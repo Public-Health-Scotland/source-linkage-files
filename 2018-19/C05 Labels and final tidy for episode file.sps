@@ -173,6 +173,7 @@ variable labels
     CIS_PPA "CIS episode that began in a Potentially Preventable Admission (PPA)"
     SPARRA_Start_FY "SPARRA 12-month risk score from the start of the financial year"
     SPARRA_End_FY "SPARRA 12-month risk score from the end of the financial year"
+    HHG_Start_FY "HHG 12-month risk score from the start of the financial year"
     Locality "Localities are based on Postcode and are correct at time of update"
     Cluster "GP Practice cluster. Based on gpprac and are correct at time of update".
 

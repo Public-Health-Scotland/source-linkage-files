@@ -22,10 +22,10 @@ match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_End_FY
-    /table = !Extracts_Alt + "HHG/HHG-20" + !NextFY + ".zsav"
+    /table = !Extracts_Alt + "HHG/HHG-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
-    HHG_SCORE = HHG_End_FY
+    HHG_SCORE = HHG_Start_FY
     /by CHI.
 execute.
 
