@@ -201,6 +201,7 @@ If (F11 = 1 and T402_T404 = 1) or (F13 = 1 and T424 = 1) Substance = 1.
 
 *Aggregate into Demographics.
 aggregate outfile = *
+    /Presorted
     /break CHI
     /Comm_Living = max(Comm_Living)
     /Adult_Major = max(Adult_Major)
@@ -348,31 +349,32 @@ If Elective_Inpatient_Instances = 1 Elective_Inpatient_Cost = Total_Cost.
 
 * /Unplanned_Beddays = sum(Unplanned_Beddays).
 aggregate outfile = *
-   /break CHI
-   /Total_Cost = sum(Total_Cost)
-   /Total_Beddays = sum(Bed_Days)
-   /Admission = sum(CIS_Attendance)
-   /Operation_Flag = max(Operation_Flag)
-   /Emergency = sum(Emergency_Instances)
-   /Elective = sum(Elective_Instances)
-   /Elective_Inpatient = sum(Elective_Inpatient_Instances)
-   /Elective_Daycase = sum(Elective_Daycase_Instances)
-   /Death_Flag = max(Death_Flag)
-   /Psychiatry_Cost = sum(Psychiatry_Cost)
-   /Maternity_Cost = sum(Maternity_Cost)
-   /Geriatric_Cost = sum(Geriatric_Cost)
-   /Emergency_Cost = sum(Emergency_Cost)
-   /Elective_Cost = sum(Elective_Cost)
-   /Elective_Inpatient_Cost = sum(Elective_Inpatient_Cost)
-   /Home_Care_Cost = sum(Home_Care_Cost)
-   /Care_Home_Cost = sum(Care_Home_Cost)
-   /Hospital_Elective_Cost = sum(Hospital_Elective_Cost)
-   /Hospital_Emergency_Cost = sum(Hospital_Emergency_Cost)
-   /AE2_Cost = sum(AE2_Cost)
-   /Prescribing_Cost = sum(Prescribing_Cost)
-   /Outpatient_Cost = sum(Outpatient_Cost)
-   /Total_Outpatient_Cost = sum(Total_Outpatient_Cost)
-   /Community_Health_Cost = sum(Community_Health_Cost).
+    /Presorted
+    /break CHI
+    /Total_Cost = sum(Total_Cost)
+    /Total_Beddays = sum(Bed_Days)
+    /Admission = sum(CIS_Attendance)
+    /Operation_Flag = max(Operation_Flag)
+    /Emergency = sum(Emergency_Instances)
+    /Elective = sum(Elective_Instances)
+    /Elective_Inpatient = sum(Elective_Inpatient_Instances)
+    /Elective_Daycase = sum(Elective_Daycase_Instances)
+    /Death_Flag = max(Death_Flag)
+    /Psychiatry_Cost = sum(Psychiatry_Cost)
+    /Maternity_Cost = sum(Maternity_Cost)
+    /Geriatric_Cost = sum(Geriatric_Cost)
+    /Emergency_Cost = sum(Emergency_Cost)
+    /Elective_Cost = sum(Elective_Cost)
+    /Elective_Inpatient_Cost = sum(Elective_Inpatient_Cost)
+    /Home_Care_Cost = sum(Home_Care_Cost)
+    /Care_Home_Cost = sum(Care_Home_Cost)
+    /Hospital_Elective_Cost = sum(Hospital_Elective_Cost)
+    /Hospital_Emergency_Cost = sum(Hospital_Emergency_Cost)
+    /AE2_Cost = sum(AE2_Cost)
+    /Prescribing_Cost = sum(Prescribing_Cost)
+    /Outpatient_Cost = sum(Outpatient_Cost)
+    /Total_Outpatient_Cost = sum(Total_Outpatient_Cost)
+    /Community_Health_Cost = sum(Community_Health_Cost).
 
 
 compute Elective_Inpatient_Flag = 0.
@@ -525,8 +527,6 @@ If ((Residential_Care_Cost GT Psychiatry_Cost) and (Residential_Care_Cost GT Mat
 If (Service_Use_Cohort = '') Service_Use_Cohort = 'Other'.
 
 Recode Total_Beddays Total_Cost (sysmis = 0).
-
-sort cases by CHI (a).
 
 *1. rename variable.
 rename variables Service_Use_Cohort = Service_Use_Cohort.
