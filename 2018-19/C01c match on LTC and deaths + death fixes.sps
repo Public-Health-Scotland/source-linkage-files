@@ -3,7 +3,9 @@
  * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
  * Get a warning here but should be fine. - Caused by the way we match on NSU.
 
-match files
+ * We don't have an NSU extract for 2018/19 yet, should get one at end of FY.
+
+ * match files
     /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
     /By chi.
@@ -11,15 +13,15 @@ match files
 
 * Set up the variables for the NSU CHIs.
 * The macros are defined in C01a.
-Do if recid = "".
-    Compute year = !FY.
-    Compute recid = "NSU".
-    Compute SMRType = "Non-User".
-End if.
+ * Do if recid = "".
+ *     Compute year = !FY.
+ *     Compute recid = "NSU".
+ *     Compute SMRType = "Non-User".
+ * End if.
 
 ********************Match on LTC flags and dates of LTC incidence (based on hospital incidence only)*****.
 *Match on LTCs, deceased flags and date.
-match files file = *
+match files file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
     /Rename(death_date = DN_death_date)
     /table = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
     /table = !Extracts_Alt + "Deceased_patient_reference_file-20" + !FY + ".zsav"
