@@ -20,7 +20,12 @@ add files
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /By chi.
- *     /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
+
+ *  We are not currently including Care Home data for 2017/18 or 2018/19 but we still want the variables for consistency.
+String sc_send_lca ch_lca (A2) ch_name (A70).
+Numeric ch_admreas (F2.0).
+
+ * /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
 *Sort Cases by chi.
