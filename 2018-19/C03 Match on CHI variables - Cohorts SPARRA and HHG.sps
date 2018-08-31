@@ -18,16 +18,16 @@ match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_Start_FY
-    /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
-    /Rename
-    UPI_Number = chi
-    SPARRA_RISK_SCORE = SPARRA_End_FY
     /table = !Extracts_Alt + "HHG/HHG-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_Start_FY
     /by CHI.
-execute.
+
+ *     /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
+    /Rename
+    UPI_Number = chi
+    SPARRA_RISK_SCORE = SPARRA_End_FY
 
  * HHG only for 201718 onwards.
  * /table = !Extracts_Alt + "HHG/HHG-20" + !FY + ".zsav" 

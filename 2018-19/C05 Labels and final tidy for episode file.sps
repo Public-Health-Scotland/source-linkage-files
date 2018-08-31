@@ -172,7 +172,6 @@ variable labels
     digestive_date "Other Diseases of Digestive System LTC incidence date"
     CIS_PPA "CIS episode that began in a Potentially Preventable Admission (PPA)"
     SPARRA_Start_FY "SPARRA 12-month risk score from the start of the financial year"
-    SPARRA_End_FY "SPARRA 12-month risk score from the end of the financial year"
     HHG_Start_FY "HHG 12-month risk score from the start of the financial year"
     Locality "Localities are based on Postcode and are correct at time of update"
     Cluster "GP Practice cluster. Based on gpprac and are correct at time of update".
@@ -292,7 +291,8 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
       '32' "Na h-Eileanan Siar"
 !EndDefine.
 
-!AddLCADictionaryInfo LCA = LCA sc_send_lca ch_lca.
+!AddLCADictionaryInfo LCA = LCA.
+* sc_send_lca ch_lca.
 
 Value Labels ipdc newcis_ipdc
    'I' "Inpatient"
@@ -431,7 +431,7 @@ Value Labels deceased
 Variable Width
     year (4)
     ipdc mpat cat alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp clinic_type ae_patflow post_mortem newcis_ipdc (1)
-    lca sigfac tadm adtf disch dischto newcis_admtype ae_arrivalmode ae_attendcat ae_alcohol sc_send_lca ch_lca ch_admreas (2)
+    lca sigfac tadm adtf disch dischto newcis_admtype ae_arrivalmode ae_attendcat ae_alcohol (2)
     ooh_outcome.1 ooh_outcome.2 ooh_outcome.3 ooh_outcome.4 (2)
     age (3)
     newpattype_cis recid spec CIJadm_spec CIJdis_spec refsource ae_disdest ae_placeinc ae_reasonwait ae_bodyloc (3)
@@ -451,7 +451,7 @@ Variable Width
     conc (8)
     hbpraccode hbrescode HSCP2016 DataZone2011 hbtreatcode  death_board_occurrence (9)
     stay (7)
-    SMRType chi ch_name (10)
+    SMRType chi (10)
     cost_total_net cost_total_net_incDNAs (10)
     record_keydate1 record_keydate2 keydate1_dateformat keydate2_dateformat dob death_date dateop1 dateop2 dateop3 dateop4(10).
 
@@ -570,10 +570,6 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     ooh_CC
     CCM
     TotalnoDNcontacts
-    sc_send_lca
-    ch_name
-    ch_lca
-    ch_admreas
     no_dispensed_items
     nhshosp
     commhosp
@@ -670,7 +666,7 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     Demographic_Cohort
     Service_Use_Cohort
     SPARRA_Start_FY
-    SPARRA_End_FY
+    HHG_Start_FY
     /zcompressed.
 get file = !File + "source-episode-file-20" + !FY + ".zsav".
 
@@ -683,4 +679,4 @@ erase file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
+
