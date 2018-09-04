@@ -286,9 +286,6 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
 
 get file = !file + "source-individual-file-20" + !FY + ".zsav".
 
-Descriptives chi to HRI_ScotP
-    /STATISTICS ALL.
-
 *************************************************************************************************************************************************.
 * Housekeeping.
 erase file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".

@@ -1,27 +1,7 @@
 ﻿* Encoding: UTF-8.
-* 2016/17 data.
-* Creating an aggregated master PLICs file with one row per client.
-* Note that clients will be excluded.
-* The aggregated file will contain the following data sets:
-   * SMR00 - Outpatients
-   * SMR01 - Acute inpatients/day cases
-   * SMR02 - Maternity
-   * SMR04 - Mental Health
-   * SMR01_1E - Geriatric Long Stay
-   * Accident & Emergency
-   * Prescribing
-   * GP OOH - GP Out of Hours
-   * DN - District Nursing
-   * Care Homes
+* We create a row per chi by producing various summaries from the episode file.
 
-* Program created by Denise Hastie, October 2013.
-* Program updated by Denise Hastie, May 2015 to reflect changes made in Julie"s costed files.
-* Program updated by Denise Hastie, August 2016 to make the addition of LTCs be in line with the master PLICS file for 14/15.
-* Deceased flag will also be updated. The geography and deprivation section has also been changed to be the same as the * updated version of the 14/15 master plics SPSS program.
-
-* Changing file paths and where appropriate names to Source linkage files. Denise Greig, October 2017.
-
-*************************************************************************************************************************************************.
+ * Produced, based on the original, by James McMahon.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -44,6 +24,7 @@ Numeric Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpp
  * Set any blanks as user missing, so they will be ignored by the aggregate. 
 Missing Values Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode NSU_postcode ("       ").
 
+ * Create a series of indicators which can be aggregated later to provide a summary for each CHI.
 *************************************************************************************************************************************************.
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -342,15 +323,16 @@ Else if (recid = "NSU").
     Compute NSU_postcode = postcode.
     Compute NSU_gpprac = gpprac.
 
-    * By definition these chis should have no activity.
+    * By definition these chis should have no activity but we will create a flag to make this clear.
+    Compute NSU = 1. 
 End if.
 *************************************************************************************************************************************************.
  * We"ll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
- * Now aggregate by Chi, keep all of the variables we made, we"ll clean them up next.
+ * Now aggregate by Chi, keep all of the variables we made, we'll clean them up next.
  * Also keep variables that are only dependant on CHI (as opposed to postcode) e.g. death_date, cohorts, LTC etc.
- * Using Presorted so that we keep the ordering from earlier (chi, keydate1). This way we get the most recent (non-blank) data from each record.
+ * Using Presorted so that we keep the ordering from earlier (chi, keydate1). This way, when we do 'Last', we get the most recent (non-blank) data from each record.
 aggregate outfile = *
     /Presorted
     /break chi
@@ -383,7 +365,8 @@ aggregate outfile = *
     GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes
     GLS_cost GLS_daycase_cost GLS_inpatient_cost
     GLS_el_inpatient_cost GLS_non_el_inpatient_cost
-    GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays = sum(GLS_episodes GLS_daycase_episodes GLS_inpatient_episodes
+    GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays 
+        = sum(GLS_episodes GLS_daycase_episodes GLS_inpatient_episodes
     GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes
     GLS_cost GLS_daycase_cost GLS_inpatient_cost
     GLS_el_inpatient_cost GLS_non_el_inpatient_cost
@@ -401,6 +384,7 @@ aggregate outfile = *
     /DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays
         = sum(DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays)
     /deceased death_date = First(deceased death_date)
+    /NSU = Max(NSU)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date
@@ -410,7 +394,7 @@ aggregate outfile = *
     /Demographic_Cohort Service_Use_Cohort = First(Demographic_Cohort Service_Use_Cohort)
     /SPARRA_Start_FY SPARRA_End_FY = First(SPARRA_Start_FY SPARRA_End_FY).
 
- * Do a temporary save.
+ * Do a temporary save as the above can take a while to run.
 save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
    /zcompressed.
 get file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
@@ -562,9 +546,7 @@ Else if (NSU_postcode ne "").
 End if.
 
 * GP Practice hierarchy.
-* Prescribing will need to be added once updated extracts are available. DH August 2016.
-* Prescriber GP Practice now added to this hierarchy as first in the list. DH, August 2016.
-String gpprac (A5).
+Numeric gpprac (F5.0).
 Do if  Not(SysMiss(PIS_gpprac)).
     compute gpprac = PIS_gpprac.
 Else if  Not(SysMiss(AE_gpprac)).
@@ -595,14 +577,38 @@ Recode Acute_episodes to DN_cost (sysmis = 0).
 * Create a total health cost.
 compute health_net_cost = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + AE_cost + PIS_cost + OoH_cost.
 compute health_net_costincDNAs = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + OP_cost_dnas + AE_cost + PIS_cost + OoH_cost.
+
+* Care home and DN costs aren't included in the above as we do not have data for all LCAs / HBs (also the completness of what we do have is questionable).
 compute health_net_costincIncomplete = health_net_cost + CH_cost + DN_cost.
+
+ * Tidy up counter variables.
+Alter Type
+    Acute_episodes to Acute_non_el_inpatient_episodes
+    Acute_inpatient_beddays to Acute_non_el_inpatient_beddays
+    Mat_episodes to Mat_inpatient_episodes
+    Mat_inpatient_beddays
+    MH_daycase_episodes to MH_non_el_inpatient_episodes
+    MH_inpatient_beddays to MH_non_el_inpatient_beddays
+    GLS_episodes to GLS_non_el_inpatient_episodes
+    GLS_inpatient_beddays to GLS_non_el_inpatient_beddays
+    OP_newcons_attendances OP_newcons_dnas
+    AE_attendances
+    PIS_dispensed_items
+    CH_episodes CH_beddays
+    OoH_cases to OoH_consultation_time
+    DN_episodes DN_contacts
+    DD_NonCode9_episodes to DD_Code9_beddays (F8.0).
+
+ * Create a year variable for time-series linking.
+String year (A4).
+Compute year = !FY.
 
 * Delete the record specific dob gpprac and postcode, and reorder others whilst we're here.
 save outfile = !file + "temp-source-individual-file-2-20" + !FY + ".zsav"
    /Drop Acute_postcode to NSU_postcode
       Acute_dob to NSU_dob
       Acute_gpprac to NSU_gpprac
-   /Keep chi gender dob age postcode gpprac
+   /Keep year chi gender dob age postcode gpprac
       health_net_cost health_net_costincDNAs health_net_costincIncomplete
       deceased death_date
       ALL

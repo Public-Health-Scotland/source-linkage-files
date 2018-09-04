@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = "/conf/hscdiip/DH-Extract/Delayed_Discharges/DD_LinkageFile_Jul16Mar18.sav".
+get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Jun18DD_LinkageFile.zsav".
 
 Rename Variables
    HealthLocationCode = location
@@ -8,7 +8,7 @@ Rename Variables
    Delay_End_Date = keydate2_dateformat.
 
  * Drop any records with obviously bad dates.
-Select if keydate1_dateformat <= keydate2_dateformat.
+Select if (keydate1_dateformat LE keydate2_dateformat) or keydate2_dateformat EQ date.dmy(1,1,1900).
 
 String recid (A3) SMRType (A10) year (A4).
 Compute recid = "DD".
@@ -189,14 +189,14 @@ Else.
    Compute No_End_Date = 0.
 End if.
 
- * Flag records to keep that have an start or end of delay which falls in the correct FY.
-Do if
-   (Range(keydate1_dateformat, Date.DMY(01, 04, Number(!altFY, F4.0)), Date.DMY(31, 03, Number(!altFY, F4.0) + 1)) OR
-   Range(keydate2_dateformat, Date.DMY(01, 04, Number(!altFY, F4.0)), Date.DMY(31, 03, Number(!altFY, F4.0) + 1)) OR
-   (Sysmiss(keydate2_dateformat) AND any(spec, "CC", "G1", "G2", "G21", "G22", "G3", "G4", "G5", "G6", "G61", "G62", "G63"))).
-   Compute Correct_Dates = 1.
+* Flag records to keep that have an start or end of delay which falls in the correct FY.
+Do if  (Range(keydate1_dateformat, Date.DMY(01, 04, Number(!altFY, F4.0)), Date.DMY(31, 03, Number(!altFY, F4.0) + 1)) OR
+    Range(keydate2_dateformat, Date.DMY(01, 04, Number(!altFY, F4.0)), Date.DMY(31, 03, Number(!altFY, F4.0) + 1)) OR
+    (Range(keydate1_dateformat, Date.DMY(01, 04, Number(!altFY, F4.0)), Date.DMY(31, 03, Number(!altFY, F4.0) + 1)) and
+    Sysmiss(keydate2_dateformat) AND any(spec, "CC", "G1", "G2", "G21", "G22", "G3", "G4", "G5", "G6", "G61", "G62", "G63"))).
+    Compute Correct_Dates = 1.
 Else.
-   Compute Correct_Dates = 0.
+    Compute Correct_Dates = 0.
 End if.
 
  * Do some checks.
@@ -204,7 +204,7 @@ Crosstabs No_End_Date by spec.
 Crosstabs Ammended_Dates by Correct_Dates.
 Crosstabs No_End_Date by Correct_Dates.
 
- * Keep records which have an end date (except Mental Health) and fall within our dates).
+ * Keep only records which have an end date (except Mental Health) and fall within our dates.
 Select if Correct_Dates = 1 AND No_End_Date = 0.
 
 sort cases by chi keydate1_dateformat.
