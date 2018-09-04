@@ -42,7 +42,7 @@ Variable Labels
    dob "Date of birth"
    gpprac "GP practice code"
    lca "Local Council Authority"
-    NSU "Flag to indicate Non-service-users"
+   NSU "Flag to indicate Non-service-users"
    health_net_cost "Total net cost"
    health_net_costincDNAs "Total net cost including 'did not attend'"
    health_net_costincIncomplete "Total net cost including CH and DN (not DNAs)"

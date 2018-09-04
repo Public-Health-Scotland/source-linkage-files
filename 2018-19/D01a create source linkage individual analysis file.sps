@@ -392,7 +392,8 @@ aggregate outfile = *
     arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date)
     /Demographic_Cohort Service_Use_Cohort = First(Demographic_Cohort Service_Use_Cohort)
-    /SPARRA_Start_FY SPARRA_End_FY = First(SPARRA_Start_FY SPARRA_End_FY).
+    /SPARRA_Start_FY = First(SPARRA_Start_FY)
+    /HHG_Start_FY = First(HHG_Start_FY).
 
  * Do a temporary save as the above can take a while to run.
 save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
