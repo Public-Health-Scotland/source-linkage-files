@@ -125,9 +125,9 @@ Variable Labels
    HRI_scotP "Cumulative percent in Scotland excluding District Nursing and Care Home costs".
 
  * Tweak for 17/18 and 18/19 so we can keep the variables but make it clear there is no data.
-Compute ch_episodes = $sysmiss.
-Compute ch_beddays = $sysmiss.
-Compute ch_cost = $sysmiss.
+Compute ch_episodes = $sysmis.
+Compute ch_beddays = $sysmis.
+Compute ch_cost = $sysmis.
 
 sort cases by chi.
 save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
