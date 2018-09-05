@@ -109,7 +109,8 @@ Do if chi = lag(chi) and missing(new_CIS).
                 Compute new_CIS = lag(new_CIS).
                 Compute keydate3_dateformat = lag(keydate3_dateformat).
                 Compute keydate4_dateformat = lag(keydate4_dateformat).
-                Compute keydate2_dateformat = lag(keydate4_dateformat).
+                * Don't make the dates give it a negative stay (in cases where the match was +- 1 day).
+                Compute keydate2_dateformat = Max(keydate1_dateformat, lag(keydate4_dateformat)).
             Else if DaysWrong = 1.
                 Compute Flag9 = 1.
                 Compute new_CIS = lag(new_CIS).

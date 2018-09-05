@@ -19,6 +19,13 @@ Define !Tests()
 !New FY = 1617.
 !Tests.
 
+if recid = "DD" and keydate2_dateformat = date.dmy(1, 7, 2016) flag = 1.
+
+
+GET FILE='/conf/sourcedev/Source Linkage File Updates/1819/source-episode-file-201819.zsav'.
+Dataset Name Episode1819.
+Title "Episode File 2018/19".
+
    sort cases by recid.
    split file by recid.
    
@@ -61,6 +68,5 @@ Do If chi NE "".
 End if.
 
 Frequencies WrongGender.
-
 
 
