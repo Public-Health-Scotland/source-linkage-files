@@ -193,10 +193,6 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     gls_inpatient_beddays
     gls_el_inpatient_beddays
     gls_non_el_inpatient_beddays
-    DD_NonCode9_episodes
-    DD_Code9_episodes
-    DD_NonCode9_beddays
-    DD_Code9_beddays
     op_newcons_attendances
     op_newcons_dnas
     op_cost_attend

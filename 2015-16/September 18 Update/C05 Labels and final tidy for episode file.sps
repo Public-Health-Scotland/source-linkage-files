@@ -525,10 +525,6 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     discondition
     reftype
     refsource
-    Delay_End_Reason
-    Primary_Delay_Reason
-    Secondary_Delay_Reason
-    DD_Quality
     clinic_type
     attendance_status
     ae_arrivalmode

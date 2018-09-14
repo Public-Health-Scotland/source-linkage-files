@@ -12,19 +12,19 @@ get file = !File + "source-episode-file-20" + !FY + ".zsav".
 * Exclude people with blank chi.
 select if chi ne "".
 
- * Sort data into chi and episode date order.
+* Sort data into chi and episode date order.
 Sort cases by chi keydate1_dateformat.
 
- * Declare the variables we will use to store postcode etc. data.
- * Don't include DD as this data has just been taken from acute / MH.
+* Declare the variables we will use to store postcode etc. data.
+* Don't include DD as this data has just been taken from acute / MH.
 Numeric Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob NSU_dob (Date12).
 String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode NSU_postcode (A7).
 Numeric Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac NSU_gpprac (F5.0).
 
- * Set any blanks as user missing, so they will be ignored by the aggregate. 
+* Set any blanks as user missing, so they will be ignored by the aggregate.
 Missing Values Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode NSU_postcode ("       ").
 
- * Create a series of indicators which can be aggregated later to provide a summary for each CHI.
+* Create a series of indicators which can be aggregated later to provide a summary for each CHI.
 *************************************************************************************************************************************************.
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -302,19 +302,19 @@ Else if (recid = "DN").
     * Time.
     * Leaving this out for now due to problems with contact duration variable.
     *compute DN_total_duration = TotalDurationofContacts.
-
-Else if (recid = "DD").
+    * Not used in 2015/16
+        * Else if (recid = "DD").
     *************************************************************************************************************************************************.
     * Delayed Discharge (DD) section.
     * Not taking any demographic fields from DD.
 
     * For activity count the number of episodes for code 9 and non code 9 reasons.
-    If Primary_Delay_Reason NE "9" DD_NonCode9_episodes = 1.
-    If Primary_Delay_Reason EQ "9" DD_Code9_episodes = 1.
+    *     If Primary_Delay_Reason NE "9" DD_NonCode9_episodes = 1.
+    *     If Primary_Delay_Reason EQ "9" DD_Code9_episodes = 1.
 
     * For beddays count the number for code 9 and non code 9 reasons.
-    If Primary_Delay_Reason NE "9" DD_NonCode9_beddays = yearstay.
-    If Primary_Delay_Reason EQ "9" DD_Code9_beddays = yearstay.
+    *     If Primary_Delay_Reason NE "9" DD_NonCode9_beddays = yearstay.
+    *     If Primary_Delay_Reason EQ "9" DD_Code9_beddays = yearstay.
 Else if (recid = "NSU").
     *************************************************************************************************************************************************.
     * Non-Service-User (NSU) section.
@@ -324,39 +324,39 @@ Else if (recid = "NSU").
     Compute NSU_gpprac = gpprac.
 
     * By definition these chis should have no activity but we will create a flag to make this clear.
-    Compute NSU = 1. 
+    Compute NSU = 1.
 End if.
 *************************************************************************************************************************************************.
- * We"ll use this to get the most accurate gender we can.
+* We"ll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
- * Now aggregate by Chi, keep all of the variables we made, we'll clean them up next.
- * Also keep variables that are only dependant on CHI (as opposed to postcode) e.g. death_date, cohorts, LTC etc.
- * Using Presorted so that we keep the ordering from earlier (chi, keydate1). This way, when we do 'Last', we get the most recent (non-blank) data from each record.
+* Now aggregate by Chi, keep all of the variables we made, we'll clean them up next.
+* Also keep variables that are only dependant on CHI (as opposed to postcode) e.g. death_date, cohorts, LTC etc.
+* Using Presorted so that we keep the ordering from earlier (chi, keydate1). This way, when we do 'Last', we get the most recent (non-blank) data from each record.
 aggregate outfile = *
     /Presorted
     /break chi
     /gender = Mean(gender)
     /Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode NSU_postcode
-        = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode NSU_postcode)
+    = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode NSU_postcode)
     /Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob NSU_dob
-        = Last(Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob NSU_dob)
+    = Last(Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob NSU_dob)
     /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac NSU_gpprac
-        =Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac NSU_gpprac)
+    =Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac NSU_gpprac)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
     Acute_inpatient_beddays Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays
-        = sum(Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
+    = sum(Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
     Acute_inpatient_beddays Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays)
     /Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_cost Mat_daycase_cost Mat_inpatient_cost Mat_inpatient_beddays
-        = sum(Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_cost Mat_daycase_cost Mat_inpatient_cost Mat_inpatient_beddays)
+    = sum(Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_cost Mat_daycase_cost Mat_inpatient_cost Mat_inpatient_beddays)
     /MH_episodes MH_daycase_episodes MH_inpatient_episodes
     MH_el_inpatient_episodes MH_non_el_inpatient_episodes
     MH_cost MH_daycase_cost MH_inpatient_cost
     MH_el_inpatient_cost MH_non_el_inpatient_cost
-    MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays 
-        = sum(MH_episodes MH_daycase_episodes MH_inpatient_episodes
+    MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays
+    = sum(MH_episodes MH_daycase_episodes MH_inpatient_episodes
     MH_el_inpatient_episodes MH_non_el_inpatient_episodes
     MH_cost MH_daycase_cost MH_inpatient_cost
     MH_el_inpatient_cost MH_non_el_inpatient_cost
@@ -365,34 +365,36 @@ aggregate outfile = *
     GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes
     GLS_cost GLS_daycase_cost GLS_inpatient_cost
     GLS_el_inpatient_cost GLS_non_el_inpatient_cost
-    GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays 
-        = sum(GLS_episodes GLS_daycase_episodes GLS_inpatient_episodes
+    GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
+    = sum(GLS_episodes GLS_daycase_episodes GLS_inpatient_episodes
     GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes
     GLS_cost GLS_daycase_cost GLS_inpatient_cost
     GLS_el_inpatient_cost GLS_non_el_inpatient_cost
     GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays)
     /OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas
-        = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
+    = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
     /PIS_dispensed_items PIS_cost = sum(no_dispensed_items PIS_cost)
     /CH_episodes CH_beddays CH_cost = sum(CH_episodes CH_beddays CH_cost)
     /OoH_cases = Max(OoH_CC)
     /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost
-        = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost)
+    = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost)
     /DN_episodes DN_contacts DN_cost
-        = sum(DN_episodes DN_contacts DN_cost)
-    /DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays
-        = sum(DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays)
+    = sum(DN_episodes DN_contacts DN_cost)
     /deceased death_date = First(deceased death_date)
     /NSU = Max(NSU)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date
-        = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
+    = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date)
     /Demographic_Cohort Service_Use_Cohort = First(Demographic_Cohort Service_Use_Cohort)
     /SPARRA_Start_FY SPARRA_End_FY = First(SPARRA_Start_FY SPARRA_End_FY).
+
+ * No delayed Discharge for 2015/16.
+ *     /DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays
+        = sum(DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays)
 
  * Do a temporary save as the above can take a while to run.
 save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
@@ -596,8 +598,10 @@ Alter Type
     PIS_dispensed_items
     CH_episodes CH_beddays
     OoH_cases to OoH_consultation_time
-    DN_episodes DN_contacts
-    DD_NonCode9_episodes to DD_Code9_beddays (F8.0).
+    DN_episodes DN_contacts (F8.0).
+
+ * No DD in 2015/16
+DD_NonCode9_episodes to DD_Code9_beddays.
 
  * Create a year variable for time-series linking.
 String year (A4).
