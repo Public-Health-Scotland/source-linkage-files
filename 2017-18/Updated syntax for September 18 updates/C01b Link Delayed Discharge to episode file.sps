@@ -2,7 +2,7 @@
 
 get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat
-    chi gender dob age gpprac postcode lca
+    chi gender dob age gpprac postcode lca DataZone2011
     hbtreatcode location spec tadm
     CIS_marker newCIS_ipdc newCIS_admtype newpattype_CIScode newpattype_CIS CIJadm_spec CIJdis_spec CIS_PPA.
 
@@ -10,7 +10,7 @@ get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
 select if chi NE "".
 select if any(recid, "01B", "02B", "04B", "GLS").
 
- * Copy the CIS marker.
+ * Create a copy of the CIS marker.
 String new_CIS (A5).
 Compute new_CIS = CIS_marker.
 
@@ -18,6 +18,7 @@ Compute new_CIS = CIS_marker.
 Missing Values new_CIS ("     ").
 
  * Aggregate to get the dates of the CIS episode.
+ * This usually takes a while to run.
 aggregate
    /break chi new_CIS
    /keydate3_dateformat = Min(keydate1_dateformat)
@@ -32,36 +33,28 @@ add files
    /File = *
    /File = !Extracts + "DD_LinkageFile-20" + !FY + ".zsav".
 
+ * Create an order variable to make DD records appear after others.
 if any(recid, "00B", "01B", "02B", "04B", "GLS") order = 1.
 if recid = "DD" order = 2.
 
- * Remove any DD records which don"t match a chi in the file.
+ * Remove any DD records which don't match a chi in the file.
 sort cases by chi order.
 
-Compute No_matching_chi = 0.
-
-Do If recid = "DD".
-  Compute No_matching_chi = 1.
-  If CHI NE lag(CHI) No_matching_chi = 2.
-End if.
-
-Frequencies No_matching_chi.
-
-Select if No_matching_chi NE 2.
+Select If Not(recid = "DD" AND CHI NE lag(CHI)).
 
 save outfile = !File + "DD_Temp-1.zsav"
    /zcompressed.
 
 get file = !File + "DD_Temp-1.zsav".
 
-* Sort.
+* Sort so that DD is roughly where we expect it to fit.
 sort cases by chi keydate1_dateformat order.
 
 * Capture the Mental Health delays with no end dates.
 Do if chi = lag(chi) and recid = "DD" and lag(recid) = "04B" and sysmiss(keydate2_dateformat)
                 and sysmiss(lag(keydate2_dateformat)) and keydate1_dateformat GE lag(keydate3_dateformat) - time.days(1).
     Compute Flag8 = 1.
-    If keydate1_dateformat GE lag(keydate3_dateformat) Flag8 = 1.
+    If keydate1_dateformat GE lag(keydate3_dateformat) Flag8 = 2.
     Compute new_CIS = lag(new_CIS).
     Compute keydate3_dateformat = lag(keydate3_dateformat).
     Compute keydate4_dateformat = lag(keydate4_dateformat).
@@ -111,6 +104,7 @@ Do if chi = lag(chi) and missing(new_CIS).
                 Compute keydate4_dateformat = lag(keydate4_dateformat).
                 * Don't make the dates give it a negative stay (in cases where the match was +- 1 day).
                 Compute keydate2_dateformat = Max(keydate1_dateformat, lag(keydate4_dateformat)).
+            * If it's only one day out then we'll count it as matching the CIS.
             Else if DaysWrong = 1.
                 Compute Flag9 = 1.
                 Compute new_CIS = lag(new_CIS).
@@ -121,8 +115,9 @@ Do if chi = lag(chi) and missing(new_CIS).
     End if.
 End if.
 
+ * Sort in the opposite direction.
 sort cases by chi (A) keydate1_dateformat (D) order (A).
-            * If DD record date ends within hospital dates but starts before, change the start date to that of the first hospital record.
+* If DD record date ends within CIS dates but starts before.
 Do if recid = 'DD' and chi = lag(chi) and missing(new_CIS).
     Compute Flag4 = 0.
     Do if keydate1_dateformat LE lag(keydate3_dateformat) and Range(keydate2_dateformat, lag(keydate3_dateformat) - time.days(1), lag(keydate4_dateformat) + time.days(1)).
@@ -130,6 +125,7 @@ Do if recid = 'DD' and chi = lag(chi) and missing(new_CIS).
         Compute DaysWrong = DateDiff(lag(keydate3_dateformat), keydate1_dateformat, "days").
         If keydate1_dateformat LE lag(keydate3_dateformat) and Range(keydate2_dateformat, lag(keydate3_dateformat), lag(keydate4_dateformat)) flag4 = 2.
         Compute Flag10 = 0.
+        * If it's only one day out, count it as matching the CIS.
         Do if DaysWrong = 1.
             Compute Flag10 = 1.
             Compute new_CIS = lag(new_CIS).
@@ -142,6 +138,7 @@ End if.
  * Set the CIJ variables (for the DD's we have assigned a CIS).
  * Also take other variables of use.
 Missing Values Postcode ("       ")
+    /DataZone2011 ("        ")
     /LCA ("  ").
 sort cases by CHI new_CIS order.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
@@ -149,8 +146,8 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /break CHI new_CIS
     /newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA
     = First(newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA)
-    /DD_gender DD_dob DD_age DD_gpprac DD_postcode DD_lca
-    = Last(gender dob age gpprac postcode lca).
+    /DD_gender DD_dob DD_age DD_gpprac DD_postcode DD_lca DD_DataZone2011
+    = Last(gender dob age gpprac postcode lca DataZone2011).
 
  * Fill in the variables for the DD.
 Do if recid = "DD".
@@ -160,6 +157,7 @@ Do if recid = "DD".
     Compute gpprac = DD_gpprac.
     Compute postcode = DD_postcode.
     Compute lca = DD_lca.
+    Compute DataZone2011 = DD_DataZone2011.
 End if.
 
 * Sort back to a 'normal' order.
@@ -173,29 +171,19 @@ Do if recid = "DD" and chi = lag(chi).
     If Missing(gpprac) gpprac = lag(DD_gpprac).
     If Missing(postcode) postcode = lag(DD_postcode).
     If Missing(lca) lca = lag(DD_lca).
+    If Missing(DataZone2011) DataZone2011 = lag(DD_DataZone2011).
 End if.
 
-
-Do if recid = "DD" and chi = lag(chi) and new_CIS = lag(new_CIS).
-    Compute OrigAdmDaysDiff = 999.
-    Do if Abs(DateDiff(OriginalAdmissionDate, lag(keydate3_dateformat), "days")) LE 2.
-        Compute OrigAdmDaysDiff = 2.
-        Do if Abs(DateDiff(OriginalAdmissionDate, lag(keydate3_dateformat), "days")) LE 1.
-            Compute OrigAdmDaysDiff = 1.
-            If OriginalAdmissionDate = keydate3_dateformat = 0 OrigAdmDaysDiff = 0.
-        End if.
-    End if.
-End if.
-
+ * Labels for the flags (just for info now).
 Variable labels
 Flag1 "1 - CIS added to non-DD record"
 Flag2 "2 - CIS added to DD that falls within CIS period"
 Flag3 "3 - DD record that starts within CIS period but ends after"
 Flag4 "4 - DD record that starts before CIS period but ends during"
-NoCIS "no-CIS attached"
 Flag6 "6 - DD that matches CIS but had end-date changed"
 Flag7 "7 - DD with changed dates pushing it over the CIS dates"
-Flag8 "8 - DD records linked to MH with no end dates".
+Flag8 "8 - DD records linked to MH with no end dates"
+NoCIS "no-CIS attached".
 
  * Flag DDs which don't seem to have an associated hospital stay.
 if missing(new_CIS) and recid = "DD" NoCIS = 1.
@@ -207,6 +195,8 @@ get file = !File + "DD_Temp-2.zsav".
 select if recid = "DD".
 
  * Group the flags into a single quality variable.
+ * There is a matrix showing the map between DD_Quality and the flags.
+ * See - \\Freddy\DEPT\PHIBCS\PHI\Health & Social Care\Topics\Linkage\Reference Files\DD flags matrix.xlsx.
 String DD_Quality (A3).
 Variable Labels DD_Quality "Indication of how well a delay episode could be matched to a CIS episode".
 Value Labels DD_quality
@@ -224,7 +214,7 @@ Value Labels DD_quality
     "3DP"	"Ends in CIS (allowing +-1 day and starts one day before) - (3DP)"
     "4"	"Matches unended MH record - (4)"
     "4P"	"Matches unended MH record (allowing -1 day) - (4P)"
-    "-"           "No Match".
+    "-"           "No Match (We don't keep these)".
 
 Do if recid = "DD".
     Do if flag2 = 2 and flag6 = 0.
@@ -255,10 +245,10 @@ Do if recid = "DD".
         Compute DD_Quality = "4".
     Else if flag8 = 1.
         Compute DD_Quality = "4P".
+    Else.
+        Compute DD_Quality = "-".
     End if.
 End if.
-
-Recode DD_Quality ("" = "-").
 
  * Final checks before the DD records are ready to be separated and added back to source.
 crosstabs DD_Quality by NoCIS.
@@ -294,6 +284,10 @@ save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsa
     /zcompressed.
 
  * Count the beddays.
+ * Similar method to that used in Care homes.
+ * 1) Declare an SPSS macro which will set the beddays for each month.
+ * 2) Use python to run the macro with the correct parameters.
+ * This means that different month lengths and leap years are handled correctly.
 Define !BedDaysPerMonth (Month = !Tokens(1) 
    /MonthNum = !Tokens(1) 
    /DaysInMonth = !Tokens(1) 
@@ -361,11 +355,14 @@ for month in sorted(months.items(), key=lambda x: x[1][1]):
    spss.Submit(syntax)
 End Program.
 
+ * Compute stay and yearstay.
 Compute yearstay = Sum(apr_beddays to mar_beddays).
 Compute stay = datediff(keydate2_dateformat, keydate1_dateformat, "days").
 
+ * Set the cis_marker back to the usual name.
 Compute cis_marker = new_CIS.
 
+ * Set the SMRType based on whether we matched a CIS or not.
 Do if NoCIS = 1.
     Compute SMRType = "DD-No CIS".
 Else.
@@ -405,5 +402,6 @@ get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
 Erase File = !File + "DD_Temp-1.zsav".
 Erase File = !File + "DD_Temp-2.zsav".
 
+ * Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
 Erase file = !File + "temp-source-episode-with-CIS-dates.zsav".
 
