@@ -113,7 +113,7 @@ Delete Variables NonScot ScotFlag Eng_Prac postcode PCArea gpprac.
  *  4.Sort Cases by health cost in descending order.
 
  * Modification to exclude Care Home costs as we only cost over 65s.
-Compute health_net_costincIncomplet = health_net_costincIncomplet - ch_cost.
+Compute health_net_costincIncomplete = health_net_costincIncomplete - ch_cost.
 
  *  5. Aggregate the file three times, but use add variables to add the council area total health cost, health board total health cost and whole of Scotland total health cost.
  * Scotland total cost.
