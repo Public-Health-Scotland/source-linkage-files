@@ -23,7 +23,7 @@ GET DATA  /TYPE=TXT
       PatCHINumberC A10
       PatDateOfBirthC A10
       PatGenderCode F1.0
-      TreatmentNHSBoardCodeasatdateofepisode A1
+      TreatmentNHSBoardCypher A1
       TreatmentLocationCode A7
       GPPracticeCode A5
       CouncilAreaCode A2
@@ -49,28 +49,28 @@ GET DATA  /TYPE=TXT
 CACHE.
 
 rename variables
+    AgeatMidpointofFinancialYear = age
+    AlcoholInvolvedCode = ae_alcohol
+    AlcoholRelatedAdmission = alcohol_adm
+    ArrivalModeCode = ae_arrivalmode
+    ArrivalTime = ae_arrivaltime
+    AttendanceCategoryCode = ae_attendcat
+    BodilyLocationOfInjuryCode = ae_bodyloc
+    CouncilAreaCode = lca
+    DischargeDestinationCode = ae_disdest
+    FallsRelatedAdmission = falls_adm
+    GPPracticeCode = gpprac
+    HSCPCode = HSCP2016
     PatCHINumberC = chi
     PatGenderCode = gender
-    CouncilAreaCode = lca
-    HSCPCode = HSCP2016
-    TreatmentLocationCode = location
-    GPPracticeCode = gpprac
-    ArrivalTime = ae_arrivaltime
-    ArrivalModeCode = ae_arrivalmode
-    ReferralSourceCode = refsource
-    AttendanceCategoryCode = ae_attendcat
-    DischargeDestinationCode = ae_disdest
     PatientFlowCode = ae_patflow
     PlaceofIncidentCode = ae_placeinc
     ReasonforWaitCode = ae_reasonwait
-    BodilyLocationOfInjuryCode = ae_bodyloc
-    AlcoholInvolvedCode = ae_alcohol
-    AlcoholRelatedAdmission = alcohol_adm
-    SubstanceMisuseRelatedAdmission = submis_adm
-    FallsRelatedAdmission = falls_adm
+    ReferralSourceCode = refsource
     SelfHarmRelatedAdmission = selfharm_adm
+    SubstanceMisuseRelatedAdmission = submis_adm
     TotalNetCosts = cost_total_net
-    AgeatMidpointofFinancialYear = age.
+    TreatmentLocationCode = location.
 
 string year (a4) recid (a3).
 compute year = !FY.
@@ -83,39 +83,42 @@ Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
 End if. 
 Alter Type GPprac (F5.0).
 
-Rename Variables (ArrivalDate PatDateofBirthC = record_keydate1 dob).
+Rename Variables
+    ArrivalDate = record_keydate1
+    PatDateofBirthC =dob.
+
 alter type record_keydate1 dob (SDate10).
 Compute record_keydate2 = record_keydate1.
 alter type record_keydate1 record_keydate2 dob (Date12).
 
 String hbtreatcode (a9).
-Do If (TreatmentNHSBoardCodeasatdateofepisode eq 'A').
+Do If (TreatmentNHSBoardCypher eq 'A').
    Compute hbtreatcode = 'S08000015'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'B').
+Else If (TreatmentNHSBoardCypher eq 'B').
    Compute hbtreatcode = 'S08000016'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'Y').
+Else If (TreatmentNHSBoardCypher eq 'Y').
    Compute hbtreatcode = 'S08000017'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'F').
+Else If (TreatmentNHSBoardCypher eq 'F').
    Compute hbtreatcode = 'S08000029'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'V').
+Else If (TreatmentNHSBoardCypher eq 'V').
    Compute hbtreatcode = 'S08000019'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'N').
+Else If (TreatmentNHSBoardCypher eq 'N').
    Compute hbtreatcode = 'S08000020'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'G').
+Else If (TreatmentNHSBoardCypher eq 'G').
    Compute hbtreatcode = 'S08000021'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'H').
+Else If (TreatmentNHSBoardCypher eq 'H').
    Compute hbtreatcode = 'S08000022'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'L').
+Else If (TreatmentNHSBoardCypher eq 'L').
    Compute hbtreatcode = 'S08000023'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'S').
+Else If (TreatmentNHSBoardCypher eq 'S').
    Compute hbtreatcode = 'S08000024'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'R').
+Else If (TreatmentNHSBoardCypher eq 'R').
    Compute hbtreatcode = 'S08000025'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'Z').
+Else If (TreatmentNHSBoardCypher eq 'Z').
    Compute hbtreatcode = 'S08000026'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'T').
+Else If (TreatmentNHSBoardCypher eq 'T').
    Compute hbtreatcode = 'S08000030'.
-Else If (TreatmentNHSBoardCodeasatdateofepisode eq 'W').
+Else If (TreatmentNHSBoardCypher eq 'W').
    Compute hbtreatcode = 'S08000028'.
 End If.
 
@@ -125,53 +128,23 @@ Compute Postcode = Replace(PostcodeCHIC, " ", "").
 If Postcode = "" Postcode = Replace(PostcodeepiC, " ", "").
 If Length(Postcode) < 7 Postcode = Concat(char.substr(Postcode, 1, 3), " ", char.substr(Postcode, 4, 3)).
 
-save outfile = !file + 'aande_temp.zsav'
-   /keep year recid record_keydate1 record_keydate2 chi gender dob gpprac postcode lca HSCP2016 location hbtreatcode
-      ae_arrivaltime ae_arrivalmode refsource ae_attendcat ae_disdest ae_patflow ae_placeinc ae_reasonwait ae_bodyloc ae_alcohol
-      alcohol_adm submis_adm falls_adm selfharm_adm cost_total_net age
-   /zcompressed.
+* Allocate the costs to the correct month.
 
-* Create a file with costs by month.
-get file = !file + 'aande_temp.zsav'.
+ * Set up the variables.
+Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2).
 
+* Get the month number.
 compute month = xdate.Month(record_keydate1).
 
-numeric costmonthnum (F2.0).
-Do If (month eq 4).
-   Compute costmonthnum = 1.
-Else If (month eq 5).
-   Compute costmonthnum = 2.
-Else If (month eq 6).
-   Compute costmonthnum = 3.
-Else If (month eq 7).
-   Compute costmonthnum = 4.
-Else If (month eq 8).
-   Compute costmonthnum = 5.
-Else If (month eq 9).
-   Compute costmonthnum = 6.
-Else If (month eq 10).
-   Compute costmonthnum = 7.
-Else If (month eq 11).
-   Compute costmonthnum = 8.
-Else If (month eq 12).
-   Compute costmonthnum = 9.
-Else If (month eq 1).
-   Compute costmonthnum = 10.
-Else If (month eq 2).
-   Compute costmonthnum = 11.
-Else If (month eq 3).
-   Compute costmonthnum = 12.
-End If.
-
-do repeat x = col1 to col12
-   /y = 1 to 12.
-   compute x = 0.
-   if (y = costmonthnum) x = cost_total_net.
-end repeat.
-
-rename variables (col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 col11 col12 = 
-                  apr_cost may_cost jun_cost jul_cost aug_cost sep_cost 
-                  oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost).
+ * Loop through the months (in the correct FY order and assign the cost to the relevant month.
+Do Repeat month_num = 4 5 6 7 8 9 10 11 12 1 2 3
+    /month_cost = apr_cost to mar_cost.
+    Do if month = month_num.
+        Compute month_cost = cost_total_net.
+    Else.
+        Compute month_cost = 0.
+    End if.
+End Repeat.
 
  * Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
@@ -195,12 +168,8 @@ save outfile = !file + 'aande_for_source-20' + !FY + '.zsav'
 
 get file = !file + 'aande_for_source-20' + !FY + '.zsav'.
 
-* Housekeeping. 
-erase file = !file + 'aande_temp.zsav'.
-
  * Zip up raw data.
-Host Command = ["zip -m '" + !Extracts + "A&E-episode-level-extract-20" + !FY + ".zip' '" +
-   !Extracts + "A&E-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Extracts + "A&E-episode-level-extract-20" + !FY + ".csv'"].
 
 
 

@@ -52,33 +52,33 @@ CACHE.
 
 * Datazone for outpatients is not Datazone 2011. Consultant code does not have Lead in front of it. 
 rename variables
-    PatUPI = chi
-    PatGenderCode = gender
-    PracticeLocationCode = gpprac
-    PracticeNHSBoardCode = hbpraccode
+    AgeatMidpointofFinancialYear = age
+    AlcoholRelatedAdmission = alcohol_adm
+    ClinicAttendanceStatusCode = attendance_status
+    ClinicTypeCode = clinic_type
+    CommunityHospitalFlag = commhosp
+    ConsultantHCPCode = conc
+    EpisodeRecordKeySMR00C = erk
+    FallsRelatedAdmission = falls_adm
+    GeoCouncilAreaCode = lca
     GeoPostcodeC = postcode
     NHSBoardofResidenceCode = hbrescode
-    GeoCouncilAreaCode = lca
-    TreatmentLocationCode = location
-    TreatmentNHSBoardCode = hbtreatcode
-    SpecialtyClassificat.1497Code = spec
-    SignificantFacilityCode = sigfac
-    ConsultantHCPCode = conc
+    NHSHospitalFlag = nhshosp
+    PatGenderCode = gender
+    PatUPI = chi
     PatientCategoryCode = cat
+    PracticeLocationCode = gpprac
+    PracticeNHSBoardCode = hbpraccode
     ReferralSourceCode = refsource
     ReferralTypeCode = reftype
-    ClinicTypeCode = clinic_type
-    ClinicAttendanceStatusCode = attendance_status
-    AlcoholRelatedAdmission = alcohol_adm
-    SubstanceMisuseRelatedAdmission = submis_adm
-    FallsRelatedAdmission = falls_adm
     SelfHarmRelatedAdmission = selfharm_adm
-    TotalNetCosts = cost_total_net
-    NHSHospitalFlag = nhshosp
-    CommunityHospitalFlag = commhosp
-    AgeatMidpointofFinancialYear = age
     SendingLocationCodeSMR00 = sendloc
-    EpisodeRecordKeySMR00C = erk.
+    SignificantFacilityCode = sigfac
+    SpecialtyClassificat.1497Code = spec
+    SubstanceMisuseRelatedAdmission = submis_adm
+    TotalNetCosts = cost_total_net
+    TreatmentLocationCode = location
+    TreatmentNHSBoardCode = hbtreatcode.
 
 string year (a4) recid (a3).
 compute year = !FY.
@@ -98,72 +98,24 @@ Rename Variables
 alter type record_keydate1 dob (SDate10).
 Compute record_keydate2 = record_keydate1.
 alter type record_keydate1 record_keydate2 dob (Date12).
-
-string unique_id (a16).
-compute unique_id = concat(sendloc, erk).
-
-sort cases by unique_id.
-
-save outfile = !file + 'op_temp.zsav'
-   /keep year recid record_keydate1 record_keydate2 chi gender dob gpprac hbpraccode postcode hbrescode lca location hbtreatcode
-      spec sigfac conc cat age refsource reftype attendance_status clinic_type alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp
-      cost_total_net unique_id
-   /zcompressed.
   
-* Create a file that contains uri and costsfmth and net cost.  Make this look like a 'cross-tab' ready for matching back to the acute_temp file. 
+* Allocate the costs to the correct month.
 
-get file = !file + 'op_temp.zsav'
-   /keep unique_id cost_total_net record_keydate1.
+ * Set up the variables.
+Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2).
 
+* Get the month number.
 compute month = xdate.Month(record_keydate1).
 
-numeric costmonthnum (F2.0).
-Do If (month eq 4).
-   Compute costmonthnum = 1.
-Else If (month eq 5).
-   Compute costmonthnum = 2.
-Else If (month eq 6).
-   Compute costmonthnum = 3.
-Else If (month eq 7).
-   Compute costmonthnum = 4.
-Else If (month eq 8).
-   Compute costmonthnum = 5.
-Else If (month eq 9).
-   Compute costmonthnum = 6.
-Else If (month eq 10).
-   Compute costmonthnum = 7.
-Else If (month eq 11).
-   Compute costmonthnum = 8.
-Else If (month eq 12).
-   Compute costmonthnum = 9.
-Else If (month eq 1).
-   Compute costmonthnum = 10.
-Else If (month eq 2).
-   Compute costmonthnum = 11.
-Else If (month eq 3).
-   Compute costmonthnum = 12.
-End If.
-
-do repeat x = col1 to col12
-   /y = 1 to 12.
-   compute x = 0.
-   if (y = costmonthnum) x = cost_total_net.
-end repeat.
-
-rename variables (col1 col2 col3 col4 col5 col6 col7 col8 col9 col10 col11 col12 =
-   apr_cost may_cost jun_cost jul_cost aug_cost sep_cost
-   oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost).
-
-
-save outfile = !file + 'op_monthly_costs_by_unique_id.zsav'
-   /zcompressed.
-
-* Match this file back to the main op file..  
-
-match files file = !file + 'op_temp.zsav'
-   /table = !file + 'op_monthly_costs_by_unique_id.zsav'
-   /by unique_id.
-execute.
+ * Loop through the months (in the correct FY order and assign the cost to the relevant month.
+Do Repeat month_num = 4 5 6 7 8 9 10 11 12 1 2 3
+    /month_cost = apr_cost to mar_cost.
+    Do if month = month_num.
+        Compute month_cost = cost_total_net.
+    Else.
+        Compute month_cost = 0.
+    End if.
+End Repeat.
 
  * Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
@@ -181,10 +133,5 @@ save outfile = !file + 'outpatients_for_source-20'+!FY+'.zsav'
 
 get file = !file + 'outpatients_for_source-20'+!FY+'.zsav'.
 
-* Housekeeping. 
-erase file = !file + 'op_temp.zsav'.
-erase file = !file + 'op_monthly_costs_by_unique_id.zsav'.
-
  * zip up the raw data.
-Host Command = ["zip -m '" + !Extracts + "Outpatients-episode-level-extract-20" + !FY + ".zip' '" +
-   !Extracts + "Outpatients-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Extracts + "Outpatients-episode-level-extract-20" + !FY + ".csv'"].
