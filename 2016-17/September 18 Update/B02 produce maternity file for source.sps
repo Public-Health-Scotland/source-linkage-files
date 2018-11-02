@@ -195,8 +195,6 @@ Else if record_keydate1 LE #EndOfMonth.
    Else.
        Compute !BedDays = DateDiff(record_keydate2, record_keydate1, "days").
     End If.
-*Else if record_keydate1 EQ #EndOfMonth.
-  *  Compute !BedDays = 1.
 Else.
    Compute !BedDays = 0.
 End If.
