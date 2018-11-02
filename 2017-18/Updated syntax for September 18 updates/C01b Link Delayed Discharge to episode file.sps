@@ -310,9 +310,9 @@ Do if keydate1_dateformat LE #StartOfMonth.
    Else.
       Compute !BedDays = DateDiff(keydate2_dateformat, #StartOfMonth, "days").
    End If.
-Else if keydate1_dateformat LT #EndOfMonth.
-   Do if keydate2_dateformat GE #EndOfMonth.
-      Compute !BedDays = DateDiff(#EndOfMonth, keydate1_dateformat, "days").
+Else if keydate1_dateformat LE #EndOfMonth.
+   Do if keydate2_dateformat GT #EndOfMonth.
+      Compute !BedDays = DateDiff(#EndOfMonth, keydate1_dateformat, "days") + 1.
    Else.
       Compute !BedDays = DateDiff(keydate2_dateformat, keydate1_dateformat, "days").
    End If.
@@ -369,6 +369,10 @@ Else.
     Compute SMRType = "DD-CIS".
 End if.
 
+ * Set the IPDC variable to be I.
+String ipdc (A1).
+Compute ipdc = "I".
+
  * Create record_keydate as numeric.
 Compute record_keydate1 = xdate.mday(keydate1_dateformat) + 100 * xdate.month(keydate1_dateformat) + 10000 * xdate.year(keydate1_dateformat).
 Compute record_keydate2 = xdate.mday(keydate2_dateformat) + 100 * xdate.month(keydate2_dateformat) + 10000 * xdate.year(keydate2_dateformat).
@@ -379,7 +383,7 @@ save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
     keydate1_dateformat keydate2_dateformat record_keydate1 record_keydate2
     hbtreatcode to cis_marker
     Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
-    newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec
+    ipdc newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA
     DD_Quality stay yearstay
     Apr_beddays to Mar_beddays
     /zcompressed.
