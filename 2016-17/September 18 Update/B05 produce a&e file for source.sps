@@ -12,41 +12,43 @@
 ********************************************************************************************************.
 
 GET DATA  /TYPE=TXT
-   /FILE= !Extracts + 'A&E-episode-level-extract-20' + !FY + '.csv'
-   /ENCODING='UTF8'
-   /DELIMITERS=","
-   /QUALIFIER='"'
-   /ARRANGEMENT=DELIMITED
-   /FIRSTCASE=2
-   /VARIABLES=
-      ArrivalDate A10
-      PatCHINumberC A10
-      PatDateOfBirthC A10
-      PatGenderCode F1.0
-      TreatmentNHSBoardCypher A1
-      TreatmentLocationCode A7
-      GPPracticeCode A5
-      CouncilAreaCode A2
-      PostcodeepiC A8
-      PostcodeCHIC A8
-      HSCPCode A9
-      ArrivalTime Time5
-      ArrivalModeCode A2
-      ReferralSourceCode A3
-      AttendanceCategoryCode A2
-      DischargeDestinationCode A3
-      PatientFlowCode A1
-      PlaceofIncidentCode A3
-      ReasonforWaitCode A3
-      BodilyLocationOfInjuryCode A3
-      AlcoholInvolvedCode A2
-      AlcoholRelatedAdmission A1
-      SubstanceMisuseRelatedAdmission A1
-      FallsRelatedAdmission A1
-      SelfHarmRelatedAdmission A1
-      TotalNetCosts F8.2
-      AgeatMidpointofFinancialYear F3.0.
+    /FILE= !Extracts + 'A&E-episode-level-extract-20' + !FY + '.csv'
+    /ENCODING='UTF8'
+    /DELIMITERS=","
+    /QUALIFIER='"'
+    /ARRANGEMENT=DELIMITED
+    /FIRSTCASE=2
+    /VARIABLES=
+    ArrivalDate A10
+    PatCHINumberC A10
+    PatDateOfBirthC A10
+    PatGenderCode F1.0
+    ResidenceNHSBoardCypher A1
+    TreatmentNHSBoardCypher A1
+    TreatmentLocationCode A7
+    GPPracticeCode A5
+    CouncilAreaCode A2
+    PostcodeepiC A8
+    PostcodeCHIC A8
+    HSCPCode A9
+    ArrivalTime Time5
+    ArrivalModeCode A2
+    ReferralSourceCode A3
+    AttendanceCategoryCode A2
+    DischargeDestinationCode A3
+    PatientFlowCode A1
+    PlaceofIncidentCode A3
+    ReasonforWaitCode A3
+    BodilyLocationOfInjuryCode A3
+    AlcoholInvolvedCode A2
+    AlcoholRelatedAdmission A1
+    SubstanceMisuseRelatedAdmission A1
+    FallsRelatedAdmission A1
+    SelfHarmRelatedAdmission A1
+    TotalNetCosts F8.2
+    AgeatMidpointofFinancialYear F3.0.
 CACHE.
+Execute.
 
 rename variables
     AgeatMidpointofFinancialYear = age
@@ -91,42 +93,33 @@ alter type record_keydate1 dob (SDate10).
 Compute record_keydate2 = record_keydate1.
 alter type record_keydate1 record_keydate2 dob (Date12).
 
-String hbtreatcode (a9).
-Do If (TreatmentNHSBoardCypher eq 'A').
-   Compute hbtreatcode = 'S08000015'.
-Else If (TreatmentNHSBoardCypher eq 'B').
-   Compute hbtreatcode = 'S08000016'.
-Else If (TreatmentNHSBoardCypher eq 'Y').
-   Compute hbtreatcode = 'S08000017'.
-Else If (TreatmentNHSBoardCypher eq 'F').
-   Compute hbtreatcode = 'S08000029'.
-Else If (TreatmentNHSBoardCypher eq 'V').
-   Compute hbtreatcode = 'S08000019'.
-Else If (TreatmentNHSBoardCypher eq 'N').
-   Compute hbtreatcode = 'S08000020'.
-Else If (TreatmentNHSBoardCypher eq 'G').
-   Compute hbtreatcode = 'S08000021'.
-Else If (TreatmentNHSBoardCypher eq 'H').
-   Compute hbtreatcode = 'S08000022'.
-Else If (TreatmentNHSBoardCypher eq 'L').
-   Compute hbtreatcode = 'S08000023'.
-Else If (TreatmentNHSBoardCypher eq 'S').
-   Compute hbtreatcode = 'S08000024'.
-Else If (TreatmentNHSBoardCypher eq 'R').
-   Compute hbtreatcode = 'S08000025'.
-Else If (TreatmentNHSBoardCypher eq 'Z').
-   Compute hbtreatcode = 'S08000026'.
-Else If (TreatmentNHSBoardCypher eq 'T').
-   Compute hbtreatcode = 'S08000030'.
-Else If (TreatmentNHSBoardCypher eq 'W').
-   Compute hbtreatcode = 'S08000028'.
-End If.
 
 * POSTCODE = need to make this length 7!  use the CHI postcode and if that is blank, then use the epi postcode.
 String Postcode (A7).
 Compute Postcode = Replace(PostcodeCHIC, " ", "").
 If Postcode = "" Postcode = Replace(PostcodeepiC, " ", "").
 If Length(Postcode) < 7 Postcode = Concat(char.substr(Postcode, 1, 3), " ", char.substr(Postcode, 4, 3)).
+
+String hbtreatcode hbrescode(A9).
+
+ * Recode the cipher type HB codes into 9-char.
+ * Currently using HB2018 set-up.
+Recode TreatmentNHSBoardCypher ResidenceNHSBoardCypher
+    ("A" = "S08000015") 
+    ("B" = "S08000016") 
+    ("F" = "S08000029")
+    ("G" = "S08000021")
+    ("H" = "S08000022")
+    ("L" = "S08000023")
+    ("N" = "S08000020")
+    ("R" = "S08000025")
+    ("S" = "S08000024")
+    ("T" = "S08000030")
+    ("V" = "S08000019")
+    ("W" = "S08000028")
+    ("Y" = "S08000017")
+    ("Z" = "S08000026")
+    Into hbtreatcode hbrescode.
 
 * Allocate the costs to the correct month.
 
@@ -159,7 +152,7 @@ Compute keyTime2 = $sysmis.
 sort cases by chi record_keydate1 keyTime1.
 
 save outfile = !file + 'aande_for_source-20' + !FY + '.zsav'
-   /keep year recid record_keydate1 record_keydate2 keyTime1 keyTime2 chi gender dob gpprac postcode lca HSCP2016 location hbtreatcode
+   /keep year recid record_keydate1 record_keydate2 keyTime1 keyTime2 chi gender dob gpprac postcode lca HSCP2016 location hbrescode hbtreatcode
       ae_arrivalmode refsource ae_attendcat ae_disdest ae_patflow ae_placeinc ae_reasonwait ae_bodyloc ae_alcohol
       alcohol_adm submis_adm falls_adm selfharm_adm cost_total_net age
       apr_cost may_cost jun_cost jul_cost aug_cost sep_cost
