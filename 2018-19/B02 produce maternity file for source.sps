@@ -259,13 +259,83 @@ alter type record_keydate1 record_keydate2 (F8.0).
 sort cases by chi record_keydate1.
 
 save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
-   /keep year recid record_keydate1 record_keydate2 chi gender dob gpprac hbpraccode postcode hbrescode lca location hbtreatcode
-      stay yearstay spec sigfac conc mpat adtf admloc disch dischto dischloc diag1 diag2 diag3 diag4 diag5 diag6
-      op1a dateop1 op2a op3a op4a age discondition cis_marker newcis_admtype newcis_ipdc
-      newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp
-      cost_total_net apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost 
-      apr_beddays may_beddays jun_beddays jul_beddays aug_beddays sep_beddays oct_cost nov_beddays dec_beddays jan_beddays feb_beddays mar_beddays 
-   /zcompressed.
+    /keep year
+    recid
+    record_keydate1
+    record_keydate2
+    chi
+    gender
+    dob
+    gpprac
+    hbpraccode
+    postcode
+    hbrescode
+    lca
+    location
+    hbtreatcode
+    stay
+    yearstay
+    spec
+    sigfac
+    conc
+    mpat
+    adtf
+    admloc
+    disch
+    dischto
+    dischloc
+    diag1
+    diag2
+    diag3
+    diag4
+    diag5
+    diag6
+    op1a
+    dateop1
+    op2a
+    op3a
+    op4a
+    age
+    discondition
+    cis_marker
+    newcis_admtype
+    newcis_ipdc
+    newpattype_ciscode
+    newpattype_cis
+    CIJadm_spec
+    CIJdis_spec
+    alcohol_adm
+    submis_adm
+    falls_adm
+    selfharm_adm
+    commhosp
+    nhshosp
+    cost_total_net
+    apr_cost
+    may_cost
+    jun_cost
+    jul_cost
+    aug_cost
+    sep_cost
+    oct_cost
+    nov_cost
+    dec_cost
+    jan_cost
+    feb_cost
+    mar_cost
+    apr_beddays
+    may_beddays
+    jun_beddays
+    jul_beddays
+    aug_beddays
+    sep_beddays
+    oct_cost
+    nov_beddays
+    dec_beddays
+    jan_beddays
+    feb_beddays
+    mar_beddays
+    /zcompressed.
 
 get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
 
