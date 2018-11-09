@@ -1,12 +1,25 @@
 ﻿* Encoding: UTF-8.
  * Run A01-Set up Macros first!.
 
- * Update this to use the latest DataZone populations file.
-get file='/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2017.sav'
+ * Most up to date Datazone Population estimates.
+Define !DataZone_Pops()
+   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2017.sav"
+!EndDefine.
+
+************************************************************************************************************************************.
+* 1. Obtain the population estimates for Locality AgeGroup and Gender.
+get file = !DataZone_Pops
     /Keep Year DataZone2011 sex age0 to age90plus.
 
  * Select out the estimates for the year of interest.
  * This may need to be changed if we don't have estimates yet.
+
+ * Code if we don't have estimates for this year (and so have to use previous year)
+ * select if year = Number(!altFY, F4.0) - 1.
+ * execute.
+ * compute year = year + 1.
+
+ * Code in usual case where estimates are availiable.
 select if year = Number(!altFY, F4.0).
 
  * Recode to make it match source.
@@ -34,11 +47,13 @@ Recode Age_plus_one
 
 sort cases by DataZone2011.
 
+ * Match on Localities.
 match files file = *
-    /table = "/conf/irf/05-lookups/04-geography/01-locality/Locality_lookup_source.sav"
+    /table = !Lookup + "01-locality/Locality_lookup_source.sav"
     /Rename (Datazone = Datazone2011)
     /By DataZone2011.
 
+ * Aggregate to get populations for Locality/Age Group/Gender.
 aggregate outfile = *
     /Break Locality AgeGroup gender
     /Population_Estimate = Sum(Population_Estimate).
@@ -47,8 +62,8 @@ save outfile = !File + "Population-estimates-20" + !FY + ".zsav"
     /zcompressed.
 
 ************************************************************************************************************************************.
-*2. Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
-get file = "/conf/hscdiip/01-Source-linkage-files/source-individual-file-20" + !FY + '.zsav'
+* 2. Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
+get file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav"
     /Keep chi Locality age gender NSU death_date.
 
  * If they don't have a locality, they're no good as we won't have an estimate to match them against.
@@ -110,6 +125,7 @@ compute Scaling_Factor = New_NSU_Figure / NSU_Population.
  * A scaling factor > 1 implies that we NSU + service-users is less than the population estimate; hence we need to add NSUs ...
 Recode Scaling_Factor (Lo Thru 0 = 0) (1 Thru Hi = 1).
  * Seed is set to make sure same number of individuals is picked each time syntax is ran.
+Numeric Keep_NSU (F1.0).
 set seed 100.
 compute Keep_NSU = RV.BERNOULLI(Scaling_Factor).
 
@@ -122,4 +138,28 @@ save outfile = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav"
     /Keep chi Keep_NSU
     /zcompressed.
 
+************************************************************************************************************************************.
+* 3. Match the flag back on to the SLF.
+match files 
+    /file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav"
+    /table = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav"
+    /Rename Keep_NSU = Keep_Population
+    /By Chi.
 
+ * Flag all non-NSUs as Keep.
+If NSU = 0 Keep_Population = 1.
+
+ * If the flag is missing they must be a non-keep NSU so set to 0.
+Recode Keep_Population (sysmis = 0).
+
+ * Set Variable labels.
+Variable Labels 
+Keep_Population "Flag indicating whether this CHI should be kept or discarded when scaling the whole population to be more in line with official population estimates".
+
+ * Set Value Labels.
+Value Labels Keep_Population
+    1 "Keep"
+    0 "Discard".  
+
+save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
+    /zcompressed.
