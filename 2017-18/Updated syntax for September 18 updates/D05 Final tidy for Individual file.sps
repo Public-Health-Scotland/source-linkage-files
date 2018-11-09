@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !file + "temp-source-individual-file-4-20" + !FY + ".zsav".
+get file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
    "1011" "2010/11"
@@ -129,12 +129,13 @@ Variable Labels
     HRI_lcaP "Cumulative percent in LCA excluding District Nursing and Care Home costs"
     HRI_lcaP_incDN	"Cumulative percent in LCA including District Nursing costs"
     HRI_hbP "Cumulative percent in HB excluding District Nursing and Care Home costs"
-    HRI_scotP "Cumulative percent in Scotland excluding District Nursing and Care Home costs".
+    HRI_scotP "Cumulative percent in Scotland excluding District Nursing and Care Home costs"
+    Keep_Population "Flag indicating whether this CHI should be kept or discarded when scaling the whole population to be more in line with official population estimates".
 
- * Tweak for 17/18 and 18/19 so we can keep the variables but make it clear there is no data.
-Compute ch_episodes = $sysmis.
-Compute ch_beddays = $sysmis.
-Compute ch_cost = $sysmis.
+ * Set Value Labels.
+Value Labels Keep_Population
+    1 "Keep"
+    0 "Discard".  
 
 sort cases by chi.
 save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
@@ -198,10 +199,6 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     gls_inpatient_beddays
     gls_el_inpatient_beddays
     gls_non_el_inpatient_beddays
-    DD_NonCode9_episodes
-    DD_Code9_episodes
-    DD_NonCode9_beddays
-    DD_Code9_beddays
     op_newcons_attendances
     op_newcons_dnas
     op_cost_attend
@@ -292,9 +289,9 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     HRI_scotP
     SPARRA_Start_FY
     SPARRA_End_FY
-    HHG_End_FY
     Demographic_Cohort
     Service_Use_Cohort
+    Keep_Population
     /zcompressed.
 
 get file = !file + "source-individual-file-20" + !FY + ".zsav".
@@ -305,5 +302,6 @@ erase file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
 erase file = !file + "temp-source-individual-file-2-20" + !FY + ".zsav".
 erase file = !file + "temp-source-individual-file-3-20" + !FY + ".zsav".
 erase file = !file + "temp-source-individual-file-4-20" + !FY + ".zsav".
+erase file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 erase file = !file + 'HRI_lookup_' + !FY + '.zsav'.
