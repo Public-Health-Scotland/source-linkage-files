@@ -47,6 +47,16 @@ Define !Lookup()
    "/conf/irf/05-lookups/04-geography/"
 !EndDefine.
 
+ * Locations of the existing Anon_CHI lookups.
+Define !CHI-to-Anon-lookup()
+    "/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav"
+!EndDefine.
+
+Define !Anon-to-CHI-lookup()
+    "/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav"
+!EndDefine.
+
+
 ************************************************************************************************************.
  * This will automatically set from the FY macro above for example for !FY = "1718" it will produce "2017".
 Define !altFY()

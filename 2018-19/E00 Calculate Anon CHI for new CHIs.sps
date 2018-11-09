@@ -3,14 +3,7 @@
  * Syntax to add new CHIs to the file after an update.
  * This could be ran every time but it makes more sense to run it once all new / updated files are availiable.
 ***************************************************************************.
- * Locations of the existing lookups.
-Define !CHI-to-Anon-lookup()
-    "/conf/sourcedev/James/Anon CHI/CHI-to-Anon-lookup.zsav"
-!EndDefine.
-
-Define !Anon-to-CHI-lookup()
-    "/conf/sourcedev/James/Anon CHI/Anon-to-CHI-lookup.zsav"
-!EndDefine.
+ * Run A01 Set-up macros first!.
 
  * Add updated individual files together.
  * Only need to do individual files as they have all the CHIs.
