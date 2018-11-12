@@ -29,7 +29,7 @@ Select if Keep = 1.
  * If running this for the first time i.e. there is no lookup, skip this bit and run an execute. then continue from Begin Program instead.
 match files
     /File = * 
-    /Table = !CHI-to-Anon-lookup
+    /Table = !CHItoAnonlookup
     /In = Seen_Before
     /By CHI
     /Keep = CHI Year.
@@ -76,11 +76,11 @@ End Program.
  * Or skip if running for the first time / no lookup availiable.
 add files
     /File = *
-    /File = !CHI-to-Anon-lookup
+    /File = !CHItoAnonlookup
     /By CHI.
 
  * Save out, we will use this one to swap out CHIs in SLFs.
-save outfile = !CHI-to-Anon-lookup
+save outfile = !CHItoAnonlookup
     /Keep CHI Anon_CHI
     /zcompressed.
 
@@ -88,6 +88,6 @@ save outfile = !CHI-to-Anon-lookup
 sort cases by Anon_CHI.
 
  * Save out, this one will be provided for users to match CHIs back when needed.
-save outfile = !Anon-to-CHI-lookup
+save outfile = !AnontoCHIlookup
     /Keep Anon_CHI CHI
     /zcompressed.

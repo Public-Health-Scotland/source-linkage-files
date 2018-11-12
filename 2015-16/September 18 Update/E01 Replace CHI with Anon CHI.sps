@@ -1,12 +1,15 @@
 ﻿* Encoding: UTF-8.
-
+*****************************************************************************************.
 * Run A01 Set-up Macros first!.
+*****************************************************************************************.
 
+*****************************************************************************************.
  * Episode file
+*****************************************************************************************.
  * Match on the Anon_CHI from the lookup.
 match files
     /file = !file + "source-episode-file-20" + !FY + ".zsav"
-    /table = !CHI-to-Anon-lookup
+    /table = !CHItoAnonlookup
     /By CHI.
 
 sort cases by Anon_CHI.
@@ -18,11 +21,13 @@ save outfile = !file + "source-episode-file-20" + !FY + ".zsav"
     /zcompressed.
 
 
+*****************************************************************************************.
  * Individual file
+*****************************************************************************************.
  * Match on the Anon_CHI from the lookup.
 match files
     /file = !file + "source-individual-file-20" + !FY + ".zsav"
-    /table = !CHI-to-Anon-lookup
+    /table = !CHItoAnonlookup
     /By CHI.
 
 sort cases by Anon_CHI.
