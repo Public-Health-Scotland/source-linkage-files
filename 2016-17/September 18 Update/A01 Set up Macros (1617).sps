@@ -48,11 +48,11 @@ Define !Lookup()
 !EndDefine.
 
  * Locations of the existing Anon_CHI lookups.
-Define !CHI-to-Anon-lookup()
+Define !CHItoAnonlookup()
     "/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav"
 !EndDefine.
 
-Define !Anon-to-CHI-lookup()
+Define !AnontoCHIlookup()
     "/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav"
 !EndDefine.
 
