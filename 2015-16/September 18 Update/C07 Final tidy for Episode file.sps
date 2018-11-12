@@ -306,6 +306,7 @@ Value Labels recid
     'CH' "Care Home records"
     'DD' "Delayed Discharge episode"
     'DN' "District Nursing episode"
+    'CMH' 'Community Mental Health episiode'
     'GLS' "Geriatric Long Stay (SMR01) discharges"
     'NRS' "National Records Service death registrations"
     'NSU' "Non-Service-User (Included for whole population analysis)"
@@ -319,6 +320,7 @@ Add Value Labels SMRType
     'DD-CIS' 'Delayed Discharge - Linked to a CIS episode'
     'DD-No CIS' 'Delayed Discharge - Not linked to a CIS episode'
     'DN' 'District Nursing'
+    'Comm-MH' 'Community Mental Health'
     'GLS-IP' 'Geriatric Long Stay - Inpatient'
     'Matern-DC' 'Maternity - Daycase'
     'Matern-IP' 'Maternity - Inpatient'
