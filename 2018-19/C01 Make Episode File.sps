@@ -17,6 +17,7 @@ add files
     /file = !File + "aande_for_source-20" + !FY + ".zsav"
     /file = !File + "deaths_for_source-20" + !FY + ".zsav"
     /file = !File + "DN_for_source-20" + !FY + ".zsav"
+    /file = !File + 'CMH_for_source-20' + !FY + '.zsav'
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /By chi.

@@ -201,36 +201,14 @@ Value Labels year
    '2324' "2023/24"
    '2425' "2024/25".
 
- * DN Labels.
-Add VALUE LABELS diag1 to diag6
-   1	'Assessment'
-   10	'Long Term Condition Management'
-   11	'Medication'
-   12	'Mobility'
-   13	'Nutrition/Fluids'
-   14	'Personal Care'
-   16	'Procedures'
-   17	'Risk Management'
-   18	'Skin/Wound Care'
-   19	'Social Circumstances'
-   2	'Bladder/Bowel Care'
-   20	'Symptom Management'
-   21	'Teaching'
-   22	'Palliative Care'
-   3	'Care Management'
-   4	'Carers'
-   5	'Emotional / Psychological Issues'
-   6	'Equipment'
-   8	'Health Promotion'.
-
 Add value labels location
-   1 'DN-Hospital'
-   2 'DN-HealthCentre'
-   3 'DN-GP Surgery'
-   5 'DN-Nursing Home or Care Home or Residential Home'
-   6 'DN-Patient or client residence'
-   7 'DN-Day Centre'
-   8 'DN-Other'.
+    '1' "CHAD - Hospital including Day Hospitals"
+    '2' "CHAD - Health Centre"
+    '3' "CHAD - GP Surgery"
+    '5' "CHAD - Nursing Home, Care Home or Residential Home"
+    '6' "CHAD - Patient or client home / residence"
+    '7' "CHAD - Day Centre"
+    '8' "CHAD - Other".
 
 Define !AddHBDictionaryInfo (HB = !CMDEND)
     Add Value Labels !HB
@@ -307,6 +285,7 @@ Value Labels recid
     'CH' "Care Home records"
     'DD' "Delayed Discharge episode"
     'DN' "District Nursing episode"
+    'CMH' 'Community Mental Health episiode'
     'GLS' "Geriatric Long Stay (SMR01) discharges"
     'NRS' "National Records Service death registrations"
     'NSU' "Non-Service-User (Included for whole population analysis)"
@@ -320,6 +299,7 @@ Add Value Labels SMRType
     'DD-CIS' 'Delayed Discharge - Linked to a CIS episode'
     'DD-No CIS' 'Delayed Discharge - Not linked to a CIS episode'
     'DN' 'District Nursing'
+    'Comm-MH' 'Community Mental Health'
     'GLS-IP' 'Geriatric Long Stay - Inpatient'
     'Matern-DC' 'Maternity - Daycase'
     'Matern-IP' 'Maternity - Inpatient'
