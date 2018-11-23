@@ -354,7 +354,8 @@ get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
 Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
 
  * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
+Host Command = ["zip -mjv '" + !File + "Activity.zip' " + 
+    "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
@@ -363,7 +364,8 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+    "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "' " + 
+    "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "'"].
 
 
 
