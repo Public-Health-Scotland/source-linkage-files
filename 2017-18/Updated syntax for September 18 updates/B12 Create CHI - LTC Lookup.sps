@@ -12,6 +12,8 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
+ * Unzip the file.
+Host Command = ["gunzip '" + !CSDExtractLoc + "_extract_1_LTCs.csv'"].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
@@ -76,4 +78,5 @@ save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
 
 get file = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
-
+* Zip back up.
+Host Command = ["gzip '" + !CSDExtractLoc + "_extract_1_LTCs.csv'"].

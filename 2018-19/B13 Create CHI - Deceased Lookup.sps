@@ -17,9 +17,10 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
+ * Unzip the file.
+Host Command = ["gunzip '" + !CSDExtractLoc + "_extract_2_Deaths.csv'"].
 
 * Read in CSV output file.
-
 GET DATA  /TYPE=TXT
    /FILE= !CSDExtractLoc + "_extract_2_Deaths.csv"
    /ENCODING='UTF8'
@@ -69,5 +70,6 @@ save outfile = !Extracts_Alt + "Deceased_patient_reference_file-20" + !FY + ".zs
 
 get file = !Extracts_Alt + "Deceased_patient_reference_file-20" + !FY + ".zsav".
 
-
+* Zip back up.
+Host Command = ["gzip '" + !CSDExtractLoc + "_extract_2_Deaths.csv'"].
 
