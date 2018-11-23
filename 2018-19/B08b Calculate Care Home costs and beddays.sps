@@ -21,7 +21,7 @@ sort cases by year nursingcareprovision.
 
 match files
     /file = *
-    /Table = !Extracts_Alt + "Cost_CH_Lookup.sav"
+    /Table = !Costs_Lookup + "Cost_CH_Lookup.sav"
     /By year nursingcareprovision.
 
  *Create age groups.

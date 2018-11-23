@@ -138,7 +138,7 @@ Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', C
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Costs_Lookup + "Care_home_lookup-20" + !FY + ".sav"
    /In = AccurateData1
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 Frequencies AccurateData1.

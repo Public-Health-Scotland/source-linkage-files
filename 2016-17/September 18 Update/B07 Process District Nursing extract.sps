@@ -109,7 +109,7 @@ Compute year = !FY.
 sort cases by hbtreatcode.
 
 match files file = *
-    /Table = !Extracts_Alt + "Cost_DN_Lookup.sav"
+    /Table = !Costs_Lookup + "Cost_DN_Lookup.sav"
     /Drop hbtreatname
     /By hbtreatcode year. 
 
