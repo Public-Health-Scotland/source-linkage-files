@@ -15,10 +15,10 @@
 ********************************************************************************************************.
  * This should unzip the file in the DH-Extracts directory.
  * Note the extract numbers might need changing.
-Host Command = ["gunzip '" + !CSDExtractLoc + "_extract_3_paid_data_fy_" + !altFY + ".csv'"].
+Host Command = ["gunzip '" + !CSDExtractLoc + "_extract_7_paid_data_fy_" + !altFY + ".csv'"].
 
 GET DATA  /TYPE=TXT
-   /FILE= !CSDExtractLoc + "_extract_3_paid_data_fy_" + !altFY + ".csv"
+   /FILE= !CSDExtractLoc + "_extract_7_paid_data_fy_" + !altFY + ".csv"
    /ENCODING="UTF8"
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -42,5 +42,5 @@ save outfile = !File + "pis_" + !FY + "_measures.zsav"
 get file = !File + "pis_" + !FY + "_measures.zsav".
 
  * zip raw data back up.
-Host Command = ["gzip '" + !CSDExtractLoc + "_extract_3_paid_data_fy_" + !altFY + ".csv'"].
+Host Command = ["gzip '" + !CSDExtractLoc + "_extract_7_paid_data_fy_" + !altFY + ".csv'"].
 
