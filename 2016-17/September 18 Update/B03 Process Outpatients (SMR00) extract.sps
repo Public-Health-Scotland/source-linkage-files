@@ -127,8 +127,7 @@ sort cases by chi record_keydate1.
 save outfile = !file + 'outpatients_for_source-20'+!FY+'.zsav'
    /keep year recid record_keydate1 record_keydate2 chi gender dob gpprac hbpraccode postcode hbrescode lca location hbtreatcode
       spec sigfac conc cat age refsource reftype attendance_status clinic_type alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp
-      cost_total_net unique_id
-      apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost
+      cost_total_net apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost
    /zcompressed.
 
 get file = !file + 'outpatients_for_source-20'+!FY+'.zsav'.
