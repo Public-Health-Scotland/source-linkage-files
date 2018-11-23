@@ -19,7 +19,7 @@
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
  * Ask Social Care Team for the care home names lookup, which originally comes from the Care Inspectorate.
-
+*Last ran :23/11/2018-AG.
 * Read in care home lookup file (all care homes).
 GET DATA /TYPE=XLSX
    /FILE= !Extracts_Alt + 'Care_home_lookup.xlsx'
@@ -30,7 +30,7 @@ GET DATA /TYPE=XLSX
 
 * Only keep ones which were open on or after the start of the FY.
 select if Sysmis(DateCanx) OR DateCanx > Date.DMY(01, 04, Number(!altFY, F4.0)).
-
+exe.
 * If the postcode has a space in it & it's more than 7 long, remove a space, repeat if needed.
 Loop If (char.Index(CareHomePostcode, " ") > 0) & (char.Length(CareHomePostcode) > 7).
    Compute CareHomePostcode = Replace(CareHomePostcode, " ", "").
@@ -112,5 +112,5 @@ Aggregate
    /Break CareHomeCouncilAreaCode CareHomePostcode CareHomeName
    /CareHomeCouncilName MainClientGroup Sector = First(CareHomeCouncil MainClientGroup Sector)
    /DateReg DateCanx = Max(DateReg DateCanx).
-
+exe.
 
