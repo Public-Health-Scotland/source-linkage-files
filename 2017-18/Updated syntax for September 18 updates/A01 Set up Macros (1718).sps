@@ -33,9 +33,13 @@ Define !Extracts_Alt()
    "/conf/hscdiip/DH-Extract/"
 !EndDefine.
 
+Define !Costs_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
+!EndDefine.
+
  * Replace the number with the CSD ref.
 Define !CSDRef()
-    "SCTASK0065265"
+    "SCTASK0076848"
 !EndDefine.
 
 Define !CSDExtractLoc()
