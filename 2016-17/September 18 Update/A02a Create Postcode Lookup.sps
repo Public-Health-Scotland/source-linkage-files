@@ -1,16 +1,17 @@
 ﻿* Encoding: UTF-8.
  * Run 01-Set up Macros first!.
+*Last ran-23/11/2018-AG.
 
 CD "/conf/linkage/output/lookups/Unicode".
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2018_1.5.sav"
+   "Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2018_2.sav"
 !EndDefine.
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "Deprivation/postcode_2018_1.5_simd2016.sav"
+   "Deprivation/postcode_2018_2_simd2016.sav"
 !EndDefine.
 
  * Most up to date Urban-Rural / Postcode lookup.
@@ -129,13 +130,13 @@ match files
    /File = !PCDir
    /Table = !SIMDLookup
    /By PC7.
-
+exe.
  * Add on Urban Rural Classifications.
 match files
    /File = *
    /Table = !URLookup
    /By PC8.
-
+exe.
  * Sort by DataZone and then add on the localities.
 sort cases by DataZone2011.
 match files
@@ -143,9 +144,9 @@ match files
    /Table = !Lookup + "01-locality/Locality_lookup_source.sav"
    /Rename (DataZone = DataZone2011)
    /By Datazone2011.
-
+exe.
 if locality = "" locality = "No Locality Information".
-
+exe.
  * Use CA2011 to produce the 2-char LCA codes.
 String LCA (A2).
 !CA2011toLCA.

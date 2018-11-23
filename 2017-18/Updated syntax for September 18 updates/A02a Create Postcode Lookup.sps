@@ -5,12 +5,12 @@ CD "/conf/linkage/output/lookups/Unicode".
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2018_1.5.sav"
+   "Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2018_2.sav"
 !EndDefine.
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "Deprivation/postcode_2018_1.5_simd2016.sav"
+   "Deprivation/postcode_2018_2_simd2016.sav"
 !EndDefine.
 
  * Most up to date Urban-Rural / Postcode lookup.
