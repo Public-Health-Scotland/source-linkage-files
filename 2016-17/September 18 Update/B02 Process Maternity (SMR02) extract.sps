@@ -329,7 +329,7 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     jul_beddays
     aug_beddays
     sep_beddays
-    oct_cost
+    oct_beddays
     nov_beddays
     dec_beddays
     jan_beddays

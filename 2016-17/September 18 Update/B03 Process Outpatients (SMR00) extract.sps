@@ -4,7 +4,7 @@
 * Read in the outpatients extract.  Rename/reformat/recode columns as appropriate. 
 
 * Program by Denise Hastie, June 2016.
-
+*Last ran 26/11/2018.
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.

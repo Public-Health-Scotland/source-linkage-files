@@ -125,7 +125,7 @@ compute gender = 2.
 string year (a4) recid (a3) ipdc (a1) newcis_ipdc (a1) newpattype_cis (a13).
 compute year = !FY.
 compute recid = '02B'.
-
+exe.
  * Recode GP Practice into a 5 digit number.
  * We assume that if it starts with a letter it's an English practice and so recode to 99995.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
@@ -329,7 +329,7 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     jul_beddays
     aug_beddays
     sep_beddays
-    oct_cost
+    oct_beddays
     nov_beddays
     dec_beddays
     jan_beddays
