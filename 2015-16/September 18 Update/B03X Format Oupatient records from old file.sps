@@ -27,6 +27,10 @@ Rename Variables
     august_cost = aug_cost
     sept_cost = sep_cost.
 
+alter type dob (A8).
+alter type dob (sdate10).
+
+Recode nhshosp commhosp ('1' = 'Y') ('0' = 'N').
 
  * Save out in the exact form that will be expected.
 save outfile = !file + 'outpatients_for_source-20'+!FY+'.zsav'
