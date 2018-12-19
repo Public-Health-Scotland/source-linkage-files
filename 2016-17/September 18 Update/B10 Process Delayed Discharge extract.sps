@@ -1,5 +1,5 @@
-﻿* Encoding: UTF-8.
-get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Jun18DD_LinkageFile.zsav".
+﻿ * Encoding: UTF-8.
+get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Sep18DD_LinkageFile.zsav".
 
 Rename Variables
    HealthLocationCode = location

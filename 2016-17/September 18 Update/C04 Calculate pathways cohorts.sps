@@ -31,6 +31,8 @@ end repeat.
 
 
 *Frailty ClassIfication.
+
+*If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
 compute Frail_Cohort = 0.
 If (recid = 'CH' and age GE 65) Frail_Cohort = 1.
 do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
@@ -38,8 +40,6 @@ do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
         compute Frail_Cohort  = 1.
     End If.
 end repeat.
-*If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
-
 *Maternity ClassIfication.
 compute Maternity_Cohort = 0.
 If recid = '02B' Maternity_Cohort = 1.
@@ -539,4 +539,4 @@ save outfile = !File + 'GP_Practice_Service_Use_Cohorts_' + !FY + '.zsav'
    /keep CHI Service_Use_Cohort
    /zcompressed.
 
-
+get file= !File + 'GP_Practice_Service_Use_Cohorts_' + !FY + '.zsav'.

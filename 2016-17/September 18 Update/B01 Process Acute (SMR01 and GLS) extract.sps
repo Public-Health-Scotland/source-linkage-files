@@ -150,7 +150,8 @@ compute recid = '01B'.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
    Compute gpprac = "99995".
 End if. 
-Alter Type GPprac (F5.0).
+exe.
+Alter Type gpprac (F5.0).
 
  * Flag GLS records.
 if (glsrecord EQ 'Y') recid = 'GLS'.

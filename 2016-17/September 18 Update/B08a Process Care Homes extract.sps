@@ -74,7 +74,7 @@ if UPINumber = lag(UPINumber) Days = DATEDIFF(CareHomeAdmissionDate,(lag(CareHom
 
 compute break_ascending = 0.
 if days ge 2 break_ascending = 1.
-
+exe.
  * Currently the first episode for each person is not being flagged as distinct so repeat process above but in reverse.
 sort cases by UPINumber FinancialQuarter CareHomeDischargeDate CareHomeAdmissionDate (D).
 
@@ -138,7 +138,7 @@ Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', C
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Costs_Lookup + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
    /In = AccurateData1
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 Frequencies AccurateData1.

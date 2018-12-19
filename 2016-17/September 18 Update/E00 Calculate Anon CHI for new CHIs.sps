@@ -11,9 +11,10 @@
 * Add the filepaths e.g.
 * "/conf/sourcedev/Source Linkage File Updates/YEAR/source-individual-file-20YEAR.zsav".
 add files
-    /File =  
-    /File = 
-    /File =
+    /File ="/conf/sourcedev/Source Linkage File Updates/1516/source-individual-file-201516.zsav"
+    /File ="/conf/sourcedev/Source Linkage File Updates/1617/source-individual-file-201617.zsav"
+    /File = "/conf/sourcedev/Source Linkage File Updates/1718/source-individual-file-201718.zsav"
+    /File ="/conf/sourcedev/Source Linkage File Updates/1819/source-individual-file-201819.zsav"
     /Keep CHI Year
     /By CHI.
 
@@ -37,6 +38,7 @@ match files
 Select if Seen_Before = 0.
  * This will show how many new CHIs came from each file.
  * Don't skip this bit as it also executes which is required for the below.
+exe.
 Frequencies Year.
 
  * This Python program reads in the CHI numbers, encodes them and then creates a new variable in SPSS and writes the values to it.

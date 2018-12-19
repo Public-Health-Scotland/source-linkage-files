@@ -40,17 +40,17 @@ match files
    /Table = !Lookup + "../ReadCodeLookup.zsav"
    /In = FullMatch1
    /By ReadCode Description.
-
+exe.
 * If the codes still don't match it could just be because the descriptions are different.
 match files
    /File = *
    /Table = !Lookup + "../ReadCodeLookup.zsav"
    /Rename (Description = TrueDescription)
    /By ReadCode.
-
+exe.
 * If we had a description in the lookup that matched a readcode, use that one now.
 If FullMatch1 = 0 AND char.Len(TrueDescription) > 0 Description = TrueDescription.
-
+exe.
 * Any that are still not matching at this point must be bad readcodes.
 Sort cases by ReadCode Description.
 match files
@@ -58,7 +58,7 @@ match files
    /Table = !Lookup + "../ReadCodeLookup.zsav"
    /In = FullMatch2
    /By ReadCode Description.
-
+exe.
 Frequencies FullMatch1 FullMatch2.
 
 Temporary.
@@ -86,7 +86,7 @@ match files
    /Table = !Lookup + "../ReadCodeLookup.zsav"
    /In = FinalCheck
    /By ReadCode Description.
-
+exe.
  * If the final corrections worked then this command should result in a warning.
 Temporary.
 select if FinalCheck = 0.

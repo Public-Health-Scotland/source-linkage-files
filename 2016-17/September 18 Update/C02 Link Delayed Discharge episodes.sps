@@ -23,7 +23,7 @@ aggregate
    /break chi new_CIS
    /keydate3_dateformat = Min(keydate1_dateformat)
    /keydate4_dateformat = Max(keydate2_dateformat).
-
+exe.
 save outfile = !File + "temp-source-episode-with-CIS-dates.zsav"
    /zcompressed.
 get file = !File + "temp-source-episode-with-CIS-dates.zsav".

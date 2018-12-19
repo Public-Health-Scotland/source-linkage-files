@@ -32,3 +32,4 @@ execute.
 Save Outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
    /zcompressed.
 
+get file= !File + "temp-source-episode-file-5-" + !FY + ".zsav".
