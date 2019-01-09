@@ -1,233 +1,210 @@
 ﻿* Encoding: UTF-8.
- * Match on the non-service-user CHIs.
- * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
- * Get a warning here but should be fine. - Caused by the way we match on NSU.
+get file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 
-match files
-    /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
-    /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /By chi.
-*execute.
+* Match on postcode stuff.
+Sort Cases by postcode.
 
-* Set up the variables for the NSU CHIs.
-* The macros are defined in C01a.
-Do if recid = "".
-    Compute year = !FY.
-    Compute recid = "NSU".
-    Compute SMRType = "Non-User".
+ * Keep existing values in case we can't match the postcode.
+Rename Variables
+    LCA = LCA_old
+    HSCP2016 = HSCP2016_old
+    Datazone2011 = Datazone2011_old
+    hbrescode = hbrescode_old.
+
+*Apply consistent geographies.
+match files file = *
+    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /Rename (HB2014 = hbrescode)
+    /In = PostcodeMatch
+    /by postcode.
+
+ * If the postcode matched use the new values, if it didn't use the existing ones.
+Do if PostcodeMatch = 0.
+    Compute LCA = LCA_old.
+    Compute HSCP2016 = HSCP2016_old.
+    Compute Datazone2011 = Datazone2011_old.
+    Compute hbrescode = hbrescode_old.
 End if.
 
-********************Match on LTC flags and dates of LTC incidence (based on hospital incidence only)*****.
-*Match on LTCs, deceased flags and date.
-match files file = *
-    /Rename(death_date = DN_death_date)
-    /table = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
-    /table = !Extracts_Alt + "Deceased_patient_reference_file-20" + !FY + ".zsav"
-    /by chi.
-*execute.
+ * If we can, 'cascade' the geographies upwards i.e. if they have an LCA use this to fill in HSCP2016 and so on for hbrescode.
+ * Codes are correct as at August 2018.
 
-* Recode flags.
-Recode arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd
-   hefailure ms parkinsons refailure congen bloodbfo endomet digestive
-   deceased (sysmis = 0).
-
- * Now we have all CHIs and LTC data try to work out a dob if it's missing, then calculate the age.
-Do If (~SysMiss(dob)).
-    Compute age = DateDiff(!midFY, dob, "years").
-Else if chi ne "".
-    * Create 2 scratch variables with the possible dobs and ages from the CHI.
-    Compute #CHI_dob1 = Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".19", char.substr(chi, 5, 2)), EDate12).
-    Compute #CHI_dob2 = Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".20", char.substr(chi, 5, 2)), EDate12).
-    Compute #CHI_age1 = DateDiff(!midFY, #CHI_dob1, "years").
-    Compute #CHI_age2 = DateDiff(!midFY, #CHI_dob2, "years").
-    * If either of the dobs is missing use the other one.
-    * This only happens with impossible dates because of leap years.
-    Do if Sysmiss(#CHI_dob1) AND ~Sysmiss(#CHI_dob2).
-        Compute dob = #CHI_dob2.
-        Compute age = #CHI_age2.
-    Else if Sysmiss(#CHI_dob2) AND ~Sysmiss(#CHI_dob1).
-        Compute dob = #CHI_dob1.
-        Compute age = #CHI_age1.
-        * If the younger age is negative, assume they are the older one.
-    Else if #CHI_age2 < 0.
-        Compute dob = #CHI_dob1.
-        Compute age = #CHI_age1.
-        * If the younger dob means that they have activity before birth assume they are older.
-    Else if #CHI_dob2 > keydate1_dateformat.
-        Compute dob = #CHI_dob1.
-        Compute age = #CHI_age1.
-        * If the younger dob means that they have an LTC before birth assume they are the older one.
-    Else if #CHI_dob2 > Min(arth_date to digestive_date).
-        Compute dob = #CHI_dob1.
-        Compute age = #CHI_age1.
-        * If the congenital defect date lines up with a dob, assume it's correct.
-    Else if #CHI_dob2 = congen_date.
-        Compute dob = #CHI_dob2.
-        Compute age = #CHI_age2.
-    Else if #CHI_dob1 = congen_date.
-        Compute dob = #CHI_dob1.
-        Compute age = #CHI_age1.
-      * If the older age makes the person older than 115, assume they are younger (oldest living person is 113).
-    Else if #CHI_age1 > 115.
-        Compute dob = #CHI_dob2.
-        Compute age = #CHI_age2.
+* First LCA -> HSCP2016.
+Do if HSCP2016 = "".
+    Do if (LCA = "01").
+        Compute HSCP2016 = "S37000001".
+    Else if (LCA = "02").
+        Compute HSCP2016 = "S37000002".
+    Else if (LCA = "03").
+        Compute HSCP2016 = "S37000003".
+    Else if (LCA = "04").
+        Compute HSCP2016 = "S37000004".
+    Else if (LCA = "05").
+        Compute HSCP2016 = "S37000025".
+    Else if (LCA = "06").
+        Compute HSCP2016 = "S37000005".
+    Else if (LCA = "07").
+        Compute HSCP2016 = "S37000029".
+    Else if (LCA = "08").
+        Compute HSCP2016 = "S37000006".
+    Else if (LCA = "09").
+        Compute HSCP2016 = "S37000007".
+    Else if (LCA = "10").
+        Compute HSCP2016 = "S37000008".
+    Else if (LCA = "11").
+        Compute HSCP2016 = "S37000009".
+    Else if (LCA = "12").
+        Compute HSCP2016 = "S37000010".
+    Else if (LCA = "13").
+        Compute HSCP2016 = "S37000011".
+    Else if (LCA = "14").
+        Compute HSCP2016 = "S37000012".
+    Else if (LCA = "15").
+        Compute HSCP2016 = "S37000013".
+    Else if (LCA = "16").
+        Compute HSCP2016 = "S37000032".
+    Else if (LCA = "17").
+        Compute HSCP2016 = "S37000015".
+    Else if (LCA = "18").
+        Compute HSCP2016 = "S37000016".
+    Else if (LCA = "19").
+        Compute HSCP2016 = "S37000017".
+    Else if (LCA = "20").
+        Compute HSCP2016 = "S37000018".
+    Else if (LCA = "21").
+        Compute HSCP2016 = "S37000019".
+    Else if (LCA = "22").
+        Compute HSCP2016 = "S37000020".
+    Else if (LCA = "23").
+        Compute HSCP2016 = "S37000021".
+    Else if (LCA = "24").
+        Compute HSCP2016 = "S37000022".
+    Else if (LCA = "25").
+        Compute HSCP2016 = "S37000033".
+    Else if (LCA = "26").
+        Compute HSCP2016 = "S37000024".
+    Else if (LCA = "27").
+        Compute HSCP2016 = "S37000026".
+    Else if (LCA = "28").
+        Compute HSCP2016 = "S37000027".
+    Else if (LCA = "29").
+        Compute HSCP2016 = "S37000028".
+    Else if (LCA = "30").
+        Compute HSCP2016 = "S37000005".
+    Else if (LCA = "31").
+        Compute HSCP2016 = "S37000030".
+    Else if (LCA = "32").
+        Compute HSCP2016 = "S37000031".
     End if.
-    * If we still don't have an age, try and fill it in from a previous record.
-    Do if (sysmiss(Age) OR age = 999) and Chi = Lag(Chi).
-        * Only use the previous one if it matches the CHI.
-        Do if #CHI_age1 = Lag(Age) Or #CHI_dob1 = lag(dob).
-            Compute dob = #CHI_dob1.
-            Compute age = #CHI_age1.
-        Else if #CHI_age2 = Lag(Age) Or #CHI_dob2 = lag(dob).
-            Compute dob = #CHI_dob2.
-            Compute age = #CHI_age2.
-        End if.
-    End if.
-End If.
-
-frequencies age.
-
- * If any gender codes are missing or 0 recode to CHI gender.
-If chi NE "" #CHI_gender = Number(char.SUBSTR(chi, 9, 1), F1.0).
-
-Do If sysmis(gender) OR gender = 0.
-   Do If Mod(#CHI_gender, 2) = 1.
-      Compute gender = 1.
-   Else If Mod(#CHI_gender, 2) = 0.
-      Compute gender = 2.
-   End If.
-End If.
-
-frequencies gender.
-
-********************** update deceased flag and death date using the NRS records ***********************.
- * Note that the deaths file is out-of-date, therefore there are some cases where NRS record exists with date of death, but deceased flag is 0, because this person wasn't in the deceased file.
-Do If (CHI NE "").
-    Do if recid = "NRS".
-        Compute deceased = 1.
-        Compute death_date = keydate1_dateformat.
-    Else if recid = "DN" and ~Sysmiss(DN_death_date).
-        Compute deceased = 1.
-        Compute death_date = DN_death_date.
-    End if.
-End If.
-
- * Propagate the changes to the rest of the file.
-Aggregate outfile=* mode addvariables overwrite=yes
-   /Presorted
-   /Break CHI
-   /deceased = max(deceased)
-   /death_date = max(death_date).
-
- * Update flag and date for blank CHIs.
-Do If (chi = " " and recid = "NRS").
-   Compute deceased = 1.
-   Compute death_date = keydate1_dateformat.
-End If.
-
- * Clean up any deaths which are now outside of the FY.
- * Only needed when updating older files using newer death extracts.
-Do If death_date >= Date.DMY(1, 4, Number(!altFY, F4.0) + 1).
-   Compute death_date = $sysmis.
-   Compute deceased = 0.
-End if.   
-
-save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
-    /Drop DN_death_date DateofDeath99
-   /zcompressed.
-
-*********************************************************************************.
-* Code to identify potentially erroneous dates and replace them with the date of death registered.
-Get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
-
-* Select records with chi nos.
-select if chi NE "".
-
-* Choose records which have activity after death_date is recorded. Records with difference in 7 days between activity and death date is rejected.
-select if (death_date LT keydate2_dateformat).
-
-sort cases by chi keydate2_dateformat.
-Aggregate
-    /Presorted
-    /Break chi
-    /recid_1 = last(recid)
-    /death_date_1 = First(death_date)
-    /keydate2_dateformat_1 = last(keydate2_dateformat).
-
-Do if ((recid  = "00B") and (attendance_status = 8 ) and (keydate2_dateformat_1 = keydate2_dateformat)).
-    if (chi = lag (chi) and (death_date LT lag(keydate2_dateformat))) Flag = 1.
-    if (chi NE lag(chi)) and (death_date LT keydate2_dateformat_1) Flag = 1.
-Else if ((recid = "00B" ) and (attendance_status NE 8 ) and (death_date LT keydate2_dateformat_1)).
-    Compute Flag = 1.
-Else if (recid = "PIS" and death_date LT Date.DMY(1, 4, Number(!altFY, F4.0))).
-    Compute Flag = 1.
-Else if (death_date LT keydate2_dateformat_1 ).
-    Compute Flag = 1.
 End if.
 
-Select if Flag = 1.
+* Now HSCP2016 -> hbrescode.
+Do if hbrescode = "".
+    Do if (HSCP2016 = "S37000001").
+        Compute hbrescode = "S08000020".
+    Else if (HSCP2016 = "S37000002").
+        Compute hbrescode = "S08000020".
+    Else if (HSCP2016 = "S37000003").
+        Compute hbrescode = "S08000030".
+    Else if (HSCP2016 = "S37000004").
+        Compute hbrescode = "S08000022".
+    Else if (HSCP2016 = "S37000005").
+        Compute hbrescode = "S08000019".
+    Else if (HSCP2016 = "S37000006").
+        Compute hbrescode = "S08000017".
+    Else if (HSCP2016 = "S37000007").
+        Compute hbrescode = "S08000030".
+    Else if (HSCP2016 = "S37000008").
+        Compute hbrescode = "S08000015".
+    Else if (HSCP2016 = "S37000009").
+        Compute hbrescode = "S08000021".
+    Else if (HSCP2016 = "S37000010").
+        Compute hbrescode = "S08000024".
+    Else if (HSCP2016 = "S37000011").
+        Compute hbrescode = "S08000021".
+    Else if (HSCP2016 = "S37000012").
+        Compute hbrescode = "S08000024".
+    Else if (HSCP2016 = "S37000013").
+        Compute hbrescode = "S08000019".
+    Else if (HSCP2016 = "S37000015").
+        Compute hbrescode = "S08000021".
+    Else if (HSCP2016 = "S37000016").
+        Compute hbrescode = "S08000022".
+    Else if (HSCP2016 = "S37000017").
+        Compute hbrescode = "S08000021".
+    Else if (HSCP2016 = "S37000018").
+        Compute hbrescode = "S08000024".
+    Else if (HSCP2016 = "S37000019").
+        Compute hbrescode = "S08000020".
+    Else if (HSCP2016 = "S37000020").
+        Compute hbrescode = "S08000015".
+    Else if (HSCP2016 = "S37000021").
+        Compute hbrescode = "S08000023".
+    Else if (HSCP2016 = "S37000022").
+        Compute hbrescode = "S08000025".
+    Else if (HSCP2016 = "S37000024").
+        Compute hbrescode = "S08000021".
+    Else if (HSCP2016 = "S37000025").
+        Compute hbrescode = "S08000016".
+    Else if (HSCP2016 = "S37000026").
+        Compute hbrescode = "S08000026".
+    Else if (HSCP2016 = "S37000027").
+        Compute hbrescode = "S08000015".
+    Else if (HSCP2016 = "S37000028").
+        Compute hbrescode = "S08000023".
+    Else if (HSCP2016 = "S37000029").
+        Compute hbrescode = "S08000021".
+    Else if (HSCP2016 = "S37000030").
+        Compute hbrescode = "S08000024".
+    Else if (HSCP2016 = "S37000031").
+        Compute hbrescode = "S08000028".
+    Else if (HSCP2016 = "S37000032").
+        Compute hbrescode = "S08000029".
+    Else if (HSCP2016 = "S37000033").
+        Compute hbrescode = "S08000030".
+    End If.
+End if.
 
-*aggregate to find last record of activity.
-aggregate outfile = *
-    /Presorted
-    /break chi
-    /death_date = Last(death_date)
-    /recid = Last(recid)
-    /keydate1_dateformat = Last(keydate1_dateformat)
-    /keydate2_dateformat = Last(keydate2_dateformat)
-    /deathdiag1 to deathdiag11 = Last(deathdiag1 to deathdiag11)
-    /deceased = Last(deceased).
+Frequencies hbrescode.
+*****************************************************************************************.
+********* Match in GP practice and cluster info. **********************************.
+sort cases by gpprac.
 
-select if (DateDiff(keydate2_dateformat, death_date, "days") GT 7).
+ * Keep existing values in case we can't match the gpprac code.
+Rename Variables
+    hbpraccode = hbpraccode_old.
 
-* Match registered deaths with derived date of death.
 match files file = *
-    /table = !File + "Death_Date_Registered-20" + !FY + ".zsav"
-    /by chi.
+    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /In = GPPracMatch
+    /Drop PC7 PC8
+    /by gpprac.
 
-* Replace death_date with the latest registered dates of death.
-if (death_date + time.days(7) LT Datedeath_GRO) death_date = Datedeath_GRO.
+ * If the gpprac code didn't match use the existing values.
+Do if GPPracMatch = 0.
+    Compute hbpraccode = hbpraccode_old.
+End if.
 
-* Some PIS records still have death before start of FY.
-If (recid = "PIS" and death_date LT Date.DMY(1, 4, Number(!altFY, F4.0))) death_date = $sysmis.
+ * Set some known dummy practice codes to consistent Board codes.
+Do if any(gpprac, 99942, 99957, 99961, 99976, 99981, 99999).
+    Compute hbpraccode = "S08200003". /*Outwith Scotland / unknown*/.
+Else if gpprac = 99995.
+    Compute hbpraccode = "S08200001".  /*RUK*/.
+End if.
 
-* If (recid NE "PIS" and (DateDiff(keydate2_dateformat, death_date, "days") LT 7)) death_date = $sysmis.
 
-Select if ~SysMiss(death_date).
+Frequencies hbpraccode.
 
-save outfile = !File + "Deaths to modify-20" + !FY + ".zsav"
-    /Drop Datedeath_GRO
-    /Rename (Death_date = Datedeath_GRO)
-    /Keep chi Datedeath_GRO
+ * If the practice code didn't match the lookups and still doesn't have a board code, remove it as it's probably a bad code.
+if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
+
+ * Recode according to boundary changes 08/05/2018.
+Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+Recode HSCP2016 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
+Recode CA2011 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
+
+save outfile = !File + "temp-source-episode-file-6-" + !FY + ".zsav"
+    /Drop LCA_old HSCP2016_old Datazone2011_old hbrescode_old hbpraccode_old PostcodeMatch GPPracMatch
     /zcompressed.
 
-match files file = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
-    /Table = !File + "Deaths to modify-20" + !FY + ".zsav"
-    /By chi.
 
-* If we have a new death_date to use (Datedeath_GRO) then update it.
-* If we updated the date, amend the NRS keydate2 to the new date.
-Do If ~SysMiss(Datedeath_GRO).
-    Compute death_date = Datedeath_GRO.
-    Do If recid = "NRS".
-        Compute keydate2_dateformat = Datedeath_GRO.
-        Compute record_keydate2 = Number(Replace(String(Datedeath_GRO, Sdate12), "/", ""), F8.0).
-    End if.
-End if.
-
-* Clean up any deaths which are now outside of the FY.
-If death_date GE Date.DMY(1, 4, Number(!altFY, F4.0) + 1) death_date = $sysmis.
-
-* Recalculate deceased.
-Do if (~Sysmiss(death_date)).
-    Compute deceased = 1.
-Else.
-    Compute deceased = 0.
-End if.
-
-save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
-    /Drop Datedeath_GRO
-    /zcompressed.
-get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
-*****************************************************************************************************************************.
-       

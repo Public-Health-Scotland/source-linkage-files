@@ -6,7 +6,6 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-
 get file = !File + "source-episode-file-20" + !FY + ".zsav".
 
 * Exclude people with blank chi.
@@ -17,13 +16,13 @@ Sort cases by chi keydate1_dateformat keyTime1 keydate2_dateformat keyTime2.
 
 * Declare the variables we will use to store postcode etc. data.
 * Don't include DD as this data has just been taken from acute / MH.
-Numeric Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob CMH_dob NSU_dob (Date12).
-String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode (A7).
-Numeric Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac (F5.0).
+Numeric Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob CMH_dob NSU_dob NRS_dob (Date12).
+String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode(A7).
+Numeric Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac (F5.0).
 
 * Set any blanks as user missing, so they will be ignored by the aggregate.
 Missing Values
-    Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode CMH_postcode
+    Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode CMH_postcode NRS_postcode
     ("").
 * Create a series of indicators which can be aggregated later to provide a summary for each CHI.
 *************************************************************************************************************************************************.
@@ -315,18 +314,18 @@ Else if (recid = "CMH").
     * For activity count the number of contacts.
     Compute CMH_contacts = 1.
 
-Else if (recid = "DD").
+    * Else if (recid = "DD").
     *************************************************************************************************************************************************.
     * Delayed Discharge (DD) section.
     * Not taking any demographic fields from DD.
 
     * For activity count the number of episodes for code 9 and non code 9 reasons.
-    If Primary_Delay_Reason NE "9" DD_NonCode9_episodes = 1.
-    If Primary_Delay_Reason EQ "9" DD_Code9_episodes = 1.
+    *     If Primary_Delay_Reason NE "9" DD_NonCode9_episodes = 1.
+    *     If Primary_Delay_Reason EQ "9" DD_Code9_episodes = 1.
 
     * For beddays count the number for code 9 and non code 9 reasons.
-    If Primary_Delay_Reason NE "9" DD_NonCode9_beddays = yearstay.
-    If Primary_Delay_Reason EQ "9" DD_Code9_beddays = yearstay.
+    *     If Primary_Delay_Reason NE "9" DD_NonCode9_beddays = yearstay.
+    *     If Primary_Delay_Reason EQ "9" DD_Code9_beddays = yearstay.
 Else if (recid = "NSU").
     *************************************************************************************************************************************************.
     * Non-Service-User (NSU) section.
@@ -337,9 +336,16 @@ Else if (recid = "NSU").
 
     * By definition these chis should have no activity but we will create a flag to make this clear.
     Compute NSU = 1.
+
+    *************************************************************************************************************************************************.
+Else if (recid = "NRS").
+    Compute NRS_dob  = dob.
+    Compute NRS_postcode = postcode.
+    Compute NRS_gpprac = gpprac.
+    Compute NRS = 1.
 End if.
-*************************************************************************************************************************************************.
- * We"ll use this to get the most accurate gender we can.
+
+* We'll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
  * Now aggregate by Chi, keep all of the variables we made, we'll clean them up next.
@@ -349,12 +355,12 @@ aggregate outfile = *
     /Presorted
     /break chi
     /gender = Mean(gender)
-    /Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode
-    = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode)
-    /Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob CMH_dob NSU_dob
-    = Last(Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob CMH_dob NSU_dob)
-    /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac
-    = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac)
+    /Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode
+    = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode)
+    /Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob CMH_dob NSU_dob NRS_dob
+    = Last(Acute_dob Mat_dob MH_dob GLS_dob OP_dob AE_dob PIS_dob CH_dob OoH_dob DN_dob CMH_dob NSU_dob NRS_dob)
+    /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac
+    = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
     Acute_inpatient_beddays Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays
@@ -395,8 +401,6 @@ aggregate outfile = *
     = sum(DN_episodes DN_contacts DN_cost)
     /CMH_contacts
     = sum(CMH_contacts)
-    /DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays
-    = sum(DD_NonCode9_episodes DD_Code9_episodes DD_NonCode9_beddays DD_Code9_beddays)
     /deceased death_date = First(deceased death_date)
     /NSU = Max(NSU)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
@@ -407,7 +411,7 @@ aggregate outfile = *
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date)
     /Demographic_Cohort Service_Use_Cohort = First(Demographic_Cohort Service_Use_Cohort)
     /SPARRA_Start_FY SPARRA_End_FY = First(SPARRA_Start_FY SPARRA_End_FY)
-    /HHG_Start_FY = First(HHG_Start_FY).
+    /HHG_End_FY = First(HHG_End_FY).
 
  * Do a temporary save as the above can take a while to run.
 save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
@@ -461,11 +465,11 @@ Compute #CHI_age1 = DateDiff(!midFY, #CHI_dob1, "years").
 Compute #CHI_age2 = DateDiff(!midFY, #CHI_dob2, "years").
 
  * If any of the dobs from the dataset match the dob in the CHI, use that (don't use if we have contradictions).
-Do if any(#CHI_dob1, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob)
-    and Not(any(#CHI_dob2, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob)).
+Do if any(#CHI_dob1, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob, NRS_dob)
+    and Not(any(#CHI_dob2, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob, NRS_dob)).
     Compute dob = #CHI_dob1.
-Else if Not(any(#CHI_dob1, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob))
-    and any(#CHI_dob2, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob).
+Else if Not(any(#CHI_dob1, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob, NRS_dob))
+    and any(#CHI_dob2, Acute_dob, Mat_dob, MH_dob, GLS_dob, OP_dob, AE_dob, PIS_dob, CH_dob, OoH_dob, DN_dob, CMH_dob, NSU_dob, NRS_dob).
     Compute dob = #CHI_dob2.
 End if.
 
@@ -523,6 +527,8 @@ Do if sysmis(dob).
         Compute dob = CH_dob.
     Else if Not(sysmis(NSU_dob)).
         Compute dob = NSU_dob.
+ Else if Not(sysmis(NRS_dob)).
+        Compute dob = NRS_dob.
     End if.
 End if.
 
@@ -532,9 +538,20 @@ End if.
 
 Frequencies age.
 
+ * If all postcodes are blank create a dummy postcode so we don't lose the CHI - we'll clean this up later. 
+ * First firgure out if they are all blank.
+compute #All_Blank = 1.
+
+Do repeat postcode =  acute_postcode to NRS_postcode.
+    If postcode NE "" #All_Blank = 0.
+End repeat.
+
+ * Use NRS_postcode to store the dummy for no other reason than it's last in the heirarchy.
+If #All_Blank = 1 NRS_postcode = "XXX XXX".
+
  * Make a postcode variable from the various postcodes labled by the dataset they came from.
 VarsToCases
-    /make postcode from acute_postcode to NSU_postcode
+    /make postcode from acute_postcode to NRS_postcode
     /Index dataset (postcode).
 
  * Count the number of times each postcode appears for each chi.
@@ -567,6 +584,8 @@ Else if dataset = "CH_postcode".
     Compute order = 11.
 Else if dataset = "NSU_postcode".
     Compute order = 12.
+Else if dataset = "NRS_postcode".
+    Compute order = 13.
 End if.
 
  * Match on to the postcode file, to get a flag letting us know if the postcode is real or not.
@@ -592,12 +611,25 @@ add files
 
  * Just keep the first record.
 Select if Keep = 1.
+Execute.
 
 *********************************************************************************.
  * Do the same for gpprac.
+
+* If all gppracs are blank create a dummy gpprac so we don't lose the CHI - we'll clean this up later. 
+ * First firgure out if they are all blank.
+compute #All_Blank = 1.
+
+Do repeat gpprac =  acute_gpprac to NRS_gpprac.
+    If Not(sysmis(gpprac))  #All_Blank = 0.
+End repeat.
+
+ * Use NRS_gpprac to store the dummy for no other reason than it's last in the heirarchy.
+If #All_Blank = 1 NRS_gpprac = 0.
+
  * Make a gpprac variable from the various gpprac labled by the dataset they came from.
 VarsToCases
-    /make gpprac from acute_gpprac to NSU_gpprac
+    /make gpprac from acute_gpprac to NRS_gpprac
     /Index dataset (gpprac)
     /Drop Keep.
 
@@ -631,6 +663,8 @@ Else if dataset = "CH_gpprac".
     Compute order = 11.
 Else if dataset = "NSU_gpprac".
     Compute order = 12.
+Else if dataset = "NRS_gpprac".
+    Compute order = 13.
 End if.
 
  * Match on to the gpprac file, to get a flag letting us know if the gpprac is real or not.
@@ -638,7 +672,7 @@ sort cases by gpprac.
 match files file = *
     /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
     /In gppracMatch
-    /Keep chi to order
+    /Keep chi to order 
     /By gpprac.
 
  * Sort the chis gppracs according to;
@@ -654,7 +688,12 @@ add files
     /By Chi
     /Drop dataset ndistgppracs order gppracMatch.
 
+
+if postcode='XXX XXX' postcode="".
+if gpprac=0 gpprac=$sysmis.
+
 Select if Keep = 1.
+Execute.
 
  * Tidy up counter variables.
 Alter Type
@@ -672,8 +711,7 @@ Alter Type
     CH_episodes CH_beddays
     OoH_cases to OoH_consultation_time
     DN_episodes DN_contacts
-    CMH_contacts
-    DD_NonCode9_episodes to DD_Code9_beddays (F8.0).
+    CMH_contacts (F8.0).
 
 * Recode all the system missing values to zero so that calculations will work.
 Recode Acute_episodes to DN_cost (sysmis = 0).
@@ -690,8 +728,8 @@ String year (A4).
 Compute year = !FY.
 
 * Delete the record specific dob gpprac and postcode, and reorder others whilst we're here.
-save outfile = !file + "temp-source-individual-file-2-20" + !FY + ".zsav"
-   /Drop Acute_dob to NSU_dob
+save outfile =!File + "temp-source-individual-file-2-20" + !FY + ".zsav"
+   /Drop Acute_dob to NRS_dob
       Keep
    /Keep year chi gender dob age postcode gpprac
       health_net_cost health_net_costincDNAs health_net_costincIncomplete

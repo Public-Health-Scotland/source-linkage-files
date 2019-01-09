@@ -11,9 +11,10 @@
 * Add the filepaths e.g.
 * "/conf/sourcedev/Source Linkage File Updates/YEAR/source-individual-file-20YEAR.zsav".
 add files
-    /File =  
-    /File = 
-    /File =
+    /File ="/conf/sourcedev/Source Linkage File Updates/1516/source-individual-file-201516.zsav"
+    /File ="/conf/sourcedev/Source Linkage File Updates/1617/source-individual-file-201617.zsav"
+    /File = "/conf/sourcedev/Source Linkage File Updates/1718/source-individual-file-201718.zsav"
+    /File ="/conf/sourcedev/Source Linkage File Updates/1819/source-individual-file-201819.zsav"
     /Keep CHI Year
     /By CHI.
 

@@ -34,6 +34,6 @@ sort cases by Anon_CHI.
 
  * Save out, put Anon_CHI where CHI was and drop CHI.
 save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
-    /Keep Year to SMRType Anon_CHI All
+    /Keep Year Anon_CHI All
     /Drop Chi
     /zcompressed.

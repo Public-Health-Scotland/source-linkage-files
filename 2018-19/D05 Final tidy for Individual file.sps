@@ -288,7 +288,7 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     HRI_hbP
     HRI_scotP
     SPARRA_Start_FY
-    SPARRA_End_FY
+    HHG_Start_FY
     Demographic_Cohort
     Service_Use_Cohort
     Keep_Population

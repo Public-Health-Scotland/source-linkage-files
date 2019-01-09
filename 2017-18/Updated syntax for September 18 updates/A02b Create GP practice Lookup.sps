@@ -26,7 +26,7 @@ match files
    /Table = !Lookup + "Practice Details.sav"
    /Rename (practice = gpprac)
    /by gpprac.
-
+exe.
  * Fix the Locale -> Unicode issue.
 alter type cluster (A50).
 
@@ -37,7 +37,7 @@ match files
    /Rename (Postcode = PC8)
    /Table = !PCDir
    /By PC8.
-
+exe.
  * Use CA2011 to produce the 2-char LCA codes.
 String LCA (A2).
  * These macros are defined in A02a, so this needs to be run before and in the same session as the following.

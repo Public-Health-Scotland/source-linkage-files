@@ -33,7 +33,7 @@ get file = !DataZone_Pops
  * execute.
  * compute year = year + 1.
 
- * Code in usual case where estimates are availiable.
+ * Code in usual case where estimates are available.
 select if year = Number(!altFY, F4.0).
 
  * Recode to make it match source.
