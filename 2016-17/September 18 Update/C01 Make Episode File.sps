@@ -117,13 +117,13 @@ End If.
 
 
 ********************** Temporarily work on CIS only records ***************************.
+
+sort cases by CHI cis_marker record_keydate1 record_keydate2.
  * Only work on records that have a CIS marker, save out others.
 temporary.
 select if not(any(recid, "01B", "04B", "GLS", "02B")).
 save outfile = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
     /zcompressed.
-
-sort cases by CHI record_keydate1 record_keydate2.
 
 select if any(recid, "01B", "04B", "GLS", "02B").
 
@@ -146,7 +146,6 @@ Do if chi NE "" and newcis_ipdc = "".
 End if.
 
  * reset the newcis variables after the above.
-sort cases by CHI cis_marker keydate1_dateformat.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /Presorted
     /break CHI cis_marker
@@ -160,9 +159,9 @@ select if chi ne "".
 crosstabs recid by cis_marker.
 
 add files file = *
-    /file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
+    /file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
+	/By CHI record_keydate1 record_keydate2.
 
-sort cases by chi keydate1_dateformat.
 
 ********************** Back to full file ***************************..
 ********************Create cost inc. DNAs, & modify cost not inc. DNAs using cattend *****.
@@ -181,7 +180,6 @@ Do If Length(Postcode) = 6.
 End If.
 
  * Create a Flag for PPA (Potentially Preventable Admissions).
-sort cases by chi cis_marker keydate1_dateformat.
  
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
