@@ -21,7 +21,6 @@ GET DATA  /TYPE=TXT
       ClinicDateFinYear A4
       ClinicDate00 A10
       SendingLocationCodeSMR00 A5
-      EpisodeRecordKeySMR00C A11
       PatUPI A10
       PatGenderCode F1.0
       PatDateOfBirthC A10
@@ -50,15 +49,13 @@ GET DATA  /TYPE=TXT
       TotalNetCosts F7.2.
 CACHE.
 
-* Datazone for outpatients is not Datazone 2011. Consultant code does not have Lead in front of it. 
-rename variables
+Rename Variables
     AgeatMidpointofFinancialYear = age
     AlcoholRelatedAdmission = alcohol_adm
     ClinicAttendanceStatusCode = attendance_status
     ClinicTypeCode = clinic_type
     CommunityHospitalFlag = commhosp
     ConsultantHCPCode = conc
-    EpisodeRecordKeySMR00C = erk
     FallsRelatedAdmission = falls_adm
     GeoCouncilAreaCode = lca
     GeoPostcodeC = postcode

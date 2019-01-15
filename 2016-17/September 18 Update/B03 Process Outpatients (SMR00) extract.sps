@@ -4,7 +4,7 @@
 * Read in the outpatients extract.  Rename/reformat/recode columns as appropriate. 
 
 * Program by Denise Hastie, June 2016.
-*Last ran 26/11/2018.
+
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
@@ -21,7 +21,6 @@ GET DATA  /TYPE=TXT
       ClinicDateFinYear A4
       ClinicDate00 A10
       SendingLocationCodeSMR00 A5
-      EpisodeRecordKeySMR00C A11
       PatUPI A10
       PatGenderCode F1.0
       PatDateOfBirthC A10
@@ -50,15 +49,13 @@ GET DATA  /TYPE=TXT
       TotalNetCosts F7.2.
 CACHE.
 
-* Datazone for outpatients is not Datazone 2011. Consultant code does not have Lead in front of it. 
-rename variables
+Rename Variables
     AgeatMidpointofFinancialYear = age
     AlcoholRelatedAdmission = alcohol_adm
     ClinicAttendanceStatusCode = attendance_status
     ClinicTypeCode = clinic_type
     CommunityHospitalFlag = commhosp
     ConsultantHCPCode = conc
-    EpisodeRecordKeySMR00C = erk
     FallsRelatedAdmission = falls_adm
     GeoCouncilAreaCode = lca
     GeoPostcodeC = postcode
@@ -125,10 +122,38 @@ alter type record_keydate1 record_keydate2 (F8.0).
 sort cases by chi record_keydate1.
 
 save outfile = !file + 'outpatients_for_source-20'+!FY+'.zsav'
-   /keep year recid record_keydate1 record_keydate2 chi gender dob gpprac hbpraccode postcode hbrescode lca location hbtreatcode
-      spec sigfac conc cat age refsource reftype attendance_status clinic_type alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp
-      cost_total_net apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost
-   /zcompressed.
+    /keep year
+    recid
+    record_keydate1
+    record_keydate2
+    chi
+    gender
+    dob
+    gpprac
+    hbpraccode
+    postcode
+    hbrescode
+    lca
+    location
+    hbtreatcode
+    spec
+    sigfac
+    conc
+    cat
+    age
+    refsource
+    reftype
+    attendance_status
+    clinic_type
+    alcohol_adm
+    submis_adm
+    falls_adm
+    selfharm_adm
+    commhosp
+    nhshosp
+    cost_total_net
+    apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost
+    /zcompressed.
 
 get file = !file + 'outpatients_for_source-20'+!FY+'.zsav'.
 
