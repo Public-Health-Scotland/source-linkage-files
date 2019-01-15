@@ -1,7 +1,5 @@
 ﻿* Encoding: UTF-8.
- * Run 01-Set up Macros first!.
-
-CD "/conf/linkage/output/lookups/Unicode". 
+ * Run A01-Set up Macros first!.
 
  * Build the GPprac Lookup.
  * Email NSS.isdGeneralPractice asking for an updated GP Clusters file (Practice Details.sav)
