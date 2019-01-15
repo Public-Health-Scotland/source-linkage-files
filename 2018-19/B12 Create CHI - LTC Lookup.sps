@@ -12,12 +12,18 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
+* Change this to the relevant number.
+* Should be '_extract_NUMBER'.
+Define !Extract_Number()
+	"_extract_1"
+!EndDefine.
+
  * Unzip the file.
-Host Command = ["gunzip '" + !CSDExtractLoc + "_extract_1_LTCs.csv'"].
+Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_LTCs.csv'"].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-   /FILE= !CSDExtractLoc + "_extract_1_LTCs.csv"
+   /FILE= !CSDExtractLoc + !Extract_Number + "_LTCs.csv"
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -79,4 +85,4 @@ save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
 get file = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Zip back up.
-Host Command = ["gzip '" + !CSDExtractLoc + "_extract_1_LTCs.csv'"].
+Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_LTCs.csv'"].

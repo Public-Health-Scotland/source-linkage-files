@@ -157,7 +157,7 @@ Compute  year = !FY.
 
 match files
    /file = *
-   /Table =!Costs_Lookup + "Cost_GPOoH_Lookup.sav"
+   /Table = !Extracts_Alt + "Cost_GPOoH_Lookup.sav"
    /By TreatmentNHSBoardCode Year.
 
 Rename Variables Cost_per_consultation =  cost_total_net.
@@ -374,7 +374,5 @@ Erase file = !File + "GP-Diagnosis-Data-" + !FY + ".zsav".
 Erase file = !File + "GP-Outcomes-Data-" + !FY + ".zsav".
 
  * zip up the raw data.
-Host Command = ["zip -m '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".zip' '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".csv'"].
-
-
+Host Command = ["gzip '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".csv'"].
 

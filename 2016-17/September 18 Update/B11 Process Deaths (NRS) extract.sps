@@ -122,6 +122,5 @@ get file = !File + "Death_Date_Registered-20" + !FY + ".zsav".
 
 get file = !file + 'deaths_for_source-20' + !FY + '.zsav'.
 
-Host Command = ["zip -m '" + !Extracts + "NRS-death-registrations-extract-20" + !FY + ".zip' '" +
-   !Extracts + "NRS-death-registrations-extract-20" + !FY + ".csv'"].
-
+ * zip up the raw data.
+Host Command = ["gzip '" + !Extracts + "NRS-death-registrations-extract-20" + !FY + ".csv'"].

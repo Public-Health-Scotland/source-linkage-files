@@ -340,7 +340,7 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
 get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
 
  * zip up the raw data.
-Host Command = ["gzip -m '" + !Extracts + "Maternity-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Extracts + "Maternity-episode-level-extract-20" + !FY + ".csv'"].
 
 
 

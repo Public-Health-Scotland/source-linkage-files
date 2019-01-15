@@ -86,4 +86,5 @@ Save outfile = !File + "GP-Outcomes-Data-" + !FY + ".zsav"
    /zcompressed.
 get file = !File + "GP-Outcomes-Data-" + !FY + ".zsav".
 
-Host Command = ["zip -m '" + !Extracts + "GP-OoH-outcomes-extract-20" + !FY + ".zip' '" + !Extracts + "GP-OoH-outcomes-extract-20" + !FY + ".csv'"].
+ * Zip up raw data.
+Host Command = ["gzip '" + !Extracts + "GP-OoH-outcomes-extract-20" + !FY + ".csv'"].

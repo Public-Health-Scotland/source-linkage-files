@@ -109,7 +109,7 @@ Compute year = !FY.
 sort cases by hbtreatcode.
 
 match files file = *
-    /Table = !Costs_Lookup + "Cost_DN_Lookup.sav"
+    /Table = !Extracts_Alt + "Cost_DN_Lookup.sav"
     /Drop hbtreatname
     /By hbtreatcode year. 
 
@@ -335,6 +335,5 @@ Erase file = !File + "DN-Temp-1" + ".zsav".
 Erase file = !File + "DN-Temp-2" + ".zsav".
 
 * zip up the raw data.
-Host Command = ["zip -m '" + !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".zip' '" +
-   !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].
 

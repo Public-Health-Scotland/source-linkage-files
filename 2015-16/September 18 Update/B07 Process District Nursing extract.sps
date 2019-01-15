@@ -335,6 +335,5 @@ Erase file = !File + "DN-Temp-1" + ".zsav".
 Erase file = !File + "DN-Temp-2" + ".zsav".
 
 * zip up the raw data.
-Host Command = ["zip -m '" + !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".zip' '" +
-   !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].
 

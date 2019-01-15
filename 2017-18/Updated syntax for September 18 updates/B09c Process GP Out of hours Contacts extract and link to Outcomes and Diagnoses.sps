@@ -374,7 +374,5 @@ Erase file = !File + "GP-Diagnosis-Data-" + !FY + ".zsav".
 Erase file = !File + "GP-Outcomes-Data-" + !FY + ".zsav".
 
  * zip up the raw data.
-Host Command = ["zip -m '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".zip' '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".csv'"].
-
-
+Host Command = ["gzip '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".csv'"].
 
