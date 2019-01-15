@@ -227,7 +227,7 @@ Value Labels recid
     'CH' "Care Home records"
     'DD' "Delayed Discharge episode"
     'DN' "District Nursing episode"
-    'CMH' 'Community Mental Health episiode'
+    'CMH' 'Community Mental Health episode'
     'GLS' "Geriatric Long Stay (SMR01) discharges"
     'NRS' "National Records Service death registrations"
     'NSU' "Non-Service-User (Included for whole population analysis)"
