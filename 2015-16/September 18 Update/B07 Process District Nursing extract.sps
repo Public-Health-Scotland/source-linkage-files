@@ -59,7 +59,7 @@ rename variables UPINumberC = chi.
  * Only keep records with CHI.
 Select if chi ne "".
 
-*Check frequencies for Healthboards.
+*Check frequencies for Health Boards.
 *Check Frequencies for NumberofContacts (should be 1).
 *Frequencies TreatmentNHSBoardName NumberofContacts.
 
@@ -103,7 +103,7 @@ Alter Type record_keydate1 death_date dob (SDate10).
 compute record_keydate2 = record_keydate1.
 Alter Type record_keydate1 record_keydate2 death_date dob (Date12).
 
-* Create costs for the DN from costsbook. (Work from here).
+* Create costs for the DN from Costs Book. (Work from here).
 Compute year = !FY.
 
 sort cases by hbtreatcode.

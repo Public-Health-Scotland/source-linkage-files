@@ -50,7 +50,7 @@ GET DATA  /TYPE=TXT
       ConsultationType A26.
 CACHE.
 
-* If they don"t have a CHI it isn"t useful for linkage.
+* If they don't have a CHI it isn't useful for linkage.
 Select if Chi NE "".
 
 * Some CHIs seem to have lost their leading zero.
@@ -225,7 +225,7 @@ Alter Type GPprac (F5.0).
  * Patient Geography.
 Rename Variables (PatientNHSBoardCode PatientDataZone2011 HSCPofResidenceCode = hbrescode DataZone2011 HSCP2016).
 
- * Treatement Geography.
+ * Treatment Geography.
 Recode TreatmentLocationCode ("UNKNOWN" = "").
 Rename Variables (TreatmentNHSBoardCode TreatmentLocationCode = hbtreatcode location).
 

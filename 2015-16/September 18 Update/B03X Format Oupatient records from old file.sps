@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
- * Get the outpatients reocrds.
+ * Get the outpatients records.
  * This is just a select if recid = "00B".
 
 GET  FILE = !File + "source-episode-file-20" + !FY + "-Outpatients-only.zsav".

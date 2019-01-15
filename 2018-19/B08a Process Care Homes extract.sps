@@ -108,17 +108,12 @@ get file = !File + "Care-Home-Temp-1.zsav".
 ********************************************************************************************************.
 ********************************************************************************************************.
  * Tidy up care home names.
- * Python program.
-Begin Program.
-# This program splits the given string into words and then capitalises each word
-# It then joins them together putting the spaces back in.
-def titleCase(string):
-    return " ".join([word.capitalize() for word in string.split()])
-End Program.
 
- * Run the above python program on CareHomeName.
+ * Run the Python function 'capwords' on CareHomeName.
+ * This will capitalise each word for uniformity and will improve matching.
+ * https://docs.python.org/2/library/string.html#string-functions
 SPSSINC TRANS RESULT=CareHomeName Type=73
-   /FORMULA "titleCase(CareHomeName)".
+   /FORMULA "string.capwords(CareHomeName)".
 
  * First get a count of how often individual names are used.
 Aggregate
@@ -126,7 +121,7 @@ Aggregate
    /RecordsPerName = n.
 
  * Find out many authorities are using particular versions of names.
-Aggregate Outfile = * Mode = AddVariables Overwrite = Yes
+Aggregate outfile = * Mode = AddVariables Overwrite = Yes
    /break CareHomeCouncilAreaCode CareHomePostcode CareHomeName
    /RecordsPerName = Sum(RecordsPerName)
    /DiffSendingAuthorities = n.
@@ -147,7 +142,7 @@ Frequencies AccurateData1.
 
  * Fill in any blank CouncilAreaCodes which we can be reasonably sure about.
 Sort cases by SendingCouncilAreaCode (A) CareHomeName (A) AccurateData1 (D) weighted_count (D).
-Aggregate Outfile = * Mode = AddVariables Overwrite = Yes
+Aggregate outfile = * Mode = AddVariables Overwrite = Yes
    /Presorted
    /break = SendingCouncilAreaCode CareHomeName
    /CareHomeCouncilAreaCode = First(CareHomeCouncilAreaCode).
@@ -160,7 +155,7 @@ Do if AccurateData1 = 0.
     * Try adding 'Care Home' or 'Nursing Home' on the end.
    Compute TestName1 = Concat(Rtrim(CareHomeName), " Care Home").
    Compute TestName2 = Concat(Rtrim(CareHomeName), " Nursing Home").
-    * If they have the above alread try removing / replacing it.
+    * If they have the above name ending already, try removing / replacing it.
    Do if char.index(CareHomeName, "Care Home") > 1.
       Compute TestName1 = Strunc(CareHomeName, char.index(CareHomeName, "Care Home") - 1).
       Compute TestName2 = Replace(CareHomeName, "Care Home", "Nursing Home").
@@ -225,7 +220,7 @@ Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', C
 Sort cases by CareHomeCouncilAreaCode (A) CareHomeName (A) AccurateData2 (D) weighted_count (D).
 
  * Use the most likely postcode. Overwriting different ones. (On first try this 'removed' about 100).
-Aggregate Outfile = * Mode = AddVariables Overwrite = Yes
+Aggregate outfile = * Mode = AddVariables Overwrite = Yes
    /Presorted
    /break = CareHomeCouncilAreaCode CareHomeName
    /CareHomePostcode = First(CareHomePostcode).
@@ -315,7 +310,7 @@ Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', C
 Sort cases by CareHomeCouncilAreaCode (A) CareHomeName (A) AccurateData4 (D) weighted_count (D).
 
  * Use the most likely postcode. Overwriting different ones. (On first try this 'removed' about 100).
-Aggregate Outfile = * Mode = AddVariables Overwrite = Yes
+Aggregate outfile = * Mode = AddVariables Overwrite = Yes
    /Presorted
    /break = CareHomeCouncilAreaCode CareHomeName
    /CareHomePostcode = First(CareHomePostcode).

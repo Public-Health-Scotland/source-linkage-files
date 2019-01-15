@@ -172,7 +172,7 @@ sort cases by uri.
 save outfile = !file + 'mh_temp.zsav'
    /zcompressed.
   
-* Create a file that contains uri and costsfmth and net cost.  Make this look like a 'crosstab' ready for matching back to the acute_temp file. 
+* Create a file that contains uri and costs month and net cost. Make this look like a 'crosstab' ready for matching back to the acute_temp file. 
 get file = !file + 'mh_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 

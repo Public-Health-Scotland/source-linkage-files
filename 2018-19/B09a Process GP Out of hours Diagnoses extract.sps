@@ -48,10 +48,10 @@ match files
    /Rename (Description = TrueDescription)
    /By ReadCode.
 
-* If we had a description in the lookup that matched a readcode, use that one now.
+* If we had a description in the lookup that matched a Read code, use that one now.
 If FullMatch1 = 0 AND char.Len(TrueDescription) > 0 Description = TrueDescription.
 
-* Any that are still not matching at this point must be bad readcodes.
+* Any that are still not matching at this point must be bad Read codes.
 Sort cases by ReadCode Description.
 match files
    /File = *
@@ -63,15 +63,15 @@ Frequencies FullMatch1 FullMatch2.
 
 Temporary.
 select if FullMatch2 = 0.
- * The following are probably bad readcodes for some reason.
+ * The following are probably bad Read codes for some reason.
 Frequencies ReadCode Description.
 
 ******************************************.
 * PAUSE HERE *
-* Check the output for any dodgy readcodes and try and fix by adding exceptions / code to the do if below. 
+* Check the output for any dodgy Read codes and try and fix by adding exceptions / code to the do if below. 
 ******************************************.
 
-* If we can lets use the description to pick a readcode from the lookup file.
+* If we can lets use the description to pick a Read code from the lookup file.
 * Couldn't think of a way to generalise this as descriptions are not necessarily unique.
 Do if FullMatch2 = 0.
     If ReadCode = "Xa1m." ReadCode = "S349" . /*Someone used ReadCode v3.
@@ -98,7 +98,7 @@ Sort cases by GUID ReadCode.
  * Remove any duplicates.
 Select if Not(GUID = lag(GUID) AND ReadCode = lag(ReadCode)).
 
- * Sort the Readcodes to keep the more specific ones if available. 
+ * Sort the Read codes to keep the more specific ones if available. 
 Do if char.index(Readcode, ".") > 0.
    Compute ReadCodeLevel = char.index(Readcode, ".").
 Else.

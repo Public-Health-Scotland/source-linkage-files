@@ -106,6 +106,12 @@ End If.
  * Set to the correct types for matching.
 Alter type CareHomeCouncilAreaCode (A2) CareHomePostcode (A7).
 
+ * Run the Python function 'capwords' on CareHomeName.
+ * This will capitalise each word for uniformity and will improve matching.
+ * https://docs.python.org/2/library/string.html#string-functions
+SPSSINC TRANS RESULT=CareHomeName Type=73
+   /FORMULA "string.capwords(CareHomeName)".
+
  * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
 Aggregate
    /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
