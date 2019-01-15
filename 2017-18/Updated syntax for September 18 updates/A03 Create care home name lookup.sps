@@ -108,7 +108,7 @@ Alter type CareHomeCouncilAreaCode (A2) CareHomePostcode (A7).
 
  * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
 Aggregate
-   /outfile = !Extracts + 'Care_home_lookup-20' + !FY + '.sav'
+   /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
    /Break CareHomeCouncilAreaCode CareHomePostcode CareHomeName
    /CareHomeCouncilName MainClientGroup Sector = First(CareHomeCouncil MainClientGroup Sector)
    /DateReg DateCanx = Max(DateReg DateCanx).

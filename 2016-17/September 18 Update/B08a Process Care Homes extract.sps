@@ -74,7 +74,7 @@ if UPINumber = lag(UPINumber) Days = DATEDIFF(CareHomeAdmissionDate,(lag(CareHom
 
 compute break_ascending = 0.
 if days ge 2 break_ascending = 1.
-exe.
+
  * Currently the first episode for each person is not being flagged as distinct so repeat process above but in reverse.
 sort cases by UPINumber FinancialQuarter CareHomeDischargeDate CareHomeAdmissionDate (D).
 
@@ -138,7 +138,7 @@ Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', C
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData1
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 Frequencies AccurateData1.
@@ -181,7 +181,7 @@ End if.
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName1.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName1)
    /In = TestName1Correct
    /By CareHomeCouncilAreaCode CareHomePostcode TestName1.
@@ -191,7 +191,7 @@ match files
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName2.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName2)
    /In = TestName2Correct
    /By CareHomeCouncilAreaCode CareHomePostcode TestName2.
@@ -210,7 +210,7 @@ Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct.
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData2
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 Frequencies AccurateData2.
@@ -234,7 +234,7 @@ Aggregate Outfile = * Mode = AddVariables Overwrite = Yes
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData3
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 Frequencies AccurateData3.
@@ -269,7 +269,7 @@ End if.
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName1.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName1)
    /In = TestName1Correct
    /By CareHomeCouncilAreaCode CareHomePostcode TestName1.
@@ -279,7 +279,7 @@ match files
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName2.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName2)
    /In = TestName2Correct
    /By CareHomeCouncilAreaCode CareHomePostcode TestName2.
@@ -299,7 +299,7 @@ Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct.
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData4
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 Frequencies AccurateData4.
@@ -324,7 +324,7 @@ Aggregate Outfile = * Mode = AddVariables Overwrite = Yes
 Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_lookup-20" + !FY + ".sav"
+   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData5
    /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
 * Now 30.6% Match the lookup.
