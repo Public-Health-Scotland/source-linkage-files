@@ -191,6 +191,28 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
       '32' "Na h-Eileanan Siar"
 !EndDefine.
 
+Define !AddHBDictionaryInfo (HB = !CMDEND)
+    Add Value Labels !HB
+        'S08000015' "Ayrshire and Arran"
+        'S08000016' "Borders"
+        'S08000017' "Dumfries and Galloway"
+        'S08000018' "Fife"
+        'S08000019' "Forth Valley"
+        'S08000020' "Grampian"
+        'S08000021' "Greater Glasgow and Clyde"
+        'S08000022' "Highland"
+        'S08000023' "Lanarkshire"
+        'S08000024' "Lothian"
+        'S08000025' "Orkney"
+        'S08000026' "Shetland"
+        'S08000027' "Tayside"
+        'S08000028' "Western Isles"
+        'S08200001' 'Out-with Scotland'
+        'S08200002' 'No Fixed Abode'
+        'S08200003' 'Not Known'
+        'S08200004' 'Outside UK'.
+!EndDefine.
+
 ************************************************************************************************************.
  * This will automatically set from the FY macro above for example for !FY = "1718" it will produce "2017".
 Define !altFY()
