@@ -84,77 +84,77 @@ Define !SIMDLookup()
    "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2018_2_simd2016.sav"
 !EndDefine.
 
-
  * The following two macros are used for creating the old LCA codes
  * They will need updating if the Council area codes change.
 Define !CA2011toLCA()
-Do if ValueLabel(CA2011) = "Aberdeen City".
-   Compute LCA = "01".
-Else if ValueLabel(CA2011) = "Aberdeenshire".
-   Compute LCA = "02".
-Else if ValueLabel(CA2011) = "Angus".
-   Compute LCA = "03".
-Else if ValueLabel(CA2011) = "Argyll and Bute".
-   Compute LCA = "04".
-Else if ValueLabel(CA2011) = "Scottish Borders".
-   Compute LCA = "05".
-Else if ValueLabel(CA2011) = "Clackmannanshire".
-   Compute LCA = "06".
-Else if ValueLabel(CA2011) = "West Dunbartonshire".
-   Compute LCA = "07".
-Else if ValueLabel(CA2011) = "Dumfries and Galloway".
-   Compute LCA = "08".
-Else if ValueLabel(CA2011) = "Dundee City".
-   Compute LCA = "09".
-Else if ValueLabel(CA2011) = "East Ayrshire".
-   Compute LCA = "10".
-Else if ValueLabel(CA2011) = "East Dunbartonshire".
-   Compute LCA = "11".
-Else if ValueLabel(CA2011) = "East Lothian".
-   Compute LCA = "12".
-Else if ValueLabel(CA2011) = "East Renfrewshire".
-   Compute LCA = "13".
-Else if ValueLabel(CA2011) = "City of Edinburgh".
-   Compute LCA = "14".
-Else if ValueLabel(CA2011) = "Falkirk".
-   Compute LCA = "15".
-Else if ValueLabel(CA2011) = "Fife".
-   Compute LCA = "16".
-Else if ValueLabel(CA2011) = "Glasgow City".
-   Compute LCA = "17".
-Else if ValueLabel(CA2011) = "Highland".
-   Compute LCA = "18".
-Else if ValueLabel(CA2011) = "Inverclyde".
-   Compute LCA = "19".
-Else if ValueLabel(CA2011) = "Midlothian".
-   Compute LCA = "20".
-Else if ValueLabel(CA2011) = "Moray".
-   Compute LCA = "21".
-Else if ValueLabel(CA2011) = "North Ayrshire".
-   Compute LCA = "22".
-Else if ValueLabel(CA2011) = "North Lanarkshire".
-   Compute LCA = "23".
-Else if ValueLabel(CA2011) = "Orkney Islands".
-   Compute LCA = "24".
-Else if ValueLabel(CA2011) = "Perth and Kinross".
-   Compute LCA = "25".
-Else if ValueLabel(CA2011) = "Renfrewshire".
-   Compute LCA = "26".
-Else if ValueLabel(CA2011) = "Shetland Islands".
-   Compute LCA = "27".
-Else if ValueLabel(CA2011) = "South Ayrshire".
-   Compute LCA = "28".
-Else if ValueLabel(CA2011) = "South Lanarkshire".
-   Compute LCA = "29".
-Else if ValueLabel(CA2011) = "Stirling".
-   Compute LCA = "30".
-Else if ValueLabel(CA2011) = "West Lothian".
-   Compute LCA = "31".
-Else if ValueLabel(CA2011) = "Na h-Eileanan Siar".
-   Compute LCA = "32".
-End If.
+	Do if ValueLabel(CA2011) = "Aberdeen City".
+	   Compute LCA = "01".
+	Else if ValueLabel(CA2011) = "Aberdeenshire".
+	   Compute LCA = "02".
+	Else if ValueLabel(CA2011) = "Angus".
+	   Compute LCA = "03".
+	Else if ValueLabel(CA2011) = "Argyll and Bute".
+	   Compute LCA = "04".
+	Else if ValueLabel(CA2011) = "Scottish Borders".
+	   Compute LCA = "05".
+	Else if ValueLabel(CA2011) = "Clackmannanshire".
+	   Compute LCA = "06".
+	Else if ValueLabel(CA2011) = "West Dunbartonshire".
+	   Compute LCA = "07".
+	Else if ValueLabel(CA2011) = "Dumfries and Galloway".
+	   Compute LCA = "08".
+	Else if ValueLabel(CA2011) = "Dundee City".
+	   Compute LCA = "09".
+	Else if ValueLabel(CA2011) = "East Ayrshire".
+	   Compute LCA = "10".
+	Else if ValueLabel(CA2011) = "East Dunbartonshire".
+	   Compute LCA = "11".
+	Else if ValueLabel(CA2011) = "East Lothian".
+	   Compute LCA = "12".
+	Else if ValueLabel(CA2011) = "East Renfrewshire".
+	   Compute LCA = "13".
+	Else if ValueLabel(CA2011) = "City of Edinburgh".
+	   Compute LCA = "14".
+	Else if ValueLabel(CA2011) = "Falkirk".
+	   Compute LCA = "15".
+	Else if ValueLabel(CA2011) = "Fife".
+	   Compute LCA = "16".
+	Else if ValueLabel(CA2011) = "Glasgow City".
+	   Compute LCA = "17".
+	Else if ValueLabel(CA2011) = "Highland".
+	   Compute LCA = "18".
+	Else if ValueLabel(CA2011) = "Inverclyde".
+	   Compute LCA = "19".
+	Else if ValueLabel(CA2011) = "Midlothian".
+	   Compute LCA = "20".
+	Else if ValueLabel(CA2011) = "Moray".
+	   Compute LCA = "21".
+	Else if ValueLabel(CA2011) = "North Ayrshire".
+	   Compute LCA = "22".
+	Else if ValueLabel(CA2011) = "North Lanarkshire".
+	   Compute LCA = "23".
+	Else if ValueLabel(CA2011) = "Orkney Islands".
+	   Compute LCA = "24".
+	Else if ValueLabel(CA2011) = "Perth and Kinross".
+	   Compute LCA = "25".
+	Else if ValueLabel(CA2011) = "Renfrewshire".
+	   Compute LCA = "26".
+	Else if ValueLabel(CA2011) = "Shetland Islands".
+	   Compute LCA = "27".
+	Else if ValueLabel(CA2011) = "South Ayrshire".
+	   Compute LCA = "28".
+	Else if ValueLabel(CA2011) = "South Lanarkshire".
+	   Compute LCA = "29".
+	Else if ValueLabel(CA2011) = "Stirling".
+	   Compute LCA = "30".
+	Else if ValueLabel(CA2011) = "West Lothian".
+	   Compute LCA = "31".
+	Else if ValueLabel(CA2011) = "Na h-Eileanan Siar".
+	   Compute LCA = "32".
+	End If.
 !EndDefine.
 
+ * This 'might' need updating if the Council areas change.
 Define !AddLCADictionaryInfo (LCA = !CMDEND)
    Value Labels !LCA
       '01' "Aberdeen City"
@@ -191,28 +191,22 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
       '32' "Na h-Eileanan Siar"
 !EndDefine.
 
+ * This will only need updating if the name of the Health Board variable changes.
+ * Change '/Source variables = HBXXXX' in the below.
 Define !AddHBDictionaryInfo (HB = !CMDEND)
+	* Copy the labels from the Postcode Lookup file.
+	Apply Dictionary From !PCDir
+		/VarInfo ValLabels = Replace
+		/Source variables = HB2018 
+		/Target variables = !HB.
+		
+	* Add extra non official labels.
     Add Value Labels !HB
-        'S08000015' "Ayrshire and Arran"
-        'S08000016' "Borders"
-        'S08000017' "Dumfries and Galloway"
-        'S08000018' "Fife"
-        'S08000019' "Forth Valley"
-        'S08000020' "Grampian"
-        'S08000021' "Greater Glasgow and Clyde"
-        'S08000022' "Highland"
-        'S08000023' "Lanarkshire"
-        'S08000024' "Lothian"
-        'S08000025' "Orkney"
-        'S08000026' "Shetland"
-        'S08000027' "Tayside"
-        'S08000028' "Western Isles"
         'S08200001' 'Out-with Scotland'
         'S08200002' 'No Fixed Abode'
         'S08200003' 'Not Known'
         'S08200004' 'Outside UK'.
 !EndDefine.
-
 
 ************************************************************************************************************.
  * This will automatically set from the FY macro above for example for !FY = "1718" it will produce "2017".
