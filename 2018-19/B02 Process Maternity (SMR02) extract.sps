@@ -157,99 +157,48 @@ Compute stay = Datediff(record_keydate2, record_keydate1, "days").
 
 Frequencies stay yearstay.
 
- * Need to have Year as the first variable.
-add files file = *
-    /Keep Year All.
- * Count the beddays.
- * Similar method to that used in Care homes.
- * 1) Declare an SPSS macro which will set the beddays for each month.
- * 2) Use python to run the macro with the correct parameters.
- * This means that different month lengths and leap years are handled correctly.
-Define !BedDaysAndCostsPerMonth (Month = !Tokens(1) 
-   /MonthNum = !Tokens(1) 
-   /DaysInMonth = !Tokens(1) 
-   /Year = !Tokens(1))
-
- * Store the start and end date of the given month.
-Compute #StartOfMonth = Date.DMY(1, !MonthNum, !Year).
-Compute #EndOfMonth = Date.DMY(!DaysInMonth, !MonthNum, !Year).
-
- * Create the names of the variables e.g. April_beddays and April_cost.
-!Let !BedDays = !Concat(!Month, "_beddays").
-!Let !Costs = !Concat(!Month, "_cost").
-
- * Create variables for the month.
-Numeric !Costs (F8.2).
-Numeric !BedDays (F8.2).
-
- * Go through all possibilities to decide how many days to be allocated.
-Do if record_keydate1 LE #StartOfMonth.
-   Do if record_keydate2 GE #EndOfMonth.
-      Compute !BedDays = !DaysInMonth.
-   Else.
-      Compute !BedDays = DateDiff(record_keydate2, #StartOfMonth, "days").
-   End If.
-Else if record_keydate1 LE #EndOfMonth.
-   Do if record_keydate2 GT #EndOfMonth.
-      Compute !BedDays = DateDiff(#EndOfMonth, record_keydate1, "days") + 1.
-   Else.
-       Compute !BedDays = DateDiff(record_keydate2, record_keydate1, "days").
-    End If.
-Else.
-   Compute !BedDays = 0.
-End If.
-
- * Months after the discharge date will end up with negatives.
-If !BedDays < 0 !BedDays = 0.
-
- * Now set costs.
- * First deal with the single day cases; we want to keep the beddays and can assign all costs to that month.
- * The next bit sets zeros for other months in the above case.
-Do if (record_keydate1 = record_keydate2 and Range(record_keydate1, #StartOfMonth, #EndOfMonth)).
-    Compute !BedDays = yearstay.
-    Compute !Costs = cost_total_net.
-Else if (record_keydate1 = record_keydate2).
-    Compute !BedDays = 0.
-    Compute !Costs = 0.
-Else if yearstay NE 0.
-    Compute !Costs = (!BedDays / yearstay) * cost_total_net.
-Else.
-    Compute !Costs = 0.
-End if.
-!EndDefine.
-
- * This python program will call the macro for each month with the right variables.
- * They will also be in FY order.
+ * BedDays.
+* This Python program will call the 'BedDaysPerMonth' macro (Defined in A01) for each month in FY order.
 Begin Program.
-from calendar import month_name, monthrange
-from datetime import date
+from calendar import month_name
 import spss
 
-#Set the financial year, this line reads the first variable ('year')
-fin_year = int((int(spss.Cursor().fetchone()[0]) // 100) + 2000)
-
-#This line generates a 'dictionary' which will hold all the info we need for each month
-#month_name is a list of all the month names and just needs the number of the month
-#(m < 4) + 2015 - This will set the year to be 2015 for April onwards and 2016 other wise
-#monthrange takes a year and a month number and returns 2 numbers, the first and last day of the month, we only need the second.
-months = {m: [month_name[m], (m < 4) + fin_year, monthrange((m < 4) + fin_year, m)[1]]  for m in range(1,13)}
-print(months) #Print to the output window so you can see how it works
-
-#This will make the output look a bit nicer
-print("\n\n***This is the syntax that will be run:***")
-
-#This loops over the months above but first sorts them by year, meaning they are in correct FY order
-for month in sorted(months.items(), key=lambda x: x[1][1]):
-   syntax = "!BedDaysAndCostsPerMonth Month = " + month[1][0][:3]
-   syntax += " MonthNum = " + str(month[0])
-   syntax += " DaysInMonth = " + str(month[1][2])
-   syntax += " Year = " + str(month[1][1]) + "."
+#Loop through the months by number in FY order
+for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
+   #To show what is happening print some stuff to the screen
+   print(month, month_name[month])
    
+   #Set up the syntax
+   syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
+   
+   #Use the correct admission and discharge variables
+   syntax += " AdmissionVar = record_keydate1 DischargeVar = record_keydate2."
+   
+   #print the syntax to the screen
    print(syntax)
+   
+   #run the syntax
    spss.Submit(syntax)
-spss.Submit("execute.")
 End Program.
 
+ * Costs.
+ * Declare Variables
+Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2)
+ * Calculate Cost per month from beddays and cost_total_net.
+Do Repeat Beddays = Apr_beddays to Mar_beddays
+		/Cost = Apr_cost to Mar_cost
+		/MonthNum = 4 5 6 7 8 9 10 11 12 1 2 3.
+	
+	* Fix the instances where the episode is a daycase; 
+	* these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
+	Do if (record_keydate1 = record_keydate2) and xdate.Month(record_keydate1) = MonthNum.
+		Compute BedDays = yearstay.
+	End if.
+	
+	Compute Cost = (BedDays / yearstay) * cost_total_net.
+End Repeat.
+
+ 
  * Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
