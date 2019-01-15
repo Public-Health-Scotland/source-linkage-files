@@ -314,7 +314,7 @@ Compute stay = datediff(keydate2_dateformat, keydate1_dateformat, "days").
  * Declare Variables
 Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2)
  * Calculate Cost per month from beddays and daily cost.
-Do Repeat Beddays = Apr_beddays to Mar_beddays.
+Do Repeat Beddays = Apr_beddays to Mar_beddays
 		/Cost = Apr_cost to Mar_cost.
 	Compute Cost = Beddays * DDCostOriginal
 End Repeat.
