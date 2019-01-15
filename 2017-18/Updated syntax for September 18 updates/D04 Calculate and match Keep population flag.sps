@@ -1,11 +1,20 @@
 ﻿* Encoding: UTF-8.
  * Run A01-Set up Macros first!.
 
- * Most up to date Datazone Population estimates.
-Define !DataZone_Pops()
-   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2017.sav"
-!EndDefine.
-
+************************************************************************************************************************************.
+************************************************************************************************************************************.
+************************************************************************************************************************************.
+ * We don't currently have an NSU cohort for 2018/19.
+ * Use this code for new years where we don't have an NSU cohort, otherwise run main code below.
+get file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav".
+Numeric Keep_Population (F1.0).
+Compute Keep_Population = 1.
+save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
+    /zcompressed.
+************************************************************************************************************************************.
+************************************************************************************************************************************.
+************************************************************************************************************************************.
+ 
 ************************************************************************************************************************************.
 * 1. Obtain the population estimates for Locality AgeGroup and Gender.
 get file = !DataZone_Pops
@@ -19,7 +28,7 @@ get file = !DataZone_Pops
  * execute.
  * compute year = year + 1.
 
- * Code in usual case where estimates are availiable.
+ * Code in usual case where estimates are available.
 select if year = Number(!altFY, F4.0).
 
  * Recode to make it match source.
@@ -120,7 +129,7 @@ compute New_NSU_Figure = NSU_Population - Difference.
 compute Scaling_Factor = New_NSU_Figure / NSU_Population.
 
  * Run Bernoulli Random Sampling. 
- * Recode any scaling factors that fall outside (0, 1), as these will result in sysmiss if given to rv.bernoilli.
+ * Recode any scaling factors that fall outside (0, 1), as these will result in sysmiss if given to rv.Bernoulli.
  * A scaling factor < 0 implies that we have more service-users than population estimate; hence we should get rid of more NSUs than we actually have.
  * A scaling factor > 1 implies that we NSU + service-users is less than the population estimate; hence we need to add NSUs ...
 Recode Scaling_Factor (Lo Thru 0 = 0) (1 Thru Hi = 1).

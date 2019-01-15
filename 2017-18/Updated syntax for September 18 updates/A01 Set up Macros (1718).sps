@@ -82,6 +82,11 @@ Define !SIMDLookup()
    "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2018_2_simd2016.sav"
 !EndDefine.
 
+ * Most up to date DataZone Population estimates.
+Define !DataZone_Pops()
+   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2017.sav"
+!EndDefine.
+
  * The following two macros are used for creating the old LCA codes
  * They will need updating if the Council area codes change.
 Define !CA2011toLCA()
