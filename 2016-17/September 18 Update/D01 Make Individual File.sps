@@ -538,17 +538,17 @@ End if.
 Frequencies age.
 
  * If all postcodes are blank create a dummy postcode so we don't lose the CHI - we'll clean this up later. 
- * First firgure out if they are all blank.
+ * First figure out if they are all blank.
 compute #All_Blank = 1.
 
 Do repeat postcode =  acute_postcode to NRS_postcode.
     If postcode NE "" #All_Blank = 0.
 End repeat.
 
- * Use NRS_postcode to store the dummy for no other reason than it's last in the heirarchy.
+ * Use NRS_postcode to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 NRS_postcode = "XXX XXX".
 
- * Make a postcode variable from the various postcodes labled by the dataset they came from.
+ * Make a postcode variable from the various postcodes labeled by the dataset they came from.
 VarsToCases
     /make postcode from acute_postcode to NRS_postcode
     /Index dataset (postcode).
@@ -558,7 +558,7 @@ aggregate
     /break chi postcode
     /ndistpostcodes = n(postcode).
 
- * Give an order based on old heirarchy. This will only be used if we have a 'tie'.
+ * Give an order based on old hierarchy. This will only be used if we have a 'tie'.
 Do if dataset = "PIS_postcode".
     Compute order = 1.
 Else if dataset = "AE_postcode".
@@ -615,17 +615,17 @@ Select if Keep = 1.
  * Do the same for gpprac.
 
 * If all gppracs are blank create a dummy gpprac so we don't lose the CHI - we'll clean this up later. 
- * First firgure out if they are all blank.
+ * First figure out if they are all blank.
 compute #All_Blank = 1.
 
 Do repeat gpprac =  acute_gpprac to NRS_gpprac.
     If Not(sysmis(gpprac))  #All_Blank = 0.
 End repeat.
 
- * Use NRS_gpprac to store the dummy for no other reason than it's last in the heirarchy.
+ * Use NRS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 NRS_gpprac = 0.
 
- * Make a gpprac variable from the various gpprac labled by the dataset they came from.
+ * Make a gpprac variable from the various gpprac labeled by the dataset they came from.
 VarsToCases
     /make gpprac from acute_gpprac to NRS_gpprac
     /Index dataset (gpprac)
@@ -636,7 +636,7 @@ aggregate
     /break chi gpprac
     /ndistgppracs = n(gpprac).
 
- * Give an order based on old heirarchy. This will only be used if we have a 'tie'.
+ * Give an order based on old hierarchy. This will only be used if we have a 'tie'.
 Do if dataset = "PIS_gpprac".
     Compute order = 1.
 Else if dataset = "AE_gpprac".
@@ -720,7 +720,7 @@ Recode Acute_episodes to DN_cost (sysmis = 0).
 compute health_net_cost = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + AE_cost + PIS_cost + OoH_cost.
 compute health_net_costincDNAs = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + OP_cost_dnas + AE_cost + PIS_cost + OoH_cost.
 
-* Care home and DN costs aren't included in the above as we do not have data for all LCAs / HBs (also the completness of what we do have is questionable).
+* Care home and DN costs aren't included in the above as we do not have data for all LCAs / HBs (also the completeness of what we do have is questionable).
 compute health_net_costincIncomplete = health_net_cost + CH_cost + DN_cost.
 
  * Create a year variable for time-series linking.
