@@ -23,7 +23,7 @@ aggregate
    /break chi new_CIS
    /keydate3_dateformat = Min(keydate1_dateformat)
    /keydate4_dateformat = Max(keydate2_dateformat).
-exe.
+
 save outfile = !File + "temp-source-episode-with-CIS-dates.zsav"
    /zcompressed.
 get file = !File + "temp-source-episode-with-CIS-dates.zsav".
@@ -255,7 +255,7 @@ crosstabs DD_Quality by NoCIS.
 Frequencies DD_Quality NoCIS.
 
 sort cases by LCA.
-Split file Seperate by LCA.
+Split file Separate by LCA.
 
 Frequencies DD_Quality.
 
@@ -283,80 +283,32 @@ save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsa
     MONTHFLAG OriginalAdmissionDate Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
     /zcompressed.
 
- * Count the beddays.
- * Similar method to that used in Care homes.
- * 1) Declare an SPSS macro which will set the beddays for each month.
- * 2) Use python to run the macro with the correct parameters.
- * This means that different month lengths and leap years are handled correctly.
-Define !BedDaysPerMonth (Month = !Tokens(1) 
-   /MonthNum = !Tokens(1) 
-   /DaysInMonth = !Tokens(1) 
-   /Year = !Tokens(1))
 
- * Store the start and end date of the given month.
-Compute #StartOfMonth = Date.DMY(1, !MonthNum, !Year).
-Compute #EndOfMonth = Date.DMY(!DaysInMonth, !MonthNum, !Year).
-
- * Create the names of the variables e.g. April_beddays and April_cost.
-!Let !BedDays = !Concat(!Month, "_beddays").
-
- * Create variables for the month.
-Numeric !BedDays (F2.0).
-
- * Go through all possibilities to decide how many days to be allocated.
-Do if keydate1_dateformat LE #StartOfMonth.
-   Do if keydate2_dateformat GE #EndOfMonth.
-      Compute !BedDays = !DaysInMonth.
-   Else.
-      Compute !BedDays = DateDiff(keydate2_dateformat, #StartOfMonth, "days").
-   End If.
-Else if keydate1_dateformat LE #EndOfMonth.
-   Do if keydate2_dateformat GT #EndOfMonth.
-      Compute !BedDays = DateDiff(#EndOfMonth, keydate1_dateformat, "days") + 1.
-   Else.
-      Compute !BedDays = DateDiff(keydate2_dateformat, keydate1_dateformat, "days").
-   End If.
-Else.
-   Compute !BedDays = 0.
-End If.
-
- * Months after the discharge date will end up with negatives.
-If !BedDays < 0 !BedDays = 0.
-!EndDefine.
-
- * This python program will call the macro for each month with the right variables.
- * They will also be in FY order.
+ * This Python program will call the 'BedDaysPerMonth' macro (Defined in A01) for each month in FY order.
 Begin Program.
-from calendar import month_name, monthrange
-from datetime import date
+from calendar import month_name
 import spss
 
-#Set the financial year, this line reads the first variable ('year')
-fin_year = int((int(spss.Cursor().fetchone()[0]) // 100) + 2000)
-
-#This line generates a 'dictionary' which will hold all the info we need for each month
-#month_name is a list of all the month names and just needs the number of the month
-#(m < 4) + 2015 - This will set the year to be 2015 for April onwards and 2016 other wise
-#monthrange takes a year and a month number and returns 2 numbers, the first and last day of the month, we only need the second.
-months = {m: [month_name[m], (m < 4) + fin_year, monthrange((m < 4) + fin_year, m)[1]]  for m in range(1,13)}
-print(months) #Print to the output window so you can see how it works
-
-#This will make the output look a bit nicer
-print("\n\n***This is the syntax that will be run:***")
-
-#This loops over the months above but first sorts them by year, meaning they are in correct FY order
-for month in sorted(months.items(), key=lambda x: x[1][1]):
-   syntax = "!BedDaysPerMonth Month = " + month[1][0][:3]
-   syntax += " MonthNum = " + str(month[0])
-   syntax += " DaysInMonth = " + str(month[1][2])
-   syntax += " Year = " + str(month[1][1]) + "."
+#Loop through the months by number in FY order
+for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
+   #To show what is happening print some stuff to the screen
+   print(month, month_name[month])
    
+   #Set up the syntax
+   syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
+   
+   #Set DelayedDischarge to 1 so that the macro uses the correct methodology
+   syntax += " DelayedDischarge = 1."
+   
+   #print the syntax to the screen
    print(syntax)
+   
+   #run the syntax
    spss.Submit(syntax)
 End Program.
 
  * Compute stay and yearstay.
-Compute yearstay = Sum(apr_beddays to mar_beddays).
+Compute yearstay = Sum(Apr_beddays to Mar_beddays).
 Compute stay = datediff(keydate2_dateformat, keydate1_dateformat, "days").
 
  * Set the cis_marker back to the usual name.
@@ -369,7 +321,7 @@ Else.
     Compute SMRType = "DD-CIS".
 End if.
 
- * Set the IPDC variable to be I.
+ * Set the IPDC variable to be I (inpatient).
 String ipdc (A1).
 Compute ipdc = "I".
 
