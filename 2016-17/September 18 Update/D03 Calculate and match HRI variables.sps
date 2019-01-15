@@ -17,7 +17,7 @@
  *  3. Compute the flag = 0 to allow the calculate HRIs for the whole of Scotland.
  *  4. Sort Cases by health cost in descending order.
  *  5. Aggregate the file three times, but use add variables to add the council area total health cost, health board total health cost and whole of Scotland total health cost.
- *  6. To make the process easier, using the substr function, change the hb variable so it just contains the last 2 characters from each health board number.
+ *  6. To make the process easier, using the substr function, change the HB variable so it just contains the last 2 characters from each health board number.
  *  7. Save this file. This file now contains all the information for all patients in Scotland for that year. * * ENSURE FILENAMES REFLECT CURRENT YEAR. *  * 
 
  * * *  * Now the HRIs for each health board, council area and whole of Scotland can be identified.. Health Board and Council Area are computed in the same way.
@@ -150,7 +150,7 @@ end repeat.
 
 do repeat x = hb1 to hb14
    /y = 1 to 14.
-   if (y = hb) x = health_net_cost.
+   if (y = HB) x = health_net_cost.
 end repeat.
 
 do repeat x = lcaB1 to lcaB32
@@ -167,7 +167,7 @@ end repeat.
 
 do repeat x = hbT1 to hbT14
    /y = 1 to 14.
-   if (y = hb) x = HB_TotCost.
+   if (y = HB) x = HB_TotCost.
 end repeat.
 
 do repeat x = lcaBT1 to lcaBT32
@@ -261,7 +261,7 @@ if (lcaBP le 95.00) LcaBFlag95 = 1.
 if (hbP le 95.00) hbFlag95 = 1.
 if (ScotP le 95.00) ScotFlag95 = 1.
 
- * Rename varaibles for Source individual file.
+ * Rename variables for Source individual file.
 Rename Variables 
 (LCAFlag50 = HRI_lca) 
 (LCABFlag50 = HRI_lca_incDN) 

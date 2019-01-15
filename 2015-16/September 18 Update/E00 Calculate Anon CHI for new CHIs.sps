@@ -1,20 +1,18 @@
 ﻿* Encoding: UTF-8.
 ***************************************************************************.
  * Syntax to add new CHIs to the file after an update.
- * This could be ran every time but it makes more sense to run it once all new / updated files are availiable.
+ * This could be ran every time but it makes more sense to run it once all new / updated files are available.
 ***************************************************************************.
  * Run A01 Set-up macros first!.
 
  * Add updated individual files together.
  * Only need to do individual files as they have all the CHIs.
 
-* Add the filepaths e.g.
+* Add the file paths e.g.
 * "/conf/sourcedev/Source Linkage File Updates/YEAR/source-individual-file-20YEAR.zsav".
 add files
-    /File ="/conf/sourcedev/Source Linkage File Updates/1516/source-individual-file-201516.zsav"
-    /File ="/conf/sourcedev/Source Linkage File Updates/1617/source-individual-file-201617.zsav"
-    /File = "/conf/sourcedev/Source Linkage File Updates/1718/source-individual-file-201718.zsav"
-    /File ="/conf/sourcedev/Source Linkage File Updates/1819/source-individual-file-201819.zsav"
+    /File =
+    /File =
     /Keep CHI Year
     /By CHI.
 
@@ -74,7 +72,7 @@ cur.close()
 End Program.
 
  * Add to the existing lookup.
- * Or skip if running for the first time / no lookup availiable.
+ * Or skip if running for the first time / no lookup available.
 add files
     /File = *
     /File = !CHItoAnonlookup
