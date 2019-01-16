@@ -59,6 +59,7 @@ Numeric SPARRA_End_FY (F2.0).
 Numeric HHG_Start_FY (F2.0).
 Numeric HHG_End_FY (F2.0).
 
+String Primary_Delay_Reason (A4).
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -68,129 +69,129 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (newpattype_cis NE "Mat
     Compute Acute_postcode = postcode.
     Compute Acute_gpprac = gpprac.
 
-	Compute Acute_episodes = 1.
-	Compute Acute_cost = Cost_Total_Net.
+    Compute Acute_episodes = 1.
+    Compute Acute_cost = Cost_Total_Net.
 
     * Create Inpatient / Daycase activity, cost and bed day counts for acute elective / non-elective inpatients and day cases.
-	Do if (IPDC = "I").
-		* Episode count.
-		Compute Acute_inpatient_episodes = 1.
-		If (newpattype_CIS = "Elective") Acute_el_inpatient_episodes = 1.
-		If (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_episodes = 1.
+    Do if (IPDC = "I").
+        * Episode count.
+        Compute Acute_inpatient_episodes = 1.
+        If (newpattype_CIS = "Elective") Acute_el_inpatient_episodes = 1.
+        If (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_episodes = 1.
 
-		* Beddays count.
-		Compute Acute_inpatient_beddays = yearstay.
-		If (newpattype_CIS = "Elective") Acute_el_inpatient_beddays = yearstay.
-		If (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_beddays = yearstay.
+        * Beddays count.
+        Compute Acute_inpatient_beddays = yearstay.
+        If (newpattype_CIS = "Elective") Acute_el_inpatient_beddays = yearstay.
+        If (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_beddays = yearstay.
 
-		* Cost.
-		Compute Acute_inpatient_cost = Cost_Total_Net.
-		if (newpattype_CIS = "Elective") Acute_el_inpatient_cost = Cost_Total_Net.
-		if (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_cost = Cost_Total_Net.
-	Else if (IPDC = "D").
-		* Episode count.
-		Compute Acute_daycase_episodes = 1.
+        * Cost.
+        Compute Acute_inpatient_cost = Cost_Total_Net.
+        if (newpattype_CIS = "Elective") Acute_el_inpatient_cost = Cost_Total_Net.
+        if (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_cost = Cost_Total_Net.
+    Else if (IPDC = "D").
+        * Episode count.
+        Compute Acute_daycase_episodes = 1.
 
-		* Cost.
-		Compute Acute_daycase_cost = Cost_Total_Net.
-	End if.
+        * Cost.
+        Compute Acute_daycase_cost = Cost_Total_Net.
+    End if.
 
 Else if (newpattype_cis = "Maternity").
     *************************************************************************************************************************************************.
     * Maternity (SMR02) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
-    append this to the end of each record for each patient.
+        append this to the end of each record for each patient.
 
     Compute Mat_DoB = DoB.
     Compute Mat_postcode = postcode.
     Compute Mat_gpprac = gpprac.
 
 
-	Compute Mat_episodes = 1.
-	Compute Mat_cost = Cost_Total_Net.
+    Compute Mat_episodes = 1.
+    Compute Mat_cost = Cost_Total_Net.
 
     * Create Inpatient / Daycase activity, cost and bed day counts for Maternity.
-	Do if (IPDC = "I").
-		* Episode count.
-		Compute Mat_inpatient_episodes = 1.
+    Do if (IPDC = "I").
+        * Episode count.
+        Compute Mat_inpatient_episodes = 1.
 
-		* Beddays count.
-		Compute Mat_inpatient_beddays = yearstay.
+        * Beddays count.
+        Compute Mat_inpatient_beddays = yearstay.
 
 
-		Compute Mat_inpatient_cost = Cost_Total_Net.
-	Else if (IPDC = "D").
-		* Episode count.
-		Compute Mat_daycase_episodes = 1.
+        Compute Mat_inpatient_cost = Cost_Total_Net.
+    Else if (IPDC = "D").
+        * Episode count.
+        Compute Mat_daycase_episodes = 1.
 
-		* Cost.
-		Compute Mat_daycase_cost = Cost_Total_Net.
-	End if.
+        * Cost.
+        Compute Mat_daycase_cost = Cost_Total_Net.
+    End if.
 
 Else if (recid = "04B") AND (newpattype_cis NE "Maternity").
     *************************************************************************************************************************************************.
     * Mental Health (SMR04) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
-    append this to the end of each record for each patient.
+        append this to the end of each record for each patient.
     Compute MH_DoBs= DoB.
     Compute MH_postcode = postcode.
     Compute MH_gpprac = gpprac.
 
-	Compute MH_episodes = 1.
-	Compute MH_cost = Cost_Total_Net.
+    Compute MH_episodes = 1.
+    Compute MH_cost = Cost_Total_Net.
 
     * Create Inpatient (no Day Case activity for acute Mental Health) activity, cost and bed day counts for acute Mental Health elective / non-elective inpatients and day cases.
-	Do if (IPDC = "I").
-		* Episode count.
-		Compute MH_inpatient_episodes = 1.
-		If (newpattype_CIS = "Elective") MH_el_inpatient_episodes = 1.
-		If (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_episodes = 1.
+    Do if (IPDC = "I").
+        * Episode count.
+        Compute MH_inpatient_episodes = 1.
+        If (newpattype_CIS = "Elective") MH_el_inpatient_episodes = 1.
+        If (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_episodes = 1.
 
-		* Beddays count.
-		Compute MH_inpatient_beddays = yearstay.
-		If (newpattype_CIS = "Elective") MH_el_inpatient_beddays = yearstay.
-		If (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_beddays = yearstay.
+        * Beddays count.
+        Compute MH_inpatient_beddays = yearstay.
+        If (newpattype_CIS = "Elective") MH_el_inpatient_beddays = yearstay.
+        If (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_beddays = yearstay.
 
-		* Cost.
-		Compute MH_inpatient_cost = Cost_Total_Net.
-		if (newpattype_CIS = "Elective") MH_el_inpatient_cost = Cost_Total_Net.
-		if (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_cost = Cost_Total_Net.
-	End if.
+        * Cost.
+        Compute MH_inpatient_cost = Cost_Total_Net.
+        if (newpattype_CIS = "Elective") MH_el_inpatient_cost = Cost_Total_Net.
+        if (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_cost = Cost_Total_Net.
+    End if.
 Else if (SMRType = "GLS-IP").
     *************************************************************************************************************************************************.
     * Geriatric Long Stay (SMR01_1E) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
-    append this to the end of each record for each patient.
+        append this to the end of each record for each patient.
     Compute GLS_DoBs = DoB.
     Compute GLS_postcode = postcode.
     Compute GLS_gpprac = gpprac.
 
- 	Compute GLS_episodes = 1.
-	Compute GLS_cost = Cost_Total_Net.
+    Compute GLS_episodes = 1.
+    Compute GLS_cost = Cost_Total_Net.
 
     * Create Inpatient (no Day Case activity for GLS) activity, cost and bed day counts for Geriatric Long Stay elective / non-elective inpatients and day cases.
-	Do if (IPDC = "I").
-		* Episode count.
-		Compute GLS_inpatient_episodes = 1.
-		If (newpattype_CIS = "Elective") GLS_el_inpatient_episodes = 1.
-		If (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_episodes = 1.
+    Do if (IPDC = "I").
+        * Episode count.
+        Compute GLS_inpatient_episodes = 1.
+        If (newpattype_CIS = "Elective") GLS_el_inpatient_episodes = 1.
+        If (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_episodes = 1.
 
-		* Beddays count.
-		Compute GLS_inpatient_beddays = yearstay.
-		If (newpattype_CIS = "Elective") GLS_el_inpatient_beddays = yearstay.
-		If (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_beddays = yearstay.
+        * Beddays count.
+        Compute GLS_inpatient_beddays = yearstay.
+        If (newpattype_CIS = "Elective") GLS_el_inpatient_beddays = yearstay.
+        If (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_beddays = yearstay.
 
-		* Cost.
-		Compute GLS_inpatient_cost = Cost_Total_Net.
-		if (newpattype_CIS = "Elective") GLS_el_inpatient_cost = Cost_Total_Net.
-		if (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_cost = Cost_Total_Net.
-	End if.
+        * Cost.
+        Compute GLS_inpatient_cost = Cost_Total_Net.
+        if (newpattype_CIS = "Elective") GLS_el_inpatient_cost = Cost_Total_Net.
+        if (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_cost = Cost_Total_Net.
+    End if.
 
 Else if (recid = "00B").
     *************************************************************************************************************************************************.
     * Outpatients (SMR00) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
-    append this to the end of each record for each patient.
+        append this to the end of each record for each patient.
 
     Compute OP_DoBs = DoB.
     Compute OP_postcode = postcode.
@@ -198,24 +199,24 @@ Else if (recid = "00B").
 
     * Activity (count the attendances).
     Do if (attendance_status = 1).
-		* Attended episode count.
-		Compute OP_newcons_attendances = 1.
+        * Attended episode count.
+        Compute OP_newcons_attendances = 1.
 
-		* Cost of attended episodes.
-		Compute OP_cost_attend = Cost_Total_Net.
-	Else if (any(attendance_status, 5, 8)).
-		* Unattended episode count.
-		Compute OP_newcons_dnas = 1.
+        * Cost of attended episodes.
+        Compute OP_cost_attend = Cost_Total_Net.
+    Else if (any(attendance_status, 5, 8)).
+        * Unattended episode count.
+        Compute OP_newcons_dnas = 1.
 
-		* Cost of DNAs only.
-		Compute OP_cost_dnas = Cost_Total_Net_incDNAs.
-	End if.
+        * Cost of DNAs only.
+        Compute OP_cost_dnas = Cost_Total_Net_incDNAs.
+    End if.
 
 Else if (recid = "AE2").
     *************************************************************************************************************************************************.
     * Accident and Emergency (AE2) section (sum the number of of attendances and costs associated).
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
-    append this to the end of each record for each patient.
+        append this to the end of each record for each patient.
     Compute AE_DoB = DoB.
     Compute AE_postcode = postcode.
     Compute AE_gpprac = gpprac.
@@ -230,7 +231,7 @@ Else if (recid = "PIS").
     * For Prescribing: sum the information by patient * only one row per person exists in the master PLICs file with minimal data.
 
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
-    append this to the end of each record for each patient.
+        append this to the end of each record for each patient.
     Compute PIS_DoB = DoB.
     Compute PIS_postcode = postcode.
     Compute PIS_gpprac = gpprac.
@@ -283,7 +284,7 @@ Else if (recid = "OoH").
 
     * Time.
     Compute OoH_consultation_time = DateDiff(keydate2_dateformat + keyTime2,  keydate1_dateformat + KeyTime1, "minutes").
-	* Fix any dodgy records.
+    * Fix any dodgy records.
     if OoH_consultation_time < 0 OoH_consultation_time = 0.
 
 Else if (recid = "DN").
@@ -321,19 +322,19 @@ Else if (recid = "DD").
     * Delayed Discharge (DD) section.
     * Not taking any demographic fields from DD.
 
-	Do if (Primary_Delay_Reason NE "9").
-		* Episode Count.
-		Compute DD_NonCode9_episodes = 1.
+    Do if (Primary_Delay_Reason NE "9").
+        * Episode Count.
+        Compute DD_NonCode9_episodes = 1.
 
-		* Bedday Count.
-		Compute DD_NonCode9_beddays = yearstay.
-	Else if (Primary_Delay_Reason = "9").
-		* Episode Count.
-		Compute DD_Code9_episodes = 1.
+        * Bedday Count.
+        Compute DD_NonCode9_beddays = yearstay.
+    Else if (Primary_Delay_Reason = "9").
+        * Episode Count.
+        Compute DD_Code9_episodes = 1.
 
-		* Bedday Count.
-		Compute DD_Code9_beddays = yearstay.
-	End if.
+        * Bedday Count.
+        Compute DD_Code9_beddays = yearstay.
+    End if.
 
 Else if (recid = "NSU").
     *************************************************************************************************************************************************.
@@ -367,67 +368,67 @@ aggregate outfile = *
     /break chi
     /gender = Mean(gender)
     /Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode
-   = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode)
+    = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode)
     /Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB
-   = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB)
+    = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB)
     /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac
-   = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac)
+    = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
     Acute_inpatient_beddays Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays
-   = sum(Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
+    = sum(Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
     Acute_inpatient_beddays Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays)
     /Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_cost Mat_daycase_cost Mat_inpatient_cost Mat_inpatient_beddays
-   = sum(Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_cost Mat_daycase_cost Mat_inpatient_cost Mat_inpatient_beddays)
-    /MH_episodes MH_daycase_episodes MH_inpatient_episodes
+    = sum(Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_cost Mat_daycase_cost Mat_inpatient_cost Mat_inpatient_beddays)
+    /MH_episodes MH_inpatient_episodes
     MH_el_inpatient_episodes MH_non_el_inpatient_episodes
-    MH_cost MH_daycase_cost MH_inpatient_cost
+    MH_cost MH_inpatient_cost
     MH_el_inpatient_cost MH_non_el_inpatient_cost
     MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays
-   = sum(MH_episodes MH_daycase_episodes MH_inpatient_episodes
+    = sum(MH_episodes MH_inpatient_episodes
     MH_el_inpatient_episodes MH_non_el_inpatient_episodes
-    MH_cost MH_daycase_cost MH_inpatient_cost
+    MH_cost MH_inpatient_cost
     MH_el_inpatient_cost MH_non_el_inpatient_cost
     MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays)
-    /GLS_episodes GLS_daycase_episodes GLS_inpatient_episodes
+    /GLS_episodes GLS_inpatient_episodes
     GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes
-    GLS_cost GLS_daycase_cost GLS_inpatient_cost
+    GLS_cost GLS_inpatient_cost
     GLS_el_inpatient_cost GLS_non_el_inpatient_cost
     GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
-   = sum(GLS_episodes GLS_daycase_episodes GLS_inpatient_episodes
+    = sum(GLS_episodes GLS_inpatient_episodes
     GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes
-    GLS_cost GLS_daycase_cost GLS_inpatient_cost
+    GLS_cost GLS_inpatient_cost
     GLS_el_inpatient_cost GLS_non_el_inpatient_cost
     GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays)
     /OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas
-   = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
+    = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
     /PIS_dispensed_items PIS_cost = sum(no_dispensed_items PIS_cost)
     /CH_episodes CH_beddays CH_cost = sum(CH_episodes CH_beddays CH_cost)
     /OoH_cases = Max(OoH_CC)
     /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost
-   = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost)
+    = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost)
     /DN_episodes DN_contacts DN_cost
-   = sum(DN_episodes DN_contacts DN_cost)
+    = sum(DN_episodes DN_contacts DN_cost)
     /CMH_contacts
-   = sum(CMH_contacts)
+    = sum(CMH_contacts)
     /deceased death_date = First(deceased death_date)
-	/DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
-	= sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
+    /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
+    = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
     /NSU = Max(NSU)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
-	= First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
+    = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
     /arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date
-   = First(arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
+    = First(arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date)
     /Demographic_Cohort Service_Use_Cohort
-	= First(Demographic_Cohort Service_Use_Cohort)
+    = First(Demographic_Cohort Service_Use_Cohort)
     /SPARRA_Start_FY SPARRA_End_FY
-	= First(SPARRA_Start_FY SPARRA_End_FY)
-	/HHG_Start_FY HHG_End_FY
-	= First(HHG_Start_FY HHG_End_FY).
+    = First(SPARRA_Start_FY SPARRA_End_FY)
+    /HHG_Start_FY HHG_End_FY
+    = First(HHG_Start_FY HHG_End_FY).
 
  * Do a temporary save as the above can take a while to run.
 save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
