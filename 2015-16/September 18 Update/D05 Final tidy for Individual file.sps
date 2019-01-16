@@ -18,22 +18,6 @@ Value Labels year
    "2324" "2023/24"
    "2425" "2024/25".
 
- * Tidy up variable types.
-alter type
-   acute_episodes to acute_non_el_inpatient_episodes acute_inpatient_beddays to acute_non_el_inpatient_beddays
-   mat_episodes to mat_inpatient_episodes mat_inpatient_beddays
-   MH_episodes to MH_non_el_inpatient_episodes MH_inpatient_beddays to MH_non_el_inpatient_beddays
-   gls_episodes to gls_daycase_episodes gls_non_el_inpatient_episodes gls_inpatient_beddays to gls_non_el_inpatient_beddays
-   op_newcons_attendances op_newcons_dnas
-   ae_attendances
-   pis_dispensed_items
-   ch_episodes ch_beddays
-   ooh_cases to ooh_PCC
-   DN_episodes DN_contacts (F8.0).
-
- * Tidy up NSU flag.
-Recode NSU (sysmis = 0).
-Alter Type NSU (F1.0).
 
  * Add variable labels.
 Variable Labels
@@ -289,6 +273,8 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     HRI_scotP
     SPARRA_Start_FY
     SPARRA_End_FY
+	HHG_Start_FY
+	HHG_End_FY
     Demographic_Cohort
     Service_Use_Cohort
     Keep_Population
