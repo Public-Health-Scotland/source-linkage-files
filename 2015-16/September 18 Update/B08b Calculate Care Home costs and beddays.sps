@@ -40,7 +40,7 @@ for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
    syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
    
    #Use the correct admission and discharge variables
-   syntax += " AdmissionVar = CareHomeAdmissionDate DischargeVar = CareHomeDischargeDate."
+   syntax += " AdmissionVar = Admission DischargeVar = Discharge."
    
    #print the syntax to the screen
    print(syntax)
@@ -57,7 +57,7 @@ Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost 
 Do Repeat Beddays = Apr_beddays to Mar_beddays
 		/Cost = Apr_cost to Mar_cost.
 	Do if Age >= 65.
-		Compute Cost = Beddays * CostPerDay
+		Compute Cost = Beddays * CostPerDay.
 	End if.
 End Repeat.
 
