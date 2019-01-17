@@ -28,29 +28,30 @@ Missing Values
 *************************************************************************************************************************************************.
  * First Initialise all variables.
 Numeric
-    Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays (F8.0)
-    Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost Acute_inpatient_beddays (F8.2)
-    Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_inpatient_beddays (F8.0)
-    Mat_cost Mat_daycase_cost Mat_inpatient_cost (F8.2)
-    MH_episodes MH_inpatient_episodes MH_el_inpatient_episodes MH_non_el_inpatient_episodes MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays (F8.0)
-    MH_cost MH_inpatient_cost MH_el_inpatient_cost MH_non_el_inpatient_cost (F8.2)
-    GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays (F8.0)
-    GLS_cost GLS_inpatient_cost GLS_el_inpatient_cost GLS_non_el_inpatient_cost (F8.2)
-    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays (F8.0)
-    OP_newcons_attendances OP_newcons_dnas (F8.0)
-    OP_cost_attend OP_cost_dnas (F8.2)
-    AE_attendances (F8.0)
-    AE_cost (F8.2)
-    PIS_dispensed_items (F8.0)
-    PIS_cost (F8.2)
-    CH_episodes CH_beddays (F8.0)
-    CH_cost (F8.2)
-    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time (F8.0)
-    OoH_cost (F8.2)
-    DN_episodes DN_contacts (F8.0)
-    DN_cost (F8.2)
-    CMH_contacts (F8.0)
-    NSU (F1.0).
+    Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays 
+    Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost Acute_inpatient_beddays 
+    Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_inpatient_beddays 
+    Mat_cost Mat_daycase_cost Mat_inpatient_cost 
+    MH_episodes MH_inpatient_episodes MH_el_inpatient_episodes MH_non_el_inpatient_episodes MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays 
+    MH_cost MH_inpatient_cost MH_el_inpatient_cost MH_non_el_inpatient_cost 
+    GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays 
+    GLS_cost GLS_inpatient_cost GLS_el_inpatient_cost GLS_non_el_inpatient_cost 
+    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays 
+    OP_newcons_attendances OP_newcons_dnas 
+    OP_cost_attend OP_cost_dnas 
+    AE_attendances 
+    AE_cost 
+    PIS_dispensed_items 
+    PIS_cost 
+    CH_episodes CH_beddays 
+    CH_cost 
+    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time 
+    OoH_cost 
+    DN_episodes DN_contacts 
+    DN_cost 
+    CMH_contacts.
+
+Numeric NSU (F1.0).
 
 * May get errors here if the variables already exist.
 Numeric SPARRA_Start_FY (F2.0).
