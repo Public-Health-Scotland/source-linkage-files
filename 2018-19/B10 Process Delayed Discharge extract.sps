@@ -21,8 +21,9 @@ alter type location (A7).
 
 alter type MonthFlag (MOYR8).
 
-* Recode the Local Authority to match source.
+* Recode the Local Authority to match source coding.
 String DD_Responsible_LCA (A2).
+Variable Labels DD_Responsible_LCA "Local Authority assigned responsibility for the delay".
 Do If la = "Aberdeen City".
    Compute DD_Responsible_LCA = "01".
 Else If la = "Aberdeenshire".
