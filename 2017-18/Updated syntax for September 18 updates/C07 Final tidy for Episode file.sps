@@ -212,7 +212,7 @@ Add value labels location
 
 !AddHBDictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
 
-!AddLCADictionaryInfo LCA = LCA sc_send_lca ch_lca.
+!AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
 
 Value Labels ipdc newcis_ipdc
    'I' "Inpatient"
@@ -555,6 +555,7 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     Delay_End_Reason
     Primary_Delay_Reason
     Secondary_Delay_Reason
+    DD_Responsible_LCA
     DD_Quality
     clinic_type
     attendance_status
@@ -710,4 +711,3 @@ erase file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
