@@ -16,7 +16,7 @@
 * Read in Read code lookup.
 * To get a new Read code lookup file Email NSS.isdGeneralPractice. Although the file shouldn't change from year to year.
 * Save ReadCodes.csv to \\irf\05-lookups.
-*Last ran:23/11/2018-AG.
+
 GET DATA  /TYPE=TXT
    /FILE= !Lookup + "../ReadCodes.csv"
    /DELIMITERS=","

@@ -3,7 +3,7 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-*Last ran:23/11/2018-AG.
+
 * Read in CSV output file.
 GET DATA /TYPE=TXT
    /FILE= !Extracts + 'Acute-episode-level-extract-20' + !FY + '.csv'
@@ -150,8 +150,7 @@ compute recid = '01B'.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
    Compute gpprac = "99995".
 End if. 
-exe.
-Alter Type gpprac (F5.0).
+Alter Type GPprac (F5.0).
 
  * Flag GLS records.
 if (glsrecord EQ 'Y') recid = 'GLS'.

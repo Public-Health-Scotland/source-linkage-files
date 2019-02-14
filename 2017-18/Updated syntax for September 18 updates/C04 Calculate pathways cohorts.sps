@@ -3,15 +3,9 @@
 *Andrew Mooney.
 *Feb 2017.
 
-* ModIfied for 15/16 for SLF update, DKG October 2017.
-
-
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-
-*Last ran 21/05/18-AnitaGeorge.
-**********************************************************************************************************************.
 
 *2. Create the Demographic Service_Use_Cohort File.
 
@@ -31,6 +25,8 @@ end repeat.
 
 
 *Frailty ClassIfication.
+
+*If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
 compute Frail_Cohort = 0.
 If (recid = 'CH' and age GE 65) Frail_Cohort = 1.
 do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
@@ -38,8 +34,6 @@ do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
         compute Frail_Cohort  = 1.
     End If.
 end repeat.
-*If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
-
 *Maternity ClassIfication.
 compute Maternity_Cohort = 0.
 If recid = '02B' Maternity_Cohort = 1.
@@ -533,10 +527,11 @@ rename variables Service_Use_Cohort = Service_Use_Cohort.
 
 
 *2. add variable label (from AM).
-variable labels Service_Use_Cohort 'Allocated based on main service type, i.e. where the highest proportion of health cost was spent in the financial year'.
+variable labels 
+    Service_Use_Cohort 'Allocated based on main service type, i.e. where the highest proportion of health cost was spent in the financial year'.
 
 save outfile = !File + 'GP_Practice_Service_Use_Cohorts_' + !FY + '.zsav'
    /keep CHI Service_Use_Cohort
    /zcompressed.
 
-
+get file= !File + 'GP_Practice_Service_Use_Cohorts_' + !FY + '.zsav'.

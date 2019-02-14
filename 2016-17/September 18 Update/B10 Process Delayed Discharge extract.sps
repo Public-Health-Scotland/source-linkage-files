@@ -1,4 +1,4 @@
-﻿ * Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Sep18DD_LinkageFile.zsav".
 
 Rename Variables
