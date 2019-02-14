@@ -279,7 +279,7 @@ Temporary.
 Select if any(flag7, 1, 2).
 save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
     /Rename (keydate1_dateformat keydate2_dateformat keydate3_dateformat keydate4_dateformat = RDD Delay_End_Date CIS_Start_Date CIS_End_Date)
-    /keep year chi lca RDD Delay_End_Date new_CIS newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec
+    /keep year chi DD_Responsible_LCA RDD Delay_End_Date new_CIS newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec
     MONTHFLAG OriginalAdmissionDate Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
     /zcompressed.
 
@@ -334,7 +334,7 @@ save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
     /Keep year recid SMRType chi gender dob age gpprac postcode lca
     keydate1_dateformat keydate2_dateformat record_keydate1 record_keydate2
     hbtreatcode to cis_marker
-    Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
+    Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason DD_Responsible_LCA
     ipdc newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA
     DD_Quality stay yearstay
     Apr_beddays to Mar_beddays
@@ -343,7 +343,7 @@ save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
 get file = !File + "DD_for_source-20" + !FY + ".zsav".
 
  * New DD variables.
- * Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason and DD_Quality
+ * Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason and DD_Quality DD_Responsible_LCA
 *********************************************************************************************************************.
  * Match back into source.
 add files
