@@ -77,6 +77,7 @@ Do if FullMatch2 = 0.
     If ReadCode = "Xa1m." ReadCode = "S349" . /*Someone used ReadCode v3.
     Compute ReadCode = Replace(ReadCode, "?", ".").
     Compute ReadCode = char.Rpad(ReadCode, 5, ".").
+    If ReadCode = "HO6.." ReadCode = "H06.." /*Letter 'O' was used instead of zero.
 End if.
 
  * Do a final check.
