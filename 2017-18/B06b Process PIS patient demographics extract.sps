@@ -18,11 +18,15 @@
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
  * This should unzip the file in the DH-Extracts directory.
- * Note the extract numbers might need changing.
-Host Command = ["gunzip '" + !CSDExtractLoc + "_extract_8_fy_" + !altFY + ".csv'" ].
+* Change this to the relevant number.
+* Should be '_extract_NUMBER'.
+Define !Extract_Number()
+    "_extract_6"
+!EndDefine.
+Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_fy_" + !altFY + ".csv'" ].
 
 GET DATA  /TYPE=TXT
-   /FILE = !CSDExtractLoc + "_extract_8_fy_" + !altFY + ".csv"
+   /FILE = !CSDExtractLoc + !Extract_Number + "_fy_" + !altFY + ".csv"
    /ENCODING="UTF8"
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -49,6 +53,6 @@ save outfile = !File + "pis_" + !FY + "_patients.zsav"
 
 get file = !File + "pis_" + !FY + "_patients.zsav".
 
-Host Command = ["gzip '" + !CSDExtractLoc + "_extract_8_fy_" + !altFY + ".csv'" ].
+Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_fy_" + !altFY + ".csv'" ].
 
 

@@ -20,7 +20,7 @@
 * Change this to the relevant number.
 * Should be '_extract_NUMBER'.
 Define !Extract_Number()
-	"_extract_2"
+    "_extract_2"
 !EndDefine.
 
  * Unzip the file.
