@@ -11,7 +11,7 @@ sort cases by Practice.
 save outfile = !Lookup + "Practice Details.sav".
 
  * Sort the national ref file by practice.
-get file = "National Reference Files/gpprac.sav"
+get file = "/conf/linkage/output/lookups/Unicode/National Reference Files/gpprac.sav"
    /Keep praccode postcode end.
 
 sort cases by praccode.
@@ -27,6 +27,7 @@ match files
 
  * Fix the Locale -> Unicode issue.
 alter type cluster (A50).
+alter type postcode (A8).
 
  * Match on Geography info (the postcode from the ref file is PC8).
 sort cases by Postcode.
