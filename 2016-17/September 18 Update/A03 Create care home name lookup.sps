@@ -18,15 +18,19 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
- * Ask Social Care Team for the care home names lookup, which originally comes from the Care Inspectorate.
+ * To get an updated Care Home Lookup file email the Care Inspectorate.
+ * Contact is Al Scrougal - Al.Scougal@careinspectorate.gov.scot 
+ * Attach the existing lookup and ask for an updated version - it is updated monthly.
 
 * Read in care home lookup file (all care homes).
 GET DATA /TYPE=XLSX
-   /FILE= !Extracts_Alt + 'Care_home_lookup.xlsx'
-   /SHEET=name 'ALL'
+   /FILE= !Lookup + 'CareHome Lookup All.xlsx'
    /CELLRANGE=full
    /READNAMES=on
    /ASSUMEDSTRWIDTH=32767.
+
+Rename Varaibles
+    AccomPostCodeNo = CareHomePostcode.
 
 * Only keep ones which were open on or after the start of the FY.
 select if Sysmis(DateCanx) OR DateCanx > Date.DMY(01, 04, Number(!altFY, F4.0)).
@@ -37,69 +41,69 @@ Loop If (char.Index(CareHomePostcode, " ") > 0) & (char.Length(CareHomePostcode)
 End Loop.
 
  * Assign Council Codes.
-Do If CareHomeCouncil = 'Aberdeen City'.
+Do If Council_Area_Name = 'Aberdeen City'.
    Compute CareHomeCouncilAreaCode = 1.
-Else If CareHomeCouncil = 'Aberdeenshire'.
+Else If Council_Area_Name = 'Aberdeenshire'.
    Compute CareHomeCouncilAreaCode = 2.
-Else If CareHomeCouncil = 'Angus'.
+Else If Council_Area_Name = 'Angus'.
    Compute CareHomeCouncilAreaCode = 3.
-Else If CareHomeCouncil = 'Argyll & Bute'.
+Else If Council_Area_Name = 'Argyll & Bute'.
    Compute CareHomeCouncilAreaCode = 4.
-Else If CareHomeCouncil = 'Scottish Borders'.
+Else If Council_Area_Name = 'Scottish Borders'.
    Compute CareHomeCouncilAreaCode = 5.
-Else If CareHomeCouncil = 'Clackmannanshire'.
+Else If Council_Area_Name = 'Clackmannanshire'.
    Compute CareHomeCouncilAreaCode = 6.
-Else If CareHomeCouncil = 'West Dunbartonshire'.
+Else If Council_Area_Name = 'West Dunbartonshire'.
    Compute CareHomeCouncilAreaCode = 7.
-Else If CareHomeCouncil = 'Dumfries & Galloway'.
+Else If Council_Area_Name = 'Dumfries & Galloway'.
    Compute CareHomeCouncilAreaCode = 8.
-Else If CareHomeCouncil = 'Dundee City'.
+Else If Council_Area_Name = 'Dundee City'.
    Compute CareHomeCouncilAreaCode = 9.
-Else If CareHomeCouncil = 'East Ayrshire'.
+Else If Council_Area_Name = 'East Ayrshire'.
    Compute CareHomeCouncilAreaCode = 10.
-Else If CareHomeCouncil = 'East Dunbartonshire'.
+Else If Council_Area_Name = 'East Dunbartonshire'.
    Compute CareHomeCouncilAreaCode = 11.
-Else If CareHomeCouncil = 'East Lothian'.
+Else If Council_Area_Name = 'East Lothian'.
    Compute CareHomeCouncilAreaCode = 12.
-Else If CareHomeCouncil = 'East Renfrewshire'.
+Else If Council_Area_Name = 'East Renfrewshire'.
    Compute CareHomeCouncilAreaCode = 13.
-Else If CareHomeCouncil = 'Edinburgh, City of'.
+Else If Council_Area_Name = 'Edinburgh, City of'.
    Compute CareHomeCouncilAreaCode = 14.
-Else If CareHomeCouncil = 'Falkirk'.
+Else If Council_Area_Name = 'Falkirk'.
    Compute CareHomeCouncilAreaCode = 15.
-Else If CareHomeCouncil = 'Fife'.
+Else If Council_Area_Name = 'Fife'.
    Compute CareHomeCouncilAreaCode = 16.
-Else If CareHomeCouncil = 'Glasgow City'.
+Else If Council_Area_Name = 'Glasgow City'.
    Compute CareHomeCouncilAreaCode = 17.
-Else If CareHomeCouncil = 'Highland'.
+Else If Council_Area_Name = 'Highland'.
    Compute CareHomeCouncilAreaCode = 18.
-Else If CareHomeCouncil = 'Inverclyde'.
+Else If Council_Area_Name = 'Inverclyde'.
    Compute CareHomeCouncilAreaCode = 19.
-Else If CareHomeCouncil = 'Midlothian'.
+Else If Council_Area_Name = 'Midlothian'.
    Compute CareHomeCouncilAreaCode = 20.
-Else If CareHomeCouncil = 'Moray'.
+Else If Council_Area_Name = 'Moray'.
    Compute CareHomeCouncilAreaCode = 21.
-Else If CareHomeCouncil = 'North Ayrshire'.
+Else If Council_Area_Name = 'North Ayrshire'.
    Compute CareHomeCouncilAreaCode = 22.
-Else If CareHomeCouncil = 'North Lanarkshire'.
+Else If Council_Area_Name = 'North Lanarkshire'.
    Compute CareHomeCouncilAreaCode = 23.
-Else If CareHomeCouncil = 'Orkney Islands'.
+Else If Council_Area_Name = 'Orkney Islands'.
    Compute CareHomeCouncilAreaCode = 24.
-Else If CareHomeCouncil = 'Perth & Kinross'.
+Else If Council_Area_Name = 'Perth & Kinross'.
    Compute CareHomeCouncilAreaCode = 25.
-Else If CareHomeCouncil = 'Renfrewshire'.
+Else If Council_Area_Name = 'Renfrewshire'.
    Compute CareHomeCouncilAreaCode = 26.
-Else If CareHomeCouncil = 'Shetland Islands'.
+Else If Council_Area_Name = 'Shetland Islands'.
    Compute CareHomeCouncilAreaCode = 27.
-Else If CareHomeCouncil = 'South Ayrshire'.
+Else If Council_Area_Name = 'South Ayrshire'.
    Compute CareHomeCouncilAreaCode = 28.
-Else If CareHomeCouncil = 'South Lanarkshire'.
+Else If Council_Area_Name = 'South Lanarkshire'.
    Compute CareHomeCouncilAreaCode = 29.
-Else If CareHomeCouncil = 'Stirling'.
+Else If Council_Area_Name = 'Stirling'.
    Compute CareHomeCouncilAreaCode = 30.
-Else If CareHomeCouncil = 'West Lothian'.
+Else If Council_Area_Name = 'West Lothian'.
    Compute CareHomeCouncilAreaCode = 31.
-Else If CareHomeCouncil = 'Na h-Eilean Siar'.
+Else If Council_Area_Name = 'Na h-Eilean Siar'.
    Compute CareHomeCouncilAreaCode = 32.
 End If.
 
@@ -109,14 +113,15 @@ Alter type CareHomeCouncilAreaCode (A2) CareHomePostcode (A7).
  * Run the Python function 'capwords' on CareHomeName.
  * This will capitalise each word for uniformity and will improve matching.
  * https://docs.python.org/2/library/string.html#string-functions
+
 SPSSINC TRANS RESULT=CareHomeName Type=73
-   /FORMULA "string.capwords(CareHomeName)".
+   /FORMULA "string.capwords(ServiceName)".
 
  * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
 Aggregate
    /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
    /Break CareHomeCouncilAreaCode CareHomePostcode CareHomeName
-   /CareHomeCouncilName MainClientGroup Sector = First(CareHomeCouncil MainClientGroup Sector)
+   /CareHomeCouncilName MainClientGroup Sector = First(Council_Area_Name MainClientGroup Sector)
    /DateReg DateCanx = Max(DateReg DateCanx).
 
 
