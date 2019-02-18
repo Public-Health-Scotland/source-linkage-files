@@ -17,7 +17,7 @@
 * Change this to the relevant number.
 * Should be '_extract_NUMBER'.
 Define !Extract_Number()
-    "_extract_5"
+    "_extract_7"
 !EndDefine.
 
 Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_paid_data_fy_" + !altFY + ".csv'"].
