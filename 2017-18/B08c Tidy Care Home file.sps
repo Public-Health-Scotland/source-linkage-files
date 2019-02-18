@@ -139,7 +139,7 @@ value labels ch_admreas
 Variable Labels ch_admreas 'Primary reason for admission to a care home'.
 
  * 19. Costing variables.
-Rename Variables FinYearCostofEpisode = cost_total_net.
+Compute cost_total_net = Sum(apr_cost to mar_cost).
 
 sort cases by chi record_keydate1.
 
@@ -201,7 +201,6 @@ erase file = !File + "Care-Home-Temp-4.zsav".
 
 * zip up the raw data.
 Host Command = ["gzip '" + !Extracts + "Care-Home-full-extract-20" + !FY + ".csv'"].
-Host Command = ["gzip '" + !Extracts + "Care-Home-Lookup-20" + !FY + ".csv'"].
 
  * Number of new variables = 4
    care home admission reason

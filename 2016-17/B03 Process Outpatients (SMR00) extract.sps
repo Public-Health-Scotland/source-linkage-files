@@ -21,6 +21,7 @@ GET DATA  /TYPE=TXT
       ClinicDateFinYear A4
       ClinicDate00 A10
       SendingLocationCodeSMR00 A5
+      EpisodeRecordKey A11
       PatUPI A10
       PatGenderCode F1.0
       PatDateOfBirthC A10

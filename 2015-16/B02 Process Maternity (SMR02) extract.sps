@@ -181,21 +181,26 @@ for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
    spss.Submit(syntax)
 End Program.
 
- * Costs.
- * Declare Variables
-Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2)
- * Calculate Cost per month from beddays and cost_total_net.
+* Costs.
+* Declare Variables.
+Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2).
+
+* Calculate Cost per month from beddays and cost_total_net.
 Do Repeat Beddays = Apr_beddays to Mar_beddays
-		/Cost = Apr_cost to Mar_cost
-		/MonthNum = 4 5 6 7 8 9 10 11 12 1 2 3.
-	
-	* Fix the instances where the episode is a daycase; 
-	* these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
-	Do if (record_keydate1 = record_keydate2) and xdate.Month(record_keydate1) = MonthNum.
-		Compute BedDays = yearstay.
-	End if.
-	
-	Compute Cost = (BedDays / yearstay) * cost_total_net.
+    /Cost = Apr_cost to Mar_cost
+    /MonthNum = 4 5 6 7 8 9 10 11 12 1 2 3.
+
+    * Fix the instances where the episode is a daycase;
+        * these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
+    Do if (record_keydate1 = record_keydate2).
+        Do if  xdate.Month(record_keydate1) = MonthNum.
+            Compute Cost = cost_total_net.
+        Else.
+            Compute Cost = 0.
+        End if.
+    Else.
+        Compute Cost = (BedDays / yearstay) * cost_total_net.
+    End if.
 End Repeat.
 
  
