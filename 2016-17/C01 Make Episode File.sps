@@ -158,9 +158,11 @@ Temporary.
 select if chi ne "".
 crosstabs recid by cis_marker.
 
+sort cases by CHI record_keydate1 record_keydate2.
+
 add files file = *
     /file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
-	/By CHI record_keydate1 record_keydate2.
+    /By CHI record_keydate1 record_keydate2.
 
 
 ********************** Back to full file ***************************..
