@@ -20,16 +20,17 @@ End if.
 ********************Match on LTC flags and dates of LTC incidence (based on hospital incidence only)*****.
 *Match on LTCs, deceased flags and date.
 match files file = *
-    /Rename(death_date = DN_death_date)
     /table = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
     /table = !Extracts_Alt + "Deceased_patient_reference_file-20" + !FY + ".zsav"
     /by chi.
-*execute.
 
 * Recode flags.
 Recode arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd
    hefailure ms parkinsons refailure congen bloodbfo endomet digestive
    deceased (sysmis = 0).
+
+ * Check age and gender before corrections.
+Frequencies age gender.
 
  * Now we have all CHIs and LTC data try to work out a dob if it's missing, then calculate the age.
 Do If (~SysMiss(dob)).
@@ -67,13 +68,13 @@ Else if chi ne "".
     Else if #CHI_dob1 = congen_date.
         Compute dob = #CHI_dob1.
         Compute age = #CHI_age1.
-      * If the older age makes the person older than 115, assume they are younger (oldest living person is 113).
-    Else if #CHI_age1 > 115.
+      * If the older age makes the person older than 113, assume they are younger (oldest living person is 113).
+    Else if #CHI_age1 > 113.
         Compute dob = #CHI_dob2.
         Compute age = #CHI_age2.
     End if.
     * If we still don't have an age, try and fill it in from a previous record.
-    Do if (sysmiss(Age) OR age = 999) and Chi = Lag(Chi).
+    Do if (sysmiss(Age) OR age = 999) and CHI = Lag(CHI).
         * Only use the previous one if it matches the CHI.
         Do if #CHI_age1 = Lag(Age) Or #CHI_dob1 = lag(dob).
             Compute dob = #CHI_dob1.
@@ -84,8 +85,6 @@ Else if chi ne "".
         End if.
     End if.
 End If.
-
-frequencies age.
 
  * If any gender codes are missing or 0 recode to CHI gender.
 If chi NE "" #CHI_gender = Number(char.SUBSTR(chi, 9, 1), F1.0).
@@ -98,135 +97,160 @@ Do If sysmis(gender) OR gender = 0.
    End If.
 End If.
 
-frequencies gender.
+* Check again - we don't expect too many changes.
+Frequencies age gender.
 
-********************** update deceased flag and death date using the NRS records ***********************.
- * Note that the deaths file is out-of-date, therefore there are some cases where NRS record exists with date of death, but deceased flag is 0, because this person wasn't in the deceased file.
-Do If (CHI NE "").
-    Do if recid = "NRS".
-        Compute deceased = 1.
-        Compute death_date = keydate1_dateformat.
-    Else if recid = "DN" and ~Sysmiss(DN_death_date).
-        Compute deceased = 1.
-        Compute death_date = DN_death_date.
-    End if.
-End If.
-
- * Propagate the changes to the rest of the file.
-Aggregate outfile=* mode addvariables overwrite=yes
-   /Presorted
-   /Break CHI
-   /deceased = max(deceased)
-   /death_date = max(death_date).
-
- * Update flag and date for blank CHIs.
-Do If (chi = " " and recid = "NRS").
-   Compute deceased = 1.
-   Compute death_date = keydate1_dateformat.
-End If.
-
- * Clean up any deaths which are now outside of the FY.
- * Only needed when updating older files using newer death extracts.
-Do If death_date >= Date.DMY(1, 4, Number(!altFY, F4.0) + 1).
-   Compute death_date = $sysmis.
-   Compute deceased = 0.
-End if.   
-
+ * Save here whist we work on a subset of the file.
 save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
-    /Drop DN_death_date DateofDeath99
    /zcompressed.
 
-*********************************************************************************.
-* Code to identify potentially erroneous dates and replace them with the date of death registered.
-Get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
+***************************************************************************************************************************.
+ * Determine the 'best' death date to use.
+***************************************************************************************************************************.
+ * Only keep relevant variables.
+get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+    /Keep year recid keydate1_dateformat keydate2_dateformat SMRType CHI gender dob age
+    attendance_status
+    deceased death_date
+    death_date_NRS death_date_CHI death_date.
 
-* Select records with chi nos.
-select if chi NE "".
+ * Remove blank CHIs for now.
+Select if CHI NE "". 
 
-* Choose records which have activity after death_date is recorded. Records with difference in 7 days between activity and death date is rejected.
-select if (death_date LT keydate2_dateformat).
-
-sort cases by chi keydate2_dateformat.
-Aggregate
-    /Presorted
-    /Break chi
-    /recid_1 = last(recid)
-    /death_date_1 = First(death_date)
-    /keydate2_dateformat_1 = last(keydate2_dateformat).
-
-Do if ((recid  = "00B") and (attendance_status = 8 ) and (keydate2_dateformat_1 = keydate2_dateformat)).
-    if (chi = lag (chi) and (death_date LT lag(keydate2_dateformat))) Flag = 1.
-    if (chi NE lag(chi)) and (death_date LT keydate2_dateformat_1) Flag = 1.
-Else if ((recid = "00B" ) and (attendance_status NE 8 ) and (death_date LT keydate2_dateformat_1)).
-    Compute Flag = 1.
-Else if (recid = "PIS" and death_date LT Date.DMY(1, 4, Number(!altFY, F4.0))).
-    Compute Flag = 1.
-Else if (death_date LT keydate2_dateformat_1 ).
-    Compute Flag = 1.
+* Work out last activity dates.
+* Don't count CMH, DN, CH as we can't be sure about the quality.
+Do If Not(any(recid, "PIS", "00B", "NRS", "DN", "CMH", "CH")).
+ * Normal case - valid activity.
+    Compute valid_activity = keydate2_dateformat.
+Else if recid = "NRS".
+  * Latest record is a death record.
+    Compute valid_activity = keydate1_dateformat.
+    Compute death_date_NRS_ep = keydate1_dateformat.
+Else if recid = "00B".
+* Outpatients - Could be a DNA.
+     If attendance_status NE 8 valid_activity = keydate2_dateformat.
+Else if recid = "PIS".
+    * For this we'll count PIS activity as the first of the year.
+    Compute valid_activity = date.dmy(1, 4, Number(!altFY, F4.0)).
 End if.
 
-Select if Flag = 1.
+ * Create some flags.
+Numeric NSU Has_NRS (F1.0).
+Compute NSU = 0.
+Compute Has_NRS = 0.
+If recid = "NSU" NSU = 1.
+If recid = "NRS" Has_NRS = 1.
 
-*aggregate to find last record of activity.
+ * Find the latest activity for each CHI.
 aggregate outfile = *
-    /Presorted
-    /break chi
-    /death_date = Last(death_date)
-    /recid = Last(recid)
-    /keydate1_dateformat = Last(keydate1_dateformat)
-    /keydate2_dateformat = Last(keydate2_dateformat)
-    /deathdiag1 to deathdiag11 = Last(deathdiag1 to deathdiag11)
-    /deceased = Last(deceased).
+    /Break CHI NSU death_date_NRS death_date_CHI death_date
+    /death_date_NRS_ep = First(death_date_NRS_ep)
+    /last_activity = max(valid_activity)
+    /Has_NRS = max(Has_NRS).
 
-select if (DateDiff(keydate2_dateformat, death_date, "days") GT 7).
+ * Change dates to a readable form.
+Alter Type last_activity death_date_NRS_ep (Date12).
 
-* Match registered deaths with derived date of death.
-match files file = *
-    /table = !File + "Death_Date_Registered-20" + !FY + ".zsav"
-    /by chi.
+ * Set up some flags.
+Numeric Activity_after_death CHI_death_date_works CHI_death_date_missing Remove_NSU Using_NRS Using_CHI Using_NRS_ep (F1.0).
 
-* Replace death_date with the latest registered dates of death.
-if (death_date + time.days(7) LT Datedeath_GRO) death_date = Datedeath_GRO.
+ * If they have an NRS death episode which works we should use this date.
+Compute Using_NRS_ep = 0.
+Do if Has_NRS and death_date_NRS_ep >= last_activity.
+    Compute death_date =  death_date_NRS_ep.
+    Compute Using_NRS_ep = 1.
+End if.
 
-* Some PIS records still have death before start of FY.
-If (recid = "PIS" and death_date LT Date.DMY(1, 4, Number(!altFY, F4.0))) death_date = $sysmis.
+ * Flag for activity after death.
+If Datediff(last_activity, death_date, "days") GT 3 Activity_after_death = 1.
+ * Flag if the CHI death date is after the last activity.
+If Datediff(last_activity, death_date_CHI, "days") LE 0 CHI_death_date_works = 1.
+ * Flag if there is no CHI death date.
+If sysmis(death_date_CHI) CHI_death_date_missing = 1.
 
-* If (recid NE "PIS" and (DateDiff(keydate2_dateformat, death_date, "days") LT 7)) death_date = $sysmis.
+ * Initialise flags.
+Compute Remove_NSU = 0.
+Compute Using_NRS = 0.
+Compute Using_CHI = 0.
 
-Select if ~SysMiss(death_date).
+ * For checking later, record if we are using the CHI or NRS death date.
+If death_date = death_date_NRS Using_NRS = 1.
+If death_date = death_date_CHI and Using_NRS = 0 Using_CHI = 1. 
 
-save outfile = !File + "Deaths to modify-20" + !FY + ".zsav"
-    /Drop Datedeath_GRO
-    /Rename (Death_date = Datedeath_GRO)
-    /Keep chi Datedeath_GRO
-    /zcompressed.
+ * If they are an NSU with a death before the FY, we'll flag them for removal.
+If NSU = 1 and death_date < date.dmy(1, 4, Number(!altfy, F4.0)) Remove_NSU = 1.
 
-match files file = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
-    /Table = !File + "Deaths to modify-20" + !FY + ".zsav"
-    /By chi.
+ * If the current death date doesn't work but the CHI death date does, use that and update the flag so we know what happened.
+If Activity_after_death and CHI_death_date_works death_date = death_date_CHI.
+If Activity_after_death and CHI_death_date_works Using_CHI = 2.
 
-* If we have a new death_date to use (Datedeath_GRO) then update it.
-* If we updated the date, amend the NRS keydate2 to the new date.
-Do If ~SysMiss(Datedeath_GRO).
-    Compute death_date = Datedeath_GRO.
-    Do If recid = "NRS".
-        Compute keydate2_dateformat = Datedeath_GRO.
-        Compute record_keydate2 = Number(Replace(String(Datedeath_GRO, Sdate12), "/", ""), F8.0).
+ * If the current death date doesn't work and the CHI death date is blank, use that and update the flag so we know what happened.
+If Activity_after_death and CHI_death_date_missing death_date = death_date_CHI.
+If Activity_after_death and CHI_death_date_missing Using_CHI = 3.
+
+ * Update the Using_NRS flag.
+If Using_CHI > 0 Using_NRS = 0.
+
+ * Clear any deaths which happened after the end of the FY.
+Numeric Death_after_FY (F1.0).
+Compute Death_after_FY = 0.
+If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) Death_after_FY = 1.
+If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) death_date = $sysmis.
+
+ * Keep only CHIs with a death_date - for linking back to main file.
+select if Not(sysmis(death_date)).
+
+ * Tidy up, might turn this into a save later.
+add files file = *
+    /Keep CHI death_date Remove_NSU Using_NRS_ep Using_NRS Using_CHI Death_after_FY.
+
+ * Match back to SLF.
+match files
+    /file = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+    /table = *
+    /By CHI.
+
+* Clear any deaths which occured before the start of the FY - allow one year if the only activity is PIS.
+Numeric Remove_Death (F1.0).
+Compute Remove_Death = 0.
+Do if recid NE "PIS".
+    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 1) Remove_death = 2.
+Else.
+    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 2) Remove_death = 1.
+End if.
+
+aggregate outfile = * Mode = AddVariables Overwrite = Yes
+    /Break CHI
+    /Remove_death = Max(Remove_death).
+
+If Remove_Death NE 0 death_date = $sysmis.
+
+ * Create the deceased flag.
+Numeric deceased (F1.0).
+Compute deceased = 0.
+If Not(sysmis(death_date)) deceased = 1.
+ 
+ * Set the 'new' variables for the episodes with no CHIs.
+Do if CHI = "".
+    Compute death_date = $sysmis.
+    Compute deceased = 0.
+    Do if recid = "NRS".
+        Compute death_date = keydate1_dateformat.
+        Compute deceased = 1.
     End if.
 End if.
 
-* Clean up any deaths which are now outside of the FY.
-If death_date GE Date.DMY(1, 4, Number(!altFY, F4.0) + 1) death_date = $sysmis.
-
-* Recalculate deceased.
-Do if (~Sysmiss(death_date)).
-    Compute deceased = 1.
-Else.
-    Compute deceased = 0.
+ * Set date 2 of NRS to be the death date.
+Do if recid = "NRS".
+    Compute keydate2_dateformat = death_date.
+    Compute record_keydate2  = xdate.mday(death_date) + 100 * xdate.month(death_date) + 10000 * xdate.year(death_date).
 End if.
 
+ * Get rid of the NSUs which have a death_date before the start of the FY.
+Recode Remove_NSU (sysmis = 0).
+select if Remove_NSU = 0.
+
 save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
-    /Drop Datedeath_GRO
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 *****************************************************************************************************************************.
