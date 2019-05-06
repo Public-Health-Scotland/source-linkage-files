@@ -2,13 +2,12 @@
 ************************************************************************************************************
                                                    NSS (ISD)
 ************************************************************************************************************
-** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
-** Date:    	01/08/2018
+** AUTHOR:  James McMahon (j.mcmahon1@nhs.net)
+** Date:        01/08/2018
 ************************************************************************************************************
-** Amended by:         
+** Amended by:
 ** Date:
-** Changes:  
-29/03/19-Localities lookup file link updated -Anita George             
+** Changes:
 ************************************************************************************************************.
  * Set the Financial Year.
 Define !FY()
@@ -21,7 +20,7 @@ Define !NextFY ()
 !EndDefine.
 
 Define !File()
-   !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
+    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
 !EndDefine.
 
 * Extract files - "home".
@@ -34,22 +33,23 @@ Define !Extracts_Alt()
    "/conf/hscdiip/DH-Extract/"
 !EndDefine.
 
-
 Define !Costs_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
 !EndDefine.
-
 
  * Replace the number with the CSD ref.
 Define !CSDRef()
     "SCTASK0076848"
 !EndDefine.
 
-
 Define !CSDExtractLoc()
     !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), !Unquote(!Eval(!CSDRef))))
 !EndDefine.
 
+*******************************************************.
+ * Source Lookups *
+ * Should not need changing *
+*******************************************************.
  * Location of source lookups.
 Define !Lookup()
    "/conf/irf/05-lookups/04-geography/"
@@ -64,16 +64,18 @@ Define !AnontoCHIlookup()
     "/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav"
 !EndDefine.
 
-* Geography file lookups  - these will sometimes need updating.
-
+*******************************************************.
+ * Geography Lookups *
+ * Will need to be changed when geography files update.
+*******************************************************.
  * Localities lookup file.
 Define !LocalitiesLookup()
-	"/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20180903.sav"
+    "/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20180903.sav"
 !EndDefine.
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2018_2.sav"
+   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2019_1.sav"
 !EndDefine.
 
  * Most up to date Urban-Rural / Postcode lookup.
@@ -83,7 +85,7 @@ Define !URLookup()
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2018_2_simd2016.sav"
+   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2019_1_simd2016.sav"
 !EndDefine.
 
  * Most up to date DataZone Population estimates.
@@ -91,72 +93,77 @@ Define !DataZone_Pops()
    "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2017.sav"
 !EndDefine.
 
+*******************************************************.
+ * Functional macros *
+ * Should not need changing unless something is broken or to update methodolody.
+*******************************************************.
+
  * The following two macros are used for creating the old LCA codes
  * They will need updating if the Council area codes change.
-Define !CA2011toLCA()
-Do if ValueLabel(CA2011) = "Aberdeen City".
+Define !CAtoLCA()
+Do if ValueLabel(CA2018) = "Aberdeen City".
    Compute LCA = "01".
-Else if ValueLabel(CA2011) = "Aberdeenshire".
+Else if ValueLabel(CA2018) = "Aberdeenshire".
    Compute LCA = "02".
-Else if ValueLabel(CA2011) = "Angus".
+Else if ValueLabel(CA2018) = "Angus".
    Compute LCA = "03".
-Else if ValueLabel(CA2011) = "Argyll and Bute".
+Else if ValueLabel(CA2018) = "Argyll and Bute".
    Compute LCA = "04".
-Else if ValueLabel(CA2011) = "Scottish Borders".
+Else if ValueLabel(CA2018) = "Scottish Borders".
    Compute LCA = "05".
-Else if ValueLabel(CA2011) = "Clackmannanshire".
+Else if ValueLabel(CA2018) = "Clackmannanshire".
    Compute LCA = "06".
-Else if ValueLabel(CA2011) = "West Dunbartonshire".
+Else if ValueLabel(CA2018) = "West Dunbartonshire".
    Compute LCA = "07".
-Else if ValueLabel(CA2011) = "Dumfries and Galloway".
+Else if ValueLabel(CA2018) = "Dumfries and Galloway".
    Compute LCA = "08".
-Else if ValueLabel(CA2011) = "Dundee City".
+Else if ValueLabel(CA2018) = "Dundee City".
    Compute LCA = "09".
-Else if ValueLabel(CA2011) = "East Ayrshire".
+Else if ValueLabel(CA2018) = "East Ayrshire".
    Compute LCA = "10".
-Else if ValueLabel(CA2011) = "East Dunbartonshire".
+Else if ValueLabel(CA2018) = "East Dunbartonshire".
    Compute LCA = "11".
-Else if ValueLabel(CA2011) = "East Lothian".
+Else if ValueLabel(CA2018) = "East Lothian".
    Compute LCA = "12".
-Else if ValueLabel(CA2011) = "East Renfrewshire".
+Else if ValueLabel(CA2018) = "East Renfrewshire".
    Compute LCA = "13".
-Else if ValueLabel(CA2011) = "City of Edinburgh".
+Else if ValueLabel(CA2018) = "City of Edinburgh".
    Compute LCA = "14".
-Else if ValueLabel(CA2011) = "Falkirk".
+Else if ValueLabel(CA2018) = "Falkirk".
    Compute LCA = "15".
-Else if ValueLabel(CA2011) = "Fife".
+Else if ValueLabel(CA2018) = "Fife".
    Compute LCA = "16".
-Else if ValueLabel(CA2011) = "Glasgow City".
+Else if ValueLabel(CA2018) = "Glasgow City".
    Compute LCA = "17".
-Else if ValueLabel(CA2011) = "Highland".
+Else if ValueLabel(CA2018) = "Highland".
    Compute LCA = "18".
-Else if ValueLabel(CA2011) = "Inverclyde".
+Else if ValueLabel(CA2018) = "Inverclyde".
    Compute LCA = "19".
-Else if ValueLabel(CA2011) = "Midlothian".
+Else if ValueLabel(CA2018) = "Midlothian".
    Compute LCA = "20".
-Else if ValueLabel(CA2011) = "Moray".
+Else if ValueLabel(CA2018) = "Moray".
    Compute LCA = "21".
-Else if ValueLabel(CA2011) = "North Ayrshire".
+Else if ValueLabel(CA2018) = "North Ayrshire".
    Compute LCA = "22".
-Else if ValueLabel(CA2011) = "North Lanarkshire".
+Else if ValueLabel(CA2018) = "North Lanarkshire".
    Compute LCA = "23".
-Else if ValueLabel(CA2011) = "Orkney Islands".
+Else if ValueLabel(CA2018) = "Orkney Islands".
    Compute LCA = "24".
-Else if ValueLabel(CA2011) = "Perth and Kinross".
+Else if ValueLabel(CA2018) = "Perth and Kinross".
    Compute LCA = "25".
-Else if ValueLabel(CA2011) = "Renfrewshire".
+Else if ValueLabel(CA2018) = "Renfrewshire".
    Compute LCA = "26".
-Else if ValueLabel(CA2011) = "Shetland Islands".
+Else if ValueLabel(CA2018) = "Shetland Islands".
    Compute LCA = "27".
-Else if ValueLabel(CA2011) = "South Ayrshire".
+Else if ValueLabel(CA2018) = "South Ayrshire".
    Compute LCA = "28".
-Else if ValueLabel(CA2011) = "South Lanarkshire".
+Else if ValueLabel(CA2018) = "South Lanarkshire".
    Compute LCA = "29".
-Else if ValueLabel(CA2011) = "Stirling".
+Else if ValueLabel(CA2018) = "Stirling".
    Compute LCA = "30".
-Else if ValueLabel(CA2011) = "West Lothian".
+Else if ValueLabel(CA2018) = "West Lothian".
    Compute LCA = "31".
-Else if ValueLabel(CA2011) = "Na h-Eileanan Siar".
+Else if ValueLabel(CA2018) = "Na h-Eileanan Siar".
    Compute LCA = "32".
 End If.
 !EndDefine.
@@ -245,8 +252,8 @@ Define !midFY()
  * DelayedDischarge (Optional)
  * 0 (default value) - count the first day but not the last.
  * 1 - count the last day but not the first (this is the methodology for Delayed Discharge beddays).
- 
-Define !BedDaysPerMonth (Month_abbr = !Tokens(1) 
+
+Define !BedDaysPerMonth (Month_abbr = !Tokens(1)
     /AdmissionVar = !Default(keydate1_dateformat) !Tokens(1)
     /DischargeVar = !Default(keydate2_dateformat) !Tokens(1)
     /DelayedDischarge = !Default(0) !Tokens(1))
@@ -272,28 +279,28 @@ Numeric !BedDays (F2.0).
 
  * Go through all possibilities to decide how many days to be allocated.
 Do if !AdmissionVar LE #StartOfMonth.
-	Do if !DischargeVar GT #EndOfMonth.
-		* They were in hospital throughout this month.
-		* This will be the maximum number of days in the month.
-		Compute !BedDays = DateDiff(#EndOfMonth, #StartOfMonth, "days") + 1.
-	Else if !DischargeVar LE #StartOfMonth.
-		* The whole record occurred before the month began.
-		Compute !BedDays = 0.
-	Else.
-		* They were discharged at some point in the month.
-		Compute !BedDays = DateDiff(!DischargeVar, #StartOfMonth, "days").
-	End If.
+    Do if !DischargeVar GT #EndOfMonth.
+        * They were in hospital throughout this month.
+        * This will be the maximum number of days in the month.
+        Compute !BedDays = DateDiff(#EndOfMonth, #StartOfMonth, "days") + 1.
+    Else if !DischargeVar LE #StartOfMonth.
+        * The whole record occurred before the month began.
+        Compute !BedDays = 0.
+    Else.
+        * They were discharged at some point in the month.
+        Compute !BedDays = DateDiff(!DischargeVar, #StartOfMonth, "days").
+    End If.
  * If we're here they were admitted during the month.
 Else if !AdmissionVar LE #EndOfMonth.
-	Do if !DischargeVar GT #EndOfMonth.
-		Compute !BedDays = DateDiff(#EndOfMonth, !AdmissionVar, "days") + 1.
-	Else.
-		* Admitted and discharged within this month.
-		Compute !BedDays = DateDiff(!DischargeVar, !AdmissionVar, "days").
-	End If.
+    Do if !DischargeVar GT #EndOfMonth.
+        Compute !BedDays = DateDiff(#EndOfMonth, !AdmissionVar, "days") + 1.
+    Else.
+        * Admitted and discharged within this month.
+        Compute !BedDays = DateDiff(!DischargeVar, !AdmissionVar, "days").
+    End If.
 Else.
-	* They were admitted in a future month.
-	Compute !BedDays = 0.
+    * They were admitted in a future month.
+    Compute !BedDays = 0.
 End If.
 
  * If we are looking at Delayed Discharge records, we should count the last day and not the first.
@@ -303,7 +310,7 @@ End If.
         and xdate.Year(!AdmissionVar) =  #Year.
         Compute !BedDays = !BedDays - 1.
     End if.
-    
+
     Do if xdate.Month(!DischargeVar) = xdate.Month(date.MOYR(#MonthNum, #Year))
         and xdate.Year(!DischargeVar) =  #Year.
         Compute !BedDays = !BedDays + 1.
