@@ -1,4 +1,11 @@
+#Folders to ignore
 2015-16/Pre\ Sep \18/*
 2016-17/Pre\ Sep18/*
 2017-18/Pre\ Sep18/*
 
+#Ignore documentation etc.
+*.pptx
+*.docx
+
+#Ignore SPSS job files
+*.spj
