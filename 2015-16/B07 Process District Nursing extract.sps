@@ -21,7 +21,6 @@ GET DATA  /TYPE=TXT
     TreatmentNHSBoardCode9 A9
     AgeatContactDate F3.0
     EpisodeContactNumber F4.0
-    PatientDoDDate A10
     ContactStartTime Time5
     ContactEndTime Time5
     ContactDate A10
@@ -30,23 +29,18 @@ GET DATA  /TYPE=TXT
     OtherInterventionSubcategory1 F1.0
     OtherInterventionCategory2 F2.0
     OtherInterventionSubcategory2 F1.0
-    NumberofContacts F1.0
     OtherInterventionCategory3 F2.0
     OtherInterventionSubcategory3 F1.0
     OtherInterventionCategory4 F2.0
     OtherInterventionSubcategory4 F1.0
     PrimaryInterventionSubcategory F1.0
     PrimaryInterventionCategory F2.0
-    VisitStatus F1.0
     UPINumberC A10
     PatientDoBDateC A10
-    PlannedUnplanned F1.0
     PatientPostcodeCContact A7
     DurationofContactmeasure F3.0
     Gender F1.0
-    ContactFinancialYear A4
     LocationofContact F1.0
-    ContactID A36
     PracticeNHSBoardCode9Contact A9
     PatientCouncilAreaCodeContact A2
     PracticeCodeContact A5
@@ -59,13 +53,8 @@ rename variables UPINumberC = chi.
  * Only keep records with CHI.
 Select if chi ne "".
 
-*Check frequencies for Health Boards.
-*Check Frequencies for NumberofContacts (should be 1).
-*Frequencies TreatmentNHSBoardName NumberofContacts.
-
 *Alter or create variables to match file to source file.
 rename variables
-   ContactFinancialYear = year
    TreatmentNHSBoardName = hbtreatname
    TreatmentNHSBoardCode9 = hbtreatcode
    HSCPofResidenceCodeContact = HSCP2016
@@ -94,14 +83,13 @@ Alter Type GPprac (F5.0).
 *Create variables recordkeydate1 = Contact Date and record keydate2 = recordkeydate1.
 Rename Variables
     ContactDate = record_keydate1
-    PatientDoDDate = death_date
     PatientDoBDateC = dob.
 
 Compute ContactEndTime = DateSum(ContactStartTime, DurationofContactmeasure, "minutes").
 
-Alter Type record_keydate1 death_date dob (SDate10).
+Alter Type record_keydate1 dob (SDate10).
 compute record_keydate2 = record_keydate1.
-Alter Type record_keydate1 record_keydate2 death_date dob (Date12).
+Alter Type record_keydate1 record_keydate2 dob (Date12).
 
 * Create costs for the DN from Costs Book. (Work from here).
 Compute year = !FY.
@@ -170,7 +158,7 @@ save outfile = !File + "DN-Temp-2" + ".zsav"
 get file = !File + "DN-Temp-2" + ".zsav".
 
 *Aggregate out records for final DN to source linkage files.
-sort cases by chi dob record_keydate1 record_keydate2.
+sort cases by chi CCM record_keydate1 EpisodeContactNumber.
 
  * Set blanks as missing so that the aggregate ignores them.
 Recode hbtreatcode hbrescode HSCP2016 (" " = "-").
@@ -181,12 +169,12 @@ Missing Values
     hbtreatcode hbrescode HSCP2016 postcode lca ("-").
 
 aggregate outfile=*
+    /Presorted
     /break chi CCM
     /record_keydate1 = Min(record_keydate1)
     /record_keydate2 = Max(record_keydate2)
     /SMRType = First(SMRType)
     /recid = First(recid)
-    /death_date = Last(death_date)
     /dob = Last(dob)
     /hbtreatcode = Last(hbtreatcode)
     /hbrescode = Last(hbrescode)
@@ -205,7 +193,7 @@ aggregate outfile=*
     /cost_total_net = Sum(cost_total_net)
     /location = First (LocationofContact)
     /year = First(year)
-    /TotalnoDNcontacts = Sum(NumberofContacts)
+    /TotalnoDNcontacts = n
     /jan_cost = Sum(jan_cost)
     /feb_cost = Sum(feb_cost)
     /mar_cost = Sum(mar_cost)
@@ -295,7 +283,6 @@ save outfile = !File + "DN_for_source-20" + !FY + ".zsav"
     SMRType
     chi
     gender
-    death_date
     dob
     CCM
     gpprac
