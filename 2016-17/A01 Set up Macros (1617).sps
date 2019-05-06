@@ -5,9 +5,10 @@
 ** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
 ** Date:    	01/08/2018
 ************************************************************************************************************
-** Amended by:         
+** Amended by:  
 ** Date:
-** Changes:               
+** Changes:          
+29/03/19-Localities lookup file link updated -Anita George           
 ************************************************************************************************************.
 *Last ran:23/11/18- AG.
 ***********************************************************************************************************.
@@ -66,7 +67,7 @@ Define !AnontoCHIlookup()
 
  * Localities lookup file.
 Define !LocalitiesLookup()
-	!Quote(!Concat(!Unquote(!Eval(!Lookup)), "01-locality/Locality_lookup_source.sav")) 
+	"/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20180903.sav"
 !EndDefine.
 
  * Most up to date Postcode directory.
