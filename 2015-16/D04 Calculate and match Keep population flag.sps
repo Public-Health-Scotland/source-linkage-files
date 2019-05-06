@@ -1,6 +1,5 @@
 ﻿* Encoding: UTF-8.
  * Run A01-Set up Macros first!.
-
 ************************************************************************************************************************************.
 ************************************************************************************************************************************.
 ************************************************************************************************************************************.
@@ -57,10 +56,11 @@ Recode Age_plus_one
 sort cases by DataZone2011.
 
  * Match on Localities.
-match files file = *
-    /table = !Lookup + "01-locality/Locality_lookup_source.sav"
-    /Rename (Datazone = Datazone2011)
-    /By DataZone2011.
+match files
+   /File = * 
+   /Table = !LocalitiesLookup
+   /Rename (HSCPLocality = Locality)
+   /By Datazone2011.
 
  * Aggregate to get populations for Locality/Age Group/Gender.
 aggregate outfile = *
