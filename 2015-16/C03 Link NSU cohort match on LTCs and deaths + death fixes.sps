@@ -2,12 +2,10 @@
  * Match on the non-service-user CHIs.
  * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
  * Get a warning here but should be fine. - Caused by the way we match on NSU.
-
 match files
     /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
     /By chi.
-*execute.
 
 * Set up the variables for the NSU CHIs.
 * The macros are defined in C01a.
@@ -18,16 +16,14 @@ Do if recid = "".
 End if.
 
 ********************Match on LTC flags and dates of LTC incidence (based on hospital incidence only)*****.
-*Match on LTCs, deceased flags and date.
+*Match on LTCs flags and date.
 match files file = *
     /table = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
-    /table = !Extracts_Alt + "Deceased_patient_reference_file-20" + !FY + ".zsav"
     /by chi.
 
 * Recode flags.
 Recode arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd
-   hefailure ms parkinsons refailure congen bloodbfo endomet digestive
-   deceased (sysmis = 0).
+   hefailure ms parkinsons refailure congen bloodbfo endomet digestive (sysmis = 0).
 
  * Check age and gender before corrections.
 Frequencies age gender.
@@ -105,14 +101,16 @@ save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
    /zcompressed.
 
 ***************************************************************************************************************************.
- * Determine the 'best' death date to use.
+ * Determine the most appropriate death date to use.
 ***************************************************************************************************************************.
  * Only keep relevant variables.
-get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+match files 
+    /file  = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+    /table = !Extracts_Alt + "All Deaths.zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat SMRType CHI gender dob age
     attendance_status
-    deceased death_date
-    death_date_NRS death_date_CHI death_date.
+    death_date death_date_NRS death_date_CHI death_date
+    /By CHI.
 
  * Remove blank CHIs for now.
 Select if CHI NE "". 
@@ -200,14 +198,11 @@ If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) death_date = $sysmis.
  * Keep only CHIs with a death_date - for linking back to main file.
 select if Not(sysmis(death_date)).
 
- * Tidy up, might turn this into a save later.
-add files file = *
-    /Keep CHI death_date Remove_NSU Using_NRS_ep Using_NRS Using_CHI Death_after_FY.
-
  * Match back to SLF.
 match files
     /file = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
     /table = *
+    /Drop death_date_NRS death_date_CHI death_date_NRS_ep last_activity Has_NRS Activity_after_death CHI_death_date_works CHI_death_date_missing
     /By CHI.
 
 * Clear any deaths which occured before the start of the FY - allow one year if the only activity is PIS.
@@ -251,6 +246,7 @@ Recode Remove_NSU (sysmis = 0).
 select if Remove_NSU = 0.
 
 save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
+    /Drop Remove_NSU Remove_Death Using_NRS_ep Using_NRS Using_CHI Death_after_FY
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 *****************************************************************************************************************************.

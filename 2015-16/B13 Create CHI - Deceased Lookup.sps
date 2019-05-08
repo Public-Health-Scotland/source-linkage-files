@@ -33,11 +33,8 @@ CACHE.
 Alter type death_date_NRS death_date_CHI (EDate12).
 Alter type death_date_NRS death_date_CHI (Date12).
 
-Sort cases by CHI.
-
  * Keep only one record per CHI.
 aggregate outfile = *
-    /Presorted
     /Break CHI
     /death_date_NRS death_date_CHI = Max(death_date_NRS death_date_CHI).
 
