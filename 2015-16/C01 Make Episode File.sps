@@ -73,14 +73,18 @@ End if.
  * Make them look nice.
 Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
-* Set the type of admission for Maternity records to 42.
+ * Set the type of admission for Maternity records here as the varaible isn't included in the datmart.
 If (recid = "02B") tadm = "42".
+ * Correct for home births.
+If (recid = "02B" and mpat = "0") tadm = "41".
 
 * Populate SMRType for non-acute records (note GLS is included in the acute program).
 Do If (recid = "02B" and any(mpat, "1", "3", "5", "7", "A")).
    Compute SMRType = "Matern-IP".
 Else If (recid = "02B" and any(mpat, "2", "4", "6")).
    Compute SMRType = "Matern-DC".
+Else if (recid = "02B" and mpat = "0").
+    Compute SMRType = "Matern-HB".
 Else If (recid = "04B").
    Compute SMRType = "Psych-IP".
 Else If (recid = "00B").
@@ -107,7 +111,7 @@ Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
       Compute newpattype_cis = "Elective".
    Else If Range(newcis_admtype, "20", "22", "30", "39") OR newcis_admtype = "18".
       Compute newpattype_cis = "Non-Elective".
-   Else If newcis_admtype = "42".
+   Else If any(newcis_admtype, "41", "42").
       Compute newpattype_cis = "Maternity".
    Else If Any(newcis_admtype, "40", "48", "Un", "99").
       Compute newpattype_cis = "Other".
