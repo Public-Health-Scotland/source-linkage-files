@@ -107,9 +107,9 @@ Rename Variables
     DischargeTypeCode = disch
     FallsRelatedAdmission01 = falls_adm
     GeoCouncilAreaCode = lca
-    GeoDatazone2011 = DataZone2011
+    GeoDatazone2011 = DataZone
     GeoPostcodeC = postcode
-    HSCPCode = HSCP2016
+    HSCPCode = HSCP
     LeadConsultantHCPCode = conc
     LocationAdmittedTransFromCode = admloc
     LocationDischargedTransToCode = dischloc
@@ -285,8 +285,8 @@ save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
     postcode
     hbrescode
     lca
-    HSCP2016
-    DataZone2011
+    HSCP
+    DataZone
     location
     hbtreatcode
     yearstay

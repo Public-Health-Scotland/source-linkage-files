@@ -223,7 +223,7 @@ End if.
 Alter Type GPprac (F5.0).
 
  * Patient Geography.
-Rename Variables (PatientNHSBoardCode PatientDataZone2011 HSCPofResidenceCode = hbrescode DataZone2011 HSCP2016).
+Rename Variables (PatientNHSBoardCode PatientDataZone2011 HSCPofResidenceCode = hbrescode DataZone HSCP).
 
  * Treatment Geography.
 Recode TreatmentLocationCode ("UNKNOWN" = "").
@@ -340,7 +340,7 @@ save outfile = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     recid  SMRType
     record_keydate1 record_keydate2 keyTime1 keyTime2
     chi gender dob age gpprac postcode
-    hbrescode datazone2011 HSCP2016
+    hbrescode datazone HSCP
     hbtreatcode
     location
     attendance_status

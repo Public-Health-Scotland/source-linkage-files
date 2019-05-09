@@ -69,8 +69,8 @@ rename variables
     GeoPostcodeC = postcode
     NHSBoardofResidenceCode = hbrescode
     GeoCouncilAreaCode = lca
-    HSCPCode = HSCP2016
-    GeoDataZone2011 = DataZone2011
+    HSCPCode = HSCP
+    GeoDataZone2011 = DataZone
     PrimCauseofDeathCode4char = deathdiag1
     SecCauseofDeath0Code4char = deathdiag2
     SecCauseofDeath1Code4char = deathdiag3

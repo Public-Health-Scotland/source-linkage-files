@@ -29,7 +29,7 @@ GET DATA  /TYPE=TXT
     PracticeNHSBoardCode A9
     GeoPostcodeC A7
     NHSBoardofResidenceCode A9
-    HSCP2016 A9
+    HSCP A9
     GeoCouncilAreaCode A2
     TreatmentLocationCode A7
     TreatmentNHSBoardCode A9
@@ -225,6 +225,7 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     postcode
     hbrescode
     lca
+    HSCP
     location
     hbtreatcode
     stay

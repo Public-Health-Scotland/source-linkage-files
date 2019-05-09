@@ -57,7 +57,7 @@ Select if chi ne "".
 rename variables
    TreatmentNHSBoardName = hbtreatname
    TreatmentNHSBoardCode9 = hbtreatcode
-   HSCPofResidenceCodeContact = HSCP2016
+   HSCPofResidenceCodeContact = HSCP
    PatientPostcodeCContact = postcode
    PracticeNHSBoardCode9Contact = hbpraccode
    NHSBoardofResidenceCode9Contact = hbrescode
@@ -161,12 +161,12 @@ get file = !File + "DN-Temp-2" + ".zsav".
 sort cases by chi CCM record_keydate1 EpisodeContactNumber.
 
  * Set blanks as missing so that the aggregate ignores them.
-Recode hbtreatcode hbrescode HSCP2016 (" " = "-").
+Recode hbtreatcode hbrescode HSCP (" " = "-").
 Recode postcode (" " = "-").
 Recode LCA (" " = "-").
 
 Missing Values
-    hbtreatcode hbrescode HSCP2016 postcode lca ("-").
+    hbtreatcode hbrescode HSCP postcode lca ("-").
 
 aggregate outfile=*
     /Presorted
@@ -178,7 +178,7 @@ aggregate outfile=*
     /dob = Last(dob)
     /hbtreatcode = Last(hbtreatcode)
     /hbrescode = Last(hbrescode)
-    /HSCP2016 = Last(HSCP2016)
+    /HSCP = Last(HSCP)
     /lca = Last(lca)
     /age = Last(age)
     /diag1 = First(PrimaryInterventionCategory)
@@ -208,12 +208,12 @@ aggregate outfile=*
     /dec_cost = Sum(dec_cost).
 
  * Put the blanks back..
-Recode hbtreatcode hbrescode HSCP2016 ("-" = " ").
+Recode hbtreatcode hbrescode HSCP ("-" = " ").
 Recode postcode ("-" = " ").
 Recode LCA ("-" = " ").
 
 Missing Values
-    hbtreatcode hbrescode HSCP2016 postcode lca ().
+    hbtreatcode hbrescode HSCP postcode lca ().
 
 *Tidy up for source linkage episode file.
 alter type year(A4).
@@ -289,7 +289,7 @@ save outfile = !File + "DN_for_source-20" + !FY + ".zsav"
     postcode
     hbrescode
     hbtreatcode
-    HSCP2016
+    HSCP
     lca
     location
     diag1

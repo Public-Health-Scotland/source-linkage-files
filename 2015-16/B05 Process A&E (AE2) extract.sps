@@ -62,7 +62,7 @@ rename variables
     DischargeDestinationCode = ae_disdest
     FallsRelatedAdmission = falls_adm
     GPPracticeCode = gpprac
-    HSCPCode = HSCP2016
+    HSCPCode = HSCP
     PatCHINumberC = chi
     PatGenderCode = gender
     PatientFlowCode = ae_patflow
@@ -152,12 +152,50 @@ Compute keyTime2 = $sysmis.
 sort cases by chi record_keydate1 keyTime1.
 
 save outfile = !file + 'aande_for_source-20' + !FY + '.zsav'
-   /keep year recid record_keydate1 record_keydate2 keyTime1 keyTime2 chi gender dob gpprac postcode lca HSCP2016 location hbrescode hbtreatcode
-      ae_arrivalmode refsource ae_attendcat ae_disdest ae_patflow ae_placeinc ae_reasonwait ae_bodyloc ae_alcohol
-      alcohol_adm submis_adm falls_adm selfharm_adm cost_total_net age
-      apr_cost may_cost jun_cost jul_cost aug_cost sep_cost
-      oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost
-   /zcompressed.
+    /keep year
+    recid
+    record_keydate1
+    record_keydate2
+    keyTime1
+    keyTime2
+    chi
+    gender
+    dob
+    gpprac
+    postcode
+    lca
+    HSCP
+    location
+    hbrescode
+    hbtreatcode
+    ae_arrivalmode
+    refsource
+    ae_attendcat
+    ae_disdest
+    ae_patflow
+    ae_placeinc
+    ae_reasonwait
+    ae_bodyloc
+    ae_alcohol
+    alcohol_adm
+    submis_adm
+    falls_adm
+    selfharm_adm
+    cost_total_net
+    age
+    apr_cost
+    may_cost
+    jun_cost
+    jul_cost
+    aug_cost
+    sep_cost
+    oct_cost
+    nov_cost
+    dec_cost
+    jan_cost
+    feb_cost
+    mar_cost
+    /zcompressed.
 
 get file = !file + 'aande_for_source-20' + !FY + '.zsav'.
 
