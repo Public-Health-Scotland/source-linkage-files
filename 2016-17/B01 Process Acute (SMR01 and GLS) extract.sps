@@ -78,7 +78,7 @@ GET DATA /TYPE=TXT
       SubstanceMisuseRelatedAdmission01 A1
       FallsRelatedAdmission01 A1
       SelfHarmRelatedAdmission01 A1
-      UniqueRecordIdentifier A8
+      UniqueRecordIdentifier A11
       lineno F3.0.
 CACHE.
 Execute.
@@ -270,6 +270,18 @@ alter type record_keydate1 record_keydate2 (F8.0).
 frequencies stay yearstay.
 
 sort cases by chi record_keydate1.
+
+ * Add label for acute only variables.
+Value Labels oldtadm
+    '0' "Deferred admission"
+    '1' "Waiting list/diary/booked"
+    '2' "Repeat admission"
+    '3' "Transfer"
+    '4' "Emergency - deliberate self inflicted injury or poisoning"
+    '5' "Emergency - road traffic accident"
+    '6' "Emergency - home accident (includes accidental poisoning in the home)"
+    '7' "Emergency - other injury (includes accidental poisoning other than in the home)"
+    '8' "Emergency - other (excluding accidental poisoning)".
 
 save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
     /keep year

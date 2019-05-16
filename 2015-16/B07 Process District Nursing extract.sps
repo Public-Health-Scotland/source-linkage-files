@@ -48,22 +48,21 @@ GET DATA  /TYPE=TXT
     HSCPofResidenceCodeContact A9.
 CACHE.
 
-rename variables UPINumberC = chi.
-
- * Only keep records with CHI.
-Select if chi ne "".
-
 *Alter or create variables to match file to source file.
-rename variables
-   TreatmentNHSBoardName = hbtreatname
-   TreatmentNHSBoardCode9 = hbtreatcode
-   HSCPofResidenceCodeContact = HSCP
-   PatientPostcodeCContact = postcode
-   PracticeNHSBoardCode9Contact = hbpraccode
-   NHSBoardofResidenceCode9Contact = hbrescode
-   Ageatcontactdate = age
-   PracticeCodeContact = gpprac
-   PatientCouncilAreaCodeContact = lca.
+Rename Variables
+    Ageatcontactdate = age
+    HSCPofResidenceCodeContact = HSCP
+    NHSBoardofResidenceCode9Contact = hbrescode
+    PatientCouncilAreaCodeContact = lca
+    PatientPostcodeCContact = postcode
+    PracticeCodeContact = gpprac
+    PracticeNHSBoardCode9Contact = hbpraccode
+    TreatmentNHSBoardCode9 = hbtreatcode
+    TreatmentNHSBoardName = hbtreatname
+    UPINumberC = chi.
+
+* Only keep records with a CHI so we can group into continuous episodes.
+Select if CHI NE "".
 
 *Create recid variable .
 string recid(A3).
@@ -73,11 +72,11 @@ compute recid = "DN".
 string SMRType (A10).
 compute SMRType = "DN".
 
- * Recode GP Practice into a 5 digit number.
- * We assume that if it starts with a letter it's an English practice and so recode to 99995.
+* Recode GP Practice into a 5 digit number.
+* We assume that if it starts with a letter it's an English practice and so recode to 99995.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
-   Compute gpprac = "99995".
-End if. 
+    Compute gpprac = "99995".
+End if.
 Alter Type GPprac (F5.0).
 
 *Create variables recordkeydate1 = Contact Date and record keydate2 = recordkeydate1.
@@ -92,6 +91,7 @@ compute record_keydate2 = record_keydate1.
 Alter Type record_keydate1 record_keydate2 dob (Date12).
 
 * Create costs for the DN from Costs Book. (Work from here).
+String Year (A4).
 Compute year = !FY.
 
 sort cases by hbtreatcode.
@@ -99,82 +99,46 @@ sort cases by hbtreatcode.
 match files file = *
     /Table = !Extracts_Alt + "Cost_DN_Lookup.sav"
     /Drop hbtreatname
-    /By hbtreatcode year. 
+    /By hbtreatcode year.
 
+* Since the costs are rough estimates we round them to the nearest pound.
+* This hopefully means they aren't seen as too 'exact'.
 Compute cost_total_net = rnd(cost_total_net).
 
-save outfile = !File + "DN-Temp-1" + ".zsav"
-   /zcompressed.
-get file = !File + "DN-Temp-1" + ".zsav".
-
- * Finding the difference between dates of contacts and creating new variable DATEDIFF.
-sort cases by chi dob record_keydate1.
-if (chi=lag(chi) and dob eq lag(dob)) Day_diff eq DATEDIFF(record_keydate1, lag(record_keydate1), "days").
+* Finding the difference between dates of contacts and creating new variable DATEDIFF.
+sort cases by chi record_keydate1.
+if (chi=lag(chi)) Day_diff eq DateDiff(record_keydate1, lag(record_keydate1), "days").
 
 *Creating CCM Continuous Care Marker. Records with less than or equal to 7 days are maintained as same CCM and greater than 7 days is CCM+1.
-AGGREGATE
-   /BREAK chi
-   /record_keydate1_1 = first(record_keydate1)
-   /Day_diff_1 = first(day_diff).
-
-Numeric  CCM (F5.0).
-Compute CCM_1 = 1.
-
-Do if (chi=lag(chi)).
-   Do if (lag(record_keydate1) eq record_keydate1_1).
-      Do if  (Day_diff le 7).
-         compute CCM = CCM_1.
-      Else if (Day_diff gt 7).
-         compute CCM = CCM_1 + 1.
-      End if.
-
-   Else if (lag (record_keydate1) ne record_keydate1_1).
-      Do if (Day_diff le 7).
-         compute Flag = 1.
-      Else if (Day_diff gt 7).
-         compute  Flag = 2.
-      End if.
-   End if.
+Numeric CCM (F5.0).
+Compute CCM = 1.
+Do if (CHI = lag(CHI)).
+    Do If (Day_diff LE 7 ).
+        Compute CCM = lag(CCM).
+    Else.
+        Compute CCM = lag(CCM) + 1.
+    End if.
 End if.
 
-Do if  Flag = 1.
-   Compute CCM = lag(CCM).
-Else if Flag = 2.
-   Compute CCM = (lag(CCM) + 1).
-End If.
-
-Recode CCM (Sysmiss = 1).
-
- * Calculate costs per month.
+* Calculate costs per month.
 Compute cost_monthnum = xDate.Month(record_keydate1).
 
 Do repeat month = jan_cost feb_cost mar_cost apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost
-   /monthnum = 1 to 12.
-   If cost_monthnum = monthnum month = cost_total_net.
+    /monthnum = 1 to 12.
+    If cost_monthnum = monthnum month = cost_total_net.
 End repeat.
 
-save outfile = !File + "DN-Temp-2" + ".zsav"
-   /zcompressed.
-get file = !File + "DN-Temp-2" + ".zsav".
-
 *Aggregate out records for final DN to source linkage files.
-sort cases by chi CCM record_keydate1 EpisodeContactNumber.
 
- * Set blanks as missing so that the aggregate ignores them.
-Recode hbtreatcode hbrescode HSCP (" " = "-").
-Recode postcode (" " = "-").
-Recode LCA (" " = "-").
-
+* Set blanks as missing so that the aggregate ignores them.
 Missing Values
-    hbtreatcode hbrescode HSCP postcode lca ("-").
+    hbtreatcode hbrescode HSCP postcode lca (" ").
 
 aggregate outfile=*
     /Presorted
-    /break chi CCM
+    /break year chi recid SMRType CCM
     /record_keydate1 = Min(record_keydate1)
     /record_keydate2 = Max(record_keydate2)
-    /SMRType = First(SMRType)
-    /recid = First(recid)
     /dob = Last(dob)
     /hbtreatcode = Last(hbtreatcode)
     /hbrescode = Last(hbrescode)
@@ -192,7 +156,6 @@ aggregate outfile=*
     /gpprac = First(gpprac)
     /cost_total_net = Sum(cost_total_net)
     /location = First (LocationofContact)
-    /year = First(year)
     /TotalnoDNcontacts = n
     /jan_cost = Sum(jan_cost)
     /feb_cost = Sum(feb_cost)
@@ -207,18 +170,10 @@ aggregate outfile=*
     /nov_cost = Sum(nov_cost)
     /dec_cost = Sum(dec_cost).
 
- * Put the blanks back..
-Recode hbtreatcode hbrescode HSCP ("-" = " ").
-Recode postcode ("-" = " ").
-Recode LCA ("-" = " ").
-
 Missing Values
     hbtreatcode hbrescode HSCP postcode lca ().
 
 *Tidy up for source linkage episode file.
-alter type year(A4).
-compute year = !FY.
-
 Alter type diag1 to diag6 (A6) location(A7).
 
 * Trim leading and trailing spaces.
@@ -266,10 +221,10 @@ Define !LocationofContact()
 !LocationofContact.
 
 Variable Labels
-   CCM "Continuous Care Marker"
-   TotalnoDNcontacts "Total Number of Patient Contacts".
+    CCM "Continuous Care Marker"
+    TotalnoDNcontacts "Total Number of Patient Contacts".
 
- * Put record_keydate back into numeric.
+* Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 alter type record_keydate1 record_keydate2 (F8.0).
@@ -316,10 +271,6 @@ save outfile = !File + "DN_for_source-20" + !FY + ".zsav"
     /zcompressed.
 
 get file = !File + "DN_for_source-20" + !FY + ".zsav".
-
-   *Delete temp files.
-Erase file = !File + "DN-Temp-1" + ".zsav".
-Erase file = !File + "DN-Temp-2" + ".zsav".
 
 * zip up the raw data.
 Host Command = ["gzip '" + !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].

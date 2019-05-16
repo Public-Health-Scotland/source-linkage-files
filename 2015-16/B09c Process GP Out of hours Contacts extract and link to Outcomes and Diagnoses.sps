@@ -84,7 +84,7 @@ Frequencies Overlap Duplicate.
  * Get rid of obvious duplicates.
 select if Duplicate NE 2.
 
- * Where it"s a duplicate except for an overlapping time flag it.
+ * Where it's a duplicate except for an overlapping time flag it.
 If (Overlap = 1 AND Duplicate = 1) ToMerge = 1.
 
  * Repeat in the other direction so both records are flagged to be merged.
@@ -104,17 +104,7 @@ if sysmis(counter) counter = lag(counter) + 1.
 if ToMerge = 1 counter = 0.
 
  * Set blank values to missing so they are ignored by the aggregate.
-*PatientNHSBoardCode.
-MISSING VALUES PatientNHSBoardCode('        ').
-*PatientDataZone2011.
-MISSING VALUES PatientDataZone2011('        ').
-*HSCPofResidenceCode.
-MISSING VALUES HSCPofResidenceCode('        ').
-*PracticeCode.
-MISSING VALUES PracticeCode('      ').
-*postcode.
-MISSING VALUES postcode('       ').
-
+Missing Values PatientNHSBoardCode PatientDataZone2011 HSCPofResidenceCode Postcode PracticeCode (' ').
 
 aggregate outfile = *
    /Break GUID chi ConsultationRecorded TreatmentNHSBoardCode TreatmentLocationCode TreatmentLocationDescription KISAccessed ReferralSource ConsultationType Counter
@@ -163,10 +153,7 @@ match files
 Rename Variables Cost_per_consultation =  cost_total_net.
 Alter type cost_total_net (F8.2).
 
-save outfile = !File + "GPOOH-Temp-3.zsav"
-   /zcompressed.
 ************************************************************************************************************.
-get file = !File + "GPOOH-Temp-3.zsav".
 * Variables.
 
 * recid.
@@ -175,7 +162,6 @@ Compute recid = "OoH".
 add value labels recid "OoH" "GP Out of Hours consultation".
 
 * Dates.
-
 Rename Variables  
 ConsultationStartDateTime = record_keydate1 
 ConsultationEndDateTime = record_keydate2.
@@ -264,27 +250,6 @@ Recode ReferralSource
 
 Variable Width ReferralSource (5).
 
-Value Labels ReferralSource
-    "1" "WALK-IN"
-    "2" "PATIENT IS CALLER"
-    "3" "SAS"
-    "4" "FAMILY MEMBER/NEIGHBOUR/FRIEND/MEMBER OF PUBLIC"
-    "9" "OTHER"
-    "B" "HCP - CPN/DISTRICT NURSE/MIDWIFE"
-    "C" "HCP - NURSING HOME/CARE HOME/RESIDENTIAL HOME"
-    "D" "HCP - CHEMIST/PHARMACIST"
-    "E" "HCP - HOSPITAL"
-    "F" "HCP - NURSE"
-    "G" "HCP - LABORATORY"
-    "H" "HCP - DOCTOR (GP)"
-    "I" "HCP - OTHER HCP"
-    "J" "HCP - OTHER OOH SERVICE"
-    "P" "POLICE/PRISON"
-    "S" "SOCIAL SERVICES"
-    "A" "A&E"
-    "M" "MIU"
-    "N" "NHS 24".
-
 Rename Variables ReferralSource = refsource.
 
  * KIS.
@@ -337,10 +302,21 @@ sort cases by chi record_keydate1 keyTime1.
 *Reorder and remove unneeded variables.
 save outfile = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /Keep year
-    recid  SMRType
-    record_keydate1 record_keydate2 keyTime1 keyTime2
-    chi gender dob age gpprac postcode
-    hbrescode datazone HSCP
+    recid
+    SMRType
+    record_keydate1
+    record_keydate2
+    keyTime1
+    keyTime2
+    chi
+    gender
+    dob
+    age
+    gpprac
+    postcode
+    hbrescode
+    datazone
+    HSCP
     hbtreatcode
     location
     attendance_status
@@ -354,21 +330,10 @@ save outfile = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
 
 get file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav".
 
-
- * /Drop TimeToConsultation TreatmentLocationDescription
-*New Variables
-ooh_location *
-KISAccessed
-ConsultationStartTime
-ConsultationEndTime
-Outcome 1 - 4
-ooh_CC
- 
  * HouseKeeping.
  * Delete temp files.
 Erase file = !File + "GPOOH-Temp-1.zsav".
 Erase file = !File + "GPOOH-Temp-2.zsav".
-Erase file = !File + "GPOOH-Temp-3.zsav".
 
 Erase file = !File + "GP-Diagnosis-Data-" + !FY + ".zsav".
 Erase file = !File + "GP-Outcomes-Data-" + !FY + ".zsav".

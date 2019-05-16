@@ -73,7 +73,7 @@ GET DATA  /TYPE=TXT
       DuplicateRecordFlag04 A1
       NHSHospitalFlag04 A1
       CommunityHospitalFlag04 A1
-      UniqueRecordIdentifier A8.
+      UniqueRecordIdentifier A11.
 CACHE.
 Execute.
 
@@ -235,6 +235,11 @@ Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record
 alter type record_keydate1 record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1.
+
+ * Add MH specific labele.
+Value Labels stadm
+    '3' "Formal"
+    '4' "Informal".
 
 save outfile = !file + 'mental_health_for_source-20' + !FY + '.zsav'
     /keep year

@@ -203,7 +203,6 @@ Do Repeat Beddays = Apr_beddays to Mar_beddays
     End if.
 End Repeat.
 
- 
  * Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
@@ -211,6 +210,16 @@ Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record
 alter type record_keydate1 record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1.
+
+ * Add Labels to Maternity only variables.
+Value Labels discondition
+    '1' "Still pregnant"
+    '2' "Aborted (all types of completed abortion)"
+    '3' "Delivered"
+    '4' "Postnatal care only"
+    '5' "Pregnancy not confirmed"
+    '8' "Other (includes missed abortion)".
+
 
 save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     /keep year
