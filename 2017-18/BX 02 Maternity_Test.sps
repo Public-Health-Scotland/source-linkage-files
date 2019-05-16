@@ -1,88 +1,108 @@
 ﻿* Encoding: UTF-8.
-* Encoding: UTF-8.
+
 *Tests for maternity dataset.
 get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
 
-*to check for records that are admitted more than 2 years and records that are discharged after the FY2016.
+ * Flag to count CHIs.
+Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
 
-if record_keydate1 gt 20180331 Flag_keydate2=1.
-if record_keydate1 lt 20160401 Flag_keydate1=1.
-EXECUTE.
+ * Flags to count M/Fs.
+Do if gender = 1.
+    Compute Male = 1.
+Else if gender = 2.
+    Compute Female = 1.
+End if.
 
-Select if   Flag_keydate2=1 or  Flag_keydate1=1.
-exe.
+ * Flags to count missing values.
+If sysmis(dob) No_DoB = 1.
 
+if postcode = "" No_Postcode = 1.
+if hbrescode = "" No_HB = 1.
+if LCA = "" No_LCA = 1.
+if sysmis(gpprac) No_GPprac = 1.
 
-*To check aggregated data variations with the existing SLF 2016/17 data.
+ * Get values for whole file.
+Dataset Declare SLFnew.
+aggregate outfile = SLFnew
+    /break
+    /n_CHIs = sum(Has_CHI)
+    /Males Females = Sum(Male Female)
+    /MeanAge = mean(age)
+    /No_Postcode No_HB No_LCA No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
+    /n_episodes = n
+    /Total_Costs_net = Sum(cost_total_net)
+    /Total_yearstay = Sum(yearstay)
+    /Total_stay = Sum(stay).
 
-get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
+ * Restructure for easy analysis and viewing.
+Dataset activate SLFnew.
+Varstocases
+    /Make New_Value from n_CHIs to Total_stay
+    /Index Measure (New_Value).
+Sort cases by Measure.
+*************************************************************************************************************.
 
-Dataset name SLFcurrent.
-Compute Pre_Cost=sum(apr_cost,may_cost, jun_cost, jul_cost, aug_cost, sep_cost, oct_cost, nov_cost, dec_cost, jan_cost, feb_cost, mar_cost).
-Compute beddays=sum(apr_beddays, may_beddays, jun_beddays, jul_beddays, aug_beddays, sep_beddays, oct_beddays, nov_beddays, dec_beddays, jan_beddays, feb_beddays, mar_beddays).
-exe.
-aggregate outfile=*
-/break year
-/no_records=n
-/Pre_Cost=sum(Pre_Cost)
-/beddays=sum(beddays)
-/Total_Costs_net=Sum(cost_total_net)
-/Total_yearstay=Sum(yearstay)
-/Total_stay=Sum(stay).
-exe.
-Dataset name SLFcurrent.
-Dataset activate  SLFcurrent.
-alter type year(A6).
+*************************************************************************************************************.
+get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
+    /Keep recid Anon_CHI gender dob postcode hbrescode LCA gpprac age cost_total_net yearstay stay.
+select if recid = '02B'.
 
+ * Flag to count CHIs.
+Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
 
-get file='/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' +!FY+'.zsav'.
-select if recid='02B'.
-exe.
+ * Flags to count M/Fs.
+Do if gender = 1.
+    Compute Male = 1.
+Else if gender = 2.
+    Compute Female = 1.
+End if.
 
-Dataset name SLFprevious.
-Compute Pre_Cost=sum(apr_cost, may_cost, jun_cost, jul_cost, aug_cost, sep_cost, oct_cost, nov_cost, dec_cost, jan_cost, feb_cost, mar_cost).
-Compute beddays=sum(apr_beddays, may_beddays, jun_beddays, jul_beddays, aug_beddays, sep_beddays, oct_beddays, nov_beddays, dec_beddays, jan_beddays, feb_beddays, mar_beddays).
-exe.
+ * Flags to count missing values.
+If sysmis(dob) No_DoB = 1.
 
-aggregate outfile=*
-/break year
-/no_records=n
-/Pre_Cost=sum(Pre_Cost)
-/beddays=sum(beddays)
-/Total_Costs_net=Sum(cost_total_net)
-/Total_yearstay=Sum(yearstay)
-/Total_stay=Sum(stay).
-exe.
+if postcode = "" No_Postcode = 1.
+if hbrescode = "" No_HB = 1.
+if LCA = "" No_LCA = 1.
+if sysmis(gpprac) No_GPprac = 1.
 
-alter type year(A6).
-Compute year=!FY+'p'.
-exe.
-Dataset name SLFprevious.
+ * Get values for whole file.
+Dataset Declare SLFexisting.
+aggregate outfile = SLFexisting
+    /break
+    /n_CHIs = sum(Has_CHI)
+    /Males Females = Sum(Male Female)
+    /MeanAge = mean(age)
+    /No_Postcode No_HB No_LCA No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
+    /n_episodes = n
+    /Total_Costs_net = Sum(cost_total_net)
+    /Total_yearstay = Sum(yearstay)
+    /Total_stay = Sum(stay).
 
-add files file =SLFprevious
-/file = SLFcurrent.
-exe.
+Dataset activate SLFexisting.
+Varstocases
+    /Make Existing_Value from n_CHIs to Total_stay
+    /Index Measure (Existing_Value).
+Sort cases by Measure.
+*************************************************************************************************************.
 
-*Check % variations.
-Compute Costs_difference=(((Total_Costs_net-lag(Total_Costs_net))/(lag(Total_Costs_net)))*100).
-Compute Pre_cost_difference=(((Pre_cost-lag(Pre_cost))/(lag(Pre_cost)))*100).
-Compute beddays_difference=(((beddays-lag(beddays))/(lag(beddays)))*100).
-Compute yearstay_difference=(((Total_yearstay-lag(Total_yearstay))/(lag (Total_yearstay)))*100).
-Compute stay_difference =(((Total_stay-lag(Total_stay))/(lag (Total_stay)))*100).
-Compute no_records_difference=(((no_records-lag(no_records))/(lag(no_records)))*100).
-exe.
+*************************************************************************************************************.
+ * Match together.
+match files
+    /file = SLFexisting
+    /file = SLFnew
+    /By Measure.
+Dataset Name MaternityComparison.
 
-*Flag differences with more than or equal to +/- 15%.
-If ((100-Costs_difference) ge 115 or (100-Costs_difference) le 85) Flag_Costs_net_difference =1.
-If ((100-Pre_cost_difference) ge 115 or  (100-Pre_cost_difference) le 85) Flag_Pre_cost_difference=1.
-If ((100-beddays_difference)  ge 115 or (100-beddays_difference) le 85) Flag_beddays_difference=1.
-If ((100-yearstay_difference) ge 115 or (100-yearstay_difference) le 85) Flag_yearstay_difference=1 .
-If ((100-stay_difference) ge 115  or (100-stay_difference) le 85) Flag_stay_difference=1.
-if ((100-no_records_difference) ge 115 or (100-no_records_difference) le 85) Flag_records_difference=1.  
-exe.
+ * Close both datasets.
+Dataset close SLFnew.
+Dataset close SLFexisting.
 
-*Close both datasets.
-Dataset close SLFcurrent.
-Dataset close SLFprevious.
+ * Produce comparisons.
+Compute Difference = New_Value - Existing_Value.
+Compute PctChange = Difference / Existing_Value * 100.
+Compute Issue = (abs(PctChange) > 5).
+Alter Type Issue (F1.0) PctChange (PCT4.2).
 
+ * Highlight issues.
+Crosstabs Measure by Issue.
 

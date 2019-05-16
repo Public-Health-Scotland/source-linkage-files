@@ -111,7 +111,7 @@ aggregate outfile = Old_Summary
     /CHM = Sum(CMH_Contacts)
     /LTC1 to LTC19 = Sum(arth to digestive)
     /Pop = Sum(Keep_Population)
-    /HRI1 to HRI4 = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN).
+    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN).
 
 Dataset Close OldFile.
 
