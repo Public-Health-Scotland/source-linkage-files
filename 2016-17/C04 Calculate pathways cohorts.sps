@@ -13,26 +13,31 @@ get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 
 select If CHI ne ''.
 
-*Mental Health ClassIfication.
 compute MH_Cohort = 0.
+* Include CMH here?.
 If recid = '04B' MH_Cohort = 1.
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If any(char.substr(x, 1,2), 'F2', 'F3') or any(char.substr(x, 1,4), 'F067', 'F070', 'F072', 'F078', 'F079').
-        compute MH_Cohort = 1.
-    End If.
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do if any(recid, "01B", "GLS", "50B", "02B", "AE2").
+        Do If any(char.substr(diag, 1,2), 'F2', 'F3') or any(char.substr(diag, 1,4), 'F067', 'F070', 'F072', 'F078', 'F079').
+            compute MH_Cohort = 1.
+        End If.
+    End if.
 end repeat.
-* If MentalHealthProblemsClientGroup = 'Y' MH_Cohort = 1.
 
+* If MentalHealthProblemsClientGroup = 'Y' MH_Cohort = 1.
 
 *Frailty ClassIfication.
 
 *If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
 compute Frail_Cohort = 0.
 If (recid = 'CH' and age GE 65) Frail_Cohort = 1.
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(char.substr(x, 1,2), 'W0', 'W1') or any(char.substr(x, 1, 3), 'F00', 'F01', 'F02', 'F03', 'F05', 'I61', 'I63', 'I64', 'G20', 'G21') or any(char.substr(x, 1,4), 'R268', 'G22X') or spec = 'AB' or any(sigfac, '1E', '1D') or recid = 'GLS').
-        compute Frail_Cohort  = 1.
-    End If.
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do if any(recid, "01B", "GLS", "50B", "02B", "04B", "AE2").
+        Do If (any(char.substr(diag, 1,2), 'W0', 'W1') or any(char.substr(diag, 1, 3), 'F00', 'F01', 'F02', 'F03', 'F05', 'I61', 'I63', 'I64', 'G20', 'G21')
+            or any(char.substr(diag, 1,4), 'R268', 'G22X') or spec = 'AB' or any(sigfac, '1E', '1D') or recid = 'GLS').
+            compute Frail_Cohort  = 1.
+        End If.
+    End if.
 end repeat.
 *Maternity ClassIfication.
 compute Maternity_Cohort = 0.
@@ -56,7 +61,7 @@ If (CVD = 1 or COPD = 1 or CHD = 1 or Parkinsons = 1 or MS = 1) Medium_CC_Cohort
 compute Low_CC_Cohort = 0.
 If (Epilepsy = 1 or Asthma = 1 or Arth = 1 or Diabetes = 1 or atrialfib = 1) Low_CC_Cohort = 1.
 
-
+*Add CMH here?.
 *Assisted Living in the Community.
 compute Comm_Living_Cohort = 0.
 If any (recid, 'HC-', 'HC + ', 'RSP', 'DN', 'MLS', 'INS', 'CPL', 'DC') Comm_Living_Cohort = 1.
@@ -119,34 +124,38 @@ If (recid = 'NRS' and sysmis(ExternalCause)) End_of_LIfe_Cohort = 1.
 compute Substance_Cohort = 0.
 
 *Alcohol Codes.
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(char.substr(x, 1, 3), 'F10', 'K70', 'X45', 'X65', 'Y15', 'Y90', 'Y91') or
-        any(char.substr(x, 1,4), 'E244', 'E512', 'G312', 'G621', 'G721', 'I426', 'K292', 'K860', 'O354', 'P043', 'Q860', 'T510', 'T511', 'T519', 'Y573', 'R780', 'Z502', 'Z714', 'Z721', 'K852')).
-        compute Substance_Cohort = 1.
-    End If.
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do if any(recid, "01B", "GLS", "50B", "02B", "04B", "AE2").
+        Do If (any(char.substr(diag, 1, 3), 'F10', 'K70', 'X45', 'X65', 'Y15', 'Y90', 'Y91') or
+            any(char.substr(diag, 1,4), 'E244', 'E512', 'G312', 'G621', 'G721', 'I426', 'K292', 'K860', 'O354', 'P043', 'Q860', 'T510', 'T511', 'T519', 'Y573', 'R780', 'Z502', 'Z714', 'Z721', 'K852')).
+            compute Substance_Cohort = 1.
+        End If.
+    End if.
 end repeat.
 
 *Drug Codes.
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(recid, '01B', '04B') and (any(char.substr(x, 1, 3), 'F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F18', 'F19') or any(x, 'T400', 'T401', 'T403', 'T405', 'T406', 'T407', 'T408', 'T409', 'T436'))).
-        compute Substance_Cohort = 1.
-    End If.
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do if any(recid, "01B", "GLS", "50B", "02B", "04B", "AE2").
+        Do If (any(recid, '01B', '04B') and (any(char.substr(diag, 1, 3), 'F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F18', 'F19') or any(diag, 'T400', 'T401', 'T403', 'T405', 'T406', 'T407', 'T408', 'T409', 'T436'))).
+            compute Substance_Cohort = 1.
+        End If.
+    End if.
 end repeat.
 
 
 *Some drug codes only count If other code present in CIS i.e. T402/T404 only If F11 and T424 only If F13.
 compute F11 = 0.
 
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(recid, '01B', '04B') and (any(char.substr(x, 1, 3), 'F11'))).
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do If (any(recid, '01B', '04B') and (any(char.substr(diag, 1, 3), 'F11'))).
         compute F11 = 1.
     End If.
 end repeat.
 
 compute T402_T404 = 0.
 
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(recid, '01B', '04B') and (any(x, 'T402', 'T404'))).
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do If (any(recid, '01B', '04B') and (any(diag, 'T402', 'T404'))).
         compute T402_T404 = 1.
     End If.
 end repeat.
@@ -154,16 +163,16 @@ end repeat.
 compute F13 = 0.
 
 
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(recid, '01B', '04B') and (any(char.substr(x, 1, 3), 'F11'))).
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do If (any(recid, '01B', '04B') and (any(char.substr(diag, 1, 3), 'F11'))).
         compute F13 = 1.
     End If.
 end repeat.
 
 compute T424 = 0.
 
-do repeat x = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(recid, '01B', '04B') and (any(x, 'T424'))).
+do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
+    Do If (any(recid, '01B', '04B') and (any(diag, 'T424'))).
         compute T424 = 1.
     End If.
 end repeat.
@@ -258,8 +267,8 @@ sort cases by spec.
 
 *Matching the specialty codes data to all specialty code descriptions.
 match files file = *
-   /table = '/conf/linkage/output/lookups/Archive/clinical/specialty/copspecs.sav'
-   /by spec.
+    /table = '/conf/linkage/output/lookups/Archive/clinical/specialty/copspecs.sav'
+    /by spec.
 
 
 *Costs Expansion for Rules and Stats.
@@ -277,7 +286,7 @@ compute AE2_Cost = 0.
 compute Hospital_Elective_Cost = 0.
 compute Hospital_Emergency_Cost = 0.
 compute Community_Health_Cost = 0.
-If (specname = 'Geriatric Medicine' or recid = '50B' or specname = 'Psychiatry of Old Age') Geriatric_Cost = Cost_Total_Net.
+If (specname = 'Geriatric Medicine' or any(recid, '50B', "GLS") or specname = 'Psychiatry of Old Age') Geriatric_Cost = Cost_Total_Net.
 If (recid = '02B' or newpattype_CIS = 'Maternity') Maternity_Cost = Cost_Total_Net.
 If (recid = '04B' and specname ne 'Psychiatry of Old Age') Psychiatry_Cost = Cost_Total_Net.
 If (recid = '01B' and (newpattype_CIS = 'Elective' or newCIS_ipdc = 'D') and specname ne 'Geriatric Medicine') Acute_Elective_Cost = Cost_Total_Net.
@@ -290,51 +299,53 @@ If any(recid, '01B', '04B', '50B', 'GLS') and newpattype_CIS = 'Elective' Hospit
 If any(recid, '01B', '04B', '50B', 'GLS') and newpattype_CIS = 'Non-Elective' Hospital_Emergency_Cost = Cost_Total_Net.
 If recid = 'PIS' Prescribing_Cost = Cost_Total_Net.
 If any(recid, 'AE2', 'OoH', 'SAS', 'N24') AE2_Cost = Cost_Total_Net.
+*Include CMH here?.
 If recid = 'DN' Community_Health_Cost = Cost_Total_Net.
 If op1a ne '' Operation_Flag = 1.
 
 
-*Changing the record id from SMR to the CIS stay.
-alter type recid (A5).
-If any (recid, '01B', '02B', '04B', '50B', 'GLS') recid = CIS_marker.
 
+Do if CIS_Marker NE "".
+    Compute CIS_Attendance = 1.
+Else.
+    Compute CIS_Attendance = 0.
+    Compute CIS_Marker = recid.
+End if.
 
 *removed from the aggregate /Unplanned_Beddays = sum(Unplanned_Beddays).
 aggregate outfile = *
-   /break CHI recid newCIS_ipdc newpattype_CIS
-   /Total_Cost = sum(Cost_Total_Net)
-   /Bed_Days = sum(yearstay)
-   /Psychiatry_Cost = sum(Psychiatry_Cost)
-   /Maternity_Cost = sum(Maternity_Cost)
-   /Geriatric_Cost = sum(Geriatric_Cost)
-   /Elective_Cost = sum(Acute_Elective_Cost)
-   /Emergency_Cost = sum(Acute_Emergency_Cost)
-   /Home_Care_Cost = sum(Home_Care_Cost)
-   /Care_Home_Cost = sum(Care_Home_Cost)
-   /Hospital_Elective_Cost = sum(Hospital_Elective_Cost)
-   /Hospital_Emergency_Cost = sum(Hospital_Emergency_Cost)
-   /AE2_Cost = sum(AE2_Cost)
-   /Prescribing_Cost = sum(Prescribing_Cost)
-   /Outpatient_Cost = sum(Outpatient_Cost)
-   /Total_Outpatient_Cost = sum(Total_Outpatient_Cost)
-   /Community_Health_Cost = sum(Community_Health_Cost)
-   /Operation_Flag = max(Operation_Flag).
+    /break CHI CIS_marker newCIS_ipdc newpattype_CIS
+    /Total_Cost = sum(Cost_Total_Net)
+    /Bed_Days = sum(yearstay)
+    /Psychiatry_Cost = sum(Psychiatry_Cost)
+    /Maternity_Cost = sum(Maternity_Cost)
+    /Geriatric_Cost = sum(Geriatric_Cost)
+    /Elective_Cost = sum(Acute_Elective_Cost)
+    /Emergency_Cost = sum(Acute_Emergency_Cost)
+    /Home_Care_Cost = sum(Home_Care_Cost)
+    /Care_Home_Cost = sum(Care_Home_Cost)
+    /Hospital_Elective_Cost = sum(Hospital_Elective_Cost)
+    /Hospital_Emergency_Cost = sum(Hospital_Emergency_Cost)
+    /AE2_Cost = sum(AE2_Cost)
+    /Prescribing_Cost = sum(Prescribing_Cost)
+    /Outpatient_Cost = sum(Outpatient_Cost)
+    /Total_Outpatient_Cost = sum(Total_Outpatient_Cost)
+    /Community_Health_Cost = sum(Community_Health_Cost)
+    /Operation_Flag = max(Operation_Flag)
+    /CIS_Attendance = max(CIS_Attendance).
 
 
-compute CIS_Attendance = 0.
 compute Emergency_Instances = 0.
 compute Elective_Instances = 0.
 compute Elective_Inpatient_Instances = 0.
 compute Elective_Daycase_Instances = 0.
 compute Death_Flag = 0.
 
-
-If (recid ne 'AE2' and recid ne 'PIS' and recid ne '00B' and recid ne 'NRS') CIS_Attendance = 1.
 If (newpattype_CIS = 'Non-Elective') Emergency_Instances = 1.
 If (newpattype_CIS = 'Elective' or newCIS_ipdc = 'D') Elective_Instances = 1.
 If (newpattype_CIS = 'Elective' and newCIS_ipdc = 'I') Elective_Inpatient_Instances = 1.
 If (newpattype_CIS = 'Elective' and newCIS_ipdc = 'D') Elective_Daycase_Instances = 1.
-If recid = 'NRS' Death_Flag = 1.
+If CIS_Marker = 'NRS' Death_Flag = 1.
 
 
 compute Elective_Inpatient_Cost = 0.
@@ -372,7 +383,11 @@ aggregate outfile = *
 
 
 compute Elective_Inpatient_Flag = 0.
-compute Elective_Inpatient_Percentage = Elective_Inpatient_Cost / Elective_Cost.
+Do if Elective_Cost > 0.
+    compute Elective_Inpatient_Percentage = Elective_Inpatient_Cost / Elective_Cost.
+Else.
+    compute Elective_Inpatient_Percentage = 0.
+End if.
 
 
 If Elective_Inpatient_Percentage GT 0.5 Elective_Inpatient_Flag = 1.
@@ -411,9 +426,9 @@ If (Outpatient_Cost GT 0) Outpatient_Cohort = 1.
 If (Home_Care_Cost GT 0 or Community_Health_Cost GT 0) Community_Care_Cohort = 1.
 If (AE2_Cost GT 0) AE2_Cohort = 1.
 If (Psychiatry_Cohort = 0 and Maternity_Cohort = 0 and Geriatric_Cohort = 0 and Elective_Inpatient_Cohort = 0 and
-   Limited_Daycases_Cohort = 0 and Single_Emergency_Cohort = 0 and Multiple_Emergency_Cohort = 0 and
-   Routine_Daycase_Cohort = 0 and Prescribing_Cohort = 0 and Outpatient_Cohort = 0 and Community_Care_Cohort = 0 and
-   AE2_Cohort = 0 and Residential_Care_Cohort = 0) Other_Cohort = 1.
+    Limited_Daycases_Cohort = 0 and Single_Emergency_Cohort = 0 and Multiple_Emergency_Cohort = 0 and
+    Routine_Daycase_Cohort = 0 and Prescribing_Cohort = 0 and Outpatient_Cohort = 0 and Community_Care_Cohort = 0 and
+    AE2_Cohort = 0 and Residential_Care_Cohort = 0) Other_Cohort = 1.
 
 ***********************************************************************************************************************************.
 
@@ -447,76 +462,76 @@ string Service_Use_Cohort (A18).
 If Total_Cost = 0 Service_Use_Cohort = 'None'.
 
 If ((Psychiatry_Cost GT Maternity_Cost) and (Psychiatry_Cost GT Geriatric_Cost) and (Psychiatry_Cost GT Elective_Inpatient_Cost)  and
-   (Psychiatry_Cost GT Limited_Daycases_Cost) and (Psychiatry_Cost GT Single_Emergency_Cost) and (Psychiatry_Cost GT Multiple_Emergency_Cost) and
-   (Psychiatry_Cost GT Routine_Daycase_Cost) and (Psychiatry_Cost GT Prescribing_Cost) and (Psychiatry_Cost GT Outpatient_Cost) and
-   (Psychiatry_Cost GT AE2_Cost) and (Psychiatry_Cost GT Community_Care_Cost) and (Psychiatry_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Psychiatry'.
+    (Psychiatry_Cost GT Limited_Daycases_Cost) and (Psychiatry_Cost GT Single_Emergency_Cost) and (Psychiatry_Cost GT Multiple_Emergency_Cost) and
+    (Psychiatry_Cost GT Routine_Daycase_Cost) and (Psychiatry_Cost GT Prescribing_Cost) and (Psychiatry_Cost GT Outpatient_Cost) and
+    (Psychiatry_Cost GT AE2_Cost) and (Psychiatry_Cost GT Community_Care_Cost) and (Psychiatry_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Psychiatry'.
 
 If ((Maternity_Cost GT Psychiatry_Cost) and (Maternity_Cost GT Geriatric_Cost) and (Maternity_Cost GT Elective_Inpatient_Cost) and
-   (Maternity_Cost GT Limited_Daycases_Cost) and (Maternity_Cost GT Single_Emergency_Cost) and (Maternity_Cost GT Multiple_Emergency_Cost) and
-   (Maternity_Cost GT Routine_Daycase_Cost) and (Maternity_Cost GT Prescribing_Cost) and (Maternity_Cost GT Outpatient_Cost) and
-   (Maternity_Cost GT AE2_Cost) and (Maternity_Cost GT Community_Care_Cost) and (Maternity_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Maternity'.
+    (Maternity_Cost GT Limited_Daycases_Cost) and (Maternity_Cost GT Single_Emergency_Cost) and (Maternity_Cost GT Multiple_Emergency_Cost) and
+    (Maternity_Cost GT Routine_Daycase_Cost) and (Maternity_Cost GT Prescribing_Cost) and (Maternity_Cost GT Outpatient_Cost) and
+    (Maternity_Cost GT AE2_Cost) and (Maternity_Cost GT Community_Care_Cost) and (Maternity_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Maternity'.
 
 If ((Geriatric_Cost GE Psychiatry_Cost) and (Geriatric_Cost GT Maternity_Cost) and (Geriatric_Cost GT Elective_Inpatient_Cost) and
-   (Geriatric_Cost GT Limited_Daycases_Cost) and (Geriatric_Cost GT Single_Emergency_Cost) and (Geriatric_Cost GT Multiple_Emergency_Cost) and
-   (Geriatric_Cost GT Routine_Daycase_Cost) and (Geriatric_Cost GT Prescribing_Cost) and (Geriatric_Cost GT Outpatient_Cost) and
-   (Geriatric_Cost GT AE2_Cost) and (Geriatric_Cost GT Community_Care_Cost) and (Geriatric_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Geriatric'.
+    (Geriatric_Cost GT Limited_Daycases_Cost) and (Geriatric_Cost GT Single_Emergency_Cost) and (Geriatric_Cost GT Multiple_Emergency_Cost) and
+    (Geriatric_Cost GT Routine_Daycase_Cost) and (Geriatric_Cost GT Prescribing_Cost) and (Geriatric_Cost GT Outpatient_Cost) and
+    (Geriatric_Cost GT AE2_Cost) and (Geriatric_Cost GT Community_Care_Cost) and (Geriatric_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Geriatric'.
 
 If ((Elective_Inpatient_Cost GT Psychiatry_Cost) and (Elective_Inpatient_Cost GT Maternity_Cost) and (Elective_Inpatient_Cost GT Geriatric_Cost) and
-   (Elective_Inpatient_Cost GT Limited_Daycases_Cost) and (Elective_Inpatient_Cost GT Single_Emergency_Cost) and
-   (Elective_Inpatient_Cost GT Multiple_Emergency_Cost) and (Elective_Inpatient_Cost GT Routine_Daycase_Cost) and
-   (Elective_Inpatient_Cost GT Prescribing_Cost) and (Elective_Inpatient_Cost GT Outpatient_Cost) and (Elective_Inpatient_Cost GT AE2_Cost) and
-   (Elective_Inpatient_Cost GT Community_Care_Cost) and (Elective_Inpatient_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Elective Inpatient'.
+    (Elective_Inpatient_Cost GT Limited_Daycases_Cost) and (Elective_Inpatient_Cost GT Single_Emergency_Cost) and
+    (Elective_Inpatient_Cost GT Multiple_Emergency_Cost) and (Elective_Inpatient_Cost GT Routine_Daycase_Cost) and
+    (Elective_Inpatient_Cost GT Prescribing_Cost) and (Elective_Inpatient_Cost GT Outpatient_Cost) and (Elective_Inpatient_Cost GT AE2_Cost) and
+    (Elective_Inpatient_Cost GT Community_Care_Cost) and (Elective_Inpatient_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Elective Inpatient'.
 
 If ((Limited_Daycases_Cost GT Psychiatry_Cost) and (Limited_Daycases_Cost GT Maternity_Cost) and (Limited_Daycases_Cost GT Geriatric_Cost) and
-   (Limited_Daycases_Cost GT Elective_Inpatient_Cost) and (Limited_Daycases_Cost GT Single_Emergency_Cost) and
-   (Limited_Daycases_Cost GT Multiple_Emergency_Cost) and (Limited_Daycases_Cost GT Routine_Daycase_Cost) and
-   (Limited_Daycases_Cost GT Prescribing_Cost) and (Limited_Daycases_Cost GT Outpatient_Cost) and (Limited_Daycases_Cost GT AE2_Cost) and
-   (Limited_Daycases_Cost GT Community_Care_Cost) and (Limited_Daycases_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Limited Daycases'.
+    (Limited_Daycases_Cost GT Elective_Inpatient_Cost) and (Limited_Daycases_Cost GT Single_Emergency_Cost) and
+    (Limited_Daycases_Cost GT Multiple_Emergency_Cost) and (Limited_Daycases_Cost GT Routine_Daycase_Cost) and
+    (Limited_Daycases_Cost GT Prescribing_Cost) and (Limited_Daycases_Cost GT Outpatient_Cost) and (Limited_Daycases_Cost GT AE2_Cost) and
+    (Limited_Daycases_Cost GT Community_Care_Cost) and (Limited_Daycases_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Limited Daycases'.
 
 If ((Routine_Daycase_Cost GT Psychiatry_Cost) and (Routine_Daycase_Cost GT Maternity_Cost) and (Routine_Daycase_Cost GT Geriatric_Cost) and
-   (Routine_Daycase_Cost GT Elective_Inpatient_Cost) and (Routine_Daycase_Cost GT Limited_Daycases_Cost) and
-   (Routine_Daycase_Cost GT Single_Emergency_Cost) and (Routine_Daycase_Cost GT Multiple_Emergency_Cost) and
-   (Routine_Daycase_Cost GT Prescribing_Cost) and (Routine_Daycase_Cost GE Outpatient_Cost) and (Routine_Daycase_Cost GT AE2_Cost) and
-   (Routine_Daycase_Cost GT Community_Care_Cost) and (Routine_Daycase_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Routine Daycase'.
+    (Routine_Daycase_Cost GT Elective_Inpatient_Cost) and (Routine_Daycase_Cost GT Limited_Daycases_Cost) and
+    (Routine_Daycase_Cost GT Single_Emergency_Cost) and (Routine_Daycase_Cost GT Multiple_Emergency_Cost) and
+    (Routine_Daycase_Cost GT Prescribing_Cost) and (Routine_Daycase_Cost GE Outpatient_Cost) and (Routine_Daycase_Cost GT AE2_Cost) and
+    (Routine_Daycase_Cost GT Community_Care_Cost) and (Routine_Daycase_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Routine Daycase'.
 
 If ((Single_Emergency_Cost GT Psychiatry_Cost) and (Single_Emergency_Cost GT Maternity_Cost) and (Single_Emergency_Cost GT Geriatric_Cost) and
-   (Single_Emergency_Cost GT Elective_Inpatient_Cost) and (Single_Emergency_Cost GT Limited_Daycases_Cost) and
-   (Single_Emergency_Cost GT Multiple_Emergency_Cost) and (Single_Emergency_Cost GT Routine_Daycase_Cost) and
-   (Single_Emergency_Cost GT Prescribing_Cost) and (Single_Emergency_Cost GT Outpatient_Cost) and (Single_Emergency_Cost GT AE2_Cost) and
-   (Single_Emergency_Cost GT Community_Care_Cost) and (Single_Emergency_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Single Emergency'.
+    (Single_Emergency_Cost GT Elective_Inpatient_Cost) and (Single_Emergency_Cost GT Limited_Daycases_Cost) and
+    (Single_Emergency_Cost GT Multiple_Emergency_Cost) and (Single_Emergency_Cost GT Routine_Daycase_Cost) and
+    (Single_Emergency_Cost GT Prescribing_Cost) and (Single_Emergency_Cost GT Outpatient_Cost) and (Single_Emergency_Cost GT AE2_Cost) and
+    (Single_Emergency_Cost GT Community_Care_Cost) and (Single_Emergency_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Single Emergency'.
 
 If ((Multiple_Emergency_Cost GT Psychiatry_Cost) and (Multiple_Emergency_Cost GT Maternity_Cost) and (Multiple_Emergency_Cost GT Geriatric_Cost) and
-   (Multiple_Emergency_Cost GT Elective_Inpatient_Cost) and (Multiple_Emergency_Cost GT Limited_Daycases_Cost) and
-   (Multiple_Emergency_Cost GT Single_Emergency_Cost) and (Multiple_Emergency_Cost GT Routine_Daycase_Cost) and
-   (Multiple_Emergency_Cost GT Prescribing_Cost) and (Multiple_Emergency_Cost GT Outpatient_Cost) and (Multiple_Emergency_Cost GT AE2_Cost) and
-   (Multiple_Emergency_Cost GT Community_Care_Cost) and (Multiple_Emergency_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Multiple Emergency'.
+    (Multiple_Emergency_Cost GT Elective_Inpatient_Cost) and (Multiple_Emergency_Cost GT Limited_Daycases_Cost) and
+    (Multiple_Emergency_Cost GT Single_Emergency_Cost) and (Multiple_Emergency_Cost GT Routine_Daycase_Cost) and
+    (Multiple_Emergency_Cost GT Prescribing_Cost) and (Multiple_Emergency_Cost GT Outpatient_Cost) and (Multiple_Emergency_Cost GT AE2_Cost) and
+    (Multiple_Emergency_Cost GT Community_Care_Cost) and (Multiple_Emergency_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Multiple Emergency'.
 
 If ((Prescribing_Cost GT Psychiatry_Cost) and (Prescribing_Cost GT Maternity_Cost) and (Prescribing_Cost GT Geriatric_Cost) and
-   (Prescribing_Cost GT Elective_Inpatient_Cost) and (Prescribing_Cost GT Limited_Daycases_Cost) and (Prescribing_Cost GT Single_Emergency_Cost) and
-   (Prescribing_Cost GT Multiple_Emergency_Cost) and (Prescribing_Cost GT Routine_Daycase_Cost) and (Prescribing_Cost GT Outpatient_Cost) and
-   (Prescribing_Cost GT AE2_Cost) and (Prescribing_Cost GT Community_Care_Cost) and (Prescribing_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Prescribing'.
+    (Prescribing_Cost GT Elective_Inpatient_Cost) and (Prescribing_Cost GT Limited_Daycases_Cost) and (Prescribing_Cost GT Single_Emergency_Cost) and
+    (Prescribing_Cost GT Multiple_Emergency_Cost) and (Prescribing_Cost GT Routine_Daycase_Cost) and (Prescribing_Cost GT Outpatient_Cost) and
+    (Prescribing_Cost GT AE2_Cost) and (Prescribing_Cost GT Community_Care_Cost) and (Prescribing_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Prescribing'.
 
 If ((Outpatient_Cost GT Psychiatry_Cost) and (Outpatient_Cost GT Maternity_Cost) and (Outpatient_Cost GT Geriatric_Cost) and
-   (Outpatient_Cost GT Elective_Inpatient_Cost) and (Outpatient_Cost GT Limited_Daycases_Cost) and (Outpatient_Cost GT Single_Emergency_Cost) and
-   (Outpatient_Cost GT Multiple_Emergency_Cost) and (Outpatient_Cost GT Routine_Daycase_Cost) and (Outpatient_Cost GT Prescribing_Cost) and
-   (Outpatient_Cost GT AE2_Cost) and (Outpatient_Cost GT Community_Care_Cost) and (Outpatient_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Outpatients'.
+    (Outpatient_Cost GT Elective_Inpatient_Cost) and (Outpatient_Cost GT Limited_Daycases_Cost) and (Outpatient_Cost GT Single_Emergency_Cost) and
+    (Outpatient_Cost GT Multiple_Emergency_Cost) and (Outpatient_Cost GT Routine_Daycase_Cost) and (Outpatient_Cost GT Prescribing_Cost) and
+    (Outpatient_Cost GT AE2_Cost) and (Outpatient_Cost GT Community_Care_Cost) and (Outpatient_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Outpatients'.
 
 If ((Community_Care_Cost GT Psychiatry_Cost) and (Community_Care_Cost GT Maternity_Cost) and (Community_Care_Cost GT Geriatric_Cost) and
-   (Community_Care_Cost GT Elective_Inpatient_Cost) and (Community_Care_Cost GT Limited_Daycases_Cost) and
-   (Community_Care_Cost GT Single_Emergency_Cost) and (Community_Care_Cost GT Multiple_Emergency_Cost) and
-   (Community_Care_Cost GT Routine_Daycase_Cost) and (Community_Care_Cost GT Prescribing_Cost) and (Community_Care_Cost GT Outpatient_Cost) and
-   (Community_Care_Cost GT AE2_Cost) and (Community_Care_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Community Care'.
+    (Community_Care_Cost GT Elective_Inpatient_Cost) and (Community_Care_Cost GT Limited_Daycases_Cost) and
+    (Community_Care_Cost GT Single_Emergency_Cost) and (Community_Care_Cost GT Multiple_Emergency_Cost) and
+    (Community_Care_Cost GT Routine_Daycase_Cost) and (Community_Care_Cost GT Prescribing_Cost) and (Community_Care_Cost GT Outpatient_Cost) and
+    (Community_Care_Cost GT AE2_Cost) and (Community_Care_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Community Care'.
 
 If ((AE2_Cost GT Psychiatry_Cost) and (AE2_Cost GT Maternity_Cost) and (AE2_Cost GT Geriatric_Cost) and (AE2_Cost GT Elective_Inpatient_Cost) and
-   (AE2_Cost GT Limited_Daycases_Cost) and (AE2_Cost GT Single_Emergency_Cost) and (AE2_Cost GT Multiple_Emergency_Cost) and
-   (AE2_Cost GT Routine_Daycase_Cost) and (AE2_Cost GT Outpatient_Cost) and (AE2_Cost GT Prescribing_Cost) and (AE2_Cost GT Community_Care_Cost) and
-   (AE2_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Unscheduled Care'.
+    (AE2_Cost GT Limited_Daycases_Cost) and (AE2_Cost GT Single_Emergency_Cost) and (AE2_Cost GT Multiple_Emergency_Cost) and
+    (AE2_Cost GT Routine_Daycase_Cost) and (AE2_Cost GT Outpatient_Cost) and (AE2_Cost GT Prescribing_Cost) and (AE2_Cost GT Community_Care_Cost) and
+    (AE2_Cost GT Residential_Care_Cost)) Service_Use_Cohort = 'Unscheduled Care'.
 
 If ((Residential_Care_Cost GT Psychiatry_Cost) and (Residential_Care_Cost GT Maternity_Cost) and (Residential_Care_Cost GT Geriatric_Cost) and
-   (Residential_Care_Cost GT Elective_Inpatient_Cost) and (Residential_Care_Cost GT Limited_Daycases_Cost) and
-   (Residential_Care_Cost GT Single_Emergency_Cost) and (Residential_Care_Cost GT Multiple_Emergency_Cost) and
-   (Residential_Care_Cost GT Routine_Daycase_Cost) and (Residential_Care_Cost GT Outpatient_Cost) and (Residential_Care_Cost GT Prescribing_Cost) and
-   (Residential_Care_Cost GT AE2_Cost) and (Residential_Care_Cost GT Community_Care_Cost)) Service_Use_Cohort = 'Residential Care'.
+    (Residential_Care_Cost GT Elective_Inpatient_Cost) and (Residential_Care_Cost GT Limited_Daycases_Cost) and
+    (Residential_Care_Cost GT Single_Emergency_Cost) and (Residential_Care_Cost GT Multiple_Emergency_Cost) and
+    (Residential_Care_Cost GT Routine_Daycase_Cost) and (Residential_Care_Cost GT Outpatient_Cost) and (Residential_Care_Cost GT Prescribing_Cost) and
+    (Residential_Care_Cost GT AE2_Cost) and (Residential_Care_Cost GT Community_Care_Cost)) Service_Use_Cohort = 'Residential Care'.
 
 If (Service_Use_Cohort = '') Service_Use_Cohort = 'Other'.
 
@@ -527,11 +542,11 @@ rename variables Service_Use_Cohort = Service_Use_Cohort.
 
 
 *2. add variable label (from AM).
-variable labels 
+variable labels
     Service_Use_Cohort 'Allocated based on main service type, i.e. where the highest proportion of health cost was spent in the financial year'.
 
 save outfile = !File + 'GP_Practice_Service_Use_Cohorts_' + !FY + '.zsav'
-   /keep CHI Service_Use_Cohort
-   /zcompressed.
+    /keep CHI Service_Use_Cohort
+    /zcompressed.
 
 get file= !File + 'GP_Practice_Service_Use_Cohorts_' + !FY + '.zsav'.
