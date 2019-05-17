@@ -45,6 +45,10 @@ Define !CSDRef()
     "SCTASK0089100"
 !EndDefine.
 
+Define !CSDExtractLoc()
+    !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), !Unquote(!Eval(!CSDRef))))
+!EndDefine.
+
 *******************************************************.
  * Source Lookups *
  * Should not need changing *
