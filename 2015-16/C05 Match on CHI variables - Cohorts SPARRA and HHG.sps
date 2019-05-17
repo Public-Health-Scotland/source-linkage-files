@@ -29,6 +29,10 @@ execute.
  * /table = !Extracts_Alt + "HHG/HHG-20" + !FY + ".zsav" 
    /Rename (UPI_Number = chi)
 
-Save Outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
+ * Make any variables which are missing.
+Numeric HHG_Start_FY HHG_End_FY (F2.0).
+
+save outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
    /zcompressed.
 
+get file= !File + "temp-source-episode-file-5-" + !FY + ".zsav".

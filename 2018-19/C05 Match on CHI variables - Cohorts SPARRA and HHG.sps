@@ -24,15 +24,10 @@ match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     HHG_SCORE = HHG_Start_FY
     /by CHI.
 
- *     /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
-    /Rename
-    UPI_Number = chi
-    SPARRA_RISK_SCORE = SPARRA_End_FY
+ * Make any variables which are missing.
+Numeric SPARRA_End_FY HHG_End_FY (F2.0).
 
- * HHG only for 201718 onwards.
- * /table = !Extracts_Alt + "HHG/HHG-20" + !FY + ".zsav" 
-   /Rename (UPI_Number = chi)
-
-Save Outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
    /zcompressed.
 
+get file= !File + "temp-source-episode-file-5-" + !FY + ".zsav".
