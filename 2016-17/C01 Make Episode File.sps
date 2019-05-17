@@ -5,7 +5,7 @@
 
 
 ********************************************************************************************************.
- * Run 01-Set up Macros first!.
+* Run 01-Set up Macros first!.
 ********************************************************************************************************.
 
 * Bring all the data sets together.
@@ -17,10 +17,10 @@ add files
     /file = !File + "aande_for_source-20" + !FY + ".zsav"
     /file = !File + "deaths_for_source-20" + !FY + ".zsav"
     /file = !File + "DN_for_source-20" + !FY + ".zsav"
-    /file = !File + 'CMH_for_source-20' + !FY + '.zsav'
     /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
+    /file = !File + "CMH_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -28,72 +28,74 @@ add files
 
 * Check that all CHIs are valid.
 Do if chi ne "".
-   Do Repeat Digit = #Digit.1 to #Digit.9
-      /Position = 1 to 9.
-      Compute Digit = Number(char.substr(chi, Position, 1), F1.0) * (11 - Position).
-   End Repeat.
+    Do Repeat Digit = #Digit.1 to #Digit.9
+        /Position = 1 to 9.
+        Compute Digit = Number(char.substr(chi, Position, 1), F1.0) * (11 - Position).
+    End Repeat.
 
-   Numeric #Check_digit Valid_CHI (F1.0).
-   Compute #Check_digit = Mod(11 - Mod(Sum(#Digit.1 to #Digit.9), 11), 11).
+    Numeric #Check_digit Valid_CHI (F1.0).
+    Compute #Check_digit = Mod(11 - Mod(Sum(#Digit.1 to #Digit.9), 11), 11).
 
-   Do If #Check_digit = 10.
-      Compute Valid_CHI = 0.
-   Else If #Check_digit = Number(char.substr(chi, 10, 1), F1.0).
-      Compute Valid_CHI = 1.
-   Else.
-      Compute Valid_CHI = 0.
-   End if.
+    Do If #Check_digit = 10.
+        Compute Valid_CHI = 0.
+    Else If #Check_digit = Number(char.substr(chi, 10, 1), F1.0).
+        Compute Valid_CHI = 1.
+    Else.
+        Compute Valid_CHI = 0.
+    End if.
 
-   Do if Valid_CHI = 1 AND
-      (Number(char.Substr(chi, 1, 2), F2.0) > 31 OR
-      Number(char.Substr(chi, 3, 2), F2.0) > 12).
-      Compute Valid_CHI = 2.
-   End if.
+    Do if Valid_CHI = 1 AND
+        (Number(char.Substr(chi, 1, 2), F2.0) > 31 OR
+        Number(char.Substr(chi, 3, 2), F2.0) > 12).
+        Compute Valid_CHI = 2.
+    End if.
 End if.
 
 Value labels Valid_CHI
-   0 "Invalid check digit"
-   1 "Valid CHI"
-   2 "Impossible DoB in CHI".
+    0 "Invalid check digit"
+    1 "Valid CHI"
+    2 "Impossible DoB in CHI".
 
 Frequencies Valid_CHI.
 
- * If it's not valid then set it to blank as it's no good for linking.
+* If it's not valid then set it to blank as it's no good for linking.
 If any(Valid_CHI, 0, 2) chi = "".
 
- * Create keydates as date variables.
+* Create keydates as date variables.
 Compute keydate1_dateformat = DATE.DMY(Mod(record_keydate1, 100), Trunc(Mod(record_keydate1, 10000) / 100), Trunc(record_keydate1 / 10000)).
 
- * Deal with empty end dates.
+* Deal with empty end dates.
 Do if SysMiss(record_keydate2).
     Compute keydate2_dateformat = $sysmis.
 Else.
     Compute keydate2_dateformat = DATE.DMY(Mod(record_keydate2, 100), Trunc(Mod(record_keydate2, 10000) / 100), Trunc(record_keydate2 / 10000)).
 End if.
 
- * Make them look nice.
+* Make them look nice.
 Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
-* Set the type of admission for Maternity records to 42.
+* Set the type of admission for Maternity records here as the varaible isn't included in the datmart.
 If (recid = "02B") tadm = "42".
+* Correct for home births.
+If (recid = "02B" and mpat = "0") tadm = "41".
 
 * Populate SMRType for non-acute records (note GLS is included in the acute program).
-Do If (recid = "02B" and (any(mpat, "1", "3", "5", "7", "A") or discondition = 3)).
-   Compute SMRType = "Matern-IP".
+Do If (recid = "02B" and any(mpat, "1", "3", "5", "7", "A")).
+    Compute SMRType = "Matern-IP".
 Else If (recid = "02B" and any(mpat, "2", "4", "6")).
-   Compute SMRType = "Matern-DC".
+    Compute SMRType = "Matern-DC".
 Else if (recid = "02B" and mpat = "0").
     Compute SMRType = "Matern-HB".
 Else If (recid = "04B").
-   Compute SMRType = "Psych-IP".
+    Compute SMRType = "Psych-IP".
 Else If (recid = "00B").
-   Compute SMRType = "Outpatient".
+    Compute SMRType = "Outpatient".
 Else If (recid = "AE2").
-   Compute SMRType = "A & E".
+    Compute SMRType = "A & E".
 Else If (recid = "PIS").
-   Compute SMRType = "PIS".
+    Compute SMRType = "PIS".
 Else If (recid = "NRS").
-   Compute SMRType = "NRS Deaths".
+    Compute SMRType = "NRS Deaths".
 End If.
 frequencies SMRType.
 
@@ -106,22 +108,26 @@ Alter Type uri (F8.0).
 
 *apply newpattype_CIS logic to all records with a valid CHI number.
 Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
-   Do If Range(newcis_admtype, "10", "19") AND newcis_admtype NE "18".
-      Compute newpattype_cis = "Elective".
-   Else If Range(newcis_admtype, "20", "22", "30", "39") OR newcis_admtype = "18".
-      Compute newpattype_cis = "Non-Elective".
-   Else If any(newcis_admtype, "41", "42").
-      Compute newpattype_cis = "Maternity".
-   Else If Any(newcis_admtype, "40", "48", "Un", "99").
-      Compute newpattype_cis = "Other".
-   End If.
+    Do If Range(newcis_admtype, "10", "19") AND newcis_admtype NE "18".
+        Compute newpattype_cis = "Elective".
+        Compute newpattype_ciscode = 1.
+    Else If Range(newcis_admtype, "20", "22", "30", "39") OR newcis_admtype = "18".
+        Compute newpattype_cis = "Non-Elective".
+        Compute newpattype_ciscode = 0.
+    Else If any(newcis_admtype, "41", "42").
+        Compute newpattype_cis = "Maternity".
+        Compute newpattype_ciscode = 2.
+    Else If Any(newcis_admtype, "40", "48", "Un", "99").
+        Compute newpattype_cis = "Other".
+        Compute newpattype_ciscode = $sysmis.
+    End If.
 End If.
 
 
 ********************** Temporarily work on CIS only records ***************************.
 
-sort cases by CHI cis_marker record_keydate1 record_keydate2.
- * Only work on records that have a CIS marker, save out others.
+sort cases by CHI record_keydate1 record_keydate2.
+* Only work on records that have a CIS marker, save out others.
 temporary.
 select if not(any(recid, "01B", "04B", "GLS", "02B")).
 save outfile = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
@@ -130,32 +136,40 @@ save outfile = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
 select if any(recid, "01B", "04B", "GLS", "02B").
 
 * Fill in the blank CIS markers.
-do if (chi ne lag(chi)) AND cis_marker eq ' ' AND chi ne ' '.
-   compute cis_marker= '1'.
+do if (chi ne lag(chi)) AND cis_marker = "" AND chi NE "".
+    compute cis_marker= "1".
 end if.
 
- * Populate ipdc for maternity records.
+* Populate ipdc for maternity records.
 Do if SMRType = "Matern-IP".
     Compute ipdc = "I".
 Else if SMRType = "Matern-DC".
     Compute  ipdc = "D".
 End if.
 
- * Tidy up newcis_ipdc.
+* Tidy up newcis_ipdc.
 Do if chi NE "" and newcis_ipdc = "".
     if ipdc = "I" newcis_ipdc = "I".
     if (recid = "01B" and ipdc = "D") newcis_ipdc = "D".
 End if.
 
- * reset the newcis variables after the above.
+* Reset the newcis variables after the above.
+* And add dates for the start and end of the CIJ.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
-    /Presorted
     /break CHI cis_marker
     /newcis_ipdc = max(newcis_ipdc)
     /newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec = First(newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec)
-    /CIJdis_spec = last(CIJdis_spec).
+    /CIJdis_spec = last(CIJdis_spec)
+    /CIJ_start_date = Min(keydate1_dateformat)
+    /CIJ_end_date = Max(keydate2_dateformat).
 
- * All records with a CHI should now have a valid CIS marker.
+ * Clean up.
+Do if cis_marker = "".
+    Compute CIJ_start_date = $sysmis.
+    Compute CIJ_end_date = $sysmis.
+End if.
+
+* All records with a CHI should now have a valid CIS marker.
 Temporary.
 select if chi ne "".
 crosstabs recid by cis_marker.
@@ -180,11 +194,11 @@ If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 
 ************** Correct the postcodes that have 6 characters instead of 7.
 Do If Length(Postcode) = 6.
-   Compute Postcode = Concat(char.substr(Postcode, 1, 3), " ", char.substr(Postcode, 4, 3)).
+    Compute Postcode = Concat(char.substr(Postcode, 1, 3), " ", char.substr(Postcode, 4, 3)).
 End If.
 
- * Create a Flag for PPA (Potentially Preventable Admissions).
- 
+* Create a Flag for PPA (Potentially Preventable Admissions).
+
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
     * First record in CIS.
@@ -193,7 +207,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
         Do if newpattype_cis = "Non-Elective".
             Compute PPA = 0.
             * Initialise PPA flag for relevant records.
-            
+
 
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
@@ -355,9 +369,8 @@ get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
 * Housekeeping.
 Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
 
- * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !File + "Activity.zip' " + 
-    "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
+* Zip all activity (this doesn't really save any space but tidies things up for now).
+Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
@@ -366,8 +379,8 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " +
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "' " + 
-    "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "'"].
+    "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
 
