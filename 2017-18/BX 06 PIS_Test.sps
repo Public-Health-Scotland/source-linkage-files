@@ -26,21 +26,23 @@ aggregate outfile = SLFnew
     /Males Females = Sum(Male Female)
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
+    /mean_dispensed = Mean(no_dispensed_items)
+    /mean_cost = Mean(cost_total_net)
     /n_dispensed = Sum(no_dispensed_items)
     /Total_Costs_net = Sum(cost_total_net).
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to cost_total_net
+    /Make New_Value from n_CHIs to Total_Costs_net
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI gender dob postcode hbrescode LCA gpprac age cost_total_net yearstay stay.
-select if recid = '01B'.
+    /Keep recid Anon_CHI gender dob postcode hbrescode LCA gpprac age cost_total_net yearstay stay no_dispensed_items.
+select if recid = 'PIS'.
 
  * Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -64,15 +66,16 @@ aggregate outfile = SLFexisting
     /break
     /n_CHIs = sum(Has_CHI)
     /Males Females = Sum(Male Female)
-    /MeanAge = mean(age)
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
+    /mean_dispensed = Mean(no_dispensed_items)
+    /mean_cost = Mean(cost_total_net)
     /n_dispensed = Sum(no_dispensed_items)
     /Total_Costs_net = Sum(cost_total_net).
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to cost_total_net
+    /Make Existing_Value from n_CHIs to Total_Costs_net
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
