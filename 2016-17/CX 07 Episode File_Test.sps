@@ -94,8 +94,7 @@ do repeat var = Num_episodes to Mar_cost
         Compute diff = ((lag(var) - var) / var) * 100.
     End if.
 End repeat.
-
-
+Alter type pct_diff.1 to pct_diff.36 (F6.4).
 
 ***************************************.
 
@@ -117,6 +116,7 @@ do repeat var = Num_episodes to Mar_cost
         Compute diff = ((lag(var) - var) / var) * 100.
     End if.
 End repeat.
+Alter type pct_diff.1 to pct_diff.36 (F6.4).
 
 
 
