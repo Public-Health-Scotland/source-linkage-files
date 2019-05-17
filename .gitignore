@@ -9,3 +9,10 @@
 
 #Ignore SPSS job files
 *.spj
+
+
+#Ignore MS Office files
+*.xls
+*.xlsx
+*.doc
+*.docx
