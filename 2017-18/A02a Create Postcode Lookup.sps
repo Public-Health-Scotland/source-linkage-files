@@ -25,9 +25,9 @@ match files
 
 Recode Locality ("" = "No Locality Information").
 
- * Use CA2011 to produce the 2-char LCA codes.
+ * Use Council Area variable to produce the 2-char LCA codes.
 String LCA (A2).
-!CA2011toLCA.
+!CAtoLCA.
 !AddLCADictionaryInfo LCA = LCA.
 
  * Add Variable labels.

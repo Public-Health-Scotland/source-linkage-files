@@ -82,15 +82,19 @@ add files
     /file = Oldbyrecid
     /In = Old
     /By Year recid.
+Dataset Name RecidCompare.
+Dataset Close Newbyrecid.
+Dataset Close Oldbyrecid.
 
+Dataset Activate RecidCompare.
 do repeat var = Num_episodes to Mar_cost
-    /num = var.1 to var.36.
+    /diff = pct_diff.1 to pct_diff.36.
 
     Do if Old = 1.
-        Compute num = ((lag(var) - var) / var) * 100.
+        Compute diff = ((lag(var) - var) / var) * 100.
     End if.
 End repeat.
-
+Alter type pct_diff.1 to pct_diff.36 (F6.4).
 
 ***************************************.
 
@@ -100,14 +104,19 @@ add files
     /file = OldbyLCA
     /In = Old
     /By Year LCA.
+Dataset Name LCACompare.
+Dataset Close NewbyLCA.
+Dataset Close OldbyLCA.
 
+Dataset Activate LCACompare.
 do repeat var = Num_episodes to Mar_cost
-    /num = var.1 to var.36.
+    /diff = pct_diff.1 to pct_diff.36.
 
     Do if Old = 1.
-        Compute num = ((lag(var) - var) / var) * 100.
+        Compute diff = ((lag(var) - var) / var) * 100.
     End if.
-
 End repeat.
+Alter type pct_diff.1 to pct_diff.36 (F6.4).
+
 
 

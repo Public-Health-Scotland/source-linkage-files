@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Dec18DD_LinkageFile.zsav".
+get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Mar19DD_LinkageFile.zsav".
 
 Rename Variables
    HealthLocationCode = location
@@ -90,6 +90,9 @@ Else If la = "Comhairle nan Eilean Siar".
    Compute DD_Responsible_LCA = "32".
 End If.
 
+!AddLCADictionaryInfo LCA = DD_Responsible_LCA.
+Crosstabs DD_Responsible_LCA by LA.
+
 * Recode the hb treat code to match source.
 String hbtreatcode (A9).
 Do If hb = "NHS Ayrshire & Arran".
@@ -121,6 +124,9 @@ Else If hb = "NHS Tayside".
 Else If hb = "NHS Western Isles".
    Compute hbtreatcode = "S08000028".
 End If.
+
+!AddHBDictionaryInfo HB = hbtreatcode.
+crosstabs hbtreatcode by HB.
 
 *Add labels to Delay end reason.
 alter type Delay_End_Reason (F1.0).

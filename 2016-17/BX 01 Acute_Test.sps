@@ -1,81 +1,107 @@
 ﻿* Encoding: UTF-8.
 
 *Tests for acute dataset.
-*to check for records that are admitted more than 2 years and records that are discharged after the FY2016.
 get file = !file + 'acute_for_source-20' + !FY + '.zsav'.
-if record_keydate2 gt 20170331 Flag_keydate2 = 1.
-if record_keydate1 lt 20140401 Flag_keydate1 = 1.
 
-Select if  Flag_keydate2 = 1 or Flag_keydate1 = 1.
-Execute.
+ * Flag to count CHIs.
+Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
 
-*One record with admission in 1997.
-*To check aggregated data variations with the existing SLF 2016/17 data.
+ * Flags to count M/Fs.
+Do if gender = 1.
+    Compute Male = 1.
+Else if gender = 2.
+    Compute Female = 1.
+End if.
 
-get file = !file + 'acute_for_source-20' + + '.zsav'.
+ * Flags to count missing values.
+If sysmis(dob) No_DoB = 1.
 
-Dataset name SLFcurrent.
-Compute Pre_Cost = sum(apr_cost to mar_cost).
-Compute beddays = sum(apr_beddays to mar_beddays).
+if postcode = "" No_Postcode = 1.
+if hbrescode = "" No_HB = 1.
+if LCA = "" No_LCA = 1.
+if sysmis(gpprac) No_GPprac = 1.
 
-aggregate outfile = *
-  /presorted
-  /break year
-  /no_records = n
-  /Pre_Cost = sum(Pre_Cost)
-  /beddays = sum(beddays)
-  /Total_Costs_net = Sum(cost_total_net)
-  /Total_yearstay = Sum(yearstay)
-  /Total_stay = Sum(stay).
+ * Get values for whole file.
+Dataset Declare SLFnew.
+aggregate outfile = SLFnew
+    /break
+    /n_CHIs = sum(Has_CHI)
+    /Males Females = Sum(Male Female)
+    /MeanAge = mean(age)
+    /No_Postcode No_HB No_LCA No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
+    /n_episodes = n
+    /Total_Costs_net = Sum(cost_total_net)
+    /Total_yearstay = Sum(yearstay)
+    /Total_stay = Sum(stay).
 
-Dataset name SLFcurrent.
-Dataset activate SLFcurrent.
-alter type year(A6).
+ * Restructure for easy analysis and viewing.
+Dataset activate SLFnew.
+Varstocases
+    /Make New_Value from n_CHIs to Total_stay
+    /Index Measure (New_Value).
+Sort cases by Measure.
+*************************************************************************************************************.
 
-
-get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'.
+*************************************************************************************************************.
+get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
+    /Keep recid Anon_CHI gender dob postcode hbrescode LCA gpprac age cost_total_net yearstay stay.
 select if recid = '01B'.
 
-Dataset name SLFprevious.
-Compute Pre_Cost = sum(apr_cost to mar_cost).
-Compute beddays = sum(apr_beddays to mar_beddays).
+ * Flag to count CHIs.
+Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
 
-aggregate outfile = *
-  /presorted
-  /break year
-  /no_records = n
-  /Pre_Cost = sum(Pre_Cost)
-  /beddays = sum(beddays)
-  /Total_Costs_net = Sum(cost_total_net)
-  /Total_yearstay = Sum(yearstay)
-  /Total_stay = Sum(stay).
+ * Flags to count M/Fs.
+Do if gender = 1.
+    Compute Male = 1.
+Else if gender = 2.
+    Compute Female = 1.
+End if.
 
-alter type year(A6).
-Dataset name SLFprevious.
+ * Flags to count missing values.
+If sysmis(dob) No_DoB = 1.
 
-add files file = SLFprevious
-  /file = SLFcurrent.
-exe.
-*Check % variations.
-Compute Costs_difference = (((Total_Costs_net - lag(Total_Costs_net)) / (lag(Total_Costs_net))) * 100).
-Compute Pre_cost_difference = (((Pre_cost - lag(Pre_cost)) / (lag(Pre_cost))) * 100).
-Compute beddays_difference = (((beddays - lag(beddays)) / (lag(beddays))) * 100).
-Compute yearstay_difference = (((Total_yearstay - lag(Total_yearstay)) / (lag (Total_yearstay))) * 100).
-Compute stay_difference = (((Total_stay - lag(Total_stay)) / (lag(Total_stay))) * 100).
-Compute no_records_difference = (((no_records - lag(no_records)) / (lag(no_records))) * 100).
+if postcode = "" No_Postcode = 1.
+if hbrescode = "" No_HB = 1.
+if LCA = "" No_LCA = 1.
+if sysmis(gpprac) No_GPprac = 1.
 
-Descriptives Costs_difference Pre_cost_difference beddays_difference yearstay_difference stay_difference no_records_difference.
+ * Get values for whole file.
+Dataset Declare SLFexisting.
+aggregate outfile = SLFexisting
+    /break
+    /n_CHIs = sum(Has_CHI)
+    /Males Females = Sum(Male Female)
+    /MeanAge = mean(age)
+    /No_Postcode No_HB No_LCA No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
+    /n_episodes = n
+    /Total_Costs_net = Sum(cost_total_net)
+    /Total_yearstay = Sum(yearstay)
+    /Total_stay = Sum(stay).
 
-*Flag differences with more than or equal to +/ -  15%.
-If ~Range((100 - abs(Costs_difference)), 85, 115) Flag_Costs_net_difference = 1.
-If ~Range((100 - abs(Pre_cost_difference)), 85, 115) Flag_Pre_cost_difference = 1.
-If ~Range((100 - abs(beddays_difference)), 85, 115) Flag_beddays_difference = 1.
-If ~Range((100 - abs(yearstay_difference)), 85, 115) Flag_yearstay_difference = 1 .
-If ~Range((100 - abs(stay_difference)), 85, 115) Flag_stay_difference = 1.
-If ~Range((100 - abs(no_records_difference)), 85, 115) Flag_records_difference = 1. 
+Dataset activate SLFexisting.
+Varstocases
+    /Make Existing_Value from n_CHIs to Total_stay
+    /Index Measure (Existing_Value).
+Sort cases by Measure.
+*************************************************************************************************************.
 
-frequencies Flag_Costs_net_difference Flag_Pre_cost_difference Flag_beddays_difference Flag_yearstay_difference Flag_stay_difference Flag_records_difference.
+*************************************************************************************************************.
+ * Match together.
+match files
+    /file = SLFexisting
+    /file = SLFnew
+    /By Measure.
+Dataset Name AcuteComparison.
 
-*Close both datasets.
-Dataset close SLFcurrent.
-Dataset close SLFprevious.
+ * Close both datasets.
+Dataset close SLFnew.
+Dataset close SLFexisting.
+
+ * Produce comparisons.
+Compute Difference = New_Value - Existing_Value.
+Compute PctChange = Difference / Existing_Value * 100.
+Compute Issue = (abs(PctChange) > 5).
+Alter Type Issue (F1.0) PctChange (PCT4.2).
+
+ * Highlight issues.
+Crosstabs Measure by Issue.

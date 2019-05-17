@@ -1,11 +1,5 @@
 ﻿* Encoding: UTF-8.
-* Produce NRS deaths extract in suitable format for PLICS.
-* Modified version of previous read in files used to create NRS data for PLICS.
-
 * Read in the deaths extract.  Rename/reformat/recode columns as appropriate.
-
-* Program by Denise Hastie, July 2016.
-
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -21,7 +15,6 @@ GET DATA  /TYPE=TXT
     /VARIABLES=
     PatUPI A10
     DateofDeath99 A10
-    DateDeathRegistered99 A10
     PatGenderCode F1.0
     PatDateOfBirthC A10
     GPpracticecode99 A5
@@ -31,63 +24,63 @@ GET DATA  /TYPE=TXT
     HSCPCode A9
     GeoDataZone2011 A9
     DeathLocationCode A5
-    PrimCauseofDeathCode4char A4
-    SecCauseofDeath0Code4char A4
-    SecCauseofDeath1Code4char A4
-    SecCauseofDeath2Code4char A4
-    SecCauseofDeath3Code4char A4
-    SecCauseofDeath4Code4char A4
-    SecCauseofDeath5Code4char A4
-    SecCauseofDeath6Code4char A4
-    SecCauseofDeath7Code4char A4
-    SecCauseofDeath8Code4char A4
-    SecCauseofDeath9Code4char A4
+    PrimCauseofDeathCode6char A6
+    SecCauseofDeath0Code6char A6
+    SecCauseofDeath1Code6char A6
+    SecCauseofDeath2Code6char A6
+    SecCauseofDeath3Code6char A6
+    SecCauseofDeath4Code6char A6
+    SecCauseofDeath5Code6char A6
+    SecCauseofDeath6Code6char A6
+    SecCauseofDeath7Code6char A6
+    SecCauseofDeath8Code6char A6
+    SecCauseofDeath9Code6char A6
     PostMortemCode A1
     PlaceDeathOccurredCode F1.0
     NHSBoardofOccurrenceCode A9
-    UniqueRecordIdentifier A8.
+    UniqueRecordIdentifier A11.
 CACHE.
+Execute.
 
 Rename Variables
+    DeathLocationCode = death_location_code
+    GeoCouncilAreaCode = lca
+    GeoDataZone2011 = DataZone
+    GeoPostcodeC = postcode
+    HSCPCode = HSCP
+    NHSBoardofOccurrenceCode = death_board_occurrence
+    NHSBoardofResidenceCode = hbrescode
     PatDateofBirthC = dob
-    DateDeathRegistered99 = Datedeath_GRO.
+    PatGenderCode = gender
+    PatUPI = chi
+    PlaceDeathOccurredCode = place_death_occurred
+    PostMortemCode = post_mortem
+    PrimCauseofDeathCode6char = deathdiag1
+    SecCauseofDeath0Code6char = deathdiag2
+    SecCauseofDeath1Code6char = deathdiag3
+    SecCauseofDeath2Code6char = deathdiag4
+    SecCauseofDeath3Code6char = deathdiag5
+    SecCauseofDeath4Code6char = deathdiag6
+    SecCauseofDeath5Code6char = deathdiag7
+    SecCauseofDeath6Code6char = deathdiag8
+    SecCauseofDeath7Code6char = deathdiag9
+    SecCauseofDeath8Code6char = deathdiag10
+    SecCauseofDeath9Code6char = deathdiag11
+    UniqueRecordIdentifier = uri
+    gppracticecode99 = gpprac.
 
-alter type dob Datedeath_GRO (SDate10).
-alter type dob Datedeath_GRO (Date12).
+alter type dob dateofdeath99 (SDate10).
+alter type dob (Date12).
 
-Numeric record_keydate1 record_keydate2 (F8.0).
-compute record_keydate1 = Number(concat(char.substr(dateofdeath99, 1, 4), char.substr(dateofdeath99, 6, 2), char.substr(dateofdeath99, 9, 2)), F8.0).
-compute record_keydate2 = record_keydate1.
+Rename Variables dateofdeath99 = record_keydate1.
+Numeric record_keydate2 (F8.0).
+Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
+Compute record_keydate2 = record_keydate1.
+Alter type record_keydate1 (F8.0).
 
 string recid (a3) year (a4).
 compute recid = 'NRS'.
 compute year = !FY.
-
-rename variables
-    PatUPI = chi
-    PatGenderCode = gender
-    GeoPostcodeC = postcode
-    NHSBoardofResidenceCode = hbrescode
-    GeoCouncilAreaCode = lca
-    HSCPCode = HSCP2016
-    GeoDataZone2011 = DataZone2011
-    PrimCauseofDeathCode4char = deathdiag1
-    SecCauseofDeath0Code4char = deathdiag2
-    SecCauseofDeath1Code4char = deathdiag3
-    SecCauseofDeath2Code4char = deathdiag4
-    SecCauseofDeath3Code4char = deathdiag5
-    SecCauseofDeath4Code4char = deathdiag6
-    SecCauseofDeath5Code4char = deathdiag7
-    SecCauseofDeath6Code4char = deathdiag8
-    SecCauseofDeath7Code4char = deathdiag9
-    SecCauseofDeath8Code4char = deathdiag10
-    SecCauseofDeath9Code4char = deathdiag11
-    PostMortemCode = post_mortem
-    PlaceDeathOccurredCode = place_death_occurred
-    DeathLocationCode = death_location_code
-    NHSBoardofOccurrenceCode = death_board_occurrence
-    gppracticecode99 = gpprac
-    UniqueRecordIdentifier = uri.
 
  * Recode GP Practice into a 5 digit number.
  * We assume that if it starts with a letter it's an English practice and so recode to 99995.
@@ -98,27 +91,29 @@ Alter Type GPprac (F5.0).
 
 sort cases by chi.
 
+Value Labels place_death_occurred
+    '0' "Home"
+    '1' "Farm"
+    '2' "Mine/Quarry"
+    '3' "Place of Industry"
+    '4' "Sport/Recreation Area"
+    '5' "Street/Highway"
+    '6' "Public Building"
+    '7' "Residential Institution"
+    '8' "Other Specified Place"
+    '9' "Unspecified".
+
+Value Labels post_mortem
+    '1' "Post mortem has been performed"
+    '2' "Post mortem may be performed"
+    '3' "Post mortem not proposed"
+    '4' "Post mortem proposed and performed later"
+    '5' "Post mortem proposed but no further information received"
+    '6' "Post mortem not proposed but performed later".
+
  * Save the main file out for source.
 save outfile = !file + 'deaths_for_source-20' + !FY + '.zsav'
-    /Drop Datedeath_GRO
     /zcompressed.
-
-********************************************.
- * Save out the extra file to fix dates if needed.
- * Only keep dates in this FY.
-Select if Datedeath_GRO GE Date.DMY(1, 4, Number(!altFY, F4.0)).
-
-aggregate outfile = *
-   /Break chi
-   /Datedeath_GRO = Max(Datedeath_GRO).
-
-Select if CHI ne "".
-
-save outfile = !File + "Death_Date_Registered-20" + !FY + ".zsav"
-   /zcompressed.
-
-get file = !File + "Death_Date_Registered-20" + !FY + ".zsav".
-*******************************************
 
 get file = !file + 'deaths_for_source-20' + !FY + '.zsav'.
 

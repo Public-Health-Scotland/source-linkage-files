@@ -45,6 +45,10 @@ Define !CSDRef()
     "SCTASK0089100"
 !EndDefine.
 
+Define !CSDExtractLoc()
+    !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), !Unquote(!Eval(!CSDRef))))
+!EndDefine.
+
 *******************************************************.
  * Source Lookups *
  * Should not need changing *
@@ -215,9 +219,10 @@ Apply Dictionary From !PCDir
 
  * Add extra non official labels.
 Add Value Labels !HB
-    'S08200004' "Outside UK"
+    'S08200001' "Outwith Scotland / RUK"
     'S08200002' "No Fixed Abode"
     'S08200003' "Not Known"
+    'S08200004' "Outside UK"
     'S27000001' "Non-NHS Provider/Location"
     'S27000002' "Not Applicable"
     'S08100001' "National Facility (e.g. GJNH)"

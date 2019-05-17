@@ -40,16 +40,16 @@ match files
  * Use CA2011 to produce the 2-char LCA codes.
 String LCA (A2).
  * These macros are defined in A02a, so this needs to be run before and in the same session as the following.
-!CA2011toLCA.
+!CAtoLCA.
 !AddLCADictionaryInfo LCA = LCA.
 
  * Sort by gpprac before saving.
 Sort cases by gpprac.
 
- * Save out, rename HB2014 for source, keep LCA etc. for others (Andrew Mooney).
+ * Save out, rename HB2018 for source, keep LCA etc. for others (Andrew Mooney).
 save outfile = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
-   /Rename (HB2014 = hbpraccode)
-   /Keep gpprac PC7 PC8 cluster hbpraccode HSCP2016 CA2011 LCA
+   /Rename (HB2018 = hbpraccode)
+   /Keep gpprac PC7 PC8 cluster hbpraccode HSCP2018 CA2018 LCA
    /zcompressed.
 
 get file = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav".

@@ -38,7 +38,7 @@ Rename Variables
     PatientDoBDate = dob
     PatientPostcode = postcode
     NHSBoardofResidenceCode9 = hbrescode
-    PatientHSCPCodeatEvent  = HSCP2016
+    PatientHSCPCodeatEvent  = HSCP
     PracticeCode = gpprac
     TreatmentNHSBoardCode9 = hbtreatcode.
 
@@ -97,7 +97,7 @@ save outfile = !file + 'CMH_for_source-20' + !FY + '.zsav'
     gpprac
     postcode
     hbrescode
-    HSCP2016
+    HSCP
     location
     hbtreatcode
     diag1
