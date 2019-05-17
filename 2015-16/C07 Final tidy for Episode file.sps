@@ -1,82 +1,70 @@
 ﻿* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
 
-variable labels
-    year "Year"
-    recid "Record Identifier"
-    record_keydate1 "Record Keydate 1"
-    record_keydate2 "Record Keydate 2"
-    keydate1_dateformat "Record Key date 1 in Date format"
-    keydate2_dateformat "Record Key date 2 in Date format"
-    keyTime1 "Record KeyTime 1"
-    keyTime2 "Record KeyTime 2"
-    SMRType "Record type"
-    chi "Community Health Index number"
-    gender "Gender"
-    dob "Date of Birth"
-    gpprac "GP Practice code"
-    hbpraccode "NHS Board of GP Practice"
-    postcode "7 character postcode"
-    hbrescode "NHS Board of Residence"
-    lca "Local Council Authority"
-    hbtreatcode "NHS Board of Treatment"
-    location "Treatment location code"
-    yearstay "Stay within year "
-    stay "Length of Stay"
-    ipdc "Inpatient/Day case marker"
-    spec "Specialty "
-    sigfac "Significant Facility"
-    conc "Consultant Code"
-    mpat "Management of Patient"
-    cat "Patient Category"
-    tadm "Type of Admission"
-    adtf "Admitted/Transferred from"
-    admloc "Admitted/Transferred from location"
-    oldtadm "Old Type of Admission"
-    disch "Discharge Type"
-    dischto "Discharged To"
-    dischloc "Discharged To Location"
-    diag1 "Main condition"
-    diag2 "Co-morbidity/other condition 1"
-    diag3 "Co-morbidity/other condition 2"
-    diag4 "Co-morbidity/other condition 3"
-    diag5 "Co-morbidity/other condition 4"
-    diag6 "Co-morbidity/other condition 5"
-    op1a "Main operation code (A part)"
-    op1b "Main operation code (B part)"
-    dateop1 "Date of Main Operation"
-    op2a "Other operation 1 (A Part)"
-    op2b "Other operation 1 (B Part)"
-    dateop2 "Date of Other operation 1"
-    op3a "Other operation 2 (A Part)"
-    op3b "Other operation 2 (B Part)"
-    dateop3 "Date of Other operation 2"
-    op4a "Other operation 3 (A Part)"
-    op4b "Other operation 3 (B Part)"
-    dateop4 "Date of Other operation 3"
-    smr01_cis "CIS marker from SMR01 record"
-    discondition "Condition on Discharge"
-    stadm "Status on Admission"
+Variable Labels
     adcon1 "Admission Condition 1"
     adcon2 "Admission Condition 2"
     adcon3 "Admission Condition 3"
     adcon4 "Admission Condition 4"
-    reftype "Referral Type"
-    refsource "Referral Source"
-    attendance_status "Attendance Status"
-    clinic_type "Clinic Type"
+    admloc "Admitted/Transferred from location"
+    adtf "Admitted/Transferred from"
+    ae_alcohol "Alcohol Involved"
     ae_arrivalmode "Arrival Mode"
     ae_attendcat "Attendance Category"
+    ae_bodyloc "Bodily Location"
     ae_disdest "Discharge Destination"
     ae_patflow "Patient Flow"
     ae_placeinc "Place Incident Occurred"
     ae_reasonwait "Reason for Wait"
-    ae_bodyloc "Bodily Location"
-    ae_alcohol "Alcohol Involved"
-    death_location_code "Death location"
+    age "Age of patient at midpoint of financial year"
+    alcohol_adm "Indicates alcohol related admission or attendance"
+    apr_beddays "Number of Bed days from episode in April"
+    apr_cost "Cost from episode in April"
+    arth "Arthritis Artherosis LTC marker"
+    arth_date "Arthritis Artherosis LTC incidence date"
+    asthma "Asthma LTC marker"
+    asthma_date "Asthma LTC incidence date"
+    atrialfib "Atrial Fibrillation LTC marker"
+    atrialfib_date "Atrial Fibrillation LTC incidence date"
+    attendance_status "Attendance Status"
+    aug_beddays "Number of Bed days from episode in August"
+    aug_cost "Cost from episode in August"
+    bloodbfo "Diseases of Blood and Blood Forming Organs LTC marker"
+    bloodbfo_date "Diseases of Blood and Blood Forming Organs LTC incidence date"
+    cancer "Cancer LTC marker"
+    cancer_date "Cancer LTC incidence date"
+    cat "Patient Category"
+    chd "Coronary heart disease (CHD) LTC marker"
+    chd_date "Coronary heart disease (CHD) LTC incidence date"
+    chi "Community Health Index number"
+    CIJadm_spec "Specialty on first record in CIJ"
+    CIJdis_spec "Specialty on last record in CIJ"
+    cis_marker "CIJ (Continuous Inpatient Journey) marker"
+    CIS_PPA "CIS episode that began in a Potentially Preventable Admission (PPA)"
+    clinic_type "Clinic Type"
+    Cluster "GP Practice cluster. Based on gpprac and are correct at time of update"
+    commhosp "Community Hospital flag"
+    conc "Consultant Code"
+    congen "Congenital Problems LTC marker"
+    congen_date "Congenital Problems LTC incidence date"
+    copd "Chronic Obstructive Pulmonary Disease (COPD) LTC marker"
+    copd_date "Chronic Obstructive Pulmonary Disease (COPD) LTC incidence date"
+    cost_total_net "Total Net Cost excluding Outpatient and OoH DNA costs"
+    Cost_Total_Net_incDNAs "Total Net Cost including Outpatient and OoH DNA costs"
+    cvd "Cardiovascular disease (CVD) LTC marker"
+    cvd_date "Cardiovascular disease (CVD) LTC incidence date"
+    dateop1 "Date of Main Operation"
+    dateop2 "Date of Other operation 1"
+    dateop3 "Date of Other operation 2"
+    dateop4 "Date of Other operation 3"
+    DD_Quality "Indication of how well a delay episode could be matched to a CIS episode"
+    DD_Responsible_LCA "Local Authority assigned responsibility for the delay"
     death_board_occurrence "NHS Board of Occurrence of death"
-    place_death_occurred "Place death occurred"
+    death_date "Derived Date of Death"
+    death_location_code "Death location"
     deathdiag1 "Main cause of death"
+    deathdiag10 "Secondary Cause 8"
+    deathdiag11 "Secondary Cause 9"
     deathdiag2 "Secondary Cause 0"
     deathdiag3 "Secondary Cause 1"
     deathdiag4 "Secondary Cause 2"
@@ -85,96 +73,112 @@ variable labels
     deathdiag7 "Secondary Cause 5"
     deathdiag8 "Secondary Cause 6"
     deathdiag9 "Secondary Cause 7"
-    deathdiag10 "Secondary Cause 8"
-    deathdiag11 "Secondary Cause 9"
-    age "Age of patient at midpoint of financial year"
-    cost_total_net "Total Net Cost excluding Outpatient and OoH DNA costs"
-    Cost_Total_Net_incDNAs "Total Net Cost including Outpatient and OoH DNA costs"
-    nhshosp "NHS Hospital flag"
-    apr_beddays "Number of Bed days from episode in April"
-    may_beddays "Number of Bed days from episode in May"
-    jun_beddays "Number of Bed days from episode in June"
-    jul_beddays "Number of Bed days from episode in July"
-    aug_beddays "Number of Bed days from episode in August"
-    sep_beddays "Number of Bed days from episode in September"
-    oct_beddays "Number of Bed days from episode in October"
-    nov_beddays "Number of Bed days from episode in November"
     dec_beddays "Number of Bed days from episode in December"
-    jan_beddays "Number of Bed days from episode in January"
-    feb_beddays "Number of Bed days from episode in February"
-    mar_beddays "Number of Bed days from episode in March"
-    apr_cost "Cost from episode in April"
-    may_cost "Cost from episode in May"
-    jun_cost "Cost from episode in June"
-    jul_cost "Cost from episode in July"
-    aug_cost "Cost from episode in August"
-    sep_cost "Cost from episode in September"
-    oct_cost "Cost from episode in October"
-    nov_cost "Cost from episode in November"
     dec_cost "Cost from episode in December"
-    jan_cost "Cost from episode in January"
+    deceased "Deceased flag"
+    dementia "Dementia LTC marker"
+    dementia_date "Dementia LTC incidence date"
+    diabetes "Diabetes LTC marker"
+    diabetes_date "Diabetes LTC incidence date"
+    diag1 "Main condition"
+    diag2 "Co-morbidity/other condition 1"
+    diag3 "Co-morbidity/other condition 2"
+    diag4 "Co-morbidity/other condition 3"
+    diag5 "Co-morbidity/other condition 4"
+    diag6 "Co-morbidity/other condition 5"
+    digestive "Other Diseases of Digestive System LTC marker"
+    digestive_date "Other Diseases of Digestive System LTC incidence date"
+    disch "Discharge Type"
+    dischloc "Discharged To Location"
+    dischto "Discharged To"
+    discondition "Condition on Discharge - SMR02 only"
+    dob "Date of Birth"
+    endomet "Other Endocrine Metabolic Diseases LTC marker"
+    endomet_date "Other Endocrine Metabolic Diseases LTC incidence date"
+    epilepsy "Epilepsy LTC marker"
+    epilepsy_date "Epilepsy LTC incidence date"
+    falls_adm "Indicates fall related admission or attendance"
+    feb_beddays "Number of Bed days from episode in February"
     feb_cost "Cost from episode in February"
+    gender "Gender"
+    gpprac "GP Practice code"
+    hbpraccode "NHS Board of GP Practice"
+    hbrescode "NHS Board of Residence"
+    hbtreatcode "NHS Board of Treatment"
+    hefailure "Heart Failure LTC marker"
+    hefailure_date "Heart failure LTC incidence date"
+    HHG_End_FY "HHG 12-month risk score from the end of the financial year"
+    HHG_Start_FY "HHG 12-month risk score from the start of the financial year"
+    ipdc "Inpatient/Day case marker"
+    jan_beddays "Number of Bed days from episode in January"
+    jan_cost "Cost from episode in January"
+    jul_beddays "Number of Bed days from episode in July"
+    jul_cost "Cost from episode in July"
+    jun_beddays "Number of Bed days from episode in June"
+    jun_cost "Cost from episode in June"
+    keydate1_dateformat "Record Key date 1 in Date format"
+    keydate2_dateformat "Record Key date 2 in Date format"
+    keyTime1 "Record KeyTime 1"
+    keyTime2 "Record KeyTime 2"
+    lca "Local Council Authority"
+    liver "Chronic Liver Disease LTC marker"
+    liver_date "Chronic Liver Disease LTC incidence date"
+    Locality "HSCP Locality. Based on postcode and are correct at time of update"
+    location "Treatment location code"
+    mar_beddays "Number of Bed days from episode in March"
     mar_cost "Cost from episode in March"
-    uri "Unique record identifier"
-    cis_marker "CIJ (Continuous Inpatient Journey) marker"
+    may_beddays "Number of Bed days from episode in May"
+    may_cost "Cost from episode in May"
+    mpat "Management of Patient"
+    ms "Multiple Sclerosis LTC marker"
+    ms_date "Multiple Sclerosis LTC incidence date"
     newcis_admtype "CIJ admission type"
     newcis_ipdc "CIJ inpatient day case identifier"
-    newpattype_ciscode "CIJ patient type code"
     newpattype_cis "CIJ patient type"
-    CIJadm_spec "Specialty on first record in CIJ"
-    CIJdis_spec "Specialty on last record in CIJ"
-    alcohol_adm "Indicates alcohol related admission or attendance"
-    submis_adm "Indicates substance misuse related admission or attendance"
-    falls_adm "Indicates fall related admission or attendance"
-    selfharm_adm "Indicates self-harm related admission or attendance"
-    commhosp "Community Hospital flag"
-    post_mortem "Post Mortem Indicator"
-    death_date "Derived Date of Death"
+    newpattype_ciscode "CIJ patient type code"
+    nhshosp "NHS Hospital flag"
     no_dispensed_items "Number of dispensed items"
-    deceased "Deceased flag"
-    cvd "Cardiovascular disease (CVD) LTC marker"
-    copd "Chronic Obstructive Pulmonary Disease (COPD) LTC marker"
-    dementia "Dementia LTC marker"
-    diabetes "Diabetes LTC marker"
-    chd "Coronary heart disease (CHD) LTC marker"
-    hefailure "Heart Failure LTC marker"
-    refailure "Renal Failure LTC marker"
-    epilepsy "Epilepsy LTC marker"
-    asthma "Asthma LTC marker"
-    atrialfib "Atrial Fibrillation LTC marker"
-    cancer "Cancer LTC marker"
-    arth "Arthritis Artherosis LTC marker"
+    nov_beddays "Number of Bed days from episode in November"
+    nov_cost "Cost from episode in November"
+    oct_beddays "Number of Bed days from episode in October"
+    oct_cost "Cost from episode in October"
+    oldtadm "Old Type of Admission"
+    op1a "Main operation code (A part)"
+    op1b "Main operation code (B part)"
+    op2a "Other operation 1 (A Part)"
+    op2b "Other operation 1 (B Part)"
+    op3a "Other operation 2 (A Part)"
+    op3b "Other operation 2 (B Part)"
+    op4a "Other operation 3 (A Part)"
+    op4b "Other operation 3 (B Part)"
     parkinsons "Parkinsons LTC marker"
-    liver "Chronic Liver Disease LTC marker"
-    ms "Multiple Sclerosis LTC marker"
-    congen "Congenital Problems LTC marker"
-    bloodbfo "Diseases of Blood and Blood Forming Organs LTC marker"
-    endomet "Other Endocrine Metabolic Diseases LTC marker"
-    digestive "Other Diseases of Digestive System LTC marker"
-    arth_date "Arthritis Artherosis LTC incidence date"
-    asthma_date "Asthma LTC incidence date"
-    atrialfib_date "Atrial Fibrillation LTC incidence date"
-    cancer_date "Cancer LTC incidence date"
-    cvd_date "Cardiovascular disease (CVD) LTC incidence date"
-    liver_date "Chronic Liver Disease LTC incidence date"
-    copd_date "Chronic Obstructive Pulmonary Disease (COPD) LTC incidence date"
-    dementia_date "Dementia LTC incidence date"
-    diabetes_date "Diabetes LTC incidence date"
-    epilepsy_date "Epilepsy LTC incidence date"
-    chd_date "Coronary heart disease (CHD) LTC incidence date"
-    hefailure_date "Heart failure LTC incidence date"
-    ms_date "Multiple Sclerosis LTC incidence date"
     parkinsons_date "Parkinsons LTC incidence date"
+    place_death_occurred "Place death occurred"
+    post_mortem "Post Mortem Indicator"
+    postcode "7 character postcode"
+    recid "Record Identifier"
+    record_keydate1 "Record Keydate 1"
+    record_keydate2 "Record Keydate 2"
+    refailure "Renal Failure LTC marker"
     refailure_date "Renal failure LTC incidence date"
-    congen_date "Congenital Problems LTC incidence date"
-    bloodbfo_date "Diseases of Blood and Blood Forming Organs LTC incidence date"
-    endomet_date "Other Endocrine Metabolic Diseases LTC incidence date"
-    digestive_date "Other Diseases of Digestive System LTC incidence date"
-    CIS_PPA "CIS episode that began in a Potentially Preventable Admission (PPA)"
-    SPARRA_Start_FY "SPARRA 12-month risk score from the start of the financial year"
+    refsource "Referral Source"
+    reftype "Referral Type"
+    selfharm_adm "Indicates self-harm related admission or attendance"
+    sep_beddays "Number of Bed days from episode in September"
+    sep_cost "Cost from episode in September"
+    sigfac "Significant Facility"
+    smr01_cis "CIS marker from SMR01 record"
+    SMRType "Record type"
     SPARRA_End_FY "SPARRA 12-month risk score from the end of the financial year"
-    Locality "HSCP Locality. Based on postcode and are correct at time of update"
-    Cluster "GP Practice cluster. Based on gpprac and are correct at time of update".
+    SPARRA_Start_FY "SPARRA 12-month risk score from the start of the financial year"
+    spec "Specialty "
+    stadm "Status on Admission - SMR04 only"
+    stay "Length of Stay"
+    submis_adm "Indicates substance misuse related admission or attendance"
+    tadm "Type of Admission"
+    uri "Unique record identifier"
+    year "Year"
+    yearstay "Stay within year".
 
  * Gender flags.
 Value Labels gender
@@ -211,7 +215,7 @@ Add value labels location
 
 !AddHBDictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
 
-!AddLCADictionaryInfo LCA = LCA sc_send_lca ch_lca.
+!AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
 
 Value Labels ipdc newcis_ipdc
    'I' "Inpatient"
@@ -247,6 +251,51 @@ Add Value Labels SMRType
     'Non-User' 'Non-Service-User'
     'PIS' 'Community Prescribing summary'
     'Psych-IP' 'Psychiatric - Inpatient'.
+
+Value Labels refsource
+    '01' "A&E - Self Referral"
+    '01A' "A&E - Patient"
+    '01B' "A&E - Associated Person eg. parent, friend, employer, neighbour."
+    '02' "A&E - Healthcare professional/ service/ organisation"
+    '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services."
+    '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service."
+    '02C' "A&E - 999 emergency services Includes SAS Paramedic Practitioner."
+    '02D' "A&E - NHS24"
+    '02E' "A&E - Minor injuries unit"
+    '02F' "A&E - Same hospital Excludes minor injuries units."
+    '02G' "A&E - Other hospital Excludes minor injuries units"
+    '02H' "A&E - Other healthcare professional"
+    '02J' "A&E - GP referral for admission."
+    '03' "A&E - Local Authority"
+    '03A' "A&E - Education"
+    '03B' "A&E - Social Services"
+    '03C' "A&E - Police"
+    '03D' "A&E - Other local authority department"
+    '04' "A&E - Private professional /agency /organisation"
+    '05' "A&E - Other agency"
+    '05A' "A&E - Prison/penal establishment"
+    '05B' "A&E - Judicial"
+    '05C' "A&E - Voluntary agency"
+    '05D' "A&E - Armed forces"
+    '3' "GP OoH - SAS"
+    '5' "00B - Self referral"
+    '6' "00B - Prison/Penal Establishments"
+    '7' "00B - Judicial"
+    '8' "00B - Local Authority/Voluntary Agency"
+    '9' "GP OoH / 00B - Other"
+    '98' "A&E - Other"
+    '99' "A&E - Not Known"
+    'A' "GP OoH / A&E - Accident and Emergency Department "
+    'E' "GP OoH - HCP - Hospital"
+    'F' "GP OoH - HCP - Nurse"
+    'G' "GP OoH - HCP - Laboratory"
+    'H' "GP OoH - HCP - Doctor (GP)"
+    'I' "GP OoH - HCP - Other HCP"
+    'J' "GP OoH - HCP - Other OoH Service"
+    'M' "GP OoH - Minor Injuries Unite"
+    'N' "GP OoH / 00B - NHS 24"
+    'P' "GP OoH - Police / Prison"
+    'S' "GP OoH - Social Services".
 
 Value Labels spec CIJadm_spec CIJdis_spec
     'A1' "General Medicine"
@@ -449,9 +498,132 @@ Value Labels attendance_status
    8 "Patient did not attend (DNA)".
 
 Value Labels deceased
-   '1' "Deceased"
-   '0' "Alive".
+   1 "Deceased"
+   0 "Alive".
 
+Value Labels newpattype_ciscode
+    2 "Maternity"
+    0 "Non-elective"
+    1 "Elective".
+
+Value Labels mpat
+    '0' "Home Birth SMR02"
+    '1' "Inpatients (except for categories 3,5,7 and A below)"
+    '2' "Day Case in Day Bed Unit (except where retained overnight or longer)"
+    '3' "Inpatient originally admitted as a Day Case in Day Bed Unit, then moved to Inpatient Ward for intended overnight"
+    '4' "Day Case in Inpatient Ward (except where retained overnight or longer)"
+    '5' "Inpatient originally admitted as Day Case in Inpatient Ward and retained overnight or longer"
+    '6' "Day Case - Other than in Day Bed Unit or Inpatient Ward (except where retained overnight or longer)"
+    '7' "Inpatient originally admitted as Day Case Other, then moved to Inpatient Ward for intended overnight retention or longer"
+    'A' "Inpatient admitted to and discharged from a Day Bed Unit on the same day"
+    'B' "Hospital at Home".
+
+Value Labels tadm newcis_admtype
+    '10' "Routine Admission, no additional detail added"
+    '11' "Routine elective (i.e. from waiting list as planned, excludes planned transfers)"
+    '12' "Admitted on day of decision to admit, or following day, not for medical reasons, but because resources are available"
+    '18' "Planned transfers"
+    '19' "Routine Admission, type not known"
+    '20' "Urgent Admission, no additional detail added"
+    '21' "Patient delay (for domestic, legal or other practical reasons)"
+    '22' "Hospital delay (for administrative or clinical reasons)"
+    '30' "Emergency Admission, no additional detail added"
+    '31' "Patient Injury - Self Inflicted (Injury or Poisoning)"
+    '32' "Patient Injury - Road Traffic Accident (RTA)"
+    '33' "Patient Injury - Home Incident (including Assault or Accidental Poisoning in the home)"
+    '34' "Patient Injury - Incident at Work (including Assault or Accidental Poisoning at work)"
+    '35' "Patient Injury - Other Injury (inc. Accidental Poisoning other than in the home) - not elsewhere classified"
+    '36' "Patient Non-Injury (e.g. stroke, MI, Ruptured Appendix)"
+    '38' "Other Emergency Admission (including emergency transfers)"
+    '39' "Emergency Admission, type not known"
+    '40' "Other admission types, no additional detail added"
+    '41' "Home Birth (SMR02 only)"
+    '42' "Maternity Admission (SMR02 only)"
+    '48' "Other".
+
+Value Labels adtf dischto
+    '00' "Patient Died (except patients on pass)"
+    '01' "Patient died whilst on pass"
+    '20' "Place of Residence - Institution, no additional detail added"
+    '24' "NHS Partnership hospital"
+    '25' "Care home"
+    '26' "Intermediate Care"
+    '28' "Place of Residence - Institution - other type"
+    '29' "Place of Residence - Institution - type not known"
+    '60' "Other types of location etc - no additional detail added"
+    '61' "Private Hospital"
+    '62' "Hospice"
+    '68' "Other type of location"
+    '69' "Type of location - not known"
+    '70' "Home Birth (SMR02 only)"
+    '10' "Private Residence - No additional detail given"
+    '11' "Private Residence - Living alone"
+    '12' "Private Residence - Living with relatives or friends"
+    '14' "Private Residence - (supported)"
+    '18' "Private Residence - Other type (e.g.Foster Care)"
+    '19' "Private Residence - Type not known"
+    '30' "Temporary place of residence, no additional detail needed"
+    '31' "Holiday Accommodation"
+    '32' "Student Accommodation"
+    '33' "Legal establishment, including prison"
+    '34' "No fixed abode"
+    '38' "Other type of temporary residence (includes hospital residences, hotel facilities)"
+    '39' "Temporary place of residence - type not known"
+    '40' "Transfer within the same Health Board/Health Care Provider - no additional detail added"
+    '41' "Accident and Emergency Ward"
+    '42' "Surgical specialty"
+    '43' "Medical specialty"
+    '44' "Obstetrics/Postnatal Cots"
+    '45' "Paediatrics"
+    '46' "Neonatal Paediatrics"
+    '47' "GP Obstetrics/Postnatal cots"
+    '48' "Other Specialty not separately identified"
+    '49' "Transfer within the same Health Board/ Health Care Provider - specialty not known"
+    '4A' "GP Non Obstetrics"
+    '4B' "Geriatrics (except for patient on pass)"
+    '4C' "Geriatrics (patient on pass)"
+    '4D' "Psychiatry (except for patient on pass)"
+    '4E' "Psychiatry (patient on pass)"
+    '4F' "Orthopaedics"
+    '4G' "Learning Disability"
+    '4H' "Hospital at Home"
+    '50' "Transfer to/from another Health Board/Health Care Provider - no additional detail added"
+    '51' "Accident and Emergency Ward"
+    '52' "Surgical specialty"
+    '53' "Medical specialty"
+    '54' "Obstetrics/Postnatal Cots"
+    '55' "Paediatrics"
+    '56' "Neonatal Paediatrics"
+    '57' "GP Obstetrics/Postnatal cots"
+    '58' "Other Specialty not separately identified"
+    '59' "Transfer to/from another Health Board/ Health Care Provider - specialty not known"
+    '5A' "GP Non Obstetrics"
+    '5B' "Geriatrics (except for patient on pass)"
+    '5C' "Geriatrics (patient on pass)"
+    '5D' "Psychiatry (except for patient on pass)"
+    '5E' "Psychiatry (patient on pass)"
+    '5F' "Orthopaedics"
+    '5G' "Learning Disability"
+    '5H' "Hospital at Home".
+
+Value Labels disch
+    '10' "Regular discharge, no additional detail added"
+    '11' "Discharge from NHS inpatient/day case care"
+    '12' "Transfer within the same Health Board/Health Care Provider"
+    '13' "Transfer to another Health Board/Health Care Provider"
+    '18' "Other type of regular discharge"
+    '19' "Regular discharge, type not known"
+    '20' "Irregular Discharge, no additional detail added"
+    '21' "Patient discharged himself/herself against medical advice"
+    '22' "Patient discharged by relative"
+    '23' "Patient absconded from detention (SMR04 only)"
+    '28' "Other type of irregular discharge"
+    '29' "Irregular discharge, type not known"
+    '40' "Death, no additional detail added"
+    '41' "Death - Post Mortem"
+    '42' "Death - No Post Mortem"
+    '43' "Death - whilst on pass"
+    '70' "Home Birth (SMR02 only)".
 
 Variable Width
     year (4)
@@ -474,23 +646,19 @@ Variable Width
     location (7)
     postcode (8)
     conc (8)
-    hbpraccode hbrescode HSCP2016 DataZone2011 hbtreatcode  death_board_occurrence (9)
+    hbpraccode hbrescode HSCP2018 DataZone2011 hbtreatcode  death_board_occurrence (9)
     stay (7)
     SMRType chi ch_name (10)
     cost_total_net cost_total_net_incDNAs (10)
     record_keydate1 record_keydate2 keydate1_dateformat keydate2_dateformat dob death_date dateop1 dateop2 dateop3 dateop4(10).
 
 *********************************************************************************************.
-Sort Cases by CHI record_keydate1 record_keydate2.
+*sort cases by CHI record_keydate1 record_keydate2.
 
 * Reorder and keep vars.
- * New vars;
- * GPOOH - KIS_accessed ConsultationStartTime ConsultationEndTime ooh_outcome.1 ooh_outcome.2 ooh_outcome.3 ooh_outcome.4 ooh_CC 
- * Care Homes - sc_send_lca ch_name ch_lca ch_admreas
- * DN - CCM TotalnoDNcontacts TotalDurationofContacts
 
-Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
-    /keep
+save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
+    /Keep
     year
     recid
     record_keydate1
@@ -551,6 +719,11 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     discondition
     reftype
     refsource
+    Delay_End_Reason
+    Primary_Delay_Reason
+    Secondary_Delay_Reason
+    DD_Responsible_LCA
+    DD_Quality
     clinic_type
     attendance_status
     ae_arrivalmode
@@ -600,6 +773,8 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     commhosp
     smr01_cis
     cis_marker
+    CIJ_start_date
+    CIJ_end_date
     newcis_ipdc
     newcis_admtype
     newpattype_ciscode
@@ -671,9 +846,9 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     jan_cost
     feb_cost
     mar_cost
-    HSCP2016
+    HSCP2018
     LCA
-    CA2011
+    CA2018
     Locality
     DataZone2011
     simd2016rank
@@ -692,6 +867,8 @@ Save Outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     Service_Use_Cohort
     SPARRA_Start_FY
     SPARRA_End_FY
+    HHG_Start_FY
+    HHG_End_FY
     /zcompressed.
 get file = !File + "source-episode-file-20" + !FY + ".zsav".
 
@@ -704,4 +881,3 @@ erase file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
