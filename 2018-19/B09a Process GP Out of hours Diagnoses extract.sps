@@ -71,7 +71,7 @@ Frequencies ReadCode Description.
 * Check the output for any dodgy Read codes and try and fix by adding exceptions / code to the do if below. 
 ******************************************.
 
-* If we can lets use the description to pick a Read code from the lookup file.
+* If we can let's use the description to pick a Read code from the lookup file.
 * Couldn't think of a way to generalise this as descriptions are not necessarily unique.
 Do if FullMatch2 = 0.
     If ReadCode = "Xa1m." ReadCode = "S349" . /*Someone used ReadCode v3.
