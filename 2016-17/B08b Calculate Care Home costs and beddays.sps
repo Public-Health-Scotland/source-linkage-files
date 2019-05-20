@@ -22,7 +22,7 @@ sort cases by year NursingCareProvision.
  * Match on the costs lookup.
 match files
     /file = *
-    /Table = !Extracts_Alt + "Cost_CH_Lookup.sav"
+    /Table = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
     /By year NursingCareProvision.
 
  * Beddays.
