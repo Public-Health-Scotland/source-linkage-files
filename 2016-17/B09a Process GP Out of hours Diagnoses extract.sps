@@ -73,12 +73,21 @@ Frequencies ReadCode Description.
 
 * If we can let's use the description to pick a Read code from the lookup file.
 * Couldn't think of a way to generalise this as descriptions are not necessarily unique.
+String Old_ReadCode (A5).
 Do if FullMatch2 = 0.
-    If ReadCode = "Xa1m." ReadCode = "S349" . /*Someone used ReadCode v3.
-    Compute ReadCode = Replace(ReadCode, "?", ".").
-    Compute ReadCode = char.Rpad(ReadCode, 5, ".").
+    Compute Old_ReadCode = ReadCode.
+    If ReadCode = "Xa1m." ReadCode = "S349". /*Someone used ReadCode v3.
+    If ReadCode = "Xa1mz" ReadCode = "S349." /*Someone used ReadCode v3.
     If ReadCode = "HO6.." ReadCode = "H06.." /*Letter 'O' was used instead of zero.
+    Compute ReadCode = Replace(ReadCode, "?", ".").  /*Someone used '?' instead of '.'.
+    Compute ReadCode = char.Rpad(ReadCode, 5, "."). /*Some readcodes were not padded out with '.'s.
 End if.
+
+ * See which were changed.
+ * Shouldn't be many!.
+Temporary.
+Select if FullMatch2 = 0 and Old_ReadCode NE ReadCode.
+Crosstabs Old_ReadCode by ReadCode.
 
  * Do a final check.
 Sort cases by ReadCode Description.
