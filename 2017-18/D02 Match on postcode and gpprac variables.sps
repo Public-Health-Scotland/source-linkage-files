@@ -39,6 +39,8 @@ Recode hbrescode hbpraccode ("S08000018" = "S08000029") ("S08000027" = "S0800003
 Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
 Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
 
+!AddHBDictionaryInfo HB = hbrescode hbpraccode.
+
 sort cases by chi.
 
 save outfile = !File + "temp-source-individual-file-3-20" + !FY + ".zsav"
