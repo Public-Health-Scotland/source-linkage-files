@@ -42,7 +42,7 @@ varstocases /make Population_Estimate from age0 to age90plus
 String AgeGroup (A5).
 Recode Age_plus_one
     (1 Thru 5 = "0-4")
-    (6 Thru 15 = "0-14")
+    (6 Thru 15 = "5-14")
     (16 Thru 25 = "15-24")
     (26 Thru 35 = "25-34")
     (36 Thru 45 = "35-44")
@@ -78,21 +78,30 @@ get file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav"
  * If they don't have a locality, they're no good as we won't have an estimate to match them against.
  * Same for age and gender.
 select if Locality ne ''.
+select if Not(sysmis(age)).
 
  * Remove people who died before the mid-point of the calender year.
  * This will make our numbers line up better with the methodology used for the mid-year population estimates.
-compute dead = 0.
-Do if NSU = 0 and ~sysmiss(death_date). 
-    if death_date <= date.dmy(30, 06, Number(!altFY, F4.0)) dead = 1.
-End if.
+compute Dead_at_midyear = 0.
+ * Set some dates.
+compute #mid_year = date.dmy(30, 06, Number(!altFY, F4.0)).
+ * Nasty hack to make SPSS recognise missing death dates!!!.
+ * anyone who died 5 years before the file shouldn't be in it anyway...
+compute #previous_date = date.dmy(30, 06, Number(!altFY, F4.0) - 5).
 
-Select if Dead NE 1.
+ * Flag non-NSUs who were dead at the mid year date. This will also tag sysmis dates because SPSS sucks.
+If NSU = 0 and death_date <= #mid_year Dead_at_midyear = 1.
+ * This is the cleanup.
+If death_date < #previous_date Dead_at_midyear = 0.
+
+Frequencies Dead_at_midyear.
+Select if Dead_at_midyear = 0.
 
  * Assign the same 10-year age-groups.
 String AgeGroup (A5).
 Recode Age
     (0 Thru 4 = "0-4")
-    (5 Thru 14 = "0-14")
+    (5 Thru 14 = "5-14")
     (15 Thru 24 = "15-24")
     (25 Thru 34 = "25-34")
     (35 Thru 44 = "35-44")
@@ -133,10 +142,13 @@ compute Scaling_Factor = New_NSU_Figure / NSU_Population.
  * A scaling factor < 0 implies that we have more service-users than population estimate; hence we should get rid of more NSUs than we actually have.
  * A scaling factor > 1 implies that we NSU + service-users is less than the population estimate; hence we need to add NSUs ...
 Recode Scaling_Factor (Lo Thru 0 = 0) (1 Thru Hi = 1).
+Frequencies Scaling_Factor.
+
  * Seed is set to make sure same number of individuals is picked each time syntax is ran.
 Numeric Keep_NSU (F1.0).
 set seed 100.
 compute Keep_NSU = RV.BERNOULLI(Scaling_Factor).
+Frequencies Keep_NSU.
 
  * Save out the flag as a lookup by CHI, only need to keep the NSUs with the flag. 
 Select if Keep_NSU = 1.
@@ -160,6 +172,7 @@ If NSU = 0 Keep_Population = 1.
 
  * If the flag is missing they must be a non-keep NSU so set to 0.
 Recode Keep_Population (sysmis = 0).
+Frequencies Keep_Population.
 
 save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
