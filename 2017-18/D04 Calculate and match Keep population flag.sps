@@ -83,10 +83,18 @@ select if Not(sysmis(age)).
  * Remove people who died before the mid-point of the calender year.
  * This will make our numbers line up better with the methodology used for the mid-year population estimates.
 compute Dead_at_midyear = 0.
-Do if NSU = 0 and ~sysmiss(death_date). 
-    if death_date <= date.dmy(30, 06, Number(!altFY, F4.0)) Dead_at_midyear = 1.
-End if.
+ * Set some dates.
+compute #mid_year = date.dmy(30, 06, Number(!altFY, F4.0)).
+ * Nasty hack to make SPSS recognise missing death dates!!!.
+ * anyone who died 5 years before the file shouldn't be in it anyway...
+compute #previous_date = date.dmy(30, 06, Number(!altFY, F4.0) - 5).
 
+ * Flag non-NSUs who were dead at the mid year date. This will also tag sysmis dates because SPSS sucks.
+If NSU = 0 and death_date <= #mid_year Dead_at_midyear = 1.
+ * This is the cleanup.
+If death_date < #previous_date Dead_at_midyear = 0.
+
+Frequencies Dead_at_midyear.
 Select if Dead_at_midyear = 0.
 
  * Assign the same 10-year age-groups.
