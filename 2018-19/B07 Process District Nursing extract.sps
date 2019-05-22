@@ -94,6 +94,9 @@ Alter Type record_keydate1 record_keydate2 dob (Date12).
 String Year (A4).
 Compute year = !FY.
 
+* Recode Fife and Tayside so they match the cost lookup.
+Recode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+
 sort cases by hbtreatcode.
 
 match files file = *

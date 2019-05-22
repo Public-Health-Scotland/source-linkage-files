@@ -139,6 +139,10 @@ save outfile = !File + "GPOOH-Temp-2.zsav"
 ************************************************************************************************************.
 * Costs.
 get file = !File + "GPOOH-Temp-2.zsav".
+
+* Recode Fife and Tayside so they match the cost lookup.
+Recode TreatmentNHSBoardCode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+
 Sort cases by TreatmentNHSBoardCode.
 
 * Year.
