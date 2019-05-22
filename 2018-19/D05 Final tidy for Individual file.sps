@@ -306,9 +306,9 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     endomet_date
     digestive_date
     hbrescode
-    HSCP2016
+    HSCP2018
     LCA
-    CA2011
+    CA2018
     Locality
     Datazone2011
     hbpraccode
