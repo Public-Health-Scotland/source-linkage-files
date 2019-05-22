@@ -22,10 +22,15 @@ match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_Start_FY
+    /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
+    /Rename
+    UPI_Number = chi
+    SPARRA_RISK_SCORE = SPARRA_End_FY
+    /table = !Extracts_Alt + "HHG/HHG-20" + !NextFY + ".zsav"
+    /Rename
+    UPI_Number = chi
+    HHG_SCORE = HHG_End_FY
     /by CHI.
-
- * Make any variables which are missing.
-Numeric SPARRA_End_FY HHG_End_FY (F2.0).
 
 save outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
    /zcompressed.
