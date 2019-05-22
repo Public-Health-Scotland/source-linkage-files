@@ -7,7 +7,7 @@ Sort Cases by postcode.
 *Apply consistent geographies.
 match files file = *
     /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
-    /Rename (HB2014 = hbrescode)
+    /Rename (HB2018 = hbrescode)
     /In = PostcodeMatch
     /by postcode.
 
@@ -36,8 +36,8 @@ if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
 
  * Recode according to boundary changes 08/05/2018.
 Recode hbrescode hbpraccode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
-Recode HSCP2016 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
-Recode CA2011 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
+Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
+Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
 
 sort cases by chi.
 
