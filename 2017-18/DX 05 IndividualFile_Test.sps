@@ -109,7 +109,7 @@ Numeric DD_NonCode9_episodes DD2 DD3 DD_Code9_beddays  (F1.0).
 Numeric CMH_Contacts (F1.0).
 
  * Delete some variables which no longer exist.
-Frequencies GLS_daycase_episodes GLS_non_el_inpatient_beddays MH_daycase_episodes MH_daycase_cost.
+Frequencies GLS_daycase_episodes GLS_daycase_cost MH_daycase_episodes MH_daycase_cost.
 Delete variables GLS_daycase_episodes GLS_daycase_cost.
 Delete variables MH_daycase_episodes MH_daycase_cost.
 
