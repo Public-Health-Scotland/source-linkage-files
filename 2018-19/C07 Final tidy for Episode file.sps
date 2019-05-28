@@ -37,6 +37,8 @@ Variable Labels
     chd "Coronary heart disease (CHD) LTC marker"
     chd_date "Coronary heart disease (CHD) LTC incidence date"
     chi "Community Health Index number"
+    CIJ_start_date "Date of admission for the first record in the CIJ (Continuous Inpatient Journey)"
+    CIJ_end_date "Date of discharge for the last record in the CIJ (Continuous Inpatient Journey)"
     CIJadm_spec "Specialty on first record in CIJ"
     CIJdis_spec "Specialty on last record in CIJ"
     cis_marker "CIJ (Continuous Inpatient Journey) marker"
