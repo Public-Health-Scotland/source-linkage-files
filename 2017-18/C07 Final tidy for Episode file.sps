@@ -655,10 +655,9 @@ Variable Width
     record_keydate1 record_keydate2 keydate1_dateformat keydate2_dateformat dob death_date dateop1 dateop2 dateop3 dateop4(10).
 
 *********************************************************************************************.
-*sort cases by CHI record_keydate1 record_keydate2.
+sort cases by CHI record_keydate1 record_keydate2.
 
 * Reorder and keep vars.
-
 save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     /Keep
     year
