@@ -20,18 +20,19 @@ Value Labels year
 
 * Tidy up counter variables.
 Alter type
-    Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays 
-    Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_inpatient_beddays 
-    MH_episodes MH_inpatient_episodes MH_el_inpatient_episodes MH_non_el_inpatient_episodes MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays 
-    GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays 
-    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays 
-    OP_newcons_attendances OP_newcons_dnas 
-    AE_attendances 
-    PIS_dispensed_items 
-    CH_episodes CH_beddays 
-    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time 
-    DN_episodes DN_contacts 
-    CMH_contacts (F8.0).
+    Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays
+    Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_inpatient_beddays
+    MH_episodes MH_inpatient_episodes MH_el_inpatient_episodes MH_non_el_inpatient_episodes MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays
+    GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
+    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
+    OP_newcons_attendances OP_newcons_dnas
+    AE_attendances
+    PIS_dispensed_items
+    CH_episodes CH_beddays
+    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
+    DN_episodes DN_contacts
+    CMH_contacts
+    CIJ_el CIJ_non_el CIJ_mat (F8.0).
 
 * Tidy up the display.
 Variable width
@@ -128,6 +129,9 @@ Variable Labels
     DN_contacts	"Number of District Nursing contacts"
     DN_cost	"Cost of District Nursing"
     CMH_contacts    "Number of Community Mental Health contacts"
+    CIJ_el "Number of Continous Inpatient Journeys (CIJ) which began with an Elective admission"
+    CIJ_non_el "Number of Continous Inpatient Journeys (CIJ) which began with a Non-Elective admission"
+    CIJ_mat "Number of Continous Inpatient Journeys (CIJ) which began with an Maternity admission"
     HRI_lca "HRIs in LCA excluding District Nursing and Care Home costs"
     HRI_lca_incDN	"HRIs in LCA including District Nursing costs"
     HRI_hb "HRIs in HB excluding District Nursing and Care Home costs"
@@ -267,6 +271,9 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     DN_contacts
     DN_cost
     CMH_contacts
+    CIJ_el
+    CIJ_non_el
+    CIJ_mat
     arth
     asthma
     atrialfib
