@@ -102,25 +102,29 @@ frequencies SMRType.
 
 Alter Type uri (F8.0).
 
-********************************************Additional code to correct inpatient - el/non-el split - GNW ********************.
-*add in correction for newpattype_cis using types of admission codes.
 
-*apply newpattype_CIS logic to all records with a valid CHI number.
+ * Slight correction for newpattype_cis using types of admission.
+ * Lump the unknowns together to avoid potential confusion.
+Recode newcis_admtype ("Un" = "99").
+
+ * Apply newpattype_CIS logic to all records with a valid CHI number.
 Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
-    Do If Range(newcis_admtype, "10", "19") AND newcis_admtype NE "18".
-        Compute newpattype_cis = "Elective".
-        Compute newpattype_ciscode = 1.
-    Else If Range(newcis_admtype, "20", "22", "30", "39") OR newcis_admtype = "18".
-        Compute newpattype_cis = "Non-Elective".
-        Compute newpattype_ciscode = 0.
-    Else If any(newcis_admtype, "41", "42").
-        Compute newpattype_cis = "Maternity".
+     * Maternity now also has 41 for home birth.
+    Do If any(newcis_admtype, "41", "42").
         Compute newpattype_ciscode = 2.
-    Else If Any(newcis_admtype, "40", "48", "Un", "99").
-        Compute newpattype_cis = "Other".
-        Compute newpattype_ciscode = $sysmis.
+    * 40 and 48 are other - 99 is our code for unknown.
+    Else If Any(newcis_admtype, "40", "48", "99").
+        Compute newpattype_ciscode = 9.
     End If.
 End If.
+
+ * Recode newpattype.
+Recode newpattype_ciscode
+    (0 = "Non-elective")
+    (1 = "Elective")
+    (2 = "Maternity")
+    (9 = "Other")
+    Into newpattype_cis.
 
 
 ********************** Temporarily work on CIS only records ***************************.
