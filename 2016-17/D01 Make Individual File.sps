@@ -11,18 +11,15 @@ get file = !File + "source-episode-file-20" + !FY + ".zsav".
 * Exclude people with blank chi.
 select if chi NE "".
 
-* Sort data into chi and episode date order.
-Sort cases by chi keydate1_dateformat keyTime1 keydate2_dateformat keyTime2.
-
 * Declare the variables we will use to store postcode etc. data.
 * Don't include DD as this data has just been taken from acute / MH.
 Numeric Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB (Date12).
-String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode(A7).
+String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode (A7).
 Numeric Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac (F5.0).
 
 * Set any blanks as user missing, so they will be ignored by the aggregate.
 Missing Values
-    Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode CMH_postcode NRS_postcode
+    Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode
     ("").
 * Create a series of indicators which can be aggregated later to provide a summary for each CHI.
 *************************************************************************************************************************************************.
@@ -49,7 +46,10 @@ Numeric
     OoH_cost 
     DN_episodes DN_contacts 
     DN_cost 
-    CMH_contacts.
+    CMH_contacts
+    CIJ_el
+    CIJ_non_el
+    CIJ_mat.
 
 Numeric NSU (F1.0).
 
@@ -61,6 +61,22 @@ Numeric HHG_Start_FY (F2.0).
 Numeric HHG_End_FY (F2.0).
 
 String Primary_Delay_Reason (A4).
+
+ * Create a variable to count CIJs.
+sort cases by CHI cis_marker.
+add files file = *
+    /by CHI cis_marker
+    /First = Distinct_CIJ.
+
+If cis_marker = "" Distinct_CIJ = 0.
+
+Do if newpattype_ciscode = 0.
+    Compute CIJ_non_el = Distinct_CIJ.
+Else if newpattype_ciscode = 1.
+    Compute CIJ_el = Distinct_CIJ.
+Else if newpattype_ciscode = 2.
+    Compute CIJ_mat = Distinct_CIJ.
+End if.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -134,7 +150,7 @@ Else if (recid = "04B") AND (newpattype_cis NE "Maternity").
     * Mental Health (SMR04) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
         append this to the end of each record for each patient.
-    Compute MH_DoBs= DoB.
+    Compute MH_DoB= DoB.
     Compute MH_postcode = postcode.
     Compute MH_gpprac = gpprac.
 
@@ -163,7 +179,7 @@ Else if (SMRType = "GLS-IP").
     * Geriatric Long Stay (SMR01_1E) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
         append this to the end of each record for each patient.
-    Compute GLS_DoBs = DoB.
+    Compute GLS_DoB = DoB.
     Compute GLS_postcode = postcode.
     Compute GLS_gpprac = gpprac.
 
@@ -194,7 +210,7 @@ Else if (recid = "00B").
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
         append this to the end of each record for each patient.
 
-    Compute OP_DoBs = DoB.
+    Compute OP_DoB = DoB.
     Compute OP_postcode = postcode.
     Compute OP_gpprac = gpprac.
 
@@ -356,10 +372,11 @@ Else if (recid = "NRS").
     Compute NRS = 1.
 End if.
 *************************************************************************************************************************************************.
-
 * We'll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
+* Sort data into chi and episode date order.
+Sort cases by chi keydate1_dateformat keyTime1 keydate2_dateformat keyTime2.
 
  * Now aggregate by Chi, keep all of the variables we made, we'll clean them up next.
  * Also keep variables that are only dependant on CHI (as opposed to postcode) e.g. death_date, cohorts, LTC etc.
@@ -417,6 +434,7 @@ aggregate outfile = *
     /deceased death_date = First(deceased death_date)
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
+    /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
     /NSU = Max(NSU)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
