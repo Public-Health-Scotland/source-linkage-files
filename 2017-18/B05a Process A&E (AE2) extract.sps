@@ -20,6 +20,7 @@ GET DATA  /TYPE=TXT
     /FIRSTCASE=2
     /VARIABLES=
     ArrivalDate A10
+    DischargeDate A10
     PatCHINumberC A10
     PatDateOfBirthC A10
     PatGenderCode F1.0
@@ -50,7 +51,8 @@ GET DATA  /TYPE=TXT
     FallsRelatedAdmission A1
     SelfHarmRelatedAdmission A1
     TotalNetCosts F8.2
-    AgeatMidpointofFinancialYear F3.0.
+    AgeatMidpointofFinancialYear F3.0
+    CaseReferenceNumber A100.
 CACHE.
 Execute.
 
@@ -62,6 +64,7 @@ Rename Variables
     ArrivalTime = keyTime1
     AttendanceCategoryCode = ae_attendcat
     BodilyLocationOfInjuryCode = ae_bodyloc
+    CaseReferenceNumber = uri
     CouncilAreaCode = lca
     DischargeDestinationCode = ae_disdest
     DischargeTime = keyTime2
@@ -95,12 +98,11 @@ Alter Type GPprac (F5.0).
 
 Rename Variables
     ArrivalDate = record_keydate1
+    DischargeDate = record_keydate2
     PatDateofBirthC = dob.
 
-alter type record_keydate1 dob (SDate10).
-Compute record_keydate2 = record_keydate1.
+alter type record_keydate1 record_keydate2 dob (SDate10).
 alter type record_keydate1 record_keydate2 dob (Date12).
-
 
 * POSTCODE = need to make this length 7!  use the CHI postcode and if that is blank, then use the epi postcode.
 String Postcode (A7).
@@ -151,8 +153,6 @@ End Repeat.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 alter type record_keydate1 record_keydate2 (F8.0).
-
-sort cases by chi record_keydate1 keyTime1 keyTime2.
 
 * Add A&E specific value labels.
 Value Labels ae_arrivalmode
@@ -536,7 +536,10 @@ Value Labels ae_bodyloc
     '30E' "5th toe"
     '31' "Multiple body regions".
 
-save outfile = !file + 'aande_for_source-20' + !FY + '.zsav'
+ * Sort for linking on CUP marker.
+sort cases by record_keydate1 keyTime1 uri.
+
+save outfile = !file + 'a&e_data-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -583,9 +586,10 @@ save outfile = !file + 'aande_for_source-20' + !FY + '.zsav'
     jan_cost
     feb_cost
     mar_cost
+    uri
     /zcompressed.
 
-get file = !file + 'aande_for_source-20' + !FY + '.zsav'.
+get file = !file + 'a&e_data-20' + !FY + '.zsav'.
 
  * Zip up raw data.
 Host Command = ["gzip '" + !Extracts + "A&E-episode-level-extract-20" + !FY + ".csv'"].

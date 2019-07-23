@@ -53,6 +53,8 @@ Variable Labels
     copd_date "Chronic Obstructive Pulmonary Disease (COPD) LTC incidence date"
     cost_total_net "Total Net Cost excluding Outpatient and OoH DNA costs"
     Cost_Total_Net_incDNAs "Total Net Cost including Outpatient and OoH DNA costs"
+    CUP_marker "A marker which groups together unscheduled care episodes (Continous Urgent care Pathway)"
+    CUP_pathway "A string indicating which episode types (and in which order) occured in the CUP"
     cvd "Cardiovascular disease (CVD) LTC marker"
     cvd_date "Cardiovascular disease (CVD) LTC incidence date"
     dateop1 "Date of Main Operation"
@@ -178,33 +180,33 @@ Variable Labels
     stay "Length of Stay"
     submis_adm "Indicates substance misuse related admission or attendance"
     tadm "Type of Admission"
-    uri "Unique record identifier"
+    uri "Unique Record Identifier - See notes"
     year "Year"
     yearstay "Stay within year".
 
- * Gender flags.
+* Gender flags.
 Value Labels gender
-   '0' "Not Known"
-   '1' "Male"
-   '2' "Female"
-   '9' "Not Specified".
+    '0' "Not Known"
+    '1' "Male"
+    '2' "Female"
+    '9' "Not Specified".
 
 Value Labels year
-   '1011' "2010/11"
-   '1112' "2011/12"
-   '1213' "2012/13"
-   '1314' "2013/14"
-   '1415' "2014/15"
-   '1516' "2015/16"
-   '1617' "2016/17"
-   '1718' "2017/18"
-   '1819' "2018/19"
-   '1920' "2019/20"
-   '2021' "2020/21"
-   '2122' "2021/22"
-   '2223' "2022/23"
-   '2324' "2023/24"
-   '2425' "2024/25".
+    '1011' "2010/11"
+    '1112' "2011/12"
+    '1213' "2012/13"
+    '1314' "2013/14"
+    '1415' "2014/15"
+    '1516' "2015/16"
+    '1617' "2016/17"
+    '1718' "2017/18"
+    '1819' "2018/19"
+    '1920' "2019/20"
+    '2021' "2020/21"
+    '2122' "2021/22"
+    '2223' "2022/23"
+    '2324' "2023/24"
+    '2425' "2024/25".
 
 Add value labels location
     '1' "CHAD - Hospital including Day Hospitals"
@@ -220,8 +222,8 @@ Add value labels location
 !AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
 
 Value Labels ipdc newcis_ipdc
-   'I' "Inpatient"
-   'D' "Daycase".
+    'I' "Inpatient"
+    'D' "Daycase".
 
 Value Labels recid
     '00B' "Outpatient (SMR00) appointments"
@@ -468,42 +470,42 @@ Value Labels spec CIJadm_spec CIJdis_spec
 
 
 Value Labels sigfac
-   '11' "Other (inc. Clinical Facilities of Standard Specialty Ward 1K, Day Bed Unit 1J)"
-   '13' "Intensive Care Unit"
-   '14' "Cardiac Care Unit"
-   '16' "Children's Unit"
-   '17' "Accident & Emergency (A&E) Ward"
-   '18' "Ward for Younger Physically Disabled"
-   '19' "Spinal Unit"
-   '1A' "Geriatric Orthopaedic Rehabilitation Unit (GORU)"
-   '1B' "Rehabilitation Ward (except GORU & PRU)"
-   '1C' "Burns Unit"
-   '1D' "Geriatric Assessment Unit"
-   '1E' "Long Stay Unit for Care of the Elderly"
-   '1F' "Convalescent Unit"
-   '1G' "Palliative Care Unit"
-   '1H' "High Dependency Unit"
-   '1M' "Transplant Unit"
-   '1P' "Stroke Unit"
-   '39' "Ambulatory Emergency Care Unit"
-   '40' "Acute Assessment Unit (AAU)".
+    '11' "Other (inc. Clinical Facilities of Standard Specialty Ward 1K, Day Bed Unit 1J)"
+    '13' "Intensive Care Unit"
+    '14' "Cardiac Care Unit"
+    '16' "Children's Unit"
+    '17' "Accident & Emergency (A&E) Ward"
+    '18' "Ward for Younger Physically Disabled"
+    '19' "Spinal Unit"
+    '1A' "Geriatric Orthopaedic Rehabilitation Unit (GORU)"
+    '1B' "Rehabilitation Ward (except GORU & PRU)"
+    '1C' "Burns Unit"
+    '1D' "Geriatric Assessment Unit"
+    '1E' "Long Stay Unit for Care of the Elderly"
+    '1F' "Convalescent Unit"
+    '1G' "Palliative Care Unit"
+    '1H' "High Dependency Unit"
+    '1M' "Transplant Unit"
+    '1P' "Stroke Unit"
+    '39' "Ambulatory Emergency Care Unit"
+    '40' "Acute Assessment Unit (AAU)".
 
 Value Labels cat
-   '1' "Amenity"
-   '4' "Overseas visitor - liable to pay for treatment"
-   '2' "Paying"
-   '5' "Overseas visitor - not liable to pay"
-   '3' "NHS"
-   '8' "Other (including Hospice)".
+    '1' "Amenity"
+    '4' "Overseas visitor - liable to pay for treatment"
+    '2' "Paying"
+    '5' "Overseas visitor - not liable to pay"
+    '3' "NHS"
+    '8' "Other (including Hospice)".
 
 Value Labels attendance_status
-   1 "Patient attended and was seen"
-   5 "Patient attended but was not seen (CNW - Could Not Wait)"
-   8 "Patient did not attend (DNA)".
+    1 "Patient attended and was seen"
+    5 "Patient attended but was not seen (CNW - Could Not Wait)"
+    8 "Patient did not attend (DNA)".
 
 Value Labels deceased
-   1 "Deceased"
-   0 "Alive".
+    1 "Deceased"
+    0 "Alive".
 
 Value Labels newpattype_ciscode
     0 "Non-elective"
@@ -777,6 +779,8 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     commhosp
     smr01_cis
     cis_marker
+    CUP_marker
+    CUP_pathway
     CIJ_start_date
     CIJ_end_date
     newcis_ipdc
