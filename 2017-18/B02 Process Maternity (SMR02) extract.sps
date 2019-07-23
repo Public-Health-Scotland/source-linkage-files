@@ -136,13 +136,6 @@ Alter Type GPprac (F5.0).
  * Set the IPDC marker for the CIJ.
 Recode CIJInpatientDayCaseIdentifierCode ("IP" = "I") ("DC" = "D") into newcis_ipdc.
 
- * Recode newpattype.
-Recode newpattype_ciscode
-    (2 = "Maternity")
-    (0 = "Non-elective")
-    (1 = "Elective")
-    Into newpattype_cis.
-
 Rename Variables
     DateofAdmissionFullDate = record_keydate1
     DateofDischargeFullDate = record_keydate2
@@ -265,7 +258,6 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     newcis_admtype
     newcis_ipdc
     newpattype_ciscode
-    newpattype_cis
     CIJadm_spec
     CIJdis_spec
     alcohol_adm

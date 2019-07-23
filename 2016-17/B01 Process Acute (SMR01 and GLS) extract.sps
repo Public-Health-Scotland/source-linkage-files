@@ -163,13 +163,6 @@ Recode InpatientDayCaseIdentifierCode ("IP" = "I") ("DC" = "D") into ipdc.
  * Set the IPDC marker for the CIJ.
 Recode CIJInpatientDayCaseIdentifierCode01 ("IP" = "I") ("DC" = "D") into newcis_ipdc.
 
- * Recode newpattype.
-Recode newpattype_ciscode
-    (2 = "Maternity")
-    (0 = "Non-elective")
-    (1 = "Elective")
-    Into newpattype_cis.
-
  * Rename date variables.
 Rename Variables
     DateofAdmission01 = record_keydate1
@@ -340,7 +333,6 @@ save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
     newcis_admtype
     newcis_ipdc
     newpattype_ciscode
-    newpattype_cis
     CIJadm_spec
     CIJdis_spec
     alcohol_adm

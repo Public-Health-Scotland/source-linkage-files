@@ -137,7 +137,7 @@ Variable Labels
     newcis_admtype "CIJ admission type"
     newcis_ipdc "CIJ inpatient day case identifier"
     newpattype_cis "CIJ patient type"
-    newpattype_ciscode "CIJ patient type code"
+    newpattype_ciscode "CIJ patient type - coded"
     nhshosp "NHS Hospital flag"
     no_dispensed_items "Number of dispensed items"
     nov_beddays "Number of Bed days from episode in November"
@@ -506,9 +506,10 @@ Value Labels deceased
    0 "Alive".
 
 Value Labels newpattype_ciscode
-    2 "Maternity"
     0 "Non-elective"
-    1 "Elective".
+    1 "Elective"
+    2 "Maternity"
+    9 "Unknown".
 
 Value Labels mpat
     '0' "Home Birth SMR02"

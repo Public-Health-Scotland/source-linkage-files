@@ -145,13 +145,6 @@ Alter Type GPprac (F5.0).
 
 if (CIJInpatientDayCaseIdentifierCode04 EQ 'MH') newcis_ipdc = 'I'.
 
- * Recode newpattype.
-Recode newpattype_ciscode
-    (2 = "Maternity")
-    (0 = "Non-elective")
-    (1 = "Elective")
-    Into newpattype_cis.
-
  * Deal with date variables.
 Rename Variables
     DateofAdmission04 = record_keydate1
@@ -283,7 +276,6 @@ save outfile = !file + 'mental_health_for_source-20' + !FY + '.zsav'
     newcis_admtype
     newcis_ipdc
     newpattype_ciscode
-    newpattype_cis
     CIJadm_spec
     CIJdis_spec
     alcohol_adm
