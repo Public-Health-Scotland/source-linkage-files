@@ -23,7 +23,6 @@ EXECUTE.
 Rename Variables
     ArrivalDate = record_keydate1
     ArrivalTime = keyTime1
-    CaseReferenceNumber = uri
     CUPMarker = CUP_marker
     CUPPathwayName = CUP_pathway.
 
@@ -35,16 +34,17 @@ Alter Type record_keydate1 (F8.0).
 * And remove any duplicates.
 
 aggregate outfile = *
-    /Break record_keydate1 keyTime1 uri
+    /Break record_keydate1 keyTime1 CaseReferenceNumber
     /CUP_marker CUP_pathway = First(CUP_marker CUP_pathway).
 
 match files
     /file = !file + "a&e_data-20" + !FY + ".zsav"
     /table = *
-    /by record_keydate1 keyTime1 uri.
+    /by record_keydate1 keyTime1 CaseReferenceNumber.
 
 sort cases by chi record_keydate1 keyTime1 record_keydate2 keyTime2.
 
+ * Don't keep the CaseReferenceNumber as it's not a very good unique ID.
 save outfile = !file + 'a&e_for_source-20' + !FY + '.zsav'
     /keep year
     recid
@@ -92,7 +92,6 @@ save outfile = !file + 'a&e_for_source-20' + !FY + '.zsav'
     jan_cost
     feb_cost
     mar_cost
-    uri
     CUP_marker
     CUP_pathway
     /zcompressed.
