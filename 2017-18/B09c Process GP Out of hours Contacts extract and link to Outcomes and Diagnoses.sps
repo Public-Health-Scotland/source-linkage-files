@@ -41,7 +41,7 @@ GET DATA  /TYPE=TXT
       chi A10
       dob A10
       gender F1.0
-      postcode A7
+      postcode A8
       PracticeCode A6
       PracticeName A23
       KISAccessed A1

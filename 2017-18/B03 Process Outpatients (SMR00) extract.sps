@@ -26,7 +26,7 @@ GET DATA  /TYPE=TXT
     PatDateOfBirthC A10
     PracticeLocationCode A5
     PracticeNHSBoardCode A9
-    GeoPostcodeC A7
+    GeoPostcodeC A8
     NHSBoardofResidenceCode A9
     GeoCouncilAreaCode A2
     TreatmentLocationCode A7

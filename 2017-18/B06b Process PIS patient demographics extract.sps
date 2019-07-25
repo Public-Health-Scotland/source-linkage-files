@@ -36,7 +36,7 @@ GET DATA  /TYPE=TXT
       upi A10
       dob A10
       gender F1.0
-      postcode A7
+      postcode A8
       gpprac A5.
 CACHE.
 
