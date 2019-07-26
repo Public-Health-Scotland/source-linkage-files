@@ -1,24 +1,100 @@
 ﻿* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 
+* Correct Postcode formatting.
+* Remove any postcodes which are length 3 or 4 as these can not be valid (not a useful dummy either).
+If range(Length(Postcode), 3, 4) Postcode = "".
+
+* Remove spaces which deals with any 8-char postcodes.
+* These should only come from A&E but we read all in as 8-char just in case.
+Compute Postcode = Replace(Postcode, " ", "").
+
+* Add spaces to create a 7-char postcode.
+Loop if range(Length(Postcode), 5, 6).
+    Compute #current_length = Length(Postcode).
+    Compute Postcode = Concat(char.substr(Postcode, 1,  #current_length - 3), " ", char.substr(Postcode,  #current_length - 2, 3)).
+End Loop.
+
+alter type postcode (A7).
+
 * Match on postcode stuff.
 Sort Cases by postcode.
 
- * Keep existing values in case we can't match the postcode.
+* Keep existing values in case we can't match the postcode.
 Rename Variables
     LCA = LCA_old
     HSCP = HSCP_old
     Datazone = Datazone_old
     hbrescode = hbrescode_old.
 
-*Apply consistent geographies.
+* Apply consistent geographies.
+match files file = *
+    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /In = PostcodeMatch
+    /by postcode.
+
+* Where there are blank postcodes try to fill in from other episodes.
+* Work out which CHIs we can do something with (where they have at least one correct postcode and at least one incorrect one).
+aggregate
+    /Break chi
+    /all_match = mean(PostcodeMatch).
+
+* Identify CHIs which are 'potentially fixable'.
+Compute potentially_fixable = 0.
+if chi NE "" and (all_match NE 0 and all_match NE 1) potentially_fixable = 1.
+
+* Save out main file for now.
+Temporary.
+Select if potentially_fixable = 0.
+save outfile = !File + "temp-no-postcode-changes-" + !FY + ".zsav"
+    /zcompressed.
+
+* Work on 'potentially fixable' records for now.
+Select if potentially_fixable = 1.
+
+* Keep track of changed postcodes.
+Compute changed_postcode = 0.
+
+sort cases by chi keydate1_dateformat keytime1 keydate2_dateformat keytime2.
+
+* NK010AA is a dummy postcode for 'Unknown' so we're good to replace this.
+Do if chi = lag(chi) and any(postcode, "", "NK010AA").
+    Do if (lag(PostcodeMatch) = 1 or lag(changed_postcode) = 1).
+        Compute postcode = lag(postcode).
+        Compute changed_postcode = 1.
+    Else if chi = lag(chi, 2) and (lag(PostcodeMatch, 2) = 1 or lag(changed_postcode, 2) = 1).
+        Compute postcode = lag(postcode, 2).
+        Compute changed_postcode = 1.
+    End if.
+End if.
+
+sort cases by chi (A) keydate2_dateformat keytime2 keydate1_dateformat keytime1 (D).
+
+Do if chi = lag(chi) and any(postcode, "", "NK010AA").
+    Do if (lag(PostcodeMatch) = 1 or lag(changed_postcode) = 1).
+        Compute postcode = lag(postcode).
+        Compute changed_postcode = 1.
+    Else if chi = lag(chi, 2) and (lag(PostcodeMatch, 2) = 1 or lag(changed_postcode, 2) = 1).
+        Compute postcode = lag(postcode, 2).
+        Compute changed_postcode = 1.
+    End if.
+End if.
+
+sort cases by Postcode.
+
+add files file = *
+    /file = !File + "temp-no-postcode-changes-" + !FY + ".zsav"
+    /Drop HB2018 HSCP2018 LCA DataZone2011 PostcodeMatch all_match potentially_fixable changed_postcode
+    /By Postcode.
+
+* Apply consistent geographies.
 match files file = *
     /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
     /Rename (HB2018 = hbrescode)
     /In = PostcodeMatch
     /by postcode.
 
- * If the postcode matched use the new values, if it didn't use the existing ones.
+* If the postcode matched use the new values, if it didn't use the existing ones.
 Do if PostcodeMatch = 0.
     Compute LCA = LCA_old.
     Compute HSCP2018 = HSCP_old.
@@ -26,10 +102,76 @@ Do if PostcodeMatch = 0.
     Compute hbrescode = hbrescode_old.
 End if.
 
- * If we can, 'cascade' the geographies upwards i.e. if they have an LCA use this to fill in HSCP2018 and so on for hbrescode.
- * Codes are correct as at August 2018.
+* If we can, 'cascade' the geographies upwards i.e. if they have an LCA use this to fill in HSCP2018 and so on for hbrescode.
+* Codes are correct as at August 2018.
 
-* First LCA -> HSCP2018.
+* First HSCP -> LCA.
+* Best one to do first as we can't do anything about C & S.
+Do if LCA = "".
+    Do if (HSCP2018 = "S37000001").
+        Compute LCA = "01".
+    Else if (HSCP2018 = "S37000002").
+        Compute LCA = "02".
+    Else if (HSCP2018 = "S37000003").
+        Compute LCA = "03".
+    Else if (HSCP2018 = "S37000004").
+        Compute LCA = "04".
+    Else if (HSCP2018 = "S37000025").
+        Compute LCA = "05".
+    Else if (HSCP2018 = "S37000029").
+        Compute LCA = "07".
+    Else if (HSCP2018 = "S37000006").
+        Compute LCA = "08".
+    Else if (HSCP2018 = "S37000007").
+        Compute LCA = "09".
+    Else if (HSCP2018 = "S37000008").
+        Compute LCA = "10".
+    Else if (HSCP2018 = "S37000009").
+        Compute LCA = "11".
+    Else if (HSCP2018 = "S37000010").
+        Compute LCA = "12".
+    Else if (HSCP2018 = "S37000011").
+        Compute LCA = "13".
+    Else if (HSCP2018 = "S37000012").
+        Compute LCA = "14".
+    Else if (HSCP2018 = "S37000013").
+        Compute LCA = "15".
+    Else if (HSCP2018 = "S37000032").
+        Compute LCA = "16".
+    Else if (HSCP2018 = "S37000015").
+        Compute LCA = "17".
+    Else if (HSCP2018 = "S37000016").
+        Compute LCA = "18".
+    Else if (HSCP2018 = "S37000017").
+        Compute LCA = "19".
+    Else if (HSCP2018 = "S37000018").
+        Compute LCA = "20".
+    Else if (HSCP2018 = "S37000019").
+        Compute LCA = "21".
+    Else if (HSCP2018 = "S37000020").
+        Compute LCA = "22".
+    Else if (HSCP2018 = "S37000021").
+        Compute LCA = "23".
+    Else if (HSCP2018 = "S37000022").
+        Compute LCA = "24".
+    Else if (HSCP2018 = "S37000033").
+        Compute LCA = "25".
+    Else if (HSCP2018 = "S37000024").
+        Compute LCA = "26".
+    Else if (HSCP2018 = "S37000026").
+        Compute LCA = "27".
+    Else if (HSCP2018 = "S37000027").
+        Compute LCA = "28".
+    Else if (HSCP2018 = "S37000028").
+        Compute LCA = "29".
+    Else if (HSCP2018 = "S37000030").
+        Compute LCA = "31".
+    Else if (HSCP2018 = "S37000031").
+        Compute LCA = "32".
+    End if.
+End if.
+
+* Next LCA -> HSCP2018.
 Do if HSCP2018 = "".
     Do if (LCA = "01").
         Compute HSCP2018 = "S37000001".
@@ -169,9 +311,74 @@ End if.
 ********* Match in GP practice and cluster info. **********************************.
 sort cases by gpprac.
 
- * Keep existing values in case we can't match the gpprac code.
+* Keep existing values in case we can't match the gpprac code.
 Rename Variables
     hbpraccode = hbpraccode_old.
+
+* Find out which GPprac codes are good.
+match files file = *
+    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /In = GPPracMatch
+    /Drop PC7 PC8
+    /by gpprac.
+
+* Where there are missing gppraccodes try to fill in from other episodes.
+
+* Since the dummy codes are in the lookup file these will be flagged as valid which is not desirable.
+If any(gpprac, 99942, 99957, 99961, 99976, 99981, 99995, 99999) GPPracMatch = 0.
+
+* Work out which CHIs we can do something with (where they have at least one correct practice code and at least one incorrect one).
+aggregate
+    /Break chi
+    /all_match = mean(GPPracMatch).
+
+* Identify CHIs which are 'potentially fixable'.
+Compute potentially_fixable = 0.
+if chi NE "" and (all_match NE 0 and all_match NE 1) potentially_fixable = 1.
+
+* Save out main file for now.
+Temporary.
+Select if potentially_fixable = 0.
+save outfile = !File + "temp-no-gpprac-changes-" + !FY + ".zsav"
+    /zcompressed.
+
+* Work on 'potentially fixable' records for now.
+Select if potentially_fixable = 1.
+
+* Keep track of changed practice codes.
+Compute changed_gpprac = 0.
+
+sort cases by chi keydate1_dateformat keytime1 keydate2_dateformat keytime2.
+
+* 99999 is a dummy practice code for 'Unknown' so we're good to replace this.
+Do if chi = lag(chi) and (sysmis(gpprac) or gpprac = 99999).
+    Do if (lag(GPPracMatch) = 1 or lag(changed_gpprac) = 1).
+        Compute gpprac = lag(gpprac).
+        Compute changed_gpprac = 1.
+    Else if chi = lag(chi, 2) and (lag(GPPracMatch, 2) = 1 or lag(changed_gpprac, 2) = 1).
+        Compute gpprac = lag(gpprac, 2).
+        Compute changed_gpprac = 1.
+    End if.
+End if.
+
+sort cases by chi (A) keydate2_dateformat keytime2 keydate1_dateformat keytime1 (D).
+
+Do if chi = lag(chi) and (sysmis(gpprac) or gpprac = 99999).
+    Do if (lag(GPPracMatch) = 1 or lag(changed_gpprac) = 1).
+        Compute gpprac = lag(gpprac).
+        Compute changed_gpprac = 1.
+    Else if chi = lag(chi, 2) and (lag(GPPracMatch, 2) = 1 or lag(changed_gpprac, 2) = 1).
+        Compute gpprac = lag(gpprac, 2).
+        Compute changed_gpprac = 1.
+    End if.
+End if.
+
+sort cases by gpprac.
+
+add files file = *
+    /file = !File + "temp-no-gpprac-changes-" + !FY + ".zsav"
+    /Drop hbpraccode GPPracMatch all_match potentially_fixable changed_gpprac
+    /By gpprac.
 
 match files file = *
     /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
@@ -179,28 +386,24 @@ match files file = *
     /Drop PC7 PC8
     /by gpprac.
 
- * If the gpprac code didn't match use the existing values.
+* If the gpprac code didn't match use the existing values.
 Do if GPPracMatch = 0.
     Compute hbpraccode = hbpraccode_old.
 End if.
 
- * Set some known dummy practice codes to consistent Board codes.
-Do if any(gpprac, 99942, 99957, 99961, 99976, 99981, 99999).
-    Compute hbpraccode = "S08200003". /*Outwith Scotland / unknown*/.
-Else if gpprac = 99995.
-    Compute hbpraccode = "S08200001".  /*RUK*/.
-End if.
-
-
+* Apply dictionary info.
 !AddHBDictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
 !AddLCADictionaryInfo LCA = LCA sc_send_lca ch_lca.
 
-
- * If the practice code didn't match the lookups and also doesn't have a board code (usually all of them), remove it as it's probably a bad code.
+* If the practice code didn't match the lookups and also doesn't have a board code (usually all of them), remove it as it's probably a bad code.
 if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
 
- * Recode according to boundary changes 08/05/2018.
- * All of the codes should be correct (have labels) except for the few which we will recode below.
+* Final tweak to geographies, if the episode is still missing a hbrescode but hbpraccode and hbtreatcode agree.
+* Not including yet as unsure whether the gains are worth introducing incorrect boards...
+* If hbpraccode NE "" and hbrescode = "" and hbpraccode = hbtreatcode hbrescode = hbpraccode.
+
+* Recode according to boundary changes 08/05/2018.
+* All of the codes should be correct (have labels) except for the few which we will recode below.
 Frequencies hbrescode hbpraccode hbtreatcode HSCP2018 CA2018 LCA.
 Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
 Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
@@ -209,3 +412,7 @@ Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
 save outfile = !File + "temp-source-episode-file-6-" + !FY + ".zsav"
     /Drop LCA_old HSCP_old Datazone_old hbrescode_old hbpraccode_old PostcodeMatch GPPracMatch
     /zcompressed.
+
+* Housekeeping.
+Erase file = !File + "temp-no-postcode-changes-" + !FY + ".zsav".
+Erase file = !File + "temp-no-gpprac-changes-" + !FY + ".zsav".
