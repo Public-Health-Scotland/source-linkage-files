@@ -37,7 +37,7 @@ GET DATA  /TYPE=TXT
     PrimaryInterventionCategory F2.0
     UPINumberC A10
     PatientDoBDateC A10
-    PatientPostcodeCContact A7
+    PatientPostcodeCContact A8
     DurationofContactmeasure F3.0
     Gender F1.0
     LocationofContact F1.0

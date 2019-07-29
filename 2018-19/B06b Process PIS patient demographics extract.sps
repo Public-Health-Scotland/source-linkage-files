@@ -21,7 +21,7 @@
 * Change this to the relevant number.
 * Should be '_extract_NUMBER'.
 Define !Extract_Number()
-    "_extract_8"
+    "_extract_6"
 !EndDefine.
 Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_fy_" + !altFY + ".csv'" ].
 
@@ -36,7 +36,7 @@ GET DATA  /TYPE=TXT
       upi A10
       dob A10
       gender F1.0
-      postcode A7
+      postcode A8
       gpprac A5.
 CACHE.
 

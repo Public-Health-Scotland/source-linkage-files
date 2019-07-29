@@ -103,11 +103,10 @@ Rename Variables
 alter type record_keydate1 record_keydate2 dob (SDate10).
 alter type record_keydate1 record_keydate2 dob (Date12).
 
-* POSTCODE = need to make this length 7!  use the CHI postcode and if that is blank, then use the epi postcode.
-String Postcode (A7).
-Compute Postcode = Replace(PostcodeCHIC, " ", "").
-If Postcode = "" Postcode = Replace(PostcodeepiC, " ", "").
-If Length(Postcode) < 7 Postcode = Concat(char.substr(Postcode, 1, 3), " ", char.substr(Postcode, 4, 3)).
+* Postcode - use the CHI postcode and if that is blank, then use the epi postcode.
+String Postcode (A8).
+Compute Postcode = PostcodeCHIC.
+If Postcode = "" Postcode = PostcodeepiC.
 
 String hbtreatcode hbrescode(A9).
 

@@ -20,7 +20,7 @@ GET DATA  /TYPE=TXT
     GPpracticecode99 A5
     GeoCouncilAreaCode A2
     NHSBoardofResidenceCode A9
-    GeoPostcodeC A7
+    GeoPostcodeC A8
     HSCPCode A9
     GeoDataZone2011 A9
     DeathLocationCode A5
