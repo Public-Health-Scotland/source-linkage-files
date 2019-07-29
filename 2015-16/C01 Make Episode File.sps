@@ -194,11 +194,6 @@ Compute Cost_Total_Net_incDNAs = Cost_Total_Net.
 * In the Cost_Total_Net column set the cost for those with attendance status 5 or 8 (CNWs and DNAs).
 If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 
-************** Correct the postcodes that have 6 characters instead of 7.
-Do If Length(Postcode) = 6.
-    Compute Postcode = Concat(char.substr(Postcode, 1, 3), " ", char.substr(Postcode, 4, 3)).
-End If.
-
 * Create a Flag for PPA (Potentially Preventable Admissions).
 
 * Acute records.
