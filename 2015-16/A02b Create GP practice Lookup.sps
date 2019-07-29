@@ -39,9 +39,20 @@ match files
 
  * Use CA2011 to produce the 2-char LCA codes.
 String LCA (A2).
- * These macros are defined in A02a, so this needs to be run before and in the same session as the following.
+
+ * These macros are defined in A01, so this needs to be run before and in the same session as the following.
 !CAtoLCA.
+
+ * Set some known dummy practice codes to consistent Board codes.
+Do if any(gpprac, 99942, 99957, 99961, 99976, 99981, 99999).
+    Compute hbpraccode = "S08200003". /*Outwith Scotland / unknown*/.
+Else if gpprac = 99995.
+    Compute hbpraccode = "S08200001".  /*RUK*/.
+End if.
+
+ * Add dictionary info.
 !AddLCADictionaryInfo LCA = LCA.
+!AddHBDictionaryInfo HB = hbpraccode 
 
  * Sort by gpprac before saving.
 Sort cases by gpprac.
