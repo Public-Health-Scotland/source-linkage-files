@@ -1,25 +1,25 @@
 ﻿* Encoding: UTF-8.
 * Create maternity costed extract in suitable format for PLICS.
 
-* Read in the maternity extract.  Rename/reformat/recode columns as appropriate. 
+* Read in the maternity extract.  Rename/reformat/recode columns as appropriate.
 
 * Program by Denise Hastie, July 2016.
 * Updated by Denise Hastie, August 2016.  Added in a section that was in the master PLICS file creation program
-* with regards to calculating the length of stay for maternity.  
+    * with regards to calculating the length of stay for maternity.
 
 ********************************************************************************************************.
- * Run 01-Set up Macros first!.
+* Run 01-Set up Macros first!.
 ********************************************************************************************************.
 
 * Read in CSV output file.
-GET DATA  /TYPE=TXT
+GET DATA  /TYPE = TXT
     /FILE = !Extracts + 'Maternity-episode-level-extract-20' + !FY + '.csv'
-    /ENCODING='UTF8'
-    /DELIMITERS=","
-    /QUALIFIER='"'
-    /ARRANGEMENT=DELIMITED
-    /FIRSTCASE=2
-    /VARIABLES=
+    /ENCODING = 'UTF8'
+    /DELIMITERS = ","
+    /QUALIFIER = '"'
+    /ARRANGEMENT = DELIMITED
+    /FIRSTCASE = 2
+    /VARIABLES = 
     CostsFinancialYear A4
     DateofAdmissionFullDate A10
     DateofDischargeFullDate A10
@@ -69,11 +69,12 @@ GET DATA  /TYPE=TXT
     AlcoholRelatedAdmission A1
     SubstanceMisuseRelatedAdmission A1
     FallsRelatedAdmission A1
-    SelfHarmRelatedAdmission A1.
-CACHE.
+    SelfHarmRelatedAdmission A1
+    UniqueRecordIdentifier A11.
+Cache.
 Execute.
 
-rename variables
+Rename Variables
     AdmittedTransferFromCodenew = adtf
     AdmittedTransferFromLocationCode = admloc
     AgeatMidpointofFinancialYear = age
@@ -116,7 +117,8 @@ rename variables
     SubstanceMisuseRelatedAdmission = submis_adm
     TotalNetCosts = cost_total_net
     TreatmentLocationCode = location
-    TreatmentNHSBoardCode = hbtreatcode.
+    TreatmentNHSBoardCode = hbtreatcode
+    UniqueRecordIdentifier = uri.
 
 * Create a variable for gender.
 numeric gender (F1.0).
@@ -126,14 +128,14 @@ string year (a4) recid (a3) ipdc (a1) newcis_ipdc (a1) newpattype_cis (a13).
 compute year = !FY.
 compute recid = '02B'.
 
- * Recode GP Practice into a 5 digit number.
- * We assume that if it starts with a letter it's an English practice and so recode to 99995.
+* Recode GP Practice into a 5 digit number.
+* We assume that if it starts with a letter it's an English practice and so recode to 99995.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
-   Compute gpprac = "99995".
-End if. 
+    Compute gpprac = "99995".
+End if.
 Alter Type GPprac (F5.0).
 
- * Set the IPDC marker for the CIJ.
+* Set the IPDC marker for the CIJ.
 Recode CIJInpatientDayCaseIdentifierCode ("IP" = "I") ("DC" = "D") into newcis_ipdc.
 
 Rename Variables
@@ -150,28 +152,28 @@ Compute stay = Datediff(record_keydate2, record_keydate1, "days").
 
 Frequencies stay yearstay.
 
- * BedDays.
+* BedDays.
 * This Python program will call the 'BedDaysPerMonth' macro (Defined in A01) for each month in FY order.
 Begin Program.
-from calendar import month_name
-import spss
-
-#Loop through the months by number in FY order
-for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
-   #To show what is happening print some stuff to the screen
-   print(month, month_name[month])
-   
-   #Set up the syntax
-   syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
-   
-   #Use the correct admission and discharge variables
-   syntax += " AdmissionVar = record_keydate1 DischargeVar = record_keydate2."
-   
-   #print the syntax to the screen
-   print(syntax)
-   
-   #run the syntax
-   spss.Submit(syntax)
+    from calendar import month_name
+    import spss
+    
+    #Loop through the months by number in FY order
+    for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
+    #To show what is happening print some stuff to the screen
+    print(month, month_name[month])
+    
+    #Set up the syntax
+    syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
+    
+    #Use the correct admission and discharge variables
+    syntax +=  " AdmissionVar = record_keydate1 DischargeVar = record_keydate2."
+    
+    #print the syntax to the screen
+    print(syntax)
+    
+    #run the syntax
+    spss.Submit(syntax)
 End Program.
 
 * Costs.
@@ -196,7 +198,7 @@ Do Repeat Beddays = Apr_beddays to Mar_beddays
     End if.
 End Repeat.
 
- * Put record_keydate back into numeric.
+* Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 
@@ -204,7 +206,7 @@ alter type record_keydate1 record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1.
 
- * Add Labels to Maternity only variables.
+* Add Labels to Maternity only variables.
 Value Labels discondition
     '1' "Still pregnant"
     '2' "Aborted (all types of completed abortion)"
@@ -291,11 +293,12 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     jan_beddays
     feb_beddays
     mar_beddays
+    uri
     /zcompressed.
 
 get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
 
- * zip up the raw data.
+* zip up the raw data.
 Host Command = ["gzip '" + !Extracts + "Maternity-episode-level-extract-20" + !FY + ".csv'"].
 
 
