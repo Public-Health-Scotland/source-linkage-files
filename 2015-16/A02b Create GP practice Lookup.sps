@@ -32,10 +32,11 @@ alter type postcode (A8).
  * Match on Geography info (the postcode from the ref file is PC8).
 sort cases by Postcode.
 match files
-   /File = * 
-   /Rename (Postcode = PC8)
-   /Table = !PCDir
-   /By PC8.
+    /File = *
+    /Rename Postcode = PC8
+    /Table = !PCDir
+    /Rename HB2018 = hbpraccode
+    /By PC8.
 
  * Use CA2011 to produce the 2-char LCA codes.
 String LCA (A2).
@@ -52,14 +53,13 @@ End if.
 
  * Add dictionary info.
 !AddLCADictionaryInfo LCA = LCA.
-!AddHBDictionaryInfo HB = hbpraccode 
+!AddHBDictionaryInfo HB = hbpraccode.
 
  * Sort by gpprac before saving.
 Sort cases by gpprac.
 
  * Save out, rename HB2018 for source, keep LCA etc. for others (Andrew Mooney).
 save outfile = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
-   /Rename (HB2018 = hbpraccode)
    /Keep gpprac PC7 PC8 cluster hbpraccode HSCP2018 CA2018 LCA
    /zcompressed.
 
