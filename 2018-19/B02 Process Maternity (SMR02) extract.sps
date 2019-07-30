@@ -27,7 +27,7 @@ GET DATA  /TYPE = TXT
     PatDateOfBirthC A10
     PracticeLocationCode A5
     PracticeNHSBoardCode A9
-    GeoPostcodeC A7
+    GeoPostcodeC A8
     NHSBoardofResidenceCode A9
     HSCP A9
     GeoCouncilAreaCode A2
@@ -155,24 +155,24 @@ Frequencies stay yearstay.
 * BedDays.
 * This Python program will call the 'BedDaysPerMonth' macro (Defined in A01) for each month in FY order.
 Begin Program.
-    from calendar import month_name
-    import spss
-    
-    #Loop through the months by number in FY order
-    for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
-    #To show what is happening print some stuff to the screen
+from calendar import month_name
+import spss
+
+# Loop through the months by number in FY order
+for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
+    # To show what is happening print some stuff to the screen
     print(month, month_name[month])
-    
-    #Set up the syntax
+
+    # Set up the syntax
     syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
     
-    #Use the correct admission and discharge variables
+    # Use the correct admission and discharge variables
     syntax +=  " AdmissionVar = record_keydate1 DischargeVar = record_keydate2."
     
-    #print the syntax to the screen
+    # print the syntax to the screen
     print(syntax)
-    
-    #run the syntax
+
+    # run the syntax
     spss.Submit(syntax)
 End Program.
 
