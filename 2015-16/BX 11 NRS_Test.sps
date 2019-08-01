@@ -1,48 +1,47 @@
 ﻿* Encoding: UTF-8.
-*PIS tests.
-get file = !File + "prescribing_file_for_source-20" + !FY + ".zsav".
 
- * Flag to count CHIs.
+* Tests for NRS deaths dataset.
+get file = !file + 'deaths_for_source-20' + !FY + '.zsav'.
+
+* Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
+* Flags to count M/Fs.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
     Compute Female = 1.
 End if.
 
- * Flags to count missing values.
+* Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
 if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
- * Get values for whole file.
+* Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
     /break
     /n_CHIs = sum(Has_CHI)
-    /Males Females = Sum(Male Female)
+    /n_Males n_Females = Sum(Male Female)
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
-    /n_episodes = n
-    /mean_dispensed = Mean(no_dispensed_items)
-    /mean_cost = Mean(cost_total_net)
-    /Total_dispensed = Sum(no_dispensed_items)
-    /Total_Costs_net = Sum(cost_total_net).
+    /n_deaths = n
+    /Earliest_death = Min(record_keydate1)
+    /Latest_death = Max(record_keydate1).
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to Total_Costs_net
+    /Make New_Value from n_CHIs to Latest_death
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI gender dob postcode hbrescode LCA gpprac age cost_total_net yearstay stay no_dispensed_items.
-select if recid = 'PIS'.
+    /Keep recid Anon_CHI record_keydate1 gender dob postcode gpprac.
+select if recid = 'NRS'.
 
  * Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -65,17 +64,15 @@ Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
     /break
     /n_CHIs = sum(Has_CHI)
-    /Males Females = Sum(Male Female)
+    /n_Males n_Females = Sum(Male Female)
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
-    /n_episodes = n
-    /mean_dispensed = Mean(no_dispensed_items)
-    /mean_cost = Mean(cost_total_net)
-    /Total_dispensed = Sum(no_dispensed_items)
-    /Total_Costs_net = Sum(cost_total_net).
+    /n_deaths = n
+    /Earliest_death = Min(record_keydate1)
+    /Latest_death = Max(record_keydate1).
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to Total_Costs_net
+    /Make Existing_Value from n_CHIs to Latest_death
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
@@ -86,7 +83,7 @@ match files
     /file = SLFexisting
     /file = SLFnew
     /By Measure.
-Dataset Name PISComparison.
+Dataset Name NRSComparison.
 
  * Close both datasets.
 Dataset close SLFnew.

@@ -1,81 +1,61 @@
 ﻿* Encoding: UTF-8.
-*PIS tests.
-get file = !File + "prescribing_file_for_source-20" + !FY + ".zsav".
+
+*Tests for Delayed Discharge dataset.
+get file = !file + 'Extracts/DD_LinkageFile-20' + !FY + '.zsav'.
 
  * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
-Do if gender = 1.
-    Compute Male = 1.
-Else if gender = 2.
-    Compute Female = 1.
-End if.
-
  * Flags to count missing values.
-If sysmis(dob) No_DoB = 1.
-
 if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
 
  * Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
     /break
     /n_CHIs = sum(Has_CHI)
-    /Males Females = Sum(Male Female)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
+    /No_Postcode = SUM(No_Postcode)
     /n_episodes = n
-    /mean_dispensed = Mean(no_dispensed_items)
-    /mean_cost = Mean(cost_total_net)
-    /Total_dispensed = Sum(no_dispensed_items)
-    /Total_Costs_net = Sum(cost_total_net).
+    /n_ammended_date = Sum(Ammended_Dates)
+    /Earliest_start Earliest_end = Min(keydate1_dateformat keydate2_dateformat)
+    /Latest_start Latest_end  = Max(keydate1_dateformat keydate2_dateformat).
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to Total_Costs_net
+    /Make New_Value from n_CHIs to Latest_end
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI gender dob postcode hbrescode LCA gpprac age cost_total_net yearstay stay no_dispensed_items.
-select if recid = 'PIS'.
+    /Keep recid Anon_CHI keydate1_dateformat keydate2_dateformat postcode DD_Quality.
+select if recid = 'DD'.
 
  * Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
-Do if gender = 1.
-    Compute Male = 1.
-Else if gender = 2.
-    Compute Female = 1.
-End if.
-
- * Flags to count missing values.
-If sysmis(dob) No_DoB = 1.
-
 if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
+
+ * Estimate records with assumed end dates.
+If any(DD_Quality, "1A", "1AP", "2A", "2AP") Ammended_Dates = 1.
 
  * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
     /break
     /n_CHIs = sum(Has_CHI)
-    /Males Females = Sum(Male Female)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
+    /No_Postcode = SUM(No_Postcode)
     /n_episodes = n
-    /mean_dispensed = Mean(no_dispensed_items)
-    /mean_cost = Mean(cost_total_net)
-    /Total_dispensed = Sum(no_dispensed_items)
-    /Total_Costs_net = Sum(cost_total_net).
+    /n_ammended_date = Sum(Ammended_Dates)
+    /Earliest_start Earliest_end = Min(keydate1_dateformat keydate2_dateformat)
+    /Latest_start Latest_end  = Max(keydate1_dateformat keydate2_dateformat).
+
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to Total_Costs_net
+    /Make Existing_Value from n_CHIs to Latest_end
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
@@ -86,7 +66,7 @@ match files
     /file = SLFexisting
     /file = SLFnew
     /By Measure.
-Dataset Name PISComparison.
+Dataset Name DDComparison.
 
  * Close both datasets.
 Dataset close SLFnew.
@@ -100,3 +80,5 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.
 Crosstabs Measure by Issue.
+
+

@@ -28,7 +28,7 @@ aggregate outfile = SLFnew
     /n_episodes = n
     /mean_dispensed = Mean(no_dispensed_items)
     /mean_cost = Mean(cost_total_net)
-    /n_dispensed = Sum(no_dispensed_items)
+    /Total_dispensed = Sum(no_dispensed_items)
     /Total_Costs_net = Sum(cost_total_net).
 
  * Restructure for easy analysis and viewing.
@@ -70,7 +70,7 @@ aggregate outfile = SLFexisting
     /n_episodes = n
     /mean_dispensed = Mean(no_dispensed_items)
     /mean_cost = Mean(cost_total_net)
-    /n_dispensed = Sum(no_dispensed_items)
+    /Total_dispensed = Sum(no_dispensed_items)
     /Total_Costs_net = Sum(cost_total_net).
 
 Dataset activate SLFexisting.
