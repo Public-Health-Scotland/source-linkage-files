@@ -29,7 +29,7 @@ Recode arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy ch
 Frequencies age gender.
 
  * Now we have all CHIs and LTC data try to work out a dob if it's missing, then calculate the age.
-Do If (~SysMiss(dob)).
+Do If (Not(SysMiss(dob))).
     Compute age = DateDiff(!midFY, dob, "years").
 Else if chi ne "".
     * Create 2 scratch variables with the possible dobs and ages from the CHI.
@@ -39,10 +39,10 @@ Else if chi ne "".
     Compute #CHI_age2 = DateDiff(!midFY, #CHI_dob2, "years").
     * If either of the dobs is missing use the other one.
     * This only happens with impossible dates because of leap years.
-    Do if Sysmiss(#CHI_dob1) AND ~Sysmiss(#CHI_dob2).
+    Do if Sysmiss(#CHI_dob1) AND Not(Sysmiss(#CHI_dob2)).
         Compute dob = #CHI_dob2.
         Compute age = #CHI_age2.
-    Else if Sysmiss(#CHI_dob2) AND ~Sysmiss(#CHI_dob1).
+    Else if Sysmiss(#CHI_dob2) AND Not(Sysmiss(#CHI_dob1)).
         Compute dob = #CHI_dob1.
         Compute age = #CHI_age1.
         * If the younger age is negative, assume they are the older one.
@@ -70,7 +70,7 @@ Else if chi ne "".
         Compute age = #CHI_age2.
     End if.
     * If we still don't have an age, try and fill it in from a previous record.
-    Do if (sysmiss(Age) OR age = 999) and CHI = Lag(CHI).
+    Do if sysmiss(Age) and CHI = Lag(CHI).
         * Only use the previous one if it matches the CHI.
         Do if #CHI_age1 = Lag(Age) Or #CHI_dob1 = lag(dob).
             Compute dob = #CHI_dob1.
@@ -155,14 +155,14 @@ Numeric Activity_after_death CHI_death_date_works CHI_death_date_missing Remove_
  * If they have an NRS death episode which works we should use this date.
 Compute Using_NRS_ep = 0.
 Do if Has_NRS and death_date_NRS_ep >= last_activity.
-    Compute death_date =  death_date_NRS_ep.
+    Compute death_date = death_date_NRS_ep.
     Compute Using_NRS_ep = 1.
 End if.
 
  * Flag for activity after death.
 If Datediff(last_activity, death_date, "days") GT 3 Activity_after_death = 1.
  * Flag if the CHI death date is after the last activity.
-If Datediff(last_activity, death_date_CHI, "days") LE 0 CHI_death_date_works = 1.
+If death_date_CHI >= last_activity CHI_death_date_works = 1.
  * Flag if there is no CHI death date.
 If sysmis(death_date_CHI) CHI_death_date_missing = 1.
 
