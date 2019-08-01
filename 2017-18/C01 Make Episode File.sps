@@ -17,6 +17,7 @@ add files
     /file = !File + "a&e_for_source-20" + !FY + ".zsav"
     /file = !File + "deaths_for_source-20" + !FY + ".zsav"
     /file = !File + "DN_for_source-20" + !FY + ".zsav"
+    /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !File + "CMH_for_source-20" + !FY + ".zsav"
@@ -119,13 +120,13 @@ Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
 End If.
 
  * Recode newpattype.
+String newpattype_cis (A13).
 Recode newpattype_ciscode
-    (0 = "Non-elective")
+    (0 = "Non-Elective")
     (1 = "Elective")
     (2 = "Maternity")
     (9 = "Other")
     Into newpattype_cis.
-
 
 ********************** Temporarily work on CIS only records ***************************.
 
@@ -196,6 +197,7 @@ Compute Cost_Total_Net_incDNAs = Cost_Total_Net.
 If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 
 * Create a Flag for PPA (Potentially Preventable Admissions).
+sort cases by chi cis_marker record_keydate1 record_keydate2.
 
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
@@ -358,10 +360,6 @@ Frequencies PPA CIS_PPA.
 
 sort cases by chi keydate1_dateformat.
 
-*  We are not currently including Care Home data for 2017/18 or 2018/19 but we still want the variables for consistency.
-String sc_send_lca ch_lca (A2) ch_name (A73).
-Numeric ch_admreas (F2.0).
-
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
@@ -380,6 +378,7 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 

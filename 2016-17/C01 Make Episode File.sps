@@ -120,8 +120,9 @@ Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
 End If.
 
  * Recode newpattype.
+String newpattype_cis (A13).
 Recode newpattype_ciscode
-    (0 = "Non-elective")
+    (0 = "Non-Elective")
     (1 = "Elective")
     (2 = "Maternity")
     (9 = "Other")
@@ -196,6 +197,7 @@ Compute Cost_Total_Net_incDNAs = Cost_Total_Net.
 If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 
 * Create a Flag for PPA (Potentially Preventable Admissions).
+sort cases by chi cis_marker record_keydate1 record_keydate2.
 
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").

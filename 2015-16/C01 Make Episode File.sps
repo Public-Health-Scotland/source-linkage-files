@@ -20,6 +20,7 @@ add files
     /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
+    /file = !File + "CMH_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -102,6 +103,7 @@ frequencies SMRType.
 
 Alter Type uri (F8.0).
 
+
  * Slight correction for newpattype_cis using types of admission.
  * Lump the unknowns together to avoid potential confusion.
 Recode newcis_admtype ("Un" = "99").
@@ -118,13 +120,13 @@ Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
 End If.
 
  * Recode newpattype.
+String newpattype_cis (A13).
 Recode newpattype_ciscode
-    (0 = "Non-elective")
+    (0 = "Non-Elective")
     (1 = "Elective")
     (2 = "Maternity")
     (9 = "Other")
     Into newpattype_cis.
-
 
 ********************** Temporarily work on CIS only records ***************************.
 
@@ -195,6 +197,7 @@ Compute Cost_Total_Net_incDNAs = Cost_Total_Net.
 If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 
 * Create a Flag for PPA (Potentially Preventable Admissions).
+sort cases by chi cis_marker record_keydate1 record_keydate2.
 
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
@@ -357,18 +360,11 @@ Frequencies PPA CIS_PPA.
 
 sort cases by chi keydate1_dateformat.
 
- * Declare variables for Delay Discharge (1516 only).
-Numeric Delay_End_Reason (F1.0).
-String Primary_Delay_Reason (A4).
-String Secondary_Delay_Reason (A4).
-String DD_Quality (A3).
-String DD_Responsible_LCA (A2).
-
-save outfile = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
-get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
+get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
 
 * Housekeeping.
 Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
@@ -383,6 +379,7 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
