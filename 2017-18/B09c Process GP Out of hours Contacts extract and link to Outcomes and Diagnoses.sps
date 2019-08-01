@@ -157,6 +157,14 @@ match files
 Rename Variables Cost_per_consultation =  cost_total_net.
 Alter type cost_total_net (F8.2).
 
+* Calculate costs per month.
+Compute cost_monthnum = xDate.Month(ConsultationStartDateTime).
+
+Do repeat month = jan_cost feb_cost mar_cost apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost
+    /monthnum = 1 to 12.
+    If cost_monthnum = monthnum month = cost_total_net.
+End repeat.
+
 ************************************************************************************************************.
 * Variables.
 
@@ -329,6 +337,18 @@ save outfile = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     diag1 To diag6
     ooh_outcome.1 to ooh_outcome.4
     cost_total_net
+    apr_cost
+    may_cost
+    jun_cost
+    jul_cost
+    aug_cost
+    sep_cost
+    oct_cost
+    nov_cost
+    dec_cost
+    jan_cost
+    feb_cost
+    mar_cost
     ooh_CC
     /zcompressed.
 
