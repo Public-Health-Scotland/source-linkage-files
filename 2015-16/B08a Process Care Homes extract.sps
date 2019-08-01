@@ -32,7 +32,7 @@ GET DATA  /Type = TXT
       GenderDescription A6
       NHSBoardofResidenceCode A9
       ClientCouncilAreaCode A2
-      ClientPostcode A7
+      ClientPostcode A8
       CareHomeAdmissionDate A10
       CareHomeDischargeDate A10
       CareHomeName A73
