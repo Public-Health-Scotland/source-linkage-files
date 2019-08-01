@@ -16,7 +16,7 @@ GET DATA
     UPINumber A10
     PatientDoBDate A10
     Gender F1.0
-    PatientPostcode A7
+    PatientPostcode A8
     NHSBoardofResidenceCode9 A9
     PatientHSCPCodeatEvent A9
     PracticeCode F5.0
