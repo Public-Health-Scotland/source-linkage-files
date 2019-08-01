@@ -2,7 +2,7 @@
 
 get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat CIJ_start_date CIJ_end_date
-    chi gender dob age gpprac postcode lca DataZone
+    chi gender dob age gpprac postcode lca datazone
     hbtreatcode location spec tadm
     CIS_marker newCIS_ipdc newCIS_admtype newpattype_CIScode newpattype_CIS CIJadm_spec CIJdis_spec CIS_PPA.
 
@@ -11,9 +11,9 @@ select if chi NE "".
 select if any(recid, "01B", "02B", "04B", "GLS").
 
  * Do a temp save here as it speeds things up (because SPSS is wierd).
-save outfile =  !File + "slf_reducedForDD.zsav"
+save outfile =  !File + "slf_reduced_for_DD.zsav"
     /zcompressed.
-get file =  !File + "slf_reducedForDD.zsav".
+get file =  !File + "slf_reduced_for_DD.zsav".
 
 * Create a copy of the CIS marker.
 String new_CIS (A5).
@@ -48,8 +48,8 @@ sort cases by chi keydate1_dateformat order.
 * Capture the Mental Health delays with no end dates.
 Do if chi = lag(chi) and recid = "DD" and lag(recid) = "04B" and sysmiss(keydate2_dateformat)
     and sysmiss(lag(keydate2_dateformat)) and keydate1_dateformat GE lag(CIJ_start_date) - time.days(1).
-    Compute Flag8 = 1.
-    If keydate1_dateformat GE lag(CIJ_start_date) Flag8 = 2.
+    Compute Flag_8 = 1.
+    If keydate1_dateformat GE lag(CIJ_start_date) Flag_8 = 2.
     Compute new_CIS = lag(new_CIS).
     Compute CIJ_start_date = lag(CIJ_start_date).
     Compute CIJ_end_date = lag(CIJ_end_date).
@@ -59,52 +59,46 @@ End if.
 Do if chi = lag(chi) and missing(new_CIS).
     * Create flags simply to check rows where CIS markers are being added.
     * don't expect any of these.
-    compute flag1 = 0.
+    compute Flag_1 = 0.
     Do if keydate1_dateformat = lag(keydate2_dateformat) and recid ne "DD".
         compute new_CIS = lag(new_CIS).
         Compute CIJ_start_date = lag(CIJ_start_date).
         Compute CIJ_end_date = lag(CIJ_end_date).
-        compute flag1 = 1.
+        compute Flag_1 = 1.
     Else if recid = "DD".
-        Compute Flag2 = 0.
-        Compute Flag3 = 0.
-        Compute Flag4 = 0.
-        Compute NoCIS = 0.
+        Compute Flag_2 = 0.
+        Compute Flag_3 = 0.
+        Compute Flag_4 = 0.
+        Compute no_CIS = 0.
         * Flag DD records which fit entirely within a CIS episode. Allow one day.
         Do if (keydate1_dateformat GE lag(CIJ_start_date) - time.days(1)) and (keydate2_dateformat LE lag(CIJ_end_date) + time.days(1)).
             compute new_CIS = lag(new_CIS).
-            Compute CIJ_start_date = lag(CIJ_start_date).
-            Compute CIJ_end_date = lag(CIJ_end_date).
-            compute flag2 = 1.
-            If (keydate1_dateformat GE lag(CIJ_start_date)) and (keydate2_dateformat LE lag(CIJ_end_date)) flag2 = 2.
-            compute Flag6 = 0.
+            compute Flag_2 = 1.
+            If (keydate1_dateformat GE lag(CIJ_start_date)) and (keydate2_dateformat LE lag(CIJ_end_date)) Flag_2 = 2.
+            compute Flag_6 = 0.
             * If we know the date has changed flag it and work out how off that dates are.
             Do if Ammended_Dates = 1.
-                Compute Flag6 = 1.
-                Compute DaysWrong = DateDiff(lag(CIJ_end_date), keydate2_dateformat, "days").
+                Compute Flag_6 = 1.
+                Compute days_wrong = DateDiff(lag(CIJ_end_date), keydate2_dateformat, "days").
             End if.
             * If DD record date starts within hospital dates but ends afterwards.
         Else if Range(keydate1_dateformat, lag(CIJ_start_date) - time.days(1), lag(CIJ_end_date) + time.days(1)) and keydate2_dateformat GT lag(CIJ_end_date).
-            Compute flag3 = 1.
-            If Range(keydate1_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) and keydate2_dateformat GT lag(CIJ_end_date) flag3 = 2.
-            Compute DaysWrong = DateDiff(keydate2_dateformat, lag(CIJ_end_date), "days").
-            Compute Flag7 = 0.
-            Compute Flag9 = 0.
+            Compute Flag_3 = 1.
+            If Range(keydate1_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) and keydate2_dateformat GT lag(CIJ_end_date) Flag_3 = 2.
+            Compute days_wrong = DateDiff(keydate2_dateformat, lag(CIJ_end_date), "days").
+            Compute Flag_7 = 0.
+            Compute Flag_9 = 0.
             * If we know the date has changed flag it and work out how off that dates are.
             Do if Ammended_Dates = 1 AND xdate.month(MonthFlag) = xdate.month(lag(CIJ_end_date)).
-                Compute Flag7 = 1.
-                If Range(keydate1_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) Flag7 = 2.
+                Compute Flag_7 = 1.
+                If Range(keydate1_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) Flag_7 = 2.
                 Compute new_CIS = lag(new_CIS).
-                Compute CIJ_start_date = lag(CIJ_start_date).
-                Compute CIJ_end_date = lag(CIJ_end_date).
                 * Don't make the dates give it a negative stay (in cases where the match was +- 1 day).
                 Compute keydate2_dateformat = Max(keydate1_dateformat, lag(CIJ_end_date)).
                 * If it's only one day out then we'll count it as matching the CIS.
-            Else if DaysWrong = 1.
-                Compute Flag9 = 1.
+            Else if days_wrong = 1.
+                Compute Flag_9 = 1.
                 Compute new_CIS = lag(new_CIS).
-                Compute CIJ_start_date = lag(CIJ_start_date).
-                Compute CIJ_end_date = lag(CIJ_end_date).
             End if.
         End if.
     End if.
@@ -114,37 +108,35 @@ End if.
 sort cases by chi (A) keydate1_dateformat (D) order (A).
 * If DD record date ends within CIS dates but starts before.
 Do if recid = 'DD' and chi = lag(chi) and missing(new_CIS).
-    Compute Flag4 = 0.
+    Compute Flag_4 = 0.
     Do if keydate1_dateformat LE lag(CIJ_start_date) and Range(keydate2_dateformat, lag(CIJ_start_date) - time.days(1), lag(CIJ_end_date) + time.days(1)).
-        Compute flag4 = 1.
-        Compute DaysWrong = DateDiff(lag(CIJ_start_date), keydate1_dateformat, "days").
-        If keydate1_dateformat LE lag(CIJ_start_date) and Range(keydate2_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) flag4 = 2.
-        Compute Flag10 = 0.
+        Compute Flag_4 = 1.
+        Compute days_wrong = DateDiff(lag(CIJ_start_date), keydate1_dateformat, "days").
+        If keydate1_dateformat LE lag(CIJ_start_date) and Range(keydate2_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) Flag_4 = 2.
+        Compute Flag_10 = 0.
         * If it's only one day out, count it as matching the CIS.
-        Do if DaysWrong = 1.
-            Compute Flag10 = 1.
+        Do if days_wrong = 1.
+            Compute Flag_10 = 1.
             Compute new_CIS = lag(new_CIS).
-            Compute CIJ_start_date = lag(CIJ_start_date).
-            Compute CIJ_end_date = lag(CIJ_end_date).
         End if.
     End if.
 End if.
 
 * Set the CIJ variables (for the DD's we have assigned a CIS).
 * Also take other variables of use.
-Missing Values Postcode ("       ")
-    /DataZone ("        ")
-    /LCA ("  ").
+Missing Values Postcode datazone LCA (" ").
+
 sort cases by CHI new_CIS order.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /Presorted
     /break CHI new_CIS
-    /newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA
-    = First(newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA)
-    /DD_gender DD_dob DD_age DD_gpprac DD_postcode DD_lca DD_DataZone
-    = Last(gender dob age gpprac postcode lca DataZone).
+    /CIJ_start_date CIJ_end_date newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA
+    = First(CIJ_start_date CIJ_end_date newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA)
+    /DD_gender DD_dob DD_age DD_gpprac DD_postcode DD_lca DD_datazone
+    = Last(gender dob age gpprac postcode lca datazone).
 
-* Fill in the variables for the DD.
+ * Fill in the variables for the DD.
+ * This will keep the value which was on the DD record if it was there, otherwise it will be filled in from the latest episode in the CIJ to have valid data.
 Do if recid = "DD".
     Compute gender = DD_gender.
     Compute dob = DD_dob.
@@ -152,7 +144,7 @@ Do if recid = "DD".
     Compute gpprac = DD_gpprac.
     Compute postcode = DD_postcode.
     Compute lca = DD_lca.
-    Compute DataZone = DD_DataZone.
+    Compute datazone = DD_datazone.
 End if.
 
 * Sort back to a 'normal' order.
@@ -166,22 +158,22 @@ Do if recid = "DD" and chi = lag(chi).
     If Missing(gpprac) gpprac = lag(DD_gpprac).
     If Missing(postcode) postcode = lag(DD_postcode).
     If Missing(lca) lca = lag(DD_lca).
-    If Missing(DataZone) DataZone = lag(DD_DataZone).
+    If Missing(datazone) datazone = lag(DD_datazone).
 End if.
 
 * Labels for the flags (just for info now).
 Variable labels
-    Flag1 "1 - CIS added to non-DD record"
-    Flag2 "2 - CIS added to DD that falls within CIS period"
-    Flag3 "3 - DD record that starts within CIS period but ends after"
-    Flag4 "4 - DD record that starts before CIS period but ends during"
-    Flag6 "6 - DD that matches CIS but had end-date changed"
-    Flag7 "7 - DD with changed dates pushing it over the CIS dates"
-    Flag8 "8 - DD records linked to MH with no end dates"
-    NoCIS "no-CIS attached".
+    Flag_1 "1 - CIS added to non-DD record"
+    Flag_2 "2 - CIS added to DD that falls within CIS period"
+    Flag_3 "3 - DD record that starts within CIS period but ends after"
+    Flag_4 "4 - DD record that starts before CIS period but ends during"
+    Flag_6 "6 - DD that matches CIS but had end-date changed"
+    Flag_7 "7 - DD with changed dates pushing it over the CIS dates"
+    Flag_8 "8 - DD records linked to MH with no end dates"
+    no_CIS "no-CIS attached".
 
 * Flag DDs which don't seem to have an associated hospital stay.
-if missing(new_CIS) and recid = "DD" NoCIS = 1.
+if missing(new_CIS) and recid = "DD" no_CIS = 1.
 
 save outfile = !File + "DD_Temp-2.zsav"
     /zcompressed.
@@ -212,33 +204,33 @@ Value Labels DD_quality
     "-"           "No Match (We don't keep these)".
 
 Do if recid = "DD".
-    Do if flag2 = 2 and flag6 = 0.
+    Do if Flag_2 = 2 and Flag_6 = 0.
         Compute DD_Quality = "1".
-    Else if flag2 = 1 and flag6 = 0.
+    Else if Flag_2 = 1 and Flag_6 = 0.
         Compute DD_Quality = "1P".
-    Else if flag2 = 2 and flag6 = 1.
+    Else if Flag_2 = 2 and Flag_6 = 1.
         Compute DD_Quality = "1A".
-    Else if flag2 = 1 and flag6 = 1.
+    Else if Flag_2 = 1 and Flag_6 = 1.
         Compute DD_Quality = "1AP".
-    Else if any(flag4, 1, 2) and flag10 = 0.
+    Else if any(Flag_4, 1, 2) and Flag_10 = 0.
         Compute DD_Quality = "3".
-    Else if flag4 = 2 and flag10 = 1.
+    Else if Flag_4 = 2 and Flag_10 = 1.
         Compute DD_Quality = "3D".
-    Else if flag4 = 1 and flag10 = 1.
+    Else if Flag_4 = 1 and Flag_10 = 1.
         Compute DD_Quality = "3DP".
-    Else if any(flag3, 1, 2) and flag7 = 0 and flag9 = 0.
+    Else if any(Flag_3, 1, 2) and Flag_7 = 0 and Flag_9 = 0.
         Compute DD_Quality = "2".
-    Else if flag3 = 2 and flag7 = 0 and flag9 = 1.
+    Else if Flag_3 = 2 and Flag_7 = 0 and Flag_9 = 1.
         Compute DD_Quality = "2D".
-    Else if flag3 = 1 and flag7 = 0 and flag9 = 1.
+    Else if Flag_3 = 1 and Flag_7 = 0 and Flag_9 = 1.
         Compute DD_Quality = "2DP".
-    Else if flag3 = 2 and flag7 = 2.
+    Else if Flag_3 = 2 and Flag_7 = 2.
         Compute DD_Quality = "2A".
-    Else if flag3 = 1 and flag7 = 1.
+    Else if Flag_3 = 1 and Flag_7 = 1.
         Compute DD_Quality = "2AP".
-    Else if flag8 = 2.
+    Else if Flag_8 = 2.
         Compute DD_Quality = "4".
-    Else if flag8 = 1.
+    Else if Flag_8 = 1.
         Compute DD_Quality = "4P".
     Else.
         Compute DD_Quality = "-".
@@ -246,8 +238,8 @@ Do if recid = "DD".
 End if.
 
 * Final checks before the DD records are ready to be separated and added back to source.
-crosstabs DD_Quality by NoCIS.
-Frequencies DD_Quality NoCIS.
+crosstabs DD_Quality by no_CIS.
+Frequencies DD_Quality no_CIS.
 
 sort cases by LCA.
 Split file Separate by LCA.
@@ -257,7 +249,7 @@ Frequencies DD_Quality.
 aggregate
     /Presorted
     /break lca
-    /UnMatched = SUM(NoCIS)
+    /UnMatched = SUM(no_CIS)
     /DDs = N.
 
 compute pct_unmatched = UnMatched / DDs * 100.
@@ -271,7 +263,7 @@ sort cases by chi keydate1_dateformat.
 
 * Save out records with changed end dates to feed back to the DD team.
 Temporary.
-Select if any(flag7, 1, 2).
+Select if any(Flag_7, 1, 2).
 save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
     /Rename (keydate1_dateformat keydate2_dateformat = RDD Delay_End_Date)
     /keep year chi DD_Responsible_LCA RDD Delay_End_Date new_CIS newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec
@@ -310,7 +302,7 @@ Compute stay = datediff(keydate2_dateformat, keydate1_dateformat, "days").
 Compute cis_marker = new_CIS.
 
 * Set the SMRType based on whether we matched a CIS or not.
-Do if NoCIS = 1.
+Do if no_CIS = 1.
     Compute SMRType = "DD-No CIS".
 Else.
     Compute SMRType = "DD-CIS".
@@ -327,7 +319,7 @@ alter type record_keydate1 record_keydate2 (F8.0).
 
 save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
     /Keep year recid SMRType chi gender dob age gpprac postcode lca
-    keydate1_dateformat keydate2_dateformat record_keydate1 record_keydate2
+    keydate1_dateformat keydate2_dateformat record_keydate1 record_keydate2 CIJ_start_date CIJ_end_date
     hbtreatcode to cis_marker
     Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason DD_Responsible_LCA
     ipdc newcis_ipdc newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec CIJdis_spec CIS_PPA
@@ -354,5 +346,5 @@ Erase File = !File + "DD_Temp-1.zsav".
 Erase File = !File + "DD_Temp-2.zsav".
 
 * Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
-Erase file = !File + "slf_reducedForDD.zsav".
+Erase file = !File + "slf_reduced_for_DD.zsav".
 
