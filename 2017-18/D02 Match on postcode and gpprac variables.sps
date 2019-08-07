@@ -8,17 +8,22 @@ Sort Cases by postcode.
 match files file = *
     /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
     /Rename (HB2018 = hbrescode)
-    /In = PostcodeMatch
     /by postcode.
 
-Frequencies hbrescode.
+ * We now also want to include 2019 geographies. 
+ * We will just match these to the postcode, therefore the 2018 ones will be slightly more complete.
+match files file = *
+    /Table = !PCDir
+    /Rename PC7 = Postcode
+    /Keep year to UR2_2016 HB2019 CA2019 HSCP2019
+    /By Postcode.
+
 *****************************************************************************************.
 ********* Match in GP practice and cluster info. **********************************.
 sort cases by gpprac.
 
 match files file = *
     /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
-    /In = GPPracMatch
     /Drop PC7 PC8
     /by gpprac.
 
@@ -29,17 +34,9 @@ Else if gpprac = 99995.
     Compute hbpraccode = "S08200001".  /*RUK*/.
 End if.
 
-Frequencies hbpraccode.
-
- * If the practice code didn't match the lookups and still doesn't have a board code, remove it as it's probably a bad code.
-if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
-
- * Recode according to boundary changes 08/05/2018.
-Recode hbrescode hbpraccode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
-Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
-Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
-
+ * Add dummy codes etc.
 !AddHB2018DictionaryInfo HB = hbrescode hbpraccode.
+!AddHB2019DictionaryInfo HB = HB2019.
 
 sort cases by chi.
 
