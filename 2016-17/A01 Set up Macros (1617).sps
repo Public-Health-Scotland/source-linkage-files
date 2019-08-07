@@ -210,14 +210,14 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
 
  * This will only need updating if the name of the Health Board variable changes.
  * Change '/Source variables = HBXXXX' in the below.
-Define !AddHBDictionaryInfo (HB = !CMDEND)
+Define !AddHB2018DictionaryInfo (HB = !CMDEND)
  * Copy the labels from the Postcode Lookup file.
 Apply Dictionary From !PCDir
     /VarInfo ValLabels = Replace
     /Source variables = HB2018
     /Target variables = !HB.
-
- * Add extra non official labels.
+    
+* Add extra non official labels.
 Add Value Labels !HB
     'S08200001' "Outwith Scotland / RUK"
     'S08200002' "No Fixed Abode"
@@ -233,6 +233,33 @@ Add Value Labels !HB
     'S08100006' "NHS Healthcare Improvement Scotland"
     'S08100007' "Scottish Ambulance Service"
     'S08100008' "State Hospital".
+    
+!EndDefine.
+    
+Define !AddHB2019DictionaryInfo (HB = !CMDEND)
+ * Copy the labels from the Postcode Lookup file.
+Apply Dictionary From !PCDir
+    /VarInfo ValLabels = Replace
+    /Source variables = HB2019
+    /Target variables = !HB.
+
+* Add extra non official labels.
+Add Value Labels !HB
+    'S08200001' "Outwith Scotland / RUK"
+    'S08200002' "No Fixed Abode"
+    'S08200003' "Not Known"
+    'S08200004' "Outside UK"
+    'S27000001' "Non-NHS Provider/Location"
+    'S27000002' "Not Applicable"
+    'S08100001' "National Facility (e.g. GJNH)"
+    'S08100002' "NHS24"
+    'S08100003' "NHS Education for Scotland"
+    'S08100004' "NHS Health Scotland"
+    'S08100005' "NHS National Services Scotland"
+    'S08100006' "NHS Healthcare Improvement Scotland"
+    'S08100007' "Scottish Ambulance Service"
+    'S08100008' "State Hospital".
+
 !EndDefine.
 
 ************************************************************************************************************.

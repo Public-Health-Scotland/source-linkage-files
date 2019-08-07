@@ -217,7 +217,7 @@ Add value labels location
     '7' "CHAD - Day Centre"
     '8' "CHAD - Other".
 
-!AddHBDictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
+!AddHB2018DictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
 
 !AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
 

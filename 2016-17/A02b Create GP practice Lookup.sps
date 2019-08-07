@@ -53,7 +53,7 @@ End if.
 
  * Add dictionary info.
 !AddLCADictionaryInfo LCA = LCA.
-!AddHBDictionaryInfo HB = hbpraccode.
+!AddHB2018DictionaryInfo HB = hbpraccode.
 
  * Sort by gpprac before saving.
 Sort cases by gpprac.

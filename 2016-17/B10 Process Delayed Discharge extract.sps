@@ -128,7 +128,7 @@ Else If hb = "NHS Western Isles".
    Compute hbtreatcode = "S08000028".
 End If.
 
-!AddHBDictionaryInfo HB = hbtreatcode.
+!AddHB2018DictionaryInfo HB = hbtreatcode.
 crosstabs hbtreatcode by HB.
 
 *Add labels to Delay end reason.
