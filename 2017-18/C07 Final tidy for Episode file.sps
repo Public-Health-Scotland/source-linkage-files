@@ -218,6 +218,7 @@ Add value labels location
     '8' "CHAD - Other".
 
 !AddHB2018DictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
+!AddHB2019DictionaryInfo HB = HB2019.
 
 !AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
 
@@ -859,6 +860,9 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     CA2018
     Locality
     DataZone2011
+    HB2019
+    HSCP2019
+    CA2019
     simd2016rank
     simd2016_sc_decile
     simd2016_sc_quintile
