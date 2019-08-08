@@ -172,7 +172,7 @@ If NSU = 0 Keep_Population = 1.
 
  * If the flag is missing they must be a non-keep NSU so set to 0.
 Recode Keep_Population (sysmis = 0).
-Frequencies Keep_Population.
+Crosstabs NSU by Keep_Population.
 
 save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
