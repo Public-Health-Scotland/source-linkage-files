@@ -156,7 +156,7 @@ aggregate
     /DN = Max(DN_contacts)
     /CMH = Max(CMH_contacts).
 
- * If there are no values (i.e. the max is sysmis or 0) then we should set the variable to sysmis to hopefully avoid confusion.
+* If there are no values (i.e. the max is sysmis or 0) then we should set the variable to sysmis to hopefully avoid confusion.
 Do repeat Test = HHG_Start HHG_End SPARRA_Start SPARRA_End
     /Var = HHG_Start_FY HHG_End_FY SPARRA_Start_FY  SPARRA_End_FY.
     If Test = 0 Var = $sysmis.
@@ -168,7 +168,7 @@ Do if DD = 0.
     Compute DD_Code9_episodes = $sysmis.
     Compute DD_Code9_beddays = $sysmis.
 End if.
-    
+
 Do if CH = 0.
     Compute ch_episodes = $sysmis.
     Compute ch_beddays = $sysmis.
@@ -331,6 +331,9 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     UR6_2016
     UR3_2016
     UR2_2016
+    HB2019
+    HSCP2019
+    CA2019
     HRI_lca
     HRI_lca_incDN
     HRI_hb
