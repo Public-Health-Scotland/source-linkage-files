@@ -45,7 +45,8 @@ GET DATA  /TYPE=TXT
     PatientCouncilAreaCodeContact A2
     PracticeCodeContact A5
     NHSBoardofResidenceCode9Contact A9
-    HSCPofResidenceCodeContact A9.
+    HSCPofResidenceCodeContact A9
+    PatientDataZone2011Contact A9.
 CACHE.
 
 *Alter or create variables to match file to source file.
@@ -56,6 +57,7 @@ Rename Variables
     PatientCouncilAreaCodeContact = lca
     PatientPostcodeCContact = postcode
     PracticeCodeContact = gpprac
+    PatientDataZone2011Contact = datazone
     PracticeNHSBoardCode9Contact = hbpraccode
     TreatmentNHSBoardCode9 = hbtreatcode
     TreatmentNHSBoardName = hbtreatname
@@ -135,7 +137,7 @@ End repeat.
 
 * Set blanks as missing so that the aggregate ignores them.
 Missing Values
-    hbtreatcode hbrescode HSCP postcode lca (" ").
+    hbtreatcode hbrescode HSCP postcode lca datazone (" ").
 
 aggregate outfile=*
     /Presorted
@@ -147,6 +149,7 @@ aggregate outfile=*
     /hbrescode = Last(hbrescode)
     /HSCP = Last(HSCP)
     /lca = Last(lca)
+    /datazone = Last(datazone)
     /age = Last(age)
     /diag1 = First(PrimaryInterventionCategory)
     /diag2 = First(OtherInterventionCategory1)
@@ -249,6 +252,7 @@ save outfile = !File + "DN_for_source-20" + !FY + ".zsav"
     hbtreatcode
     HSCP
     lca
+    datazone
     location
     diag1
     diag2
