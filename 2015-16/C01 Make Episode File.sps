@@ -20,7 +20,6 @@ add files
     /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
-    /file = !File + "CMH_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -366,6 +365,18 @@ save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /zcompressed.
 get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
 
+ * Declare variables for Delay Discharge (1516 only).
+Numeric Delay_End_Reason (F1.0).
+String Primary_Delay_Reason (A4).
+String Secondary_Delay_Reason (A4).
+String DD_Quality (A3).
+String DD_Responsible_LCA (A2).
+
+save outfile = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
+    /zcompressed.
+
+get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
+
 * Housekeeping.
 Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
 
@@ -379,7 +390,6 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
