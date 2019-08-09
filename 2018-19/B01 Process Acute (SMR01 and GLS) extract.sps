@@ -63,7 +63,6 @@ GET DATA /TYPE=TXT
       Operation4BCode4char A4
       DateofOperation401 A10
       AgeatMidpointofFinancialYear01 F3.0
-      ContinuousInpatientStaySMR01 F5.0
       ContinuousInpatientStaySMR01incGLS F5.0
       ContinuousInpatientJourneyMarker01 A5
       CIJPlannedAdmissionCode01 F1.0
@@ -94,7 +93,7 @@ Rename Variables
     CIJTypeofAdmissionCode01 = newcis_admtype
     CommunityHospitalFlag01 = commhosp
     ContinuousInpatientJourneyMarker01 = cis_marker
-    ContinuousInpatientStaySMR01 = smr01_cis
+    ContinuousInpatientStaySMR01incGLS = smr01_cis
     CostsFinancialMonthNumber01 = costmonthnum
     CostsFinancialYear01 = costsfy
     Diagnosis1Code6char = diag1
