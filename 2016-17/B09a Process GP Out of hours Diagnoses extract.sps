@@ -49,7 +49,7 @@ match files
    /By ReadCode.
 
 * If we had a description in the lookup that matched a Read code, use that one now.
-If FullMatch1 = 0 AND char.Len(TrueDescription) > 0 Description = TrueDescription.
+If FullMatch1 = 0 AND TrueDescription NE "" Description = TrueDescription.
 
 * Any that are still not matching at this point must be bad Read codes.
 Sort cases by ReadCode Description.
@@ -95,7 +95,7 @@ match files
    /File = *
    /Table = !Lookup + "../ReadCodeLookup.zsav"
    /In = FinalCheck
-   /By ReadCode Description.
+   /By ReadCode.
 
  * If the final corrections worked then this command should result in a warning.
 Temporary.
