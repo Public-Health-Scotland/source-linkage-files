@@ -22,13 +22,13 @@ get file = !DataZone_Pops
  * Select out the estimates for the year of interest.
  * This may need to be changed if we don't have estimates yet.
 
- * Code if we don't have estimates for this year (and so have to use previous year)
- * select if year = Number(!altFY, F4.0) - 1.
- * execute.
- * compute year = year + 1.
+ * Code if we don't have estimates for this year (and so have to use previous year).
+select if year = Number(!altFY, F4.0) - 1.
+execute.
+compute year = year + 1.
 
  * Code in usual case where estimates are available.
-select if year = Number(!altFY, F4.0).
+* select if year = Number(!altFY, F4.0).
 
  * Recode to make it match source.
 Recode sex ("M" = 1) ("F" = 2) into gender.
@@ -176,3 +176,6 @@ Crosstabs NSU by Keep_Population.
 
 save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
+
+get file = !File + "temp-source-individual-file-5-20" + !FY + ".zsav".
+
