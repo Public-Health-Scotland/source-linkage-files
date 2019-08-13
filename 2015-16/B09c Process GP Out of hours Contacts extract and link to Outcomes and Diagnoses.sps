@@ -22,31 +22,24 @@ GET DATA  /TYPE=TXT
    /ARRANGEMENT=DELIMITED
    /FIRSTCASE=2
    /VARIABLES=
-      GUID A36
-      PatientNHSBoardCode A9
-      PracticeNHSBoardCode A9
-      PracticeLCA F2.0
-      PracticeDataZone2011 A9
-      PatientDataZone2011 A9
-      ConsultationRecorded A1
-      HSCPofResidenceCode A9
-      HSCPofResidenceName A20
-      ConsultationStart A20
-      ConsultationEnd A20
-      LengthofConsultation F2.0
-      TimetoConsultation F3.0
-      TreatmentLocationCode A7
-      TreatmentLocationDescription A34
-      TreatmentNHSBoardCode A9
       chi A10
       dob A10
       gender F1.0
       postcode A8
+      PatientNHSBoardCode A9
+      HSCPofResidenceCode A9
+      PatientDataZone2011 A9
       PracticeCode A6
-      PracticeName A23
+      PracticeNHSBoardCode A9
+      GUID A36
+      ConsultationRecorded A1
+      ConsultationStart A20
+      ConsultationEnd A20
+      TreatmentLocationCode A7
+      TreatmentLocationDescription A34
+      TreatmentNHSBoardCode A9
       KISAccessed A1
       ReferralSource A47
-      ConsultationGUID A36
       ConsultationType A26.
 CACHE.
 
