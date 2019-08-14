@@ -173,7 +173,7 @@ End if.
  * Sort back by CHI ready for matching.
 sort cases by CHI.
 
-xsave outfile = !file + 'HRI_lookup_NEW' + !FY + '.zsav'
+xsave outfile = !file + 'HRI_lookup_' + !FY + '.zsav'
     /keep chi
     HRI_scot to HRI_lca_incDN
     HRI_scotP to HRI_lcaP_incDN
