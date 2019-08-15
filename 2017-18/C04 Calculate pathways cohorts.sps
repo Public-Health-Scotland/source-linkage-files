@@ -17,7 +17,7 @@ compute MH_Cohort = 0.
  * Include CMH here?.
 If recid = '04B' MH_Cohort = 1.
 do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do if any(recid, "01B", "GLS", "50B", "02B", "AE2").
+    Do if any(recid, "01B", "GLS", "50B", "02B", "04B", "AE2").
         Do If any(char.substr(diag, 1,2), 'F2', 'F3') or any(char.substr(diag, 1,4), 'F067', 'F070', 'F072', 'F078', 'F079').
             compute MH_Cohort = 1.
         End If.
