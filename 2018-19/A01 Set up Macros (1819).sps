@@ -267,9 +267,17 @@ Define !altFY()
    !Quote(!Concat('20', !SubStr(!Unquote(!Eval(!FY)), 1, 2)))
 !EndDefine.
 
- * This will also automatically set from the macro above, for example for !FY = "1718" it will produce Date.DMY(30, 9, 2017).
+ * These will also automatically set from the macro above, for example for !FY = "1718" it will produce Date.DMY(30, 9, 2017).
 Define !midFY()
    Date.DMY(30, 9, !Unquote(!Eval(!altFY)))
+!EndDefine.
+
+Define !startFY()
+   Date.DMY(01, 4, !Unquote(!Eval(!altFY)))
+!EndDefine.
+
+Define !endFY()
+   Date.DMY(31, 03, !Unquote(!Eval(!altFY)))
 !EndDefine.
 
 ************************************************************************************************************.
