@@ -171,8 +171,13 @@ Rename Variables
 ConsultationStartDateTime = record_keydate1 
 ConsultationEndDateTime = record_keydate2.
 
+ * Split out the time from the date.
 Compute keyTime1 = time.hms(xdate.hour(record_keydate1), xdate.minute(record_keydate1), xdate.second(record_keydate1)).
 Compute keyTime2 = time.hms(xdate.hour(record_keydate2), xdate.minute(record_keydate2), xdate.second(record_keydate2)).
+
+ * Remove the time part from the date variables so they'll not sort wierdly.
+Compute record_keydate1 = record_keydate1 - keyTime1.
+Compute record_keydate2 = record_keydate2 - keyTime2.
 
 Alter type record_keydate1 record_keydate2 (SDATE10).
 alter type record_keydate1 record_keydate2 (A10).
