@@ -31,6 +31,7 @@ GET DATA  /TYPE=TXT
    /FIRSTCASE=2
    /VARIABLES=
       chi A10
+      postcode A8
       arth_date A10
       asthma_date A10
       atrialfib_date A10
@@ -78,7 +79,7 @@ frequencies arth asthma atrialfib cancer cvd liver copd dementia diabetes epilep
 sort cases by chi.
 
 save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
-   /keep chi arth to digestive
+   /keep chi postcode arth to digestive
       arth_date to digestive_date
    /zcompressed.
 
