@@ -2,25 +2,26 @@
 ************************************************************************************************************
                                                    NSS (ISD)
 ************************************************************************************************************
-** AUTHOR:  James McMahon (j.mcmahon1@nhs.net)
-** Date:        01/08/2018
+** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
+** Date:    	01/08/2018
 ************************************************************************************************************
-** Amended by:
+** Amended by:         
 ** Date:
-** Changes:
+** Changes:        
+29/03/19-Localities lookup file link updated -Anita George             
 ************************************************************************************************************.
  * Set the Financial Year.
 Define !FY()
-   "1516"
+   "1920"
 !EndDefine.
 
- * Set the next FY, needed for SPARRA (and HHG).
+* Set the next FY, needed for SPARRA (and HHG).
 Define !NextFY ()
-    "1617"
+    "2021"
 !EndDefine.
 
 Define !File()
-    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
+   !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
 !EndDefine.
 
 * Extract files - "home".

@@ -40,12 +40,12 @@ Define !Costs_Lookup()
 
  * Replace the number with the CSD ref.
 Define !CSDRef()
-    "SCTASK0100294"
+    "SCTASK0110915"
 !EndDefine.
 
 
 Define !CSDExtractLoc()
-    !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), !Unquote(!Eval(!CSDRef))))
+    !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRef))))
 !EndDefine.
 
 *******************************************************.
