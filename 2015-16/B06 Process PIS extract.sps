@@ -61,6 +61,8 @@ string recid (A3) year (A4).
 compute recid = "PIS".
 compute year = !FY.
 
+sort cases by chi.
+
 save outfile = !file + "prescribing_file_for_source-20" + !FY + ".zsav"
     /Drop DIPaidGICexcl.BB
     /zcompressed.

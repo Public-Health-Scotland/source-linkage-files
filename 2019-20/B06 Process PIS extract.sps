@@ -9,7 +9,7 @@
 * Change this to the relevant number.
 * Should be '_extract_NUMBER'.
 Define !Extract_Number()
-    "_extract_7"
+    "_extract_3"
 !EndDefine.
 
 Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].
@@ -60,6 +60,8 @@ compute record_keydate2 = record_keydate1.
 string recid (A3) year (A4).
 compute recid = "PIS".
 compute year = !FY.
+
+sort cases by chi.
 
 save outfile = !file + "prescribing_file_for_source-20" + !FY + ".zsav"
     /Drop DIPaidGICexcl.BB
