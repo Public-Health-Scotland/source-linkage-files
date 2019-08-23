@@ -503,6 +503,6 @@ Dataset Close New_Summary.
 Numeric Issue (F1.0) PctChange (F8.4).
 Compute Difference = NewValue - OldValue.
 Compute PctChange = Difference / OldValue * 100.
-Compute Issue = (PctChange > 5).
+Compute Issue = abs(PctChange) > 5.
 
 Sort cases by Issue (D) Measure (A).
