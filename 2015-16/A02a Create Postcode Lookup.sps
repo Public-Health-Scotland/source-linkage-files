@@ -9,12 +9,6 @@ match files
    /Table = !SIMDLookup
    /By PC7.
 
- * Add on Urban Rural Classifications.
-match files
-   /File = *
-   /Table = !URLookup
-   /By PC8.
-
  * Sort by DataZone and then add on the localities.
 sort cases by DataZone2011.
 match files

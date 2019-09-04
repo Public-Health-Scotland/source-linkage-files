@@ -76,12 +76,7 @@ Define !LocalitiesLookup()
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2019_1.5.sav"
-!EndDefine.
-
- * Most up to date Urban-Rural / Postcode lookup.
-Define !URLookup()
-   "/conf/linkage/output/lookups/Unicode/Geography/Urban Rural Classification/postcode_urban_rural_2016.sav"
+   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2019_2.sav"
 !EndDefine.
 
  * Most up to date SIMD / Postcode lookup.
@@ -91,7 +86,7 @@ Define !SIMDLookup()
 
  * Most up to date DataZone Population estimates.
 Define !DataZone_Pops()
-   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2017.sav"
+   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2018.sav"
 !EndDefine.
 
 *******************************************************.
