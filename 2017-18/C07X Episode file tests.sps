@@ -28,6 +28,12 @@ If sysmis(dob) No_DoB = 1.
 if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
+ * Flags to count stay types.
+If newpattype_cis = "Elective" CIJ_elective = 1.
+If newpattype_cis = "Non-Elective" CIJ_non_elective = 1.
+If newpattype_cis = "Maternity" CIJ_maternity = 1.
+If newpattype_cis = "Other" CIJ_other = 1.
+
 sort cases by recid.
 
 aggregate outfile = !DatasetName
@@ -36,6 +42,7 @@ aggregate outfile = !DatasetName
     /n_episodes = n
     /n_male n_female = Sum(Male Female)
     /n_no_dob n_no_postcode n_no_gpprac= Sum(No_DoB No_Postcode No_GPprac)
+    /n_CIJ_elective n_CIJ_non_elective n_CIJ_maternity n_CIJ_other = Sum(CIJ_elective CIJ_non_elective CIJ_maternity CIJ_other)
     /Avg_age = Mean(age)
     /n_children n_adults n_over65 = Sum(Child Adult Over_65)
     /Earliest_adm Earliest_dis = Min(keydate1_dateformat keydate2_dateformat)
