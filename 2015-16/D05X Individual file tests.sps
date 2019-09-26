@@ -2,8 +2,11 @@
 *Individual File checks.
 *Run A01 for the individual year.
 
-get file= !file + "source-individual-file-20" + !FY + ".zsav".
+Define !FinalName()
+    !Concat("Indiv_Comparison_", !unquote(!Eval(!FY)))
+!EndDefine.
 
+get file= !file + "source-individual-file-20" + !FY + ".zsav".
  * Set up some flags.
 
  * Flag to count the males and females.
@@ -494,9 +497,11 @@ match files
     /By Measure.
 
  * Housekeeping.
-Dataset Name Comparison.
+Dataset Name !FinalName.
 Dataset Close Old_Summary.
 Dataset Close New_Summary.
+
+Dataset Activate !FinalName.
 
  * Compute percentage change from old to new.
  * Highlight any which have a >= 5 % change.

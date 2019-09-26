@@ -53,15 +53,6 @@ Numeric
 
 Numeric NSU (F1.0).
 
-* May get errors here if the variables already exist.
-Numeric SPARRA_Start_FY (F2.0).
-Numeric SPARRA_End_FY (F2.0).
-
-Numeric HHG_Start_FY (F2.0).
-Numeric HHG_End_FY (F2.0).
-
-String Primary_Delay_Reason (A4).
-
  * Create a variable to count CIJs.
 sort cases by CHI cis_marker.
 add files file = *
