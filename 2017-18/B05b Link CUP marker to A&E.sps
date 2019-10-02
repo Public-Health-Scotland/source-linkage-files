@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 * James McMahon July 2019
-    * Extract CUP varaibles from UCD and link to
+    * Extract CUP variables from UCD and link to
     ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.

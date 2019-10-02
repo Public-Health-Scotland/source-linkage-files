@@ -183,7 +183,7 @@ Else.
 End if.
 
  * Flag the records that don't have an end date.
- * Unless they are Mental Health (any of the specs could be MH), as these are the only ones we could match.
+ * Unless they are Mental Health (any of the specialities could be MH), as these are the only ones we could match.
 Do if SysMiss(keydate2_dateformat) AND Not(any(spec, "CC", "G1", "G2", "G21", "G22", "G3", "G4", "G5", "G6", "G61", "G62", "G63")).
    Compute No_End_Date = 1.
 Else.

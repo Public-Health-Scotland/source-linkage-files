@@ -29,10 +29,10 @@ if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
  * Flags to count stay types.
-If newpattype_cis = "Elective" CIJ_elective = 1.
-If newpattype_cis = "Non-Elective" CIJ_non_elective = 1.
-If newpattype_cis = "Maternity" CIJ_maternity = 1.
-If newpattype_cis = "Other" CIJ_other = 1.
+If cij_pattype= "Elective" CIJ_elective = 1.
+If cij_pattype= "Non-Elective" CIJ_non_elective = 1.
+If cij_pattype= "Maternity" CIJ_maternity = 1.
+If cij_pattype= "Other" CIJ_other = 1.
 
 sort cases by recid.
 
@@ -47,7 +47,7 @@ aggregate outfile = !DatasetName
     /n_children n_adults n_over65 = Sum(Child Adult Over_65)
     /Earliest_adm Earliest_dis = Min(keydate1_dateformat keydate2_dateformat)
     /Latest_adm Latest_dis= Max(keydate1_dateformat keydate2_dateformat)
-    /CIS_PPAs = Sum(CIS_PPA)
+    /cij_ppas = Sum(cij_ppa)
     /avg_yearstay avg_stay = Mean(yearstay stay)
     /total_yearstay total_stay = Sum(yearstay stay)
     /avg_apr_beddays = Mean(apr_beddays)
