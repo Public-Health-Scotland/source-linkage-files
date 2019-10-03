@@ -4,7 +4,7 @@ get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat CIJ_start_date CIJ_end_date
     chi gender dob age gpprac postcode lca datazone
     hbtreatcode location spec tadm
-    cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattypecij_adm_spec cij_dis_spec cij_ppa.
+    cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec cij_ppa.
 
 * Keep records that have a chi, and a cij_marker.
 select if chi NE "".
@@ -130,8 +130,8 @@ sort cases by CHI temp_cij_marker order.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /Presorted
     /break CHI temp_cij_marker
-    /CIJ_start_date CIJ_end_date cij_ipdc cij_admtype cij_pattype_code cij_pattypecij_adm_spec cij_dis_spec cij_ppa
-    = First(CIJ_start_date CIJ_end_date cij_ipdc cij_admtype cij_pattype_code cij_pattypecij_adm_spec cij_dis_spec cij_ppa)
+    /CIJ_start_date CIJ_end_date cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec cij_ppa
+    = First(CIJ_start_date CIJ_end_date cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec cij_ppa)
     /DD_gender DD_dob DD_age DD_gpprac DD_postcode DD_lca DD_datazone
     = Last(gender dob age gpprac postcode lca datazone).
 
@@ -266,7 +266,7 @@ Temporary.
 Select if any(Flag_7, 1, 2).
 save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
     /Rename (keydate1_dateformat keydate2_dateformat = RDD Delay_End_Date)
-    /keep year chi DD_Responsible_LCA RDD Delay_End_Date temp_cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattypecij_adm_spec cij_dis_spec
+    /keep year chi DD_Responsible_LCA RDD Delay_End_Date temp_cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec
     MONTHFLAG OriginalAdmissionDate Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
     /zcompressed.
 
@@ -322,7 +322,7 @@ save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
     keydate1_dateformat keydate2_dateformat record_keydate1 record_keydate2 CIJ_start_date CIJ_end_date
     hbtreatcode to cij_marker
     Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason DD_Responsible_LCA
-    ipdc cij_ipdc cij_admtype cij_pattype_code cij_pattypecij_adm_spec cij_dis_spec cij_ppa
+    ipdc cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec cij_ppa
     DD_Quality stay yearstay
     Apr_beddays to Mar_beddays
     /zcompressed.

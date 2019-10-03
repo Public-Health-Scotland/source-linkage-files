@@ -114,6 +114,8 @@ Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
     End If.
 End If.
 
+If cij_admtype = "18" cij_pattype_code = 0.
+
  * Recode cij_pattype.
 String cij_pattype(A13).
 Recode cij_pattype_code
@@ -122,6 +124,8 @@ Recode cij_pattype_code
     (2 = "Maternity")
     (9 = "Other")
     Into cij_pattype.
+
+crosstabs cij_pattype by cij_pattype_code.
 
 ********************** Temporarily work on CIJ only records ***************************.
 
@@ -157,7 +161,7 @@ End if.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /break CHI cij_marker
     /cij_ipdc = max(cij_ipdc)
-    /cij_admtype cij_pattype_code cij_pattypecij_adm_spec = First(cij_admtype cij_pattype_code cij_pattypecij_adm_spec)
+    /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
     /cij_dis_spec = last(cij_dis_spec)
     /CIJ_start_date = Min(keydate1_dateformat)
     /CIJ_end_date = Max(keydate2_dateformat).
