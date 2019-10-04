@@ -53,15 +53,6 @@ Numeric
 
 Numeric NSU (F1.0).
 
-* May get errors here if the variables already exist.
-Numeric SPARRA_Start_FY (F2.0).
-Numeric SPARRA_End_FY (F2.0).
-
-Numeric HHG_Start_FY (F2.0).
-Numeric HHG_End_FY (F2.0).
-
-String Primary_Delay_Reason (A4).
-
  * Create a variable to count CIJs.
 sort cases by CHI cij_marker.
 add files file = *
@@ -81,7 +72,7 @@ End if.
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
 
-Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattypeNE "Maternity").
+Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattype NE "Maternity").
     Compute Acute_DoB = DoB.
     Compute Acute_postcode = postcode.
     Compute Acute_gpprac = gpprac.
@@ -93,18 +84,18 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattypeNE "Materni
     Do if (IPDC = "I").
         * Episode count.
         Compute Acute_inpatient_episodes = 1.
-        If (cij_pattype= "Elective") Acute_el_inpatient_episodes = 1.
-        If (cij_pattype= "Non-Elective") Acute_non_el_inpatient_episodes = 1.
+        If (cij_pattype = "Elective") Acute_el_inpatient_episodes = 1.
+        If (cij_pattype = "Non-Elective") Acute_non_el_inpatient_episodes = 1.
 
         * Beddays count.
         Compute Acute_inpatient_beddays = yearstay.
-        If (cij_pattype= "Elective") Acute_el_inpatient_beddays = yearstay.
-        If (cij_pattype= "Non-Elective") Acute_non_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Elective") Acute_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Non-Elective") Acute_non_el_inpatient_beddays = yearstay.
 
         * Cost.
         Compute Acute_inpatient_cost = Cost_Total_Net.
-        if (cij_pattype= "Elective") Acute_el_inpatient_cost = Cost_Total_Net.
-        if (cij_pattype= "Non-Elective") Acute_non_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Elective") Acute_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Non-Elective") Acute_non_el_inpatient_cost = Cost_Total_Net.
     Else if (IPDC = "D").
         * Episode count.
         Compute Acute_daycase_episodes = 1.
@@ -113,7 +104,7 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattypeNE "Materni
         Compute Acute_daycase_cost = Cost_Total_Net.
     End if.
 
-Else if (cij_pattype= "Maternity").
+Else if (cij_pattype = "Maternity").
     *************************************************************************************************************************************************.
     * Maternity (SMR02) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
@@ -145,7 +136,7 @@ Else if (cij_pattype= "Maternity").
         Compute Mat_daycase_cost = Cost_Total_Net.
     End if.
 
-Else if (recid = "04B") AND (cij_pattypeNE "Maternity").
+Else if (recid = "04B") AND (cij_pattype NE "Maternity").
     *************************************************************************************************************************************************.
     * Mental Health (SMR04) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
@@ -161,18 +152,18 @@ Else if (recid = "04B") AND (cij_pattypeNE "Maternity").
     Do if (IPDC = "I").
         * Episode count.
         Compute MH_inpatient_episodes = 1.
-        If (cij_pattype= "Elective") MH_el_inpatient_episodes = 1.
-        If (cij_pattype= "Non-Elective") MH_non_el_inpatient_episodes = 1.
+        If (cij_pattype = "Elective") MH_el_inpatient_episodes = 1.
+        If (cij_pattype = "Non-Elective") MH_non_el_inpatient_episodes = 1.
 
         * Beddays count.
         Compute MH_inpatient_beddays = yearstay.
-        If (cij_pattype= "Elective") MH_el_inpatient_beddays = yearstay.
-        If (cij_pattype= "Non-Elective") MH_non_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Elective") MH_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Non-Elective") MH_non_el_inpatient_beddays = yearstay.
 
         * Cost.
         Compute MH_inpatient_cost = Cost_Total_Net.
-        if (cij_pattype= "Elective") MH_el_inpatient_cost = Cost_Total_Net.
-        if (cij_pattype= "Non-Elective") MH_non_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Elective") MH_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Non-Elective") MH_non_el_inpatient_cost = Cost_Total_Net.
     End if.
 Else if (SMRType = "GLS-IP").
     *************************************************************************************************************************************************.
@@ -190,18 +181,18 @@ Else if (SMRType = "GLS-IP").
     Do if (IPDC = "I").
         * Episode count.
         Compute GLS_inpatient_episodes = 1.
-        If (cij_pattype= "Elective") GLS_el_inpatient_episodes = 1.
-        If (cij_pattype= "Non-Elective") GLS_non_el_inpatient_episodes = 1.
+        If (cij_pattype = "Elective") GLS_el_inpatient_episodes = 1.
+        If (cij_pattype = "Non-Elective") GLS_non_el_inpatient_episodes = 1.
 
         * Beddays count.
         Compute GLS_inpatient_beddays = yearstay.
-        If (cij_pattype= "Elective") GLS_el_inpatient_beddays = yearstay.
-        If (cij_pattype= "Non-Elective") GLS_non_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Elective") GLS_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Non-Elective") GLS_non_el_inpatient_beddays = yearstay.
 
         * Cost.
         Compute GLS_inpatient_cost = Cost_Total_Net.
-        if (cij_pattype= "Elective") GLS_el_inpatient_cost = Cost_Total_Net.
-        if (cij_pattype= "Non-Elective") GLS_non_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Elective") GLS_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Non-Elective") GLS_non_el_inpatient_cost = Cost_Total_Net.
     End if.
 
 Else if (recid = "00B").
