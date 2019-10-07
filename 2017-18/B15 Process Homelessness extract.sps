@@ -105,6 +105,11 @@ Rename Variables
     ApplicationReferenceNumber = hl1_application_ref
     PropertyTypeCode = hl1_property_type.
 
+Apply Dictionary From !PCDir
+    /VarInfo ValLabels = Replace
+    /Source variables = CA2011
+    /Target variables = hl1_sending_lca.
+
 
 * Put record_keydate into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
