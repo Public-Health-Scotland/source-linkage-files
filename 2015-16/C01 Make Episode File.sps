@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Create the master PLICS file for 2015/16.
 
 * Program created and modified by Denise Hastie, June/July 2016.
