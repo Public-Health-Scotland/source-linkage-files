@@ -639,7 +639,7 @@ Variable Width
     lca sigfac tadm adtf disch dischto cij_admtype ae_arrivalmode ae_attendcat ae_alcohol sc_send_lca ch_lca ch_admreas (2)
     ooh_outcome.1 ooh_outcome.2 ooh_outcome.3 ooh_outcome.4 (2)
     age (3)
-    cij_pattyperecid spec cij_adm_spec cij_dis_spec refsource ae_disdest ae_placeinc ae_reasonwait ae_bodyloc (3)
+    cij_pattype recid spec cij_adm_spec cij_dis_spec refsource ae_disdest ae_placeinc ae_reasonwait ae_bodyloc (3)
     op1a op1b op2a op2b op3a op3b op4a op4b (4)
     deathdiag1 deathdiag2 deathdiag3 deathdiag4 deathdiag5 deathdiag6 deathdiag7 deathdiag8 deathdiag9 deathdiag10 deathdiag11 (4)
     gpprac (5)
