@@ -105,6 +105,13 @@ Rename Variables
     ApplicationReferenceNumber = hl1_application_ref
     PropertyTypeCode = hl1_property_type.
 
+
+* Put record_keydate into numeric.
+Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
+Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
+
+alter type record_keydate1 record_keydate2 (F8.0).
+
 sort cases by chi record_keydate1 record_keydate2.
 
 save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
