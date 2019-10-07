@@ -215,7 +215,7 @@ Numeric stay (F7.0).
  * Get the time before this FY, add it to yearstay (round to ignore the .33 for daycases) and then add on any days after this FY.
  * Note those without end dates are given 365 as yearstay so will get 365 days for this FY in stay too.
  * It's a bit complicated so that it can handle the episodes with no end date.
-Compute stay = Max(datediff(date.dmy(01, 04, Number(!altFY, F4.0)), record_keydate1, "days"), 0) + Rnd(yearstay) + Max(datediff(record_keydate2, Date.DMY(01, 04, Number(!altFY, F4.0) + 1), "days"), 0).
+Compute stay = Max(datediff(!startFY, record_keydate1, "days"), 0) + Rnd(yearstay) + Max(datediff(record_keydate2, !endFY + time.days(1), "days"), 0).
 
  * Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).

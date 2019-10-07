@@ -1,4 +1,8 @@
 ﻿* Encoding: UTF-8.
+Define !FinalName()
+    !Concat("Recid_Compare_", !unquote(!Eval(!FY)))
+!EndDefine.
+
 Define !Create_Aggregate(FileVersion = !Tokens(1)).
 
 !Let !DatasetName = !Concat(!Unquote(!FileVersion), "By", "Recid").
@@ -125,17 +129,14 @@ match files
     /file OldByRecid
     /rename Value = Old_Value
     /By year recid measure.
-Dataset Name RecidCompare.
+Dataset Name !FinalName.
 Dataset Close Newbyrecid.
 Dataset Close Oldbyrecid.
 
-Dataset Activate RecidCompare.
+Dataset Activate  !FinalName.
 
 Compute diff = New_Value - Old_Value.
 Compute pct_diff = (diff / Old_Value) * 100.
 If abs(pct_diff) >= 5 Possible_issue = 1.
 
 Crosstabs recid by Possible_issue.
-
-
-

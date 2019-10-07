@@ -272,7 +272,7 @@ Define !startFY()
 !EndDefine.
 
 Define !endFY()
-   Date.DMY(31, 03, !Unquote(!Eval(!altFY)))
+   Date.DMY(31, 03, !Unquote(!Eval(!altFY)) + 1)
 !EndDefine.
 
 ************************************************************************************************************.
