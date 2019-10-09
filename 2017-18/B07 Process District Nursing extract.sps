@@ -1,10 +1,5 @@
 ﻿* Encoding: UTF-8.
 
-*District Nursing Database.
-*Anita George 15/11/2017 .
-*calculate recid frequencies for cost book and to average out costs in the excel spreadsheet.
-*Last ran 30/5/18.-AnitaGeorge.
-
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.

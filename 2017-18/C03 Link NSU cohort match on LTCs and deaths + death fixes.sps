@@ -262,7 +262,7 @@ match files
     /Drop death_date_NRS death_date_CHI death_date_NRS_ep last_activity Has_NRS Activity_after_death CHI_death_date_works CHI_death_date_missing
     /By CHI.
 
-* Clear any deaths which occured before the start of the FY - allow one year if the only activity is PIS.
+* Clear any deaths which occurred before the start of the FY - allow one year if the only activity is PIS.
 Numeric Remove_Death (F1.0).
 Compute Remove_Death = 0.
 Do if recid NE "PIS".
