@@ -1,12 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Create maternity costed extract in suitable format for PLICS.
-
-* Read in the maternity extract.  Rename/reformat/recode columns as appropriate.
-
-* Program by Denise Hastie, July 2016.
-* Updated by Denise Hastie, August 2016.  Added in a section that was in the master PLICS file creation program
-    * with regards to calculating the length of stay for maternity.
-
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
@@ -79,14 +71,14 @@ Rename Variables
     AdmittedTransferFromLocationCode = admloc
     AgeatMidpointofFinancialYear = age
     AlcoholRelatedAdmission = alcohol_adm
-    CIJAdmissionSpecialtyCode = CIJadm_spec
-    CIJDischargeSpecialtyCode = CIJdis_spec
-    CIJPlannedAdmissionCode = newpattype_ciscode
-    CIJTypeofAdmissionCode = newcis_admtype
+    CIJAdmissionSpecialtyCode = cij_adm_spec
+    CIJDischargeSpecialtyCode = cij_dis_spec
+    CIJPlannedAdmissionCode = cij_pattype_code
+    CIJTypeofAdmissionCode = cij_admtype
     CommunityHospitalFlag = commhosp
     ConditionOnDischargeCode = discondition
     ConsultantHCPCode = conc
-    ContinuousInpatientJourneyMarker = cis_marker
+    ContinuousInpatientJourneyMarker = cij_marker
     CostsFinancialYear = costsfy
     Diagnosis1DischargeCode = diag1
     Diagnosis2DischargeCode = diag2
@@ -124,7 +116,7 @@ Rename Variables
 numeric gender (F1.0).
 compute gender = 2.
 
-string year (a4) recid (a3) ipdc (a1) newcis_ipdc (a1) newpattype_cis (a13).
+string year (a4) recid (a3) ipdc (a1) cij_ipdc (a1) cij_pattype(a13).
 compute year = !FY.
 compute recid = '02B'.
 
@@ -136,7 +128,7 @@ End if.
 Alter Type GPprac (F5.0).
 
 * Set the IPDC marker for the CIJ.
-Recode CIJInpatientDayCaseIdentifierCode ("IP" = "I") ("DC" = "D") into newcis_ipdc.
+Recode CIJInpatientDayCaseIdentifierCode ("IP" = "I") ("DC" = "D") into cij_ipdc.
 
 Rename Variables
     DateofAdmissionFullDate = record_keydate1
@@ -256,12 +248,12 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     op4a
     age
     discondition
-    cis_marker
-    newcis_admtype
-    newcis_ipdc
-    newpattype_ciscode
-    CIJadm_spec
-    CIJdis_spec
+    cij_marker
+    cij_admtype
+    cij_ipdc
+    cij_pattype_code
+    cij_adm_spec
+    cij_dis_spec
     alcohol_adm
     submis_adm
     falls_adm

@@ -143,7 +143,7 @@ do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
 end repeat.
 
 
- * Some drug codes only count If other code present in CIS i.e. T402/T404 only If F11 and T424 only If F13.
+ * Some drug codes only count If other code present in CIJ i.e. T402/T404 only If F11 and T424 only If F13.
 compute F11 = 0.
 
 do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
@@ -179,10 +179,9 @@ end repeat.
 
 
  * If DrugsandAlcoholClientGroup = 'Y' Substance_Cohort = 1.
- * exe.
 
 aggregate outfile =  * 
-    /break CHI cis_marker
+    /break CHI cij_marker
     /Comm_Living = max(Comm_Living_Cohort)
     /Adult_Major = max(Adult_Major_Cohort)
     /Child_Major = max(Child_Major_Cohort)
@@ -287,16 +286,16 @@ compute Hospital_Elective_Cost = 0.
 compute Hospital_Emergency_Cost = 0.
 compute Community_Health_Cost = 0.
 If (specname = 'Geriatric Medicine' or any(recid, '50B', "GLS") or specname = 'Psychiatry of Old Age') Geriatric_Cost = Cost_Total_Net.
-If (recid = '02B' or newpattype_CIS = 'Maternity') Maternity_Cost = Cost_Total_Net.
+If (recid = '02B' or cij_pattype= 'Maternity') Maternity_Cost = Cost_Total_Net.
 If (recid = '04B' and specname ne 'Psychiatry of Old Age') Psychiatry_Cost = Cost_Total_Net.
-If (recid = '01B' and (newpattype_CIS = 'Elective' or newCIS_ipdc = 'D') and specname ne 'Geriatric Medicine') Acute_Elective_Cost = Cost_Total_Net.
-If (recid = '01B' and newpattype_CIS = 'Non-Elective' and specname ne 'Geriatric Medicine') Acute_Emergency_Cost = Cost_Total_Net.
+If (recid = '01B' and (cij_pattype= 'Elective' or cij_ipdc = 'D') and specname ne 'Geriatric Medicine') Acute_Elective_Cost = Cost_Total_Net.
+If (recid = '01B' and cij_pattype= 'Non-Elective' and specname ne 'Geriatric Medicine') Acute_Emergency_Cost = Cost_Total_Net.
 If recid = '00B' Outpatient_Cost = Cost_Total_Net-Geriatric_Cost.
 If recid = '00B' Total_Outpatient_Cost = Cost_Total_Net.
 If any(recid, 'HC-', 'HC + ', 'INS', 'RSP', 'MLS', 'DC', 'CPL') Home_Care_Cost = Cost_Total_Net.
 If recid = 'CH' Care_Home_Cost = Cost_Total_Net.
-If any(recid, '01B', '04B', '50B', 'GLS') and newpattype_CIS = 'Elective' Hospital_Elective_Cost = Cost_Total_Net.
-If any(recid, '01B', '04B', '50B', 'GLS') and newpattype_CIS = 'Non-Elective' Hospital_Emergency_Cost = Cost_Total_Net.
+If any(recid, '01B', '04B', '50B', 'GLS') and cij_pattype= 'Elective' Hospital_Elective_Cost = Cost_Total_Net.
+If any(recid, '01B', '04B', '50B', 'GLS') and cij_pattype= 'Non-Elective' Hospital_Emergency_Cost = Cost_Total_Net.
 If recid = 'PIS' Prescribing_Cost = Cost_Total_Net.
 If any(recid, 'AE2', 'OoH', 'SAS', 'N24') AE2_Cost = Cost_Total_Net.
  * Include CMH here?.
@@ -305,16 +304,16 @@ If op1a ne '' Operation_Flag = 1.
 
 
 
-Do if CIS_Marker NE "".
-    Compute CIS_Attendance = 1.
+Do if cij_marker NE "".
+    Compute cij_Attendance = 1.
 Else.
-    Compute CIS_Attendance = 0.
-    Compute CIS_Marker = recid.
+    Compute cij_Attendance = 0.
+    Compute cij_marker = recid.
 End if.
 
  * removed from the aggregate /Unplanned_Beddays = sum(Unplanned_Beddays).
 aggregate outfile =  * 
-    /break CHI CIS_marker newCIS_ipdc newpattype_CIS
+    /break CHI cij_marker cij_ipdc cij_pattype
     /Total_Cost = sum(Cost_Total_Net)
     /Bed_Days = sum(yearstay)
     /Psychiatry_Cost = sum(Psychiatry_Cost)
@@ -332,7 +331,7 @@ aggregate outfile =  *
     /Total_Outpatient_Cost = sum(Total_Outpatient_Cost)
     /Community_Health_Cost = sum(Community_Health_Cost)
     /Operation_Flag = max(Operation_Flag)
-    /CIS_Attendance = max(CIS_Attendance).
+    /cij_attendance = max(cij_attendance).
 
 
 compute Emergency_Instances = 0.
@@ -341,11 +340,11 @@ compute Elective_Inpatient_Instances = 0.
 compute Elective_Daycase_Instances = 0.
 compute Death_Flag = 0.
 
-If (newpattype_CIS = 'Non-Elective') Emergency_Instances = 1.
-If (newpattype_CIS = 'Elective' or newCIS_ipdc = 'D') Elective_Instances = 1.
-If (newpattype_CIS = 'Elective' and newCIS_ipdc = 'I') Elective_Inpatient_Instances = 1.
-If (newpattype_CIS = 'Elective' and newCIS_ipdc = 'D') Elective_Daycase_Instances = 1.
-If CIS_Marker = 'NRS' Death_Flag = 1.
+If (cij_pattype= 'Non-Elective') Emergency_Instances = 1.
+If (cij_pattype= 'Elective' or cij_ipdc = 'D') Elective_Instances = 1.
+If (cij_pattype= 'Elective' and cij_ipdc = 'I') Elective_Inpatient_Instances = 1.
+If (cij_pattype= 'Elective' and cij_ipdc = 'D') Elective_Daycase_Instances = 1.
+If cij_marker = 'NRS' Death_Flag = 1.
 
 
 compute Elective_Inpatient_Cost = 0.
@@ -358,7 +357,7 @@ aggregate outfile =  *
     /break CHI
     /Total_Cost = sum(Total_Cost)
     /Total_Beddays = sum(Bed_Days)
-    /Admission = sum(CIS_Attendance)
+    /Admission = sum(cij_attendance)
     /Operation_Flag = max(Operation_Flag)
     /Emergency = sum(Emergency_Instances)
     /Elective = sum(Elective_Instances)

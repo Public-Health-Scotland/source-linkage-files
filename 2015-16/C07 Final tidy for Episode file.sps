@@ -39,10 +39,10 @@ Variable Labels
     chi "Community Health Index number"
     CIJ_start_date "Date of admission for the first record in the CIJ (Continuous Inpatient Journey)"
     CIJ_end_date "Date of discharge for the last record in the CIJ (Continuous Inpatient Journey)"
-    CIJadm_spec "Specialty on first record in CIJ"
-    CIJdis_spec "Specialty on last record in CIJ"
-    cis_marker "CIJ (Continuous Inpatient Journey) marker"
-    CIS_PPA "CIS episode that began in a Potentially Preventable Admission (PPA)"
+    cij_adm_spec "Specialty on first record in CIJ"
+    cij_dis_spec "Specialty on last record in CIJ"
+    cij_marker "CIJ (Continuous Inpatient Journey) marker"
+    cij_ppa "CIJ which began in a Potentially Preventable Admission (PPA)"
     clinic_type "Clinic Type"
     Cluster "GP Practice cluster. Based on gpprac and are correct at time of update"
     commhosp "Community Hospital flag"
@@ -53,15 +53,15 @@ Variable Labels
     copd_date "Chronic Obstructive Pulmonary Disease (COPD) LTC incidence date"
     cost_total_net "Total Net Cost excluding Outpatient and OoH DNA costs"
     Cost_Total_Net_incDNAs "Total Net Cost including Outpatient and OoH DNA costs"
-    CUP_marker "A marker which groups together unscheduled care episodes (Continous Urgent care Pathway)"
-    CUP_pathway "A string indicating which episode types (and in which order) occured in the CUP"
+    CUP_marker "A marker which groups together unscheduled care episodes (Continuous Urgent care Pathway)"
+    CUP_pathway "A string indicating which episode types (and in which order) occurred in the CUP"
     cvd "Cardiovascular disease (CVD) LTC marker"
     cvd_date "Cardiovascular disease (CVD) LTC incidence date"
     dateop1 "Date of Main Operation"
     dateop2 "Date of Other operation 1"
     dateop3 "Date of Other operation 2"
     dateop4 "Date of Other operation 3"
-    DD_Quality "Indication of how well a delay episode could be matched to a CIS episode"
+    DD_Quality "Indication of how well a delay episode could be matched to a CIJ"
     DD_Responsible_LCA "Local Authority assigned responsibility for the delay"
     death_board_occurrence "NHS Board of Occurrence of death"
     death_date "Derived Date of Death"
@@ -136,10 +136,10 @@ Variable Labels
     mpat "Management of Patient"
     ms "Multiple Sclerosis LTC marker"
     ms_date "Multiple Sclerosis LTC incidence date"
-    newcis_admtype "CIJ admission type"
-    newcis_ipdc "CIJ inpatient day case identifier"
-    newpattype_cis "CIJ patient type"
-    newpattype_ciscode "CIJ patient type - coded"
+    cij_admtype "CIJ admission type"
+    cij_ipdc "CIJ inpatient day case identifier"
+    cij_pattype"CIJ patient type"
+    cij_pattype_code "CIJ patient type - coded"
     nhshosp "NHS Hospital flag"
     no_dispensed_items "Number of dispensed items"
     nov_beddays "Number of Bed days from episode in November"
@@ -171,11 +171,11 @@ Variable Labels
     sep_beddays "Number of Bed days from episode in September"
     sep_cost "Cost from episode in September"
     sigfac "Significant Facility"
-    smr01_cis "CIS marker from SMR01 record"
+    smr01_cis_marker "CIS marker from SMR01 record - Includes GLS"
     SMRType "Record type"
     SPARRA_End_FY "SPARRA 12-month risk score from the end of the financial year"
     SPARRA_Start_FY "SPARRA 12-month risk score from the start of the financial year"
-    spec "Specialty "
+    spec "Speciality"
     stadm "Status on Admission - SMR04 only"
     stay "Length of Stay"
     submis_adm "Indicates substance misuse related admission or attendance"
@@ -222,7 +222,7 @@ Add value labels location
 
 !AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
 
-Value Labels ipdc newcis_ipdc
+Value Labels ipdc cij_ipdc
     'I' "Inpatient"
     'D' "Daycase".
 
@@ -246,8 +246,8 @@ Add Value Labels SMRType
     'Acute-DC' 'Acute - Daycase'
     'Acute-IP' 'Acute - Inpatient'
     'Care-Home' 'Care Home resident'
-    'DD-CIS' 'Delayed Discharge - Linked to a CIS episode'
-    'DD-No CIS' 'Delayed Discharge - Not linked to a CIS episode'
+    'DD-CIJ' 'Delayed Discharge - Linked to a CIJ'
+    'DD-No CIJ' 'Delayed Discharge - Not linked to a CIJ'
     'DN' 'District Nursing'
     'Comm-MH' 'Community Mental Health'
     'GLS-IP' 'Geriatric Long Stay - Inpatient'
@@ -304,7 +304,7 @@ Value Labels refsource
     'P' "GP OoH - Police / Prison"
     'S' "GP OoH - Social Services".
 
-Value Labels spec CIJadm_spec CIJdis_spec
+Value Labels spec cij_adm_spec cij_dis_spec
     'A1' "General Medicine"
     'A11' "Acute Medicine"
     'A2' "Cardiology"
@@ -508,7 +508,7 @@ Value Labels deceased
     1 "Deceased"
     0 "Alive".
 
-Value Labels newpattype_ciscode
+Value Labels cij_pattype_code
     0 "Non-elective"
     1 "Elective"
     2 "Maternity"
@@ -526,7 +526,7 @@ Value Labels mpat
     'A' "Inpatient admitted to and discharged from a Day Bed Unit on the same day"
     'B' "Hospital at Home".
 
-Value Labels tadm newcis_admtype
+Value Labels tadm cij_admtype
     '10' "Routine Admission, no additional detail added"
     '11' "Routine elective (i.e. from waiting list as planned, excludes planned transfers)"
     '12' "Admitted on day of decision to admit, or following day, not for medical reasons, but because resources are available"
@@ -635,17 +635,17 @@ Value Labels disch
 
 Variable Width
     year (4)
-    ipdc mpat cat alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp clinic_type ae_patflow post_mortem newcis_ipdc (1)
-    lca sigfac tadm adtf disch dischto newcis_admtype ae_arrivalmode ae_attendcat ae_alcohol sc_send_lca ch_lca ch_admreas (2)
+    ipdc mpat cat alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp clinic_type ae_patflow post_mortem cij_ipdc (1)
+    lca sigfac tadm adtf disch dischto cij_admtype ae_arrivalmode ae_attendcat ae_alcohol sc_send_lca ch_lca ch_admreas (2)
     ooh_outcome.1 ooh_outcome.2 ooh_outcome.3 ooh_outcome.4 (2)
     age (3)
-    newpattype_cis recid spec CIJadm_spec CIJdis_spec refsource ae_disdest ae_placeinc ae_reasonwait ae_bodyloc (3)
+    cij_pattype recid spec cij_adm_spec cij_dis_spec refsource ae_disdest ae_placeinc ae_reasonwait ae_bodyloc (3)
     op1a op1b op2a op2b op3a op3b op4a op4b (4)
     deathdiag1 deathdiag2 deathdiag3 deathdiag4 deathdiag5 deathdiag6 deathdiag7 deathdiag8 deathdiag9 deathdiag10 deathdiag11 (4)
     gpprac (5)
-    smr01_cis (5)
+    smr01_cis_marker (5)
     CCM (5)
-    admloc dischloc cis_marker death_location_code (5)
+    admloc dischloc cij_marker death_location_code (5)
     diag1 diag2 diag3 diag4 diag5 diag6 (6)
     adcon1 adcon2 adcon3 adcon4 (6)
     gender (6)
@@ -745,7 +745,7 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     submis_adm
     falls_adm
     selfharm_adm
-    CIS_PPA
+    cij_ppa
     death_location_code
     death_board_occurrence
     place_death_occurred
@@ -778,18 +778,18 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     no_dispensed_items
     nhshosp
     commhosp
-    smr01_cis
-    cis_marker
+    smr01_cis_marker
+    cij_marker
     CUP_marker
     CUP_pathway
     CIJ_start_date
     CIJ_end_date
-    newcis_ipdc
-    newcis_admtype
-    newpattype_ciscode
-    newpattype_cis
-    CIJadm_spec
-    CIJdis_spec
+    cij_ipdc
+    cij_admtype
+    cij_pattype_code
+    cij_pattype
+    cij_adm_spec
+    cij_dis_spec
     uri
     arth
     asthma

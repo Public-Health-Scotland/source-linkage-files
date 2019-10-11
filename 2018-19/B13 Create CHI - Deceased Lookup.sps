@@ -1,8 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Create Deceased reference data set for PLICS.
-
-* 1.  the patient date of death on the CHI database
-* 2.  the NRS death registrations.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.

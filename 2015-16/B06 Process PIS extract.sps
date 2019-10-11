@@ -1,6 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Read and process prescribing extract from BI.
-* Rewritten by James McMahon August 2019 now BI join the previously 2 extracts for us.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.

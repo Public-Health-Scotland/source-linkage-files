@@ -1,14 +1,5 @@
 ﻿* Encoding: UTF-8.
-************************************************************************************************************
-   NSS (ISD)
-   ************************************************************************************************************
-   ** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
-   ** Date:    	09/05/2018
-   ************************************************************************************************************
-   ** Amended by:
-   ** Date:
-   ** Changes:
-   ************************************************************************************************************.
+
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
@@ -175,7 +166,7 @@ ConsultationEndDateTime = record_keydate2.
 Compute keyTime1 = time.hms(xdate.hour(record_keydate1), xdate.minute(record_keydate1), xdate.second(record_keydate1)).
 Compute keyTime2 = time.hms(xdate.hour(record_keydate2), xdate.minute(record_keydate2), xdate.second(record_keydate2)).
 
- * Remove the time part from the date variables so they'll not sort wierdly.
+ * Remove the time part from the date variables so they'll not sort weirdly.
 Compute record_keydate1 = record_keydate1 - keyTime1.
 Compute record_keydate2 = record_keydate2 - keyTime2.
 

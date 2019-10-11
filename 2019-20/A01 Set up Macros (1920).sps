@@ -5,11 +5,7 @@
 ** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
 ** Date:    	01/08/2018
 ************************************************************************************************************
-** Amended by:         
-** Date:
-** Changes:        
-29/03/19-Localities lookup file link updated -Anita George             
-************************************************************************************************************.
+
  * Set the Financial Year.
 Define !FY()
    "1920"
@@ -91,7 +87,7 @@ Define !DataZone_Pops()
 
 *******************************************************.
  * Functional macros *
- * Should not need changing unless something is broken or to update methodolody.
+ * Should not need changing unless something is broken or to update methodology.
 *******************************************************.
 
  * The following two macros are used for creating the old LCA codes
@@ -212,7 +208,7 @@ Apply Dictionary From !PCDir
 
  * Add extra non official labels.
 Add Value Labels !HB
-    'S08200001' "Outwith Scotland / RUK"
+    'S08200001' "Out-with Scotland / RUK"
     'S08200002' "No Fixed Abode"
     'S08200003' "Not Known"
     'S08200004' "Outside UK"
@@ -238,7 +234,7 @@ Apply Dictionary From !PCDir
 
 * Add extra non official labels.
 Add Value Labels !HB
-    'S08200001' "Outwith Scotland / RUK"
+    'S08200001' "Out-with Scotland / RUK"
     'S08200002' "No Fixed Abode"
     'S08200003' "Not Known"
     'S08200004' "Outside UK"
