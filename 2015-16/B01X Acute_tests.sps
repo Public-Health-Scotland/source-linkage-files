@@ -69,7 +69,7 @@ Sort cases by Measure.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
     /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob postcode gpprac age
     cost_total_net yearstay stay apr_beddays to mar_beddays apr_cost to mar_cost.
-select if recid = '01B'.
+select if any(recid, "01B", "GLS").
 
  * Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
