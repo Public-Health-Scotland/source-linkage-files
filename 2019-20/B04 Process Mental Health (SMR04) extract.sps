@@ -1,9 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Create mental health costed extract in suitable format for PLICS.
-
-* Read in the mental health extract.  Rename/reformat/recode columns as appropriate. 
-
-* Program by Denise Hastie, June 2016.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
@@ -87,12 +82,12 @@ rename variables
     AdmittedTransFromCode = adtf
     AgeatMidpointofFinancialYear04 = age
     AlcoholRelatedAdmission04 = alcohol_adm
-    CIJAdmissionSpecialtyCode04 = CIJadm_spec
-    CIJDischargeSpecialtyCode04 = CIJdis_spec
-    CIJPlannedAdmissionCode04 = newpattype_ciscode
-    CIJTypeofAdmissionCode04 = newcis_admtype
+    CIJAdmissionSpecialtyCode04 = cij_adm_spec
+    CIJDischargeSpecialtyCode04 = cij_dis_spec
+    CIJPlannedAdmissionCode04 = cij_pattype_code
+    CIJTypeofAdmissionCode04 = cij_admtype
     CommunityHospitalFlag04 = commhosp
-    ContinuousInpatientJourneyMarker04 = cis_marker
+    ContinuousInpatientJourneyMarker04 = cij_marker
     CostsFinancialMonthNumber04 = costmonthnum
     CostsFinancialYear04 = costsfy
     Diagnosis1Code6char = diag1
@@ -131,7 +126,7 @@ rename variables
     UniqueRecordIdentifier = uri.
 
 
-string year (a4) recid (a3) ipdc (a1) newcis_ipdc (a1) newpattype_cis (a13).
+string year (a4) recid (a3) ipdc (a1) cij_ipdc (a1) cij_pattype(a13).
 compute year = !FY.
 compute recid = '04B'.
 compute ipdc = 'I'.
@@ -143,7 +138,7 @@ Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
 End if. 
 Alter Type GPprac (F5.0).
 
-if (CIJInpatientDayCaseIdentifierCode04 EQ 'MH') newcis_ipdc = 'I'.
+if (CIJInpatientDayCaseIdentifierCode04 EQ 'MH') cij_ipdc = 'I'.
 
  * Deal with date variables.
 Rename Variables
@@ -154,10 +149,10 @@ Rename Variables
 alter type record_keydate1 record_keydate2 dob (SDate10).
 alter type record_keydate1 record_keydate2 dob (Date12).
 
-* Need to make CIJ Type of Admission (newcis_admtype) two characters in length (to be consistent with acute).  Recode the Unknown to 99.
+* Need to make CIJ Type of Admission (cij_admtype) two characters in length (to be consistent with acute).  Recode the Unknown to 99.
 
-Recode newcis_admtype ('Unknown' = '99').
-alter type newcis_admtype (A2).
+Recode cij_admtype ('Unknown' = '99').
+alter type cij_admtype (A2).
 
 sort cases by uri.
 
@@ -165,7 +160,7 @@ sort cases by uri.
 save outfile = !file + 'mh_temp.zsav'
    /zcompressed.
   
-* Create a file that contains uri and costs month and net cost. Make this look like a 'crosstab' ready for matching back to the acute_temp file. 
+* Create a file that contains uri and costs month and net cost. Make this look like a 'cross-tab' ready for matching back to the acute_temp file. 
 get file = !file + 'mh_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 
@@ -272,12 +267,12 @@ save outfile = !file + 'mental_health_for_source-20' + !FY + '.zsav'
     diag5
     diag6
     age
-    cis_marker
-    newcis_admtype
-    newcis_ipdc
-    newpattype_ciscode
-    CIJadm_spec
-    CIJdis_spec
+    cij_marker
+    cij_admtype
+    cij_ipdc
+    cij_pattype_code
+    cij_adm_spec
+    cij_dis_spec
     alcohol_adm
     submis_adm
     falls_adm

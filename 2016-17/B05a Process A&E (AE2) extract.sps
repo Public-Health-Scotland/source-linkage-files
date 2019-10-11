@@ -1,11 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Create A&E costed extract in suitable format for PLICS.
-* Modified version of previous read in files used to create A&E data for PLICS.
-
-* Read in the a&e extract.  Rename/reformat/recode columns as appropriate.
-
-* Program by Denise Hastie, June 2016.
-* Updated by Denise Hastie, July 2016 (to add in age at mid-point of financial year).
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.

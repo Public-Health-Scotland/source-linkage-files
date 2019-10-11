@@ -62,7 +62,7 @@ select if recid = 'AE2'.
 * Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
 
-* Flags to count M/Fs.
+* Flags to count Males / Females.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
