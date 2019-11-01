@@ -46,8 +46,8 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
     Compute HH_6before_ep = 0.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
-    Do repeat HH_start = AssessmentDecisionDate.1 to AssessmentDecisionDate.6
-        /HH_end = CaseClosedDate.1 to CaseClosedDate.6.
+    Do repeat HH_start = AssessmentDecisionDate.1 to AssessmentDecisionDate.4
+        /HH_end = CaseClosedDate.1 to CaseClosedDate.4.
 
         * If there was an active application at any point in the FY.
         If Range(HH_start, !startFY, !endFY)
