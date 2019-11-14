@@ -389,7 +389,7 @@ save outfile = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
 get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
 
 * Housekeeping.
-Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
+Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
 Host Command = ["zip -mjv '" + !File + "Activity.zip' " + 
