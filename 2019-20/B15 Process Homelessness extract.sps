@@ -31,6 +31,14 @@ GET DATA  /TYPE=TXT
     Refused F1.0
     /MAP.
 
+ * Drop records for parthnerships which don't have good / complete data.
+ * For most of the below there will be no data anyway but some have test data only.
+Compute #Drop = 0.
+If (!FY = "1617" and any(SendingLocalAuthorityCode9, "S12000005", "S12000017", "S12000028", "S12000040", "S12000041",  "S12000042")) #Drop = 1.
+If (!FY = "1718" and any(SendingLocalAuthorityCode9, "S12000040", "S12000041")) #Drop = 1.
+
+Select if #Drop = 0.
+
 * Display dates nicely.
 Alter Type AssessmentDecisionDate CaseClosedDate (Date12).
 
@@ -70,29 +78,17 @@ Value Labels PropertyTypeCode
     23 "Shared Property - Local Authority"
     24 "Shared Property - RSL".
 
-String reason_ftm (A10).
-Compute reason_ftm = Concat(String(FinancialDifficultiesDebtUnemployment, F1.0), 
-String(PhysicalHealthReasons, F1.0), 
-String(MentalHealthReasons, F1.0), 
-String(UnmetNeedforSupportfromHousingSocialWorkHealthServi, F1.0), 
-String(LackofSupportfromFriendsFamily, F1.0), 
-String(DifficultiesManagingonOwn, F1.0), 
-String(DrugAlcoholDependency, F1.0), 
-String(CriminalAntiSocialBehaviour, F1.0), 
-String(NottodowithApplicantHousehold, F1.0), 
-String(Refused, F1.0)).
-
-String reason_ftm_2 (A10).
-If FinancialDifficultiesDebtUnemployment = 1 reason_ftm_2 = Concat(reason_ftm_2, "F").
-If PhysicalHealthReasons = 1 reason_ftm_2 = Concat(reason_ftm_2, "P").
-If MentalHealthReasons = 1 reason_ftm_2 = Concat(reason_ftm_2, "M").
-If UnmetNeedforSupportfromHousingSocialWorkHealthServi = 1 reason_ftm_2 = Concat(reason_ftm_2, "U").
-If LackofSupportfromFriendsFamily = 1 reason_ftm_2 = Concat(reason_ftm_2, "L").
-If DifficultiesManagingonOwn = 1 reason_ftm_2 = Concat(reason_ftm_2, "O").
-If DrugAlcoholDependency = 1 reason_ftm_2 = Concat(reason_ftm_2, "D").
-If CriminalAntiSocialBehaviour = 1 reason_ftm_2 = Concat(reason_ftm_2, "C").
-If NottodowithApplicantHousehold = 1 reason_ftm_2 = Concat(reason_ftm_2, "N").
-If Refused = 1 reason_ftm_2 = Concat(reason_ftm_2, "R").
+String hl1_reason_ftm (A10).
+If FinancialDifficultiesDebtUnemployment = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "F").
+If PhysicalHealthReasons = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "Ph").
+If MentalHealthReasons = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "M").
+If UnmetNeedforSupportfromHousingSocialWorkHealthServi = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "U").
+If LackofSupportfromFriendsFamily = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "L").
+If DifficultiesManagingonOwn = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "O").
+If DrugAlcoholDependency = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "D").
+If CriminalAntiSocialBehaviour = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "C").
+If NottodowithApplicantHousehold = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "N").
+If Refused = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "R"). 
 
 Rename Variables
     AssessmentDecisionDate = record_keydate1
@@ -109,7 +105,6 @@ Apply Dictionary From !PCDir
     /VarInfo ValLabels = Replace
     /Source variables = CA2011
     /Target variables = hl1_sending_lca.
-
 
 * Put record_keydate into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
@@ -132,8 +127,7 @@ save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
     hl1_application_ref
     hl1_sending_lca
     hl1_property_type
-    reason_ftm
-    reason_ftm_2
+    hl1_reason_ftm
     /zcompressed.
 
  * zip up the raw data.
