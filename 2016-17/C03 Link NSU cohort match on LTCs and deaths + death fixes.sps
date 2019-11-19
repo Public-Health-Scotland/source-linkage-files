@@ -1,5 +1,8 @@
 ﻿* Encoding: UTF-8.
  * Create Homelessness flags.
+ * Unzip the homelessness file.
+Host command = ["unzip '" + !File + "Activity.zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
+
 get file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /Keep CHI record_keydate1 record_keydate2.
 
@@ -15,13 +18,38 @@ Else.
 End if.
 Alter type AssessmentDecisionDate CaseClosedDate (Date12).
 
+ * Work out what the maximum number of records per person was.
+ * We need this later.
+aggregate
+    /Presorted
+    /Break CHI
+    /num_records = n.
+
+aggregate
+    /max_records = max(num_records).
+
+ * Assuming it must be <=9.
+Alter Type max_records (F1.0).
+
+ * Ugly hack beacuse SPSS...
+ * Take the max_records number and generate two macros using this.
+ * However the way to do this without Python is to write out to a new file.
+do if $casenum = 1.
+    write out = !File + "Temp macro definitions.sps"
+        /"Define !maxAssesment() !Concat('AssessmentDecisionDate.', '" max_records "') !EndDefine."
+        /"Define !maxClose() !Concat('CaseClosedDate.', '" max_records "') !EndDefine.".
+end if.
+
 * Sort for restructure.
 Sort cases by chi AssessmentDecisionDate.
+
+ * Run the file we created above which should define the two macros.
+include !File + "Temp macro definitions.sps".
 
 * Restructure to have single record per CHI.
 casestovars
     /ID = chi
-    /Drop record_keydate1 record_keydate2.
+    /Drop record_keydate1 record_keydate2 num_records max_records.
 
 * Match to source.
 match files
@@ -30,6 +58,10 @@ match files
     /In = HH
     /By chi.
 
+ * Housekeeping.
+ * Don't need this as it's still in the zip archive too.
+Erase file = !File + "homelessness_for_source-20" + !FY + ".zsav".
+Erase file = !File + "Temp macro definitions.sps".
 
 Numeric HH_in_FY HH_ep  HH_6after_ep  HH_6before_ep (F1.0).
 Variable Labels
@@ -46,8 +78,8 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
     Compute HH_6before_ep = 0.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
-    Do repeat HH_start = AssessmentDecisionDate.1 to AssessmentDecisionDate.4
-        /HH_end = CaseClosedDate.1 to CaseClosedDate.4.
+    Do repeat HH_start = AssessmentDecisionDate.1 to !maxAssesment
+        /HH_end = CaseClosedDate.1 to !maxClose.
 
         * If there was an active application at any point in the FY.
         If Range(HH_start, !startFY, !endFY)
@@ -75,11 +107,6 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
             or (HH_start <= keydate1_dateformat and Missing(HH_end)) HH_6before_ep = 1.
     End Repeat.
 End if.
-
-crosstabs recid by HH_in_FY.
-crosstabs recid by HH_ep.
-crosstabs recid by HH_6after_ep.
-crosstabs recid by HH_6before_ep.
 
 * Match on the non-service-user CHIs.
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
