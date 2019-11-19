@@ -120,8 +120,7 @@ Variable Labels
     hl1_application_ref "Reference number for the Homelessness application, allows grouping households together"
     hl1_sending_lca "LCA which processed the application for Homelessness"
     hl1_property_type "Type of property from which  the applicant became homeless / threatened with homelessness"
-    reason_ftm "Reason(s) for failing to maintain accommodation in hl1_property_type"
-    reason_ftm_2 "Reason(s) for failing to maintain accommodation in hl1_property_type"
+    hl1_reason_ftm "Reason(s) for failing to maintain accommodation in hl1_property_type - See episode file layout for more information"
     ipdc "Inpatient/Day case marker"
     jan_beddays "Number of Bed days from episode in January"
     jan_cost "Cost from episode in January"
@@ -187,8 +186,7 @@ Variable Labels
     tadm "Type of Admission"
     uri "Unique Record Identifier - See notes"
     year "Year"
-    yearstay "Stay within year"
-    .
+    yearstay "Stay within year".
 * Gender flags.
 Value Labels gender
     '0' "Not Known"
@@ -698,15 +696,14 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     hbpraccode
     postcode
     hbrescode
-hl1_application_ref
-hl1_sending_lca
-hl1_property_type
-reason_ftm
-reason_ftm_2
-HH_in_FY
-HH_ep
-HH_6after_ep
-HH_6before_ep
+    hl1_application_ref
+    hl1_sending_lca
+    hl1_property_type
+    hl1_reason_ftm
+    HH_in_FY
+    HH_ep
+    HH_6after_ep
+    HH_6before_ep
     hbtreatcode
     location
     yearstay
