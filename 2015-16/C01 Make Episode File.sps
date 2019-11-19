@@ -372,13 +372,24 @@ String Secondary_Delay_Reason (A4).
 String DD_Quality (A3).
 String DD_Responsible_LCA (A2).
 
+ * Declare variables for Homelessness (1516 only).
+String hl1_application_ref (A15).
+String hl1_sending_lca (A9).
+Numeric hl1_property_type (F2.0).
+String reason_ftm (A10).
+String reason_ftm_2 (A10).
+Numeric HH_in_FY (F1.0).
+Numeric HH_ep (F1.0).
+Numeric HH_6after_ep (F1.0).
+Numeric HH_6before_ep (F1.0).
+
 save outfile = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
     /zcompressed.
 
 get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
 
 * Housekeeping.
-Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
+Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
 Host Command = ["zip -mjv '" + !File + "Activity.zip' " + 

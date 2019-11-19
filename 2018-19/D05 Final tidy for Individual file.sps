@@ -38,7 +38,7 @@ Alter type
 Variable width
     gender age postcode gpprac (7)
     health_net_cost health_net_costincDNAs health_net_costincIncomplete (15)
-    dob NSU to digestive_date (10).
+    dob HL1_in_FY NSU to digestive_date (10).
 
 * Add variable labels.
 Variable Labels
@@ -52,6 +52,7 @@ Variable Labels
     Locality "HSCP Locality"
     Cluster "GP Practice Cluster"
     NSU "Flag to indicate Non-service-users"
+    HL1_in_FY "CHI had an active homelessness application during this financial year"
     health_net_cost "Total net cost"
     health_net_costincDNAs "Total net cost including 'did not attend'"
     health_net_costincIncomplete "Total net cost including CH and DN (not DNAs)"
@@ -199,6 +200,7 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     health_net_costincDNAs
     health_net_costincIncomplete
     NSU
+    HL1_in_FY
     deceased
     death_date
     acute_episodes
