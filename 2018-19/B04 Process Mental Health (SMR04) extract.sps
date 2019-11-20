@@ -198,7 +198,6 @@ aggregate outfile = !file + 'MH_monthly_costs_and_beddays_by_uri.sav'
 match files file = !file + 'mh_temp.zsav'
    /table = !file + 'MH_monthly_costs_and_beddays_by_uri.sav'
    /by uri.
-execute.
 
  * This is just to remove duplicates.
 add files file = *
@@ -224,7 +223,7 @@ alter type record_keydate1 record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1.
 
- * Add MH specific labele.
+ * Add MH specific labels.
 Value Labels stadm
     '3' "Formal"
     '4' "Informal".

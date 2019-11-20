@@ -248,7 +248,6 @@ Do if (recid EQ '01B').
 Else If (recid EQ 'GLS').
    Compute SMRType = 'GLS-IP'.
 End If.
-frequencies SMRType.
 
 * Calculate the total length of stay (for the entire episode, not just within the financial year).
 Numeric stay (F7.0).
@@ -258,8 +257,6 @@ Compute stay = Datediff(record_keydate2, record_keydate1, "days").
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 alter type record_keydate1 record_keydate2 (F8.0).
-
-frequencies stay yearstay.
 
 sort cases by chi record_keydate1.
 

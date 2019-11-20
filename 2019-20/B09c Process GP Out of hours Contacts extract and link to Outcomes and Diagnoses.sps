@@ -63,8 +63,6 @@ Do If CHI = lag(CHI) AND GUID = lag(GUID).
    End If.
 End if.
       
-Frequencies Overlap Duplicate.
-
  * Get rid of obvious duplicates.
 select if Duplicate NE 2.
 
@@ -75,8 +73,6 @@ If (Overlap = 1 AND Duplicate = 1) ToMerge = 1.
 sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime (D).
 IF GUID = lag(GUID) AND CHI = lag(CHI) AND ConsultationEndDateTime > Lag(ConsultationStartDateTime) 
    AND ConsultationType = Lag(ConsultationType) AND TreatmentLocationCode = Lag(TreatmentLocationCode) ToMerge = 1.
-
-frequencies tomerge.
 
  * Create counters for unique consultations.
 sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime.

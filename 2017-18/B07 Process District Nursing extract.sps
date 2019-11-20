@@ -206,8 +206,9 @@ Define !InterventionCategory (Vars = !CMDEND)
     "8" "Health Promotion".
 !EndDefine.
 
-Define !LocationofContact()
-    Value Labels
+!InterventionCategory Vars = diag1 to diag6.
+
+Value Labels
     Location
     "1" "Hospital"
     "2" "HealthCentre"
@@ -216,10 +217,6 @@ Define !LocationofContact()
     "6" "Patient or client residence"
     "7" "Day Centre"
     "8" "Other"
-!EndDefine.
-
-!InterventionCategory Vars = diag1 to diag6.
-!LocationofContact.
 
 Variable Labels
     CCM "Continuous Care Marker"

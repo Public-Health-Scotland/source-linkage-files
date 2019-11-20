@@ -16,6 +16,7 @@ GET DATA  /TYPE=TXT
       GUID A36
       Outcome A55.
 CACHE.
+Execute.
 
 * Get rid of any with a blank outcome.
 Select if Not(Outcome = '').

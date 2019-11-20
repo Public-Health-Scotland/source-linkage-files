@@ -93,7 +93,7 @@ Else If (recid = "PIS").
 Else If (recid = "NRS").
     Compute SMRType = "NRS Deaths".
 End If.
-frequencies SMRType.
+
 
 *CHECK RESULTS FROM FREQUENCY SMRTYPE.
 
@@ -126,7 +126,7 @@ Recode cij_pattype_code
     (9 = "Other")
     Into cij_pattype.
 
-crosstabs cij_pattype by cij_pattype_code.
+
 
 ********************** Temporarily work on CIJ only records ***************************.
 
@@ -356,7 +356,7 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
-Frequencies PPA cij_ppa.
+
 
 sort cases by chi keydate1_dateformat.
 

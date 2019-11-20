@@ -31,7 +31,7 @@ GET DATA  /TYPE=TXT
     Refused F1.0
     /MAP.
 
- * Drop records for parthnerships which don't have good / complete data.
+ * Drop records for partnerships which don't have good / complete data.
  * For most of the below there will be no data anyway but some have test data only.
 Compute #Drop = 0.
 If (!FY = "1617" and any(SendingLocalAuthorityCode9, "S12000005", "S12000017", "S12000028", "S12000040", "S12000041",  "S12000042")) #Drop = 1.

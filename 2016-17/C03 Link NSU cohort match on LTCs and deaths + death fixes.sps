@@ -31,7 +31,7 @@ aggregate
  * Assuming it must be <=9.
 Alter Type max_records (F1.0).
 
- * Ugly hack beacuse SPSS...
+ * Ugly hack because SPSS...
  * Take the max_records number and generate two macros using this.
  * However the way to do this without Python is to write out to a new file.
 do if $casenum = 1.
@@ -136,7 +136,7 @@ Recode arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy ch
     hefailure ms parkinsons refailure congen bloodbfo endomet digestive (sysmis = 0).
 
 * Check age and gender before corrections.
-Frequencies age gender.
+
 Numeric Changed_DoB (F2.0).
 Compute Changed_DoB = 0.
 
@@ -264,8 +264,8 @@ xsave outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Drop Changed_DoB
     /zcompressed.
 
-* Check again - we don't expect too many changes.
-Frequencies age gender Changed_DoB.
+
+
 
 ***************************************************************************************************************************.
 * Determine the most appropriate death date to use.
@@ -372,7 +372,7 @@ match files
     /Drop death_date_NRS death_date_CHI death_date_NRS_ep last_activity Has_NRS Activity_after_death CHI_death_date_works CHI_death_date_missing
     /By CHI.
 
-* Clear any deaths which occured before the start of the FY - allow one year if the only activity is PIS.
+* Clear any deaths which occurred before the start of the FY - allow one year if the only activity is PIS.
 Numeric Remove_Death (F1.0).
 Compute Remove_Death = 0.
 Do if recid NE "PIS".

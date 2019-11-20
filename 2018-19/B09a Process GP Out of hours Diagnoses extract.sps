@@ -17,6 +17,7 @@ GET DATA  /TYPE=TXT
       ReadCode A5
       Description A70.
 CACHE.
+Execute.
 
 * Sort and save.
 Sort cases by ReadCode.
@@ -79,19 +80,6 @@ End if.
 Temporary.
 Select if FullMatch2 = 0 and Old_ReadCode NE ReadCode.
 Crosstabs Old_ReadCode by ReadCode.
-
- * Do a final check.
-Sort cases by ReadCode Description.
-match files
-   /File = *
-   /Table = !Lookup + "../ReadCodeLookup.zsav"
-   /In = FinalCheck
-   /By ReadCode.
-
- * If the final corrections worked then this command should result in a warning.
-Temporary.
-select if FinalCheck = 0.
-Frequencies ReadCode Description.
 
 ************************************************************************************************************.
 * Sort and restructure the data so it's ready to link to case IDs.
