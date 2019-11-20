@@ -3,23 +3,23 @@
 *Tests for GP OoHs dataset.
 get file = !file + 'GP_OOH_for_Source-20' + !FY + '.zsav'.
 
- * Flag to count CHIs.
+* Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
+* Flags to count M/Fs.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
     Compute Female = 1.
 End if.
 
- * Flags to count missing values.
+* Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
 if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
- * Get values for whole file.
+* Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
     /break
@@ -28,8 +28,10 @@ aggregate outfile = SLFnew
     /Mean_Age = mean(age)
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
-    /Total__Costs_net = Sum(cost_total_net)
-    /Mean_Costs_net = Mean(cost_total_net)
+    /Total__Costs = Sum(cost_total_net)
+    /Mean__Costs = Mean(cost_total_net)
+    /Max_Cost = Max(cost_total_net)
+    /Min_Cost = Min(cost_total_net)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)
@@ -43,12 +45,24 @@ aggregate outfile = SLFnew
     /Total_cost_dec = Sum(dec_cost)
     /Total_cost_jan = Sum(jan_cost)
     /Total_cost_feb = Sum(feb_cost)
-    /Total_cost_mar = Sum(mar_cost).
+    /Total_cost_mar = Sum(mar_cost)
+    /Mean_cost_apr = Mean(apr_cost)
+    /Mean_cost_may = Mean(may_cost)
+    /Mean_cost_jun = Mean(jun_cost)
+    /Mean_cost_jul = Mean(jul_cost)
+    /Mean_cost_aug = Mean(aug_cost)
+    /Mean_cost_sep = Mean(sep_cost)
+    /Mean_cost_oct = Mean(oct_cost)
+    /Mean_cost_nov = Mean(nov_cost)
+    /Mean_cost_dec = Mean(dec_cost)
+    /Mean_cost_jan = Mean(jan_cost)
+    /Mean_cost_feb = Mean(feb_cost)
+    /Mean_cost_mar = Mean(mar_cost).
 
- * Restructure for easy analysis and viewing.
+* Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to Total_cost_mar
+    /Make New_Value from n_CHIs to Mean_cost_mar
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
@@ -59,23 +73,23 @@ get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY 
     cost_total_net apr_cost to mar_cost sc_send_lca.
 select if recid = 'OoH'.
 
- * Flag to count CHIs.
+* Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
+* Flags to count M/Fs.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
     Compute Female = 1.
 End if.
 
- * Flags to count missing values.
+* Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
 if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
- * Get values for whole file.
+* Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
     /break
@@ -84,8 +98,10 @@ aggregate outfile = SLFexisting
     /Mean_Age = mean(age)
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
-    /Total__Costs_net = Sum(cost_total_net)
-    /Mean_Costs_net = Mean(cost_total_net)
+    /Total__Costs = Sum(cost_total_net)
+    /Mean__Costs = Mean(cost_total_net)
+    /Max_Cost = Max(cost_total_net)
+    /Min_Cost = Min(cost_total_net)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)
@@ -99,34 +115,46 @@ aggregate outfile = SLFexisting
     /Total_cost_dec = Sum(dec_cost)
     /Total_cost_jan = Sum(jan_cost)
     /Total_cost_feb = Sum(feb_cost)
-    /Total_cost_mar = Sum(mar_cost).
+    /Total_cost_mar = Sum(mar_cost)
+    /Mean_cost_apr = Mean(apr_cost)
+    /Mean_cost_may = Mean(may_cost)
+    /Mean_cost_jun = Mean(jun_cost)
+    /Mean_cost_jul = Mean(jul_cost)
+    /Mean_cost_aug = Mean(aug_cost)
+    /Mean_cost_sep = Mean(sep_cost)
+    /Mean_cost_oct = Mean(oct_cost)
+    /Mean_cost_nov = Mean(nov_cost)
+    /Mean_cost_dec = Mean(dec_cost)
+    /Mean_cost_jan = Mean(jan_cost)
+    /Mean_cost_feb = Mean(feb_cost)
+    /Mean_cost_mar = Mean(mar_cost).
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to Total_cost_mar
+    /Make Existing_Value from n_CHIs to Mean_cost_mar
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
 
 *************************************************************************************************************.
- * Match together.
+* Match together.
 match files
     /file = SLFexisting
     /file = SLFnew
     /By Measure.
 Dataset Name GPOoHsComparison.
 
- * Close both datasets.
+* Close both datasets.
 Dataset close SLFnew.
 Dataset close SLFexisting.
 
- * Produce comparisons.
+* Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
 Compute PctChange = Difference / Existing_Value * 100.
 Compute Issue = (abs(PctChange) > 5).
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
- * Highlight issues.
+* Highlight issues.
 Crosstabs Measure by Issue.
 
 
