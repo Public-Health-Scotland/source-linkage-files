@@ -260,12 +260,9 @@ Value labels Changed_DoB
     10 "Copied from previous record".
 
 * Save here whist we work on a subset of the file.
-xsave outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Drop Changed_DoB
     /zcompressed.
-
-
-
 
 ***************************************************************************************************************************.
 * Determine the most appropriate death date to use.
