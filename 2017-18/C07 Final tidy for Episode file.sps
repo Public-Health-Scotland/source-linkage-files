@@ -37,12 +37,16 @@ Variable Labels
     chd "Coronary heart disease (CHD) LTC marker"
     chd_date "Coronary heart disease (CHD) LTC incidence date"
     chi "Community Health Index number"
-    CIJ_start_date "Date of admission for the first record in the CIJ (Continuous Inpatient Journey)"
-    CIJ_end_date "Date of discharge for the last record in the CIJ (Continuous Inpatient Journey)"
     cij_adm_spec "Specialty on first record in CIJ"
+    cij_admtype "CIJ admission type"
     cij_dis_spec "Specialty on last record in CIJ"
+    CIJ_end_date "Date of discharge for the last record in the CIJ (Continuous Inpatient Journey)"
+    cij_ipdc "CIJ inpatient day case identifier"
     cij_marker "CIJ (Continuous Inpatient Journey) marker"
+    cij_pattype "CIJ patient type"
+    cij_pattype_code "CIJ patient type - coded"
     cij_ppa "CIJ which began in a Potentially Preventable Admission (PPA)"
+    CIJ_start_date "Date of admission for the first record in the CIJ (Continuous Inpatient Journey)"
     clinic_type "Clinic Type"
     Cluster "GP Practice cluster. Based on gpprac and are correct at time of update"
     commhosp "Community Hospital flag"
@@ -113,6 +117,10 @@ Variable Labels
     hefailure_date "Heart failure LTC incidence date"
     HHG_End_FY "HHG 12-month risk score from the end of the financial year"
     HHG_Start_FY "HHG 12-month risk score from the start of the financial year"
+    hl1_application_ref "Reference number for the Homelessness application, allows grouping households together"
+    hl1_sending_lca "LCA which processed the application for Homelessness"
+    hl1_property_type "Type of property from which  the applicant became homeless / threatened with homelessness"
+    hl1_reason_ftm "Reason(s) for failing to maintain accommodation in hl1_property_type - See episode file layout for more information"
     ipdc "Inpatient/Day case marker"
     jan_beddays "Number of Bed days from episode in January"
     jan_cost "Cost from episode in January"
@@ -136,10 +144,6 @@ Variable Labels
     mpat "Management of Patient"
     ms "Multiple Sclerosis LTC marker"
     ms_date "Multiple Sclerosis LTC incidence date"
-    cij_admtype "CIJ admission type"
-    cij_ipdc "CIJ inpatient day case identifier"
-    cij_pattype"CIJ patient type"
-    cij_pattype_code "CIJ patient type - coded"
     nhshosp "NHS Hospital flag"
     no_dispensed_items "Number of dispensed items"
     nov_beddays "Number of Bed days from episode in November"
@@ -183,7 +187,6 @@ Variable Labels
     uri "Unique Record Identifier - See notes"
     year "Year"
     yearstay "Stay within year".
-
 * Gender flags.
 Value Labels gender
     '0' "Not Known"
@@ -242,20 +245,30 @@ Value Labels recid
     'OoH' "GP Out of Hours contact"
     'PIS' "Community Prescribing summary".
 
-Add Value Labels SMRType
-    'Acute-DC' 'Acute - Daycase'
-    'Acute-IP' 'Acute - Inpatient'
-    'Care-Home' 'Care Home resident'
-    'DD-CIJ' 'Delayed Discharge - Linked to a CIJ'
-    'DD-No CIJ' 'Delayed Discharge - Not linked to a CIJ'
-    'DN' 'District Nursing'
-    'Comm-MH' 'Community Mental Health'
-    'GLS-IP' 'Geriatric Long Stay - Inpatient'
-    'Matern-DC' 'Maternity - Daycase'
-    'Matern-IP' 'Maternity - Inpatient'
-    'Non-User' 'Non-Service-User'
-    'PIS' 'Community Prescribing summary'
-    'Psych-IP' 'Psychiatric - Inpatient'.
+Value Labels SMRType
+    'A & E' "Accident & Emergency attendance"
+    'Acute-DC' "Acute (SMR01) - Daycase"
+    'Acute-IP' "Acute (SMR01) - Inpatient"
+    'Comm-MH' "Community Mental Health"
+    'DD-CIJ' "Delayed Discharge - Linked to a CIJ"
+    'DD-No' "CIJ Delayed Discharge - Not linked to a CIJ"
+    'DN' "District Nursing"
+    'GLS-IP' "Geriatric Long Stay - Inpatient"
+    'HL1-Main' "Homelessness application - Main applicant"
+    'HL1-Other' "Homelessness application - Not main (other) applicant"
+    'Matern-DC' "Maternity (SMR02) - Daycase"
+    'Matern-IP' "Maternity (SMR02) - Inpatient"
+    'Non-User' "Non-Service-User"
+    'NRS' "NRS Death episode"
+    'OOH-Advice' "Out of Hours - Doctor / Nurse Advice"
+    'OOH-DN' "Out of Hours - District Nurse"
+    'OOH-HomeV' "Out of Hours - Home Visit"
+    'OOH-NHS24' "Out of Hours - NHS24 Nurse Advice"
+    'OOH-Other' "Out of Hours - Other"
+    'OOH-PCC' "Out of Hours - Primary Care Emergency Centre / Primary Care Centre"
+    'Outpatient' "New consultant led outpatient appointments"
+    'PIS' "Community Prescribing summary"
+    'Psych-IP' "Psychiatric (SMR04)- Inpatient".
 
 Value Labels refsource
     '01' "A&E - Self Referral"
@@ -683,6 +696,14 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     hbpraccode
     postcode
     hbrescode
+    hl1_application_ref
+    hl1_sending_lca
+    hl1_property_type
+    hl1_reason_ftm
+    HH_in_FY
+    HH_ep
+    HH_6after_ep
+    HH_6before_ep
     hbtreatcode
     location
     yearstay

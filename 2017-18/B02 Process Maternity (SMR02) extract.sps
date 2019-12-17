@@ -142,8 +142,6 @@ alter type record_keydate1 record_keydate2 dob dateop1 (Date12).
 Numeric stay (F7.0).
 Compute stay = Datediff(record_keydate2, record_keydate1, "days").
 
-Frequencies stay yearstay.
-
 * BedDays.
 * This Python program will call the 'BedDaysPerMonth' macro (Defined in A01) for each month in FY order.
 Begin Program.
@@ -178,7 +176,7 @@ Do Repeat Beddays = Apr_beddays to Mar_beddays
     /MonthNum = 4 5 6 7 8 9 10 11 12 1 2 3.
 
     * Fix the instances where the episode is a daycase;
-        * these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
+    * these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
     Do if (record_keydate1 = record_keydate2).
         Do if  xdate.Month(record_keydate1) = MonthNum.
             Compute Cost = cost_total_net.

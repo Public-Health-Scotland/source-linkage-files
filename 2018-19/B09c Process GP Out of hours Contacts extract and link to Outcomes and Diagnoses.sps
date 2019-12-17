@@ -1,14 +1,5 @@
 ﻿* Encoding: UTF-8.
-************************************************************************************************************
-   NSS (ISD)
-   ************************************************************************************************************
-   ** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
-   ** Date:    	09/05/2018
-   ************************************************************************************************************
-   ** Amended by:
-   ** Date:
-   ** Changes:
-   ************************************************************************************************************.
+
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
@@ -72,8 +63,6 @@ Do If CHI = lag(CHI) AND GUID = lag(GUID).
    End If.
 End if.
       
-Frequencies Overlap Duplicate.
-
  * Get rid of obvious duplicates.
 select if Duplicate NE 2.
 
@@ -84,8 +73,6 @@ If (Overlap = 1 AND Duplicate = 1) ToMerge = 1.
 sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime (D).
 IF GUID = lag(GUID) AND CHI = lag(CHI) AND ConsultationEndDateTime > Lag(ConsultationStartDateTime) 
    AND ConsultationType = Lag(ConsultationType) AND TreatmentLocationCode = Lag(TreatmentLocationCode) ToMerge = 1.
-
-frequencies tomerge.
 
  * Create counters for unique consultations.
 sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime.
@@ -175,7 +162,7 @@ ConsultationEndDateTime = record_keydate2.
 Compute keyTime1 = time.hms(xdate.hour(record_keydate1), xdate.minute(record_keydate1), xdate.second(record_keydate1)).
 Compute keyTime2 = time.hms(xdate.hour(record_keydate2), xdate.minute(record_keydate2), xdate.second(record_keydate2)).
 
- * Remove the time part from the date variables so they'll not sort wierdly.
+ * Remove the time part from the date variables so they'll not sort weirdly.
 Compute record_keydate1 = record_keydate1 - keyTime1.
 Compute record_keydate2 = record_keydate2 - keyTime2.
 

@@ -43,12 +43,24 @@ aggregate outfile = SLFnew
     /Total_cost_dec = Sum(dec_cost)
     /Total_cost_jan = Sum(jan_cost)
     /Total_cost_feb = Sum(feb_cost)
-    /Total_cost_mar = Sum(mar_cost).
+    /Total_cost_mar = Sum(mar_cost)
+    /Mean_cost_apr = Mean(apr_cost)
+    /Mean_cost_may = Mean(may_cost)
+    /Mean_cost_jun = Mean(jun_cost)
+    /Mean_cost_jul = Mean(jul_cost)
+    /Mean_cost_aug = Mean(aug_cost)
+    /Mean_cost_sep = Mean(sep_cost)
+    /Mean_cost_oct = Mean(oct_cost)
+    /Mean_cost_nov = Mean(nov_cost)
+    /Mean_cost_dec = Mean(dec_cost)
+    /Mean_cost_jan = Mean(jan_cost)
+    /Mean_cost_feb = Mean(feb_cost)
+    /Mean_cost_mar = Mean(mar_cost).
 
 * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to Total_cost_mar
+    /Make New_Value from n_CHIs to Mean_cost_mar
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
@@ -62,7 +74,7 @@ select if recid = 'AE2'.
 * Flag to count CHIs.
 Recode Anon_CHI ("" = 0) (Else = 1) Into Has_CHI.
 
-* Flags to count M/Fs.
+* Flags to count Males / Females.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
@@ -99,11 +111,23 @@ aggregate outfile = SLFexisting
     /Total_cost_dec = Sum(dec_cost)
     /Total_cost_jan = Sum(jan_cost)
     /Total_cost_feb = Sum(feb_cost)
-    /Total_cost_mar = Sum(mar_cost).
+    /Total_cost_mar = Sum(mar_cost)
+    /Mean_cost_apr = Mean(apr_cost)
+    /Mean_cost_may = Mean(may_cost)
+    /Mean_cost_jun = Mean(jun_cost)
+    /Mean_cost_jul = Mean(jul_cost)
+    /Mean_cost_aug = Mean(aug_cost)
+    /Mean_cost_sep = Mean(sep_cost)
+    /Mean_cost_oct = Mean(oct_cost)
+    /Mean_cost_nov = Mean(nov_cost)
+    /Mean_cost_dec = Mean(dec_cost)
+    /Mean_cost_jan = Mean(jan_cost)
+    /Mean_cost_feb = Mean(feb_cost)
+    /Mean_cost_mar = Mean(mar_cost).
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to Total_cost_mar
+    /Make Existing_Value from n_CHIs to Mean_cost_mar
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.

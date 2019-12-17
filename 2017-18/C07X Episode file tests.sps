@@ -33,10 +33,10 @@ if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
  * Flags to count stay types.
-If cij_pattype= "Elective" CIJ_elective = 1.
-If cij_pattype= "Non-Elective" CIJ_non_elective = 1.
-If cij_pattype= "Maternity" CIJ_maternity = 1.
-If cij_pattype= "Other" CIJ_other = 1.
+If cij_pattype = "Elective" CIJ_elective = 1.
+If cij_pattype = "Non-Elective" CIJ_non_elective = 1.
+If cij_pattype = "Maternity" CIJ_maternity = 1.
+If cij_pattype = "Other" CIJ_other = 1.
 
 sort cases by recid.
 
@@ -140,3 +140,5 @@ Compute pct_diff = (diff / Old_Value) * 100.
 If abs(pct_diff) >= 5 Possible_issue = 1.
 
 Crosstabs recid by Possible_issue.
+
+save outfile = !File + "source-episode-TESTS-20" + !FY + ".sav".

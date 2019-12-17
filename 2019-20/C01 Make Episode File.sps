@@ -1,8 +1,4 @@
 * Encoding: UTF-8.
-* Create the master PLICS file for 2015/16.
-
-* Program created and modified by Denise Hastie, June/July 2016.
-
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -20,6 +16,7 @@ add files
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !File + "CMH_for_source-20" + !FY + ".zsav"
+    /file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -73,7 +70,7 @@ End if.
 * Make them look nice.
 Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
-* Set the type of admission for Maternity records here as the varaible isn't included in the datmart.
+* Set the type of admission for Maternity records here as the variable isn't included in the datmart.
 If (recid = "02B") tadm = "42".
 * Correct for home births.
 If (recid = "02B" and mpat = "0") tadm = "41".
@@ -96,51 +93,55 @@ Else If (recid = "PIS").
 Else If (recid = "NRS").
     Compute SMRType = "NRS Deaths".
 End If.
-frequencies SMRType.
+
 
 *CHECK RESULTS FROM FREQUENCY SMRTYPE.
 
 Alter Type uri (F8.0).
 
 
- * Slight correction for newpattype_cis using types of admission.
+ * Slight correction for cij_pattypeusing types of admission.
  * Lump the unknowns together to avoid potential confusion.
-Recode newcis_admtype ("Un" = "99").
+Recode cij_admtype ("Un" = "99").
 
- * Apply newpattype_CIS logic to all records with a valid CHI number.
+ * Apply cij_pattypelogic to all records with a valid CHI number.
 Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
      * Maternity now also has 41 for home birth.
-    Do If any(newcis_admtype, "41", "42").
-        Compute newpattype_ciscode = 2.
+    Do If any(cij_admtype, "41", "42").
+        Compute cij_pattype_code = 2.
     * 40 and 48 are other - 99 is our code for unknown.
-    Else If Any(newcis_admtype, "40", "48", "99").
-        Compute newpattype_ciscode = 9.
+    Else If Any(cij_admtype, "40", "48", "99").
+        Compute cij_pattype_code = 9.
     End If.
 End If.
 
- * Recode newpattype.
-String newpattype_cis (A13).
-Recode newpattype_ciscode
+If cij_admtype = "18" cij_pattype_code = 0.
+
+ * Recode cij_pattype.
+String cij_pattype(A13).
+Recode cij_pattype_code
     (0 = "Non-Elective")
     (1 = "Elective")
     (2 = "Maternity")
     (9 = "Other")
-    Into newpattype_cis.
+    Into cij_pattype.
 
-********************** Temporarily work on CIS only records ***************************.
+
+
+********************** Temporarily work on CIJ only records ***************************.
 
 sort cases by CHI record_keydate1 record_keydate2.
-* Only work on records that have a CIS marker, save out others.
+* Only work on records that have a CIJ marker, save out others.
 temporary.
 select if not(any(recid, "01B", "04B", "GLS", "02B")).
-save outfile = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
     /zcompressed.
 
 select if any(recid, "01B", "04B", "GLS", "02B").
 
-* Fill in the blank CIS markers.
-do if (chi ne lag(chi)) AND cis_marker = "" AND chi NE "".
-    compute cis_marker= "1".
+* Fill in the blank CIJ markers.
+do if (chi ne lag(chi)) AND cij_marker = "" AND chi NE "".
+    compute cij_marker= "1".
 end if.
 
 * Populate ipdc for maternity records.
@@ -150,42 +151,42 @@ Else if SMRType = "Matern-DC".
     Compute  ipdc = "D".
 End if.
 
-* Tidy up newcis_ipdc.
-Do if chi NE "" and newcis_ipdc = "".
-    if ipdc = "I" newcis_ipdc = "I".
-    if (recid = "01B" and ipdc = "D") newcis_ipdc = "D".
+* Tidy up cij_ipdc.
+Do if chi NE "" and cij_ipdc = "".
+    if ipdc = "I" cij_ipdc = "I".
+    if (recid = "01B" and ipdc = "D") cij_ipdc = "D".
 End if.
 
-* Reset the newcis variables after the above.
+* Reset the CIJ variables after the above.
 * And add dates for the start and end of the CIJ.
 aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
-    /break CHI cis_marker
-    /newcis_ipdc = max(newcis_ipdc)
-    /newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec = First(newcis_admtype newpattype_ciscode newpattype_cis CIJadm_spec)
-    /CIJdis_spec = last(CIJdis_spec)
+    /break CHI cij_marker
+    /cij_ipdc = max(cij_ipdc)
+    /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
+    /cij_dis_spec = last(cij_dis_spec)
     /CIJ_start_date = Min(keydate1_dateformat)
     /CIJ_end_date = Max(keydate2_dateformat).
 
  * Clean up.
-Do if cis_marker = "".
+Do if cij_marker = "".
     Compute CIJ_start_date = $sysmis.
     Compute CIJ_end_date = $sysmis.
 End if.
 
-* All records with a CHI should now have a valid CIS marker.
+* All records with a CHI should now have a valid CIJ marker.
 Temporary.
 select if chi ne "".
-crosstabs recid by cis_marker.
+crosstabs recid by cij_marker.
 
 sort cases by CHI record_keydate1 record_keydate2.
 
 add files file = *
-    /file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav"
+    /file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
     /By CHI record_keydate1 record_keydate2.
 
 
 ********************** Back to full file ***************************..
-********************Create cost inc. DNAs, & modify cost not inc. DNAs using cattend *****.
+********************Create cost including DNAs, & modify cost not including DNAs using cattend *****.
 
 * Modify cost_total_net so that it zeros cost for in the cost_total_net column.
 * The full cost will be held in the cost_total_net_incDNA column.
@@ -196,14 +197,14 @@ Compute Cost_Total_Net_incDNAs = Cost_Total_Net.
 If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 
 * Create a Flag for PPA (Potentially Preventable Admissions).
-sort cases by chi cis_marker record_keydate1 record_keydate2.
+sort cases by chi cij_marker record_keydate1 record_keydate2.
 
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
-    * First record in CIS.
-    Do if (chi NE lag(chi) or (chi = lag(chi) and cis_marker NE lag(cis_marker))).
+    * First record in CIJ.
+    Do if (chi NE lag(chi) or (chi = lag(chi) and cij_marker NE lag(cij_marker))).
         * Non-elective original admission.
-        Do if newpattype_cis = "Non-Elective".
+        Do if cij_pattype= "Non-Elective".
             Compute PPA = 0.
             * Initialise PPA flag for relevant records.
 
@@ -352,10 +353,10 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
 End if.
 
 aggregate
-    /Break chi cis_marker
-    /CIS_PPA = Max(PPA).
+    /Break chi cij_marker
+    /cij_ppa = Max(PPA).
 
-Frequencies PPA CIS_PPA.
+
 
 sort cases by chi keydate1_dateformat.
 
@@ -370,18 +371,19 @@ save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
 get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
 
 * Housekeeping.
-Erase file = !File + "temp-source-episode-file-Non-CIS-" + !FY + ".zsav".
+Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
 Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "aande_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "a&e_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 

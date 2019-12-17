@@ -1,9 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Create Outpatients costed extract in suitable format for PLICS.
-
-* Read in the outpatients extract.  Rename/reformat/recode columns as appropriate.
-
-* Program by Denise Hastie, June 2016.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.

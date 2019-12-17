@@ -1,13 +1,4 @@
 ﻿* Encoding: UTF-8.
-* Create LTC reference data set for PLICS.
-
-* Read in the LTC extract (IT ref IMT-CR-03774).
-* Need to change dates into the format YYYYMMDD and add in long term condition flag markers.
-* LTC flags should have the same names as those from previous PLICS analysis files.
-
-* Program by Denise Hastie, June 2016.
-
-*Last ran 16/05/18-AnitaGeorge.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.

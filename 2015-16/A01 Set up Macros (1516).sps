@@ -4,11 +4,7 @@
 ************************************************************************************************************
 ** AUTHOR:  James McMahon (j.mcmahon1@nhs.net)
 ** Date:        01/08/2018
-************************************************************************************************************
-** Amended by:
-** Date:
-** Changes:
-************************************************************************************************************.
+
  * Set the Financial Year.
 Define !FY()
    "1516"
@@ -80,7 +76,7 @@ Define !PCDir()
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2019_1.5_simd2016.sav"
+   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2019_2_simd2016.sav"
 !EndDefine.
 
  * Most up to date DataZone Population estimates.
@@ -90,7 +86,7 @@ Define !DataZone_Pops()
 
 *******************************************************.
  * Functional macros *
- * Should not need changing unless something is broken or to update methodolody.
+ * Should not need changing unless something is broken or to update methodology.
 *******************************************************.
 
  * The following two macros are used for creating the old LCA codes
@@ -211,7 +207,7 @@ Apply Dictionary From !PCDir
 
  * Add extra non official labels.
 Add Value Labels !HB
-    'S08200001' "Outwith Scotland / RUK"
+    'S08200001' "Out-with Scotland / RUK"
     'S08200002' "No Fixed Abode"
     'S08200003' "Not Known"
     'S08200004' "Outside UK"
@@ -237,7 +233,7 @@ Apply Dictionary From !PCDir
 
 * Add extra non official labels.
 Add Value Labels !HB
-    'S08200001' "Outwith Scotland / RUK"
+    'S08200001' "Out-with Scotland / RUK"
     'S08200002' "No Fixed Abode"
     'S08200003' "Not Known"
     'S08200004' "Outside UK"

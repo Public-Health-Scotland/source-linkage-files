@@ -87,13 +87,13 @@ Rename Variables
     AdmittedTransFromCode = adtf
     AgeatMidpointofFinancialYear01 = age
     AlcoholRelatedAdmission01 = alcohol_adm
-    CIJAdmissionSpecialtyCode01 = CIJadm_spec
-    CIJDischargeSpecialtyCode01 = CIJdis_spec
-    CIJPlannedAdmissionCode01 = newpattype_ciscode
-    CIJTypeofAdmissionCode01 = newcis_admtype
+    CIJAdmissionSpecialtyCode01 = cij_adm_spec
+    CIJDischargeSpecialtyCode01 = cij_dis_spec
+    CIJPlannedAdmissionCode01 = cij_pattype_code
+    CIJTypeofAdmissionCode01 = cij_admtype
     CommunityHospitalFlag01 = commhosp
-    ContinuousInpatientJourneyMarker01 = cis_marker
-    ContinuousInpatientStaySMR01incGLS = smr01_cis
+    ContinuousInpatientJourneyMarker01 = cij_marker
+    ContinuousInpatientStaySMR01incGLS = smr01_cis_marker
     CostsFinancialMonthNumber01 = costmonthnum
     CostsFinancialYear01 = costsfy
     Diagnosis1Code6char = diag1
@@ -154,13 +154,13 @@ Alter Type GPprac (F5.0).
  * Flag GLS records.
 if (glsrecord EQ 'Y') recid = 'GLS'.
 
-String ipdc (A1) newcis_ipdc (A1) newpattype_cis (A13).
+String ipdc (A1) cij_ipdc (A1) cij_pattype(A13).
 
  * Set the IPDC marker for the episode.
 Recode InpatientDayCaseIdentifierCode ("IP" = "I") ("DC" = "D") into ipdc.
 
  * Set the IPDC marker for the CIJ.
-Recode CIJInpatientDayCaseIdentifierCode01 ("IP" = "I") ("DC" = "D") into newcis_ipdc.
+Recode CIJInpatientDayCaseIdentifierCode01 ("IP" = "I") ("DC" = "D") into cij_ipdc.
 
  * Rename date variables.
 Rename Variables
@@ -185,7 +185,7 @@ save outfile = !file + 'acute_temp.zsav'
    /zcompressed.
   
 * Create a file that contains uri, the month number and the net cost and yearstay.
-* Make this look like a 'crosstab' ready for matching back To the acute_temp file. 
+* Make this look like a 'cross-tab' ready for matching back To the acute_temp file. 
 get file = !file + 'acute_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 
@@ -248,7 +248,6 @@ Do if (recid EQ '01B').
 Else If (recid EQ 'GLS').
    Compute SMRType = 'GLS-IP'.
 End If.
-frequencies SMRType.
 
 * Calculate the total length of stay (for the entire episode, not just within the financial year).
 Numeric stay (F7.0).
@@ -258,8 +257,6 @@ Compute stay = Datediff(record_keydate2, record_keydate1, "days").
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 alter type record_keydate1 record_keydate2 (F8.0).
-
-frequencies stay yearstay.
 
 sort cases by chi record_keydate1.
 
@@ -326,14 +323,14 @@ save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
     op4a
     op4b
     dateop4
-    smr01_cis
+    smr01_cis_marker
     age
-    cis_marker
-    newcis_admtype
-    newcis_ipdc
-    newpattype_ciscode
-    CIJadm_spec
-    CIJdis_spec
+    cij_marker
+    cij_admtype
+    cij_ipdc
+    cij_pattype_code
+    cij_adm_spec
+    cij_dis_spec
     alcohol_adm
     submis_adm
     falls_adm

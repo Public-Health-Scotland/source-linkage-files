@@ -31,8 +31,10 @@ aggregate outfile = SLFnew
     /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /n_missing_end_dates = Sum(Missing_End_date)
-    /Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
-    /Mean_Costs_net Mean_yearstay Mean_stay = Mean(cost_total_net yearstay stay)
+/Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
+    /Mean__Costs_net Mean__yearstay Mean__stay = Mean(cost_total_net yearstay stay)
+    /Max_Cost Max_yearstay Max_stay = Max(cost_total_net yearstay stay)
+    /Min_Cost Min_yearstay Min_stay = Min(cost_total_net yearstay stay)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
     /Total_beddays_apr = Sum(apr_beddays)
@@ -58,13 +60,37 @@ aggregate outfile = SLFnew
     /Total_cost_dec = Sum(dec_cost)
     /Total_cost_jan = Sum(jan_cost)
     /Total_cost_feb = Sum(feb_cost)
-    /Total_cost_mar = Sum(mar_cost).
+    /Total_cost_mar = Sum(mar_cost)
+    /Mean_beddays_apr = Mean(apr_beddays)
+    /Mean_beddays_may = Mean(may_beddays)
+    /Mean_beddays_jun = Mean(jun_beddays)
+    /Mean_beddays_jul = Mean(jul_beddays)
+    /Mean_beddays_aug = Mean(aug_beddays)
+    /Mean_beddays_sep = Mean(sep_beddays)
+    /Mean_beddays_oct = Mean(oct_beddays)
+    /Mean_beddays_nov = Mean(nov_beddays)
+    /Mean_beddays_dec = Mean(dec_beddays)
+    /Mean_beddays_jan = Mean(jan_beddays)
+    /Mean_beddays_feb = Mean(feb_beddays)
+    /Mean_beddays_mar = Mean(mar_beddays)
+    /Mean_cost_apr = Mean(apr_cost)
+    /Mean_cost_may = Mean(may_cost)
+    /Mean_cost_jun = Mean(jun_cost)
+    /Mean_cost_jul = Mean(jul_cost)
+    /Mean_cost_aug = Mean(aug_cost)
+    /Mean_cost_sep = Mean(sep_cost)
+    /Mean_cost_oct = Mean(oct_cost)
+    /Mean_cost_nov = Mean(nov_cost)
+    /Mean_cost_dec = Mean(dec_cost)
+    /Mean_cost_jan = Mean(jan_cost)
+    /Mean_cost_feb = Mean(feb_cost)
+    /Mean_cost_mar = Mean(mar_cost).
 
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to Total_cost_mar
+    /Make New_Value from n_CHIs to Mean_cost_mar
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
@@ -103,7 +129,9 @@ aggregate outfile = SLFexisting
     /n_episodes = n
     /n_missing_end_dates = Sum(Missing_End_date)
     /Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
-    /Mean_Costs_net Mean_yearstay Mean_stay = Mean(cost_total_net yearstay stay)
+    /Mean__Costs_net Mean__yearstay Mean__stay = Mean(cost_total_net yearstay stay)
+    /Max_Cost Max_yearstay Max_stay = Max(cost_total_net yearstay stay)
+    /Min_Cost Min_yearstay Min_stay = Min(cost_total_net yearstay stay)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
     /Total_beddays_apr = Sum(apr_beddays)
@@ -129,11 +157,35 @@ aggregate outfile = SLFexisting
     /Total_cost_dec = Sum(dec_cost)
     /Total_cost_jan = Sum(jan_cost)
     /Total_cost_feb = Sum(feb_cost)
-    /Total_cost_mar = Sum(mar_cost).
+    /Total_cost_mar = Sum(mar_cost)
+    /Mean_beddays_apr = Mean(apr_beddays)
+    /Mean_beddays_may = Mean(may_beddays)
+    /Mean_beddays_jun = Mean(jun_beddays)
+    /Mean_beddays_jul = Mean(jul_beddays)
+    /Mean_beddays_aug = Mean(aug_beddays)
+    /Mean_beddays_sep = Mean(sep_beddays)
+    /Mean_beddays_oct = Mean(oct_beddays)
+    /Mean_beddays_nov = Mean(nov_beddays)
+    /Mean_beddays_dec = Mean(dec_beddays)
+    /Mean_beddays_jan = Mean(jan_beddays)
+    /Mean_beddays_feb = Mean(feb_beddays)
+    /Mean_beddays_mar = Mean(mar_beddays)
+    /Mean_cost_apr = Mean(apr_cost)
+    /Mean_cost_may = Mean(may_cost)
+    /Mean_cost_jun = Mean(jun_cost)
+    /Mean_cost_jul = Mean(jul_cost)
+    /Mean_cost_aug = Mean(aug_cost)
+    /Mean_cost_sep = Mean(sep_cost)
+    /Mean_cost_oct = Mean(oct_cost)
+    /Mean_cost_nov = Mean(nov_cost)
+    /Mean_cost_dec = Mean(dec_cost)
+    /Mean_cost_jan = Mean(jan_cost)
+    /Mean_cost_feb = Mean(feb_cost)
+    /Mean_cost_mar = Mean(mar_cost).
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to Total_cost_mar
+    /Make Existing_Value from n_CHIs to Mean_cost_mar
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.

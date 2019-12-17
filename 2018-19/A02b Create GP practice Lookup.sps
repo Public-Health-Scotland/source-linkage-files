@@ -46,7 +46,7 @@ String LCA (A2).
 
  * Set some known dummy practice codes to consistent Board codes.
 Do if any(gpprac, 99942, 99957, 99961, 99976, 99981, 99999).
-    Compute hbpraccode = "S08200003". /*Outwith Scotland / unknown*/.
+    Compute hbpraccode = "S08200003". /*Out-with Scotland / unknown*/.
 Else if gpprac = 99995.
     Compute hbpraccode = "S08200001".  /*RUK*/.
 End if.

@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Jun19DD_LinkageFile.zsav".
+get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Sep19DD_LinkageFile.zsav".
 
 Rename Variables
     HealthLocationCode = location
@@ -94,7 +94,6 @@ Else If la = "Comhairle nan Eilean Siar".
 End If.
 
 !AddLCADictionaryInfo LCA = DD_Responsible_LCA.
-Crosstabs DD_Responsible_LCA by LA.
 
 * Recode the hb treat code to match source.
 String hbtreatcode (A9).
@@ -129,7 +128,6 @@ Else If hb = "NHS Western Isles".
 End If.
 
 !AddHB2018DictionaryInfo HB = hbtreatcode.
-crosstabs hbtreatcode by HB.
 
 *Add labels to Delay end reason.
 alter type Delay_End_Reason (F1.0).
@@ -209,11 +207,6 @@ Do if  (Range(keydate1_dateformat, #StartFY, #EndFY) OR Range(keydate2_dateforma
 Else.
     Compute Correct_Dates = 0.
 End if.
-
-* Do some checks.
-Crosstabs No_End_Date by spec.
-Crosstabs Ammended_Dates by Correct_Dates.
-Crosstabs No_End_Date by Correct_Dates.
 
 * Keep only records which have an end date (except Mental Health) and fall within our dates.
 Select if Correct_Dates = 1 AND No_End_Date = 0.

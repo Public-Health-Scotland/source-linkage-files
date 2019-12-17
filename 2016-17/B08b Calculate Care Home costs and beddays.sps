@@ -57,7 +57,7 @@ Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost 
 Do Repeat Beddays = Apr_beddays to Mar_beddays
     /Cost = Apr_cost to Mar_cost.
     Do if Age >= 65.
-        Compute Cost = Beddays * CostPerDay.
+        Compute Cost = Beddays * Cost_Per_Day.
     End if.
 End Repeat.
 

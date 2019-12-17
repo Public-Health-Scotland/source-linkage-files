@@ -13,13 +13,13 @@ select if chi NE "".
 
 * Declare the variables we will use to store postcode etc. data.
 * Don't include DD as this data has just been taken from acute / MH.
-Numeric Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB (Date12).
-String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode (A7).
+Numeric Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB (Date12).
+String Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode HL1_postcode (A7).
 Numeric Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac (F5.0).
 
 * Set any blanks as user missing, so they will be ignored by the aggregate.
 Missing Values
-    Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode
+    Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode HL1_postcode
     ("").
 * Create a series of indicators which can be aggregated later to provide a summary for each CHI.
 *************************************************************************************************************************************************.
@@ -54,25 +54,25 @@ Numeric
 Numeric NSU (F1.0).
 
  * Create a variable to count CIJs.
-sort cases by CHI cis_marker.
+sort cases by CHI cij_marker.
 add files file = *
-    /by CHI cis_marker
+    /by CHI cij_marker
     /First = Distinct_CIJ.
 
-If cis_marker = "" Distinct_CIJ = 0.
+If cij_marker = "" Distinct_CIJ = 0.
 
-Do if newpattype_ciscode = 0.
+Do if cij_pattype_code = 0.
     Compute CIJ_non_el = Distinct_CIJ.
-Else if newpattype_ciscode = 1.
+Else if cij_pattype_code = 1.
     Compute CIJ_el = Distinct_CIJ.
-Else if newpattype_ciscode = 2.
+Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
 
-Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (newpattype_cis NE "Maternity").
+Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattype NE "Maternity").
     Compute Acute_DoB = DoB.
     Compute Acute_postcode = postcode.
     Compute Acute_gpprac = gpprac.
@@ -84,18 +84,18 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (newpattype_cis NE "Mat
     Do if (IPDC = "I").
         * Episode count.
         Compute Acute_inpatient_episodes = 1.
-        If (newpattype_CIS = "Elective") Acute_el_inpatient_episodes = 1.
-        If (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_episodes = 1.
+        If (cij_pattype = "Elective") Acute_el_inpatient_episodes = 1.
+        If (cij_pattype = "Non-Elective") Acute_non_el_inpatient_episodes = 1.
 
         * Beddays count.
         Compute Acute_inpatient_beddays = yearstay.
-        If (newpattype_CIS = "Elective") Acute_el_inpatient_beddays = yearstay.
-        If (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Elective") Acute_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Non-Elective") Acute_non_el_inpatient_beddays = yearstay.
 
         * Cost.
         Compute Acute_inpatient_cost = Cost_Total_Net.
-        if (newpattype_CIS = "Elective") Acute_el_inpatient_cost = Cost_Total_Net.
-        if (newpattype_CIS = "Non-Elective") Acute_non_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Elective") Acute_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Non-Elective") Acute_non_el_inpatient_cost = Cost_Total_Net.
     Else if (IPDC = "D").
         * Episode count.
         Compute Acute_daycase_episodes = 1.
@@ -104,7 +104,7 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (newpattype_cis NE "Mat
         Compute Acute_daycase_cost = Cost_Total_Net.
     End if.
 
-Else if (newpattype_cis = "Maternity").
+Else if (cij_pattype = "Maternity").
     *************************************************************************************************************************************************.
     * Maternity (SMR02) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
@@ -136,12 +136,12 @@ Else if (newpattype_cis = "Maternity").
         Compute Mat_daycase_cost = Cost_Total_Net.
     End if.
 
-Else if (recid = "04B") AND (newpattype_cis NE "Maternity").
+Else if (recid = "04B") AND (cij_pattype NE "Maternity").
     *************************************************************************************************************************************************.
     * Mental Health (SMR04) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
         append this to the end of each record for each patient.
-    Compute MH_DoB= DoB.
+    Compute MH_DoB = DoB.
     Compute MH_postcode = postcode.
     Compute MH_gpprac = gpprac.
 
@@ -152,18 +152,18 @@ Else if (recid = "04B") AND (newpattype_cis NE "Maternity").
     Do if (IPDC = "I").
         * Episode count.
         Compute MH_inpatient_episodes = 1.
-        If (newpattype_CIS = "Elective") MH_el_inpatient_episodes = 1.
-        If (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_episodes = 1.
+        If (cij_pattype = "Elective") MH_el_inpatient_episodes = 1.
+        If (cij_pattype = "Non-Elective") MH_non_el_inpatient_episodes = 1.
 
         * Beddays count.
         Compute MH_inpatient_beddays = yearstay.
-        If (newpattype_CIS = "Elective") MH_el_inpatient_beddays = yearstay.
-        If (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Elective") MH_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Non-Elective") MH_non_el_inpatient_beddays = yearstay.
 
         * Cost.
         Compute MH_inpatient_cost = Cost_Total_Net.
-        if (newpattype_CIS = "Elective") MH_el_inpatient_cost = Cost_Total_Net.
-        if (newpattype_CIS = "Non-Elective") MH_non_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Elective") MH_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Non-Elective") MH_non_el_inpatient_cost = Cost_Total_Net.
     End if.
 Else if (SMRType = "GLS-IP").
     *************************************************************************************************************************************************.
@@ -181,18 +181,18 @@ Else if (SMRType = "GLS-IP").
     Do if (IPDC = "I").
         * Episode count.
         Compute GLS_inpatient_episodes = 1.
-        If (newpattype_CIS = "Elective") GLS_el_inpatient_episodes = 1.
-        If (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_episodes = 1.
+        If (cij_pattype = "Elective") GLS_el_inpatient_episodes = 1.
+        If (cij_pattype = "Non-Elective") GLS_non_el_inpatient_episodes = 1.
 
         * Beddays count.
         Compute GLS_inpatient_beddays = yearstay.
-        If (newpattype_CIS = "Elective") GLS_el_inpatient_beddays = yearstay.
-        If (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Elective") GLS_el_inpatient_beddays = yearstay.
+        If (cij_pattype = "Non-Elective") GLS_non_el_inpatient_beddays = yearstay.
 
         * Cost.
         Compute GLS_inpatient_cost = Cost_Total_Net.
-        if (newpattype_CIS = "Elective") GLS_el_inpatient_cost = Cost_Total_Net.
-        if (newpattype_CIS = "Non-Elective") GLS_non_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Elective") GLS_el_inpatient_cost = Cost_Total_Net.
+        if (cij_pattype = "Non-Elective") GLS_non_el_inpatient_cost = Cost_Total_Net.
     End if.
 
 Else if (recid = "00B").
@@ -361,6 +361,11 @@ Else if (recid = "NRS").
     Compute NRS_postcode = postcode.
     Compute NRS_gpprac = gpprac.
     Compute NRS = 1.
+
+    *************************************************************************************************************************************************.
+Else if (recid = "HL1").
+    Compute HL1_DoB = DoB.
+    Compute HL1_postcode = postcode.
 End if.
 *************************************************************************************************************************************************.
 * We'll use this to get the most accurate gender we can.
@@ -376,10 +381,10 @@ aggregate outfile = *
     /Presorted
     /break chi
     /gender = Mean(gender)
-    /Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode
-    = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode)
-    /Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB
-    = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB)
+    /Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode HL1_postcode
+    = Last(Acute_postcode Mat_postcode MH_postcode GLS_postcode OP_postcode AE_postcode PIS_postcode CH_postcode OoH_postcode DN_postcode CMH_postcode NSU_postcode NRS_postcode HL1_postcode)
+    /Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB
+    = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB CH_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB)
     /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac
     = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac CH_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
@@ -426,6 +431,7 @@ aggregate outfile = *
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
     /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
+    /HL1_in_FY = Max(HH_in_FY)
     /NSU = Max(NSU)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
@@ -492,11 +498,11 @@ Compute #CHI_age1 = DateDiff(!midFY, #CHI_DoB1, "years").
 Compute #CHI_age2 = DateDiff(!midFY, #CHI_DoB2, "years").
 
  * If any of the DoBs from the dataset match the DoB in the CHI, use that (don't use if we have contradictions).
-Do if any(#CHI_DoB1, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB,NRS_DoB)
-    and Not(any(#CHI_DoB2, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB,NRS_DoB)).
+Do if any(#CHI_DoB1, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB, NRS_DoB, HL1_DoB)
+    and Not(any(#CHI_DoB2, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB, NRS_DoB, HL1_DoB)).
     Compute DoB = #CHI_DoB1.
-Else if Not(any(#CHI_DoB1, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB,NRS_DoB))
-    and any(#CHI_DoB2, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB,NRS_DoB).
+Else if Not(any(#CHI_DoB1, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB, NRS_DoB, HL1_DoB))
+    and any(#CHI_DoB2, Acute_DoB, Mat_DoB, MH_DoB, GLS_DoB, OP_DoB, AE_DoB, PIS_DoB, CH_DoB, OoH_DoB, DN_DoB, CMH_DoB, NSU_DoB, NRS_DoB, HL1_DoB).
     Compute DoB = #CHI_DoB2.
 End if.
 
@@ -550,11 +556,13 @@ Do if sysmis(DoB).
         Compute DoB = MH_DoB.
     Else if Not(sysmis(GLS_DoB)).
         Compute DoB = GLS_DoB.
+    Else if Not(sysmis(HL1_DoB)).
+        Compute DoB = HL1_DoB.
     Else if Not(sysmis(CH_DoB)).
         Compute DoB = CH_DoB.
     Else if Not(sysmis(NSU_DoB)).
         Compute DoB = NSU_DoB.
- Else if Not(sysmis(NRS_DoB)).
+    Else if Not(sysmis(NRS_DoB)).
         Compute DoB = NRS_DoB.
     End if.
 End if.
@@ -569,16 +577,16 @@ Frequencies age.
  * First figure out if they are all blank.
 Compute #All_Blank = 1.
 
-Do repeat postcode = acute_postcode to NRS_postcode.
+Do repeat postcode = acute_postcode to HL1_postcode.
     If postcode NE "" #All_Blank = 0.
 End repeat.
 
  * Use NRS_postcode to store the dummy for no other reason than it's last in the hierarchy.
-If #All_Blank = 1 NRS_postcode = "XXX XXX".
+If #All_Blank = 1 HL1_postcode = "XXX XXX".
 
  * Make a postcode variable from the various postcodes labeled by the dataset they came from.
 VarsToCases
-    /make postcode from acute_postcode to NRS_postcode
+    /make postcode from acute_postcode to HL1_postcode
     /Index dataset (postcode).
 
  * Count the number of times each postcode appears for each chi.
@@ -613,6 +621,8 @@ Else if dataset = "NSU_postcode".
     Compute order = 12.
 Else if dataset = "NRS_postcode".
     Compute order = 13.
+Else if dataset = "HL1_postcode".
+    Compute order = 14.
 End if.
 
  * Match on to the postcode file, to get a flag letting us know if the postcode is real or not.
@@ -647,6 +657,7 @@ Execute.
  * First figure out if they are all blank.
 Compute #All_Blank = 1.
 
+ * We don't use HL1 gpprac as this doesn't come from the dataset and will have only been added from other records.
 Do repeat gpprac = acute_gpprac to NRS_gpprac.
     If Not(sysmis(gpprac))  #All_Blank = 0.
 End repeat.
@@ -722,7 +733,7 @@ if postcode = 'XXX XXX' postcode = "".
 if gpprac = 0 gpprac = $sysmis.
 
 * Recode all the system missing values to zero so that calculations will work.
-Recode Acute_episodes to NSU (sysmis = 0).
+Recode Acute_episodes to NSU HL1_in_FY (sysmis = 0).
 
 * Create a total health cost.
 Compute health_net_cost = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + AE_cost + PIS_cost + OoH_cost.
@@ -737,7 +748,7 @@ Compute year = !FY.
 
 * Delete the record specific DoB gpprac and postcode, and reorder others whilst we're here.
 save outfile = !file + "temp-source-individual-file-2-20" + !FY + ".zsav"
-   /Drop Acute_DoB to NRS_DoB Keep
+   /Drop Acute_DoB to HL1_DoB Keep
    /Keep year chi gender DoB age postcode gpprac
       health_net_cost health_net_costincDNAs health_net_costincIncomplete
       deceased death_date

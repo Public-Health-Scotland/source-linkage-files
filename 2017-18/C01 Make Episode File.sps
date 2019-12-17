@@ -16,6 +16,7 @@ add files
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !File + "CMH_for_source-20" + !FY + ".zsav"
+    /file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -92,7 +93,7 @@ Else If (recid = "PIS").
 Else If (recid = "NRS").
     Compute SMRType = "NRS Deaths".
 End If.
-frequencies SMRType.
+
 
 *CHECK RESULTS FROM FREQUENCY SMRTYPE.
 
@@ -125,7 +126,7 @@ Recode cij_pattype_code
     (9 = "Other")
     Into cij_pattype.
 
-crosstabs cij_pattype by cij_pattype_code.
+
 
 ********************** Temporarily work on CIJ only records ***************************.
 
@@ -355,7 +356,7 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
-Frequencies PPA cij_ppa.
+
 
 sort cases by chi keydate1_dateformat.
 
@@ -382,6 +383,7 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
