@@ -33,10 +33,10 @@ if postcode = "" No_Postcode = 1.
 if sysmis(gpprac) No_GPprac = 1.
 
  * Flags to count stay types.
-If cij_pattype= "Elective" CIJ_elective = 1.
-If cij_pattype= "Non-Elective" CIJ_non_elective = 1.
-If cij_pattype= "Maternity" CIJ_maternity = 1.
-If cij_pattype= "Other" CIJ_other = 1.
+If cij_pattype = "Elective" CIJ_elective = 1.
+If cij_pattype = "Non-Elective" CIJ_non_elective = 1.
+If cij_pattype = "Maternity" CIJ_maternity = 1.
+If cij_pattype = "Other" CIJ_other = 1.
 
 sort cases by recid.
 
