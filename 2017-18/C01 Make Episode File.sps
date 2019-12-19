@@ -17,10 +17,11 @@ add files
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !File + "CMH_for_source-20" + !FY + ".zsav"
     /file = !File + "homelessness_for_source-20" + !FY + ".zsav"
+    /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
-*Sort Cases by chi.
+* Sort Cases by chi.
 
 * Check that all CHIs are valid.
 Do if chi ne "".
@@ -356,13 +357,7 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
-
-
 sort cases by chi keydate1_dateformat.
-
-*  We are not currently including Care Home data for 2017/18 or 2018/19 but we still want the variables for consistency.
-String sc_send_lca ch_lca (A2) ch_name (A73).
-Numeric ch_admreas (F2.0).
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
@@ -384,6 +379,7 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
