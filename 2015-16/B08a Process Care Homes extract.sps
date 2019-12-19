@@ -118,12 +118,12 @@ SPSSINC TRANS RESULT=CareHomeName Type=73
 
  * First get a count of how often individual names are used.
 Aggregate
-   /break SendingCouncilAreaCode CareHomeCouncilAreaCode CareHomePostcode CareHomeName
+   /break SendingCouncilAreaCode CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
    /RecordsPerName = n.
 
  * Find out many authorities are using particular versions of names.
 Aggregate outfile = * Mode = AddVariables Overwrite = Yes
-   /break CareHomeCouncilAreaCode CareHomePostcode CareHomeName
+   /break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
    /RecordsPerName = Sum(RecordsPerName)
    /DiffSendingAuthorities = n.
 
@@ -131,12 +131,12 @@ Aggregate outfile = * Mode = AddVariables Overwrite = Yes
 Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', CareHomePostcode, CareHomeCouncilAreaCode)).
 
 *******************************************************************************************************.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData1
-   /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+   /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 Frequencies AccurateData1.
 * 16.7% Match the lookup.
 ********************************************************************************************************.
@@ -174,23 +174,23 @@ Do if AccurateData1 = 0.
 End if.
 *******************************************************************************************************.
  * Check if TestName1 makes the record match the lookup.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName1.
+Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName1.
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName1)
    /In = TestName1Correct
-   /By CareHomeCouncilAreaCode CareHomePostcode TestName1.
+   /By CareHomePostcode CareHomeCouncilAreaCode TestName1.
 
 *******************************************************************************************************.
  * Check if TestName2 makes the record match the lookup.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName2.
+Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName2.
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName2)
    /In = TestName2Correct
-   /By CareHomeCouncilAreaCode CareHomePostcode TestName2.
+   /By CareHomePostcode CareHomeCouncilAreaCode TestName2.
 
  * If the name was correct take this as the new one, don't do it if both were correct.
 Do If TestName1Correct = 1 AND TestName2Correct = 0.
@@ -203,12 +203,12 @@ Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct.
 
 *******************************************************************************************************.
  * See which match now.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData2
-   /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+   /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 Frequencies AccurateData2.
 * 16.7% Match the lookup.
 
@@ -227,12 +227,12 @@ Aggregate outfile = * Mode = AddVariables Overwrite = Yes
    /CareHomePostcode = First(CareHomePostcode).
 
 *******************************************************************************************************.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData3
-   /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+   /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 Frequencies AccurateData3.
 * Now 17.9% Match the lookup.
 ********************************************************************************************************.
@@ -262,23 +262,23 @@ Do if AccurateData3 = 0.
 End if.
 *******************************************************************************************************.
  * Check if TestName1 makes the record match the lookup.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName1.
+Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName1.
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName1)
    /In = TestName1Correct
-   /By CareHomeCouncilAreaCode CareHomePostcode TestName1.
+   /By CareHomePostcode CareHomeCouncilAreaCode TestName1.
 
 *******************************************************************************************************.
  * Check if TestName2 makes the record match the lookup.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode TestName2.
+Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName2.
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName = TestName2)
    /In = TestName2Correct
-   /By CareHomeCouncilAreaCode CareHomePostcode TestName2.
+   /By CareHomePostcode CareHomeCouncilAreaCode TestName2.
 
 *******************************************************************************************************.
  * If the name was correct take this as the new one, don't do it if both were correct.
@@ -292,12 +292,12 @@ Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct.
 
 *******************************************************************************************************.
  * See which match now.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData4
-   /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+   /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 Frequencies AccurateData4.
 * 16.7% Match the lookup.
 
@@ -317,12 +317,12 @@ Aggregate outfile = * Mode = AddVariables Overwrite = Yes
    /CareHomePostcode = First(CareHomePostcode).
 
 *******************************************************************************************************.
-Sort Cases by CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
    /file = *
    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
    /In = AccurateData5
-   /By CareHomeCouncilAreaCode CareHomePostcode CareHomeName.
+   /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 * Now 30.6% Match the lookup.
 ********************************************************************************************************.
 Frequencies AccurateData1 AccurateData2 AccurateData3 AccurateData4 AccurateData5.

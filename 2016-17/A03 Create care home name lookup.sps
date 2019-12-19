@@ -67,7 +67,7 @@ Else If Council_Area_Name = 'East Lothian'.
    Compute CareHomeCouncilAreaCode = 12.
 Else If Council_Area_Name = 'East Renfrewshire'.
    Compute CareHomeCouncilAreaCode = 13.
-Else If Council_Area_Name = 'Edinburgh, City of'.
+Else If any(Council_Area_Name, 'Edinburgh, City of', "City of Edinburgh").
    Compute CareHomeCouncilAreaCode = 14.
 Else If Council_Area_Name = 'Falkirk'.
    Compute CareHomeCouncilAreaCode = 15.
@@ -109,18 +109,20 @@ End If.
 
  * Set to the correct types for matching.
 Alter type CareHomeCouncilAreaCode (A2) CareHomePostcode (A7).
+ * Pad council area code with zero if needed.
+Compute CareHomeCouncilAreaCode = Replace(CareHomeCouncilAreaCode, " ", "0").
 
  * Run the Python function 'capwords' on CareHomeName.
  * This will capitalise each word for uniformity and will improve matching.
  * https://docs.python.org/2/library/string.html#string-functions
 
-SPSSINC TRANS RESULT=CareHomeName Type=73
+SPSSINC TRANS RESULT = CareHomeName Type = 73
    /FORMULA "string.capwords(ServiceName)".
 
  * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
 Aggregate
    /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
-   /Break CareHomeCouncilAreaCode CareHomePostcode CareHomeName
+   /Break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
    /CareHomeCouncilName MainClientGroup Sector = First(Council_Area_Name MainClientGroup Sector)
    /DateReg DateCanx = Max(DateReg DateCanx).
 
