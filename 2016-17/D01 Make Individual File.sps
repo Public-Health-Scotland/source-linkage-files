@@ -104,7 +104,7 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattype NE "Matern
         Compute Acute_daycase_cost = Cost_Total_Net.
     End if.
 
-Else if (cij_pattype = "Maternity").
+Else if (recid = "02B" OR cij_pattype = "Maternity").
     *************************************************************************************************************************************************.
     * Maternity (SMR02) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
