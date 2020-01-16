@@ -65,8 +65,6 @@ Do Repeat LTC = arth to digestive
    End if.
 End Repeat.
 
-frequencies arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive.
-
 sort cases by chi.
 
 save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"

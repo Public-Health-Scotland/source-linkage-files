@@ -449,8 +449,6 @@ if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
 * If hbpraccode NE "" and hbrescode = "" and hbpraccode = hbtreatcode hbrescode = hbpraccode.
 
 * Recode according to boundary changes 08/05/2018.
-* All of the codes should be correct (have labels) except for the few which we will recode below.
-Frequencies hbrescode hbpraccode hbtreatcode HSCP2018 CA2018 LCA.
 Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
 Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
 Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
