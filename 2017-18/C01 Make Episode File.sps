@@ -18,6 +18,8 @@ add files
     /file = !File + "CMH_for_source-20" + !FY + ".zsav"
     /file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
+    /file = !File + "Home_Care_for_source-20" + !FY + ".zsav"
+    /file = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -53,7 +55,7 @@ Value labels Valid_CHI
     1 "Valid CHI"
     2 "Impossible DoB in CHI".
 
-Frequencies Valid_CHI.
+Crosstabs Valid_CHI by recid.
 
 * If it's not valid then set it to blank as it's no good for linking.
 If any(Valid_CHI, 0, 2) chi = "".
@@ -380,6 +382,8 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Home_Care_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
