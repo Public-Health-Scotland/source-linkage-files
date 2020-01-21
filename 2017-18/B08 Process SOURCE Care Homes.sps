@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_CH_extracts_ELoth_NLan_SLan.zsav".
 
 Rename Variables
@@ -11,6 +11,9 @@ Rename Variables
     seeded_chi_number = chi.
 
 Alter type nursing_care_provision (F1.0) gender (F1.0) postcode (A8) ch_name (A73).
+
+ * If the chi seeded postcode is blank use the submitted one.
+If postcode = "" postcode = submitted_postcode.
 
 String Year (A4).
 Compute Year = !FY.
