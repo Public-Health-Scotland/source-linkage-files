@@ -104,7 +104,7 @@ Do if (SMRType = "Acute-DC" OR SMRType = "Acute-IP") AND (cij_pattype NE "Matern
         Compute Acute_daycase_cost = Cost_Total_Net.
     End if.
 
-Else if (cij_pattype = "Maternity").
+Else if (recid = "02B" OR cij_pattype = "Maternity").
     *************************************************************************************************************************************************.
     * Maternity (SMR02) section.
     * For the fields that there will be a hierarchy taken, aggregate and take the last of each column and
@@ -512,9 +512,9 @@ Numeric age (F3.0).
 Do If (sysmis(DoB)).
     * If either of the DoBs are missing use the other one.
     * This only happens with impossible dates because of leap years.
-    Do if sysmiss(#CHI_DoB1) AND Not(sysmis(#CHI_DoB2)).
+    Do if sysmis(#CHI_DoB1) AND Not(sysmis(#CHI_DoB2)).
         Compute DoB = #CHI_DoB2.
-    Else if sysmiss(#CHI_DoB2) AND Not(sysmis(#CHI_DoB1)).
+    Else if sysmis(#CHI_DoB2) AND Not(sysmis(#CHI_DoB1)).
         Compute DoB = #CHI_DoB1.
         * If the younger age is negative, assume they are the older one.
     Else if #CHI_age2 < 0.
@@ -571,8 +571,6 @@ Do if sysmis(age).
     Compute age = DateDiff(!midFY, DoB, "years").
 End if.
 
-Frequencies age.
-
  * If all postcodes are blank create a dummy postcode so we don't lose the CHI - we'll clean this up later.
  * First figure out if they are all blank.
 Compute #All_Blank = 1.
@@ -584,7 +582,7 @@ End repeat.
  * Use NRS_postcode to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 HL1_postcode = "XXX XXX".
 
- * Make a postcode variable from the various postcodes labeled by the dataset they came from.
+ * Make a postcode variable from the various postcodes labelled by the dataset they came from.
 VarsToCases
     /make postcode from acute_postcode to HL1_postcode
     /Index dataset (postcode).
@@ -665,7 +663,7 @@ End repeat.
  * Use NRS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 NRS_gpprac = 0.
 
- * Make a gpprac variable from the various gpprac labeled by the dataset they came from.
+ * Make a gpprac variable from the various gpprac labelled by the dataset they came from.
 VarsToCases
     /make gpprac from acute_gpprac to NRS_gpprac
     /Index dataset (gpprac)

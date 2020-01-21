@@ -38,7 +38,7 @@ varstocases /make Population_Estimate from age0 to age90plus
     /index = Age_plus_one.
 
 * Break into 10-year age groups.
-* Note that the ages start at 0 but vars to cases numbers from 1.
+* Note that the ages start at 0 but varstocases numbers from 1.
 String AgeGroup (A5).
 Recode Age_plus_one
     (1 Thru 5 = "0-4")
@@ -91,10 +91,9 @@ compute #previous_date = date.dmy(30, 06, Number(!altFY, F4.0) - 5).
 
  * Flag non-NSUs who were dead at the mid year date. This will also tag sysmis dates because SPSS sucks.
 If NSU = 0 and death_date <= #mid_year Dead_at_midyear = 1.
- * This is the cleanup.
+ * This is the clean-up.
 If death_date < #previous_date Dead_at_midyear = 0.
 
-Frequencies Dead_at_midyear.
 Select if Dead_at_midyear = 0.
 
  * Assign the same 10-year age-groups.
@@ -142,13 +141,11 @@ compute Scaling_Factor = New_NSU_Figure / NSU_Population.
  * A scaling factor < 0 implies that we have more service-users than population estimate; hence we should get rid of more NSUs than we actually have.
  * A scaling factor > 1 implies that we NSU + service-users is less than the population estimate; hence we need to add NSUs ...
 Recode Scaling_Factor (Lo Thru 0 = 0) (1 Thru Hi = 1).
-Frequencies Scaling_Factor.
 
  * Seed is set to make sure same number of individuals is picked each time syntax is ran.
 Numeric Keep_NSU (F1.0).
 set seed 100.
 compute Keep_NSU = RV.BERNOULLI(Scaling_Factor).
-Frequencies Keep_NSU.
 
  * Save out the flag as a lookup by CHI, only need to keep the NSUs with the flag. 
 Select if Keep_NSU = 1.
@@ -172,7 +169,6 @@ If NSU = 0 Keep_Population = 1.
 
  * If the flag is missing they must be a non-keep NSU so set to 0.
 Recode Keep_Population (sysmis = 0).
-Crosstabs NSU by Keep_Population.
 
 save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.

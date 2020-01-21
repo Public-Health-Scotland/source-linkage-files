@@ -237,25 +237,6 @@ Do if recid = "DD".
     End if.
 End if.
 
-* Final checks before the DD records are ready to be separated and added back to source.
-crosstabs DD_Quality by no_cij.
-Frequencies DD_Quality no_cij.
-
-sort cases by LCA.
-Split file Separate by LCA.
-
-Frequencies DD_Quality.
-
-aggregate
-    /Presorted
-    /break lca
-    /UnMatched = SUM(no_cij)
-    /DDs = N.
-
-compute pct_unmatched = UnMatched / DDs * 100.
-Frequencies pct_unmatched.
-
-Split file off.
 * Drop records which are no good.
 Select if DD_Quality NE "-".
 
@@ -269,7 +250,6 @@ save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsa
     /keep year chi DD_Responsible_LCA RDD Delay_End_Date temp_cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec
     MONTHFLAG OriginalAdmissionDate Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
     /zcompressed.
-
 
 * This Python program will call the 'BedDaysPerMonth' macro (Defined in A01) for each month in FY order.
 Begin Program.

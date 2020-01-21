@@ -8,7 +8,7 @@
 
  * Step 1 - Remove non-Scottish residents
  * Step 2 - Work out total cost for Scotland, HBs and LCAs.
- * Step 3 - Create a cummulative percentage using the percentage of resource used by each CHI.
+ * Step 3 - Create a cumulative percentage using the percentage of resource used by each CHI.
  * Step 4 - Identify those CHIs which are jointly using 50% of the resources for an area, these are the HRIs.
  * Step 5 - Save out and link back to the SLF.
 
@@ -74,15 +74,13 @@ End if.
 * If they have a dummy postcode but a Scottish practice Scotflag will be 4.
 String NonScot (A7).
 if Scotflag = 0 NonScot = PCArea.
-frequencies NonScot ScotFlag Eng_Prac.
 
 select if ScotFlag NE 0.
-execute.
-Delete Variables NonScot ScotFlag Eng_Prac postcode PCArea gpprac.
 
 * Modification to exclude Care Home costs as we only cost over 65s.
 Compute health_net_costincIncomplete = health_net_costincIncomplete - ch_cost.
 sort cases by chi.
+Delete Variables NonScot ScotFlag Eng_Prac postcode PCArea gpprac.
 
 * Get the total costs for the different Geographies.
 * Scotland total cost.
@@ -116,7 +114,7 @@ Do if $casenum = 1.
      * The first case will just be its own percentage.
     Compute HRI_scotP = scotland_pct.
 Else.
-     * Subsequent cases are the cummulative sum of percentages.
+     * Subsequent cases are the cumulative sum of percentages.
     Compute HRI_scotP = lag(HRI_scotP) + scotland_pct.
 End if.
 
@@ -145,7 +143,7 @@ Else.
 End if.
 
  * Flag the CHIs who together are using the 'first' 50% of resource
- * These are the HRIs and are usually aorund 2% of the total population.
+ * These are the HRIs and are usually around 2% of the total population.
 if (HRI_scotP <= 50) HRI_scot = 1.
 if (HRI_hbP <= 50) HRI_hb = 1.
 if (HRI_lcaP <= 50) HRI_lca = 1.
@@ -173,19 +171,12 @@ End if.
  * Sort back by CHI ready for matching.
 sort cases by CHI.
 
-xsave outfile = !file + 'HRI_lookup_' + !FY + '.zsav'
+save outfile = !file + 'HRI_lookup_' + !FY + '.zsav'
     /keep chi
     HRI_scot to HRI_lca_incDN
     HRI_scotP to HRI_lcaP_incDN
     /zcompressed.
 
- * Check all HBs and LCAs have flags, is usually around 2%.
-crosstabs HRI_hb by hbrescode
-    /Cells = COLUMN.
-crosstabs HRI_lca by lca
-    /Cells = COLUMN.
-crosstabs HRI_lca_incDN by lca
-    /Cells = COLUMN.
 
  * Match to individual file.
 match files

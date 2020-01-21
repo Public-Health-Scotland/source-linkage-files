@@ -213,24 +213,6 @@ Select if Correct_Dates = 1 AND No_End_Date = 0.
 
 sort cases by chi keydate1_dateformat keydate2_dateformat.
 
- * Highlight overlapping records.
-Compute Possible_overlap = 0.
-
-Do if chi = lag(chi) and keydate1_dateformat < lag(keydate2_dateformat).
-    Compute Possible_overlap = 2.
-    If OriginalAdmissionDate NE lag(OriginalAdmissionDate) Possible_overlap = 1.
-End if.
-
- * Do it in both directions so that both records are highlighted.
-sort cases by chi (A) keydate1_dateformat keydate2_dateformat (D).
-
-Do if chi = lag(chi) and keydate2_dateformat > lag(keydate1_dateformat).
-    Compute Possible_overlap = 2.
-    If OriginalAdmissionDate NE lag(OriginalAdmissionDate) Possible_overlap = 1.
-End if.
-
-Frequencies Possible_overlap.
-
 save outfile = !Extracts + "DD_LinkageFile-20" + !FY + ".zsav"
     /Drop hb la Correct_Dates No_End_Date
     /zcompressed.
