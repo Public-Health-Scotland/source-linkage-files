@@ -67,6 +67,20 @@ Recode sending_location
 SPSSINC TRANS RESULT = ch_name Type = 73
    /FORMULA "string.capwords(ch_name)".
 
+ * First get a count of how often individual names are used.
+Aggregate
+   /break CareHomePostcode  CareHomeCouncilAreaCode 
+   /RecordsPerName = n.
+
+ * Find out many authorities are using particular versions of names.
+Aggregate outfile = * Mode = AddVariables Overwrite = Yes
+   /break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
+   /RecordsPerName = Sum(RecordsPerName)
+   /DiffSendingAuthorities = n.
+
+ * Created a weighted count, which means multiple authorities using the same name is more powerful, if they have a blank postcode or CA code give them zero weight.
+Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', CareHomePostcode, CareHomeCouncilAreaCode)).
+
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
