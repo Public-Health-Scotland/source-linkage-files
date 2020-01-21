@@ -202,6 +202,21 @@ End Repeat.
 
 Compute cost_total_net = Sum(apr_cost to mar_cost).
 
+Alter type support_from_unpaid_carer social_worker housing_support meals living_alone day_care type_of_housing (F1.0).
+
+Value Labels support_from_unpaid_carer social_worker housing_support meals living_alone day_care
+    0 "No"
+    1 "Yes"
+    9 "Not Known".
+
+Value Labels type_of_housing
+    1 'Mainstream'
+    2 'Supported'
+    3 'Long Stay Care Home'
+    4 'Hospital or other medical establishment'
+    5 'Other'
+    6 'Not Known'.
+
 Value Labels ch_admreas
     1 'Respite'
     2 'Intermediate Care (includes Step Up/Step Down)'
@@ -219,7 +234,7 @@ Value Labels nursing_care_provision
     1 'Yes'.
 
 Value Labels ch_provider
-    1 'Local Authority/Health & Social Care Partnership'
+    1 'Local Authority / Health & Social Care Partnership'
     2 'Private'
     3 'Other Local Authority'
     4 'Third Sector'
