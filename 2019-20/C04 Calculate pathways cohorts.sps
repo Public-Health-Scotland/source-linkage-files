@@ -250,13 +250,6 @@ get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 
 select If CHI ne ''.
 
-sort cases by spec.
-
- * Matching the specialty codes data to all specialty code descriptions.
-match files file =  * 
-    /table = '/conf/linkage/output/lookups/Archive/clinical/specialty/copspecs.sav'
-    /by spec.
-
  * Costs Expansion for Rules and Stats.
 compute Psychiatry_Cost = 0.
 compute Geriatric_Cost = 0.
@@ -273,11 +266,15 @@ compute Hospital_Elective_Cost = 0.
 compute Hospital_Emergency_Cost = 0.
 compute Community_Health_Cost = 0.
 
-If (specname = 'Geriatric Medicine' or any(recid, '50B', "GLS") or specname = 'Psychiatry of Old Age') Geriatric_Cost = Cost_Total_Net.
-If (recid = '02B' or cij_pattype= 'Maternity') Maternity_Cost = Cost_Total_Net.
-If (recid = '04B' and specname ne 'Psychiatry of Old Age') Psychiatry_Cost = Cost_Total_Net.
-If (recid = '01B' and (cij_pattype= 'Elective' or cij_ipdc = 'D') and specname ne 'Geriatric Medicine') Acute_Elective_Cost = Cost_Total_Net.
-If (recid = '01B' and cij_pattype= 'Non-Elective' and specname ne 'Geriatric Medicine') Acute_Emergency_Cost = Cost_Total_Net.
+ * Specialities used
+ * AB = Geriatric Medicine
+ * G4 = Psychiatry of Old Age
+
+If (spec = "AB" or any(recid, '50B', "GLS") or spec = "G4") Geriatric_Cost = Cost_Total_Net.
+If (recid = '02B' or cij_pattype = 'Maternity') Maternity_Cost = Cost_Total_Net.
+If (recid = '04B' and spec NE "G4") Psychiatry_Cost = Cost_Total_Net.
+If (recid = '01B' and (cij_pattype = 'Elective' or cij_ipdc = 'D') and spec NE "AB") Acute_Elective_Cost = Cost_Total_Net.
+If (recid = '01B' and cij_pattype = 'Non-Elective' and spec NE "AB") Acute_Emergency_Cost = Cost_Total_Net.
 If recid = '00B' Outpatient_Cost = Cost_Total_Net-Geriatric_Cost.
 If recid = '00B' Total_Outpatient_Cost = Cost_Total_Net.
 If any(recid, 'HC-', 'HC + ', 'INS', 'RSP', 'MLS', 'DC', 'CPL') Home_Care_Cost = Cost_Total_Net.
