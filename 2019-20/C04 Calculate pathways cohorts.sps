@@ -316,7 +316,6 @@ End if.
 aggregate outfile =  * 
     /break CHI cij_marker cij_ipdc cij_pattype
     /Total_Cost = sum(Cost_Total_Net)
-    /Bed_Days = sum(yearstay)
     /Psychiatry_Cost = sum(Psychiatry_Cost)
     /Maternity_Cost = sum(Maternity_Cost)
     /Geriatric_Cost = sum(Geriatric_Cost)
@@ -357,7 +356,6 @@ aggregate outfile =  *
     /Presorted
     /break CHI
     /Total_Cost = sum(Total_Cost)
-    /Total_Beddays = sum(Bed_Days)
     /Admission = sum(cij_attendance)
     /Operation_Flag = max(Operation_Flag)
     /Emergency = sum(Emergency_Instances)
@@ -535,7 +533,7 @@ If ((Residential_Care_Cost GT Psychiatry_Cost) and (Residential_Care_Cost GT Mat
 
 If (Service_Use_Cohort = '') Service_Use_Cohort = 'Unassigned'.
 
-Recode Total_Beddays Total_Cost (sysmis = 0).
+Recode Total_Cost (sysmis = 0).
 
  * 1. rename variable.
 Rename Variables Service_Use_Cohort = Service_Use_Cohort.
