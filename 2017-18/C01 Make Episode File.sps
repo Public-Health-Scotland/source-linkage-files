@@ -20,6 +20,7 @@ add files
     /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "Home_Care_for_source-20" + !FY + ".zsav"
     /file = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
+    /file = !File + "SDS-for-source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -384,6 +385,7 @@ Host Command = ["zip -mjv '" + !File + "Activity.zip' " + "'" + !File + "acute_f
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Home_Care_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "SDS-for-source-201718" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
