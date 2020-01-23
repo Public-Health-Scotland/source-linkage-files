@@ -547,6 +547,7 @@ Variable labels
 
 save outfile = !File + 'Service_Use_Cohorts_' + !FY + '.zsav'
     /keep CHI Service_Use_Cohort 
+Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
     /zcompressed.
 
 get file= !File + 'Service_Use_Cohorts_' + !FY + '.zsav'.
