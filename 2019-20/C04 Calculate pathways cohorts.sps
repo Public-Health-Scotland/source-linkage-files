@@ -64,7 +64,8 @@ If (Epilepsy = 1 or Asthma = 1 or Arth = 1 or Diabetes = 1 or atrialfib = 1) Low
  * Add CMH here?.
  * Assisted Living in the Community.
 compute Comm_Living_Cohort = 0.
-If any (recid, 'HC-', 'HC + ', 'RSP', 'DN', 'MLS', 'INS', 'CPL', 'DC') Comm_Living_Cohort = 1.
+* Not using this cohort until we have more datasets and Scotland complete DN etc.
+* If any (recid, 'HC-', 'HC + ', 'RSP', 'DN', 'MLS', 'INS', 'CPL', 'DC') Comm_Living_Cohort = 1.
 
 
 compute Prescribing_Cost = 0.
