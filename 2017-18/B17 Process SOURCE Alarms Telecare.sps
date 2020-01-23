@@ -1,17 +1,25 @@
 ﻿* Encoding: UTF-8.
-Insert file ="/conf/irf/11-Development team/Dev00-PLICS-files/2017-18/A01 Set up Macros (1718).sps".
-
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_AT_extracts_ELoth_NLan_only.zsav".
 
+Alter type social_care_id (A10) financial_year (A4).
+
+sort cases by social_care_id sending_location.
+match files file = *
+    /table = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav"
+    /By social_care_id sending_location.
+
 Rename Variables
-service_start_date = record_keydate1
-service_end_date = record_keydate2
-chi_gender_code = gender
-chi_postcode = postcode
-chi_date_of_birth = dob
-seeded_chi_number = chi.
+    service_start_date = record_keydate1
+    service_end_date = record_keydate2
+    chi_gender_code = gender
+    chi_postcode = postcode
+    chi_date_of_birth = dob
+    seeded_chi_number = chi.
 
 Alter type gender (F1.0) postcode (A8).
+
+* If the chi seeded postcode is blank use the submitted one.
+If postcode = "" postcode = submitted_postcode.
 
 String Year (A4).
 Compute Year = !FY.
@@ -93,5 +101,12 @@ save outfile = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
     sc_send_lca
     record_keydate1
     record_keydate2
+    living_alone
+    support_from_unpaid_carer
+    social_worker
+    housing_support
+    type_of_housing
+    meals
+    day_care
     /zcompressed.
 get file = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav".

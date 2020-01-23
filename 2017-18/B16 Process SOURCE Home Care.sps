@@ -1,7 +1,12 @@
 ﻿* Encoding: UTF-8.
-Insert file ="/conf/irf/11-Development team/Dev00-PLICS-files/2017-18/A01 Set up Macros (1718).sps".
-
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_HC_extracts_ELoth_NLan_SLan.zsav".
+
+Alter type social_care_id (A10) financial_year (A4).
+
+sort cases by social_care_id sending_location.
+match files file = *
+    /table = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav"
+    /By social_care_id sending_location.
 
 Rename Variables
     hc_service_start_date = record_keydate1
@@ -14,7 +19,7 @@ Rename Variables
 
 Alter type gender (F1.0) postcode (A8) hc_reablement (F1.0) hc_service_provider (F1.0).
 
- * If the chi seeded postcode is blank use the submitted one.
+* If the chi seeded postcode is blank use the submitted one.
 If postcode = "" postcode = submitted_postcode.
 
 String Year (A4).
@@ -23,7 +28,7 @@ Compute Year = !FY.
 string recid (a3).
 Compute recid eq 'HC'.
 
- * Use hc_service to create the SMRType.
+* Use hc_service to create the SMRType.
 string SMRType (a10).
 Do if hc_service = "1".
     compute SMRType = 'HC-Non-Per'.
@@ -87,7 +92,7 @@ Value Labels hc_reablement
     1 'Yes'
     9 'Not Known'.
 
- * Remove end dates which should be blank.
+* Remove end dates which should be blank.
 If end_date_missing record_keydate2 = $sysmis.
 
 * In case keydate is needed as F8.0...
@@ -117,6 +122,13 @@ save outfile = !File + "Home_Care_for_source-20" + !FY + ".zsav"
     hc_hours
     hc_service_provider
     hc_reablement
+    living_alone
+    support_from_unpaid_carer
+    social_worker
+    housing_support
+    type_of_housing
+    meals
+    day_care
     /zcompressed.
 get file = !File + "Home_Care_for_source-20" + !FY + ".zsav".
 

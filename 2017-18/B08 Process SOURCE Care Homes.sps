@@ -3,8 +3,10 @@ get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_CH_extracts_
 
 Alter type social_care_id (A10) financial_year (A4).
 
+sort cases by social_care_id sending_location.
 match files file = *
-    /file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_extracts_ELoth_NLan_SLan.zsav".
+    /table = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav"
+    /By social_care_id sending_location.
 
 Rename Variables
     ch_admission_date = record_keydate1
@@ -72,20 +74,6 @@ Recode sending_location
 SPSSINC TRANS RESULT = ch_name Type = 73
    /FORMULA "string.capwords(ch_name)".
 
- * First get a count of how often individual names are used.
-Aggregate
-   /break CareHomePostcode  CareHomeCouncilAreaCode 
-   /RecordsPerName = n.
-
- * Find out many authorities are using particular versions of names.
-Aggregate outfile = * Mode = AddVariables Overwrite = Yes
-   /break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
-   /RecordsPerName = Sum(RecordsPerName)
-   /DiffSendingAuthorities = n.
-
- * Created a weighted count, which means multiple authorities using the same name is more powerful, if they have a blank postcode or CA code give them zero weight.
-Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', CareHomePostcode, CareHomeCouncilAreaCode)).
-
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
@@ -146,7 +134,6 @@ Else If TestName2Correct = 1 AND TestName1Correct = 0.
    Compute ch_name = TestName2.
 End If.
 Frequencies TestName1Correct TestName2Correct.
-Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct.
 
 *******************************************************************************************************.
 * See which match now.
@@ -159,6 +146,7 @@ match files
     /By ch_postcode ch_name.
 Frequencies AccurateData2.
 * 54.9% Match the lookup.
+Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateData1 AccurateData2.
 
  * Add dictionary info.
 !AddLCADictionaryInfo LCA = sc_send_lca ch_lca.
@@ -315,5 +303,12 @@ save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     jan_cost
     feb_cost
     mar_cost
+    living_alone
+    support_from_unpaid_carer
+    social_worker
+    housing_support
+    type_of_housing
+    meals
+    day_care
     /zcompressed.
 get file = !File + "Care_Home_For_Source-20" + !FY + ".zsav".
