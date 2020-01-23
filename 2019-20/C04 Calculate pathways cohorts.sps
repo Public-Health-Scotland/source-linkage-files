@@ -1,4 +1,4 @@
- * Encoding: UTF-8.
+﻿ * Encoding: UTF-8.
  * Cohort Syntax.
  * Andrew Mooney.
  * Feb 2017.
@@ -7,12 +7,15 @@
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 
- * 2. Create the Demographic Service_Use_Cohort File.
+******************************************************************************************************************** * * .
+ * Create the Demographic Cohort File.
+******************************************************************************************************************** * * .
 
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 
 select If CHI ne ''.
 
+ * Mental Health Classification.
 compute MH_Cohort = 0.
  * Include CMH here?.
 If recid = '04B' MH_Cohort = 1.
@@ -27,7 +30,6 @@ end repeat.
  * If MentalHealthProblemsClientGroup = 'Y' MH_Cohort = 1.
 
  * Frailty ClassIfication.
-
  * If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
 compute Frail_Cohort = 0.
  * If (recid = 'CH' and age GE 65) Frail_Cohort = 1. /* Removing CH for now as it makes a mess in 1718  */.
@@ -51,11 +53,9 @@ If (Dementia = 1 or hefailure = 1 or refailure = 1 or liver = 1 or Cancer = 1) H
 If spec = 'G5' High_CC_Cohort = 1.
  * If LearningDisabilityClientGroup = 'Y' High_CC_Cohort = 1.
 
-
  * Medium CC ClassIfication.
 compute Medium_CC_Cohort = 0.
 If (CVD = 1 or COPD = 1 or CHD = 1 or Parkinsons = 1 or MS = 1) Medium_CC_Cohort = 1.
-
 
  * Low CC ClassIfication.
 compute Low_CC_Cohort = 0.
@@ -67,20 +67,17 @@ compute Comm_Living_Cohort = 0.
 * Not using this cohort until we have more datasets and Scotland complete DN etc.
 * If any (recid, 'HC-', 'HC + ', 'RSP', 'DN', 'MLS', 'INS', 'CPL', 'DC') Comm_Living_Cohort = 1.
 
-
+ * Seperate out prescribing cost.
 compute Prescribing_Cost = 0.
 If recid = 'PIS' Prescribing_Cost = Cost_Total_Net.
-
 
  * Adult Major Conditions ClassIfication.
 compute Adult_Major_Cohort = 0.
 If ((Prescribing_Cost GE 500 or recid = '01B') and age GE 18) Adult_Major_Cohort = 1.
 
-
  * Child Major Conditions ClassIfication.
 compute Child_Major_Cohort = 0.
 If ((Prescribing_Cost GE 500 or recid = '01B') and age LT 18) Child_Major_Cohort = 1.
-
 
 **************************************************************************************************************************************************** * 
      * IDENTIfY ALL EXTERNAL (accidental) CAUSES of DEATH
@@ -97,12 +94,9 @@ If  range (deathdiag1, 'V01', 'Y84')
     or range (deathdiag9, 'V01', 'Y84')
     or range (deathdiag10, 'V01', 'Y84')
     or range (deathdiag11, 'V01', 'Y84') ExternalCause = 1.
-
-
-******************************************************************************************************************************************** * * .
-** * INLCUDE FALLS IN THE COHORT
-   ********************************************************************************************************************************************** ,
-
+******************************************************************************************************************************************* * * .
+* INLCUDE FALLS IN THE COHORT
+**********************************************************************************************************************************************.
 If  range (deathdiag1, 'W00', 'W19')
     or range (deathdiag2, 'W00', 'W19')
     or range (deathdiag3, 'W00', 'W19')
@@ -114,9 +108,7 @@ If  range (deathdiag1, 'W00', 'W19')
     or range (deathdiag9, 'W00', 'W19')
     or range (deathdiag10, 'W00', 'W19')
     or range (deathdiag11, 'W00', 'W19') ExternalCause = $sysmis.
-
-
-************************************************************ * * .
+************************************************************.
  * End of LIfe ClassIfication.
 compute End_of_LIfe_Cohort = 0.
 If (recid = 'NRS' and sysmis(ExternalCause)) End_of_LIfe_Cohort = 1.
@@ -143,7 +135,6 @@ do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
     End if.
 end repeat.
 
-
  * Some drug codes only count If other code present in CIJ i.e. T402/T404 only If F11 and T424 only If F13.
 compute F11 = 0.
 
@@ -163,7 +154,6 @@ end repeat.
 
 compute F13 = 0.
 
-
 do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
     Do If (any(recid, '01B', '04B') and (any(char.substr(diag, 1, 3), 'F11'))).
         compute F13 = 1.
@@ -177,7 +167,6 @@ do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
         compute T424 = 1.
     End If.
 end repeat.
-
 
  * If DrugsandAlcoholClientGroup = 'Y' Substance_Cohort = 1.
 
@@ -201,7 +190,6 @@ aggregate outfile =  *
 
 If (F11 = 1 and T402_T404 = 1) or (F13 = 1 and T424 = 1) Substance = 1.
 
-
  * Aggregate into Demographics.
 aggregate outfile =  * 
     /Presorted
@@ -217,7 +205,6 @@ aggregate outfile =  *
     /Maternity = max(Maternity)
     /Frailty = max(Frailty)
     /End_of_LIfe = max(End_of_LIfe).
-
 
  * Hierarchy of Classes.
 String Demographic_Cohort (A32).
@@ -256,8 +243,8 @@ save outfile = !File + 'Demographic_Cohorts_' + !FY + '.zsav'
     /zcompressed.
 
 ******************************************************************************************************************** * * .
+ * Create the Service Use Cohort File.
 ******************************************************************************************************************** * * .
- * 3. Create the Service Use Service_Use_Cohort File.
 
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 
@@ -269,7 +256,6 @@ sort cases by spec.
 match files file =  * 
     /table = '/conf/linkage/output/lookups/Archive/clinical/specialty/copspecs.sav'
     /by spec.
-
 
  * Costs Expansion for Rules and Stats.
 compute Psychiatry_Cost = 0.
@@ -286,6 +272,7 @@ compute AE2_Cost = 0.
 compute Hospital_Elective_Cost = 0.
 compute Hospital_Emergency_Cost = 0.
 compute Community_Health_Cost = 0.
+
 If (specname = 'Geriatric Medicine' or any(recid, '50B', "GLS") or specname = 'Psychiatry of Old Age') Geriatric_Cost = Cost_Total_Net.
 If (recid = '02B' or cij_pattype= 'Maternity') Maternity_Cost = Cost_Total_Net.
 If (recid = '04B' and specname ne 'Psychiatry of Old Age') Psychiatry_Cost = Cost_Total_Net.
@@ -302,8 +289,6 @@ If any(recid, 'AE2', 'OoH', 'SAS', 'N24') AE2_Cost = Cost_Total_Net.
  * Include CMH here?.
 If recid = 'DN' Community_Health_Cost = Cost_Total_Net.
 If op1a ne '' Operation_Flag = 1.
-
-
 
 Do if cij_marker NE "".
     Compute cij_Attendance = 1.
@@ -333,7 +318,6 @@ aggregate outfile =  *
     /Operation_Flag = max(Operation_Flag)
     /cij_attendance = max(cij_attendance).
 
-
 compute Emergency_Instances = 0.
 compute Elective_Instances = 0.
 compute Elective_Inpatient_Instances = 0.
@@ -346,10 +330,8 @@ If (cij_pattype= 'Elective' and cij_ipdc = 'I') Elective_Inpatient_Instances = 1
 If (cij_pattype= 'Elective' and cij_ipdc = 'D') Elective_Daycase_Instances = 1.
 If cij_marker = 'NRS' Death_Flag = 1.
 
-
 compute Elective_Inpatient_Cost = 0.
 If Elective_Inpatient_Instances = 1 Elective_Inpatient_Cost = Total_Cost.
-
 
  * /Unplanned_Beddays = sum(Unplanned_Beddays).
 aggregate outfile =  * 
@@ -379,14 +361,12 @@ aggregate outfile =  *
     /Total_Outpatient_Cost = sum(Total_Outpatient_Cost)
     /Community_Health_Cost = sum(Community_Health_Cost).
 
-
 compute Elective_Inpatient_Flag = 0.
 Do if Elective_Cost > 0.
     compute Elective_Inpatient_Percentage = Elective_Inpatient_Cost / Elective_Cost.
 Else.
     compute Elective_Inpatient_Percentage = 0.
 End if.
-
 
 If Elective_Inpatient_Percentage GT 0.5 Elective_Inpatient_Flag = 1.
 
@@ -408,7 +388,6 @@ compute AE2_Cohort = 0.
 compute Elective_Other_Cohort = 0.
 compute Other_Cohort = 0.
 
-
  * Create our set of rules to classIfy HRI patients.
 If (Psychiatry_Cost GT 0) Psychiatry_Cohort = 1.
 If (Maternity_Cost GT 0) Maternity_Cohort = 1.
@@ -429,7 +408,6 @@ If (Psychiatry_Cohort = 0 and Maternity_Cohort = 0 and Geriatric_Cohort = 0 and 
     AE2_Cohort = 0 and Residential_Care_Cohort = 0) Other_Cohort = 1.
 
 ********************************************************************************************************************************** * .
-
  * Adjusting Cohorts based on Cost.
 
  * Create new variables to calculate the cost for each cohort.
@@ -441,7 +419,6 @@ compute Routine_Daycase_Cost = 0.
 compute Community_Care_Cost = 0.
 compute Residential_Care_Cost = 0.
 
-
  * Calculate the costs for each cohort.
 If (Elective_Inpatient_Cohort = 1) Elective_Inpatient_Cost = Elective_Cost.
 If (Limited_Daycases_Cohort = 1) Limited_Daycases_Cost = Elective_Cost.
@@ -450,7 +427,6 @@ If (Single_Emergency_Cohort = 1) Single_Emergency_Cost = Emergency_Cost.
 If (Multiple_Emergency_Cohort = 1) Multiple_Emergency_Cost = Emergency_Cost.
 If Community_Care_Cohort = 1 Community_Care_Cost = Home_Care_Cost + Community_Health_Cost.
 If Residential_Care_Cohort = 1 Residential_Care_Cost = Care_Home_Cost.
-
 
 Recode Total_Cost (sysmis = 0).
 
@@ -537,7 +513,6 @@ Recode Total_Cost (sysmis = 0).
 
  * 1. rename variable.
 Rename Variables Service_Use_Cohort = Service_Use_Cohort.
-
 
  * 2. add variable label (from AM).
 Variable labels
