@@ -12,8 +12,11 @@
  * In 1617 use the 12-Month predictions from April 1st 2016 as "Start_FY" and 12-Month predictions from April 1st 2017 as "End_Fy".
 
 match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
-    /table = !File + "Patient_Demographic_Cohort_" + !FY + ".zsav"
-    /table = !File + "GP_Practice_Service_Use_Cohorts_" + !FY+ ".zsav"
+    /table = !File + "Demographic_Cohorts_" + !FY + ".zsav"
+    /Drop End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
+    /table = !File + "Service_Use_Cohorts_" + !FY+ ".zsav"
+    /Drop Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost
+    Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
     /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
