@@ -459,7 +459,7 @@ Recode Total_Cost (sysmis = 0).
  * Compare costs for each Service_Use_Cohort and sort each patient into the Service_Use_Cohort with the greatest cost attached.
 string Service_Use_Cohort (A18).
 
-If Total_Cost = 0 Service_Use_Cohort = 'None'.
+If Total_Cost = 0 Service_Use_Cohort = 'Unassigned'.
 
 If ((Psychiatry_Cost GT Maternity_Cost) and (Psychiatry_Cost GT Geriatric_Cost) and (Psychiatry_Cost GT Elective_Inpatient_Cost)  and
     (Psychiatry_Cost GT Limited_Daycases_Cost) and (Psychiatry_Cost GT Single_Emergency_Cost) and (Psychiatry_Cost GT Multiple_Emergency_Cost) and
@@ -533,7 +533,7 @@ If ((Residential_Care_Cost GT Psychiatry_Cost) and (Residential_Care_Cost GT Mat
     (Residential_Care_Cost GT Routine_Daycase_Cost) and (Residential_Care_Cost GT Outpatient_Cost) and (Residential_Care_Cost GT Prescribing_Cost) and
     (Residential_Care_Cost GT AE2_Cost) and (Residential_Care_Cost GT Community_Care_Cost)) Service_Use_Cohort = 'Residential Care'.
 
-If (Service_Use_Cohort = '') Service_Use_Cohort = 'Other'.
+If (Service_Use_Cohort = '') Service_Use_Cohort = 'Unassigned'.
 
 Recode Total_Beddays Total_Cost (sysmis = 0).
 
