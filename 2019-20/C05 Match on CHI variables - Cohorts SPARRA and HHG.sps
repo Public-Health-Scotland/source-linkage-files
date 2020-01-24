@@ -13,10 +13,7 @@
 
 match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /table = !File + "Demographic_Cohorts_" + !FY + ".zsav"
-    /Drop End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
     /table = !File + "Service_Use_Cohorts_" + !FY+ ".zsav"
-    /Drop Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost
-    Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
     /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
@@ -25,6 +22,9 @@ match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_Start_FY
+    /Drop Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost
+    Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
+    /Drop End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
     /by CHI.
 
 Numeric SPARRA_End_FY HHG_End_FY (F2.0).
