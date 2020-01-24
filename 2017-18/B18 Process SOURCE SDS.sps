@@ -1,5 +1,6 @@
 ﻿* Encoding: UTF-8.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_SDS_extracts_ELoth_NLan_SLan.zsav".
+get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_SDS_extracts_ELoth_NLan_SLan.zsav"
+    /Drop sds_option_1_net_value sds_option_2_net_value sds_option_3_net_value sds_option_1_gross_value sds_option_2_gross_value sds_option_3_gross_value sds_total_net_value sds_total_gross_value.
 
 Alter type social_care_id (A10) financial_year (A4).
 
@@ -24,10 +25,7 @@ If postcode = "" postcode = submitted_postcode.
 * Restructure to create one line per SDS option.
 varstocases
     /make recieved from sds_option_1 sds_option_2 sds_option_3
-    /make sds_net_value from sds_option_1_net_value sds_option_2_net_value sds_option_3_net_value
-    /make sds_gross_value from sds_option_1_gross_value sds_option_2_gross_value sds_option_3_gross_value
-    /Index sds_option
-    /Drop sds_total_net_value sds_total_gross_value.
+    /Index sds_option.
 
 * Drop the lines that don't have any useful data.
 Select if Recieved = 1.
@@ -117,8 +115,6 @@ save outfile = !File + "SDS-for-source-20" + !FY + ".zsav"
     sc_send_lca
     record_keydate1
     record_keydate2
-    sds_net_value
-    sds_gross_value
     living_alone
     support_from_unpaid_carer
     social_worker
