@@ -216,7 +216,7 @@ Value Labels
     "5" "Nursing Home or Care Home or Residential Home"
     "6" "Patient or client residence"
     "7" "Day Centre"
-    "8" "Other"
+    "8" "Other".
 
 Variable Labels
     CCM "Continuous Care Marker"
