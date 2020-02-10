@@ -7,7 +7,7 @@
 
  * Check the file from Primary care team is sorted by practice.
 get file = !Lookup + "Practice Details.sav".
-sort cases by Practice.
+sort cases by PracticeCode.
 save outfile = !Lookup + "Practice Details.sav".
 
  * Sort the national ref file by practice.
@@ -22,7 +22,7 @@ match files
    /File = *
    /Rename (praccode = gpprac)
    /Table = !Lookup + "Practice Details.sav"
-   /Rename (practice = gpprac)
+   /Rename (PracticeCode = gpprac)
    /by gpprac.
 
  * Fix the Locale -> Unicode issue.
