@@ -21,14 +21,12 @@ Execute.
 
 * Sort and save.
 Sort cases by ReadCode.
-save outfile = !File + "GP-Diagnosis-Data-Temp.zsav"
-   /zcompressed.
 ************************************************************************************************************.
 * This section attempts to identify and fix any bad read codes 
 ************************************************************************************************************.
 * See which ones match.
 match files
-   /File = !File + "GP-Diagnosis-Data-Temp.zsav"
+   /File = *
    /Table = !Lookup + "../ReadCodeLookup.zsav"
    /In = FullMatch1
    /By ReadCode Description.
@@ -71,6 +69,7 @@ Do if FullMatch2 = 0.
     If ReadCode = "Xa1m." ReadCode = "S349". /*Someone used ReadCode v3.
     If ReadCode = "Xa1mz" ReadCode = "S349." /*Someone used ReadCode v3.
     If ReadCode = "HO6.." ReadCode = "H06.." /*Letter 'O' was used instead of zero.
+    If ReadCode = "zV6.." ReadCode = "ZVz.." /* Read code does not exist. 
     Compute ReadCode = Replace(ReadCode, "?", ".").  /*Someone used '?' instead of '.'.
     Compute ReadCode = char.Rpad(ReadCode, 5, "."). /*Some readcodes were not padded out with '.'s.
 End if.
@@ -114,9 +113,6 @@ Save outfile = !File + "GP-Diagnosis-Data-" + !FY + ".zsav"
    /zcompressed.
 
 get file = !File + "GP-Diagnosis-Data-" + !FY + ".zsav".
-
-* Clean up / save space.
-Erase File = !File + "GP-Diagnosis-Data-Temp.zsav".
 
  * Zip up raw data.
 Host Command = ["gzip '" + !Extracts + "GP-OoH-diagnosis-extract-20" + !FY + ".csv'"].
