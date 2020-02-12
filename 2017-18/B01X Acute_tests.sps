@@ -16,9 +16,6 @@ End if.
  * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
  * Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
@@ -26,7 +23,6 @@ aggregate outfile = SLFnew
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
  /Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
     /Mean__Costs_net Mean__yearstay Mean__stay = Mean(cost_total_net yearstay stay)
@@ -93,7 +89,7 @@ Sort cases by Measure.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob postcode gpprac age
+    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob age
     cost_total_net yearstay stay apr_beddays to mar_beddays apr_cost to mar_cost.
 select if any(recid, "01B", "GLS").
 
@@ -110,9 +106,6 @@ End if.
  * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
  * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
@@ -120,7 +113,6 @@ aggregate outfile = SLFexisting
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
     /Mean__Costs_net Mean__yearstay Mean__stay = Mean(cost_total_net yearstay stay)
@@ -204,3 +196,9 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.
 Crosstabs Measure by Issue.
+
+*Save test file.
+Save Outfile = !file + 'acute_tests_201718.zsav'
+   /zcompressed .
+
+
