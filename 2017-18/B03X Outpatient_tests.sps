@@ -19,9 +19,6 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
@@ -30,7 +27,6 @@ aggregate outfile = SLFnew
     /n_DNAs = sum(DNA)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /Total__Cost = Sum(cost_total_net)
     /Mean__Cost = Mean(cost_total_net)
@@ -73,7 +69,7 @@ Sort cases by Measure.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob postcode gpprac age
+    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob age
     Cost_Total_Net_incDNAs apr_cost to mar_cost attendance_status.
 select if recid = '00B'.
 
@@ -93,9 +89,6 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
@@ -104,7 +97,6 @@ aggregate outfile = SLFexisting
     /n_DNAs = sum(DNA)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /Total__Cost = Sum(Cost_Total_Net_incDNAs)
     /Mean__Cost = Mean(Cost_Total_Net_incDNAs)
@@ -164,3 +156,7 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
+
+Save Outfile = !file + 'Outpatient_tests_201718.zsav'
+   /zcompressed .
+

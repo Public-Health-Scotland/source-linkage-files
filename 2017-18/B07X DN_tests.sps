@@ -16,9 +16,6 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Flag to check how many HBs we have.
 AutoRecode hbtreatcode /into HBs.
 
@@ -29,7 +26,6 @@ aggregate outfile = SLFnew
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /n_hbs = Max(HBs)
     /Total__Cost = Sum(cost_total_net)
@@ -73,7 +69,7 @@ Sort cases by Measure.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob postcode gpprac age
+    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob age
     cost_total_net apr_cost to mar_cost hbtreatcode.
 select if recid = 'DN'.
 
@@ -90,9 +86,6 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Flag to check how many HBs we have.
 AutoRecode hbtreatcode /into HBs.
 
@@ -103,7 +96,6 @@ aggregate outfile = SLFexisting
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /n_hbs = Max(HBs)
     /Total__Cost = Sum(cost_total_net)
@@ -164,3 +156,7 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
+
+Save Outfile = !file + 'DN_tests_201718.zsav'
+   /zcompressed .
+
