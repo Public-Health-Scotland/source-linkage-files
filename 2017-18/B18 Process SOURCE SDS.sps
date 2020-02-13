@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_SDS_extracts_ELoth_NLan_SLan.zsav"
     /Drop sds_option_1_net_value sds_option_2_net_value sds_option_3_net_value sds_option_1_gross_value sds_option_2_gross_value sds_option_3_gross_value sds_total_net_value sds_total_gross_value.
 
@@ -50,43 +50,8 @@ Numeric age (F3.0).
 
 Compute age = datediff(!midFY, dob, "years").
 
-String sc_send_lca (A2).
-Recode sending_location
-    ("100" = "01")
-    ("110" = "02")
-    ("120" = "03")
-    ("130" = "04")
-    ("150" = "06")
-    ("170" = "08")
-    ("180" = "09")
-    ("190" = "10")
-    ("200" = "11")
-    ("210" = "12")
-    ("220" = "13")
-    ("230" = "14")
-    ("235" = "32")
-    ("240" = "15")
-    ("250" = "16")
-    ("260" = "17")
-    ("270" = "18")
-    ("280" = "19")
-    ("290" = "20")
-    ("300" = "21")
-    ("310" = "22")
-    ("320" = "23")
-    ("330" = "24")
-    ("340" = "25")
-    ("350" = "26")
-    ("355" = "05")
-    ("360" = "27")
-    ("370" = "28")
-    ("380" = "29")
-    ("390" = "30")
-    ("395" = "07")
-    ("400" = "31")
-    into sc_send_lca.
-
-!AddLCADictionaryInfo LCA = sc_send_lca.
+ * Uses sending_location and recodes into sc_sending_location using actual codes.
+!Create_sc_sending_location.
 
 * Remove end dates which should be blank.
 If end_date_missing record_keydate2 = $sysmis.
