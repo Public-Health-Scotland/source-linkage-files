@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_AT_extracts_ELoth_NLan_only.zsav".
 
 Alter type social_care_id (A10) financial_year (A4).
@@ -66,12 +66,11 @@ save outfile = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
     sc_send_lca
     record_keydate1
     record_keydate2
-    living_alone
-    support_from_unpaid_carer
-    social_worker
-    housing_support
-    type_of_housing
-    meals
-    day_care
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     /zcompressed.
 get file = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav".

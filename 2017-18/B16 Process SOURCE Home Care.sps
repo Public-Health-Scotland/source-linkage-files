@@ -15,9 +15,10 @@ Rename Variables
     chi_postcode = postcode
     chi_date_of_birth = dob
     seeded_chi_number = chi
-    reablement = hc_reablement.
+    reablement = hc_reablement
+    hc_service_provider = hc_provider.
 
-Alter type gender (F1.0) postcode (A8) hc_reablement (F1.0) hc_service_provider (F1.0).
+Alter type gender (F1.0) postcode (A8) hc_reablement (F1.0) hc_provider (F1.0).
 
 * If the chi seeded postcode is blank use the submitted one.
 If postcode = "" postcode = submitted_postcode.
@@ -85,15 +86,14 @@ save outfile = !File + "Home_Care_for_source-20" + !FY + ".zsav"
     record_keydate1
     record_keydate2
     hc_hours
-    hc_service_provider
+    hc_provider
     hc_reablement
-    living_alone
-    support_from_unpaid_carer
-    social_worker
-    housing_support
-    type_of_housing
-    meals
-    day_care
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     /zcompressed.
 get file = !File + "Home_Care_for_source-20" + !FY + ".zsav".
 

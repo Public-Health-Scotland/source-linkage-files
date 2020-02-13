@@ -14,7 +14,7 @@ Rename Variables
     chi_gender_code = gender
     chi_postcode = postcode
     chi_date_of_birth = dob
-    reason_for_admission = ch_admreas
+    reason_for_admission = ch_adm_reason
     seeded_chi_number = chi.
 
 Alter type nursing_care_provision (F1.0) gender (F1.0) postcode (A8) ch_name (A73).
@@ -162,6 +162,9 @@ match files
     /Table = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
     /By year nursing_care_provision.
 
+Rename Variables
+nursing_care_provision = ch_nursing.
+
 * Costs.
 * Declare Variables.
 Numeric apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost (F8.2).
@@ -176,22 +179,7 @@ End Repeat.
 
 Compute cost_total_net = Sum(apr_cost to mar_cost).
 
-Alter type support_from_unpaid_carer social_worker housing_support meals living_alone day_care type_of_housing (F1.0).
-
-Value Labels support_from_unpaid_carer social_worker housing_support meals living_alone day_care
-    0 "No"
-    1 "Yes"
-    9 "Not Known".
-
-Value Labels type_of_housing
-    1 'Mainstream'
-    2 'Supported'
-    3 'Long Stay Care Home'
-    4 'Hospital or other medical establishment'
-    5 'Other'
-    6 'Not Known'.
-
-Value Labels ch_admreas
+Value Labels ch_adm_reason
     1 'Respite'
     2 'Intermediate Care (includes Step Up/Step Down)'
     3 'Emergency'
@@ -203,7 +191,7 @@ Value Labels ch_admreas
     9 'Choice'
     10 'Other'.
 
-Value Labels nursing_care_provision
+Value Labels ch_nursing
     0 'No'
     1 'Yes'.
 
@@ -240,9 +228,9 @@ save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     record_keydate1
     record_keydate2
     ch_name
-    ch_admreas
+    ch_adm_reason
     ch_provider
-    nursing_care_provision
+    ch_nursing
     yearstay
     stay
     cost_total_net
@@ -270,12 +258,11 @@ save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     jan_cost
     feb_cost
     mar_cost
-    living_alone
-    support_from_unpaid_carer
-    social_worker
-    housing_support
-    type_of_housing
-    meals
-    day_care
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     /zcompressed.
 get file = !File + "Care_Home_For_Source-20" + !FY + ".zsav".
