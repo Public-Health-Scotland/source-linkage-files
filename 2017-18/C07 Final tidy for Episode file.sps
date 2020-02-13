@@ -34,6 +34,7 @@ Variable Labels
     cancer "Cancer LTC marker"
     cancer_date "Cancer LTC incidence date"
     cat "Patient Category"
+    CCM "Continuous Care Marker"
     ch_name "Name of care home where the client/service user resides"
     ch_adm_reason "Primary reason for admission to a care home"
     ch_provider "The service provider of the care home"
@@ -198,6 +199,7 @@ Variable Labels
     stay "Length of Stay"
     submis_adm "Indicates substance misuse related admission or attendance"
     tadm "Type of Admission"
+    TotalnoDNcontacts "Total Number of Patient Contacts"
     uri "Unique Record Identifier - See notes"
     year "Year"
     yearstay "Stay within year".
