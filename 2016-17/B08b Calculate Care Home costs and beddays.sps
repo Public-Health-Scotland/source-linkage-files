@@ -61,6 +61,8 @@ Do Repeat Beddays = Apr_beddays to Mar_beddays
     End if.
 End Repeat.
 
+Compute cost_total_net = Sum(apr_cost to mar_cost).
+
 save outfile= !File + "Care-Home-Temp-4.zsav"
    /zcompressed.
 get file = !File + "Care-Home-Temp-4.zsav".

@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 ************************************************************************************************************
 NSS (ISD)
 ************************************************************************************************************
@@ -136,10 +136,6 @@ value labels ch_admreas
 7 'Learning Disability'
 8 'High Dependency'.
 
-Variable Labels ch_admreas 'Primary reason for admission to a care home'.
-
- * 19. Costing variables.
-Compute cost_total_net = Sum(apr_cost to mar_cost).
 
 sort cases by chi record_keydate1.
 
