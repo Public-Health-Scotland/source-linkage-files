@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 
 * Correct Postcode formatting.
