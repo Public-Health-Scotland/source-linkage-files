@@ -886,13 +886,13 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     hb2019
     hscp2019
     ca2019
-    simd2016rank
-    simd2016_sc_decile
-    simd2016_sc_quintile
-    simd2016_hb2014_decile
-    simd2016_hb2014_quintile
-    simd2016_hscp2016_decile
-    simd2016_hscp2016_quintile
+    simd2020_rank
+    simd2020_sc_decile
+    simd2020_sc_quintile
+    simd2020_hb2019_decile
+    simd2020_hb2019_quintile
+    simd2020_hscp2019_decile
+    simd2020_hscp2019_quintile
     ur8_2016
     ur6_2016
     ur3_2016
