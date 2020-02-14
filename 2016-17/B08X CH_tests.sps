@@ -16,9 +16,6 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Flag to check how many LCAs we have.
 AutoRecode sc_send_lca /into Sending_LCAs.
 
@@ -29,7 +26,6 @@ aggregate outfile = SLFnew
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /n_sending_LCAs = Max(Sending_LCAs)
     /Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
@@ -97,7 +93,7 @@ Sort cases by Measure.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob postcode gpprac age
+    /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob age
     cost_total_net yearstay stay apr_beddays to mar_beddays apr_cost to mar_cost sc_send_lca.
 select if recid = 'CH'.
 
@@ -114,9 +110,6 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Flag to check how many LCAs we have.
 AutoRecode sc_send_lca /into Sending_LCAs.
 
@@ -127,7 +120,6 @@ aggregate outfile = SLFexisting
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_episodes = n
     /n_sending_LCAs = Max(Sending_LCAs)
     /Total__Costs_net Total__yearstay Total__stay = Sum(cost_total_net yearstay stay)
@@ -212,4 +204,7 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
+
+Save Outfile = !file + 'CH_tests_20' + !FY + '.zsav'
+   /zcompressed .
 
