@@ -379,14 +379,7 @@ Numeric
     hc_reablement (F1.0).
 
 * Care Homes.
- * String
-    ch_lca (A2)
-    ch_name (A73)
-    ch_provider (A1) .
-
- * Numeric
-    ch_adm_reason (F2.0)
-    ch_nursing (F1.0).
+String ch_provider (A1) .
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
