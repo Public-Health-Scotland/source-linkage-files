@@ -93,6 +93,6 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
  * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'PIS_tests_201718.zsav'
+Save Outfile = !file + 'PIS_tests_20' + !FY + '.zsav'
    /zcompressed .
 
