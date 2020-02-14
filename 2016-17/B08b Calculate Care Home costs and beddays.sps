@@ -13,7 +13,7 @@
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 
-get file = !File + "Care-Home-Temp-3.zsav".
+get file = !File + "Care-Home-Temp-1.zsav".
 String Year (A4).
 Compute year = !FY.
 
@@ -63,6 +63,6 @@ End Repeat.
 
 Compute cost_total_net = Sum(apr_cost to mar_cost).
 
-save outfile= !File + "Care-Home-Temp-4.zsav"
+save outfile= !File + "Care-Home-Temp-2.zsav"
    /zcompressed.
-get file = !File + "Care-Home-Temp-4.zsav".
+get file = !File + "Care-Home-Temp-2.zsav".
