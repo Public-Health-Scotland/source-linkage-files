@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 
 * Correct Postcode formatting.
@@ -343,14 +343,6 @@ Do if hbrescode = "".
         Compute hbrescode = "S08000030".
     End If.
 End if.
-
- * We now also want to include 2019 geographies. 
- * We will just match these to the postcode, therefore the 2018 ones will be slightly more complete.
-match files file = *
-    /Table = !PCDir
-    /Rename PC7 = Postcode
-    /Keep year to PostcodeMatch HB2019 CA2019 HSCP2019
-    /By Postcode.
 
 *****************************************************************************************.
 ********* Match in GP practice and cluster info. **********************************.

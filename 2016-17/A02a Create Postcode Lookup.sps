@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
  * Run A01-Set up Macros first!.
  **************************************************************************************************
  * Build the Postcode lookup.
@@ -36,7 +36,7 @@ sort cases by PC7.
 save outfile = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
    /Rename (PC7 = postcode)
    /Keep Postcode HB2018 HSCP2018 CA2018 LCA Locality DataZone2011
-      simd2016rank
+      HB2019 CA2019 HSCP2019
       simd2016_sc_decile simd2016_sc_quintile
       simd2016_HB2014_decile simd2016_HB2014_quintile
       simd2016_HSCP2016_decile simd2016_HSCP2016_quintile
