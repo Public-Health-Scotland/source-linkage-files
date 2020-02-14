@@ -884,7 +884,7 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     HB2019
     HSCP2019
     CA2019
-    simd2020rank
+    simd2020_rank
     simd2020_sc_decile
     simd2020_sc_quintile
     simd2020_HB2019_decile
