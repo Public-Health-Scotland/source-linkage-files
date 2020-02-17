@@ -16,16 +16,12 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
 * Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
     /break
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_deaths = n
     /Earliest_death = Min(record_keydate1)
     /Latest_death = Max(record_keydate1).
@@ -40,7 +36,7 @@ Sort cases by Measure.
 
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid Anon_CHI record_keydate1 gender dob postcode gpprac.
+    /Keep recid Anon_CHI record_keydate1 gender dob.
 select if recid = 'NRS'.
 
  * Flag to count CHIs.
@@ -56,16 +52,12 @@ End if.
  * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-if postcode = "" No_Postcode = 1.
-if sysmis(gpprac) No_GPprac = 1.
-
  * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
     /break
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
-    /No_Postcode No_GPprac = SUM(No_Postcode No_GPprac)
     /n_deaths = n
     /Earliest_death = Min(record_keydate1)
     /Latest_death = Max(record_keydate1).
@@ -97,3 +89,8 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.
 Crosstabs Measure by Issue.
+
+*Save test file. 
+Save Outfile = !file + 'NRS_tests_20' + !FY + '.zsav'
+   /zcompressed .
+
