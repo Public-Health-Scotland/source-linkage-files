@@ -5,7 +5,6 @@
 match files
     /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /Drop AssessmentDecisionDate.1 to HH
     /By chi.
 
 * Set up the variables for the NSU CHIs.
