@@ -10,14 +10,6 @@ match files file = *
     /Rename (HB2018 = hbrescode)
     /by postcode.
 
- * We now also want to include 2019 geographies. 
- * We will just match these to the postcode, therefore the 2018 ones will be slightly more complete.
-match files file = *
-    /Table = !PCDir
-    /Rename PC7 = Postcode
-    /Keep year to UR2_2016 HB2019 CA2019 HSCP2019
-    /By Postcode.
-
 *****************************************************************************************.
 ********* Match in GP practice and cluster info. **********************************.
 sort cases by gpprac.
