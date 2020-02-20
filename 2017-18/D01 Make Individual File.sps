@@ -380,8 +380,16 @@ Else if (recid = "HC").
     * Episode count.
     Compute HC_episodes = 1.
 
-    If SMRType = "HC-Per" HC_personal_episodes = 1.
-    If SMRType = "HC-Non-Per" HC_non_personal_episodes = 1.
+    * Hours count.
+    Compute HC_total_hours = hc_hours.
+
+    Do if SMRType = "HC-Per".
+        Compute HC_personal_episodes = 1.
+        Compute HC_personal_hours = hc_hours.
+    Else if SMRType = "HC-Non-Per".
+        Compute HC_non_personal_episodes = 1.
+        Compute HC_personal_hours = hc_hours.
+    End if.
 
 Else if (recid = "AT").
     *************************************************************************************************************************************************.
