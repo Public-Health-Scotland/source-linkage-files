@@ -377,7 +377,10 @@ Numeric
     hc_reablement (F1.0).
 
 * Care Homes.
-String ch_provider (A1) .
+String ch_provider (A1).
+
+* SDS.
+Numeric sds_option_4 (F1.0).
 
  * Declare variables for Delay Discharge (1516 only).
 Numeric Delay_End_Reason (F1.0).

@@ -379,7 +379,10 @@ Numeric
     hc_reablement (F1.0).
 
 * Care Homes.
-String ch_provider (A1) .
+String ch_provider (A1).
+
+* SDS.
+Numeric sds_option_4 (F1.0).
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL

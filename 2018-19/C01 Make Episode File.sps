@@ -382,11 +382,14 @@ Numeric
 * Care Homes.
 String
     ch_name (A73)
-    ch_provider (A1) .
+    ch_provider (A1).
 
 Numeric
     ch_adm_reason (F2.0)
     ch_nursing (F1.0).
+
+* SDS.
+Numeric sds_option_4 (F1.0).
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
