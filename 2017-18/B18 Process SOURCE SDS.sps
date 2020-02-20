@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_SDS_extracts_ELoth_NLan_SLan.zsav"
     /Drop sds_option_1_net_value sds_option_2_net_value sds_option_3_net_value sds_option_1_gross_value sds_option_2_gross_value sds_option_3_gross_value sds_total_net_value sds_total_gross_value.
 
@@ -59,6 +59,13 @@ If start_date_missing record_keydate1 = !startFY.
 * Remove end dates which should be blank.
 If end_date_missing record_keydate2 = $sysmis.
 
+aggregate 
+    /break social_care_id
+    /n_packages = n.
+
+Numeric sds_option_4 (F1.0).
+Recode n_packages (1 = 0) (2 Thru Hi = 1) into sds_option_4.
+
 * In case keydate is needed as F8.0...
 alter type record_keydate1 record_keydate2 (SDATE10).
 alter type record_keydate1 record_keydate2 (A10).
@@ -80,14 +87,15 @@ save outfile = !File + "SDS-for-source-20" + !FY + ".zsav"
     age
     gender
     postcode
-    sc_send_lca
     record_keydate1
     record_keydate2
+    sc_send_lca
     sc_living_alone
     sc_support_from_unpaid_carer
     sc_social_worker
     sc_type_of_housing
     sc_meals
     sc_day_care
+    sds_option_4
     /zcompressed.
 get file = !File + "SDS-for-source-20" + !FY + ".zsav".
