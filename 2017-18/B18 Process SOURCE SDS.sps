@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_SDS_extracts_ELoth_NLan_SLan.zsav"
     /Drop sds_option_1_net_value sds_option_2_net_value sds_option_3_net_value sds_option_1_gross_value sds_option_2_gross_value sds_option_3_gross_value sds_total_net_value sds_total_gross_value.
 
@@ -13,7 +13,7 @@ Rename Variables
     sds_start_date = record_keydate1
     sds_end_date = record_keydate2
     chi_gender_code = gender
-    sumbitted_postcode = postcode
+    submitted_postcode = postcode
     chi_date_of_birth = dob
     seeded_chi_number = chi.
 

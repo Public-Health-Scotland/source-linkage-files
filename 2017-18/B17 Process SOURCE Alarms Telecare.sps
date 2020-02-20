@@ -12,7 +12,7 @@ Rename Variables
     service_start_date = record_keydate1
     service_end_date = record_keydate2
     chi_gender_code = gender
-    sumbitted_postcode = postcode
+    submitted_postcode = postcode
     chi_date_of_birth = dob
     seeded_chi_number = chi.
 
