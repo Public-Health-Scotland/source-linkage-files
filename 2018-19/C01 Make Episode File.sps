@@ -381,7 +381,6 @@ Numeric
 
 * Care Homes.
 String
-    ch_lca (A2)
     ch_name (A73)
     ch_provider (A1) .
 
