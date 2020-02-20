@@ -53,6 +53,9 @@ Compute age = datediff(!midFY, dob, "years").
  * Uses sending_location and recodes into sc_sending_location using actual codes.
 !Create_sc_sending_location.
 
+* Set missing start dates to the start of the year.
+If start_date_missing record_keydate1 = !startFY.
+
 * Remove end dates which should be blank.
 If end_date_missing record_keydate2 = $sysmis.
 
