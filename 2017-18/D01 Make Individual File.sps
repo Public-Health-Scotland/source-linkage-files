@@ -477,7 +477,7 @@ aggregate outfile = *
     /CH_episodes CH_beddays CH_cost = sum(CH_episodes CH_beddays CH_cost)
     /HC_episodes HC_personal_episodes HC_non_personal_episodes = sum(HC_episodes HC_personal_episodes HC_non_personal_episodes)
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
-    /SDS_option_1 SDS_option_2 SDS_option_3 = Max(SDS_option_1 SDS_option_2 SDS_option_3)
+    /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
     /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care
     = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
