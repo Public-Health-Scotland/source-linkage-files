@@ -12,15 +12,15 @@ Rename Variables
     ch_admission_date = record_keydate1
     ch_discharge_date = record_keydate2
     chi_gender_code = gender
-    chi_postcode = postcode
+    submitted_postcode = postcode
     chi_date_of_birth = dob
     reason_for_admission = ch_adm_reason
     seeded_chi_number = chi.
 
 Alter type nursing_care_provision (F1.0) gender (F1.0) postcode (A8) ch_name (A73).
 
- * If the chi seeded postcode is blank use the submitted one.
-If postcode = "" postcode = submitted_postcode.
+ * Prefer the submitted postcode but if this is blank then use the CHI seeded postocde.
+If postcode = "" postcode = chi_postcode.
 
 String Year (A4).
 Compute Year = !FY.

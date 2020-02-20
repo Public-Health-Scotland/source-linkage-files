@@ -13,14 +13,14 @@ Rename Variables
     sds_start_date = record_keydate1
     sds_end_date = record_keydate2
     chi_gender_code = gender
-    chi_postcode = postcode
+    sumbitted_postcode = postcode
     chi_date_of_birth = dob
     seeded_chi_number = chi.
 
 Alter type gender (F1.0) postcode (A8) sds_option_1 sds_option_2 sds_option_3 (F1.0).
 
-* If the chi seeded postcode is blank use the submitted one.
-If postcode = "" postcode = submitted_postcode.
+ * Prefer the submitted postcode but if this is blank then use the CHI seeded postocde.
+If postcode = "" postcode = chi_postcode.
 
 * Restructure to create one line per SDS option.
 varstocases
