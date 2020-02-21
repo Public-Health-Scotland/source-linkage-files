@@ -3,6 +3,20 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
+ * Zip up all BXX test files.
+Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " + 
+    "'" + !File + "A&E_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "acute_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "CH_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "CMH_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "DD_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "DN_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Maternity_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "NRS_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "PIS_tests_20" + !FY + ".zsav" + "'"].
 
 * Bring all the data sets together.
 add files
