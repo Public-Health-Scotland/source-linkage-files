@@ -1,5 +1,7 @@
 * Encoding: UTF-8.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_CH_extracts_ELoth_NLan_SLan.zsav".
+ * Make ch_name the first variable to make the Python below simpler.
+get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_CH_extracts_ELoth_NLan_SLan.zsav"
+    /Keep ch_name ALL.
 
 Alter type social_care_id (A10) financial_year (A4).
 
@@ -38,8 +40,36 @@ Compute age = datediff(!midFY, dob, "years").
 !Create_sc_sending_location.
 
 *******************************************************************************************************.
-SPSSINC TRANS RESULT = ch_name Type = 73
-   /FORMULA "string.capwords(ch_name)".
+* Tidy up care home names.
+ * Use custom Python as it's twice as quick as built in SPSS.
+Begin Program.
+import spss
+
+ # Open the dataset with write access
+ # Read in the CareHomeNames, which must be the first variable "spss.Cursor([0]..."
+cur = spss.Cursor([0], accessType = 'w')
+
+# Create a new variable, string length 73
+cur.AllocNewVarsBuffer(80)
+cur.SetOneVarNameAndType('ch_name_tidy', 73)
+cur.CommitDictionary()
+
+ # Loop through every case and write the tidied care home name
+for i in range(cur.GetCaseCount()):
+    # Read a case and save the care home name
+    # We need to strip trailing spaces
+    care_home_name = cur.fetchone()[0].rstrip()
+
+    # Write the tidied name to the SPSS dataset
+    cur.SetValueChar('ch_name_tidy', str(care_home_name).title())
+    cur.CommitCase()
+
+ # Close the connection to the dataset
+cur.close() 
+End Program.
+
+* Overwirte the original care home name.
+Compute ch_name = ch_name_tidy.
 
 Sort Cases by ch_postcode ch_name.
 match files
