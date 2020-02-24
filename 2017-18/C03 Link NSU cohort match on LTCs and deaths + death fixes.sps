@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
  * Create Homelessness flags.
  * Unzip the homelessness file.
-Host command = ["unzip '" + !File + "Activity.zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
+Host command = ["unzip '" +!File + "Activity_20" + !FY + ".zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
 
 get file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /Keep CHI record_keydate1 record_keydate2.
@@ -411,4 +411,6 @@ save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 *****************************************************************************************************************************.
-       
+
+ * Put the homelessness file back in the  'Activities' zip.
+Host  Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' '" + !File + "homelessness_for_source-20" + !FY + ".zsav'"].
