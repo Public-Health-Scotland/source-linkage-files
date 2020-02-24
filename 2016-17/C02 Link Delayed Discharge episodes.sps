@@ -325,6 +325,9 @@ get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
 Erase File = !File + "DD_Temp-1.zsav".
 Erase File = !File + "DD_Temp-2.zsav".
 
-* Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
+ * Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
 Erase file = !File + "slf_reduced_for_DD.zsav".
+
+ * Add the Delayed Discharge extract to the 'Activities zip'.
+Host  Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' '" + !File + "DD_for_source-20" + !FY + ".zsav'"].
 
