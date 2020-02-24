@@ -3,6 +3,19 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
+Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " + 
+    "'" + !File + "A&E_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "acute_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "CH_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "CMH_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "DD_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "DN_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Maternity_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "NRS_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "PIS_tests_20" + !FY + ".zsav" + "'"].
 
 * Bring all the data sets together.
 add files
@@ -392,7 +405,7 @@ get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
 Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !File + "Activity.zip' " + 
+Host Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' " + 
     "'" + !File + "a&e_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
