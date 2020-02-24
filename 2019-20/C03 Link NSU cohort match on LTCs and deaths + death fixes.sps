@@ -55,7 +55,7 @@ casestovars
 match files
     /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
     /table = *
-    /In = HH
+    /In = HH_in_FY
     /By chi.
 
  * Housekeeping.
@@ -63,7 +63,7 @@ match files
 Erase file = !File + "homelessness_for_source-20" + !FY + ".zsav".
 Erase file = !File + "Temp macro definitions.sps".
 
-Numeric HH_in_FY HH_ep  HH_6after_ep  HH_6before_ep (F1.0).
+Numeric HH_ep  HH_6after_ep  HH_6before_ep (F1.0).
 Variable Labels
     HH_in_FY "CHI had an active homelessness application during this financial year"
     HH_ep "CHI had an active homelessness application at time of episode"
@@ -80,12 +80,6 @@ Do if Not(any(recid, "PIS", "NSU")).
     * May need to change the numbers here depending on the max number of episodes someone has.
     Do repeat HH_start = AssessmentDecisionDate.1 to !maxAssesment
         /HH_end = CaseClosedDate.1 to !maxClose.
-
-        * If there was an active application at any point in the FY.
-        If Range(HH_start, !startFY, !endFY)
-            or Range(HH_end, !startFY, !endFY)
-            or Range(!startFY, HH_start, HH_end)
-            or (HH_start <= !endFY and Missing(HH_end)) HH_in_FY = 1.
 
         * If there was an active application during episode.
         * HH started during episode or HH ended during episode or HH was ongoing at start of episode.
@@ -108,6 +102,9 @@ Do if Not(any(recid, "PIS", "NSU")).
     End Repeat.
 End if.
 
+If recid = 'HL1' and chi = '' HH_in_FY = 1 . 
+
+********************************************************************************************************************************
 * Match on the non-service-user CHIs.
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
 * Get a warning here but should be fine. - Caused by the way we match on NSU.

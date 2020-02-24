@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -217,10 +217,6 @@ Value Labels
     "6" "Patient or client residence"
     "7" "Day Centre"
     "8" "Other".
-
-Variable Labels
-    CCM "Continuous Care Marker"
-    TotalnoDNcontacts "Total Number of Patient Contacts".
 
 * Put record_keydate back into numeric.
 Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record_keydate1) + 10000 * xdate.year(record_keydate1).
