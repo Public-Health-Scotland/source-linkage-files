@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
  * Create Homelessness flags.
  * Unzip the homelessness file.
-Host command = ["unzip '" + !File + "Activity.zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
+Host command = ["unzip '" +!File + "Activity_20" + !FY + ".zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
 
 get file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /Keep CHI record_keydate1 record_keydate2.
@@ -70,8 +70,9 @@ Variable Labels
     HH_6after_ep "CHI had an active homelessness application at some point 6 months after the end of the episode"
     HH_6before_ep "CHI had an active homelessness application at some point 6 months prior to the start of the episode".
 
-* I'm ignoring PIS (as the dates are not really episode dates), and CH as I'm not sure Care Homes tells us much (and the data is bad).
-Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS", "HL1").
+* I'm ignoring PIS (as the dates are not really episode dates).
+Do if Not(any(recid, "PIS", "NSU")).
+    Compute HH_in_FY = 0.
     Compute HH_ep = 0.
     Compute HH_6after_ep = 0.
     Compute HH_6before_ep = 0.
@@ -410,4 +411,6 @@ save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 *****************************************************************************************************************************.
-       
+
+ * Put the homelessness file back in the  'Activities' zip.
+Host  Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' '" + !File + "homelessness_for_source-20" + !FY + ".zsav'"].
