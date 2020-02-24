@@ -34,6 +34,7 @@ Variable Labels
     cancer "Cancer LTC marker"
     cancer_date "Cancer LTC incidence date"
     cat "Patient Category"
+    CCM "Continuous Care Marker"
     chd "Coronary heart disease (CHD) LTC marker"
     chd_date "Coronary heart disease (CHD) LTC incidence date"
     chi "Community Health Index number"
@@ -184,6 +185,7 @@ Variable Labels
     stay "Length of Stay"
     submis_adm "Indicates substance misuse related admission or attendance"
     tadm "Type of Admission"
+    TotalnoDNcontacts "Total Number of Patient Contacts"
     uri "Unique Record Identifier - See notes"
     year "Year"
     yearstay "Stay within year".
