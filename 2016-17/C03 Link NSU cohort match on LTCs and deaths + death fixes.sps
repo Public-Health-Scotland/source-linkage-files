@@ -18,6 +18,9 @@ Else.
 End if.
 Alter type AssessmentDecisionDate CaseClosedDate (Date12).
 
+* Set empty end dates to the end of the FY.
+If missing(CaseClosedDate) CaseClosedDate = !EndFY.
+
  * Work out what the maximum number of records per person was.
  * We need this later.
 aggregate
@@ -70,11 +73,20 @@ Variable Labels
     HH_6after_ep "CHI had an active homelessness application at some point 6 months after the end of the episode"
     HH_6before_ep "CHI had an active homelessness application at some point 6 months prior to the start of the episode".
 
-* I'm ignoring PIS (as the dates are not really episode dates), and CH as I'm not sure Care Homes tells us much (and the data is bad).
-Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS", "HL1").
+* I'm ignoring PIS (as the dates are not really episode dates).
+Do if Not(any(recid, "PIS", "NSU")).
+    Compute missing_end_date_changed = 0.
+    
+    Compute HH_in_FY = 0.
     Compute HH_ep = 0.
     Compute HH_6after_ep = 0.
     Compute HH_6before_ep = 0.
+
+    * Correctly handle missing end dates.
+    Do if Missing(keydate2_dateformat).
+        Compute keydate2_dateformat = !endFY.
+        Compute missing_end_date_changed = 1.
+    End if.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
     Do repeat HH_start = AssessmentDecisionDate.1 to !maxAssesment
@@ -88,8 +100,8 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
             or (HH_start <= keydate2_dateformat and Missing(HH_end)) HH_ep = 1.
 
         * If there was an active application in the 6 months after the discharge of the episode.
-        If Range(HH_start, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
-            or Range(HH_end, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
+        If Range(HH_start,keydate2_dateformat + time.days(1), keydate2_dateformat + time.days(180))
+            or Range(HH_end,keydate2_dateformat + time.days(1), keydate2_dateformat + time.days(180))
             or Range(keydate2_dateformat + time.days(180), HH_start, HH_end)
             or (HH_start <= keydate2_dateformat + time.days(180) and Missing(HH_end)) HH_6after_ep = 1.
 
@@ -99,19 +111,21 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
             or Range(keydate1_dateformat - time.days(180), HH_start, HH_end)
             or (HH_start <= keydate1_dateformat and Missing(HH_end)) HH_6before_ep = 1.
     End Repeat.
+
+    If missing_end_date_changed = 1 keydate2_dateformat = $sysmis.
+
 End if.
 
-If recid = 'HL1' and chi = '' HH_in_FY = 1 . 
+If recid = 'HL1' and chi = '' HH_in_FY = 1. 
 
 ********************************************************************************************************************************
-
 * Match on the non-service-user CHIs.
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
 * Get a warning here but should be fine. - Caused by the way we match on NSU.
 match files
     /file = * 
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /Drop AssessmentDecisionDate.1 to HH
+    /Drop AssessmentDecisionDate.1 to missing_end_date_changed
     /By chi.
 
 * Set up the variables for the NSU CHIs.
