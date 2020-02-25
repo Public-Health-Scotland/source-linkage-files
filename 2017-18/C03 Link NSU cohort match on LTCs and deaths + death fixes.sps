@@ -18,6 +18,9 @@ Else.
 End if.
 Alter type AssessmentDecisionDate CaseClosedDate (Date12).
 
+* Set empty end dates to the end of the FY.
+If missing(CaseClosedDate) CaseClosedDate = !EndFY.
+
  * Work out what the maximum number of records per person was.
  * We need this later.
 aggregate
@@ -72,10 +75,18 @@ Variable Labels
 
 * I'm ignoring PIS (as the dates are not really episode dates).
 Do if Not(any(recid, "PIS", "NSU")).
+    Compute missing_end_date_changed = 0.
+    
     Compute HH_in_FY = 0.
     Compute HH_ep = 0.
     Compute HH_6after_ep = 0.
     Compute HH_6before_ep = 0.
+
+    * Correctly handle missing end dates.
+    Do if Missing(keydate2_dateformat).
+        Compute keydate2_dateformat = !endFY.
+        Compute missing_end_date_changed = 1.
+    End if.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
     Do repeat HH_start = AssessmentDecisionDate.1 to !maxAssesment
@@ -89,8 +100,8 @@ Do if Not(any(recid, "PIS", "NSU")).
             or (HH_start <= keydate2_dateformat and Missing(HH_end)) HH_ep = 1.
 
         * If there was an active application in the 6 months after the discharge of the episode.
-        If Range(HH_start, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
-            or Range(HH_end, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
+        If Range(HH_start,keydate2_dateformat + time.days(1), keydate2_dateformat + time.days(180))
+            or Range(HH_end,keydate2_dateformat + time.days(1), keydate2_dateformat + time.days(180))
             or Range(keydate2_dateformat + time.days(180), HH_start, HH_end)
             or (HH_start <= keydate2_dateformat + time.days(180) and Missing(HH_end)) HH_6after_ep = 1.
 
@@ -100,9 +111,12 @@ Do if Not(any(recid, "PIS", "NSU")).
             or Range(keydate1_dateformat - time.days(180), HH_start, HH_end)
             or (HH_start <= keydate1_dateformat and Missing(HH_end)) HH_6before_ep = 1.
     End Repeat.
+
+    If missing_end_date_changed = 1 keydate2_dateformat = $sysmis.
+
 End if.
 
-If recid = 'HL1' and chi = '' HH_in_FY = 1 . 
+If recid = 'HL1' and chi = '' HH_in_FY = 1. 
 
 ********************************************************************************************************************************
 * Match on the non-service-user CHIs.
@@ -111,7 +125,7 @@ If recid = 'HL1' and chi = '' HH_in_FY = 1 .
 match files
     /file = * 
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /Drop AssessmentDecisionDate.1 to HH
+    /Drop AssessmentDecisionDate.1 to missing_end_date_changed
     /By chi.
 
 * Set up the variables for the NSU CHIs.
@@ -410,7 +424,3 @@ save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Drop Remove_NSU Remove_Death Using_NRS_ep Using_NRS Using_CHI Death_after_FY
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
-*****************************************************************************************************************************.
-
- * Put the homelessness file back in the  'Activities' zip.
-Host  Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' '" + !File + "homelessness_for_source-20" + !FY + ".zsav'"].
