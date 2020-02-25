@@ -424,7 +424,3 @@ save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Drop Remove_NSU Remove_Death Using_NRS_ep Using_NRS Using_CHI Death_after_FY
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
-*****************************************************************************************************************************.
-
- * Put the homelessness file back in the  'Activities' zip.
-Host  Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' '" + !File + "homelessness_for_source-20" + !FY + ".zsav'"].
