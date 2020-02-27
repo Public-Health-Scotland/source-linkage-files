@@ -54,6 +54,9 @@ casestovars
     /ID = chi
     /Drop record_keydate1 record_keydate2 num_records max_records.
 
+ * Declare this here to make the ordering neat when we get rid of them later.
+Numeric missing_end_date_changed (F1.0).
+
 * Match to source.
 match files
     /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
