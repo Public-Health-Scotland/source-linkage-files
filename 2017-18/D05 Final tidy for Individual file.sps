@@ -392,7 +392,6 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     demographic_cohort
     service_use_cohort
     keep_population
-    ALL
     /zcompressed.
 
 get file = !file + "source-individual-file-20" + !FY + ".zsav".
