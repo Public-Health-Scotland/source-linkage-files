@@ -905,12 +905,3 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     /zcompressed.
 get file = !File + "source-episode-file-20" + !FY + ".zsav".
 
-
-* Housekeeping.
-* May get some errors if files have already been deleted to save space.
-erase file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
-erase file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
