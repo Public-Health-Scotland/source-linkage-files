@@ -105,7 +105,7 @@ Do if chi ne "".
         Compute age = #CHI_age2.
         Compute Changed_DoB = 9.
     End if.
-    
+
 
     * If we still don't have an age, try and fill it in from a previous record.
     Do if sysmiss(Age) and CHI = Lag(CHI).
@@ -183,7 +183,7 @@ Else if recid = "00B".
     If attendance_status NE 8 valid_activity = keydate2_dateformat.
 Else if recid = "PIS".
     * For this we'll count PIS activity as the first of the year.
-    Compute valid_activity = date.dmy(1, 4, Number(!altFY, F4.0)).
+    Compute valid_activity = !startFY.
 End if.
 
 * Create some Changed_DoBs.
@@ -230,7 +230,7 @@ If death_date = death_date_NRS Using_NRS = 1.
 If death_date = death_date_CHI and Using_NRS = 0 Using_CHI = 1.
 
 * If they are an NSU with a death before the FY, we'll Changed_DoB them for removal.
-If NSU = 1 and death_date < date.dmy(1, 4, Number(!altfy, F4.0)) Remove_NSU = 1.
+If NSU = 1 and death_date < !startFY Remove_NSU = 1.
 
 * If the current death date doesn't work but the CHI death date does, use that and update the Changed_DoB so we know what happened.
 If Activity_after_death and CHI_death_date_works death_date = death_date_CHI.
@@ -246,8 +246,11 @@ If Using_CHI > 0 Using_NRS = 0.
 * Clear any deaths which happened after the end of the FY.
 Numeric Death_after_FY (F1.0).
 Compute Death_after_FY = 0.
-If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) Death_after_FY = 1.
-If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) death_date = $sysmis.
+Do if death_date > !endFY.
+    Compute Death_after_FY = 1.
+    Compute death_date = $sysmis.
+End if.
+
 
 * Keep only CHIs with a death_date - for linking back to main file.
 select if Not(sysmis(death_date)).
@@ -262,10 +265,10 @@ match files
 * Clear any deaths which occurred before the start of the FY - allow one year if the only activity is PIS.
 Numeric Remove_Death (F1.0).
 Compute Remove_Death = 0.
-Do if recid NE "PIS".
-    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 1) Remove_death = 2.
+Do if recid = "PIS".
+    If death_date < Datesum(!startFY, -1, "years") Remove_death = 2.
 Else.
-    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 2) Remove_death = 1.
+    If death_date < !startFY Remove_death = 1.
 End if.
 
 aggregate outfile = * Mode = AddVariables Overwrite = Yes
