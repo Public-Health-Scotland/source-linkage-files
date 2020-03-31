@@ -85,7 +85,7 @@ End if.
 * Make them look nice.
 Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
-* Set the type of admission for Maternity records here as the variable isn't included in the datmart.
+* Set the type of admission for Maternity records here as the variable isn't included in the datamart.
 If (recid = "02B") tadm = "42".
 * Correct for home births.
 If (recid = "02B" and mpat = "0") tadm = "41".

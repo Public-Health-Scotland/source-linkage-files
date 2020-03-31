@@ -304,7 +304,7 @@ Value Labels SMRType
 Value Labels refsource
     '01' "A&E - Self Referral"
     '01A' "A&E - Patient"
-    '01B' "A&E - Associated Person eg. parent, friend, employer, neighbour."
+    '01B' "A&E - Associated Person e.g. parent, friend, employer, neighbour."
     '02' "A&E - Healthcare professional/ service/ organisation"
     '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services."
     '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service."
@@ -463,7 +463,7 @@ Value Labels spec cij_adm_spec cij_dis_spec
     'R41' "Industrial therapists"
     'R5' "Physiotherapy"
     'R6' "Speech and Language Therapy"
-    'R7' "Ambulancemen/women – Accident & Emergency"
+    'R7' "Ambulance men/women – Accident & Emergency"
     'R8' "Audiological science"
     'R81' "Hearing aids"
     'R82' "Audiometry"
@@ -707,7 +707,7 @@ Variable Width
 *********************************************************************************************.
 sort cases by CHI record_keydate1 record_keydate2.
 
-* Reorder and keep vars.
+* Reorder and keep variables.
 save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     /Keep
     year

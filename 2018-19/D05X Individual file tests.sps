@@ -275,9 +275,6 @@ if sysmis(gpprac) No_GPprac = 1.
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
 
- * Create some variables - These should exist in all files after September 2019 update.
-Numeric CIJ_el CIJ_non_el CIJ_mat (F8.0).
-
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
     /Break
