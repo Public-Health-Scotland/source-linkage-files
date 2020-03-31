@@ -125,19 +125,19 @@ If recid = 'HL1' and chi = '' HH_in_FY = 1.
 * Match on the non-service-user CHIs.
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
 * Get a warning here but should be fine. - Caused by the way we match on NSU.
-* match files
+match files
     /file = * 
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
     /Drop AssessmentDecisionDate.1 to missing_end_date_changed
     /By chi.
-	
+
 * Set up the variables for the NSU CHIs.
 * The macros are defined in C01a.
- * Do if recid = "".
- *     Compute year = !FY.
- *     Compute recid = "NSU".
- *     Compute SMRType = "Non-User".
- * End if.
+Do if recid = "".
+    Compute year = !FY.
+    Compute recid = "NSU".
+    Compute SMRType = "Non-User".
+End if.
 
 ********************Match on LTC Changed_DoBs and dates of LTC incidence (based on hospital incidence only)*****.
 *Match on LTCs Changed_DoBs and date.
@@ -307,7 +307,7 @@ Else if recid = "00B".
     If attendance_status NE 8 valid_activity = keydate2_dateformat.
 Else if recid = "PIS".
     * For this we'll count PIS activity as the first of the year.
-    Compute valid_activity = date.dmy(1, 4, Number(!altFY, F4.0)).
+    Compute valid_activity = !startFY.
 End if.
 
 * Create some Changed_DoBs.
@@ -354,7 +354,7 @@ If death_date = death_date_NRS Using_NRS = 1.
 If death_date = death_date_CHI and Using_NRS = 0 Using_CHI = 1.
 
 * If they are an NSU with a death before the FY, we'll Changed_DoB them for removal.
-If NSU = 1 and death_date < date.dmy(1, 4, Number(!altfy, F4.0)) Remove_NSU = 1.
+If NSU = 1 and death_date < !startFY Remove_NSU = 1.
 
 * If the current death date doesn't work but the CHI death date does, use that and update the Changed_DoB so we know what happened.
 If Activity_after_death and CHI_death_date_works death_date = death_date_CHI.
@@ -370,8 +370,10 @@ If Using_CHI > 0 Using_NRS = 0.
 * Clear any deaths which happened after the end of the FY.
 Numeric Death_after_FY (F1.0).
 Compute Death_after_FY = 0.
-If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) Death_after_FY = 1.
-If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) death_date = $sysmis.
+Do if death_date > !endFY.
+    Compute Death_after_FY = 1.
+    Compute death_date = $sysmis.
+End if.
 
 * Keep only CHIs with a death_date - for linking back to main file.
 select if Not(sysmis(death_date)).
@@ -386,10 +388,10 @@ match files
 * Clear any deaths which occurred before the start of the FY - allow one year if the only activity is PIS.
 Numeric Remove_Death (F1.0).
 Compute Remove_Death = 0.
-Do if recid NE "PIS".
-    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 1) Remove_death = 2.
+Do if recid = "PIS".
+    If death_date < Datesum(!startFY, -1, "years") Remove_death = 2.
 Else.
-    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 2) Remove_death = 1.
+    If death_date < !startFY Remove_death = 1.
 End if.
 
 aggregate outfile = * Mode = AddVariables Overwrite = Yes

@@ -406,8 +406,7 @@ String DD_Responsible_LCA (A2).
 String hl1_application_ref (A15).
 String hl1_sending_lca (A9).
 Numeric hl1_property_type (F2.0).
-String reason_ftm (A10).
-String reason_ftm_2 (A10).
+String hl1_reason_ftm (A10).
 Numeric HH_in_FY (F1.0).
 Numeric HH_ep (F1.0).
 Numeric HH_6after_ep (F1.0).
