@@ -19,16 +19,16 @@ Rename Variables
 
 Alter type gender (F1.0) postcode (A8) sds_option_1 sds_option_2 sds_option_3 (F1.0).
 
- * Prefer the submitted postcode but if this is blank then use the CHI seeded postocde.
+ * Prefer the submitted postcode but if this is blank then use the CHI seeded postcode.
 If postcode = "" postcode = chi_postcode.
 
 * Restructure to create one line per SDS option.
 varstocases
-    /make recieved from sds_option_1 sds_option_2 sds_option_3
+    /make received from sds_option_1 sds_option_2 sds_option_3
     /Index sds_option.
 
 * Drop the lines that don't have any useful data.
-Select if Recieved = 1.
+Select if received = 1.
 
 String Year (A4).
 Compute Year = !FY.

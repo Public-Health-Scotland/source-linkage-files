@@ -18,7 +18,7 @@ Rename Variables
 
 Alter type gender (F1.0) postcode (A8).
 
- * Prefer the submitted postcode but if this is blank then use the CHI seeded postocde.
+ * Prefer the submitted postcode but if this is blank then use the CHI seeded postcode.
 If postcode = "" postcode = chi_postcode.
 
 String Year (A4).

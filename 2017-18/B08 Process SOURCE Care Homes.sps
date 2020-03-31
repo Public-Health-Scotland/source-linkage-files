@@ -21,7 +21,7 @@ Rename Variables
 
 Alter type nursing_care_provision (F1.0) gender (F1.0) postcode (A8) ch_name (A73).
 
- * Prefer the submitted postcode but if this is blank then use the CHI seeded postocde.
+ * Prefer the submitted postcode but if this is blank then use the CHI seeded postcode.
 If postcode = "" postcode = chi_postcode.
 
 String Year (A4).
@@ -68,7 +68,7 @@ for i in range(cur.GetCaseCount()):
 cur.close() 
 End Program.
 
-* Overwirte the original care home name.
+* Overwrite the original care home name.
 Compute ch_name = ch_name_tidy.
 
 Sort Cases by ch_postcode ch_name.
