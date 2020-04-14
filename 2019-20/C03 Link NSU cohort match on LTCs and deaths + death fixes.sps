@@ -18,6 +18,9 @@ Else.
 End if.
 Alter type AssessmentDecisionDate CaseClosedDate (Date12).
 
+* Set empty end dates to the end of the FY.
+If missing(CaseClosedDate) CaseClosedDate = !EndFY.
+
  * Work out what the maximum number of records per person was.
  * We need this later.
 aggregate
@@ -51,6 +54,9 @@ casestovars
     /ID = chi
     /Drop record_keydate1 record_keydate2 num_records max_records.
 
+ * Declare this here to make the ordering neat when we get rid of them later.
+Numeric missing_end_date_changed (F1.0).
+
 * Match to source.
 match files
     /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
@@ -70,11 +76,20 @@ Variable Labels
     HH_6after_ep "CHI had an active homelessness application at some point 6 months after the end of the episode"
     HH_6before_ep "CHI had an active homelessness application at some point 6 months prior to the start of the episode".
 
-* I'm ignoring PIS (as the dates are not really episode dates), and CH as I'm not sure Care Homes tells us much (and the data is bad).
-Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS", "HL1").
+* I'm ignoring PIS (as the dates are not really episode dates).
+Do if Not(any(recid, "PIS", "NSU")).
+    Compute missing_end_date_changed = 0.
+    
+    Compute HH_in_FY = 0.
     Compute HH_ep = 0.
     Compute HH_6after_ep = 0.
     Compute HH_6before_ep = 0.
+
+    * Correctly handle missing end dates.
+    Do if Missing(keydate2_dateformat).
+        Compute keydate2_dateformat = !endFY.
+        Compute missing_end_date_changed = 1.
+    End if.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
     Do repeat HH_start = AssessmentDecisionDate.1 to !maxAssesment
@@ -88,8 +103,8 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
             or (HH_start <= keydate2_dateformat and Missing(HH_end)) HH_ep = 1.
 
         * If there was an active application in the 6 months after the discharge of the episode.
-        If Range(HH_start, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
-            or Range(HH_end, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
+        If Range(HH_start,keydate2_dateformat + time.days(1), keydate2_dateformat + time.days(180))
+            or Range(HH_end,keydate2_dateformat + time.days(1), keydate2_dateformat + time.days(180))
             or Range(keydate2_dateformat + time.days(180), HH_start, HH_end)
             or (HH_start <= keydate2_dateformat + time.days(180) and Missing(HH_end)) HH_6after_ep = 1.
 
@@ -99,27 +114,30 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
             or Range(keydate1_dateformat - time.days(180), HH_start, HH_end)
             or (HH_start <= keydate1_dateformat and Missing(HH_end)) HH_6before_ep = 1.
     End Repeat.
+
+    If missing_end_date_changed = 1 keydate2_dateformat = $sysmis.
+
 End if.
 
-If recid = 'HL1' and chi = '' HH_in_FY = 1 . 
+If recid = 'HL1' and chi = '' HH_in_FY = 1. 
 
 ********************************************************************************************************************************
 * Match on the non-service-user CHIs.
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
 * Get a warning here but should be fine. - Caused by the way we match on NSU.
-* match files
+match files
     /file = * 
     /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /Drop AssessmentDecisionDate.1 to HH
+    /Drop AssessmentDecisionDate.1 to missing_end_date_changed
     /By chi.
-	
+
 * Set up the variables for the NSU CHIs.
 * The macros are defined in C01a.
- * Do if recid = "".
- *     Compute year = !FY.
- *     Compute recid = "NSU".
- *     Compute SMRType = "Non-User".
- * End if.
+Do if recid = "".
+    Compute year = !FY.
+    Compute recid = "NSU".
+    Compute SMRType = "Non-User".
+End if.
 
 ********************Match on LTC Changed_DoBs and dates of LTC incidence (based on hospital incidence only)*****.
 *Match on LTCs Changed_DoBs and date.
@@ -289,7 +307,7 @@ Else if recid = "00B".
     If attendance_status NE 8 valid_activity = keydate2_dateformat.
 Else if recid = "PIS".
     * For this we'll count PIS activity as the first of the year.
-    Compute valid_activity = date.dmy(1, 4, Number(!altFY, F4.0)).
+    Compute valid_activity = !startFY.
 End if.
 
 * Create some Changed_DoBs.
@@ -336,7 +354,7 @@ If death_date = death_date_NRS Using_NRS = 1.
 If death_date = death_date_CHI and Using_NRS = 0 Using_CHI = 1.
 
 * If they are an NSU with a death before the FY, we'll Changed_DoB them for removal.
-If NSU = 1 and death_date < date.dmy(1, 4, Number(!altfy, F4.0)) Remove_NSU = 1.
+If NSU = 1 and death_date < !startFY Remove_NSU = 1.
 
 * If the current death date doesn't work but the CHI death date does, use that and update the Changed_DoB so we know what happened.
 If Activity_after_death and CHI_death_date_works death_date = death_date_CHI.
@@ -352,8 +370,10 @@ If Using_CHI > 0 Using_NRS = 0.
 * Clear any deaths which happened after the end of the FY.
 Numeric Death_after_FY (F1.0).
 Compute Death_after_FY = 0.
-If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) Death_after_FY = 1.
-If death_date > date.dmy(31, 3, Number(!altFY, F4.0) + 1) death_date = $sysmis.
+Do if death_date > !endFY.
+    Compute Death_after_FY = 1.
+    Compute death_date = $sysmis.
+End if.
 
 * Keep only CHIs with a death_date - for linking back to main file.
 select if Not(sysmis(death_date)).
@@ -368,10 +388,10 @@ match files
 * Clear any deaths which occurred before the start of the FY - allow one year if the only activity is PIS.
 Numeric Remove_Death (F1.0).
 Compute Remove_Death = 0.
-Do if recid NE "PIS".
-    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 1) Remove_death = 2.
+Do if recid = "PIS".
+    If death_date < Datesum(!startFY, -1, "years") Remove_death = 2.
 Else.
-    If death_date < date.dmy(1, 4, Number(!altFY, F4.0) - 2) Remove_death = 1.
+    If death_date < !startFY Remove_death = 1.
 End if.
 
 aggregate outfile = * Mode = AddVariables Overwrite = Yes
@@ -409,5 +429,3 @@ save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
     /Drop Remove_NSU Remove_Death Using_NRS_ep Using_NRS Using_CHI Death_after_FY
     /zcompressed.
 get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
-*****************************************************************************************************************************.
-       

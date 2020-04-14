@@ -322,7 +322,7 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     Datazone2011
     hbpraccode
     Cluster
-    simd2020rank
+    simd2020_rank
     simd2020_sc_decile
     simd2020_sc_quintile
     simd2020_HB2019_decile

@@ -29,7 +29,7 @@ GET DATA /TYPE=XLSX
    /READNAMES=on
    /ASSUMEDSTRWIDTH=32767.
 
-Rename Varaibles
+Rename Variables
     AccomPostCodeNo = CareHomePostcode.
 
 * Only keep ones which were open on or after the start of the FY.

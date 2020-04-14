@@ -82,7 +82,7 @@ End if.
 * Make them look nice.
 Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
-* Set the type of admission for Maternity records here as the variable isn't included in the datmart.
+* Set the type of admission for Maternity records here as the variable isn't included in the datamart.
 If (recid = "02B") tadm = "42".
 * Correct for home births.
 If (recid = "02B" and mpat = "0") tadm = "41".
@@ -389,8 +389,7 @@ String DD_Responsible_LCA (A2).
 String hl1_application_ref (A15).
 String hl1_sending_lca (A9).
 Numeric hl1_property_type (F2.0).
-String reason_ftm (A10).
-String reason_ftm_2 (A10).
+String hl1_reason_ftm (A10).
 Numeric HH_in_FY (F1.0).
 Numeric HH_ep (F1.0).
 Numeric HH_6after_ep (F1.0).
