@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
+get file = !File + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 Variable Labels
     adcon1 "Admission Condition 1"
@@ -34,6 +34,7 @@ Variable Labels
     cancer "Cancer LTC marker"
     cancer_date "Cancer LTC incidence date"
     cat "Patient Category"
+    CCM "Continuous Care Marker"
     chd "Coronary heart disease (CHD) LTC marker"
     chd_date "Coronary heart disease (CHD) LTC incidence date"
     chi "Community Health Index number"
@@ -59,8 +60,8 @@ Variable Labels
     Cost_Total_Net_incDNAs "Total Net Cost including Outpatient and OoH DNA costs"
     CUP_marker "A marker which groups together unscheduled care episodes (Continuous Urgent care Pathway)"
     CUP_pathway "A string indicating which episode types (and in which order) occurred in the CUP"
-    cvd "Cardiovascular disease (CVD) LTC marker"
-    cvd_date "Cardiovascular disease (CVD) LTC incidence date"
+    cvd "Cerebrovascular Disease (CVD) LTC marker"
+    cvd_date "Cerebrovascular Disease (CVD) LTC incidence date"
     dateop1 "Date of Main Operation"
     dateop2 "Date of Other operation 1"
     dateop3 "Date of Other operation 2"
@@ -184,6 +185,7 @@ Variable Labels
     stay "Length of Stay"
     submis_adm "Indicates substance misuse related admission or attendance"
     tadm "Type of Admission"
+    TotalnoDNcontacts "Total Number of Patient Contacts"
     uri "Unique Record Identifier - See notes"
     year "Year"
     yearstay "Stay within year".
@@ -273,7 +275,7 @@ Value Labels SMRType
 Value Labels refsource
     '01' "A&E - Self Referral"
     '01A' "A&E - Patient"
-    '01B' "A&E - Associated Person eg. parent, friend, employer, neighbour."
+    '01B' "A&E - Associated Person e.g. parent, friend, employer, neighbour."
     '02' "A&E - Healthcare professional/ service/ organisation"
     '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services."
     '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service."
@@ -432,7 +434,7 @@ Value Labels spec cij_adm_spec cij_dis_spec
     'R41' "Industrial therapists"
     'R5' "Physiotherapy"
     'R6' "Speech and Language Therapy"
-    'R7' "Ambulancemen/women – Accident & Emergency"
+    'R7' "Ambulance men/women – Accident & Emergency"
     'R8' "Audiological science"
     'R81' "Hearing aids"
     'R82' "Audiometry"
@@ -676,7 +678,7 @@ Variable Width
 *********************************************************************************************.
 sort cases by CHI record_keydate1 record_keydate2.
 
-* Reorder and keep vars.
+* Reorder and keep variables.
 save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     /Keep
     year

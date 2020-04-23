@@ -1,7 +1,11 @@
 ﻿* Encoding: UTF-8.
+
+*********************************************************************************************************************
+ * Link Homelessness to source
+*********************************************************************************************************************
  * Create Homelessness flags.
  * Unzip the homelessness file.
-Host command = ["unzip '" + !File + "Activity.zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
+Host command = ["unzip '" +!File + "Activity_20" + !FY + ".zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
 
 get file = !File + "homelessness_for_source-20" + !FY + ".zsav"
     /Keep CHI record_keydate1 record_keydate2.
@@ -103,27 +107,9 @@ End if.
 
 If recid = 'HL1' and chi = '' HH_in_FY = 1 . 
 
-********************************************************************************************************************************
-* Match on the non-service-user CHIs.
-* Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
-* Get a warning here but should be fine. - Caused by the way we match on NSU.
-* match files
-    /file = * 
-    /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /Drop AssessmentDecisionDate.1 to HH
-    /By chi.
-	
-* Set up the variables for the NSU CHIs.
-* The macros are defined in C01a.
- * Do if recid = "".
- *     Compute year = !FY.
- *     Compute recid = "NSU".
- *     Compute SMRType = "Non-User".
- * End if.
-
-*************************************************************************************************************************************
-
 *Save Temp.
 save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav" 
 /zcompressed.  
+
+*******************************************************************************************************************************
 

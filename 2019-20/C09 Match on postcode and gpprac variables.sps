@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
+get file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
 
 * Correct Postcode formatting.
 * Remove any postcodes which are length 3 or 4 as these can not be valid (not a useful dummy either).
@@ -445,7 +445,7 @@ Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027"
 Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
 Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
 
-save outfile = !File + "temp-source-episode-file-7-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-8-" + !FY + ".zsav"
     /Drop LCA_old HSCP_old Datazone_old hbrescode_old hbpraccode_old PostcodeMatch GPPracMatch
     /zcompressed.   
 
