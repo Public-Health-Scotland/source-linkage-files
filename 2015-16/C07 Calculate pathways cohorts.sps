@@ -11,7 +11,7 @@
 * Create the Demographic Cohort File.
 ******************************************************************************************************************** * * .
 
-get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
+get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
 
 select If CHI ne "".
 
@@ -246,7 +246,7 @@ save outfile = !File + "Demographic_Cohorts_" + !FY + ".zsav"
 * Create the Service Use Cohort File.
 ******************************************************************************************************************** * * .
 
-get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
+get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
 
 select If CHI ne "".
 

@@ -1,25 +1,12 @@
 ﻿* Encoding: UTF-8.
-****************************************************************************************************************************
-* Match on the non-service-user CHIs.
-*****************************************************************************************************************************
-* Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
-* Get a warning here but should be fine. - Caused by the way we match on NSU.
-match files
-    /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
-    /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /By chi.
 
-* Set up the variables for the NSU CHIs.
-* The macros are defined in C01a.
-Do if recid = "".
-    Compute year = !FY.
-    Compute recid = "NSU".
-    Compute SMRType = "Non-User".
-End if.
-
-***************************************************************************************************************************
+*****************************************************************************************************************
 Match on LTC Changed_DoBs and dates of LTC incidence (based on hospital incidence only)
-***************************************************************************************************************************.
+*****************************************************************************************************************
+
+*Get temp file from previous syntax. 
+Get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav". 
+
 *Match on LTCs Changed_DoBs and date.
 match files file = *
     /table = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
@@ -154,6 +141,6 @@ Value labels Changed_DoB
     10 "Copied from previous record".
 
 * Save here whist we work on a subset of the file.
-save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
     /Drop Changed_DoB
     /zcompressed.

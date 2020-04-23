@@ -11,7 +11,7 @@
 * For SPARRA and HHG (where available).
 * In 1617 use the 12-Month predictions from April 1st 2016 as "Start_FY" and 12-Month predictions from April 1st 2017 as "End_Fy".
 
-match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
+match files file = !File + "temp-source-episode-file-6-" + !FY + ".zsav"
     /table = !File + "Demographic_Cohorts_" + !FY + ".zsav"
     /table = !File + "Service_Use_Cohorts_" + !FY+ ".zsav"
     /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !FY + ".zsav"
@@ -34,7 +34,7 @@ match files file = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
 * Make any variables which are missing.
 Numeric HHG_Start_FY HHG_End_FY (F2.0).
 
-save outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-7-" + !FY + ".zsav"
     /zcompressed.
 
-get file= !File + "temp-source-episode-file-5-" + !FY + ".zsav".
+get file= !File + "temp-source-episode-file-7-" + !FY + ".zsav".
