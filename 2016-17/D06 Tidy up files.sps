@@ -16,6 +16,7 @@ erase file = !File + "temp-source-episode-file-4-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-5-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
 erase file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
+erase file = !File + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 *Delete Source Individual temp files. 
 erase file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".

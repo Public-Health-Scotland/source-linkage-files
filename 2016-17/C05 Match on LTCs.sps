@@ -5,7 +5,7 @@ Match on LTC Changed_DoBs and dates of LTC incidence (based on hospital incidenc
 *****************************************************************************************************************
 
 *Get temp file from previous syntax. 
-Get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav". 
+Get file = !File + "temp-source-episode-file-4-" + !FY + ".zsav". 
 
 *Match on LTCs Changed_DoBs and date.
 match files file = *
@@ -141,6 +141,6 @@ Value labels Changed_DoB
     10 "Copied from previous record".
 
 * Save here whist we work on a subset of the file.
-save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
     /Drop Changed_DoB
     /zcompressed.
