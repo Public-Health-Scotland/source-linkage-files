@@ -1,6 +1,6 @@
 * Encoding: UTF-8.
  * Make ch_name the first variable to make the Python below simpler.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_CH_extracts_ELoth_NLan_SLan.zsav"
+get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_Q4_CH_extract.zsav"
     /Keep ch_name ALL.
 
 Alter type social_care_id (A10) financial_year (A4).

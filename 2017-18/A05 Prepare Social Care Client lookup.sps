@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
  * Read the data.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_extracts_ELoth_NLan_SLan.zsav"
+get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_Q4_Client_extract.zsav"
     /Drop financial_year financial_quarter seeded_chi_number chi_date_of_birth chi_gender_code chi_postcode housing_support.
  * Variables are all really wide for some reason so tidy this up.
 Variable width ALL (8).
