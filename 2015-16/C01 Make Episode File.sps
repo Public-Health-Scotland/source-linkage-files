@@ -369,6 +369,7 @@ aggregate
     /cij_ppa = Max(PPA).
 
 sort cases by chi keydate1_dateformat.
+<<<<<<< HEAD
 
 *  We are not currently including Social Care data for some years but we still want the variables for consistency.
 * Social Care.
@@ -394,6 +395,9 @@ String ch_provider (A1).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
+=======
+
+>>>>>>> dev
 
  * Declare variables for Delay Discharge (1516 only).
 Numeric Delay_End_Reason (F1.0).
@@ -412,16 +416,12 @@ Numeric HH_ep (F1.0).
 Numeric HH_6after_ep (F1.0).
 Numeric HH_6before_ep (F1.0).
 
-save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
+save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
-get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
+get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
 
-save outfile = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
-    /zcompressed.
-
-get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
 
 * Housekeeping.
 Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
