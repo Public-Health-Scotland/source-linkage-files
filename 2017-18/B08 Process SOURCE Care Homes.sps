@@ -147,6 +147,10 @@ Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateD
  * Add dictionary info.
 !AddLCADictionaryInfo LCA = sc_send_lca ch_lca.
 
+*******************************************************************************************************.
+* When the end date is missing the stay can be assumed to be ongoing so we'll replace with a system missing.
+If end_date_missing = 1 record_keydate2 = $sysmis.
+
 * Work out bed days per month.
 * Create a dummy end date for those with a blank end date.
 Compute #dummy_discharge_date = record_keydate2.
