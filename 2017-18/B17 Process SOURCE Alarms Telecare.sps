@@ -40,6 +40,9 @@ Compute age = datediff(!midFY, dob, "years").
  * Uses sending_location and recodes into sc_sending_location using actual codes.
 !Create_sc_sending_location.
 
+* Remove end dates which should be blank.
+If end_date_missing record_keydate2 = $sysmis.
+
 * In case keydate is needed as F8.0...
 alter type record_keydate1 record_keydate2 (SDATE10).
 alter type record_keydate1 record_keydate2 (A10).
