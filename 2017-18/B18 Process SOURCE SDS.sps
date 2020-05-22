@@ -1,10 +1,8 @@
 ﻿* Encoding: UTF-8.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_SDS_extract.zsav"
-    /Drop sds_option_1_net_value sds_option_2_net_value sds_option_3_net_value sds_option_1_gross_value sds_option_2_gross_value sds_option_3_gross_value sds_total_net_value sds_total_gross_value.
-
-Alter type social_care_id (A10) financial_year (A4).
+get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_SDS_extract.zsav".
 
 sort cases by social_care_id sending_location.
+
 match files file = *
     /table = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav"
     /By social_care_id sending_location.

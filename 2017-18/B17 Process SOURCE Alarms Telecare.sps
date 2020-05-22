@@ -1,7 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_Q4_AT_extract.zsav".
-
-Alter type social_care_id (A10) financial_year (A4).
+get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_AT_extract.zsav".
 
 sort cases by social_care_id sending_location.
 match files file = *
