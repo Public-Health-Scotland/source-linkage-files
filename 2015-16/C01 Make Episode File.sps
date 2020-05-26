@@ -369,7 +369,35 @@ aggregate
     /cij_ppa = Max(PPA).
 
 sort cases by chi keydate1_dateformat.
+<<<<<<< HEAD
 
+*  We are not currently including Social Care data for some years but we still want the variables for consistency.
+* Social Care.
+ * String
+    sc_send_lca (A2).
+
+Numeric
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care (F1.0).
+
+* Home Care.
+Numeric
+    hc_hours (F22.2)
+    hc_provider (F1.0)
+    hc_reablement (F1.0).
+
+* Care Homes.
+String ch_provider (A1).
+
+* SDS.
+Numeric sds_option_4 (F1.0).
+=======
+
+>>>>>>> dev
 
  * Declare variables for Delay Discharge (1516 only).
 Numeric Delay_End_Reason (F1.0).
