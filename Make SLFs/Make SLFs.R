@@ -36,7 +36,7 @@ create_fst_files <- function(year) {
       read_sav(paste0(indiv_filename, ".zsav")) %>%
         rename_all(tolower) %>%
         as_tibble() %>%
-        write_fst(paste0(indiv_filename, ".fst"))
+        write_fst(paste0(indiv_filename, ".fst"), compress = 100)
     } else {
       write_lines("Skipping as fst file already exists in sourcedev",
         path = "log",
@@ -123,7 +123,7 @@ create_fst_lookups <- function() {
   read_sav(paste0(chi_lookup, ".zsav")) %>%
     rename_all(tolower) %>%
     as_tibble() %>%
-    write_fst(paste0(chi_lookup, ".fst"), compress = 25)
+    write_fst(paste0(chi_lookup, ".fst"), compress = 50)
 
   end_time <- Sys.time()
 
