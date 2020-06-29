@@ -19,3 +19,8 @@ Make\ SLFs/.Rproj.user/*
 *.docx
 
 *.spv
+.Rproj.user
+
+Make SLFs/.Rhistory
+
+Make SLFs/log

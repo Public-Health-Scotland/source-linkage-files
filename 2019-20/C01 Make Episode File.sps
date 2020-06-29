@@ -373,9 +373,36 @@ aggregate
 
 sort cases by chi keydate1_dateformat.
 
-*  We are not currently including Care Home data for 2017/18 or 2018/19 but we still want the variables for consistency.
-String sc_send_lca ch_lca (A2) ch_name (A73).
-Numeric ch_admreas (F2.0).
+*  We are not currently including Social Care data for some years but we still want the variables for consistency.
+* Social Care.
+String
+    sc_send_lca (A2).
+
+Numeric
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care (F1.0).
+
+* Home Care.
+Numeric
+    hc_hours (F22.2)
+    hc_provider (F1.0)
+    hc_reablement (F1.0).
+
+* Care Homes.
+String
+    ch_name (A73)
+    ch_provider (A1).
+
+Numeric
+    ch_adm_reason (F2.0)
+    ch_nursing (F1.0).
+
+* SDS.
+Numeric sds_option_4 (F1.0).
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL

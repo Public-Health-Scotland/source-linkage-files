@@ -431,7 +431,7 @@ End if.
 
 * Apply dictionary info.
 !AddHB2018DictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
-!AddLCADictionaryInfo LCA = LCA sc_send_lca ch_lca.
+!AddLCADictionaryInfo LCA = LCA sc_send_lca.
 
 * If the practice code didn't match the lookups and also doesn't have a board code (usually all of them), remove it as it's probably a bad code.
 if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.

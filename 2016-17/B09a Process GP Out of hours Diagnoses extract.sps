@@ -17,10 +17,9 @@ GET DATA  /TYPE=TXT
       ReadCode A5
       Description A70.
 CACHE.
-Execute.
 
 * Sort and save.
-Sort cases by ReadCode.
+Sort cases by ReadCode Description.
 ************************************************************************************************************.
 * This section attempts to identify and fix any bad read codes 
 ************************************************************************************************************.

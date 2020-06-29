@@ -40,7 +40,7 @@ Define !Costs_Lookup()
 
  * Replace the number with the CSD ref.
 Define !CSDRef()
-    "SCTASK0137288"
+    "SCTASK0153645"
 !EndDefine.
 
 Define !CSDExtractLoc()
@@ -76,12 +76,12 @@ Define !LocalitiesLookup()
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2019_2.sav"
+   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2020_1.sav"
 !EndDefine.
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2019_2_simd2020.sav"
+   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2020_1_simd2020.sav"
 !EndDefine.
 
  * Most up to date DataZone Population estimates.
@@ -199,6 +199,48 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
       '30' "Stirling"
       '31' "West Lothian"
       '32' "Na h-Eileanan Siar"
+!EndDefine.
+
+ * Recode the Social care loation codes into LCA codes.
+Define !Create_sc_sending_location ()
+String sc_send_lca (A2).
+Recode sending_location
+    ("100" = "01")
+    ("110" = "02")
+    ("120" = "03")
+    ("130" = "04")
+    ("150" = "06")
+    ("170" = "08")
+    ("180" = "09")
+    ("190" = "10")
+    ("200" = "11")
+    ("210" = "12")
+    ("220" = "13")
+    ("230" = "14")
+    ("235" = "32")
+    ("240" = "15")
+    ("250" = "16")
+    ("260" = "17")
+    ("270" = "18")
+    ("280" = "19")
+    ("290" = "20")
+    ("300" = "21")
+    ("310" = "22")
+    ("320" = "23")
+    ("330" = "24")
+    ("340" = "25")
+    ("350" = "26")
+    ("355" = "05")
+    ("360" = "27")
+    ("370" = "28")
+    ("380" = "29")
+    ("390" = "30")
+    ("395" = "07")
+    ("400" = "31")
+    into sc_send_lca.
+
+ * Add dictionary info.
+!AddLCADictionaryInfo LCA = sc_send_lca.
 !EndDefine.
 
  * This will only need updating if the name of the Health Board variable changes.

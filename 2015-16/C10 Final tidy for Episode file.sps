@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 Variable Labels
@@ -35,6 +35,10 @@ Variable Labels
     cancer_date "Cancer LTC incidence date"
     cat "Patient Category"
     CCM "Continuous Care Marker"
+    ch_name "Name of care home where the client/service user resides"
+    ch_adm_reason "Primary reason for admission to a care home"
+    ch_provider "The service provider of the care home"
+    ch_nursing "The client/service user requires nursing care"
     chd "Coronary heart disease (CHD) LTC marker"
     chd_date "Coronary heart disease (CHD) LTC incidence date"
     chi "Community Health Index number"
@@ -111,6 +115,9 @@ Variable Labels
     feb_cost "Cost from episode in February"
     gender "Gender"
     gpprac "GP Practice code"
+    hc_hours "Total number of home care service hours."
+    hc_provider "The organisation type that provides the home care service to the client/service user."
+    hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hbpraccode "NHS Board of GP Practice"
     hbrescode "NHS Board of Residence"
     hbtreatcode "NHS Board of Treatment"
@@ -172,6 +179,14 @@ Variable Labels
     refailure_date "Renal failure LTC incidence date"
     refsource "Referral Source"
     reftype "Referral Type"
+    sc_send_lca "Social care data sending local authority"
+    sc_living_alone "Indicator of whether the client/service user lives alone"
+    sc_support_from_unpaid_carer "Indicator of whether the client/service user received support from an unpaid carer at any point during the quarter"
+    sc_social_worker "Indicator of whether the client/service user has an assigned Social Worker or a Support Worker"
+    sc_type_of_housing "Type of housing in which the client/service resides, see notes"
+    sc_meals "An indicator of whether the client/service user received a Meals Service at any point during the quarter"
+    sc_day_care "An indicator of whether the client/service user has received a day care service within the reporting period"
+    sds_option_4 "A flag to indicate whether the SDS episode could be considered 'option 4' i.e. the client chose a mix of options"
     selfharm_adm "Indicates self-harm related admission or attendance"
     sep_beddays "Number of Bed days from episode in September"
     sep_cost "Cost from episode in September"
@@ -189,6 +204,7 @@ Variable Labels
     uri "Unique Record Identifier - See notes"
     year "Year"
     yearstay "Stay within year".
+
 * Gender flags.
 Value Labels gender
     '0' "Not Known"
@@ -225,7 +241,7 @@ Add value labels location
 !AddHB2018DictionaryInfo HB = hbrescode hbtreatcode hbpraccode death_board_occurrence.
 !AddHB2019DictionaryInfo HB = HB2019.
 
-!AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca ch_lca.
+!AddLCADictionaryInfo LCA = LCA DD_Responsible_LCA sc_send_lca .
 
 Value Labels ipdc cij_ipdc
     'I' "Inpatient"
@@ -237,31 +253,41 @@ Value Labels recid
     '02B' "Maternity (SMR02) discharges"
     '04B' "Mental Health (SMR04) admissions/discharges"
     'AE2' "Accident & Emergency attendances"
-    'CH' "Care Home records"
+    'AT' "Community alarm and/or telecare service"
+    'CH' "Care Home stay episodes"
     'DD' "Delayed Discharge episode"
     'DN' "District Nursing episode"
     'CMH' 'Community Mental Health episode'
     'GLS' "Geriatric Long Stay (SMR01) discharges"
+    'HC' "Home Care service"
+    'HL1' "Homelessness application"
     'NRS' "National Records Service death registrations"
     'NSU' "Non-Service-User (Included for whole population analysis)"
     'OoH' "GP Out of Hours contact"
-    'PIS' "Community Prescribing summary".
+    'PIS' "Community Prescribing summary"
+    'SDS' "Self-Directed Support options".
 
 Value Labels SMRType
     'A & E' "Accident & Emergency attendance"
     'Acute-DC' "Acute (SMR01) - Daycase"
     'Acute-IP' "Acute (SMR01) - Inpatient"
+    'AT-Alarm' "Alarm service"
+    'AT-Tele' "Telecare service"
+    'Care-Home' "Care Home stay episodes"
     'Comm-MH' "Community Mental Health"
     'DD-CIJ' "Delayed Discharge - Linked to a CIJ"
-    'DD-No' "CIJ Delayed Discharge - Not linked to a CIJ"
+    'DD-No CIJ' "Delayed Discharge - Not linked to a CIJ"
     'DN' "District Nursing"
     'GLS-IP' "Geriatric Long Stay - Inpatient"
     'HL1-Main' "Homelessness application - Main applicant"
     'HL1-Other' "Homelessness application - Not main (other) applicant"
+    'HC-Non-Per' "Home Care - Non-Personal Care"
+    'HC-Per' "Home Care - Personal Care"
+    'HC-Unknown' "Home Care - Unknown Care type"
     'Matern-DC' "Maternity (SMR02) - Daycase"
     'Matern-IP' "Maternity (SMR02) - Inpatient"
     'Non-User' "Non-Service-User"
-    'NRS' "NRS Death episode"
+    'NRS Deaths' "NRS Death episode"
     'OOH-Advice' "Out of Hours - Doctor / Nurse Advice"
     'OOH-DN' "Out of Hours - District Nurse"
     'OOH-HomeV' "Out of Hours - Home Visit"
@@ -270,7 +296,10 @@ Value Labels SMRType
     'OOH-PCC' "Out of Hours - Primary Care Emergency Centre / Primary Care Centre"
     'Outpatient' "New consultant led outpatient appointments"
     'PIS' "Community Prescribing summary"
-    'Psych-IP' "Psychiatric (SMR04)- Inpatient".
+    'Psych-IP' "Psychiatric (SMR04)- Inpatient"
+    'SDS-1' "SDS - Direct Payment"
+    'SDS-2' "SDS - The Person Directs the Available Support"
+    'SDS-3' "SDS - The Local Authority Arranges the Support".
 
 Value Labels refsource
     '01' "A&E - Self Referral"
@@ -651,7 +680,7 @@ Value Labels disch
 Variable Width
     year (4)
     ipdc mpat cat alcohol_adm submis_adm falls_adm selfharm_adm commhosp nhshosp clinic_type ae_patflow post_mortem cij_ipdc (1)
-    lca sigfac tadm adtf disch dischto cij_admtype ae_arrivalmode ae_attendcat ae_alcohol sc_send_lca ch_lca ch_admreas (2)
+    lca sigfac tadm adtf disch dischto cij_admtype ae_arrivalmode ae_attendcat ae_alcohol sc_send_lca (2)
     ooh_outcome.1 ooh_outcome.2 ooh_outcome.3 ooh_outcome.4 (2)
     age (3)
     cij_pattype recid spec cij_adm_spec cij_dis_spec refsource ae_disdest ae_placeinc ae_reasonwait ae_bodyloc (3)
@@ -687,9 +716,9 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     record_keydate2
     keydate1_dateformat
     keydate2_dateformat
-    keyTime1
-    KeyTime2
-    SMRType
+    keytime1
+    keytime2
+    smrtype
     chi
     gender
     dob
@@ -698,18 +727,10 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     hbpraccode
     postcode
     hbrescode
-    hl1_application_ref
-    hl1_sending_lca
-    hl1_property_type
-    hl1_reason_ftm
-    HH_in_FY
-    HH_ep
-    HH_6after_ep
-    HH_6before_ep
     hbtreatcode
     location
-    yearstay
-    stay
+    nhshosp
+    commhosp
     ipdc
     spec
     sigfac
@@ -749,11 +770,11 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     discondition
     reftype
     refsource
-    Delay_End_Reason
-    Primary_Delay_Reason
-    Secondary_Delay_Reason
-    DD_Responsible_LCA
-    DD_Quality
+    delay_end_reason
+    primary_delay_reason
+    secondary_delay_reason
+    dd_responsible_lca
+    dd_quality
     clinic_type
     attendance_status
     ae_arrivalmode
@@ -768,7 +789,6 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     submis_adm
     falls_adm
     selfharm_adm
-    cij_ppa
     death_location_code
     death_board_occurrence
     place_death_occurred
@@ -786,34 +806,100 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     deathdiag11
     deceased
     death_date
-    KIS_accessed
+    kis_accessed
     ooh_outcome.1
     ooh_outcome.2
     ooh_outcome.3
     ooh_outcome.4
-    ooh_CC
-    CCM
-    TotalnoDNcontacts
+    ooh_cc
+    ccm
+    totalnodncontacts
+    hl1_application_ref
+    hl1_sending_lca
+    hl1_property_type
+    hl1_reason_ftm
     sc_send_lca
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     ch_name
-    ch_lca
-    ch_admreas
-    no_dispensed_items
-    nhshosp
-    commhosp
+    ch_adm_reason
+    ch_provider
+    ch_nursing
+    hc_hours
+    hc_provider
+    hc_reablement
+    sds_option_4
     smr01_cis_marker
     cij_marker
-    CUP_marker
-    CUP_pathway
-    CIJ_start_date
-    CIJ_end_date
+    cij_start_date
+    cij_end_date
     cij_ipdc
     cij_admtype
     cij_pattype_code
     cij_pattype
     cij_adm_spec
     cij_dis_spec
+    cij_ppa
+    cup_marker
+    cup_pathway
     uri
+    hh_in_fy
+    hh_ep
+    hh_6after_ep
+    hh_6before_ep
+    no_dispensed_items
+    yearstay
+    stay
+    apr_beddays
+    may_beddays
+    jun_beddays
+    jul_beddays
+    aug_beddays
+    sep_beddays
+    oct_beddays
+    nov_beddays
+    dec_beddays
+    jan_beddays
+    feb_beddays
+    mar_beddays
+    cost_total_net
+    cost_total_net_incdnas
+    apr_cost
+    may_cost
+    jun_cost
+    jul_cost
+    aug_cost
+    sep_cost
+    oct_cost
+    nov_cost
+    dec_cost
+    jan_cost
+    feb_cost
+    mar_cost
+    hscp2018
+    lca
+    ca2018
+    locality
+    datazone2011
+    hb2019
+    hscp2019
+    ca2019
+    simd2020_rank
+    simd2020_sc_decile
+    simd2020_sc_quintile
+    simd2020_hb2019_decile
+    simd2020_hb2019_quintile
+    simd2020_hscp2019_decile
+    simd2020_hscp2019_quintile
+    ur8_2016
+    ur6_2016
+    ur3_2016
+    ur2_2016
+    cluster
     arth
     asthma
     atrialfib
@@ -852,58 +938,12 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     bloodbfo_date
     endomet_date
     digestive_date
-    cost_total_net
-    Cost_Total_Net_incDNAs
-    apr_beddays
-    may_beddays
-    jun_beddays
-    jul_beddays
-    aug_beddays
-    sep_beddays
-    oct_beddays
-    nov_beddays
-    dec_beddays
-    jan_beddays
-    feb_beddays
-    mar_beddays
-    apr_cost
-    may_cost
-    jun_cost
-    jul_cost
-    aug_cost
-    sep_cost
-    oct_cost
-    nov_cost
-    dec_cost
-    jan_cost
-    feb_cost
-    mar_cost
-    HSCP2018
-    LCA
-    CA2018
-    Locality
-    DataZone2011
-    HB2019
-    HSCP2019
-    CA2019
-    simd2020_rank
-    simd2020_sc_decile
-    simd2020_sc_quintile
-    simd2020_HB2019_decile
-    simd2020_HB2019_quintile
-    simd2020_HSCP2019_decile
-    simd2020_HSCP2019_quintile
-    UR8_2016
-    UR6_2016
-    UR3_2016
-    UR2_2016
-    Cluster
-    Demographic_Cohort
-    Service_Use_Cohort
-    SPARRA_Start_FY
-    SPARRA_End_FY
-    HHG_Start_FY
-    HHG_End_FY
+    demographic_cohort
+    service_use_cohort
+    sparra_start_fy
+    sparra_end_fy
+    hhg_start_fy
+    hhg_end_fy
     /zcompressed.
 get file = !File + "source-episode-file-20" + !FY + ".zsav".
 

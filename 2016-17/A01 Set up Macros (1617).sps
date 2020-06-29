@@ -36,7 +36,7 @@ Define !Costs_Lookup()
 
  * Replace the number with the CSD ref.
 Define !CSDRef()
-    "SCTASK0137288"
+    "SCTASK0153645"
 !EndDefine.
 
 Define !CSDExtractLoc()
@@ -72,12 +72,12 @@ Define !LocalitiesLookup()
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2019_2.sav"
+   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2020_1.sav"
 !EndDefine.
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2019_2_simd2020.sav"
+   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2020_1_simd2020.sav"
 !EndDefine.
 
  * Most up to date DataZone Population estimates.

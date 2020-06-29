@@ -73,7 +73,7 @@ Variable Labels
     DD_Code9_episodes'Number of Delayed Discharge episodes with a Code9 reason for delay'
     DD_NonCode9_beddays'Total number of Delayed Discharge episodes with a non-Code9 reason for delay'
     DD_Code9_beddays'Total number of Delayed Discharge beddays with a Code9 reason for delay'
-    mat_episodes "Number of  maternity episodes"
+    mat_episodes "Number of maternity episodes"
     mat_daycase_episodes "Number of maternity day case episodes"
     mat_inpatient_episodes "Number of maternity inpatient episodes"
     mat_cost "Cost of maternity activity"
@@ -103,7 +103,7 @@ Variable Labels
     gls_el_inpatient_beddays "Number of geriatric long stay elective inpatient bed days"
     gls_non_el_inpatient_beddays "Number of geriatric long stay non-elective inpatient bed days"
     DD_NonCode9_episodes "Number of Delayed Discharge episodes with a non-Code 9 reason for delay"
-    DD_NonCode9_beddays  "Number of Delayed Discharge beddays with a non-Code 9 reason for delay"
+    DD_NonCode9_beddays "Number of Delayed Discharge beddays with a non-Code 9 reason for delay"
     DD_Code9_episodes "Number of Delayed Discharge episodes with a Code 9 reason for delay"
     DD_Code9_beddays "Number of Delayed Discharge beddays with a Code 9 reason for delay"
     op_newcons_attendances "Number of new outpatient attendances"
@@ -114,31 +114,40 @@ Variable Labels
     ae_cost "Cost of A&E attendances"
     pis_dispensed_items "Number of prescribing items dispensed"
     pis_cost "Cost of prescribing items dispensed "
-    ch_episodes	"Number of distinct Care Home episodes"
-    ch_cost	"Cost of Care Home stays"
-    ch_beddays	"Number of Care Home beddays"
-    ooh_cases	"Number of GP OoH cases (multiple consultations per case)"
-    ooh_homeV	"Number of GP OoH Home visit consultations"
-    ooh_advice	"Number of GP OoH Doctor / Nurse advice consultations"
-    ooh_DN	"Number of GP OoH District Nurse consultations"
-    ooh_NHS24	"Number of GP OoH NHS24 consultations"
-    ooh_other	"Number of GP OoH Other consultations"
-    ooh_PCC	"Number of GP OoH Primary Care Centre / Emergency Primary Care Centre consultations"
-    ooh_cost	"Cost of all GP OoHs"
-    ooh_consultation_time	"Total time for GP OoH Consultations"
-    DN_episodes	"Number of District Nursing episodes (consultations more than 7-days apart)"
-    DN_contacts	"Number of District Nursing contacts"
-    DN_cost	"Cost of District Nursing"
-    CMH_contacts    "Number of Community Mental Health contacts"
+    ooh_cases "Number of GP OoH cases (multiple consultations per case)"
+    ooh_homeV "Number of GP OoH Home visit consultations"
+    ooh_advice "Number of GP OoH Doctor / Nurse advice consultations"
+    ooh_DN "Number of GP OoH District Nurse consultations"
+    ooh_NHS24 "Number of GP OoH NHS24 consultations"
+    ooh_other "Number of GP OoH Other consultations"
+    ooh_PCC "Number of GP OoH Primary Care Centre / Emergency Primary Care Centre consultations"
+    ooh_cost "Cost of all GP OoHs"
+    ooh_consultation_time "Total time for GP OoH Consultations"
+    DN_episodes "Number of District Nursing episodes (consultations more than 7-days apart)"
+    DN_contacts "Number of District Nursing contacts"
+    DN_cost "Cost of District Nursing"
+    CMH_contacts "Number of Community Mental Health contacts"
+    ch_episodes "Number of distinct Care Home episodes"
+    ch_cost "Cost of Care Home stays"
+    ch_beddays "Number of Care Home beddays"
+    HC_episodes "Total number of home care episodes, includes personal, non-personal and unknown type"
+    HC_personal_episodes "Total number of personal home care episodes"
+    HC_non_personal_episodes "Total number of non-personal home care episodes"
+    AT_alarms "Total number of alarms packages"
+    AT_telecare "Total number of telecare packages"
+    SDS_option_1 "Total number of SDS packages (option 1)"
+    SDS_option_2 "Total number of SDS packages (option 2)"
+    SDS_option_3 "Total number of SDS packages (option 3)"
+    SDS_option_4 "A flag to indicate whether the client had an SDS option 4 (a mix) within the year - not a count"
     CIJ_el "Number of Continous Inpatient Journeys (CIJ) which began with an Elective admission"
     CIJ_non_el "Number of Continous Inpatient Journeys (CIJ) which began with a Non-Elective admission"
     CIJ_mat "Number of Continous Inpatient Journeys (CIJ) which began with an Maternity admission"
     HRI_lca "HRIs in LCA excluding District Nursing and Care Home costs"
-    HRI_lca_incDN	"HRIs in LCA including District Nursing costs"
+    HRI_lca_incDN "HRIs in LCA including District Nursing costs"
     HRI_hb "HRIs in HB excluding District Nursing and Care Home costs"
     HRI_scot "HRIs in Scotland excluding District Nursing and Care Home costs"
     HRI_lcaP "Cumulative percent in LCA excluding District Nursing and Care Home costs"
-    HRI_lcaP_incDN	"Cumulative percent in LCA including District Nursing costs"
+    HRI_lcaP_incDN "Cumulative percent in LCA including District Nursing costs"
     HRI_hbP "Cumulative percent in HB excluding District Nursing and Care Home costs"
     HRI_scotP "Cumulative percent in Scotland excluding District Nursing and Care Home costs"
     Keep_Population "Flag indicating whether this CHI should be kept or discarded when scaling the whole population to be more in line with official population estimates".
@@ -153,9 +162,12 @@ aggregate
     /HHG_Start HHG_End = Max(HHG_Start_FY HHG_End_FY)
     /SPARRA_Start SPARRA_End = MAx(SPARRA_Start_FY  SPARRA_End_FY)
     /DD = Max(DD_NonCode9_episodes)
-    /CH = Max(ch_episodes)
     /DN = Max(DN_contacts)
-    /CMH = Max(CMH_contacts).
+    /CMH = Max(CMH_contacts)
+    /CH = Max(ch_episodes)
+    /HC = Max(hc_episodes)
+    /ATA ATT = Max(AT_alarms AT_telecare)
+    /SDS1 SDS2 SDS3 = Max(SDS_option_1 SDS_option_2 SDS_option_3).
 
 * If there are no values (i.e. the max is sysmis or 0) then we should set the variable to sysmis to hopefully avoid confusion.
 Do repeat Test = HHG_Start HHG_End SPARRA_Start SPARRA_End
@@ -170,12 +182,6 @@ Do if DD = 0.
     Compute DD_Code9_beddays = $sysmis.
 End if.
 
-Do if CH = 0.
-    Compute ch_episodes = $sysmis.
-    Compute ch_beddays = $sysmis.
-    Compute ch_cost = $sysmis.
-End if.
-
 Do if DN = 0.
     Compute DN_episodes = $sysmis.
     Compute DN_contacts = $sysmis.
@@ -186,7 +192,33 @@ Do if CMH = 0.
     Compute CMH_contacts = $sysmis.
 End if.
 
-*sort cases by chi.
+Do if CH = 0.
+    Compute ch_episodes = $sysmis.
+    Compute ch_beddays = $sysmis.
+    Compute ch_cost = $sysmis.
+End if.
+
+Do if HC = 0.
+    Compute HC_episodes = $sysmis.
+    Compute HC_personal_episodes = $sysmis.
+    Compute HC_non_personal_episodes = $sysmis.
+End if.
+
+Do if ATA = 0 and ATT = 0.
+    Compute AT_alarms = $sysmis.
+    Compute AT_telecare = $sysmis.
+End if.
+
+Do if SDS1 = 0 and SDS2 = 0 and SDS3 = 0.
+    Compute SDS_option_1 = $sysmis.
+    Compute SDS_option_2 = $sysmis.
+    Compute SDS_option_3 = $sysmis.
+    Compute SDS_option_4 = $sysmis.
+End if.
+
+ * Final sort.
+sort cases by chi.
+
 save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     /Keep
     year
@@ -197,10 +229,10 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     postcode
     gpprac
     health_net_cost
-    health_net_costincDNAs
-    health_net_costincIncomplete
-    NSU
-    HL1_in_FY
+    health_net_costincdnas
+    health_net_costincincomplete
+    nsu
+    hl1_in_fy
     deceased
     death_date
     acute_episodes
@@ -223,17 +255,17 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     mat_daycase_cost
     mat_inpatient_cost
     mat_inpatient_beddays
-    MH_episodes
-    MH_inpatient_episodes
-    MH_el_inpatient_episodes
-    MH_non_el_inpatient_episodes
-    MH_cost
-    MH_inpatient_cost
-    MH_el_inpatient_cost
-    MH_non_el_inpatient_cost
-    MH_inpatient_beddays
-    MH_el_inpatient_beddays
-    MH_non_el_inpatient_beddays
+    mh_episodes
+    mh_inpatient_episodes
+    mh_el_inpatient_episodes
+    mh_non_el_inpatient_episodes
+    mh_cost
+    mh_inpatient_cost
+    mh_el_inpatient_cost
+    mh_non_el_inpatient_cost
+    mh_inpatient_beddays
+    mh_el_inpatient_beddays
+    mh_non_el_inpatient_beddays
     gls_episodes
     gls_inpatient_episodes
     gls_el_inpatient_episodes
@@ -245,10 +277,10 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     gls_inpatient_beddays
     gls_el_inpatient_beddays
     gls_non_el_inpatient_beddays
-    DD_NonCode9_episodes
-    DD_NonCode9_beddays
-    DD_Code9_episodes
-    DD_Code9_beddays
+    dd_noncode9_episodes
+    dd_noncode9_beddays
+    dd_code9_episodes
+    dd_code9_beddays
     op_newcons_attendances
     op_newcons_dnas
     op_cost_attend
@@ -257,25 +289,34 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     ae_cost
     pis_dispensed_items
     pis_cost
+    ooh_cases
+    ooh_homev
+    ooh_advice
+    ooh_dn
+    ooh_nhs24
+    ooh_other
+    ooh_pcc
+    ooh_consultation_time
+    ooh_cost
+    dn_episodes
+    dn_contacts
+    dn_cost
+    cmh_contacts
     ch_episodes
     ch_beddays
     ch_cost
-    ooh_cases
-    ooh_homeV
-    ooh_advice
-    ooh_DN
-    ooh_NHS24
-    ooh_other
-    ooh_PCC
-    ooh_consultation_time
-    ooh_cost
-    DN_episodes
-    DN_contacts
-    DN_cost
-    CMH_contacts
-    CIJ_el
-    CIJ_non_el
-    CIJ_mat
+    hc_episodes
+    hc_personal_episodes
+    hc_non_personal_episodes
+    at_alarms
+    at_telecare
+    sds_option_1
+    sds_option_2
+    sds_option_3
+    sds_option_4
+    cij_el
+    cij_non_el
+    cij_mat
     arth
     asthma
     atrialfib
@@ -315,52 +356,48 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     endomet_date
     digestive_date
     hbrescode
-    HSCP2018
-    LCA
-    CA2018
-    Locality
-    Datazone2011
+    hscp2018
+    lca
+    ca2018
+    locality
+    datazone2011
     hbpraccode
-    Cluster
+    cluster
     simd2020_rank
     simd2020_sc_decile
     simd2020_sc_quintile
-    simd2020_HB2019_decile
-    simd2020_HB2019_quintile
-    simd2020_HSCP2019_decile
-    simd2020_HSCP2019_quintile
-    UR8_2016
-    UR6_2016
-    UR3_2016
-    UR2_2016
-    HB2019
-    HSCP2019
-    CA2019
-    HRI_lca
-    HRI_lca_incDN
-    HRI_hb
-    HRI_scot
-    HRI_lcaP
-    HRI_lcaP_incDN
-    HRI_hbP
-    HRI_scotP
-    SPARRA_Start_FY
-    SPARRA_End_FY
-    HHG_Start_FY
-    HHG_End_FY
-    Demographic_Cohort
-    Service_Use_Cohort
-    Keep_Population
+    simd2020_hb2019_decile
+    simd2020_hb2019_quintile
+    simd2020_hscp2019_decile
+    simd2020_hscp2019_quintile
+    ur8_2016
+    ur6_2016
+    ur3_2016
+    ur2_2016
+    hb2019
+    hscp2019
+    ca2019
+    hri_lca
+    hri_lca_incdn
+    hri_hb
+    hri_scot
+    hri_lcap
+    hri_lcap_incdn
+    hri_hbp
+    hri_scotp
+    sparra_start_fy
+    sparra_end_fy
+    hhg_start_fy
+    hhg_end_fy
+    demographic_cohort
+    service_use_cohort
+    keep_population
     /zcompressed.
 
 get file = !file + "source-individual-file-20" + !FY + ".zsav".
 
 *************************************************************************************************************************************************.
 * Housekeeping.
-erase file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-2-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-3-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-4-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
-
 erase file = !file + 'HRI_lookup_' + !FY + '.zsav'.
+erase file = !File + "Population-estimates-20" + !FY + ".zsav".
+erase file = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav".
