@@ -43,7 +43,6 @@ match files
 
 sort cases by Anon_CHI.
 
-
  * Pause and check here - it's difficult to go back after the save!.
 If CHI NE "" and Anon_CHI = "" Error = 1.
 Frequencies Error.

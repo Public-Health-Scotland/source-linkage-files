@@ -398,10 +398,6 @@ get file = !file + "source-individual-file-20" + !FY + ".zsav".
 
 *************************************************************************************************************************************************.
 * Housekeeping.
-erase file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-2-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-3-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-4-20" + !FY + ".zsav".
-erase file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
-
 erase file = !file + 'HRI_lookup_' + !FY + '.zsav'.
+erase file = !File + "Population-estimates-20" + !FY + ".zsav".
+erase file = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav".

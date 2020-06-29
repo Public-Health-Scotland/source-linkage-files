@@ -101,7 +101,7 @@ if break_ascending = 0 counter = 0.
 if (UPINumber =  lag(UPINumber)) and (counter = 0) counter = lag(counter).
 
 * Bring CareHomeName to the front to make the following Python a bit simpler.
-add files file = !File + "Care-Home-Temp-1.zsav"
+add files file = *
     /Keep CareHomeName ALL.
 execute.
 
@@ -142,8 +142,11 @@ Aggregate
     /break SendingCouncilAreaCode CareHomePostcode CareHomeName CareHomeCouncilAreaCode
     /RecordsPerName = n.
 
+Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
+
 * Find out many authorities are using particular versions of names.
 Aggregate outfile = * Mode = AddVariables Overwrite = Yes
+    /Presorted
     /break CareHomePostcode CareHomeName CareHomeCouncilAreaCode
     /RecordsPerName = Sum(RecordsPerName)
     /DiffSendingAuthorities = n.
@@ -152,7 +155,6 @@ Aggregate outfile = * Mode = AddVariables Overwrite = Yes
 Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', CareHomePostcode, CareHomeCouncilAreaCode)).
 
 *******************************************************************************************************.
-Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
     /file = *
     /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
