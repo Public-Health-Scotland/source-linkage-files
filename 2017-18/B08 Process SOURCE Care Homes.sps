@@ -212,6 +212,7 @@ End Repeat.
 
 Compute cost_total_net = Sum(apr_cost to mar_cost).
 
+Alter type ch_adm_reason (F2.0).
 Value Labels ch_adm_reason
     1 'Respite'
     2 'Intermediate Care (includes Step Up/Step Down)'
