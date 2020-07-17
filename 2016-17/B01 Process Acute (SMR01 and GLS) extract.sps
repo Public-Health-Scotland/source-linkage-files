@@ -70,6 +70,8 @@ GET DATA /TYPE=TXT
       CIJTypeofAdmissionCode01 A2
       CIJAdmissionSpecialtyCode01 A3
       CIJDischargeSpecialtyCode01 A3
+      CIJStartDate04 A10
+      CIJEndDate04 A10
       TotalNetCosts01 F8.2
       NHSHospitalFlag01 A1
       CommunityHospitalFlag01 A1
@@ -89,7 +91,9 @@ Rename Variables
     AlcoholRelatedAdmission01 = alcohol_adm
     CIJAdmissionSpecialtyCode01 = cij_adm_spec
     CIJDischargeSpecialtyCode01 = cij_dis_spec
+    CIJEndDate04 = CIJ_end_date
     CIJPlannedAdmissionCode01 = cij_pattype_code
+    CIJStartDate04 = CIJ_start_date
     CIJTypeofAdmissionCode01 = cij_admtype
     CommunityHospitalFlag01 = commhosp
     ContinuousInpatientJourneyMarker01 = cij_marker
@@ -173,8 +177,8 @@ Rename Variables
     PatDateOfBirthC = dob.
 
  * Change dates to date types.
-alter type record_keydate1 record_keydate2 dob dateop1 dateop2 dateop3 dateop4 (SDate10).
-alter type record_keydate1 record_keydate2 dob dateop1 dateop2 dateop3 dateop4 (Date12).
+alter type record_keydate1 record_keydate2 dob dateop1 dateop2 dateop3 dateop4 CIJ_start_date CIJ_end_date (SDate10).
+alter type record_keydate1 record_keydate2 dob dateop1 dateop2 dateop3 dateop4 CIJ_start_date CIJ_end_date (Date12).
 
  * If we have no costs lets fix this.
 Recode lineno cost_total_net (sysmis = 0).
@@ -331,6 +335,8 @@ save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
     cij_pattype_code
     cij_adm_spec
     cij_dis_spec
+    CIJ_start_date 
+    CIJ_end_date
     alcohol_adm
     submis_adm
     falls_adm

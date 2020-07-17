@@ -72,18 +72,6 @@ Frequencies Valid_CHI.
 * If it's not valid then set it to blank as it's no good for linking.
 If any(Valid_CHI, 0, 2) chi = "".
 
-* Create keydates as date variables.
-Compute keydate1_dateformat = DATE.DMY(Mod(record_keydate1, 100), Trunc(Mod(record_keydate1, 10000) / 100), Trunc(record_keydate1 / 10000)).
-
-* Deal with empty end dates.
-Do if SysMiss(record_keydate2).
-    Compute keydate2_dateformat = $sysmis.
-Else.
-    Compute keydate2_dateformat = DATE.DMY(Mod(record_keydate2, 100), Trunc(Mod(record_keydate2, 10000) / 100), Trunc(record_keydate2 / 10000)).
-End if.
-
-* Make them look nice.
-Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
 * Set the type of admission for Maternity records here as the variable isn't included in the datamart.
 If (recid = "02B") tadm = "42".
@@ -178,15 +166,8 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /break CHI cij_marker
     /cij_ipdc = max(cij_ipdc)
     /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
-    /cij_dis_spec = last(cij_dis_spec)
-    /CIJ_start_date = Min(keydate1_dateformat)
-    /CIJ_end_date = Max(keydate2_dateformat).
+    /cij_dis_spec = last(cij_dis_spec).
 
- * Clean up.
-Do if cij_marker = "".
-    Compute CIJ_start_date = $sysmis.
-    Compute CIJ_end_date = $sysmis.
-End if.
 
 * All records with a CHI should now have a valid CIJ marker.
 Temporary.
