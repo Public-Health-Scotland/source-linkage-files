@@ -72,6 +72,18 @@ Frequencies Valid_CHI.
 * If it's not valid then set it to blank as it's no good for linking.
 If any(Valid_CHI, 0, 2) chi = "".
 
+* Create keydates as date variables.
+Compute keydate1_dateformat = DATE.DMY(Mod(record_keydate1, 100), Trunc(Mod(record_keydate1, 10000) / 100), Trunc(record_keydate1 / 10000)).
+
+* Deal with empty end dates.
+Do if SysMiss(record_keydate2).
+    Compute keydate2_dateformat = $sysmis.
+Else.
+    Compute keydate2_dateformat = DATE.DMY(Mod(record_keydate2, 100), Trunc(Mod(record_keydate2, 10000) / 100), Trunc(record_keydate2 / 10000)).
+End if.
+
+* Make them look nice.
+Alter Type keydate1_dateformat keydate2_dateformat (Date12).
 
 * Set the type of admission for Maternity records here as the variable isn't included in the datamart.
 If (recid = "02B") tadm = "42".
@@ -354,7 +366,7 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
-sort cases by chi CIJ_start_date.
+sort cases by chi keydate1_dateformat.
 
 *  We are not currently including Social Care data for some years but we still want the variables for consistency.
 * Social Care.
@@ -382,7 +394,7 @@ String ch_provider (A1).
 Numeric sds_option_4 (F1.0).
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
-    /Keep year recid CIJ_start_date CIJ_end_date ALL
+    /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
 get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav".
