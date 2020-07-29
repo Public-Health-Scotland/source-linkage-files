@@ -70,8 +70,8 @@ GET DATA /TYPE=TXT
       CIJTypeofAdmissionCode01 A2
       CIJAdmissionSpecialtyCode01 A3
       CIJDischargeSpecialtyCode01 A3
-      CIJStartDate04 A10
-      CIJEndDate04 A10
+      CIJStartDate01 A10
+      CIJEndDate01 A10
       TotalNetCosts01 F8.2
       NHSHospitalFlag01 A1
       CommunityHospitalFlag01 A1

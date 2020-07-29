@@ -178,9 +178,7 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /break CHI cij_marker
     /cij_ipdc = max(cij_ipdc)
     /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
-    /cij_dis_spec = last(cij_dis_spec)
-    /CIJ_start_date = Min (CIJ_start_date)
-    /CIJ_end_date = Max (CIJ_end_date).
+    /cij_dis_spec = last(cij_dis_spec).
 
 
 * All records with a CHI should now have a valid CIJ marker.
@@ -370,7 +368,7 @@ sort cases by chi keydate1_dateformat.
 
 *  We are not currently including Social Care data for some years but we still want the variables for consistency.
 * Social Care.
- * String
+ String
     sc_send_lca (A2).
 
 Numeric
@@ -388,10 +386,17 @@ Numeric
     hc_reablement (F1.0).
 
 * Care Homes.
-String ch_provider (A1).
+String
+    ch_name (A73)
+    ch_provider (A1).
+
+Numeric
+    ch_adm_reason (F2.0)
+    ch_nursing (F1.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
+
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL

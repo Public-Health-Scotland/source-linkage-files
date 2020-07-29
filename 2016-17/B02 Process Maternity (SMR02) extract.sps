@@ -43,8 +43,8 @@ GET DATA  /TYPE = TXT
     CIJTypeofAdmissionCode A2
     CIJAdmissionSpecialtyCode A3
     CIJDischargeSpecialtyCode A3
-    CIJStartDate04 A10
-    CIJEndDate04 A10
+    CIJStartDate A10
+    CIJEndDate A10
     TotalNetCosts F8.2
     Diagnosis1DischargeCode A6
     Diagnosis2DischargeCode A6
