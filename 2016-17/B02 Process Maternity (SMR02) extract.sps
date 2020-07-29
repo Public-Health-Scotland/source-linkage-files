@@ -75,9 +75,9 @@ Rename Variables
     AlcoholRelatedAdmission = alcohol_adm
     CIJAdmissionSpecialtyCode = cij_adm_spec
     CIJDischargeSpecialtyCode = cij_dis_spec
-    CIJEndDate04 = CIJ_end_date
+    CIJEndDate = CIJ_end_date
     CIJPlannedAdmissionCode = cij_pattype_code
-    CIJStartDate04 = CIJ_start_date
+    CIJStartDate = CIJ_start_date
     CIJTypeofAdmissionCode = cij_admtype
     CommunityHospitalFlag = commhosp
     ConditionOnDischargeCode = discondition

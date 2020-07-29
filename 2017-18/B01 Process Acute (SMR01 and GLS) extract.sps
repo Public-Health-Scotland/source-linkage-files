@@ -91,9 +91,9 @@ Rename Variables
     AlcoholRelatedAdmission01 = alcohol_adm
     CIJAdmissionSpecialtyCode01 = cij_adm_spec
     CIJDischargeSpecialtyCode01 = cij_dis_spec
-    CIJEndDate04 = CIJ_end_date
+    CIJEndDate01 = CIJ_end_date
     CIJPlannedAdmissionCode01 = cij_pattype_code
-    CIJStartDate04 = CIJ_start_date
+    CIJStartDate01 = CIJ_start_date
     CIJTypeofAdmissionCode01 = cij_admtype
     CommunityHospitalFlag01 = commhosp
     ContinuousInpatientJourneyMarker01 = cij_marker
