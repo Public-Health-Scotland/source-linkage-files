@@ -362,11 +362,10 @@ aggregate
     /cij_ppa = Max(PPA).
 
 sort cases by chi keydate1_dateformat.
-<<<<<<< HEAD
 
 *  We are not currently including Social Care data for some years but we still want the variables for consistency.
 * Social Care.
-String
+*String
     sc_send_lca (A2).
 
 Numeric
@@ -385,12 +384,7 @@ Numeric
 
 * Care Homes.
 String
-    ch_name (A73)
     ch_provider (A1).
-
-Numeric
-    ch_adm_reason (F2.0)
-    ch_nursing (F1.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
