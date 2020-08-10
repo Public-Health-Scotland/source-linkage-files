@@ -176,15 +176,8 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /break CHI cij_marker
     /cij_ipdc = max(cij_ipdc)
     /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
-    /cij_dis_spec = last(cij_dis_spec)
-    /CIJ_start_date = Min(keydate1_dateformat)
-    /CIJ_end_date = Max(keydate2_dateformat).
+    /cij_dis_spec = last(cij_dis_spec).
 
- * Clean up.
-Do if cij_marker = "".
-    Compute CIJ_start_date = $sysmis.
-    Compute CIJ_end_date = $sysmis.
-End if.
 
 * All records with a CHI should now have a valid CIJ marker.
 Temporary.
@@ -368,8 +361,6 @@ End if.
 aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
-
-
 
 sort cases by chi keydate1_dateformat.
 
