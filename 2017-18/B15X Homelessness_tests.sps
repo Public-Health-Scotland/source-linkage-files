@@ -55,39 +55,7 @@ If hl1_sending_lca = 'S12000039' West_Dunbartonshire = 1.
 If hl1_sending_lca = 'S12000040' West_Lothian = 1.
 
 *Change missing hl1_sending_lca values to 0. 
-If sysmis(Aberdeen_City) Aberdeen_City = 0. 
-If sysmis(Aberdeenshire) Aberdeenshire = 0. 
-If sysmis(Angus) Angus = 0. 
-If sysmis(Argyll_and_Bute) Argyll_and_Bute = 0. 
-If sysmis(City_of_Edinburgh) City_of_Edinburgh = 0.
-If sysmis(Clackmannanshire) Clackmannanshire = 0.
-If sysmis(Dumfries_and_Galloway) Dumfries_and_Galloway = 0. 
-If sysmis(Dundee_City)  Dundee_City = 0.
-If sysmis(East_Ayrshire) East_Ayrshire = 0.
-If sysmis(East_Dunbartonshire) East_Dunbartonshire = 0. 
-If sysmis(East_Lothian) East_Lothian = 0.
-If sysmis(East_Renfrewshire) East_Renfrewshire = 0.
-If sysmis(Falkirk) Falkirk = 0.
-If sysmis(Fife) Fife = 0. 
-If sysmis(Glasgow_City) Glasgow_City = 0.
-If sysmis(Highland) Highland = 0.
-If sysmis(Inverclyde)  Inverclyde = 0.
-If sysmis(Midlothian) Midlothian = 0. 
-If sysmis(Moray) Moray = 0.
-If sysmis(Na_h_Eileanan_Siar) Na_h_Eileanan_Siar = 0.
-If sysmis(North_Ayrshire) North_Ayrshire = 0.
-If sysmis(North_Lanarkshire) North_Lanarkshire = 0.
-If sysmis(Orkney_Islands) Orkney_Islands = 0. 
-If sysmis(Perth_and_Kinross) Perth_and_Kinross = 0.
-If sysmis(Renfrewshire) Renfrewshire = 0. 
-If sysmis(Scottish_Borders) Scottish_Borders = 0. 
-If sysmis(Shetland_Islands) Shetland_Islands = 0. 
-If sysmis(South_Ayrshire) South_Ayrshire = 0. 
-If sysmis(South_Lanarkshire) South_Lanarkshire = 0. 
-If sysmis(Stirling) Stirling = 0. 
-If sysmis(West_Dunbartonshire) West_Dunbartonshire = 0. 
-If sysmis(West_Lothian) West_Lothian = 0. 
-
+Recode Aberdeen_City to West_Lothian (SYSMIS = 0).
 
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
