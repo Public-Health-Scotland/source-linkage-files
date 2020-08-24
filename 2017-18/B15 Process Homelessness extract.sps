@@ -130,5 +130,7 @@ save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
     hl1_reason_ftm
     /zcompressed.
 
+get file = !file + 'homelessness_for_source-20' + !FY + '.zsav'.
+
  * zip up the raw data.
 Host Command = ["gzip '" + !Extracts + "Homelessness extract-20" + !FY + ".csv'"].
