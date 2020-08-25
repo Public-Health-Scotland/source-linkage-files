@@ -22,6 +22,14 @@ match files file = !File + "temp-source-episode-file-6-" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_Start_FY
+    /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
+    /Rename
+    UPI_Number = chi
+    SPARRA_RISK_SCORE = SPARRA_End_FY
+    /table = !Extracts_Alt + "HHG/HHG-20" + !NextFY + ".zsav"
+    /Rename
+    UPI_Number = chi
+    HHG_SCORE = HHG_End_FY
     /Drop Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost
     Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
     /Drop End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
@@ -34,12 +42,3 @@ save outfile = !File + "temp-source-episode-file-7-" + !FY + ".zsav"
 
 get file= !File + "temp-source-episode-file-7-" + !FY + ".zsav".
 
-
-*  /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
-    /Rename
-    UPI_Number = chi
-    SPARRA_RISK_SCORE = SPARRA_End_FY
-    /table = !Extracts_Alt + "HHG/HHG-20" + !NextFY + ".zsav"
-    /Rename
-    UPI_Number = chi
-    HHG_SCORE = HHG_End_FY
