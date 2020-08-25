@@ -43,6 +43,8 @@ GET DATA  /TYPE = TXT
     CIJTypeofAdmissionCode A2
     CIJAdmissionSpecialtyCode A3
     CIJDischargeSpecialtyCode A3
+    CIJStartDate A10
+    CIJEndDate A10
     TotalNetCosts F8.2
     Diagnosis1DischargeCode A6
     Diagnosis2DischargeCode A6
@@ -73,7 +75,9 @@ Rename Variables
     AlcoholRelatedAdmission = alcohol_adm
     CIJAdmissionSpecialtyCode = cij_adm_spec
     CIJDischargeSpecialtyCode = cij_dis_spec
+    CIJEndDate = CIJ_end_date
     CIJPlannedAdmissionCode = cij_pattype_code
+    CIJStartDate = CIJ_start_date
     CIJTypeofAdmissionCode = cij_admtype
     CommunityHospitalFlag = commhosp
     ConditionOnDischargeCode = discondition
@@ -136,8 +140,8 @@ Rename Variables
     DateofMainOperationFullDate = dateop1
     PatDateOfBirthC = dob.
 
-alter type record_keydate1 record_keydate2 dob dateop1 (SDate10).
-alter type record_keydate1 record_keydate2 dob dateop1 (Date12).
+alter type record_keydate1 record_keydate2 dob dateop1 CIJ_start_date CIJ_end_date (SDate10).
+alter type record_keydate1 record_keydate2 dob dateop1 CIJ_start_date CIJ_end_date (Date12).
 
 Numeric stay (F7.0).
 Compute stay = Datediff(record_keydate2, record_keydate1, "days").
@@ -252,6 +256,8 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     cij_pattype_code
     cij_adm_spec
     cij_dis_spec
+    CIJ_start_date
+    CIJ_end_date
     alcohol_adm
     submis_adm
     falls_adm

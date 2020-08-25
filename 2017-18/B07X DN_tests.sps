@@ -16,8 +16,25 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-* Flag to check how many HBs we have.
-AutoRecode hbtreatcode /into HBs.
+*Flag to count how many episodes in each HB by treatment code. 
+If hbtreatcode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbtreatcode = 'S08000016' NHS_Borders = 1. 
+If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
+If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
+If hbtreatcode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If hbtreatcode = 'S08000022' NHS_Highland = 1.
+If hbtreatcode = 'S08000023' NHS_Lanarkshire =1. 
+If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
+If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
+If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
+If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
+If hbtreatcode = 'S08000029' NHS_Fife = 1. 
+If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
+
+*Change missing HB values to 0. 
+Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
+
 
 * Get values for whole file.
 Dataset Declare SLFnew.
@@ -27,7 +44,6 @@ aggregate outfile = SLFnew
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
     /n_episodes = n
-    /n_hbs = Max(HBs)
     /Total__Cost = Sum(cost_total_net)
     /Mean__Cost = Mean(cost_total_net)
     /Max_Cost = Max(cost_total_net)
@@ -57,12 +73,27 @@ aggregate outfile = SLFnew
     /Mean_cost_dec = Mean(dec_cost)
     /Mean_cost_jan = Mean(jan_cost)
     /Mean_cost_feb = Mean(feb_cost)
-    /Mean_cost_mar = Mean(mar_cost).
+    /Mean_cost_mar = Mean(mar_cost)
+    /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
+    /All_NHS_Borders = Sum(NHS_Borders)
+    /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
+    /All_NHS_Forth_Valley = Sum(NHS_Forth_Valley)
+    /All_NHS_Grampian = Sum(NHS_Grampian)
+    /All_NHS_Greater_Glasgow_and_Clyde = Sum(NHS_Greater_Glasgow_and_Clyde)
+    /All_NHS_Highland = Sum(NHS_Highland) 
+    /All_NHS_Lanarkshire = Sum(NHS_Lanarkshire)
+    /All_NHS_Lothian = Sum(NHS_Lothian)
+    /All_NHS_Orkney = Sum(NHS_Orkney)
+    /All_NHS_Shetland = Sum(NHS_Shetland)
+    /All_NHS_Western_Isles = Sum(NHS_Western_Isles)
+    /All_NHS_Fife = Sum(NHS_Fife)
+    /All_NHS_Tayside = Sum(NHS_Tayside).
+
 
 * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
 Varstocases
-    /Make New_Value from n_CHIs to Mean_cost_mar
+    /Make New_Value from n_CHIs to All_NHS_Tayside
     /Index Measure (New_Value).
 Sort cases by Measure.
 *************************************************************************************************************.
@@ -86,8 +117,38 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-* Flag to check how many HBs we have.
-AutoRecode hbtreatcode /into HBs.
+*Flag to count how many episodes in each HB by treatment code. 
+If hbtreatcode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbtreatcode = 'S08000016' NHS_Borders = 1. 
+If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
+If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
+If hbtreatcode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If hbtreatcode = 'S08000022' NHS_Highland = 1.
+If hbtreatcode = 'S08000023' NHS_Lanarkshire =1. 
+If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
+If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
+If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
+If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
+If hbtreatcode = 'S08000029' NHS_Fife = 1. 
+If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
+
+*Change missing HB values to 0. 
+If sysmis (NHS_Ayrshire_and_Arran) NHS_Ayrshire_and_Arran = 0.
+If sysmis (NHS_Borders) NHS_Borders = 0. 
+If sysmis(NHS_Dumfries_and_Galloway) NHS_Dumfries_and_Galloway = 0.
+If sysmis(NHS_Forth_Valley) NHS_Forth_Valley = 0. 
+If sysmis(NHS_Grampian) NHS_Grampian = 0. 
+If sysmis(NHS_Greater_Glasgow_and_Clyde) NHS_Greater_Glasgow_and_Clyde = 0.
+If sysmis(NHS_Highland) NHS_Highland = 0.
+If sysmis(NHS_Lanarkshire) NHS_Lanarkshire = 0. 
+If sysmis(NHS_Lothian) NHS_Lothian = 0. 
+If sysmis(NHS_Orkney) NHS_Orkney = 0. 
+If sysmis(NHS_Shetland) NHS_Shetland = 0. 
+If sysmis(NHS_Western_Isles) NHS_Western_Isles = 0. 
+If sysmis(NHS_Fife) NHS_Fife = 0. 
+If sysmis(NHS_Tayside) NHS_Tayside = 0. 
+
 
 * Get values for whole file.
 Dataset Declare SLFexisting.
@@ -97,7 +158,6 @@ aggregate outfile = SLFexisting
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
     /n_episodes = n
-    /n_hbs = Max(HBs)
     /Total__Cost = Sum(cost_total_net)
     /Mean__Cost = Mean(cost_total_net)
     /Max_Cost = Max(cost_total_net)
@@ -127,11 +187,25 @@ aggregate outfile = SLFexisting
     /Mean_cost_dec = Mean(dec_cost)
     /Mean_cost_jan = Mean(jan_cost)
     /Mean_cost_feb = Mean(feb_cost)
-    /Mean_cost_mar = Mean(mar_cost).
+    /Mean_cost_mar = Mean(mar_cost)
+    /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
+    /All_NHS_Borders = Sum(NHS_Borders)
+    /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
+    /All_NHS_Forth_Valley = Sum(NHS_Forth_Valley)
+    /All_NHS_Grampian = Sum(NHS_Grampian)
+    /All_NHS_Greater_Glasgow_and_Clyde = Sum(NHS_Greater_Glasgow_and_Clyde)
+    /All_NHS_Highland = Sum(NHS_Highland) 
+    /All_NHS_Lanarkshire = Sum(NHS_Lanarkshire)
+    /All_NHS_Lothian = Sum(NHS_Lothian)
+    /All_NHS_Orkney = Sum(NHS_Orkney)
+    /All_NHS_Shetland = Sum(NHS_Shetland)
+    /All_NHS_Western_Isles = Sum(NHS_Western_Isles)
+    /All_NHS_Fife = Sum(NHS_Fife)
+    /All_NHS_Tayside = Sum(NHS_Tayside).
 
 Dataset activate SLFexisting.
 Varstocases
-    /Make Existing_Value from n_CHIs to Mean_cost_mar
+    /Make Existing_Value from n_CHIs to All_NHS_Tayside
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 *************************************************************************************************************.

@@ -34,7 +34,7 @@ GET DATA  /TYPE=TXT
  * Drop records for partnerships which don't have good / complete data.
  * For most of the below there will be no data anyway but some have test data only.
 Compute #Drop = 0.
-If (!FY = "1617" and any(SendingLocalAuthorityCode9, "S12000005", "S12000017", "S12000028", "S12000040", "S12000041",  "S12000042")) #Drop = 1.
+If (!FY = "1617" and any(SendingLocalAuthorityCode9, "S12000005", "S12000028", "S12000040", "S12000041")) #Drop = 1.
 If (!FY = "1718" and any(SendingLocalAuthorityCode9, "S12000040", "S12000041")) #Drop = 1.
 
 Select if #Drop = 0.
@@ -129,6 +129,8 @@ save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
     hl1_property_type
     hl1_reason_ftm
     /zcompressed.
+
+get file = !file + 'homelessness_for_source-20' + !FY + '.zsav'.
 
  * zip up the raw data.
 Host Command = ["gzip '" + !Extracts + "Homelessness extract-20" + !FY + ".csv'"].

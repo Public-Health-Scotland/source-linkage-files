@@ -60,6 +60,8 @@ GET DATA  /TYPE=TXT
       CIJTypeofAdmissionCode04 A7
       CIJAdmissionSpecialtyCode04 A3
       CIJDischargeSpecialtyCode04 A3
+      CIJStartDate04 A10
+      CIJEndDate04 A10
       TotalNetCosts04 F8.2
       AlcoholRelatedAdmission04 A1
       SubstanceMisuseRelatedAdmission04 A1
@@ -84,7 +86,9 @@ rename variables
     AlcoholRelatedAdmission04 = alcohol_adm
     CIJAdmissionSpecialtyCode04 = cij_adm_spec
     CIJDischargeSpecialtyCode04 = cij_dis_spec
+    CIJEndDate04 = CIJ_end_date
     CIJPlannedAdmissionCode04 = cij_pattype_code
+    CIJStartDate04 = CIJ_start_date
     CIJTypeofAdmissionCode04 = cij_admtype
     CommunityHospitalFlag04 = commhosp
     ContinuousInpatientJourneyMarker04 = cij_marker
@@ -146,8 +150,8 @@ Rename Variables
     DateofDischarge04 = record_keydate2
     PatDateOfBirthC = dob.
 
-alter type record_keydate1 record_keydate2 dob (SDate10).
-alter type record_keydate1 record_keydate2 dob (Date12).
+alter type record_keydate1 record_keydate2 dob CIJ_start_date CIJ_end_date (SDate10).
+alter type record_keydate1 record_keydate2 dob CIJ_start_date CIJ_end_date (Date12).
 
 * Need to make CIJ Type of Admission (cij_admtype) two characters in length (to be consistent with acute).  Recode the Unknown to 99.
 
@@ -272,6 +276,8 @@ save outfile = !file + 'mental_health_for_source-20' + !FY + '.zsav'
     cij_pattype_code
     cij_adm_spec
     cij_dis_spec
+    CIJ_start_date
+    CIJ_end_date
     alcohol_adm
     submis_adm
     falls_adm
