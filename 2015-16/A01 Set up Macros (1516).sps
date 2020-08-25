@@ -71,7 +71,7 @@ Define !LocalitiesLookup()
 
  * Most up to date Postcode directory.
 Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2020_1.sav"
+   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2020_2.sav"
 !EndDefine.
 
  * Most up to date SIMD / Postcode lookup.
