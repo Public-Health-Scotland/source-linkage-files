@@ -76,7 +76,7 @@ Define !PCDir()
 
  * Most up to date SIMD / Postcode lookup.
 Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2020_1_simd2020v2.sav"
+   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2020_2_simd2020v2.sav"
 !EndDefine.
 
  * Most up to date DataZone Population estimates.
