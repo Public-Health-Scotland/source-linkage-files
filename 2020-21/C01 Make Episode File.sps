@@ -13,6 +13,7 @@ Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " +
     "'" + !File + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "NRS_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !File + "Homelessness_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "PIS_tests_20" + !FY + ".zsav" + "'"].
 
 *We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom. 
