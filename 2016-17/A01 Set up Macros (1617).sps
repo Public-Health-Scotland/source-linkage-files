@@ -67,7 +67,7 @@ Define !AnontoCHIlookup()
 *******************************************************.
  * Localities lookup file.
 Define !LocalitiesLookup()
-    "/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20191216.sav"
+    "/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20200825.sav"
 !EndDefine.
 
  * Most up to date Postcode directory.
@@ -82,7 +82,7 @@ Define !SIMDLookup()
 
  * Most up to date DataZone Population estimates.
 Define !DataZone_Pops()
-   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2018.sav"
+   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2019.sav"
 !EndDefine.
 
 *******************************************************.
