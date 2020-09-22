@@ -104,20 +104,7 @@ If hbtreatcode = 'S08000030' NHS_Tayside = 1.
 If hbtreatcode = 'S08000027' NHS_Tayside = 1. 
 
 *Change missing HB values to 0. 
-If sysmis (NHS_Ayrshire_and_Arran) NHS_Ayrshire_and_Arran = 0.
-If sysmis (NHS_Borders) NHS_Borders = 0. 
-If sysmis(NHS_Dumfries_and_Galloway) NHS_Dumfries_and_Galloway = 0.
-If sysmis(NHS_Forth_Valley) NHS_Forth_Valley = 0. 
-If sysmis(NHS_Grampian) NHS_Grampian = 0. 
-If sysmis(NHS_Greater_Glasgow_and_Clyde) NHS_Greater_Glasgow_and_Clyde = 0.
-If sysmis(NHS_Highland) NHS_Highland = 0.
-If sysmis(NHS_Lanarkshire) NHS_Lanarkshire = 0. 
-If sysmis(NHS_Lothian) NHS_Lothian = 0. 
-If sysmis(NHS_Orkney) NHS_Orkney = 0. 
-If sysmis(NHS_Shetland) NHS_Shetland = 0. 
-If sysmis(NHS_Western_Isles) NHS_Western_Isles = 0. 
-If sysmis(NHS_Fife) NHS_Fife = 0. 
-If sysmis(NHS_Tayside) NHS_Tayside = 0. 
+Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
 
  * Get values for whole file.
 Dataset Declare SLFexisting.
