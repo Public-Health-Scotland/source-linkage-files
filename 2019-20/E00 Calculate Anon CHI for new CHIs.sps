@@ -17,6 +17,8 @@ add files
     /File = "1617/source-individual-file-201617.zsav"
     /File = "1718/source-individual-file-201718.zsav"
     /File = "1819/source-individual-file-201819.zsav"
+    /File = "1920/source-individual-file-201920.zsav"
+    /File = "2021/source-individual-file-202021.zsav"
     /Keep CHI Year
     /By CHI.
 
