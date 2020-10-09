@@ -51,7 +51,6 @@ aggregate outfile = !DatasetName
     /n_children n_adults n_over65 = Sum(Child Adult Over_65)
     /Earliest_adm Earliest_dis = Min(keydate1_dateformat keydate2_dateformat)
     /Latest_adm Latest_dis= Max(keydate1_dateformat keydate2_dateformat)
-    /cij_ppas = Sum(cij_ppa)
     /avg_yearstay avg_stay = Mean(yearstay stay)
     /total_yearstay total_stay = Sum(yearstay stay)
     /avg_apr_beddays = Mean(apr_beddays)
