@@ -6,10 +6,6 @@
 Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " + 
     "'" + !File + "A&E_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "CH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "CMH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "DD_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "DN_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "Maternity_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
@@ -17,19 +13,18 @@ Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " +
     "'" + !File + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "PIS_tests_20" + !FY + ".zsav" + "'"].
 
+
 * Bring all the data sets together.
 add files
     /file = !File + "a&e_for_source-20" + !FY + ".zsav"
     /file = !File + "acute_for_source-20" + !FY + ".zsav"
-    /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "deaths_for_source-20" + !FY + ".zsav"
-    /file = !File + "DN_for_source-20" + !FY + ".zsav"
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "maternity_for_source-20" + !FY + ".zsav"
     /file = !File + "mental_health_for_source-20" + !FY + ".zsav"
     /file = !File + "outpatients_for_source-20" + !FY + ".zsav"
-    /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /By chi.
+
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
 *Sort Cases by chi.
@@ -365,7 +360,7 @@ sort cases by chi keydate1_dateformat.
 
 *  We are not currently including Social Care data for some years but we still want the variables for consistency.
 * Social Care.
-*String
+String
     sc_send_lca (A2).
 
 Numeric
@@ -384,27 +379,52 @@ Numeric
 
 * Care Homes.
 String
+    ch_name (A73)
     ch_provider (A1).
+
+Numeric
+    ch_adm_reason (F2.0)
+    ch_nursing (F1.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
 
- * Declare variables for Delay Discharge (1516 only).
+ * Declare variables for Delay Discharge (14/15 and 1516 only).
 Numeric Delay_End_Reason (F1.0).
-String Primary_Delay_Reason (A4).
-String Secondary_Delay_Reason (A4).
-String DD_Quality (A3).
-String DD_Responsible_LCA (A2).
+String 
+    Primary_Delay_Reason (A4)
+    Secondary_Delay_Reason (A4)    
+    DD_Quality (A3)
+    DD_Responsible_LCA (A2).
 
- * Declare variables for Homelessness (1516 only).
-String hl1_application_ref (A15).
-String hl1_sending_lca (A9).
-Numeric hl1_property_type (F2.0).
-String hl1_reason_ftm (A10).
-Numeric HH_in_FY (F1.0).
-Numeric HH_ep (F1.0).
-Numeric HH_6after_ep (F1.0).
-Numeric HH_6before_ep (F1.0).
+ * Declare variables for Homelessness (14/15 and 1516 only).
+String 
+    hl1_application_ref (A15)
+    hl1_sending_lca (A9)
+    hl1_reason_ftm (A10).
+
+Numeric 
+    hl1_property_type (F2.0)
+    HH_in_FY (F1.0)
+    HH_ep (F1.0)
+    HH_6after_ep (F1.0)
+    HH_6before_ep (F1.0).
+
+*Declare variables for DN. 
+Numeric 
+    CCM (F5.0) 
+    TotalnoDNcontacts (F7.0).
+
+*Declare variables for SPARRA and HHG (1415 only). 
+Numeric 
+    SPARRA_Start_FY (F8.0) 
+    SPARRA_End_FY (F2.0) 
+    HHG_Start_FY(F2.0) 
+    HHG_End_FY(F2.0).
+
+*Declare variables for prescribing (1415 only). 
+Numeric no_dispensed_items (F2.0).
+
 
 save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
@@ -420,12 +440,10 @@ Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 Host Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' " + 
     "'" + !File + "a&e_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+
 
