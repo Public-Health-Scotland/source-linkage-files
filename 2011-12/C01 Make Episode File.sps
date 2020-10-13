@@ -6,7 +6,6 @@
 Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " + 
     "'" + !File + "A&E_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "Maternity_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "NRS_tests_20" + !FY + ".zsav" + "' " +
@@ -19,7 +18,6 @@ add files
     /file = !File + "a&e_for_source-20" + !FY + ".zsav"
     /file = !File + "acute_for_source-20" + !FY + ".zsav"
     /file = !File + "deaths_for_source-20" + !FY + ".zsav"
-    /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "maternity_for_source-20" + !FY + ".zsav"
     /file = !File + "mental_health_for_source-20" + !FY + ".zsav"
     /file = !File + "outpatients_for_source-20" + !FY + ".zsav"
@@ -443,7 +441,6 @@ Host Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' " +
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+    "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" +  "'"].
 
 
