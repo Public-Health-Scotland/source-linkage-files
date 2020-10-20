@@ -419,8 +419,19 @@ Numeric
     HHG_Start_FY(F2.0) 
     HHG_End_FY(F2.0).
 
-*Declare variables for prescribing (1415 only). 
+*Declare variables for prescribing (None for 11/12, 12/13, 13/14, 14/15). 
 Numeric no_dispensed_items (F2.0).
+
+*Declare variables for GP OOH (none for 11/12, 12/13, 13/14). 
+Numeric 
+    ooh_outcome.1 (F2.0) 
+    ooh_outcome.2 (F2.0) 
+    ooh_outcome.3 (F2.0) 
+    ooh_outcome.4 (F2.0) 
+    ooh_CC (F1.0).
+
+*Declare variables for KIS (none for 11/12, 12/13, 13/14). 
+Numeric KIS_accessed (F1.0).
 
 
 save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
