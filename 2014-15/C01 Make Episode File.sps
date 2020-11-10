@@ -23,6 +23,7 @@ add files
     /file = !File + "maternity_for_source-20" + !FY + ".zsav"
     /file = !File + "mental_health_for_source-20" + !FY + ".zsav"
     /file = !File + "outpatients_for_source-20" + !FY + ".zsav"
+    /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /By chi.
 
 
@@ -444,6 +445,7 @@ Host Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' " +
     "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
+    "'" + !File + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
 
