@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -415,17 +415,6 @@ Numeric
 Numeric 
     CCM (F5.0) 
     TotalnoDNcontacts (F7.0).
-
-*Declare variables for SPARRA and HHG (1415 only). 
-Numeric 
-    SPARRA_Start_FY (F8.0) 
-    SPARRA_End_FY (F2.0) 
-    HHG_Start_FY(F2.0) 
-    HHG_End_FY(F2.0).
-
-*Declare variables for prescribing (1415 only). 
-Numeric no_dispensed_items (F2.0).
-
 
 save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
