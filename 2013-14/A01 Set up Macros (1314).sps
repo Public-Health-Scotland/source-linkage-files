@@ -35,7 +35,11 @@ Define !Costs_Lookup()
 
  * Replace the number with the CSD ref.
 Define !CSDRef()
+<<<<<<< HEAD
     "SCTASK0182757"
+=======
+    "SCTASK0182748"
+>>>>>>> c2974942cbb08783ab5715c1fed7eef743961495
 !EndDefine.
 
 Define !CSDExtractLoc()
