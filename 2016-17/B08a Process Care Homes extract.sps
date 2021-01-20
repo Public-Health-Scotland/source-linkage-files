@@ -134,8 +134,18 @@ for i in range(cur.GetCaseCount()):
 cur.close() 
 End Program.
 
-* Overwirte the original care home name.
-Compute CareHomeName = ch_name.
+* Overwrite the original care home name.
+Compute ch_name = ch_name_tidy.
+
+* First fill in any blank care_home names where we have a correct postcode.
+Sort cases by ch_postcode.
+match files
+    /file = *
+    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name_real)
+    /By ch_postcode.
+
+If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
 
 * First get a count of how often individual names are used.
 Aggregate
