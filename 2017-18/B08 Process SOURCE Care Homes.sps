@@ -70,6 +70,16 @@ End Program.
 * Overwrite the original care home name.
 Compute ch_name = ch_name_tidy.
 
+* First fill in any blank care_home names where we have a correct postcode.
+Sort cases by ch_postcode.
+match files
+    /file = *
+    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name_real)
+    /By ch_postcode.
+
+If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
+
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
@@ -142,7 +152,7 @@ match files
     /By ch_postcode ch_name.
 Frequencies AccurateData2.
 * 54.9% Match the lookup.
-Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateData1 AccurateData2.
+Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateData1 AccurateData2 ch_name_real.
 
  * Add dictionary info.
 !AddLCADictionaryInfo LCA = sc_send_lca ch_lca.
