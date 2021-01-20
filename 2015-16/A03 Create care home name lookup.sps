@@ -29,7 +29,7 @@ GET DATA /TYPE=XLSX
    /READNAMES=on
    /ASSUMEDSTRWIDTH=32767.
 
-Rename Variables
+Rename Varaibles
     AccomPostCodeNo = CareHomePostcode.
 
 * Only keep ones which were open on or after the start of the FY.
@@ -111,43 +111,27 @@ End If.
 Alter type CareHomeCouncilAreaCode (A2) CareHomePostcode (A7).
  * Pad council area code with zero if needed.
 Compute CareHomeCouncilAreaCode = Replace(CareHomeCouncilAreaCode, " ", "0").
- 
-* Tidy up care home names.
-add files file = *
-    /Keep ServiceName CareHomePostcode CareHomeCouncilAreaCode Council_Area_Name MainClientGroup Sector DateReg DateCanx.
-execute.
 
-Begin Program.
-import spss
+ * Run the Python function 'capwords' on CareHomeName.
+ * This will capitalise each word for uniformity and will improve matching.
+ * https://docs.python.org/2/library/string.html#string-functions
 
- # Open the dataset with write access
- # Read in the CareHomeNames, which must be the first variable "spss.Cursor([0]..."
-cur = spss.Cursor([0], accessType = 'w')
+SPSSINC TRANS RESULT = CareHomeName Type = 73
+   /FORMULA "string.capwords(ServiceName)".
 
-# Create a new variable, string length 73
-cur.AllocNewVarsBuffer(80)
-cur.SetOneVarNameAndType('CareHomeName', 73)
-cur.CommitDictionary()
+ * Aggregate to remove any duplicates, e.g. when a CH changed name during the year
+ * and to sort correctly for matching. Keep some interesting variables.
+Sort cases by CareHomePostcode DateReg.
 
- # Loop through every case and write the tidied care home name
-for i in range(cur.GetCaseCount()):
-    # Read a case and save the care home name
-    # We need to strip trailing spaces
-    care_home_name = cur.fetchone()[0].rstrip()
-
-    # Write the tidied name to the SPSS dataset
-    cur.SetValueChar('CareHomeName', str(care_home_name).title())
-    cur.CommitCase()
-
- # Close the connection to the dataset
-cur.close() 
-End Program.
-
- * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
 Aggregate
-   /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
-   /Break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
-   /CareHomeCouncilName MainClientGroup Sector = First(Council_Area_Name MainClientGroup Sector)
-   /DateReg DateCanx = Max(DateReg DateCanx).
+   /outfile = *
+   /Break CareHomePostcode CareHomeCouncilAreaCode 
+    /CareHomeName = last(CareHomeName)
+   /CareHomeCouncilName MainClientGroup Sector = Last(Council_Area_Name MainClientGroup Sector).
 
+sort cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode.
+
+save outfile =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
+
+get file =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
 

@@ -119,11 +119,19 @@ Compute CareHomeCouncilAreaCode = Replace(CareHomeCouncilAreaCode, " ", "0").
 SPSSINC TRANS RESULT = CareHomeName Type = 73
    /FORMULA "string.capwords(ServiceName)".
 
- * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
-Aggregate
-   /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
-   /Break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
-   /CareHomeCouncilName MainClientGroup Sector = First(Council_Area_Name MainClientGroup Sector)
-   /DateReg DateCanx = Max(DateReg DateCanx).
+ * Aggregate to remove any duplicates, e.g. when a CH changed name during the year
+ * and to sort correctly for matching. Keep some interesting variables.
+Sort cases by CareHomePostcode DateReg.
 
+Aggregate
+   /outfile = *
+   /Break CareHomePostcode CareHomeCouncilAreaCode 
+    /CareHomeName = last(CareHomeName)
+   /CareHomeCouncilName MainClientGroup Sector = Last(Council_Area_Name MainClientGroup Sector).
+
+sort cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode.
+
+save outfile =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
+
+get file =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
 
