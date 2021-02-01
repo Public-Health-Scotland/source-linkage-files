@@ -7,8 +7,7 @@
  * Episode file
 *****************************************************************************************.
 *Create a copy of source episode file so this doesnt get overwritten if there is an error.
-Host Command = ["cp " + !File + "source-episode-file-20" + !FY + ".zsav" "source-episode-file-20" + !FY + "_CHI.zsav"] . 
-
+Host Command = ["cp '" + !File + "source-episode-file-20" + !FY + ".zsav' '" + !File + "source-episode-file-20" + !FY + "_CHI.zsav'"]. 
 
 * Match on the Anon_CHI from the lookup.
 match files
@@ -33,7 +32,7 @@ save outfile = !file + "source-episode-file-20" + !FY + ".zsav"
  * Individual file
 *****************************************************************************************.
 *Create a copy of source episode file so this doesnt get overwritten if there is an error.
-Host Command = ["cp " + !File + "source-individual-file-20" + !FY + ".zsav" "source-individual-file-20" + !FY + "_CHI.zsav"] .  
+Host Command = ["cp '" + !File + "source-individual-file-20" + !FY + ".zsav' '" + !File + "source-individual-file-20" + !FY + "_CHI.zsav'"]. 
 
 * Match on the Anon_CHI from the lookup.
 match files
