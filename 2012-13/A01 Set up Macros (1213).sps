@@ -35,15 +35,24 @@ Define !Costs_Lookup()
 
  * Replace the number with the CSD ref.
 Define !CSDRef()
-<<<<<<< HEAD
     "SCTASK0182757"
-=======
-    "SCTASK0182748"
->>>>>>> c2974942cbb08783ab5715c1fed7eef743961495
 !EndDefine.
 
 Define !CSDExtractLoc()
     !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRef))))
+!EndDefine.
+
+
+*For Old files CSD ref use this for 14/15 PIS only.
+*For LTC and Deaths IT extracts use CSD ref above. 
+Define !CSDRefOld()
+    "SCTASK0182748"
+!EndDefine.
+
+*For Old files CSD ref use this for 14/15 PIS only.
+*For LTC and Deaths IT extracts in 14/15 use CSD ref above. 
+Define !CSDExtractLocOld()
+    !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRefOld))))
 !EndDefine.
 
 *******************************************************.
