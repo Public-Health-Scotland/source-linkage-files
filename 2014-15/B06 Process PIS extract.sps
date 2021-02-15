@@ -10,10 +10,10 @@ Define !Extract_Number()
     "_extract_5"
 !EndDefine.
 
-Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].
+Host Command = ["gunzip '" + !CSDExtractLocOld + !Extract_Number + "_" + !altFY + ".csv'"].
 
 GET DATA  /TYPE=TXT
-    /FILE=!CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv"
+    /FILE=!CSDExtractLocOld + !Extract_Number + "_" + !altFY + ".csv"
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -68,4 +68,4 @@ save outfile = !file + "prescribing_file_for_source-20" + !FY + ".zsav"
 get file = !file + "prescribing_file_for_source-20" + !FY + ".zsav".
 
 * zip raw data back up.
-Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].
+Host Command = ["gzip '" + !CSDExtractLocOld + !Extract_Number + "_" + !altFY + ".csv'"].
