@@ -1,14 +1,16 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Open processed Acute extract.
 get file = !file + 'acute_for_source-20' + !FY + '.zsav'.
 
 * Apply new costs, these are taken from the 17/18 file.
 * Either the average cost per day for inpatient, or the average daycase cost for daycase.
+* Using the A11H DC cost for A210H as it had low activity in 17/18.
 Do if recid = "01B" and spec = "C3" and hbtreatcode = "S08000015".
     Do if location = "A111H".
         If ipdc = "D" cost_total_net = 521.38.
         If ipdc = "I" cost_total_net = 2309.26 * yearstay.
     Else if location = "A210H".
+        If ipdc = "D" cost_total_net = 521.38.
         If ipdc = "I" cost_total_net = 2460.63 * yearstay.
     End if.
 End if.
