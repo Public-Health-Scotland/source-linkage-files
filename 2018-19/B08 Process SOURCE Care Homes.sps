@@ -94,6 +94,10 @@ alter type record_keydate1 (F8.0).
 Compute record_keydate2 = Concat(char.Substr(record_keydate2, 1, 4), char.Substr(record_keydate2, 6, 2), char.Substr(record_keydate2, 9, 2)).
 alter type record_keydate2 (F8.0).
 
+* To be changed later.
+* Just to match existing files.
+Alter type ch_provider (A1).
+
 sort cases by chi record_keydate1 record_keydate2.
 
 save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
