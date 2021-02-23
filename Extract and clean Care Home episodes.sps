@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -35,7 +35,8 @@ match files file = *
 
 Variable width ALL (15).
 
-alter type sending_location (A3)
+alter type 
+    sending_location (A3)
     financial_year (F4.0)
     financial_quarter (F1.0)
     social_care_id (A10)
@@ -230,7 +231,7 @@ compute sc_submission = concat(String(financial_year, F4.0), "Q", String(financi
 
 * Highlight episodes where the ch_provider changes within submission quarters.
 aggregate
-    /Break record_date sending_location  ch_admission_date nursing_care_provision
+    /Break record_date sending_location ch_admission_date nursing_care_provision
     /min_provider = min(ch_provider)
     /max_provider = max(ch_provider).
 
@@ -338,7 +339,6 @@ Value Labels ch_provider
     4 'Third Sector'
     5 'NHS Board'
     6 'Other'.
-
 
 save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     /Keep chi
