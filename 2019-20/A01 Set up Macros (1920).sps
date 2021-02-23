@@ -197,6 +197,48 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
       '32' "Na h-Eileanan Siar"
 !EndDefine.
 
+* Recode the Social care loation codes into LCA codes.
+Define !Create_sc_sending_location ()
+String sc_send_lca (A2).
+Recode sending_location
+    ("100" = "01")
+    ("110" = "02")
+    ("120" = "03")
+    ("130" = "04")
+    ("150" = "06")
+    ("170" = "08")
+    ("180" = "09")
+    ("190" = "10")
+    ("200" = "11")
+    ("210" = "12")
+    ("220" = "13")
+    ("230" = "14")
+    ("235" = "32")
+    ("240" = "15")
+    ("250" = "16")
+    ("260" = "17")
+    ("270" = "18")
+    ("280" = "19")
+    ("290" = "20")
+    ("300" = "21")
+    ("310" = "22")
+    ("320" = "23")
+    ("330" = "24")
+    ("340" = "25")
+    ("350" = "26")
+    ("355" = "05")
+    ("360" = "27")
+    ("370" = "28")
+    ("380" = "29")
+    ("390" = "30")
+    ("395" = "07")
+    ("400" = "31")
+    into sc_send_lca.
+
+ * Add dictionary info.
+!AddLCADictionaryInfo LCA = sc_send_lca.
+!EndDefine.
+
  * This will only need updating if the name of the Health Board variable changes.
  * Change '/Source variables = HBXXXX' in the below.
 Define !AddHB2018DictionaryInfo (HB = !CMDEND)
