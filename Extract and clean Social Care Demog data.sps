@@ -55,8 +55,10 @@ match files file = *
 * Note that we might lose some valid non-Scottish postcodes here.
 Do if Valid_PC = 1.
     Compute postcode = submitted_postcode.
-Else.
+Else if chi_postcode NE "".
     Compute postcode = chi_postcode.
+Else.
+    Compute postcode = submitted_postcode.
 End if.
 
 * Sort so that the latest submissions are last.
