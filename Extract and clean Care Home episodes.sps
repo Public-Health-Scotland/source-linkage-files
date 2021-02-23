@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -39,6 +39,7 @@ alter type
     sending_location (A3)
     financial_year (F4.0)
     financial_quarter (F1.0)
+    period (A6)
     social_care_id (A10)
     nursing_care_provision (F1.0)
     reason_for_admission (F2.0)
@@ -225,10 +226,6 @@ sort cases by sending_location chi ch_admission_date financial_year financial_qu
 Numeric record_date (Date12).
 compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year), 6, "months"), -1, "days").
 
-* Combine the FY year and quarter into a new string variable.
-String sc_submission (A6).
-compute sc_submission = concat(String(financial_year, F4.0), "Q", String(financial_quarter, F1.0)).
-
 * Highlight episodes where the ch_provider changes within submission quarters.
 aggregate
     /Break record_date sending_location ch_admission_date nursing_care_provision
@@ -248,7 +245,7 @@ aggregate outfile = *
     /gender dob postcode = first(gender dob postcode)
     /ch_discharge_date = last(ch_discharge_date)
     /record_date = Max(record_date)
-    /sc_latest_submission = Max(sc_submission)
+    /sc_latest_submission = Max(period)
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
     /reason_for_admission = last(reason_for_admission).
