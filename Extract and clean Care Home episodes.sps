@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -24,14 +24,7 @@ Define !Extracts()
 
 * Care Home data.
 get file = !sc_extracts + "CH/CH_allyears.sav"
-    /Keep ch_name sending_location social_care_id financial_year financial_quarter period ch_postcode ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
-
-sort cases by sending_location social_care_id period ch_admission_date, ch_discharge_date.
-
-* Match on the demographics data (chi, gender, dob and postcode).
-match files file = *
-    /table = !Extracts_Alt + "Social Care Demographics lookup.zsav"
-    /by = sending_location social_care_id.
+    /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
 
 Variable width ALL (15).
 
@@ -46,6 +39,13 @@ alter type
     ch_provider (F1.0)
     ch_postcode (A8)
     ch_name (A73).
+
+sort cases by sending_location social_care_id period ch_admission_date, ch_discharge_date.
+
+* Match on the demographics data (chi, gender, dob and postcode).
+match files file = *
+    /table = !Extracts_Alt + "Social Care Demographics lookup.zsav"
+    /by sending_location social_care_id.
 
 * Correct Postcode formatting.
 * Remove any postcodes which are length 3 or 4 as these can not be valid (not a useful dummy either).
@@ -356,4 +356,5 @@ save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     scem
     sc_latest_submission
     /zcompressed.
+get file = !Extracts_Alt + "All Care Home episodes.zsav".
 
