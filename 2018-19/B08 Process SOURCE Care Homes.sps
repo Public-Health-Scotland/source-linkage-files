@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
  * Make ch_name the first variable to make the Python below simpler.
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
 
@@ -98,7 +98,7 @@ Alter type ch_provider (A1).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
+save outfile = !File + "care_home_for_source-20" + !FY + ".zsav"
     /Keep Year
     recid
     SMRType
@@ -152,4 +152,4 @@ save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     sc_meals
     sc_day_care
     /zcompressed.
-get file = !File + "Care_Home_For_Source-20" + !FY + ".zsav".
+get file = !File + "care_home_for_source-20" + !FY + ".zsav".
