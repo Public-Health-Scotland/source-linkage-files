@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -244,6 +244,8 @@ aggregate outfile = *
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
     /reason_for_admission = last(reason_for_admission).
+
+sort cases by sending_location social_care_id ch_admission_date record_date.
 
 * Highlight the duplicate records.
 * These are conflicting records submitted in the same quarter with the same admission dates.
