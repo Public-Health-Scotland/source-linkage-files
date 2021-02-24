@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -115,8 +115,6 @@ match files
     /In = AccurateData1
     /Drop CareHomeCouncilName MainClientGroup Sector CareHomeCouncilAreaCode
     /By ch_postcode ch_name.
-Frequencies AccurateData1.
-* 35.8% Match the lookup.
 
 * Guess some possible names for ones which don't match the lookup.
 String TestName1 TestName2(A73).
@@ -168,7 +166,6 @@ Do If TestName1Correct = 1 AND TestName2Correct = 0.
 Else If TestName2Correct = 1 AND TestName1Correct = 0.
     Compute ch_name = TestName2.
 End If.
-Frequencies TestName1Correct TestName2Correct.
 
 *******************************************************************************************************.
 * See which match now.
@@ -180,8 +177,6 @@ match files
     /In = AccurateData2
     /Drop CareHomeCouncilName MainClientGroup Sector CareHomeCouncilAreaCode
     /By ch_postcode ch_name.
-Frequencies AccurateData2.
-* 54.9% Match the lookup.
 
 * Highlight where an episode has at least one row of good data.
 aggregate
@@ -202,7 +197,7 @@ Do if AccurateData2 = 0 AND real_ch_name NE "".
     Compute ch_postcode = real_ch_postcode.
 End if.
 
-CROSSTABS AccurateData2 by Any_accurate.
+crosstabs AccurateData2 by Any_accurate.
 * Fixes around 8000 rows.
 
 Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateData1 AccurateData2 Any_accurate ch_name_real real_ch_name real_ch_postcode.
@@ -294,18 +289,6 @@ Do if n_records > 1.
         Compute ch_admission_date = lag(record_date).
     End if.
 End if.
-
-sort cases by sending_location social_care_id sc_latest_submission scem ch_admission_date ch_discharge_date.
-
-* Checks for errors.
-Do if sending_location = lag(sending_location) and social_care_id = lag(social_care_id).
-    Do if scem NE lag(scem).
-        If sysmiss(lag(ch_discharge_date)) unended_episode = 1.
-        If lag(ch_discharge_date) GT ch_admission_date overlap = 1.
-    End if.
-end if.
-
-frequencies unended_episode overlap duplicate.
 
 Rename Variables
     ch_admission_date = record_keydate1
