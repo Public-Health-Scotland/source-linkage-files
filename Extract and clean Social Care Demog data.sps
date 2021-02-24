@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
@@ -79,6 +79,9 @@ aggregate outfile = *
     /gender = last(gender)
     /dob = last(dob)
     /postcode = last(postcode).
+
+ * Set postcode to A8 for correct matching with SLFs.
+Alter type postcode (A8).
 
 *  Save to be used in other Social Care processing.
 save outfile = !Extracts_Alt + "Social Care Demographics lookup.zsav"
