@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
@@ -17,7 +17,9 @@ Variable width ALL (15).
 Alter type
     upi (A10)
     submitted_postcode (A7)
-    submitted_gender chi_gender_code (F1.0).
+    submitted_gender chi_gender_code (F1.0)
+    sending_location (A3)
+    social_care_id (A10).
 
 * Create new variables which will hold the 'final' data.
 String postcode (A7).
@@ -81,6 +83,7 @@ aggregate outfile = *
 *  Save to be used in other Social Care processing.
 save outfile = !Extracts_Alt + "Social Care Demographics lookup.zsav"
     /zcompressed.
+get file =  !Extracts_Alt + "Social Care Demographics lookup.zsav".
 
 
 
