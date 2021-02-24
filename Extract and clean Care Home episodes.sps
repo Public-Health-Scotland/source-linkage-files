@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -223,7 +223,7 @@ compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year
 
 * Highlight episodes where the ch_provider changes within submission quarters.
 aggregate
-    /Break record_date sending_location ch_admission_date nursing_care_provision
+    /Break record_date sending_location social_care_id ch_admission_date nursing_care_provision
     /min_provider = min(ch_provider)
     /max_provider = max(ch_provider).
 
