@@ -69,12 +69,12 @@ Rename Variables
     day_care = sc_day_care.
 
 * Sort for matching.
-sort cases by social_care_id sending_location.
+sort cases by sending_location social_care_id .
 * Save and reorder flag variables so they're in the same order as Social Care Dataset definition.
 save outfile =  !File + "Client_for_Source-20" + !FY + ".zsav"
     /Keep
-    social_care_id
     sending_location
+    social_care_id
     sc_living_alone
     sc_support_from_unpaid_carer
     sc_social_worker

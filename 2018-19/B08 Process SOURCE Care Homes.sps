@@ -1,16 +1,14 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
  * Make ch_name the first variable to make the Python below simpler.
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
 
 * Select episodes for given FY.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 < !startFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
 
-sort cases by social_care_id sending_location.
-
 * Match on Client data.
 match files file = *
     /table = !File + "Client_for_Source-20" + !FY + ".zsav"
-    /By social_care_id sending_location.
+    /By sending_location social_care_id.
 
 String Year (A4).
 Compute Year = !FY.
