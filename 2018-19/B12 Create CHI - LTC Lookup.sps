@@ -69,6 +69,39 @@ End Repeat.
 If postcode = "NA" postcode = "".
 
 sort cases by chi postcode.
+
+ * Highlight different CHI numbers.
+add files file = *
+    /first = first_chi
+    /last = last_chi
+    /by chi.
+
+ * Highlight different CHI number / postcode combinations.
+add files file = *
+    /first = first_chi_postcode
+    /last = last_chi_postcode
+    /by chi postcode.
+
+ * Create flags to identify duplicates.
+Numeric duplicate_chi duplicate_chi_postcode (F1.0).
+
+Do if first_chi = last_chi.
+    Compute duplicate_chi = 0.
+    Compute duplicate_chi_postcode = 0.
+Else.
+    Do if first_chi_postcode = last_chi_postcode.
+        Compute duplicate_chi = 1.
+        Compute duplicate_chi_postcode = 0.
+    Else.
+        Compute duplicate_chi = 1.
+        Compute duplicate_chi_postcode = 1.
+    End if.
+End if.
+
+Temporary.
+select if duplicate_chi = 1 or duplicate_chi_postcode = 1.
+save outfile = !File + "LTC_errors_20" + !FY + ".sav".
+
 save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
    /keep chi postcode arth to digestive
       arth_date to digestive_date
