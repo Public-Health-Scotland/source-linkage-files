@@ -92,7 +92,12 @@ String Year (A4).
 Compute year = !FY.
 
 * Recode Fife and Tayside so they match the cost lookup.
+*(2014 > 2018 HB codes). 
 Recode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+
+*Recode Greater Glasgow & Clyde and Lanarkshire so they match the costs lookup. 
+*(2018 > 2019 HB codes). 
+Recode hbtreatcode ("S08000021" = "S08000031") ("S08000023" = "S08000032"). 
 
 sort cases by hbtreatcode.
 
