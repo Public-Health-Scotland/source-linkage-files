@@ -98,9 +98,10 @@ Else.
     End if.
 End if.
 
-Temporary.
-select if duplicate_chi = 1 or duplicate_chi_postcode = 1.
+If duplicate_chi = 1 or duplicate_chi_postcode = 1 Error = 1.
+Frequencies Error.
 save outfile = !File + "LTC_errors_20" + !FY + ".sav".
+
 
 save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
    /keep chi postcode arth to digestive
