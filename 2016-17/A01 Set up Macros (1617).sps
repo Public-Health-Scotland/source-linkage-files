@@ -57,7 +57,6 @@ Define !CSDExtractLocOld()
 !EndDefine.
 
 
-*******************************************************.
  * Source Lookups *
  * Should not need changing *
 *******************************************************.
