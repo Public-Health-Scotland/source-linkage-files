@@ -69,6 +69,8 @@ End Repeat.
 If postcode = "NA" postcode = "".
 
 sort cases by chi postcode.
+
+
 save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
    /keep chi postcode arth to digestive
       arth_date to digestive_date
