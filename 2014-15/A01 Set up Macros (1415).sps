@@ -2,26 +2,21 @@
 ************************************************************************************************************
                                                    NSS (ISD)
 ************************************************************************************************************
-** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
-** Date:    	01/08/2018
-************************************************************************************************************
-** Amended by:         
-** Date:
-** Changes:    
-29/03/19-Localities lookup file link updated -Anita George                 
-************************************************************************************************************.
+** AUTHOR:  James McMahon (j.mcmahon1@nhs.net)
+** Date:        01/08/2018
+
  * Set the Financial Year.
 Define !FY()
-   "1718"
+   "1415"
 !EndDefine.
 
  * Set the next FY, needed for SPARRA (and HHG).
 Define !NextFY ()
-    "1819"
+    "1516"
 !EndDefine.
 
 Define !File()
-   !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
+    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
 !EndDefine.
 
 * Extract files - "home".
@@ -38,7 +33,7 @@ Define !Costs_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
 !EndDefine.
 
-* Replace the number with the CSD ref.
+ * Replace the number with the CSD ref.
 Define !CSDRef()
     "SCTASK0205902"
 !EndDefine.
@@ -60,7 +55,7 @@ Define !CSDExtractLocOld()
     !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRefOld))))
 !EndDefine.
 
-
+*******************************************************.
  * Source Lookups *
  * Should not need changing *
 *******************************************************.
@@ -212,48 +207,6 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
       '30' "Stirling"
       '31' "West Lothian"
       '32' "Na h-Eileanan Siar"
-!EndDefine.
-
- * Recode the Social care loation codes into LCA codes.
-Define !Create_sc_sending_location ()
-String sc_send_lca (A2).
-Recode sending_location
-    ("100" = "01")
-    ("110" = "02")
-    ("120" = "03")
-    ("130" = "04")
-    ("150" = "06")
-    ("170" = "08")
-    ("180" = "09")
-    ("190" = "10")
-    ("200" = "11")
-    ("210" = "12")
-    ("220" = "13")
-    ("230" = "14")
-    ("235" = "32")
-    ("240" = "15")
-    ("250" = "16")
-    ("260" = "17")
-    ("270" = "18")
-    ("280" = "19")
-    ("290" = "20")
-    ("300" = "21")
-    ("310" = "22")
-    ("320" = "23")
-    ("330" = "24")
-    ("340" = "25")
-    ("350" = "26")
-    ("355" = "05")
-    ("360" = "27")
-    ("370" = "28")
-    ("380" = "29")
-    ("390" = "30")
-    ("395" = "07")
-    ("400" = "31")
-    into sc_send_lca.
-
- * Add dictionary info.
-!AddLCADictionaryInfo LCA = sc_send_lca.
 !EndDefine.
 
  * This will only need updating if the name of the Health Board variable changes.
