@@ -44,7 +44,7 @@ Rename Variables
  * Use the postcode lookup file to identify valid postcodes.
  * We don't want any of the geographies at this point.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In = PostcodeMatch
     /Drop HB2018 to UR2_2016
     /by postcode.
@@ -62,7 +62,7 @@ if chi NE "" and (all_match NE 0 and all_match NE 1) potentially_fixable = 1.
 * Save out main file for now.
 Temporary.
 Select if potentially_fixable = 0.
-save outfile = !File + "temp-no-postcode-changes-" + !FY + ".zsav"
+save outfile = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav"
     /zcompressed.
 
 * Work on 'potentially fixable' records for now.
@@ -99,13 +99,13 @@ End if.
 sort cases by Postcode.
 
 add files file = *
-    /file = !File + "temp-no-postcode-changes-" + !FY + ".zsav"
+    /file = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav"
     /Drop PostcodeMatch all_match potentially_fixable changed_postcode
     /By Postcode.
 
 * Apply consistent geographies.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /Rename (HB2018 = hbrescode)
     /In = PostcodeMatch
     /by postcode.
