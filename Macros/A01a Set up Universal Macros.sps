@@ -59,6 +59,10 @@ Define !AnontoCHIlookup()
     "/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav"
 !EndDefine.
 
+*Latest update month for postcode and gp prac lookups.
+Define !LatestUpdate()
+   "March_2021"
+!EndDefine.
 
 *******************************************************.
  * Geography Lookups *
