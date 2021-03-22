@@ -369,7 +369,7 @@ Rename Variables
 * Find out which GPprac codes are good.
 * We don't want any of the other variables at this point.
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 to hbpraccode
     /by gpprac.
@@ -391,7 +391,7 @@ if chi NE "" and (all_match NE 0 and all_match NE 1) potentially_fixable = 1.
 * Save out main file for now.
 Temporary.
 Select if potentially_fixable = 0.
-save outfile = !File + "temp-no-gpprac-changes-" + !FY + ".zsav"
+save outfile = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
     /zcompressed.
 
 * Work on 'potentially fixable' records for now.
@@ -428,12 +428,12 @@ End if.
 sort cases by gpprac.
 
 add files file = *
-    /file = !File + "temp-no-gpprac-changes-" + !FY + ".zsav"
+    /file = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
     /Drop GPPracMatch all_match potentially_fixable changed_gpprac
     /By gpprac.
 
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 PC8
     /by gpprac.
@@ -462,6 +462,6 @@ save outfile = !File + "temp-source-episode-file-8-" + !FY + ".zsav"
     /zcompressed.   
 
 * Housekeeping.
-Erase file = !File + "temp-no-postcode-changes-" + !FY + ".zsav".
-Erase file = !File + "temp-no-gpprac-changes-" + !FY + ".zsav".
+Erase file = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav".
+Erase file = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav".
 
