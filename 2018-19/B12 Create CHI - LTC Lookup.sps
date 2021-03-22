@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
@@ -65,7 +65,11 @@ Do Repeat LTC = arth to digestive
    End if.
 End Repeat.
 
-sort cases by chi.
+* Fix postcode being read in as 'NA'.
+If postcode = "NA" postcode = "".
+
+sort cases by chi postcode.
+
 
 save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
    /keep chi postcode arth to digestive
