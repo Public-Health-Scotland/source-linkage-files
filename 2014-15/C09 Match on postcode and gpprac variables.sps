@@ -1,20 +1,6 @@
 ﻿* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
 
-* Recode all to 2018 boundaries.
-* Can only do this as the 2014/2016 -> 2018 change didn't affect any postcodes, the 2018 -> 2019 change affected 7 postcodes.
-* This might incorrectly assign people from those 7 postcodes in the edge case where we have a valid 2019 geog for them but no postcode.
-
-* HB2014 -> HB2018.
-Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
-* HB2019 -> HB2018.
-Recode hbrescode hbpraccode hbtreatcode ("S08000031" = "S08000021") ("S08000032" = "S08000023").
-
-* HSCP2016 -> HSCP2018.
-Recode HSCP ("S37000014" = "S37000032") ("S37000023" = "S37000033").
-* HSCP2019 -> HSCP2018.
-Recode HSCP ("S37000034" = "S37000015") ("S37000035" = "S37000021").
-
 * Correct Postcode formatting.
 * Remove any postcodes which are length 3 or 4 as these can not be valid (not a useful dummy either).
 If range(Length(Postcode), 3, 4) Postcode = "".
@@ -454,8 +440,10 @@ if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
 * Not including yet as unsure whether the gains are worth introducing incorrect boards...
 * If hbpraccode NE "" and hbrescode = "" and hbpraccode = hbtreatcode hbrescode = hbpraccode.
 
-* All geographies should now have a label and be from the 2018 (or dummy) geographies.
-crosstabs hbrescode hbtreatcode hbpraccode hscp2018 ca2018 lca by recid.
+* Recode according to boundary changes 08/05/2018.
+Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
+Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
 
 save outfile = !File + "temp-source-episode-file-8-" + !FY + ".zsav"
     /Drop LCA_old HSCP_old Datazone_old hbrescode_old hbpraccode_old PostcodeMatch GPPracMatch

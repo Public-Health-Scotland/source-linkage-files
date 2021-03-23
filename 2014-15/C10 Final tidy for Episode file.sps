@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 Variable Labels
@@ -705,7 +705,7 @@ Variable Width
     record_keydate1 record_keydate2 keydate1_dateformat keydate2_dateformat dob death_date dateop1 dateop2 dateop3 dateop4(10).
 
 *********************************************************************************************.
-sort cases by CHI record_keydate1 keytime1 record_keydate2 keytime2.
+sort cases by CHI record_keydate1 record_keydate2.
 
 * Reorder and keep variables.
 save outfile = !File + "source-episode-file-20" + !FY + ".zsav"

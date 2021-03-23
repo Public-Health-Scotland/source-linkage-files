@@ -123,11 +123,6 @@ get file = !File + "GPOOH-Temp-2.zsav".
 * Recode Fife and Tayside so they match the cost lookup.
 Recode TreatmentNHSBoardCode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
 
-*Recode Greater Glasgow & Clyde and Lanarkshire so they match the costs lookup. 
-*(2018 > 2019 HB codes). 
-Recode TreatmentNHSBoardCode ("S08000021" = "S08000031") ("S08000023" = "S08000032"). 
-
-
 Sort cases by TreatmentNHSBoardCode.
 
 * Year.
