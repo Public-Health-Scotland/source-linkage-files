@@ -13,6 +13,24 @@
 *Run A01a Set up Universal macros and then A01b Set up (year) Macro at the beginning of each update.
 *Date: 22/03/21. 
 
+*******************************************************.
+ * Update Macros *
+ * Needs changed every update *
+*******************************************************.
+* IT Extracts * 
+* Replace the number with the CSD ref.
+Define !CSDRef()
+    "SCTASK0205902"
+!EndDefine.
+
+*Latest update month for postcode and gp prac lookups.
+Define !LatestUpdate()
+   "March_2021"
+!EndDefine.
+
+*******************************************************.
+* File Path locations *. 
+*******************************************************.
 
 Define !File()
    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
@@ -32,11 +50,7 @@ Define !Costs_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
 !EndDefine.
 
-* Replace the number with the CSD ref.
-Define !CSDRef()
-    "SCTASK0205902"
-!EndDefine.
-
+* IT extract. 
 Define !CSDExtractLoc()
     !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRef))))
 !EndDefine.
@@ -57,11 +71,6 @@ Define !CHItoAnonlookup()
 
 Define !AnontoCHIlookup()
     "/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav"
-!EndDefine.
-
-*Latest update month for postcode and gp prac lookups.
-Define !LatestUpdate()
-   "March_2021"
 !EndDefine.
 
 *******************************************************.

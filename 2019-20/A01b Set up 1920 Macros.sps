@@ -12,7 +12,7 @@
 *Run A01a Set up Universal macros and then A01b Set up (year) Macro at the beginning of each update.
 *Date: 22/03/21. 
 *A01a Set up Universal Macros is located at: 
-        * "/conf/irf/11-Development team/Dev00-PLICS-files/Macros/A01a Set up Universal Macros.sps"
+        * "/conf/irf/11-Development team/Dev00-PLICS-files/All Years/A01a Set up Universal Macros.sps"
 
 
  * Set the Financial Year.
