@@ -30,18 +30,12 @@ Numeric
 * Compare the values for submitted and CHI matched for gender dob and postcode.
 
 * For gender prefer CHI match if we have it.
-Do if sysmis(chi_gender_code).
-    compute gender = submitted_gender.
-Else.
-    compute gender = chi_gender_code.
-End if.
+compute gender = chi_gender_code.
+if sysmis(chi_gender_code) gender = submitted_gender.
 
 * For dob prefer CHI match if we have it.
-Do if sysmis(chi_date_of_birth).
-    compute dob = submitted_date_of_birth.
-Else.
-    compute dob = chi_date_of_birth.
-End if.
+compute dob = chi_date_of_birth.
+if sysmis(chi_date_of_birth) dob = submitted_date_of_birth.
 
 * Match to the Scottish Postcode Directory to determine if the submitted postcodes are valid.
 sort cases by submitted_postcode.
