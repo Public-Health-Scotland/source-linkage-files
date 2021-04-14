@@ -12,7 +12,7 @@
  * Make a copy of the existing file, in case something weird has happened to the data!.
  * Get an error because of the -p flag: This keeps the amend date but fails on permissions - command works fine though.
  * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Extracts_Alt + "Cost_GPOoH_Lookup.sav' '" +  !Extracts_Alt + "Cost_GPOoH_Lookup_OLD.sav'"].
+Host Command = ["cp '" + !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav' '" +  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup_OLD.sav'"].
 
 * Now read in from the spreadsheet.
 GET DATA
