@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
- * Run A01-Set up Macros first!.
+ * Run A01a - Set up Universal Macros and A01b Set up (year) Macros first!.
  **************************************************************************************************
  * Build the Postcode lookup.
 
@@ -33,7 +33,7 @@ Variable Labels
 sort cases by PC7.
 
  * Save out, only keep the variables we need and rename PC7.
-save outfile = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+save outfile = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
    /Rename (PC7 = postcode)
    /Keep Postcode HB2018 HSCP2018 CA2018 LCA Locality DataZone2011
       HB2019 CA2019 HSCP2019
@@ -44,7 +44,4 @@ save outfile = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
       UR8_2016 UR6_2016 UR3_2016 UR2_2016 
    /Zcompressed.
 
-get file = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav".
-
-
-
+get file = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav".

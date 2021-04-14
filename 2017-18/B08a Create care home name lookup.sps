@@ -29,7 +29,7 @@ GET DATA /TYPE=XLSX
    /READNAMES=on
    /ASSUMEDSTRWIDTH=32767.
 
-Rename Varaibles
+Rename Variables
     AccomPostCodeNo = CareHomePostcode.
 
 * Only keep ones which were open on or after the start of the FY.
@@ -114,7 +114,7 @@ Compute CareHomeCouncilAreaCode = Replace(CareHomeCouncilAreaCode, " ", "0").
 
  * Run the Python function 'capwords' on CareHomeName.
  * This will capitalise each word for uniformity and will improve matching.
- * https://docs.python.org/2/library/string.html#string-functions
+ * https://docs.python.org/2/library/string.html#string-functions.
 
 SPSSINC TRANS RESULT = CareHomeName Type = 73
    /FORMULA "string.capwords(ServiceName)".

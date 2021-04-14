@@ -1,20 +1,36 @@
 ﻿* Encoding: UTF-8.
+*Run Macros before SLF update.
 ************************************************************************************************************
-                                                   NSS (ISD)
-************************************************************************************************************
-** AUTHOR:	James McMahon (j.mcmahon1@nhs.net)
+** AUTHOR:	James McMahon (james.mcmahon@phs.scot)
 ** Date:    	01/08/2018
 ************************************************************************************************************
+** Amended by: Jennifer Thom (Jennifer.Thom@phs.scot)
+** Date: 22/03/21
+** Changes: Switched macro file so there is one universal macro file for each quarterly update. 
+                  *and each year will have its own unique year macro. 
+************************************************************************************************************.
+*Universal Macros for Source Linkage Files - applies to all years. 
+*Run A01a Set up Universal macros and then A01b Set up (year) Macro at the beginning of each update.
+*Date: 22/03/21. 
 
- * Set the Financial Year.
-Define !FY()
-   "1819"
+*******************************************************.
+ * Update Macros *
+ * Needs changed every update *
+*******************************************************.
+* IT Extracts * 
+* Replace the number with the CSD ref.
+Define !CSDRef()
+    "SCTASK0205902"
 !EndDefine.
 
-* Set the next FY, needed for SPARRA (and HHG).
-Define !NextFY ()
-    "1920"
+*Latest update month for postcode and gp prac lookups.
+Define !LatestUpdate()
+   "March_2021"
 !EndDefine.
+
+*******************************************************.
+* File Path locations *. 
+*******************************************************.
 
 Define !File()
    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
@@ -34,26 +50,9 @@ Define !Costs_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
 !EndDefine.
 
-* Replace the number with the CSD ref.
-Define !CSDRef()
-    "SCTASK0205902"
-!EndDefine.
-
+* IT extract. 
 Define !CSDExtractLoc()
     !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRef))))
-!EndDefine.
-
-
-*For Old files CSD ref use this for 14/15 PIS only.
-*For LTC and Deaths IT extracts use CSD ref above. 
-Define !CSDRefOld()
-    "SCTASK0182748"
-!EndDefine.
-
-*For Old files CSD ref use this for 14/15 PIS only.
-*For LTC and Deaths IT extracts in 14/15 use CSD ref above. 
-Define !CSDExtractLocOld()
-    !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRefOld))))
 !EndDefine.
 
 *******************************************************.
@@ -363,4 +362,6 @@ Variable Width !Beddays (5).
 Variable Level !Beddays (Scale).
 
 !EndDefine.
+
+
 
