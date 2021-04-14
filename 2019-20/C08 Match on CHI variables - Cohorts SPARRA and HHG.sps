@@ -4,7 +4,7 @@
 ********************************************************************************************************. 
 
  * Get the SPARRA and HHG files from the SPARRA team.
- * Email NSS.SPARRAOnline@nhs.net for SPARRA and  NSS.HighHealthGain@nhs.net for HHG.
+ * Email phs.sparraonline@phs.scot for SPARRA and  phs.highhealthgain@phs.scot for HHG.
  * Ask for the 12 month scores for all chis from as close to 1st April as possible.
  * Save the files in extracts as SPARRA-201718.zsav and HHG-201718.zsav.
 

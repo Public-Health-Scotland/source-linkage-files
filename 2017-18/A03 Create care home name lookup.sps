@@ -7,7 +7,7 @@
 ** Name of customer/output:		Source
 ** Directory where outputs saved:	Set by CD
 ** Length of time to run program:	10 secs.
-** AUTHOR:				James McMahon (j.mcmahon1@nhs.net)
+** AUTHOR:				James McMahon (james.mcmahon@phs.scot)
 ** Date:    				15/05/2018
 ************************************************************************************************************
 ** Amended by:         
