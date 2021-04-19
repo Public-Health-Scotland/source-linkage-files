@@ -46,7 +46,7 @@ Do repeat pc = submitted_postcode chi_postcode.
     If Length(pc) < 5 pc = "".
 
     * Remove spaces which deals with any 8-char postcodes.
-    Compute Postcode = Replace(pc, " ", "").
+    Compute pc = Replace(pc, " ", "").
     * If any postcodes are now 8 or longer, these are invalid.
     If Length(pc) >= 8 pc = "".
 
@@ -81,10 +81,12 @@ Else if chi_postcode NE "".
     Compute postcode_type = "CHI".
     Compute postcode = chi_postcode.
 Else.
-    Compute postcode_type = "submitted - invalid".
+    Compute postcode_type = "submitted - invalid (Not valid Scottish)".
     Compute postcode = submitted_postcode.
 End if.
 If postcode = "" postcode_type = "missing".
+ * Check where the postcodes we are using are coming from.
+frequencies postcode_type.
 
 * Sort so that the latest submissions are last.
 sort cases by sending_location social_care_id latest_record extract_date.
@@ -105,6 +107,8 @@ aggregate outfile = *
 
  * Set postcode to A8 for correct matching with SLFs.
 Alter type postcode (A8).
+ * Reset the missing values.
+Missing values chi postcode ().
 
 *  Save to be used in other Social Care processing.
 save outfile = !Extracts_Alt + "Social Care Demographics lookup.zsav"
