@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
@@ -17,9 +17,9 @@ Variable width ALL (15).
 * Fix string lengths and convert gender to numeric.
 Alter type
     upi (A10)
-    submitted_postcode (A7)
-    submitted_gender chi_gender_code (F1.0)
+    submitted_gender chi_gender_code (F2.0)
     sending_location (A3)
+    submitted_date_of_birth chi_date_of_birth (date11)
     social_care_id (A10).
 
 * Create new variables which will hold the 'final' data.
@@ -29,10 +29,11 @@ Numeric
     dob (DATE11).
 
 * Compare the values for submitted and CHI matched for gender dob and postcode.
-
+* Clean up some gender codes.
+if submitted_gender = 99 submitted_gender = 9.
 * For gender prefer CHI match if we have it.
 compute gender = chi_gender_code.
-if sysmis(chi_gender_code) gender = submitted_gender.
+if sysmis(chi_gender_code) or any(chi_gender_code, 0, 9) gender = submitted_gender.
 
 * For dob prefer CHI match if we have it.
 compute dob = chi_date_of_birth.
