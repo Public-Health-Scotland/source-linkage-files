@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
@@ -38,6 +38,28 @@ compute dob = chi_date_of_birth.
 if sysmis(chi_date_of_birth) dob = submitted_date_of_birth.
 
 * Match to the Scottish Postcode Directory to determine if the submitted postcodes are valid.
+Do repeat pc = submitted_postcode chi_postcode.
+    * Correct Postcode formatting.
+    * Remove any postcodes which are length less than 5 as these can not be valid (not a useful dummy either).
+    If Length(pc) < 5 pc = "".
+
+    * Remove spaces which deals with any 8-char postcodes.
+    Compute Postcode = Replace(pc, " ", "").
+    * If any postcodes are now 8 or longer, these are invalid.
+    If Length(pc) >= 8 pc = "".
+
+    * Add spaces to create a 7-char postcode.
+    Loop if range(Length(pc), 5, 6).
+        Compute #current_length = Length(pc).
+        Compute pc = Concat(char.substr(pc, 1,  #current_length - 3), " ", char.substr(pc,  #current_length - 2, 3)).
+    End Loop.
+
+    * Remove dummy postcodes.
+    If any(pc, "NF1 1AB", "NK1 0AA") pc = "".
+End repeat.
+
+alter type submitted_postcode chi_postcode (A7).
+
 sort cases by submitted_postcode.
 
 match files file = *
@@ -47,15 +69,20 @@ match files file = *
     /Keep latest_record extract_date sending_location social_care_id upi gender dob postcode submitted_postcode chi_postcode
     /By submitted_postcode.
 
+String postcode_type (A100).
 * If the submitted postcode is valid keep it, otherwise use the postcode from CHI.
 * Note that we might lose some valid non-Scottish postcodes here.
 Do if Valid_PC = 1.
+    Compute postcode_type = "submitted - valid".
     Compute postcode = submitted_postcode.
 Else if chi_postcode NE "".
+    Compute postcode_type = "CHI".
     Compute postcode = chi_postcode.
 Else.
+    Compute postcode_type = "submitted - invalid".
     Compute postcode = submitted_postcode.
 End if.
+If postcode = "" postcode_type = "missing".
 
 * Sort so that the latest submissions are last.
 sort cases by sending_location social_care_id latest_record extract_date.
