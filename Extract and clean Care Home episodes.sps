@@ -1,7 +1,7 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
-Insert file = "pass.sps" Error = Stop.
+*Insert file = "pass.sps" Error = Stop.
 
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
