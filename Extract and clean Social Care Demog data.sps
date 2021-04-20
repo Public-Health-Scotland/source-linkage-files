@@ -8,7 +8,7 @@ Define !sc_extracts()
 get file = !sc_extracts + "DEMOG/DEMOG_allyears.zsav"
     /Keep latest_record extract_date sending_location social_care_id
     submitted_chi_number upi
-    submitted_postcode chi_postcode 
+    submitted_postcode chi_postcode
     submitted_date_of_birth chi_date_of_birth
     submitted_gender chi_gender_code.
 * Cosmetic.
@@ -58,6 +58,44 @@ Do repeat pc = submitted_postcode chi_postcode.
 
     * Remove dummy postcodes.
     If any(pc, "NF1 1AB", "NK1 0AA") pc = "".
+
+    * Remove other invalid postcodes (checked using postcodes.io).
+    if any(pc,
+        'DY103DJ',
+        'EH191TR',
+        'EH292EZ',
+        'EH33TNZ',
+        'G46 2NF',
+        'G46 6FY',
+        'G69 2YB',
+        'G73 8NZ',
+        'G74 7SN',
+        'G75 1ZZ',
+        'G75 6DF',
+        'G77 3GT',
+        'G78 6BU',
+        'G78 ITE',
+        'G79 8AJ',
+        'IV178ED',
+        'KA113FP',
+        'KA28OBE',
+        'KA5 1LQ',
+        'KA71JUJ',
+        'KA9 9FG',
+        'KW152SE',
+        'KY1 3DO',
+        'KY13OPX',
+        'L15 0PR',
+        'M16 0GS',
+        'ML3 0GS',
+        'ML7 6AQ',
+        'NK1 1AA',
+        'NK1 1AB',
+        'PA438JP',
+        'PA494JS',
+        'PR2 5AL',
+        'TD8 8JD') pc = "".
+
 End repeat.
 
 alter type submitted_postcode chi_postcode (A7).
@@ -85,7 +123,7 @@ Else.
     Compute postcode = submitted_postcode.
 End if.
 If postcode = "" postcode_type = "missing".
- * Check where the postcodes we are using are coming from.
+* Check where the postcodes we are using are coming from.
 frequencies postcode_type.
 
 * Sort so that the latest submissions are last.
@@ -105,9 +143,9 @@ aggregate outfile = *
     /dob = last(dob)
     /postcode = last(postcode).
 
- * Set postcode to A8 for correct matching with SLFs.
+* Set postcode to A8 for correct matching with SLFs.
 Alter type postcode (A8).
- * Reset the missing values.
+* Reset the missing values.
 Missing values chi postcode ().
 
 *  Save to be used in other Social Care processing.
