@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 Insert file = "pass.sps" Error = Stop.
@@ -278,6 +278,7 @@ add files file = *
     /by sending_location social_care_id scem record_date
     /last = Last_record.
 
+Numeric last_ch_discharge_date (Date11).
 If last_record last_ch_discharge_date = ch_discharge_date.
 
 * For all episodes set the sc_dates to be the first admission and last discharge (these are the actual dates for the episode).
