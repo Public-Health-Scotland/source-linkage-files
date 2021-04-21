@@ -1,5 +1,4 @@
-﻿* Encoding: UTF-8.
- * Make ch_name the first variable to make the Python below simpler.
+* Encoding: UTF-8.
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
 
 * Select episodes for given FY.
@@ -22,7 +21,7 @@ compute SMRType = 'Care-Home'.
 Numeric age (F3.0).
 Compute age = datediff(!midFY, dob, "years").
 
- * Uses sending_location and recodes into sc_sending_location using actual codes.
+* Uses sending_location and recodes into sc_sending_location using actual codes.
 !Create_sc_sending_location.
 
 * Work out bed days per month.
