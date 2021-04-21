@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -489,6 +489,8 @@ aggregate outfile = *
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date
     = First(arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date)
+    /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care =
+    First(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /Demographic_Cohort Service_Use_Cohort
     = First(Demographic_Cohort Service_Use_Cohort)
     /SPARRA_Start_FY SPARRA_End_FY
