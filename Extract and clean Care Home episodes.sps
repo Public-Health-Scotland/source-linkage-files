@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -241,6 +241,7 @@ End if.
 
 * Count records (where episodes are split because of changes in ch_provider or nursing_care).
 * Create a marker to link split episodes together.
+Numeric record_count scem (F6.0).
 Compute record_count = 1.
 Compute scem = 1. /*scem = Social Care Episode Marker - name hopefully to be changed */.
 
@@ -317,6 +318,8 @@ Value Labels ch_provider
     5 'NHS Board'
     6 'Other'.
 
+ * Remove SCEM for records without a CHI.
+if chi = "" scem = $sysmis.
 save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     /Keep chi
     gender
