@@ -1,5 +1,28 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
+
+* Adjust discharge dates according to death dates.
+match files file = *
+    /table = !Extracts_Alt + "All Deaths.zsav"
+    /by = chi.
+
+add files file = *
+    /last = last_scem_ep
+    /by chi scem.
+
+Compute changed_dis_date = 0.
+
+do if range(datediff(sc_date_2, death_date "days"), 1, 5).
+    Compute days_after_death = datediff(sc_date_2, death_date "days").
+    Compute changed_dis_date = 1.
+    Compute new_sc_date_2 = death_date.
+    If last_scem_ep new_record_keydate2 = death_date.
+else if range(datediff(sc_date_2, death_date_CHI "days"), 1, 5).
+    Compute days_after_death = datediff(sc_date_2, death_date_CHI "days").
+    Compute changed_dis_date = 2.
+    Compute new_sc_date_2 = death_date_CHI.
+    If last_scem_ep new_record_keydate2 = death_date_CHI.
+end if.
 
 * Select episodes for given FY.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 < !startFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
