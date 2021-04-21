@@ -7,21 +7,6 @@ Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
 
-define !output_dir()
-    "/conf/sourcedev/James/sc_test_extracts/"
-!enddefine.
-
-* This is just needed for the CH lookup which is used for repairing names where possible.
-* Need to re-work this to use a generic lookup, currently the lookup is filtered to only CHs which were open in the given year.
-Define !FY()
-    "1819"
-!EndDefine.
-
-* Extract files - "home".
-Define !Extracts()
-    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/Extracts/"))
-!EndDefine.
-
 * Care Home data.
 get file = !sc_extracts + "CH/CH_allyears.sav"
     /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
