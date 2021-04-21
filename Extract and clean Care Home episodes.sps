@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -320,6 +320,9 @@ Value Labels ch_provider
 
  * Remove SCEM for records without a CHI.
 if chi = "" scem = $sysmis.
+
+sort cases by chi scem record_keydate1 record_keydate2.
+
 save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     /Keep chi
     gender
