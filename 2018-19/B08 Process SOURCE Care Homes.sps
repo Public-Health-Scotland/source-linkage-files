@@ -2,21 +2,28 @@
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
 
 * Adjust discharge dates according to death dates.
+* Match on the death dates from the deceased lookup (year specific).
 match files file = *
     /table = !Extracts_Alt + "All Deaths.zsav"
     /by = chi.
 
+* Create a flag to identify the last record where an episode has been split.
 add files file = *
     /last = last_scem_ep
     /by chi scem.
 
+* Flag to identify which episodes were changed and why.
 Compute changed_dis_date = 0.
 
+* Episodes where the death_date is within 1-5 days of the dis date.
 do if range(datediff(sc_date_2, death_date "days"), 1, 5).
+    * Some tracking variables.
     Compute days_after_death = datediff(sc_date_2, death_date "days").
     Compute changed_dis_date = 1.
+    * Create new variables for now, this will overwrite in the final version.
     Compute new_sc_date_2 = death_date.
     If last_scem_ep new_record_keydate2 = death_date.
+* Episodes not affected by the above but where the CHI death date fits the criteria (most CHIs have the same death date so this is a small number).
 else if range(datediff(sc_date_2, death_date_CHI "days"), 1, 5).
     Compute days_after_death = datediff(sc_date_2, death_date_CHI "days").
     Compute changed_dis_date = 2.
@@ -24,7 +31,7 @@ else if range(datediff(sc_date_2, death_date_CHI "days"), 1, 5).
     If last_scem_ep new_record_keydate2 = death_date_CHI.
 end if.
 
-* Select episodes for given FY.
+* Now select episodes for given FY, need to do this now as discharge dates may have been moved out of the FY above.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 < !startFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
 
 * Match on Client data.
