@@ -825,6 +825,10 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     sc_type_of_housing
     sc_meals
     sc_day_care
+    sc_date_1
+    sc_date_2
+    scem
+    sc_latest_submission
     ch_name
     ch_adm_reason
     ch_provider
