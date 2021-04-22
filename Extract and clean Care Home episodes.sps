@@ -228,6 +228,11 @@ If min_provider NE max_provider ch_provider = 6.
 
 * Sort to ensure the latest submitted records come last.
 Sort cases by sending_location social_care_id chi ch_admission_date ch_provider nursing_care_provision record_date.
+save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
+    /Keep chi sending_location social_care_id ch_name ch_postcode ch_admission_date ch_discharge_date record_date period All
+    /Drop min_provider max_provider
+    /zcompressed.
+get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
@@ -353,4 +358,7 @@ save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     sc_latest_submission
     /zcompressed.
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
+
+* Clean up.
+Erase file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
