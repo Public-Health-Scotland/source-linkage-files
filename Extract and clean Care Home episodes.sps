@@ -273,11 +273,11 @@ Else if lag(sending_location) = sending_location AND lag(social_care_id) = socia
     End if.
 End if.
 
-sort cases by sending_location social_care_id scem record_date.
+sort cases by chi sending_location social_care_id scem record_date.
 * Highlight the last episode of the scem to take the discharge date from.
 * Can't use aggregate as that will ignore missing dates.
 add files file = *
-    /by sending_location social_care_id scem record_date
+    /by chi sending_location social_care_id scem record_date
     /last = Last_record.
 
 Numeric last_ch_discharge_date (Date11).
@@ -287,7 +287,7 @@ If last_record last_ch_discharge_date = ch_discharge_date.
 * This will only be useful for split episodes, in the normal case they will match the single line episode dates.
 * Also add on the maximum number of records for each episode so we can identify the split episodes.
 aggregate
-    /break sending_location social_care_id scem
+    /break chi sending_location social_care_id scem
     /n_records = max(record_count)
     /sc_date_1 = min(ch_admission_date)
     /sc_date_2 = max(last_ch_discharge_date).
