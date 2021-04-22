@@ -226,26 +226,27 @@ aggregate
 * If min and max are the same all values must be the same, otherwise at least one must be different.
 If min_provider NE max_provider ch_provider = 6.
 
-* Sort to ensure the latest submitted records come last.
-Sort cases by sending_location social_care_id chi ch_admission_date ch_provider nursing_care_provision record_date.
 save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
     /Keep chi sending_location social_care_id ch_name ch_postcode ch_admission_date ch_discharge_date record_date period All
     /Drop min_provider max_provider
     /zcompressed.
 get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
+* Sort to ensure the latest submitted records come last.
+Sort cases by chi ch_admission_date record_date sending_location social_care_id ch_provider nursing_care_provision.
+
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
-    /Break sending_location social_care_id chi ch_admission_date ch_provider nursing_care_provision
-    /gender dob postcode = first(gender dob postcode)
+    /Break chi ch_admission_date sending_location social_care_id ch_provider nursing_care_provision
     /ch_discharge_date = last(ch_discharge_date)
     /record_date = Max(record_date)
     /sc_latest_submission = Max(period)
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
-    /reason_for_admission = last(reason_for_admission).
+    /reason_for_admission = last(reason_for_admission)
+    /gender dob postcode = first(gender dob postcode).
 
-sort cases by sending_location social_care_id ch_admission_date record_date.
+sort cases by chi ch_admission_date record_date sending_location social_care_id.
 
 * Highlight the duplicate records.
 * These are conflicting records submitted in the same quarter with the same admission dates.
