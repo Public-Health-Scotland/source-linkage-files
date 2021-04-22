@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -28,6 +28,11 @@ alter type
 
 * Correct the period for 2017.
 If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
+
+* Work out the record date, which is the last day of the quarter e.g. 2017 Q4 = 2017-03-31.
+* SPSS uses US quarters (Q1 = Jan-Apr etc.) so adjust the dates so it works for our FY quarters.
+Numeric record_date (Date11).
+compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year), 6, "months"), -1, "days").
 
 * Filter out any episodes where the discharge date is before the admission date.
 Compute dis_before_adm = ch_admission_date > ch_discharge_date.
@@ -210,11 +215,6 @@ End if.
 
 * Sort back to a sensible order.
 sort cases by sending_location chi ch_admission_date financial_year financial_quarter ch_discharge_date.
-
-* Work out the record date, which is the last day of the quarter e.g. 2017 Q4 = 2017-03-31.
-* SPSS uses US quarters (Q1 = Jan-Apr etc.) so adjust the dates so it works for our FY quarters.
-Numeric record_date (Date12).
-compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year), 6, "months"), -1, "days").
 
 * Highlight episodes where the ch_provider changes within submission quarters.
 aggregate
