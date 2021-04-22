@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -13,6 +13,7 @@ get file = !sc_extracts + "CH/CH_allyears.sav"
 
 Variable width ALL (15).
 
+ * Clean up types.
 alter type 
     sending_location (A3)
     financial_year (F4.0)
@@ -24,6 +25,9 @@ alter type
     ch_provider (F1.0)
     ch_postcode (A8)
     ch_name (A73).
+
+* Correct the period for 2017.
+If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
 
 sort cases by sending_location social_care_id period ch_admission_date, ch_discharge_date.
 
