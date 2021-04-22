@@ -295,14 +295,20 @@ aggregate
 * Where the episodes are split (> 1 record) change the admission and discharge dates to the start and end of the quarters using the record_date as appropriate.
 Do if n_records > 1.
     Do if record_count = 1.
+        Compute changed_dis_date = 1.
         Compute ch_discharge_date = record_date.
     Else if record_count = n_records.
+        Compute changed_adm_date = 1.
         Compute ch_admission_date = lag(record_date).
     Else.
+        Compute changed_dis_date = 1.
         Compute ch_discharge_date = record_date.
+        Compute changed_adm_date = 1.
         Compute ch_admission_date = lag(record_date).
     End if.
 End if.
+
+Frequencies changed_adm_date changed_dis_date.
 
 Rename Variables
     ch_admission_date = record_keydate1
