@@ -161,9 +161,9 @@ match files
     /By ch_postcode TestName2.
 
 * If the name was correct take this as the new one, don't do it if both were correct.
-Do If TestName1Correct = 1 AND TestName2Correct = 0.
+Do If TestName1Correct = 1 and TestName2Correct = 0.
     Compute ch_name = TestName1.
-Else If TestName2Correct = 1 AND TestName1Correct = 0.
+Else If TestName2Correct = 1 and TestName1Correct = 0.
     Compute ch_name = TestName2.
 End If.
 
@@ -192,7 +192,7 @@ aggregate
     /real_ch_name = first(ch_name)
     /real_ch_postcode = first(ch_postcode).
 
-Do if AccurateData2 = 0 AND real_ch_name NE "".
+Do if AccurateData2 = 0 and real_ch_name NE "".
     Compute ch_name = real_ch_name.
     Compute ch_postcode = real_ch_postcode.
 End if.
@@ -207,8 +207,8 @@ sort cases by sending_location social_care_id ch_admission_date financial_year f
 
 * Correct missing nursing_care_provision.
 * Sometimes nursing_care provision is missing on the first record but present on the next, in these cases fill it in.
-Do If lag(sending_location) = sending_location AND lag(social_care_id) = social_care_id.
-    Do If lag(ch_admission_date) = ch_admission_date AND sysmis(nursing_care_provision) AND Not(sysmis(lag(nursing_care_provision))).
+Do If lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+    Do If lag(ch_admission_date) = ch_admission_date and sysmis(nursing_care_provision) and Not(sysmis(lag(nursing_care_provision))).
         Compute nursing_care_provision = lag(nursing_care_provision).
     End If.
 End if.
