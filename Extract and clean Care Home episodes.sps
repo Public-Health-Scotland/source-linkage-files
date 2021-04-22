@@ -203,18 +203,18 @@ crosstabs AccurateData2 by Any_accurate.
 Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateData1 AccurateData2 Any_accurate ch_name_real real_ch_name real_ch_postcode.
 
 * Sort into reverse order so we can use lag() to fill in below.
-sort cases by sending_location chi ch_admission_date financial_year financial_quarter (D).
+sort cases by sending_location social_care_id ch_admission_date financial_year financial_quarter (D).
 
 * Correct missing nursing_care_provision.
 * Sometimes nursing_care provision is missing on the first record but present on the next, in these cases fill it in.
-Do If lag(sending_location) = sending_location AND lag(chi) = chi.
+Do If lag(sending_location) = sending_location AND lag(social_care_id) = social_care_id.
     Do If lag(ch_admission_date) = ch_admission_date AND sysmis(nursing_care_provision) AND Not(sysmis(lag(nursing_care_provision))).
         Compute nursing_care_provision = lag(nursing_care_provision).
     End If.
 End if.
 
 * Sort back to a sensible order.
-sort cases by sending_location chi ch_admission_date financial_year financial_quarter ch_discharge_date.
+sort cases by sending_location social_care_id ch_admission_date financial_year financial_quarter ch_discharge_date.
 
 * Highlight episodes where the ch_provider changes within submission quarters.
 aggregate
