@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -28,6 +28,12 @@ alter type
 
 * Correct the period for 2017.
 If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
+
+* Filter out any episodes where the discharge date is before the admission date.
+Compute dis_before_adm = ch_admission_date > ch_discharge_date.
+crosstabs dis_before_adm by period. 
+* April 2021: 1 record in 2019 Q4 submission, shouldn't be many / any of these, report to DM.
+select if not dis_before_adm.
 
 sort cases by sending_location social_care_id period ch_admission_date, ch_discharge_date.
 
