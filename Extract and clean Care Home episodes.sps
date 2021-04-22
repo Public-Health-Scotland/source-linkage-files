@@ -237,7 +237,7 @@ Sort cases by chi ch_admission_date record_date sending_location social_care_id 
 
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
-    /Break chi ch_admission_date sending_location social_care_id ch_provider nursing_care_provision
+    /Break chi sending_location social_care_id ch_provider nursing_care_provision ch_admission_date
     /ch_discharge_date = last(ch_discharge_date)
     /record_date = Max(record_date)
     /sc_latest_submission = Max(period)
@@ -246,30 +246,45 @@ aggregate outfile = *
     /reason_for_admission = last(reason_for_admission)
     /gender dob postcode = first(gender dob postcode).
 
-sort cases by chi ch_admission_date record_date sending_location social_care_id.
-
-* Highlight the duplicate records.
-* These are conflicting records submitted in the same quarter with the same admission dates.
-Compute Duplicate = 0.
-Do If lag(sending_location) = sending_location AND lag(social_care_id) = social_care_id AND lag(ch_admission_date) = ch_admission_date AND lag(record_date) = record_date.
-    Compute Duplicate = 1.
-End if.
+sort cases by chi ch_admission_date record_date ch_discharge_date.
 
 * Count records (where episodes are split because of changes in ch_provider or nursing_care).
-* Create a marker to link split episodes together.
+* Create a marker to link split episodes together and link across CHI.
 Numeric record_count scem (F6.0).
 Compute record_count = 1.
 Compute scem = 1. /*scem = Social Care Episode Marker - name hopefully to be changed */.
 
-* If the episode is split keep the marker the same and increase the record count (unless it's flagged as a duplicate).
-Do If lag(sending_location) = sending_location AND lag(social_care_id) = social_care_id AND lag(ch_admission_date) = ch_admission_date AND lag(record_date) NE record_date.
-    Compute record_count = lag(record_count) + 1.
-    Compute scem = lag(scem).
-Else if lag(sending_location) = sending_location AND lag(social_care_id) = social_care_id.
-    Do if duplicate NE 1.
-        Compute scem = lag(scem) + 1.
-    Else.
+Do if chi = lag(chi) and CHI NE "".
+    Do If lag(ch_admission_date) = ch_admission_date.
+        * Normal records.
+        * These are records for the same person, same admission date submitted in different quarters.
         Compute scem = lag(scem).
+        * Duplicate records.
+        * These are conflicting records submitted in the same quarter with the same admission dates.
+        * Or same CHI, same start date, different SC id.
+        If lag(record_date) NE record_date and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id record_count = lag(record_count) + 1.
+    Else.
+        * Normal records.
+        * These are different episodes (new admission date) for the same person.
+        Compute scem = lag(scem) + 1.
+    End if.
+End if.
+
+* For missing CHI records.
+sort cases by sending_location social_care_id ch_admission_date record_date ch_discharge_date.
+
+Do if chi = "" and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+    Do If lag(ch_admission_date) = ch_admission_date.
+        * Normal records.
+        * These are records for the same person, same admission date submitted in different quarters.
+        Compute scem = lag(scem).
+        * Duplicate records.
+        * These are conflicting records submitted in the same quarter with the same admission dates.
+        If lag(record_date) NE record_date record_count = lag(record_count) + 1.
+    Else.
+        * Normal records.
+        * These are different episodes (new admission date) for the same person.
+        Compute scem = lag(scem) + 1.
     End if.
 End if.
 
