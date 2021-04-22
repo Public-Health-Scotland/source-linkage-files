@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -13,8 +13,8 @@ get file = !sc_extracts + "CH/CH_allyears.sav"
 
 Variable width ALL (15).
 
- * Clean up types.
-alter type 
+* Clean up types.
+alter type
     sending_location (A3)
     financial_year (F4.0)
     financial_quarter (F1.0)
@@ -36,7 +36,7 @@ compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year
 
 * Filter out any episodes where the discharge date is before the admission date.
 Compute dis_before_adm = ch_admission_date > ch_discharge_date.
-crosstabs dis_before_adm by period. 
+crosstabs dis_before_adm by period.
 * April 2021: 1 record in 2019 Q4 submission, shouldn't be many / any of these, report to DM.
 select if not dis_before_adm.
 
@@ -52,7 +52,7 @@ match files file = *
 If range(Length(ch_postcode), 3, 4) ch_postcode = "".
 
 * Remove spaces which deals with any 8-char postcodes.
-* Shouldn't get these but we read all in as 8-char just incase.
+* Shouldn't get these but we read all in as 8-char just in case.
 * Also make it upper-case.
 Compute ch_postcode = Replace(Upcase(ch_postcode), " ", "").
 
@@ -88,7 +88,7 @@ for i in range(cur.GetCaseCount()):
     # Write the tidied name to the SPSS dataset
     cur.SetValueChar('ch_name_tidy', str(care_home_name).title())
     cur.CommitCase()
-
+    
 # Close the connection to the dataset
 cur.close()
 End Program.
@@ -325,6 +325,9 @@ End if.
 
 Frequencies changed_adm_date changed_dis_date.
 
+* Remove SCEM for records without a CHI.
+if chi = "" scem = $sysmis.
+
 Rename Variables
     ch_admission_date = record_keydate1
     ch_discharge_date = record_keydate2
@@ -354,9 +357,6 @@ Value Labels ch_provider
     4 'Third Sector'
     5 'NHS Board'
     6 'Other'.
-
- * Remove SCEM for records without a CHI.
-if chi = "" scem = $sysmis.
 
 sort cases by chi scem record_keydate1 record_keydate2.
 
