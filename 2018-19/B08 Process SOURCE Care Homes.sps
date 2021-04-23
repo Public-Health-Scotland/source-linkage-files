@@ -25,7 +25,7 @@ do if range(datediff(sc_date_2, death_date, "days"), 1, 5).
     If last_scem_ep new_record_keydate2 = death_date.
 * Episodes not affected by the above but where the CHI death date fits the criteria (most CHIs have the same death date so this is a small number).
 else if range(datediff(sc_date_2, death_date_CHI, "days"), 1, 5).
-    Compute days_after_death = datediff(sc_date_2, death_date_CHI "days").
+    Compute days_after_death = datediff(sc_date_2, death_date_CHI, "days").
     Compute changed_dis_date = 2.
     Compute new_sc_date_2 = death_date_CHI.
     If last_scem_ep new_record_keydate2 = death_date_CHI.
