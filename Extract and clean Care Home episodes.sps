@@ -328,6 +328,19 @@ aggregate
 * If min and max are the same all values must be the same, otherwise at least one must be different.
 If min_provider NE max_provider ch_provider = 6.
 
+ * Where we have multiple social care IDs from the same sending location for a single CHI, merge the IDs into the first one.
+ * First identify the earliest submitted social_care_id.
+aggregate 
+    /break sending_location social_care_id
+    /eariest_submission = min(period).
+
+ * Apply the earliest submitted social_care_id to all instances of the same CHI within a single sending_location.
+sort cases by chi sending_location eariest_submission social_care_id.
+aggregate outfile = * mode = addvariables overwrite = yes
+    /Presorted
+    /Break chi sending_location
+    /social_care_id = first(social_care_id).
+
 save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
     /Keep chi sending_location social_care_id ch_name ch_postcode ch_admission_date ch_discharge_date record_date period All
     /Drop min_provider max_provider
