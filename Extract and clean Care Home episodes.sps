@@ -124,8 +124,10 @@ Loop If char.Index(ch_name, "  ") > 0.
 End Loop.
 
 * No space before brackets.
-Do if char.substr(ch_name, char.Index(ch_name, "(") - 1, 1) NE " ".
-    Compute ch_name = replace(ch_name, "(", " (").
+Do if char.Index(ch_name, "(") > 0.
+    Do if char.substr(ch_name, char.Index(ch_name, "(") - 1, 1) NE " ".
+        Compute ch_name = replace(ch_name, "(", " (").
+    End if.
 End if.
 
 Compute #diff_name = ch_name NE ch_name_real and ch_name_real NE "".
@@ -262,7 +264,7 @@ def similarity_ratio(s1, s2):
         ratio = 1
     else:
         seq = SequenceMatcher(lambda x: x==" ", s1.lower(), s2.lower())
-        if seq.real_quick_ratio() > 0.8:
+        if seq.real_quick_ratio() > 0.9:
             ratio = seq.ratio()
         else:
             ratio = 0
