@@ -86,7 +86,7 @@ Compute Difference = cost_per_day - cost_old.
 crosstabs  Difference by year by NursingCareProvision.
 
 save outfile=!Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
-    /Keep year NursingCareProvision cost_per_day.
+    /Keep year NursingCareProvision nursing_care_provision cost_per_day.
 
 get file = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav".
 
