@@ -1,133 +1,179 @@
 ﻿* Encoding: UTF-8.
 ************************************************************************************************************
-                                                   NSS (ISD)
-************************************************************************************************************
-** Filename:				Create care home lookup
-** Description of syntax purpose:	Create a sav file from the XLSX lookup which can be used for checking data.
+    NSS (ISD)
+    ************************************************************************************************************
+    ** Filename:				Create care home lookup
+    ** Description of syntax purpose:	Create a sav file from the XLSX lookup which can be used for checking data.
 ** Name of customer/output:		Source
-** Directory where outputs saved:	Set by CD
-** Length of time to run program:	10 secs.
+    ** Directory where outputs saved:	Set by CD
+    ** Length of time to run program:	10 secs.
 ** AUTHOR:				James McMahon (james.mcmahon@phs.scot)
-** Date:    				15/05/2018
-************************************************************************************************************
-** Amended by:         
-** Date:
-** Changes:               
-************************************************************************************************************.
+    ** Date:    				15/05/2018
+    ************************************************************************************************************
+    ** Amended by:
+    ** Date:
+    ** Changes:
+    ************************************************************************************************************.
 
 ********************************************************************************************************.
- * Run 01-Set up Macros first!.
+* Run 01-Set up Macros first!.
 ********************************************************************************************************.
- * To get an updated Care Home Lookup file email the Care Inspectorate.
- * Contact is Al Scrougal - Al.Scougal@careinspectorate.gov.scot 
- * Attach the existing lookup and ask for an updated version - it is updated monthly.
+* To get an updated Care Home Lookup file email the Care Inspectorate.
+* Contact is Al Scrougal - Al.Scougal@careinspectorate.gov.scot
+    * Attach the existing lookup and ask for an updated version - it is updated monthly.
 
 * Read in care home lookup file (all care homes).
 GET DATA /TYPE=XLSX
-   /FILE= !Lookup + 'CareHome Lookup All.xlsx'
-   /CELLRANGE=full
-   /READNAMES=on
-   /ASSUMEDSTRWIDTH=32767.
+    /FILE= !Lookup + 'CareHome Lookup All.xlsx'
+    /CELLRANGE=full
+    /READNAMES=on
+    /ASSUMEDSTRWIDTH=32767.
 
-Rename Varaibles
-    AccomPostCodeNo = CareHomePostcode.
+* Correct Postcode formatting.
+Rename variables AccomPostCodeNo = CareHomePostcode.
+* Remove any postcodes which are length 3 or 4 as these can not be valid (not a useful dummy either).
+If range(Length(CareHomePostcode), 3, 4) CareHomePostcode = "".
+
+* Remove spaces which deals with any 8-char postcodes.
+* Shouldn't get these but we read all in as 8-char just in case.
+* Also make it upper-case.
+Compute CareHomePostcode = Replace(Upcase(CareHomePostcode), " ", "").
+
+* Add spaces to create a 7-char postcode.
+Loop if range(Length(CareHomePostcode), 5, 6).
+    Compute #current_length = Length(CareHomePostcode).
+    Compute CareHomePostcode = Concat(char.substr(CareHomePostcode, 1,  #current_length - 3), " ", char.substr(CareHomePostcode,  #current_length - 2, 3)).
+End Loop.
+
+alter type CareHomePostcode (A7).
+
+* Only interested in name changes.
+aggregate outfile = *
+    /Break ServiceName CareHomePostcode Council_Area_Name
+    /DateReg = Min(DateReg)
+    /DateCanx = Max(DateCanx).
+
+* Remove any old Care Homes which aren't of interest.
+Select if DateReg >= date.dmy(01, 04, 2015) or DateCanx >= date.dmy(01, 04, 2015).
+
+sort cases by CareHomePostcode Council_Area_Name DateReg.
+
+Do if CareHomePostcode = lag(CareHomePostcode) and Council_Area_Name = lag(Council_Area_Name) and DateReg NE lag(DateReg) and DateReg = lag(DateCanx).
+    Compute #year_opened = xdate.year(DateReg).
+    If xdate.month(DateReg) < 4 #year_opened = xdate.year(DateReg) - 1.
+    Compute DateReg = Date.dmy(01, 04, #year_opened).
+    Compute changed_reg = 1.
+End if.
+
+sort cases by CareHomePostcode Council_Area_Name(A) DateReg(D).
+
+Do if CareHomePostcode = lag(CareHomePostcode) and Council_Area_Name = lag(Council_Area_Name) and lag(changed_reg).
+    Compute DateCanx = date.dmy(31, 03, xdate.year(lag(DateReg))).
+    Compute changed_Canx = 1.
+End if.
+    
+sort cases by CareHomePostcode Council_Area_Name DateReg.
+
+Do Repeat open = Open_2015 to Open_2030
+    /year = 2015 to 2030.
+    Compute #yearStart = date.dmy(01, 04, year).
+    Compute #yearEnd = date.dmy(31, 03, year + 1).
+    Compute Open = DateReg <=  #yearEnd and (sysmis(DateCanx) or DateCanx >= #yearStart).
+End Repeat.
+
+ * Assign Council Codes.
+String CareHomeCouncilAreaCode (A2).
+Recode Council_Area_Name
+    ('Aberdeen City' = '01')
+    ('Aberdeenshire' = '02')
+    ('Angus' = '03')
+    ('Argyll & Bute' = '04')
+    ('Scottish Borders' = '05')
+    ('Clackmannanshire' = '06')
+    ('West Dunbartonshire' = '07')
+    ('Dumfries & Galloway' = '08')
+    ('Dundee City' = '09')
+    ('East Ayrshire' = '10')
+    ('East Dunbartonshire' = '11')
+    ('East Lothian' = '12')
+    ('East Renfrewshire' = '13')
+    ('City of Edinburgh' = '14')
+    ('Falkirk' = '15')
+    ('Fife' = '16')
+    ('Glasgow City' = '17')
+    ('Highland' = '18')
+    ('Inverclyde' = '19')
+    ('Midlothian' = '20')
+    ('Moray' = '21')
+    ('North Ayrshire' = '22')
+    ('North Lanarkshire' = '23')
+    ('Orkney Islands' = '24')
+    ('Perth & Kinross' = '25')
+    ('Renfrewshire' = '26')
+    ('Shetland Islands' = '27')
+    ('South Ayrshire' = '28')
+    ('South Lanarkshire' = '29')
+    ('Stirling' = '30')
+    ('West Lothian' = '31')
+    ('Na h-Eileanan Siar' = '32')
+    Into CareHomeCouncilAreaCode.
+
+!AddLCADictionaryInfo LCA = CareHomeCouncilAreaCode.
+
+*******************************************************************************************************.
+* Tidy up care home names.
+* Use custom Python as it's twice as quick as built in SPSS.
+Begin Program.
+import spss
+
+# Open the dataset with write access
+# Read in the CareHomeNames, which must be the first variable "spss.Cursor([0]..."
+cur = spss.Cursor([0], accessType = 'w')
+
+# Create a new variable, string length 73
+cur.AllocNewVarsBuffer(80)
+cur.SetOneVarNameAndType('CareHomeName', 73)
+cur.CommitDictionary()
+
+# Loop through every case and write the tidied care home name
+for i in range(cur.GetCaseCount()):
+    # Read a case and save the care home name
+    # We need to strip trailing spaces
+    care_home_name = cur.fetchone()[0].rstrip()
+    
+    # Write the tidied name to the SPSS dataset
+    cur.SetValueChar('CareHomeName', str(care_home_name).title())
+    cur.CommitCase()
+    
+# Close the connection to the dataset
+cur.close()
+End Program.
+
+* Fix some obvious typos.
+* Double (or more spaces).
+Compute fixed_space = char.Index(CareHomeName, "  ") > 0.
+Loop If char.Index(CareHomeName, "  ") > 0.
+    compute CareHomeName = replace(CareHomeName, "  ", " ").
+End Loop.
+
+* No space before brackets.
+Compute fixed_bracket = char.substr(CareHomeName, char.Index(CareHomeName, "(") - 1, 1) NE " ".
+Do if char.substr(CareHomeName, char.Index(CareHomeName, "(") - 1, 1) NE " ".
+        Compute CareHomeName = replace(CareHomeName, "(", " (").
+End if.
+
+frequencies fixed_space fixed_bracket.
 
 * Only keep ones which were open on or after the start of the FY.
 select if Sysmis(DateCanx) OR DateCanx > Date.DMY(01, 04, Number(!altFY, F4.0)).
 
-* If the postcode has a space in it & it's more than 7 long, remove a space, repeat if needed.
-Loop If (char.Index(CareHomePostcode, " ") > 0) & (char.Length(CareHomePostcode) > 7).
-   Compute CareHomePostcode = Replace(CareHomePostcode, " ", "").
-End Loop.
+ * Aggregate to remove any duplicates, e.g. when a CH changed name during the year.
+sort cases by CareHomePostcode DateReg.
 
- * Assign Council Codes.
-Do If Council_Area_Name = 'Aberdeen City'.
-   Compute CareHomeCouncilAreaCode = 1.
-Else If Council_Area_Name = 'Aberdeenshire'.
-   Compute CareHomeCouncilAreaCode = 2.
-Else If Council_Area_Name = 'Angus'.
-   Compute CareHomeCouncilAreaCode = 3.
-Else If Council_Area_Name = 'Argyll & Bute'.
-   Compute CareHomeCouncilAreaCode = 4.
-Else If Council_Area_Name = 'Scottish Borders'.
-   Compute CareHomeCouncilAreaCode = 5.
-Else If Council_Area_Name = 'Clackmannanshire'.
-   Compute CareHomeCouncilAreaCode = 6.
-Else If Council_Area_Name = 'West Dunbartonshire'.
-   Compute CareHomeCouncilAreaCode = 7.
-Else If Council_Area_Name = 'Dumfries & Galloway'.
-   Compute CareHomeCouncilAreaCode = 8.
-Else If Council_Area_Name = 'Dundee City'.
-   Compute CareHomeCouncilAreaCode = 9.
-Else If Council_Area_Name = 'East Ayrshire'.
-   Compute CareHomeCouncilAreaCode = 10.
-Else If Council_Area_Name = 'East Dunbartonshire'.
-   Compute CareHomeCouncilAreaCode = 11.
-Else If Council_Area_Name = 'East Lothian'.
-   Compute CareHomeCouncilAreaCode = 12.
-Else If Council_Area_Name = 'East Renfrewshire'.
-   Compute CareHomeCouncilAreaCode = 13.
-Else If any(Council_Area_Name, 'Edinburgh, City of', "City of Edinburgh").
-   Compute CareHomeCouncilAreaCode = 14.
-Else If Council_Area_Name = 'Falkirk'.
-   Compute CareHomeCouncilAreaCode = 15.
-Else If Council_Area_Name = 'Fife'.
-   Compute CareHomeCouncilAreaCode = 16.
-Else If Council_Area_Name = 'Glasgow City'.
-   Compute CareHomeCouncilAreaCode = 17.
-Else If Council_Area_Name = 'Highland'.
-   Compute CareHomeCouncilAreaCode = 18.
-Else If Council_Area_Name = 'Inverclyde'.
-   Compute CareHomeCouncilAreaCode = 19.
-Else If Council_Area_Name = 'Midlothian'.
-   Compute CareHomeCouncilAreaCode = 20.
-Else If Council_Area_Name = 'Moray'.
-   Compute CareHomeCouncilAreaCode = 21.
-Else If Council_Area_Name = 'North Ayrshire'.
-   Compute CareHomeCouncilAreaCode = 22.
-Else If Council_Area_Name = 'North Lanarkshire'.
-   Compute CareHomeCouncilAreaCode = 23.
-Else If Council_Area_Name = 'Orkney Islands'.
-   Compute CareHomeCouncilAreaCode = 24.
-Else If Council_Area_Name = 'Perth & Kinross'.
-   Compute CareHomeCouncilAreaCode = 25.
-Else If Council_Area_Name = 'Renfrewshire'.
-   Compute CareHomeCouncilAreaCode = 26.
-Else If Council_Area_Name = 'Shetland Islands'.
-   Compute CareHomeCouncilAreaCode = 27.
-Else If Council_Area_Name = 'South Ayrshire'.
-   Compute CareHomeCouncilAreaCode = 28.
-Else If Council_Area_Name = 'South Lanarkshire'.
-   Compute CareHomeCouncilAreaCode = 29.
-Else If Council_Area_Name = 'Stirling'.
-   Compute CareHomeCouncilAreaCode = 30.
-Else If Council_Area_Name = 'West Lothian'.
-   Compute CareHomeCouncilAreaCode = 31.
-Else If Council_Area_Name = 'Na h-Eilean Siar'.
-   Compute CareHomeCouncilAreaCode = 32.
-End If.
-
- * Set to the correct types for matching.
-Alter type CareHomeCouncilAreaCode (A2) CareHomePostcode (A7).
- * Pad council area code with zero if needed.
-Compute CareHomeCouncilAreaCode = Replace(CareHomeCouncilAreaCode, " ", "0").
-
- * Run the Python function 'capwords' on CareHomeName.
- * This will capitalise each word for uniformity and will improve matching.
- * https://docs.python.org/2/library/string.html#string-functions
-
-SPSSINC TRANS RESULT = CareHomeName Type = 73
-   /FORMULA "string.capwords(ServiceName)".
-
- * Aggregate to remove any duplicates, e.g. when a CH changed name during the year
- * and to sort correctly for matching. Keep some interesting variables.
-Sort cases by CareHomePostcode DateReg.
-
-Aggregate
-   /outfile = *
-   /Break CareHomePostcode CareHomeCouncilAreaCode 
-    /CareHomeName = last(CareHomeName)
-   /CareHomeCouncilName MainClientGroup Sector = Last(Council_Area_Name MainClientGroup Sector).
+aggregate
+    /outfile = *
+    /Break CareHomePostcode CareHomeCouncilAreaCode
+    /CareHomeName = last(CareHomeName).
 
 sort cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode.
 

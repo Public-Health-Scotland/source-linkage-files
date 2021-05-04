@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -96,28 +96,62 @@ End Program.
 * Overwrite the original care home name.
 Compute ch_name = ch_name_tidy.
 
-* First fill in any blank care_home names where we have a correct postcode.
+ * Check what the name should be if we just look at the Care home postcode.
 Sort cases by ch_postcode.
 match files
     /file = *
     /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name_real)
-    /Drop ch_name_tidy CareHomeCouncilName MainClientGroup Sector CareHomeCouncilAreaCode
+    /Drop ch_name_tidy CareHomeCouncilAreaCode
     /By ch_postcode.
 
+Compute has_real_ch_name = ch_name_real NE "".
+
+aggregate
+    /break ch_postcode sending_location
+    /uses_real_name = max(has_real_ch_name).
+
+* If the Sending Location has ever used the 'real' name, then just overwrite with it (mostly will overwrite blanks).
+If uses_real_name ch_name = ch_name_real.
+
+* Fill in any remaining blank care_home names where we have a correct postcode.
 If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
 
+* Fix some obvious typos.
+* Double (or more spaces).
+Loop If char.Index(ch_name, "  ") > 0.
+    compute ch_name = replace(ch_name, "  ", " ").
+End Loop.
+
+* No space before brackets.
+Do if char.substr(ch_name, char.Index(ch_name, "(") - 1, 1) NE " ".
+    Compute ch_name = replace(ch_name, "(", " (").
+End if.
+
+Compute #diff_name = ch_name NE ch_name_real and ch_name_real NE "".
+
+* Now fill in any where the provided name is a substring of the real name.
+Do if #diff_name.
+    Compute #name_is_subset = char.index(ch_name_real, ch_name) > 1.
+    * And any where the supplied name contains the real name plus some extra bits.
+    Compute #name_is_extra = char.index(ch_name, ch_name_real) > 1.
+End if.
+
+If #name_is_subset or #name_is_extra ch_name = ch_name_real.
+
+* Compare the current data to the lookup.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
     /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
     /In = AccurateData1
-    /Drop CareHomeCouncilName MainClientGroup Sector CareHomeCouncilAreaCode
+    /Drop CareHomeCouncilAreaCode
     /By ch_postcode ch_name.
+frequencies AccurateData1.
 
 * Guess some possible names for ones which don't match the lookup.
-String TestName1 TestName2(A73).
+String TestName1 TestName2 (A73).
 Do if AccurateData1 = 0.
     * Try adding 'Care Home' or 'Nursing Home' on the end.
     Compute TestName1 = Concat(Rtrim(ch_name), " Care Home").
@@ -157,7 +191,7 @@ match files
     /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName CareHomePostcode = TestName2 ch_postcode)
     /In = TestName2Correct
-    /Drop CareHomeCouncilName MainClientGroup Sector CareHomeCouncilAreaCode
+    /Drop CareHomeCouncilAreaCode
     /By ch_postcode TestName2.
 
 * If the name was correct take this as the new one, don't do it if both were correct.
@@ -175,8 +209,9 @@ match files
     /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
     /In = AccurateData2
-    /Drop CareHomeCouncilName MainClientGroup Sector CareHomeCouncilAreaCode
+    /Drop CareHomeCouncilAreaCode
     /By ch_postcode ch_name.
+frequencies AccurateData2.
 
 * Highlight where an episode has at least one row of good data.
 aggregate
@@ -184,11 +219,11 @@ aggregate
     /Any_accurate = max(AccurateData2).
 
 * Apply the good data to other rows in the episode.
-sort cases by sending_location chi ch_admission_date (A) AccurateData2 (D).
+sort cases by sending_location social_care_id ch_admission_date (A) AccurateData2 (D).
 
 aggregate
     /presorted
-    /break sending_location chi ch_admission_date
+    /break sending_location social_care_id ch_admission_date
     /real_ch_name = first(ch_name)
     /real_ch_postcode = first(ch_postcode).
 
@@ -200,7 +235,72 @@ End if.
 crosstabs AccurateData2 by Any_accurate.
 * Fixes around 8000 rows.
 
-Delete Variables TestName1 TestName2 TestName1Correct TestName2Correct AccurateData1 AccurateData2 Any_accurate ch_name_real real_ch_name real_ch_postcode.
+ * Find names where they are very simlar to more common names which have been supplied for the same postcode.
+aggregate    
+    /break ch_postcode ch_name
+    /n_records_using_name = n.
+
+aggregate
+    /break ch_postcode
+    /max_records_using_name = max(n_records_using_name).
+
+String best_guess_name (A73).
+If max_records_using_name = n_records_using_name best_guess_name = ch_name.
+
+aggregate outfile = * mode addvariables overwrite yes
+    /break ch_postcode
+    /best_guess_name= max(best_guess_name).
+
+ * Python program which creates a similarity ratio.
+Begin Program.
+from difflib import SequenceMatcher
+
+def similarity_ratio(s1, s2):
+    if s1 == "":
+        ratio = 0
+    elif s1 == s2:
+        ratio = 1
+    else:
+        seq = SequenceMatcher(lambda x: x==" ", s1.lower(), s2.lower())
+        if seq.real_quick_ratio() > 0.8:
+            ratio = seq.ratio()
+        else:
+            ratio = 0
+    return(ratio)
+End Program.
+
+SPSSINC TRANS result = ratio type = 0
+    /formula similarity_ratio(ch_name, best_guess_name).
+
+If ratio >= 0.95 ch_name = best_guess_name.
+
+ * Fill in more blank care home names by looking for cases where we have:
+ * A postcode with only a single name other than blanks
+ * in these cases use the name to fill in the blanks.
+
+sort cases by ch_postcode ch_name.
+Compute non_blank_name = ch_name NE "".
+aggregate
+    /presorted
+    /break ch_postcode
+    /n_pc_records = sum(non_blank_name).
+
+aggregate
+    /presorted
+    /break ch_postcode ch_name
+    /n_ch_records = sum(non_blank_name).
+
+Compute single_name = n_pc_records = n_ch_records.
+sort cases by ch_postcode single_name (D).
+
+Do if ch_postcode = lag(ch_postcode) and lag(single_name) and ch_name = "".
+    Compute ch_name = lag(ch_name).
+    Compute single_name = 1.
+End if.
+
+* Refresh the variables to drop all the ones we no longer need.
+add files file = *
+    /keep = sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode.
 
 * Sort into reverse order so we can use lag() to fill in below.
 sort cases by sending_location social_care_id ch_admission_date financial_year financial_quarter (D).
