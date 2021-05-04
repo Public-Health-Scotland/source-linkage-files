@@ -428,6 +428,63 @@ Frequencies changed_adm_date changed_dis_date.
 * Remove SCEM for records without a CHI.
 if chi = "" scem = $sysmis.
 
+sort cases by chi scem ch_admission_date ch_discharge_date.
+
+* Adjust discharge dates according to death dates.
+* Match on the death dates from the deceased lookup (year specific).
+match files file = *
+    /table = !Extracts_Alt + "All Deaths.zsav"
+    /by chi.
+
+* Create a flag to identify the last record where an episode has been split.
+add files file = *
+    /last = last_scem_ep
+    /by chi scem.
+
+* Episodes where the death_date is within 1-5 days of the dis date.
+do if range(datediff(sc_date_2, death_date, "days"), 1, 5).
+    * Some tracking variables.
+    Compute changed_dis_date = 1.
+    Compute old_ch_discharge_date = ch_discharge_date.
+    Compute old_sc_date_2 = sc_date_2.
+    * Overwrite the discharge dates with the death date as appropriate.
+    Compute sc_date_2 = death_date.
+    Do if last_scem_ep.
+        Compute ch_discharge_date = death_date.
+    Else if ch_discharge_date > death_date.
+        Compute ch_discharge_date = death_date.
+        Compute none_last_ep_changed = 1.
+    End if.
+    * Episodes not affected by the above but where the CHI death date fits the criteria (most CHIs have the same death date so this is a small number).
+else if range(datediff(sc_date_2, death_date_CHI, "days"), 1, 5).
+    * Some tracking variables.
+    Compute changed_dis_date = 2.
+    Compute old_ch_discharge_date = ch_discharge_date.
+    Compute old_sc_date_2 = sc_date_2.
+    * Overwrite the discharge dates with the death date as appropriate.
+    Compute old_ch_discharge_date = ch_discharge_date.
+    Compute old_sc_date_2 = sc_date_2.
+    Compute sc_date_2 = death_date_CHI.
+    Do if last_scem_ep.
+        Compute ch_discharge_date = death_date_CHI.
+    Else if ch_discharge_date > death_date_CHI.
+       Compute ch_discharge_date = death_date_CHI.
+       Compute none_last_ep_changed = 2.
+    End if.
+end if.
+Alter type ch_discharge_date old_sc_date_2 (Date11).
+Value labels changed_dis_date none_last_ep_changed
+1 "Changed to match NRS death date (<= 5 days before dis)"
+2 "Changed to match CHI death date (<= 5 days before dis)".
+
+Frequencies changed_dis_date none_last_ep_changed.
+
+ * Remove any episodes which now have an admission after discharge i.e. they were admitted after death.
+ * As of April 2021 this removes 34 episodes.
+Compute death_before_adm = ch_admission_date > ch_discharge_date.
+Frequencies death_before_adm.
+Select if not(death_before_adm).
+
 Rename Variables
     ch_admission_date = record_keydate1
     ch_discharge_date = record_keydate2
