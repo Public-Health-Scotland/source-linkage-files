@@ -303,7 +303,7 @@ add files file = *
     /keep = sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode.
 
 * Sort into reverse order so we can use lag() to fill in below.
-sort cases by sending_location social_care_id ch_admission_date financial_year financial_quarter (D).
+sort cases by sending_location social_care_id ch_admission_date period (D).
 
 * Correct missing nursing_care_provision.
 * Sometimes nursing_care provision is missing on the first record but present on the next, in these cases fill it in.
@@ -314,11 +314,11 @@ Do If lag(sending_location) = sending_location and lag(social_care_id) = social_
 End if.
 
 * Sort back to a sensible order.
-sort cases by sending_location social_care_id ch_admission_date financial_year financial_quarter ch_discharge_date.
+sort cases by sending_location social_care_id ch_admission_date period ch_discharge_date.
 
 * Highlight episodes where the ch_provider changes within submission quarters.
 aggregate
-    /Break record_date sending_location social_care_id ch_admission_date nursing_care_provision
+    /Break period sending_location social_care_id ch_admission_date nursing_care_provision
     /min_provider = min(ch_provider)
     /max_provider = max(ch_provider).
 
@@ -333,7 +333,7 @@ save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
 get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
 * Sort to ensure the latest submitted records come last.
-Sort cases by chi ch_admission_date record_date sending_location social_care_id ch_provider nursing_care_provision.
+sort cases by chi ch_admission_date period sending_location social_care_id ch_provider nursing_care_provision.
 
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
@@ -468,14 +468,14 @@ else if range(datediff(sc_date_2, death_date_CHI, "days"), 1, 5).
     Do if last_scem_ep.
         Compute ch_discharge_date = death_date_CHI.
     Else if ch_discharge_date > death_date_CHI.
-       Compute ch_discharge_date = death_date_CHI.
-       Compute none_last_ep_changed = 2.
+        Compute ch_discharge_date = death_date_CHI.
+        Compute none_last_ep_changed = 2.
     End if.
 end if.
 Alter type ch_discharge_date old_sc_date_2 (Date11).
 Value labels changed_dis_date none_last_ep_changed
-1 "Changed to match NRS death date (<= 5 days before dis)"
-2 "Changed to match CHI death date (<= 5 days before dis)".
+    1 "Changed to match NRS death date (<= 5 days before dis)"
+    2 "Changed to match CHI death date (<= 5 days before dis)".
 
 Frequencies changed_dis_date none_last_ep_changed.
 
