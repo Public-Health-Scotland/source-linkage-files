@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -530,10 +530,15 @@ Value Labels ch_provider
     5 'NHS Board'
     6 'Other'.
 
-sort cases by chi scem record_keydate1 record_keydate2.
+ * Include the sc_id as a unique person identifier (first merge with sending loc).
+String person_id (A13).
+Compute person_id = concat(sending_location, "-", social_care_id).
+
+sort cases by sending_location social_care_id chi scem record_keydate1 record_keydate2.
 
 save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     /Keep chi
+    person_id
     gender
     dob
     postcode

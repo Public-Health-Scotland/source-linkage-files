@@ -102,6 +102,7 @@ save outfile = !File + "care_home_for_source-20" + !FY + ".zsav"
     recid
     SMRType
     chi
+    person_id
     dob
     age
     gender

@@ -720,6 +720,7 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     keytime2
     smrtype
     chi
+    person_id
     gender
     dob
     age
