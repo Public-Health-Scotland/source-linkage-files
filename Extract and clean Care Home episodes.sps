@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -332,10 +332,10 @@ If min_provider NE max_provider ch_provider = 6.
  * First identify the earliest submitted social_care_id.
 aggregate 
     /break sending_location social_care_id
-    /eariest_submission = min(period).
+    /earliest_submission = min(period).
 
  * Apply the earliest submitted social_care_id to all instances of the same CHI within a single sending_location.
-sort cases by chi sending_location eariest_submission social_care_id.
+sort cases by chi sending_location earliest_submission social_care_id.
 aggregate outfile = * mode = addvariables overwrite = yes
     /Presorted
     /Break chi sending_location
