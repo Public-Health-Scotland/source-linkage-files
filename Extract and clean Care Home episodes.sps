@@ -34,6 +34,9 @@ If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
 Numeric record_date (Date11).
 compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year), 6, "months"), -1, "days").
 
+* Filter out any episodes where the admission date is missing.
+select if not(sysmis(ch_admission_date)).
+
 * Filter out any episodes where the discharge date is before the admission date.
 Compute dis_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(ch_discharge_date)).
 crosstabs dis_before_adm by period.
