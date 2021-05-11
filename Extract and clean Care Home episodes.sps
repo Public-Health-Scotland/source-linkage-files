@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -295,13 +295,24 @@ aggregate
     /break ch_postcode ch_name
     /n_ch_records = sum(non_blank_name).
 
-Compute single_name = n_pc_records = n_ch_records.
-sort cases by ch_postcode single_name (D).
-
-Do if ch_postcode = lag(ch_postcode) and lag(single_name) and ch_name = "".
-    Compute ch_name = lag(ch_name).
-    Compute single_name = 1.
+Do if n_pc_records > 20.
+    Compute name_proportion = n_ch_records / n_pc_records.
 End if.
+
+sort cases by ch_postcode name_proportion (D).
+
+String old_name (A100).
+Do if ch_postcode = lag(ch_postcode) and lag(name_proportion) > 0.8.
+    Do if (ch_name = "" or lag(name_proportion) > 0.9) and ch_name NE lag(ch_name).
+        Compute old_name = ch_name.
+        If ch_name = "" ch_name = lag(ch_name).
+        If lag(name_proportion) > 0.9 ch_name = lag(ch_name).
+        Compute name_proportion = lag(name_proportion).
+    End if.
+End if.
+Temporary.
+Select if old_name ne ch_name and name_proportion > 0.8.
+crosstabs old_name by ch_name.
 
 * Refresh the variables to drop all the ones we no longer need.
 add files file = *
@@ -353,6 +364,7 @@ get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 * Sort to ensure the latest submitted records come last.
 sort cases by chi ch_admission_date period sending_location social_care_id ch_provider nursing_care_provision.
 
+Missing values ch_name ch_postcode postcode ("").
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
     /Break chi sending_location social_care_id ch_provider nursing_care_provision ch_admission_date
