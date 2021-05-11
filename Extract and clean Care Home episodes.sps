@@ -35,12 +35,12 @@ Numeric record_date (Date11).
 compute record_date = Datesum(Datesum(date.qyr(financial_quarter, financial_year), 6, "months"), -1, "days").
 
 * Filter out any episodes where the discharge date is before the admission date.
-Compute dis_before_adm = ch_admission_date > ch_discharge_date.
+Compute dis_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(ch_discharge_date)).
 crosstabs dis_before_adm by period.
 * April 2021: 1 record in 2019 Q4 submission, shouldn't be many / any of these, report to DM.
 select if not dis_before_adm.
 
-sort cases by sending_location social_care_id period ch_admission_date, ch_discharge_date.
+sort cases by sending_location social_care_id period ch_admission_date ch_discharge_date.
 
 * Match on the demographics data (chi, gender, dob and postcode).
 match files file = *
@@ -496,7 +496,7 @@ Frequencies changed_dis_date none_last_ep_changed.
 
  * Remove any episodes which now have an admission after discharge i.e. they were admitted after death.
  * As of April 2021 this removes 34 episodes.
-Compute death_before_adm = ch_admission_date > ch_discharge_date.
+Compute death_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(ch_discharge_date)).
 Frequencies death_before_adm.
 Select if not(death_before_adm).
 
