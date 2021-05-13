@@ -234,7 +234,7 @@ def similarity_ratio(s1, s2):
         ratio = 1
     else:
         seq = SequenceMatcher(lambda x: x==" ", s1.lower(), s2.lower())
-        if seq.real_quick_ratio() > 0.9:
+        if seq.real_quick_ratio() >= 0.95:
             ratio = seq.ratio()
         else:
             ratio = 0
