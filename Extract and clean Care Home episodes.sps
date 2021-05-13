@@ -99,27 +99,6 @@ End Program.
 * Overwrite the original care home name.
 Compute ch_name = ch_name_tidy.
 
- * Check what the name should be if we just look at the Care home postcode.
-Sort cases by ch_postcode.
-match files
-    /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
-    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name_real)
-    /Drop ch_name_tidy CareHomeCouncilAreaCode
-    /By ch_postcode.
-
-Compute has_real_ch_name = ch_name_real NE "".
-
-aggregate
-    /break ch_postcode sending_location
-    /uses_real_name = max(has_real_ch_name).
-
-* If the Sending Location has ever used the 'real' name, then just overwrite with it (mostly will overwrite blanks).
-If uses_real_name ch_name = ch_name_real.
-
-* Fill in any remaining blank care_home names where we have a correct postcode.
-If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
-
 * Fix some obvious typos.
 * Double (or more spaces).
 Loop If char.Index(ch_name, "  ") > 0.
@@ -133,10 +112,20 @@ Do if char.Index(ch_name, "(") > 0.
     End if.
 End if.
 
-Compute #diff_name = ch_name NE ch_name_real and ch_name_real NE "".
+ * Check what the name should be if we just look at the Care home postcode.
+Sort cases by ch_postcode.
+match files
+    /file = *
+    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name_real)
+    /Drop ch_name_tidy CareHomeCouncilAreaCode
+    /By ch_postcode.
+
+* Fill in any remaining blank care_home names where we have a correct postcode.
+If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
 
 * Now fill in any where the provided name is a substring of the real name.
-Do if #diff_name.
+Do if ch_name NE ch_name_real and ch_name_real NE "".
     Compute #name_is_subset = char.index(ch_name_real, ch_name) > 1.
     * And any where the supplied name contains the real name plus some extra bits.
     Compute #name_is_extra = char.index(ch_name, ch_name_real) > 1.
