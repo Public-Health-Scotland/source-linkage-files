@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 ************************************************************************************************************
     NSS (ISD)
     ************************************************************************************************************
@@ -157,9 +157,12 @@ Loop If char.Index(CareHomeName, "  ") > 0.
 End Loop.
 
 * No space before brackets.
-Compute fixed_bracket = char.substr(CareHomeName, char.Index(CareHomeName, "(") - 1, 1) NE " ".
-Do if char.substr(CareHomeName, char.Index(CareHomeName, "(") - 1, 1) NE " ".
+Compute fixed_bracket = 0.
+Do if char.Index(CareHomeName, "(") > 0.
+    Do if char.substr(CareHomeName, char.Index(CareHomeName, "(") - 1, 1) NE " ".
         Compute CareHomeName = replace(CareHomeName, "(", " (").
+        Compute fixed_bracket = 1.
+    End if.
 End if.
 
 frequencies fixed_space fixed_bracket.
