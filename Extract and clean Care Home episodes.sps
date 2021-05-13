@@ -122,7 +122,25 @@ match files
     /By ch_postcode.
 
 * Fill in any remaining blank care_home names where we have a correct postcode.
-If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
+* TODO - Improve lookup and count CHs per postcode - if only one then ok to overwrite.
+String Changed_name (A100).
+Compute Changed_name = "No Change".
+Do if ch_name_real NE "".
+    Do if n_at_postcode = 1.
+        Compute changed_name = "Single name for postcode in lookup".
+        If ch_name = "" changed_name = "Single name for postcode in lookup (submitted was blank)".
+        Compute ch_name = ch_name_real.
+    Else if n_in_fy = 1.
+        Do if ch_name = "".
+            Compute ch_name = ch_name_real.
+            Compute changed_name = "Single name open in " + !FY +  " for postcode (submitted was blank)".
+        Else if Number(!altFY, F4.0) = financial_year.
+            Compute ch_name = ch_name_real.
+            Compute changed_name = "Single name open in " + !FY +  " for postcode (not blank but record submitted in " + !FY + ")".
+        End if.
+    End if.
+End if.
+Frequencies changed_name.
 
 * Now fill in any where the provided name is a substring of the real name.
 Do if ch_name NE ch_name_real and ch_name_real NE "".
