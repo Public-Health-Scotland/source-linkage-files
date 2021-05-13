@@ -247,7 +247,7 @@ SPSSINC TRANS result = ratio type = 0
 If ratio >= 0.95 ch_name = best_guess_name.
 
  * Fill in more blank care home names by looking for cases where we have:
- * A postcode with only a single name other than blanks
+ * A postcode with a commonly occuring name and some blanks
  * in these cases use the name to fill in the blanks.
 
 sort cases by ch_postcode ch_name.
@@ -269,16 +269,15 @@ End if.
 sort cases by ch_postcode name_proportion (D).
 
 String old_name (A100).
-Do if ch_postcode = lag(ch_postcode) and lag(name_proportion) > 0.8.
-    Do if (ch_name = "" or lag(name_proportion) > 0.9) and ch_name NE lag(ch_name).
+Do if ch_postcode = lag(ch_postcode) and lag(name_proportion) >= 0.8.
+    Do if (ch_name = "" or lag(name_proportion) >= 0.95) and ch_name NE lag(ch_name).
         Compute old_name = ch_name.
-        If ch_name = "" ch_name = lag(ch_name).
-        If lag(name_proportion) > 0.9 ch_name = lag(ch_name).
+        Compute ch_name = lag(ch_name).
         Compute name_proportion = lag(name_proportion).
     End if.
 End if.
 Temporary.
-Select if old_name ne ch_name and name_proportion > 0.8.
+Select if old_name ne ch_name and name_proportion >= 0.8.
 crosstabs old_name by ch_name.
 
 * Refresh the variables to drop all the ones we no longer need.
