@@ -19,8 +19,8 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 * To get an updated Care Home Lookup file email the Care Inspectorate.
-* Contact is Al Scrougal - Al.Scougal@careinspectorate.gov.scot
-    * Attach the existing lookup and ask for an updated version - it is updated monthly.
+* Contact is Al Scrougal - Al.Scougal@careinspectorate.gov.scot.
+* Attach the existing lookup and ask for an updated version - it is updated monthly.
 
 * Read in care home lookup file (all care homes).
 GET DATA /TYPE=XLSX
@@ -58,6 +58,7 @@ Select if DateReg >= date.dmy(01, 04, 2015) or DateCanx >= date.dmy(01, 04, 2015
 
 sort cases by CareHomePostcode Council_Area_Name DateReg.
 
+ * When a Care Home changes name mid-year change to the start of the FY.
 Do if CareHomePostcode = lag(CareHomePostcode) and Council_Area_Name = lag(Council_Area_Name) and DateReg NE lag(DateReg) and DateReg = lag(DateCanx).
     Compute #year_opened = xdate.year(DateReg).
     If xdate.month(DateReg) < 4 #year_opened = xdate.year(DateReg) - 1.
