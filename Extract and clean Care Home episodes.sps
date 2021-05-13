@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -350,14 +350,15 @@ aggregate
 
  * Apply the earliest submitted social_care_id to all instances of the same CHI within a single sending_location.
 sort cases by chi sending_location earliest_submission social_care_id.
-aggregate outfile = * mode = addvariables overwrite = yes
+aggregate
     /Presorted
     /Break chi sending_location
-    /social_care_id = first(social_care_id).
+    /first_sc_id = first(social_care_id).
+If chi NE "" social_care_id = first_sc_id.
 
 save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
     /Keep chi sending_location social_care_id ch_name ch_postcode ch_admission_date ch_discharge_date record_date period All
-    /Drop min_provider max_provider
+    /Drop min_provider max_provider first_sc_id
     /zcompressed.
 get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
