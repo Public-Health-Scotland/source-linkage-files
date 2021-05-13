@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 ************************************************************************************************************
     NSS (ISD)
     ************************************************************************************************************
@@ -168,16 +168,20 @@ End if.
 
 frequencies fixed_space fixed_bracket.
 
-* Only keep ones which were open on or after the start of the FY.
-select if Sysmis(DateCanx) OR DateCanx > Date.DMY(01, 04, Number(!altFY, F4.0)).
+* If there is a duplicate keep the one relevant to the FY, otherwise keep all.
+Compute open_in_fy = Sysmis(DateCanx) OR DateCanx > Date.DMY(01, 04, Number(!altFY, F4.0)).
+sort cases by CareHomePostcode open_in_fy DateReg.
 
- * Aggregate to remove any duplicates, e.g. when a CH changed name during the year.
-sort cases by CareHomePostcode DateReg.
+ * Aggregate to remove the duplicates, keeping the one which was open in the FY, or if there are multiple, the latest opened.
+ * Count so that we can use this info when looking up. 
+aggregate outfile = *
+    /Presorted
+    /Break CareHomePostcode
+    /CareHomeName CareHomeCouncilAreaCode = last(CareHomeName CareHomeCouncilAreaCode)
+    /n_in_fy = sum(open_in_fy)
+    /n_at_postcode = n.
 
-aggregate
-    /outfile = *
-    /Break CareHomePostcode CareHomeCouncilAreaCode
-    /CareHomeName = last(CareHomeName).
+Alter type n_in_fy n_at_postcode (F2.0).
 
 sort cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode.
 
