@@ -126,12 +126,12 @@ If ch_name = "" and ch_name_real NE "" ch_name = ch_name_real.
 
 * Now fill in any where the provided name is a substring of the real name.
 Do if ch_name NE ch_name_real and ch_name_real NE "".
-    Compute #name_is_subset = char.index(ch_name_real, ch_name) > 1.
+    Compute name_is_subset = char.index(ch_name_real, ch_name) > 0.
     * And any where the supplied name contains the real name plus some extra bits.
-    Compute #name_is_extra = char.index(ch_name, ch_name_real) > 1.
+    Compute name_is_extra = char.index(ch_name, ch_name_real) > 0.
 End if.
 
-If #name_is_subset or #name_is_extra ch_name = ch_name_real.
+If name_is_subset or name_is_extra ch_name = ch_name_real.
 
 * Compare the current data to the lookup.
 Sort Cases by ch_postcode ch_name.
