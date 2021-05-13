@@ -207,28 +207,6 @@ match files
     /By ch_postcode ch_name.
 frequencies AccurateData2.
 
-* Highlight where an episode has at least one row of good data.
-aggregate
-    /break sending_location chi ch_admission_date
-    /Any_accurate = max(AccurateData2).
-
-* Apply the good data to other rows in the episode.
-sort cases by sending_location social_care_id ch_admission_date (A) AccurateData2 (D).
-
-aggregate
-    /presorted
-    /break sending_location social_care_id ch_admission_date
-    /real_ch_name = first(ch_name)
-    /real_ch_postcode = first(ch_postcode).
-
-Do if AccurateData2 = 0 and real_ch_name NE "".
-    Compute ch_name = real_ch_name.
-    Compute ch_postcode = real_ch_postcode.
-End if.
-
-crosstabs AccurateData2 by Any_accurate.
-* Fixes around 8000 rows.
-
  * Find names where they are very simlar to more common names which have been supplied for the same postcode.
 aggregate    
     /break ch_postcode ch_name
