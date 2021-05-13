@@ -112,6 +112,17 @@ Do if char.Index(ch_name, "(") > 0.
     End if.
 End if.
 
+* Compare the initial data to the lookup.
+Sort Cases by ch_postcode ch_name.
+match files
+    /file = *
+    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
+    /In = AccurateData0
+    /Drop CareHomeCouncilAreaCode
+    /By ch_postcode ch_name.
+frequencies AccurateData0.
+
  * Check what the name should be if we just look at the Care home postcode.
 Sort cases by ch_postcode.
 match files
@@ -151,7 +162,7 @@ End if.
 
 If name_is_subset or name_is_extra ch_name = ch_name_real.
 
-* Compare the current data to the lookup.
+* Compare the current data to the lookup and check what (if any) improvements have been made.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
@@ -160,7 +171,7 @@ match files
     /In = AccurateData1
     /Drop CareHomeCouncilAreaCode
     /By ch_postcode ch_name.
-frequencies AccurateData1.
+crosstabs AccurateData0 by AccurateData1.
 
 * Guess some possible names for ones which don't match the lookup.
 String TestName1 TestName2 (A73).
@@ -212,18 +223,6 @@ Do If TestName1Correct = 1 and TestName2Correct = 0.
 Else If TestName2Correct = 1 and TestName1Correct = 0.
     Compute ch_name = TestName2.
 End If.
-
-*******************************************************************************************************.
-* See which match now.
-Sort Cases by ch_postcode ch_name.
-match files
-    /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
-    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
-    /In = AccurateData2
-    /Drop CareHomeCouncilAreaCode
-    /By ch_postcode ch_name.
-frequencies AccurateData2.
 
  * Find names where they are very simlar to more common names which have been supplied for the same postcode.
 aggregate    
@@ -297,6 +296,18 @@ End if.
 Temporary.
 Select if old_name ne ch_name and name_proportion >= 0.8.
 crosstabs old_name by ch_name.
+
+*******************************************************************************************************.
+* See which match now.
+Sort Cases by ch_postcode ch_name.
+match files
+    /file = *
+    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
+    /In = AccurateData2
+    /Drop CareHomeCouncilAreaCode
+    /By ch_postcode ch_name.
+crosstabs AccurateData1 by AccurateData2 by AccurateData0.
 
 * Refresh the variables to drop all the ones we no longer need.
 save outfile = !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav"
