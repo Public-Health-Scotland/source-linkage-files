@@ -423,7 +423,7 @@ sort cases by chi sending_location social_care_id scem record_date.
 * Highlight the last episode of the scem to take the discharge date from.
 * Can't use aggregate as that will ignore missing dates.
 add files file = *
-    /by chi sending_location social_care_id scem record_date
+    /by chi sending_location social_care_id scem
     /last = Last_record.
 
 Numeric last_ch_discharge_date (Date11).
