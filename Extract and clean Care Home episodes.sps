@@ -143,7 +143,7 @@ End if.
 Frequencies changed_name.
 
 * Now fill in any where the provided name is a substring of the real name.
-Do if ch_name NE ch_name_real and ch_name_real NE "".
+Do if ch_name NE ch_name_real and ch_name_real NE "" and ch_name NE "".
     Compute name_is_subset = char.index(ch_name_real, ch_name) > 0.
     * And any where the supplied name contains the real name plus some extra bits.
     Compute name_is_extra = char.index(ch_name, ch_name_real) > 0.
