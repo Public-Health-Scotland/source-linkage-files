@@ -6,8 +6,7 @@ Define !sc_extracts()
 * Get demographics extract.
 * This will be changed to an SQL extract from the new platform in the future.
 get file = !sc_extracts + "DEMOG/DEMOG_allyears.zsav"
-    /Keep latest_record extract_date sending_location social_care_id
-    submitted_chi_number upi
+    /Keep latest_record extract_date sending_location social_care_id upi
     submitted_postcode chi_postcode
     submitted_date_of_birth chi_date_of_birth
     submitted_gender chi_gender_code.
