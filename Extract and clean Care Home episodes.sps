@@ -281,13 +281,15 @@ Select if old_name ne ch_name and name_proportion >= 0.8.
 crosstabs old_name by ch_name.
 
 * Refresh the variables to drop all the ones we no longer need.
-add files file = *
-    /keep = sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode.
+save outfile = !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav"
+    /keep = sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode
+    /zcompressed.
+get file =  !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav".
 
+* Correct missing nursing_care_provision.
 * Sort into reverse order so we can use lag() to fill in below.
 sort cases by sending_location social_care_id ch_admission_date period (D).
 
-* Correct missing nursing_care_provision.
 * Sometimes nursing_care provision is missing on the first record but present on the next, in these cases fill it in.
 Do If lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
     Do If lag(ch_admission_date) = ch_admission_date and sysmis(nursing_care_provision) and Not(sysmis(lag(nursing_care_provision))).
@@ -542,4 +544,5 @@ get file = !Extracts_Alt + "All Care Home episodes.zsav".
 
 * Clean up.
 Erase file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
+Erase file = !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav".
 
