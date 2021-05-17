@@ -32,7 +32,7 @@ Numeric
 if submitted_gender = 99 submitted_gender = 9.
 * For gender prefer CHI match if we have it.
 compute gender = chi_gender_code.
-if sysmis(chi_gender_code) or any(chi_gender_code, 0, 9) gender = submitted_gender.
+if sysmis(chi_gender_code) or chi_gender_code = 9 gender = submitted_gender.
 
 * For dob prefer CHI match if we have it.
 compute dob = chi_date_of_birth.
