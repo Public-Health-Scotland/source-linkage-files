@@ -133,32 +133,35 @@ match files
     /By ch_postcode.
 
 * Fill in any remaining blank care_home names where we have a correct postcode.
-* TODO - Improve lookup and count CHs per postcode - if only one then ok to overwrite.
+* The lookup also counts how many Care Home names are associated with a postcode - ever an in the the given FY.
 String Changed_name (A100).
 Compute Changed_name = "No Change".
-Do if ch_name_real NE "".
-    Do if n_at_postcode = 1.
-        Compute changed_name = "Single name for postcode in lookup".
-        If ch_name = "" changed_name = "Single name for postcode in lookup (submitted was blank)".
+Do if n_at_postcode = 1.
+    Compute changed_name = "Single name for postcode in lookup".
+    If ch_name = "" changed_name = "Single name for postcode in lookup (submitted was blank)".
+    Compute ch_name = ch_name_real.
+Else if n_in_fy = 1.
+    Do if ch_name = "".
         Compute ch_name = ch_name_real.
-    Else if n_in_fy = 1.
-        Do if ch_name = "".
-            Compute ch_name = ch_name_real.
-            Compute changed_name = "Single name open in " + !FY +  " for postcode (submitted was blank)".
-        Else if Number(!altFY, F4.0) = financial_year.
-            Compute ch_name = ch_name_real.
-            Compute changed_name = "Single name open in " + !FY +  " for postcode (not blank but record submitted in " + !FY + ")".
-        End if.
+        Compute changed_name = "Single name open in " + !FY +  " for postcode (submitted was blank)".
+    Else if Number(!altFY, F4.0) = financial_year.
+        Compute ch_name = ch_name_real.
+        Compute changed_name = "Single name open in " + !FY +  " for postcode (not blank but record submitted in " + !FY + ")".
     End if.
 End if.
 Frequencies changed_name.
 
 * Now fill in any where the provided name is a substring of the real name.
+* TODO - adjust the lookup to provide multiple names e.g. ch_name, ch_name2, ch_name3 - use those here for this fix.
 Do if ch_name NE ch_name_real and ch_name_real NE "" and ch_name NE "".
     Compute name_is_subset = char.index(ch_name_real, ch_name) > 0.
     * And any where the supplied name contains the real name plus some extra bits.
     Compute name_is_extra = char.index(ch_name, ch_name_real) > 0.
 End if.
+
+temporary.
+select if ch_name NE ch_name_real.
+Frequencies name_is_subset name_is_extra.
 
 If name_is_subset or name_is_extra ch_name = ch_name_real.
 
