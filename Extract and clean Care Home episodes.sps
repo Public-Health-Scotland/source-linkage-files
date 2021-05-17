@@ -366,20 +366,40 @@ get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 * Sort to ensure the latest submitted records come last.
 sort cases by chi sending_location social_care_id ch_admission_date period.
 
-Missing values ch_name ch_postcode postcode ("").
+ * Track when the discharge date is missing (open record), if this is the latest submission we need to preserve it.
+String dis_date_missing (A6).
+If sysmis(ch_discharge_date) dis_date_missing = period.
+
+Missing values ch_name ch_postcode("").
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
     /Break chi sending_location social_care_id ch_provider nursing_care_provision ch_admission_date
     /ch_discharge_date = last(ch_discharge_date)
-    /record_date = Max(record_date)
-    /sc_latest_submission = Max(period)
+    /record_date = max(record_date)
+    /sc_latest_submission = max(period)
+    /lastest_submission_dis_missing = max(dis_date_missing)
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
     /reason_for_admission = last(reason_for_admission)
     /gender dob postcode = first(gender dob postcode).
 
-sort cases by chi ch_admission_date record_date ch_discharge_date.
+ * Check the discharge date and if there was a missing date in the latest submission use that.
+* However some (~1/3) episodes have subsequent episodes starting on the same day, in this case keep the episode closed.
+sort cases by chi sending_location social_care_id (A) ch_admission_date (D).
+* Find cases where dis was missing in last submission but isn't after the aggregate.
+Do if lastest_submission_dis_missing = sc_latest_submission and not sysmis(ch_discharge_date).
+    * Clear case where the dis 'should' be missing but this would result in an overlap.
+    Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id and lag(ch_admission_date) = ch_discharge_date.
+        Compute corrected_open_end_date = 0.
+    Else.
+        * Usual case (2/3) where we 're-open' the episode and ignore the dis date which was supplied earlier.
+        Compute corrected_open_end_date = 1.
+        Compute ch_discharge_date = $sysmis.
+    End if.
+End if.
+Frequencies corrected_open_end_date.
 
+sort cases by chi sending_location social_care_id ch_admission_date record_date ch_discharge_date.
 * Count records (where episodes are split because of changes in ch_provider or nursing_care).
 * Create a marker to link split episodes together and link across CHI.
 Numeric record_count scem (F6.0).
