@@ -364,7 +364,7 @@ save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
 get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
 * Sort to ensure the latest submitted records come last.
-sort cases by chi ch_admission_date period sending_location social_care_id ch_provider nursing_care_provision.
+sort cases by chi sending_location social_care_id ch_admission_date period.
 
 Missing values ch_name ch_postcode postcode ("").
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
