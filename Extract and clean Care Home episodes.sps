@@ -370,10 +370,20 @@ sort cases by chi sending_location social_care_id ch_admission_date period.
 String dis_date_missing (A6).
 If sysmis(ch_discharge_date) dis_date_missing = period.
 
+* Create a counter to track changes in Nursing Care / CH provider to use in the aggregate.
+* This deals with cases where the NC changes more than once.
+Compute episode_counter = 0.
+Do if chi = lag(chi) and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+    Do if ch_admission_date = lag(ch_admission_date).
+        Compute episode_counter = lag(episode_counter).
+        If ch_provider ne lag(ch_provider) or nursing_care_provision ne lag(nursing_care_provision) episode_counter = lag(episode_counter) + 1.
+    End if.
+End if.
+
 Missing values ch_name ch_postcode("").
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
 aggregate outfile = *
-    /Break chi sending_location social_care_id ch_provider nursing_care_provision ch_admission_date
+    /Break chi sending_location social_care_id ch_admission_date ch_provider nursing_care_provision episode_counter
     /ch_discharge_date = last(ch_discharge_date)
     /record_date = max(record_date)
     /sc_latest_submission = max(period)
