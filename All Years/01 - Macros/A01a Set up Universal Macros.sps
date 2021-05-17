@@ -83,8 +83,8 @@ Define !PIS_extract_file()
  * Source Lookups *
  * Should not need changing *
 *******************************************************.
- * Location of source lookups.
-Define !Lookup()
+ * Location of SLF lookups.
+Define !Lookup_dir_slf()
    "/conf/irf/05-lookups/04-geography/"
 !EndDefine.
 
@@ -98,28 +98,88 @@ Define !AnontoCHIlookup()
 !EndDefine.
 
 *******************************************************.
- * Geography Lookups *
+ * Geography Lookup Directories *
  * Will need to be changed when geography files update.
 *******************************************************.
- * Localities lookup file.
-Define !LocalitiesLookup()
-    "/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20200825.sav"
+
+*Directory for lookups - should not need changing. 
+Define !Global_Lookup_dir()
+    "/conf/linkage/output/lookups/Unicode/"
+!EndDefine. 
+
+*Directory for Locality. 
+Define !Locality_dir()
+    "Geography/HSCP Locality/"
+!EndDefine. 
+
+*Directory for Scottish Postcode Directory (SPD).
+Define !SPD_dir()
+    "Geography/Scottish Postcode Directory/"
+!EndDefine. 
+
+*Directory for Scottish Index for Multiple Deprivation (SIMD). 
+Define !SIMD_dir()
+    "Deprivation/"
+!EndDefine. 
+
+*Directory for DataZone Populations. 
+Define !DataZone_pop_dir()
+    "Populations/Estimates/"
+!EndDefine. 
+
+
+*******************************************************.
+ * Geography Lookup Files *
+ * Will need to be changed when geography files update.
+ * They are mainly changed here.
+*******************************************************.
+
+*Locality file - will need changing when geography files update. 
+Define !Locality_file()
+    "HSCP Localities_DZ11_Lookup_20200825.sav"
+!EndDefine. 
+
+*SPD file - will need changing when geography files update.
+Define !SPD_file()
+    "Scottish_Postcode_Directory_2020_2.sav"
+!EndDefine. 
+
+*SIMD file - will need changing when geography files update.
+Define !SIMD_file()
+    "postcode_2020_2_simd2020v2.sav"
 !EndDefine.
 
- * Most up to date Postcode directory.
-Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2020_2.sav"
+*DataZone Populations file - will need changing when geography files update.
+Define !DataZone_pop_file()
+    "DataZone2011_pop_est_2011_2019.sav"
+!EndDefine. 
+
+
+*******************************************************.
+ * Geography Lookup Macros *
+ * Should only need to change above macros when geography file updates.
+*******************************************************.
+
+*Locality Lookup. 
+Define !Localities_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!Locality_dir)), !Unquote(!Eval(!Locality_file))))
 !EndDefine.
 
- * Most up to date SIMD / Postcode lookup.
-Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2020_2_simd2020v2.sav"
+*SPD Lookup. 
+Define !SPD_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!SPD_dir)), !Unquote(!Eval(!SPD_file))))
 !EndDefine.
 
- * Most up to date DataZone Population estimates.
-Define !DataZone_Pops()
-   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2019.sav"
+*SIMD Lookup. 
+Define !SIMD_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!SIMD_dir)), !Unquote(!Eval(!SIMD_file))))
 !EndDefine.
+
+*DataZone Population Lookup. 
+Define !DataZone_Pop_Lookup
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!DataZone_pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
+!EndDefine. 
+
 
 *******************************************************.
  * Functional macros *
