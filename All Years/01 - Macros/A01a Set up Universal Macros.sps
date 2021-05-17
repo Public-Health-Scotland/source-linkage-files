@@ -19,7 +19,7 @@
 *******************************************************.
 * IT Extracts * 
 * Replace the number with the CSD ref.
-Define !CSDRef()
+Define !IT_extract_number()
     "SCTASK0205902"
 !EndDefine.
 
@@ -32,28 +32,52 @@ Define !LatestUpdate()
 * File Path locations *. 
 *******************************************************.
 
-Define !File()
+*Directory for all years SLF development. Links to !FY() for updating each financial year.
+Define !Year_dir()
    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
 !EndDefine.
 
 * Extract files - "home".
-Define !Extracts()
-   !Quote(!Concat(!Unquote(!Eval(!File)), "Extracts/"))
+*Directory for BO extracts. Links to !Year_dir() for storing raw extracts for each FY.
+Define !Year_Extracts_dir()
+   !Quote(!Concat(!Unquote(!Eval(!Year_dir)), "Extracts/"))
 !EndDefine.
 
- * Secondary extracts storage in case the above is full, or other reasons.
-Define !Extracts_Alt()
-   "/conf/hscdiip/DH-Extract/"
+*Secondary extracts storage in case the above is full, or other reasons.
+*Main storage folder in HSCDIIP.
+Define !SLF_Extracts()
+   "/conf/hscdiip/SLF_Extracts/"
 !EndDefine.
 
-Define !Costs_Lookup()
-    !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
+*Directory for storing cost lookup.sav.
+Define !Costs_dir()
+    !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Costs/"))
 !EndDefine.
 
-* IT extract. 
-Define !CSDExtractLoc()
-    !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRef))))
+*******************************************************.
+* IT extracts. 
+*******************************************************.
+
+*Directory for IT extracts.
+Define !IT_Extracts_dir()
+    !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "IT_extracts/"))
 !EndDefine.
+
+*LTC extract.
+Define !LTC_extract_file()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_number)), "_extract_1_LTCs.csv"))
+!EndDefine.
+
+*Deaths extract.
+Define !Deaths_extract_file()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_number)), "_extract_2_Deaths.csv"))			
+!EndDefine.
+
+*PIS extract.
+Define !PIS_extract_file()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_number)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY))))		
+!EndDefine.
+
 
 *******************************************************.
  * Source Lookups *
