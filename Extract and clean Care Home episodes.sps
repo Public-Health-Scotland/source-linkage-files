@@ -430,12 +430,8 @@ Do if chi = lag(chi) and CHI NE "".
         * These are different episodes (new admission date) for the same person.
         Compute scem = lag(scem) + 1.
     End if.
-End if.
-
 * For missing CHI records.
-sort cases by sending_location social_care_id ch_admission_date record_date ch_discharge_date.
-
-Do if chi = "" and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+Else if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
     Do If lag(ch_admission_date) = ch_admission_date.
         * Normal records.
         * These are records for the same person, same admission date submitted in different quarters.
