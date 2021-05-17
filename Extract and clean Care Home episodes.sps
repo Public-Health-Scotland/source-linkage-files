@@ -314,7 +314,7 @@ crosstabs AccurateData1 by AccurateData2 by AccurateData0.
 
 * Refresh the variables to drop all the ones we no longer need.
 save outfile = !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav"
-    /keep = sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode
+    /keep sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode
     /zcompressed.
 get file =  !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav".
 
@@ -359,7 +359,7 @@ Frequencies changed_sc_id.
 
 save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
     /Keep chi sending_location social_care_id ch_name ch_postcode ch_admission_date ch_discharge_date record_date period All
-    /Drop min_provider max_provider first_sc_id
+    /Drop min_provider max_provider latest_sc_id changed_sc_id
     /zcompressed.
 get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
