@@ -166,7 +166,6 @@ Define !DataZone_pop_dir()
  * Will need to be changed when geography files update.
  * They are mainly changed here.
 *******************************************************.
-
 *Locality file - will need changing when geography files update. 
 Define !Locality_file()
     "HSCP Localities_DZ11_Lookup_20200825.sav"
@@ -174,12 +173,12 @@ Define !Locality_file()
 
 *SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2020_2.sav"
+    "Scottish_Postcode_Directory_2021_1.sav"
 !EndDefine. 
 
 *SIMD file - will need changing when geography files update.
 Define !SIMD_file()
-    "postcode_2020_2_simd2020v2.sav"
+    "postcode_2021_1_simd2020v2.sav"
 !EndDefine.
 
 *DataZone Populations file - will need changing when geography files update.
@@ -192,7 +191,6 @@ Define !DataZone_pop_file()
  * Geography Lookup Macros *
  * Should only need to change above macros when geography file updates.
 *******************************************************.
-
 *Locality Lookup. 
 Define !Localities_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!Locality_dir)), !Unquote(!Eval(!Locality_file))))
