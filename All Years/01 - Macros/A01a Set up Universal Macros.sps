@@ -29,9 +29,8 @@ Define !LatestUpdate()
 !EndDefine.
 
 *******************************************************.
-* File Path locations *. 
+* Directories for File Path locations *. 
 *******************************************************.
-
 *Directory for all years SLF development. Links to !FY() for updating each financial year.
 Define !Year_dir()
    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
@@ -49,15 +48,55 @@ Define !SLF_Extracts()
    "/conf/hscdiip/SLF_Extracts/"
 !EndDefine.
 
-*Directory for storing cost lookup.sav.
+*Directory for storing lookups created by SLFs. 
+*Includes source_postcode_lookup, source_GPPrac_lookup and PracticeDetails.sav.
+Define !Lookup_dir_slf()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Lookups/"))
+!EndDefine. 
+
+*Directory for storing cost lookups for DN, CH and GP OOH.
 Define !Costs_dir()
     !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Costs/"))
 !EndDefine.
 
+*Directory for storing latest Delayed Discharges extracts. 
+Define !Delayed_Discharges_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Delayed_Discharges/"))
+!EndDefine. 
+
+*Directory for storing latest HHG extract. 
+Define !HHG_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "HHG/"))
+!EndDefine. 
+
+*Directory for storing latest NSU extract.
+Define !NSU_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "NSU/"))
+!EndDefine.
+
+*Directory for storing latest SPARRA extract.
+Define !SPARRA_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "SPARRA/"))
+!EndDefine. 
+
+*Directory for storing latest Demographic and Service Use cohorts. 
+Define !Cohort_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Cohorts/"))
+!EndDefine. 
+
+*Directory for storing LTC year specific reference files. 
+Define !LTCs_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "LTCs/"))
+!EndDefine. 
+
+*Directory for storing the All_Deaths file. 
+Define !Deaths_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Deaths/"))
+!EndDefine. 
+
 *******************************************************.
 * IT extracts. 
 *******************************************************.
-
 *Directory for IT extracts.
 Define !IT_Extracts_dir()
     !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "IT_extracts/"))
@@ -96,7 +135,6 @@ Define !AnontoCHIlookup()
  * Geography Lookup Directories *
  * Will need to be changed when geography files update.
 *******************************************************.
-
 *Directory for lookups - should not need changing. 
 Define !Global_Lookup_dir()
     "/conf/linkage/output/lookups/Unicode/"
