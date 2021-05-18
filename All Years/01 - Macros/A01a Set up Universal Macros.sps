@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 *Run Macros before SLF update.
 ************************************************************************************************************
 ** AUTHOR:	James McMahon (james.mcmahon@phs.scot)
@@ -19,7 +19,7 @@
 *******************************************************.
 * IT Extracts * 
 * Replace the number with the CSD ref.
-Define !IT_extract_number()
+Define !IT_extract_ref()
     "SCTASK0205902"
 !EndDefine.
 
@@ -65,29 +65,24 @@ Define !IT_Extracts_dir()
 
 *LTC extract.
 Define !LTC_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_number)), "_extract_1_LTCs.csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_1_LTCs.csv"))
 !EndDefine.
 
 *Deaths extract.
 Define !Deaths_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_number)), "_extract_2_Deaths.csv"))			
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_2_Deaths.csv"))			
 !EndDefine.
 
 *PIS extract.
 Define !PIS_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_number)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY))))		
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY)), ".csv"))		
 !EndDefine.
 
 
 *******************************************************.
- * Source Lookups *
+ * AnonCHI lookup *
  * Should not need changing *
 *******************************************************.
- * Location of SLF lookups.
-Define !Lookup_dir_slf()
-   "/conf/irf/05-lookups/04-geography/"
-!EndDefine.
-
  * Locations of the existing Anon_CHI lookups.
 Define !CHItoAnonlookup()
     "/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav"
