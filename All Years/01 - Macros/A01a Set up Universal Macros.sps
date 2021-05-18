@@ -156,7 +156,7 @@ Define !SIMD_dir()
 !EndDefine. 
 
 *Directory for DataZone Populations. 
-Define !DataZone_pop_dir()
+Define !pop_dir()
     "Populations/Estimates/"
 !EndDefine. 
 
@@ -208,7 +208,7 @@ Define !SIMD_Lookup()
 
 *DataZone Population Lookup. 
 Define !DataZone_Pop_Lookup
-    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!DataZone_pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
 !EndDefine. 
 
 
