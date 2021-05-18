@@ -25,3 +25,9 @@ Define !NextFY ()
     "1920"
 !EndDefine.
 
+*This related to the file in the IT extracts directory and should unzip this in B06 Process PIS extract.
+*Change this to the relevant number specific to FY.
+* Should be '_extract_NUMBER'.
+Define !Extract_Number()
+    "_extract_3"
+!EndDefine.

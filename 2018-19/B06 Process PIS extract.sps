@@ -3,13 +3,9 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-* This should unzip the file in the IT extracts directory.
-* Change this to the relevant number.
-* Should be '_extract_NUMBER'.
-Define !Extract_Number()
-    "_extract_3"
-!EndDefine.
-
+*This should unzip the PIS extract in the IT extract directory.
+*The Macro !Extract_Number can be found in A01b 'Year' Macro and the number should be specific to FY. 
+*!Extract_Number should be changed to the relevant number.
 Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].
 
 GET DATA  /TYPE=TXT
