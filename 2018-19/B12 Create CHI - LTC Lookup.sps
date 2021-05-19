@@ -10,11 +10,11 @@ Define !Extract_Number()
 !EndDefine.
 
  * Unzip the file.
-Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_LTCs.csv'"].
+Host Command = ["gunzip '" + !IT_extracts_dir + !IT_extract_ref + !LTC_extract_file].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-   /FILE= !CSDExtractLoc + !Extract_Number + "_LTCs.csv"
+   /FILE= !IT_extracts_dir + !IT_extract_ref + !LTC_extract_file
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -79,4 +79,4 @@ save outfile = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav"
 get file = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Zip back up.
-Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_LTCs.csv'"].
+Host Command = ["gzip '" + !IT_extracts_dir + !IT_extract_ref + !LTC_extract_file].
