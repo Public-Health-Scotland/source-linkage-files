@@ -6,7 +6,7 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !File + "source-episode-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 
 * Exclude people with blank chi.
 select if chi NE "".
@@ -497,9 +497,9 @@ aggregate outfile = *
     = First(HHG_Start_FY HHG_End_FY).
 
 * Do a temporary save as the above can take a while to run.
-save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav"
     /zcompressed.
-get file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav".
 
 * Clean up the gender, use the most common (by rounding the mean), if the mean is 1.5 (i.e. no gender known or equal male and females) then take it from the CHI).
 Do if gender NE 1.5.
@@ -816,11 +816,11 @@ String year (A4).
 Compute year = !FY.
 
 * Delete the record specific DoB gpprac and postcode, and reorder others whilst we're here.
-save outfile = !file + "temp-source-individual-file-2-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav"
     /Keep year chi gender DoB age postcode gpprac
     health_net_cost health_net_costincDNAs health_net_costincIncomplete
     deceased death_date
     ALL
     /zcompressed.
 
-get file = !file + "temp-source-individual-file-2-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav".

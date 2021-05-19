@@ -1,12 +1,12 @@
-* Encoding: UTF-8.
-get file = !File + "temp-source-individual-file-2-20" + !FY + ".zsav".
+﻿* Encoding: UTF-8.
+get file = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav".
 
 * Match on postcode stuff.
 Sort Cases by postcode.
 
 *Apply consistent geographies.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
     /Rename (HB2018 = hbrescode)
     /by postcode.
 
@@ -32,7 +32,7 @@ End if.
 
 sort cases by chi.
 
-save outfile = !File + "temp-source-individual-file-3-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
    /zcompressed.
 
-get file = !File + "temp-source-individual-file-3-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav".
