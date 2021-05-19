@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + "Homelessness extract-20" + !FY + ".csv"
+    /FILE= !Year_Extracts_dir + "Homelessness extract-20" + !FY + ".csv"
     /ENCODING='UTF8'
     /DELCASE=LINE
     /DELIMITERS=" ,"
@@ -114,7 +114,7 @@ alter type record_keydate1 record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'
     /Keep year
     recid
     SMRType
@@ -131,4 +131,4 @@ save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
     /zcompressed.
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Homelessness extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Year_Extracts_dir + "Homelessness extract-20" + !FY + ".csv'"].

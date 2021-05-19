@@ -5,10 +5,10 @@
 ************************************************************************************************************************************.
  * We don't currently have an NSU cohort for 2018/19.
  * Use this code for new years where we don't have an NSU cohort, otherwise run main code below.
-get file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav".
 Numeric Keep_Population (F1.0).
 Compute Keep_Population = 1.
-save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
 ************************************************************************************************************************************.
 ************************************************************************************************************************************.
@@ -67,12 +67,12 @@ aggregate outfile = *
     /Break Locality AgeGroup gender
     /Population_Estimate = Sum(Population_Estimate).
 
-save outfile = !File + "Population-estimates-20" + !FY + ".zsav"
+save outfile = !Year_dir + "Population-estimates-20" + !FY + ".zsav"
     /zcompressed.
 
 ************************************************************************************************************************************.
 * 2. Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
-get file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav"
+get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
     /Keep chi Locality age gender NSU death_date.
 
  * If they don't have a locality, they're no good as we won't have an estimate to match them against.
@@ -126,7 +126,7 @@ select if NSU = 1.
 
  * Match on the population estimates.
 match files file = *
-    /table = !File + "Population-estimates-20" + !FY + ".zsav"
+    /table = !Year_dir + "Population-estimates-20" + !FY + ".zsav"
     /by Locality AgeGroup Gender.
 
  * Calculate difference between Source Population and Estimated Population.
@@ -152,15 +152,15 @@ Select if Keep_NSU = 1.
 
 Sort cases by CHI.
 
-save outfile = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav"
+save outfile = !Year_dir + "NSU-Keep-Lookup-20" + !FY + ".zsav"
     /Keep chi Keep_NSU
     /zcompressed.
 
 ************************************************************************************************************************************.
 * 3. Match the flag back on to the SLF.
 match files 
-    /file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav"
-    /table = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav"
+    /file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
+    /table = !Year_dir + "NSU-Keep-Lookup-20" + !FY + ".zsav"
     /Rename Keep_NSU = Keep_Population
     /By Chi.
 
@@ -170,8 +170,8 @@ If NSU = 0 Keep_Population = 1.
  * If the flag is missing they must be a non-keep NSU so set to 0.
 Recode Keep_Population (sysmis = 0).
 
-save outfile = !File + "temp-source-individual-file-5-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
 
-get file = !File + "temp-source-individual-file-5-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 

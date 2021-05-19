@@ -5,8 +5,8 @@
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
 * Get a warning here but should be fine. - Caused by the way we match on NSU.
 match files
-    /file = !File + "temp-source-episode-file-3-" + !FY + ".zsav" 
-    /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
+    /file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav" 
+    /file = !Year_Extracts_dir + "All_CHIs_20" + !FY + ".zsav"
     /By chi.
 
 * Set up the variables for the NSU CHIs.
@@ -18,7 +18,7 @@ Do if recid = "".
 End if.
 
 *Save Temp.
-save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav" 
+save outfile = !Year_dir + "temp-source-episode-file-4-" + !FY + ".zsav" 
 /zcompressed.  
 
 ********************************************************************************************************************************

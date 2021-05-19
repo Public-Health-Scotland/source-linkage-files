@@ -40,10 +40,10 @@ Numeric death_date (Date12).
 Compute death_date = death_date_CHI.
 If Not(sysmis(death_date_NRS)) death_date = death_date_NRS.
 
-save outfile = !Extracts_Alt + "All Deaths.zsav"
+save outfile = !SLF_Extracts + "All Deaths.zsav"
     /zcompressed.
 
-get file = !Extracts_Alt +  "All Deaths.zsav".
+get file = !SLF_Extracts +  "All Deaths.zsav".
 
 * Zip back up.
 Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_Deaths.csv'"].

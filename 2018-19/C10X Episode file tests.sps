@@ -5,7 +5,7 @@ Define !FinalName()
 
 Define !Create_Aggregate(FileVersion = !Tokens(1)).
 
-!Let !DatasetName = !Concat(!Unquote(!FileVersion), "By", "Recid").
+!Let !DatasetName = !Concat(!Unquote(!Year_dirVersion), "By", "Recid").
 
 Dataset Declare !DatasetName.
 
@@ -117,7 +117,7 @@ Alter type value (F8.2).
 
 !EndDefine.
 
-get file = !File + "source-episode-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 !Create_Aggregate FileVersion = New.
 
 get file =  "/conf/hscdiip/01-Source-linkage-files/source-episode-file-20" + !FY + ".zsav".
@@ -141,4 +141,4 @@ If abs(pct_diff) >= 5 Possible_issue = 1.
 
 Crosstabs recid by Possible_issue.
 
-save outfile = !File + "source-episode-TESTS-20" + !FY + ".sav".
+save outfile = !Year_dir + "source-episode-TESTS-20" + !FY + ".sav".

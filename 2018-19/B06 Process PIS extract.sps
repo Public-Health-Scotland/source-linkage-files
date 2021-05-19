@@ -57,11 +57,11 @@ compute year = !FY.
 
 sort cases by chi.
 
-save outfile = !file + "prescribing_file_for_source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /Drop DIPaidGICexcl.BB
     /zcompressed.
 
-get file = !file + "prescribing_file_for_source-20" + !FY + ".zsav".
+get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
 * zip raw data back up.
 Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].

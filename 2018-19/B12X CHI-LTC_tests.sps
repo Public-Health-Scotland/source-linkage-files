@@ -2,7 +2,7 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav".
+get file = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Highlight different CHI numbers.
 add files file = *
@@ -36,4 +36,4 @@ If duplicate_chi = 1 or duplicate_chi_postcode = 1 Error = 1.
 
 crosstabs Error by chi.
 
-save outfile = !File + "LTC_tests_20" + !FY + ".sav".
+save outfile = !Year_dir + "LTC_tests_20" + !FY + ".sav".

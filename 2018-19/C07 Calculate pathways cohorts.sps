@@ -11,7 +11,7 @@
 * Create the Demographic Cohort File.
 ******************************************************************************************************************** * * .
 
-get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav".
 
 select If CHI ne "".
 
@@ -238,7 +238,7 @@ End if.
 * Add variable label (from AM).
 variable labels Demographic_Cohort "Allocated on the basis of health status and need of care, using LTCs, diagnosis codes and other characteristics".
 
-save outfile = !File + "Demographic_Cohorts_" + !FY + ".zsav"
+save outfile = !Year_dir + "Demographic_Cohorts_" + !FY + ".zsav"
     /keep CHI Demographic_Cohort End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
     /zcompressed.
 
@@ -246,7 +246,7 @@ save outfile = !File + "Demographic_Cohorts_" + !FY + ".zsav"
 * Create the Service Use Cohort File.
 ******************************************************************************************************************** * * .
 
-get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav".
 
 select If CHI ne "".
 
@@ -515,9 +515,9 @@ Rename Variables Service_Use_Cohort = Service_Use_Cohort.
 Variable labels
     Service_Use_Cohort "Allocated based on main service type, i.e. where the highest proportion of health cost was spent in the financial year".
 
-save outfile = !File + "Service_Use_Cohorts_" + !FY + ".zsav"
+save outfile = !Year_dir + "Service_Use_Cohorts_" + !FY + ".zsav"
     /keep CHI Service_Use_Cohort
     Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
     /zcompressed.
 
-get file = !File + "Service_Use_Cohorts_" + !FY + ".zsav".
+get file = !Year_dir + "Service_Use_Cohorts_" + !FY + ".zsav".
