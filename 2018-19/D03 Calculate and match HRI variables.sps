@@ -14,7 +14,7 @@
 
 
 * First quickly create a lookup for Postcode district, use the lookup file which has all Scottish Postcodes in it.
-get file = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+get file = !Lookup + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
     /Keep postcode.
 String PCArea (A3).
 * Workout the postcode area.
@@ -24,12 +24,12 @@ Compute PCArea = char.substr(postcode, 1, char.index(postcode, "0123456789", 1) 
 sort cases by PCArea.
 Select if PCArea NE lag(PCArea).
 
-save outfile = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
+save outfile = !File + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
     /keep PCArea
     /zcompressed.
 
 
-get file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
+get file = !File + "temp-source-individual-file-3-20" + !FY + ".zsav"
     /Keep year chi postcode gpprac lca hbrescode Health_net_cost Health_net_costincincomplete ch_cost.
 
 String PCArea (A3).
@@ -41,7 +41,7 @@ sort cases by PCArea.
 
 match files
     /file =  *
-    /table = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
+    /table = !File + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
     /In = ScotFlag
     /by PCArea.
 
@@ -171,7 +171,7 @@ End if.
  * Sort back by CHI ready for matching.
 sort cases by CHI.
 
-save outfile = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
+save outfile = !file + 'HRI_lookup_' + !FY + '.zsav'
     /keep chi
     HRI_scot to HRI_lca_incDN
     HRI_scotP to HRI_lcaP_incDN
@@ -180,14 +180,14 @@ save outfile = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
 
  * Match to individual file.
 match files
-    /file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
-    /table = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
+    /file = !File + "temp-source-individual-file-3-20" + !FY + ".zsav"
+    /table = !file + 'HRI_lookup_' + !FY + '.zsav'
     /By chi.
 
-save outfile = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
+save outfile = !File + "temp-source-individual-file-4-20" + !FY + ".zsav"
     /zcompressed.
 
-get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav".
+get file = !File + "temp-source-individual-file-4-20" + !FY + ".zsav".
 
  * Housekeeping.
-Erase file = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav".
+Erase file = !File + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav".

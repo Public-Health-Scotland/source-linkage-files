@@ -6,7 +6,7 @@ Sort Cases by postcode.
 
 *Apply consistent geographies.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
     /Rename (HB2018 = hbrescode)
     /by postcode.
 
@@ -15,7 +15,7 @@ match files file = *
 sort cases by gpprac.
 
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "Source GPprac Lookup-20" + !LatestUpdate + ".zsav"
     /Drop PC7 PC8
     /by gpprac.
 
