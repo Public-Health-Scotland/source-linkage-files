@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !File + "temp-source-individual-file-2-20" + !FY + ".zsav".
 
 * Match on postcode stuff.
@@ -15,7 +15,7 @@ match files file = *
 sort cases by gpprac.
 
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "Source GPprac Lookup-20" + !LatestUpdate + ".zsav"
     /Drop PC7 PC8
     /by gpprac.
 

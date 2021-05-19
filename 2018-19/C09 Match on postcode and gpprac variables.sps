@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
 
 * Recode all to 2018 boundaries.
@@ -44,7 +44,7 @@ Rename Variables
  * Use the postcode lookup file to identify valid postcodes.
  * We don't want any of the geographies at this point.
 match files file = *
-    /table = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In = PostcodeMatch
     /Drop HB2018 to UR2_2016
     /by postcode.
@@ -99,13 +99,13 @@ End if.
 sort cases by Postcode.
 
 add files file = *
-    /file = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav"
+    /file = !Year_dir + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav"
     /Drop PostcodeMatch all_match potentially_fixable changed_postcode
     /By Postcode.
 
 * Apply consistent geographies.
 match files file = *
-    /table = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /Rename (HB2018 = hbrescode)
     /In = PostcodeMatch
     /by postcode.
@@ -369,7 +369,7 @@ Rename Variables
 * Find out which GPprac codes are good.
 * We don't want any of the other variables at this point.
 match files file = *
-    /table = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 to hbpraccode
     /by gpprac.
@@ -428,12 +428,12 @@ End if.
 sort cases by gpprac.
 
 add files file = *
-    /file = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
+    /file = !Year_dir + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
     /Drop GPPracMatch all_match potentially_fixable changed_gpprac
     /By gpprac.
 
 match files file = *
-    /table = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 PC8
     /by gpprac.

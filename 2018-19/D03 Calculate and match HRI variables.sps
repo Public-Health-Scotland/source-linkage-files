@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Calculating HRIs (high resource individuals) which are patients whose total health costs account for more than 50% of their council, health board of
    residence, or Scotland's total health costs.
  * Originally created by Kara Sellar 18/10/13.
@@ -14,7 +14,7 @@
 
 
 * First quickly create a lookup for Postcode district, use the lookup file which has all Scottish Postcodes in it.
-get file = !Lookup + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
+get file = !Lookup_dir_slf + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
     /Keep postcode.
 String PCArea (A3).
 * Workout the postcode area.
