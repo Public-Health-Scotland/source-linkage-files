@@ -483,10 +483,10 @@ If last_dis_date_open sc_date_2 = $sysmis.
 
 * Where the episodes are split (> 1 record) change the admission and discharge dates to the start and end of the quarters using the record_date as appropriate.
 Do if n_records > 1.
-    Do if record_count = 1.
+    Do if first_record.
         Compute changed_dis_date = 1.
         Compute ch_discharge_date = record_date.
-    Else if record_count = n_records.
+    Else if last_record.
         Compute changed_adm_date = 1.
         Compute ch_admission_date = lag(record_date).
     Else.
@@ -511,19 +511,15 @@ match files file = *
     /by chi.
 
 * Create a flag to identify the last record where an episode has been split.
-add files file = *
-    /last = last_scem_ep
-    /by chi scem.
-
 * Episodes where the death_date is within 1-5 days of the dis date.
-do if range(datediff(sc_date_2, death_date, "days"), 1, 5).
+Do if range(datediff(sc_date_2, death_date, "days"), 1, 5).
     * Some tracking variables.
     Compute changed_dis_date = 1.
     Compute old_ch_discharge_date = ch_discharge_date.
     Compute old_sc_date_2 = sc_date_2.
     * Overwrite the discharge dates with the death date as appropriate.
     Compute sc_date_2 = death_date.
-    Do if last_scem_ep.
+    Do if last_record.
         Compute ch_discharge_date = death_date.
     Else if ch_discharge_date > death_date.
         Compute ch_discharge_date = death_date.
@@ -539,13 +535,14 @@ else if range(datediff(sc_date_2, death_date_CHI, "days"), 1, 5).
     Compute old_ch_discharge_date = ch_discharge_date.
     Compute old_sc_date_2 = sc_date_2.
     Compute sc_date_2 = death_date_CHI.
-    Do if last_scem_ep.
+    Do if last_record.
         Compute ch_discharge_date = death_date_CHI.
     Else if ch_discharge_date > death_date_CHI.
         Compute ch_discharge_date = death_date_CHI.
         Compute none_last_ep_changed = 2.
     End if.
-end if.
+End if.
+
 Alter type ch_discharge_date old_sc_date_2 (Date11).
 Value labels changed_dis_date none_last_ep_changed
     1 "Changed to match NRS death date (<= 5 days before dis)"
