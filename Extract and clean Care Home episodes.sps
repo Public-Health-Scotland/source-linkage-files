@@ -364,11 +364,15 @@ save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
 get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 
 * Sort to ensure the latest submitted records come last.
-sort cases by chi sending_location social_care_id ch_admission_date period.
+sort cases by chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider.
 
- * Track when the discharge date is missing (open record), if this is the latest submission we need to preserve it.
-String dis_date_missing (A6).
-If sysmis(ch_discharge_date) dis_date_missing = period.
+ * Remove exact duplicates as they will be removed in the aggregate anyway and they make the below calculations more complicated.
+aggregate
+    /presorted
+    /break chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider
+    /Duplicate_count = n.
+*Frequencies Duplicate_count.
+Select if Duplicate_count = 1.
 
 * Create a counter to track changes in Nursing Care / CH provider to use in the aggregate.
 * This deals with cases where the NC changes more than once.
