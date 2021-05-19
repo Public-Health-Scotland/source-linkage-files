@@ -489,11 +489,13 @@ Do if n_records > 1.
     Else if last_record.
         Compute changed_adm_date = 1.
         Compute ch_admission_date = lag(record_date).
+        If Duplicate and lag(Duplicate) ch_admission_date = lag(ch_admission_date).
     Else.
         Compute changed_dis_date = 1.
         Compute ch_discharge_date = record_date.
         Compute changed_adm_date = 1.
         Compute ch_admission_date = lag(record_date).
+        If Duplicate and lag(Duplicate) ch_admission_date = lag(ch_admission_date).
     End if.
 End if.
 
