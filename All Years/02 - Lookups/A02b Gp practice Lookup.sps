@@ -6,9 +6,9 @@
  * Save the Cluster file to \\stats\irf\05-lookups\04-geography\Practice Details.sav.
 
  * Check the file from Primary care team is sorted by practice.
-get file = !Lookup + "Practice Details.sav".
+get file = !Lookup_dir_slf + "Practice Details.sav".
 sort cases by PracticeCode.
-save outfile = !Lookup + "Practice Details.sav".
+save outfile = !Lookup_dir_slf + "Practice Details.sav".
 
  * Sort the national ref file by practice.
 get file = "/conf/linkage/output/lookups/Unicode/National Reference Files/gpprac.sav"
@@ -21,7 +21,7 @@ sort cases by praccode.
 match files
    /File = *
    /Rename (praccode = gpprac)
-   /Table = !Lookup + "Practice Details.sav"
+   /Table = !Lookup_dir_slf + "Practice Details.sav"
    /Rename (PracticeCode = gpprac)
    /by gpprac.
 
@@ -34,7 +34,7 @@ sort cases by Postcode.
 match files
     /File = *
     /Rename Postcode = PC8
-    /Table = !PCDir
+    /Table = !SPD_Lookup
     /Rename HB2018 = hbpraccode
     /By PC8.
 
@@ -59,8 +59,8 @@ End if.
 Sort cases by gpprac.
 
  * Save out, rename HB2018 for source, keep LCA etc. for others (Andrew Mooney).
-save outfile = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
+save outfile = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
    /Keep gpprac PC7 PC8 cluster hbpraccode HSCP2018 CA2018 LCA
    /zcompressed.
 
-get file = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav".
+get file = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav".
