@@ -1,6 +1,20 @@
 ﻿* Encoding: UTF-8.
 get file = !File + "temp-source-episode-file-7-" + !FY + ".zsav".
 
+* Recode all to 2018 boundaries.
+* Can only do this as the 2014/2016 -> 2018 change didn't affect any postcodes, the 2018 -> 2019 change affected 7 postcodes.
+* This might incorrectly assign people from those 7 postcodes in the edge case where we have a valid 2019 geog for them but no postcode.
+
+* HB2014 -> HB2018.
+Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+* HB2019 -> HB2018.
+Recode hbrescode hbpraccode hbtreatcode ("S08000031" = "S08000021") ("S08000032" = "S08000023").
+
+* HSCP2016 -> HSCP2018.
+Recode HSCP ("S37000014" = "S37000032") ("S37000023" = "S37000033").
+* HSCP2019 -> HSCP2018.
+Recode HSCP ("S37000034" = "S37000015") ("S37000035" = "S37000021").
+
 * Correct Postcode formatting.
 * Remove any postcodes which are length 3 or 4 as these can not be valid (not a useful dummy either).
 If range(Length(Postcode), 3, 4) Postcode = "".
@@ -30,7 +44,7 @@ Rename Variables
  * Use the postcode lookup file to identify valid postcodes.
  * We don't want any of the geographies at this point.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In = PostcodeMatch
     /Drop HB2018 to UR2_2016
     /by postcode.
@@ -48,7 +62,7 @@ if chi NE "" and (all_match NE 0 and all_match NE 1) potentially_fixable = 1.
 * Save out main file for now.
 Temporary.
 Select if potentially_fixable = 0.
-save outfile = !File + "temp-no-postcode-changes-" + !FY + ".zsav"
+save outfile = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav"
     /zcompressed.
 
 * Work on 'potentially fixable' records for now.
@@ -85,13 +99,13 @@ End if.
 sort cases by Postcode.
 
 add files file = *
-    /file = !File + "temp-no-postcode-changes-" + !FY + ".zsav"
+    /file = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav"
     /Drop PostcodeMatch all_match potentially_fixable changed_postcode
     /By Postcode.
 
 * Apply consistent geographies.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /Rename (HB2018 = hbrescode)
     /In = PostcodeMatch
     /by postcode.
@@ -355,7 +369,7 @@ Rename Variables
 * Find out which GPprac codes are good.
 * We don't want any of the other variables at this point.
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 to hbpraccode
     /by gpprac.
@@ -377,7 +391,7 @@ if chi NE "" and (all_match NE 0 and all_match NE 1) potentially_fixable = 1.
 * Save out main file for now.
 Temporary.
 Select if potentially_fixable = 0.
-save outfile = !File + "temp-no-gpprac-changes-" + !FY + ".zsav"
+save outfile = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
     /zcompressed.
 
 * Work on 'potentially fixable' records for now.
@@ -414,12 +428,12 @@ End if.
 sort cases by gpprac.
 
 add files file = *
-    /file = !File + "temp-no-gpprac-changes-" + !FY + ".zsav"
+    /file = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
     /Drop GPPracMatch all_match potentially_fixable changed_gpprac
     /By gpprac.
 
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 PC8
     /by gpprac.
@@ -440,16 +454,14 @@ if GPPracMatch = 0 and hbpraccode = "" gpprac = $sysmis.
 * Not including yet as unsure whether the gains are worth introducing incorrect boards...
 * If hbpraccode NE "" and hbrescode = "" and hbpraccode = hbtreatcode hbrescode = hbpraccode.
 
-* Recode according to boundary changes 08/05/2018.
-Recode hbrescode hbpraccode hbtreatcode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
-Recode HSCP2018 ("S37000014" = "S37000032") ("S37000023" = "S37000033").
-Recode CA2018 ("S12000015" = "S12000047") ("S12000024" = "S12000048").
+* All geographies should now have a label and be from the 2018 (or dummy) geographies.
+crosstabs hbrescode hbtreatcode hbpraccode hscp2018 ca2018 lca by recid.
 
 save outfile = !File + "temp-source-episode-file-8-" + !FY + ".zsav"
     /Drop LCA_old HSCP_old Datazone_old hbrescode_old hbpraccode_old PostcodeMatch GPPracMatch
     /zcompressed.   
 
 * Housekeeping.
-Erase file = !File + "temp-no-postcode-changes-" + !FY + ".zsav".
-Erase file = !File + "temp-no-gpprac-changes-" + !FY + ".zsav".
+Erase file = !File + "temp-no-postcode-changes-" + !LatestUpdate + ".zsav".
+Erase file = !File + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav".
 
