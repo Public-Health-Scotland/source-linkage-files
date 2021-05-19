@@ -16,7 +16,7 @@ save outfile = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav"
  
 ************************************************************************************************************************************.
 * 1. Obtain the population estimates for Locality AgeGroup and Gender.
-get file = !DataZone_Pops
+get file = !DataZone_Pop_Lookup
     /Keep Year DataZone2011 sex age0 to age90plus.
 
  * Select out the estimates for the year of interest.
@@ -58,7 +58,7 @@ sort cases by DataZone2011.
  * Match on Localities.
 match files
    /File = * 
-   /Table = !LocalitiesLookup
+   /Table = !Localities_Lookup
    /Rename (HSCPLocality = Locality)
    /By Datazone2011.
 

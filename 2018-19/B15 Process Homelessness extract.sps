@@ -101,7 +101,7 @@ Rename Variables
     ApplicationReferenceNumber = hl1_application_ref
     PropertyTypeCode = hl1_property_type.
 
-Apply Dictionary From !PCDir
+Apply Dictionary From !SPD_Lookup
     /VarInfo ValLabels = Replace
     /Source variables = CA2011
     /Target variables = hl1_sending_lca.
