@@ -552,8 +552,16 @@ Value labels changed_dis_date none_last_ep_changed
 
 Frequencies changed_dis_date none_last_ep_changed.
 
- * Remove any episodes which now have an admission after discharge i.e. they were admitted after death.
- * As of April 2021 this removes 34 episodes.
+sort cases by chi sending_location social_care_id scem sc_latest_submission.
+
+Compute continuous_marker = 1.
+Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+    Compute continuous_marker = lag(continuous_marker).
+    If ch_admission_date > lag(ch_discharge_date) continuous_marker = lag(continuous_marker) + 1.
+End if.
+
+* Remove any episodes which now have an admission after discharge i.e. they were admitted after death.
+* As of April 2021 this removes 34 episodes.
 Compute death_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(ch_discharge_date)).
 Frequencies death_before_adm.
 Select if not(death_before_adm).
