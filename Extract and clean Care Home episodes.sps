@@ -414,9 +414,9 @@ aggregate outfile = *
     /gender dob postcode = first(gender dob postcode)
     /Duplicate = max(duplicate).
 
- * Check the discharge date and if there was a missing date in the latest submission use that.
+* Check the discharge date and if there was a missing date in the latest submission use that.
 * However some (~1/3) episodes have subsequent episodes starting on the same day, in this case keep the episode closed.
-sort cases by chi sending_location social_care_id (A) ch_admission_date (D).
+sort cases by chi sending_location social_care_id (A) ch_admission_date record_date (D) .
 * Find cases where dis was missing in last submission but isn't after the aggregate.
 Do if lastest_submission_dis_missing = sc_latest_submission and not sysmis(ch_discharge_date).
     * Clear case where the dis 'should' be missing but this would result in an overlap.
