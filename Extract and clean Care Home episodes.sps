@@ -459,19 +459,21 @@ End if.
 sort cases by chi sending_location social_care_id scem record_date.
 * Highlight the last episode of the scem to take the discharge date from.
 * Can't use aggregate as that will ignore missing dates.
-add files file = *
-    /by chi sending_location social_care_id scem
-    /last = Last_record.
+aggregate
+    /Presorted
+    /break chi sending_location social_care_id scem
+    /n_records = max(record_count).
+
+Compute first_record = record_count = 1.
+Compute last_record = record_count = n_records.
 
 Numeric last_ch_discharge_date (Date11).
-If last_record last_ch_discharge_date = ch_discharge_date.
 
 * For all episodes set the sc_dates to be the first admission and last discharge (these are the actual dates for the episode).
 * This will only be useful for split episodes, in the normal case they will match the single line episode dates.
 * Also add on the maximum number of records for each episode so we can identify the split episodes.
 aggregate
     /break chi sending_location social_care_id scem
-    /n_records = max(record_count)
     /sc_date_1 = min(ch_admission_date)
     /sc_date_2 = max(last_ch_discharge_date).
 
