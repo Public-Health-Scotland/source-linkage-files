@@ -9,7 +9,7 @@ Get file = !Year_dir + "temp-source-episode-file-4-" + !FY + ".zsav".
 
 *Match on LTCs Changed_DoBs and date.
 match files file = *
-    /table = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav"
+    /table = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav"
     /by chi.
 
 * Recode Changed_DoBs.

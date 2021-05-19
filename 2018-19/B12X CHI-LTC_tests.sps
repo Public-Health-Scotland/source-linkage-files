@@ -2,7 +2,7 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav".
+get file = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Highlight different CHI numbers.
 add files file = *

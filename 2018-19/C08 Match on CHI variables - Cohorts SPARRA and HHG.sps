@@ -12,21 +12,21 @@
 * In 1617 use the 12-Month predictions from April 1st 2016 as "Start_FY" and 12-Month predictions from April 1st 2017 as "End_Fy".
 
 match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
-    /table = !Year_dir + "Demographic_Cohorts_" + !FY + ".zsav"
-    /table = !Year_dir + "Service_Use_Cohorts_" + !FY+ ".zsav"
-    /table = !SLF_Extracts + "SPARRA/SPARRA-20" + !FY + ".zsav"
+    /table = !Cohort_dir + "Demographic_Cohorts_" + !FY + ".zsav"
+    /table = !Cohort_dir + "Service_Use_Cohorts_" + !FY+ ".zsav"
+    /table = !SPARRA_dir + "SPARRA/SPARRA-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_Start_FY
-    /table = !SLF_Extracts + "HHG/HHG-20" + !FY + ".zsav"
+    /table = !HHG_dir + "HHG/HHG-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_Start_FY
-    /table = !SLF_Extracts + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
+    /table = !SPARRA_dir + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_End_FY
-    /table = !SLF_Extracts + "HHG/HHG-20" + !NextFY + ".zsav"
+    /table = !HHG_dir + "HHG/HHG-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_End_FY

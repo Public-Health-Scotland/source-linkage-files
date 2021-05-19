@@ -136,7 +136,7 @@ Compute  year = !FY.
 
 match files
    /file = *
-   /Table = !SLF_Extracts + "Costs/Cost_GPOoH_Lookup.sav"
+   /Table = !Costs_dir + "Costs/Cost_GPOoH_Lookup.sav"
    /By TreatmentNHSBoardCode Year.
 
 Rename Variables Cost_per_consultation =  cost_total_net.

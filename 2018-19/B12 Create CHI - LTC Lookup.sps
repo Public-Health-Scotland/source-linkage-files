@@ -71,12 +71,12 @@ If postcode = "NA" postcode = "".
 sort cases by chi postcode.
 
 
-save outfile = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav"
+save outfile = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav"
    /keep chi postcode arth to digestive
       arth_date to digestive_date
    /zcompressed.
 
-get file = !SLF_Extracts + "LTCs_patient_reference_file-20" + !FY + ".zsav".
+get file = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Zip back up.
 Host Command = ["gzip '" + !IT_extracts_dir + !IT_extract_ref + !LTC_extract_file].
