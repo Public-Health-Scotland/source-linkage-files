@@ -366,7 +366,7 @@ get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
 * Sort to ensure the latest submitted records come last.
 sort cases by chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider.
 
- * Remove exact duplicates as they will be removed in the aggregate anyway and they make the below calculations more complicated.
+* Remove exact duplicates as they will be removed in the aggregate anyway and they make the below calculations more complicated.
 aggregate
     /presorted
     /break chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider
@@ -383,13 +383,22 @@ Compute Duplicate = Duplicate_submission_count > 1.
 
 * Create a counter to track changes in Nursing Care / CH provider to use in the aggregate.
 * This deals with cases where the NC changes more than once.
-Compute episode_counter = 0.
-Do if chi = lag(chi) and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+Compute episode_counter = 1.
+Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
     Do if ch_admission_date = lag(ch_admission_date).
-        Compute episode_counter = lag(episode_counter).
-        If ch_provider ne lag(ch_provider) or nursing_care_provision ne lag(nursing_care_provision) episode_counter = lag(episode_counter) + 1.
+        Do if Duplicate.
+            Compute episode_counter = lag(episode_counter) + 1.
+            If lag(Duplicate, 2) and ch_provider = lag(ch_provider, 2) and nursing_care_provision = lag(nursing_care_provision, 2) episode_counter = lag(episode_counter, 2).
+        Else.
+            Compute episode_counter = lag(episode_counter).
+            If ch_provider ne lag(ch_provider) or nursing_care_provision ne lag(nursing_care_provision) episode_counter = lag(episode_counter) + 1.
+        End if.
     End if.
 End if.
+
+* Track when the discharge date is missing (open record), if this is the latest submission we need to preserve it.
+String dis_date_missing (A6).
+If sysmis(ch_discharge_date) dis_date_missing = period.
 
 Missing values ch_name ch_postcode("").
 * Aggregate to episode level, splitting episodes where the ch_provider or nursing_care changes.
@@ -435,8 +444,8 @@ Do if chi = lag(chi) and lag(sending_location) = sending_location and lag(social
         Compute scem = lag(scem).
         Do if lag(record_date) NE record_date.
             Compute record_count = lag(record_count) + 1.
-        * Duplicate records.
-        * These are conflicting records submitted in the same quarter with the same admission dates.
+            * Duplicate records.
+            * These are conflicting records submitted in the same quarter with the same admission dates.
         Else.
             Compute record_count = lag(record_count).
         End if.
