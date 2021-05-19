@@ -428,29 +428,18 @@ Numeric record_count scem (F6.0).
 Compute record_count = 1.
 Compute scem = 1. /*scem = Social Care Episode Marker - name hopefully to be changed */.
 
-Do if chi = lag(chi) and CHI NE "".
+Do if chi = lag(chi) and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
     Do If lag(ch_admission_date) = ch_admission_date.
         * Normal records.
         * These are records for the same person, same admission date submitted in different quarters.
         Compute scem = lag(scem).
+        Do if lag(record_date) NE record_date.
+            Compute record_count = lag(record_count) + 1.
         * Duplicate records.
         * These are conflicting records submitted in the same quarter with the same admission dates.
-        * Or same CHI, same start date, different SC id.
-        If lag(record_date) NE record_date and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id record_count = lag(record_count) + 1.
-    Else.
-        * Normal records.
-        * These are different episodes (new admission date) for the same person.
-        Compute scem = lag(scem) + 1.
-    End if.
-* For missing CHI records.
-Else if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
-    Do If lag(ch_admission_date) = ch_admission_date.
-        * Normal records.
-        * These are records for the same person, same admission date submitted in different quarters.
-        Compute scem = lag(scem).
-        * Duplicate records.
-        * These are conflicting records submitted in the same quarter with the same admission dates.
-        If lag(record_date) NE record_date record_count = lag(record_count) + 1.
+        Else.
+            Compute record_count = lag(record_count).
+        End if.
     Else.
         * Normal records.
         * These are different episodes (new admission date) for the same person.
