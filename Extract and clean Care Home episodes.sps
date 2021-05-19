@@ -374,6 +374,13 @@ aggregate
 *Frequencies Duplicate_count.
 Select if Duplicate_count = 1.
 
+aggregate
+    /presorted
+    /break chi sending_location social_care_id ch_admission_date period
+    /Duplicate_submission_count = n.
+
+Compute Duplicate = Duplicate_submission_count > 1.
+
 * Create a counter to track changes in Nursing Care / CH provider to use in the aggregate.
 * This deals with cases where the NC changes more than once.
 Compute episode_counter = 0.
@@ -395,7 +402,8 @@ aggregate outfile = *
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
     /reason_for_admission = last(reason_for_admission)
-    /gender dob postcode = first(gender dob postcode).
+    /gender dob postcode = first(gender dob postcode)
+    /Duplicate = max(duplicate).
 
  * Check the discharge date and if there was a missing date in the latest submission use that.
 * However some (~1/3) episodes have subsequent episodes starting on the same day, in this case keep the episode closed.
