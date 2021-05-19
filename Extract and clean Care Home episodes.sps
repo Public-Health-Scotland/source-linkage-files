@@ -467,15 +467,19 @@ aggregate
 Compute first_record = record_count = 1.
 Compute last_record = record_count = n_records.
 
-Numeric last_ch_discharge_date (Date11).
+Compute open_dis_date = last_record and sysmis(ch_discharge_date).
 
 * For all episodes set the sc_dates to be the first admission and last discharge (these are the actual dates for the episode).
 * This will only be useful for split episodes, in the normal case they will match the single line episode dates.
 * Also add on the maximum number of records for each episode so we can identify the split episodes.
 aggregate
+    /Presorted
     /break chi sending_location social_care_id scem
     /sc_date_1 = min(ch_admission_date)
-    /sc_date_2 = max(last_ch_discharge_date).
+    /sc_date_2 = max(ch_discharge_date)
+    /last_dis_date_open = max(open_dis_date).
+
+If last_dis_date_open sc_date_2 = $sysmis.
 
 * Where the episodes are split (> 1 record) change the admission and discharge dates to the start and end of the quarters using the record_date as appropriate.
 Do if n_records > 1.
