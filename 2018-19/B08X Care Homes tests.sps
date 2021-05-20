@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !File + "Care_Home_For_Source-20" + !FY + ".zsav".
+get file = !File + "care_home_for_source-20" + !FY + ".zsav".
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
