@@ -3,11 +3,6 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-* Change this to the relevant number.
-* Should be '_extract_NUMBER'.
-Define !Extract_Number()
-    "_extract_1"
-!EndDefine.
 
  * Unzip the file.
 Host Command = ["gunzip '" + !IT_extracts_dir + !IT_extract_ref + !LTC_extract_file].
