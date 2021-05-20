@@ -6,7 +6,7 @@
 * Get a warning here but should be fine. - Caused by the way we match on NSU.
 match files
     /file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav" 
-    /file = !Year_Extracts_dir + "All_CHIs_20" + !FY + ".zsav"
+    /file = !NSU_dir + "All_CHIs_20" + !FY + ".zsav"
     /By chi.
 
 * Set up the variables for the NSU CHIs.
