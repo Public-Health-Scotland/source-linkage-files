@@ -207,10 +207,18 @@ Define !SIMD_Lookup()
 !EndDefine.
 
 *DataZone Population Lookup. 
-Define !DataZone_Pop_Lookup
+Define !DataZone_Pop_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
 !EndDefine. 
 
+
+*******************************************************.
+*Read code lookup.
+*******************************************************.
+
+Define !ReadCodeLookup()
+    '/conf/irf/05-lookups'
+!EndDefine.
 
 *******************************************************.
  * Functional macros *
@@ -328,7 +336,7 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
  * Change '/Source variables = HBXXXX' in the below.
 Define !AddHB2018DictionaryInfo (HB = !CMDEND)
  * Copy the labels from the Postcode Lookup file.
-Apply Dictionary From !PCDir
+Apply Dictionary From !SPD_Lookup
     /VarInfo ValLabels = Replace
     /Source variables = HB2018
     /Target variables = !HB.

@@ -18,7 +18,7 @@
 * Save ReadCodes.csv to \\irf\05-lookups.
 
 GET DATA  /TYPE=TXT
-   /FILE= !Lookup_dir_slf + "../ReadCodes.csv"
+   /FILE= !ReadCodeLookup + "/ReadCodes.csv"
    /DELIMITERS=","
    /QUALIFIER='"'
    /ARRANGEMENT=DELIMITED
@@ -32,5 +32,5 @@ CACHE.
 Sort cases by ReadCode.
 Compute Description = Upper(Description).
 
-save outfile = !Lookup_dir_slf + "../ReadCodeLookup.zsav"
+save outfile = !Lookup_dir_slf + "ReadCodeLookup.zsav"
    /zcompressed.
