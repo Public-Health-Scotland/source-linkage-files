@@ -102,7 +102,7 @@ Recode hbtreatcode ("S08000021" = "S08000031") ("S08000023" = "S08000032").
 sort cases by hbtreatcode.
 
 match files file = *
-    /Table = !Costs_dir + "Costs/Cost_DN_Lookup.sav"
+    /Table = !Costs_dir + "Cost_DN_Lookup.sav"
     /Drop hbtreatname
     /By hbtreatcode year.
 
