@@ -217,7 +217,7 @@ Define !DataZone_Pop_Lookup()
 *******************************************************.
 
 Define !ReadCodeLookup()
-    '/conf/irf/05-lookups'
+    '/conf/irf/05-lookups/'
 !EndDefine.
 
 *******************************************************.
