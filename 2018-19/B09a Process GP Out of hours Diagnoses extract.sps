@@ -26,14 +26,14 @@ Sort cases by ReadCode Description.
 * See which ones match.
 match files
    /File = *
-   /Table = !Lookup_dir_slf + "../ReadCodeLookup.zsav"
+   /Table = !ReadCodeLookup + "ReadCodeLookup.zsav"
    /In = FullMatch1
    /By ReadCode Description.
 
 * If the codes still don't match it could just be because the descriptions are different.
 match files
    /File = *
-   /Table = !Lookup_dir_slf + "../ReadCodeLookup.zsav"
+   /Table = !ReadCodeLookup + "ReadCodeLookup.zsav"
    /Rename (Description = TrueDescription)
    /By ReadCode.
 
@@ -44,7 +44,7 @@ If FullMatch1 = 0 AND TrueDescription NE "" Description = TrueDescription.
 Sort cases by ReadCode Description.
 match files
    /File = *
-   /Table = !Lookup_dir_slf + "../ReadCodeLookup.zsav"
+   /Table = !ReadCodeLookup + "ReadCodeLookup.zsav"
    /In = FullMatch2
    /By ReadCode Description.
 
