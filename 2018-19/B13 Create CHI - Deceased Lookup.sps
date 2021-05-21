@@ -5,11 +5,11 @@
 ********************************************************************************************************.
 
  * Unzip the file.
-Host Command = ["gunzip '" + !IT_extracts_dir + !IT_extract_ref + !Deaths_extract_file].
+Host Command = ["gunzip '" + !Deaths_extract_file + "'"].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-   /FILE= !IT_extracts_dir + !IT_extract_ref + !Deaths_extract_file
+   /FILE= !Deaths_extract_file
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -41,5 +41,5 @@ save outfile = !Deaths_dir + "All Deaths.zsav"
 get file = !Deaths_dir +  "All Deaths.zsav".
 
 * Zip back up.
-Host Command = ["gzip '" + !IT_extracts_dir + !IT_extract_ref + !Deaths_extract_file].
+Host Command = ["gzip '" + !Deaths_extract_file + "'"].
 
