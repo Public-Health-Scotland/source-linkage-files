@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
@@ -314,6 +314,12 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     sds_option_2
     sds_option_3
     sds_option_4
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     cij_el
     cij_non_el
     cij_mat
