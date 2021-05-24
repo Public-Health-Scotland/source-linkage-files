@@ -3,18 +3,13 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-* Change this to the relevant number.
-* Should be '_extract_N'.
-Define !Extract_Number()
-    "_extract_2"
-!EndDefine.
 
  * Unzip the file.
-Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_Deaths.csv'"].
+Host Command = ["gunzip '" + !Deaths_extract_file + "'"].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-   /FILE= !CSDExtractLoc + !Extract_Number + "_Deaths.csv"
+   /FILE= !Deaths_extract_file
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -40,11 +35,11 @@ Numeric death_date (Date12).
 Compute death_date = death_date_CHI.
 If Not(sysmis(death_date_NRS)) death_date = death_date_NRS.
 
-save outfile = !Extracts_Alt + "All Deaths.zsav"
+save outfile = !Deaths_dir + "All Deaths.zsav"
     /zcompressed.
 
-get file = !Extracts_Alt +  "All Deaths.zsav".
+get file = !Deaths_dir +  "All Deaths.zsav".
 
 * Zip back up.
-Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_Deaths.csv'"].
+Host Command = ["gzip '" + !Deaths_extract_file + "'"].
 

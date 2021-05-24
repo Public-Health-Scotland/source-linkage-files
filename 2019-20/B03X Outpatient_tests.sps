@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 * Tests for outpatient dataset.
-get file = !file + 'outpatients_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'outpatients_for_source-20' + !FY + '.zsav'.
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -293,6 +293,6 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'Outpatient_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Outpatient_tests_20' + !FY + '.zsav'
    /zcompressed .
 
