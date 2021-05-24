@@ -25,8 +25,35 @@ Define !IT_extract_ref()
 
 *Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-   "March_2021"
+   "May_2021"
 !EndDefine.
+
+
+*******************************************************.
+*Geography Macros.
+*Needs changing when files update.
+*******************************************************.
+
+*Locality file - will need changing when geography files update. 
+Define !Locality_file()
+    "HSCP Localities_DZ11_Lookup_20200825.sav"
+!EndDefine. 
+
+*SPD file - will need changing when geography files update.
+Define !SPD_file()
+    "Scottish_Postcode_Directory_2021_1.sav"
+!EndDefine. 
+
+*SIMD file - will need changing when geography files update.
+Define !SIMD_file()
+    "postcode_2021_1_simd2020v2.sav"
+!EndDefine.
+
+*DataZone Populations file - will need changing when geography files update.
+Define !DataZone_pop_file()
+    "DataZone2011_pop_est_2011_2019.sav"
+!EndDefine. 
+
 
 *******************************************************.
 * Directories for File Path locations *. 
@@ -158,32 +185,6 @@ Define !SIMD_dir()
 *Directory for DataZone Populations. 
 Define !pop_dir()
     "Populations/Estimates/"
-!EndDefine. 
-
-
-*******************************************************.
- * Geography Lookup Files *
- * Will need to be changed when geography files update.
- * They are mainly changed here.
-*******************************************************.
-*Locality file - will need changing when geography files update. 
-Define !Locality_file()
-    "HSCP Localities_DZ11_Lookup_20200825.sav"
-!EndDefine. 
-
-*SPD file - will need changing when geography files update.
-Define !SPD_file()
-    "Scottish_Postcode_Directory_2021_1.sav"
-!EndDefine. 
-
-*SIMD file - will need changing when geography files update.
-Define !SIMD_file()
-    "postcode_2021_1_simd2020v2.sav"
-!EndDefine.
-
-*DataZone Populations file - will need changing when geography files update.
-Define !DataZone_pop_file()
-    "DataZone2011_pop_est_2011_2019.sav"
 !EndDefine. 
 
 
@@ -362,7 +363,7 @@ Add Value Labels !HB
 
 Define !AddHB2019DictionaryInfo (HB = !CMDEND)
  * Copy the labels from the Postcode Lookup file.
-Apply Dictionary From !PCDir
+Apply Dictionary From !SPD_Lookup
     /VarInfo ValLabels = Replace
     /Source variables = HB2019
     /Target variables = !HB.
