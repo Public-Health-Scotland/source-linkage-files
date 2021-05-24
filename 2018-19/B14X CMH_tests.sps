@@ -22,9 +22,9 @@ If hbtreatcode = 'S08000016' NHS_Borders = 1.
 If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
 If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
-If hbtreatcode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If hbtreatcode = 'S08000023' NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -92,9 +92,9 @@ If hbtreatcode = 'S08000016' NHS_Borders = 1.
 If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
 If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
-If hbtreatcode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If hbtreatcode = 'S08000023' NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
