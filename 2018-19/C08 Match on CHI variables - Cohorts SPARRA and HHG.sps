@@ -14,19 +14,19 @@
 match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
     /table = !Cohort_dir + "Demographic_Cohorts_" + !FY + ".zsav"
     /table = !Cohort_dir + "Service_Use_Cohorts_" + !FY+ ".zsav"
-    /table = !SPARRA_dir + "SPARRA/SPARRA-20" + !FY + ".zsav"
+    /table = !SPARRA_dir + "SPARRA-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_Start_FY
-    /table = !HHG_dir + "HHG/HHG-20" + !FY + ".zsav"
+    /table = !HHG_dir + "HHG-20" + !FY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_Start_FY
-    /table = !SPARRA_dir + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
+    /table = !SPARRA_dir + "SPARRA-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_End_FY
-    /table = !HHG_dir + "HHG/HHG-20" + !NextFY + ".zsav"
+    /table = !HHG_dir + "HHG-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
     HHG_SCORE = HHG_End_FY

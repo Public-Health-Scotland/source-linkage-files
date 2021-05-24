@@ -5,7 +5,7 @@ Define !FinalName()
 
 Define !Create_Aggregate(FileVersion = !Tokens(1)).
 
-!Let !DatasetName = !Concat(!Unquote(!Year_dirVersion), "By", "Recid").
+!Let !DatasetName = !Concat(!Unquote(!FileVersion), "By", "Recid").
 
 Dataset Declare !DatasetName.
 
