@@ -689,7 +689,7 @@ End if.
 * Match on to the postcode file, to get a flag letting us know if the postcode is real or not.
 sort cases by postcode.
 match files file = *
-    /table = !Lookup_dir_slf + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In PostcodeMatch
     /Keep chi to order
     /By Postcode.
@@ -778,7 +778,7 @@ End if.
 * Match on to the gpprac file, to get a flag letting us know if the gpprac is real or not.
 sort cases by gpprac.
 match files file = *
-    /table = !Lookup_dir_slf + "Source GPprac Lookup-20" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In gppracMatch
     /Keep chi to order
     /By gpprac.

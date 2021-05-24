@@ -59,8 +59,8 @@ End if.
 Sort cases by gpprac.
 
  * Save out, rename HB2018 for source, keep LCA etc. for others (Andrew Mooney).
-save outfile = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
+save outfile = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
    /Keep gpprac PC7 PC8 cluster hbpraccode HSCP2018 CA2018 LCA
    /zcompressed.
 
-get file = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav".
+get file = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav".

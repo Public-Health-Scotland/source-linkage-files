@@ -14,7 +14,7 @@
 
 
 * First quickly create a lookup for Postcode district, use the lookup file which has all Scottish Postcodes in it.
-get file = !Lookup_dir_slf + "Source Postcode Lookup-20" + !LatestUpdate + ".zsav"
+get file = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /Keep postcode.
 String PCArea (A3).
 * Workout the postcode area.
