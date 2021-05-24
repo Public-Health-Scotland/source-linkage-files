@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 *Tests for Delayed Discharge dataset.
-get file = !file + 'Extracts/DD_LinkageFile-20' + !FY + '.zsav'.
+get file = !Year_dir + 'Extracts/DD_LinkageFile-20' + !FY + '.zsav'.
 
  * Flag to count CHIs.
 Recode Primary_Delay_Reason ("9" = 1) (Else = 0) Into Code_9.
@@ -67,7 +67,7 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 Crosstabs Measure by Issue.
 
 *Save test file . 
-Save Outfile = !file + 'DD_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'DD_tests_20' + !FY + '.zsav'
    /zcompressed .
 
 

@@ -121,7 +121,7 @@ SPSSINC TRANS RESULT = CareHomeName Type = 73
 
  * Aggregate to remove any duplicates (shouldn't be any) and to sort correctly for matching. Keep some interesting variables.
 Aggregate
-   /outfile = !Extracts + 'Care_home_name_lookup-20' + !FY + '.sav'
+   /outfile = !Year_Extracts_dir + 'Care_home_name_lookup-20' + !FY + '.sav'
    /Break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
    /CareHomeCouncilName MainClientGroup Sector = First(Council_Area_Name MainClientGroup Sector)
    /DateReg DateCanx = Max(DateReg DateCanx).
