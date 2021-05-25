@@ -4,9 +4,8 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 *This should unzip the PIS extract in the IT extract directory.
-*The Macro !Extract_Number can be found in A01b 'Year' Macro and the number should be specific to FY. 
-*!Extract_Number should be changed to the relevant number.
-Host Command = ["gunzip '" + !PIS_extract_file + "'"].
+* !PIS_extract_file is dependant on the macro !Extract_Number which can be found in A01b 'Year' Macro and the number should be specific to FY. 
+Host Command = ["gunzip " + !PIS_extract_file].
 
 GET DATA  /TYPE=TXT
     /FILE=!PIS_extract_file
@@ -26,7 +25,6 @@ GET DATA  /TYPE=TXT
     DIPaidGICexcl.BB F6.2
     /MAP.
 CACHE.
-EXECUTE.
 
 rename variables
     PatUPI = chi
@@ -64,5 +62,4 @@ save outfile = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
 get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
 * zip raw data back up.
-Host Command = ["gzip '" + !PIS_extract_file + "'"].
-
+Host Command = ["gzip " + !PIS_extract_file].
