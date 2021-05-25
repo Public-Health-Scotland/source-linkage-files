@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 *Tests for maternity dataset.
-get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'maternity_for_source-20' + !FY + '.zsav'.
 
 * Flag to count CHIs.
 Recode chi ("" = 0) (Else = 1) Into Has_CHI.
@@ -329,6 +329,6 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 Crosstabs Measure by Issue.
 
 *Save test file.
-Save Outfile = !file + 'Maternity_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Maternity_tests_20' + !FY + '.zsav'
    /zcompressed .
 

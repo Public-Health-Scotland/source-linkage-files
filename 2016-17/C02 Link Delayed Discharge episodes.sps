@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 
-get file = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
+get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat CIJ_start_date CIJ_end_date
     chi gender dob age gpprac postcode lca datazone
     hbtreatcode location spec tadm
@@ -11,9 +11,9 @@ select if chi NE "".
 select if any(recid, "01B", "02B", "04B", "GLS").
 
  * Do a temp save here as it speeds things up (because SPSS is weird).
-save outfile =  !File + "slf_reduced_for_DD.zsav"
+save outfile =  !Year_dir + "slf_reduced_for_DD.zsav"
     /zcompressed.
-get file =  !File + "slf_reduced_for_DD.zsav".
+get file =  !Year_dir + "slf_reduced_for_DD.zsav".
 
 * Create a copy of the CIJ marker.
 String temp_cij_marker (A5).
@@ -25,7 +25,7 @@ Missing Values temp_cij_marker ("     ").
 * Add all files together.
 add files
     /File = *
-    /File = !Extracts + "DD_LinkageFile-20" + !FY + ".zsav"
+    /File = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav"
     /By CHI.
 
 * Create an order variable to make DD records appear after others.
@@ -37,10 +37,10 @@ sort cases by chi order.
 
 Select If Not(recid = "DD" AND CHI NE lag(CHI)).
 
-save outfile = !File + "DD_Temp-1.zsav"
+save outfile = !Year_dir + "DD_Temp-1.zsav"
     /zcompressed.
 
-get file = !File + "DD_Temp-1.zsav".
+get file = !Year_dir + "DD_Temp-1.zsav".
 
 * Sort so that DD is roughly where we expect it to fit.
 sort cases by chi keydate1_dateformat order.
@@ -175,9 +175,9 @@ Variable labels
 * Flag DDs which don't seem to have an associated hospital stay.
 if missing(temp_cij_marker) and recid = "DD" no_cij = 1.
 
-save outfile = !File + "DD_Temp-2.zsav"
+save outfile = !Year_dir + "DD_Temp-2.zsav"
     /zcompressed.
-get file = !File + "DD_Temp-2.zsav".
+get file = !Year_dir + "DD_Temp-2.zsav".
 
 select if recid = "DD".
 
@@ -245,7 +245,7 @@ sort cases by chi keydate1_dateformat.
 * Save out records with changed end dates to feed back to the DD team.
 Temporary.
 Select if any(Flag_7, 1, 2).
-save outfile = !File + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
+save outfile = !Year_dir + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
     /Rename (keydate1_dateformat keydate2_dateformat = RDD Delay_End_Date)
     /keep year chi DD_Responsible_LCA RDD Delay_End_Date temp_cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec
     MONTHFLAG OriginalAdmissionDate Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
@@ -297,7 +297,7 @@ Compute record_keydate1 = xdate.mday(keydate1_dateformat) + 100 * xdate.month(ke
 Compute record_keydate2 = xdate.mday(keydate2_dateformat) + 100 * xdate.month(keydate2_dateformat) + 10000 * xdate.year(keydate2_dateformat).
 alter type record_keydate1 record_keydate2 (F8.0).
 
-save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "DD_for_source-20" + !FY + ".zsav"
     /Keep year recid SMRType chi gender dob age gpprac postcode lca
     keydate1_dateformat keydate2_dateformat record_keydate1 record_keydate2 CIJ_start_date CIJ_end_date
     hbtreatcode to cij_marker
@@ -307,27 +307,27 @@ save outfile = !File + "DD_for_source-20" + !FY + ".zsav"
     Apr_beddays to Mar_beddays
     /zcompressed.
 
-get file = !File + "DD_for_source-20" + !FY + ".zsav".
+get file = !Year_dir + "DD_for_source-20" + !FY + ".zsav".
 
 * New DD variables.
 * Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason and DD_Quality DD_Responsible_LCA
     *********************************************************************************************************************.
 * Match back into source.
 add files
-    /File =  !File + "temp-source-episode-file-1-" + !FY + ".zsav"
-    /File =  !File + "DD_for_source-20" + !FY + ".zsav"
+    /File =  !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
+    /File =  !Year_dir + "DD_for_source-20" + !FY + ".zsav"
     /by chi keydate1_dateformat.
 
-save outfile = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav"
     /zcompressed.
-get file = !File + "temp-source-episode-file-2-" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav".
 
-Erase File = !File + "DD_Temp-1.zsav".
-Erase File = !File + "DD_Temp-2.zsav".
+Erase File = !Year_dir + "DD_Temp-1.zsav".
+Erase File = !Year_dir + "DD_Temp-2.zsav".
 
  * Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
-Erase file = !File + "slf_reduced_for_DD.zsav".
+Erase file = !Year_dir + "slf_reduced_for_DD.zsav".
 
  * Add the Delayed Discharge extract to the 'Activities zip'.
-Host  Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' '" + !File + "DD_for_source-20" + !FY + ".zsav'"].
+Host  Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' '" + !Year_dir + "DD_for_source-20" + !FY + ".zsav'"].
 
