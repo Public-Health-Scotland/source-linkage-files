@@ -14,7 +14,7 @@
 ********************************************************************************************************.
 
 GET DATA  /Type = TXT
-    /File = !Extracts + "Care-Home-full-extract-20" + !FY + ".csv"
+    /File = !Year_Extracts_dir + "Care-Home-full-extract-20" + !FY + ".csv"
     /Encoding = 'UTF8'
     /Delimiters = ","
     /Qualifier = '"'
@@ -157,7 +157,7 @@ Compute weighted_count = RecordsPerName * DiffSendingAuthorities * not(any('', C
 *******************************************************************************************************.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /In = AccurateData1
     /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 ********************************************************************************************************.
@@ -197,7 +197,7 @@ End if.
 Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName1.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName = TestName1)
     /In = TestName1Correct
     /By CareHomePostcode CareHomeCouncilAreaCode TestName1.
@@ -207,7 +207,7 @@ match files
 Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName2.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName = TestName2)
     /In = TestName2Correct
     /By CareHomePostcode CareHomeCouncilAreaCode TestName2.
@@ -223,7 +223,7 @@ End If.
 Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /In = AccurateData2
     /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 
@@ -245,7 +245,7 @@ Aggregate outfile = * Mode = AddVariables Overwrite = Yes
 Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /In = AccurateData3
     /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 ********************************************************************************************************.
@@ -278,7 +278,7 @@ Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName1.
 Delete Variables TestName1Correct.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName = TestName1)
     /In = TestName1Correct
     /By CareHomePostcode CareHomeCouncilAreaCode TestName1.
@@ -289,7 +289,7 @@ Sort Cases by CareHomePostcode CareHomeCouncilAreaCode TestName2.
 Delete Variables TestName2Correct.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName = TestName2)
     /In = TestName2Correct
     /By CareHomePostcode CareHomeCouncilAreaCode TestName2.
@@ -307,7 +307,7 @@ End If.
 Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /In = AccurateData4
     /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 
@@ -330,7 +330,7 @@ Aggregate outfile = * Mode = AddVariables Overwrite = Yes
 Sort Cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /In = AccurateData5
     /By CareHomePostcode CareHomeName CareHomeCouncilAreaCode .
 ********************************************************************************************************.
@@ -391,8 +391,8 @@ Compute yearStay = DateDiff(CareHomeDischargeDate, CareHomeAdmissionDate, "days"
 * Get rid of any record where dates are still wrong.
 Select if stay > 0.
 
-save outfile = !File + "Care-Home-Temp-1.zsav"
+save outfile = !Year_dir + "Care-Home-Temp-1.zsav"
     /Drop counter FinancialYear CareHomeAdmissionDate CareHomeDischargeDate
     /zcompressed.
-get file = !File + "Care-Home-Temp-1.zsav".
+get file = !Year_dir + "Care-Home-Temp-1.zsav".
 
