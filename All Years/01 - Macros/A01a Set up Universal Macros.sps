@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 *Run Macros before SLF update.
 ************************************************************************************************************
 ** AUTHOR:	James McMahon (james.mcmahon@phs.scot)
@@ -26,6 +26,10 @@ Define !IT_extract_ref()
 *Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
    "May_2021"
+!EndDefine.
+
+Define !Delayed_Discharge_period()
+    "Jul16_Mar21"
 !EndDefine.
 
 
@@ -212,6 +216,12 @@ Define !DataZone_Pop_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
 !EndDefine. 
 
+*******************************************************.
+*Delayed Discharges file.
+*******************************************************.
+Define !Delayed_Discharge_file()
+    !Quote(!Concat(!Unquote(!Eval(!Delayed_Discharges_dir)), !Unquote(!Eval(!Delayed_Discharge_period)), "DD_LinkageFile.zsav"))
+!EndDefine.
 
 *******************************************************.
 *Read code lookup.
