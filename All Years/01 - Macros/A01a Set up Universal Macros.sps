@@ -148,6 +148,18 @@ Define !PIS_extract_file()
     !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY)), ".csv"))		
 !EndDefine.
 
+*******************************************************.
+*IT macro for Older years - specific to running 1415.
+*******************************************************.
+*IT ref for older years.
+Define !IT_extract_ref_OLD()
+    "SCTASK0182748"
+!EndDefine.
+
+*PIS extract for OLD years.
+Define !PIS_extract_file_OLD()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref_OLD)), !Unquote(!Eval(!PIS_extract_number_OLD)), !Unquote(!Eval(!altFY)), ".csv"))		
+!EndDefine.
 
 *******************************************************.
  * AnonCHI lookup *
