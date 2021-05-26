@@ -51,6 +51,7 @@ aggregate outfile = !DatasetName
     /n_children n_adults n_over65 = Sum(Child Adult Over_65)
     /Earliest_adm Earliest_dis = Min(keydate1_dateformat keydate2_dateformat)
     /Latest_adm Latest_dis= Max(keydate1_dateformat keydate2_dateformat)
+    /cij_ppas = Sum(cij_ppa)
     /avg_yearstay avg_stay = Mean(yearstay stay)
     /total_yearstay total_stay = Sum(yearstay stay)
     /avg_apr_beddays = Mean(apr_beddays)
@@ -116,7 +117,7 @@ Alter type value (F8.2).
 
 !EndDefine.
 
-get file = !File + "source-episode-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 !Create_Aggregate FileVersion = New.
 
 get file =  "/conf/hscdiip/01-Source-linkage-files/source-episode-file-20" + !FY + ".zsav".
@@ -140,4 +141,4 @@ If abs(pct_diff) >= 5 Possible_issue = 1.
 
 Crosstabs recid by Possible_issue.
 
-save outfile = !File + "source-episode-TESTS-20" + !FY + ".sav".
+save outfile = !Year_dir + "source-episode-TESTS-20" + !FY + ".sav".

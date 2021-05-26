@@ -11,10 +11,10 @@
 
 **********************************************************************************************************.
 
-match files file = !File + "temp-source-episode-file-6-" + !FY + ".zsav"
-    /table = !File + "Demographic_Cohorts_" + !FY + ".zsav"
-    /table = !File + "Service_Use_Cohorts_" + !FY+ ".zsav"
-    /table = !Extracts_Alt + "SPARRA/SPARRA-20" + !NextFY + ".zsav"
+match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
+    /table = !Cohort_dir + "Demographic_Cohorts_" + !FY + ".zsav"
+    /table = !Cohort_dir + "Service_Use_Cohorts_" + !FY+ ".zsav"
+    /table = !SPARRA_dir + "SPARRA-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
     SPARRA_RISK_SCORE = SPARRA_End_FY
@@ -29,10 +29,10 @@ Numeric
     HHG_Start_FY(F2.0) 
     HHG_End_FY(F2.0).
 
-save outfile = !File + "temp-source-episode-file-7-" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-episode-file-7-" + !FY + ".zsav"
    /zcompressed.
 
-get file= !File + "temp-source-episode-file-7-" + !FY + ".zsav".
+get file= !Year_dir + "temp-source-episode-file-7-" + !FY + ".zsav".
 
 
 **********************************************************************************************************.

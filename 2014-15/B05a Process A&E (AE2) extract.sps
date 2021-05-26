@@ -5,7 +5,7 @@
 ********************************************************************************************************.
 
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + 'A&E-episode-level-extract-20' + !FY + '.csv'
+    /FILE= !Year_Extracts_dir + 'A&E-episode-level-extract-20' + !FY + '.csv'
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -530,7 +530,7 @@ Value Labels ae_bodyloc
 * Sort for linking on CUP marker.
 sort cases by record_keydate1 keyTime1 CaseReferenceNumber.
 
-save outfile = !file + 'a&e_data-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'a&e_data-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -580,10 +580,10 @@ save outfile = !file + 'a&e_data-20' + !FY + '.zsav'
     CaseReferenceNumber
     /zcompressed.
 
-get file = !file + 'a&e_data-20' + !FY + '.zsav'.
+get file = !Year_dir + 'a&e_data-20' + !FY + '.zsav'.
 
 * Zip up raw data.
-Host Command = ["gzip '" + !Extracts + "A&E-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Year_Extracts_dir + "A&E-episode-level-extract-20" + !FY + ".csv'"].
 
 
 
