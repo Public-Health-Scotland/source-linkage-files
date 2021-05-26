@@ -6,7 +6,7 @@
 
 * Read in outcome data.
 GET DATA  /TYPE=TXT
-   /FILE= !Extracts + "GP-OoH-outcomes-extract-20" + !FY + ".csv"
+   /FILE= !Year_Extracts_dir + "GP-OoH-outcomes-extract-20" + !FY + ".csv"
    /ENCODING='UTF8'
    /DELCASE=LINE
    /DELIMITERS=","
@@ -73,10 +73,10 @@ End Repeat.
 
  * Save, it's now ready to be linked to the consultation data.
  * Only keeping Outcome.1 to Outcome.4.
-Save outfile = !File + "GP-Outcomes-Data-" + !FY + ".zsav"
+Save outfile = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav"
    /Keep GUID Outcome.1 to Outcome.4
    /zcompressed.
-get file = !File + "GP-Outcomes-Data-" + !FY + ".zsav".
+get file = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav".
 
  * Zip up raw data.
-Host Command = ["gzip '" + !Extracts + "GP-OoH-outcomes-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Year_Extracts_dir + "GP-OoH-outcomes-extract-20" + !FY + ".csv'"].

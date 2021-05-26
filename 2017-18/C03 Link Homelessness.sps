@@ -5,9 +5,9 @@
 *********************************************************************************************************************
  * Create Homelessness flags.
  * Unzip the homelessness file.
-Host command = ["unzip '" +!File + "Activity_20" + !FY + ".zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !File + "'"].
+Host command = ["unzip '" +!Year_dir + "Activity_20" + !FY + ".zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !Year_dir + "'"].
 
-get file = !File + "homelessness_for_source-20" + !FY + ".zsav"
+get file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
     /Keep CHI record_keydate1 record_keydate2.
 
 Select if CHI ne "".
@@ -39,7 +39,7 @@ Alter Type max_records (F1.0).
  * Take the max_records number and generate two macros using this.
  * However the way to do this without Python is to write out to a new file.
 do if $casenum = 1.
-    write out = !File + "Temp macro definitions.sps"
+    write out = !Year_dir + "Temp macro definitions.sps"
         /"Define !maxAssesment() !Concat('AssessmentDecisionDate.', '" max_records "') !EndDefine."
         /"Define !maxClose() !Concat('CaseClosedDate.', '" max_records "') !EndDefine.".
 end if.
@@ -48,7 +48,7 @@ end if.
 Sort cases by chi AssessmentDecisionDate.
 
  * Run the file we created above which should define the two macros.
-include !File + "Temp macro definitions.sps".
+include !Year_dir + "Temp macro definitions.sps".
 
 * Restructure to have single record per CHI.
 casestovars
@@ -57,15 +57,15 @@ casestovars
 
 * Match to source.
 match files
-    /file = !File + "temp-source-episode-file-2-" + !FY + ".zsav"
+    /file = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav"
     /table = *
     /In = HH_in_FY
     /By chi.
 
  * Housekeeping.
  * Don't need this as it's still in the zip archive too.
-Erase file = !File + "homelessness_for_source-20" + !FY + ".zsav".
-Erase file = !File + "Temp macro definitions.sps".
+Erase file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav".
+Erase file = !Year_dir + "Temp macro definitions.sps".
 
 Numeric HH_ep  HH_6after_ep  HH_6before_ep (F1.0).
 Variable Labels
@@ -108,7 +108,7 @@ End if.
 If recid = 'HL1' and chi = '' HH_in_FY = 1 . 
 
 *Save Temp.
-save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav" 
+save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav" 
 /keep year to DD_Quality HH_in_FY to HH_6before_ep
 /zcompressed.  
 
