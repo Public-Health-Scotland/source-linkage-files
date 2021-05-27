@@ -71,7 +71,7 @@ Rename Variables
 * Sort for matching.
 sort cases by sending_location social_care_id .
 * Save and reorder flag variables so they're in the same order as Social Care Dataset definition.
-save outfile =  !File + "Client_for_Source-20" + !FY + ".zsav"
+save outfile =  !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
     /Keep
     sending_location
     social_care_id
@@ -83,4 +83,4 @@ save outfile =  !File + "Client_for_Source-20" + !FY + ".zsav"
     sc_day_care
     /zcompressed.
 
-get file = !File + "Client_for_Source-20" + !FY + ".zsav".
+get file = !Year_dir + "Client_for_Source-20" + !FY + ".zsav".

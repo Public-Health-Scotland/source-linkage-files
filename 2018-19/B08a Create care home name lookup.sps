@@ -24,7 +24,7 @@
 
 * Read in care home lookup file (all care homes).
 GET DATA /TYPE=XLSX
-    /FILE= !Lookup + 'CareHome Lookup All.xlsx'
+    /FILE= !Lookup_dir_slf + 'CareHome Lookup All.xlsx'
     /CELLRANGE=full
     /READNAMES=on
     /ASSUMEDSTRWIDTH=32767.
@@ -185,7 +185,7 @@ Alter type n_in_fy n_at_postcode (F2.0).
 
 sort cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode.
 
-save outfile =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
+save outfile =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
 
-get file =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
+get file =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
 

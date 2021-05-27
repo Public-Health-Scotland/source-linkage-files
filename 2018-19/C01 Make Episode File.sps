@@ -4,7 +4,7 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
  * Zip up all BXX test files.
-    "'" + !File + "Care_Home_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !Year_dir + "Care_Home_tests_20" + !FY + ".zsav" + "' " +
 Host Command = ["zip -mjv '" + !Year_dir + "BXX_tests_20" + !FY + ".zip' " + 
     "'" + !Year_dir + "A&E_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "acute_tests_20" + !FY + ".zsav" + "' " +
@@ -32,7 +32,7 @@ add files
     /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
-    /file = !File + "care_home_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -400,7 +400,7 @@ Host Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' " +
     "'" + !Year_dir + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
-    "'" + !File + "care_home_for_source-20" + !FY + ".zsav"+ "' " +
+    "'" + !Year_dir + "care_home_for_source-20" + !FY + ".zsav"+ "' " +
 
 
 

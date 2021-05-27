@@ -1,12 +1,12 @@
 ﻿* Encoding: UTF-8.
-get file = !Extracts_Alt + "All Care Home episodes.zsav".
+get file = !SC_dir + "All Care Home episodes.zsav".
 
 * Now select episodes for given FY, need to do this now as discharge dates may have been moved out of the FY above.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 < !startFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
 
 * Match on Client data.
 match files file = *
-    /table = !File + "Client_for_Source-20" + !FY + ".zsav"
+    /table = !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
     /By sending_location social_care_id.
 
 String Year (A4).
@@ -63,7 +63,7 @@ Compute stay = Max(datediff(!startFY, record_keydate1, "days"), 0) + Rnd(yearsta
 sort cases by year ch_nursing.
 match files
     /file = *
-    /Table = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
+    /Table = !Costs_dir + "Cost_CH_Lookup.sav"
     /rename nursing_care_provision = ch_nursing
     /By year ch_nursing.
 
@@ -97,7 +97,7 @@ Alter type ch_provider (A1).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !File + "care_home_for_source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /Keep Year
     recid
     SMRType
@@ -152,4 +152,4 @@ save outfile = !File + "care_home_for_source-20" + !FY + ".zsav"
     sc_meals
     sc_day_care
     /zcompressed.
-get file = !File + "care_home_for_source-20" + !FY + ".zsav".
+get file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav".
