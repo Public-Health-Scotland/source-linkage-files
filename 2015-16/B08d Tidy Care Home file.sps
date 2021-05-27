@@ -13,7 +13,7 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 
-get file = !File + "Care-Home-Temp-2.zsav".
+get file = !Year_dir + "Care-Home-Temp-2.zsav".
 
 ***********************************************************************************************************.
 * Add dictionary information.
@@ -108,7 +108,7 @@ value labels ch_adm_reason
 sort cases by chi record_keydate1.
 
 * Delete variables we don't need any more.
-save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "Care_Home_For_Source-20" + !FY + ".zsav"
     /Keep
     year
     recid
@@ -155,12 +155,12 @@ save outfile = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     Feb_cost
     Mar_cost
     /zcompressed.
-get file = !File + "Care_Home_For_Source-20" + !FY + ".zsav".
+get file = !Year_dir + "Care_Home_For_Source-20" + !FY + ".zsav".
 
 * Housekeeping.
-erase file = !File + "Care-Home-Temp-1.zsav".
-erase file = !File + "Care-Home-Temp-2.zsav".
+erase file = !Year_dir + "Care-Home-Temp-1.zsav".
+erase file = !Year_dir + "Care-Home-Temp-2.zsav".
 
 * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Care-Home-full-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Year_Extracts_dir + "Care-Home-full-extract-20" + !FY + ".csv'"].
 

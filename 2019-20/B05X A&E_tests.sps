@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 *Tests for A&E dataset.
 
-get file = !file + 'a&e_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'a&e_for_source-20' + !FY + '.zsav'.
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -29,8 +29,8 @@ If hbtreatcode = 'S08000024' NHS_Lothian = 1.
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
 If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If hbtreatcode = 'S08000029' NHS_Fife = 1. 
-If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
+If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
 *Change missing HB values to 0. 
 Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
@@ -160,8 +160,8 @@ If hbtreatcode = 'S08000024' NHS_Lothian = 1.
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
 If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If hbtreatcode = 'S08000029' NHS_Fife = 1. 
-If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
+If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
 *Change missing HB values to 0. 
 Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
@@ -279,6 +279,6 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'A&E_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'A&E_tests_20' + !FY + '.zsav'
    /zcompressed .
 

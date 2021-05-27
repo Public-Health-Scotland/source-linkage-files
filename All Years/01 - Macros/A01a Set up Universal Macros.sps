@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 *Run Macros before SLF update.
 ************************************************************************************************************
 ** AUTHOR:	James McMahon (james.mcmahon@phs.scot)
@@ -19,51 +19,152 @@
 *******************************************************.
 * IT Extracts * 
 * Replace the number with the CSD ref.
-Define !CSDRef()
-    "SCTASK0205902"
+Define !IT_extract_ref()
+    "SCTASK0228343"
 !EndDefine.
 
 *Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-   "March_2021"
+   "May_2021"
 !EndDefine.
 
+Define !Delayed_Discharge_period()
+    "Jul16_Mar21"
+!EndDefine.
+
+
 *******************************************************.
-* File Path locations *. 
+*Geography Macros.
+*Needs changing when files update.
 *******************************************************.
 
-Define !File()
+*Locality file - will need changing when geography files update. 
+Define !Locality_file()
+    "HSCP Localities_DZ11_Lookup_20200825.sav"
+!EndDefine. 
+
+*SPD file - will need changing when geography files update.
+Define !SPD_file()
+    "Scottish_Postcode_Directory_2021_1.sav"
+!EndDefine. 
+
+*SIMD file - will need changing when geography files update.
+Define !SIMD_file()
+    "postcode_2021_1_simd2020v2.sav"
+!EndDefine.
+
+*DataZone Populations file - will need changing when geography files update.
+Define !DataZone_pop_file()
+    "DataZone2011_pop_est_2011_2019.sav"
+!EndDefine. 
+
+
+*******************************************************.
+* Directories for File Path locations *. 
+*******************************************************.
+*Directory for all years SLF development. Links to !FY() for updating each financial year.
+Define !Year_dir()
    !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
 !EndDefine.
 
 * Extract files - "home".
-Define !Extracts()
-   !Quote(!Concat(!Unquote(!Eval(!File)), "Extracts/"))
+*Directory for BO extracts. Links to !Year_dir() for storing raw extracts for each FY.
+Define !Year_Extracts_dir()
+   !Quote(!Concat(!Unquote(!Eval(!Year_dir)), "Extracts/"))
 !EndDefine.
 
- * Secondary extracts storage in case the above is full, or other reasons.
-Define !Extracts_Alt()
-   "/conf/hscdiip/DH-Extract/"
+*Secondary extracts storage in case the above is full, or other reasons.
+*Main storage folder in HSCDIIP.
+Define !SLF_Extracts()
+   "/conf/hscdiip/SLF_Extracts/"
 !EndDefine.
 
-Define !Costs_Lookup()
-    !Quote(!Concat(!Unquote(!Eval(!Extracts_Alt)), "Costs/"))
+*Directory for storing lookups created by SLFs. 
+*Includes source_postcode_lookup, source_GPPrac_lookup and PracticeDetails.sav.
+Define !Lookup_dir_slf()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Lookups/"))
+!EndDefine. 
+
+*Directory for storing cost lookups for DN, CH and GP OOH.
+Define !Costs_dir()
+    !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Costs/"))
 !EndDefine.
 
-* IT extract. 
-Define !CSDExtractLoc()
-    !Quote(!Concat("/conf/hscdiip/IT extracts/", !Unquote(!Eval(!CSDRef))))
+*Directory for storing latest Delayed Discharges extracts. 
+Define !Delayed_Discharges_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Delayed_Discharges/"))
+!EndDefine. 
+
+*Directory for storing latest HHG extract. 
+Define !HHG_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "HHG/"))
+!EndDefine. 
+
+*Directory for storing latest NSU extract.
+Define !NSU_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "NSU/"))
+!EndDefine.
+
+*Directory for storing latest SPARRA extract.
+Define !SPARRA_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "SPARRA/"))
+!EndDefine. 
+
+*Directory for storing latest Demographic and Service Use cohorts. 
+Define !Cohort_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Cohorts/"))
+!EndDefine. 
+
+*Directory for storing LTC year specific reference files. 
+Define !LTCs_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "LTCs/"))
+!EndDefine. 
+
+*Directory for storing the All_Deaths file. 
+Define !Deaths_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Deaths/"))
+!EndDefine. 
+
+*******************************************************.
+* IT extracts. 
+*******************************************************.
+*Directory for IT extracts.
+Define !IT_Extracts_dir()
+    !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "IT_extracts/"))
+!EndDefine.
+
+*LTC extract.
+Define !LTC_extract_file()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_1_LTCs.csv"))
+!EndDefine.
+
+*Deaths extract.
+Define !Deaths_extract_file()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_2_Deaths.csv"))			
+!EndDefine.
+
+*PIS extract.
+Define !PIS_extract_file()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY)), ".csv"))		
 !EndDefine.
 
 *******************************************************.
- * Source Lookups *
+*IT macro for Older years - specific to running 1415.
+*******************************************************.
+*IT ref for older years.
+Define !IT_extract_ref_OLD()
+    "SCTASK0182748"
+!EndDefine.
+
+*PIS extract for OLD years.
+Define !PIS_extract_file_OLD()
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref_OLD)), !Unquote(!Eval(!PIS_extract_number_OLD)), !Unquote(!Eval(!altFY)), ".csv"))		
+!EndDefine.
+
+*******************************************************.
+ * AnonCHI lookup *
  * Should not need changing *
 *******************************************************.
- * Location of source lookups.
-Define !Lookup()
-   "/conf/irf/05-lookups/04-geography/"
-!EndDefine.
-
  * Locations of the existing Anon_CHI lookups.
 Define !CHItoAnonlookup()
     "/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav"
@@ -74,27 +175,72 @@ Define !AnontoCHIlookup()
 !EndDefine.
 
 *******************************************************.
- * Geography Lookups *
+ * Geography Lookup Directories *
  * Will need to be changed when geography files update.
 *******************************************************.
- * Localities lookup file.
-Define !LocalitiesLookup()
-    "/conf/linkage/output/lookups/Unicode/Geography/HSCP Locality/HSCP Localities_DZ11_Lookup_20200825.sav"
+*Directory for lookups - should not need changing. 
+Define !Global_Lookup_dir()
+    "/conf/linkage/output/lookups/Unicode/"
+!EndDefine. 
+
+*Directory for Locality. 
+Define !Locality_dir()
+    "Geography/HSCP Locality/"
+!EndDefine. 
+
+*Directory for Scottish Postcode Directory (SPD).
+Define !SPD_dir()
+    "Geography/Scottish Postcode Directory/"
+!EndDefine. 
+
+*Directory for Scottish Index for Multiple Deprivation (SIMD). 
+Define !SIMD_dir()
+    "Deprivation/"
+!EndDefine. 
+
+*Directory for DataZone Populations. 
+Define !pop_dir()
+    "Populations/Estimates/"
+!EndDefine. 
+
+
+*******************************************************.
+ * Geography Lookup Macros *
+ * Should only need to change above macros when geography file updates.
+*******************************************************.
+*Locality Lookup. 
+Define !Localities_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!Locality_dir)), !Unquote(!Eval(!Locality_file))))
 !EndDefine.
 
- * Most up to date Postcode directory.
-Define !PCDir()
-   "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2020_2.sav"
+*SPD Lookup. 
+Define !SPD_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!SPD_dir)), !Unquote(!Eval(!SPD_file))))
 !EndDefine.
 
- * Most up to date SIMD / Postcode lookup.
-Define !SIMDLookup()
-   "/conf/linkage/output/lookups/Unicode/Deprivation/postcode_2020_2_simd2020v2.sav"
+*SIMD Lookup. 
+Define !SIMD_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!SIMD_dir)), !Unquote(!Eval(!SIMD_file))))
 !EndDefine.
 
- * Most up to date DataZone Population estimates.
-Define !DataZone_Pops()
-   "/conf/linkage/output/lookups/Unicode/Populations/Estimates/DataZone2011_pop_est_2011_2019.sav"
+*DataZone Population Lookup. 
+Define !DataZone_Pop_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
+!EndDefine. 
+
+*******************************************************.
+*Delayed Discharges file.
+*******************************************************.
+Define !Delayed_Discharge_file()
+    !Quote(!Concat(!Unquote(!Eval(!Delayed_Discharges_dir)), !Unquote(!Eval(!Delayed_Discharge_period)), "DD_LinkageFile.zsav"))
+!EndDefine.
+
+*******************************************************.
+*Read code lookup.
+*******************************************************.
+
+Define !ReadCodeLookup()
+    '/conf/irf/05-lookups/'
 !EndDefine.
 
 *******************************************************.
@@ -213,7 +359,7 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
  * Change '/Source variables = HBXXXX' in the below.
 Define !AddHB2018DictionaryInfo (HB = !CMDEND)
  * Copy the labels from the Postcode Lookup file.
-Apply Dictionary From !PCDir
+Apply Dictionary From !SPD_Lookup
     /VarInfo ValLabels = Replace
     /Source variables = HB2018
     /Target variables = !HB.
@@ -239,7 +385,7 @@ Add Value Labels !HB
 
 Define !AddHB2019DictionaryInfo (HB = !CMDEND)
  * Copy the labels from the Postcode Lookup file.
-Apply Dictionary From !PCDir
+Apply Dictionary From !SPD_Lookup
     /VarInfo ValLabels = Replace
     /Source variables = HB2019
     /Target variables = !HB.

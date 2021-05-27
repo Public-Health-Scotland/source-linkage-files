@@ -13,7 +13,7 @@
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 
-get file = !File + "Care-Home-Temp-1.zsav".
+get file = !Year_dir + "Care-Home-Temp-1.zsav".
 String Year (A4).
 Compute year = !FY.
 
@@ -22,7 +22,7 @@ sort cases by year NursingCareProvision.
  * Match on the costs lookup.
 match files
     /file = *
-    /Table = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
+    /Table = !SLF_Extracts + "Costs/Cost_CH_Lookup.sav"
     /By year NursingCareProvision.
 
  * Beddays.
@@ -63,6 +63,6 @@ End Repeat.
 
 Compute cost_total_net = Sum(apr_cost to mar_cost).
 
-save outfile= !File + "Care-Home-Temp-2.zsav"
+save outfile= !Year_dir + "Care-Home-Temp-2.zsav"
    /zcompressed.
-get file = !File + "Care-Home-Temp-2.zsav".
+get file = !Year_dir + "Care-Home-Temp-2.zsav".
