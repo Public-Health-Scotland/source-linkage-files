@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 * Open processed Acute extract.
-get file = !file + 'acute_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'acute_for_source-20' + !FY + '.zsav'.
 
 * Apply new costs, these are taken from the 2017/18 file.
 * Either the average cost per day for inpatient, or the average daycase cost for daycase.
@@ -53,6 +53,6 @@ Do Repeat Beddays = Apr_beddays to Mar_beddays
 End Repeat.
 
 * Overwrite the data for onward processing.
-save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'acute_for_source-20' + !FY + '.zsav'
     /Drop keydate1_dateformat keydate2_dateformat
     /zcompressed.

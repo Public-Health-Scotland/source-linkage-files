@@ -6,7 +6,7 @@ Define !FinalName()
     !Concat("Indiv_Comparison_", !unquote(!Eval(!FY)))
 !EndDefine.
 
-get file= !file + "source-individual-file-20" + !FY + ".zsav".
+get file= !Year_dir + "source-individual-file-20" + !FY + ".zsav".
  * Set up some flags.
 
  * Flag to count the males and females.
@@ -509,4 +509,4 @@ Compute Issue = abs(PctChange) > 5.
 
 Sort cases by Issue (D) Measure (A).
 
-save outfile = !File + "source-individual-TESTS-20" + !FY + ".sav".
+save outfile = !Year_dir + "source-individual-TESTS-20" + !FY + ".sav".

@@ -5,15 +5,15 @@
 
  * Start with the postcode directory and add all SIMD data.
 match files
-   /File = !PCDir
-   /Table = !SIMDLookup
+   /File = !SPD_Lookup
+   /Table = !SIMD_Lookup
    /By PC7.
 
  * Sort by DataZone and then add on the localities.
 sort cases by DataZone2011.
 match files
    /File = * 
-   /Table = !LocalitiesLookup
+   /Table = !Localities_Lookup
    /Rename (HSCPLocality = Locality)
    /By Datazone2011.
 
@@ -33,7 +33,7 @@ Variable Labels
 sort cases by PC7.
 
  * Save out, only keep the variables we need and rename PC7.
-save outfile = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
+save outfile = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
    /Rename (PC7 = postcode)
    /Keep Postcode HB2018 HSCP2018 CA2018 LCA Locality DataZone2011
       HB2019 CA2019 HSCP2019
@@ -44,4 +44,4 @@ save outfile = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
       UR8_2016 UR6_2016 UR3_2016 UR2_2016 
    /Zcompressed.
 
-get file = !Lookup + "source_postcode_lookup_" + !LatestUpdate + ".zsav".
+get file = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav".

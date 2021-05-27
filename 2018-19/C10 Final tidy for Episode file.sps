@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !File + "temp-source-episode-file-8-" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 Variable Labels
     adcon1 "Admission Condition 1"
@@ -708,7 +708,7 @@ Variable Width
 sort cases by CHI record_keydate1 keytime1 record_keydate2 keytime2.
 
 * Reorder and keep variables.
-save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
+save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     /Keep
     year
     recid
@@ -950,5 +950,5 @@ save outfile = !File + "source-episode-file-20" + !FY + ".zsav"
     hhg_start_fy
     hhg_end_fy
     /zcompressed.
-get file = !File + "source-episode-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 

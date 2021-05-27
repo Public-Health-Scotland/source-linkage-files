@@ -1,20 +1,15 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-* Change this to the relevant number.
-* Should be '_extract_NUMBER'.
-Define !Extract_Number()
-    "_extract_1"
-!EndDefine.
 
  * Unzip the file.
-Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_LTCs.csv'"].
+Host Command = ["gunzip '" + !LTC_extract_file + "'"].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-   /FILE= !CSDExtractLoc + !Extract_Number + "_LTCs.csv"
+   /FILE= !LTC_extract_file
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -65,14 +60,18 @@ Do Repeat LTC = arth to digestive
    End if.
 End Repeat.
 
-sort cases by chi.
+* Fix postcode being read in as 'NA'.
+If postcode = "NA" postcode = "".
 
-save outfile = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav"
+sort cases by chi postcode.
+
+
+save outfile = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav"
    /keep chi postcode arth to digestive
       arth_date to digestive_date
    /zcompressed.
 
-get file = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav".
+get file = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Zip back up.
-Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_LTCs.csv'"].
+Host Command = ["gzip '" + !LTC_extract_file + "'"].

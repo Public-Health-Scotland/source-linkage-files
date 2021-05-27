@@ -5,12 +5,12 @@
 * Determine the most appropriate death date to use.
 ***************************************************************************************************************************.
 *Get file from previous syntax. 
-Get file = !File + "temp-source-episode-file-5-" + !FY + ".zsav". 
+Get file = !Year_dir + "temp-source-episode-file-5-" + !FY + ".zsav". 
 
 * Only keep relevant variables.
 match files
     /file  = *
-    /table = !Extracts_Alt + "All Deaths.zsav"
+    /table = !Deaths_dir + "All Deaths.zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat SMRType CHI gender dob age
     attendance_status
     death_date death_date_NRS death_date_CHI death_date
@@ -104,7 +104,7 @@ select if Not(sysmis(death_date)).
 
 * Match back to SLF.
 match files
-    /file = !File + "temp-source-episode-file-5-" + !FY + ".zsav"
+    /file = !Year_dir + "temp-source-episode-file-5-" + !FY + ".zsav"
     /table = *
     /Drop death_date_NRS death_date_CHI death_date_NRS_ep last_activity Has_NRS Activity_after_death CHI_death_date_works CHI_death_date_missing
     /By CHI.
@@ -149,9 +149,9 @@ End if.
 Recode Remove_NSU (sysmis = 0).
 select if Remove_NSU = 0.
 
-save outfile = !File + "temp-source-episode-file-6-" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
     /Drop Remove_NSU Remove_Death Using_NRS_ep Using_NRS Using_CHI Death_after_FY
     /zcompressed.
-get file = !File + "temp-source-episode-file-6-" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav".
 *****************************************************************************************************************************.
        

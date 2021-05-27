@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 * Tests for NRS deaths dataset.
-get file = !file + 'deaths_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'deaths_for_source-20' + !FY + '.zsav'.
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -91,6 +91,6 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 Crosstabs Measure by Issue.
 
 *Save test file. 
-Save Outfile = !file + 'NRS_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'NRS_tests_20' + !FY + '.zsav'
    /zcompressed .
 

@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
     "1011" "2010/11"
@@ -219,7 +219,7 @@ End if.
  * Final sort.
 sort cases by chi.
 
-save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
+save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     /Keep
     year
     chi
@@ -394,10 +394,10 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     keep_population
     /zcompressed.
 
-get file = !file + "source-individual-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
 
 *************************************************************************************************************************************************.
 *Housekeeping. 
-erase file = !file + 'HRI_lookup_' + !FY + '.zsav'.
-erase file = !File + "Population-estimates-20" + !FY + ".zsav".
-erase file = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav".
+erase file = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'.
+erase file = !Year_dir + "Population-estimates-20" + !FY + ".zsav".
+erase file = !Year_dir + "NSU-Keep-Lookup-20" + !FY + ".zsav".

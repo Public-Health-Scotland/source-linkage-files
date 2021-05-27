@@ -1,40 +1,33 @@
 ﻿* Encoding: UTF-8.
-
-**********************************************************************************************************************************
-Dummy file for latest year without an NSU cohort
-**********************************************************************************************************************************.
-*Get previous file saved at end of homelessness. 
-Get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav" .
-
-*save file as next temp ep file. 
-Save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav" 
-/zcompressed.  
-
-*Delete previous file. 
-Erase file = !File + "temp-source-episode-file-3-" + !FY + ".zsav" .
-
 ********************************************************************************************************************************
-* Match on the non-service-user CHIs 
+* Match on the non-service-user CHIs.
 ********************************************************************************************************************************
 * Needs to be matched on like this to ensure no CHIs are marked as NSU when we already have activity for them.
-* Get a warning here but should be fine. - Caused by the way we match on NSU.
-*match files
-    /file = !File + "temp-source-episode-file-3-" + !FY + ".zsav" 
-    /file = !Extracts + "All_CHIs_20" + !FY + ".zsav"
-    /Drop AssessmentDecisionDate.1 to HH
+* Get a warning about duplicate key here but should be fine.
+* Caused by the way we match on NSUs, if an 'NSU' is already in the file, and has more than one record, that's the duplicate.
+match files
+    /file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav"
+    /file = !NSU_dir + "All_CHIs_20" + !FY + ".zsav"
+    /rename postcode = chi_postcode gpprac = chi_gpprac dob = chi_dob
+    /In = has_chi_data
     /By chi.
 
 * Set up the variables for the NSU CHIs.
-* The macros are defined in C01a.
-*Do if recid = "".
-  *  Compute year = !FY.
-    *Compute recid = "NSU".
-    *Compute SMRType = "Non-User".
-*End if.
+Do if recid = "".
+    Compute year = !FY.
+    Compute recid = "NSU".
+    Compute SMRType = "Non-User".
+    Compute postcode = chi_postcode. 
+    Compute gpprac = chi_gpprac.
+    Compute dob = chi_dob.
+ * Fill in any other missing data from the CHI file.
+Else if has_chi_data.
+    If postcode = "" postcode = chi_postcode. 
+    If sysmiss(gpprac) gpprac = chi_gpprac.
+    If sysmiss(dob) dob = chi_dob.
+End if.
 
-*Save Temp.
-*save outfile = !File + "temp-source-episode-file-4-" + !FY + ".zsav" 
-/zcompressed.  
-
-**********************************************************************************************************************************
-
+* save next temp file.
+save outfile = !Year_dir + "temp-source-episode-file-4-" + !FY + ".zsav"
+    /Drop has_chi_data chi_postcode chi_gpprac chi_dob
+    /zcompressed.
