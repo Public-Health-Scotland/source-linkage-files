@@ -185,7 +185,7 @@ Alter type n_in_fy n_at_postcode (F2.0).
 
 sort cases by CareHomePostcode CareHomeName CareHomeCouncilAreaCode.
 
-save outfile =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
+save outfile =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
 
-get file =  !Extracts + "Care_home_name_lookup-20" + !FY + ".sav".
+get file =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
 
