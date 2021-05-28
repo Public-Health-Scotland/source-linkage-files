@@ -115,6 +115,8 @@ save outfile = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     ch_adm_reason
     ch_provider
     ch_nursing
+	sc_chi_cis
+    sc_id_cis
     yearstay
     stay
     cost_total_net

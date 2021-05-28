@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -525,12 +525,22 @@ Compute death_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(
 Frequencies death_before_adm.
 Select if not(death_before_adm).
 
-sort cases by chi sending_location social_care_id split_ep_marker sc_latest_submission.
+* Create two 'continuous markers' one based on CHI, one based on sc_id + send_loc.
 
-Compute continuous_marker = 1.
+ * sc_id + send_loc - this will apply to all clients but won't link up stays between sending locations.
+sort cases by chi sending_location social_care_id ch_admission_date sc_latest_submission.
+Compute sc_id_cis = 1.
 Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
-    Compute continuous_marker = lag(continuous_marker).
-    If ch_admission_date > lag(ch_discharge_date) continuous_marker = lag(continuous_marker) + 1.
+    Compute sc_id_cis = lag(sc_id_cis).
+    If ch_admission_date > lag(ch_discharge_date) sc_id_cis = lag(sc_id_cis) + 1.
+End if.
+
+ * CHI - This won't apply to clients without a CHI but will link up stays across sending locations.
+sort cases by chi ch_admission_date sc_latest_submission.
+Compute sc_chi_cis = 1.
+Do if chi = lag(chi) and chi NE "".
+    Compute sc_chi_cis = lag(sc_chi_cis).
+    If ch_admission_date > lag(ch_discharge_date) sc_chi_cis = lag(sc_chi_cis) + 1.
 End if.
 
 Rename Variables
@@ -581,6 +591,8 @@ save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     ch_postcode
     record_keydate1
     record_keydate2
+    sc_chi_cis
+    sc_id_cis
     ch_provider
     ch_nursing
     ch_adm_reason
