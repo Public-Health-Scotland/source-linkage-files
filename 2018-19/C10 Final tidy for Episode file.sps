@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 Variable Labels
@@ -826,8 +826,6 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     sc_type_of_housing
     sc_meals
     sc_day_care
-    sc_date_1
-    sc_date_2
     sc_latest_submission
     ch_name
     ch_adm_reason

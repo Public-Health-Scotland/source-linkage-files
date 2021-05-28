@@ -467,20 +467,6 @@ aggregate
 Compute first_record = record_count = 1.
 Compute last_record = record_count = n_records.
 
-Compute open_dis_date = last_record and sysmis(ch_discharge_date).
-
-* For all episodes set the sc_dates to be the first admission and last discharge (these are the actual dates for the episode).
-* This will only be useful for split episodes, in the normal case they will match the single line episode dates.
-* Also add on the maximum number of records for each episode so we can identify the split episodes.
-aggregate
-    /Presorted
-    /break chi sending_location social_care_id split_ep_marker
-    /sc_date_1 = min(ch_admission_date)
-    /sc_date_2 = max(ch_discharge_date)
-    /last_dis_date_open = max(open_dis_date).
-
-If last_dis_date_open sc_date_2 = $sysmis.
-
 * Where the episodes are split (> 1 record) change the admission and discharge dates to the start and end of the quarters using the record_date as appropriate.
 Do if n_records > 1.
     Do if first_record.
@@ -511,38 +497,22 @@ match files file = *
 
 * Create a flag to identify the last record where an episode has been split.
 * Episodes where the death_date is within 1-5 days of the dis date.
-Do if range(datediff(sc_date_2, death_date, "days"), 1, 5).
+Do if range(datediff(ch_discharge_date, death_date, "days"), 1, 5).
     * Some tracking variables.
     Compute changed_dis_date = 1.
     Compute old_ch_discharge_date = ch_discharge_date.
-    Compute old_sc_date_2 = sc_date_2.
     * Overwrite the discharge dates with the death date as appropriate.
-    Compute sc_date_2 = death_date.
-    Do if last_record.
-        Compute ch_discharge_date = death_date.
-    Else if ch_discharge_date > death_date.
-        Compute ch_discharge_date = death_date.
-        Compute none_last_ep_changed = 1.
-    End if.
+    Compute ch_discharge_date = death_date.
     * Episodes not affected by the above but where the CHI death date fits the criteria (most CHIs have the same death date so this is a small number).
-else if range(datediff(sc_date_2, death_date_CHI, "days"), 1, 5).
+else if range(datediff(ch_discharge_date, death_date_CHI, "days"), 1, 5).
     * Some tracking variables.
     Compute changed_dis_date = 2.
     Compute old_ch_discharge_date = ch_discharge_date.
-    Compute old_sc_date_2 = sc_date_2.
     * Overwrite the discharge dates with the death date as appropriate.
-    Compute old_ch_discharge_date = ch_discharge_date.
-    Compute old_sc_date_2 = sc_date_2.
-    Compute sc_date_2 = death_date_CHI.
-    Do if last_record.
-        Compute ch_discharge_date = death_date_CHI.
-    Else if ch_discharge_date > death_date_CHI.
-        Compute ch_discharge_date = death_date_CHI.
-        Compute none_last_ep_changed = 2.
-    End if.
+    Compute ch_discharge_date = death_date_CHI.
 End if.
 
-Alter type ch_discharge_date old_sc_date_2 (Date11).
+Alter type ch_discharge_date (Date11).
 Value labels changed_dis_date none_last_ep_changed
     1 "Changed to match NRS death date (<= 5 days before dis)"
     2 "Changed to match CHI death date (<= 5 days before dis)".
@@ -611,8 +581,6 @@ save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     ch_postcode
     record_keydate1
     record_keydate2
-    sc_date_1
-    sc_date_2
     ch_provider
     ch_nursing
     ch_adm_reason

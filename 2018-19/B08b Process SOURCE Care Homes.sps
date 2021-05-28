@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !SC_dir + "All Care Home episodes.zsav".
 
 * Now select episodes for given FY, need to do this now as discharge dates may have been moved out of the FY above.
@@ -110,8 +110,6 @@ save outfile = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     sc_send_lca
     record_keydate1
     record_keydate2
-    sc_date_1
-    sc_date_2
     sc_latest_submission
     ch_name
     ch_adm_reason
