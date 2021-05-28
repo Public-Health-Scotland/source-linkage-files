@@ -433,15 +433,15 @@ Frequencies corrected_open_end_date.
 sort cases by chi sending_location social_care_id ch_admission_date record_date ch_discharge_date.
 * Count records (where episodes are split because of changes in ch_provider or nursing_care).
 * Create a marker to link split episodes together and link across CHI.
-Numeric record_count scem (F6.0).
+Numeric record_count split_ep_marker (F6.0).
 Compute record_count = 1.
-Compute scem = 1. /*scem = Social Care Episode Marker - name hopefully to be changed */.
+Compute split_ep_marker = 1.
 
 Do if chi = lag(chi) and lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
     Do If lag(ch_admission_date) = ch_admission_date.
         * Normal records.
         * These are records for the same person, same admission date submitted in different quarters.
-        Compute scem = lag(scem).
+        Compute split_ep_marker = lag(split_ep_marker).
         Do if lag(record_date) NE record_date.
             Compute record_count = lag(record_count) + 1.
             * Duplicate records.
@@ -452,16 +452,16 @@ Do if chi = lag(chi) and lag(sending_location) = sending_location and lag(social
     Else.
         * Normal records.
         * These are different episodes (new admission date) for the same person.
-        Compute scem = lag(scem) + 1.
+        Compute split_ep_marker = lag(split_ep_marker) + 1.
     End if.
 End if.
 
-sort cases by chi sending_location social_care_id scem record_date.
-* Highlight the last episode of the scem to take the discharge date from.
+sort cases by chi sending_location social_care_id split_ep_marker record_date.
+* Highlight the last episode of the split_ep_marker to take the discharge date from.
 * Can't use aggregate as that will ignore missing dates.
 aggregate
     /Presorted
-    /break chi sending_location social_care_id scem
+    /break chi sending_location social_care_id split_ep_marker
     /n_records = max(record_count).
 
 Compute first_record = record_count = 1.
@@ -474,7 +474,7 @@ Compute open_dis_date = last_record and sysmis(ch_discharge_date).
 * Also add on the maximum number of records for each episode so we can identify the split episodes.
 aggregate
     /Presorted
-    /break chi sending_location social_care_id scem
+    /break chi sending_location social_care_id split_ep_marker
     /sc_date_1 = min(ch_admission_date)
     /sc_date_2 = max(ch_discharge_date)
     /last_dis_date_open = max(open_dis_date).
@@ -501,10 +501,7 @@ End if.
 
 Frequencies changed_adm_date changed_dis_date.
 
-* Remove SCEM for records without a CHI.
-if chi = "" scem = $sysmis.
-
-sort cases by chi scem ch_admission_date ch_discharge_date.
+sort cases by chi split_ep_marker ch_admission_date ch_discharge_date.
 
 * Adjust discharge dates according to death dates.
 * Match on the death dates from the deceased lookup (year specific).
@@ -558,7 +555,7 @@ Compute death_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(
 Frequencies death_before_adm.
 Select if not(death_before_adm).
 
-sort cases by chi sending_location social_care_id scem sc_latest_submission.
+sort cases by chi sending_location social_care_id split_ep_marker sc_latest_submission.
 
 Compute continuous_marker = 1.
 Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
@@ -600,7 +597,7 @@ Value Labels ch_provider
 String person_id (A13).
 Compute person_id = concat(sending_location, "-", social_care_id).
 
-sort cases by sending_location social_care_id chi scem record_keydate1 record_keydate2.
+sort cases by sending_location social_care_id chi split_ep_marker record_keydate1 record_keydate2.
 
 save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     /Keep chi
@@ -619,7 +616,6 @@ save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     ch_provider
     ch_nursing
     ch_adm_reason
-    scem
     sc_latest_submission
     /zcompressed.
 get file = !Extracts_Alt + "All Care Home episodes.zsav".
