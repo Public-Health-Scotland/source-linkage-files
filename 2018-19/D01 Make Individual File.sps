@@ -635,7 +635,7 @@ Do repeat postcode = acute_postcode to SDS_postcode.
     If postcode NE "" #All_Blank = 0.
 End repeat.
 
-* Use NRS_postcode to store the dummy for no other reason than it's last in the hierarchy.
+* Use HL1_postcode to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 HL1_postcode = "XXX XXX".
 
 * Make a postcode variable from the various postcodes labelled by the dataset they came from.
@@ -725,7 +725,7 @@ Do repeat gpprac = acute_gpprac to SDS_gpprac.
     If Not(sysmis(gpprac))  #All_Blank = 0.
 End repeat.
 
-* Use NRS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
+* Use SDS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 SDS_gpprac = 0.
 
 * Make a gpprac variable from the various gpprac labelled by the dataset they came from.
