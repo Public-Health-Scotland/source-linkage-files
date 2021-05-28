@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !SC_dir + "All Care Home episodes.zsav".
+get file = !SC_dir + "all_ch_episodes" + !LatestUpdate + ".zsav".
 
 * Now select episodes for given FY, need to do this now as discharge dates may have been moved out of the FY above.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 < !startFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
@@ -115,7 +115,7 @@ save outfile = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     ch_adm_reason
     ch_provider
     ch_nursing
-	sc_chi_cis
+    sc_chi_cis
     sc_id_cis
     yearstay
     stay

@@ -47,7 +47,7 @@ sort cases by sending_location social_care_id period ch_admission_date ch_discha
 
 * Match on the demographics data (chi, gender, dob and postcode).
 match files file = *
-    /table = !Extracts_Alt + "Social Care Demographics lookup.zsav"
+    /table = !SC_dir + "sc_demograpics_lookup_" + !LatestUpdate + ".zsav"
     /by sending_location social_care_id.
 
 * Correct Postcode formatting.
@@ -116,7 +116,7 @@ End if.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
     /In = AccurateData0
     /Drop CareHomeCouncilAreaCode
@@ -127,7 +127,7 @@ frequencies AccurateData0.
 Sort cases by ch_postcode.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name_real)
     /Drop ch_name_tidy CareHomeCouncilAreaCode
     /By ch_postcode.
@@ -169,7 +169,7 @@ If name_is_subset or name_is_extra ch_name = ch_name_real.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
     /In = AccurateData1
     /Drop CareHomeCouncilAreaCode
@@ -204,7 +204,7 @@ End if.
 Sort Cases by ch_postcode TestName1.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName CareHomePostcode = TestName1 ch_postcode)
     /In = TestName1Correct
     /By ch_postcode TestName1.
@@ -214,7 +214,7 @@ match files
 Sort Cases by ch_postcode TestName2.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomeName CareHomePostcode = TestName2 ch_postcode)
     /In = TestName2Correct
     /Drop CareHomeCouncilAreaCode
@@ -305,7 +305,7 @@ crosstabs old_name by ch_name.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
     /In = AccurateData2
     /Drop CareHomeCouncilAreaCode
@@ -313,10 +313,10 @@ match files
 crosstabs AccurateData1 by AccurateData2 by AccurateData0.
 
 * Refresh the variables to drop all the ones we no longer need.
-save outfile = !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav"
+save outfile = !SC_dir + "TEMP-Care_Home_end_of_name_changes.zsav"
     /keep sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode
     /zcompressed.
-get file =  !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav".
+get file =  !SC_dir + "TEMP-Care_Home_end_of_name_changes.zsav".
 
 * Correct missing nursing_care_provision.
 * Sort into reverse order so we can use lag() to fill in below.
@@ -357,11 +357,11 @@ End if.
 
 Frequencies changed_sc_id.
 
-save outfile = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav"
+save outfile = !SC_dir + "TEMP-Care_Home_pre-aggregate.zsav"
     /Keep chi sending_location social_care_id ch_name ch_postcode ch_admission_date ch_discharge_date record_date period All
     /Drop min_provider max_provider latest_sc_id changed_sc_id
     /zcompressed.
-get file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
+get file = !SC_dir + "TEMP-Care_Home_pre-aggregate.zsav".
 
 * Sort to ensure the latest submitted records come last.
 sort cases by chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider.
@@ -513,11 +513,11 @@ else if range(datediff(ch_discharge_date, death_date_CHI, "days"), 1, 5).
 End if.
 
 Alter type ch_discharge_date (Date11).
-Value labels changed_dis_date none_last_ep_changed
+Value labels changed_dis_date
     1 "Changed to match NRS death date (<= 5 days before dis)"
     2 "Changed to match CHI death date (<= 5 days before dis)".
 
-Frequencies changed_dis_date none_last_ep_changed.
+Frequencies changed_dis_date.
 
 * Remove any episodes which now have an admission after discharge i.e. they were admitted after death.
 * As of April 2021 this removes 34 episodes.
@@ -579,7 +579,7 @@ Compute person_id = concat(sending_location, "-", social_care_id).
 
 sort cases by sending_location social_care_id chi split_ep_marker record_keydate1 record_keydate2.
 
-save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
+save outfile = !SC_dir + "all_ch_episodes" + !LatestUpdate + ".zsav"
     /Keep chi
     person_id
     gender
@@ -598,9 +598,9 @@ save outfile = !Extracts_Alt + "All Care Home episodes.zsav"
     ch_adm_reason
     sc_latest_submission
     /zcompressed.
-get file = !Extracts_Alt + "All Care Home episodes.zsav".
+get file = !SC_dir + "all_ch_episodes" + !LatestUpdate + ".zsav".
 
 * Clean up.
-Erase file = !Extracts_Alt + "TEMP - Care Home pre aggregate.zsav".
-Erase file = !Extracts_Alt + "TEMP - Care Home (end of name changes).zsav".
+Erase file = !SC_dir + "TEMP-Care_Home_pre-aggregate.zsav".
+Erase file = !SC_dir + "TEMP-Care_Home_end_of_name_changes.zsav".
 

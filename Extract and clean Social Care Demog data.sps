@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
@@ -148,9 +148,9 @@ Alter type postcode (A8).
 Missing values chi postcode ().
 
 *  Save to be used in other Social Care processing.
-save outfile = !Extracts_Alt + "Social Care Demographics lookup.zsav"
+save outfile = !SC_dir + "sc_demograpics_lookup_" + !LatestUpdate + ".zsav"
     /zcompressed.
-get file =  !Extracts_Alt + "Social Care Demographics lookup.zsav".
+get file = !SC_dir + "sc_demograpics_lookup_" + !LatestUpdate + ".zsav".
 
 
 
