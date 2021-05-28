@@ -66,4 +66,3 @@ save outfile =  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav"
     /Keep Year TreatmentNHSBoardCode Cost_per_consultation.
 
 get file =  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav".
-

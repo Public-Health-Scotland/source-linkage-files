@@ -218,6 +218,3 @@ save outfile = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav"
     /zcompressed.
 
 get file = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav".
-
-
-

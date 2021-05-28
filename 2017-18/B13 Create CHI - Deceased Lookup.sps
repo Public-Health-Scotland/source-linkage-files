@@ -42,4 +42,3 @@ get file = !Deaths_dir +  "All Deaths.zsav".
 
 * Zip back up.
 Host Command = ["gzip '" + !Deaths_extract_file + "'"].
-

@@ -432,8 +432,6 @@ Host Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' " +
     "'" + !Year_dir + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
 
-
 *We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom. 
 *    "'" + !Year_dir + "DN_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "CMH_for_source-20" + !FY + ".zsav" + "' " +
-
+    "'" + !Year_dir + "CMH_for_source-20" + !FY + ".zsav" + "' " +.

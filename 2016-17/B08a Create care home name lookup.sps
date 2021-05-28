@@ -125,5 +125,3 @@ Aggregate
    /Break CareHomePostcode CareHomeName CareHomeCouncilAreaCode 
    /CareHomeCouncilName MainClientGroup Sector = First(Council_Area_Name MainClientGroup Sector)
    /DateReg DateCanx = Max(DateReg DateCanx).
-
-

@@ -256,5 +256,3 @@ Crosstabs Measure by Issue.
 
 Save Outfile = !Year_dir + 'Homelessness_tests_20' + !FY + '.zsav'
    /zcompressed .
-
-

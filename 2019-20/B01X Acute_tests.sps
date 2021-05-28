@@ -334,5 +334,3 @@ Crosstabs Measure by Issue.
 *Save test file.
 Save Outfile = !Year_dir + 'acute_tests_20' + !FY + '.zsav'
    /zcompressed .
-
-

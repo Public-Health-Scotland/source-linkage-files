@@ -274,4 +274,3 @@ get file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
 
 * zip up the raw data.
 Host Command = ["gzip '" + !Year_Extracts_dir + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].
-

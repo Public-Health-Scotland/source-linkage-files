@@ -395,4 +395,3 @@ save outfile = !Year_dir + "Care-Home-Temp-1.zsav"
     /Drop counter FinancialYear CareHomeAdmissionDate CareHomeDischargeDate
     /zcompressed.
 get file = !Year_dir + "Care-Home-Temp-1.zsav".
-

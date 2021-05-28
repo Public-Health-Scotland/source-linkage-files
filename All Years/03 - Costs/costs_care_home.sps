@@ -89,6 +89,3 @@ save outfile=!Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
     /Keep year NursingCareProvision nursing_care_provision cost_per_day.
 
 get file = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav".
-
-
-

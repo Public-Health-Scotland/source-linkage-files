@@ -451,4 +451,3 @@ Crosstabs Measure by Issue.
 
 Save Outfile = !file + 'Care_Home_tests_20' + !FY + '.zsav'
    /zcompressed .
-

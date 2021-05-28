@@ -35,11 +35,3 @@ save outfile = !Year_dir + "temp-source-episode-file-7-" + !FY + ".zsav"
 get file= !Year_dir + "temp-source-episode-file-7-" + !FY + ".zsav".
 
 *Not including 'NextFY' as 2122 file does not exist.
-*    /table = !SPARRA_dir + "SPARRA-20" + !NextFY + ".zsav"
-    /Rename
-    UPI_Number = chi
-    SPARRA_RISK_SCORE = SPARRA_End_FY
-    /table = !HHG_dir + "HHG-20" + !NextFY + ".zsav"
-    /Rename
-    UPI_Number = chi
-    HHG_SCORE = HHG_End_FY

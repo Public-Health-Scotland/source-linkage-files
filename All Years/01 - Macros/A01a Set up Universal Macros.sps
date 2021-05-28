@@ -508,6 +508,3 @@ Variable Width !Beddays (5).
 Variable Level !Beddays (Scale).
 
 !EndDefine.
-
-
-
