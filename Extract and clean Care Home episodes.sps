@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 * Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
 *Insert file = "pass.sps" Error = Stop.
@@ -123,7 +123,7 @@ match files
     /By ch_postcode ch_name.
 frequencies AccurateData0.
 
- * Check what the name should be if we just look at the Care home postcode.
+* Check what the name should be if we just look at the Care home postcode.
 Sort cases by ch_postcode.
 match files
     /file = *
@@ -227,8 +227,8 @@ Else If TestName2Correct = 1 and TestName1Correct = 0.
     Compute ch_name = TestName2.
 End If.
 
- * Find names where they are very simlar to more common names which have been supplied for the same postcode.
-aggregate    
+* Find names where they are very simlar to more common names which have been supplied for the same postcode.
+aggregate
     /break ch_postcode ch_name
     /n_records_using_name = n.
 
@@ -266,9 +266,9 @@ SPSSINC TRANS result = ratio type = 0
 
 If ratio >= 0.95 ch_name = best_guess_name.
 
- * Fill in more blank care home names by looking for cases where we have:
- * A postcode with a commonly occuring name and some blanks
- * in these cases use the name to fill in the blanks.
+* Fill in more blank care home names by looking for cases where we have:.
+* A postcode with a commonly occuring name and some blanks.
+* in these cases use the name to fill in the blanks.
 
 sort cases by ch_postcode ch_name.
 Compute non_blank_name = ch_name NE "".
@@ -342,8 +342,8 @@ aggregate
 * If min and max are the same all values must be the same, otherwise at least one must be different.
 If min_provider NE max_provider ch_provider = 6.
 
- * Where we have multiple social care IDs from the same sending location for a single CHI, merge the IDs into the first one.
- * Apply the latest submitted social_care_id to all instances of the same CHI within a single sending_location.
+* Where we have multiple social care IDs from the same sending location for a single CHI, merge the IDs into the first one.
+* Apply the latest submitted social_care_id to all instances of the same CHI within a single sending_location.
 sort cases by chi sending_location period.
 aggregate
     /Presorted
@@ -527,7 +527,7 @@ Select if not(death_before_adm).
 
 * Create two 'continuous markers' one based on CHI, one based on sc_id + send_loc.
 
- * sc_id + send_loc - this will apply to all clients but won't link up stays between sending locations.
+* sc_id + send_loc - this will apply to all clients but won't link up stays between sending locations.
 sort cases by chi sending_location social_care_id ch_admission_date sc_latest_submission.
 Compute sc_id_cis = 1.
 Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
@@ -535,7 +535,7 @@ Do if lag(sending_location) = sending_location and lag(social_care_id) = social_
     If ch_admission_date > lag(ch_discharge_date) sc_id_cis = lag(sc_id_cis) + 1.
 End if.
 
- * CHI - This won't apply to clients without a CHI but will link up stays across sending locations.
+* CHI - This won't apply to clients without a CHI but will link up stays across sending locations.
 sort cases by chi ch_admission_date sc_latest_submission.
 Compute sc_chi_cis = 1.
 Do if chi = lag(chi) and chi NE "".
@@ -573,7 +573,7 @@ Value Labels ch_provider
     5 'NHS Board'
     6 'Other'.
 
- * Include the sc_id as a unique person identifier (first merge with sending loc).
+* Include the sc_id as a unique person identifier (first merge with sending loc).
 String person_id (A13).
 Compute person_id = concat(sending_location, "-", social_care_id).
 
