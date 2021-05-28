@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 Define !sc_extracts()
     "/conf/social-care/05-Analysts/All Sandpit Extracts/"
 !EndDefine.
@@ -102,7 +102,7 @@ alter type submitted_postcode chi_postcode (A7).
 sort cases by submitted_postcode.
 
 match files file = *
-    /table = !PCDir
+    /table = !SPD_Lookup
     /Rename pc7 = submitted_postcode
     /In = Valid_PC
     /Keep latest_record extract_date sending_location social_care_id upi gender dob postcode submitted_postcode chi_postcode
