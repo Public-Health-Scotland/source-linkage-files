@@ -76,7 +76,7 @@ alter type record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !File + "SDS-for-source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /Keep Year
     recid
     SMRType
@@ -96,4 +96,4 @@ save outfile = !File + "SDS-for-source-20" + !FY + ".zsav"
     sc_day_care
     sds_option_4
     /zcompressed.
-get file = !File + "SDS-for-source-20" + !FY + ".zsav".
+get file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav".

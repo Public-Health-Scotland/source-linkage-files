@@ -2,7 +2,7 @@
 
 
 *Tests for Home Care dataset.
-Get file = !File + "Home_Care_for_source-20" + !FY + ".zsav".
+Get file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav".
 
 
 * Flag to count CHIs.
@@ -379,5 +379,5 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'Home_Care_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Home_Care_tests_20' + !FY + '.zsav'
    /zcompressed .
