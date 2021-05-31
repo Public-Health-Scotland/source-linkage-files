@@ -32,7 +32,7 @@ match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
     /by CHI.
 
 * HHG only for 201718 onwards.
-* /table = !Extracts_Alt + "HHG/HHG-20" + !FY + ".zsav"
+* /table = !HHG_dir + "HHG-20" + !FY + ".zsav"
     /Rename (UPI_Number = chi)
 
 * Make any variables which are missing.

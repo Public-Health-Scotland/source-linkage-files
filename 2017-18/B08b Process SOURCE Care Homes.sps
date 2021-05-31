@@ -73,7 +73,7 @@ Compute ch_name = ch_name_tidy.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName CareHomeCouncilAreaCode = ch_postcode ch_name ch_lca)
     /In = AccurateData1
     /By ch_postcode ch_name.
@@ -108,7 +108,7 @@ End if.
 Sort Cases by ch_postcode TestName1.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+   /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName CareHomePostcode = TestName1 ch_postcode)
    /In = TestName1Correct
    /By ch_postcode TestName1.
@@ -118,7 +118,7 @@ match files
 Sort Cases by ch_postcode TestName2.
 match files
    /file = *
-   /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+   /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
    /Rename (CareHomeName CareHomePostcode = TestName2 ch_postcode)
    /In = TestName2Correct
    /By ch_postcode TestName2.
@@ -136,7 +136,7 @@ Frequencies TestName1Correct TestName2Correct.
 Sort Cases by ch_postcode ch_name CareHomeCouncilAreaCode .
 match files
     /file = *
-    /Table = !Extracts + "Care_home_name_lookup-20" + !FY + ".sav"
+    /Table = !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav"
     /Rename (CareHomePostcode CareHomeName = ch_postcode ch_name)
     /In = AccurateData2
     /By ch_postcode ch_name.
@@ -192,7 +192,7 @@ Descriptives apr_beddays to stay.
 sort cases by year nursing_care_provision.
 match files
     /file = *
-    /Table = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
+    /Table = !Costs_dir + "Cost_CH_Lookup.sav"
     /By year nursing_care_provision.
 
 Rename Variables

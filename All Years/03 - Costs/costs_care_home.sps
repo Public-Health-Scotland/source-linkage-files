@@ -9,11 +9,11 @@
  * Make a copy of the existing file, incase something wierd has happened to the data!.
  * Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
  * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Extracts_Alt + "Costs/Cost_CH_Lookup.sav' '" +  !Extracts_Alt + "Costs/Cost_CH_Lookup_OLD.sav'"].
+Host Command = ["cp '" + !Costs_dir + "Cost_CH_Lookup.sav' '" +  !Costs_dir + "Cost_CH_Lookup_OLD.sav'"].
 
 GET DATA
   /TYPE=XLSX
-  /FILE= !Extracts_Alt + "Costs/CH_Costs.xlsx"
+  /FILE= !Costs_dir + "CH_Costs.xlsx"
   /CELLRANGE=FULL
   /READNAMES=ON
   /DATATYPEMIN PERCENTAGE=95.0
@@ -78,14 +78,14 @@ sort cases by Year NursingCareProvision.
 
  * Check here to make sure costs haven't changed radically.
 match files file = *
-    /table !Extracts_Alt + "Costs/Cost_CH_Lookup_OLD.sav"
+    /table !Costs_dir + "Cost_CH_Lookup_OLD.sav"
     /Rename cost_per_day = cost_old
     /By year NursingCareProvision.
 
 Compute Difference = cost_per_day - cost_old.
 crosstabs  Difference by year by NursingCareProvision.
 
-save outfile=!Extracts_Alt + "Costs/Cost_CH_Lookup.sav"
+save outfile=!Costs_dir + "Cost_CH_Lookup.sav"
     /Keep year NursingCareProvision nursing_care_provision cost_per_day.
 
-get file = !Extracts_Alt + "Costs/Cost_CH_Lookup.sav".
+get file = !Costs_dir + "Cost_CH_Lookup.sav".
