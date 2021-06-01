@@ -24,7 +24,7 @@
 
 * Read in care home lookup file (all care homes).
 GET DATA /TYPE=XLSX
-    /FILE= !Lookup + 'CareHome Lookup All.xlsx'
+    /FILE= !Lookup_dir_slf + 'Care_Home_Lookup_All.xlsx'
     /CELLRANGE=full
     /READNAMES=on
     /ASSUMEDSTRWIDTH=32767.
