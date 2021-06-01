@@ -492,7 +492,7 @@ sort cases by chi split_ep_marker ch_admission_date ch_discharge_date.
 * Adjust discharge dates according to death dates.
 * Match on the death dates from the deceased lookup (year specific).
 match files file = *
-    /table = !Deaths_dir + "All Deaths.zsav"
+    /table = !Deaths_dir + "all_deaths.zsav"
     /by chi.
 
 * Create a flag to identify the last record where an episode has been split.
