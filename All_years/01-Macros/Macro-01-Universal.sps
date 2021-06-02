@@ -125,6 +125,11 @@ Define !Deaths_dir()
    !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Deaths/"))
 !EndDefine. 
 
+*Directory for storing Social care files. 
+Define !SC_dir()
+   !Quote(!Concat(!Unquote(!Eval(!SLF_Extracts)), "Social_care/"))
+!EndDefine. 
+
 *******************************************************.
 * IT extracts. 
 *******************************************************.
