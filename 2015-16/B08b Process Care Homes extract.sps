@@ -14,7 +14,7 @@
 ********************************************************************************************************.
 
 GET DATA  /Type = TXT
-    /File = !Year_Extracts_dir + "Care-Home-full-extract-20" + !FY + ".csv"
+    /File = !SC_dir + "Care-Home-full-extract-20" + !FY + ".csv"
     /Encoding = 'UTF8'
     /Delimiters = ","
     /Qualifier = '"'
