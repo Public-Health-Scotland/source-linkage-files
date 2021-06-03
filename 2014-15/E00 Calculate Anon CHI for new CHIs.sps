@@ -8,7 +8,7 @@
  * Add updated individual files together.
  * Only need to do individual files as they have all the CHIs.
 
-CD "/conf/sourcedev/Source Linkage File Updates".
+CD "/conf/sourcedev/Source_Linkage_File_Updates".
 
 * Add the file paths for any year which has been updated e.g.
 * "YEAR/source-individual-file-20YEAR.zsav".
