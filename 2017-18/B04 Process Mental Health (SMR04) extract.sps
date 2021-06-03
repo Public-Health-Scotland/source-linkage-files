@@ -323,8 +323,3 @@ erase file = !Year_dir + 'mh_temp.zsav'.
 erase file = !Year_dir + "MH_monthly_costs_and_beddays_by_uri.sav".
 
 Host Command = ["gzip '" + !Year_Extracts_dir + "Mental-Health-episode-level-extract-20" + !FY + ".csv'"].
-
-
-
-
-

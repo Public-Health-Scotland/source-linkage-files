@@ -18,7 +18,7 @@
 * Save ReadCodes.csv to \\irf\05-lookups.
 
 GET DATA  /TYPE=TXT
-   /FILE= !ReadCodeLookup + "/ReadCodes.csv"
+   /FILE= !ReadCodeLookup + "ReadCodes.csv"
    /DELIMITERS=","
    /QUALIFIER='"'
    /ARRANGEMENT=DELIMITED

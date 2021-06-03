@@ -14,7 +14,7 @@
 ********************************************************************************************************.
 
 GET DATA  /Type = TXT
-    /File = !Year_Extracts_dir + "Care-Home-full-extract-20" + !FY + ".csv"
+    /File = !SC_dir + "Care-Home-full-extract-20" + !FY + ".csv"
     /Encoding = 'UTF8'
     /Delimiters = ","
     /Qualifier = '"'
@@ -405,4 +405,3 @@ save outfile = !Year_dir + "Care-Home-Temp-1.zsav"
     /Drop counter FinancialYear CareHomeAdmissionDate CareHomeDischargeDate
     /zcompressed.
 get file = !Year_dir + "Care-Home-Temp-1.zsav".
-

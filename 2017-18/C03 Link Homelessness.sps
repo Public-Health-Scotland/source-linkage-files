@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 *********************************************************************************************************************
  * Link Homelessness to source
@@ -109,8 +109,5 @@ If recid = 'HL1' and chi = '' HH_in_FY = 1 .
 
 *Save Temp.
 save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav" 
-/keep year to DD_Quality HH_in_FY to HH_6before_ep
-/zcompressed.  
-
-*******************************************************************************************************************************
-
+   /keep year to DD_Quality HH_in_FY to HH_6before_ep
+   /zcompressed.

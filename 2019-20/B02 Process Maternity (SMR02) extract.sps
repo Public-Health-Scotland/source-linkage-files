@@ -296,9 +296,3 @@ get file = !Year_dir + 'maternity_for_source-20' + !FY + '.zsav'.
 
 * zip up the raw data.
 Host Command = ["gzip '" + !Year_Extracts_dir + "Maternity-episode-level-extract-20" + !FY + ".csv'"].
-
-
-
-
-
-

@@ -15,12 +15,12 @@ Check the numbers in this file as some data completeness issues may mean the num
  * Make a copy of the existing file, incase something wierd has happened to the data!.
  * Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
  * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Extracts_Alt + "Costs/Cost_DN_Lookup.sav' '" +  !Extracts_Alt + "Costs/Cost_DN_Lookup_OLD.sav'"].
+Host Command = ["cp '" + !Costs_dir + "Cost_DN_Lookup.sav' '" +  !Costs_dir + "Cost_DN_Lookup_OLD.sav'"].
 
  * Read Costs Excel workbook.
 GET DATA
   /TYPE=XLSX
-  /FILE= !Extracts_Alt + "Costs/DN_Costs.xlsx"
+  /FILE= !Costs_dir + "DN_Costs.xlsx"
   /SHEET=name 'DN'
   /CELLRANGE=FULL
   /READNAMES=ON
@@ -38,12 +38,12 @@ Alter type year (A4).
 
 sort cases by year HB2019.
 
-save outfile = !Extracts_Alt + "Costs/raw_dn_costs.sav".
+save outfile = !Costs_dir + "raw_dn_costs.sav".
 
 *Get District Nursing file extracted from BOXI .
 
 GET DATA  /TYPE=TXT
-  /FILE= !Extracts_Alt + "Costs/DN-Contacts-Numbers-for-Costs.csv"
+  /FILE= !Costs_dir + "DN-Contacts-Numbers-for-Costs.csv"
   /DELIMITERS=" ,"
   /QUALIFIER='"'
   /FIRSTCASE=2
@@ -62,10 +62,10 @@ sort cases by year TreatmentNHSBoardCode.
 
 match files file= *
     /rename TreatmentNHSBoardCode = HB2019
-    /table =  !Extracts_Alt + "Costs/raw_dn_costs.sav"
+    /table =  !Costs_dir + "raw_dn_costs.sav"
     /by year HB2019.
 
-save outfile =  !Extracts_Alt + "Costs/raw_dn_costs_with_contacts.sav".
+save outfile =  !Costs_dir + "raw_dn_costs_with_contacts.sav".
 
 ************************************************************************
 *Calculate population cost for NHS Highland with HSCP population ratio. Of the two HSCPs, Argyll and Bute provides the District Nursing data which is 27% of the population.
@@ -100,7 +100,7 @@ Compute PopPct = PopProportion * 100.
 *Argyll and Bute is the only HSCP in NHS Highland that submits data.
 select if HSCPName EQ "Argyll and Bute".
 
-match files File = !Extracts_Alt + "Costs/raw_dn_costs_with_contacts.sav"
+match files File = !Costs_dir + "raw_dn_costs_with_contacts.sav"
     /Table = * 
     /by year HB2019.
 
@@ -158,19 +158,19 @@ add files file = *
 
  * Check here to make sure costs haven't changed radically.
 match files file = *
-    /table !Extracts_Alt + "Costs/Cost_DN_Lookup_OLD.sav"
+    /table !Costs_dir + "Cost_DN_Lookup_OLD.sav"
     /Rename cost_total_net = cost_old
     /By hbtreatcode Year.
 
 Compute Difference = cost_total_net - cost_old.
 crosstabs  Difference by year by hbtreatcode.
 
-save outfile = !Extracts_Alt + "Costs/Cost_DN_Lookup.sav"
+save outfile = !Costs_dir + "Cost_DN_Lookup.sav"
     /Drop cost_old Difference.
 
-get file =  !Extracts_Alt + "Costs/Cost_DN_Lookup.sav".
+get file =  !Costs_dir + "Cost_DN_Lookup.sav".
 
 
 **Tidyup.
-Erase file = !Extracts_Alt + "Costs/raw_dn_costs.sav".
-Erase file = !Extracts_Alt + "Costs/raw_dn_costs_with_contacts.sav".
+Erase file = !Costs_dir + "raw_dn_costs.sav".
+Erase file = !Costs_dir + "raw_dn_costs_with_contacts.sav".

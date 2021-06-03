@@ -12,12 +12,12 @@
  * Make a copy of the existing file, in case something weird has happened to the data!.
  * Get an error because of the -p flag: This keeps the amend date but fails on permissions - command works fine though.
  * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav' '" +  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup_OLD.sav'"].
+Host Command = ["cp '" + !Costs_dir + "Cost_GPOoH_Lookup.sav' '" +  !Costs_dir + "Cost_GPOoH_Lookup_OLD.sav'"].
 
 * Now read in from the spreadsheet.
 GET DATA
     /TYPE=XLSX
-    /FILE= !Extracts_Alt + "Costs/OOH_Costs.xlsx"
+    /FILE= !Costs_dir + "OOH_Costs.xlsx"
     /SHEET=name 'Sheet1'
     /CELLRANGE=FULL
     /READNAMES=ON
@@ -51,7 +51,7 @@ sort cases by HB2019 year.
 
  * Check here to make sure costs haven't changed radically.
 match files file = *
-    /table  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup_OLD.sav"
+    /table  !Costs_dir + "Cost_GPOoH_Lookup_OLD.sav"
     /Rename Cost_per_consultation = cost_old
     /Rename TreatmentNHSBoardCode = HB2019
     /By HB2019 Year.
@@ -60,10 +60,9 @@ Compute Difference = Cost_per_consultation - cost_old.
 crosstabs  Difference by year by HB2019.
 
 * Save.
-save outfile =  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav"
+save outfile =  !Costs_dir + "Cost_GPOoH_Lookup.sav"
     /Rename
     HB2019 = TreatmentNHSBoardCode
     /Keep Year TreatmentNHSBoardCode Cost_per_consultation.
 
-get file =  !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav".
-
+get file =  !Costs_dir + "Cost_GPOoH_Lookup.sav".

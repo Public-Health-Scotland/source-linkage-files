@@ -321,7 +321,9 @@ Dataset close SLFexisting.
 
 * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
 Compute Issue = (abs(PctChange) > 5).
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
@@ -331,4 +333,3 @@ Crosstabs Measure by Issue.
 *Save test file.
 Save Outfile = !Year_dir + 'Maternity_tests_20' + !FY + '.zsav'
    /zcompressed .
-

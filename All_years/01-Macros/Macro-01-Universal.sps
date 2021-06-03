@@ -64,7 +64,7 @@ Define !DataZone_pop_file()
 *******************************************************.
 *Directory for all years SLF development. Links to !FY() for updating each financial year.
 Define !Year_dir()
-   !Quote(!Concat("/conf/sourcedev/Source Linkage File Updates/", !Unquote(!Eval(!FY)), "/"))
+   !Quote(!Concat("/conf/sourcedev/Source_Linkage_File_Updates/", !Unquote(!Eval(!FY)), "/"))
 !EndDefine.
 
 * Extract files - "home".
@@ -555,6 +555,3 @@ Variable Width !Beddays (5).
 Variable Level !Beddays (Scale).
 
 !EndDefine.
-
-
-

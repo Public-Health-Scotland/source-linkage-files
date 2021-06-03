@@ -13,7 +13,7 @@
 
 match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
     /table = !Cohort_dir + "Demographic_Cohorts_" + !FY + ".zsav"
-    /table = !Cohort_dir + "Service_Use_Cohorts_" + !FY+ ".zsav"
+    /table = !Cohort_dir + "Service_Use_Cohorts_" + !FY + ".zsav"
     /table = !SPARRA_dir + "SPARRA-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
@@ -36,4 +36,3 @@ get file= !Year_dir + "temp-source-episode-file-7-" + !FY + ".zsav".
 
 
 **********************************************************************************************************.
-

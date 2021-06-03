@@ -20,6 +20,7 @@ Host Command = ["zip -mjv '" + !Year_dir + "BXX_tests_20" + !FY + ".zip' " +
     "'" + !Year_dir + "Home_Care_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "SDS_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "Homelessness_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !Year_dir + "LTC_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "PIS_tests_20" + !FY + ".zsav" + "'"].
 
 * Bring all the data sets together.
@@ -399,7 +400,3 @@ Host Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' " +
     "'" + !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "SDS-for-source-20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
-
-
-
-
