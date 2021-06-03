@@ -16,6 +16,7 @@ Host Command = ["zip -mjv '" + !Year_dir + "BXX_tests_20" + !FY + ".zip' " +
     "'" + !Year_dir + "NRS_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "Homelessness_tests_20" + !FY + ".zsav" + "' " +
+    "'" + !Year_dir + "LTC_tests_20" + !FY + ".zsav" + "' " +
     "'" + !Year_dir + "PIS_tests_20" + !FY + ".zsav" + "'"].
 
 * Bring all the data sets together.
