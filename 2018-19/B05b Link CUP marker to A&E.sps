@@ -67,6 +67,7 @@ save outfile = !Year_dir + 'a&e_for_source-20' + !FY + '.zsav'
     diag3
     ae_arrivalmode
     refsource
+	sigfac
     ae_attendcat
     ae_disdest
     ae_patflow

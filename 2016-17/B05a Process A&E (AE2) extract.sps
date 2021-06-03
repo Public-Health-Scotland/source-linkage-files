@@ -45,7 +45,8 @@ GET DATA  /TYPE=TXT
     SelfHarmRelatedAdmission A1
     TotalNetCosts F8.2
     AgeatMidpointofFinancialYear F3.0
-    CaseReferenceNumber A100.
+    CaseReferenceNumber A100
+    SignificantFacilityCode A2.
 CACHE.
 Execute.
 
@@ -74,6 +75,7 @@ Rename Variables
     ReferralSourceCode = refsource
     SelfHarmRelatedAdmission = selfharm_adm
     SubstanceMisuseRelatedAdmission = submis_adm
+    SignificantFacilityCode = sigfac
     TotalNetCosts = cost_total_net
     TreatmentLocationCode = location.
 
@@ -552,6 +554,7 @@ save outfile = !Year_dir + 'a&e_data-20' + !FY + '.zsav'
     diag3
     ae_arrivalmode
     refsource
+    sigfac
     ae_attendcat
     ae_disdest
     ae_patflow
