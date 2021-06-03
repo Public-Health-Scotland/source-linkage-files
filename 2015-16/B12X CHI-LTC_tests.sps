@@ -32,8 +32,10 @@ Else.
     End if.
 End if.
 
-If duplicate_chi = 1 or duplicate_chi_postcode = 1 Error = 1.
+Compute Error = duplicate_chi = 1 or duplicate_chi_postcode = 1.
 
-crosstabs Error by chi.
+Aggregate outfile = *
+/Break Error
+/Count = n.
 
 save outfile = !Year_dir + "LTC_tests_20" + !FY + ".sav".
