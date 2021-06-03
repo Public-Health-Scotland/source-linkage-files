@@ -6,7 +6,7 @@
 
 * Read in Consultation data.
 GET DATA  /TYPE=TXT
-   /FILE= !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".csv"
+   /FILE= !Year_Extracts_dir + "GP-OoH-consultations-extract-20" + !FY + ".csv"
    /ENCODING="UTF8"
    /DELIMITERS=","
    /Qualifier = '"'
@@ -97,31 +97,36 @@ aggregate outfile = *
  * Restore the blank values.
 Missing Values PatientNHSBoardCode PatientDataZone2011 HSCPofResidenceCode Postcode PracticeCode ().
 
-save outfile = !File + "GPOOH-Temp-1.zsav"
+save outfile = !Year_dir + "GPOOH-Temp-1.zsav"
    /zcompressed.
 ************************************************************************************************************.
  * Match data together.
 match files
-   /File = !File + "GPOOH-Temp-1.zsav"
-   /Table = !File + "GP-Diagnosis-Data-" + !FY + ".zsav"
+   /File = !Year_dir + "GPOOH-Temp-1.zsav"
+   /Table = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav"
    /In DiagData
    /By GUID.
 
 match files
    /File = *
-   /Table = !File + "GP-Outcomes-Data-" + !FY + ".zsav"
+   /Table = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav"
    /In OutcomeData
    /By GUID.
 
-save outfile = !File + "GPOOH-Temp-2.zsav"
+save outfile = !Year_dir + "GPOOH-Temp-2.zsav"
    /zcompressed.
 
 ************************************************************************************************************.
 * Costs.
-get file = !File + "GPOOH-Temp-2.zsav".
+get file = !Year_dir + "GPOOH-Temp-2.zsav".
 
 * Recode Fife and Tayside so they match the cost lookup.
 Recode TreatmentNHSBoardCode ("S08000018" = "S08000029") ("S08000027" = "S08000030").
+
+*Recode Greater Glasgow & Clyde and Lanarkshire so they match the costs lookup. 
+*(2018 > 2019 HB codes). 
+Recode TreatmentNHSBoardCode ("S08000021" = "S08000031") ("S08000023" = "S08000032"). 
+
 
 Sort cases by TreatmentNHSBoardCode.
 
@@ -131,7 +136,7 @@ Compute  year = !FY.
 
 match files
    /file = *
-   /Table = !Extracts_Alt + "Costs/Cost_GPOoH_Lookup.sav"
+   /Table = !Costs_dir + "Cost_GPOoH_Lookup.sav"
    /By TreatmentNHSBoardCode Year.
 
 Rename Variables Cost_per_consultation =  cost_total_net.
@@ -213,7 +218,7 @@ Recode TreatmentLocationCode ("UNKNOWN" = "").
 Rename Variables (TreatmentNHSBoardCode TreatmentLocationCode = hbtreatcode location).
 
  * Keep the location descriptions as a lookup.
-aggregate outfile = !File + "GP-OOH-Location-Description-Lookup-20" + !FY + ".sav"
+aggregate outfile = !Year_dir + "GP-OOH-Location-Description-Lookup-20" + !FY + ".sav"
    /Break location
    /LocationDescription = First(TreatmentLocationDescription).
 
@@ -297,7 +302,7 @@ Alter Type
 sort cases by chi record_keydate1 keyTime1.
 
 *Reorder and remove unneeded variables.
-save outfile = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /Keep year
     recid
     SMRType
@@ -337,16 +342,15 @@ save outfile = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     ooh_CC
     /zcompressed.
 
-get file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav".
+get file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav".
 
  * HouseKeeping.
  * Delete temp files.
-Erase file = !File + "GPOOH-Temp-1.zsav".
-Erase file = !File + "GPOOH-Temp-2.zsav".
+Erase file = !Year_dir + "GPOOH-Temp-1.zsav".
+Erase file = !Year_dir + "GPOOH-Temp-2.zsav".
 
-Erase file = !File + "GP-Diagnosis-Data-" + !FY + ".zsav".
-Erase file = !File + "GP-Outcomes-Data-" + !FY + ".zsav".
+Erase file = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav".
+Erase file = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav".
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "GP-OoH-consultations-extract-20" + !FY + ".csv'"].
-
+Host Command = ["gzip '" + !Year_Extracts_dir + "GP-OoH-consultations-extract-20" + !FY + ".csv'"].

@@ -5,7 +5,7 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + "A&E-UCD-CUP-extract-20" + !FY + ".csv"
+    /FILE= !Year_Extracts_dir + "A&E-UCD-CUP-extract-20" + !FY + ".csv"
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -38,14 +38,14 @@ aggregate outfile = *
     /CUP_marker CUP_pathway = First(CUP_marker CUP_pathway).
 
 match files
-    /file = !file + "a&e_data-20" + !FY + ".zsav"
+    /file = !Year_dir + "a&e_data-20" + !FY + ".zsav"
     /table = *
     /by record_keydate1 keyTime1 CaseReferenceNumber.
 
 sort cases by chi record_keydate1 keyTime1 record_keydate2 keyTime2.
 
  * Don't keep the CaseReferenceNumber as it's not a very good unique ID.
-save outfile = !file + 'a&e_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'a&e_for_source-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -96,11 +96,10 @@ save outfile = !file + 'a&e_for_source-20' + !FY + '.zsav'
     CUP_pathway
     /zcompressed.
 
-get file = !file + 'a&e_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'a&e_for_source-20' + !FY + '.zsav'.
 
 * Housekeeping.
-Erase file = !file + 'a&e_data-20' + !FY + '.zsav'.
+Erase file = !Year_dir + 'a&e_data-20' + !FY + '.zsav'.
 
 * Zip up raw data.
-Host Command = ["gzip '" + !Extracts + "A&E-UCD-CUP-extract-20" + !FY + ".csv'"].
-
+Host Command = ["gzip '" + !Year_Extracts_dir + "A&E-UCD-CUP-extract-20" + !FY + ".csv'"].

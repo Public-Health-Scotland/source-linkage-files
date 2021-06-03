@@ -2,7 +2,7 @@
 
 
 
-get file = !File + "SDS-for-source-20" + !FY + ".zsav".
+get file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav".
 
 
 * Flag to count CHIs.
@@ -337,5 +337,5 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'SDS_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'SDS_tests_20' + !FY + '.zsav'
    /zcompressed .

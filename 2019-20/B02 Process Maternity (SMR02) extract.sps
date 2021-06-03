@@ -5,7 +5,7 @@
 
 * Read in CSV output file.
 GET DATA  /TYPE = TXT
-    /FILE = !Extracts + 'Maternity-episode-level-extract-20' + !FY + '.csv'
+    /FILE = !Year_Extracts_dir + 'Maternity-episode-level-extract-20' + !FY + '.csv'
     /ENCODING = 'UTF8'
     /DELIMITERS = ","
     /QUALIFIER = '"'
@@ -210,7 +210,7 @@ Value Labels discondition
     '8' "Other (includes missed abortion)".
 
 
-save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'maternity_for_source-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -292,13 +292,7 @@ save outfile = !file + 'maternity_for_source-20' + !FY + '.zsav'
     uri
     /zcompressed.
 
-get file = !file + 'maternity_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'maternity_for_source-20' + !FY + '.zsav'.
 
 * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Maternity-episode-level-extract-20" + !FY + ".csv'"].
-
-
-
-
-
-
+Host Command = ["gzip '" + !Year_Extracts_dir + "Maternity-episode-level-extract-20" + !FY + ".csv'"].
