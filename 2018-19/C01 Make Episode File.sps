@@ -407,15 +407,15 @@ get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav".
 Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' " + 
-    "'" + !Year_dir + "acute_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "maternity_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "a&e_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "deaths_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "DN_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "CMH_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " + 
+    !Year_dir + "acute_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "maternity_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "mental_health_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "outpatients_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "a\&\e_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "DN_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
