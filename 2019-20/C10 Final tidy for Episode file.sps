@@ -720,6 +720,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     keytime2
     smrtype
     chi
+    person_id
     gender
     dob
     age
@@ -825,6 +826,9 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     sc_type_of_housing
     sc_meals
     sc_day_care
+    sc_latest_submission
+	sc_chi_cis
+    sc_id_cis
     ch_name
     ch_adm_reason
     ch_provider
