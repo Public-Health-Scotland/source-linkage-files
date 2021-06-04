@@ -827,7 +827,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     sc_meals
     sc_day_care
     sc_latest_submission
-	sc_chi_cis
+    sc_chi_cis
     sc_id_cis
     ch_name
     ch_adm_reason
