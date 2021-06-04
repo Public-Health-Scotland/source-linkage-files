@@ -4,20 +4,20 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
  * Zip up all BXX test files.
-Host Command = ["zip -mjv '" + !Year_dir + "BXX_tests_20" + !FY + ".zip' " + 
-    "'" + !Year_dir + "A&E_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "CMH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "DD_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "DN_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Maternity_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "NRS_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Homelessness_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "LTC_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "PIS_tests_20" + !FY + ".zsav" + "'"].
+Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " + 
+    !Year_dir + "A\&\E_tests_20" + !FY + ".zsav " +
+    !Year_dir + "acute_tests_20" + !FY + ".zsav " +
+    !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
+    !Year_dir + "DD_tests_20" + !FY + ".zsav " +
+    !Year_dir + "DN_tests_20" + !FY + ".zsav " +
+    !Year_dir + "GPOoH_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Maternity_tests_20" + !FY + ".zsav " +
+    !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav " +
+    !Year_dir + "NRS_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
+    !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
+    !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 * Bring all the data sets together.
 add files
