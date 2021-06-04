@@ -38,4 +38,5 @@ Aggregate outfile = *
 /Break Error
 /Count = n.
 
-save outfile = !Year_dir + "LTC_tests_20" + !FY + ".sav".
+save outfile = !Year_dir + "LTC_tests_20" + !FY + ".zsav"
+/zcompressed.
