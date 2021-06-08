@@ -5,7 +5,7 @@
 *********************************************************************************************************************
  * Create Homelessness flags.
  * Unzip the homelessness file.
-Host command = ["unzip '" +!Year_dir + "Activity_20" + !FY + ".zip' 'homelessness_for_source-20" + !FY + ".zsav' -d '" + !Year_dir + "'"].
+Host command = ["unzip " +!Year_dir + "Activity_20" + !FY + ".zip homelessness_for_source-20" + !FY + ".zsav -d " + !Year_dir].
 
 get file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
     /Keep CHI record_keydate1 record_keydate2.

@@ -79,4 +79,4 @@ Save outfile = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav"
 get file = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav".
 
  * Zip up raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "GP-OoH-outcomes-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "GP-OoH-outcomes-extract-20" + !FY + ".csv"].

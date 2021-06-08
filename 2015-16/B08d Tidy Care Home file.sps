@@ -162,4 +162,4 @@ erase file = !Year_dir + "Care-Home-Temp-1.zsav".
 erase file = !Year_dir + "Care-Home-Temp-2.zsav".
 
 * zip up the raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "Care-Home-full-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "Care-Home-full-extract-20" + !FY + ".csv"].

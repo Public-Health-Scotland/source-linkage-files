@@ -322,4 +322,4 @@ get file = !Year_dir + 'mental_health_for_source-20' + !FY + '.zsav'.
 erase file = !Year_dir + 'mh_temp.zsav'.
 erase file = !Year_dir + "MH_monthly_costs_and_beddays_by_uri.sav".
 
-Host Command = ["gzip '" + !Year_Extracts_dir + "Mental-Health-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "Mental-Health-episode-level-extract-20" + !FY + ".csv"].
