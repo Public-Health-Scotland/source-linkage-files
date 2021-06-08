@@ -5,7 +5,7 @@
 ********************************************************************************************************.
 
  * Unzip the file.
-Host Command = ["gunzip '" + !Deaths_extract_file + "'"].
+Host Command = ["gunzip " + !Deaths_extract_file].
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
@@ -41,4 +41,4 @@ save outfile = !Deaths_dir + "all_deaths" + !LatestUpdate + ".zsav".
 get file = !Deaths_dir +  "all_deaths" + !LatestUpdate + ".zsav".
 
 * Zip back up.
-Host Command = ["gzip '" + !Deaths_extract_file + "'"].
+Host Command = ["gzip " + !Deaths_extract_file + "'"].
