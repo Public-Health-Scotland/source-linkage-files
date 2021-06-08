@@ -5,7 +5,7 @@
 ********************************************************************************************************.
  * Zip up all BXX test files.
 Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " + 
-    !Year_dir + "A\&\E_tests_20" + !FY + ".zsav " +
+    !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
     !Year_dir + "acute_tests_20" + !FY + ".zsav " +
     !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
     !Year_dir + "DD_tests_20" + !FY + ".zsav " +
@@ -389,7 +389,7 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "maternity_for_source-20" + !FY + ".zsav " +
     !Year_dir + "mental_health_for_source-20" + !FY + ".zsav " +
     !Year_dir + "outpatients_for_source-20" + !FY + ".zsav " +
-    !Year_dir + "a\&\e_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
     !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
     !Year_dir + "DN_for_source-20" + !FY + ".zsav " +

@@ -4,7 +4,7 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " + 
-    !Year_dir + "A\&\E_tests_20" + !FY + ".zsav " +
+    !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
     !Year_dir + "acute_tests_20" + !FY + ".zsav " +
     !Year_dir + "CH_tests_20" + !FY + ".zsav " +
     !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
@@ -419,7 +419,7 @@ Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
 Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " + 
-    !Year_dir + "a\&\e_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
     !Year_dir + "acute_for_source-20" + !FY + ".zsav " +
     !Year_dir + "Care_Home_For_Source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
