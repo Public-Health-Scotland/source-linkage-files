@@ -102,4 +102,4 @@ get file = !Year_dir + 'a&e_for_source-20' + !FY + '.zsav'.
 Erase file = !Year_dir + 'a&e_data-20' + !FY + '.zsav'.
 
 * Zip up raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "A&E-UCD-CUP-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "A&E-UCD-CUP-extract-20" + !FY + ".csv"].

@@ -118,4 +118,4 @@ save outfile = !Year_dir + 'deaths_for_source-20' + !FY + '.zsav'
 get file = !Year_dir + 'deaths_for_source-20' + !FY + '.zsav'.
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "NRS-death-registrations-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "NRS-death-registrations-extract-20" + !FY + ".csv"].

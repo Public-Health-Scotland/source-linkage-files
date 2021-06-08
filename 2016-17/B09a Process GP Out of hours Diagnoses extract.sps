@@ -114,4 +114,4 @@ Save outfile = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav"
 get file = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav".
 
  * Zip up raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "GP-OoH-diagnosis-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "GP-OoH-diagnosis-extract-20" + !FY + ".csv"].

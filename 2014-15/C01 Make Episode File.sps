@@ -3,15 +3,15 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-Host Command = ["zip -mjv '" + !Year_dir + "BXX_tests_20" + !FY + ".zip' " + 
-    "'" + !Year_dir + "A&E_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Maternity_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "NRS_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "PIS_tests_20" + !FY + ".zsav" + "'"].
+Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " + 
+    !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
+    !Year_dir + "acute_tests_20" + !FY + ".zsav " +
+    !Year_dir + "GPOoH_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Maternity_tests_20" + !FY + ".zsav " +
+    !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav " +
+    !Year_dir + "NRS_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
+    !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 
 * Bring all the data sets together.
@@ -427,12 +427,12 @@ get file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav".
 Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' " + 
-    "'" + !Year_dir + "a&e_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "acute_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "deaths_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "maternity_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " + 
+    !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "acute_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "maternity_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "mental_health_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "outpatients_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
