@@ -1,8 +1,8 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !SC_dir + "all_ch_episodes" + !LatestUpdate + ".zsav".
 
 * Now select episodes for given FY, need to do this now as discharge dates may have been moved out of the FY above.
-select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 < !startFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
+select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 <= !endFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
 
 * Match on Client data.
 match files file = *
