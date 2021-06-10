@@ -532,7 +532,7 @@ sort cases by chi sending_location social_care_id ch_admission_date sc_latest_su
 Compute sc_id_cis = 1.
 Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
     Compute sc_id_cis = lag(sc_id_cis).
-    If ch_admission_date > lag(ch_discharge_date) sc_id_cis = lag(sc_id_cis) + 1.
+    If ch_admission_date > lag(ch_discharge_date) + time.days(1) sc_id_cis = lag(sc_id_cis) + 1.
 End if.
 
 * CHI - This won't apply to clients without a CHI but will link up stays across sending locations.
@@ -540,7 +540,7 @@ sort cases by chi ch_admission_date sc_latest_submission.
 Compute sc_chi_cis = 1.
 Do if chi = lag(chi) and chi NE "".
     Compute sc_chi_cis = lag(sc_chi_cis).
-    If ch_admission_date > lag(ch_discharge_date) sc_chi_cis = lag(sc_chi_cis) + 1.
+    If ch_admission_date > lag(ch_discharge_date) + time.days(1) sc_chi_cis = lag(sc_chi_cis) + 1.
 End if.
 
 Rename Variables
