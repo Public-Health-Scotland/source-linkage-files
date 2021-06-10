@@ -28,7 +28,7 @@ Alter type
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
     PIS_dispensed_items
-    CH_episodes CH_beddays
+    CH_cis_episodes CH_beddays
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
     DN_episodes DN_contacts
     CMH_contacts
@@ -127,9 +127,9 @@ Variable Labels
     DN_contacts "Number of District Nursing contacts"
     DN_cost "Cost of District Nursing"
     CMH_contacts "Number of Community Mental Health contacts"
-    ch_episodes "Number of distinct Care Home episodes"
-    ch_cost "Cost of Care Home stays"
-    ch_beddays "Number of Care Home beddays"
+    ch_cis_episodes "Number of continuous Care Home episodes"
+    ch_cost "Cost of continuous Care Home stays "
+    ch_beddays "Number of continuous Care Home beddays"
     HC_episodes "Total number of home care episodes, includes personal, non-personal and unknown type"
     HC_personal_episodes "Total number of personal home care episodes"
     HC_non_personal_episodes "Total number of non-personal home care episodes"
@@ -164,7 +164,7 @@ aggregate
     /DD = Max(DD_NonCode9_episodes)
     /DN = Max(DN_contacts)
     /CMH = Max(CMH_contacts)
-    /CH = Max(ch_episodes)
+    /CH = Max(CH_cis_episodes)
     /HC = Max(hc_episodes)
     /ATA ATT = Max(AT_alarms AT_telecare)
     /SDS1 SDS2 SDS3 = Max(SDS_option_1 SDS_option_2 SDS_option_3).
@@ -193,7 +193,7 @@ Do if CMH = 0.
 End if.
 
 Do if CH = 0.
-    Compute ch_episodes = $sysmis.
+    Compute CH_cis_episodes = $sysmis.
     Compute ch_beddays = $sysmis.
     Compute ch_cost = $sysmis.
 End if.
@@ -302,7 +302,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     dn_contacts
     dn_cost
     cmh_contacts
-    ch_episodes
+    ch_cis_episodes
     ch_beddays
     ch_cost
     hc_episodes
