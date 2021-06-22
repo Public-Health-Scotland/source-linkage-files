@@ -74,9 +74,9 @@ End if.
 
 * Create care home continuous episode variables.
 * Use these later to aggregate over the episodes.
-sort cases by CHI sc_chi_cis.
+sort cases by CHI ch_chi_cis.
 add files file = *
-    /by  CHI sc_chi_cis
+    /by  CHI ch_chi_cis
     /first = first_ch_ep
     /last = last_ch_ep.
 
@@ -433,7 +433,7 @@ End if.
 *.
 aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
-    /break CHI sc_chi_cis
+    /break CHI ch_chi_cis
     /ch_no_cost = max(ch_no_cost)
     /ch_ep_start ch_ep_end = first(ch_ep_start ch_ep_end)
     /ch_cost_per_day = mean(ch_cost_per_day).
