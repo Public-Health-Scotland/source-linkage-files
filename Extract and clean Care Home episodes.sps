@@ -528,20 +528,134 @@ Select if not(death_before_adm).
 * Create two 'continuous markers' one based on CHI, one based on sc_id + send_loc.
 
 * sc_id + send_loc - this will apply to all clients but won't link up stays between sending locations.
+* New logic for the CIS markers -
+* - Group episodes where there is no more than a day between admission and discharge.
+* - Keep track of the 'latest discharge' so that if there is a earlier long episode this is captured and treated as continuous.
+* - When an episode has a missing end date, use the start of the next quarter (record_date + 1) as the end date, to avoid endless overlaps.
+Numeric max_dis_date_sc_id max_dis_date_chi (Date11).
+
 sort cases by chi sending_location social_care_id ch_admission_date sc_latest_submission.
-Compute ch_sc_id_cis = 1.
+* Old method - to be removed.
+Compute ch_sc_id_cis_old = 1.
 Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+    Compute ch_sc_id_cis_old = lag(ch_sc_id_cis_old).
+    If ch_admission_date > lag(ch_discharge_date) + time.days(1) ch_sc_id_cis_old = lag(ch_sc_id_cis_old) + 1.
+End if.
+
+* Set up the cis marker.
+Compute ch_sc_id_cis = 1.
+
+* Set up the max_dis_date.
+Do if sysmis(ch_discharge_date).
+    Compute max_dis_date_sc_id = record_date + time.days(1).
+Else.
+    Compute max_dis_date_sc_id = ch_discharge_date.
+End if.
+
+Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id.
+    * Copy the cis marker from the previous episode before incrementing.
     Compute ch_sc_id_cis = lag(ch_sc_id_cis).
-    If ch_admission_date > lag(ch_discharge_date) + time.days(1) ch_sc_id_cis = lag(ch_sc_id_cis) + 1.
+    * Update the max_dis_date.
+    Do if sysmis(ch_discharge_date).
+        Compute max_dis_date_sc_id = max(lag(max_dis_date_sc_id), record_date + time.days(1)).
+    Else.
+        Compute max_dis_date_sc_id = max(lag(max_dis_date_sc_id), ch_discharge_date).
+    End if.
+    * If the admission is more than one day after the latest dis date then increment the cis.
+    Do if ch_admission_date > lag(max_dis_date_sc_id) + time.days(1).
+        Compute ch_sc_id_cis = lag(ch_sc_id_cis) + 1.
+        * Reset the max_dis_date based on the current episode (start of the new cis)
+        Compute max_dis_date_sc_id = ch_discharge_date.
+        If sysmis(ch_discharge_date) max_dis_date_sc_id = record_date + time.days(1).
+    End if.
 End if.
 
 * CHI - This won't apply to clients without a CHI but will link up stays across sending locations.
 sort cases by chi ch_admission_date sc_latest_submission.
-Compute ch_chi_cis = 1.
+* Old method - to be removed.
+If chi NE "" ch_chi_cis_old = 1.
+Do if chi = lag(chi) and chi NE "".
+    Compute ch_chi_cis_old = lag(ch_chi_cis_old).
+    If ch_admission_date > lag(ch_discharge_date) + time.days(1) ch_chi_cis_old = lag(ch_chi_cis_old) + 1.
+End if.
+
+* Logic is the same as above.
+If chi NE "" ch_chi_cis = 1.
+
+Do if sysmis(ch_discharge_date).
+    Compute max_dis_date_chi = record_date + time.days(1).
+Else.
+    Compute max_dis_date_chi = ch_discharge_date.
+End if.
+
 Do if chi = lag(chi) and chi NE "".
     Compute ch_chi_cis = lag(ch_chi_cis).
-    If ch_admission_date > lag(ch_discharge_date) + time.days(1) ch_chi_cis = lag(ch_chi_cis) + 1.
+    Do if sysmis(ch_discharge_date).
+        Compute max_dis_date_chi = max(lag(max_dis_date_chi), record_date + time.days(1)).
+    Else.
+        Compute max_dis_date_chi = max(lag(max_dis_date_chi), ch_discharge_date).
+    End if.
+    
+    Do if ch_admission_date > lag(max_dis_date_chi) + time.days(1).
+        Compute ch_chi_cis = lag(ch_chi_cis) + 1.
+        Compute max_dis_date_chi = ch_discharge_date. 
+    End if.
 End if.
+
+compute sc_id_cis_changed = ch_sc_id_cis NE ch_sc_id_cis_old.
+compute chi_cis_changed = ch_chi_cis NE ch_chi_cis_old.
+frequencies sc_id_cis_changed chi_cis_changed.
+
+
+******************************************************************************************************************************************************************************************************.
+* Code for testing bedday calculations - to be removed.
+Compute include = Range(ch_admission_date, !startFY, !endFY) or (ch_admission_date <= !endFY and (ch_discharge_date >= !startFY or sysmis(ch_discharge_date))) and
+    Not(Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.0) and sysmis(ch_discharge_date) AND ch_admission_date < !startFY) .
+
+sort cases by include CHI ch_chi_cis.
+add files file = *
+    /by include CHI ch_chi_cis
+    /first = first_ch_ep
+    /last = last_ch_ep.
+
+* Count continuous episodes.
+Do if include.
+    Compute ch_cis_episodes = first_ch_ep.
+
+    if first_ch_ep ch_ep_start = ch_admission_date.
+    if last_ch_ep ch_ep_end = ch_discharge_date.
+End if.
+
+aggregate outfile = * mode = addvariables overwrite = yes
+    /presorted
+    /break include CHI ch_chi_cis
+    /ch_ep_start ch_ep_end = first(ch_ep_start ch_ep_end).
+
+Do if include.
+    Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    If sysmis(ch_ep_end) ch_beddays = datediff(Min(record_date + time.days(1), !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+
+    * Now all data will appear on all records we only want the first to avoid double counts.
+    Do if Not(first_ch_ep).
+        Compute ch_beddays = 0.
+    End if.
+End if.
+
+sort cases by chi ch_admission_date sc_latest_submission.
+
+aggregate
+    /presorted
+    /break CHI
+    /all_beddays = sum(ch_beddays).
+
+Compute error = include and all_beddays > 366.
+Frequencies error.
+
+temporary.
+select if include.
+descriptives all_beddays.
+******************************************************************************************************************************************************************************************************.
+
 
 Rename Variables
     ch_admission_date = record_keydate1
