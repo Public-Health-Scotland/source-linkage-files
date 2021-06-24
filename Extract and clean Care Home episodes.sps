@@ -615,8 +615,7 @@ Compute include = Range(ch_admission_date, !startFY, !endFY) or (ch_admission_da
 sort cases by include CHI ch_chi_cis.
 add files file = *
     /by include CHI ch_chi_cis
-    /first = first_ch_ep
-    /last = last_ch_ep.
+    /first = first_ch_ep.
 
 * Count continuous episodes.
 Do if include.
@@ -634,7 +633,6 @@ aggregate outfile = * mode = addvariables overwrite = yes
 
 Do if include.
     Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
-    If sysmis(ch_ep_end) ch_beddays = datediff(Min(record_date + time.days(1), !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
 
     * Now all data will appear on all records we only want the first to avoid double counts.
     Do if Not(first_ch_ep).
@@ -642,6 +640,7 @@ Do if include.
     End if.
 End if.
 
+If chi = "" ch_beddays = $sysmis.
 sort cases by chi ch_admission_date sc_latest_submission.
 
 aggregate
