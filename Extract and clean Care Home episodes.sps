@@ -623,7 +623,7 @@ Do if include.
     Compute ch_cis_episodes = first_ch_ep.
     Compute ch_ep_start = ch_admission_date.
     Compute ch_ep_end = ch_discharge_date.
-	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 1, 4), F4.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
+    If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
 End if.
 
 aggregate outfile = * mode = addvariables overwrite = yes
