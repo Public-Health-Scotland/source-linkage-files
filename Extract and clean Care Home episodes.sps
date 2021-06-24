@@ -621,15 +621,16 @@ add files file = *
 * Count continuous episodes.
 Do if include.
     Compute ch_cis_episodes = first_ch_ep.
-
-    if first_ch_ep ch_ep_start = ch_admission_date.
-    if last_ch_ep ch_ep_end = ch_discharge_date.
+    Compute ch_ep_start = ch_admission_date.
+    Compute ch_ep_end = ch_discharge_date.
+	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 1, 4), F4.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
 End if.
 
 aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break include CHI ch_chi_cis
-    /ch_ep_start ch_ep_end = first(ch_ep_start ch_ep_end).
+    /ch_ep_start = min(ch_ep_start)
+    /ch_ep_end = max(ch_ep_end).
 
 Do if include.
     Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
