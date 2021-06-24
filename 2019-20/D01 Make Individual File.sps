@@ -439,7 +439,14 @@ aggregate outfile = * mode = addvariables overwrite = yes
     /ch_cost_per_day = mean(ch_cost_per_day).
 
 Do if recid = "CH".
-    Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    Do if sysmis(ch_ep_end).
+        * If the episode has an open end date, treat it as the end of the quarter for bed day calculations.
+        Compute  ch_beddays = datediff(Min(record_date + time.days(1), !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    Else.
+        * Otherwise work out the beddays spent within the year as usual.
+        Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    End if.
+
     If Not(ch_no_cost) ch_cost = ch_beddays * ch_cost_per_day.
 
     * Now all data will appear on all records we only want the first to avoid double counts.

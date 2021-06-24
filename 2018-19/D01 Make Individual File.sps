@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -71,6 +71,14 @@ Else if cij_pattype_code = 1.
 Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
+
+* Create care home continuous episode variables.
+* Use these later to aggregate over the episodes.
+sort cases by CHI ch_chi_cis.
+add files file = *
+    /by  CHI ch_chi_cis
+    /first = first_ch_ep
+    /last = last_ch_ep.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -361,14 +369,21 @@ Else if (recid = "CH").
     Compute CH_postcode = postcode.
     Compute CH_gpprac = gpprac.
 
-    * Episode count.
-    Compute CH_episodes = 1.
+    * Count continuous episodes.
+    Compute ch_cis_episodes = first_ch_ep.
+    
+    * Work out the cost per day for each row, we'll take the mean of this for the whole CIS episode.
+    Do if yearstay > 0.
+        Compute ch_cost_per_day = cost_total_net / yearstay.
+    Else if yearstay = 0.
+         Compute ch_cost_per_day = cost_total_net.
+    End if.
 
-    * Cost.
-    Compute CH_cost = Cost_Total_Net.
+    * Flag if any of the rows have a missing cost.
+    Compute ch_no_cost = sysmis(ch_cost_per_day).
 
-    * Beddays.
-    Compute CH_beddays = yearstay.
+    if first_ch_ep ch_ep_start = keydate1_dateformat.
+    if last_ch_ep ch_ep_end = keydate2_dateformat.
 Else if (recid = "HC").
     *************************************************************************************************************************************************.
     * Home Care (HC) section.
@@ -414,6 +429,33 @@ Else if (recid = "SDS").
 End if.
 
 *************************************************************************************************************************************************.
+* Aggregate over the Care Home 'CIS' episodes.
+*.
+aggregate outfile = * mode = addvariables overwrite = yes
+    /presorted
+    /break CHI ch_chi_cis
+    /ch_no_cost = max(ch_no_cost)
+    /ch_ep_start ch_ep_end = first(ch_ep_start ch_ep_end)
+    /ch_cost_per_day = mean(ch_cost_per_day).
+
+Do if recid = "CH".
+    Do if sysmis(ch_ep_end).
+        * If the episode has an open end date, treat it as the end of the quarter for bed day calculations.
+        Compute  ch_beddays = datediff(Min(record_date + time.days(1), !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    Else.
+        * Otherwise work out the beddays spent within the year as usual.
+        Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    End if.
+
+    If Not(ch_no_cost) ch_cost = ch_beddays * ch_cost_per_day.
+
+    * Now all data will appear on all records we only want the first to avoid double counts.
+    Do if Not(first_ch_ep).
+        Compute ch_beddays = 0.
+        Compute ch_cost = 0.
+    End if.
+End if.
+    
 * We'll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
@@ -474,7 +516,8 @@ aggregate outfile = *
     = sum(DN_episodes DN_contacts DN_cost)
     /CMH_contacts
     = sum(CMH_contacts)
-    /CH_episodes CH_beddays CH_cost = sum(CH_episodes CH_beddays CH_cost)
+    /CH_cis_episodes = sum(ch_cis_episodes)
+    /CH_beddays CH_cost = sum(CH_beddays CH_cost)
     /HC_episodes HC_personal_episodes HC_non_personal_episodes = sum(HC_episodes HC_personal_episodes HC_non_personal_episodes)
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
     /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
@@ -489,8 +532,6 @@ aggregate outfile = *
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date
     = First(arth_date asthma_date atrialfib_date cancer_date cvd_date liver_date copd_date dementia_date diabetes_date epilepsy_date
     chd_date hefailure_date ms_date parkinsons_date refailure_date congen_date bloodbfo_date endomet_date digestive_date)
-    /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care =
-    First(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /Demographic_Cohort Service_Use_Cohort
     = First(Demographic_Cohort Service_Use_Cohort)
     /SPARRA_Start_FY SPARRA_End_FY
@@ -637,7 +678,7 @@ Do repeat postcode = acute_postcode to SDS_postcode.
     If postcode NE "" #All_Blank = 0.
 End repeat.
 
-* Use HL1_postcode to store the dummy for no other reason than it's last in the hierarchy.
+* Use NRS_postcode to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 HL1_postcode = "XXX XXX".
 
 * Make a postcode variable from the various postcodes labelled by the dataset they came from.
@@ -727,7 +768,7 @@ Do repeat gpprac = acute_gpprac to SDS_gpprac.
     If Not(sysmis(gpprac))  #All_Blank = 0.
 End repeat.
 
-* Use SDS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
+* Use NRS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 SDS_gpprac = 0.
 
 * Make a gpprac variable from the various gpprac labelled by the dataset they came from.
