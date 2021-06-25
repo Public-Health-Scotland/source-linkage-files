@@ -382,8 +382,8 @@ Else if (recid = "CH").
     Compute ch_no_cost = sysmis(ch_cost_per_day).
 
     Compute ch_ep_end = keydate2_dateformat.
-	If symis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 5), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months")
-	
+	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
+
 Else if (recid = "HC").
     *************************************************************************************************************************************************.
     * Home Care (HC) section.

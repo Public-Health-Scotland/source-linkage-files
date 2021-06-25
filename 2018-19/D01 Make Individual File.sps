@@ -77,8 +77,7 @@ End if.
 sort cases by CHI ch_chi_cis.
 add files file = *
     /by  CHI ch_chi_cis
-    /first = first_ch_ep
-    /last = last_ch_ep.
+    /first = first_ch_ep.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -382,8 +381,9 @@ Else if (recid = "CH").
     * Flag if any of the rows have a missing cost.
     Compute ch_no_cost = sysmis(ch_cost_per_day).
 
-    if first_ch_ep ch_ep_start = keydate1_dateformat.
-    if last_ch_ep ch_ep_end = keydate2_dateformat.
+    Compute ch_ep_end = keydate2_dateformat.
+	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
+
 Else if (recid = "HC").
     *************************************************************************************************************************************************.
     * Home Care (HC) section.
@@ -435,17 +435,12 @@ aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
     /ch_no_cost = max(ch_no_cost)
-    /ch_ep_start ch_ep_end = first(ch_ep_start ch_ep_end)
+    /ch_ep_start = keydate1_dateformat
+	/ch_ep_end = max(ch_ep_end)
     /ch_cost_per_day = mean(ch_cost_per_day).
 
 Do if recid = "CH".
-    Do if sysmis(ch_ep_end).
-        * If the episode has an open end date, treat it as the end of the quarter for bed day calculations.
-        Compute  ch_beddays = datediff(Min(record_date + time.days(1), !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
-    Else.
-        * Otherwise work out the beddays spent within the year as usual.
-        Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
-    End if.
+	Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
 
     If Not(ch_no_cost) ch_cost = ch_beddays * ch_cost_per_day.
 
