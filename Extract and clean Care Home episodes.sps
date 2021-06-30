@@ -428,7 +428,7 @@ Do if lastest_submission_dis_missing = sc_latest_submission and not sysmis(ch_di
         Compute ch_discharge_date = $sysmis.
     End if.
 End if.
-Frequencies corrected_open_end_date.
+*Frequencies corrected_open_end_date.
 
 sort cases by chi sending_location social_care_id ch_admission_date record_date ch_discharge_date.
 * Count records (where episodes are split because of changes in ch_provider or nursing_care).
@@ -485,7 +485,7 @@ Do if n_records > 1.
     End if.
 End if.
 
-Frequencies changed_adm_date changed_dis_date.
+*Frequencies changed_adm_date changed_dis_date.
 
 sort cases by chi split_ep_marker ch_admission_date ch_discharge_date.
 
@@ -517,12 +517,12 @@ Value labels changed_dis_date
     1 "Changed to match NRS death date (<= 5 days before dis)"
     2 "Changed to match CHI death date (<= 5 days before dis)".
 
-Frequencies changed_dis_date.
+*Frequencies changed_dis_date.
 
 * Remove any episodes which now have an admission after discharge i.e. they were admitted after death.
 * As of April 2021 this removes 34 episodes.
 Compute death_before_adm = ch_admission_date > ch_discharge_date and not(sysmis(ch_discharge_date)).
-Frequencies death_before_adm.
+*Frequencies death_before_adm.
 Select if not(death_before_adm).
 
 * Create two 'continuous markers' one based on CHI, one based on sc_id + send_loc.
