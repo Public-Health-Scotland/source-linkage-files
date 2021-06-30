@@ -1,12 +1,8 @@
 ﻿* Encoding: UTF-8.
-Define !sc_extracts()
-    "/conf/social-care/05-Analysts/All Sandpit Extracts/"
-!EndDefine.
-
 * Get demographics extract.
 * This will be changed to an SQL extract from the new platform in the future.
-get file = !sc_extracts + "DEMOG/DEMOG_allyears.zsav"
-    /Keep latest_record extract_date sending_location social_care_id upi
+get file = !SC_dir + "Social-Care-Demog_Extract.zsav"
+    /Keep latest_record_flag extract_date sending_location social_care_id upi
     submitted_postcode chi_postcode
     submitted_date_of_birth chi_date_of_birth
     submitted_gender chi_gender_code.
@@ -105,7 +101,7 @@ match files file = *
     /table = !SPD_Lookup
     /Rename pc7 = submitted_postcode
     /In = Valid_PC
-    /Keep latest_record extract_date sending_location social_care_id upi gender dob postcode submitted_postcode chi_postcode
+    /Keep latest_record_flag extract_date sending_location social_care_id upi gender dob postcode submitted_postcode chi_postcode
     /By submitted_postcode.
 
 String postcode_type (A100).
@@ -126,7 +122,7 @@ If postcode = "" postcode_type = "missing".
 frequencies postcode_type.
 
 * Sort so that the latest submissions are last.
-sort cases by sending_location social_care_id latest_record extract_date.
+sort cases by sending_location social_care_id latest_record_flag extract_date.
 
 * Set blank values for upi and postcode to be missing.
 * This means they will be ignored on the aggregate.

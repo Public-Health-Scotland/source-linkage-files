@@ -1,13 +1,10 @@
 ﻿* Encoding: UTF-8.
 * Read the data.
-Define !sc_extracts()
-    "/conf/social-care/05-Analysts/All Sandpit Extracts/"
-!EndDefine.
-get file = !sc_extracts + "CLIENT/CLIENT_allyears.zsav"
+get file = !SC_dir + "Social-Care-Client_Extract.zsav"
     /Keep sending_location social_care_id financial_year financial_quarter 
     support_from_unpaid_carer social_worker meals living_alone day_care type_of_housing.
 
-select if financial_year = !altFY.
+select if financial_year = Number(!altFY, F4.0).
 
 * Variables are all really wide for some reason so tidy this up.
 Variable width ALL (8).

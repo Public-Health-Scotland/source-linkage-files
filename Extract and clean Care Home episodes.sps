@@ -1,14 +1,6 @@
 * Encoding: UTF-8.
-
-* Pass.sps needs updating to include a new macro !connect_sc with the correct details for SC connection.
-*Insert file = "pass.sps" Error = Stop.
-
-Define !sc_extracts()
-    "/conf/social-care/05-Analysts/All Sandpit Extracts/"
-!EndDefine.
-
 * Care Home data.
-get file = !sc_extracts + "CH/CH_allyears.sav"
+get file = !SC_dir + "Social-Care-Carehome_Extract.zsav"
     /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
 
 Variable width ALL (15).
