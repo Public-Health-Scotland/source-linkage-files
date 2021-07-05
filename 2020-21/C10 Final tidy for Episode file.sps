@@ -35,6 +35,8 @@ Variable Labels
     cancer_date "Cancer LTC incidence date"
     cat "Patient Category"
     CCM "Continuous Care Marker"
+    ch_chi_cis "Marker to flag care home stays - chi"
+    ch_sc_id_cis "Marker to flag care home stays - sc id"
     ch_name "Name of care home where the client/service user resides"
     ch_adm_reason "Primary reason for admission to a care home"
     ch_provider "The service provider of the care home"
@@ -169,6 +171,7 @@ Variable Labels
     op4b "Other operation 3 (B Part)"
     parkinsons "Parkinsons LTC marker"
     parkinsons_date "Parkinsons LTC incidence date"
+    person_id "Unique identifier taken from underlying dataset"
     place_death_occurred "Place death occurred"
     post_mortem "Post Mortem Indicator"
     postcode "7 character postcode"
@@ -179,6 +182,7 @@ Variable Labels
     refailure_date "Renal failure LTC incidence date"
     refsource "Referral Source"
     reftype "Referral Type"
+    sc_latest_submission "The quarter in which the latest record was received for this episode"
     sc_send_lca "Social care data sending local authority"
     sc_living_alone "Indicator of whether the client/service user lives alone"
     sc_support_from_unpaid_carer "Indicator of whether the client/service user received support from an unpaid carer at any point during the quarter"
@@ -720,6 +724,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     keytime2
     smrtype
     chi
+    person_id
     gender
     dob
     age
@@ -825,6 +830,9 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     sc_type_of_housing
     sc_meals
     sc_day_care
+    sc_latest_submission
+    ch_chi_cis
+    ch_sc_id_cis
     ch_name
     ch_adm_reason
     ch_provider
