@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -6,7 +6,7 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !Year_dir + "source-episode-file-20" + !FY + "_with_care_home.zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 
 * Exclude people with blank chi.
 select if chi NE "".
@@ -435,8 +435,8 @@ aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
     /ch_no_cost = max(ch_no_cost)
-    /ch_ep_start = keydate1_dateformat
-	/ch_ep_end = max(ch_ep_end)
+    /ch_ep_start = first(keydate1_dateformat)
+    /ch_ep_end = max(ch_ep_end)
     /ch_cost_per_day = mean(ch_cost_per_day).
 
 Do if recid = "CH".

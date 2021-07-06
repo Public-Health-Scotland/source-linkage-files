@@ -435,8 +435,8 @@ aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
     /ch_no_cost = max(ch_no_cost)
-    /ch_ep_start = keydate1_dateformat
-	/ch_ep_end = max(ch_ep_end)
+    /ch_ep_start = first(keydate1_dateformat)
+    /ch_ep_end = max(ch_ep_end)
     /ch_cost_per_day = mean(ch_cost_per_day).
 
 Do if recid = "CH".
