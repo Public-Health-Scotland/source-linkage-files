@@ -381,6 +381,7 @@ Else if (recid = "CH").
     * Flag if any of the rows have a missing cost.
     Compute ch_no_cost = sysmis(ch_cost_per_day).
 
+*Use the end date and if the end date is missing then use the first day of the next financial quarter - Note SPSS reads calendar quarter. 
     Compute ch_ep_end = keydate2_dateformat.
 	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
 
@@ -435,7 +436,7 @@ aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
     /ch_no_cost = max(ch_no_cost)
-    /ch_ep_start = first(keydate1_dateformat)
+    /ch_ep_start = min(keydate1_dateformat)
     /ch_ep_end = max(ch_ep_end)
     /ch_cost_per_day = mean(ch_cost_per_day).
 
@@ -517,6 +518,7 @@ aggregate outfile = *
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
     /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
     /SDS_option_4 = Max(SDS_option_4)
+    /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
     /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
     /NSU = Max(NSU)
