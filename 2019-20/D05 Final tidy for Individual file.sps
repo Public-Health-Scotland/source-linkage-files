@@ -127,9 +127,9 @@ Variable Labels
     DN_contacts "Number of District Nursing contacts"
     DN_cost "Cost of District Nursing"
     CMH_contacts "Number of Community Mental Health contacts"
-    ch_cis_episodes "Number of continuous Care Home episodes"
-    ch_cost "Cost of continuous Care Home stays "
-    ch_beddays "Number of continuous Care Home beddays"
+    CH_cis_episodes "Number of distinct Care Home episodes"
+    ch_cost "Cost of Care Home stays"
+    ch_beddays "Number of Care Home beddays"
     HC_episodes "Total number of home care episodes, includes personal, non-personal and unknown type"
     HC_personal_episodes "Total number of personal home care episodes"
     HC_non_personal_episodes "Total number of non-personal home care episodes"
@@ -302,7 +302,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     dn_contacts
     dn_cost
     cmh_contacts
-    ch_cis_episodes
+    CH_cis_episodes
     ch_beddays
     ch_cost
     hc_episodes
@@ -314,6 +314,12 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     sds_option_2
     sds_option_3
     sds_option_4
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     cij_el
     cij_non_el
     cij_mat
