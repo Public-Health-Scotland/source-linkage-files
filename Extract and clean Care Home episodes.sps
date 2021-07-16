@@ -3,7 +3,8 @@
 get file = !SC_dir + "Social-Care-Carehome_Extract.zsav"
     /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
 
-Variable width ALL (15).
+ * Cosmetic change.
+variable width ALL (15).
 
 * Clean up types.
 alter type
@@ -20,6 +21,9 @@ alter type
 
 * Correct the period for 2017.
 If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
+
+* Drop any records which haven't been validated yet.
+Select if period NE "2020Q4".
 
 * Work out the record date, which is the last day of the quarter e.g. 2017 Q4 = 2017-03-31.
 * SPSS uses US quarters (Q1 = Jan-Apr etc.) so adjust the dates so it works for our FY quarters.
