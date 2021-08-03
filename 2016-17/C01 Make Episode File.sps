@@ -7,7 +7,6 @@
 Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " + 
     "'" + !File + "A&E_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "CH_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "CMH_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "DD_tests_20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_tests_20" + !FY + ".zsav" + "' " +
@@ -28,7 +27,6 @@ add files
     /file = !File + "a&e_for_source-20" + !FY + ".zsav"
     /file = !File + "deaths_for_source-20" + !FY + ".zsav"
     /file = !File + "DN_for_source-20" + !FY + ".zsav"
-    /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
     /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !File + "CMH_for_source-20" + !FY + ".zsav"
@@ -369,7 +367,7 @@ sort cases by chi keydate1_dateformat.
 
 *  We are not currently including Social Care data for some years but we still want the variables for consistency.
 * Social Care.
-*String
+String
     sc_send_lca (A2).
 
 Numeric
@@ -388,11 +386,15 @@ Numeric
 
 * Care Homes.
 String
+    ch_name (A73)
     ch_provider (A1).
+
+Numeric
+    ch_adm_reason (F2.0)
+    ch_nursing (F1.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
-
 
 save outfile = !File + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
@@ -413,7 +415,6 @@ Host Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' " +
     "'" + !File + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "CMH_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
     "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
