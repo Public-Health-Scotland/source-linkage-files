@@ -6,7 +6,7 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !File + "source-episode-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 
 * Exclude people with blank chi.
 select if chi NE "".
@@ -497,9 +497,9 @@ aggregate outfile = *
     = First(HHG_Start_FY HHG_End_FY).
 
 * Do a temporary save as the above can take a while to run.
-save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav"
     /zcompressed.
-get file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav".
 
 * Clean up the gender, use the most common (by rounding the mean), if the mean is 1.5 (i.e. no gender known or equal male and females) then take it from the CHI).
 Do if gender NE 1.5.
@@ -635,7 +635,7 @@ Do repeat postcode = acute_postcode to SDS_postcode.
     If postcode NE "" #All_Blank = 0.
 End repeat.
 
-* Use NRS_postcode to store the dummy for no other reason than it's last in the hierarchy.
+* Use HL1_postcode to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 HL1_postcode = "XXX XXX".
 
 * Make a postcode variable from the various postcodes labelled by the dataset they came from.
@@ -689,7 +689,7 @@ End if.
 * Match on to the postcode file, to get a flag letting us know if the postcode is real or not.
 sort cases by postcode.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In PostcodeMatch
     /Keep chi to order
     /By Postcode.
@@ -725,7 +725,7 @@ Do repeat gpprac = acute_gpprac to SDS_gpprac.
     If Not(sysmis(gpprac))  #All_Blank = 0.
 End repeat.
 
-* Use NRS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
+* Use SDS_gpprac to store the dummy for no other reason than it's last in the hierarchy.
 If #All_Blank = 1 SDS_gpprac = 0.
 
 * Make a gpprac variable from the various gpprac labelled by the dataset they came from.
@@ -778,7 +778,7 @@ End if.
 * Match on to the gpprac file, to get a flag letting us know if the gpprac is real or not.
 sort cases by gpprac.
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In gppracMatch
     /Keep chi to order
     /By gpprac.
@@ -816,11 +816,11 @@ String year (A4).
 Compute year = !FY.
 
 * Delete the record specific DoB gpprac and postcode, and reorder others whilst we're here.
-save outfile = !file + "temp-source-individual-file-2-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav"
     /Keep year chi gender DoB age postcode gpprac
     health_net_cost health_net_costincDNAs health_net_costincIncomplete
     deceased death_date
     ALL
     /zcompressed.
 
-get file = !file + "temp-source-individual-file-2-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav".

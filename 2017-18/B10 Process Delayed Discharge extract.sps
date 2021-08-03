@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-get file = !Extracts_Alt + "/Delayed_Discharges/Jul16_Dec20DD_LinkageFile.zsav".
+get file = !Delayed_Discharge_file.
 
 Rename Variables
     HealthLocationCode = location
@@ -213,11 +213,8 @@ Select if Correct_Dates = 1 AND No_End_Date = 0.
 
 sort cases by chi keydate1_dateformat keydate2_dateformat.
 
-save outfile = !Extracts + "DD_LinkageFile-20" + !FY + ".zsav"
+save outfile = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav"
     /Drop hb la Correct_Dates No_End_Date
     /zcompressed.
 
-get file = !Extracts + "DD_LinkageFile-20" + !FY + ".zsav".
-
-
-
+get file = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav".

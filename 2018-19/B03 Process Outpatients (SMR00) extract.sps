@@ -6,7 +6,7 @@
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + 'Outpatients-episode-level-extract-20' + !FY + '.csv'
+    /FILE= !Year_Extracts_dir + 'Outpatients-episode-level-extract-20' + !FY + '.csv'
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -142,7 +142,7 @@ Value Labels clinic_type
     '4' "AHP".
 
 
-save outfile = !file + 'outpatients_for_source-20'+!FY+'.zsav'
+save outfile = !Year_dir + 'outpatients_for_source-20'+!FY+'.zsav'
     /keep year
     recid
     record_keydate1
@@ -183,7 +183,7 @@ save outfile = !file + 'outpatients_for_source-20'+!FY+'.zsav'
     uri
     /zcompressed.
 
-get file = !file + 'outpatients_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'outpatients_for_source-20' + !FY + '.zsav'.
 
 * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Outpatients-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip '" + !Year_Extracts_dir + "Outpatients-episode-level-extract-20" + !FY + ".csv'"].

@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 
-get file = !file + 'homelessness_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'.
 
 
 * Flag to count CHIs.
@@ -245,14 +245,14 @@ Dataset close SLFexisting.
 
 * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
 Compute Issue = (abs(PctChange) > 5).
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'Homelessness_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Homelessness_tests_20' + !FY + '.zsav'
    /zcompressed .
-
-

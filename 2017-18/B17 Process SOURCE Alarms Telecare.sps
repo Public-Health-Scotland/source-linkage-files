@@ -55,7 +55,7 @@ alter type record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
     /Keep Year
     recid
     SMRType
@@ -74,4 +74,4 @@ save outfile = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
     sc_meals
     sc_day_care
     /zcompressed.
-get file = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav".
+get file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav".

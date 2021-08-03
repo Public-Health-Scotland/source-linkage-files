@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 * Tests for NRS deaths dataset.
-get file = !file + 'deaths_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'deaths_for_source-20' + !FY + '.zsav'.
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -83,7 +83,9 @@ Dataset close SLFexisting.
 
  * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
 Compute Issue = (abs(PctChange) > 5).
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
@@ -91,6 +93,5 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 Crosstabs Measure by Issue.
 
 *Save test file. 
-Save Outfile = !file + 'NRS_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'NRS_tests_20' + !FY + '.zsav'
    /zcompressed .
-

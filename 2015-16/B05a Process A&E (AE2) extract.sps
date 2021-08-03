@@ -5,7 +5,7 @@
 ********************************************************************************************************.
 
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + 'A&E-episode-level-extract-20' + !FY + '.csv'
+    /FILE= !Year_Extracts_dir + 'A&E-episode-level-extract-20' + !FY + '.csv'
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -45,7 +45,8 @@ GET DATA  /TYPE=TXT
     SelfHarmRelatedAdmission A1
     TotalNetCosts F8.2
     AgeatMidpointofFinancialYear F3.0
-    CaseReferenceNumber A100.
+    CaseReferenceNumber A100
+    SignificantFacilityCode A2.
 CACHE.
 Execute.
 
@@ -74,6 +75,7 @@ Rename Variables
     ReferralSourceCode = refsource
     SelfHarmRelatedAdmission = selfharm_adm
     SubstanceMisuseRelatedAdmission = submis_adm
+    SignificantFacilityCode = sigfac
     TotalNetCosts = cost_total_net
     TreatmentLocationCode = location.
 
@@ -530,7 +532,7 @@ Value Labels ae_bodyloc
 * Sort for linking on CUP marker.
 sort cases by record_keydate1 keyTime1 CaseReferenceNumber.
 
-save outfile = !file + 'a&e_data-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'a&e_data-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -552,6 +554,7 @@ save outfile = !file + 'a&e_data-20' + !FY + '.zsav'
     diag3
     ae_arrivalmode
     refsource
+    sigfac
     ae_attendcat
     ae_disdest
     ae_patflow
@@ -580,12 +583,7 @@ save outfile = !file + 'a&e_data-20' + !FY + '.zsav'
     CaseReferenceNumber
     /zcompressed.
 
-get file = !file + 'a&e_data-20' + !FY + '.zsav'.
+get file = !Year_dir + 'a&e_data-20' + !FY + '.zsav'.
 
 * Zip up raw data.
-Host Command = ["gzip '" + !Extracts + "A&E-episode-level-extract-20" + !FY + ".csv'"].
-
-
-
-
-
+Host Command = ["gzip '" + !Year_Extracts_dir + "A&E-episode-level-extract-20" + !FY + ".csv'"].
