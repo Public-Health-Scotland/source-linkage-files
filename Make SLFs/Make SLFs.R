@@ -25,7 +25,7 @@ create_fst_files <- function(year) {
   if (file_exists(path_ext_set(indiv_path, ".zsav"))) {
     write_lines(
       str_glue("Starting individual file for 20{year}.\nIt is now: {start_time}"),
-      path = "log",
+      file = "log",
       append = TRUE
     )
 
@@ -37,14 +37,14 @@ create_fst_files <- function(year) {
     } else {
       write_lines(
         str_glue("Skipping 20{year} as fst file already exists in sourcedev"),
-        path = "log",
+        file = "log",
         append = TRUE
       )
     }
   } else {
     write_lines(
       str_glue("Skipping 20{year} as zsav file doesn't exist"),
-      path = "log",
+      file = "log",
       append = TRUE
     )
   }
@@ -54,7 +54,7 @@ create_fst_files <- function(year) {
   if (file_exists(path_ext_set(episode_path, ".zsav"))) {
     write_lines(
       str_glue("Starting episode file for 20{year}.\nIt is now: {Sys.time()}"),
-      path = "log",
+      file = "log",
       append = TRUE
     )
 
@@ -66,13 +66,13 @@ create_fst_files <- function(year) {
     } else {
       write_lines(
         str_glue("Skipping 20{year} as fst file already exists in sourcedev"),
-        path = "log",
+        file = "log",
         append = TRUE
       )
     }
   } else {
     write_lines(str_glue("Skipping 20{year}, as zsav file doesn't exist"),
-      path = "log",
+      file = "log",
       append = TRUE
     )
   }
@@ -83,7 +83,7 @@ create_fst_files <- function(year) {
     round_half_up(digits = 1)
 
   write_lines(str_glue("Done with {year} at {end_time}\nIt took:{time_diff} minutes"),
-    path = "log",
+    file = "log",
     append = TRUE
   )
 }
@@ -98,7 +98,7 @@ create_fst_lookups <- function() {
 
   write_lines(
     str_glue("Starting Anon CHI lookup it is now: {start_time}"),
-    path = "log",
+    file = "log",
     append = TRUE
   )
 
@@ -109,7 +109,7 @@ create_fst_lookups <- function() {
 
   write_lines(
     str_glue("Starting CHI lookup it is now: {Sys.time()}"),
-    path = "log",
+    file = "log",
     append = TRUE
   )
 
@@ -125,12 +125,12 @@ create_fst_lookups <- function() {
 
   write_lines(
     str_glue("Done with lookups at {end_time}.\nIt took: {time_diff} minutes"),
-    path = "log",
+    file = "log",
     append = TRUE
   )
 }
 
-years <- list("1516", "1617", "1718", "1819", "1920", "2021")
+years <- list("1819", "1920", "2021")
 
 future_map(
   years,
