@@ -1,14 +1,41 @@
 ﻿* Encoding: UTF-8.
- * Read the data.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_Client_extract_fix.zsav".
-   
- * Variables are all really wide for some reason so tidy this up.
+* Read the data.
+get file = !SC_dir + "Social-Care-Client_Extract.zsav"
+    /Keep sending_location social_care_id financial_year financial_quarter 
+    support_from_unpaid_carer social_worker meals living_alone day_care type_of_housing.
+
+select if financial_year = Number(!altFY, F4.0).
+
+* Variables are all really wide for some reason so tidy this up.
 Variable width ALL (8).
 
- * Change the flags to numerics.
-Alter type support_from_unpaid_carer social_worker type_of_housing meals living_alone day_care (F1.0).
+* Change the flags to numerics.
+Alter type
+    support_from_unpaid_carer
+    social_worker
+    type_of_housing meals
+    living_alone day_care (F1.0)
+    sending_location (A3)
+    financial_year (F4.0)
+    financial_quarter (F1.0)
+    social_care_id (A10).
 
- * Add labels to the flag variables.
+Missing values
+    support_from_unpaid_carer social_worker meals living_alone day_care (9)
+    type_of_housing (6).
+
+sort cases by social_care_id sending_location financial_year financial_quarter.
+aggregate outfile = *
+    /presorted
+    /break social_care_id sending_location
+    /support_from_unpaid_carer social_worker meals living_alone day_care type_of_housing = last(support_from_unpaid_carer social_worker meals living_alone day_care type_of_housing).
+
+Missing values support_from_unpaid_carer social_worker meals living_alone day_care type_of_housing ().
+
+Recode support_from_unpaid_carer social_worker meals living_alone day_care (sysmis = 9).
+Recode type_of_housing (sysmis = 6).
+
+* Add labels to the flag variables.
 Variable Labels living_alone 'Indicator of whether the client/service user lives alone.'.
 Variable Labels support_from_unpaid_carer 'Indicator of whether the client/service user received support from an unpaid carer at any point during the quarter.'.
 Variable Labels social_worker 'Indicator of whether the client/service user has an assigned Social Worker or a Support Worker.'.
@@ -16,7 +43,7 @@ Variable Labels type_of_housing 'Housing status of the client at the end of the 
 Variable Labels meals 'Indicator of whether the client/service user received a Meals Service at any point during the quarter.'.
 Variable Labels day_care 'Indicator of whether the client/service user has received a day care service within the reporting period.'.
 
- * Add some value labels.
+* Add some value labels.
 Value Labels support_from_unpaid_carer social_worker meals living_alone day_care
     0 "No"
     1 "Yes"
@@ -38,13 +65,13 @@ Rename Variables
     meals = sc_meals
     day_care = sc_day_care.
 
- * Sort for matching.
-sort cases by social_care_id sending_location.
- * Save and reorder flag variables so they're in the same order as Social Care Dataset definition.
-save outfile = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav"
+* Sort for matching.
+sort cases by sending_location social_care_id .
+* Save and reorder flag variables so they're in the same order as Social Care Dataset definition.
+save outfile =  !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
     /Keep
-    social_care_id
     sending_location
+    social_care_id
     sc_living_alone
     sc_support_from_unpaid_carer
     sc_social_worker
@@ -53,4 +80,4 @@ save outfile = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_f
     sc_day_care
     /zcompressed.
 
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav".
+get file = !Year_dir + "Client_for_Source-20" + !FY + ".zsav".
