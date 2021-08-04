@@ -361,7 +361,8 @@ sort cases by chi keydate1_dateformat.
 * Social Care variables for consistency.
 * Social Care.
 String
-    sc_send_lca (A2).
+    sc_send_lca (A2)
+    sc_latest_submission (A6).
 
 Numeric
     sc_living_alone
@@ -384,7 +385,9 @@ String
 
 Numeric
     ch_adm_reason (F2.0)
-    ch_nursing (F1.0).
+    ch_nursing (F1.0)
+    ch_chi_cis (F8.0)
+    ch_sc_id_cis(F8.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
