@@ -315,7 +315,18 @@ add files
     /File =  !Year_dir + "DD_for_source-20" + !FY + ".zsav"
     /by chi keydate1_dateformat.
 
+Do if chi NE "" and cij_marker NE "".
+    Compute has_delay = SMRType = "DD-CIJ".
+End if.
+
+aggregate
+    /break chi cij_marker
+    /cij_delay = max(has_delay).
+
+Alter type cij_delay (F1.0).
+
 save outfile = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav"
+    /Drop has_delay
     /zcompressed.
 get file = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav".
 
