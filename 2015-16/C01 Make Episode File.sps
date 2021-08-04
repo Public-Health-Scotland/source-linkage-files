@@ -36,6 +36,7 @@ add files
 
 * Check that all CHIs are valid.
 Do if chi ne "".
+    * Test the check digit.
     Do Repeat Digit = #Digit.1 to #Digit.9
         /Position = 1 to 9.
         Compute Digit = Number(char.substr(chi, Position, 1), F1.0) * (11 - Position).
@@ -106,22 +107,18 @@ Else If (recid = "NRS").
     Compute SMRType = "NRS Deaths".
 End If.
 
-
-*CHECK RESULTS FROM FREQUENCY SMRTYPE.
-
 Alter Type uri (F8.0).
 
-
- * Slight correction for cij_pattypeusing types of admission.
- * Lump the unknowns together to avoid potential confusion.
+* Slight correction for cij_pattypeusing types of admission.
+* Lump the unknowns together to avoid potential confusion.
 Recode cij_admtype ("Un" = "99").
 
- * Apply cij_pattypelogic to all records with a valid CHI number.
+* Apply cij_pattypelogic to all records with a valid CHI number.
 Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
-     * Maternity now also has 41 for home birth.
+    * Maternity now also has 41 for home birth.
     Do If any(cij_admtype, "41", "42").
         Compute cij_pattype_code = 2.
-    * 40 and 48 are other - 99 is our code for unknown.
+        * 40 and 48 are other - 99 is our code for unknown.
     Else If Any(cij_admtype, "40", "48", "99").
         Compute cij_pattype_code = 9.
     End If.
@@ -129,7 +126,7 @@ End If.
 
 If cij_admtype = "18" cij_pattype_code = 0.
 
- * Recode cij_pattype.
+* Recode cij_pattype.
 String cij_pattype(A13).
 Recode cij_pattype_code
     (0 = "Non-Elective")
@@ -138,10 +135,7 @@ Recode cij_pattype_code
     (9 = "Other")
     Into cij_pattype.
 
-
-
 ********************** Temporarily work on CIJ only records ***************************.
-
 sort cases by CHI record_keydate1 record_keydate2.
 * Only work on records that have a CIJ marker, save out others.
 temporary.
@@ -177,7 +171,6 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
     /cij_dis_spec = last(cij_dis_spec).
 
-
 * All records with a CHI should now have a valid CIJ marker.
 Temporary.
 select if chi ne "".
@@ -189,10 +182,8 @@ add files file = *
     /file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
     /By CHI record_keydate1 record_keydate2.
 
-
 ********************** Back to full file ***************************..
 ********************Create cost including DNAs, & modify cost not including DNAs using cattend *****.
-
 * Modify cost_total_net so that it zeros cost for in the cost_total_net column.
 * The full cost will be held in the cost_total_net_incDNA column.
 Numeric Cost_Total_Net_incDNAs (F8.2).
@@ -204,16 +195,17 @@ If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 * Create a Flag for PPA (Potentially Preventable Admissions).
 sort cases by chi cij_marker record_keydate1 record_keydate2.
 
+Numeric PPA (F1.0).
+
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
     * First record in CIJ.
     Do if (chi NE lag(chi) or (chi = lag(chi) and cij_marker NE lag(cij_marker))).
         * Non-elective original admission.
-        Do if cij_pattype= "Non-Elective".
-            Compute PPA = 0.
+        Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
-
-
+            Compute PPA = 0.
+            
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
             Do if range (char.Substr(op1a, 1 , 3), "K01", "K50") or
@@ -286,7 +278,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
                 any (char.Substr(diag6, 1, 3), "A35", "A36", "A80", "B05", "B06", "B26") or
                 any (char.Substr(diag1, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag2, 1, 4), "A370", "A379", "B161", "B169") or
-                any(char.Substr(diag3, 1, 4), "A370", "A379", "B161", "B169") or
+                any (char.Substr(diag3, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag4, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag5, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag6, 1, 4), "A370", "A379", "B161", "B169").
@@ -361,9 +353,11 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
+Alter type cij_ppa (F1.0).
+
 sort cases by chi keydate1_dateformat.
 
-*  We are not currently including Social Care data for some years but we still want the variables for consistency.
+* Social Care variables for consistency.
 * Social Care.
 String
     sc_send_lca (A2).
