@@ -389,14 +389,14 @@ Numeric
 * SDS.
 Numeric sds_option_4 (F1.0).
 
- * Declare variables for Delay Discharge (1516 only).
+* Declare variables for Delay Discharge (14/15 and 15/16 only).
 Numeric Delay_End_Reason CIJ_Delay (F1.0).
 String Primary_Delay_Reason (A4).
 String Secondary_Delay_Reason (A4).
 String DD_Quality (A3).
 String DD_Responsible_LCA (A2).
 
- * Declare variables for Homelessness (1516 only).
+* Declare variables for Homelessness (14/15 and 15/16 only).
 String hl1_application_ref (A15).
 String hl1_sending_lca (A9).
 Numeric hl1_property_type (F2.0).
