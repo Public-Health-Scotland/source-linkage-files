@@ -1,8 +1,11 @@
 import os
 from collections import defaultdict
 import re
+import gzip
 
 if __name__ == "__main__":
+    compress_files = False
+
     base_dir = r"\\stats\sourcedev\Source_Linkage_File_Updates\Extracts Temp"
 
     print("Looking in '{}' for csv files.".format(base_dir))
@@ -23,7 +26,7 @@ if __name__ == "__main__":
         match = pattern.search(file)
         if match:
             files_by_year[match.group(1)].append(file)
-            
+
     n_files = files_by_year.__len__()
 
     if n_files == 0:
@@ -52,10 +55,21 @@ if __name__ == "__main__":
             # If a file already exists remove the old one first
             if os.path.exists(sorted_file):
                 os.remove(sorted_file)
-                print("Removed existing {} from {} folder".format(file, year))
+                print(
+                    "Removed the existing {} from the {} Extracts folder.".format(
+                        file, year
+                    )
+                )
 
             # Move to the sorted location
             os.rename(unsorted_file, sorted_file)
-            print("Moved {} to {} folder\n".format(file, year))
+            print("Moved {} to the {} Extracts folder.".format(file, year))
 
-    input("Press enter to close")
+            if compress_files:
+                with open(sorted_file, "rb") as uncompressed_csv:
+                    with gzip.open(sorted_file + ".gz", "wb") as gzip_csv:
+                        print("Compressing {} ...".format(file))
+                        gzip_csv.writelines(uncompressed_csv)
+                os.remove(sorted_file)
+
+    input("Done with all files, press enter to exit.")
