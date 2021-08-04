@@ -385,7 +385,7 @@ Numeric
 Numeric sds_option_4 (F1.0).
 
  * Declare variables for Delay Discharge (14/15 and 1516 only).
-Numeric Delay_End_Reason (F1.0).
+Numeric Delay_End_Reason CIJ_Delay (F1.0).
 String 
     Primary_Delay_Reason (A4)
     Secondary_Delay_Reason (A4)    
