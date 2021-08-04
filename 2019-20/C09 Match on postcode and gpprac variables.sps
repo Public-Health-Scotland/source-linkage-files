@@ -369,7 +369,7 @@ Rename Variables
 * Find out which GPprac codes are good.
 * We don't want any of the other variables at this point.
 match files file = *
-    /table = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 to hbpraccode
     /by gpprac.
@@ -433,7 +433,7 @@ add files file = *
     /By gpprac.
 
 match files file = *
-    /table = !Lookup_dir_slf + "source_GPprac_Lookup_" + !LatestUpdate + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
     /Drop PC7 PC8
     /by gpprac.

@@ -63,9 +63,9 @@ aggregate outfile = *
 ***This bit will need changing to accomodate new costs ***.
  * Most recent costs year availiable.
 String TempYear1 TempYear2 (A4).
-Do if Year = "XXX".
+Do if Year = "1920".
     * Make costs for other years.
-    Compute TempYear1 = "1819".
+    Compute TempYear1 = "2021".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.

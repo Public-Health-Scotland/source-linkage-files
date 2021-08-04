@@ -186,4 +186,4 @@ save outfile = !Year_dir + 'outpatients_for_source-20'+!FY+'.zsav'
 get file = !Year_dir + 'outpatients_for_source-20' + !FY + '.zsav'.
 
 * zip up the raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "Outpatients-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "Outpatients-episode-level-extract-20" + !FY + ".csv"].

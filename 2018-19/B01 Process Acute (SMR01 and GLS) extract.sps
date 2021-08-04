@@ -377,4 +377,4 @@ erase file = !Year_dir + 'acute_temp.zsav'.
 erase file = !Year_dir + 'acute_monthly_costs_and_beddays_by_uri.sav'.
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Year_Extracts_dir + "Acute-episode-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "Acute-episode-level-extract-20" + !FY + ".csv"].

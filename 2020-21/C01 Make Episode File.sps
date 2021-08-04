@@ -1,25 +1,26 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
- * Zip up all BXX test files.
-Host Command = ["zip -mjv '" + !Year_dir + "BXX_tests_20" + !FY + ".zip' " + 
-    "'" + !Year_dir + "A&E_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "DD_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Maternity_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "NRS_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "Homelessness_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "LTC_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "PIS_tests_20" + !FY + ".zsav" + "'"].
+* Zip up all BXX test files.
+Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
+    !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
+    !Year_dir + "acute_tests_20" + !FY + ".zsav " +
+    !Year_dir + "DD_tests_20" + !FY + ".zsav " +
+    !Year_dir + "GPOoH_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Maternity_tests_20" + !FY + ".zsav " +
+    !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav " +
+    !Year_dir + "NRS_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
+    !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
+    !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
-*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom. 
-*    "'" + !Year_dir + "CMH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "DN_tests_20" + !FY + ".zsav" + "' " +
+*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom.
+*   !Year_dir + "CMH_tests_20" + !FY + ".zsav " +.
+*    !Year_dir + "DN_tests_20" + !FY + ".zsav " +.
 
 * Bring all the data sets together.
 add files
@@ -32,14 +33,12 @@ add files
     /file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /By chi.
 
-*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom. 
-*    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav"
-*    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav"
-
-* All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
-*Sort Cases by chi.
+*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom.
+*    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
+*    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav".
 
 * Check that all CHIs are valid.
 Do if chi ne "".
@@ -113,22 +112,18 @@ Else If (recid = "NRS").
     Compute SMRType = "NRS Deaths".
 End If.
 
-
-*CHECK RESULTS FROM FREQUENCY SMRTYPE.
-
 Alter Type uri (F8.0).
 
-
- * Slight correction for cij_pattypeusing types of admission.
- * Lump the unknowns together to avoid potential confusion.
+* Slight correction for cij_pattypeusing types of admission.
+* Lump the unknowns together to avoid potential confusion.
 Recode cij_admtype ("Un" = "99").
 
- * Apply cij_pattypelogic to all records with a valid CHI number.
+* Apply cij_pattypelogic to all records with a valid CHI number.
 Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
-     * Maternity now also has 41 for home birth.
+    * Maternity now also has 41 for home birth.
     Do If any(cij_admtype, "41", "42").
         Compute cij_pattype_code = 2.
-    * 40 and 48 are other - 99 is our code for unknown.
+        * 40 and 48 are other - 99 is our code for unknown.
     Else If Any(cij_admtype, "40", "48", "99").
         Compute cij_pattype_code = 9.
     End If.
@@ -136,7 +131,7 @@ End If.
 
 If cij_admtype = "18" cij_pattype_code = 0.
 
- * Recode cij_pattype.
+* Recode cij_pattype.
 String cij_pattype(A13).
 Recode cij_pattype_code
     (0 = "Non-Elective")
@@ -144,8 +139,6 @@ Recode cij_pattype_code
     (2 = "Maternity")
     (9 = "Other")
     Into cij_pattype.
-
-
 
 ********************** Temporarily work on CIJ only records ***************************.
 
@@ -184,7 +177,6 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
     /cij_dis_spec = last(cij_dis_spec).
 
-
 * All records with a CHI should now have a valid CIJ marker.
 Temporary.
 select if chi ne "".
@@ -195,7 +187,6 @@ sort cases by CHI record_keydate1 record_keydate2.
 add files file = *
     /file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
     /By CHI record_keydate1 record_keydate2.
-
 
 ********************** Back to full file ***************************..
 ********************Create cost including DNAs, & modify cost not including DNAs using cattend *****.
@@ -368,22 +359,7 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
-
-
 sort cases by chi keydate1_dateformat.
-
-*  We are not currently including Social Care data for some years but we still want the variables for consistency.
-* Social Care.
-String
-    sc_send_lca (A2).
-
-Numeric
-    sc_living_alone
-    sc_support_from_unpaid_carer
-    sc_social_worker
-    sc_type_of_housing
-    sc_meals
-    sc_day_care (F1.0).
 
 * Home Care.
 Numeric
@@ -391,48 +367,38 @@ Numeric
     hc_provider (F1.0)
     hc_reablement (F1.0).
 
-* Care Homes.
-String
-    ch_name (A73)
-    ch_provider (A1).
-
-Numeric
-    ch_adm_reason (F2.0)
-    ch_nursing (F1.0).
-
 * SDS.
 Numeric sds_option_4 (F1.0).
 
-
-*We are currently not including DN or CMH for FY 2021 but we want the variables for consistency - 04/09/20 Jennifer Thom. 
-*DN.
+* We are currently not including DN or CMH for FY 2021 but we want the variables for consistency - 04/09/20 Jennifer Thom.
+* District Nursing.
 Numeric
-CCM (F5.0) 
-TotalnoDNcontacts (F7.0). 
-
-
+    CCM (F5.0)
+    TotalnoDNcontacts (F7.0).
 
 save outfile = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
+
 get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav".
 
 * Housekeeping.
 Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' " +
-    "'" + !Year_dir + "acute_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "maternity_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "a&e_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "deaths_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "homelessness_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
+    !Year_dir + "acute_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "maternity_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "mental_health_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "outpatients_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
 
-*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom. 
-*    "'" + !Year_dir + "DN_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !Year_dir + "CMH_for_source-20" + !FY + ".zsav" + "' " +.
+* We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom.
+*   !Year_dir + "DN_for_source-20" + !FY + ".zsav " +.
+*    !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +.
