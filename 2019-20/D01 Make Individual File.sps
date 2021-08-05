@@ -475,7 +475,6 @@ aggregate outfile = *
     = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB CH_DoB HC_DoB AT_DoB SDS_DoB)
     /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac CH_gpprac HC_gpprac AT_gpprac SDS_gpprac
     = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac CH_gpprac HC_gpprac AT_gpprac SDS_gpprac)
-    /cij_delay = sum(cij_delay)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
     Acute_inpatient_beddays Acute_el_inpatient_beddays Acute_non_el_inpatient_beddays
@@ -525,7 +524,7 @@ aggregate outfile = *
     /SDS_option_4 = Max(SDS_option_4)
     /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
-    /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
+    /CIJ_el CIJ_non_el CIJ_mat cij_delay = Sum(CIJ_el CIJ_non_el CIJ_mat cij_delay)
     /NSU = Max(NSU)
     /deceased death_date = First(deceased death_date)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
