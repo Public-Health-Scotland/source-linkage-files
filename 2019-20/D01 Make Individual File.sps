@@ -72,8 +72,8 @@ Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
 
-*Create a count for cij_delay variable.
-If cij_delay and Distinct_CIJ cij_delay =1.
+* Create a count for cij_delay variable.
+If cij_delay and Distinct_CIJ cij_delay = 1.
 Compute cij_delay = cij_delay and Distinct_CIJ.
 
 * Create care home continuous episode variables.
