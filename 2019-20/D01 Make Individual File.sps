@@ -72,6 +72,15 @@ Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
 
+*Create variables to count preventable admissions and preventable beddays. 
+Do if cij_ppa = 1 and Distinct_CIJ = 1.
+    Compute preventable_admissions = 1.
+    Compute preventable_beddays = yearstay. 
+Else. 
+    Compute preventable_admissions = 0.
+    Compute preventable_beddays = 0.
+End if.
+
 * Create care home continuous episode variables.
 * Use these later to aggregate over the episodes.
 sort cases by CHI ch_chi_cis.
@@ -470,6 +479,7 @@ aggregate outfile = *
     /Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB CH_DoB HC_DoB AT_DoB SDS_DoB
     = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB CH_DoB HC_DoB AT_DoB SDS_DoB)
     /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac CH_gpprac HC_gpprac AT_gpprac SDS_gpprac
+    /preventable_admissions preventable_beddays = Sum(preventable_admissions preventable_beddays)
     = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac CH_gpprac HC_gpprac AT_gpprac SDS_gpprac)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
