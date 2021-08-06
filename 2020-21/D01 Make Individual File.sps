@@ -72,6 +72,10 @@ Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
 
+* Create a count for cij_delay variable.
+If cij_delay and Distinct_CIJ cij_delay = 1.
+Compute cij_delay = cij_delay and Distinct_CIJ.
+
 * Create care home continuous episode variables.
 * Use these later to aggregate over the episodes.
 sort cases by CHI ch_chi_cis.
@@ -520,7 +524,7 @@ aggregate outfile = *
     /SDS_option_4 = Max(SDS_option_4)
     /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
-    /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
+    /CIJ_el CIJ_non_el CIJ_mat cij_delay = Sum(CIJ_el CIJ_non_el CIJ_mat cij_delay)
     /NSU = Max(NSU)
     /deceased death_date = First(deceased death_date)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
