@@ -479,7 +479,6 @@ aggregate outfile = *
     /Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB CH_DoB HC_DoB AT_DoB SDS_DoB
     = Last(Acute_DoB Mat_DoB MH_DoB GLS_DoB OP_DoB AE_DoB PIS_DoB OoH_DoB DN_DoB CMH_DoB NSU_DoB NRS_DoB HL1_DoB CH_DoB HC_DoB AT_DoB SDS_DoB)
     /Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac CH_gpprac HC_gpprac AT_gpprac SDS_gpprac
-    /preventable_admissions preventable_beddays = Sum(preventable_admissions preventable_beddays)
     = Last(Acute_gpprac Mat_gpprac MH_gpprac GLS_gpprac OP_gpprac AE_gpprac PIS_gpprac OoH_gpprac DN_gpprac CMH_gpprac NSU_gpprac NRS_gpprac CH_gpprac HC_gpprac AT_gpprac SDS_gpprac)
     /Acute_episodes Acute_daycase_episodes Acute_inpatient_episodes Acute_el_inpatient_episodes Acute_non_el_inpatient_episodes
     Acute_cost Acute_daycase_cost Acute_inpatient_cost Acute_el_inpatient_cost Acute_non_el_inpatient_cost
@@ -532,6 +531,7 @@ aggregate outfile = *
     /HL1_in_FY = Max(HH_in_FY)
     /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
     /NSU = Max(NSU)
+    /preventable_admissions preventable_beddays = Sum(preventable_admissions preventable_beddays)
     /deceased death_date = First(deceased death_date)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
