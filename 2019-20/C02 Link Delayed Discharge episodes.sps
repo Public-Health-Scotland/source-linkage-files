@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat CIJ_start_date CIJ_end_date
@@ -10,7 +10,7 @@ get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
 select if chi NE "".
 select if any(recid, "01B", "02B", "04B", "GLS").
 
- * Do a temp save here as it speeds things up (because SPSS is weird).
+* Do a temp save here as it speeds things up (because SPSS is weird).
 save outfile =  !Year_dir + "slf_reduced_for_DD.zsav"
     /zcompressed.
 get file =  !Year_dir + "slf_reduced_for_DD.zsav".
@@ -135,8 +135,8 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /DD_gender DD_dob DD_age DD_gpprac DD_postcode DD_lca DD_datazone
     = Last(gender dob age gpprac postcode lca datazone).
 
- * Fill in the variables for the DD.
- * This will keep the value which was on the DD record if it was there, otherwise it will be filled in from the latest episode in the CIJ to have valid data.
+* Fill in the variables for the DD.
+* This will keep the value which was on the DD record if it was there, otherwise it will be filled in from the latest episode in the CIJ to have valid data.
 Do if recid = "DD".
     Compute gender = DD_gender.
     Compute dob = DD_dob.
@@ -309,24 +309,32 @@ save outfile = !Year_dir + "DD_for_source-20" + !FY + ".zsav"
 
 get file = !Year_dir + "DD_for_source-20" + !FY + ".zsav".
 
-* New DD variables.
-* Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason and DD_Quality DD_Responsible_LCA
-    *********************************************************************************************************************.
 * Match back into source.
 add files
     /File =  !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /File =  !Year_dir + "DD_for_source-20" + !FY + ".zsav"
     /by chi keydate1_dateformat.
 
+Do if chi NE "" and cij_marker NE "".
+    Compute has_delay = SMRType = "DD-CIJ".
+End if.
+
+aggregate
+    /break chi cij_marker
+    /cij_delay = max(has_delay).
+
+Alter type cij_delay (F1.0).
+
 save outfile = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav"
+    /Drop has_delay
     /zcompressed.
 get file = !Year_dir + "temp-source-episode-file-2-" + !FY + ".zsav".
 
 Erase File = !Year_dir + "DD_Temp-1.zsav".
 Erase File = !Year_dir + "DD_Temp-2.zsav".
 
- * Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
+* Think before deleting this one as it takes a while to create... may be worth leaving it till later to delete.
 Erase file = !Year_dir + "slf_reduced_for_DD.zsav".
 
- * Add the Delayed Discharge extract to the 'Activities zip'.
+* Add the Delayed Discharge extract to the 'Activities zip'.
 Host  Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' '" + !Year_dir + "DD_for_source-20" + !FY + ".zsav'"].

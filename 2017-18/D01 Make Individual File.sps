@@ -72,6 +72,10 @@ Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
 
+* Create a count for cij_delay variable.
+If cij_delay and Distinct_CIJ cij_delay = 1.
+Compute cij_delay = cij_delay and Distinct_CIJ.
+
 *Create variables to count preventable admissions and preventable beddays. 
 Do if cij_ppa.
     If Distinct_CIJ preventable_admissions = 1.
@@ -529,7 +533,7 @@ aggregate outfile = *
     /SDS_option_4 = Max(SDS_option_4)
     /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
-    /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
+    /CIJ_el CIJ_non_el CIJ_mat cij_delay = Sum(CIJ_el CIJ_non_el CIJ_mat cij_delay)
     /NSU = Max(NSU)
     /preventable_admissions preventable_beddays = Sum(preventable_admissions preventable_beddays)
     /deceased death_date = First(deceased death_date)
