@@ -35,6 +35,8 @@ Variable Labels
     cancer_date "Cancer LTC incidence date"
     cat "Patient Category"
     CCM "Continuous Care Marker"
+    ch_chi_cis "Marker to flag care home stays - chi"
+    ch_sc_id_cis "Marker to flag care home stays - sc id"
     ch_name "Name of care home where the client/service user resides"
     ch_adm_reason "Primary reason for admission to a care home"
     ch_provider "The service provider of the care home"
@@ -44,6 +46,7 @@ Variable Labels
     chi "Community Health Index number"
     cij_adm_spec "Specialty on first record in CIJ"
     cij_admtype "CIJ admission type"
+    cij_delay "CIJ which had a delay at some point"
     cij_dis_spec "Specialty on last record in CIJ"
     CIJ_end_date "Date of discharge for the last record in the CIJ (Continuous Inpatient Journey)"
     cij_ipdc "CIJ inpatient day case identifier"
@@ -169,6 +172,7 @@ Variable Labels
     op4b "Other operation 3 (B Part)"
     parkinsons "Parkinsons LTC marker"
     parkinsons_date "Parkinsons LTC incidence date"
+    person_id "Unique identifier taken from underlying dataset"
     place_death_occurred "Place death occurred"
     post_mortem "Post Mortem Indicator"
     postcode "7 character postcode"
@@ -179,6 +183,7 @@ Variable Labels
     refailure_date "Renal failure LTC incidence date"
     refsource "Referral Source"
     reftype "Referral Type"
+    sc_latest_submission "The quarter in which the latest record was received for this episode"
     sc_send_lca "Social care data sending local authority"
     sc_living_alone "Indicator of whether the client/service user lives alone"
     sc_support_from_unpaid_carer "Indicator of whether the client/service user received support from an unpaid carer at any point during the quarter"
@@ -513,7 +518,6 @@ Value Labels spec cij_adm_spec cij_dis_spec
     'XSU' "Unspecified"
     'XX' "Others".
 
-
 Value Labels sigfac
     '11' "Other (inc. Clinical Facilities of Standard Specialty Ward 1K, Day Bed Unit 1J)"
     '13' "Intensive Care Unit"
@@ -704,7 +708,6 @@ Variable Width
     cost_total_net cost_total_net_incDNAs (10)
     record_keydate1 record_keydate2 keydate1_dateformat keydate2_dateformat dob death_date dateop1 dateop2 dateop3 dateop4(10).
 
-*********************************************************************************************.
 sort cases by CHI record_keydate1 keytime1 record_keydate2 keytime2.
 
 * Reorder and keep variables.
@@ -720,6 +723,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     keytime2
     smrtype
     chi
+    person_id
     gender
     dob
     age
@@ -847,6 +851,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     cij_adm_spec
     cij_dis_spec
     cij_ppa
+    cij_delay
     cup_marker
     cup_pathway
     uri

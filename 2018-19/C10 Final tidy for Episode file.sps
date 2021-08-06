@@ -46,6 +46,7 @@ Variable Labels
     chi "Community Health Index number"
     cij_adm_spec "Specialty on first record in CIJ"
     cij_admtype "CIJ admission type"
+    cij_delay "CIJ which had a delay at some point"
     cij_dis_spec "Specialty on last record in CIJ"
     CIJ_end_date "Date of discharge for the last record in the CIJ (Continuous Inpatient Journey)"
     cij_ipdc "CIJ inpatient day case identifier"
@@ -517,7 +518,6 @@ Value Labels spec cij_adm_spec cij_dis_spec
     'XSU' "Unspecified"
     'XX' "Others".
 
-
 Value Labels sigfac
     '11' "Other (inc. Clinical Facilities of Standard Specialty Ward 1K, Day Bed Unit 1J)"
     '13' "Intensive Care Unit"
@@ -708,7 +708,6 @@ Variable Width
     cost_total_net cost_total_net_incDNAs (10)
     record_keydate1 record_keydate2 keydate1_dateformat keydate2_dateformat dob death_date dateop1 dateop2 dateop3 dateop4(10).
 
-*********************************************************************************************.
 sort cases by CHI record_keydate1 keytime1 record_keydate2 keytime2.
 
 * Reorder and keep variables.
@@ -852,6 +851,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     cij_adm_spec
     cij_dis_spec
     cij_ppa
+    cij_delay
     cup_marker
     cup_pathway
     uri

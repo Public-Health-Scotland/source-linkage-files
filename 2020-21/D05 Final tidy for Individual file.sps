@@ -142,6 +142,7 @@ Variable Labels
     CIJ_el "Number of Continous Inpatient Journeys (CIJ) which began with an Elective admission"
     CIJ_non_el "Number of Continous Inpatient Journeys (CIJ) which began with a Non-Elective admission"
     CIJ_mat "Number of Continous Inpatient Journeys (CIJ) which began with an Maternity admission"
+    cij_delay "Number of Continuous Inpatient Journeys (CIJ) which had a delay at some point"
     HRI_lca "HRIs in LCA excluding District Nursing and Care Home costs"
     HRI_lca_incDN "HRIs in LCA including District Nursing costs"
     HRI_hb "HRIs in HB excluding District Nursing and Care Home costs"
@@ -323,6 +324,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     cij_el
     cij_non_el
     cij_mat
+    cij_delay
     arth
     asthma
     atrialfib
