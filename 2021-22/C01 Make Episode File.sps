@@ -18,9 +18,9 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
     !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
-*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom.
+* We are currently not including DN or CMH extracts for FY 2021 or 2022 - 04/09/20 Jennifer Thom.
 *   !Year_dir + "CMH_tests_20" + !FY + ".zsav " +.
-*    !Year_dir + "DN_tests_20" + !FY + ".zsav " +.
+*   !Year_dir + "DN_tests_20" + !FY + ".zsav " +.
 
 * Bring all the data sets together.
 add files
@@ -36,7 +36,7 @@ add files
     /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /By chi.
 
-*We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom.
+*We are currently not including DN or CMH extracts for FY 2021 or 2022  - 04/09/20 Jennifer Thom.
 *    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
 *    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav".
 
@@ -403,6 +403,6 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
     !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
 
-* We are currently not including DN or CMH extracts for FY 2021 - 04/09/20 Jennifer Thom.
+* We are currently not including DN or CMH extracts for FY 2021 or 2022  - 04/09/20 Jennifer Thom.
 *   !Year_dir + "DN_for_source-20" + !FY + ".zsav " +.
 *    !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +.
