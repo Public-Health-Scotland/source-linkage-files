@@ -356,7 +356,8 @@ sort cases by chi keydate1_dateformat.
 * Social Care variables for consistency.
 * Social Care.
 String
-    sc_send_lca (A2).
+    sc_send_lca (A2)
+    sc_latest_submission (A6).
 
 Numeric
     sc_living_alone
@@ -379,31 +380,30 @@ String
 
 Numeric
     ch_adm_reason (F2.0)
-    ch_nursing (F1.0).
+    ch_nursing (F1.0)
+    ch_chi_cis (F8.0)
+    ch_sc_id_cis(F8.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
 
- * Declare variables for Delay Discharge (14/15 and 1516 only).
+* Declare variables for Delay Discharge (14/15 and 15/16 only).
 Numeric Delay_End_Reason CIJ_Delay (F1.0).
-String 
-    Primary_Delay_Reason (A4)
-    Secondary_Delay_Reason (A4)    
-    DD_Quality (A3)
-    DD_Responsible_LCA (A2).
+String Primary_Delay_Reason (A4).
+String Secondary_Delay_Reason (A4).
+String DD_Quality (A3).
+String DD_Responsible_LCA (A2).
 
- * Declare variables for Homelessness (14/15 and 1516 only).
-String 
-    hl1_application_ref (A15)
-    hl1_sending_lca (A9)
-    hl1_reason_ftm (A10).
+* Declare variables for Homelessness (14/15 and 15/16 only).
+String hl1_application_ref (A15).
+String hl1_sending_lca (A9).
+Numeric hl1_property_type (F2.0).
+String hl1_reason_ftm (A10).
+Numeric HH_in_FY (F1.0).
+Numeric HH_ep (F1.0).
+Numeric HH_6after_ep (F1.0).
+Numeric HH_6before_ep (F1.0).
 
-Numeric 
-    hl1_property_type (F2.0)
-    HH_in_FY (F1.0)
-    HH_ep (F1.0)
-    HH_6after_ep (F1.0)
-    HH_6before_ep (F1.0).
 
 *Declare variables for DN. 
 Numeric 
