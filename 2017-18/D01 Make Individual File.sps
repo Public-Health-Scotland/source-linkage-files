@@ -76,6 +76,15 @@ End if.
 If cij_delay and Distinct_CIJ cij_delay = 1.
 Compute cij_delay = cij_delay and Distinct_CIJ.
 
+*Create variables to count preventable admissions and preventable beddays. 
+Do if cij_ppa.
+    If Distinct_CIJ preventable_admissions = 1.
+    Compute preventable_beddays = datediff(Min(!endFY, CIJ_end_date), Max(!startFY, CIJ_start_date), "days").
+Else. 
+    Compute preventable_admissions = 0.
+    Compute preventable_beddays = 0.
+End if.
+
 * Create care home continuous episode variables.
 * Use these later to aggregate over the episodes.
 sort cases by CHI ch_chi_cis.
@@ -526,6 +535,7 @@ aggregate outfile = *
     /HL1_in_FY = Max(HH_in_FY)
     /CIJ_el CIJ_non_el CIJ_mat cij_delay = Sum(CIJ_el CIJ_non_el CIJ_mat cij_delay)
     /NSU = Max(NSU)
+    /preventable_admissions preventable_beddays = Sum(preventable_admissions preventable_beddays)
     /deceased death_date = First(deceased death_date)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
