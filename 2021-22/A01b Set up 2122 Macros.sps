@@ -18,17 +18,17 @@
 
  * Set the Financial Year.
 Define !FY()
-   "2021"
+   "2122"
 !EndDefine.
 
 * Set the next FY, needed for SPARRA (and HHG).
 Define !NextFY ()
-    "2122"
+    "2223"
 !EndDefine.
 
 *This related to the file in the IT extracts directory and should unzip this in B06 Process PIS extract.
 *Change this to the relevant number specific to FY.
 * Should be '_extract_NUMBER'.
 Define !PIS_extract_number()
-    "_extract_5_"
+    "_extract_??_"
 !EndDefine.
