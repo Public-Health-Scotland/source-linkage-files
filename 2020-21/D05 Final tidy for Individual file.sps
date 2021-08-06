@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
@@ -52,6 +52,8 @@ Variable Labels
     Locality "HSCP Locality"
     Cluster "GP Practice Cluster"
     NSU "Flag to indicate Non-service-users"
+    preventable_admissions "Number of preventable admissions"
+    preventable_beddays "Number of preventable beddays"
     HL1_in_FY "CHI had an active homelessness application during this financial year"
     health_net_cost "Total net cost"
     health_net_costincDNAs "Total net cost including 'did not attend'"
@@ -232,6 +234,8 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     health_net_costincdnas
     health_net_costincincomplete
     nsu
+    preventable_admissions 
+    preventable_beddays
     hl1_in_fy
     deceased
     death_date
