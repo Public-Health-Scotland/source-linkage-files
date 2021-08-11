@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 GET DATA  /TYPE=TXT
     /FILE= !Year_Extracts_dir + "Homelessness extract-20" + !FY + ".csv"
     /ENCODING='UTF8'
@@ -131,4 +131,4 @@ save outfile = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'
     /zcompressed.
 
  * zip up the raw data.
-Host Command = ["gzip " + !Year_Extracts_dir + "Homelessness extract-20" + !FY + ".csv"].
+Host Command = ["gzip " + !Year_Extracts_dir + "Homelessness-extract-20" + !FY + ".csv"].
