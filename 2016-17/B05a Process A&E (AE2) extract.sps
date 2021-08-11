@@ -586,4 +586,4 @@ save outfile = !Year_dir + 'a&e_data-20' + !FY + '.zsav'
 get file = !Year_dir + 'a&e_data-20' + !FY + '.zsav'.
 
 * Zip up raw data.
-Host Command = ["gzip " + !Year_Extracts_dir + "A&E-episode-level-extract-20" + !FY + ".csv"].
+Host Command = ["gzip " + !Year_Extracts_dir + "A\&E-episode-level-extract-20" + !FY + ".csv"].
