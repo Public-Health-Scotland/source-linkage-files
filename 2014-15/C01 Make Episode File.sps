@@ -357,7 +357,8 @@ sort cases by chi keydate1_dateformat.
 * Social Care.
 String
     sc_send_lca (A2)
-    sc_latest_submission (A6).
+    sc_latest_submission (A6)
+    person_id (A13).
 
 Numeric
     sc_living_alone
