@@ -29,7 +29,7 @@ Define !LatestUpdate()
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Mar21"
+    "Jul16_Jun21"
 !EndDefine.
 
 
