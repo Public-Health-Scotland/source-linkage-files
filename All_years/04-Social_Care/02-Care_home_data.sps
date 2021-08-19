@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Care Home data.
 get file = !SC_dir + "Social-Care-Carehome_Extract.zsav"
     /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
@@ -489,7 +489,7 @@ sort cases by chi split_ep_marker ch_admission_date ch_discharge_date.
 * Adjust discharge dates according to death dates.
 * Match on the death dates from the deceased lookup (year specific).
 match files file = *
-    /table = !Deaths_dir + "all_deaths.zsav"
+    /table = !Deaths_dir + "all_deaths_" + !LatestUpdate + ".zsav"
     /by chi.
 
 * Create a flag to identify the last record where an episode has been split.

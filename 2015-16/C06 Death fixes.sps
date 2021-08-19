@@ -10,7 +10,7 @@ Get file = !Year_dir + "temp-source-episode-file-5-" + !FY + ".zsav".
 * Only keep relevant variables.
 match files
     /file  = *
-    /table = !Deaths_dir + "all_deaths.zsav"
+    /table = !Deaths_dir + "all_deaths_" + !LatestUpdate + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat SMRType CHI gender dob age
     attendance_status
     death_date death_date_NRS death_date_CHI death_date

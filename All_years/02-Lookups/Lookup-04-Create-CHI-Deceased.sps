@@ -35,10 +35,10 @@ Numeric death_date (Date12).
 Compute death_date = death_date_CHI.
 If Not(sysmis(death_date_NRS)) death_date = death_date_NRS.
 
-save outfile = !Deaths_dir + "all_deaths" + !LatestUpdate + ".zsav"
+save outfile = !Deaths_dir + "all_deaths_" + !LatestUpdate + ".zsav"
     /zcompressed.
 
-get file = !Deaths_dir +  "all_deaths" + !LatestUpdate + ".zsav".
+get file = !Deaths_dir +  "all_deaths_" + !LatestUpdate + ".zsav".
 
 * Zip back up.
 Host Command = ["gzip " + !Deaths_extract_file].
