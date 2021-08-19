@@ -144,9 +144,9 @@ Alter type postcode (A8).
 Missing values chi postcode ().
 
 *  Save to be used in other Social Care processing.
-save outfile = !SC_dir + "sc_demograpics_lookup_" + !LatestUpdate + ".zsav"
+save outfile = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav"
     /zcompressed.
-get file = !SC_dir + "sc_demograpics_lookup_" + !LatestUpdate + ".zsav".
+get file = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav".
 
 
 

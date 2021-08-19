@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Care Home data.
 get file = !SC_dir + "Social-Care-Carehome_Extract.zsav"
     /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
@@ -43,7 +43,7 @@ sort cases by sending_location social_care_id period ch_admission_date ch_discha
 
 * Match on the demographics data (chi, gender, dob and postcode).
 match files file = *
-    /table = !SC_dir + "sc_demograpics_lookup_" + !LatestUpdate + ".zsav"
+    /table = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav"
     /by sending_location social_care_id.
 
 * Correct Postcode formatting.
