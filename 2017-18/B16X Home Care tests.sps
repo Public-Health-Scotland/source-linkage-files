@@ -25,9 +25,6 @@ If hc_reablement = 0 hc_reablement_no = 1.
 If hc_reablement = 1 hc_reablement_yes = 1.
 If hc_reablement = 9 hc_reablement_unknown = 1.
 
-*Flag to count missing hc_reablement.
-If sysmis(hc_reablement) hc_reablement_missing = 1. 
-
 *Flag to count HC provider. 
 If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1. 
 If hc_provider = 5 hc_provider_other = 1. 
@@ -120,7 +117,6 @@ aggregate outfile = SLFnew
     /n_hc_reablement_no = Sum(hc_reablement_no)
     /n_hc_reablement_yes = Sum(hc_reablement_yes)
     /n_hc_reablement_unknown = Sum(hc_reablement_unknown)
-    /n_hc_reablement_missing = Sum(hc_reablement_missing)
     /n_sc_living_alone_no = Sum(sc_living_alone_no)
     /n_sc_living_alone_yes = Sum(sc_living_alone_yes)
     /n_sc_living_alone_unknown = Sum(sc_living_alone_unknown)
@@ -203,9 +199,6 @@ If SMRType = 'HC-Non-Per' HC_Non_Per = 1.
 If hc_reablement = 0 hc_reablement_no = 1.
 If hc_reablement = 1 hc_reablement_yes = 1.
 If hc_reablement = 9 hc_reablement_unknown = 1.
-
-*Flag to count missing hc_reablement.
-If sysmis(hc_reablement) hc_reablement_missing = 1. 
 
 *Flag to count HC provider. 
 If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1. 
@@ -299,7 +292,6 @@ aggregate outfile = SLFexisting
     /n_hc_reablement_no = Sum(hc_reablement_no)
     /n_hc_reablement_yes = Sum(hc_reablement_yes)
     /n_hc_reablement_unknown = Sum(hc_reablement_unknown)
-    /n_hc_reablement_missing = Sum(hc_reablement_missing)
     /n_sc_living_alone_no = Sum(sc_living_alone_no)
     /n_sc_living_alone_yes = Sum(sc_living_alone_yes)
     /n_sc_living_alone_unknown = Sum(sc_living_alone_unknown)
