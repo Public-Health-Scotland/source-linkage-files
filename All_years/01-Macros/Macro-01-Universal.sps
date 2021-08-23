@@ -20,7 +20,7 @@
 * IT Extracts * 
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0228343"
+    "SCTASK0247528"
 !EndDefine.
 
 *Latest update month for postcode and gp prac lookups.

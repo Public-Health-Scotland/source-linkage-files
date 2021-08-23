@@ -30,5 +30,5 @@ Define !NextFY ()
 *Change this to the relevant number specific to FY.
 * Should be '_extract_NUMBER'.
 Define !PIS_extract_number()
-    "_extract_??_"
+    "_extract_9_"
 !EndDefine.
