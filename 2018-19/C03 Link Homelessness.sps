@@ -109,5 +109,5 @@ If recid = 'HL1' and chi = '' HH_in_FY = 1 .
 
 *Save Temp.
 save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav" 
-   /keep year to DD_Quality HH_in_FY to HH_6before_ep
+   /keep year to cij_delay HH_in_FY to HH_6before_ep
    /zcompressed.
