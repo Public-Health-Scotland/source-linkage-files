@@ -13,6 +13,7 @@
     * Numbers may be slightly different.
     * Now include `person_id` and `sc_latest_submission` variables.
     * In Home Care missing reablement has been re-coded to unknown (9).
+* Data now available in 2021 for DN and CMH - code now amended to include these.
 
 # June 2021 Update - Released 29-Jul-2021
 
