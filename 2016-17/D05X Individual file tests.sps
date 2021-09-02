@@ -218,6 +218,7 @@ aggregate outfile = New_Summary
     /mean_CIJ_el = Mean(CIJ_el)
     /mean_CIJ_non_el = Mean(CIJ_non_el)
     /mean_CIJ_mat = Mean(CIJ_mat)
+    /mean_cij_delay = Mean(cij_delay)
     /mean_arth = Mean(arth)
     /mean_asthma = Mean(asthma)
     /mean_atrialfib = Mean(atrialfib)
@@ -278,6 +279,12 @@ if sysmis(gpprac) No_GPprac = 1.
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
 
+*No PPA or PPB available in the old file. 
+*Will need to add these back into the old summary once the year is updated again.
+*   /n_preventable_admissions = Sum(preventable_admissions)
+*   /total_preventable_beddays = Sum(preventable_beddays)
+*   /total_cij_delay = Sum(cij_delay)
+
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
     /Break
@@ -285,12 +292,9 @@ aggregate outfile = Old_Summary
     /Age_mean = mean(age)
     /sex_Males sex_Females = Sum(Male Female)
     /n_NSUs n_Dead = SUM(NSU deceased)
-    /n_preventable_admissions n_preventable_beddays = Sum(preventable_admissions preventable_beddays)
     /n_No_Postcode n_No_HB n_No_LCA n_No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
     /n_No_Demog n_No_Service = Sum(No_Demog No_Service)
     /n_No_SPARRA_start n_No_SPARRA_end n_No_HHG_start n_No_HHG_end = Sum(SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY)
-    /n_preventable_admissions = Sum(preventable_admissions)
-    /total_preventable_beddays = Sum(preventable_beddays)
     /total_health_net_cost = Sum(health_net_cost)
     /total_health_net_costincDNAs = Sum(health_net_costincDNAs)
     /total_health_net_costincIncomplete = Sum(health_net_costincIncomplete)
@@ -367,7 +371,6 @@ aggregate outfile = Old_Summary
     /total_CIJ_el = Sum(CIJ_el)
     /total_CIJ_non_el = Sum(CIJ_non_el)
     /total_CIJ_mat = Sum(CIJ_mat)
-    /total_cij_delay = Sum(cij_delay)
     /total_arth = Sum(arth)
     /total_asthma = Sum(asthma)
     /total_atrialfib = Sum(atrialfib)
