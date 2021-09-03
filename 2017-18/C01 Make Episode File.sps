@@ -390,6 +390,7 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "DN_for_source-20" + !FY + ".zsav " +
     !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
+	!Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
     !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
     !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
