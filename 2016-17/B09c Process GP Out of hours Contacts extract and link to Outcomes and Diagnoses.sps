@@ -218,7 +218,7 @@ Recode TreatmentLocationCode ("UNKNOWN" = "").
 Rename Variables (TreatmentNHSBoardCode TreatmentLocationCode = hbtreatcode location).
 
  * Keep the location descriptions as a lookup.
-aggregate outfile = !Year_dir + "GP-OOH-Location-Description-Lookup-20" + !FY + ".sav"
+aggregate outfile = !Lookup_dir_slf + "GP-OOH-Location-Description-Lookup-20" + !FY + ".sav"
    /Break location
    /LocationDescription = First(TreatmentLocationDescription).
 
