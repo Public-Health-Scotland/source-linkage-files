@@ -53,7 +53,8 @@ include !Year_dir + "Temp macro definitions.sps".
 * Restructure to have single record per CHI.
 casestovars
     /ID = chi
-    /Drop record_keydate1 record_keydate2 num_records max_records.
+    /Drop record_keydate1 record_keydate2 num_records max_records
+    /autofix = no.
 
 * Match to source.
 match files
