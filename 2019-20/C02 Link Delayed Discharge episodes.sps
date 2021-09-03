@@ -245,7 +245,7 @@ sort cases by chi keydate1_dateformat.
 * Save out records with changed end dates to feed back to the DD team.
 Temporary.
 Select if any(Flag_7, 1, 2).
-save outfile = !Year_dir + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
+save outfile = !Delayed_Discharges_dir + "DD episodes with corrected end-dates - 20" + !FY + ".zsav"
     /Rename (keydate1_dateformat keydate2_dateformat = RDD Delay_End_Date)
     /keep year chi DD_Responsible_LCA RDD Delay_End_Date temp_cij_marker cij_ipdc cij_admtype cij_pattype_code cij_pattype cij_adm_spec cij_dis_spec
     MONTHFLAG OriginalAdmissionDate Delay_End_Reason Primary_Delay_Reason Secondary_Delay_Reason
