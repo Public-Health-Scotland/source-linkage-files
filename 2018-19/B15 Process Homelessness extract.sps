@@ -12,8 +12,10 @@ GET DATA  /TYPE=TXT
     AssessmentDecisionDate YMDHMS19
     CaseClosedDate YMDHMS19
     SendingLocalAuthorityCode9 A9
+    ClientUniqueIdentifier A100
     UPINumberC A10
     ClientDoBDateC YMDHMS19
+    Age F3.0
     GenderCode F1.0
     ClientPostcodeC A8
     MainApplicantFlag A1
@@ -29,6 +31,7 @@ GET DATA  /TYPE=TXT
     CriminalAntiSocialBehaviour F1.0
     NottodowithApplicantHousehold F1.0
     Refused F1.0
+    universal_credit F1.0
     /MAP.
 
  * Drop records for partnerships which don't have good / complete data.
@@ -95,6 +98,7 @@ Rename Variables
     CaseClosedDate = record_keydate2
     SendingLocalAuthorityCode9 = hl1_sending_lca
     UPINumberC = chi
+    ClientUniqueIdentifier = person_id
     ClientDoBDateC = dob
     GenderCode = gender
     ClientPostcodeC = postcode
@@ -119,7 +123,9 @@ save outfile = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'
     recid
     SMRType
     chi
+    person_id
     dob
+    age
     gender
     postcode
     record_keydate1
