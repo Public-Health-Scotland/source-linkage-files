@@ -54,12 +54,20 @@ if __name__ == "__main__":
 
             # If a file already exists remove the old one first
             if os.path.exists(sorted_file):
-                os.remove(sorted_file)
-                print(
-                    "Removed the existing {} from the {} Extracts folder.".format(
-                        file, year
+                try:
+                    os.remove(sorted_file)
+                except PermissionError:
+                    print(
+                        "Tried to remove {} from the {} Extracts folder but couldn't.\nCheck if the file is open then re-run this script.".format(
+                            file, year
+                        )
                     )
-                )
+                else:
+                    print(
+                        "Removed the existing {} from the {} Extracts folder.".format(
+                            file, year
+                        )
+                    )
 
             # Move to the sorted location
             os.rename(unsorted_file, sorted_file)
@@ -72,4 +80,6 @@ if __name__ == "__main__":
                         gzip_csv.writelines(uncompressed_csv)
                 os.remove(sorted_file)
 
-    input("Done with all files, press enter to exit.")
+    input(
+        "\n---------------------------------------------\nThe script has finished, press enter to exit."
+    )
