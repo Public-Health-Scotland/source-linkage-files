@@ -24,7 +24,7 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -49,7 +49,7 @@ aggregate outfile = SLFnew
     /Max_Cost = Maxcost_total_net
     /Min_Cost = Mincost_total_net
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)
     /Total_cost_may = Sum(may_cost)
     /Total_cost_jun = Sum(jun_cost)
@@ -125,7 +125,7 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -151,7 +151,7 @@ aggregate outfile = SLFexisting
     /Max_Cost = Maxcost_total_net
     /Min_Cost = Mincost_total_net
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)
     /Total_cost_may = Sum(may_cost)
     /Total_cost_jun = Sum(jun_cost)

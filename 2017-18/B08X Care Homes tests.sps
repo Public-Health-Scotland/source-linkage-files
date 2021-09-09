@@ -35,7 +35,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -98,7 +98,7 @@ aggregate outfile = SLFnew
     /Max_Cost Max_yearstay Max_stay = Max(cost_total_net yearstay stay)
     /Min_Cost Min_yearstay Min_stay = Min(cost_total_net yearstay stay)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_beddays_apr = Sum(Apr_beddays)
     /Total_beddays_may = Sum(May_beddays)
     /Total_beddays_jun = Sum(Jun_beddays)
@@ -250,7 +250,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -313,7 +313,7 @@ aggregate outfile = SLFexisting
     /Max_Cost Max_yearstay Max_stay = Max(cost_total_net yearstay stay)
     /Min_Cost Min_yearstay Min_stay = Min(cost_total_net yearstay stay)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_beddays_apr = Sum(Apr_beddays)
     /Total_beddays_may = Sum(May_beddays)
     /Total_beddays_jun = Sum(Jun_beddays)

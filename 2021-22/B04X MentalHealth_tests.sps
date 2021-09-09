@@ -26,7 +26,7 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -70,7 +70,7 @@ aggregate outfile = SLFnew
     /Max_Cost Max_yearstay Max_stay = Max(cost_total_net yearstay stay)
     /Min_Cost Min_yearstay Min_stay = Min(cost_total_net yearstay stay)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_beddays_apr = Sum(apr_beddays)
     /Total_beddays_may = Sum(may_beddays)
     /Total_beddays_jun = Sum(jun_beddays)
@@ -185,7 +185,7 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -229,7 +229,7 @@ aggregate outfile = SLFexisting
     /Max_Cost Max_yearstay Max_stay = Max(cost_total_net yearstay stay)
     /Min_Cost Min_yearstay Min_stay = Min(cost_total_net yearstay stay)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_beddays_apr = Sum(apr_beddays)
     /Total_beddays_may = Sum(may_beddays)
     /Total_beddays_jun = Sum(jun_beddays)

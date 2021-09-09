@@ -45,7 +45,7 @@ If hbrescode = 'S08000019' NHS_Forth_Valley = 1.
 If hbrescode = 'S08000020' NHS_Grampian = 1. 
 If any(hbrescode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbrescode = 'S08000022' NHS_Highland = 1.
-If any(hbrescode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbrescode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbrescode = 'S08000024' NHS_Lothian = 1. 
 If hbrescode = 'S08000025' NHS_Orkney = 1. 
 If hbrescode = 'S08000026' NHS_Shetland = 1. 
@@ -82,12 +82,12 @@ aggregate outfile = !DatasetName
     /break year recid
     /n_episodes = n
     /n_male n_female = Sum(Male Female)
-    /n_no_dob n_no_postcode n_no_gpprac= Sum(No_DoB No_Postcode No_GPprac)
+    /n_no_dob n_no_postcode n_no_gpprac = Sum(No_DoB No_Postcode No_GPprac)
     /n_CIJ_elective n_CIJ_non_elective n_CIJ_maternity n_CIJ_other = Sum(CIJ_elective CIJ_non_elective CIJ_maternity CIJ_other)
     /Avg_age = Mean(age)
     /n_children n_adults n_over65 = Sum(Child Adult Over_65)
     /Earliest_adm Earliest_dis = Min(keydate1_dateformat keydate2_dateformat)
-    /Latest_adm Latest_dis= Max(keydate1_dateformat keydate2_dateformat)
+    /Latest_adm Latest_dis = Max(keydate1_dateformat keydate2_dateformat)
     /cij_ppas = Sum(cij_ppa)
     /avg_yearstay avg_stay = Mean(yearstay stay)
     /total_yearstay total_stay = Sum(yearstay stay)
@@ -185,7 +185,7 @@ Alter type value (F8.2).
 get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 !Create_Aggregate FileVersion = New.
 
-get file =  "/conf/hscdiip/01-Source-linkage-files/source-episode-file-20" + !FY + ".zsav".
+get file = "/conf/hscdiip/01-Source-linkage-files/source-episode-file-20" + !FY + ".zsav".
 !Create_Aggregate FileVersion = Old.
 
 match files 
