@@ -23,9 +23,9 @@ aggregate outfile = SLFnew
     /Males Females = Sum(Male Female)
     /n_episodes = n
     /mean_dispensed = Mean(no_dispensed_items)
-    /mean_cost = Mean(cost_total_net)
+    /mean_cost = Meancost_total_net
     /Total_dispensed = Sum(no_dispensed_items)
-    /Total_Costs_net = Sum(cost_total_net).
+    /Total_Costs_net = Sumcost_total_net.
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
@@ -61,9 +61,9 @@ aggregate outfile = SLFexisting
     /Males Females = Sum(Male Female)
     /n_episodes = n
     /mean_dispensed = Mean(no_dispensed_items)
-    /mean_cost = Mean(cost_total_net)
+    /mean_cost = Meancost_total_net
     /Total_dispensed = Sum(no_dispensed_items)
-    /Total_Costs_net = Sum(cost_total_net).
+    /Total_Costs_net = Sumcost_total_net.
 
 Dataset activate SLFexisting.
 Varstocases

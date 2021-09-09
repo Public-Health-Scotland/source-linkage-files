@@ -108,7 +108,7 @@ match files file = *
 
 * Since the costs are rough estimates we round them to the nearest pound.
 * This hopefully means they aren't seen as too 'exact'.
-Compute cost_total_net = rnd(cost_total_net).
+Compute cost_total_net = rndcost_total_net.
 
 * Finding the difference between dates of contacts and creating new variable DATEDIFF.
 sort cases by chi record_keydate1.
@@ -160,7 +160,7 @@ aggregate outfile=*
     /postcode = Last(postcode)
     /gender = First(gender)
     /gpprac = First(gpprac)
-    /cost_total_net = Sum(cost_total_net)
+    /cost_total_net = Sumcost_total_net
     /location = First (LocationofContact)
     /TotalnoDNcontacts = n
     /jan_cost = Sum(jan_cost)
