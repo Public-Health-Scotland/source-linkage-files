@@ -34,6 +34,9 @@ GET DATA  /TYPE=TXT
     universal_credit F1.0
     /MAP.
 
+* TODO - Update person_id to be at least A20 so this will fit.
+alter type ClientUniqueIdentifier (A20).
+
 * Drop records for partnerships which don't have good / complete data.
 * For most of the below there will be no data anyway but some have test data only.
 Compute #Drop = 0.
@@ -123,7 +126,6 @@ save outfile = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'
     recid
     SMRType
     chi
-    person_id
     dob
     age
     gender
