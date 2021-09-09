@@ -364,12 +364,13 @@ get file = !SC_dir + "TEMP-Care_Home_pre-aggregate.zsav".
 sort cases by chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider.
 
 * Remove exact duplicates as they will be removed in the aggregate anyway and they make the below calculations more complicated.
-aggregate
-    /presorted
-    /break chi sending_location social_care_id ch_admission_date period nursing_care_provision ch_provider
-    /Duplicate_count = n.
-*Frequencies Duplicate_count.
-Select if Duplicate_count = 1.
+compute duplicate_to_drop = chi = lag(chi) and sending_location = lag(sending_location) and social_care_id = lag(social_care_id)
+    and ch_admission_date = lag(ch_admission_date) and period = lag(period)
+    and nursing_care_provision = lag(nursing_care_provision) and ch_provider = lag(ch_provider).
+
+ * crosstabs sending_location by duplicate_to_drop by period
+    /cells = count row.
+Select if not duplicate_to_drop.
 
 aggregate
     /presorted
