@@ -16,21 +16,21 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-*Flag to count how many episodes in each HB by treatment code. 
-If hbtreatcode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
-If hbtreatcode = 'S08000016' NHS_Borders = 1. 
-If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
-If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
-If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
-If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
-If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
-If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
-If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
-If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
-If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
-If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
+*Flag to count how many episodes in each HB by rescode. 
+If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbrescode = 'S08000016' NHS_Borders = 1. 
+If hbrescode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbrescode = 'S08000019' NHS_Forth_Valley = 1. 
+If hbrescode = 'S08000020' NHS_Grampian = 1. 
+If any(hbrescode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
+If hbrescode = 'S08000022' NHS_Highland = 1.
+If any(hbrescode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If hbrescode = 'S08000024' NHS_Lothian = 1. 
+If hbrescode = 'S08000025' NHS_Orkney = 1. 
+If hbrescode = 'S08000026' NHS_Shetland = 1. 
+If hbrescode = 'S08000028' NHS_Western_Isles = 1. 
+If any(hbrescode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbrescode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
 *Change missing HB values to 0. 
 Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
@@ -101,7 +101,7 @@ Sort cases by Measure.
 *************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
     /Keep recid Anon_CHI record_keydate1 record_keydate2 gender dob age
-    cost_total_net apr_cost to mar_cost hbtreatcode.
+    cost_total_net apr_cost to mar_cost hbrescode.
 select if recid = 'DN'.
 
 * Flag to count CHIs.
@@ -117,21 +117,21 @@ End if.
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
 
-*Flag to count how many episodes in each HB by treatment code. 
-If hbtreatcode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
-If hbtreatcode = 'S08000016' NHS_Borders = 1. 
-If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
-If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
-If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
-If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
-If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
-If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
-If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
-If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
-If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
-If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
+*Flag to count how many episodes in each HB by rescode. 
+If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbrescode = 'S08000016' NHS_Borders = 1. 
+If hbrescode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbrescode = 'S08000019' NHS_Forth_Valley = 1. 
+If hbrescode = 'S08000020' NHS_Grampian = 1. 
+If any(hbrescode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
+If hbrescode = 'S08000022' NHS_Highland = 1.
+If any(hbrescode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If hbrescode = 'S08000024' NHS_Lothian = 1. 
+If hbrescode = 'S08000025' NHS_Orkney = 1. 
+If hbrescode = 'S08000026' NHS_Shetland = 1. 
+If hbrescode = 'S08000028' NHS_Western_Isles = 1. 
+If any(hbrescode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbrescode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
 
 *Change missing HB values to 0. 
