@@ -146,7 +146,7 @@ Compute Difference = New_Value - Existing_Value.
 Do if Existing_Value NE 0.
     Compute PctChange = Difference / Existing_Value * 100.
 End if.
-Compute Issue = (abs(PctChange) > 5).
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.
