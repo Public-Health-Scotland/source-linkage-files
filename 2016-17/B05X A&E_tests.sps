@@ -32,9 +32,6 @@ If hbtreatcode = 'S08000028' NHS_Western_Isles = 1.
 If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
 If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
-
 *Flag to count HB costs. 
 If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = cost_total_net.
 If NHS_Borders = 1 NHS_Borders_cost = cost_total_net. 
@@ -50,9 +47,6 @@ If NHS_Shetland = 1 NHS_Shetland_cost = cost_total_net.
 If NHS_Western_Isles = 1 NHS_Western_Isles_cost = cost_total_net.
 If NHS_Fife = 1 NHS_Fife_cost = cost_total_net.
 If NHS_Tayside = 1 NHS_Tayside_cost = cost_total_net.
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran_cost to NHS_Tayside_cost (SYSMIS = 0).
 
 * Get values for whole file.
 Dataset Declare SLFnew.
@@ -163,9 +157,6 @@ If hbtreatcode = 'S08000028' NHS_Western_Isles = 1.
 If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
 If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
-
 *Flag to count HB costs. 
 If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = cost_total_net.
 If NHS_Borders = 1 NHS_Borders_cost = cost_total_net. 
@@ -181,9 +172,6 @@ If NHS_Shetland = 1 NHS_Shetland_cost = cost_total_net.
 If NHS_Western_Isles = 1 NHS_Western_Isles_cost = cost_total_net.
 If NHS_Fife = 1 NHS_Fife_cost = cost_total_net.
 If NHS_Tayside = 1 NHS_Tayside_cost = cost_total_net.
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran_cost to NHS_Tayside_cost (SYSMIS = 0).
 
 * Get values for whole file.
 Dataset Declare SLFexisting.

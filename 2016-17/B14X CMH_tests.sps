@@ -33,9 +33,6 @@ If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1.
 If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 If hbtreatcode = 'S08000027' NHS_Tayside = 1.
 
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
-
  * Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
@@ -102,9 +99,6 @@ If hbtreatcode = 'S08000028' NHS_Western_Isles = 1.
 If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
 If hbtreatcode = 'S08000030' NHS_Tayside = 1.
 If hbtreatcode = 'S08000027' NHS_Tayside = 1. 
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
 
  * Get values for whole file.
 Dataset Declare SLFexisting.
