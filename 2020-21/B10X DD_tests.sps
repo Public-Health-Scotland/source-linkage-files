@@ -20,7 +20,7 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -54,7 +54,7 @@ aggregate outfile = SLFnew
     /All_NHS_Tayside = Sum(NHS_Tayside)
     /prop_code9 = mean(code_9)
     /Earliest_start Earliest_end = Min(keydate1_dateformat keydate2_dateformat)
-    /Latest_start Latest_end  = Max(keydate1_dateformat keydate2_dateformat).
+    /Latest_start Latest_end = Max(keydate1_dateformat keydate2_dateformat).
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
@@ -86,7 +86,7 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
@@ -120,7 +120,7 @@ aggregate outfile = SLFexisting
     /All_NHS_Tayside = Sum(NHS_Tayside)
     /prop_code9 = mean(code_9)
     /Earliest_start Earliest_end = Min(keydate1_dateformat keydate2_dateformat)
-    /Latest_start Latest_end  = Max(keydate1_dateformat keydate2_dateformat).
+    /Latest_start Latest_end = Max(keydate1_dateformat keydate2_dateformat).
 
 Dataset activate SLFexisting.
 Varstocases
@@ -146,7 +146,7 @@ Compute Difference = New_Value - Existing_Value.
 Do if Existing_Value NE 0.
     Compute PctChange = Difference / Existing_Value * 100.
 End if.
-Compute Issue = (abs(PctChange) > 5).
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.

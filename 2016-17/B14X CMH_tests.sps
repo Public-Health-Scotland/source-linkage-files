@@ -33,9 +33,6 @@ If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1.
 If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 If hbtreatcode = 'S08000027' NHS_Tayside = 1.
 
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
-
  * Get values for whole file.
 Dataset Declare SLFnew.
 aggregate outfile = SLFnew
@@ -44,7 +41,7 @@ aggregate outfile = SLFnew
     /n_Males n_Females = Sum(Male Female)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
@@ -103,9 +100,6 @@ If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1.
 If hbtreatcode = 'S08000030' NHS_Tayside = 1.
 If hbtreatcode = 'S08000027' NHS_Tayside = 1. 
 
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
-
  * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
@@ -114,7 +108,7 @@ aggregate outfile = SLFexisting
     /n_Males n_Females = Sum(Male Female)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
@@ -154,7 +148,7 @@ Compute Difference = New_Value - Existing_Value.
 Do if Existing_Value NE 0.
     Compute PctChange = Difference / Existing_Value * 100.
 End if.
-Compute Issue = (abs(PctChange) > 5).
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.

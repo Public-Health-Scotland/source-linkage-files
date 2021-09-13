@@ -6,7 +6,7 @@ Define !FinalName()
     !Concat("Indiv_Comparison_", !unquote(!Eval(!FY)))
 !EndDefine.
 
-get file= !Year_dir + "source-individual-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
  * Set up some flags.
 
  * Flag to count the males and females.

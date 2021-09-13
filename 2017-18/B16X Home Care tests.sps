@@ -44,7 +44,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -104,7 +104,7 @@ aggregate outfile = SLFnew
     /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_HC_Per = Sum(HC_Per)
     /n_HC_Non_Per = Sum(HC_Non_Per)
     /n_HC_Unknown = Sum(HC_Unknown)
@@ -219,7 +219,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -279,7 +279,7 @@ aggregate outfile = SLFexisting
     /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_HC_Per = Sum(HC_Per)
     /n_HC_Non_Per = Sum(HC_Non_Per)
     /n_HC_Unknown = Sum(HC_Unknown)
@@ -365,7 +365,7 @@ Compute Difference = New_Value - Existing_Value.
 Do if Existing_Value NE 0.
     Compute PctChange = Difference / Existing_Value * 100.
 End if.
-Compute Issue = (abs(PctChange) > 5).
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
