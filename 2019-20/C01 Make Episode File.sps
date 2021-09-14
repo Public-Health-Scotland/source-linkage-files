@@ -60,7 +60,7 @@ Do if chi ne "".
 
     * Test if the first 6 digits could make a valid Date of Birth.
     Do if Valid_CHI = 1 AND
-        sysmis(Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".19", char.substr(chi, 5, 2)), EDate12)) OR
+        sysmis(Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".19", char.substr(chi, 5, 2)), EDate12)) AND
         sysmis(Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".20", char.substr(chi, 5, 2)), EDate12)).
         Compute Valid_CHI = 2.
     End if.
