@@ -162,14 +162,14 @@ End if.
 varstocases /make year from year tempyear1 tempyear2.
 *****************************************************************.
 
- * Add in years by copying the most recent year we have.
+* Add in years by copying the most recent year we have.
 ***This bit will need changing to accomodate new costs ***.
- * Most recent costs year availiable.
+* Most recent costs year availiable.
 String TempYear1 TempYear2 (A4).
-Do if Year = "1819".
+Do if Year = "1920".
     * Make costs for other years.
-    Compute TempYear1 = "1920".
-    Compute TempYear2 = "2021".
+    Compute TempYear1 = "2021".
+    Compute TempYear2 = "2122".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
