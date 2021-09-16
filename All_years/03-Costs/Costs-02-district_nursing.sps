@@ -116,14 +116,31 @@ select if Not(Sysmis(cost_total_net)).
 
 
 *****************************************************************.
- * This section should be reviewed periodically to check if these fixes are still needed.
- * Check the latest highlight report!.
+* Fixes for incomplete submisssions.
+* If a Partnership has abnormally low contacts this will affect the cost so use the previous year until we have a complete submission.
+* This section should be reviewed periodically to check if these fixes are still needed.
+* Check the latest highlight report!.
 *****************************************************************.
- * Fix for NHS Highland 2017/18.
- * Highland have not sumbitted Q4 17/18 data so the costs would be inflated if we used their contact numbers.
- * As a temp fix we will use 16/17 for Highland but use 17/18 costs for other boards.
-
- * Tayside also have a partial submission for 17/18 and 18/19.
+* Easy chart to see trends in contacts.
+aggregate
+    /break Board_Name
+    /max_contacts = max(NumberofContacts).
+Compute pct_of_max = NumberofContacts / max_contacts *100.
+GGRAPH
+  /GRAPHDATASET NAME="graphdataset" VARIABLES=Year pct_of_max Board_Name MISSING=LISTWISE 
+    REPORTMISSING=NO
+  /GRAPHSPEC SOURCE=INLINE.
+BEGIN GPL
+  SOURCE: s=userSource(id("graphdataset"))
+  DATA: Year=col(source(s), name("Year"), unit.category())
+  DATA: pct_of_max=col(source(s), name("pct_of_max"))
+  DATA: Board_Name=col(source(s), name("Board_Name"), unit.category())
+  GUIDE: axis(dim(1), label("Year"))
+  GUIDE: axis(dim(2), label("pct_of_max"))
+  GUIDE: legend(aesthetic(aesthetic.color.interior), label("NHS Board"))
+  SCALE: linear(dim(2), include(0))
+  ELEMENT: line(position(Year*pct_of_max), color.interior(Board_Name), missing.interpolate())
+END GPL.
 
 String TempYear1 TempYear2 (A4).
 Do if Board_Name = "NHS Highland".
