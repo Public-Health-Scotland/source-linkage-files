@@ -26,8 +26,8 @@ GET DATA
 EXECUTE.
 
 varstocases
-    /Make Consultations from @1415_Consultations to @1819_Consultations
-    /Make Cost from @1415_Cost to @1819_Cost
+    /Make Consultations from @1415_Consultations to @1920_Consultations
+    /Make Cost from @1415_Cost to @1920_Cost
     /Index Year(Cost).
 
 Compute Year = char.substr(Year, 2, 4).
@@ -36,20 +36,20 @@ Alter type year (A4).
 Compute Cost_per_consultation = Cost * 1000 / Consultations.
 
 * Add in years by copying the most recent year we have.
-***This bit will need changing to accommodate new costs ***.
+* This bit will need changing to accommodate new costs ***.
 * Most recent costs year available.
 String TempYear1 TempYear2 (A4).
-Do if Year = "1819".
+Do if Year = "1920".
     * Make costs for other years.
-    Compute TempYear1 = "1920".
-    Compute TempYear2 = "2021".
+    Compute TempYear1 = "2021".
+    Compute TempYear2 = "2122".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
 
 sort cases by HB2019 year.
 
- * Check here to make sure costs haven't changed radically.
+* Check here to make sure costs haven't changed radically.
 match files file = *
     /table  !Costs_dir + "Cost_GPOoH_Lookup_OLD.sav"
     /Rename Cost_per_consultation = cost_old
