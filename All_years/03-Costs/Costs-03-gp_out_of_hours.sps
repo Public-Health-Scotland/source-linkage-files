@@ -1,5 +1,5 @@
 ﻿* Encoding: UTF-8.
-* Make GP Out of  Hours Cost Lookup.
+* Make GP Out of Hours Cost Lookup.
 
 * 1. Attendances taken from 2018 Primary Care Out of Hours Report
     http://www.isdscotland.org/Health-Topics/Emergency-Care/GP-Out-of-Hours-Services/Primary-Care-Statistics/
@@ -12,7 +12,7 @@
 * Make a copy of the existing file, in case something weird has happened to the data!.
 * Get an error because of the -p flag: This keeps the amend date but fails on permissions - command works fine though.
 * If this doesn't work manually make a copy.
-Host Command = ["cp " + !Costs_dir + "Cost_GPOoH_Lookup.sav " +  !Costs_dir + "Cost_GPOoH_Lookup_pre" + !LatestUpdate + ".sav"].
+Host Command = ["cp " + !Costs_dir + "Cost_GPOoH_Lookup.sav " + !Costs_dir + "Cost_GPOoH_Lookup_pre" + !LatestUpdate + ".sav"].
 
 * Now read in from the spreadsheet.
 GET DATA
@@ -51,7 +51,7 @@ sort cases by HB2019 year.
 
 * Check here to make sure costs haven't changed radically.
 match files file = *
-    /table  !Costs_dir + "Cost_GPOoH_Lookup_OLD.sav"
+    /table !Costs_dir + "Cost_GPOoH_Lookup_pre" + !LatestUpdate + ".sav"
     /Rename Cost_per_consultation = cost_old
     /Rename TreatmentNHSBoardCode = HB2019
     /By HB2019 Year.
