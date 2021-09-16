@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Make GP Out of  Hours Cost Lookup.
 
 * 1. Attendances taken from 2018 Primary Care Out of Hours Report
@@ -12,7 +12,7 @@
  * Make a copy of the existing file, in case something weird has happened to the data!.
  * Get an error because of the -p flag: This keeps the amend date but fails on permissions - command works fine though.
  * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Costs_dir + "Cost_GPOoH_Lookup.sav' '" +  !Costs_dir + "Cost_GPOoH_Lookup_OLD.sav'"].
+Host Command = ["cp " + !Costs_dir + "Cost_GPOoH_Lookup.sav " +  !Costs_dir + "Cost_GPOoH_Lookup_pre" + !LatestUpdate + ".sav"].
 
 * Now read in from the spreadsheet.
 GET DATA
