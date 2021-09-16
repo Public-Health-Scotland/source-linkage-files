@@ -190,7 +190,7 @@ Compute pct_diff = Difference / cost_old * 100.
 crosstabs  Difference pct_diff by year by hbtreatcode.
 
 save outfile = !Costs_dir + "Cost_DN_Lookup.sav"
-    /Drop cost_old Difference.
+    /Drop cost_old Difference pct_diff.
 
 get file =  !Costs_dir + "Cost_DN_Lookup.sav".
 
