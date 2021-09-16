@@ -144,13 +144,19 @@ END GPL.
 
 String TempYear1 TempYear2 (A4).
 Do if Board_Name = "NHS Highland".
-    If Year = "1718" Year = "".
-    If Year = "1617" TempYear1 = "1718".
+    If Year = "1819" Year = "".
+    If Year = "1617" TempYear1 = "1819".
+    If Year = "1920" Year = "".
+    If Year = "1617" TempYear2 = "1920".
 Else if Board_Name = "NHS Tayside".
     If Year = "1718" Year = "".
     If Year = "1617" TempYear1 = "1718".
-    If Year = "1819" Year = "".
-    If Year = "1617" TempYear2 = "1819".
+Else if Board_Name = "NHS Forth Valley".
+    If Year = "1920" Year = "".
+    If Year = "1819" TempYear1 = "1920".
+Else if Board_Name = "NHS Greater Glasgow & Clyde".
+    If Year = "1920" Year = "".
+    If Year = "1819" TempYear1 = "1920".
 End if.
 
 varstocases /make year from year tempyear1 tempyear2.
