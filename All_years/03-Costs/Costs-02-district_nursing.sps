@@ -69,7 +69,7 @@ save outfile =  !Costs_dir + "raw_dn_costs_with_contacts.sav".
 
 ************************************************************************
 *Calculate population cost for NHS Highland with HSCP population ratio. Of the two HSCPs, Argyll and Bute provides the District Nursing data which is 27% of the population.
-get file = "/conf/linkage/output/lookups/Unicode/Populations/Estimates/HSCP2019_pop_est_5year_agegroups_1981_2019.sav".
+get file = !HSCP_5year_Pop_Lookup.
 
  * Select only the HSCPs for NHS Highland.
 select if any(HSCP2019, "S37000004", "S37000016") and Year >= 2015.
