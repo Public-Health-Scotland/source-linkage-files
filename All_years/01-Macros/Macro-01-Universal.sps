@@ -58,6 +58,10 @@ Define !DataZone_pop_file()
     "DataZone2011_pop_est_2011_2019.sav"
 !EndDefine. 
 
+*5-year HSCP Populations file - will need changing when geography files update.
+Define !HSCP_5year_pop_file()
+    "HSCP2019_pop_est_1981_2020.sav"
+!EndDefine.
 
 *******************************************************.
 * Directories for File Path locations *. 
@@ -232,6 +236,11 @@ Define !SIMD_Lookup()
 Define !DataZone_Pop_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!pop_dir)), !Unquote(!Eval(!DataZone_pop_file))))
 !EndDefine. 
+
+*5-year HSCP Population Lookup.
+Define !HSCP_5year_Pop_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!pop_dir)), !Unquote(!Eval(!HSCP_5year_pop_file))))
+!EndDefine.
 
 *******************************************************.
 *Delayed Discharges file.
