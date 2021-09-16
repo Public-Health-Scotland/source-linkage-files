@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Create Lookup for District Nursing Costs.
 
 ** 10/08/18-Anita George
@@ -30,7 +30,7 @@ EXECUTE.
 
  * Add extra years in here as needed.
 Varstocases 
-    /Make Cost from @1516_Cost @1617_Cost @1718_Cost @1819_Cost
+    /Make Cost from @1516_Cost @1617_Cost @1718_Cost @1819_Cost @1920_Cost
     /Index Year(Cost).
 
 Compute Year = char.substr(Year, 2, 4).
