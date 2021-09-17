@@ -335,7 +335,7 @@ aggregate
     /min_provider = min(ch_provider)
     /max_provider = max(ch_provider).
 
-* If the reason_for_admission has changed within a quarter (Duplicate) make it 6 (Other).
+* If the Care Home provider has changed within a quarter (Duplicate) make it 6 (Other).
 * If min and max are the same all values must be the same, otherwise at least one must be different.
 If min_provider NE max_provider ch_provider = 6.
 
