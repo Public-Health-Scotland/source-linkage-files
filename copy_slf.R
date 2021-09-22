@@ -36,7 +36,7 @@ copy_slfs <- function(years) {
     )
 
     # Copy the files for the given year
-    fs::file_copy(input_files, output_folder)
+    fs::file_copy(input_files, output_folder, overwrite = TRUE)
 
     # Set the files back to read-only
     fs::file_chmod(output_files, mode = 440)
@@ -46,6 +46,6 @@ copy_slfs <- function(years) {
   fs::file_delete(path(output_folder, "Update-In-Progress.txt"))
 }
 
-years_to_copy <- c("1718", "1819")
+years_to_copy <- c("1415", "1516", "1617", "1718", "1819", "1920", "2021", "2122")
 
 copy_slfs(years_to_copy)
