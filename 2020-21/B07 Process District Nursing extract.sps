@@ -5,7 +5,7 @@
 ********************************************************************************************************.
 
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv"
+    /FILE= !Year_Extracts_dir + "District-Nursing-contact-level-extract-20" + !FY + ".csv"
     /ENCODING="UTF8"
     /DELIMITERS=" ,"
     /QUALIFIER='"'
@@ -102,13 +102,13 @@ Recode hbtreatcode ("S08000021" = "S08000031") ("S08000023" = "S08000032").
 sort cases by hbtreatcode.
 
 match files file = *
-    /Table = !Extracts_Alt + "Costs/Cost_DN_Lookup.sav"
+    /Table = !Costs_dir + "Cost_DN_Lookup.sav"
     /Drop hbtreatname
     /By hbtreatcode year.
 
 * Since the costs are rough estimates we round them to the nearest pound.
 * This hopefully means they aren't seen as too 'exact'.
-Compute cost_total_net = rnd(cost_total_net).
+Compute cost_total_net = rndcost_total_net.
 
 * Finding the difference between dates of contacts and creating new variable DATEDIFF.
 sort cases by chi record_keydate1.
@@ -228,7 +228,7 @@ Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 alter type record_keydate1 record_keydate2 (F8.0).
 
-save outfile = !File + "DN_for_source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "DN_for_source-20" + !FY + ".zsav"
     /keep
     year
     recid
@@ -270,8 +270,7 @@ save outfile = !File + "DN_for_source-20" + !FY + ".zsav"
     TotalnoDNcontacts
     /zcompressed.
 
-get file = !File + "DN_for_source-20" + !FY + ".zsav".
+get file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
 
 * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "District-Nursing-contact-level-extract-20" + !FY + ".csv'"].
-
+Host Command = ["gzip " + !Year_Extracts_dir + "District-Nursing-contact-level-extract-20" + !FY + ".csv"].

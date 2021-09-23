@@ -7,7 +7,7 @@
 * Read in CSV output file.
 GET DATA
     /TYPE=TXT
-    /FILE= !Extracts + "Community-MH-contact-level-extract-20" + !FY + ".csv"
+    /FILE= !Year_Extracts_dir + "Community-MH-contact-level-extract-20" + !FY + ".csv"
     /DELIMITERS=" ,"
     /QUALIFIER='"'
     /ARRANGEMENT=DELIMITED
@@ -83,7 +83,7 @@ Compute record_keydate1 = xdate.mday(record_keydate1) + 100 * xdate.month(record
 Compute record_keydate2 = xdate.mday(record_keydate2) + 100 * xdate.month(record_keydate2) + 10000 * xdate.year(record_keydate2).
 alter type record_keydate1 record_keydate2 (F8.0).
 
-save outfile = !file + 'CMH_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'CMH_for_source-20' + !FY + '.zsav'
     /Keep year
     recid
     record_keydate1
@@ -108,7 +108,7 @@ save outfile = !file + 'CMH_for_source-20' + !FY + '.zsav'
     diag6
     /zcompressed.
 
-get file = !file + 'CMH_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'CMH_for_source-20' + !FY + '.zsav'.
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Community-MH-contact-level-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "Community-MH-contact-level-extract-20" + !FY + ".csv"].

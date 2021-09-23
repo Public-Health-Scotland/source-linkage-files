@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 
 *Tests for GP OoHs dataset.
-get file = !file + 'CMH_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'CMH_for_source-20' + !FY + '.zsav'.
 
  * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -22,15 +22,15 @@ If hbtreatcode = 'S08000016' NHS_Borders = 1.
 If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
 If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
-If hbtreatcode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If hbtreatcode = 'S08000023' NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
 If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If hbtreatcode = 'S08000029' NHS_Fife = 1. 
-If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
+If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 If hbtreatcode = 'S08000027' NHS_Tayside = 1.
 
 *Change missing HB values to 0. 
@@ -44,7 +44,7 @@ aggregate outfile = SLFnew
     /n_Males n_Females = Sum(Male Female)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
@@ -92,14 +92,14 @@ If hbtreatcode = 'S08000016' NHS_Borders = 1.
 If hbtreatcode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
 If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1. 
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
-If hbtreatcode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If hbtreatcode = 'S08000023' NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
 If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If hbtreatcode = 'S08000029' NHS_Fife = 1. 
+If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
 If hbtreatcode = 'S08000030' NHS_Tayside = 1.
 If hbtreatcode = 'S08000027' NHS_Tayside = 1. 
 
@@ -114,7 +114,7 @@ aggregate outfile = SLFexisting
     /n_Males n_Females = Sum(Male Female)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
@@ -151,15 +151,15 @@ Dataset close SLFexisting.
 
  * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
-Compute Issue = (abs(PctChange) > 5).
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.
 Crosstabs Measure by Issue.
 
 *Save test file. 
-Save Outfile = !file + 'CMH_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'CMH_tests_20' + !FY + '.zsav'
    /zcompressed .
-
-

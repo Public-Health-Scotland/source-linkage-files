@@ -3,7 +3,7 @@
 
 
 *Tests for Alarms and Telecare Dataset. 
-get file = !File + "Alarms-Telecare-for-source-20" + !FY + ".zsav".
+get file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav".
 
 
 * Flag to count CHIs.
@@ -35,7 +35,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -95,7 +95,7 @@ aggregate outfile = SLFnew
     /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_AT_Alarm = Sum(AT_Alarm)
     /n_AT_Tele = Sum(AT_Tele)
     /n_sc_living_alone_no = Sum(sc_living_alone_no)
@@ -191,7 +191,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -251,7 +251,7 @@ aggregate outfile = SLFexisting
     /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_AT_Alarm = Sum(AT_Alarm)
     /n_AT_Tele = Sum(AT_Tele)
     /n_sc_living_alone_no = Sum(sc_living_alone_no)
@@ -326,12 +326,14 @@ Dataset close SLFexisting.
 
 * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
-Compute Issue = (abs(PctChange) > 5).
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'Alarms_Telecare_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Alarms_Telecare_tests_20' + !FY + '.zsav'
    /zcompressed .

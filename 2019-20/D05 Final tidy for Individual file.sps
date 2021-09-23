@@ -1,5 +1,5 @@
-﻿* Encoding: UTF-8.
-get file = !file + "temp-source-individual-file-5-20" + !FY + ".zsav".
+* Encoding: UTF-8.
+get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
     "1011" "2010/11"
@@ -28,7 +28,7 @@ Alter type
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
     PIS_dispensed_items
-    CH_episodes CH_beddays
+    CH_cis_episodes CH_beddays
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
     DN_episodes DN_contacts
     CMH_contacts
@@ -52,6 +52,8 @@ Variable Labels
     Locality "HSCP Locality"
     Cluster "GP Practice Cluster"
     NSU "Flag to indicate Non-service-users"
+    preventable_admissions "Number of preventable admissions"
+    preventable_beddays "Number of preventable beddays"
     HL1_in_FY "CHI had an active homelessness application during this financial year"
     health_net_cost "Total net cost"
     health_net_costincDNAs "Total net cost including 'did not attend'"
@@ -127,7 +129,7 @@ Variable Labels
     DN_contacts "Number of District Nursing contacts"
     DN_cost "Cost of District Nursing"
     CMH_contacts "Number of Community Mental Health contacts"
-    ch_episodes "Number of distinct Care Home episodes"
+    CH_cis_episodes "Number of distinct Care Home episodes"
     ch_cost "Cost of Care Home stays"
     ch_beddays "Number of Care Home beddays"
     HC_episodes "Total number of home care episodes, includes personal, non-personal and unknown type"
@@ -142,6 +144,7 @@ Variable Labels
     CIJ_el "Number of Continous Inpatient Journeys (CIJ) which began with an Elective admission"
     CIJ_non_el "Number of Continous Inpatient Journeys (CIJ) which began with a Non-Elective admission"
     CIJ_mat "Number of Continous Inpatient Journeys (CIJ) which began with an Maternity admission"
+    cij_delay "Number of Continuous Inpatient Journeys (CIJ) which had a delay at some point"
     HRI_lca "HRIs in LCA excluding District Nursing and Care Home costs"
     HRI_lca_incDN "HRIs in LCA including District Nursing costs"
     HRI_hb "HRIs in HB excluding District Nursing and Care Home costs"
@@ -164,7 +167,7 @@ aggregate
     /DD = Max(DD_NonCode9_episodes)
     /DN = Max(DN_contacts)
     /CMH = Max(CMH_contacts)
-    /CH = Max(ch_episodes)
+    /CH = Max(CH_cis_episodes)
     /HC = Max(hc_episodes)
     /ATA ATT = Max(AT_alarms AT_telecare)
     /SDS1 SDS2 SDS3 = Max(SDS_option_1 SDS_option_2 SDS_option_3).
@@ -193,7 +196,7 @@ Do if CMH = 0.
 End if.
 
 Do if CH = 0.
-    Compute ch_episodes = $sysmis.
+    Compute CH_cis_episodes = $sysmis.
     Compute ch_beddays = $sysmis.
     Compute ch_cost = $sysmis.
 End if.
@@ -219,7 +222,7 @@ End if.
  * Final sort.
 sort cases by chi.
 
-save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
+save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     /Keep
     year
     chi
@@ -232,6 +235,8 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     health_net_costincdnas
     health_net_costincincomplete
     nsu
+    preventable_admissions 
+    preventable_beddays
     hl1_in_fy
     deceased
     death_date
@@ -302,7 +307,7 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     dn_contacts
     dn_cost
     cmh_contacts
-    ch_episodes
+    CH_cis_episodes
     ch_beddays
     ch_cost
     hc_episodes
@@ -314,9 +319,16 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     sds_option_2
     sds_option_3
     sds_option_4
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care
     cij_el
     cij_non_el
     cij_mat
+    cij_delay
     arth
     asthma
     atrialfib
@@ -394,10 +406,10 @@ save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
     keep_population
     /zcompressed.
 
-get file = !file + "source-individual-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
 
 *************************************************************************************************************************************************.
 *Housekeeping. 
-erase file = !file + 'HRI_lookup_' + !FY + '.zsav'.
-erase file = !File + "Population-estimates-20" + !FY + ".zsav".
-erase file = !File + "NSU-Keep-Lookup-20" + !FY + ".zsav".
+erase file = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'.
+erase file = !Year_dir + "Population-estimates-20" + !FY + ".zsav".
+erase file = !Year_dir + "NSU-Keep-Lookup-20" + !FY + ".zsav".

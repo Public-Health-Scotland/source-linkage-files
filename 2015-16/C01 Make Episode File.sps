@@ -3,32 +3,32 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-Host Command = ["zip -mjv '" + !File + "BXX_tests_20" + !FY + ".zip' " + 
-    "'" + !File + "A&E_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "acute_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "CH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "CMH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "DD_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "DN_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "GPOoH_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "Maternity_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "MentalHealth_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "NRS_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "Outpatient_tests_20" + !FY + ".zsav" + "' " +
-    "'" + !File + "PIS_tests_20" + !FY + ".zsav" + "'"].
+* Zip up all BXX test files.
+Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
+    !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
+    !Year_dir + "acute_tests_20" + !FY + ".zsav " +
+    !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
+    !Year_dir + "DD_tests_20" + !FY + ".zsav " +
+    !Year_dir + "DN_tests_20" + !FY + ".zsav " +
+    !Year_dir + "GPOoH_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Maternity_tests_20" + !FY + ".zsav " +
+    !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav " +
+    !Year_dir + "NRS_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
+    !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
+    !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 * Bring all the data sets together.
 add files
-    /file = !File + "a&e_for_source-20" + !FY + ".zsav"
-    /file = !File + "acute_for_source-20" + !FY + ".zsav"
-    /file = !File + "Care_Home_For_Source-20" + !FY + ".zsav"
-    /file = !File + "deaths_for_source-20" + !FY + ".zsav"
-    /file = !File + "DN_for_source-20" + !FY + ".zsav"
-    /file = !File + "GP_OOH_for_Source-20" + !FY + ".zsav"
-    /file = !File + "maternity_for_source-20" + !FY + ".zsav"
-    /file = !File + "mental_health_for_source-20" + !FY + ".zsav"
-    /file = !File + "outpatients_for_source-20" + !FY + ".zsav"
-    /file = !File + "prescribing_file_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "acute_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "maternity_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "mental_health_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "outpatients_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "a&e_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "deaths_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
+    /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
@@ -36,6 +36,7 @@ add files
 
 * Check that all CHIs are valid.
 Do if chi ne "".
+    * Test the check digit.
     Do Repeat Digit = #Digit.1 to #Digit.9
         /Position = 1 to 9.
         Compute Digit = Number(char.substr(chi, Position, 1), F1.0) * (11 - Position).
@@ -52,9 +53,10 @@ Do if chi ne "".
         Compute Valid_CHI = 0.
     End if.
 
+    * Test if the first 6 digits could make a valid Date of Birth.
     Do if Valid_CHI = 1 AND
-        (Number(char.Substr(chi, 1, 2), F2.0) > 31 OR
-        Number(char.Substr(chi, 3, 2), F2.0) > 12).
+        sysmis(Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".19", char.substr(chi, 5, 2)), EDate12)) AND
+        sysmis(Number(Concat(char.substr(chi, 1, 2), ".", char.substr(chi, 3, 2), ".20", char.substr(chi, 5, 2)), EDate12)).
         Compute Valid_CHI = 2.
     End if.
 End if.
@@ -106,22 +108,18 @@ Else If (recid = "NRS").
     Compute SMRType = "NRS Deaths".
 End If.
 
-
-*CHECK RESULTS FROM FREQUENCY SMRTYPE.
-
 Alter Type uri (F8.0).
 
-
- * Slight correction for cij_pattypeusing types of admission.
- * Lump the unknowns together to avoid potential confusion.
+* Slight correction for cij_pattypeusing types of admission.
+* Lump the unknowns together to avoid potential confusion.
 Recode cij_admtype ("Un" = "99").
 
- * Apply cij_pattypelogic to all records with a valid CHI number.
+* Apply cij_pattypelogic to all records with a valid CHI number.
 Do If chi NE "" AND any(recid, "01B", "04B", "GLS", "02B").
-     * Maternity now also has 41 for home birth.
+    * Maternity now also has 41 for home birth.
     Do If any(cij_admtype, "41", "42").
         Compute cij_pattype_code = 2.
-    * 40 and 48 are other - 99 is our code for unknown.
+        * 40 and 48 are other - 99 is our code for unknown.
     Else If Any(cij_admtype, "40", "48", "99").
         Compute cij_pattype_code = 9.
     End If.
@@ -129,7 +127,7 @@ End If.
 
 If cij_admtype = "18" cij_pattype_code = 0.
 
- * Recode cij_pattype.
+* Recode cij_pattype.
 String cij_pattype(A13).
 Recode cij_pattype_code
     (0 = "Non-Elective")
@@ -138,15 +136,12 @@ Recode cij_pattype_code
     (9 = "Other")
     Into cij_pattype.
 
-
-
 ********************** Temporarily work on CIJ only records ***************************.
-
 sort cases by CHI record_keydate1 record_keydate2.
 * Only work on records that have a CIJ marker, save out others.
 temporary.
 select if not(any(recid, "01B", "04B", "GLS", "02B")).
-save outfile = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
     /zcompressed.
 
 select if any(recid, "01B", "04B", "GLS", "02B").
@@ -177,7 +172,6 @@ aggregate outfile = * MODE = ADDVARIABLES OVERWRITE = YES
     /cij_admtype cij_pattype_code cij_pattype cij_adm_spec = First(cij_admtype cij_pattype_code cij_pattype cij_adm_spec)
     /cij_dis_spec = last(cij_dis_spec).
 
-
 * All records with a CHI should now have a valid CIJ marker.
 Temporary.
 select if chi ne "".
@@ -186,13 +180,11 @@ crosstabs recid by cij_marker.
 sort cases by CHI record_keydate1 record_keydate2.
 
 add files file = *
-    /file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
+    /file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
     /By CHI record_keydate1 record_keydate2.
-
 
 ********************** Back to full file ***************************..
 ********************Create cost including DNAs, & modify cost not including DNAs using cattend *****.
-
 * Modify cost_total_net so that it zeros cost for in the cost_total_net column.
 * The full cost will be held in the cost_total_net_incDNA column.
 Numeric Cost_Total_Net_incDNAs (F8.2).
@@ -204,16 +196,17 @@ If (Any(Attendance_status, 5, 8)) Cost_Total_Net = 0.
 * Create a Flag for PPA (Potentially Preventable Admissions).
 sort cases by chi cij_marker record_keydate1 record_keydate2.
 
+Numeric PPA (F1.0).
+
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
     * First record in CIJ.
     Do if (chi NE lag(chi) or (chi = lag(chi) and cij_marker NE lag(cij_marker))).
         * Non-elective original admission.
-        Do if cij_pattype= "Non-Elective".
-            Compute PPA = 0.
+        Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
-
-
+            Compute PPA = 0.
+            
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
             Do if range (char.Substr(op1a, 1 , 3), "K01", "K50") or
@@ -286,7 +279,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
                 any (char.Substr(diag6, 1, 3), "A35", "A36", "A80", "B05", "B06", "B26") or
                 any (char.Substr(diag1, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag2, 1, 4), "A370", "A379", "B161", "B169") or
-                any(char.Substr(diag3, 1, 4), "A370", "A379", "B161", "B169") or
+                any (char.Substr(diag3, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag4, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag5, 1, 4), "A370", "A379", "B161", "B169") or
                 any (char.Substr(diag6, 1, 4), "A370", "A379", "B161", "B169").
@@ -361,12 +354,16 @@ aggregate
     /Break chi cij_marker
     /cij_ppa = Max(PPA).
 
+Alter type cij_ppa (F1.0).
+
 sort cases by chi keydate1_dateformat.
 
-*  We are not currently including Social Care data for some years but we still want the variables for consistency.
+* Social Care variables for consistency.
 * Social Care.
-*String
-    sc_send_lca (A2).
+String
+    sc_send_lca (A2)
+    sc_latest_submission (A6)
+    person_id (A13).
 
 Numeric
     sc_living_alone
@@ -384,19 +381,26 @@ Numeric
 
 * Care Homes.
 String
+    ch_name (A73)
     ch_provider (A1).
+
+Numeric
+    ch_adm_reason (F2.0)
+    ch_nursing (F1.0)
+    ch_chi_cis (F8.0)
+    ch_sc_id_cis(F8.0).
 
 * SDS.
 Numeric sds_option_4 (F1.0).
 
- * Declare variables for Delay Discharge (1516 only).
-Numeric Delay_End_Reason (F1.0).
+* Declare variables for Delay Discharge (14/15 and 15/16 only).
+Numeric Delay_End_Reason CIJ_Delay (F1.0).
 String Primary_Delay_Reason (A4).
 String Secondary_Delay_Reason (A4).
 String DD_Quality (A3).
 String DD_Responsible_LCA (A2).
 
- * Declare variables for Homelessness (1516 only).
+* Declare variables for Homelessness (14/15 and 15/16 only).
 String hl1_application_ref (A15).
 String hl1_sending_lca (A9).
 Numeric hl1_property_type (F2.0).
@@ -406,26 +410,24 @@ Numeric HH_ep (F1.0).
 Numeric HH_6after_ep (F1.0).
 Numeric HH_6before_ep (F1.0).
 
-save outfile = !File + "temp-source-episode-file-3-" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
-get file = !File + "temp-source-episode-file-3-" + !FY + ".zsav".
-
+get file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav".
 
 * Housekeeping.
-Erase file = !File + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
+Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv '" + !File + "Activity_20" + !FY + ".zip' " + 
-    "'" + !File + "a&e_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "acute_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "Care_Home_For_Source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "deaths_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "DN_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "maternity_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "mental_health_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "outpatients_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "prescribing_file_for_source-20" + !FY + ".zsav" + "' " +
-    "'" + !File + "GP_OOH_for_Source-20" + !FY + ".zsav" + "'"].
+Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
+    !Year_dir + "acute_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "maternity_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "mental_health_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "outpatients_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "DN_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav "].
 

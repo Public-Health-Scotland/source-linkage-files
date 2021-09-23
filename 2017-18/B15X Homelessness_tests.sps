@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 
-get file = !file + 'homelessness_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'.
 
 
 * Flag to count CHIs.
@@ -68,7 +68,7 @@ aggregate outfile = SLFnew
     /n_Males n_Females = Sum(Male Female)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_HL1_Main = Sum(HL1_Main) 
     /n_HL1_Other = Sum(HL1_Other)
     /All_Aberdeen_City = Sum(Aberdeen_City)
@@ -80,7 +80,7 @@ aggregate outfile = SLFnew
     /All_Dumfries_and_Galloway = Sum(Dumfries_and_Galloway)
     /All_Dundee_City = Sum(Dundee_City)
     /All_East_Ayrshire = Sum(East_Ayrshire) 
-    /All_East_Dunbartonshire =Sum(East_Dunbartonshire)
+    /All_East_Dunbartonshire = Sum(East_Dunbartonshire)
     /All_East_Lothian = Sum(East_Lothian) 
     /All_East_Renfrewshire = Sum(East_Renfrewshire)
     /All_Falkirk = Sum(Falkirk)
@@ -185,7 +185,7 @@ aggregate outfile = SLFexisting
     /n_Males n_Females = Sum(Male Female)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_HL1_Main = Sum(HL1_Main) 
     /n_HL1_Other = Sum(HL1_Other)
     /All_Aberdeen_City = Sum(Aberdeen_City)
@@ -197,7 +197,7 @@ aggregate outfile = SLFexisting
     /All_Dumfries_and_Galloway = Sum(Dumfries_and_Galloway)
     /All_Dundee_City = Sum(Dundee_City)
     /All_East_Ayrshire = Sum(East_Ayrshire) 
-    /All_East_Dunbartonshire =Sum(East_Dunbartonshire)
+    /All_East_Dunbartonshire = Sum(East_Dunbartonshire)
     /All_East_Lothian = Sum(East_Lothian) 
     /All_East_Renfrewshire = Sum(East_Renfrewshire)
     /All_Falkirk = Sum(Falkirk)
@@ -245,14 +245,14 @@ Dataset close SLFexisting.
 
 * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
-Compute Issue = (abs(PctChange) > 5).
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'Homelessness_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Homelessness_tests_20' + !FY + '.zsav'
    /zcompressed .
-
-

@@ -6,7 +6,7 @@ Define !FinalName()
     !Concat("Indiv_Comparison_", !unquote(!Eval(!FY)))
 !EndDefine.
 
-get file= !file + "source-individual-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
  * Set up some flags.
 
  * Flag to count the males and females.
@@ -32,6 +32,38 @@ if sysmis(gpprac) No_GPprac = 1.
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
 
+*Flag to count how many patients in each HB by rescode. 
+If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbrescode = 'S08000016' NHS_Borders = 1. 
+If hbrescode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbrescode = 'S08000019' NHS_Forth_Valley = 1. 
+If hbrescode = 'S08000020' NHS_Grampian = 1. 
+If any(hbrescode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
+If hbrescode = 'S08000022' NHS_Highland = 1.
+If any(hbrescode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
+If hbrescode = 'S08000024' NHS_Lothian = 1. 
+If hbrescode = 'S08000025' NHS_Orkney = 1. 
+If hbrescode = 'S08000026' NHS_Shetland = 1. 
+If hbrescode = 'S08000028' NHS_Western_Isles = 1. 
+If any(hbrescode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbrescode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
+
+*Flag to count HB costs. 
+If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = health_net_cost.
+If NHS_Borders = 1 NHS_Borders_cost = health_net_cost. 
+If NHS_Dumfries_and_Galloway = 1 NHS_Dumfries_and_Galloway_cost = health_net_cost.
+If NHS_Forth_Valley = 1 NHS_Forth_Valley_cost = health_net_cost.
+If NHS_Grampian = 1 NHS_Grampian_cost = health_net_cost.
+If NHS_Greater_Glasgow_and_Clyde = 1 NHS_Greater_Glasgow_and_Clyde_cost = health_net_cost.
+If NHS_Highland = 1 NHS_Highland_cost = health_net_cost.
+If NHS_Lanarkshire = 1 NHS_Lanarkshire_cost = health_net_cost.
+If NHS_Lothian = 1 NHS_Lothian_cost = health_net_cost.
+If NHS_Orkney = 1 NHS_Orkney_cost = health_net_cost.
+If NHS_Shetland = 1 NHS_Shetland_cost = health_net_cost.
+If NHS_Western_Isles = 1 NHS_Western_Isles_cost = health_net_cost.
+If NHS_Fife = 1 NHS_Fife_cost = health_net_cost.
+If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
+
  * Produce the counts.
  * Ideally will name things better in the future!.
 Dataset declare New_Summary.
@@ -44,6 +76,8 @@ aggregate outfile = New_Summary
     /n_No_Postcode n_No_HB n_No_LCA n_No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
     /n_No_Demog n_No_Service = Sum(No_Demog No_Service)
     /n_No_SPARRA_start n_No_SPARRA_end n_No_HHG_start n_No_HHG_end = Sum(SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY)
+    /n_preventable_admissions = Sum(preventable_admissions)
+    /total_preventable_beddays = Sum(preventable_beddays)
     /total_health_net_cost = Sum(health_net_cost)
     /total_health_net_costincDNAs = Sum(health_net_costincDNAs)
     /total_health_net_costincIncomplete = Sum(health_net_costincIncomplete)
@@ -101,7 +135,7 @@ aggregate outfile = New_Summary
     /total_AE_cost = Sum(AE_cost)
     /total_PIS_dispensed_items = Sum(PIS_dispensed_items)
     /total_PIS_cost = Sum(PIS_cost)
-    /total_CH_episodes = Sum(CH_episodes)
+    /total_CH_cis_episodes = Sum(CH_cis_episodes)
     /total_CH_beddays = Sum(CH_beddays)
     /total_CH_cost = Sum(CH_cost)
     /total_OoH_cases = Sum(OoH_cases)
@@ -120,6 +154,7 @@ aggregate outfile = New_Summary
     /total_CIJ_el = Sum(CIJ_el)
     /total_CIJ_non_el = Sum(CIJ_non_el)
     /total_CIJ_mat = Sum(CIJ_mat)
+    /total_cij_delay = Sum(cij_delay)
     /total_arth = Sum(arth)
     /total_asthma = Sum(asthma)
     /total_atrialfib = Sum(atrialfib)
@@ -196,7 +231,7 @@ aggregate outfile = New_Summary
     /mean_AE_cost = Mean(AE_cost)
     /mean_PIS_dispensed_items = Mean(PIS_dispensed_items)
     /mean_PIS_cost = Mean(PIS_cost)
-    /mean_CH_episodes = Mean(CH_episodes)
+    /mean_CH_cis_episodes = Mean(CH_cis_episodes)
     /mean_CH_beddays = Mean(CH_beddays)
     /mean_CH_cost = Mean(CH_cost)
     /mean_OoH_cases = Mean(OoH_cases)
@@ -215,6 +250,7 @@ aggregate outfile = New_Summary
     /mean_CIJ_el = Mean(CIJ_el)
     /mean_CIJ_non_el = Mean(CIJ_non_el)
     /mean_CIJ_mat = Mean(CIJ_mat)
+    /mean_cij_delay = Mean(cij_delay)
     /mean_arth = Mean(arth)
     /mean_asthma = Mean(asthma)
     /mean_atrialfib = Mean(atrialfib)
@@ -235,12 +271,40 @@ aggregate outfile = New_Summary
     /mean_endomet = Mean(endomet)
     /mean_digestive = Mean(digestive)
     /n_Population = Sum(Keep_Population)
-    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN).
+    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN)
+    /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
+    /All_NHS_Borders = Sum(NHS_Borders)
+    /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
+    /All_NHS_Forth_Valley = Sum(NHS_Forth_Valley)
+    /All_NHS_Grampian = Sum(NHS_Grampian)
+    /All_NHS_Greater_Glasgow_and_Clyde = Sum(NHS_Greater_Glasgow_and_Clyde)
+    /All_NHS_Highland = Sum(NHS_Highland) 
+    /All_NHS_Lanarkshire = Sum(NHS_Lanarkshire)
+    /All_NHS_Lothian = Sum(NHS_Lothian)
+    /All_NHS_Orkney = Sum(NHS_Orkney)
+    /All_NHS_Shetland = Sum(NHS_Shetland)
+    /All_NHS_Western_Isles = Sum(NHS_Western_Isles)
+    /All_NHS_Fife = Sum(NHS_Fife)
+    /All_NHS_Tayside = Sum(NHS_Tayside)
+    /NHS_Ayrshire_and_Arran_cost = Sum(NHS_Ayrshire_and_Arran_cost) 
+    /NHS_Borders_cost = Sum(NHS_Borders_cost)
+    /NHS_Dumfries_and_Galloway_cost = Sum(NHS_Dumfries_and_Galloway_cost) 
+    /NHS_Forth_Valley_cost = Sum(NHS_Forth_Valley_cost)
+    /NHS_Grampian_cost = Sum(NHS_Grampian_cost)
+    /NHS_Greater_Glasgow_and_Clyde_cost = Sum(NHS_Greater_Glasgow_and_Clyde_cost)
+    /NHS_Highland_cost = Sum(NHS_Highland_cost)
+    /NHS_Lanarkshire_cost = Sum(NHS_Lanarkshire_cost) 
+    /NHS_Lothian_cost = Sum(NHS_Lothian_cost) 
+    /NHS_Orkney_cost = Sum(NHS_Orkney_cost)
+    /NHS_Shetland_cost = Sum(NHS_Shetland_cost)
+    /NHS_Western_Isles_cost = Sum(NHS_Western_Isles_cost) 
+    /NHS_Fife_cost = Sum(NHS_Fife_cost)
+    /NHS_Tayside_cost = Sum(NHS_Tayside_cost). 
 
  * Rearrange nicely.
 Dataset Activate New_Summary.
 Varstocases
-    /Make NewValue from n_CHIs to HRI_LCA_incDN
+    /Make NewValue from n_CHIs to NHS_Tayside_cost
     /Index Measure (NewValue).
 Sort cases by Measure.
 
@@ -274,6 +338,50 @@ if sysmis(gpprac) No_GPprac = 1.
 
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
+
+*Flag to count how many patients in each HB by rescode. 
+If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbrescode = 'S08000016' NHS_Borders = 1. 
+If hbrescode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbrescode = 'S08000019' NHS_Forth_Valley = 1. 
+If hbrescode = 'S08000020' NHS_Grampian = 1. 
+If any(hbrescode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
+If hbrescode = 'S08000022' NHS_Highland = 1.
+If any(hbrescode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
+If hbrescode = 'S08000024' NHS_Lothian = 1. 
+If hbrescode = 'S08000025' NHS_Orkney = 1. 
+If hbrescode = 'S08000026' NHS_Shetland = 1. 
+If hbrescode = 'S08000028' NHS_Western_Isles = 1. 
+If any(hbrescode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbrescode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
+
+*Flag to count HB costs. 
+If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = health_net_cost.
+If NHS_Borders = 1 NHS_Borders_cost = health_net_cost. 
+If NHS_Dumfries_and_Galloway = 1 NHS_Dumfries_and_Galloway_cost = health_net_cost.
+If NHS_Forth_Valley = 1 NHS_Forth_Valley_cost = health_net_cost.
+If NHS_Grampian = 1 NHS_Grampian_cost = health_net_cost.
+If NHS_Greater_Glasgow_and_Clyde = 1 NHS_Greater_Glasgow_and_Clyde_cost = health_net_cost.
+If NHS_Highland = 1 NHS_Highland_cost = health_net_cost.
+If NHS_Lanarkshire = 1 NHS_Lanarkshire_cost = health_net_cost.
+If NHS_Lothian = 1 NHS_Lothian_cost = health_net_cost.
+If NHS_Orkney = 1 NHS_Orkney_cost = health_net_cost.
+If NHS_Shetland = 1 NHS_Shetland_cost = health_net_cost.
+If NHS_Western_Isles = 1 NHS_Western_Isles_cost = health_net_cost.
+If NHS_Fife = 1 NHS_Fife_cost = health_net_cost.
+If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
+
+*No PPA or PPB available in the old file. 
+*Will need to add these back into the old summary once the year is updated again.
+*   /n_preventable_admissions = Sum(preventable_admissions)
+*   /total_preventable_beddays = Sum(preventable_beddays)
+*   /total_cij_delay = Sum(cij_delay)
+    /total_CH_cis_episodes = Sum(CH_cis_episodes)
+    /total_CH_beddays = Sum(CH_beddays)
+    /total_CH_cost = Sum(CH_cost)
+    /mean_CH_cis_episodes = Mean(CH_cis_episodes)
+    /mean_CH_beddays = Mean(CH_beddays)
+    /mean_CH_cost = Mean(CH_cost).
 
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
@@ -342,9 +450,6 @@ aggregate outfile = Old_Summary
     /total_AE_cost = Sum(AE_cost)
     /total_PIS_dispensed_items = Sum(PIS_dispensed_items)
     /total_PIS_cost = Sum(PIS_cost)
-    /total_CH_episodes = Sum(CH_episodes)
-    /total_CH_beddays = Sum(CH_beddays)
-    /total_CH_cost = Sum(CH_cost)
     /total_OoH_cases = Sum(OoH_cases)
     /total_OoH_homeV = Sum(OoH_homeV)
     /total_OoH_advice = Sum(OoH_advice)
@@ -437,9 +542,6 @@ aggregate outfile = Old_Summary
     /mean_AE_cost = Mean(AE_cost)
     /mean_PIS_dispensed_items = Mean(PIS_dispensed_items)
     /mean_PIS_cost = Mean(PIS_cost)
-    /mean_CH_episodes = Mean(CH_episodes)
-    /mean_CH_beddays = Mean(CH_beddays)
-    /mean_CH_cost = Mean(CH_cost)
     /mean_OoH_cases = Mean(OoH_cases)
     /mean_OoH_homeV = Mean(OoH_homeV)
     /mean_OoH_advice = Mean(OoH_advice)
@@ -476,14 +578,42 @@ aggregate outfile = Old_Summary
     /mean_endomet = Mean(endomet)
     /mean_digestive = Mean(digestive)
     /n_Population = Sum(Keep_Population)
-    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN).
+    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN)
+    /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
+    /All_NHS_Borders = Sum(NHS_Borders)
+    /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
+    /All_NHS_Forth_Valley = Sum(NHS_Forth_Valley)
+    /All_NHS_Grampian = Sum(NHS_Grampian)
+    /All_NHS_Greater_Glasgow_and_Clyde = Sum(NHS_Greater_Glasgow_and_Clyde)
+    /All_NHS_Highland = Sum(NHS_Highland) 
+    /All_NHS_Lanarkshire = Sum(NHS_Lanarkshire)
+    /All_NHS_Lothian = Sum(NHS_Lothian)
+    /All_NHS_Orkney = Sum(NHS_Orkney)
+    /All_NHS_Shetland = Sum(NHS_Shetland)
+    /All_NHS_Western_Isles = Sum(NHS_Western_Isles)
+    /All_NHS_Fife = Sum(NHS_Fife)
+    /All_NHS_Tayside = Sum(NHS_Tayside)
+    /NHS_Ayrshire_and_Arran_cost = Sum(NHS_Ayrshire_and_Arran_cost) 
+    /NHS_Borders_cost = Sum(NHS_Borders_cost)
+    /NHS_Dumfries_and_Galloway_cost = Sum(NHS_Dumfries_and_Galloway_cost) 
+    /NHS_Forth_Valley_cost = Sum(NHS_Forth_Valley_cost)
+    /NHS_Grampian_cost = Sum(NHS_Grampian_cost)
+    /NHS_Greater_Glasgow_and_Clyde_cost = Sum(NHS_Greater_Glasgow_and_Clyde_cost)
+    /NHS_Highland_cost = Sum(NHS_Highland_cost)
+    /NHS_Lanarkshire_cost = Sum(NHS_Lanarkshire_cost) 
+    /NHS_Lothian_cost = Sum(NHS_Lothian_cost) 
+    /NHS_Orkney_cost = Sum(NHS_Orkney_cost)
+    /NHS_Shetland_cost = Sum(NHS_Shetland_cost)
+    /NHS_Western_Isles_cost = Sum(NHS_Western_Isles_cost) 
+    /NHS_Fife_cost = Sum(NHS_Fife_cost)
+    /NHS_Tayside_cost = Sum(NHS_Tayside_cost). 
 
 Dataset Close OldFile.
 
  * Rearrange nicely.
 Dataset Activate Old_Summary.
 Varstocases
-    /Make OldValue from n_CHIs to HRI_LCA_incDN
+    /Make OldValue from n_CHIs to NHS_Tayside_cost
     /Index Measure (OldValue).
 Sort cases by Measure.
 
@@ -509,4 +639,4 @@ Compute Issue = abs(PctChange) > 5.
 
 Sort cases by Issue (D) Measure (A).
 
-save outfile = !File + "source-individual-TESTS-20" + !FY + ".sav".
+save outfile = !Year_dir + "source-individual-TESTS-20" + !FY + ".sav".

@@ -1,24 +1,43 @@
 ﻿* Encoding: UTF-8.
-get file = "/conf/hscdiip/Social Care Extracts/SPSS extracts/201718_SDS_extract.zsav".
+insert file = "pass.sps".
 
-sort cases by social_care_id sending_location.
+GET DATA
+  /TYPE=ODBC
+  /CONNECT= !Connect_sc
+  /SQL='SELECT sending_location, social_care_id, period, '+
+    'sds_start_date, sds_end_date, sds_option_1, sds_option_2, sds_option_3 '+
+    'FROM social_care_2.sds '+
+    'WHERE (financial_year = 2017) '+
+    'ORDER BY sending_location, social_care_id'
+  /ASSUMEDSTRWIDTH=255.
+CACHE.
+EXECUTE.
 
+Alter type
+    sending_location (A3)
+    social_care_id (A10)
+    sds_option_1 sds_option_2 sds_option_3 (F1.0).
+
+* Match on the demographics data (chi, gender, dob and postcode).
 match files file = *
-    /table = "/conf/hscdiip/Social Care Extracts/SPSS extracts/2017Q4_Client_for_source.zsav"
-    /By social_care_id sending_location.
+    /table = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav"
+    /by sending_location social_care_id.
+
+* Match on Client data.
+match files file = *
+    /table = !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
+    /By sending_location social_care_id.
+
+Do if sysmis(sds_start_date).
+    Compute sds_start_date = !StartFY.
+End if.
 
 Rename Variables
     sds_start_date = record_keydate1
-    sds_end_date = record_keydate2
-    chi_gender_code = gender
-    submitted_postcode = postcode
-    chi_date_of_birth = dob
-    seeded_chi_number = chi.
+    sds_end_date = record_keydate2.
 
-Alter type gender (F1.0) postcode (A8) sds_option_1 sds_option_2 sds_option_3 (F1.0).
-
- * Prefer the submitted postcode but if this is blank then use the CHI seeded postcode.
-If postcode = "" postcode = chi_postcode.
+String sc_latest_submission (A6).
+Compute sc_latest_submission = "2017Q4".
 
 * Restructure to create one line per SDS option.
 varstocases
@@ -44,18 +63,16 @@ Else if sds_option = 3.
     Compute SMRType = "SDS-3".
 End if.
 
+ *  Derive age from dob.
 Numeric age (F3.0).
-
 Compute age = datediff(!midFY, dob, "years").
+
+* Include the sc_id as a unique person identifier (first merge with sending loc).
+String person_id (A13).
+Compute person_id = concat(sending_location, "-", social_care_id).
 
  * Uses sending_location and recodes into sc_sending_location using actual codes.
 !Create_sc_sending_location.
-
-* Set missing start dates to the start of the year.
-If start_date_missing record_keydate1 = !startFY.
-
-* Remove end dates which should be blank.
-If end_date_missing record_keydate2 = $sysmis.
 
 aggregate 
     /break social_care_id
@@ -76,7 +93,7 @@ alter type record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !File + "SDS-for-source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /Keep Year
     recid
     SMRType
@@ -96,4 +113,4 @@ save outfile = !File + "SDS-for-source-20" + !FY + ".zsav"
     sc_day_care
     sds_option_4
     /zcompressed.
-get file = !File + "SDS-for-source-20" + !FY + ".zsav".
+get file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav".

@@ -7,7 +7,7 @@
 
 * Read in CSV output file.
 GET DATA  /TYPE=TXT
-   /FILE= !Extracts + 'Mental-Health-episode-level-extract-20' + !FY + '.csv'
+   /FILE= !Year_Extracts_dir + 'Mental-Health-episode-level-extract-20' + !FY + '.csv'
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -161,11 +161,11 @@ alter type cij_admtype (A2).
 sort cases by uri.
 
 * need to add in SMR04 specific variables in to here. 
-save outfile = !file + 'mh_temp.zsav'
+save outfile = !Year_dir + 'mh_temp.zsav'
    /zcompressed.
   
 * Create a file that contains uri and costs month and net cost. Make this look like a 'cross-tab' ready for matching back to the acute_temp file. 
-get file = !file + 'mh_temp.zsav'
+get file = !Year_dir + 'mh_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 
  * Initialise the variables we'll need.
@@ -188,7 +188,7 @@ Do Repeat Month_num = 1 To 12
 End Repeat.
 
 * Create a lookup file for each URI.
-aggregate outfile = !file + 'MH_monthly_costs_and_beddays_by_uri.sav'
+aggregate outfile = !Year_dir + 'MH_monthly_costs_and_beddays_by_uri.sav'
    /Presorted
    /break uri
    /apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost =
@@ -199,8 +199,8 @@ aggregate outfile = !file + 'MH_monthly_costs_and_beddays_by_uri.sav'
 
 * Match this file back to the main acute file and then create totals adding across the months for each of the costs and yearstay variables.  
 * Need To reduce each uri to one row only. All columns will have the same information except for the costs month variable.
-match files file = !file + 'mh_temp.zsav'
-   /table = !file + 'MH_monthly_costs_and_beddays_by_uri.sav'
+match files file = !Year_dir + 'mh_temp.zsav'
+   /table = !Year_dir + 'MH_monthly_costs_and_beddays_by_uri.sav'
    /by uri.
 
  * This is just to remove duplicates.
@@ -232,7 +232,7 @@ Value Labels stadm
     '3' "Formal"
     '4' "Informal".
 
-save outfile = !file + 'mental_health_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'mental_health_for_source-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -316,15 +316,10 @@ save outfile = !file + 'mental_health_for_source-20' + !FY + '.zsav'
     uri
     /zcompressed.
 
-get file = !file + 'mental_health_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'mental_health_for_source-20' + !FY + '.zsav'.
 
 * Housekeeping.
-erase file = !file + 'mh_temp.zsav'.
-erase file = !file + "MH_monthly_costs_and_beddays_by_uri.sav".
+erase file = !Year_dir + 'mh_temp.zsav'.
+erase file = !Year_dir + "MH_monthly_costs_and_beddays_by_uri.sav".
 
-Host Command = ["gzip '" + !Extracts + "Mental-Health-episode-level-extract-20" + !FY + ".csv'"].
-
-
-
-
-
+Host Command = ["gzip " + !Year_Extracts_dir + "Mental-Health-episode-level-extract-20" + !FY + ".csv"].

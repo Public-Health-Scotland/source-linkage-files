@@ -6,7 +6,7 @@
 ********************************************************************************************************.
 
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + 'NRS-death-registrations-extract-20' + !FY + '.csv'
+    /FILE= !Year_Extracts_dir + 'NRS-death-registrations-extract-20' + !FY + '.csv'
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -112,10 +112,10 @@ Value Labels post_mortem
     '6' "Post mortem not proposed but performed later".
 
  * Save the main file out for source.
-save outfile = !file + 'deaths_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'deaths_for_source-20' + !FY + '.zsav'
     /zcompressed.
 
-get file = !file + 'deaths_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'deaths_for_source-20' + !FY + '.zsav'.
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "NRS-death-registrations-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "NRS-death-registrations-extract-20" + !FY + ".csv"].

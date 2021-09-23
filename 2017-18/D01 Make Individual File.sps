@@ -6,7 +6,7 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !File + "source-episode-file-20" + !FY + ".zsav".
+get file = !Year_dir + "source-episode-file-20" + !FY + ".zsav".
 
 * Exclude people with blank chi.
 select if chi NE "".
@@ -71,6 +71,26 @@ Else if cij_pattype_code = 1.
 Else if cij_pattype_code = 2.
     Compute CIJ_mat = Distinct_CIJ.
 End if.
+
+* Create a count for cij_delay variable.
+If cij_delay and Distinct_CIJ cij_delay = 1.
+Compute cij_delay = cij_delay and Distinct_CIJ.
+
+*Create variables to count preventable admissions and preventable beddays. 
+Do if cij_ppa.
+    If Distinct_CIJ preventable_admissions = 1.
+    Compute preventable_beddays = datediff(Min(!endFY, CIJ_end_date), Max(!startFY, CIJ_start_date), "days").
+Else. 
+    Compute preventable_admissions = 0.
+    Compute preventable_beddays = 0.
+End if.
+
+* Create care home continuous episode variables.
+* Use these later to aggregate over the episodes.
+sort cases by CHI ch_chi_cis.
+add files file = *
+    /by  CHI ch_chi_cis
+    /first = first_ch_ep.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -361,14 +381,23 @@ Else if (recid = "CH").
     Compute CH_postcode = postcode.
     Compute CH_gpprac = gpprac.
 
-    * Episode count.
-    Compute CH_episodes = 1.
+    * Count continuous episodes.
+    Compute ch_cis_episodes = first_ch_ep.
+    
+    * Work out the cost per day for each row, we'll take the mean of this for the whole CIS episode.
+    Do if yearstay > 0.
+        Compute ch_cost_per_day = cost_total_net / yearstay.
+    Else if yearstay = 0.
+         Compute ch_cost_per_day = cost_total_net.
+    End if.
 
-    * Cost.
-    Compute CH_cost = Cost_Total_Net.
+    * Flag if any of the rows have a missing cost.
+    Compute ch_no_cost = sysmis(ch_cost_per_day).
 
-    * Beddays.
-    Compute CH_beddays = yearstay.
+*Use the end date and if the end date is missing then use the first day of the next financial quarter - Note SPSS reads calendar quarter. 
+    Compute ch_ep_end = keydate2_dateformat.
+	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
+
 Else if (recid = "HC").
     *************************************************************************************************************************************************.
     * Home Care (HC) section.
@@ -414,6 +443,28 @@ Else if (recid = "SDS").
 End if.
 
 *************************************************************************************************************************************************.
+* Aggregate over the Care Home 'CIS' episodes.
+*.
+aggregate outfile = * mode = addvariables overwrite = yes
+    /presorted
+    /break CHI ch_chi_cis
+    /ch_no_cost = max(ch_no_cost)
+    /ch_ep_start = min(keydate1_dateformat)
+    /ch_ep_end = max(ch_ep_end)
+    /ch_cost_per_day = mean(ch_cost_per_day).
+
+Do if recid = "CH".
+	Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+
+    If Not(ch_no_cost) ch_cost = ch_beddays * ch_cost_per_day.
+
+    * Now all data will appear on all records we only want the first to avoid double counts.
+    Do if Not(first_ch_ep).
+        Compute ch_beddays = 0.
+        Compute ch_cost = 0.
+    End if.
+End if.
+    
 * We'll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
@@ -474,14 +525,17 @@ aggregate outfile = *
     = sum(DN_episodes DN_contacts DN_cost)
     /CMH_contacts
     = sum(CMH_contacts)
-    /CH_episodes CH_beddays CH_cost = sum(CH_episodes CH_beddays CH_cost)
+    /CH_cis_episodes = sum(ch_cis_episodes)
+    /CH_beddays CH_cost = sum(CH_beddays CH_cost)
     /HC_episodes HC_personal_episodes HC_non_personal_episodes = sum(HC_episodes HC_personal_episodes HC_non_personal_episodes)
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
     /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
     /SDS_option_4 = Max(SDS_option_4)
+    /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
-    /CIJ_el CIJ_non_el CIJ_mat = Sum(CIJ_el CIJ_non_el CIJ_mat)
+    /CIJ_el CIJ_non_el CIJ_mat cij_delay = Sum(CIJ_el CIJ_non_el CIJ_mat cij_delay)
     /NSU = Max(NSU)
+    /preventable_admissions preventable_beddays = Sum(preventable_admissions preventable_beddays)
     /deceased death_date = First(deceased death_date)
     /arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive
     = First(arth asthma atrialfib cancer cvd liver copd dementia diabetes epilepsy chd hefailure ms parkinsons refailure congen bloodbfo endomet digestive)
@@ -497,9 +551,9 @@ aggregate outfile = *
     = First(HHG_Start_FY HHG_End_FY).
 
 * Do a temporary save as the above can take a while to run.
-save outfile = !file + "temp-source-individual-file-1-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav"
     /zcompressed.
-get file = !file + "temp-source-individual-file-1-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav".
 
 * Clean up the gender, use the most common (by rounding the mean), if the mean is 1.5 (i.e. no gender known or equal male and females) then take it from the CHI).
 Do if gender NE 1.5.
@@ -689,7 +743,7 @@ End if.
 * Match on to the postcode file, to get a flag letting us know if the postcode is real or not.
 sort cases by postcode.
 match files file = *
-    /table = !Lookup + "Source Postcode Lookup-20" + !FY + ".zsav"
+    /table = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In PostcodeMatch
     /Keep chi to order
     /By Postcode.
@@ -778,7 +832,7 @@ End if.
 * Match on to the gpprac file, to get a flag letting us know if the gpprac is real or not.
 sort cases by gpprac.
 match files file = *
-    /table = !Lookup + "Source GPprac Lookup-20" + !FY + ".zsav"
+    /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In gppracMatch
     /Keep chi to order
     /By gpprac.
@@ -816,11 +870,11 @@ String year (A4).
 Compute year = !FY.
 
 * Delete the record specific DoB gpprac and postcode, and reorder others whilst we're here.
-save outfile = !file + "temp-source-individual-file-2-20" + !FY + ".zsav"
+save outfile = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav"
     /Keep year chi gender DoB age postcode gpprac
     health_net_cost health_net_costincDNAs health_net_costincIncomplete
     deceased death_date
     ALL
     /zcompressed.
 
-get file = !file + "temp-source-individual-file-2-20" + !FY + ".zsav".
+get file = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav".

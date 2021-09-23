@@ -2,7 +2,7 @@
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-get file = !Extracts_Alt + "LTCs_patient_reference_file-20" + !FY + ".zsav".
+get file = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Highlight different CHI numbers.
 add files file = *
@@ -32,8 +32,11 @@ Else.
     End if.
 End if.
 
-If duplicate_chi = 1 or duplicate_chi_postcode = 1 Error = 1.
+Compute Error = duplicate_chi = 1 or duplicate_chi_postcode = 1.
 
-crosstabs Error by chi.
+Aggregate outfile = *
+/Break Error
+/Count = n.
 
-save outfile = !File + "LTC_tests_20" + !FY + ".sav".
+save outfile = !Year_dir + "LTC_tests_20" + !FY + ".zsav"
+/zcompressed.

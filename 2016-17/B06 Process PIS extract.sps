@@ -3,17 +3,12 @@
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
-* This should unzip the file in the IT extracts directory.
-* Change this to the relevant number.
-* Should be '_extract_NUMBER'.
-Define !Extract_Number()
-    "_extract_4"
-!EndDefine.
-
-Host Command = ["gunzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].
+*This should unzip the PIS extract in the IT extract directory.
+* !PIS_extract_file is dependant on the macro !Extract_Number which can be found in A01b 'Year' Macro and the number should be specific to FY. 
+Host Command = ["gunzip " + !PIS_extract_file].
 
 GET DATA  /TYPE=TXT
-    /FILE=!CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv"
+    /FILE=!PIS_extract_file
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -30,7 +25,6 @@ GET DATA  /TYPE=TXT
     DIPaidGICexcl.BB F6.2
     /MAP.
 CACHE.
-EXECUTE.
 
 rename variables
     PatUPI = chi
@@ -61,11 +55,11 @@ compute year = !FY.
 
 sort cases by chi.
 
-save outfile = !file + "prescribing_file_for_source-20" + !FY + ".zsav"
+save outfile = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /Drop DIPaidGICexcl.BB
     /zcompressed.
 
-get file = !file + "prescribing_file_for_source-20" + !FY + ".zsav".
+get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
 * zip raw data back up.
-Host Command = ["gzip '" + !CSDExtractLoc + !Extract_Number + "_" + !altFY + ".csv'"].
+Host Command = ["gzip " + !PIS_extract_file].

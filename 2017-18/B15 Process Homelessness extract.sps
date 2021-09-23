@@ -1,6 +1,6 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 GET DATA  /TYPE=TXT
-    /FILE= !Extracts + "Homelessness extract-20" + !FY + ".csv"
+    /FILE= !Year_Extracts_dir + "Homelessness extract-20" + !FY + ".csv"
     /ENCODING='UTF8'
     /DELCASE=LINE
     /DELIMITERS=" ,"
@@ -12,8 +12,10 @@ GET DATA  /TYPE=TXT
     AssessmentDecisionDate YMDHMS19
     CaseClosedDate YMDHMS19
     SendingLocalAuthorityCode9 A9
+    ClientUniqueIdentifier A100
     UPINumberC A10
     ClientDoBDateC YMDHMS19
+    Age F3.0
     GenderCode F1.0
     ClientPostcodeC A8
     MainApplicantFlag A1
@@ -29,10 +31,14 @@ GET DATA  /TYPE=TXT
     CriminalAntiSocialBehaviour F1.0
     NottodowithApplicantHousehold F1.0
     Refused F1.0
+    universal_credit F1.0
     /MAP.
 
- * Drop records for partnerships which don't have good / complete data.
- * For most of the below there will be no data anyway but some have test data only.
+* TODO - Update person_id to be at least A20 so this will fit.
+alter type ClientUniqueIdentifier (A20).
+
+* Drop records for partnerships which don't have good / complete data.
+* For most of the below there will be no data anyway but some have test data only.
 Compute #Drop = 0.
 If (!FY = "1617" and any(SendingLocalAuthorityCode9, "S12000005", "S12000028", "S12000040", "S12000041")) #Drop = 1.
 If (!FY = "1718" and any(SendingLocalAuthorityCode9, "S12000040", "S12000041")) #Drop = 1.
@@ -48,7 +54,7 @@ compute year = !FY.
 compute recid = "HL1".
 
 Recode MainApplicantFlag
-    ("Y"  = "HL1-Main")
+    ("Y" = "HL1-Main")
     ("N" = "HL1-Other")
     Into SMRType.
 
@@ -88,20 +94,21 @@ If DifficultiesManagingonOwn = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "O").
 If DrugAlcoholDependency = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "D").
 If CriminalAntiSocialBehaviour = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "C").
 If NottodowithApplicantHousehold = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "N").
-If Refused = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "R"). 
+If Refused = 1 HL1_reason_FtM = Concat(HL1_reason_FtM, "R").
 
 Rename Variables
     AssessmentDecisionDate = record_keydate1
     CaseClosedDate = record_keydate2
     SendingLocalAuthorityCode9 = hl1_sending_lca
     UPINumberC = chi
+    ClientUniqueIdentifier = person_id
     ClientDoBDateC = dob
     GenderCode = gender
     ClientPostcodeC = postcode
     ApplicationReferenceNumber = hl1_application_ref
     PropertyTypeCode = hl1_property_type.
 
-Apply Dictionary From !PCDir
+Apply Dictionary From !SPD_Lookup
     /VarInfo ValLabels = Replace
     /Source variables = CA2011
     /Target variables = hl1_sending_lca.
@@ -114,12 +121,13 @@ alter type record_keydate1 record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1 record_keydate2.
 
-save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'homelessness_for_source-20' + !FY + '.zsav'
     /Keep year
     recid
     SMRType
     chi
     dob
+    age
     gender
     postcode
     record_keydate1
@@ -130,7 +138,5 @@ save outfile = !file + 'homelessness_for_source-20' + !FY + '.zsav'
     hl1_reason_ftm
     /zcompressed.
 
-get file = !file + 'homelessness_for_source-20' + !FY + '.zsav'.
-
- * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Homelessness extract-20" + !FY + ".csv'"].
+* zip up the raw data.
+Host Command = ["gzip " + !Year_Extracts_dir + "Homelessness-extract-20" + !FY + ".csv"].

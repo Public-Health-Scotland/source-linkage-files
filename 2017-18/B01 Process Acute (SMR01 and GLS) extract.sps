@@ -6,7 +6,7 @@
 
 * Read in CSV output file.
 GET DATA /TYPE=TXT
-   /FILE= !Extracts + 'Acute-episode-level-extract-20' + !FY + '.csv'
+   /FILE= !Year_Extracts_dir + 'Acute-episode-level-extract-20' + !FY + '.csv'
    /ENCODING='UTF8'
    /DELIMITERS=","
    /QUALIFIER='"'
@@ -185,12 +185,12 @@ Recode lineno cost_total_net (sysmis = 0).
 
 sort cases by uri.
 
-save outfile = !file + 'acute_temp.zsav'
+save outfile = !Year_dir + 'acute_temp.zsav'
    /zcompressed.
   
 * Create a file that contains uri, the month number and the net cost and yearstay.
 * Make this look like a 'cross-tab' ready for matching back To the acute_temp file. 
-get file = !file + 'acute_temp.zsav'
+get file = !Year_dir + 'acute_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 
  * Initialise the variables we'll need.
@@ -213,7 +213,7 @@ Do Repeat Month_num = 1 To 12
 End Repeat.
 
  * Create a lookup file for each URI.
-aggregate outfile = !file + 'acute_monthly_costs_and_beddays_by_uri.sav'
+aggregate outfile = !Year_dir + 'acute_monthly_costs_and_beddays_by_uri.sav'
    /Presorted
    /break uri
    /apr_cost may_cost jun_cost jul_cost aug_cost sep_cost oct_cost nov_cost dec_cost jan_cost feb_cost mar_cost =
@@ -225,8 +225,8 @@ aggregate outfile = !file + 'acute_monthly_costs_and_beddays_by_uri.sav'
 * Match this file back to the main acute file and then create totals adding across the months for each of the costs and yearstay variables.  
 * Need To reduce each uri to one row only. All columns will have the same information except for the costs month variable.
 
-match files file = !file + 'acute_temp.zsav'
-   /table = !file + 'acute_monthly_costs_and_beddays_by_uri.sav'
+match files file = !Year_dir + 'acute_temp.zsav'
+   /table = !Year_dir + 'acute_monthly_costs_and_beddays_by_uri.sav'
    /by uri.
 
  * This is just to remove duplicates.
@@ -276,7 +276,7 @@ Value Labels oldtadm
     '7' "Emergency - other injury (includes accidental poisoning other than in the home)"
     '8' "Emergency - other (excluding accidental poisoning)".
 
-save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
+save outfile = !Year_dir + 'acute_for_source-20' + !FY + '.zsav'
     /keep year
     recid
     record_keydate1
@@ -370,14 +370,11 @@ save outfile = !file + 'acute_for_source-20' + !FY + '.zsav'
     uri
     /zcompressed.
 
-get file = !file + 'acute_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'acute_for_source-20' + !FY + '.zsav'.
 
 * Housekeeping.
-erase file = !file + 'acute_temp.zsav'.
-erase file = !file + 'acute_monthly_costs_and_beddays_by_uri.sav'.
+erase file = !Year_dir + 'acute_temp.zsav'.
+erase file = !Year_dir + 'acute_monthly_costs_and_beddays_by_uri.sav'.
 
  * zip up the raw data.
-Host Command = ["gzip '" + !Extracts + "Acute-episode-level-extract-20" + !FY + ".csv'"].
-
-
-
+Host Command = ["gzip " + !Year_Extracts_dir + "Acute-episode-level-extract-20" + !FY + ".csv"].

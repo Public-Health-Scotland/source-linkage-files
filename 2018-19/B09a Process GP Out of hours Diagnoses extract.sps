@@ -7,7 +7,7 @@
 ************************************************************************************************************.
 * Read in Diagnosis extract.
 GET DATA  /TYPE=TXT
-   /FILE= !Extracts + "GP-OoH-diagnosis-extract-20" + !FY + ".csv"
+   /FILE= !Year_Extracts_dir + "GP-OoH-diagnosis-extract-20" + !FY + ".csv"
    /DELIMITERS=","
    /QUALIFIER='"'
    /ARRANGEMENT=DELIMITED
@@ -26,14 +26,14 @@ Sort cases by ReadCode Description.
 * See which ones match.
 match files
    /File = *
-   /Table = !Lookup + "../ReadCodeLookup.zsav"
+   /Table = !ReadCodeLookup + "ReadCodeLookup.zsav"
    /In = FullMatch1
    /By ReadCode Description.
 
 * If the codes still don't match it could just be because the descriptions are different.
 match files
    /File = *
-   /Table = !Lookup + "../ReadCodeLookup.zsav"
+   /Table = !ReadCodeLookup + "ReadCodeLookup.zsav"
    /Rename (Description = TrueDescription)
    /By ReadCode.
 
@@ -44,7 +44,7 @@ If FullMatch1 = 0 AND TrueDescription NE "" Description = TrueDescription.
 Sort cases by ReadCode Description.
 match files
    /File = *
-   /Table = !Lookup + "../ReadCodeLookup.zsav"
+   /Table = !ReadCodeLookup + "ReadCodeLookup.zsav"
    /In = FullMatch2
    /By ReadCode Description.
 
@@ -107,11 +107,11 @@ Do Repeat diag = diag1 to diag6
 End Repeat.
 
 * Save, it's now ready to be linked to the consultation data.
-Save outfile = !File + "GP-Diagnosis-Data-" + !FY + ".zsav"
+Save outfile = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav"
    /Keep GUID diag1 to diag6
    /zcompressed.
 
-get file = !File + "GP-Diagnosis-Data-" + !FY + ".zsav".
+get file = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav".
 
  * Zip up raw data.
-Host Command = ["gzip '" + !Extracts + "GP-OoH-diagnosis-extract-20" + !FY + ".csv'"].
+Host Command = ["gzip " + !Year_Extracts_dir + "GP-OoH-diagnosis-extract-20" + !FY + ".csv"].

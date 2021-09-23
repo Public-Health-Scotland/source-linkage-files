@@ -2,7 +2,7 @@
 
 
 *Tests for Home Care dataset.
-Get file = !File + "Home_Care_for_source-20" + !FY + ".zsav".
+Get file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav".
 
 
 * Flag to count CHIs.
@@ -25,9 +25,6 @@ If hc_reablement = 0 hc_reablement_no = 1.
 If hc_reablement = 1 hc_reablement_yes = 1.
 If hc_reablement = 9 hc_reablement_unknown = 1.
 
-*Flag to count missing hc_reablement.
-If sysmis(hc_reablement) hc_reablement_missing = 1. 
-
 *Flag to count HC provider. 
 If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1. 
 If hc_provider = 5 hc_provider_other = 1. 
@@ -47,7 +44,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -107,7 +104,7 @@ aggregate outfile = SLFnew
     /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_HC_Per = Sum(HC_Per)
     /n_HC_Non_Per = Sum(HC_Non_Per)
     /n_HC_Unknown = Sum(HC_Unknown)
@@ -120,7 +117,6 @@ aggregate outfile = SLFnew
     /n_hc_reablement_no = Sum(hc_reablement_no)
     /n_hc_reablement_yes = Sum(hc_reablement_yes)
     /n_hc_reablement_unknown = Sum(hc_reablement_unknown)
-    /n_hc_reablement_missing = Sum(hc_reablement_missing)
     /n_sc_living_alone_no = Sum(sc_living_alone_no)
     /n_sc_living_alone_yes = Sum(sc_living_alone_yes)
     /n_sc_living_alone_unknown = Sum(sc_living_alone_unknown)
@@ -204,9 +200,6 @@ If hc_reablement = 0 hc_reablement_no = 1.
 If hc_reablement = 1 hc_reablement_yes = 1.
 If hc_reablement = 9 hc_reablement_unknown = 1.
 
-*Flag to count missing hc_reablement.
-If sysmis(hc_reablement) hc_reablement_missing = 1. 
-
 *Flag to count HC provider. 
 If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1. 
 If hc_provider = 5 hc_provider_other = 1. 
@@ -226,7 +219,7 @@ If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
-If sc_social_worker = 9 sc_social_worker_unknown =1.
+If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
@@ -286,7 +279,7 @@ aggregate outfile = SLFexisting
     /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /n_HC_Per = Sum(HC_Per)
     /n_HC_Non_Per = Sum(HC_Non_Per)
     /n_HC_Unknown = Sum(HC_Unknown)
@@ -299,7 +292,6 @@ aggregate outfile = SLFexisting
     /n_hc_reablement_no = Sum(hc_reablement_no)
     /n_hc_reablement_yes = Sum(hc_reablement_yes)
     /n_hc_reablement_unknown = Sum(hc_reablement_unknown)
-    /n_hc_reablement_missing = Sum(hc_reablement_missing)
     /n_sc_living_alone_no = Sum(sc_living_alone_no)
     /n_sc_living_alone_yes = Sum(sc_living_alone_yes)
     /n_sc_living_alone_unknown = Sum(sc_living_alone_unknown)
@@ -370,12 +362,14 @@ Dataset close SLFexisting.
 
 * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
-Compute Issue = (abs(PctChange) > 5).
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'Home_Care_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'Home_Care_tests_20' + !FY + '.zsav'
    /zcompressed .

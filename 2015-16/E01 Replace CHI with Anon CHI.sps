@@ -7,11 +7,11 @@
  * Episode file
 *****************************************************************************************.
 *Create a copy of source episode file so this doesnt get overwritten if there is an error.
-Host Command = ["cp '" + !File + "source-episode-file-20" + !FY + ".zsav' '" + !File + "source-episode-file-20" + !FY + "_CHI.zsav'"]. 
+Host Command = ["cp " + !Year_dir + "source-episode-file-20" + !FY + ".zsav " + !Year_dir + "source-episode-file-20" + !FY + "_CHI.zsav"]. 
 
 * Match on the Anon_CHI from the lookup.
 match files
-    /file = !file + "source-episode-file-20" + !FY + ".zsav"
+    /file = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     /table = !CHItoAnonlookup
     /By CHI.
 
@@ -22,7 +22,7 @@ If CHI NE "" and Anon_CHI = "" Error = 1.
 Frequencies Error.
 
  * Save out, put Anon_CHI where CHI was and drop CHI.
-save outfile = !file + "source-episode-file-20" + !FY + ".zsav"
+save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     /Keep Year to SMRType Anon_CHI All
     /Drop Chi Error
     /zcompressed.
@@ -32,11 +32,11 @@ save outfile = !file + "source-episode-file-20" + !FY + ".zsav"
  * Individual file
 *****************************************************************************************.
 *Create a copy of source episode file so this doesnt get overwritten if there is an error.
-Host Command = ["cp '" + !File + "source-individual-file-20" + !FY + ".zsav' '" + !File + "source-individual-file-20" + !FY + "_CHI.zsav'"]. 
+Host Command = ["cp " + !Year_dir + "source-individual-file-20" + !FY + ".zsav " + !Year_dir + "source-individual-file-20" + !FY + "_CHI.zsav"]. 
 
 * Match on the Anon_CHI from the lookup.
 match files
-    /file = !file + "source-individual-file-20" + !FY + ".zsav"
+    /file = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     /table = !CHItoAnonlookup
     /By CHI.
 
@@ -47,7 +47,7 @@ If CHI NE "" and Anon_CHI = "" Error = 1.
 Frequencies Error.
 
  * Save out, put Anon_CHI where CHI was and drop CHI.
-save outfile = !file + "source-individual-file-20" + !FY + ".zsav"
+save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     /Keep Year Anon_CHI All
     /Drop Chi Error
     /zcompressed.

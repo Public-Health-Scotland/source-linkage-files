@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 *PIS tests.
-get file = !File + "prescribing_file_for_source-20" + !FY + ".zsav".
+get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
  * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -86,13 +86,14 @@ Dataset close SLFexisting.
 
  * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
-Compute PctChange = Difference / Existing_Value * 100.
-Compute Issue = (abs(PctChange) > 5).
+Do if Existing_Value NE 0.
+    Compute PctChange = Difference / Existing_Value * 100.
+End if.
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
  * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'PIS_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'PIS_tests_20' + !FY + '.zsav'
    /zcompressed .
-

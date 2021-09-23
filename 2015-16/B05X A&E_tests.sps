@@ -1,7 +1,7 @@
 ﻿* Encoding: UTF-8.
 *Tests for A&E dataset.
 
-get file = !file + 'a&e_for_source-20' + !FY + '.zsav'.
+get file = !Year_dir + 'a&e_for_source-20' + !FY + '.zsav'.
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
@@ -24,35 +24,29 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
 If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If hbtreatcode = 'S08000029' NHS_Fife = 1. 
-If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
+If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
 *Flag to count HB costs. 
-If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = (cost_total_net).
-If NHS_Borders = 1 NHS_Borders_cost = (cost_total_net). 
-If NHS_Dumfries_and_Galloway = 1 NHS_Dumfries_and_Galloway_cost = (cost_total_net).
-If NHS_Forth_Valley = 1 NHS_Forth_Valley_cost = (cost_total_net).
-If NHS_Grampian = 1 NHS_Grampian_cost = (cost_total_net).
-If NHS_Greater_Glasgow_and_Clyde = 1 NHS_Greater_Glasgow_and_Clyde_cost = (cost_total_net).
-If NHS_Highland = 1 NHS_Highland_cost = (cost_total_net).
-If NHS_Lanarkshire = 1 NHS_Lanarkshire_cost = (cost_total_net).
-If NHS_Lothian = 1 NHS_Lothian_cost = (cost_total_net).
-If NHS_Orkney = 1 NHS_Orkney_cost = (cost_total_net).
-If NHS_Shetland = 1 NHS_Shetland_cost = (cost_total_net).
-If NHS_Western_Isles = 1 NHS_Western_Isles_cost = (cost_total_net).
-If NHS_Fife = 1 NHS_Fife_cost = (cost_total_net).
-If NHS_Tayside = 1 NHS_Tayside_cost = (cost_total_net).
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran_cost to NHS_Tayside_cost (SYSMIS = 0).
+If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = cost_total_net.
+If NHS_Borders = 1 NHS_Borders_cost = cost_total_net. 
+If NHS_Dumfries_and_Galloway = 1 NHS_Dumfries_and_Galloway_cost = cost_total_net.
+If NHS_Forth_Valley = 1 NHS_Forth_Valley_cost = cost_total_net.
+If NHS_Grampian = 1 NHS_Grampian_cost = cost_total_net.
+If NHS_Greater_Glasgow_and_Clyde = 1 NHS_Greater_Glasgow_and_Clyde_cost = cost_total_net.
+If NHS_Highland = 1 NHS_Highland_cost = cost_total_net.
+If NHS_Lanarkshire = 1 NHS_Lanarkshire_cost = cost_total_net.
+If NHS_Lothian = 1 NHS_Lothian_cost = cost_total_net.
+If NHS_Orkney = 1 NHS_Orkney_cost = cost_total_net.
+If NHS_Shetland = 1 NHS_Shetland_cost = cost_total_net.
+If NHS_Western_Isles = 1 NHS_Western_Isles_cost = cost_total_net.
+If NHS_Fife = 1 NHS_Fife_cost = cost_total_net.
+If NHS_Tayside = 1 NHS_Tayside_cost = cost_total_net.
 
 * Get values for whole file.
 Dataset Declare SLFnew.
@@ -62,10 +56,10 @@ aggregate outfile = SLFnew
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
     /n_episodes = n
-    /Total__Costs_net = Sum(Cost_Total_Net)
-    /Mean_Costs_net = Mean(Cost_Total_Net)
+    /Total__Costs_net = Sum(cost_total_net)
+    /Mean_Costs_net = Mean(cost_total_net)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)
     /Total_cost_may = Sum(may_cost)
     /Total_cost_jun = Sum(jun_cost)
@@ -155,35 +149,29 @@ If hbtreatcode = 'S08000019' NHS_Forth_Valley = 1.
 If hbtreatcode = 'S08000020' NHS_Grampian = 1. 
 If any(hbtreatcode, 'S08000021', 'S08000031') NHS_Greater_Glasgow_and_Clyde = 1.
 If hbtreatcode = 'S08000022' NHS_Highland = 1.
-If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire =1. 
+If any(hbtreatcode, 'S08000023', 'S08000032') NHS_Lanarkshire = 1. 
 If hbtreatcode = 'S08000024' NHS_Lothian = 1. 
 If hbtreatcode = 'S08000025' NHS_Orkney = 1. 
 If hbtreatcode = 'S08000026' NHS_Shetland = 1. 
 If hbtreatcode = 'S08000028' NHS_Western_Isles = 1. 
-If hbtreatcode = 'S08000029' NHS_Fife = 1. 
-If hbtreatcode = 'S08000030' NHS_Tayside = 1. 
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran to NHS_Tayside (SYSMIS = 0).
+If any(hbtreatcode, 'S08000018', 'S08000029') NHS_Fife = 1. 
+If any(hbtreatcode, 'S08000027', 'S08000030') NHS_Tayside = 1. 
 
 *Flag to count HB costs. 
-If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = (cost_total_net).
-If NHS_Borders = 1 NHS_Borders_cost = (cost_total_net). 
-If NHS_Dumfries_and_Galloway = 1 NHS_Dumfries_and_Galloway_cost = (cost_total_net).
-If NHS_Forth_Valley = 1 NHS_Forth_Valley_cost = (cost_total_net).
-If NHS_Grampian = 1 NHS_Grampian_cost = (cost_total_net).
-If NHS_Greater_Glasgow_and_Clyde = 1 NHS_Greater_Glasgow_and_Clyde_cost = (cost_total_net).
-If NHS_Highland = 1 NHS_Highland_cost = (cost_total_net).
-If NHS_Lanarkshire = 1 NHS_Lanarkshire_cost = (cost_total_net).
-If NHS_Lothian = 1 NHS_Lothian_cost = (cost_total_net).
-If NHS_Orkney = 1 NHS_Orkney_cost = (cost_total_net).
-If NHS_Shetland = 1 NHS_Shetland_cost = (cost_total_net).
-If NHS_Western_Isles = 1 NHS_Western_Isles_cost = (cost_total_net).
-If NHS_Fife = 1 NHS_Fife_cost = (cost_total_net).
-If NHS_Tayside = 1 NHS_Tayside_cost = (cost_total_net).
-
-*Change missing HB values to 0. 
-Recode NHS_Ayrshire_and_Arran_cost to NHS_Tayside_cost (SYSMIS = 0).
+If NHS_Ayrshire_and_Arran = 1 NHS_Ayrshire_and_Arran_cost = cost_total_net.
+If NHS_Borders = 1 NHS_Borders_cost = cost_total_net. 
+If NHS_Dumfries_and_Galloway = 1 NHS_Dumfries_and_Galloway_cost = cost_total_net.
+If NHS_Forth_Valley = 1 NHS_Forth_Valley_cost = cost_total_net.
+If NHS_Grampian = 1 NHS_Grampian_cost = cost_total_net.
+If NHS_Greater_Glasgow_and_Clyde = 1 NHS_Greater_Glasgow_and_Clyde_cost = cost_total_net.
+If NHS_Highland = 1 NHS_Highland_cost = cost_total_net.
+If NHS_Lanarkshire = 1 NHS_Lanarkshire_cost = cost_total_net.
+If NHS_Lothian = 1 NHS_Lothian_cost = cost_total_net.
+If NHS_Orkney = 1 NHS_Orkney_cost = cost_total_net.
+If NHS_Shetland = 1 NHS_Shetland_cost = cost_total_net.
+If NHS_Western_Isles = 1 NHS_Western_Isles_cost = cost_total_net.
+If NHS_Fife = 1 NHS_Fife_cost = cost_total_net.
+If NHS_Tayside = 1 NHS_Tayside_cost = cost_total_net.
 
 * Get values for whole file.
 Dataset Declare SLFexisting.
@@ -193,10 +181,10 @@ aggregate outfile = SLFexisting
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
     /n_episodes = n
-    /Total__Costs_net = Sum(Cost_Total_Net)
-    /Mean_Costs_net = Mean(Cost_Total_Net)
+    /Total__Costs_net = Sum(cost_total_net)
+    /Mean_Costs_net = Mean(cost_total_net)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
-    /Latest_start Latest_end  = Max(record_keydate1 record_keydate2)
+    /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)
     /Total_cost_may = Sum(may_cost)
     /Total_cost_jun = Sum(jun_cost)
@@ -273,12 +261,11 @@ Dataset close SLFexisting.
 * Produce comparisons.
 Compute Difference = New_Value - Existing_Value.
 Compute PctChange = Difference / Existing_Value.
-Compute Issue = (abs(PctChange) > 5).
+Compute Issue = abs(PctChange) > 5.
 Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 * Highlight issues.
 Crosstabs Measure by Issue.
 
-Save Outfile = !file + 'A&E_tests_20' + !FY + '.zsav'
+Save Outfile = !Year_dir + 'A&E_tests_20' + !FY + '.zsav'
    /zcompressed .
-
