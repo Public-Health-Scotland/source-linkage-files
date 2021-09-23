@@ -3,17 +3,14 @@
 ************************************************************************************************************************************.
 ************************************************************************************************************************************.
 ************************************************************************************************************************************.
- * We don't currently have an NSU cohort for 2018/19.
+ * We don't currently have an NSU cohort for 2014/15 or latest years.
  * Use this code for new years where we don't have an NSU cohort, otherwise run main code below.
-get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav".
-Numeric Keep_Population (F1.0).
-Compute Keep_Population = 1.
-save outfile = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav"
+*get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav".
+*Numeric Keep_Population (F1.0).
+*Compute Keep_Population = 1.
+*save outfile = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
 ************************************************************************************************************************************.
-************************************************************************************************************************************.
-************************************************************************************************************************************.
- 
 ************************************************************************************************************************************.
 * 1. Obtain the population estimates for Locality AgeGroup and Gender.
 get file = !DataZone_Pop_Lookup
@@ -174,3 +171,9 @@ save outfile = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav"
     /zcompressed.
 
 get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
+
+*************************************************************************************************************************************************.
+*Housekeeping. 
+erase file = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'.
+erase file = !Year_dir + "Population-estimates-20" + !FY + ".zsav".
+erase file = !Year_dir + "NSU-Keep-Lookup-20" + !FY + ".zsav".
