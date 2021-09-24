@@ -534,10 +534,25 @@ Value Labels sigfac
     '1F' "Convalescent Unit"
     '1G' "Palliative Care Unit"
     '1H' "High Dependency Unit"
+    '1L' "Adolescent Unit"
     '1M' "Transplant Unit"
+    '1N' "Mother and Baby Unit"
     '1P' "Stroke Unit"
+    '1Q' "Secure Psychiatric Inpatient Facility"
+    '1R' "Intensive Psychiatric Care Unit (IPCU)"
+    '1S' "Long Stay Unit - Mental Health"
+    '1T' "Psychiatric Rehabilitation Unit (PRU)"
+    '31' "Outpatient Department"
+    '32' "Accident & Emergency Department"
+    '33' "Day Hospital"
+    '34' "Health Centre"
+    '35' "GP Surgery Premises"
+    '36' "Patients home"
+    '37' "Other Community Premises"
+    '38' "Rapid Access Chest Pain Clinic"
     '39' "Ambulatory Emergency Care Unit"
-    '40' "Acute Assessment Unit (AAU)".
+    '40' "Acute Assessment Unit (AAU)"
+    '41' "Flow Navigation Centre (A&E Data mart only)".
 
 Value Labels cat
     '1' "Amenity"
