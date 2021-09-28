@@ -1,5 +1,5 @@
 get_lookups_dir <- function() {
-  fs::path("/conf/linkage/output/lookups/Unicode/")
+  fs::path("/conf/linkage/output/lookups/Unicode")
 }
 
 
@@ -13,10 +13,10 @@ get_lookups_dir <- function() {
 #' @examples
 #' locality_file <- read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds")
 read_locality_file <- function(file) {
-  locality_path <- fs::path(get_lookups_dir, "Geography", "HSCP Locality", file)
+  locality_path <- fs::path(get_lookups_dir(), "Geography", "HSCP Locality", file)
 
   # If given a sav extension (or other), swap it for rds
-  fs::path_ext_set(locality_path, "rds")
+  locality_path <- fs::path_ext_set(locality_path, "rds")
 
   # Check if the file exists and we can read it
   if (!fs::file_access(locality_path, "read")) {
