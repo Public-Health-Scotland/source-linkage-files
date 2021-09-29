@@ -1,26 +1,381 @@
 ---
 title: "SLF Cross Year Tests"
-output: html_document
+output:
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(slfhelper)
 library(tidyverse)
 ```
 
 
 ```{r data_import}
+data <- read_slf_episode(year = c("1516", "1617", "1718", "1819", "1920"),
+                         columns = c("year", "recid", "anon_chi", "hscp2019", "hbtreatcode", "hb2019",
+                                     "gender", "spec", "age", "cost_total_net", "yearstay", 
+                                     "sigfac", "simd2020v2_sc_quintile", "tadm", "location"))
 
 ```
 
-## SLF Cross Year tests
+```{r data_set_up}
+# Create some age groups
+data <- data %>% 
+  mutate(Age_group = case_when(
+    age < 20 ~ "<20",
+    between(age, 20, 29) ~ "20-29",
+    between(age, 30, 39) ~ "30-39",
+    between(age, 40, 49) ~ "40-49", 
+    between(age, 50, 59) ~ "50-59", 
+    between(age, 60, 69) ~ "60-69",
+    between(age, 70, 79) ~ "70-79", 
+    between(age, 80, 89) ~ "80-89", 
+    age >90 ~ ">90"))
 
-### Cost total net
+#' Convert HB2019 codes to factors with names as labels
+#'
+#' @param HB2019
+#'
+#' @return
+#' @export
+#'
+#' @examples
 
-Breakdown by recid and healthboard
+hb_2019_as_factor <- function(HB2019) {
+  factor(
+    HB2019,
+    levels = c(
+      "S08000015",
+      "S08000016",
+      "S08000017",
+      "S08000019",
+      "S08000020",
+      "S08000031",
+      "S08000022",
+      "S08000032",
+      "S08000024",
+      "S08000025",
+      "S08000026",
+      "S08000028",
+      "S08000029",
+      "S08000030"
+    ),
+    labels = c(
+      "Ayrshire and Arran",
+      "Borders",
+      "Dumfries and Galloway",
+      "Forth Valley",
+      "Grampian",
+      "Greater Glasgow and Clyde",
+      "Highland",
+      "Lanarkshire",
+      "Lothian",
+      "Orkney",
+      "Shetland",
+      "Western Isles",
+      "Fife",
+      "Tayside"
+    )
+  )
+}
+
+#' Convert HSCP2019 codes to factors with names as labels
+#'
+#' @param HSCP2019
+#'
+#' @return
+#' @export
+#'
+#' @examples
+hscp_2019_as_factor <- function(HSCP2019) {
+  factor(
+    HSCP2019,
+    levels = c(
+      "S37000001",
+      "S37000002",
+      "S37000003",
+      "S37000004",
+      "S37000005",
+      "S37000006",
+      "S37000007",
+      "S37000008",
+      "S37000009",
+      "S37000010",
+      "S37000011",
+      "S37000012",
+      "S37000013",
+      "S37000034",
+      "S37000016",
+      "S37000017",
+      "S37000018",
+      "S37000019",
+      "S37000020",
+      "S37000035",
+      "S37000022",
+      "S37000024",
+      "S37000025",
+      "S37000026",
+      "S37000027",
+      "S37000028",
+      "S37000029",
+      "S37000030",
+      "S37000031",
+      "S37000032",
+      "S37000033"
+    ),
+    labels = c(
+      "Aberdeen City",
+      "Aberdeenshire",
+      "Angus",
+      "Argyll and Bute",
+      "Clackmannanshire and Stirling",
+      "Dumfries and Galloway",
+      "Dundee City",
+      "East Ayrshire",
+      "East Dunbartonshire",
+      "East Lothian",
+      "East Renfrewshire",
+      "Edinburgh",
+      "Falkirk",
+      "Glasgow City",
+      "Highland",
+      "Inverclyde",
+      "Midlothian",
+      "Moray",
+      "North Ayrshire",
+      "North Lanarkshire",
+      "Orkney Islands",
+      "Renfrewshire",
+      "Scottish Borders",
+      "Shetland Islands",
+      "South Ayrshire",
+      "South Lanarkshire",
+      "West Dunbartonshire",
+      "West Lothian",
+      "Western Isles",
+      "Fife",
+      "Perth and Kinross"
+    )
+  )
+}
+```
+
+
+# SLF Cross Year tests
+
+## Admissions
+
+### Graphs showing 01B and GLS admissions by Health & Social Care Partnership
 
 ```{r}
+hscpadmissions <- data %>%
+  filter(recid %in% c("01B", "GLS")) %>%
+  group_by(year, hscp2019) %>%
+  summarise(admissions = n()) %>% 
+  filter(hscp2019 != "") %>% 
+  ungroup()
+
+hscpadmissions %>%
+  ggplot(aes(x = year, y = admissions, fill = hscp_2019_as_factor(hscp2019))) +
+  geom_col(position = "dodge")+
+  labs(x = "Year", y = "Total Number of Admissions", fill = "Health & Social Care Partnership")
+```
+
+
+###Graph showing 01B and GLS admissions by Health Board of Residence
+
+```{r}
+hbadmissions <- data %>%
+  filter(recid %in% c("01B", "GLS")) %>%
+  group_by(year, hb2019) %>%
+  summarise(admissions = n()) %>% 
+  filter(hb2019 != "") %>% 
+  ungroup()
+
+hbadmissions %>% 
+  ggplot(aes(x = year, y = admissions, fill = hb_2019_as_factor(hb2019))) +
+  geom_col(position = "dodge") +
+  labs(x = "Year", y = "Total Number of Admissions", fill = "Health Board")
+```
+
+
+###Graph showing emergency admissions across years per 1,000
+
+```{r}
+###
+# Compare emergency admissions across years per 1,000
+emergency_adm <- data %>% 
+  filter(recid %in% c("01B", "GLS")) %>%
+  filter(tadm %in% c(30, 31, 32, 33, 34, 35, 36, 38, 39)) %>% 
+  group_by(year) %>% 
+  summarise(emergency_adm = n()) %>% 
+  ungroup()
+  
+adm <- data %>% 
+  filter(recid %in% c("01B", "GLS")) %>%
+  group_by(year) %>% 
+  summarise(admissions = n()) %>% 
+  ungroup()
+
+#merge datasets to work out percentage of emergency admissions 
+tadm <- merge(x= emergency_adm, y= adm, by = "year")
+
+tadm <- tadm %>% 
+  mutate(percentage = (admissions - emergency_adm)/admissions * 100) %>% 
+  mutate(cruderate = (emergency_adm/admissions)*1000)
+
+
+#create a plot 
+tadm %>% 
+  ggplot(aes(x = as.integer(as.ordered(year)), y = cruderate)) +
+  geom_line()+
+  scale_x_continuous("year", labels = levels(as.ordered(tadm$year))) + 
+  labs(x = "Year", y = "Total number of emergency admissions per 1,000")
+```
+
+###Graph showing admissions by specialty across years 
+
+```{r}
+spec_admissions <- data %>%
+  filter(recid %in% c("01B", "GLS")) %>%
+  group_by(year, spec) %>%
+  summarise(admissions = n()) %>% 
+  ungroup()
+
+spec_admissions %>% 
+  ggplot(aes(x = year, y = admissions, fill = spec)) +
+  geom_col(position = "dodge") +
+  labs(x = "year", y = "Total Number of Admissions", fill = "Specialty")
+
+spec_admissions %>% 
+  ggplot(aes(x = as.integer(as.ordered(year)), y = admissions, colour = as.factor(spec)))  +
+  geom_line() +
+  scale_x_continuous("year", labels = levels(as.ordered(spec_admissions$year))) +
+  labs(x = "Year", y = "Total Number of Admissions") + 
+  scale_colour_discrete(name = "spec")
+```
+
+
+
+
+
+##Patients 
+
+###Graph showing the number of patients admitted by hscp2019
+
+```{r}
+patients_by_hscp <- data %>% 
+  filter(recid %in% c("01B", "GLS")) %>%
+  mutate(valid_chi = if_else(anon_chi != "", 1, 0)) %>% 
+  group_by(year, hscp2019) %>% 
+  count(valid_chi) %>% 
+  filter(valid_chi == 1 & hscp2019 != "") %>% 
+  ungroup()
+
+  #create a plot
+patients_by_hscp %>%  
+  ggplot(aes(x = year, y = n, fill = hscp_2019_as_factor(hscp2019))) +
+  geom_col(position = "dodge")+
+  labs(x = "Year", y = "Total Number of patients", fill = "Health & Social Care Partnership")
+```
+
+###Graph showing the number of patients admitted by Health Board of Residence 
+```{r}
+patients_by_hb <- data %>% 
+  filter(recid %in% c("01B", "GLS")) %>%
+  mutate(valid_chi = if_else(anon_chi != "", 1, 0)) %>% 
+  group_by(year, hb2019) %>% 
+  count(valid_chi) %>% 
+  filter(valid_chi == 1 & hb2019 != "") %>% 
+  ungroup()
+
+patients_by_hb %>%  
+  ggplot(aes(x = year, y = n, fill = hb_2019_as_factor(hb2019))) +
+  geom_col(position = "dodge")+
+  labs(x = "Year", y = "Total Number of patients", fill = "Health Board")
+```
+
+
+###Graph showing the number of patients admitted by recid
+
+```{r}
+patients_by_recid <- data %>% 
+  mutate(valid_chi = if_else(anon_chi != "", 1, 0)) %>% 
+  group_by(year, recid) %>% 
+  count(valid_chi) %>% 
+  filter(valid_chi == 1 & recid != "") %>% 
+  ungroup()
+
+patients_by_recid %>%  
+  ggplot(aes(x = as.integer(as.ordered(year)), y = n, colour = as.factor(recid))) +
+  geom_line() +
+  scale_x_continuous("year", labels = levels(as.ordered(patients_by_recid$year)))+ 
+  labs(x = "Year", y = "Number of Patients") + 
+  scale_colour_discrete(name = "Recid")
+```
+
+
+##Cost
+
+### Graphs showing the average cost for 01B and GLS admissions by gender
+
+``` {r}
+avg_cost_by_gender<- data %>%
+  filter(recid %in% c("01B", "GLS")) %>%
+  group_by(year, gender) %>% 
+  summarise(total_cost = sum(cost_total_net),
+            total_beddays = sum(yearstay),
+            avg_cost_per_day = total_cost / total_beddays) %>% 
+  ungroup()
+  
+avg_cost_by_gender %>% 
+  ggplot(aes(x = as.integer(as.ordered(year)), y = avg_cost_per_day, colour = as.factor(gender))) +
+  geom_line()+
+  scale_x_continuous("year", labels = levels(as.ordered(avg_cost_by_gender$year)))
 
 ```
 
+
+###Graphs showing the average cost per day split by gender and age groups
+
+```{r}
+  # Avg cost per day across years and Recid split by gender and age groups
+age_avg_cost <- data %>%
+  filter(recid %in% c("01B", "GLS", "02B", "04B", "AE2")) %>%
+  group_by(year, recid, gender, Age_group) %>%
+  summarise(total_cost = sum(cost_total_net),
+            total_beddays = sum(yearstay),
+            avg_cost_per_day = total_cost / total_beddays)
+
+age_avg_cost %>%
+  ggplot(aes(x = year, y = avg_cost_per_day, fill = Age_group)) +
+  geom_col(position = "dodge") +
+  facet_wrap("gender")
+```
+
+
+
+###Graphs showing average cost per day by year and significant facility
+
+```{r}
+# Get total cost by year and sigfac
+sigfac_cost<- data %>%
+  filter(recid %in% c("01B", "GLS")) %>%
+  group_by(year, sigfac, recid) %>%
+  summarise(total_cost = sum(cost_total_net),
+            total_beddays = sum(yearstay),
+            avg_cost_per_day = total_cost / total_beddays) %>% 
+  ungroup()
+
+#Create a plot
+sigfac_cost %>%
+  ggplot(aes(x = year, y = avg_cost_per_day, fill = sigfac)) +
+  geom_col(position = "dodge") +
+  facet_wrap("recid")
+
+sigfac_cost %>%
+  ggplot(aes(x = as.integer(as.ordered(year)), y = avg_cost_per_day, colour = as.factor(sigfac))) +
+           geom_line()+
+           scale_x_continuous("year", labels = levels(as.ordered(sigfac_cost$year)))
+```
