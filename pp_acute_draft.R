@@ -19,7 +19,7 @@ year <- "1819"
 year_dir <- path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
 file_path <- path(year_dir, "Acute-episode-level-extract-201819.csv.gz")
 
-extract_file_path <- function(year, type = c("Acute", "Mental")) {
+extract_path <- function(year, type = c("Acute", "Mental")) {
   year_dir <- path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
 
   file_name <- case_when(type == "Acute" ~ "Acute-episode-level-extract",
