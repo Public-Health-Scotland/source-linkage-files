@@ -10,38 +10,18 @@
 #              prior to processing.
 #####################################################
 
-library(janitor)
-
 #Load set up file
 source("setup_environment.R")
 
+#Set up for extract_path function
 year <- "1819"
 year_dir <- path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
 file_path <- path(year_dir, "Acute-episode-level-extract-201819.csv.gz")
 
-extract_path <- function(year, type = c("Acute", "Mental")) {
-  year_dir <- path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
-
-  file_name <- case_when(type == "Acute" ~ "Acute-episode-level-extract",
-                         type == "Mental" ~ "Mental-Health-episode-level-extract")
-
-  file_path <- path(year_dir, glue::glue("{file_name}-20{year}.csv.gz"))
-
-  if (file_exists(path_ext_remove(file_path))) {
-    file_path <- path_ext_remove(file_path)
-  } else if (!file_exists(file_path)) {
-    rlang::abort(glue::glue("{type} Extract not found"))
-  }
-
-  return(file_path)
-}
-
-
-
 #Load extract file
-acute_file <- read_csv(file_path)
+acute_file <- read_csv(extract_path(year, "Acute"))
 
-boxi_acute %>%
+acute_file %>%
   rename(tadm = AdmissionTypeCode,
          adtf = AdmittedTransFromCode,
          age = AgeatMidpointofFinancialYear01,
