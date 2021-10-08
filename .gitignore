@@ -3,24 +3,18 @@
 2016-17/Pre\ Sep18/*
 2017-18/Pre\ Sep18/*
 Make\ SLFs/.Rproj.user/*
-
 #Ignore documentation etc.
 *.pptx
 *.docx
-
 #Ignore SPSS job files
 *.spj
-
-
 #Ignore MS Office files
 *.xls
 *.xlsx
 *.doc
 *.docx
-
 *.spv
 .Rproj.user
-
-Make SLFs/.Rhistory
-
-Make SLFs/log
+*.Rhistory
+Make_R_files/log.txt
+hc_data_issues.html
