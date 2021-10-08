@@ -407,9 +407,3 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     /zcompressed.
 
 get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
-
-*************************************************************************************************************************************************.
-*Housekeeping. 
-erase file = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'.
-erase file = !Year_dir + "Population-estimates-20" + !FY + ".zsav".
-erase file = !Year_dir + "NSU-Keep-Lookup-20" + !FY + ".zsav".
