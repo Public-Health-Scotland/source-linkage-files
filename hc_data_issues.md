@@ -1,0 +1,43 @@
+## Home Care data issues
+
+### Period / FQ
+
+* Some 2017 records have fin_qu = 0, which gives period = "2017" instead of "2017Q4".
+** These records cause issues withe other variables e.g. `hc_period_start_date` and `hc_period_end_date` are computed incorrectly and then the flag `hc_start_date_after_period_end_date` reports them as incorrect making the flag pretty useless.
+** These are all from North Ayrshire.
+* 259 records have a missing start date (mostly from 2017 Noth Ayrshire, with the same issues as above)
+** Of these 239 also don't have an end date (mostly 2017 North Ayrshire)
+
+
+### Social Care ID changes
+
+For the same CHI in the same sending location. A lot of these look like typos or submission erros which should be reported back and resolved: e.g.
+
+* Clackmannanshire: 00437 -> 437
+* Clackmannanshire: 00452319 -> 452319
+* Edinburgh: 8239553 -> 8292523
+
+| sending_location_name | number of chi's affected |
+|-----------------------|-------------------------:|
+| Aberdeen City         |                        2 |
+| City of Edinburgh     |                        1 |
+| Clackmannanshire      |                       77 |
+| East Ayrshire         |                        3 |
+| East Dunbartonshire   |                        1 |
+| East Renfrewshire     |                        2 |
+| Falkirk               |                        1 |
+| Fife                  |                        2 |
+| Glasgow City          |                       19 |
+| Highland              |                       14 |
+| Inverclyde            |                        3 |
+| Midlothian            |                       12 |
+| North Ayrshire        |                        2 |
+| North Lanarkshire     |                        7 |
+| Perth and Kinross     |                        1 |
+| Renfrewshire          |                        9 |
+| Scottish Borders      |                        2 |
+| South Ayrshire        |                        3 |
+| South Lanarkshire     |                        5 |
+| Stirling              |                        3 |
+| West Dunbartonshire   |                        4 |
+| West Lothian          |                        1 |
