@@ -14,9 +14,9 @@ IT_extract_ref <- function() {
 }
 
 latest_update <- function() {
-  "Dec_2021"
+  "Sep_2021"
 }
 
-delayed_discharges_period <- function() {
+dd_period <- function() {
   "Jul16_Jun21"
 }
