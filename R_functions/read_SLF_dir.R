@@ -1,56 +1,62 @@
-#General SLF directory for accessing HSCDIIP folders/files
-#' @param () - String containing SLF directory file path
+#'General SLF directory for accessing HSCDIIP folders/files
+#' @param  String containing SLF directory file path
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#' read_slf_dir()
-read_slf_dir <- function(){
+#' get_slf_dir()
+get_slf_dir <- function(){
   slf_dir <- "/conf/hscdiip/SLF_Extracts/"
 
   return(slf_dir)
 }
 
 ####################################################
-#Function for delayed discharges directory
+#'Function for delayed discharges directory
 #' @param dd_dir - the name of the SLF directory
 #'
-#' @return The data read using `readr::read_rds``
+#' @return
 #' @export
 #'
 #' @examples
-#' delayed_discharges_file <- read_sav(read_dd_file())
-
+#' delayed_discharges_file <- read_dd_file()
 #Function for reading in delayed discharges file
 read_dd_file <- function() {
- dd_dir <- "Delayed_Discharges/"
+ dd_dir <- "Delayed_Discharges"
 
- delayed_discharges_file<- glue::glue("{read_slf_dir()}{dd_dir}{dd_period()}DD_LinkageFile.zsav")
+ dd_name <- "DD_LinkageFile"
 
-  return(delayed_discharges_file)
+ delayed_discharges_file <- fs::path(get_slf_dir(), dd_dir, glue::glue("{dd_period()}{dd_name}"))
+ delayed_discharges_file <- fs::path_ext_set(delayed_discharges_file, "zsav")
+
+ return(haven::read_sav(delayed_discharges_file))
+
 }
 
 
 ####################################################
-#Function for lookups directory - source postcode and gpprac lookup
+#'Function for lookups directory - source postcode and gpprac lookup
 #' @param `type`` - the name of lookups within lookup directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#'source_pc_lookup <- read_sav(read_lookups_dir("postcode"))
-#'source_gpprac_lookup <- read_sav(read_lookups_dir("gpprac"))
+#'source_pc_lookup <- read_lookups_dir("postcode")
+#'source_gpprac_lookup <- read_lookups_dir("gpprac")
 read_lookups_dir <- function(type = c("postcode", "gpprac")) {
-  lookups_dir <- "Lookups/"
+  lookups_dir <- "Lookups"
 
   lookups_name <- case_when(type == "postcode" ~ "source_postcode_lookup_",
                             type == "gpprac" ~ "source_GPprac_lookup_"
-                            )
-  lookups_file <- glue::glue("{read_slf_dir()}{lookups_dir}{lookups_name}{latest_update()}.zsav")
+  )
 
-  return(lookups_file)
+  lookups_file <- fs::path(get_slf_dir(), lookups_dir, glue::glue("{lookups_name}{latest_update()}"))
+  lookups_file <- fs::path_ext_set(lookups_file, "zsav")
+
+  return(haven::read_sav(lookups_file))
+
 }
 
 
@@ -69,19 +75,21 @@ read_practice_details <- function() {
 #' @export
 #'
 #' @examples
-#'demographic_cohorts <- read_sav(read_cohorts_dir("demographic"))
-#'service_use_cohorts <- read_sav(read_cohorts_dir("service_use"))
-
+#'demographic_cohorts <- read_cohorts_dir("demographic")
+#'service_use_cohorts <- read_cohorts_dir("service_use")
 read_cohorts_dir <- function(type = c("demographic","service_use")){
-  cohorts_dir <- "Cohorts/"
+  cohorts_dir <- "Cohorts"
 
   cohorts_name <- case_when(type == "demographic" ~ "Demographic_Cohorts_",
                             type == "service_use" ~ "Service_Use_Cohorts_"
-                            )
-  cohorts_file <- glue::glue("{read_slf_dir()}{cohorts_dir}{cohorts_name}{year}.zsav")
+  )
 
-  return(cohorts_file)
+  cohorts_file <- fs::path(get_slf_dir(), cohorts_dir, glue::glue("{cohorts_name}{year}"))
+  cohorts_file <- fs::path_ext_set(cohorts_file, "zsav")
+
+  return(haven::read_sav(cohorts_file))
 }
+
 
 
 ####################################################
@@ -92,40 +100,45 @@ read_cohorts_dir <- function(type = c("demographic","service_use")){
 #' @export
 #'
 #' @examples
-#'ch_costs <- read_sav(read_costs_dir("CH"))
+#'ch_costs <- read_costs_file("CH")
 #'dn_costs <- read_sav(read_costs_dir("DN"))
 #'ooh_costs <- read_sav(read_costs_dir("GPOOH"))
 
 read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
-  costs_dir <- "Costs/"
+  costs_dir <- "Costs"
 
   costs_name <- case_when(type == "CH" ~ "Cost_CH_Lookup",
                           type == "DN" ~ "Cost_DN_Lookup",
                           type == "GPOOH" ~ "Cost_GPOOH_Lookup"
                           )
 
-  costs_file <- glue::glue("{read_slf_dir()}{costs_dir}{costs_name}.sav")
+  costs_file <- fs::path(read_slf_dir(), costs_dir, costs_name)
+  costs_file <-  fs::path_ext_set(costs_file, "sav")
 
-  return(costs_file)
+  return(haven::read_sav(costs_file))
+
 }
 
 ###################################################
 #Function for deaths directory - saving/reading the all deaths file
-#' @param ()
-#'
-#' @return The data read using `haven::read_sav`
+
+#'Get the deaths file directory
+#' @return
 #' @export
 #'
 #' @examples
-#' all_deaths <- read_sav(read_deaths_dir())
+#' all_deaths <- read_deaths_dir()
 read_deaths_dir <- function() {
-  deaths_dir <- "Deaths/"
+  deaths_dir <- "Deaths"
 
   deaths_name <- "all_deaths_"
 
-  deaths_file <- glue::glue("{read_slf_dir()}{deaths_dir}{deaths_name}{latest_update()}.zsav")
 
-  return(deaths_file)
+  deaths_file <- fs::path(get_slf_dir(), deaths_dir, glue::glue("{deaths_name}{latest_update()}"))
+  deaths_file <- fs::path_ext_set(deaths_file, "zsav")
+
+  return(haven::read_sav(deaths_file))
+
 }
 
 ###################################################
@@ -136,15 +149,17 @@ read_deaths_dir <- function() {
 #' @export
 #'
 #' @examples
-#' hhg_file <- read_sav(read_hhg_dir())
+#' hhg_file <- read_hhg_dir()
 read_hhg_dir<- function() {
-  hhg_dir <- "HHG/"
+  hhg_dir <- "HHG"
 
-  hhg_file <- glue::glue("{read_slf_dir()}{hhg_dir}HHG-20{year}.zsav")
+  hhg_name <- "HHG-20"
 
-  return(hhg_file)
+  hhg_file <- fs::path(get_slf_dir(), hhg_dir, glue::glue("{hhg_name}{year}"))
+  hhg_file <- fs::path_ext_set(hhg_file, "zsav")
+
+  return(haven::read_sav(hhg_file))
 }
-
 
 
 ###################################################
@@ -155,13 +170,17 @@ read_hhg_dir<- function() {
 #' @export
 #'
 #' @examples
-#' sparra_file <- read_sav(read_sparra_dir())
+#' sparra_file <- read_sparra_dir()
 read_sparra_dir <- function() {
-  sparra_dir <- "SPARRA/"
+  sparra_dir <- "SPARRA"
 
-  sparra_file <- glue::glue("{read_slf_dir()}{sparra_dir}SPARRA-20{year}.zsav")
+  sparra_name <- "SPARRA-20"
 
-  return(sparra_file)
+  sparra_file <- fs::path(get_slf_dir(), sparra_dir, glue::glue("{sparra_name}{year}"))
+  sparra_file <- fs::path_ext_set(sparra_file, "zsav")
+
+  return(haven::read_sav(sparra_file))
+
 }
 
 
@@ -173,14 +192,19 @@ read_sparra_dir <- function() {
 #' @export
 #'
 #' @examples
-#' nsu_file <- read_sav(read_nsu_dir())
+#' nsu_file <- read_nsu_dir()
 read_nsu_dir <- function() {
   nsu_dir <- "NSU/"
 
-  nsu_file <- glue::glue("{read_slf_dir()}{nsu_dir}All_CHIs_20{year}.zsav")
+  nsu_name <- "All_CHIs_20"
 
-  return(nsu_file)
+  nsu_file <- fs::path(get_slf_dir(), nsu_dir, glue::glue("{nsu_name}{year}"))
+  nsu_file <- fs::path_ext_set(nsu_file, "zsav")
+
+  return(haven::read_sav(nsu_file))
 }
+
+
 
 
 ########################################################
@@ -191,24 +215,24 @@ read_nsu_dir <- function() {
 #' @export
 #'
 #' @examples
-#' ltc_file <- read_sav(read_ltc_dir())
+#' ltc_file <- read_ltc_dir()
 read_ltc_dir <- function(){
-  ltc_dir <- "LTCs/"
+  ltc_dir <- "LTCs"
 
-  ltc_file <- glue::glue("{read_slf_dir()}{ltc_dir}LTCs_patient_reference_file-20{year}.zsav")
+  ltc_name <- "LTCs_patient_reference_file-20"
 
-  return(ltc_file)
+  ltc_file <- fs::path(get_slf_dir(), ltc_dir, glue::glue("{ltc_name}{year}"))
+  ltc_file <- fs::path_ext_set(ltc_file, "zsav")
+
+  return(haven::read_sav(ltc_file))
 }
 
-
-ltc_file <- read_sav(read_ltc_dir())
 
 
 ########################################################
 #Function for IT extract directory - stores IT extracts for all years
-#' @param ()
 #'
-#' @return The data read using `haven::read_sav`
+#' @return
 #' @export
 #'
 #' @examples
@@ -238,6 +262,8 @@ read_it_extract_dir <- function(extract){
   return(it_extract_file)
 }
 
+
+#Path not working with .csv.gz - look into this!
 
 #End of Script
 ########################################################
