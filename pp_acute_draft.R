@@ -17,7 +17,77 @@ source("setup_environment.R")
 year <- "1819"
 
 #Load extract file
-acute_file <- read_csv(extract_path(year, "Acute"))
+acute_file <- read_csv(file = extract_path(year, "Acute"), n_max = 2000,
+                       col_type = cols(
+                       `Costs Financial Year (01)` = col_integer(),
+                       `Costs Financial Month Number (01)` = col_double(),
+                       `GLS Record` = col_character(),
+                       `Date of Admission(01)` = col_character(),
+                       `Date of Discharge(01)` = col_character(),
+                       `Pat UPI` = col_character(),
+                       `Pat Gender Code` = col_double(),
+                       `Pat Date Of Birth [C]` = col_character(),
+                       `Practice Location Code` = col_character(),
+                       `Practice NHS Board Code - current` = col_character(),
+                       `Geo Postcode [C]` = col_character(),
+                       `NHS Board of Residence Code - current` = col_character(),
+                       `Geo Council Area Code` = col_character(),
+                       `Geo HSCP of Residence Code - current` = col_character(),
+                       `Geo Data Zone 2011` = col_character(),
+                       `Treatment Location Code` = col_character(),
+                       `Treatment NHS Board Code - current` = col_character(),
+                       `Occupied Bed Days (01)` = col_double(),
+                       `Inpatient Day Case Identifier Code` = col_character(),
+                       `Specialty Classificat. 1/4/97 Code` = col_character(),
+                       `Significant Facility Code` = col_character(),
+                       `Lead Consultant/HCP Code` = col_character(),
+                       `Management of Patient Code` = col_character(),
+                       `Patient Category Code` = col_character(),
+                       `Admission Type Code` = col_character(),
+                       `Admitted Trans From Code` = col_character(),
+                       `Location Admitted Trans From Code` = col_character(),
+                       `Old SMR1 Type of Admission Code` = col_integer(),
+                       `Discharge Type Code` = col_character(),
+                       `Discharge Trans To Code` = col_character(),
+                       `Location Discharged Trans To Code` = col_character(),
+                       `Diagnosis 1 Code (6 char)` = col_character(),
+                       `Diagnosis 2 Code (6 char)` = col_character(),
+                       `Diagnosis 3 Code (6 char)` = col_character(),
+                       `Diagnosis 4 Code (6 char)` = col_character(),
+                       `Diagnosis 5 Code (6 char)` = col_character(),
+                       `Diagnosis 6 Code (6 char)` = col_character(),
+                       `Operation 1A Code (4 char)` = col_character(),
+                       `Operation 1B Code (4 char)` = col_character(),
+                       `Date of Operation 1 (01)` = col_character(),
+                       `Operation 2A Code (4 char)` = col_character(),
+                       `Operation 2B Code (4 char)` = col_character(),
+                       `Date of Operation 2 (01)` = col_character(),
+                       `Operation 3A Code (4 char)` = col_character(),
+                       `Operation 3B Code (4 char)` = col_character(),
+                       `Date of Operation 3 (01)` = col_character(),
+                       `Operation 4A Code (4 char)` = col_character(),
+                       `Operation 4B Code (4 char)` = col_character(),
+                       `Date of Operation 4 (01)` = col_character(),
+                       `Age at Midpoint of Financial Year (01)` = col_integer(),
+                       `Continuous Inpatient Stay(SMR01) (inc GLS)` = col_integer(),
+                       `Continuous Inpatient Journey Marker (01)` = col_character(),
+                       `CIJ Planned Admission Code (01)` = col_integer(),
+                       `CIJ Inpatient Day Case Identifier Code (01)` = col_character(),
+                       `CIJ Type of Admission Code (01)` = col_character(),
+                       `CIJ Admission Specialty Code (01)` = col_character(),
+                       `CIJ Discharge Specialty Code (01)` = col_character(),
+                       `CIJ Start Date (01)` = col_date(format = "%Y/%m/%d %T"),
+                       `CIJ End Date (01)` = col_character(),
+                       `Total Net Costs (01)` = col_double(),
+                       `NHS Hospital Flag (01)` = col_character(),
+                       `Community Hospital Flag (01)` = col_character(),
+                       `Alcohol Related Admission (01)` = col_character(),
+                       `Substance Misuse Related Admission (01)` = col_character(),
+                       `Falls Related Admission (01)` = col_character(),
+                       `Self Harm Related Admission (01)` = col_character(),
+                       `Unique Record Identifier` = col_character(),
+                       `Line Number (01)` = col_character()
+                       ))
 names(acute_file) <- str_replace_all(names(acute_file), " ", "_")
 
 #Rename variables in line with SLF variable names
@@ -86,8 +156,9 @@ acute_file <- acute_file %>%
          dateop3 = `Date_of_Operation_3_(01)`,
          dateop4 = `Date_of_Operation_4_(01)`,
          dob = `Pat_Date_Of_Birth_[C]`,
-         idpc = Inpatient_Day_Case_Identifier_Code,
-         cij_idpc = `CIJ_Inpatient_Day_Case_Identifier_Code_(01)`
+         ipdc = Inpatient_Day_Case_Identifier_Code,
+         cij_ipdc = `CIJ_Inpatient_Day_Case_Identifier_Code_(01)`,
+         lineno = `Line_Number_(01)`
          )
 
 
@@ -95,10 +166,11 @@ acute_file <- acute_file %>%
 #Set recid as 01B and flag GLS records
   mutate(recid = if_else(GLS_Record == "Y", "GLS", "01B")) %>%
 #Set IDPC marker for the episode
-  mutate(idpc = recode(idpc, "IP" = "I",
+  #use case_when for this!
+  mutate(ipdc = recode(ipdc, "IP" = "I",
                              "DC" = "D")) %>%
 #Set IDPC marker for the cij
-  mutate(cij_idpc = recode(cij_idpc, "IP" = "I",
+  mutate(cij_ipdc = recode(cij_ipdc, "IP" = "I",
                                      "DC" = "D")) %>%
 #Recode GP practice into 5 digit number
 #We assume that if it starts with a letter it's an English practice and so recode to 99995.
@@ -132,8 +204,108 @@ select(uri, cost_total_net, yearstay, costmonthnum) %>%
          jan_beddays = if_else(costmonthnum == 1, yearstay, 0),
          feb_beddays = if_else(costmonthnum == 2, yearstay, 0),
          mar_beddays = if_else(costmonthnum == 3, yearstay, 0)
+         ) %>%
+#aggregate by uri and sum variables
+#check how to remove duplicates here?
+  group_by(uri) %>%
+  summarise(apr_cost = sum(apr_cost),
+            may_cost = sum(may_cost),
+            jun_cost = sum(jun_cost),
+            jul_cost = sum(jul_cost),
+            aug_cost = sum(aug_cost),
+            sep_cost = sum(sep_cost),
+            oct_cost = sum(oct_cost),
+            nov_cost = sum(nov_cost),
+            dec_cost = sum(dec_cost),
+            jan_cost = sum(jan_cost),
+            feb_cost = sum(feb_cost),
+            mar_cost = sum(mar_cost),
+            apr_beddays = sum(apr_beddays),
+            may_beddays = sum(may_beddays),
+            jun_beddays = sum(jun_beddays),
+            jul_beddays = sum(jul_beddays),
+            aug_beddays = sum(aug_beddays),
+            sep_beddays = sum(sep_beddays),
+            oct_beddays = sum(oct_beddays),
+            nov_beddays = sum(nov_beddays),
+            dec_beddays = sum(dec_beddays),
+            jan_beddays = sum(jan_beddays),
+            feb_beddays = sum(feb_beddays),
+            mar_beddays = sum(mar_beddays)
+            ) %>%
+  ungroup()
+
+#match monthly cost and beddays back to acute_file
+acute_monthly_totals <- acute_file %>%
+  distinct(uri, .keep_all = TRUE)%>%
+  left_join(monthly_cost_beddays, by = "uri") %>%
+#total up yearstay and costs
+  mutate(yearstay = rowSums(across(ends_with("beddays"))),
+         cost_total_net = rowSums(across(ends_with("cost")))
          )
 
+
+
+
+
+
+mutate(yearstay = select(., apr_beddays:mar_beddays) %>%
+           rowSums()) %>%
+  mutate(cost_total_net = select(., apr_cost:mar_cost) %>%
+           rowSums())
+
+#ends with
+
+
+
+dates<- acute_file%>%
+  #Calculate the total length of stay (for the entire episode, not just within the financial year).
+  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"),
+         stay2 = time_length(record_keydate1 %--% record_keydate2, unit = "days"))
+
+#If costs are missing fill them in
+mutate(cost_total_net = if_else(lineno == "NA", 0, cost_total_net))
+
+if(sum(is.na(acute_monthly_totals$cost_total_net)) > 0){
+  rlang::warn("Found missing costs ")
+}
+
+
+
+#Test
+acute_dates <- acute_file %>%
+  #Convert dates from character to date format
+  mutate(record_keydate1 = substr(1,10,ymd(record_keydate1)))
+
+acute_dates <- acute_file %>%
+  mutate(record_keydate1 = as.date(record_keydate1, format = "%y/%m/%d"))
+
+acute_dates <- acute_file %>%
+  mutate(record_keydate1 = str_replace_all(record_keydate1,"/", "-" ),
+         record_keydate1 = ymd_hms(record_keydate1)
+  )
+
+
+
+acute_dates <- acute_file %>%
+  mutate(across(str_replace_all(where("date"),"/", "-")))
+
+
+
+acute_dates <- acute_file %>%
+  mutate(across(contains("date"), fast_strptime(., format = "%Y/%m/%d %T")))
+
+
+acute_dates <- acute_file %>%
+  mutate(across(c(str_replace_all(contains("date")), "/", "-")), ymd_hms)
+
+
+
+
+#working
+#Change dates to date type
+mutate(across(contains("date"), ~ str_replace_all(., "/", "-") %>%
+                ymd_hms())) %>%
 
 ###############################################################
 #FUNCTIONS TO DO
