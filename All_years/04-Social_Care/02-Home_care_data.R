@@ -178,7 +178,19 @@ working_data2 <- working_data %>%
       TRUE ~ lag(episode_counter)
     )
   ) %>%
-  ungroup() %>%
+  ungroup()
+
+working_data3 <- working_data2 %>%
+  # Fix hours where derived hours are missing
+  # For A&B 2021, use multistaff (min = 1) * staff hours
+  tidylog::mutate(
+    hc_hours_derived = case_when(
+      sending_location_name == "Argyll and Bute" &
+        str_starts(period, "2021")
+      ~ pmax(1, multistaff_input) * total_staff_home_care_hours,
+      TRUE ~ hc_hours_derived
+    )
+  ) %>%
   mutate(hours_submission_quarter = period) %>%
   # Store the homecare hours with the sumbission month
   pivot_wider(
