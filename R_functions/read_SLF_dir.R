@@ -7,7 +7,7 @@
 #' @examples
 #' get_slf_dir()
 get_slf_dir <- function() {
-  slf_dir <- "/conf/hscdiip/SLF_Extracts/"
+  slf_dir <- fs::path("/conf/hscdiip/SLF_Extracts")
 
   return(slf_dir)
 }
@@ -47,7 +47,7 @@ read_dd_file <- function() {
 read_lookups_dir <- function(type = c("postcode", "gpprac")) {
   lookups_dir <- "Lookups"
 
-  lookups_name <- case_when(
+  lookups_name <- dplyr::case_when(
     type == "postcode" ~ "source_postcode_lookup_",
     type == "gpprac" ~ "source_GPprac_lookup_"
   )
@@ -79,7 +79,7 @@ read_practice_details <- function() {
 read_cohorts_dir <- function(type = c("demographic", "service_use")) {
   cohorts_dir <- "Cohorts"
 
-  cohorts_name <- case_when(
+  cohorts_name <- dplyr::case_when(
     type == "demographic" ~ "Demographic_Cohorts_",
     type == "service_use" ~ "Service_Use_Cohorts_"
   )
@@ -302,7 +302,7 @@ read_it_extract_dir <- function(extract) {
 #GP prac lookup and postcode lookup stored in lookups folder.
 read_SLF_dir <- function(type = c("Lookups", "Costs", "Delayed_Discharges", "IT_extracts", "HHG",
                                   "NSU", "SPARRA", "Cohorts", "LTCs", "Deaths", "Social_care"), file) {
-  SLF_dir_path <- path("/conf/hscdiip/SLF_Extracts/", type, file)
+  SLF_dir_path <- fs::path("/conf/hscdiip/SLF_Extracts/", type, file)
 }
 
 #Test read_SLF_dir function
