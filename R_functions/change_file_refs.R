@@ -7,8 +7,6 @@
 #' @export
 #'
 #' @examples
-#'
-#'
 IT_extract_ref <- function() {
   "SCTASK0247528"
 }

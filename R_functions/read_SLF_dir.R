@@ -1,4 +1,4 @@
-#'General SLF directory for accessing HSCDIIP folders/files
+#' General SLF directory for accessing HSCDIIP folders/files
 #' @param  String containing SLF directory file path
 #'
 #' @return The data read using `haven::read_sav`
@@ -6,14 +6,14 @@
 #'
 #' @examples
 #' get_slf_dir()
-get_slf_dir <- function(){
+get_slf_dir <- function() {
   slf_dir <- "/conf/hscdiip/SLF_Extracts/"
 
   return(slf_dir)
 }
 
 ####################################################
-#'Function for delayed discharges directory
+#' Function for delayed discharges directory
 #' @param dd_dir - the name of the SLF directory
 #'
 #' @return
@@ -21,46 +21,45 @@ get_slf_dir <- function(){
 #'
 #' @examples
 #' delayed_discharges_file <- read_dd_file()
-#Function for reading in delayed discharges file
+# Function for reading in delayed discharges file
 read_dd_file <- function() {
- dd_dir <- "Delayed_Discharges"
+  dd_dir <- "Delayed_Discharges"
 
- dd_name <- "DD_LinkageFile"
+  dd_name <- "DD_LinkageFile"
 
- delayed_discharges_file <- fs::path(get_slf_dir(), dd_dir, glue::glue("{dd_period()}{dd_name}"))
- delayed_discharges_file <- fs::path_ext_set(delayed_discharges_file, "zsav")
+  delayed_discharges_file <- fs::path(get_slf_dir(), dd_dir, glue::glue("{dd_period()}{dd_name}"))
+  delayed_discharges_file <- fs::path_ext_set(delayed_discharges_file, "zsav")
 
- return(haven::read_sav(delayed_discharges_file))
-
+  return(haven::read_sav(delayed_discharges_file))
 }
 
 
 ####################################################
-#'Function for lookups directory - source postcode and gpprac lookup
+#' Function for lookups directory - source postcode and gpprac lookup
 #' @param `type`` - the name of lookups within lookup directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#'source_pc_lookup <- read_lookups_dir("postcode")
-#'source_gpprac_lookup <- read_lookups_dir("gpprac")
+#' source_pc_lookup <- read_lookups_dir("postcode")
+#' source_gpprac_lookup <- read_lookups_dir("gpprac")
 read_lookups_dir <- function(type = c("postcode", "gpprac")) {
   lookups_dir <- "Lookups"
 
-  lookups_name <- case_when(type == "postcode" ~ "source_postcode_lookup_",
-                            type == "gpprac" ~ "source_GPprac_lookup_"
+  lookups_name <- case_when(
+    type == "postcode" ~ "source_postcode_lookup_",
+    type == "gpprac" ~ "source_GPprac_lookup_"
   )
 
   lookups_file <- fs::path(get_slf_dir(), lookups_dir, glue::glue("{lookups_name}{latest_update()}"))
   lookups_file <- fs::path_ext_set(lookups_file, "zsav")
 
   return(haven::read_sav(lookups_file))
-
 }
 
 
-#Function for reading in GP cluster lookup "Practice Details" for creating source GP prac lookup above
+# Function for reading in GP cluster lookup "Practice Details" for creating source GP prac lookup above
 read_practice_details <- function() {
   practice_details <- "/conf/hscdiip/SLF_Extracts/Lookups/Practice Details.sav"
 
@@ -68,20 +67,21 @@ read_practice_details <- function() {
 }
 
 ####################################################
-#Function for cohorts directory - Demographic cohorts and Service Use cohorts
+# Function for cohorts directory - Demographic cohorts and Service Use cohorts
 #' @param `type`` - the name of cohorts within cohort directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#'demographic_cohorts <- read_cohorts_dir("demographic")
-#'service_use_cohorts <- read_cohorts_dir("service_use")
-read_cohorts_dir <- function(type = c("demographic","service_use")){
+#' demographic_cohorts <- read_cohorts_dir("demographic")
+#' service_use_cohorts <- read_cohorts_dir("service_use")
+read_cohorts_dir <- function(type = c("demographic", "service_use")) {
   cohorts_dir <- "Cohorts"
 
-  cohorts_name <- case_when(type == "demographic" ~ "Demographic_Cohorts_",
-                            type == "service_use" ~ "Service_Use_Cohorts_"
+  cohorts_name <- case_when(
+    type == "demographic" ~ "Demographic_Cohorts_",
+    type == "service_use" ~ "Service_Use_Cohorts_"
   )
 
   cohorts_file <- fs::path(get_slf_dir(), cohorts_dir, glue::glue("{cohorts_name}{year}"))
@@ -93,36 +93,35 @@ read_cohorts_dir <- function(type = c("demographic","service_use")){
 
 
 ####################################################
-#Function for costs directory - Reading CH, DN and GP OOH costs
+# Function for costs directory - Reading CH, DN and GP OOH costs
 #' @param `type`` - the name of costs lookup within costs directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#'ch_costs <- read_costs_file("CH")
-#'dn_costs <- read_sav(read_costs_dir("DN"))
-#'ooh_costs <- read_sav(read_costs_dir("GPOOH"))
-
+#' ch_costs <- read_costs_file("CH")
+#' dn_costs <- read_sav(read_costs_dir("DN"))
+#' ooh_costs <- read_sav(read_costs_dir("GPOOH"))
 read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
   costs_dir <- "Costs"
 
-  costs_name <- case_when(type == "CH" ~ "Cost_CH_Lookup",
-                          type == "DN" ~ "Cost_DN_Lookup",
-                          type == "GPOOH" ~ "Cost_GPOOH_Lookup"
-                          )
+  costs_name <- case_when(
+    type == "CH" ~ "Cost_CH_Lookup",
+    type == "DN" ~ "Cost_DN_Lookup",
+    type == "GPOOH" ~ "Cost_GPOOH_Lookup"
+  )
 
   costs_file <- fs::path(read_slf_dir(), costs_dir, costs_name)
-  costs_file <-  fs::path_ext_set(costs_file, "sav")
+  costs_file <- fs::path_ext_set(costs_file, "sav")
 
   return(haven::read_sav(costs_file))
-
 }
 
 ###################################################
-#Function for deaths directory - saving/reading the all deaths file
+# Function for deaths directory - saving/reading the all deaths file
 
-#'Get the deaths file directory
+#' Get the deaths file directory
 #' @return
 #' @export
 #'
@@ -138,11 +137,10 @@ read_deaths_dir <- function() {
   deaths_file <- fs::path_ext_set(deaths_file, "zsav")
 
   return(haven::read_sav(deaths_file))
-
 }
 
 ###################################################
-#Function for HHG directory - reading HHG extract
+# Function for HHG directory - reading HHG extract
 #' @param ()
 #'
 #' @return The data read using `haven::read_sav`
@@ -150,7 +148,7 @@ read_deaths_dir <- function() {
 #'
 #' @examples
 #' hhg_file <- read_hhg_dir()
-read_hhg_dir<- function() {
+read_hhg_dir <- function() {
   hhg_dir <- "HHG"
 
   hhg_name <- "HHG-20"
@@ -163,7 +161,7 @@ read_hhg_dir<- function() {
 
 
 ###################################################
-#Function for SPARRA directory - reading SPARRA extract
+# Function for SPARRA directory - reading SPARRA extract
 #' @param ()
 #'
 #' @return The data read using `haven::read_sav`
@@ -180,12 +178,11 @@ read_sparra_dir <- function() {
   sparra_file <- fs::path_ext_set(sparra_file, "zsav")
 
   return(haven::read_sav(sparra_file))
-
 }
 
 
 ########################################################
-#Function for NSU directory - stores NSU extracts for years that are available
+# Function for NSU directory - stores NSU extracts for years that are available
 #' @param ()
 #'
 #' @return The data read using `haven::read_sav`
@@ -208,7 +205,7 @@ read_nsu_dir <- function() {
 
 
 ########################################################
-#Function for LTCs directory - stores LTC extracts for all years
+# Function for LTCs directory - stores LTC extracts for all years
 #' @param ()
 #'
 #' @return The data read using `haven::read_sav`
@@ -216,7 +213,7 @@ read_nsu_dir <- function() {
 #'
 #' @examples
 #' ltc_file <- read_ltc_dir()
-read_ltc_dir <- function(){
+read_ltc_dir <- function() {
   ltc_dir <- "LTCs"
 
   ltc_name <- "LTCs_patient_reference_file-20"
@@ -230,32 +227,33 @@ read_ltc_dir <- function(){
 
 
 ########################################################
-#Function for IT extract directory - stores IT extracts for all years
+# Function for IT extract directory - stores IT extracts for all years
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #' it_extract_1819 <- read_csv(file = read_it_extract_dir("1819"), n_max = 2000)
-#initialise extract type
+# initialise extract type
 extract <- c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")
 
-#create function with 'extract'
-read_it_extract_dir <- function(extract){
- it_extract_dir <- "IT_extracts/"
+# create function with 'extract'
+read_it_extract_dir <- function(extract) {
+  it_extract_dir <- "IT_extracts/"
 
   csd_ref <- "SCTASK0247528_extract_"
 
-  extract_name <- case_when(extract == "LTCs" ~ "1_LTCs",
-                            extract == "Deaths" ~ "2_Deaths",
-                            extract == "1516" ~ "3_2015",
-                            extract == "1617" ~ "4_2016",
-                            extract == "1718" ~ "5_2017",
-                            extract == "1819" ~ "6_2018",
-                            extract == "1920" ~ "7_2019",
-                            extract == "2021" ~ "8_2020",
-                            extract == "2122" ~ "9_2021"
-                            )
+  extract_name <- case_when(
+    extract == "LTCs" ~ "1_LTCs",
+    extract == "Deaths" ~ "2_Deaths",
+    extract == "1516" ~ "3_2015",
+    extract == "1617" ~ "4_2016",
+    extract == "1718" ~ "5_2017",
+    extract == "1819" ~ "6_2018",
+    extract == "1920" ~ "7_2019",
+    extract == "2021" ~ "8_2020",
+    extract == "2122" ~ "9_2021"
+  )
 
   it_extract_file <- glue::glue("{read_slf_dir()}{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
 
@@ -263,7 +261,7 @@ read_it_extract_dir <- function(extract){
 }
 
 
-#Path not working with .csv.gz - look into this!
+# Path not working with .csv.gz - look into this!
 
 #End of Script
 ########################################################
