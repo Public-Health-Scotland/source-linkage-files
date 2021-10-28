@@ -1,3 +1,9 @@
+---
+title: Home Care Data Issues
+output: html_document
+----
+
+
 ## Home Care data issues
 
 ### Period / FQ
@@ -9,7 +15,7 @@
 ** Of these 239 also don't have an end date (mostly 2017 North Ayrshire)
 
 
-### Social Care ID changes
+## Social Care ID changes
 
 For the same CHI in the same sending location. A lot of these look like typos or submission erros which should be reported back and resolved: e.g.
 
@@ -41,3 +47,8 @@ For the same CHI in the same sending location. A lot of these look like typos or
 | Stirling              |                        3 |
 | West Dunbartonshire   |                        4 |
 | West Lothian          |                        1 |
+
+
+## Missing derived hours
+
+`r htmltools::includeHTML("missing_derived_hours.html")`
