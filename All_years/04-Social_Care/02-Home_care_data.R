@@ -74,6 +74,20 @@ pre_compute_record_dates <- hc_data %>%
     qtr_start = yq(period) %m+% period(3, "months")
   )
 
+# Output table of hc hours
+hc_data %>%
+  mutate() %>%
+  group_by(financial_year, financial_quarter, sending_location_name) %>%
+  summarise(
+    all_records = n(),
+    missing_derived_hours = sum(is.na(hc_hours_derived))
+  ) %>%
+  ungroup() %>%
+  filter(missing_derived_hours >= 1) %>%
+  mutate(pct_missing = scales::percent(missing_derived_hours / all_records, 0.1)) %>%
+  gt::gt(groupname_col = "financial_year") %>%
+  gt::gtsave("missing_derived_hours.html")
+
 working_data <- hc_data %>%
   # Fix bad 2017 period
   tidylog::mutate(
