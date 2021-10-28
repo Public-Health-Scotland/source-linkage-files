@@ -17,10 +17,20 @@ read_dd_file <- function() {
 
   dd_name <- "DD_LinkageFile"
 
-  delayed_discharges_file <- fs::path(get_slf_dir(), dd_dir, glue::glue("{dd_period()}{dd_name}"))
-  delayed_discharges_file <- fs::path_ext_set(delayed_discharges_file, "zsav")
+  dd_file_path <- fs::path(
+    get_slf_dir(),
+    dd_dir,
+    paste0(
+      dd_period(),
+      dd_name
+    )
+  )
+  dd_file_path <- fs::path_ext_set(
+    dd_file_path,
+    "zsav"
+  )
 
-  return(haven::read_sav(delayed_discharges_file))
+  return(haven::read_sav(dd_file_path))
 }
 
 #' Function for lookups directory - source postcode and gpprac lookup
