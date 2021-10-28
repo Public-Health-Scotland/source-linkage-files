@@ -41,7 +41,6 @@ hc_data <-
     "hc_start_date_after_end_date"
   ) %>%
   collect() %>%
-  slice_sample(n = 10000) %>%
   left_join(read_rds(demog_file_path),
     by = c("sending_location", "social_care_id")
   ) %>%
@@ -137,11 +136,11 @@ working_data <- hc_data %>%
   group_by(sending_location, chi) %>%
   mutate(replace_sc_id = !is.na(chi) &&
     social_care_id != last(social_care_id)) %>%
-  tidylog::mutate(social_care_id = if_else(replace_sc_id, last(social_care_id), social_care_id)) %>%
-  ungroup() %>%
-  # Fix hours where derived hours are missing
-  mutate(multistaff_input = min(1, multistaff_input))
-
+  tidylog::mutate(social_care_id = if_else(replace_sc_id,
+    last(social_care_id),
+    social_care_id
+  )) %>%
+  ungroup()
 
 working_data2 <- working_data %>%
   group_by(
@@ -160,9 +159,10 @@ working_data2 <- working_data %>%
   # If the hc_provider changes for the same start date and service set it to other
   ## TODO check if we should break by provider instead of this
   mutate(change_hc_provider = min(hc_service_provider) != max(hc_service_provider)) %>%
-  tidylog::mutate(
-    hc_service_provider = if_else(change_hc_provider, 5L, hc_service_provider)
-  ) %>%
+  tidylog::mutate(hc_service_provider = if_else(change_hc_provider,
+    5L,
+    hc_service_provider
+  )) %>%
   group_by(period, .add = TRUE) %>%
   mutate(duplicate_submissions = n()) %>%
   ungroup(period) %>%
@@ -172,9 +172,11 @@ working_data2 <- working_data %>%
     episode_counter = case_when(
       duplicate_submissions > 1 &&
         lag(duplicate_submissions, 2) > 1 &&
-        reablement == lag(reablement, 2) ~ lag(episode_counter, 2),
+        reablement == lag(reablement, 2)
+      ~ lag(episode_counter, 2),
       duplicate_submissions > 1 |
-        reablement != lag(reablement) ~ lag(episode_counter) + 1,
+        reablement != lag(reablement)
+      ~ lag(episode_counter) + 1,
       TRUE ~ lag(episode_counter)
     )
   ) %>%
@@ -229,15 +231,17 @@ working_data3 <- working_data2 %>%
     record_count = row_number(),
     change_start_date = record_count > min(record_count),
     change_end_date = record_count < max(record_count),
-    hc_service_start_date = if_else(change_start_date, lag(record_date), hc_service_start_date),
-    hc_service_end_date = if_else(change_end_date, record_date, hc_service_end_date)
+    hc_service_start_date = if_else(change_start_date,
+      lag(record_date),
+      hc_service_start_date
+    ),
+    hc_service_end_date = if_else(change_end_date,
+      record_date,
+      hc_service_end_date
+    )
   ) %>%
   ungroup() %>%
   replace_na(list(
     hc_service = 0L,
     reablement = 9L
   ))
-
-# TODO - HC hours
-# Weird hour summing
-# Keep record of hours per submission (period)
