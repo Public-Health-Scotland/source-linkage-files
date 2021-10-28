@@ -159,10 +159,14 @@ read_hhg_dir <- function() {
 
   hhg_name <- "HHG-20"
 
-  hhg_file <- fs::path(get_slf_dir(), hhg_dir, glue::glue("{hhg_name}{year}"))
-  hhg_file <- fs::path_ext_set(hhg_file, "zsav")
+  hhg_file_path <- fs::path(
+    get_slf_dir(),
+    hhg_dir,
+    paste0(hhg_name, year)
+  )
+  hhg_file_path <- fs::path_ext_set(hhg_file_path, "zsav")
 
-  return(haven::read_sav(hhg_file))
+  return(haven::read_sav(hhg_file_path))
 }
 
 
