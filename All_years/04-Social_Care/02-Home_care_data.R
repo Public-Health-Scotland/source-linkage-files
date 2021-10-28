@@ -7,63 +7,17 @@ library(readr)
 library(phsmethods)
 library(tidyr)
 
-sc_con <- odbc::dbConnect(
-  drv = odbc::odbc(),
-  dsn = "DVPROD",
-  uid = rstudioapi::showPrompt(
-    title = "Username",
-    message = "Username:"
+source("All_years/04-Social_Care/02a-hc_functions.R")
+
+sc_con <- phs_db_connection(dsn = "DVPROD")
+
+demog_file_path <- get_demog_file_path(
+  social_care_dir = path(
+    "/conf/hscdiip",
+    "SLF_Extracts/Social_care"
   ),
-  pwd = rstudioapi::askForPassword("SMRA Password:")
+  latest_update = "Sep_2021"
 )
-
-social_care_dir <- path("/conf/hscdiip/SLF_Extracts/Social_care")
-latest_update <- "Sep_2021"
-
-demog_file_path <-
-  path(
-    social_care_dir,
-    str_glue("sc_demographics_lookup_{latest_update}.zsav")
-  )
-
-if (!file_exists(demog_file_path)) {
-  stop(
-    str_glue(
-      "Demographics file doesn't exists or the name: '{path_file(demog_file_path)}' is incorrect"
-    )
-  )
-}
-
-is_number_like <- function(x) {
-  values <- unique(x)
-
-  if (!is.character(values)) {
-    return(FALSE)
-  }
-
-  return(all(!grepl("\\D", values)))
-}
-
-is_integer_like <- function(x) {
-  values <- unique(x)
-
-  if (!is.numeric(values)) {
-    return(FALSE)
-  }
-
-  return(all(na.exclude(values) %% 1 == 0))
-}
-
-copy_spss_to_rds <- function(file_path) {
-  new_file_path <- fs::path_ext_set(path = file_path, ext = "rds")
-
-  haven::read_spss(file_path) %>%
-    readr::write_rds(new_file_path, compress = "xz")
-
-  return(new_file_path)
-}
-
-demog_file_path <- copy_spss_to_rds(demog_file_path)
 
 hc_data <-
   tbl(sc_con, dbplyr::in_schema("social_care_2", "homecare")) %>%
