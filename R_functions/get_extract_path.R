@@ -1,8 +1,10 @@
 extract_path <- function(year, type = c("Acute", "Mental")) {
   year_dir <- path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
 
-  file_name <- case_when(type == "Acute" ~ "Acute-episode-level-extract",
-                         type == "Mental" ~ "Mental-Health-episode-level-extract")
+  file_name <- case_when(
+    type == "Acute" ~ "Acute-episode-level-extract",
+    type == "Mental" ~ "Mental-Health-episode-level-extract"
+  )
 
   file_path <- path(year_dir, glue::glue("{file_name}-20{year}.csv.gz"))
 

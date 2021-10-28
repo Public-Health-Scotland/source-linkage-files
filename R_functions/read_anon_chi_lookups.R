@@ -8,8 +8,7 @@
 #'
 #' @examples
 #' chi_to_anon <- chi_to_anon()
-
-chi_to_anon <- function () {
+chi_to_anon <- function() {
   "/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav"
 }
 
