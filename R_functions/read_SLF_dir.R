@@ -135,10 +135,14 @@ read_deaths_dir <- function() {
   deaths_name <- "all_deaths_"
 
 
-  deaths_file <- fs::path(get_slf_dir(), deaths_dir, glue::glue("{deaths_name}{latest_update()}"))
-  deaths_file <- fs::path_ext_set(deaths_file, "zsav")
+  deaths_file_path <- fs::path(
+    get_slf_dir(),
+    deaths_dir,
+    paste0(deaths_name, latest_update())
+  )
+  deaths_file_path <- fs::path_ext_set(deaths_file_path, "zsav")
 
-  return(haven::read_sav(deaths_file))
+  return(haven::read_sav(deaths_file_path))
 }
 
 ###################################################
