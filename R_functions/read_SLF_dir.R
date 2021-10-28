@@ -209,10 +209,14 @@ read_nsu_dir <- function() {
 
   nsu_name <- "All_CHIs_20"
 
-  nsu_file <- fs::path(get_slf_dir(), nsu_dir, glue::glue("{nsu_name}{year}"))
-  nsu_file <- fs::path_ext_set(nsu_file, "zsav")
+  nsu_file_path <- fs::path(
+    get_slf_dir(),
+    nsu_dir,
+    paste0(nsu_name, year)
+  )
+  nsu_file_path <- fs::path_ext_set(nsu_file_path, "zsav")
 
-  return(haven::read_sav(nsu_file))
+  return(haven::read_sav(nsu_file_path))
 }
 
 
