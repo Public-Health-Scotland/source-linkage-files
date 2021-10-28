@@ -67,12 +67,14 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
 #'
 #' @return The practice details file
 #' @export
+read_practice_details <- function(file_name = "Practice Details.sav") {
+  practice_details_path <- fs::path(
+    "/conf/hscdiip/SLF_Extracts/Lookups",
+    file_name
+  )
 
-# Function for reading in GP cluster lookup "Practice Details" for creating source GP prac lookup above
-read_practice_details <- function() {
-  practice_details <- "/conf/hscdiip/SLF_Extracts/Lookups/Practice Details.sav"
-
-  return(practice_details)
+  practice_details_file <- haven::read_sav(practice_details_path)
+  return(practice_details_file)
 }
 
 #' Function for cohorts directory - Demographic cohorts and Service Use cohorts
