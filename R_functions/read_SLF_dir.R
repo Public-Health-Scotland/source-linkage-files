@@ -90,13 +90,13 @@ read_cohorts_dir <- function(type = c("demographic", "service_use")) {
     type == "service_use" ~ "Service_Use_Cohorts_"
   )
 
-  cohorts_file <- fs::path(get_slf_dir(), cohorts_dir, glue::glue("{cohorts_name}{year}"))
-  cohorts_file <- fs::path_ext_set(cohorts_file, "zsav")
+  cohorts_file_path <- fs::path(get_slf_dir(), cohorts_dir, paste0(cohorts_name, year))
+  cohorts_file_path <- fs::path_ext_set(cohorts_file_path, "zsav")
 
-  return(haven::read_sav(cohorts_file))
+
+  cohorts_file <- haven::read_sav(cohorts_file_path)
+  return(cohorts_file)
 }
-
-
 
 #' Function for costs directory - Reading CH, DN and GP OOH costs
 #' @param type The name of costs lookup within costs directory
