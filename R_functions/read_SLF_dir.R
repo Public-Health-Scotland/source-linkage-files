@@ -184,10 +184,14 @@ read_sparra_dir <- function() {
 
   sparra_name <- "SPARRA-20"
 
-  sparra_file <- fs::path(get_slf_dir(), sparra_dir, glue::glue("{sparra_name}{year}"))
-  sparra_file <- fs::path_ext_set(sparra_file, "zsav")
+  sparra_file_path <- fs::path(
+    get_slf_dir(),
+    sparra_dir,
+    paste0(sparra_name, year)
+  )
+  sparra_file_path <- fs::path_ext_set(sparra_file_path, "zsav")
 
-  return(haven::read_sav(sparra_file))
+  return(haven::read_sav(sparra_file_path))
 }
 
 
