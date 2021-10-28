@@ -111,16 +111,16 @@ read_cohorts_dir <- function(type = c("demographic", "service_use")) {
 read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
   costs_dir <- "Costs"
 
-  costs_name <- case_when(
+  costs_name <- dplyr::case_when(
     type == "CH" ~ "Cost_CH_Lookup",
     type == "DN" ~ "Cost_DN_Lookup",
     type == "GPOOH" ~ "Cost_GPOOH_Lookup"
   )
 
-  costs_file <- fs::path(read_slf_dir(), costs_dir, costs_name)
-  costs_file <- fs::path_ext_set(costs_file, "sav")
+  costs_file_path <- fs::path(read_slf_dir(), costs_dir, costs_name)
+  costs_file_path <- fs::path_ext_set(costs_file_path, "sav")
 
-  return(haven::read_sav(costs_file))
+  return(haven::read_sav(costs_file_path))
 }
 
 #' Get the deaths file directory
