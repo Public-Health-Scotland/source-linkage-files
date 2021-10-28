@@ -236,10 +236,14 @@ read_ltc_dir <- function() {
 
   ltc_name <- "LTCs_patient_reference_file-20"
 
-  ltc_file <- fs::path(get_slf_dir(), ltc_dir, glue::glue("{ltc_name}{year}"))
-  ltc_file <- fs::path_ext_set(ltc_file, "zsav")
+  ltc_file_path <- fs::path(
+    get_slf_dir(),
+    ltc_dir,
+    paste0(ltc_name, year)
+  )
+  ltc_file_path <- fs::path_ext_set(ltc_file_path, "zsav")
 
-  return(haven::read_sav(ltc_file))
+  return(haven::read_sav(ltc_file_path))
 }
 
 
