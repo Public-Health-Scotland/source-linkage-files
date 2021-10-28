@@ -46,10 +46,17 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
     type == "gpprac" ~ "source_GPprac_lookup_"
   )
 
-  lookups_file <- fs::path(get_slf_dir(), lookups_dir, glue::glue("{lookups_name}{latest_update()}"))
-  lookups_file <- fs::path_ext_set(lookups_file, "zsav")
+  lookups_file_path <- fs::path(
+    get_slf_dir(),
+    lookups_dir,
+    paste0(lookups_name, latest_update())
+  )
+  lookups_file_path <- fs::path_ext_set(
+    lookups_file_path,
+    "zsav"
+  )
 
-  return(haven::read_sav(lookups_file))
+  return(haven::read_sav(lookups_file_path))
 }
 
 #' Function for reading in GP cluster
