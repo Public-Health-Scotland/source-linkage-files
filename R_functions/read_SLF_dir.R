@@ -277,9 +277,9 @@ read_it_extract_dir <- function(extract) {
     extract == "2122" ~ "9_2021"
   )
 
-  it_extract_file <- glue::glue("{read_slf_dir()}{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
+  it_extract_file_path <- glue::glue("{read_slf_dir()}{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
 
-  return(it_extract_file)
+  return(it_extract_file_path)
 }
 
 
