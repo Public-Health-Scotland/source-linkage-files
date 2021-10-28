@@ -1,27 +1,17 @@
 #' General SLF directory for accessing HSCDIIP folders/files
-#' @param  String containing SLF directory file path
 #'
-#' @return The data read using `haven::read_sav`
+#' @return The path to the main SLF Extracts folder
 #' @export
-#'
-#' @examples
-#' get_slf_dir()
 get_slf_dir <- function() {
   slf_dir <- fs::path("/conf/hscdiip/SLF_Extracts")
 
   return(slf_dir)
 }
 
-####################################################
 #' Function for delayed discharges directory
-#' @param dd_dir - the name of the SLF directory
 #'
-#' @return
+#' @return Reads the DD file (sav)
 #' @export
-#'
-#' @examples
-#' delayed_discharges_file <- read_dd_file()
-# Function for reading in delayed discharges file
 read_dd_file <- function() {
   dd_dir <- "Delayed_Discharges"
 
@@ -33,17 +23,11 @@ read_dd_file <- function() {
   return(haven::read_sav(delayed_discharges_file))
 }
 
-
-####################################################
 #' Function for lookups directory - source postcode and gpprac lookup
-#' @param `type`` - the name of lookups within lookup directory
+#' @param type the name of lookups within lookup directory
 #'
-#' @return The data read using `haven::read_sav`
+#' @return The data as a tibble read using `haven::read_sav`
 #' @export
-#'
-#' @examples
-#' source_pc_lookup <- read_lookups_dir("postcode")
-#' source_gpprac_lookup <- read_lookups_dir("gpprac")
 read_lookups_dir <- function(type = c("postcode", "gpprac")) {
   lookups_dir <- "Lookups"
 
@@ -58,6 +42,14 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
   return(haven::read_sav(lookups_file))
 }
 
+#' Function for reading in GP cluster
+#' lookup "Practice Details" for creating
+#' source GP prac lookup above
+#'
+#' @param file_name Name of the file to be read
+#'
+#' @return The practice details file
+#' @export
 
 # Function for reading in GP cluster lookup "Practice Details" for creating source GP prac lookup above
 read_practice_details <- function() {
@@ -66,16 +58,11 @@ read_practice_details <- function() {
   return(practice_details)
 }
 
-####################################################
-# Function for cohorts directory - Demographic cohorts and Service Use cohorts
-#' @param `type`` - the name of cohorts within cohort directory
+#' Function for cohorts directory - Demographic cohorts and Service Use cohorts
+#' @param type The name of cohorts within cohort directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
-#'
-#' @examples
-#' demographic_cohorts <- read_cohorts_dir("demographic")
-#' service_use_cohorts <- read_cohorts_dir("service_use")
 read_cohorts_dir <- function(type = c("demographic", "service_use")) {
   cohorts_dir <- "Cohorts"
 
@@ -92,9 +79,8 @@ read_cohorts_dir <- function(type = c("demographic", "service_use")) {
 
 
 
-####################################################
-# Function for costs directory - Reading CH, DN and GP OOH costs
-#' @param `type`` - the name of costs lookup within costs directory
+#' Function for costs directory - Reading CH, DN and GP OOH costs
+#' @param type The name of costs lookup within costs directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
@@ -117,9 +103,6 @@ read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
 
   return(haven::read_sav(costs_file))
 }
-
-###################################################
-# Function for deaths directory - saving/reading the all deaths file
 
 #' Get the deaths file directory
 #' @return
@@ -263,9 +246,9 @@ read_it_extract_dir <- function(extract) {
 
 # Path not working with .csv.gz - look into this!
 
-#End of Script
+# End of Script
 ########################################################
-#Still work in progress. Saving notes below
+# Still work in progress. Saving notes below
 ########################################################
 #Lookups folder
     #Saves out GP prac lookup and postcode lookup
