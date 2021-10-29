@@ -1,20 +1,24 @@
-#' Change file references
+#' Get the IT extract ref number
 #'
-#' @param file - the file name will need updating each update
-#'
-#'
-#' @return
+#' @return the IT extract ref number
 #' @export
-#'
-#' @examples
 IT_extract_ref <- function() {
   "SCTASK0247528"
 }
 
+#' Get the latest update
+#'
+#' @return Latest update as MMM_YYYY
+#' @export
 latest_update <- function() {
   "Sep_2021"
 }
 
+#' Get the Delayed Discharge period
+#'
+#' @return The period for the Delayed Discharge file
+#' as MMMYY_MMMYY
+#' @export
 dd_period <- function() {
   "Jul16_Jun21"
 }
