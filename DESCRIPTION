@@ -1,0 +1,14 @@
+Package: source-linkage-files
+Title: Creates the source linkage files 
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jennifer",
+           family = "Thom",
+           role = c("aut", "cre"),
+           email = "jennifer.thom@phs.scot")
+Description: Creates the source linkage files.
+License: OGL
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
