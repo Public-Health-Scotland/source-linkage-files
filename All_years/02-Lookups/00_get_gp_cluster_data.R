@@ -16,29 +16,24 @@ library(haven)
 latest_update <- "Dec_2021"
 
 # Retrieve the latest resource from the dataset
-gp_data <- get_dataset("gp-practice-contact-details-and-list-sizes",
+get_dataset("gp-practice-contact-details-and-list-sizes",
   max_resources = 1
 ) %>%
-  clean_names()
-
-# Filter to relevant variables
-gp_data <- gp_data %>%
+  clean_names() %>%
+  # Filter and save
   select(
-    practice_code,
+    gpprac = practice_code,
     practice_name = gp_practice_name,
-    hb,
-    hscp,
     postcode,
     cluster = gp_cluster
-  )
-
-
-gp_data %>%
-  rename(gpprac = practice_code) %>%
+  ) %>%
+  # Sort for SPSS matching
   arrange(gpprac) %>%
-  write_sav(path(lookup_dir,
-    paste0("practice_details_", latest_update),
-    ext = "zsav"
-  ),
-  compress = TRUE
+  # Write as an SPSS file
+  write_sav(
+    path(lookup_dir,
+      paste0("practice_details_", latest_update),
+      ext = "zsav"
+    ),
+    compress = TRUE
   )
