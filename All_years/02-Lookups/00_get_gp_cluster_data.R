@@ -13,6 +13,14 @@ library(janitor)
 library(fs)
 library(haven)
 
+# Load 'old' file for comparison
+lookup_dir <- path("/conf/hscdiip/SLF_Extracts/Lookups")
+old_data <- read_sav(path(lookup_dir, "Practice Details.sav")) %>%
+  zap_labels() %>%
+  zap_label() %>%
+  zap_formats() %>%
+  zap_widths() %>%
+  clean_names()
 
 latest_update <- "Dec_2021"
 
@@ -32,6 +40,9 @@ gp_data <- gp_data %>%
     postcode,
     cluster = gp_cluster
   )
+
+# Compare new to old
+waldo::compare(select(gp_data, practice_code, cluster), select(old_data, practice_code, cluster))
 
 gp_data %>%
   rename(gpprac = practice_code) %>%
