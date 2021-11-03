@@ -7,7 +7,7 @@
 
 
  * Sort the national ref file by practice.
-get file = "/conf/linkage/output/lookups/Unicode/National Reference Files/gpprac.sav"
+get file = !gpprac_Lookup
    /Keep praccode postcode end.
 
 sort cases by praccode.
