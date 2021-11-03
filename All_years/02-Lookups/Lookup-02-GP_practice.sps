@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
  * Run A01-Set up Macros first!.
 
  * Build the GPprac Lookup.
@@ -31,6 +31,7 @@ match files
     /Rename Postcode = PC8
     /Table = !SPD_Lookup
     /Rename HB2018 = hbpraccode
+    /keep gpprac PC7 PC8 cluster hbpraccode HSCP2018 CA2018
     /By PC8.
 
  * Use CA2011 to produce the 2-char LCA codes.
