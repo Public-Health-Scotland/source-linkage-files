@@ -166,11 +166,12 @@ working_data2 <- working_data %>%
 
 working_data3 <- working_data2 %>%
   # Fix hours where derived hours are missing
-  # For A&B 2021, use multistaff (min = 1) * staff hours
+  # For A&B 2020/21, use multistaff (min = 1) * staff hours
   tidylog::mutate(
     hc_hours_derived = case_when(
       sending_location_name == "Argyll and Bute" &
-        str_starts(period, "2021")
+        str_starts(period, "2020") &
+        is.na(hc_hours_derived)
       ~ pmax(1, multistaff_input) * total_staff_home_care_hours,
       TRUE ~ hc_hours_derived
     )
