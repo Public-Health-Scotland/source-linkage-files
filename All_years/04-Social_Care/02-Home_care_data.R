@@ -81,7 +81,6 @@ bad_sc_id <- demog_file %>%
   ))
 
 pre_compute_record_dates <- hc_data %>%
-  filter(str_detect(period, "^\\d{4}Q\\d$")) %>%
   distinct(period) %>%
   mutate(
     record_date = yq(period) %m+% period(6, "months") %m-% days(1),
