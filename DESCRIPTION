@@ -1,14 +1,22 @@
-Package: source-linkage-files
-Title: Creates the source linkage files 
+Package: createslf
+Title: Creates the source linkage files
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Jennifer",
            family = "Thom",
            role = c("aut", "cre"),
-           email = "jennifer.thom@phs.scot")
+           email = "jennifer.thom@phs.scot",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Creates the source linkage files.
 License: OGL
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Imports: 
+    dplyr,
+    fs,
+    glue,
+    haven,
+    readr,
+    rlang
