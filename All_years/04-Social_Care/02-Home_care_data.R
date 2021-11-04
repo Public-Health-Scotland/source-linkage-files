@@ -52,9 +52,11 @@ hc_query <-
   # Set reablement 9 to NA for now
   mutate(reablement = na_if(reablement, 9L)) %>%
   # Drop unvalidated (2020Q4 rows)
-  filter(period < "2020Q4",
-         # Drop bad rows
-         hc_start_date_after_end_date == 0)
+  filter(
+    period < "2020Q4",
+    # Drop bad rows
+    hc_start_date_after_end_date == 0
+  )
 
 
 hc_data <- collect(hc_query) %>%
@@ -71,7 +73,10 @@ bad_sc_id <- demog_file %>%
   filter(chi != "") %>%
   group_by(sending_location, chi) %>%
   filter(n_distinct(social_care_id) > 1) %>%
-  left_join(distinct(hc_data, sending_location, sending_location_name),
+  left_join(
+    distinct(hc_data,
+             sending_location,
+             sending_location_name),
     by = "sending_location"
   ) %>%
   mutate(last_sc_id = if_else(
