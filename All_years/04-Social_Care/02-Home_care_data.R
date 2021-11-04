@@ -19,35 +19,51 @@ demog_file <- read_demog_file(
   latest_update = "Sep_2021"
 )
 
-hc_data <-
+hc_query <-
   tbl(sc_con, dbplyr::in_schema("social_care_2", "homecare")) %>%
   select(
-    "sending_location",
-    "sending_location_name",
-    "period",
-    "social_care_id",
-    "financial_year",
-    "financial_quarter",
-    "hc_service_provider",
-    "hc_service",
-    "hc_service_start_date",
-    "hc_service_end_date",
-    "hc_period_start_date",
-    "hc_period_end_date",
-    "multistaff_input",
-    "total_staff_home_care_hours",
-    "reablement",
-    "hc_hours_derived",
-    "hc_start_date_after_end_date"
+    sending_location,
+    sending_location_name,
+    social_care_id,
+    hc_service_start_date,
+    hc_service_end_date,
+    period,
+    financial_year,
+    financial_quarter,
+    hc_service,
+    hc_service_provider,
+    reablement,
+    hc_hours_derived,
+    total_staff_home_care_hours,
+    multistaff_input,
+    hc_start_date_after_end_date
   ) %>%
-  collect() %>%
-  left_join(read_rds(demog_file_path),
-    by = c("sending_location", "social_care_id")
-  ) %>%
+  # Fix bad 2017 period
   mutate(
-    across(c(where(is_number_like), -chi), parse_number),
+    financial_quarter = if_else(
+      period == "2017" &
+        financial_quarter == 0 &
+        financial_year == 2017,
+      4,
+      financial_quarter
+    ),
+    period = if_else(period == "2017", "2017Q4", period)
+  ) %>%
+  # Set reablement 9 to NA for now
+  mutate(reablement = na_if(reablement, 9L)) %>%
+  # Drop unvalidated (2020Q4 rows)
+  filter(period < "2020Q4",
+         # Drop bad rows
+         hc_start_date_after_end_date == 0)
+
+
+hc_data <- collect(hc_query) %>%
+  tidylog::mutate(
     across(where(is_integer_like), as.integer),
     across(where(is.character), zap_empty)
+  ) %>%
+  tidylog::left_join(demog_file,
+    by = c("sending_location", "social_care_id")
   )
 
 bad_sc_id <- demog_file %>%
@@ -74,7 +90,6 @@ pre_compute_record_dates <- hc_data %>%
 
 # Output table of hc hours
 hc_data %>%
-  mutate() %>%
   group_by(financial_year, financial_quarter, sending_location_name) %>%
   summarise(
     all_records = n(),
@@ -87,49 +102,13 @@ hc_data %>%
   gt::gtsave("missing_derived_hours.html")
 
 working_data <- hc_data %>%
-  # Fix bad 2017 period
-  tidylog::mutate(
-    financial_quarter = if_else(
-      period == "2017" &
-        financial_quarter == 0 &
-        financial_year == 2017,
-      4L,
-      financial_quarter
-    )
-  ) %>%
-  tidylog::mutate(period = if_else(period == "2017", "2017Q4", period)) %>%
-  left_join(pre_compute_record_dates, by = "period") %>%
-  # Drop bad rows
-  tidylog::filter(hc_start_date_after_end_date == 0) %>%
   # Replace missing start dates with the start of the quater
-  tidylog::mutate(hc_service_start_date = if_else(
+  left_join(pre_compute_record_dates, by = "period") %>%
+  mutate(hc_service_start_date = if_else(
     !is.na(hc_service_start_date),
     qtr_start,
     hc_service_start_date
   )) %>%
-  # Drop unvalidated (2020Q4 rows)
-  tidylog::filter(period != "2020Q4") %>%
-  # Set reablement 9 to NA for now
-  mutate(reablement = na_if(reablement, 9L)) %>%
-  select(
-    sending_location,
-    sending_location_name,
-    chi,
-    social_care_id,
-    hc_service_start_date,
-    hc_service_end_date,
-    period,
-    record_date,
-    hc_service,
-    hc_service_provider,
-    reablement,
-    hc_hours_derived,
-    total_staff_home_care_hours,
-    multistaff_input,
-    gender,
-    dob,
-    postcode
-  ) %>%
   arrange(sending_location, chi, record_date, hc_service_start_date) %>%
   # fix multiple sc_id per chi
   group_by(sending_location, chi) %>%
