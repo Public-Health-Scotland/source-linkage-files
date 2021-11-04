@@ -145,10 +145,8 @@ read_deaths_dir <- function() {
   return(haven::read_sav(deaths_file_path))
 }
 
-###################################################
-# Function for HHG directory - reading HHG extract
-#' @param ()
-#'
+
+#' Function for HHG directory - reading HHG extract
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
@@ -170,10 +168,8 @@ read_hhg_dir <- function() {
 }
 
 
-###################################################
-# Function for SPARRA directory - reading SPARRA extract
-#' @param ()
-#'
+
+#' Function for SPARRA directory - reading SPARRA extract
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
@@ -195,10 +191,8 @@ read_sparra_dir <- function() {
 }
 
 
-########################################################
-# Function for NSU directory - stores NSU extracts for years that are available
-#' @param ()
-#'
+
+#' Function for NSU directory - stores NSU extracts for years that are available
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
@@ -221,11 +215,7 @@ read_nsu_dir <- function() {
 
 
 
-
-########################################################
-# Function for LTCs directory - stores LTC extracts for all years
-#' @param ()
-#'
+#' Function for LTCs directory - stores LTC extracts for all years
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
