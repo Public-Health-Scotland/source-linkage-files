@@ -33,7 +33,7 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   return(db_connection)
 }
 
-get_demog_file_path <- function(social_care_dir, latest_update) {
+read_demog_file <- function(social_care_dir, latest_update) {
   demog_file_path <- fs::path(
     social_care_dir,
     glue::glue("sc_demographics_lookup_{latest_update}.rds")
@@ -48,7 +48,15 @@ get_demog_file_path <- function(social_care_dir, latest_update) {
     )
   }
 
-  return(demog_file_path)
+  clean_file <- read_rds(demog_file_path) %>%
+    tidylog::mutate(
+      across(c(where(is_integer_like), -chi), as.integer),
+      across(where(is.character), zap_empty)
+    ) %>%
+    haven::zap_formats() %>%
+    haven::zap_widths()
+
+  return(clean_file)
 }
 
 

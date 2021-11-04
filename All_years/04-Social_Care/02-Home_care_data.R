@@ -11,7 +11,7 @@ source("All_years/04-Social_Care/02a-hc_functions.R")
 
 sc_con <- phs_db_connection(dsn = "DVPROD")
 
-demog_file_path <- get_demog_file_path(
+demog_file <- read_demog_file(
   social_care_dir = path(
     "/conf/hscdiip",
     "SLF_Extracts/Social_care"
@@ -50,8 +50,7 @@ hc_data <-
     across(where(is.character), zap_empty)
   )
 
-bad_sc_id <- read_rds(demog_file_path) %>%
-  mutate(sending_location = as.integer(sending_location)) %>%
+bad_sc_id <- demog_file %>%
   distinct(sending_location, chi, social_care_id) %>%
   filter(chi != "") %>%
   group_by(sending_location, chi) %>%
