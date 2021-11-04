@@ -238,19 +238,16 @@ read_ltc_dir <- function() {
 
 
 
-########################################################
-# Function for IT extract directory - stores IT extracts for all years
+#' Function for IT extract directory - stores IT extracts for all years
+#'
+#' @param type
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #' it_extract_1819 <- read_csv(file = read_it_extract_dir("1819"), n_max = 2000)
-# initialise extract type
-extract <- c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")
-
-# create function with 'extract'
-read_it_extract_dir <- function(extract) {
+read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")) {
   it_extract_dir <- "IT_extracts/"
 
   csd_ref <- "SCTASK0247528_extract_"
