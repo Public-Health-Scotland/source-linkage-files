@@ -1,8 +1,18 @@
+#' Open a connection to a PHS database
+#'
+#' @param dsn The Data Source Name passed on to `odbc::dbconnect`
+#' the dsn must be setup first. e.g. SMRA or DVPROD
+#' @param username The username to use for authentication,
+#' if not supplied it first will check the environment variable
+#' and finally ask the user for input.
+#'
+#' @return a connection to the specified dsn
+#' @export
 phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   # Collect username from the environment
   username <- Sys.getenv("USER")
 
-  # Check the username is correct and take input if not
+  # Check the username is not empty and take input if not
   if (is.na(username) | username == "") {
     username <- rstudioapi::showPrompt(
       title = "Username",
@@ -13,14 +23,14 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
 
   # Create the connection
   password_text <- glue::glue("{dsn} password for user: {username}")
-  smra_connection <- odbc::dbConnect(
+  db_connection <- odbc::dbConnect(
     odbc::odbc(),
     dsn = dsn,
     uid = username,
     pwd = rstudioapi::askForPassword(password_text)
   )
 
-  return(smra_connection)
+  return(db_connection)
 }
 
 get_demog_file_path <- function(social_care_dir, latest_update) {
