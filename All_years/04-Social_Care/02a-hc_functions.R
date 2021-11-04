@@ -60,22 +60,30 @@ read_demog_file <- function(social_care_dir, latest_update) {
 }
 
 
-is_number_like <- function(x) {
-  values <- unique(x)
-
-  if (!is.character(values)) {
-    return(FALSE)
-  }
-
-  return(all(!grepl("\\D", values)))
-}
-
 is_integer_like <- function(x) {
   values <- unique(x)
 
-  if (!is.numeric(values)) {
+  if (is.character(values)) {
+    values <- trimws(values)
+
+    is_empty <- values == ""
+
+    # \\D is any non-digit
+    contains_only_digits <- !grepl("\\D", values)
+
+    if (all(contains_only_digits | is_empty)) {
+      values <- as.numeric(values)
+      contains_only_integers <- na.exclude(values) %% 1 == 0
+
+      return(all(contains_only_integers))
+    } else {
+      return(FALSE)
+    }
+
+  } else if (is.numeric(values)) {
+    return(all(na.exclude(values) %% 1 == 0))
+  } else {
     return(FALSE)
   }
 
-  return(all(na.exclude(values) %% 1 == 0))
 }
