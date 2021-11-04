@@ -78,11 +78,13 @@ read_practice_details <- function(file_name = "Practice Details.sav") {
 }
 
 #' Function for cohorts directory - Demographic cohorts and Service Use cohorts
+#'
 #' @param type The name of cohorts within cohort directory
+#' @param year Year of cohort extracts
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
-read_cohorts_dir <- function(type = c("demographic", "service_use")) {
+read_cohorts_dir <- function(type = c("demographic", "service_use"), year) {
   cohorts_dir <- "Cohorts"
 
   cohorts_name <- dplyr::case_when(
@@ -99,25 +101,26 @@ read_cohorts_dir <- function(type = c("demographic", "service_use")) {
 }
 
 #' Function for costs directory - Reading CH, DN and GP OOH costs
+#'
 #' @param type The name of costs lookup within costs directory
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#' ch_costs <- read_costs_file("CH")
-#' dn_costs <- read_sav(read_costs_dir("DN"))
-#' ooh_costs <- read_sav(read_costs_dir("GPOOH"))
+#' ch_costs <- read_costs_dir("CH")
+#' dn_costs <- read_costs_dir("DN")
+#' ooh_costs <- read_costs_dir("GPOOH")
 read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
   costs_dir <- "Costs"
 
   costs_name <- dplyr::case_when(
     type == "CH" ~ "Cost_CH_Lookup",
     type == "DN" ~ "Cost_DN_Lookup",
-    type == "GPOOH" ~ "Cost_GPOOH_Lookup"
+    type == "GPOOH" ~ "Cost_GPOoH_Lookup"
   )
 
-  costs_file_path <- fs::path(read_slf_dir(), costs_dir, costs_name)
+  costs_file_path <- fs::path(get_slf_dir(), costs_dir, costs_name)
   costs_file_path <- fs::path_ext_set(costs_file_path, "sav")
 
   return(haven::read_sav(costs_file_path))
@@ -147,12 +150,15 @@ read_deaths_dir <- function() {
 
 
 #' Function for HHG directory - reading HHG extract
+#'
+#' @param year Yeah of extract
+#'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#' hhg_file <- read_hhg_dir()
-read_hhg_dir <- function() {
+#' hhg_file <- read_hhg_dir("1819")
+read_hhg_dir <- function(year) {
   hhg_dir <- "HHG"
 
   hhg_name <- "HHG-20"
@@ -170,12 +176,15 @@ read_hhg_dir <- function() {
 
 
 #' Function for SPARRA directory - reading SPARRA extract
+#'
+#' @param year Year of extract
+#'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#' sparra_file <- read_sparra_dir()
-read_sparra_dir <- function() {
+#' sparra_file <- read_sparra_dir("1819")
+read_sparra_dir <- function(year) {
   sparra_dir <- "SPARRA"
 
   sparra_name <- "SPARRA-20"
@@ -193,12 +202,15 @@ read_sparra_dir <- function() {
 
 
 #' Function for NSU directory - stores NSU extracts for years that are available
+#'
+#' @param year Year of extract
+#'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#' nsu_file <- read_nsu_dir()
-read_nsu_dir <- function() {
+#' nsu_file <- read_nsu_dir("1819")
+read_nsu_dir <- function(year) {
   nsu_dir <- "NSU/"
 
   nsu_name <- "All_CHIs_20"
@@ -216,12 +228,15 @@ read_nsu_dir <- function() {
 
 
 #' Function for LTCs directory - stores LTC extracts for all years
+#'
+#' @param year Year of extract
+#'
 #' @return The data read using `haven::read_sav`
 #' @export
 #'
 #' @examples
-#' ltc_file <- read_ltc_dir()
-read_ltc_dir <- function() {
+#' ltc_file <- read_ltc_dir("1819")
+read_ltc_dir <- function(year) {
   ltc_dir <- "LTCs"
 
   ltc_name <- "LTCs_patient_reference_file-20"
@@ -246,25 +261,25 @@ read_ltc_dir <- function() {
 #' @export
 #'
 #' @examples
-#' it_extract_1819 <- read_csv(file = read_it_extract_dir("1819"), n_max = 2000)
+#' it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"), n_max = 2000)
 read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")) {
   it_extract_dir <- "IT_extracts/"
 
   csd_ref <- "SCTASK0247528_extract_"
 
-  extract_name <- case_when(
-    extract == "LTCs" ~ "1_LTCs",
-    extract == "Deaths" ~ "2_Deaths",
-    extract == "1516" ~ "3_2015",
-    extract == "1617" ~ "4_2016",
-    extract == "1718" ~ "5_2017",
-    extract == "1819" ~ "6_2018",
-    extract == "1920" ~ "7_2019",
-    extract == "2021" ~ "8_2020",
-    extract == "2122" ~ "9_2021"
+  extract_name <- dplyr::case_when(
+    type == "LTCs" ~ "1_LTCs",
+    type == "Deaths" ~ "2_Deaths",
+    type == "1516" ~ "3_2015",
+    type == "1617" ~ "4_2016",
+    type == "1718" ~ "5_2017",
+    type == "1819" ~ "6_2018",
+    type == "1920" ~ "7_2019",
+    type == "2021" ~ "8_2020",
+    type == "2122" ~ "9_2021"
   )
 
-  it_extract_file_path <- glue::glue("{read_slf_dir()}{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
+  it_extract_file_path <- glue::glue("{get_slf_dir()}/{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
 
   return(it_extract_file_path)
 }
