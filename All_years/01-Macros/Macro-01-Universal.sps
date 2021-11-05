@@ -45,6 +45,11 @@ Define !SPD_file()
     "Scottish_Postcode_Directory_2021_1.sav"
 !EndDefine.
 
+* gpprac file.
+Define !gpprac_file()
+    "gpprac.sav"
+!EndDefine.
+
 * SIMD file - will need changing when geography files update.
 Define !SIMD_file()
     "postcode_2021_1_simd2020v2.sav"
@@ -199,6 +204,11 @@ Define !SPD_dir()
     "Geography/Scottish Postcode Directory/"
 !EndDefine.
 
+* Directory for the gpprac lookup.
+Define !gpprac_dir()
+    "National Reference Files/"
+!EndDefine.
+
 * Directory for Scottish Index for Multiple Deprivation (SIMD).
 Define !SIMD_dir()
     "Deprivation/"
@@ -221,6 +231,11 @@ Define !Localities_Lookup()
 * SPD Lookup.
 Define !SPD_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!SPD_dir)), !Unquote(!Eval(!SPD_file))))
+!EndDefine.
+
+* GP practice lookup.
+Define !gpprac_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!gpprac_dir)), !Unquote(!Eval(!gpprac_file))))
 !EndDefine.
 
 * SIMD Lookup.
@@ -400,7 +415,7 @@ Define !Create_sc_sending_location ()
     ("395" = "07")
     ("400" = "31")
     into sc_send_lca.
-    
+
 * Add dictionary info.
     !AddLCADictionaryInfo LCA = sc_send_lca.
 !EndDefine.
@@ -413,7 +428,7 @@ Define !AddHB2018DictionaryInfo (HB = !CMDEND)
     /VarInfo ValLabels = Replace
     /Source variables = HB2018
     /Target variables = !HB.
-    
+
 * Add extra non official labels.
     Add Value Labels !HB
     'S08200001' "Out-with Scotland / RUK"
@@ -438,7 +453,7 @@ Define !AddHB2019DictionaryInfo (HB = !CMDEND)
     /VarInfo ValLabels = Replace
     /Source variables = HB2019
     /Target variables = !HB.
-    
+
 * Add extra non official labels.
     Add Value Labels !HB
     'S08200001' "Out-with Scotland / RUK"
