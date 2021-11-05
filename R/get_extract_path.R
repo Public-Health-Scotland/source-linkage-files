@@ -1,6 +1,6 @@
 #' Get BOXI extract
 #'
-#' @param year
+#' @param year Year of extract
 #' @param type Name of BOXI extract
 #'
 #' @return BOXI extracts containing data for each dataset
