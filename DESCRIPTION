@@ -20,3 +20,5 @@ Imports:
     haven,
     readr,
     rlang
+Suggests: 
+    testthat
