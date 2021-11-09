@@ -249,15 +249,10 @@ acute_monthly_totals <- acute_file %>%
          cost_total_net = rowSums(across(ends_with("cost")))
          ) %>%
 #create and populate SMRType
-  mutate(SMRType = if_else(recid == '01B' & lineno != 330 & ipdc == 'I', 'Acute-IP', ''),
-         SMRType = if_else(recid == '01B' & lineno != 330 & ipdc == 'D', 'Acute-DC', SMRType),
-         SMRType = if_else(lineno == 330 & ipdc == 'I', 'GLS-IP', SMRType),
-         SMRType = if_else(recid == 'GLS', 'GLS-IP', SMRType)
-         )
-
-
-
-
+  mutate(SMRType = case_when(recid == '01B' & lineno != 330 & ipdc == 'I' ~ 'Acute-IP',
+                           recid == '01B' & lineno != 330 & ipdc == 'D' ~ 'Acute-DC',
+                           lineno == 330 & ipdc == 'I' ~ 'GLS-IP',
+                           recid == 'GLS' ~ 'GLS-IP'))
 
 
 mutate(yearstay = select(., apr_beddays:mar_beddays) %>%
