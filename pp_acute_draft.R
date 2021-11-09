@@ -255,19 +255,16 @@ acute_monthly_totals <- acute_file %>%
                            recid == 'GLS' ~ 'GLS-IP'))
 
 
-mutate(yearstay = select(., apr_beddays:mar_beddays) %>%
-           rowSums()) %>%
-  mutate(cost_total_net = select(., apr_cost:mar_cost) %>%
-           rowSums())
-
-#ends with
 
 
+#working - But now not working?
+#Change dates to date type
+acute_dates <- acute_file %>%
+  mutate(across(contains("date"), ~ str_replace_all(.,"/", "-") %>%
+                  ymd_hms()))
 
-dates<- acute_file%>%
-  #Calculate the total length of stay (for the entire episode, not just within the financial year).
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"),
-         stay2 = time_length(record_keydate1 %--% record_keydate2, unit = "days"))
+dates_test <- acute_file %>%
+mutate(across(contains("date")) ~ as_datetime(., format = "%Y/%m/%d"))
 
 #If costs are missing fill them in
 mutate(cost_total_net = if_else(lineno == "NA", 0, cost_total_net))
@@ -275,42 +272,6 @@ mutate(cost_total_net = if_else(lineno == "NA", 0, cost_total_net))
 if(sum(is.na(acute_monthly_totals$cost_total_net)) > 0){
   rlang::warn("Found missing costs ")
 }
-
-
-
-#Test
-acute_dates <- acute_file %>%
-  #Convert dates from character to date format
-  mutate(record_keydate1 = substr(1,10,ymd(record_keydate1)))
-
-acute_dates <- acute_file %>%
-  mutate(record_keydate1 = as_datetime(record_keydate1, format = "%Y/%m/%d"),
-         record_keydate2 = as_datetime(record_keydate2, format = "%Y/%m/%d")
-         )
-
-acute_dates <- acute_file %>%
-  mutate(record_keydate1 = str_replace_all(record_keydate1,"/", "-" ),
-         record_keydate1 = ymd_hms(record_keydate1)
-  )
-
-
-
-acute_dates <- acute_file %>%
-  mutate(across(str_replace_all(where("date"),"/", "-"), ymd))
-
-
-acute_dates <- acute_file %>%
-  mutate(across(contains("date"), fast_strptime(., format = "%Y/%m/%d %T")))
-
-acute_dates <- acute_file %>%
-mutate(across(contains("date"), ymd))
-
-#working
-#Change dates to date type
-acute_dates <- acute_file %>%
-  mutate(across(contains("date"), ~ str_replace_all(.,"/", "-") %>%
-                  ymd_hms()))
-
 
 ###############################################################
 #FUNCTIONS TO DO
