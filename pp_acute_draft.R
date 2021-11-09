@@ -289,7 +289,9 @@ acute_dates <- acute_file %>%
   mutate(record_keydate1 = substr(1,10,ymd(record_keydate1)))
 
 acute_dates <- acute_file %>%
-  mutate(record_keydate1 = as.date(record_keydate1, format = "%y/%m/%d"))
+  mutate(record_keydate1 = as_datetime(record_keydate1, format = "%Y/%m/%d"),
+         record_keydate2 = as_datetime(record_keydate2, format = "%Y/%m/%d")
+         )
 
 acute_dates <- acute_file %>%
   mutate(record_keydate1 = str_replace_all(record_keydate1,"/", "-" ),
@@ -299,24 +301,21 @@ acute_dates <- acute_file %>%
 
 
 acute_dates <- acute_file %>%
-  mutate(across(str_replace_all(where("date"),"/", "-")))
-
+  mutate(across(str_replace_all(where("date"),"/", "-"), ymd))
 
 
 acute_dates <- acute_file %>%
   mutate(across(contains("date"), fast_strptime(., format = "%Y/%m/%d %T")))
 
-
 acute_dates <- acute_file %>%
-  mutate(across(c(str_replace_all(contains("date")), "/", "-")), ymd_hms)
-
-
-
+mutate(across(contains("date"), ymd))
 
 #working
 #Change dates to date type
-mutate(across(contains("date"), ~ str_replace_all(., "/", "-") %>%
-                ymd_hms())) %>%
+acute_dates <- acute_file %>%
+  mutate(across(contains("date"), ~ str_replace_all(.,"/", "-") %>%
+                  ymd_hms()))
+
 
 ###############################################################
 #FUNCTIONS TO DO
