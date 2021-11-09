@@ -174,7 +174,13 @@ acute_file <- acute_file %>%
 #Recode GP practice into 5 digit number
 #We assume that if it starts with a letter it's an English practice and so recode to 99995.
 #PUT INTO FUNCTION?
-  mutate(gpprac = if_else(str_detect(gpprac, "[A-Z]"), "99995", gpprac))
+  mutate(gpprac = if_else(str_detect(gpprac, "[A-Z]"), "99995", gpprac)) %>%
+#Change dates to date type
+  mutate(record_keydate1 = as_datetime(record_keydate1, format = "%Y/%m/%d"),
+         record_keydate2 = as_datetime(record_keydate2, format = "%Y/%m/%d")) %>%
+#Calculate the total length of stay (for the entire episode, not just within the financial year).
+  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
+
 
 #initialise monthly cost/beddays variables - PUT INTO FUNCTION
 monthly_cost_beddays <- acute_file %>%
