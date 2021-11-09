@@ -166,12 +166,11 @@ acute_file <- acute_file %>%
 #Set recid as 01B and flag GLS records
   mutate(recid = if_else(GLS_Record == "Y", "GLS", "01B")) %>%
 #Set IDPC marker for the episode
-  #use case_when for this!
-  mutate(ipdc = recode(ipdc, "IP" = "I",
-                             "DC" = "D")) %>%
+  mutate(ipdc = case_when(ipdc == "IP" ~ "I",
+                          ipdc == "DC" ~ "D")) %>%
 #Set IDPC marker for the cij
-  mutate(cij_ipdc = recode(cij_ipdc, "IP" = "I",
-                                     "DC" = "D")) %>%
+  mutate(cij_ipdc = case_when(cij_ipdc == "IP" ~ "I",
+                              cij_ipdc == "DC" ~ "D")) %>%
 #Recode GP practice into 5 digit number
 #We assume that if it starts with a letter it's an English practice and so recode to 99995.
 #PUT INTO FUNCTION?
