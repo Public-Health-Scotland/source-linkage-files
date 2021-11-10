@@ -60,6 +60,8 @@ hc_query <-
   ) %>%
   # Set reablement 9 to NA for now
   mutate(reablement = na_if(reablement, 9L)) %>%
+  # Fix any NA hc_service
+  mutate(hc_service = if_else(is.na(hc_service), 0L, hc_service)) %>%
   # Drop unvalidated data (2020Q4 and onwards)
   filter(
     period < "2020Q4",
@@ -174,6 +176,7 @@ fixed_reablement_service <- episode_counts %>%
   # If reablement is missing fill in from later records (up)
   # If still missing fill in from earlier records (down)
   tidylog::fill(reablement, .direction = "updown") %>%
+  mutate(reablement = replace_na(reablement, 9L)) %>%
   # If the hc_provider changes for the same start date and service set it to other (5)
   ## TODO check if we should break by provider instead of this
   mutate(change_hc_provider = min(hc_service_provider) != max(hc_service_provider)) %>%
@@ -276,8 +279,3 @@ final_data <- merged_data %>%
       hc_service_end_date
     )
   ) %>%
-  ungroup() %>%
-  replace_na(list(
-    hc_service = 0L,
-    reablement = 9L
-  ))
