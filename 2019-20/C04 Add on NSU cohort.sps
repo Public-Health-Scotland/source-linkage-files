@@ -8,7 +8,7 @@
 match files
     /file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav"
     /file = !NSU_dir + "All_CHIs_20" + !FY + ".zsav"
-    /rename postcode = chi_postcode gpprac = chi_gpprac dob = chi_dob
+    /rename postcode = chi_postcode gpprac = chi_gpprac dob = chi_dob gender = chi_gender
     /In = has_chi_data
     /By chi.
 
@@ -20,14 +20,16 @@ Do if recid = "".
     Compute postcode = chi_postcode. 
     Compute gpprac = chi_gpprac.
     Compute dob = chi_dob.
- * Fill in any other missing data from the CHI file.
+    Compute gender = chi_gender.
+* Fill in any other missing data from the CHI file.
 Else if has_chi_data.
     If postcode = "" postcode = chi_postcode. 
     If sysmiss(gpprac) gpprac = chi_gpprac.
     If sysmiss(dob) dob = chi_dob.
+    If sysmiss(gender) gender = chi_gender.
 End if.
 
 * save next temp file.
 save outfile = !Year_dir + "temp-source-episode-file-4-" + !FY + ".zsav"
-    /Drop has_chi_data chi_postcode chi_gpprac chi_dob
+    /Drop has_chi_data chi_postcode chi_gpprac chi_dob chi_gender
     /zcompressed.
