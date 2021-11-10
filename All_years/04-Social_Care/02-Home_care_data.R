@@ -151,7 +151,7 @@ fixed_sc_ids <- replaced_start_dates %>%
   tidylog::mutate(social_care_id = last(social_care_id)) %>%
   ungroup()
 
-episode_counts <- fixed_sc_ids %>%
+fixed_reablement_service <- fixed_sc_ids %>%
   # Group across what will be the standard split
   # Same person, same start date, same service
   group_by(
@@ -160,19 +160,11 @@ episode_counts <- fixed_sc_ids %>%
     sending_location,
     social_care_id,
     hc_service_start_date,
-    hc_service,
-  # Group by period as well to count 'duplicates'
-  # i.e. Same data multiple times in a period
-    period
-  ) %>%
-  mutate(duplicate_submissions = n() > 1)
-
-fixed_reablement_service <- episode_counts %>%
-  # Drop the period grouping
-  # i.e back to standard grouping
-  tidylog::ungroup(period) %>%
+    hc_service) %>%
   # Sort so latest submitted records are last
-  arrange(period) %>%
+  arrange(period,
+  # .by_group will also sort it by the groups which makes the output easier to read
+          .by_group = TRUE) %>%
   # If reablement is missing fill in from later records (up)
   # If still missing fill in from earlier records (down)
   tidylog::fill(reablement, .direction = "updown") %>%
@@ -187,21 +179,13 @@ fixed_reablement_service <- episode_counts %>%
 
 changes_highlight <- fixed_reablement_service %>%
   # Sort to highlight any changes in reablement
-  # within the 'duplicates'
-  arrange(period, reablement) %>%
-  mutate(
-    episode_counter = 1,
-    episode_counter = case_when(
-      duplicate_submissions > 1 &&
-        lag(duplicate_submissions, 2) > 1 &&
-        reablement == lag(reablement, 2)
-      ~ lag(episode_counter, 2),
-      duplicate_submissions > 1 |
-        reablement != lag(reablement)
-      ~ lag(episode_counter) + 1,
-      TRUE ~ lag(episode_counter)
-    )
-  ) %>%
+  arrange(period,
+          reablement) %>%
+  # Highlight where the reablement is different to the previous (within the grouping)
+  # The pmax(... na.rm) is needed for to prevent NAs on the first row (it will return FALSE / 0)
+  mutate(episode_counter = pmax(lag(reablement) != reablement, 0, na.rm = TRUE) %>%
+           # Do a cummulative sum, of the above 1/0 flag which will create the counter
+           cumsum()) %>%
   ungroup()
 
 hours_wrangled <- changes_highlight %>%
@@ -279,3 +263,4 @@ final_data <- merged_data %>%
       hc_service_end_date
     )
   ) %>%
+  ungroup()
