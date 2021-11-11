@@ -28,6 +28,8 @@ demog_file <- read_demog_file(
 
 # Query to database -------------------------------------------------------
 
+latest_validated_period <- "2021Q1"
+
 hc_query <-
   tbl(sc_con, dbplyr::in_schema("social_care_2", "homecare")) %>%
   select(
@@ -64,7 +66,7 @@ hc_query <-
   mutate(hc_service = if_else(is.na(hc_service), 0L, hc_service)) %>%
   # Drop unvalidated data (2020Q4 and onwards)
   filter(
-    period < "2020Q4",
+    period <= latest_validated_period,
     # Drop bad rows
     hc_start_date_after_end_date == 0
   )
