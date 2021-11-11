@@ -162,7 +162,8 @@ fixed_reablement_service <- fixed_sc_ids %>%
     sending_location,
     social_care_id,
     hc_service_start_date,
-    hc_service) %>%
+    hc_service,
+    hc_service_provider) %>%
   # Sort so latest submitted records are last
   arrange(period,
   # .by_group will also sort it by the groups which makes the output easier to read
@@ -170,14 +171,7 @@ fixed_reablement_service <- fixed_sc_ids %>%
   # If reablement is missing fill in from later records (up)
   # If still missing fill in from earlier records (down)
   tidylog::fill(reablement, .direction = "updown") %>%
-  mutate(reablement = replace_na(reablement, 9L)) %>%
-  # If the hc_provider changes for the same start date and service set it to other (5)
-  ## TODO check if we should break by provider instead of this
-  mutate(change_hc_provider = min(hc_service_provider) != max(hc_service_provider)) %>%
-  tidylog::mutate(hc_service_provider = if_else(change_hc_provider,
-    5L,
-    hc_service_provider
-  ))
+  mutate(reablement = replace_na(reablement, 9L))
 
 changes_highlight <- fixed_reablement_service %>%
   # Sort to highlight any changes in reablement
@@ -227,6 +221,7 @@ merged_data <- hours_wrangled %>%
     social_care_id,
     hc_service_start_date,
     hc_service,
+    hc_service_provider,
     reablement,
     episode_counter
   ) %>%
@@ -236,8 +231,7 @@ merged_data <- hours_wrangled %>%
     across(
       c(
         hc_service_end_date,
-        record_date,
-        hc_service_provider
+        record_date
       ),
       last
     ),
