@@ -138,7 +138,7 @@ replaced_start_dates <- hc_full_data %>%
   # Replace missing start dates with the start of the quater
   left_join(pre_compute_record_dates, by = "period") %>%
   mutate(hc_service_start_date = if_else(
-    !is.na(hc_service_start_date),
+    is.na(hc_service_start_date),
     qtr_start,
     hc_service_start_date
   ))
