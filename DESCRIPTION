@@ -9,14 +9,20 @@ Authors@R: c(
   )
 Description: Creates the source linkage files.
 License: OGL
-Imports: 
+Imports:
     dplyr,
     fs,
     glue,
     haven,
+    janitor,
+    lubridate,
+    magrittr,
     readr,
-    rlang
-Suggests: 
+    rlang,
+    stringr,
+    tibble,
+    tidyr
+Suggests:
     spelling,
     testthat
 Encoding: UTF-8
