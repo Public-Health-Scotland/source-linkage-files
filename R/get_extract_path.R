@@ -18,7 +18,7 @@ extract_path <- function(year, type = c("Acute", "Mental")) {
 
   if (fs::file_exists(fs::path_ext_remove(file_path))) {
     file_path <- fs::path_ext_remove(file_path)
-  } else if (! fs::file_exists(file_path)) {
+  } else if (!fs::file_exists(file_path)) {
     rlang::abort(glue::glue("{type} Extract not found"))
   }
 
