@@ -2,16 +2,12 @@
  * Run A01-Set up Macros first!.
 
  * Build the GPprac Lookup.
- * Email NSS.isdGeneralPractice asking for an updated GP Clusters file (Practice Details.sav)
- * Save the Cluster file to \\stats\irf\05-lookups\04-geography\Practice Details.sav.
+ * Using the R script '00_get_gp_cluster_data'.
+ * This pulls from the open data platform.
 
- * Check the file from Primary care team is sorted by practice.
-get file = !Lookup_dir_slf + "Practice Details.sav".
-sort cases by PracticeCode.
-save outfile = !Lookup_dir_slf + "Practice Details.sav".
 
  * Sort the national ref file by practice.
-get file = "/conf/linkage/output/lookups/Unicode/National Reference Files/gpprac.sav"
+get file = !gpprac_Lookup
    /Keep praccode postcode end.
 
 sort cases by praccode.
@@ -21,8 +17,7 @@ sort cases by praccode.
 match files
    /File = *
    /Rename (praccode = gpprac)
-   /Table = !Lookup_dir_slf + "Practice Details.sav"
-   /Rename (PracticeCode = gpprac)
+   /Table = !Lookup_dir_slf + "practice_details_" + !LatestUpdate + ".zsav"
    /by gpprac.
 
  * Fix the Locale -> Unicode issue.
@@ -36,6 +31,7 @@ match files
     /Rename Postcode = PC8
     /Table = !SPD_Lookup
     /Rename HB2018 = hbpraccode
+    /keep gpprac PC7 PC8 cluster hbpraccode HSCP2018 CA2018
     /By PC8.
 
  * Use CA2011 to produce the 2-char LCA codes.
