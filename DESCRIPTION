@@ -9,10 +9,6 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: Creates the source linkage files.
 License: OGL
-Encoding: UTF-8
-LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
 Imports: 
     dplyr,
     fs,
@@ -21,4 +17,10 @@ Imports:
     readr,
     rlang
 Suggests: 
+    spelling,
     testthat
+Encoding: UTF-8
+Language: en-GB
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
