@@ -1,17 +1,7 @@
-library(haven)
-library(janitor)
-library(dplyr)
-library(fst)
-library(glue)
-library(readr)
-library(furrr)
-library(fs)
-future::plan("multisession")
-
 write_to_log <- function(message) {
   write_lines(message,
-    file = "Make_R_files/log.txt",
-    append = TRUE
+              file = "Make_R_files/log.txt",
+              append = TRUE
   )
 }
 
@@ -99,9 +89,3 @@ create_fst_lookups <- function() {
 
   write_to_log(glue("Done with lookups at {end_time}.\nIt took: {time_diff} minutes"))
 }
-
-years <- list("1819", "1920", "2021")
-
-future_map(years, ~create_fst_files(.x))
-
-create_fst_lookups()

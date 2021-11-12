@@ -376,6 +376,12 @@ If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
 *   /n_preventable_admissions = Sum(preventable_admissions)
 *   /total_preventable_beddays = Sum(preventable_beddays)
 *   /total_cij_delay = Sum(cij_delay)
+    /total_CH_cis_episodes = Sum(CH_cis_episodes)
+    /total_CH_beddays = Sum(CH_beddays)
+    /total_CH_cost = Sum(CH_cost)
+    /mean_CH_cis_episodes = Mean(CH_cis_episodes)
+    /mean_CH_beddays = Mean(CH_beddays)
+    /mean_CH_cost = Mean(CH_cost).
 
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
@@ -444,9 +450,6 @@ aggregate outfile = Old_Summary
     /total_AE_cost = Sum(AE_cost)
     /total_PIS_dispensed_items = Sum(PIS_dispensed_items)
     /total_PIS_cost = Sum(PIS_cost)
-    /total_CH_episodes = Sum(CH_episodes)
-    /total_CH_beddays = Sum(CH_beddays)
-    /total_CH_cost = Sum(CH_cost)
     /total_OoH_cases = Sum(OoH_cases)
     /total_OoH_homeV = Sum(OoH_homeV)
     /total_OoH_advice = Sum(OoH_advice)
@@ -539,9 +542,6 @@ aggregate outfile = Old_Summary
     /mean_AE_cost = Mean(AE_cost)
     /mean_PIS_dispensed_items = Mean(PIS_dispensed_items)
     /mean_PIS_cost = Mean(PIS_cost)
-    /mean_CH_episodes = Mean(CH_episodes)
-    /mean_CH_beddays = Mean(CH_beddays)
-    /mean_CH_cost = Mean(CH_cost)
     /mean_OoH_cases = Mean(OoH_cases)
     /mean_OoH_homeV = Mean(OoH_homeV)
     /mean_OoH_advice = Mean(OoH_advice)
