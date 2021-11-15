@@ -254,7 +254,17 @@ acute_monthly_totals <- acute_file %>%
                            lineno == 330 & ipdc == 'I' ~ 'GLS-IP',
                            recid == 'GLS' ~ 'GLS-IP'))
 
-
+#Fix c3 costs
+c3_costs_fix <- acute_monthly_totals %>%
+  mutate(cost_total_net = case_when(recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
+                                    location == 'A111H' & ipdc == 'D' ~ 521.38,
+                                    recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
+                                    location == 'A111H' & ipdc == 'I' ~ 2309.63 * yearstay,
+                                    recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
+                                      location == 'A210H' & ipdc == 'D' ~ 521.38,
+                                    recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
+                                      location == 'A210H' & ipdc == 'I' ~ 2460.63 * yearstay,
+                                    )
 
 
 #working - But now not working?
