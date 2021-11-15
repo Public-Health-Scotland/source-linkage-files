@@ -16,5 +16,7 @@ The data read using \code{haven::read_sav}
 Function for NSU directory - stores NSU extracts for years that are available
 }
 \examples{
+\dontrun{
 nsu_file <- read_nsu_dir("1819")
+}
 }

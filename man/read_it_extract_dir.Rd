@@ -18,5 +18,7 @@ read_it_extract_dir(
 Function for IT extract directory - stores IT extracts for all years
 }
 \examples{
-it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"), n_max = 2000)
+\dontrun{
+it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"))
+}
 }

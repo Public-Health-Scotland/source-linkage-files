@@ -16,7 +16,9 @@ The data read using \code{haven::read_sav}
 Function for costs directory - Reading CH, DN and GP OOH costs
 }
 \examples{
+\dontrun{
 ch_costs <- read_costs_dir("CH")
 dn_costs <- read_costs_dir("DN")
 ooh_costs <- read_costs_dir("GPOOH")
+}
 }

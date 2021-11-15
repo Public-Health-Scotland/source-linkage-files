@@ -16,5 +16,7 @@ The data read using \code{haven::read_sav}
 Function for LTCs directory - stores LTC extracts for all years
 }
 \examples{
+\dontrun{
 ltc_file <- read_ltc_dir("1819")
+}
 }
