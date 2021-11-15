@@ -108,9 +108,11 @@ read_cohorts_dir <- function(type = c("demographic", "service_use"), year) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' ch_costs <- read_costs_dir("CH")
 #' dn_costs <- read_costs_dir("DN")
 #' ooh_costs <- read_costs_dir("GPOOH")
+#' }
 read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
   costs_dir <- "Costs"
 
@@ -131,7 +133,9 @@ read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' all_deaths <- read_deaths_dir()
+#' }
 read_deaths_dir <- function() {
   deaths_dir <- "Deaths"
 
@@ -157,7 +161,9 @@ read_deaths_dir <- function() {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' hhg_file <- read_hhg_dir("1819")
+#' }
 read_hhg_dir <- function(year) {
   hhg_dir <- "HHG"
 
@@ -183,7 +189,9 @@ read_hhg_dir <- function(year) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' sparra_file <- read_sparra_dir("1819")
+#' }
 read_sparra_dir <- function(year) {
   sparra_dir <- "SPARRA"
 
@@ -209,7 +217,9 @@ read_sparra_dir <- function(year) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' nsu_file <- read_nsu_dir("1819")
+#' }
 read_nsu_dir <- function(year) {
   nsu_dir <- "NSU/"
 
@@ -235,7 +245,9 @@ read_nsu_dir <- function(year) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' ltc_file <- read_ltc_dir("1819")
+#' }
 read_ltc_dir <- function(year) {
   ltc_dir <- "LTCs"
 
@@ -261,7 +273,9 @@ read_ltc_dir <- function(year) {
 #' @export
 #'
 #' @examples
-#' it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"), n_max = 2000)
+#' \dontrun{
+#' it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"))
+#' }
 read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")) {
   it_extract_dir <- "IT_extracts/"
 

@@ -16,5 +16,7 @@ The data read using \code{haven::read_sav}
 Function for SPARRA directory - reading SPARRA extract
 }
 \examples{
+\dontrun{
 sparra_file <- read_sparra_dir("1819")
+}
 }

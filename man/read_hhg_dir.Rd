@@ -16,5 +16,7 @@ The data read using \code{haven::read_sav}
 Function for HHG directory - reading HHG extract
 }
 \examples{
+\dontrun{
 hhg_file <- read_hhg_dir("1819")
+}
 }

@@ -13,5 +13,7 @@ read_deaths_dir()
 Get the deaths file directory
 }
 \examples{
+\dontrun{
 all_deaths <- read_deaths_dir()
+}
 }
