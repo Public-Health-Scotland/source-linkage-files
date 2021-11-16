@@ -32,7 +32,7 @@ Define !Delayed_Discharge_period()
 !EndDefine.
 
 Define !SC_Latest_Validated_period()
-    "2020Q4"
+    "2021Q1"
 !EndDefine.
 
 *******************************************************.
