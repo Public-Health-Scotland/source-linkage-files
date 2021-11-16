@@ -20,7 +20,10 @@ alter type
     ch_name (A73).
 
 * Correct the period for 2017.
-If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
+Do If financial_year = 2017.
+    If sysmis(financial_quarter) financial_quarter = 4.
+    If financial_quarter = 4 period = "2017Q4".
+End if.
 
 * Drop any records which haven't been validated yet.
 Select if period LE !SC_Latest_Validated_period.
