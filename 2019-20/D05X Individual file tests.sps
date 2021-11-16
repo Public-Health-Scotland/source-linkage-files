@@ -371,17 +371,6 @@ If NHS_Western_Isles = 1 NHS_Western_Isles_cost = health_net_cost.
 If NHS_Fife = 1 NHS_Fife_cost = health_net_cost.
 If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
 
-*No PPA or PPB available in the old file. 
-*Will need to add these back into the old summary once the year is updated again.
-*   /n_preventable_admissions = Sum(preventable_admissions)
-*   /total_preventable_beddays = Sum(preventable_beddays)
-*   /total_cij_delay = Sum(cij_delay)
-    /total_CH_cis_episodes = Sum(CH_cis_episodes)
-    /total_CH_beddays = Sum(CH_beddays)
-    /total_CH_cost = Sum(CH_cost)
-    /mean_CH_cis_episodes = Mean(CH_cis_episodes)
-    /mean_CH_beddays = Mean(CH_beddays)
-    /mean_CH_cost = Mean(CH_cost).
 
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
@@ -393,6 +382,8 @@ aggregate outfile = Old_Summary
     /n_No_Postcode n_No_HB n_No_LCA n_No_GPprac = SUM(No_Postcode No_HB No_LCA No_GPprac)
     /n_No_Demog n_No_Service = Sum(No_Demog No_Service)
     /n_No_SPARRA_start n_No_SPARRA_end n_No_HHG_start n_No_HHG_end = Sum(SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY)
+    /n_preventable_admissions = Sum(preventable_admissions)
+    /total_preventable_beddays = Sum(preventable_beddays)
     /total_health_net_cost = Sum(health_net_cost)
     /total_health_net_costincDNAs = Sum(health_net_costincDNAs)
     /total_health_net_costincIncomplete = Sum(health_net_costincIncomplete)
@@ -450,6 +441,9 @@ aggregate outfile = Old_Summary
     /total_AE_cost = Sum(AE_cost)
     /total_PIS_dispensed_items = Sum(PIS_dispensed_items)
     /total_PIS_cost = Sum(PIS_cost)
+    /total_CH_cis_episodes = Sum(CH_cis_episodes)
+    /total_CH_beddays = Sum(CH_beddays)
+    /total_CH_cost = Sum(CH_cost)
     /total_OoH_cases = Sum(OoH_cases)
     /total_OoH_homeV = Sum(OoH_homeV)
     /total_OoH_advice = Sum(OoH_advice)
@@ -466,6 +460,7 @@ aggregate outfile = Old_Summary
     /total_CIJ_el = Sum(CIJ_el)
     /total_CIJ_non_el = Sum(CIJ_non_el)
     /total_CIJ_mat = Sum(CIJ_mat)
+    /total_cij_delay = Sum(cij_delay)
     /total_arth = Sum(arth)
     /total_asthma = Sum(asthma)
     /total_atrialfib = Sum(atrialfib)
@@ -542,6 +537,9 @@ aggregate outfile = Old_Summary
     /mean_AE_cost = Mean(AE_cost)
     /mean_PIS_dispensed_items = Mean(PIS_dispensed_items)
     /mean_PIS_cost = Mean(PIS_cost)
+    /mean_CH_cis_episodes = Mean(CH_cis_episodes)
+    /mean_CH_beddays = Mean(CH_beddays)
+    /mean_CH_cost = Mean(CH_cost)
     /mean_OoH_cases = Mean(OoH_cases)
     /mean_OoH_homeV = Mean(OoH_homeV)
     /mean_OoH_advice = Mean(OoH_advice)
@@ -558,6 +556,7 @@ aggregate outfile = Old_Summary
     /mean_CIJ_el = Mean(CIJ_el)
     /mean_CIJ_non_el = Mean(CIJ_non_el)
     /mean_CIJ_mat = Mean(CIJ_mat)
+    /mean_cij_delay = Mean(cij_delay)
     /mean_arth = Mean(arth)
     /mean_asthma = Mean(asthma)
     /mean_atrialfib = Mean(atrialfib)
