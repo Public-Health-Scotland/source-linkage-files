@@ -15,12 +15,12 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
     !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
     !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
     !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
-* We are currently not including DN, CMH or CH extracts for FY 2021 or 2022 - 31/08/21 Jennifer Thom.
+* We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "CMH_tests_20" + !FY + ".zsav " +.
 *   !Year_dir + "DN_tests_20" + !FY + ".zsav " +.
-*   !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
 
 * Bring all the data sets together.
 add files
@@ -33,12 +33,12 @@ add files
     /file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /By chi.
 
-*We are currently not including DN, CMH or CH extracts for FY 2021 or 2022  - 31/08/21 Jennifer Thom.
+* We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
 *    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav".
-*    /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav".
 
 * Check that all CHIs are valid.
 Do if chi ne "".
@@ -212,7 +212,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
             Compute PPA = 0.
-            
+
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
             Do if range (char.Substr(op1a, 1 , 3), "K01", "K50") or
@@ -365,41 +365,16 @@ Alter type cij_ppa (F1.0).
 sort cases by chi keydate1_dateformat.
 
 * Social Care variables for consistency.
-* Social Care.
-String
-    sc_send_lca (A2)
-    sc_latest_submission (A6)
-    person_id (A13).
-
-Numeric
-    sc_living_alone
-    sc_support_from_unpaid_carer
-    sc_social_worker
-    sc_type_of_housing
-    sc_meals
-    sc_day_care (F1.0).
-
 * Home Care.
 Numeric
     hc_hours (F22.2)
     hc_provider (F1.0)
     hc_reablement (F1.0).
 
-* Care Homes.
-String
-    ch_name (A73)
-    ch_provider (A1).
-
-Numeric
-    ch_adm_reason (F2.0)
-    ch_nursing (F1.0)
-    ch_chi_cis (F8.0)
-    ch_sc_id_cis(F8.0).
-
 * SDS.
 Numeric sds_option_4 (F1.0).
 
-* We are currently not including DN or CMH for FY 2021 but we want the variables for consistency - 04/09/20 Jennifer Thom.
+* We are currently not including DN or CMH for FY 2122 but we want the variables for consistency - 04/09/20 Jennifer Thom.
 * District Nursing.
 Numeric
     CCM (F5.0)
@@ -409,7 +384,6 @@ save outfile = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
-
 get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav".
 
 * Housekeeping.
@@ -424,11 +398,12 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
     !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
     !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
 
-* We are currently not including DN, CMH or CH extracts for FY 2021 or 2022  - 31/08/21 Jennifer Thom.
+* We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "DN_for_source-20" + !FY + ".zsav " +.
 *   !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +.
-*   !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +.
 
