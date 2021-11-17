@@ -10,7 +10,7 @@ get_slf_dir <- function() {
 
 #' Function for delayed discharges directory
 #'
-#' @return Reads the DD file (sav)
+#' @return The delayed discharges file as a [tibble][tibble::tibble-package]
 #' @export
 read_dd_file <- function() {
   dd_dir <- "Delayed_Discharges"
@@ -37,6 +37,7 @@ read_dd_file <- function() {
 #' @param type the name of lookups within lookup directory
 #'
 #' @return The data as a tibble read using `haven::read_sav`
+#'  as a [tibble][tibble::tibble-package]
 #' @export
 read_lookups_dir <- function(type = c("postcode", "gpprac")) {
   lookups_dir <- "Lookups"
@@ -65,7 +66,7 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
 #'
 #' @param file_name Name of the file to be read
 #'
-#' @return The practice details file
+#' @return The practice details file as a [tibble][tibble::tibble-package]
 #' @export
 read_practice_details <- function(file_name = "Practice Details.sav") {
   practice_details_path <- fs::path(
@@ -82,7 +83,7 @@ read_practice_details <- function(file_name = "Practice Details.sav") {
 #' @param type The name of cohorts within cohort directory
 #' @param year Year of cohort extracts
 #'
-#' @return The data read using `haven::read_sav`
+#' @return The data read using `haven::read_sav` as a [tibble][tibble::tibble-package]
 #' @export
 read_cohorts_dir <- function(type = c("demographic", "service_use"), year) {
   cohorts_dir <- "Cohorts"
@@ -104,7 +105,7 @@ read_cohorts_dir <- function(type = c("demographic", "service_use"), year) {
 #'
 #' @param type The name of costs lookup within costs directory
 #'
-#' @return The data read using `haven::read_sav`
+#' @return The data read using `haven::read_sav` as a [tibble][tibble::tibble-package]
 #' @export
 #'
 #' @examples
@@ -129,7 +130,7 @@ read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
 }
 
 #' Get the deaths file directory
-#' @return
+#' @return the 'all deaths' file as a [tibble][tibble::tibble-package]
 #' @export
 #'
 #' @examples
@@ -267,9 +268,10 @@ read_ltc_dir <- function(year) {
 
 #' Function for IT extract directory - stores IT extracts for all years
 #'
-#' @param type
+#' @param type The type of the extract - one of "LTCs", "Deaths",
+#' "1516", "1617", "1718", "1819", "1920", "2021", "2122"
 #'
-#' @return
+#' @return The  path to the file
 #' @export
 #'
 #' @examples

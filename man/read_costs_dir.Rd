@@ -10,7 +10,7 @@ read_costs_dir(type = c("CH", "DN", "GPOOH"))
 \item{type}{The name of costs lookup within costs directory}
 }
 \value{
-The data read using \code{haven::read_sav}
+The data read using \code{haven::read_sav} as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Function for costs directory - Reading CH, DN and GP OOH costs

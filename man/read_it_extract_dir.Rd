@@ -9,10 +9,11 @@ read_it_extract_dir(
 )
 }
 \arguments{
-\item{type}{}
+\item{type}{The type of the extract - one of "LTCs", "Deaths",
+"1516", "1617", "1718", "1819", "1920", "2021", "2122"}
 }
 \value{
-
+The  path to the file
 }
 \description{
 Function for IT extract directory - stores IT extracts for all years

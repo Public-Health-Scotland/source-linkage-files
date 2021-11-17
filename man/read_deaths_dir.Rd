@@ -7,7 +7,7 @@
 read_deaths_dir()
 }
 \value{
-
+the 'all deaths' file as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Get the deaths file directory

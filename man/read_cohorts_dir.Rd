@@ -12,7 +12,7 @@ read_cohorts_dir(type = c("demographic", "service_use"), year)
 \item{year}{Year of cohort extracts}
 }
 \value{
-The data read using \code{haven::read_sav}
+The data read using \code{haven::read_sav} as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Function for cohorts directory - Demographic cohorts and Service Use cohorts

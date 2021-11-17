@@ -7,7 +7,7 @@
 read_dd_file()
 }
 \value{
-Reads the DD file (sav)
+The delayed discharges file as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Function for delayed discharges directory

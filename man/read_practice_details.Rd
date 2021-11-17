@@ -12,7 +12,7 @@ read_practice_details(file_name = "Practice Details.sav")
 \item{file_name}{Name of the file to be read}
 }
 \value{
-The practice details file
+The practice details file as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Function for reading in GP cluster

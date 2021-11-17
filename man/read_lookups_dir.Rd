@@ -11,6 +11,7 @@ read_lookups_dir(type = c("postcode", "gpprac"))
 }
 \value{
 The data as a tibble read using \code{haven::read_sav}
+as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Function for lookups directory - source postcode and gpprac lookup
