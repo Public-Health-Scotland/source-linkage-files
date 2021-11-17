@@ -10,6 +10,7 @@ GET DATA
     "nursing_care_provision, ch_admission_date, ch_discharge_date, age FROM "+
     "social_care_2.carehome".
 CACHE.
+Execute.
 
  * Cosmetic change.
 variable width ALL (15).
