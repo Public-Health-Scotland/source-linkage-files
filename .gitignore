@@ -63,3 +63,4 @@ vignettes/*.pdf
 
 Make SLFs/log.txt
 .Rproj.user
+docs
