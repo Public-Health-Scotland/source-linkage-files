@@ -5,20 +5,13 @@ Insert file = "pass.sps".
 GET DATA
   /TYPE=ODBC
   /CONNECT=!connect_sc
-  /SQL="SELECT latest_record_flag, extract_date, sending_location, social_care_id, upi, "+
-    "submitted_postcode, chi_postcode, "+
-    "submitted_date_of_birth, chi_date_of_birth, "+
-    "submitted_gender, chi_gender_code "+
-    "FROM social_care_2.demographic".
+  /SQL='SELECT latest_record_flag, extract_date, sending_location, social_care_id, '+
+    'upi, submitted_postcode, chi_postcode, submitted_date_of_birth, chi_date_of_birth, '+    
+    'submitted_gender, chi_gender_code FROM social_care_2.demographic'
+  /ASSUMEDSTRWIDTH=255.
 CACHE.
+EXECUTE.
 
-
- * get file = !SC_dir + "Social-Care-Demog_Extract.zsav"
-    /Keep latest_record_flag extract_date sending_location social_care_id upi
-    submitted_postcode chi_postcode
-    submitted_date_of_birth chi_date_of_birth
-    submitted_gender chi_gender_code.
-* Cosmetic.
 Variable width ALL (15).
 
 * Fix string lengths and convert gender to numeric.
@@ -159,9 +152,3 @@ Missing values chi postcode ().
 save outfile = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav"
     /zcompressed.
 get file = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav".
-
-
-
-
-
-
