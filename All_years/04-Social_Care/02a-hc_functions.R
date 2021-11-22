@@ -86,26 +86,14 @@ is_integer_like <- function(x) {
   values <- unique(x)
 
   if (is.character(values)) {
-    values <- trimws(values)
+    values <- suppressWarnings(as.numeric(values))
 
-    is_empty <- values == ""
+    if (all(is.na(values))) return(FALSE)
 
-    # \\D is any non-digit
-    contains_only_digits <- !grepl("\\D", values)
-
-    if (all(contains_only_digits | is_empty)) {
-      values <- as.numeric(values)
-      contains_only_integers <- na.exclude(values) %% 1 == 0
-
-      return(all(contains_only_integers))
-    } else {
-      return(FALSE)
-    }
-
+    return(rlang::is_integerish(values))
   } else if (is.numeric(values)) {
-    return(all(na.exclude(values) %% 1 == 0))
+    return(rlang::is_integerish(values))
   } else {
     return(FALSE)
   }
-
 }
