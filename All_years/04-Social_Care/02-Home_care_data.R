@@ -234,7 +234,7 @@ pivotted_hours <- fixed_hours %>%
   )
 
 
-merged_data <- hours_wrangled %>%
+merged_data <- pivotted_hours %>%
   # Group the data to be merged
   # Same - person, start_date, service_type and reablement
   # Episode counter is needed to split multiple changes in reablement
