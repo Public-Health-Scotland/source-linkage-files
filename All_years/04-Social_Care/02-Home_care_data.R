@@ -137,7 +137,7 @@ pre_compute_record_dates <- hc_full_data %>%
   )
 
 replaced_start_dates <- hc_full_data %>%
-  # Replace missing start dates with the start of the quater
+  # Replace missing start dates with the start of the quarter
   left_join(pre_compute_record_dates, by = "period") %>%
   mutate(hc_service_start_date = if_else(
     is.na(hc_service_start_date),
@@ -180,7 +180,7 @@ changes_highlight <- fixed_reablement_service %>%
   # Highlight where the reablement is different to the previous (within the grouping)
   # The pmax(... na.rm) is needed for to prevent NAs on the first row (it will return FALSE / 0)
   mutate(episode_counter = pmax(lag(reablement) != reablement, 0, na.rm = TRUE) %>%
-           # Do a cummulative sum, of the above 1/0 flag which will create the counter
+           # Do a cumulative sum, of the above 1/0 flag which will create the counter
            cumsum()) %>%
   ungroup()
 
@@ -227,7 +227,7 @@ merged_data <- hours_wrangled %>%
   ) %>%
   arrange(period) %>%
   summarise(
-    # Take the lastest submitted value
+    # Take the latest submitted value
     across(
       c(
         hc_service_end_date,
@@ -245,7 +245,7 @@ merged_data <- hours_wrangled %>%
 
 final_data <- merged_data %>%
   # Highlight where episodes have been split
-  # and ammend start and end dates as required
+  # and amend start and end dates as required
   mutate(
     record_count = row_number(),
     change_start_date = record_count > min(record_count),
