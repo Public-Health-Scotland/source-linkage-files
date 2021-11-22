@@ -36,9 +36,6 @@ add files
     /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /By chi.
 
-* All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
-*Sort Cases by chi.
-
 * Check that all CHIs are valid.
 Do if chi ne "".
     * Test the check digit.
@@ -211,7 +208,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
             Compute PPA = 0.
-            
+
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
             Do if range (char.Substr(op1a, 1 , 3), "K01", "K50") or

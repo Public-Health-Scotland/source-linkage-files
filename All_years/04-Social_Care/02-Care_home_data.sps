@@ -1,7 +1,16 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Care Home data.
-get file = !SC_dir + "Social-Care-Carehome_Extract.zsav"
-    /Keep ch_name ch_postcode sending_location social_care_id financial_year financial_quarter period ch_provider reason_for_admission nursing_care_provision ch_admission_date ch_discharge_date age.
+Insert file = "pass.sps".
+
+GET DATA
+  /TYPE=ODBC
+  /CONNECT=!connect_sc
+  /SQL="SELECT ch_name, ch_postcode, sending_location, social_care_id, financial_year, "+
+    "financial_quarter, period, ch_provider, reason_for_admission, type_of_admission, "+
+    "nursing_care_provision, ch_admission_date, ch_discharge_date, age FROM "+
+    "social_care_2.carehome".
+CACHE.
+Execute.
 
  * Cosmetic change.
 variable width ALL (15).
@@ -20,10 +29,13 @@ alter type
     ch_name (A73).
 
 * Correct the period for 2017.
-If financial_year = 2017 and financial_quarter = 4 period = "2017Q4".
+Do If financial_year = 2017.
+    If sysmis(financial_quarter) financial_quarter = 4.
+    If financial_quarter = 4 period = "2017Q4".
+End if.
 
 * Drop any records which haven't been validated yet.
-Select if period NE "2020Q4".
+Select if period LE !SC_Latest_Validated_period.
 
 * Work out the record date, which is the last day of the quarter e.g. 2017 Q4 = 2017-03-31.
 * SPSS uses US quarters (Q1 = Jan-Apr etc.) so adjust the dates so it works for our FY quarters.

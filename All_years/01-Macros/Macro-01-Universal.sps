@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -29,6 +29,10 @@ Define !LatestUpdate()
 
 Define !Delayed_Discharge_period()
     "Jul16_Sep21"
+!EndDefine.
+
+Define !SC_Latest_Validated_period()
+    "2021Q1"
 !EndDefine.
 
 *******************************************************.
