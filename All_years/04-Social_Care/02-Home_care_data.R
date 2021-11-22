@@ -82,6 +82,9 @@ hc_full_data <- collect(hc_query) %>%
     # Make empty strings NA
     across(where(is.character), zap_empty)
   ) %>%
+  # Create factors out of the categorical string variables
+  mutate(sending_location_name = factor(sending_location_name),
+         period = ordered(period)) %>%
   # Match on the demographic data
   # CHI + other vars
   tidylog::left_join(demog_file,
