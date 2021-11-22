@@ -187,18 +187,24 @@ changes_highlight <- fixed_reablement_service %>%
            cumsum()) %>%
   ungroup()
 
-hours_wrangled <- changes_highlight %>%
-  # Fix hours where derived hours are missing
-  # For A&B 2020/21, use multistaff (min = 1) * staff hours
+fixed_hours <- changes_highlight %>%
   tidylog::mutate(
+    days_in_quarter = time_length(pmax(qtr_start, hc_service_start_date) %--% pmin(record_date, hc_service_end_date, na.rm = TRUE), "days") + 1,
     hc_hours_derived = case_when(
+      # For A&B 2020/21, use multistaff (min = 1) * staff hours
       sending_location_name == "Argyll and Bute" &
         str_starts(period, "2020") &
         is.na(hc_hours_derived)
       ~ pmax(1, multistaff_input) * total_staff_home_care_hours,
+      # Angus submit hourly daily instead of weekly hours
+      sending_location_name == "Angus" &
+        period %in% c("2018Q3", "2018Q4", "2019Q1", "2019Q2", "2019Q3")
+      ~ (hc_hours_derived / 7) * days_in_quarter,
       TRUE ~ hc_hours_derived
     )
-  ) %>%
+  )
+
+pivotted_hours <- fixed_hours %>%
   # Create a copy of the period then pivot the hours on it
   # This creates a new variable per quarter
   # with the hours for that quarter for every record
@@ -212,7 +218,7 @@ hours_wrangled <- changes_highlight %>%
   )
 
 
-merged_data <- hours_wrangled %>%
+merged_data <- pivotted_hours %>%
   # Group the data to be merged
   # Same - person, start_date, service_type and reablement
   # Episode counter is needed to split multiple changes in reablement
