@@ -197,6 +197,34 @@ fixed_reablement_service <- fixed_sc_ids %>%
   tidylog::fill(reablement, .direction = "updown") %>%
   mutate(reablement = replace_na(reablement, 9L))
 
+# Asses how many 'episodes' will have multiple reablements
+reablement_change <- fixed_reablement_service %>%
+  summarise(
+    last_submitted = max(period),
+    has_reablement_change = n_distinct(reablement) > 1,
+    n_records = n()
+  ) %>%
+  group_by(sending_location_name, last_submitted, has_reablement_change) %>%
+  summarise(
+    n_episodes = n(),
+    n_records = sum(n_records)
+  ) %>%
+  ungroup() %>%
+  pivot_wider(names_from = has_reablement_change, values_from = c(n_episodes, n_records)) %>%
+  drop_na() %>%
+  mutate(
+    eps_pct = scales::percent(n_episodes_TRUE / n_episodes_FALSE, accuracy = 0.1),
+    records_pct = scales::percent(n_records_TRUE / n_records_FALSE, accuracy = 0.1)
+  ) %>%
+  select(sending_location_name, last_submitted, n_episodes = n_episodes_TRUE, eps_pct, n_records = n_records_TRUE, records_pct)
+
+reablement_change %>%
+  group_by(sending_location_name) %>%
+  gt::gt() %>%
+  gt::summary_rows(groups = TRUE, columns = starts_with("n_"), fns = list(Totals = ~ sum(.))) %>%
+  gt::grand_summary_rows(columns = starts_with("n_"), fns = list(Total = ~ sum(.))) %>%
+  gt::gtsave("Reablement changes.html")
+
 changes_highlight <- fixed_reablement_service %>%
   # Sort to highlight any changes in reablement
   arrange(
