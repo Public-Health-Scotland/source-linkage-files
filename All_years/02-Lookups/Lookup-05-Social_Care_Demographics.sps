@@ -6,7 +6,7 @@ GET DATA
   /TYPE=ODBC
   /CONNECT=!connect_sc
   /SQL='SELECT latest_record_flag, extract_date, sending_location, social_care_id, '+
-    'upi, submitted_postcode, chi_postcode, submitted_date_of_birth, chi_date_of_birth, '+    
+    'upi, chi_upi, submitted_postcode, chi_postcode, submitted_date_of_birth, chi_date_of_birth, '+    
     'submitted_gender, chi_gender_code FROM social_care_2.demographic'
   /ASSUMEDSTRWIDTH=255.
 CACHE.
@@ -16,7 +16,7 @@ Variable width ALL (15).
 
 * Fix string lengths and convert gender to numeric.
 Alter type
-    upi (A10)
+    upi chi_upi (A10)
     submitted_gender chi_gender_code (F2.0)
     sending_location (A3)
     submitted_date_of_birth chi_date_of_birth (date11)
@@ -27,6 +27,10 @@ String postcode (A7).
 Numeric
     gender (F1.0)
     dob (DATE11).
+
+* Take the chi_upi if upi is missing - per Deanna 23/11/21.
+* Note: need to ask Deanna / DM what the differences with these vars - JMc.
+If upi = "" upi = chi_upi.
 
 * Compare the values for submitted and CHI matched for gender dob and postcode.
 * Clean up some gender codes.
