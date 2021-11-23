@@ -83,8 +83,10 @@ hc_full_data <- collect(hc_query) %>%
     across(where(is.character), zap_empty)
   ) %>%
   # Create factors out of the categorical string variables
-  mutate(sending_location_name = factor(sending_location_name),
-         period = ordered(period)) %>%
+  mutate(
+    sending_location_name = factor(sending_location_name),
+    period = ordered(period)
+  ) %>%
   # Match on the demographic data
   # CHI + other vars
   tidylog::left_join(demog_file,
@@ -127,6 +129,7 @@ hc_full_data %>%
   gt::gt(groupname_col = "financial_year") %>%
   gt::gtsave("missing_derived_hours.html")
 
+
 # Process and clean the data ----------------------------------------------
 
 # Work out the dates for each period
@@ -142,25 +145,25 @@ pre_compute_record_dates <- hc_full_data %>%
 replaced_start_dates <- hc_full_data %>%
   # Replace missing start dates with the start of the quarter
   left_join(pre_compute_record_dates, by = "period") %>%
-  tidylog::mutate(start_date_missing = is.na(hc_service_start_date),
+  tidylog::mutate(
+    start_date_missing = is.na(hc_service_start_date),
     hc_service_start_date = if_else(
       start_date_missing,
-    qtr_start,
-    hc_service_start_date
-  ))
+      qtr_start,
+      hc_service_start_date
+    )
+  )
 
 # Output table for DM / SC team on bad dates
 bad_dates <- replaced_start_dates %>%
-  mutate(end_before_qtr = qtr_start > hc_service_end_date,
-         end_before_start = hc_service_start_date > hc_service_end_date,
-         start_after_quarter = record_date < hc_service_start_date) %>%
-  tidylog::filter(if_any(c(end_before_qtr, end_before_start, start_after_quarter))) %>%
+  mutate(
+    end_before_qtr = qtr_start > hc_service_end_date,
+    start_after_quarter = record_date < hc_service_start_date
+  ) %>%
+  tidylog::filter(if_any(c(end_before_qtr, start_after_quarter))) %>%
   group_by(sending_location_name, period) %>%
-  summarise(across(c(end_before_qtr, end_before_start, start_after_quarter), sum, na.rm = TRUE)) %>%
-  #janitor::adorn_totals(where = c("row", "col")) %>%
-  gt::gt() %>%
-  gt::grand_summary_rows(-period, list(Totals = ~sum(.))) %>%
-  gt::tab_header("Records with bad dates, by Sending Location and period")
+  summarise(across(c(end_before_qtr, start_after_quarter), sum, na.rm = TRUE)) %>%
+  janitor::adorn_totals(where = c("row", "col"))
 
 bad_dates
 
@@ -182,11 +185,13 @@ fixed_reablement_service <- fixed_sc_ids %>%
     social_care_id,
     hc_service_start_date,
     hc_service,
-    hc_service_provider) %>%
+    hc_service_provider
+  ) %>%
   # Sort so latest submitted records are last
   arrange(period,
-  # .by_group will also sort it by the groups which makes the output easier to read
-          .by_group = TRUE) %>%
+    # .by_group will also sort it by the groups which makes the output easier to read
+    .by_group = TRUE
+  ) %>%
   # If reablement is missing fill in from later records (up)
   # If still missing fill in from earlier records (down)
   tidylog::fill(reablement, .direction = "updown") %>%
@@ -194,13 +199,15 @@ fixed_reablement_service <- fixed_sc_ids %>%
 
 changes_highlight <- fixed_reablement_service %>%
   # Sort to highlight any changes in reablement
-  arrange(period,
-          reablement) %>%
+  arrange(
+    period,
+    reablement
+  ) %>%
   # Highlight where the reablement is different to the previous (within the grouping)
   # The pmax(... na.rm) is needed for to prevent NAs on the first row (it will return FALSE / 0)
   mutate(episode_counter = pmax(lag(reablement) != reablement, 0, na.rm = TRUE) %>%
-           # Do a cumulative sum, of the above 1/0 flag which will create the counter
-           cumsum()) %>%
+    # Do a cumulative sum, of the above 1/0 flag which will create the counter
+    cumsum()) %>%
   ungroup()
 
 fixed_hours <- changes_highlight %>%
@@ -265,7 +272,7 @@ merged_data <- pivotted_hours %>%
     # Sum the (quarterly) hours
     across(starts_with("hc_hours_20"), sum, na.rm = TRUE),
     # Shouldn't matter as these are all the same
-    across(c(gender, dob, postcode), first),
+    across(c(gender, dob, postcode), first)
   )
 
 final_data <- merged_data %>%
