@@ -12,14 +12,13 @@ get_lookups_dir <- function() {
 #' Read the locality file
 #'
 #' @param file - the file name of the locality file
-#' @param ... optional arguments passed on to read_rds
 #'
 #' @return The data read using `readr::read_rds``
 #' @export
 #'
 #' @examples
 #' locality_file <- read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds")
-read_locality_file <- function(file, ...) {
+read_locality_file <- function(file) {
   locality_path <- fs::path(get_lookups_dir(), "Geography", "HSCP Locality", file)
 
   # If given a sav extension (or other), swap it for rds
@@ -30,7 +29,7 @@ read_locality_file <- function(file, ...) {
     rlang::abort(message = "Couldn't read the locality file")
   }
 
-  return(readr::read_rds(locality_path, ...))
+  return(readr::read_rds(locality_path))
 }
 
 

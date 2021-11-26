@@ -3,7 +3,6 @@
 #' @return the chi to anon lookup
 #' @export
 #'
-#' @examples
 read_chi_to_anon <- function() {
   chi_to_anon_path <- fs::path("/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav")
 
@@ -17,7 +16,6 @@ read_chi_to_anon <- function() {
 #' @return the anon to chi lookup
 #' @export
 #'
-#' @examples
 read_anon_to_chi <- function() {
   anon_to_chi_path <- fs::path("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
 
