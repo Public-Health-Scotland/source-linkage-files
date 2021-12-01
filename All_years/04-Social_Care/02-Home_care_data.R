@@ -53,7 +53,8 @@ hc_query <-
   mutate(
     financial_quarter = if_else(
       period == "2017" &
-        financial_quarter == 0 &
+        # These used to be zero but are now missing
+        is.na(financial_quarter) | financial_quarter == 0 &
         financial_year == 2017,
       4,
       financial_quarter
