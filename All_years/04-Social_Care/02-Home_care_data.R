@@ -100,7 +100,7 @@ hc_full_data <- collect(hc_query) %>%
 # repeated social care IDs
 bad_sc_id <- demog_file %>%
   distinct(sending_location, chi, social_care_id) %>%
-  filter(chi != "") %>%
+  filter(!is.na(chi)) %>%
   group_by(sending_location, chi) %>%
   filter(n_distinct(social_care_id) > 1) %>%
   left_join(
@@ -188,7 +188,7 @@ fixed_sc_ids <- replaced_start_dates %>%
   # Sort and take the latest sc_id
   arrange(sending_location, chi, record_date, hc_service_start_date) %>%
   group_by(sending_location, chi) %>%
-  tidylog::mutate(social_care_id = last(social_care_id)) %>%
+  tidylog::mutate(social_care_id = if_else(is.na(chi), social_care_id, last(social_care_id))) %>%
   ungroup()
 
 fixed_reablement_service <- fixed_sc_ids %>%
