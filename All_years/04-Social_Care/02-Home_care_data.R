@@ -25,7 +25,6 @@ demog_file <- read_demog_file(
   latest_update = "Sep_2021"
 )
 
-
 # Query to database -------------------------------------------------------
 
 latest_validated_period <- "2021Q1"
@@ -71,7 +70,6 @@ hc_query <-
     # Drop bad rows
     hc_start_date_after_end_date == 0
   )
-
 
 # Extract the data --------------------------------------------------------
 
@@ -130,7 +128,6 @@ hc_full_data %>%
   gt::gt(groupname_col = "financial_year") %>%
   gt::gtsave("missing_derived_hours.html")
 
-
 # Process and clean the data ----------------------------------------------
 
 # Work out the dates for each period
@@ -142,6 +139,7 @@ pre_compute_record_dates <- hc_full_data %>%
     record_date = yq(period) %m+% period(6, "months") %m-% days(1),
     qtr_start = yq(period) %m+% period(3, "months")
   )
+
 
 replaced_start_dates <- hc_full_data %>%
   # Replace missing start dates with the start of the quarter
@@ -205,48 +203,7 @@ fixed_reablement_service <- fixed_sc_ids %>%
   tidylog::fill(reablement, .direction = "updown") %>%
   mutate(reablement = replace_na(reablement, 9L))
 
-# Asses how many 'episodes' will have multiple reablements
-reablement_change <- fixed_reablement_service %>%
-  summarise(
-    last_submitted = max(period),
-    has_reablement_change = n_distinct(reablement) > 1,
-    n_records = n()
-  ) %>%
-  group_by(sending_location_name, last_submitted, has_reablement_change) %>%
-  summarise(
-    n_episodes = n(),
-    n_records = sum(n_records)
-  ) %>%
-  ungroup() %>%
-  pivot_wider(names_from = has_reablement_change, values_from = c(n_episodes, n_records)) %>%
-  drop_na() %>%
-  mutate(
-    eps_pct = scales::percent(n_episodes_TRUE / n_episodes_FALSE, accuracy = 0.1),
-    records_pct = scales::percent(n_records_TRUE / n_records_FALSE, accuracy = 0.1)
-  ) %>%
-  select(sending_location_name, last_submitted, n_episodes = n_episodes_TRUE, eps_pct, n_records = n_records_TRUE, records_pct)
-
-reablement_change %>%
-  group_by(sending_location_name) %>%
-  gt::gt() %>%
-  gt::summary_rows(groups = TRUE, columns = starts_with("n_"), fns = list(Totals = ~ sum(.))) %>%
-  gt::grand_summary_rows(columns = starts_with("n_"), fns = list(Total = ~ sum(.))) %>%
-  gt::gtsave("Reablement changes.html")
-
-changes_highlight <- fixed_reablement_service %>%
-  # Sort to highlight any changes in reablement
-  arrange(
-    period,
-    reablement
-  ) %>%
-  # Highlight where the reablement is different to the previous (within the grouping)
-  # The pmax(... na.rm) is needed for to prevent NAs on the first row (it will return FALSE / 0)
-  mutate(episode_counter = pmax(lag(reablement) != reablement, 0, na.rm = TRUE) %>%
-    # Do a cumulative sum, of the above 1/0 flag which will create the counter
-    cumsum()) %>%
-  ungroup()
-
-fixed_hours <- changes_highlight %>%
+fixed_hours <- fixed_reablement_service %>%
   tidylog::mutate(
     days_in_quarter = time_length(pmax(qtr_start, hc_service_start_date) %--% pmin(record_date, hc_service_end_date, na.rm = TRUE), "days") + 1,
     hc_hours_derived = case_when(
@@ -276,12 +233,8 @@ pivotted_hours <- fixed_hours %>%
     names_prefix = "hc_hours_"
   )
 
-
 merged_data <- pivotted_hours %>%
   # Group the data to be merged
-  # Same - person, start_date, service_type and reablement
-  # Episode counter is needed to split multiple changes in reablement
-  # e.g. 1 -> 2 -> 2 -> 1 becomes 1 -> 2 -> 1 not 1 -> 2
   group_by(
     chi,
     sending_location_name,
@@ -290,17 +243,13 @@ merged_data <- pivotted_hours %>%
     hc_service_start_date,
     hc_service,
     hc_service_provider,
-    reablement,
-    episode_counter
+    reablement
   ) %>%
   arrange(period) %>%
   summarise(
     # Take the latest submitted value
     across(
-      c(
-        hc_service_end_date,
-        record_date
-      ),
+      c(hc_service_end_date, record_date),
       last
     ),
     # Store the period for the latest submitted record
@@ -311,20 +260,3 @@ merged_data <- pivotted_hours %>%
     across(c(gender, dob, postcode), first)
   )
 
-final_data <- merged_data %>%
-  # Highlight where episodes have been split
-  # and amend start and end dates as required
-  mutate(
-    record_count = row_number(),
-    change_start_date = record_count > min(record_count),
-    change_end_date = record_count < max(record_count),
-    hc_service_start_date = if_else(change_start_date,
-      lag(record_date),
-      hc_service_start_date
-    ),
-    hc_service_end_date = if_else(change_end_date,
-      record_date,
-      hc_service_end_date
-    )
-  ) %>%
-  ungroup()
