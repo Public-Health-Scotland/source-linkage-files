@@ -40,15 +40,23 @@ read_demog_file <- function(social_care_dir, latest_update) {
   )
 
   if (!fs::file_exists(demog_file_path)) {
+    demog_file_path <- fs::path_ext_set(demog_file_path, "zsav")
+  } else {
     stop(
       glue::glue(
-        "Demographics file doesn't exists or the name: ",
-        "'{path_file(demog_file_path)}' is incorrect"
+        "Demographics file doesn't in rds or zsav format or the name: ",
+        "'{fs::path_ext_remove(fs::path_file(demog_file_path))}' is incorrect"
       )
     )
   }
 
-  clean_file <- read_rds(demog_file_path) %>%
+
+  data <- switch(fs::path_ext(demog_file_path),
+    "rds" = readr::read_rds(demog_file_path),
+    "zsav" = haven::read_sav(demog_file_path)
+  )
+
+  clean_data <- data %>%
     tidylog::mutate(
       across(c(where(is_integer_like), -chi), as.integer),
       across(where(is.character), zap_empty)
@@ -56,7 +64,7 @@ read_demog_file <- function(social_care_dir, latest_update) {
     haven::zap_formats() %>%
     haven::zap_widths()
 
-  return(clean_file)
+  return(clean_data)
 }
 
 
@@ -74,21 +82,23 @@ read_demog_file <- function(social_care_dir, latest_update) {
 #'
 #' @examples
 #' library(dplyr)
-#'data <-
-#'  tibble(
-#'    x = c(1, 2, 3),
-#'    y = c("4", "5", "6"),
-#'    z = c("a", "b", "c")
-#'  )
-#'data %>%
-#'  mutate(across(where(is_integer_like), as.integer))
+#' data <-
+#'   tibble(
+#'     x = c(1, 2, 3),
+#'     y = c("4", "5", "6"),
+#'     z = c("a", "b", "c")
+#'   )
+#' data %>%
+#'   mutate(across(where(is_integer_like), as.integer))
 is_integer_like <- function(x) {
   values <- unique(x)
 
   if (is.character(values)) {
     values <- suppressWarnings(as.numeric(values))
 
-    if (all(is.na(values))) return(FALSE)
+    if (all(is.na(values))) {
+      return(FALSE)
+    }
 
     return(rlang::is_integerish(values))
   } else if (is.numeric(values)) {

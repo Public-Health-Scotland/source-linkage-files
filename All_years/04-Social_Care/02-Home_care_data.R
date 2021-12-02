@@ -12,22 +12,23 @@ library(tidyr)
 
 source("All_years/04-Social_Care/02a-hc_functions.R")
 
+latest_validated_period <- "2021Q1"
+
+latest_update <- "Dec_2021"
+
+social_care_dir <- path("/conf/hscdiip/SLF_Extracts/Social_care")
+
 # Open connection to DVPROD
 sc_con <- phs_db_connection(dsn = "DVPROD")
 
 # Read demographic file
 # TODO replace the demographic file with R code
 demog_file <- read_demog_file(
-  social_care_dir = path(
-    "/conf/hscdiip",
-    "SLF_Extracts/Social_care"
-  ),
-  latest_update = "Sep_2021"
+  social_care_dir = social_care_dir,
+  latest_update = latest_update
 )
 
 # Query to database -------------------------------------------------------
-
-latest_validated_period <- "2021Q1"
 
 hc_query <-
   tbl(sc_con, dbplyr::in_schema("social_care_2", "homecare")) %>%
@@ -260,3 +261,15 @@ merged_data <- pivotted_hours %>%
     across(c(gender, dob, postcode), first)
   )
 
+
+# Write data out ----------------------------------------------------------
+
+merged_data %>%
+  write_rds(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.rds")),
+    compress = "gz"
+  )
+
+merged_data %>%
+  write_sav(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.zsav")),
+    compress = TRUE
+  )
