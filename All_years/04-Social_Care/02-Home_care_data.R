@@ -166,22 +166,14 @@ bad_dates <- replaced_start_dates %>%
   summarise(across(c(end_before_qtr, start_after_quarter), sum, na.rm = TRUE)) %>%
   janitor::adorn_totals(where = c("row", "col"))
 
-bad_dates
-
-# Output table for DM / SC team on bad dates
-bad_dates <- replaced_start_dates %>%
-  mutate(end_before_qtr = qtr_start > hc_service_end_date,
-         end_before_start = hc_service_start_date > hc_service_end_date,
-         start_after_quarter = record_date < hc_service_start_date) %>%
-  tidylog::filter(if_any(c(end_before_qtr, end_before_start, start_after_quarter))) %>%
-  group_by(sending_location_name, period) %>%
-  summarise(across(c(end_before_qtr, end_before_start, start_after_quarter), sum, na.rm = TRUE)) %>%
-  #janitor::adorn_totals(where = c("row", "col")) %>%
-  gt::gt() %>%
-  gt::grand_summary_rows(-period, list(Totals = ~sum(.))) %>%
-  gt::tab_header("Records with bad dates, by Sending Location and period")
-
-bad_dates
+# Only keep records which have some time in the
+# quarter in which they were submitted (~140).
+dropped_bad_dates <- replaced_start_dates %>%
+  mutate(
+    end_before_qtr = qtr_start > hc_service_end_date & !is.na(hc_service_end_date),
+    start_after_quarter = record_date < hc_service_start_date
+  ) %>%
+  tidylog::filter(!if_any(c(end_before_qtr, start_after_quarter)))
 
 fixed_sc_ids <- replaced_start_dates %>%
   # Fix cases where a CHI has multiple sc_ids
