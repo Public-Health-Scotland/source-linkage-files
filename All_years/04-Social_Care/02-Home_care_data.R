@@ -231,6 +231,7 @@ pivotted_hours <- fixed_hours %>%
     names_from = hours_submission_quarter,
     values_from = hc_hours_derived,
     values_fn = sum,
+    values_fill = 0,
     names_sort = TRUE,
     names_prefix = "hc_hours_"
   )
