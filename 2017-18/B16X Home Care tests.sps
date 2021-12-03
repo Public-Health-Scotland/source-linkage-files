@@ -1,14 +1,11 @@
 ﻿* Encoding: UTF-8.
-
-
 *Tests for Home Care dataset.
 Get file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav".
-
 
 * Flag to count CHIs.
 Recode CHI ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
+* Flags to count M/Fs.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
@@ -17,29 +14,28 @@ End if.
 
 *Flags to count SMRtype.
 If SMRType = 'HC-Per' HC_Per = 1.
-If SMRType = 'HC-Non-Per' HC_Non_Per = 1. 
-If SMRType = 'HC-Unknown' HC_Unknown = 1. 
+If SMRType = 'HC-Non-Per' HC_Non_Per = 1.
+If SMRType = 'HC-Unknown' HC_Unknown = 1.
 
 *Flag to count hc_reablement.
 If hc_reablement = 0 hc_reablement_no = 1.
 If hc_reablement = 1 hc_reablement_yes = 1.
 If hc_reablement = 9 hc_reablement_unknown = 1.
 
-*Flag to count HC provider. 
-If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1. 
-If hc_provider = 5 hc_provider_other = 1. 
+*Flag to count HC provider.
+If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1.
+If hc_provider = 5 hc_provider_other = 1.
 
-
-*Flag to count sc support. 
+*Flag to count sc support.
 *sc_living_alone.
-If sc_living_alone = 0 sc_living_alone_no = 1. 
-If sc_living_alone = 1 sc_living_alone_yes = 1. 
-If sc_living_alone = 9 sc_living_alone_unknown = 1. 
+If sc_living_alone = 0 sc_living_alone_no = 1.
+If sc_living_alone = 1 sc_living_alone_yes = 1.
+If sc_living_alone = 9 sc_living_alone_unknown = 1.
 
 *sc_support_from_unpaid_carer.
-If sc_support_from_unpaid_carer = 0 sc_support_from_unpaid_carer_no = 1. 
+If sc_support_from_unpaid_carer = 0 sc_support_from_unpaid_carer_no = 1.
 If sc_support_from_unpaid_carer = 1 sc_support_from_unpaid_carer_yes = 1.
-If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1. 
+If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
@@ -47,50 +43,48 @@ If sc_social_worker = 1 sc_social_worker_yes = 1.
 If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
-If sc_meals = 0 sc_meals_no = 1. 
-If sc_meals = 1 sc_meals_yes = 1. 
-If sc_meals = 9 sc_meals_unknown = 1. 
+If sc_meals = 0 sc_meals_no = 1.
+If sc_meals = 1 sc_meals_yes = 1.
+If sc_meals = 9 sc_meals_unknown = 1.
 
 *sc_day_care.
 If sc_day_care = 0 sc_day_care_no = 1.
 If sc_day_care = 1 sc_day_care_yes = 1.
-If sc_day_care = 9 sc_day_care_unknown = 1. 
-
+If sc_day_care = 9 sc_day_care_unknown = 1.
 
 *Flags to count sc_send_lca.
 If sc_send_lca = '01' Aberdeen_city = 1.
 If sc_send_lca = '02' Aberdeenshire = 1.
 If sc_send_lca = '03' Angus = 1.
-If sc_send_lca = '04' Argyll_and_Bute = 1. 
-If sc_send_lca = '05' Scottish_Borders = 1. 
+If sc_send_lca = '04' Argyll_and_Bute = 1.
+If sc_send_lca = '05' Scottish_Borders = 1.
 If sc_send_lca = '06' Clackmannanshire = 1.
 If sc_send_lca = '07' West_Dunbartonshire = 1.
-If sc_send_lca = '08' Dumfries_and_Galloway = 1. 
-If sc_send_lca = '09' Dundee_City = 1. 
+If sc_send_lca = '08' Dumfries_and_Galloway = 1.
+If sc_send_lca = '09' Dundee_City = 1.
 If sc_send_lca = '10' East_Ayrshire = 1.
 If sc_send_lca = '11' East_Dunbartonshire = 1.
 If sc_send_lca = '12' East_Lothian = 1.
-If sc_send_lca = '13' East_Renfrewshire = 1. 
-If sc_send_lca = '14' City_of_Edinburgh = 1. 
-If sc_send_lca = '15' Falkirk = 1. 
-If sc_send_lca = '16' Fife = 1. 
+If sc_send_lca = '13' East_Renfrewshire = 1.
+If sc_send_lca = '14' City_of_Edinburgh = 1.
+If sc_send_lca = '15' Falkirk = 1.
+If sc_send_lca = '16' Fife = 1.
 If sc_send_lca = '17' Glasgow_City = 1.
 If sc_send_lca = '18' Highland = 1.
 If sc_send_lca = '19' Inverclyde = 1.
 If sc_send_lca = '20' Midlothian = 1.
-If sc_send_lca = '21' Moray = 1. 
-If sc_send_lca = '22' North_Ayrshire = 1. 
+If sc_send_lca = '21' Moray = 1.
+If sc_send_lca = '22' North_Ayrshire = 1.
 If sc_send_lca = '23' North_Lanarkshire = 1.
 If sc_send_lca = '24' Orkney_Islands = 1.
-If sc_send_lca = '25' Perth_and_Kinross = 1. 
+If sc_send_lca = '25' Perth_and_Kinross = 1.
 If sc_send_lca = '26' Renfrewshire = 1.
-If sc_send_lca = '27' Shetland_Islands = 1. 
-If sc_send_lca = '28' South_Ayrshire = 1. 
+If sc_send_lca = '27' Shetland_Islands = 1.
+If sc_send_lca = '28' South_Ayrshire = 1.
 If sc_send_lca = '29' South_Lanarkshire = 1.
 If sc_send_lca = '30' Stirling = 1.
 If sc_send_lca = '31' West_Lothian = 1.
-If sc_send_lca = '32' Na_h_Eileanan_Siar = 1. 
-
+If sc_send_lca = '32' Na_h_Eileanan_Siar = 1.
 
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
@@ -108,10 +102,10 @@ aggregate outfile = SLFnew
     /n_HC_Per = Sum(HC_Per)
     /n_HC_Non_Per = Sum(HC_Non_Per)
     /n_HC_Unknown = Sum(HC_Unknown)
-    /avg_hc_hours = Mean(hc_hours)
-    /n_hc_hours = Sum(hc_hours)
-    /Min_hc_hours = Min(hc_hours)
-    /Max_hc_hours = Max (hc_hours)
+    /avg_hc_hours_q1 avg_hc_hours_q2 avg_hc_hours_q3 avg_hc_hours_q4 = Mean(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
+    /n_hc_hours_q1 n_hc_hours_q2 n_hc_hours_q3 n_hc_hours_q4 = sum(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
+    /min_hc_hours_q1 min_hc_hours_q2 min_hc_hours_q3 min_hc_hours_q4 = min(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
+    /max_hc_hours_q1 max_hc_hours_q2 max_hc_hours_q3 max_hc_hours_q4 = max(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
     /n_hc_provider_1_to_4 = Sum(hc_provider_1_to_4)
     /n_hc_provider_other = Sum(hc_provider_other)
     /n_hc_reablement_no = Sum(hc_reablement_no)
@@ -165,19 +159,16 @@ aggregate outfile = SLFnew
     /All_West_Lothian = Sum(West_Lothian)
     /All_Na_h_Eileanan_Siar = Sum(Na_h_Eileanan_Siar).
 
-
 Dataset activate SLFnew.
 Varstocases
     /Make New_Value from n_CHIs to All_Na_h_Eileanan_Siar
     /Index Measure (New_Value).
 Sort cases by Measure.
 
-**************************************************************************************************************************
-
 **************************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
     /Keep recid SMRType Anon_CHI record_keydate1 record_keydate2 gender dob age
-              hc_hours hc_provider hc_reablement sc_send_lca to sc_day_care.
+    hc_hours hc_provider hc_reablement sc_send_lca to sc_day_care.
 select if recid = 'HC'.
 
 * Flag to count CHIs.
@@ -192,29 +183,28 @@ End if.
 
 *Flags to count SMRtype.
 If SMRType = 'HC-Per' HC_Per = 1.
-If SMRType = 'HC-Unknown' HC_Unknown = 1. 
-If SMRType = 'HC-Non-Per' HC_Non_Per = 1. 
+If SMRType = 'HC-Unknown' HC_Unknown = 1.
+If SMRType = 'HC-Non-Per' HC_Non_Per = 1.
 
 *Flag to count hc_reablement.
 If hc_reablement = 0 hc_reablement_no = 1.
 If hc_reablement = 1 hc_reablement_yes = 1.
 If hc_reablement = 9 hc_reablement_unknown = 1.
 
-*Flag to count HC provider. 
-If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1. 
-If hc_provider = 5 hc_provider_other = 1. 
+*Flag to count HC provider.
+If any(hc_provider, 1, 2, 3, 4) hc_provider_1_to_4 = 1.
+If hc_provider = 5 hc_provider_other = 1.
 
-
-*Flag to count sc support. 
+*Flag to count sc support.
 *sc_living_alone.
-If sc_living_alone = 0 sc_living_alone_no = 1. 
-If sc_living_alone = 1 sc_living_alone_yes = 1. 
-If sc_living_alone = 9 sc_living_alone_unknown = 1. 
+If sc_living_alone = 0 sc_living_alone_no = 1.
+If sc_living_alone = 1 sc_living_alone_yes = 1.
+If sc_living_alone = 9 sc_living_alone_unknown = 1.
 
 *sc_support_from_unpaid_carer.
-If sc_support_from_unpaid_carer = 0 sc_support_from_unpaid_carer_no = 1. 
+If sc_support_from_unpaid_carer = 0 sc_support_from_unpaid_carer_no = 1.
 If sc_support_from_unpaid_carer = 1 sc_support_from_unpaid_carer_yes = 1.
-If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1. 
+If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1.
 
 *sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
@@ -222,50 +212,48 @@ If sc_social_worker = 1 sc_social_worker_yes = 1.
 If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
 *sc_meals.
-If sc_meals = 0 sc_meals_no = 1. 
-If sc_meals = 1 sc_meals_yes = 1. 
-If sc_meals = 9 sc_meals_unknown = 1. 
+If sc_meals = 0 sc_meals_no = 1.
+If sc_meals = 1 sc_meals_yes = 1.
+If sc_meals = 9 sc_meals_unknown = 1.
 
 *sc_day_care.
 If sc_day_care = 0 sc_day_care_no = 1.
 If sc_day_care = 1 sc_day_care_yes = 1.
-If sc_day_care = 9 sc_day_care_unknown = 1. 
-
+If sc_day_care = 9 sc_day_care_unknown = 1.
 
 *Flags to count sc_send_lca.
 If sc_send_lca = '01' Aberdeen_city = 1.
 If sc_send_lca = '02' Aberdeenshire = 1.
 If sc_send_lca = '03' Angus = 1.
-If sc_send_lca = '04' Argyll_and_Bute = 1. 
-If sc_send_lca = '05' Scottish_Borders = 1. 
+If sc_send_lca = '04' Argyll_and_Bute = 1.
+If sc_send_lca = '05' Scottish_Borders = 1.
 If sc_send_lca = '06' Clackmannanshire = 1.
 If sc_send_lca = '07' West_Dunbartonshire = 1.
-If sc_send_lca = '08' Dumfries_and_Galloway = 1. 
-If sc_send_lca = '09' Dundee_City = 1. 
+If sc_send_lca = '08' Dumfries_and_Galloway = 1.
+If sc_send_lca = '09' Dundee_City = 1.
 If sc_send_lca = '10' East_Ayrshire = 1.
 If sc_send_lca = '11' East_Dunbartonshire = 1.
 If sc_send_lca = '12' East_Lothian = 1.
-If sc_send_lca = '13' East_Renfrewshire = 1. 
-If sc_send_lca = '14' City_of_Edinburgh = 1. 
-If sc_send_lca = '15' Falkirk = 1. 
-If sc_send_lca = '16' Fife = 1. 
+If sc_send_lca = '13' East_Renfrewshire = 1.
+If sc_send_lca = '14' City_of_Edinburgh = 1.
+If sc_send_lca = '15' Falkirk = 1.
+If sc_send_lca = '16' Fife = 1.
 If sc_send_lca = '17' Glasgow_City = 1.
 If sc_send_lca = '18' Highland = 1.
 If sc_send_lca = '19' Inverclyde = 1.
 If sc_send_lca = '20' Midlothian = 1.
-If sc_send_lca = '21' Moray = 1. 
-If sc_send_lca = '22' North_Ayrshire = 1. 
+If sc_send_lca = '21' Moray = 1.
+If sc_send_lca = '22' North_Ayrshire = 1.
 If sc_send_lca = '23' North_Lanarkshire = 1.
 If sc_send_lca = '24' Orkney_Islands = 1.
-If sc_send_lca = '25' Perth_and_Kinross = 1. 
+If sc_send_lca = '25' Perth_and_Kinross = 1.
 If sc_send_lca = '26' Renfrewshire = 1.
-If sc_send_lca = '27' Shetland_Islands = 1. 
-If sc_send_lca = '28' South_Ayrshire = 1. 
+If sc_send_lca = '27' Shetland_Islands = 1.
+If sc_send_lca = '28' South_Ayrshire = 1.
 If sc_send_lca = '29' South_Lanarkshire = 1.
 If sc_send_lca = '30' Stirling = 1.
 If sc_send_lca = '31' West_Lothian = 1.
-If sc_send_lca = '32' Na_h_Eileanan_Siar = 1. 
-
+If sc_send_lca = '32' Na_h_Eileanan_Siar = 1.
 
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
@@ -346,8 +334,7 @@ Varstocases
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 
-**************************************************************************************************************************
-
+**************************************************************************************************************************.
 **************************************************************************************************************************.
 * Match together.
 match files
@@ -372,4 +359,4 @@ Alter Type Issue (F1.0) PctChange (PCT4.2).
 Crosstabs Measure by Issue.
 
 Save Outfile = !Year_dir + 'Home_Care_tests_20' + !FY + '.zsav'
-   /zcompressed .
+    /zcompressed .
