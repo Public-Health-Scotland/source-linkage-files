@@ -202,7 +202,8 @@ fixed_reablement_service <- fixed_sc_ids %>%
   # If reablement is missing fill in from later records (up)
   # If still missing fill in from earlier records (down)
   tidylog::fill(reablement, .direction = "updown") %>%
-  mutate(reablement = replace_na(reablement, 9L))
+  mutate(reablement = replace_na(reablement, 9L)) %>%
+  ungroup()
 
 fixed_hours <- fixed_reablement_service %>%
   tidylog::mutate(
