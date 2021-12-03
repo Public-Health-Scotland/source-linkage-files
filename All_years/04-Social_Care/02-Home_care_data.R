@@ -258,7 +258,7 @@ merged_data <- pivotted_hours %>%
     # Store the period for the latest submitted record
     sc_latest_submission = last(period),
     # Sum the (quarterly) hours
-    across(starts_with("hc_hours_20"), sum, na.rm = TRUE),
+    across(starts_with("hc_hours_20"), sum),
     # Shouldn't matter as these are all the same
     across(c(gender, dob, postcode), first)
   )
