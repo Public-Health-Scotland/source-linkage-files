@@ -1,18 +1,19 @@
 ﻿* Encoding: UTF-8.
-insert file = "pass.sps".
+get file = !SC_dir + "all_hc_episodes_" + !LatestUpdate + ".zsav".
 
-GET DATA
-  /TYPE=ODBC
-  /CONNECT= !Connect_sc
-  /SQL='SELECT sending_location, social_care_id, period, '+
-    'hc_service_provider, hc_service, reablement, '+
-    'hc_service_start_date, hc_service_end_date, hc_hours_derived  '+
-    'FROM social_care_2.homecare '+
-    'WHERE (financial_year = 2017) '+
-    'ORDER BY sending_location, social_care_id'
-  /ASSUMEDSTRWIDTH=255.
-CACHE.
-EXECUTE.
+* Now select episodes for given FY.
+select if Range(hc_service_start_date, !startFY, !endFY) or (hc_service_start_date <= !endFY and (hc_service_end_date >= !startFY or sysmis(hc_service_end_date))).
+
+* Convert from R factor which is a labelled numeric in SPSS.
+Alter type sc_latest_submission (A6).
+compute sc_latest_submission = ValueLabel(sc_latest_submission).
+
+* Remove any episodes where the latest submission was before the current year and the record started earlier with an open end date.
+Do if Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.0).
+    Compute old_open_record = sysmis(hc_service_end_date) AND hc_service_start_date < !startFY.
+End if.
+
+Select if sysmis(old_open_record).
 
 Alter type
     sending_location (A3)
@@ -22,10 +23,7 @@ Alter type
 
 Recode reablement (SYSMIS = 9).
 
-* Match on the demographics data (chi, gender, dob and postcode).
-match files file = *
-    /table = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav"
-    /by sending_location social_care_id.
+sort cases by sending_location social_care_id.
 
 * Match on Client data.
 match files file = *
@@ -36,11 +34,7 @@ Rename Variables
     hc_service_start_date = record_keydate1
     hc_service_end_date = record_keydate2
     reablement = hc_reablement
-    hc_service_provider = hc_provider
-    hc_hours_derived = hc_hours.
-
-String sc_latest_submission (A6).
-Compute sc_latest_submission = "2017Q4".
+    hc_service_provider = hc_provider.
 
 String Year (A4).
 Compute Year = !FY.
@@ -50,15 +44,15 @@ Compute recid eq 'HC'.
 
 * Use hc_service to create the SMRType.
 string SMRType (a10).
-Do if hc_service = "1".
+Do if hc_service = 1.
     compute SMRType = 'HC-Non-Per'.
-Else if hc_service = "2".
+Else if hc_service = 2.
     compute SMRType = "HC-Per".
 Else.
     compute SMRType = "HC-Unknown".
 End if.
 
- *  Derive age from dob.
+*  Derive age from dob.
 Numeric age (F3.0).
 Compute age = datediff(!midFY, dob, "years").
 
@@ -66,7 +60,7 @@ Compute age = datediff(!midFY, dob, "years").
 String person_id (A13).
 Compute person_id = concat(sending_location, "-", social_care_id).
 
- * Uses sending_location and recodes into sc_sending_location using actual codes.
+* Uses sending_location and recodes into sc_sending_location using actual codes.
 !Create_sc_sending_location.
 
 Value Labels hc_provider
@@ -93,6 +87,16 @@ alter type record_keydate2 (F8.0).
 
 sort cases by chi record_keydate1 record_keydate2.
 
+Define !keep_correct_hours (fin_year = !tokens(1)).
+    Rename variables
+        !Concat("hc_hours_", !unquote(!fin_year), "Q1") = hc_hours_q1
+        !Concat("hc_hours_", !unquote(!fin_year), "Q2") = hc_hours_q2
+        !Concat("hc_hours_", !unquote(!fin_year), "Q3") = hc_hours_q3
+        !Concat("hc_hours_", !unquote(!fin_year), "Q4") = hc_hours_q4.
+!EndDefine.
+
+!keep_correct_hours fin_year = !altFY.
+
 save outfile = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
     /Keep Year
     recid
@@ -105,7 +109,10 @@ save outfile = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
     sc_send_lca
     record_keydate1
     record_keydate2
-    hc_hours
+    hc_hours_q1
+    hc_hours_q2
+    hc_hours_q3
+    hc_hours_q4
     hc_provider
     hc_reablement
     person_id
