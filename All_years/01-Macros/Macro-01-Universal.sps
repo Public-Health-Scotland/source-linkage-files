@@ -35,6 +35,11 @@ Define !SC_Latest_Validated_period()
     "2021Q1"
 !EndDefine.
 
+* Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
+Define !latest_cost_year()
+    2018
+!EndDefine.
+
 *******************************************************.
 * Geography Macros.
 * Needs changing when files update.
@@ -275,6 +280,19 @@ Define !ReadCodeLookup()
 * Functional macros *.
 * Should not need changing unless something is broken or to update methodology.
 *******************************************************.
+* Creates a variable with the correct uplift factor.
+* It works out the difference in years (minimum of 0).
+* Take 1.01 (for 1%) to the power of the difference in years (minimum of 0).
+* For non plics recids use uplift of 1 so we won't change anything.
+Define !create_uplift_var().
+    * Filter to PLICs recids.
+    Do if any(recid, "00B", "01B", "GLS", "02B", "04B", "AE2").
+        Compute uplift = ((1.01) ** max(0, !Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
+    Else.
+        Compute uplift = 1.
+    End if.
+!EndDefine.
+
 * The following two macros are used for creating the old LCA codes
 * They will need updating if the Council area codes change.
 Define !CAtoLCA()
