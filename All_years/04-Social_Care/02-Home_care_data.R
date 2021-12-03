@@ -269,9 +269,7 @@ merged_data <- pivotted_hours %>%
 merged_data %>%
   write_rds(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.rds")),
     compress = "gz"
-  )
-
-merged_data %>%
+  ) %>%
   write_sav(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.zsav")),
     compress = TRUE
   )
