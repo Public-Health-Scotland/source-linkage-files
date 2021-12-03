@@ -227,13 +227,33 @@ pivotted_hours <- fixed_hours %>%
   # This creates a new variable per quarter
   # with the hours for that quarter for every record
   mutate(hours_submission_quarter = period) %>%
-  pivot_wider(
+  tidylog::pivot_wider(
     names_from = hours_submission_quarter,
     values_from = hc_hours_derived,
     values_fn = sum,
     values_fill = 0,
     names_sort = TRUE,
     names_prefix = "hc_hours_"
+  ) %>%
+  # Add in hour variables for the 2017 quarters we don't have
+  mutate(
+    hc_hours_2017Q1 = NA_real_,
+    hc_hours_2017Q2 = NA_real_,
+    hc_hours_2017Q3 = NA_real_,
+    .before = hc_hours_2017Q4
+  ) %>%
+  tidylog::full_join(
+    tibble(
+      hours_submission_quarter = str_sub(latest_validated_period, end = 4) %>%
+        paste0("Q", 1:4),
+      hc_hours_derived = NA_real_
+    ) %>%
+      pivot_wider(
+        names_from = hours_submission_quarter,
+        values_from = hc_hours_derived,
+        names_prefix = "hc_hours_"
+      ),
+    .name_repair = "minimal"
   )
 
 merged_data <- pivotted_hours %>%
