@@ -15,6 +15,7 @@ match files
    /File = * 
    /Table = !Localities_Lookup
    /Rename (HSCPLocality = Locality)
+   /Drop ca2019name hscp2019name hb2019name
    /By Datazone2011.
 
 Recode Locality ("" = "No Locality Information").
