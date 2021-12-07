@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 *2. LookUp for costs for Care Homes.
 
 *Get COSLA Value tables.
@@ -73,6 +73,10 @@ Varstocases /make Year from Year TempYear1 TempYear2.
 * Uplift costs for Years after the latest year.
 * increase by 1% for every year after the latest.
 * Add/delete lines as appropriate.
+if year > "1920" cost_per_day = cost_per_day * 1.01.
+if year > "2021" cost_per_day = cost_per_day * 1.01.
+if year > "2122" cost_per_day = cost_per_day * 1.01.
+if year > "2223" cost_per_day = cost_per_day * 1.01.
 
 sort cases by Year nursing_care_provision.
 
