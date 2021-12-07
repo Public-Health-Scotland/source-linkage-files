@@ -6,10 +6,10 @@
 * https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/ - Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes for Older People in Scotland.
 * Check and add any new years to 'CH_Costs.xlsx'.
 
- * Make a copy of the existing file, incase something wierd has happened to the data!.
- * Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
- * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Costs_dir + "Cost_CH_Lookup.sav' '" +  !Costs_dir + "Cost_CH_Lookup_OLD.sav'"].
+* Make a copy of the existing file, incase something wierd has happened to the data!.
+* Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
+* If this doesn't work manually make a copy.
+Host Command = ["cp " + !Costs_dir + "Cost_CH_Lookup.sav " +  !Costs_dir + "Cost_CH_Lookup_pre" + !LatestUpdate + ".sav"].
 
 GET DATA
     /TYPE=XLSX
@@ -82,7 +82,7 @@ sort cases by Year nursing_care_provision.
 
 * Check here to make sure costs haven't changed radically.
 match files file = *
-    /table !Costs_dir + "Cost_CH_Lookup_OLD.sav"
+    /table !Costs_dir + "Cost_CH_Lookup_pre" + !LatestUpdate + ".sav"
     /Rename cost_per_day = cost_old
     /By year nursing_care_provision.
 
