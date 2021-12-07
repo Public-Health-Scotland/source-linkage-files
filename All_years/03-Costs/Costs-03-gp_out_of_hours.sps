@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Make GP Out of Hours Cost Lookup.
 
 * 1. Attendances taken from 2018 Primary Care Out of Hours Report
@@ -46,6 +46,14 @@ Do if Year = "1920".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
+
+* Uplift costs for Years after the latest year.
+* increase by 1% for every year after the latest.
+* Add/delete lines as appropriate.
+if year > "1920" cost_per_consultation = cost_per_consultation * 1.01.
+if year > "2021" cost_per_consultation = cost_per_consultation * 1.01.
+if year > "2122" cost_per_consultation = cost_per_consultation * 1.01.
+if year > "2223" cost_per_consultation = cost_per_consultation * 1.01.
 
 sort cases by HB2019 year.
 
