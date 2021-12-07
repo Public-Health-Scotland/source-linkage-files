@@ -1,6 +1,7 @@
 # December 2021 Update - Unreleased
 
 * Include Care Home data up to 2021/22 Q1
+* All costs are now uplifted by 1% per year from the latest avaliable year.
 
 # September 2021 Update - Released 22-Sep-2021
 
