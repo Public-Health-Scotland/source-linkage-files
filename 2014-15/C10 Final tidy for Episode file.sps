@@ -1,6 +1,12 @@
 ﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
+!create_uplift_var.
+Do repeat cost_var = cost_total_net  cost_total_net_incdnas apr_cost to mar_cost.
+    * Uplift costs.
+    Compute cost_var = cost_var * uplift.
+End repeat.
+
 Variable Labels
     adcon1 "Admission Condition 1"
     adcon2 "Admission Condition 2"
