@@ -1,6 +1,6 @@
 * Encoding: UTF-8.
 GET DATA  /TYPE=TXT
-    /FILE= !Year_Extracts_dir + "Homelessness extract-20" + !FY + ".csv"
+    /FILE= !Year_Extracts_dir + "Homelessness-extract-20" + !FY + ".csv"
     /ENCODING='UTF8'
     /DELCASE=LINE
     /DELIMITERS=" ,"
