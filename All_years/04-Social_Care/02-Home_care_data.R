@@ -296,7 +296,8 @@ merged_data <- pivotted_hours %>%
     across(starts_with("hc_hours_20"), sum),
     # Shouldn't matter as these are all the same
     across(c(gender, dob, postcode), first)
-  )
+  ) %>%
+  ungroup()
 
 
 # Write data out ----------------------------------------------------------
