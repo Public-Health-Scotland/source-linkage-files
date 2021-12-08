@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -19,16 +19,20 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0247528"
+    "SCTASK0270905"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Sep_2021"
+    "Dec_2021"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Jun21"
+    "Jul16_Sep21"
+!EndDefine.
+
+Define !SC_Latest_Validated_period()
+    "2021Q1"
 !EndDefine.
 
 *******************************************************.

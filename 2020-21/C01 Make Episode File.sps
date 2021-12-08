@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -7,7 +7,9 @@
 Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
     !Year_dir + "acute_tests_20" + !FY + ".zsav " +
+    !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
     !Year_dir + "DD_tests_20" + !FY + ".zsav " +
+    !Year_dir + "DN_tests_20" + !FY + ".zsav " +
     !Year_dir + "GPOoH_tests_20" + !FY + ".zsav " +
     !Year_dir + "Maternity_tests_20" + !FY + ".zsav " +
     !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav " +
@@ -16,8 +18,7 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
     !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
     !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
-    !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
-    !Year_dir + "DN_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
     !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 * Bring all the data sets together.
@@ -28,12 +29,13 @@ add files
     /file = !Year_dir + "outpatients_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "a&e_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "deaths_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
-    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav"
-    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
     /By chi.
 
 * Check that all CHIs are valid.
@@ -208,7 +210,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
             Compute PPA = 0.
-            
+
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
             Do if range (char.Substr(op1a, 1 , 3), "K01", "K50") or
@@ -360,13 +362,6 @@ Alter type cij_ppa (F1.0).
 
 sort cases by chi keydate1_dateformat.
 
-* Social Care variables for consistency.
-* Home Care.
-Numeric
-    hc_hours (F22.2)
-    hc_provider (F1.0)
-    hc_reablement (F1.0).
-
 * SDS.
 Numeric sds_option_4 (F1.0).
 
@@ -374,7 +369,6 @@ save outfile = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
     /zcompressed.
-
 get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav".
 
 * Housekeeping.
@@ -390,8 +384,9 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
     !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
-    !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
-	!Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
+    !Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "DN_for_source-20" + !FY + ".zsav " +
     !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
     !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
