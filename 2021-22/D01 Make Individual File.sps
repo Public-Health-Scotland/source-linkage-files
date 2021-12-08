@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -47,7 +47,8 @@ Numeric
     CMH_contacts
     CH_episodes CH_beddays
     CH_cost
-    HC_episodes HC_personal_episodes HC_non_personal_episodes
+    HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes
+    HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours
     AT_alarms AT_telecare
     SDS_option_1 SDS_option_2 SDS_option_3
     CIJ_el
@@ -76,11 +77,11 @@ End if.
 If cij_delay and Distinct_CIJ cij_delay = 1.
 Compute cij_delay = cij_delay and Distinct_CIJ.
 
-*Create variables to count preventable admissions and preventable beddays. 
+*Create variables to count preventable admissions and preventable beddays.
 Do if cij_ppa.
     If Distinct_CIJ preventable_admissions = 1.
     Compute preventable_beddays = datediff(Min(!endFY, CIJ_end_date), Max(!startFY, CIJ_start_date), "days").
-Else. 
+Else.
     Compute preventable_admissions = 0.
     Compute preventable_beddays = 0.
 End if.
@@ -383,20 +384,20 @@ Else if (recid = "CH").
 
     * Count continuous episodes.
     Compute ch_cis_episodes = first_ch_ep.
-    
+
     * Work out the cost per day for each row, we'll take the mean of this for the whole CIS episode.
     Do if yearstay > 0.
         Compute ch_cost_per_day = cost_total_net / yearstay.
     Else if yearstay = 0.
-         Compute ch_cost_per_day = cost_total_net.
+        Compute ch_cost_per_day = cost_total_net.
     End if.
 
     * Flag if any of the rows have a missing cost.
     Compute ch_no_cost = sysmis(ch_cost_per_day).
 
-*Use the end date and if the end date is missing then use the first day of the next financial quarter - Note SPSS reads calendar quarter. 
+    *Use the end date and if the end date is missing then use the first day of the next financial quarter - Note SPSS reads calendar quarter.
     Compute ch_ep_end = keydate2_dateformat.
-	If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
+    If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
 
 Else if (recid = "HC").
     *************************************************************************************************************************************************.
@@ -410,14 +411,19 @@ Else if (recid = "HC").
     Compute HC_episodes = 1.
 
     * Hours count.
-    Compute HC_total_hours = hc_hours.
+    Compute HC_total_hours = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
 
     Do if SMRType = "HC-Per".
         Compute HC_personal_episodes = 1.
-        Compute HC_personal_hours = hc_hours.
+        Compute HC_personal_hours = HC_total_hours.
     Else if SMRType = "HC-Non-Per".
         Compute HC_non_personal_episodes = 1.
-        Compute HC_personal_hours = hc_hours.
+        Compute HC_non_personal_hours = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
+    End if.
+
+    Do if hc_reablement = 1.
+        compute HC_reablement_episodes = 1.
+        compute HC_reablement_hours = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
     End if.
 
 Else if (recid = "AT").
@@ -454,7 +460,7 @@ aggregate outfile = * mode = addvariables overwrite = yes
     /ch_cost_per_day = mean(ch_cost_per_day).
 
 Do if recid = "CH".
-	Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
+    Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
 
     If Not(ch_no_cost) ch_cost = ch_beddays * ch_cost_per_day.
 
@@ -464,7 +470,7 @@ Do if recid = "CH".
         Compute ch_cost = 0.
     End if.
 End if.
-    
+
 * We'll use this to get the most accurate gender we can.
 Recode gender (0 = 1.5) (9 = 1.5).
 
@@ -527,7 +533,8 @@ aggregate outfile = *
     = sum(CMH_contacts)
     /CH_cis_episodes = sum(ch_cis_episodes)
     /CH_beddays CH_cost = sum(CH_beddays CH_cost)
-    /HC_episodes HC_personal_episodes HC_non_personal_episodes = sum(HC_episodes HC_personal_episodes HC_non_personal_episodes)
+    /HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes = sum(HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes)
+    /HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours = sum(HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours)
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
     /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
     /SDS_option_4 = Max(SDS_option_4)
@@ -572,25 +579,26 @@ Value Labels gender
     "2" "Female".
 
 * From all the different data sources that we have in the file, a hierarchy will be created for how
-    * Postcode, GP Practice and Date of Birth will be assigned.
+    Postcode, GP Practice and Date of Birth will be assigned.
 * Note that due to the minimum data extract that for PIS data, GP Practice is not available. This was
     not included in the request for the extract so that multiple rows for patients would be avoided and
     also because the GP Practice that is held in PIS is the GP Practice of the PRESCRIBER not the patient.
 * In most cases this will be the GP Practice of the patient but this is not always the case.
 
-*The hierarchy has been decided based on what health service would most likely be used by patients.
-* 1 - Prescribing (except for GP Practice - added in for GP Practice August 2016)
+* The hierarchy has been decided based on what health service would most likely be used by patients:
+    * 1 - Prescribing (except for GP Practice - added in for GP Practice August 2016)
     * 2 - Accident and Emergency
     * 3 - OOH
     * 4 - Outpatients
     * 5 - Acute
     * 6 - Maternity
-    * 7 - District Nursing
-    * 8 - Community Mental Health
-    * 8 - Mental health
-    * 9 - Geriatric long stay
-    * 10 - Care Homes
-    * 11 - NSU.
+    * 7 - Home Care
+    * 8 - District Nursing
+    * 9 - Community Mental Health
+    * 10 - Mental health
+    * 11 - Geriatric long stay
+    * 12 - Care Homes
+    * 13 - NSU.
 
 * Date of birth hierarchy.
 Numeric DoB (Date12).
@@ -716,15 +724,15 @@ Else if dataset = "Acute_postcode".
     Compute order = 5.
 Else if dataset = "Mat_postcode".
     Compute order = 6.
-Else if dataset = "DN_postcode".
-    Compute order = 7.
-Else if dataset = "CMH_postcode".
-    Compute order = 8.
-Else if dataset = "MH_postcode".
-    Compute order = 9.
-Else if dataset = "GLS_postcode".
-    Compute order = 10.
 Else if dataset = "HC_postcode".
+    Compute order = 7.
+Else if dataset = "DN_postcode".
+    Compute order = 8.
+Else if dataset = "CMH_postcode".
+    Compute order = 9.
+Else if dataset = "MH_postcode".
+    Compute order = 10.
+Else if dataset = "GLS_postcode".
     Compute order = 11.
 Else if dataset = "AT_postcode".
     Compute order = 12.
@@ -805,15 +813,15 @@ Else if dataset = "Acute_gpprac".
     Compute order = 5.
 Else if dataset = "Mat_gpprac".
     Compute order = 6.
-Else if dataset = "DN_gpprac".
-    Compute order = 7.
-Else if dataset = "CMH_gpprac".
-    Compute order = 8.
-Else if dataset = "MH_gpprac".
-    Compute order = 9.
-Else if dataset = "GLS_gpprac".
-    Compute order = 10.
 Else if dataset = "HC_gpprac".
+    Compute order = 7.
+Else if dataset = "DN_gpprac".
+    Compute order = 8.
+Else if dataset = "CMH_gpprac".
+    Compute order = 9.
+Else if dataset = "MH_gpprac".
+    Compute order = 10.
+Else if dataset = "GLS_gpprac".
     Compute order = 11.
 Else if dataset = "AT_gpprac".
     Compute order = 12.
