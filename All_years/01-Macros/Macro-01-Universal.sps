@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -66,7 +66,7 @@ Define !SIMD_file()
 
 * DataZone Populations file - will need changing when geography files update.
 Define !DataZone_pop_file()
-    "DataZone2011_pop_est_2011_2019.sav"
+    "DataZone2011_pop_est_2011_2020.sav"
 !EndDefine.
 
 * 5-year HSCP Populations file - will need changing when geography files update.
