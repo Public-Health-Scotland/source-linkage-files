@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 !create_uplift_var.
@@ -124,8 +124,11 @@ Variable Labels
     feb_cost "Cost from episode in February"
     gender "Gender"
     gpprac "GP Practice code"
-    hc_hours "Total number of home care service hours."
-    hc_provider "The organisation type that provides the home care service to the client/service user."
+    hc_hours_q1 "Total number of home care service hours in Q1 (April - June)"
+    hc_hours_q2 "Total number of home care service hours in Q2 (July - September)"
+    hc_hours_q3 "Total number of home care service hours in Q3 (October - December)"
+    hc_hours_q4 "Total number of home care service hours in Q4 (January - March)"
+    hc_provider "The organisation type that provides the home care service to the client/service user"
     hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hbpraccode "NHS Board of GP Practice"
     hbrescode "NHS Board of Residence"
@@ -857,7 +860,10 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ch_adm_reason
     ch_provider
     ch_nursing
-    hc_hours
+    hc_hours_q1
+    hc_hours_q2
+    hc_hours_q3
+    hc_hours_q4
     hc_provider
     hc_reablement
     sds_option_4
