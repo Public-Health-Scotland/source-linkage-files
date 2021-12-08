@@ -18,6 +18,7 @@ Select if sysmis(old_open_record).
 Alter type
     sending_location (A3)
     social_care_id (A10)
+    postcode (A8)
     reablement (F1.0)
     hc_service_provider (F1.0).
 
