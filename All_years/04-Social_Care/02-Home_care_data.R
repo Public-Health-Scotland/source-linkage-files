@@ -152,17 +152,28 @@ replaced_start_dates <- hc_full_data %>%
       qtr_start,
       hc_service_start_date
     )
+  ) %>%
+  # Replace really early start dates with start of the quarter
+  tidylog::mutate(
+    early_start_date = hc_service_start_date < as.Date("1989-01-01"),
+    hc_service_start_date = if_else(
+      early_start_date,
+      qtr_start,
+      hc_service_start_date
+    )
   )
 
 # Output table for DM / SC team on bad dates
 bad_dates <- replaced_start_dates %>%
   mutate(
-    end_before_qtr = qtr_start > hc_service_end_date,
-    start_after_quarter = record_date < hc_service_start_date
+    end_before_qtr = qtr_start > hc_service_end_date & !is.na(hc_service_end_date),
+    start_after_quarter = record_date < hc_service_start_date,
+    # Need to check this as we are potentialsly introducing bad start dates above
+    start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  tidylog::filter(if_any(c(end_before_qtr, start_after_quarter))) %>%
+  tidylog::filter(if_any(c(end_before_qtr, start_after_quarter, start_after_end))) %>%
   group_by(sending_location_name, period) %>%
-  summarise(across(c(end_before_qtr, start_after_quarter), sum, na.rm = TRUE)) %>%
+  summarise(across(c(end_before_qtr, start_after_quarter, start_after_end), sum, na.rm = TRUE)) %>%
   janitor::adorn_totals(where = c("row", "col"))
 
 # Only keep records which have some time in the
@@ -170,9 +181,13 @@ bad_dates <- replaced_start_dates %>%
 dropped_bad_dates <- replaced_start_dates %>%
   mutate(
     end_before_qtr = qtr_start > hc_service_end_date & !is.na(hc_service_end_date),
-    start_after_quarter = record_date < hc_service_start_date
+    start_after_quarter = record_date < hc_service_start_date,
+    # Need to check this as we are potentialsly introducing bad start dates above
+    start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  tidylog::filter(!if_any(c(end_before_qtr, start_after_quarter)))
+  tidylog::filter(!end_before_qtr,
+                  !start_after_quarter,
+                  !start_after_end)
 
 fixed_sc_ids <- replaced_start_dates %>%
   # Fix cases where a CHI has multiple sc_ids
