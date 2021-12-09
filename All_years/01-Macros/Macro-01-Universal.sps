@@ -51,7 +51,7 @@ Define !Locality_file()
 
 * SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2021_1.sav"
+    "Scottish_Postcode_Directory_2021_2.sav"
 !EndDefine.
 
 * gpprac file.
@@ -66,7 +66,7 @@ Define !SIMD_file()
 
 * DataZone Populations file - will need changing when geography files update.
 Define !DataZone_pop_file()
-    "DataZone2011_pop_est_2011_2019.sav"
+    "DataZone2011_pop_est_2011_2020.sav"
 !EndDefine.
 
 * 5-year HSCP Populations file - will need changing when geography files update.

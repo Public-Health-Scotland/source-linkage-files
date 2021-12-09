@@ -17,4 +17,4 @@ Make\ SLFs/.Rproj.user/*
 .Rproj.user
 *.Rhistory
 Make_R_files/log.txt
-hc_data_issues.html
+*.html
