@@ -24,21 +24,22 @@ Alter type
     Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_inpatient_beddays
     MH_episodes MH_inpatient_episodes MH_el_inpatient_episodes MH_non_el_inpatient_episodes MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays
     GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
-    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
     PIS_dispensed_items
-    CH_cis_episodes CH_beddays
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
+    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     DN_episodes DN_contacts
     CMH_contacts
-    CIJ_el CIJ_non_el CIJ_mat (F8.0).
+    CH_cis_episodes CH_beddays
+    HC_episodes HC_personal_episodes HC_non_personal_episodes
+    AT_telecare AT_alarms
+    SDS_option_1 SDS_option_2 SDS_option_3
+    CIJ_el CIJ_non_el CIJ_mat CIJ_delay
+    preventable_admissions preventable_beddays (F8.0).
 
 * Tidy up the display.
-Variable width
-    gender age postcode gpprac (7)
-    health_net_cost health_net_costincDNAs health_net_costincIncomplete (15)
-    dob HL1_in_FY NSU to digestive_date (10).
+Variable width ALL (10).
 
 * Add variable labels.
 Variable Labels
