@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -371,7 +371,7 @@ Numeric
 
 * Home Care.
 Numeric
-    hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
+    hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
     hc_provider (F1.0)
     hc_reablement (F1.0).
 
@@ -405,7 +405,6 @@ Numeric HH_in_FY (F1.0).
 Numeric HH_ep (F1.0).
 Numeric HH_6after_ep (F1.0).
 Numeric HH_6before_ep (F1.0).
-
 
 *Declare variables for DN.
 Numeric
