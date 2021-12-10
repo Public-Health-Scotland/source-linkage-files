@@ -375,7 +375,7 @@ Numeric
 
 * Home Care.
 Numeric
-    hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
+    hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
     hc_provider (F1.0)
     hc_reablement (F1.0).
 
