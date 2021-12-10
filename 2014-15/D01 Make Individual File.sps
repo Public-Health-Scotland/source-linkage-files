@@ -411,19 +411,19 @@ Else if (recid = "HC").
     Compute HC_episodes = 1.
 
     * Hours count.
-    Compute HC_total_hours = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
+    Compute HC_total_hours = hc_hours_annual.
 
     Do if SMRType = "HC-Per".
         Compute HC_personal_episodes = 1.
         Compute HC_personal_hours = HC_total_hours.
     Else if SMRType = "HC-Non-Per".
         Compute HC_non_personal_episodes = 1.
-        Compute HC_non_personal_hours = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
+        Compute HC_non_personal_hours = hc_hours_annual.
     End if.
 
     Do if hc_reablement = 1.
         compute HC_reablement_episodes = 1.
-        compute HC_reablement_hours = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
+        compute HC_reablement_hours = hc_hours_annual.
     End if.
 
 Else if (recid = "AT").
