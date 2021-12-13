@@ -99,7 +99,7 @@ Define !keep_correct_hours (fin_year = !tokens(1)).
 !keep_correct_hours fin_year = !altFY.
 
 * Create annual hours variable.
-Compute hc_hours_annual = hc_hours_q1 + hc_hours_q2 + hc_hours_q3 + hc_hours_q4.
+Compute hc_hours_annual = sum(hc_hours_q1 to hc_hours_q4).
 
 save outfile = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
     /Keep Year
