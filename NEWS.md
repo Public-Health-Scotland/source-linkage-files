@@ -1,8 +1,12 @@
 # December 2021 Update - Unreleased
 
 * Include Care Home data up to 2021/22 Q1
-* Include Home Care data using the new methodology, from 2017/18 Q4 - 2021/22 Q1. 
+* Include Home Care data using the new methodology, from 2017/18 Q4 - 2021/22 Q1.
+  * New variables `hc_hours_q1`, `hc_hours_q2`, `hc_hours_q3` and `hc_hours_q4`
 * All costs are now uplifted by 1% per year from the latest avaliable year.
+* Home Care in the individual file now has new variables.
+  * episode counts: `HC_reablement_episodes`.
+  * sums of hours: `HC_reablement_hours`, `HC_total_hours`, `HC_personal_hours`, `HC_non_personal_hours` and `HC_reablement_hours`.
 
 # September 2021 Update - Released 22-Sep-2021
 
