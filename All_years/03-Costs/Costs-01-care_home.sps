@@ -24,7 +24,7 @@ EXECUTE.
 select if any(SourceofFunding, 'All Funding With Nursing Care', 'All Funding Without Nursing Care').
 
 VARSTOCASES
-    /MAKE Cost_per_week FROM @2017 to @2019
+    /MAKE Cost_per_week FROM @2017 to @2021
     /Index= Calender_Year (Cost_per_week).
 
 * remove the @ sign.
@@ -62,10 +62,10 @@ aggregate outfile = *
 * Add in years by copying the most recent year we have.
 * Most recent costs year availiable.
 String TempYear1 TempYear2 (A4).
-Do if Year = "1920".
+Do if Year = "XXXX".
     * Make costs for other years.
-    Compute TempYear1 = "2021".
-    Compute TempYear2 = "2122".
+    Compute TempYear1 = "2223".
+    Compute TempYear2 = "2324".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
@@ -73,8 +73,6 @@ Varstocases /make Year from Year TempYear1 TempYear2.
 * Uplift costs for Years after the latest year.
 * increase by 1% for every year after the latest.
 * Add/delete lines as appropriate.
-if year > "1920" cost_per_day = cost_per_day * 1.01.
-if year > "2021" cost_per_day = cost_per_day * 1.01.
 if year > "2122" cost_per_day = cost_per_day * 1.01.
 if year > "2223" cost_per_day = cost_per_day * 1.01.
 
@@ -89,7 +87,7 @@ match files file = *
 Compute pct_diff = (cost_per_day - cost_old) / cost_old * 100.
 crosstabs  pct_diff by year by nursing_care_provision.
 
-save outfile=!Costs_dir + "Cost_CH_Lookup.sav"
+save outfile = !Costs_dir + "Cost_CH_Lookup.sav"
     /Keep year nursing_care_provision cost_per_day.
 
 get file = !Costs_dir + "Cost_CH_Lookup.sav".
