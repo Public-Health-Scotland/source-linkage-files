@@ -1,4 +1,4 @@
-# December 2021 Update - Unreleased
+# December 2021 Update - Released 16-Dec-2021
 
 * Include Care Home data up to 2021/22 Q1
 * Include Home Care data using the new methodology, from 2017/18 Q4 - 2021/22 Q1.
