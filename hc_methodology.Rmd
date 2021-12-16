@@ -1,0 +1,44 @@
+---
+title: "SLF - Home Care methodology"
+author: "James McMahon"
+date: "11/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Methodology
+
+### Data import
+
+  1. Extract all data directly from the DVRPOD / social_care_2 database
+  1. Fix 2017 issues
+    * Fix `period` = "2017" to `period` = "2017Q4"
+    * Fix `financial_quarter` = 0 to `financial_quarter` = 4 (for 2017 only)
+  1. Set any missing `hc_service` to 0 (Not submitted)
+  1. Drop any records flagged with `hc_start_date_after_end_date`
+  1. Don't import any unvalidated records, currently up to `r latest_validated_period`
+ 
+### Data cleanup
+
+  1. Where start date is missing replace this with the start of the quarter
+  1. Where a CHI has multiple `social_care_id`s for the same `sending_location` replace all ids with the latest submitted one. 
+  1. Fill in `reablement` - First group across; `chi, sending_location_name, sending_location, social_care_id, hc_service_start_date, hc_service` which will ultimately be the episode.
+    * Where `reablement` = 9 or missing, fill in from other records in the 'episode' 
+    * first fill in from the latest records, to the earliest
+    * Then from earlier records if still missing.
+  1. Replace `hc_service_provider`, when it changes within the episode, to 5 (other).
+
+### Merge data
+
+  1. Merge records together, by the grouping mentioned above, records are the same epsiode if they are for the same person, same service type and start on the same date.
+    1. If `reablement` changes within the episode, split the episode at the quarter date between the change. ** We could replicate this logic for `hc_service_provider` **
+    1. For Argyll and Bute 2020/21 use `multistaff_input * total_staff_home_care_hours` where `multistaff_input` must be at least 1, for the hours.
+    1. For Angus 2018Q3-2019Q3 inclusive recalculate the hours as they were submitted as average weekly hours, so divide by 7 (days) then multiply by the number of days in the quarter to get quarterly hours.
+    1. Take the hours for each quarter and create a new variable which is a sum of all hours for that episode in that quarter
+  1. Where an episode is split (due to reablement changing) recalculate the dates so that they start/end at the start and end of the quarter where the 'change' happens.
+
+```{r sc_id, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+replaced_start_dates %>% group_by(sending_location_name) %>% summarise(before = n_distinct(social_care_id)) %>% left_join(fixed_sc_ids %>% group_by(sending_location_name) %>% summarise(after = n_distinct(social_care_id))) %>% mutate(diff = before - after, diff_pct = scales::percent(diff/ before, accuracy = 0.1)) %>% gt::gt()
+```
