@@ -1,6 +1,12 @@
 * Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
+!create_uplift_var.
+Do repeat cost_var = cost_total_net  cost_total_net_incdnas apr_cost to mar_cost.
+    * Uplift costs.
+    Compute cost_var = cost_var * uplift.
+End repeat.
+
 Variable Labels
     adcon1 "Admission Condition 1"
     adcon2 "Admission Condition 2"
@@ -118,6 +124,7 @@ Variable Labels
     feb_cost "Cost from episode in February"
     gender "Gender"
     gpprac "GP Practice code"
+    hc_hours_annual "Total number of home care service hours in the financial year"
     hc_hours_q1 "Total number of home care service hours in Q1 (April - June)"
     hc_hours_q2 "Total number of home care service hours in Q2 (July - September)"
     hc_hours_q3 "Total number of home care service hours in Q3 (October - December)"
@@ -312,17 +319,17 @@ Value Labels SMRType
 Value Labels refsource
     '01' "A&E - Self Referral"
     '01A' "A&E - Patient"
-    '01B' "A&E - Associated Person e.g. parent, friend, employer, neighbour."
+    '01B' "A&E - Associated Person e.g. parent, friend, employer, neighbour"
     '02' "A&E - Healthcare professional/ service/ organisation"
-    '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services."
-    '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service."
-    '02C' "A&E - 999 emergency services Includes SAS Paramedic Practitioner."
+    '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services"
+    '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service"
+    '02C' "A&E - 999 emergency services Includes SAS Paramedic Practitioner"
     '02D' "A&E - NHS24"
     '02E' "A&E - Minor injuries unit"
-    '02F' "A&E - Same hospital Excludes minor injuries units."
+    '02F' "A&E - Same hospital Excludes minor injuries units"
     '02G' "A&E - Other hospital Excludes minor injuries units"
     '02H' "A&E - Other healthcare professional"
-    '02J' "A&E - GP referral for admission."
+    '02J' "A&E - GP referral for admission"
     '03' "A&E - Local Authority"
     '03A' "A&E - Education"
     '03B' "A&E - Social Services"
@@ -854,6 +861,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ch_adm_reason
     ch_provider
     ch_nursing
+    hc_hours_annual
     hc_hours_q1
     hc_hours_q2
     hc_hours_q3

@@ -197,7 +197,7 @@ fixed_sc_ids <- replaced_start_dates %>%
   tidylog::mutate(social_care_id = if_else(is.na(chi), social_care_id, last(social_care_id))) %>%
   ungroup()
 
-fixed_reablement_service <- fixed_sc_ids %>%
+fixed_reablement <- fixed_sc_ids %>%
   # Group across what will be the standard split
   # Same person, same start date, same service
   group_by(
@@ -220,7 +220,7 @@ fixed_reablement_service <- fixed_sc_ids %>%
   mutate(reablement = replace_na(reablement, 9L)) %>%
   ungroup()
 
-fixed_hours <- fixed_reablement_service %>%
+fixed_hours <- fixed_reablement %>%
   tidylog::mutate(
     days_in_quarter = time_length(pmax(qtr_start, hc_service_start_date) %--% pmin(record_date, hc_service_end_date, na.rm = TRUE), "days") + 1,
     hc_hours_derived = case_when(
