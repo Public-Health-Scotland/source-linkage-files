@@ -17,6 +17,7 @@ Make\ SLFs/.Rproj.user/*
 
 # SPSS output
 *.spv
+Make_R_files/log.txt
 
 # History files
 .Rhistory
