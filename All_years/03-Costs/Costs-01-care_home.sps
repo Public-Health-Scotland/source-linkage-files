@@ -3,89 +3,91 @@
 
 *Get COSLA Value tables.
 *The values are obtained from.
-* http://www.isdscotland.org/Health-Topics/Health-and-Social-Community-Care/Care-Homes/Previous-Publications/index.asp - Table15
+* https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/ - Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes for Older People in Scotland.
 * Check and add any new years to 'CH_Costs.xlsx'.
 
- * Make a copy of the existing file, incase something wierd has happened to the data!.
- * Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
- * If this doesn't work manually make a copy.
-Host Command = ["cp '" + !Costs_dir + "Cost_CH_Lookup.sav' '" +  !Costs_dir + "Cost_CH_Lookup_OLD.sav'"].
+* Make a copy of the existing file, incase something wierd has happened to the data!.
+* Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
+* If this doesn't work manually make a copy.
+Host Command = ["cp " + !Costs_dir + "Cost_CH_Lookup.sav " +  !Costs_dir + "Cost_CH_Lookup_pre" + !LatestUpdate + ".sav"].
 
 GET DATA
-  /TYPE=XLSX
-  /FILE= !Costs_dir + "CH_Costs.xlsx"
-  /CELLRANGE=FULL
-  /READNAMES=ON
-  /DATATYPEMIN PERCENTAGE=95.0
-  /HIDDEN IGNORE=YES.
+    /TYPE=XLSX
+    /FILE= !Costs_dir + "CH_Costs.xlsx"
+    /CELLRANGE=FULL
+    /READNAMES=ON
+    /DATATYPEMIN PERCENTAGE=95.0
+    /HIDDEN IGNORE=YES.
 EXECUTE.
 
- * We only want the funding totals.
+* We only want the funding totals.
 select if any(SourceofFunding, 'All Funding With Nursing Care', 'All Funding Without Nursing Care').
 
 VARSTOCASES
-    /MAKE Cost_per_week FROM @2009 to @2019
+    /MAKE Cost_per_week FROM @2017 to @2021
     /Index= Calender_Year (Cost_per_week).
 
-
- * remove the @ sign.
+* remove the @ sign.
 Compute Calender_Year = char.Subst(Calender_Year, 2).
 Alter type Calender_Year (F4.0).
 
- * Create Year as FY = YYYY from CCYY.
+* Create Year as FY = YYYY from CCYY.
 String Year (A4).
-Compute year = char.Lpad(Ltrim(String(((Calender_Year - 2000) * 100) + Mod(Calender_Year, 100) + 1, F4.0)), 4, "0"). 
+Compute year = char.Lpad(Ltrim(String(((Calender_Year - 2000) * 100) + Mod(Calender_Year, 100) + 1, F4.0)), 4, "0").
 
- * Create a flag for Nusring care provision from source of funding.
-String NursingCareProvision (A1).
+* Create a flag for Nursing care provision from source of funding.
+Numeric nursing_care_provision (F1.0).
 Recode SourceofFunding
-    ('All Funding With Nursing Care' = "Y")
-    ('All Funding Without Nursing Care' = "N")
-    into NursingCareProvision.
+    ('All Funding With Nursing Care' = 1)
+    ('All Funding Without Nursing Care' = 0)
+    into nursing_care_provision.
 
- * Calculate the cost per day.
+* Calculate the cost per day.
 Compute cost_per_day = (Cost_per_week / 7).
 
- * Work out the unknown nursing care case as the mean of the others.
-String UnknownSource (A100).
-Compute UnknownSource = "Unknown Source of Funding".
+* Work out the unknown nursing care case as the mean of the others.
+String unknown_nursing (A100).
+Compute unknown_nursing = "Unknown Source of Funding".
 
-varstocases /make SourceofFunding from SourceofFunding UnknownSource.
+varstocases /make SourceofFunding from SourceofFunding unknown_nursing.
 
- * We want it to appear as NursingCareProvision = blank.
-if SourceofFunding = "Unknown Source of Funding" NursingCareProvision = "".
+* We want it to appear as NursingCareProvision = blank.
+if SourceofFunding = "Unknown Source of Funding" nursing_care_provision = $sysmis.
 
 aggregate outfile = *
-    /Break year NursingCareProvision
+    /Break year nursing_care_provision
     /cost_per_day = Mean(cost_per_day).
 
- * Add in years by copying the most recent year we have.
 ***This bit will need changing to accomodate new costs ***.
- * Most recent costs year availiable.
+* Add in years by copying the most recent year we have.
+* Most recent costs year availiable.
 String TempYear1 TempYear2 (A4).
-Do if Year = "1920".
+Do if Year = "XXXX".
     * Make costs for other years.
-    Compute TempYear1 = "2021".
+    Compute TempYear1 = "2223".
+    Compute TempYear2 = "2324".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
 
- * For new CH data.
-Numeric nursing_care_provision (F1.0).
-Recode NursingCareProvision ("N" = 0) ("Y" = 1) into nursing_care_provision.
+* Uplift costs for Years after the latest year.
+* increase by 1% for every year after the latest.
+* Add/delete lines as appropriate.
+if year > "2122" cost_per_day = cost_per_day * 1.01.
+if year > "2223" cost_per_day = cost_per_day * 1.01.
 
-sort cases by Year NursingCareProvision.
+sort cases by Year nursing_care_provision.
 
- * Check here to make sure costs haven't changed radically.
+* Check here to make sure costs haven't changed radically.
 match files file = *
-    /table !Costs_dir + "Cost_CH_Lookup_OLD.sav"
+    /table !Costs_dir + "Cost_CH_Lookup_pre" + !LatestUpdate + ".sav"
     /Rename cost_per_day = cost_old
-    /By year NursingCareProvision.
+    /By year nursing_care_provision.
 
-Compute Difference = cost_per_day - cost_old.
-crosstabs  Difference by year by NursingCareProvision.
+Compute pct_diff = (cost_per_day - cost_old) / cost_old * 100.
+crosstabs  pct_diff by year by nursing_care_provision.
 
-save outfile=!Costs_dir + "Cost_CH_Lookup.sav"
-    /Keep year NursingCareProvision nursing_care_provision cost_per_day.
+save outfile = !Costs_dir + "Cost_CH_Lookup.sav"
+    /Keep year nursing_care_provision cost_per_day.
 
 get file = !Costs_dir + "Cost_CH_Lookup.sav".
