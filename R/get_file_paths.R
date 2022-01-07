@@ -260,42 +260,85 @@ read_ltc_dir <- function(year, ...) {
 }
 
 
-
-#' Function for IT extract directory - stores IT extracts for all years
+#' Get the full path to the IT
+#' Long Term Conditions extract
 #'
-#' @param type The type of extract, LTC, Deaths or year of PIS extract
-#'
-#' @return The file path to the requested extract
+#' @return the path as an [fs::path]
 #' @export
+get_it_ltc_path <- function() {
+  it_ltc_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "IT_extracts"),
+    file_name = glue::glue("{it_extract_ref()}_extract_1_LTCs.csv.gz")
+  )
+
+  return(it_ltc_path)
+}
+
+#' Get the full path to the IT Deaths extract
 #'
-#' @examples
-#' \dontrun{
-#' it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"))
-#' }
-read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")) {
-  it_extract_dir <- "IT_extracts"
-
-  extract_name <- dplyr::case_when(
-    type == "LTCs" ~ "1_LTCs",
-    type == "Deaths" ~ "2_Deaths",
-    type == "1516" ~ "3_2015",
-    type == "1617" ~ "4_2016",
-    type == "1718" ~ "5_2017",
-    type == "1819" ~ "6_2018",
-    type == "1920" ~ "7_2019",
-    type == "2021" ~ "8_2020",
-    type == "2122" ~ "9_2021"
+#' @return the path as an [fs::path]
+#' @export
+get_it_deaths_path <- function() {
+  it_deaths_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "IT_extracts"),
+    file_name = glue::glue("{it_extract_ref()}_extract_2_Deaths.csv.gz")
   )
 
-  it_extract_file_path <- fs::path(
-    get_slf_dir(),
-    it_extract_dir,
-    glue::glue("{it_extract_ref()}_extract_{extract_name}.csv.gz")
+  return(it_deaths_path)
+}
+
+#' Get the full path to the IT PIS extract
+#'
+#' @param year the year for the required extract
+#'
+#' @return the path as an [fs::path]
+#' @export
+get_it_prescribing_path <- function(year) {
+  extract_number <- switch(year,
+    "1516" = "3_2015",
+    "1617" = "4_2016",
+    "1718" = "5_2017",
+    "1819" = "6_2018",
+    "1920" = "7_2019",
+    "2021" = "8_2020",
+    "2122" = "9_2021"
   )
 
-  if (!fs::file_exists(it_extract_file_path)) {
-    rlang::abort(message = glue::glue("The file {fs::path_file(it_extract_file_path)} does not exist"))
+  it_prescribing_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "IT_extracts"),
+    file_name = glue::glue("{it_extract_ref()}_extract_{extract_number}.csv.gz")
+  )
+
+  return(it_prescribing_path)
+}
+
+
+#' Get and check and full file path
+#'
+#' @param directory The file directory
+#' @param file_name The file name (with extension if not supplied to `ext`)
+#' @param ext The extension (type of the file) - optional
+#' @param check_mode The mode passed to [fs::file_access], defaults to "read"
+#' to check that you have read access to the file
+#'
+#' @return The full file path, an error will be thrown
+#' if the path doesn't exist or it's not readable
+get_file_path <- function(directory, file_name, ext = NULL, check_mode = "read") {
+  if (!fs::dir_exists(directory)) {
+    rlang::abort(message = glue::glue("The directory {directory} does not exist"))
   }
 
-  return(it_extract_file_path)
+  file_path <- fs::path(directory, file_name)
+
+  if (!is.null(ext)) {
+    file_path <- fs::path_ext_set(file_path, ext)
+  }
+
+  if (!fs::file_exists(file_path)) {
+    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} does not exist in {directory}"))
+  } else if (!fs::file_access(file_path, mode = check_mode)) {
+    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} exists in {directory} but is not {check_mode}able"))
+  }
+
+  return(file_path)
 }
