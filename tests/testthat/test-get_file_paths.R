@@ -157,8 +157,10 @@ test_that("LTC extract returns data", {
 })
 
 
-test_that("IT extract returns data", {
-  it_extract <- readr::read_csv(read_it_extract_dir("1819"), n_max = 100, show_col_types = FALSE)
+test_that("IT extract file paths work", {
 
-  expect_s3_class(it_extract, "tbl_df")
+  expect_s3_class(get_it_ltc_path(), "fs_path")
+  expect_s3_class(get_it_deaths_path(), "fs_path")
+  expect_s3_class(get_it_prescribing_path("1920"), "fs_path")
+
 })
