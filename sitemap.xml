@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -11,9 +17,6 @@
   </url>
   <url>
     <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IT_extract_ref.html</loc>
   </url>
   <url>
     <loc>/reference/boxi_date_format.html</loc>
@@ -31,10 +34,16 @@
     <loc>/reference/extract_path.html</loc>
   </url>
   <url>
+    <loc>/reference/get_lookups_dir.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_slf_dir.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/it_extract_ref.html</loc>
   </url>
   <url>
     <loc>/reference/latest_update.html</loc>
