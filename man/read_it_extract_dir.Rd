@@ -9,10 +9,10 @@ read_it_extract_dir(
 )
 }
 \arguments{
-\item{type}{}
+\item{type}{The type of extract, LTC, Deaths or year of PIS extract}
 }
 \value{
-
+The file path to the requested extract
 }
 \description{
 Function for IT extract directory - stores IT extracts for all years

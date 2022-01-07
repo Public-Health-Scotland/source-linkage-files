@@ -12,11 +12,8 @@ read_datazone_pop_file(file)
 }}
 }
 \value{
-The data read using `readr::read_rds``
+The data read using \code{readr::read_rds}
 }
 \description{
 Read the Datazone populations
-}
-\examples{
-datazone_pop_file <- read_datazone_pop_file("DataZone2011_pop_est_2011_2019.rds")
 }

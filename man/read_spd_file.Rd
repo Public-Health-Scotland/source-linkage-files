@@ -4,7 +4,7 @@
 \alias{read_spd_file}
 \title{Read the Scottish Postcode Directory file}
 \usage{
-read_spd_file(file)
+read_spd_file(file = NULL)
 }
 \arguments{
 \item{file}{\itemize{
@@ -12,11 +12,8 @@ read_spd_file(file)
 }}
 }
 \value{
-The data read using `readr::read_rds``
+The data read using \code{readr::read_rds}
 }
 \description{
 Read the Scottish Postcode Directory file
-}
-\examples{
-spd_file <- read_spd_file("Scottish_Postcode_Directory_2021_1.rds")
 }
