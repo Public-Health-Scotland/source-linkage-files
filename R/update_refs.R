@@ -3,7 +3,7 @@
 #' @return the IT extract ref number
 #' @export
 it_extract_ref <- function() {
-  "SCTASK0247528"
+  "SCTASK0270905"
 }
 
 #' Get the latest update
