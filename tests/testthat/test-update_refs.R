@@ -1,5 +1,5 @@
 test_that("IT extract ref number looks valid", {
-  it_ref <- IT_extract_ref()
+  it_ref <- it_extract_ref()
 
   expect_type(it_ref, "character")
   expect_match(it_ref, "SCTASK\\d{7}")

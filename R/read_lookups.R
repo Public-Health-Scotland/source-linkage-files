@@ -28,7 +28,7 @@ read_locality_file <- function(file) {
 
 
 
-#'Read the Scottish Postcode Directory file
+#' Read the Scottish Postcode Directory file
 #'
 #' @param file - the file name of the spd file
 #'
@@ -36,7 +36,7 @@ read_locality_file <- function(file) {
 #' @export
 #'
 #' @examples
-#'spd_file <- read_spd_file("Scottish_Postcode_Directory_2021_1.rds")
+#' spd_file <- read_spd_file("Scottish_Postcode_Directory_2021_1.rds")
 read_spd_file <- function(file) {
   spd_path <- fs::path(get_lookups_dir(), "Geography", "Scottish Postcode Directory", file)
 
@@ -53,14 +53,14 @@ read_spd_file <- function(file) {
 
 
 
-#'Read the Scottish Index for Multiple Deprivation (SIMD)
+#' Read the Scottish Index for Multiple Deprivation (SIMD)
 #' @param file - the file name of the simd file
 #'
 #' @return The data read using `readr::read_rds``
 #' @export
 #'
 #' @examples
-#'simd_file <- read_simd_file("postcode_2021_1_simd2020v2.rds")
+#' simd_file <- read_simd_file("postcode_2021_1_simd2020v2.rds")
 read_simd_file <- function(file) {
   simd_path <- fs::path(get_lookups_dir(), "Deprivation", file)
 
@@ -77,14 +77,14 @@ read_simd_file <- function(file) {
 
 
 
-#'Read the Datazone populations
+#' Read the Datazone populations
 #' @param file - the file name of the datazone populations file
 #'
 #' @return The data read using `readr::read_rds``
 #' @export
 #'
 #' @examples
-#'datazone_pop_file <- read_datazone_pop_file("DataZone2011_pop_est_2011_2019.rds")
+#' datazone_pop_file <- read_datazone_pop_file("DataZone2011_pop_est_2011_2019.rds")
 read_datazone_pop_file <- function(file) {
   datazone_pop_path <- fs::path(get_lookups_dir(), "Populations", "Estimates", file)
 
