@@ -4,10 +4,13 @@
 \alias{read_deaths_dir}
 \title{Get the deaths file directory}
 \usage{
-read_deaths_dir()
+read_deaths_dir(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \link[haven:read_spss]{haven::read_sav}}
 }
 \value{
-
+The Deaths file, read by \link[haven:read_spss]{haven}
 }
 \description{
 Get the deaths file directory

@@ -4,15 +4,17 @@
 \alias{read_cohorts_dir}
 \title{Function for cohorts directory - Demographic cohorts and Service Use cohorts}
 \usage{
-read_cohorts_dir(type = c("demographic", "service_use"), year)
+read_cohorts_dir(type = c("demographic", "service_use"), year, ...)
 }
 \arguments{
 \item{type}{The name of cohorts within cohort directory}
 
 \item{year}{Year of cohort extracts}
+
+\item{...}{additional arguments passed to \link[haven:read_spss]{haven::read_sav}}
 }
 \value{
-The data read using \code{haven::read_sav}
+The data read using \link[haven:read_spss]{haven}
 }
 \description{
 Function for cohorts directory - Demographic cohorts and Service Use cohorts

@@ -12,11 +12,8 @@ read_locality_file(file)
 }}
 }
 \value{
-The data read using `readr::read_rds``
+The data read using \code{readr::read_rds}
 }
 \description{
 Read the locality file
-}
-\examples{
-locality_file <- read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds")
 }
