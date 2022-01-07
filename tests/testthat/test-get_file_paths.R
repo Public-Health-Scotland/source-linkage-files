@@ -1,7 +1,7 @@
 test_that("main SLF directory exists", {
   slf_dir_path <- get_slf_dir()
 
-  expect_true(fs::file_exists(slf_dir_path))
+  expect_true(fs::dir_exists(slf_dir_path))
 })
 
 
@@ -17,11 +17,11 @@ test_that("Delayed discharges file returns data", {
 test_that("gpprac lookup returns data", {
   gpprac_lookup <- read_lookups_dir("gpprac")
 
-  names <- c("gpprac", "pc7", "PC8", "Cluster", "hbpraccode", "HSCP2018", "CA2018", "LCA")
+  var_names <- c("gpprac", "pc7", "PC8", "cluster", "hbpraccode", "HSCP2018", "CA2018", "LCA")
 
   expect_s3_class(gpprac_lookup, "tbl_df")
   expect_length(gpprac_lookup, 8)
-  expect_named(gpprac_lookup, names)
+  expect_named(gpprac_lookup, var_names)
 })
 
 
@@ -29,7 +29,7 @@ test_that("gpprac lookup returns data", {
 test_that("Postcode lookup returns data", {
   postcode_lookup <- read_lookups_dir("postcode")
 
-  names <- c(
+  var_names <- c(
     "postcode", "HB2018", "HSCP2018", "CA2018", "LCA", "Locality", "DataZone2011",
     "HB2019", "CA2019", "HSCP2019", "SIMD2020v2_rank", "simd2020v2_sc_decile", "simd2020v2_sc_quintile",
     "simd2020v2_hb2019_decile", "simd2020v2_hb2019_quintile", "simd2020v2_hscp2019_decile",
@@ -38,7 +38,7 @@ test_that("Postcode lookup returns data", {
 
   expect_s3_class(postcode_lookup, "tbl_df")
   expect_length(postcode_lookup, 21)
-  expect_named(postcode_lookup, names)
+  expect_named(postcode_lookup, var_names)
 })
 
 
@@ -51,9 +51,9 @@ test_that("Gp clusters file (Practice details) returns data", {
 
 
 test_that("Demographic file returns data", {
-  demographic_file <- read_cohorts_dir("demographic", "1819")
+  demographic_file <- read_cohorts_dir("demographic", "1819", n_max = 100)
 
-  names <- c(
+  var_names <- c(
     "chi", "Demographic_Cohort", "End_of_LIfe", "Frailty", "High_CC",
     "Maternity", "MH", "Substance", "Medium_CC", "Low_CC", "Child_Major",
     "Adult_Major", "Comm_Living"
@@ -61,12 +61,12 @@ test_that("Demographic file returns data", {
 
   expect_s3_class(demographic_file, "tbl_df")
   expect_length(demographic_file, 13)
-  expect_named(demographic_file, names)
+  expect_named(demographic_file, var_names)
 })
 
 
 test_that("Service Use file returns data", {
-  service_use_file <- read_cohorts_dir("service_use", "1819")
+  service_use_file <- read_cohorts_dir("service_use", "1819", n_max = 100)
 
   names <- c(
     "chi", "Service_Use_Cohort", "Psychiatry_Cost", "Maternity_Cost", "Geriatric_Cost",
@@ -106,7 +106,7 @@ test_that("DN costs lookup returns data", {
 test_that("GPOoH costs lookup returns data", {
   gpooh_cost_lookup <- read_costs_dir("GPOOH")
 
-  names <- c("Year", "TreatmentNHSBoardCode", "Cost_per_consultation")
+  names <- c("Year", "TreatmentNHSBoardCode", "cost_per_consultation")
 
   expect_s3_class(gpooh_cost_lookup, "tbl_df")
   expect_length(gpooh_cost_lookup, 3)
@@ -115,7 +115,7 @@ test_that("GPOoH costs lookup returns data", {
 
 
 test_that("Deaths file returns data", {
-  deaths_file <- read_deaths_dir()
+  deaths_file <- read_deaths_dir(n_max = 100)
 
   expect_s3_class(deaths_file, "tbl_df")
   expect_length(deaths_file, 4)
@@ -123,7 +123,7 @@ test_that("Deaths file returns data", {
 
 
 test_that("HHG extract returns data", {
-  hhg_file <- read_hhg_dir("1819")
+  hhg_file <- read_hhg_dir("1819", n_max = 100)
 
   expect_s3_class(hhg_file, "tbl_df")
   expect_length(hhg_file, 2)
@@ -131,7 +131,7 @@ test_that("HHG extract returns data", {
 
 
 test_that("SPARRA extract returns data", {
-  sparra_file <- read_sparra_dir("1819")
+  sparra_file <- read_sparra_dir("1819", n_max = 100)
 
   expect_s3_class(sparra_file, "tbl_df")
   expect_length(sparra_file, 2)
@@ -139,7 +139,7 @@ test_that("SPARRA extract returns data", {
 
 
 test_that("NSU extract returns data", {
-  nsu_file <- read_nsu_dir("1819")
+  nsu_file <- read_nsu_dir("1819", n_max = 100)
 
   names <- c("year", "CHI", "dob", "postcode", "gpprac")
 
@@ -150,7 +150,7 @@ test_that("NSU extract returns data", {
 
 
 test_that("LTC extract returns data", {
-  ltc_file <- read_ltc_dir("1819")
+  ltc_file <- read_ltc_dir("1819", n_max = 100)
 
   expect_s3_class(ltc_file, "tbl_df")
   expect_length(ltc_file, 40)
@@ -158,7 +158,7 @@ test_that("LTC extract returns data", {
 
 
 test_that("IT extract returns data", {
-  it_extract <- read_it_extract_dir("1819", n_max = 2000)
+  it_extract <- readr::read_csv(read_it_extract_dir("1819"), n_max = 100, show_col_types = FALSE)
 
   expect_s3_class(it_extract, "tbl_df")
 })
