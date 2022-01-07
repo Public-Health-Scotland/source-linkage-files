@@ -2,7 +2,7 @@
 #'
 #' @return the IT extract ref number
 #' @export
-IT_extract_ref <- function() {
+it_extract_ref <- function() {
   "SCTASK0247528"
 }
 

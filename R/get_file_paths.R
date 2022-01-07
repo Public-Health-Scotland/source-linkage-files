@@ -276,10 +276,11 @@ read_ltc_dir <- function(year) {
 #' \dontrun{
 #' it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"))
 #' }
-read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")) {
-  it_extract_dir <- "IT_extracts/"
+read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122"),
+                                slf_dir = get_slf_dir(),
+                                it_extract_ref = it_extract_ref()) {
 
-  csd_ref <- "SCTASK0247528_extract_"
+  it_extract_dir <- "IT_extracts"
 
   extract_name <- dplyr::case_when(
     type == "LTCs" ~ "1_LTCs",
@@ -293,7 +294,11 @@ read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718
     type == "2122" ~ "9_2021"
   )
 
-  it_extract_file_path <- glue::glue("{get_slf_dir()}/{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
+  it_extract_file_path <- fs::path(
+    slf_dir,
+    it_extract_dir,
+    glue::glue("{it_extract_ref}{extract_name}.csv.gz")
+  )
 
   return(it_extract_file_path)
 }
