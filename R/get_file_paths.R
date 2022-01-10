@@ -13,18 +13,15 @@ get_slf_dir <- function() {
 #' @return Reads the DD file (sav)
 #' @export
 read_dd_file <- function() {
-  dd_dir <- "Delayed_Discharges"
-
-  dd_name <- "DD_LinkageFile"
-
   dd_file_path <- fs::path(
     get_slf_dir(),
-    dd_dir,
+    "Delayed_Discharges",
     paste0(
       dd_period(),
-      dd_name
+      "DD_LinkageFile"
     )
   )
+
   dd_file_path <- fs::path_ext_set(
     dd_file_path,
     "zsav"
@@ -51,6 +48,7 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
     lookups_dir,
     paste0(lookups_name, latest_update())
   )
+
   lookups_file_path <- fs::path_ext_set(
     lookups_file_path,
     "zsav"
@@ -69,7 +67,8 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
 #' @export
 read_practice_details <- function(file_name = "Practice Details.sav") {
   practice_details_path <- fs::path(
-    "/conf/hscdiip/SLF_Extracts/Lookups",
+    get_slf_dir(),
+    "Lookups",
     file_name
   )
 
@@ -81,10 +80,11 @@ read_practice_details <- function(file_name = "Practice Details.sav") {
 #'
 #' @param type The name of cohorts within cohort directory
 #' @param year Year of cohort extracts
+#' @param ... additional arguments passed to [haven::read_sav]
 #'
-#' @return The data read using `haven::read_sav`
+#' @return The data read using [haven][haven::read_sav]
 #' @export
-read_cohorts_dir <- function(type = c("demographic", "service_use"), year) {
+read_cohorts_dir <- function(type = c("demographic", "service_use"), year, ...) {
   cohorts_dir <- "Cohorts"
 
   cohorts_name <- dplyr::case_when(
@@ -96,7 +96,7 @@ read_cohorts_dir <- function(type = c("demographic", "service_use"), year) {
   cohorts_file_path <- fs::path_ext_set(cohorts_file_path, "zsav")
 
 
-  cohorts_file <- haven::read_sav(cohorts_file_path)
+  cohorts_file <- haven::read_sav(cohorts_file_path, ...)
   return(cohorts_file)
 }
 
@@ -129,33 +129,32 @@ read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
 }
 
 #' Get the deaths file directory
-#' @return
+#'
+#' @param ... additional arguments passed to [haven::read_sav]
+#'
+#' @return The Deaths file, read by [haven][haven::read_sav]
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' all_deaths <- read_deaths_dir()
 #' }
-read_deaths_dir <- function() {
-  deaths_dir <- "Deaths"
-
-  deaths_name <- "all_deaths_"
-
-
+read_deaths_dir <- function(...) {
   deaths_file_path <- fs::path(
     get_slf_dir(),
-    deaths_dir,
-    paste0(deaths_name, latest_update())
+    "Deaths",
+    paste0("all_deaths_", latest_update())
   )
   deaths_file_path <- fs::path_ext_set(deaths_file_path, "zsav")
 
-  return(haven::read_sav(deaths_file_path))
+  return(haven::read_sav(deaths_file_path, ...))
 }
 
 
 #' Function for HHG directory - reading HHG extract
 #'
 #' @param year Yeah of extract
+#' @param ... additional arguments passed to [haven::read_sav]
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
@@ -164,26 +163,21 @@ read_deaths_dir <- function() {
 #' \dontrun{
 #' hhg_file <- read_hhg_dir("1819")
 #' }
-read_hhg_dir <- function(year) {
-  hhg_dir <- "HHG"
-
-  hhg_name <- "HHG-20"
-
+read_hhg_dir <- function(year, ...) {
   hhg_file_path <- fs::path(
     get_slf_dir(),
-    hhg_dir,
-    paste0(hhg_name, year)
+    "HHG",
+    paste0("HHG-20", year)
   )
   hhg_file_path <- fs::path_ext_set(hhg_file_path, "zsav")
 
-  return(haven::read_sav(hhg_file_path))
+  return(haven::read_sav(hhg_file_path, ...))
 }
-
-
 
 #' Function for SPARRA directory - reading SPARRA extract
 #'
 #' @param year Year of extract
+#' @param ... additional arguments passed to [haven::read_sav]
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
@@ -192,7 +186,7 @@ read_hhg_dir <- function(year) {
 #' \dontrun{
 #' sparra_file <- read_sparra_dir("1819")
 #' }
-read_sparra_dir <- function(year) {
+read_sparra_dir <- function(year, ...) {
   sparra_dir <- "SPARRA"
 
   sparra_name <- "SPARRA-20"
@@ -204,7 +198,7 @@ read_sparra_dir <- function(year) {
   )
   sparra_file_path <- fs::path_ext_set(sparra_file_path, "zsav")
 
-  return(haven::read_sav(sparra_file_path))
+  return(haven::read_sav(sparra_file_path, ...))
 }
 
 
@@ -212,6 +206,7 @@ read_sparra_dir <- function(year) {
 #' Function for NSU directory - stores NSU extracts for years that are available
 #'
 #' @param year Year of extract
+#' @param ... additional arguments passed to [haven::read_sav]
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
@@ -220,7 +215,7 @@ read_sparra_dir <- function(year) {
 #' \dontrun{
 #' nsu_file <- read_nsu_dir("1819")
 #' }
-read_nsu_dir <- function(year) {
+read_nsu_dir <- function(year, ...) {
   nsu_dir <- "NSU/"
 
   nsu_name <- "All_CHIs_20"
@@ -232,7 +227,7 @@ read_nsu_dir <- function(year) {
   )
   nsu_file_path <- fs::path_ext_set(nsu_file_path, "zsav")
 
-  return(haven::read_sav(nsu_file_path))
+  return(haven::read_sav(nsu_file_path, ...))
 }
 
 
@@ -240,6 +235,7 @@ read_nsu_dir <- function(year) {
 #' Function for LTCs directory - stores LTC extracts for all years
 #'
 #' @param year Year of extract
+#' @param ... additional arguments passed to [haven::read_sav]
 #'
 #' @return The data read using `haven::read_sav`
 #' @export
@@ -248,7 +244,7 @@ read_nsu_dir <- function(year) {
 #' \dontrun{
 #' ltc_file <- read_ltc_dir("1819")
 #' }
-read_ltc_dir <- function(year) {
+read_ltc_dir <- function(year, ...) {
   ltc_dir <- "LTCs"
 
   ltc_name <- "LTCs_patient_reference_file-20"
@@ -260,40 +256,89 @@ read_ltc_dir <- function(year) {
   )
   ltc_file_path <- fs::path_ext_set(ltc_file_path, "zsav")
 
-  return(haven::read_sav(ltc_file_path))
+  return(haven::read_sav(ltc_file_path, ...))
 }
 
 
-
-#' Function for IT extract directory - stores IT extracts for all years
+#' Get the full path to the IT
+#' Long Term Conditions extract
 #'
-#' @param type
-#'
-#' @return
+#' @return the path as an [fs::path]
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' it_extract_1819 <- readr::read_csv(file = read_it_extract_dir("1819"))
-#' }
-read_it_extract_dir <- function(type = c("LTCs", "Deaths", "1516", "1617", "1718", "1819", "1920", "2021", "2122")) {
-  it_extract_dir <- "IT_extracts/"
-
-  csd_ref <- "SCTASK0247528_extract_"
-
-  extract_name <- dplyr::case_when(
-    type == "LTCs" ~ "1_LTCs",
-    type == "Deaths" ~ "2_Deaths",
-    type == "1516" ~ "3_2015",
-    type == "1617" ~ "4_2016",
-    type == "1718" ~ "5_2017",
-    type == "1819" ~ "6_2018",
-    type == "1920" ~ "7_2019",
-    type == "2021" ~ "8_2020",
-    type == "2122" ~ "9_2021"
+get_it_ltc_path <- function() {
+  it_ltc_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "IT_extracts"),
+    file_name = glue::glue("{it_extract_ref()}_extract_1_LTCs.csv.gz")
   )
 
-  it_extract_file_path <- glue::glue("{get_slf_dir()}/{it_extract_dir}{csd_ref}{extract_name}.csv.gz")
+  return(it_ltc_path)
+}
 
-  return(it_extract_file_path)
+#' Get the full path to the IT Deaths extract
+#'
+#' @return the path as an [fs::path]
+#' @export
+get_it_deaths_path <- function() {
+  it_deaths_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "IT_extracts"),
+    file_name = glue::glue("{it_extract_ref()}_extract_2_Deaths.csv.gz")
+  )
+
+  return(it_deaths_path)
+}
+
+#' Get the full path to the IT PIS extract
+#'
+#' @param year the year for the required extract
+#'
+#' @return the path as an [fs::path]
+#' @export
+get_it_prescribing_path <- function(year) {
+  extract_number <- switch(year,
+    "1516" = "3_2015",
+    "1617" = "4_2016",
+    "1718" = "5_2017",
+    "1819" = "6_2018",
+    "1920" = "7_2019",
+    "2021" = "8_2020",
+    "2122" = "9_2021"
+  )
+
+  it_prescribing_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "IT_extracts"),
+    file_name = glue::glue("{it_extract_ref()}_extract_{extract_number}.csv.gz")
+  )
+
+  return(it_prescribing_path)
+}
+
+
+#' Get and check and full file path
+#'
+#' @param directory The file directory
+#' @param file_name The file name (with extension if not supplied to `ext`)
+#' @param ext The extension (type of the file) - optional
+#' @param check_mode The mode passed to [fs::file_access], defaults to "read"
+#' to check that you have read access to the file
+#'
+#' @return The full file path, an error will be thrown
+#' if the path doesn't exist or it's not readable
+get_file_path <- function(directory, file_name, ext = NULL, check_mode = "read") {
+  if (!fs::dir_exists(directory)) {
+    rlang::abort(message = glue::glue("The directory {directory} does not exist"))
+  }
+
+  file_path <- fs::path(directory, file_name)
+
+  if (!is.null(ext)) {
+    file_path <- fs::path_ext_set(file_path, ext)
+  }
+
+  if (!fs::file_exists(file_path)) {
+    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} does not exist in {directory}"))
+  } else if (!fs::file_access(file_path, mode = check_mode)) {
+    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} exists in {directory} but is not {check_mode}able"))
+  }
+
+  return(file_path)
 }

@@ -3,11 +3,9 @@
 2016-17/Pre\ Sep18/*
 2017-18/Pre\ Sep18/*
 Make\ SLFs/.Rproj.user/*
-
 #Ignore documentation etc.
 *.pptx
 *.docx
-
 #Ignore SPSS job files
 *.spj
 
@@ -19,6 +17,7 @@ Make\ SLFs/.Rproj.user/*
 
 # SPSS output
 *.spv
+Make_R_files/log.txt
 
 # History files
 .Rhistory

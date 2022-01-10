@@ -12,11 +12,8 @@ read_simd_file(file)
 }}
 }
 \value{
-The data read using `readr::read_rds``
+The data read using \code{readr::read_rds}
 }
 \description{
 Read the Scottish Index for Multiple Deprivation (SIMD)
-}
-\examples{
-simd_file <- read_simd_file("postcode_2021_1_simd2020v2.rds")
 }

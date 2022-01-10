@@ -65,7 +65,7 @@ match files file= *
 
 save outfile =  !Costs_dir + "raw_dn_costs_with_contacts.sav".
 
-************************************************************************
+************************************************************************.
 * Calculate population cost for NHS Highland with HSCP population ratio. Of the two HSCPs, Argyll and Bute provides the District Nursing data which is 27% of the population.
 get file = !HSCP_5year_Pop_Lookup.
 
@@ -123,40 +123,63 @@ aggregate
     /break Board_Name
     /max_contacts = max(NumberofContacts).
 Compute pct_of_max = NumberofContacts / max_contacts *100.
+
 GGRAPH
-  /GRAPHDATASET NAME="graphdataset" VARIABLES=Year pct_of_max Board_Name MISSING=LISTWISE 
+    /GRAPHDATASET NAME="graphdataset" VARIABLES=Year pct_of_max Board_Name MISSING=LISTWISE
     REPORTMISSING=NO
-  /GRAPHSPEC SOURCE=INLINE.
+    /GRAPHSPEC SOURCE=INLINE.
 BEGIN GPL
-  SOURCE: s=userSource(id("graphdataset"))
-  DATA: Year=col(source(s), name("Year"), unit.category())
-  DATA: pct_of_max=col(source(s), name("pct_of_max"))
-  DATA: Board_Name=col(source(s), name("Board_Name"), unit.category())
-  GUIDE: axis(dim(1), label("Year"))
-  GUIDE: axis(dim(2), label("pct_of_max"))
-  GUIDE: legend(aesthetic(aesthetic.color.interior), label("NHS Board"))
-  SCALE: linear(dim(2), include(0))
-  ELEMENT: line(position(Year*pct_of_max), color.interior(Board_Name), missing.interpolate())
+    SOURCE: s=userSource(id("graphdataset"))
+    DATA: Year=col(source(s), name("Year"), unit.category())
+    DATA: pct_of_max=col(source(s), name("pct_of_max"))
+    DATA: Board_Name=col(source(s), name("Board_Name"), unit.category())
+    GUIDE: axis(dim(1), label("Year"))
+    GUIDE: axis(dim(2), label("pct_of_max"))
+    GUIDE: legend(aesthetic(aesthetic.color.interior), label("NHS Board"))
+    SCALE: linear(dim(2), include(0))
+    ELEMENT: line(position(Year*pct_of_max), color.interior(Board_Name), missing.interpolate())
 END GPL.
 
+* Also upflift any 'copied' costs.
+* So for some boards / years we will upflift twice.
+* e.g. Forth Valley we use 1819 costs in place of 1920 cost, so we upflift 1819 to get a 'new' 1920 costs.
+* This cost is then uplifted again as needed to produce costs we don't have, e.g. 2021.
+Compute uplift = 0.
 String TempYear1 TempYear2 (A4).
 Do if Board_Name = "NHS Highland".
     If Year = "1819" Year = "".
-    If Year = "1617" TempYear1 = "1819".
     If Year = "1920" Year = "".
-    If Year = "1617" TempYear2 = "1920".
+    Do If Year = "1617".
+        Compute TempYear1 = "1819".
+        Compute Uplift1 = 2.
+        Compute TempYear2 = "1920".
+        Compute Uplift2 = 3.
+    End if.
 Else if Board_Name = "NHS Tayside".
     If Year = "1718" Year = "".
-    If Year = "1617" TempYear1 = "1718".
+    Do If Year = "1617".
+        Compute TempYear1 = "1718".
+        Compute Uplift1 = 1.
+    End if.
 Else if Board_Name = "NHS Forth Valley".
     If Year = "1920" Year = "".
-    If Year = "1819" TempYear1 = "1920".
+    Do If Year = "1819".
+        Compute TempYear1 = "1920".
+        Compute Uplift1 = 1.
+    End if.
 Else if Board_Name = "NHS Greater Glasgow & Clyde".
     If Year = "1920" Year = "".
-    If Year = "1819" TempYear1 = "1920".
+    Do If Year = "1819".
+        Compute TempYear1 = "1920".
+        Compute Uplift1 = 1.
+    End if.
 End if.
 
-varstocases /make year from year tempyear1 tempyear2.
+varstocases
+    /make year from year tempyear1 tempyear2
+    /make uplift from uplift uplift1 uplift2.
+
+Compute cost_total_net = cost_total_net * ((1.01) ** uplift).
 *****************************************************************.
 
 * Add in years by copying the most recent year we have.
@@ -164,12 +187,20 @@ varstocases /make year from year tempyear1 tempyear2.
 * Most recent costs year availiable.
 String TempYear1 TempYear2 (A4).
 Do if Year = "1920".
-* Make costs for other years.
+    * Make costs for other years.
     Compute TempYear1 = "2021".
     Compute TempYear2 = "2122".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
+
+* Uplift costs for Years after the latest year.
+* increase by 1% for every year after the latest.
+* Add/delete lines as appropriate.
+if year > "1920" cost_total_net = cost_total_net * 1.01.
+if year > "2021" cost_total_net = cost_total_net * 1.01.
+if year > "2122" cost_total_net = cost_total_net * 1.01.
+if year > "2223" cost_total_net = cost_total_net * 1.01.
 
 sort cases by HB2019 Year.
 

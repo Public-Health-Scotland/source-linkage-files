@@ -4,10 +4,12 @@
 \alias{read_nsu_dir}
 \title{Function for NSU directory - stores NSU extracts for years that are available}
 \usage{
-read_nsu_dir(year)
+read_nsu_dir(year, ...)
 }
 \arguments{
 \item{year}{Year of extract}
+
+\item{...}{additional arguments passed to \link[haven:read_spss]{haven::read_sav}}
 }
 \value{
 The data read using \code{haven::read_sav}

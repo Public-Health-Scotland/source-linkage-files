@@ -4,10 +4,12 @@
 \alias{read_ltc_dir}
 \title{Function for LTCs directory - stores LTC extracts for all years}
 \usage{
-read_ltc_dir(year)
+read_ltc_dir(year, ...)
 }
 \arguments{
 \item{year}{Year of extract}
+
+\item{...}{additional arguments passed to \link[haven:read_spss]{haven::read_sav}}
 }
 \value{
 The data read using \code{haven::read_sav}

@@ -1,3 +1,7 @@
+#' Get the path to the lookups directory
+#'
+#' @return the Lookups directory path as a [fs::path]
+#' @export
 get_lookups_dir <- function() {
   fs::path("/conf/linkage/output/lookups/Unicode")
 }
@@ -7,11 +11,8 @@ get_lookups_dir <- function() {
 #'
 #' @param file - the file name of the locality file
 #'
-#' @return The data read using `readr::read_rds``
+#' @return The data read using `readr::read_rds`
 #' @export
-#'
-#' @examples
-#' locality_file <- read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds")
 read_locality_file <- function(file) {
   locality_path <- fs::path(get_lookups_dir(), "Geography", "HSCP Locality", file)
 
@@ -27,40 +28,43 @@ read_locality_file <- function(file) {
 }
 
 
-
-#'Read the Scottish Postcode Directory file
+#' Read the Scottish Postcode Directory file
 #'
 #' @param file - the file name of the spd file
 #'
-#' @return The data read using `readr::read_rds``
+#' @return The data read using `readr::read_rds`
 #' @export
-#'
-#' @examples
-#'spd_file <- read_spd_file("Scottish_Postcode_Directory_2021_1.rds")
-read_spd_file <- function(file) {
-  spd_path <- fs::path(get_lookups_dir(), "Geography", "Scottish Postcode Directory", file)
+read_spd_file <- function(file = NULL) {
+  spd_dir <- fs::path(get_lookups_dir(), "Geography", "Scottish Postcode Directory")
 
-  # If given a sav extension (or other), swap it for rds
-  spd_path <- fs::path_ext_set(spd_path, "rds")
+  if (is.null(file)) {
+    # Try to automatically pick the correct file
+    spd_path <- fs::dir_ls(spd_dir, regexp = "Scottish_Postcode_Directory_.+?\\.rds") %>%
+      # Use max to pick the latest incase there are multiple versions
+      max()
+  } else {
+    spd_path <- fs::path(spd_dir, file)
 
-  # Check if the file exists and we can read it
-  if (!fs::file_access(spd_path, "read")) {
-    rlang::abort(message = "Couldn't read the spd file")
+    # If given a sav extension (or other), swap it for rds
+    spd_path <- fs::path_ext_set(spd_dir, "rds")
+
+    # Check if the file exists and we can read it
+    if (!fs::file_access(spd_path, "read")) {
+      rlang::abort(message = glue::glue("The SPD file supplied ({fs::path_file(spd_path)}) doesn't exist in rds format."))
+    } else {
+      rlang::inform(message = glue::glue("Using {fs::path_file(spd_path)}"))
+    }
   }
 
   return(readr::read_rds(spd_path))
 }
 
 
-
-#'Read the Scottish Index for Multiple Deprivation (SIMD)
+#' Read the Scottish Index for Multiple Deprivation (SIMD)
 #' @param file - the file name of the simd file
 #'
-#' @return The data read using `readr::read_rds``
+#' @return The data read using `readr::read_rds`
 #' @export
-#'
-#' @examples
-#'simd_file <- read_simd_file("postcode_2021_1_simd2020v2.rds")
 read_simd_file <- function(file) {
   simd_path <- fs::path(get_lookups_dir(), "Deprivation", file)
 
@@ -76,15 +80,11 @@ read_simd_file <- function(file) {
 }
 
 
-
-#'Read the Datazone populations
+#' Read the Datazone populations
 #' @param file - the file name of the datazone populations file
 #'
-#' @return The data read using `readr::read_rds``
+#' @return The data read using `readr::read_rds`
 #' @export
-#'
-#' @examples
-#'datazone_pop_file <- read_datazone_pop_file("DataZone2011_pop_est_2011_2019.rds")
 read_datazone_pop_file <- function(file) {
   datazone_pop_path <- fs::path(get_lookups_dir(), "Populations", "Estimates", file)
 

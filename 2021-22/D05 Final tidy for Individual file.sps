@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
@@ -24,21 +24,22 @@ Alter type
     Mat_episodes Mat_daycase_episodes Mat_inpatient_episodes Mat_inpatient_beddays
     MH_episodes MH_inpatient_episodes MH_el_inpatient_episodes MH_non_el_inpatient_episodes MH_inpatient_beddays MH_el_inpatient_beddays MH_non_el_inpatient_beddays
     GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
-    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
     PIS_dispensed_items
-    CH_cis_episodes CH_beddays
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
+    DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     DN_episodes DN_contacts
     CMH_contacts
-    CIJ_el CIJ_non_el CIJ_mat (F8.0).
+    CH_cis_episodes CH_beddays
+    HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes
+    AT_telecare AT_alarms
+    SDS_option_1 SDS_option_2 SDS_option_3
+    CIJ_el CIJ_non_el CIJ_mat CIJ_delay
+    preventable_admissions preventable_beddays (F8.0).
 
 * Tidy up the display.
-Variable width
-    gender age postcode gpprac (7)
-    health_net_cost health_net_costincDNAs health_net_costincIncomplete (15)
-    dob HL1_in_FY NSU to digestive_date (10).
+Variable width ALL (10).
 
 * Add variable labels.
 Variable Labels
@@ -135,6 +136,11 @@ Variable Labels
     HC_episodes "Total number of home care episodes, includes personal, non-personal and unknown type"
     HC_personal_episodes "Total number of personal home care episodes"
     HC_non_personal_episodes "Total number of non-personal home care episodes"
+    HC_reablement_episodes "Total number of home care episodes flagged as being reablement"
+    HC_total_hours "Total number of home care hours"
+    HC_personal_hours "Total number of personal home care hours"
+    HC_non_personal_hours "Total number of non-personal home care hours"
+    HC_reablement_hours "Total number of home care hours that were flagged as being reablement"
     AT_alarms "Total number of alarms packages"
     AT_telecare "Total number of telecare packages"
     SDS_option_1 "Total number of SDS packages (option 1)"
@@ -219,7 +225,7 @@ Do if SDS1 = 0 and SDS2 = 0 and SDS3 = 0.
     Compute SDS_option_4 = $sysmis.
 End if.
 
- * Final sort.
+* Final sort.
 sort cases by chi.
 
 save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
@@ -235,7 +241,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     health_net_costincdnas
     health_net_costincincomplete
     nsu
-    preventable_admissions 
+    preventable_admissions
     preventable_beddays
     hl1_in_fy
     deceased
@@ -307,12 +313,17 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     dn_contacts
     dn_cost
     cmh_contacts
-    CH_cis_episodes
+    ch_cis_episodes
     ch_beddays
     ch_cost
     hc_episodes
     hc_personal_episodes
     hc_non_personal_episodes
+    hc_reablement_episodes
+    hc_total_hours
+    hc_personal_hours
+    hc_non_personal_hours
+    hc_reablement_hours
     at_alarms
     at_telecare
     sds_option_1

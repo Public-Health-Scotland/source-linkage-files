@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -19,16 +19,25 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0247528"
+    "SCTASK0270905"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Sep_2021"
+    "Dec_2021"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Jun21"
+    "Jul16_Sep21"
+!EndDefine.
+
+Define !SC_Latest_Validated_period()
+    "2021Q1"
+!EndDefine.
+
+* Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
+Define !latest_cost_year()
+    2018
 !EndDefine.
 
 *******************************************************.
@@ -42,7 +51,12 @@ Define !Locality_file()
 
 * SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2021_1.sav"
+    "Scottish_Postcode_Directory_2021_2.sav"
+!EndDefine.
+
+* gpprac file.
+Define !gpprac_file()
+    "gpprac.sav"
 !EndDefine.
 
 * SIMD file - will need changing when geography files update.
@@ -52,7 +66,7 @@ Define !SIMD_file()
 
 * DataZone Populations file - will need changing when geography files update.
 Define !DataZone_pop_file()
-    "DataZone2011_pop_est_2011_2019.sav"
+    "DataZone2011_pop_est_2011_2020.sav"
 !EndDefine.
 
 * 5-year HSCP Populations file - will need changing when geography files update.
@@ -199,6 +213,11 @@ Define !SPD_dir()
     "Geography/Scottish Postcode Directory/"
 !EndDefine.
 
+* Directory for the gpprac lookup.
+Define !gpprac_dir()
+    "National Reference Files/"
+!EndDefine.
+
 * Directory for Scottish Index for Multiple Deprivation (SIMD).
 Define !SIMD_dir()
     "Deprivation/"
@@ -221,6 +240,11 @@ Define !Localities_Lookup()
 * SPD Lookup.
 Define !SPD_Lookup()
     !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!SPD_dir)), !Unquote(!Eval(!SPD_file))))
+!EndDefine.
+
+* GP practice lookup.
+Define !gpprac_Lookup()
+    !Quote(!Concat(!Unquote(!Eval(!Global_Lookup_dir)), !Unquote(!Eval(!gpprac_dir)), !Unquote(!Eval(!gpprac_file))))
 !EndDefine.
 
 * SIMD Lookup.
@@ -256,6 +280,19 @@ Define !ReadCodeLookup()
 * Functional macros *.
 * Should not need changing unless something is broken or to update methodology.
 *******************************************************.
+* Creates a variable with the correct uplift factor.
+* It works out the difference in years (minimum of 0).
+* Take 1.01 (for 1%) to the power of the difference in years (minimum of 0).
+* For non plics recids use uplift of 1 so we won't change anything.
+Define !create_uplift_var().
+    * Filter to PLICs recids.
+    Do if any(recid, "00B", "01B", "GLS", "02B", "04B", "AE2").
+        Compute uplift = ((1.01) ** max(0, !Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
+    Else.
+        Compute uplift = 1.
+    End if.
+!EndDefine.
+
 * The following two macros are used for creating the old LCA codes
 * They will need updating if the Council area codes change.
 Define !CAtoLCA()
@@ -400,7 +437,7 @@ Define !Create_sc_sending_location ()
     ("395" = "07")
     ("400" = "31")
     into sc_send_lca.
-    
+
 * Add dictionary info.
     !AddLCADictionaryInfo LCA = sc_send_lca.
 !EndDefine.
@@ -413,7 +450,7 @@ Define !AddHB2018DictionaryInfo (HB = !CMDEND)
     /VarInfo ValLabels = Replace
     /Source variables = HB2018
     /Target variables = !HB.
-    
+
 * Add extra non official labels.
     Add Value Labels !HB
     'S08200001' "Out-with Scotland / RUK"
@@ -438,7 +475,7 @@ Define !AddHB2019DictionaryInfo (HB = !CMDEND)
     /VarInfo ValLabels = Replace
     /Source variables = HB2019
     /Target variables = !HB.
-    
+
 * Add extra non official labels.
     Add Value Labels !HB
     'S08200001' "Out-with Scotland / RUK"

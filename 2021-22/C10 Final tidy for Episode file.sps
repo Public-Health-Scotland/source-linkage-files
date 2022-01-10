@@ -1,5 +1,11 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
+
+!create_uplift_var.
+Do repeat cost_var = cost_total_net  cost_total_net_incdnas apr_cost to mar_cost.
+    * Uplift costs.
+    Compute cost_var = cost_var * uplift.
+End repeat.
 
 Variable Labels
     adcon1 "Admission Condition 1"
@@ -118,8 +124,12 @@ Variable Labels
     feb_cost "Cost from episode in February"
     gender "Gender"
     gpprac "GP Practice code"
-    hc_hours "Total number of home care service hours."
-    hc_provider "The organisation type that provides the home care service to the client/service user."
+    hc_hours_annual "Total number of home care service hours in the financial year"
+    hc_hours_q1 "Total number of home care service hours in Q1 (April - June)"
+    hc_hours_q2 "Total number of home care service hours in Q2 (July - September)"
+    hc_hours_q3 "Total number of home care service hours in Q3 (October - December)"
+    hc_hours_q4 "Total number of home care service hours in Q4 (January - March)"
+    hc_provider "The organisation type that provides the home care service to the client/service user"
     hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hbpraccode "NHS Board of GP Practice"
     hbrescode "NHS Board of Residence"
@@ -309,17 +319,17 @@ Value Labels SMRType
 Value Labels refsource
     '01' "A&E - Self Referral"
     '01A' "A&E - Patient"
-    '01B' "A&E - Associated Person e.g. parent, friend, employer, neighbour."
+    '01B' "A&E - Associated Person e.g. parent, friend, employer, neighbour"
     '02' "A&E - Healthcare professional/ service/ organisation"
-    '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services."
-    '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service."
-    '02C' "A&E - 999 emergency services Includes SAS Paramedic Practitioner."
+    '02A' "A&E - GP Referral from usual GP practice / practice providing temporary general medical services"
+    '02B' "A&E - Out-of-Hours Services Referral out-with normal working hours from a primary care OOH service"
+    '02C' "A&E - 999 emergency services Includes SAS Paramedic Practitioner"
     '02D' "A&E - NHS24"
     '02E' "A&E - Minor injuries unit"
-    '02F' "A&E - Same hospital Excludes minor injuries units."
+    '02F' "A&E - Same hospital Excludes minor injuries units"
     '02G' "A&E - Other hospital Excludes minor injuries units"
     '02H' "A&E - Other healthcare professional"
-    '02J' "A&E - GP referral for admission."
+    '02J' "A&E - GP referral for admission"
     '03' "A&E - Local Authority"
     '03A' "A&E - Education"
     '03B' "A&E - Social Services"
@@ -534,10 +544,25 @@ Value Labels sigfac
     '1F' "Convalescent Unit"
     '1G' "Palliative Care Unit"
     '1H' "High Dependency Unit"
+    '1L' "Adolescent Unit"
     '1M' "Transplant Unit"
+    '1N' "Mother and Baby Unit"
     '1P' "Stroke Unit"
+    '1Q' "Secure Psychiatric Inpatient Facility"
+    '1R' "Intensive Psychiatric Care Unit (IPCU)"
+    '1S' "Long Stay Unit - Mental Health"
+    '1T' "Psychiatric Rehabilitation Unit (PRU)"
+    '31' "Outpatient Department"
+    '32' "Accident & Emergency Department"
+    '33' "Day Hospital"
+    '34' "Health Centre"
+    '35' "GP Surgery Premises"
+    '36' "Patients home"
+    '37' "Other Community Premises"
+    '38' "Rapid Access Chest Pain Clinic"
     '39' "Ambulatory Emergency Care Unit"
-    '40' "Acute Assessment Unit (AAU)".
+    '40' "Acute Assessment Unit (AAU)"
+    '41' "Flow Navigation Centre (A&E Data mart only)".
 
 Value Labels cat
     '1' "Amenity"
@@ -836,7 +861,11 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ch_adm_reason
     ch_provider
     ch_nursing
-    hc_hours
+    hc_hours_annual
+    hc_hours_q1
+    hc_hours_q2
+    hc_hours_q3
+    hc_hours_q4
     hc_provider
     hc_reablement
     sds_option_4

@@ -7,8 +7,9 @@ Authors@R: c(
     person("James", "McMahon", , "james.mcmahon@phs.scot", role = "aut",
            comment = c(ORCID = "0000-0002-5380-2029"))
   )
-Description: A package with functions used to create the Source Linkage Files (SLF)s
-License: Open Government Licence (OGL)
+Description: A package with functions used to create the Source Linkage
+    Files (SLF)s.
+License: MIT + file LICENSE
 URL: https://public-health-scotland.github.io/source-linkage-files,
     https://github.com/Public-Health-Scotland/source-linkage-files
 BugReports: 

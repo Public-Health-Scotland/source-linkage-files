@@ -209,7 +209,7 @@ Do if any (recid, "01B", "02B", "04B", "GLS").
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
             Compute PPA = 0.
-            
+
             *Set op exclusions for selection below.
             *Hyper / CHF main ops.
             Do if range (char.Substr(op1a, 1 , 3), "K01", "K50") or
@@ -378,7 +378,7 @@ Numeric
 
 * Home Care.
 Numeric
-    hc_hours (F22.2)
+    hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
     hc_provider (F1.0)
     hc_reablement (F1.0).
 

@@ -4,10 +4,12 @@
 \alias{read_sparra_dir}
 \title{Function for SPARRA directory - reading SPARRA extract}
 \usage{
-read_sparra_dir(year)
+read_sparra_dir(year, ...)
 }
 \arguments{
 \item{year}{Year of extract}
+
+\item{...}{additional arguments passed to \link[haven:read_spss]{haven::read_sav}}
 }
 \value{
 The data read using \code{haven::read_sav}
