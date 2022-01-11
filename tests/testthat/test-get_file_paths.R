@@ -38,11 +38,9 @@ test_that("Postcode lookup returns data", {
 })
 
 
-test_that("Gp clusters file (Practice details) returns data", {
-  practice_details <- read_practice_details()
-
-  expect_s3_class(practice_details, "tbl_df")
-  expect_length(practice_details, 8)
+test_that("GP clusters file (Practice Details) path works", {
+  expect_s3_class(get_practice_details_path(), "fs_path")
+  expect_error(get_practice_details_path(ext = "rds"))
 })
 
 
@@ -154,9 +152,7 @@ test_that("LTC extract returns data", {
 
 
 test_that("IT extract file paths work", {
-
   expect_s3_class(get_it_ltc_path(), "fs_path")
   expect_s3_class(get_it_deaths_path(), "fs_path")
   expect_s3_class(get_it_prescribing_path("1920"), "fs_path")
-
 })
