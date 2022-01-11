@@ -1,3 +1,51 @@
+#' Get and check and full file path
+#'
+#' @description This generic function takes a directory and
+#' file name then checks to make sure they exist.
+#' The parameter `check_mode` will also test to make sure
+#' the file is readable (default) or writeable (`check_mode = "write"`).
+#' By default it will return an error if the file doesn't exist
+#' but with `create = TRUE` it will create an empty file with
+#' appropriate permissions.
+#'
+#' @param directory The file directory
+#' @param file_name The file name (with extension if not supplied to `ext`)
+#' @param ext The extension (type of the file) - optional
+#' @param check_mode The mode passed to [fs::file_access], defaults to "read"
+#' to check that you have read access to the file
+#' @param create Optionally create the file if it doesn't exists
+#'
+#' @return The full file path, an error will be thrown
+#' if the path doesn't exist or it's not readable
+get_file_path <- function(directory, file_name, ext = NULL, check_mode = "read", create = FALSE) {
+  if (!fs::dir_exists(directory)) {
+    rlang::abort(message = glue::glue("The directory {directory} does not exist"))
+  }
+
+  file_path <- fs::path(directory, file_name)
+
+  if (!is.null(ext)) {
+    file_path <- fs::path_ext_set(file_path, ext)
+  }
+
+  if (!fs::file_exists(file_path)) {
+    if (create == FALSE) {
+      # The file doesn't exists and we don't want to create it
+      rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} does not exist in {directory}"))
+    } else {
+      # The file doesn't exist but we do want to create it
+      fs::file_create(file_path, mode = "u=rw,g=rw")
+      rlang::inform(message = glue::glue("The file {fs::path_file(file_path)} did not exist in {directory}, it has now been created as an empty file."))
+    }
+  }
+
+  if (!fs::file_access(file_path, mode = check_mode)) {
+    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} exists in {directory} but is not {check_mode}able"))
+  }
+
+  return(file_path)
+}
+
 #' General SLF directory for accessing HSCDIIP folders/files
 #'
 #' @return The path to the main SLF Extracts folder
@@ -261,16 +309,17 @@ read_ltc_dir <- function(year, ...) {
   return(haven::read_sav(ltc_file_path, ...))
 }
 
-
 #' Get the full path to the IT
 #' Long Term Conditions extract
+#' @param ... additional arguments passed to `get_file_path`
 #'
-#' @return the path as an [fs::path]
+#' @return the path to the LTC extract as an [fs::path]
 #' @export
-get_it_ltc_path <- function() {
+get_it_ltc_path <- function(...) {
   it_ltc_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name = glue::glue("{it_extract_ref()}_extract_1_LTCs.csv.gz")
+    file_name = glue::glue("{it_extract_ref()}_extract_1_LTCs.csv.gz"),
+    ...
   )
 
   return(it_ltc_path)
@@ -278,9 +327,11 @@ get_it_ltc_path <- function() {
 
 #' Get the full path to the IT Deaths extract
 #'
-#' @return the path as an [fs::path]
+#' @param ... additional arguments passed to `get_file_path`
+#'
+#' @return the path to the IT Deaths extract as an [fs::path]
 #' @export
-get_it_deaths_path <- function() {
+get_it_deaths_path <- function(...) {
   it_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
     file_name = glue::glue("{it_extract_ref()}_extract_2_Deaths.csv.gz")
@@ -292,10 +343,11 @@ get_it_deaths_path <- function() {
 #' Get the full path to the IT PIS extract
 #'
 #' @param year the year for the required extract
+#' @param ... additional arguments passed to `get_file_path`
 #'
-#' @return the path as an [fs::path]
+#' @return the path to the PIS extract as an [fs::path]
 #' @export
-get_it_prescribing_path <- function(year) {
+get_it_prescribing_path <- function(year, ...) {
   extract_number <- switch(year,
     "1516" = "3_2015",
     "1617" = "4_2016",
@@ -308,39 +360,9 @@ get_it_prescribing_path <- function(year) {
 
   it_prescribing_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name = glue::glue("{it_extract_ref()}_extract_{extract_number}.csv.gz")
+    file_name = glue::glue("{it_extract_ref()}_extract_{extract_number}.csv.gz"),
+    ...
   )
 
   return(it_prescribing_path)
-}
-
-
-#' Get and check and full file path
-#'
-#' @param directory The file directory
-#' @param file_name The file name (with extension if not supplied to `ext`)
-#' @param ext The extension (type of the file) - optional
-#' @param check_mode The mode passed to [fs::file_access], defaults to "read"
-#' to check that you have read access to the file
-#'
-#' @return The full file path, an error will be thrown
-#' if the path doesn't exist or it's not readable
-get_file_path <- function(directory, file_name, ext = NULL, check_mode = "read") {
-  if (!fs::dir_exists(directory)) {
-    rlang::abort(message = glue::glue("The directory {directory} does not exist"))
-  }
-
-  file_path <- fs::path(directory, file_name)
-
-  if (!is.null(ext)) {
-    file_path <- fs::path_ext_set(file_path, ext)
-  }
-
-  if (!fs::file_exists(file_path)) {
-    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} does not exist in {directory}"))
-  } else if (!fs::file_access(file_path, mode = check_mode)) {
-    rlang::abort(message = glue::glue("The file {fs::path_file(file_path)} exists in {directory} but is not {check_mode}able"))
-  }
-
-  return(file_path)
 }

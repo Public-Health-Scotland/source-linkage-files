@@ -4,13 +4,15 @@
 \alias{get_it_prescribing_path}
 \title{Get the full path to the IT PIS extract}
 \usage{
-get_it_prescribing_path(year)
+get_it_prescribing_path(year, ...)
 }
 \arguments{
 \item{year}{the year for the required extract}
+
+\item{...}{additional arguments passed to \code{get_file_path}}
 }
 \value{
-the path as an \link[fs:path]{fs::path}
+the path to the PIS extract as an \link[fs:path]{fs::path}
 }
 \description{
 Get the full path to the IT PIS extract
