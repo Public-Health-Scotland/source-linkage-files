@@ -4,13 +4,9 @@ test_that("main SLF directory exists", {
   expect_true(fs::dir_exists(slf_dir_path))
 })
 
-
-test_that("Delayed discharges file returns data", {
-  dd_file <- read_dd_file()
-
-  expect_s3_class(dd_file, "tbl_df")
-  expect_length(dd_file, 14)
-  expect_gte(nrow(dd_file), 130000)
+test_that("Delayed discharges path works", {
+  expect_s3_class(get_dd_path(), "fs_path")
+  expect_error(get_dd_path(ext = "rds"))
 })
 
 

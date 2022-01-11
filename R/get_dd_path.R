@@ -1,0 +1,21 @@
+#' Get the Delayed Discharges file path
+#'
+#' @param ... additional arguments passed to `get_file_path`
+#' @param dd_period The period to use for reading the file,
+#' defaults to `dd_period()`
+#'
+#' @return The path to the latest DD file
+#' @export
+get_dd_path <- function(..., dd_period = NULL) {
+  if (is.null(dd_period)) {
+    dd_period <- dd_period()
+  }
+
+  dd_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Delayed_Discharges"),
+    file_name = paste0(dd_period, "DD_LinkageFile.zsav"),
+    ...
+  )
+
+  return(dd_path)
+}
