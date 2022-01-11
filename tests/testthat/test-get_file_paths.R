@@ -132,22 +132,9 @@ test_that("SPARRA extract returns data", {
 })
 
 
-test_that("NSU extract returns data", {
-  nsu_file <- read_nsu_dir("1819", n_max = 100)
-
-  names <- c("year", "CHI", "dob", "postcode", "gpprac")
-
-  expect_s3_class(nsu_file, "tbl_df")
-  expect_length(nsu_file, 5)
-  expect_named(nsu_file, names)
-})
-
-
-test_that("LTC extract returns data", {
-  ltc_file <- read_ltc_dir("1819", n_max = 100)
-
-  expect_s3_class(ltc_file, "tbl_df")
-  expect_length(ltc_file, 40)
+test_that("NSU file path works", {
+  expect_s3_class(get_nsu_path(year = "1920"), "fs_path")
+  expect_error(get_nsu_path(year = "1920", ext = "rds"))
 })
 
 
