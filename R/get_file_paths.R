@@ -56,26 +56,25 @@ get_slf_dir <- function() {
   return(slf_dir)
 }
 
-#' Function for delayed discharges directory
+#' Get the Delayed Discharges file path
 #'
-#' @return Reads the DD file (sav)
+#' @param ... additional arguments passed to `get_file_path`
+#' @param dd_period The period to use for reading the file, defaults to `dd_period()`
+#'
+#' @return The path to the latest DD file
 #' @export
-read_dd_file <- function() {
-  dd_file_path <- fs::path(
-    get_slf_dir(),
-    "Delayed_Discharges",
-    paste0(
-      dd_period(),
-      "DD_LinkageFile"
-    )
+get_dd_path <- function(..., dd_period = NULL) {
+  if (is.null(dd_period)) {
+    dd_period <- dd_period()
+  }
+
+  dd_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Delayed_Discharges"),
+    file_name = paste0(dd_period, "DD_LinkageFile.zsav"),
+    ...
   )
 
-  dd_file_path <- fs::path_ext_set(
-    dd_file_path,
-    "zsav"
-  )
-
-  return(haven::read_sav(dd_file_path))
+  return(dd_path)
 }
 
 #' Function for lookups directory - source postcode and gpprac lookup
