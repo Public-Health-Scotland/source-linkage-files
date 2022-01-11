@@ -106,23 +106,21 @@ read_lookups_dir <- function(type = c("postcode", "gpprac"), update = latest_upd
   return(haven::read_sav(lookups_file_path))
 }
 
-#' Function for reading in GP cluster
-#' lookup "Practice Details" for creating
-#' source GP prac lookup above
+
+#' Get the path to the Practice Details file
 #'
-#' @param file_name Name of the file to be read
+#' @param ... additional arguments passed to `get_file_path`
 #'
 #' @return The practice details file
 #' @export
-read_practice_details <- function(file_name = "Practice Details.sav") {
-  practice_details_path <- fs::path(
-    get_slf_dir(),
-    "Lookups",
-    file_name
+get_practice_details_path <- function(...) {
+  practice_details_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Lookups"),
+    file_name = "Practice Details.sav",
+    ...
   )
 
-  practice_details_file <- haven::read_sav(practice_details_path)
-  return(practice_details_file)
+  return(practice_details_path)
 }
 
 #' Function for cohorts directory - Demographic cohorts and Service Use cohorts
