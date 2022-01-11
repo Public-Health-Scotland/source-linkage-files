@@ -4,10 +4,13 @@
 \alias{get_it_deaths_path}
 \title{Get the full path to the IT Deaths extract}
 \usage{
-get_it_deaths_path()
+get_it_deaths_path(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \code{get_file_path}}
 }
 \value{
-the path as an \link[fs:path]{fs::path}
+the path to the IT Deaths extract as an \link[fs:path]{fs::path}
 }
 \description{
 Get the full path to the IT Deaths extract

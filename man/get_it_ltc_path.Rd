@@ -5,10 +5,13 @@
 \title{Get the full path to the IT
 Long Term Conditions extract}
 \usage{
-get_it_ltc_path()
+get_it_ltc_path(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \code{get_file_path}}
 }
 \value{
-the path as an \link[fs:path]{fs::path}
+the path to the LTC extract as an \link[fs:path]{fs::path}
 }
 \description{
 Get the full path to the IT

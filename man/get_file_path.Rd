@@ -4,7 +4,13 @@
 \alias{get_file_path}
 \title{Get and check and full file path}
 \usage{
-get_file_path(directory, file_name, ext = NULL, check_mode = "read")
+get_file_path(
+  directory,
+  file_name,
+  ext = NULL,
+  check_mode = "read",
+  create = FALSE
+)
 }
 \arguments{
 \item{directory}{The file directory}
@@ -15,11 +21,19 @@ get_file_path(directory, file_name, ext = NULL, check_mode = "read")
 
 \item{check_mode}{The mode passed to \link[fs:file_access]{fs::file_access}, defaults to "read"
 to check that you have read access to the file}
+
+\item{create}{Optionally create the file if it doesn't exists}
 }
 \value{
 The full file path, an error will be thrown
 if the path doesn't exist or it's not readable
 }
 \description{
-Get and check and full file path
+This generic function takes a directory and
+file name then checks to make sure they exist.
+The parameter \code{check_mode} will also test to make sure
+the file is readable (default) or writeable (\code{check_mode = "write"}).
+By default it will return an error if the file doesn't exist
+but with \code{create = TRUE} it will create an empty file with
+appropriate permissions.
 }
