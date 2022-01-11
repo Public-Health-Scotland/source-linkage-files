@@ -248,62 +248,21 @@ read_sparra_dir <- function(year, ...) {
   return(haven::read_sav(sparra_file_path, ...))
 }
 
-
-
-#' Function for NSU directory - stores NSU extracts for years that are available
+#' Get the NSU file path for the given year
 #'
 #' @param year Year of extract
-#' @param ... additional arguments passed to [haven::read_sav]
+#' @param ... additional arguments passed to `get_file_path`
 #'
-#' @return The data read using `haven::read_sav`
+#' @return the path to the NSU file as an [fs::path]
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' nsu_file <- read_nsu_dir("1819")
-#' }
-read_nsu_dir <- function(year, ...) {
-  nsu_dir <- "NSU/"
-
-  nsu_name <- "All_CHIs_20"
-
-  nsu_file_path <- fs::path(
-    get_slf_dir(),
-    nsu_dir,
-    paste0(nsu_name, year)
+get_nsu_path <- function(year, ...) {
+  nsu_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "NSU"),
+    file_name = glue::glue("All_CHIs_20{year}.zsav"),
+    ...
   )
-  nsu_file_path <- fs::path_ext_set(nsu_file_path, "zsav")
 
-  return(haven::read_sav(nsu_file_path, ...))
-}
-
-
-
-#' Function for LTCs directory - stores LTC extracts for all years
-#'
-#' @param year Year of extract
-#' @param ... additional arguments passed to [haven::read_sav]
-#'
-#' @return The data read using `haven::read_sav`
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ltc_file <- read_ltc_dir("1819")
-#' }
-read_ltc_dir <- function(year, ...) {
-  ltc_dir <- "LTCs"
-
-  ltc_name <- "LTCs_patient_reference_file-20"
-
-  ltc_file_path <- fs::path(
-    get_slf_dir(),
-    ltc_dir,
-    paste0(ltc_name, year)
-  )
-  ltc_file_path <- fs::path_ext_set(ltc_file_path, "zsav")
-
-  return(haven::read_sav(ltc_file_path, ...))
+  return(nsu_file_path)
 }
 
 #' Get the full path to the IT
