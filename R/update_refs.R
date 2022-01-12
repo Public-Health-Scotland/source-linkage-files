@@ -14,9 +14,9 @@ latest_update <- function() {
   "Dec_2021"
 }
 
-#' Get the latest update
+#' Get the previous update
 #'
-#' @return Latest update as MMM_YYYY
+#' @return previous update as MMM_YYYY
 #' @export
 previous_update <- function() {
   "Sep_2021"
