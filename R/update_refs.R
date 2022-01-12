@@ -14,6 +14,14 @@ latest_update <- function() {
   "Dec_2021"
 }
 
+#' Get the latest update
+#'
+#' @return Latest update as MMM_YYYY
+#' @export
+previous_update <- function() {
+  "Sep_2021"
+}
+
 #' Get the Delayed Discharge period
 #'
 #' @return The period for the Delayed Discharge file
