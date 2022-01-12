@@ -4,10 +4,12 @@
 \alias{read_lookups_dir}
 \title{Function for lookups directory - source postcode and gpprac lookup}
 \usage{
-read_lookups_dir(type = c("postcode", "gpprac"))
+read_lookups_dir(type = c("postcode", "gpprac"), update = latest_update())
 }
 \arguments{
 \item{type}{the name of lookups within lookup directory}
+
+\item{update}{the update month (latest or previous)}
 }
 \value{
 The data as a tibble read using \code{haven::read_sav}
