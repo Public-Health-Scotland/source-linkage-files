@@ -57,36 +57,6 @@ get_slf_dir <- function() {
 }
 
 
-#' Function for lookups directory - source postcode and gpprac lookup
-#'
-#' @param type the name of lookups within lookup directory
-#' @param update the update month (latest or previous)
-#'
-#' @return The data as a tibble read using `haven::read_sav`
-#' @export
-read_lookups_dir <- function(type = c("postcode", "gpprac"), update = latest_update()) {
-  lookups_dir <- "Lookups"
-
-  lookups_name <- dplyr::case_when(
-    type == "postcode" ~ "source_postcode_lookup_",
-    type == "gpprac" ~ "source_GPprac_lookup_"
-  )
-
-  lookups_file_path <- fs::path(
-    get_slf_dir(),
-    lookups_dir,
-    paste0(lookups_name, update)
-  )
-
-  lookups_file_path <- fs::path_ext_set(
-    lookups_file_path,
-    "zsav"
-  )
-
-  return(haven::read_sav(lookups_file_path))
-}
-
-
 #' Function for cohorts directory - Demographic cohorts and Service Use cohorts
 #'
 #' @param type The name of cohorts within cohort directory
