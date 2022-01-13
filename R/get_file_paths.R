@@ -56,71 +56,36 @@ get_slf_dir <- function() {
   return(slf_dir)
 }
 
-#' Get the Delayed Discharges file path
+#' Get the full path to the SLF Postcode lookup
 #'
-#' @param ... additional arguments passed to `get_file_path`
-#' @param dd_period The period to use for reading the file, defaults to `dd_period()`
+#' @param update the update month (defaults to use [latest_update()])
+#' @param ... additional arguments passed to [get_file_path]
 #'
-#' @return The path to the latest DD file
+#' @return the path to the SLF Postcode lookup as an [fs::path]
 #' @export
-get_dd_path <- function(..., dd_period = NULL) {
-  if (is.null(dd_period)) {
-    dd_period <- dd_period()
-  }
-
-  dd_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Delayed_Discharges"),
-    file_name = paste0(dd_period, "DD_LinkageFile.zsav"),
-    ...
-  )
-
-  return(dd_path)
-}
-
-#' Function for lookups directory - source postcode and gpprac lookup
-#'
-#' @param type the name of lookups within lookup directory
-#' @param update the update month (latest or previous)
-#'
-#' @return The data as a tibble read using `haven::read_sav`
-#' @export
-read_lookups_dir <- function(type = c("postcode", "gpprac"), update = latest_update()) {
-  lookups_dir <- "Lookups"
-
-  lookups_name <- dplyr::case_when(
-    type == "postcode" ~ "source_postcode_lookup_",
-    type == "gpprac" ~ "source_GPprac_lookup_"
-  )
-
-  lookups_file_path <- fs::path(
-    get_slf_dir(),
-    lookups_dir,
-    paste0(lookups_name, update)
-  )
-
-  lookups_file_path <- fs::path_ext_set(
-    lookups_file_path,
-    "zsav"
-  )
-
-  return(haven::read_sav(lookups_file_path))
-}
-
-
-#' Get the path to the Practice Details file
-#'
-#' @param ... additional arguments passed to `get_file_path`
-#'
-#' @return The practice details file
-#' @export
-get_practice_details_path <- function(...) {
-  practice_details_path <- get_file_path(
+get_slf_postcode_path <- function(update = latest_update(), ...) {
+  get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = "Practice Details.sav",
+    file_name = glue::glue("source_postcode_lookup_{update}.zsav"),
+    check_mode = "write",
     ...
   )
+}
 
-  return(practice_details_path)
+#' Get the full path to the SLF GP practice lookup
+#'
+#' @param update the update month (defaults to use [latest_update()])
+#' @param ... additional arguments passed to [get_file_path]
+#'
+#' @return the path to the SLF GP practice lookup as an [fs::path]
+#' @export
+get_slf_gpprac_path <- function(update = latest_update(), ...) {
+  get_file_path(
+    directory = fs::path(get_slf_dir(), "Lookups"),
+    file_name = glue::glue("source_GPprac_lookup_{update}.zsav"),
+    check_mode = "write",
+    ...
+  )
 }
 
 #' Function for cohorts directory - Demographic cohorts and Service Use cohorts
