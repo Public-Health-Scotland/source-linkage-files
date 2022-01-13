@@ -107,9 +107,3 @@ test_that("SPARRA file path works", {
     "The file SPARRA-201920.rds does not exist in /conf/hscdiip/SLF_Extracts/SPARRA"
   )
 })
-
-
-test_that("NSU file path works", {
-  expect_s3_class(get_nsu_path(year = "1920"), "fs_path")
-  expect_error(get_nsu_path(year = "1920", ext = "rds"))
-})
