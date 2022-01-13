@@ -31,11 +31,13 @@ read_dd_file <- function() {
 }
 
 #' Function for lookups directory - source postcode and gpprac lookup
+#'
 #' @param type the name of lookups within lookup directory
+#' @param update the update month (latest or previous)
 #'
 #' @return The data as a tibble read using `haven::read_sav`
 #' @export
-read_lookups_dir <- function(type = c("postcode", "gpprac")) {
+read_lookups_dir <- function(type = c("postcode", "gpprac"), update = latest_update()) {
   lookups_dir <- "Lookups"
 
   lookups_name <- dplyr::case_when(
@@ -46,7 +48,7 @@ read_lookups_dir <- function(type = c("postcode", "gpprac")) {
   lookups_file_path <- fs::path(
     get_slf_dir(),
     lookups_dir,
-    paste0(lookups_name, latest_update())
+    paste0(lookups_name, update)
   )
 
   lookups_file_path <- fs::path_ext_set(
