@@ -198,27 +198,21 @@ read_deaths_dir <- function(...) {
 }
 
 
-#' Function for HHG directory - reading HHG extract
+#' Get the path to the HHG extract
 #'
-#' @param year Yeah of extract
-#' @param ... additional arguments passed to [haven::read_sav]
+#' @param year Year of extract
+#' @param ... additional arguments passed to [get_file_path]
 #'
-#' @return The data read using `haven::read_sav`
+#' @return the path to the HHG extract as an [fs::path]
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' hhg_file <- read_hhg_dir("1819")
-#' }
-read_hhg_dir <- function(year, ...) {
-  hhg_file_path <- fs::path(
-    get_slf_dir(),
-    "HHG",
-    paste0("HHG-20", year)
+get_hhg_path <- function(year, ...) {
+  hhg_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "HHG"),
+    file_name = glue::glue("HHG-20{year}.zsav"),
+    ...
   )
-  hhg_file_path <- fs::path_ext_set(hhg_file_path, "zsav")
 
-  return(haven::read_sav(hhg_file_path, ...))
+  return(hhg_file_path)
 }
 
 #' Get the path to the SPARRA extract

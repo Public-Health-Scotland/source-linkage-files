@@ -116,11 +116,14 @@ test_that("Deaths file returns data", {
 })
 
 
-test_that("HHG extract returns data", {
-  hhg_file <- read_hhg_dir("1819", n_max = 100)
+test_that("HHG file path works", {
+  expect_s3_class(get_hhg_path("1920"), "fs_path")
 
-  expect_s3_class(hhg_file, "tbl_df")
-  expect_length(hhg_file, 2)
+  expect_error(get_hhg_path(), "\"year\" is missing, with no default")
+  expect_error(
+    get_hhg_path("1920", ext = "rds"),
+    "The file HHG-201920.rds does not exist in /conf/hscdiip/SLF_Extracts/HHG"
+  )
 })
 
 
