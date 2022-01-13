@@ -5,34 +5,6 @@ test_that("main SLF directory exists", {
 })
 
 
-test_that("gpprac lookup returns data", {
-  gpprac_lookup <- read_lookups_dir("gpprac")
-
-  var_names <- c("gpprac", "pc7", "PC8", "cluster", "hbpraccode", "HSCP2018", "CA2018", "LCA")
-
-  expect_s3_class(gpprac_lookup, "tbl_df")
-  expect_length(gpprac_lookup, 8)
-  expect_named(gpprac_lookup, var_names)
-})
-
-
-
-test_that("Postcode lookup returns data", {
-  postcode_lookup <- read_lookups_dir("postcode")
-
-  var_names <- c(
-    "postcode", "HB2018", "HSCP2018", "CA2018", "LCA", "Locality", "DataZone2011",
-    "HB2019", "CA2019", "HSCP2019", "SIMD2020v2_rank", "simd2020v2_sc_decile", "simd2020v2_sc_quintile",
-    "simd2020v2_hb2019_decile", "simd2020v2_hb2019_quintile", "simd2020v2_hscp2019_decile",
-    "simd2020v2_hscp2019_quintile", "UR8_2016", "UR6_2016", "UR3_2016", "UR2_2016"
-  )
-
-  expect_s3_class(postcode_lookup, "tbl_df")
-  expect_length(postcode_lookup, 21)
-  expect_named(postcode_lookup, var_names)
-})
-
-
 test_that("Demographic file returns data", {
   demographic_file <- read_cohorts_dir("demographic", "1819", n_max = 100)
 
