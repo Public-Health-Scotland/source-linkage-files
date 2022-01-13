@@ -124,11 +124,14 @@ test_that("HHG extract returns data", {
 })
 
 
-test_that("SPARRA extract returns data", {
-  sparra_file <- read_sparra_dir("1819", n_max = 100)
+test_that("SPARRA file path works", {
+  expect_s3_class(get_sparra_path("1920"), "fs_path")
 
-  expect_s3_class(sparra_file, "tbl_df")
-  expect_length(sparra_file, 2)
+  expect_error(get_sparra_path(), "\"year\" is missing, with no default")
+  expect_error(
+    get_sparra_path("1920", ext = "rds"),
+    "The file SPARRA-201920.rds does not exist in /conf/hscdiip/SLF_Extracts/SPARRA"
+  )
 })
 
 

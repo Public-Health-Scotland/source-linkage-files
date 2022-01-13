@@ -221,31 +221,21 @@ read_hhg_dir <- function(year, ...) {
   return(haven::read_sav(hhg_file_path, ...))
 }
 
-#' Function for SPARRA directory - reading SPARRA extract
+#' Get the path to the SPARRA extract
 #'
 #' @param year Year of extract
-#' @param ... additional arguments passed to [haven::read_sav]
+#' @param ... additional arguments passed to [get_file_path]
 #'
-#' @return The data read using `haven::read_sav`
+#' @return the path to the SPARRA extract as an [fs::path]
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' sparra_file <- read_sparra_dir("1819")
-#' }
-read_sparra_dir <- function(year, ...) {
-  sparra_dir <- "SPARRA"
-
-  sparra_name <- "SPARRA-20"
-
-  sparra_file_path <- fs::path(
-    get_slf_dir(),
-    sparra_dir,
-    paste0(sparra_name, year)
+get_sparra_path <- function(year, ...) {
+  sparra_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "SPARRA"),
+    file_name = glue::glue("SPARRA-20{year}.zsav"),
+    ...
   )
-  sparra_file_path <- fs::path_ext_set(sparra_file_path, "zsav")
 
-  return(haven::read_sav(sparra_file_path, ...))
+  return(sparra_file_path)
 }
 
 #' Get the NSU file path for the given year
