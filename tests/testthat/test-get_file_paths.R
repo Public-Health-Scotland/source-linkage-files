@@ -4,10 +4,6 @@ test_that("main SLF directory exists", {
   expect_true(fs::dir_exists(slf_dir_path))
 })
 
-test_that("SLF postcode lookup file paths work", {
-  expect_s3_class(get_slf_postcode_path(), "fs_path")
-  expect_s3_class(get_slf_postcode_path(update = previous_update()), "fs_path")
-})
 
 test_that("SLF GP practice lookup file paths work", {
   expect_s3_class(get_slf_gpprac_path(), "fs_path")

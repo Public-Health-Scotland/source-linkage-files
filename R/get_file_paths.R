@@ -56,20 +56,34 @@ get_slf_dir <- function() {
   return(slf_dir)
 }
 
-#' Get the full path to the SLF Postcode lookup
+
+#' Function for lookups directory - source postcode and gpprac lookup
 #'
-#' @param update the update month (defaults to use [latest_update()])
-#' @param ... additional arguments passed to [get_file_path]
+#' @param type the name of lookups within lookup directory
+#' @param update the update month (latest or previous)
 #'
-#' @return the path to the SLF Postcode lookup as an [fs::path]
+#' @return The data as a tibble read using `haven::read_sav`
 #' @export
-get_slf_postcode_path <- function(update = latest_update(), ...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = glue::glue("source_postcode_lookup_{update}.zsav"),
-    check_mode = "write",
-    ...
+read_lookups_dir <- function(type = c("postcode", "gpprac"), update = latest_update()) {
+  lookups_dir <- "Lookups"
+
+  lookups_name <- dplyr::case_when(
+    type == "postcode" ~ "source_postcode_lookup_",
+    type == "gpprac" ~ "source_GPprac_lookup_"
   )
+
+  lookups_file_path <- fs::path(
+    get_slf_dir(),
+    lookups_dir,
+    paste0(lookups_name, update)
+  )
+
+  lookups_file_path <- fs::path_ext_set(
+    lookups_file_path,
+    "zsav"
+  )
+
+  return(haven::read_sav(lookups_file_path))
 }
 
 #' Get the full path to the SLF GP practice lookup
