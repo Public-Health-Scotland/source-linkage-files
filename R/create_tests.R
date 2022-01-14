@@ -8,7 +8,7 @@
 sum_flags <- function(data){
 
 data <- data %>%
-  dplyr::summarise_all(sum) %>%
+  dplyr::summarise(across(everything(), sum)) %>%
   tidyr::pivot_longer(
     cols = everything(),
     names_to = "measure",
