@@ -140,6 +140,7 @@ save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-' + !F
     ch_adm_reason
     ch_provider
     ch_nursing
+    hc_hours_annual
     hc_hours_q1
     hc_hours_q2
     hc_hours_q3
