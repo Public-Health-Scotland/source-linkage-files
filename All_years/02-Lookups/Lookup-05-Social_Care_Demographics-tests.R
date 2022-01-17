@@ -3,10 +3,10 @@
 # get_slf_dir
 # latest_update
 # previous_update
-# read_lookups_dir
-#sum_flags
-#demog_lookup_tests
-#compare_tests
+# read_demog_tests
+# sum_flags
+# demog_lookup_tests
+# compare_tests
 
 library(tidyselect)
 library(dplyr)
