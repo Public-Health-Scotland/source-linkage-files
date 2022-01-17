@@ -25,7 +25,7 @@ data <- data %>%
 #' @export
 compare_tests <- function(old_data, new_data){
     dplyr::full_join(old_data, new_data, by = "measure", suffix = c("_old", "_new")) %>%
-    dplyr::mutate(diff = value_old - value_new,
+    dplyr::mutate(diff = value_new - value_old,
            pctChange = diff/value_old*100,
            issue = if_else(pctChange >= 5, 1, 0))
 }
