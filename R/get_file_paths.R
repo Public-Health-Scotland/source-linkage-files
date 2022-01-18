@@ -114,7 +114,7 @@ get_ch_costs_path <- function(...) {
 
 #' Get the full District Nursing costs lookup path
 #'
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to [get_file_path]
 #'
 #' @return the path to the costs lookup as an [fs::path]
 #' @export
@@ -145,24 +145,19 @@ get_gp_ooh_costs_path <- function(...) {
   return(gp_ooh_costs_path)
 }
 
-#' Get the deaths file directory
+#' Get the full path to the SLF deaths lookup file
 #'
-#' @param ... additional arguments passed to [haven::read_sav]
+#' @param update The update month to use, defaults to \code{\link{latest_update}}
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The Deaths file, read by [haven][haven::read_sav]
+#' @return the path to the costs lookup as an \code{\link[fs]{path}}
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' all_deaths <- read_deaths_dir()
-#' }
-read_deaths_dir <- function(...) {
-  deaths_file_path <- fs::path(
-    get_slf_dir(),
-    "Deaths",
-    paste0("all_deaths_", latest_update())
+get_slf_deaths_path <- function(update = latest_update(), ...) {
+  slf_deaths_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Deaths"),
+    file_name = glue::glue("all_deaths_{update}.zsav"),
+    ...
   )
-  deaths_file_path <- fs::path_ext_set(deaths_file_path, "zsav")
 
-  return(haven::read_sav(deaths_file_path, ...))
+  return(slf_deaths_file_path)
 }
