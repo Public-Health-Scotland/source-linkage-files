@@ -19,9 +19,7 @@ test_that("Costs paths work", {
 })
 
 
-test_that("Deaths file returns data", {
-  deaths_file <- read_deaths_dir(n_max = 100)
-
-  expect_s3_class(deaths_file, "tbl_df")
-  expect_length(deaths_file, 4)
+test_that("SLF Deaths lookup path works", {
+  expect_s3_class(get_slf_deaths_path(), "fs_path")
+  expect_s3_class(get_slf_deaths_path(previous_update()), "fs_path")
 })
