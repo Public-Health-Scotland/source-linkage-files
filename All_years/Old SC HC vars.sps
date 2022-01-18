@@ -1,7 +1,9 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 *Run !FY from macros - update 1415, 1516 and 1617.
 *Episode file.
-Get file ='/conf/hscdiip/01-Source-linkage-files/source-episode-file-' + !FY + ".zsav".
+* Set the Financial Year.
+
+Get file ='/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + ".zsav".
 
 rename variables hc_hours = hc_hours_annual.
 
@@ -15,7 +17,7 @@ Variable Labels
     hc_hours_q4 "Total number of home care service hours in Q4 (January - March)".
 
 * Reorder and keep variables.
-save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-' + !FY + ".zsav"
+save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + ".zsav"
     /Keep
     year
     recid
@@ -264,7 +266,7 @@ save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-' + !F
 
 *indiv file. 
 *Run !FY from macros - update 1415, 1516 and 1617.
-Get file ='/conf/hscdiip/01-Source-linkage-files/source-individual-file-' + !FY + ".zsav".
+Get file ='/conf/hscdiip/01-Source-linkage-files/source-individual-file-20' + !FY + ".zsav".
 
 Numeric 
 HC_reablement_episodes HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours (F8.0).
@@ -277,7 +279,7 @@ Variable Labels
     HC_reablement_hours "Total number of home care hours that were flagged as being reablement".
 
 *Save in order.
-save outfile = '/conf/hscdiip/01-Source-linkage-files/source-individual-file-' + !FY + ".zsav"
+save outfile = '/conf/hscdiip/01-Source-linkage-files/source-individual-file-20' + !FY + ".zsav"
     /Keep
     year
     chi
