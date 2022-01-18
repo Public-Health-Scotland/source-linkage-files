@@ -7,14 +7,37 @@
 get_dd_path(..., dd_period = NULL)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{get_file_path}}
+\item{...}{additional arguments passed to \code{\link{get_file_path}}}
 
 \item{dd_period}{The period to use for reading the file,
-defaults to \code{dd_period()}}
+defaults to \code{\link{dd_period}}}
 }
 \value{
-The path to the latest DD file
+The path to the latest Delayed Discharges file
+as a \code{\link[fs]{path}}
 }
 \description{
 Get the Delayed Discharges file path
 }
+\seealso{
+\code{\link{get_file_path}} for the generic function.
+
+Other file path functions: 
+\code{\link{get_ch_costs_path}()},
+\code{\link{get_demog_cohorts_path}()},
+\code{\link{get_dn_costs_path}()},
+\code{\link{get_file_path}()},
+\code{\link{get_gp_ooh_costs_path}()},
+\code{\link{get_hhg_path}()},
+\code{\link{get_it_deaths_path}()},
+\code{\link{get_it_ltc_path}()},
+\code{\link{get_it_prescribing_path}()},
+\code{\link{get_nsu_path}()},
+\code{\link{get_practice_details_path}()},
+\code{\link{get_service_use_cohorts_path}()},
+\code{\link{get_slf_deaths_path}()},
+\code{\link{get_slf_gpprac_path}()},
+\code{\link{get_slf_postcode_path}()},
+\code{\link{get_sparra_path}()}
+}
+\concept{file path functions}

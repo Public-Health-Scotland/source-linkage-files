@@ -8,12 +8,34 @@ Long Term Conditions extract}
 get_it_ltc_path(...)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{get_file_path}}
+\item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
-the path to the LTC extract as an \link[fs:path]{fs::path}
+The path to the LTC extract as an \code{\link[fs]{path}}
 }
 \description{
 Get the full path to the IT
 Long Term Conditions extract
 }
+\seealso{
+\code{\link{get_file_path}} for the generic function.
+
+Other file path functions: 
+\code{\link{get_ch_costs_path}()},
+\code{\link{get_dd_path}()},
+\code{\link{get_demog_cohorts_path}()},
+\code{\link{get_dn_costs_path}()},
+\code{\link{get_file_path}()},
+\code{\link{get_gp_ooh_costs_path}()},
+\code{\link{get_hhg_path}()},
+\code{\link{get_it_deaths_path}()},
+\code{\link{get_it_prescribing_path}()},
+\code{\link{get_nsu_path}()},
+\code{\link{get_practice_details_path}()},
+\code{\link{get_service_use_cohorts_path}()},
+\code{\link{get_slf_deaths_path}()},
+\code{\link{get_slf_gpprac_path}()},
+\code{\link{get_slf_postcode_path}()},
+\code{\link{get_sparra_path}()}
+}
+\concept{file path functions}

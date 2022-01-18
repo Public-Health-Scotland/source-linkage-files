@@ -19,7 +19,8 @@ get_file_path(
 
 \item{ext}{The extension (type of the file) - optional}
 
-\item{check_mode}{The mode passed to \link[fs:file_access]{fs::file_access}, defaults to "read"
+\item{check_mode}{The mode passed to
+\code{\link[fs]{file_access}}, defaults to "read"
 to check that you have read access to the file}
 
 \item{create}{Optionally create the file if it doesn't exists}
@@ -37,3 +38,23 @@ By default it will return an error if the file doesn't exist
 but with \code{create = TRUE} it will create an empty file with
 appropriate permissions.
 }
+\seealso{
+Other file path functions:
+\code{\link{get_ch_costs_path}()},
+\code{\link{get_dd_path}()},
+\code{\link{get_demog_cohorts_path}()},
+\code{\link{get_dn_costs_path}()},
+\code{\link{get_gp_ooh_costs_path}()},
+\code{\link{get_hhg_path}()},
+\code{\link{get_it_deaths_path}()},
+\code{\link{get_it_ltc_path}()},
+\code{\link{get_it_prescribing_path}()},
+\code{\link{get_nsu_path}()},
+\code{\link{get_practice_details_path}()},
+\code{\link{get_service_use_cohorts_path}()},
+\code{\link{get_slf_deaths_path}()},
+\code{\link{get_slf_gpprac_path}()},
+\code{\link{get_slf_postcode_path}()},
+\code{\link{get_sparra_path}()}
+}
+\concept{file path functions}
