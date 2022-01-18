@@ -57,28 +57,41 @@ get_slf_dir <- function() {
 }
 
 
-#' Function for cohorts directory - Demographic cohorts and Service Use cohorts
+#' Get the full path to the Demographics
+#' Cohort lookup
 #'
-#' @param type The name of cohorts within cohort directory
-#' @param year Year of cohort extracts
-#' @param ... additional arguments passed to [haven::read_sav]
+#' @param year The year for the cohorts extract
+#' @param ... additional arguments passed to [get_file_path]
 #'
-#' @return The data read using [haven][haven::read_sav]
+#' @return the path to the Demographics Cohort lookup as an [fs::path]
 #' @export
-read_cohorts_dir <- function(type = c("demographic", "service_use"), year, ...) {
-  cohorts_dir <- "Cohorts"
-
-  cohorts_name <- dplyr::case_when(
-    type == "demographic" ~ "Demographic_Cohorts_",
-    type == "service_use" ~ "Service_Use_Cohorts_"
+get_demog_cohorts_path <- function(year, ...) {
+  demog_cohorts_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Cohorts"),
+    file_name = glue::glue("Service_Use_Cohorts_{year}.zsav"),
+    ...
   )
 
-  cohorts_file_path <- fs::path(get_slf_dir(), cohorts_dir, paste0(cohorts_name, year))
-  cohorts_file_path <- fs::path_ext_set(cohorts_file_path, "zsav")
+  return(demog_cohorts_path)
+}
 
 
-  cohorts_file <- haven::read_sav(cohorts_file_path, ...)
-  return(cohorts_file)
+#' Get the full path to the Service Use
+#' Cohort lookup
+#'
+#' @param year The year for the cohorts extract
+#' @param ... additional arguments passed to [get_file_path]
+#'
+#' @return the path to the Service Use Cohort lookup as an [fs::path]
+#' @export
+get_service_use_cohorts_path <- function(year, ...) {
+  service_use_cohorts_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Cohorts"),
+    file_name = glue::glue("Demographic_Cohorts_{year}.zsav"),
+    ...
+  )
+
+  return(service_use_cohorts_path)
 }
 
 #' Function for costs directory - Reading CH, DN and GP OOH costs
