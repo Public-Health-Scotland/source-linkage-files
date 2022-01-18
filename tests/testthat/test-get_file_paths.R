@@ -5,13 +5,6 @@ test_that("main SLF directory exists", {
 })
 
 
-test_that("Cohorts paths work", {
-  expect_s3_class(get_demog_cohorts_path("1920"), "fs_path")
-  expect_s3_class(get_service_use_cohorts_path("1920"), "fs_path")
-})
-
-
-
 test_that("Costs paths work", {
   expect_s3_class(get_ch_costs_path(), "fs_path")
   expect_s3_class(get_dn_costs_path(), "fs_path")
