@@ -94,32 +94,55 @@ get_service_use_cohorts_path <- function(year, ...) {
   return(service_use_cohorts_path)
 }
 
-#' Function for costs directory - Reading CH, DN and GP OOH costs
-#'
-#' @param type The name of costs lookup within costs directory
-#'
-#' @return The data read using `haven::read_sav`
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' ch_costs <- read_costs_dir("CH")
-#' dn_costs <- read_costs_dir("DN")
-#' ooh_costs <- read_costs_dir("GPOOH")
-#' }
-read_costs_dir <- function(type = c("CH", "DN", "GPOOH")) {
-  costs_dir <- "Costs"
 
-  costs_name <- dplyr::case_when(
-    type == "CH" ~ "Cost_CH_Lookup",
-    type == "DN" ~ "Cost_DN_Lookup",
-    type == "GPOOH" ~ "Cost_GPOoH_Lookup"
+#' Get the full Care Home costs lookup path
+#'
+#' @param ... additional arguments passed to `get_file_path`
+#'
+#' @return the path to the costs lookup as an [fs::path]
+#' @export
+get_ch_costs_path <- function(...) {
+  ch_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = glue::glue("Cost_CH_Lookup.sav"),
+    ...
   )
 
-  costs_file_path <- fs::path(get_slf_dir(), costs_dir, costs_name)
-  costs_file_path <- fs::path_ext_set(costs_file_path, "sav")
+  return(ch_costs_path)
+}
 
-  return(haven::read_sav(costs_file_path))
+
+#' Get the full District Nursing costs lookup path
+#'
+#' @param ... additional arguments passed to `get_file_path`
+#'
+#' @return the path to the costs lookup as an [fs::path]
+#' @export
+get_dn_costs_path <- function(...) {
+  dn_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = glue::glue("Cost_DN_Lookup.sav"),
+    ...
+  )
+
+  return(dn_costs_path)
+}
+
+
+#' Get the full GP Out of Hours costs lookup path
+#'
+#' @param ... additional arguments passed to `get_file_path`
+#'
+#' @return the path to the costs lookup as an [fs::path]
+#' @export
+get_gp_ooh_costs_path <- function(...) {
+  gp_ooh_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = glue::glue("Cost_GPOoH_Lookup.sav"),
+    ...
+  )
+
+  return(gp_ooh_costs_path)
 }
 
 #' Get the deaths file directory
