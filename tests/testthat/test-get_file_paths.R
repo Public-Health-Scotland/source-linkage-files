@@ -5,35 +5,11 @@ test_that("main SLF directory exists", {
 })
 
 
-test_that("Demographic file returns data", {
-  demographic_file <- read_cohorts_dir("demographic", "1819", n_max = 100)
-
-  var_names <- c(
-    "chi", "Demographic_Cohort", "End_of_LIfe", "Frailty", "High_CC",
-    "Maternity", "MH", "Substance", "Medium_CC", "Low_CC", "Child_Major",
-    "Adult_Major", "Comm_Living"
-  )
-
-  expect_s3_class(demographic_file, "tbl_df")
-  expect_length(demographic_file, 13)
-  expect_named(demographic_file, var_names)
+test_that("Cohorts paths work", {
+  expect_s3_class(get_demog_cohorts_path("1920"), "fs_path")
+  expect_s3_class(get_service_use_cohorts_path("1920"), "fs_path")
 })
 
-
-test_that("Service Use file returns data", {
-  service_use_file <- read_cohorts_dir("service_use", "1819", n_max = 100)
-
-  names <- c(
-    "chi", "Service_Use_Cohort", "Psychiatry_Cost", "Maternity_Cost", "Geriatric_Cost",
-    "Elective_Inpatient_Cost", "Limited_Daycases_Cost", "Single_Emergency_Cost",
-    "Multiple_Emergency_Cost", "Routine_Daycase_Cost", "Outpatient_Cost",
-    "Prescribing_Cost", "AE2_Cost"
-  )
-
-  expect_s3_class(service_use_file, "tbl_df")
-  expect_length(service_use_file, 13)
-  expect_named(service_use_file, names)
-})
 
 
 test_that("CH costs lookup returns data", {
