@@ -1,9 +1,11 @@
 #' Get the full Care Home costs lookup path
 #'
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return the path to the costs lookup as an [fs::path]
+#' @return The path to the costs lookup as an \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_ch_costs_path <- function(...) {
   ch_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
@@ -19,8 +21,10 @@ get_ch_costs_path <- function(...) {
 #'
 #' @param ... additional arguments passed to [get_file_path]
 #'
-#' @return the path to the costs lookup as an [fs::path]
+#' @return The path to the costs lookup as an \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_dn_costs_path <- function(...) {
   dn_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
@@ -34,10 +38,12 @@ get_dn_costs_path <- function(...) {
 
 #' Get the full GP Out of Hours costs lookup path
 #'
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return the path to the costs lookup as an [fs::path]
+#' @return The path to the costs lookup as an \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_gp_ooh_costs_path <- function(...) {
   gp_ooh_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),

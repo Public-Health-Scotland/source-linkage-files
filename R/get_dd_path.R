@@ -1,11 +1,14 @@
 #' Get the Delayed Discharges file path
 #'
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #' @param dd_period The period to use for reading the file,
-#' defaults to `dd_period()`
+#' defaults to \code{\link{dd_period}}
 #'
-#' @return The path to the latest DD file
+#' @return The path to the latest Delayed Discharges file
+#' as a \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_dd_path <- function(..., dd_period = NULL) {
   if (is.null(dd_period)) {
     dd_period <- dd_period()

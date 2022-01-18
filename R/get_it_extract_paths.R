@@ -1,9 +1,11 @@
 #' Get the full path to the IT
 #' Long Term Conditions extract
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return the path to the LTC extract as an [fs::path]
+#' @return The path to the LTC extract as an \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_it_ltc_path <- function(...) {
   it_ltc_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
@@ -16,10 +18,12 @@ get_it_ltc_path <- function(...) {
 
 #' Get the full path to the IT Deaths extract
 #'
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return the path to the IT Deaths extract as an [fs::path]
+#' @return The path to the IT Deaths extract as an \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_it_deaths_path <- function(...) {
   it_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
@@ -32,10 +36,12 @@ get_it_deaths_path <- function(...) {
 #' Get the full path to the IT PIS extract
 #'
 #' @param year the year for the required extract
-#' @param ... additional arguments passed to `get_file_path`
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return the path to the PIS extract as an [fs::path]
+#' @return The path to the PIS extract as an \code{\link[fs]{path}}
 #' @export
+#' @family file path functions
+#' @seealso \code{\link{get_file_path}} for the generic function.
 get_it_prescribing_path <- function(year, ...) {
   extract_number <- switch(year,
     "1516" = "3_2015",
