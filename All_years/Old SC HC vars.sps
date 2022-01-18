@@ -2,13 +2,16 @@
 *Run !FY from macros - update 1415, 1516 and 1617.
 *Episode file.
 * Set the Financial Year.
+Define !FY()
+    ""
+!EndDefine.
 
 Get file ='/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + ".zsav".
 
 rename variables hc_hours = hc_hours_annual.
 
 Numeric
-hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2).
+    hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2).
 
 Variable Labels
     hc_hours_q1 "Total number of home care service hours in Q1 (April - June)"
@@ -264,12 +267,12 @@ save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + 
     hhg_end_fy
     /zcompressed.
 
-*indiv file. 
+*indiv file.
 *Run !FY from macros - update 1415, 1516 and 1617.
 Get file ='/conf/hscdiip/01-Source-linkage-files/source-individual-file-20' + !FY + ".zsav".
 
-Numeric 
-HC_reablement_episodes HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours (F8.0).
+Numeric
+    HC_reablement_episodes HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours (F8.0).
 
 Variable Labels
     HC_reablement_episodes "Total number of home care episodes flagged as being reablement"
