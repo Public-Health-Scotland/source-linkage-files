@@ -1,6 +1,5 @@
 * Encoding: UTF-8.
-*Run !FY from macros - update 1415, 1516 and 1617.
-*Episode file.
+* Episode file.
 * Set the Financial Year.
 Define !FY()
     ""
@@ -8,6 +7,7 @@ Define !FY()
 
 Get file ='/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + ".zsav".
 
+Numeric hc_hours (F8.2).
 rename variables hc_hours = hc_hours_annual.
 
 Numeric
@@ -31,7 +31,7 @@ save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + 
     keytime1
     keytime2
     smrtype
-    chi
+    anon_chi
     person_id
     gender
     dob
@@ -267,7 +267,7 @@ save outfile = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + 
     hhg_end_fy
     /zcompressed.
 
-*indiv file.
+* Individual file.
 *Run !FY from macros - update 1415, 1516 and 1617.
 Get file ='/conf/hscdiip/01-Source-linkage-files/source-individual-file-20' + !FY + ".zsav".
 
@@ -285,7 +285,7 @@ Variable Labels
 save outfile = '/conf/hscdiip/01-Source-linkage-files/source-individual-file-20' + !FY + ".zsav"
     /Keep
     year
-    chi
+    anon_chi
     gender
     dob
     age
