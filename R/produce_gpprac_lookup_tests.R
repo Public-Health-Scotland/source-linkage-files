@@ -4,7 +4,8 @@
 #'
 #' @return a dataframe with a count of each flag
 #' @export
-gpprac_lookup_tests <- function(data){
+#' @importFrom dplyr mutate select
+produce_gpprac_lookup_tests <- function(data){
 
   data %>%
     #use functions to create HB and partnership flags
@@ -13,8 +14,8 @@ gpprac_lookup_tests <- function(data){
     #create other test flags
     dplyr::mutate(n_gpprac = 1) %>%
     #remove variables that won't be summed
-    dplyr::select(-c(gpprac:LCA)) %>%
+    dplyr::select(-c(.data$gpprac:.data$LCA)) %>%
     #use function to sum new test flags
-    sum_flags()
+    sum_test_flags()
 }
 
