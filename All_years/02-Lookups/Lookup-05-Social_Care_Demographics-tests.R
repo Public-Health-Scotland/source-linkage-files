@@ -12,18 +12,13 @@ library(tidyselect)
 library(dplyr)
 
 ####################################################
-#Get demographic lookup data
-new_demog_lookup <- read_demog_lookup(file)
-old_demog_lookup <- read_demog_lookup(file, update = previous_update())
-
-####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- demog_lookup_tests(new_demog_lookup)
-old_tests <- demog_lookup_tests(old_demog_lookup)
+new_tests <- produce_sc_demog_lookup_tests(haven::read_sav(get_sc_demog_lookup_path()))
+old_tests <- produce_sc_demog_lookup_tests(haven::read_sav(get_sc_demog_lookup_path(update = previous_update())))
 
 ####################################################
 #create tests
-comparison <- compare_tests(old_tests, new_tests)
+comparison <- produce_test_comparison(old_tests, new_tests)
 
 #END OF SCRIPT
 ####################################################

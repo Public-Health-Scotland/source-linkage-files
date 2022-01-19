@@ -11,14 +11,9 @@
   #compare_tests
 
 ####################################################
-#Get GP practice lookup data
-new_gpprac_lookup <- read_lookups_dir("gpprac")
-old_gpprac_lookup <- read_lookups_dir("gpprac", update = previous_update())
-
-####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- gpprac_lookup_tests(new_gpprac_lookup)
-old_tests <- gpprac_lookup_tests(old_gpprac_lookup)
+new_tests <- produce_gpprac_lookup_tests(haven::read_sav(read_lookups_dir("gpprac")))
+old_tests <- produce_gpprac_lookup_tests(haven::read_sav(read_lookups_dir("gpprac", update = previous_update())))
 
 ####################################################
 #create tests

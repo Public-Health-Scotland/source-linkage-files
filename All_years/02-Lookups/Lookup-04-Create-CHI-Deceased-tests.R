@@ -12,14 +12,9 @@ library(tidyselect)
 library(dplyr)
 
 ####################################################
-#Get demographic lookup data
-new_deaths_file <- read_deaths_file(file)
-old_deaths_file <- read_deaths_file(file, update = previous_update())
-
-####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- deaths_file_tests(new_deaths_file)
-old_tests <- deaths_file_tests(old_deaths_file)
+new_tests <- produce_IT_deaths_tests(haven::read_sav(get_IT_deaths_path()))
+old_tests <- produce_IT_deaths_tests(haven::read_sav(get_IT_deaths_path(update = previous_update())))
 
 ####################################################
 #create tests
