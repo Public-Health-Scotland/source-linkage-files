@@ -2,7 +2,7 @@
 #' Cohort lookup
 #'
 #' @param year The year for the cohorts extract
-#' @param ... additional arguments passed to [get_file_path]
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
 #' @return The path to the Demographics Cohort lookup
 #' as a \code{\link[fs]{path}}
@@ -23,7 +23,7 @@ get_demog_cohorts_path <- function(year, ...) {
 #' Cohort lookup
 #'
 #' @param year The year for the cohorts extract
-#' @param ... additional arguments passed to [get_file_path]
+#' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
 #' @return The path to the Service Use Cohort lookup
 #' as a \code{\link[fs]{path}}
