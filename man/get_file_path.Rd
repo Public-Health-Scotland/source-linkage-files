@@ -39,7 +39,7 @@ but with \code{create = TRUE} it will create an empty file with
 appropriate permissions.
 }
 \seealso{
-Other file path functions:
+Other file path functions: 
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demog_cohorts_path}()},
