@@ -4,9 +4,11 @@
 \alias{get_practice_details_path}
 \title{Get the path to the Practice Details file}
 \usage{
-get_practice_details_path(...)
+get_practice_details_path(update = latest_update(), ...)
 }
 \arguments{
+\item{update}{the update month (defaults to use \code{\link{latest_update}})}
+
 \item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
