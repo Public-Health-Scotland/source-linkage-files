@@ -10,7 +10,7 @@ get_service_use_cohorts_path(year, ...)
 \arguments{
 \item{year}{The year for the cohorts extract}
 
-\item{...}{additional arguments passed to \link{get_file_path}}
+\item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
 The path to the Service Use Cohort lookup

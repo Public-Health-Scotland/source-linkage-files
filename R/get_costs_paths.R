@@ -19,7 +19,7 @@ get_ch_costs_path <- function(...) {
 
 #' Get the full District Nursing costs lookup path
 #'
-#' @param ... additional arguments passed to [get_file_path]
+#' @param ... additional arguments passed to  \code{\link{get_file_path}}
 #'
 #' @return The path to the costs lookup as an \code{\link[fs]{path}}
 #' @export

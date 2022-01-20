@@ -7,9 +7,9 @@
 get_slf_gpprac_path(update = latest_update(), ...)
 }
 \arguments{
-\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
+\item{update}{the update month (defaults to use \code{\link{latest_update}})}
 
-\item{...}{additional arguments passed to \link{get_file_path}}
+\item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
 The path to the SLF GP practice lookup as an \code{\link[fs]{path}}

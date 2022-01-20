@@ -7,7 +7,7 @@
 get_dn_costs_path(...)
 }
 \arguments{
-\item{...}{additional arguments passed to \link{get_file_path}}
+\item{...}{additional arguments passed to  \code{\link{get_file_path}}}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs]{path}}
