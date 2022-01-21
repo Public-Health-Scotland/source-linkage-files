@@ -49,12 +49,14 @@ get_it_deaths_path <- function(it_reference = it_extract_ref(), ...) {
 get_it_prescribing_path <- function(year, it_reference = it_extract_ref(), ...) {
   it_extracts_dir <- fs::path(get_slf_dir(), "IT_extracts")
 
+  alt_fy <- paste0("20", substr(year, 1, 2))
+
   file_name <- fs::dir_ls(it_extracts_dir,
     type = "file",
     regexp = it_reference
   ) %>%
     fs::path_file() %>%
-    stringr::str_extract(pattern = glue::glue("^.+?20{substr(year, 1, 2)}.+$")) %>%
+    stringr::str_extract(pattern = glue::glue("^.+?{alt_fy}.+$")) %>%
     stats::na.omit()
 
   if (length(file_name) == 0) {
