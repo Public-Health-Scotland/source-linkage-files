@@ -51,12 +51,18 @@ get_it_prescribing_path <- function(year, it_reference = it_extract_ref(), ...) 
 
   alt_fy <- paste0("20", substr(year, 1, 2))
 
+  # First list all files in the directory which contain
+  # the it_reference
   file_name <- fs::dir_ls(it_extracts_dir,
     type = "file",
     regexp = it_reference
   ) %>%
+    # Get only the file names (not the full path)
     fs::path_file() %>%
+    # Will return the full name if it matches,
+    # otherwise it will return NA
     stringr::str_extract(pattern = glue::glue("^.+?{alt_fy}\\.csv(:?\\.gz)?$")) %>%
+    # This drops all the non-matched names idealy leaving only one.
     stats::na.omit()
 
   if (length(file_name) == 0) {
