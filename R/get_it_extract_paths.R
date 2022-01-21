@@ -56,7 +56,7 @@ get_it_prescribing_path <- function(year, it_reference = it_extract_ref(), ...) 
     regexp = it_reference
   ) %>%
     fs::path_file() %>%
-    stringr::str_extract(pattern = glue::glue("^.+?{alt_fy}.+$")) %>%
+    stringr::str_extract(pattern = glue::glue("^.+?{alt_fy}\\.csv(:?\\.gz)?$")) %>%
     stats::na.omit()
 
   if (length(file_name) == 0) {
