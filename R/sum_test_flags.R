@@ -7,7 +7,7 @@
 sum_test_flags <- function(data){
 
   data <- data %>%
-    dplyr::summarise(across(tidyselect::vars_select_helpers$where(.data$is.numeric), sum, na.rm = TRUE)) %>%
+    dplyr:: summarise_all(sum, na.rm = TRUE) %>%
     tidyr::pivot_longer(
       cols = tidyselect::everything(),
       names_to = "measure",
