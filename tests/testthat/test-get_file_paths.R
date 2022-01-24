@@ -42,14 +42,6 @@ test_that("Postcode lookup returns data", {
 })
 
 
-test_that("Gp clusters file (Practice details) returns data", {
-  practice_details <- read_practice_details()
-
-  expect_s3_class(practice_details, "tbl_df")
-  expect_length(practice_details, 8)
-})
-
-
 test_that("Demographic file returns data", {
   demographic_file <- read_cohorts_dir("demographic", "1819", n_max = 100)
 
@@ -141,10 +133,10 @@ test_that("SPARRA extract returns data", {
 test_that("NSU extract returns data", {
   nsu_file <- read_nsu_dir("1819", n_max = 100)
 
-  names <- c("year", "CHI", "dob", "postcode", "gpprac")
+  names <- c("year", "chi", "dob", "postcode", "gpprac", "gender")
 
   expect_s3_class(nsu_file, "tbl_df")
-  expect_length(nsu_file, 5)
+  expect_length(nsu_file, 6)
   expect_named(nsu_file, names)
 })
 

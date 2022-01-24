@@ -65,16 +65,16 @@ read_lookups_dir <- function(type = c("postcode", "gpprac"), update = latest_upd
 #'
 #' @param file_name Name of the file to be read
 #'
-#' @return The practice details file
+#' @return The practice details file path
 #' @export
-read_practice_details <- function(file_name = "Practice Details.sav") {
+read_practice_details <- function(file_name = "practice_details_Dec_2021.zsav") {
   practice_details_path <- fs::path(
     get_slf_dir(),
     "Lookups",
     file_name
   )
 
-  practice_details_file <- haven::read_sav(practice_details_path)
+  practice_details_file <- haven:: read_sav(practice_details_path)
   return(practice_details_file)
 }
 

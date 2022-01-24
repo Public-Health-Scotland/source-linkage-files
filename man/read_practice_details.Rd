@@ -6,13 +6,13 @@
 lookup "Practice Details" for creating
 source GP prac lookup above}
 \usage{
-read_practice_details(file_name = "Practice Details.sav")
+read_practice_details(file_name = "practice_details_Dec_2021.zsav")
 }
 \arguments{
 \item{file_name}{Name of the file to be read}
 }
 \value{
-The practice details file
+The practice details file path
 }
 \description{
 Function for reading in GP cluster
