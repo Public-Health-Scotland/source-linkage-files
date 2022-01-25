@@ -12,12 +12,12 @@
 
 ####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- produce_postcode_lookup_tests(read_lookups_dir("postcode"))
-old_tests <- produce_postcode_lookup_tests(read_lookups_dir("postcode", update = previous_update()))
+new_tests <- produce_slf_postcode_tests(get_slf_postcode_path())
+old_tests <- produce_slf_postcode_tests(get_slf_postcode_path(update = previous_update()))
 
 ####################################################
 #create tests
-comparison <- compare_tests(old_tests, new_tests)
+comparison <- produce_test_comparison(old_tests, new_tests)
 
 #END OF SCRIPT
 ####################################################
