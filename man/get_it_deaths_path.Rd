@@ -16,8 +16,6 @@ The path to the IT Deaths extract as an \code{\link[fs]{path}}
 }
 \description{
 Get the full path to the IT Deaths extract
-
-Function for reading in deaths file
 }
 \seealso{
 \code{\link{get_file_path}} for the generic function.

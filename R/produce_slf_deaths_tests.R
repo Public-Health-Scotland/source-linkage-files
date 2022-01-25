@@ -3,7 +3,7 @@
 #' @param data new or old data for testing summary flags
 #'
 #' @return a dataframe with a count of each flag
-produce_it_deaths_tests <- function(data){
+produce_slf_deaths_tests <- function(data){
 
   data %>%
     #create test flags

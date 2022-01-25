@@ -13,12 +13,12 @@ library(dplyr)
 
 ####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- produce_IT_deaths_tests(haven::read_sav(get_IT_deaths_path()))
-old_tests <- produce_IT_deaths_tests(haven::read_sav(get_IT_deaths_path(update = previous_update())))
+new_tests <- produce_slf_deaths_tests(haven::read_sav(get_slf_deaths_path()))
+old_tests <- produce_slf_deaths_tests(haven::read_sav(get_slf_deaths_path(update = previous_update())))
 
 ####################################################
 #create tests
-comparison <- compare_tests(old_tests, new_tests)
+comparison <- produce_test_comparison(old_tests, new_tests)
 
 #END OF SCRIPT
 ####################################################
