@@ -34,7 +34,25 @@
     <loc>/reference/extract_path.html</loc>
   </url>
   <url>
+    <loc>/reference/get_ch_costs_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_dd_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_demog_cohorts_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_dn_costs_path.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_file_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_gp_ooh_costs_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_hhg_path.html</loc>
   </url>
   <url>
     <loc>/reference/get_it_deaths_path.html</loc>
@@ -49,7 +67,28 @@
     <loc>/reference/get_lookups_dir.html</loc>
   </url>
   <url>
+    <loc>/reference/get_nsu_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_practice_details_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_service_use_cohorts_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_slf_deaths_path.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_slf_dir.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_slf_gpprac_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_slf_postcode_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_sparra_path.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
@@ -76,43 +115,13 @@
     <loc>/reference/read_chi_to_anon.html</loc>
   </url>
   <url>
-    <loc>/reference/read_cohorts_dir.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_costs_dir.html</loc>
-  </url>
-  <url>
     <loc>/reference/read_datazone_pop_file.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_dd_file.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_deaths_dir.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_hhg_dir.html</loc>
   </url>
   <url>
     <loc>/reference/read_locality_file.html</loc>
   </url>
   <url>
-    <loc>/reference/read_lookups_dir.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_ltc_dir.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_nsu_dir.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_practice_details.html</loc>
-  </url>
-  <url>
     <loc>/reference/read_simd_file.html</loc>
-  </url>
-  <url>
-    <loc>/reference/read_sparra_dir.html</loc>
   </url>
   <url>
     <loc>/reference/read_spd_file.html</loc>

@@ -44,7 +44,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get the full path to the IT PIS extract</h1>
-    <small class="dont-index">Source: <a href="https://github.com/Public-Health-Scotland/source-linkage-files/blob/HEAD/R/get_file_paths.R" class="external-link"><code>R/get_file_paths.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/Public-Health-Scotland/source-linkage-files/blob/HEAD/R/get_it_extract_paths.R" class="external-link"><code>R/get_it_extract_paths.R</code></a></small>
     <div class="hidden name"><code>get_it_prescribing_path.Rd</code></div>
     </div>
 
@@ -53,17 +53,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_it_prescribing_path</span><span class="op">(</span><span class="va">year</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_it_prescribing_path</span><span class="op">(</span><span class="va">year</span>, it_reference <span class="op">=</span> <span class="fu"><a href="it_extract_ref.html">it_extract_ref</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>year</dt>
 <dd><p>the year for the required extract</p></dd>
+<dt>it_reference</dt>
+<dd><p>The IT reference to use, defaults to <code><a href="it_extract_ref.html">it_extract_ref</a></code></p></dd>
+<dt>...</dt>
+<dd><p>additional arguments passed to <code><a href="get_file_path.html">get_file_path</a></code></p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>the path as an <a href="https://fs.r-lib.org/reference/path.html" class="external-link">fs::path</a></p>
+    <p>The path to the PIS extract as an <code><a href="https://fs.r-lib.org/reference/path.html" class="external-link">path</a></code></p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="get_file_path.html">get_file_path</a></code> for the generic function.</p>
+<p>Other file path functions: 
+<code><a href="get_ch_costs_path.html">get_ch_costs_path</a>()</code>,
+<code><a href="get_dd_path.html">get_dd_path</a>()</code>,
+<code><a href="get_demog_cohorts_path.html">get_demog_cohorts_path</a>()</code>,
+<code><a href="get_dn_costs_path.html">get_dn_costs_path</a>()</code>,
+<code><a href="get_file_path.html">get_file_path</a>()</code>,
+<code><a href="get_gp_ooh_costs_path.html">get_gp_ooh_costs_path</a>()</code>,
+<code><a href="get_hhg_path.html">get_hhg_path</a>()</code>,
+<code><a href="get_it_deaths_path.html">get_it_deaths_path</a>()</code>,
+<code><a href="get_it_ltc_path.html">get_it_ltc_path</a>()</code>,
+<code><a href="get_nsu_path.html">get_nsu_path</a>()</code>,
+<code><a href="get_practice_details_path.html">get_practice_details_path</a>()</code>,
+<code><a href="get_service_use_cohorts_path.html">get_service_use_cohorts_path</a>()</code>,
+<code><a href="get_slf_deaths_path.html">get_slf_deaths_path</a>()</code>,
+<code><a href="get_slf_gpprac_path.html">get_slf_gpprac_path</a>()</code>,
+<code><a href="get_slf_postcode_path.html">get_slf_postcode_path</a>()</code>,
+<code><a href="get_sparra_path.html">get_sparra_path</a>()</code></p></div>
     </div>
 
   </div>
@@ -78,7 +103,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
