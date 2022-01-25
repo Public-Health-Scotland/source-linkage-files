@@ -4,7 +4,8 @@
 #' @export
 #'
 read_chi_to_anon <- function() {
-  chi_to_anon_path <- fs::path("/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav")
+  chi_to_anon_path <-
+    fs::path("/conf/hscdiip/01-Source-linkage-files/CHI-to-Anon-lookup.zsav")
 
   chi_to_anon <- haven::read_sav(chi_to_anon_path)
 
@@ -17,7 +18,8 @@ read_chi_to_anon <- function() {
 #' @export
 #'
 read_anon_to_chi <- function() {
-  anon_to_chi_path <- fs::path("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
+  anon_to_chi_path <-
+    fs::path("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
 
   anon_to_chi <- haven::read_sav(anon_to_chi_path)
 
