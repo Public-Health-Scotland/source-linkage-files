@@ -12,12 +12,12 @@
 
 ####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- produce_gpprac_lookup_tests(haven::read_sav(read_lookups_dir("gpprac")))
-old_tests <- produce_gpprac_lookup_tests(haven::read_sav(read_lookups_dir("gpprac", update = previous_update())))
+new_tests <- produce_slf_gpprac_tests(haven::read_sav(get_slf_gpprac_path()))
+old_tests <- produce_slf_gpprac_tests(haven::read_sav(get_slf_gpprac_path(update = previous_update())))
 
 ####################################################
 #create tests
-comparison <- compare_tests(old_tests, new_tests)
+comparison <- produce_test_comparison(old_tests, new_tests)
 
 #END OF SCRIPT
 ####################################################
