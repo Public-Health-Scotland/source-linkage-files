@@ -13,8 +13,8 @@ library(dplyr)
 
 ####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- produce_all_ch_episodes_tests(haven::read_sav(get_all_ch_episodes_path()))
-old_tests <- produce_all_ch_episodes_tests(haven::read_sav(get_all_ch_episodes_path(update = previous_update())))
+new_tests <- produce_sc_ch_episodes_tests(haven::read_sav(get_sc_ch_episodes_path()))
+old_tests <- produce_sc_ch_episodes_tests(haven::read_sav(get_sc_ch_episodes_path(update = previous_update())))
 
 ####################################################
 #create tests

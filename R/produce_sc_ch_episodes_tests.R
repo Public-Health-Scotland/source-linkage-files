@@ -4,7 +4,7 @@
 #'
 #' @return a dataframe with a count of each flag
 #' @export
-produce_all_ch_episodes_tests <- function(data){
+produce_sc_ch_episodes_tests <- function(data){
 
   data %>%
     #create test flags

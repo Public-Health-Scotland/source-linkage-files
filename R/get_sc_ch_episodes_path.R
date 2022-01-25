@@ -4,7 +4,7 @@
 #'
 #' @return The care home episodes file
 #' @export
-get_all_ch_episodes_path <- function(update = latest_update()) {
+get_sc_ch_episodes_path <- function(update = latest_update()) {
 
   file_name = "all_ch_episodes"
 
