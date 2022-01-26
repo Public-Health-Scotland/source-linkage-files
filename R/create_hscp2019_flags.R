@@ -4,6 +4,7 @@
 #'
 #' @return a dataframe with flag (1 or 0) for HSCP
 #' @importFrom dplyr mutate if_else
+#' @family create test flags functions
 create_hscp2019_flags <- function(data){
   data <- data %>%
     dplyr::mutate(Aberdeen_City = if_else(.data$HSCP2019 == "S37000001", 1, 0),

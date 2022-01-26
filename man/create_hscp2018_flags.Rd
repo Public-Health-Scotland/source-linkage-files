@@ -7,7 +7,7 @@
 create_hscp2018_flags(data)
 }
 \arguments{
-\item{data}{the data containing HSCP2018}
+\item{data}{a data frame containing HSCP2018}
 }
 \value{
 a dataframe with flag (1 or 0) for HSCP
@@ -15,3 +15,9 @@ a dataframe with flag (1 or 0) for HSCP
 \description{
 Create a flag for HSCP2018
 }
+\seealso{
+Other create test flags functions: 
+\code{\link{create_hb2019_flags}()},
+\code{\link{create_hscp2019_flags}()}
+}
+\concept{create test flags functions}

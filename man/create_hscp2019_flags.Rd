@@ -15,3 +15,9 @@ a dataframe with flag (1 or 0) for HSCP
 \description{
 Create a flag for HSCP2019
 }
+\seealso{
+Other create test flags functions: 
+\code{\link{create_hb2019_flags}()},
+\code{\link{create_hscp2018_flags}()}
+}
+\concept{create test flags functions}

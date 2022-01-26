@@ -15,3 +15,9 @@ a dataframe with flag (1 or 0) for each HB
 \description{
 Create HB 2019 flag
 }
+\seealso{
+Other create test flags functions: 
+\code{\link{create_hscp2018_flags}()},
+\code{\link{create_hscp2019_flags}()}
+}
+\concept{create test flags functions}

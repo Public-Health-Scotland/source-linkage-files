@@ -4,6 +4,7 @@
 #'
 #' @return a dataframe with flag (1 or 0) for each HB
 #' @importFrom dplyr mutate if_else
+#' @family create test flags functions
 create_hb2019_flags <- function(data) {
   data <- data %>%
     dplyr::mutate(
