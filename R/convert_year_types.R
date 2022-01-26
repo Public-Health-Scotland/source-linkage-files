@@ -26,5 +26,5 @@ convert_fyyear_to_year <- function(fyyear) {
 #' convert_year_to_fyyear(c("1718", "1819"))
 convert_year_to_fyyear <- function(year) {
   fyyear <- paste0(substr(year, 3, 4), as.numeric(substr(year, 3, 4)) + 1)
-  return(as.numeric(fyyear))
+  return(fyyear)
 }
