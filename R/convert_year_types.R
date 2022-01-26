@@ -9,8 +9,10 @@
 #' convert_fyyear_to_year(c("2017", "2018"))
 convert_fyyear_to_year <- function(fyyear) {
   year <- paste0("20", substr(fyyear, 1, 2))
-  return (year)
+  return(year)
 }
+
+
 
 
 #' Convert a year type from alternate '2017' to normal '1718'
@@ -24,5 +26,5 @@ convert_fyyear_to_year <- function(fyyear) {
 #' convert_year_to_fyyear(c("1718", "1819"))
 convert_year_to_fyyear <- function(year) {
   fyyear <- paste0(substr(year, 3, 4), as.numeric(substr(year, 3, 4)) + 1)
-  return (as.numeric(fyyear))
+  return(as.numeric(fyyear))
 }
