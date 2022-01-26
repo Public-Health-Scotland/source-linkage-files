@@ -9,7 +9,7 @@ produce_slf_gpprac_tests <- function(data){
 
   data %>%
     #use functions to create HB and partnership flags
-    create_HB2019_flag() %>%
+    create_hbpraccode_flag() %>%
     create_HSCP2018_flag() %>%
     #create other test flags
     dplyr::mutate(n_gpprac = 1) %>%
