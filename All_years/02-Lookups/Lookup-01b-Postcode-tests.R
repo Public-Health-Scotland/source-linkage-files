@@ -12,8 +12,8 @@
 
 ####################################################
 #Create new and old dataframes with measures for testing
-new_tests <- produce_slf_postcode_tests(get_slf_postcode_path())
-old_tests <- produce_slf_postcode_tests(get_slf_postcode_path(update = previous_update()))
+new_tests <- produce_slf_postcode_tests(haven::read_sav(get_slf_postcode_path()))
+old_tests <- produce_slf_postcode_tests(haven::read_sav(get_slf_postcode_path(update = previous_update())))
 
 ####################################################
 #create tests
