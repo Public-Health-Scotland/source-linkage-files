@@ -1,3 +1,4 @@
+
 #' Convert year types - Financial year form to the alternate form
 #'
 #' Converts year type from the financial year form '1718' to the year form '2017'.
