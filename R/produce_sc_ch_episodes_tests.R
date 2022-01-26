@@ -1,9 +1,11 @@
 #' All care home episode tests
 #'
-#' @param data new or old data for testing summary flags
+#' @param data new or old data for testing summary flags (data is from \code{\link{get_sc_ch_episodes_path}})
 #'
-#' @return a dataframe with a count of each flag
+#' @return a dataframe with a count of each flag \code{\link{sum_test_flags}}
 #' @export
+#' @importFrom dplyr mutate select
+#' @family produce tests functions
 produce_sc_ch_episodes_tests <- function(data){
 
   data %>%

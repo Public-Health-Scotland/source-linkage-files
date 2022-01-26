@@ -1,8 +1,11 @@
 #' All deaths file tests
 #'
-#' @param data new or old data for testing summary flags
-#'
-#' @return a dataframe with a count of each flag
+#' @param data new or old data for testing summary flags (data is from \code{\link{get_slf_deaths_path}})
+#
+#' @return a dataframe with a count of each flag from \code{\link{sum_test_flags}}
+#' @export
+#' @importFrom dplyr mutate select
+#' @family produce tests functions
 produce_slf_deaths_tests <- function(data){
 
   data %>%

@@ -1,10 +1,12 @@
 #' Postcode Lookup tests
 #'
-#' @param data new or old data for testing summary flags
+#' @param data new or old data for testing summary flags (data is from \code{\link{get_slf_postcode_path}})
 #'
-#' @return a dataframe with a count of each flag
+#' @return a dataframe with a count of each flag from \code{\link{sum_test_flags}}
 #' @export
 #' @importFrom dplyr mutate select
+#' @family produce tests functions
+#' @seealso \code{\link{create_hb2019_flags}} and \code{\link{create_hscp2019_flags}} for creating test flags
 produce_slf_postcode_tests <- function(data){
 
   data %>%

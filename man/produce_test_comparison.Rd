@@ -17,3 +17,12 @@ a dataframe with a comparison of new and old data
 \description{
 Compare test files
 }
+\seealso{
+Other produce tests functions: 
+\code{\link{produce_sc_ch_episodes_tests}()},
+\code{\link{produce_sc_demog_lookup_tests}()},
+\code{\link{produce_slf_deaths_tests}()},
+\code{\link{produce_slf_gpprac_tests}()},
+\code{\link{produce_slf_postcode_tests}()}
+}
+\concept{produce tests functions}

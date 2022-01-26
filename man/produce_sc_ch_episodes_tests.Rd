@@ -7,11 +7,20 @@
 produce_sc_ch_episodes_tests(data)
 }
 \arguments{
-\item{data}{new or old data for testing summary flags}
+\item{data}{new or old data for testing summary flags (data is from \code{\link{get_sc_ch_episodes_path}})}
 }
 \value{
-a dataframe with a count of each flag
+a dataframe with a count of each flag \code{\link{sum_test_flags}}
 }
 \description{
 All care home episode tests
 }
+\seealso{
+Other produce tests functions: 
+\code{\link{produce_sc_demog_lookup_tests}()},
+\code{\link{produce_slf_deaths_tests}()},
+\code{\link{produce_slf_gpprac_tests}()},
+\code{\link{produce_slf_postcode_tests}()},
+\code{\link{produce_test_comparison}()}
+}
+\concept{produce tests functions}
