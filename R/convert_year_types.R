@@ -35,7 +35,6 @@ convert_fyyear_to_year <- function(fyyear) {
 #' @examples
 #' years <- c("2017", "2018")
 #' convert_year_to_fyyear(years)
-#' [1] "1718" "1819"
 convert_year_to_fyyear <- function(year) {
   if (any((substr(year, 1, 2) != "20"))) {
     stop("Year has been entered in the wrong format, try again using form `2017` or use function `convert_fyyear_to_year` to convert to alternate year form.")
