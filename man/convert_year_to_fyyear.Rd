@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_year_types.R
 \name{convert_year_to_fyyear}
 \alias{convert_year_to_fyyear}
-\title{Convert a year type from alternate '2017' to normal '1718'}
+\title{Convert year types - Alternate year form to financial year form}
 \usage{
 convert_year_to_fyyear(year)
 }
@@ -10,11 +10,13 @@ convert_year_to_fyyear(year)
 \item{year}{vector of years in the form '2017'}
 }
 \value{
-a vector of years in the normal form '1718'
+a vector of years in the normal financial year form '1718'
 }
 \description{
-Convert a year type from alternate '2017' to normal '1718'
+Convert a year type from alternate form '2017' to normal financial year form '1718'.
 }
 \examples{
-convert_year_to_fyyear(c("1718", "1819"))
+years <- c("2017", "2018")
+convert_year_to_fyyear(years)
+[1] "1718" "1819"
 }
