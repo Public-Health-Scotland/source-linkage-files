@@ -18,5 +18,4 @@ Converts year type from the financial year form '1718' to the year form '2017'.
 \examples{
 fyyears <- c("1718", "1819")
 convert_fyyear_to_year(fyyears)
-[1] "2017" "2018"
 }
