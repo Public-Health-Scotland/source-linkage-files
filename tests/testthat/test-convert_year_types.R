@@ -1,11 +1,12 @@
+
 test_that("Can convert a year from normal financial year to the alternate form", {
   fyyear <- c(
-    1718,
-    1819,
-    1920,
-    2021,
-    2122,
-    1112
+    "1718",
+    "1819",
+    "1920",
+    "2021",
+    "2122",
+    "1112"
   )
 
   expect_equal(
