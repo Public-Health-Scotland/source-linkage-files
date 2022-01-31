@@ -1,4 +1,5 @@
 
+
 ## Read data ##
 data <- readr::read_csv(get_it_ltc_path())
 
@@ -74,12 +75,6 @@ data <- data %>%
              endomet = 0,
              digestive = 0)
 
-# Read data
-readr::read_csv(get_it_ltc_path())
-
-# Check types / rename
-
-# Create LTC flags 1/0
 
 
 # Save out to Year folder - /conf/hscdiip/SLF_Extracts/LTCs
