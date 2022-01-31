@@ -2,6 +2,7 @@
 
 export("%>%")
 export(boxi_date_format)
+export(create_demog_test_flags)
 export(create_hb_test_flags)
 export(create_hscp_test_flags)
 export(date_to_numeric)
