@@ -16,7 +16,7 @@ a dataframe with a count of each flag from \code{\link{sum_test_flags}}
 GP Practice Lookup tests
 }
 \seealso{
-\code{\link{create_hbpraccode_flags}} and \code{\link{create_hscp2018_flags}} for creating test flags
+\code{\link{create_hb_test_flags}} and \code{\link{create_hscp_test_flags}} for creating test flags
 
 Other produce tests functions: 
 \code{\link{produce_sc_ch_episodes_tests}()},

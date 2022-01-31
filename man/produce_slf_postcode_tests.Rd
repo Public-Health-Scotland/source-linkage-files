@@ -16,7 +16,7 @@ a dataframe with a count of each flag from \code{\link{sum_test_flags}}
 Postcode Lookup tests
 }
 \seealso{
-\code{\link{create_hb2019_flags}} and \code{\link{create_hscp2019_flags}} for creating test flags
+\code{\link{create_hb_test_flags}} and \code{\link{create_hscp_test_flags}} for creating test flags
 
 Other produce tests functions: 
 \code{\link{produce_sc_ch_episodes_tests}()},
