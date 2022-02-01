@@ -13,7 +13,7 @@ create_demog_test_flags <- function(data) {
     # create test flags
     dplyr::mutate(
       valid_chi = if_else(phsmethods::chi_check(.data$chi) == "Valid CHI", 1, 0),
-      unique_chi = if_else(stats::lag(.data$chi) != .data$chi, 1, 0),
+      unique_chi = if_else(dplyr::lag(.data$chi) != .data$chi, 1, 0),
       n_missing_chi = if_else(is.na(.data$chi) | .data$chi == "", 1, 0),
       n_males = if_else(.data$gender == 1, 1, 0),
       n_females = if_else(.data$gender == 2, 1, 0),
