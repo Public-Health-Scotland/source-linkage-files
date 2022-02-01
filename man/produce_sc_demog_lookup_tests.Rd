@@ -10,7 +10,7 @@ produce_sc_demog_lookup_tests(data)
 \item{data}{new or old data for testing summary flags (data is from \code{\link{get_sc_demog_lookup_path}})}
 }
 \value{
-a dataframe with a count of each flag from \code{\link{sum_test_flags}}
+a dataframe with a count of each flag from \code{\link{sum_test_flags}} and \code{\link{create_demog_test_flags}}
 }
 \description{
 Demographic Lookup tests
