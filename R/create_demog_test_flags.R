@@ -1,4 +1,4 @@
-#' Create demog test flags
+#' Create demographic test flags
 #'
 #' @param data a dataframe containing demographic variables e.g. chi
 #'

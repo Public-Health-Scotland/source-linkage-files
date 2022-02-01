@@ -1,9 +1,9 @@
-#' Create HB test flags
+#' Create Health Board test flags
 #'
 #' @param data the data containing a health board variable e.g. HB2019
 #' @param hb_var Health board variable e.g. HB2019 HB2018 hbpraccode
 #'
-#' @return a dataframe with flag (1 or 0) for each HB
+#' @return a dataframe with flag (1 or 0) for each Health Board
 #' @export
 #' @importFrom dplyr if_else
 #' @family create test flags functions

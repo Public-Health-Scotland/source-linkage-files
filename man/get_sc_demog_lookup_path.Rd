@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sc_demog_path.R
 \name{get_sc_demog_lookup_path}
 \alias{get_sc_demog_lookup_path}
-\title{Function for reading in SC Demographic lookup}
+\title{Function for reading in social care Demographic lookup}
 \usage{
 get_sc_demog_lookup_path(update = latest_update(), ...)
 }
@@ -13,10 +13,10 @@ defaults to \code{\link{latest_update}}}
 \item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
-The path to the sc demographic file as an \code{\link[fs]{path}}
+The path to the social care demographic file as an \code{\link[fs]{path}}
 }
 \description{
-Function for reading in SC Demographic lookup
+Function for reading in social care Demographic lookup
 }
 \seealso{
 \code{\link{get_file_path}} for the generic function.

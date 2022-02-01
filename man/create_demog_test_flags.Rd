@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_demog_test_flags.R
 \name{create_demog_test_flags}
 \alias{create_demog_test_flags}
-\title{Create demog test flags}
+\title{Create demographic test flags}
 \usage{
 create_demog_test_flags(data)
 }
@@ -13,7 +13,7 @@ create_demog_test_flags(data)
 a dataframe with flag (1 or 0) for each demographic variables
 }
 \description{
-Create demog test flags
+Create demographic test flags
 }
 \seealso{
 Other create test flags functions: 

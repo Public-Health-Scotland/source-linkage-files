@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_hb_test_flags.R
 \name{create_hb_test_flags}
 \alias{create_hb_test_flags}
-\title{Create HB test flags}
+\title{Create Health Board test flags}
 \usage{
 create_hb_test_flags(data, hb_var)
 }
@@ -12,10 +12,10 @@ create_hb_test_flags(data, hb_var)
 \item{hb_var}{Health board variable e.g. HB2019 HB2018 hbpraccode}
 }
 \value{
-a dataframe with flag (1 or 0) for each HB
+a dataframe with flag (1 or 0) for each Health Board
 }
 \description{
-Create HB test flags
+Create Health Board test flags
 }
 \seealso{
 Other create test flags functions: 

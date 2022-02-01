@@ -1,11 +1,11 @@
-#' Function for reading in SC Demographic lookup
+#' Function for reading in social care Demographic lookup
 #'
 #' @param update The update month to use,
 #' defaults to \code{\link{latest_update}}
 #'
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The path to the sc demographic file as an \code{\link[fs]{path}}
+#' @return The path to the social care demographic file as an \code{\link[fs]{path}}
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
