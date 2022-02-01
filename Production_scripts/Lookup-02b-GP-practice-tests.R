@@ -1,14 +1,15 @@
-# GP Practice Lookup tests
-# Required functions:
-# get_slf_dir
-# latest_update
-# previous_update
-# read_lookups_dir
-# create_HB2019_flag
-# create_HSCP2018_flag
-# sum_flags
-# gpprac_lookup_tests
-# compare_tests
+####################################################
+
+# Name of file - Lookup-02b-GP-practice-tests.R
+# Original Authors - Jennifer Thom
+# Original Date - January 2022
+#
+# Written/run on - RStudio Server
+# Version of R - 3.6.1
+#
+# Description - Produce tests for source linkage files
+# gp practice lookup file.
+
 
 ####################################################
 # Create new and old dataframes with measures for testing

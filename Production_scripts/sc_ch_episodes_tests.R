@@ -1,15 +1,13 @@
-# all ch episode tests
-# Required functions:
-# get_slf_dir
-# latest_update
-# previous_update
-# read_demog_tests
-# sum_flags
-# demog_lookup_tests
-# compare_tests
+####################################################
 
-library(tidyselect)
-library(dplyr)
+# Name of file - sc_ch_episodes_tests.R
+# Original Authors - Jennifer Thom
+# Original Date - January 2022
+#
+# Written/run on - RStudio Server
+# Version of R - 3.6.1
+#
+# Description - Produce tests for social care - care home episodes file.
 
 ####################################################
 # Create new and old dataframes with measures for testing
