@@ -39,7 +39,7 @@ create_hscp_test_flags <- function(data, hscp_var) {
       Western_Isles = if_else({{ hscp_var }} == "S37000031", 1, 0),
       Fife = if_else({{ hscp_var }} == "S37000032", 1, 0),
       Perth_and_Kinross = if_else({{ hscp_var }} == "S37000033", 1, 0),
-      Glasgow_City = if_else({{ hscp_var }} == "S37000015" | {{ hscp_var }} == "S37000034", 1, 0),
-      North_Lanarkshire = if_else({{ hscp_var }} == "S37000021" | {{ hscp_var }} == "S37000035", 1, 0)
+      Glasgow_City = if_else({{ hscp_var }} %in% c("S37000015", "S37000034"), 1, 0),
+      North_Lanarkshire = if_else({{ hscp_var }} %in% c("S37000021", "S37000035"), 1, 0)
     )
 }

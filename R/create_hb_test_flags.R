@@ -22,7 +22,7 @@ create_hb_test_flags <- function(data, hb_var) {
       NHS_Western_Isles = if_else({{ hb_var }} == "S08000028", 1, 0),
       NHS_Fife = if_else({{ hb_var }} == "S08000029", 1, 0),
       NHS_Tayside = if_else({{ hb_var }} == "S08000030", 1, 0),
-      NHS_Greater_Glasgow_and_Clyde = if_else({{ hb_var }} == "S08000031" | {{ hb_var }} == "S08000021", 1, 0),
-      NHS_Lanarkshire = if_else({{ hb_var }} == "S08000032" | {{ hb_var }} == "S08000023", 1, 0)
+      NHS_Greater_Glasgow_and_Clyde = if_else({{ hb_var }} %in% c("S08000031", "S08000021"), 1, 0),
+      NHS_Lanarkshire = if_else({{ hb_var }} %in% c("S08000032", "S08000023"), 1, 0)
     )
 }
