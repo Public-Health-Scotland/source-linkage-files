@@ -1,4 +1,5 @@
 
+
 ## financial year in question ##
 FY = 1718
 year = 2017
@@ -38,28 +39,6 @@ colnames(data) = c("chi",
                    "endomet_date",
                    "digestive_date")
 
-# change date types
-data <- data %>%
-  dplyr::mutate(arth_date = as.Date(arth_date),
-         asthma_date = as.Date(asthma_date),
-         atrialfib_date = as.Date(atrialfib_date),
-         cancer_date = as.Date(cancer_date),
-         cvd_date = as.Date(cvd_date),
-         liver_date = as.Date(liver_date),
-         copd_date = as.Date(copd_date),
-         dementia_date = as.Date(dementia_date),
-         diabetes_date = as.Date(diabetes_date),
-         epilepsy_date = as.Date(epilepsy_date),
-         chd_date = as.Date(chd_date),
-         hefailure_date = as.Date(hefailure_date),
-         ms_date = as.Date(ms_date),
-         parkinsons_date = as.Date(parkinsons_date),
-         refailure_date = as.Date(refailure_date),
-         congen_date = as.Date(congen_date),
-         bloodbfo_date = as.Date(bloodbfo_date),
-         endomet_date = as.Date(endomet_date),
-         digestive_date = as.Date(digestive_date))
-
 
 
 ## Create LTC flags 1/0 ##
@@ -67,24 +46,24 @@ data <- data %>%
 # Create new variables
 data <- data %>%
   tibble::add_column(arth = NA,
-             asthma = NA,
-             atrialfib = NA,
-             cancer = NA,
-             cvd = NA,
-             liver = NA,
-             copd = NA,
-             dementia = NA,
-             diabetes = NA,
-             epilepsy = NA,
-             chd = NA,
-             hefailure = NA,
-             ms = NA,
-             parkinsons = NA,
-             refailure = NA,
-             congen = NA,
-             bloodbfo = NA,
-             endomet = NA,
-             digestive = NA)
+                     asthma = NA,
+                     atrialfib = NA,
+                     cancer = NA,
+                     cvd = NA,
+                     liver = NA,
+                     copd = NA,
+                     dementia = NA,
+                     diabetes = NA,
+                     epilepsy = NA,
+                     chd = NA,
+                     hefailure = NA,
+                     ms = NA,
+                     parkinsons = NA,
+                     refailure = NA,
+                     congen = NA,
+                     bloodbfo = NA,
+                     endomet = NA,
+                     digestive = NA)
 
 
 
