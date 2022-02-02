@@ -39,3 +39,10 @@ for (i in 1:nrow(data)) {
 # get_slf_deaths_path()
 saveRDS(data, get_slf_deaths_path())
 
+# haven
+haven::write_sav(LTC, get_slf_deaths_path(), compress = TRUE
+)
+
+#readr
+readr::write_rds(LTC, get_slf_deaths_path(), compress = "gz")
+
