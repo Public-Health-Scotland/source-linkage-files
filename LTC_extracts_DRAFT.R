@@ -1,7 +1,7 @@
 
 ## financial year in question ##
-FY = 1718
-year = 2017
+FY <- 1718
+year <- 2017
 
 
 # output1718 <- haven::read_sav("/conf/hscdiip/SLF_Extracts/LTCs/LTCs_patient_reference_file-201718.zsav")
@@ -16,49 +16,29 @@ data <- readr::read_csv(get_it_ltc_path())
 ## Check types / rename ##
 
 # rename
-colnames(data) = c("chi",
-                   "postcode",
-                   "arth_date",
-                   "asthma_date",
-                   "atrialfib_date",
-                   "cancer_date",
-                   "cvd_date",
-                   "liver_date",
-                   "copd_date",
-                   "dementia_date",
-                   "diabetes_date",
-                   "epilepsy_date",
-                   "chd_date",
-                   "hefailure_date",
-                   "ms_date",
-                   "parkinsons_date",
-                   "refailure_date",
-                   "congen_date",
-                   "bloodbfo_date",
-                   "endomet_date",
-                   "digestive_date")
-
-# change date types
-data <- data %>%
-  dplyr::mutate(arth_date = as.Date(arth_date),
-         asthma_date = as.Date(asthma_date),
-         atrialfib_date = as.Date(atrialfib_date),
-         cancer_date = as.Date(cancer_date),
-         cvd_date = as.Date(cvd_date),
-         liver_date = as.Date(liver_date),
-         copd_date = as.Date(copd_date),
-         dementia_date = as.Date(dementia_date),
-         diabetes_date = as.Date(diabetes_date),
-         epilepsy_date = as.Date(epilepsy_date),
-         chd_date = as.Date(chd_date),
-         hefailure_date = as.Date(hefailure_date),
-         ms_date = as.Date(ms_date),
-         parkinsons_date = as.Date(parkinsons_date),
-         refailure_date = as.Date(refailure_date),
-         congen_date = as.Date(congen_date),
-         bloodbfo_date = as.Date(bloodbfo_date),
-         endomet_date = as.Date(endomet_date),
-         digestive_date = as.Date(digestive_date))
+colnames(data) <- c(
+  "chi",
+  "postcode",
+  "arth_date",
+  "asthma_date",
+  "atrialfib_date",
+  "cancer_date",
+  "cvd_date",
+  "liver_date",
+  "copd_date",
+  "dementia_date",
+  "diabetes_date",
+  "epilepsy_date",
+  "chd_date",
+  "hefailure_date",
+  "ms_date",
+  "parkinsons_date",
+  "refailure_date",
+  "congen_date",
+  "bloodbfo_date",
+  "endomet_date",
+  "digestive_date"
+)
 
 
 
@@ -66,25 +46,27 @@ data <- data %>%
 
 # Create new variables
 data <- data %>%
-  tibble::add_column(arth = NA,
-             asthma = NA,
-             atrialfib = NA,
-             cancer = NA,
-             cvd = NA,
-             liver = NA,
-             copd = NA,
-             dementia = NA,
-             diabetes = NA,
-             epilepsy = NA,
-             chd = NA,
-             hefailure = NA,
-             ms = NA,
-             parkinsons = NA,
-             refailure = NA,
-             congen = NA,
-             bloodbfo = NA,
-             endomet = NA,
-             digestive = NA)
+  tibble::add_column(
+    arth = NA,
+    asthma = NA,
+    atrialfib = NA,
+    cancer = NA,
+    cvd = NA,
+    liver = NA,
+    copd = NA,
+    dementia = NA,
+    diabetes = NA,
+    epilepsy = NA,
+    chd = NA,
+    hefailure = NA,
+    ms = NA,
+    parkinsons = NA,
+    refailure = NA,
+    congen = NA,
+    bloodbfo = NA,
+    endomet = NA,
+    digestive = NA
+  )
 
 
 
@@ -92,8 +74,8 @@ data <- data %>%
 # also clear the date if outside of FY
 
 # create ltc and ltc_data
-ltc = data[1:10, 22:40]
-ltc_date = data[1:10, 3:21]
+ltc <- data[, 22:40]
+ltc_date <- data[, 3:21]
 
 # fy date to compare to
 new_fyyear <- as.numeric(substr(year, 3, 4)) + 1
@@ -102,15 +84,15 @@ fyyear_date <- paste0("01-04-", new_fyyear)
 
 for (i in 1:nrow(ltc)) {
   for (j in 1:ncol(ltc)) {
-
-    ifelse(is.na(ltc_date[i,j] == TRUE | ltc_date[i,j] > fyyear_date | ltc_date[i,j] == fyyear_date),
-           ltc[i,j] <- 0, ltc[i,j] <- 1)
+    ifelse(is.na(ltc_date[i, j] == TRUE | ltc_date[i, j] > fyyear_date | ltc_date[i, j] == fyyear_date),
+      ltc[i, j] <- 0, ltc[i, j] <- 1
+    )
   }
 }
 
 
 # combine ltc and ltc_date
-LTC <- cbind(data[1:10, 1:2], ltc, ltc_date)
+LTC <- cbind(data[, 1:2], ltc, ltc_date)
 
 
 
@@ -125,19 +107,21 @@ LTC <- LTC %>%
 # fs::path(get_slf_dir(), "LTCs", "<filename>")
 
 # haven
-haven::write_sav(LTC, paste0("LTC_patient_reference_file-20", FY), path = "/conf/hscdiip/SLF_Extracts/LTCs")
+haven::write_sav(LTC, paste0("LTC_patient_reference_file-20", FY),
+  path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = TRUE
+)
 
-# csv
-write.csv(LTC, paste0("LTC_patient_reference_file-20", FY, ".csv"), path = "/conf/hscdiip/SLF_Extracts/LTCs")
-
+readr::write_rds(LTC, paste0("LTC_patient_reference_file-20", FY),
+  path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = "gz"
+)
 
 
 ###########################################################################################################
-# as a function # (if can get convert_fyyear_to_year to work)
+# as a function #
 get_ltc_extracts <- function(data, fyyear) {
 
   # fyyear to year
-  year = convert_fyyear_to_year(fyyear)
+  year <- convert_fyyear_to_year(fyyear)
 
   # fy date to compare to
   new_fyyear <- as.numeric(substr(year, 3, 4)) + 1
@@ -145,16 +129,16 @@ get_ltc_extracts <- function(data, fyyear) {
 
 
   # create ltc and ltc_data
-  ltc = data[1:10, 22:40]
-  ltc_date = data[1:10, 3:21]
+  ltc <- data[, 22:40]
+  ltc_date <- data[, 3:21]
 
 
   # set flags
   for (i in 1:nrow(ltc)) {
     for (j in 1:ncol(ltc)) {
-
-      ifelse(is.na(ltc_date[i,j] == TRUE | ltc_date[i,j] > fyyear_date | ltc_date[i,j] == fyyear_date),
-             ltc[i,j] <- 0, ltc[i,j] <- 1)
+      ifelse(is.na(ltc_date[i, j] == TRUE | ltc_date[i, j] > fyyear_date | ltc_date[i, j] == fyyear_date),
+        ltc[i, j] <- 0, ltc[i, j] <- 1
+      )
     }
   }
 
@@ -162,11 +146,11 @@ get_ltc_extracts <- function(data, fyyear) {
   # combine chi, postcode, ltc and ltc_date
   LTC <- cbind(data[, 1:2], ltc, ltc_date)
 
-  return (LTC)
+  return(LTC)
 }
 
 
-get_ltc_extracts(data, fyyear = 1819)
+get_ltc_extracts(data[,], fyyear = 1718)
 
 
 ###########################################################################################################
