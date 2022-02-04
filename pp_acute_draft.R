@@ -14,7 +14,7 @@
 source("setup_environment.R")
 
 #Set up for extract_path function
-year <- "1819"
+year <- "1920"
 
 #Load extract file
 acute_file <- read_csv(file = extract_path(year, "Acute"), n_max = 2000,
@@ -173,98 +173,39 @@ acute_file <- acute_file %>%
                               cij_ipdc == "DC" ~ "D")) %>%
 #Recode GP practice into 5 digit number
 #We assume that if it starts with a letter it's an English practice and so recode to 99995.
-#PUT INTO FUNCTION?
   mutate(gpprac = if_else(str_detect(gpprac, "[A-Z]"), "99995", gpprac)) %>%
 #Change dates to date type
   mutate(record_keydate1 = as_datetime(record_keydate1, format = "%Y/%m/%d"),
          record_keydate2 = as_datetime(record_keydate2, format = "%Y/%m/%d")) %>%
 #Calculate the total length of stay (for the entire episode, not just within the financial year).
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
-
-
-#initialise monthly cost/beddays variables - PUT INTO FUNCTION
-monthly_cost_beddays <- acute_file %>%
-select(uri, cost_total_net, yearstay, costmonthnum) %>%
-  mutate(apr_cost = if_else(costmonthnum == 4, cost_total_net, 0),
-         may_cost = if_else(costmonthnum == 5, cost_total_net, 0),
-         jun_cost = if_else(costmonthnum == 6, cost_total_net, 0),
-         jul_cost = if_else(costmonthnum == 7, cost_total_net, 0),
-         aug_cost = if_else(costmonthnum == 8, cost_total_net, 0),
-         sep_cost = if_else(costmonthnum == 9, cost_total_net, 0),
-         oct_cost = if_else(costmonthnum == 10, cost_total_net, 0),
-         nov_cost = if_else(costmonthnum == 11, cost_total_net, 0),
-         dec_cost = if_else(costmonthnum == 12, cost_total_net, 0),
-         jan_cost = if_else(costmonthnum == 1, cost_total_net, 0),
-         feb_cost = if_else(costmonthnum == 2, cost_total_net, 0),
-         mar_cost = if_else(costmonthnum == 3, cost_total_net, 0),
-         apr_beddays = if_else(costmonthnum == 4, yearstay, 0),
-         may_beddays = if_else(costmonthnum == 5, yearstay, 0),
-         jun_beddays = if_else(costmonthnum == 6, yearstay, 0),
-         jul_beddays = if_else(costmonthnum == 7, yearstay, 0),
-         aug_beddays = if_else(costmonthnum == 8, yearstay, 0),
-         sep_beddays = if_else(costmonthnum == 9, yearstay, 0),
-         oct_beddays = if_else(costmonthnum == 10, yearstay, 0),
-         nov_beddays = if_else(costmonthnum == 11, yearstay, 0),
-         dec_beddays = if_else(costmonthnum == 12, yearstay, 0),
-         jan_beddays = if_else(costmonthnum == 1, yearstay, 0),
-         feb_beddays = if_else(costmonthnum == 2, yearstay, 0),
-         mar_beddays = if_else(costmonthnum == 3, yearstay, 0)
-         ) %>%
-#aggregate by uri and sum variables
-#check how to remove duplicates here?
-  group_by(uri) %>%
-  summarise(apr_cost = sum(apr_cost),
-            may_cost = sum(may_cost),
-            jun_cost = sum(jun_cost),
-            jul_cost = sum(jul_cost),
-            aug_cost = sum(aug_cost),
-            sep_cost = sum(sep_cost),
-            oct_cost = sum(oct_cost),
-            nov_cost = sum(nov_cost),
-            dec_cost = sum(dec_cost),
-            jan_cost = sum(jan_cost),
-            feb_cost = sum(feb_cost),
-            mar_cost = sum(mar_cost),
-            apr_beddays = sum(apr_beddays),
-            may_beddays = sum(may_beddays),
-            jun_beddays = sum(jun_beddays),
-            jul_beddays = sum(jul_beddays),
-            aug_beddays = sum(aug_beddays),
-            sep_beddays = sum(sep_beddays),
-            oct_beddays = sum(oct_beddays),
-            nov_beddays = sum(nov_beddays),
-            dec_beddays = sum(dec_beddays),
-            jan_beddays = sum(jan_beddays),
-            feb_beddays = sum(feb_beddays),
-            mar_beddays = sum(mar_beddays)
-            ) %>%
-  ungroup()
-
-#match monthly cost and beddays back to acute_file
-acute_monthly_totals <- acute_file %>%
-  distinct(uri, .keep_all = TRUE)%>%
-  left_join(monthly_cost_beddays, by = "uri") %>%
-#total up yearstay and costs
-  mutate(yearstay = rowSums(across(ends_with("beddays"))),
-         cost_total_net = rowSums(across(ends_with("cost")))
-         ) %>%
+  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
 #create and populate SMRType
   mutate(SMRType = case_when(recid == '01B' & lineno != 330 & ipdc == 'I' ~ 'Acute-IP',
                            recid == '01B' & lineno != 330 & ipdc == 'D' ~ 'Acute-DC',
                            lineno == 330 & ipdc == 'I' ~ 'GLS-IP',
-                           recid == 'GLS' ~ 'GLS-IP'))
+                           recid == 'GLS' ~ 'GLS-IP')) %>%
+# If costs are missing, fill them in
+  mutate(cost_total_net = case_when(cost_total_net == is.na(cost_total_net) ~ 0)
+  )
 
-#Fix c3 costs
-c3_costs_fix <- acute_monthly_totals %>%
-  mutate(cost_total_net = case_when(recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
-                                    location == 'A111H' & ipdc == 'D' ~ 521.38,
-                                    recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
-                                    location == 'A111H' & ipdc == 'I' ~ 2309.63 * yearstay,
-                                    recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
-                                      location == 'A210H' & ipdc == 'D' ~ 521.38,
-                                    recid == '01B' & spec == 'C3'& hbtreatcode == 'S08000015'&
-                                      location == 'A210H' & ipdc == 'I' ~ 2460.63 * yearstay,
-                                    )
+#initialise monthly cost/beddays variables in a separate data frame for matching
+monthly_cost_beddays <- acute_file %>%
+  convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay)
+
+#match monthly cost and beddays back to acute_file
+final_acute_file_check <- acute_file %>%
+  distinct(uri, .keep_all = TRUE)%>%
+  left_join(monthly_cost_beddays, by = "uri") %>%
+#total up yearstay and costs
+  mutate(yearstay = rowSums(across(ends_with("_beddays"))),
+         cost_total_net = rowSums(across(ends_with("_cost")))
+         )
+
+
+c3_fix <- fix_c3_costs(final_acute_file)
+
+
+
 
 
 #working - But now not working?
