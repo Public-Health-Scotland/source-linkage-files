@@ -26,7 +26,7 @@ end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
 ## Read data ##
 ltc_file <- read_csv(
   file = get_it_ltc_path(),
-  col_type = vroom::cols(
+  col_type = cols(
     `PATIENT_UPI [C]` = col_character(),
     `PATIENT_POSTCODE [C]` = col_character(),
     `ARTHRITIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
@@ -37,8 +37,10 @@ ltc_file <- read_csv(
     `CHRON_LIVER_DIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `COPD_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `DEMENTIA_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `DIABETES_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `EPILEPSY_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `HEART_DISEASE_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `HEART_FAILURE_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `MULT_SCLEROSIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `PARKINSONS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
     `RENAL_FAILURE_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
