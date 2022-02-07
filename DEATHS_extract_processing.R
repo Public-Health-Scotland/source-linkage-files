@@ -51,3 +51,5 @@ haven::write_sav(deaths_file, get_slf_deaths_path(), compress = TRUE)
 
 # .rds file
 readr::write_rds(deaths_file, get_slf_deaths_path(), compress = "gz")
+
+## End of Script ##
