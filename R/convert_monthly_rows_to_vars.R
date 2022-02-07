@@ -22,6 +22,6 @@ convert_monthly_rows_to_vars <- function(data, uri_var, month_var, cost_var, bed
       values_fill = 0
     ) %>%
   group_by({{ uri_var }}) %>%
-    summarise(across(contains(c("_cost", "_beddays"))), na.rm = TRUE) %>%
+    summarise(across(contains(c("_cost", "_beddays")))) %>%
     ungroup()
 }
