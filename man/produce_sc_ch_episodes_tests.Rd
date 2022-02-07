@@ -10,7 +10,7 @@ produce_sc_ch_episodes_tests(data)
 \item{data}{new or old data for testing summary flags (data is from \code{\link{get_sc_ch_episodes_path}})}
 }
 \value{
-a dataframe with a count of each flag \code{\link{sum_test_flags}}
+a dataframe with a count of each flag \code{\link{sum_test_flags}} and \code{\link{create_demog_test_flags}}
 }
 \description{
 All care home episode tests

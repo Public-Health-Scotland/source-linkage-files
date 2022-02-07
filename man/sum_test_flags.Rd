@@ -7,7 +7,7 @@
 sum_test_flags(data)
 }
 \arguments{
-\item{data}{the data should be in a format for summarising}
+\item{data}{the data should be in a format for summarising test flags}
 }
 \value{
 a dataframe with a count of each flag
