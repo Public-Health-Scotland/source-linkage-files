@@ -1,44 +1,81 @@
 
+#####################################################
+# Draft LTC Extract Processing Code
+# Author: Catherine Holland
+# Date: February 2022
+# Written on RStudio Server
+# Version of R - 3.6.1
+# Input -
+# Description - Takes IT extract of LTC data.
+#              Renames and checks types of data.
+#              Flags variables which fall outside FY.
+#              Saves outputted flagged dataset.
+#####################################################
+
+## packages ##
+
+library(dplyr)
+library(stringr)
+
+
 ## financial year in question ##
 FY <- 1718
-year <- 2017
-
-
-# output1718 <- haven::read_sav("/conf/hscdiip/SLF_Extracts/LTCs/LTCs_patient_reference_file-201718.zsav")
-
+year <- convert_fyyear_to_year(FY)
 
 
 ## Read data ##
-it_extract_ref()
-data <- readr::read_csv(get_it_ltc_path())
-
-
-## Check types / rename ##
-
-# rename
-colnames(data) <- c(
-  "chi",
-  "postcode",
-  "arth_date",
-  "asthma_date",
-  "atrialfib_date",
-  "cancer_date",
-  "cvd_date",
-  "liver_date",
-  "copd_date",
-  "dementia_date",
-  "diabetes_date",
-  "epilepsy_date",
-  "chd_date",
-  "hefailure_date",
-  "ms_date",
-  "parkinsons_date",
-  "refailure_date",
-  "congen_date",
-  "bloodbfo_date",
-  "endomet_date",
-  "digestive_date"
+ltc_file <- readr::read_csv(
+  file = get_it_ltc_path(),
+  col_type = vroom::cols(
+    `PATIENT_UPI [C]` = col_character(),
+    `PATIENT_POSTCODE [C]` = col_character(),
+    `ARTHRITIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `ASTHMA_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `ATRIAL_FIB_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `CANCER_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `CEREBROVASC_DIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `CHRON_LIVER_DIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `COPD_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `DEMENTIA_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `EPILEPSY_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `HEART_DISEASE_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `MULT_SCLEROSIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `PARKINSONS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `RENAL_FAILURE_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `CONGENITAL_PROB_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `BLOOD_AND_BFO_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `OTH_DIS_END_MET_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
+    `OTH_DIS_DIG_SYS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T")
+  )
 )
+
+names(ltc_file) <- str_replace_all(names(ltc_file), " ", "_")
+
+## rename ##
+ltc_file <- ltc_file %>%
+  rename(
+    chi = "PATIENT_UPI_[C]",
+    postcode = "PATIENT_POSTCODE_[C]",
+    arth_date = "ARTHRITIS_DIAG_DATE",
+    asthma_date = "ASTHMA_DIAG_DATE",
+    atrialfib_date = "ATRIAL_FIB_DIAG_DATE",
+    cancer_date = "CANCER_DIAG_DATE",
+    cvd_date = "CEREBROVASC_DIS_DIAG_DATE",
+    liver_date = "CHRON_LIVER_DIS_DIAG_DATE",
+    copd_date = "COPD_DIAG_DATE",
+    dementia_date = "DEMENTIA_DIAG_DATE",
+    diabetes_date = "DIABETES_DIAG_DATE",
+    epilepsy_date = "EPILEPSY_DIAG_DATE",
+    chd_date = "HEART_DISEASE_DIAG_DATE",
+    hefailure_date = "HEART_FAILURE_DIAG_DATE",
+    ms_date = "MULT_SCLEROSIS_DIAG_DATE",
+    parkinsons_date = "PARKINSONS_DIAG_DATE",
+    refailure_date = "RENAL_FAILURE_DIAG_DATE",
+    congen_date = "CONGENITAL_PROB_DIAG_DATE",
+    bloodbfo_date = "BLOOD_AND_BFO_DIAG_DATE",
+    endomet_date = "OTH_DIS_END_MET_DIAG_DATE",
+    digestive_date = "OTH_DIS_DIG_SYS_DIAG_DATE"
+  )
 
 
 
@@ -71,86 +108,30 @@ data <- data %>%
 
 
 # Set flags to 1 or 0 based on FY
-# also clear the date if outside of FY
+# then sort by chi
+end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
 
-# create ltc and ltc_data
-ltc <- data[, 22:40]
-ltc_date <- data[, 3:21]
+LTC <- ltc_file %>%
+  mutate(across(ends_with("date"), list(flag = ~ if_else(is.na(.x) | .x > end_fy, 0, 1)))) %>%
+  rename_with(.cols = ends_with("flag"), .fn = ~ stringr::str_remove(.x, "_date_flag")) %>%
+  arrange(chi)
 
-# fy date to compare to
-new_fyyear <- as.numeric(substr(year, 3, 4)) + 1
-fyyear_date <- paste0("01-04-", new_fyyear)
-
-
-for (i in 1:nrow(ltc)) {
-  for (j in 1:ncol(ltc)) {
-    ifelse(is.na(ltc_date[i, j] == TRUE | ltc_date[i, j] > fyyear_date | ltc_date[i, j] == fyyear_date),
-      ltc[i, j] <- 0, ltc[i, j] <- 1
-    )
-  }
-}
-
-
-# combine ltc and ltc_date
-LTC <- cbind(data[, 1:2], ltc, ltc_date)
-
-
-
-## sort data by chi ##
-LTC <- LTC %>%
-  dplyr::arrange(chi)
 
 
 
 
 ## Save out to Year folder - /conf/hscdiip/SLF_Extracts/LTCs ##
-# fs::path(get_slf_dir(), "LTCs", "<filename>")
 
-# haven
+# zsav file output
 haven::write_sav(LTC, paste0("LTC_patient_reference_file-20", FY),
   path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = TRUE
 )
 
+# rds file output
 readr::write_rds(LTC, paste0("LTC_patient_reference_file-20", FY),
   path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = "gz"
 )
 
 
-###########################################################################################################
-# as a function #
-get_ltc_extracts <- function(data, fyyear) {
 
-  # fyyear to year
-  year <- convert_fyyear_to_year(fyyear)
-
-  # fy date to compare to
-  new_fyyear <- as.numeric(substr(year, 3, 4)) + 1
-  fyyear_date <- paste0("01-04-", new_fyyear)
-
-
-  # create ltc and ltc_data
-  ltc <- data[, 22:40]
-  ltc_date <- data[, 3:21]
-
-
-  # set flags
-  for (i in 1:nrow(ltc)) {
-    for (j in 1:ncol(ltc)) {
-      ifelse(is.na(ltc_date[i, j] == TRUE | ltc_date[i, j] > fyyear_date | ltc_date[i, j] == fyyear_date),
-        ltc[i, j] <- 0, ltc[i, j] <- 1
-      )
-    }
-  }
-
-
-  # combine chi, postcode, ltc and ltc_date
-  LTC <- cbind(data[, 1:2], ltc, ltc_date)
-
-  return(LTC)
-}
-
-
-get_ltc_extracts(data[,], fyyear = 1718)
-
-
-###########################################################################################################
+## END OF SCRIPT ##
