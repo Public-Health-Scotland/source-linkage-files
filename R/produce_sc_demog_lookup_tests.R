@@ -4,7 +4,6 @@
 #'
 #' @return a dataframe with a count of each flag from \code{\link{sum_test_flags}} and \code{\link{create_demog_test_flags}}
 #' @export
-#' @export
 #' @importFrom dplyr mutate select
 #' @family produce tests functions
 produce_sc_demog_lookup_tests <- function(data) {
