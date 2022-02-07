@@ -13,6 +13,8 @@
 #Load set up file
 source("setup_environment.R")
 
+library(tidyr)
+
 #Set up for extract_path function
 year <- "1920"
 
@@ -182,8 +184,8 @@ acute_clean <- acute_file %>%
                            lineno == 330 & ipdc == 'I' ~ 'GLS-IP',
                            recid == 'GLS' ~ 'GLS-IP')) %>%
 # If costs are missing, fill them in
-  mutate(cost_total_net = case_when(cost_total_net == is.na(cost_total_net) ~ 0)
-  )
+  mutate(cost_total_net = if_else(is.na(cost_total_net), 0, cost_total_net))
+
 
 #initialise monthly cost/beddays variables in a separate data frame for matching
 monthly_cost_beddays <- acute_clean %>%
@@ -200,7 +202,6 @@ final_acute_file_check <- acute_clean %>%
 
 
 c3_fix <- fix_c3_costs(final_acute_file)
-
 
 
 
