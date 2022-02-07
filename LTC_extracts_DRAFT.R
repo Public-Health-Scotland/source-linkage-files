@@ -17,35 +17,33 @@
 library(dplyr)
 library(stringr)
 
-
 ## financial year in question ##
 FY <- 1718
 year <- convert_fyyear_to_year(FY)
 
-
 ## Read data ##
 ltc_file <- readr::read_csv(
   file = get_it_ltc_path(),
-  col_type = vroom::cols(
+  col_type = cols(
     `PATIENT_UPI [C]` = col_character(),
     `PATIENT_POSTCODE [C]` = col_character(),
-    `ARTHRITIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `ASTHMA_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `ATRIAL_FIB_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `CANCER_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `CEREBROVASC_DIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `CHRON_LIVER_DIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `COPD_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `DEMENTIA_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `EPILEPSY_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `HEART_DISEASE_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `MULT_SCLEROSIS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `PARKINSONS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `RENAL_FAILURE_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `CONGENITAL_PROB_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `BLOOD_AND_BFO_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `OTH_DIS_END_MET_DIAG_DATE` = col_date(format = "%Y/%m/%d %T"),
-    `OTH_DIS_DIG_SYS_DIAG_DATE` = col_date(format = "%Y/%m/%d %T")
+    `ARTHRITIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `ASTHMA_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `ATRIAL_FIB_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `CANCER_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `CEREBROVASC_DIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `CHRON_LIVER_DIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `COPD_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `DEMENTIA_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `EPILEPSY_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `HEART_DISEASE_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `MULT_SCLEROSIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `PARKINSONS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `RENAL_FAILURE_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `CONGENITAL_PROB_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `BLOOD_AND_BFO_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `OTH_DIS_END_MET_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
+    `OTH_DIS_DIG_SYS_DIAG_DATE` = col_date(format = "%d-%m-%Y")
   )
 )
 
@@ -77,8 +75,6 @@ ltc_file <- ltc_file %>%
     digestive_date = "OTH_DIS_DIG_SYS_DIAG_DATE"
   )
 
-
-
 ## Create LTC flags 1/0 ##
 
 # Create new variables
@@ -105,8 +101,6 @@ data <- data %>%
     digestive = NA
   )
 
-
-
 # Set flags to 1 or 0 based on FY
 # then sort by chi
 end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
@@ -116,12 +110,7 @@ LTC <- ltc_file %>%
   rename_with(.cols = ends_with("flag"), .fn = ~ stringr::str_remove(.x, "_date_flag")) %>%
   arrange(chi)
 
-
-
-
-
 ## Save out to Year folder - /conf/hscdiip/SLF_Extracts/LTCs ##
-
 # zsav file output
 haven::write_sav(LTC, paste0("LTC_patient_reference_file-20", FY),
   path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = TRUE
@@ -131,7 +120,5 @@ haven::write_sav(LTC, paste0("LTC_patient_reference_file-20", FY),
 readr::write_rds(LTC, paste0("LTC_patient_reference_file-20", FY),
   path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = "gz"
 )
-
-
 
 ## END OF SCRIPT ##
