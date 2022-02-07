@@ -1,4 +1,4 @@
-#' Compare test files
+#' Produce a test comparison
 #'
 #' @param old_data dataframe containing old file
 #' @param new_data dataframe containing new file

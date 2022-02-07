@@ -1,4 +1,4 @@
-#' Function for reading in social care Demographic lookup
+#' Get the Social Care Demographic lookup file path
 #'
 #' @param update The update month to use,
 #' defaults to \code{\link{latest_update}}

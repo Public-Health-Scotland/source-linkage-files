@@ -1,4 +1,4 @@
-#' All care home episode tests
+#' Produce the Care Home all episodes tests
 #'
 #' @param data new or old data for testing summary flags (data is from \code{\link{get_sc_ch_episodes_path}})
 #'

@@ -1,4 +1,4 @@
-#' Demographic Lookup tests
+#' Produce the Social Care Demographic Lookup tests
 #'
 #' @param data new or old data for testing summary flags (data is from \code{\link{get_sc_demog_lookup_path}})
 #'

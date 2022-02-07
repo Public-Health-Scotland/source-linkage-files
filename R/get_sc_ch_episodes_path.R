@@ -1,4 +1,4 @@
-#' Function for reading in all care home episodes
+#' Get the Care Home all episodes file path
 #'
 #' @param update The update month to use,
 #' defaults to \code{\link{latest_update}}
