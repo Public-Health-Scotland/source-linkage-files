@@ -162,7 +162,7 @@ acute_file <- acute_file %>%
          )
 
 
-acute_file <- acute_file %>%
+acute_clean <- acute_file %>%
 #Set recid as 01B and flag GLS records
   mutate(recid = if_else(GLS_Record == "Y", "GLS", "01B")) %>%
 #Set IDPC marker for the episode
@@ -189,11 +189,11 @@ acute_file <- acute_file %>%
   )
 
 #initialise monthly cost/beddays variables in a separate data frame for matching
-monthly_cost_beddays <- acute_file %>%
+monthly_cost_beddays <- acute_clean %>%
   convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay)
 
 #match monthly cost and beddays back to acute_file
-final_acute_file_check <- acute_file %>%
+final_acute_file_check <- acute_clean %>%
   distinct(uri, .keep_all = TRUE)%>%
   left_join(monthly_cost_beddays, by = "uri") %>%
 #total up yearstay and costs
