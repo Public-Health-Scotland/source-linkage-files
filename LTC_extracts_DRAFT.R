@@ -20,6 +20,7 @@ library(stringr)
 ## financial year in question ##
 FY <- 1718
 year <- convert_fyyear_to_year(FY)
+end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
 
 ## Read data ##
 ltc_file <- readr::read_csv(
@@ -79,9 +80,8 @@ ltc_file <- ltc_file %>%
 
 # Set flags to 1 or 0 based on FY
 # then sort by chi
-end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
 
-LTC <- ltc_file %>%
+ltc_flags <- ltc_file %>%
   mutate(across(ends_with("date"), list(flag = ~ if_else(is.na(.x) | .x > end_fy, 0, 1)))) %>%
   rename_with(.cols = ends_with("flag"), .fn = ~ stringr::str_remove(.x, "_date_flag")) %>%
   arrange(chi)
