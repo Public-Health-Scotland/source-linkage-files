@@ -77,30 +77,6 @@ ltc_file <- ltc_file %>%
 
 ## Create LTC flags 1/0 ##
 
-# Create new variables
-data <- data %>%
-  tibble::add_column(
-    arth = NA,
-    asthma = NA,
-    atrialfib = NA,
-    cancer = NA,
-    cvd = NA,
-    liver = NA,
-    copd = NA,
-    dementia = NA,
-    diabetes = NA,
-    epilepsy = NA,
-    chd = NA,
-    hefailure = NA,
-    ms = NA,
-    parkinsons = NA,
-    refailure = NA,
-    congen = NA,
-    bloodbfo = NA,
-    endomet = NA,
-    digestive = NA
-  )
-
 # Set flags to 1 or 0 based on FY
 # then sort by chi
 end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
