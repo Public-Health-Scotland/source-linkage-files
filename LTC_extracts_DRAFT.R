@@ -16,6 +16,7 @@
 
 library(dplyr)
 library(stringr)
+library(readr)
 
 ## financial year in question ##
 FY <- 1718
@@ -23,9 +24,9 @@ year <- convert_fyyear_to_year(FY)
 end_fy <- lubridate::dmy(paste0("01-04-", as.numeric(substr(year, 3, 4)) + 1))
 
 ## Read data ##
-ltc_file <- readr::read_csv(
+ltc_file <- read_csv(
   file = get_it_ltc_path(),
-  col_type = cols(
+  col_type = vroom::cols(
     `PATIENT_UPI [C]` = col_character(),
     `PATIENT_POSTCODE [C]` = col_character(),
     `ARTHRITIS_DIAG_DATE` = col_date(format = "%d-%m-%Y"),
