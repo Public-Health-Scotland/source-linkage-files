@@ -34,6 +34,9 @@
     <loc>/reference/dd_period.html</loc>
   </url>
   <url>
+    <loc>/reference/end_fy.html</loc>
+  </url>
+  <url>
     <loc>/reference/eng_gp_to_dummy.html</loc>
   </url>
   <url>
@@ -106,6 +109,9 @@
     <loc>/reference/latest_update.html</loc>
   </url>
   <url>
+    <loc>/reference/midpoint_fy.html</loc>
+  </url>
+  <url>
     <loc>/reference/numeric_to_date.html</loc>
   </url>
   <url>
@@ -131,5 +137,8 @@
   </url>
   <url>
     <loc>/reference/read_spd_file.html</loc>
+  </url>
+  <url>
+    <loc>/reference/start_fy.html</loc>
   </url>
 </urlset>
