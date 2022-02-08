@@ -12,7 +12,7 @@ convert_monthly_rows_to_vars <- function(data, uri_var, month_var, cost_var, bed
 
     data %>%
     select({{ uri_var }}, {{ cost_var }}, {{ beddays_var }}, {{ month_var }}) %>%
-    mutate(month_name = month.abb[{{ month_var }}]) %>%
+    mutate(month_name = tolower(month.abb[{{ month_var }}])) %>%
     rename(cost = {{cost_var}},
            beddays = {{beddays_var}}) %>%
     pivot_wider(
