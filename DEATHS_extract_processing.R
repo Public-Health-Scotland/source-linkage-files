@@ -35,15 +35,16 @@ names(deaths_file) <- str_replace_all(names(deaths_file), " ", "_")
 deaths_file <- deaths_file %>%
   rename(
     chi = "PATIENT_UPI_[C]",
-    death_date_NRS = "PATIENT_DoD_DATE_(NRS)",
-    death_date_CHI = "PATIENT_DoD_DATE_(CHI)"
+    death_date_nrs = "PATIENT_DoD_DATE_(NRS)",
+    death_date_chi = "PATIENT_DoD_DATE_(CHI)"
   )
 
 ## one record per chi ##
 deaths_file <- deaths_file %>%
+  dplyr::arrange(desc(death_date_NRS), desc(death_date_CHI)) %>%
   dplyr::distinct(chi, .keep_all = TRUE) %>%
   # Use the NRS deathdate unless it isn't there
-  mutate(death_date = if_else(is.na(death_date_NRS), death_date_CHI, death_date_NRS))
+  mutate(death_date = dplyr::coalesce(death_date_NRS, death_date_CHI))
 
 ## Save file - //stats/hscdiip/SLF_extracts/Deaths/ ##
 # .zsav file
