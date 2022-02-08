@@ -14,12 +14,13 @@
 source("setup_environment.R")
 
 library(tidyr)
+library(dplyr)
 
 #Set up for extract_path function
 year <- "1920"
 
 #Load extract file
-acute_file <- read_csv(file = extract_path(year, "Acute"), n_max = 2000,
+acute_file <- read_csv(file = extract_path(year, "Acute"), n_max = 20000,
                        col_type = cols(
                        `Costs Financial Year (01)` = col_integer(),
                        `Costs Financial Month Number (01)` = col_double(),
@@ -184,7 +185,9 @@ acute_clean <- acute_file %>%
                            lineno == 330 & ipdc == 'I' ~ 'GLS-IP',
                            recid == 'GLS' ~ 'GLS-IP')) %>%
 # If costs are missing, fill them in
-  mutate(cost_total_net = if_else(is.na(cost_total_net), 0, cost_total_net))
+  mutate(cost_total_net = if_else(is.na(cost_total_net), 0, cost_total_net)) %>%
+# Apply new costs for C3 specialty, these are taken from the 2017/18 file
+  fix_c3_costs(year)
 
 
 #initialise monthly cost/beddays variables in a separate data frame for matching
@@ -192,7 +195,7 @@ monthly_cost_beddays <- acute_clean %>%
   convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay)
 
 #match monthly cost and beddays back to acute_file
-final_acute_file_check <- acute_clean %>%
+final_acute_file <- acute_clean %>%
   distinct(uri, .keep_all = TRUE)%>%
   left_join(monthly_cost_beddays, by = "uri") %>%
 #total up yearstay and costs
@@ -201,7 +204,6 @@ final_acute_file_check <- acute_clean %>%
          )
 
 
-c3_fix <- fix_c3_costs(final_acute_file)
 
 
 
