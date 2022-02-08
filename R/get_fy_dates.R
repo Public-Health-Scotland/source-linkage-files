@@ -14,7 +14,7 @@ start_fy <- function(year) {
 
 #' Return the end date of FY years
 #'
-#' @param year a vector of year
+#' @param year a vector of years
 #'
 #' @return a vector of dates of the end date of the FY year
 #' @export
