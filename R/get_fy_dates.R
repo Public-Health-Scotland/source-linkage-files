@@ -36,7 +36,6 @@ end_fy <- function(year) {
 #' @examples
 #' midpointFY("1718")
 midpoint_fy <- function(year) {
-  #as.Date(startFY(FY) + floor((endFY(FY)-startFY(FY))/2))
   as.Date(paste0(as.numeric(convert_fyyear_to_year(year)), "-09-30"))
 }
 
