@@ -10,6 +10,6 @@ produce_test_comparison <- function(old_data, new_data) {
     dplyr::mutate(
       diff = .data$value_new - .data$value_old,
       pct_change = .data$diff / .data$value_old * 100,
-      issue = if_else(.data$pct_change >= 5, 1, 0)
+      issue = !dplyr::between(.data$pct_change, -5, 5)
     )
 }
