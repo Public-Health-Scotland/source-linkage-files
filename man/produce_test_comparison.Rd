@@ -7,9 +7,9 @@
 produce_test_comparison(old_data, new_data)
 }
 \arguments{
-\item{old_data}{dataframe containing old file}
+\item{old_data}{dataframe containing the old data test flags}
 
-\item{new_data}{dataframe containing new file}
+\item{new_data}{dataframe containing the new file data test flags}
 }
 \value{
 a dataframe with a comparison of new and old data

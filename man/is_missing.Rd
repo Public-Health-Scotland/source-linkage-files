@@ -2,16 +2,16 @@
 % Please edit documentation in R/is_missing.R
 \name{is_missing}
 \alias{is_missing}
-\title{Function for checking if variables have missing values or blank}
+\title{Check for NA or blank values in a character vector}
 \usage{
 is_missing(x)
 }
 \arguments{
-\item{x}{Variable for checking missing values}
+\item{x}{a character vector}
 }
 \value{
-Check for missing (NA) or blank values.
+a logical vector indicating if each value is missing
 }
 \description{
-Function for checking if variables have missing values or blank
+Check for NA or blank values in a character vector
 }
