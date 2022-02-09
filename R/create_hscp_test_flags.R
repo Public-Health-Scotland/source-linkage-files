@@ -5,11 +5,11 @@
 #'
 #' @return a dataframe with flag (1 or 0) for each HSCP
 #' @export
-#' @importFrom dplyr if_else
+#' @importFrom dplyr mutate if_else
 #' @family create test flags functions
 create_hscp_test_flags <- function(data, hscp_var) {
   data <- data %>%
-    dplyr::mutate(
+    mutate(
       Aberdeen_City = if_else({{ hscp_var }} == "S37000001", 1, 0),
       Aberdeenshire = if_else({{ hscp_var }} == "S37000002", 1, 0),
       Angus = if_else({{ hscp_var }} == "S37000003", 1, 0),

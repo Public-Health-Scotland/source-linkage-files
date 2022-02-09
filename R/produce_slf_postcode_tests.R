@@ -13,9 +13,9 @@ produce_slf_postcode_tests <- function(data) {
     create_hb_test_flags(.data$HB2019) %>%
     create_hscp_test_flags(.data$HSCP2019) %>%
     # create other test flags
-    dplyr::mutate(n_postcode = 1) %>%
+    mutate(n_postcode = 1) %>%
     # remove variables that won't be summed
-    dplyr::select(-c(.data$postcode:.data$UR2_2016)) %>%
+    select(-c(.data$postcode:.data$UR2_2016)) %>%
     # use function to sum new test flags
     sum_test_flags()
 }

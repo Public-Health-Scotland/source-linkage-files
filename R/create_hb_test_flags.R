@@ -5,11 +5,11 @@
 #'
 #' @return a dataframe with flag (1 or 0) for each Health Board
 #' @export
-#' @importFrom dplyr if_else
+#' @importFrom dplyr mutate if_else
 #' @family create test flags functions
 create_hb_test_flags <- function(data, hb_var) {
   data <- data %>%
-    dplyr::mutate(
+    mutate(
       NHS_Ayrshire_and_Arran = if_else({{ hb_var }} == "S08000015", 1, 0),
       NHS_Borders = if_else({{ hb_var }} == "S08000016", 1, 0),
       NHS_Dumfries_and_Galloway = if_else({{ hb_var }} == "S08000017", 1, 0),

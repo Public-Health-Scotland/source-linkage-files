@@ -13,9 +13,9 @@ produce_slf_gpprac_tests <- function(data) {
     create_hb_test_flags(.data$hbpraccode) %>%
     create_hscp_test_flags(.data$HSCP2018) %>%
     # create other test flags
-    dplyr::mutate(n_gpprac = 1) %>%
+    mutate(n_gpprac = 1) %>%
     # remove variables that won't be summed
-    dplyr::select(-c(.data$gpprac:.data$LCA)) %>%
+    select(-c(.data$gpprac:.data$LCA)) %>%
     # use function to sum new test flags
     sum_test_flags()
 }
