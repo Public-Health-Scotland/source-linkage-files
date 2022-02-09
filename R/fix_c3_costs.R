@@ -1,10 +1,12 @@
-#' Fix c3 costs
+#' Apply costs fix to specialty C3 in acute processing.
 #'
 #' @param data Acute extract file after processing
+#' @param year Financial year e.g. 1819
 #'
-#' @return
+#' @return A data frame with costs applied
 #' @export
 #'
+#'@importFrom dplyr mutate case_when
 fix_c3_costs <- function(data, year) {
   if (year >= "1819") {
     # Amend cost total net
