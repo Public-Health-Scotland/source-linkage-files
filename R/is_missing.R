@@ -1,8 +1,8 @@
-#' Function for checking if variables have missing values or blank
+#' Check for NA or blank values in a character vector
 #'
-#' @param x Variable for checking missing values
+#' @param x a character vector
 #'
-#' @return Check for missing (NA) or blank values.
+#' @return a logical vector indicating if each value is missing
 #' @export
 is_missing <- function(x) {
   is.na(x) | x == ""
