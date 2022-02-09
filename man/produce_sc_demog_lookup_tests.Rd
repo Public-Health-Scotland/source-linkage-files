@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_sc_demog_lookup_tests.R
 \name{produce_sc_demog_lookup_tests}
 \alias{produce_sc_demog_lookup_tests}
-\title{Demographic Lookup tests}
+\title{Produce the Social Care Demographic Lookup tests}
 \usage{
 produce_sc_demog_lookup_tests(data)
 }
@@ -10,10 +10,11 @@ produce_sc_demog_lookup_tests(data)
 \item{data}{new or old data for testing summary flags (data is from \code{\link{get_sc_demog_lookup_path}})}
 }
 \value{
-a dataframe with a count of each flag from \code{\link{sum_test_flags}} and \code{\link{create_demog_test_flags}}
+a dataframe with a count of each flag from \code{\link{sum_test_flags}} and
+\code{\link{create_demog_test_flags}}. Missing value flag from \code{\link{is_missing}}
 }
 \description{
-Demographic Lookup tests
+Produce the Social Care Demographic Lookup tests
 }
 \seealso{
 Other produce tests functions: 

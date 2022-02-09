@@ -6,13 +6,13 @@
 #' Missing value flag from \code{\link{is_missing}}
 #' @export
 #'
-#' @importFrom dplyr if_else
+#' @importFrom dplyr if_else arrange
 #' @family create test flags functions
 create_demog_test_flags <- function(data) {
   data %>%
-    dplyr::arrange(.data$chi) %>%
+    arrange(.data$chi) %>%
     # create test flags
-    dplyr::mutate(
+    mutate(
       valid_chi = if_else(phsmethods::chi_check(.data$chi) == "Valid CHI", 1, 0),
       unique_chi = if_else(dplyr::lag(.data$chi) != .data$chi, 1, 0),
       n_missing_chi = if_else(is_missing(.data$chi), 1, 0),

@@ -12,12 +12,12 @@ produce_sc_ch_episodes_tests <- function(data) {
   data %>%
     # create test flags
     create_demog_test_flags %>%
-    dplyr::mutate(
+    mutate(
       n_missing_sending_loc = if_else(is_missing(.data$sending_location), 1, 0),
       n_missing_sc_id = if_else(is_missing(.data$social_care_id), 1, 0)
     ) %>%
     # remove variables that won't be summed
-    dplyr::select(-c(.data$chi:.data$sc_latest_submission)) %>%
+    select(-c(.data$chi:.data$sc_latest_submission)) %>%
     # use function to sum new test flags
     sum_test_flags()
 }
