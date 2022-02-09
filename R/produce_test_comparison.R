@@ -1,7 +1,7 @@
 #' Produce a test comparison
 #'
-#' @param old_data dataframe containing old file
-#' @param new_data dataframe containing new file
+#' @param old_data dataframe containing the old data test flags
+#' @param new_data dataframe containing the new file data test flags
 #'
 #' @return a dataframe with a comparison of new and old data
 #' @family produce tests functions

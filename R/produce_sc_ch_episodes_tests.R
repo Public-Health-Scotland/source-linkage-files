@@ -2,8 +2,7 @@
 #'
 #' @param data new or old data for testing summary flags (data is from \code{\link{get_sc_ch_episodes_path}})
 #'
-#' @return a dataframe with a count of each flag \code{\link{sum_test_flags}} and
-#' \code{\link{create_demog_test_flags}}. Missing value flag from \code{\link{is_missing}}
+#' @return a dataframe with a count of each flag.
 #'
 #' @export
 #' @importFrom dplyr mutate select
