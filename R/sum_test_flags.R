@@ -3,7 +3,6 @@
 #' @param data the data should be in a format for summarising test flags
 #'
 #' @return a dataframe with a count of each flag
-#' @importFrom dplyr across
 sum_test_flags <- function(data) {
   data <- data %>%
     dplyr::summarise_all(sum, na.rm = TRUE) %>%

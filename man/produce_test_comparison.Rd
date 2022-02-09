@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_test_comparison.R
 \name{produce_test_comparison}
 \alias{produce_test_comparison}
-\title{Compare test files}
+\title{Produce a test comparison}
 \usage{
 produce_test_comparison(old_data, new_data)
 }
@@ -15,14 +15,11 @@ produce_test_comparison(old_data, new_data)
 a dataframe with a comparison of new and old data
 }
 \description{
-Compare test files
+Produce a test comparison
 }
 \seealso{
 Other produce tests functions: 
 \code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()}
+\code{\link{produce_sc_demog_lookup_tests}()}
 }
 \concept{produce tests functions}

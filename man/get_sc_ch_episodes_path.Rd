@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sc_ch_episodes_path.R
 \name{get_sc_ch_episodes_path}
 \alias{get_sc_ch_episodes_path}
-\title{Function for reading in all care home episodes}
+\title{Get the Care Home all episodes file path}
 \usage{
 get_sc_ch_episodes_path(update = latest_update(), ...)
 }
@@ -16,7 +16,7 @@ defaults to \code{\link{latest_update}}}
 The path to the care home episodes file as an \code{\link[fs]{path}}
 }
 \description{
-Function for reading in all care home episodes
+Get the Care Home all episodes file path
 }
 \seealso{
 \code{\link{get_file_path}} for the generic function.

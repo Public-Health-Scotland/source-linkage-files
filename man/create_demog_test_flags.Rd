@@ -10,14 +10,10 @@ create_demog_test_flags(data)
 \item{data}{a dataframe containing demographic variables e.g. chi}
 }
 \value{
-a dataframe with flag (1 or 0) for each demographic variables
+a dataframe with flag (1 or 0) for each demographic variables.
+Missing value flag from \code{\link{is_missing}}
 }
 \description{
 Create demographic test flags
-}
-\seealso{
-Other create test flags functions: 
-\code{\link{create_hb_test_flags}()},
-\code{\link{create_hscp_test_flags}()}
 }
 \concept{create test flags functions}
