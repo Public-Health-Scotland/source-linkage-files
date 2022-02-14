@@ -16,5 +16,5 @@ a vector of dates of the mid date of the FY year
 Return the mid date of FY year
 }
 \examples{
-midpointFY("1718")
+midpoint_fy("1718")
 }
