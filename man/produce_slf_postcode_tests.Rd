@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_slf_postcode_tests.R
 \name{produce_slf_postcode_tests}
 \alias{produce_slf_postcode_tests}
-\title{Postcode Lookup tests}
+\title{Produce the Postcode Lookup tests}
 \usage{
 produce_slf_postcode_tests(data)
 }
@@ -13,7 +13,7 @@ produce_slf_postcode_tests(data)
 a dataframe with a count of each flag from \code{\link{sum_test_flags}}
 }
 \description{
-Postcode Lookup tests
+Produce the Postcode Lookup tests
 }
 \seealso{
 \code{\link{create_hb_test_flags}} and \code{\link{create_hscp_test_flags}} for creating test flags

@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_slf_deaths_tests.R
 \name{produce_slf_deaths_tests}
 \alias{produce_slf_deaths_tests}
-\title{All deaths file tests}
+\title{Produce the SLF deaths lookup tests}
 \usage{
 produce_slf_deaths_tests(data)
 }
@@ -13,7 +13,7 @@ produce_slf_deaths_tests(data)
 a dataframe with a count of each flag from \code{\link{sum_test_flags}}
 }
 \description{
-All deaths file tests
+Produce the SLF deaths lookup tests
 }
 \seealso{
 Other produce tests functions: 
