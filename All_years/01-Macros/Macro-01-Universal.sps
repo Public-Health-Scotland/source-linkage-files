@@ -160,18 +160,19 @@ Define !IT_Extracts_dir()
 
 * LTC extract.
 Define !LTC_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_1_LTCs.csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_LTCs.csv"))
 !EndDefine.
 
 * Deaths extract.
 Define !Deaths_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_2_Deaths.csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_Deaths.csv"))
 !EndDefine.
 
 * PIS extract.
 Define !PIS_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY)), ".csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_PIS_", !Unquote(!Eval(!altFY)), ".csv"))
 !EndDefine.
+
 
 *******************************************************.
 * IT macro for Older years - specific to running 1415.
@@ -183,7 +184,7 @@ Define !IT_extract_ref_OLD()
 
 * PIS extract for OLD years.
 Define !PIS_extract_file_OLD()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref_OLD)), !Unquote(!Eval(!PIS_extract_number_OLD)), !Unquote(!Eval(!altFY)), ".csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref_OLD)), "_PIS_", !Unquote(!Eval(!altFY)), ".csv"))
 !EndDefine.
 
 *******************************************************.
