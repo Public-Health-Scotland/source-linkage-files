@@ -11,7 +11,6 @@
 
 
 ## output ##
-# haven::read_sav(get_sc_demog_lookup_path())
 output <- haven::read_sav(file = "/conf/hscdiip/SLF_Extracts/Social_care/sc_demographics_lookup_Dec_2021.zsav")
 
 
@@ -22,18 +21,11 @@ library(odbc)
 library(dplyr)
 library(stringr)
 library(dbplyr)
+library(phsmethods)
 
 
 
 ## data ##
-
-# read in extract #
-sc_demog <- readr::read_rds("/conf/hscdiip/SLF_Extracts/Social_care/temp-sc_demog_extract_Feb_2022.rds")
-sc_demog <- sc_demog[, c(
-  "latest_record_flag", "extract_date", "sending_location", "social_care_id",
-  "upi", "chi_upi", "submitted_postcode", "chi_postcode", "submitted_date_of_birth",
-  "chi_date_of_birth", "submitted_gender", "chi_gender_code"
-)]
 
 
 ######################################################
@@ -44,37 +36,22 @@ db_connection <- odbc::dbConnect(
   uid = Sys.getenv("USER"),
   pwd = rstudioapi::askForPassword("password")
 )
+###################################################
 
-data <- tbl(db_connection, in_schema("social_care_2", "demographic")) %>%
+# read in data - social care 2 demographic
+sc_demog <- tbl(db_connection, in_schema("social_care_2", "demographic")) %>%
   select(
-    LATEST_RECORD_FLAG, EXTRACT_DATE, SENDING_LOCATION, SOCIAL_CARE_ID,
-    UPI, CHI_UPI, SUBMITTED_POSTCODE, CHI_POSTCODE, SUBMITTED_DATE_OF_BIRTH,
-    CHI_DATE_OF_BIRTH, SUBMITTED_GENDER, CHI_GENDER_CODE
+    latest_record_flag, extract_date, sending_location, social_care_id, upi,
+    chi_upi, submitted_postcode, chi_postcode, submitted_date_of_birth,
+    chi_date_of_birth, submitted_gender, chi_gender_code
   ) %>%
   collect()
-
-###################################################
 
 # variable types
 sc_demog <- sc_demog %>%
   mutate(
-    latest_record_flag = as.numeric(latest_record_flag),
-    extract_date = as.Date(extract_date, format = "%d-%m-%Y"),
-    sending_location = as.character(sending_location),
-    social_care_id = as.character(social_care_id),
-    upi = as.character(upi),
-    chi_upi = as.character(chi_upi),
-    submitted_postcode = as.character(submitted_postcode),
-    chi_postcode = as.character(chi_postcode),
-    submitted_date_of_birth = as.character(submitted_date_of_birth),
-    chi_date_of_birth = as.character(chi_date_of_birth),
     submitted_gender = as.numeric(submitted_gender),
-    chi_gender_code = as.numeric(chi_gender_code),
-
-    # Create new variables which will hold the 'final' data
-    postcode = as.character(NA),
-    gender = as.numeric(NA),
-    dob = as.Date(NA, format = "%d-%m-%Y")
+    chi_gender_code = as.numeric(chi_gender_code)
   )
 
 
@@ -82,7 +59,7 @@ sc_demog <- sc_demog %>%
 sc_demog <- sc_demog %>%
   mutate(
     # use chi if upi is NA
-    upi = if_else(is.na(upi), chi_upi, upi),
+    upi = coalesce(upi, chi_upi),
     # check gender code - replace code 99 with 9
     submitted_gender = replace(submitted_gender, submitted_gender == 99, 9)
   ) %>%
@@ -90,7 +67,7 @@ sc_demog <- sc_demog %>%
     # use chi gender if avaliable
     gender = if_else(is.na(chi_gender_code) | chi_gender_code == 9, submitted_gender, chi_gender_code),
     # use chi dob if avaliable
-    dob = if_else(is.na(chi_date_of_birth), submitted_date_of_birth, chi_date_of_birth)
+    dob = coalesce(chi_date_of_birth, submitted_date_of_birth)
   )
 
 
