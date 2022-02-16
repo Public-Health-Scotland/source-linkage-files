@@ -13,9 +13,9 @@
 #' @export
 #'
 #' @examples
-#' find_latest_file(spd_dir, regexp = "Scottish_Postcode_Directory_.+?\\.rds", recurse = TRUE)
-find_latest_file <- function(dir, ...) {
-  fs::dir_info(path = dir, type = "file", ...) %>%
+#' find_latest_file(get_lookups_dir(), regexp = "Scottish_Postcode_Directory_.+?\\.rds")
+find_latest_file <- function(dir, ..., recurse = TRUE) {
+  fs::dir_info(path = dir, type = "file", ..., recurse = recurse) %>%
     dplyr::arrange(desc(.data$birth_time), desc(.data$modification_time)) %>%
     dplyr::pull(.data$path) %>%
     magrittr::extract(1)
