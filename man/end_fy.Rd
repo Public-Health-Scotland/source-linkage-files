@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_fy_dates.R
 \name{end_fy}
 \alias{end_fy}
-\title{Return the end date of FY year}
+\title{Return the end date of FY years}
 \usage{
 end_fy(year)
 }
@@ -13,7 +13,7 @@ end_fy(year)
 a vector of dates of the end date of the FY year
 }
 \description{
-Return the end date of FY year
+Return the end date of FY years
 }
 \examples{
 endFY("1718")

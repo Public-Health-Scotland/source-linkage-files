@@ -6,7 +6,7 @@
 #' @return BOXI extracts containing data for each dataset
 #' @export
 #'
-extract_path <- function(year, type = c("Acute", "Mental", "Maternity")) {
+get_boxi_extract_path <- function(year, type = c("Acute", "Mental", "Maternity")) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
 
   file_name <- dplyr::case_when(
