@@ -7,10 +7,12 @@
 produce_slf_deaths_tests(data)
 }
 \arguments{
-\item{data}{new or old data for testing summary flags (data is from \code{\link{get_slf_deaths_path}})}
+\item{data}{new or old data for testing summary
+flags (data is from \code{\link{get_slf_deaths_path}})}
 }
 \value{
-a dataframe with a count of each flag from \code{\link{sum_test_flags}}
+a dataframe with a count of each flag
+from \code{\link{sum_test_flags}}
 }
 \description{
 Produce the SLF deaths lookup tests
