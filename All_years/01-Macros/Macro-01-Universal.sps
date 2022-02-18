@@ -27,6 +27,11 @@ Define !LatestUpdate()
     "Dec_2021"
 !EndDefine.
 
+*Previous update month for creating tests.
+Define !PreviousUpdate()
+    "Sep_2021"
+!EndDefine.
+
 Define !Delayed_Discharge_period()
     "Jul16_Sep21"
 !EndDefine.
