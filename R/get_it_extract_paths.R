@@ -11,7 +11,7 @@
 get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
   it_ltc_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name = glue::glue("{it_reference}_extract_1_LTCs.csv.gz"),
+    file_name = glue::glue("{it_reference}_LTCs.csv.gz"),
     ...
   )
 
@@ -30,7 +30,7 @@ get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
 get_it_deaths_path <- function(it_reference = it_extract_ref(), ...) {
   it_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name = glue::glue("{it_reference}_extract_2_Deaths.csv.gz")
+    file_name = glue::glue("{it_reference}_Deaths.csv.gz")
   )
 
   return(it_deaths_path)

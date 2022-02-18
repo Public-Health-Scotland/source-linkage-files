@@ -32,8 +32,6 @@ test_that("Can convert a year from normal financial year to the alternate form",
 })
 
 
-
-
 test_that("Can convert a year from alternate form to normal financial year", {
   year <- c(
     "2017",
