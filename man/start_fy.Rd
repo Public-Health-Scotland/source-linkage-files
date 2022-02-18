@@ -16,5 +16,5 @@ a vector of dates of the start date of the FY year
 Return the start date of FY year
 }
 \examples{
-startFY("1718")
+start_fy("1718")
 }
