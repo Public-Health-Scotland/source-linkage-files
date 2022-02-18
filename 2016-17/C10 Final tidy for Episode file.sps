@@ -860,6 +860,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ch_adm_reason
     ch_provider
     ch_nursing
+    hc_hours_annual
     hc_hours_q1
     hc_hours_q2
     hc_hours_q3
