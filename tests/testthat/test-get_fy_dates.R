@@ -8,7 +8,7 @@ test_that("Can return start FY date", {
   )
 
   expect_equal(
-    startFY(year),
+    start_fy(year),
     as.Date(c(
       "2017-04-01",
       "2019-04-01",
@@ -27,7 +27,7 @@ test_that("Can return end FY date", {
   )
 
   expect_equal(
-    endFY(year),
+    end_fy(year),
     as.Date(c(
       "2018-03-31",
       "2020-03-31",
@@ -46,7 +46,7 @@ test_that("Can return midpoint FY date", {
   )
 
   expect_equal(
-    midpointFY(year),
+    midpoint_fy(year),
     as.Date(c(
       "2017-09-30",
       "2019-09-30",
