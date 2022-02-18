@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' startFY("1718")
+#' start_fy("1718")
 start_fy <- function(year) {
   as.Date(paste0(as.numeric(convert_fyyear_to_year(year)), "-04-01"))
 }
@@ -20,7 +20,7 @@ start_fy <- function(year) {
 #' @export
 #'
 #' @examples
-#' endFY("1718")
+#' end_fy("1718")
 end_fy <- function(year) {
   as.Date(paste0((as.numeric(convert_fyyear_to_year(year)) + 1), "-03-31"))
 }
@@ -34,7 +34,7 @@ end_fy <- function(year) {
 #' @export
 #'
 #' @examples
-#' midpointFY("1718")
+#' midpoint_fy("1718")
 midpoint_fy <- function(year) {
   as.Date(paste0(as.numeric(convert_fyyear_to_year(year)), "-09-30"))
 }
