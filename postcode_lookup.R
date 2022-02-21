@@ -89,9 +89,9 @@ locality_file <-
 
 ## save file ##
 
-# rename pc7
 data <-
   data %>%
+  # rename pc7
   rename(
     postcode = "pc7",
     simd2020v2_rank = "simd2020v2_rank.x"
