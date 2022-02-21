@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -66,7 +66,7 @@ Define !gpprac_file()
 
 * SIMD file - will need changing when geography files update.
 Define !SIMD_file()
-    "postcode_2021_1_simd2020v2.sav"
+    "postcode_2021_2_simd2020v2.sav"
 !EndDefine.
 
 * DataZone Populations file - will need changing when geography files update.
