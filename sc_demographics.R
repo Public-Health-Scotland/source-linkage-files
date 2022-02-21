@@ -96,17 +96,20 @@ sc_demog <-
   mutate(across(contains("postcode"), ~postcode(.x, format = "pc7")))
 
 
+# count number of na postcodes
+na_postcodes <-
+  sc_demog %>%
+  count(across(contains("postcode"), ~is.na(.x)))
+
 # UK postcode regex
 uk_pc_regexp <- "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\\s?[0-9][A-Za-z]{2})"
 
 sc_demog <-
   sc_demog %>%
   mutate(
-    # remove dummy postcodes "NK1 0AA" and "NK1 1AB"
+    # remove dummy postcodes "NK1 0AA" and "NK1 1AB" and invalid postcodes missed by regex check
     across(ends_with("_postcode"),
-           ~na_if(.x, .x== "NK1 0AA" | .x== "NF1 1AB" |
-                    # remove invalid postcodes missed by regex check
-                    .x == "PR2 5AL" | .x ==  "M16 0GS" | .x == "DY103DJ"))
+           ~na_if(.x, c("NK1 0AA", "NF1 1AB", "PR2 5AL", "M16 0GS", "DY103DJ")))
   ) %>%
   mutate(
     # comparing with regex UK postcode
@@ -115,9 +118,9 @@ sc_demog <-
   )
 
 
-
 ## postcode type ##
-pc_lookup <- read_spd_file()
+pc_lookup <- readr::read_rds(read_spd_file()) %>%
+  select(pc7)
 
 
 sc_demog <-
@@ -127,7 +130,7 @@ sc_demog <-
     submitted_postcode, chi_postcode
   ) %>%
   # check if submitted_postcode matches with postcode lookup
-  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup$pc7, 1, 0))
+  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup, 1, 0))
 
 
 # use submitted_postcode if valid, otherwise use chi_postcode
@@ -147,6 +150,15 @@ sc_demog <-
 # Check where the postcodes are coming from
 sc_demog %>%
   count(postcode_type)
+
+
+# count number of replaced postcode - compare with count above
+na_replaced_postcodes <-
+  sc_demog %>%
+  count(across(ends_with("_postcode"), ~is.na(.x)))
+
+na_replaced_postcodes
+na_postcodes
 
 
 ## outfile ##
