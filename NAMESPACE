@@ -2,6 +2,7 @@
 
 export("%>%")
 export(boxi_date_format)
+export(ca_to_lca)
 export(convert_fyyear_to_year)
 export(convert_year_to_fyyear)
 export(date_to_numeric)
