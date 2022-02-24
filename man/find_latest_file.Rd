@@ -4,12 +4,15 @@
 \alias{find_latest_file}
 \title{Find the latest version of a file}
 \usage{
-find_latest_file(dir, ...)
+find_latest_file(dir, ..., recurse = TRUE)
 }
 \arguments{
 \item{dir}{The directory to look on}
 
 \item{...}{additional arguments passed to \code{\link[fs]{dir_info}}}
+
+\item{recurse}{Should the function search recursively
+through subfolders? The default \code{TRUE} is to search subfolders.}
 }
 \value{
 the \code{\link[fs]{path}} to the file
@@ -21,5 +24,5 @@ find the files then picks the one with the latest
 \code{birthtime}
 }
 \examples{
-find_latest_file(spd_dir, regexp = "Scottish_Postcode_Directory_.+?\\\\.rds", recurse = TRUE)
+find_latest_file(get_lookups_dir(), regexp = "Scottish_Postcode_Directory_.+?\\\\.rds")
 }
