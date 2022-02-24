@@ -28,5 +28,5 @@ previous_update <- function() {
 #' as MMMYY_MMMYY
 #' @export
 dd_period <- function() {
-  "Jul16_Sep21"
+  "Jul16_Dec21"
 }
