@@ -14,7 +14,8 @@
 #' @param check_mode The mode passed to
 #' \code{\link[fs]{file_access}}, defaults to "read"
 #' to check that you have read access to the file
-#' @param create Optionally create the file if it doesn't exists
+#' @param create Optionally create the file if it doesn't exists,
+#' the default is to only create a file if we set `check_mode = "write"`
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
@@ -25,7 +26,7 @@ get_file_path <-
            file_name,
            ext = NULL,
            check_mode = "read",
-           create = FALSE) {
+           create = NULL) {
     if (!fs::dir_exists(directory)) {
       rlang::abort(message = glue::glue("The directory {directory} does not exist"))
     }
@@ -37,19 +38,19 @@ get_file_path <-
     }
 
     if (!fs::file_exists(file_path)) {
-      if (create == FALSE) {
-        # The file doesn't exists and we don't want to create it
-        rlang::abort(
-          message = glue::glue(
-            "The file {fs::path_file(file_path)} does not exist in {directory}"
-          )
-        )
-      } else {
+      if (is.null(create) && check_mode == "write" | !is.null(create) && create == TRUE) {
         # The file doesn't exist but we do want to create it
         fs::file_create(file_path, mode = "u=rw,g=rw")
         rlang::inform(
           message = glue::glue(
-            "The file {fs::path_file(file_path)} did not exist in {directory}, it has now been created as an empty file."
+            "The file {fs::path_file(file_path)} did not exist in {directory}, it has now been created."
+          )
+        )
+      } else {
+        # The file doesn't exists and we don't want to create it
+        rlang::abort(
+          message = glue::glue(
+            "The file {fs::path_file(file_path)} does not exist in {directory}"
           )
         )
       }
@@ -82,10 +83,8 @@ get_slf_dir <- function() {
 #' @param year The Financial Year e.g. 1718
 #' @param extracts_dir (optional) `TRUE`/`FALSE`, whether to
 #'
-#' @return
+#' @return The file path to the year directory (on sourcedev)
 #' @export
-#'
-#' @examples
 get_year_dir <- function(year, extracts_dir = FALSE) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
 
