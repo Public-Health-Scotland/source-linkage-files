@@ -75,3 +75,21 @@ get_slf_dir <- function() {
 
   return(slf_dir)
 }
+
+
+#' Get the directory for the given year
+#'
+#' @param year The Financial Year e.g. 1718
+#' @param extracts_dir (optional) `TRUE`/`FALSE`, whether to
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_year_dir <- function(year, extracts_dir = FALSE) {
+  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
+
+  year_extracts_dir <- fs::path(year_dir, "Extracts")
+
+  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
+}
