@@ -152,13 +152,10 @@ final_data <- filtered_data %>%
 final_data <- final_data %>%
   replace_na(list(chi = "")) %>%
   mutate(across(c(record_keydate1, record_keydate2), date_to_numeric)) %>%
-  arrange(chi, record_keydate1, record_keydate2)
-
-# Set attributes so it for SPSS
-attr(final_data$smrtype, "format.spss") <- "A10"
-attr(final_data$postcode, "format.spss") <- "A8"
-attr(final_data$hl1_application_ref, "format.spss") <- "A15"
-
+  arrange(chi, record_keydate1, record_keydate2) %>%
+  mutate(postcode = stringr::str_pad(postcode, width = 8, side = "right"),
+         smrtype = stringr::str_pad(smrtype, width = 10, side = "right"),
+         hl1_application_ref = stringr::str_pad(hl1_application_ref, width = 15, side = "right"))
 
 # Write data --------------------------------------------------------------
 final_data %>%
