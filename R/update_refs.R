@@ -11,7 +11,7 @@ it_extract_ref <- function() {
 #' @return Latest update as MMM_YYYY
 #' @export
 latest_update <- function() {
-  "Dec_2021"
+  "Mar_2022"
 }
 
 #' Get the previous update
@@ -19,7 +19,7 @@ latest_update <- function() {
 #' @return previous update as MMM_YYYY
 #' @export
 previous_update <- function() {
-  "Sep_2021"
+  "Dec_2022"
 }
 
 #' Get the Delayed Discharge period
