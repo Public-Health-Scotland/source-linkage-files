@@ -60,9 +60,6 @@ homelessness_extract <- read_csv(extract_path(year = year, type = "Homelessness"
     person_in_receipt_of_universal_credit = `Person in Receipt of Universal Credit`
   )
 
-# Filter data -------------------------------------------------------------
-#TODO - do filtering!
-
 # Add some variables ------------------------------------------------------
 data <- homelessness_extract %>%
   mutate(
@@ -88,10 +85,53 @@ data <- homelessness_extract %>%
     )
   )
 
+# Filter data -------------------------------------------------------------
+# TODO - Move completeness code to SLF branch
+# Need a file from SG - goes in SLF_Extracts/Homelessness
+# Take a full extract from BOXI then run the below code (or similar)
+# annual_comparison %>%
+#   left_join(la_code_lookup, by = c(sending_local_authority_name = "CAName")) %>%
+#   select(sending_local_authority_code_9 = CA, fin_year, pct_complete_all) %>%
+#   # When we don't have completeness (e.g. for the latest year)
+#   # Use the previous year's completeness
+#   group_by(sending_local_authority_code_9) %>%
+#   fill(pct_complete_all) %>%
+#   ungroup() %>%
+#   readr::write_rds(fs::path("/conf/hscdiip/SLF_Extracts/Homelessness/homelessness_completeness_Mar_2022.rds"))
+#
+# Then will use the single 'full' boxi extract to pick out each year.
+# For now I've just created the file elsewhere to be picked up here!
+
+la_code_lookup <- phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5") %>%
+  dplyr::distinct(CA, CAName) %>%
+  dplyr::mutate(
+    sending_local_authority_name = dplyr::recode(
+      CAName,
+      "City of Edinburgh" = "Edinburgh",
+      "Na h-Eileanan Siar" = "Eilean Siar"
+    ) %>%
+      stringr::str_replace("\\sand\\s", " \\& ")
+  )
+
+completeness_data <- read_rds(get_file_path(
+  directory = fs::path(get_slf_dir(), "Homelessness"),
+  file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
+)) %>%
+  mutate(year = convert_year_to_fyyear(fin_year))
+
+filtered_data <- left_join(data, la_code_lookup, by = c("sending_local_authority_code_9" = "CA")) %>%
+  left_join(completeness_data,
+    by = c("sending_local_authority_name", "year")
+  ) %>%
+  # Keep where the completeness is between 90% and 110%
+  # Or if it's East Ayrshire (S12000008) as they are submitting something different.
+  filter(between(pct_complete_all, 0.90, 1.05) | sending_local_authority_code_9 == "S12000008")
+
+
 
 # Rename and select ---------------------------------------------------------
 # TODO - Include person_id (from client_id)
-final_data <- data %>%
+final_data <- filtered_data %>%
   select(year,
     recid,
     smrtype,
