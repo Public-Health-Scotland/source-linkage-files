@@ -14,6 +14,7 @@ library(readr)
 library(stringr)
 library(dplyr)
 library(tidyverse)
+library(lubridate)
 
 year <- "1920"
 
@@ -156,6 +157,13 @@ mutate(cij_ipdc = case_when(
   mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
 
 # Calculate beddays
+#work out cost month
+
+beddays<- maternity_clean %>%
+  mutate(
+         month_start = floor_date(ymd(record_keydate2), 'month'))
+         month_end = ceiling_date(ymd(record_keydate2))
+           )
 
 
-
+month_number =  month(record_keydate2, label = FALSE)),
