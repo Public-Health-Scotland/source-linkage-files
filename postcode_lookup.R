@@ -38,10 +38,7 @@ simd_file <-
 # join data together by pc7
 data <-
   pc_file %>%
-  left_join(simd_file, by = "pc7") %>%
-  # sort by DataZone2011
-  rename(datazone2011 = "datazone2011.x") %>%
-  arrange(datazone2011)
+  left_join(simd_file, by = c("pc7", "datazone2011")) 
 
 
 # rename and drop variable in locality
