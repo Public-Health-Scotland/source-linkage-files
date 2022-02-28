@@ -16,5 +16,5 @@ a vector of dates of the end date of the FY year
 Return the end date of FY years
 }
 \examples{
-endFY("1718")
+end_fy("1718")
 }

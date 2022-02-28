@@ -25,7 +25,7 @@ read_locality_file <- function(file) {
     rlang::abort(message = "Couldn't read the locality file")
   }
 
-  return(readr::read_rds(locality_path))
+  return(locality_path)
 }
 
 
@@ -67,7 +67,7 @@ read_spd_file <- function(file = NULL) {
     }
   }
 
-  return(readr::read_rds(spd_path))
+  return(spd_path)
 }
 
 
@@ -87,7 +87,7 @@ read_simd_file <- function(file) {
     rlang::abort(message = "Couldn't read the simd file")
   }
 
-  return(readr::read_rds(simd_path))
+  return(simd_path)
 }
 
 
@@ -108,5 +108,5 @@ read_datazone_pop_file <- function(file) {
     rlang::abort(message = "Couldn't read the datazone population file")
   }
 
-  return(readr::read_rds(datazone_pop_path))
+  return(datazone_pop_path)
 }

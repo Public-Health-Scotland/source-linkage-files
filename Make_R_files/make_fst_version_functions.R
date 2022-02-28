@@ -40,7 +40,7 @@ create_fst_files <- function(year, compress = 100) {
     if (!fs::file_exists(fs::path_ext_set(indiv_file, ".fst"))) {
 
       # Create individual file
-      zsav_to_fst(indiv_file, compress = 100)
+      zsav_to_fst(indiv_file, compress = compress)
     } else {
       write_to_log(glue::glue("Skipping 20{year} individual, as the fst file already exists in sourcedev"))
     }
@@ -53,7 +53,7 @@ create_fst_files <- function(year, compress = 100) {
     if (!fs::file_exists(fs::path_ext_set(ep_file, ".fst"))) {
 
       # Create episode file
-      zsav_to_fst(ep_file, compress = 100)
+      zsav_to_fst(ep_file, compress = compress)
     } else {
       write_to_log(glue::glue("Skipping 20{year} episode, as the fst file already exists in sourcedev"))
     }
