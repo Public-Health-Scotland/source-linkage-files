@@ -84,15 +84,12 @@ outfile <-
   left_join(locality_file, by = "datazone2011") %>%
   select(
     postcode,
-    hb2018,
-    hscp2018,
-    ca2018,
     lca,
     locality,
     datazone2011,
-    hb2019,
-    ca2019,
-    hscp2019,
+    matches("hb\\d{4}"),
+    matches("hscp\\d{4}"),
+    matches("ca\\d{4}"),
     matches("simd\\d{4}.?.?_rank"),
     matches("simd\\d{4}.?.?_sc_decile"),
     matches("simd\\d{4}.?.?_sc_quintile"),
