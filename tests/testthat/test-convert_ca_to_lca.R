@@ -1,9 +1,10 @@
-library(testthat)
 test_that("Can convert ca code to lca code", {
   ca <- c(
     "S12000033",
     "S12000049",
-    "S12000048"
+    "S12000048",
+    NA,
+    "S12345678"
   )
 
   expect_equal(
@@ -11,7 +12,9 @@ test_that("Can convert ca code to lca code", {
     c(
       "01",
       "17",
-      "25"
+      "25",
+      NA,
+      NA
     )
   )
 })

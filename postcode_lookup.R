@@ -16,37 +16,52 @@ library(haven)
 ## read data in ##
 
 # postcode data
-pc_file <- read_spd_file()
+pc_file <- readr::read_rds(read_spd_file()) %>%
+  select(pc7,
+         datazone2011,
+         ur8_2016,
+         ur6_2016,
+         ur3_2016,
+         ur2_2016)
 
 # simd data
-simd_file <- readr::read_rds(read_simd_file(file = "postcode_2021_2_simd2020v2.rds"))
+simd_file <- readr::read_rds(read_simd_file(file = "postcode_2021_2_simd2020v2.rds")) %>%
+  select(pc7,
+         datazone2011,
+         simd2020v2_rank,
+         simd2020v2_sc_decile,
+         simd2020v2_sc_quintile,
+         simd2020v2_hb2019_decile,
+         simd2020v2_hb2019_quintile,
+         simd2020v2_hscp2019_decile,
+         simd2020v2_hscp2019_quintile)
 
 # locality
-locality_file <- readr::read_rds(read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds"))
+locality_file <- readr::read_rds(read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds")) %>%
+  select(datazone2011,
+         hscp_locality,
+         hscp2019,
+         hscp2018,
+         ca2018,
+         ca2019,
+         hb2019,
+         hb2018)
+
 
 
 ## clean up data ##
 
-# arrange pc lookups based on pc7
-pc_file <-
-  pc_file
-
-# arrange simd based on pc7
-simd_file <-
-  simd_file
-
 # join data together by pc7
 data <-
   pc_file %>%
-  left_join(simd_file, by = c("pc7", "datazone2011")) 
+  left_join(simd_file, by = c("pc7", "datazone2011")) %>%
+  rename(postcode = "pc7")
 
 
 # rename and drop variable in locality
 locality_file <-
   locality_file %>%
   rename(locality = "hscp_locality") %>%
-  # remove ca2019name hscp2019name hb2019name
-  select(-ca2019name, -hscp2019name, -hb2019name) %>%
   # arrange by datazone2011
   arrange(datazone2011) %>%
   # recode missing locality
@@ -61,31 +76,7 @@ locality_file <-
 
 
 
-## save file ##
-
-data <-
-  data %>%
-  # rename pc7
-  rename(
-    postcode = "pc7",
-    simd2020v2_rank = "simd2020v2_rank.x"
-  ) %>%
-  # select variables for outfile
-  select(
-    datazone2011,
-    postcode,
-    simd2020v2_rank,
-    simd2020v2_sc_decile,
-    simd2020v2_sc_quintile,
-    simd2020v2_hb2019_decile,
-    simd2020v2_hb2019_quintile,
-    simd2020v2_hscp2019_decile,
-    simd2020v2_hscp2019_quintile,
-    ur8_2016,
-    ur6_2016,
-    ur3_2016,
-    ur2_2016
-  )
+## outfile ##
 
 # join data and locality files by datazone2011
 outfile <-
@@ -115,6 +106,8 @@ outfile <-
     ur2_2016
   )
 
+
+## save ##
 
 # .zsav
 haven::write_sav(outfile, get_slf_postcode_path(), compress = TRUE)
