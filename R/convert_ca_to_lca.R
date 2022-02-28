@@ -25,16 +25,16 @@ ca_to_lca <- function(ca) {
     ca == "S12000011" ~ "13", # East Ren
     ca == "S12000036" ~ "14", # City of Edinburgh
     ca == "S12000014" ~ "15", # Falkirk
-    ca == "S12000047" ~ "16", # Fife
-    ca == "S12000049" ~ "17", # Glasgow City
+    ca %in% c("S12000015", "S12000047") ~ "16", # Fife
+    ca %in% c("S12000046", "S12000049") ~ "17", # Glasgow City
     ca == "S12000017" ~ "18", # Highland
     ca == "S12000018" ~ "19", # Inverclyde
     ca == "S12000019" ~ "20", # Midlothian
     ca == "S12000020" ~ "21", # Moray
     ca == "S12000021" ~ "22", # North Ayrshire
-    ca == "S12000050" ~ "23", # North Lan
+    ca %in% c("S12000044", "S12000050") ~ "23", # North Lan
     ca == "S12000023" ~ "24", # Orkney
-    ca == "S12000048" ~ "25", # P & K
+    ca %in% c("S12000024", "S12000048") ~ "25", # P & K
     ca == "S12000038" ~ "26", # Renfrewshire
     ca == "S12000027" ~ "27", # Shetland
     ca == "S12000028" ~ "28", # South Ayrshire
