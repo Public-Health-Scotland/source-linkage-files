@@ -81,7 +81,9 @@ get_slf_dir <- function() {
 #' Get the directory for the given year
 #'
 #' @param year The Financial Year e.g. 1718
-#' @param extracts_dir (optional) `TRUE`/`FALSE`, whether to
+#' @param extracts_dir (optional) Whether to
+#' return the Extracts folder (`TRUE`) or the top-level
+#' folder (`FALSE`).
 #'
 #' @return The file path to the year directory (on sourcedev)
 #' @export

@@ -9,7 +9,9 @@ get_year_dir(year, extracts_dir = FALSE)
 \arguments{
 \item{year}{The Financial Year e.g. 1718}
 
-\item{extracts_dir}{(optional) \code{TRUE}/\code{FALSE}, whether to}
+\item{extracts_dir}{(optional) Whether to
+return the Extracts folder (\code{TRUE}) or the top-level
+folder (\code{FALSE}).}
 }
 \value{
 The file path to the year directory (on sourcedev)
