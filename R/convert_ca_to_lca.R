@@ -46,12 +46,3 @@ ca_to_lca <- function(ca) {
   return(lca)
 }
 
-
-
-# library(phsopendata)
-
-# ca_codes <- readr::read_csv(
-#    "https://www.opendata.nhs.scot/dataset/9f942fdb-e59e-44f5-b534-d6e17229cc7b/resource/967937c4-8d67-4f39-974f-fd58c4acfda5/download/ca11_ca19.csv")
-
-# ca <- phsopendata::opendata_get_resource(res_id = "967937c4-8d67-4f39-974f-fd58c4acfda5")
-## phs package not working
