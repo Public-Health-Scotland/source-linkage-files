@@ -4,8 +4,9 @@ library(haven)
 library(glue)
 
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU")
-table <- dbplyr::in_schema("ROBERM18", "FINAL_2")
-fin_year <- "1415"
+
+# Change the year
+fin_year <- "1516"
 
 db_connection <- odbc::dbConnect(
   odbc::odbc(),
@@ -13,6 +14,9 @@ db_connection <- odbc::dbConnect(
   uid = Sys.getenv("USER"),
   pwd = rstudioapi::askForPassword("password")
 )
+
+# Check the table name and change if required.
+table <- dbplyr::in_schema("ROBERM18", "FINAL_2")
 
 # Read NSU data
 nsu_data <-
@@ -36,4 +40,8 @@ file_path <- path(nsu_dir, glue("All_CHIs_20{fin_year}.zsav"))
 if (file_exists(file_path)) {
   file_copy(file_path, path(nsu_dir, glue("All_CHIs_20{fin_year}_OLD.zsav")))
 }
+<<<<<<< HEAD
 write_sav(nsu_data,file_path,compress = TRUE)
+=======
+write_sav(nsu_data, file_path, compress = TRUE)
+>>>>>>> main-R
