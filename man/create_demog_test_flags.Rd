@@ -16,4 +16,9 @@ Missing value flag from \code{\link{is_missing}}
 \description{
 Create demographic test flags
 }
+\seealso{
+Other create test flags functions: 
+\code{\link{create_hb_test_flags}()},
+\code{\link{create_hscp_test_flags}()}
+}
 \concept{create test flags functions}

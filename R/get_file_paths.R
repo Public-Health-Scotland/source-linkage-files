@@ -19,6 +19,7 @@
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
 #' @family file path functions
+#' @export
 get_file_path <-
   function(directory,
            file_name,

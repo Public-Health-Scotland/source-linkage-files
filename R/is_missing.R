@@ -5,6 +5,9 @@
 #' @return a logical vector indicating if each value is missing
 #' @export
 is_missing <- function(x) {
-  is.na(x) | x == ""
-}
+  if (typeof(x) != "character") {
+    rlang::abort(message = glue::glue("You must supply a character vector, but {class(x)} was supplied."))
+  }
 
+  return(is.na(x) | x == "")
+}
