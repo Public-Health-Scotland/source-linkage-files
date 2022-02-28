@@ -19,30 +19,9 @@ library(haven)
 pc_file <- read_spd_file()
 
 # simd data
-read_simd_file <- function(file) {
-  simd_path <- fs::path(get_lookups_dir(), "Deprivation", file)
-  # If given a sav extension (or other), swap it for rds
-  simd_path <- fs::path_ext_set(simd_path, "rds")
-  # Check if the file exists and we can read it
-  if (!fs::file_access(simd_path, "read")) {
-    rlang::abort(message = "Couldn't read the simd file")
-  }
-  return(simd_path)
-}
 simd_file <- readr::read_rds(read_simd_file(file = "postcode_2021_2_simd2020v2.rds"))
 
 # locality
-read_locality_file <- function(file) {
-  locality_path <-
-    fs::path(get_lookups_dir(), "Geography", "HSCP Locality", file)
-  # If given a sav extension (or other), swap it for rds
-  locality_path <- fs::path_ext_set(locality_path, "rds")
-  # Check if the file exists and we can read it
-  if (!fs::file_access(locality_path, "read")) {
-    rlang::abort(message = "Couldn't read the locality file")
-  }
-  return(locality_path)
-}
 locality_file <- readr::read_rds(read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds"))
 
 
@@ -50,13 +29,11 @@ locality_file <- readr::read_rds(read_locality_file("HSCP Localities_DZ11_Lookup
 
 # arrange pc lookups based on pc7
 pc_file <-
-  pc_file %>%
-  arrange(pc7)
+  pc_file
 
 # arrange simd based on pc7
 simd_file <-
-  simd_file %>%
-  arrange(pc7)
+  simd_file
 
 # join data together by pc7
 data <-
