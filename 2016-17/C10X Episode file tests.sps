@@ -69,10 +69,7 @@ If NHS_Western_Isles = 1 NHS_Western_Isles_cost = cost_total_net.
 If NHS_Fife = 1 NHS_Fife_cost = cost_total_net.
 If NHS_Tayside = 1 NHS_Tayside_cost = cost_total_net.
 
-sort cases by recid.
-
 aggregate outfile = !DatasetName
-    /Presorted
     /break year recid
     /n_episodes = n
     /n_male n_female = Sum(Male Female)
