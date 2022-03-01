@@ -19,7 +19,7 @@ current_file <- haven::read_sav(get_ch_costs_path())
 # write data to folder
 # .zsav
 haven::write_sav(current_file,
-  paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup_pre", latest_update(), ".zsav"),
+  paste0(get_slf_dir(), "/Costs/Cost_CH_Lookup_pre", latest_update(), ".zsav"),
   compress = TRUE
 )
 
