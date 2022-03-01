@@ -31,21 +31,10 @@ gp_out_of_hours <- readxl::read_xlsx(paste0(get_slf_dir(), "/Costs/OOH_Costs.xls
 ## data - wide to long ##
 gp_out_of_hours <-
   gp_out_of_hours %>%
-  pivot_longer(
-    contains("Consultations"),
-    names_to = "Year_Consultations", values_to = "Consultations"
-  ) %>%
-  pivot_longer(
-    contains("Cost"),
-    names_to = "Year_Cost", values_to = "Cost"
+  pivot_longer(c(ends_with("_Consultations"), ends_with("_Cost")),
+    names_to = c("year", ".value"),
+    names_pattern = "(\\d{4})_(.+)"
   )
-
-
-## create year variable ##
-gp_out_of_hours <-
-  gp_out_of_hours %>%
-  mutate(Year = substr(Year_Consultations, 1, 4))
-
 
 ## create cost per consultation ##
 gp_out_of_hours <-
