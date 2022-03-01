@@ -103,13 +103,11 @@ data <-
   mutate(pct_diff = difference / cost_old * 100)
 
 # count
-pct_difference_table <-
-  data %>%
+data %>%
   count(pct_diff, Year, HB2019) %>%
   spread(Year, n)
 
-difference_table <-
-  data %>%
+data %>%
   count(difference, HB2019, Year) %>%
   spread(Year, n)
 
