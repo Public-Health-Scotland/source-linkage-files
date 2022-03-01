@@ -21,8 +21,8 @@ current_file <- haven::read_sav(get_gp_ooh_costs_path())
 # write data to folder
 # .zsav
 haven::write_sav(current_file,
-                 paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup_pre", latest_update(), ".zsav"),
-                 compress = TRUE
+  paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup_pre", latest_update(), ".zsav"),
+  compress = TRUE
 )
 
 
@@ -65,14 +65,13 @@ latest_year <- 1920
 ## increase by 1% for every year after the latest ##
 gp_out_of_hours <-
   map_df(1:5, ~
-          gp_out_of_hours %>%
-            group_by(HB2019, year) %>%
-            arrange(HB2019, year) %>%
-            mutate(
-              cost_per_consultation = cost_per_consultation * (1.01)^.x,
-              year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-            )
-) %>%
+  gp_out_of_hours %>%
+    group_by(HB2019, year) %>%
+    arrange(HB2019, year) %>%
+    mutate(
+      cost_per_consultation = cost_per_consultation * (1.01)^.x,
+      year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+    )) %>%
   arrange(HB2019, year)
 
 
@@ -105,17 +104,17 @@ data <-
 
 # count
 data %>%
-  count(pct_diff, Year, HB2019) %>%
-  spread(Year, n)
+  count(pct_diff, year, HB2019) %>%
+  spread(year, n)
 
 data %>%
-  count(difference, HB2019, Year) %>%
-  spread(Year, n)
+  count(difference, HB2019, year) %>%
+  spread(year, n)
 
 
 ## Plot to check for obviously wrong looking costs ##
 
-ggplot(data = data, aes(x = Year, y = cost_per_consultation, group = Board_Name)) +
+ggplot(data = data, aes(x = year, y = cost_per_consultation, group = Board_Name)) +
   geom_line(aes(color = Board_Name)) +
   labs(y = "Cost Per Consultation", color = "NHS Board")
 
