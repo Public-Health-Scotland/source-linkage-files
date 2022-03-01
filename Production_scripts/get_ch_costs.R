@@ -11,7 +11,7 @@
 library(dplyr)
 
 
-## Make a copy of the existing file ## Make a copy of the existing file ##
+## Make a copy of the existing file ##
 # read data in
 current_file <- haven::read_sav(get_ch_costs_path())
 
