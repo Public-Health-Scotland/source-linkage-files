@@ -14,83 +14,64 @@ library(haven)
 library(createslf)
 
 
-## read data in ##
+# Read lookup files -------------------------------------------------------
 
 # postcode data
 pc_file <- readr::read_rds(read_spd_file()) %>%
-  select(pc7,
-         datazone2011,
-         ur8_2016,
-         ur6_2016,
-         ur3_2016,
-         ur2_2016)
+  select(
+    pc7,
+    matches("datazone\\d{4}$"),
+    matches("hb\\d{4}$"),
+    matches("hscp\\d{4}$"),
+    matches("ca\\d{4}$"),
+    matches("ur8_\\d{4}$"),
+    matches("ur6_\\d{4}$"),
+    matches("ur3_\\d{4}$"),
+    matches("ur2_\\d{4}$")
+  ) %>%
+  mutate(lca = ca_to_lca(ca2019))
 
 # simd data
 simd_file <- readr::read_rds(read_simd_file(file = "postcode_2021_2_simd2020v2.rds")) %>%
-  select(pc7,
-         datazone2011,
-         simd2020v2_rank,
-         simd2020v2_sc_decile,
-         simd2020v2_sc_quintile,
-         simd2020v2_hb2019_decile,
-         simd2020v2_hb2019_quintile,
-         simd2020v2_hscp2019_decile,
-         simd2020v2_hscp2019_quintile)
+  select(
+    pc7,
+    matches("simd\\d{4}.?.?_rank"),
+    matches("simd\\d{4}.?.?_sc_decile"),
+    matches("simd\\d{4}.?.?_sc_quintile"),
+    matches("simd\\d{4}.?.?_hb\\d{4}_decile"),
+    matches("simd\\d{4}.?.?_hb\\d{4}_quintile"),
+    matches("simd\\d{4}.?.?_hscp\\d{4}_decile"),
+    matches("simd\\d{4}.?.?_hscp\\d{4}_quintile")
+  )
 
 # locality
-locality_file <- readr::read_rds(read_locality_file("HSCP Localities_DZ11_Lookup_20200825.rds")) %>%
-  select(datazone2011,
-         hscp_locality,
-         hscp2019,
-         hscp2018,
-         ca2018,
-         ca2019,
-         hb2019,
-         hb2018)
-
-
-
-## clean up data ##
-
-# join data together by pc7
-data <-
-  pc_file %>%
-  left_join(simd_file, by = c("pc7", "datazone2011")) %>%
-  rename(postcode = "pc7")
-
-
-# rename and drop variable in locality
-locality_file <-
-  locality_file %>%
-  rename(locality = "hscp_locality") %>%
-  # arrange by datazone2011
-  arrange(datazone2011) %>%
-  # recode missing locality
+locality_file <- readr::read_rds(read_locality_file(file = "HSCP Localities_DZ11_Lookup_20200825.rds")) %>%
+  select(
+    locality = hscp_locality,
+    matches("datazone\\d{4}$")
+  ) %>%
   mutate(locality = replace_na(locality, "No Locality Information"))
 
 
-## LCA code ##
+# Join data together  -----------------------------------------------------
+data <-
+  left_join(pc_file, simd_file, by = "pc7") %>%
+  rename(postcode = "pc7") %>%
+  left_join(locality_file, by = "datazone2011")
 
-locality_file <-
-  locality_file %>%
-  mutate(lca = ca_to_lca(ca2019))
 
+# Finalise output -----------------------------------------------------
 
-
-## outfile ##
-
-# join data and locality files by datazone2011
 outfile <-
   data %>%
-  left_join(locality_file, by = "datazone2011") %>%
   select(
     postcode,
     lca,
     locality,
-    datazone2011,
-    matches("hb\\d{4}"),
-    matches("hscp\\d{4}"),
-    matches("ca\\d{4}"),
+    matches("datazone\\d{4}$"),
+    matches("hb\\d{4}$"),
+    matches("hscp\\d{4}$"),
+    matches("ca\\d{4}$"),
     matches("simd\\d{4}.?.?_rank"),
     matches("simd\\d{4}.?.?_sc_decile"),
     matches("simd\\d{4}.?.?_sc_quintile"),
@@ -98,14 +79,14 @@ outfile <-
     matches("simd\\d{4}.?.?_hb\\d{4}_quintile"),
     matches("simd\\d{4}.?.?_hscp\\d{4}_decile"),
     matches("simd\\d{4}.?.?_hscp\\d{4}_quintile"),
-    ur8_2016,
-    ur6_2016,
-    ur3_2016,
-    ur2_2016
+    matches("ur8_\\d{4}$"),
+    matches("ur6_\\d{4}$"),
+    matches("ur3_\\d{4}$"),
+    matches("ur2_\\d{4}$")
   )
 
 
-## save ##
+# Save out ----------------------------------------------------------------
 
 # .zsav
 haven::write_sav(outfile, get_slf_postcode_path(), compress = TRUE)
