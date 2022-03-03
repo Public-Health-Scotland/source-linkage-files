@@ -9,7 +9,7 @@ process_homelessness_extract(year, write_to_disk = TRUE)
 \arguments{
 \item{year}{The year to process, in FY format.}
 
-\item{write_to_disk}{(optional) Should the data be written to disk}
+\item{write_to_disk}{(optional) Should the data be written to disk.}
 }
 \value{
 the final data as a tibble.

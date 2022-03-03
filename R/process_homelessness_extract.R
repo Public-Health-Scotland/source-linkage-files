@@ -5,7 +5,7 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
-#' @param write_to_disk (optional) Should the data be written to disk
+#' @param write_to_disk (optional) Should the data be written to disk.
 #'
 #' @return the final data as a tibble.
 #' @export
