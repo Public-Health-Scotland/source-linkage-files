@@ -140,6 +140,8 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # dplyr::rename and select ---------------------------------------------------------
   # TODO - Include person_id (from client_id)
   final_data <- filtered_data %>%
+    # Filter out duplicates
+    fix_west_dun_duplicates() %>%
     dplyr::select(
       .data$year,
       .data$recid,
@@ -180,4 +182,42 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   }
 
   return(final_data)
+}
+
+
+#' Fix the West Dunbartonshire duplicates
+#'
+#' @description Takes the homelessness data and filters out
+#' the West Dun duplicates where one has an app_number e.g.
+#' "ABC123" and another has "00ABC123". It first modifies IDs
+#' of this type and then filters where this 'creates' a duplicate.
+#'
+#' @param data the homelessness data - It must contain the
+#' `sending_local_authority_name`, `application_reference_number`,
+#' `client_unique_identifier`, `assessment_decision_date` and
+#' `case_closed_date`.
+#'
+#' @return The fixed data
+fix_west_dun_duplicates <- function(data) {
+  west_dun_fixed <- data %>%
+    dplyr::filter(.data$sending_local_authority_name == "West Dunbartonshire") %>%
+    # Remove the leading zeros
+    dplyr::mutate(dplyr::across(
+      c(.data$application_reference_number, .data$client_unique_identifier),
+      ~ stringr::str_remove(.x, "^00")
+    )) %>%
+    # Sort so the latest case closed date is at the top
+    dplyr::arrange(dplyr::desc(.data$case_closed_date)) %>%
+    # Keep only the first record for app_ref, client_id, decision_date.
+    dplyr::distinct(.data$application_reference_number, .data$client_unique_identifier, .data$assessment_decision_date,
+      .keep_all = TRUE
+    )
+
+  fixed_data <- dplyr::bind_rows(
+    data %>%
+      dplyr::filter(.data$sending_local_authority_name != "West Dunbartonshire"),
+    west_dun_fixed
+  )
+
+  return(fixed_data)
 }
