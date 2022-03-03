@@ -13,7 +13,6 @@
 #'
 #' @importFrom readr col_date col_character col_integer
 process_homelessness_extract <- function(year, write_to_disk = TRUE) {
-  process_homelessness_extract
   # Read the data and clean the variable names ------------------------------
 
   homelessness_extract <- readr::read_csv(extract_path(year = year, type = "Homelessness"),
