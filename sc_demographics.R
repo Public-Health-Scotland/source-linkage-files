@@ -146,7 +146,7 @@ outfile <-
           latest_record_flag,
           extract_date
           ) %>%
-  # summarise so select last submission
+  # summarise to select the last (non NA) submission
   summarise(chi = last(upi),
             gender = last(gender),
             dob = last(dob),
