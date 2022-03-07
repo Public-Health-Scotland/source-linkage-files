@@ -4,24 +4,16 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - COSLA Values
+# Description - Lookup for costs for Care Homes
 #####################################################
 
 library(dplyr)
+library(createslf)
 
 
 ## Make a copy of the existing file ##
-# read data in
-current_file <- haven::read_sav(get_ch_costs_path())
-
-
-# write data to folder
-# .zsav
-haven::write_sav(current_file,
-  paste0(get_slf_dir(), "/Costs/Cost_CH_Lookup_pre", latest_update(), ".zsav"),
-  compress = TRUE
-)
+fs::file_copy(get_ch_costs_path(), get_ch_costs_path(update = previous_update()))
 
 
 ## Get COSLA Value tables ##

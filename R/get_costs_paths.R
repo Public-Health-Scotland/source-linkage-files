@@ -6,12 +6,21 @@
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
-get_ch_costs_path <- function(...) {
+get_ch_costs_path <- function(..., update = NULL) {
+
+  if (is.null(update)) {
   ch_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = glue::glue("Cost_CH_Lookup.sav"),
     ...
   )
+  } else {
+    ch_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = glue::glue("Cost_CH_Lookup_pre", update, ".sav"),
+      ...
+    )
+  }
 
   return(ch_costs_path)
 }
