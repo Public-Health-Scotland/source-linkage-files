@@ -136,44 +136,25 @@ outfile <-
 # factor labels
 outfile <-
   outfile %>%
-  mutate(
-    dementia = factor(dementia,
-      levels = c(0, 1), labels = c("No", "Yes")
+  mutate(across(
+    c(
+      dementia,
+      mental_health_problems,
+      learning_disability,
+      physical_and_sensory_disability,
+      drugs,
+      alcohol,
+      palliative_care,
+      carer,
+      elderly_frail,
+      neurological_condition,
+      autism,
+      other_vulnerable_groups
     ),
-    mental_health_problems = factor(mental_health_problems,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    learning_disability = factor(learning_disability,
-      levels = c(0, 1),
-      labels = c("No", "Yes")
-    ),
-    physical_and_sensory_disability = factor(physical_and_sensory_disability,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    drugs = factor(drugs,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    alcohol = factor(alcohol,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    palliative_care = factor(palliative_care,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    carer = factor(carer,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    elderly_frail = factor(elderly_frail,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    neurological_condition = factor(neurological_condition,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    autism = factor(autism,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
-    other_vulnerable_groups = factor(other_vulnerable_groups,
-      levels = c(0, 1), labels = c("No", "Yes")
-    ),
+    factor,
+    levels = c(0, 1),
+    labels = c("No", "Yes")
+  ),
     living_alone = factor(living_alone,
       levels = c(0, 1, 9), labels = c("No", "Yes", "Not Known")
     ),
