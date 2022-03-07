@@ -151,7 +151,8 @@ outfile <-
             gender = last(gender),
             dob = last(dob),
             postcode = last(postcode)
-            )
+            ) %>%
+            ungroup()
 
 
 ## save file ##
