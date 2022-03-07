@@ -20,6 +20,10 @@ End if.
 If sysmis(dob) No_DoB = 1.
 
 * Flags to count Health Board episodes, and costs.
+*Note cost_total_net is used here in the new file as this is taken from the datamart. 
+*This is compared to cost_total_net_incDNAs existing in the SLFS further down in the test files 
+*as this cost_total_net changes to include DNAs for outpatients.
+
 Do if (hbtreatcode = 'S08000015').
     Compute NHS_Ayrshire_and_Arran_episodes = 1.
     Compute NHS_Ayrshire_and_Arran_cost = cost_total_net.
@@ -29,7 +33,7 @@ Do if (hbtreatcode = 'S08000016').
     Compute NHS_Borders_cost = cost_total_net.
 End if.
 Do if (hbtreatcode = 'S08000017').
-    Compute NHS_Ayrshire_and_Arran_episodes = 1.
+    Compute NHS_Dumfries_and_Galloway_episodes = 1.
     Compute NHS_Dumfries_and_Galloway_cost = cost_total_net.
 End if.
 Do if (hbtreatcode = 'S08000019').
@@ -178,59 +182,59 @@ If sysmis(dob) No_DoB = 1.
 * Flags to count Health Board episodes, and costs.
 Do if (hbtreatcode = 'S08000015').
     Compute NHS_Ayrshire_and_Arran_episodes = 1.
-    Compute NHS_Ayrshire_and_Arran_cost = cost_total_net.
+    Compute NHS_Ayrshire_and_Arran_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000016').
     Compute NHS_Borders_episodes = 1.
-    Compute NHS_Borders_cost = cost_total_net.
+    Compute NHS_Borders_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000017').
-    Compute NHS_Ayrshire_and_Arran_episodes = 1.
-    Compute NHS_Dumfries_and_Galloway_cost = cost_total_net.
+    Compute NHS_Dumfries_and_Galloway_episodes = 1.
+    Compute NHS_Dumfries_and_Galloway_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000019').
     Compute NHS_Forth_Valley_episodes = 1.
-    Compute NHS_Forth_Valley_cost = cost_total_net.
+    Compute NHS_Forth_Valley_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000020').
     Compute NHS_Grampian_episodes = 1.
-    Compute NHS_Grampian_cost = cost_total_net.
+    Compute NHS_Grampian_cost = cost_total_net_incDNAs.
 End if.
 Do if (any(hbtreatcode, 'S08000021', 'S08000031')).
     Compute NHS_Greater_Glasgow_and_Clyde_episodes = 1.
-    Compute NHS_Greater_Glasgow_and_Clyde_cost = cost_total_net.
+    Compute NHS_Greater_Glasgow_and_Clyde_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000022').
     Compute NHS_Highland_episodes = 1.
-    Compute NHS_Highland_cost = cost_total_net.
+    Compute NHS_Highland_cost = cost_total_net_incDNAs.
 End if.
 Do if (any(hbtreatcode, 'S08000023', 'S08000032')).
     Compute NHS_Lanarkshire_episodes = 1.
-    Compute NHS_Lanarkshire_cost = cost_total_net.
+    Compute NHS_Lanarkshire_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000024').
     Compute NHS_Lothian_episodes = 1.
-    Compute NHS_Lothian_cost = cost_total_net.
+    Compute NHS_Lothian_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000025').
     Compute NHS_Orkney_episodes = 1.
-    Compute NHS_Orkney_cost = cost_total_net.
+    Compute NHS_Orkney_cost = cost_total_net_incDNAs.
 End if.
 Do if (hbtreatcode = 'S08000026').
     Compute NHS_Shetland_episodes = 1.
-    Compute NHS_Shetland_cost = cost_total_net.
+    Compute NHS_Shetland_cost = cost_total_net_incDNAs.
 	End if.
 Do if (hbtreatcode = 'S08000028').
     Compute NHS_Western_Isles_episodes = 1.
-    Compute NHS_Western_Isles_cost = cost_total_net.
+    Compute NHS_Western_Isles_cost = cost_total_net_incDNAs.
 	End if.
 Do if (any(hbtreatcode, 'S08000018', 'S08000029')).
     Compute NHS_Fife_episodes = 1.
-    Compute NHS_Fife_cost = cost_total_net.
+    Compute NHS_Fife_cost = cost_total_net_incDNAs.
 End if.
 Do if (any(hbtreatcode, 'S08000027', 'S08000030')).
     Compute NHS_Tayside_episodes = 1.
-    Compute NHS_Tayside_cost = cost_total_net.
+    Compute NHS_Tayside_cost = cost_total_net_incDNAs.
 End if.
 
 * Get values for whole file.
@@ -242,10 +246,10 @@ aggregate outfile = SLFexisting
     /n_Males n_Females = Sum(Male Female)
     /Mean_Age = mean(age)
     /n_episodes = n
-    /Total__Costs_net = Sum(cost_total_net)
-    /Mean__Costs_net = Mean(cost_total_net)
-    /Max_Cost = Max(cost_total_net)
-    /Min_Cost = Min(cost_total_net)
+    /Total__Costs_net = Sum(cost_total_net_incDNAs)
+    /Mean__Costs_net = Mean(cost_total_net_incDNAs)
+    /Max_Cost = Max(cost_total_net_incDNAs)
+    /Min_Cost = Min(cost_total_net_incDNAs)
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
     /Total_cost_apr = Sum(apr_cost)

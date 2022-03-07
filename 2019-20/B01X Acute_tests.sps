@@ -28,7 +28,7 @@ Do if (hbtreatcode = 'S08000016').
     Compute NHS_Borders_beddays = yearstay.
 End if.
 Do if (hbtreatcode = 'S08000017').
-    Compute NHS_Ayrshire_and_Arran_episodes = 1.
+    Compute NHS_Dumfries_and_Galloway_episodes = 1.
     Compute NHS_Dumfries_and_Galloway_cost = cost_total_net.
     Compute NHS_Dumfries_and_Galloway_beddays = yearstay.
 End if.
@@ -232,7 +232,7 @@ Do if (hbtreatcode = 'S08000016').
     Compute NHS_Borders_beddays = yearstay.
 End if.
 Do if (hbtreatcode = 'S08000017').
-    Compute NHS_Ayrshire_and_Arran_episodes = 1.
+    Compute NHS_Dumfries_and_Galloway_episodes = 1.
     Compute NHS_Dumfries_and_Galloway_cost = cost_total_net.
     Compute NHS_Dumfries_and_Galloway_beddays = yearstay.
 End if.
