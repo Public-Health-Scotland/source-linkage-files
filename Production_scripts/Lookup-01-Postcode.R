@@ -4,8 +4,8 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Postcode Data
+# Description -  Build the Postcode Lookup
 #####################################################
 
 library(dplyr)
@@ -68,10 +68,8 @@ outfile <-
     postcode,
     lca,
     locality,
-    matches("datazone\\d{4}$"),
-    matches("hb\\d{4}$"),
-    matches("hscp\\d{4}$"),
-    matches("ca\\d{4}$"),
+    matches("datazone\\d{4}$")[1],
+    matches("\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
     matches("simd\\d{4}.?.?_rank"),
     matches("simd\\d{4}.?.?_sc_decile"),
     matches("simd\\d{4}.?.?_sc_quintile"),
@@ -84,6 +82,7 @@ outfile <-
     matches("ur3_\\d{4}$"),
     matches("ur2_\\d{4}$")
   )
+
 
 
 # Save out ----------------------------------------------------------------
