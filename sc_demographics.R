@@ -9,12 +9,6 @@
 # Description -
 #####################################################
 
-
-## output ##
-output <- haven::read_sav(file = "/conf/hscdiip/SLF_Extracts/Social_care/sc_demographics_lookup_Dec_2021.zsav")
-
-
-
 ## load packages ##
 library(readr)
 library(odbc)
