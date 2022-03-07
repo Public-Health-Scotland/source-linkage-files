@@ -27,6 +27,8 @@ db_connection <- odbc::dbConnect(
   pwd = rstudioapi::askForPassword("password")
 )
 ###################################################
+## year of interest ##
+year <- 2019
 
 # read in data - social care 2 client
 sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
@@ -54,21 +56,15 @@ sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
     meals,
     day_care
   ) %>%
-  collect() %>%
+  # filter data by year
+  filter(financial_year == year) %>%
   arrange(
     sending_location,
     social_care_id,
     financial_year,
     financial_quarter
-  )
-
-
-## year of interest ##
-year <- 2019
-# filter data by year
-sc <-
-  sc %>%
-  filter(financial_year == year)
+  ) %>%
+  collect()
 
 
 # flags as numeric
