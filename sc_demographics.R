@@ -75,12 +75,15 @@ na_postcodes <-
 # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
 uk_pc_regexp <- "^[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}$"
 
+dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
+non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
+
 sc_demog <-
   sc_demog %>%
   mutate(
-    # remove dummy postcodes "NK1 0AA" and "NK1 1AB" and invalid postcodes missed by regex check
+    # remove dummy postcodes invalid postcodes missed by regex check
     across(ends_with("_postcode"),
-           ~na_if(.x, c("NK1 0AA", "NF1 1AB", "PR2 5AL", "M16 0GS", "DY103DJ")))
+           ~na_if(.x, c(dummy_postcodes, non_existant_postcodes)))
   ) %>%
   mutate(
     # comparing with regex UK postcode
