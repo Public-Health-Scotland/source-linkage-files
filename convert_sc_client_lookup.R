@@ -95,8 +95,6 @@ sc <-
 ## create outfile ##
 outfile <-
   sc %>%
-  # sort
-  arrange(sending_location, social_care_id) %>%
   # group
   group_by(sending_location, social_care_id) %>%
   # summarise to take last submission
