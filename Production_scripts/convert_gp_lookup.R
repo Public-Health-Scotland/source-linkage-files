@@ -4,8 +4,9 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Open Data, GP Practice Details, Postcode Lookup
+# Description - Build the GPprac Lookup.
+#               Pulls from the Open Data Platform and lookups.
 #####################################################
 
 
@@ -18,17 +19,7 @@ library(janitor)
 library(fs)
 
 
-## output ##
-output <- haven::read_sav(get_slf_gpprac_path())
-
-
-
 ## get data ##
-
-
-# use `00_get_gp_cluster_data.R`- draws from open data
-# latest update date
-latest_update <- "Dec_2021"
 
 # Retrieve the latest resource from the dataset
 opendata <-
@@ -50,7 +41,7 @@ opendata <-
     path(
       # lookup_dir,
       get_lookups_dir(),
-      paste0("practice_details_", latest_update),
+      paste0("practice_details_", latest_update()),
       ext = "zsav"
     ),
     compress = TRUE
@@ -58,8 +49,8 @@ opendata <-
 
 
 # gp lookup
-gp <-
-  haven::read_sav("/conf/linkage/output/lookups/Unicode/National Reference Files/gpprac.sav") %>%
+gpprac_file <-
+  haven::read_sav(read_gpprac_file("gpprac.sav")) %>%
   # select only praccode and postcode
   select(
     praccode,
@@ -71,20 +62,8 @@ gp <-
   rename(gpprac = "praccode")
 
 
-
-## match cluster information onto the practice reference list ##
-data <-
-  opendata %>%
-  # join cluster and gp data
-  left_join(gp, by = c("gpprac", "postcode")) %>%
-  # sort by postcode
-  arrange(postcode)
-
-
-## match on geography info ##
-
 # postcode lookup
-pc <- read_spd_file() %>%
+pc_lookup <- readr::read_rds(read_spd_file()) %>%
   select(
     pc7,
     pc8,
@@ -96,12 +75,18 @@ pc <- read_spd_file() %>%
   rename(postcode = "pc8")
 
 
+## Data Cleaning ##
 data <-
-  data %>%
-  # join data and postcode data
-  left_join(pc, by = "postcode") %>%
+  opendata %>%
+  ## match cluster information onto the practice reference list ##
+  left_join(gpprac_file, by = c("gpprac", "postcode")) %>%
+  # sort by postcode
+  arrange(postcode) %>%
+  ## match on geography info - postcode ##
+  left_join(pc_lookup, by = "postcode") %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
+  #order variables
   select(
     gpprac,
     pc7,
@@ -110,51 +95,8 @@ data <-
     hbpraccode,
     hscp2018,
     ca2018
-  )
-
-
-## ca to lca code ##
-# function will just be called once PR approved
-ca_to_lca <- function(ca) {
-  lca <- case_when(
-    ca == "S12000033" ~ "01", # Aberdeen City
-    ca == "S12000034" ~ "02", # Aberdeenshire
-    ca == "S12000041" ~ "03", # Angus
-    ca == "S12000035" ~ "04", # Argyll and Bute
-    ca == "S12000026" ~ "05", # Scottish Borders
-    ca == "S12000005" ~ "06", # Clackmannanshire
-    ca == "S12000039" ~ "07", # West Dun
-    ca == "S12000006" ~ "08", # Dumfies and Galloway
-    ca == "S12000042" ~ "09", # Dundee City
-    ca == "S12000008" ~ "10", # East Ayrshire
-    ca == "S12000045" ~ "11", # East Dun
-    ca == "S12000010" ~ "12", # East Lothian
-    ca == "S12000011" ~ "13", # East Ren
-    ca == "S12000036" ~ "14", # City of Edinburgh
-    ca == "S12000014" ~ "15", # Falkirk
-    ca == "S12000047" ~ "16", # Fife
-    ca == "S12000049" ~ "17", # Glasgow City
-    ca == "S12000017" ~ "18", # Highland
-    ca == "S12000018" ~ "19", # Inverclyde
-    ca == "S12000019" ~ "20", # Midlothian
-    ca == "S12000020" ~ "21", # Moray
-    ca == "S12000021" ~ "22", # North Ayrshire
-    ca == "S12000050" ~ "23", # North Lan
-    ca == "S12000023" ~ "24", # Orkney
-    ca == "S12000048" ~ "25", # P & K
-    ca == "S12000038" ~ "26", # Renfrewshire
-    ca == "S12000027" ~ "27", # Shetland
-    ca == "S12000028" ~ "28", # South Ayrshire
-    ca == "S12000029" ~ "29", # South Lan
-    ca == "S12000030" ~ "30", # Stirling
-    ca == "S12000040" ~ "31", # West Lothian
-    ca == "S12000013" ~ "32" # Na h-Eileanan Siar
-  )
-  return(lca)
-}
-
-data <-
-  data %>%
+  ) %>%
+  ## ca to lca code ##
   mutate(lca = ca_to_lca(ca2018))
 
 
@@ -163,18 +105,9 @@ data <-
 data <-
   data %>%
   mutate(
-    hbpraccode =
-      if_else(
-        gpprac == 99942 | gpprac == 99957 | gpprac == 99961 | gpprac == 99981 | gpprac == 99999, "S08200003", hbpraccode
-      )
-  ) %>%
-  mutate(
-    hbpraccode =
-      if_else(
-        gpprac == 99995, "S08200001", hbpraccode
-      )
+    hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
+    hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
   )
-
 
 
 
