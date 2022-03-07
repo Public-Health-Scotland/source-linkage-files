@@ -33,7 +33,7 @@ ch <-
   # rename
   rename(source_of_funding = "Source of Funding") %>%
   # select only the funding totals
-  filter(source_of_funding == "All Funding With Nursing Care" | source_of_funding == "All Funding Without Nursing Care")
+  filter(source_of_funding %in% c("All Funding With Nursing Care", "All Funding Without Nursing Care"))
 
 
 ch <-
@@ -160,12 +160,12 @@ outfile <-
 
 # .zsav
 haven::write_sav(outfile,
-  paste0(get_slf_dir(), "/Costs/Cost_CH_Lookup.sav"),
+  get_ch_costs_path(),
   compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-  paste0(get_slf_dir(), "/Costs/Cost_CH_Lookup.sav"),
+  get_ch_costs_path(),
   compress = "gz"
 )
