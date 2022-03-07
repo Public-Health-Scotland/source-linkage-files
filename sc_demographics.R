@@ -72,8 +72,8 @@ na_postcodes <-
   sc_demog %>%
   count(across(contains("postcode"), ~is.na(.x)))
 
-# UK postcode regex
-uk_pc_regexp <- "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\\s?[0-9][A-Za-z]{2})"
+# UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
+uk_pc_regexp <- "^[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}$"
 
 sc_demog <-
   sc_demog %>%
