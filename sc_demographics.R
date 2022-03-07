@@ -23,12 +23,7 @@ library(phsmethods)
 
 ######################################################
 # set-up conection to platform
-db_connection <- odbc::dbConnect(
-  odbc::odbc(),
-  dsn = "DVPROD",
-  uid = Sys.getenv("USER"),
-  pwd = rstudioapi::askForPassword("password")
-)
+db_connection <- phs_db_connection(dsn = "DVPROD")
 ###################################################
 
 # read in data - social care 2 demographic
