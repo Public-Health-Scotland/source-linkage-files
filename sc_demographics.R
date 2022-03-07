@@ -140,7 +140,7 @@ outfile <-
   sc_demog %>%
   # group by sending location and ID
   group_by(sending_location, social_care_id) %>%
-  # arranage so lastest submissions are last
+  # arrange so lastest submissions are last
   arrange(sending_location,
           social_care_id,
           latest_record_flag,
