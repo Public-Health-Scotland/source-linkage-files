@@ -61,24 +61,6 @@ sc_demog <- sc_demog %>%
 
 ## postcode ##
 # clean-up
-sc_demog <- sc_demog %>%
-  mutate(
-    # remove any postcodes with length < 5
-    submitted_postcode = na_if(submitted_postcode, str_length(submitted_postcode) < 5 | str_length(submitted_postcode) == 5),
-    chi_postcode = na_if(chi_postcode, str_length(chi_postcode) < 5 | str_length(chi_postcode) == 5)
-  ) %>%
-  mutate(
-    # remove spaces
-    submitted_postcode = str_replace_all(submitted_postcode, fixed(" "), ""),
-    chi_postcode = str_replace_all(chi_postcode, fixed(" "), "")
-  ) %>%
-  mutate(
-    # remove postcodes with length 8 or longer
-    submitted_postcode = na_if(submitted_postcode, str_length(submitted_postcode) > 8 | str_length(submitted_postcode) == 8),
-    chi_postcode = na_if(chi_postcode, str_length(chi_postcode) > 8 | str_length(chi_postcode) == 8)
-  )
-
-
 # format postcodes using `phsmethods`
 sc_demog <-
   sc_demog %>%
