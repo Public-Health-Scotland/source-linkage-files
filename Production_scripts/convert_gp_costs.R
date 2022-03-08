@@ -133,7 +133,7 @@ outfile <-
 
 # .zsav
 haven::write_sav(outfile,
-  paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup.sav"),
+  get_gp_ooh_costs_path(check_mode = "write"),
   compress = TRUE
 )
 
