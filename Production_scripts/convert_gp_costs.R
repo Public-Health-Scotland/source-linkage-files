@@ -139,6 +139,6 @@ haven::write_sav(outfile,
 
 # .rds file
 readr::write_rds(outfile,
-  paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup.sav"),
+  get_gp_ooh_costs_path(ext = "rds", check_mode = "write"),
   compress = "gz"
 )
