@@ -9,17 +9,15 @@
 #               Pulls from the Open Data Platform and lookups.
 #####################################################
 
+# Load packages
+  library(dplyr)
+  library(tidyr)
+  library(haven)
+  library(phsopendata)
+  library(janitor)
+  library(fs)
 
-## packages ##
-library(dplyr)
-library(tidyr)
-library(haven)
-library(phsopendata)
-library(janitor)
-library(fs)
-
-
-## get data ##
+# Read in data---------------------------------------
 
 # Retrieve the latest resource from the dataset
 opendata <-
@@ -60,7 +58,6 @@ gpprac_file <-
   # rename praccode to allow join
   rename(gpprac = "praccode")
 
-
 # postcode lookup
 pc_lookup <- readr::read_rds(read_spd_file()) %>%
   select(
@@ -74,18 +71,19 @@ pc_lookup <- readr::read_rds(read_spd_file()) %>%
   rename(postcode = "pc8")
 
 
-## Data Cleaning ##
+# Data Cleaning ---------------------------------------
+
 data <-
   opendata %>%
   ## match cluster information onto the practice reference list ##
   left_join(gpprac_file, by = c("gpprac", "postcode")) %>%
   # sort by postcode
   arrange(postcode) %>%
-  ## match on geography info - postcode ##
+  # match on geography info - postcode
   left_join(pc_lookup, by = "postcode") %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
-  #order variables
+  # order variables
   select(
     gpprac,
     pc7,
@@ -95,22 +93,16 @@ data <-
     hscp2018,
     ca2018
   ) %>%
-  ## ca to lca code ##
-  mutate(lca = ca_to_lca(ca2018))
-
-
-## dummy postcodes ##
-# set some known dummy practice codes to consistent Board codes
-data <-
-  data %>%
+  # convert ca to lca code
+  mutate(lca = ca_to_lca(ca2018)) %>%
+  # set some known dummy practice codes to consistent Board codes
   mutate(
     hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
     hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
   )
 
 
-
-## save outfile ##
+## save outfile ---------------------------------------
 outfile <-
   data %>%
   # sort by gpprac
@@ -123,3 +115,5 @@ haven::write_sav(outfile, get_slf_gpprac_path(), compress = TRUE)
 
 # .rds file
 readr::write_rds(outfile, get_slf_gpprac_path(), compress = "gz")
+
+## End of Script ---------------------------------------
