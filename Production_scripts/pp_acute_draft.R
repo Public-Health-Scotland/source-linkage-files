@@ -17,13 +17,12 @@ library(tidyr)
 library(dplyr)
 library(readr)
 library(stringr)
-library(expss)
 
 # Set up for get_boxi_extract_path function
 year <- "1920"
 
 # Load extract file
-acute_file <- read_csv(
+acute_file <- readr::read_csv(
   file = get_boxi_extract_path(year, "Acute"), n_max = 20000,
   col_type = cols(
     `Costs Financial Year (01)` = col_integer(),
