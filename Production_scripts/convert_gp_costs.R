@@ -64,15 +64,16 @@ latest_year <- 1920
 
 ## increase by 1% for every year after the latest ##
 gp_out_of_hours <-
-  map_df(1:5, ~
-  gp_out_of_hours %>%
-    group_by(HB2019, year) %>%
-    arrange(HB2019, year) %>%
-    mutate(
-      cost_per_consultation = cost_per_consultation * (1.01)^.x,
-      year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-    )) %>%
-  arrange(HB2019, year)
+  bind_rows(
+    gp_out_of_hours,
+    map_df(1:5, ~
+    gp_out_of_hours %>%
+      filter(year == latest_year) %>%
+      mutate(
+        cost_per_consultation = cost_per_consultation * (1.01)^.x,
+        year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+      ))
+  )
 
 
 
