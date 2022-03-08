@@ -25,7 +25,8 @@ fix_c3_costs <- function(data, year) {
         recid == "01B" & spec == "C3" & hbtreatcode == "S08000019" &
           location == "V217H" & ipdc == "D" ~ 1492.83,
         recid == "01B" & spec == "C3" & hbtreatcode == "S08000019" &
-          location == "V217H" & ipdc == "I" ~ 3179.24 * yearstay
+          location == "V217H" & ipdc == "I" ~ 3179.24 * yearstay,
+        TRUE ~ cost_total_net
       ))
 
   }
