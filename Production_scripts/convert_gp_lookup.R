@@ -40,14 +40,13 @@ opendata <-
   write_sav(
     path(
       # lookup_dir,
-      get_lookups_dir(),
-      paste0("practice_details_", latest_update()),
-      ext = "zsav"
+      get_practice_details_path()
     ),
     compress = TRUE
   )
 
 
+# Read Lookup files ---------------------------------------
 # gp lookup
 gpprac_file <-
   haven::read_sav(read_gpprac_file("gpprac.sav")) %>%
