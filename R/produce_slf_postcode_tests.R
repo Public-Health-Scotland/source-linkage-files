@@ -13,19 +13,19 @@
 produce_slf_postcode_tests <- function(data) {
   data %>%
     # use functions to create HB and partnership flags
-    create_hb_test_flags(.data$HB2019) %>%
-    create_hscp_test_flags(.data$HSCP2019) %>%
+    create_hb_test_flags(.data$hb2019) %>%
+    create_hscp_test_flags(.data$hscp2019) %>%
     # create other test flags
     mutate(n_postcode = 1) %>%
     # remove variables that are not test flags
     select(-c(
-      .data$postcode, .data$HB2018, .data$HSCP2018, .data$CA2018,
-      .data$LCA, .data$Locality, .data$DataZone2011, .data$HB2019,
-      .data$CA2019, .data$HSCP2019, .data$SIMD2020v2_rank,
+      .data$postcode, .data$hb2018, .data$hscp2018, .data$ca2018,
+      .data$LCA, .data$Locality, .data$datazone2011, .data$hb2019,
+      .data$ca2019, .data$hscp2019, .data$simd2020v2_rank,
       .data$simd2020v2_sc_decile, .data$simd2020v2_sc_quintile,
       .data$simd2020v2_hb2019_decile, .data$simd2020v2_hb2019_quintile,
       .data$simd2020v2_hscp2019_decile, .data$simd2020v2_hscp2019_quintile,
-      .data$UR8_2016, .data$UR6_2016, .data$UR3_2016, .data$UR2_2016
+      .data$ur8_2016, .data$ur6_2016, .data$ur3_2016, .data$ur2_2016
     )) %>%
     # use function to sum new test flags
     sum_test_flags()
