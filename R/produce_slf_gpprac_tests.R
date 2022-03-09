@@ -19,9 +19,9 @@ produce_slf_gpprac_tests <- function(data) {
     mutate(n_gpprac = 1) %>%
     # remove variables that won't be summed
     select(-c(
-      .data$gpprac, .data$pc7, .data$PC8, .data$cluster,
+      .data$gpprac, .data$pc7, .data$pc8, .data$cluster,
       .data$hbpraccode, .data$hscp2018, .data$ca2018,
-      .data$LCA
+      .data$lca
     )) %>%
     # use function to sum new test flags
     sum_test_flags()

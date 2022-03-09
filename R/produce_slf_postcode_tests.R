@@ -20,7 +20,7 @@ produce_slf_postcode_tests <- function(data) {
     # remove variables that are not test flags
     select(-c(
       .data$postcode, .data$hb2018, .data$hscp2018, .data$ca2018,
-      .data$LCA, .data$Locality, .data$datazone2011, .data$hb2019,
+      .data$lca, .data$locality, .data$datazone2011, .data$hb2019,
       .data$ca2019, .data$hscp2019, .data$simd2020v2_rank,
       .data$simd2020v2_sc_decile, .data$simd2020v2_sc_quintile,
       .data$simd2020v2_hb2019_decile, .data$simd2020v2_hb2019_quintile,
