@@ -10,15 +10,16 @@
 #              prior to processing.
 #####################################################
 
-library(readr)
-library(stringr)
-library(dplyr)
-library(tidyverse)
-library(lubridate)
+# Packages
+  library(readr)
+  library(stringr)
+  library(dplyr)
+  library(tidyverse)
+  library(lubridate)
 
 year <- "1920"
 
-## Load extract file ##
+## Load extract file---------------------------------
 
 maternity_file <- read_csv(
   file = get_boxi_extract_path(year, "Maternity"), n_max = 20000,
@@ -137,11 +138,12 @@ maternity_file <- maternity_file %>%
     uri = `Maternity_Unique_Record_Identifier_[C]`
   )
 
-## Clean data file ##
+## Data Cleaning------------------------------------------
 
 maternity_clean <- maternity_file %>%
   # Create new columns for recid and gender
   mutate(
+    year = year,
     recid = "02B",
     gender = 2
   ) %>%
