@@ -35,8 +35,11 @@ comparison <- produce_test_comparison(old_tests, new_tests)
 # Save output as zsav for now
 # Eventually change this to rds when we have more R scripts
 haven::write_sav(comparison,
-                 path = glue::glue("/conf/hscdiip/SLF_Extracts/Deaths/all_deaths_{latest_update()}_tests.zsav",
-                                   compress = TRUE)
+                 path(get_slf_dir(), "Deaths",
+                 paste0("all_deaths_", latest_update(), "_tests",
+                 ext = ".zsav")
+                 ),
+                 compress = TRUE
 )
 
 
