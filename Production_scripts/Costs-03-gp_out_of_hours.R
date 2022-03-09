@@ -9,16 +9,19 @@
 #####################################################
 
 
-<<<<<<< HEAD
-=======
 library(dplyr)
 library(ggplot2)
+library(createslf)
+library(tidyr)
+library(purrr)
 
 
 ## Make a copy of the existing file ##
+fs::file_copy(get_gp_ooh_costs_path(), get_gp_ooh_costs_path(update = latest_update()))
+
+
 # read data in
 current_file <- haven::read_sav(get_gp_ooh_costs_path())
-
 
 # write data to folder
 # .zsav
@@ -28,8 +31,10 @@ haven::write_sav(current_file,
 )
 
 
+# latest cost year
+latest_cost_year <- 1920
 
->>>>>>> get_gp_costs
+
 ## update file ##
 
 ## Attendances taken from 2018 Primary Care Out of Hours Report ##
@@ -41,12 +46,6 @@ haven::write_sav(current_file,
 ## The above should be checked / added to the Excel file 'OOH_Costs.xlsx' before running this syntax.
 
 
-<<<<<<< HEAD
-library(dplyr)
-library(ggplot2)
-
-=======
->>>>>>> get_gp_costs
 
 ## data ##
 gp_out_of_hours <- readxl::read_xlsx(paste0(get_slf_dir(), "/Costs/OOH_Costs.xlsx"))
@@ -55,30 +54,11 @@ gp_out_of_hours <- readxl::read_xlsx(paste0(get_slf_dir(), "/Costs/OOH_Costs.xls
 ## data - wide to long ##
 gp_out_of_hours <-
   gp_out_of_hours %>%
-<<<<<<< HEAD
-  pivot_longer(
-    contains("Consultations"),
-    names_to = "Year_Consultations", values_to = "Consultations"
-  ) %>%
-  pivot_longer(
-    contains("Cost"),
-    names_to = "Year_Cost", values_to = "Cost"
-  )
-
-
-## create year variable ##
-gp_out_of_hours <-
-  gp_out_of_hours %>%
-  mutate(Year = substr(Year_Consultations, 1, 4))
-
-
-=======
   pivot_longer(c(ends_with("_Consultations"), ends_with("_Cost")),
     names_to = c("year", ".value"),
     names_pattern = "(\\d{4})_(.+)"
   )
 
->>>>>>> get_gp_costs
 ## create cost per consultation ##
 gp_out_of_hours <-
   gp_out_of_hours %>%
@@ -88,43 +68,18 @@ gp_out_of_hours <-
 
 
 ## add in years by copying the most recent year ##
-<<<<<<< HEAD
-year <- 1920
-
-tempyear1 <- paste0(as.numeric(substr(year, 1, 2)) + 1, as.numeric(substr(year, 3, 4)) + 1)
-tempyear2 <- paste0(as.numeric(substr(year, 1, 2)) + 2, as.numeric(substr(year, 3, 4)) + 2)
-
-
-
 ## increase by 1% for every year after the latest ##
 gp_out_of_hours <-
+  map_df(1:5, ~
   gp_out_of_hours %>%
-  mutate(
-    cost_per_consultation =
-      if_else(Year > year,
-        cost_per_consultation * 1.01,
-        cost_per_consultation
-      )
-  ) %>%
-  # arrange by HB2019 and year
-  arrange(HB2019, Year)
-=======
-latest_year <- 1920
+    group_by(HB2019, year) %>%
+    arrange(HB2019, year) %>%
+    mutate(
+      cost_per_consultation = cost_per_consultation * (1.01)^.x,
+      year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+    )) %>%
+  arrange(HB2019, year)
 
-## increase by 1% for every year after the latest ##
-gp_out_of_hours <-
-  bind_rows(
-    gp_out_of_hours,
-    map_df(1:5, ~
-    gp_out_of_hours %>%
-      filter(year == latest_year) %>%
-      mutate(
-        cost_per_consultation = cost_per_consultation * (1.01)^.x,
-        year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-      ))
-  )
-
->>>>>>> get_gp_costs
 
 
 ## match files - to make sure costs haven't changed radically ##
@@ -132,65 +87,45 @@ lookup <- haven::read_sav(
   find_latest_file(get_slf_dir(), regexp = "Cost_GPOoH_Lookup_pre.+?\\.sav")
 )
 
-<<<<<<< HEAD
-# rename lookup varialbles to match
-=======
 # rename lookup variables to match
->>>>>>> get_gp_costs
 lookup <-
   lookup %>%
   rename(
     cost_old = "Cost_per_consultation",
-<<<<<<< HEAD
-    HB2019 = "TreatmentNHSBoardCode"
-=======
     HB2019 = "TreatmentNHSBoardCode",
     year = "Year"
->>>>>>> get_gp_costs
   )
 
 # match
-data <-
+matched_data <-
   gp_out_of_hours %>%
-<<<<<<< HEAD
-  left_join(lookup, by = c("HB2019", "Year"))
-=======
   full_join(lookup, by = c("HB2019", "year"))
->>>>>>> get_gp_costs
 
 
 # compute difference
-data <-
-  data %>%
+matched_data <-
+  matched_data %>%
   mutate(difference = cost_per_consultation - cost_old) %>%
   mutate(pct_diff = difference / cost_old * 100)
 
-# count
-data %>%
-<<<<<<< HEAD
-  count(pct_diff, Year, HB2019) %>%
-  spread(Year, n)
 
-data %>%
-  count(difference, HB2019, Year) %>%
-  spread(Year, n)
-=======
-  count(pct_diff, year, HB2019) %>%
-  spread(year, n)
+# plot difference
+ggplot(data = matched_data, aes(x = year, y = difference, fill = Board_Name)) +
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(fill = "NHS Board", x = "Year")
 
-data %>%
-  count(difference, HB2019, year) %>%
-  spread(year, n)
->>>>>>> get_gp_costs
+
+# plot pct_diff
+ggplot(data = matched_data, aes(x = year, y = pct_diff, fill = Board_Name)) +
+  geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(fill = "NHS Board", x = "Year")
 
 
 ## Plot to check for obviously wrong looking costs ##
 
-<<<<<<< HEAD
-ggplot(data = data, aes(x = Year, y = cost_per_consultation, group = Board_Name)) +
-=======
 ggplot(data = data, aes(x = year, y = cost_per_consultation, group = Board_Name)) +
->>>>>>> get_gp_costs
   geom_line(aes(color = Board_Name)) +
   labs(y = "Cost Per Consultation", color = "NHS Board")
 
@@ -208,20 +143,12 @@ outfile <-
 
 # .zsav
 haven::write_sav(outfile,
-<<<<<<< HEAD
-  paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup.sav"),
-=======
-  get_gp_ooh_costs_path(check_mode = "write"),
->>>>>>> get_gp_costs
-  compress = TRUE
+                 get_gp_ooh_costs_path(check_mode = "write"),
+                 compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-<<<<<<< HEAD
-  paste0(get_slf_dir(), "/Costs/Cost_GPOoH_Lookup.sav"),
-=======
-  get_gp_ooh_costs_path(ext = "rds", check_mode = "write"),
->>>>>>> get_gp_costs
-  compress = "gz"
+                 get_gp_ooh_costs_path(check_mode = "write"),
+                 compress = "gz"
 )

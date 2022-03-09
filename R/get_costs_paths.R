@@ -44,12 +44,25 @@ get_dn_costs_path <- function(...) {
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
-get_gp_ooh_costs_path <- function(...) {
+get_gp_ooh_costs_path <- function(..., update = NULL) {
+
+  if (is.null(update)) {
+
   gp_ooh_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = glue::glue("Cost_GPOoH_Lookup.sav"),
     ...
   )
+
+  } else {
+
+    gp_ooh_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = glue::glue("Cost_GPOoH_Lookup_pre", update, ".sav"),
+      ...
+    )
+
+  }
 
   return(gp_ooh_costs_path)
 }
