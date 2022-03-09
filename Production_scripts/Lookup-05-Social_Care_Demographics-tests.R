@@ -11,7 +11,9 @@
 
 ####################################################
 
-library(createslf)
+# Packages
+  library(createslf)
+
 
 # Read in Data---------------------------------------
 
@@ -35,5 +37,5 @@ haven::write_sav(comparison,
                                    compress = TRUE)
 )
 
-# END OF SCRIPT
-####################################################
+
+## END OF SCRIPT ##

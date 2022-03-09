@@ -1,24 +1,36 @@
-# Demographic Lookup tests
-# Required functions:
-# get_slf_dir
-# latest_update
-# previous_update
-# read_deaths_file
-# sum_flags
-# demog_lookup_tests
-# compare_tests
+####################################################
 
-library(tidyselect)
-library(dplyr)
+# Name of file - Lookup-04-Create-CHI-Deceased-tests.R
+# Original Authors - Jennifer Thom
+# Original Date - January 2022
+#
+# Written/run on - RStudio Server
+# Version of R - 3.6.1
+#
+# Description - Produce tests for source linkage files
+# Deaths lookup file.
+
 
 ####################################################
+
+# Packages
+library(createslf)
+
+
+# Read in Data---------------------------------------
+
 # Create new and old dataframes with measures for testing
 new_tests <- produce_slf_deaths_tests(haven::read_sav(get_slf_deaths_path()))
 old_tests <- produce_slf_deaths_tests(haven::read_sav(get_slf_deaths_path(update = previous_update())))
 
-####################################################
-# create tests
+
+# Create tests-------------------------------------------
+
+# Compare new and old outputs
 comparison <- produce_test_comparison(old_tests, new_tests)
+
+
+# Produce Outfile----------------------------------------
 
 # Save output as zsav for now
 # Eventually change this to rds when we have more R scripts
@@ -27,5 +39,5 @@ haven::write_sav(comparison,
                                    compress = TRUE)
 )
 
-# END OF SCRIPT
-####################################################
+
+## END OF SCRIPT ##
