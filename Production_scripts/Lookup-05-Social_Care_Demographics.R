@@ -5,11 +5,12 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Data from Social care database DVPROD
+# Description - Get Demographics extract
 #####################################################
 
 ## load packages ##
+
 library(readr)
 library(odbc)
 library(dplyr)
@@ -17,14 +18,10 @@ library(stringr)
 library(dbplyr)
 library(phsmethods)
 
+# Read in data---------------------------------------
 
-
-## data ##
-
-######################################################
 # set-up conection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
-###################################################
 
 # read in data - social care 2 demographic
 sc_demog <- tbl(db_connection, in_schema("social_care_2", "demographic")) %>%
@@ -43,7 +40,21 @@ sc_demog <- sc_demog %>%
   )
 
 
-## clean up data ##
+## Deal with postcodes---------------------------------------
+
+# UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
+uk_pc_regexp <- "^[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}$"
+
+dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
+non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
+
+## postcode type ##
+pc_lookup <- readr::read_rds(read_spd_file()) %>%
+  select(pc7)
+
+
+# Data Cleaning ---------------------------------------
+
 sc_demog <- sc_demog %>%
   mutate(
     # use chi if upi is NA
@@ -56,14 +67,8 @@ sc_demog <- sc_demog %>%
     gender = if_else(is.na(chi_gender_code) | chi_gender_code == 9, submitted_gender, chi_gender_code),
     # use chi dob if avaliable
     dob = coalesce(chi_date_of_birth, submitted_date_of_birth)
-  )
-
-
-## postcode ##
-# clean-up
+  ) %>%
 # format postcodes using `phsmethods`
-sc_demog <-
-  sc_demog %>%
   mutate(across(contains("postcode"), ~postcode(.x, format = "pc7")))
 
 
@@ -72,44 +77,20 @@ na_postcodes <-
   sc_demog %>%
   count(across(contains("postcode"), ~is.na(.x)))
 
-# UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
-uk_pc_regexp <- "^[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}$"
 
-dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
-non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
-
-sc_demog <-
-  sc_demog %>%
-  mutate(
-    # remove dummy postcodes invalid postcodes missed by regex check
-    across(ends_with("_postcode"),
-           ~na_if(.x, c(dummy_postcodes, non_existant_postcodes)))
+sc_demog <- sc_demog %>%
+  # remove dummy postcodes invalid postcodes missed by regex check
+  mutate(across(ends_with("_postcode"), ~na_if(.x, c(dummy_postcodes, non_existant_postcodes)))
   ) %>%
-  mutate(
-    # comparing with regex UK postcode
-    across(ends_with("_postcode"),
-           ~na_if(.x, !str_detect(.x, uk_pc_regexp)))
-  )
-
-
-## postcode type ##
-pc_lookup <- readr::read_rds(read_spd_file()) %>%
-  select(pc7)
-
-
-sc_demog <-
-  sc_demog %>%
-  select(
-    latest_record_flag, extract_date, sending_location, social_care_id, upi, gender, dob,
-    submitted_postcode, chi_postcode
+  # comparing with regex UK postcode
+  mutate(across(ends_with("_postcode"), ~na_if(.x, !str_detect(.x, uk_pc_regexp)))
+  ) %>%
+  select(latest_record_flag, extract_date, sending_location, social_care_id, upi, gender,
+       dob,submitted_postcode, chi_postcode
   ) %>%
   # check if submitted_postcode matches with postcode lookup
-  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup, 1, 0))
-
-
+  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup, 1, 0)) %>%
 # use submitted_postcode if valid, otherwise use chi_postcode
-sc_demog <-
-  sc_demog %>%
   mutate(postcode = case_when(
     (!is.na(submitted_postcode) & valid_pc == 1) ~ submitted_postcode,
     (is.na(submitted_postcode) & valid_pc == 0) ~ chi_postcode
@@ -131,11 +112,12 @@ na_replaced_postcodes <-
   sc_demog %>%
   count(across(ends_with("_postcode"), ~is.na(.x)))
 
+
 na_replaced_postcodes
 na_postcodes
 
 
-## outfile ##
+## save outfile ---------------------------------------
 outfile <-
   sc_demog %>%
   # group by sending location and ID
@@ -161,3 +143,5 @@ haven::write_sav(outfile, get_sc_demog_lookup_path(), compress = TRUE)
 
 # .rds file
 readr::write_rds(outfile, get_sc_demog_lookup_path(), compress = "gz")
+
+## End of Script ---------------------------------------
