@@ -6,7 +6,7 @@ Authors@R: c(
     person("Jennifer", "Thom", , "jennifer.thom@phs.scot", role = "aut"),
     person("James", "McMahon", , "james.mcmahon@phs.scot", role = "aut",
            comment = c(ORCID = "0000-0002-5380-2029")),
-    person("Catherine", "Holland", "catherine.holland@phs.scot",  role = "aut",
+    person("Catherine", "Holland", , "catherine.holland@phs.scot", role = "aut",
            comment = c(ORCID = "0000-0002-3259-5745"))
   )
 Description: A package with functions used to create the Source Linkage

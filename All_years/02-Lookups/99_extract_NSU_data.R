@@ -40,5 +40,4 @@ file_path <- path(nsu_dir, glue("All_CHIs_20{fin_year}.zsav"))
 if (file_exists(file_path)) {
   file_copy(file_path, path(nsu_dir, glue("All_CHIs_20{fin_year}_OLD.zsav")))
 }
-
 write_sav(nsu_data, file_path, compress = TRUE)
