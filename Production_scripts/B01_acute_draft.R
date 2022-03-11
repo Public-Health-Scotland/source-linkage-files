@@ -10,13 +10,14 @@
 #              prior to processing.
 #####################################################
 
-# Load set up file
-source("setup_environment.R")
-
+# Load Packages #
 library(tidyr)
 library(dplyr)
 library(readr)
 library(stringr)
+
+
+# Read in data---------------------------------------
 
 # Set up for get_boxi_extract_path function
 year <- "1920"
@@ -170,6 +171,8 @@ acute_file <- acute_file %>%
   )
 
 
+# Data Cleaning ---------------------------------------
+
 acute_clean <- acute_file %>%
   # Set recid as 01B and flag GLS records
   mutate(recid = if_else(GLS_Record == "Y", "GLS", "01B")) %>%
@@ -200,7 +203,6 @@ acute_clean <- acute_file %>%
   # Apply new costs for C3 specialty, these are taken from the 2017/18 file
   fix_c3_costs(year)
 
-
 # initialise monthly cost/beddays variables in a separate data frame for matching
 monthly_cost_beddays <- acute_clean %>%
   convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay)
@@ -228,8 +230,30 @@ val_lab(final_acute_file$oldtadm) <- make_labels("
     8 Emergency other (excluding accidental poisoning)
 ")
 
+## save outfile ---------------------------------------
+outfile <- final_acute_file %>%
+  select(
+    year, recid, record_keydate1, record_keydate2, SMRType,
+    chi, gender, dob, gpprac, hbpraccode, postcode, hbrescode,
+    lca, HSCP, DataZone, location, hbtreatcode, yearstay,
+    stay, ipdc, spec, sigfac, conc, mpat, cat, tadm, adtf, admloc,
+    oldtadm, disch, dischto, dischloc, diag1, diag2, diag3, diag4,
+    diag5, diag6, op1a, op1b, dateop1, op2a, op2b, dateop2, op3a,
+    op3b, dateop3, op4a, op4b, dateop4, smr01_cis_marker, age,
+    cij_marker, cij_admtype, cij_ipdc, cij_pattype_code, cij_adm_spec,
+    cij_dis_spec, CIJ_start_date, CIJ_end_date, alcohol_adm, submis_adm,
+    falls_adm, selfharm_adm, commhosp, cost_total_net, apr_beddays,
+    may_beddays, jun_beddays, jul_beddays, aug_beddays, sep_beddays,
+    oct_beddays, nov_beddays, dec_beddays, jan_beddays, feb_beddays,
+    mar_beddays, apr_cost, may_cost, jun_cost, jul_cost, aug_cost,
+    sep_cost, oct_cost, nov_cost, dec_cost, jan_cost, feb_cost,
+    mar_cost, uri
+  ) %>%
+  arrange(by = chi, record_keydate1)
+
 # Save out
-final_acute_file %>%
+outfile %>%
   readr::write_rds(get_source_extract_path(year, "Acute"))
 
-## End of Script ##
+
+## End of Script ---------------------------------------
