@@ -71,7 +71,7 @@ outfile <-
 latest_year <- 2122
 
 ## increase by 1% for every year after the latest ##
-outfile <-
+apply_costs_uplift <-
   map_df(1:5, ~
   outfile %>%
     group_by(financial_year, nursing_care_provision) %>%
