@@ -15,6 +15,7 @@
 #####################################################
 
 # Load packages
+
 library(dplyr)
 library(createslf)
 
@@ -30,8 +31,8 @@ ch_costs <- readxl::read_xlsx(
 
 
 # Data cleaning ---------------------------------------
-ch <-
-  ch %>%
+ch_costs <-
+  ch_costs %>%
   # rename
   rename(source_of_funding = "Source of Funding") %>%
   # select only the funding totals
@@ -61,7 +62,7 @@ ch <-
 
 # aggregate
 outfile <-
-  ch %>%
+  ch_costs %>%
   group_by(financial_year, nursing_care_provision) %>%
   mutate(cost_per_day = mean(cost_per_day)) %>%
   select(financial_year, nursing_care_provision, cost_per_day)
@@ -93,12 +94,18 @@ old_costs <- haven::read_sav(
   rename(
     cost_old = "cost_per_day",
     year = "Year"
-  ) %>%
+  )
+
+matched_costs_data <-
+  apply_costs_uplift %>%
   arrange(year, nursing_care_provision) %>%
   # match to new costs
-  full_join(lookup, by = c("year", "nursing_care_provision")) %>%
+  full_join(old_costs, by = c("year", "nursing_care_provision")) %>%
   # compute difference
-  mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100) %>%
+  mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100)
+
+
+matched_costs_data %>%
   # count
   count(pct_diff, year, nursing_care_provision) %>%
   spread(year, n)
@@ -106,7 +113,7 @@ old_costs <- haven::read_sav(
 
 ## save outfile ---------------------------------------
 outfile <-
-  data %>%
+  matched_costs_data %>%
   select(
     year,
     nursing_care_provision,
