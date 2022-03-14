@@ -24,7 +24,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(purrr)
-library(creatslf)
+library(createslf)
 
 
 # Copy existing file ---------------------------------------
@@ -239,7 +239,7 @@ costs_lookup <-
 matched_data <-
   data %>%
   full_join(costs_lookup, by = c("year", "hbtreatcode", "hbtreatname")) %>%
-# compute difference
+  # compute difference
   mutate(difference = cost_total_net - cost_old) %>%
   mutate(pct_diff = difference / cost_old * 100)
 
