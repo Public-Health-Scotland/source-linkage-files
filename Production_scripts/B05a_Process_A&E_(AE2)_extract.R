@@ -10,6 +10,7 @@
 
 
 library(dplyr)
+library(tidyr)
 
 
 ## get data ##
@@ -992,7 +993,6 @@ ae_cup_extract <- readr::read_csv(
 
 ## sort for linking onto data extract ##
 # remove any duplicates
-
 ae_cup_extract <-
   ae_cup_extract %>%
   arrange(record_keydate1, keyTime1, case_ref_number) %>%
@@ -1062,8 +1062,8 @@ outfile <-
     jan_cost,
     feb_cost,
     mar_cost,
-    CUP_marker,
-    CUP_pathway
+    cup_marker,
+    cup_pathway
   )
 
 
