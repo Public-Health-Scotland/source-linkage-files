@@ -139,6 +139,9 @@
     <loc>/reference/numeric_to_date.html</loc>
   </url>
   <url>
+    <loc>/reference/phs_db_connection.html</loc>
+  </url>
+  <url>
     <loc>/reference/pipe.html</loc>
   </url>
   <url>
@@ -170,6 +173,9 @@
   </url>
   <url>
     <loc>/reference/read_datazone_pop_file.html</loc>
+  </url>
+  <url>
+    <loc>/reference/read_gpprac_file.html</loc>
   </url>
   <url>
     <loc>/reference/read_locality_file.html</loc>
