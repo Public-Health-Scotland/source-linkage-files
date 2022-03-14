@@ -153,7 +153,8 @@ data <-
   data %>%
   group_by(Board_Name) %>%
   mutate(max_contacts = max(number_of_contacts)) %>%
-  mutate(pct_of_max = number_of_contacts / max_contacts * 100)
+  mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
+  ungroup()
 
 # plot #
 ggplot(data = data, aes(x = year, y = pct_of_max, group = Board_Name)) +
@@ -217,7 +218,6 @@ data <-
 
 data <-
   data %>%
-  ungroup() %>%
   rename(
     hbtreatcode = "HB2019",
     hbtreatname = "Treatment NHS Board Name"
@@ -236,7 +236,7 @@ costs_lookup <-
     year = "Year"
   )
 
-matched_data <-
+matched_data_costs <-
   data %>%
   full_join(costs_lookup, by = c("year", "hbtreatcode", "hbtreatname")) %>%
   # compute difference
@@ -247,13 +247,13 @@ matched_data <-
 # Create charts -----------------------------------------------
 
 # plot difference
-ggplot(data = matched_data, aes(x = year, y = difference, fill = hbtreatname)) +
+ggplot(data = matched_data_costs, aes(x = year, y = difference, fill = hbtreatname)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(fill = "NHS Board", x = "Year")
 
 # plot pct_diff
-ggplot(data = matched_data, aes(x = year, y = pct_diff, fill = hbtreatname)) +
+ggplot(data = matched_data_costs, aes(x = year, y = pct_diff, fill = hbtreatname)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(fill = "NHS Board", x = "Year")
@@ -261,7 +261,7 @@ ggplot(data = matched_data, aes(x = year, y = pct_diff, fill = hbtreatname)) +
 
 ## save outfile ---------------------------------------
 outfile <-
-  matched_data %>%
+  matched_data_costs %>%
   select(
     year,
     hbtreatcode,
