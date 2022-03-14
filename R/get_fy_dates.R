@@ -38,4 +38,3 @@ end_fy <- function(year) {
 midpoint_fy <- function(year) {
   as.Date(paste0(as.numeric(convert_fyyear_to_year(year)), "-09-30"))
 }
-
