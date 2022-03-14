@@ -24,7 +24,7 @@ library(createslf)
 fs::file_copy(get_ch_costs_path(), get_ch_costs_path(update = previous_update()))
 
 ## Read excel data
-ch <- readxl::read_xlsx(
+ch_costs <- readxl::read_xlsx(
   paste0(get_slf_dir(), "/Costs/CH_Costs.xlsx")
 )
 
