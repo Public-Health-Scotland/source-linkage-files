@@ -8,59 +8,39 @@
 # Description - Get the client extract from DVPROD / social_care_2
 #####################################################
 
-## packages ##
+# Load packages
 library(dplyr)
 library(dbplyr)
 library(tidyr)
 
 
-## data ##
+# Read in data---------------------------------------
 
-######################################################
+# specify latest year
+latest_year <- "1920"
+
 # set-up conection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
-###################################################
 
-## year of interest ##
-latest_year <- 1920
 
 # read in data - social care 2 client
 sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
   select(
-    sending_location,
-    social_care_id,
-    financial_year,
-    financial_quarter,
-    dementia,
-    mental_health_problems,
-    learning_disability,
-    physical_and_sensory_disability,
-    drugs,
-    alcohol,
-    palliative_care,
-    carer,
-    elderly_frail,
-    neurological_condition,
-    autism,
-    other_vulnerable_groups,
-    living_alone,
-    support_from_unpaid_carer,
-    social_worker,
-    type_of_housing,
-    meals,
-    day_care
+    sending_location, social_care_id, financial_year, financial_quarter,
+    dementia, mental_health_problems, learning_disability,
+    physical_and_sensory_disability, drugs, alcohol, palliative_care,
+    carer, elderly_frail, neurological_condition, autism,
+    other_vulnerable_groups, living_alone, support_from_unpaid_carer,
+    social_worker, type_of_housing, meals, day_care
   ) %>%
   collect() %>%
   filter(financial_year == convert_fyyear_to_year(latest_year)) %>%
   arrange(
-    sending_location,
-    social_care_id,
-    financial_year,
+    sending_location, social_care_id, financial_year,
     financial_quarter
   )
 
-
-# flags as numeric
+# create numeric flags
 sc <-
   sc %>%
   mutate(
@@ -84,6 +64,8 @@ sc <-
     day_care = as.numeric(day_care)
   )
 
+
+# Data Cleaning ---------------------------------------
 
 ## create outfile ##
 outfile <-
@@ -112,27 +94,22 @@ outfile <-
     type_of_housing = last(type_of_housing),
     meals = last(meals),
     day_care = last(day_care)
-  )
-
-
-# recode missing with values
-outfile <-
-  outfile %>%
-  mutate(
-    across(.cols = c("support_from_unpaid_carer",
-                     "social_worker",
-                     "meals",
-                     "living_alone",
-                     "day_care"),
-           .x = replace_na(.x, 9))
   ) %>%
+  # recode missing with values
+  mutate(across(
+    .cols = c(
+      "support_from_unpaid_carer",
+      "social_worker",
+      "meals",
+      "living_alone",
+      "day_care"
+    ),
+    .x = replace_na(.x, 9)
+  )) %>%
   mutate(
-    type_of_housing = replace_na(type_of_housing, 6))
-
-
+    type_of_housing = replace_na(type_of_housing, 6)
+  ) %>%
 # factor labels
-outfile <-
-  outfile %>%
   mutate(across(
     c(
       dementia,
@@ -165,40 +142,30 @@ outfile <-
     labels = c("No", "Yes", "Not Known")
   ),
   type_of_housing = factor(type_of_housing,
-                           levels = c(1:6),
-                           labels = c(
-                             "Mainstream", "Supported", "Long Stay Care Home",
-                             "Hospital or other medical establishment", "Other",
-                             "Not Known"
-                           ))
+    levels = c(1:6),
+    labels = c(
+      "Mainstream", "Supported", "Long Stay Care Home",
+      "Hospital or other medical establishment", "Other",
+      "Not Known"
+    )
+  )
+  ) %>%
+# rename variables
+  rename_with(
+    .cols = -c(sending_location, social_care_id),
+    ~ paste0("sc_", .x)
   )
 
 
-# rename variables
-outfile <-
-  outfile %>%
-  rename_with(
-    .cols = -c(sending_location, social_care_id),
-    ~paste0("sc_", .x))
-
-
-## save outfile ##
-
+## save outfile ---------------------------------------
 outfile <-
   outfile %>%
   # reorder
   select(
-    sending_location,
-    social_care_id,
-    sc_living_alone,
-    sc_support_from_unpaid_carer,
-    sc_social_worker,
-    sc_type_of_housing,
-    sc_meals,
-    sc_day_care
+    sending_location, social_care_id, sc_living_alone,
+    sc_support_from_unpaid_carer, sc_social_worker,
+    sc_type_of_housing, sc_meals, sc_day_care
   )
-
-
 
 # .zsav
 haven::write_sav(outfile,
@@ -218,3 +185,6 @@ readr::write_rds(outfile,
   ),
   compress = "gz"
 )
+
+## End of Script ---------------------------------------
+
