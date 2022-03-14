@@ -87,7 +87,7 @@ apply_costs_uplift <-
 # Join data together  -----------------------------------------------------
 
 # match files - to make sure costs haven't changed radically
-lookup <- haven::read_sav(
+old_costs <- haven::read_sav(
   find_latest_file(get_slf_dir(), regexp = "Cost_CH_Lookup_pre.+?\\.sav")
 ) %>%
   rename(
