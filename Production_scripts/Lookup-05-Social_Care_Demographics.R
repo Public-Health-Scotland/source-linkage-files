@@ -90,8 +90,8 @@ sc_demog <- sc_demog %>%
        dob,submitted_postcode, chi_postcode
   ) %>%
   # check if submitted_postcode matches with postcode lookup
-  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup, 1, 0)) %>%
-# use submitted_postcode if valid, otherwise use chi_postcode
+  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup$pc7, 1, 0)) %>%
+  # use submitted_postcode if valid, otherwise use chi_postcode
   mutate(postcode = case_when(
     (!is.na(submitted_postcode) & valid_pc == 1) ~ submitted_postcode,
     (is.na(submitted_postcode) & valid_pc == 0) ~ chi_postcode
