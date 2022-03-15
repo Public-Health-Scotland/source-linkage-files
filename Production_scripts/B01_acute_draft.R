@@ -15,6 +15,7 @@ library(tidyr)
 library(dplyr)
 library(readr)
 library(stringr)
+library(createslf)
 
 
 # Read in data---------------------------------------
@@ -215,20 +216,19 @@ final_acute_file <- acute_clean %>%
   mutate(
     yearstay = rowSums(across(ends_with("_beddays"))),
     cost_total_net = rowSums(across(ends_with("_cost")))
-  )
+  ) %>%
+  mutate(oldtadm = factor(oldtadm,
+    levels = c(0, 1, 2, 3, 4, 5, 6, 7, 8),
+    labels = c(
+      "Deferred admission", "Waiting list/diary/booked",
+      "Repeat admission", "Transfer", "Emergency deliberate self inflicted injury or poisoning",
+      "Emergency road traffic accident",
+      "Emergency home accident (includes accidental poisoning in the home)",
+      "Emergency other injury (includes accidental poisoning other than in the home)",
+      "Emergency other (excluding accidental poisoning)"
+    )
+  ))
 
-# Add Labels to final data
-val_lab(final_acute_file$oldtadm) <- make_labels("
-    0 Deferred admission
-    1 Waiting list/diary/booked
-    2 Repeat admission
-    3 Transfer
-    4 Emergency deliberate self inflicted injury or poisoning
-    5 Emergency road traffic accident
-    6 Emergency home accident (includes accidental poisoning in the home)
-    7 Emergency other injury (includes accidental poisoning other than in the home)
-    8 Emergency other (excluding accidental poisoning)
-")
 
 ## save outfile ---------------------------------------
 outfile <- final_acute_file %>%
