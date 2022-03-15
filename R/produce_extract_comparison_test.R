@@ -35,6 +35,6 @@ extract_comparison_test <- function(slf_new, slf_existing) {
   comparison <-
     comparison %>%
     mutate(difference = new_value - existing_value) %>%
-    mutate(pct_change = difference / existing_value * 100) %>%
+    mutate(pct_change = if_else(existing_value != 0, difference / existing_value * 100, 0)) %>%
     mutate(issue = abs(pct_change) > 5)
 }
