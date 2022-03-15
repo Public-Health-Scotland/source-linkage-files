@@ -68,7 +68,7 @@ sc <-
 # Data Cleaning ---------------------------------------
 
 ## create outfile ##
-outfile <-
+client_clean <-
   sc %>%
   # sort
   arrange(sending_location, social_care_id) %>%
