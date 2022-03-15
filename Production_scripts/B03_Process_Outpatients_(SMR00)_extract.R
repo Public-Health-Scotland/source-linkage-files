@@ -14,6 +14,8 @@ library(purrr)
 library(vroom)
 library(tidyr)
 library(ggplot2)
+library(createslf)
+library(slfhelper)
 
 
 ## Read in CSV output file ##
@@ -296,6 +298,20 @@ create_hb_costs_test_flags <- function(data, cost_var) {
       NHS_Lanarkshire_cost = if_else(NHS_Lanarkshire == 1, {{ cost_var }}, 0)
     )
 }
+
+create_outpatient_extract_flags <- function(data, postcode = FALSE) {
+  data %>%
+    # demog flags
+    create_demog_test_flags(postcode = postcode) %>%
+    # create HB flags
+    create_hb_test_flags(.data$hbtreatcode) %>%
+    # replace missing hb with 0
+    mutate(across(starts_with("NHS_"), ~ replace_na(.x, 0))) %>%
+    # create HB cost flags
+    create_hb_costs_test_flags(.data$cost_total_net) %>%
+    # replace missing hb costs with 0
+    mutate(across(starts_with("NHS_") & ends_with("_cost"), ~ replace_na(.x, 0)))
+}
 ##
 
 ## Flags ##
@@ -311,48 +327,59 @@ slf_new <- produce_outpatient_extract_test(outpatient_flags)
 
 ## get data ##
 
-episode_file <- haven::read_sav(
-  paste0("/conf/hscdiip/01-Source-linkage-files/source-episode-file-20", latest_year, ".zsav"),
-  col_select = c(
+episode_file <- read_slf_episode(latest_year,
+                            recid = c("00B"),
+                            columns = c("recid",
+                                        "anon_chi",
+                                        "record_keydate1",
+                                        "record_keydate2",
+                                        "gender",
+                                        "dob",
+                                        "age",
+                                        "hbtreatcode",
+                                        "cost_total_net",
+                                        "apr_cost",
+                                        "may_cost",
+                                        "jun_cost",
+                                        "jul_cost",
+                                        "aug_cost",
+                                        "sep_cost",
+                                        "oct_cost",
+                                        "nov_cost",
+                                        "dec_cost",
+                                        "jan_cost",
+                                        "feb_cost",
+                                        "mar_cost",
+                                        "attendance_status")
+)
+
+
+# read anon chi lookup
+anonchi_lookup <- haven::read_sav("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
+
+
+
+episode_file_updated_chi <-
+  episode_file %>%
+  left_join(anonchi_lookup, by = "anon_chi") %>%
+  # reorder
+  select(
     recid,
-    Anon_CHI,
+    chi,
     record_keydate1,
     record_keydate2,
     gender,
     dob,
     age,
     hbtreatcode,
-    Cost_Total_Net_incDNAs,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
-    attendance_status
-  )
-)
-
-
-episode_file <-
-  episode_file %>%
-  # filter for recid = "00B"
-  filter(recid == "00B") %>%
-  # rename
-  rename(
-    chi = "Anon_CHI",
-    cost_total_net = "Cost_Total_Net_incDNAs"
-  )
+    cost_total_net,
+    ends_with("_cost")) %>%
+  # date type
+  mutate(across(contains("_keydate"), .x = as.Date(.x)))
 
 
 ## Flags ##
-episode_flags <- create_outpatient_extract_flags(episode_file, postcode = FALSE)
+episode_flags <- create_outpatient_extract_flags(episode_file_updated_chi, postcode = FALSE)
 
 
 ## values for whole file ##
@@ -385,12 +412,16 @@ extract_comparison_test <- function(slf_new, slf_existing) {
   comparison <-
     comparison %>%
     mutate(difference = new_value - existing_value) %>%
-    mutate(pct_change = difference / existing_value * 100) %>%
+    mutate(pct_change = if_else(existing_value != 0, difference / existing_value * 100, 0)) %>%
     mutate(issue = abs(pct_change) > 5)
 }
 
 ## run comparison function
 comparison <- extract_comparison_test(slf_new = slf_new, slf_existing = slf_existing)
+
+
+# check if any issues in the comparison
+any(comparison$issue == TRUE)
 
 
 # plot issues
