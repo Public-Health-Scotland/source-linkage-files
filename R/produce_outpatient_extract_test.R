@@ -6,7 +6,7 @@
 #' @export
 #' @importFrom dplyr mutate select
 #' @family produce tests functions
-#' @seealso \code{\link{create_ae_extract_flags}} and
+#' @seealso \code{\link{create_outpatient_extract_flags}} and
 produce_outpatient_extract_test <- function(data, postcode = FALSE) {
   if (postcode == TRUE) {
     data %>%

@@ -16,7 +16,7 @@ a dataframe with additional variables containing flags
 Produce the Outpatient Extract Test
 }
 \seealso{
-\code{\link{create_ae_extract_flags}} and
+\code{\link{create_outpatient_extract_flags}} and
 
 Other produce tests functions: 
 \code{\link{create_outpatient_extract_flags}()},
