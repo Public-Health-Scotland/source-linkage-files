@@ -8,6 +8,7 @@
 #' @return data frame of comparison of the two files
 #' @return plots of `difference` and `pct_change`
 #' @export
+#' @family produce tests functions
 #'
 #' @examples
 #' extract_comparison_test(slf_new = slf_new, slf_existing = slf_existing)
@@ -36,22 +37,4 @@ extract_comparison_test <- function(slf_new, slf_existing) {
     mutate(difference = new_value - existing_value) %>%
     mutate(pct_change = difference / existing_value * 100) %>%
     mutate(issue = abs(pct_change) > 5)
-
-
-  # plot issues
-  difference_plot <-
-    comparison %>%
-    filter(issue == TRUE) %>%
-    ggplot(aes(x = measure, y = difference)) +
-    geom_bar(stat = "identity", fill = "steelblue") +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-  pct_change_plot <-
-    comparison %>%
-    filter(issue == TRUE) %>%
-    ggplot(aes(x = measure, y = pct_change)) +
-    geom_bar(stat = "identity", fill = "steelblue") +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-  return(list(comparison_data = comparison, difference_plot, pct_change_plot))
 }
