@@ -4,7 +4,7 @@
 \alias{create_demog_test_flags}
 \title{Create demographic test flags}
 \usage{
-create_demog_test_flags(data)
+create_demog_test_flags(data, postcode = TRUE)
 }
 \arguments{
 \item{data}{a dataframe containing demographic variables e.g. chi}
@@ -18,6 +18,7 @@ Create demographic test flags
 }
 \seealso{
 Other create test flags functions: 
+\code{\link{create_hb_costs_test_flags}()},
 \code{\link{create_hb_test_flags}()},
 \code{\link{create_hscp_test_flags}()}
 }

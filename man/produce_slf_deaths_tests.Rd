@@ -19,6 +19,9 @@ Produce the SLF deaths lookup tests
 }
 \seealso{
 Other produce tests functions: 
+\code{\link{create_ae_extract_flags}()},
+\code{\link{extract_comparison_test}()},
+\code{\link{produce_ae_extract_test}()},
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
