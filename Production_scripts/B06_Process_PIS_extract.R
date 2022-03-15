@@ -10,6 +10,7 @@
 
 library(dplyr)
 library(createslf)
+library(slfhelper)
 
 
 # Read in data ---------------------------------------
@@ -132,6 +133,13 @@ create_demog_test_flags <- function(data, postcode = TRUE) {
   }
 }
 
+create_pis_extract_flags <- function(data) {
+  data %>%
+    # demog flags
+    create_demog_test_flags(postcode = FALSE)
+}
+##
+
 
 # flags
 pis_flags <- create_pis_extract_flags(outfile)
@@ -144,30 +152,21 @@ slf_new <- produce_pis_extract_test(pis_flags)
 
 ## episode file ##
 
-episode_file <- haven::read_sav(
-  paste0("/conf/hscdiip/01-Source-linkage-files/source-episode-file-20", latest_year, ".zsav"),
-  col_select = c(
-    recid,
-    Anon_CHI,
-    gender,
-    dob,
-    hbrescode,
-    LCA,
-    age,
-    cost_total_net,
-    yearstay,
-    stay,
-    no_dispensed_items
-  )
+episode_file <- read_slf_episode(latest_year,
+                                 recid = c("PIS"),
+                                 columns = c("recid",
+                                             "anon_chi",
+                                             "gender",
+                                             "dob",
+                                             "age",
+                                             "hbrescode",
+                                             "lca",
+                                             "age",
+                                             "cost_total_net",
+                                             "yearstay",
+                                             "stay",
+                                             "no_dispensed_items")
 )
-
-episode_file <-
-  episode_file %>%
-  # filter for recid = "PIS"
-  filter(recid == "PIS") %>%
-  # rename anon_chi to be able to match
-  rename(anon_chi = "Anon_CHI")
-
 
 # anon chi lookup
 anonchi_lookup <- haven::read_sav("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
@@ -187,7 +186,7 @@ episode_file_updated_chi <-
     yearstay,
     stay,
     cost_total_net,
-    LCA
+    lca
   )
 
 
