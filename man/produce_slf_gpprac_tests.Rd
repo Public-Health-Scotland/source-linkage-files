@@ -22,6 +22,8 @@ Produce the GP Practice Lookup tests
 \code{\link{create_hscp_test_flags}} for creating test flags
 
 Other produce tests functions: 
+\code{\link{create_outpatient_extract_flags}()},
+\code{\link{produce_outpatient_extract_test}()},
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_slf_deaths_tests}()},

@@ -17,6 +17,8 @@ Produce the Care Home all episodes tests
 }
 \seealso{
 Other produce tests functions: 
+\code{\link{create_outpatient_extract_flags}()},
+\code{\link{produce_outpatient_extract_test}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_slf_deaths_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
