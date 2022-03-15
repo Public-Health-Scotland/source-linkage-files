@@ -13,6 +13,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(createslf)
+library(slfhelper)
 
 
 ## get data ##
@@ -1109,60 +1110,47 @@ slf_new <- produce_ae_extract_test(ae_flags, postcode = FALSE)
 
 ## episode file ##
 
-episode_file <- haven::read_sav(
-  paste0("/conf/hscdiip/01-Source-linkage-files/source-episode-file-20", latest_year, ".zsav"),
-  col_select = c(
-    recid,
-    Anon_CHI,
-    record_keydate1,
-    record_keydate2,
-    gender,
-    dob,
-    age,
-    hbtreatcode,
-    Cost_Total_Net_incDNAs,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
-    attendance_status
-  )
+
+episode_file <- read_slf_episode(latest_year,
+                                 recid = c("AE2"),
+                                 columns = c("recid",
+                                             "anon_chi",
+                                             "record_keydate1",
+                                             "record_keydate2",
+                                             "gender",
+                                             "dob",
+                                             "age",
+                                             "hbtreatcode",
+                                             "cost_total_net",
+                                             "apr_cost",
+                                             "may_cost",
+                                             "jun_cost",
+                                             "jul_cost",
+                                             "aug_cost",
+                                             "sep_cost",
+                                             "oct_cost",
+                                             "nov_cost",
+                                             "dec_cost",
+                                             "jan_cost",
+                                             "feb_cost",
+                                             "mar_cost",
+                                             "attendance_status")
 )
-
-
-episode_file <-
-  episode_file %>%
-  # filter for recid = "AE2"
-  filter(recid == "AE2")
-
 
 # read anon chi lookup
 anonchi_lookup <- haven::read_sav("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
 
 # remove blank line
 anonchi_lookup <- anonchi_lookup[-1, ]
-anonchi_lookup <-
-  anonchi_lookup %>%
-  rename(Anon_CHI = "anon_chi")
 
 # match anon_chi to chi using lookup
 episode_file_updated_chi <-
   episode_file %>%
-  left_join(anonchi_lookup, by = "Anon_CHI")
+  left_join(anonchi_lookup, by = "anon_chi")
 
 
 episode_file_updated_chi <-
   episode_file_updated_chi %>%
-  # rename
-  rename(cost_total_net = "Cost_Total_Net_incDNAs") %>%
   # select/re-order
   select(recid,
          record_keydate1,
