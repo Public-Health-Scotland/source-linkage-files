@@ -191,7 +191,7 @@ acute_clean <- acute_file %>%
   )) %>%
   # Recode GP practice into 5 digit number
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
-  mutate(gpprac = if_else(str_detect(gpprac, "[A-Z]"), "99995", gpprac)) %>%
+  eng_gp_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
   # create and populate SMRType
