@@ -175,6 +175,8 @@ acute_file <- acute_file %>%
 # Data Cleaning ---------------------------------------
 
 acute_clean <- acute_file %>%
+  # Set year variable
+  mutate(year = year) %>%
   # Set recid as 01B and flag GLS records
   mutate(recid = if_else(GLS_Record == "Y", "GLS", "01B")) %>%
   # Set IDPC marker for the episode
