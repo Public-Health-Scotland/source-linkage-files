@@ -173,7 +173,6 @@ produce_ae_extract_test <- function(data, postcode = TRUE) {
         NHS_Greater_Glasgow_and_Clyde_cost = sum(NHS_Greater_Glasgow_and_Clyde_cost),
         NHS_Lanarkshire_cost = sum(NHS_Lanarkshire_cost)
       ) %>%
-      #mutate_all(as.character) %>%
       tidyr::pivot_longer(
         cols = everything(),
         names_to = "measure",
