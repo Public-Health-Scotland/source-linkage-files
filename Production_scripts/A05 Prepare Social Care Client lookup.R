@@ -12,12 +12,13 @@
 library(dplyr)
 library(dbplyr)
 library(tidyr)
+library(createslf)
 
 
 # Read in data---------------------------------------
 
 # specify latest year
-latest_year <- "1920"
+latest_year <- 1920
 
 # set-up conection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
@@ -41,8 +42,8 @@ client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
   )
 
 # create numeric flags
-sc <-
-  sc %>%
+client_data <-
+  client_data %>%
   mutate(
     dementia = as.numeric(dementia),
     mental_health_problems = as.numeric(mental_health_problems),
@@ -67,9 +68,8 @@ sc <-
 
 # Data Cleaning ---------------------------------------
 
-## create outfile ##
 client_clean <-
-  sc %>%
+  client_data %>%
   # sort
   arrange(sending_location, social_care_id) %>%
   # group
@@ -159,7 +159,7 @@ client_clean <-
 
 ## save outfile ---------------------------------------
 outfile <-
-  outfile %>%
+  client_clean %>%
   # reorder
   select(
     sending_location, social_care_id, sc_living_alone,
@@ -167,22 +167,31 @@ outfile <-
     sc_type_of_housing, sc_meals, sc_day_care
   )
 
+## function here till merged ##
+get_year_dir <- function(year, extracts_dir = FALSE) {
+  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
+
+  year_extracts_dir <- fs::path(year_dir, "Extracts")
+
+  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
+}
+##
+
 # .zsav
 haven::write_sav(outfile,
   paste0(
-    get_year_dir(year = convert_year_to_fyyear(latest_year)),
-    "/Client_for_Source-20",
-    convert_year_to_fyyear(year), ".zsav"
+    get_year_dir(year = latest_year),
+    "/Client_for_Source-20", latest_year, ".zsav"
   ),
   compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-  paste0(
-    get_year_dir(year = convert_year_to_fyyear(latest_year)),
-    "/Client_for_Source-20", convert_year_to_fyyear(year), ".rds"
-  ),
+                 paste0(
+                   get_year_dir(year = latest_year),
+                   "/Client_for_Source-20", latest_year, ".zsav"
+                 ),
   compress = "gz"
 )
 
