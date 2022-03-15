@@ -12,6 +12,7 @@
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(createslf)
 
 
 ## get data ##
@@ -1099,7 +1100,7 @@ readr::write_rds(outfile,
 ae_flags <- create_ae_extract_flags(outfile, postcode = FALSE)
 
 
-## values for whole file ##
+## summarise values ##
 slf_new <- produce_ae_extract_test(ae_flags, postcode = FALSE)
 
 
@@ -1140,16 +1141,45 @@ episode_file <- haven::read_sav(
 episode_file <-
   episode_file %>%
   # filter for recid = "AE2"
-  filter(recid == "AE2") %>%
+  filter(recid == "AE2")
+
+
+# read anon chi lookup
+anonchi_lookup <- haven::read_sav("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
+
+# remove blank line
+anonchi_lookup <- anonchi_lookup[-1, ]
+anonchi_lookup <-
+  anonchi_lookup %>%
+  rename(Anon_CHI = "anon_chi")
+
+# match anon_chi to chi using lookup
+episode_file_updated_chi <-
+  episode_file %>%
+  left_join(anonchi_lookup, by = "Anon_CHI")
+
+
+episode_file_updated_chi <-
+  episode_file_updated_chi %>%
   # rename
-  rename(
-    chi = "Anon_CHI",
-    cost_total_net = "Cost_Total_Net_incDNAs"
+  rename(cost_total_net = "Cost_Total_Net_incDNAs") %>%
+  # select/re-order
+  select(recid,
+         record_keydate1,
+         record_keydate2,
+         chi,
+         gender,
+         dob,
+         age,
+         hbtreatcode,
+         attendance_status,
+         cost_total_net,
+         ends_with("_cost")
   )
 
 
 ## Flags ##
-episode_flags <- create_ae_extract_flags(episode_file, postcode = FALSE)
+episode_flags <- create_ae_extract_flags(episode_file_updated_chi, postcode = FALSE)
 
 
 ## values for whole file ##
@@ -1163,6 +1193,10 @@ slf_existing <- produce_ae_extract_test(episode_flags, postcode = FALSE)
 ## run comparison function ##
 
 comparison <- extract_comparison_test(slf_new = slf_new, slf_existing = slf_existing)
+
+
+# check if any issues in the comparison
+any(comparison$issue == TRUE)
 
 
 # plot issues
