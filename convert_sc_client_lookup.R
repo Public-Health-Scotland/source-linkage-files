@@ -27,8 +27,11 @@ db_connection <- odbc::dbConnect(
   pwd = rstudioapi::askForPassword("password")
 )
 ###################################################
+<<<<<<< HEAD
+=======
 ## year of interest ##
 year <- 2019
+>>>>>>> convert_sc_lookup
 
 # read in data - social care 2 client
 sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
@@ -56,15 +59,31 @@ sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
     meals,
     day_care
   ) %>%
+<<<<<<< HEAD
+  collect() %>%
+=======
   # filter data by year
   filter(financial_year == year) %>%
+>>>>>>> convert_sc_lookup
   arrange(
     sending_location,
     social_care_id,
     financial_year,
     financial_quarter
+<<<<<<< HEAD
+  )
+
+
+## year of interest ##
+year <- 2019
+# filter data by year
+sc <-
+  sc %>%
+  filter(financial_year == year)
+=======
   ) %>%
   collect()
+>>>>>>> convert_sc_lookup
 
 
 # flags as numeric
@@ -95,6 +114,11 @@ sc <-
 ## create outfile ##
 outfile <-
   sc %>%
+<<<<<<< HEAD
+  # sort
+  arrange(sending_location, social_care_id) %>%
+=======
+>>>>>>> convert_sc_lookup
   # group
   group_by(sending_location, social_care_id) %>%
   # summarise to take last submission
@@ -136,6 +160,46 @@ outfile <-
 # factor labels
 outfile <-
   outfile %>%
+<<<<<<< HEAD
+  mutate(
+    dementia = factor(dementia,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    mental_health_problems = factor(mental_health_problems,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    learning_disability = factor(learning_disability,
+      levels = c(0, 1),
+      labels = c("No", "Yes")
+    ),
+    physical_and_sensory_disability = factor(physical_and_sensory_disability,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    drugs = factor(drugs,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    alcohol = factor(alcohol,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    palliative_care = factor(palliative_care,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    carer = factor(carer,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    elderly_frail = factor(elderly_frail,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    neurological_condition = factor(neurological_condition,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    autism = factor(autism,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+    other_vulnerable_groups = factor(other_vulnerable_groups,
+      levels = c(0, 1), labels = c("No", "Yes")
+    ),
+=======
   mutate(across(
     c(
       dementia,
@@ -155,6 +219,7 @@ outfile <-
     levels = c(0, 1),
     labels = c("No", "Yes")
   ),
+>>>>>>> convert_sc_lookup
     living_alone = factor(living_alone,
       levels = c(0, 1, 9), labels = c("No", "Yes", "Not Known")
     ),
