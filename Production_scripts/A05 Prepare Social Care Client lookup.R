@@ -24,7 +24,7 @@ db_connection <- phs_db_connection(dsn = "DVPROD")
 
 
 # read in data - social care 2 client
-sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
+client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
   select(
     sending_location, social_care_id, financial_year, financial_quarter,
     dementia, mental_health_problems, learning_disability,
