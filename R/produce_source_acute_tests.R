@@ -15,6 +15,7 @@ produce_source_acute_tests <- function(data) {
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
+    create_hb_cost_test_flags(hbtreatcode, cost_total_net) %>%
     # remove variables that won't be summed
     select(c(valid_chi:NHS_Lanarkshire))%>%
     # use function to sum new test flags
@@ -22,8 +23,10 @@ produce_source_acute_tests <- function(data) {
 
   create_measures<- data %>%
     #functions
-    create_hb_cost_test_flags %>%
-    beddays_function
+    sum_costs_function
+    mean_costs_function
+    sum_beddays_function
+    mean_beddays_function
 
   join_output <- full_join(test_flags, create_measures)
 
