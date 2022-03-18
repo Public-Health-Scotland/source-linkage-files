@@ -12,17 +12,15 @@
 convert_monthly_rows_to_vars <- function(data, uri_var, month_var, cost_var, beddays_var){
 
     data %>%
-    select({{ uri_var }}, {{ cost_var }}, {{ beddays_var }}, {{ month_var }}) %>%
     mutate(month_name = tolower(month.abb[{{ month_var }}])) %>%
+    select(-{{ month_var }}) %>%
     rename(cost = {{cost_var}},
            beddays = {{beddays_var}}) %>%
     tidyr::pivot_wider(
       names_from = .data$month_name,
       names_glue = "{month_name}_{.value}",
       values_from = c(.data$cost, .data$beddays),
-      values_fill = 0
-    ) %>%
-  group_by({{ uri_var }}) %>%
-    summarise(across(contains(c("_cost", "_beddays")))) %>%
-    ungroup()
+      values_fill = 0.00
+    )
+
 }
