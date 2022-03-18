@@ -201,24 +201,12 @@ acute_clean <- acute_file %>%
     lineno == 330 & ipdc == "I" ~ "GLS-IP",
     recid == "GLS" ~ "GLS-IP"
   )) %>%
-  # If costs are missing, fill them in
-  mutate(cost_total_net = if_else(is.na(cost_total_net), 0, cost_total_net)) %>%
   # Apply new costs for C3 specialty, these are taken from the 2017/18 file
-  fix_c3_costs(year)
+  fix_c3_costs(year) %>%
 
 # initialise monthly cost/beddays variables in a separate data frame for matching
-monthly_cost_beddays <- acute_clean %>%
-  convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay)
-
-# match monthly cost and beddays back to acute_file
-final_acute_file <- acute_clean %>%
-  distinct(uri, .keep_all = TRUE) %>%
-  left_join(monthly_cost_beddays, by = "uri") %>%
-  # total up yearstay and costs
-  mutate(
-    yearstay = rowSums(across(ends_with("_beddays"))),
-    cost_total_net = rowSums(across(ends_with("_cost")))
-  ) %>%
+  convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay) %>%
+# Add oldtadm as a factor with labels
   mutate(oldtadm = factor(oldtadm,
     levels = c(0, 1, 2, 3, 4, 5, 6, 7, 8),
     labels = c(
