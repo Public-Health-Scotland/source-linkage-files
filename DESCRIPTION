@@ -18,8 +18,8 @@ BugReports:
     https://github.com/Public-Health-Scotland/source-linkage-files/issues
 Imports:
     dplyr (>= 1.0.0),
-    fs,
-    glue,
+    fs (>= 1.5.2),
+    glue (>= 1.5.1),
     haven (>= 2.4.0),
     janitor (>= 2.0.1),
     lubridate (>= 1.8.0),
@@ -32,7 +32,7 @@ Imports:
     stringr (>= 1.4.0),
     tibble (>= 3.0.0),
     tidyr (>= 1.1.0),
-    tidyselect
+    tidyselect (>= 1.1.1)
 Suggests:
     spelling (>= 2.2),
     testthat (>= 3.1.0)
