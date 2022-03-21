@@ -4,11 +4,7 @@
 \alias{get_boxi_extract_path}
 \title{Get BOXI extract}
 \usage{
-get_boxi_extract_path(
-  year,
-  type = c("Acute", "Mental", "Outpatient", "AE", "DN", "GPOoH", "Deaths", "CMH",
-    "Homelessness")
-)
+get_boxi_extract_path(year, type = c("Acute", "Mental"))
 }
 \arguments{
 \item{year}{Year of extract}
