@@ -47,7 +47,7 @@ pis_extract <- readr::read_csv(
 # assume that if it starts with a letter it's an English practice and so recode to 99995
 pis_extract <-
   pis_extract %>%
-  mutate(gpprac = replace(gpprac, substr(gpprac, 1, 1) %in% c("A", "Z"), "99995"))
+  eng_gp_to_dummy(gpprac)
 
 
 # Set date to the end of the FY ---------------------------------------
