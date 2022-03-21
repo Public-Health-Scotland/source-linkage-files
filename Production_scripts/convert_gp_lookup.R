@@ -8,7 +8,6 @@
 # Description -
 #####################################################
 
-
 ## packages ##
 library(dplyr)
 library(tidyr)
@@ -17,18 +16,11 @@ library(phsopendata)
 library(janitor)
 library(fs)
 
-
-## output ##
-output <- haven::read_sav(get_slf_gpprac_path())
-
-
-
 ## get data ##
-
 
 # use `00_get_gp_cluster_data.R`- draws from open data
 # latest update date
-latest_update <- "Dec_2021"
+latest_update <- latest_update()
 
 # Retrieve the latest resource from the dataset
 opendata <-
@@ -59,7 +51,7 @@ opendata <-
 
 # gp lookup
 gp <-
-  haven::read_sav("/conf/linkage/output/lookups/Unicode/National Reference Files/gpprac.sav") %>%
+  haven::read_sav(fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav")) %>%
   # select only praccode and postcode
   select(
     praccode,
@@ -70,8 +62,6 @@ gp <-
   # rename praccode to allow join
   rename(gpprac = "praccode")
 
-
-
 ## match cluster information onto the practice reference list ##
 data <-
   opendata %>%
@@ -79,7 +69,6 @@ data <-
   left_join(gp, by = c("gpprac", "postcode")) %>%
   # sort by postcode
   arrange(postcode)
-
 
 ## match on geography info ##
 
@@ -94,7 +83,6 @@ pc <- read_spd_file() %>%
   ) %>%
   # rename pc8
   rename(postcode = "pc8")
-
 
 data <-
   data %>%
@@ -111,7 +99,6 @@ data <-
     hscp2018,
     ca2018
   )
-
 
 ## ca to lca code ##
 # function will just be called once PR approved
@@ -163,20 +150,12 @@ data <-
 data <-
   data %>%
   mutate(
-    hbpraccode =
-      if_else(
-        gpprac == 99942 | gpprac == 99957 | gpprac == 99961 | gpprac == 99981 | gpprac == 99999, "S08200003", hbpraccode
-      )
-  ) %>%
-  mutate(
-    hbpraccode =
-      if_else(
-        gpprac == 99995, "S08200001", hbpraccode
-      )
+    hbpraccode = case_when(
+      gpprac %in% c(99942, 99957, 99961, 99981, 99999) ~ "S08200003",
+      gpprac == 99995 ~ "S08200001",
+      TRUE ~ hbpraccode
+    )
   )
-
-
-
 
 ## save outfile ##
 outfile <-
