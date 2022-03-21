@@ -34,12 +34,12 @@ client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
     other_vulnerable_groups, living_alone, support_from_unpaid_carer,
     social_worker, type_of_housing, meals, day_care
   ) %>%
-  collect() %>%
-  filter(financial_year == convert_fyyear_to_year(latest_year)) %>%
+  filter(financial_year == fy) %>%
   arrange(
     sending_location, social_care_id, financial_year,
     financial_quarter
-  )
+  )  %>% 
+  collect()
 
 # create numeric flags
 client_data <-
