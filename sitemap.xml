@@ -49,10 +49,10 @@
     <loc>/reference/eng_gp_to_dummy.html</loc>
   </url>
   <url>
-    <loc>/reference/extract_path.html</loc>
+    <loc>/reference/find_latest_file.html</loc>
   </url>
   <url>
-    <loc>/reference/find_latest_file.html</loc>
+    <loc>/reference/get_boxi_extract_path.html</loc>
   </url>
   <url>
     <loc>/reference/get_ch_costs_path.html</loc>
@@ -113,6 +113,9 @@
   </url>
   <url>
     <loc>/reference/get_slf_postcode_path.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_source_extract_path.html</loc>
   </url>
   <url>
     <loc>/reference/get_sparra_path.html</loc>
