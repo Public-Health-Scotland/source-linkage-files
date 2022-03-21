@@ -21,16 +21,15 @@ produce_source_acute_tests <- function(data) {
     # use function to sum new test flags
     sum_test_flags()
 
-  create_measures<- data %>%
-    #functions
-    sum_costs_function
-    mean_costs_function
-    sum_beddays_function
-    mean_beddays_function
+  create_measures<-
+    calculate_measures(outfile, "cost", sum, "_total")
+    calculate_measures(outfile, "cost", mean, "_mean")
+    calculate_measures(outfile, "beddays", sum, "_total")
+    calculate_measures(outfile, "beddays", mean, "_mean")
+    calculate_measures(outfile, "yearstay", sum, "_total")
+    calculate_measures(outfile, "yearstay", mean, "_mean")
 
   join_output <- full_join(test_flags, create_measures)
-
-
 
   return(join_output)
 
