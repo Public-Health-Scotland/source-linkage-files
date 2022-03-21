@@ -53,9 +53,7 @@ pis_extract <-
 # Set date to the end of the FY ---------------------------------------
 pis_extract <-
   pis_extract %>%
-  mutate(
-    record_keydate1 = as.Date(paste0("31-03-", as.numeric(convert_fyyear_to_year(latest_year)) + 1))
-  ) %>%
+  mutate(record_keydate1 = end_fy()) %>%
   mutate(record_keydate2 = record_keydate1)
 
 
