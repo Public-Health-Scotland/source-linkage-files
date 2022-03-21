@@ -203,9 +203,13 @@ acute_clean <- acute_file %>%
   )) %>%
   # Apply new costs for C3 specialty, these are taken from the 2017/18 file
   fix_c3_costs(year) %>%
-
 # initialise monthly cost/beddays variables in a separate data frame for matching
   convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay) %>%
+  # total up yearstay and costs
+  mutate(
+  yearstay = rowSums(across(ends_with("_beddays"))),
+  cost_total_net = rowSums(across(ends_with("_cost")))
+  ) %>%
 # Add oldtadm as a factor with labels
   mutate(oldtadm = factor(oldtadm,
     levels = c(0, 1, 2, 3, 4, 5, 6, 7, 8),
@@ -221,7 +225,7 @@ acute_clean <- acute_file %>%
 
 
 ## save outfile ---------------------------------------
-outfile <- final_acute_file %>%
+outfile <- acute_clean %>%
   select(
     year, recid, record_keydate1, record_keydate2, SMRType,
     chi, gender, dob, gpprac, hbpraccode, postcode, hbrescode,
