@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+)
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
 #####################################################
 # Social Care Lookup
 # Author: Catherine Holland
@@ -28,10 +32,15 @@ db_connection <- odbc::dbConnect(
 )
 ###################################################
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## year of interest ##
 year <- 2019
 =======
 >>>>>>> #100 convert social care client
+=======
+## year of interest ##
+year <- 2019
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
 
 # read in data - social care 2 client
 sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
@@ -60,16 +69,22 @@ sc <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
     day_care
   ) %>%
 <<<<<<< HEAD
+<<<<<<< HEAD
   # filter data by year
   filter(financial_year == year) %>%
 =======
   collect() %>%
 >>>>>>> #100 convert social care client
+=======
+  # filter data by year
+  filter(financial_year == year) %>%
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
   arrange(
     sending_location,
     social_care_id,
     financial_year,
     financial_quarter
+<<<<<<< HEAD
 <<<<<<< HEAD
   ) %>%
   collect()
@@ -84,6 +99,10 @@ sc <-
   sc %>%
   filter(financial_year == year)
 >>>>>>> #100 convert social care client
+=======
+  ) %>%
+  collect()
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
 
 
 # flags as numeric
@@ -115,10 +134,13 @@ sc <-
 outfile <-
   sc %>%
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   # sort
   arrange(sending_location, social_care_id) %>%
 >>>>>>> #100 convert social care client
+=======
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
   # group
   group_by(sending_location, social_care_id) %>%
   # summarise to take last submission
@@ -161,6 +183,9 @@ outfile <-
 outfile <-
   outfile %>%
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
   mutate(across(
     c(
       dementia,
@@ -180,6 +205,7 @@ outfile <-
     levels = c(0, 1),
     labels = c("No", "Yes")
   ),
+<<<<<<< HEAD
 =======
   mutate(
     dementia = factor(dementia,
@@ -220,6 +246,8 @@ outfile <-
       levels = c(0, 1), labels = c("No", "Yes")
     ),
 >>>>>>> #100 convert social care client
+=======
+>>>>>>> 4abb7a3e47131006ddd83fd6d112c02fbc6a440e
     living_alone = factor(living_alone,
       levels = c(0, 1, 9), labels = c("No", "Yes", "Not Known")
     ),
