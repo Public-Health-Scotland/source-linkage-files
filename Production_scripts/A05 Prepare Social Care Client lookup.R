@@ -34,11 +34,11 @@ client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
     other_vulnerable_groups, living_alone, support_from_unpaid_carer,
     social_worker, type_of_housing, meals, day_care
   ) %>%
-  filter(financial_year == fy) %>%
+  filter(financial_year == latest_year) %>%
   arrange(
     sending_location, social_care_id, financial_year,
     financial_quarter
-  )  %>% 
+  )  %>%
   collect()
 
 # create numeric flags
@@ -167,31 +167,19 @@ outfile <-
     sc_type_of_housing, sc_meals, sc_day_care
   )
 
-## function here till merged ##
-get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
-
-  year_extracts_dir <- fs::path(year_dir, "Extracts")
-
-  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
-}
-##
 
 # .zsav
 haven::write_sav(outfile,
-  paste0(
-    get_year_dir(year = latest_year),
-    "/Client_for_Source-20", latest_year, ".zsav"
-  ),
-  compress = TRUE
-)
+                 get_source_extract_path(year = latest_year,
+                                         type = "Client",
+                                         extension = "zsav"))
 
 # .rds file
 readr::write_rds(outfile,
-                 paste0(
-                   get_year_dir(year = latest_year),
-                   "/Client_for_Source-20", latest_year, ".zsav"
-                 ),
+                 get_source_extract_path(year = latest_year,
+                                         type = "Client",
+                                         extension = "rds"
+                                         ),
   compress = "gz"
 )
 
