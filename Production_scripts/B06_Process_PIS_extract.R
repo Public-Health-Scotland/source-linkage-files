@@ -172,7 +172,7 @@ anonchi_lookup <- haven::read_sav("/conf/hscdiip/01-Source-linkage-files/Anon-to
 
 episode_file_updated_chi <-
   episode_file %>%
-  left_join(anonchi_lookup, by = "anon_chi") %>%
+  slfhelper::get_chi()
   select(
     recid,
     chi,
