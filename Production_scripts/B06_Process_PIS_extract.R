@@ -11,6 +11,7 @@
 library(dplyr)
 library(createslf)
 library(slfhelper)
+library(ggplot2)
 
 
 # Read in data ---------------------------------------
@@ -69,15 +70,19 @@ outfile <-
 
 # .zsav
 haven::write_sav(outfile,
-                 get_source_extract_path(year = latest_year,
-                                         type = "PIS"),
+  get_source_extract_path(
+    year = latest_year,
+    type = "PIS"
+  ),
   compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-                 get_source_extract_path(year = latest_year,
-                                         type = "PIS"),
+  get_source_extract_path(
+    year = latest_year,
+    type = "PIS"
+  ),
   compress = "gz"
 )
 
@@ -138,28 +143,26 @@ slf_new <- produce_pis_extract_test(pis_flags)
 ## episode file ##
 
 episode_file <- read_slf_episode(latest_year,
-                                 recid = c("PIS"),
-                                 columns = c("recid",
-                                             "anon_chi",
-                                             "gender",
-                                             "dob",
-                                             "age",
-                                             "hbrescode",
-                                             "lca",
-                                             "age",
-                                             "cost_total_net",
-                                             "yearstay",
-                                             "stay",
-                                             "no_dispensed_items")
+  recid = c("PIS"),
+  columns = c(
+    "recid",
+    "anon_chi",
+    "gender",
+    "dob",
+    "age",
+    "hbrescode",
+    "lca",
+    "age",
+    "cost_total_net",
+    "yearstay",
+    "stay",
+    "no_dispensed_items"
+  )
 )
-
-# anon chi lookup
-anonchi_lookup <- haven::read_sav("/conf/hscdiip/01-Source-linkage-files/Anon-to-CHI-lookup.zsav")
-
 
 episode_file_updated_chi <-
   episode_file %>%
-  slfhelper::get_chi()
+  slfhelper::get_chi() %>%
   select(
     recid,
     chi,
@@ -234,3 +237,30 @@ comparison %>%
   ggplot(aes(x = measure, y = pct_change)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+# Save outfile ---------------------------------------
+
+outfile <- comparison
+
+
+# .zsav
+haven::write_sav(outfile,
+  get_source_extract_tests_path(
+    year = latest_year,
+    type = "PIS",
+    extension = "zsav"
+  ),
+  compress = TRUE
+)
+
+# .rds file
+readr::write_rds(outfile,
+  get_source_extract_tests_path(
+    year = latest_year,
+    type = "PIS",
+    extension = "rds"
+  ),
+  compress = "gz"
+)
