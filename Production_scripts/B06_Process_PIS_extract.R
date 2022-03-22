@@ -34,7 +34,9 @@ pis_extract <- readr::read_csv(
   # de-select "DI Paid GIC excl. BB"
   select(-c(`DI Paid GIC excl. BB`)) %>%
   # filter for chi NA
-  filter(!is.na(chi)) %>%
+  mutate(validity = chi_check(chi)) %>%
+  filter(validity == "Valid CHI") %>%
+  select(-c(validity)) %>%
   # create variables recid and year
   mutate(
     recid = "PIS",
@@ -47,13 +49,14 @@ pis_extract <- readr::read_csv(
 # assume that if it starts with a letter it's an English practice and so recode to 99995
 pis_extract <-
   pis_extract %>%
+  mutate(gpprac = as.character(gpprac)) %>%
   eng_gp_to_dummy(gpprac)
 
 
 # Set date to the end of the FY ---------------------------------------
 pis_extract <-
   pis_extract %>%
-  mutate(record_keydate1 = end_fy()) %>%
+  mutate(record_keydate1 = end_fy(latest_year)) %>%
   mutate(record_keydate2 = record_keydate1)
 
 
@@ -64,33 +67,17 @@ outfile <-
   arrange(chi)
 
 
-# function here till PR pushed
-get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
-
-  year_extracts_dir <- fs::path(year_dir, "Extracts")
-
-  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
-}
-#
-
 # .zsav
 haven::write_sav(outfile,
-  paste0(
-    get_year_dir(year = latest_year),
-    "prescribing_file_for_source-20",
-    latest_year, ".zsav"
-  ),
+                 get_source_extract_path(year = latest_year,
+                                         type = "PIS"),
   compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-  paste0(
-    get_year_dir(year = latest_year),
-    "prescribing_file_for_source-20",
-    latest_year, ".zsav"
-  ),
+                 get_source_extract_path(year = latest_year,
+                                         type = "PIS"),
   compress = "gz"
 )
 
