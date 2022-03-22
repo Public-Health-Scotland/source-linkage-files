@@ -4,7 +4,7 @@
 \alias{get_source_extract_path}
 \title{Get source extract path}
 \usage{
-get_source_extract_path(year, type = c("Acute", "Mental"))
+get_source_extract_path(year, type = c("Acute", "Mental", "DD"))
 }
 \arguments{
 \item{year}{Year of extract}
