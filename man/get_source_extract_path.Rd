@@ -2,11 +2,12 @@
 % Please edit documentation in R/get_source_extract_path.R
 \name{get_source_extract_path}
 \alias{get_source_extract_path}
-\title{Get source extract path}
+\title{Get Source Extract path}
 \usage{
 get_source_extract_path(
   year,
-  type = c("Acute", "Mental", "DD", "Client", "PIS"),
+  type = c("Acute", "AE", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH", "HC",
+    "Homelessness", "Maternity", "Mental", "Outpatients", "PIS"),
   extension = c("csv", "sav", "zsav", "rds")
 )
 }
@@ -19,5 +20,5 @@ get_source_extract_path(
 Path to clean source extract containing data for each dataset
 }
 \description{
-Get source extract path
+Get Source Extract path
 }
