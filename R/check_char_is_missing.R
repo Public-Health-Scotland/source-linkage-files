@@ -4,7 +4,7 @@
 #'
 #' @return a logical vector indicating if each value is missing
 #' @export
-is_missing <- function(x) {
+check_char_is_missing <- function(x) {
   if (typeof(x) != "character") {
     rlang::abort(
       message = glue::glue("You must supply a character vector, but {class(x)} was supplied.")
