@@ -22,6 +22,9 @@
     <loc>/reference/ca_to_lca.html</loc>
   </url>
   <url>
+    <loc>/reference/convert_eng_gpprac_to_dummy.html</loc>
+  </url>
+  <url>
     <loc>/reference/convert_fyyear_to_year.html</loc>
   </url>
   <url>
@@ -44,9 +47,6 @@
   </url>
   <url>
     <loc>/reference/end_fy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/eng_gp_to_dummy.html</loc>
   </url>
   <url>
     <loc>/reference/find_latest_file.html</loc>
