@@ -7,7 +7,7 @@
 #' @export
 #'
 get_source_extract_path <- function(year,
-                                    type = c("Acute", "Mental", "DD", "Client"),
+                                    type = c("Acute", "Mental", "DD", "Client", "PIS"),
                                     extension = c("csv", "sav", "zsav", "rds")) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
 
@@ -15,7 +15,8 @@ get_source_extract_path <- function(year,
     type == "Acute" ~ "acute_for_source",
     type == "Mental" ~ "mental_health_for_source",
     type == "DD" ~ "DD_for_source",
-    type == "Client" ~ "Client_for_Source"
+    type == "Client" ~ "Client_for_Source",
+    type == "PIS" ~ "prescribing_file_for_source"
   )
 
   file_path <- fs::path(year_dir, glue::glue("{file_name}-20{year}.{extension}"))

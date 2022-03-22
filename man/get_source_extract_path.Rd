@@ -6,7 +6,7 @@
 \usage{
 get_source_extract_path(
   year,
-  type = c("Acute", "Mental", "DD", "Client"),
+  type = c("Acute", "Mental", "DD", "Client", "PIS"),
   extension = c("csv", "sav", "zsav", "rds")
 )
 }
