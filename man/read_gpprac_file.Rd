@@ -2,18 +2,18 @@
 % Please edit documentation in R/read_lookups.R
 \name{read_gpprac_file}
 \alias{read_gpprac_file}
-\title{Read the gp practice lookup file}
+\title{Read the GP practice lookup file}
 \usage{
 read_gpprac_file(file)
 }
 \arguments{
 \item{file}{\itemize{
-\item the file name of the gp practice file
+\item the file name of the GP practice file
 }}
 }
 \value{
 The data read using \code{readr::read_rds}
 }
 \description{
-Read the gp practice lookup file
+Read the GP practice lookup file
 }

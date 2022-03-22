@@ -45,4 +45,3 @@ ca_to_lca <- function(ca) {
   )
   return(lca)
 }
-
