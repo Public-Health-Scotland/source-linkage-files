@@ -7,26 +7,27 @@
 #' @export
 #'
 write_tests_xlsx <- function(comparison_data, name) {
-  if (fs::file_exists(get_source_tests_path())) {
+  source_tests_path <- fs::path(get_slf_dir(), "Tests", glue::glue(latest_update(), "_tests.xlsx"))
+
+  if (fs::file_exists(source_tests_path)) {
     # Load excel workbook
-    wb <- loadWorkbook(get_source_tests_path())
+    wb <- loadWorkbook(source_tests_path)
   } else {
-    if (!fs::file_exists(get_source_tests_path())) {
     # create excelworkbook
     wb <- createWorkbook()
-  }}
+  }
 
   # add a new sheet for tests
-  addWorksheet(wb, name) %>%
-    # write comparison output to new sheet
-    writeData(
-      wb,
-      name,
-      comparison_data
-    ) %>%
-    # save output
-    saveWorkbook(wb,
-      get_source_tests_path(),
-      overwrite = TRUE
-    )
+  addWorksheet(wb, name)
+  # write comparison output to new sheet
+  writeData(
+    wb,
+    name,
+    comparison_data
+  )
+  # save output
+  saveWorkbook(wb,
+    source_tests_path,
+    overwrite = TRUE
+  )
 }
