@@ -8,7 +8,7 @@
 #'
 #' @return a [tibble][tibble::tibble-package]
 #' @export
-eng_gp_to_dummy <- function(data, gpprac, dummy_code = 9995L) {
+convert_eng_gpprac_to_dummy <- function(data, gpprac, dummy_code = 9995L) {
   data <- data %>%
     dplyr::mutate(
       {{ gpprac }} := dplyr::if_else(
