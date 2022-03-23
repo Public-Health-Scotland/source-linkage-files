@@ -70,7 +70,7 @@ appropriate permissions.</p>
   <span class="va">file_name</span>,
   ext <span class="op">=</span> <span class="cn">NULL</span>,
   check_mode <span class="op">=</span> <span class="st">"read"</span>,
-  create <span class="op">=</span> <span class="cn">FALSE</span>
+  create <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -87,7 +87,8 @@ appropriate permissions.</p>
 <code><a href="https://fs.r-lib.org/reference/file_access.html" class="external-link">file_access</a></code>, defaults to "read"
 to check that you have read access to the file</p></dd>
 <dt>create</dt>
-<dd><p>Optionally create the file if it doesn't exists</p></dd>
+<dd><p>Optionally create the file if it doesn't exists,
+the default is to only create a file if we set <code>check_mode = "write"</code></p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

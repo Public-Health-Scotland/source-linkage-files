@@ -52,6 +52,12 @@
     <loc>/reference/find_latest_file.html</loc>
   </url>
   <url>
+    <loc>/reference/fix_east_ayrshire_duplicates.html</loc>
+  </url>
+  <url>
+    <loc>/reference/fix_west_dun_duplicates.html</loc>
+  </url>
+  <url>
     <loc>/reference/get_boxi_extract_path.html</loc>
   </url>
   <url>
@@ -121,6 +127,9 @@
     <loc>/reference/get_sparra_path.html</loc>
   </url>
   <url>
+    <loc>/reference/get_year_dir.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -146,6 +155,9 @@
   </url>
   <url>
     <loc>/reference/previous_update.html</loc>
+  </url>
+  <url>
+    <loc>/reference/process_homelessness_extract.html</loc>
   </url>
   <url>
     <loc>/reference/produce_sc_ch_episodes_tests.html</loc>
