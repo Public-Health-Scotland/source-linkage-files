@@ -19,15 +19,13 @@ get_boxi_extract_path <- function(year, type = c("Acute", "Mental", "Outpatient"
     type == "Deaths" ~ "NRS-death-registrations-extract",
     type == "CMH" ~ "Community-MH-contact-level-extract",
     type == "Homelessness" ~ "Homelessness-extract"
+  ) %>%
+    glue::glue("-20{year}.csv.gz")
+
+  file_path <- get_file_path(
+    directory = get_year_dir(year = year, extracts_dir = TRUE),
+    file_name = file_name
   )
-
-  file_path <- fs::path(year_dir, glue::glue("{file_name}-20{year}.csv.gz"))
-
-  if (fs::file_exists(fs::path_ext_remove(file_path))) {
-    file_path <- fs::path_ext_remove(file_path)
-  } else if (!fs::file_exists(file_path)) {
-    rlang::abort(glue::glue("{type} Extract not found"))
-  }
 
   return(file_path)
 }
