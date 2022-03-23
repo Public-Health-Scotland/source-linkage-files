@@ -71,7 +71,7 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Add some variables ------------------------------------------------------
   data <- homelessness_extract %>%
     dplyr::mutate(
-      year = year,
+      year = as.character(year),
       recid = "HL1",
       smrtype = dplyr::case_when(
         main_applicant_flag == "Y" ~ "HL1-Main",
@@ -125,9 +125,16 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
     directory = fs::path(get_slf_dir(), "Homelessness"),
     file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
   )) %>%
-    dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year))
+    dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year)) %>%
+    dplyr::left_join(la_code_lookup,
+      by = c("sending_local_authority_code_9" = "CA")
+    ) %>%
+    dplyr::select(-.data$CAName, -.data$sending_local_authority_code_9)
 
-  filtered_data <- dplyr::left_join(data, la_code_lookup, by = c("sending_local_authority_code_9" = "CA")) %>%
+  filtered_data <- data %>%
+    dplyr::left_join(la_code_lookup,
+      by = c("sending_local_authority_code_9" = "CA")
+    ) %>%
     dplyr::left_join(completeness_data,
       by = c("sending_local_authority_name", "year")
     ) %>%
