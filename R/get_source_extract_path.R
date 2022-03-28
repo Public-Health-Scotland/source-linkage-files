@@ -8,12 +8,23 @@
 #'
 get_source_extract_path <- function(year,
                                     type = c(
-                                      "Acute", "AE", "CH", "Client", "CMH",
-                                      "DD", "Deaths", "DN", "GPOoH", "HC", "Homelessness",
-                                      "Maternity", "Mental", "Outpatients", "PIS"
+                                      "Acute",
+                                      "AE",
+                                      "CH",
+                                      "Client",
+                                      "CMH",
+                                      "DD",
+                                      "Deaths",
+                                      "DN",
+                                      "GPOoH",
+                                      "HC",
+                                      "Homelessness",
+                                      "Maternity",
+                                      "Mental",
+                                      "Outpatients",
+                                      "PIS"
                                     ),
                                     extension = c("csv", "sav", "zsav", "rds")) {
-
   type <- match.arg(type)
 
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
