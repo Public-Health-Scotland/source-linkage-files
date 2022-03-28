@@ -8,13 +8,15 @@ get_source_extract_path(
   year,
   type = c("Acute", "AE", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH", "HC",
     "Homelessness", "Maternity", "Mental", "Outpatients", "PIS"),
-  extension = c("csv", "sav", "zsav", "rds")
+  ext = c("zsav", "rds")
 )
 }
 \arguments{
 \item{year}{Year of extract}
 
 \item{type}{Name of clean source extract}
+
+\item{ext}{Extension for the extract (zsav or rds)}
 }
 \value{
 Path to clean source extract containing data for each dataset
