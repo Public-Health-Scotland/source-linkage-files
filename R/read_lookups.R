@@ -110,3 +110,22 @@ read_datazone_pop_file <- function(file) {
 
   return(datazone_pop_path)
 }
+
+
+
+#' Read the GP practice lookup file
+#' @param file - the file name of the GP practice file
+#'
+#' @return The data read using `readr::read_rds`
+#' @export
+read_gpprac_file <- function(file) {
+  gpprac_path <-
+    fs::path(get_lookups_dir(), "National Reference Files", file)
+
+  # Check if the file exists and we can read it
+  if (!fs::file_access(gpprac_path, "read")) {
+    rlang::abort(message = "Couldn't read the gppractice lookup file")
+  }
+
+  return(gpprac_path)
+}
