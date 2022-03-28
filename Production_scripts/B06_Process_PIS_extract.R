@@ -35,15 +35,12 @@ pis_extract <- readr::read_csv(
   # de-select "DI Paid GIC excl. BB"
   select(-c(`DI Paid GIC excl. BB`)) %>%
   # filter for chi NA
-  mutate(validity = chi_check(chi)) %>%
-  filter(validity == "Valid CHI") %>%
-  select(-c(validity)) %>%
+  filter(chi_check(chi) == "Valid CHI") %>%
   # create variables recid and year
   mutate(
     recid = "PIS",
     year = latest_year
   )
-
 
 # Recode GP Practice into a 5 digit number ---------------------------------------
 
