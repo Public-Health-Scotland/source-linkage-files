@@ -11,6 +11,7 @@ get_boxi_extract_path <-
            type = c(
              "Acute",
              "Mental",
+             "Maternity",
              "Outpatient",
              "AE",
              "DN",
@@ -30,6 +31,7 @@ get_boxi_extract_path <-
     file_name <- dplyr::case_when(
       type == "Acute" ~ "Acute-episode-level-extract",
       type == "Mental" ~ "Mental-Health-episode-level-extract",
+      type == "Maternity" ~ "Maternity-episode-level-extract",
       type == "Outpatient" ~ "Outpatients-episode-level-extract",
       type == "AE" ~ "A&E-episode-level-extract",
       type == "DN" ~ "District-Nursing-contact-level-extract",
