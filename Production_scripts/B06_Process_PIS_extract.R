@@ -19,9 +19,8 @@ library(ggplot2)
 # latest year
 latest_year <- 1920
 
-pis_extract <- readr::read_csv(
-  get_it_prescribing_path(latest_year)
-) %>%
+pis_extract <- get_it_prescribing_path(latest_year) %>%
+  readr::read_csv() %>%
   # rename
   rename(
     chi = "Pat UPI [C]",
