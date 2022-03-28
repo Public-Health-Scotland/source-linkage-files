@@ -7,6 +7,9 @@
 #' @export
 #'
 get_boxi_extract_path <- function(year, type = c("Acute", "Mental", "Outpatient", "AE", "DN", "GPOoH", "Deaths", "CMH", "Homelessness")) {
+
+  type <- match.arg(type)
+
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year, "Extracts")
 
   file_name <- dplyr::case_when(
