@@ -7,7 +7,8 @@
 produce_sc_demog_lookup_tests(data)
 }
 \arguments{
-\item{data}{new or old data for testing summary flags (data is from \code{\link{get_sc_demog_lookup_path}})}
+\item{data}{new or old data for testing summary flags
+(data is from \code{\link{get_sc_demog_lookup_path}})}
 }
 \value{
 a dataframe with a count of each flag.
