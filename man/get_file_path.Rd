@@ -9,7 +9,7 @@ get_file_path(
   file_name,
   ext = NULL,
   check_mode = "read",
-  create = FALSE
+  create = NULL
 )
 }
 \arguments{
@@ -23,7 +23,8 @@ get_file_path(
 \code{\link[fs]{file_access}}, defaults to "read"
 to check that you have read access to the file}
 
-\item{create}{Optionally create the file if it doesn't exists}
+\item{create}{Optionally create the file if it doesn't exists,
+the default is to only create a file if we set \code{check_mode = "write"}}
 }
 \value{
 The full file path, an error will be thrown
