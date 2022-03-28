@@ -49,7 +49,12 @@ get_source_extract_path <- function(year,
     type == "PIS" ~ "prescribing_file_for_source"
   )
 
-  file_path <- fs::path(year_dir, glue::glue("{file_name}-20{year}.{ext}"))
+  source_extract_path <- get_file_path(
+    directory = year_dir,
+    file_name = glue::glue("{file_name}-20{year}"),
+    ext = ext,
+    check_mode = "write"
+  )
 
-  return(file_path)
+  return(source_extract_path)
 }
