@@ -110,10 +110,10 @@ produce_outpatient_extract_test <- function(data, postcode = FALSE) {
         max_cost = max(cost_total_net, na.rm = TRUE),
         min_cost = min(cost_total_net, na.rm = TRUE),
 
-        #earliest_start1 = min(record_keydate1),
-        #earliest_start2 = min(record_keydate2),
-        #latest_start1 = max(record_keydate1),
-        #latest_start2 = max(record_keydate2),
+        # earliest_start1 = min(record_keydate1),
+        # earliest_start2 = min(record_keydate2),
+        # latest_start1 = max(record_keydate1),
+        # latest_start2 = max(record_keydate2),
 
         # total costs
         total_cost_apr = sum(apr_cost, na.rm = TRUE),
