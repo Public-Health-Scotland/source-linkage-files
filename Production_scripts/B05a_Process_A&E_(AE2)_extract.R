@@ -99,74 +99,42 @@ ae_file <- readr::read_csv(
     cost_total_net = "Total Net Costs",
     location = "Treatment Location Code",
     case_ref_number = "Case Reference Number"
-  ) %>%
-  # date types
-  mutate(
-    dob = as.Date(dob),
-    record_keydate1 = as.Date(record_keydate1),
-    record_keydate2 = as.Date(record_keydate2)
   )
 
+# Data Cleaning -----------------------------------------
 
 # year variable
-ae_episode_extract <-
-  ae_episode_extract %>%
+ae_clean <- ae_file %>%
   mutate(
-    year = latest_year,
+    year = year,
     recid = "AE2"
-  )
-
-
-## Recode GP Practice into a 5 digit number ##
-# assume that if it starts with a letter it's an English practice and so recode to 99995
-ae_episode_extract <-
-  ae_episode_extract %>%
-  mutate(gpprac = replace(gpprac, substr(gpprac, 1, 1) %in% c("A", "Z"), "99995"))
-
-
-## Postcode ##
-# use the CHI postcode and if that is blank, then use the epi postcode.
-ae_episode_extract <-
-  ae_episode_extract %>%
-  mutate(postcode = if_else(!is.na(postcode_chi), postcode_chi, postcode_epi))
-
-
-## recode cypher HB codes ##
-ae_episode_extract <-
-  ae_episode_extract %>%
-  mutate(
-    across(
-      c(hbtreatcode, hbrescode),
-      ~ case_when(
-        .x == "A" ~ "S08000015",
-        .x == "B" ~ "S08000016",
-        .x == "F" ~ "S08000029",
-        .x == "G" ~ "S08000021",
-        .x == "H" ~ "S08000022",
-        .x == "L" ~ "S08000023",
-        .x == "N" ~ "S08000020",
-        .x == "R" ~ "S08000025",
-        .x == "S" ~ "S08000024",
-        .x == "T" ~ "S08000030",
-        .x == "V" ~ "S08000019",
-        .x == "W" ~ "S08000028",
-        .x == "Y" ~ "S08000017",
-        .x == "Z" ~ "S08000026"
-      )
-    )
-  )
-
-
-## Allocate the costs to the correct month ##
-
-# month variable
-ae_episode_extract <-
-  ae_episode_extract %>%
-  mutate(month = strftime(record_keydate1, "%m"))
-
-# cost in correct month
-ae_episode_extract <-
-  ae_episode_extract %>%
+  ) %>%
+  ## Recode GP Practice into a 5 digit number ##
+  # assume that if it starts with a letter it's an English practice and so recode to 99995
+  convert_eng_gpprac_to_dummy(gpprac) %>%
+  # use the CHI postcode and if that is blank, then use the epi postcode.
+  mutate(postcode = if_else(!is.na(postcode_chi), postcode_chi, postcode_epi)) %>%
+  ## recode cypher HB codes ##
+  mutate(across(c(hbtreatcode, hbrescode), ~ case_when(
+    .x == "A" ~ "S08000015",
+    .x == "B" ~ "S08000016",
+    .x == "F" ~ "S08000029",
+    .x == "G" ~ "S08000021",
+    .x == "H" ~ "S08000022",
+    .x == "L" ~ "S08000023",
+    .x == "N" ~ "S08000020",
+    .x == "R" ~ "S08000025",
+    .x == "S" ~ "S08000024",
+    .x == "T" ~ "S08000030",
+    .x == "V" ~ "S08000019",
+    .x == "W" ~ "S08000028",
+    .x == "Y" ~ "S08000017",
+    .x == "Z" ~ "S08000026"
+  ))) %>%
+  ## Allocate the costs to the correct month ##
+  # Create month variable
+  mutate(month = strftime(record_keydate1, "%m")) %>%
+  # Allocated cost in correct month
   mutate(
     apr_cost = if_else(month == "04", cost_total_net, 0),
     may_cost = if_else(month == "05", cost_total_net, 0),
@@ -180,12 +148,8 @@ ae_episode_extract <-
     jan_cost = if_else(month == "01", cost_total_net, 0),
     feb_cost = if_else(month == "02", cost_total_net, 0),
     mar_cost = if_else(month == "03", cost_total_net, 0)
-  )
-
-
-## A&E value labels ##
-ae_episode_extract <-
-  ae_episode_extract %>%
+  ) %>%
+  # A&E value labels
   mutate(
     ae_arrivalmode = factor(ae_arrivalmode,
       levels = c("01", "02", "03", "04", "05", "06", "07", "08", "98", "99"),
@@ -902,16 +866,11 @@ ae_episode_extract <-
         "Multiple body regions"
       )
     )
-  )
-
-
-# sort for linking on CUP marker
-ae_episode_extract <-
-  ae_episode_extract %>%
+  ) %>%
+  # sort for linking on CUP marker
   arrange(record_keydate1, keyTime1, case_ref_number)
 
-
-## save outfile ##
+## save outfile ---------------------------------------
 outfile <-
   ae_episode_extract %>%
   select(
@@ -965,6 +924,9 @@ outfile <-
     case_ref_number
   )
 
+# Save as zsav file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "AE", ext = "zsav"))
 
 # .zsav
 haven::write_sav(outfile,
@@ -1113,5 +1075,7 @@ readr::write_rds(outfile,
   compress = "gz"
 )
 
+# Save as rds file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "AE", ext = "rds"))
 
-# End of Script ##
