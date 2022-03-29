@@ -43,7 +43,7 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
     month_start + months(1)
   ) %>%
     # Name the intervals for use later
-    purrr::set_names(paste0(tolower(month.abb[c(4:12, 1:3)]), "_beddays"))
+    rlang::set_names(paste0(tolower(month.abb[c(4:12, 1:3)]), "_beddays"))
 
   # Work out the beddays for each month
   beddays <- purrr::map_dfc(
