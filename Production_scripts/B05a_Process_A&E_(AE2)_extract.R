@@ -8,38 +8,61 @@
 # Description - Process A & E extract
 #####################################################
 
-
+# Load packages
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(createslf)
 library(slfhelper)
+library(readr)
 
 
-## get data ##
+# Read in data---------------------------------------
 
-# latest year
-latest_year <- 1920
+# Specify year
+year <- 1920
 
-# function here till PR pushed
-get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
-
-  year_extracts_dir <- fs::path(year_dir, "Extracts")
-
-  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
-}
-
-
-ae_episode_extract <- readr::read_csv(
-  paste0(
-    get_year_dir(year = latest_year),
-    "/Extracts/A&E-episode-level-extract-20",
-    latest_year,
-    ".csv.gz"
+ae_file <- readr::read_csv(
+  file = get_boxi_extract_path(year, "AE"), n_max = 2000,
+  col_type = cols(
+    `Arrival Date` = col_date(format = "%Y/%m/%d %T"),
+    `DAT Date` = col_date(format = "%Y/%m/%d %T"),
+    `Pat UPI [C]` = col_character(),
+    `Pat Date Of Birth [C]` = col_date(format = "%Y/%m/%d %T"),
+    `Pat Gender Code` = col_double(),
+    `NHS Board of Residence Code - current` = col_character(),
+    `Treatment NHS Board Code - current` = col_character(),
+    `Treatment Location Code` = col_character(),
+    `GP Practice Code` = col_character(),
+    `Council Area Code` = col_character(),
+    `Postcode (epi) [C]` = col_character(),
+    `Postcode (CHI) [C]` = col_character(),
+    `HSCP of Residence Code - current` = col_character(),
+    `Arrival Time` = col_time(""),
+    `DAT Time` = col_time(""),
+    `Arrival Mode Code` = col_character(),
+    `Referral Source Code` = col_character(),
+    `Attendance Category Code` = col_character(),
+    `Discharge Destination Code` = col_character(),
+    `Patient Flow Code` = col_double(),
+    `Place of Incident Code` = col_character(),
+    `Reason for Wait Code` = col_character(),
+    `Disease 1 Code` = col_character(),
+    `Disease 2 Code` = col_character(),
+    `Disease 3 Code` = col_character(),
+    `Bodily Location Of Injury Code` = col_character(),
+    `Alcohol Involved Code` = col_character(),
+    `Alcohol Related Admission` = col_character(),
+    `Substance Misuse Related Admission` = col_character(),
+    `Falls Related Admission` = col_character(),
+    `Self Harm Related Admission` = col_character(),
+    `Total Net Costs` = col_double(),
+    `Age at Midpoint of Financial Year` = col_double(),
+    `Case Reference Number` = col_character(),
+    `Significant Facility Code` = col_double()
   )
 ) %>%
-  # rename
+  # rename variables
   rename(
     record_keydate1 = "Arrival Date",
     record_keydate2 = "DAT Date",
