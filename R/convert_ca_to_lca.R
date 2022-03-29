@@ -34,7 +34,7 @@ ca_to_lca <- function(ca) {
     ca == "S12000021" ~ "22", # North Ayrshire
     ca %in% c("S12000044", "S12000050") ~ "23", # North Lan
     ca == "S12000023" ~ "24", # Orkney
-    ca %in% c("S12000024", "S12000048") ~ "25", # P & K
+    ca %in% c("S12000024", "S12000048") ~ "25", # P and K
     ca == "S12000038" ~ "26", # Renfrewshire
     ca == "S12000027" ~ "27", # Shetland
     ca == "S12000028" ~ "28", # South Ayrshire
@@ -45,4 +45,3 @@ ca_to_lca <- function(ca) {
   )
   return(lca)
 }
-
