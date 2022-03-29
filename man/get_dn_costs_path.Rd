@@ -4,10 +4,12 @@
 \alias{get_dn_costs_path}
 \title{Get the full District Nursing costs lookup path}
 \usage{
-get_dn_costs_path(...)
+get_dn_costs_path(..., update = NULL)
 }
 \arguments{
 \item{...}{additional arguments passed to  \code{\link{get_file_path}}}
+
+\item{update}{passed through \code{\link{latest_update}}}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs]{path}}
