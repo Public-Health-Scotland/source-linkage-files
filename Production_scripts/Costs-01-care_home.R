@@ -17,6 +17,7 @@
 # Load packages
 
 library(dplyr)
+library(tidyr)
 library(createslf)
 
 # Read in data---------------------------------------
@@ -25,14 +26,14 @@ library(createslf)
 fs::file_copy(get_ch_costs_path(), get_ch_costs_path(update = previous_update()))
 
 ## Read excel data
-ch_costs <- readxl::read_xlsx(
+ch_costs_data <- readxl::read_xlsx(
   paste0(get_slf_dir(), "/Costs/CH_Costs.xlsx")
 )
 
 
 # Data cleaning ---------------------------------------
 ch_costs <-
-  ch_costs %>%
+  ch_costs_data %>%
   # rename
   rename(source_of_funding = "Source of Funding") %>%
   # select only the funding totals
@@ -44,7 +45,7 @@ ch_costs <-
     values_to = "cost_per_week"
   ) %>%
   # create year as FY = YYYY from CCYY
-  mutate(financial_year = convert_year_to_fyyear(calendar_year)) %>%
+  mutate(year = convert_year_to_fyyear(calendar_year)) %>%
   # create flag - nursing care provision ##
   mutate(nursing_care_provision = if_else(source_of_funding == "All Funding With Nursing Care", 1, 0)) %>%
   # cost per day ##
@@ -63,9 +64,9 @@ ch_costs <-
 # aggregate
 outfile <-
   ch_costs %>%
-  group_by(financial_year, nursing_care_provision) %>%
+  group_by(year, nursing_care_provision) %>%
   mutate(cost_per_day = mean(cost_per_day)) %>%
-  select(financial_year, nursing_care_provision, cost_per_day)
+  select(year, nursing_care_provision, cost_per_day)
 
 
 ## add in years by copying the most recent year ##
@@ -75,14 +76,13 @@ latest_year <- 2122
 apply_costs_uplift <-
   map_df(1:5, ~
   outfile %>%
-    group_by(financial_year, nursing_care_provision) %>%
-    arrange(financial_year, nursing_care_provision) %>%
+    group_by(year, nursing_care_provision) %>%
+    arrange(year, nursing_care_provision) %>%
     mutate(
       cost_per_day = cost_per_day * (1.01)^.x,
-      financial_year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(financial_year)) + .x)
+      year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(financial_year)) + .x)
     )) %>%
-  arrange(financial_year, nursing_care_provision) %>%
-  rename(year = "financial_year")
+  arrange(year, nursing_care_provision)
 
 
 # Join data together  -----------------------------------------------------
@@ -122,13 +122,13 @@ outfile <-
 
 # .zsav
 haven::write_sav(outfile,
-  get_ch_costs_path(),
+  get_ch_costs_path(update = latest_update()),
   compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-  get_ch_costs_path(),
+  get_ch_costs_path(update = latest_update()),
   compress = "gz"
 )
 
