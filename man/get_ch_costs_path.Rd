@@ -4,10 +4,12 @@
 \alias{get_ch_costs_path}
 \title{Get the full Care Home costs lookup path}
 \usage{
-get_ch_costs_path(...)
+get_ch_costs_path(..., update = NULL)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link{get_file_path}}}
+
+\item{update}{passed through \code{\link{latest_update}}}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs]{path}}
