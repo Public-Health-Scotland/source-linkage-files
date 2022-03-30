@@ -11,9 +11,7 @@
 # Load packages
 library(dplyr)
 library(tidyr)
-library(ggplot2)
 library(createslf)
-library(slfhelper)
 library(readr)
 
 # Read in data---------------------------------------
@@ -38,7 +36,9 @@ ae_cup_file <- readr::read_csv(
     case_ref_number = "ED Case Reference Number [C]",
     cup_marker = "CUP Marker",
     cup_pathway = "CUP Pathway Name"
-  ) %>%
+  )
+
+
   # Data Cleaning---------------------------------------
 
   # Sort for linking and remove any duplicates
