@@ -36,7 +36,7 @@ get_source_extract_path <- function(year,
     type == "AE" ~ "a&e_for_source",
     type == "CH" ~ "care_home_for_source",
     type == "CMH" ~ "CMH_for_source",
-    type == "Client" ~ "client_for_Source",
+    type == "Client" ~ "client_for_source",
     type == "DD" ~ "DD_for_source",
     type == "Deaths" ~ "deaths_for_source",
     type == "DN" ~ "DN_for_source",
@@ -46,7 +46,6 @@ get_source_extract_path <- function(year,
     type == "Maternity" ~ "maternity_for_source",
     type == "Mental" ~ "mental_health_for_source",
     type == "DD" ~ "DD_for_source",
-    type == "Client" ~ "Client_for_Source"
     type == "Outpatients" ~ "outpatients_for_source",
     type == "PIS" ~ "prescribing_file_for_source"
   )
