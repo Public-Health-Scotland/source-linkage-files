@@ -12,7 +12,7 @@ write_tests_xlsx(comparison_data, name)
 \item{name}{of dataset tests}
 }
 \value{
-a workbook containing comparison tests with each dataset with a new tab
+source_tests_path to the xlsx file location
 }
 \description{
 Write tests as an xlsx workbook
