@@ -42,121 +42,117 @@ fs::file_copy(
 
 ## data ##
 dn_raw_costs <- readxl::read_excel(
-  paste0(get_slf_dir(), "/Costs/DN_Costs.xlsx")
+  fs::path(get_slf_dir(), "Costs", "DN_Costs.xlsx"),
+  .name_repair = janitor::make_clean_names
 ) %>%
   # change 1718 type to numeric - reads in as a character
-  mutate(`1718_Cost` = as.numeric(`1718_Cost`)) %>%
+  mutate(across(ends_with("_cost"), as.numeric)) %>%
   # pivot longer
   pivot_longer(
-    ends_with("Cost"),
-    names_to = "year_cost",
+    ends_with("_cost"),
+    names_to = "year",
+    names_pattern = "(\\d{4})_cost",
     values_to = "cost"
-  ) %>%
-  # create year variable
-  mutate(year = substr(year_cost, 1, 4)) %>%
-  # remove variable year_cost
-  select(-year_cost) %>%
-  # sort by year and HB2019
-  arrange(year, HB2019)
+  )
 
 # Read DN file extracted from BOXI -----------------------------
 
 # contacts
-dn_raw_costs_contacts <- readr::read_csv(
-  paste0(get_slf_dir(), "/Costs/DN-Contacts-Numbers-for-Costs.csv")
+dn_raw_contacts <- readr::read_csv(
+  fs::path(get_slf_dir(), "Costs", "DN-Contacts-Numbers-for-Costs.csv"),
+  name_repair = janitor::make_clean_names
 ) %>%
   # create year variable as fy
-  mutate(year = convert_year_to_fyyear(`Contact Financial Year`)) %>%
+  mutate(year = convert_year_to_fyyear(contact_financial_year)) %>%
   # rename TreatmentNHSBoardCode
   rename(
-    HB2019 = "Treatment NHS Board Code 9",
-    number_of_contacts = "Number of Contacts"
-  ) %>%
-  # sort by year and HB2019
-  arrange(year, HB2019)
+    hb2019 = treatment_nhs_board_code_9,
+    number_of_contacts = number_of_contacts
+  )
 
 # Join files together ------------------------------------------
 
 # match raw costs to contacts file
-dn_raw_costs_contacts <-
-  dn_raw_costs_contacts %>%
-  full_join(dn_raw_costs, by = c("HB2019", "year"))
+dn_raw_costs_contacts <- full_join(dn_raw_contacts,
+  dn_raw_costs,
+  by = c("hb2019", "year")
+)
 
 
 # Deal with population cost-------------------------------------
 
 
 ## Calculate population cost for NHS Highland with HSCP population ratio. ##
-# Of the two HSCPs, Argyll and Bute provides the District Nursing data which is 27% of the population.
+# Of the two HSCPs, Argyll and Bute provides the
+# District Nursing data which is 27% of the population.
 
-lookup <- haven::read_sav(paste0(get_lookups_dir(), "/Populations/Estimates/HSCP2019_pop_est_1981_2020.sav"))
-
-
-# Select only the HSCPs for NHS Highland & years since 2015
-lookup <-
-  lookup %>%
-  filter(HSCP2019 == "S37000004" | HSCP2019 == "S37000016") %>%
-  filter(Year > 2015 | Year == 2015) %>%
+population_lookup <- readr::read_rds(
+  fs::path(
+    get_lookups_dir(),
+    "Populations",
+    "Estimates",
+    "HSCP2019_pop_est_1981_2020.rds"
+  )
+) %>%
+  # Select only the HSCPs for NHS Highland & years since 2015
+  filter(
+    hscp2019 %in% c("S37000004", "S37000016"),
+    year >= 2015
+  ) %>%
   # Create year as FY = YYYY from CCYY.
-  rename(calendar_year = Year) %>%
-  mutate(year = convert_year_to_fyyear(calendar_year))
-
-
-## outfile ##
-outfile <-
-  lookup %>%
-  select(year, HSCP2019, Pop) %>%
-  group_by(year, HSCP2019) %>%
-  summarise(pop = sum(Pop)) %>%
-  # HSCP name
-  mutate(HSCPName = hscp_to_hscpnames(HSCP2019)) %>%
-  # add Health Board code
-  mutate(HB2019 = "S08000022") %>%
-  # get total pop
-  group_by(year, HB2019) %>%
+  rename(calendar_year = year) %>%
+  mutate(year = convert_year_to_fyyear(calendar_year)) %>%
+  group_by(year, hscp2019name) %>%
+  summarise(pop = sum(pop)) %>%
   mutate(total_pop = sum(pop)) %>%
+  ungroup() %>%
+  # add Health Board code
+  mutate(hb2019 = "S08000022") %>%
   ## compute proportion ##
-  mutate(pop_proportion = pop / total_pop) %>%
-  mutate(pop_pct = pop_proportion * 100) %>%
+  mutate(
+    pop_proportion = pop / total_pop,
+    pop_pct = pop_proportion * 100
+  ) %>%
   ## Argyll and Bute is the only HSCP in NHS Highland that submits data ##
-  filter(HSCPName == "Argyll and Bute")
+  filter(hscp2019name == "Argyll and Bute")
 
 
 # Join files -------------------------------------------
 
 ## match files ##
 
-data <-
-  outfile %>%
-  full_join(dn_raw_costs_contacts, by = c("HB2019", "year")) %>%
+data <- full_join(dn_raw_costs_contacts,
+  population_lookup,
+  by = c("hb2019", "year")
+) %>%
   # recode NA pop_proportion with 1
   mutate(pop_proportion = replace_na(pop_proportion, 1)) %>%
   ## total net cost ##
   mutate(cost_total_net = ((cost * 1000) / (number_of_contacts / pop_proportion))) %>%
-  # sort by HB2019
-  arrange(HB2019) %>%
+  # sort by HB2019 and year
+  arrange(hb2019, year) %>%
   # keep only records with cost
   filter(!is.na(cost_total_net))
 
 
-
 # Fix incomplete submissions ------------------------------------------
 
-# If a Partnership has abnormally low contacts this will affect the cost so use the
-# previous year until we have a complete submission
+# If a Partnership has abnormally low contacts this will
+# affect the cost so use the previous year
+# until we have a complete submission
 
-# explore the trends
+## explore the trends
 
 data <-
   data %>%
-  group_by(Board_Name) %>%
+  group_by(board_name) %>%
   mutate(max_contacts = max(number_of_contacts)) %>%
   mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
   ungroup()
 
 # plot #
-ggplot(data = data, aes(x = year, y = pct_of_max, group = Board_Name)) +
-  geom_line(aes(color = Board_Name)) +
+ggplot(data = data, aes(x = year, y = pct_of_max, group = board_name)) +
+  geom_line(aes(color = board_name)) +
   labs(color = "NHS Board", x = "Year")
 
 
@@ -168,21 +164,21 @@ data <-
   mutate(uplift = 0) %>%
   mutate(
     tempyear1 = case_when(
-      Board_Name == "NHS Highland" & year == "1617" ~ "1819",
-      Board_Name == "NHS Tayside" & year == "1617" ~ "1718",
-      Board_Name == "NHS Forth Valley" & year == "1819" ~ "1920",
-      Board_Name == "NHS Greater Glasgow & Clyde" & year == "1819" ~ "1920"
+      board_name == "NHS Highland" & year == "1617" ~ "1819",
+      board_name == "NHS Tayside" & year == "1617" ~ "1718",
+      board_name == "NHS Forth Valley" & year == "1819" ~ "1920",
+      board_name == "NHS Greater Glasgow & Clyde" & year == "1819" ~ "1920"
     ),
-    tempyear2 = case_when(Board_Name == "NHS Highland" & year == "1617" ~ "1920")
+    tempyear2 = case_when(board_name == "NHS Highland" & year == "1617" ~ "1920")
   ) %>%
   mutate(
     uplift1 = case_when(
-      Board_Name == "NHS Highland" & tempyear1 == "1819" ~ 2,
-      Board_Name == "NHS Tayside" & tempyear1 == "1718" ~ 1,
-      Board_Name == "NHS Forth Valley" & tempyear1 == "1920" ~ 1,
-      Board_Name == "NHS Greater Glasgow & Clyde" & tempyear1 == "1920" ~ 1
+      board_name == "NHS Highland" & tempyear1 == "1819" ~ 2,
+      board_name == "NHS Tayside" & tempyear1 == "1718" ~ 1,
+      board_name == "NHS Forth Valley" & tempyear1 == "1920" ~ 1,
+      board_name == "NHS Greater Glasgow & Clyde" & tempyear1 == "1920" ~ 1
     ),
-    uplift2 = case_when(Board_Name == "NHS Highland" & tempyear2 == "1920" ~ 3)
+    uplift2 = case_when(board_name == "NHS Highland" & tempyear2 == "1920" ~ 3)
   ) %>%
   # data - wide to long
   pivot_longer(
@@ -205,12 +201,12 @@ data <-
   bind_rows(
     data,
     map_df(1:5, ~
-    data %>%
-      filter(year == latest_year) %>%
-      mutate(
-        cost_total_net = cost_total_net * (1.01)^.x,
-        year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-      ))
+      data %>%
+        filter(year == latest_year) %>%
+        mutate(
+          cost_total_net = cost_total_net * (1.01)^.x,
+          year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+        ))
   )
 
 
