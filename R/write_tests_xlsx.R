@@ -6,7 +6,6 @@
 #' @return a workbook containing comparison tests with each dataset with a new tab
 #'
 #' @export
-#'
 write_tests_xlsx <- function(comparison_data, name) {
   source_tests_path <- fs::path(get_slf_dir(), "Tests", glue::glue(latest_update(), "_tests.xlsx"))
 
