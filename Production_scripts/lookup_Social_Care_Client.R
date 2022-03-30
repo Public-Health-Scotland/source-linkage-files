@@ -62,86 +62,87 @@ client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
 # create numeric flags
 client_data <-
   client_data %>%
-  mutate(
-    dementia = as.numeric(dementia),
-    mental_health_problems = as.numeric(mental_health_problems),
-    learning_disability = as.numeric(learning_disability),
-    physical_and_sensory_disability = as.numeric(physical_and_sensory_disability),
-    drugs = as.numeric(drugs),
-    alcohol = as.numeric(alcohol),
-    palliative_care = as.numeric(palliative_care),
-    carer = as.numeric(carer),
-    elderly_frail = as.numeric(elderly_frail),
-    neurological_condition = as.numeric(neurological_condition),
-    autism = as.numeric(autism),
-    other_vulnerable_groups = as.numeric(other_vulnerable_groups),
-    living_alone = as.numeric(living_alone),
-    support_from_unpaid_carer = as.numeric(support_from_unpaid_carer),
-    social_worker = as.numeric(social_worker),
-    type_of_housing = as.numeric(type_of_housing),
-    meals = as.numeric(meals),
-    day_care = as.numeric(day_care)
-  )
+  mutate(across(c(
+    .data$dementia,
+    .data$mental_health_problems,
+    .data$learning_disability,
+    .data$physical_and_sensory_disability,
+    .data$drugs,
+    .data$alcohol,
+    .data$palliative_care,
+    .data$carer,
+    .data$elderly_frail,
+    .data$neurological_condition,
+    .data$autism,
+    .data$other_vulnerable_groups,
+    .data$living_alone,
+    .data$support_from_unpaid_carer,
+    .data$social_worker,
+    .data$type_of_housing,
+    .data$meals,
+    .data$day_care
+  ), as.numeric))
 
 
 # Data Cleaning ---------------------------------------
 
 client_clean <-
   client_data %>%
-  # sort
-  arrange(sending_location, social_care_id) %>%
   # group
-  group_by(sending_location, social_care_id) %>%
+  group_by(.data$sending_location, .data$social_care_id) %>%
   # summarise to take last submission
-  summarise(
-    dementia = last(dementia),
-    mental_health_problems = last(mental_health_problems),
-    learning_disability = last(learning_disability),
-    physical_and_sensory_disability = last(physical_and_sensory_disability),
-    drugs = last(drugs),
-    alcohol = last(alcohol),
-    palliative_care = last(palliative_care),
-    carer = last(carer),
-    elderly_frail = last(elderly_frail),
-    neurological_condition = last(neurological_condition),
-    autism = last(autism),
-    other_vulnerable_groups = last(other_vulnerable_groups),
-    living_alone = last(living_alone),
-    support_from_unpaid_carer = last(support_from_unpaid_carer),
-    social_worker = last(social_worker),
-    type_of_housing = last(type_of_housing),
-    meals = last(meals),
-    day_care = last(day_care)
-  ) %>%
+  summarise(across(
+    c(
+      .data$dementia,
+      .data$mental_health_problems,
+      .data$learning_disability,
+      .data$physical_and_sensory_disability,
+      .data$drugs,
+      .data$alcohol,
+      .data$palliative_care,
+      .data$carer,
+      .data$elderly_frail,
+      .data$neurological_condition,
+      .data$autism,
+      .data$other_vulnerable_groups,
+      .data$living_alone,
+      .data$support_from_unpaid_carer,
+      .data$social_worker,
+      .data$type_of_housing,
+      .data$meals,
+      .data$day_care
+    ),
+    last
+  )) %>%
+  ungroup() %>%
   # recode missing with values
   mutate(across(
-    .cols = c(
-      "support_from_unpaid_carer",
-      "social_worker",
-      "meals",
-      "living_alone",
-      "day_care"
+    c(
+      .data$support_from_unpaid_carer,
+      .data$social_worker,
+      .data$meals,
+      .data$living_alone,
+      .data$day_care
     ),
-    .x = replace_na(.x, 9)
-  )) %>%
-  mutate(
-    type_of_housing = replace_na(type_of_housing, 6)
+    replace_na, 9
+  ),
+  type_of_housing = replace_na(.data$type_of_housing, 6)
   ) %>%
-# factor labels
+  # factor labels
   mutate(across(
     c(
-      dementia,
-      mental_health_problems,
-      learning_disability,
-      physical_and_sensory_disability,
-      drugs,
-      alcohol,
-      palliative_care,
-      carer,
-      elderly_frail,
-      neurological_condition,
-      autism,
-      other_vulnerable_groups
+      .data$dementia,
+      .data$mental_health_problems,
+      .data$learning_disability,
+      .data$physical_and_sensory_disability,
+      .data$drugs,
+      .data$alcohol,
+      .data$palliative_care,
+      .data$carer,
+      .data$elderly_frail,
+      .data$neurological_condition,
+      .data$autism,
+      .data$other_vulnerable_groups
     ),
     factor,
     levels = c(0, 1),
@@ -149,29 +150,32 @@ client_clean <-
   ),
   across(
     c(
-      living_alone,
-      support_from_unpaid_carer,
-      social_worker,
-      meals,
-      day_care
+      .data$living_alone,
+      .data$support_from_unpaid_carer,
+      .data$social_worker,
+      .data$meals,
+      .data$day_care
     ),
     factor,
     levels = c(0, 1, 9),
     labels = c("No", "Yes", "Not Known")
   ),
-  type_of_housing = factor(type_of_housing,
+  type_of_housing = factor(.data$type_of_housing,
     levels = c(1:6),
     labels = c(
-      "Mainstream", "Supported", "Long Stay Care Home",
-      "Hospital or other medical establishment", "Other",
+      "Mainstream",
+      "Supported",
+      "Long Stay Care Home",
+      "Hospital or other medical establishment",
+      "Other",
       "Not Known"
     )
   )
   ) %>%
-# rename variables
+  # rename variables
   rename_with(
-    .cols = -c(sending_location, social_care_id),
-    ~ paste0("sc_", .x)
+    .cols = -c(.data$sending_location, .data$social_care_id),
+    .fn = ~ paste0("sc_", .x)
   )
 
 
@@ -180,26 +184,32 @@ outfile <-
   client_clean %>%
   # reorder
   select(
-    sending_location, social_care_id, sc_living_alone,
-    sc_support_from_unpaid_carer, sc_social_worker,
-    sc_type_of_housing, sc_meals, sc_day_care
+    .data$sending_location,
+    .data$social_care_id,
+    .data$sc_living_alone,
+    .data$sc_support_from_unpaid_carer,
+    .data$sc_social_worker,
+    .data$sc_type_of_housing,
+    .data$sc_meals,
+    .data$sc_day_care
   )
 
-
-# .zsav
-haven::write_sav(outfile,
-                 get_source_extract_path(year = latest_year,
-                                         type = "Client",
-                                         extension = "zsav"))
-
-# .rds file
-readr::write_rds(outfile,
-                 get_source_extract_path(year = latest_year,
-                                         type = "Client",
-                                         extension = "rds"
-                                         ),
+outfile %>%
+  # .zsav
+  haven::write_sav(get_source_extract_path(
+    year = latest_year,
+    type = "Client",
+    ext = "zsav"
+  ),
+  compress = TRUE
+  ) %>%
+  # .rds file
+  readr::write_rds(get_source_extract_path(
+    year = latest_year,
+    type = "Client",
+    ext = "rds"
+  ),
   compress = "gz"
-)
+  )
 
 ## End of Script ---------------------------------------
-
