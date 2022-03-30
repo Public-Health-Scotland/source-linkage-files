@@ -1,28 +1,29 @@
-#' Create Health Board Cost test flags
+#' Create Health Board cost test flags
 #'
 #' @param data the data containing a health board variable e.g. HB2019
-#' @param cost_var cost to be entered into the health board cost e.g cost_total_net
+#' @param hb_var Health board variable e.g. HB2019 HB2018 hbpraccode
+#' @param cost_var Cost variable e.g. cost_total_net
 #'
-#' @return a dataframe with flag (1 or 0) for each Health Board
+#' @return a dataframe with cost(or 0) for each Health Board
 #' @export
-#' @importFrom dplyr mutate if_else
+#' @importFrom dplyr mutate case_when
 #' @family create test flags functions
-create_hb_costs_test_flags <- function(data, cost_var) {
+create_hb_cost_test_flags <- function(data, hb_var, cost_var) {
   data <- data %>%
     mutate(
-      NHS_Ayrshire_and_Arran_cost = if_else(NHS_Ayrshire_and_Arran == 1, {{ cost_var }}, 0),
-      NHS_Borders_cost = if_else(NHS_Borders == 1, {{ cost_var }}, 0),
-      NHS_Dumfries_and_Galloway_cost = if_else(NHS_Dumfries_and_Galloway == 1, {{ cost_var }}, 0),
-      NHS_Forth_Valley_cost = if_else(NHS_Forth_Valley == 1, {{ cost_var }}, 0),
-      NHS_Grampian_cost = if_else(NHS_Grampian == 1, {{ cost_var }}, 0),
-      NHS_Highland_cost = if_else(NHS_Highland == 1, {{ cost_var }}, 0),
-      NHS_Lothian_cost = if_else(NHS_Lothian == 1, {{ cost_var }}, 0),
-      NHS_Orkney_cost = if_else(NHS_Orkney == 1, {{ cost_var }}, 0),
-      NHS_Shetland_cost = if_else(NHS_Shetland == 1, {{ cost_var }}, 0),
-      NHS_Western_Isles_cost = if_else(NHS_Western_Isles == 1, {{ cost_var }}, 0),
-      NHS_Fife_cost = if_else(NHS_Fife == 1, {{ cost_var }}, 0),
-      NHS_Tayside_cost = if_else(NHS_Tayside == 1, {{ cost_var }}, 0),
-      NHS_Greater_Glasgow_and_Clyde_cost = if_else(NHS_Greater_Glasgow_and_Clyde == 1, {{ cost_var }}, 0),
-      NHS_Lanarkshire_cost = if_else(NHS_Lanarkshire == 1, {{ cost_var }}, 0)
+      NHS_Ayrshire_and_Arran_cost = case_when({{ hb_var }} == "S08000015" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Borders_cost = case_when({{ hb_var }} == "S08000016" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Dumfries_and_Galloway_cost = case_when({{ hb_var }} == "S08000017" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Forth_Valley_cost = case_when({{ hb_var }} == "S08000019" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Grampian_cost = case_when({{ hb_var }} == "S08000020" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Highland_cost = case_when({{ hb_var }} == "S08000022" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Lothian_cost = case_when({{ hb_var }} == "S08000024" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Orkney_cost = case_when({{ hb_var }} == "S08000025" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Shetland_cost = case_when({{ hb_var }} == "S08000026" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Western_Isles_cost = case_when({{ hb_var }} == "S08000028" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Fife_cost = case_when({{ hb_var }} == "S08000029" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Tayside_cost = case_when({{ hb_var }} == "S08000030" ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Greater_Glasgow_and_Clyde_cost = case_when({{ hb_var }} %in% c("S08000031", "S08000021") ~ {{cost_var}}, TRUE ~ 0),
+      NHS_Lanarkshire_cost = case_when({{ hb_var }} %in% c("S08000032", "S08000023") ~ {{cost_var}}, TRUE ~ 0)
     )
 }
