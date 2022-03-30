@@ -131,4 +131,14 @@ outfile %>%
 outfile %>%
   readr::write_rds(get_source_extract_path(year, "AE", ext = "rds"))
 
+
+# Housekeeping---------------------------------------
+
+# Delete temp a&e file
+file.remove(paste0(
+  get_year_dir(year = year),
+  "/a&e_data-20",
+  year, ".rds"
+))
+
 # End of Script #
