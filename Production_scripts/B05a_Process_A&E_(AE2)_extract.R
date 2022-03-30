@@ -11,9 +11,7 @@
 # Load packages
 library(dplyr)
 library(tidyr)
-library(ggplot2)
 library(createslf)
-library(slfhelper)
 library(readr)
 
 
@@ -149,7 +147,14 @@ ae_clean <- ae_file %>%
     feb_cost = if_else(month == "02", cost_total_net, 0),
     mar_cost = if_else(month == "03", cost_total_net, 0)
   ) %>%
-  # A&E value labels
+  # sort for linking on CUP marker
+  arrange(record_keydate1, keyTime1, case_ref_number)
+
+
+# Add value labels---------------------------------------------------
+
+# A&E value labels
+ae_clean <- ae_clean %>%
   mutate(
     ae_arrivalmode = factor(ae_arrivalmode,
       levels = c("01", "02", "03", "04", "05", "06", "07", "08", "98", "99"),
@@ -866,13 +871,11 @@ ae_clean <- ae_file %>%
         "Multiple body regions"
       )
     )
-  ) %>%
-  # sort for linking on CUP marker
-  arrange(record_keydate1, keyTime1, case_ref_number)
+  )
 
 ## save outfile ---------------------------------------
 outfile <-
-  ae_episode_extract %>%
+  ae_clean %>%
   select(
     year,
     recid,
