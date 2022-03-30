@@ -4,6 +4,7 @@
 #' @param name of dataset tests
 #'
 #' @return a workbook containing comparison tests with each dataset with a new tab
+#'
 #' @export
 #'
 write_tests_xlsx <- function(comparison_data, name) {
@@ -11,22 +12,22 @@ write_tests_xlsx <- function(comparison_data, name) {
 
   if (fs::file_exists(source_tests_path)) {
     # Load excel workbook
-    wb <- loadWorkbook(source_tests_path)
+    wb <- openxlsx::loadWorkbook(source_tests_path)
   } else {
     # create excelworkbook
-    wb <- createWorkbook()
+    wb <- openxlsx::createWorkbook()
   }
 
   # add a new sheet for tests
-  addWorksheet(wb, name)
+  openxlsx::addWorksheet(wb, name)
   # write comparison output to new sheet
-  writeData(
+  openxlsx::writeData(
     wb,
     name,
     comparison_data
   )
   # save output
-  saveWorkbook(wb,
+  openxlsx::saveWorkbook(wb,
     source_tests_path,
     overwrite = TRUE
   )
