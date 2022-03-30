@@ -3,7 +3,7 @@
 #' @param comparison_data produced by \code{\link{produce_test_comparison}}
 #' @param name of dataset tests
 #'
-#' @return a workbook containing comparison tests with each dataset with a new tab
+#' @return source_tests_path to the xlsx file location
 #'
 #' @export
 write_tests_xlsx <- function(comparison_data, name) {
@@ -30,4 +30,6 @@ write_tests_xlsx <- function(comparison_data, name) {
     source_tests_path,
     overwrite = TRUE
   )
+
+  return(source_tests_path)
 }
