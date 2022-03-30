@@ -20,7 +20,7 @@ Create Health Board test flags
 \seealso{
 Other create test flags functions: 
 \code{\link{create_demog_test_flags}()},
-\code{\link{create_hb_costs_test_flags}()},
+\code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hscp_test_flags}()}
 }
 \concept{create test flags functions}
