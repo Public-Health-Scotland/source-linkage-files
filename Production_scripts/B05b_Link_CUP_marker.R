@@ -45,7 +45,7 @@ ae_cup_file <- readr::read_csv(
   ae_cup_clean() <- ae_cup_file %>%
   arrange(record_keydate1, keyTime1, case_ref_number) %>%
   group_by(record_keydate1, keyTime1, case_ref_number) %>%
-  mutate(
+  summarise(
     cup_marker = first(cup_marker),
     cup_pathway = first(cup_pathway)
   ) %>%
