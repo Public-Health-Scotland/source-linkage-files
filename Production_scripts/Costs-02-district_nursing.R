@@ -32,13 +32,11 @@ library(createslf)
 # read data in
 current_file <- haven::read_sav(get_dn_costs_path())
 
-# write data to folder
-# .zsav
-haven::write_sav(current_file,
-  paste0(get_slf_dir(), "/Costs/Cost_DN_Lookup_pre", latest_update(), ".zsav"),
-  compress = TRUE
+# Create a copy for comparison
+fs::file_copy(
+  get_dn_costs_path(),
+  get_dn_costs_path(update = latest_update())
 )
-
 
 # Read in cost workbook ---------------------------------------
 
