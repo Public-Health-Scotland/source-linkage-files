@@ -4,7 +4,7 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
+# Input - DN_Costs.xlsx
 # Description - Create Lookup for District Nursing Costs.
 #
 # Download latest costs file from Cost Book website
@@ -12,14 +12,14 @@
 #
 # Check and add costs to the Excel file 'DN_Costs.xlsx'. ##
 #
-# Extract numbers of contacts from the CHAD - District Nursing Datamart using
-# the query: DN-Contacts-Numbers-for-Costs. This should be run/scheduled and downloaded as a .csv
-# Check the numbers in this file as some data completeness issues may mean the numbers can't be used to create costs.
-#
+# Extract numbers of contacts from the CHAD - District Nursing Datamart
+# using the query: DN-Contacts-Numbers-for-Costs.
+# This should be run/scheduled and downloaded as a .csv
+# Check the numbers in this file as some data completeness issues
+# may mean the numbers can't be used to create costs.
 #####################################################
 
 # Load packages #
-
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -186,7 +186,7 @@ data <-
     ),
     uplift2 = case_when(Board_Name == "NHS Highland" & tempyear2 == "1920" ~ 3)
   ) %>%
-# data - wide to long
+  # data - wide to long
   pivot_longer(
     c("year", contains("tempyear")),
     values_to = "year",
