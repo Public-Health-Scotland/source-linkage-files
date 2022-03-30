@@ -924,12 +924,24 @@ outfile <-
     case_ref_number
   )
 
-# Save as zsav file
-outfile %>%
-  readr::write_rds(get_source_extract_path(year, "AE", ext = "zsav"))
+# Save a temp file for matching (.zsav)
+haven::write_sav(outfile,
+  paste0(
+    get_year_dir(year = latest_year),
+    "/a&e_for_source-20",
+    latest_year, ".zsav"
+  ),
+  compress = TRUE
+)
 
-# Save as rds file
-outfile %>%
-  readr::write_rds(get_source_extract_path(year, "AE", ext = "rds"))
+# Save a temp file for matching (.rds)
+readr::write_rds(outfile,
+  paste0(
+    get_year_dir(year = latest_year),
+    "/a&e_for_source-20",
+    latest_year, ".rds"
+  ),
+  compress = "gz"
+)
 
 # End of Script #
