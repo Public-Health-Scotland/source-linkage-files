@@ -156,26 +156,10 @@ mutate(cij_ipdc = case_when(
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
-
+  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
 # Calculate beddays
-#work out cost month
+  create_monthly_beddays(year, record_keydate1, record_keydate2)
 
-beddays<- maternity_clean %>%
-  mutate(month_number =  month(record_keydate2,label = FALSE),
-         quarter = quarter(record_keydate2, fiscal_start = 4),
-         month_start = floor_date(ymd(record_keydate2), 'month'),
-         month_end = ceiling_date(ymd(record_keydate2), 'month') - days (1)) %>%
-  mutate(fy_month = case_when(month_number == 4 ~ 1,
-                              month_number == 5 ~ 2,
-                              month_number == 6 ~ 3,
-                              month_number == 7 ~ 4,
-                              month_number == 8 ~ 5,
-                              month_number == 9 ~ 6,
-                              month_number == 10 ~ 7,
-                              month_number == 11 ~ 8,
-                              month_number == 12 ~ 9,
-                              month_number == 1 ~ 10,
-                              month_number == 2 ~ 11,
-                              month_number == 1 ~ 12))
+
+
 
