@@ -154,7 +154,7 @@ mutate(cij_ipdc = case_when(
 )) %>%
   # Recode GP practice into 5 digit number
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
-  eng_gp_to_dummy(gpprac) %>%
+  convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
 
