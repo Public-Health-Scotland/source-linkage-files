@@ -24,22 +24,39 @@ year_alt <- convert_fyyear_to_year(year)
 # set-up conection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
-
 # read in data - social care 2 client
 client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
   select(
-    sending_location, social_care_id, financial_year, financial_quarter,
-    dementia, mental_health_problems, learning_disability,
-    physical_and_sensory_disability, drugs, alcohol, palliative_care,
-    carer, elderly_frail, neurological_condition, autism,
-    other_vulnerable_groups, living_alone, support_from_unpaid_carer,
-    social_worker, type_of_housing, meals, day_care
+    sending_location,
+    social_care_id,
+    financial_year,
+    financial_quarter,
+    dementia,
+    mental_health_problems,
+    learning_disability,
+    physical_and_sensory_disability,
+    drugs,
+    alcohol,
+    palliative_care,
+    carer,
+    elderly_frail,
+    neurological_condition,
+    autism,
+    other_vulnerable_groups,
+    living_alone,
+    support_from_unpaid_carer,
+    social_worker,
+    type_of_housing,
+    meals,
+    day_care
   ) %>%
   filter(financial_year == year_alt) %>%
   arrange(
-    sending_location, social_care_id, financial_year,
+    sending_location,
+    social_care_id,
+    financial_year,
     financial_quarter
-  )  %>%
+  ) %>%
   collect()
 
 # create numeric flags
