@@ -4,7 +4,7 @@
 \alias{create_demog_test_flags}
 \title{Create demographic test flags}
 \usage{
-create_demog_test_flags(data, postcode = TRUE)
+create_demog_test_flags(data)
 }
 \arguments{
 \item{data}{a dataframe containing demographic variables e.g. chi}
