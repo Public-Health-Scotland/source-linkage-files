@@ -29,7 +29,12 @@ get_source_extract_path <- function(year,
   type <- match.arg(type)
   ext <- match.arg(ext)
 
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
+  year_dir <- fs::path(
+    "/conf",
+    "sourcedev",
+    "Source_Linkage_File_Updates",
+    year
+  )
 
   file_name <- dplyr::case_when(
     type == "Acute" ~ "acute_for_source",
