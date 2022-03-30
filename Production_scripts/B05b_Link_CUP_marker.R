@@ -39,10 +39,10 @@ ae_cup_file <- readr::read_csv(
   )
 
 
-  # Data Cleaning---------------------------------------
+# Data Cleaning---------------------------------------
 
+ae_cup_clean <- ae_cup_file %>%
   # Sort for linking and remove any duplicates
-  ae_cup_clean() <- ae_cup_file %>%
   arrange(record_keydate1, keyTime1, case_ref_number) %>%
   group_by(record_keydate1, keyTime1, case_ref_number) %>%
   summarise(
@@ -56,17 +56,16 @@ ae_cup_file <- readr::read_csv(
 
 # Read TEMP source A&E file
 source_ae <- readr::read_rds(
-  outfile,
   paste0(
-    get_year_dir(year = latest_year),
-    "/a&e_for_source-20",
-    latest_year, ".rds"
+    get_year_dir(year = year),
+    "/a&e_data-20",
+    year, ".rds"
   )
 )
 
 # Join data
 matched_ae_data <- source_ae %>%
-  full_join(ae_cup_file, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
+  full_join(ae_cup_clean, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
   arrange(chi, record_keydate1, keyTime1, record_keydate2, keyTime2)
 
 

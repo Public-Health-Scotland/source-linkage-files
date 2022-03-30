@@ -930,8 +930,8 @@ outfile <-
 # Save a temp file for matching (.zsav)
 haven::write_sav(outfile,
   paste0(
-    get_year_dir(year = latest_year),
-    "/a&e_for_source-20",
+    get_year_dir(year = year),
+    "/a&e_data-20",
     latest_year, ".zsav"
   ),
   compress = TRUE
@@ -940,9 +940,9 @@ haven::write_sav(outfile,
 # Save a temp file for matching (.rds)
 readr::write_rds(outfile,
   paste0(
-    get_year_dir(year = latest_year),
-    "/a&e_for_source-20",
-    latest_year, ".rds"
+    get_year_dir(year = year),
+    "/a&e_data-20",
+    year, ".rds"
   ),
   compress = "gz"
 )
