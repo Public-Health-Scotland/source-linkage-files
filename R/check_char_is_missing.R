@@ -6,7 +6,9 @@
 #' @export
 is_missing <- function(x) {
   if (typeof(x) != "character") {
-    rlang::abort(message = glue::glue("You must supply a character vector, but {class(x)} was supplied."))
+    rlang::abort(
+      message = glue::glue("You must supply a character vector, but {class(x)} was supplied.")
+    )
   }
 
   return(is.na(x) | x == "")

@@ -8,7 +8,8 @@ Long Term Conditions extract}
 get_it_ltc_path(it_reference = it_extract_ref(), ...)
 }
 \arguments{
-\item{it_reference}{The IT reference to use, defaults to \code{\link{it_extract_ref}}}
+\item{it_reference}{The IT reference to use,
+defaults to \code{\link{it_extract_ref}}}
 
 \item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
