@@ -28,6 +28,7 @@ Imports:
     openxlsx (>= 4.2.5),
     phsmethods (>= 0.2.0),
     phsopendata (>= 0.0.0.900),
+    purrr,
     readr (>= 2.1.0),
     rlang (>= 0.4.0),
     rstudioapi,
