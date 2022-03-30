@@ -18,7 +18,8 @@ library(createslf)
 # Read in data---------------------------------------
 
 # specify latest year
-latest_year <- 1920
+year <- 1920
+year_alt <- convert_fyyear_to_year(year)
 
 # set-up conection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
@@ -34,7 +35,7 @@ client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
     other_vulnerable_groups, living_alone, support_from_unpaid_carer,
     social_worker, type_of_housing, meals, day_care
   ) %>%
-  filter(financial_year == latest_year) %>%
+  filter(financial_year == year_alt) %>%
   arrange(
     sending_location, social_care_id, financial_year,
     financial_quarter
