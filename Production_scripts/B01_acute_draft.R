@@ -320,9 +320,13 @@ outfile <- final_acute_file %>%
   ) %>%
   arrange(by = chi, record_keydate1)
 
-# Save out
+# Save as zsav file
 outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Acute"))
+  readr::write_rds(get_source_extract_path(year, "Acute", ext = "zsav"))
+
+# Save as rds file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "Acute", ext = "rds"))
 
 
 ## End of Script ---------------------------------------
