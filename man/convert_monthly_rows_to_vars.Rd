@@ -4,14 +4,20 @@
 \alias{convert_monthly_rows_to_vars}
 \title{Convert monthly rows to variables}
 \usage{
-convert_monthly_rows_to_vars(data, uri_var, month_var, cost_var, beddays_var)
+convert_monthly_rows_to_vars(
+  data,
+  uri_var,
+  month_num_var,
+  cost_var,
+  beddays_var
+)
 }
 \arguments{
 \item{data}{a dataframe containing cost and bed day variables}
 
 \item{uri_var}{a unique variable for matching e.g. uri}
 
-\item{month_var}{a variable containing month number e.g. costmonthnum}
+\item{month_num_var}{a variable containing month number e.g. costmonthnum}
 
 \item{cost_var}{a variable containing cost information e.g. cost_total_net}
 
