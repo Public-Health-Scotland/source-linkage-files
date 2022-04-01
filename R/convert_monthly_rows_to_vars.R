@@ -8,7 +8,7 @@
 #'
 #' @return A dataframe with monthly cost and bed day variables
 #'
-convert_monthly_rows_to_vars <- function(data, uri_var, month_num_var, cost_var, beddays_var){
+convert_monthly_rows_to_vars <- function(data, uri_var, month_num_var, cost_var, beddays_var) {
 
     data %>%
     dplyr::mutate(month_name = tolower(month.abb[{{ month_num_var }}])) %>%
@@ -21,5 +21,4 @@ convert_monthly_rows_to_vars <- function(data, uri_var, month_num_var, cost_var,
       values_from = c(.data$cost, .data$beddays),
       values_fill = 0.00
     )
-
 }
