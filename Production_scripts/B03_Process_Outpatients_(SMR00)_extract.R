@@ -23,7 +23,7 @@ year <- 1920
 
 # Read BOXI extract
 outpatients_file <- readr::read_csv(
-  file = get_boxi_extract_path(year, "Outpatient"), n_max = 2000,
+  file = get_boxi_extract_path(year, "Outpatient"),
   col_type = cols(
     `Clinic Date Fin Year`= col_double(),
     `Clinic Date (00)`= col_date(format = "%Y/%m/%d %T"),
@@ -146,7 +146,7 @@ outpatients_clean <- outpatients_clean %>%
 ## save outfile ---------------------------------------
 
 outfile <-
-  outpatient_episode_extract %>%
+  outpatients_clean %>%
   select(
     year,
     recid,
@@ -199,25 +199,13 @@ outfile <-
     uri
   )
 
-# .zsav
-haven::write_sav(outfile,
-  paste0(
-    get_year_dir(year = latest_year),
-    "/outpatient_for_source-20",
-    latest_year, ".zsav"
-  ),
-  compress = TRUE
-)
+# Save as zsav file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "Outpatient", ext = "zsav"))
 
-# .rds file
-readr::write_rds(outfile,
-  paste0(
-    get_year_dir(year = latest_year),
-    "/outpatient_for_source-20",
-    latest_year, ".zsav"
-  ),
-  compress = "gz"
-)
+# Save as rds file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "Outpatients", ext = "rds"))
+
 
 # End of Script #
-
