@@ -17,7 +17,7 @@ library(phsmethods)
 # Read in data ---------------------------------------
 
 # latest year
-year <- 1920
+year <- "1920"
 
 pis_file <- readr::read_csv(
   get_it_prescribing_path(year),
@@ -52,7 +52,7 @@ pis_clean <- pis_file %>%
   # create variables recid and year
   mutate(
     recid = "PIS",
-    year = latest_year
+    year = year
   ) %>%
   # Recode GP Practice into a 5 digit number
   # assume that if it starts with a letter it's an English practice and so recode to 99995
@@ -75,7 +75,7 @@ outfile <-
 # Save as .zsav file
 haven::write_sav(outfile,
   get_source_extract_path(
-    year = latest_year,
+    year = year,
     type = "PIS",
     ext = "zsav"
   ),
@@ -85,7 +85,7 @@ haven::write_sav(outfile,
 # Save as .rds file
 readr::write_rds(outfile,
   get_source_extract_path(
-    year = latest_year,
+    year = year,
     type = "PIS",
     ext = "rds"
   ),
