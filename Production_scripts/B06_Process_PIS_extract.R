@@ -21,15 +21,14 @@ year <- "1920"
 
 pis_file <- readr::read_csv(
   get_it_prescribing_path(year),
-  col_type = cols(
+  col_type = cols_only(
     `Pat UPI [C]` = col_character(),
     `Pat DoB [C]` = col_date(format = "%d-%m-%Y"),
     `Pat Gender` = col_double(),
     `Pat Postcode [C]` = col_character(),
     `Practice Code` = col_character(),
     `Number of Dispensed Items` = col_double(),
-    `DI Paid NIC excl. BB` = col_double(),
-    `DI Paid GIC excl. BB` = col_double()
+    `DI Paid NIC excl. BB` = col_double()
   )
 ) %>%
   # Rename variables
@@ -69,7 +68,6 @@ outfile <-
   pis_extract %>%
   # sort by chi
   arrange(chi) %>%
-  select(-c(`DI Paid GIC excl. BB`))
 
 
 # Save as .zsav file
