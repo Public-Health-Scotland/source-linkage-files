@@ -8,40 +8,60 @@
 # Description - Process Outpatients extract
 #####################################################
 
-
+# Load packages
 library(dplyr)
 library(purrr)
 library(vroom)
 library(tidyr)
-library(ggplot2)
 library(createslf)
-library(slfhelper)
 
 
-## Read in CSV output file ##
+# Read in data---------------------------------------
 
-# latest year
-latest_year <- 1920
+# Specify year
+year <- 1920
 
-# function here till PR pushed
-get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
-
-  year_extracts_dir <- fs::path(year_dir, "Extracts")
-
-  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
-}
-
-
-outpatient_episode_extract <- readr::read_csv(
-  paste0(
-    get_year_dir(year = latest_year),
-    "/Extracts/Outpatients-episode-level-extract-",
-    paste0(convert_fyyear_to_year(latest_year), substr(latest_year, 3, 4)),
-    ".csv"
-  )
-) %>%
-  # rename
+# Read BOXI extract
+outpatients_file <- readr::read_csv(
+  file = get_boxi_extract_path(year, "Outpatient"), n_max = 2000,
+  col_type = cols(
+    `Clinic Date Fin Year`= col_double(),
+    `Clinic Date (00)`= col_date(format = "%Y/%m/%d %T"),
+    `Episode Record Key (SMR00) [C]`= col_character(),
+    `Pat UPI`= col_character(),
+    `Pat Gender Code`= col_double(),
+    `Pat Date Of Birth [C]`= col_date(format = "%Y/%m/%d %T"),
+    `Practice Location Code`= col_character(),
+    `Practice NHS Board Code - current`= col_character(),
+    `Geo Postcode [C]`= col_character(),
+    `NHS Board of Residence Code - current`= col_character(),
+    `Geo Council Area Code`= col_character(),
+    `Treatment Location Code`= col_character(),
+    `Treatment NHS Board Code - current`= col_character(),
+    `Operation 1A Code (4 char)`= col_character(),
+    `Operation 1B Code (4 char)`= col_character(),
+    `Date of Main Operation(00)`= col_character(),
+    `Operation 2A Code (4 char)`= col_character(),
+    `Operation 2B Code (4 char)`= col_character(),
+    `Date of Operation 2 (00)`= col_date(format = "%Y/%m/%d %T"),
+    `Specialty Classificat. 1/4/97 Code`= col_character(),
+    `Significant Facility Code`= col_character(),
+    `Consultant/HCP Code`= col_character(),
+    `Patient Category Code`= col_character(),
+    `Referral Source Code`= col_character(),
+    `Referral Type Code`= col_double(),
+    `Clinic Type Code`= col_double(),
+    `Clinic Attendance (Status) Code`= col_double(),
+    `Age at Midpoint of Financial Year`= col_double(),
+    `Alcohol Related Admission`= col_character(),
+    `Substance Misuse Related Admission`= col_character(),
+    `Falls Related Admission`= col_character(),
+    `Self Harm Related Admission`= col_character(),
+    `NHS Hospital Flag`= col_character(),
+    `Community Hospital Flag`= col_character(),
+    `Total Net Costs`= col_double()
+  )) %>%
+  # Rename variables
   rename(
     clinic_date_fy = "Clinic Date Fin Year",
     record_keydate1 = "Clinic Date (00)",
@@ -78,6 +98,8 @@ outpatient_episode_extract <- readr::read_csv(
     cost_total_net = "Total Net Costs",
     location = "Treatment Location Code",
     hbtreatcode = "Treatment NHS Board Code - current"
+
+
   ) %>%
   # date types
   mutate(
