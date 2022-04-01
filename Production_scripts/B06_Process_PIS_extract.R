@@ -60,14 +60,9 @@ pis_clean <- pis_file %>%
   mutate(
     record_keydate1 = end_fy(year),
     record_keydate2 = record_keydate1
-  )
-
-
-# Save outfile  ---------------------------------------
-outfile <-
-  pis_extract %>%
+  ) %>%
   # sort by chi
-  arrange(chi) %>%
+  arrange(chi)
 
 # Issue a warning if rows were removed
 if (nrow(pis_clean) != nrow(pis_file)) {
@@ -77,25 +72,25 @@ if (nrow(pis_clean) != nrow(pis_file)) {
   ))
 }
 
-# Save as .zsav file
-haven::write_sav(outfile,
-  get_source_extract_path(
+
+# Save out ---------------------------------------
+pis_clean %>%
+  # Save as .zsav file
+  haven::write_sav(get_source_extract_path(
     year = year,
     type = "PIS",
     ext = "zsav"
   ),
   compress = TRUE
-)
-
-# Save as .rds file
-readr::write_rds(outfile,
-  get_source_extract_path(
+  ) %>%
+  # Save as .rds file
+  readr::write_rds(get_source_extract_path(
     year = year,
     type = "PIS",
     ext = "rds"
   ),
   compress = "gz"
-)
+  )
 
 
 # End of Script #
