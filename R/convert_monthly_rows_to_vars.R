@@ -9,11 +9,11 @@
 #' @return A dataframe with monthly cost and bed day variables
 #'
 #' @importFrom dplyr mutate rename group_by summarise across contains select ungroup
-convert_monthly_rows_to_vars <- function(data, uri_var, month_var, cost_var, beddays_var){
+convert_monthly_rows_to_vars <- function(data, uri_var, month_num_var, cost_var, beddays_var){
 
     data %>%
-    mutate(month_name = tolower(month.abb[{{ month_var }}])) %>%
-    select(-{{ month_var }}) %>%
+    mutate(month_name = tolower(month.abb[{{ month_num_var }}])) %>%
+    select(-{{ month_num_var }}) %>%
     rename(cost = {{cost_var}},
            beddays = {{beddays_var}}) %>%
     tidyr::pivot_wider(
