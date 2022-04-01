@@ -40,7 +40,7 @@ outpatients_file <- readr::read_csv(
     `Treatment NHS Board Code - current`= col_character(),
     `Operation 1A Code (4 char)`= col_character(),
     `Operation 1B Code (4 char)`= col_character(),
-    `Date of Main Operation(00)`= col_character(),
+    `Date of Main Operation(00)`= col_date(format = "%Y/%m/%d %T"),
     `Operation 2A Code (4 char)`= col_character(),
     `Operation 2B Code (4 char)`= col_character(),
     `Date of Operation 2 (00)`= col_date(format = "%Y/%m/%d %T"),
@@ -98,76 +98,30 @@ outpatients_file <- readr::read_csv(
     cost_total_net = "Total Net Costs",
     location = "Treatment Location Code",
     hbtreatcode = "Treatment NHS Board Code - current"
+  )
 
 
+# Data Cleaning--------------------------------------------
+
+outpatients_clean <- outpatients_file %>%
+  # Set year variable
+  mutate(year = year,
+  # Set recid variable
+        recid = "00B"
   ) %>%
-  # date types
-  mutate(
-    dob = as.Date(dob),
-    dateop1 = as.Date(dateop1),
-    dateop2 = as.Date(dateop2),
-    record_keydate1 = as.Date(record_keydate1)
-  )
-
-
-# year variable
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
-  mutate(
-    year = latest_year,
-    recid = "00B"
-  )
-
-
-## Recode GP Practice into a 5 digit number ---------------------------------------
+# Recode GP Practice into a 5 digit number
 # assume that if it starts with a letter it's an English practice and so recode to 99995
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
-  mutate(gpprac = replace(gpprac, substr(gpprac, 1, 1) %in% c("A", "Z"), "99995"))
-
-
-## compute record key date ##
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
-  mutate(record_keydate2 = record_keydate1)
-
-
-## Allocate the costs to the correct month ---------------------------------------
-
-# month and month_cost variable
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
-  mutate(month = strftime(record_keydate1, "%m"))
-
-
-# cost in correct month
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
-  mutate(
-    apr_cost = if_else(month == "04", cost_total_net, 0),
-    may_cost = if_else(month == "05", cost_total_net, 0),
-    jun_cost = if_else(month == "06", cost_total_net, 0),
-    jul_cost = if_else(month == "07", cost_total_net, 0),
-    aug_cost = if_else(month == "08", cost_total_net, 0),
-    sep_cost = if_else(month == "09", cost_total_net, 0),
-    oct_cost = if_else(month == "10", cost_total_net, 0),
-    nov_cost = if_else(month == "11", cost_total_net, 0),
-    dec_cost = if_else(month == "12", cost_total_net, 0),
-    jan_cost = if_else(month == "01", cost_total_net, 0),
-    feb_cost = if_else(month == "02", cost_total_net, 0),
-    mar_cost = if_else(month == "03", cost_total_net, 0)
-  )
-
-
+  convert_eng_gpprac_to_dummy(gpprac) %>%
+# compute record key date2
+  mutate(record_keydate2 = record_keydate1) %>%
+  # Allocate the costs to the correct month
+  create_monthly_costs(record_keydate1, cost_total_net) %>%
 # sort by chi record_keydate1
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
   arrange(chi, record_keydate1)
 
 
-## outpatient labels ---------------------------------------
-outpatient_episode_extract <-
-  outpatient_episode_extract %>%
+# Add labels ---------------------------------------
+outpatients_clean <- outpatients_clean %>%
   mutate(
     reftype = factor(reftype,
       levels = c(1:3),
@@ -189,8 +143,8 @@ outpatient_episode_extract <-
   )
 
 
-
 ## save outfile ---------------------------------------
+
 outfile <-
   outpatient_episode_extract %>%
   select(
@@ -264,4 +218,6 @@ readr::write_rds(outfile,
   ),
   compress = "gz"
 )
+
+# End of Script #
 
