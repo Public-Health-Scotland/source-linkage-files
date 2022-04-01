@@ -19,8 +19,6 @@ Produce the SLF deaths lookup tests
 }
 \seealso{
 Other produce tests functions: 
-\code{\link{create_pis_extract_flags}()},
-\code{\link{produce_pis_extract_test}()},
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
