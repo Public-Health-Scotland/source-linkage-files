@@ -318,7 +318,7 @@ outfile <- final_acute_file %>%
     mar_cost,
     uri
   ) %>%
-  arrange(by = chi, record_keydate1)
+  arrange(chi, record_keydate1)
 
 # Save as zsav file
 outfile %>%
