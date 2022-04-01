@@ -111,7 +111,7 @@ acute_file <- readr::read_csv(
     cij_admtype = `CIJ Type of Admission Code (01)`,
     commhosp = `Community Hospital Flag (01)`,
     cij_marker = `Continuous Inpatient Journey Marker (01)`,
-    smr01_cis_marker = `Continuous Inpatient Stay(SMR01) (inc_GLS)`,
+    smr01_cis_marker = `Continuous Inpatient Stay(SMR01) (inc GLS)`,
     costmonthnum = `Costs Financial Month Number (01)`,
     costsfy = `Costs Financial Year (01)`,
     diag1 = `Diagnosis 1 Code (6 char)`,
@@ -165,7 +165,8 @@ acute_file <- readr::read_csv(
     dob = `Pat Date Of Birth [C]`,
     ipdc = `Inpatient Day Case Identifier Code`,
     cij_ipdc = `CIJ Inpatient Day Case Identifier Code (01)`,
-    lineno = `Line Number (01)`
+    lineno = `Line Number (01)`,
+    GLS_record = `GLS Record`
   )
 
 
@@ -176,7 +177,7 @@ acute_clean <- acute_file %>%
   mutate(
     year = year,
     # Set recid as 01B and flag GLS records
-    recid = if_else(GLS_Record == "Y", "GLS", "01B"),
+    recid = if_else(GLS_record == "Y", "GLS", "01B"),
     # Set IDPC marker for the episode
     ipdc = case_when(
       ipdc == "IP" ~ "I",
