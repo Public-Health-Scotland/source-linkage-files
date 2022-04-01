@@ -97,7 +97,7 @@ acute_file <- readr::read_csv(
     `Line Number (01)` = col_character()
   )
 ) %>%
-# Rename variables in line with SLF variable names
+  # Rename variables
   rename(
     tadm = `Admission Type Code`,
     adtf = `Admitted Trans From Code`,
@@ -173,37 +173,40 @@ acute_file <- readr::read_csv(
 
 acute_clean <- acute_file %>%
   # Set year variable
-  mutate(year = year) %>%
-  # Set recid as 01B and flag GLS records
-  mutate(recid = if_else(GLS_Record == "Y", "GLS", "01B")) %>%
-  # Set IDPC marker for the episode
-  mutate(ipdc = case_when(
-    ipdc == "IP" ~ "I",
-    ipdc == "DC" ~ "D"
-  )) %>%
-  # Set IDPC marker for the cij
-  mutate(cij_ipdc = case_when(
-    cij_ipdc == "IP" ~ "I",
-    cij_ipdc == "DC" ~ "D"
-  )) %>%
+  mutate(
+    year = year,
+    # Set recid as 01B and flag GLS records
+    recid = if_else(GLS_Record == "Y", "GLS", "01B"),
+    # Set IDPC marker for the episode
+    ipdc = case_when(
+      ipdc == "IP" ~ "I",
+      ipdc == "DC" ~ "D"
+    ),
+    # Set IDPC marker for the cij
+    cij_ipdc = case_when(
+      cij_ipdc == "IP" ~ "I",
+      cij_ipdc == "DC" ~ "D"
+    )
+  ) %>%
   # Recode GP practice into 5 digit number
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
   eng_gp_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
-  # create and populate SMRType
-  mutate(SMRType = case_when(
-    recid == "01B" & lineno != 330 & ipdc == "I" ~ "Acute-IP",
-    recid == "01B" & lineno != 330 & ipdc == "D" ~ "Acute-DC",
-    lineno == 330 & ipdc == "I" ~ "GLS-IP",
-    recid == "GLS" ~ "GLS-IP"
-  )) %>%
+  mutate(
+    stay = difftime(record_keydate2, record_keydate1, units = "days"),
+    # create and populate SMRType
+    SMRType = case_when(
+      recid == "01B" & lineno != 330 & ipdc == "I" ~ "Acute-IP",
+      recid == "01B" & lineno != 330 & ipdc == "D" ~ "Acute-DC",
+      lineno == 330 & ipdc == "I" ~ "GLS-IP",
+      recid == "GLS" ~ "GLS-IP"
+    )
+  ) %>%
   # Apply new costs for C3 specialty, these are taken from the 2017/18 file
   fix_c3_costs(year) %>%
-
-# initialise monthly cost/beddays variables in a separate data frame for matching
+  # initialise monthly cost/beddays variables in a separate data frame for matching
   convert_monthly_rows_to_vars(uri, costmonthnum, cost_total_net, yearstay) %>%
-# Add oldtadm as a factor with labels
+  # Add oldtadm as a factor with labels
   mutate(oldtadm = factor(oldtadm,
     levels = c(0, 1, 2, 3, 4, 5, 6, 7, 8),
     labels = c(
