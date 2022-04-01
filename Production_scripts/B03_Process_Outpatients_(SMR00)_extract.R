@@ -10,8 +10,6 @@
 
 # Load packages
 library(dplyr)
-library(purrr)
-library(vroom)
 library(tidyr)
 library(createslf)
 
@@ -25,42 +23,43 @@ year <- 1920
 outpatients_file <- readr::read_csv(
   file = get_boxi_extract_path(year, "Outpatient"),
   col_type = cols(
-    `Clinic Date Fin Year`= col_double(),
-    `Clinic Date (00)`= col_date(format = "%Y/%m/%d %T"),
-    `Episode Record Key (SMR00) [C]`= col_character(),
-    `Pat UPI`= col_character(),
-    `Pat Gender Code`= col_double(),
-    `Pat Date Of Birth [C]`= col_date(format = "%Y/%m/%d %T"),
-    `Practice Location Code`= col_character(),
-    `Practice NHS Board Code - current`= col_character(),
-    `Geo Postcode [C]`= col_character(),
-    `NHS Board of Residence Code - current`= col_character(),
-    `Geo Council Area Code`= col_character(),
-    `Treatment Location Code`= col_character(),
-    `Treatment NHS Board Code - current`= col_character(),
-    `Operation 1A Code (4 char)`= col_character(),
-    `Operation 1B Code (4 char)`= col_character(),
-    `Date of Main Operation(00)`= col_date(format = "%Y/%m/%d %T"),
-    `Operation 2A Code (4 char)`= col_character(),
-    `Operation 2B Code (4 char)`= col_character(),
-    `Date of Operation 2 (00)`= col_date(format = "%Y/%m/%d %T"),
-    `Specialty Classificat. 1/4/97 Code`= col_character(),
-    `Significant Facility Code`= col_character(),
-    `Consultant/HCP Code`= col_character(),
-    `Patient Category Code`= col_character(),
-    `Referral Source Code`= col_character(),
-    `Referral Type Code`= col_double(),
-    `Clinic Type Code`= col_double(),
-    `Clinic Attendance (Status) Code`= col_double(),
-    `Age at Midpoint of Financial Year`= col_double(),
-    `Alcohol Related Admission`= col_character(),
-    `Substance Misuse Related Admission`= col_character(),
-    `Falls Related Admission`= col_character(),
-    `Self Harm Related Admission`= col_character(),
-    `NHS Hospital Flag`= col_character(),
-    `Community Hospital Flag`= col_character(),
-    `Total Net Costs`= col_double()
-  )) %>%
+    `Clinic Date Fin Year` = col_double(),
+    `Clinic Date (00)` = col_date(format = "%Y/%m/%d %T"),
+    `Episode Record Key (SMR00) [C]` = col_character(),
+    `Pat UPI` = col_character(),
+    `Pat Gender Code` = col_double(),
+    `Pat Date Of Birth [C]` = col_date(format = "%Y/%m/%d %T"),
+    `Practice Location Code` = col_character(),
+    `Practice NHS Board Code - current` = col_character(),
+    `Geo Postcode [C]` = col_character(),
+    `NHS Board of Residence Code - current` = col_character(),
+    `Geo Council Area Code` = col_character(),
+    `Treatment Location Code` = col_character(),
+    `Treatment NHS Board Code - current` = col_character(),
+    `Operation 1A Code (4 char)` = col_character(),
+    `Operation 1B Code (4 char)` = col_character(),
+    `Date of Main Operation(00)` = col_date(format = "%Y/%m/%d %T"),
+    `Operation 2A Code (4 char)` = col_character(),
+    `Operation 2B Code (4 char)` = col_character(),
+    `Date of Operation 2 (00)` = col_date(format = "%Y/%m/%d %T"),
+    `Specialty Classificat. 1/4/97 Code` = col_character(),
+    `Significant Facility Code` = col_character(),
+    `Consultant/HCP Code` = col_character(),
+    `Patient Category Code` = col_character(),
+    `Referral Source Code` = col_character(),
+    `Referral Type Code` = col_double(),
+    `Clinic Type Code` = col_double(),
+    `Clinic Attendance (Status) Code` = col_double(),
+    `Age at Midpoint of Financial Year` = col_double(),
+    `Alcohol Related Admission` = col_character(),
+    `Substance Misuse Related Admission` = col_character(),
+    `Falls Related Admission` = col_character(),
+    `Self Harm Related Admission` = col_character(),
+    `NHS Hospital Flag` = col_character(),
+    `Community Hospital Flag` = col_character(),
+    `Total Net Costs` = col_double()
+  )
+) %>%
   # Rename variables
   rename(
     clinic_date_fy = "Clinic Date Fin Year",
@@ -105,18 +104,19 @@ outpatients_file <- readr::read_csv(
 
 outpatients_clean <- outpatients_file %>%
   # Set year variable
-  mutate(year = year,
-  # Set recid variable
-        recid = "00B"
+  mutate(
+    year = year,
+    # Set recid variable
+    recid = "00B"
   ) %>%
-# Recode GP Practice into a 5 digit number
-# assume that if it starts with a letter it's an English practice and so recode to 99995
+  # Recode GP Practice into a 5 digit number
+  # assume that if it starts with a letter it's an English practice and so recode to 99995
   convert_eng_gpprac_to_dummy(gpprac) %>%
-# compute record key date2
+  # compute record key date2
   mutate(record_keydate2 = record_keydate1) %>%
   # Allocate the costs to the correct month
   create_monthly_costs(record_keydate1, cost_total_net) %>%
-# sort by chi record_keydate1
+  # sort by chi record_keydate1
   arrange(chi, record_keydate1)
 
 
