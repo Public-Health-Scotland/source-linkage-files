@@ -69,6 +69,13 @@ outfile <-
   # sort by chi
   arrange(chi) %>%
 
+# Issue a warning if rows were removed
+if (nrow(pis_clean) != nrow(pis_file)) {
+  rlang::warn(message = c(
+    "Rows were removed from the PIS extract because of the CHI number being invalid",
+    "Please check the raw PIS extract"
+  ))
+}
 
 # Save as .zsav file
 haven::write_sav(outfile,
