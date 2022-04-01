@@ -28,7 +28,6 @@ fix_c3_costs <- function(data, year) {
           location == "V217H" & ipdc == "I" ~ 3179.24 * yearstay,
         TRUE ~ cost_total_net
       ))
-
   }
 
   return(data)
