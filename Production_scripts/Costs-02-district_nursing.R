@@ -40,6 +40,9 @@ fs::file_copy(
 
 # Read in cost workbook ---------------------------------------
 
+# latest year #
+latest_year <- 1920
+
 ## data ##
 dn_raw_costs <- readxl::read_excel(
   fs::path(get_slf_dir(), "Costs", "DN_Costs.xlsx"),
@@ -150,7 +153,7 @@ data <-
   mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
   ungroup()
 
-# plot #
+# plot pct_of_max #
 ggplot(data = data, aes(x = year, y = pct_of_max, group = board_name)) +
   geom_line(aes(color = board_name)) +
   labs(color = "NHS Board", x = "Year")
@@ -158,45 +161,23 @@ ggplot(data = data, aes(x = year, y = pct_of_max, group = board_name)) +
 
 # Deal with costs ------------------------------------------
 
-## upflift any 'copied' costs ##
+## costs with pct_of_max < 75 - uplift ##
 data <-
   data %>%
-  mutate(uplift = 0) %>%
-  mutate(
-    tempyear1 = case_when(
-      board_name == "NHS Highland" & year == "1617" ~ "1819",
-      board_name == "NHS Tayside" & year == "1617" ~ "1718",
-      board_name == "NHS Forth Valley" & year == "1819" ~ "1920",
-      board_name == "NHS Greater Glasgow & Clyde" & year == "1819" ~ "1920"
-    ),
-    tempyear2 = case_when(board_name == "NHS Highland" & year == "1617" ~ "1920")
-  ) %>%
-  mutate(
-    uplift1 = case_when(
-      board_name == "NHS Highland" & tempyear1 == "1819" ~ 2,
-      board_name == "NHS Tayside" & tempyear1 == "1718" ~ 1,
-      board_name == "NHS Forth Valley" & tempyear1 == "1920" ~ 1,
-      board_name == "NHS Greater Glasgow & Clyde" & tempyear1 == "1920" ~ 1
-    ),
-    uplift2 = case_when(board_name == "NHS Highland" & tempyear2 == "1920" ~ 3)
-  ) %>%
-  # data - wide to long
-  pivot_longer(
-    c("year", contains("tempyear")),
-    values_to = "year",
-    names_to = NULL
-  ) %>%
-  pivot_longer(
-    contains("uplift"),
-    values_to = "uplift",
-    names_to = NULL
-  ) %>%
-  # cost total net
-  mutate(cost_total_net = cost_total_net * (1.01 * exp(uplift)))
+  group_by(board_name) %>%
+  arrange(year, .by_group = TRUE) %>%
+  mutate(cost_total_net = if_else(pct_of_max < 75, lag(cost_total_net, default = first(cost_total_net)) * 1.01, cost_total_net)) %>%
+  ungroup()
+
+
+# plot #
+ggplot(data = data, aes(x = year, y = cost_total_net, group = board_name)) +
+  geom_line(aes(color = board_name)) +
+  labs(color = "NHS Board", x = "Year")
 
 
 ## Add in years by copying the most recent year we have ##
-latest_year <- 1920
+
 data <-
   bind_rows(
     data,
@@ -213,11 +194,12 @@ data <-
 data <-
   data %>%
   rename(
-    hbtreatcode = "HB2019",
-    hbtreatname = "Treatment NHS Board Name"
+    hbtreatcode = "hb2019",
+    hbtreatname = "treatment_nhs_board_name"
   ) %>%
   select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
   arrange(year, hbtreatcode)
+
 
 ## Check costs haven't changed radically ##
 # using current_file - from above #
