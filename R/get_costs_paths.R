@@ -55,6 +55,6 @@ get_gp_ooh_costs_path <- function(..., update = NULL) {
     check_mode = "write",
     ...
   )
-
+  
   return(gp_ooh_costs_path)
 }
