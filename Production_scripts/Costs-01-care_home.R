@@ -44,7 +44,7 @@ ch_costs <-
   filter(source_of_funding %in% c("All Funding With Nursing Care", "All Funding Without Nursing Care")) %>%
   # restructure
   pivot_longer(
-    !contains("source"),
+    -source_of_funding,
     names_to = "calendar_year",
     values_to = "cost_per_week"
   ) %>%
