@@ -24,7 +24,10 @@ library(createslf)
 # Read in data---------------------------------------
 
 ## Make a copy of the existing file
-fs::file_copy(get_ch_costs_path(), get_ch_costs_path(update = previous_update()))
+fs::file_copy(get_ch_costs_path(),
+  get_ch_costs_path(update = latest_update()),
+  overwrite = TRUE
+)
 
 ## Read excel data
 ch_costs_data <- readxl::read_xlsx(
@@ -90,7 +93,7 @@ apply_costs_uplift <-
 
 # match files - to make sure costs haven't changed radically
 old_costs <- haven::read_sav(
-  find_latest_file(get_slf_dir(), regexp = "Cost_CH_Lookup_pre.+?\\.sav")
+  get_ch_costs_path(update = latest_update())
 ) %>%
   rename(
     cost_old = "cost_per_day",
