@@ -20,7 +20,7 @@ library(readr)
 year <- 1920
 
 ae_cup_file <- readr::read_csv(
-  file = get_boxi_extract_path(year, "AE_CUP"), n_max = 2000,
+  file = get_boxi_extract_path(year, "AE_CUP"),
   col_type = cols(
     `ED Arrival Date` = col_date(format = "%Y/%m/%d %T"),
     `ED Arrival Time` = col_time(""),
