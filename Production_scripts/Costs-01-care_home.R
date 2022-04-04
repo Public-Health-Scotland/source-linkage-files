@@ -116,24 +116,14 @@ matched_costs_data %>%
 
 
 ## save outfile ---------------------------------------
-outfile <-
-  matched_costs_data %>%
-  select(
-    year,
-    nursing_care_provision,
-    cost_per_day
+ch_costs_uplifted %>%
+  # .zsav
+  haven::write_sav(get_ch_costs_path(update = latest_update()),
+    compress = TRUE
+  ) %>%
+  # .rds file
+  readr::write_rds(get_ch_costs_path(update = latest_update()),
+    compress = "gz"
   )
-
-# .zsav
-haven::write_sav(outfile,
-  get_ch_costs_path(update = latest_update()),
-  compress = TRUE
-)
-
-# .rds file
-readr::write_rds(outfile,
-  get_ch_costs_path(update = latest_update()),
-  compress = "gz"
-)
 
 ## End of Script ---------------------------------------
