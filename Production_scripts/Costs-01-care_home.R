@@ -54,38 +54,34 @@ ch_costs <-
   mutate(nursing_care_provision = if_else(source_of_funding == "All Funding With Nursing Care", 1, 0)) %>%
   # cost per day ##
   mutate(cost_per_day = cost_per_week / 7) %>%
-  # unknown nursing variable ##
-  mutate(unknown_nursing = "Unknown Source of Funding") %>%
-  # restructure
-  pivot_longer(
-    cols = any_of(c("source_of_funding", "unknown_nursing")),
-    values_to = "source_of_funding",
-    names_to = NULL
+  # Compute mean cost for unknown nursing care
+  bind_rows(
+    group_by(., year) %>%
+      summarise(
+        source_of_funding = "Unknown Source of Funding",
+        cost_per_day = mean(cost_per_day)
+      )
   ) %>%
-  # replace nursing care provision with NA
-  mutate(nursing_care_provision = na_if(nursing_care_provision, source_of_funding == "Unknown Source of Funding"))
-
-# aggregate
-outfile <-
-  ch_costs %>%
-  group_by(year, nursing_care_provision) %>%
-  mutate(cost_per_day = mean(cost_per_day)) %>%
   select(year, nursing_care_provision, cost_per_day)
 
-
 ## add in years by copying the most recent year ##
-latest_year <- 2122
+latest_year <- max(ch_costs$year)
 
 ## increase by 1% for every year after the latest ##
-apply_costs_uplift <-
-  map_df(1:5, ~
-  outfile %>%
-    group_by(year, nursing_care_provision) %>%
-    arrange(year, nursing_care_provision) %>%
-    mutate(
-      cost_per_day = cost_per_day * (1.01)^.x,
-      year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(financial_year)) + .x)
-    )) %>%
+ch_costs_uplifted <-
+  bind_rows(
+    ch_costs,
+    map_dfr(1:5, ~
+      ch_costs %>%
+        filter(year == latest_year) %>%
+        group_by(year, nursing_care_provision) %>%
+        summarise(
+          cost_per_day = cost_per_day * (1.01)^.x,
+          .groups = "drop"
+        ) %>%
+        mutate(year = (as.numeric(convert_fyyear_to_year(year)) + .x) %>%
+          convert_year_to_fyyear()))
+  ) %>%
   arrange(year, nursing_care_provision)
 
 
@@ -101,7 +97,7 @@ old_costs <- haven::read_sav(
   )
 
 matched_costs_data <-
-  apply_costs_uplift %>%
+  ch_costs_uplifted %>%
   arrange(year, nursing_care_provision) %>%
   # match to new costs
   full_join(old_costs, by = c("year", "nursing_care_provision")) %>%
