@@ -65,15 +65,15 @@ ch_costs <-
   select(year, nursing_care_provision, cost_per_day)
 
 ## add in years by copying the most recent year ##
-latest_year <- max(ch_costs$year)
+latest_cost_year <- max(ch_costs$year)
 
 ## increase by 1% for every year after the latest ##
 ch_costs_uplifted <-
   bind_rows(
     ch_costs,
-    map_dfr(1:5, ~
+    map(1:5, ~
       ch_costs %>%
-        filter(year == latest_year) %>%
+        filter(year == latest_cost_year) %>%
         group_by(year, nursing_care_provision) %>%
         summarise(
           cost_per_day = cost_per_day * (1.01)^.x,
