@@ -202,7 +202,7 @@ outfile <-
 
 # Save as zsav file
 outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Outpatient", ext = "zsav"))
+  haven::write_sav(get_source_extract_path(year, "Outpatient", ext = "zsav"))
 
 # Save as rds file
 outfile %>%
