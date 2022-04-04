@@ -105,10 +105,14 @@ matched_costs_data <-
   mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100)
 
 
+summary(matched_costs_data$pct_diff)
+
 matched_costs_data %>%
-  # count
-  count(pct_diff, year, nursing_care_provision) %>%
-  spread(year, n)
+  pivot_wider(
+    id_cols = "year",
+    names_from = "nursing_care_provision",
+    values_from = "pct_diff"
+  )
 
 
 ## save outfile ---------------------------------------
