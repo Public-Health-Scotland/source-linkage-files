@@ -14,13 +14,6 @@ get_ch_costs_path <- function(..., update = NULL) {
     check_mode = "write",
     ...
   )
-  } else {
-    ch_costs_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "Costs"),
-      file_name = glue::glue("Cost_CH_Lookup_pre", update, ".sav"),
-      ...
-    )
-  }
 
   return(ch_costs_path)
 }
