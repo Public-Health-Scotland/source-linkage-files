@@ -13,6 +13,7 @@ library(dplyr)
 library(tidyr)
 library(createslf)
 library(readr)
+library(vroom)
 
 
 # Read in data---------------------------------------
@@ -132,23 +133,8 @@ ae_clean <- ae_file %>%
   ## Allocate the costs to the correct month ##
   # Create month variable
   mutate(month = strftime(record_keydate1, "%m")) %>%
-  # Allocated cost in correct month
-  mutate(
-    apr_cost = if_else(month == "04", cost_total_net, 0),
-    may_cost = if_else(month == "05", cost_total_net, 0),
-    jun_cost = if_else(month == "06", cost_total_net, 0),
-    jul_cost = if_else(month == "07", cost_total_net, 0),
-    aug_cost = if_else(month == "08", cost_total_net, 0),
-    sep_cost = if_else(month == "09", cost_total_net, 0),
-    oct_cost = if_else(month == "10", cost_total_net, 0),
-    nov_cost = if_else(month == "11", cost_total_net, 0),
-    dec_cost = if_else(month == "12", cost_total_net, 0),
-    jan_cost = if_else(month == "01", cost_total_net, 0),
-    feb_cost = if_else(month == "02", cost_total_net, 0),
-    mar_cost = if_else(month == "03", cost_total_net, 0)
-  ) %>%
-  # sort for linking on CUP marker
-  arrange(record_keydate1, keyTime1, case_ref_number)
+  # Allocate the costs to the correct month
+  create_monthly_costs(record_keydate1, cost_total_net)
 
 
 # Add value labels---------------------------------------------------
@@ -928,23 +914,13 @@ outfile <-
   )
 
 # Save a temp file for matching (.zsav)
-haven::write_sav(outfile,
-  paste0(
-    get_year_dir(year = year),
-    "/a&e_data-20",
-    latest_year, ".zsav"
-  ),
-  compress = TRUE
-)
+outfile %>%
+  haven::write_sav(get_source_extract_path(year, "AE", ext = "zsav"))
+
 
 # Save a temp file for matching (.rds)
-readr::write_rds(outfile,
-  paste0(
-    get_year_dir(year = year),
-    "/a&e_data-20",
-    year, ".rds"
-  ),
-  compress = "gz"
-)
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "AE", ext = "rds"))
+
 
 # End of Script #
