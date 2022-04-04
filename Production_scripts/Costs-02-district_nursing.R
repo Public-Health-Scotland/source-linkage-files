@@ -153,7 +153,7 @@ data <-
   mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
   ungroup()
 
-# plot pct_of_max #
+# plot #
 ggplot(data = data, aes(x = year, y = pct_of_max, group = board_name)) +
   geom_line(aes(color = board_name)) +
   labs(color = "NHS Board", x = "Year")
