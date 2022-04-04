@@ -21,7 +21,7 @@ library(readr)
 year <- 1920
 
 ae_file <- readr::read_csv(
-  file = get_boxi_extract_path(year, "AE"), n_max = 2000,
+  file = get_boxi_extract_path(year, "AE"),
   col_type = cols(
     `Arrival Date` = col_date(format = "%Y/%m/%d %T"),
     `DAT Date` = col_date(format = "%Y/%m/%d %T"),
