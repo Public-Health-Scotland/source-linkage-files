@@ -33,7 +33,7 @@ jobs:
    - uses: stefanzweifel/git-auto-commit-action@v4
      with:
       commit_message: Document with {roxygen2} (GitHub action)
-      file_pattern: man/\* NAMESPACE
+      file_pattern: man/* NAMESPACE
 
    - name: Style package functions
      run: Rscript -e 'styler::style_pkg()'
@@ -47,7 +47,7 @@ jobs:
    - uses: stefanzweifel/git-auto-commit-action@v4
      with:
       commit_message: Style with {styler} (GitHub action)
-      file_pattern: \*.R
+      file_pattern: /*.R
 
  lint:
   needs: document-style
