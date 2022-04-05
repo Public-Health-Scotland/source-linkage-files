@@ -10,12 +10,12 @@
 #####################################################
 
 # Load packages
-  library(dplyr)
-  library(tidyr)
-  library(haven)
-  library(phsopendata)
-  library(janitor)
-  library(fs)
+library(dplyr)
+library(tidyr)
+library(haven)
+library(phsopendata)
+library(janitor)
+library(fs)
 
 # Read in data---------------------------------------
 
