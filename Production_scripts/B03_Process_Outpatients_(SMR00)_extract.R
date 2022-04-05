@@ -116,7 +116,7 @@ outpatients_clean <- outpatients_file %>%
   # compute record key date2
   mutate(record_keydate2 = record_keydate1) %>%
   # Allocate the costs to the correct month
-  create_monthly_costs(record_keydate1, cost_total_net) %>%
+  create_day_episode_costs(record_keydate1, cost_total_net) %>%
   # sort by chi record_keydate1
   arrange(chi, record_keydate1)
 
@@ -169,6 +169,7 @@ outfile <-
     ends_with("_cost"),
     uri
   )
+
 
 # Save as zsav file
 outfile %>%
