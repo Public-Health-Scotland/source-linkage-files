@@ -14,7 +14,6 @@
 library(tidyr)
 library(dplyr)
 library(readr)
-library(stringr)
 library(createslf)
 
 
@@ -197,7 +196,7 @@ acute_clean <- acute_file %>%
     stay = difftime(record_keydate2, record_keydate1, units = "days"),
     # create and populate SMRType
     SMRType = case_when(
-      recid == "01B" & lineno != 330 ~ if_else(ipdc == "I", "Acute-IP", "Acute-DC")
+      recid == "01B" & lineno != 330 ~ if_else(ipdc == "I", "Acute-IP", "Acute-DC"),
       lineno == 330 & ipdc == "I" ~ "GLS-IP",
       recid == "GLS" ~ "GLS-IP"
     )
@@ -224,7 +223,7 @@ acute_clean <- acute_file %>%
 
 
 ## save outfile ---------------------------------------
-outfile <- final_acute_file %>%
+outfile <- acute_clean %>%
   select(
     year,
     recid,
@@ -329,4 +328,4 @@ outfile %>%
   readr::write_rds(get_source_extract_path(year, "Acute", ext = "rds"))
 
 
-## End of Script ---------------------------------------
+## End of Script ##
