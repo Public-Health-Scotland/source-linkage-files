@@ -135,7 +135,7 @@ ae_clean <- ae_file %>%
   # Create month variable
   mutate(month = strftime(record_keydate1, "%m")) %>%
   # Allocate the costs to the correct month
-  create_monthly_costs(record_keydate1, cost_total_net)
+  create_day_episode_costs(record_keydate1, cost_total_net)
 
 
 # Factors ---------------------------------------------------
@@ -488,37 +488,14 @@ outfile <-
     location,
     hbrescode,
     hbtreatcode,
-    diag1,
-    diag2,
-    diag3,
-    ae_arrivalmode,
+    starts_with("diag"),
     refsource,
     sigfac,
-    ae_attendcat,
-    ae_disdest,
-    ae_patflow,
-    ae_placeinc,
-    ae_reasonwait,
-    ae_bodyloc,
-    ae_alcohol,
-    alcohol_adm,
-    submis_adm,
-    falls_adm,
-    selfharm_adm,
+    starts_with("ae_"),
+    ends_with("_adm"),
     cost_total_net,
     age,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
+    ends_with("_cost"),
     case_ref_number
   )
 
