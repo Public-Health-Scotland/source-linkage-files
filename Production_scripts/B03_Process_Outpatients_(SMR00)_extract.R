@@ -121,25 +121,14 @@ outpatients_clean <- outpatients_file %>%
   arrange(chi, record_keydate1)
 
 
-# Add labels ---------------------------------------
+# Factors ---------------------------------------
 outpatients_clean <- outpatients_clean %>%
   mutate(
     reftype = factor(reftype,
-      levels = c(1:3),
-      labels = c(
-        "New Outpatient: Consultation and Management",
-        "New Outpatient: Consultation only",
-        "Follow-up/Return Outpatient"
-      )
+      levels = c(1:3)
     ),
     clinic_type = factor(clinic_type,
-      levels = c(1:4),
-      labels = c(
-        "Consultant",
-        "Dentist",
-        "Nurse PIN",
-        "AHP"
-      )
+      levels = c(1:4)
     )
   )
 
@@ -163,12 +152,7 @@ outfile <-
     lca,
     location,
     hbtreatcode,
-    op1a,
-    op1b,
-    dateop1,
-    op2a,
-    op2b,
-    dateop2,
+    contains("op"),
     spec,
     sigfac,
     conc,
@@ -178,25 +162,11 @@ outfile <-
     reftype,
     attendance_status,
     clinic_type,
-    alcohol_adm,
-    submis_adm,
-    falls_adm,
-    selfharm_adm,
+    ends_with("_adm"),
     commhosp,
     nhshosp,
     cost_total_net,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
+    ends_with("_cost"),
     uri
   )
 
