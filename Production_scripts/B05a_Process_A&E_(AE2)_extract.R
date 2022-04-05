@@ -13,7 +13,6 @@ library(dplyr)
 library(tidyr)
 library(createslf)
 library(readr)
-library(readr)
 library(vroom)
 
 
@@ -22,44 +21,6 @@ library(vroom)
 # Specify year
 year <- 1920
 
-ae_file <- readr::read_csv(
-  file = get_boxi_extract_path(year, "AE"),
-  col_type = cols(
-    `Arrival Date` = col_date(format = "%Y/%m/%d %T"),
-    `DAT Date` = col_date(format = "%Y/%m/%d %T"),
-    `Pat UPI [C]` = col_character(),
-    `Pat Date Of Birth [C]` = col_date(format = "%Y/%m/%d %T"),
-    `Pat Gender Code` = col_double(),
-    `NHS Board of Residence Code - current` = col_character(),
-    `Treatment NHS Board Code - current` = col_character(),
-    `Treatment Location Code` = col_character(),
-    `GP Practice Code` = col_character(),
-    `Council Area Code` = col_character(),
-    `Postcode (epi) [C]` = col_character(),
-    `Postcode (CHI) [C]` = col_character(),
-    `HSCP of Residence Code - current` = col_character(),
-    `Arrival Time` = col_time(""),
-    `DAT Time` = col_time(""),
-    `Arrival Mode Code` = col_character(),
-    `Referral Source Code` = col_character(),
-    `Attendance Category Code` = col_character(),
-    `Discharge Destination Code` = col_character(),
-    `Patient Flow Code` = col_double(),
-    `Place of Incident Code` = col_character(),
-    `Reason for Wait Code` = col_character(),
-    `Disease 1 Code` = col_character(),
-    `Disease 2 Code` = col_character(),
-    `Disease 3 Code` = col_character(),
-    `Bodily Location Of Injury Code` = col_character(),
-    `Alcohol Involved Code` = col_character(),
-    `Alcohol Related Admission` = col_character(),
-    `Substance Misuse Related Admission` = col_character(),
-    `Falls Related Admission` = col_character(),
-    `Self Harm Related Admission` = col_character(),
-    `Total Net Costs` = col_double(),
-    `Age at Midpoint of Financial Year` = col_double(),
-    `Case Reference Number` = col_character(),
-    `Significant Facility Code` = col_double()
 ae_file <- readr::read_csv(
   file = get_boxi_extract_path(year, "AE"),
   col_type = cols(
@@ -139,8 +100,6 @@ ae_file <- readr::read_csv(
     case_ref_number = "Case Reference Number"
   )
 
-
-# Data Cleaning -----------------------------------------
 
 # Data Cleaning -----------------------------------------
 
@@ -572,7 +531,5 @@ outfile %>%
 outfile %>%
   readr::write_rds(get_source_extract_path(year, "AE", ext = "rds"))
 
-
-# End of Script #
 
 # End of Script #
