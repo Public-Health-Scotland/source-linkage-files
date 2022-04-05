@@ -136,15 +136,7 @@ client_clean <-
     labels = c("No", "Yes", "Not Known")
   ),
   type_of_housing = factor(.data$type_of_housing,
-    levels = c(1:6),
-    labels = c(
-      "Mainstream",
-      "Supported",
-      "Long Stay Care Home",
-      "Hospital or other medical establishment",
-      "Other",
-      "Not Known"
-    )
+    levels = c(1:6)
   )
   ) %>%
   # rename variables
