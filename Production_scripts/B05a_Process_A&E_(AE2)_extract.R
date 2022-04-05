@@ -135,7 +135,7 @@ ae_clean <- ae_file %>%
   # Create month variable
   mutate(month = strftime(record_keydate1, "%m")) %>%
   # Allocate the costs to the correct month
-  create_monthly_costs(record_keydate1, cost_total_net)
+  create_day_episode_costs(record_keydate1, cost_total_net)
 
 
 # Factors ---------------------------------------------------
@@ -143,9 +143,11 @@ ae_clean <- ae_file %>%
 ae_clean <- ae_clean %>%
   mutate(
     ae_arrivalmode = factor(ae_arrivalmode,
-      levels = c("01", "02", "03", "04", "05", "06", "07", "08", "98", "99")),
+      levels = c("01", "02", "03", "04", "05", "06", "07", "08", "98", "99")
+    ),
     ae_attendcat = factor(ae_attendcat,
-      levels = c("01", "02", "03", "04")),
+      levels = c("01", "02", "03", "04")
+    ),
     ae_disdest = factor(ae_disdest,
       levels = c(
         "00",
@@ -156,7 +158,8 @@ ae_clean <- ae_clean %>%
         "05", "05A", "05B", "05C", "05D", "05E", "05F", "05G", "05H", "05Z",
         "06",
         "98",
-        "99")
+        "99"
+      )
     ),
     ae_patflow = factor(ae_patflow, levels = c(1:5)),
     ae_placeinc = factor(ae_placeinc,
@@ -168,16 +171,21 @@ ae_clean <- ae_clean %>%
         "05", "05A", "05B", "05C",
         "06",
         "98",
-        "99")),
+        "99"
+      )
+    ),
     ae_reasonwait = factor(ae_reasonwait,
-                           levels = c("00",
-                                      "01",
-                                      "02",
-                                      "03", "03A", "03B",
-                                      "05", "05A", "05B",
-                                      "06",
-                                      "07",
-                                      "98")),
+      levels = c(
+        "00",
+        "01",
+        "02",
+        "03", "03A", "03B",
+        "05", "05A", "05B",
+        "06",
+        "07",
+        "98"
+      )
+    ),
     ae_alcohol = factor(ae_alcohol, levels = c(1:2)),
     ae_bodyloc = factor(ae_bodyloc,
       levels = c(
@@ -488,37 +496,14 @@ outfile <-
     location,
     hbrescode,
     hbtreatcode,
-    diag1,
-    diag2,
-    diag3,
-    ae_arrivalmode,
+    starts_with("diag"),
     refsource,
     sigfac,
-    ae_attendcat,
-    ae_disdest,
-    ae_patflow,
-    ae_placeinc,
-    ae_reasonwait,
-    ae_bodyloc,
-    ae_alcohol,
-    alcohol_adm,
-    submis_adm,
-    falls_adm,
-    selfharm_adm,
+    starts_with("ae_"),
+    ends_with("_adm"),
     cost_total_net,
     age,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
+    ends_with("_cost"),
     case_ref_number
   )
 
