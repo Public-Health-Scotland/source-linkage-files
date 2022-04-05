@@ -1,14 +1,13 @@
 #' Convert monthly rows to variables
 #'
 #' @param data a dataframe containing cost and bed day variables
-#' @param uri_var a unique variable for matching e.g. uri
 #' @param month_num_var a variable containing month number e.g. costmonthnum
 #' @param cost_var a variable containing cost information e.g. cost_total_net
 #' @param beddays_var a variable containing beddays information e.g. yearstay
 #'
 #' @return A dataframe with monthly cost and bed day variables
 #'
-convert_monthly_rows_to_vars <- function(data, uri_var, month_num_var, cost_var, beddays_var) {
+convert_monthly_rows_to_vars <- function(data, month_num_var, cost_var, beddays_var) {
 
     data %>%
     dplyr::mutate(month_name = tolower(month.abb[{{ month_num_var }}])) %>%
