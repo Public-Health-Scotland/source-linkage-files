@@ -205,6 +205,11 @@ acute_clean <- acute_file %>%
   fix_c3_costs(year) %>%
   # initialise monthly cost/beddays variables in a separate data frame for matching
   convert_monthly_rows_to_vars(costmonthnum, cost_total_net, yearstay) %>%
+  # add yearstay and cost_total_net variables
+  mutate(
+    yearstay = rowSums(across(ends_with("_beddays"))),
+    cost_total_net = rowSums(across(ends_with("_cost")))
+  ) %>%
   # Add oldtadm as a factor with labels
   mutate(oldtadm = factor(oldtadm,
     levels = c(0:8),
