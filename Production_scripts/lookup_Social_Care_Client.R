@@ -59,31 +59,6 @@ client_data <- tbl(db_connection, in_schema("social_care_2", "client")) %>%
   ) %>%
   collect()
 
-# create numeric flags
-client_data <-
-  client_data %>%
-  mutate(across(c(
-    .data$dementia,
-    .data$mental_health_problems,
-    .data$learning_disability,
-    .data$physical_and_sensory_disability,
-    .data$drugs,
-    .data$alcohol,
-    .data$palliative_care,
-    .data$carer,
-    .data$elderly_frail,
-    .data$neurological_condition,
-    .data$autism,
-    .data$other_vulnerable_groups,
-    .data$living_alone,
-    .data$support_from_unpaid_carer,
-    .data$social_worker,
-    .data$type_of_housing,
-    .data$meals,
-    .data$day_care
-  ), as.numeric))
-
-
 # Data Cleaning ---------------------------------------
 
 client_clean <-
@@ -112,7 +87,7 @@ client_clean <-
       .data$meals,
       .data$day_care
     ),
-    last
+    ~ as.numeric(last(.x))
   )) %>%
   ungroup() %>%
   # recode missing with values
