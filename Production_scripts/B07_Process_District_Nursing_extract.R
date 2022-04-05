@@ -8,6 +8,7 @@
 # Description - Process District Nursing Extract
 #####################################################
 
+# Load packages
 library(dplyr)
 library(ggplot2)
 library(createslf)
@@ -18,10 +19,11 @@ library(lubridate)
 
 # Read in data ---------------------------------------
 
-# latest year
-latest_year <- 1920
+# Specify year
+year <- 1920
 
-dn_extract <- readr::read_csv(get_boxi_extract_path(year = latest_year,
+# Read BOXI extract
+dn_extract <- readr::read_csv(get_boxi_extract_path(year = year,
                                                     type = "DN")
                               ) %>%
   # rename
@@ -63,7 +65,7 @@ dn_extract <- readr::read_csv(get_boxi_extract_path(year = latest_year,
 
 # Data Cleaning  ---------------------------------------
 
-dn_extract <- dn_extract %>%
+dn_clean <- dn_extract %>%
   # valid chi
   mutate(validity = chi_check(chi)) %>%
   # filter for valid chi only
@@ -72,14 +74,14 @@ dn_extract <- dn_extract %>%
   mutate(
     recid = "DN",
     smr_type = "DN",
-    year = latest_year) %>%
+    year = year) %>%
   # record key date
   mutate(record_keydate2 = record_keydate1) %>%
   # contact end time
   mutate(contact_end_time = hms::as_hms(contact_start_time + dminutes(duration_contact))) %>%
   # gpprac tidy
   mutate(gpprac = as.character(gpprac)) %>%
-  eng_gp_to_dummy(gpprac)
+  convert_eng_gpprac_to_dummy(gpprac)
 
 
 # Costs  ---------------------------------------
@@ -104,7 +106,7 @@ dn_costs_lookup <- dn_costs_lookup %>%
   rename(year = "Year") %>%
   mutate(year = as.numeric(year))
 
-matched_dn_costs <- dn_extract %>%
+matched_dn_costs <- dn_clean %>%
   full_join(dn_costs_lookup, by = c("hbtreatcode", "year")) %>%
   # costs are rough estimates we round them to the nearest pound
   mutate(cost_total_net = round(cost_total_net, 0))
@@ -127,3 +129,62 @@ matched_dn_costs <- matched_dn_costs %>%
   ungroup()
 
 
+# costs per month
+matched_dn_costs <- matched_dn_costs %>%
+  create_day_episode_costs(record_keydate1, cost_total_net)
+
+
+## save outfile ---------------------------------------
+
+outfile <- matched_dn_costs %>%
+  group_by(year, chi, recid, smr_type, ccm) %>%
+  summarise(
+    record_keydate1 = min(record_keydate1),
+    record_keydate2 = max(record_keydate2),
+    dob = last(dob),
+    hbtreatcode = last(hbtreatcode),
+    hbrescode = last(hbrescode),
+    hscp = last(hscp),
+    lca = last(lca),
+    datazone = last(datazone),
+    age = last(age),
+    diag1 = first(primary_intervention),
+    diag2 = first(intervention_1),
+    diag3 = first(intervention_2),
+    diag4 = last(primary_intervention),
+    diag5 = last(intervention_1),
+    diag6 = last(intervention_2),
+    postcode = last(postcode),
+    gender = first(gender),
+    gpprac = first(gpprac),
+    cost_total_net = sum(cost_total_net),
+    location = first(location_contact),
+    jan_cost = sum(jan_cost),
+    feb_cost = sum(feb_cost),
+    mar_cost = sum(mar_cost),
+    apr_cost = sum(apr_cost),
+    may_cost = sum(may_cost),
+    jun_cost = sum(jun_cost),
+    jul_cost = sum(jul_cost),
+    aug_cost = sum(aug_cost),
+    sep_cost = sum(sep_cost),
+    oct_cost = sum(oct_cost),
+    nov_cost = sum(nov_cost),
+    dec_cost = sum(dec_cost)
+  ) %>%
+  ungroup() %>%
+  # factor
+  mutate(across(c(location, starts_with("diag")),
+         .x = as.factor(.x)))
+
+
+# Save as zsav file
+outfile %>%
+  haven::write_sav(get_source_extract_path(year, "DN", ext = "zsav"))
+
+# Save as rds file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "DN", ext = "rds"))
+
+
+# End of Script #
