@@ -12,7 +12,7 @@ convert_monthly_rows_to_vars <- function(data, month_num_var, cost_var, beddays_
 
   data %>%
     dplyr::mutate(month_name = tolower(month.abb[{{ month_num_var }}])) %>%
-    select(-{{ month_num_var }}) %>%
+    dplyr::select(-{{ month_num_var }}) %>%
     dplyr::rename(
       cost = {{ cost_var }},
       beddays = {{ beddays_var }}
@@ -23,5 +23,5 @@ convert_monthly_rows_to_vars <- function(data, month_num_var, cost_var, beddays_
       values_from = c(.data$cost, .data$beddays),
       values_fill = 0.00
     ) %>%
-    select(!ends_with(c("_beddays", "_cost")), glue::glue("{month_order}_beddays"), glue::glue("{month_order}_cost"))
+    dplyr::select(! dplyr::ends_with(c("_beddays", "_cost")), glue::glue("{month_order}_beddays"), glue::glue("{month_order}_cost"))
 }
