@@ -6,7 +6,7 @@
 #' @return A data frame with costs applied
 #' @export
 #'
-#'@importFrom dplyr mutate case_when
+#' @importFrom dplyr mutate case_when
 fix_c3_costs <- function(data, year) {
   if (year >= "1819") {
     # Amend cost total net

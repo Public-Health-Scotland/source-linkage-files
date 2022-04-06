@@ -8,12 +8,13 @@
 #' @return A dataframe with monthly cost and bed day variables
 #'
 convert_monthly_rows_to_vars <- function(data, month_num_var, cost_var, beddays_var) {
-
-    data %>%
+  data %>%
     dplyr::mutate(month_name = tolower(month.abb[{{ month_num_var }}])) %>%
     select(-{{ month_num_var }}) %>%
-    dplyr::rename(cost = {{cost_var}},
-           beddays = {{beddays_var}}) %>%
+    dplyr::rename(
+      cost = {{ cost_var }},
+      beddays = {{ beddays_var }}
+    ) %>%
     tidyr::pivot_wider(
       names_from = .data$month_name,
       names_glue = "{month_name}_{.value}",
