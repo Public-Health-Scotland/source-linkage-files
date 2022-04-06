@@ -10,19 +10,20 @@
 #              prior to processing.
 #####################################################
 
-# Packages
-  library(readr)
-  library(stringr)
-  library(dplyr)
-  library(tidyverse)
-  library(lubridate)
+# Load Packages
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(lubridate)
+library(createslf)
 
-year <- "1920"
 
 ## Load extract file---------------------------------
 
+year <- "1920"
+
 maternity_file <- read_csv(
-  file = get_boxi_extract_path(year, "Maternity"), n_max = 20000,
+  file = get_boxi_extract_path(year, "Maternity"),
   col_type = cols(
     `Costs Financial Year` = col_double(),
     `Date of Admission Full Date` = col_date(format = "%Y/%m/%d %T"),
@@ -79,7 +80,7 @@ maternity_file <- read_csv(
     `Maternity Unique Record Identifier [C]` = col_character()
   )
 ) %>%
-# Rename variables in line with SLF variable names
+  # Rename variables in line with SLF variable names
   rename(
     adtf = `Admitted/Transfer from Code (new)`,
     admloc = `Admitted/transfer from - Location Code`,
@@ -125,7 +126,7 @@ maternity_file <- read_csv(
     chi = `Pat UPI [C]`,
     gpprac = `Practice Location Code`,
     hbpraccode = `Practice NHS Board Code - current`,
-    slefharm_adm = `Self Harm Related Admission`,
+    selfharm_adm = `Self Harm Related Admission`,
     sigfac = `Significant Facility Code`,
     spec = `Specialty Classification 1/4/97 Code`,
     submis_adm = `Substance Misuse Related Admission`,
@@ -219,3 +220,4 @@ outfile %>%
   readr::write_rds(get_source_extract_path(year, "Maternity", ext = "rds"))
 
 
+# End of Script #
