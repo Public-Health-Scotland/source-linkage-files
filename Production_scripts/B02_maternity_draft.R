@@ -158,7 +158,7 @@ mutate(cij_ipdc = case_when(
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
 # Calculate beddays
-  create_monthly_beddays(year, record_keydate1, record_keydate2)
+  create_monthly_beddays(year, record_keydate1, record_keydate2, include_costs = TRUE)
 
 
 
