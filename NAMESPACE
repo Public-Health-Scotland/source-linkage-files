@@ -2,6 +2,7 @@
 
 export("%>%")
 export(ca_to_lca)
+export(check_year_format)
 export(convert_eng_gpprac_to_dummy)
 export(convert_fyyear_to_year)
 export(convert_year_to_fyyear)
