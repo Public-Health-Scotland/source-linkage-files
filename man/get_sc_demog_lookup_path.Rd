@@ -13,7 +13,8 @@ defaults to \code{\link{latest_update}}}
 \item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
-The path to the social care demographic file as an \code{\link[fs]{path}}
+The path to the social care demographic file
+as an \code{\link[fs]{path}}
 }
 \description{
 Get the Social Care Demographic lookup file path
