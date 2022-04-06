@@ -10,6 +10,7 @@ create_monthly_beddays(
   year,
   admission_date,
   discharge_date,
+  include_costs = FALSE,
   count_last = TRUE
 )
 }
@@ -21,6 +22,8 @@ create_monthly_beddays(
 \item{admission_date}{The admission/start date variable.}
 
 \item{discharge_date}{The admission/start date variable}
+
+\item{include_costs}{(default \code{FALSE}) - Select true for calculating monthly costs}
 
 \item{count_last}{(default \code{TRUE}) - Should the last day be counted,
 instead of the first?}
