@@ -144,19 +144,78 @@ maternity_clean <- maternity_file %>%
     recid = "02B",
     gender = 2
   ) %>%
-# Set IDPC marker for the cij
-mutate(cij_ipdc = case_when(
-  cij_ipdc == "IP" ~ "I",
-  cij_ipdc == "DC" ~ "D"
-)) %>%
+  # Set IDPC marker for the cij
+  mutate(cij_ipdc = case_when(
+    cij_ipdc == "IP" ~ "I",
+    cij_ipdc == "DC" ~ "D"
+  )) %>%
   # Recode GP practice into 5 digit number
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
-# Calculate beddays
-  create_monthly_beddays(year, record_keydate1, record_keydate2, include_costs = TRUE)
+  # Calculate beddays
+  create_monthly_beddays(year, record_keydate1, record_keydate2, include_costs = TRUE) %>%
+  # Add discondition as a factor
+  mutate(
+    discondition = factor(discondition,
+      levels = c(1:5, 8)
+    )
+  )
 
 
+# Save outfile------------------------------------------------
+
+outfile <- maternity_clean %>%
+  select(
+    year,
+    recid,
+    record_keydate1,
+    record_keydate2,
+    chi,
+    gender,
+    dob,
+    gpprac,
+    hbpraccode,
+    postcode,
+    hbrescode,
+    lca,
+    hscp,
+    location,
+    hbtreatcode,
+    stay,
+    yearstay,
+    spec,
+    sigfac,
+    conc,
+    mpat,
+    adtf,
+    admloc,
+    starts_with("disch"),
+    starts_with("diag"),
+    matches("(date)?op[1-4][ab]?"),
+    age,
+    discondition,
+    starts_with("cij"),
+    alcohol_adm,
+    submis_adm,
+    falls_adm,
+    selfharm_adm,
+    commhosp,
+    nhshosp,
+    cost_total_net,
+    ends_with("_beddays"),
+    ends_with("_cost"),
+    uri
+  ) %>%
+  arrange(chi, record_keydate1)
+
+# Save as zsav file
+outfile %>%
+  haven::read_sav(get_source_extract_path(year, "Maternity", ext = "zsav"))
+
+# Save as rds file
+outfile %>%
+  readr::write_rds(get_source_extract_path(year, "Maternity", ext = "rds"))
 
 
