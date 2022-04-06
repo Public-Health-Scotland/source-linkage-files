@@ -7,7 +7,6 @@
 #' @export
 #'
 fix_c3_costs <- function(data, year) {
-
   first_part <- substr(year, 1, 2)
   second_part <- substr(year, 3, 4)
 
