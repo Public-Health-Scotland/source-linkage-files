@@ -10,6 +10,8 @@ sum_test_flags <- function(data) {
       cols = tidyselect::everything(),
       names_to = "measure",
       values_to = "value"
-    )
+    ) %>%
+    mutate(value = format(round(value, digits = 2), scientific = F))
+
   return(data)
 }
