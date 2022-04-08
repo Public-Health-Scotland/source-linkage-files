@@ -15,5 +15,6 @@ produce_test_comparison <- function(old_data, new_data) {
       diff = .data$value_new - .data$value_old,
       pct_change = .data$diff / .data$value_old * 100,
       issue = !dplyr::between(.data$pct_change, -5, 5)
-    )
+    ) %>%
+    mutate(across(where(is.numeric), ~ format(round(.x, digits = 2), scientific = F)))
 }
