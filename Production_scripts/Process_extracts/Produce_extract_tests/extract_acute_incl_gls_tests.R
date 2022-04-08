@@ -20,14 +20,20 @@ library(slfhelper)
 
 # Read in Data---------------------------------------
 
+year <- "1920"
+
 # Read current SLF episode file and filter for 01B and GLS records
-slf_ep_1920 <- read_slf_episode("1920", recid = c("01B", "GLS"))
+slf_ep_1920 <- read_slf_episode("1920", recid = c("01B", "GLS")) %>%
+  get_chi()
 
 
 # Create new and old dataframes with measures for testing
 # To compare new slf extract to current file in hscdiip
-new_tests <- produce_source_acute_tests(readr::read_rds(get_source_extract_path(year, "Acute")))
-old_tests <- produce_source_acute_tests(slf_ep_1920)
+new_tests <- produce_source_acute_tests(readr::read_rds(get_source_extract_path(year, "Acute", ext = "rds"))) %>%
+  mutate(value = as.numeric(value))
+
+old_tests <- produce_source_acute_tests(slf_ep_1920) %>%
+  mutate(value = as.numeric(value))
 
 
 # Create tests-------------------------------------------
