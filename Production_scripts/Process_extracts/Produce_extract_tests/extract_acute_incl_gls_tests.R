@@ -45,41 +45,7 @@ comparison <- produce_test_comparison(old_tests, new_tests)
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-
-# Load excel workbook
-wb <- loadWorkbook(fs::path(
-  get_slf_dir(), "Tests",
-  paste0(latest_update(), "_tests2.xlsx")
-))
-# add a new sheet for tests
-addWorksheet(wb, "source_gpprac_lookup")
-# write comparison output to new sheet
-writeData(
-  wb,
-  "source_gpprac_lookup",
-  comparison
-)
-# save output
-saveWorkbook(wb,
-             fs::path(
-               get_slf_dir(), "Tests",
-               paste0(latest_update(), "_tests.xlsx")
-             ),
-             overwrite = TRUE
-)
-
-
-# Save output as zsav
-# This can be removed once confirmed excel workbook is okay
-haven::write_sav(comparison,
-                 path(
-                   get_slf_dir(), "Lookups",
-                   paste0("source_GPprac_lookup_", latest_update(), "_tests",
-                          ext = ".zsav"
-                   )
-                 ),
-                 compress = TRUE
-)
+write_tests_xlsx(comparison, "acute_extract")
 
 
 ## END OF SCRIPT ##
