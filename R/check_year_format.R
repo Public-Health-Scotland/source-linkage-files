@@ -23,7 +23,7 @@ check_year_format <- function(year, format = "fyyear") {
   second_part <- substr(year, 3, 4)
 
   if (format == "fyyear") {
-    if (as.integer(first_part) + 1L != as.integer(second_part)) {
+    if (any(as.integer(first_part) + 1L != as.integer(second_part))) {
       rlang::abort(c(
         "The year has been entered in the wrong format.",
         "Try again using the standard form, e.g. `1718`",
@@ -31,7 +31,7 @@ check_year_format <- function(year, format = "fyyear") {
       ))
     }
   } else if (format == "alternate") {
-    if (as.integer(first_part) != 20) {
+    if (any(as.integer(first_part) != 20)) {
       rlang::abort(c(
         "The year has been entered in the wrong format.",
         "Try again using the alternate form, e.g. `2017`",
