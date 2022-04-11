@@ -20,6 +20,5 @@ not already.
 Check that the year is in the correct format
 }
 \examples{
-year <- "1920"
-year <- check_year_format(year)
+year <- check_year_format("1920")
 }
