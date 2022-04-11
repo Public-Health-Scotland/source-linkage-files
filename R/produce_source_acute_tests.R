@@ -18,16 +18,23 @@ produce_source_acute_tests <- function(data) {
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(hbtreatcode, cost_total_net) %>%
     # remove variables that won't be summed
-    select(c(valid_chi:NHS_Lanarkshire_cost))%>%
+    select(c(valid_chi:NHS_Lanarkshire_cost)) %>%
     # use function to sum new test flags
     sum_test_flags()
+  calculate_measures(c(valid_chi:NHS_Lanarkshire_cost), "sum")
 
-  calculate_measures<- data %>%
-    calculate_measures(vars = c("beddays", "cost", "yearstay"))
+  calculate_measures <- data %>%
+    calculate_measures(vars = c("beddays", "cost", "yearstay"), measure = "all")
 
 
-  join_output <- full_join(test_flags, calculate_measures)
+  calc_2 <- data %>%
+    calculate_measures(keydate2, "min-max")
+
+  join_output <- list(
+    test_flags,
+    calculate_measures
+  ) %>%
+    purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 
   return(join_output)
-
 }
