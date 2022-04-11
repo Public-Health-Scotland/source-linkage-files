@@ -11,19 +11,19 @@
 create_hb_cost_test_flags <- function(data, hb_var, cost_var) {
   data <- data %>%
     mutate(
-      NHS_Ayrshire_and_Arran_cost = case_when({{ hb_var }} == "S08000015" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Borders_cost = case_when({{ hb_var }} == "S08000016" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Dumfries_and_Galloway_cost = case_when({{ hb_var }} == "S08000017" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Forth_Valley_cost = case_when({{ hb_var }} == "S08000019" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Grampian_cost = case_when({{ hb_var }} == "S08000020" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Highland_cost = case_when({{ hb_var }} == "S08000022" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Lothian_cost = case_when({{ hb_var }} == "S08000024" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Orkney_cost = case_when({{ hb_var }} == "S08000025" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Shetland_cost = case_when({{ hb_var }} == "S08000026" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Western_Isles_cost = case_when({{ hb_var }} == "S08000028" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Fife_cost = case_when({{ hb_var }} == "S08000029" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Tayside_cost = case_when({{ hb_var }} == "S08000030" ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Greater_Glasgow_and_Clyde_cost = case_when({{ hb_var }} %in% c("S08000031", "S08000021") ~ {{cost_var}}, TRUE ~ 0),
-      NHS_Lanarkshire_cost = case_when({{ hb_var }} %in% c("S08000032", "S08000023") ~ {{cost_var}}, TRUE ~ 0)
+      NHS_Ayrshire_and_Arran_cost = case_when({{ hb_var }} == "S08000015" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Borders_cost = case_when({{ hb_var }} == "S08000016" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Dumfries_and_Galloway_cost = case_when({{ hb_var }} == "S08000017" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Forth_Valley_cost = case_when({{ hb_var }} == "S08000019" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Grampian_cost = case_when({{ hb_var }} == "S08000020" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Highland_cost = case_when({{ hb_var }} == "S08000022" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Lothian_cost = case_when({{ hb_var }} == "S08000024" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Orkney_cost = case_when({{ hb_var }} == "S08000025" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Shetland_cost = case_when({{ hb_var }} == "S08000026" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Western_Isles_cost = case_when({{ hb_var }} == "S08000028" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Fife_cost = case_when({{ hb_var }} == "S08000029" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Tayside_cost = case_when({{ hb_var }} == "S08000030" ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Greater_Glasgow_and_Clyde_cost = case_when({{ hb_var }} %in% c("S08000031", "S08000021") ~ {{ cost_var }}, TRUE ~ 0),
+      NHS_Lanarkshire_cost = case_when({{ hb_var }} %in% c("S08000032", "S08000023") ~ {{ cost_var }}, TRUE ~ 0)
     )
 }

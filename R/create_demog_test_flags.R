@@ -23,4 +23,3 @@ create_demog_test_flags <- function(data) {
       missing_dob = if_else(is.na(.data$dob), 1, 0)
     )
 }
-
