@@ -18,7 +18,7 @@ library(createslf)
 # Read in data---------------------------------------
 
 # specify latest year
-year <- 1920
+year <- "1920"
 year_alt <- convert_fyyear_to_year(year)
 
 # set-up conection to platform
