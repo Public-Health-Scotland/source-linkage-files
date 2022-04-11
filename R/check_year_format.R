@@ -9,8 +9,7 @@
 #' @export
 #'
 #' @examples
-#' year <- "1920"
-#' year <- check_year_format(year)
+#' year <- check_year_format("1920")
 check_year_format <- function(year, format = "fyyear") {
   if (!is.character(year)) {
     rlang::warn(message = c("i" = "`year` should be a character, it will be converted."))
