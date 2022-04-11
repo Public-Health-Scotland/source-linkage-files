@@ -69,25 +69,24 @@ sc_demog <- sc_demog %>%
     # use chi dob if avaliable
     dob = coalesce(chi_date_of_birth, submitted_date_of_birth)
   ) %>%
-# format postcodes using `phsmethods`
-  mutate(across(contains("postcode"), ~postcode(.x, format = "pc7")))
+  # format postcodes using `phsmethods`
+  mutate(across(contains("postcode"), ~ postcode(.x, format = "pc7")))
 
 
 # count number of na postcodes
 na_postcodes <-
   sc_demog %>%
-  count(across(contains("postcode"), ~is.na(.x)))
+  count(across(contains("postcode"), ~ is.na(.x)))
 
 
 sc_demog <- sc_demog %>%
   # remove dummy postcodes invalid postcodes missed by regex check
-  mutate(across(ends_with("_postcode"), ~na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes)))
-  ) %>%
+  mutate(across(ends_with("_postcode"), ~ na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes)))) %>%
   # comparing with regex UK postcode
-  mutate(across(ends_with("_postcode"), ~na_if(.x, !str_detect(.x, uk_pc_regexp)))
-  ) %>%
-  select(latest_record_flag, extract_date, sending_location, social_care_id, upi, gender,
-       dob,submitted_postcode, chi_postcode
+  mutate(across(ends_with("_postcode"), ~ na_if(.x, !str_detect(.x, uk_pc_regexp)))) %>%
+  select(
+    latest_record_flag, extract_date, sending_location, social_care_id, upi, gender,
+    dob, submitted_postcode, chi_postcode
   ) %>%
   # check if submitted_postcode matches with postcode lookup
   mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup$pc7, 1, 0)) %>%
@@ -111,7 +110,7 @@ sc_demog %>%
 # count number of replaced postcode - compare with count above
 na_replaced_postcodes <-
   sc_demog %>%
-  count(across(ends_with("_postcode"), ~is.na(.x)))
+  count(across(ends_with("_postcode"), ~ is.na(.x)))
 
 
 na_replaced_postcodes
@@ -124,18 +123,20 @@ outfile <-
   # group by sending location and ID
   group_by(sending_location, social_care_id) %>%
   # arrange so lastest submissions are last
-  arrange(sending_location,
-          social_care_id,
-          latest_record_flag,
-          extract_date
-          ) %>%
+  arrange(
+    sending_location,
+    social_care_id,
+    latest_record_flag,
+    extract_date
+  ) %>%
   # summarise to select the last (non NA) submission
-  summarise(chi = last(upi),
-            gender = last(gender),
-            dob = last(dob),
-            postcode = last(postcode)
-            ) %>%
-            ungroup()
+  summarise(
+    chi = last(upi),
+    gender = last(gender),
+    dob = last(dob),
+    postcode = last(postcode)
+  ) %>%
+  ungroup()
 
 
 ## save file ##
@@ -146,4 +147,3 @@ haven::write_sav(outfile, get_sc_demog_lookup_path(), compress = TRUE)
 readr::write_rds(outfile, get_sc_demog_lookup_path(), compress = "gz")
 
 ## End of Script ---------------------------------------
-
