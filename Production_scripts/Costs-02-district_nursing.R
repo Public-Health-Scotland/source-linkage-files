@@ -41,7 +41,7 @@ fs::file_copy(
 # Read in cost workbook ---------------------------------------
 
 # latest year #
-latest_year <- 1920
+latest_year <- "1920"
 
 ## data ##
 dn_raw_costs <- readxl::read_excel(
