@@ -7,28 +7,37 @@
 #' @return a tibble with a summary
 #' @export
 #'
-calculate_measures <- function(data, vars, measure = c("sum", "all")) {
-  data <- select(data, matches({{ vars }}))
-
+calculate_measures <- function(data, vars, measure = c("sum", "all", "min-max")) {
   if (measure == "all") {
     data <- data %>%
+      select(matches({{ vars }})) %>%
       summarise(
         across(everything(), ~ sum(.x, na.rm = TRUE), .names = "total_{col}"),
         across(everything(vars = !starts_with("total_")), ~ mean(.x, na.rm = TRUE), .names = "mean_{col}")
       )
   } else if (measure == "sum") {
     data <- data %>%
-      summarise(across(everything(), ~ sum(.x, na.rm = TRUE), .names = "total_{col}"))
+      summarise(across(everything(), ~ sum(.x, na.rm = TRUE)))
+  } else if (measure == "min-max") {
+    data <- data %>%
+      select(matches({{ vars }})) %>%
+      summarise(
+        across(everything(), ~ min(.x, na.rm = TRUE), .names = "min_{col}"),
+        across(everything(vars = !starts_with("min_")), ~ max(.x, na.rm = TRUE), .names = "max_{col}")
+      ) %>%
+      mutate(across(everything(), ~ as.numeric(.x)))
   }
 
-
-  data <- data %>%
+  pivot_data <- data %>%
     tidyr::pivot_longer(
       cols = tidyselect::everything(),
       names_to = "measure",
       values_to = "value"
     ) %>%
-    mutate(value = format(round(value, digits = 2), scientific = F))
+    mutate(
+      value = format(round(value, digits = 2), scientific = F),
+      value = as.numeric(value)
+    )
 
-  return(data)
+  return(pivot_data)
 }
