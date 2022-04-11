@@ -159,7 +159,11 @@ data <-
   data %>%
   group_by(board_name) %>%
   arrange(year, .by_group = TRUE) %>%
-  mutate(cost_total_net = if_else(pct_of_max < 75, lag(cost_total_net, default = first(cost_total_net)) * 1.01, cost_total_net)) %>%
+  mutate(cost_total_net = if_else(pct_of_max < 75,
+                                  lag(cost_total_net,
+                                      default = first(cost_total_net)
+                                      ) * 1.01,
+                                  cost_total_net)) %>%
   ungroup()
 
 
