@@ -18,7 +18,7 @@ library(readr)
 # Read in data---------------------------------------
 
 # Specify year
-year <- 1920
+year <- "1920"
 
 # Read BOXI extract
 outpatients_file <- readr::read_csv(
