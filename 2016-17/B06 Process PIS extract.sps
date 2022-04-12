@@ -5,10 +5,10 @@
 ********************************************************************************************************.
 *This should unzip the PIS extract in the IT extract directory.
 * !PIS_extract_file is dependant on the macro !Extract_Number which can be found in A01b 'Year' Macro and the number should be specific to FY. 
-Host Command = ["gunzip " + !PIS_extract_file].
+Host Command = ["gunzip " + !PIS_extract_file_OLD].
 
 GET DATA  /TYPE=TXT
-    /FILE=!PIS_extract_file
+    /FILE=!PIS_extract_file_OLD
     /ENCODING='UTF8'
     /DELIMITERS=","
     /QUALIFIER='"'
@@ -62,4 +62,4 @@ save outfile = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
 get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
 * zip raw data back up.
-Host Command = ["gzip " + !PIS_extract_file].
+Host Command = ["gzip " + !PIS_extract_file_OLD].

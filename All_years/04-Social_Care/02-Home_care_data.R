@@ -12,9 +12,9 @@ library(tidyr)
 
 source("All_years/04-Social_Care/02a-hc_functions.R")
 
-latest_validated_period <- "2021Q1"
+latest_validated_period <- "2021Q2"
 
-latest_update <- "Dec_2021"
+latest_update <- "Mar_2022"
 
 social_care_dir <- path("/conf/hscdiip/SLF_Extracts/Social_care")
 
