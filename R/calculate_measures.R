@@ -33,10 +33,6 @@ calculate_measures <- function(data, vars, measure = c("sum", "all", "min-max"))
       cols = tidyselect::everything(),
       names_to = "measure",
       values_to = "value"
-    ) %>%
-    mutate(
-      value = format(round(value, digits = 2), scientific = F),
-      value = as.numeric(value)
     )
 
   return(pivot_data)

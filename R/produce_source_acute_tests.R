@@ -33,11 +33,7 @@ produce_source_acute_tests <- function(data) {
     all_measures,
     min_max
   ) %>%
-    purrr::reduce(dplyr::full_join, by = c("measure", "value")) %>%
-    mutate(
-      value = format(round(value, digits = 2), scientific = F),
-      value = as.numeric(value)
-    )
+    purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 
   return(join_output)
 }
