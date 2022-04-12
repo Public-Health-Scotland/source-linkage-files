@@ -2,12 +2,14 @@
 #'
 #' @param data A processed dataframe containing a summary of the mean and sum of variables
 #' @param vars Specify variables you want to test.
-#' This will 'match' this e.g c("beddays", "cost", "yearstay)
+#' This will 'match' this e.g c("beddays", "cost", "yearstay). Default as NULL for summarising
+#' everything in a dataframe.
+#' @param measure The measure you want to apply to variables
 #'
 #' @return a tibble with a summary
 #' @export
 #'
-calculate_measures <- function(data, vars, measure = c("sum", "all", "min-max")) {
+calculate_measures <- function(data, vars = NULL , measure = c("sum", "all", "min-max")) {
   if (measure == "all") {
     data <- data %>%
       select(matches({{ vars }})) %>%

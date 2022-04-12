@@ -17,7 +17,7 @@ produce_source_acute_tests <- function(data) {
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(hbtreatcode, cost_total_net) %>%
-    # remove variables that won't be summed
+    # keep variables for comparison
     select(c(valid_chi:NHS_Lanarkshire_cost)) %>%
     # use function to sum new test flags
   calculate_measures(c('valid_chi':'NHS_Lanarkshire_cost'), "sum")
