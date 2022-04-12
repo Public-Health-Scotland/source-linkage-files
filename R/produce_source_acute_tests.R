@@ -4,7 +4,7 @@
 #' (data is from \code{\link{get_source_extract_path}})
 #'
 #' @return a dataframe with a count of each flag
-#' from \code{\link{sum_test_flags}}
+#' from \code{\link{calculate_measures}}
 #' @export
 #'
 #' @family produce tests functions
@@ -16,9 +16,9 @@ produce_source_acute_tests <- function(data) {
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
-    create_hb_cost_test_flags(hbtreatcode, cost_total_net) %>%
+    create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     # keep variables for comparison
-    select(c(valid_chi:NHS_Lanarkshire_cost)) %>%
+    select(c(.data$valid_chi:.data$NHS_Lanarkshire_cost)) %>%
     # use function to sum new test flags
   calculate_measures(measure = "sum")
 

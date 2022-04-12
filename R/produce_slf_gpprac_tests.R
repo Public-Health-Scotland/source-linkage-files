@@ -4,7 +4,7 @@
 #' (data is from \code{\link{get_slf_gpprac_path}})
 #'
 #' @return a dataframe with a count of each flag
-#' from \code{\link{sum_test_flags}}
+#' from \code{\link{calculate_measures}}
 #' @export
 #' @importFrom dplyr mutate select
 #' @family produce tests functions

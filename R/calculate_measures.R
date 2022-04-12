@@ -12,22 +12,22 @@
 calculate_measures <- function(data, vars = NULL , measure = c("sum", "all", "min-max")) {
   if (measure == "all") {
     data <- data %>%
-      select(matches({{ vars }})) %>%
-      summarise(
-        across(everything(), ~ sum(.x, na.rm = TRUE), .names = "total_{col}"),
-        across(everything(vars = !starts_with("total_")), ~ mean(.x, na.rm = TRUE), .names = "mean_{col}")
+      dplyr:: select(tidyselect::matches({{ vars }})) %>%
+      dplyr:: summarise(
+        dplyr::across(tidyselect::everything(), ~ sum(.x, na.rm = TRUE), .names = "total_{col}"),
+        dplyr::across(tidyselect::everything(vars = !tidyselect::starts_with("total_")), ~ mean(.x, na.rm = TRUE), .names = "mean_{col}")
       )
   } else if (measure == "sum") {
     data <- data %>%
-      summarise(across(everything(), ~ sum(.x, na.rm = TRUE)))
+      dplyr::summarise(dplyr::across(tidyselect::everything(), ~ sum(.x, na.rm = TRUE)))
   } else if (measure == "min-max") {
     data <- data %>%
-      select(matches({{ vars }})) %>%
-      summarise(
-        across(everything(), ~ min(.x, na.rm = TRUE), .names = "min_{col}"),
-        across(everything(vars = !starts_with("min_")), ~ max(.x, na.rm = TRUE), .names = "max_{col}")
+      dplyr::select(tidyselect::matches({{ vars }})) %>%
+      dplyr::summarise(
+        dplyr::across(tidyselect::everything(), ~ min(.x, na.rm = TRUE), .names = "min_{col}"),
+        dplyr::across(tidyselect::everything(vars = !tidyselect::starts_with("min_")), ~ max(.x, na.rm = TRUE), .names = "max_{col}")
       ) %>%
-      mutate(across(everything(), ~ as.numeric(.x)))
+      dplyr::mutate(dplyr::across(tidyselect::everything(), ~ as.numeric(.x)))
   }
 
   pivot_data <- data %>%
