@@ -18,11 +18,11 @@ write_tests_xlsx <- function(comparison_data, name) {
   }
 
   # add a new sheet for tests
-  openxlsx::addWorksheet(wb, name)
+  openxlsx::addWorksheet(wb, paste0(name, "-", format(Sys.Date(), "%d-%m-%Y")))
   # write comparison output to new sheet
   openxlsx::writeData(
     wb,
-    name,
+    paste0(name, "-", format(Sys.Date(), "%d-%m-%Y")),
     comparison_data
   )
   # save output
