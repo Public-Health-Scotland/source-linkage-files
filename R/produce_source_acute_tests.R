@@ -20,7 +20,7 @@ produce_source_acute_tests <- function(data) {
     # keep variables for comparison
     select(c(valid_chi:NHS_Lanarkshire_cost)) %>%
     # use function to sum new test flags
-  calculate_measures(c('valid_chi':'NHS_Lanarkshire_cost'), "sum")
+  calculate_measures(measure = "sum")
 
   all_measures <- data %>%
     calculate_measures(vars = c("beddays", "cost", "yearstay"), measure = "all")
