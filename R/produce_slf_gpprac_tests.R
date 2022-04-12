@@ -24,5 +24,5 @@ produce_slf_gpprac_tests <- function(data) {
       .data$lca
     )) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }

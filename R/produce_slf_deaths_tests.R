@@ -25,5 +25,5 @@ produce_slf_deaths_tests <- function(data) {
       .data$death_date
     )) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }

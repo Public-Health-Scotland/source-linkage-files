@@ -28,5 +28,5 @@ produce_slf_postcode_tests <- function(data) {
       .data$ur8_2016, .data$ur6_2016, .data$ur3_2016, .data$ur2_2016
     )) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }
