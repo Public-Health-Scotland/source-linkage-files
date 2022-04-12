@@ -9,11 +9,11 @@
 #' @return a tibble with a summary
 #' @export
 #'
-calculate_measures <- function(data, vars = NULL , measure = c("sum", "all", "min-max")) {
+calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min-max")) {
   if (measure == "all") {
     data <- data %>%
-      dplyr:: select(tidyselect::matches({{ vars }})) %>%
-      dplyr:: summarise(
+      dplyr::select(tidyselect::matches({{ vars }})) %>%
+      dplyr::summarise(
         dplyr::across(tidyselect::everything(), ~ sum(.x, na.rm = TRUE), .names = "total_{col}"),
         dplyr::across(tidyselect::everything(vars = !tidyselect::starts_with("total_")), ~ mean(.x, na.rm = TRUE), .names = "mean_{col}")
       )

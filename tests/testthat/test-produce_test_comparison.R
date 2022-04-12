@@ -14,7 +14,7 @@ test_that("produce test comparison function returns data", {
     value_old = c(10L, 20L),
     value_new = c(15L, 25L),
     diff = c(5L, 5L),
-    pct_change = c('50%', '25%'),
+    pct_change = c("50%", "25%"),
     issue = c(TRUE, TRUE)
   )
 
