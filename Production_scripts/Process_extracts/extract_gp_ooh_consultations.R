@@ -76,7 +76,7 @@ consultations_file <- read_csv(
     chi = `UPI Number [C]`,
     dob = `Patient DoB Date [C]`,
     gender = `Gender`,
-    potcode = `Patient Postcode [C]`,
+    postcode = `Patient Postcode [C]`,
     hbrescode = `Patient NHS Board Code 9 - current`,
     hscp = `HSCP of Residence Code Current`,
     datazone = `Patient Data Zone 2011`,
@@ -131,12 +131,39 @@ consultations_clean <- consultations_file %>%
   group_by(chi, guid) %>%
   mutate(
     counter = row_number()
+  ) %>%
+  # If we've identified them as duplicates needing merged set the counter to indicate this.
+  mutate(counter = if_else(to_merge == 1, 0, counter - 1)) %>%
+  ungroup() %>%
+  # Aggregate data
+  group_by(guid,
+           chi,
+           attendance_status,
+           hbtreatcode,
+           location,
+           location_description,
+           kis_accessed,
+           refsource,
+           smrtype,
+           counter) %>%
+  summarise(
+    hbrescode = last(hbrescode),
+    datazone = last(datazone),
+    hscp = last(hscp),
+    dob = last(dob),
+    gender = last(gender),
+    postcode = last(postcode),
+    gpprac = last(gpprac),
+    record_keydate1 = min(record_keydate1),
+    record_keydate2 = max(record_keydate2)
   )
 
 
+# Join data ----------------------------------------
 
-* Create counters for unique consultations.
-sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime.
+
+
+
 
 ## Save Outfile -------------------------------------
 
