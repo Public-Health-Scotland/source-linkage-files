@@ -84,7 +84,6 @@ dn_raw_costs_contacts <- full_join(dn_raw_contacts,
 
 # Deal with population cost-------------------------------------
 
-
 ## Calculate population cost for NHS Highland with HSCP population ratio. ##
 # Of the two HSCPs, Argyll and Bute provides the
 # District Nursing data which is 27% of the population.
@@ -117,7 +116,7 @@ population_lookup <- readr::read_rds(read_datazone_pop_file("HSCP2019_pop_est_19
 
 ## match files ##
 
-data <- full_join(dn_raw_costs_contacts,
+matched_data <- full_join(dn_raw_costs_contacts,
   population_lookup,
   by = c("hb2019", "year")
 ) %>%
@@ -139,15 +138,15 @@ data <- full_join(dn_raw_costs_contacts,
 
 ## explore the trends
 
-data <-
-  data %>%
+matched_data <-
+  matched_data %>%
   group_by(board_name) %>%
   mutate(max_contacts = max(number_of_contacts)) %>%
   mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
   ungroup()
 
 # plot #
-ggplot(data = data, aes(x = year, y = pct_of_max, group = board_name)) +
+ggplot(data = matched_data, aes(x = year, y = pct_of_max, group = board_name)) +
   geom_line(aes(color = board_name)) +
   labs(color = "NHS Board", x = "Year")
 
@@ -155,48 +154,51 @@ ggplot(data = data, aes(x = year, y = pct_of_max, group = board_name)) +
 # Deal with costs ------------------------------------------
 
 ## costs with pct_of_max < 75 - uplift ##
-data <-
-  data %>%
+uplift_data <-
+  matched_data %>%
+  mutate(cost_total_net = replace(cost_total_net, pct_of_max < 75, NA)) %>%
   group_by(board_name) %>%
-  arrange(year, .by_group = TRUE) %>%
-  mutate(cost_total_net = if_else(pct_of_max < 75,
-    lag(cost_total_net,
-      default = first(cost_total_net)
-    ) * 1.01,
-    cost_total_net
-  )) %>%
+  mutate(cost_total_net = if_else(is.na(cost_total_net), lag(cost_total_net, default = first(cost_total_net)) * 1.01, cost_total_net)) %>%
   ungroup()
+
+##
+# only needs run if multiple uplift needed in the same health board #
+uplift_data <-
+  uplift_data %>%
+  group_by(board_name) %>%
+  mutate(cost_total_net = if_else(is.na(cost_total_net), lag(cost_total_net, default = first(cost_total_net)) * 1.01, cost_total_net)) %>%
+  ungroup()
+##
 
 
 # plot #
-ggplot(data = data, aes(x = year, y = cost_total_net, group = board_name)) +
+ggplot(data = uplift_data, aes(x = year, y = cost_total_net, group = board_name)) +
   geom_line(aes(color = board_name)) +
   labs(color = "NHS Board", x = "Year")
 
 
 ## Add in years by copying the most recent year we have ##
 
-data <-
+new_years_data <-
   bind_rows(
-    data,
+    uplift_data,
     map_df(1:5, ~
-      data %>%
-        filter(year == latest_year) %>%
-        mutate(
-          cost_total_net = cost_total_net * (1.01)^.x,
-          year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-        ))
+    uplift_data %>%
+      filter(year == latest_year) %>%
+      mutate(
+        cost_total_net = cost_total_net * (1.01)^.x,
+        year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+      ))
   )
 
-
-data <-
-  data %>%
+new_years_data <-
+  new_years_data %>%
   rename(
     hbtreatcode = "hb2019",
     hbtreatname = "treatment_nhs_board_name"
   ) %>%
   select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
-  arrange(year, hbtreatcode)
+  arrange(hbtreatcode, year)
 
 
 ## Check costs haven't changed radically ##
@@ -211,26 +213,46 @@ costs_lookup <-
   )
 
 matched_data_costs <-
-  data %>%
+  new_years_data %>%
   full_join(costs_lookup, by = c("year", "hbtreatcode", "hbtreatname")) %>%
   # compute difference
   mutate(difference = cost_total_net - cost_old) %>%
-  mutate(pct_diff = difference / cost_old * 100)
+  mutate(pct_diff = difference / cost_old * 100) %>%
+  arrange(hbtreatname, year)
 
 
 # Create charts -----------------------------------------------
 
 # plot difference
-ggplot(data = matched_data_costs, aes(x = year, y = difference, fill = hbtreatname)) +
+matched_data_costs %>%
+  filter(!is.na(difference)) %>%
+  ggplot(aes(x = year, y = difference, fill = hbtreatname)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(fill = "NHS Board", x = "Year")
 
+matched_data_costs %>%
+  filter(!is.na(difference)) %>%
+  ggplot(aes(x = year, y = difference, group = hbtreatname)) +
+  geom_line(aes(color = hbtreatname)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(color = "NHS Board", x = "Year")
+
+
 # plot pct_diff
-ggplot(data = matched_data_costs, aes(x = year, y = pct_diff, fill = hbtreatname)) +
+matched_data_costs %>%
+  filter(!is.na(pct_diff)) %>%
+  ggplot(aes(x = year, y = pct_diff, fill = hbtreatname)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(fill = "NHS Board", x = "Year")
+
+matched_data_costs %>%
+  filter(!is.na(pct_diff)) %>%
+  ggplot(aes(x = year, y = pct_diff, group = hbtreatname)) +
+  geom_line(aes(color = hbtreatname)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(color = "NHS Board", x = "Year")
 
 
 ## save outfile ---------------------------------------
