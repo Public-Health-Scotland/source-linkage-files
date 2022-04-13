@@ -15,7 +15,9 @@ get_boxi_extract_path <-
              "Outpatient",
              "AE",
              "DN",
-             "GPOoH",
+             "GP_OoH-c",
+             "GP_OoH-d",
+             "GP_OoH-o",
              "Deaths",
              "CMH",
              "Homelessness"
@@ -35,7 +37,9 @@ get_boxi_extract_path <-
       type == "Outpatient" ~ "Outpatients-episode-level-extract",
       type == "AE" ~ "A&E-episode-level-extract",
       type == "DN" ~ "District-Nursing-contact-level-extract",
-      type == "GPOoH" ~ "GP-OoH-diagnosis-extract",
+      type == "GP_OoH-c" ~ "GP-OoH-consultations-extract",
+      type == "GP_OoH-d" ~ "GP-OoH-diagnosis-extract",
+      type == "GP_OoH-o" ~ "GP-OoH-outcomes-extract",
       type == "Deaths" ~ "NRS-death-registrations-extract",
       type == "CMH" ~ "Community-MH-contact-level-extract",
       type == "Homelessness" ~ "Homelessness-extract"
