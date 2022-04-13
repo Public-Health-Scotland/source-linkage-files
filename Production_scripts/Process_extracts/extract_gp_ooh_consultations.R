@@ -161,6 +161,17 @@ consultations_clean <- consultations_file %>%
 
 # Join data ----------------------------------------
 
+matched_data <- list(
+  consultations_clean,
+  diagnosis_file,
+  outcomes_file
+) %>%
+  purrr::reduce(dplyr::left_join, by = "guid")
+
+
+# Matched Data Cleaning -----------------------------
+
+matched_clean <- matched data
 
 
 
