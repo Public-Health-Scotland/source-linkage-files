@@ -23,44 +23,47 @@ library(lubridate)
 year <- 1920
 
 # Read BOXI extract
-dn_extract <- readr::read_csv(get_boxi_extract_path(year = year,
-                                                    type = "DN")
-                              ) %>%
+dn_extract <- readr::read_csv(get_boxi_extract_path(
+  year = year,
+  type = "DN"
+)) %>%
   # rename
-  rename(age = "Age at Contact Date",
-         dob = "Patient DoB Date [C]",
-         gender = "Gender",
-         hscp = "HSCP of Residence Code (Contact)",
-         hbrescode = "NHS Board of Residence Code 9 (Contact)",
-         lca = "Patient Council Area Code (Contact)",
-         postcode = "Patient Postcode [C] (Contact)",
-         gpprac = "Practice Code (Contact)",
-         datazone = "Patient Data Zone 2011 (Contact)",
-         hbpraccode = "Practice NHS Board Code 9 (Contact)",
-         hbtreatcode = "Treatment NHS Board Code 9",
-         hbtreatname = "Treatment NHS Board Name",
-         chi = "UPI Number [C]",
-         episode_contact_number = "Episode Contact Number",
-         contact_start_time = "Contact Start Time",
-         contact_end_time = "Contact End Time",
-         record_keydate1 = "Contact Date",
-         intervention_1 = "Other Intervention Category (1)",
-         intervention_2 = "Other Intervention Category (2)",
-         intervention_3 = "Other Intervention Category (3)",
-         intervention_4 = "Other Intervention Category (4)",
-         intervention_sub_1 = "Other Intervention Subcategory (1)",
-         intervention_sub_2 = "Other Intervention Subcategory (2)",
-         intervention_sub_3 = "Other Intervention Subcategory (3)",
-         intervention_sub_4 = "Other Intervention Subcategory (4)",
-         primary_intervention = "Primary Intervention Category",
-         primary_intervention_sub = "Primary Intervention Subcategory",
-         duration_contact = "Duration of Contact (measure)",
-         location_contact = "Location of Contact",
-         patient_contact = "Patient Contact Category"
-         ) %>%
+  rename(
+    age = "Age at Contact Date",
+    dob = "Patient DoB Date [C]",
+    gender = "Gender",
+    hscp = "HSCP of Residence Code (Contact)",
+    hbrescode = "NHS Board of Residence Code 9 (Contact)",
+    lca = "Patient Council Area Code (Contact)",
+    postcode = "Patient Postcode [C] (Contact)",
+    gpprac = "Practice Code (Contact)",
+    datazone = "Patient Data Zone 2011 (Contact)",
+    hbpraccode = "Practice NHS Board Code 9 (Contact)",
+    hbtreatcode = "Treatment NHS Board Code 9",
+    hbtreatname = "Treatment NHS Board Name",
+    chi = "UPI Number [C]",
+    episode_contact_number = "Episode Contact Number",
+    contact_start_time = "Contact Start Time",
+    contact_end_time = "Contact End Time",
+    record_keydate1 = "Contact Date",
+    intervention_1 = "Other Intervention Category (1)",
+    intervention_2 = "Other Intervention Category (2)",
+    intervention_3 = "Other Intervention Category (3)",
+    intervention_4 = "Other Intervention Category (4)",
+    intervention_sub_1 = "Other Intervention Subcategory (1)",
+    intervention_sub_2 = "Other Intervention Subcategory (2)",
+    intervention_sub_3 = "Other Intervention Subcategory (3)",
+    intervention_sub_4 = "Other Intervention Subcategory (4)",
+    primary_intervention = "Primary Intervention Category",
+    primary_intervention_sub = "Primary Intervention Subcategory",
+    duration_contact = "Duration of Contact (measure)",
+    location_contact = "Location of Contact",
+    patient_contact = "Patient Contact Category"
+  ) %>%
   mutate(
     dob = as.Date(dob),
-    record_keydate1 = as.Date(record_keydate1))
+    record_keydate1 = as.Date(record_keydate1)
+  )
 
 
 # Data Cleaning  ---------------------------------------
@@ -74,7 +77,8 @@ dn_clean <- dn_extract %>%
   mutate(
     recid = "DN",
     smr_type = "DN",
-    year = year) %>%
+    year = year
+  ) %>%
   # record key date
   mutate(record_keydate2 = record_keydate1) %>%
   # contact end time
@@ -88,11 +92,12 @@ dn_clean <- dn_extract %>%
 
 # Recode HB codes so they match the cost lookup
 dn_extract <- dn_extract %>%
-  mutate(hbtreatcodes = case_when(hbtreatcode == "S08000018" & convert_fyyear_to_year(year) > 2018 ~ "S08000029",
-                                  hbtreatcode == "S08000027" & convert_fyyear_to_year(year) > 2018 ~ "S08000030",
-                                  hbtreatcode == "S08000021" & convert_fyyear_to_year(year) > 2019 ~ "S08000031",
-                                  hbtreatcode == "S08000023" & convert_fyyear_to_year(year) > 2019 ~ "S08000032")
-         ) %>%
+  mutate(hbtreatcodes = case_when(
+    hbtreatcode == "S08000018" & convert_fyyear_to_year(year) > 2018 ~ "S08000029",
+    hbtreatcode == "S08000027" & convert_fyyear_to_year(year) > 2018 ~ "S08000030",
+    hbtreatcode == "S08000021" & convert_fyyear_to_year(year) > 2019 ~ "S08000031",
+    hbtreatcode == "S08000023" & convert_fyyear_to_year(year) > 2019 ~ "S08000032"
+  )) %>%
   # sort by hbtreatcode
   arrange(hbtreatcode)
 
@@ -175,7 +180,8 @@ outfile <- matched_dn_costs %>%
   ungroup() %>%
   # factor
   mutate(across(c(location, starts_with("diag")),
-         .x = as.factor(.x)))
+    .x = as.factor(.x)
+  ))
 
 
 # Save as zsav file
