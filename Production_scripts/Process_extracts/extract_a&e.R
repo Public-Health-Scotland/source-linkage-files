@@ -103,8 +103,8 @@ ae_file <- readr::read_csv(
 
 # Data Cleaning -----------------------------------------
 
-# year variable
 ae_clean <- ae_file %>%
+  # year variable
   mutate(
     year = year,
     recid = "AE2"
