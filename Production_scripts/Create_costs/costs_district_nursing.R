@@ -183,12 +183,12 @@ new_years_data <-
   bind_rows(
     uplift_data,
     map_df(1:5, ~
-    uplift_data %>%
-      filter(year == latest_year) %>%
-      mutate(
-        cost_total_net = cost_total_net * (1.01)^.x,
-        year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-      ))
+      uplift_data %>%
+        filter(year == latest_year) %>%
+        mutate(
+          cost_total_net = cost_total_net * (1.01)^.x,
+          year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+        ))
   )
 
 new_years_data <-
