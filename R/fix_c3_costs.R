@@ -7,13 +7,8 @@
 #' @export
 #'
 fix_c3_costs <- function(data, year) {
-  first_part <- substr(year, 1, 2)
-  second_part <- substr(year, 3, 4)
 
-  if (as.integer(first_part) + 1L != as.integer(second_part)) {
-    stop("Year has been entered in the wrong format, try again using form `1718` or
-         use function `convert_year_to_fyyear` to convert to the financial year form.")
-  }
+  check_year_format(year)
 
   if (year >= "1819") {
     # Amend cost total net
