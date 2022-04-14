@@ -7,7 +7,6 @@
 #' @export
 #'
 fix_c3_costs <- function(data, year) {
-
   year <- check_year_format(year)
 
   if (year >= "1819") {
