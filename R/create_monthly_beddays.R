@@ -63,7 +63,7 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, i
   # Work out costs for each month if applicable
   if (include_costs) {
     costs <- beddays %>%
-      dplyr::rename_with(~ str_replace(., "_beddays", "_costs"))
+      dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_costs"))
 
     data <- dplyr::bind_cols(data, costs) %>%
       dplyr::mutate(dplyr::across(dplyr::ends_with("_costs"), ~ dplyr::if_else(.x != 0, .x / yearstay * cost_total_net, 0)))
