@@ -20,7 +20,7 @@ library(lubridate)
 # Read in data ---------------------------------------
 
 # Specify year
-year <- 1920
+year <- check_year_format("1920")
 
 # Read BOXI extract
 dn_extract <- readr::read_csv(get_boxi_extract_path(
