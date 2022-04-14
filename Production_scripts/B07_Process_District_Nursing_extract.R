@@ -128,7 +128,7 @@ matched_dn_costs <- matched_dn_costs %>%
 
 # continuous care marker
 matched_dn_costs <- matched_dn_costs %>%
-  tibble::add_column(ccm = 1) %>%
+ mutate(ccm = 1) %>%
   group_by(chi) %>%
   mutate(ccm = if_else(day_diff < 7 | day_diff == 7, lead(ccm), lead(ccm) + 1)) %>%
   ungroup()
