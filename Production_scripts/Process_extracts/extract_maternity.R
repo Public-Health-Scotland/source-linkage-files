@@ -20,7 +20,7 @@ library(createslf)
 
 ## Load extract file---------------------------------
 
-year <- "1920"
+year <- check_year_format("1920")
 
 maternity_file <- read_csv(
   file = get_boxi_extract_path(year, "Maternity"),
