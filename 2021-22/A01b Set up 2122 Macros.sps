@@ -15,7 +15,6 @@
 *A01a Set up Universal Macros is located at: 
         * "/conf/irf/11-Development team/Dev00-PLICS-files/All Years/A01a Set up Universal Macros.sps"
 
-
  * Set the Financial Year.
 Define !FY()
    "2122"
@@ -24,11 +23,4 @@ Define !FY()
 * Set the next FY, needed for SPARRA (and HHG).
 Define !NextFY ()
     "2223"
-!EndDefine.
-
-*This related to the file in the IT extracts directory and should unzip this in B06 Process PIS extract.
-*Change this to the relevant number specific to FY.
-* Should be '_extract_NUMBER'.
-Define !PIS_extract_number()
-    "_extract_9_"
 !EndDefine.
