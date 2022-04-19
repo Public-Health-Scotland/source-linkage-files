@@ -62,8 +62,7 @@ outcome_clean <- outcome_file %>%
   # Sort for identifying duplicates
   arrange(guid, outcome) %>%
   # Flag duplicates
-  #### CHECK HERE #### - top row returns NA
-  mutate(duplicate = if_else(guid == lag(guid) & outcome == lag(outcome), 1, 0)) %>%
+  mutate(duplicate = if_else(guid == lag(guid, default = first(guid)) & outcome == lag(outcome, default = first(outcome)), 1, 0)) %>%
   # Remove duplicates
   filter(duplicate == 0) %>%
   # group for getting row order
