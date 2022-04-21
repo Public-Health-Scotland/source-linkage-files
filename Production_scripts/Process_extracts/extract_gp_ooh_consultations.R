@@ -161,19 +161,50 @@ consultations_clean <- consultations_file %>%
 
 # Join data ----------------------------------------
 
-matched_data <- list(
-  consultations_clean,
-  diagnosis_file,
-  outcomes_file
-) %>%
-  purrr::reduce(dplyr::left_join, by = "guid")
+matched_data <- consultations_clean %>%
+  left_join(diagnosis_file, by = "guid") %>%
+  left_join(outcomes_file, by = "guid")
 
 
-# Matched Data Cleaning -----------------------------
+# Deal with costs -----------------------------
 
-matched_clean <- matched data
+ooh_costs <- matched_data %>%
+  mutate(hbtreatcode = case_when(
+    # Recode Fife and Tayside so they match the cost lookup.
+    hbtreatcode == "S08000018" ~ "S08000029",
+    hbtreatcode == "S08000027" ~ "S08000030",
+    # Recode Greater Glasgow & Clyde and Lanarkshire so they
+    # match the costs lookup (2018 > 2019 HB codes).
+    hbtreatcode == "S08000021" ~ "S08000031",
+    hbtreatcode == "S08000023" ~ "S08000032",
+    TRUE ~ hbtreatcode),
+    year = year
+  ) %>%
+  arrange(hbtreatcode, year) %>%
+  # Match to cost lookup
+  left_join(ooh_cost_lookup, by = c("hbtreatcode", "year")) %>%
+  rename(
+    cost_total_net = cost_per_consultation
+  ) %>%
+  create_day_episode_costs(record_keydate1, cost_total_net)
 
 
+# Data Cleaning--------------------------------------
+
+ooh_clean <- ooh_costs %>%
+  mutate(
+    recid = "OoH",
+    smrtype = case_when(smrtype == "DISTRICT NURSE" ~ "OOH-DN",
+                        smrtype == "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
+                        smrtype == "HOME VISIT" ~ "OOH-HomeV",
+                        smrtype == "NHS 24 NURSE ADVICE" ~ "OOH-NHS24",
+                        smrtype == "PCEC/PCC" ~ "OOH-PCC",
+                        TRUE ~ "OOH-Other"
+                        ),
+    age = difftime(midpoint_fy(), dob, "years")
+  ) %>%
+  convert_eng_gpprac_to_dummy(gpprac)
+# split time from date
 
 
 ## Save Outfile -------------------------------------
