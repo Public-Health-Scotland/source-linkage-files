@@ -35,13 +35,15 @@ year_dir <- fs::path(glue::glue("/conf/sourcedev/Source_Linkage_File_Updates/{ye
 sc_demographics <- haven::read_sav(fs::path(
   social_care_dir,
   paste0("sc_demographics_lookup_", latest_update),
-  ext = "zsav")) %>%
+  ext = "zsav"
+)) %>%
   arrange(sending_location, social_care_id)
 
 sc_client <- haven::read_sav(fs::path(
   year_dir,
   paste0("Client_for_Source-20", year),
-  ext = "zsav")) %>%
+  ext = "zsav"
+)) %>%
   arrange(sending_location, social_care_id)
 
 
@@ -53,16 +55,15 @@ db_connection <- phs_db_connection(dsn = "DVPROD")
 # read in data - social care 2 demographic
 at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment")) %>%
   select(
-  sending_location,
-  social_care_id,
-  period,
-  service_type,
-  service_start_date,
-  service_end_date
+    sending_location,
+    social_care_id,
+    period,
+    service_type,
+    service_start_date,
+    service_end_date
   ) %>%
   # fix bad 2017 period
-  mutate(period = if_else(period == "2017", "2017Q4", period)
-  ) %>%
+  mutate(period = if_else(period == "2017", "2017Q4", period)) %>%
   # Drop unvalidated data
   filter(period <= latest_validated_period) %>%
   # order
@@ -70,7 +71,7 @@ at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment")) %>%
   collect()
 
 # Join data --------------------------------------------------------
-matched_data<- at_full_data %>%
+matched_data <- at_full_data %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # Match on client data
@@ -85,7 +86,8 @@ pre_compute_record_dates <- matched_data %>%
   distinct(period) %>%
   mutate(
     year = substr(period, 1, 4),
-    start_fy = as.Date(paste0(year, "-04-01")))
+    start_fy = as.Date(paste0(year, "-04-01"))
+  )
 
 replaced_start_dates <- matched_data %>%
   # Replace missing start dates with the start of the quarter
@@ -106,8 +108,10 @@ at_clean <- replaced_start_dates %>%
   ) %>%
   mutate(
     recid = "AT",
-    smrtype = case_when(service_type == 1 ~ "AT-Alarm",
-                        service_type == 2 ~ "AT-Tele"),
+    smrtype = case_when(
+      service_type == 1 ~ "AT-Alarm",
+      service_type == 2 ~ "AT-Tele"
+    ),
     mid_fy = as.Date(paste0(year, "-09-30")),
     age = difftime(mid_fy, dob, "years"),
     person_id = glue::glue("{sending_location}-{social_care_id}")
@@ -138,3 +142,12 @@ outfile <- at_clean %>%
     sc_day_care
   )
 
+outfile %>%
+  # save rds file
+  write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.rds")),
+    compress = "gz"
+  ) %>%
+  # save sav file
+  write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.zsav")),
+    compress = TRUE
+  )
