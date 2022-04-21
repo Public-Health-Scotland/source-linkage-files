@@ -23,28 +23,35 @@ library(phsmethods)
 
 ## Load extracts ------------------------------------
 
+year <- "1920"
+
 # Diagnosis data
-diagnosis_file <- readr::write_rds(
+diagnosis_file <- haven::read_sav(
   paste0(
     get_year_dir(year = year),
-    "/gp-diagnosis-data-20",
-    year, ".rds"
+    "/gp-diagnosis-data-",
+    year, ".zsav"
   )
 )
 
 # Outcomes data
-outcomes_file <- readr::read_rds(
+outcomes_file <- haven::read_sav(
   paste0(
     get_year_dir(year = year),
-    "/gp-outcomes-data-20",
-    year, ".rds"
+    "/gp-outcomes-data-",
+    year, ".zsav"
   )
 )
 
+# OOH cost lookup
+ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path()) %>%
+  rename(
+    hbtreatcode = TreatmentNHSBoardCode,
+    year = Year
+  )
+
 
 ## Load extract file---------------------------------
-
-year <- "1920"
 
 # Read consultations data
 consultations_file <- read_csv(
