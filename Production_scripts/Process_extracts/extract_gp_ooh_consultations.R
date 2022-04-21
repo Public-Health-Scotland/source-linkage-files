@@ -131,8 +131,8 @@ consultations_clean <- consultations_file %>%
   #### CHECK HERE #### Is lead the right thing to do here in R to go the opposite direction?
   mutate(to_merge = if_else(
     guid == lead(guid) & chi == lead(chi) & record_keydate2 > record_keydate1 &
-      smrtype == lead(smrtype) & location == lead(location), 1, to_merge)
-    ) %>%
+      smrtype == lead(smrtype) & location == lead(location), 1, to_merge
+  )) %>%
   # Create counters for unique consultations.
   arrange(guid, chi, record_keydate1, record_keydate2) %>%
   group_by(chi, guid) %>%
@@ -143,16 +143,18 @@ consultations_clean <- consultations_file %>%
   mutate(counter = if_else(to_merge == 1, 0, counter - 1)) %>%
   ungroup() %>%
   # Aggregate data
-  group_by(guid,
-           chi,
-           attendance_status,
-           hbtreatcode,
-           location,
-           location_description,
-           kis_accessed,
-           refsource,
-           smrtype,
-           counter) %>%
+  group_by(
+    guid,
+    chi,
+    attendance_status,
+    hbtreatcode,
+    location,
+    location_description,
+    kis_accessed,
+    refsource,
+    smrtype,
+    counter
+  ) %>%
   summarise(
     hbrescode = last(hbrescode),
     datazone = last(datazone),
