@@ -194,8 +194,11 @@ ooh_costs <- matched_data %>%
   left_join(ooh_cost_lookup, by = c("hbtreatcode", "year")) %>%
   rename(
     cost_total_net = cost_per_consultation
-  ) %>%
-  create_day_episode_costs(record_keydate1, cost_total_net)
+  )
+
+# Runs too long? Potential error here??
+#monthly_costs <- ooh_costs %>%
+  #create_day_episode_costs(record_keydate1, cost_total_net)
 
 
 # Data Cleaning--------------------------------------
