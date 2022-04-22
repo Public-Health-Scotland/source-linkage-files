@@ -28,8 +28,6 @@ existing_data <- read_slf_episode("1920", recid = c("01B", "GLS")) %>%
 
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
-comparison <- produce_test_comparison(old_tests, new_tests)
-
 comparison <- produce_test_comparison(
   produce_source_acute_tests(existing_data),
   produce_source_acute_tests(new_data))

@@ -26,7 +26,7 @@ produce_source_acute_tests <- function(data) {
     calculate_measures(vars = c("beddays", "cost", "yearstay"), measure = "all")
 
   min_max <- data %>%
-    calculate_measures(c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"), "min-max")
+    calculate_measures(vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"), measure = "min-max")
 
   join_output <- list(
     test_flags,

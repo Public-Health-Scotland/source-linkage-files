@@ -10,6 +10,9 @@
 #' @export
 #'
 calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min-max")) {
+
+  measure <- match.arg(measure)
+
   if (measure == "all") {
     data <- data %>%
       dplyr::select(tidyselect::matches({{ vars }})) %>%
