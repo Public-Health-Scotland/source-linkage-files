@@ -20,6 +20,7 @@ library(dplyr)
 library(tidyverse)
 library(createslf)
 library(phsmethods)
+library(lubridate)
 
 ## Load extracts ------------------------------------
 
@@ -204,7 +205,17 @@ ooh_costs <- matched_data %>%
 # Data Cleaning--------------------------------------
 
 ooh_clean <- ooh_costs %>%
+  #TO DO - test code from here. objects taking too long.
+  # rename outcomes
+  rename(
+    ooh_outcome.1 = outcome.1,
+    ooh_outcome.2 = outcome.2,
+    ooh_outcome.3 = outcome.3,
+    ooh_outcome.4 = outcome.4
+  ) %>%
   mutate(
+  # Replace location unknown with blank. Should this be NA?
+    location = if_else(location == "UNKNOWN", "", location),
     recid = "OoH",
     smrtype = case_when(smrtype == "DISTRICT NURSE" ~ "OOH-DN",
                         smrtype == "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
@@ -213,16 +224,89 @@ ooh_clean <- ooh_costs %>%
                         smrtype == "PCEC/PCC" ~ "OOH-PCC",
                         TRUE ~ "OOH-Other"
                         ),
-    age = difftime(midpoint_fy(), dob, "years")
-  ) %>%
+    kis_accessed = case_when(kis_accessed == "Y" ~ 1,
+                             kis_accessed == "N" ~ 0,
+                             TRUE ~ 9
+                             ),
+    ooh_cc =
+    ) %>%
   convert_eng_gpprac_to_dummy(gpprac)
 # split time from date
+  mutate(
+    key_time1 = hms(substr(record_keydate1, 12, 19)),
+    key_time2 = hms(substr(record_keydate2, 12, 19))
+  ) %>%
+  # Keep the location descriptions as a lookup.
+  group_by(location) %>%
+  summarise(
+    location_description = first(location_description)
+  ) %>%
+    ungroup() %>%
+
+    arrange(guid) %>%
+    # group for getting row order
+    group_by(guid) %>%
+    mutate(row_order = row_number())
+
+
+  #Compute ooh_CC = 0.
+  #If $Casenum = 1 OR (CHI NE lag(CHI)) ooh_CC = 1.
+  #Do If ooh_CC = 0.
+ # Do If GUID NE lag(GUID).
+  #Compute ooh_CC = lag(ooh_CC) + 1.
+  #Else.
+  #Compute ooh_CC = lag(ooh_CC).
+  #End if.
+  #End if.
 
 
 ## Save Outfile -------------------------------------
 
-outfile <- clean %>%
-  select()
+outfile <- ooh_clean %>%
+    arrange(
+      chi,
+      record_keydate1,
+      keytime1
+    )
+  select(
+    year,
+    recid,
+    smrtype,
+    record_keydate1,
+    record_keydate2,
+    keytime1,
+    keytime2,
+    chi,
+    gender,
+    dob,
+    age,
+    gpprac,
+    postcode,
+    hbrescode,
+    datazone,
+    hscp,
+    hbtreatcode,
+    location,
+    attendance_status,
+    kis_Accessed,
+    refsource,
+    contains("diag"),
+    contains("ooh_outcome"),
+    cost_total_net,
+    apr_cost,
+    may_cost,
+    jun_cost,
+    jul_cost,
+    aug_cost,
+    sep_cost,
+    oct_cost,
+    nov_cost,
+    dec_cost,
+    jan_cost,
+    feb_cost,
+    mar_cost,
+    ooh_CC
+  )
 
 ## Housekeeping -------------------------------------
 
