@@ -160,10 +160,11 @@ uplift_data <-
   group_by(board_name)
 
 
-while(sum(is.na(uplift_data$cost_total_net)) != 0) {
-      uplift_data$cost_total_net = if_else(is.na(uplift_data$cost_total_net),
-                                           lag(uplift_data$cost_total_net, default = first(uplift_data$cost_total_net)) * 1.01,
-                                           uplift_data$cost_total_net)
+while (sum(is.na(uplift_data$cost_total_net)) != 0) {
+  uplift_data$cost_total_net <- if_else(is.na(uplift_data$cost_total_net),
+    lag(uplift_data$cost_total_net, default = first(uplift_data$cost_total_net)) * 1.01,
+    uplift_data$cost_total_net
+  )
 }
 
 uplift_data <-
