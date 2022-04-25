@@ -23,10 +23,12 @@ library(lubridate)
 year <- check_year_format("1920")
 
 # Read BOXI extract
-dn_extract <- readr::read_csv(get_boxi_extract_path(
+dn_extract <- readr::read_csv(
+  file = get_boxi_extract_path(
   year = year,
   type = "DN"
-)) %>%
+  )
+) %>%
   # rename
   rename(
     age = "Age at Contact Date",
@@ -62,7 +64,8 @@ dn_extract <- readr::read_csv(get_boxi_extract_path(
   ) %>%
   mutate(
     dob = as.Date(dob),
-    record_keydate1 = as.Date(record_keydate1)
+    record_keydate1 = as.Date(record_keydate1),
+    gpprac = as.character(gpprac)
   )
 
 
@@ -83,8 +86,7 @@ dn_clean <- dn_extract %>%
   mutate(record_keydate2 = record_keydate1) %>%
   # contact end time
   mutate(contact_end_time = hms::as_hms(contact_start_time + dminutes(duration_contact))) %>%
-  # gpprac tidy
-  mutate(gpprac = as.character(gpprac)) %>%
+  # gpprac
   convert_eng_gpprac_to_dummy(gpprac)
 
 
@@ -102,46 +104,42 @@ dn_extract <- dn_extract %>%
   arrange(hbtreatcode)
 
 
-# match files with DN Cost Lookup
 # read in DN cost lookup
-dn_costs_lookup <- haven::read_sav(get_dn_costs_path())
+dn_costs_lookup <- haven::read_sav(get_dn_costs_path()) %>%
+  select(-hbtreatname)
 
-dn_costs_lookup <- dn_costs_lookup %>%
-  select(-hbtreatname) %>%
-  rename(year = "Year") %>%
-  mutate(year = as.numeric(year))
-
+# match files with DN Cost Lookup
 matched_dn_costs <- dn_clean %>%
   full_join(dn_costs_lookup, by = c("hbtreatcode", "year")) %>%
   # costs are rough estimates we round them to the nearest pound
   mutate(cost_total_net = round(cost_total_net, 0))
 
-
 # difference between dates of contacts
-matched_dn_costs <- matched_dn_costs %>%
+dn_costs_dates <- matched_dn_costs %>%
   arrange(chi, record_keydate1) %>%
   group_by(chi) %>%
-  mutate(date_1 = record_keydate1, date_2 = lead(record_keydate1), day_diff = as.numeric(date_2 - date_1)) %>%
-  ungroup() %>%
-  filter(!is.na(day_diff))
-
+  mutate(date_1 = record_keydate1,
+         date_2 = lead(record_keydate1),
+         day_diff = as.numeric(date_2 - date_1)
+         ) %>%
+  ungroup()
 
 # continuous care marker
-matched_dn_costs <- matched_dn_costs %>%
- mutate(ccm = 1) %>%
+dn_costs_ccm <- dn_costs_dates %>%
+  mutate(ccm = 1) %>%
   group_by(chi) %>%
   mutate(ccm = if_else(day_diff < 7 | day_diff == 7, lead(ccm), lead(ccm) + 1)) %>%
   ungroup()
 
 
 # costs per month
-matched_dn_costs <- matched_dn_costs %>%
+dn_costs_month <- dn_costs_ccm %>%
   create_day_episode_costs(record_keydate1, cost_total_net)
 
 
 ## save outfile ---------------------------------------
 
-outfile <- matched_dn_costs %>%
+outfile <- dn_costs_month %>%
   group_by(year, chi, recid, smr_type, ccm) %>%
   summarise(
     record_keydate1 = min(record_keydate1),
