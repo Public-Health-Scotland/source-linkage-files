@@ -157,19 +157,18 @@ ggplot(data = matched_data, aes(x = year, y = pct_of_max, group = board_name)) +
 uplift_data <-
   matched_data %>%
   mutate(cost_total_net = replace(cost_total_net, pct_of_max < 75, NA)) %>%
-  group_by(board_name) %>%
-  mutate(cost_total_net = if_else(is.na(cost_total_net), lag(cost_total_net, default = first(cost_total_net)) * 1.01, cost_total_net)) %>%
-  ungroup()
+  group_by(board_name)
 
-##
-# only needs run if multiple uplift needed in the same health board #
+
+while(sum(is.na(uplift_data$cost_total_net)) != 0) {
+      uplift_data$cost_total_net = if_else(is.na(uplift_data$cost_total_net),
+                                           lag(uplift_data$cost_total_net, default = first(uplift_data$cost_total_net)) * 1.01,
+                                           uplift_data$cost_total_net)
+}
+
 uplift_data <-
   uplift_data %>%
-  group_by(board_name) %>%
-  mutate(cost_total_net = if_else(is.na(cost_total_net), lag(cost_total_net, default = first(cost_total_net)) * 1.01, cost_total_net)) %>%
   ungroup()
-##
-
 
 # plot #
 ggplot(data = uplift_data, aes(x = year, y = cost_total_net, group = board_name)) +
