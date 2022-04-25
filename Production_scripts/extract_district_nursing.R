@@ -1,5 +1,5 @@
 #####################################################
-# Districy Nursing Extract
+# District Nursing Extract
 # Author: Catherine Holland
 # Date: February 2022
 # Written on RStudio Server
