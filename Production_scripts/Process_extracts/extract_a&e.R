@@ -549,7 +549,7 @@ ae_cup_clean <- ae_cup_file %>%
 # Join data--------------------------------------------
 
 matched_ae_data <- outfile %>%
-  full_join(ae_cup_clean, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
+  left_join(ae_cup_clean, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
   arrange(chi, record_keydate1, keyTime1, record_keydate2, keyTime2)
 
 
