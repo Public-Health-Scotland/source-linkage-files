@@ -63,18 +63,20 @@ check <- diagnosis_file %>%
   tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
                              str_pad(5, "right", ".")) %>%
   # Join diagnosis to readcode lookup
-  # Identify
+  # Identify diagnosis descriptions which match the readcode lookup
   left_join(read_code_lookup %>%
             mutate(fullmatch1 = 1),
             by = c("readcode", "description")) %>%
+  # match on true description from readcode lookup
   left_join(read_code_lookup %>%
             rename(true_description = description),
             by = c("readcode")) %>%
-  # replace wrong description with readcode
+  # replace description with true description from readcode lookup if this is different
   mutate(description = if_else(is.na(fullmatch1) & !is.na(true_description),
                                true_description, description)) %>%
+  # Join to readcode lookup again to check
   left_join(read_code_lookup %>%
-            mutate(fullmatch2 = 1),
+            mutate(full_match2 = 1),
             by = c("readcode", "description")) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
   mutate(readcode = case_when(
@@ -82,50 +84,6 @@ check <- diagnosis_file %>%
     full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
     full_match2 == 0 & readcode == "HO6.." ~ "H06..",
     full_match2 == 0 & readcode == "zV6.." ~ "ZVz.."))
-
-
-
-
-matched_data <- diagnosis_file %>%
-  # Sort for matching
-  #arrange(readcode, description) %>%
-  # match by read code
-  left_join(read_code_lookup, by = "readcode") %>%
-  # rename
-  rename(
-    "description" = "description.x",
-    "true_description" = "description.y"
-  ) %>%
-  # replace NA string with blank
-  mutate(true_description = replace_na(true_description, "")) %>%
-  # identify matching descriptions
-  mutate(full_match1 = if_else(description == true_description, 1, 0)) %>%
-  # If we had a description in the lookup that matched a Read code, use that one now.
-  mutate(description = if_else(full_match1 == 0 & true_description != "",
-    true_description, description
-  )) %>%
-  # match by read code
-  left_join(read_code_lookup, by = "readcode", "description") %>%
-  # replace NA string with blank
-  mutate(description.y = replace_na(description.y, "")) %>%
-  # identify matching descriptions
-  mutate(full_match2 = if_else(description.x == description.y, 1, 0)) %>%
-  # rename
-  rename(
-    "description" = "description.x",
-    "true_description2" = "description.y"
-  ) %>%
-  mutate(old_readcode = readcode) %>%
-  # Check the output for any dodgy Read codes and try and fix by adding exceptions
-  mutate(readcode = case_when(
-    full_match2 == 0 & readcode == "Xa1m." ~ "S349",
-    full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
-    full_match2 == 0 & readcode == "HO6.." ~ "H06..",
-    full_match2 == 0 & readcode == "zV6.." ~ "ZVz..",
-    full_match2 == 0 ~ str_replace_all(readcode, "\?", "\."),
-    full_match2 == 0 ~ str_replace_all(readcode, "(\\w{5})", "\\1\."),
-    TRUE ~ readcode
-  ))
 
 
 ## Data Cleaning ---------------------------------
