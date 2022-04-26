@@ -18,7 +18,7 @@ library(readr)
 # Read in data---------------------------------------
 
 # Specify year
-year <- 1920
+year <- check_year_format("1920")
 
 ae_file <- readr::read_csv(
   file = get_boxi_extract_path(year, "AE"),
