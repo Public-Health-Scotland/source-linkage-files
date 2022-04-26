@@ -112,7 +112,6 @@ matched_dn_costs <- dn_clean %>%
   # costs are rough estimates we round them to the nearest pound
   mutate(cost_total_net = round(cost_total_net, 0))
 
-
 # difference between dates of contacts
 matched_dn_costs <- matched_dn_costs %>%
   arrange(chi, record_keydate1) %>%
@@ -121,7 +120,6 @@ matched_dn_costs <- matched_dn_costs %>%
          date_2 = lead(record_keydate1),
          day_diff = as.numeric(date_2 - date_1)) %>%
   ungroup()
-
 
 # continuous care marker
 matched_dn_costs <- matched_dn_costs %>%
@@ -174,11 +172,7 @@ outfile <- matched_dn_costs %>%
     nov_cost = sum(nov_cost),
     dec_cost = sum(dec_cost)
   ) %>%
-  ungroup() %>%
-  # factor
-  mutate(across(c(location, starts_with("diag")),
-                .x = as.factor(.x)
-  ))
+  ungroup()
 
 
 # Save as zsav file
