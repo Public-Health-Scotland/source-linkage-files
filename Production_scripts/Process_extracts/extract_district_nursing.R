@@ -116,9 +116,11 @@ matched_dn_costs <- dn_clean %>%
 matched_dn_costs <- matched_dn_costs %>%
   arrange(chi, record_keydate1) %>%
   group_by(chi) %>%
-  mutate(date_1 = record_keydate1,
-         date_2 = lead(record_keydate1),
-         day_diff = as.numeric(date_2 - date_1)) %>%
+  mutate(
+    date_1 = record_keydate1,
+    date_2 = lead(record_keydate1),
+    day_diff = as.numeric(date_2 - date_1)
+  ) %>%
   ungroup()
 
 # continuous care marker
@@ -172,7 +174,15 @@ outfile <- matched_dn_costs %>%
     nov_cost = sum(nov_cost),
     dec_cost = sum(dec_cost)
   ) %>%
+<<<<<<< HEAD
   ungroup()
+=======
+  ungroup() %>%
+  # factor
+  mutate(across(c(location, starts_with("diag")),
+    .x = as.factor(.x)
+  ))
+>>>>>>> df42083c4c9eb91c766706af0e92baf7649d02c9
 
 
 # Save as zsav file
