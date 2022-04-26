@@ -58,9 +58,37 @@ diagnosis_file <- read_csv(
 
 ## Deal with Read Codes --------------------------
 
+check <- diagnosis_file %>%
+  # Apply readcode changes
+  tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
+                             str_pad(5, "right", ".")) %>%
+  # Join diagnosis to readcode lookup
+  # Identify
+  left_join(read_code_lookup %>%
+            mutate(fullmatch1 = 1),
+            by = c("readcode", "description")) %>%
+  left_join(read_code_lookup %>%
+            rename(true_description = description),
+            by = c("readcode")) %>%
+  # replace wrong description with readcode
+  mutate(description = if_else(is.na(fullmatch1) & !is.na(true_description),
+                               true_description, description)) %>%
+  left_join(read_code_lookup %>%
+            mutate(fullmatch2 = 1),
+            by = c("readcode", "description")) %>%
+  # Check the output for any dodgy Read codes and try and fix by adding exceptions
+  mutate(readcode = case_when(
+    full_match2 == 0 & readcode == "Xa1m." ~ "S349",
+    full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
+    full_match2 == 0 & readcode == "HO6.." ~ "H06..",
+    full_match2 == 0 & readcode == "zV6.." ~ "ZVz.."))
+
+
+
+
 matched_data <- diagnosis_file %>%
   # Sort for matching
-  arrange(readcode, description) %>%
+  #arrange(readcode, description) %>%
   # match by read code
   left_join(read_code_lookup, by = "readcode") %>%
   # rename
@@ -94,8 +122,8 @@ matched_data <- diagnosis_file %>%
     full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
     full_match2 == 0 & readcode == "HO6.." ~ "H06..",
     full_match2 == 0 & readcode == "zV6.." ~ "ZVz..",
-    full_match2 == 0 ~ str_replace_all(readcode, "\\?", "\\."),
-    full_match2 == 0 ~ str_replace_all(readcode, "\\d{5}", "\\d{5}."),
+    full_match2 == 0 ~ str_replace_all(readcode, "\?", "\."),
+    full_match2 == 0 ~ str_replace_all(readcode, "(\\w{5})", "\\1\."),
     TRUE ~ readcode
   ))
 
@@ -110,7 +138,7 @@ dianosis_clean <- matched_data %>%
     duplicate = if_else(guid == lag(guid, default = first(guid)) & readcode == lag(readcode, default = first(readcode)), 1, 0)
   ) %>%
   filter(duplicate == 0) %>%
-  mutate(readcodelevel = str_locate(readcode, "[.]"))
+  mutate(readcodelevel = str_locate(readcode, "[.]"),
          readcodelevel = replace_na(readcodelevel, 0)
          ) %>%
   group_by(guid, readcode) %>%
