@@ -7,7 +7,7 @@
 ca_to_lca(ca)
 }
 \arguments{
-\item{ca}{vector of council area codes}
+\item{ca}{vector of council area codes or names}
 }
 \value{
 a vector of local council codes
