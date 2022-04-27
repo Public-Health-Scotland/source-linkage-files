@@ -13,7 +13,7 @@ convert_ca_to_lca <- function(ca_var) {
     ca_var == "S12000033" | ca_var == "Aberdeen City" ~ "01", # Aberdeen City
     ca_var == "S12000034" | ca_var == "Aberdeenshire" ~ "02", # Aberdeenshire
     ca_var == "S12000041" | ca_var == "Angus" ~ "03", # Angus
-    ca_var == "S12000035" | ca_var == "Argyll and Bute" ~ "04", # Argyll and Bute
+    ca_var == "S12000035" | ca_var == "Argyll & Bute" ~ "04", # Argyll & Bute
     ca_var == "S12000026" | ca_var == "Scottish Borders" ~ "05", # Scottish Borders
     ca_var == "S12000005" | ca_var == "Clackmannanshire" ~ "06", # Clackmannanshire
     ca_var == "S12000039" | ca_var == "West Dunbartonshire" ~ "07", # West Dun
@@ -41,7 +41,7 @@ convert_ca_to_lca <- function(ca_var) {
     ca_var == "S12000029" | ca_var == "South Lanarkshire" ~ "29", # South Lan
     ca_var == "S12000030" | ca_var == "Stirling" ~ "30", # Stirling
     ca_var == "S12000040" | ca_var == "West Lothian" ~ "31", # West Lothian
-    ca_var == "S12000013" | ca_var == "Na h-Eileanan Siar" ~ "32" # Na h-Eileanan Siar
+    ca_var == "S12000013" | ca_var == "Na h-Eileanan Siar" | ca_var == "Comhairle nan Eilean Siar"  ~ "32" # Na h-Eileanan Siar
   )
   return(lca)
 }
