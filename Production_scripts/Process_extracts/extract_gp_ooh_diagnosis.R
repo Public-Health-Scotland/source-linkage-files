@@ -61,30 +61,35 @@ diagnosis_file <- read_csv(
 diagnosis_clean <- diagnosis_file %>%
   # Apply readcode changes
   tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
-                             str_pad(5, "right", ".")) %>%
+    str_pad(5, "right", ".")) %>%
   # Join diagnosis to readcode lookup
   # Identify diagnosis descriptions which match the readcode lookup
   left_join(read_code_lookup %>%
-            mutate(fullmatch1 = 1),
-            by = c("readcode", "description")) %>%
+    mutate(fullmatch1 = 1),
+  by = c("readcode", "description")
+  ) %>%
   # match on true description from readcode lookup
   left_join(read_code_lookup %>%
-            rename(true_description = description),
-            by = c("readcode")) %>%
+    rename(true_description = description),
+  by = c("readcode")
+  ) %>%
   # replace description with true description from readcode lookup if this is different
   mutate(description = if_else(is.na(fullmatch1) & !is.na(true_description),
-                               true_description, description)) %>%
+    true_description, description
+  )) %>%
   # Join to readcode lookup again to check
   left_join(read_code_lookup %>%
-            mutate(full_match2 = 1),
-            by = c("readcode", "description")) %>%
+    mutate(full_match2 = 1),
+  by = c("readcode", "description")
+  ) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
   mutate(readcode = case_when(
     full_match2 == 0 & readcode == "Xa1m." ~ "S349",
     full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
     full_match2 == 0 & readcode == "HO6.." ~ "H06..",
     full_match2 == 0 & readcode == "zV6.." ~ "ZVz..",
-    TRUE ~ readcode))
+    TRUE ~ readcode
+  ))
 
 
 ## Data Cleaning ---------------------------------
@@ -99,7 +104,7 @@ diagnosis_clean <- diagnosis_clean %>%
   filter(duplicate == 0) %>%
   # Base R way - not working
   # mutate(readcodelevel = gregexpr('[.]', readcode)[1])
-    mutate(
+  mutate(
     readcodelevel = str_locate(readcode, "[.]"),
     readcodelevel = replace_na(readcodelevel, 0)
   ) %>%

@@ -179,15 +179,17 @@ matched_data <- consultations_clean %>%
 # Deal with costs -----------------------------
 
 ooh_costs <- matched_data %>%
-  mutate(hbtreatcode = case_when(
-    # Recode Fife and Tayside so they match the cost lookup.
-    hbtreatcode == "S08000018" ~ "S08000029",
-    hbtreatcode == "S08000027" ~ "S08000030",
-    # Recode Greater Glasgow & Clyde and Lanarkshire so they
-    # match the costs lookup (2018 > 2019 HB codes).
-    hbtreatcode == "S08000021" ~ "S08000031",
-    hbtreatcode == "S08000023" ~ "S08000032",
-    TRUE ~ hbtreatcode),
+  mutate(
+    hbtreatcode = case_when(
+      # Recode Fife and Tayside so they match the cost lookup.
+      hbtreatcode == "S08000018" ~ "S08000029",
+      hbtreatcode == "S08000027" ~ "S08000030",
+      # Recode Greater Glasgow & Clyde and Lanarkshire so they
+      # match the costs lookup (2018 > 2019 HB codes).
+      hbtreatcode == "S08000021" ~ "S08000031",
+      hbtreatcode == "S08000023" ~ "S08000032",
+      TRUE ~ hbtreatcode
+    ),
     year = year
   ) %>%
   arrange(hbtreatcode, year) %>%
@@ -213,16 +215,19 @@ ooh_clean <- ooh_costs %>%
     # Replace location unknown with blank. Should this be NA?
     location = if_else(location == "UNKNOWN", "", location),
     recid = "OoH",
-    smrtype = case_when(smrtype == "DISTRICT NURSE" ~ "OOH-DN",
-                        smrtype == "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
-                        smrtype == "HOME VISIT" ~ "OOH-HomeV",
-                        smrtype == "NHS 24 NURSE ADVICE" ~ "OOH-NHS24",
-                        smrtype == "PCEC/PCC" ~ "OOH-PCC",
-                        TRUE ~ "OOH-Other"
+    smrtype = case_when(
+      smrtype == "DISTRICT NURSE" ~ "OOH-DN",
+      smrtype == "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
+      smrtype == "HOME VISIT" ~ "OOH-HomeV",
+      smrtype == "NHS 24 NURSE ADVICE" ~ "OOH-NHS24",
+      smrtype == "PCEC/PCC" ~ "OOH-PCC",
+      TRUE ~ "OOH-Other"
     ),
-    kis_accessed = case_when(kis_accessed == "Y" ~ 1,
-                             kis_accessed == "N" ~ 0,
-                             TRUE ~ 9)
+    kis_accessed = case_when(
+      kis_accessed == "Y" ~ 1,
+      kis_accessed == "N" ~ 0,
+      TRUE ~ 9
+    )
   ) %>%
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # split time from date
@@ -245,61 +250,64 @@ ooh_clean <- ooh_clean %>%
   arrange(guid, chi) %>%
   # group for getting row order
   group_by(guid, chi) %>%
-  mutate(row_order = row_number(),
-         ooh_cc = 0,
-         ooh_cc = case_when(ooh_cc == 0 & row_order == 1 | chi != lag(chi, default = first(chi)) ~ 1,
-                            ooh_cc == 0 & guid != lag(guid) ~ lag(ooh_cc, default = first(ooh_cc)) + 1,
-                            ooh_cc == 0 ~ lag(ooh_cc, default = first(ooh_cc))
-         ))
+  mutate(
+    row_order = row_number(),
+    ooh_cc = 0,
+    ooh_cc = case_when(
+      ooh_cc == 0 & row_order == 1 | chi != lag(chi, default = first(chi)) ~ 1,
+      ooh_cc == 0 & guid != lag(guid) ~ lag(ooh_cc, default = first(ooh_cc)) + 1,
+      ooh_cc == 0 ~ lag(ooh_cc, default = first(ooh_cc))
+    )
+  )
 
 
 ## Save Outfile -------------------------------------
 
 outfile <- ooh_clean %>%
-    arrange(
-      chi,
-      record_keydate1,
-      keytime1
-    )
-  select(
-    year,
-    recid,
-    smrtype,
-    record_keydate1,
-    record_keydate2,
-    keytime1,
-    keytime2,
+  arrange(
     chi,
-    gender,
-    dob,
-    age,
-    gpprac,
-    postcode,
-    hbrescode,
-    datazone,
-    hscp,
-    hbtreatcode,
-    location,
-    attendance_status,
-    kis_Accessed,
-    refsource,
-    contains("diag"),
-    contains("ooh_outcome"),
-    cost_total_net,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
-    ooh_CC
+    record_keydate1,
+    keytime1
   )
+select(
+  year,
+  recid,
+  smrtype,
+  record_keydate1,
+  record_keydate2,
+  keytime1,
+  keytime2,
+  chi,
+  gender,
+  dob,
+  age,
+  gpprac,
+  postcode,
+  hbrescode,
+  datazone,
+  hscp,
+  hbtreatcode,
+  location,
+  attendance_status,
+  kis_Accessed,
+  refsource,
+  contains("diag"),
+  contains("ooh_outcome"),
+  cost_total_net,
+  apr_cost,
+  may_cost,
+  jun_cost,
+  jul_cost,
+  aug_cost,
+  sep_cost,
+  oct_cost,
+  nov_cost,
+  dec_cost,
+  jan_cost,
+  feb_cost,
+  mar_cost,
+  ooh_CC
+)
 
 ## Housekeeping -------------------------------------
 

@@ -29,9 +29,10 @@ year <- "1920"
 outcome_file <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-o"),
   col_type = cols(
-    `GUID`= col_character(),
+    `GUID` = col_character(),
     `Case Outcome` = col_character()
-  )) %>%
+  )
+) %>%
   # rename variables
   rename(
     guid = `GUID`,
@@ -47,17 +48,18 @@ outcome_clean <- outcome_file %>%
   # Recode outcome
   mutate(
     outcome = recode(outcome,
-              "DEATH" = "00",
-              "999/AMBULANCE" = "01",
-              "EMERGENCY ADMISSION" = "02",
-              "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
-              "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
-              "REFERRED TO A&E" = "21",
-              "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
-              "REFERRED TO MIU" = "21",
-              "REFERRED TO SOCIAL SERVICES" = "24",
-              "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
-              "OTHER" = "99")
+      "DEATH" = "00",
+      "999/AMBULANCE" = "01",
+      "EMERGENCY ADMISSION" = "02",
+      "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
+      "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
+      "REFERRED TO A&E" = "21",
+      "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
+      "REFERRED TO MIU" = "21",
+      "REFERRED TO SOCIAL SERVICES" = "24",
+      "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
+      "OTHER" = "99"
+    )
   ) %>%
   # Sort for identifying duplicates
   arrange(guid, outcome) %>%
