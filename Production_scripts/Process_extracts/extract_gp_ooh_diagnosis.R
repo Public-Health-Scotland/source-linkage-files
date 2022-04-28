@@ -58,7 +58,7 @@ diagnosis_file <- read_csv(
 
 ## Deal with Read Codes --------------------------
 
-check <- diagnosis_file %>%
+diagnosis_clean <- diagnosis_file %>%
   # Apply readcode changes
   tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
                              str_pad(5, "right", ".")) %>%
@@ -83,12 +83,13 @@ check <- diagnosis_file %>%
     full_match2 == 0 & readcode == "Xa1m." ~ "S349",
     full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
     full_match2 == 0 & readcode == "HO6.." ~ "H06..",
-    full_match2 == 0 & readcode == "zV6.." ~ "ZVz.."))
+    full_match2 == 0 & readcode == "zV6.." ~ "ZVz..",
+    TRUE ~ readcode))
 
 
 ## Data Cleaning ---------------------------------
 
-dianosis_clean <- matched_data %>%
+diagnosis_clean <- diagnosis_clean %>%
   # Sort and restructure the data so it's ready to link to case IDs.
   arrange(guid, readcode) %>%
   # Remove duplicates (use a flag)
@@ -96,10 +97,12 @@ dianosis_clean <- matched_data %>%
     duplicate = if_else(guid == lag(guid, default = first(guid)) & readcode == lag(readcode, default = first(readcode)), 1, 0)
   ) %>%
   filter(duplicate == 0) %>%
-  mutate(readcodelevel = str_locate(readcode, "[.]"),
-         readcodelevel = replace_na(readcodelevel, 0)
-         ) %>%
-  group_by(guid, readcode) %>%
+  # Base R way - not working
+  # mutate(readcodelevel = gregexpr('[.]', readcode)[1])
+    mutate(
+    readcodelevel = str_locate(readcode, "[.]"),
+    readcodelevel = replace_na(readcodelevel, 0)
+  ) %>%
   # restructure data
   pivot_wider(
     id_cols = guid,

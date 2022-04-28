@@ -138,10 +138,10 @@ consultations_clean <- consultations_file %>%
   arrange(guid, chi, record_keydate1, record_keydate2) %>%
   group_by(chi, guid) %>%
   mutate(
-    counter = row_number()
+    counter = as.double(row_number())
   ) %>%
   # If we've identified them as duplicates needing merged set the counter to indicate this.
-  mutate(counter = if_else(to_merge == 1, 0, counter - 1)) %>%
+  mutate(counter = if_else(to_merge == 1, 0, counter)) %>%
   ungroup() %>%
   # Aggregate data
   group_by(
@@ -166,7 +166,8 @@ consultations_clean <- consultations_file %>%
     gpprac = last(gpprac),
     record_keydate1 = min(record_keydate1),
     record_keydate2 = max(record_keydate2)
-  )
+  ) %>%
+  ungroup()
 
 
 # Join data ----------------------------------------
@@ -174,7 +175,6 @@ consultations_clean <- consultations_file %>%
 matched_data <- consultations_clean %>%
   left_join(diagnosis_file, by = "guid") %>%
   left_join(outcomes_file, by = "guid")
-
 
 # Deal with costs -----------------------------
 
@@ -195,17 +195,13 @@ ooh_costs <- matched_data %>%
   left_join(ooh_cost_lookup, by = c("hbtreatcode", "year")) %>%
   rename(
     cost_total_net = cost_per_consultation
-  )
-
-# Runs too long? Potential error here??
-#monthly_costs <- ooh_costs %>%
-  #create_day_episode_costs(record_keydate1, cost_total_net)
+  ) %>%
+  create_day_episode_costs(record_keydate1, cost_total_net)
 
 
 # Data Cleaning--------------------------------------
 
 ooh_clean <- ooh_costs %>%
-  #TO DO - test code from here. objects taking too long.
   # rename outcomes
   rename(
     ooh_outcome.1 = outcome.1,
@@ -214,7 +210,7 @@ ooh_clean <- ooh_costs %>%
     ooh_outcome.4 = outcome.4
   ) %>%
   mutate(
-  # Replace location unknown with blank. Should this be NA?
+    # Replace location unknown with blank. Should this be NA?
     location = if_else(location == "UNKNOWN", "", location),
     recid = "OoH",
     smrtype = case_when(smrtype == "DISTRICT NURSE" ~ "OOH-DN",
@@ -223,41 +219,38 @@ ooh_clean <- ooh_costs %>%
                         smrtype == "NHS 24 NURSE ADVICE" ~ "OOH-NHS24",
                         smrtype == "PCEC/PCC" ~ "OOH-PCC",
                         TRUE ~ "OOH-Other"
-                        ),
+    ),
     kis_accessed = case_when(kis_accessed == "Y" ~ 1,
                              kis_accessed == "N" ~ 0,
-                             TRUE ~ 9
-                             ),
-    ooh_cc =
-    ) %>%
-  convert_eng_gpprac_to_dummy(gpprac)
-# split time from date
-  mutate(
-    key_time1 = hms(substr(record_keydate1, 12, 19)),
-    key_time2 = hms(substr(record_keydate2, 12, 19))
+                             TRUE ~ 9)
   ) %>%
-  # Keep the location descriptions as a lookup.
+  convert_eng_gpprac_to_dummy(gpprac) %>%
+  # split time from date
+  mutate(
+    key_time1 = as_hms(substr(record_keydate1, 12, 19)),
+    key_time2 = as_hms(substr(record_keydate2, 12, 19)),
+    record_keydate1 = substr(record_keydate1, 1, 10),
+    record_keydate2 = substr(record_keydate2, 1, 10)
+  )
+
+# Keep the location descriptions as a lookup.
+location_lookup <- ooh_clean %>%
   group_by(location) %>%
   summarise(
     location_description = first(location_description)
   ) %>%
-    ungroup() %>%
+  ungroup()
 
-    arrange(guid) %>%
-    # group for getting row order
-    group_by(guid) %>%
-    mutate(row_order = row_number())
-
-
-  #Compute ooh_CC = 0.
-  #If $Casenum = 1 OR (CHI NE lag(CHI)) ooh_CC = 1.
-  #Do If ooh_CC = 0.
- # Do If GUID NE lag(GUID).
-  #Compute ooh_CC = lag(ooh_CC) + 1.
-  #Else.
-  #Compute ooh_CC = lag(ooh_CC).
-  #End if.
-  #End if.
+ooh_clean <- ooh_clean %>%
+  arrange(guid, chi) %>%
+  # group for getting row order
+  group_by(guid, chi) %>%
+  mutate(row_order = row_number(),
+         ooh_cc = 0,
+         ooh_cc = case_when(ooh_cc == 0 & row_order == 1 | chi != lag(chi, default = first(chi)) ~ 1,
+                            ooh_cc == 0 & guid != lag(guid) ~ lag(ooh_cc, default = first(ooh_cc)) + 1,
+                            ooh_cc == 0 ~ lag(ooh_cc, default = first(ooh_cc))
+         ))
 
 
 ## Save Outfile -------------------------------------
