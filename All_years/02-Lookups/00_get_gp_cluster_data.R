@@ -15,14 +15,20 @@ gp_clusters <- get_dataset("gp-practice-contact-details-and-list-sizes",
   max_resources = 1
 ) %>%
   clean_names() %>%
+  # Get the code lookups so we have the names
+  # Using the latest version of phsopendata for col_select
+  tidylog::left_join(get_resource("944765d7-d0d9-46a0-b377-abb3de51d08e",
+    col_select = c("HSCP", "HSCPName", "HB", "HBName")
+  ) %>%
+    clean_names()) %>%
   # Filter and save
   select(
     gpprac = practice_code,
     practice_name = gp_practice_name,
     postcode,
     cluster = gp_cluster,
-    partnership = hscp,
-    health_board = hb
+    partnership = hscp_name,
+    health_board = hb_name
   ) %>%
   # Sort for SPSS matching
   arrange(gpprac)
