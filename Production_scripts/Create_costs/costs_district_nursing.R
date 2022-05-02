@@ -163,9 +163,9 @@ uplift_data <-
 while (any(is.na(uplift_data$cost_total_net))) {
   uplift_data <- uplift_data %>%
     mutate(cost_total_net = if_else(is.na(cost_total_net),
-                                                 lag(cost_total_net) * 1.01,
-                                                 cost_total_net
-  ))
+      lag(cost_total_net) * 1.01,
+      cost_total_net
+    ))
 }
 
 uplift_data <- ungroup(uplift_data)
@@ -260,7 +260,7 @@ haven::write_sav(outfile,
 
 # .rds file
 readr::write_rds(outfile,
-                 get_dn_costs_path(ext = "rds", check_mode = "write"),
+  get_dn_costs_path(ext = "rds", check_mode = "write"),
   compress = "gz"
 )
 
