@@ -217,20 +217,13 @@ matched_data_costs <-
   full_join(costs_lookup, by = c("year", "hbtreatcode", "hbtreatname")) %>%
   # compute difference
   mutate(difference = cost_total_net - cost_old) %>%
-  mutate(pct_diff = difference / cost_old * 100) %>%
+  mutate(pct_diff = difference / cost_old) %>%
   arrange(hbtreatname, year)
 
 
 # Create charts -----------------------------------------------
 
 # plot difference
-matched_data_costs %>%
-  filter(!is.na(difference)) %>%
-  ggplot(aes(x = year, y = difference, fill = hbtreatname)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(fill = "NHS Board", x = "Year")
-
 matched_data_costs %>%
   filter(!is.na(difference)) %>%
   ggplot(aes(x = year, y = difference, group = hbtreatname)) +
@@ -242,15 +235,9 @@ matched_data_costs %>%
 # plot pct_diff
 matched_data_costs %>%
   filter(!is.na(pct_diff)) %>%
-  ggplot(aes(x = year, y = pct_diff, fill = hbtreatname)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(fill = "NHS Board", x = "Year")
-
-matched_data_costs %>%
-  filter(!is.na(pct_diff)) %>%
   ggplot(aes(x = year, y = pct_diff, group = hbtreatname)) +
   geom_line(aes(color = hbtreatname)) +
+  scale_y_continuous(labels = scales::label_percent()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(color = "NHS Board", x = "Year")
 
