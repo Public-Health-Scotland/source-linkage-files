@@ -170,10 +170,6 @@ while (any(is.na(uplift_data$cost_total_net))) {
 
 uplift_data <- ungroup(uplift_data)
 
-# plot #
-ggplot(data = uplift_data, aes(x = year, y = cost_total_net, group = board_name)) +
-  geom_line(aes(color = board_name)) +
-  labs(color = "NHS Board", x = "Year")
 
 
 ## Add in years by copying the most recent year we have ##
@@ -199,6 +195,11 @@ new_years_data <-
   select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
   arrange(hbtreatcode, year)
 
+# plot #
+ggplot(data = new_years_data, aes(x = year, y = cost_total_net, group = hbtreatname)) +
+  geom_line(aes(color = hbtreatname)) +
+  geom_vline(xintercept = latest_year, size = 0.2) +
+  labs(color = "NHS Board", x = "Year")
 
 ## Check costs haven't changed radically ##
 # using current_file - from above #
