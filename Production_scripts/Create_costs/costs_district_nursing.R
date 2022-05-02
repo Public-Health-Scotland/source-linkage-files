@@ -76,7 +76,7 @@ dn_raw_contacts <- readr::read_csv(
 # Join files together ------------------------------------------
 
 # match raw costs to contacts file
-dn_raw_costs_contacts <- full_join(dn_raw_contacts,
+dn_raw_costs_contacts <- left_join(dn_raw_contacts,
   dn_raw_costs,
   by = c("hb2019", "year")
 )
