@@ -36,7 +36,7 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
 
 convert_sc_sl_to_lca <- function(sending_location){
 
-  lca <- case_when(sending_location == "100" ~ 01,
+  lca <- dplyr::case_when(sending_location == "100" ~ 01,
           sending_location == "110" ~ 02,
           sending_location == "120" ~ 03,
           sending_location == "130" ~ 04,
