@@ -12,7 +12,7 @@
 #' year <- check_year_format("1920")
 check_year_format <- function(year, format = "fyyear") {
   if (!is.character(year)) {
-    rlang::warn(message = c("i" = "`year` should be a character, it will be converted."))
+    rlang::inform(message = c("i" = "`year` will be converted to a character."))
     year <- as.character(year)
   }
 
