@@ -260,7 +260,7 @@ haven::write_sav(outfile,
 
 # .rds file
 readr::write_rds(outfile,
-  get_gp_ooh_costs_path(ext = "rds", check_mode = "write"),
+                 get_dn_costs_path(ext = "rds", check_mode = "write"),
   compress = "gz"
 )
 
