@@ -55,7 +55,7 @@ hscp_to_hscpnames <- function(hscp) {
 #'
 #' @examples
 #' hb <- c("S08000015", "S08000016")
-#' ca_to_lca(ca)
+#' hb_to_hbnames(hb)
 hb_to_hbnames <- function(hb) {
   hbnames <- dplyr::case_when(
     hb == "S08000015" ~ "Ayrshire and Arran",
