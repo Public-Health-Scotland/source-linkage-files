@@ -17,5 +17,5 @@ Convert Health Board Codes to Health Board Names
 }
 \examples{
 hb <- c("S08000015", "S08000016")
-ca_to_lca(ca)
+hb_to_hbnames(hb)
 }
