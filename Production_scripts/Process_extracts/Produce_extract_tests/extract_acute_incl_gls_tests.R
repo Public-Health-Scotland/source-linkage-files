@@ -23,7 +23,7 @@ new_data <- readr::read_rds(get_source_extract_path(year, "Acute", ext = "rds"))
 
 # Read current SLF episode file and filter for 01B and GLS records
 existing_data <- read_slf_episode("1920", recid = c("01B", "GLS")) %>%
-  get_chi()
+  rename(chi = anon_chi)
 
 
 # Produce comparison-------------------------------------
