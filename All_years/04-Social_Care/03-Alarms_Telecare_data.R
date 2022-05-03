@@ -42,7 +42,7 @@ sc_demographics <- haven::read_sav(fs::path(
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
-at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment")) %>%
+at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment_snapshot")) %>%
   select(
     sending_location,
     social_care_id,
