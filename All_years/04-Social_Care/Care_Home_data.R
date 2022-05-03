@@ -130,11 +130,67 @@ ch_episode <- ch_data_clean %>%
   summarise(
     ch_discharge_date = last(ch_discharge_date),
     record_date = max(record_date),
+    qtr_start = max(qtr_start),
     sc_latest_submission = max(period),
     ch_name = last(ch_name),
     ch_postcode = last(ch_postcode),
     gender = first(gender),
     dob = first(dob),
     postcode = first(postcode)) %>%
-  ungroup()
   # preserve open end dates
+  mutate(dis_date_missing = is.na(ch_discharge_date)) %>%
+  # Amend dates for split episodes
+  # Change the start and end date as appropriate when an episode is split, using the end date of the submission quarter
+  mutate(ch_discharge_date = if_else(is.na(ch_discharge_date) &
+                                       !is.na(lead(ch_discharge_date)) &
+                                       lead(ch_admission_date) == ch_admission_date &
+                                       nursing_care_provision != ch_provider,
+                                     record_date, ch_discharge_date)) %>%
+  ungroup()
+
+# count if any duplicate records
+ch_episode %>% count(duplicated(.))
+
+
+# Compare to Deaths Data ---------------------------------------
+
+deaths_data <- haven::read_sav(get_slf_deaths_path())
+
+# match with deaths data
+matched_deaths_data <- ch_episode %>%
+  left_join(deaths_data, by = "chi") %>%
+  # compare discharge date with NRS and CHI death date
+  # if either of the dates are 5 or fewer days before discharge
+  # adjust the discharge date to the date of death
+  # corrects most cases of ‘discharge after death’
+  mutate(dis_after_death = death_date == ch_discharge_date - 5 | death_date < ch_discharge_date - 5) %>%
+  mutate(ch_discharge_date = if_else(dis_after_death == TRUE, death_date, ch_discharge_date)) %>%
+  # remove any episodes where discharge is now before admission, i.e. death was before admission
+  filter(ch_admission_date < ch_discharge_date)
+
+
+# Continuous Care Home Stays ---------------------------------------
+
+# stay will be continuous as long as the admission date is the next day or earlier than the previous discharge date
+
+ch_markers <- matched_deaths_data %>%
+  # ch_chi_cis
+  # uses the CHI number so will aggregate across continuous stays even if the data was provided by different local authorities
+  group_by(chi) %>%
+  mutate(date_1 = ch_admission_date,
+         date_2 = lead(ch_discharge_date),
+         day_diff = as.numeric(date_2 - date_1)) %>%
+  mutate(ch_chi_cis = 1) %>%
+  mutate(ch_chi_cis = if_else(day_diff < 1 | day_diff == 1, lead(ch_chi_cis), lead(ch_chi_cis) + 1)) %>%
+  ungroup()
+
+
+  # ch_sc_id_cis
+  # uses the social care id and sending location so can be used for episodes that are not attached to a CHI number
+  # This will restrict continuous stays to each Local Authority
+  group_by
+
+
+
+
+output <- haven::read_sav(get_sc_ch_episodes_path())
