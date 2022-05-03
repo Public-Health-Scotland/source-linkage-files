@@ -19,8 +19,6 @@ library(lubridate)
 
 # Set up------------------------------------------------------------------
 
-latest_validated_period <- "2021Q2"
-
 latest_update <- "Mar_2022"
 
 social_care_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
@@ -53,8 +51,6 @@ at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment_snapsho
   ) %>%
   # fix bad 2017 period
   mutate(period = if_else(period == "2017", "2017Q4", period)) %>%
-  # Drop unvalidated data
-  filter(period <= latest_validated_period) %>%
   # order
   arrange(sending_location, social_care_id) %>%
   collect()
