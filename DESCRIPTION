@@ -32,6 +32,7 @@ Imports:
     readr (>= 2.1.0),
     rlang (>= 1.0.0),
     rstudioapi,
+    scales (>= 1.1.1),
     stringr (>= 1.4.0),
     tibble (>= 3.0.0),
     tidyr (>= 1.1.0),

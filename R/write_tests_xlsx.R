@@ -6,7 +6,7 @@
 #' @return source_tests_path to the xlsx file location
 #'
 #' @export
-write_tests_xlsx <- function(comparison_data, name) {
+write_tests_xlsx <- function(comparison_data, sheet_name) {
   source_tests_path <- fs::path(get_slf_dir(), "Tests", glue::glue(latest_update(), "_tests.xlsx"))
 
   if (fs::file_exists(source_tests_path)) {
@@ -17,12 +17,14 @@ write_tests_xlsx <- function(comparison_data, name) {
     wb <- openxlsx::createWorkbook()
   }
 
+  sheet_name_dated <- paste0(sheet_name, "-", format(Sys.Date(), "%d %b"))
+
   # add a new sheet for tests
-  openxlsx::addWorksheet(wb, name)
+  openxlsx::addWorksheet(wb, sheet_name_dated)
   # write comparison output to new sheet
   openxlsx::writeData(
     wb,
-    name,
+    sheet_name_dated,
     comparison_data
   )
   # save output
