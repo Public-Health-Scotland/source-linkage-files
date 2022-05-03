@@ -1,0 +1,100 @@
+---
+title: Alarms Telecare Queries
+output: html_document
+----
+
+## Alarms Telecare Queries
+
+### Period 
+
+* For the period 2017 there are 148,651 records which are not assigned "2017Q4".
+
+| period    |   n     |
+|-----------|---------|
+| 2017      |   148651|
+| 2017Q4    |     3749|
+| 2018Q1    |   145311|
+| 2018Q2    |   147741|
+| 2018Q3    |   144374|
+| 2018Q4    |   147662|
+| 2019Q1    |   136813|
+| 2019Q2    |   134892|
+| 2019Q3    |   124546|
+| 2019Q4    |   136914|
+| 2020      |    67548| 
+| 2020Q1    |    68913|
+| 2020Q2    |    67125|
+| 2020Q3    |    68133|
+| 2020Q4    |    74357|
+| 2021Q1    |    33813|
+| 2021Q2    |    40080|
+| 2021Q3    |    37927|
+
+* These are split across 28 sending locations.
+
+| sending_location_name | period  |   n   |
+|-----------------------|---------|-------|
+| Aberdeen City	        |   2017  | 4176  |
+| Aberdeenshire	        |   2017  | 5982  |
+| Angus	                |   2017	| 4297  |
+| Argyll and Bute	      |   2017	| 3146  |
+| City of Edinburgh	    |   2017  |	13438 |
+| Clackmannanshire      |  	2017  | 2646  |
+| Dumfries and Galloway	|   2017  |	3738  |
+| Dundee City           | 	2017  |	6442  |
+| East Ayrshire	        |   2017  |	6531  |
+| East Dunbartonshire   | 	2017  |	1253  |
+| East Lothian          | 	2017  |	523   |
+| East Renfrewshire     | 	2017  |	3681  |
+| Falkirk               | 	2017  |	4865  |
+| Fife                  | 	2017  | 16265 |
+| Highland              | 	2017  |	3342  |
+| Inverclyde            | 	2017  |	3423  |
+| Midlothian            | 	2017	| 2271  |
+| Moray                 | 	2017	| 6835  |
+| Na h-Eileanan Siar	  |   2017  |	2027  |
+| North Ayrshire        | 	2017  |	13889 |
+| North Lanarkshire     | 	2017  |	11284 |
+| Orkney Islands        | 	2017  |	810   |
+| Perth and Kinross     | 	2017  |	4894  |
+| Shetland Islands      | 	2017  |	640   |
+| South Ayrshire        | 	2017  |	9584  |
+| Stirling              | 	2017  |	3376  |
+| West Dunbartonshire   | 	2017  |	3850  |
+| West Lothian          | 	2017  |	544   |
+
+
+* For the period 2020 there are 67,548 records which do not have a quarter attached. 
+
+
+| sending_location_name | period|number of records affected |
+|-----------------------|-------|--------------------------:|
+| Aberdeenshire         | 2020  |                       5846|
+| Argyll & Bute         | 2020  |                      10385|
+| City of Edinburgh     | 2020  |                      11335|
+| Clackmananshire       | 2020  |                       2852|
+| East Ayrshire         | 2020  |                       5655|
+| Falkirk               | 2020  |                       5417|
+| Highland              | 2020  |                       3245|
+| Inverclyde            | 2020  |                       2564|
+| North Ayrshire        | 2020  |                      11312|
+| Scottish Borders      | 2020  |                        767|
+| Shetland Islands      | 2020  |                        692|
+| Stirling              | 2020  |                       3164|
+| West Lothian          | 2020  |                       4314|
+
+
+### Service start date 
+
+* Current logic is that if the service start date is missing then set this to the start of the FY. This was 
+  when we had data for 2017Q4 only. Including more data shows there is a large amount of missing start dates.
+
+
+| service_start_missing |     n   |
+|-----------------------|---------|
+| FALSE                 |  1716974|
+| TRUE                  |    11575|
+
+
+
+
