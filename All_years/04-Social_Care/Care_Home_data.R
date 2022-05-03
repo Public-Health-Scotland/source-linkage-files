@@ -26,7 +26,7 @@ latest_update <- "Mar_2022"
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 care home
-ch_data <- tbl(db_connection, in_schema("social_care_2", "carehome")) %>%
+ch_data <- tbl(db_connection, in_schema("social_care_2", "carehome_snapshot")) %>%
   select(
     ch_name,
     ch_postcode,
@@ -65,9 +65,9 @@ ch_clean <- ch_data %>%
   arrange(sending_location, social_care_id, period, ch_admission_date, ch_discharge_date)
 
 
-# Match with demogrpahics data  ---------------------------------------
+# Match with demographics data  ---------------------------------------
 
-# Read in data---------------------------------------
+# read in demographic data
 sc_demog <- haven::read_sav(get_sc_demog_lookup_path())
 
 matched_ch_data <- ch_clean %>%
@@ -175,22 +175,64 @@ matched_deaths_data <- ch_episode %>%
 
 ch_markers <- matched_deaths_data %>%
   # ch_chi_cis
-  # uses the CHI number so will aggregate across continuous stays even if the data was provided by different local authorities
   group_by(chi) %>%
-  mutate(date_1 = ch_admission_date,
-         date_2 = lead(ch_discharge_date),
-         day_diff = as.numeric(date_2 - date_1)) %>%
   mutate(ch_chi_cis = 1) %>%
-  mutate(ch_chi_cis = if_else(day_diff < 1 | day_diff == 1, lead(ch_chi_cis), lead(ch_chi_cis) + 1)) %>%
-  ungroup()
-
-
+  mutate(ch_chi_cis_TF = ch_admission_date == lag(ch_discharge_date) + 1 |
+                                ch_admission_date < lag(ch_discharge_date) |
+                                is.na(ch_admission_date == lag(ch_discharge_date) + 1)) %>%
+  mutate(ch_chi_cis = if_else(ch_chi_cis_TF == FALSE,
+                              lag(ch_chi_cis) + 1,
+                                  lag(ch_chi_cis, default = first(ch_chi_cis))
+        )) %>%
+  ungroup() %>%
   # ch_sc_id_cis
   # uses the social care id and sending location so can be used for episodes that are not attached to a CHI number
   # This will restrict continuous stays to each Local Authority
-  group_by
+  mutate(ch_sc_id_cis = 1) %>%
+  group_by(social_care_id, sending_location) %>%
+  mutate(ch_sc_id_cis = 1) %>%
+  mutate(ch_sc_id_cis_TF = ch_admission_date == lag(ch_discharge_date) + 1 |
+           ch_admission_date < lag(ch_discharge_date) |
+           is.na(ch_admission_date == lag(ch_discharge_date) + 1)) %>%
+  mutate(ch_sc_id_cis = if_else(ch_sc_id_cis_TF == FALSE,
+                              lag(ch_sc_id_cis) + 1,
+                              lag(ch_sc_id_cis, default = first(ch_sc_id_cis))
+  )) %>%
+  ungroup()
 
 
+# Outfile ---------------------------------------
+
+outfile <- ch_markers %>%
+  mutate(person_id = paste0(sending_location, "-", social_care_id)) %>%
+  rename(
+    record_keydate1 = ch_admission_date,
+    record_keydate2 = ch_discharge_date,
+    #ch_adm_reason = reason_for_admission,
+    ch_nursing = nursing_care_provision) %>%
+  arrange(sending_location,
+          social_care_id,
+          chi,
+          record_keydate1,
+          record_keydate2) %>%
+  select(chi,
+         person_id,
+         gender,
+         dob,
+         postcode,
+         sending_location,
+         social_care_id,
+         ch_name,
+         ch_postcode,
+         record_keydate1,
+         record_keydate2,
+         ch_chi_cis,
+         ch_sc_id_cis,
+         ch_provider,
+         ch_nursing,
+         #ch_adm_reason,
+         sc_latest_submission)
 
 
+# output
 output <- haven::read_sav(get_sc_ch_episodes_path())
