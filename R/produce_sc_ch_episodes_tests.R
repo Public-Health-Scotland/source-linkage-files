@@ -25,5 +25,5 @@ produce_sc_ch_episodes_tests <- function(data) {
       .data$ch_nursing, .data$ch_adm_reason, .data$sc_latest_submission
     )) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }
