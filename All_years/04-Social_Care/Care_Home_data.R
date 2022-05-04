@@ -13,9 +13,9 @@
 library(dplyr)
 library(dbplyr)
 library(createslf)
+library(lubridate)
+library(tidyr)
 
-
-latest_validated_period <- "2021Q2"
 
 latest_update <- "Mar_2022"
 
@@ -52,10 +52,11 @@ ch_clean <- ch_data %>%
   # correct period 2017
   mutate(financial_quarter = if_else(financial_year == 2017 & is.na(financial_quarter), 4, financial_quarter)) %>%
   mutate(period = if_else(financial_year == 2017 & financial_quarter == 4, "2017Q4", period)) %>%
-  # drop unvalidated records
-  filter(period < latest_validated_period) %>%
   # create financial quarter end and start dates
-  get_fq_dates(period) %>%
+  mutate(
+    record_date = yq(period) %m+% period(6, "months") %m-% days(1),
+    qtr_start = yq(period) %m+% period(3, "months")
+  ) %>%
   # filter missing admission dates
   filter(!is.na(ch_admission_date)) %>%
   # filter out any episodes where discharge is before admission
@@ -75,45 +76,46 @@ matched_ch_data <- ch_clean %>%
 
 
 # Data Cleaning Care Home Name and Postcode ---------------------------------------
+
 matched_ch_clean <- matched_ch_data %>%
   # correct postcode
   mutate(across(contains("postcode"), .x = postcode(.x)))
+
+# read in data from CH lookup
+ch_lookup <- readxl::read_xlsx(get_slf_ch_path())
 
 
 # Data Cleaning Care Home Data ---------------------------------------
 
 ch_data_clean <- matched_ch_data %>%
   # sort data
-  arrange(sending_location, social_care_id, period, ch_admission_date, period) %>%
+  arrange(sending_location, social_care_id, ch_admission_date, period) %>%
+  group_by(sending_location, social_care_id, ch_admission_date, period) %>%
   # fill in nursing care provision when missing but present in the following entry
-  mutate(nursing_care_provision = if_else(is.na(nursing_care_provision) &
-                                               !is.na(lead(nursing_care_provision)) &
-                                               lead(sending_location) == sending_location &
-                                               lead(social_care_id) == social_care_id &
-                                               lead(ch_admission_date) == ch_admission_date,
-                                             lead(nursing_care_provision),
-                                          nursing_care_provision)) %>%
+  fill(nursing_care_provision) %>%
   # tidy up ch_provider using "6" when disagreeing values
-  group_by(sending_location,
-           social_care_id,
-           ch_admission_date,
-           nursing_care_provision) %>%
-  mutate(first_ch_provider = first(ch_provider),
-         last_ch_provider = last(ch_provider)) %>%
-  mutate(ch_provider = if_else(first_ch_provider != last_ch_provider, "6", ch_provider)) %>%
-  select(-c(first_ch_provider, last_ch_provider)) %>%
-  ungroup() %>%
+  mutate(
+    min_ch_provider = min(ch_provider),
+    max_ch_provider = max(ch_provider)
+  ) %>%
+  mutate(ch_provider = if_else(min_ch_provider != max_ch_provider, "6", ch_provider)) %>%
+  select(-c(min_ch_provider, max_ch_provider)) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
-  group_by(chi, sending_location) %>%
   mutate(latest_sc_id = last(social_care_id)) %>%
-  # count changed
-  mutate(changed_sc_id = if_else(!is.na(chi) & social_care_id != latest_sc_id, 1, 0),
-         social_care_id = if_else(!is.na(chi) & social_care_id != latest_sc_id,
-                                  latest_sc_id, social_care_id)) %>%
-  ungroup() %>%
+  # count changed social_care_id
+  mutate(
+    changed_sc_id = if_else(!is.na(chi) & social_care_id != latest_sc_id, 1, 0),
+    social_care_id = if_else(!is.na(chi) & social_care_id != latest_sc_id,
+      latest_sc_id, social_care_id
+    )
+  ) %>%
   # remove any duplicate records
-  distinct()
+  distinct() %>%
+  # counter for split episodes
+  mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE)) %>%
+  mutate(sum_split_episode = cumsum(split_episode_counter)) %>%
+  ungroup()
 
 # count changed social_care_id
 ch_data_clean %>% count(changed_sc_id)
@@ -123,12 +125,11 @@ ch_data_clean %>% count(changed_sc_id)
 
 # to a single row per episode where admission the same
 ch_episode <- ch_data_clean %>%
-  # sort
-  arrange(sending_location, social_care_id, ch_admission_date) %>%
-  # Where the ch_provider or nursing_care_provision is different on records within the episode, split the episode at this point.
-  group_by(chi, sending_location, social_care_id, ch_admission_date, ch_provider, nursing_care_provision) %>%
+  # when nursing_care_provision is different on records within the episode, split the episode at this point
+  group_by(chi, sending_location, social_care_id, ch_admission_date, cum_sum_split_episode, nursing_care_provision) %>%
   summarise(
     ch_discharge_date = last(ch_discharge_date),
+    ch_provider = max(ch_provider),
     record_date = max(record_date),
     qtr_start = max(qtr_start),
     sc_latest_submission = max(period),
@@ -136,37 +137,47 @@ ch_episode <- ch_data_clean %>%
     ch_postcode = last(ch_postcode),
     gender = first(gender),
     dob = first(dob),
-    postcode = first(postcode)) %>%
-  # preserve open end dates
-  mutate(dis_date_missing = is.na(ch_discharge_date)) %>%
+    postcode = first(postcode)
+  ) %>%
+  ungroup() %>%
   # Amend dates for split episodes
-  # Change the start and end date as appropriate when an episode is split, using the end date of the submission quarter
-  mutate(ch_discharge_date = if_else(is.na(ch_discharge_date) &
-                                       !is.na(lead(ch_discharge_date)) &
-                                       lead(ch_admission_date) == ch_admission_date &
-                                       nursing_care_provision != ch_provider,
-                                     record_date, ch_discharge_date)) %>%
+  # Change the start and end date as appropriate when an episode is split, using the start / end date of the submission quarter
+  arrange(chi, sending_location, social_care_id, ch_admission_date, sc_latest_submission) %>%
+  group_by(chi, sending_location, social_care_id, ch_admission_date) %>%
+  # counter for latest submission
+  mutate(latest_submission_counter = pmax(sc_latest_submission != lag(sc_latest_submission), FALSE, na.rm = TRUE)) %>%
+  mutate(sum_latest_submission = cumsum(latest_submission_counter)) %>%
+  mutate(
+    ch_admission_date = if_else(sum_latest_submission == min(sum_latest_submission), ch_admission_date, qtr_start),
+    ch_discharge_date = if_else(sum_latest_submission == max(sum_latest_submission), ch_discharge_date, record_date)
+  ) %>%
   ungroup()
-
-# count if any duplicate records
-ch_episode %>% count(duplicated(.))
 
 
 # Compare to Deaths Data ---------------------------------------
 
 deaths_data <- haven::read_sav(get_slf_deaths_path())
 
-# match with deaths data
+# match ch_episode data with deaths data
 matched_deaths_data <- ch_episode %>%
   left_join(deaths_data, by = "chi") %>%
   # compare discharge date with NRS and CHI death date
+  group_by(chi, sending_location, social_care_id, ch_admission_date) %>%
   # if either of the dates are 5 or fewer days before discharge
   # adjust the discharge date to the date of death
   # corrects most cases of ‘discharge after death’
-  mutate(dis_after_death = death_date == ch_discharge_date - 5 | death_date < ch_discharge_date - 5) %>%
+  mutate(
+    dis_after_death = ymd(death_date) < ymd(ch_discharge_date) - days(5) | ymd(death_date) == ymd(ch_discharge_date) - days(5),
+    dis_after_death = replace_na(dis_after_death, FALSE)
+  ) %>%
   mutate(ch_discharge_date = if_else(dis_after_death == TRUE, death_date, ch_discharge_date)) %>%
   # remove any episodes where discharge is now before admission, i.e. death was before admission
-  filter(ch_admission_date < ch_discharge_date)
+  mutate(
+    dis_before_adm = ch_discharge_date < ch_admission_date,
+    dis_before_adm = replace_na(dis_before_adm, FALSE)
+  ) %>%
+  filter(dis_before_adm == FALSE) %>%
+  ungroup()
 
 
 # Continuous Care Home Stays ---------------------------------------
@@ -175,29 +186,16 @@ matched_deaths_data <- ch_episode %>%
 
 ch_markers <- matched_deaths_data %>%
   # ch_chi_cis
-  group_by(chi) %>%
-  mutate(ch_chi_cis = 1) %>%
-  mutate(ch_chi_cis_TF = ch_admission_date == lag(ch_discharge_date) + 1 |
-                                ch_admission_date < lag(ch_discharge_date) |
-                                is.na(ch_admission_date == lag(ch_discharge_date) + 1)) %>%
-  mutate(ch_chi_cis = if_else(ch_chi_cis_TF == FALSE,
-                              lag(ch_chi_cis) + 1,
-                                  lag(ch_chi_cis, default = first(ch_chi_cis))
-        )) %>%
+  group_by(chi, sending_location, social_care_id) %>%
+  mutate(continuous_stay_chi = pmax(ch_admission_date != lag(ch_discharge_date) + days(1), FALSE, na.rm = TRUE)) %>%
+  mutate(ch_chi_cis = cumsum(continuous_stay_chi) + 1) %>%
   ungroup() %>%
   # ch_sc_id_cis
   # uses the social care id and sending location so can be used for episodes that are not attached to a CHI number
   # This will restrict continuous stays to each Local Authority
-  mutate(ch_sc_id_cis = 1) %>%
   group_by(social_care_id, sending_location) %>%
-  mutate(ch_sc_id_cis = 1) %>%
-  mutate(ch_sc_id_cis_TF = ch_admission_date == lag(ch_discharge_date) + 1 |
-           ch_admission_date < lag(ch_discharge_date) |
-           is.na(ch_admission_date == lag(ch_discharge_date) + 1)) %>%
-  mutate(ch_sc_id_cis = if_else(ch_sc_id_cis_TF == FALSE,
-                              lag(ch_sc_id_cis) + 1,
-                              lag(ch_sc_id_cis, default = first(ch_sc_id_cis))
-  )) %>%
+  mutate(continuous_stay_sc = pmax(ch_admission_date != lag(ch_discharge_date) + days(1), FALSE, na.rm = TRUE)) %>%
+  mutate(ch_sc_id_cis = cumsum(continuous_stay_sc) + 1) %>%
   ungroup()
 
 
@@ -208,30 +206,35 @@ outfile <- ch_markers %>%
   rename(
     record_keydate1 = ch_admission_date,
     record_keydate2 = ch_discharge_date,
-    #ch_adm_reason = reason_for_admission,
-    ch_nursing = nursing_care_provision) %>%
-  arrange(sending_location,
-          social_care_id,
-          chi,
-          record_keydate1,
-          record_keydate2) %>%
-  select(chi,
-         person_id,
-         gender,
-         dob,
-         postcode,
-         sending_location,
-         social_care_id,
-         ch_name,
-         ch_postcode,
-         record_keydate1,
-         record_keydate2,
-         ch_chi_cis,
-         ch_sc_id_cis,
-         ch_provider,
-         ch_nursing,
-         #ch_adm_reason,
-         sc_latest_submission)
+    # ch_adm_reason = reason_for_admission,
+    ch_nursing = nursing_care_provision
+  ) %>%
+  arrange(
+    sending_location,
+    social_care_id,
+    chi,
+    record_keydate1,
+    record_keydate2
+  ) %>%
+  select(
+    chi,
+    person_id,
+    gender,
+    dob,
+    postcode,
+    sending_location,
+    social_care_id,
+    ch_name,
+    ch_postcode,
+    record_keydate1,
+    record_keydate2,
+    ch_chi_cis,
+    ch_sc_id_cis,
+    ch_provider,
+    ch_nursing,
+    # ch_adm_reason,
+    sc_latest_submission
+  )
 
 
 # output
