@@ -14,15 +14,23 @@ Generally speaking, we use the [GitHub Flow model](https://docs.github.com/en/ge
 
 ### Create a new branch
 
-To work on a new issue, you will need to create a new branch. This is best done for even small changes such as renaming scripts/functions. To do this, make sure your `main-R` is the most up-to-date version. This can be done in `R`.
+To work on a new issue, you will need to create a new branch. This is best done for even small changes such as renaming scripts/functions. To do this, make sure your `main-R` is the most up-to-date version. 
 
-Firstly, 
+This can be done using the RStudio buttons:
 
 - switch branch (checkout) `main-R` and pull,
 
 - click the new branch button to the left of the current branch name to create your new branch,
 
 - name your new branch something meaningful and descriptive.
+
+Or, equally in the terminal:
+
+```
+git checkout main-R
+git pull
+git checkout -b <new_branch_name>
+```
 
 Once you have completed this, you can start to use your new branch.
 
