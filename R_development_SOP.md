@@ -46,9 +46,14 @@ To commit your changes, use the commit button in the Git pane in RStudio, give e
 
 Once you have committed your changes, push this to your branch using the push button or `git push` in the terminal.
 
-If you have created a new function which requires documentation, make sure to run `devtools::documentation`.
+### Pushing commits back to GitHub
 
-Another good practice is to run a `check` on the script in the `build` tab. 
+Before each commit, but absolutely before you push, you should make sure your code is documented, tested, checked and styled.
+
+- **Document**: `Ctrl + Shift + D`, the 'Document' button under 'More' in the build pane, or running `devtools::document` will invoke [`{roxygen2}`](https://roxygen2.r-lib.org/articles/roxygen2.html) to build the documentation for your functions. Note that we have a GitHub action set-up which should automatically perform this step if it's missed.
+- **Test**: `Ctrl + Alt + F7`, the 'Test Package' button under 'More' in the build pane, or running `devtools::test` will invoke [`{testthat}`](https://testthat.r-lib.org/) to run any new or existing tests which have been written. Writing tests and then checking that they are still working ensures that our functions do what they are supposed to, and will highlight when any changes we make inadvertantly break existing behaviour.
+- **Check**: `Ctrl + Shift + E`, the 'Check' button in the build pane, or running `devtools::check`. This can take a couple of minutes as it peforms lots of checks, including the above steps of *document* and *test*. For some information on the steps performed see the [Automated checking](https://r-pkgs.org/r-cmd-check.html) chapter in the R for Packages book.
+- **Style**: Use the [`{styler}`](https://styler.r-lib.org/) to style any files you've created or modified, this ensures that the codebase has a consistent style. Note that we have a GitHub action set-up which should automatically perform this step if it's missed.
 
 
 ## Pull Requests
