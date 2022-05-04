@@ -206,7 +206,7 @@ outfile <- maternity_clean %>%
     nhshosp,
     cost_total_net,
     ends_with("_beddays"),
-    ends_with("_costs"),
+    ends_with("_cost"),
     uri
   ) %>%
   arrange(chi, record_keydate1)
