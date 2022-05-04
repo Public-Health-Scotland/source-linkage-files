@@ -172,15 +172,7 @@ outfile <- matched_dn_costs %>%
     nov_cost = sum(nov_cost),
     dec_cost = sum(dec_cost)
   ) %>%
-<<<<<<< HEAD
-  ungroup()
-=======
-  ungroup() %>%
-  # factor
-  mutate(across(c(location, starts_with("diag")),
-    .x = as.factor(.x)
-  ))
->>>>>>> df42083c4c9eb91c766706af0e92baf7649d02c9
+ ungroup()
 
 
 # Save as zsav file
