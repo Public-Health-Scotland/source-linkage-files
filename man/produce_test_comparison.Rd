@@ -24,6 +24,7 @@ Other produce tests functions:
 \code{\link{produce_slf_deaths_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_source_acute_tests}()}
+\code{\link{produce_source_acute_tests}()},
+\code{\link{produce_source_maternity_tests}()}
 }
 \concept{produce tests functions}
