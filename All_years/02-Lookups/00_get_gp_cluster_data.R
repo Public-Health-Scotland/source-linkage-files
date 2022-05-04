@@ -13,7 +13,8 @@ library(janitor)
 library(fs)
 library(haven)
 
-latest_update <- "Dec_2021"
+latest_update <- "Mar_2022"
+lookup_dir <- path("/conf/hscdiip/SLF_Extracts/Lookups")
 
 # Retrieve the latest resource from the dataset
 get_dataset("gp-practice-contact-details-and-list-sizes",

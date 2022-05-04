@@ -14,8 +14,12 @@ pretty_time_diff <- function(start_time, end_time, units = "mins", digits = 1) {
 }
 
 zsav_to_fst <- function(file, compress) {
-  haven::read_sav(file) %>%
-    dplyr::rename_all(tolower) %>%
+  data <- haven::read_sav(file) %>%
+    dplyr::rename_all(tolower)
+
+  haven::write_sav(data, file, compress = TRUE)
+
+  data %>%
     tibble::as_tibble() %>%
     fst::write_fst(
       x = .,

@@ -18,12 +18,11 @@ Produce the Social Care Demographic Lookup tests
 }
 \seealso{
 Other produce tests functions: 
-\code{\link{create_outpatient_extract_flags}()},
-\code{\link{produce_outpatient_extract_test}()},
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_slf_deaths_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_postcode_tests}()},
+\code{\link{produce_source_acute_tests}()},
 \code{\link{produce_test_comparison}()}
 }
 \concept{produce tests functions}

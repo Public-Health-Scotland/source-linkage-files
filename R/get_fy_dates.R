@@ -8,7 +8,7 @@
 #' @examples
 #' start_fy("1718")
 start_fy <- function(year) {
-  as.Date(paste0(as.numeric(convert_fyyear_to_year(year)), "-04-01"))
+  as.Date(paste0(convert_fyyear_to_year(year), "-04-01"))
 }
 
 
@@ -36,5 +36,5 @@ end_fy <- function(year) {
 #' @examples
 #' midpoint_fy("1718")
 midpoint_fy <- function(year) {
-  as.Date(paste0(as.numeric(convert_fyyear_to_year(year)), "-09-30"))
+  as.Date(paste0(convert_fyyear_to_year(year), "-09-30"))
 }

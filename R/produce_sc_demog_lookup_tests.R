@@ -28,5 +28,5 @@ produce_sc_demog_lookup_tests <- function(data) {
       )
     ) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }

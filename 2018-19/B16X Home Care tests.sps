@@ -168,7 +168,7 @@ Sort cases by Measure.
 **************************************************************************************************************************.
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
     /Keep recid SMRType Anon_CHI record_keydate1 record_keydate2 gender dob age
-    hc_hours hc_provider hc_reablement sc_send_lca to sc_day_care.
+    hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 hc_provider hc_reablement sc_send_lca to sc_day_care.
 select if recid = 'HC'.
 
 * Flag to count CHIs.
@@ -271,10 +271,10 @@ aggregate outfile = SLFexisting
     /n_HC_Per = Sum(HC_Per)
     /n_HC_Non_Per = Sum(HC_Non_Per)
     /n_HC_Unknown = Sum(HC_Unknown)
-    /avg_hc_hours = Mean(hc_hours)
-    /total_hc_hours = Sum(hc_hours)
-    /Min_hc_hours = Min(hc_hours)
-    /Max_hc_hours = Max (hc_hours)
+    /avg_hc_hours_q1 avg_hc_hours_q2 avg_hc_hours_q3 avg_hc_hours_q4 = Mean(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
+    /total_hc_hours_annual total_hc_hours_q1 total_hc_hours_q2 total_hc_hours_q3 total_hc_hours_q4 = sum(hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
+    /min_hc_hours_q1 min_hc_hours_q2 min_hc_hours_q3 min_hc_hours_q4 = min(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
+    /max_hc_hours_q1 max_hc_hours_q2 max_hc_hours_q3 max_hc_hours_q4 = max(hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4)
     /n_hc_provider_1_to_4 = Sum(hc_provider_1_to_4)
     /n_hc_provider_other = Sum(hc_provider_other)
     /n_hc_reablement_no = Sum(hc_reablement_no)

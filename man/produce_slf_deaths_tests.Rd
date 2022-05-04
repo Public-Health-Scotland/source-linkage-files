@@ -12,19 +12,18 @@ flags (data is from \code{\link{get_slf_deaths_path}})}
 }
 \value{
 a dataframe with a count of each flag
-from \code{\link{sum_test_flags}}
+from \code{\link{calculate_measures}}
 }
 \description{
 Produce the SLF deaths lookup tests
 }
 \seealso{
 Other produce tests functions: 
-\code{\link{create_outpatient_extract_flags}()},
-\code{\link{produce_outpatient_extract_test}()},
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_postcode_tests}()},
+\code{\link{produce_source_acute_tests}()},
 \code{\link{produce_test_comparison}()}
 }
 \concept{produce tests functions}

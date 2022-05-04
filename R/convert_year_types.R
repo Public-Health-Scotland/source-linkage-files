@@ -12,12 +12,10 @@
 #' fyyears <- c("1718", "1819")
 #' convert_fyyear_to_year(fyyears)
 convert_fyyear_to_year <- function(fyyear) {
-  first_part <- substr(fyyear, 1, 2)
-  second_part <- substr(fyyear, 3, 4)
-  if (any(as.integer(first_part) + 1L != as.integer(second_part))) {
-    stop("Year has been entered in the wrong format, try again using form `1718` or use function `convert_year_to_fyyear` to convert to the financial year form.")
-  }
-  year <- paste0("20", first_part)
+  fyyear <- check_year_format(year = fyyear, format = "fyyear")
+
+  year <- paste0("20", substr(fyyear, 1, 2))
+
   return(year)
 }
 
@@ -35,9 +33,9 @@ convert_fyyear_to_year <- function(fyyear) {
 #' years <- c("2017", "2018")
 #' convert_year_to_fyyear(years)
 convert_year_to_fyyear <- function(year) {
-  if (any((substr(year, 1, 2) != "20"))) {
-    stop("Year has been entered in the wrong format, try again using form `2017` or use function `convert_fyyear_to_year` to convert to alternate year form.")
-  }
-  fyyear <- paste0(substr(year, 3, 4), as.numeric(substr(year, 3, 4)) + 1)
+  year <- check_year_format(year = year, format = "alternate")
+
+  fyyear <- paste0(substr(year, 3, 4), as.integer(substr(year, 3, 4)) + 1L)
+
   return(fyyear)
 }

@@ -44,7 +44,7 @@ deaths_file <- deaths_file %>%
   dplyr::arrange(desc(death_date_nrs), desc(death_date_chi)) %>%
   dplyr::distinct(chi, .keep_all = TRUE) %>%
   # Use the NRS deathdate unless it isn't there
-  mutate(death_date = dplyr::coalesce(death_date_nrs , death_date_chi))
+  mutate(death_date = dplyr::coalesce(death_date_nrs, death_date_chi))
 
 ## Save file - //stats/hscdiip/SLF_extracts/Deaths/ ##
 # .zsav file
