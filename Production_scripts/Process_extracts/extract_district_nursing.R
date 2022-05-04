@@ -84,7 +84,7 @@ dn_clean <- dn_extract %>%
   mutate(record_keydate2 = record_keydate1) %>%
   # contact end time
   mutate(contact_end_time = hms::as_hms(contact_start_time + dminutes(duration_contact))) %>%
-  # gpprac
+  # deal with gpprac
   convert_eng_gpprac_to_dummy(gpprac)
 
 
