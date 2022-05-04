@@ -12,8 +12,6 @@ library(tidyr)
 
 source("All_years/04-Social_Care/02a-hc_functions.R")
 
-latest_validated_period <- "2021Q2"
-
 latest_update <- "Mar_2022"
 
 social_care_dir <- path("/conf/hscdiip/SLF_Extracts/Social_care")
@@ -31,7 +29,7 @@ demog_file <- read_demog_file(
 # Query to database -------------------------------------------------------
 
 hc_query <-
-  tbl(sc_con, dbplyr::in_schema("social_care_2", "homecare")) %>%
+  tbl(sc_con, dbplyr::in_schema("social_care_2", "homecare_snapshot")) %>%
   select(
     sending_location,
     sending_location_name,
@@ -65,10 +63,8 @@ hc_query <-
   mutate(reablement = na_if(reablement, 9L)) %>%
   # Fix any NA hc_service
   mutate(hc_service = if_else(is.na(hc_service), 0L, hc_service)) %>%
-  # Drop unvalidated data (2020Q4 and onwards)
+  # Drop bad rows
   filter(
-    period <= latest_validated_period,
-    # Drop bad rows
     hc_start_date_after_end_date == 0
   )
 
