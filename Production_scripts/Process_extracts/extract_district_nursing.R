@@ -97,9 +97,7 @@ dn_extract <- dn_extract %>%
     hbtreatcode == "S08000027" & convert_fyyear_to_year(year) > 2018 ~ "S08000030",
     hbtreatcode == "S08000021" & convert_fyyear_to_year(year) > 2019 ~ "S08000031",
     hbtreatcode == "S08000023" & convert_fyyear_to_year(year) > 2019 ~ "S08000032"
-  )) %>%
-  # sort by hbtreatcode
-  arrange(hbtreatcode)
+  ))
 
 
 # match files with DN Cost Lookup
