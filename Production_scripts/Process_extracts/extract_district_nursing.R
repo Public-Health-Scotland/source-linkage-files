@@ -172,7 +172,7 @@ outfile <- matched_dn_costs %>%
     nov_cost = sum(nov_cost),
     dec_cost = sum(dec_cost)
   ) %>%
- ungroup()
+  ungroup()
 
 
 # Save as zsav file
