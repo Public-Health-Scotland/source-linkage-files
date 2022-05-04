@@ -36,10 +36,6 @@ Define !Delayed_Discharge_period()
     "Jul16_Dec21"
 !EndDefine.
 
-Define !SC_Latest_Validated_period()
-    "2021Q2"
-!EndDefine.
-
 * Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
 Define !latest_cost_year()
     2018
