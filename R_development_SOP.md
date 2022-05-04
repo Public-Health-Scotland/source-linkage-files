@@ -6,7 +6,7 @@ This SOP aims to provide background to and a framework for contributing to the S
 
 ## Issues
 
-Any piece of work required will be logged as an Issue on GitHub. This allows each piece of work to be assigned to an individual to work on. It provides a well-organised workflow for the team to work collaboratively.
+Any piece of work required will be logged as [an issue on GitHub](https://github.com/Public-Health-Scotland/source-linkage-files/issues). This allows each piece of work to be assigned to an individual to work on. It provides a well-organised workflow for the team to work collaboratively.
 
 ## Branching
 
@@ -34,7 +34,7 @@ Your branch is a safe place to make changes. If you make a mistake, you can reve
 
 Commits contain the changes you have carried out in your script. You can do this as little or often as you want. Ideally, each commit should contain an isolated, complete change. This makes it easy to revert your changes if needed. A good working practice can be committing after completion of your script, or at end of the day working, then after any requested changes to your script.
 
-To commit your changes, use the commit button in the Git console on `R`, give each commit a descriptive message to help you and future contributors understand what changes the commit contains.
+To commit your changes, use the commit button in the Git pane in RStudio, give each commit a descriptive message to help you and future contributors understand what changes the commit contains. See [writing meaningfull commit messages](https://reflectoring.io/meaningful-commit-messages/) for some in-depth advice.
 
 Once you have committed your changes, push this to your branch using the push button or `git push` in the terminal.
 
