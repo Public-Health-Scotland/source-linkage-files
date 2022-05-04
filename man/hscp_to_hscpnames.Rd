@@ -7,10 +7,10 @@
 hscp_to_hscpnames(hscp)
 }
 \arguments{
-\item{hscp}{vector of hscp codes}
+\item{hscp}{vector of HSCP codes}
 }
 \value{
-a vector of hscp names
+a vector of HSCP names
 }
 \description{
 Convert HSCP Codes to HSCP Names

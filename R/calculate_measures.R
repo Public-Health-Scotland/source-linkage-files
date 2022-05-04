@@ -2,7 +2,7 @@
 #'
 #' @param data A processed dataframe containing a summary of the mean and sum of variables
 #' @param vars Specify variables you want to test.
-#' This will 'match' this e.g c("beddays", "cost", "yearstay). Default as NULL for summarising
+#' This will match this e.g c(`beddays`, `cost`, `yearstay`). Default as NULL for summarising
 #' everything in a dataframe.
 #' @param measure The measure you want to apply to variables
 #'

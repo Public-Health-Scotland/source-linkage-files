@@ -1,8 +1,8 @@
 #' Convert HSCP Codes to HSCP Names
 #'
-#' @param hscp vector of hscp codes
+#' @param hscp vector of HSCP codes
 #'
-#' @return a vector of hscp names
+#' @return a vector of HSCP names
 #' @export
 #'
 #' @examples
@@ -46,11 +46,11 @@ hscp_to_hscpnames <- function(hscp) {
 }
 
 
-#' Convert Health Board Codes to Health Board Names
+#' Convert NHS Health Board Codes to NHS Health Board Names
 #'
-#' @param hb vector of hscp codes
+#' @param hb vector of NHS Health Board codes
 #'
-#' @return a vector of hb names
+#' @return a vector of NHS Health Board names
 #' @export
 #'
 #' @examples

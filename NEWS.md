@@ -4,9 +4,9 @@
 * Now using Social Care data up to 2021/22 Q2.
   * Issues with client data - should be resolved by next update, client data will be reviewed to include it more completely.
 * Big changes to Homelessness data
-  * Some LAs have more data thanks to work with DM
+  * Some LAs have more data thanks to work with Data Management
   * Some LAs have had data removed as it's incomplete and possibly misleading - all LAs with data now have at least 90% completeness (at the application level).
-  * Homelessness Flags now only look at the application decision date (keydate1).
+  * Homelessness Flags now only look at the application decision date (`keydate1`).
   * Some duplicates removed from West Dunbartonshire and East Ayrshire.
  
 # December 2021 Update - Released 16-Dec-2021
