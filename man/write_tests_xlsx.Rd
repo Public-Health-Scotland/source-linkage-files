@@ -9,7 +9,7 @@ write_tests_xlsx(comparison_data, sheet_name)
 \arguments{
 \item{comparison_data}{produced by \code{\link{produce_test_comparison}}}
 
-\item{name}{of dataset tests}
+\item{sheet_name}{the name of the dataset - this will be used as the sheet name}
 }
 \value{
 source_tests_path to the xlsx file location
