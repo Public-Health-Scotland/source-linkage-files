@@ -10,6 +10,7 @@
 
 # Load packages
 library(createslf)
+library(dplyr)
 library(openxlsx)
 library(slfhelper)
 
@@ -19,18 +20,18 @@ library(slfhelper)
 year <- "1920"
 
 # Read new data file
-new_data <- haven::read_sav(get_source_extract_path(year, "Outpatients", ext = "zsav"))
+new_data <- readr::read_rds(get_source_extract_path(year, "Outpatients", ext = "rds"))
 
 # Read current SLF episode file and filter for 01B and GLS records
-existing_data <- read_slf_episode("1920", recid = "00B", columns = c("anon_chi", names(new_data))) %>%
+existing_data <- read_slf_episode(year, recid = "00B") %>%
   rename(chi = anon_chi)
 
 
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_acute_tests(existing_data),
-  produce_source_acute_tests(new_data)
+  produce_source_outpatients_tests(existing_data),
+  produce_source_outpatients_tests(new_data)
 )
 
 
