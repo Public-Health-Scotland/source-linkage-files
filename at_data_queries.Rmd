@@ -96,5 +96,13 @@ output: html_document
 | TRUE                  |    11575|
 
 
+### Valid CHI
+
+| Valid CHI           |    n    |
+|---------------------|---------|  
+| Missing             |  10941  |
+| Too few characters  |  4204   |
+| Valid CHI           |  1713407|
+
 
 
