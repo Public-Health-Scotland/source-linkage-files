@@ -10,7 +10,7 @@ GET DATA
     "dementia, mental_health_problems, learning_disability, physical_and_sensory_disability, drugs, alcohol, palliative_care, carer, ",
     "elderly_frail, neurological_condition, autism, other_vulnerable_groups, ",
     "living_alone, support_from_unpaid_carer, social_worker, type_of_housing, meals, day_care ",
-    "FROM social_care_2.client WHERE financial_year = ", !unquote(!fin_year),
+    "FROM social_care_2.client_snapshot WHERE financial_year = ", !unquote(!fin_year),
     "ORDER BY sending_location, social_care_id, financial_year, financial_quarter"))
    /ASSUMEDSTRWIDTH=255.
 CACHE.
