@@ -4,7 +4,7 @@
 #' (data is from \code{\link{get_slf_postcode_path}})
 #'
 #' @return a dataframe with a count of each flag
-#' from \code{\link{sum_test_flags}}
+#' from \code{\link{calculate_measures}}
 #' @export
 #' @importFrom dplyr mutate select
 #' @family produce tests functions
@@ -28,5 +28,5 @@ produce_slf_postcode_tests <- function(data) {
       .data$ur8_2016, .data$ur6_2016, .data$ur3_2016, .data$ur2_2016
     )) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }

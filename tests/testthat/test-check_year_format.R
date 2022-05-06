@@ -13,20 +13,20 @@ test_that("Check year format works", {
 
   # Year as a numeric
   expect_equal(check_year_format(1718), "1718") %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
   expect_equal(check_year_format(1718, format = "fyyear"), "1718") %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
   expect_equal(check_year_format(2017, format = "alternate"), "2017") %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
 
   # Vectors
   expect_equal(check_year_format(c(1718, 1819, 1920)), c("1718", "1819", "1920")) %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
   expect_equal(
     check_year_format(c(2017, 2018, 2019), format = "alternate"),
     c("2017", "2018", "2019")
   ) %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
 
   # Incorrect fomat
   expect_error(
@@ -62,15 +62,15 @@ test_that("Check year format works", {
     check_year_format(2017),
     "Try again using the standard form, e.g. `1718`"
   ) %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
   expect_error(
     check_year_format(2017, format = "fyyear"),
     "Try again using the standard form, e.g. `1718`"
   ) %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
   expect_error(
     check_year_format(1718, format = "alternate"),
     "Try again using the alternate form, e.g. `2017`"
   ) %>%
-    expect_warning("`year` should be a character")
+    expect_message("`year` will be converted to a character")
 })
