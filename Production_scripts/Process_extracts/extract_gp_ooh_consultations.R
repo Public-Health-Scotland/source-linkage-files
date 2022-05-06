@@ -21,6 +21,7 @@ library(tidyverse)
 library(createslf)
 library(phsmethods)
 library(lubridate)
+library(hms)
 
 ## Load extracts ------------------------------------
 
@@ -267,7 +268,7 @@ outfile <- ooh_clean %>%
   arrange(
     chi,
     record_keydate1,
-    keytime1
+    key_time1
   )
 select(
   year,
@@ -275,8 +276,8 @@ select(
   smrtype,
   record_keydate1,
   record_keydate2,
-  keytime1,
-  keytime2,
+  key_time1,
+  key_time2,
   chi,
   gender,
   dob,
