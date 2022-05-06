@@ -32,6 +32,7 @@ Other file path functions:
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
 \code{\link{get_nsu_path}()},
+\code{\link{get_readcode_lookup_path}()},
 \code{\link{get_sc_ch_episodes_path}()},
 \code{\link{get_sc_demog_lookup_path}()},
 \code{\link{get_service_use_cohorts_path}()},
