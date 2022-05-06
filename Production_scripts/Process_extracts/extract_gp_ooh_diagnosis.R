@@ -24,13 +24,7 @@ library(stringr)
 
 ## Load Read code lookup----------------------------
 
-## TODO - Put into function##
-read_code_lookup <- haven::read_sav(
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = "ReadCodeLookup.zsav"
-  )
-) %>%
+read_code_lookup <- haven::read_sav(get_readcode_lookup_path()) %>%
   rename(
     readcode = "ReadCode",
     description = "Description"
