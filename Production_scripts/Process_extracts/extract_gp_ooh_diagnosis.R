@@ -125,22 +125,5 @@ diagnosis_clean <- diagnosis_read_codes %>%
 outfile <- diagnosis_clean %>%
   select()
 
-# TEMP zsav file
-haven::write_sav(
-  paste0(
-    get_year_dir(year = year),
-    "/gp-outcomes-data-20",
-    year, ".zsav"
-  )
-)
-
-# TEMP rds file
-readr::write_rds(
-  paste0(
-    get_year_dir(year = year),
-    "/gp-outcomes-data-20",
-    year, ".rds"
-  )
-)
 
 # End of Script #

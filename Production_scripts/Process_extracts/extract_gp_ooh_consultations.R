@@ -310,21 +310,5 @@ select(
   ooh_CC
 )
 
-## Housekeeping -------------------------------------
-
-# Delete TEMP files
-# diagnosis
-file.remove(paste0(
-  get_year_dir(year = year),
-  "/gp-diagnosis-data-20",
-  year, ".rds"
-))
-
-# outcomes
-file.remove(paste0(
-  get_year_dir(year = year),
-  "/gp-outcomes-data-20",
-  year, ".rds"
-))
 
 # End of Script #
