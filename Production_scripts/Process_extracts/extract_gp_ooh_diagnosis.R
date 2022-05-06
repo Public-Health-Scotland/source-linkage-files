@@ -99,7 +99,7 @@ diagnosis_clean <- diagnosis_read_codes %>%
   # Base R way - not working
   # mutate(readcodelevel = gregexpr('[.]', readcode)[1])
   mutate(
-    readcodelevel = str_locate(readcode, "[.]")[,1],
+    readcodelevel = str_locate(readcode, "[.]")[, 1],
     readcodelevel = replace_na(readcodelevel, 0)
   ) %>%
   arrange(
