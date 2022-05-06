@@ -58,7 +58,7 @@ diagnosis_file <- read_csv(
 
 ## Deal with Read Codes --------------------------
 
-diagnosis_clean <- diagnosis_file %>%
+diagnosis_read_codes <- diagnosis_file %>%
   # Apply readcode changes
   tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
     str_pad(5, "right", ".")) %>%
@@ -94,7 +94,7 @@ diagnosis_clean <- diagnosis_file %>%
 
 ## Data Cleaning ---------------------------------
 
-diagnosis_clean <- diagnosis_clean %>%
+diagnosis_clean <- diagnosis_read_codes %>%
   # Sort and restructure the data so it's ready to link to case IDs.
   arrange(guid, readcode) %>%
   # Remove duplicates (use a flag)
@@ -105,21 +105,24 @@ diagnosis_clean <- diagnosis_clean %>%
   # Base R way - not working
   # mutate(readcodelevel = gregexpr('[.]', readcode)[1])
   mutate(
-    readcodelevel = str_locate(readcode, "[.]"),
+    readcodelevel = str_locate(readcode, "[.]")[,1],
     readcodelevel = replace_na(readcodelevel, 0)
+  ) %>%
+  arrange(
+    guid,
+    desc(readcodelevel),
+    readcode
   ) %>%
   # restructure data
   pivot_wider(
-    id_cols = guid,
     names_from = readcodelevel,
     values_from = readcode
   )
 
 
-
 ## Save outfile----------------------------------------
 
-outfile <- outcome_clean %>%
+outfile <- diagnosis_clean %>%
   select()
 
 # TEMP zsav file
