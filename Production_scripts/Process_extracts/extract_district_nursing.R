@@ -131,7 +131,7 @@ matched_dn_costs <- matched_dn_costs %>%
 
 # costs per month
 matched_dn_costs <- matched_dn_costs %>%
-  create_day_episode_costs(record_keydate1, cost_total_net)
+  create_monthly_costs(record_keydate1, cost_total_net)
 
 
 ## save outfile ---------------------------------------
