@@ -102,7 +102,7 @@ dn_extract <- dn_extract %>%
 
 # match files with DN Cost Lookup
 # read in DN cost lookup
-dn_costs_lookup <- haven::read_sav(get_dn_costs_path()) %>%
+dn_costs_lookup <- readr::read_rds(get_dn_costs_path(ext = "rds")) %>%
   select(-hbtreatname)
 
 matched_dn_costs <- dn_clean %>%
