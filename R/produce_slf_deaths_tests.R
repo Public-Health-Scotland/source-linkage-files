@@ -4,7 +4,7 @@
 #' flags (data is from \code{\link{get_slf_deaths_path}})
 #
 #' @return a dataframe with a count of each flag
-#' from \code{\link{sum_test_flags}}
+#' from \code{\link{calculate_measures}}
 #' @export
 #' @importFrom dplyr mutate select
 #' @family produce tests functions
@@ -25,5 +25,5 @@ produce_slf_deaths_tests <- function(data) {
       .data$death_date
     )) %>%
     # use function to sum new test flags
-    sum_test_flags()
+    calculate_measures(measure = "sum")
 }

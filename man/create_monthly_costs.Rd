@@ -2,6 +2,7 @@
 % Please edit documentation in R/create_monthly_costs.R
 \name{create_monthly_costs}
 \alias{create_monthly_costs}
+<<<<<<< HEAD
 \title{Generate costs for each month}
 \usage{
 create_monthly_costs(data, date_var, cost_var)
@@ -19,4 +20,33 @@ that assigns cost to each month.
 }
 \description{
 Generate costs for each month
+=======
+\title{Create monthly costs}
+\usage{
+create_monthly_costs(
+  data,
+  yearstay = yearstay,
+  cost_total_net = cost_total_net
+)
+}
+\arguments{
+\item{data}{Data containing bedday variables,
+likely created by \link{create_monthly_beddays}}
+
+\item{yearstay}{The variable containing the total
+number of beddays in the year, default is \code{yearstay}}
+
+\item{cost_total_net}{The variable containing the total
+number of cost for the year, default is \code{cost_total_net}}
+}
+\value{
+a \link[tibble:tibble-package]{tibble} with cost variables
+added
+}
+\description{
+Create monthly costs
+}
+\seealso{
+create_monthly_beddays
+>>>>>>> 0eae2cc164cded68b27cbc56bb48a0a70c6ab9e0
 }

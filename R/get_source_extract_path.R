@@ -29,14 +29,19 @@ get_source_extract_path <- function(year,
   type <- match.arg(type)
   ext <- match.arg(ext)
 
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
+  year_dir <- fs::path(
+    "/conf",
+    "sourcedev",
+    "Source_Linkage_File_Updates",
+    year
+  )
 
   file_name <- dplyr::case_when(
     type == "Acute" ~ "acute_for_source",
     type == "AE" ~ "a&e_for_source",
     type == "CH" ~ "care_home_for_source",
     type == "CMH" ~ "CMH_for_source",
-    type == "Client" ~ "client_for_Source",
+    type == "Client" ~ "client_for_source",
     type == "DD" ~ "DD_for_source",
     type == "Deaths" ~ "deaths_for_source",
     type == "DN" ~ "DN_for_source",
@@ -45,6 +50,7 @@ get_source_extract_path <- function(year,
     type == "Homelessness" ~ "homelessness_for_source",
     type == "Maternity" ~ "maternity_for_source",
     type == "Mental" ~ "mental_health_for_source",
+    type == "DD" ~ "DD_for_source",
     type == "Outpatients" ~ "outpatients_for_source",
     type == "PIS" ~ "prescribing_file_for_source"
   )

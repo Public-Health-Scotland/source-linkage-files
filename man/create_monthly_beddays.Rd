@@ -26,7 +26,7 @@ create_monthly_beddays(
 instead of the first?}
 }
 \value{
-The data with additional variables \code{apr_beddays} to \code{mar_beddays}
+a \link[tibble:tibble-package]{tibble} with additional variables \code{apr_beddays} to \code{mar_beddays}
 that count the beddays which occurred in the month.
 }
 \description{

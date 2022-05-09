@@ -9,10 +9,10 @@
 #####################################################
 
 # Packages
-  library(dplyr)
-  library(tidyr)
-  library(haven)
-  library(createslf)
+library(dplyr)
+library(tidyr)
+library(haven)
+library(createslf)
 
 
 # Read lookup files -------------------------------------------------------
@@ -30,7 +30,7 @@ pc_file <- readr::read_rds(read_spd_file()) %>%
     matches("ur3_\\d{4}$"),
     matches("ur2_\\d{4}$")
   ) %>%
-  mutate(lca = ca_to_lca(ca2019))
+  mutate(lca = convert_ca_to_lca(ca2019))
 
 # simd data
 simd_file <- readr::read_rds(read_simd_file(file = "postcode_2021_2_simd2020v2.rds")) %>%
