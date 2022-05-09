@@ -2,25 +2,6 @@
 % Please edit documentation in R/create_monthly_costs.R
 \name{create_monthly_costs}
 \alias{create_monthly_costs}
-<<<<<<< HEAD
-\title{Generate costs for each month}
-\usage{
-create_monthly_costs(data, date_var, cost_var)
-}
-\arguments{
-\item{data}{Data to assign costs for}
-
-\item{date_var}{Admission date or discharge date}
-
-\item{cost_var}{Cost variable e.g. cost_total_net}
-}
-\value{
-The data with additional variables \code{apr_cost} to \code{mar_cost}
-that assigns cost to each month.
-}
-\description{
-Generate costs for each month
-=======
 \title{Create monthly costs}
 \usage{
 create_monthly_costs(
@@ -48,5 +29,4 @@ Create monthly costs
 }
 \seealso{
 create_monthly_beddays
->>>>>>> 0eae2cc164cded68b27cbc56bb48a0a70c6ab9e0
 }
