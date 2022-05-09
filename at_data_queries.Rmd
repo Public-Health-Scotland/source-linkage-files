@@ -7,7 +7,7 @@ output: html_document
 
 ### Period 
 
-* For the period 2017 there are 148,651 records which are not assigned "2017Q4".
+* For the period 2017 there are `r broken2017` records which are not assigned "2017Q4".
 
 | period    |   n     |
 |-----------|---------|
