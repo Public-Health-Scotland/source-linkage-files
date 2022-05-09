@@ -7,7 +7,7 @@ output: html_document
 
 ### Period 
 
-* For the period 2017 there are `r broken2017` records which are not assigned "2017Q4".
+* For the period 2017 there are 148,651 records which are not assigned "2017Q4". In the current methodology we change these to 2017Q4. 
 
 | period    |   n     |
 |-----------|---------|
@@ -64,7 +64,7 @@ output: html_document
 | West Lothian          | 	2017  |	544   |
 
 
-* For the period 2020 there are 67,548 records which do not have a quarter attached. 
+* For the period 2020 there are 67,548 records which do not have a quarter attached. These are split across 13 LCA's
 
 
 | sending_location_name | period|number of records affected |
@@ -84,10 +84,11 @@ output: html_document
 | West Lothian          | 2020  |                       4314|
 
 
-### Service start date 
+### Service start date missing
 
 * Current logic is that if the service start date is missing then set this to the start of the FY. This was 
-  when we had data for 2017Q4 only. Including more data shows there is a large amount of missing start dates.
+  when we had data for 2017Q4 only. 
+* Including more data shows there is 11,575 missing start dates where the majority of these look like they are in Aberdeen City.
 
 
 | service_start_missing |     n   |
@@ -95,14 +96,20 @@ output: html_document
 | FALSE                 |  1716974|
 | TRUE                  |    11575|
 
+* Aberdeen City has the majority of missing start dates. 
+* South Ayrshire with 291
 
-### Valid CHI
+|sending_location_name|   n   |
+|---------------------|-------|
+| Aberdeen City       |  11278|
+| Argyll and Bute     |      2|
+| City of Edinburgh   |      1|
+| Dundee City         |      1|
+| East Lothian        |      2|
+| South Ayrshire      |    291|
 
-| Valid CHI           |    n    |
-|---------------------|---------|  
-| Missing             |  10941  |
-| Too few characters  |  4204   |
-| Valid CHI           |  1713407|
+
+
 
 
 
