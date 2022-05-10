@@ -78,11 +78,35 @@ matched_ch_data <- ch_clean %>%
 # Data Cleaning Care Home Name and Postcode ---------------------------------------
 
 matched_ch_clean <- matched_ch_data %>%
-  # correct postcode
-  mutate(across(contains("postcode"), .x = postcode(.x)))
+  # correct postcode formatting
+  mutate(across(contains("postcode"), .x = format_postcode(.x)))
 
-# read in data from CH lookup
-ch_lookup <- readxl::read_xlsx(get_slf_ch_path())
+# postcode lookup
+postcode_lookup <- haven::read_sav(get_slf_postcode_path()) %>%
+  # select postcode
+  select(postcode)
+
+# CH lookup
+ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
+  rename(ch_postcode = "AccomPostCodeNo",
+         ch_name = "ServiceName")
+
+ch_names <- ch_lookup %>%
+  select(ch_name)
+
+name_postcode_clean <- matched_ch_clean %>%
+  # check postcodes and care home names are in lookup
+  filter(!(ch_postcode %in% postcode_lookup),
+         !(ch_name %in% ch_lookup$ch_name)) %>%
+  mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup),
+         ch_name = na_if(ch_name, ch_name %in% ch_lookup$ch_name)) %>%
+  arrange(ch_postcode) %>%
+  # where there is only a single Care Home at the Postcode (ever) just use that name, overwriting anything which was submitted
+  group_by(ch_postcode) %>%
+  fill(ch_name, .direction = "downup") %>%
+  mutate(ch_name_change_counter = pmax(ch_name != lag(ch_name) & !is.na(ch_name), FALSE, na.rm = TRUE)) %>%
+  mutate(ch_name = if_else(ch_name_change_counter == 1, last(ch_name), ch_name)) %>%
+  ungroup()
 
 
 # Data Cleaning Care Home Data ---------------------------------------
