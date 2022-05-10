@@ -1,9 +1,11 @@
 test_that("Get existing data works", {
-  dummy_new_data <- tibble(year = "1920",
-                           recid = "04B",
-                           chi = 1,
-                           diag1 = 1,
-                           diag2 = 2)
+  dummy_new_data <- tibble(
+    year = "1920",
+    recid = "04B",
+    chi = 1,
+    diag1 = 1,
+    diag2 = 2
+  )
 
   slf_data <- get_existing_data_for_tests(dummy_new_data)
 

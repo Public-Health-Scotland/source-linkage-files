@@ -30,4 +30,3 @@ get_existing_data_for_tests <- function(new_data) {
 
   return(slf_data)
 }
-
