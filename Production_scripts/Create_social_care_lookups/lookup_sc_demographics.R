@@ -141,9 +141,9 @@ outfile <-
 
 ## save file ##
 # .zsav file
-haven::write_sav(outfile, get_sc_demog_lookup_path(), compress = TRUE)
+haven::write_sav(outfile, get_sc_demog_lookup_path(check_mode = "write"), compress = TRUE)
 
 # .rds file
-readr::write_rds(outfile, get_sc_demog_lookup_path(), compress = "gz")
+readr::write_rds(outfile, get_sc_demog_lookup_path(check_mode = "write"), compress = "gz")
 
 ## End of Script ---------------------------------------
