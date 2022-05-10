@@ -15,6 +15,7 @@ library(dbplyr)
 library(createslf)
 library(lubridate)
 library(tidyr)
+library(phsmethods)
 
 
 latest_update <- "Mar_2022"
@@ -79,34 +80,50 @@ matched_ch_data <- ch_clean %>%
 
 matched_ch_clean <- matched_ch_data %>%
   # correct postcode formatting
-  mutate(across(contains("postcode"), .x = format_postcode(.x)))
+  mutate(across(contains("postcode"), .x = postcode(.x)))
+
 
 # postcode lookup
 postcode_lookup <- haven::read_sav(get_slf_postcode_path()) %>%
   # select postcode
-  select(postcode)
+  select(postcode) %>%
+  # format postcode
+  mutate(postcode = postcode(postcode))
 
 # CH lookup
 ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
   rename(ch_postcode = "AccomPostCodeNo",
-         ch_name = "ServiceName")
+         ch_name_lookup = "ServiceName") %>%
+  select(ch_postcode,
+         ch_name_lookup) %>%
+  # format postcode
+  mutate(ch_postcode = postcode(ch_postcode))
 
-ch_names <- ch_lookup %>%
-  select(ch_name)
 
 name_postcode_clean <- matched_ch_clean %>%
+  # deal with capitalisation of CH names
+  mutate(ch_name = stringr::str_to_title(ch_name)) %>%
   # check postcodes and care home names are in lookup
   filter(!(ch_postcode %in% postcode_lookup),
-         !(ch_name %in% ch_lookup$ch_name)) %>%
+         !(ch_name %in% ch_lookup$ch_name_lookup)) %>%
+  ## ?? filter out if not in lookup OR make postcode/name NA if not in??
   mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup),
-         ch_name = na_if(ch_name, ch_name %in% ch_lookup$ch_name)) %>%
+         ch_name = na_if(ch_name, ch_name %in% ch_lookup$ch_name_lookup)) %>%
   arrange(ch_postcode) %>%
   # where there is only a single Care Home at the Postcode (ever) just use that name, overwriting anything which was submitted
   group_by(ch_postcode) %>%
+  # fill in names where NA but has a name in another record
   fill(ch_name, .direction = "downup") %>%
+  # change name if CH name does not match previous name
   mutate(ch_name_change_counter = pmax(ch_name != lag(ch_name) & !is.na(ch_name), FALSE, na.rm = TRUE)) %>%
   mutate(ch_name = if_else(ch_name_change_counter == 1, last(ch_name), ch_name)) %>%
-  ungroup()
+  ungroup() %>%
+  # match CH names with CH lookup
+  left_join(ch_lookup, by = c("ch_postcode")) %>%
+  # check CH name matches the lookup name
+  mutate(name_match = if_else(ch_name != ch_name_lookup | is.na(ch_name_lookup), 0, 1)) %>%
+  # replace ch name with lookup name if not a match
+  mutate(ch_name = if_else(name_match == 0 & !is.na(ch_name_lookup), ch_name_lookup, ch_name))
 
 
 # Data Cleaning Care Home Data ---------------------------------------
@@ -150,7 +167,7 @@ ch_data_clean %>% count(changed_sc_id)
 # to a single row per episode where admission the same
 ch_episode <- ch_data_clean %>%
   # when nursing_care_provision is different on records within the episode, split the episode at this point
-  group_by(chi, sending_location, social_care_id, ch_admission_date, cum_sum_split_episode, nursing_care_provision) %>%
+  group_by(chi, sending_location, social_care_id, ch_admission_date, sum_split_episode, nursing_care_provision) %>%
   summarise(
     ch_discharge_date = last(ch_discharge_date),
     ch_provider = max(ch_provider),
@@ -159,6 +176,7 @@ ch_episode <- ch_data_clean %>%
     sc_latest_submission = max(period),
     ch_name = last(ch_name),
     ch_postcode = last(ch_postcode),
+    reason_for_admission = last(reason_for_admission),
     gender = first(gender),
     dob = first(dob),
     postcode = first(postcode)
@@ -230,7 +248,7 @@ outfile <- ch_markers %>%
   rename(
     record_keydate1 = ch_admission_date,
     record_keydate2 = ch_discharge_date,
-    # ch_adm_reason = reason_for_admission,
+    ch_adm_reason = reason_for_admission,
     ch_nursing = nursing_care_provision
   ) %>%
   arrange(
@@ -256,10 +274,7 @@ outfile <- ch_markers %>%
     ch_sc_id_cis,
     ch_provider,
     ch_nursing,
-    # ch_adm_reason,
+    ch_adm_reason,
     sc_latest_submission
   )
 
-
-# output
-output <- haven::read_sav(get_sc_ch_episodes_path())
