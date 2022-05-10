@@ -19,6 +19,8 @@ Create HSCP test flags
 }
 \seealso{
 Other create test flags functions: 
+\code{\link{create_demog_test_flags}()},
+\code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hb_test_flags}()}
 }
 \concept{create test flags functions}
