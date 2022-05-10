@@ -1,7 +1,5 @@
 #' Get the full path to the SLF deaths lookup file
 #'
-#' @param update The update month to use,
-#' defaults to \code{\link{latest_update}}
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #' @param year financial year e.g. "1920"
 #'
