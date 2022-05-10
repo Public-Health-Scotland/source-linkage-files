@@ -536,14 +536,11 @@ ae_cup_file <- readr::read_csv(
 # Data Cleaning---------------------------------------
 
 ae_cup_clean <- ae_cup_file %>%
-  # Sort for linking and remove any duplicates
-  arrange(record_keydate1, keyTime1, case_ref_number) %>%
-  group_by(record_keydate1, keyTime1, case_ref_number) %>%
-  summarise(
-    cup_marker = first(cup_marker),
-    cup_pathway = first(cup_pathway)
-  ) %>%
-  ungroup()
+  # Remove any duplicates
+  distinct(record_keydate1,
+           keyTime1,
+           case_ref_number,
+           .keep_all = TRUE)
 
 
 # Join data--------------------------------------------
