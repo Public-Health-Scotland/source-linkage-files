@@ -79,7 +79,8 @@ pis_clean %>%
   haven::write_sav(get_source_extract_path(
     year = year,
     type = "PIS",
-    ext = "zsav"
+    ext = "zsav",
+    check_mode = "write"
   ),
   compress = TRUE
   ) %>%
@@ -87,7 +88,7 @@ pis_clean %>%
   readr::write_rds(get_source_extract_path(
     year = year,
     type = "PIS",
-    ext = "rds"
+    check_mode = "write"
   ),
   compress = "gz"
   )

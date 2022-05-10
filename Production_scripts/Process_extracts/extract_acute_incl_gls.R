@@ -268,11 +268,11 @@ outfile <- acute_clean %>%
 
 # Save as zsav file
 outfile %>%
-  haven::read_sav(get_source_extract_path(year, "Acute", ext = "zsav"))
+  haven::read_sav(get_source_extract_path(year, "Acute", ext = "zsav", check_mode = "write"))
 
 # Save as rds file
 outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Acute", ext = "rds"))
+  readr::write_rds(get_source_extract_path(year, "Acute", check_mode = "write"))
 
 
 ## End of Script ##
