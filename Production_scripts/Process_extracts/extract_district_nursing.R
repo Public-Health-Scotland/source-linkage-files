@@ -22,29 +22,19 @@ library(lubridate)
 year <- check_year_format("1920")
 
 # Read BOXI extract
-get_boxi_extract_path(
+dn_extract <- get_boxi_extract_path(
   year = year,
   type = "DN"
 ) %>%
-  readr::read_csv(col_types = cols(
-    `Treatment NHS Board Name` = col_character(),
+  read_csv(col_types = cols_only(
     `Treatment NHS Board Code 9` = col_character(),
     `Age at Contact Date` = col_integer(),
-    `Episode Contact Number` = col_integer(),
-    `Contact Start Time` = col_time(format = "%R"),
-    `Contact End Time` = col_time(format = "%R"),
     `Contact Date` = col_date(format = "%Y/%m/%d %T"),
-    `Patient Contact Category` = col_character(),
-    `Primary Intervention Subcategory` = col_character(),
     `Primary Intervention Category` = col_character(),
     `Other Intervention Category (1)` = col_character(),
-    `Other Intervention Subcategory (1)` = col_character(),
     `Other Intervention Category (2)` = col_character(),
-    `Other Intervention Subcategory (2)` = col_character(),
     `Other Intervention Category (3)` = col_character(),
-    `Other Intervention Subcategory (3)` = col_character(),
     `Other Intervention Category (4)` = col_character(),
-    `Other Intervention Subcategory (4)` = col_character(),
     `UPI Number [C]` = col_character(),
     `Patient DoB Date [C]` = col_date(format = "%Y/%m/%d %T"),
     `Patient Postcode [C] (Contact)` = col_character(),
@@ -53,7 +43,7 @@ get_boxi_extract_path(
     `Location of Contact` = col_double(),
     `Practice NHS Board Code 9 (Contact)` = col_character(),
     `Patient Council Area Code (Contact)` = col_character(),
-    `Practice Code (Contact)` = col_integer(),
+    `Practice Code (Contact)` = col_character(),
     `NHS Board of Residence Code 9 (Contact)` = col_character(),
     `HSCP of Residence Code (Contact)` = col_character(),
     `Patient Data Zone 2011 (Contact)` = col_character()
@@ -71,30 +61,13 @@ get_boxi_extract_path(
     datazone = "Patient Data Zone 2011 (Contact)",
     hbpraccode = "Practice NHS Board Code 9 (Contact)",
     hbtreatcode = "Treatment NHS Board Code 9",
-    hbtreatname = "Treatment NHS Board Name",
     chi = "UPI Number [C]",
-    episode_contact_number = "Episode Contact Number",
-    contact_start_time = "Contact Start Time",
-    contact_end_time = "Contact End Time",
     record_keydate1 = "Contact Date",
+    primary_intervention = "Primary Intervention Category",
     intervention_1 = "Other Intervention Category (1)",
     intervention_2 = "Other Intervention Category (2)",
-    intervention_3 = "Other Intervention Category (3)",
-    intervention_4 = "Other Intervention Category (4)",
-    intervention_sub_1 = "Other Intervention Subcategory (1)",
-    intervention_sub_2 = "Other Intervention Subcategory (2)",
-    intervention_sub_3 = "Other Intervention Subcategory (3)",
-    intervention_sub_4 = "Other Intervention Subcategory (4)",
-    primary_intervention = "Primary Intervention Category",
-    primary_intervention_sub = "Primary Intervention Subcategory",
     duration_contact = "Duration of Contact (measure)",
-    location_contact = "Location of Contact",
-    patient_contact = "Patient Contact Category"
-  ) %>%
-  mutate(
-    dob = as.Date(dob),
-    record_keydate1 = as.Date(record_keydate1),
-    gpprac = as.character(gpprac)
+    location_contact = "Location of Contact"
   )
 
 
