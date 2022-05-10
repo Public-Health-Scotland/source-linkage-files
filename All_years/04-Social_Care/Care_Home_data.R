@@ -92,10 +92,14 @@ postcode_lookup <- haven::read_sav(get_slf_postcode_path()) %>%
 
 # CH lookup
 ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
-  rename(ch_postcode = "AccomPostCodeNo",
-         ch_name_lookup = "ServiceName") %>%
-  select(ch_postcode,
-         ch_name_lookup) %>%
+  rename(
+    ch_postcode = "AccomPostCodeNo",
+    ch_name_lookup = "ServiceName"
+  ) %>%
+  select(
+    ch_postcode,
+    ch_name_lookup
+  ) %>%
   # format postcode
   mutate(ch_postcode = postcode(ch_postcode))
 
@@ -104,11 +108,15 @@ name_postcode_clean <- matched_ch_clean %>%
   # deal with capitalisation of CH names
   mutate(ch_name = stringr::str_to_title(ch_name)) %>%
   # check postcodes and care home names are in lookup
-  filter(!(ch_postcode %in% postcode_lookup),
-         !(ch_name %in% ch_lookup$ch_name_lookup)) %>%
+  filter(
+    !(ch_postcode %in% postcode_lookup),
+    !(ch_name %in% ch_lookup$ch_name_lookup)
+  ) %>%
   ## ?? filter out if not in lookup OR make postcode/name NA if not in??
-  mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup),
-         ch_name = na_if(ch_name, ch_name %in% ch_lookup$ch_name_lookup)) %>%
+  mutate(
+    ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup),
+    ch_name = na_if(ch_name, ch_name %in% ch_lookup$ch_name_lookup)
+  ) %>%
   arrange(ch_postcode) %>%
   # where there is only a single Care Home at the Postcode (ever) just use that name, overwriting anything which was submitted
   group_by(ch_postcode) %>%
