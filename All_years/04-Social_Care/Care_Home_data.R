@@ -98,7 +98,9 @@ ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
   ) %>%
   select(
     ch_postcode,
-    ch_name_lookup
+    ch_name_lookup,
+    DateReg,
+    DateCanx
   ) %>%
   # format postcode
   mutate(ch_postcode = postcode(ch_postcode))
@@ -131,7 +133,10 @@ name_postcode_clean <- matched_ch_clean %>%
   # check CH name matches the lookup name
   mutate(name_match = if_else(ch_name != ch_name_lookup | is.na(ch_name_lookup), 0, 1)) %>%
   # replace ch name with lookup name if not a match
-  mutate(ch_name = if_else(name_match == 0 & !is.na(ch_name_lookup), ch_name_lookup, ch_name))
+  mutate(ch_name = if_else(name_match == 0 & !is.na(ch_name_lookup), ch_name_lookup, ch_name)) %>%
+  # check admission date within CH dates
+  mutate(date_check = if_else(is.na(DateReg) | is.na(DateCanx) | ch_admission_date %in% range(DateReg, DateCanx), TRUE, FALSE))
+  ## ?? filter out the FALSE? where admission date is not within the CH dates??
 
 
 # Data Cleaning Care Home Data ---------------------------------------
