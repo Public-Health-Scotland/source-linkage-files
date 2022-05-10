@@ -10,8 +10,7 @@
 get_slf_postcode_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = glue::glue("source_postcode_lookup_{update}.zsav"),
-    check_mode = "write",
+    file_name = glue::glue("source_postcode_lookup_{update}.rds"),
     ...
   )
 }
@@ -28,8 +27,7 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
 get_slf_gpprac_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = glue::glue("source_GPprac_lookup_{update}.zsav"),
-    check_mode = "write",
+    file_name = glue::glue("source_GPprac_lookup_{update}.rds"),
     ...
   )
 }
@@ -47,7 +45,7 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 get_slf_deaths_path <- function(update = latest_update(), ...) {
   slf_deaths_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = glue::glue("all_deaths_{update}.zsav"),
+    file_name = glue::glue("all_deaths_{update}.rds"),
     ...
   )
 

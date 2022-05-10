@@ -25,7 +25,7 @@ get_source_extract_path <- function(year,
                                       "Outpatients",
                                       "PIS"
                                     ),
-                                    ext = c("zsav", "rds")) {
+                                    ...) {
   type <- match.arg(type)
   ext <- match.arg(ext)
 
@@ -57,9 +57,8 @@ get_source_extract_path <- function(year,
 
   source_extract_path <- get_file_path(
     directory = year_dir,
-    file_name = glue::glue("{file_name}-20{year}"),
-    ext = ext,
-    check_mode = "write"
+    file_name = glue::glue("{file_name}-20{year}.rds"),
+    ...
   )
 
   return(source_extract_path)

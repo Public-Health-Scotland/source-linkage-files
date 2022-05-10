@@ -16,7 +16,7 @@ get_dd_path <- function(..., dd_period = NULL) {
 
   dd_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Delayed_Discharges"),
-    file_name = paste0(dd_period, "DD_LinkageFile.zsav"),
+    file_name = paste0(dd_period, "DD_LinkageFile.rds"),
     ...
   )
 
