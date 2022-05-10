@@ -10,10 +10,8 @@
 
 # Load packages
 library(dplyr)
-library(ggplot2)
+library(readr)
 library(createslf)
-library(phsmethods)
-library(lubridate)
 
 
 # Read in data ---------------------------------------
