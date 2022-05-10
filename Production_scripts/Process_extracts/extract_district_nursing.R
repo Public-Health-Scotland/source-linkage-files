@@ -22,10 +22,42 @@ library(lubridate)
 year <- check_year_format("1920")
 
 # Read BOXI extract
-dn_extract <- readr::read_csv(get_boxi_extract_path(
+get_boxi_extract_path(
   year = year,
   type = "DN"
-)) %>%
+) %>%
+  readr::read_csv(col_types = cols(
+    `Treatment NHS Board Name` = col_character(),
+    `Treatment NHS Board Code 9` = col_character(),
+    `Age at Contact Date` = col_integer(),
+    `Episode Contact Number` = col_integer(),
+    `Contact Start Time` = col_time(format = "%R"),
+    `Contact End Time` = col_time(format = "%R"),
+    `Contact Date` = col_date(format = "%Y/%m/%d %T"),
+    `Patient Contact Category` = col_character(),
+    `Primary Intervention Subcategory` = col_character(),
+    `Primary Intervention Category` = col_character(),
+    `Other Intervention Category (1)` = col_character(),
+    `Other Intervention Subcategory (1)` = col_character(),
+    `Other Intervention Category (2)` = col_character(),
+    `Other Intervention Subcategory (2)` = col_character(),
+    `Other Intervention Category (3)` = col_character(),
+    `Other Intervention Subcategory (3)` = col_character(),
+    `Other Intervention Category (4)` = col_character(),
+    `Other Intervention Subcategory (4)` = col_character(),
+    `UPI Number [C]` = col_character(),
+    `Patient DoB Date [C]` = col_date(format = "%Y/%m/%d %T"),
+    `Patient Postcode [C] (Contact)` = col_character(),
+    `Duration of Contact (measure)` = col_double(),
+    Gender = col_double(),
+    `Location of Contact` = col_double(),
+    `Practice NHS Board Code 9 (Contact)` = col_character(),
+    `Patient Council Area Code (Contact)` = col_character(),
+    `Practice Code (Contact)` = col_integer(),
+    `NHS Board of Residence Code 9 (Contact)` = col_character(),
+    `HSCP of Residence Code (Contact)` = col_character(),
+    `Patient Data Zone 2011 (Contact)` = col_character()
+  )) %>%
   # rename
   rename(
     age = "Age at Contact Date",
