@@ -104,34 +104,41 @@ dn_costs <- dn_clean %>%
   create_day_episode_costs(record_keydate1, cost_total_net)
 
 
-## save outfile ---------------------------------------
+## Aggregate to episodes  ---------------------------------------
 
-outfile <- dn_monthly_costs %>%
-  group_by(year, chi, recid, smr_type, ccm) %>%
+care_marker <- dn_costs %>%
+  group_by(chi) %>%
+  arrange(record_keydate1, .by_group = TRUE) %>%
+  # Create ccm (Contiuous Care Marker) which will group contacts which occur less
+  # than 7 days apart
+  mutate(ccm = pmax((record_keydate1 - lag(record_keydate1)) > 7, FALSE, na.rm = TRUE) %>%
+    cumsum())
+
+dn_episodes <- care_marker %>%
+  group_by(year, chi, ccm) %>%
   summarise(
+    recid = first(recid),
+    smr_type = first(smr_type),
     record_keydate1 = min(record_keydate1),
-    record_keydate2 = max(record_keydate2),
+    record_keydate2 = max(record_keydate1),
     dob = last(dob),
-    hbtreatcode = last(hbtreatcode),
-    hbrescode = last(hbrescode),
-    hscp = last(hscp),
-    lca = last(lca),
-    datazone = last(datazone),
+    gender = last(gender),
+    gpprac = last(gpprac),
     age = last(age),
+    postcode = last(postcode),
+    datazone = last(datazone),
+    lca = last(lca),
+    hscp = last(hscp),
+    hbrescode = last(hbrescode),
+    hbtreatcode = last(hbtreatcode),
+    location = first(location_contact),
     diag1 = first(primary_intervention),
     diag2 = first(intervention_1),
     diag3 = first(intervention_2),
     diag4 = last(primary_intervention),
     diag5 = last(intervention_1),
     diag6 = last(intervention_2),
-    postcode = last(postcode),
-    gender = first(gender),
-    gpprac = first(gpprac),
     cost_total_net = sum(cost_total_net),
-    location = first(location_contact),
-    jan_cost = sum(jan_cost),
-    feb_cost = sum(feb_cost),
-    mar_cost = sum(mar_cost),
     apr_cost = sum(apr_cost),
     may_cost = sum(may_cost),
     jun_cost = sum(jun_cost),
@@ -140,7 +147,10 @@ outfile <- dn_monthly_costs %>%
     sep_cost = sum(sep_cost),
     oct_cost = sum(oct_cost),
     nov_cost = sum(nov_cost),
-    dec_cost = sum(dec_cost)
+    dec_cost = sum(dec_cost),
+    jan_cost = sum(jan_cost),
+    feb_cost = sum(feb_cost),
+    mar_cost = sum(mar_cost)
   ) %>%
   ungroup()
 
