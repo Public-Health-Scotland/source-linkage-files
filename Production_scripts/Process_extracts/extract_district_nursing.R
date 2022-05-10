@@ -72,20 +72,14 @@ dn_extract <- get_boxi_extract_path(
 # Data Cleaning  ---------------------------------------
 
 dn_clean <- dn_extract %>%
-  # valid chi
-  mutate(validity = chi_check(chi)) %>%
   # filter for valid chi only
-  filter(validity == "Valid CHI") %>%
+  filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
   # add variables
   mutate(
+    year = year,
     recid = "DN",
-    smr_type = "DN",
-    year = year
+    smr_type = "DN"
   ) %>%
-  # record key date
-  mutate(record_keydate2 = record_keydate1) %>%
-  # contact end time
-  mutate(contact_end_time = hms::as_hms(contact_start_time + dminutes(duration_contact))) %>%
   # deal with gpprac
   convert_eng_gpprac_to_dummy(gpprac)
 
