@@ -278,3 +278,14 @@ outfile <- ch_markers %>%
     sc_latest_submission
   )
 
+
+# zsav file
+outfile %>%
+  haven::read_sav(get_sc_ch_episodes_path(latest_update, ext = "zsav"))
+
+# rds file
+outfile %>%
+  readr::write_rds(get_sc_ch_episodes_path(latest_update, ext = "rds"))
+
+
+# End of Script #
