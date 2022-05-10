@@ -86,45 +86,21 @@ dn_clean <- dn_extract %>%
 
 # Costs  ---------------------------------------
 
-# Recode HB codes so they match the cost lookup
-dn_extract <- dn_extract %>%
-  mutate(hbtreatcodes = case_when(
-    hbtreatcode == "S08000018" & convert_fyyear_to_year(year) > 2018 ~ "S08000029",
-    hbtreatcode == "S08000027" & convert_fyyear_to_year(year) > 2018 ~ "S08000030",
-    hbtreatcode == "S08000021" & convert_fyyear_to_year(year) > 2019 ~ "S08000031",
-    hbtreatcode == "S08000023" & convert_fyyear_to_year(year) > 2019 ~ "S08000032"
-  ))
-
-
-
-# read in DN cost lookup
-dn_costs_lookup <- readr::read_rds(get_dn_costs_path(ext = "rds")) %>%
-  select(-hbtreatname)
-
-# match files with DN Cost Lookup
-matched_dn_costs <- dn_clean %>%
-  full_join(dn_costs_lookup, by = c("hbtreatcode", "year")) %>%
-  # costs are rough estimates we round them to the nearest pound
-  mutate(cost_total_net = round(cost_total_net, 0))
-
-
-care_marker <- matched_dn_costs %>%
-  arrange(chi, record_keydate1) %>%
-  group_by(chi) %>%
-  # difference between dates of contacts
-  mutate(
-    date_1 = record_keydate1,
-    date_2 = lead(record_keydate1),
-    day_diff = as.numeric(date_2 - date_1)
+# Recode HB codes to HB2019 so they match the cost lookup
+dn_costs <- dn_clean %>%
+  mutate(hbtreatcode = recode(hbtreatcode,
+    "S08000018" = "S08000029",
+    "S08000027" = "S08000030",
+    "S08000021" = "S08000031",
+    "S08000023" = "S08000032"
+  )) %>%
+  # match files with DN Cost Lookup
+  left_join(haven::read_sav(get_dn_costs_path(ext = "sav")),
+    by = c("hbtreatcode", "year" = "Year")
   ) %>%
-  # continuous care marker
-  mutate(ccm = 1) %>%
-  mutate(ccm = if_else(day_diff <= 7, lead(ccm), lead(ccm) + 1)) %>%
-  ungroup()
-
-
-# costs per month
-dn_monthly_costs <- care_marker %>%
+  # costs are rough estimates we round them to the nearest pound
+  mutate(cost_total_net = janitor::round_half_up(cost_total_net)) %>%
+  # Create monthly cost vars
   create_day_episode_costs(record_keydate1, cost_total_net)
 
 
