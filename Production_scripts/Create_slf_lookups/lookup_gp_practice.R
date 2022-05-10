@@ -127,7 +127,7 @@ outfile <-
   rename(pc8 = "postcode")
 
 # .zsav
-haven::write_sav(outfile, get_slf_gpprac_path(), compress = TRUE)
+haven::write_sav(outfile, get_slf_gpprac_path(ext = "zsav", check_mode = "write"), compress = TRUE)
 
 # .rds file
-readr::write_rds(outfile, get_slf_gpprac_path(), compress = "gz")
+readr::write_rds(outfile, get_slf_gpprac_path(check_mode = "write"), compress = "gz")

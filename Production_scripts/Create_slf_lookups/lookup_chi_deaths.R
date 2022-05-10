@@ -48,9 +48,9 @@ deaths_file <- deaths_file %>%
 
 ## Save file - //stats/hscdiip/SLF_extracts/Deaths/ ##
 # .zsav file
-haven::write_sav(deaths_file, get_slf_deaths_path(), compress = TRUE)
+haven::write_sav(deaths_file, get_slf_deaths_path(ext = "zsav", check_mode = "write"), compress = TRUE)
 
 # .rds file
-readr::write_rds(deaths_file, get_slf_deaths_path(), compress = "gz")
+readr::write_rds(deaths_file, get_slf_deaths_path(check_mode = "write"), compress = "gz")
 
 ## End of Script ##

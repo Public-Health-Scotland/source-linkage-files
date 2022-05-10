@@ -89,15 +89,10 @@ ltc_flags <- ltc_file %>%
   rename_with(.cols = ends_with("flag"), .fn = ~ stringr::str_remove(.x, "_date_flag")) %>%
   arrange(chi)
 
-## Save out to Year folder - /conf/hscdiip/SLF_Extracts/LTCs ##
-# zsav file output
-haven::write_sav(LTC, paste0("LTC_patient_reference_file-20", FY),
-  path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = TRUE
-)
+# .zsav
+haven::write_sav(outfile, get_ltcs_path(ext = "zsav", check_mode = "write"), compress = TRUE)
 
-# rds file output
-readr::write_rds(LTC, paste0("LTC_patient_reference_file-20", FY),
-  path = "/conf/hscdiip/SLF_Extracts/LTCs", compress = "gz"
-)
+# .rds file
+readr::write_rds(outfile, get_ltcs_path(check_mode = "write"), compress = "gz")
 
 ## END OF SCRIPT ##
