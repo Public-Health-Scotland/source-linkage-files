@@ -100,43 +100,41 @@ dn_extract <- dn_extract %>%
   ))
 
 
-# match files with DN Cost Lookup
+
 # read in DN cost lookup
 dn_costs_lookup <- readr::read_rds(get_dn_costs_path(ext = "rds")) %>%
   select(-hbtreatname)
 
+# match files with DN Cost Lookup
 matched_dn_costs <- dn_clean %>%
   full_join(dn_costs_lookup, by = c("hbtreatcode", "year")) %>%
   # costs are rough estimates we round them to the nearest pound
   mutate(cost_total_net = round(cost_total_net, 0))
 
-# difference between dates of contacts
-matched_dn_costs <- matched_dn_costs %>%
+
+care_marker <- matched_dn_costs %>%
   arrange(chi, record_keydate1) %>%
   group_by(chi) %>%
+  # difference between dates of contacts
   mutate(
     date_1 = record_keydate1,
     date_2 = lead(record_keydate1),
     day_diff = as.numeric(date_2 - date_1)
   ) %>%
-  ungroup()
-
-# continuous care marker
-matched_dn_costs <- matched_dn_costs %>%
+  # continuous care marker
   mutate(ccm = 1) %>%
-  group_by(chi) %>%
   mutate(ccm = if_else(day_diff <= 7, lead(ccm), lead(ccm) + 1)) %>%
   ungroup()
 
 
 # costs per month
-matched_dn_costs <- matched_dn_costs %>%
-  create_monthly_costs(record_keydate1, cost_total_net)
+dn_monthly_costs <- care_marker %>%
+  create_day_episode_costs(record_keydate1, cost_total_net)
 
 
 ## save outfile ---------------------------------------
 
-outfile <- matched_dn_costs %>%
+outfile <- dn_monthly_costs %>%
   group_by(year, chi, recid, smr_type, ccm) %>%
   summarise(
     record_keydate1 = min(record_keydate1),
