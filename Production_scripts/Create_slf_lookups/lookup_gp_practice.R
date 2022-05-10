@@ -4,11 +4,12 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Open Data, GP Practice Details, Postcode Lookup
+# Description - Build the GPprac Lookup.
+#               Pulls from the Open Data Platform and lookups.
 #####################################################
 
-## packages ##
+# Load packages
 library(dplyr)
 library(tidyr)
 library(haven)
@@ -16,16 +17,12 @@ library(phsopendata)
 library(janitor)
 library(fs)
 
-## get data ##
-
-# use `00_get_gp_cluster_data.R`- draws from open data
-# latest update date
-latest_update <- latest_update()
+# Read in data---------------------------------------
 
 # Retrieve the latest resource from the dataset
 opendata <-
   get_dataset("gp-practice-contact-details-and-list-sizes",
-    max_resources = 1
+              max_resources = 1
   ) %>%
   clean_names() %>%
   # Filter and save
@@ -41,17 +38,16 @@ opendata <-
   write_sav(
     path(
       # lookup_dir,
-      get_lookups_dir(),
-      paste0("practice_details_", latest_update),
-      ext = "zsav"
+      get_practice_details_path()
     ),
     compress = TRUE
   )
 
 
+# Read Lookup files ---------------------------------------
 # gp lookup
-gp <-
-  haven::read_sav(fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav")) %>%
+gpprac_file <-
+  haven::read_sav(read_gpprac_file("gpprac.sav")) %>%
   # select only praccode and postcode
   select(
     praccode,
@@ -62,18 +58,8 @@ gp <-
   # rename praccode to allow join
   rename(gpprac = "praccode")
 
-## match cluster information onto the practice reference list ##
-data <-
-  opendata %>%
-  # join cluster and gp data
-  left_join(gp, by = c("gpprac", "postcode")) %>%
-  # sort by postcode
-  arrange(postcode)
-
-## match on geography info ##
-
 # postcode lookup
-pc <- read_spd_file() %>%
+pc_lookup <- readr::read_rds(read_spd_file()) %>%
   select(
     pc7,
     pc8,
@@ -84,12 +70,20 @@ pc <- read_spd_file() %>%
   # rename pc8
   rename(postcode = "pc8")
 
+
+# Data Cleaning ---------------------------------------
+
 data <-
-  data %>%
-  # join data and postcode data
-  left_join(pc, by = "postcode") %>%
+  opendata %>%
+  ## match cluster information onto the practice reference list ##
+  left_join(gpprac_file, by = c("gpprac", "postcode")) %>%
+  # sort by postcode
+  arrange(postcode) %>%
+  # match on geography info - postcode
+  left_join(pc_lookup, by = "postcode") %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
+  # order variables
   select(
     gpprac,
     pc7,
@@ -98,27 +92,17 @@ data <-
     hbpraccode,
     hscp2018,
     ca2018
-  )
-
-## council area code ##
-data <-
-  data %>%
-  mutate(lca = convert_ca_to_lca(ca2018))
-
-
-## dummy postcodes ##
-# set some known dummy practice codes to consistent Board codes
-data <-
-  data %>%
+  ) %>%
+  # convert ca to lca code
+  mutate(lca = ca_to_lca(ca2018)) %>%
+  # set some known dummy practice codes to consistent Board codes
   mutate(
-    hbpraccode = case_when(
-      gpprac %in% c(99942, 99957, 99961, 99981, 99999) ~ "S08200003",
-      gpprac == 99995 ~ "S08200001",
-      TRUE ~ hbpraccode
-    )
+    hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
+    hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
   )
 
-## save outfile ##
+
+## save outfile ---------------------------------------
 outfile <-
   data %>%
   # sort by gpprac
@@ -131,3 +115,5 @@ haven::write_sav(outfile, get_slf_gpprac_path(ext = "zsav", check_mode = "write"
 
 # .rds file
 readr::write_rds(outfile, get_slf_gpprac_path(check_mode = "write"), compress = "gz")
+
+## End of Script ---------------------------------------
