@@ -181,12 +181,18 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Write data --------------------------------------------------------------
   if (write_to_disk) {
     final_data %>%
-      readr::write_rds(get_file_path(get_year_dir(year), glue::glue("homelessness_for_source-20{year}"), ext = "rds", check_mode = "write"),
-        compress = "gz"
-      ) %>%
-      haven::write_sav(get_file_path(get_year_dir(year), glue::glue("homelessness_for_source-20{year}"), ext = "zsav", check_mode = "write"),
-        compress = TRUE
-      )
+      write_rds(get_file_path(
+        get_year_dir(year),
+        glue::glue("homelessness_for_source-20{year}"),
+        ext = "rds",
+        check_mode = "write"
+      )) %>%
+      write_sav(get_file_path(
+        get_year_dir(year),
+        glue::glue("homelessness_for_source-20{year}"),
+        ext = "zsav",
+        check_mode = "write"
+      ))
   }
 
   return(final_data)

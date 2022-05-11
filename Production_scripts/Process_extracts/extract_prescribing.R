@@ -76,21 +76,17 @@ if (nrow(pis_clean) != nrow(pis_file)) {
 # Save out ---------------------------------------
 pis_clean %>%
   # Save as .zsav file
-  haven::write_sav(get_source_extract_path(
+  write_sav(get_source_extract_path(
     year = year,
     type = "PIS",
     ext = "zsav"
-  ),
-  compress = TRUE
-  ) %>%
+  )  ) %>%
   # Save as .rds file
-  readr::write_rds(get_source_extract_path(
+  write_rds(get_source_extract_path(
     year = year,
     type = "PIS",
     ext = "rds"
-  ),
-  compress = "gz"
-  )
+  )  )
 
 
 # End of Script #

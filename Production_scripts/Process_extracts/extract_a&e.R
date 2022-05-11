@@ -356,11 +356,9 @@ outfile <- matched_ae_data %>%
 
 # Save as zsav file
 outfile %>%
-  readr::write_rds(get_source_extract_path(year, "AE", ext = "zsav"))
-
+  write_sav(get_source_extract_path(year, "AE", ext = "zsav")) %>%
 # Save as rds file
-outfile %>%
-  readr::write_rds(get_source_extract_path(year, "AE", ext = "rds"))
+  write_rds(get_source_extract_path(year, "AE", ext = "rds"))
 
 
 # End of Script #

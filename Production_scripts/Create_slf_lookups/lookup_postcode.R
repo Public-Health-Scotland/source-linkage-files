@@ -89,8 +89,8 @@ outfile <-
 
 # Save out ----------------------------------------------------------------
 
+outfile %>%
 # .zsav
-haven::write_sav(outfile, get_slf_postcode_path(), compress = TRUE)
-
+write_sav(get_slf_postcode_path())
 # .rds file
-readr::write_rds(outfile, get_slf_postcode_path(), compress = "gz")
+write_rds(get_slf_postcode_path())

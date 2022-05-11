@@ -118,12 +118,8 @@ matched_costs_data %>%
 ## save outfile ---------------------------------------
 ch_costs_uplifted %>%
   # .zsav
-  haven::write_sav(get_ch_costs_path(update = latest_update()),
-    compress = TRUE
-  ) %>%
+  write_sav(get_ch_costs_path(update = latest_update())) %>%
   # .rds file
-  readr::write_rds(get_ch_costs_path(update = latest_update()),
-    compress = "gz"
-  )
+  write_rds(get_ch_costs_path(update = latest_update()))
 
 ## End of Script ---------------------------------------

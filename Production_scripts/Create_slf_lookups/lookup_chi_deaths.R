@@ -47,10 +47,11 @@ deaths_file <- deaths_file %>%
   mutate(death_date = dplyr::coalesce(death_date_nrs, death_date_chi))
 
 ## Save file - //stats/hscdiip/SLF_extracts/Deaths/ ##
-# .zsav file
-haven::write_sav(deaths_file, get_slf_deaths_path(), compress = TRUE)
 
+deaths_file %>%
+# .zsav file
+write_sav(get_slf_deaths_path()) %>%
 # .rds file
-readr::write_rds(deaths_file, get_slf_deaths_path(), compress = "gz")
+write_rds(get_slf_deaths_path())
 
 ## End of Script ##
