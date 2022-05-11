@@ -66,8 +66,7 @@ convert_sc_sl_to_lca <- function(sending_location){
           {{sending_location}} == "380" ~ "29",
           {{sending_location}} == "390" ~ "30",
           {{sending_location}} == "395" ~ "07",
-          {{sending_location}} == "400" ~ "31",
-          TRUE ~ NA)
+          {{sending_location}} == "400" ~ "31")
   return(lca)
 }
 

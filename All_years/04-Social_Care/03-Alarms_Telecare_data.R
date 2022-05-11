@@ -16,6 +16,8 @@ library(dbplyr)
 library(phsmethods)
 library(tidyverse)
 library(lubridate)
+library(fs)
+library(haven)
 
 # Set up------------------------------------------------------------------
 
@@ -106,12 +108,12 @@ at_full_clean <- replaced_start_dates %>%
 
 # Save outfile------------------------------------------------
 
-outfile %>%
+at_full_clean %>%
   # save rds file
-  write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.rds")),
+  readr::write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.rds")),
     compress = "gz"
   ) %>%
   # save sav file
-  write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.zsav")),
+  haven::write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.zsav")),
     compress = TRUE
   )
