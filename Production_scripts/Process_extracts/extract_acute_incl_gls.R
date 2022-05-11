@@ -267,9 +267,9 @@ outfile <- acute_clean %>%
   arrange(chi, record_keydate1)
 
 outfile %>%
-# Save as zsav file
+  # Save as zsav file
   write_sav(get_source_extract_path(year, "Acute", ext = "zsav")) %>%
-# Save as rds file
+  # Save as rds file
   write_rds(get_source_extract_path(year, "Acute", ext = "rds"))
 
 

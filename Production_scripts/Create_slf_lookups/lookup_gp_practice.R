@@ -125,7 +125,7 @@ outfile <-
   rename(pc8 = "postcode")
 
 outfile %>%
-# .zsav
-write_sav(get_slf_gpprac_path()) %>%
-# .rds file
-write_rds(get_slf_gpprac_path())
+  # .zsav
+  write_sav(get_slf_gpprac_path()) %>%
+  # .rds file
+  write_rds(get_slf_gpprac_path())

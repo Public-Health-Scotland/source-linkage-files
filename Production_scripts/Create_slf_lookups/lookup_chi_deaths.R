@@ -49,9 +49,9 @@ deaths_file <- deaths_file %>%
 ## Save file - //stats/hscdiip/SLF_extracts/Deaths/ ##
 
 deaths_file %>%
-# .zsav file
-write_sav(get_slf_deaths_path()) %>%
-# .rds file
-write_rds(get_slf_deaths_path())
+  # .zsav file
+  write_sav(get_slf_deaths_path()) %>%
+  # .rds file
+  write_rds(get_slf_deaths_path())
 
 ## End of Script ##
