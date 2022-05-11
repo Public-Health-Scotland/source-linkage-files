@@ -170,7 +170,7 @@ ch_lookup_clean <- ch_lookup %>%
 
 # Care Home names---------------------------------------
 
-name_changes <- ch_lookup_clean %>%
+ch_clean <- ch_lookup_clean %>%
   group_by(ServiceName,
            ch_postcode,
            Council_Area_Name) %>%
@@ -193,6 +193,19 @@ name_changes <- ch_lookup_clean %>%
   mutate(DateCanx = if_else(change_canx_date == 1, as.Date(paste0(lubridate::year(DateReg), "/03/31")), DateCanx)) %>%
   arrange(ch_postcode, Council_Area_Name, DateReg)
 
+# dates
+open_dates <- as.data.frame(matrix(0, nrow = nrow(ch_clean), ncol = length(2015:2030)))
+colnames(open_dates) <- paste0("open_", c(2015:2030))
 
+ch_dates <- ch_clean %>%
+  mutate(open_2015 = if_else(year_opened < 2015, 1 , 0))
+
+
+
+
+
+
+
+output <- haven::read_sav("/conf/sourcedev/Source_Linkage_File_Updates/1920/Extracts/Care_home_name_lookup-201920.sav")
 
 
