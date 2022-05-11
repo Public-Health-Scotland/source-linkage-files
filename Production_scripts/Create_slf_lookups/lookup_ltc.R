@@ -18,7 +18,7 @@ library(stringr)
 library(readr)
 
 # Financial year
-year <- 1718
+year <- "1718"
 end_fy <- end_fy(year)
 
 
