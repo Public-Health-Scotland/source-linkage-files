@@ -11,7 +11,6 @@
 # Packages
 library(dplyr)
 library(tidyr)
-library(haven)
 library(createslf)
 
 

@@ -11,7 +11,6 @@
 
 ## load packages ##
 
-library(readr)
 library(odbc)
 library(dplyr)
 library(stringr)
