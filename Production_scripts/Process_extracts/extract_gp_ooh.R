@@ -1,13 +1,13 @@
 #####################################################
-# Draft pre processing code for Gp Out of Hours - Consultations
+# Draft pre processing code for Gp Out of Hours
 # Author: Jennifer Thom
 # Date: April 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
 # Input - GP-OoH-
-#         # consultations-extract-.csv
 #         # diagnosis-extract-.csv
 #         # outcomes-extract-.csv
+#         # consultations-extract-.csv
 #
 # Description - Preprocessing of GP out of hours raw BOXI file.
 #              Tidy up file in line with SLF format
@@ -19,31 +19,24 @@ library(readr)
 library(dplyr)
 library(tidyverse)
 library(createslf)
+library(stringr)
+library(tidyr)
 library(phsmethods)
 library(lubridate)
 library(hms)
 
-## Load extracts ------------------------------------
-
+# Specify year
 year <- "1920"
 
-# Diagnosis data
-diagnosis_file <- haven::read_sav(
-  paste0(
-    get_year_dir(year = year),
-    "/gp-diagnosis-data-",
-    year, ".zsav"
-  )
-)
 
-# Outcomes data
-outcomes_file <- haven::read_sav(
-  paste0(
-    get_year_dir(year = year),
-    "/gp-outcomes-data-",
-    year, ".zsav"
+## Load Lookups------------------------------------------
+
+# Read code lookup
+read_code_lookup <- haven::read_sav(get_readcode_lookup_path()) %>%
+  rename(
+    readcode = "ReadCode",
+    description = "Description"
   )
-)
 
 # OOH cost lookup
 ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path()) %>%
@@ -53,7 +46,159 @@ ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path()) %>%
   )
 
 
+-----------------------------------------------------
+# Diagnosis Data
+-----------------------------------------------------
+
 ## Load extract file---------------------------------
+diagnosis_file <- read_csv(
+  file = get_boxi_extract_path(year, "GP_OoH-d"),
+  col_type = cols(
+    `GUID` = col_character(),
+    `Diagnosis Code` = col_character(),
+    `Diagnosis Description` = col_character()
+  )
+) %>%
+  # rename variables
+  rename(
+    guid = `GUID`,
+    readcode = `Diagnosis Code`,
+    description = `Diagnosis Description`
+  )
+
+
+## Deal with Read Codes --------------------------
+
+diagnosis_read_codes <- diagnosis_file %>%
+  # Apply readcode changes
+  tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
+                    str_pad(5, "right", ".")) %>%
+  # Join diagnosis to readcode lookup
+  # Identify diagnosis descriptions which match the readcode lookup
+  left_join(read_code_lookup %>%
+              mutate(fullmatch1 = 1),
+            by = c("readcode", "description")
+  ) %>%
+  # match on true description from readcode lookup
+  left_join(read_code_lookup %>%
+              rename(true_description = description),
+            by = c("readcode")
+  ) %>%
+  # replace description with true description from readcode lookup if this is different
+  mutate(description = if_else(is.na(fullmatch1) & !is.na(true_description),
+                               true_description, description
+  )) %>%
+  # Join to readcode lookup again to check
+  left_join(read_code_lookup %>%
+              mutate(full_match2 = 1),
+            by = c("readcode", "description")
+  ) %>%
+  # Check the output for any dodgy Read codes and try and fix by adding exceptions
+  mutate(readcode = case_when(
+    full_match2 == 0 & readcode == "Xa1m." ~ "S349",
+    full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
+    full_match2 == 0 & readcode == "HO6.." ~ "H06..",
+    full_match2 == 0 & readcode == "zV6.." ~ "ZVz..",
+    TRUE ~ readcode
+  ))
+
+
+## Data Cleaning ---------------------------------
+
+diagnosis_clean <- diagnosis_read_codes %>%
+  # Sort and restructure the data so it's ready to link to case IDs.
+  arrange(guid, readcode) %>%
+  # Remove duplicates (use a flag)
+  mutate(
+    duplicate = if_else(guid == lag(guid, default = first(guid)) & readcode == lag(readcode, default = first(readcode)), 1, 0)
+  ) %>%
+  filter(duplicate == 0) %>%
+  # TODO - CHECK HERE. Logic needs checking if this is the right way to do this
+  mutate(
+    readcodelevel = str_locate(readcode, "[.]")[, 1],
+    readcodelevel = replace_na(readcodelevel, 0)
+  ) %>%
+  arrange(
+    guid,
+    desc(readcodelevel),
+    readcode
+  ) %>%
+  # restructure data
+  pivot_wider(
+    names_from = readcodelevel,
+    values_from = readcode
+  )
+
+
+-----------------------------------------------------
+# Outcomes Data
+-----------------------------------------------------
+
+## Load extract file---------------------------------
+outcome_file <- read_csv(
+  file = get_boxi_extract_path(year, "GP_OoH-o"),
+  col_type = cols(
+    `GUID` = col_character(),
+    `Case Outcome` = col_character()
+  )
+) %>%
+  # rename variables
+  rename(
+    guid = `GUID`,
+    outcome = `Case Outcome`
+  )
+
+
+## Data Cleaning -----------------------------------
+outcome_clean <- outcome_file %>%
+  # Remove blank outcomes
+  filter(outcome != "") %>%
+  # Recode outcome
+  mutate(
+    outcome = recode(outcome,
+                     "DEATH" = "00",
+                     "999/AMBULANCE" = "01",
+                     "EMERGENCY ADMISSION" = "02",
+                     "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
+                     "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
+                     "REFERRED TO A&E" = "21",
+                     "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
+                     "REFERRED TO MIU" = "21",
+                     "REFERRED TO SOCIAL SERVICES" = "24",
+                     "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
+                     "OTHER" = "99"
+    )
+  ) %>%
+  # Sort for identifying duplicates
+  arrange(guid, outcome) %>%
+  # Flag duplicates
+  mutate(duplicate = if_else(guid == lag(guid, default = first(guid)) & outcome == lag(outcome, default = first(outcome)), 1, 0)) %>%
+  # Remove duplicates
+  filter(duplicate == 0) %>%
+  # group for getting row order
+  group_by(guid) %>%
+  mutate(row_order = row_number()) %>%
+  # use row order to pivot outcomes
+  pivot_wider(
+    id_cols = guid,
+    names_from = row_order,
+    names_prefix = "outcome_",
+    values_from = outcome
+  ) %>%
+  ungroup() %>%
+  select(
+    guid,
+    outcome_1,
+    outcome_2,
+    outcome_3,
+    outcome_4
+  )
+
+-----------------------------------------------------
+# Consultatations Data
+-----------------------------------------------------
+
+  ## Load extract file---------------------------------
 
 # Read consultations data
 consultations_file <- read_csv(
@@ -174,8 +319,8 @@ consultations_clean <- consultations_file %>%
 # Join data ----------------------------------------
 
 matched_data <- consultations_clean %>%
-  left_join(diagnosis_file, by = "guid") %>%
-  left_join(outcomes_file, by = "guid")
+  left_join(diagnosis_clean, by = "guid") %>%
+  left_join(outcomes_clean, by = "guid")
 
 # Deal with costs -----------------------------
 
@@ -309,6 +454,5 @@ select(
   mar_cost,
   ooh_CC
 )
-
 
 # End of Script #
