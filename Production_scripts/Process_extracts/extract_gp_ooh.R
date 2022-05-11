@@ -47,11 +47,11 @@ ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path()) %>%
 
 
 -----------------------------------------------------
-# Diagnosis Data
------------------------------------------------------
+  # Diagnosis Data
+  -----------------------------------------------------
 
-## Load extract file---------------------------------
-diagnosis_file <- read_csv(
+    ## Load extract file---------------------------------
+    diagnosis_file <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-d"),
   col_type = cols(
     `GUID` = col_character(),
@@ -72,26 +72,26 @@ diagnosis_file <- read_csv(
 diagnosis_read_codes <- diagnosis_file %>%
   # Apply readcode changes
   tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
-                    str_pad(5, "right", ".")) %>%
+    str_pad(5, "right", ".")) %>%
   # Join diagnosis to readcode lookup
   # Identify diagnosis descriptions which match the readcode lookup
   left_join(read_code_lookup %>%
-              mutate(fullmatch1 = 1),
-            by = c("readcode", "description")
+    mutate(fullmatch1 = 1),
+  by = c("readcode", "description")
   ) %>%
   # match on true description from readcode lookup
   left_join(read_code_lookup %>%
-              rename(true_description = description),
-            by = c("readcode")
+    rename(true_description = description),
+  by = c("readcode")
   ) %>%
   # replace description with true description from readcode lookup if this is different
   mutate(description = if_else(is.na(fullmatch1) & !is.na(true_description),
-                               true_description, description
+    true_description, description
   )) %>%
   # Join to readcode lookup again to check
   left_join(read_code_lookup %>%
-              mutate(full_match2 = 1),
-            by = c("readcode", "description")
+    mutate(full_match2 = 1),
+  by = c("readcode", "description")
   ) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
   mutate(readcode = case_when(
@@ -131,11 +131,11 @@ diagnosis_clean <- diagnosis_read_codes %>%
 
 
 -----------------------------------------------------
-# Outcomes Data
------------------------------------------------------
+  # Outcomes Data
+  -----------------------------------------------------
 
-## Load extract file---------------------------------
-outcome_file <- read_csv(
+    ## Load extract file---------------------------------
+    outcome_file <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-o"),
   col_type = cols(
     `GUID` = col_character(),
@@ -156,17 +156,17 @@ outcome_clean <- outcome_file %>%
   # Recode outcome
   mutate(
     outcome = recode(outcome,
-                     "DEATH" = "00",
-                     "999/AMBULANCE" = "01",
-                     "EMERGENCY ADMISSION" = "02",
-                     "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
-                     "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
-                     "REFERRED TO A&E" = "21",
-                     "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
-                     "REFERRED TO MIU" = "21",
-                     "REFERRED TO SOCIAL SERVICES" = "24",
-                     "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
-                     "OTHER" = "99"
+      "DEATH" = "00",
+      "999/AMBULANCE" = "01",
+      "EMERGENCY ADMISSION" = "02",
+      "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
+      "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
+      "REFERRED TO A&E" = "21",
+      "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
+      "REFERRED TO MIU" = "21",
+      "REFERRED TO SOCIAL SERVICES" = "24",
+      "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
+      "OTHER" = "99"
     )
   ) %>%
   # Sort for identifying duplicates
@@ -195,13 +195,13 @@ outcome_clean <- outcome_file %>%
   )
 
 -----------------------------------------------------
-# Consultatations Data
------------------------------------------------------
+  # Consultatations Data
+  -----------------------------------------------------
 
-  ## Load extract file---------------------------------
+    ## Load extract file---------------------------------
 
-# Read consultations data
-consultations_file <- read_csv(
+    # Read consultations data
+    consultations_file <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-c"),
   col_type = cols(
     `UPI Number [C]` = col_character(),
