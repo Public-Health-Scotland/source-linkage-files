@@ -1,216 +1,240 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/R_development_SOP.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/authors.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/index.html</loc>
   </url>
   <url>
-    <loc>/reference/ca_to_lca.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_eng_gpprac_to_dummy.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/calculate_measures.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_fyyear_to_year.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/check_year_format.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_year_to_fyyear.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_ca_to_lca.html</loc>
   </url>
   <url>
-    <loc>/reference/create_day_episode_costs.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_eng_gpprac_to_dummy.html</loc>
   </url>
   <url>
-    <loc>/reference/create_demog_test_flags.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_fyyear_to_year.html</loc>
   </url>
   <url>
-    <loc>/reference/create_hb_test_flags.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_monthly_rows_to_vars.html</loc>
   </url>
   <url>
-    <loc>/reference/create_hscp_test_flags.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_year_to_fyyear.html</loc>
   </url>
   <url>
-    <loc>/reference/create_monthly_beddays.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_day_episode_costs.html</loc>
   </url>
   <url>
-    <loc>/reference/date_to_numeric.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_demog_test_flags.html</loc>
   </url>
   <url>
-    <loc>/reference/dd_period.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_hb_cost_test_flags.html</loc>
   </url>
   <url>
-    <loc>/reference/end_fy.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_hb_test_flags.html</loc>
   </url>
   <url>
-    <loc>/reference/find_latest_file.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_hscp_test_flags.html</loc>
   </url>
   <url>
-    <loc>/reference/fix_east_ayrshire_duplicates.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_monthly_beddays.html</loc>
   </url>
   <url>
-    <loc>/reference/fix_west_dun_duplicates.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/date_to_numeric.html</loc>
   </url>
   <url>
-    <loc>/reference/get_boxi_extract_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/dd_period.html</loc>
   </url>
   <url>
-    <loc>/reference/get_ch_costs_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/end_fy.html</loc>
   </url>
   <url>
-    <loc>/reference/get_dd_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/find_latest_file.html</loc>
   </url>
   <url>
-    <loc>/reference/get_demog_cohorts_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/fix_c3_costs.html</loc>
   </url>
   <url>
-    <loc>/reference/get_dn_costs_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/fix_east_ayrshire_duplicates.html</loc>
   </url>
   <url>
-    <loc>/reference/get_file_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/fix_west_dun_duplicates.html</loc>
   </url>
   <url>
-    <loc>/reference/get_gp_ooh_costs_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_boxi_extract_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_hhg_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_ch_costs_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_it_deaths_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_dd_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_it_ltc_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_demog_cohorts_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_it_prescribing_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_dn_costs_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_lookups_dir.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_file_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_nsu_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_gp_ooh_costs_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_practice_details_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_hhg_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_sc_ch_episodes_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_it_deaths_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_sc_demog_lookup_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_it_ltc_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_service_use_cohorts_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_it_prescribing_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_slf_deaths_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_lookups_dir.html</loc>
   </url>
   <url>
-    <loc>/reference/get_slf_dir.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_nsu_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_slf_gpprac_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_practice_details_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_slf_postcode_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_ch_episodes_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_source_extract_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_demog_lookup_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_sparra_path.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_service_use_cohorts_path.html</loc>
   </url>
   <url>
-    <loc>/reference/get_year_dir.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_deaths_path.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_dir.html</loc>
   </url>
   <url>
-    <loc>/reference/is_missing.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_gpprac_path.html</loc>
   </url>
   <url>
-    <loc>/reference/it_extract_ref.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_postcode_path.html</loc>
   </url>
   <url>
-    <loc>/reference/latest_update.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_source_extract_path.html</loc>
   </url>
   <url>
-    <loc>/reference/midpoint_fy.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_sparra_path.html</loc>
   </url>
   <url>
-    <loc>/reference/numeric_to_date.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_year_dir.html</loc>
   </url>
   <url>
-    <loc>/reference/phs_db_connection.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/hb_to_hbnames.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/hscp_to_hscpnames.html</loc>
   </url>
   <url>
-    <loc>/reference/previous_update.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/process_homelessness_extract.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/is_missing.html</loc>
   </url>
   <url>
-    <loc>/reference/produce_sc_ch_episodes_tests.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/it_extract_ref.html</loc>
   </url>
   <url>
-    <loc>/reference/produce_sc_demog_lookup_tests.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/latest_update.html</loc>
   </url>
   <url>
-    <loc>/reference/produce_slf_deaths_tests.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/midpoint_fy.html</loc>
   </url>
   <url>
-    <loc>/reference/produce_slf_gpprac_tests.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/numeric_to_date.html</loc>
   </url>
   <url>
-    <loc>/reference/produce_slf_postcode_tests.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/phs_db_connection.html</loc>
   </url>
   <url>
-    <loc>/reference/produce_test_comparison.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>/reference/read_anon_to_chi.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/previous_update.html</loc>
   </url>
   <url>
-    <loc>/reference/read_chi_to_anon.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/process_homelessness_extract.html</loc>
   </url>
   <url>
-    <loc>/reference/read_datazone_pop_file.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_ch_episodes_tests.html</loc>
   </url>
   <url>
-    <loc>/reference/read_gpprac_file.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_demog_lookup_tests.html</loc>
   </url>
   <url>
-    <loc>/reference/read_locality_file.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_deaths_tests.html</loc>
   </url>
   <url>
-    <loc>/reference/read_simd_file.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_gpprac_tests.html</loc>
   </url>
   <url>
-    <loc>/reference/read_spd_file.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_postcode_tests.html</loc>
   </url>
   <url>
-    <loc>/reference/start_fy.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_acute_tests.html</loc>
   </url>
   <url>
-    <loc>/reference/sum_test_flags.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_test_comparison.html</loc>
   </url>
   <url>
-    <loc>/reference/write_tests_xlsx.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_anon_to_chi.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_chi_to_anon.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_datazone_pop_file.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_gpprac_file.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_locality_file.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_simd_file.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_spd_file.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/start_fy.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_tests_xlsx.html</loc>
   </url>
 </urlset>
