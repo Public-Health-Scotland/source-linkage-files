@@ -11,12 +11,11 @@
 #' @export
 #' @family Process extracts
 #'
-#' @importFrom readr col_date col_character col_integer
 process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Read the data and clean the variable names ------------------------------
 
   homelessness_extract <- readr::read_csv(get_boxi_extract_path(year = year, type = "Homelessness"),
-    col_types = readr::cols(
+    col_types = cols(
       "Assessment Decision Date" = col_date(format = "%Y%m%d %T"),
       "Case Closed Date" = col_date(format = "%Y%m%d %T"),
       "Sending Local Authority Code 9" = col_character(),
