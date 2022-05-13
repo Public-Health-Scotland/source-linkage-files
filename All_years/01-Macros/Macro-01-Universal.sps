@@ -24,12 +24,12 @@ Define !IT_extract_ref()
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Mar_2022"
+    "Jun_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Dec_2021"
+    "Mar_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
