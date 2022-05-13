@@ -103,6 +103,9 @@ at_full_clean <- replaced_start_dates %>%
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
     sc_send_lca = convert_sc_sl_to_lca(sending_location)
+  ) %>%
+  rename(
+    sc_latest_submission = period
   )
 
 
