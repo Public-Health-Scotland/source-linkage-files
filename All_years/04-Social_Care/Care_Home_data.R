@@ -198,7 +198,9 @@ ch_episode <- ch_data_clean %>%
   mutate(latest_submission_counter = pmax(sc_latest_submission != lag(sc_latest_submission), FALSE, na.rm = TRUE)) %>%
   mutate(sum_latest_submission = cumsum(latest_submission_counter)) %>%
   mutate(
+  # If it's the first episode(s) then keep the admission date(s), otherwise use the start of the quarter
     ch_admission_date = if_else(sum_latest_submission == min(sum_latest_submission), ch_admission_date, qtr_start),
+      # If it's the last episode(s) then keep the discharge date(s), otherwise use the end of the quarter
     ch_discharge_date = if_else(sum_latest_submission == max(sum_latest_submission), ch_discharge_date, record_date)
   ) %>%
   ungroup()
