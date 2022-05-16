@@ -62,7 +62,6 @@ with an admission and discharge date</p>
   <span class="va">year</span>,
   <span class="va">admission_date</span>,
   <span class="va">discharge_date</span>,
-  include_costs <span class="op">=</span> <span class="cn">FALSE</span>,
   count_last <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -77,15 +76,13 @@ with an admission and discharge date</p>
 <dd><p>The admission/start date variable.</p></dd>
 <dt>discharge_date</dt>
 <dd><p>The admission/start date variable</p></dd>
-<dt>include_costs</dt>
-<dd><p>(default <code>FALSE</code>) - Select true for calculating monthly costs</p></dd>
 <dt>count_last</dt>
 <dd><p>(default <code>TRUE</code>) - Should the last day be counted,
 instead of the first?</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The data with additional variables <code>apr_beddays</code> to <code>mar_beddays</code>that count the beddays which occurred in the month.</p>
+    <p>a <a href="https://tibble.tidyverse.org/reference/tibble-package.html" class="external-link">tibble</a> with additional variables <code>apr_beddays</code> to <code>mar_beddays</code>that count the beddays which occurred in the month.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
