@@ -140,7 +140,7 @@ name_postcode_clean <- matched_ch_clean %>%
 ch_data_clean <- matched_ch_data %>%
   # sort data
   arrange(sending_location, social_care_id, ch_admission_date, period) %>%
-  group_by(sending_location, social_care_id, ch_admission_date, period) %>%
+  group_by(sending_location, social_care_id, ch_admission_date) %>%
   # fill in nursing care provision when missing but present in the following entry
   fill(nursing_care_provision) %>%
   # tidy up ch_provider using "6" when disagreeing values
