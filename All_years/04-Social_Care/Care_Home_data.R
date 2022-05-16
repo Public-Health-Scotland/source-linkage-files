@@ -208,7 +208,9 @@ ch_episode <- ch_data_clean %>%
 
 # Compare to Deaths Data ---------------------------------------
 
-deaths_data <- haven::read_sav(get_slf_deaths_path())
+deaths_data <- haven::read_sav(get_slf_deaths_path()) # remaining here until .rds file saved
+deaths_data <- readr::read_rds(get_slf_deaths_path())
+
 
 # match ch_episode data with deaths data
 matched_deaths_data <- ch_episode %>%
