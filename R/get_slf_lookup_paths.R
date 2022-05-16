@@ -64,7 +64,7 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
-get_slf_ch_path <- function(update = latest_update(), ...) {
+get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
     file_name = glue::glue("Care_Home_Lookup_All.xlsx"),

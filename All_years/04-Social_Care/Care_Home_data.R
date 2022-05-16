@@ -94,7 +94,7 @@ valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path()) %>%
 
 
 # CH lookup
-ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
+ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
   rename(
     ch_postcode = "AccomPostCodeNo",
     ch_name_lookup = "ServiceName"
@@ -116,7 +116,7 @@ name_postcode_clean <- matched_ch_clean %>%
   # deal with punctuation in the CH names
   mutate(ch_name = stringr::str_replace_all(ch_name, "[[:punct:]]", " ")) %>%
   # replace invalid postcode with NA
-  mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup)) %>%
+  mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% valid_spd_postcodes)) %>%
   # where there is only a single Care Home at the Postcode, use that name
   group_by(ch_postcode) %>%
   # fill in names where NA but has a name in another record
@@ -163,7 +163,7 @@ ch_data_clean <- matched_ch_data %>%
   # remove any duplicate records
   distinct() %>%
   # counter for split episodes
-  mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>% 
+  mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>%
   cumsum()) %>%
   ungroup()
 
@@ -254,7 +254,7 @@ ch_markers <- matched_deaths_data %>%
 # Outfile ---------------------------------------
 
 outfile <- ch_markers %>%
-  mutate(person_id = paste0(sending_location, "-", social_care_id)) %>%
+  create_person_id() %>%
   rename(
     record_keydate1 = ch_admission_date,
     record_keydate2 = ch_discharge_date,
@@ -289,13 +289,11 @@ outfile <- ch_markers %>%
   )
 
 
-# zsav file
 outfile %>%
-  haven::read_sav(get_sc_ch_episodes_path(latest_update, ext = "zsav"))
-
-# rds file
-outfile %>%
-  readr::write_rds(get_sc_ch_episodes_path(latest_update, ext = "rds"))
+  # .zsav
+  write_sav(get_sc_ch_episodes_path(latest_update)) %>%
+  # .rds file
+  write_rds(get_sc_ch_episodes_path(latest_update))
 
 
 # End of Script #
