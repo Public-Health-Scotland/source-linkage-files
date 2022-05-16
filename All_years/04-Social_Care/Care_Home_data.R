@@ -44,22 +44,26 @@ ch_data <- tbl(db_connection, in_schema("social_care_2", "carehome_snapshot")) %
     ch_discharge_date,
     age
   ) %>%
+  # correct FY 2017
+  mutate(financial_quarter = if_else(financial_year == 2017 & is.na(financial_quarter), 4, financial_quarter)) %>%
+  mutate(period = if_else(financial_year == 2017 & financial_quarter == 4, "2017Q4", period)) %>%
+  # filter missing admission dates
+  filter(!is.na(ch_admission_date)) %>%
   collect()
 
 
 # Data Cleaning ---------------------------------------
 
-ch_clean <- ch_data %>%
-  # correct period 2017
-  mutate(financial_quarter = if_else(financial_year == 2017 & is.na(financial_quarter), 4, financial_quarter)) %>%
-  mutate(period = if_else(financial_year == 2017 & financial_quarter == 4, "2017Q4", period)) %>%
-  # create financial quarter end and start dates
+# period start and end dates
+period_dates <- ch_data %>%
+  distinct(period) %>%
   mutate(
     record_date = yq(period) %m+% period(6, "months") %m-% days(1),
     qtr_start = yq(period) %m+% period(3, "months")
-  ) %>%
-  # filter missing admission dates
-  filter(!is.na(ch_admission_date)) %>%
+  )
+
+ch_clean <- ch_data %>%
+  left_join(period_dates, by = c("period")) %>%
   # filter out any episodes where discharge is before admission
   mutate(dis_before_adm = ch_admission_date > ch_discharge_date & !is.na(ch_discharge_date)) %>%
   filter(dis_before_adm == FALSE) %>%
@@ -70,7 +74,8 @@ ch_clean <- ch_data %>%
 # Match with demographics data  ---------------------------------------
 
 # read in demographic data
-sc_demog <- haven::read_sav(get_sc_demog_lookup_path())
+sc_demog <- haven::read_sav(get_sc_demog_lookup_path()) # remaining here until .rds file ready
+sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
 
 matched_ch_data <- ch_clean %>%
   left_join(sc_demog, by = c("sending_location", "social_care_id"))
@@ -84,11 +89,9 @@ matched_ch_clean <- matched_ch_data %>%
 
 
 # postcode lookup
-postcode_lookup <- haven::read_sav(get_slf_postcode_path()) %>%
-  # select postcode
-  select(postcode) %>%
-  # format postcode
-  mutate(postcode = postcode(postcode))
+valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path()) %>%
+  pull(postcode)
+
 
 # CH lookup
 ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
@@ -102,25 +105,19 @@ ch_lookup <- readxl::read_xlsx(get_slf_ch_path()) %>%
     DateReg,
     DateCanx
   ) %>%
-  # format postcode
-  mutate(ch_postcode = postcode(ch_postcode))
+  # format postcode and CH name
+  mutate(ch_postcode = postcode(ch_postcode),
+         ch_name_lookup = toupper(ch_name_lookup))
 
 
 name_postcode_clean <- matched_ch_clean %>%
   # deal with capitalisation of CH names
   mutate(ch_name = stringr::str_to_title(ch_name)) %>%
-  # check postcodes and care home names are in lookup
-  filter(
-    !(ch_postcode %in% postcode_lookup),
-    !(ch_name %in% ch_lookup$ch_name_lookup)
-  ) %>%
-  ## ?? filter out if not in lookup OR make postcode/name NA if not in??
-  mutate(
-    ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup),
-    ch_name = na_if(ch_name, ch_name %in% ch_lookup$ch_name_lookup)
-  ) %>%
-  arrange(ch_postcode) %>%
-  # where there is only a single Care Home at the Postcode (ever) just use that name, overwriting anything which was submitted
+  # deal with punctuation in the CH names
+  mutate(ch_name = stringr::str_replace_all(ch_name, "[[:punct:]]", " ")) %>%
+  # replace invalid postcode with NA
+  mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% postcode_lookup)) %>%
+  # where there is only a single Care Home at the Postcode, use that name
   group_by(ch_postcode) %>%
   # fill in names where NA but has a name in another record
   fill(ch_name, .direction = "downup") %>%
@@ -136,7 +133,6 @@ name_postcode_clean <- matched_ch_clean %>%
   mutate(ch_name = if_else(name_match == 0 & !is.na(ch_name_lookup), ch_name_lookup, ch_name)) %>%
   # check admission date within CH dates
   mutate(date_check = if_else(is.na(DateReg) | is.na(DateCanx) | ch_admission_date %in% range(DateReg, DateCanx), TRUE, FALSE))
-  ## ?? filter out the FALSE? where admission date is not within the CH dates??
 
 
 # Data Cleaning Care Home Data ---------------------------------------
@@ -148,6 +144,7 @@ ch_data_clean <- matched_ch_data %>%
   # fill in nursing care provision when missing but present in the following entry
   fill(nursing_care_provision) %>%
   # tidy up ch_provider using "6" when disagreeing values
+  fill(ch_provider) %>%
   mutate(
     min_ch_provider = min(ch_provider),
     max_ch_provider = max(ch_provider)
@@ -162,8 +159,7 @@ ch_data_clean <- matched_ch_data %>%
     changed_sc_id = if_else(!is.na(chi) & social_care_id != latest_sc_id, 1, 0),
     social_care_id = if_else(!is.na(chi) & social_care_id != latest_sc_id,
       latest_sc_id, social_care_id
-    )
-  ) %>%
+    )) %>%
   # remove any duplicate records
   distinct() %>%
   # counter for split episodes
@@ -197,7 +193,6 @@ ch_episode <- ch_data_clean %>%
   ungroup() %>%
   # Amend dates for split episodes
   # Change the start and end date as appropriate when an episode is split, using the start / end date of the submission quarter
-  arrange(chi, sending_location, social_care_id, ch_admission_date, sc_latest_submission) %>%
   group_by(chi, sending_location, social_care_id, ch_admission_date) %>%
   # counter for latest submission
   mutate(latest_submission_counter = pmax(sc_latest_submission != lag(sc_latest_submission), FALSE, na.rm = TRUE)) %>%
