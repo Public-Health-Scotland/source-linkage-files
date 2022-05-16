@@ -163,8 +163,8 @@ ch_data_clean <- matched_ch_data %>%
   # remove any duplicate records
   distinct() %>%
   # counter for split episodes
-  mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE)) %>%
-  mutate(sum_split_episode = cumsum(split_episode_counter)) %>%
+  mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>% 
+  cumsum()) %>%
   ungroup()
 
 # count changed social_care_id
@@ -176,7 +176,7 @@ ch_data_clean %>% count(changed_sc_id)
 # to a single row per episode where admission the same
 ch_episode <- ch_data_clean %>%
   # when nursing_care_provision is different on records within the episode, split the episode at this point
-  group_by(chi, sending_location, social_care_id, ch_admission_date, sum_split_episode, nursing_care_provision) %>%
+  group_by(chi, sending_location, social_care_id, ch_admission_date, nursing_care_provision, split_episode_counter) %>%
   summarise(
     ch_discharge_date = last(ch_discharge_date),
     ch_provider = max(ch_provider),
