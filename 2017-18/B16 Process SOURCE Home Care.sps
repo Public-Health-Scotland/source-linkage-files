@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !SC_dir + "all_hc_episodes_" + !LatestUpdate + ".zsav".
 
 * Now select episodes for given FY.
@@ -40,13 +40,13 @@ Rename Variables
 String Year (A4).
 Compute Year = !FY.
 
-string recid (a3).
-Compute recid eq 'HC'.
+string recid (A3).
+Compute recid = "HC".
 
 * Use hc_service to create the SMRType.
-string SMRType (a10).
+string SMRType (A10).
 Do if hc_service = 1.
-    compute SMRType = 'HC-Non-Per'.
+    compute SMRType = "HC-Non-Per".
 Else if hc_service = 2.
     compute SMRType = "HC-Per".
 Else.
