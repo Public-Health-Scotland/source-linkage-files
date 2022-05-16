@@ -93,13 +93,20 @@ Define !keep_correct_hours (fin_year = !tokens(1)).
         !Concat("hc_hours_", !unquote(!fin_year), "Q1") = hc_hours_q1
         !Concat("hc_hours_", !unquote(!fin_year), "Q2") = hc_hours_q2
         !Concat("hc_hours_", !unquote(!fin_year), "Q3") = hc_hours_q3
-        !Concat("hc_hours_", !unquote(!fin_year), "Q4") = hc_hours_q4.
+        !Concat("hc_hours_", !unquote(!fin_year), "Q4") = hc_hours_q4
+        !Concat("hc_cost_", !unquote(!fin_year), "Q1") = hc_cost_q1
+        !Concat("hc_cost_", !unquote(!fin_year), "Q2") = hc_cost_q2
+        !Concat("hc_cost_", !unquote(!fin_year), "Q3") = hc_cost_q3
+        !Concat("hc_cost_", !unquote(!fin_year), "Q4") = hc_cost_q4.
 !EndDefine.
 
 !keep_correct_hours fin_year = !altFY.
 
 * Create annual hours variable.
 Compute hc_hours_annual = sum(hc_hours_q1 to hc_hours_q4).
+
+* Create annual cost (cost_total_net).
+Compute cost_total_net = sum(hc_cost_q1 to hc_cost_q4).
 
 save outfile = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
     /Keep Year
@@ -118,6 +125,11 @@ save outfile = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
     hc_hours_q2
     hc_hours_q3
     hc_hours_q4
+    cost_total_net
+    hc_cost_q1
+    hc_cost_q2
+    hc_cost_q3
+    hc_cost_q4
     hc_provider
     hc_reablement
     person_id
