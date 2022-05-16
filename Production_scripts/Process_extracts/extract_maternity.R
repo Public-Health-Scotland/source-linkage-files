@@ -217,7 +217,7 @@ outfile %>%
 
 # Save as rds file
 outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"))
+  readr::write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"), compress = "gz")
 
 
 # End of Script #
