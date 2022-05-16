@@ -28,8 +28,8 @@ hc_costs_path_old <- fs::path(costs_dir, "costs_hc_lookup_pre-Jun_2022.rds")
 
 ## Make a copy of the existing file
 fs::file_copy(hc_costs_path,
-              hc_costs_path_old,
-              overwrite = TRUE
+  hc_costs_path_old,
+  overwrite = TRUE
 )
 
 
@@ -46,17 +46,21 @@ hc_costs_raw <- readxl::read_xlsx(fs::path(costs_dir, "hc_costs.xlsx")) %>%
 ## data - wide to long ##
 hc_costs <- hc_costs_raw %>%
   left_join(phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
-                                      col_select = c("CA", "CAName", "HBName")),
-            by = c("gss_code" = "CA")
-            ) %>%
+    col_select = c("CA", "CAName", "HBName")
+  ),
+  by = c("gss_code" = "CA")
+  ) %>%
   select(ca_name = CAName, health_board = HBName, starts_with("sw1_")) %>%
   mutate(across(starts_with("sw1_"), as.numeric),
-         ca_name = factor(ca_name)) %>%
-  pivot_longer(cols = starts_with("sw1_"),
-               names_to = "year",
-               names_prefix = "sw1_",
-               names_transform = ~sub("20(\\d\\d)_(\\d\\d)", "20\\1", .x),
-                 values_to = "hourly_cost") %>%
+    ca_name = factor(ca_name)
+  ) %>%
+  pivot_longer(
+    cols = starts_with("sw1_"),
+    names_to = "year",
+    names_prefix = "sw1_",
+    names_transform = ~ sub("20(\\d\\d)_(\\d\\d)", "20\\1", .x),
+    values_to = "hourly_cost"
+  ) %>%
   mutate(year = as.integer(year))
 
 ## add in years by copying the most recent year ##
@@ -67,14 +71,14 @@ hc_costs_uplifted <-
   bind_rows(
     hc_costs,
     map(1:5, ~
-          hc_costs %>%
-          filter(year == latest_cost_year) %>%
-          group_by(year, ca_name, health_board) %>%
-          summarise(
-            hourly_cost = hourly_cost * (1.01)^.x,
-            .groups = "drop"
-          ) %>%
-          mutate(year = year + .x))
+      hc_costs %>%
+        filter(year == latest_cost_year) %>%
+        group_by(year, ca_name, health_board) %>%
+        summarise(
+          hourly_cost = hourly_cost * (1.01)^.x,
+          .groups = "drop"
+        ) %>%
+        mutate(year = year + .x))
   ) %>%
   arrange(year, ca_name)
 

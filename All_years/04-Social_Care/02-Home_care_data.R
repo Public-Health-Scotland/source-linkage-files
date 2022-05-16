@@ -181,9 +181,11 @@ dropped_bad_dates <- replaced_start_dates %>%
     # Need to check this as we are potentialsly introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  tidylog::filter(!end_before_qtr,
-                  !start_after_quarter,
-                  !start_after_end)
+  tidylog::filter(
+    !end_before_qtr,
+    !start_after_quarter,
+    !start_after_end
+  )
 
 fixed_sc_ids <- dropped_bad_dates %>%
   # Fix cases where a CHI has multiple sc_ids
@@ -218,7 +220,13 @@ fixed_reablement <- fixed_sc_ids %>%
 
 fixed_hours <- fixed_reablement %>%
   tidylog::mutate(
-    days_in_quarter = time_length(pmax(qtr_start, hc_service_start_date) %--% pmin(record_date, hc_service_end_date, na.rm = TRUE), "days") + 1,
+    days_in_quarter = time_length(
+      interval(
+        pmax(qtr_start, hc_service_start_date),
+        pmin(record_date, hc_service_end_date, na.rm = TRUE)
+      ),
+      "days"
+    ) + 1,
     hc_hours = case_when(
       # For A&B 2020/21, use multistaff (min = 1) * staff hours
       sending_location_name == "Argyll and Bute" &
