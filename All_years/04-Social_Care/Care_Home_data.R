@@ -222,7 +222,7 @@ matched_deaths_data <- ch_episode %>%
     dis_after_death = ymd(death_date) <= ymd(ch_discharge_date) - days(5),
     dis_after_death = replace_na(dis_after_death, FALSE)
   ) %>%
-  mutate(ch_discharge_date = if_else(dis_after_death == TRUE, death_date, ch_discharge_date)) %>%
+  mutate(ch_discharge_date = if_else(dis_after_death, death_date, ch_discharge_date)) %>%
   # remove any episodes where discharge is now before admission, i.e. death was before admission
   mutate(
     dis_before_adm = ch_discharge_date < ch_admission_date,
