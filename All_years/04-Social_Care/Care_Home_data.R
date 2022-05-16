@@ -219,7 +219,7 @@ matched_deaths_data <- ch_episode %>%
   # adjust the discharge date to the date of death
   # corrects most cases of ‘discharge after death’
   mutate(
-    dis_after_death = ymd(death_date) < ymd(ch_discharge_date) - days(5) | ymd(death_date) == ymd(ch_discharge_date) - days(5),
+    dis_after_death = ymd(death_date) <= ymd(ch_discharge_date) - days(5),
     dis_after_death = replace_na(dis_after_death, FALSE)
   ) %>%
   mutate(ch_discharge_date = if_else(dis_after_death == TRUE, death_date, ch_discharge_date)) %>%
