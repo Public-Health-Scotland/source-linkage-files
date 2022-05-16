@@ -214,7 +214,6 @@ deaths_data <- haven::read_sav(get_slf_deaths_path())
 matched_deaths_data <- ch_episode %>%
   left_join(deaths_data, by = "chi") %>%
   # compare discharge date with NRS and CHI death date
-  group_by(chi, sending_location, social_care_id, ch_admission_date) %>%
   # if either of the dates are 5 or fewer days before discharge
   # adjust the discharge date to the date of death
   # corrects most cases of ‘discharge after death’
