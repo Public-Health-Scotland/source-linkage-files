@@ -239,7 +239,7 @@ matched_deaths_data <- ch_episode %>%
 ch_markers <- matched_deaths_data %>%
   # ch_chi_cis
   group_by(chi, sending_location, social_care_id) %>%
-  mutate(continuous_stay_chi = pmax(ch_admission_date != lag(ch_discharge_date) + days(1), FALSE, na.rm = TRUE)) %>%
+  mutate(continuous_stay_chi = pmax(ch_admission_date >= lag(ch_discharge_date) + days(1), FALSE, na.rm = TRUE)) %>%
   mutate(ch_chi_cis = cumsum(continuous_stay_chi) + 1) %>%
   ungroup() %>%
   # ch_sc_id_cis
