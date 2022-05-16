@@ -22,7 +22,7 @@ library(fs)
 # Retrieve the latest resource from the dataset
 opendata <-
   get_dataset("gp-practice-contact-details-and-list-sizes",
-              max_resources = 1
+    max_resources = 1
   ) %>%
   clean_names() %>%
   # Filter and save
