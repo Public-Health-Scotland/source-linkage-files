@@ -74,6 +74,17 @@ ltc_file <- read_csv(
     digestive_date = `OTH_DIS_DIG_SYS_DIAG_DATE`
   )
 
+
+chi_check <- ltc_file %>%
+  pull(chi) %>%
+  phsmethods::chi_check()
+
+if (!all(chi_check %in% c("Valid CHI", "Missing (Blank)", "Missing (NA)"))) {
+  stop("There were bad CHI numbers in the LTC file")
+}
+
+
+
 # Create LTC flags 1/0------------------------------------
 
 # Set flags to 1 or 0 based on FY
