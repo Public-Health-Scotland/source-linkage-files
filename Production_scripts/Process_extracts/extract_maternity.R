@@ -213,7 +213,7 @@ outfile <- maternity_clean %>%
 
 # Save as zsav file
 outfile %>%
-  haven::read_sav(get_source_extract_path(year, "Maternity", ext = "zsav", check_mode = "write"))
+  haven::read_sav(get_source_extract_path(year, "Maternity", ext = "zsav", check_mode = "write"), compress = TRUE)
 
 # Save as rds file
 outfile %>%
