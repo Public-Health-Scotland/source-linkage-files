@@ -219,7 +219,7 @@ fixed_reablement <- fixed_sc_ids %>%
 fixed_hours <- fixed_reablement %>%
   tidylog::mutate(
     days_in_quarter = time_length(pmax(qtr_start, hc_service_start_date) %--% pmin(record_date, hc_service_end_date, na.rm = TRUE), "days") + 1,
-    hc_hours_derived = case_when(
+    hc_hours = case_when(
       # For A&B 2020/21, use multistaff (min = 1) * staff hours
       sending_location_name == "Argyll and Bute" &
         str_starts(period, "2020") &
