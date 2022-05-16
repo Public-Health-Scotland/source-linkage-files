@@ -185,7 +185,7 @@ dropped_bad_dates <- replaced_start_dates %>%
                   !start_after_quarter,
                   !start_after_end)
 
-fixed_sc_ids <- replaced_start_dates %>%
+fixed_sc_ids <- dropped_bad_dates %>%
   # Fix cases where a CHI has multiple sc_ids
   # Sort and take the latest sc_id
   arrange(sending_location, chi, record_date, hc_service_start_date) %>%
