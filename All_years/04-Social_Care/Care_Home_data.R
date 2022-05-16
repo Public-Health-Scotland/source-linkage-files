@@ -225,10 +225,9 @@ matched_deaths_data <- ch_episode %>%
   mutate(ch_discharge_date = if_else(dis_after_death, death_date, ch_discharge_date)) %>%
   # remove any episodes where discharge is now before admission, i.e. death was before admission
   mutate(
-    dis_before_adm = ch_discharge_date < ch_admission_date,
-    dis_before_adm = replace_na(dis_before_adm, FALSE)
+    dis_before_adm = replace_na(ch_discharge_date < ch_admission_date, FALSE)
   ) %>%
-  filter(dis_before_adm == FALSE) %>%
+  filter(!dis_before_adm) %>%
   ungroup()
 
 
