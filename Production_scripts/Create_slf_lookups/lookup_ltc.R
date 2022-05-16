@@ -80,7 +80,7 @@ ltc_file <- read_csv(
 # then sort by chi
 
 ltc_flags <- ltc_file %>%
-  mutate(across(ends_with("date"), list(flag = ~ if_else(is.na(.x) | .x > end_fy, 0, 1)))) %>%
+  mutate(across(ends_with("date"), list(flag = ~ if_else(is.na(.x) | .x > end_fy, 0L, 1L)))) %>%
   rename_with(.cols = ends_with("flag"), .fn = ~ stringr::str_remove(.x, "_date_flag"))
 
 
