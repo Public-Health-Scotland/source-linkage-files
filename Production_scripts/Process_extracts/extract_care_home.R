@@ -101,9 +101,13 @@ ch_name_lookup_outfile <- ch_names %>%
 
 ch_name_lookup_outfile %>%
   # .zsav
-  haven::write_sav(get_ch_name_lookup_path(fyyear, ext = "zsav")) %>%
+  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav")) %>%
   # .rds file
-  readr:write_rds(get_ch_name_lookup_path(fyyear, ext = "rds"))
+  write_rds(get_source_extract_path(fyyear, type = "CH", ext = "rds"))
+
+save outfile =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
+
+
 
 # ----------------------------------------------------------------------------------------------------------------------------
 
@@ -183,28 +187,26 @@ costs <- matched_costs %>%
 
 outfile <- costs %>%
   arrange(chi, record_keydate1, record_keydate2) %>%
-  select(
-    year,
-    recid,
-    SMRType,
-    chi,
-    person_id,
-    dob,
-    age,
-    gender,
-    postcode,
-    lca,
-    record_keydate1,
-    record_keydate2,
-    sc_latest_submission,
-    starts_with("ch_"),
-    yearstay,
-    stay,
-    cost_total_net,
-    ends_with("_beddays"),
-    ends_with("_cost"),
-    starts_with("sc_")
-  )
+  select(year,
+         recid,
+         SMRType,
+         chi,
+         person_id,
+         dob,
+         age,
+         gender,
+         postcode,
+         lca,
+         record_keydate1,
+         record_keydate2,
+         sc_latest_submission,
+         starts_with("ch_"),
+         yearstay,
+         stay,
+         cost_total_net,
+         ends_with("_beddays"),
+         ends_with("_cost"),
+         starts_with("sc_"))
 
 
 outfile %>%
@@ -216,6 +218,10 @@ outfile %>%
 
 
 # End of Script #
+
+
+
+
 
 # Data Cleaning---------------------------------------
 
