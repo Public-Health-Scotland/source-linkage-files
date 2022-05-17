@@ -1,13 +1,13 @@
-﻿* Encoding: UTF-8.
-*2. LookUp for costs for Care Homes.
+* Encoding: UTF-8.
+* Lookup for costs for Care Homes.
 
-*Get COSLA Value tables.
-*The values are obtained from.
+* Get Care Home Census Value tables.
+* The values are obtained from.
 * https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/ - Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes for Older People in Scotland.
 * Check and add any new years to 'CH_Costs.xlsx'.
 
-* Make a copy of the existing file, incase something wierd has happened to the data!.
-* Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
+* Make a copy of the existing file, in case something weird has happened to the data!.
+* Get an error because of the -p flag: This keeps the amend date but fails on permissions - command works fine though.
 * If this doesn't work manually make a copy.
 Host Command = ["cp " + !Costs_dir + "Cost_CH_Lookup.sav " +  !Costs_dir + "Cost_CH_Lookup_pre" + !LatestUpdate + ".sav"].
 
@@ -58,9 +58,9 @@ aggregate outfile = *
     /Break year nursing_care_provision
     /cost_per_day = Mean(cost_per_day).
 
-***This bit will need changing to accomodate new costs ***.
+***This bit will need changing to accommodate new costs ***.
 * Add in years by copying the most recent year we have.
-* Most recent costs year availiable.
+* Most recent costs year available.
 String TempYear1 TempYear2 (A4).
 Do if Year = "XXXX".
     * Make costs for other years.
