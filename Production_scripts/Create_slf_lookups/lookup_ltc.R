@@ -16,11 +16,10 @@
 library(dplyr)
 library(stringr)
 library(readr)
+library(createslf)
 
 # Financial year
 year <- "1718"
-end_fy <- end_fy(year)
-
 
 # Read data------------------------------------------------
 ltc_file <- read_csv(
@@ -74,14 +73,29 @@ ltc_file <- read_csv(
     digestive_date = `OTH_DIS_DIG_SYS_DIAG_DATE`
   )
 
+chi_check <- ltc_file %>%
+  pull(chi) %>%
+  phsmethods::chi_check()
+
+if (!all(chi_check %in% c("Valid CHI", "Missing (Blank)", "Missing (NA)"))) {
+  stop("There were bad CHI numbers in the LTC file")
+}
+
+
 # Create LTC flags 1/0------------------------------------
 
 # Set flags to 1 or 0 based on FY
 # then sort by chi
 
 ltc_flags <- ltc_file %>%
-  mutate(across(ends_with("date"), list(flag = ~ if_else(is.na(.x) | .x > end_fy, 0L, 1L)))) %>%
-  rename_with(.cols = ends_with("flag"), .fn = ~ stringr::str_remove(.x, "_date_flag"))
+  mutate(across(
+    ends_with("date"),
+    list(flag = ~ if_else(is.na(.x) | .x > end_fy(year), 0L, 1L))
+  )) %>%
+  rename_with(
+    .cols = ends_with("flag"),
+    .fn = ~ stringr::str_remove(.x, "_date_flag")
+  )
 
 
 # Save Outfile---------------------------------------------
