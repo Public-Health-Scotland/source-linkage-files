@@ -77,7 +77,7 @@ ch_names <- ch_clean %>%
 
 # Outfile ---------------------------------------
 
-ch_name_lookup <- ch_names %>%
+ch_name_lookup_outfile <- ch_names %>%
   group_by(ch_postcode) %>%
   mutate(ch_name = last(ch_name),
          council_area_code = last(council_area_code),
@@ -86,6 +86,15 @@ ch_name_lookup <- ch_names %>%
   select(ch_postcode, ch_name, council_area_code, n_in_fy, n_at_postcode) %>%
   ungroup() %>%
   arrange(ch_postcode, ch_name, council_area_code)
+
+ch_name_lookup_outfile %>%
+  # .zsav
+  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav")) %>%
+  # .rds file
+  write_rds(get_source_extract_path(fyyear, type = "CH", ext = "rds"))
+
+save outfile =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
+
 
 
 # ----------------------------------------------------------------------------------------------------------------------------
@@ -147,12 +156,48 @@ matched_costs <- source_ch_clean %>%
   left_join(ch_costs, by = c("year", "ch_nursing"))
 
 
+costs <- matched_costs %>%
+  # monthly costs
+  create_monthly_costs(yearstay, cost_per_day) %>%
+  # cost total net
+  mutate(cost_total_net = rowSums(across(ends_with("_cost"))))
 
-monthly_costs <- matched_costs %>%
-  create_day_episode_costs()
+
+# Outfile  ---------------------------------------
+
+outfile <- costs %>%
+  arrange(chi, record_keydate1, record_keydate2) %>%
+  select(year,
+         recid,
+         SMRType,
+         chi,
+         person_id,
+         dob,
+         age,
+         gender,
+         postcode,
+         lca,
+         record_keydate1,
+         record_keydate2,
+         sc_latest_submission,
+         starts_with("ch_"),
+         yearstay,
+         stay,
+         cost_total_net,
+         ends_with("_beddays"),
+         ends_with("_cost"),
+         starts_with("sc_"))
+
+
+outfile %>%
+  # .zsav
+  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav")) %>%
+  # .rds file
+  write_rds(get_source_extract_path(fyyear, type = "CH", ext = "rds"))
 
 
 
+# End of Script #
 
 
 
