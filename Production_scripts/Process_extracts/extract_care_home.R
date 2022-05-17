@@ -15,26 +15,25 @@ library(dbplyr)
 library(createslf)
 
 
+fyyear <- check_year_format("1920")
+
+
 ## Care Home Lookup ##
 
 # Read in data---------------------------------------
 
-ch_lookup <- readxl::read_xlsx(get_slf_ch_path())
+ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path())
 
 
 # Data Cleaning---------------------------------------
 
-ch_lookup_clean <- ch_lookup %>%
+ch_clean <- ch_lookup %>%
   # correct postcode formatting
   mutate(AccomPostCodeNo = postcode(AccomPostCodeNo)) %>%
   rename(ch_postcode = "AccomPostCodeNo") %>%
   mutate(DateReg = as.Date(DateReg),
-         DateCanx = as.Date(DateCanx))
-
-
-# Care Home names---------------------------------------
-
-ch_clean <- ch_lookup_clean %>%
+         DateCanx = as.Date(DateCanx)) %>%
+  # clean up care home names
   group_by(ServiceName,
            ch_postcode,
            Council_Area_Name) %>%
@@ -55,21 +54,106 @@ ch_clean <- ch_lookup_clean %>%
                                       lag(change_reg_date) == 1), 1, 0)) %>%
   mutate(change_canx_date = replace_na(change_canx_date, 0)) %>%
   mutate(DateCanx = if_else(change_canx_date == 1, as.Date(paste0(lubridate::year(DateReg), "/03/31")), DateCanx)) %>%
-  arrange(ch_postcode, Council_Area_Name, DateReg)
-
-# dates
-open_dates <- as.data.frame(matrix(0, nrow = nrow(ch_clean), ncol = length(2015:2030)))
-colnames(open_dates) <- paste0("open_", c(2015:2030))
-
-ch_dates <- ch_clean %>%
-  mutate(open_2015 = if_else(year_opened < 2015, 1 , 0))
+  arrange(ch_postcode, Council_Area_Name, DateReg) %>%
+  ungroup() %>%
+  # add council codes
+  mutate(council_area_code = convert_ca_to_lca(Council_Area_Name))
 
 
+# Care Home Names ---------------------------------------
+
+ch_names <- ch_clean %>%
+  rename(ch_name = "ServiceName") %>%
+  # deal with capitalisation of CH names
+  mutate(ch_name = stringr::str_to_title(ch_name)) %>%
+  # deal with punctuation in the CH names
+  mutate(ch_name = stringr::str_replace_all(ch_name, "[[:punct:]]", " ")) %>%
+  # deal with whitespace at start and end and witihin
+  mutate(ch_name = stringr::str_trim(ch_name, side = "both"),
+         ch_name = stringr::str_squish(ch_name)) %>%
+  # check for duplicate in FY
+  mutate(open_in_fy = if_else(is.na(DateCanx) | DateCanx > lubridate::ymd(paste0(convert_fyyear_to_year(year), "-04-01")), 1, 0))
+
+
+# Outfile ---------------------------------------
+
+ch_name_lookup <- ch_names %>%
+  group_by(ch_postcode) %>%
+  mutate(ch_name = last(ch_name),
+         council_area_code = last(council_area_code),
+         n_in_fy = sum(open_in_fy),
+         n_at_postcode = n()) %>%
+  select(ch_postcode, ch_name, council_area_code, n_in_fy, n_at_postcode) %>%
+  ungroup() %>%
+  arrange(ch_postcode, ch_name, council_area_code)
+
+
+# ----------------------------------------------------------------------------------------------------------------------------
+
+
+## Source Care Homes ##
+
+
+# Read in data---------------------------------------
+
+source_ch_data <- haven::read_sav(get_sc_ch_episodes_path()) %>%
+  # select episodes for FY
+  filter(record_keydate1 %in% range(start_fy(year), end_fy(year)) |
+           (record_keydate1 <= end_fy(year) & record_keydate2 >= start_fy(year) | is.na(record_keydate2))) %>%
+  # remove any episodes where the latest submission was before the current year
+  filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4))
+
+
+# Match on Client Data ---------------------------------------
+
+client_data <- readr::read_rds(get_source_extract_path(year, type = "Client", ext = "rds"))
+
+matched_data <- source_ch_data %>%
+  left_join(client_data, by = c("sending_location", "social_care_id"))
+
+
+# Data Cleaning ---------------------------------------
+
+source_ch_clean <- matched_data %>%
+  mutate(year = convert_fyyear_to_year(fyyear),
+         recid = "CH",
+         SMRType = "Care-Home") %>%
+  # compute age variable
+  compute_age(fyyear, dob) %>%
+  # compute lca variable from sending_location
+  mutate(lca = convert_sending_location_to_lca(sending_location)) %>%
+  # bed days
+  # create dummy end where blank
+  mutate(dummy_discharge = if_else(is.na(record_keydate2), end_fy(fyyear) + days(1), record_keydate2)) %>%
+  create_monthly_beddays(year, record_keydate1, dummy_discharge) %>%
+  # year stay
+  mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
+  # total length of stay
+  mutate(stay = lubridate::as.period(lubridate::interval(start_fy(fyyear), record_keydate1))$day +
+           source_ch_clean$yearstay +
+           lubridate::as.period(lubridate::interval(end_fy(fyyear), dummy_discharge))$day)
+
+
+# Costs  ---------------------------------------
+
+# read in CH Costs Lookup
+ch_costs <- haven::read_sav(get_ch_costs_path()) %>%
+  rename(year = "Year",
+         ch_nursing = "nursing_care_provision")
+
+
+# match costs
+matched_costs <- source_ch_clean %>%
+  left_join(ch_costs, by = c("year", "ch_nursing"))
+
+
+
+monthly_costs <- matched_costs %>%
+  create_day_episode_costs()
 
 
 
 
 
-output <- haven::read_sav("/conf/sourcedev/Source_Linkage_File_Updates/1920/Extracts/Care_home_name_lookup-201920.sav")
 
 
