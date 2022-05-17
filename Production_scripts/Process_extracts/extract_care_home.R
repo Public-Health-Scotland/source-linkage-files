@@ -67,9 +67,6 @@ ch_clean <- ch_lookup %>%
   # add council codes
   mutate(council_area_code = convert_ca_to_lca(Council_Area_Name))
 
-# dates
-open_dates <- as.data.frame(matrix(0, nrow = nrow(ch_clean), ncol = length(2015:2030)))
-colnames(open_dates) <- paste0("open_", c(2015:2030))
 
 # Care Home Names ---------------------------------------
 
@@ -108,9 +105,11 @@ ch_name_lookup_outfile %>%
   # .rds file
   readr:write_rds(get_ch_name_lookup_path(fyyear, ext = "rds"))
 
+# ----------------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------------
 
+## Source Care Homes ##
 
 ## Source Care Homes ##
 

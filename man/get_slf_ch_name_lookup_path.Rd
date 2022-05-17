@@ -31,7 +31,10 @@ Other file path functions:
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+<<<<<<< refs/remotes/origin/main-R
 \code{\link{get_ltcs_path}()},
+=======
+>>>>>>> source care home script new age function new sending_location to lca function
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_sc_ch_episodes_path}()},

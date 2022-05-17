@@ -10,9 +10,13 @@ export(convert_eng_gpprac_to_dummy)
 export(convert_fyyear_to_year)
 <<<<<<< refs/remotes/origin/main-R
 <<<<<<< refs/remotes/origin/main-R
+<<<<<<< refs/remotes/origin/main-R
 export(convert_hb_to_hbnames)
 export(convert_hscp_to_hscpnames)
 export(convert_numeric_to_date)
+=======
+export(convert_sending_location_to_lca)
+>>>>>>> source care home script new age function new sending_location to lca function
 =======
 export(convert_sending_location_to_lca)
 >>>>>>> source care home script new age function new sending_location to lca function
