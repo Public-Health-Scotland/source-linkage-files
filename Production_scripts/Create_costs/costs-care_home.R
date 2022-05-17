@@ -4,10 +4,10 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input - COSLA Values
+# Input - Tables from CHC publication
 # Description - Lookup for costs for Care Homes
 #
-# Get COSLA Value tables
+# Get the Care Home Census tables
 # Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes for Older People in Scotland.
 # https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/
 # Check and add any new years to 'CH_Costs.xlsx'
