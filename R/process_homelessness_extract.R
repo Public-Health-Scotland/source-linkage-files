@@ -12,6 +12,12 @@
 #' @export
 #' @family Process extracts
 process_homelessness_extract <- function(year, write_to_disk = TRUE) {
+  # Only run for a single year
+  stopifnot(length(year) == 1)
+
+  # Check that the supplied year is in the correct format
+  year <- check_year_format(year)
+
   # Read the data and clean the variable names ------------------------------
 
   homelessness_extract <- readr::read_csv(get_boxi_extract_path(year = year, type = "Homelessness"),
