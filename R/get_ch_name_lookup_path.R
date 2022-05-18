@@ -7,7 +7,6 @@
 #' @export
 #'
 get_ch_name_lookup_path <- function(year, ext = c("zsav", "rds"), ...) {
-
   ext <- match.arg(ext)
 
   year_dir <- fs::path(
@@ -27,5 +26,4 @@ get_ch_name_lookup_path <- function(year, ext = c("zsav", "rds"), ...) {
   )
 
   return(lookup_path)
-
 }
