@@ -1,5 +1,5 @@
 # June 2022 Update - Unreleased
-
+* We now use [`{haven}`](https://haven.tidyverse.org/news/index.html) to compress the SPSS files which compresses them better than SPSS does 🤷‍♂️
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.
