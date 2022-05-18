@@ -5,12 +5,12 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
-#' @param write_to_disk (optional) Should the data be written to disk.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
-#' @return the final data as a tibble.
+#' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family Process extracts
-#'
 process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Read the data and clean the variable names ------------------------------
 
@@ -109,6 +109,7 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Then will use the single 'full' boxi extract to pick out each year.
   # For now I've just created the file elsewhere to be picked up here!
 
+  # TODO make the la_code_lookup a testable function
   la_code_lookup <- phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5") %>%
     dplyr::distinct(.data$CA, .data$CAName) %>%
     dplyr::mutate(
