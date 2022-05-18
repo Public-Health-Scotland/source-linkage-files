@@ -1,5 +1,5 @@
 write_to_log <- function(message) {
-  write_lines(message,
+  readr::write_lines(message,
     file = "Make_R_files/log.txt",
     append = TRUE
   )
