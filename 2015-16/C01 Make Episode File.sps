@@ -147,8 +147,8 @@ save outfile = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
 select if any(recid, "01B", "04B", "GLS", "02B").
 
 * Fill in the blank CIJ markers.
-do if (chi ne lag(chi)) AND cij_marker = "" AND chi NE "".
-    compute cij_marker= "1".
+do if (chi ne lag(chi)) AND sysmis(cij_marker) AND chi NE "".
+    compute cij_marker= 1.
 end if.
 
 * Populate ipdc for maternity records.
@@ -415,6 +415,7 @@ save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Drop Valid_CHI PPA
     /zcompressed.
 get file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav".
+
 
 * Housekeeping.
 Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
