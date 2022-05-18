@@ -16,12 +16,12 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
 
   homelessness_extract <- readr::read_csv(get_boxi_extract_path(year = year, type = "Homelessness"),
     col_types = cols(
-      "Assessment Decision Date" = col_date(format = "%Y%m%d %T"),
-      "Case Closed Date" = col_date(format = "%Y%m%d %T"),
+      "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
+      "Case Closed Date" = col_date(format = "%Y/%m/%d %T"),
       "Sending Local Authority Code 9" = col_character(),
       "Client Unique Identifier" = col_character(),
       "UPI Number [C]" = col_character(),
-      "Client DoB Date [C]" = col_date(format = "%Y%m%d %T"),
+      "Client DoB Date [C]" = col_date(format = "%Y/%m/%d %T"),
       "Age at Assessment Decision Date" = col_integer(),
       "Gender Code" = col_integer(),
       "Client Postcode [C]" = col_character(),
