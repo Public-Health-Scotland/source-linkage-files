@@ -312,7 +312,7 @@ add files
     /File =  !Year_dir + "DD_for_source-20" + !FY + ".zsav"
     /by chi keydate1_dateformat.
 
-Do if chi NE "" and cij_marker NE "".
+Do if chi NE "" and cij_marker NE sysmis(cij_marker).
     Compute has_delay = SMRType = "DD-CIJ".
 End if.
 
