@@ -20,7 +20,9 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
 
   # Read the data and clean the variable names ------------------------------
 
-  homelessness_extract <- readr::read_csv(get_boxi_extract_path(year = year, type = "Homelessness"),
+  homelessness_extract_path <- get_boxi_extract_path(year = year, type = "Homelessness")
+
+  homelessness_extract <- readr::read_csv(homelessness_extract_path,
     col_types = cols(
       "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
       "Case Closed Date" = col_date(format = "%Y/%m/%d %T"),
@@ -127,10 +129,12 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
         stringr::str_replace("\\sand\\s", " \\& ")
     )
 
-  completeness_data <- readr::read_rds(get_file_path(
+  completeness_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Homelessness"),
     file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
-  )) %>%
+  )
+
+  completeness_data <- readr::read_rds(completeness_file_path) %>%
     dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year)) %>%
     dplyr::left_join(la_code_lookup,
       by = c("sending_local_authority_code_9" = "CA")
