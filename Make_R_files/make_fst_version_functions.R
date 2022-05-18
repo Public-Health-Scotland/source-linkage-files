@@ -13,19 +13,38 @@ pretty_time_diff <- function(start_time, end_time, units = "mins", digits = 1) {
   return(time_diff)
 }
 
-zsav_to_fst <- function(file, compress) {
-  data <- haven::read_sav(file) %>%
+zsav_to_fst <- function(path, compress) {
+  # Read the zsav file
+  data <- haven::read_sav(path) %>%
     dplyr::rename_all(tolower)
 
-  haven::write_sav(data, file, compress = TRUE)
+  # Make a copy
+  copy_path <- fs::path(
+    fs::path_dir(path),
+    stringr::str_replace(
+      fs::path_file(path),
+      "(.+?)\\.",
+      "\\1_pre-fst\\."
+    )
+  )
+  fs::file_copy(path, copy_path)
 
+  # Write the file with haven (as compression is better)
+  haven::write_sav(data, path, compress = "zsav")
+
+  # Write the file as an fst version
   data %>%
-    tibble::as_tibble() %>%
     fst::write_fst(
       x = .,
-      path = fs::path_ext_set(file, ".fst"),
+      path = fs::path_ext_set(path, "fst"),
       compress = compress
     )
+
+  # Delete the copy (it was just in case any previous steps crashed)
+  # Check that the files exist and are bigger than 0 bytes
+  if (fs::file_size(path) > 0 & fs::file_size(fs::path_ext_set(path, "fst")) > 0) {
+    fs::file_delete(copy_path)
+  }
 }
 
 create_fst_files <- function(year, compress = 100) {
