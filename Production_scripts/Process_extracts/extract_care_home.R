@@ -13,6 +13,8 @@
 library(dplyr)
 library(dbplyr)
 library(createslf)
+library(phsmethods)
+library(lubridate)
 
 
 fyyear <- check_year_format("1920")
@@ -89,12 +91,9 @@ ch_name_lookup_outfile <- ch_names %>%
 
 ch_name_lookup_outfile %>%
   # .zsav
-  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav")) %>%
+  haven::write_sav(get_ch_name_lookup_path(fyyear, ext = "zsav")) %>%
   # .rds file
-  write_rds(get_source_extract_path(fyyear, type = "CH", ext = "rds"))
-
-save outfile =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
-
+  readr:write_rds(get_ch_name_lookup_path(fyyear, ext = "rds"))
 
 
 # ----------------------------------------------------------------------------------------------------------------------------
@@ -115,8 +114,10 @@ source_ch_data <- haven::read_sav(get_sc_ch_episodes_path()) %>%
 
 # Match on Client Data ---------------------------------------
 
+# read client data in
 client_data <- readr::read_rds(get_source_extract_path(year, type = "Client", ext = "rds"))
 
+# match to client data
 matched_data <- source_ch_data %>%
   left_join(client_data, by = c("sending_location", "social_care_id"))
 
@@ -124,6 +125,7 @@ matched_data <- source_ch_data %>%
 # Data Cleaning ---------------------------------------
 
 source_ch_clean <- matched_data %>%
+  # create variables
   mutate(year = convert_fyyear_to_year(fyyear),
          recid = "CH",
          SMRType = "Care-Home") %>%
@@ -138,9 +140,9 @@ source_ch_clean <- matched_data %>%
   # year stay
   mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
   # total length of stay
-  mutate(stay = lubridate::as.period(lubridate::interval(start_fy(fyyear), record_keydate1))$day +
-           source_ch_clean$yearstay +
-           lubridate::as.period(lubridate::interval(end_fy(fyyear), dummy_discharge))$day)
+  mutate(stay = as.period(interval(start_fy(fyyear), record_keydate1))$day +
+           yearstay +
+           as.period(interval(end_fy(fyyear), dummy_discharge))$day)
 
 
 # Costs  ---------------------------------------

@@ -20,7 +20,7 @@ a vector of age at midpoint
 Compute Age of Clients at Midpoint of Year
 }
 \examples{
-dob <- c("01-01-1990", "10-05-1960")
+dob <- as.Date(c("01-01-1990", "10-05-1960"))
 fyyear <- "1920"
 compute_age(fyyear, dob)
 }
