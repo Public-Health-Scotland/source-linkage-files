@@ -126,7 +126,7 @@ ggplot(data = matched_costs_data, aes(x = year, y = hourly_cost)) +
   geom_line(aes(group = ca_name, color = ca_name)) +
   scale_y_continuous(labels = scales::label_dollar(prefix = "£")) +
   labs(y = "Hourly costs", color = "Local Authority") +
-  facet_wrap(~health_board)
+  facet_wrap(~health_board.x)
 
 
 ## save outfile ---------------------------------------
