@@ -85,7 +85,11 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
         main_applicant_flag == "N" ~ "HL1-Other"
       )
     ) %>%
-    dplyr::mutate(dplyr::across(c(.data$financial_difficulties_debt_unemployment:.data$refused), tidyr::replace_na, 9L),
+    dplyr::mutate(
+      dplyr::across(
+        c(.data$financial_difficulties_debt_unemployment:.data$refused),
+        tidyr::replace_na, 9L
+      ),
       hl1_reason_ftm = paste0(
         dplyr::if_else(.data$financial_difficulties_debt_unemployment == 1L, "F", ""),
         dplyr::if_else(.data$physical_health_reasons == 1L, "Ph", ""),
