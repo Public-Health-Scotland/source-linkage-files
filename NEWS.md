@@ -1,5 +1,5 @@
 # June 2022 Update - Unreleased
-
+* The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.
