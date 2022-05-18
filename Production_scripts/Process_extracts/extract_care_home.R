@@ -101,12 +101,9 @@ ch_name_lookup_outfile <- ch_names %>%
 
 ch_name_lookup_outfile %>%
   # .zsav
-  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav")) %>%
+  haven::write_sav(get_ch_name_lookup_path(fyyear, ext = "zsav")) %>%
   # .rds file
-  write_rds(get_source_extract_path(fyyear, type = "CH", ext = "rds"))
-
-save outfile =  !Year_Extracts_dir + "Care_home_name_lookup-20" + !FY + ".sav".
-
+  readr:write_rds(get_ch_name_lookup_path(fyyear, ext = "rds"))
 
 
 # ----------------------------------------------------------------------------------------------------------------------------
@@ -142,11 +139,9 @@ matched_data <- source_ch_data %>%
 
 source_ch_clean <- matched_data %>%
   # create variables
-  mutate(
-    year = convert_fyyear_to_year(fyyear),
-    recid = "CH",
-    SMRType = "Care-Home"
-  ) %>%
+  mutate(year = convert_fyyear_to_year(fyyear),
+         recid = "CH",
+         SMRType = "Care-Home") %>%
   # compute age variable
   compute_age(fyyear, dob) %>%
   # compute lca variable from sending_location
@@ -158,7 +153,9 @@ source_ch_clean <- matched_data %>%
   # year stay
   mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
   # total length of stay
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
+  mutate(stay = as.period(interval(start_fy(fyyear), record_keydate1))$day +
+           yearstay +
+           as.period(interval(end_fy(fyyear), dummy_discharge))$day)
 
 
 # Costs  ---------------------------------------
