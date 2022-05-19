@@ -19,6 +19,7 @@
 library(dplyr)
 library(purrr)
 library(tidyr)
+library(ggplot2)
 library(createslf)
 
 # Read in data---------------------------------------
@@ -118,6 +119,23 @@ matched_costs_data %>%
     names_from = "nursing_care_provision",
     values_from = "pct_diff"
   )
+
+ggplot(
+  data = matched_costs_data,
+  aes(
+    x = year,
+    y = cost_per_day,
+    colour = as.factor(nursing_care_provision),
+    group = as.factor(nursing_care_provision)
+  )
+) +
+  geom_step() +
+  geom_step(aes(y = cost_old), linetype = "dotdash") +
+  geom_vline(xintercept = latest_cost_year, linetype = "dashed") +
+  scale_y_continuous(labels = scales::label_dollar(prefix = "£")) +
+  scale_colour_discrete() +
+  labs(y = "Cost per day", color = "Nursing Care provision")
+
 
 
 ## save outfile ---------------------------------------
