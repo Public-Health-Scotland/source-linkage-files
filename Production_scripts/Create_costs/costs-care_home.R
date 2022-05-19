@@ -62,6 +62,16 @@ ch_costs_scot <-
       )
   )
 
+# Interpolate any missing years (e.g. 2019/20)
+ch_costs <- ch_costs_scot %>%
+  group_by(nursing_care_provision) %>%
+  tidylog::mutate(cost_per_day = if_else(
+    is.na(cost_per_day),
+    (lag(cost_per_day, order_by = year) + lead(cost_per_day, order_by = year)) / 2,
+    cost_per_day
+  )) %>%
+  ungroup()
+
 ## add in years by copying the most recent year ##
 latest_cost_year <- max(ch_costs$year)
 
