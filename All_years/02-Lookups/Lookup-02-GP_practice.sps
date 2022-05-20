@@ -23,6 +23,7 @@ match files
  * Fix the Locale -> Unicode issue.
 alter type cluster (A50).
 alter type postcode (A8).
+Compute postcode = upcase(postcode).
 
  * Match on Geography info (the postcode from the ref file is PC8).
 sort cases by Postcode.

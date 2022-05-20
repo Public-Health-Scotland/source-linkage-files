@@ -7,7 +7,7 @@ library(janitor)
 library(fs)
 library(haven)
 
-latest_update <- "Mar_2022"
+latest_update <- "Jun_2022"
 lookup_dir <- path("/conf/hscdiip/SLF_Extracts/Lookups")
 
 # Retrieve the latest resource from the dataset
