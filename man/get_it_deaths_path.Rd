@@ -31,6 +31,7 @@ Other file path functions:
 \code{\link{get_hhg_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+\code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_sc_ch_episodes_path}()},

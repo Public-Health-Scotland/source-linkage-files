@@ -9,10 +9,11 @@ process_homelessness_extract(year, write_to_disk = TRUE)
 \arguments{
 \item{year}{The year to process, in FY format.}
 
-\item{write_to_disk}{(optional) Should the data be written to disk.}
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 }
 \value{
-the final data as a tibble.
+the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
