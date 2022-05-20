@@ -1,4 +1,6 @@
 # June 2022 Update - Unreleased
+* Fixed a bug where we were overcounting preventable beddays in the individual file.
+  * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
 * Fixed a bug where CH costs was not referring to end of year. 
   * eg. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
