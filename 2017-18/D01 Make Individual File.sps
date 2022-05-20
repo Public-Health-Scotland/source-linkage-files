@@ -77,9 +77,11 @@ End if.
 If cij_delay and Distinct_CIJ cij_delay = 1.
 Compute cij_delay = cij_delay and Distinct_CIJ.
 
-*Create variables to count preventable admissions and preventable beddays.
-Do if cij_ppa.
-    If Distinct_CIJ preventable_admissions = 1.
+* Create variables to count preventable admissions and preventable beddays.
+* Only count if the CIJ is flagged as preventable (CIJ_ppa).
+* And only count once per CIJ (use Distinct_CIJ).
+Do if cij_ppa and Distinct_CIJ.
+    Compute preventable_admissions = 1.
     Compute preventable_beddays = datediff(Min(!endFY, CIJ_end_date), Max(!startFY, CIJ_start_date), "days").
 Else.
     Compute preventable_admissions = 0.
