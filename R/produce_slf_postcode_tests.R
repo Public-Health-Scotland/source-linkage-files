@@ -6,7 +6,6 @@
 #' @return a dataframe with a count of each flag
 #' from \code{\link{calculate_measures}}
 #' @export
-#' @importFrom dplyr mutate select
 #' @family produce tests functions
 #' @seealso \code{\link{create_hb_test_flags}} and
 #' \code{\link{create_hscp_test_flags}} for creating test flags
@@ -16,9 +15,9 @@ produce_slf_postcode_tests <- function(data) {
     create_hb_test_flags(.data$hb2019) %>%
     create_hscp_test_flags(.data$hscp2019) %>%
     # create other test flags
-    mutate(n_postcode = 1) %>%
+    dplyr::mutate(n_postcode = 1) %>%
     # remove variables that are not test flags
-    select(-c(
+    dplyr::select(-c(
       .data$postcode, .data$hb2018, .data$hscp2018, .data$ca2018,
       .data$lca, .data$locality, .data$datazone2011, .data$hb2019,
       .data$ca2019, .data$hscp2019, .data$simd2020v2_rank,

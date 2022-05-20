@@ -33,6 +33,7 @@ Other file path functions:
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+\code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_readcode_lookup_path}()},

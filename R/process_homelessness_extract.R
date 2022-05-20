@@ -5,24 +5,31 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
-#' @param write_to_disk (optional) Should the data be written to disk.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
-#' @return the final data as a tibble.
+#' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family Process extracts
-#'
-#' @importFrom readr col_date col_character col_integer
 process_homelessness_extract <- function(year, write_to_disk = TRUE) {
+  # Only run for a single year
+  stopifnot(length(year) == 1)
+
+  # Check that the supplied year is in the correct format
+  year <- check_year_format(year)
+
   # Read the data and clean the variable names ------------------------------
 
-  homelessness_extract <- readr::read_csv(get_boxi_extract_path(year = year, type = "Homelessness"),
-    col_types = readr::cols(
-      "Assessment Decision Date" = col_date(format = "%Y%m%d %T"),
-      "Case Closed Date" = col_date(format = "%Y%m%d %T"),
+  homelessness_extract_path <- get_boxi_extract_path(year = year, type = "Homelessness")
+
+  homelessness_extract <- readr::read_csv(homelessness_extract_path,
+    col_types = cols(
+      "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
+      "Case Closed Date" = col_date(format = "%Y/%m/%d %T"),
       "Sending Local Authority Code 9" = col_character(),
       "Client Unique Identifier" = col_character(),
       "UPI Number [C]" = col_character(),
-      "Client DoB Date [C]" = col_date(format = "%Y%m%d %T"),
+      "Client DoB Date [C]" = col_date(format = "%Y/%m/%d %T"),
       "Age at Assessment Decision Date" = col_integer(),
       "Gender Code" = col_integer(),
       "Client Postcode [C]" = col_character(),
@@ -78,7 +85,11 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
         main_applicant_flag == "N" ~ "HL1-Other"
       )
     ) %>%
-    dplyr::mutate(dplyr::across(c(.data$financial_difficulties_debt_unemployment:.data$refused), tidyr::replace_na, 9L),
+    dplyr::mutate(
+      dplyr::across(
+        c(.data$financial_difficulties_debt_unemployment:.data$refused),
+        tidyr::replace_na, 9L
+      ),
       hl1_reason_ftm = paste0(
         dplyr::if_else(.data$financial_difficulties_debt_unemployment == 1L, "F", ""),
         dplyr::if_else(.data$physical_health_reasons == 1L, "Ph", ""),
@@ -110,6 +121,7 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Then will use the single 'full' boxi extract to pick out each year.
   # For now I've just created the file elsewhere to be picked up here!
 
+  # TODO make the la_code_lookup a testable function
   la_code_lookup <- phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5") %>%
     dplyr::distinct(.data$CA, .data$CAName) %>%
     dplyr::mutate(
@@ -121,10 +133,12 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
         stringr::str_replace("\\sand\\s", " \\& ")
     )
 
-  completeness_data <- readr::read_rds(get_file_path(
+  completeness_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Homelessness"),
     file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
-  )) %>%
+  )
+
+  completeness_data <- readr::read_rds(completeness_file_path) %>%
     dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year)) %>%
     dplyr::left_join(la_code_lookup,
       by = c("sending_local_authority_code_9" = "CA")
