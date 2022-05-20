@@ -1,5 +1,5 @@
 # June 2022 Update - Unreleased
-
+* Fixed a bug where CH costs was not referring to end of year. eg. 2018 costs relates to 2017/18
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.
