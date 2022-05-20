@@ -5,6 +5,8 @@
 * The changes to Homelessness described in the March update have been properly implemented.
 * Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
 * The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
+* Fixed a bug where we were overcounting preventable beddays in the individual file.
+  * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.
