@@ -1,5 +1,6 @@
 # June 2022 Update - Unreleased
 * The changes to Homelessness described in the March update have been properly implemented.
+* Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.

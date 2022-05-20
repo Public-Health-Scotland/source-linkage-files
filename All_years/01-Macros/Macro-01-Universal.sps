@@ -52,7 +52,7 @@ Define !Locality_file()
 
 * SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2022_1.sav"
+    "Scottish_Postcode_Directory_2022_1.zsav"
 !EndDefine.
 
 * gpprac file.
