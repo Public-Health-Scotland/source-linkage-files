@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -63,7 +63,7 @@ add files file = *
     /by CHI cij_marker
     /First = Distinct_CIJ.
 
-If cij_marker = "" Distinct_CIJ = 0.
+If sysmis(cij_marker) Distinct_CIJ = 0.
 
 Do if cij_pattype_code = 0.
     Compute CIJ_non_el = Distinct_CIJ.
