@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Lookup for costs for Care Homes.
 
 * Get Care Home Census Value tables.
@@ -62,10 +62,10 @@ aggregate outfile = *
 * Add in years by copying the most recent year we have.
 * Most recent costs year available.
 String TempYear1 TempYear2 (A4).
-Do if Year = "XXXX".
+Do if Year = "2021".
     * Make costs for other years.
-    Compute TempYear1 = "2223".
-    Compute TempYear2 = "2324".
+    Compute TempYear1 = "2122".
+    Compute TempYear2 = "2223".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
@@ -73,8 +73,8 @@ Varstocases /make Year from Year TempYear1 TempYear2.
 * Uplift costs for Years after the latest year.
 * increase by 1% for every year after the latest.
 * Add/delete lines as appropriate.
+if year > "2021" cost_per_day = cost_per_day * 1.01.
 if year > "2122" cost_per_day = cost_per_day * 1.01.
-if year > "2223" cost_per_day = cost_per_day * 1.01.
 
 sort cases by Year nursing_care_provision.
 
