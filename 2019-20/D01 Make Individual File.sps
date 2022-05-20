@@ -63,7 +63,7 @@ add files file = *
     /by CHI cij_marker
     /First = Distinct_CIJ.
 
-If cij_marker = "" Distinct_CIJ = 0.
+If cij_marker = sysmis(cij_marker) Distinct_CIJ = 0.
 
 Do if cij_pattype_code = 0.
     Compute CIJ_non_el = Distinct_CIJ.
