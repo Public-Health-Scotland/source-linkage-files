@@ -16,14 +16,14 @@ test_that("Responds correctly to bad inputs", {
     "The year has been entered in the wrong format\\."
   )
 
-  expect_warning(
+  expect_message(
     convert_fyyear_to_year(1819),
-    "`year` should be a character"
+    "`year` will be converted to a character"
   )
 
-  expect_warning(
+  expect_message(
     convert_fyyear_to_year(2018),
-    "`year` should be a character"
+    "`year` will be converted to a character"
   ) %>%
     expect_error("The year has been entered in the wrong format\\.")
 })
@@ -46,14 +46,14 @@ test_that("Responds correctly to bad inputs", {
     "The year has been entered in the wrong format\\."
   )
 
-  expect_warning(
+  expect_message(
     convert_year_to_fyyear(2018),
-    "`year` should be a character"
+    "`year` will be converted to a character"
   )
 
-  expect_warning(
+  expect_message(
     convert_year_to_fyyear(1819),
-    "`year` should be a character"
+    "`year` will be converted to a character"
   ) %>%
     expect_error("The year has been entered in the wrong format\\.")
 })

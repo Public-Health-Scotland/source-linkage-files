@@ -9,11 +9,11 @@ convert_monthly_rows_to_vars(data, month_num_var, cost_var, beddays_var)
 \arguments{
 \item{data}{a dataframe containing cost and bed day variables}
 
-\item{month_num_var}{a variable containing month number e.g. costmonthnum}
+\item{month_num_var}{a variable containing month number e.g. \code{cost_month_num}}
 
-\item{cost_var}{a variable containing cost information e.g. cost_total_net}
+\item{cost_var}{a variable containing cost information e.g. \code{cost_total_net}}
 
-\item{beddays_var}{a variable containing beddays information e.g. yearstay}
+\item{beddays_var}{a variable containing beddays information e.g. \code{yearstay}}
 }
 \value{
 A dataframe with monthly cost and bed day variables

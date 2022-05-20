@@ -1,9 +1,9 @@
 #' Convert monthly rows to variables
 #'
 #' @param data a dataframe containing cost and bed day variables
-#' @param month_num_var a variable containing month number e.g. costmonthnum
-#' @param cost_var a variable containing cost information e.g. cost_total_net
-#' @param beddays_var a variable containing beddays information e.g. yearstay
+#' @param month_num_var a variable containing month number e.g. `cost_month_num`
+#' @param cost_var a variable containing cost information e.g. `cost_total_net`
+#' @param beddays_var a variable containing beddays information e.g. `yearstay`
 #'
 #' @return A dataframe with monthly cost and bed day variables
 #'
