@@ -64,7 +64,7 @@ GET DATA /TYPE=TXT
       DateofOperation401 A10
       AgeatMidpointofFinancialYear01 F3.0
       ContinuousInpatientStaySMR01incGLS F5.0
-      ContinuousInpatientJourneyMarker01 A5
+      ContinuousInpatientJourneyMarker01 F5.0
       CIJPlannedAdmissionCode01 F1.0
       CIJInpatientDayCaseIdentifierCode01 A2
       CIJTypeofAdmissionCode01 A2

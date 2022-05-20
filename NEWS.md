@@ -1,4 +1,11 @@
-# March 2022 Update - Draft
+# June 2022 Update - Unreleased
+* Fixed a bug where CH costs was not referring to end of year. 
+  * eg. 2018 costs relates to 2017/18
+* The changes to Homelessness described in the March update have been properly implemented.
+* Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
+
+
+# March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.
 * New variable `gender` included in NSU extract.
 * Now using Social Care data up to 2021/22 Q2.

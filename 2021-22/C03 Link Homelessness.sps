@@ -26,7 +26,7 @@ aggregate
     /max_records = max(num_records).
 
  * Assuming it must be <=9.
-Alter Type max_records (F1.0).
+Alter Type max_records (AMIN).
 
  * Ugly hack because SPSS...
  * Take the max_records number and generate two macros using this.

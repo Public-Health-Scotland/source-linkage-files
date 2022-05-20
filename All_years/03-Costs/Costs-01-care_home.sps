@@ -33,7 +33,7 @@ Alter type Calender_Year (F4.0).
 
 * Create Year as FY = YYYY from CCYY.
 String Year (A4).
-Compute year = char.Lpad(Ltrim(String(((Calender_Year - 2000) * 100) + Mod(Calender_Year, 100) + 1, F4.0)), 4, "0").
+Compute year = char.Lpad(Ltrim(String(((Mod(Calender_Year, 100) -1) * 100) + (Calender_Year - 2000), F4.0)), 4, "0").
 
 * Create a flag for Nursing care provision from source of funding.
 Numeric nursing_care_provision (F1.0).
