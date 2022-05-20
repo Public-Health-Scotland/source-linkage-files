@@ -1,4 +1,9 @@
 # June 2022 Update - Unreleased
+
+* Fixed a bug where CH costs was not referring to end of year. 
+  * eg. 2018 costs relates to 2017/18
+* The changes to Homelessness described in the March update have been properly implemented.
+* Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
 * The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
 
 # March 2022 Update - Released 17-Mar-2022

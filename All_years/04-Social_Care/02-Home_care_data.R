@@ -181,11 +181,13 @@ dropped_bad_dates <- replaced_start_dates %>%
     # Need to check this as we are potentialsly introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  tidylog::filter(!end_before_qtr,
-                  !start_after_quarter,
-                  !start_after_end)
+  tidylog::filter(
+    !end_before_qtr,
+    !start_after_quarter,
+    !start_after_end
+  )
 
-fixed_sc_ids <- replaced_start_dates %>%
+fixed_sc_ids <- dropped_bad_dates %>%
   # Fix cases where a CHI has multiple sc_ids
   # Sort and take the latest sc_id
   arrange(sending_location, chi, record_date, hc_service_start_date) %>%
@@ -218,8 +220,14 @@ fixed_reablement <- fixed_sc_ids %>%
 
 fixed_hours <- fixed_reablement %>%
   tidylog::mutate(
-    days_in_quarter = time_length(pmax(qtr_start, hc_service_start_date) %--% pmin(record_date, hc_service_end_date, na.rm = TRUE), "days") + 1,
-    hc_hours_derived = case_when(
+    days_in_quarter = time_length(
+      interval(
+        pmax(qtr_start, hc_service_start_date),
+        pmin(record_date, hc_service_end_date, na.rm = TRUE)
+      ),
+      "days"
+    ) + 1,
+    hc_hours = case_when(
       # For A&B 2020/21, use multistaff (min = 1) * staff hours
       sending_location_name == "Argyll and Bute" &
         str_starts(period, "2020") &
@@ -233,18 +241,26 @@ fixed_hours <- fixed_reablement %>%
     )
   )
 
-pivotted_hours <- fixed_hours %>%
+hc_costs <- read_rds(path("/conf/hscdiip/SLF_Extracts/Costs", "costs_hc_lookup.rds"))
+
+matched_costs <- fixed_hours %>%
+  left_join(hc_costs,
+                     by = c("sending_location_name" = "ca_name",
+                            "financial_year" = "year")) %>%
+  mutate(hc_cost = hc_hours * hourly_cost)
+
+pivotted_hours <- matched_costs %>%
   # Create a copy of the period then pivot the hours on it
   # This creates a new variable per quarter
   # with the hours for that quarter for every record
   mutate(hours_submission_quarter = period) %>%
-  tidylog::pivot_wider(
+  pivot_wider(
     names_from = hours_submission_quarter,
-    values_from = hc_hours_derived,
+    values_from = c(hc_hours, hc_cost),
     values_fn = sum,
     values_fill = 0,
     names_sort = TRUE,
-    names_prefix = "hc_hours_"
+    names_glue = "{.value}_{hours_submission_quarter}"
   ) %>%
   # Add in hour variables for the 2017 quarters we don't have
   mutate(
@@ -253,18 +269,27 @@ pivotted_hours <- fixed_hours %>%
     hc_hours_2017Q3 = NA_real_,
     .before = hc_hours_2017Q4
   ) %>%
-  tidylog::full_join(
+  mutate(
+    hc_cost_2017Q1 = NA_real_,
+    hc_cost_2017Q2 = NA_real_,
+    hc_cost_2017Q3 = NA_real_,
+    .before = hc_cost_2017Q4
+  ) %>%
+  # A full join will only add columns which are 'new'
+  full_join(
+    # Create the columns we don't have as NA
     tibble(
-      hours_submission_quarter = str_sub(latest_validated_period, end = 4) %>%
-        paste0("Q", 1:4),
-      hc_hours_derived = NA_real_
+      # Create columns for the latest year
+      hours_submission_quarter = paste0(max(hc_full_data$financial_year), "Q", 1:4),
+      hc_hours = NA_real_,
+      hc_cost = NA_real_
     ) %>%
+      # Pivot them to the same format as the rest of the data
       pivot_wider(
         names_from = hours_submission_quarter,
-        values_from = hc_hours_derived,
-        names_prefix = "hc_hours_"
-      ),
-    .name_repair = "minimal"
+        values_from = c(hc_hours, hc_cost),
+        names_glue = "{.value}_{hours_submission_quarter}"
+      )
   )
 
 merged_data <- pivotted_hours %>%
@@ -290,6 +315,7 @@ merged_data <- pivotted_hours %>%
     sc_latest_submission = last(period),
     # Sum the (quarterly) hours
     across(starts_with("hc_hours_20"), sum),
+    across(starts_with("hc_cost_20"), sum),
     # Shouldn't matter as these are all the same
     across(c(gender, dob, postcode), first)
   ) %>%
@@ -300,8 +326,10 @@ merged_data <- pivotted_hours %>%
 
 merged_data %>%
   write_rds(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.rds")),
-    compress = "gz"
+    compress = "xz",
+    compression = 9,
+    version = 3
   ) %>%
   write_sav(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.zsav")),
-    compress = TRUE
+    compress = "zsav"
   )

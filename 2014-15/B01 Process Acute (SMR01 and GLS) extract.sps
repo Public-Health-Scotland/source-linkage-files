@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
@@ -64,7 +64,7 @@ GET DATA /TYPE=TXT
       DateofOperation401 A10
       AgeatMidpointofFinancialYear01 F3.0
       ContinuousInpatientStaySMR01incGLS F5.0
-      ContinuousInpatientJourneyMarker01 A5
+      ContinuousInpatientJourneyMarker01 F5.0
       CIJPlannedAdmissionCode01 F1.0
       CIJInpatientDayCaseIdentifierCode01 A2
       CIJTypeofAdmissionCode01 A2
@@ -152,7 +152,7 @@ compute recid = '01B'.
  * We assume that if it starts with a letter it's an English practice and so recode to 99995.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
    Compute gpprac = "99995".
-End if. 
+End if.
 Alter Type GPprac (F5.0).
 
  * Flag GLS records.
@@ -187,9 +187,9 @@ sort cases by uri.
 
 save outfile = !Year_dir + 'acute_temp.zsav'
    /zcompressed.
-  
+
 * Create a file that contains uri, the month number and the net cost and yearstay.
-* Make this look like a 'cross-tab' ready for matching back To the acute_temp file. 
+* Make this look like a 'cross-tab' ready for matching back To the acute_temp file.
 get file = !Year_dir + 'acute_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 
@@ -222,7 +222,7 @@ aggregate outfile = !Year_dir + 'acute_monthly_costs_and_beddays_by_uri.sav'
        Sum(apr_beddays may_beddays jun_beddays jul_beddays aug_beddays sep_beddays oct_beddays nov_beddays dec_beddays jan_beddays feb_beddays mar_beddays).
 
 
-* Match this file back to the main acute file and then create totals adding across the months for each of the costs and yearstay variables.  
+* Match this file back to the main acute file and then create totals adding across the months for each of the costs and yearstay variables.
 * Need To reduce each uri to one row only. All columns will have the same information except for the costs month variable.
 
 match files file = !Year_dir + 'acute_temp.zsav'
@@ -331,7 +331,7 @@ save outfile = !Year_dir + 'acute_for_source-20' + !FY + '.zsav'
     cij_pattype_code
     cij_adm_spec
     cij_dis_spec
-    CIJ_start_date 
+    CIJ_start_date
     CIJ_end_date
     alcohol_adm
     submis_adm
