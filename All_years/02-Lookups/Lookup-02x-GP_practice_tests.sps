@@ -12,19 +12,19 @@ End if.
 
 * Create a flag for counting HB2019.
 If hbpraccode = 'S08000015'     NHS_Ayrshire_and_Arran = 1.
-If hbpraccode = 'S08000016'	 NHS_Borders = 1.
-If hbpraccode = 'S08000017'	 NHS_Dumfries_and_Galloway = 1.
-If hbpraccode = 'S08000019'	 NHS_Forth_Valley = 1.
-If hbpraccode = 'S08000020'	 NHS_Grampian = 1.
-If hbpraccode = 'S08000021'	 NHS_Greater_Glasgow_and_Clyde = 1.
-If hbpraccode = 'S08000022'	 NHS_Highland = 1.
-If hbpraccode = 'S08000023'	 NHS_Lanarkshire = 1.
+If hbpraccode = 'S08000016'  NHS_Borders = 1.
+If hbpraccode = 'S08000017'  NHS_Dumfries_and_Galloway = 1.
+If hbpraccode = 'S08000019'  NHS_Forth_Valley = 1.
+If hbpraccode = 'S08000020'  NHS_Grampian = 1.
+If hbpraccode = 'S08000021'  NHS_Greater_Glasgow_and_Clyde = 1.
+If hbpraccode = 'S08000022'  NHS_Highland = 1.
+If hbpraccode = 'S08000023'  NHS_Lanarkshire = 1.
 If hbpraccode = 'S08000024' NHS_Lothian = 1.
-If hbpraccode = 'S08000025'	 NHS_Orkney = 1.
-If hbpraccode = 'S08000026'	 NHS_Shetland = 1.
-If hbpraccode = 'S08000028'	 NHS_Western_Isles = 1.
+If hbpraccode = 'S08000025'  NHS_Orkney = 1.
+If hbpraccode = 'S08000026'  NHS_Shetland = 1.
+If hbpraccode = 'S08000028'  NHS_Western_Isles = 1.
 If hbpraccode = 'S08000029' NHS_Fife = 1.
-If hbpraccode = 'S08000030'	 NHS_Tayside = 1.
+If hbpraccode = 'S08000030'  NHS_Tayside = 1.
 if hbpraccode = '' hbpraccode_missing = 1.
 
 
@@ -71,20 +71,20 @@ Else.
 End if.
 
 * Create a flag for counting HB2019.
-If hbpraccode = 'S08000015'     NHS_Ayrshire_and_Arran = 1.
-If hbpraccode = 'S08000016'	 NHS_Borders = 1.
-If hbpraccode = 'S08000017'	 NHS_Dumfries_and_Galloway = 1.
-If hbpraccode = 'S08000019'	 NHS_Forth_Valley = 1.
-If hbpraccode = 'S08000020'	 NHS_Grampian = 1.
-If hbpraccode = 'S08000021'	 NHS_Greater_Glasgow_and_Clyde = 1.
-If hbpraccode = 'S08000022'	 NHS_Highland = 1.
-If hbpraccode = 'S08000023'	 NHS_Lanarkshire = 1.
+If hbpraccode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
+If hbpraccode = 'S08000016' NHS_Borders = 1.
+If hbpraccode = 'S08000017' NHS_Dumfries_and_Galloway = 1.
+If hbpraccode = 'S08000019' NHS_Forth_Valley = 1.
+If hbpraccode = 'S08000020' NHS_Grampian = 1.
+If hbpraccode = 'S08000021' NHS_Greater_Glasgow_and_Clyde = 1.
+If hbpraccode = 'S08000022' NHS_Highland = 1.
+If hbpraccode = 'S08000023' NHS_Lanarkshire = 1.
 If hbpraccode = 'S08000024' NHS_Lothian = 1.
-If hbpraccode = 'S08000025'	 NHS_Orkney = 1.
-If hbpraccode = 'S08000026'	 NHS_Shetland = 1.
-If hbpraccode = 'S08000028'	 NHS_Western_Isles = 1.
+If hbpraccode = 'S08000025' NHS_Orkney = 1.
+If hbpraccode = 'S08000026' NHS_Shetland = 1.
+If hbpraccode = 'S08000028' NHS_Western_Isles = 1.
 If hbpraccode = 'S08000029' NHS_Fife = 1.
-If hbpraccode = 'S08000030'	 NHS_Tayside = 1.
+If hbpraccode = 'S08000030' NHS_Tayside = 1.
 if hbpraccode = '' hbpraccode_missing = 1.
 
 
