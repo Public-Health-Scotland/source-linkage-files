@@ -5,6 +5,7 @@
   * eg. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
 * Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
+* We now match on clusters from the past 5 years, rather than just the latest (quarterly) release. This means that more GP practices will be assigned to a cluster (even if the code has been retired at the time of the SLF refresh).
 
 
 # March 2022 Update - Released 17-Mar-2022
