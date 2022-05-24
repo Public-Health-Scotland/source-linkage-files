@@ -1,3 +1,16 @@
 url: https://public-health-scotland.github.io/source-linkage-files
 template:
   bootstrap: 5
+
+reference:
+  - title: Connection to PHS database
+    desc: Connection to PHS database
+  - contents:
+    - phs_db_connection
+
+  - title: Create
+    desc: Functions to create variables, flags, costs, beddays
+  - contents:
+    - starts_with("create_")
+    - calculate_measures
+    - starts_with("fix_")
