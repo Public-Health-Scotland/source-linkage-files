@@ -86,7 +86,8 @@ mh_extract <- get_boxi_extract_path(
       "NHS Hospital Flag (04)" = col_factor(levels = c("Y", "N")),
       "Community Hospital Flag (04)" = col_factor(levels = c("Y", "N")),
       "Unique Record Identifier" = col_integer()
-  )) %>%
+    )
+  ) %>%
   # rename variables
   rename(
     costsfy = "Costs Financial Year (04)",
@@ -133,7 +134,7 @@ mh_extract <- get_boxi_extract_path(
     cij_pattype_code = "CIJ Planned Admission Code (04)",
     cij_inpatient = "CIJ Inpatient Day Case Identifier Code (04)",
     cij_admtype = "CIJ Type of Admission Code (04)",
-    cij_adm_spec= "CIJ Admission Specialty Code (04)",
+    cij_adm_spec = "CIJ Admission Specialty Code (04)",
     cij_dis_spec = "CIJ Discharge Specialty Code (04)",
     cij_start_date = "CIJ Start Date (04)",
     cij_end_date = "CIJ End Date (04)",
@@ -154,14 +155,18 @@ mh_extract <- get_boxi_extract_path(
 
 mh_clean <- mh_extract %>%
   # create year, recid, ipdc variables
-  mutate(year = year,
-         recid = "04B",
-         ipdc = "I") %>%
+  mutate(
+    year = year,
+    recid = "04B",
+    ipdc = "I"
+  ) %>%
   # deal with dummy / english variables
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # cij_ipdc
-  mutate(cij_ipdc = if_else(cij_inpatient == "MH", "I", "NA"),
-         cij_ipdc = na_if(cij_ipdc, "NA")) %>%
+  mutate(
+    cij_ipdc = if_else(cij_inpatient == "MH", "I", "NA"),
+    cij_ipdc = na_if(cij_ipdc, "NA")
+  ) %>%
   # cij_admtype recode unknown to 99
   mutate(cij_admtype = if_else(cij_admtype == "Unknown", "99", cij_admtype))
 
@@ -188,7 +193,7 @@ aggregate_costs_beddays <- mh_costs %>%
 
 
 # one row per uri minus costs and beddays
-aggregate <- mh_costs %>%#
+aggregate <- mh_costs %>% #
   select(-c(ends_with("_costs"), ends_with("_beddays"))) %>%
   group_by(uri) %>%
   summarise_all(first)
@@ -207,20 +212,24 @@ stay_variables <- mh_data %>%
     # yearstay
     yearstay = rowSums(across(ends_with("_beddays"))),
     # cost total net
-    cost_total_net = rowSums(across(ends_with("_costs")))) %>%
-    # total length of stay
+    cost_total_net = rowSums(across(ends_with("_costs")))
+  ) %>%
+  # total length of stay
   mutate(
     stay = as.period(interval(start_fy(year), record_keydate1))$day +
-           yearstay +
-           as.period(interval(end_fy(year), record_keydate2))$day)
+      yearstay +
+      as.period(interval(end_fy(year), record_keydate2))$day
+  )
 
 
 # Outfile  ---------------------------------------
 
 outfile <- stay_variables %>%
   # numeric record_keydate
-  mutate(record_keydate1 = lubridate::month(record_keydate1) + 100 * lubridate::month(record_keydate1) + 10000 * lubridate::year(record_keydate1),
-         record_keydate2 = lubridate::month(record_keydate2) + 100 * lubridate::month(record_keydate2) + 10000 * lubridate::year(record_keydate2)) %>%
+  mutate(
+    record_keydate1 = lubridate::month(record_keydate1) + 100 * lubridate::month(record_keydate1) + 10000 * lubridate::year(record_keydate1),
+    record_keydate2 = lubridate::month(record_keydate2) + 100 * lubridate::month(record_keydate2) + 10000 * lubridate::year(record_keydate2)
+  ) %>%
   arrange(chi, record_keydate1) %>%
   select(
     year,
