@@ -362,6 +362,9 @@ End if.
 ********* Match in GP practice and cluster info. **********************************.
 sort cases by gpprac.
 
+* Keep existing values in case we can't match the gpprac code.
+Rename Variables hbpraccode = hbpraccode_old.
+
 * Find out which GPprac codes are good.
 * We don't want any of the other variables at this point.
 match files file = *
@@ -427,9 +430,6 @@ add files file = *
     /file = !Year_dir + "temp-no-gpprac-changes-" + !LatestUpdate + ".zsav"
     /Drop GPPracMatch all_match potentially_fixable changed_gpprac
     /By gpprac.
-
-* Keep existing values in case we can't match the gpprac code.
-Rename Variables hbpraccode = hbpraccode_old.
 
  * Match on hbpraccode and cluster from the lookup.
 match files file = *
