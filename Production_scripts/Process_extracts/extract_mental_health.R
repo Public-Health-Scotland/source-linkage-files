@@ -168,46 +168,9 @@ mh_clean <- mh_extract %>%
     cij_ipdc = na_if(cij_ipdc, "NA")
   ) %>%
   # cij_admtype recode unknown to 99
-  mutate(cij_admtype = if_else(cij_admtype == "Unknown", "99", cij_admtype))
-
-
-
-# Costs  ---------------------------------------
-
-mh_costs <- mh_clean %>%
-  # beddays
-  create_monthly_beddays(year, record_keydate1, record_keydate2) %>%
-  # monthly costs
-  create_monthly_costs(yearstay, cost_total_net)
-
-
-# Aggregate  ---------------------------------------
-
-# one row per uri
-aggregate_costs_beddays <- mh_costs %>%
-  group_by(uri) %>%
-  summarise(
-    across(ends_with("_costs"), ~ sum(.x)),
-    across(ends_with("_beddays"), ~ sum(.x))
-  )
-
-
-# one row per uri minus costs and beddays
-aggregate <- mh_costs %>% #
-  select(-c(ends_with("_costs"), ends_with("_beddays"))) %>%
-  group_by(uri) %>%
-  summarise_all(first)
-
-
-# join summarise together
-mh_data <- aggregate %>%
-  left_join(aggregate_costs_beddays, by = "uri")
-
-
-
-# Stay Variables  ---------------------------------------
-
-stay_variables <- mh_data %>%
+  mutate(cij_admtype = if_else(cij_admtype == "Unknown", "99", cij_admtype)) %>%
+  # monthly beddays and costs
+  convert_monthly_rows_to_vars(costmonthnum, cost_total_net, yearstay) %>%
   mutate(
     # yearstay
     yearstay = rowSums(across(ends_with("_beddays"))),
@@ -215,16 +178,12 @@ stay_variables <- mh_data %>%
     cost_total_net = rowSums(across(ends_with("_costs")))
   ) %>%
   # total length of stay
-  mutate(
-    stay = as.period(interval(start_fy(year), record_keydate1))$day +
-      yearstay +
-      as.period(interval(end_fy(year), record_keydate2))$day
-  )
+  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
 
 
 # Outfile  ---------------------------------------
 
-outfile <- stay_variables %>%
+outfile <- mh_clean %>%
   # numeric record_keydate
   mutate(
     record_keydate1 = lubridate::month(record_keydate1) + 100 * lubridate::month(record_keydate1) + 10000 * lubridate::year(record_keydate1),
