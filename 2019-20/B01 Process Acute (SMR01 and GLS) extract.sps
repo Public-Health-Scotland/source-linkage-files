@@ -239,18 +239,14 @@ Select if Keep = 1.
 compute yearstay = apr_beddays + may_beddays + jun_beddays + jul_beddays + aug_beddays + sep_beddays + oct_beddays + nov_beddays + dec_beddays + jan_beddays + feb_beddays + mar_beddays.
 compute cost_total_net = apr_cost + may_cost + jun_cost + jul_cost + aug_cost + sep_cost + oct_cost + nov_cost + dec_cost + jan_cost + feb_cost + mar_cost.
 
- * Create the SMRType.
- * 310 is the line number for GLS, however, not all records with this line number are tagged as GLS records.
-string SMRType(a10).
-Do if (recid EQ '01B').
-   Do if (lineno NE 330).
-      If ipdc EQ 'I' SMRType = 'Acute-IP'.
-      If ipdc EQ 'D' SMRType = 'Acute-DC'.
-   Else If (lineno EQ 330 and ipdc EQ 'I').
-      Compute SMRType = 'GLS-IP'.
-   End If.
-Else If (recid EQ 'GLS').
-   Compute SMRType = 'GLS-IP'.
+ * Create the smrtype.
+String smrtype (A10).
+Do if (recid = "01B").
+      If ipdc = "I" smrtype = "Acute-IP".
+      If ipdc = "D" smrtype = "Acute-DC".
+Else If (recid = "GLS").
+    * There are no day cases for GLS.
+   Compute smrtype = "GLS-IP".
 End If.
 
 * Calculate the total length of stay (for the entire episode, not just within the financial year).
