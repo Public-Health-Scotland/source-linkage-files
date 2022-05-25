@@ -3,7 +3,9 @@
 * Fixed a bug where CH costs was not referring to end of year. 
   * eg. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
-* Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
+* `cij_marker` is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
+  * Check code of the form `cij_marker = "x"`. `x` now needs to be a numeric.
+  * Check code of the form `cij_maker = lag(cij_marker)`. If the previous `cij_marker` is missing, the expression will fail, previously it would have compared to an empty string.
 * We now match on clusters from the past 5 years, rather than just the latest (quarterly) release. This means that more GP practices will be assigned to a cluster (even if the code has been retired at the time of the SLF refresh).
 * The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
 * Fixed a bug where we were overcounting preventable beddays in the individual file.
