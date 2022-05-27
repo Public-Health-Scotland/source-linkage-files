@@ -197,7 +197,7 @@ Numeric PPA (F1.0).
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
     * First record in CIJ.
-    Do if (chi NE lag(chi) or (chi = lag(chi) and cij_marker NE lag(cij_marker))).
+    Do if (chi NE lag(chi) or (chi = lag(chi) and ((cij_marker NE lag(cij_marker)) or (Not(sysmis(cij_marker)) and sysmis(lag(cij_marker)))))).
         * Non-elective original admission.
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.

@@ -3,10 +3,19 @@
 * Fixed a bug where CH costs was not referring to end of year. 
   * eg. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
-* Cij_marker is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
 * We now use [`{haven}`](https://haven.tidyverse.org/news/index.html) to compress the SPSS files which compresses them better than SPSS does 🤷‍♂️
 * Fixed a bug where we were overcounting preventable beddays in the individual file.
   * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
+* `cij_marker` is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
+  * Check code of the form `cij_marker = "x"`. `x` now needs to be a numeric.
+  * Check code of the form `cij_maker = lag(cij_marker)`. If the previous `cij_marker` is missing, the expression will fail, previously it would have compared to an empty string.
+* We now match on clusters from the past 5 years, rather than just the latest (quarterly) release. This means that more GP practices will be assigned to a cluster (even if the code has been retired at the time of the SLF refresh).
+* The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
+* Fixed a bug where we were overcounting preventable beddays in the individual file.
+  * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
+* We were correcting some costs for FV and A&A (see previous update). `cost_total_net` was being correctly updated, however the monthly cost variables for Forth Valley were not being changed, this is now fixed.
+* Fixed a bug where people with no Care Home episodes would have 1 `ch_cis_episodes` in the individual file.
+* Added the `keep_population` variable to 2014/15 individual file, this was missed when we added the NSU cohort.
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.

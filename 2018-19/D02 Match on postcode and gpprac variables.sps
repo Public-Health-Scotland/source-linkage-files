@@ -16,7 +16,7 @@ sort cases by gpprac.
 
 match files file = *
     /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
-    /Drop PC7 PC8
+    /Drop PC7 PC8 practice_name open_date close_date 
     /by gpprac.
 
  * Set some known dummy practice codes to consistent Board codes.
