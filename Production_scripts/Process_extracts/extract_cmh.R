@@ -90,12 +90,7 @@ cmh_clean <- cmh_extract %>%
   # record key date 2
   mutate(record_keydate2 = record_keydate1) %>%
   # create blank diag 6
-  mutate(diag6 = NA) %>%
-  # numeric keydate
-  mutate(
-    record_keydate1 = lubridate::month(record_keydate1) + 100 * lubridate::month(record_keydate1) + 10000 * lubridate::year(record_keydate1),
-    record_keydate2 = lubridate::month(record_keydate2) + 100 * lubridate::month(record_keydate2) + 10000 * lubridate::year(record_keydate2)
-  )
+  mutate(diag6 = NA) 
 
 
 
