@@ -97,9 +97,6 @@ deaths_extract <- get_boxi_extract_path(
 deaths_clean <- deaths_extract %>%
   # rename dod
   rename(record_keydate1 = "dod") %>%
-  # record key date 1
-  mutate(record_keydate1 = lubridate::month(record_keydate1) + 100 * lubridate::month(record_keydate1) + 10000 * lubridate::year(record_keydate1)) %>%
-  # record key date 2
   mutate(record_keydate2 = record_keydate1) %>%
   # create recid and year variables
   mutate(
