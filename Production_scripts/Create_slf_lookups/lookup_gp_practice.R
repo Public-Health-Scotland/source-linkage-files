@@ -48,8 +48,7 @@ opendata <-
 
 
 # gp lookup
-gp <- fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav") %>%
-  haven::read_sav() %>%
+haven::read_sav(fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav")) %>%
   # select only praccode and postcode
   select(
     praccode,
