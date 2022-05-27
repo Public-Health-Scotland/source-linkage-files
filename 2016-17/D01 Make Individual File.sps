@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -95,6 +95,8 @@ sort cases by CHI ch_chi_cis.
 add files file = *
     /by  CHI ch_chi_cis
     /first = first_ch_ep.
+
+If sysmis(ch_chi_cis) first_ch_ep = 0.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
