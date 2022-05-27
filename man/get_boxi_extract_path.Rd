@@ -6,7 +6,7 @@
 \usage{
 get_boxi_extract_path(
   year,
-  type = c("Acute", "Mental", "Maternity", "Outpatient", "AE", "AE_CUP", "DN", "GPOoH",
+  type = c("Acute", "MH", "Maternity", "Outpatient", "AE", "AE_CUP", "DN", "GPOoH",
     "Deaths", "CMH", "Homelessness")
 )
 }
