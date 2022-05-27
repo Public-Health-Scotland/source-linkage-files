@@ -11,6 +11,8 @@
 * Fixed a bug where we were overcounting preventable beddays in the individual file.
   * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
 * We were correcting some costs for FV and A&A (see previous update). `cost_total_net` was being correctly updated, however the monthly cost variables for Forth Valley were not being changed, this is now fixed.
+* Fixed a bug where people with no Care Home episodes would have 1 `ch_cis_episodes` in the individual file.
+* Added the `keep_population` variable to 2014/15 individual file, this was missed when we added the NSU cohort.
 
 
 # March 2022 Update - Released 17-Mar-2022
