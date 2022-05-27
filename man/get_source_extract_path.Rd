@@ -8,7 +8,11 @@ get_source_extract_path(
   year,
   type = c("Acute", "AE", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH", "HC",
     "Homelessness", "Maternity", "MH", "Outpatients", "PIS"),
+<<<<<<< refs/remotes/origin/main-R
   ...
+=======
+  ext = c("zsav", "rds")
+>>>>>>> # 96 Mental Health Extract (#238)
 )
 }
 \arguments{
