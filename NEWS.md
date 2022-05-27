@@ -10,6 +10,7 @@
 * The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
 * Fixed a bug where we were overcounting preventable beddays in the individual file.
   * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
+* We were correcting some costs for FV and A&A (see previous update). `cost_total_net` was being correctly updated, however the monthly cost variables for Forth Valley were not being changed, this is now fixed.
 
 
 # March 2022 Update - Released 17-Mar-2022
