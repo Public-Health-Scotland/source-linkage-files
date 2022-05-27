@@ -102,7 +102,6 @@ cmh_clean <- cmh_extract %>%
 # Outfile --------------------------------------------
 
 outfile <- cmh_clean %>%
-  arrange(chi, record_keydate1, keyTime1) %>%
   select(
     recid,
     record_keydate1,
