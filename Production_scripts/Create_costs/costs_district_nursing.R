@@ -253,8 +253,8 @@ outfile <-
   )
 
 outfile %>%
-# .zsav
-write_sav(get_dn_costs_path(ext = "zsav", check_mode = "write"))
+  # .zsav
+  write_sav(get_dn_costs_path(ext = "zsav", check_mode = "write"))
 # .rds file
 write_rds(get_dn_costs_path(check_mode = "write"))
 
