@@ -244,6 +244,12 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/start_fy.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_rds.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_sav.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_tests_xlsx.html</loc>
   </url>
 </urlset>
