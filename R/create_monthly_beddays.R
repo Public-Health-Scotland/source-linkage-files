@@ -5,15 +5,14 @@
 #' @param year The financial year in '1718' format.
 #' @param admission_date The admission/start date variable.
 #' @param discharge_date The admission/start date variable
-#' @param include_costs (default `FALSE`) - Select true for calculating monthly costs
 #' @param count_last (default `TRUE`) - Should the last day be counted,
 #' instead of the first?
 #'
-#' @return The data with additional variables `apr_beddays` to `mar_beddays`
+#' @return a [tibble][tibble::tibble-package] with additional variables `apr_beddays` to `mar_beddays`
 #' that count the beddays which occurred in the month.
 #'
 #' @export
-create_monthly_beddays <- function(data, year, admission_date, discharge_date, include_costs = FALSE, count_last = TRUE) {
+create_monthly_beddays <- function(data, year, admission_date, discharge_date, count_last = TRUE) {
 
   # Create a 'stay interval' from the episode dates
   data <- data %>%
@@ -59,15 +58,6 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, i
   # Join the beddays back to the data
   data <- dplyr::bind_cols(data, beddays) %>%
     dplyr::select(-.data$stay_interval)
-
-  # Work out costs for each month if applicable
-  if (include_costs) {
-    costs <- beddays %>%
-      dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
-
-    data <- dplyr::bind_cols(data, costs) %>%
-      dplyr::mutate(dplyr::across(dplyr::ends_with("_cost"), ~ dplyr::if_else(.x != 0, .x / yearstay * cost_total_net, 0)))
-  }
 
   return(data)
 }

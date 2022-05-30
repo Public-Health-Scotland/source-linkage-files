@@ -11,7 +11,6 @@
 ## packages ##
 library(dplyr)
 library(tidyr)
-library(haven)
 library(phsopendata)
 library(janitor)
 library(fs)
@@ -44,14 +43,12 @@ opendata <-
       get_lookups_dir(),
       paste0("practice_details_", latest_update),
       ext = "zsav"
-    ),
-    compress = TRUE
+    )
   )
 
 
 # gp lookup
-gp <-
-  haven::read_sav(fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav")) %>%
+haven::read_sav(fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav")) %>%
   # select only praccode and postcode
   select(
     praccode,
@@ -126,8 +123,8 @@ outfile <-
   # rename pc8 back - saved in output as pc8
   rename(pc8 = "postcode")
 
-# .zsav
-haven::write_sav(outfile, get_slf_gpprac_path(), compress = TRUE)
-
-# .rds file
-readr::write_rds(outfile, get_slf_gpprac_path(), compress = "gz")
+outfile %>%
+  # .zsav
+  write_sav(get_slf_gpprac_path()) %>%
+  # .rds file
+  write_rds(get_slf_gpprac_path())
