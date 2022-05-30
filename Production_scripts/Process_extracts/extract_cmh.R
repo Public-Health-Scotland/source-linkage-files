@@ -90,7 +90,7 @@ cmh_clean <- cmh_extract %>%
   # record key date 2
   mutate(record_keydate2 = record_keydate1) %>%
   # create blank diag 6
-  mutate(diag6 = NA) 
+  mutate(diag6 = NA)
 
 
 
