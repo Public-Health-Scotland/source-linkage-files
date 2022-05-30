@@ -12,7 +12,7 @@
 get_sc_ch_episodes_path <- function(update = latest_update(), ...) {
   sc_ch_episodes_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Social_care"),
-    file_name = glue::glue("all_ch_episodes{update}.zsav"),
+    file_name = glue::glue("all_ch_episodes{update}.rds"),
     ...
   )
 

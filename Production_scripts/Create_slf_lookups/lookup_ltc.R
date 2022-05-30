@@ -21,7 +21,6 @@ library(createslf)
 # Financial year
 year <- "1718"
 
-
 # Read data------------------------------------------------
 ltc_file <- read_csv(
   file = get_it_ltc_path(),
@@ -74,7 +73,6 @@ ltc_file <- read_csv(
     digestive_date = `OTH_DIS_DIG_SYS_DIAG_DATE`
   )
 
-
 chi_check <- ltc_file %>%
   pull(chi) %>%
   phsmethods::chi_check()
@@ -82,7 +80,6 @@ chi_check <- ltc_file %>%
 if (!all(chi_check %in% c("Valid CHI", "Missing (Blank)", "Missing (NA)"))) {
   stop("There were bad CHI numbers in the LTC file")
 }
-
 
 
 # Create LTC flags 1/0------------------------------------

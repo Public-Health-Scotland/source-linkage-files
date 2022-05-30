@@ -4,22 +4,20 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Open Data, GP Practice Details, Postcode Lookup
+# Description - Build the GPprac Lookup.
+#               Pulls from the Open Data Platform and lookups.
 #####################################################
 
-## packages ##
+# Load packages
 library(dplyr)
 library(tidyr)
 library(phsopendata)
 library(janitor)
 library(fs)
+library(createslf)
 
-## get data ##
-
-# use `00_get_gp_cluster_data.R`- draws from open data
-# latest update date
-latest_update <- latest_update()
+# Read in data---------------------------------------
 
 # Retrieve the latest resource from the dataset
 opendata <-
@@ -31,46 +29,29 @@ opendata <-
   select(
     gpprac = practice_code,
     practice_name = gp_practice_name,
-    postcode,
+    gpprac_postcode = postcode,
     cluster = gp_cluster
   ) %>%
   # Sort for SPSS matching
   arrange(gpprac) %>%
-  # Write as an SPSS file
-  write_sav(
-    path(
-      # lookup_dir,
-      get_lookups_dir(),
-      paste0("practice_details_", latest_update),
-      ext = "zsav"
-    )
-  )
+  # Write out as an SPSS file
+  write_sav(get_practice_details_path(check_mode = "write")) %>%
+  # rds as well
+  write_rds(get_practice_details_path(check_mode = "write"))
 
 
+# Read Lookup files ---------------------------------------
 # gp lookup
-haven::read_sav(fs::path(get_lookups_dir(), "National Reference Files", "gpprac.sav")) %>%
+gpprac_file <-
+  haven::read_sav(read_gpprac_file("gpprac.sav")) %>%
   # select only praccode and postcode
   select(
-    praccode,
-    postcode
-  ) %>%
-  # sort by praccode
-  arrange(praccode) %>%
-  # rename praccode to allow join
-  rename(gpprac = "praccode")
-
-## match cluster information onto the practice reference list ##
-data <-
-  opendata %>%
-  # join cluster and gp data
-  left_join(gp, by = c("gpprac", "postcode")) %>%
-  # sort by postcode
-  arrange(postcode)
-
-## match on geography info ##
+    gpprac = praccode,
+    gpprac_postcode = postcode
+  )
 
 # postcode lookup
-pc <- read_spd_file() %>%
+pc_lookup <- readr::read_rds(read_spd_file()) %>%
   select(
     pc7,
     pc8,
@@ -81,50 +62,46 @@ pc <- read_spd_file() %>%
   # rename pc8
   rename(postcode = "pc8")
 
-data <-
-  data %>%
-  # join data and postcode data
-  left_join(pc, by = "postcode") %>%
+
+# Data Cleaning ---------------------------------------
+
+gpprac_slf_lookup <-
+  ## match cluster information onto the practice reference list ##
+  left_join(opendata, gpprac_file, by = c("gpprac", "gpprac_postcode")) %>%
+  # match on geography info - postcode
+  left_join(pc_lookup, by = c("gpprac_postcode" = "postcode")) %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
+  # order variables
   select(
     gpprac,
     pc7,
-    postcode,
+    gpprac_postcode,
     cluster,
     hbpraccode,
     hscp2018,
     ca2018
-  )
-
-## council area code ##
-data <-
-  data %>%
-  mutate(lca = convert_ca_to_lca(ca2018))
-
-
-## dummy postcodes ##
-# set some known dummy practice codes to consistent Board codes
-data <-
-  data %>%
+  ) %>%
+  # convert ca to lca code
+  mutate(lca = convert_ca_to_lca(ca2018)) %>%
+  # set some known dummy practice codes to consistent Board codes
   mutate(
-    hbpraccode = case_when(
-      gpprac %in% c(99942, 99957, 99961, 99981, 99999) ~ "S08200003",
-      gpprac == 99995 ~ "S08200001",
-      TRUE ~ hbpraccode
-    )
-  )
-
-## save outfile ##
-outfile <-
-  data %>%
+    hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
+    hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
+  ) %>%
   # sort by gpprac
   arrange(gpprac) %>%
   # rename pc8 back - saved in output as pc8
-  rename(pc8 = "postcode")
+  rename(pc8 = "gpprac_postcode")
 
-outfile %>%
+
+## save outfile ---------------------------------------
+
+gpprac_slf_lookup %>%
   # .zsav
-  write_sav(get_slf_gpprac_path()) %>%
+  write_sav(get_slf_gpprac_path(ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  write_rds(get_slf_gpprac_path())
+  write_rds(get_slf_gpprac_path(check_mode = "write"))
+
+
+## End of Script ---------------------------------------
