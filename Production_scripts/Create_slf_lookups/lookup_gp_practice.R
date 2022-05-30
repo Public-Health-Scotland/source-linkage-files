@@ -33,8 +33,10 @@ opendata <-
   ) %>%
   # Sort for SPSS matching
   arrange(gpprac) %>%
-  # Write as an SPSS file
-  write_sav(get_practice_details_path(check_mode = "write"))
+  # Write out as an SPSS file
+  write_sav(get_practice_details_path(check_mode = "write")) %>%
+  # rds as well
+  write_rds(get_practice_details_path(check_mode = "write"))
 
 
 # Read Lookup files ---------------------------------------
