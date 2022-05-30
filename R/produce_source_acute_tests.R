@@ -1,11 +1,11 @@
 #' Produce the Source Extract tests
 #'
 #' @description Produce a set of tests which can be used by most
-#' of the extracts. 
+#' of the extracts.
 #' This will produce counts of various demographics
 #' using [create_demog_test_flags()] counts of episodes for every `hbtreatcode`
 #' using [create_hb_test_flags()], a total cost for each `hbtreatcode` using
-#' [create_hb_cost_test_flags()]. 
+#' [create_hb_cost_test_flags()].
 #' It will also produce various summary statistics for bedday, cost and
 #' episode date variables.
 #'
