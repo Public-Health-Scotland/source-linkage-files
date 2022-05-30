@@ -1,7 +1,7 @@
 #' Get Source Extract path
 #'
 #' @param year Year of extract
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
+#' @param ... additional arguments passed to [get_file_path()]
 #' @param type Name of clean source extract
 #'
 #' @return Path to clean source extract containing data for each dataset
