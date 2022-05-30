@@ -5,7 +5,7 @@
 #' defaults to \code{\link{it_extract_ref}}
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The path to the LTC extract as an \code{\link[fs]{path}}
+#' @return The path to the LTC extract as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
@@ -25,7 +25,7 @@ get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
 #' defaults to \code{\link{it_extract_ref}}
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The path to the IT Deaths extract as an \code{\link[fs]{path}}
+#' @return The path to the IT Deaths extract as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
@@ -46,7 +46,7 @@ get_it_deaths_path <-
 #' defaults to \code{\link{it_extract_ref}}
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The path to the PIS extract as an \code{\link[fs]{path}}
+#' @return The path to the PIS extract as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.

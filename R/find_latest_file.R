@@ -2,16 +2,16 @@
 #'
 #' @description
 #' This will return the latest created file matching
-#' the criteria. It uses \code{\link[fs]{dir_info}} to
+#' the criteria. It uses [fs::dir_info()] to
 #' find the files then picks the one with the latest
 #' \code{birthtime}
 #'
 #' @param dir The directory to look on
-#' @param ... additional arguments passed to \code{\link[fs]{dir_info}}
+#' @param ... additional arguments passed to [fs::dir_info()]
 #' @param recurse Should the function search recursively
 #' through subfolders? The default `TRUE` is to search subfolders.
 #'
-#' @return the \code{\link[fs]{path}} to the file
+#' @return the [fs::path()] to the file
 #' @export
 #'
 #' @examples

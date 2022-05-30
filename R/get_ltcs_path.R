@@ -3,7 +3,7 @@
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #' @param year financial year e.g. "1920"
 #'
-#' @return The path to the costs lookup as an \code{\link[fs]{path}}
+#' @return The path to the costs lookup as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.

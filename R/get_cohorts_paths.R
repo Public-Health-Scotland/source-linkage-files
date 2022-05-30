@@ -5,7 +5,7 @@
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
 #' @return The path to the Demographics Cohort lookup
-#' as a \code{\link[fs]{path}}
+#' as a [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
@@ -26,7 +26,7 @@ get_demog_cohorts_path <- function(year, ...) {
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
 #' @return The path to the Service Use Cohort lookup
-#' as a \code{\link[fs]{path}}
+#' as a [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.

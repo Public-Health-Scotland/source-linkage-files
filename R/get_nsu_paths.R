@@ -3,7 +3,7 @@
 #' @param year Year of extract
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The path to the NSU file as an \code{\link[fs]{path}}
+#' @return The path to the NSU file as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.

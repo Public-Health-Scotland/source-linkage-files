@@ -5,7 +5,7 @@
 #' defaults to \code{\link{dd_period}}
 #'
 #' @return The path to the latest Delayed Discharges file
-#' as a \code{\link[fs]{path}}
+#' as a [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.

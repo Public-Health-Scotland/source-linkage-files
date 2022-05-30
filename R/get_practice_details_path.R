@@ -3,7 +3,7 @@
 #' @param update the update month (defaults to use \code{\link{latest_update}})
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
-#' @return The path to the Practice Details file as an \code{\link[fs]{path}}
+#' @return The path to the Practice Details file as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
