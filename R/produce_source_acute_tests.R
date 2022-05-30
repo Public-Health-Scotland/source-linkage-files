@@ -1,4 +1,13 @@
-#' Produce the Acute tests
+#' Produce the Source Extract tests
+#'
+#' @description Produce a set of tests which can be used by most
+#' of the extracts.
+#' This will produce counts of various demographics
+#' using [create_demog_test_flags()] counts of episodes for every `hbtreatcode`
+#' using [create_hb_test_flags()], a total cost for each `hbtreatcode` using
+#' [create_hb_cost_test_flags()].
+#' It will also produce various summary statistics for bedday, cost and
+#' episode date variables.
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from \code{\link{get_source_extract_path}})
@@ -11,7 +20,7 @@
 #' @seealso \code{\link{create_hb_test_flags}},
 #' \code{\link{create_hscp_test_flags}} and \code{\link{create_hb_cost_test_flags}}
 #' for creating test flags
-produce_source_acute_tests <- function(data) {
+produce_source_extract_tests <- function(data) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
