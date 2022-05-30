@@ -27,7 +27,6 @@ get_source_extract_path <- function(year,
                                     ),
                                     ...) {
   type <- match.arg(type)
-  ext <- match.arg(ext)
 
   year_dir <- fs::path(
     "/conf",
