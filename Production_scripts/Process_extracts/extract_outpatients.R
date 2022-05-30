@@ -11,8 +11,8 @@
 # Load packages
 library(dplyr)
 library(tidyr)
-library(createslf)
 library(readr)
+library(createslf)
 
 
 # Read in data---------------------------------------
@@ -173,11 +173,8 @@ outfile <-
 
 # Save as zsav file
 outfile %>%
-  haven::write_sav(get_source_extract_path(year, "Outpatient", ext = "zsav", check_mode = "write"), compress = TRUE)
-
-# Save as rds file
-outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Outpatients", check_mode = "write"), compress = "gz")
-
+  write_sav(get_source_extract_path(year, "Outpatient", ext = "zsav", check_mode = "write")) %>%
+  # Save as rds file
+  write_rds(get_source_extract_path(year, "Outpatients", check_mode = "write"))
 
 # End of Script #

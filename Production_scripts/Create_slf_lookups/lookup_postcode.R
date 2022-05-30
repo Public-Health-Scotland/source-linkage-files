@@ -11,7 +11,6 @@
 # Packages
 library(dplyr)
 library(tidyr)
-library(haven)
 library(createslf)
 
 
@@ -89,8 +88,8 @@ outfile <-
 
 # Save out ----------------------------------------------------------------
 
-# .zsav
-haven::write_sav(outfile, get_slf_postcode_path(ext = "zsav", check_mode = "write"), compress = TRUE)
-
-# .rds file
-readr::write_rds(outfile, get_slf_postcode_path(check_mode = "write"), compress = "gz")
+outfile %>%
+  # .zsav
+  write_sav(get_slf_postcode_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_slf_postcode_path(check_mode = "write"))

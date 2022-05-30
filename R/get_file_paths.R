@@ -40,7 +40,7 @@ get_file_path <-
     if (!fs::file_exists(file_path)) {
       if (is.null(create) && check_mode == "write" | !is.null(create) && create == TRUE) {
         # The file doesn't exist but we do want to create it
-        fs::file_create(file_path, mode = "u=rw,g=rw")
+        fs::file_create(file_path)
         rlang::inform(
           message = glue::glue(
             "The file {fs::path_file(file_path)} did not exist in {directory}, it has now been created."

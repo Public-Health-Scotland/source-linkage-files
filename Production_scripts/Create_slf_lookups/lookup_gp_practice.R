@@ -12,7 +12,6 @@
 # Load packages
 library(dplyr)
 library(tidyr)
-library(haven)
 library(phsopendata)
 library(janitor)
 library(fs)
@@ -35,13 +34,7 @@ opendata <-
   # Sort for SPSS matching
   arrange(gpprac) %>%
   # Write as an SPSS file
-  write_sav(
-    path(
-      # lookup_dir,
-      get_practice_details_path()
-    ),
-    compress = TRUE
-  )
+  write_sav(get_practice_details_path(check_mode = "write"))
 
 
 # Read Lookup files ---------------------------------------
@@ -73,10 +66,9 @@ pc_lookup <- readr::read_rds(read_spd_file()) %>%
 
 # Data Cleaning ---------------------------------------
 
-data <-
-  opendata %>%
+gpprac_slf_lookup <-
   ## match cluster information onto the practice reference list ##
-  left_join(gpprac_file, by = c("gpprac", "postcode")) %>%
+  left_join(opendata, gpprac_file, by = c("gpprac", "postcode")) %>%
   # sort by postcode
   arrange(postcode) %>%
   # match on geography info - postcode
@@ -99,21 +91,20 @@ data <-
   mutate(
     hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
     hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
-  )
-
-
-## save outfile ---------------------------------------
-outfile <-
-  data %>%
+  ) %>%
   # sort by gpprac
   arrange(gpprac) %>%
   # rename pc8 back - saved in output as pc8
   rename(pc8 = "postcode")
 
-# .zsav
-haven::write_sav(outfile, get_slf_gpprac_path(ext = "zsav", check_mode = "write"), compress = TRUE)
 
-# .rds file
-readr::write_rds(outfile, get_slf_gpprac_path(check_mode = "write"), compress = "gz")
+## save outfile ---------------------------------------
+
+gpprac_slf_lookup %>%
+  # .zsav
+  write_sav(get_slf_gpprac_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_slf_gpprac_path(check_mode = "write"))
+
 
 ## End of Script ---------------------------------------

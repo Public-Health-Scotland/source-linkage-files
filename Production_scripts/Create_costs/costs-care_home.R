@@ -19,6 +19,7 @@
 library(dplyr)
 library(purrr)
 library(tidyr)
+library(ggplot2)
 library(createslf)
 
 # Read in data---------------------------------------
@@ -29,40 +30,48 @@ fs::file_copy(get_ch_costs_path(),
   overwrite = TRUE
 )
 
-## Read excel data
-ch_costs_data <- readxl::read_xlsx(
-  paste0(get_slf_dir(), "/Costs/CH_Costs.xlsx")
-)
+## Read costs from the CHC Open data
+ch_costs_data <- phsopendata::get_resource(
+  res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
+  col_select = c("Date", "KeyStatistic", "CA", "Value")
+) %>%
+  janitor::clean_names() %>%
+  # Dates are at end of the fin year
+  # so cost are for the fin year to that date.
+  mutate(year = createslf::convert_year_to_fyyear((date %/% 10000) - 1)) %>%
+  filter(year >= "1617") %>%
+  mutate(funding_source = stringr::str_extract(key_statistic, "((:?All)|(:?Self)|(:?Publicly))")) %>%
+  mutate(nursing_care_provision = if_else(stringr::str_detect(key_statistic, "Without"), 1, 0)) %>%
+  select(year, ca, funding_source, nursing_care_provision, cost_per_week = value)
 
 
 # Data cleaning ---------------------------------------
-ch_costs <-
+ch_costs_scot <-
   ch_costs_data %>%
-  # rename
-  rename(source_of_funding = "Source of Funding") %>%
-  # select only the funding totals
-  filter(source_of_funding %in% c("All Funding With Nursing Care", "All Funding Without Nursing Care")) %>%
-  # restructure
-  pivot_longer(
-    -source_of_funding,
-    names_to = "calendar_year",
-    values_to = "cost_per_week"
-  ) %>%
-  # create year as FY = YYYY from CCYY
-  mutate(year = convert_year_to_fyyear(calendar_year)) %>%
-  # create flag - nursing care provision ##
-  mutate(nursing_care_provision = if_else(source_of_funding == "All Funding With Nursing Care", 1, 0)) %>%
-  # cost per day ##
+  filter(ca == "S92000003") %>%
+  filter(funding_source == "All") %>%
+  select(year, nursing_care_provision, cost_per_week) %>%
+  # cost per day
   mutate(cost_per_day = cost_per_week / 7) %>%
+  select(-cost_per_week) %>%
   # Compute mean cost for unknown nursing care
   bind_rows(
     group_by(., year) %>%
       summarise(
-        source_of_funding = "Unknown Source of Funding",
+        nursing_care_provision = NA_real_,
         cost_per_day = mean(cost_per_day)
       )
-  ) %>%
-  select(year, nursing_care_provision, cost_per_day)
+  )
+
+# Interpolate any missing years (e.g. 2019/20)
+ch_costs <- ch_costs_scot %>%
+  group_by(nursing_care_provision) %>%
+  tidylog::mutate(cost_per_day = if_else(
+    is.na(cost_per_day),
+    (lag(cost_per_day, order_by = year) + lead(cost_per_day, order_by = year)) / 2,
+    cost_per_day
+  )) %>%
+  ungroup()
 
 ## add in years by copying the most recent year ##
 latest_cost_year <- max(ch_costs$year)
@@ -88,9 +97,7 @@ ch_costs_uplifted <-
 # Join data together  -----------------------------------------------------
 
 # match files - to make sure costs haven't changed radically
-old_costs <- haven::read_sav(
-  get_ch_costs_path(update = latest_update())
-) %>%
+old_costs <- haven::read_sav(get_ch_costs_path(update = latest_update())) %>%
   rename(
     cost_old = "cost_per_day",
     year = "Year"
@@ -104,7 +111,6 @@ matched_costs_data <-
   # compute difference
   mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100)
 
-
 summary(matched_costs_data$pct_diff)
 
 matched_costs_data %>%
@@ -114,16 +120,29 @@ matched_costs_data %>%
     values_from = "pct_diff"
   )
 
+ggplot(
+  data = matched_costs_data,
+  aes(
+    x = year,
+    y = cost_per_day,
+    colour = as.factor(nursing_care_provision),
+    group = as.factor(nursing_care_provision)
+  )
+) +
+  geom_step() +
+  geom_step(aes(y = cost_old), linetype = "dotdash") +
+  geom_vline(xintercept = latest_cost_year, linetype = "dashed") +
+  scale_y_continuous(labels = scales::label_dollar(prefix = "£")) +
+  scale_colour_discrete() +
+  labs(y = "Cost per day", color = "Nursing Care provision")
+
 
 ## save outfile ---------------------------------------
 ch_costs_uplifted %>%
   # .zsav
-  haven::write_sav(get_ch_costs_path(update = latest_update(), ext = "zsav", check_mode = "write"),
-    compress = TRUE
-  ) %>%
+  write_sav(get_ch_costs_path(update = latest_update(), ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  readr::write_rds(get_ch_costs_path(update = latest_update(), check_mode = "write"),
-    compress = "gz"
-  )
+  write_rds(get_ch_costs_path(update = latest_update(), check_mode = "write"))
+
 
 ## End of Script ---------------------------------------

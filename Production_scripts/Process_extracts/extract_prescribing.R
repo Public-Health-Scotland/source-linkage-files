@@ -9,8 +9,8 @@
 #####################################################
 
 library(dplyr)
-library(createslf)
 library(readr)
+library(createslf)
 library(phsmethods)
 
 
@@ -76,22 +76,15 @@ if (nrow(pis_clean) != nrow(pis_file)) {
 # Save out ---------------------------------------
 pis_clean %>%
   # Save as .zsav file
-  haven::write_sav(get_source_extract_path(
+  write_sav(get_source_extract_path(
     year = year,
     type = "PIS",
     ext = "zsav",
-    check_mode = "write"
-  ),
-  compress = TRUE
-  ) %>%
+    check_mode = "write")) %>%
   # Save as .rds file
-  readr::write_rds(get_source_extract_path(
+  write_rds(get_source_extract_path(
     year = year,
     type = "PIS",
-    check_mode = "write"
-  ),
-  compress = "gz"
-  )
-
+    check_mode = "write"))
 
 # End of Script #

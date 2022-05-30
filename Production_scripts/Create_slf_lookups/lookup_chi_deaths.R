@@ -18,7 +18,7 @@ library(stringr)
 library(readr)
 
 # Read data -------------------------------------------------------
-deaths_file <- read_csv(
+deaths_data <- read_csv(
   file = get_it_deaths_path(),
   col_type = cols(
     `PATIENT_UPI [C]` = col_character(),
@@ -37,20 +37,20 @@ deaths_file <- read_csv(
 # Data Cleaning------------------------------------------------------
 
 # One record per chi
-outfile <- deaths_file %>%
+deaths_clean <- deaths_data %>%
   dplyr::arrange(desc(death_date_nrs), desc(death_date_chi)) %>%
   dplyr::distinct(chi, .keep_all = TRUE) %>%
   # Use the NRS deathdate unless it isn't there
   mutate(death_date = dplyr::coalesce(death_date_nrs, death_date_chi))
 
 
-# Save Outfile--------------------------------------------------------
+# Save File--------------------------------------------------------
 
-# .zsav file
-haven::write_sav(outfile, get_slf_deaths_path(ext = "zsav", check_mode = "write"), compress = TRUE)
-
-# .rds file
-readr::write_rds(outfile, get_slf_deaths_path(check_mode = "write"), compress = "gz")
+deaths_clean %>%
+  # .zsav file
+  write_sav(get_slf_deaths_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_slf_deaths_path(check_mode = "write"))
 
 
 ## End of Script ##

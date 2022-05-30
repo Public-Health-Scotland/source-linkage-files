@@ -11,7 +11,6 @@
 
 ## load packages ##
 
-library(readr)
 library(odbc)
 library(dplyr)
 library(stringr)
@@ -72,12 +71,10 @@ sc_demog <- sc_demog %>%
   # format postcodes using `phsmethods`
   mutate(across(contains("postcode"), ~ postcode(.x, format = "pc7")))
 
-
 # count number of na postcodes
 na_postcodes <-
   sc_demog %>%
   count(across(contains("postcode"), ~ is.na(.x)))
-
 
 sc_demog <- sc_demog %>%
   # remove dummy postcodes invalid postcodes missed by regex check
@@ -101,17 +98,14 @@ sc_demog <- sc_demog %>%
     (is.na(submitted_postcode) & is.na(chi_postcode)) ~ "missing"
   ))
 
-
 # Check where the postcodes are coming from
 sc_demog %>%
   count(postcode_type)
-
 
 # count number of replaced postcode - compare with count above
 na_replaced_postcodes <-
   sc_demog %>%
   count(across(ends_with("_postcode"), ~ is.na(.x)))
-
 
 na_replaced_postcodes
 na_postcodes
@@ -140,10 +134,11 @@ outfile <-
 
 
 ## save file ##
-# .zsav file
-haven::write_sav(outfile, get_sc_demog_lookup_path(check_mode = "write"), compress = TRUE)
 
-# .rds file
-readr::write_rds(outfile, get_sc_demog_lookup_path(check_mode = "write"), compress = "gz")
+outfile %>%
+  # .zsav file
+  write_sav(get_sc_demog_lookup_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_sc_demog_lookup_path(check_mode = "write"))
 
 ## End of Script ---------------------------------------
