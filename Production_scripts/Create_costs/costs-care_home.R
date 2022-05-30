@@ -140,9 +140,10 @@ ggplot(
 ## save outfile ---------------------------------------
 ch_costs_uplifted %>%
   # .zsav
-  write_sav(get_ch_costs_path(update = latest_update())) %>%
+  write_sav(get_ch_costs_path(update = latest_update(), ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  write_rds(get_ch_costs_path(update = latest_update()))
+  write_rds(get_ch_costs_path(update = latest_update(), check_mode = "write"))
+
 
 
 ## End of Script ---------------------------------------
