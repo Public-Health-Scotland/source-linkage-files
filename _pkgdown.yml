@@ -15,3 +15,7 @@ reference:
     - calculate_measures
     - starts_with("fix_")
 
+  - title: Everything
+  - contents:
+    - matches(".")
+
