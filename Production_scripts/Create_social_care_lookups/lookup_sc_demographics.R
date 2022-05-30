@@ -134,6 +134,15 @@ outfile <-
 
 
 ## save file ##
+<<<<<<<
+
+=======
+outfile %>%
+  # .zsav file
+  write_sav(get_sc_demog_lookup_path()) %>%
+  # .rds file
+  write_rds(get_sc_demog_lookup_path())
+>>>>>>>
 
 outfile %>%
   # .zsav file
