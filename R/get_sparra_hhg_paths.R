@@ -11,7 +11,7 @@
 get_hhg_path <- function(year, ...) {
   hhg_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "HHG"),
-    file_name = glue::glue("HHG-20{year}.zsav"),
+    file_name = glue::glue("HHG-20{year}.rds"),
     ...
   )
 
@@ -30,7 +30,7 @@ get_hhg_path <- function(year, ...) {
 get_sparra_path <- function(year, ...) {
   sparra_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "SPARRA"),
-    file_name = glue::glue("SPARRA-20{year}.zsav"),
+    file_name = glue::glue("SPARRA-20{year}.rds"),
     ...
   )
 
