@@ -19,10 +19,8 @@ library(slfhelper)
 year <- "1920"
 
 # Read new data file
-new_data <- readr::read_rds(get_source_extract_path(year, "AE", ext = "rds"))
-# zsav until rds file avaliable
-new_data <- haven::read_sav(get_source_extract_path(year, "AE", ext = "zsav")) %>%
-  rename(postcode = "Postcode")
+new_data <- readr::read_rds(
+  get_source_extract_path(year, "AE", ext = "rds"))
 
 # Read current SLF episode file and filter for 01B and GLS records
 existing_data <- get_existing_data_for_tests(new_data = new_data)
