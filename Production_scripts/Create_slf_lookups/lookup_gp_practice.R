@@ -15,6 +15,7 @@ library(tidyr)
 library(phsopendata)
 library(janitor)
 library(fs)
+library(createslf)
 
 # Read in data---------------------------------------
 
@@ -28,7 +29,7 @@ opendata <-
   select(
     gpprac = practice_code,
     practice_name = gp_practice_name,
-    postcode,
+    gpprac_postcode = postcode,
     cluster = gp_cluster
   ) %>%
   # Sort for SPSS matching
@@ -45,13 +46,9 @@ gpprac_file <-
   haven::read_sav(read_gpprac_file("gpprac.sav")) %>%
   # select only praccode and postcode
   select(
-    praccode,
-    postcode
-  ) %>%
-  # sort by praccode
-  arrange(praccode) %>%
-  # rename praccode to allow join
-  rename(gpprac = "praccode")
+    gpprac = praccode,
+    gpprac_postcode = postcode
+  )
 
 # postcode lookup
 pc_lookup <- readr::read_rds(read_spd_file()) %>%
@@ -70,25 +67,23 @@ pc_lookup <- readr::read_rds(read_spd_file()) %>%
 
 gpprac_slf_lookup <-
   ## match cluster information onto the practice reference list ##
-  left_join(opendata, gpprac_file, by = c("gpprac", "postcode")) %>%
-  # sort by postcode
-  arrange(postcode) %>%
+  left_join(opendata, gpprac_file, by = c("gpprac", "gpprac_postcode")) %>%
   # match on geography info - postcode
-  left_join(pc_lookup, by = "postcode") %>%
+  left_join(pc_lookup, by = c("gpprac_postcode" = "postcode")) %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
   # order variables
   select(
     gpprac,
     pc7,
-    postcode,
+    gpprac_postcode,
     cluster,
     hbpraccode,
     hscp2018,
     ca2018
   ) %>%
   # convert ca to lca code
-  mutate(lca = ca_to_lca(ca2018)) %>%
+  mutate(lca = convert_ca_to_lca(ca2018)) %>%
   # set some known dummy practice codes to consistent Board codes
   mutate(
     hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
@@ -97,7 +92,7 @@ gpprac_slf_lookup <-
   # sort by gpprac
   arrange(gpprac) %>%
   # rename pc8 back - saved in output as pc8
-  rename(pc8 = "postcode")
+  rename(pc8 = "gpprac_postcode")
 
 
 ## save outfile ---------------------------------------
