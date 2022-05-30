@@ -11,7 +11,6 @@
 
 ## load packages ##
 
-library(readr)
 library(odbc)
 library(dplyr)
 library(stringr)
@@ -140,10 +139,10 @@ outfile <-
 
 
 ## save file ##
-# .zsav file
-haven::write_sav(outfile, get_sc_demog_lookup_path(), compress = TRUE)
-
-# .rds file
-readr::write_rds(outfile, get_sc_demog_lookup_path(), compress = "gz")
+outfile %>%
+  # .zsav file
+  write_sav(get_sc_demog_lookup_path()) %>%
+  # .rds file
+  write_rds(get_sc_demog_lookup_path())
 
 ## End of Script ---------------------------------------

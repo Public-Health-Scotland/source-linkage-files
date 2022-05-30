@@ -163,20 +163,16 @@ outfile <-
 
 outfile %>%
   # .zsav
-  haven::write_sav(get_source_extract_path(
+  write_sav(get_source_extract_path(
     year = latest_year,
     type = "Client",
     ext = "zsav"
-  ),
-  compress = TRUE
-  ) %>%
+  )) %>%
   # .rds file
-  readr::write_rds(get_source_extract_path(
+  write_rds(get_source_extract_path(
     year = latest_year,
     type = "Client",
     ext = "rds"
-  ),
-  compress = "gz"
-  )
+  ))
 
 ## End of Script ---------------------------------------
