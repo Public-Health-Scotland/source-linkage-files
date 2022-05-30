@@ -8,7 +8,7 @@ produce_sc_ch_episodes_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link{get_sc_ch_episodes_path}})}
+(data is from \code{\link[=get_sc_ch_episodes_path]{get_sc_ch_episodes_path()}})}
 }
 \value{
 a dataframe with a count of each flag.
