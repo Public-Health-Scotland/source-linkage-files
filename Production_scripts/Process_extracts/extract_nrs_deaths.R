@@ -69,7 +69,7 @@ deaths_extract <- get_boxi_extract_path(
     death_board_occurrence = "NHS Board of Occurrence Code - current",
     hbrescode = "NHS Board of Residence Code - current",
     dob = "Pat Date Of Birth [C]",
-    dod = "Date of Death(99)",
+    record_keydate1 = "Date of Death(99)",
     gender = "Pat Gender Code",
     chi = "Pat UPI",
     place_death_occurred = "Place Death Occurred Code",
@@ -95,8 +95,6 @@ deaths_extract <- get_boxi_extract_path(
 
 
 deaths_clean <- deaths_extract %>%
-  # rename dod
-  rename(record_keydate1 = "dod") %>%
   mutate(record_keydate2 = record_keydate1) %>%
   # create recid and year variables
   mutate(
