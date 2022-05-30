@@ -7,7 +7,7 @@
 get_source_extract_path(
   year,
   type = c("Acute", "AE", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH", "HC",
-    "Homelessness", "Maternity", "Mental", "Outpatients", "PIS"),
+    "Homelessness", "Maternity", "MH", "Outpatients", "PIS"),
   ...
 )
 }
