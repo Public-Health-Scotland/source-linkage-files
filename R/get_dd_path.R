@@ -11,7 +11,7 @@
 #' @seealso [get_file_path()] for the generic function.
 get_dd_path <- function(..., dd_period = NULL) {
   if (is.null(dd_period)) {
-    dd_period <- dd_period()
+    dd_period <- get_dd_period()
   }
 
   dd_path <- get_file_path(
