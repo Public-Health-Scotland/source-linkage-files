@@ -104,16 +104,9 @@ deaths_clean <- deaths_extract %>%
   # fix dummy gpprac codes
   convert_eng_gpprac_to_dummy(gpprac)
 
+# Save--------------------------------------------
 
-
-# Outfile --------------------------------------------
-
-
-outfile <- deaths_clean %>%
-  arrange(chi)
-
-
-outfile %>%
+deaths_clean %>%
   # Save as zsav file
   write_sav(get_source_extract_path(year, "Deaths", ext = "zsav")) %>%
   # Save as rds file
