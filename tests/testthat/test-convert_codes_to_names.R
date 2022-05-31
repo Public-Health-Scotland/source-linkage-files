@@ -8,7 +8,7 @@ test_that("Can convert HSCP code to HSCP Name", {
   )
 
   expect_equal(
-    hscp_to_hscpnames(hscp),
+    convert_hscp_to_hscpnames(hscp),
     c(
       "Aberdeen City",
       "Glasgow City",
@@ -31,7 +31,7 @@ test_that("Can convert Health Board code to HB Name", {
   )
 
   expect_equal(
-    hb_to_hbnames(hb),
+    convert_hb_to_hbnames(hb),
     c(
       "Ayrshire and Arran",
       "Greater Glasgow and Clyde",
