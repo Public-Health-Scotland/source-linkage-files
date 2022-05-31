@@ -3,7 +3,7 @@
 export("%>%")
 export(calculate_measures)
 export(check_year_format)
-export(compute_age)
+export(compute_mid_year_age)
 export(convert_ca_to_lca)
 export(convert_date_to_numeric)
 export(convert_eng_gpprac_to_dummy)
