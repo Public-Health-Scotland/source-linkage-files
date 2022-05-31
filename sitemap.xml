@@ -31,13 +31,25 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_ca_to_lca.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_date_to_numeric.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_eng_gpprac_to_dummy.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_fyyear_to_year.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_hb_to_hbnames.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_hscp_to_hscpnames.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_monthly_rows_to_vars.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_numeric_to_date.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_year_to_fyyear.html</loc>
@@ -64,12 +76,6 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_monthly_costs.html</loc>
   </url>
   <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/date_to_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/dd_period.html</loc>
-  </url>
-  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/end_fy.html</loc>
   </url>
   <url>
@@ -92,6 +98,9 @@
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_dd_path.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_dd_period.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_demog_cohorts_path.html</loc>
@@ -163,12 +172,6 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_year_dir.html</loc>
   </url>
   <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/hb_to_hbnames.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/hscp_to_hscpnames.html</loc>
-  </url>
-  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/index.html</loc>
   </url>
   <url>
@@ -182,9 +185,6 @@
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/midpoint_fy.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/numeric_to_date.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/phs_db_connection.html</loc>

@@ -44,7 +44,23 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="connection-to-phs-database">Connection to PHS database<a class="anchor" aria-label="anchor" href="#connection-to-phs-database"></a></h2>
+      
+      <p class="section-desc"></p><p>Connection to PHS database</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="phs_db_connection.html">phs_db_connection()</a></code> 
+        </dt>
+        <dd>Open a connection to a PHS database</dd>
+      </dl></div><div class="section level2">
+      <h2 id="check">Check<a class="anchor" aria-label="anchor" href="#check"></a></h2>
       
       
 
@@ -56,34 +72,67 @@
 
       <dl><dt>
           
-          <code><a href="calculate_measures.html">calculate_measures()</a></code> 
+          <code><a href="is_missing.html">is_missing()</a></code> 
         </dt>
-        <dd>Calculate measures for testing</dd>
+        <dd>Check for NA or blank values in a character vector</dd>
+      </dl></div><div class="section level2">
+      <h2 id="years-dates">Years &amp; Dates<a class="anchor" aria-label="anchor" href="#years-dates"></a></h2>
+      
+      
+
+      
+    </div><div class="section level2">
+      
+      <h3 id="dates-within-financial-year">Dates within Financial Year<a class="anchor" aria-label="anchor" href="#dates-within-financial-year"></a></h3>
+      <p class="section-desc"></p><p>Functions to compute the start, end and midpoint dates of a financial year, and convert date types</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="end_fy.html">end_fy()</a></code> 
+        </dt>
+        <dd>Return the end date of FY years</dd>
       </dl><dl><dt>
           
-          <code><a href="check_year_format.html">check_year_format()</a></code> 
+          <code><a href="midpoint_fy.html">midpoint_fy()</a></code> 
         </dt>
-        <dd>Check that the year is in the correct format</dd>
+        <dd>Return the mid date of FY year</dd>
       </dl><dl><dt>
           
-          <code><a href="convert_ca_to_lca.html">convert_ca_to_lca()</a></code> 
+          <code><a href="start_fy.html">start_fy()</a></code> 
         </dt>
-        <dd>Convert Council Areas into Local Council Authority Codes</dd>
+        <dd>Return the start date of FY year</dd>
       </dl><dl><dt>
           
-          <code><a href="convert_eng_gpprac_to_dummy.html">convert_eng_gpprac_to_dummy()</a></code> 
+          <code><a href="convert_date_to_numeric.html">convert_date_to_numeric()</a></code> 
         </dt>
-        <dd>Convert English GP practice codes to a dummy code</dd>
+        <dd>Convert a date type to the 'SLF numeric format'</dd>
       </dl><dl><dt>
+          
+          <code><a href="convert_numeric_to_date.html">convert_numeric_to_date()</a></code> 
+        </dt>
+        <dd>Convert a date in 'SLF numeric format' to Date type</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="year-format">Year Format<a class="anchor" aria-label="anchor" href="#year-format"></a></h3>
+      <p class="section-desc"></p><p>Functions to convert between financial year and calendar year, and check that the year variable is in the correct format</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="convert_fyyear_to_year.html">convert_fyyear_to_year()</a></code> 
         </dt>
         <dd>Convert year types - Financial year form to the alternate form</dd>
-      </dl><dl><dt>
-          
-          <code><a href="convert_monthly_rows_to_vars.html">convert_monthly_rows_to_vars()</a></code> 
-        </dt>
-        <dd>Convert monthly rows to variables</dd>
       </dl><dl><dt>
           
           <code><a href="convert_year_to_fyyear.html">convert_year_to_fyyear()</a></code> 
@@ -91,11 +140,54 @@
         <dd>Convert year types - Alternate year form to financial year form</dd>
       </dl><dl><dt>
           
+          <code><a href="check_year_format.html">check_year_format()</a></code> 
+        </dt>
+        <dd>Check that the year is in the correct format</dd>
+      </dl></div><div class="section level2">
+      <h2 id="create">Create<a class="anchor" aria-label="anchor" href="#create"></a></h2>
+      
+      
+
+      
+    </div><div class="section level2">
+      
+      <h3 id="costs">Costs<a class="anchor" aria-label="anchor" href="#costs"></a></h3>
+      <p class="section-desc"></p><p>Functions to create costs variables and fix costs</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
           <code><a href="create_day_episode_costs.html">create_day_episode_costs()</a></code> 
         </dt>
         <dd>Assign costs for single day episodes to the
 relevant month</dd>
       </dl><dl><dt>
+          
+          <code><a href="create_monthly_costs.html">create_monthly_costs()</a></code> 
+        </dt>
+        <dd>Create monthly costs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_c3_costs.html">fix_c3_costs()</a></code> 
+        </dt>
+        <dd>Apply costs fix to specialty C3 in acute processing.</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="flags">Flags<a class="anchor" aria-label="anchor" href="#flags"></a></h3>
+      <p class="section-desc"></p><p>Functions to create flag variables</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="create_demog_test_flags.html">create_demog_test_flags()</a></code> 
         </dt>
@@ -115,43 +207,81 @@ relevant month</dd>
           <code><a href="create_hscp_test_flags.html">create_hscp_test_flags()</a></code> 
         </dt>
         <dd>Create HSCP test flags</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="monthly">Monthly<a class="anchor" aria-label="anchor" href="#monthly"></a></h3>
+      <p class="section-desc"></p><p>Functions to convert monthly variables, beddays</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="convert_monthly_rows_to_vars.html">convert_monthly_rows_to_vars()</a></code> 
+        </dt>
+        <dd>Convert monthly rows to variables</dd>
       </dl><dl><dt>
           
           <code><a href="create_monthly_beddays.html">create_monthly_beddays()</a></code> 
         </dt>
         <dd>Generate counts of beddays per month for an episode
 with an admission and discharge date</dd>
+      </dl></div><div class="section level2">
+      <h2 id="codes">Codes<a class="anchor" aria-label="anchor" href="#codes"></a></h2>
+      
+      <p class="section-desc"></p><p>Convert various codes to alternate forms</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="convert_ca_to_lca.html">convert_ca_to_lca()</a></code> 
+        </dt>
+        <dd>Convert Council Areas into Local Council Authority Codes</dd>
       </dl><dl><dt>
           
-          <code><a href="create_monthly_costs.html">create_monthly_costs()</a></code> 
+          <code><a href="convert_eng_gpprac_to_dummy.html">convert_eng_gpprac_to_dummy()</a></code> 
         </dt>
-        <dd>Create monthly costs</dd>
+        <dd>Convert English GP practice codes to a dummy code</dd>
       </dl><dl><dt>
           
-          <code><a href="date_to_numeric.html">date_to_numeric()</a></code> 
+          <code><a href="convert_hb_to_hbnames.html">convert_hb_to_hbnames()</a></code> 
         </dt>
-        <dd>Convert a date type to the 'SLF numeric format'</dd>
+        <dd>Convert NHS Health Board Codes to NHS Health Board Names</dd>
       </dl><dl><dt>
           
-          <code><a href="dd_period.html">dd_period()</a></code> 
+          <code><a href="convert_hscp_to_hscpnames.html">convert_hscp_to_hscpnames()</a></code> 
         </dt>
-        <dd>Get the Delayed Discharge period</dd>
+        <dd>Convert HSCP Codes to HSCP Names</dd>
       </dl><dl><dt>
           
-          <code><a href="end_fy.html">end_fy()</a></code> 
+          <code><a href="read_anon_to_chi.html">read_anon_to_chi()</a></code> 
         </dt>
-        <dd>Return the end date of FY years</dd>
+        <dd>Read the Anon to CHI lookup</dd>
       </dl><dl><dt>
           
-          <code><a href="find_latest_file.html">find_latest_file()</a></code> 
+          <code><a href="read_chi_to_anon.html">read_chi_to_anon()</a></code> 
         </dt>
-        <dd>Find the latest version of a file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="fix_c3_costs.html">fix_c3_costs()</a></code> 
-        </dt>
-        <dd>Apply costs fix to specialty C3 in acute processing.</dd>
-      </dl><dl><dt>
+        <dd>Read the CHI to Anon lookup</dd>
+      </dl></div><div class="section level2">
+      <h2 id="duplicates">Duplicates<a class="anchor" aria-label="anchor" href="#duplicates"></a></h2>
+      
+      <p class="section-desc"></p><p>Functions to fix duplicates</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="fix_east_ayrshire_duplicates.html">fix_east_ayrshire_duplicates()</a></code> 
         </dt>
@@ -161,6 +291,131 @@ with an admission and discharge date</dd>
           <code><a href="fix_west_dun_duplicates.html">fix_west_dun_duplicates()</a></code> 
         </dt>
         <dd>Fix the West Dunbartonshire duplicates</dd>
+      </dl></div><div class="section level2">
+      <h2 id="writing-data">Writing data<a class="anchor" aria-label="anchor" href="#writing-data"></a></h2>
+      
+      <p class="section-desc"></p><p>Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="write_sav.html">write_sav()</a></code> 
+        </dt>
+        <dd>Write an SPSS zsav file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="write_rds.html">write_rds()</a></code> 
+        </dt>
+        <dd>Write an R rds file</dd>
+      </dl></div><div class="section level2">
+      <h2 id="initialisation">Initialisation<a class="anchor" aria-label="anchor" href="#initialisation"></a></h2>
+      
+      <p class="section-desc"></p><p>Get the date of update, period, and extract number</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_dd_period.html">get_dd_period()</a></code> 
+        </dt>
+        <dd>Get the Delayed Discharge period</dd>
+      </dl><dl><dt>
+          
+          <code><a href="latest_update.html">latest_update()</a></code> 
+        </dt>
+        <dd>Get the latest update</dd>
+      </dl><dl><dt>
+          
+          <code><a href="previous_update.html">previous_update()</a></code> 
+        </dt>
+        <dd>Get the previous update</dd>
+      </dl><dl><dt>
+          
+          <code><a href="it_extract_ref.html">it_extract_ref()</a></code> 
+        </dt>
+        <dd>Get the IT extract ref number</dd>
+      </dl></div><div class="section level2">
+      <h2 id="files">Files<a class="anchor" aria-label="anchor" href="#files"></a></h2>
+      
+      
+
+      
+    </div><div class="section level2">
+      
+      <h3 id="directories">Directories<a class="anchor" aria-label="anchor" href="#directories"></a></h3>
+      <p class="section-desc"></p><p>File Directories for SLF’s</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_lookups_dir.html">get_lookups_dir()</a></code> 
+        </dt>
+        <dd>Get the path to the lookups directory</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_slf_dir.html">get_slf_dir()</a></code> 
+        </dt>
+        <dd>General SLF directory for accessing HSCDIIP folders/files</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_year_dir.html">get_year_dir()</a></code> 
+        </dt>
+        <dd>Get the directory for the given year</dd>
+      </dl></div><div class="section level2">
+      
+      <h3 id="paths">Paths<a class="anchor" aria-label="anchor" href="#paths"></a></h3>
+      <p class="section-desc"></p><p>File Paths for SLF’s</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="find_latest_file.html">find_latest_file()</a></code> 
+        </dt>
+        <dd>Find the latest version of a file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_datazone_pop_file.html">read_datazone_pop_file()</a></code> 
+        </dt>
+        <dd>Read the Datazone populations</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_gpprac_file.html">read_gpprac_file()</a></code> 
+        </dt>
+        <dd>Read the GP practice lookup file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_locality_file.html">read_locality_file()</a></code> 
+        </dt>
+        <dd>Read the locality file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_simd_file.html">read_simd_file()</a></code> 
+        </dt>
+        <dd>Read the Scottish Index for Multiple Deprivation (SIMD)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_spd_file.html">read_spd_file()</a></code> 
+        </dt>
+        <dd>Read the Scottish Postcode Directory file</dd>
       </dl><dl><dt>
           
           <code><a href="get_boxi_extract_path.html">get_boxi_extract_path()</a></code> 
@@ -187,11 +442,6 @@ Cohort lookup</dd>
           <code><a href="get_dn_costs_path.html">get_dn_costs_path()</a></code> 
         </dt>
         <dd>Get the full District Nursing costs lookup path</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_existing_data_for_tests.html">get_existing_data_for_tests()</a></code> 
-        </dt>
-        <dd>Get data from the SLFs for tests</dd>
       </dl><dl><dt>
           
           <code><a href="get_file_path.html">get_file_path()</a></code> 
@@ -223,11 +473,6 @@ Long Term Conditions extract</dd>
           <code><a href="get_it_prescribing_path.html">get_it_prescribing_path()</a></code> 
         </dt>
         <dd>Get the full path to the IT PIS extract</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_lookups_dir.html">get_lookups_dir()</a></code> 
-        </dt>
-        <dd>Get the path to the lookups directory</dd>
       </dl><dl><dt>
           
           <code><a href="get_ltcs_path.html">get_ltcs_path()</a></code> 
@@ -266,11 +511,6 @@ Cohort lookup</dd>
         <dd>Get the full path to the SLF deaths lookup file</dd>
       </dl><dl><dt>
           
-          <code><a href="get_slf_dir.html">get_slf_dir()</a></code> 
-        </dt>
-        <dd>General SLF directory for accessing HSCDIIP folders/files</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_slf_gpprac_path.html">get_slf_gpprac_path()</a></code> 
         </dt>
         <dd>Get the full path to the SLF GP practice lookup</dd>
@@ -289,61 +529,38 @@ Cohort lookup</dd>
           <code><a href="get_sparra_path.html">get_sparra_path()</a></code> 
         </dt>
         <dd>Get the path to the SPARRA extract</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_year_dir.html">get_year_dir()</a></code> 
-        </dt>
-        <dd>Get the directory for the given year</dd>
-      </dl><dl><dt>
-          
-          <code><a href="hb_to_hbnames.html">hb_to_hbnames()</a></code> 
-        </dt>
-        <dd>Convert NHS Health Board Codes to NHS Health Board Names</dd>
-      </dl><dl><dt>
-          
-          <code><a href="hscp_to_hscpnames.html">hscp_to_hscpnames()</a></code> 
-        </dt>
-        <dd>Convert HSCP Codes to HSCP Names</dd>
-      </dl><dl><dt>
-          
-          <code><a href="is_missing.html">is_missing()</a></code> 
-        </dt>
-        <dd>Check for NA or blank values in a character vector</dd>
-      </dl><dl><dt>
-          
-          <code><a href="it_extract_ref.html">it_extract_ref()</a></code> 
-        </dt>
-        <dd>Get the IT extract ref number</dd>
-      </dl><dl><dt>
-          
-          <code><a href="latest_update.html">latest_update()</a></code> 
-        </dt>
-        <dd>Get the latest update</dd>
-      </dl><dl><dt>
-          
-          <code><a href="midpoint_fy.html">midpoint_fy()</a></code> 
-        </dt>
-        <dd>Return the mid date of FY year</dd>
-      </dl><dl><dt>
-          
-          <code><a href="numeric_to_date.html">numeric_to_date()</a></code> 
-        </dt>
-        <dd>Convert a date in 'SLF numeric format' to Date type</dd>
-      </dl><dl><dt>
-          
-          <code><a href="phs_db_connection.html">phs_db_connection()</a></code> 
-        </dt>
-        <dd>Open a connection to a PHS database</dd>
-      </dl><dl><dt>
-          
-          <code><a href="previous_update.html">previous_update()</a></code> 
-        </dt>
-        <dd>Get the previous update</dd>
-      </dl><dl><dt>
+      </dl></div><div class="section level2">
+      <h2 id="process">Process<a class="anchor" aria-label="anchor" href="#process"></a></h2>
+      
+      <p class="section-desc"></p><p>Process SLF Extracts</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="process_homelessness_extract.html">process_homelessness_extract()</a></code> 
         </dt>
         <dd>Process the homelessness extract</dd>
+      </dl></div><div class="section level2">
+      <h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a></h2>
+      
+      <p class="section-desc"></p><p>Tests for the SLF Extracts</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="get_existing_data_for_tests.html">get_existing_data_for_tests()</a></code> 
+        </dt>
+        <dd>Get data from the SLFs for tests</dd>
       </dl><dl><dt>
           
           <code><a href="produce_sc_ch_episodes_tests.html">produce_sc_ch_episodes_tests()</a></code> 
@@ -376,66 +593,22 @@ Cohort lookup</dd>
         <dd>Produce the Source Extract tests</dd>
       </dl><dl><dt>
           
-          <code><a href="produce_test_comparison.html">produce_test_comparison()</a></code> 
-        </dt>
-        <dd>Produce a test comparison</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_anon_to_chi.html">read_anon_to_chi()</a></code> 
-        </dt>
-        <dd>Read the Anon to CHI lookup</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_chi_to_anon.html">read_chi_to_anon()</a></code> 
-        </dt>
-        <dd>Read the CHI to Anon lookup</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_datazone_pop_file.html">read_datazone_pop_file()</a></code> 
-        </dt>
-        <dd>Read the Datazone populations</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_gpprac_file.html">read_gpprac_file()</a></code> 
-        </dt>
-        <dd>Read the GP practice lookup file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_locality_file.html">read_locality_file()</a></code> 
-        </dt>
-        <dd>Read the locality file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_simd_file.html">read_simd_file()</a></code> 
-        </dt>
-        <dd>Read the Scottish Index for Multiple Deprivation (SIMD)</dd>
-      </dl><dl><dt>
-          
-          <code><a href="read_spd_file.html">read_spd_file()</a></code> 
-        </dt>
-        <dd>Read the Scottish Postcode Directory file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="start_fy.html">start_fy()</a></code> 
-        </dt>
-        <dd>Return the start date of FY year</dd>
-      </dl><dl><dt>
-          
-          <code><a href="write_rds.html">write_rds()</a></code> 
-        </dt>
-        <dd>Write an R rds file</dd>
-      </dl><dl><dt>
-          
-          <code><a href="write_sav.html">write_sav()</a></code> 
-        </dt>
-        <dd>Write an SPSS zsav file</dd>
-      </dl><dl><dt>
-          
           <code><a href="write_tests_xlsx.html">write_tests_xlsx()</a></code> 
         </dt>
         <dd>Write tests as an xlsx workbook</dd>
+      </dl><dl><dt>
+          
+          <code><a href="calculate_measures.html">calculate_measures()</a></code> 
+        </dt>
+        <dd>Calculate measures for testing</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_test_comparison.html">produce_test_comparison()</a></code> 
+        </dt>
+        <dd>Produce a test comparison</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
