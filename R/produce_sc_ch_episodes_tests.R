@@ -1,7 +1,7 @@
 #' Produce the Care Home all episodes tests
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from \code{\link{get_sc_ch_episodes_path}})
+#' (data is from [get_sc_ch_episodes_path()])
 #'
 #' @return a dataframe with a count of each flag.
 #'

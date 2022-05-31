@@ -1,12 +1,12 @@
 #' Get the full path to the SLF Postcode lookup
 #'
-#' @param update the update month (defaults to use \code{\link{latest_update}})
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
+#' @param update the update month (defaults to use [latest_update()])
+#' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the SLF Postcode lookup as an \code{\link[fs]{path}}
+#' @return The path to the SLF Postcode lookup as an [fs::path()]
 #' @export
 #' @family file path functions
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_slf_postcode_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
@@ -17,13 +17,13 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
 
 #' Get the full path to the SLF GP practice lookup
 #'
-#' @param update the update month (defaults to use \code{\link{latest_update}})
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
+#' @param update the update month (defaults to use [latest_update()])
+#' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the SLF GP practice lookup as an \code{\link[fs]{path}}
+#' @return The path to the SLF GP practice lookup as an [fs::path()]
 #' @export
 #' @family file path functions
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_slf_gpprac_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
@@ -35,13 +35,13 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 #' Get the full path to the SLF deaths lookup file
 #'
 #' @param update The update month to use,
-#' defaults to \code{\link{latest_update}}
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
+#' defaults to [latest_update()]
+#' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the costs lookup as an \code{\link[fs]{path}}
+#' @return The path to the costs lookup as an [fs::path()]
 #' @export
 #' @family file path functions
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_slf_deaths_path <- function(update = latest_update(), ...) {
   slf_deaths_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),

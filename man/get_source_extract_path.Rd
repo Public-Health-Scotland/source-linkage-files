@@ -16,7 +16,7 @@ get_source_extract_path(
 
 \item{type}{Name of clean source extract}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 Path to clean source extract containing data for each dataset
