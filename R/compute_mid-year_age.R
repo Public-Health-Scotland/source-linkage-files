@@ -11,7 +11,7 @@
 #' dob <- as.Date(c("01-01-1990", "10-05-1960"))
 #' fyyear <- "1920"
 #' compute_age(fyyear, dob)
-compute_age <- function(data, fyyear, dob) {
+compute_mid-year_age <- function(data, fyyear, dob) {
   data <- data %>%
     # age
     dplyr::mutate(age = lubridate::as.period(lubridate::interval(start = dob, end = midpoint_fy(fyyear)))$year)
