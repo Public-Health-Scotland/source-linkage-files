@@ -13,7 +13,7 @@ test_that("Latest Update string looks valid", {
 })
 
 test_that("Delayed Discharge period string looks valid", {
-  dd_period_string <- dd_period()
+  dd_period_string <- get_dd_period()
 
   expect_type(dd_period_string, "character")
   expect_match(dd_period_string, "Jul16_[A-Z][a-z]{2}[0-9]{2}")
