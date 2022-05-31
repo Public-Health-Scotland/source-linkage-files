@@ -184,7 +184,7 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Changes only required for SPSS ------------------------------------------
   final_data <- final_data %>%
     tidyr::replace_na(list(chi = "")) %>%
-    dplyr::mutate(dplyr::across(c(.data$record_keydate1, .data$record_keydate2), date_to_numeric)) %>%
+    dplyr::mutate(dplyr::across(c(.data$record_keydate1, .data$record_keydate2), convert_date_to_numeric)) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::mutate(
       postcode = stringr::str_pad(.data$postcode, width = 8, side = "right"),

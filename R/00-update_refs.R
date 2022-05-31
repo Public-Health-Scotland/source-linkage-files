@@ -27,6 +27,6 @@ previous_update <- function() {
 #' @return The period for the Delayed Discharge file
 #' as MMMYY_MMMYY
 #' @export
-dd_period <- function() {
+get_dd_period <- function() {
   "Jul16_Dec21"
 }

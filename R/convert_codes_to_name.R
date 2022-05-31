@@ -7,8 +7,8 @@
 #'
 #' @examples
 #' hscp <- c("S37000001", "S37000002")
-#' hscp_to_hscpnames(hscp)
-hscp_to_hscpnames <- function(hscp) {
+#' convert_hscp_to_hscpnames(hscp)
+convert_hscp_to_hscpnames <- function(hscp) {
   hscpnames <- dplyr::case_when(
     hscp == "S37000001" ~ "Aberdeen City",
     hscp == "S37000002" ~ "Aberdeenshire",
@@ -55,8 +55,8 @@ hscp_to_hscpnames <- function(hscp) {
 #'
 #' @examples
 #' hb <- c("S08000015", "S08000016")
-#' hb_to_hbnames(hb)
-hb_to_hbnames <- function(hb) {
+#' convert_hb_to_hbnames(hb)
+convert_hb_to_hbnames <- function(hb) {
   hbnames <- dplyr::case_when(
     hb == "S08000015" ~ "Ayrshire and Arran",
     hb == "S08000016" ~ "Borders",
