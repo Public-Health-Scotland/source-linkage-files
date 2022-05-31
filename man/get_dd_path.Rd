@@ -10,7 +10,7 @@ get_dd_path(..., dd_period = NULL)
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 
 \item{dd_period}{The period to use for reading the file,
-defaults to \code{\link[=dd_period]{dd_period()}}}
+defaults to \code{\link[=get_dd_period]{get_dd_period()}}}
 }
 \value{
 The path to the latest Delayed Discharges file
