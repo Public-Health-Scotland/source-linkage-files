@@ -59,6 +59,11 @@ reference:
   - contents:
     - contains("_duplicates")
 
+  - title: Writing data
+    desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
+  - contents:
+    - write_sav
+    - write_rds
 
   - title: Initialisation
     desc: Get the date of update, period, and extract number
@@ -91,3 +96,4 @@ reference:
     - contains("_tests")
     - contains("_measures")
     - starts_with("produce_test")
+
