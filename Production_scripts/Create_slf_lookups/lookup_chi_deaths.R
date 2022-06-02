@@ -1,4 +1,3 @@
-
 #####################################################
 # Draft DEATHS Extract Processing Code
 # Author: Catherine Holland
@@ -12,45 +11,46 @@
 #               Saves outputted flagged dataset.
 #####################################################
 
-
-## packages ##
+# Load packages
 
 library(dplyr)
 library(stringr)
 library(readr)
 
-## Read data in ##
-deaths_file <- read_csv(
+# Read data -------------------------------------------------------
+deaths_data <- read_csv(
   file = get_it_deaths_path(),
   col_type = cols(
     `PATIENT_UPI [C]` = col_character(),
     `PATIENT DoD DATE (NRS)` = col_date(format = "%d-%m-%Y"),
     `PATIENT DoD DATE (CHI)` = col_date(format = "%d-%m-%Y")
   )
-)
-
-names(deaths_file) <- str_replace_all(names(deaths_file), " ", "_")
-
-# rename variables
-deaths_file <- deaths_file %>%
+) %>%
+  # rename variables
   rename(
-    chi = "PATIENT_UPI_[C]",
-    death_date_nrs = "PATIENT_DoD_DATE_(NRS)",
-    death_date_chi = "PATIENT_DoD_DATE_(CHI)"
+    chi = `PATIENT_UPI [C]`,
+    death_date_nrs = `PATIENT DoD DATE (NRS)`,
+    death_date_chi = `PATIENT DoD DATE (CHI)`
   )
 
-## one record per chi ##
-deaths_file <- deaths_file %>%
+
+# Data Cleaning------------------------------------------------------
+
+# One record per chi
+deaths_clean <- deaths_data %>%
   dplyr::arrange(desc(death_date_nrs), desc(death_date_chi)) %>%
   dplyr::distinct(chi, .keep_all = TRUE) %>%
   # Use the NRS deathdate unless it isn't there
   mutate(death_date = dplyr::coalesce(death_date_nrs, death_date_chi))
 
-## Save file - //stats/hscdiip/SLF_extracts/Deaths/ ##
-# .zsav file
-haven::write_sav(deaths_file, get_slf_deaths_path(), compress = TRUE)
 
-# .rds file
-readr::write_rds(deaths_file, get_slf_deaths_path(), compress = "gz")
+# Save File--------------------------------------------------------
+
+deaths_clean %>%
+  # .zsav file
+  write_sav(get_slf_deaths_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_slf_deaths_path(check_mode = "write"))
+
 
 ## End of Script ##

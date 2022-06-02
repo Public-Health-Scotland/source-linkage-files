@@ -11,7 +11,7 @@ create_demog_test_flags(data)
 }
 \value{
 a dataframe with flag (1 or 0) for each demographic variables.
-Missing value flag from \code{\link{is_missing}}
+Missing value flag from \code{\link[=is_missing]{is_missing()}}
 }
 \description{
 Create demographic test flags

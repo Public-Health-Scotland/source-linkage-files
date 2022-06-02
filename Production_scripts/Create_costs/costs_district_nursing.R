@@ -252,16 +252,10 @@ outfile <-
     cost_total_net
   )
 
-# .zsav
-haven::write_sav(outfile,
-  get_dn_costs_path(check_mode = "write"),
-  compress = TRUE
-)
-
+outfile %>%
+  # .zsav
+  write_sav(get_dn_costs_path(ext = "zsav", check_mode = "write"))
 # .rds file
-readr::write_rds(outfile,
-  get_dn_costs_path(ext = "rds", check_mode = "write"),
-  compress = "gz"
-)
+write_rds(get_dn_costs_path(check_mode = "write"))
 
 ## End of Script ---------------------------------------
