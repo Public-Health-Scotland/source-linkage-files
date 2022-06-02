@@ -7,20 +7,20 @@
 get_dd_path(..., dd_period = NULL)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 
 \item{dd_period}{The period to use for reading the file,
-defaults to \code{\link{dd_period}}}
+defaults to \code{\link[=get_dd_period]{get_dd_period()}}}
 }
 \value{
 The path to the latest Delayed Discharges file
-as a \code{\link[fs]{path}}
+as a \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the Delayed Discharges file path
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},

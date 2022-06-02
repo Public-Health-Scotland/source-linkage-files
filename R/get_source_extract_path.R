@@ -1,8 +1,8 @@
 #' Get Source Extract path
 #'
 #' @param year Year of extract
+#' @param ... additional arguments passed to [get_file_path()]
 #' @param type Name of clean source extract
-#' @param ext Extension for the extract (zsav or rds)
 #'
 #' @return Path to clean source extract containing data for each dataset
 #' @export
@@ -25,9 +25,8 @@ get_source_extract_path <- function(year,
                                       "Outpatients",
                                       "PIS"
                                     ),
-                                    ext = c("zsav", "rds")) {
+                                    ...) {
   type <- match.arg(type)
-  ext <- match.arg(ext)
 
   year_dir <- fs::path(
     "/conf",
@@ -57,9 +56,8 @@ get_source_extract_path <- function(year,
 
   source_extract_path <- get_file_path(
     directory = year_dir,
-    file_name = glue::glue("{file_name}-20{year}"),
-    ext = ext,
-    check_mode = "write"
+    file_name = glue::glue("{file_name}-20{year}.rds"),
+    ...
   )
 
   return(source_extract_path)

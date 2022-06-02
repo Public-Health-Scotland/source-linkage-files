@@ -12,7 +12,7 @@
 #' @param file_name The file name (with extension if not supplied to \code{ext})
 #' @param ext The extension (type of the file) - optional
 #' @param check_mode The mode passed to
-#' \code{\link[fs]{file_access}}, defaults to "read"
+#' [fs::file_access()], defaults to "read"
 #' to check that you have read access to the file
 #' @param create Optionally create the file if it doesn't exists,
 #' the default is to only create a file if we set `check_mode = "write"`

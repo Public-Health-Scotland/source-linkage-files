@@ -79,14 +79,14 @@ pis_clean %>%
   write_sav(get_source_extract_path(
     year = year,
     type = "PIS",
-    ext = "zsav"
+    ext = "zsav",
+    check_mode = "write"
   )) %>%
   # Save as .rds file
   write_rds(get_source_extract_path(
     year = year,
     type = "PIS",
-    ext = "rds"
+    check_mode = "write"
   ))
-
 
 # End of Script #

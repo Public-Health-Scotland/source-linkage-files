@@ -23,10 +23,12 @@ produce_source_maternity_tests <- function(data) {
     calculate_measures(measure = "sum")
 
   all_measures <- data %>%
-    calculate_measures(vars = c("beddays", "cost", "yearstay"), measure = "all")
+    calculate_measures(vars = c("beddays", "cost", "yearstay"),
+                       measure = "all")
 
   min_max <- data %>%
-    calculate_measures(vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"), measure = "min-max")
+    calculate_measures(vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"),
+                       measure = "min-max")
 
   join_output <- list(
     test_flags,
