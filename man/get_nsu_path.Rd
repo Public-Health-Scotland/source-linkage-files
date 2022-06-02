@@ -9,16 +9,16 @@ get_nsu_path(year, ...)
 \arguments{
 \item{year}{Year of extract}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the NSU file as an \code{\link[fs]{path}}
+The path to the NSU file as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the NSU file path for the given year
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{create_person_id}()},

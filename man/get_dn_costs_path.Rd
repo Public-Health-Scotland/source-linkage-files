@@ -7,18 +7,18 @@
 get_dn_costs_path(..., update = NULL)
 }
 \arguments{
-\item{...}{additional arguments passed to  \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to  \code{\link[=get_file_path]{get_file_path()}}}
 
-\item{update}{passed through \code{\link{latest_update}}}
+\item{update}{passed through \code{\link[=latest_update]{latest_update()}}}
 }
 \value{
-The path to the costs lookup as an \code{\link[fs]{path}}
+The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full District Nursing costs lookup path
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{create_person_id}()},

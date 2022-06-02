@@ -13,7 +13,7 @@ test_that("Can convert a date type to numeric", {
   ))
 
   expect_equal(
-    date_to_numeric(dates),
+    convert_date_to_numeric(dates),
     c(
       20170913,
       20180312,
@@ -44,7 +44,7 @@ test_that("Can convert a numeric 'date' to a proper date type", {
   )
 
   expect_equal(
-    numeric_to_date(numeric_dates),
+    convert_numeric_to_date(numeric_dates),
     as.Date(c(
       "2017/09/13",
       "2018/03/12",

@@ -3,7 +3,7 @@
 #' @param data a dataframe containing demographic variables e.g. chi
 #'
 #' @return a dataframe with flag (1 or 0) for each demographic variables.
-#' Missing value flag from \code{\link{is_missing}}
+#' Missing value flag from [is_missing()]
 #' @export
 #'
 #' @family create test flags functions

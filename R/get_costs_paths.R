@@ -1,17 +1,16 @@
 #' Get the full Care Home costs lookup path
 #'
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
-#' @param update passed through \code{\link{latest_update}}
+#' @param ... additional arguments passed to [get_file_path()]
+#' @param update passed through [latest_update()]
 #'
-#' @return The path to the costs lookup as an \code{\link[fs]{path}}
+#' @return The path to the costs lookup as an [fs::path()]
 #' @export
 #' @family file path functions
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_ch_costs_path <- function(..., update = NULL) {
   ch_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue("Cost_CH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.sav"),
-    check_mode = "write",
+    file_name = glue::glue("Cost_CH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"),
     ...
   )
 
@@ -20,18 +19,17 @@ get_ch_costs_path <- function(..., update = NULL) {
 
 #' Get the full District Nursing costs lookup path
 #'
-#' @param ... additional arguments passed to  \code{\link{get_file_path}}
-#' @param update passed through \code{\link{latest_update}}
+#' @param ... additional arguments passed to  [get_file_path()]
+#' @param update passed through [latest_update()]
 #'
-#' @return The path to the costs lookup as an \code{\link[fs]{path}}
+#' @return The path to the costs lookup as an [fs::path()]
 #' @export
 #' @family file path functions
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_dn_costs_path <- function(..., update = NULL) {
   dn_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue("Cost_DN_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.sav"),
-    check_mode = "write",
+    file_name = glue::glue("Cost_DN_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"),
     ...
   )
 
@@ -41,18 +39,17 @@ get_dn_costs_path <- function(..., update = NULL) {
 
 #' Get the full GP Out of Hours costs lookup path
 #'
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
-#' @param update passed through \code{\link{latest_update}}
+#' @param ... additional arguments passed to [get_file_path()]
+#' @param update passed through [latest_update()]
 #'
-#' @return The path to the costs lookup as an \code{\link[fs]{path}}
+#' @return The path to the costs lookup as an [fs::path()]
 #' @export
 #' @family file path functions
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_gp_ooh_costs_path <- function(..., update = NULL) {
   gp_ooh_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue("Cost_GPOoH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.sav"),
-    check_mode = "write",
+    file_name = glue::glue("Cost_GPOoH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"),
     ...
   )
 
