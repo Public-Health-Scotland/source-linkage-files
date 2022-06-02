@@ -23,7 +23,7 @@ latest_update <- "Jun_2022"
 
 costs_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Costs/")
 hc_costs_path <- fs::path(costs_dir, "costs_hc_lookup.rds")
-hc_costs_path_old <- fs::path(costs_dir, str_glue("costs_hc_lookup_pre-{latest_update}.rds"))
+hc_costs_path_old <- fs::path(costs_dir, glue::glue("costs_hc_lookup_pre-{latest_update}.rds"))
 
 
 # Copy existing file-----------------------------------
