@@ -1,15 +1,15 @@
 #' Produce Maternity tests
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from \code{\link{get_source_extract_path}})
+#' (data is from [get_source_extract_path()])
 #'
 #' @return a dataframe with a count of each flag
-#' from \code{\link{calculate_measures}}
+#' from [calculate_measures()]
 #' @export
 #'
 #' @family produce tests functions
-#' @seealso \code{\link{create_hb_test_flags}},
-#' \code{\link{create_hscp_test_flags}} and \code{\link{create_hb_cost_test_flags}}
+#' @seealso [create_hb_test_flags()],
+#' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
 #' for creating test flags
 produce_source_maternity_tests <- function(data) {
   test_flags <- data %>%

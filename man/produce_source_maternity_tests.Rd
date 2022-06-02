@@ -8,18 +8,18 @@ produce_source_maternity_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link{get_source_extract_path}})}
+(data is from \code{\link[=get_source_extract_path]{get_source_extract_path()}})}
 }
 \value{
 a dataframe with a count of each flag
-from \code{\link{calculate_measures}}
+from \code{\link[=calculate_measures]{calculate_measures()}}
 }
 \description{
 Produce Maternity tests
 }
 \seealso{
-\code{\link{create_hb_test_flags}},
-\code{\link{create_hscp_test_flags}} and \code{\link{create_hb_cost_test_flags}}
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}},
+\code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}} and \code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}}
 for creating test flags
 
 Other produce tests functions: 
