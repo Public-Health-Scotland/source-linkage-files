@@ -8,25 +8,25 @@ produce_slf_gpprac_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link{get_slf_gpprac_path}})}
+(data is from \code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}})}
 }
 \value{
 a dataframe with a count of each flag
-from \code{\link{calculate_measures}}
+from \code{\link[=calculate_measures]{calculate_measures()}}
 }
 \description{
 Produce the GP Practice Lookup tests
 }
 \seealso{
-\code{\link{create_hb_test_flags}} and
-\code{\link{create_hscp_test_flags}} for creating test flags
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}} and
+\code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}} for creating test flags
 
 Other produce tests functions: 
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_slf_deaths_tests}()},
 \code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_source_acute_tests}()},
+\code{\link{produce_source_extract_tests}()},
 \code{\link{produce_test_comparison}()}
 }
 \concept{produce tests functions}

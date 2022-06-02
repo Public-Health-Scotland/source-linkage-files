@@ -8,7 +8,7 @@ produce_sc_demog_lookup_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link{get_sc_demog_lookup_path}})}
+(data is from \code{\link[=get_sc_demog_lookup_path]{get_sc_demog_lookup_path()}})}
 }
 \value{
 a dataframe with a count of each flag.
@@ -22,7 +22,7 @@ Other produce tests functions:
 \code{\link{produce_slf_deaths_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_source_acute_tests}()},
+\code{\link{produce_source_extract_tests}()},
 \code{\link{produce_test_comparison}()}
 }
 \concept{produce tests functions}

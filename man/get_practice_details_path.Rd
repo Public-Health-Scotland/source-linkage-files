@@ -7,18 +7,18 @@
 get_practice_details_path(update = latest_update(), ...)
 }
 \arguments{
-\item{update}{the update month (defaults to use \code{\link{latest_update}})}
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the Practice Details file as an \code{\link[fs]{path}}
+The path to the Practice Details file as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the path to the Practice Details file
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},

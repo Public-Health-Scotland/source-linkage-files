@@ -184,7 +184,7 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Changes only required for SPSS ------------------------------------------
   final_data <- final_data %>%
     tidyr::replace_na(list(chi = "")) %>%
-    dplyr::mutate(dplyr::across(c(.data$record_keydate1, .data$record_keydate2), date_to_numeric)) %>%
+    dplyr::mutate(dplyr::across(c(.data$record_keydate1, .data$record_keydate2), convert_date_to_numeric)) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::mutate(
       postcode = stringr::str_pad(.data$postcode, width = 8, side = "right"),
@@ -195,12 +195,18 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
   # Write data --------------------------------------------------------------
   if (write_to_disk) {
     final_data %>%
-      readr::write_rds(get_file_path(get_year_dir(year), glue::glue("homelessness_for_source-20{year}"), ext = "rds", check_mode = "write"),
-        compress = "gz"
-      ) %>%
-      haven::write_sav(get_file_path(get_year_dir(year), glue::glue("homelessness_for_source-20{year}"), ext = "zsav", check_mode = "write"),
-        compress = TRUE
-      )
+      write_rds(get_file_path(
+        get_year_dir(year),
+        glue::glue("homelessness_for_source-20{year}"),
+        ext = "rds",
+        check_mode = "write"
+      )) %>%
+      write_sav(get_file_path(
+        get_year_dir(year),
+        glue::glue("homelessness_for_source-20{year}"),
+        ext = "zsav",
+        check_mode = "write"
+      ))
   }
 
   return(final_data)

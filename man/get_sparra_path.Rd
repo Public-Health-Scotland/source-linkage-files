@@ -9,16 +9,16 @@ get_sparra_path(year, ...)
 \arguments{
 \item{year}{Year of extract}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the SPARRA extract as an \code{\link[fs]{path}}
+The path to the SPARRA extract as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the path to the SPARRA extract
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
