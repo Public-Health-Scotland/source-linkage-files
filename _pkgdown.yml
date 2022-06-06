@@ -26,9 +26,17 @@ reference:
   - contents:
     - ends_with("year")
     - contains("year_format")
+  - subtitle: Age
+    desc: Compute Client Age Variables
+  - contents:
+    - contains("_age")
 
 
   - title: Create
+  - subtitle: ID
+    desc: Create Client ID
+  - contents:
+    - contains("_id")
   - subtitle: Costs
     desc: Functions to create costs variables and fix costs
   - contents:
@@ -52,6 +60,7 @@ reference:
     - contains("_hb_to")
     - contains("_hscp_to")
     - contains("_chi")
+    - contains("lca")
 
 
   - title: Duplicates
