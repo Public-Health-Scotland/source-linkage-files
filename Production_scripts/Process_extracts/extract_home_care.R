@@ -1,11 +1,11 @@
 #####################################################
-# Home Care
+# Home Care Extract
 # Author: Catherine Holland
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Social Care Home Care Episodes
+# Description - Process Home Care Extract
 #####################################################
 
 
@@ -20,7 +20,7 @@ year <- check_year_format("1920")
 
 # Read in data---------------------------------------
 
-source_hc_data <- readr::read_rds(get_sc_hc_episodes_path()) %>%
+source_hc_data <- readr::read_rds(get_sc_hc_episodes_path(update = "Jun_2022")) %>%
   # select episodes for FY
   filter(hc_service_start_date %in% range(start_fy(year), end_fy(year)) |
            (hc_service_start_date <= end_fy(year) & hc_service_end_date >= start_fy(year) | is.na(hc_service_end_date))) %>%
@@ -45,7 +45,7 @@ matched_data <- source_hc_data %>%
 
 source_hc_clean <- matched_data %>%
   # record reablement
-  mutate(reablement = replace_na(reablement, 9)) %>%
+  mutate(reablement = tidyr::replace_na(reablement, 9)) %>%
   # rename
   rename(record_keydate1 = "hc_service_start_date",
          record_keydate2 = "hc_service_end_date",
@@ -73,13 +73,29 @@ hc_hours <- source_hc_clean %>%
          hc_hours_q2 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q2"),
          hc_hours_q3 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q3"),
          hc_hours_q4 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q4")) %>%
+  # remove hours variables not from current year
+  select(-(contains("hc_hours_2"))) %>%
   # create annual hours variable
   mutate(hc_hours_annual = rowSums(across(contains("hc_hours_q"))))
 
 
+# Home Care Costs ---------------------------------------
+
+hc_costs <- hc_hours %>%
+  # rename costs variables
+  rename(hc_costs_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
+         hc_costs_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
+         hc_costs_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
+         hc_costs_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")) %>%
+  # remove cost variables not from current year
+  select(-(contains("hc_cost_2"))) %>%
+  # create cost total net
+  mutate(cost_total_net = rowSums(across(contains("hc_cost_q"))))
+
+
 # Outfile ---------------------------------------
 
-outfile <- hc_hours %>%
+outfile <- hc_costs %>%
   select(year,
          recid,
          SMRType,
@@ -91,8 +107,9 @@ outfile <- hc_hours %>%
          lca,
          record_keydate1,
          record_keydate2,
-         hc_hours_annual,
-         starts_with("hc_hours_q"),
+         starts_with("hc_hours"),
+         cost_total_net,
+         starts_with("hc_cost"),
          hc_provider,
          hc_reablement,
          person_id,
