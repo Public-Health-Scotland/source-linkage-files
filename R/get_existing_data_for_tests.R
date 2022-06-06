@@ -21,11 +21,11 @@ get_existing_data_for_tests <- function(new_data) {
 
   variable_names <- c("anon_chi", dplyr::intersect(slfhelper::ep_file_vars, names(new_data)))
 
-  slf_data <- slfhelper::read_slf_episode(
+  slf_data <- suppressWarnings(slfhelper::read_slf_episode(
     year = year,
     recids = recids,
     columns = variable_names
-  ) %>%
+  )) %>%
     dplyr::rename(chi = .data$anon_chi)
 
   return(slf_data)
