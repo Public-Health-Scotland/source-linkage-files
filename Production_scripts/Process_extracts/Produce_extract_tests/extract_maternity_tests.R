@@ -29,8 +29,8 @@ existing_data <- read_slf_episode(year, recid = "02B") %>%
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_maternity_tests(existing_data),
-  produce_source_maternity_tests(new_data)
+  produce_source_extract_tests(existing_data),
+  produce_source_extract_tests(new_data)
 )
 
 

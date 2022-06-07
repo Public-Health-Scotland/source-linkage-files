@@ -23,7 +23,6 @@ Other produce tests functions:
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_postcode_tests}()},
 \code{\link{produce_source_extract_tests}()},
-\code{\link{produce_source_maternity_tests}()},
 \code{\link{produce_test_comparison}()}
 }
 \concept{produce tests functions}
