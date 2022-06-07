@@ -55,9 +55,9 @@ ch_clean <- ch_lookup %>%
   mutate(DateReg = if_else(change_reg_date == 1, as.Date(paste0(year_opened, "/04/01")), DateReg)) %>%
   arrange(ch_postcode, Council_Area_Name, desc(DateReg)) %>%
   mutate(change_canx_date = if_else(!is.na(DateCanx) |
-                                      (ch_postcode == lag(ch_postcode) &
-                                         Council_Area_Name == lag(Council_Area_Name) &
-                                         lag(change_reg_date) == 1), 1, 0)) %>%
+    (ch_postcode == lag(ch_postcode) &
+      Council_Area_Name == lag(Council_Area_Name) &
+      lag(change_reg_date) == 1), 1, 0)) %>%
   mutate(change_canx_date = replace_na(change_canx_date, 0)) %>%
   mutate(DateCanx = if_else(change_canx_date == 1, as.Date(paste0(lubridate::year(DateReg), "/03/31")), DateCanx)) %>%
   arrange(ch_postcode, Council_Area_Name, DateReg) %>%
