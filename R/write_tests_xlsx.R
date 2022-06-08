@@ -33,5 +33,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
     overwrite = TRUE
   )
 
+  fs::file_chmod(path = source_tests_path, mode = "660")
+
   return(source_tests_path)
 }
