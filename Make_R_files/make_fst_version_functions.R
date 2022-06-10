@@ -72,8 +72,8 @@ create_fst_files <- function(year, compress = 100) {
   }
 
   write_to_log(glue::glue("{Sys.time()} - Starting episode file for 20{year}."))
-  if (fs::file_exists(ep_file)) {
-    if (!fs::file_exists(fs::path_ext_set(ep_file, ".fst"))) {
+  if (fs::file_exists(ep_file_path)) {
+    if (!fs::file_exists(fs::path_ext_set(ep_file_path, ".fst"))) {
 
       # Create episode file
       zsav_to_fst(ep_file_path, compress = compress)
@@ -84,9 +84,9 @@ create_fst_files <- function(year, compress = 100) {
     write_to_log(glue::glue("{Sys.time()} - Skipping 20{year} episode, as the zsav file doesn't exist in sourcedev"))
   }
 
+  time_diff <- pretty_time_diff(start_time, Sys.time())
   finish_message <- glue::glue_col(
-    "{green {Sys.time()} - Done with {year}}",
-    "\nIt took: {blue {pretty_time_diff(start_time, Sys.time())} minutes}\n"
+    "{green {Sys.time()} - Done with {year}} in {blue {time_diff} minutes}\n"
   )
   write_to_log(finish_message)
   message(finish_message)
@@ -104,14 +104,14 @@ create_fst_lookups <- function(compress = 100) {
     fs::path(hscdiip_slf_dir, "CHI-to-Anon-lookup.zsav")
 
   write_to_log(glue::glue("{Sys.time()} - Starting Anon CHI lookup."))
-  zsav_to_fst(anon_chi_lookup, compress = compress)
+  zsav_to_fst(anon_chi_lookup_path, compress = compress)
 
   write_to_log(glue::glue("{Sys.time()} - Starting CHI lookup."))
-  zsav_to_fst(chi_lookup, compress = compress)
+  zsav_to_fst(chi_lookup_path, compress = compress)
 
+  time_diff <- pretty_time_diff(start_time, Sys.time())
   finish_message <- glue::glue_col(
-    "{green {Sys.time()} - Done with lookups}",
-    "\nIt took: {blue {pretty_time_diff(start_time, Sys.time())} minutes}\n"
+    "{green {Sys.time()} - Done with lookups} in {blue {time_diff} minutes}\n"
   )
   write_to_log(finish_message)
   message(finish_message)
