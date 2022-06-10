@@ -1,4 +1,4 @@
-# June 2022 Update - Unreleased
+# June 2022 Update - Released 10-Jun-2022
 
 * Fixed a bug where CH costs was not referring to end of year. 
   * eg. 2018 costs relates to 2017/18
