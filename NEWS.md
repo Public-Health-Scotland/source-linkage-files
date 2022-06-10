@@ -4,8 +4,6 @@
   * eg. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
 * We now use [`{haven}`](https://haven.tidyverse.org/news/index.html) to compress the SPSS files which compresses them better than SPSS does 🤷‍♂️
-* Fixed a bug where we were overcounting preventable beddays in the individual file.
-  * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
 * `cij_marker` is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
   * Check code of the form `cij_marker = "x"`. `x` now needs to be a numeric.
   * Check code of the form `cij_maker = lag(cij_marker)`. If the previous `cij_marker` is missing, the expression will fail, previously it would have compared to an empty string.
