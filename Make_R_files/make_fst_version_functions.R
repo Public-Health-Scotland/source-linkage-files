@@ -57,7 +57,7 @@ create_fst_files <- function(year, compress = 100) {
   ep_file_path <-
     fs::path(slf_sourcedev_dir, glue::glue("source-episode-file-20{year}.zsav"))
 
-  write_to_log(glue::glue("Starting individual file for 20{year}.\nIt is now: {start_time}"))
+  write_to_log(glue::glue("{Sys.time()} - Starting individual file for 20{year}."))
 
   if (fs::file_exists(indiv_file_path)) {
     if (!fs::file_exists(fs::path_ext_set(indiv_file_path, ".fst"))) {
@@ -65,29 +65,31 @@ create_fst_files <- function(year, compress = 100) {
       # Create individual file
       zsav_to_fst(indiv_file_path, compress = compress)
     } else {
-      write_to_log(glue::glue("Skipping 20{year} individual, as the fst file already exists in sourcedev"))
+      write_to_log(glue::glue("{Sys.time()} - Skipping 20{year} individual, as the fst file already exists in sourcedev"))
     }
   } else {
-    write_to_log(glue::glue("Skipping 20{year} individual, as the zsav file doesn't exist in sourcedev"))
+    write_to_log(glue::glue("{Sys.time()} - Skipping 20{year} individual, as the zsav file doesn't exist in sourcedev"))
   }
 
-  write_to_log(glue::glue("Starting episode file for 20{year}.\nIt is now: {Sys.time()}"))
-  if (fs::file_exists(ep_file_path)) {
-    if (!fs::file_exists(fs::path_ext_set(ep_file_path, ".fst"))) {
+  write_to_log(glue::glue("{Sys.time()} - Starting episode file for 20{year}."))
+  if (fs::file_exists(ep_file)) {
+    if (!fs::file_exists(fs::path_ext_set(ep_file, ".fst"))) {
 
       # Create episode file
       zsav_to_fst(ep_file_path, compress = compress)
     } else {
-      write_to_log(glue::glue("Skipping 20{year} episode, as the fst file already exists in sourcedev"))
+      write_to_log(glue::glue("{Sys.time()} - Skipping 20{year} episode, as the fst file already exists in sourcedev"))
     }
   } else {
-    write_to_log(glue::glue("Skipping 20{year} episode, as the zsav file doesn't exist in sourcedev"))
+    write_to_log(glue::glue("{Sys.time()} - Skipping 20{year} episode, as the zsav file doesn't exist in sourcedev"))
   }
 
-  write_to_log(glue::glue(
-    "Done with {year} at {Sys.time()}",
-    "\nIt took: {pretty_time_diff(start_time, Sys.time())} minutes"
-  ))
+  finish_message <- glue::glue_col(
+    "{green {Sys.time()} - Done with {year}}",
+    "\nIt took: {blue {pretty_time_diff(start_time, Sys.time())} minutes}\n"
+  )
+  write_to_log(finish_message)
+  message(finish_message)
 }
 
 create_fst_lookups <- function(compress = 100) {
@@ -101,14 +103,16 @@ create_fst_lookups <- function(compress = 100) {
   chi_lookup_path <-
     fs::path(hscdiip_slf_dir, "CHI-to-Anon-lookup.zsav")
 
-  write_to_log(glue::glue("Starting Anon CHI lookup it is now: {start_time}"))
-  zsav_to_fst(anon_chi_lookup_path, compress = compress)
+  write_to_log(glue::glue("{Sys.time()} - Starting Anon CHI lookup."))
+  zsav_to_fst(anon_chi_lookup, compress = compress)
 
-  write_to_log(glue::glue("Starting CHI lookup it is now: {Sys.time()}"))
-  zsav_to_fst(chi_lookup_path, compress = compress)
+  write_to_log(glue::glue("{Sys.time()} - Starting CHI lookup."))
+  zsav_to_fst(chi_lookup, compress = compress)
 
-  write_to_log(glue::glue(
-    "Done with lookups at {Sys.time()}.",
-    "\nIt took: {pretty_time_diff(start_time, Sys.time())} minutes"
-  ))
+  finish_message <- glue::glue_col(
+    "{green {Sys.time()} - Done with lookups}",
+    "\nIt took: {blue {pretty_time_diff(start_time, Sys.time())} minutes}\n"
+  )
+  write_to_log(finish_message)
+  message(finish_message)
 }
