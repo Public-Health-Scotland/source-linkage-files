@@ -7,12 +7,12 @@ library(janitor)
 library(fs)
 library(haven)
 
-latest_update <- "Mar_2022"
+latest_update <- "Jun_2022"
 lookup_dir <- path("/conf/hscdiip/SLF_Extracts/Lookups")
 
 # Retrieve the latest resource from the dataset
 gp_clusters <- get_dataset("gp-practice-contact-details-and-list-sizes",
-  max_resources = 1
+  max_resources = 20
 ) %>%
   clean_names() %>%
   # Get the code lookups so we have the names
@@ -30,6 +30,9 @@ gp_clusters <- get_dataset("gp-practice-contact-details-and-list-sizes",
     partnership = hscp_name,
     health_board = hb_name
   ) %>%
+  tidyr::drop_na(cluster) %>%
+  mutate(practice_name = stringr::str_to_title(practice_name)) %>%
+  distinct(gpprac, .keep_all = TRUE) %>%
   # Sort for SPSS matching
   arrange(gpprac)
 
@@ -40,5 +43,5 @@ write_sav(
     paste0("practice_details_", latest_update),
     ext = "zsav"
   ),
-  compress = TRUE
+  compress = "zsav"
 )

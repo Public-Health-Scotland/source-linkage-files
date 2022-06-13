@@ -147,8 +147,8 @@ save outfile = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
 select if any(recid, "01B", "04B", "GLS", "02B").
 
 * Fill in the blank CIJ markers.
-do if (chi ne lag(chi)) AND cij_marker = "" AND chi NE "".
-    compute cij_marker= "1".
+do if (chi ne lag(chi)) AND sysmis(cij_marker) AND chi NE "".
+    compute cij_marker= 1.
 end if.
 
 * Populate ipdc for maternity records.
@@ -201,7 +201,7 @@ Numeric PPA (F1.0).
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
     * First record in CIJ.
-    Do if (chi NE lag(chi) or (chi = lag(chi) and cij_marker NE lag(cij_marker))).
+    Do if (chi NE lag(chi) or (chi = lag(chi) and ((cij_marker NE lag(cij_marker)) or (Not(sysmis(cij_marker)) and sysmis(lag(cij_marker)))))).
         * Non-elective original admission.
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.
@@ -377,7 +377,8 @@ Numeric
 Numeric
     hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
     hc_provider (F1.0)
-    hc_reablement (F1.0).
+    hc_reablement (F1.0)
+    hc_cost_q1 hc_cost_q2 hc_cost_q3 hc_cost_q4 (F22.2).
 
 * Care Homes.
 String
@@ -415,6 +416,7 @@ save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav"
     /Drop Valid_CHI PPA
     /zcompressed.
 get file = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav".
+
 
 * Housekeeping.
 Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
