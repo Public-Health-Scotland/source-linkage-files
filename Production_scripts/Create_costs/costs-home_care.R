@@ -29,8 +29,8 @@ latest_update <- "Jun_2022"
 
 ## Make a copy of the existing file
 fs::file_copy(get_hc_costs_path(),
-              get_hc_costs_path(update = latest_update),
-              overwrite = TRUE
+  get_hc_costs_path(update = latest_update),
+  overwrite = TRUE
 )
 
 
@@ -46,14 +46,14 @@ hc_costs_raw <- readxl::read_xlsx(get_hc_raw_costs_path()) %>%
 ## data - wide to long ##
 hc_costs <- hc_costs_raw %>%
   left_join(phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
-                                      col_select = c("CA", "CAName", "HBName")
+    col_select = c("CA", "CAName", "HBName")
   ) %>%
     distinct(),
   by = c("gss_code" = "CA")
   ) %>%
   select(ca_name = CAName, health_board = HBName, starts_with("sw1_")) %>%
   mutate(across(starts_with("sw1_"), as.numeric),
-         ca_name = factor(ca_name)
+    ca_name = factor(ca_name)
   ) %>%
   tidyr::pivot_longer(
     cols = starts_with("sw1_"),
@@ -74,14 +74,14 @@ hc_costs_uplifted <-
   bind_rows(
     hc_costs,
     purrr::map(1:5, ~
-          hc_costs %>%
-          filter(year == latest_cost_year) %>%
-          group_by(year, ca_name, health_board) %>%
-          summarise(
-            hourly_cost = hourly_cost * (1.01)^.x,
-            .groups = "drop"
-          ) %>%
-          mutate(year = year + .x))
+      hc_costs %>%
+        filter(year == latest_cost_year) %>%
+        group_by(year, ca_name, health_board) %>%
+        summarise(
+          hourly_cost = hourly_cost * (1.01)^.x,
+          .groups = "drop"
+        ) %>%
+        mutate(year = year + .x))
   ) %>%
   arrange(year, ca_name)
 
