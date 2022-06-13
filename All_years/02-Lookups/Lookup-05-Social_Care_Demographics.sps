@@ -7,7 +7,7 @@ GET DATA
   /CONNECT=!connect_sc
   /SQL='SELECT latest_record_flag, extract_date, sending_location, social_care_id, '+
     'upi, chi_upi, submitted_postcode, chi_postcode, submitted_date_of_birth, chi_date_of_birth, '+    
-    'submitted_gender, chi_gender_code FROM social_care_2.demographic'
+    'submitted_gender, chi_gender_code FROM social_care_2.demographic_snapshot'
   /ASSUMEDSTRWIDTH=255.
 CACHE.
 EXECUTE.
