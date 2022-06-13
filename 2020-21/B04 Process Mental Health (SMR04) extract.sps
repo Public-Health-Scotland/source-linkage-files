@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
@@ -54,7 +54,7 @@ GET DATA  /TYPE=TXT
       AdmissionDiagnosis3Code6char A6
       AdmissionDiagnosis4Code6char A6
       AgeatMidpointofFinancialYear04 F3.0
-      ContinuousInpatientJourneyMarker04 A5
+      ContinuousInpatientJourneyMarker04 F5.0
       CIJPlannedAdmissionCode04 F1.0
       CIJInpatientDayCaseIdentifierCode04 A2
       CIJTypeofAdmissionCode04 A7
@@ -74,7 +74,7 @@ GET DATA  /TYPE=TXT
 CACHE.
 Execute.
 
-* SMR04 specific variables need to be added in here. 
+* SMR04 specific variables need to be added in here.
 rename variables
     AdmissionDiagnosis1Code6char = adcon1
     AdmissionDiagnosis2Code6char = adcon2
@@ -139,7 +139,7 @@ compute ipdc = 'I'.
  * We assume that if it starts with a letter it's an English practice and so recode to 99995.
 Do if Range(char.Substr(gpprac, 1, 1), "A", "Z").
    Compute gpprac = "99995".
-End if. 
+End if.
 Alter Type GPprac (F5.0).
 
 if (CIJInpatientDayCaseIdentifierCode04 EQ 'MH') cij_ipdc = 'I'.
@@ -160,11 +160,11 @@ alter type cij_admtype (A2).
 
 sort cases by uri.
 
-* need to add in SMR04 specific variables in to here. 
+* need to add in SMR04 specific variables in to here.
 save outfile = !Year_dir + 'mh_temp.zsav'
    /zcompressed.
-  
-* Create a file that contains uri and costs month and net cost. Make this look like a 'cross-tab' ready for matching back to the acute_temp file. 
+
+* Create a file that contains uri and costs month and net cost. Make this look like a 'cross-tab' ready for matching back to the acute_temp file.
 get file = !Year_dir + 'mh_temp.zsav'
    /keep uri cost_total_net yearstay costmonthnum.
 
@@ -197,7 +197,7 @@ aggregate outfile = !Year_dir + 'MH_monthly_costs_and_beddays_by_uri.sav'
        Sum(apr_beddays may_beddays jun_beddays jul_beddays aug_beddays sep_beddays oct_beddays nov_beddays dec_beddays jan_beddays feb_beddays mar_beddays).
 
 
-* Match this file back to the main acute file and then create totals adding across the months for each of the costs and yearstay variables.  
+* Match this file back to the main acute file and then create totals adding across the months for each of the costs and yearstay variables.
 * Need To reduce each uri to one row only. All columns will have the same information except for the costs month variable.
 match files file = !Year_dir + 'mh_temp.zsav'
    /table = !Year_dir + 'MH_monthly_costs_and_beddays_by_uri.sav'
