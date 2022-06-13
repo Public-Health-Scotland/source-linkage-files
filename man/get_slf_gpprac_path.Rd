@@ -7,18 +7,18 @@
 get_slf_gpprac_path(update = latest_update(), ...)
 }
 \arguments{
-\item{update}{the update month (defaults to use \code{\link{latest_update}})}
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the SLF GP practice lookup as an \code{\link[fs]{path}}
+The path to the SLF GP practice lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full path to the SLF GP practice lookup
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
@@ -31,6 +31,7 @@ Other file path functions:
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+\code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_sc_ch_episodes_path}()},

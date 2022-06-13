@@ -1,6 +1,6 @@
 #' Write tests as an xlsx workbook
 #'
-#' @param comparison_data produced by \code{\link{produce_test_comparison}}
+#' @param comparison_data produced by [produce_test_comparison()]
 #' @param sheet_name the name of the dataset - this will be used as the sheet name
 #'
 #' @return source_tests_path to the xlsx file location
@@ -32,6 +32,8 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
     source_tests_path,
     overwrite = TRUE
   )
+
+  fs::file_chmod(path = source_tests_path, mode = "660")
 
   return(source_tests_path)
 }

@@ -1,24 +1,23 @@
 #' Produce the GP Practice Lookup tests
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from \code{\link{get_slf_gpprac_path}})
+#' (data is from [get_slf_gpprac_path()])
 #'
 #' @return a dataframe with a count of each flag
-#' from \code{\link{calculate_measures}}
+#' from [calculate_measures()]
 #' @export
-#' @importFrom dplyr mutate select
 #' @family produce tests functions
-#' @seealso \code{\link{create_hb_test_flags}} and
-#' \code{\link{create_hscp_test_flags}} for creating test flags
+#' @seealso [create_hb_test_flags()] and
+#' [create_hscp_test_flags()] for creating test flags
 produce_slf_gpprac_tests <- function(data) {
   data %>%
     # use functions to create HB and partnership flags
     create_hb_test_flags(.data$hbpraccode) %>%
     create_hscp_test_flags(.data$hscp2018) %>%
     # create other test flags
-    mutate(n_gpprac = 1) %>%
+    dplyr::mutate(n_gpprac = 1) %>%
     # remove variables that won't be summed
-    select(-c(
+    dplyr::select(-c(
       .data$gpprac, .data$pc7, .data$pc8, .data$cluster,
       .data$hbpraccode, .data$hscp2018, .data$ca2018,
       .data$lca

@@ -133,12 +133,8 @@ ggplot(data = matched_costs_data, aes(x = year, y = cost_per_consultation)) +
 gp_ooh_costs_uplifted %>%
   rename(TreatmentNHSBoardCode = "HB2019") %>%
   # .zsav
-  haven::write_sav(get_gp_ooh_costs_path(check_mode = "write"),
-    compress = TRUE
-  ) %>%
+  write_sav(get_gp_ooh_costs_path(ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  readr::write_rds(get_gp_ooh_costs_path(check_mode = "write"),
-    compress = "gz"
-  )
+  write_rds(get_gp_ooh_costs_path(check_mode = "write"))
 
 ## End of Script ---------------------------------------

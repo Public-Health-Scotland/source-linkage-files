@@ -22,15 +22,14 @@ year <- "1920"
 new_data <- readr::read_rds(get_source_extract_path(year, "Acute", ext = "rds"))
 
 # Read current SLF episode file and filter for 01B and GLS records
-existing_data <- read_slf_episode("1920", recid = c("01B", "GLS")) %>%
-  rename(chi = anon_chi)
+existing_data <- get_existing_data_for_tests(new_data = new_data)
 
 
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_acute_tests(existing_data),
-  produce_source_acute_tests(new_data)
+  produce_source_extract_tests(existing_data),
+  produce_source_extract_tests(new_data)
 )
 
 

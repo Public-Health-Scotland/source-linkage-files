@@ -10,18 +10,18 @@ get_service_use_cohorts_path(year, ...)
 \arguments{
 \item{year}{The year for the cohorts extract}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 The path to the Service Use Cohort lookup
-as a \code{\link[fs]{path}}
+as a \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full path to the Service Use
 Cohort lookup
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
@@ -34,6 +34,7 @@ Other file path functions:
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+\code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_sc_ch_episodes_path}()},

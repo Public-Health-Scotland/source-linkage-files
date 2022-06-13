@@ -8,18 +8,18 @@ get_it_deaths_path(it_reference = it_extract_ref(), ...)
 }
 \arguments{
 \item{it_reference}{The IT reference to use,
-defaults to \code{\link{it_extract_ref}}}
+defaults to \code{\link[=it_extract_ref]{it_extract_ref()}}}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the IT Deaths extract as an \code{\link[fs]{path}}
+The path to the IT Deaths extract as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full path to the IT Deaths extract
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
@@ -31,6 +31,7 @@ Other file path functions:
 \code{\link{get_hhg_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+\code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_sc_ch_episodes_path}()},

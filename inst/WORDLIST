@@ -15,6 +15,7 @@ MMM
 MMMYY
 NSU
 PIS
+RStudio
 SDS
 SLF
 SLFs
@@ -24,9 +25,11 @@ Telecare
 YYYY
 YYYYMMDD
 beddays
+bz
 datazone
 dsn
 fyyear
+gz
 hbpraccode
 rds
 reablement
@@ -36,4 +39,6 @@ sourcedev
 spd
 specialty
 tibble
+xz
+zlib
 zsav

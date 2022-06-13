@@ -1,0 +1,99 @@
+url: https://public-health-scotland.github.io/source-linkage-files
+template:
+  bootstrap: 5
+
+reference:
+
+  - title: Connection to PHS database
+    desc: Connection to PHS database
+  - contents:
+    - phs_db_connection
+
+
+  - title: Check
+  - contents:
+    - is_missing
+
+
+  - title: Years & Dates
+  - subtitle: Dates within Financial Year
+    desc: Functions to compute the start, end and midpoint dates of a financial year, and convert date types
+  - contents:
+    - ends_with("_fy")
+    - contains("_date")
+  - subtitle: Year Format
+    desc: Functions to convert between financial year and calendar year, and check that the year variable is in the correct format
+  - contents:
+    - ends_with("year")
+    - contains("year_format")
+
+
+  - title: Create
+  - subtitle: Costs
+    desc: Functions to create costs variables and fix costs
+  - contents:
+    - ends_with("_costs")
+  - subtitle: Flags
+    desc: Functions to create flag variables
+  - contents:
+    - ends_with("_flags")
+  - subtitle: Monthly
+    desc: Functions to convert monthly variables, beddays
+  - contents:
+    - contains("_monthly_rows")
+    - contains("_beddays")
+
+
+  - title: Codes
+    desc: Convert various codes to alternate forms
+  - contents:
+    - contains("_ca")
+    - contains("to_dummy")
+    - contains("_hb_to")
+    - contains("_hscp_to")
+    - contains("_chi")
+
+
+  - title: Duplicates
+    desc: Functions to fix duplicates
+  - contents:
+    - contains("_duplicates")
+
+  - title: Writing data
+    desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
+  - contents:
+    - write_sav
+    - write_rds
+
+  - title: Initialisation
+    desc: Get the date of update, period, and extract number
+  - contents:
+    - ends_with("_period")
+    - ends_with("_update")
+    - starts_with("it_extract")
+
+
+  - title: Files
+  - subtitle: Directories
+    desc: File Directories for SLF's
+  - contents:
+    - ends_with("_dir")
+  - subtitle: Paths
+    desc: File Paths for SLF's
+  - contents:
+    - ends_with("_file")
+    - ends_with("_path")
+
+  - title: Process
+    desc: Process SLF Extracts
+  - contents:
+    - starts_with("process_")
+
+
+  - title: Testing
+    desc: Tests for the SLF Extracts
+  - contents:
+    - contains("_tests")
+    - contains("_measures")
+    - starts_with("produce_test")
+
