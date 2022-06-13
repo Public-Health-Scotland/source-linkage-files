@@ -6,7 +6,7 @@ GET DATA
   /CONNECT= !Connect_sc
   /SQL='SELECT sending_location, social_care_id, period, service_type, '+
     'service_start_date, service_end_date '+
-    'FROM social_care_2.equipment '+
+    'FROM social_care_2.equipment_snapshot '+
     'WHERE (financial_year = 2017) '+
     'ORDER BY sending_location, social_care_id'
   /ASSUMEDSTRWIDTH=255.
