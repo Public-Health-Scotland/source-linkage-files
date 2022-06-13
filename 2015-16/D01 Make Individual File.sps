@@ -49,6 +49,7 @@ Numeric
     CH_cost
     HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes
     HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours
+    HC_total_cost HC_personal_hours_cost HC_non_personal_hours_cost HC_reablement_hours_cost
     AT_alarms AT_telecare
     SDS_option_1 SDS_option_2 SDS_option_3
     CIJ_el
@@ -63,7 +64,7 @@ add files file = *
     /by CHI cij_marker
     /First = Distinct_CIJ.
 
-If cij_marker = "" Distinct_CIJ = 0.
+If sysmis(cij_marker) Distinct_CIJ = 0.
 
 Do if cij_pattype_code = 0.
     Compute CIJ_non_el = Distinct_CIJ.
@@ -77,9 +78,11 @@ End if.
 If cij_delay and Distinct_CIJ cij_delay = 1.
 Compute cij_delay = cij_delay and Distinct_CIJ.
 
-*Create variables to count preventable admissions and preventable beddays.
-Do if cij_ppa.
-    If Distinct_CIJ preventable_admissions = 1.
+* Create variables to count preventable admissions and preventable beddays.
+* Only count if the CIJ is flagged as preventable (CIJ_ppa).
+* And only count once per CIJ (use Distinct_CIJ).
+Do if cij_ppa and Distinct_CIJ.
+    Compute preventable_admissions = 1.
     Compute preventable_beddays = datediff(Min(!endFY, CIJ_end_date), Max(!startFY, CIJ_start_date), "days").
 Else.
     Compute preventable_admissions = 0.
@@ -92,6 +95,8 @@ sort cases by CHI ch_chi_cis.
 add files file = *
     /by  CHI ch_chi_cis
     /first = first_ch_ep.
+
+If sysmis(ch_chi_cis) first_ch_ep = 0.
 
 * For SMR01/02/04/01_1E: sum activity and costs per patient with an Elective/Non-Elective split.
 * Acute (SMR01) section.
@@ -413,17 +418,23 @@ Else if (recid = "HC").
     * Hours count.
     Compute HC_total_hours = hc_hours_annual.
 
+    * Total cost.
+    compute HC_total_cost = cost_total_net.
+
     Do if SMRType = "HC-Per".
         Compute HC_personal_episodes = 1.
         Compute HC_personal_hours = HC_total_hours.
+        Compute HC_personal_hours_cost = cost_total_net.
     Else if SMRType = "HC-Non-Per".
         Compute HC_non_personal_episodes = 1.
         Compute HC_non_personal_hours = hc_hours_annual.
+        Compute HC_non_personal_hours_cost = cost_total_net.
     End if.
 
     Do if hc_reablement = 1.
         compute HC_reablement_episodes = 1.
         compute HC_reablement_hours = hc_hours_annual.
+        compute HC_reablement_hours_cost = cost_total_net.
     End if.
 
 Else if (recid = "AT").
@@ -450,7 +461,7 @@ End if.
 
 *************************************************************************************************************************************************.
 * Aggregate over the Care Home 'CIS' episodes.
-*.
+
 aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
@@ -477,7 +488,7 @@ Recode gender (0 = 1.5) (9 = 1.5).
 * Sort data into chi and episode date order.
 Sort cases by chi keydate1_dateformat keyTime1 keydate2_dateformat keyTime2.
 
-* Now aggregate by Chi, keep all of the variables we made, we'll clean them up next.
+* Now aggregate by CHI, keep all of the variables we made, we'll clean them up next.
 * Also keep variables that are only dependant on CHI (as opposed to postcode) e.g. death_date, cohorts, LTC etc.
 * Using Presorted so that we keep the ordering from earlier (chi, keydate1). This way, when we do 'Last', we get the most recent (non-blank) data from each record.
 aggregate outfile = *
@@ -535,6 +546,8 @@ aggregate outfile = *
     /CH_beddays CH_cost = sum(CH_beddays CH_cost)
     /HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes = sum(HC_episodes HC_personal_episodes HC_non_personal_episodes HC_reablement_episodes)
     /HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours = sum(HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours)
+    /HC_total_cost HC_personal_hours_cost HC_non_personal_hours_cost HC_reablement_hours_cost =
+    sum(HC_total_cost HC_personal_hours_cost HC_non_personal_hours_cost HC_reablement_hours_cost)
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
     /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
     /SDS_option_4 = Max(SDS_option_4)
@@ -867,6 +880,7 @@ Delete Variables Keep dataset nDistGPpracs order gppracMatch.
 Recode Acute_episodes to deceased (sysmis = 0).
 
 * Create a total health cost.
+* TODO add Home Care costs here, after speaking to HHG team as it will impact HRI.
 Compute health_net_cost = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + AE_cost + PIS_cost + OoH_cost.
 Compute health_net_costincDNAs = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + OP_cost_dnas + AE_cost + PIS_cost + OoH_cost.
 

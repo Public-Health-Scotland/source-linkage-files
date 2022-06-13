@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 
 *********************************************************************************************************************
  * Link Homelessness to source
@@ -8,19 +8,12 @@
 Host command = ["unzip " +!Year_dir + "Activity_20" + !FY + ".zip homelessness_for_source-20" + !FY + ".zsav -d " + !Year_dir].
 
 get file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
-    /Keep CHI record_keydate1 record_keydate2.
+    /Keep CHI record_keydate1.
 
 Select if CHI ne "".
 
 * Bring back the AssessmentDecisionDate in date format.
 Compute AssessmentDecisionDate = DATE.DMY(Mod(record_keydate1, 100), Trunc(Mod(record_keydate1, 10000) / 100), Trunc(record_keydate1 / 10000)).
-* Deal with empty end dates.
-Do if SysMiss(record_keydate2).
-    Compute CaseClosedDate = $sysmis.
-Else.
-    Compute CaseClosedDate = DATE.DMY(Mod(record_keydate2, 100), Trunc(Mod(record_keydate2, 10000) / 100), Trunc(record_keydate2 / 10000)).
-End if.
-Alter type AssessmentDecisionDate CaseClosedDate (Date12).
 
  * Work out what the maximum number of records per person was.
  * We need this later.
@@ -33,15 +26,14 @@ aggregate
     /max_records = max(num_records).
 
  * Assuming it must be <=9.
-Alter Type max_records (F1.0).
+Alter Type max_records (AMIN).
 
  * Ugly hack because SPSS...
  * Take the max_records number and generate two macros using this.
  * However the way to do this without Python is to write out to a new file.
 do if $casenum = 1.
     write out = !Year_dir + "Temp macro definitions.sps"
-        /"Define !maxAssesment() !Concat('AssessmentDecisionDate.', '" max_records "') !EndDefine."
-        /"Define !maxClose() !Concat('CaseClosedDate.', '" max_records "') !EndDefine.".
+        /"Define !maxAssesment() !Concat('AssessmentDecisionDate.', '" max_records "') !EndDefine.".
 end if.
 
 * Sort for restructure.
@@ -53,7 +45,7 @@ include !Year_dir + "Temp macro definitions.sps".
 * Restructure to have single record per CHI.
 casestovars
     /ID = chi
-    /Drop record_keydate1 record_keydate2 num_records max_records
+    /Drop record_keydate1 num_records max_records
     /autofix = no.
 
 * Match to source.
@@ -82,27 +74,16 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
     Compute HH_6before_ep = 0.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
-    Do repeat HH_start = AssessmentDecisionDate.1 to !maxAssesment
-        /HH_end = CaseClosedDate.1 to !maxClose.
+    Do repeat AssessmentDecisionDate = AssessmentDecisionDate.1 to !maxAssesment.
+        * If there was an application decision made during episode.
+        * HH started during episode.
+        If Range(AssessmentDecisionDate, keydate1_dateformat, keydate2_dateformat) HH_ep = 1.
 
-        * If there was an active application during episode.
-        * HH started during episode or HH ended during episode or HH was ongoing at start of episode.
-        If Range(HH_start, keydate1_dateformat, keydate2_dateformat)
-            or Range(HH_end, keydate1_dateformat, keydate2_dateformat)
-            or Range(keydate1_dateformat, HH_start, HH_end)
-            or (HH_start <= keydate2_dateformat and Missing(HH_end)) HH_ep = 1.
+        * If there was an application decision made in the 6 months (180 days) after the episode discharged.
+        If Range(AssessmentDecisionDate, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1)) HH_6after_ep = 1.
 
-        * If there was an active application in the 6 months after the discharge of the episode.
-        If Range(HH_start, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
-            or Range(HH_end, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1))
-            or Range(keydate2_dateformat + time.days(180), HH_start, HH_end)
-            or (HH_start <= keydate2_dateformat + time.days(180) and Missing(HH_end)) HH_6after_ep = 1.
-
-        * If the was an active episode in the 6 mo (180 days) prior.
-        If Range(HH_start, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1))
-            or Range(HH_end, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1))
-            or Range(keydate1_dateformat - time.days(180), HH_start, HH_end)
-            or (HH_start <= keydate1_dateformat and Missing(HH_end)) HH_6before_ep = 1.
+        * If the was an application decision made in the 6 months prior to admission.
+        If Range(AssessmentDecisionDate, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1)) HH_6before_ep = 1.
     End Repeat.
 End if.
 
