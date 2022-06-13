@@ -16,11 +16,8 @@ save outfile =  !Year_dir + "slf_reduced_for_DD.zsav"
 get file =  !Year_dir + "slf_reduced_for_DD.zsav".
 
 * Create a copy of the CIJ marker.
-String temp_cij_marker (A5).
+Numeric temp_cij_marker (F5.0).
 Compute temp_cij_marker = cij_marker.
-
-* Set blank to be user missing (important for later).
-Missing Values temp_cij_marker ("     ").
 
 * Add all files together.
 add files
@@ -56,7 +53,7 @@ Do if chi = lag(chi) and recid = "DD" and lag(recid) = "04B" and sysmiss(keydate
 End if.
 
 * Use Min and Max CIJ dates to fill in temp_cij_marker - where possible - DD episodes with no CIJ.
-Do if chi = lag(chi) and missing(temp_cij_marker).
+Do if chi = lag(chi) and sysmis(temp_cij_marker).
     * Create flags simply to check rows where CIJ markers are being added.
     * don't expect any of these.
     compute Flag_1 = 0.
@@ -107,7 +104,7 @@ End if.
 * Sort in the opposite direction.
 sort cases by chi (A) keydate1_dateformat (D) order (A).
 * If DD record date ends within CIJ dates but starts before.
-Do if recid = 'DD' and chi = lag(chi) and missing(temp_cij_marker).
+Do if recid = 'DD' and chi = lag(chi) and sysmis(temp_cij_marker).
     Compute Flag_4 = 0.
     Do if keydate1_dateformat LE lag(CIJ_start_date) and Range(keydate2_dateformat, lag(CIJ_start_date) - time.days(1), lag(CIJ_end_date) + time.days(1)).
         Compute Flag_4 = 1.
@@ -173,7 +170,7 @@ Variable labels
     no_cij "no-CIJ attached".
 
 * Flag DDs which don't seem to have an associated hospital stay.
-if missing(temp_cij_marker) and recid = "DD" no_cij = 1.
+if sysmis(temp_cij_marker) and recid = "DD" no_cij = 1.
 
 save outfile = !Year_dir + "DD_Temp-2.zsav"
     /zcompressed.
@@ -315,7 +312,7 @@ add files
     /File =  !Year_dir + "DD_for_source-20" + !FY + ".zsav"
     /by chi keydate1_dateformat.
 
-Do if chi NE "" and cij_marker NE "".
+Do if chi NE "" and cij_marker NE sysmis(cij_marker).
     Compute has_delay = SMRType = "DD-CIJ".
 End if.
 

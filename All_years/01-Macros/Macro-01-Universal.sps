@@ -19,25 +19,21 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0288917"
+    "SCTASK0323518"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Mar_2022"
+    "Jun_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Dec_2021"
+    "Mar_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Dec21"
-!EndDefine.
-
-Define !SC_Latest_Validated_period()
-    "2021Q2"
+    "Jul16_Mar22"
 !EndDefine.
 
 * Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
@@ -56,7 +52,7 @@ Define !Locality_file()
 
 * SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2021_2.sav"
+    "Scottish_Postcode_Directory_2022_1.zsav"
 !EndDefine.
 
 * gpprac file.
@@ -66,7 +62,7 @@ Define !gpprac_file()
 
 * SIMD file - will need changing when geography files update.
 Define !SIMD_file()
-    "postcode_2021_2_simd2020v2.sav"
+    "postcode_2022_1_simd2020v2.zsav"
 !EndDefine.
 
 * DataZone Populations file - will need changing when geography files update.

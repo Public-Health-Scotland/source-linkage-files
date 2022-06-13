@@ -1,13 +1,13 @@
 ﻿* Encoding: UTF-8.
-*2. LookUp for costs for Care Homes.
+* Lookup for costs for Care Homes.
 
-*Get COSLA Value tables.
-*The values are obtained from.
+* Get Care Home Census Value tables.
+* The values are obtained from.
 * https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/ - Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes for Older People in Scotland.
 * Check and add any new years to 'CH_Costs.xlsx'.
 
-* Make a copy of the existing file, incase something wierd has happened to the data!.
-* Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
+* Make a copy of the existing file, in case something weird has happened to the data!.
+* Get an error because of the -p flag: This keeps the amend date but fails on permissions - command works fine though.
 * If this doesn't work manually make a copy.
 Host Command = ["cp " + !Costs_dir + "Cost_CH_Lookup.sav " +  !Costs_dir + "Cost_CH_Lookup_pre" + !LatestUpdate + ".sav"].
 
@@ -33,7 +33,7 @@ Alter type Calender_Year (F4.0).
 
 * Create Year as FY = YYYY from CCYY.
 String Year (A4).
-Compute year = char.Lpad(Ltrim(String(((Calender_Year - 2000) * 100) + Mod(Calender_Year, 100) + 1, F4.0)), 4, "0").
+Compute year = char.Lpad(Ltrim(String(((Mod(Calender_Year, 100) -1) * 100) + (Calender_Year - 2000), F4.0)), 4, "0").
 
 * Create a flag for Nursing care provision from source of funding.
 Numeric nursing_care_provision (F1.0).
@@ -58,14 +58,14 @@ aggregate outfile = *
     /Break year nursing_care_provision
     /cost_per_day = Mean(cost_per_day).
 
-***This bit will need changing to accomodate new costs ***.
+***This bit will need changing to accommodate new costs ***.
 * Add in years by copying the most recent year we have.
-* Most recent costs year availiable.
+* Most recent costs year available.
 String TempYear1 TempYear2 (A4).
-Do if Year = "XXXX".
+Do if Year = "2021".
     * Make costs for other years.
-    Compute TempYear1 = "2223".
-    Compute TempYear2 = "2324".
+    Compute TempYear1 = "2122".
+    Compute TempYear2 = "2223".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
@@ -73,8 +73,8 @@ Varstocases /make Year from Year TempYear1 TempYear2.
 * Uplift costs for Years after the latest year.
 * increase by 1% for every year after the latest.
 * Add/delete lines as appropriate.
+if year > "2021" cost_per_day = cost_per_day * 1.01.
 if year > "2122" cost_per_day = cost_per_day * 1.01.
-if year > "2223" cost_per_day = cost_per_day * 1.01.
 
 sort cases by Year nursing_care_provision.
 
