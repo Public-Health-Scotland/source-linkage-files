@@ -16,7 +16,7 @@ library(createslf)
 library(lubridate)
 
 
-latest_update <- "Mar_2022"
+latest_update <- "Jun_2022"
 
 
 # Read in data---------------------------------------
@@ -97,7 +97,17 @@ home_care_clean <- matched_hc_data %>%
   # fill reablement when missing but present in group
   group_by(sending_location, social_care_id, hc_service_start_date) %>%
   tidyr::fill(reablement, .direction = "updown") %>%
-  ungroup()
+  ungroup() %>%
+  # Only keep records which have some time in the quarter in which they were submitted
+  mutate(
+    end_before_qtr = qtr_start > hc_service_end_date & !is.na(hc_service_end_date),
+    start_after_quarter = record_date < hc_service_start_date,
+    # Need to check - as we are potentialsly introducing bad start dates above
+    start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
+  ) %>%
+  filter(!end_before_qtr,
+         !start_after_quarter,
+         !start_after_end)
 
 
 # count changed social_care_id
@@ -110,18 +120,13 @@ home_care_clean %>% count(changed_sc_id)
 
 home_care_hours <- home_care_clean %>%
   mutate(days_in_quarter = time_length(interval(
-        pmax(qtr_start, hc_service_start_date),
-        pmin(record_date, hc_service_end_date, na.rm = TRUE)
-      ),"days") + 1,
+        pmax(qtr_start, hc_service_start_date), pmin(record_date, hc_service_end_date, na.rm = TRUE)),"days") + 1,
     hc_hours = case_when(
       # For A&B 2020/21, use multistaff (min = 1) * staff hours
-      sending_location_name == "Argyll and Bute" &
-        str_starts(period, "2020") &
-        is.na(hc_hours_derived)
+      sending_location_name == "Argyll and Bute" & stringr::str_starts(period, "2020") & is.na(hc_hours_derived)
       ~ pmax(1, multistaff_input) * total_staff_home_care_hours,
       # Angus submit hourly daily instead of weekly hours
-      sending_location_name == "Angus" &
-        period %in% c("2018Q3", "2018Q4", "2019Q1", "2019Q2", "2019Q3")
+      sending_location_name == "Angus" & period %in% c("2018Q3", "2018Q4", "2019Q1", "2019Q2", "2019Q3")
       ~ (hc_hours_derived / 7) * days_in_quarter,
       TRUE ~ hc_hours_derived
     )
