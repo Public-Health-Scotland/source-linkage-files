@@ -29,7 +29,7 @@ latest_update <- "Jun_2022"
 
 ## Make a copy of the existing file
 fs::file_copy(get_hc_costs_path(),
-              get_hc_costs_path(update = latest_update,
+              get_hc_costs_path(update = latest_update),
               overwrite = TRUE
 )
 
