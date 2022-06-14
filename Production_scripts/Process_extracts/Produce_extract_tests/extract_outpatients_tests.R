@@ -30,8 +30,14 @@ existing_data <- read_slf_episode(year, recid = "00B") %>%
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_outpatients_tests(existing_data),
-  produce_source_outpatients_tests(new_data)
+  produce_source_extract_tests(existing_data,
+    all_vars = "cost",
+    max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
+  ),
+  produce_source_extract_tests(new_data,
+    all_vars = "cost",
+    max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
+  )
 )
 
 
