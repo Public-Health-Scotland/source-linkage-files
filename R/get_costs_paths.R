@@ -57,7 +57,6 @@ get_gp_ooh_costs_path <- function(..., update = NULL) {
 }
 
 
-
 #' Get the full Home Care costs lookup path
 #'
 #' @param ... additional arguments passed to [get_file_path()]
@@ -75,4 +74,24 @@ get_hc_costs_path <- function(..., update = NULL) {
   )
 
   return(hc_costs_path)
+}
+
+
+#' Get the Home Care raw costs path
+#'
+#' @param ... additional arguments passed to [get_file_path()]
+#' @param update passed through [latest_update()]
+#'
+#' @return The path to the costs lookup as an [fs::path()]
+#' @export
+#' @family file path functions
+#' @seealso [get_file_path()] for the generic function.
+get_hc_raw_costs_path <- function(..., update = NULL) {
+  hc_raw_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = glue::glue("hc_costs.xlsx"),
+    ...
+  )
+
+  return(hc_raw_costs_path)
 }

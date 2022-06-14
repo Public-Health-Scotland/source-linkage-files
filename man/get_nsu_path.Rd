@@ -28,6 +28,7 @@ Other file path functions:
 \code{\link{get_file_path}()},
 \code{\link{get_gp_ooh_costs_path}()},
 \code{\link{get_hc_costs_path}()},
+\code{\link{get_hc_raw_costs_path}()},
 \code{\link{get_hhg_path}()},
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
