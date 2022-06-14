@@ -36,17 +36,17 @@ ch_clean <- ch_lookup %>%
     # format date types
     DateReg = as.Date(DateReg),
     DateCanx = as.Date(DateCanx)
-    ) %>%
+  ) %>%
   # clean up care home names
   group_by(
     ch_name,
     ch_postcode,
     Council_Area_Name
-    ) %>%
+  ) %>%
   mutate(
-    year_opened = format(DateReg,'%Y'),
-    year_canx = format(DateCanx, '%Y')
-    ) %>%
+    year_opened = format(DateReg, "%Y"),
+    year_canx = format(DateCanx, "%Y")
+  ) %>%
   mutate(
     fy_year_opened = convert_year_to_fyyear(year_opened),
     fy_year_canx = convert_year_to_fyyear(year_canx)
@@ -54,12 +54,12 @@ ch_clean <- ch_lookup %>%
   mutate(
     DateReg = min(DateReg, start_fy(fy_year_opened)),
     DateCanx = max(DateCanx, end_fy(fy_year_closed))
-    ) %>%
+  ) %>%
   summarise(
-      DateReg = min(DateReg),
-      DateCanx = max(DateCanx)
-      ) %>%
-      ungroup() %>%
+    DateReg = min(DateReg),
+    DateCanx = max(DateCanx)
+  ) %>%
+  ungroup() %>%
   # add council codes
   mutate(council_area_code = convert_ca_to_lca(Council_Area_Name))
 

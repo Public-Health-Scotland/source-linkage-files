@@ -7,7 +7,7 @@
 #' @export
 clean_up_free_text <- function(data, string, remove_punct = TRUE) {
   if (remove_punct == TRUE) {
-  data <- data %>%
+    data <- data %>%
       dplyr::mutate(
         # deal with capitalisation of CH names
         {{ string }} := stringr::str_to_title({{ string }}),
@@ -16,7 +16,7 @@ clean_up_free_text <- function(data, string, remove_punct = TRUE) {
         {{ string }} := stringr::str_squish({{ string }}),
         # deal with punctuation in the CH names
         {{ string }} := stringr::str_replace_all({{ string }}, "[[:punct:]]", " ")
-        )
+      )
   } else {
     data <- data %>%
       dplyr::mutate(
@@ -27,5 +27,4 @@ clean_up_free_text <- function(data, string, remove_punct = TRUE) {
         {{ string }} := stringr::str_squish({{ string }})
       )
   }
-
 }
