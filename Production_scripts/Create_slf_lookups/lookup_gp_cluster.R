@@ -23,7 +23,8 @@ gp_clusters <- phsopendata::get_dataset("gp-practice-contact-details-and-list-si
   clean_names()
 
 code_lookups <- phsopendata::get_resource("944765d7-d0d9-46a0-b377-abb3de51d08e",
-                             col_select = c("HSCP", "HSCPName", "HB", "HBName")) %>%
+  col_select = c("HSCP", "HSCPName", "HB", "HBName")
+) %>%
   clean_names()
 
 
