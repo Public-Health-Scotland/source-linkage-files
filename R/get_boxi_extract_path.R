@@ -42,7 +42,7 @@ get_boxi_extract_path <-
       type == "Deaths" ~ "NRS-death-registrations-extract",
       type == "CMH" ~ "Community-MH-contact-level-extract",
       type == "Homelessness" ~ "Homelessness-extract",
-      type == "Bateman" ~ tempfile()
+      type == "Bateman" ~ "Bateman"
     )
 
     boxi_extract_path_csv_gz <- fs::path(year_dir, glue::glue("{file_name}-20{year}.csv.gz"))
