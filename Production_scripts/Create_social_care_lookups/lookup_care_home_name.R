@@ -28,40 +28,38 @@ ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path())
 # Data Cleaning---------------------------------------
 
 ch_clean <- ch_lookup %>%
-  # correct postcode formatting
-  mutate(AccomPostCodeNo = format_postcode(AccomPostCodeNo)) %>%
-  rename(ch_postcode = "AccomPostCodeNo") %>%
+  # rename care home name
+  rename(ch_name = "ServiceName") %>%
   mutate(
+    # correct postcode formatting
+    ch_postcode = postcode(AccomPostCodeNo),
+    # format date types
     DateReg = as.Date(DateReg),
     DateCanx = as.Date(DateCanx)
-  ) %>%
+    ) %>%
   # clean up care home names
   group_by(
-    ServiceName,
+    ch_name,
     ch_postcode,
     Council_Area_Name
+    ) %>%
+  mutate(
+    year_opened = format(DateReg,'%Y'),
+    year_canx = format(DateCanx, '%Y')
+    ) %>%
+  mutate(
+    fy_year_opened = convert_year_to_fyyear(year_opened),
+    fy_year_canx = convert_year_to_fyyear(year_canx)
   ) %>%
+  mutate(
+    DateReg = min(DateReg, start_fy(fy_year_opened)),
+    DateCanx = max(DateCanx, end_fy(fy_year_closed))
+    ) %>%
   summarise(
-    DateReg = min(DateReg),
-    DateCanx = max(DateCanx)
-  ) %>%
-  # remove any old Care Homes which aren't of interest
-  filter(DateReg >= lubridate::ymd("2015-04-01") | DateCanx >= lubridate::ymd("2015-04-01")) %>%
-  arrange(ch_postcode, Council_Area_Name, DateReg) %>%
-  # when a Care Home changes name mid-year change to the start of the FY
-  mutate(year_opened = lubridate::year(DateReg)) %>%
-  mutate(change_reg_date = if_else(lubridate::month(DateReg) < 4, 1, 0)) %>%
-  mutate(year_opened = if_else(change_reg_date == 1, year_opened - 1, year_opened)) %>%
-  mutate(DateReg = if_else(change_reg_date == 1, as.Date(paste0(year_opened, "/04/01")), DateReg)) %>%
-  arrange(ch_postcode, Council_Area_Name, desc(DateReg)) %>%
-  mutate(change_canx_date = if_else(!is.na(DateCanx) |
-    (ch_postcode == lag(ch_postcode) &
-      Council_Area_Name == lag(Council_Area_Name) &
-      lag(change_reg_date) == 1), 1, 0)) %>%
-  mutate(change_canx_date = replace_na(change_canx_date, 0)) %>%
-  mutate(DateCanx = if_else(change_canx_date == 1, as.Date(paste0(lubridate::year(DateReg), "/03/31")), DateCanx)) %>%
-  arrange(ch_postcode, Council_Area_Name, DateReg) %>%
-  ungroup() %>%
+      DateReg = min(DateReg),
+      DateCanx = max(DateCanx)
+      ) %>%
+      ungroup() %>%
   # add council codes
   mutate(council_area_code = convert_ca_to_lca(Council_Area_Name))
 
@@ -69,16 +67,7 @@ ch_clean <- ch_lookup %>%
 # Care Home Names ---------------------------------------
 
 ch_names <- ch_clean %>%
-  rename(ch_name = "ServiceName") %>%
-  # deal with capitalisation of CH names
-  mutate(ch_name = stringr::str_to_title(ch_name)) %>%
-  # deal with punctuation in the CH names
-  mutate(ch_name = stringr::str_replace_all(ch_name, "[[:punct:]]", " ")) %>%
-  # deal with whitespace at start and end and witihin
-  mutate(
-    ch_name = stringr::str_trim(ch_name, side = "both"),
-    ch_name = stringr::str_squish(ch_name)
-  ) %>%
+  clean_up_free_text(ch_name, remove_punct = TRUE) %>%
   # check for duplicate in FY
   mutate(open_in_fy = if_else(is.na(DateCanx) | DateCanx > lubridate::ymd(paste0(convert_fyyear_to_year(year), "-04-01")), 1, 0))
 

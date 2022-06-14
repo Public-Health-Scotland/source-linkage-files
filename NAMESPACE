@@ -3,6 +3,7 @@
 export("%>%")
 export(calculate_measures)
 export(check_year_format)
+export(clean_up_free_text)
 export(convert_ca_to_lca)
 export(convert_date_to_numeric)
 export(convert_eng_gpprac_to_dummy)
