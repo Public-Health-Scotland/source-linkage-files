@@ -85,7 +85,7 @@ matched_ch_data <- ch_clean %>%
 
 matched_ch_clean <- matched_ch_data %>%
   # correct postcode formatting
-  mutate(across(contains("postcode"), .x = postcode(.x)))
+  mutate(across(contains("postcode"), .x = format_postcode(.x)))
 
 
 # postcode lookup
@@ -106,7 +106,7 @@ ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
     DateCanx
   ) %>%
   # format postcode and CH name
-  mutate(ch_postcode = postcode(ch_postcode),
+  mutate(ch_postcode = format_postcode(ch_postcode),
          ch_name_lookup = toupper(ch_name_lookup))
 
 
