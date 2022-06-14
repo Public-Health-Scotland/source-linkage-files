@@ -20,7 +20,12 @@
 #' @seealso [create_hb_test_flags()],
 #' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
 #' for creating test flags
-produce_source_extract_tests <- function(data) {
+produce_source_extract_tests <- function(data,
+                                         all_vars = c("beddays", "cost", "yearstay"),
+                                         max_min_vars = c(
+                                           "record_keydate1", "record_keydate2",
+                                           "cost_total_net", "yearstay"
+                                         )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
@@ -32,10 +37,10 @@ produce_source_extract_tests <- function(data) {
     calculate_measures(measure = "sum")
 
   all_measures <- data %>%
-    calculate_measures(vars = c("beddays", "cost", "yearstay"), measure = "all")
+    calculate_measures(vars = {{ all_vars }}, measure = "all")
 
   min_max <- data %>%
-    calculate_measures(vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"), measure = "min-max")
+    calculate_measures(vars = {{ max_min_vars }}, measure = "min-max")
 
   join_output <- list(
     test_flags,
