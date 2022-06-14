@@ -29,7 +29,7 @@ ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path())
 
 ch_clean <- ch_lookup %>%
   # correct postcode formatting
-  mutate(AccomPostCodeNo = postcode(AccomPostCodeNo)) %>%
+  mutate(AccomPostCodeNo = format_postcode(AccomPostCodeNo)) %>%
   rename(ch_postcode = "AccomPostCodeNo") %>%
   mutate(
     DateReg = as.Date(DateReg),
