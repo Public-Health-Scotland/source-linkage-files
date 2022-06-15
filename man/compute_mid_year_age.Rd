@@ -20,15 +20,7 @@ a vector of age at midpoint
 Compute Age of Clients at Midpoint of Year
 }
 \examples{
-<<<<<<< refs/remotes/origin/main-R
-<<<<<<< refs/remotes/origin/main-R
 dob <- as.Date(c("01-01-1990", "10-05-1960"))
-=======
-dob <- c("01-01-1990", "10-05-1960")
->>>>>>> source care home script new age function new sending_location to lca function
-=======
-dob <- as.Date(c("01-01-1990", "10-05-1960"))
->>>>>>> save outfile
 fyyear <- "1920"
 compute_mid_year_age(fyyear, dob)
 }
