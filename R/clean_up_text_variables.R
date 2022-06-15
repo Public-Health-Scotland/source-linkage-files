@@ -16,7 +16,6 @@
 #' clean_up_free_text("hiwSDS SD. h")
 clean_up_free_text <- function(string, case_to = c("upper", "lower", "sentence", "title", "none"),
                                remove_punct = TRUE) {
-
   if (missing(case_to)) case_to <- "title"
 
   case_to <- match.arg(case_to)
