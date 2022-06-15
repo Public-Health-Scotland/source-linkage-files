@@ -72,7 +72,11 @@ episode date variables.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">produce_source_extract_tests</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">produce_source_extract_tests</span><span class="op">(</span>
+  <span class="va">data</span>,
+  sum_mean_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beddays"</span>, <span class="st">"cost"</span>, <span class="st">"yearstay"</span><span class="op">)</span>,
+  max_min_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"record_keydate1"</span>, <span class="st">"record_keydate2"</span>, <span class="st">"cost_total_net"</span>, <span class="st">"yearstay"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,6 +84,14 @@ episode date variables.</p>
     <dl><dt>data</dt>
 <dd><p>new or old data for testing summary flags
 (data is from <code><a href="get_source_extract_path.html">get_source_extract_path()</a></code>)</p></dd>
+
+
+<dt>max_min_vars</dt>
+<dd><p>variables used when selecting 'min-max' from <code><a href="calculate_measures.html">calculate_measures()</a></code></p></dd>
+
+
+<dt>all_vars</dt>
+<dd><p>variables used when selecting 'all' measures from <code><a href="calculate_measures.html">calculate_measures()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">
