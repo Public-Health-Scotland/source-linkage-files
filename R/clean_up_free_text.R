@@ -21,15 +21,15 @@ clean_up_free_text <- function(string, case_to = c("upper", "lower", "sentence",
 
   case_to <- match.arg(case_to)
 
-  cleaned_string <-
-    # Deal with whitespace at start and end and within
-    stringr::str_squish(stringr::str_trim(string, side = "both"))
-
   # Remove any punctuation (optionally)
   if (remove_punct) {
     # deal with punctuation in the CH names
-    cleaned_string <- stringr::str_replace_all(cleaned_string, "[[:punct:]]", " ")
+    string <- stringr::str_replace_all(string, "[[:punct:]]", " ")
   }
+
+  cleaned_string <-
+    # Deal with whitespace at start and end and within
+    stringr::str_squish(stringr::str_trim(string, side = "both"))
 
   # Make the case uniform
   cleaned_string <- dplyr::case_when(

@@ -6,13 +6,8 @@
 #' @return Path to clean source extract containing data for each dataset
 #' @export
 get_ch_name_lookup_path <- function(year, ...) {
-  year_dir <- fs::path(
-    "/conf",
-    "sourcedev",
-    "Source_Linkage_File_Updates",
-    year,
-    "Extracts"
-  )
+
+  year_dir <- paste0(get_year_dir(year), "/Extracts")
 
 
   lookup_path <- get_file_path(
