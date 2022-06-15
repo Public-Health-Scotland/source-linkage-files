@@ -91,8 +91,9 @@ home_care_clean <- matched_hc_data %>%
   mutate(
     changed_sc_id = if_else(!is.na(chi) & social_care_id != latest_sc_id, 1, 0),
     social_care_id = if_else(!is.na(chi) & social_care_id != latest_sc_id,
-                             latest_sc_id, social_care_id
-    )) %>%
+      latest_sc_id, social_care_id
+    )
+  ) %>%
   ungroup() %>%
   # fill reablement when missing but present in group
   group_by(sending_location, social_care_id, hc_service_start_date) %>%
@@ -105,9 +106,11 @@ home_care_clean <- matched_hc_data %>%
     # Need to check - as we are potentialsly introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  filter(!end_before_qtr,
-         !start_after_quarter,
-         !start_after_end)
+  filter(
+    !end_before_qtr,
+    !start_after_quarter,
+    !start_after_end
+  )
 
 
 # count changed social_care_id
@@ -119,8 +122,10 @@ home_care_clean %>% count(changed_sc_id)
 
 
 home_care_hours <- home_care_clean %>%
-  mutate(days_in_quarter = time_length(interval(
-        pmax(qtr_start, hc_service_start_date), pmin(record_date, hc_service_end_date, na.rm = TRUE)),"days") + 1,
+  mutate(
+    days_in_quarter = time_length(interval(
+      pmax(qtr_start, hc_service_start_date), pmin(record_date, hc_service_end_date, na.rm = TRUE)
+    ), "days") + 1,
     hc_hours = case_when(
       # For A&B 2020/21, use multistaff (min = 1) * staff hours
       sending_location_name == "Argyll and Bute" & stringr::str_starts(period, "2020") & is.na(hc_hours_derived)
