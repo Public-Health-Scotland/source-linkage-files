@@ -37,6 +37,8 @@ ch_clean <- ch_lookup %>%
     DateReg = as.Date(DateReg),
     DateCanx = as.Date(DateCanx)
   ) %>%
+  # remove any old Care Homes which aren't of interest
+  filter(DateReg >= start_fy("1718") | DateCanx >= start_fy("1718") | is.na(DateCanx )) %>%
   # clean up care home names
   group_by(
     ch_name,
@@ -44,16 +46,11 @@ ch_clean <- ch_lookup %>%
     Council_Area_Name
   ) %>%
   mutate(
-    year_opened = format(DateReg, "%Y"),
-    year_canx = format(DateCanx, "%Y")
-  ) %>%
+    DateCanx = tidyr::replace_na(DateCanx, end_fy(year, format = "fyyear"))
+    ) %>%
   mutate(
-    fy_year_opened = convert_year_to_fyyear(year_opened),
-    fy_year_canx = convert_year_to_fyyear(year_canx)
-  ) %>%
-  mutate(
-    DateReg = min(DateReg, start_fy(fy_year_opened)),
-    DateCanx = max(DateCanx, end_fy(fy_year_closed))
+    DateReg = min(DateReg, start_fy(lubridate::year(DateReg), format = "alternate")),
+    DateCanx = max(DateCanx, end_fy(lubridate::year(DateCanx), format = "alternate"))
   ) %>%
   summarise(
     DateReg = min(DateReg),
@@ -69,7 +66,7 @@ ch_clean <- ch_lookup %>%
 ch_names <- ch_clean %>%
   clean_up_free_text(ch_name, remove_punct = TRUE) %>%
   # check for duplicate in FY
-  mutate(open_in_fy = if_else(is.na(DateCanx) | DateCanx > lubridate::ymd(paste0(convert_fyyear_to_year(year), "-04-01")), 1, 0))
+  mutate(open_in_fy = is.na(DateCanx) | DateCanx > start_fy(convert_fyyear_to_year(year)))
 
 
 # Outfile ---------------------------------------

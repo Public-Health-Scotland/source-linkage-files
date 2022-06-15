@@ -7,8 +7,17 @@
 #'
 #' @examples
 #' start_fy("1718")
-start_fy <- function(year) {
-  as.Date(paste0(convert_fyyear_to_year(year), "-04-01"))
+start_fy <- function(year, format = c("fyear", "alternate")) {
+
+  if (format == "fyyear"){
+
+    as.Date(paste0(convert_fyyear_to_year(year), "-04-01"))
+
+  } else {
+
+    as.Date(paste0(year, "-04-01"))
+
+    }
 }
 
 
@@ -21,8 +30,17 @@ start_fy <- function(year) {
 #'
 #' @examples
 #' end_fy("1718")
-end_fy <- function(year) {
-  as.Date(paste0((as.numeric(convert_fyyear_to_year(year)) + 1), "-03-31"))
+end_fy <- function(year, format = c("fyear", "alternate")) {
+
+  if (format == "fyyear"){
+
+    as.Date(paste0(as.numeric(convert_fyyear_to_year(year)) + 1, "-03-31"))
+
+  } else {
+
+    as.Date(paste0(as.numeric(year) + 1, "-03-31"))
+
+  }
 }
 
 
