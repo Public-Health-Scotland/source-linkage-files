@@ -38,7 +38,7 @@ ch_clean <- ch_lookup %>%
     DateCanx = as.Date(DateCanx)
   ) %>%
   # remove any old Care Homes which aren't of interest
-  filter(DateReg >= start_fy("1718") | DateCanx >= start_fy("1718") | is.na(DateCanx )) %>%
+  filter(DateReg >= start_fy("1718") | DateCanx >= start_fy("1718") | is.na(DateCanx)) %>%
   # clean up care home names
   group_by(
     ch_name,
@@ -47,7 +47,7 @@ ch_clean <- ch_lookup %>%
   ) %>%
   mutate(
     DateCanx = tidyr::replace_na(DateCanx, end_fy(year, format = "fyyear"))
-    ) %>%
+  ) %>%
   mutate(
     DateReg = min(DateReg, start_fy(lubridate::year(DateReg), format = "alternate")),
     DateCanx = max(DateCanx, end_fy(lubridate::year(DateCanx), format = "alternate"))
