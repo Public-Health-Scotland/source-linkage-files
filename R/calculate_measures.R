@@ -28,8 +28,7 @@ calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min
       dplyr::summarise(
         dplyr::across(tidyselect::everything(), ~ min(.x, na.rm = TRUE), .names = "min_{col}"),
         dplyr::across(tidyselect::everything(vars = !tidyselect::starts_with("min_")), ~ max(.x, na.rm = TRUE), .names = "max_{col}")
-      ) %>%
-      dplyr::mutate(dplyr::across(tidyselect::everything(), ~ as.numeric(.x)))
+      )
   }
 
   pivot_data <- data %>%
