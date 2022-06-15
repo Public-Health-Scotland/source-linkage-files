@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Cohort Syntax.
 * Andrew Mooney.
 * Feb 2017.
@@ -286,6 +286,9 @@ If any(recid, "AE2", "OoH", "SAS", "N24") AE2_Cost = Cost_Total_Net.
 * Include CMH here?.
 If recid = "DN" Community_Health_Cost = Cost_Total_Net.
 If op1a ne '' Operation_Flag = 1.
+
+* Convert cij_marker to string so we can merge it with recid.
+Alter type cij_marker (A7).
 
 Do if cij_marker NE "".
     Compute cij_Attendance = 1.

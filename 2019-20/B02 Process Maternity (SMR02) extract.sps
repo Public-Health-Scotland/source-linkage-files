@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
@@ -11,7 +11,7 @@ GET DATA  /TYPE = TXT
     /QUALIFIER = '"'
     /ARRANGEMENT = DELIMITED
     /FIRSTCASE = 2
-    /VARIABLES = 
+    /VARIABLES =
     CostsFinancialYear A4
     DateofAdmissionFullDate A10
     DateofDischargeFullDate A10
@@ -37,7 +37,7 @@ GET DATA  /TYPE = TXT
     DischargeTransfertoCodenew A2
     DischargedtoLocationCode A5
     ConditionOnDischargeCode F1.0
-    ContinuousInpatientJourneyMarker A5
+    ContinuousInpatientJourneyMarker F5.0
     CIJPlannedAdmissionCode F1.0
     CIJInpatientDayCaseIdentifierCode A2
     CIJTypeofAdmissionCode A2
@@ -159,10 +159,10 @@ for month in (4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3):
 
     # Set up the syntax
     syntax = "!BedDaysPerMonth Month_abbr = " + month_name[month][:3]
-    
+
     # Use the correct admission and discharge variables
     syntax +=  " AdmissionVar = record_keydate1 DischargeVar = record_keydate2."
-    
+
     # print the syntax to the screen
     print(syntax)
 
