@@ -8,15 +8,7 @@ get_source_extract_path(
   year,
   type = c("Acute", "AE", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH", "HC",
     "Homelessness", "Maternity", "MH", "Outpatients", "PIS"),
-<<<<<<< refs/remotes/origin/main-R
-<<<<<<< refs/remotes/origin/main-R
   ...
-=======
-  ext = c("zsav", "rds")
->>>>>>> # 96 Mental Health Extract (#238)
-=======
-  ...
->>>>>>> Amend check mode (#214)
 )
 }
 \arguments{
@@ -24,15 +16,7 @@ get_source_extract_path(
 
 \item{type}{Name of clean source extract}
 
-<<<<<<< refs/remotes/origin/main-R
-<<<<<<< refs/remotes/origin/main-R
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
-=======
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
->>>>>>> Amend check mode (#214)
-=======
-\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
->>>>>>> Document with {roxygen2} (GitHub action)
 }
 \value{
 Path to clean source extract containing data for each dataset
