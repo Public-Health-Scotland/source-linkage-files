@@ -16,7 +16,7 @@ library(createslf)
 library(lubridate)
 
 
-latest_update <- "Jun_2022"
+latest_update <- latest_update()
 
 
 # Read in data---------------------------------------
