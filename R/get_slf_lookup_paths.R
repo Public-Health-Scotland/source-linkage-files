@@ -60,7 +60,7 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
 #' defaults to [latest_update()]
 #' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the costs lookup as an [fs::path()]
+#' @return The path to the SLF GP cluster lookup as an [fs::path()]
 #' @export
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
