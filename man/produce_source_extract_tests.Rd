@@ -6,7 +6,7 @@
 \usage{
 produce_source_extract_tests(
   data,
-  all_vars = c("beddays", "cost", "yearstay"),
+  sum_mean_vars = c("beddays", "cost", "yearstay"),
   max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay")
 )
 }
@@ -14,9 +14,9 @@ produce_source_extract_tests(
 \item{data}{new or old data for testing summary flags
 (data is from \code{\link[=get_source_extract_path]{get_source_extract_path()}})}
 
-\item{all_vars}{variables used when selecting 'all' measures from \code{\link[=calculate_measures]{calculate_measures()}}}
-
 \item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
+
+\item{all_vars}{variables used when selecting 'all' measures from \code{\link[=calculate_measures]{calculate_measures()}}}
 }
 \value{
 a dataframe with a count of each flag
