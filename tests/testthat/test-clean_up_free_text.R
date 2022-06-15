@@ -1,7 +1,9 @@
 test_that("Free Text is Cleaned Up", {
-  names = c("glasgow care home.",
-            " edinburgh Nursing_home",
-            "PERTH Residential ")
+  names <- c(
+    "glasgow care home.",
+    " edinburgh Nursing_home",
+    "PERTH Residential "
+  )
 
   expect_equal(
     clean_up_free_text(names, case_to = "title", remove_punct = TRUE),
