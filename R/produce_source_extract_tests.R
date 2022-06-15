@@ -23,7 +23,7 @@
 #' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
 #' for creating test flags
 produce_source_extract_tests <- function(data,
-                                         all_vars = c("beddays", "cost", "yearstay"),
+                                         sum_mean_vars = c("beddays", "cost", "yearstay"),
                                          max_min_vars = c(
                                            "record_keydate1", "record_keydate2",
                                            "cost_total_net", "yearstay"
