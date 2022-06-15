@@ -63,7 +63,7 @@ gp_clusters_clean %>%
   # .zsav
   write_sav(get_slf_gp_cluster_path(update = latest_update, ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  write_rds(get_ch_costs_path(update = latest_update, check_mode = "write"))
+  write_rds(get_slf_gp_cluster_path(update = latest_update, check_mode = "write"))
 
 
 ## End of Script ---------------------------------------
