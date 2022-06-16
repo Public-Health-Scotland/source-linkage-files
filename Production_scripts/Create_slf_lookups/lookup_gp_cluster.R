@@ -53,7 +53,9 @@ gp_clusters_clean <- matched_gp_clusters %>%
   # format postcode
   mutate(postcode = phsmethods::format_postcode(postcode)) %>%
   # keep distinct gpprac
-  distinct(gpprac, .keep_all = TRUE)
+  distinct(gpprac, .keep_all = TRUE) %>%
+    # Sort for SPSS matching
+  arrange(gpprac)
 
 
 
