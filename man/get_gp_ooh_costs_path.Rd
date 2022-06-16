@@ -26,6 +26,8 @@ Other file path functions:
 \code{\link{get_demog_cohorts_path}()},
 \code{\link{get_dn_costs_path}()},
 \code{\link{get_file_path}()},
+\code{\link{get_hc_costs_path}()},
+\code{\link{get_hc_raw_costs_path}()},
 \code{\link{get_hhg_path}()},
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
