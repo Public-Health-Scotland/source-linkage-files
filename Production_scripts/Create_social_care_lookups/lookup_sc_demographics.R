@@ -69,7 +69,7 @@ sc_demog <- sc_demog %>%
     dob = coalesce(chi_date_of_birth, submitted_date_of_birth)
   ) %>%
   # format postcodes using `phsmethods`
-  mutate(across(contains("postcode"), ~ postcode(.x, format = "pc7")))
+  mutate(across(contains("postcode"), ~ format_postcode(.x, format = "pc7")))
 
 # count number of na postcodes
 na_postcodes <-
@@ -134,6 +134,12 @@ outfile <-
 
 
 ## save file ##
+
+outfile %>%
+  # .zsav file
+  write_sav(get_sc_demog_lookup_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_sc_demog_lookup_path(check_mode = "write"))
 
 outfile %>%
   # .zsav file
