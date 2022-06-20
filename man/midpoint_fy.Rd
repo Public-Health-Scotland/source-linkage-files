@@ -4,7 +4,7 @@
 \alias{midpoint_fy}
 \title{Return the mid date of FY year}
 \usage{
-midpoint_fy(year)
+midpoint_fy(year, format = c("fyyear", "alternate"))
 }
 \arguments{
 \item{year}{a vector of years}

@@ -4,7 +4,7 @@
 \alias{end_fy}
 \title{Return the end date of FY years}
 \usage{
-end_fy(year, format = c("fyear", "alternate"))
+end_fy(year, format = c("fyyear", "alternate"))
 }
 \arguments{
 \item{year}{a vector of years}
