@@ -60,7 +60,7 @@ ch_clean <- ch_lookup %>%
 # Care Home Names ---------------------------------------
 
 ch_names <- ch_clean %>%
-  clean_up_free_text(ch_name, remove_punct = TRUE) %>%
+  mutate(ch_name = clean_up_free_text(ch_name)) %>%
   # check for duplicate in FY
   mutate(open_in_fy = is.na(DateCanx) | DateCanx > start_fy(convert_fyyear_to_year(year)))
 
