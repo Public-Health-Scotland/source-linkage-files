@@ -16,17 +16,17 @@ library(phsmethods)
 library(lubridate)
 
 
-year <- check_year_format("1920")
+fyyear <- check_year_format("1920")
 
 
 # Read in data---------------------------------------
 
-source_ch_data <- haven::read_sav(get_sc_ch_episodes_path()) %>%
+source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
   # select episodes for FY
-  filter(record_keydate1 %in% range(start_fy(year), end_fy(year)) |
-    (record_keydate1 <= end_fy(year) & record_keydate2 >= start_fy(year) | is.na(record_keydate2))) %>%
+  filter(record_keydate1 %in% range(start_fy(fyyear), end_fy(fyyear)) |
+    (record_keydate1 <= end_fy(fyyear) & record_keydate2 >= start_fy(fyyear) | is.na(record_keydate2))) %>%
   # remove any episodes where the latest submission was before the current year
-  filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4))
+  filter(convert_fyyear_to_year(fyyear) > substr(sc_latest_submission, 1, 4))
 
 
 # Match on Client Data ---------------------------------------
@@ -44,7 +44,7 @@ matched_data <- source_ch_data %>%
 source_ch_clean <- matched_data %>%
   # create variables
   mutate(
-    year = convert_fyyear_to_year(year),
+    year = convert_fyyear_to_year(fyyear),
     recid = "CH",
     SMRType = "Care-Home"
   ) %>%
@@ -65,7 +65,7 @@ source_ch_clean <- matched_data %>%
 # Costs  ---------------------------------------
 
 # read in CH Costs Lookup
-ch_costs <- haven::read_sav(get_ch_costs_path()) %>%
+ch_costs <- haven::read_sav(get_ch_costs_path(ext = "sav")) %>%
   rename(
     year = "Year",
     ch_nursing = "nursing_care_provision"
