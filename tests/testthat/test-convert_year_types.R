@@ -38,5 +38,3 @@ test_that("Can convert a year from alternate form to normal financial year", {
   expect_equal(convert_year_to_fyyear("2020"), "2021")
   expect_equal(convert_year_to_fyyear("2021"), "2122")
 })
-
-
