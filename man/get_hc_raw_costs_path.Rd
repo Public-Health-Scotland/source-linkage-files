@@ -37,6 +37,7 @@ Other file path functions:
 \code{\link{get_practice_details_path}()},
 \code{\link{get_sc_ch_episodes_path}()},
 \code{\link{get_sc_demog_lookup_path}()},
+\code{\link{get_sc_hc_episodes_path}()},
 \code{\link{get_service_use_cohorts_path}()},
 \code{\link{get_slf_deaths_path}()},
 \code{\link{get_slf_gp_cluster_path}()},
