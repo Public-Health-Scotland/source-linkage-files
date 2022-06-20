@@ -21,3 +21,12 @@ test_that("Can return midpoint FY date", {
   expect_equal(midpoint_fy("1920"), as.Date("2019-09-30"))
   expect_equal(midpoint_fy("2021"), as.Date("2020-09-30"))
 })
+
+test_that("FY interval is correct", {
+  expect_s4_class(fy_interval("1718"), "Interval")
+
+  expect_equal(fy_interval("1718"),
+               lubridate::interval(
+                 as.Date("2017-04-01"),
+                                   as.Date("2018-03-31")))
+})
