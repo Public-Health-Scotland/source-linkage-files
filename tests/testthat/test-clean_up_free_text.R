@@ -2,7 +2,8 @@ test_that("Free Text is Cleaned Up", {
   names <- c(
     "glasgow care home.",
     " edinburgh Nursing_home",
-    "PERTH Residential "
+    "PERTH Residential ",
+    "  Dunkeld view   -   house"
   )
 
   expect_equal(
@@ -10,7 +11,8 @@ test_that("Free Text is Cleaned Up", {
     c(
       "Glasgow Care Home",
       "Edinburgh Nursing Home",
-      "Perth Residential"
+      "Perth Residential",
+      "Dunkeld View House"
     )
   )
 })
