@@ -8,11 +8,15 @@
 #' @examples
 #' start_fy("1718")
 start_fy <- function(year, format = c("fyyear", "alternate")) {
+<<<<<<< HEAD
 
   if (missing(format)) {format <- "fyyear"}
 
   format <- match.arg(format)
 
+=======
+  format <- match.arg(format)
+>>>>>>> 2c55afcb41780d1c9e80021f6c87871a55c4fc46
   if (format == "fyyear") {
     start_fy = as.Date(paste0(convert_fyyear_to_year(year), "-04-01"))
   } else if (format == "alternate") {
