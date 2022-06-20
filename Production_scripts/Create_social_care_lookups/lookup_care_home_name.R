@@ -48,13 +48,9 @@ ch_clean <- ch_lookup %>%
   mutate(
     DateCanx = tidyr::replace_na(DateCanx, end_fy(year, format = "fyyear"))
   ) %>%
-  mutate(
-    DateReg = min(DateReg, start_fy(lubridate::year(DateReg), format = "alternate")),
-    DateCanx = max(DateCanx, end_fy(lubridate::year(DateCanx), format = "alternate"))
-  ) %>%
   summarise(
-    DateReg = min(DateReg),
-    DateCanx = max(DateCanx)
+    DateReg = min(start_fy(lubridate::year(DateReg), format = "alternate")),
+    DateCanx = max(end_fy(lubridate::year(DateCanx), format = "alternate"))
   ) %>%
   ungroup() %>%
   # add council codes
