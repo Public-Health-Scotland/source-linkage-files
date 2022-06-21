@@ -11,10 +11,9 @@
 #' fyyear <- "1920"
 #' compute_mid_year_age(fyyear, dob)
 compute_mid_year_age <- function(fyyear, dob) {
+  age_intervals <- lubridate::interval(start = dob, end = midpoint_fy(fyyear))
 
- age_intervals <- lubridate::interval(start = dob, end = midpoint_fy(fyyear))
+  ages <- lubridate::as.period(age_intervals$year)
 
- ages <- lubridate::as.period(age_intervals$year)
- 
- return(ages)
+  return(ages)
 }
