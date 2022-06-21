@@ -62,7 +62,7 @@ ch_clean <- ch_lookup %>%
 ch_names <- ch_clean %>%
   mutate(ch_name = clean_up_free_text(ch_name)) %>%
   # check for duplicate in FY
-  mutate(open_in_fy = is.na(DateCanx) | DateCanx > start_fy(convert_fyyear_to_year(year)))
+  mutate(open_in_fy = is.na(DateCanx) | DateCanx > start_fy(year, format = "fyyear"))
 
 
 # Outfile ---------------------------------------
