@@ -16,17 +16,17 @@ library(phsmethods)
 library(lubridate)
 
 
-fyyear <- check_year_format("1920")
+year <- check_year_format("1920")
 
 
 # Read in data---------------------------------------
 
 source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
   # select episodes for FY
-  filter(is_date_in_year(record_keydate1, fyyear) |
-    (record_keydate1 <= end_fy(fyyear) & record_keydate2 >= start_fy(fyyear) | is.na(record_keydate2))) %>%
+  filter(is_date_in_year(record_keydate1, year) |
+    (record_keydate1 <= end_fy(year) & record_keydate2 >= start_fy(year) | is.na(record_keydate2))) %>%
   # remove any episodes where the latest submission was before the current year
-  filter(convert_fyyear_to_year(fyyear) > substr(sc_latest_submission, 1, 4))
+  filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4))
 
 
 # Match on Client Data ---------------------------------------
@@ -44,7 +44,7 @@ matched_data <- source_ch_data %>%
 source_ch_clean <- matched_data %>%
   # create variables
   mutate(
-    year = fyyear,
+    year = year,
     recid = "CH",
     SMRType = "Care-Home"
   ) %>%
@@ -52,7 +52,7 @@ source_ch_clean <- matched_data %>%
   mutate(lca = convert_sending_location_to_lca(sending_location)) %>%
   # bed days
   # create dummy end where blank
-  mutate(dummy_discharge = if_else(is.na(record_keydate2), end_fy(fyyear) + days(1), record_keydate2)) %>%
+  mutate(dummy_discharge = if_else(is.na(record_keydate2), end_fy(year) + days(1), record_keydate2)) %>%
   create_monthly_beddays(year, record_keydate1, dummy_discharge) %>%
   # year stay
   mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
@@ -93,7 +93,6 @@ outfile <- costs %>%
     chi,
     person_id,
     dob,
-    age,
     gender,
     postcode,
     lca,
