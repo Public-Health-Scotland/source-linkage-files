@@ -23,7 +23,7 @@ fyyear <- check_year_format("1920")
 
 source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
   # select episodes for FY
-  filter(record_keydate1 %in% range(start_fy(fyyear), end_fy(fyyear)) |
+  filter(is_date_in_year(record_keydate1, fyyear) |
     (record_keydate1 <= end_fy(fyyear) & record_keydate2 >= start_fy(fyyear) | is.na(record_keydate2))) %>%
   # remove any episodes where the latest submission was before the current year
   filter(convert_fyyear_to_year(fyyear) > substr(sc_latest_submission, 1, 4))
