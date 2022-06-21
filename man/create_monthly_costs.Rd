@@ -12,7 +12,7 @@ create_monthly_costs(
 }
 \arguments{
 \item{data}{Data containing bedday variables,
-likely created by \link{create_monthly_beddays}}
+see \link{create_monthly_beddays} to create}
 
 \item{yearstay}{The variable containing the total
 number of beddays in the year, default is \code{yearstay}}
@@ -21,11 +21,11 @@ number of beddays in the year, default is \code{yearstay}}
 number of cost for the year, default is \code{cost_total_net}}
 }
 \value{
-a \link[tibble:tibble-package]{tibble} with cost variables
-added
+The data with additional variables \code{apr_cost} to \code{mar_cost}
+that assigns the cost to each month
 }
 \description{
-Create monthly costs
+Assign monthly costs using a cost variable and vector containing monthly beddays
 }
 \seealso{
 create_monthly_beddays

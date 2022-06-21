@@ -2,8 +2,7 @@
 % Please edit documentation in R/create_monthly_beddays.R
 \name{create_monthly_beddays}
 \alias{create_monthly_beddays}
-\title{Generate counts of beddays per month for an episode
-with an admission and discharge date}
+\title{Create Monthly Beddays}
 \usage{
 create_monthly_beddays(
   data,
@@ -32,4 +31,7 @@ that count the beddays which occurred in the month.
 \description{
 Generate counts of beddays per month for an episode
 with an admission and discharge date
+}
+\seealso{
+create_monthly_costs
 }

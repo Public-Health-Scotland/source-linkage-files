@@ -12,8 +12,6 @@
 #' @return a connection to the specified dsn
 #' @export
 #'
-#' @examples
-#' db_connection <- phs_db_connection(dsn = "DVPROD")
 phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   # Collect username from the environment
   username <- Sys.getenv("USER")

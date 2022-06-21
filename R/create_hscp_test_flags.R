@@ -1,5 +1,7 @@
 #' Create HSCP test flags
 #'
+#' @description Create flags for Health & Social Care Partnerships
+#'
 #' @param data the data containing a HSCP variable
 #' @param hscp_var HSCP variable e.g. HSCP2019 HSCP2018
 #'

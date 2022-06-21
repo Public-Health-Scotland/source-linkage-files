@@ -15,7 +15,7 @@ create_hscp_test_flags(data, hscp_var)
 a dataframe with flag (1 or 0) for each HSCP
 }
 \description{
-Create HSCP test flags
+Create flags for Health & Social Care Partnerships
 }
 \seealso{
 Other create test flags functions: 

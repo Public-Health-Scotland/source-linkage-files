@@ -2,7 +2,7 @@
 % Please edit documentation in R/fix_c3_costs.R
 \name{fix_c3_costs}
 \alias{fix_c3_costs}
-\title{Apply costs fix to specialty C3 in acute processing.}
+\title{Fix C3 Costs}
 \usage{
 fix_c3_costs(data, year)
 }

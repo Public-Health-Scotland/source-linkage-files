@@ -1,4 +1,6 @@
-#' Apply costs fix to specialty C3 in acute processing.
+#' Fix C3 Costs
+#'
+#' @description Apply costs fix to specialty C3 in acute processing.
 #'
 #' @param data Acute extract file after processing
 #' @param year Financial year e.g. 1819

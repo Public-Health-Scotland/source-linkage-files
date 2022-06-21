@@ -1,5 +1,7 @@
 #' Convert monthly rows to variables
 #'
+#' @description Creates data with monthly cost and beddays variables using assigned cost vector
+#'
 #' @param data a dataframe containing cost and bed day variables
 #' @param month_num_var a variable containing month number e.g. `cost_month_num`
 #' @param cost_var a variable containing cost information e.g. `cost_total_net`

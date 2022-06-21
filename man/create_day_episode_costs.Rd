@@ -2,23 +2,22 @@
 % Please edit documentation in R/create_day_episode_costs.R
 \name{create_day_episode_costs}
 \alias{create_day_episode_costs}
-\title{Assign costs for single day episodes to the
-relevant month}
+\title{Assign costs for single day episodes}
 \usage{
 create_day_episode_costs(data, date_var, cost_var)
 }
 \arguments{
 \item{data}{Data to assign costs for}
 
-\item{date_var}{Admission date or discharge date}
+\item{date_var}{Date vector for the costs, e.g admission date or discharge date}
 
-\item{cost_var}{Cost variable e.g. cost_total_net}
+\item{cost_var}{Cost variable containing the costs e.g. cost_total_net}
 }
 \value{
 The data with additional variables \code{apr_cost} to \code{mar_cost}
-that assigns cost to each month.
+that assigns the cost to each month
 }
 \description{
 Assign costs for single day episodes to the
-relevant month
+relevant month using a cost vector
 }

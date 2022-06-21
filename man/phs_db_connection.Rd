@@ -20,6 +20,3 @@ a connection to the specified dsn
 \description{
 Opens a connection to PHS database to allow data to be collected
 }
-\examples{
-db_connection <- phs_db_connection(dsn = "DVPROD")
-}

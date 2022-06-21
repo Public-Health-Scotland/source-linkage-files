@@ -1,5 +1,7 @@
 #' Create Health Board test flags
 #'
+#' @description Create test flags for NHS Health Boards
+#'
 #' @param data the data containing a health board variable e.g. HB2019
 #' @param hb_var Health board variable e.g. HB2019 HB2018 hbpraccode
 #'

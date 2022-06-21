@@ -8,6 +8,8 @@ end_fy(year, format = c("fyyear", "alternate"))
 }
 \arguments{
 \item{year}{a vector of years}
+
+\item{format}{the format of the year vector, default is financial year}
 }
 \value{
 a vector of dates of the end date of the FY year
