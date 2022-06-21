@@ -26,7 +26,7 @@ fix_west_dun_duplicates <- function(data) {
     dplyr::arrange(dplyr::desc(.data$case_closed_date)) %>%
     # Keep only the first record for app_ref, client_id, decision_date.
     dplyr::distinct(.data$application_reference_number, .data$client_unique_identifier, .data$assessment_decision_date,
-                    .keep_all = TRUE
+      .keep_all = TRUE
     )
 
   fixed_data <- dplyr::bind_rows(
@@ -69,7 +69,7 @@ fix_east_ayrshire_duplicates <- function(data) {
     dplyr::arrange(dplyr::desc(.data$case_closed_date)) %>%
     # Keep only the first record for app_ref, client_id, decision_date.
     dplyr::distinct(.data$application_reference_number, .data$client_unique_identifier, .data$assessment_decision_date,
-                    .keep_all = TRUE
+      .keep_all = TRUE
     )
 
   fixed_data <- dplyr::bind_rows(
