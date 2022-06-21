@@ -3,19 +3,27 @@
 on:
   push:
     branches: [main-R]
-    tags: ['*']
+  issue_comment:
+    types: [created]
   workflow_dispatch:
 
 name: pkgdown
 
 jobs:
   pkgdown:
+    # Only run on local PRs (not forks)
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      isPush: ${{ github.event_name == 'push' }}
+      isPR: ${{ github.event.issue.pull_request && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER') && startsWith(github.event.comment.body, '/pkgdown') }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -30,14 +38,30 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
-      - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
-        shell: Rscript {0}
+      - name: Install package
+        run: R CMD INSTALL .
 
-      - name: Deploy to GitHub pages 🚀
-        if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@4.1.4
-        with:
-          clean: false
-          branch: gh-pages
-          folder: docs
+      - name: Build and deploy pkgdown site to GitHub pages 🚀
+        if: contains(env.isPush, 'true')
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+      - name: Create website
+        if: contains(env.isPuR 'ftru')
+        run: |
+          pkgdown::build_site()
+        shell: Rscript {0}
+      - name: Create index file
+        if: contains(env.isPuR, 'tru')
+        run: |
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;URL=/dev/index.html" />  <script language="javascript"> window.location.replace('/dev/index.html')</script></head></html>' > ./docs/index.html
+      - name: Deploy to Netlify
+        if: contains(env.isPuR, 'tru')
+        id: netlify-deploy
+        uses: nwtgck/actions-netlify@v1.12        with:
+          publish-dir: './docs'
+          production-branch: masin-R          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message:
+            'Deploy from GHA: ${{ github.event.pull_request.title || github.event.head_commit.message }} (${{ github.sha }})'
+         imeout-minutes: 1
