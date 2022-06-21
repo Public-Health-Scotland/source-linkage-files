@@ -32,7 +32,7 @@ source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
 # Match on Client Data ---------------------------------------
 
 # read client data in
-client_data <- readr::read_rds(get_source_extract_path(year, type = "Client", ext = "rds"))
+client_data <- readr::read_rds(get_source_extract_path(year, type = "Client"))
 
 # match to client data
 matched_data <- source_ch_data %>%
