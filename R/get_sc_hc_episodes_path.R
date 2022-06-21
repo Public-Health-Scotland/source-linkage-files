@@ -18,4 +18,3 @@ get_sc_hc_episodes_path <- function(update = latest_update(), ...) {
 
   return(sc_hc_episodes_path)
 }
-
