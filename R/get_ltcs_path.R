@@ -1,4 +1,6 @@
-#' Get the full path to the SLF deaths lookup file
+#' Long Term Conditions
+#'
+#' @description Get the full path to the LTC Refernce File
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param year financial year e.g. "1920"

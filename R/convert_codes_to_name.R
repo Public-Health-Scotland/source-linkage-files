@@ -1,4 +1,6 @@
-#' Convert HSCP Codes to HSCP Names
+#' Convet HSCP Codes
+#'
+#' @description Convert Health & Social Care Partnership Codes to the Health & Social Care Partnership Name
 #'
 #' @param hscp vector of HSCP codes
 #'
@@ -46,7 +48,9 @@ convert_hscp_to_hscpnames <- function(hscp) {
 }
 
 
-#' Convert NHS Health Board Codes to NHS Health Board Names
+#' Convert NHS Health Board Codes
+#'
+#' @description Convert NHS Health Board Codes to the NHS Health Board Names
 #'
 #' @param hb vector of NHS Health Board codes
 #'

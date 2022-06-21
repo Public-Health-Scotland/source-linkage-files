@@ -1,4 +1,6 @@
-#' Get Source Extract path
+#' Source Extract
+#'
+#' @description Get the file path for Source Extract for given extract and year
 #'
 #' @param year Year of extract
 #' @param ... additional arguments passed to [get_file_path()]
@@ -7,6 +9,7 @@
 #' @return Path to clean source extract containing data for each dataset
 #' @export
 #'
+#' @family extract file paths
 get_source_extract_path <- function(year,
                                     type = c(
                                       "Acute",

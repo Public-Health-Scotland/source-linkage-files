@@ -10,10 +10,10 @@ convert_ca_to_lca(ca_var)
 \item{ca_var}{vector of council area codes or names}
 }
 \value{
-a vector of local council codes
+a vector of local council authority codes
 }
 \description{
-Convert Council Areas into Local Council Authority Codes
+Convert Council Area code into the Local Council Authority code
 }
 \examples{
 ca <- c("S12000033", "S12000034")

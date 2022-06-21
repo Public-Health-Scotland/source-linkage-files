@@ -31,3 +31,8 @@ Wrapper around \code{\link[haven:read_spss]{haven::write_sav()}} but with compre
 default, it also corrects the file permissions to be writeable by the group,
 which is often an issue in the PHS RStudio server.
 }
+\seealso{
+Other write out data: 
+\code{\link{write_rds}()}
+}
+\concept{write out data}

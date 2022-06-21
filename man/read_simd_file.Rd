@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_lookups.R
 \name{read_simd_file}
 \alias{read_simd_file}
-\title{Read the Scottish Index for Multiple Deprivation (SIMD)}
+\title{SIMD}
 \usage{
 read_simd_file(file)
 }
@@ -15,5 +15,14 @@ read_simd_file(file)
 The data read using \code{readr::read_rds}
 }
 \description{
-Read the Scottish Index for Multiple Deprivation (SIMD)
+Read the Scottish Index for Multiple Deprivation (SIMD) file
 }
+\seealso{
+Other lookup paths: 
+\code{\link{get_lookups_dir}()},
+\code{\link{read_datazone_pop_file}()},
+\code{\link{read_gpprac_file}()},
+\code{\link{read_locality_file}()},
+\code{\link{read_spd_file}()}
+}
+\concept{lookup paths}

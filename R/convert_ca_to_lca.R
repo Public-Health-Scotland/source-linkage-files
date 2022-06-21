@@ -1,8 +1,10 @@
 #' Convert Council Areas into Local Council Authority Codes
 #'
+#' @description Convert Council Area code into the Local Council Authority code
+#'
 #' @param ca_var vector of council area codes or names
 #'
-#' @return a vector of local council codes
+#' @return a vector of local council authority codes
 #' @export
 #'
 #' @examples

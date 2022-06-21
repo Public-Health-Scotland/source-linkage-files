@@ -1,4 +1,6 @@
-#' Produce the SLF deaths lookup tests
+#' SLF Deaths Lookup Tests
+#'
+#' @description Produce the tests for SLF deaths lookup
 #'
 #' @param data new or old data for testing summary
 #' flags (data is from [get_slf_deaths_path()])
@@ -6,7 +8,7 @@
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
 #' @export
-#' @family produce tests functions
+#' @family slf test functions
 produce_slf_deaths_tests <- function(data) {
   data %>%
     # create test flags

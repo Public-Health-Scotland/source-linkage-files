@@ -1,11 +1,14 @@
 #' Get BOXI extract
 #'
+#' @description Get the BOXI extract path for a given extract and year
+#'
 #' @param year Year of extract
 #' @param type Name of BOXI extract
 #'
 #' @return BOXI extracts containing data for each dataset
 #' @export
 #'
+#' @family extract file paths
 get_boxi_extract_path <-
   function(year,
            type = c(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_eng_gpprac_to_dummy.R
 \name{convert_eng_gpprac_to_dummy}
 \alias{convert_eng_gpprac_to_dummy}
-\title{Convert English GP practice codes to a dummy code}
+\title{Convert GP Practice Codes}
 \usage{
 convert_eng_gpprac_to_dummy(data, gpprac, dummy_code = 9995L)
 }

@@ -19,5 +19,15 @@ get_boxi_extract_path(
 BOXI extracts containing data for each dataset
 }
 \description{
-Get BOXI extract
+Get the BOXI extract path for a given extract and year
 }
+\seealso{
+Other extract file paths: 
+\code{\link{get_hhg_path}()},
+\code{\link{get_it_deaths_path}()},
+\code{\link{get_it_ltc_path}()},
+\code{\link{get_it_prescribing_path}()},
+\code{\link{get_source_extract_path}()},
+\code{\link{get_sparra_path}()}
+}
+\concept{extract file paths}

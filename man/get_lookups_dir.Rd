@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_lookups.R
 \name{get_lookups_dir}
 \alias{get_lookups_dir}
-\title{Get the path to the lookups directory}
+\title{Lookups Directory Path}
 \usage{
 get_lookups_dir()
 }
@@ -12,3 +12,18 @@ the Lookups directory path as a \link[fs:path]{fs::path}
 \description{
 Get the path to the lookups directory
 }
+\seealso{
+Other lookup paths: 
+\code{\link{read_datazone_pop_file}()},
+\code{\link{read_gpprac_file}()},
+\code{\link{read_locality_file}()},
+\code{\link{read_simd_file}()},
+\code{\link{read_spd_file}()}
+
+Other directories: 
+\code{\link{get_slf_dir}()},
+\code{\link{get_slf_postcode_path}()},
+\code{\link{get_year_dir}()}
+}
+\concept{directories}
+\concept{lookup paths}
