@@ -13,8 +13,6 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    # Only run on local PRs (not forks)
-    if: (github.event_name == 'push' || github.event.pull_request.head.repo.fork == false ) || github.event.issue.pull_request
     runs-on: ubuntu-latest
     # Only restrict concurrency for non-PR jobs
     concurrency:
