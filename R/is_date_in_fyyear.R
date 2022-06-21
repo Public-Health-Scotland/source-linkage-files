@@ -1,9 +1,11 @@
-#' Is a date in the financial year
+#' Check if a date in the financial year
 #'
-#' @param date A date to be checked
-#' @param year The financial year in the format '1718' as a character.
+#' @description Test to check if a date is within the financial year
 #'
-#' @return logical
+#' @param date The date to be checked
+#' @param year The financial year in the format '1718' as a character
+#'
+#' @return logical T/F
 #' @export
 #'
 #' @examples

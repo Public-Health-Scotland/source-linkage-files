@@ -1,5 +1,8 @@
 #' Open a connection to a PHS database
 #'
+#'
+#' @description Opens a connection to PHS database to allow data to be collected
+#'
 #' @param dsn The Data Source Name passed on to `odbc::dbconnect`
 #' the dsn must be setup first. e.g. SMRA or DVPROD
 #' @param username The username to use for authentication,
@@ -8,6 +11,9 @@
 #'
 #' @return a connection to the specified dsn
 #' @export
+#'
+#' @examples
+#' db_connection <- phs_db_connection(dsn = "DVPROD")
 phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   # Collect username from the environment
   username <- Sys.getenv("USER")

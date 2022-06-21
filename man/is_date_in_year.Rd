@@ -2,20 +2,20 @@
 % Please edit documentation in R/is_date_in_fyyear.R
 \name{is_date_in_year}
 \alias{is_date_in_year}
-\title{Is a date in the financial year}
+\title{Check if a date in the financial year}
 \usage{
 is_date_in_year(date, year)
 }
 \arguments{
-\item{date}{A date to be checked}
+\item{date}{The date to be checked}
 
-\item{year}{The financial year in the format '1718' as a character.}
+\item{year}{The financial year in the format '1718' as a character}
 }
 \value{
-logical
+logical T/F
 }
 \description{
-Is a date in the financial year
+Test to check if a date is within the financial year
 }
 \examples{
 is_date_in_year(Sys.time(), "2223")

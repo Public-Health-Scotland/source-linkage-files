@@ -1,3 +1,5 @@
+# run pkgdown::build_reference_index()to build reference index
+
 url: https://public-health-scotland.github.io/source-linkage-files
 template:
   bootstrap: 5
@@ -12,7 +14,7 @@ reference:
 
   - title: Check
   - contents:
-    - is_missing
+    - starts_with("is_")
 
 
   - title: Years & Dates
