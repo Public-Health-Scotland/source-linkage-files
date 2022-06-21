@@ -111,10 +111,10 @@ outfile <- costs %>%
 
 
 outfile %>%
-  # .zsav
-  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav")) %>%
-  # .rds file
-  write_rds(get_source_extract_path(fyyear, type = "CH", ext = "rds"))
+ # .zsav
+ write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav", check_mode = "write")) %>%
+ # .rds file
+ write_rds(get_source_extract_path(fyyear, type = "CH", check_mode = "write"))
 
 
 
