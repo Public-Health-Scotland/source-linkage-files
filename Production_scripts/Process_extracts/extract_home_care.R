@@ -23,7 +23,7 @@ year <- check_year_format("1920")
 source_hc_data <- readr::read_rds(get_sc_hc_episodes_path(update = "Jun_2022")) %>%
   # select episodes for FY
   filter(hc_service_start_date %in% range(start_fy(year), end_fy(year)) |
-           (hc_service_start_date <= end_fy(year) & hc_service_end_date >= start_fy(year) | is.na(hc_service_end_date))) %>%
+    (hc_service_start_date <= end_fy(year) & hc_service_end_date >= start_fy(year) | is.na(hc_service_end_date))) %>%
   # remove any episodes where the latest submission was before the current year
   filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4)) %>%
   # alter sending location type to allow match
@@ -47,16 +47,22 @@ source_hc_clean <- matched_data %>%
   # record reablement
   mutate(reablement = tidyr::replace_na(reablement, 9)) %>%
   # rename
-  rename(record_keydate1 = "hc_service_start_date",
-         record_keydate2 = "hc_service_end_date",
-         hc_reablement = "reablement",
-         hc_provider = "hc_service_provider") %>%
+  rename(
+    record_keydate1 = "hc_service_start_date",
+    record_keydate2 = "hc_service_end_date",
+    hc_reablement = "reablement",
+    hc_provider = "hc_service_provider"
+  ) %>%
   # year / recid / SMRType variables
-  mutate(year = convert_fyyear_to_year(year),
-         recid = "HC",
-         SMRType = case_when(hc_service == 1 ~ "HC-Non-Per",
-                             hc_service == 2 ~ "HC-Per",
-                             TRUE            ~ "HC-Unknown")) %>%
+  mutate(
+    year = convert_fyyear_to_year(year),
+    recid = "HC",
+    SMRType = case_when(
+      hc_service == 1 ~ "HC-Non-Per",
+      hc_service == 2 ~ "HC-Per",
+      TRUE ~ "HC-Unknown"
+    )
+  ) %>%
   # age
   compute_mid_year_age(year, dob) %>%
   # person_id
@@ -69,10 +75,12 @@ source_hc_clean <- matched_data %>%
 
 hc_hours <- source_hc_clean %>%
   # rename hours variables
-  rename(hc_hours_q1 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q1"),
-         hc_hours_q2 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q2"),
-         hc_hours_q3 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q3"),
-         hc_hours_q4 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q4")) %>%
+  rename(
+    hc_hours_q1 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q1"),
+    hc_hours_q2 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q2"),
+    hc_hours_q3 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q3"),
+    hc_hours_q4 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q4")
+  ) %>%
   # remove hours variables not from current year
   select(-(contains("hc_hours_2"))) %>%
   # create annual hours variable
@@ -83,10 +91,12 @@ hc_hours <- source_hc_clean %>%
 
 hc_costs <- hc_hours %>%
   # rename costs variables
-  rename(hc_costs_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
-         hc_costs_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
-         hc_costs_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
-         hc_costs_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")) %>%
+  rename(
+    hc_costs_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
+    hc_costs_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
+    hc_costs_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
+    hc_costs_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")
+  ) %>%
   # remove cost variables not from current year
   select(-(contains("hc_cost_2"))) %>%
   # create cost total net
@@ -96,24 +106,26 @@ hc_costs <- hc_hours %>%
 # Outfile ---------------------------------------
 
 outfile <- hc_costs %>%
-  select(year,
-         recid,
-         SMRType,
-         chi,
-         dob,
-         age,
-         gender,
-         postcode,
-         lca,
-         record_keydate1,
-         record_keydate2,
-         starts_with("hc_hours"),
-         cost_total_net,
-         starts_with("hc_cost"),
-         hc_provider,
-         hc_reablement,
-         person_id,
-         starts_with("sc_"))
+  select(
+    year,
+    recid,
+    SMRType,
+    chi,
+    dob,
+    age,
+    gender,
+    postcode,
+    lca,
+    record_keydate1,
+    record_keydate2,
+    starts_with("hc_hours"),
+    cost_total_net,
+    starts_with("hc_cost"),
+    hc_provider,
+    hc_reablement,
+    person_id,
+    starts_with("sc_")
+  )
 
 
 outfile %>%
@@ -125,7 +137,3 @@ outfile %>%
 
 
 # End of Script #
-
-
-
-
