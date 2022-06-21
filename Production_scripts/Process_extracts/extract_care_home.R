@@ -44,7 +44,7 @@ matched_data <- source_ch_data %>%
 source_ch_clean <- matched_data %>%
   # create variables
   mutate(
-    year = convert_fyyear_to_year(fyyear),
+    year = fyyear,
     recid = "CH",
     SMRType = "Care-Home"
   ) %>%
