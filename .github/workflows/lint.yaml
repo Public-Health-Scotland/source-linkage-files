@@ -3,6 +3,7 @@
 on:
   pull_request:
     branches: [main-R]
+    paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
 
 name: lint
 
