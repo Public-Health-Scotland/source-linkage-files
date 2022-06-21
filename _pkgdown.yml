@@ -13,6 +13,7 @@ reference:
 
 
   - title: Check
+    desc: Checks within vectors
   - contents:
     - starts_with("is_")
 
@@ -22,6 +23,7 @@ reference:
     desc: Functions to compute the start, end and midpoint dates of a financial year, and convert date types
   - contents:
     - ends_with("_fy")
+    - fy_interval
     - contains("_date")
   - subtitle: Year Format
     desc: Functions to convert between financial year and calendar year, and check that the year variable is in the correct format

@@ -1,5 +1,7 @@
 #' Check that the year is in the correct format
 #'
+#' @description Test to check that the year vector is in the correct format
+#'
 #' @param year the year to check
 #' @param format the format that year should be using. Default is "fyyear" for
 #' example `1718`, the other format available is "alternate" e.g. `2017`

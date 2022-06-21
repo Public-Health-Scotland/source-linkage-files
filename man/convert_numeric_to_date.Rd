@@ -13,7 +13,7 @@ convert_numeric_to_date(numeric_date)
 a Date vector
 }
 \description{
-Convert a date in 'SLF numeric format' to Date type
+Convert a numeric vector to a date - YYYY-MM-DD
 }
 \examples{
 convert_numeric_to_date(c(20210101, 19993112))

@@ -13,7 +13,7 @@ convert_date_to_numeric(date)
 a vector of numerics where the number is of the form YYYYMMDD
 }
 \description{
-Convert a date type to the 'SLF numeric format'
+Convert a date to the 'SLF numeric format' - YYYYMMDD
 }
 \examples{
 convert_date_to_numeric(as.Date("2021-03-31"))

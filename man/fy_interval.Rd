@@ -13,7 +13,7 @@ fy_interval(year)
 An \link[lubridate:interval]{interval}
 }
 \description{
-Financial Year interval
+Get the interval between the start date and end date of the specified financial year
 }
 \examples{
 fy_interval("1920")

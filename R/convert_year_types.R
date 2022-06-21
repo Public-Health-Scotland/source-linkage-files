@@ -1,7 +1,6 @@
 #' Convert year types - Financial year form to the alternate form
 #'
-#' Converts year type from the financial year form
-#' '1718' to the year form '2017'.
+#' @description Convert a year vector from financial year '1718' to the alternate format '2017'
 #'
 #' @param fyyear vector of financial years in the form '1718'
 #'
@@ -21,8 +20,7 @@ convert_fyyear_to_year <- function(fyyear) {
 
 #' Convert year types - Alternate year form to financial year form
 #'
-#' Convert a year type from alternate form '2017' to normal
-#' financial year form '1718'.
+#' @description Convert a year vector from the alternate format '2017' to financial year format '2017'
 #'
 #' @param year vector of years in the form '2017'
 #'

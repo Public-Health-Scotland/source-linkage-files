@@ -13,7 +13,7 @@ end_fy(year, format = c("fyyear", "alternate"))
 a vector of dates of the end date of the FY year
 }
 \description{
-Return the end date of FY years
+Get the end date of the specified financial year
 }
 \examples{
 end_fy("1718")

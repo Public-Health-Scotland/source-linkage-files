@@ -1,8 +1,10 @@
 #' Return the start date of FY year
 #'
+#' @description Get the start date of the specified financial year
+#'
 #' @param year a vector of years
 #'
-#' @return a vector of dates of the start date of the FY year
+#' @return a vector of the start dates of the FY year
 #' @export
 #'
 #' @examples
@@ -25,6 +27,8 @@ start_fy <- function(year, format = c("fyyear", "alternate")) {
 
 
 #' Return the end date of FY years
+#'
+#' @description Get the end date of the specified financial year
 #'
 #' @param year a vector of years
 #'
@@ -50,7 +54,9 @@ end_fy <- function(year, format = c("fyyear", "alternate")) {
 }
 
 
-#' Return the mid date of FY year
+#' Return the date of the midpoint of the FY year
+#'
+#' @description Get the date of the midpoint of the specified financial year
 #'
 #' @param year a vector of years
 #'
@@ -75,7 +81,10 @@ midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
   return(midpoint_fy)
 }
 
+
 #' Financial Year interval
+#'
+#' @description Get the interval between the start date and end date of the specified financial year
 #'
 #' @param year The financial year in the format '1718' as a character.
 #'

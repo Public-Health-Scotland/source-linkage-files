@@ -10,10 +10,10 @@ start_fy(year, format = c("fyyear", "alternate"))
 \item{year}{a vector of years}
 }
 \value{
-a vector of dates of the start date of the FY year
+a vector of the start dates of the FY year
 }
 \description{
-Return the start date of FY year
+Get the start date of the specified financial year
 }
 \examples{
 start_fy("1718")

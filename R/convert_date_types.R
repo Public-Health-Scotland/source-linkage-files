@@ -1,5 +1,7 @@
 #' Convert a date type to the 'SLF numeric format'
 #'
+#' @description Convert a date to the 'SLF numeric format' - YYYYMMDD
+#'
 #' @param date a vector of dates
 #'
 #' @return a vector of numerics where the number is of the form YYYYMMDD
@@ -14,6 +16,8 @@ convert_date_to_numeric <- function(date) {
 }
 
 #' Convert a date in 'SLF numeric format' to Date type
+#'
+#' @description Convert a numeric vector to a date - YYYY-MM-DD
 #'
 #' @param numeric_date a numeric vector containing dates in the form YYYYMMDD
 #'

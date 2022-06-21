@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_fy_dates.R
 \name{midpoint_fy}
 \alias{midpoint_fy}
-\title{Return the mid date of FY year}
+\title{Return the date of the midpoint of the FY year}
 \usage{
 midpoint_fy(year, format = c("fyyear", "alternate"))
 }
@@ -13,7 +13,7 @@ midpoint_fy(year, format = c("fyyear", "alternate"))
 a vector of dates of the mid date of the FY year
 }
 \description{
-Return the mid date of FY year
+Get the date of the midpoint of the specified financial year
 }
 \examples{
 midpoint_fy("1718")
