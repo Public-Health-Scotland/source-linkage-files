@@ -74,3 +74,19 @@ midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
 
   return(midpoint_fy)
 }
+
+#' Financial Year interval
+#'
+#' @param year The financial year in the format '1718' as a character.
+#'
+#' @return An [interval][lubridate::interval()]
+#' @export
+#'
+#' @examples
+#' fy_interval("1920")
+fy_interval <- function(year) {
+  # year must be the correct type
+  check_year_format(year, format = "fyyear")
+
+  lubridate::interval(start = start_fy(year), end = end_fy(year))
+}
