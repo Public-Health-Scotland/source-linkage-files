@@ -48,8 +48,6 @@ source_ch_clean <- matched_data %>%
     recid = "CH",
     SMRType = "Care-Home"
   ) %>%
-  # compute age variable
-  compute_mid_year_age(fyyear, dob) %>%
   # compute lca variable from sending_location
   mutate(lca = convert_sending_location_to_lca(sending_location)) %>%
   # bed days
