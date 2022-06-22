@@ -1,6 +1,6 @@
 # June 2022
 
-* Zihao joined the team.
+* Zihao Li joined the team.
 
 
 # June 2022 Update - Released 10-Jun-2022
