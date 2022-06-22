@@ -1,4 +1,4 @@
-#' IT Long Term Conditions
+#' IT Long Term Conditions file path
 #'
 #' @description Get the full path to the IT Long Term Conditions extract
 #'
