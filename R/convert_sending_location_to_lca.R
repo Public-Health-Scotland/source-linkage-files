@@ -1,13 +1,19 @@
-#' Convert Social Care Sending Location Codes into LCA
+#' Convert Social Care Sending Location Codes into LCA Codes
 #'
-#' @param sending_location vector of council area codes or names
+#' @description Convert Social Care Sending Location Codes into the Local Council Authority Codes
 #'
-#' @return a vector of local council codes
+#' @param sending_location vector of sending location codes
+#'
+#' @return a vector of local council authority codes
 #' @export
 #'
 #' @examples
 #' sending_location <- c("100", "120")
 #' convert_sending_location_to_lca(sending_location)
+#'
+#' @family code functions
+#'
+#' @seealso convert_ca_to_lca
 convert_sending_location_to_lca <- function(sending_location) {
   lca <- dplyr::case_when(
     sending_location == "100" ~ "01",
