@@ -22,7 +22,6 @@ Get the full path to the IT Deaths extract
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
-\code{\link{create_person_id}()},
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demog_cohorts_path}()},

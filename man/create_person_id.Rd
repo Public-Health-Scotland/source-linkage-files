@@ -2,45 +2,19 @@
 % Please edit documentation in R/create_person_id.R
 \name{create_person_id}
 \alias{create_person_id}
-\title{Get the Social Care Person ID}
+\title{Create the Person ID}
 \usage{
 create_person_id(data, type = c("SC"))
 }
 \arguments{
+\item{data}{the data containing the variables to compute the person id from}
+
 \item{type}{the type of the ID}
 }
 \value{
 The social care person id
 }
 \description{
-Get the Social Care Person ID
+Creates the Person ID - using the sending location code and clients social care ID,
+the default is Social Care which uses sending location and Social Care ID to compute the Person ID
 }
-\seealso{
-Other file path functions: 
-\code{\link{get_ch_costs_path}()},
-\code{\link{get_dd_path}()},
-\code{\link{get_demog_cohorts_path}()},
-\code{\link{get_dn_costs_path}()},
-\code{\link{get_file_path}()},
-\code{\link{get_gp_ooh_costs_path}()},
-\code{\link{get_hc_costs_path}()},
-\code{\link{get_hc_raw_costs_path}()},
-\code{\link{get_hhg_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
-\code{\link{get_ltcs_path}()},
-\code{\link{get_nsu_path}()},
-\code{\link{get_practice_details_path}()},
-\code{\link{get_sc_ch_episodes_path}()},
-\code{\link{get_sc_demog_lookup_path}()},
-\code{\link{get_sc_hc_episodes_path}()},
-\code{\link{get_service_use_cohorts_path}()},
-\code{\link{get_slf_ch_name_lookup_path}()},
-\code{\link{get_slf_deaths_path}()},
-\code{\link{get_slf_gp_cluster_path}()},
-\code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()},
-\code{\link{get_sparra_path}()}
-}
-\concept{file path functions}

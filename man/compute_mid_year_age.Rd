@@ -2,25 +2,28 @@
 % Please edit documentation in R/compute_mid_year_age.R
 \name{compute_mid_year_age}
 \alias{compute_mid_year_age}
-\title{Compute Age of Clients at Midpoint of Year}
+\title{Compute Age at Midpoint of Year}
 \usage{
-compute_mid_year_age(data, fyyear, dob)
-}
-\arguments{
-\item{data}{data to assign age to}
-
-\item{fyyear}{financial year}
-
-\item{dob}{date of birth of the client}
-}
-\value{
-a vector of age at midpoint
-}
-\description{
-Compute Age of Clients at Midpoint of Year
-}
-\examples{
-dob <- as.Date(c("01-01-1990", "10-05-1960"))
-fyyear <- "1920"
 compute_mid_year_age(fyyear, dob)
 }
+\arguments{
+\item{fyyear}{current financial year}
+
+\item{dob}{date of birth of the clients}
+}
+\value{
+a vector of ages at the financial year midpoint
+}
+\description{
+Compute the age of a client at the midpoint of the year - 30-09-YYYY
+}
+\examples{
+dob <- as.Date(c("01-01-1990", "31-10-1997"), format = "\%d-\%m-\%Y")
+fyyear <- "1920"
+compute_mid_year_age(fyyear, dob)
+
+}
+\seealso{
+midpoint_fy
+}
+\concept{date functions}

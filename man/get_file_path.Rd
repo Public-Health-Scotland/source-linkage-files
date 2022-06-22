@@ -41,7 +41,6 @@ appropriate permissions.
 }
 \seealso{
 Other file path functions: 
-\code{\link{create_person_id}()},
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demog_cohorts_path}()},

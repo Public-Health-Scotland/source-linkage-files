@@ -2,20 +2,25 @@
 % Please edit documentation in R/convert_sending_location_to_lca.R
 \name{convert_sending_location_to_lca}
 \alias{convert_sending_location_to_lca}
-\title{Convert Social Care Sending Location Codes into LCA}
+\title{Convert Social Care Sending Location Codes into LCA Codes}
 \usage{
 convert_sending_location_to_lca(sending_location)
 }
 \arguments{
-\item{sending_location}{vector of council area codes or names}
+\item{sending_location}{vector of sending location codes}
 }
 \value{
-a vector of local council codes
+a vector of local council authority codes
 }
 \description{
-Convert Social Care Sending Location Codes into LCA
+Convert Social Care Sending Location Codes into the Local Council Authority Codes
 }
 \examples{
 sending_location <- c("100", "120")
 convert_sending_location_to_lca(sending_location)
+
 }
+\seealso{
+convert_ca_to_lca
+}
+\concept{code functions}

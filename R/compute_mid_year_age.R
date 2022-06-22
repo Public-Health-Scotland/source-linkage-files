@@ -1,18 +1,26 @@
-#' Compute Age of Clients at Midpoint of Year
+#' Compute Age at Midpoint of Year
 #'
-#' @param data data to assign age to
-#' @param fyyear financial year
-#' @param dob date of birth of the client
+#' @description Compute the age of a client at the midpoint of the year - 30-09-YYYY
 #'
-#' @return a vector of age at midpoint
+#' @param fyyear current financial year
+#' @param dob date of birth of the clients
+#'
+#' @return a vector of ages at the financial year midpoint
 #' @export
 #'
 #' @examples
-#' dob <- as.Date(c("01-01-1990", "10-05-1960"))
+#' dob <- as.Date(c("01-01-1990", "31-10-1997"), format = "%d-%m-%Y")
 #' fyyear <- "1920"
 #' compute_mid_year_age(fyyear, dob)
-compute_mid_year_age <- function(data, fyyear, dob) {
-  data <- data %>%
-    # age
-    dplyr::mutate(age = lubridate::as.period(lubridate::interval(start = dob, end = midpoint_fy(fyyear)))$year)
+#'
+#' @family date functions
+#'
+#' @seealso midpoint_fy
+compute_mid_year_age <- function(fyyear, dob) {
+
+  age_intervals <- lubridate::interval(start = dob, end = as.Date(midpoint_fy(fyyear)))
+
+  ages <- lubridate::as.period(age_intervals)$year
+
+  return(ages)
 }

@@ -9,7 +9,7 @@ get_ch_name_lookup_path(year, ...)
 \arguments{
 \item{year}{Year of extract}
 
-\item{ext}{Extension for the extract (zsav or rds)}
+\item{...}{additional arguments passed to \code{\link{get_file_path}}}
 }
 \value{
 Path to clean source extract containing data for each dataset
