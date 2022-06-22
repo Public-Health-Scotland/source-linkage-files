@@ -14,9 +14,9 @@ produce_source_extract_tests(
 \item{data}{new or old data for testing summary flags
 (data is from \code{\link[=get_source_extract_path]{get_source_extract_path()}})}
 
-\item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
+\item{sum_mean_vars}{variables used when selecting 'all' measures from \code{\link[=calculate_measures]{calculate_measures()}}}
 
-\item{all_vars}{variables used when selecting 'all' measures from \code{\link[=calculate_measures]{calculate_measures()}}}
+\item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
 }
 \value{
 a dataframe with a count of each flag

@@ -1,6 +1,7 @@
 #' Return the start date of FY year
 #'
 #' @param year a vector of years
+#' @param format the format of the year vector, default is financial year
 #'
 #' @return a vector of dates of the start date of the FY year
 #' @export
@@ -27,6 +28,7 @@ start_fy <- function(year, format = c("fyyear", "alternate")) {
 #' Return the end date of FY years
 #'
 #' @param year a vector of years
+#' @param format the format of the year vector, default is financial year
 #'
 #' @return a vector of dates of the end date of the FY year
 #' @export
@@ -53,6 +55,7 @@ end_fy <- function(year, format = c("fyyear", "alternate")) {
 #' Return the mid date of FY year
 #'
 #' @param year a vector of years
+#' @param format the format of the year vector, default is financial year
 #'
 #' @return a vector of dates of the mid date of the FY year
 #' @export
