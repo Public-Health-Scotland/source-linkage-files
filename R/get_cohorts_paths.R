@@ -30,7 +30,7 @@ get_demog_cohorts_path <- function(year, ...) {
 #' @return The path to the Service Use Cohort lookup
 #' as a [fs::path()]
 #' @export
-#' @family cohort lookup
+#' @family cohort lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_service_use_cohorts_path <- function(year, ...) {
   service_use_cohorts_path <- get_file_path(
