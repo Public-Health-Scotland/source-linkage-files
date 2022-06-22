@@ -28,7 +28,7 @@ get_ch_costs_path <- function(..., update = NULL) {
 #'
 #' @return The path to the costs lookup as an [fs::path()]
 #' @export
-#' @family costs lookup
+#' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_dn_costs_path <- function(..., update = NULL) {
   dn_costs_path <- get_file_path(
