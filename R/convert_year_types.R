@@ -35,7 +35,14 @@ convert_fyyear_to_year <- function(fyyear) {
 convert_year_to_fyyear <- function(year) {
   year <- check_year_format(year = year, format = "alternate")
 
-  fyyear <- paste0(substr(year, 3, 4), as.integer(substr(year, 3, 4)) + 1L)
+  first_part <- substr(year, 1, 2)
+  second_part <- substr(year, 3, 4)
+
+  if (substr(second_part, 1, 1) != "0") {
+    fyyear <- paste0(second_part, as.integer(second_part) + 1L)
+  } else {
+    fyyear <- paste0(second_part, "0", as.integer(second_part) + 1L)
+  }
 
   return(fyyear)
 }
