@@ -21,7 +21,6 @@ Get the full Care Home costs lookup path
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
-\code{\link{create_person_id}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demog_cohorts_path}()},
 \code{\link{get_dn_costs_path}()},
