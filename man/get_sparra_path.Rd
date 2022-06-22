@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sparra_hhg_paths.R
 \name{get_sparra_path}
 \alias{get_sparra_path}
-\title{SPARRA Extract}
+\title{SPARRA Extract File Path}
 \usage{
 get_sparra_path(year, ...)
 }

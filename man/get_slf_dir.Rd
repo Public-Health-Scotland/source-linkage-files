@@ -15,7 +15,6 @@ File path for the general SLF directory for accessing HSCDIIP folders/files
 \seealso{
 Other directories: 
 \code{\link{get_lookups_dir}()},
-\code{\link{get_slf_postcode_path}()},
 \code{\link{get_year_dir}()}
 }
 \concept{directories}

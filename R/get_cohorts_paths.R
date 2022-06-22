@@ -1,4 +1,4 @@
-#' Demographics Cohort
+#' Demographics Cohort File Path
 #'
 #' @description Get the full path to the Demographics Cohort lookup
 #'
@@ -20,7 +20,7 @@ get_demog_cohorts_path <- function(year, ...) {
   return(demog_cohorts_path)
 }
 
-#' Service Use Cohort
+#' Service Use Cohort File Path
 #'
 #' @description Get the full path to the Service Use Cohort lookup
 #'

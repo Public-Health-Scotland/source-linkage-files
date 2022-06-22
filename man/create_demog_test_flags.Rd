@@ -14,12 +14,12 @@ a dataframe with flag (1 or 0) for each demographic variable.
 Missing value flag from \code{\link[=is_missing]{is_missing()}}
 }
 \description{
-Create demographic flags for testing
+Create the demographic flags for testing
 }
 \seealso{
-Other create test flags functions: 
+Other flag functions: 
 \code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hb_test_flags}()},
 \code{\link{create_hscp_test_flags}()}
 }
-\concept{create test flags functions}
+\concept{flag functions}

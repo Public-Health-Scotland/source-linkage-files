@@ -10,6 +10,8 @@
 #'
 #' @examples
 #' start_fy("1718")
+#'
+#' @family date functions
 start_fy <- function(year, format = c("fyyear", "alternate")) {
   if (missing(format)) {
     format <- "fyyear"
@@ -39,6 +41,8 @@ start_fy <- function(year, format = c("fyyear", "alternate")) {
 #'
 #' @examples
 #' end_fy("1718")
+#'
+#' @family date functions
 end_fy <- function(year, format = c("fyyear", "alternate")) {
   if (missing(format)) {
     format <- "fyyear"
@@ -68,6 +72,8 @@ end_fy <- function(year, format = c("fyyear", "alternate")) {
 #'
 #' @examples
 #' midpoint_fy("1718")
+#'
+#' @family date functions
 midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
   if (missing(format)) {
     format <- "fyyear"
@@ -96,6 +102,8 @@ midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
 #'
 #' @examples
 #' fy_interval("1920")
+#'
+#' @family date functions
 fy_interval <- function(year) {
   # year must be the correct type
   check_year_format(year, format = "fyyear")

@@ -19,4 +19,15 @@ Get the date of the midpoint of the specified financial year
 }
 \examples{
 midpoint_fy("1718")
+
 }
+\seealso{
+Other date functions: 
+\code{\link{convert_date_to_numeric}()},
+\code{\link{convert_numeric_to_date}()},
+\code{\link{end_fy}()},
+\code{\link{fy_interval}()},
+\code{\link{is_date_in_year}()},
+\code{\link{start_fy}()}
+}
+\concept{date functions}

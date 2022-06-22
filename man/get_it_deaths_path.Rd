@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_it_extract_paths.R
 \name{get_it_deaths_path}
 \alias{get_it_deaths_path}
-\title{IT Deaths}
+\title{IT Deaths File Path}
 \usage{
 get_it_deaths_path(it_reference = it_extract_ref(), ...)
 }

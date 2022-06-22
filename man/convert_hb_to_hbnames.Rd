@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_codes_to_name.R
 \name{convert_hb_to_hbnames}
 \alias{convert_hb_to_hbnames}
-\title{Convert NHS Health Board Codes}
+\title{Convert NHS Health Board Codes to Names}
 \usage{
 convert_hb_to_hbnames(hb)
 }
@@ -18,4 +18,11 @@ Convert NHS Health Board Codes to the NHS Health Board Names
 \examples{
 hb <- c("S08000015", "S08000016")
 convert_hb_to_hbnames(hb)
+
 }
+\seealso{
+Other code functions: 
+\code{\link{convert_ca_to_lca}()},
+\code{\link{convert_hscp_to_hscpnames}()}
+}
+\concept{code functions}

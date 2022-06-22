@@ -1,4 +1,4 @@
-#' Convert monthly rows to variables
+#' Convert Monthly Rows to Variables
 #'
 #' @description Creates data with monthly cost and beddays variables using assigned cost vector
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_it_extract_paths.R
 \name{get_it_prescribing_path}
 \alias{get_it_prescribing_path}
-\title{IT Prescribing}
+\title{IT Prescribing File Path}
 \usage{
 get_it_prescribing_path(year, it_reference = it_extract_ref(), ...)
 }

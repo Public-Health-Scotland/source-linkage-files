@@ -22,7 +22,6 @@ Get the directory for Source Linkage File Updates for the given year
 \seealso{
 Other directories: 
 \code{\link{get_lookups_dir}()},
-\code{\link{get_slf_dir}()},
-\code{\link{get_slf_postcode_path}()}
+\code{\link{get_slf_dir}()}
 }
 \concept{directories}

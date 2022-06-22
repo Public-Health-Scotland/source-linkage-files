@@ -13,7 +13,7 @@ the Lookups directory path as a \link[fs:path]{fs::path}
 Get the path to the lookups directory
 }
 \seealso{
-Other lookup paths: 
+Other lookup file paths: 
 \code{\link{read_datazone_pop_file}()},
 \code{\link{read_gpprac_file}()},
 \code{\link{read_locality_file}()},
@@ -22,8 +22,7 @@ Other lookup paths:
 
 Other directories: 
 \code{\link{get_slf_dir}()},
-\code{\link{get_slf_postcode_path}()},
 \code{\link{get_year_dir}()}
 }
 \concept{directories}
-\concept{lookup paths}
+\concept{lookup file paths}

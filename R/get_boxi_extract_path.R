@@ -1,6 +1,6 @@
 #' Get BOXI extract
 #'
-#' @description Get the BOXI extract path for a given extract and year
+#' @description Get the BOXI extract path for a given extract and year, returns an error message if the extract does not exist
 #'
 #' @param year Year of extract
 #' @param type Name of BOXI extract

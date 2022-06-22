@@ -1,6 +1,6 @@
-#' Long Term Conditions
+#' Long Term Conditions File Path
 #'
-#' @description Get the full path to the LTC Refernce File
+#' @description Get the full path to the LTC Reference File
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param year financial year e.g. "1920"

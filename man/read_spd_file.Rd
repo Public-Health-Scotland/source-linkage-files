@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_lookups.R
 \name{read_spd_file}
 \alias{read_spd_file}
-\title{Scottish Postcode Directory}
+\title{Scottish Postcode Directory File Path}
 \usage{
 read_spd_file(file = NULL)
 }
@@ -18,11 +18,11 @@ The data read using \code{readr::read_rds}
 Read the Scottish Postcode Directory file
 }
 \seealso{
-Other lookup paths: 
+Other lookup file paths: 
 \code{\link{get_lookups_dir}()},
 \code{\link{read_datazone_pop_file}()},
 \code{\link{read_gpprac_file}()},
 \code{\link{read_locality_file}()},
 \code{\link{read_simd_file}()}
 }
-\concept{lookup paths}
+\concept{lookup file paths}

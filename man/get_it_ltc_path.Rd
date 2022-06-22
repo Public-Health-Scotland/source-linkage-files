@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_it_extract_paths.R
 \name{get_it_ltc_path}
 \alias{get_it_ltc_path}
-\title{IT Long Term Conditions}
+\title{IT Long Term Conditions File Path}
 \usage{
 get_it_ltc_path(it_reference = it_extract_ref(), ...)
 }

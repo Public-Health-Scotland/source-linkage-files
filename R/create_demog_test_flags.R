@@ -1,6 +1,6 @@
 #' Create demographic test flags
 #'
-#' @description Create demographic flags for testing
+#' @description Create the demographic flags for testing
 #'
 #' @param data a dataframe containing demographic variables e.g. chi
 #'
@@ -8,7 +8,7 @@
 #' Missing value flag from [is_missing()]
 #' @export
 #'
-#' @family create test flags functions
+#' @family flag functions
 create_demog_test_flags <- function(data) {
   data %>%
     dplyr::arrange(.data$chi) %>%

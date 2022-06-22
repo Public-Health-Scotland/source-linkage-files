@@ -1,6 +1,5 @@
 #' Open a connection to a PHS database
 #'
-#'
 #' @description Opens a connection to PHS database to allow data to be collected
 #'
 #' @param dsn The Data Source Name passed on to `odbc::dbconnect`

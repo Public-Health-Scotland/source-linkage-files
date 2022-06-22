@@ -1,4 +1,4 @@
-#' Social Care Demographic Lookup
+#' Social Care Demographic Lookup File Path
 #'
 #' @description Get the file path for the Social Care Demographic lookup file
 #'

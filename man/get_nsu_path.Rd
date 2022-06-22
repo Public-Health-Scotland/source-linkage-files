@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nsu_paths.R
 \name{get_nsu_path}
 \alias{get_nsu_path}
-\title{NSU}
+\title{NSU File Path}
 \usage{
 get_nsu_path(year, ...)
 }

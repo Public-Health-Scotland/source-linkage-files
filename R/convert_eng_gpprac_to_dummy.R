@@ -1,4 +1,4 @@
-#' Convert GP Practice Codes
+#' Convert GP Practice Codes to a Dummy Code
 #'
 #' @description Convert English GP practice codes to a dummy code
 #'

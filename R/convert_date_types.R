@@ -9,6 +9,8 @@
 #'
 #' @examples
 #' convert_date_to_numeric(as.Date("2021-03-31"))
+#'
+#' @family date functions
 convert_date_to_numeric <- function(date) {
   lubridate::year(date) * 10000 +
     lubridate::month(date) * 100 +
@@ -26,6 +28,8 @@ convert_date_to_numeric <- function(date) {
 #'
 #' @examples
 #' convert_numeric_to_date(c(20210101, 19993112))
+#'
+#' @family date functions
 convert_numeric_to_date <- function(numeric_date) {
   as.Date(strptime(as.character(numeric_date), "%Y%m%d", tz = "UTC"))
 }

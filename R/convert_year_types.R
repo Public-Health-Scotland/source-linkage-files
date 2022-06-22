@@ -10,6 +10,8 @@
 #' @examples
 #' fyyears <- c("1718", "1819")
 #' convert_fyyear_to_year(fyyears)
+#'
+#' @family year functions
 convert_fyyear_to_year <- function(fyyear) {
   fyyear <- check_year_format(year = fyyear, format = "fyyear")
 
@@ -30,6 +32,8 @@ convert_fyyear_to_year <- function(fyyear) {
 #' @examples
 #' years <- c("2017", "2018")
 #' convert_year_to_fyyear(years)
+#'
+#' @family year functions
 convert_year_to_fyyear <- function(year) {
   year <- check_year_format(year = year, format = "alternate")
 

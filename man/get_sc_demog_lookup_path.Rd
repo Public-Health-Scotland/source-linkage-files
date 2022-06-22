@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sc_demog_path.R
 \name{get_sc_demog_lookup_path}
 \alias{get_sc_demog_lookup_path}
-\title{Social Care Demographic Lookup}
+\title{Social Care Demographic Lookup File Path}
 \usage{
 get_sc_demog_lookup_path(update = latest_update(), ...)
 }

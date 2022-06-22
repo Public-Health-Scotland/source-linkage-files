@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_source_extract_path.R
 \name{get_source_extract_path}
 \alias{get_source_extract_path}
-\title{Source Extract}
+\title{Source Extract File Path}
 \usage{
 get_source_extract_path(
   year,

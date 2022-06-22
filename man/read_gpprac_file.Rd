@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_lookups.R
 \name{read_gpprac_file}
 \alias{read_gpprac_file}
-\title{GP Practice}
+\title{GP Practice File Path}
 \usage{
 read_gpprac_file(file)
 }
@@ -18,11 +18,11 @@ The data read using \code{readr::read_rds}
 Read the GP practice lookup file
 }
 \seealso{
-Other lookup paths: 
+Other lookup file paths: 
 \code{\link{get_lookups_dir}()},
 \code{\link{read_datazone_pop_file}()},
 \code{\link{read_locality_file}()},
 \code{\link{read_simd_file}()},
 \code{\link{read_spd_file}()}
 }
-\concept{lookup paths}
+\concept{lookup file paths}

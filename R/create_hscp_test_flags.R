@@ -7,7 +7,7 @@
 #'
 #' @return a dataframe with flag (1 or 0) for each HSCP
 #' @export
-#' @family create test flags functions
+#' @family flag functions
 create_hscp_test_flags <- function(data, hscp_var) {
   data <- data %>%
     dplyr::mutate(

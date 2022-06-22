@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_codes_to_name.R
 \name{convert_hscp_to_hscpnames}
 \alias{convert_hscp_to_hscpnames}
-\title{Convet HSCP Codes}
+\title{Convert HSCP Codes to Names}
 \usage{
 convert_hscp_to_hscpnames(hscp)
 }
@@ -18,4 +18,11 @@ Convert Health & Social Care Partnership Codes to the Health & Social Care Partn
 \examples{
 hscp <- c("S37000001", "S37000002")
 convert_hscp_to_hscpnames(hscp)
+
 }
+\seealso{
+Other code functions: 
+\code{\link{convert_ca_to_lca}()},
+\code{\link{convert_hb_to_hbnames}()}
+}
+\concept{code functions}

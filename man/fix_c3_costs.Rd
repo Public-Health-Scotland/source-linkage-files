@@ -2,7 +2,7 @@
 % Please edit documentation in R/fix_c3_costs.R
 \name{fix_c3_costs}
 \alias{fix_c3_costs}
-\title{Fix C3 Costs}
+\title{Fix C3 Costs - Acute Extract}
 \usage{
 fix_c3_costs(data, year)
 }

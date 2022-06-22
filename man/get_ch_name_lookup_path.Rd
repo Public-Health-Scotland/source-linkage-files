@@ -15,7 +15,7 @@ get_ch_name_lookup_path(year, ...)
 Path to clean source extract containing data for each dataset
 }
 \description{
-Year Specific Care Home Name Lookup
+Get the full file path to the Year Specific Care Home Lookup
 }
 \seealso{
 Other social care lookup file paths: 

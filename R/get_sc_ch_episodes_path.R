@@ -1,4 +1,4 @@
-#' Care Home Episodes
+#' Care Home Episodes File Path
 #'
 #' @description Get the file path for Care Home all episodes file
 #'

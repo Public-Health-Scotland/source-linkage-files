@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_gpprac_path}
 \alias{get_slf_gpprac_path}
-\title{SLG GP Lookup}
+\title{SLG GP Lookup File Path}
 \usage{
 get_slf_gpprac_path(update = latest_update(), ...)
 }
@@ -20,10 +20,10 @@ Get the full path to the SLF GP practice lookup
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other slf lookups: 
+Other slf lookup file path: 
 \code{\link{get_slf_ch_name_lookup_path}()},
 \code{\link{get_slf_deaths_path}()},
 \code{\link{get_slf_gp_cluster_path}()},
 \code{\link{get_slf_postcode_path}()}
 }
-\concept{slf lookups}
+\concept{slf lookup file path}

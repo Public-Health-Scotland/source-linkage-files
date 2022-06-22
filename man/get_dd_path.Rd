@@ -22,6 +22,8 @@ Get the Delayed Discharges file path
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
+get_dd_period
+
 Other file path functions: 
 \code{\link{get_file_path}()},
 \code{\link{get_ltcs_path}()},

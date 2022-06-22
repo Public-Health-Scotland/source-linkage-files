@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_practice_details_path.R
 \name{get_practice_details_path}
 \alias{get_practice_details_path}
-\title{Practice Details}
+\title{Practice Details File Path}
 \usage{
 get_practice_details_path(update = latest_update(), ...)
 }

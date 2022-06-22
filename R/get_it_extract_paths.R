@@ -1,4 +1,4 @@
-#' IT Long Term Conditions file path
+#' IT Long Term Conditions File Path
 #'
 #' @description Get the full path to the IT Long Term Conditions extract
 #'
@@ -20,7 +20,7 @@ get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
   return(it_ltc_path)
 }
 
-#' IT Deaths
+#' IT Deaths File Path
 #'
 #' @description Get the full path to the IT Deaths extract
 #'
@@ -42,7 +42,7 @@ get_it_deaths_path <-
     return(it_deaths_path)
   }
 
-#' IT Prescribing
+#' IT Prescribing File Path
 #'
 #' @description Get the full path to the IT PIS extract
 #'

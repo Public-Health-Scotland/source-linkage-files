@@ -17,4 +17,15 @@ Convert a date to the 'SLF numeric format' - YYYYMMDD
 }
 \examples{
 convert_date_to_numeric(as.Date("2021-03-31"))
+
 }
+\seealso{
+Other date functions: 
+\code{\link{convert_numeric_to_date}()},
+\code{\link{end_fy}()},
+\code{\link{fy_interval}()},
+\code{\link{is_date_in_year}()},
+\code{\link{midpoint_fy}()},
+\code{\link{start_fy}()}
+}
+\concept{date functions}

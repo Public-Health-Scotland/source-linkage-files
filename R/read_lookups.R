@@ -5,14 +5,14 @@
 #' @return the Lookups directory path as a [fs::path]
 #' @export
 #'
-#' @family lookup paths
+#' @family lookup file paths
 #' @family directories
 get_lookups_dir <- function() {
   fs::path("/conf/linkage/output/lookups/Unicode")
 }
 
 
-#' Locality File
+#' Locality File Path
 #'
 #' @description Read the locality file path
 #'
@@ -21,7 +21,7 @@ get_lookups_dir <- function() {
 #' @return The data read using `readr::read_rds`
 #' @export
 #'
-#' @family lookup paths
+#' @family lookup file paths
 read_locality_file <- function(file) {
   locality_path <-
     fs::path(get_lookups_dir(), "Geography", "HSCP Locality", file)
@@ -38,7 +38,7 @@ read_locality_file <- function(file) {
 }
 
 
-#' Scottish Postcode Directory
+#' Scottish Postcode Directory File Path
 #'
 #' @description Read the Scottish Postcode Directory file
 #'
@@ -47,7 +47,7 @@ read_locality_file <- function(file) {
 #' @return The data read using `readr::read_rds`
 #' @export
 #'
-#' @family lookup paths
+#' @family lookup file paths
 read_spd_file <- function(file = NULL) {
   spd_dir <-
     fs::path(
@@ -84,7 +84,7 @@ read_spd_file <- function(file = NULL) {
 }
 
 
-#' SIMD
+#' SIMD File Path
 #'
 #' @description Read the Scottish Index for Multiple Deprivation (SIMD) file
 #'
@@ -93,7 +93,7 @@ read_spd_file <- function(file = NULL) {
 #' @return The data read using `readr::read_rds`
 #' @export
 #'
-#' @family lookup paths
+#' @family lookup file paths
 read_simd_file <- function(file) {
   simd_path <- fs::path(get_lookups_dir(), "Deprivation", file)
 
@@ -109,7 +109,7 @@ read_simd_file <- function(file) {
 }
 
 
-#' Datazone Populations
+#' Datazone Populations File Path
 #'
 #' @description Read the Datazone populations file
 #'
@@ -118,7 +118,7 @@ read_simd_file <- function(file) {
 #' @return The data read using `readr::read_rds`
 #' @export
 #'
-#' @family lookup paths
+#' @family lookup file paths
 read_datazone_pop_file <- function(file) {
   datazone_pop_path <-
     fs::path(get_lookups_dir(), "Populations", "Estimates", file)
@@ -136,7 +136,7 @@ read_datazone_pop_file <- function(file) {
 
 
 
-#' GP Practice
+#' GP Practice File Path
 #'
 #' @description Read the GP practice lookup file
 #'
@@ -145,7 +145,7 @@ read_datazone_pop_file <- function(file) {
 #' @return The data read using `readr::read_rds`
 #' @export
 #'
-#' @family lookup paths
+#' @family lookup file paths
 read_gpprac_file <- function(file) {
   gpprac_path <-
     fs::path(get_lookups_dir(), "National Reference Files", file)

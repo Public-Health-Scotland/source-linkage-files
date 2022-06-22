@@ -1,4 +1,4 @@
-#' Fix the West Dunbartonshire duplicates
+#' Fix the West Dunbartonshire duplicates - Homelessness
 #'
 #' @description Takes the homelessness data and filters out
 #' the West Dun duplicates where one has an app_number e.g.
@@ -39,7 +39,7 @@ fix_west_dun_duplicates <- function(data) {
 }
 
 
-#' Fix the East Ayrshire duplicates
+#' Fix the East Ayrshire duplicates - Homelessness
 #'
 #' @description Takes the homelessness data and filters out
 #' the East Ayrshire duplicates where one has an app_number e.g.

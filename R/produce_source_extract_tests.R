@@ -22,6 +22,7 @@
 #' @seealso [create_hb_test_flags()],
 #' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
 #' for creating test flags
+#' @seealso calculate_measures
 produce_source_extract_tests <- function(data,
                                          sum_mean_vars = c("beddays", "cost", "yearstay"),
                                          max_min_vars = c(

@@ -10,6 +10,8 @@
 #'
 #' @examples
 #' is_date_in_year(Sys.time(), "2223")
+#'
+#' @family date functions
 is_date_in_year <- function(date, year) {
   lubridate::`%within%`(date, fy_interval(year))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/fix_duplicates.R
 \name{fix_west_dun_duplicates}
 \alias{fix_west_dun_duplicates}
-\title{Fix the West Dunbartonshire duplicates}
+\title{Fix the West Dunbartonshire duplicates - Homelessness}
 \usage{
 fix_west_dun_duplicates(data)
 }

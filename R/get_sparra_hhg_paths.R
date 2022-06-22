@@ -1,5 +1,5 @@
 
-#' HHG Extract
+#' HHG Extract File Path
 #'
 #' @description Get the path to the HHG extract
 #'
@@ -20,7 +20,7 @@ get_hhg_path <- function(year, ...) {
   return(hhg_file_path)
 }
 
-#' SPARRA Extract
+#' SPARRA Extract File Path
 #'
 #' @description Get the path to the SPARRA extract
 #'

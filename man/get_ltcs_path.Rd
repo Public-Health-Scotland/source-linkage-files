@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_ltcs_path.R
 \name{get_ltcs_path}
 \alias{get_ltcs_path}
-\title{Long Term Conditions}
+\title{Long Term Conditions File Path}
 \usage{
 get_ltcs_path(year, ...)
 }
@@ -15,7 +15,7 @@ get_ltcs_path(year, ...)
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full path to the LTC Refernce File
+Get the full path to the LTC Reference File
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.

@@ -1,4 +1,4 @@
-#' Practice Details
+#' Practice Details File Path
 #'
 #' @description Get the path to the Practice Details file
 #'

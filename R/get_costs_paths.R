@@ -1,4 +1,4 @@
-#' Care Home Costs
+#' Care Home Costs File Path
 #'
 #' @description Get the full Care Home costs lookup path
 #'
@@ -19,7 +19,7 @@ get_ch_costs_path <- function(..., update = NULL) {
   return(ch_costs_path)
 }
 
-#' District Nursing Costs
+#' District Nursing Costs File Path
 #'
 #' @description Get the full District Nursing costs lookup path
 #'
@@ -41,7 +41,7 @@ get_dn_costs_path <- function(..., update = NULL) {
 }
 
 
-#' GP Out of Hours Costs
+#' GP Out of Hours Costs File Path
 #'
 #' @description Get the full GP Out of Hours costs lookup path
 #'
@@ -63,7 +63,7 @@ get_gp_ooh_costs_path <- function(..., update = NULL) {
 }
 
 
-#' Full Home Care Costs
+#' Full Home Care Costs File Path
 #'
 #' @description Get the full Home Care costs lookup path
 #'
@@ -85,7 +85,7 @@ get_hc_costs_path <- function(..., update = NULL) {
 }
 
 
-#' Raw Home Care Costs
+#' Raw Home Care Costs File Path
 #'
 #' @description Get the Home Care raw costs path
 #'

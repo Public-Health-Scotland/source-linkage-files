@@ -17,4 +17,15 @@ Convert a numeric vector to a date - YYYY-MM-DD
 }
 \examples{
 convert_numeric_to_date(c(20210101, 19993112))
+
 }
+\seealso{
+Other date functions: 
+\code{\link{convert_date_to_numeric}()},
+\code{\link{end_fy}()},
+\code{\link{fy_interval}()},
+\code{\link{is_date_in_year}()},
+\code{\link{midpoint_fy}()},
+\code{\link{start_fy}()}
+}
+\concept{date functions}

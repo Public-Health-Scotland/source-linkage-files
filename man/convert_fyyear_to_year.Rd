@@ -18,4 +18,11 @@ Convert a year vector from financial year '1718' to the alternate format '2017'
 \examples{
 fyyears <- c("1718", "1819")
 convert_fyyear_to_year(fyyears)
+
 }
+\seealso{
+Other year functions: 
+\code{\link{check_year_format}()},
+\code{\link{convert_year_to_fyyear}()}
+}
+\concept{year functions}

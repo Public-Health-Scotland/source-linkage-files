@@ -12,6 +12,8 @@
 #'
 #' @examples
 #' year <- check_year_format("1920")
+#'
+#' @family year functions
 check_year_format <- function(year, format = "fyyear") {
   if (!is.character(year)) {
     rlang::inform(message = c("i" = "`year` will be converted to a character."))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_monthly_costs.R
 \name{create_monthly_costs}
 \alias{create_monthly_costs}
-\title{Create monthly costs}
+\title{Create Monthly Costs}
 \usage{
 create_monthly_costs(
   data,

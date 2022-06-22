@@ -1,6 +1,6 @@
 #' Year Specific Care Home Name Lookup
 #'
-#' @descrition Get the full file path to the Year Specific Care Home Lookup
+#' @description Get the full file path to the Year Specific Care Home Lookup
 #'
 #' @param year Year of extract
 #' @param ... additional arguments passed to [get_file_path()]

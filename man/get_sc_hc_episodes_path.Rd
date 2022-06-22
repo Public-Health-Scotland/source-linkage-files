@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sc_hc_episodes_path.R
 \name{get_sc_hc_episodes_path}
 \alias{get_sc_hc_episodes_path}
-\title{Home Care Episodes}
+\title{Home Care Episodes File Path}
 \usage{
 get_sc_hc_episodes_path(update = latest_update(), ...)
 }

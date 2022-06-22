@@ -1,4 +1,4 @@
-#' Convet HSCP Codes
+#' Convert HSCP Codes to Names
 #'
 #' @description Convert Health & Social Care Partnership Codes to the Health & Social Care Partnership Name
 #'
@@ -10,6 +10,8 @@
 #' @examples
 #' hscp <- c("S37000001", "S37000002")
 #' convert_hscp_to_hscpnames(hscp)
+#'
+#' @family code functions
 convert_hscp_to_hscpnames <- function(hscp) {
   hscpnames <- dplyr::case_when(
     hscp == "S37000001" ~ "Aberdeen City",
@@ -48,7 +50,7 @@ convert_hscp_to_hscpnames <- function(hscp) {
 }
 
 
-#' Convert NHS Health Board Codes
+#' Convert NHS Health Board Codes to Names
 #'
 #' @description Convert NHS Health Board Codes to the NHS Health Board Names
 #'
@@ -60,6 +62,8 @@ convert_hscp_to_hscpnames <- function(hscp) {
 #' @examples
 #' hb <- c("S08000015", "S08000016")
 #' convert_hb_to_hbnames(hb)
+#'
+#' @family code functions
 convert_hb_to_hbnames <- function(hb) {
   hbnames <- dplyr::case_when(
     hb == "S08000015" ~ "Ayrshire and Arran",

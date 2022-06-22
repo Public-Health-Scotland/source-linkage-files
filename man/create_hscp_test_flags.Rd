@@ -18,9 +18,9 @@ a dataframe with flag (1 or 0) for each HSCP
 Create flags for Health & Social Care Partnerships
 }
 \seealso{
-Other create test flags functions: 
+Other flag functions: 
 \code{\link{create_demog_test_flags}()},
 \code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hb_test_flags}()}
 }
-\concept{create test flags functions}
+\concept{flag functions}

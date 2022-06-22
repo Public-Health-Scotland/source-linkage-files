@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cohorts_paths.R
 \name{get_service_use_cohorts_path}
 \alias{get_service_use_cohorts_path}
-\title{Service Use Cohort}
+\title{Service Use Cohort File Path}
 \usage{
 get_service_use_cohorts_path(year, ...)
 }
@@ -21,7 +21,7 @@ Get the full path to the Service Use Cohort lookup
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other cohort lookup: 
+Other cohort lookup file paths: 
 \code{\link{get_demog_cohorts_path}()}
 }
-\concept{cohort lookup}
+\concept{cohort lookup file paths}

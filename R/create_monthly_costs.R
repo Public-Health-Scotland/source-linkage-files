@@ -1,4 +1,4 @@
-#' Create monthly costs
+#' Create Monthly Costs
 #'
 #' @description Assign monthly costs using a cost variable and vector containing monthly beddays
 #'
