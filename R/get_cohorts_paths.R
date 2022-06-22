@@ -8,7 +8,7 @@
 #' @return The path to the Demographics Cohort lookup
 #' as a [fs::path()]
 #' @export
-#' @family cohort lookup
+#' @family cohort lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_demog_cohorts_path <- function(year, ...) {
   demog_cohorts_path <- get_file_path(
