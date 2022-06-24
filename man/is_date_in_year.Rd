@@ -23,6 +23,7 @@ is_date_in_year(Sys.time(), "2223")
 }
 \seealso{
 Other date functions: 
+\code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{convert_numeric_to_date}()},
 \code{\link{end_fy}()},

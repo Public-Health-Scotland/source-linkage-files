@@ -21,6 +21,7 @@ convert_date_to_numeric(as.Date("2021-03-31"))
 }
 \seealso{
 Other date functions: 
+\code{\link{compute_mid_year_age}()},
 \code{\link{convert_numeric_to_date}()},
 \code{\link{end_fy}()},
 \code{\link{fy_interval}()},

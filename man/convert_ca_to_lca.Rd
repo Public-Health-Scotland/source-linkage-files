@@ -25,6 +25,7 @@ convert_sending_location_to_lca
 
 Other code functions: 
 \code{\link{convert_hb_to_hbnames}()},
-\code{\link{convert_hscp_to_hscpnames}()}
+\code{\link{convert_hscp_to_hscpnames}()},
+\code{\link{convert_sending_location_to_lca}()}
 }
 \concept{code functions}

@@ -25,5 +25,14 @@ compute_mid_year_age(fyyear, dob)
 }
 \seealso{
 midpoint_fy
+
+Other date functions: 
+\code{\link{convert_date_to_numeric}()},
+\code{\link{convert_numeric_to_date}()},
+\code{\link{end_fy}()},
+\code{\link{fy_interval}()},
+\code{\link{is_date_in_year}()},
+\code{\link{midpoint_fy}()},
+\code{\link{start_fy}()}
 }
 \concept{date functions}
