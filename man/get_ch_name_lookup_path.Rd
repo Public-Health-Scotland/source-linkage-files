@@ -9,7 +9,7 @@ get_ch_name_lookup_path(year, ...)
 \arguments{
 \item{year}{Year of extract}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 Path to clean source extract containing data for each dataset

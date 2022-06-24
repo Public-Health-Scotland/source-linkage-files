@@ -1,7 +1,8 @@
 #' Get the full path to the Year Specific Care Home Lookup
 #'
 #' @param year Year of extract
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
+#' @param ... additional arguments passed to [get_file_path()]
+
 #'
 #' @return Path to clean source extract containing data for each dataset
 #' @export
