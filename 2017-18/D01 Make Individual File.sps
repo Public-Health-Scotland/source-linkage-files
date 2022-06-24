@@ -575,15 +575,19 @@ save outfile = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav"
     /zcompressed.
 get file = !Year_dir + "temp-source-individual-file-1-20" + !FY + ".zsav".
 
-* Clean up the gender, use the most common (by rounding the mean), if the mean is 1.5 (i.e. no gender known or equal male and females) then take it from the CHI).
+* Clean up the gender, use the most common (by rounding the mean).
+* If the mean is 1.5 (i.e. no gender known or equal male and females) then take it from the CHI.
+* If the person doesn't have a CHI number then set it to 9 (not recorded / not specified)
 Do if gender NE 1.5.
     Compute gender = rnd(gender).
-Else.
+Else if gender = 1.5 AND chi NE "".
     Do if Mod(number(char.substr(chi, 9, 1), F1.0), 2) = 1.
         Compute gender = 1.
     Else.
         Compute gender = 2.
     End If.
+Else if gender = 1.5 AND chi = "".
+	Compute gender = 9.
 End If.
 
 Alter type gender (F1.0).
