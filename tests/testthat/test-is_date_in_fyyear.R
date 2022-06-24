@@ -1,9 +1,13 @@
 test_that("is_date_in_year errors as expected", {
-  expect_error(is_date_in_year(Sys.time(), "2017"),
-               "The year has been entered in the wrong format")
+  expect_error(
+    is_date_in_year(Sys.time(), "2017"),
+    "The year has been entered in the wrong format"
+  )
 
-  expect_error(is_date_in_year("2017-04-01", "1718"),
-               "not a recognized date-time")
+  expect_error(
+    is_date_in_year("2017-04-01", "1718"),
+    "not a recognized date-time"
+  )
 })
 
 test_that("is_date_in_year works as expected", {

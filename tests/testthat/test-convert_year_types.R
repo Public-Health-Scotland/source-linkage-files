@@ -28,6 +28,7 @@ test_that("Responds correctly to bad inputs", {
     expect_error("The year has been entered in the wrong format\\.")
 })
 
+
 test_that("Can convert a year from alternate form to normal financial year", {
   expect_equal(convert_year_to_fyyear("2011"), "1112")
   expect_equal(convert_year_to_fyyear("2012"), "1213")
@@ -36,24 +37,4 @@ test_that("Can convert a year from alternate form to normal financial year", {
   expect_equal(convert_year_to_fyyear("2019"), "1920")
   expect_equal(convert_year_to_fyyear("2020"), "2021")
   expect_equal(convert_year_to_fyyear("2021"), "2122")
-
-  expect_equal(convert_year_to_fyyear(c("2017", "2018", "2019")), c("1718", "1819", "1920"))
-})
-
-test_that("Responds correctly to bad inputs", {
-  expect_error(
-    convert_year_to_fyyear("1819"),
-    "The year has been entered in the wrong format\\."
-  )
-
-  expect_message(
-    convert_year_to_fyyear(2018),
-    "`year` will be converted to a character"
-  )
-
-  expect_message(
-    convert_year_to_fyyear(1819),
-    "`year` will be converted to a character"
-  ) %>%
-    expect_error("The year has been entered in the wrong format\\.")
 })

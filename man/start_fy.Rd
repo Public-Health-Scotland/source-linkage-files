@@ -4,7 +4,7 @@
 \alias{start_fy}
 \title{Return the start date of FY year}
 \usage{
-start_fy(year)
+start_fy(year, format = c("fyyear", "alternate"))
 }
 \arguments{
 \item{year}{a vector of years}
