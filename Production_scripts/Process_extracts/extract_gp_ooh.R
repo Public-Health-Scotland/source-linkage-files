@@ -15,48 +15,45 @@
 #####################################################
 
 # Load Packages
-library(readr)
 library(dplyr)
-library(tidyverse)
-library(createslf)
+library(readr)
 library(stringr)
 library(tidyr)
-library(phsmethods)
 library(lubridate)
+library(createslf)
+
+# TODO - Do we need to load these packages?
+library(phsmethods)
 library(hms)
 
 # Specify year
-year <- "1920"
+year <- check_year_format("1920")
 
 
 ## Load Lookups------------------------------------------
 
 # Read code lookup
-read_code_lookup <- haven::read_sav(get_readcode_lookup_path()) %>%
+readcode_lookup <- haven::read_sav(get_readcode_lookup_path()) %>%
   rename(
     readcode = "ReadCode",
     description = "Description"
   )
 
 # OOH cost lookup
-ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path()) %>%
+ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path(ext = "sav")) %>%
   rename(
     hbtreatcode = TreatmentNHSBoardCode,
     year = Year
   )
 
+# Diagnosis Data ---------------------------------
 
------------------------------------------------------
-  # Diagnosis Data
-  -----------------------------------------------------
-
-    ## Load extract file---------------------------------
-    diagnosis_file <- read_csv(
+## Load extract file
+diagnosis_extract <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-d"),
-  col_type = cols(
-    `GUID` = col_character(),
-    `Diagnosis Code` = col_character(),
-    `Diagnosis Description` = col_character()
+  col_types = cols(
+    # All columns are character type
+    .default = col_character()
   )
 ) %>%
   # rename variables
@@ -64,95 +61,138 @@ ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path()) %>%
     guid = `GUID`,
     readcode = `Diagnosis Code`,
     description = `Diagnosis Description`
-  )
+  ) %>%
+  drop_na(readcode) %>%
+  distinct()
 
 
-## Deal with Read Codes --------------------------
+## Deal with Read Codes
 
-diagnosis_read_codes <- diagnosis_file %>%
-  # Apply readcode changes
-  tidylog::mutate(readcode = str_replace_all(readcode, "\\?", "\\.") %>%
-    str_pad(5, "right", ".")) %>%
+diagnosis_readcodes <- diagnosis_extract %>%
+  mutate(
+    # Replace question marks with dot
+    readcode = str_replace_all(readcode, "\\?", "\\."),
+    # Pad with dots up to 5 charaters
+    readcode = str_pad(readcode, 5, "right", ".")
+  ) %>%
   # Join diagnosis to readcode lookup
   # Identify diagnosis descriptions which match the readcode lookup
-  left_join(read_code_lookup %>%
-    mutate(fullmatch1 = 1),
+  left_join(readcode_lookup %>%
+    mutate(full_match_1 = 1L),
   by = c("readcode", "description")
   ) %>%
   # match on true description from readcode lookup
-  left_join(read_code_lookup %>%
+  left_join(readcode_lookup %>%
     rename(true_description = description),
   by = c("readcode")
   ) %>%
   # replace description with true description from readcode lookup if this is different
-  mutate(description = if_else(is.na(fullmatch1) & !is.na(true_description),
+  mutate(description = if_else(is.na(full_match_1) & !is.na(true_description),
     true_description, description
   )) %>%
   # Join to readcode lookup again to check
-  left_join(read_code_lookup %>%
-    mutate(full_match2 = 1),
+  left_join(readcode_lookup %>%
+    mutate(full_match_2 = 1L),
   by = c("readcode", "description")
   ) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
-  mutate(readcode = case_when(
-    full_match2 == 0 & readcode == "Xa1m." ~ "S349",
-    full_match2 == 0 & readcode == "Xa1mz" ~ "S349",
-    full_match2 == 0 & readcode == "HO6.." ~ "H06..",
-    full_match2 == 0 & readcode == "zV6.." ~ "ZVz..",
+  mutate(readcode = if_else(is.na(full_match_2), case_when(
+    readcode == "Xa1m." ~ "S349",
+    readcode == "Xa1mz" ~ "S349",
+    readcode == "HO6.." ~ "H06..",
+    readcode == "zV6.." ~ "ZV6..",
     TRUE ~ readcode
-  ))
-
-
-## Data Cleaning ---------------------------------
-
-diagnosis_clean <- diagnosis_read_codes %>%
-  # Sort and restructure the data so it's ready to link to case IDs.
-  arrange(guid, readcode) %>%
-  # Remove duplicates (use a flag)
-  mutate(
-    duplicate = if_else(guid == lag(guid, default = first(guid)) & readcode == lag(readcode, default = first(readcode)), 1, 0)
-  ) %>%
-  filter(duplicate == 0) %>%
-  # TODO - CHECK HERE. Logic needs checking if this is the right way to do this
-  mutate(
-    readcodelevel = str_locate(readcode, "[.]")[, 1],
-    readcodelevel = replace_na(readcodelevel, 0)
-  ) %>%
-  arrange(
-    guid,
-    desc(readcodelevel),
-    readcode
-  ) %>%
-  # restructure data
-  pivot_wider(
-    names_from = readcodelevel,
-    values_from = readcode
+  ), readcode)) %>%
+  # Join to readcode lookup again to check
+  left_join(readcode_lookup %>%
+    mutate(full_match_final = 1L),
+  by = c("readcode", "description")
   )
 
+# See how the code above performed
+diagnosis_readcodes %>%
+  count(full_match_1, full_match_2, full_match_final) %>%
+  print()
 
------------------------------------------------------
-  # Outcomes Data
-  -----------------------------------------------------
+# Check any readcodes which are still not matching the lookup
+readcodes_not_matched <- diagnosis_readcodes %>%
+  filter(is.na(full_match_final)) %>%
+  count(readcode, description)
 
-    ## Load extract file---------------------------------
-    outcome_file <- read_csv(
+print(readcodes_not_matched)
+
+# Give an error if any new 'bad' readcodes come up.
+unrecognised_but_ok_codes <- c("@1JX.", "@1JXz", "@43jS", "@65PW", "@8CA.", "@8CAK", "@A795")
+
+new_bad_codes <- readcodes_not_matched %>% filter(!(readcode %in% unrecognised_but_ok_codes))
+
+if (nrow(new_bad_codes) != 0) {
+  cli::cli_abort(c("New unrecognised readcodes",
+    "i" = "There {?is/are} {nrow(new_bad_codes)} new unrecognised readcode{?s} in the data.",
+    " " = "Check the {cli::qty(nrow(new_bad_codes))} code{?s} then either fix, or add {?it/them} to the {.var unrecognised_but_ok_codes} vector",
+    "",
+    ">" = "New bad {cli::qty(nrow(new_bad_codes))} code{?s}: {new_bad_codes$readcode}"
+  ))
+}
+
+rm(readcode_lookup, readcodes_not_matched, unrecognised_but_ok_codes, new_bad_codes)
+
+## Data Cleaning
+
+diagnosis_clean <- diagnosis_readcodes %>%
+  select(guid, readcode, description) %>%
+  mutate(
+    readcode_level = str_locate(readcode, "\\.")[, "start"],
+    readcode_level = replace_na(readcode_level, 6)
+  ) %>%
+  group_by(guid) %>%
+  # Sort so that the 'more specific' readcodes are preferred
+  arrange(desc(readcode_level)) %>%
+  mutate(diag_n = row_number()) %>%
+  ungroup() %>%
+  select(-readcode_level) %>%
+  # restructure data
+  pivot_wider(
+    names_from = diag_n,
+    values_from = c(readcode, description),
+    names_glue = "{.value}_{diag_n}"
+  ) %>%
+  select(
+    guid,
+    # Use any of in case we have fewer than 6 diagnoses
+    any_of(c(
+      "diag_1",
+      "diag_2",
+      "diag_3",
+      "diag_4",
+      "diag_5",
+      "diag_6"
+    ))
+  )
+
+rm(diagnosis_extract, diagnosis_readcodes)
+
+# Outcomes Data ---------------------------------
+
+## Load extract file
+outcomes_extract <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-o"),
-  col_type = cols(
-    `GUID` = col_character(),
-    `Case Outcome` = col_character()
+  col_types  = cols(
+    # All columns are character type
+    .default = col_character()
   )
 ) %>%
   # rename variables
   rename(
     guid = `GUID`,
     outcome = `Case Outcome`
-  )
-
-
-## Data Cleaning -----------------------------------
-outcome_clean <- outcome_file %>%
+  ) %>%
   # Remove blank outcomes
   filter(outcome != "") %>%
+  distinct()
+
+## Data Cleaning
+outcomes_clean <- outcomes_extract %>%
   # Recode outcome
   mutate(
     outcome = recode(outcome,
@@ -169,44 +209,38 @@ outcome_clean <- outcome_file %>%
       "OTHER" = "99"
     )
   ) %>%
-  # Sort for identifying duplicates
-  arrange(guid, outcome) %>%
-  # Flag duplicates
-  mutate(duplicate = if_else(guid == lag(guid, default = first(guid)) & outcome == lag(outcome, default = first(outcome)), 1, 0)) %>%
-  # Remove duplicates
-  filter(duplicate == 0) %>%
-  # group for getting row order
+  # Sort so we prefer 'lower' outcomes e.g. Death, over things like 'Other'
   group_by(guid) %>%
-  mutate(row_order = row_number()) %>%
+  arrange(outcome) %>%
+  mutate(outcome_n = row_number()) %>%
+  ungroup() %>%
   # use row order to pivot outcomes
   pivot_wider(
-    id_cols = guid,
-    names_from = row_order,
+    names_from = outcome_n,
     names_prefix = "outcome_",
     values_from = outcome
   ) %>%
-  ungroup() %>%
   select(
     guid,
-    outcome_1,
-    outcome_2,
-    outcome_3,
-    outcome_4
+    any_of(c(
+      "outcome_1",
+      "outcome_2",
+      "outcome_3",
+      "outcome_4"
+    ))
   )
 
------------------------------------------------------
-  # Consultatations Data
-  -----------------------------------------------------
+rm(outcomes_extract)
 
-    ## Load extract file---------------------------------
+# Consultations Data---------------------------------
 
-    # Read consultations data
-    consultations_file <- read_csv(
+# Read consultations data
+consultations_file <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-c"),
-  col_type = cols(
+  col_types = cols(
     `UPI Number [C]` = col_character(),
     `Patient DoB Date [C]` = col_date(format = "%Y/%m/%d %T"),
-    `Gender` = col_double(),
+    `Gender` = col_integer(),
     `Patient Postcode [C]` = col_character(),
     `Patient NHS Board Code 9 - current` = col_character(),
     `HSCP of Residence Code Current` = col_character(),
@@ -214,13 +248,13 @@ outcome_clean <- outcome_file %>%
     `Practice Code` = col_character(),
     `Practice NHS Board Code 9 - current` = col_character(),
     `GUID` = col_character(),
-    `Consultation Recorded` = col_character(),
+    `Consultation Recorded` = col_factor(levels = c("Y", "N")),
     `Consultation Start Date Time` = col_datetime(format = "%Y/%m/%d %H:%M:%S"),
     `Consultation End Date Time` = col_datetime(format = "%Y/%m/%d %H:%M:%S"),
     `Treatment Location Code` = col_character(),
     `Treatment Location Description` = col_character(),
     `Treatment NHS Board Code 9` = col_character(),
-    `KIS Accessed` = col_character(),
+    `KIS Accessed` = col_factor(levels = c("Y", "N")),
     `Referral Source` = col_character(),
     `Consultation Type` = col_character()
   )
@@ -245,33 +279,30 @@ outcome_clean <- outcome_file %>%
     kis_accessed = `KIS Accessed`,
     refsource = `Referral Source`,
     smrtype = `Consultation Type`
-  )
+  ) %>%
+  distinct()
 
 
-## Data Cleaning ------------------------------------
+## Data Cleaning
 
 consultations_clean <- consultations_file %>%
-  # Blank CHI is not useful for linkage - remove blanks
-  filter(chi != "") %>%
   # Restore CHI leading zero
-  mutate(chi = chi_pad(chi)) %>%
-  # Some episodes are wrongly included.
-  filter(record_keydate1 <= end_fy(year) & record_keydate2 >= start_fy(year)) %>%
-  # Sort out any duplicates
-  arrange(guid, chi, record_keydate1, record_keydate2) %>%
-  # Flag duplicates and overlaps
-  mutate(
-    # Flag overlap
-    overlap = if_else(record_keydate1 < lag(record_keydate2), 1, 0),
-    # Flag duplicates
-    duplicate = case_when(
-      smrtype == lag(smrtype) & location == lag(location) ~ 1,
-      record_keydate1 == lag(record_keydate1) & record_keydate2 == lag(record_keydate2) ~ 2,
-      TRUE ~ 0
-    )
+  mutate(chi = phsmethods::chi_pad(chi)) %>%
+  # Filter missing / bad CHI numbers
+  filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
+  # Some episodes are wrongly included in the BOXI extract
+  # Filter to episodes with any time in the given financial year.
+  filter(
+    is_date_in_year(record_keydate1, year) | is_date_in_year(record_keydate2, year)
   ) %>%
-  # Get rid of obvious duplicates
-  filter(duplicate != 2) %>%
+  # TODO - WIP James to here: I was looking at doing the merge overlapping episodes bit.
+  group_by(chi) %>%
+  arrange(chi, record_keydate1, record_keydate2) %>%
+  mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
+    cumsum()) %>%
+  ungroup() %>%
+  View()
+
   # Where it's a duplicate except for an overlapping time flag it.
   mutate(to_merge = if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
   # Repeat in the other direction so both records are flagged to be merged.
@@ -316,13 +347,13 @@ consultations_clean <- consultations_file %>%
   ungroup()
 
 
-# Join data ----------------------------------------
+# Join data ---------------------------------
 
 matched_data <- consultations_clean %>%
   left_join(diagnosis_clean, by = "guid") %>%
   left_join(outcomes_clean, by = "guid")
 
-# Deal with costs -----------------------------
+# Costs ---------------------------------
 
 ooh_costs <- matched_data %>%
   mutate(
@@ -347,7 +378,7 @@ ooh_costs <- matched_data %>%
   create_day_episode_costs(record_keydate1, cost_total_net)
 
 
-# Data Cleaning--------------------------------------
+# Final cleaning  ---------------------------------
 
 ooh_clean <- ooh_costs %>%
   # rename outcomes
