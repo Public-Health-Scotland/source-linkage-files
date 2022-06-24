@@ -68,6 +68,6 @@ jobs:
         shell: Rscript {0}
 
       - name: Commit and push changes
-      - uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Style code"
