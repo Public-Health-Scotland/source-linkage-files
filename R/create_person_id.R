@@ -10,7 +10,6 @@
 #' @export
 #'
 create_person_id <- function(data, type = c("SC")) {
-
   if (missing(type)) {
     type <- "SC"
   }
