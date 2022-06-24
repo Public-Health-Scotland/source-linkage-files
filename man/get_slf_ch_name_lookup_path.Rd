@@ -36,6 +36,7 @@ Other file path functions:
 \code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
+\code{\link{get_readcode_lookup_path}()},
 \code{\link{get_sc_ch_episodes_path}()},
 \code{\link{get_sc_demog_lookup_path}()},
 \code{\link{get_sc_hc_episodes_path}()},
