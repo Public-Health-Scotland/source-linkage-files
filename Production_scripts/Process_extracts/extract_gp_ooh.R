@@ -177,7 +177,7 @@ rm(diagnosis_extract, diagnosis_readcodes)
 ## Load extract file
 outcomes_extract <- read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-o"),
-  col_types  = cols(
+  col_types = cols(
     # All columns are character type
     .default = col_character()
   )
@@ -303,8 +303,8 @@ consultations_clean <- consultations_file %>%
   ungroup() %>%
   View()
 
-  # Where it's a duplicate except for an overlapping time flag it.
-  mutate(to_merge = if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
+# Where it's a duplicate except for an overlapping time flag it.
+mutate(to_merge = if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
   # Repeat in the other direction so both records are flagged to be merged.
   #### CHECK HERE #### Is lead the right thing to do here in R to go the opposite direction?
   mutate(to_merge = if_else(

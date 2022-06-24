@@ -41,8 +41,11 @@ test_that("FY interval is correct", {
 test_that("FY interval is correct", {
   expect_s4_class(fy_interval("1718"), "Interval")
 
-  expect_equal(fy_interval("1718"),
-               lubridate::interval(
-                 as.Date("2017-04-01"),
-                                   as.Date("2018-03-31")))
+  expect_equal(
+    fy_interval("1718"),
+    lubridate::interval(
+      as.Date("2017-04-01"),
+      as.Date("2018-03-31")
+    )
+  )
 })
