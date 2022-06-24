@@ -17,7 +17,6 @@
 #'
 #' @seealso midpoint_fy
 compute_mid_year_age <- function(fyyear, dob) {
-
   age_intervals <- lubridate::interval(start = dob, end = as.Date(midpoint_fy(fyyear)))
 
   ages <- lubridate::as.period(age_intervals)$year
