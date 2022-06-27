@@ -8,19 +8,16 @@
 # Description - Match on Client data and Costs data
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(createslf)
 library(phsmethods)
 library(lubridate)
 
-
 year <- check_year_format("1920")
 
 
 # Read in data---------------------------------------
-
 source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
   # select episodes for FY
   filter(is_date_in_year(record_keydate1, year) |
@@ -30,7 +27,6 @@ source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
 
 
 # Match on Client Data ---------------------------------------
-
 # read client data in
 client_data <- readr::read_rds(get_source_extract_path(year, type = "Client"))
 
@@ -40,7 +36,6 @@ matched_data <- source_ch_data %>%
 
 
 # Data Cleaning ---------------------------------------
-
 source_ch_clean <- matched_data %>%
   # create variables
   mutate(
@@ -61,7 +56,6 @@ source_ch_clean <- matched_data %>%
 
 
 # Costs  ---------------------------------------
-
 # read in CH Costs Lookup
 ch_costs <- haven::read_sav(get_ch_costs_path(ext = "sav")) %>%
   rename(
@@ -69,11 +63,9 @@ ch_costs <- haven::read_sav(get_ch_costs_path(ext = "sav")) %>%
     ch_nursing = "nursing_care_provision"
   )
 
-
 # match costs
 matched_costs <- source_ch_clean %>%
   left_join(ch_costs, by = c("year", "ch_nursing"))
-
 
 costs <- matched_costs %>%
   # monthly costs
@@ -108,13 +100,11 @@ outfile <- costs %>%
     starts_with("sc_")
   )
 
-
 outfile %>%
   # .zsav
   write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav", check_mode = "write")) %>%
   # .rds file
   write_rds(get_source_extract_path(fyyear, type = "CH", check_mode = "write"))
-
 
 
 # End of Script #
