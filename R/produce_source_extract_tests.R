@@ -11,7 +11,7 @@
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_source_extract_path()])
-#' @param all_vars variables used when selecting 'all' measures from [calculate_measures()]
+#' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #'
 #' @return a dataframe with a count of each flag
