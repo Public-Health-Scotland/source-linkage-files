@@ -32,6 +32,10 @@ reference:
     - has_concept("year functions")
     - ends_with("year")
     - contains("year_format")
+  - subtitle: Ages
+    desc: Functions to deal with ages of clients
+  - contents:
+    - contains("_age")
 
 
   - title: Clean-Up
@@ -41,6 +45,11 @@ reference:
 
 
   - title: Create
+  - subtitle: ID
+    desc: Functions to create ID variables
+  - contents:
+    - has_concept("id functions")
+    - contains("_id")
   - subtitle: Costs
     desc: Functions to create costs variables and fix costs
   - contents:
@@ -61,7 +70,7 @@ reference:
     desc: Convert various codes to alternate forms
   - contents:
     - has_concept("code functions")
-    - contains("_ca")
+    - contains("_to_lca")
     - contains("to_dummy")
     - contains("_hb_to")
     - contains("_hscp_to")

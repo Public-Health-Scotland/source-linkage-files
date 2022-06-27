@@ -8,7 +8,8 @@
 #'
 #' @return The social care person id
 #' @export
-#'
+#'#
+#' @family id functions
 create_person_id <- function(data, type = c("SC")) {
   if (missing(type)) {
     type <- "SC"
