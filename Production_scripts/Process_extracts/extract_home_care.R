@@ -62,7 +62,8 @@ source_hc_clean <- matched_data %>%
   ) %>%
   # age
   mutate(
-    age = compute_mid_year_age(year, dob)) %>%
+    age = compute_mid_year_age(year, dob)
+  ) %>%
   # person_id
   create_person_id() %>%
   # compute lca variable from sending_location
