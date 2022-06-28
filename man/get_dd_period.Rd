@@ -2,7 +2,7 @@
 % Please edit documentation in R/00-update_refs.R
 \name{get_dd_period}
 \alias{get_dd_period}
-\title{Get the Delayed Discharge period}
+\title{Delayed Discharge period}
 \usage{
 get_dd_period()
 }
@@ -11,5 +11,12 @@ The period for the Delayed Discharge file
 as MMMYY_MMMYY
 }
 \description{
-Get the Delayed Discharge period
+Get the period for Deyalyed Discharge
 }
+\seealso{
+Other initialisation: 
+\code{\link{it_extract_ref}()},
+\code{\link{latest_update}()},
+\code{\link{previous_update}()}
+}
+\concept{initialisation}

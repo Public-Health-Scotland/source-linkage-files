@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_ch_name_lookup_path.R
 \name{get_ch_name_lookup_path}
 \alias{get_ch_name_lookup_path}
-\title{Get the full path to the Year Specific Care Home Lookup}
+\title{Year Specific Care Home Name Lookup}
 \usage{
 get_ch_name_lookup_path(year, ...)
 }
@@ -15,5 +15,10 @@ get_ch_name_lookup_path(year, ...)
 Path to clean source extract containing data for each dataset
 }
 \description{
-Get the full path to the Year Specific Care Home Lookup
+Get the full file path to the Year Specific Care Home Lookup
 }
+\seealso{
+Other social care lookup file paths: 
+\code{\link{get_sc_demog_lookup_path}()}
+}
+\concept{social care lookup file paths}

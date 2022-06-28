@@ -1,4 +1,6 @@
-#' Generate counts of beddays per month for an episode
+#' Create Monthly Beddays
+#'
+#' @description Generate counts of beddays per month for an episode
 #' with an admission and discharge date
 #'
 #' @param data Data to calculate beddays for.
@@ -12,6 +14,8 @@
 #' that count the beddays which occurred in the month.
 #'
 #' @export
+#'
+#' @seealso create_monthly_costs
 create_monthly_beddays <- function(data, year, admission_date, discharge_date, count_last = TRUE) {
 
   # Create a 'stay interval' from the episode dates

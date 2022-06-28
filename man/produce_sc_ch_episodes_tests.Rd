@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_sc_ch_episodes_tests.R
 \name{produce_sc_ch_episodes_tests}
 \alias{produce_sc_ch_episodes_tests}
-\title{Produce the Care Home all episodes tests}
+\title{Care Home All Epsiodes Tests}
 \usage{
 produce_sc_ch_episodes_tests(data)
 }
@@ -14,15 +14,10 @@ produce_sc_ch_episodes_tests(data)
 a dataframe with a count of each flag.
 }
 \description{
-Produce the Care Home all episodes tests
+Produce the test for the Care Home all episodes
 }
 \seealso{
-Other produce tests functions: 
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_source_extract_tests}()},
-\code{\link{produce_test_comparison}()}
+Other social care test functions: 
+\code{\link{produce_sc_demog_lookup_tests}()}
 }
-\concept{produce tests functions}
+\concept{social care test functions}

@@ -1,12 +1,14 @@
 
-#' Get the path to the HHG extract
+#' HHG Extract File Path
+#'
+#' @description Get the path to the HHG extract
 #'
 #' @param year Year of extract
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the HHG extract as an [fs::path()]
 #' @export
-#' @family file path functions
+#' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_hhg_path <- function(year, ...) {
   hhg_file_path <- get_file_path(
@@ -18,14 +20,16 @@ get_hhg_path <- function(year, ...) {
   return(hhg_file_path)
 }
 
-#' Get the path to the SPARRA extract
+#' SPARRA Extract File Path
+#'
+#' @description Get the path to the SPARRA extract
 #'
 #' @param year Year of extract
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the SPARRA extract as an [fs::path()]
 #' @export
-#' @family file path functions
+#' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sparra_path <- function(year, ...) {
   sparra_file_path <- get_file_path(
