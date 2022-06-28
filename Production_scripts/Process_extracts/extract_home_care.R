@@ -52,7 +52,7 @@ source_hc_clean <- matched_data %>%
   ) %>%
   # year / recid / SMRType variables
   mutate(
-    year = convert_fyyear_to_year(year),
+    year = year,
     recid = "HC",
     SMRType = case_when(
       hc_service == 1 ~ "HC-Non-Per",
