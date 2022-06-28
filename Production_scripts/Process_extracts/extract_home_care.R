@@ -8,12 +8,10 @@
 # Description - Process Home Care Extract
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(dbplyr)
 library(createslf)
-
 
 year <- check_year_format("1920")
 
@@ -28,7 +26,6 @@ source_hc_data <- readr::read_rds(get_sc_hc_episodes_path(update = "Jun_2022")) 
   filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4)) %>%
   # alter sending location type to allow match
   mutate(sending_location = as.character(sending_location))
-
 
 
 # Match on Client Data ---------------------------------------
@@ -127,13 +124,10 @@ outfile <- hc_costs %>%
     starts_with("sc_")
   )
 
-
 outfile %>%
   # .zsav
   write_sav(get_source_extract_path(fyyear, type = "HC", ext = "zsav")) %>%
   # .rds file
   write_rds(get_source_extract_path(fyyear, type = "HC", ext = "rds"))
-
-
 
 # End of Script #
