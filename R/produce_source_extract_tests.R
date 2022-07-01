@@ -40,10 +40,10 @@ produce_source_extract_tests <- function(data,
     calculate_measures(measure = "sum")
 
   all_measures <- data %>%
-    calculate_measures(vars = dplyr::any_of({{ sum_mean_vars }}), measure = "all")
+    calculate_measures(vars = {{ sum_mean_vars }}, measure = "all")
 
   min_max <- data %>%
-    calculate_measures(vars = dplyr::any_of({{ max_min_vars }}), measure = "min-max")
+    calculate_measures(vars = {{ max_min_vars }}, measure = "min-max")
 
   join_output <- list(
     test_flags,
