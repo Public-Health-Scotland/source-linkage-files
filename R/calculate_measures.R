@@ -29,8 +29,7 @@ calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min
         dplyr::across(tidyselect::everything(), ~ min(.x, na.rm = TRUE), .names = "min_{col}"),
         dplyr::across(tidyselect::everything(vars = !tidyselect::starts_with("min_")), ~ max(.x, na.rm = TRUE), .names = "max_{col}")
       ) %>%
-      dplyr::mutate(dplyr::across(as.Date(.x), ~ convert_date_to_numeric(.x)))
-      dplyr::mutate(dplyr::across(tidyselect::everything(), ~ as.numeric(.x)))
+      dplyr::mutate(dplyr::across(contains("date"), ~ convert_date_to_numeric(.)))
   }
 
   pivot_data <- data %>%
