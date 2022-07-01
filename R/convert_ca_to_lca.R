@@ -1,13 +1,18 @@
 #' Convert Council Areas into Local Council Authority Codes
 #'
+#' @description Convert Council Area code into the Local Council Authority code
+#'
 #' @param ca_var vector of council area codes or names
 #'
-#' @return a vector of local council codes
+#' @return a vector of local council authority codes
 #' @export
 #'
 #' @examples
 #' ca <- c("S12000033", "S12000034")
 #' convert_ca_to_lca(ca)
+#'
+#' @family code functions
+#' @seealso convert_sending_location_to_lca
 convert_ca_to_lca <- function(ca_var) {
   lca <- dplyr::case_when(
     ca_var == "S12000033" | ca_var == "Aberdeen City" ~ "01", # Aberdeen City

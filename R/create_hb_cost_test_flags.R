@@ -1,12 +1,14 @@
 #' Create Health Board cost test flags
 #'
+#' @description Create flags for each NHS Health Board with cost assigned if present in that record
+#'
 #' @param data the data containing a health board variable e.g. HB2019
 #' @param hb_var Health board variable e.g. HB2019 HB2018 hbpraccode
 #' @param cost_var Cost variable e.g. cost_total_net
 #'
 #' @return a dataframe with flag (1 or 0) for each Health Board
 #' @export
-#' @family create test flags functions
+#' @family flag functions
 create_hb_cost_test_flags <- function(data, hb_var, cost_var) {
   data <- data %>%
     dplyr::mutate(

@@ -1,4 +1,6 @@
-#' Convert English GP practice codes to a dummy code
+#' Convert GP Practice Codes to a Dummy Code
+#'
+#' @description Convert English GP practice codes to a dummy code
 #'
 #' @param data a [tibble][tibble::tibble-package]
 #' @param gpprac The column containing the GP practice codes

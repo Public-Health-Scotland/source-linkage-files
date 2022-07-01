@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_slf_deaths_tests.R
 \name{produce_slf_deaths_tests}
 \alias{produce_slf_deaths_tests}
-\title{Produce the SLF deaths lookup tests}
+\title{SLF Deaths Lookup Tests}
 \usage{
 produce_slf_deaths_tests(data)
 }
@@ -15,15 +15,11 @@ a dataframe with a count of each flag
 from \code{\link[=calculate_measures]{calculate_measures()}}
 }
 \description{
-Produce the SLF deaths lookup tests
+Produce the tests for SLF deaths lookup
 }
 \seealso{
-Other produce tests functions: 
-\code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
+Other slf test functions: 
 \code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_source_extract_tests}()},
-\code{\link{produce_test_comparison}()}
+\code{\link{produce_slf_postcode_tests}()}
 }
-\concept{produce tests functions}
+\concept{slf test functions}

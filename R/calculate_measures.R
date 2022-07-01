@@ -1,4 +1,6 @@
-#' Calculate measures for testing
+#' Calculate Measures for Testing
+#'
+#' @description Produces measures used within testing extracts. Computes various measures for the variables specified.
 #'
 #' @param data A processed dataframe containing a summary of the mean and sum of variables
 #' @param vars Specify variables you want to test.
@@ -9,6 +11,8 @@
 #' @return a tibble with a summary
 #' @export
 #'
+#' @family extract test functions
+#' @seealso produce_source_extract_tests
 calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min-max")) {
   measure <- match.arg(measure)
 

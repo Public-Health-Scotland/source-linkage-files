@@ -1,4 +1,6 @@
-#' Read the CHI to Anon lookup
+#' Read in the CHI to Anon Lookup
+#'
+#' @description Reads in the lookup to convert CHI number to Anonymous code
 #'
 #' @return the chi to anon lookup
 #' @export
@@ -13,6 +15,8 @@ read_chi_to_anon <- function() {
 }
 
 #' Read the Anon to CHI lookup
+#'
+#' @description Reads in the lookup to Anonymous code to CHI number
 #'
 #' @return the anon to chi lookup
 #' @export

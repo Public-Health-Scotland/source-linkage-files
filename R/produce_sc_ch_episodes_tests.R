@@ -1,4 +1,6 @@
-#' Produce the Care Home all episodes tests
+#' Care Home All Epsiodes Tests
+#'
+#' @description Produce the test for the Care Home all episodes
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_sc_ch_episodes_path()])
@@ -6,7 +8,7 @@
 #' @return a dataframe with a count of each flag.
 #'
 #' @export
-#' @family produce tests functions
+#' @family social care test functions
 produce_sc_ch_episodes_tests <- function(data) {
   data %>%
     # create test flags

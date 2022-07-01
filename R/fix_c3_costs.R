@@ -1,11 +1,12 @@
-#' Apply costs fix to specialty C3 in acute processing.
+#' Fix C3 Costs - Acute Extract
+#'
+#' @description Apply costs fix to specialty C3 in acute processing.
 #'
 #' @param data Acute extract file after processing
 #' @param year Financial year e.g. 1819
 #'
 #' @return A data frame with costs applied
 #' @export
-#'
 fix_c3_costs <- function(data, year) {
   year <- check_year_format(year)
 

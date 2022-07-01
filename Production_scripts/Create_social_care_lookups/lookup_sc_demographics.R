@@ -24,7 +24,7 @@ library(createslf)
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
-sc_demog <- tbl(db_connection, in_schema("social_care_2", "demographic")) %>%
+sc_demog <- tbl(db_connection, in_schema("social_care_2", "demographic_snapshot")) %>%
   select(
     latest_record_flag, extract_date, sending_location, social_care_id, upi,
     chi_upi, submitted_postcode, chi_postcode, submitted_date_of_birth,
