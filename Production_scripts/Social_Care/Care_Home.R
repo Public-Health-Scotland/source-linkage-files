@@ -4,8 +4,12 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Care Home Data from Platform
+# Description - Cleans the data and matches on demographic,
+# cleans Care Home names and postcodes
+# merges records to a single row per person
+# compares to Deaths data
+# continuous Care Home Stays marker
 #####################################################
 
 
@@ -17,8 +21,6 @@ library(lubridate)
 library(tidyr)
 library(phsmethods)
 
-
-latest_update <- "Mar_2022"
 
 
 # Read in data---------------------------------------
@@ -74,7 +76,6 @@ ch_clean <- ch_data %>%
 # Match with demographics data  ---------------------------------------
 
 # read in demographic data
-sc_demog <- haven::read_sav(get_sc_demog_lookup_path()) # remaining here until .rds file ready
 sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
 
 matched_ch_data <- ch_clean %>%
@@ -89,12 +90,12 @@ matched_ch_clean <- matched_ch_data %>%
 
 
 # postcode lookup
-valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path()) %>%
+valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path(ext = "zsav")) %>%
   pull(postcode)
 
 
-# CH lookup
-ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
+# Care Home Name lookup
+ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
   rename(
     ch_postcode = "AccomPostCodeNo",
     ch_name_lookup = "ServiceName"
