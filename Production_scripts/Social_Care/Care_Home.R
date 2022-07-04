@@ -122,7 +122,7 @@ name_postcode_clean <- matched_ch_data %>%
   mutate(ch_name = if_else(ch_name_change_counter == 1, last(ch_name), ch_name)) %>%
   ungroup() %>%
   # match CH names with CH lookup
-  left_join(ch_lookup, by = c("ch_postcode")) %>%
+  left_join(ch_name_lookup, by = c("ch_postcode")) %>%
   # check CH name matches the lookup name
   mutate(name_match = if_else(ch_name != ch_name_lookup | is.na(ch_name_lookup), 0, 1)) %>%
   # replace ch name with lookup name if not a match
@@ -133,7 +133,7 @@ name_postcode_clean <- matched_ch_data %>%
 
 # Data Cleaning Care Home Data ---------------------------------------
 
-ch_data_clean <- matched_ch_data %>%
+ch_data_clean <- name_postcode_clean %>%
   # sort data
   arrange(sending_location, social_care_id, ch_admission_date, period) %>%
   group_by(sending_location, social_care_id, ch_admission_date) %>%
@@ -162,6 +162,7 @@ ch_data_clean <- matched_ch_data %>%
   mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>%
   cumsum()) %>%
   ungroup()
+
 
 # count changed social_care_id
 ch_data_clean %>% count(changed_sc_id)
@@ -204,7 +205,6 @@ ch_episode <- ch_data_clean %>%
 
 # Compare to Deaths Data ---------------------------------------
 
-deaths_data <- haven::read_sav(get_slf_deaths_path()) # remaining here until .rds file saved
 deaths_data <- readr::read_rds(get_slf_deaths_path())
 
 

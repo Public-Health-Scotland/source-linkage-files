@@ -1,5 +1,5 @@
 #####################################################
-# Draft DEATHS Extract Processing Code
+# Deaths Extract Processing Code
 # Author: Catherine Holland
 # Date: February 2022
 # Written on RStudio Server
