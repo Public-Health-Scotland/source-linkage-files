@@ -67,7 +67,7 @@ ch_costs <- haven::read_sav(get_ch_costs_path(ext = "sav")) %>%
 matched_costs <- source_ch_clean %>%
   left_join(ch_costs, by = c("year", "ch_nursing"))
 
-costs <- matched_costs %>%
+monthly_costs <- matched_costs %>%
   # monthly costs
   create_monthly_costs(yearstay, cost_per_day) %>%
   # cost total net
