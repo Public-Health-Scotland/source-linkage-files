@@ -79,12 +79,7 @@ ch_clean <- ch_data %>%
 sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
 
 matched_ch_data <- ch_clean %>%
-  left_join(sc_demog, by = c("sending_location", "social_care_id"))
-
-
-# Data Cleaning Care Home Name and Postcode ---------------------------------------
-
-matched_ch_clean <- matched_ch_data %>%
+  left_join(sc_demog, by = c("sending_location", "social_care_id"))%>%
   # correct postcode formatting
   mutate(across(contains("postcode"), .x = format_postcode(.x)))
 
