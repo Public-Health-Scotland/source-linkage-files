@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_costs_paths.R
 \name{get_dn_costs_path}
 \alias{get_dn_costs_path}
-\title{Get the full District Nursing costs lookup path}
+\title{District Nursing Costs File Path}
 \usage{
 get_dn_costs_path(..., update = NULL)
 }
@@ -20,30 +20,10 @@ Get the full District Nursing costs lookup path
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other file path functions: 
+Other costs lookup file paths: 
 \code{\link{get_ch_costs_path}()},
-\code{\link{get_dd_path}()},
-\code{\link{get_demog_cohorts_path}()},
-\code{\link{get_file_path}()},
 \code{\link{get_gp_ooh_costs_path}()},
 \code{\link{get_hc_costs_path}()},
-\code{\link{get_hc_raw_costs_path}()},
-\code{\link{get_hhg_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
-\code{\link{get_ltcs_path}()},
-\code{\link{get_nsu_path}()},
-\code{\link{get_practice_details_path}()},
-\code{\link{get_sc_ch_episodes_path}()},
-\code{\link{get_sc_demog_lookup_path}()},
-\code{\link{get_sc_hc_episodes_path}()},
-\code{\link{get_service_use_cohorts_path}()},
-\code{\link{get_slf_ch_name_lookup_path}()},
-\code{\link{get_slf_deaths_path}()},
-\code{\link{get_slf_gp_cluster_path}()},
-\code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()},
-\code{\link{get_sparra_path}()}
+\code{\link{get_hc_raw_costs_path}()}
 }
-\concept{file path functions}
+\concept{costs lookup file paths}

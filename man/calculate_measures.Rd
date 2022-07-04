@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_measures.R
 \name{calculate_measures}
 \alias{calculate_measures}
-\title{Calculate measures for testing}
+\title{Calculate Measures for Testing}
 \usage{
 calculate_measures(data, vars = NULL, measure = c("sum", "all", "min-max"))
 }
@@ -19,5 +19,12 @@ everything in a dataframe.}
 a tibble with a summary
 }
 \description{
-Calculate measures for testing
+Produces measures used within testing extracts. Computes various measures for the variables specified.
 }
+\seealso{
+produce_source_extract_tests
+
+Other extract test functions: 
+\code{\link{produce_source_extract_tests}()}
+}
+\concept{extract test functions}

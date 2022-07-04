@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_existing_data_for_tests.R
 \name{get_existing_data_for_tests}
 \alias{get_existing_data_for_tests}
-\title{Get data from the SLFs for tests}
+\title{SLF Data for Testing}
 \usage{
 get_existing_data_for_tests(new_data)
 }
@@ -19,3 +19,11 @@ Get the relevant data from the SLFs
 use, the year, recid and variable names from the
 'new' data to make it as efficient as possible.
 }
+\seealso{
+produce_source_extract_tests
+
+Other test functions: 
+\code{\link{produce_test_comparison}()},
+\code{\link{write_tests_xlsx}()}
+}
+\concept{test functions}

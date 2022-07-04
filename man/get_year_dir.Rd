@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_file_paths.R
 \name{get_year_dir}
 \alias{get_year_dir}
-\title{Get the directory for the given year}
+\title{Year Directory}
 \usage{
 get_year_dir(year, extracts_dir = FALSE)
 }
@@ -17,5 +17,11 @@ folder (\code{FALSE}).}
 The file path to the year directory (on sourcedev)
 }
 \description{
-Get the directory for the given year
+Get the directory for Source Linkage File Updates for the given year
 }
+\seealso{
+Other directories: 
+\code{\link{get_lookups_dir}()},
+\code{\link{get_slf_dir}()}
+}
+\concept{directories}

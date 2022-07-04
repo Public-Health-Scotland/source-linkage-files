@@ -10,5 +10,5 @@ read_anon_to_chi()
 the anon to chi lookup
 }
 \description{
-Read the Anon to CHI lookup
+Reads in the lookup to Anonymous code to CHI number
 }

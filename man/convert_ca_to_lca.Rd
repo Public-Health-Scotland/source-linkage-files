@@ -10,12 +10,22 @@ convert_ca_to_lca(ca_var)
 \item{ca_var}{vector of council area codes or names}
 }
 \value{
-a vector of local council codes
+a vector of local council authority codes
 }
 \description{
-Convert Council Areas into Local Council Authority Codes
+Convert Council Area code into the Local Council Authority code
 }
 \examples{
 ca <- c("S12000033", "S12000034")
 convert_ca_to_lca(ca)
+
 }
+\seealso{
+convert_sending_location_to_lca
+
+Other code functions: 
+\code{\link{convert_hb_to_hbnames}()},
+\code{\link{convert_hscp_to_hscpnames}()},
+\code{\link{convert_sending_location_to_lca}()}
+}
+\concept{code functions}

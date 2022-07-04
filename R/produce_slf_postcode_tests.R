@@ -1,4 +1,6 @@
-#' Produce the Postcode Lookup tests
+#' SLF Postcode Lookup Tests
+#'
+#' @description Produce the tests for the SLF Postcode Lookup
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_slf_postcode_path()])
@@ -6,7 +8,7 @@
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
 #' @export
-#' @family produce tests functions
+#' @family slf test functions
 #' @seealso [create_hb_test_flags()] and
 #' [create_hscp_test_flags()] for creating test flags
 produce_slf_postcode_tests <- function(data) {
