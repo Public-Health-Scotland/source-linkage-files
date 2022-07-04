@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_monthly_rows_to_vars.R
 \name{convert_monthly_rows_to_vars}
 \alias{convert_monthly_rows_to_vars}
-\title{Convert monthly rows to variables}
+\title{Convert Monthly Rows to Variables}
 \usage{
 convert_monthly_rows_to_vars(data, month_num_var, cost_var, beddays_var)
 }
@@ -19,5 +19,5 @@ convert_monthly_rows_to_vars(data, month_num_var, cost_var, beddays_var)
 A dataframe with monthly cost and bed day variables
 }
 \description{
-Convert monthly rows to variables
+Creates data with monthly cost and beddays variables using assigned cost vector
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_sc_demog_lookup_tests.R
 \name{produce_sc_demog_lookup_tests}
 \alias{produce_sc_demog_lookup_tests}
-\title{Produce the Social Care Demographic Lookup tests}
+\title{Social Care Demographic Lookup Tests}
 \usage{
 produce_sc_demog_lookup_tests(data)
 }
@@ -14,15 +14,10 @@ produce_sc_demog_lookup_tests(data)
 a dataframe with a count of each flag.
 }
 \description{
-Produce the Social Care Demographic Lookup tests
+Produce the tests for Social Care Demographic Lookup
 }
 \seealso{
-Other produce tests functions: 
-\code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_source_extract_tests}()},
-\code{\link{produce_test_comparison}()}
+Other social care test functions: 
+\code{\link{produce_sc_ch_episodes_tests}()}
 }
-\concept{produce tests functions}
+\concept{social care test functions}

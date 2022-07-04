@@ -1,14 +1,16 @@
-#' Create monthly costs
+#' Create Monthly Costs
+#'
+#' @description Assign monthly costs using a cost variable and vector containing monthly beddays
 #'
 #' @param data Data containing bedday variables,
-#' likely created by [create_monthly_beddays]
+#' see [create_monthly_beddays] to create
 #' @param yearstay The variable containing the total
 #' number of beddays in the year, default is `yearstay`
 #' @param cost_total_net The variable containing the total
 #' number of cost for the year, default is `cost_total_net`
 #'
-#' @return a [tibble][tibble::tibble-package] with cost variables
-#' added
+#' @return The data with additional variables `apr_cost` to `mar_cost`
+#' that assigns the cost to each month
 #' @export
 #' @seealso create_monthly_beddays
 create_monthly_costs <- function(data, yearstay = yearstay, cost_total_net = cost_total_net) {

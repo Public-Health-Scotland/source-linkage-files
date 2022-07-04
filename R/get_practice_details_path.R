@@ -1,4 +1,6 @@
-#' Get the path to the Practice Details file
+#' Practice Details File Path
+#'
+#' @description Get the path to the Practice Details file
 #'
 #' @param update the update month (defaults to use [latest_update()])
 #' @param ... additional arguments passed to [get_file_path()]

@@ -13,10 +13,16 @@ convert_fyyear_to_year(fyyear)
 a vector of years in the alternate form '2017'
 }
 \description{
-Converts year type from the financial year form
-'1718' to the year form '2017'.
+Convert a year vector from financial year '1718' to the alternate format '2017'
 }
 \examples{
 fyyears <- c("1718", "1819")
 convert_fyyear_to_year(fyyears)
+
 }
+\seealso{
+Other year functions: 
+\code{\link{check_year_format}()},
+\code{\link{convert_year_to_fyyear}()}
+}
+\concept{year functions}

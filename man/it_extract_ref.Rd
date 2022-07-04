@@ -12,3 +12,10 @@ the IT extract ref number
 \description{
 Get the IT extract ref number
 }
+\seealso{
+Other initialisation: 
+\code{\link{get_dd_period}()},
+\code{\link{latest_update}()},
+\code{\link{previous_update}()}
+}
+\concept{initialisation}

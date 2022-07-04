@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_source_extract_tests.R
 \name{produce_source_extract_tests}
 \alias{produce_source_extract_tests}
-\title{Produce the Source Extract tests}
+\title{Source Extract Tests}
 \usage{
 produce_source_extract_tests(
   data,
@@ -37,12 +37,9 @@ episode date variables.
 \code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}} and \code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}}
 for creating test flags
 
-Other produce tests functions: 
-\code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_test_comparison}()}
+calculate_measures
+
+Other extract test functions: 
+\code{\link{calculate_measures}()}
 }
-\concept{produce tests functions}
+\concept{extract test functions}

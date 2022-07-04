@@ -1,4 +1,6 @@
-#' Produce the Social Care Demographic Lookup tests
+#' Social Care Demographic Lookup Tests
+#'
+#' @description Produce the tests for Social Care Demographic Lookup
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_sc_demog_lookup_path()])
@@ -6,7 +8,7 @@
 #' @return a dataframe with a count of each flag.
 #'
 #' @export
-#' @family produce tests functions
+#' @family social care test functions
 produce_sc_demog_lookup_tests <- function(data) {
   data %>%
     # create test flags

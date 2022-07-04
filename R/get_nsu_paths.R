@@ -1,4 +1,6 @@
-#' Get the NSU file path for the given year
+#' NSU File Path
+#'
+#' @description Get the NSU file path for the given year
 #'
 #' @param year Year of extract
 #' @param ... additional arguments passed to [get_file_path()]

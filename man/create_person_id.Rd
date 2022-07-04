@@ -18,3 +18,4 @@ The social care person id
 Creates the Person ID - using the sending location code and clients social care ID,
 the default is Social Care which uses sending location and Social Care ID to compute the Person ID
 }
+\concept{id functions}
