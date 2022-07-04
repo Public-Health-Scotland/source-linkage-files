@@ -96,7 +96,7 @@ outfile <- costs %>%
     stay,
     cost_total_net,
     ends_with("_beddays"),
-    ends_with("_cost"),
+    ends_with("_costs"),
     starts_with("sc_")
   )
 
