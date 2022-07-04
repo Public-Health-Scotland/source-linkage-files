@@ -2,7 +2,7 @@
 % Please edit documentation in R/00-update_refs.R
 \name{previous_update}
 \alias{previous_update}
-\title{Get the previous update}
+\title{Previous update}
 \usage{
 previous_update()
 }
@@ -10,5 +10,12 @@ previous_update()
 previous update as MMM_YYYY
 }
 \description{
-Get the previous update
+Get the date of the previous update, e.g 'Mar_2022'
 }
+\seealso{
+Other initialisation: 
+\code{\link{get_dd_period}()},
+\code{\link{it_extract_ref}()},
+\code{\link{latest_update}()}
+}
+\concept{initialisation}

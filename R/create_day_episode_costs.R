@@ -1,14 +1,16 @@
-#' Assign costs for single day episodes to the
-#' relevant month
+#' Assign costs for single day episodes
+#'
+#' @description Assign costs for single day episodes to the
+#' relevant month using a cost vector
 #'
 #' @param data Data to assign costs for
-#' @param date_var Admission date or discharge date
-#' @param cost_var Cost variable e.g. cost_total_net
+#' @param date_var Date vector for the costs, e.g admission date or discharge date
+#' @param cost_var Cost variable containing the costs e.g. cost_total_net
 #'
 #' @return The data with additional variables `apr_cost` to `mar_cost`
-#' that assigns cost to each month.
-#'
+#' that assigns the cost to each month
 #' @export
+#'
 create_day_episode_costs <- function(data, date_var, cost_var) {
   data <- data %>%
     # month and month_cost variable

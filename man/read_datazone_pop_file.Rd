@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_lookups.R
 \name{read_datazone_pop_file}
 \alias{read_datazone_pop_file}
-\title{Read the Datazone populations}
+\title{Datazone Populations File Path}
 \usage{
 read_datazone_pop_file(file)
 }
@@ -15,5 +15,14 @@ read_datazone_pop_file(file)
 The data read using \code{readr::read_rds}
 }
 \description{
-Read the Datazone populations
+Read the Datazone populations file
 }
+\seealso{
+Other lookup file paths: 
+\code{\link{get_lookups_dir}()},
+\code{\link{read_gpprac_file}()},
+\code{\link{read_locality_file}()},
+\code{\link{read_simd_file}()},
+\code{\link{read_spd_file}()}
+}
+\concept{lookup file paths}

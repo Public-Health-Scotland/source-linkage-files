@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_file_paths.R
 \name{get_slf_dir}
 \alias{get_slf_dir}
-\title{General SLF directory for accessing HSCDIIP folders/files}
+\title{SLF directory - hscdiip}
 \usage{
 get_slf_dir()
 }
@@ -10,5 +10,11 @@ get_slf_dir()
 The path to the main SLF Extracts folder
 }
 \description{
-General SLF directory for accessing HSCDIIP folders/files
+File path for the general SLF directory for accessing HSCDIIP folders/files
 }
+\seealso{
+Other directories: 
+\code{\link{get_lookups_dir}()},
+\code{\link{get_year_dir}()}
+}
+\concept{directories}

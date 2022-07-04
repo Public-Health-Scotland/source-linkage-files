@@ -1,4 +1,4 @@
-#' Produce the Source Extract tests
+#' Source Extract Tests
 #'
 #' @description Produce a set of tests which can be used by most
 #' of the extracts.
@@ -11,17 +11,18 @@
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_source_extract_path()])
-#' @param all_vars variables used when selecting 'all' measures from [calculate_measures()]
+#' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
 #' @export
 #'
-#' @family produce tests functions
+#' @family extract test functions
 #' @seealso [create_hb_test_flags()],
 #' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
 #' for creating test flags
+#' @seealso calculate_measures
 produce_source_extract_tests <- function(data,
                                          sum_mean_vars = c("beddays", "cost", "yearstay"),
                                          max_min_vars = c(
