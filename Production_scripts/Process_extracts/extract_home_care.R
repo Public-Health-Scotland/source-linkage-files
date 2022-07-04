@@ -18,7 +18,7 @@ year <- check_year_format("1920")
 
 # Read in data---------------------------------------
 
-source_hc_data <- readr::read_rds(get_sc_hc_episodes_path(update = "Jun_2022")) %>%
+source_hc_data <- readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
   # select episodes for FY
   filter(hc_service_start_date %in% range(start_fy(year), end_fy(year)) |
     (hc_service_start_date <= end_fy(year) & hc_service_end_date >= start_fy(year) | is.na(hc_service_end_date))) %>%
