@@ -106,7 +106,7 @@ ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
          ch_name_lookup = toupper(ch_name_lookup))
 
 
-name_postcode_clean <- matched_ch_clean %>%
+name_postcode_clean <- matched_ch_data %>%
   # deal with capitalisation of CH names
   mutate(ch_name = stringr::str_to_title(ch_name)) %>%
   # deal with punctuation in the CH names
