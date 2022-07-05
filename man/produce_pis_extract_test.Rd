@@ -19,12 +19,6 @@ Produce the Prescribing Extract Test
 \code{\link{create_pis_extract_flags}} and
 
 Other produce tests functions: 
-\code{\link{create_pis_extract_flags}()},
-\code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_test_comparison}()}
+\code{\link{create_pis_extract_flags}()}
 }
 \concept{produce tests functions}
