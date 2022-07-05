@@ -1,11 +1,11 @@
 ####################################################
-# Name of file - extract_maternity_tests.R
-# Original Authors - Jennifer Thom
-# Original Date - March 2022
+# Name of file - extract_homelessness_tests.R
+# Original Authors - Bateman McBride
+# Original Date - July 2022
 # Written/run on - RStudio Server
 # Version of R - 3.6.1
 # Description - Produce tests for source linkage files:
-#               acute processed file.
+#               homelessness processed file.
 #####################################################
 
 # Load packages
@@ -19,7 +19,7 @@ library(slfhelper)
 year <- "1920"
 
 # Read new data file
-new_data <- readr::read_rds(get_source_extract_path(year, "Maternity", ext = "rds"))
+new_data <- readr::read_rds(get_source_extract_path(year, "Homelessness", ext = "rds"))
 
 # Read current SLF episode file and filter for 01B and GLS records
 existing_data <- read_slf_episode(year, recid = "02B") %>%
