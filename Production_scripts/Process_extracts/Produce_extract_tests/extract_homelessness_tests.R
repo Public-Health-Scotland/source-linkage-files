@@ -31,7 +31,8 @@ existing_data <- read_slf_episode(year, recid = "HL1") %>%
 
 comparison <- produce_slf_homelessness_tests(
   new_data = new_data,
-  existing_data = existing_data)
+  existing_data = existing_data
+)
 
 # Produce Outfile----------------------------------------
 
