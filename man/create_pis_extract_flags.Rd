@@ -17,12 +17,6 @@ Create the Prescribing Extract Flags
 }
 \seealso{
 Other produce tests functions: 
-\code{\link{produce_pis_extract_test}()},
-\code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_test_comparison}()}
+\code{\link{produce_pis_extract_test}()}
 }
 \concept{produce tests functions}
