@@ -53,21 +53,21 @@ slf_new <- produce_pis_extract_test(pis_flags)
 ## episode file ##
 
 episode_file <- read_slf_episode(latest_year,
-                                 recid = c("PIS"),
-                                 columns = c(
-                                   "recid",
-                                   "anon_chi",
-                                   "gender",
-                                   "dob",
-                                   "age",
-                                   "hbrescode",
-                                   "lca",
-                                   "age",
-                                   "cost_total_net",
-                                   "yearstay",
-                                   "stay",
-                                   "no_dispensed_items"
-                                 )
+  recid = c("PIS"),
+  columns = c(
+    "recid",
+    "anon_chi",
+    "gender",
+    "dob",
+    "age",
+    "hbrescode",
+    "lca",
+    "age",
+    "cost_total_net",
+    "yearstay",
+    "stay",
+    "no_dispensed_items"
+  )
 )
 
 episode_file_updated_chi <-
@@ -157,20 +157,20 @@ outfile <- comparison
 
 # .zsav
 haven::write_sav(outfile,
-                 get_source_extract_tests_path(
-                   year = latest_year,
-                   type = "PIS",
-                   extension = "zsav"
-                 ),
-                 compress = TRUE
+  get_source_extract_tests_path(
+    year = latest_year,
+    type = "PIS",
+    extension = "zsav"
+  ),
+  compress = TRUE
 )
 
 # .rds file
 readr::write_rds(outfile,
-                 get_source_extract_tests_path(
-                   year = latest_year,
-                   type = "PIS",
-                   extension = "rds"
-                 ),
-                 compress = "gz"
+  get_source_extract_tests_path(
+    year = latest_year,
+    type = "PIS",
+    extension = "rds"
+  ),
+  compress = "gz"
 )
