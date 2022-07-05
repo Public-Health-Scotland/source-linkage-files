@@ -1,4 +1,6 @@
-#' Generate counts of beddays per month for an episode
+#' Create Monthly Beddays
+#'
+#' @description Generate counts of beddays per month for an episode
 #' with an admission and discharge date
 #'
 #' @param data Data to calculate beddays for.
@@ -8,10 +10,12 @@
 #' @param count_last (default `TRUE`) - Should the last day be counted,
 #' instead of the first?
 #'
-#' @return The data with additional variables `apr_beddays` to `mar_beddays`
+#' @return a [tibble][tibble::tibble-package] with additional variables `apr_beddays` to `mar_beddays`
 #' that count the beddays which occurred in the month.
 #'
 #' @export
+#'
+#' @seealso create_monthly_costs
 create_monthly_beddays <- function(data, year, admission_date, discharge_date, count_last = TRUE) {
 
   # Create a 'stay interval' from the episode dates

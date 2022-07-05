@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -151,8 +151,8 @@ save outfile = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav"
 select if any(recid, "01B", "04B", "GLS", "02B").
 
 * Fill in the blank CIJ markers.
-do if (chi ne lag(chi)) AND cij_marker = "" AND chi NE "".
-    compute cij_marker= "1".
+do if (chi ne lag(chi)) AND sysmis(cij_marker) AND chi NE "".
+    compute cij_marker= 1.
 end if.
 
 * Populate ipdc for maternity records.
@@ -205,7 +205,7 @@ Numeric PPA (F1.0).
 * Acute records.
 Do if any (recid, "01B", "02B", "04B", "GLS").
     * First record in CIJ.
-    Do if (chi NE lag(chi) or (chi = lag(chi) and cij_marker NE lag(cij_marker))).
+    Do if (chi NE lag(chi) or (chi = lag(chi) and ((cij_marker NE lag(cij_marker)) or (Not(sysmis(cij_marker)) and sysmis(lag(cij_marker)))))).
         * Non-elective original admission.
         Do if cij_pattype = "Non-Elective".
             * Initialise PPA flag for relevant records.

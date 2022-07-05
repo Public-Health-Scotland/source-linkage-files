@@ -15,11 +15,12 @@ create_hb_test_flags(data, hb_var)
 a dataframe with flag (1 or 0) for each Health Board
 }
 \description{
-Create Health Board test flags
+Create test flags for NHS Health Boards
 }
 \seealso{
-Other create test flags functions: 
+Other flag functions: 
 \code{\link{create_demog_test_flags}()},
+\code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hscp_test_flags}()}
 }
-\concept{create test flags functions}
+\concept{flag functions}

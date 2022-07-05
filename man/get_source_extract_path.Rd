@@ -2,13 +2,13 @@
 % Please edit documentation in R/get_source_extract_path.R
 \name{get_source_extract_path}
 \alias{get_source_extract_path}
-\title{Get Source Extract path}
+\title{Source Extract File Path}
 \usage{
 get_source_extract_path(
   year,
   type = c("Acute", "AE", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH", "HC",
-    "Homelessness", "Maternity", "Mental", "Outpatients", "PIS"),
-  ext = c("zsav", "rds")
+    "Homelessness", "Maternity", "MH", "Outpatients", "PIS"),
+  ...
 )
 }
 \arguments{
@@ -16,11 +16,21 @@ get_source_extract_path(
 
 \item{type}{Name of clean source extract}
 
-\item{ext}{Extension for the extract (zsav or rds)}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 Path to clean source extract containing data for each dataset
 }
 \description{
-Get Source Extract path
+Get the file path for Source Extract for given extract and year
 }
+\seealso{
+Other extract file paths: 
+\code{\link{get_boxi_extract_path}()},
+\code{\link{get_hhg_path}()},
+\code{\link{get_it_deaths_path}()},
+\code{\link{get_it_ltc_path}()},
+\code{\link{get_it_prescribing_path}()},
+\code{\link{get_sparra_path}()}
+}
+\concept{extract file paths}

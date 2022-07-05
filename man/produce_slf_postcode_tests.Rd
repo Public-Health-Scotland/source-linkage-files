@@ -2,32 +2,27 @@
 % Please edit documentation in R/produce_slf_postcode_tests.R
 \name{produce_slf_postcode_tests}
 \alias{produce_slf_postcode_tests}
-\title{Produce the Postcode Lookup tests}
+\title{SLF Postcode Lookup Tests}
 \usage{
 produce_slf_postcode_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link{get_slf_postcode_path}})}
+(data is from \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}})}
 }
 \value{
 a dataframe with a count of each flag
-from \code{\link{sum_test_flags}}
+from \code{\link[=calculate_measures]{calculate_measures()}}
 }
 \description{
-Produce the Postcode Lookup tests
+Produce the tests for the SLF Postcode Lookup
 }
 \seealso{
-\code{\link{create_hb_test_flags}} and
-\code{\link{create_hscp_test_flags}} for creating test flags
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}} and
+\code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}} for creating test flags
 
-Other produce tests functions: 
-\code{\link{create_pis_extract_flags}()},
-\code{\link{produce_pis_extract_test}()},
-\code{\link{produce_sc_ch_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
+Other slf test functions: 
 \code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_test_comparison}()}
+\code{\link{produce_slf_gpprac_tests}()}
 }
-\concept{produce tests functions}
+\concept{slf test functions}

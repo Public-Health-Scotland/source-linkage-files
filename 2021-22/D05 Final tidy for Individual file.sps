@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
@@ -324,6 +324,10 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     hc_personal_hours
     hc_non_personal_hours
     hc_reablement_hours
+    hc_total_cost
+    hc_personal_hours_cost
+    hc_non_personal_hours_cost
+    hc_reablement_hours_cost
     at_alarms
     at_telecare
     sds_option_1

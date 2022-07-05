@@ -9,11 +9,13 @@ HB
 HHG
 HSCDIIP
 HSCP
+LAs
 LTC
 MMM
 MMMYY
 NSU
 PIS
+RStudio
 SDS
 SLF
 SLFs
@@ -23,8 +25,11 @@ Telecare
 YYYY
 YYYYMMDD
 beddays
+bz
 datazone
 dsn
+fyyear
+gz
 hbpraccode
 rds
 reablement
@@ -32,5 +37,8 @@ simd
 slfhelper
 sourcedev
 spd
+specialty
 tibble
+xz
+zlib
 zsav

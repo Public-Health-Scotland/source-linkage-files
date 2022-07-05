@@ -1,19 +1,23 @@
 #' Get BOXI extract
 #'
+#' @description Get the BOXI extract path for a given extract and year, returns an error message if the extract does not exist
+#'
 #' @param year Year of extract
 #' @param type Name of BOXI extract
 #'
 #' @return BOXI extracts containing data for each dataset
 #' @export
 #'
+#' @family extract file paths
 get_boxi_extract_path <-
   function(year,
            type = c(
              "Acute",
-             "Mental",
+             "MH",
              "Maternity",
              "Outpatient",
              "AE",
+             "AE_CUP",
              "DN",
              "GPOoH",
              "Deaths",
@@ -30,10 +34,11 @@ get_boxi_extract_path <-
 
     file_name <- dplyr::case_when(
       type == "Acute" ~ "Acute-episode-level-extract",
-      type == "Mental" ~ "Mental-Health-episode-level-extract",
+      type == "MH" ~ "Mental-Health-episode-level-extract",
       type == "Maternity" ~ "Maternity-episode-level-extract",
       type == "Outpatient" ~ "Outpatients-episode-level-extract",
       type == "AE" ~ "A&E-episode-level-extract",
+      type == "AE_CUP" ~ "A&E-UCD-CUP-extract",
       type == "DN" ~ "District-Nursing-contact-level-extract",
       type == "GPOoH" ~ "GP-OoH-diagnosis-extract",
       type == "Deaths" ~ "NRS-death-registrations-extract",

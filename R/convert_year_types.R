@@ -1,7 +1,6 @@
 #' Convert year types - Financial year form to the alternate form
 #'
-#' Converts year type from the financial year form
-#' '1718' to the year form '2017'.
+#' @description Convert a year vector from financial year '1718' to the alternate format '2017'
 #'
 #' @param fyyear vector of financial years in the form '1718'
 #'
@@ -11,20 +10,19 @@
 #' @examples
 #' fyyears <- c("1718", "1819")
 #' convert_fyyear_to_year(fyyears)
+#'
+#' @family year functions
 convert_fyyear_to_year <- function(fyyear) {
-  first_part <- substr(fyyear, 1, 2)
-  second_part <- substr(fyyear, 3, 4)
-  if (any(as.integer(first_part) + 1L != as.integer(second_part))) {
-    stop("Year has been entered in the wrong format, try again using form `1718` or use function `convert_year_to_fyyear` to convert to the financial year form.")
-  }
-  year <- paste0("20", first_part)
+  fyyear <- check_year_format(year = fyyear, format = "fyyear")
+
+  year <- paste0("20", substr(fyyear, 1, 2))
+
   return(year)
 }
 
 #' Convert year types - Alternate year form to financial year form
 #'
-#' Convert a year type from alternate form '2017' to normal
-#' financial year form '1718'.
+#' @description Convert a year vector from the alternate format '2017' to financial year format '2017'
 #'
 #' @param year vector of years in the form '2017'
 #'
@@ -34,10 +32,19 @@ convert_fyyear_to_year <- function(fyyear) {
 #' @examples
 #' years <- c("2017", "2018")
 #' convert_year_to_fyyear(years)
+#'
+#' @family year functions
 convert_year_to_fyyear <- function(year) {
-  if (any((substr(year, 1, 2) != "20"))) {
-    stop("Year has been entered in the wrong format, try again using form `2017` or use function `convert_fyyear_to_year` to convert to alternate year form.")
+  year <- check_year_format(year = year, format = "alternate")
+
+  first_part <- substr(year, 1, 2)
+  second_part <- substr(year, 3, 4)
+
+  if (substr(second_part, 1, 1) != "0") {
+    fyyear <- paste0(second_part, as.integer(second_part) + 1L)
+  } else {
+    fyyear <- paste0(second_part, "0", as.integer(second_part) + 1L)
   }
-  fyyear <- paste0(substr(year, 3, 4), as.numeric(substr(year, 3, 4)) + 1)
+
   return(fyyear)
 }

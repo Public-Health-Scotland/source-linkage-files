@@ -6,7 +6,7 @@ GET DATA
   /CONNECT= !Connect_sc
   /SQL='SELECT sending_location, social_care_id, period, '+
     'sds_start_date, sds_end_date, sds_option_1, sds_option_2, sds_option_3 '+
-    'FROM social_care_2.sds '+
+    'FROM social_care_2.sds_snapshot '+
     'WHERE (financial_year = 2017) '+
     'ORDER BY sending_location, social_care_id'
   /ASSUMEDSTRWIDTH=255.

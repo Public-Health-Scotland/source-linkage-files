@@ -2,18 +2,26 @@
 % Please edit documentation in R/write_tests_xlsx.R
 \name{write_tests_xlsx}
 \alias{write_tests_xlsx}
-\title{Write tests as an xlsx workbook}
+\title{Write out Tests}
 \usage{
-write_tests_xlsx(comparison_data, name)
+write_tests_xlsx(comparison_data, sheet_name)
 }
 \arguments{
-\item{comparison_data}{produced by \code{\link{produce_test_comparison}}}
+\item{comparison_data}{produced by \code{\link[=produce_test_comparison]{produce_test_comparison()}}}
 
-\item{name}{of dataset tests}
+\item{sheet_name}{the name of the dataset - this will be used as the sheet name}
 }
 \value{
 source_tests_path to the xlsx file location
 }
 \description{
-Write tests as an xlsx workbook
+Write test output as an xlsx workbook, specific sheet for each extract
 }
+\seealso{
+produce_test_comparison
+
+Other test functions: 
+\code{\link{get_existing_data_for_tests}()},
+\code{\link{produce_test_comparison}()}
+}
+\concept{test functions}

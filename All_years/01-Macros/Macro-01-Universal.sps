@@ -19,25 +19,21 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0270905"
+    "SCTASK0323518"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Dec_2021"
+    "Jun_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Sep_2021"
+    "Mar_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Sep21"
-!EndDefine.
-
-Define !SC_Latest_Validated_period()
-    "2021Q1"
+    "Jul16_Mar22"
 !EndDefine.
 
 * Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
@@ -56,7 +52,7 @@ Define !Locality_file()
 
 * SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2021_2.sav"
+    "Scottish_Postcode_Directory_2022_1.zsav"
 !EndDefine.
 
 * gpprac file.
@@ -66,7 +62,7 @@ Define !gpprac_file()
 
 * SIMD file - will need changing when geography files update.
 Define !SIMD_file()
-    "postcode_2021_1_simd2020v2.sav"
+    "postcode_2022_1_simd2020v2.zsav"
 !EndDefine.
 
 * DataZone Populations file - will need changing when geography files update.
@@ -160,18 +156,19 @@ Define !IT_Extracts_dir()
 
 * LTC extract.
 Define !LTC_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_1_LTCs.csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_LTCs.csv"))
 !EndDefine.
 
 * Deaths extract.
 Define !Deaths_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_extract_2_Deaths.csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_Deaths.csv"))
 !EndDefine.
 
 * PIS extract.
 Define !PIS_extract_file()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), !Unquote(!Eval(!PIS_extract_number)), !Unquote(!Eval(!altFY)), ".csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref)), "_PIS_", !Unquote(!Eval(!altFY)), ".csv"))
 !EndDefine.
+
 
 *******************************************************.
 * IT macro for Older years - specific to running 1415.
@@ -183,7 +180,7 @@ Define !IT_extract_ref_OLD()
 
 * PIS extract for OLD years.
 Define !PIS_extract_file_OLD()
-    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref_OLD)), !Unquote(!Eval(!PIS_extract_number_OLD)), !Unquote(!Eval(!altFY)), ".csv"))
+    !Quote(!Concat(!Unquote(!Eval(!IT_extracts_dir)), !Unquote(!Eval(!IT_extract_ref_OLD)), "_PIS_", !Unquote(!Eval(!altFY)), ".csv"))
 !EndDefine.
 
 *******************************************************.
