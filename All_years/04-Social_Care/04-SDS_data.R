@@ -1,0 +1,95 @@
+#####################################################
+# Social Care SDS Data
+# Author: Jennifer Thom
+# Date: July 2022
+# Written on RStudio Server
+# Version of R - 3.6.1
+# Input - Data from Social care database DVPROD
+# Description - Process SDS data
+#####################################################
+
+# Load packages
+
+library(readr)
+library(dplyr)
+library(dbplyr)
+library(phsmethods)
+library(tidyverse)
+library(lubridate)
+library(fs)
+library(haven)
+
+# Set up------------------------------------------------------------------
+
+latest_update <- "Jun_2022"
+
+social_care_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
+
+
+# Read Demographic file----------------------------------------------------
+
+sc_demographics <- haven::read_sav(fs::path(
+  social_care_dir,
+  paste0("sc_demographics_lookup_", latest_update),
+  ext = "zsav"
+)) %>%
+  arrange(sending_location, social_care_id)
+
+
+# Query to database -------------------------------------------------------
+
+# set-up conection to platform
+db_connection <- phs_db_connection(dsn = "DVPROD")
+
+# read in data - social care 2 demographic
+sds_full_data <- tbl(db_connection, in_schema("social_care_2", "sds_snapshot")) %>%
+  select(
+    sending_location,
+    social_care_id,
+    period,
+    sds_start_date,
+    sds_end_date,
+    sds_option_1,
+    sds_option_2,
+    sds_option_3,
+  ) %>%
+  collect()
+
+# Data Cleaning-----------------------------------------------------
+
+sds_full_clean <- sds_full_data %>%
+  # Match on demographics data (chi, gender, dob and postcode)
+  left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
+  # If sds start date is missing, assign start of FY
+  mutate(start_fy = as.Date(paste0(period, "-04-01")),
+         sds_start_date = if_else(is.na(sds_start_date), start_fy, sds_start_date)
+         ) %>%
+  # rename for matching source variables
+  rename(
+    record_keydate1 = sds_start_date,
+    record_keydate2 = sds_end_date
+  ) %>%
+  # Pivot longer on sds option variables
+  # tried cols = contains("sds_option_") here but not working
+  pivot_longer(
+    cols = contains("sds_option_"),
+    names_to = "sds_option",
+    values_to = "received"
+  ) %>%
+  filter(received == "1") %>%
+  # Include source variables
+  mutate(
+    year = period,
+    recid = "SDS",
+    smrtype = case_when(
+      sds_option == "1" ~ "SDS-1",
+      sds_option == "2" ~ "SDS-2",
+      sds_option == "3" ~ "SDS-3"),
+    mid_fy = as.Date(paste0(year, "-09-30")),
+    # age not working
+    age = lubridate::difftime(mid_fy, dob, units = "years"),
+    # Create person id variable
+    person_id = glue::glue("{sending_location}-{social_care_id}"),
+    # Use function for creating sc send lca variables
+    sc_send_lca = convert_sc_sl_to_lca(sending_location)
+  )
