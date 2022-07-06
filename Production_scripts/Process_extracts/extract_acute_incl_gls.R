@@ -270,6 +270,6 @@ outfile %>%
   # Save as zsav file
   write_sav(get_source_extract_path(year, "Acute", ext = "zsav", check_mode = "write"), compress = "zsav") %>%
   # Save as rds file
-  write_rds(get_source_extract_path(year, "Acute",, check_mode = "write"), compress = "xz")
+  write_rds(get_source_extract_path(year, "Acute", , check_mode = "write"), compress = "xz")
 
 ## End of Script ##
