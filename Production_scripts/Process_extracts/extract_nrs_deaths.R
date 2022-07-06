@@ -108,9 +108,9 @@ deaths_clean <- deaths_extract %>%
 
 deaths_clean %>%
   # Save as zsav file
-  write_sav(get_source_extract_path(year, "Deaths", ext = "zsav")) %>%
+  write_sav(get_source_extract_path(year, "Deaths", check_mode = "write"), compress = "zsav") %>%
   # Save as rds file
-  write_rds(get_source_extract_path(year, "Deaths"))
+  write_rds(get_source_extract_path(year, "Deaths", check_mode = "write"), compress = "xz")
 
 
 # End of Script #

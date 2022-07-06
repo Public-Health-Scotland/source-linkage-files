@@ -356,9 +356,9 @@ outfile <- matched_ae_data %>%
 
 # Save as zsav file
 outfile %>%
-  write_sav(get_source_extract_path(year, "AE", ext = "zsav")) %>%
+  write_sav(get_source_extract_path(year, "AE", ext = "zsav", check_mode = "write"), compress = "zsav") %>%
   # Save as rds file
-  write_rds(get_source_extract_path(year, "AE", ext = "rds"))
+  write_rds(get_source_extract_path(year, "AE", check_mode = "write"), compress = "xz")
 
 
 # End of Script #

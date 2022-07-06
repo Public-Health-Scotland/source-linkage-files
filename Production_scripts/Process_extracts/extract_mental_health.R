@@ -238,6 +238,6 @@ outfile <- mh_clean %>%
 
 outfile %>%
   # Save as zsav file
-  write_sav(get_source_extract_path(year, "MH", ext = "zsav")) %>%
+  write_sav(get_source_extract_path(year, "MH", ext = "zsav", check_mode = "write"), compress = "zsav") %>%
   # Save as rds file
-  write_rds(get_source_extract_path(year, "MH", ext = "rds"))
+  write_rds(get_source_extract_path(year, "MH", check_mode = "write"), compress = "xz")
