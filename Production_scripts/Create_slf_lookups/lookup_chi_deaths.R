@@ -48,9 +48,9 @@ deaths_clean <- deaths_data %>%
 
 deaths_clean %>%
   # .zsav file
-  write_sav(get_slf_deaths_path(ext = "zsav", check_mode = "write")) %>%
+  write_sav(get_slf_deaths_path(ext = "zsav", check_mode = "write"), compress = "zsav") %>%
   # .rds file
-  write_rds(get_slf_deaths_path(check_mode = "write"))
+  write_rds(get_slf_deaths_path(check_mode = "write"), compress = "xz")
 
 
 ## End of Script ##
