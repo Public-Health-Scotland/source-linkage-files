@@ -167,15 +167,17 @@ outfile %>%
     year = latest_year,
     type = "Client",
     ext = "zsav",
-    check_mode = "write"),
-    compress = "zsav"
+    check_mode = "write"
+  ),
+  compress = "zsav"
   ) %>%
   # .rds file
   write_rds(get_source_extract_path(
     year = latest_year,
     type = "Client",
-    check_mode = "write"),
-    compress = "xz"
+    check_mode = "write"
+  ),
+  compress = "xz"
   )
 
 ## End of Script ---------------------------------------
