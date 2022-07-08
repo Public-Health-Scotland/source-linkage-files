@@ -146,9 +146,9 @@ outfile <- hc_costs_uplifted %>%
 
 outfile %>%
   # .zsav
-  write_sav(get_hc_costs_path(update = latest_update(), ext = "zsav", check_mode = "write")) %>%
+  write_sav(get_hc_costs_path(update = latest_update(), ext = "zsav", check_mode = "write"), compress = "zsav") %>%
   # .rds file
-  write_rds(get_hc_costs_path(update = latest_update(), check_mode = "write"))
+  write_rds(get_hc_costs_path(update = latest_update(), check_mode = "write"), compress = "xz")
 
 
 ## End of Script ---------------------------------------
