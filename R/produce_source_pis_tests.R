@@ -19,8 +19,7 @@
 #' for creating test flags
 #' @seealso calculate_measures
 produce_source_pis_tests <- function(data,
-                                     sum_mean_vars = c("beddays", "cost", "yearstay")
-                                     ) {
+                                     sum_mean_vars = c("beddays", "cost", "yearstay")) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
