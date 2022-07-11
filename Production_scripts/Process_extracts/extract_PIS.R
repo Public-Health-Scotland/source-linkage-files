@@ -52,7 +52,7 @@ pis_clean <- pis_file %>%
   # create variables recid and year
   mutate(
     recid = "PIS",
-    year = latest_year
+    year = year
   ) %>%
   # Recode GP Practice into a 5 digit number
   # assume that if it starts with a letter it's an English practice and so recode to 99995
@@ -66,7 +66,7 @@ pis_clean <- pis_file %>%
 
 # Save outfile  ---------------------------------------
 outfile <-
-  pis_extract %>%
+  pis_clean %>%
   # sort by chi
   arrange(chi) %>%
   select(-c(`DI Paid GIC excl. BB`))
@@ -77,7 +77,8 @@ haven::write_sav(outfile,
   get_source_extract_path(
     year = latest_year,
     type = "PIS",
-    ext = "zsav"
+    ext = "zsav",
+    check_mode = "write"
   ),
   compress = TRUE
 )
@@ -85,9 +86,10 @@ haven::write_sav(outfile,
 # Save as .rds file
 readr::write_rds(outfile,
   get_source_extract_path(
-    year = latest_year,
+    year = year,
     type = "PIS",
-    ext = "rds"
+    ext = "rds",
+    check_mode = "write"
   ),
   compress = "gz"
 )
