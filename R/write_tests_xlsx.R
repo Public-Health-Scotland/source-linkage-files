@@ -15,30 +15,34 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   source_tests_path <- fs::path(get_slf_dir(), "Tests", glue::glue(latest_update(), "_tests.xlsx"))
 
   if (fs::file_exists(source_tests_path)) {
-    # Load excel workbook
+    # Load the data from the existing workbook
     wb <- openxlsx::loadWorkbook(source_tests_path)
   } else {
-    # create excelworkbook
+    # Create a blank workbook object
     wb <- openxlsx::createWorkbook()
+
+    # Create a dummy file
+    fs::file_touch(path = source_tests_path)
+    # Set the correct permissions
+    fs::file_chmod(path = source_tests_path, mode = "660")
   }
 
-  sheet_name_dated <- paste0(sheet_name, "-", format(Sys.Date(), "%d %b"))
-
   # add a new sheet for tests
+  sheet_name_dated <- paste0(sheet_name, "-", format(Sys.Date(), "%d %b"))
   openxlsx::addWorksheet(wb, sheet_name_dated)
-  # write comparison output to new sheet
+
+  # write test comparison output to the new sheet
   openxlsx::writeData(
     wb,
     sheet_name_dated,
     comparison_data
   )
-  # save output
+
+  # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
     source_tests_path,
     overwrite = TRUE
   )
-
-  fs::file_chmod(path = source_tests_path, mode = "660")
 
   return(source_tests_path)
 }
