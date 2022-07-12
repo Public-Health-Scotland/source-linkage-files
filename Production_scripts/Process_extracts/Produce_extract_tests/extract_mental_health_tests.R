@@ -1,5 +1,5 @@
 ####################################################
-# Name of file -
+# Name of file - extract_mental_health_tests.R
 # Original Authors - Zihao Li
 # Original Date - July 2022
 # Written/run on - RStudio Server
@@ -36,6 +36,6 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "acute_extract")
+write_tests_xlsx(comparison, "mental_health_extract")
 
 ## END OF SCRIPT ##
