@@ -11,7 +11,7 @@ The period for the Delayed Discharge file
 as MMMYY_MMMYY
 }
 \description{
-Get the period for Deyalyed Discharge
+Get the period for Delayed Discharge
 }
 \seealso{
 Other initialisation: 
