@@ -74,22 +74,17 @@ sds_full_clean <- sds_full_data %>%
   pivot_longer(
     cols = contains("sds_option_"),
     names_to = "sds_option",
-    values_to = "received"
+    names_prefix = "sds_option_",
+    names_transform = list(sds_option = ~ paste0("SDS-", .x)),
+    values_to = "received",
+    values_transform = list(received = as.integer)
   ) %>%
-  filter(received == "1") %>%
+  # Only keep rows where they received a package and remove duplicates
+  filter(received == 1) %>%
+  distinct() %>%
   # Include source variables
   mutate(
     recid = "SDS",
-    sds_option = case_when(
-      sds_option == "sds_option_1" ~ 1,
-      sds_option == "sds_option_2" ~ 2,
-      sds_option == "sds_option_3" ~ 3
-    ),
-    smrtype = case_when(
-      sds_option == 1 ~ "SDS-1",
-      sds_option == 2 ~ "SDS-2",
-      sds_option == 3 ~ "SDS-3"
-    ),
     mid_fy = as.Date(paste0(period, "-09-30")),
     # create age variable
     age = floor(time_length(interval(dob, mid_fy), "years")),
@@ -99,14 +94,29 @@ sds_full_clean <- sds_full_data %>%
     sc_send_lca = convert_sc_sl_to_lca(sending_location)
   )
 
+check <- sds_full_clean %>%
+  group_by(sending_location, social_care_id, sds_option) %>%
+  arrange(period, record_keydate1, .by_group = TRUE) %>%
+  mutate(flag = (record_keydate1 > lag(record_keydate2)) %>%
+                 replace_na(TRUE),
+         episode_counter = cumsum(flag)
+         )
+
+last <- check %>%
+  # possibly do an ungroup and then group by(sending_location, social_care_id, sds_option)
+group_by(episode_counter, .add = TRUE) %>%
+  summarise(record_keydate1 = min(record_keydate1),
+            across(everything(), last))
+
+
 # work out sds_option_4
 sds_option_4 <- sds_full_clean %>%
-  group_by(social_care_id) %>%
-  summarise(n_packages = n())
+  group_by(sending_location, social_care_id, period) %>%
+  summarise(n_packages = n_distinct(sds_option))
 
 # Match back onto data
 outfile <- sds_full_clean %>%
-  left_join(sds_option_4, by = "social_care_id") %>%
+  left_join(sds_option_4, by = c("sending_location", "social_care_id", "period")) %>%
   mutate(
     sds_option_4 = if_else(n_packages >= 2, 1, 0)
   )
