@@ -1,18 +1,25 @@
 #' Write out Tests
 #'
-#' @description Write test output as an xlsx workbook, specific sheet for each extract
+#' @description Write test output as an xlsx workbook, with a specific sheet
+#' for each extract. The extract sheet will be dated with the current month and
+#' day, which allows us to run the tests multiple times in the same update.
 #'
 #' @param comparison_data produced by [produce_test_comparison()]
-#' @param sheet_name the name of the dataset - this will be used as the sheet name
+#' @param sheet_name the name of the dataset, which will be used to create
+#' the sheet name
 #'
-#' @return source_tests_path to the xlsx file location
+#' @return the path to the xlsx file location
 #'
 #' @export
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data, sheet_name) {
-  source_tests_path <- fs::path(get_slf_dir(), "Tests", glue::glue(latest_update(), "_tests.xlsx"))
+  source_tests_path <- fs::path(
+    get_slf_dir(),
+    "Tests",
+    glue::glue(latest_update(), "_tests.xlsx")
+  )
 
   if (fs::file_exists(source_tests_path)) {
     # Load the data from the existing workbook
