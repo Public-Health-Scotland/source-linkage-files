@@ -1,16 +1,17 @@
 # June 2022 Update - Released 10-Jun-2022
 
 * Fixed a bug where CH costs was not referring to end of year. 
-  * eg. 2018 costs relates to 2017/18
+  * e.g. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
-* We now use [`{haven}`](https://haven.tidyverse.org/news/index.html) to compress the SPSS files which compresses them better than SPSS does 🤷‍♂️
+* We now use [`{haven}`](https://haven.tidyverse.org/news/index.html) to compress the SPSS files which compresses them better than SPSS does 🤷
+♂️
 * `cij_marker` is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
   * Check code of the form `cij_marker = "x"`. `x` now needs to be a numeric.
   * Check code of the form `cij_maker = lag(cij_marker)`. If the previous `cij_marker` is missing, the expression will fail, previously it would have compared to an empty string.
 * We now match on clusters from the past 5 years, rather than just the latest (quarterly) release. This means that more GP practices will be assigned to a cluster (even if the code has been retired at the time of the SLF refresh).
 * The ACaDMe variable `glsrecord` is now the only thing we use to determine if an episode should have recid `01B` (Acute) or `GLS`. Previously `lineno` was also used.
-* Fixed a bug where we were overcounting preventable beddays in the individual file.
-  * e.g. if a cij had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
+* Fixed a bug where we were over-counting preventable beddays in the individual file.
+  * e.g. if a CIJ had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.
 * We were correcting some costs for FV and A&A (see previous update). `cost_total_net` was being correctly updated, however the monthly cost variables for Forth Valley were not being changed, this is now fixed.
 * Fixed a bug where people with no Care Home episodes would have 1 `ch_cis_episodes` in the individual file.
 * Added the `keep_population` variable to 2014/15 individual file, this was missed when we added the NSU cohort.
@@ -42,7 +43,7 @@
 * Add `sigfac` data for A&E records - previously this would be missing.
 * New `cij_delay` variable added to the episode file.
 * Count of delays added to the individual file.
-* Add new variables to the individual file `preventable_admissions` and `preventable_beddays` which count the number of `CIJ_PPA`s and the beddays associated with the stay respectively.
+* Add new variables to the individual file `preventable_admissions` and `preventable_beddays` which count the number of `cij_ppa`s and the beddays associated with the stay respectively.
 * Added a `NEWS.md` file to easily keep track of major changes.
 * Add SPARRA and HHG scores, calculated at April 2021 for end-year 2020/21 and start year 2021/22.
 * Update costs for DN, GP OOH and CH's - costs for 1920 now available. 
@@ -55,4 +56,4 @@
 
 # June 2021 Update - Released 29-Jul-2021
 
-* Included new Care Home data for 2018/19 onwards.
+* Included new Care Home data for 2018/19 onward.

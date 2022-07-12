@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_sc_ch_episodes_tests.R
 \name{produce_sc_ch_episodes_tests}
 \alias{produce_sc_ch_episodes_tests}
-\title{Care Home All Epsiodes Tests}
+\title{Care Home All Episodes Tests}
 \usage{
 produce_sc_ch_episodes_tests(data)
 }
