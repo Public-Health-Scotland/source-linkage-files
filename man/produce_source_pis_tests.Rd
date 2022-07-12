@@ -4,10 +4,7 @@
 \alias{produce_source_pis_tests}
 \title{Source PIS Tests}
 \usage{
-produce_source_pis_tests(
-  data,
-  sum_mean_vars = c("beddays", "cost", "yearstay")
-)
+produce_source_pis_tests(data, sum_mean_vars = c("cost", "no_dispensed_items"))
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
