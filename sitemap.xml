@@ -28,6 +28,12 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/check_year_format.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_free_text.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/compute_mid_year_age.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_ca_to_lca.html</loc>
   </url>
   <url>
@@ -50,6 +56,9 @@
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_numeric_to_date.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_sending_location_to_lca.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_year_to_fyyear.html</loc>
@@ -76,6 +85,9 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_monthly_costs.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_person_id.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/end_fy.html</loc>
   </url>
   <url>
@@ -91,10 +103,16 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/fix_west_dun_duplicates.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/fy_interval.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_boxi_extract_path.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_ch_costs_path.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_ch_name_lookup_path.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_dd_path.html</loc>
@@ -160,6 +178,9 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_service_use_cohorts_path.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_ch_name_lookup_path.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_deaths_path.html</loc>
   </url>
   <url>
@@ -185,6 +206,9 @@
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/is_date_in_year.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/is_missing.html</loc>
