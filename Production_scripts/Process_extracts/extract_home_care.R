@@ -63,7 +63,7 @@ source_hc_clean <- matched_data %>%
     )
   ) %>%
   # person_id
-  create_person_id() %>%
+  create_person_id(type = "SC") %>%
   # compute lca variable from sending_location
   mutate(lca = convert_sending_location_to_lca(sending_location))
 
