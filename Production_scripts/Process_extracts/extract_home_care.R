@@ -45,8 +45,6 @@ matched_data <- source_hc_data %>%
 # Data Cleaning ---------------------------------------
 
 source_hc_clean <- matched_data %>%
-  # record reablement
-  mutate(reablement = tidyr::replace_na(reablement, 9)) %>%
   # rename
   rename(
     record_keydate1 = "hc_service_start_date",
@@ -64,8 +62,6 @@ source_hc_clean <- matched_data %>%
       TRUE ~ "HC-Unknown"
     )
   ) %>%
-  # age
-  mutate(age = compute_mid_year_age(year, dob)) %>%
   # person_id
   create_person_id() %>%
   # compute lca variable from sending_location
@@ -113,7 +109,6 @@ outfile <- hc_costs %>%
     SMRType,
     chi,
     dob,
-    age,
     gender,
     postcode,
     lca,
