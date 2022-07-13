@@ -125,8 +125,13 @@ outfile <- hc_costs %>%
 
 outfile %>%
   # .zsav
-  write_sav(get_source_extract_path(year, type = "HC", ext = "zsav")) %>%
+  write_sav(get_source_extract_path(
+    year,
+    type = "HC",
+    check_mode = "write",
+    ext = "zsav"
+  )) %>%
   # .rds file
-  write_rds(get_source_extract_path(year, type = "HC"))
+  write_rds(get_source_extract_path(year, type = "HC",  check_mode = "write"))
 
 # End of Script #
