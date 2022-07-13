@@ -132,6 +132,6 @@ outfile %>%
     ext = "zsav"
   )) %>%
   # .rds file
-  write_rds(get_source_extract_path(year, type = "HC",  check_mode = "write"))
+  write_rds(get_source_extract_path(year, type = "HC", check_mode = "write"))
 
 # End of Script #
