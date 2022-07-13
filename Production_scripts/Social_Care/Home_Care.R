@@ -15,9 +15,6 @@ library(createslf)
 library(lubridate)
 
 
-latest_update <- latest_update()
-
-
 # Read in data---------------------------------------
 
 # set-up conection to platform
@@ -53,7 +50,6 @@ home_care_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "homecar
 # Match on demographic data ---------------------------------------
 
 # read in demographic data
-sc_demog <- haven::read_sav(get_sc_demog_lookup_path(ext = "zsav")) # remaining here until .rds file ready
 sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
 
 matched_hc_data <- home_care_data %>%
