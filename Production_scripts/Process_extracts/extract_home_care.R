@@ -17,10 +17,17 @@ year <- check_year_format("1920")
 
 # Read in data---------------------------------------
 
-source_hc_data <- readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
+source_hc_data <-
+  readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
   # select episodes for FY
-  filter(hc_service_start_date %in% range(start_fy(year), end_fy(year)) |
-    (hc_service_start_date <= end_fy(year) & hc_service_end_date >= start_fy(year) | is.na(hc_service_end_date))) %>%
+  filter(
+    hc_service_start_date %in% range(start_fy(year), end_fy(year)) |
+      (
+        hc_service_start_date <= end_fy(year) &
+          hc_service_end_date >= start_fy(year) |
+          is.na(hc_service_end_date)
+      )
+  ) %>%
   # remove any episodes where the latest submission was before the current year
   filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4)) %>%
   # alter sending location type to allow match
@@ -60,9 +67,7 @@ source_hc_clean <- matched_data %>%
     )
   ) %>%
   # age
-  mutate(
-    age = compute_mid_year_age(year, dob)
-  ) %>%
+  mutate(age = compute_mid_year_age(year, dob)) %>%
   # person_id
   create_person_id() %>%
   # compute lca variable from sending_location
