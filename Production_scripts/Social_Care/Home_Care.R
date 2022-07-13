@@ -218,9 +218,9 @@ outfile <- pivotted_hours %>%
 
 outfile %>%
   # .zsav
-  write_sav(get_sc_hc_episodes_path(latest_update)) %>%
+  write_sav(get_sc_hc_episodes_path(check_mode = "write", ext = "zsav")) %>%
   # .rds file
-  write_rds(get_sc_hc_episodes_path(latest_update))
+  write_rds(get_sc_hc_episodes_path(check_mode = "write"))
 
 
 # End of Script #
