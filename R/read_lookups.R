@@ -40,9 +40,9 @@ read_locality_file <- function(file) {
 
 #' Scottish Postcode Directory File Path
 #'
-#' @description Read the Scottish Postcode Directory file
+#' @description Read the Scottish Postcode Directory (SPD)
 #'
-#' @param file - the file name of the spd file
+#' @param file - the file name of the SPD
 #'
 #' @return The data read using `readr::read_rds`
 #' @export

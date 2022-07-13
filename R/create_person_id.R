@@ -8,7 +8,7 @@
 #'
 #' @return The social care person id
 #' @export
-#' #
+#'
 #' @family id functions
 create_person_id <- function(data, type = c("SC")) {
   if (missing(type)) {
@@ -18,7 +18,7 @@ create_person_id <- function(data, type = c("SC")) {
   type <- match.arg(type)
 
   if (type == "SC") {
-    dplyr::mutate(data, person_id = paste0(sending_location, "-", social_care_id))
+    dplyr::mutate(data, person_id = paste0(.data$sending_location, "-", .data$social_care_id))
   } else {
     data
   }
