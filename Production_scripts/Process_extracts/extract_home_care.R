@@ -27,6 +27,7 @@ source_hc_data <-
   # remove any episodes where the latest submission was before the current year
   filter(substr(sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
   # alter sending location type to allow match
+  # TODO change the client script to use sending location as an integer
   mutate(sending_location = as.character(sending_location))
 
 
