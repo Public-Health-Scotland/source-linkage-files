@@ -11,7 +11,6 @@
 
 # Load packages
 library(dplyr)
-library(dbplyr)
 library(createslf)
 library(lubridate)
 
@@ -25,7 +24,7 @@ latest_update <- latest_update()
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 home care
-home_care_data <- tbl(db_connection, in_schema("social_care_2", "homecare_snapshot")) %>%
+home_care_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "homecare_snapshot")) %>%
   select(
     sending_location,
     sending_location_name,
