@@ -19,19 +19,17 @@ year <- "1920"
 
 # Read new data file
 new_data <- readr::read_rds(get_source_extract_path(year, "Homelessness", ext = "rds")) %>%
-  mutate(smrtype = stringr::str_trim(smrtype, "both"))
+  dplyr::mutate(smrtype = stringr::str_trim(smrtype, "both"))
 
 # Read current SLF episode file and filter for homelessness records (recid HL1)
-existing_data <- read_slf_episode(year, recid = "HL1") %>%
-  dplyr::rename(chi = anon_chi) %>%
-  dplyr::select(colnames(new_data))
+existing_data <- get_existing_data_for_tests(new_data = new_data)
 
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 
-comparison <- produce_slf_homelessness_tests(
-  new_data = new_data,
-  existing_data = existing_data
+comparison <- produce_test_comparison(
+  produce_slf_homelessness_tests(existing_data),
+  produce_slf_homelessness_tests(new_data)
 )
 
 # Produce Outfile----------------------------------------
