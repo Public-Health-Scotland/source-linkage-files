@@ -10,7 +10,6 @@
 
 # Load packages
 library(dplyr)
-library(dbplyr)
 library(createslf)
 
 year <- check_year_format("1920")
