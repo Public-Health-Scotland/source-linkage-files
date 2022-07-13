@@ -66,7 +66,6 @@ period_dates <- matched_hc_data %>%
     qtr_start = yq(period) %m+% period(3, "months")
   )
 
-
 home_care_clean <- matched_hc_data %>%
   # set reablement values == 9 to NA
   mutate(reablement = na_if(reablement, "9")) %>%
@@ -107,14 +106,11 @@ home_care_clean <- matched_hc_data %>%
     !start_after_end
   )
 
-
 # count changed social_care_id
 home_care_clean %>% count(changed_sc_id)
 
 
-
 # Home Care Hours ---------------------------------------
-
 
 home_care_hours <- home_care_clean %>%
   mutate(
@@ -137,11 +133,9 @@ home_care_hours <- home_care_clean %>%
 
 home_care_costs <- readr::read_rds(get_hc_costs_path())
 
-
 matched_costs <- home_care_hours %>%
   left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%
   mutate(hc_cost = hc_hours * hourly_cost)
-
 
 pivotted_hours <- matched_costs %>%
   # Create a copy of the period then pivot the hours on it
@@ -213,8 +207,6 @@ outfile <- pivotted_hours %>%
     across(c(gender, dob, postcode), first)
   ) %>%
   ungroup()
-
-
 
 outfile %>%
   # .zsav
