@@ -15,7 +15,8 @@ produce_test_comparison(old_data, new_data)
 a dataframe with a comparison of new and old data
 }
 \description{
-Produce a comparison test between the new processed data and the exisiting data
+Produce a comparison test between the new processed data
+and the existing data
 }
 \seealso{
 write_tests_xlsx
