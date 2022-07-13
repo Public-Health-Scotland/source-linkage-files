@@ -4,15 +4,15 @@
 \alias{produce_slf_homelessness_tests}
 \title{SLF Homelessness Extract Tests}
 \usage{
-produce_slf_homelessness_tests(new_data, existing_data)
+produce_slf_homelessness_tests(
+  data,
+  max_min_vars = c("record_keydate1", "record_keydate2")
+)
 }
 \arguments{
-\item{new_data}{The new data for testing}
+\item{data}{The data for testing}
 
-\item{existing_data}{The existing data for testing}
-}
-\value{
-A dataframe with counts of records, their differences, and proportional differences
+\item{max_min_vars}{Shouldn't need to change, currently specifies keydate1 and deydate2}
 }
 \description{
 Produce the tests for the SLF Homelessness Extract
