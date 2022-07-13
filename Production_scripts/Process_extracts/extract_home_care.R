@@ -25,7 +25,7 @@ source_hc_data <-
       (is_date_in_year(hc_service_start_date, year) | is.na(hc_service_end_date))
   ) %>%
   # remove any episodes where the latest submission was before the current year
-  filter(convert_fyyear_to_year(year) > substr(sc_latest_submission, 1, 4)) %>%
+  filter(substr(sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
   # alter sending location type to allow match
   mutate(sending_location = as.character(sending_location))
 
