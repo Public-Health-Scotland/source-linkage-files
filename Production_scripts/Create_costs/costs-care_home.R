@@ -33,8 +33,10 @@ fs::file_copy(get_ch_costs_path(),
 
 ## Read costs from the CHC Open data
 ch_costs_data <-
-  phsopendata::get_resource(res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
-                            col_select = c("Date", "KeyStatistic", "CA", "Value")) %>%
+  phsopendata::get_resource(
+    res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
+    col_select = c("Date", "KeyStatistic", "CA", "Value")
+  ) %>%
   janitor::clean_names() %>%
   # Dates are at end of the fin year
   # so cost are for the fin year to that date.
@@ -43,10 +45,11 @@ ch_costs_data <-
   mutate(funding_source = stringr::str_extract(key_statistic, "((:?All)|(:?Self)|(:?Publicly))")) %>%
   mutate(nursing_care_provision = if_else(stringr::str_detect(key_statistic, "Without"), 1, 0)) %>%
   select(year,
-         ca,
-         funding_source,
-         nursing_care_provision,
-         cost_per_week = value)
+    ca,
+    funding_source,
+    nursing_care_provision,
+    cost_per_week = value
+  )
 
 
 # Data cleaning ---------------------------------------
