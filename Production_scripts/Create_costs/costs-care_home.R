@@ -97,7 +97,7 @@ ch_costs_uplifted <-
 # Join data together  -----------------------------------------------------
 
 # match files - to make sure costs haven't changed radically
-old_costs <- haven::read_sav(get_ch_costs_path(update = latest_update())) %>%
+old_costs <- readr::read_rds(get_ch_costs_path(update = latest_update())) %>%
   rename(
     cost_old = "cost_per_day",
     year = "Year"
