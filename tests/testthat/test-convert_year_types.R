@@ -37,4 +37,6 @@ test_that("Can convert a year from alternate form to normal financial year", {
   expect_equal(convert_year_to_fyyear("2019"), "1920")
   expect_equal(convert_year_to_fyyear("2020"), "2021")
   expect_equal(convert_year_to_fyyear("2021"), "2122")
+
+  expect_equal(convert_year_to_fyyear(c("2017", "2018", "2019")), c("1718", "1819", "1920"))
 })
