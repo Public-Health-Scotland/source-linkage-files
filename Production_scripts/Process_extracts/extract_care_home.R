@@ -11,7 +11,6 @@
 # Load packages
 library(dplyr)
 library(createslf)
-library(phsmethods)
 library(lubridate)
 
 year <- check_year_format("1920")
