@@ -60,10 +60,9 @@ source_ch_clean <- matched_data %>%
 
 # Costs  ---------------------------------------
 # read in CH Costs Lookup
-ch_costs <- haven::read_sav(get_ch_costs_path(ext = "sav")) %>%
+ch_costs <- readr::read_rds(get_ch_costs_path()) %>%
   rename(
-    year = "Year",
-    ch_nursing = "nursing_care_provision"
+    ch_nursing = nursing_care_provision
   )
 
 # match costs
