@@ -15,6 +15,10 @@
 #' @family test functions
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data, sheet_name) {
+
+
+# Set up the workbook -----------------------------------------------------
+
   source_tests_path <- fs::path(
     get_slf_dir(),
     "Tests",
@@ -45,11 +49,70 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   openxlsx::addWorksheet(wb, sheet_name_dated)
 
   # write test comparison output to the new sheet
-  openxlsx::writeData(
-    wb,
-    sheet_name_dated,
-    comparison_data
+  # Style it as a Data table for nice formatting
+  openxlsx::writeDataTable(
+    wb = wb,
+    sheet = sheet_name_dated,
+    x = comparison_data,
+    tableStyle = "TableStyleLight1",
+    withFilter = FALSE
   )
+
+
+# Formatting --------------------------------------------------------------
+
+  # Get the column numbers
+  pct_change_col <- which(names(comparison) == "pct_change")
+  issue_col <- which(names(comparison) == "issue")
+  numeric_cols <- which(names(comparison) %in% c("value_old", "value_new", "diff"))
+
+  # Format the pct_chnange column as a percentage
+  openxlsx::addStyle(
+    wb = wb,
+    sheet = sheet_name_dated,
+    style = openxlsx::createStyle(numFmt = "0.0%"),
+    cols = pct_change_col,
+    rows = 2:(nrow(comparison_data) + 1),
+    gridExpand = TRUE
+  )
+
+  # Format the numeric columns with commas
+  openxlsx::addStyle(
+    wb = wb,
+    sheet = sheet_name_dated,
+    style = openxlsx::createStyle(numFmt = "#,##0"),
+    cols = numeric_cols,
+    rows = 2:(nrow(comparison_data) + 1),
+    gridExpand = TRUE
+  )
+
+  # Set the column widths - wider for the first (measure)
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = 1,
+    widths = 40
+  )
+
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = 2:ncol(comparison_data),
+    widths = 15
+  )
+
+  # Apply conditional formatting to highlight issues
+  openxlsx::conditionalFormatting(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = issue_col,
+    rows = 2:(nrow(comparison_data) + 1),
+    rule = "TRUE",
+    type = "contains"
+  )
+
+
+# Write workbook to disk --------------------------------------------------
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
