@@ -59,7 +59,8 @@ source_ch_clean <- matched_data %>%
   mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
   # total length of stay
   mutate(stay = time_length(interval(record_keydate1, dummy_discharge),
-                            unit = "days"))
+    unit = "days"
+  ))
 
 
 # Costs  ---------------------------------------
