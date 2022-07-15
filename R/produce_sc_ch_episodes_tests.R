@@ -1,4 +1,4 @@
-#' Care Home All Epsiodes Tests
+#' Care Home All Episodes Tests
 #'
 #' @description Produce the test for the Care Home all episodes
 #'

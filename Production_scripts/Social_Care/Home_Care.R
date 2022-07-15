@@ -11,12 +11,8 @@
 
 # Load packages
 library(dplyr)
-library(dbplyr)
 library(createslf)
 library(lubridate)
-
-
-latest_update <- latest_update()
 
 
 # Read in data---------------------------------------
@@ -25,7 +21,7 @@ latest_update <- latest_update()
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 home care
-home_care_data <- tbl(db_connection, in_schema("social_care_2", "homecare_snapshot")) %>%
+home_care_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "homecare_snapshot")) %>%
   select(
     sending_location,
     sending_location_name,
@@ -54,7 +50,6 @@ home_care_data <- tbl(db_connection, in_schema("social_care_2", "homecare_snapsh
 # Match on demographic data ---------------------------------------
 
 # read in demographic data
-sc_demog <- haven::read_sav(get_sc_demog_lookup_path(ext = "zsav")) # remaining here until .rds file ready
 sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
 
 matched_hc_data <- home_care_data %>%
@@ -70,7 +65,6 @@ period_dates <- matched_hc_data %>%
     record_date = yq(period) %m+% period(6, "months") %m-% days(1),
     qtr_start = yq(period) %m+% period(3, "months")
   )
-
 
 home_care_clean <- matched_hc_data %>%
   # set reablement values == 9 to NA
@@ -112,14 +106,11 @@ home_care_clean <- matched_hc_data %>%
     !start_after_end
   )
 
-
 # count changed social_care_id
 home_care_clean %>% count(changed_sc_id)
 
 
-
 # Home Care Hours ---------------------------------------
-
 
 home_care_hours <- home_care_clean %>%
   mutate(
@@ -142,11 +133,9 @@ home_care_hours <- home_care_clean %>%
 
 home_care_costs <- readr::read_rds(get_hc_costs_path())
 
-
 matched_costs <- home_care_hours %>%
   left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%
   mutate(hc_cost = hc_hours * hourly_cost)
-
 
 pivotted_hours <- matched_costs %>%
   # Create a copy of the period then pivot the hours on it
@@ -219,13 +208,11 @@ outfile <- pivotted_hours %>%
   ) %>%
   ungroup()
 
-
-
 outfile %>%
   # .zsav
-  write_sav(get_sc_hc_episodes_path(latest_update)) %>%
+  write_sav(get_sc_hc_episodes_path(check_mode = "write", ext = "zsav")) %>%
   # .rds file
-  write_rds(get_sc_hc_episodes_path(latest_update))
+  write_rds(get_sc_hc_episodes_path(check_mode = "write"))
 
 
 # End of Script #
