@@ -20,8 +20,7 @@ year <- check_year_format("1920")
 new_data <- readr::read_rds(get_source_extract_path(year, "Maternity"))
 
 # Read current SLF episode file and filter for 01B and GLS records
-existing_data <- read_slf_episode(year, recid = "02B") %>%
-  rename(chi = anon_chi)
+existing_data <- get_existing_data_for_tests(new_data = new_data)
 
 
 # Produce comparison-------------------------------------
