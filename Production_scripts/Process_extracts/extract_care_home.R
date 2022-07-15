@@ -49,7 +49,11 @@ source_ch_clean <- matched_data %>%
   mutate(lca = convert_sending_location_to_lca(sending_location)) %>%
   # bed days
   # create dummy end where blank
-  mutate(dummy_discharge = if_else(is.na(record_keydate2), end_fy(year) + days(1), record_keydate2)) %>%
+  mutate(dummy_discharge = if_else(
+    is.na(record_keydate2),
+    end_fy(year) + days(1),
+    record_keydate2
+  )) %>%
   create_monthly_beddays(year, record_keydate1, dummy_discharge) %>%
   # year stay
   mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
@@ -78,8 +82,7 @@ monthly_costs <- matched_costs %>%
 
 # Outfile  ---------------------------------------
 
-outfile <- costs %>%
-  arrange(chi, record_keydate1, record_keydate2) %>%
+outfile <- monthly_costs %>%
   select(
     year,
     recid,
@@ -102,11 +105,17 @@ outfile <- costs %>%
     starts_with("sc_")
   )
 
+
 outfile %>%
   # .zsav
-  write_sav(get_source_extract_path(fyyear, type = "CH", ext = "zsav", check_mode = "write")) %>%
+  write_sav(get_source_extract_path(
+    year,
+    type = "CH",
+    ext = "zsav",
+    check_mode = "write"
+  )) %>%
   # .rds file
-  write_rds(get_source_extract_path(fyyear, type = "CH", check_mode = "write"))
+  write_rds(get_source_extract_path(year, type = "CH", check_mode = "write"))
 
 
 # End of Script #
