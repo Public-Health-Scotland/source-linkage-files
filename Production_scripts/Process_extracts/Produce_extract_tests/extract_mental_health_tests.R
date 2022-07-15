@@ -10,8 +10,6 @@
 
 # Load packages
 library(createslf)
-library(openxlsx)
-library(slfhelper)
 
 
 # Read in Data-----------------------------------------
