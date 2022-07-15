@@ -70,7 +70,7 @@ matched_costs <- source_ch_clean %>%
 
 monthly_costs <- matched_costs %>%
   # monthly costs
-  create_monthly_costs(yearstay, cost_per_day) %>%
+  create_monthly_costs(yearstay, cost_per_day * yearstay) %>%
   # cost total net
   mutate(cost_total_net = rowSums(across(ends_with("_cost"))))
 
@@ -97,7 +97,7 @@ outfile <- costs %>%
     stay,
     cost_total_net,
     ends_with("_beddays"),
-    ends_with("_costs"),
+    ends_with("_cost"),
     starts_with("sc_")
   )
 
