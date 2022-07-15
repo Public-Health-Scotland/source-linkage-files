@@ -18,7 +18,7 @@ year <- check_year_format("1920")
 
 # Read new data file
 new_data <- readr::read_rds(
-  get_source_extract_path(year, "AE", ext = "rds")
+  get_source_extract_path(year, "AE")
 )
 
 # Read current SLF episode file
