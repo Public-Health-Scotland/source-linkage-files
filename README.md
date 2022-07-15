@@ -1,6 +1,8 @@
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/Public-Health-Scotland/source-linkage-files/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Public-Health-Scotland/source-linkage-files/actions/workflows/R-CMD-check.yaml)
+  [![Codecov test coverage](https://codecov.io/gh/Public-Health-Scotland/source-linkage-files/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Public-Health-Scotland/source-linkage-files?branch=master)
   <!-- badges: end -->
+
 # source-linkage-files
 This repo is for the SPSS syntax used for the PHS Source Linkage File (SLF) project. 
 
