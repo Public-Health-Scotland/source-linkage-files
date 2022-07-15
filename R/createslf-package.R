@@ -3,3 +3,6 @@
 #' @importFrom tibble tibble
 ## usethis namespace: end
 NULL
+
+# Import `where` from tidyselect which isn't exported by default.
+utils::globalVariables("where")
