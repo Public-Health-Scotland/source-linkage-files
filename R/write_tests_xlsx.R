@@ -17,7 +17,7 @@
 write_tests_xlsx <- function(comparison_data, sheet_name) {
 
 
-# Set up the workbook -----------------------------------------------------
+  # Set up the workbook -----------------------------------------------------
 
   source_tests_path <- fs::path(
     get_slf_dir(),
@@ -59,7 +59,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   )
 
 
-# Formatting --------------------------------------------------------------
+  # Formatting --------------------------------------------------------------
 
   # Get the column numbers
   pct_change_col <- which(names(comparison) == "pct_change")
@@ -112,7 +112,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   )
 
 
-# Write workbook to disk --------------------------------------------------
+  # Write workbook to disk --------------------------------------------------
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
