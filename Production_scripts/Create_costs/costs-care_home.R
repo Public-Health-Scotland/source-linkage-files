@@ -145,5 +145,4 @@ ch_costs_uplifted %>%
   write_rds(get_ch_costs_path(update = latest_update(), check_mode = "write"))
 
 
-
 ## End of Script ---------------------------------------
