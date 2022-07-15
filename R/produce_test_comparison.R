@@ -8,6 +8,8 @@
 #'
 #' @return a dataframe with a comparison of new and old data
 #'
+#' @export
+#'
 #' @family test functions
 #' @seealso write_tests_xlsx
 produce_test_comparison <- function(old_data, new_data) {
