@@ -35,7 +35,13 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   }
 
   # add a new sheet for tests
-  sheet_name_dated <- paste0(sheet_name, "-", format(Sys.Date(), "%d %b"))
+  sheet_name_dated <- paste0(sheet_name, format(Sys.Date(), "_%d_%b"))
+
+  # If there has already been a sheet created today, append the time
+  if (sheet_name_dated %in% names(wb)) {
+    sheet_name_dated <- paste0(sheet_name_dated, format(Sys.time(), "_%H%M"))
+  }
+
   openxlsx::addWorksheet(wb, sheet_name_dated)
 
   # write test comparison output to the new sheet
