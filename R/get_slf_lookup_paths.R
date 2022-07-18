@@ -71,8 +71,7 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
 get_readcode_lookup_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = glue::glue("ReadCodeLookup.zsav"),
-    check_mode = "write",
+    file_name = glue::glue("ReadCodeLookup.rds"),
     ...
   )
 }

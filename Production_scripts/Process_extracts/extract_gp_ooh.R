@@ -33,7 +33,7 @@ year <- check_year_format("1920")
 ## Load Lookups------------------------------------------
 
 # Read code lookup
-readcode_lookup <- haven::read_sav(get_readcode_lookup_path()) %>%
+readcode_lookup <- readr::read_rds(get_readcode_lookup_path()) %>%
   rename(
     readcode = "ReadCode",
     description = "Description"
