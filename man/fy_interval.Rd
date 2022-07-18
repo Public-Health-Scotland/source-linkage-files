@@ -17,11 +17,21 @@ An \link[lubridate:interval]{interval}
 An \link[lubridate:interval]{interval}
 }
 \description{
-Financial Year interval
-
-Financial Year interval
+Get the interval between the start date and end date of the specified financial year
 }
 \examples{
 fy_interval("1920")
+
 fy_interval("1920")
 }
+\seealso{
+Other date functions: 
+\code{\link{compute_mid_year_age}()},
+\code{\link{convert_date_to_numeric}()},
+\code{\link{convert_numeric_to_date}()},
+\code{\link{end_fy}()},
+\code{\link{is_date_in_year}()},
+\code{\link{midpoint_fy}()},
+\code{\link{start_fy}()}
+}
+\concept{date functions}

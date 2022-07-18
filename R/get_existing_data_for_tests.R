@@ -1,4 +1,4 @@
-#' Get data from the SLFs for tests
+#' SLF Data for Testing
 #'
 #' @description Get the relevant data from the SLFs
 #' use, the year, recid and variable names from the
@@ -10,6 +10,9 @@
 #' @return a [tibble][tibble::tibble-package] from the
 #' SLF with the relevant recids and variables.
 #' @export
+#'
+#' @family test functions
+#' @seealso produce_source_extract_tests
 get_existing_data_for_tests <- function(new_data) {
   year <- new_data %>%
     dplyr::pull(.data$year) %>%

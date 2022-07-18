@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_codes_to_name.R
 \name{convert_hscp_to_hscpnames}
 \alias{convert_hscp_to_hscpnames}
-\title{Convert HSCP Codes to HSCP Names}
+\title{Convert HSCP Codes to Names}
 \usage{
 convert_hscp_to_hscpnames(hscp)
 }
@@ -13,9 +13,17 @@ convert_hscp_to_hscpnames(hscp)
 a vector of HSCP names
 }
 \description{
-Convert HSCP Codes to HSCP Names
+Convert Health & Social Care Partnership Codes to the Health & Social Care Partnership Name
 }
 \examples{
 hscp <- c("S37000001", "S37000002")
 convert_hscp_to_hscpnames(hscp)
+
 }
+\seealso{
+Other code functions: 
+\code{\link{convert_ca_to_lca}()},
+\code{\link{convert_hb_to_hbnames}()},
+\code{\link{convert_sending_location_to_lca}()}
+}
+\concept{code functions}

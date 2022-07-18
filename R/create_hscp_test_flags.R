@@ -1,11 +1,13 @@
 #' Create HSCP test flags
 #'
+#' @description Create flags for Health & Social Care Partnerships
+#'
 #' @param data the data containing a HSCP variable
 #' @param hscp_var HSCP variable e.g. HSCP2019 HSCP2018
 #'
 #' @return a dataframe with flag (1 or 0) for each HSCP
 #' @export
-#' @family create test flags functions
+#' @family flag functions
 create_hscp_test_flags <- function(data, hscp_var) {
   data <- data %>%
     dplyr::mutate(

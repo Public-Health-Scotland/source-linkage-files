@@ -7,8 +7,11 @@
 #' @return The path to the latest Delayed Discharges file
 #' as a [fs::path()]
 #' @export
+#'
 #' @family file path functions
+#'
 #' @seealso [get_file_path()] for the generic function.
+#' @seealso get_dd_period
 get_dd_path <- function(..., dd_period = NULL) {
   if (is.null(dd_period)) {
     dd_period <- get_dd_period()

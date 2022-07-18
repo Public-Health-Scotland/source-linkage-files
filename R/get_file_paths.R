@@ -19,6 +19,7 @@
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
+#'
 #' @family file path functions
 #' @export
 get_file_path <-
@@ -67,10 +68,14 @@ get_file_path <-
     return(file_path)
   }
 
-#' General SLF directory for accessing HSCDIIP folders/files
+#' SLF directory - hscdiip
+#'
+#' @description File path for the general SLF directory for accessing HSCDIIP folders/files
 #'
 #' @return The path to the main SLF Extracts folder
 #' @export
+#'
+#' @family directories
 get_slf_dir <- function() {
   slf_dir <- fs::path("/conf/hscdiip/SLF_Extracts")
 
@@ -78,7 +83,9 @@ get_slf_dir <- function() {
 }
 
 
-#' Get the directory for the given year
+#' Year Directory
+#'
+#' @description Get the directory for Source Linkage File Updates for the given year
 #'
 #' @param year The Financial Year e.g. 1718
 #' @param extracts_dir (optional) Whether to
@@ -87,6 +94,8 @@ get_slf_dir <- function() {
 #'
 #' @return The file path to the year directory (on sourcedev)
 #' @export
+#'
+#' @family directories
 get_year_dir <- function(year, extracts_dir = FALSE) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
 

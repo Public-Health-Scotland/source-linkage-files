@@ -1,10 +1,17 @@
-#' Produce a test comparison
+#' Test Comparison
+#'
+#' @description Produce a comparison test between the new processed data
+#' and the existing data
 #'
 #' @param old_data dataframe containing the old data test flags
 #' @param new_data dataframe containing the new file data test flags
 #'
 #' @return a dataframe with a comparison of new and old data
-#' @family produce tests functions
+#'
+#' @export
+#'
+#' @family test functions
+#' @seealso write_tests_xlsx
 produce_test_comparison <- function(old_data, new_data) {
   dplyr::full_join(old_data,
     new_data,

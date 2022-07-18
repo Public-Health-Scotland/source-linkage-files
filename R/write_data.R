@@ -19,6 +19,8 @@
 #'
 #' @return `write_sav()` returns the input `data` invisibly.
 #' @export
+#'
+#' @family write out data
 write_sav <- function(data, path, compress = "zsav") {
   haven::write_sav(
     data = data,
@@ -46,6 +48,8 @@ write_sav <- function(data, path, compress = "zsav") {
 #' for more details.
 #' @return `write_sav()` returns the input `data` invisibly.
 #' @export
+#'
+#' @family write out data
 write_rds <- function(data, path, compress = "xz", ...) {
   readr::write_rds(
     x = data,

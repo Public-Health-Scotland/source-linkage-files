@@ -5,7 +5,10 @@ test_that("Check year format works", {
   expect_equal(check_year_format("2017", format = "alternate"), "2017")
 
   # Vector of years
-  expect_equal(check_year_format(c("1718", "1819", "1920")), c("1718", "1819", "1920"))
+  expect_equal(
+    check_year_format(c("1718", "1819", "1920")),
+    c("1718", "1819", "1920")
+  )
   expect_equal(
     check_year_format(c("2017", "2018", "2019"), format = "alternate"),
     c("2017", "2018", "2019")
@@ -20,7 +23,10 @@ test_that("Check year format works", {
     expect_message("`year` will be converted to a character")
 
   # Vectors
-  expect_equal(check_year_format(c(1718, 1819, 1920)), c("1718", "1819", "1920")) %>%
+  expect_equal(
+    check_year_format(c(1718, 1819, 1920)),
+    c("1718", "1819", "1920")
+  ) %>%
     expect_message("`year` will be converted to a character")
   expect_equal(
     check_year_format(c(2017, 2018, 2019), format = "alternate"),
