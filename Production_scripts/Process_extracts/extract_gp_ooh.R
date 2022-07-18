@@ -40,10 +40,9 @@ readcode_lookup <- readr::read_rds(get_readcode_lookup_path()) %>%
   )
 
 # OOH cost lookup
-ooh_cost_lookup <- haven::read_sav(get_gp_ooh_costs_path(ext = "sav")) %>%
+ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path()) %>%
   rename(
-    hbtreatcode = TreatmentNHSBoardCode,
-    year = Year
+    hbtreatcode = TreatmentNHSBoardCode
   )
 
 # Diagnosis Data ---------------------------------

@@ -82,7 +82,7 @@ gp_ooh_costs_uplifted <-
   arrange(year, HB2019, Board_Name)
 
 ## match files - to make sure costs haven't changed radically ##
-old_costs <- haven::read_sav(get_gp_ooh_costs_path(update = latest_update())) %>%
+old_costs <- readr::read_rds(get_gp_ooh_costs_path(update = latest_update())) %>%
   # rename lookup variables to match
   rename(
     cost_old = "cost_per_consultation",
