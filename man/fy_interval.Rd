@@ -5,15 +5,11 @@
 \title{Financial Year interval}
 \usage{
 fy_interval(year)
-
-fy_interval(year)
 }
 \arguments{
 \item{year}{The financial year in the format '1718' as a character.}
 }
 \value{
-An \link[lubridate:interval]{interval}
-
 An \link[lubridate:interval]{interval}
 }
 \description{
@@ -22,7 +18,6 @@ Get the interval between the start date and end date of the specified financial 
 \examples{
 fy_interval("1920")
 
-fy_interval("1920")
 }
 \seealso{
 Other date functions: 
