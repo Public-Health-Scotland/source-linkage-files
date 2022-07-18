@@ -31,11 +31,6 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   } else {
     # Create a blank workbook object
     wb <- openxlsx::createWorkbook()
-
-    # Create a dummy file
-    fs::file_touch(path = source_tests_path)
-    # Set the correct permissions
-    fs::file_chmod(path = source_tests_path, mode = "660")
   }
 
   # add a new sheet for tests
@@ -119,6 +114,11 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
     source_tests_path,
     overwrite = TRUE
   )
+
+  if (fs::file_info(source_tests_path)$user == Sys.getenv("USER")) {
+    # Set the correct permissions
+    fs::file_chmod(path = source_tests_path, mode = "660")
+  }
 
   return(source_tests_path)
 }
