@@ -1,8 +1,8 @@
 pandoc: 2.14.2
-pkgdown: 2.0.5
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-07-15T17:20Z
+last_built: 2022-07-19T10:55Z
 urls:
   reference: https://public-health-scotland.github.io/source-linkage-files/reference
   article: https://public-health-scotland.github.io/source-linkage-files/articles
