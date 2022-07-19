@@ -15,9 +15,10 @@
 #'
 #' @family extract test functions
 #' @seealso [calculate_measures()]
-produce_source_extract_tests <- function(data,
-                                         max_min_vars = c(
-                                           "record_keydate1", "record_keydate2")) {
+produce_nrs_extract_tests <- function(data,
+                                      max_min_vars = c(
+                                        "record_keydate1", "record_keydate2"
+                                      )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     dplyr::arrange(.data$chi) %>%
@@ -30,7 +31,7 @@ produce_source_extract_tests <- function(data,
       death = 1
     ) %>%
     # keep variables for comparison
-    dplyr::select(c(.data$valid_chi:.data$death)) %>%
+    dplyr::select(c(.data$has_chi:.data$death)) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
