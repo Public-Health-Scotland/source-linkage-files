@@ -19,7 +19,7 @@ year <- check_year_format("1920")
 # Read in data---------------------------------------
 # TODO update this to use the rds version
 source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
-  # select episodes for FY
+  # select episodes for FY - TODO - test filter for records starting after current FY
   filter(
     is_date_in_year(record_keydate1, year) |
       (is_date_in_year(record_keydate2, year) | is.na(record_keydate2))
