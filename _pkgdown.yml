@@ -75,6 +75,7 @@ reference:
     - contains("_hb_to")
     - contains("_hscp_to")
     - contains("_chi")
+    - contains("lca")
 
 
   - title: Duplicates
