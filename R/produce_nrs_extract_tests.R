@@ -17,7 +17,8 @@
 #' @seealso [calculate_measures()]
 produce_source_extract_tests <- function(data,
                                          max_min_vars = c(
-                                           "record_keydate1", "record_keydate2")) {
+                                           "record_keydate1", "record_keydate2"
+                                         )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     dplyr::arrange(.data$chi) %>%
