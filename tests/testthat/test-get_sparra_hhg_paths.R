@@ -1,3 +1,5 @@
+skip_on_ci()
+
 test_that("HHG file path works", {
   expect_s3_class(get_hhg_path("1920", ext = "zsav"), "fs_path")
 

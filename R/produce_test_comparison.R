@@ -1,11 +1,14 @@
 #' Test Comparison
 #'
-#' @description Produce a comparison test between the new processed data and the exisiting data
+#' @description Produce a comparison test between the new processed data
+#' and the existing data
 #'
 #' @param old_data dataframe containing the old data test flags
 #' @param new_data dataframe containing the new file data test flags
 #'
 #' @return a dataframe with a comparison of new and old data
+#'
+#' @export
 #'
 #' @family test functions
 #' @seealso write_tests_xlsx
