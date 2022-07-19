@@ -2,23 +2,33 @@
 % Please edit documentation in R/is_date_in_fyyear.R
 \name{is_date_in_year}
 \alias{is_date_in_year}
-\title{Check if a date in the financial year}
+\title{Check if a date, or interval is in the financial year}
 \usage{
-is_date_in_year(date, year)
+is_date_in_year(date, year, date_end = NULL)
 }
 \arguments{
-\item{date}{The date to be checked}
+\item{date}{The main / start date to check}
 
 \item{year}{The financial year in the format '1718' as a character}
+
+\item{date_end}{(optional) The end date}
 }
 \value{
-logical T/F
+a logical T/F
 }
 \description{
-Test to check if a date is within the financial year
+Test to check if a date, or intervals is within a given
+financial year. If given just one date it will check to see if it is in the
+given financial year. When supplied with two dates it will check to see if
+any part of that date range falls in the given financial year.
 }
 \examples{
 is_date_in_year(Sys.time(), "2223")
+is_date_in_year(
+  date = as.Date("2020-01-01"),
+  date_end = as.Date("2023-01-01"),
+  year = "2122"
+)
 
 }
 \seealso{
