@@ -15,9 +15,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' find_latest_file(get_lookups_dir(),
 #'   regexp = "Scottish_Postcode_Directory_.+?\\.rds"
 #' )
+#' }
 find_latest_file <- function(dir, ..., recurse = TRUE) {
   fs::dir_info(path = dir, type = "file", ..., recurse = recurse) %>%
     dplyr::arrange(dplyr::desc(.data$birth_time), dplyr::desc(.data$modification_time)) %>%

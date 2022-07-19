@@ -16,6 +16,10 @@ test_that("monthly beddays work", {
     ))
   )
 
-  expect_snapshot(as.data.frame(create_monthly_beddays(input_data, year = "1920", adm_date, dis_date)))
-  expect_snapshot(as.data.frame(create_monthly_beddays(input_data, year = "2021", adm_date, dis_date)))
+  expect_snapshot(as.data.frame(
+    create_monthly_beddays(input_data, year = "1920", adm_date, dis_date)
+  ))
+  expect_snapshot(as.data.frame(
+    create_monthly_beddays(input_data, year = "2021", adm_date, dis_date)
+  ))
 })
