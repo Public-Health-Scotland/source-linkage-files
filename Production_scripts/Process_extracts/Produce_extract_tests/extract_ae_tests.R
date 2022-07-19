@@ -10,29 +10,33 @@
 
 # Load packages
 library(createslf)
-library(openxlsx)
-library(slfhelper)
 
 
 # Read in Data-----------------------------------------
 
-year <- "1920"
+year <- check_year_format("1920")
 
 # Read new data file
 new_data <- readr::read_rds(
-  get_source_extract_path(year, "AE", ext = "rds")
+  get_source_extract_path(year, "AE")
 )
-
 
 # Read current SLF episode file
 existing_data <- get_existing_data_for_tests(new_data = new_data)
 
 
 # Produce comparison-------------------------------------
+
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_extract_tests(existing_data),
-  produce_source_extract_tests(new_data)
+  produce_source_extract_tests(existing_data,
+    sum_mean_vars = "cost",
+    max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
+  ),
+  produce_source_extract_tests(new_data,
+    sum_mean_vars = "cost",
+    max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
+  )
 )
 
 
