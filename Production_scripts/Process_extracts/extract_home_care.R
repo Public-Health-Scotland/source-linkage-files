@@ -21,8 +21,8 @@ source_hc_data <-
   readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
   # select episodes for FY
   filter(
-    is_date_in_year(hc_service_start_date, year) |
-      (is_date_in_year(hc_service_start_date, year) | is.na(hc_service_end_date))
+    is_date_in_fyyear(year, hc_service_start_date) |
+      (is_date_in_fyyear(year, hc_service_start_date, ) | is.na(hc_service_end_date))
   ) %>%
   # remove any episodes where the latest submission was before the current year
   filter(substr(sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
