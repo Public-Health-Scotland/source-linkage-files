@@ -82,9 +82,9 @@ outfile <- ch_names %>%
 
 outfile %>%
   # .zsav
-  write_sav(get_ch_name_lookup_path(year, ext = "zsav", check_mode = "write"), compress = "zsav") %>%
+  write_sav(get_ch_name_lookup_path(year, ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  write_rds(get_ch_name_lookup_path(year, check_mode = "write"), compress = "xz")
+  write_rds(get_ch_name_lookup_path(year, check_mode = "write"))
 
 
 # End of Script #

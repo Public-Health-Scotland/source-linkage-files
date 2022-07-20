@@ -157,11 +157,11 @@ dn_episodes <- care_marker %>%
 
 # Save as zsav file
 dn_episodes %>%
-  haven::write_sav(get_source_extract_path(year, "DN", ext = "zsav", check_mode = "write"), compress = "zsav")
+  haven::write_sav(get_source_extract_path(year, "DN", ext = "zsav", check_mode = "write"))
 
 # Save as rds file
 dn_episodes %>%
-  readr::write_rds(get_source_extract_path(year, "DN", check_mode = "write"), compress = "xz")
+  readr::write_rds(get_source_extract_path(year, "DN", check_mode = "write"))
 
 
 # End of Script #
