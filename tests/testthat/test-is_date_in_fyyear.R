@@ -6,7 +6,17 @@ test_that("is_date_in_fyyear errors as expected", {
 
   expect_error(
     is_date_in_fyyear("1718", "2017-04-01"),
-    "not a recognized date-time"
+    "must be a `Date` or `POSIXct` vector"
+  )
+
+  expect_error(
+    is_date_in_fyyear("1718", as.Date("2017-04-01"), "2017-04-01"),
+    "must be a `Date` or `POSIXct` vector"
+  )
+
+  expect_error(
+    is_date_in_fyyear("1718", as.Date("2018-04-01"), as.Date("2017-01-01")),
+    "`date_end` must not be earlier than `date`"
   )
 })
 

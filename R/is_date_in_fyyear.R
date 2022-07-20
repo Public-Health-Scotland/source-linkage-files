@@ -27,6 +27,35 @@
 #'
 #' @family date functions
 is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
+
+  # Check that date is the correct type
+  if (!inherits(date, c("Date", "POSIXct"))) {
+    cli::cli_abort(c("{.var date} must be a `Date` or `POSIXct` vector",
+      "x" = "You've supplied {?a/an} {.cls {class(date)}} vector"
+    ))
+  }
+
+  if (!missing(date_end)) {
+    # Check that date_end is the correct type
+    if (!inherits(date_end, c("Date", "POSIXct"))) {
+      cli::cli_abort(c("{.var date_end} must be a `Date` or `POSIXct` vector",
+        "x" = "You've supplied {?a/an} {.cls {class(date_end)}} vector"
+      ))
+    }
+
+    # Check that date_end always comes after date (or all date_end is NA)
+    if (any(date > date_end, na.rm = TRUE) & !all(is.na(date_end))) {
+      first_error <- which.min(date > date_end)
+
+      cli::cli_abort(c("{.var date_end} must not be earlier than {.var date}",
+        "i" = "See case {first_error} where
+                         {.var date} = '{date[first_error]}'and
+                         {.var date_end} = '{date_end[first_error]}'",
+        "There {?is/are} {sum(date > date_end, na.rm = TRUE)} error{?s} in total."
+      ))
+    }
+  }
+
   if (is.null(date_end)) {
     is_date_in_fyyear <- lubridate::`%within%`(date, fy_interval(fyyear))
 
