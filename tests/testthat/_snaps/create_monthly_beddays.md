@@ -1,3 +1,9 @@
+# monthly beddays errors properly
+
+    `discharge_date` must not be earlier than `admission_date`
+    i See case 9 where `admission_date` = '2022-01-01' and `discharge_date` = '2020-01-01'
+    There are 2 errors in total.
+
 # monthly beddays work as expected
 
     Code
