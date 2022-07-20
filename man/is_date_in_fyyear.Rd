@@ -14,13 +14,17 @@ is_date_in_fyyear(fyyear, date, date_end = NULL)
 \item{date_end}{(optional) The end date}
 }
 \value{
-a logical T/F or \code{NA} if either of the dates are \code{NA}
+a logical, TRUE/FALSE
 }
 \description{
 Test to check if a date, or intervals is within a given
-financial year. If given just one date it will check to see if it is in the
-given financial year. When supplied with two dates it will check to see if
-any part of that date range falls in the given financial year.
+financial year.
+If given just one date it will check to see if it is in the
+given financial year.
+When supplied with two dates it will check to see if
+any part of that date range falls in the given financial year. If the
+\code{date_end} is \code{NA} it checks that \code{date} was before or during the financial
+year.
 }
 \examples{
 is_date_in_fyyear("2223", Sys.time())
