@@ -5,8 +5,8 @@
 #' given financial year. When supplied with two dates it will check to see if
 #' any part of that date range falls in the given financial year.
 #'
-#' @param date The main / start date to check
 #' @param fyyear The financial year in the format '1718' as a character
+#' @param date The main/start date to check
 #' @param date_end (optional) The end date
 #'
 #' @return a logical T/F
@@ -14,16 +14,15 @@
 #' @export
 #'
 #' @examples
-#' is_date_in_fyyear(Sys.time(), "2223")
+#' is_date_in_fyyear("2223", Sys.time())
 #' is_date_in_fyyear(
 #'   fyyear = "2122",
 #'   date = as.Date("2020-01-01"),
-#'   date_end = as.Date("2023-01-01"),
-#'   fyyear = "2122"
+#'   date_end = as.Date("2023-01-01")
 #' )
 #'
 #' @family date functions
-is_date_in_fyyear <- function(date, fyyear, date_end = NULL) {
+is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
   if (is.null(date_end)) {
     lubridate::`%within%`(date, fy_interval(fyyear))
   } else {

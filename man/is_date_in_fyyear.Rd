@@ -4,12 +4,12 @@
 \alias{is_date_in_fyyear}
 \title{Check if a date, or interval is in the financial year}
 \usage{
-is_date_in_fyyear(date, fyyear, date_end = NULL)
+is_date_in_fyyear(fyyear, date, date_end = NULL)
 }
 \arguments{
-\item{date}{The main / start date to check}
-
 \item{fyyear}{The financial year in the format '1718' as a character}
+
+\item{date}{The main/start date to check}
 
 \item{date_end}{(optional) The end date}
 }
@@ -23,12 +23,11 @@ given financial year. When supplied with two dates it will check to see if
 any part of that date range falls in the given financial year.
 }
 \examples{
-is_date_in_fyyear(Sys.time(), "2223")
+is_date_in_fyyear("2223", Sys.time())
 is_date_in_fyyear(
   fyyear = "2122",
   date = as.Date("2020-01-01"),
-  date_end = as.Date("2023-01-01"),
-  fyyear = "2122"
+  date_end = as.Date("2023-01-01")
 )
 
 }
