@@ -45,7 +45,7 @@ is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
 
     # Check that date_end always comes after date (or all date_end is NA)
     if (any(date > date_end, na.rm = TRUE) & !all(is.na(date_end))) {
-      first_error <- which.min(date > date_end)
+      first_error <- which.max(date > date_end)
 
       cli::cli_abort(c("{.var date_end} must not be earlier than {.var date}",
         "i" = "See case {first_error} where
