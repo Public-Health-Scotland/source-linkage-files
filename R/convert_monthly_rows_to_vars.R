@@ -13,7 +13,7 @@ convert_monthly_rows_to_vars <- function(data, month_num_var, cost_var, beddays_
   month_order <- tolower(month.abb[c(4:12, 1:3)])
 
   data %>%
-    dplyr::mutate(month_name = tolower(month.abb[{{ month_num_var }}])) %>%
+    dplyr::mutate(month_name = month_order[{{ month_num_var }}]) %>%
     dplyr::select(-{{ month_num_var }}) %>%
     dplyr::rename(
       cost = {{ cost_var }},

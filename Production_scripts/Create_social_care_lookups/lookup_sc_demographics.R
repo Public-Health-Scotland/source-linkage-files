@@ -141,10 +141,5 @@ outfile %>%
   # .rds file
   write_rds(get_sc_demog_lookup_path(check_mode = "write"))
 
-outfile %>%
-  # .zsav file
-  write_sav(get_sc_demog_lookup_path(ext = "zsav", check_mode = "write")) %>%
-  # .rds file
-  write_rds(get_sc_demog_lookup_path(check_mode = "write"))
 
 ## End of Script ---------------------------------------
