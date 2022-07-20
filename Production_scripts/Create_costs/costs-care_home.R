@@ -8,7 +8,8 @@
 # Description - Lookup for costs for Care Homes
 #
 # Get the Care Home Census tables
-# Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes for Older People in Scotland.
+# Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes
+# for Older People in Scotland.
 # https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/
 # Check and add any new years to 'CH_Costs.xlsx'
 #
@@ -31,10 +32,11 @@ fs::file_copy(get_ch_costs_path(),
 )
 
 ## Read costs from the CHC Open data
-ch_costs_data <- phsopendata::get_resource(
-  res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
-  col_select = c("Date", "KeyStatistic", "CA", "Value")
-) %>%
+ch_costs_data <-
+  phsopendata::get_resource(
+    res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
+    col_select = c("Date", "KeyStatistic", "CA", "Value")
+  ) %>%
   janitor::clean_names() %>%
   # Dates are at end of the fin year
   # so cost are for the fin year to that date.
@@ -42,7 +44,12 @@ ch_costs_data <- phsopendata::get_resource(
   filter(year >= "1617") %>%
   mutate(funding_source = stringr::str_extract(key_statistic, "((:?All)|(:?Self)|(:?Publicly))")) %>%
   mutate(nursing_care_provision = if_else(stringr::str_detect(key_statistic, "Without"), 1, 0)) %>%
-  select(year, ca, funding_source, nursing_care_provision, cost_per_week = value)
+  select(year,
+    ca,
+    funding_source,
+    nursing_care_provision,
+    cost_per_week = value
+  )
 
 
 # Data cleaning ---------------------------------------
@@ -66,7 +73,7 @@ ch_costs_scot <-
 # Interpolate any missing years (e.g. 2019/20)
 ch_costs <- ch_costs_scot %>%
   group_by(nursing_care_provision) %>%
-  tidylog::mutate(cost_per_day = if_else(
+  mutate(cost_per_day = if_else(
     is.na(cost_per_day),
     (lag(cost_per_day, order_by = year) + lead(cost_per_day, order_by = year)) / 2,
     cost_per_day
@@ -97,7 +104,7 @@ ch_costs_uplifted <-
 # Join data together  -----------------------------------------------------
 
 # match files - to make sure costs haven't changed radically
-old_costs <- haven::read_sav(get_ch_costs_path(update = latest_update())) %>%
+old_costs <- readr::read_rds(get_ch_costs_path(update = latest_update())) %>%
   rename(
     cost_old = "cost_per_day",
     year = "Year"
@@ -140,9 +147,8 @@ ggplot(
 ## save outfile ---------------------------------------
 ch_costs_uplifted %>%
   # .zsav
-  write_sav(get_ch_costs_path(update = latest_update(), ext = "zsav", check_mode = "write"), compress = "zsav") %>%
+  write_sav(get_ch_costs_path(ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  write_rds(get_ch_costs_path(update = latest_update(), check_mode = "write"), compress = "xz")
-
+  write_rds(get_ch_costs_path(check_mode = "write"))
 
 ## End of Script ---------------------------------------

@@ -24,7 +24,9 @@ find the files then picks the one with the latest
 \code{birthtime}
 }
 \examples{
+\dontrun{
 find_latest_file(get_lookups_dir(),
   regexp = "Scottish_Postcode_Directory_.+?\\\\.rds"
 )
+}
 }

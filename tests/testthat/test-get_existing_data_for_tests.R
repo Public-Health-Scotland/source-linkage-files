@@ -1,3 +1,5 @@
+skip_on_ci()
+
 test_that("Get existing data works", {
   dummy_new_data <- tibble(
     year = "1920",

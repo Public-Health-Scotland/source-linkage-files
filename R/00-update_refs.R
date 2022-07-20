@@ -34,7 +34,7 @@ previous_update <- function() {
 
 #' Delayed Discharge period
 #'
-#' @description Get the period for Deyalyed Discharge
+#' @description Get the period for Delayed Discharge
 #'
 #' @return The period for the Delayed Discharge file
 #' as MMMYY_MMMYY
