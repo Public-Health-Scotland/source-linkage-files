@@ -22,7 +22,11 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
   data <- data %>%
     dplyr::mutate(stay_interval = lubridate::interval(
       {{ admission_date }},
-      {{ discharge_date }}
+      # If discharge date is NA then calculate beddays to the end of the year
+      dplyr::if_else(is.na({{ discharge_date }}),
+        end_fy(year) + lubridate::days(1),
+        {{ discharge_date }}
+      )
     ) %>%
       # Shift it forward by a day (default)
       # so we will count the last day and not the first.
