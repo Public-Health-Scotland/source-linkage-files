@@ -20,10 +20,7 @@ year <- check_year_format("1920")
 source_hc_data <-
   readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
   # select episodes for FY
-  filter(
-    is_date_in_fyyear(year, hc_service_start_date) |
-      (is_date_in_fyyear(year, hc_service_start_date, ) | is.na(hc_service_end_date))
-  ) %>%
+  filter(is_date_in_fyyear(year, record_keydate1, record_keydate2)) %>%
   # remove any episodes where the latest submission was before the current year
   filter(substr(sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
   # alter sending location type to allow match
