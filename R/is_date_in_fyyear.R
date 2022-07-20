@@ -35,8 +35,9 @@ is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
     date_interval <- lubridate::interval(date, date_end)
 
     is_date_in_fyyear <- dplyr::if_else(!is.na(date_end),
-                   lubridate::int_overlaps(date_interval, fy_interval(fyyear)),
-                   (date <= end_fy(fyyear)))
+      lubridate::int_overlaps(date_interval, fy_interval(fyyear)),
+      (date <= end_fy(fyyear))
+    )
 
     return(is_date_in_fyyear)
   }
