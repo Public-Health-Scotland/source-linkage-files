@@ -24,14 +24,10 @@
 #' @family date functions
 is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
   if (is.null(date_end)) {
-    lubridate::`%within%`(date, fy_interval(fyyear))
+    return(lubridate::`%within%`(date, fy_interval(fyyear)))
   } else {
-    if (date > date_end) {
-      cli::cli_abort("The start date cannot come after the end date.")
-    }
-
     date_interval <- lubridate::interval(date, date_end)
 
-    lubridate::int_overlaps(date_interval, fy_interval(fyyear))
+    return(lubridate::int_overlaps(date_interval, fy_interval(fyyear)))
   }
 }
