@@ -9,7 +9,7 @@
 #' @param date The main/start date to check
 #' @param date_end (optional) The end date
 #'
-#' @return a logical T/F
+#' @return a logical T/F or `NA` if either of the dates are `NA`
 #'
 #' @export
 #'

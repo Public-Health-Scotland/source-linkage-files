@@ -14,7 +14,7 @@ is_date_in_fyyear(fyyear, date, date_end = NULL)
 \item{date_end}{(optional) The end date}
 }
 \value{
-a logical T/F
+a logical T/F or \code{NA} if either of the dates are \code{NA}
 }
 \description{
 Test to check if a date, or intervals is within a given
