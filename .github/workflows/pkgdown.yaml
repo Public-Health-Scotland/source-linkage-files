@@ -1,9 +1,12 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
     branches: [main-R]
-    tags: ['*']
+  issue_comment:
+    types: [created]
+  release:
+    types: [published]
   workflow_dispatch:
 
 name: pkgdown
@@ -16,8 +19,13 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      isPush: ${{ github.event_name == 'push' }}
+      isPR: ${{ github.event.issue.pull_request && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER') && startsWith(github.event.comment.body, '/pkgdown') }}
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-pandoc@v2
 
@@ -30,14 +38,35 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
-      - name: Build site
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Build and deploy pkgdown site to GitHub pages 🚀
+        if: contains(env.isPush, 'true')
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
+ 
+      - name: Create website
+        if: contains(env.isPR, 'true')
+        run: |
+          pkgdown::build_site()
         shell: Rscript {0}
 
-      - name: Deploy to GitHub pages 🚀
-        if: github.event_name != 'pull_request'
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+      - name: Create index file
+        if: contains(env.isPR, 'true')
+        run: |
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;URL=/dev/index.html" />  <script language="javascript"> window.location.replace('/dev/index.html')</script></head></html>' > ./docs/index.html
+
+      - name: Deploy to Netlify
+        if: contains(env.isPR, 'true')
+        id: netlify-deploy
+        uses: nwtgck/actions-netlify@v1.2
         with:
-          clean: false
-          branch: gh-pages
-          folder: docs
+          publish-dir: './docs'
+          production-branch: main-R          
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message:
+            'Deploy from GHA: ${{ github.event.pull_request.title || github.event.head_commit.message }} (${{ github.sha }})'
+          timeout-minutes: 1

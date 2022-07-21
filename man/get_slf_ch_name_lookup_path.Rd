@@ -2,7 +2,11 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_ch_name_lookup_path}
 \alias{get_slf_ch_name_lookup_path}
+<<<<<<< HEAD
 \title{Get the full path to the SLF Care Home lookup}
+=======
+\title{SLF Care Home Lookup File Path}
+>>>>>>> main-R
 \usage{
 get_slf_ch_name_lookup_path(update = latest_update(), ...)
 }
@@ -20,6 +24,7 @@ Get the full path to the SLF Care Home lookup
 \seealso{
 \code{\link{get_file_path}} for the generic function.
 
+<<<<<<< HEAD
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
@@ -43,3 +48,12 @@ Other file path functions:
 \code{\link{get_sparra_path}()}
 }
 \concept{file path functions}
+=======
+Other slf lookup file path: 
+\code{\link{get_slf_deaths_path}()},
+\code{\link{get_slf_gp_cluster_path}()},
+\code{\link{get_slf_gpprac_path}()},
+\code{\link{get_slf_postcode_path}()}
+}
+\concept{slf lookup file path}
+>>>>>>> main-R

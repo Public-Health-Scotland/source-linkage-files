@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_deaths_path}
 \alias{get_slf_deaths_path}
-\title{Get the full path to the SLF deaths lookup file}
+\title{SLF Deaths Lookup File Path}
 \usage{
 get_slf_deaths_path(update = latest_update(), ...)
 }
@@ -21,6 +21,7 @@ Get the full path to the SLF deaths lookup file
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
+<<<<<<< HEAD
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
@@ -39,8 +40,12 @@ Other file path functions:
 \code{\link{get_sc_demog_lookup_path}()},
 \code{\link{get_service_use_cohorts_path}()},
 \code{\link{get_slf_ch_name_lookup_path}()},
+=======
+Other slf lookup file path: 
+\code{\link{get_slf_ch_name_lookup_path}()},
+\code{\link{get_slf_gp_cluster_path}()},
+>>>>>>> main-R
 \code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()},
-\code{\link{get_sparra_path}()}
+\code{\link{get_slf_postcode_path}()}
 }
-\concept{file path functions}
+\concept{slf lookup file path}

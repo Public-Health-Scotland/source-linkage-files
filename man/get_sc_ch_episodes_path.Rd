@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sc_ch_episodes_path.R
 \name{get_sc_ch_episodes_path}
 \alias{get_sc_ch_episodes_path}
-\title{Get the Care Home all episodes file path}
+\title{Care Home Episodes File Path}
 \usage{
 get_sc_ch_episodes_path(update = latest_update(), ...)
 }
@@ -16,11 +16,12 @@ defaults to \code{\link[=latest_update]{latest_update()}}}
 The path to the care home episodes file as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the Care Home all episodes file path
+Get the file path for Care Home all episodes file
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
+<<<<<<< HEAD
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
@@ -42,5 +43,9 @@ Other file path functions:
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()},
 \code{\link{get_sparra_path}()}
+=======
+Other social care episodes file paths: 
+\code{\link{get_sc_hc_episodes_path}()}
+>>>>>>> main-R
 }
-\concept{file path functions}
+\concept{social care episodes file paths}

@@ -1,11 +1,13 @@
-#' Get the full Care Home costs lookup path
+#' Care Home Costs File Path
+#'
+#' @description Get the full Care Home costs lookup path
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param update passed through [latest_update()]
 #'
 #' @return The path to the costs lookup as an [fs::path()]
 #' @export
-#' @family file path functions
+#' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_ch_costs_path <- function(..., update = NULL) {
   ch_costs_path <- get_file_path(
@@ -17,14 +19,16 @@ get_ch_costs_path <- function(..., update = NULL) {
   return(ch_costs_path)
 }
 
-#' Get the full District Nursing costs lookup path
+#' District Nursing Costs File Path
+#'
+#' @description Get the full District Nursing costs lookup path
 #'
 #' @param ... additional arguments passed to  [get_file_path()]
 #' @param update passed through [latest_update()]
 #'
 #' @return The path to the costs lookup as an [fs::path()]
 #' @export
-#' @family file path functions
+#' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_dn_costs_path <- function(..., update = NULL) {
   dn_costs_path <- get_file_path(
@@ -37,14 +41,16 @@ get_dn_costs_path <- function(..., update = NULL) {
 }
 
 
-#' Get the full GP Out of Hours costs lookup path
+#' GP Out of Hours Costs File Path
+#'
+#' @description Get the full GP Out of Hours costs lookup path
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param update passed through [latest_update()]
 #'
 #' @return The path to the costs lookup as an [fs::path()]
 #' @export
-#' @family file path functions
+#' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_gp_ooh_costs_path <- function(..., update = NULL) {
   gp_ooh_costs_path <- get_file_path(
@@ -54,4 +60,48 @@ get_gp_ooh_costs_path <- function(..., update = NULL) {
   )
 
   return(gp_ooh_costs_path)
+}
+
+
+#' Full Home Care Costs File Path
+#'
+#' @description Get the full Home Care costs lookup path
+#'
+#' @param ... additional arguments passed to [get_file_path()]
+#' @param update passed through [latest_update()]
+#'
+#' @return The path to the costs lookup as an [fs::path()]
+#' @export
+#' @family costs lookup file paths
+#' @seealso [get_file_path()] for the generic function.
+get_hc_costs_path <- function(..., update = NULL) {
+  hc_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = glue::glue("costs_hc_lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"),
+    ...
+  )
+
+  return(hc_costs_path)
+}
+
+
+#' Raw Home Care Costs File Path
+#'
+#' @description Get the Home Care raw costs path
+#'
+#' @param ... additional arguments passed to [get_file_path()]
+#' @param update passed through [latest_update()]
+#'
+#' @return The path to the costs lookup as an [fs::path()]
+#' @export
+#' @family costs lookup file paths
+#' @seealso [get_file_path()] for the generic function.
+get_hc_raw_costs_path <- function(..., update = NULL) {
+  hc_raw_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = glue::glue("hc_costs.xlsx"),
+    ...
+  )
+
+  return(hc_raw_costs_path)
 }

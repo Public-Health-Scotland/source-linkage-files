@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sparra_hhg_paths.R
 \name{get_sparra_path}
 \alias{get_sparra_path}
-\title{Get the path to the SPARRA extract}
+\title{SPARRA Extract File Path}
 \usage{
 get_sparra_path(year, ...)
 }
@@ -20,17 +20,13 @@ Get the path to the SPARRA extract
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other file path functions: 
-\code{\link{get_ch_costs_path}()},
-\code{\link{get_dd_path}()},
-\code{\link{get_demog_cohorts_path}()},
-\code{\link{get_dn_costs_path}()},
-\code{\link{get_file_path}()},
-\code{\link{get_gp_ooh_costs_path}()},
+Other extract file paths: 
+\code{\link{get_boxi_extract_path}()},
 \code{\link{get_hhg_path}()},
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
+<<<<<<< HEAD
 \code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
@@ -41,5 +37,8 @@ Other file path functions:
 \code{\link{get_slf_deaths_path}()},
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()}
+=======
+\code{\link{get_source_extract_path}()}
+>>>>>>> main-R
 }
-\concept{file path functions}
+\concept{extract file paths}

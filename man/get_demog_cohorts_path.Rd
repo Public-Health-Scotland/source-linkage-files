@@ -2,8 +2,7 @@
 % Please edit documentation in R/get_cohorts_paths.R
 \name{get_demog_cohorts_path}
 \alias{get_demog_cohorts_path}
-\title{Get the full path to the Demographics
-Cohort lookup}
+\title{Demographics Cohort File Path}
 \usage{
 get_demog_cohorts_path(year, ...)
 }
@@ -17,12 +16,12 @@ The path to the Demographics Cohort lookup
 as a \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full path to the Demographics
-Cohort lookup
+Get the full path to the Demographics Cohort lookup
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
+<<<<<<< HEAD
 Other file path functions: 
 \code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
@@ -44,5 +43,9 @@ Other file path functions:
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()},
 \code{\link{get_sparra_path}()}
+=======
+Other cohort lookup file paths: 
+\code{\link{get_service_use_cohorts_path}()}
+>>>>>>> main-R
 }
-\concept{file path functions}
+\concept{cohort lookup file paths}

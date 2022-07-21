@@ -1,4 +1,6 @@
-#' Calculate measures for testing
+#' Calculate Measures for Testing
+#'
+#' @description Produces measures used within testing extracts. Computes various measures for the variables specified.
 #'
 #' @param data A processed dataframe containing a summary of the mean and sum of variables
 #' @param vars Specify variables you want to test.
@@ -9,6 +11,8 @@
 #' @return a tibble with a summary
 #' @export
 #'
+#' @family extract test functions
+#' @seealso produce_source_extract_tests
 calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min-max")) {
   measure <- match.arg(measure)
 
@@ -29,7 +33,7 @@ calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min
         dplyr::across(tidyselect::everything(), ~ min(.x, na.rm = TRUE), .names = "min_{col}"),
         dplyr::across(tidyselect::everything(vars = !tidyselect::starts_with("min_")), ~ max(.x, na.rm = TRUE), .names = "max_{col}")
       ) %>%
-      dplyr::mutate(dplyr::across(tidyselect::everything(), ~ as.numeric(.x)))
+      dplyr::mutate(dplyr::across(where(lubridate::is.Date), ~ convert_date_to_numeric(.)))
   }
 
   pivot_data <- data %>%
