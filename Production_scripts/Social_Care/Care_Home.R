@@ -79,7 +79,7 @@ ch_clean <- ch_data %>%
 sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
 
 matched_ch_data <- ch_clean %>%
-  left_join(sc_demog, by = c("sending_location", "social_care_id"))%>%
+  left_join(sc_demog, by = c("sending_location", "social_care_id")) %>%
   # correct postcode formatting
   mutate(across(contains("postcode"), .x = format_postcode(.x)))
 
@@ -102,8 +102,10 @@ ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
     DateCanx
   ) %>%
   # format postcode and CH name
-  mutate(ch_postcode = format_postcode(ch_postcode),
-         ch_name_lookup = toupper(ch_name_lookup))
+  mutate(
+    ch_postcode = format_postcode(ch_postcode),
+    ch_name_lookup = toupper(ch_name_lookup)
+  )
 
 
 name_postcode_clean <- matched_ch_data %>%
@@ -155,12 +157,13 @@ ch_data_clean <- name_postcode_clean %>%
     changed_sc_id = if_else(!is.na(chi) & social_care_id != latest_sc_id, 1, 0),
     social_care_id = if_else(!is.na(chi) & social_care_id != latest_sc_id,
       latest_sc_id, social_care_id
-    )) %>%
+    )
+  ) %>%
   # remove any duplicate records
   distinct() %>%
   # counter for split episodes
   mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>%
-  cumsum()) %>%
+    cumsum()) %>%
   ungroup()
 
 
@@ -195,9 +198,9 @@ ch_episode <- ch_data_clean %>%
   mutate(latest_submission_counter = pmax(sc_latest_submission != lag(sc_latest_submission), FALSE, na.rm = TRUE)) %>%
   mutate(sum_latest_submission = cumsum(latest_submission_counter)) %>%
   mutate(
-  # If it's the first episode(s) then keep the admission date(s), otherwise use the start of the quarter
+    # If it's the first episode(s) then keep the admission date(s), otherwise use the start of the quarter
     ch_admission_date = if_else(sum_latest_submission == min(sum_latest_submission), ch_admission_date, qtr_start),
-      # If it's the last episode(s) then keep the discharge date(s), otherwise use the end of the quarter
+    # If it's the last episode(s) then keep the discharge date(s), otherwise use the end of the quarter
     ch_discharge_date = if_else(sum_latest_submission == max(sum_latest_submission), ch_discharge_date, record_date)
   ) %>%
   ungroup()
