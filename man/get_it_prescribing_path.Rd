@@ -28,20 +28,7 @@ Other extract file paths:
 \code{\link{get_hhg_path}()},
 \code{\link{get_it_deaths_path}()},
 \code{\link{get_it_ltc_path}()},
-<<<<<<< HEAD
-\code{\link{get_ltcs_path}()},
-\code{\link{get_nsu_path}()},
-\code{\link{get_practice_details_path}()},
-\code{\link{get_sc_ch_episodes_path}()},
-\code{\link{get_sc_demog_lookup_path}()},
-\code{\link{get_service_use_cohorts_path}()},
-\code{\link{get_slf_ch_name_lookup_path}()},
-\code{\link{get_slf_deaths_path}()},
-\code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()},
-=======
 \code{\link{get_source_extract_path}()},
->>>>>>> main-R
 \code{\link{get_sparra_path}()}
 }
 \concept{extract file paths}

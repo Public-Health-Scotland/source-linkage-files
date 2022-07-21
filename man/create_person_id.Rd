@@ -2,28 +2,13 @@
 % Please edit documentation in R/create_person_id.R
 \name{create_person_id}
 \alias{create_person_id}
-<<<<<<< HEAD
-\title{Create the Person ID}
-=======
 \title{Create the Person ID variable}
->>>>>>> main-R
 \usage{
 create_person_id(data, type = c("SC"))
 }
 \arguments{
 \item{data}{the data containing the variables to compute the person id from}
 
-<<<<<<< HEAD
-\item{type}{the type of the ID}
-}
-\value{
-The social care person id
-}
-\description{
-Creates the Person ID - using the sending location code and clients social care ID,
-the default is Social Care which uses sending location and Social Care ID to compute the Person ID
-}
-=======
 \item{type}{the dataset type to use to create the ID options are:
 \itemize{
 \item 'SC' (Social Care)
@@ -40,4 +25,3 @@ Creates the Person ID, this depends on the data set used
 }
 }
 \concept{id functions}
->>>>>>> main-R
