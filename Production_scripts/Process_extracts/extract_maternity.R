@@ -154,7 +154,7 @@ maternity_clean <- maternity_file %>%
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
+  calculate_stay(year, record_keydate1, record_keydate2) %>%
   # Calculate beddays
   create_monthly_beddays(year, record_keydate1, record_keydate2) %>%
   # Calculate costs
