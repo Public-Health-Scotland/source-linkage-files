@@ -178,7 +178,7 @@ mh_clean <- mh_extract %>%
     cost_total_net = rowSums(across(ends_with("_cost")))
   ) %>%
   # total length of stay
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
+  calculate_stay(year, record_keydate1, record_keydate2)
 
 
 # Outfile  ---------------------------------------
