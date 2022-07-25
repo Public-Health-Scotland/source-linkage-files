@@ -21,6 +21,7 @@ convert_numeric_to_date(c(20210101, 19993112))
 }
 \seealso{
 Other date functions: 
+\code{\link{calculate_stay}()},
 \code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{end_fy}()},
