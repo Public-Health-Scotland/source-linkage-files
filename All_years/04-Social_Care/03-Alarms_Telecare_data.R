@@ -51,8 +51,13 @@ at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment_snapsho
     service_start_date,
     service_end_date
   ) %>%
-  # fix bad 2017 period
-  mutate(period = if_else(period == "2017", "2017Q4", period)) %>%
+  # fix bad period (2017, 2020 & 2021)
+  # TODO - ask SC team as last meeting they said to look at extract date - these dont relate.
+  # e.g. extract date later than period
+  mutate(period = if_else(period == "2017", "2017Q4", period),
+         period = if_else(period == "2020", "2020Q4", period),
+         period = if_else(period == "2021", "2021Q4", period)
+         ) %>%
   # order
   arrange(sending_location, social_care_id) %>%
   collect()
@@ -135,15 +140,7 @@ at_full_clean <- replaced_start_dates %>%
   # rename period as sc_latest_submission variable
   rename(
     sc_latest_submission = period
-  ) %>%
-  # Assign period with no quarter to yearQ4 - TODO - ask SC team as last
-  # meeting said look at extract date - these dont relate.
-  # e.g. extract date later than period
-  mutate(
-    sc_latest_submission = case_when(sc_latest_submission == "2020" ~ "2020Q4",
-                                     sc_latest_submission == "2021" ~ "2021Q4",
-                                     TRUE ~ sc_latest_submission)
-      )
+  )
 
 # WIP from here onwards
 
