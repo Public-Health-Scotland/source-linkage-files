@@ -193,7 +193,7 @@ acute_clean <- acute_file %>%
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   calculate_stay(year, record_keydate1, record_keydate2) %>%
-    # create and populate SMRType
+  # create and populate SMRType
   mutate(
     SMRType = case_when(
       recid == "01B" & lineno != 330 ~ if_else(ipdc == "I", "Acute-IP", "Acute-DC"),
