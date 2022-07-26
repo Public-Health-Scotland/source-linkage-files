@@ -74,24 +74,28 @@ read_spd_file <- function(file_name = NULL, ext = "rds") {
 
 #' SIMD File Path
 #'
-#' @description Read the Scottish Index for Multiple Deprivation (SIMD) file
+#' @description Get the path to the centrally held Scottish Index of Multiple
+#' Deprivation (SIMD) file.
 #'
-#' @param file - the file name of the simd file
+#' @param file_name (optional) the file name of the SIMD file, if not supplied
+#' it will try to return the latest file automatically (using
+#' [find_latest_file()])
+#' @param ext The extension (type of the file) - optional
 #'
-#' @return The data read using `readr::read_rds`
+#' @return An [fs::path()] to the SIMD file
 #' @export
 #'
 #' @family lookup file paths
-read_simd_file <- function(file) {
-  simd_path <- fs::path(get_lookups_dir(), "Deprivation", file)
+read_simd_file <- function(file_name = NULL, ext = "rds") {
+  simd_dir <-
+    fs::path(get_lookups_dir(), "Deprivation")
 
-  # If given a sav extension (or other), swap it for rds
-  simd_path <- fs::path_ext_set(simd_path, "rds")
-
-  # Check if the file exists and we can read it
-  if (!fs::file_access(simd_path, "read")) {
-    rlang::abort(message = "Couldn't read the simd file")
-  }
+  simd_path <- get_file_path(
+    directory = simd_dir,
+    file_name = file_name,
+    ext = ext,
+    file_name_regexp = glue::glue("postcode_\\d\\d\\d\\d_\\d_simd\\d\\d\\d\\d.*?\\.{ext}")
+  )
 
   return(simd_path)
 }
