@@ -15,11 +15,11 @@
 
 # Load packages
 library(dplyr)
-library(dbplyr)
-library(createslf)
+#library(dbplyr)
 library(lubridate)
 library(tidyr)
 library(phsmethods)
+library(createslf)
 
 
 
@@ -29,7 +29,7 @@ library(phsmethods)
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 care home
-ch_data <- tbl(db_connection, in_schema("social_care_2", "carehome_snapshot")) %>%
+ch_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "carehome_snapshot")) %>%
   select(
     ch_name,
     ch_postcode,
