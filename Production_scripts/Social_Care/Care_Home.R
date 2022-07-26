@@ -106,6 +106,10 @@ ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
     ch_postcode = phsmethods::format_postcode(ch_postcode),
     ch_name_lookup = clean_up_free_text(ch_name_lookup)
   ) %>%
+  group_by(ch_postcode, ch_name_lookup) %>%
+  summarise(open_interval = interval(min(DateReg), replace_na(max(DateCanx), Sys.Date()))) %>%
+  arrange(open_interval) %>%
+  ungroup()
 
 
 name_postcode_clean <- matched_ch_data %>%
