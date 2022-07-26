@@ -18,8 +18,7 @@
 #' @family extract test functions
 #' for creating test flags
 #' @seealso calculate_measures
-produce_source_pis_tests <- function(data,
-                                     sum_mean_vars = c("cost", "no_dispensed_items")) {
+produce_source_pis_tests <- function(data) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
@@ -30,7 +29,7 @@ produce_source_pis_tests <- function(data,
     calculate_measures(measure = "sum")
 
   all_measures <- data %>%
-    calculate_measures(vars = {{ sum_mean_vars }}, measure = "all")
+    calculate_measures(vars = c("cost", "no_dispensed_items"), measure = "all")
 
   join_output <- list(
     test_flags,
