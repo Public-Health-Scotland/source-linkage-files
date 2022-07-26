@@ -273,13 +273,6 @@ outfile <- ch_markers %>%
     ch_adm_reason = reason_for_admission,
     ch_nursing = nursing_care_provision
   ) %>%
-  arrange(
-    sending_location,
-    social_care_id,
-    chi,
-    record_keydate1,
-    record_keydate2
-  ) %>%
   select(
     chi,
     person_id,
