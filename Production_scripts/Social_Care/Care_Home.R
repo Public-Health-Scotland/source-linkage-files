@@ -153,13 +153,12 @@ ch_data_clean <- name_postcode_clean %>%
   select(-c(min_ch_provider, max_ch_provider)) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
+  group_by(sending_location, chi) %>%
   mutate(latest_sc_id = last(social_care_id)) %>%
   # count changed social_care_id
   mutate(
-    changed_sc_id = if_else(!is.na(chi) & social_care_id != latest_sc_id, 1, 0),
-    social_care_id = if_else(!is.na(chi) & social_care_id != latest_sc_id,
-      latest_sc_id, social_care_id
-    )
+    changed_sc_id = !is.na(chi) & social_care_id != latest_sc_id,
+    social_care_id = if_else(changed_sc_id, latest_sc_id, social_care_id)
   ) %>%
   # remove any duplicate records
   distinct() %>%
