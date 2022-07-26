@@ -103,16 +103,14 @@ ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
   ) %>%
   # format postcode and CH name
   mutate(
-    ch_postcode = format_postcode(ch_postcode),
-    ch_name_lookup = toupper(ch_name_lookup)
-  )
+    ch_postcode = phsmethods::format_postcode(ch_postcode),
+    ch_name_lookup = clean_up_free_text(ch_name_lookup)
+  ) %>%
 
 
 name_postcode_clean <- matched_ch_data %>%
-  # deal with capitalisation of CH names
-  mutate(ch_name = stringr::str_to_title(ch_name)) %>%
-  # deal with punctuation in the CH names
-  mutate(ch_name = stringr::str_replace_all(ch_name, "[[:punct:]]", " ")) %>%
+  # Make the care home name more uniform
+  mutate(ch_name = clean_up_free_text(ch_name)) %>%
   # replace invalid postcode with NA
   mutate(ch_postcode = na_if(ch_postcode, ch_postcode %in% valid_spd_postcodes)) %>%
   # where there is only a single Care Home at the Postcode, use that name
