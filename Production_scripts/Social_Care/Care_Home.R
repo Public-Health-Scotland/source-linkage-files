@@ -149,7 +149,7 @@ ch_data_clean <- name_postcode_clean %>%
     min_ch_provider = min(ch_provider),
     max_ch_provider = max(ch_provider)
   ) %>%
-  mutate(ch_provider = if_else(min_ch_provider != max_ch_provider, "6", ch_provider)) %>%
+  mutate(ch_provider = if_else(min_ch_provider != max_ch_provider, 6L, ch_provider)) %>%
   select(-c(min_ch_provider, max_ch_provider)) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
