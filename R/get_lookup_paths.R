@@ -128,25 +128,25 @@ read_datazone_pop_file <- function(file_name = NULL, ext = "rds") {
 }
 
 
-
-#' GP Practice File Path
+#' GP Practice File Path (gpprac)
 #'
-#' @description Read the GP practice lookup file
+#' @description Get the path for the centrally held file `gpprac`
 #'
 #' @param file - the file name of the GP practice file
 #'
-#' @return The data read using `readr::read_rds`
+#' @return  An [fs::path()] to the file
 #' @export
 #'
 #' @family lookup file paths
-read_gpprac_file <- function(file) {
-  gpprac_path <-
-    fs::path(get_lookups_dir(), "National Reference Files", file)
+read_gpprac_file <- function() {
+  gpprac_dir <-
+    fs::path(get_lookups_dir(), "National Reference Files")
 
-  # Check if the file exists and we can read it
-  if (!fs::file_access(gpprac_path, "read")) {
-    rlang::abort(message = "Couldn't read the gppractice lookup file")
-  }
+  gpprac_path <- get_file_path(
+    directory = gpprac_dir,
+    file_name = "gpprac",
+    ext = "sav"
+  )
 
   return(gpprac_path)
 }
