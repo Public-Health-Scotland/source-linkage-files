@@ -218,9 +218,17 @@ ch_episode <- ch_data_clean %>%
   # TODO double check this works
   mutate(
     # If it's the first episode(s) then keep the admission date(s), otherwise use the start of the quarter
-    ch_admission_date = if_else(sum_latest_submission == min(sum_latest_submission), ch_admission_date, qtr_start),
+    ch_admission_date = if_else(
+      sum_latest_submission == min(sum_latest_submission),
+      ch_admission_date,
+      qtr_start
+    ),
     # If it's the last episode(s) then keep the discharge date(s), otherwise use the end of the quarter
-    ch_discharge_date = if_else(sum_latest_submission == max(sum_latest_submission), ch_discharge_date, record_date)
+    ch_discharge_date = if_else(
+      sum_latest_submission == max(sum_latest_submission),
+      ch_discharge_date,
+      record_date
+    )
   ) %>%
   ungroup()
 
