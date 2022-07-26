@@ -200,8 +200,12 @@ ch_episode <- ch_data_clean %>%
   # Change the start and end date as appropriate when an episode is split, using the start / end date of the submission quarter
   group_by(chi, sending_location, social_care_id, ch_admission_date) %>%
   # counter for latest submission
-  mutate(latest_submission_counter = pmax(sc_latest_submission != lag(sc_latest_submission), FALSE, na.rm = TRUE)) %>%
-  mutate(sum_latest_submission = cumsum(latest_submission_counter)) %>%
+  # TODO check if this is the same as split_episode_counter?
+  mutate(
+    latest_submission_counter = replace_na(sc_latest_submission != lag(sc_latest_submission), TRUE),
+    sum_latest_submission = cumsum(latest_submission_counter)
+  ) %>%
+  # TODO double check this works
   mutate(
     # If it's the first episode(s) then keep the admission date(s), otherwise use the start of the quarter
     ch_admission_date = if_else(sum_latest_submission == min(sum_latest_submission), ch_admission_date, qtr_start),
