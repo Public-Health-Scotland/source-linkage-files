@@ -165,8 +165,10 @@ ch_data_clean <- name_postcode_clean %>%
   # remove any duplicate records before merging for speed and simplicity
   distinct() %>%
   # counter for split episodes
-  mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>%
-    cumsum()) %>%
+  mutate(
+    split_episode = replace_na(nursing_care_provision != lag(nursing_care_provision), TRUE),
+    split_episode_counter = cumsum(split_episode)
+  ) %>%
   ungroup()
 
 
