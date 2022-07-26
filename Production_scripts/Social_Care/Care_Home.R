@@ -12,15 +12,11 @@
 # continuous Care Home Stays marker
 #####################################################
 
-
 # Load packages
 library(dplyr)
-# library(dbplyr)
 library(lubridate)
 library(tidyr)
-library(phsmethods)
 library(createslf)
-
 
 
 # Read in data---------------------------------------
