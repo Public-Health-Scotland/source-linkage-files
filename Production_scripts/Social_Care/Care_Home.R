@@ -246,16 +246,20 @@ matched_deaths_data <- ch_episode %>%
 
 ch_markers <- matched_deaths_data %>%
   # ch_chi_cis
-  group_by(chi, sending_location, social_care_id) %>%
-  mutate(continuous_stay_chi = pmax(ch_admission_date >= lag(ch_discharge_date) + days(1), FALSE, na.rm = TRUE)) %>%
-  mutate(ch_chi_cis = cumsum(continuous_stay_chi) + 1) %>%
+  group_by(chi) %>%
+  mutate(
+    continuous_stay_chi = replace_na(ch_admission_date <= lag(ch_discharge_date) + days(1), TRUE),
+    ch_chi_cis = cumsum(continuous_stay_chi)
+  ) %>%
   ungroup() %>%
   # ch_sc_id_cis
   # uses the social care id and sending location so can be used for episodes that are not attached to a CHI number
   # This will restrict continuous stays to each Local Authority
   group_by(social_care_id, sending_location) %>%
-  mutate(continuous_stay_sc = pmax(ch_admission_date >= lag(ch_discharge_date) + days(1), FALSE, na.rm = TRUE)) %>%
-  mutate(ch_sc_id_cis = cumsum(continuous_stay_sc) + 1) %>%
+  mutate(
+    continuous_stay_sc = replace_na(ch_admission_date <= lag(ch_discharge_date) + days(1), TRUE),
+    ch_sc_id_cis = cumsum(continuous_stay_sc)
+  ) %>%
   ungroup()
 
 
