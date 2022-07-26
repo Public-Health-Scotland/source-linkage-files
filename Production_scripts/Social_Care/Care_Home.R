@@ -49,8 +49,6 @@ ch_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "carehome_snaps
   # correct FY 2017
   mutate(financial_quarter = if_else(financial_year == 2017 & is.na(financial_quarter), 4, financial_quarter)) %>%
   mutate(period = if_else(financial_year == 2017 & financial_quarter == 4, "2017Q4", period)) %>%
-  # filter missing admission dates
-  filter(!is.na(ch_admission_date)) %>%
   collect()
 
 
@@ -71,6 +69,8 @@ ch_clean <- ch_data %>%
   filter(dis_before_adm == FALSE) %>%
   # sort data
   arrange(sending_location, social_care_id, period, ch_admission_date, ch_discharge_date)
+# Set missing admission date to start of the submitted quarter
+  mutate(ch_admission_date = if_else(is.na(ch_admission_date), qtr_start, ch_admission_date)) %>%
 
 
 # Match with demographics data  ---------------------------------------
