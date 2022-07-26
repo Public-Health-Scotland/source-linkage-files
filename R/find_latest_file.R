@@ -27,8 +27,10 @@ find_latest_file <- function(directory, regexp) {
       regexp = regexp,
       recurse = TRUE
     ) %>%
-    dplyr::arrange(dplyr::desc(.data$birth_time),
-                   dplyr::desc(.data$modification_time)) %>%
+    dplyr::arrange(
+      dplyr::desc(.data$birth_time),
+      dplyr::desc(.data$modification_time)
+    ) %>%
     dplyr::pull(.data$path) %>%
     magrittr::extract(1)
 
