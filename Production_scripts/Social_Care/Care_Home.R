@@ -63,6 +63,7 @@ period_dates <- ch_data %>%
   )
 
 ch_clean <- ch_data %>%
+  mutate(across(c(ch_provider, reason_for_admission, type_of_admission, nursing_care_provision), as.integer)) %>%
   left_join(period_dates, by = c("period")) %>%
   # Set missing admission date to start of the submitted quarter
   mutate(ch_admission_date = if_else(is.na(ch_admission_date), qtr_start, ch_admission_date)) %>%
