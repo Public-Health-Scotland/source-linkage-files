@@ -1,5 +1,5 @@
 ####################################################
-# Name of file - PIS-tests.R
+# Name of file - extract_prescribing_tests.R
 # Original Authors - Jennifer Thom
 # Original Date - July 2022
 # Written/run on - RStudio Server
