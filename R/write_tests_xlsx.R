@@ -15,6 +15,10 @@
 #' @family test functions
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data, sheet_name) {
+
+
+  # Set up the workbook -----------------------------------------------------
+
   source_tests_path <- fs::path(
     get_slf_dir(),
     "Tests",
@@ -27,29 +31,94 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   } else {
     # Create a blank workbook object
     wb <- openxlsx::createWorkbook()
-
-    # Create a dummy file
-    fs::file_touch(path = source_tests_path)
-    # Set the correct permissions
-    fs::file_chmod(path = source_tests_path, mode = "660")
   }
 
   # add a new sheet for tests
-  sheet_name_dated <- paste0(sheet_name, "-", format(Sys.Date(), "%d %b"))
+  sheet_name_dated <- paste0(sheet_name, format(Sys.Date(), "_%d_%b"))
+
+  # If there has already been a sheet created today, append the time
+  if (sheet_name_dated %in% names(wb)) {
+    sheet_name_dated <- paste0(sheet_name_dated, format(Sys.time(), "_%H%M"))
+  }
+
   openxlsx::addWorksheet(wb, sheet_name_dated)
 
   # write test comparison output to the new sheet
-  openxlsx::writeData(
-    wb,
-    sheet_name_dated,
-    comparison_data
+  # Style it as a Data table for nice formatting
+  openxlsx::writeDataTable(
+    wb = wb,
+    sheet = sheet_name_dated,
+    x = comparison_data,
+    tableStyle = "TableStyleLight1",
+    withFilter = FALSE
   )
+
+
+  # Formatting --------------------------------------------------------------
+
+  # Get the column numbers
+  pct_change_col <- which(names(comparison_data) == "pct_change")
+  issue_col <- which(names(comparison_data) == "issue")
+  numeric_cols <- which(names(comparison_data) %in% c("value_old", "value_new", "diff"))
+
+  # Format the pct_chnange column as a percentage
+  openxlsx::addStyle(
+    wb = wb,
+    sheet = sheet_name_dated,
+    style = openxlsx::createStyle(numFmt = "0.0%"),
+    cols = pct_change_col,
+    rows = 2:(nrow(comparison_data) + 1),
+    gridExpand = TRUE
+  )
+
+  # Format the numeric columns with commas
+  openxlsx::addStyle(
+    wb = wb,
+    sheet = sheet_name_dated,
+    style = openxlsx::createStyle(numFmt = "#,##0"),
+    cols = numeric_cols,
+    rows = 2:(nrow(comparison_data) + 1),
+    gridExpand = TRUE
+  )
+
+  # Set the column widths - wider for the first (measure)
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = 1,
+    widths = 40
+  )
+
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = 2:ncol(comparison_data),
+    widths = 15
+  )
+
+  # Apply conditional formatting to highlight issues
+  openxlsx::conditionalFormatting(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = issue_col,
+    rows = 2:(nrow(comparison_data) + 1),
+    rule = "TRUE",
+    type = "contains"
+  )
+
+
+  # Write workbook to disk --------------------------------------------------
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
     source_tests_path,
     overwrite = TRUE
   )
+
+  if (fs::file_info(source_tests_path)$user == Sys.getenv("USER")) {
+    # Set the correct permissions
+    fs::file_chmod(path = source_tests_path, mode = "660")
+  }
 
   return(source_tests_path)
 }
