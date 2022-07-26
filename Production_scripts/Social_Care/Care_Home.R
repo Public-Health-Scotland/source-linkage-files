@@ -89,6 +89,7 @@ valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path(ext = "zsav")) %>%
 
 # Care Home Name lookup
 ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
+  filter(is.na(DateCanx) | DateCanx > start_fy("1718")) %>%
   rename(
     ch_postcode = "AccomPostCodeNo",
     ch_name_lookup = "ServiceName"
