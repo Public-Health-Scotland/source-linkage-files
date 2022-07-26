@@ -181,19 +181,29 @@ ch_data_clean %>% count(changed_sc_id)
 # to a single row per episode where admission the same
 ch_episode <- ch_data_clean %>%
   # when nursing_care_provision is different on records within the episode, split the episode at this point
-  group_by(chi, sending_location, social_care_id, ch_admission_date, nursing_care_provision, split_episode_counter) %>%
+  group_by(
+    chi,
+    sending_location,
+    social_care_id,
+    ch_admission_date,
+    nursing_care_provision,
+    split_episode_counter
+  ) %>%
   summarise(
-    ch_discharge_date = last(ch_discharge_date),
-    ch_provider = max(ch_provider),
-    record_date = max(record_date),
-    qtr_start = max(qtr_start),
-    sc_latest_submission = max(period),
-    ch_name = last(ch_name),
-    ch_postcode = last(ch_postcode),
-    reason_for_admission = last(reason_for_admission),
-    gender = first(gender),
-    dob = first(dob),
-    postcode = first(postcode)
+    across(
+      c(
+        ch_discharge_date,
+        ch_provider,
+        record_date,
+        qtr_start,
+        sc_latest_submission,
+        ch_name,
+        ch_postcode,
+        reason_for_admission
+      ),
+      last
+    ),
+    across(c(gender, dob, postcode), first)
   ) %>%
   ungroup() %>%
   # Amend dates for split episodes
