@@ -26,12 +26,8 @@ existing_data <- get_existing_data_for_tests(new_data = new_data)
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_pis_tests(existing_data,
-    sum_mean_vars = c("cost", "no_dispensed_items")
-  ),
-  produce_source_pis_tests(new_data,
-    sum_mean_vars = c("cost", "no_dispensed_items")
-  )
+  produce_source_pis_tests(existing_data),
+  produce_source_pis_tests(new_data)
 )
 
 
