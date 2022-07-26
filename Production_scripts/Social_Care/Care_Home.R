@@ -228,16 +228,16 @@ matched_deaths_data <- ch_episode %>%
   # adjust the discharge date to the date of death
   # corrects most cases of ‘discharge after death’
   mutate(
-    dis_after_death = ymd(death_date) <= ymd(ch_discharge_date) - days(5),
-    dis_after_death = replace_na(dis_after_death, FALSE)
+    dis_after_death = replace_na(
+      death_date > (ch_discharge_date - days(5)) &
+        death_date < ch_discharge_date,
+      FALSE
+    )
   ) %>%
   mutate(ch_discharge_date = if_else(dis_after_death, death_date, ch_discharge_date)) %>%
+  ungroup() %>%
   # remove any episodes where discharge is now before admission, i.e. death was before admission
-  mutate(
-    dis_before_adm = replace_na(ch_discharge_date < ch_admission_date, FALSE)
-  ) %>%
-  filter(!dis_before_adm) %>%
-  ungroup()
+  filter(!replace_na(ch_discharge_date < ch_admission_date, FALSE))
 
 
 # Continuous Care Home Stays ---------------------------------------
