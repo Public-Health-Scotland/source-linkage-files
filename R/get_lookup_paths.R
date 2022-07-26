@@ -40,15 +40,18 @@ read_locality_file <- function(file) {
 
 #' Scottish Postcode Directory File Path
 #'
-#' @description Read the Scottish Postcode Directory (SPD)
+#' @description Get the path to the centrally held Scottish Postcode Directory
+#' (SPD) file.
 #'
-#' @param file - the file name of the SPD
+#' @param file_name (optional) the file name of the SPD, if not supplied it will
+#' try to return the latest file automatically (using [find_latest_file()])
+#' @param ext The extension (type of the file) - optional
 #'
-#' @return The data read using `readr::read_rds`
+#' @return An [fs::path()] to the Scottish Postcode Directory
 #' @export
 #'
 #' @family lookup file paths
-read_spd_file <- function(file = NULL) {
+read_spd_file <- function(file_name = NULL, ext = "rds") {
   spd_dir <-
     fs::path(
       get_lookups_dir(),
@@ -56,29 +59,12 @@ read_spd_file <- function(file = NULL) {
       "Scottish Postcode Directory"
     )
 
-  if (is.null(file)) {
-    # Try to automatically pick the correct file
-    spd_path <-
-      fs::dir_ls(spd_dir, regexp = "Scottish_Postcode_Directory_.+?\\.rds") %>%
-      # Use max to pick the latest incase there are multiple versions
-      max()
-  } else {
-    spd_path <- fs::path(spd_dir, file)
-
-    # If given a sav extension (or other), swap it for rds
-    spd_path <- fs::path_ext_set(spd_dir, "rds")
-
-    # Check if the file exists and we can read it
-    if (!fs::file_access(spd_path, "read")) {
-      rlang::abort(
-        message = glue::glue(
-          "The SPD file supplied ({fs::path_file(spd_path)}) doesn't exist in rds format."
-        )
-      )
-    } else {
-      rlang::inform(message = glue::glue("Using {fs::path_file(spd_path)}"))
-    }
-  }
+  spd_path <- get_file_path(
+    directory = spd_dir,
+    file_name = file_name,
+    ext = ext,
+    file_name_regexp = glue::glue("Scottish_Postcode_Directory_.+?\\.{ext}")
+  )
 
   return(spd_path)
 }
