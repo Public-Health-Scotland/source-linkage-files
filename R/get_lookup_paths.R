@@ -14,25 +14,27 @@ get_lookups_dir <- function() {
 
 #' Locality File Path
 #'
-#' @description Read the locality file path
+#' @description Get the path to the centrally held HSCP Localities file.
 #'
-#' @param file - the file name of the locality file
+#' @param file_name (optional) the file name of the Localities files, if not
+#' supplied it will try to return the latest file automatically (using
+#' [find_latest_file()])
+#' @param ext The extension (type of the file) - optional
 #'
-#' @return The data read using `readr::read_rds`
+#' @return An [fs::path()] to the Scottish Postcode Directory
 #' @export
 #'
 #' @family lookup file paths
-read_locality_file <- function(file) {
-  locality_path <-
-    fs::path(get_lookups_dir(), "Geography", "HSCP Locality", file)
+read_locality_file <- function(file_name = NULL, ext = "rds") {
+  locality_dir <-
+    fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
 
-  # If given a sav extension (or other), swap it for rds
-  locality_path <- fs::path_ext_set(locality_path, "rds")
-
-  # Check if the file exists and we can read it
-  if (!fs::file_access(locality_path, "read")) {
-    rlang::abort(message = "Couldn't read the locality file")
-  }
+  locality_path <- get_file_path(
+    directory = locality_dir,
+    file_name = file_name,
+    ext = ext,
+    file_name_regexp = glue::glue("HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}")
+  )
 
   return(locality_path)
 }
