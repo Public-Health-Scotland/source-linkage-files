@@ -82,6 +82,7 @@ matched_ch_data <- ch_clean %>%
 
 
 # postcode lookup
+# TODO - Fix the SPD lookup then use the rds version here
 valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path(ext = "zsav")) %>%
   pull(postcode)
 
