@@ -42,9 +42,9 @@ get_file_path <-
       if (check_mode == "read") {
         file_path <- find_latest_file(directory, regexp = file_name_regexp)
       } else {
-        cli::cli_abort(c("`check_mode = \"{check_mode}\"` can't be used to find the
+        cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to find the
                    latest file with {.var file_name_regexp}",
-          "v" = "Try `check_mode = \"read\"`"
+          "v" = "Try {.arg check_mode = \"read\"}"
         ))
       }
     } else {

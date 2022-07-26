@@ -20,8 +20,22 @@
 #' )
 #' }
 find_latest_file <- function(directory, regexp) {
-  fs::dir_info(path = directory, type = "file", regexp = regexp, recurse = TRUE) %>%
-    dplyr::arrange(dplyr::desc(.data$birth_time), dplyr::desc(.data$modification_time)) %>%
+  latest_file_path <-
+    fs::dir_info(
+      path = directory,
+      type = "file",
+      regexp = regexp,
+      recurse = TRUE
+    ) %>%
+    dplyr::arrange(dplyr::desc(.data$birth_time),
+                   dplyr::desc(.data$modification_time)) %>%
     dplyr::pull(.data$path) %>%
     magrittr::extract(1)
+
+  if (!is.na(latest_file_path)) {
+    return(latest_file_path)
+  } else {
+    cli::cli_abort("There was no file in {.path {directory}} that matched the
+                   regular expression {.arg {regexp}}")
+  }
 }
