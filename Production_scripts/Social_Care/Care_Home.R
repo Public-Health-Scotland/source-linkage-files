@@ -140,11 +140,6 @@ name_postcode_clean <- matched_ch_data %>%
 ch_data_clean <- name_postcode_clean %>%
   # sort data
   arrange(sending_location, social_care_id, ch_admission_date, period) %>%
-  group_by(sending_location, social_care_id, ch_admission_date) %>%
-  # fill in nursing care provision when missing but present in the following entry
-  fill(nursing_care_provision) %>%
-  # tidy up ch_provider using "6" when disagreeing values
-  fill(ch_provider) %>%
   mutate(
     min_ch_provider = min(ch_provider),
     max_ch_provider = max(ch_provider)
@@ -160,7 +155,14 @@ ch_data_clean <- name_postcode_clean %>%
     changed_sc_id = !is.na(chi) & social_care_id != latest_sc_id,
     social_care_id = if_else(changed_sc_id, latest_sc_id, social_care_id)
   ) %>%
-  # remove any duplicate records
+  ungroup() %>%
+  group_by(sending_location, social_care_id, ch_admission_date) %>%
+  # fill in nursing care provision when missing but present in the following entry
+  mutate(nursing_care_provision = na_if(nursing_care_provision, 9)) %>%
+  fill(nursing_care_provision, .direction = "downup") %>%
+  # tidy up ch_provider using 6 when disagreeing values
+  fill(ch_provider, .direction = "downup") %>%
+  # remove any duplicate records before merging for speed and simplicity
   distinct() %>%
   # counter for split episodes
   mutate(split_episode_counter = pmax(nursing_care_provision != lag(nursing_care_provision), FALSE, na.rm = TRUE) %>%
