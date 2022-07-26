@@ -15,7 +15,7 @@
 
 # Load packages
 library(dplyr)
-#library(dbplyr)
+# library(dbplyr)
 library(lubridate)
 library(tidyr)
 library(phsmethods)
@@ -64,7 +64,7 @@ period_dates <- ch_data %>%
 
 ch_clean <- ch_data %>%
   left_join(period_dates, by = c("period")) %>%
-# Set missing admission date to start of the submitted quarter
+  # Set missing admission date to start of the submitted quarter
   mutate(ch_admission_date = if_else(is.na(ch_admission_date), qtr_start, ch_admission_date)) %>%
   # If the dis date is before admission, remove the dis date
   mutate(ch_discharge_date = if_else(ch_admission_date > ch_discharge_date, NA_Date_, ch_discharge_date))
