@@ -25,7 +25,7 @@ get_lookups_dir <- function() {
 #' @export
 #'
 #' @family lookup file paths
-read_locality_file <- function(file_name = NULL, ext = "rds") {
+get_locality_path <- function(file_name = NULL, ext = "rds") {
   locality_dir <-
     fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
 
@@ -53,7 +53,7 @@ read_locality_file <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-read_spd_file <- function(file_name = NULL, ext = "rds") {
+get_spd_path <- function(file_name = NULL, ext = "rds") {
   spd_dir <-
     fs::path(
       get_lookups_dir(),
@@ -86,7 +86,7 @@ read_spd_file <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-read_simd_file <- function(file_name = NULL, ext = "rds") {
+get_simd_path <- function(file_name = NULL, ext = "rds") {
   simd_dir <-
     fs::path(get_lookups_dir(), "Deprivation")
 
@@ -100,7 +100,7 @@ read_simd_file <- function(file_name = NULL, ext = "rds") {
   return(simd_path)
 }
 
-
+# TODO update this function to look for a specified type of pop estimate e.g. datazone, hscp etc.
 #' Datazone Populations File Path
 #'
 #' @description Get the path to the Datazone populations estimates
@@ -108,12 +108,13 @@ read_simd_file <- function(file_name = NULL, ext = "rds") {
 #' @param file_name (optional) the file name of the populations file, if not
 #' supplied it will try to return the latest file automatically (using
 #' [find_latest_file()])
+#' @param ext The extension (type of the file) - optional
 #'
 #' @return An [fs::path()] to the populations estimates file
 #' @export
 #'
 #' @family lookup file paths
-read_datazone_pop_file <- function(file_name = NULL, ext = "rds") {
+get_datazone_pop_path <- function(file_name = NULL, ext = "rds") {
   datazone_pop_dir <-
     fs::path(get_lookups_dir(), "Populations", "Estimates")
 
@@ -128,17 +129,15 @@ read_datazone_pop_file <- function(file_name = NULL, ext = "rds") {
 }
 
 
-#' GP Practice File Path (gpprac)
+#' GP Practice Reference File Path (gpprac)
 #'
-#' @description Get the path for the centrally held file `gpprac`
-#'
-#' @param file - the file name of the GP practice file
+#' @description Get the path for the centrally held reference file `gpprac`
 #'
 #' @return  An [fs::path()] to the file
 #' @export
 #'
 #' @family lookup file paths
-read_gpprac_file <- function() {
+get_gpprac_ref_path <- function() {
   gpprac_dir <-
     fs::path(get_lookups_dir(), "National Reference Files")
 
