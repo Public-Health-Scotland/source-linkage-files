@@ -103,25 +103,26 @@ read_simd_file <- function(file_name = NULL, ext = "rds") {
 
 #' Datazone Populations File Path
 #'
-#' @description Read the Datazone populations file
+#' @description Get the path to the Datazone populations estimates
 #'
-#' @param file - the file name of the datazone populations file
+#' @param file_name (optional) the file name of the populations file, if not
+#' supplied it will try to return the latest file automatically (using
+#' [find_latest_file()])
 #'
-#' @return The data read using `readr::read_rds`
+#' @return An [fs::path()] to the populations estimates file
 #' @export
 #'
 #' @family lookup file paths
-read_datazone_pop_file <- function(file) {
-  datazone_pop_path <-
-    fs::path(get_lookups_dir(), "Populations", "Estimates", file)
+read_datazone_pop_file <- function(file_name = NULL, ext = "rds") {
+  datazone_pop_dir <-
+    fs::path(get_lookups_dir(), "Populations", "Estimates")
 
-  # If given a sav extension (or other), swap it for rds
-  datazone_pop_path <- fs::path_ext_set(datazone_pop_path, "rds")
-
-  # Check if the file exists and we can read it
-  if (!fs::file_access(datazone_pop_path, "read")) {
-    rlang::abort(message = "Couldn't read the datazone population file")
-  }
+  datazone_pop_path <- get_file_path(
+    directory = datazone_pop_dir,
+    file_name = file_name,
+    ext = ext,
+    file_name_regexp = glue::glue("DataZone2011_pop_est_2001_\\d+?\\.{ext}")
+  )
 
   return(datazone_pop_path)
 }
