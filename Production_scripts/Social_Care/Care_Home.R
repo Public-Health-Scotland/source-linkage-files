@@ -64,13 +64,10 @@ period_dates <- ch_data %>%
 
 ch_clean <- ch_data %>%
   left_join(period_dates, by = c("period")) %>%
-  # filter out any episodes where discharge is before admission
-  mutate(dis_before_adm = ch_admission_date > ch_discharge_date & !is.na(ch_discharge_date)) %>%
-  filter(dis_before_adm == FALSE) %>%
-  # sort data
-  arrange(sending_location, social_care_id, period, ch_admission_date, ch_discharge_date)
 # Set missing admission date to start of the submitted quarter
   mutate(ch_admission_date = if_else(is.na(ch_admission_date), qtr_start, ch_admission_date)) %>%
+  # If the dis date is before admission, remove the dis date
+  mutate(ch_discharge_date = if_else(ch_admission_date > ch_discharge_date, NA_Date_, ch_discharge_date))
 
 
 # Match with demographics data  ---------------------------------------
