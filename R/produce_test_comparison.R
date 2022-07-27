@@ -21,6 +21,10 @@ produce_test_comparison <- function(old_data, new_data) {
     dplyr::mutate(
       diff = round(.data$value_new - .data$value_old, digits = 2),
       pct_change = scales::percent(.data$diff / .data$value_old),
-      issue = !dplyr::between(.data$diff / .data$value_old, -.05, .05)
-    )
+      issue = dplyr::case_when(
+        dplyr::between(.data$diff / .data$value_old, -.05, .05) ~ F,
+        !dplyr::between(.data$diff / .data$value_old, -.05, .05) ~ T
+      )
+    ) %>%
+    dplyr::mutate(issue = dplyr::if_else(is.na(pct_change), F, issue))
 }
