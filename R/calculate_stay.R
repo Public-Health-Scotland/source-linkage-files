@@ -13,24 +13,22 @@
 #' @export
 #'
 #' @family date functions
-calculate_stay <- function(data, year, start_date, end_date) {
-  stay <- data %>%
-    dplyr::mutate(dummy_discharge = dplyr::if_else(
-      is.na({{ end_date }}),
+calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
+  lubridate::time_length(lubridate::interval(start_date, end_date), unit = "days")
+
+  if (is.na(end_date) & is.null(sc_qtr)) {
+
+    dummy_discharge <- dplyr::if_else(
+      is.na(end_date),
       end_fy(year) + days(1),
-      {{ end_date }}
-    )) %>%
-    dplyr::mutate(
-      stay = lubridate::time_length(lubridate::interval({{ start_date }}, {{ end_date }}), unit = "days"),
-      stay = dplyr::if_else(is.na({{ end_date }}),
-        lubridate::time_length(lubridate::interval(
-          {{ start_date }},
-          .data$dummy_discharge
-        ),
-        unit = "days"
-        ), stay
-      )
+      end_date
     )
 
-  return(stay)
+    lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
+  } else if (is.na(end_date) & !is.null(sc_qtr)) {
+
+    qtr_end <- yq(sc_qtr) %m+% period(6, "months") %m-% days(1)
+
+    lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
+  }
 }
