@@ -13,7 +13,7 @@ calculate_stay(year, start_date, end_date, sc_qtr = NULL)
 
 \item{end_date}{The discharge/end date variable. e.g record_keydate2}
 
-\item{data}{Data to calculate the total length of stay}
+\item{sc_qtr}{The latest submitted quarter. e.g. sc_latest_submission}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with additional variable \code{stay}.
