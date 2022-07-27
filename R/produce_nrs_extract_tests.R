@@ -28,7 +28,7 @@ produce_nrs_extract_tests <- function(data,
       n_males = dplyr::if_else(.data$gender == 1, 1, 0),
       n_females = dplyr::if_else(.data$gender == 2, 1, 0),
       missing_dob = dplyr::if_else(is.na(.data$dob), 1, 0),
-      death = 1
+      n_deaths = 1
     ) %>%
     # keep variables for comparison
     dplyr::select(c(.data$has_chi:.data$death)) %>%
