@@ -23,15 +23,10 @@ produce_nrs_extract_tests <- function(data,
     # use functions to create HB and partnership flags
     dplyr::arrange(.data$chi) %>%
     # create test flags
-    dplyr::mutate(
-      has_chi = dplyr::if_else(!is_missing(.data$chi), 1, 0),
-      n_males = dplyr::if_else(.data$gender == 1, 1, 0),
-      n_females = dplyr::if_else(.data$gender == 2, 1, 0),
-      missing_dob = dplyr::if_else(is.na(.data$dob), 1, 0),
-      n_deaths = 1
-    ) %>%
+    create_demog_test_flags() %>%
+    mutate(n_deaths = 1)
     # keep variables for comparison
-    dplyr::select(c(.data$has_chi:.data$death)) %>%
+    dplyr::select(c(.data$valid_chi:.data$n_deaths)) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
