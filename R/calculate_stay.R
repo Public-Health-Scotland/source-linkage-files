@@ -25,7 +25,8 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
 
     lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
   } else if (is.na(end_date) & !is.null(sc_qtr)) {
-    qtr_end <- yq(sc_qtr) %m+% period(6, "months") %m-% days(1)
+
+    qtr_end <- yq(sc_qtr) %m+% period(6, "months")
 
     lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
   }
