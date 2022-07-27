@@ -14,9 +14,9 @@
 #'
 #' @family date functions
 calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
-  lubridate::time_length(lubridate::interval(start_date, end_date), unit = "days")
 
-  if (is.na(end_date) & is.null(sc_qtr)) {
+  if (is.missing(sc_qtr)) {
+    # Do normal stay calculation
     dummy_discharge <- dplyr::if_else(
       is.na(end_date),
       end_fy(year) + days(1),
@@ -24,9 +24,16 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     )
 
     lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
-  } else if (is.na(end_date) & !is.null(sc_qtr)) {
+  } else {
+    # Do SC stay calculation
+
     qtr_end <- yq(sc_qtr) %m+% period(6, "months")
 
     lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
   }
+
+    # do SC calculation if qtr_end < start_date then set to next qtr
+  if (qtr_end < start_date)
+
 }
+
