@@ -175,7 +175,7 @@ mh_clean <- mh_extract %>%
     # yearstay
     yearstay = rowSums(across(ends_with("_beddays"))),
     # cost total net
-    cost_total_net = rowSums(across(ends_with("_costs")))
+    cost_total_net = rowSums(across(ends_with("_cost")))
   ) %>%
   # total length of stay
   mutate(stay = difftime(record_keydate2, record_keydate1, units = "days"))
@@ -238,6 +238,6 @@ outfile <- mh_clean %>%
 
 outfile %>%
   # Save as zsav file
-  write_sav(get_source_extract_path(year, "MH", ext = "zsav")) %>%
+  write_sav(get_source_extract_path(year, "MH", ext = "zsav", check_mode = "write")) %>%
   # Save as rds file
-  write_rds(get_source_extract_path(year, "MH", ext = "rds"))
+  write_rds(get_source_extract_path(year, "MH", check_mode = "write"))

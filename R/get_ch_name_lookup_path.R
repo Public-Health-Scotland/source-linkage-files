@@ -4,6 +4,7 @@
 #'
 #' @param year Year of extract
 #' @param ... additional arguments passed to [get_file_path()]
+
 #'
 #' @return Path to clean source extract containing data for each dataset
 #' @export

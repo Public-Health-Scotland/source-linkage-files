@@ -16,6 +16,9 @@
 #' to check that you have read access to the file
 #' @param create Optionally create the file if it doesn't exists,
 #' the default is to only create a file if we set `check_mode = "write"`
+#' @param file_name_regexp A regular expression to search for the file name
+#' if this is used `file_name` should not be, it will return the most recently
+#' created file using [find_latest_file()]
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
@@ -24,15 +27,30 @@
 #' @export
 get_file_path <-
   function(directory,
-           file_name,
+           file_name = NULL,
            ext = NULL,
            check_mode = "read",
-           create = NULL) {
+           create = NULL,
+           file_name_regexp = NULL) {
     if (!fs::dir_exists(directory)) {
       rlang::abort(message = glue::glue("The directory {directory} does not exist"))
     }
 
-    file_path <- fs::path(directory, file_name)
+    if (!is.null(file_name)) {
+      file_path <- fs::path(directory, file_name)
+    } else if (!is.null(file_name_regexp)) {
+      if (check_mode == "read") {
+        file_path <- find_latest_file(directory, regexp = file_name_regexp)
+      } else {
+        cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to find the
+                   latest file with {.var file_name_regexp}",
+          "v" = "Try {.arg check_mode = \"read\"}"
+        ))
+      }
+    } else {
+      cli::cli_abort("You must specify a {.var file_name} or a regular expression
+                     to search for with {.var file_name_regexp}")
+    }
 
     if (!is.null(ext)) {
       file_path <- fs::path_ext_set(file_path, ext)
