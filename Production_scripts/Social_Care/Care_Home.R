@@ -77,12 +77,9 @@ matched_ch_data <- ch_clean %>%
   # correct postcode formatting
   mutate(across(contains("postcode"), phsmethods::format_postcode))
 
-
-# postcode lookup
-# TODO - Fix the SPD lookup then use the rds version here
-valid_spd_postcodes <- haven::read_sav(get_slf_postcode_path(ext = "zsav")) %>%
-  pull(postcode)
-
+# Get a list of confirmed valid Scottish postcodes from the SPD
+valid_spd_postcodes <- readr::read_rds(get_spd_path()) %>%
+  pull(pc7)
 
 # Care Home Name lookup
 ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
