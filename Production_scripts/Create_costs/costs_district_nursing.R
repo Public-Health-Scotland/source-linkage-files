@@ -88,7 +88,7 @@ dn_raw_costs_contacts <- left_join(dn_raw_contacts,
 # Of the two HSCPs, Argyll and Bute provides the
 # District Nursing data which is 27% of the population.
 
-population_lookup <- readr::read_rds(read_datazone_pop_file("HSCP2019_pop_est_1981_2020.rds")) %>%
+population_lookup <- readr::read_rds(get_datazone_pop_path("HSCP2019_pop_est_1981_2020.rds")) %>%
   # Select only the HSCPs for NHS Highland & years since 2015
   filter(
     hscp2019 %in% c("S37000004", "S37000016"),
