@@ -60,22 +60,18 @@ find the files then picks the one with the latest
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_latest_file</span><span class="op">(</span><span class="va">dir</span>, <span class="va">...</span>, recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">find_latest_file</span><span class="op">(</span><span class="va">directory</span>, <span class="va">regexp</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>dir</dt>
-<dd><p>The directory to look on</p></dd>
+    <dl><dt>directory</dt>
+<dd><p>The directory to look in</p></dd>
 
 
-<dt>...</dt>
-<dd><p>additional arguments passed to <code><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">fs::dir_info()</a></code></p></dd>
-
-
-<dt>recurse</dt>
-<dd><p>Should the function search recursively
-through subfolders? The default <code>TRUE</code> is to search subfolders.</p></dd>
+<dt>regexp</dt>
+<dd><p>a <a href="https://www.regular-expressions.info/quickstart.html" class="external-link">regular expression</a>
+passed to <code><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">fs::dir_info()</a></code> to search for the file</p></dd>
 
 </dl></div>
     <div class="section level2">
