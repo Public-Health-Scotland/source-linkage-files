@@ -1,8 +1,15 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !SC_dir + "all_at_episodes_" + !LatestUpdate + ".zsav".
 
 * Now select episodes for given FY.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 <= !endFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
+
+* Remove any episodes where the latest submission was before the current year and the record started earlier with an open end date.
+Do if Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.0).
+    Compute old_open_record = sysmis(record_keydate2) AND record_keydate1 < !startFY.
+End if.
+
+Select if sysmis(old_open_record) or NOT(old_open_record).
 
 Alter type
     sending_location (A3)
