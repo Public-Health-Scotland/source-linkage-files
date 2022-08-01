@@ -62,36 +62,6 @@ at_full_data <- tbl(db_connection, in_schema("social_care_2", "equipment_snapsho
 
 # Data Cleaning-----------------------------------------------------
 
-
-----------------------------------------------------------------
-# assign start of FY
-
-# Work out the start fY for each period
-# CHECK - do we need 2017 as the start of FY?
-# CHECK - do we need start of Quarter?
-# CHECK - do we remove these records? - 11,575 are missing
-# CHECK - period = 2020 what do we change this to?
-#pre_compute_record_dates <- at_full_data %>%
-#  distinct(period) %>%
-#  mutate(
- #   year = substr(period, 1, 4),
- #   start_fy = as.Date(paste0(year, "-04-01"))
-#  )
-
-#replaced_start_dates <- at_full_data %>%
-  # Replace missing start dates with the start of the fy
-  #left_join(pre_compute_record_dates, by = "period") %>%
-  #tidylog::mutate(
-   # start_date_missing = is.na(service_start_date),
-   # at_service_start_date = if_else(
-   #   start_date_missing,
-   #  start_fy,
-   #   service_start_date
-   #   )
-#)
-
-------------------------------------------------------------
-
 # Work out the dates for each period
 # Record date is the last day of the quarter
 # qtr_start is the first day of the quarter
