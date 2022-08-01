@@ -25,7 +25,11 @@ library(createslf)
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 care home
-ch_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "carehome_snapshot")) %>%
+ch_data <-
+  tbl(
+    db_connection,
+    dbplyr::in_schema("social_care_2", "carehome_snapshot")
+  ) %>%
   select(
     ch_name,
     ch_postcode,
@@ -43,8 +47,14 @@ ch_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "carehome_snaps
     age
   ) %>%
   # correct FY 2017
-  mutate(financial_quarter = if_else(financial_year == 2017 & is.na(financial_quarter), 4, financial_quarter)) %>%
-  mutate(period = if_else(financial_year == 2017 & financial_quarter == 4, "2017Q4", period)) %>%
+  mutate(financial_quarter = if_else(
+    financial_year == 2017 &
+      is.na(financial_quarter),
+    4,
+    financial_quarter
+  )) %>%
+  mutate(period = if_else(financial_year == 2017 &
+    financial_quarter == 4, "2017Q4", period)) %>%
   collect()
 
 
@@ -59,12 +69,26 @@ period_dates <- ch_data %>%
   )
 
 ch_clean <- ch_data %>%
-  mutate(across(c(ch_provider, reason_for_admission, type_of_admission, nursing_care_provision), as.integer)) %>%
+  mutate(across(
+    c(
+      ch_provider,
+      reason_for_admission,
+      type_of_admission,
+      nursing_care_provision
+    ),
+    as.integer
+  )) %>%
   left_join(period_dates, by = c("period")) %>%
   # Set missing admission date to start of the submitted quarter
   mutate(ch_admission_date = if_else(is.na(ch_admission_date), qtr_start, ch_admission_date)) %>%
   # If the dis date is before admission, remove the dis date
-  mutate(ch_discharge_date = if_else(ch_admission_date > ch_discharge_date, NA_Date_, ch_discharge_date))
+  mutate(
+    ch_discharge_date = if_else(
+      ch_admission_date > ch_discharge_date,
+      NA_Date_,
+      ch_discharge_date
+    )
+  )
 
 
 # Match with demographics data  ---------------------------------------
@@ -82,7 +106,8 @@ valid_spd_postcodes <- readr::read_rds(get_spd_path()) %>%
   pull(pc7)
 
 # Care Home Name lookup
-ch_name_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
+ch_name_lookup <-
+  readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
   filter(is.na(DateCanx) | DateCanx > start_fy("1718")) %>%
   rename(
     ch_postcode = "AccomPostCodeNo",
