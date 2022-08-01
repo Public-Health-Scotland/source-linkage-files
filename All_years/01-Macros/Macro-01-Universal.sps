@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -47,7 +47,7 @@ Define !latest_cost_year()
 *******************************************************.
 * Locality file - will need changing when geography files update.
 Define !Locality_file()
-    "HSCP Localities_DZ11_Lookup_20200825.sav"
+    "HSCP Localities_DZ11_Lookup_20220630.sav"
 !EndDefine.
 
 * SPD file - will need changing when geography files update.
