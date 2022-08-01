@@ -22,7 +22,7 @@ library(createslf)
 # Retrieve the latest resource from the dataset
 opendata <-
   get_dataset("gp-practice-contact-details-and-list-sizes",
-    max_resources = 1
+    max_resources = 20
   ) %>%
   clean_names() %>%
   # Filter and save
@@ -35,15 +35,15 @@ opendata <-
   # Sort for SPSS matching
   arrange(gpprac) %>%
   # Write out as an SPSS file
-  write_sav(get_practice_details_path(check_mode = "write")) %>%
+  write_sav(get_practice_details_path(ext = "zsav", check_mode = "write")) %>%
   # rds as well
   write_rds(get_practice_details_path(check_mode = "write"))
 
 
 # Read Lookup files ---------------------------------------
 # gp lookup
-gpprac_file <-
-  haven::read_sav(read_gpprac_file("gpprac.sav")) %>%
+gpprac_ref_file <-
+  haven::read_sav(get_gpprac_ref_path()) %>%
   # select only praccode and postcode
   select(
     gpprac = praccode,
@@ -51,7 +51,7 @@ gpprac_file <-
   )
 
 # postcode lookup
-pc_lookup <- readr::read_rds(read_spd_file()) %>%
+spd_file <- readr::read_rds(get_spd_path()) %>%
   select(
     pc7,
     pc8,
@@ -67,9 +67,9 @@ pc_lookup <- readr::read_rds(read_spd_file()) %>%
 
 gpprac_slf_lookup <-
   ## match cluster information onto the practice reference list ##
-  left_join(opendata, gpprac_file, by = c("gpprac", "gpprac_postcode")) %>%
+  left_join(opendata, gpprac_ref_file, by = c("gpprac", "gpprac_postcode")) %>%
   # match on geography info - postcode
-  left_join(pc_lookup, by = c("gpprac_postcode" = "postcode")) %>%
+  left_join(spd_file, by = c("gpprac_postcode" = "postcode")) %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
   # order variables
