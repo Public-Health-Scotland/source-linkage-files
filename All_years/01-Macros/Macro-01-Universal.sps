@@ -72,7 +72,7 @@ Define !DataZone_pop_file()
 
 * 5-year HSCP Populations file - will need changing when geography files update.
 Define !HSCP_5year_pop_file()
-    "HSCP2019_pop_est_1981_2020.sav"
+    "HSCP2019_pop_est_1981_2021.sav"
 !EndDefine.
 
 *******************************************************.
