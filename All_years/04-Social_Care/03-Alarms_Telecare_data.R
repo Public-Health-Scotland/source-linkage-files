@@ -132,30 +132,21 @@ at_full_clean <- replaced_start_dates %>%
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
-    sc_send_lca = convert_sc_sl_to_lca(sending_location)
+    sc_send_lca = convert_sc_sl_to_lca(sending_location))
+
+qtr_merge <- at_full_clean %>%
+  dtplyr::lazy_dt() %>%
+  arrange(sending_location, social_care_id, record_keydate1, smrtype,  period) %>%
+  group_by(sending_location, social_care_id, record_keydate1, smrtype,  period) %>%
+  mutate(
+    pkg_count = row_number()
   ) %>%
-  # rename period as sc_latest_submission variable
-  rename(
-    sc_latest_submission = period
-  )
-
-# WIP from here onwards
-
-check <- at_full_clean %>%
-  group_by(sending_location, social_care_id, smrtype) %>%
-  arrange(sc_latest_submission, record_keydate1, .by_group = TRUE) %>%
-  mutate(flag = (record_keydate1 > lag(record_keydate2)) %>%
-           replace_na(TRUE),
-         episode_counter = cumsum(flag)
-  )
-
-last <- check %>%
-  # possibly do an ungroup and then group by(sending_location, social_care_id, sds_option)
-  group_by(episode_counter, .add = TRUE) %>%
-  summarise(record_keydate1 = min(record_keydate1),
-            across(everything(), last)
-
-
+  group_by(sending_location, social_care_id, record_keydate1, smrtype, pkg_count) %>%
+  summarise(sc_latest_submission = last(period),
+            # replace with a list of vars
+            across(everything(), last)) %>%
+  arrange(sending_location, social_care_id, record_keydate1, smrtype,  sc_latest_submission) %>%
+  as_tibble()
 
 
 # Save outfile------------------------------------------------
