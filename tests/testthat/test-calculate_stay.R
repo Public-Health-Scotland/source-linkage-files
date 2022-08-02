@@ -59,23 +59,34 @@ test_that("Can return correct length of stay", {
   # if start and end dates are both supplied, calculate length of stay
 
   # Start before FY, end during FY
- expect_equal(calculate_stay("1920",
-                             as.Date(c("2019/03/31", "2019/06/30",
-                                       "2019/01/01","2019/04/01")),
-                             as.Date(c("2019/10/31", "2019/08/31",
-                                       "2020/04/01","2020/07/01" ))
-                             ),
-                            c(214, 62, 456, 457))
+  expect_equal(
+    calculate_stay(
+      "1920",
+      as.Date(c(
+        "2019/03/31", "2019/06/30",
+        "2019/01/01", "2019/04/01"
+      )),
+      as.Date(c(
+        "2019/10/31", "2019/08/31",
+        "2020/04/01", "2020/07/01"
+      ))
+    ),
+    c(214, 62, 456, 457)
+  )
 
- # Normal calculation - no sc_qtr supplied
- # if start date supplied but end date missing, use dummy date (end_FY + 1) to calculate length of stay
-  expect_equal(calculate_stay("1920",
-                              as.Date(c("2019/03/31", "2019/06/30",
-                                        "2019/01/01","2019/04/01")),
-                              as.Date(c(NA, NA, NA, NA))),
-                              c(367, 276, 456, 366))
-
-
+  # Normal calculation - no sc_qtr supplied
+  # if start date supplied but end date missing, use dummy date (end_FY + 1) to calculate length of stay
+  expect_equal(
+    calculate_stay(
+      "1920",
+      as.Date(c(
+        "2019/03/31", "2019/06/30",
+        "2019/01/01", "2019/04/01"
+      )),
+      as.Date(c(NA, NA, NA, NA))
+    ),
+    c(367, 276, 456, 366)
+  )
 })
 
 
