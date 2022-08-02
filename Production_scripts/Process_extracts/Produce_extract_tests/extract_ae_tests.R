@@ -17,9 +17,7 @@ library(createslf)
 year <- check_year_format("1920")
 
 # Read new data file
-new_data <- readr::read_rds(
-  get_source_extract_path(year, "AE")
-)
+new_data <- readr::read_rds(get_source_extract_path(year, "AE"))
 
 # Read current SLF episode file
 existing_data <- get_existing_data_for_tests(new_data = new_data)
