@@ -79,6 +79,9 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_hscp_test_flags.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_lca_test_flags.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/create_monthly_beddays.html</loc>
   </url>
   <url>
@@ -260,6 +263,9 @@
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_gpprac_tests.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_homelessness_tests.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_postcode_tests.html</loc>
