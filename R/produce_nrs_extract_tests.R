@@ -24,7 +24,7 @@ produce_nrs_extract_tests <- function(data,
     dplyr::arrange(.data$chi) %>%
     # create test flags
     create_demog_test_flags() %>%
-    mutate(n_deaths = 1)
+    dplyr::mutate(n_deaths = 1) %>%
   # keep variables for comparison
   dplyr::select(c(.data$valid_chi:.data$n_deaths)) %>%
     # use function to sum new test flags
