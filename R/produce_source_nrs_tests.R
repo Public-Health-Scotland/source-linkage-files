@@ -16,7 +16,6 @@
 #' @family extract test functions
 #' @seealso [calculate_measures()]
 produce_source_nrs_tests <- function(data) {
-
   test_flags <- data %>%
     # create test flags
     create_demog_test_flags() %>%
