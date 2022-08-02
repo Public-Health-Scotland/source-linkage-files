@@ -13,24 +13,27 @@
 
 # Packages
 library(createslf)
-library(openxlsx)
 
 
 # Read in Data---------------------------------------
 
-# Create new and old dataframes with measures for testing
-new_tests <- produce_sc_ch_episodes_tests(haven::read_sav(get_sc_ch_episodes_path()))
-old_tests <- produce_sc_ch_episodes_tests(haven::read_sav(get_sc_ch_episodes_path(update = previous_update())))
+new_data <- readr::read_rds(get_sc_ch_episodes_path())
+existing_data <- readr::read_rds(get_sc_ch_episodes_path(update = previous_update()))
+
 
 # Create tests-------------------------------------------
 
 # Compare new and old outputs
-comparison <- produce_test_comparison(old_tests, new_tests)
+comparison <- produce_test_comparison(
+  produce_sc_ch_episodes_tests(new_data),
+  produce_sc_ch_episodes_tests(existing_data)
+)
 
 
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
 write_tests_xlsx(comparison, "all_ch_episodes")
+
 
 ## END OF SCRIPT ##

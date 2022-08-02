@@ -6,10 +6,11 @@
 \usage{
 get_file_path(
   directory,
-  file_name,
+  file_name = NULL,
   ext = NULL,
   check_mode = "read",
-  create = NULL
+  create = NULL,
+  file_name_regexp = NULL
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ to check that you have read access to the file}
 
 \item{create}{Optionally create the file if it doesn't exists,
 the default is to only create a file if we set \code{check_mode = "write"}}
+
+\item{file_name_regexp}{A regular expression to search for the file name
+if this is used \code{file_name} should not be, it will return the most recently
+created file using \code{\link[=find_latest_file]{find_latest_file()}}}
 }
 \value{
 The full file path, an error will be thrown
