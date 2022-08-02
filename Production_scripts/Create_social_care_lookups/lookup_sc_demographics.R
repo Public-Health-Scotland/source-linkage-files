@@ -49,8 +49,8 @@ dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
 non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
 ## postcode type ##
-pc_lookup <- readr::read_rds(read_spd_file()) %>%
-  select(pc7)
+valid_spd_postcodes <- readr::read_rds(get_spd_path()) %>%
+  pull(pc7)
 
 
 # Data Cleaning ---------------------------------------
@@ -86,7 +86,7 @@ sc_demog <- sc_demog %>%
     dob, submitted_postcode, chi_postcode
   ) %>%
   # check if submitted_postcode matches with postcode lookup
-  mutate(valid_pc = if_else(submitted_postcode %in% pc_lookup$pc7, 1, 0)) %>%
+  mutate(valid_pc = if_else(submitted_postcode %in% valid_spd_postcodes, 1, 0)) %>%
   # use submitted_postcode if valid, otherwise use chi_postcode
   mutate(postcode = case_when(
     (!is.na(submitted_postcode) & valid_pc == 1) ~ submitted_postcode,
@@ -141,10 +141,5 @@ outfile %>%
   # .rds file
   write_rds(get_sc_demog_lookup_path(check_mode = "write"))
 
-outfile %>%
-  # .zsav file
-  write_sav(get_sc_demog_lookup_path(ext = "zsav", check_mode = "write")) %>%
-  # .rds file
-  write_rds(get_sc_demog_lookup_path(check_mode = "write"))
 
 ## End of Script ---------------------------------------

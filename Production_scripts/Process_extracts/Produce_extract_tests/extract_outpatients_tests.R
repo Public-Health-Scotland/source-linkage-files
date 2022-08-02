@@ -1,11 +1,11 @@
 ####################################################
-# A&E Extract Tests
-# Original Authors - Catherine Holland
+# Name of file - produce-outpatients-tests.R
+# Original Authors - Jennifer Thom
 # Original Date - May 2022
 # Written/run on - RStudio Server
 # Version of R - 3.6.1
 # Description - Produce tests for source linkage files:
-#               A&E processed file.
+#               acute processed file.
 #####################################################
 
 # Load packages
@@ -17,14 +17,13 @@ library(createslf)
 year <- check_year_format("1920")
 
 # Read new data file
-new_data <- readr::read_rds(get_source_extract_path(year, "AE"))
+new_data <- readr::read_rds(get_source_extract_path(year, "Outpatients"))
 
-# Read current SLF episode file
-existing_data <- get_existing_data_for_tests(new_data = new_data)
+# Read current SLF episode file and filter for 01B and GLS records
+existing_data <- get_existing_data_for_tests(new_data)
 
 
 # Produce comparison-------------------------------------
-
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
   produce_source_extract_tests(existing_data,
@@ -41,7 +40,7 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "ae_extract")
+write_tests_xlsx(comparison, "outpatients_extract")
 
 
 ## END OF SCRIPT ##

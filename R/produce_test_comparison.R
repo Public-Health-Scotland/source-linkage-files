@@ -19,8 +19,8 @@ produce_test_comparison <- function(old_data, new_data) {
     suffix = c("_old", "_new")
   ) %>%
     dplyr::mutate(
-      diff = round(.data$value_new - .data$value_old, digits = 2),
-      pct_change = scales::percent(.data$diff / .data$value_old),
-      issue = !dplyr::between(.data$diff / .data$value_old, -.05, .05)
+      difference = round(.data$value_new - .data$value_old, digits = 2),
+      pct_change = scales::percent(.data$difference / .data$value_old),
+      issue = !dplyr::between(.data$difference / .data$value_old, -.05, .05)
     )
 }
