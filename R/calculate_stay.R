@@ -29,11 +29,14 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
 
     lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
   } else {
-    # Do SC stay calculation and set to end of quarter
-    lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
-  }
-  # Do SC calculation if qtr_end < start_date then set to next qtr
-  if (qtr_end < start_date) {
-    lubridate::time_length(lubridate::interval(start_date, next_qtr), unit = "days")
+    # Do SC Calculation - end_date is missing
+     dplyr::if_else(
+      # if qtr_end < start_date then set to next qtr
+      qtr_end < start_date,
+      lubridate::time_length(lubridate::interval(start_date, next_qtr), unit = "days"),
+      # if end date is missing set to end of quarter
+      lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
+    )
   }
 }
+
