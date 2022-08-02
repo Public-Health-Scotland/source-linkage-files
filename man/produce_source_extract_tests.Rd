@@ -40,6 +40,7 @@ for creating test flags
 calculate_measures
 
 Other extract test functions: 
-\code{\link{calculate_measures}()}
+\code{\link{calculate_measures}()},
+\code{\link{produce_source_nrs_tests}()}
 }
 \concept{extract test functions}
