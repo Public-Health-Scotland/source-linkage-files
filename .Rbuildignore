@@ -20,3 +20,4 @@
 ^Make_R_files$
 ^Production_scripts$
 ^R_development_SOP\.md$
+^codecov\.yml$
