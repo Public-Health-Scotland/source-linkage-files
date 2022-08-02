@@ -22,10 +22,16 @@ jobs:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
       isPush: ${{ github.event_name == 'push' }}
-      isPR: ${{ github.event.issue.pull_request && (github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER') && startsWith(github.event.comment.body, '/pkgdown') }}
+      isPR: ${{ github.event.issue.pull_request && github.event.comment.body, '/pkgdown' }}
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Checkout Pull Request
+        if: contains(env.isPR, 'true')
+        run: hub pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: r-lib/actions/setup-pandoc@v2
 

@@ -22,7 +22,7 @@ library(createslf)
 # Retrieve the latest resource from the dataset
 opendata <-
   get_dataset("gp-practice-contact-details-and-list-sizes",
-    max_resources = 1
+    max_resources = 20
   ) %>%
   clean_names() %>%
   # Filter and save
@@ -35,7 +35,7 @@ opendata <-
   # Sort for SPSS matching
   arrange(gpprac) %>%
   # Write out as an SPSS file
-  write_sav(get_practice_details_path(check_mode = "write")) %>%
+  write_sav(get_practice_details_path(ext = "zsav", check_mode = "write")) %>%
   # rds as well
   write_rds(get_practice_details_path(check_mode = "write"))
 
@@ -43,7 +43,7 @@ opendata <-
 # Read Lookup files ---------------------------------------
 # gp lookup
 gpprac_ref_file <-
-  haven::read_sav(get_gpprac_ref_path("gpprac.sav")) %>%
+  haven::read_sav(get_gpprac_ref_path()) %>%
   # select only praccode and postcode
   select(
     gpprac = praccode,
