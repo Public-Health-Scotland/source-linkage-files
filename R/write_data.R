@@ -28,7 +28,10 @@ write_sav <- function(data, path, compress = "zsav") {
     compress = compress
   )
 
-  fs::file_chmod(path = path, mode = "660")
+  if (fs::file_info(path)$user == Sys.getenv("USER")) {
+    # Set the correct permissions
+    fs::file_chmod(path = path, mode = "660")
+  }
 
   return(invisible(data))
 }
@@ -60,7 +63,10 @@ write_rds <- function(data, path, compress = "xz", ...) {
     compression = 9
   )
 
-  fs::file_chmod(path = path, mode = "660")
+  if (fs::file_info(path)$user == Sys.getenv("USER")) {
+    # Set the correct permissions
+    fs::file_chmod(path = path, mode = "660")
+  }
 
   return(invisible(data))
 }
