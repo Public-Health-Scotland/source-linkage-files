@@ -20,6 +20,7 @@ Create the demographic flags for testing
 Other flag functions: 
 \code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hb_test_flags}()},
-\code{\link{create_hscp_test_flags}()}
+\code{\link{create_hscp_test_flags}()},
+\code{\link{create_lca_test_flags}()}
 }
 \concept{flag functions}

@@ -11,13 +11,12 @@
 library(dplyr)
 library(readr)
 library(createslf)
-library(phsmethods)
 
 
 # Read in data ---------------------------------------
 
 # latest year
-year <- "1920"
+year <- check_year_format("1920")
 
 pis_file <- readr::read_csv(
   get_it_prescribing_path(year),
@@ -47,28 +46,28 @@ pis_file <- readr::read_csv(
 
 pis_clean <- pis_file %>%
   # filter for chi NA
-  filter(chi_check(chi) == "Valid CHI") %>%
+  filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
   # create variables recid and year
   mutate(
     recid = "PIS",
     year = year
   ) %>%
   # Recode GP Practice into a 5 digit number
-  # assume that if it starts with a letter it's an English practice and so recode to 99995
+  # assume that if it starts with a letter it's an English practice
+  # and so recode to 99995
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Set date to the end of the FY
   mutate(
     record_keydate1 = end_fy(year),
     record_keydate2 = record_keydate1
-  ) %>%
-  # sort by chi
-  arrange(chi)
+  )
 
 # Issue a warning if rows were removed
 if (nrow(pis_clean) != nrow(pis_file)) {
-  rlang::warn(message = c(
-    "Rows were removed from the PIS extract because of the CHI number being invalid",
-    "Please check the raw PIS extract"
+  cli::cli_warn(message = c(
+    "{nrow(pis_file) - nrow(pis_clean)} row{?s} were removed from the PIS
+    extract because the CHI number was invalid",
+    "Check the raw PIS extract: {.path {get_it_prescribing_path(year)}}"
   ))
 }
 

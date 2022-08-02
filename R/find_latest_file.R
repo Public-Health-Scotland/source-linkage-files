@@ -6,10 +6,9 @@
 #' find the files then picks the one with the latest
 #' \code{birthtime}
 #'
-#' @param dir The directory to look on
-#' @param ... additional arguments passed to [fs::dir_info()]
-#' @param recurse Should the function search recursively
-#' through subfolders? The default `TRUE` is to search subfolders.
+#' @param directory The directory to look in
+#' @param regexp a [regular expression](https://www.regular-expressions.info/quickstart.html)
+#' passed to [fs::dir_info()] to search for the file
 #'
 #' @return the [fs::path()] to the file
 #' @export
@@ -20,9 +19,25 @@
 #'   regexp = "Scottish_Postcode_Directory_.+?\\.rds"
 #' )
 #' }
-find_latest_file <- function(dir, ..., recurse = TRUE) {
-  fs::dir_info(path = dir, type = "file", ..., recurse = recurse) %>%
-    dplyr::arrange(dplyr::desc(.data$birth_time), dplyr::desc(.data$modification_time)) %>%
+find_latest_file <- function(directory, regexp) {
+  latest_file_path <-
+    fs::dir_info(
+      path = directory,
+      type = "file",
+      regexp = regexp,
+      recurse = TRUE
+    ) %>%
+    dplyr::arrange(
+      dplyr::desc(.data$birth_time),
+      dplyr::desc(.data$modification_time)
+    ) %>%
     dplyr::pull(.data$path) %>%
     magrittr::extract(1)
+
+  if (!is.na(latest_file_path)) {
+    return(latest_file_path)
+  } else {
+    cli::cli_abort("There was no file in {.path {directory}} that matched the
+                   regular expression {.arg {regexp}}")
+  }
 }
