@@ -87,6 +87,37 @@ test_that("Can return correct length of stay", {
     ),
     c(367, 276, 456, 366)
   )
+
+  # SC calculation - sc_qtr supplied
+  # if start date supplied but end date missing, use end_qtr to calculate length of stay
+  expect_equal(
+    calculate_stay(
+      "1920",
+      as.Date(c(
+        "2019/03/31", "2019/06/30",
+        "2019/01/01", "2019/04/01"
+      )),
+      as.Date(c(NA, NA, NA, NA)),
+      c("2019Q1", "2019Q2", "2019Q3", "2019Q4")
+    ),
+    c(92, 93, 365, 366)
+  )
+
+
+  # SC calculation - sc_qtr supplied
+  # if qtr_end < start_date then set to next qtr to calculate length of stay
+  expect_equal(
+    calculate_stay(
+      "1920",
+      as.Date(c(
+        "2019/07/31", "2019/10/31",
+        "2020/01/31", "2020/04/30"
+      )),
+      as.Date(c(NA, NA, NA, NA)),
+      c("2019Q1", "2019Q2", "2019Q3", "2019Q4")
+    ),
+    c(62, 62, 61, 62)
+  )
 })
 
 
