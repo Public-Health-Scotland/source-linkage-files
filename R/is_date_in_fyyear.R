@@ -56,7 +56,7 @@ is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
     }
   }
 
-  if (is.null(date_end)) {
+  if (is.missing(date_end)) {
     is_date_in_fyyear <- lubridate::`%within%`(date, fy_interval(fyyear))
 
     return(is_date_in_fyyear)
