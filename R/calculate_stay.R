@@ -19,7 +19,7 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
   qtr_end <- yq(sc_qtr) %m+% period(6, "months")
   next_qtr <- yq(sc_qtr) %m+% period(9, "months")
 
-  if (is.missing(sc_qtr)) {
+  if (missing(sc_qtr)) {
     # Do normal stay calculation
     dummy_discharge <- dplyr::if_else(
       is.na(end_date),
