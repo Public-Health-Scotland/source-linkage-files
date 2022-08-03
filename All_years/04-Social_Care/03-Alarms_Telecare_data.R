@@ -116,27 +116,46 @@ at_full_clean <- replaced_start_dates %>%
   ) %>%
   ungroup()
 
-
+# Deal with episodes which have a package across quarters.
 qtr_merge <- at_full_clean %>%
+  # Use lazy_dt() for faster running of code
   dtplyr::lazy_dt() %>%
+  # Sort prior to merging
   arrange(sending_location, social_care_id, record_keydate1, smrtype, period) %>%
   group_by(sending_location, social_care_id, record_keydate1, smrtype, period) %>%
+  # Create a count for the package number across episodes
   mutate(
     pkg_count = row_number()
   ) %>%
+  # group for merging episodes
   group_by(sending_location, social_care_id, record_keydate1, smrtype, pkg_count) %>%
+  # merge episodes with packages across quarters
+  # drop variables not needed
   summarise(
+    sending_location = last(sending_location),
+    social_care_id = last(social_care_id),
     sc_latest_submission = last(period),
-    # replace with a list of vars
-    across(everything(), last)
-  ) %>%
+    record_keydate1 = last(record_keydate1),
+    record_keydate2 = last(record_keydate2),
+    smrtype = last(smrtype),
+    pkg_count = last(pkg_count),
+    chi = last(chi),
+    gender = last(gender),
+    dob = last(dob),
+    postcode = last(postcode),
+    recid = last(recid),
+    person_id = last(person_id),
+    sc_send_lca = last(sc_send_lca)
+  )%>%
+  # sort after merging
   arrange(sending_location, social_care_id, record_keydate1, smrtype, sc_latest_submission) %>%
+  # end of lazy_dt()
   as_tibble()
 
 
 # Save outfile------------------------------------------------
 
-at_full_clean %>%
+qtr_merge %>%
   # save rds file
   readr::write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.rds")),
     compress = "gz"
