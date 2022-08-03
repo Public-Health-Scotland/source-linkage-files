@@ -14,6 +14,10 @@ produce_slf_homelessness_tests(
 
 \item{max_min_vars}{Shouldn't need to change, currently specifies keydate1 and deydate2}
 }
+\value{
+a dataframe with a count of each flag
+from \code{\link[=calculate_measures]{calculate_measures()}}
+}
 \description{
 Produce the tests for the SLF Homelessness Extract
 }
