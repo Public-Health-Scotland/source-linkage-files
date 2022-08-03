@@ -10,14 +10,16 @@
 #'
 #' @return a [tibble][tibble::tibble-package] with additional variable `stay`.
 #' If there is no end date use dummy discharge to calculate the total length of stay.
+#' If there is no end date but sc_qtr is supplied then set this to the end of quarter.
+#' If the quarter end date < start date and sc_qtr is supplied then set this to the end of next quarter.
 #' @export
 #'
 #' @family date functions
 calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
 
   # Set Quarters
-  qtr_end <- yq(sc_qtr) %m+% period(6, "months")
-  next_qtr <- yq(sc_qtr) %m+% period(9, "months")
+  qtr_end <- lubridate::yq(sc_qtr) %m+% lubridate::period(6, "months")
+  next_qtr <- lubridate::yq(sc_qtr) %m+% lubridate::period(9, "months")
 
   if (missing(sc_qtr)) {
     # Do normal stay calculation

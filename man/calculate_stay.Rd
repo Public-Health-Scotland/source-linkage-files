@@ -18,6 +18,8 @@ calculate_stay(year, start_date, end_date, sc_qtr = NULL)
 \value{
 a \link[tibble:tibble-package]{tibble} with additional variable \code{stay}.
 If there is no end date use dummy discharge to calculate the total length of stay.
+If there is no end date but sc_qtr is supplied then set this to the end of quarter.
+If the quarter end date < start date and sc_qtr is supplied then set this to the end of next quarter.
 }
 \description{
 Calculate the total length of stay between start_date and end_date.
