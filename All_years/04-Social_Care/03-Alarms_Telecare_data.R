@@ -103,20 +103,34 @@ at_full_clean <- replaced_start_dates %>%
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
-    sc_send_lca = convert_sc_sl_to_lca(sending_location))
+    sc_send_lca = convert_sc_sl_to_lca(sending_location)
+  ) %>%
+  # when multiple social_care_id from sending_location for single CHI
+  # replace social_care_id with latest
+  group_by(sending_location, chi) %>%
+  mutate(latest_sc_id = last(social_care_id)) %>%
+  # count changed social_care_id
+  mutate(
+    changed_sc_id = !is.na(chi) & social_care_id != latest_sc_id,
+    social_care_id = if_else(changed_sc_id, latest_sc_id, social_care_id)
+  ) %>%
+  ungroup()
+
 
 qtr_merge <- at_full_clean %>%
   dtplyr::lazy_dt() %>%
-  arrange(sending_location, social_care_id, record_keydate1, smrtype,  period) %>%
-  group_by(sending_location, social_care_id, record_keydate1, smrtype,  period) %>%
+  arrange(sending_location, social_care_id, record_keydate1, smrtype, period) %>%
+  group_by(sending_location, social_care_id, record_keydate1, smrtype, period) %>%
   mutate(
     pkg_count = row_number()
   ) %>%
   group_by(sending_location, social_care_id, record_keydate1, smrtype, pkg_count) %>%
-  summarise(sc_latest_submission = last(period),
-            # replace with a list of vars
-            across(everything(), last)) %>%
-  arrange(sending_location, social_care_id, record_keydate1, smrtype,  sc_latest_submission) %>%
+  summarise(
+    sc_latest_submission = last(period),
+    # replace with a list of vars
+    across(everything(), last)
+  ) %>%
+  arrange(sending_location, social_care_id, record_keydate1, smrtype, sc_latest_submission) %>%
   as_tibble()
 
 
