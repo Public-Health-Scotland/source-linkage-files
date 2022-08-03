@@ -92,7 +92,18 @@ sds_full_clean <- sds_full_data %>%
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
     sc_send_lca = convert_sc_sl_to_lca(sending_location)
-  )
+  ) %>%
+# when multiple social_care_id from sending_location for single CHI
+# replace social_care_id with latest
+group_by(sending_location, chi) %>%
+  mutate(latest_sc_id = last(social_care_id)) %>%
+  # count changed social_care_id
+  mutate(
+    changed_sc_id = !is.na(chi) & social_care_id != latest_sc_id,
+    social_care_id = if_else(changed_sc_id, latest_sc_id, social_care_id)
+  ) %>%
+  ungroup()
+
 
 check <- sds_full_clean %>%
   group_by(sending_location, social_care_id, sds_option) %>%
