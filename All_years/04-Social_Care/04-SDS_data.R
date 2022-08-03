@@ -92,9 +92,9 @@ sds_full_clean <- sds_full_data %>%
     # Use function for creating sc send lca variables
     sc_send_lca = convert_sc_sl_to_lca(sending_location)
   ) %>%
-# when multiple social_care_id from sending_location for single CHI
-# replace social_care_id with latest
-group_by(sending_location, chi) %>%
+  # when multiple social_care_id from sending_location for single CHI
+  # replace social_care_id with latest
+  group_by(sending_location, chi) %>%
   mutate(latest_sc_id = last(social_care_id)) %>%
   # count changed social_care_id
   mutate(
@@ -104,28 +104,47 @@ group_by(sending_location, chi) %>%
   ungroup()
 
 
-check <- sds_full_clean %>%
+merge_eps <- sds_full_clean %>%
+  # Use lazy_dt() for faster running of code
+  dtplyr::lazy_dt() %>%
   group_by(sending_location, social_care_id, sds_option) %>%
   arrange(period, record_keydate1, .by_group = TRUE) %>%
-  mutate(flag = (record_keydate1 > lag(record_keydate2)) %>%
-                 replace_na(TRUE),
-         episode_counter = cumsum(flag)
-         )
-
-last <- check %>%
-  # possibly do an ungroup and then group by(sending_location, social_care_id, sds_option)
-group_by(episode_counter, .add = TRUE) %>%
-  summarise(record_keydate1 = min(record_keydate1),
-            across(everything(), last))
-
+  # Create a flag for episodes that are going to be merged
+  # Create an episode counter
+  mutate(
+    flag = (record_keydate1 > lag(record_keydate2)) %>%
+      replace_na(TRUE),
+    episode_counter = cumsum(flag)
+  ) %>%
+  # Group by episode counter and merge episodes
+  group_by(episode_counter, .add = TRUE) %>%
+  summarise(
+    sc_latest_submission = last(period),
+    record_keydate1 = min(record_keydate1),
+    record_keydate2 = max(record_keydate2),
+    sending_location = last(sending_location),
+    social_care_id = last(social_care_id),
+    chi = last(chi),
+    gender = last(gender),
+    dob = last(dob),
+    postcode = last(postcode),
+    sds_option = last(sds_option),
+    recid = last(recid),
+    age = last(age),
+    person_id = last(person_id),
+    sc_send_lca = last(sc_send_lca),
+    episode_counter = last(episode_counter)
+  ) %>%
+  # end of lazy_dt()
+  as_tibble()
 
 # work out sds_option_4
-sds_option_4 <- sds_full_clean %>%
+sds_option_4 <- merge_eps %>%
   group_by(sending_location, social_care_id, period) %>%
   summarise(n_packages = n_distinct(sds_option))
 
 # Match back onto data
-outfile <- sds_full_clean %>%
+outfile <- merge_eps %>%
   left_join(sds_option_4, by = c("sending_location", "social_care_id", "period")) %>%
   mutate(
     sds_option_4 = if_else(n_packages >= 2, 1, 0)
