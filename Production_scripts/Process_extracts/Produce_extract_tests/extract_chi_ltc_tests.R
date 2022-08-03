@@ -24,9 +24,11 @@ duplicates <- new_data %>%
   dplyr::summarise(dplyr::across(c("duplicate_chi", "duplicate_chi_postcode"), sum)) %>%
   dplyr::ungroup() %>%
   tibble::as_tibble() %>%
-  tidyr::pivot_longer(cols = tidyselect::everything(),
-                      names_to = "measure",
-                      values_to = "value")
+  tidyr::pivot_longer(
+    cols = tidyselect::everything(),
+    names_to = "measure",
+    values_to = "value"
+  )
 
 # Flag when a person has an LTC but no diagnosis date
 valid_dates <- new_data %>%
@@ -51,8 +53,10 @@ valid_dates <- new_data %>%
     endomet_valid = (endomet > 0 & !is.na(endomet_date)),
     digestive_valid = (digestive > 0 & !is.na(digestive_date))
   ) %>%
-  dplyr::summarise(dplyr::across(dplyr::contains("valid"), ~ sum(.x, na.rm = TRUE)),
-                   dplyr::across(c(arth:digestive), sum, na.rm = TRUE)) %>%
+  dplyr::summarise(
+    dplyr::across(dplyr::contains("valid"), ~ sum(.x, na.rm = TRUE)),
+    dplyr::across(c(arth:digestive), sum, na.rm = TRUE)
+  ) %>%
   dplyr::mutate(
     arth_invalid = arth - arth_valid,
     asthma_invalid = asthma - asthma_valid,
@@ -72,10 +76,13 @@ valid_dates <- new_data %>%
     congen_invalid = congen - congen_valid,
     bloodbfo_invalid = bloodbfo - bloodbfo_valid,
     endomet_invalid = endomet - endomet_valid,
-    digestive_invalid = digestive - digestive_valid) %>%
-  tidyr::pivot_longer(cols = tidyselect::everything(),
-                      names_to = "measure",
-                      values_to = "value")
+    digestive_invalid = digestive - digestive_valid
+  ) %>%
+  tidyr::pivot_longer(
+    cols = tidyselect::everything(),
+    names_to = "measure",
+    values_to = "value"
+  )
 
 # Put together for final output
 comparison <- dplyr::bind_rows(duplicates, valid_dates)
