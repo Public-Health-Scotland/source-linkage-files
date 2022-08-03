@@ -18,14 +18,14 @@
 calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
 
   # Set Quarters
-  qtr_end <- lubridate::yq(sc_qtr) %m+% lubridate::period(6, "months")
-  next_qtr <- lubridate::yq(sc_qtr) %m+% lubridate::period(9, "months")
+  qtr_end <- lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(6, "months"))
+  next_qtr <- lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(9, "months"))
 
   if (missing(sc_qtr)) {
     # Do normal stay calculation
     dummy_discharge <- dplyr::if_else(
       is.na(end_date),
-      end_fy(year) + days(1),
+      end_fy(year) + lubridate::days(1),
       end_date
     )
 
