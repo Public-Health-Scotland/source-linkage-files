@@ -120,8 +120,52 @@ test_that("Can return correct length of stay", {
   )
 })
 
+test_that("calculate stay function works", {
+  test_tibble <- tibble(
+    start_date = as.Date(c(
+      "2019/03/31",
+      "2019/06/30",
+      "2019/01/01",
+      "2019/04/01",
+      "2019/03/31",
+      "2019/06/30",
+      "2019/01/01",
+      "2019/04/01",
+      "2019/03/31",
+      "2019/06/30",
+      "2019/01/01",
+      "2019/04/01",
+      "2019/07/31",
+      "2019/10/31",
+      "2020/01/31",
+      "2020/04/30"
+    )),
+    end_date = as.Date(c(
+      "2019/10/31",
+      "2019/08/31",
+      "2020/04/01",
+      "2020/07/01",
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA
+    )),
+    sc_latest_submission = c(NA, NA, NA, NA, NA, NA, NA, NA, "2019Q1", "2019Q2", "2019Q3", "2019Q4",
+                             "2019Q1", "2019Q2", "2019Q3", "2019Q4")
+  )
 
+  # Expect snapshot
+  expect_snapshot(as.data.frame(
+    test_tibble %>%
+    mutate(stay = calculate_stay("1920", start_date, end_date, sc_latest_submission))
+    ))
+})
 
-
-# expect_snapshot(test_tibble %>% mutate(stay = calculate_stay("1920", start_date, end_date)))
-# expect_equal(calcu)
