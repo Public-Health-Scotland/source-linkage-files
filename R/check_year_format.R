@@ -16,7 +16,7 @@
 #' @family year functions
 check_year_format <- function(year, format = "fyyear") {
   if (!is.character(year)) {
-    rlang::inform(message = c("i" = "`year` will be converted to a character."))
+    cli::cli_inform(c("i" = "{.var year} will be converted to a {.class character}."))
     year <- as.character(year)
   }
 
@@ -27,18 +27,18 @@ check_year_format <- function(year, format = "fyyear") {
 
   if (format == "fyyear") {
     if (any(as.integer(first_part) + 1L != as.integer(second_part))) {
-      rlang::abort(c(
-        "The year has been entered in the wrong format.",
-        "Try again using the standard form, e.g. `1718`",
-        "Or use the function `convert_year_to_fyyear`."
+      cli::cli_abort(c(
+        "The {.var year} has been entered in the wrong format.",
+        "Try again using the standard form, e.g. {.val 1718}",
+        "Or use the function {.fun convert_year_to_fyyear}."
       ))
     }
   } else if (format == "alternate") {
     if (any(!(as.integer(first_part) %in% c(18, 19, 20)))) {
-      rlang::abort(c(
-        "The year has been entered in the wrong format.",
-        "Try again using the alternate form, e.g. `2017`",
-        "Or use the function `convert_fyyear_to_year`."
+      cli::cli_abort(c(
+        "The {.var year} has been entered in the wrong format.",
+        "Try again using the alternate form, e.g. {.val 1718}",
+        "Or use the function {.fun convert_fyyear_to_year}."
       ))
     }
   }
