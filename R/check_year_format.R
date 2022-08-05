@@ -37,7 +37,7 @@ check_year_format <- function(year, format = "fyyear") {
     if (any(!(as.integer(first_part) %in% c(18, 19, 20)))) {
       cli::cli_abort(c(
         "The {.var year} has been entered in the wrong format.",
-        "Try again using the alternate form, e.g. {.val 1718}",
+        "Try again using the alternate form, e.g. {.val 2017}",
         "Or use the function {.fun convert_fyyear_to_year}."
       ))
     }
