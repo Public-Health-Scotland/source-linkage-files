@@ -167,6 +167,6 @@ test_that("calculate stay function works", {
   # Expect snapshot
   expect_snapshot(as.data.frame(
     test_tibble %>%
-      mutate(stay = calculate_stay("1920", start_date, end_date, sc_latest_submission))
+      dplyr::mutate(stay = calculate_stay("1920", start_date, end_date, sc_latest_submission))
   ))
 })
