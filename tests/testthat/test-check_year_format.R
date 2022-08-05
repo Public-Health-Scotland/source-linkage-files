@@ -46,11 +46,12 @@ test_that("Check year errors properly for single year input", {
   expect_error(
     check_year_format("2017", format = "fyyear"),
     suppressMessages(cli::cli_text("Try again using the standard form, e.g. {.val 1718}"))
-    )
+  )
   expect_error(
     check_year_format("1718", format = "alternate"),
     suppressMessages(cli::cli_text("Try again using the standard form, e.g. {.val 2017}"))
-  )})
+  )
+})
 
 test_that("Check year errors properly for single year numeric input", {
   expect_error(
