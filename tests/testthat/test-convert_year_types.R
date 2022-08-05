@@ -7,7 +7,10 @@ test_that("Can convert a year from normal financial year to the alternate form",
   expect_equal(convert_fyyear_to_year("2021"), "2020")
   expect_equal(convert_fyyear_to_year("2122"), "2021")
 
-  expect_equal(convert_fyyear_to_year(c("1718", "1819", "1920")), c("2017", "2018", "2019"))
+  expect_equal(
+    convert_fyyear_to_year(c("1718", "1819", "1920")),
+    c("2017", "2018", "2019")
+  )
 })
 
 test_that("Responds correctly to bad inputs", {
@@ -38,5 +41,16 @@ test_that("Can convert a year from alternate form to normal financial year", {
   expect_equal(convert_year_to_fyyear("2020"), "2021")
   expect_equal(convert_year_to_fyyear("2021"), "2122")
 
-  expect_equal(convert_year_to_fyyear(c("2017", "2018", "2019")), c("1718", "1819", "1920"))
+  expect_equal(
+    convert_year_to_fyyear(c("2017", "2018", "2019")),
+    c("1718", "1819", "1920")
+  )
+})
+
+test_that("Will respond correctly to weird inputs", {
+  expect_equal(
+    convert_year_to_fyyear(c("2017", "1917")),
+    c("1718", "1718")
+  ) %>%
+    expect_warning("1 value was not in the 21st century i.e. not \"20xx\".+?\"1917\" -> \"1718\"")
 })
