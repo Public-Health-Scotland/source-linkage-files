@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -24,12 +24,12 @@ Define !IT_extract_ref()
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Jun_2022"
+    "Sep_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Mar_2022"
+    "Jun_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
@@ -47,7 +47,7 @@ Define !latest_cost_year()
 *******************************************************.
 * Locality file - will need changing when geography files update.
 Define !Locality_file()
-    "HSCP Localities_DZ11_Lookup_20200825.sav"
+    "HSCP Localities_DZ11_Lookup_20220630.sav"
 !EndDefine.
 
 * SPD file - will need changing when geography files update.
@@ -72,7 +72,7 @@ Define !DataZone_pop_file()
 
 * 5-year HSCP Populations file - will need changing when geography files update.
 Define !HSCP_5year_pop_file()
-    "HSCP2019_pop_est_1981_2020.sav"
+    "HSCP2019_pop_est_1981_2021.sav"
 !EndDefine.
 
 *******************************************************.

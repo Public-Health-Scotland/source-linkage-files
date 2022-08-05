@@ -1,8 +1,9 @@
-# June 2022 Update - Unreleased
+# June 2022 Update - Released 10-Jun-2022
 
 * Fixed a bug where CH costs was not referring to end of year. 
   * eg. 2018 costs relates to 2017/18
 * The changes to Homelessness described in the March update have been properly implemented.
+* We now use [`{haven}`](https://haven.tidyverse.org/news/index.html) to compress the SPSS files which compresses them better than SPSS does 🤷‍♂️
 * `cij_marker` is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
   * Check code of the form `cij_marker = "x"`. `x` now needs to be a numeric.
   * Check code of the form `cij_maker = lag(cij_marker)`. If the previous `cij_marker` is missing, the expression will fail, previously it would have compared to an empty string.
@@ -13,7 +14,6 @@
 * We were correcting some costs for FV and A&A (see previous update). `cost_total_net` was being correctly updated, however the monthly cost variables for Forth Valley were not being changed, this is now fixed.
 * Fixed a bug where people with no Care Home episodes would have 1 `ch_cis_episodes` in the individual file.
 * Added the `keep_population` variable to 2014/15 individual file, this was missed when we added the NSU cohort.
-
 
 # March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.

@@ -23,7 +23,7 @@ latest_update <- "Jun_2022"
 
 costs_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Costs/")
 hc_costs_path <- fs::path(costs_dir, "costs_hc_lookup.rds")
-hc_costs_path_old <- fs::path(costs_dir, str_glue("costs_hc_lookup_pre-{latest_update}.rds"))
+hc_costs_path_old <- fs::path(costs_dir, glue::glue("costs_hc_lookup_pre-{latest_update}.rds"))
 
 
 # Copy existing file-----------------------------------
@@ -49,7 +49,8 @@ hc_costs_raw <- readxl::read_xlsx(fs::path(costs_dir, "hc_costs.xlsx")) %>%
 hc_costs <- hc_costs_raw %>%
   left_join(phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
     col_select = c("CA", "CAName", "HBName")
-  ),
+  ) %>%
+    distinct(),
   by = c("gss_code" = "CA")
   ) %>%
   select(ca_name = CAName, health_board = HBName, starts_with("sw1_")) %>%
