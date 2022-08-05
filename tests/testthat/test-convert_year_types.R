@@ -16,7 +16,7 @@ test_that("Can convert a year from normal financial year to the alternate form",
 test_that("Responds correctly to bad inputs", {
   expect_error(
     convert_fyyear_to_year("2018"),
-    "The year has been entered in the wrong format\\."
+    "The `year` has been entered in the wrong format\\."
   )
 
   expect_message(
@@ -28,7 +28,7 @@ test_that("Responds correctly to bad inputs", {
     convert_fyyear_to_year(2018),
     "`year` will be converted to a character"
   ) %>%
-    expect_error("The year has been entered in the wrong format\\.")
+    expect_error("The `year` has been entered in the wrong format\\.")
 })
 
 
