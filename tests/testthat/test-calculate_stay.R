@@ -159,14 +159,33 @@ test_that("calculate stay function works", {
       NA
     )),
     sc_latest_submission = c(
-      NA, NA, NA, NA, NA, NA, NA, NA, "2019Q1", "2019Q2", "2019Q3", "2019Q4",
-      "2019Q1", "2019Q2", "2019Q3", "2019Q4"
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      NA,
+      "2019Q1",
+      "2019Q2",
+      "2019Q3",
+      "2019Q4",
+      "2019Q1",
+      "2019Q2",
+      "2019Q3",
+      "2019Q4"
     )
   )
 
   # Expect snapshot
-  expect_snapshot(as.data.frame(
+  expect_snapshot(
     test_tibble %>%
-      dplyr::mutate(stay = calculate_stay("1920", start_date, end_date, sc_latest_submission))
-  ))
+      dplyr::mutate(stay = calculate_stay(
+        "1920",
+        start_date,
+        end_date,
+        sc_latest_submission
+      ))
+  )
 })
