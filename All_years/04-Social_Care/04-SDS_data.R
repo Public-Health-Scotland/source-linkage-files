@@ -129,17 +129,14 @@ merge_eps <- sds_full_clean %>%
   # end of lazy_dt()
   as_tibble()
 
-# work out sds_option_4
-sds_option_4 <- merge_eps %>%
-  group_by(sending_location, social_care_id, period) %>%
-  summarise(n_packages = n_distinct(sds_option))
-
-# Match back onto data
 outfile <- merge_eps %>%
-  left_join(sds_option_4, by = c("sending_location", "social_care_id", "period")) %>%
+  # Work out if the client had SDS option 4
+  # TODO add a comment explaining option 4!
+  group_by(sending_location, social_care_id, period) %>%
   mutate(
-    sds_option_4 = if_else(n_packages >= 2, 1, 0)
-  )
+    sds_option_4 = if_else(n_distinct(sds_option) >= 2, 1, 0)
+  ) %>%
+  ungroup()
 
 
 # Save outfile------------------------------------------------
@@ -147,11 +144,11 @@ outfile <- merge_eps %>%
 outfile %>%
   # save rds file
   readr::write_rds(path(social_care_dir, str_glue("all_sds_episodes_{latest_update}.rds")),
-    compress = "gz"
+    compress = "xz"
   ) %>%
   # save sav file
   haven::write_sav(path(social_care_dir, str_glue("all_sds_episodes_{latest_update}.zsav")),
-    compress = TRUE
+    compress = "zsav"
   )
 
 
