@@ -12,9 +12,7 @@
 
 library(readr)
 library(dplyr)
-library(dbplyr)
 library(phsmethods)
-library(tidyverse)
 library(lubridate)
 
 
@@ -41,7 +39,7 @@ sc_demographics <- haven::read_sav(fs::path(
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
-sds_full_data <- tbl(db_connection, in_schema("social_care_2", "sds_snapshot")) %>%
+sds_full_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "sds_snapshot")) %>%
   select(
     sending_location,
     social_care_id,
