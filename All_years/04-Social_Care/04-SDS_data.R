@@ -78,9 +78,6 @@ sds_full_clean <- sds_full_data %>%
   # Include source variables
   mutate(
     recid = "SDS",
-    mid_fy = as.Date(paste0(period, "-09-30")),
-    # create age variable
-    age = floor(time_length(interval(dob, mid_fy), "years")),
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
