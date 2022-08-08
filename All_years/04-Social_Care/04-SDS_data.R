@@ -57,10 +57,7 @@ sds_full_clean <- sds_full_data %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # If sds start date is missing, assign start of FY
-  mutate(
-    start_fy = as.Date(paste0(period, "-04-01")),
-    sds_start_date = if_else(is.na(sds_start_date), start_fy, sds_start_date)
-  ) %>%
+  mutate(sds_start_date = if_else(is.na(sds_start_date), as.Date(paste0(period, "-04-01")), sds_start_date)) %>%
   # rename for matching source variables
   rename(
     record_keydate1 = sds_start_date,
