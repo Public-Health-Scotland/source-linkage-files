@@ -29,6 +29,10 @@ match files file = *
 String Year (A4).
 Compute Year = !FY.
 
+ *  Derive age from dob.
+Numeric age (F3.0).
+Compute age = datediff(!midFY, dob, "years").
+
 * In case keydate is needed as F8.0...
 alter type record_keydate1 record_keydate2 (SDATE10).
 alter type record_keydate1 record_keydate2 (A10).
