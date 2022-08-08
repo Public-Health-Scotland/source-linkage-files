@@ -29,8 +29,7 @@ sc_demographics <- haven::read_sav(fs::path(
   social_care_dir,
   paste0("sc_demographics_lookup_", latest_update),
   ext = "zsav"
-)) %>%
-  arrange(sending_location, social_care_id)
+))
 
 
 # Query to database -------------------------------------------------------
