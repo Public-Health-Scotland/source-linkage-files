@@ -158,5 +158,5 @@ qtr_merge %>%
   ) %>%
   # save sav file
   haven::write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.zsav")),
-    compress = TRUE
+    compress = "zsav"
   )
