@@ -139,6 +139,7 @@ rm(readcode_lookup, readcodes_not_matched, unrecognised_but_ok_codes, new_bad_co
 ## Data Cleaning
 
 diagnosis_clean <- diagnosis_readcodes %>%
+  dtplyr::lazy_dt() %>%
   select(guid, readcode, description) %>%
   mutate(
     readcode_level = str_locate(readcode, "\\.")[, "start"],
@@ -167,7 +168,8 @@ diagnosis_clean <- diagnosis_readcodes %>%
       "diag_5",
       "diag_6"
     ))
-  )
+  ) %>%
+  as_tibble()
 
 rm(diagnosis_extract, diagnosis_readcodes)
 
@@ -192,6 +194,7 @@ outcomes_extract <- read_csv(
 
 ## Data Cleaning
 outcomes_clean <- outcomes_extract %>%
+  dtplyr::lazy_dt() %>%
   # Recode outcome
   mutate(
     outcome = recode(outcome,
@@ -227,7 +230,8 @@ outcomes_clean <- outcomes_extract %>%
       "outcome_3",
       "outcome_4"
     ))
-  )
+  ) %>%
+  as_tibble()
 
 rm(outcomes_extract)
 
@@ -285,6 +289,7 @@ consultations_file <- read_csv(
 ## Data Cleaning
 
 consultations_clean <- consultations_file %>%
+  dtplyr::lazy_dt() %>%
   # Restore CHI leading zero
   mutate(chi = phsmethods::chi_pad(chi)) %>%
   # Filter missing / bad CHI numbers
@@ -300,6 +305,7 @@ consultations_clean <- consultations_file %>%
   mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
   ungroup() %>%
+  as_tibble() %>%
   View()
 
 # Where it's a duplicate except for an overlapping time flag it.
