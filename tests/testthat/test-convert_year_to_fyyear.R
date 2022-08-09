@@ -13,6 +13,24 @@ test_that("year to fyyear works for valid inputs", {
   )
 })
 
+test_that("year to fyyear errors properly on bad inputs", {
+  expect_warning(
+    convert_year_to_fyyear("1819"),
+    "A `year` value has likely been entered in the wrong format."
+  )
+
+  expect_message(
+    convert_year_to_fyyear(2018),
+    "`year` will be converted to a character"
+  )
+
+  expect_message(
+    convert_year_to_fyyear(1819),
+    "`year` will be converted to a character"
+  ) %>%
+    expect_warning("A `year` value has likely been entered in the wrong format.")
+})
+
 test_that("Will respond correctly to weird inputs", {
   expect_equal(
     convert_year_to_fyyear(c("2017", "1917")),
