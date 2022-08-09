@@ -40,10 +40,21 @@ convert_year_to_fyyear <- function(year) {
   first_part <- substr(year, 1, 2)
   second_part <- substr(year, 3, 4)
 
-  if (substr(second_part, 1, 1) != "0") {
-    fyyear <- paste0(second_part, as.integer(second_part) + 1L)
-  } else {
-    fyyear <- paste0(second_part, "0", as.integer(second_part) + 1L)
+  fyyear <-
+    dplyr::if_else(
+      substr(second_part, 1, 1) != "0",
+      paste0(second_part, as.integer(second_part) + 1L),
+      paste0(second_part, "0", as.integer(second_part) + 1L)
+    )
+
+  if (length(year) > 1 && any(first_part != "20")) {
+    non_21c <- which(first_part != "20")
+
+    cli::cli_warn(c(
+      "i" = "{cli::qty(length(non_21c))}{?A/Some} value{?s} w{?as/ere} not in the 21st century i.e. not {.val 20xx}",
+      "This may have produced unexpected results, specifically:",
+      "*" = "{.val {year[non_21c]}} -> {.val {fyyear[non_21c]}}"
+    ))
   }
 
   return(fyyear)
