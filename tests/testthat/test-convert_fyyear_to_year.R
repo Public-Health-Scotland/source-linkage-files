@@ -29,4 +29,10 @@ test_that("fyyear to year errors properly on bad inputs", {
     "`year` will be converted to a character"
   ) %>%
     expect_error("The `year` has been entered in the wrong format\\.")
+
+  expect_error(convert_fyyear_to_year(NA), "`year` must not be \"NA\"")
+  expect_error(convert_fyyear_to_year(NA_character_), "`year` must not be \"NA\"")
+  expect_error(convert_fyyear_to_year(NA_real_), "`year` must not be \"NA\"")
+  expect_error(convert_fyyear_to_year(c("1718", NA)), "`year` must not be \"NA\"")
+  expect_error(convert_fyyear_to_year(c("2017", NA)), "`year` must not be \"NA\"")
 })
