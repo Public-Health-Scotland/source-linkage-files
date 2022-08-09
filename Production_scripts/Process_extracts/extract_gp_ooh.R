@@ -22,9 +22,6 @@ library(tidyr)
 library(lubridate)
 library(createslf)
 
-# TODO - Do we need to load these packages?
-library(phsmethods)
-library(hms)
 
 # Specify year
 year <- check_year_format("1920")
@@ -414,8 +411,8 @@ ooh_clean <- ooh_costs %>%
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # split time from date
   mutate(
-    key_time1 = as_hms(substr(record_keydate1, 12, 19)),
-    key_time2 = as_hms(substr(record_keydate2, 12, 19)),
+    key_time1 = hms::as_hms(substr(record_keydate1, 12, 19)),
+    key_time2 = hms::as_hms(substr(record_keydate2, 12, 19)),
     record_keydate1 = substr(record_keydate1, 1, 10),
     record_keydate2 = substr(record_keydate2, 1, 10)
   )
