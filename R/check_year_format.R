@@ -15,6 +15,10 @@
 #'
 #' @family year functions
 check_year_format <- function(year, format = "fyyear") {
+  if (any(is.na(year))) {
+    cli::cli_abort("{.var year} must not be {.val NA}")
+  }
+
   if (!is.character(year)) {
     cli::cli_inform(c("i" = "{.var year} will be converted to a {.class character}."))
     year <- as.character(year)

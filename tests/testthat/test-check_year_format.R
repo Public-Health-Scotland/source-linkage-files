@@ -88,3 +88,11 @@ test_that("Check year errors properly for vector input ", {
     suppressMessages(cli::cli_text("Try again using the standard form, e.g. {.val 1718}"))
   )
 })
+
+test_that("Check year errors properly for other bad inputs", {
+  expect_error(check_year_format(NA), "`year` must not be \"NA\"")
+  expect_error(check_year_format(NA_character_), "`year` must not be \"NA\"")
+  expect_error(check_year_format(NA_real_), "`year` must not be \"NA\"")
+  expect_error(check_year_format(c("1718", NA)), "`year` must not be \"NA\"")
+  expect_error(check_year_format(c("2017", NA)), "`year` must not be \"NA\"")
+})
