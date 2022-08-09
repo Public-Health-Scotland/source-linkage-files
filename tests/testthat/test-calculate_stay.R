@@ -51,9 +51,9 @@ test_that("Can return correct length of stay", {
   # qtr_end < start_date , end missing
   expect_equal(calculate_stay("1920", as.Date("2020/04/30"), as.Date(NA), "2019Q4"), 62)
 
+})
 
-
-  ## Vectors
+test_that("Can calculate the correct stay for vectors of dates", {
 
   # Normal calculation - no sc_qtr supplied
   # if start and end dates are both supplied, calculate length of stay
