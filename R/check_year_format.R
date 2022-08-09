@@ -22,11 +22,11 @@ check_year_format <- function(year, format = "fyyear") {
 
   format <- match.arg(arg = format, choices = c("fyyear", "alternate"))
 
-  first_part <- substr(year, 1, 2)
-  second_part <- substr(year, 3, 4)
+  first_part <- as.integer(substr(year, 1, 2))
+  second_part <- as.integer(substr(year, 3, 4))
 
   if (format == "fyyear") {
-    if (any(as.integer(first_part) + 1L != as.integer(second_part))) {
+    if (any(first_part + 1L != second_part)) {
       cli::cli_abort(c(
         "The {.var year} has been entered in the wrong format.",
         "Try again using the standard form, e.g. {.val 1718}",
@@ -34,7 +34,7 @@ check_year_format <- function(year, format = "fyyear") {
       ))
     }
   } else if (format == "alternate") {
-    if (any(!(as.integer(first_part) %in% c(18, 19, 20)))) {
+    if (any(!(first_part %in% c(18:20)))) {
       cli::cli_abort(c(
         "The {.var year} has been entered in the wrong format.",
         "Try again using the alternate form, e.g. {.val 2017}",
