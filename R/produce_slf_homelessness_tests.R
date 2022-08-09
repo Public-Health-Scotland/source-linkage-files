@@ -5,7 +5,8 @@
 #'
 #' @description Produce the tests for the SLF Homelessness Extract
 #'
-#' @return
+#' @return a dataframe with a count of each flag
+#' from [calculate_measures()]
 #'
 #' @export
 #' @family slf test functions
