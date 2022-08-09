@@ -7,7 +7,6 @@
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_source_extract_path()])
-#' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
