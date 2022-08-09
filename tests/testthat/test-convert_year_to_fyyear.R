@@ -18,5 +18,5 @@ test_that("Will respond correctly to weird inputs", {
     convert_year_to_fyyear(c("2017", "1917")),
     c("1718", "1718")
   ) %>%
-    expect_warning("1 value was not in the 21st century i.e. not \"20xx\".+?\"1917\" -> \"1718\"")
+    expect_warning("A value was not in the 21st century i.e. not \"20xx\".+?\"1917\" -> \"1718\"")
 })
