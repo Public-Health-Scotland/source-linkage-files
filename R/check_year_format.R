@@ -44,6 +44,16 @@ check_year_format <- function(year, format = "fyyear") {
         "Try again using the alternate form, e.g. {.val 2017}",
         "Or use the function {.fun convert_fyyear_to_year}."
       ))
+    } else if (any(first_part != 20 & first_part + 1L == second_part)) {
+      possible_bad_values <- first_part != 20 & first_part + 1L == second_part
+      count_bad_values <- sum(possible_bad_values)
+
+      cli::cli_warn(c(
+        "{cli::qty(count_bad_values)}{?A/Some} {.var year} value{?s} ha{?s/ve} likely been entered in the wrong format.",
+        "i" = "{.val {year[possible_bad_values]}}",
+        "You might want to check and try again using the alternate form, e.g. {.val 2017}",
+        "Or use the function {.fun convert_fyyear_to_year}."
+      ))
     }
   }
 
