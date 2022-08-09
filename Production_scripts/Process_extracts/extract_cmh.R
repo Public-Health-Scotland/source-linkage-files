@@ -98,6 +98,7 @@ cmh_clean <- cmh_extract %>%
 
 outfile <- cmh_clean %>%
   select(
+    year,
     recid,
     record_keydate1,
     record_keydate2,
