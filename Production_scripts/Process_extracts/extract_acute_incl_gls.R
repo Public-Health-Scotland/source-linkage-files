@@ -194,7 +194,7 @@ acute_clean <- acute_file %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(
     stay = calculate_stay(year, record_keydate1, record_keydate2)
-  )%>%
+  ) %>%
   # create and populate SMRType
   mutate(
     SMRType = case_when(

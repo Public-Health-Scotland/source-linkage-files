@@ -156,7 +156,7 @@ maternity_clean <- maternity_file %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(
     stay = calculate_stay(year, record_keydate1, record_keydate2)
-  )%>%
+  ) %>%
   # Calculate beddays
   create_monthly_beddays(year, record_keydate1, record_keydate2) %>%
   # Calculate costs
