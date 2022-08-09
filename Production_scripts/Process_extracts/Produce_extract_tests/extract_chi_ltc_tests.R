@@ -8,7 +8,7 @@
 #               LTC file received from IT.
 #####################################################
 
-year <- "1920"
+year <- check_year_format("1920")
 
 new_data <- haven::read_sav(get_ltcs_path(year))
 
@@ -22,7 +22,6 @@ duplicates <- new_data %>%
   dplyr::mutate(duplicate_chi_postcode = dplyr::n() > 1) %>%
   dplyr::ungroup() %>%
   dplyr::summarise(dplyr::across(c("duplicate_chi", "duplicate_chi_postcode"), sum)) %>%
-  dplyr::ungroup() %>%
   tibble::as_tibble() %>%
   tidyr::pivot_longer(
     cols = tidyselect::everything(),
