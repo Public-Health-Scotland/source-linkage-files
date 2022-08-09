@@ -1,12 +1,9 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !Delayed_Discharge_file.
 
 Rename Variables
-    HealthLocationCode = location
-    SpecialtyCode = spec
     RDD = keydate1_dateformat
-    Delay_End_Date = keydate2_dateformat
-    PatientPostcode = postcode.
+    Delay_End_Date = keydate2_dateformat.
 
 * Drop any records with obviously bad dates.
 Select if (keydate1_dateformat LE keydate2_dateformat) or keydate2_dateformat EQ date.dmy(1,1,1900).
