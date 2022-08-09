@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Delayed_Discharge_file.
 
 Rename Variables
@@ -21,108 +21,8 @@ alter type postcode (A8).
 
 alter type MonthFlag (MOYR8).
 
-* Recode the Local Authority to match source coding.
-String DD_Responsible_LCA (A2).
-Variable Labels DD_Responsible_LCA "Local Authority assigned responsibility for the delay".
-Do If la = "Aberdeen City".
-    Compute DD_Responsible_LCA = "01".
-Else If la = "Aberdeenshire".
-    Compute DD_Responsible_LCA = "02".
-Else If la = "Angus".
-    Compute DD_Responsible_LCA = "03".
-Else If la = "Argyll & Bute".
-    Compute DD_Responsible_LCA = "04".
-Else If la = "Scottish Borders".
-    Compute DD_Responsible_LCA = "05".
-Else If la = "Clackmannanshire".
-    Compute DD_Responsible_LCA = "06".
-Else If la = "West Dunbartonshire".
-    Compute DD_Responsible_LCA = "07".
-Else If la = "Dumfries & Galloway".
-    Compute DD_Responsible_LCA = "08".
-Else If la = "Dundee City".
-    Compute DD_Responsible_LCA = "09".
-Else If la = "East Ayrshire".
-    Compute DD_Responsible_LCA = "10".
-Else If la = "East Dunbartonshire".
-    Compute DD_Responsible_LCA = "11".
-Else If la = "East Lothian".
-    Compute DD_Responsible_LCA = "12".
-Else If la = "East Renfrewshire".
-    Compute DD_Responsible_LCA = "13".
-Else If la = "City of Edinburgh".
-    Compute DD_Responsible_LCA = "14".
-Else If la = "Falkirk".
-    Compute DD_Responsible_LCA = "15".
-Else If la = "Fife".
-    Compute DD_Responsible_LCA = "16".
-Else If la = "Glasgow City".
-    Compute DD_Responsible_LCA = "17".
-Else If la = "Highland".
-    Compute DD_Responsible_LCA = "18".
-Else If la = "Inverclyde".
-    Compute DD_Responsible_LCA = "19".
-Else If la = "Midlothian".
-    Compute DD_Responsible_LCA = "20".
-Else If la = "Moray".
-    Compute DD_Responsible_LCA = "21".
-Else If la = "North Ayrshire".
-    Compute DD_Responsible_LCA = "22".
-Else If la = "North Lanarkshire".
-    Compute DD_Responsible_LCA = "23".
-Else If la = "Orkney".
-    Compute DD_Responsible_LCA = "24".
-Else If la = "Perth & Kinross".
-    Compute DD_Responsible_LCA = "25".
-Else If la = "Renfrewshire".
-    Compute DD_Responsible_LCA = "26".
-Else If la = "Shetland".
-    Compute DD_Responsible_LCA = "27".
-Else If la = "South Ayrshire".
-    Compute DD_Responsible_LCA = "28".
-Else If la = "South Lanarkshire".
-    Compute DD_Responsible_LCA = "29".
-Else If la = "Stirling".
-    Compute DD_Responsible_LCA = "30".
-Else If la = "West Lothian".
-    Compute DD_Responsible_LCA = "31".
-Else If la = "Comhairle nan Eilean Siar".
-    Compute DD_Responsible_LCA = "32".
-End If.
 
 !AddLCADictionaryInfo LCA = DD_Responsible_LCA.
-
-* Recode the hb treat code to match source.
-String hbtreatcode (A9).
-Do If hb = "NHS Ayrshire & Arran".
-    Compute hbtreatcode = "S08000015".
-Else If hb = "NHS Borders".
-    Compute hbtreatcode = "S08000016".
-Else If hb = "NHS Dumfries & Galloway".
-    Compute hbtreatcode = "S08000017".
-Else If hb = "NHS Fife".
-    Compute hbtreatcode = "S08000018".
-Else If hb = "NHS Forth Valley".
-    Compute hbtreatcode = "S08000019".
-Else If hb = "NHS Grampian".
-    Compute hbtreatcode = "S08000020".
-Else If hb = "NHS Greater Glasgow & Clyde".
-    Compute hbtreatcode = "S08000021".
-Else If hb = "NHS Highland".
-    Compute hbtreatcode = "S08000022".
-Else If hb = "NHS Lanarkshire".
-    Compute hbtreatcode = "S08000023".
-Else If hb = "NHS Lothian".
-    Compute hbtreatcode = "S08000024".
-Else If hb = "NHS Orkney".
-    Compute hbtreatcode = "S08000025".
-Else If hb = "NHS Shetland".
-    Compute hbtreatcode = "S08000026".
-Else If hb = "NHS Tayside".
-    Compute hbtreatcode = "S08000027".
-Else If hb = "NHS Western Isles".
-    Compute hbtreatcode = "S08000028".
-End If.
 
 !AddHB2018DictionaryInfo HB = hbtreatcode.
 
