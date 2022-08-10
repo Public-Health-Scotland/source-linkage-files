@@ -14,9 +14,7 @@ new_data <- readr::read_rds(get_ltcs_path(year))
 
 # Find and flag any duplicate chis and chi/postcode combinations
 duplicates <- new_data %>%
-  dtplyr::lazy_dt() %>%
   dplyr::summarise(duplicate_chi = nrow(new_data) - dplyr::n_distinct(chi)) %>%
-  tibble::as_tibble() %>%
   tidyr::pivot_longer(
     cols = tidyselect::everything(),
     names_to = "measure",
