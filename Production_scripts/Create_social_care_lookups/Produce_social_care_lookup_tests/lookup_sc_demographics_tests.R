@@ -17,8 +17,8 @@ library(openxlsx)
 # Read in Data---------------------------------------
 
 # Create new and old dataframes with measures for testing
-new_tests <- produce_sc_demog_lookup_tests(haven::read_sav(get_sc_demog_lookup_path()))
-old_tests <- produce_sc_demog_lookup_tests(haven::read_sav(get_sc_demog_lookup_path(update = previous_update())))
+new_tests <- produce_sc_demog_lookup_tests(readr::read_rds(get_sc_demog_lookup_path()))
+old_tests <- produce_sc_demog_lookup_tests(readr::read_rds(get_sc_demog_lookup_path(update = previous_update())))
 
 
 # Create tests-------------------------------------------
