@@ -23,7 +23,7 @@ library(janitor)
 year <- "1920"
 
 dd_file <- haven::read_sav(get_dd_path()) %>%
-  clean_names %>%
+  clean_names() %>%
   # rename variables
   rename(
     location = health_location_code,
@@ -40,7 +40,7 @@ dd_clean <- dd_file %>%
   # Drop any records with obviously bad dates
   filter(
     keydate1_dateformat <= keydate2_dateformat | keydate2_dateformat == ymd("1900, 1, 1")
-    ) %>%
+  ) %>%
   # set up variables
   mutate(
     recid = "DD",
@@ -56,7 +56,7 @@ dd_clean <- dd_file %>%
       la == "Angus" ~ 03,
       la == "Argyll & Bute" ~ 04,
       la == "Scottish Borders" ~ 05,
-      la =="Clackmannanshire" ~ 06,
+      la == "Clackmannanshire" ~ 06,
       la == "West Dunbartonshire" ~ 07,
       la == "Dumfries & Galloway" ~ 08,
       la == "Dundee City" ~ 09,
@@ -85,7 +85,7 @@ dd_clean <- dd_file %>%
       la == "Comhairle nan Eilean Siar" ~ 32
     ),
     #  Recode the hb treat code to match source.
-  hbtreatcode = case_when(
+    hbtreatcode = case_when(
       hb == "NHS Ayrshire & Arran" ~ "S08000015",
       hb == "NHS Borders" ~ "S08000016",
       hb == "NHS Dumfries & Galloway" ~ "S08000017",
@@ -99,19 +99,8 @@ dd_clean <- dd_file %>%
       hb == "NHS Orkney" ~ "S08000025",
       hb == "NHS Shetland" ~ "S08000026",
       hb == "NHS Tayside" ~ "S08000027",
-      hb == "NHS Western Isles" ~ "S08000028"),
-  primary_delay_reason = na_if(primary_delay_reason, ""),
-  secondary_delay_reason = na_if(secondary_delay_reason, "")
+      hb == "NHS Western Isles" ~ "S08000028"
+    ),
+    primary_delay_reason = na_if(primary_delay_reason, ""),
+    secondary_delay_reason = na_if(secondary_delay_reason, "")
   )
-
-
-
-
-
-
-
-
-
-
-
-
