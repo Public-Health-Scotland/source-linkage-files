@@ -39,7 +39,7 @@ test_that("Error messages return as expected", {
     add_smr_type(recid = c("00B", "AE2", "Bum", "PIS")),
     suppressMessages(cli::cli_inform(c("i" = "One or more values of {.var recid} do not have an
                    assignable {.var smrtype}")))
-    )
+  )
 })
 
 # Errors that abort the function
@@ -49,7 +49,5 @@ test_that("Error escapes functions as expected", {
   )
   expect_error(
     add_smr_type(recid = c("02B", "02B", "02B"), mpat = c(NA, NA, NA))
-
   )
 })
-
