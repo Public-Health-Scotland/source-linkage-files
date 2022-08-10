@@ -22,15 +22,12 @@ library(janitor)
 
 year <- "1920"
 
-dd_file <- haven::read_sav(get_dd_path()) %>%
+dd_file <- haven::read_sav(get_dd_path(ext = "zsav")) %>%
   clean_names() %>%
   # rename variables
   rename(
-    location = health_location_code,
-    spec = specialty_code,
     keydate1_dateformat = rdd,
-    keydate2_dateformat = delay_end_date,
-    postcode = patient_postcode
+    keydate2_dateformat = delay_end_date
   )
 
 
