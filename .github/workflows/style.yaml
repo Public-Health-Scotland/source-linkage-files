@@ -54,14 +54,13 @@ jobs:
             ${{ runner.os }}-styler-
             ${{ runner.os }}-
 
-      - name: Style standard pacakge files
+      - name: Style standard package functions and tests
         run: styler::style_pkg(filetype = c(".R", ".Rmd", ".Rmarkdown", ".Rnw"))
         shell: Rscript {0}
 
       - name: Style production scripts
         run: styler::style_dir("Production_scripts/")
         shell: Rscript {0}
-
 
       - name: Style other scripts
         run: styler::style_dir("Make_R_files/")

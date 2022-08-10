@@ -1,5 +1,4 @@
 ####################################################
-
 # Name of file - Lookup-05-Social_Care_Demographics-tests.R
 # Original Authors - Jennifer Thom
 # Original Date - January 2022
@@ -8,7 +7,6 @@
 # Version of R - 3.6.1
 #
 # Description - Produce tests for social care demographic lookup file.
-
 ####################################################
 
 # Packages
