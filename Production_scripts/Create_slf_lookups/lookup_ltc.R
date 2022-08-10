@@ -98,13 +98,11 @@ ltc_flags <- ltc_file %>%
 
 
 # Save Outfile---------------------------------------------
-outfile <- ltc_flags %>%
-  arrange(chi)
-
-# .zsav
-haven::write_sav(outfile, get_ltcs_path(ext = "zsav", check_mode = "write"))
-
-# .rds file
-readr::write_rds(outfile, get_ltcs_path(check_mode = "write"))
+ltc_flags %>%
+  arrange(chi) %>%
+  # .zsav
+  write_sav(get_ltcs_path(ext = "zsav", check_mode = "write")) %>%
+  # .rds file
+  write_rds(get_ltcs_path(check_mode = "write"))
 
 ## END OF SCRIPT ##
