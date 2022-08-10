@@ -1,0 +1,142 @@
+# run pkgdown::build_reference_index() to build the reference index
+
+url: https://public-health-scotland.github.io/source-linkage-files
+template:
+  bootstrap: 5
+
+reference:
+
+  - title: Connection to PHS database
+    desc: Connection to PHS database
+  - contents:
+    - phs_db_connection
+
+
+  - title: Check
+    desc: Checks within vectors
+  - contents:
+    - is_missing
+
+
+  - title: Years & Dates
+  - subtitle: Dates within Financial Year
+    desc: Functions to compute the start, end and midpoint dates of a financial year, and convert date types
+  - contents:
+    - has_concept("date functions")
+    - ends_with("_fy")
+    - fy_interval
+    - contains("_date")
+  - subtitle: Year Format
+    desc: Functions to convert between financial year and calendar year, and check that the year variable is in the correct format
+  - contents:
+    - has_concept("year functions")
+    - ends_with("year")
+    - contains("year_format")
+  - subtitle: Ages
+    desc: Functions to deal with ages of clients
+  - contents:
+    - contains("_age")
+
+
+  - title: Clean-Up
+    desc: Clean up the data
+  - contents:
+    - starts_with("clean_up")
+
+
+  - title: Create
+  - subtitle: ID
+    desc: Functions to create ID variables
+  - contents:
+    - has_concept("id functions")
+    - contains("_id")
+  - subtitle: Costs
+    desc: Functions to create costs variables and fix costs
+  - contents:
+    - ends_with("_costs")
+  - subtitle: Flags
+    desc: Functions to create flag variables
+  - contents:
+    - has_concept("flag functions")
+    - ends_with("_flags")
+  - subtitle: Monthly
+    desc: Functions to convert monthly variables, beddays
+  - contents:
+    - contains("_monthly_rows")
+    - contains("_beddays")
+
+
+  - title: Codes
+    desc: Convert various codes to alternate forms
+  - contents:
+    - has_concept("code functions")
+    - contains("_to_lca")
+    - contains("to_dummy")
+    - contains("_hb_to")
+    - contains("_hscp_to")
+    - contains("_chi")
+    - contains("lca")
+
+
+  - title: Duplicates
+    desc: Functions to fix duplicates
+  - contents:
+    - contains("_duplicates")
+
+
+  - title: Writing data
+    desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
+  - contents:
+    - has_concept("write out data")
+    - write_sav
+    - write_rds
+
+
+  - title: Initialisation
+    desc: Get the date of update, period, and extract number
+  - contents:
+    - has_concept("initialisation")
+    - ends_with("_period")
+    - ends_with("_update")
+    - starts_with("it_extract")
+
+
+  - title: Files
+  - subtitle: Directories
+    desc: File Directories for SLF's
+  - contents:
+    - has_concept("directiories")
+    - ends_with("_dir")
+  - subtitle: Paths
+    desc: File Paths for SLF's
+  - contents:
+    - has_concept("file path functions")
+    - has_concept("lookup file paths")
+    - has_concept("slf lookup file paths")
+    - has_concept("costs lookup file paths")
+    - has_concept("extract file paths")
+    - has_concept("social care lookup file paths")
+    - has_concept("social care episodes file paths")
+    - has_concept("cohort lookup file paths")
+    - ends_with("_file")
+    - ends_with("_path")
+
+
+  - title: Process
+    desc: Process SLF Extracts
+  - contents:
+    - has_concept("prcoess extracts")
+    - starts_with("process_")
+
+
+  - title: Testing
+    desc: Tests for the SLF Extracts
+  - contents:
+    - has_concept("test functions")
+    - has_concept("extract test functions")
+    - has_concept("slf test functions")
+    - has_concept("social care test functions")
+    - contains("_tests")
+    - contains("_measures")
+    - starts_with("produce_test")
+

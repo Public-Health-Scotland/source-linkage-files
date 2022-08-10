@@ -2,7 +2,7 @@
 % Please edit documentation in R/00-update_refs.R
 \name{latest_update}
 \alias{latest_update}
-\title{Get the latest update}
+\title{Latest update}
 \usage{
 latest_update()
 }
@@ -10,5 +10,12 @@ latest_update()
 Latest update as MMM_YYYY
 }
 \description{
-Get the latest update
+Get the date of the latest update, e.g 'Jun_2022'
 }
+\seealso{
+Other initialisation: 
+\code{\link{get_dd_period}()},
+\code{\link{it_extract_ref}()},
+\code{\link{previous_update}()}
+}
+\concept{initialisation}

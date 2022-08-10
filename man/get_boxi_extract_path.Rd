@@ -6,8 +6,8 @@
 \usage{
 get_boxi_extract_path(
   year,
-  type = c("Acute", "Mental", "Maternity", "Outpatient", "AE", "DN", "GPOoH", "Deaths",
-    "CMH", "Homelessness")
+  type = c("Acute", "MH", "Maternity", "Outpatient", "AE", "AE_CUP", "DN", "GPOoH",
+    "Deaths", "CMH", "Homelessness")
 )
 }
 \arguments{
@@ -19,5 +19,15 @@ get_boxi_extract_path(
 BOXI extracts containing data for each dataset
 }
 \description{
-Get BOXI extract
+Get the BOXI extract path for a given extract and year, returns an error message if the extract does not exist
 }
+\seealso{
+Other extract file paths: 
+\code{\link{get_hhg_path}()},
+\code{\link{get_it_deaths_path}()},
+\code{\link{get_it_ltc_path}()},
+\code{\link{get_it_prescribing_path}()},
+\code{\link{get_source_extract_path}()},
+\code{\link{get_sparra_path}()}
+}
+\concept{extract file paths}

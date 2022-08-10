@@ -193,8 +193,10 @@ acute_clean <- acute_file %>%
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(
-    stay = difftime(record_keydate2, record_keydate1, units = "days"),
-    # create and populate SMRType
+    stay = calculate_stay(year, record_keydate1, record_keydate2)
+  ) %>%
+  # create and populate SMRType
+  mutate(
     SMRType = case_when(
       recid == "01B" & lineno != 330 ~ if_else(ipdc == "I", "Acute-IP", "Acute-DC"),
       lineno == 330 & ipdc == "I" ~ "GLS-IP",
@@ -266,13 +268,10 @@ outfile <- acute_clean %>%
   ) %>%
   arrange(chi, record_keydate1)
 
-# Save as zsav file
 outfile %>%
-  haven::read_sav(get_source_extract_path(year, "Acute", ext = "zsav"))
-
-# Save as rds file
-outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Acute", ext = "rds"))
-
+  # Save as zsav file
+  write_sav(get_source_extract_path(year, "Acute", ext = "zsav", check_mode = "write")) %>%
+  # Save as rds file
+  write_rds(get_source_extract_path(year, "Acute", check_mode = "write"))
 
 ## End of Script ##

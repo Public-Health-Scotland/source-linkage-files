@@ -6,10 +6,11 @@
 \usage{
 get_file_path(
   directory,
-  file_name,
+  file_name = NULL,
   ext = NULL,
   check_mode = "read",
-  create = NULL
+  create = NULL,
+  file_name_regexp = NULL
 )
 }
 \arguments{
@@ -20,11 +21,15 @@ get_file_path(
 \item{ext}{The extension (type of the file) - optional}
 
 \item{check_mode}{The mode passed to
-\code{\link[fs]{file_access}}, defaults to "read"
+\code{\link[fs:file_access]{fs::file_access()}}, defaults to "read"
 to check that you have read access to the file}
 
 \item{create}{Optionally create the file if it doesn't exists,
 the default is to only create a file if we set \code{check_mode = "write"}}
+
+\item{file_name_regexp}{A regular expression to search for the file name
+if this is used \code{file_name} should not be, it will return the most recently
+created file using \code{\link[=find_latest_file]{find_latest_file()}}}
 }
 \value{
 The full file path, an error will be thrown
@@ -41,23 +46,9 @@ appropriate permissions.
 }
 \seealso{
 Other file path functions: 
-\code{\link{get_ch_costs_path}()},
 \code{\link{get_dd_path}()},
-\code{\link{get_demog_cohorts_path}()},
-\code{\link{get_dn_costs_path}()},
-\code{\link{get_gp_ooh_costs_path}()},
-\code{\link{get_hhg_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
+\code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
-\code{\link{get_practice_details_path}()},
-\code{\link{get_sc_ch_episodes_path}()},
-\code{\link{get_sc_demog_lookup_path}()},
-\code{\link{get_service_use_cohorts_path}()},
-\code{\link{get_slf_deaths_path}()},
-\code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()},
-\code{\link{get_sparra_path}()}
+\code{\link{get_practice_details_path}()}
 }
 \concept{file path functions}

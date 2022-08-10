@@ -12,26 +12,45 @@
 #' @param file_name The file name (with extension if not supplied to \code{ext})
 #' @param ext The extension (type of the file) - optional
 #' @param check_mode The mode passed to
-#' \code{\link[fs]{file_access}}, defaults to "read"
+#' [fs::file_access()], defaults to "read"
 #' to check that you have read access to the file
 #' @param create Optionally create the file if it doesn't exists,
 #' the default is to only create a file if we set `check_mode = "write"`
+#' @param file_name_regexp A regular expression to search for the file name
+#' if this is used `file_name` should not be, it will return the most recently
+#' created file using [find_latest_file()]
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
+#'
 #' @family file path functions
 #' @export
 get_file_path <-
   function(directory,
-           file_name,
+           file_name = NULL,
            ext = NULL,
            check_mode = "read",
-           create = NULL) {
+           create = NULL,
+           file_name_regexp = NULL) {
     if (!fs::dir_exists(directory)) {
       rlang::abort(message = glue::glue("The directory {directory} does not exist"))
     }
 
-    file_path <- fs::path(directory, file_name)
+    if (!is.null(file_name)) {
+      file_path <- fs::path(directory, file_name)
+    } else if (!is.null(file_name_regexp)) {
+      if (check_mode == "read") {
+        file_path <- find_latest_file(directory, regexp = file_name_regexp)
+      } else {
+        cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to find the
+                   latest file with {.var file_name_regexp}",
+          "v" = "Try {.arg check_mode = \"read\"}"
+        ))
+      }
+    } else {
+      cli::cli_abort("You must specify a {.var file_name} or a regular expression
+                     to search for with {.var file_name_regexp}")
+    }
 
     if (!is.null(ext)) {
       file_path <- fs::path_ext_set(file_path, ext)
@@ -40,7 +59,7 @@ get_file_path <-
     if (!fs::file_exists(file_path)) {
       if (is.null(create) && check_mode == "write" | !is.null(create) && create == TRUE) {
         # The file doesn't exist but we do want to create it
-        fs::file_create(file_path, mode = "u=rw,g=rw")
+        fs::file_create(file_path)
         rlang::inform(
           message = glue::glue(
             "The file {fs::path_file(file_path)} did not exist in {directory}, it has now been created."
@@ -67,10 +86,14 @@ get_file_path <-
     return(file_path)
   }
 
-#' General SLF directory for accessing HSCDIIP folders/files
+#' SLF directory - hscdiip
+#'
+#' @description File path for the general SLF directory for accessing HSCDIIP folders/files
 #'
 #' @return The path to the main SLF Extracts folder
 #' @export
+#'
+#' @family directories
 get_slf_dir <- function() {
   slf_dir <- fs::path("/conf/hscdiip/SLF_Extracts")
 
@@ -78,7 +101,9 @@ get_slf_dir <- function() {
 }
 
 
-#' Get the directory for the given year
+#' Year Directory
+#'
+#' @description Get the directory for Source Linkage File Updates for the given year
 #'
 #' @param year The Financial Year e.g. 1718
 #' @param extracts_dir (optional) Whether to
@@ -87,6 +112,8 @@ get_slf_dir <- function() {
 #'
 #' @return The file path to the year directory (on sourcedev)
 #' @export
+#'
+#' @family directories
 get_year_dir <- function(year, extracts_dir = FALSE) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
 

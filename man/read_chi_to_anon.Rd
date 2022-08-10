@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_anon_chi_lookups.R
 \name{read_chi_to_anon}
 \alias{read_chi_to_anon}
-\title{Read the CHI to Anon lookup}
+\title{Read in the CHI to Anon Lookup}
 \usage{
 read_chi_to_anon()
 }
@@ -10,5 +10,5 @@ read_chi_to_anon()
 the chi to anon lookup
 }
 \description{
-Read the CHI to Anon lookup
+Reads in the lookup to convert CHI number to Anonymous code
 }

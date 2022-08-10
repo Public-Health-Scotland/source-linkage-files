@@ -154,9 +154,13 @@ maternity_clean <- maternity_file %>%
   # We assume that if it starts with a letter it's an English practice and so recode to 99995.
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
-  mutate(stay = difftime(record_keydate2, record_keydate1, units = "days")) %>%
+  mutate(
+    stay = calculate_stay(year, record_keydate1, record_keydate2)
+  ) %>%
   # Calculate beddays
-  create_monthly_beddays(year, record_keydate1, record_keydate2, include_costs = TRUE) %>%
+  create_monthly_beddays(year, record_keydate1, record_keydate2) %>%
+  # Calculate costs
+  create_monthly_costs() %>%
   # Add discondition as a factor
   mutate(
     discondition = factor(discondition,
@@ -211,13 +215,10 @@ outfile <- maternity_clean %>%
   ) %>%
   arrange(chi, record_keydate1)
 
-# Save as zsav file
 outfile %>%
-  haven::read_sav(get_source_extract_path(year, "Maternity", ext = "zsav"))
-
-# Save as rds file
-outfile %>%
-  readr::write_rds(get_source_extract_path(year, "Maternity", ext = "rds"))
-
+  # Save as zsav file
+  write_sav(get_source_extract_path(year, "Maternity", ext = "zsav", check_mode = "write")) %>%
+  # Save as rds file
+  write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"))
 
 # End of Script #

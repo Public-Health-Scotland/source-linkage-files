@@ -4,27 +4,27 @@
 \alias{find_latest_file}
 \title{Find the latest version of a file}
 \usage{
-find_latest_file(dir, ..., recurse = TRUE)
+find_latest_file(directory, regexp)
 }
 \arguments{
-\item{dir}{The directory to look on}
+\item{directory}{The directory to look in}
 
-\item{...}{additional arguments passed to \code{\link[fs]{dir_info}}}
-
-\item{recurse}{Should the function search recursively
-through subfolders? The default \code{TRUE} is to search subfolders.}
+\item{regexp}{a \href{https://www.regular-expressions.info/quickstart.html}{regular expression}
+passed to \code{\link[fs:dir_ls]{fs::dir_info()}} to search for the file}
 }
 \value{
-the \code{\link[fs]{path}} to the file
+the \code{\link[fs:path]{fs::path()}} to the file
 }
 \description{
 This will return the latest created file matching
-the criteria. It uses \code{\link[fs]{dir_info}} to
+the criteria. It uses \code{\link[fs:dir_ls]{fs::dir_info()}} to
 find the files then picks the one with the latest
 \code{birthtime}
 }
 \examples{
+\dontrun{
 find_latest_file(get_lookups_dir(),
   regexp = "Scottish_Postcode_Directory_.+?\\\\.rds"
 )
+}
 }

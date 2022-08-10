@@ -17,8 +17,15 @@ The year if the check passes, it will be converted to a character if
 not already.
 }
 \description{
-Check that the year is in the correct format
+Test to check that the year vector is in the correct format
 }
 \examples{
 year <- check_year_format("1920")
+
 }
+\seealso{
+Other year functions: 
+\code{\link{convert_fyyear_to_year}()},
+\code{\link{convert_year_to_fyyear}()}
+}
+\concept{year functions}

@@ -2,42 +2,28 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_gpprac_path}
 \alias{get_slf_gpprac_path}
-\title{Get the full path to the SLF GP practice lookup}
+\title{SLG GP Lookup File Path}
 \usage{
 get_slf_gpprac_path(update = latest_update(), ...)
 }
 \arguments{
-\item{update}{the update month (defaults to use \code{\link{latest_update}})}
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the SLF GP practice lookup as an \code{\link[fs]{path}}
+The path to the SLF GP practice lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full path to the SLF GP practice lookup
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other file path functions: 
-\code{\link{get_ch_costs_path}()},
-\code{\link{get_dd_path}()},
-\code{\link{get_demog_cohorts_path}()},
-\code{\link{get_dn_costs_path}()},
-\code{\link{get_file_path}()},
-\code{\link{get_gp_ooh_costs_path}()},
-\code{\link{get_hhg_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
-\code{\link{get_nsu_path}()},
-\code{\link{get_practice_details_path}()},
-\code{\link{get_sc_ch_episodes_path}()},
-\code{\link{get_sc_demog_lookup_path}()},
-\code{\link{get_service_use_cohorts_path}()},
+Other slf lookup file path: 
+\code{\link{get_slf_ch_name_lookup_path}()},
 \code{\link{get_slf_deaths_path}()},
-\code{\link{get_slf_postcode_path}()},
-\code{\link{get_sparra_path}()}
+\code{\link{get_slf_gp_cluster_path}()},
+\code{\link{get_slf_postcode_path}()}
 }
-\concept{file path functions}
+\concept{slf lookup file path}

@@ -2,15 +2,13 @@
 % Please edit documentation in R/create_monthly_beddays.R
 \name{create_monthly_beddays}
 \alias{create_monthly_beddays}
-\title{Generate counts of beddays per month for an episode
-with an admission and discharge date}
+\title{Create Monthly Beddays}
 \usage{
 create_monthly_beddays(
   data,
   year,
   admission_date,
   discharge_date,
-  include_costs = FALSE,
   count_last = TRUE
 )
 }
@@ -23,16 +21,17 @@ create_monthly_beddays(
 
 \item{discharge_date}{The admission/start date variable}
 
-\item{include_costs}{(default \code{FALSE}) - Select true for calculating monthly costs}
-
 \item{count_last}{(default \code{TRUE}) - Should the last day be counted,
 instead of the first?}
 }
 \value{
-The data with additional variables \code{apr_beddays} to \code{mar_beddays}
+a \link[tibble:tibble-package]{tibble} with additional variables \code{apr_beddays} to \code{mar_beddays}
 that count the beddays which occurred in the month.
 }
 \description{
 Generate counts of beddays per month for an episode
 with an admission and discharge date
+}
+\seealso{
+create_monthly_costs
 }

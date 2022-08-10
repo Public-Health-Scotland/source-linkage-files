@@ -2,26 +2,22 @@
 % Please edit documentation in R/produce_sc_ch_episodes_tests.R
 \name{produce_sc_ch_episodes_tests}
 \alias{produce_sc_ch_episodes_tests}
-\title{Produce the Care Home all episodes tests}
+\title{Care Home All Episodes Tests}
 \usage{
 produce_sc_ch_episodes_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link{get_sc_ch_episodes_path}})}
+(data is from \code{\link[=get_sc_ch_episodes_path]{get_sc_ch_episodes_path()}})}
 }
 \value{
 a dataframe with a count of each flag.
 }
 \description{
-Produce the Care Home all episodes tests
+Produce the test for the Care Home all episodes
 }
 \seealso{
-Other produce tests functions: 
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_slf_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()},
-\code{\link{produce_test_comparison}()}
+Other social care test functions: 
+\code{\link{produce_sc_demog_lookup_tests}()}
 }
-\concept{produce tests functions}
+\concept{social care test functions}

@@ -18,5 +18,5 @@ and finally ask the user for input.}
 a connection to the specified dsn
 }
 \description{
-Open a connection to a PHS database
+Opens a connection to PHS database to allow data to be collected
 }

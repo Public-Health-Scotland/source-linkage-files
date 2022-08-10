@@ -8,7 +8,7 @@ test_that("Can convert ca code to lca code", {
   )
 
   expect_equal(
-    ca_to_lca(ca),
+    convert_ca_to_lca(ca),
     c(
       "01",
       "17",

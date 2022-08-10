@@ -363,15 +363,14 @@ End if.
 sort cases by gpprac.
 
 * Keep existing values in case we can't match the gpprac code.
-Rename Variables
-    hbpraccode = hbpraccode_old.
+Rename Variables hbpraccode = hbpraccode_old.
 
 * Find out which GPprac codes are good.
 * We don't want any of the other variables at this point.
 match files file = *
     /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
-    /Drop PC7 to hbpraccode
+    /Drop PC7 PC8 hbpraccode practice_name cluster open_date close_date
     /by gpprac.
 
 * Where there are missing gppraccodes try to fill in from other episodes.
@@ -432,10 +431,11 @@ add files file = *
     /Drop GPPracMatch all_match potentially_fixable changed_gpprac
     /By gpprac.
 
+ * Match on hbpraccode and cluster from the lookup.
 match files file = *
     /table = !Lookup_dir_slf + "source_GPprac_lookup_" + !LatestUpdate + ".zsav"
     /In = GPPracMatch
-    /Drop PC7 PC8
+    /Drop PC7 PC8 practice_name open_date close_date
     /by gpprac.
 
 * If the gpprac code didn't match use the existing values.
