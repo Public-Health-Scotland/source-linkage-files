@@ -1,7 +1,7 @@
 test_that("is_date_in_fyyear errors as expected", {
   expect_error(
     is_date_in_fyyear("2017", Sys.time()),
-    "The year has been entered in the wrong format"
+    "The `year` has been entered in the wrong format"
   )
 
   expect_error(

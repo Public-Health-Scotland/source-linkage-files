@@ -1,11 +1,12 @@
 #' SLF Homelessness Extract Tests
 #'
 #' @param data The data for testing
-#' @param max_min_vars Shouldn't need to change, currently specifies keydate1 and deydate2
+#' @param max_min_vars Shouldn't need to change, currently specifies keydate1 and keydate2
 #'
 #' @description Produce the tests for the SLF Homelessness Extract
 #'
-#' @return
+#' @return a dataframe with a count of each flag
+#' from [calculate_measures()]
 #'
 #' @export
 #' @family slf test functions

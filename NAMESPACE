@@ -2,6 +2,7 @@
 
 export("%>%")
 export(calculate_measures)
+export(calculate_stay)
 export(check_year_format)
 export(clean_up_free_text)
 export(compute_mid_year_age)

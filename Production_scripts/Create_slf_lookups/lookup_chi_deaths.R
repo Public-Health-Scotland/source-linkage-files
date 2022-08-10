@@ -1,10 +1,9 @@
 #####################################################
-# Draft DEATHS Extract Processing Code
+# Deaths Extract Processing Code
 # Author: Catherine Holland
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
 # Description - Takes IT extract of Deaths data.
 #               Creates new death date variable,
 #               uses NRS death date as death date if avaliable.
@@ -12,7 +11,6 @@
 #####################################################
 
 # Load packages
-
 library(dplyr)
 library(stringr)
 library(readr)
