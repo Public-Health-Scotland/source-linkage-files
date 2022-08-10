@@ -20,7 +20,7 @@ library(janitor)
 
 # Read in data---------------------------------------
 
-year <- "1920"
+year <- check_year_format("1920")
 
 dd_file <- haven::read_sav(get_dd_path(ext = "zsav")) %>%
   clean_names() %>%
