@@ -14,7 +14,6 @@
 #' )
 #' add_smr_type(x)
 add_smr_type <- function(recid, mpat = NULL) {
-
   if (any(is.na(recid)) & !all(is.na(recid))) {
     cli::cli_inform(c("i" = "Some values of {.var recid} are {.val NA},
                     please check this is populated throughout the data"))
@@ -31,21 +30,26 @@ add_smr_type <- function(recid, mpat = NULL) {
   }
 
   if (!any((recid %in% c("02B", "04B", "00B", "AE2", "PIS", "NRS"))) &
-      !any(is.na(recid))) {
+    !any(is.na(recid))) {
     cli::cli_inform(c("i" = "One or more values of {.var recid} do not have an
                    assignable {.var smrtype}"))
   }
 
-  smrtype <- dplyr::case_when(
-        recid == "02B" & mpat %in% c("1", "3", "5", "7", "A") ~ "Matern-IP",
-        recid == "02B" & mpat %in% c("2", "4", "6") ~ "Matern-DC",
-        recid == "02B" & mpat == "0" ~ "Matern-HB",
-        recid == "04B" ~ "Psych-IP",
-        recid == "00B" ~ "Outpatient",
-        recid == "AE2" ~ "A & E",
-        recid == "PIS" ~ "PIS",
-        recid == "NRS" ~ "NRS Deaths")
+  if (missing(mpat)) {
+    smrtype <- dplyr::case_when(
+      recid == "04B" ~ "Psych-IP",
+      recid == "00B" ~ "Outpatient",
+      recid == "AE2" ~ "A & E",
+      recid == "PIS" ~ "PIS",
+      recid == "NRS" ~ "NRS Deaths"
+    )
+  } else {
+    smrtype <- dplyr::case_when(
+      recid == "02B" & mpat %in% c("1", "3", "5", "7", "A") ~ "Matern-IP",
+      recid == "02B" & mpat %in% c("2", "4", "6") ~ "Matern-DC",
+      recid == "02B" & mpat == "0" ~ "Matern-HB"
+    )
+  }
 
   return(smrtype)
-
 }
