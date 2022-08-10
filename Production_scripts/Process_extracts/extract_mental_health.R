@@ -176,7 +176,7 @@ mh_clean <- mh_extract %>%
     yearstay = rowSums(across(ends_with("_beddays"))),
     # cost total net
     cost_total_net = rowSums(across(ends_with("_cost"))),
-  # total length of stay
+    # total length of stay
     stay = calculate_stay(year, record_keydate1, record_keydate2)
   )
 
