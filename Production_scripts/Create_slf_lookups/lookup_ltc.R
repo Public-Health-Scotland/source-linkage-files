@@ -18,7 +18,7 @@ library(readr)
 library(createslf)
 
 # Financial year
-year <- "1718"
+year <- check_year_format("1920")
 
 # Read data------------------------------------------------
 ltc_file <- read_csv(
