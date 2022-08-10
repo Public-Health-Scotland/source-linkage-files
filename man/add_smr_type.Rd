@@ -7,7 +7,9 @@
 add_smr_type(recid, mpat = NULL)
 }
 \arguments{
-\item{df}{A data frame with added SMR type variable}
+\item{recid}{A vector of record IDs}
+
+\item{mpat}{A vector of mpat values}
 }
 \value{
 A vector of SMR types
