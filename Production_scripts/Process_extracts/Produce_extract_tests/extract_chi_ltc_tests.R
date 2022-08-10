@@ -19,6 +19,11 @@ duplicates <- new_data %>%
     cols = tidyselect::everything(),
     names_to = "measure",
     values_to = "value"
+  ) %>%
+  dplyr::mutate(
+    difference = NA,
+    pct_change = NA,
+    issue = NA
   )
 
 # Produce Outfile----------------------------------------
