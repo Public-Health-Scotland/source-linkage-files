@@ -4,7 +4,7 @@
 \alias{add_smr_type}
 \title{Add smrtype variable based on record ID}
 \usage{
-add_smr_type(data)
+add_smr_type(recid, mpat = NULL)
 }
 \arguments{
 \item{df}{A data frame with added SMR type variable}
