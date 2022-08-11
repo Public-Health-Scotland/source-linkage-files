@@ -14,6 +14,8 @@ library(dplyr)
 library(createslf)
 library(janitor)
 
+latest_update <- "Mar_2022"
+
 
 # Read in data---------------------------------------
 
@@ -61,9 +63,9 @@ gp_clusters_clean <- matched_gp_clusters %>%
 
 gp_clusters_clean %>%
   # .zsav
-  write_sav(get_slf_gp_cluster_path(ext = "zsav", check_mode = "write")) %>%
+  write_sav(get_slf_gp_cluster_path(update = latest_update, ext = "zsav", check_mode = "write")) %>%
   # .rds file
-  write_rds(get_slf_gp_cluster_path(check_mode = "write"))
+  write_rds(get_slf_gp_cluster_path(update = latest_update, check_mode = "write"))
 
 
 ## End of Script ---------------------------------------
