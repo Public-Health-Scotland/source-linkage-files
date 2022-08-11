@@ -120,8 +120,7 @@ end_next_fy_quarter <- function(quarter) {
     cal_quarter_date_unique,
     lubridate::period(9, "months")
   ) %>%
-    lubridate::add_with_rollback(lubridate::period(-1, "days")
-    ) %>%
+    lubridate::add_with_rollback(lubridate::period(-1, "days")) %>%
     purrr::set_names(quarter_unique)
 
   end_next_fy_quarter <- fy_quarter_date_unique[quarter] %>%

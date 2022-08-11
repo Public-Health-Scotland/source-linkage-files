@@ -96,7 +96,7 @@ test_that("end_next_fy_quarter works", {
     "2020-03-31",
     "2020-06-30"
   )))
-  })
+})
 
 test_that("bad inputs for quarter error properly", {
   # Single NA
