@@ -25,13 +25,31 @@ opendata <-
     max_resources = 20
   ) %>%
   clean_names() %>%
-  # Filter and save
+  left_join(
+    phsopendata::get_resource(
+      "944765d7-d0d9-46a0-b377-abb3de51d08e",
+      col_select = c("HSCP", "HSCPName", "HB", "HBName")
+    ) %>%
+      clean_names(),
+    by = c("hb", "hscp")
+  ) %>%
+  # select variables
   select(
     gpprac = practice_code,
     practice_name = gp_practice_name,
-    gpprac_postcode = postcode,
-    cluster = gp_cluster
+    postcode,
+    cluster = gp_cluster,
+    partnership = hscp_name,
+    health_board = hb_name
   ) %>%
+  # drop NA cluster rows
+  filter(!is.na(cluster)) %>%
+  # format practice name text
+  mutate(practice_name = stringr::str_to_title(practice_name)) %>%
+  # format postcode
+  mutate(postcode = phsmethods::format_postcode(postcode)) %>%
+  # keep distinct gpprac
+  distinct(gpprac, .keep_all = TRUE) %>%
   # Sort for SPSS matching
   arrange(gpprac) %>%
   # Write out as an SPSS file
