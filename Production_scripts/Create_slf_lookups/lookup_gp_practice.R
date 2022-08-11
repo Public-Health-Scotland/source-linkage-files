@@ -11,26 +11,22 @@
 
 # Load packages
 library(dplyr)
-library(tidyr)
-library(phsopendata)
-library(janitor)
-library(fs)
 library(createslf)
 
 # Read in data---------------------------------------
 
 # Retrieve the latest resource from the dataset
 opendata <-
-  get_dataset("gp-practice-contact-details-and-list-sizes",
+  phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
     max_resources = 20
   ) %>%
-  clean_names() %>%
+  janitor::clean_names() %>%
   left_join(
     phsopendata::get_resource(
       "944765d7-d0d9-46a0-b377-abb3de51d08e",
       col_select = c("HSCP", "HSCPName", "HB", "HBName")
     ) %>%
-      clean_names(),
+      janitor::clean_names(),
     by = c("hb", "hscp")
   ) %>%
   # select variables
@@ -43,7 +39,7 @@ opendata <-
     health_board = hb_name
   ) %>%
   # drop NA cluster rows
-  filter(!is.na(cluster)) %>%
+  tidyr::drop_na(cluster) %>%
   # format practice name text
   mutate(practice_name = stringr::str_to_title(practice_name)) %>%
   # format postcode
@@ -104,7 +100,11 @@ gpprac_slf_lookup <-
   mutate(lca = convert_ca_to_lca(ca2018)) %>%
   # set some known dummy practice codes to consistent Board codes
   mutate(
-    hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
+    hbpraccode = if_else(
+      gpprac %in% c(99942, 99957, 99961, 99981, 99999),
+      "S08200003",
+      hbpraccode
+    ),
     hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
   ) %>%
   # sort by gpprac
