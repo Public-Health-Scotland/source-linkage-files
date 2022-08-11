@@ -29,10 +29,11 @@ Other date functions:
 \code{\link{convert_numeric_to_date}()},
 \code{\link{end_fy_quarter}()},
 \code{\link{end_fy}()},
+\code{\link{end_next_fy_quarter}()},
 \code{\link{fy_interval}()},
 \code{\link{is_date_in_fyyear}()},
 \code{\link{midpoint_fy}()},
-\code{\link{next_fy_quarter}()},
-\code{\link{start_fy_quarter}()}
+\code{\link{start_fy_quarter}()},
+\code{\link{start_next_fy_quarter}()}
 }
 \concept{date functions}
