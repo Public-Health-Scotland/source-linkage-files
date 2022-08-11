@@ -7,7 +7,7 @@
 end_fy(year, format = c("fyyear", "alternate"))
 }
 \arguments{
-\item{year}{a vector of years}
+\item{year}{a character vector of years}
 
 \item{format}{the format of the year vector, default is financial year}
 }
@@ -27,9 +27,12 @@ Other date functions:
 \code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{convert_numeric_to_date}()},
+\code{\link{end_fy_quarter}()},
 \code{\link{fy_interval}()},
 \code{\link{is_date_in_fyyear}()},
 \code{\link{midpoint_fy}()},
+\code{\link{next_fy_quarter}()},
+\code{\link{start_fy_quarter}()},
 \code{\link{start_fy}()}
 }
 \concept{date functions}
