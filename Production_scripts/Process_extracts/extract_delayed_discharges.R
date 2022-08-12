@@ -33,9 +33,19 @@ dd_file <- haven::read_sav(get_dd_path(ext = "zsav")) %>%
 # Data Cleaning---------------------------------------
 
 dd_clean <- dd_file %>%
+  # Use end of the month date for records with no end date (but we think have ended)
+  # Create a flag for these records
+  mutate(
+    month_end = lubridate::ceiling_date(keydate1_dateformat, "month") - 1,
+    ammended_dates = case_when(
+      keydate2_dateformat == ymd("1900,1,1") ~ TRUE,
+      TRUE ~ FALSE
+    ),
+    keydate2_dateformat = if_else(ammended_dates == TRUE, month_end, keydate2_dateformat)
+  ) %>%
   # Drop any records with obviously bad dates
   filter(
-    (keydate1_dateformat <= keydate2_dateformat) | keydate2_dateformat == ymd("1900, 1, 1")
+    (keydate1_dateformat <= keydate2_dateformat) | is.na(keydate2_dateformat)
   ) %>%
   # set up variables
   mutate(
