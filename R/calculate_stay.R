@@ -25,10 +25,18 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     )
 
     lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
-  } else {
+  } else if (!missing(sc_qtr)){
     # Set Quarters
-    qtr_end <- lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(6, "months"))
-    next_qtr <- lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(9, "months"))
+    qtr_end <- dplyr::if_else(
+      is.na(end_date),
+      lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(6, "months")),
+      end_date
+    )
+    next_qtr <- dplyr::if_else(
+      is.na(end_date),
+      lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(9, "months")),
+      end_date
+    )
 
     # Do SC Calculation - end_date is missing
     dplyr::if_else(
@@ -38,5 +46,7 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
       # if end date is missing set to end of quarter
       lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
     )
+  } else {
+    lubridate::time_length(lubridate::interval(start_date, end_date), unit = "days")
   }
 }
