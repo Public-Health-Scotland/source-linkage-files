@@ -50,6 +50,16 @@ test_that("Can return correct length of stay", {
   expect_equal(calculate_stay("1920", as.Date("2020/01/31"), as.Date(NA), "2019Q3"), 61)
   # qtr_end < start_date , end missing
   expect_equal(calculate_stay("1920", as.Date("2020/04/30"), as.Date(NA), "2019Q4"), 62)
+
+  # SC calculation - if sc_qtr is supplied but end_date is not missing use end_date
+  # Start before FY, end during FY
+  expect_equal(calculate_stay("1920", as.Date("2019/03/31"), as.Date("2019/10/31"), "2019Q1"), 214)
+  # Start during FY, end during FY
+  expect_equal(calculate_stay("1920", as.Date("2019/06/30"), as.Date("2019/08/31"), "2019Q2"), 62)
+  # Start before FY, end after FY
+  expect_equal(calculate_stay("1920", as.Date("2019/01/01"), as.Date("2020/04/01"), "2019Q3"), 456)
+  # Start during FY, end after FY
+  expect_equal(calculate_stay("1920", as.Date("2019/04/01"), as.Date("2020/07/01"), "2019Q4"), 457)
 })
 
 test_that("Can calculate the correct stay for vectors of dates", {
@@ -117,6 +127,24 @@ test_that("Can calculate the correct stay for vectors of dates", {
     ),
     c(62, 62, 61, 62)
   )
+
+  # SC calculation - if sc_qtr is supplied but end_date is not missing use end_date
+  # Start before FY, end during FY
+  expect_equal(
+    calculate_stay(
+      "1920",
+      as.Date(c(
+        "2019/03/31", "2019/06/30",
+        "2019/01/01", "2019/04/01"
+      )),
+      as.Date(c(
+        "2019/10/31", "2019/08/31",
+        "2020/04/01", "2020/07/01"
+      )),
+    c("2019Q1", "2019Q2", "2019Q3", "2019Q4")
+    ),
+    c(214, 62, 456, 457)
+  )
 })
 
 test_that("calculate stay function works", {
@@ -137,7 +165,11 @@ test_that("calculate stay function works", {
       "2019/07/31",
       "2019/10/31",
       "2020/01/31",
-      "2020/04/30"
+      "2020/04/30",
+      "2019/03/31",
+      "2019/06/30",
+      "2019/01/01",
+      "2019/04/01"
     )),
     end_date = as.Date(c(
       "2019/10/31",
@@ -155,7 +187,11 @@ test_that("calculate stay function works", {
       NA,
       NA,
       NA,
-      NA
+      NA,
+      "2019/10/31",
+      "2019/08/31",
+      "2020/04/01",
+      "2020/07/01"
     )),
     sc_latest_submission = c(
       NA,
@@ -166,6 +202,10 @@ test_that("calculate stay function works", {
       NA,
       NA,
       NA,
+      "2019Q1",
+      "2019Q2",
+      "2019Q3",
+      "2019Q4",
       "2019Q1",
       "2019Q2",
       "2019Q3",
