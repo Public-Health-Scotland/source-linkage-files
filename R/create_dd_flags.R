@@ -14,14 +14,14 @@ create_dd_flags <- function(data, year) {
   # Flag records with no end date
   data <- data %>%
     dplyr::mutate(
-      no_end_date = dplyr::if_else(is.na(keydate2_dateformat) & (!(spec %in% mh_spec)),
+      no_end_date = dplyr::if_else(is.na(.data$keydate2_dateformat) & (!(.data$spec %in% mh_spec)),
         TRUE,
         FALSE
       ),
       # Flag records with correct date
-      correct_dates = dplyr::if_else(is_date_in_fyyear(year, keydate1_dateformat) |
-        is_date_in_fyyear(year, keydate2_dateformat) |
-        is.na(keydate2_dateformat) & .data$spec %in% mh_spec,
+      correct_dates = dplyr::if_else(is_date_in_fyyear(year, .data$keydate1_dateformat) |
+        is_date_in_fyyear(year, .data$keydate2_dateformat) |
+        is.na(.data$keydate2_dateformat) & .data$spec %in% mh_spec,
       TRUE,
       FALSE
       )
