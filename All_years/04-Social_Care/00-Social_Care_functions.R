@@ -1,3 +1,15 @@
+#' Latest update
+#'
+#' @description Get the date of the latest update, e.g 'Jun_2022'
+#'
+#' @return Latest update as MMM_YYYY
+#' @export
+#'
+#' @family initialisation
+latest_update <- function() {
+  "Sep_2022"
+}
+
 #' Open a connection to a PHS database
 #'
 #' @param dsn The Data Source Name passed on to `odbc::dbconnect`
