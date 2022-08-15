@@ -18,16 +18,14 @@ library(lubridate)
 
 # Set up------------------------------------------------------------------
 
-latest_update <- "Jun_2022"
-
-social_care_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
+source("All_years/04-Social_Care/00-Social_Care_functions.R")
 
 
 # Read Demographic file----------------------------------------------------
 
 sc_demographics <- haven::read_sav(fs::path(
   social_care_dir,
-  paste0("sc_demographics_lookup_", latest_update),
+  paste0("sc_demographics_lookup_", latest_update()),
   ext = "zsav"
 ))
 
@@ -57,7 +55,10 @@ sds_full_clean <- sds_full_data %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # If sds start date is missing, assign start of FY
-  mutate(sds_start_date = if_else(is.na(sds_start_date), as.Date(paste0(period, "-04-01")), sds_start_date)) %>%
+  mutate(sds_start_date = if_else(is.na(sds_start_date),
+    as.Date(paste0(period, "-04-01")),
+    sds_start_date
+  )) %>%
   # rename for matching source variables
   rename(
     record_keydate1 = sds_start_date,
@@ -143,11 +144,11 @@ outfile <- merge_eps %>%
 
 outfile %>%
   # save rds file
-  readr::write_rds(path(social_care_dir, str_glue("all_sds_episodes_{latest_update}.rds")),
+  readr::write_rds(path(social_care_dir, str_glue("all_sds_episodes_{latest_update()}.rds")),
     compress = "xz"
   ) %>%
   # save sav file
-  haven::write_sav(path(social_care_dir, str_glue("all_sds_episodes_{latest_update}.zsav")),
+  haven::write_sav(path(social_care_dir, str_glue("all_sds_episodes_{latest_update()}.zsav")),
     compress = "zsav"
   )
 
