@@ -1,5 +1,4 @@
 ####################################################
-
 # Name of file - Lookup-04-Create-CHI-Deceased-tests.R
 # Original Authors - Jennifer Thom
 # Original Date - January 2022
@@ -9,8 +8,6 @@
 #
 # Description - Produce tests for source linkage files
 # Deaths lookup file.
-
-
 ####################################################
 
 # Packages

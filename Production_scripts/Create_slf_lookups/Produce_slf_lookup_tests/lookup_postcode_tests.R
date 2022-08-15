@@ -1,5 +1,4 @@
 ####################################################
-
 # Name of file - Lookup-01b-Postcode-tests.R
 # Original Authors - Jennifer Thom
 # Original Date - January 2022
@@ -9,7 +8,6 @@
 #
 # Description - Produce tests for source linkage files
 # postcode lookup file.
-
 ####################################################
 
 # Packages
