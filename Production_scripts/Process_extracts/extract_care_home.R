@@ -45,12 +45,6 @@ source_ch_clean <- matched_data %>%
   # compute lca variable from sending_location
   mutate(lca = convert_sending_location_to_lca(sending_location)) %>%
   # bed days
-  # create dummy end where blank
-  mutate(dummy_discharge = if_else(
-    is.na(record_keydate2),
-    end_fy(year) + days(1),
-    record_keydate2
-  )) %>%
   create_monthly_beddays(year, record_keydate1, dummy_discharge) %>%
   # year stay
   mutate(
