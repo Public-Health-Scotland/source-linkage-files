@@ -29,6 +29,13 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
 
     lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
   } else {
+    # Check the quarters
+    if (any(is.na(sc_qtr))) {
+      cli::cli_abort("Some of the submitted quarters are missing")
+    } else {
+      sc_qtr <- check_quarter_format(sc_qtr)
+    }
+
     # Set Quarters
     qtr_end <- lubridate::add_with_rollback(end_fy_quarter(sc_qtr), lubridate::period(1, "days"))
     next_qtr <- lubridate::add_with_rollback(end_next_fy_quarter(sc_qtr), lubridate::period(1, "days"))
