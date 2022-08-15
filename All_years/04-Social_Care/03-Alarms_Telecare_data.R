@@ -16,16 +16,14 @@ library(lubridate)
 
 # Set up------------------------------------------------------------------
 
-latest_update <- "Mar_2022"
-
-social_care_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
+source("All_years/04-Social_Care/00-Social_Care_functions.R")
 
 
 # Read Demographic file----------------------------------------------------
 
 sc_demographics <- haven::read_sav(fs::path(
   social_care_dir,
-  paste0("sc_demographics_lookup_", latest_update),
+  paste0("sc_demographics_lookup_", latest_update()),
   ext = "zsav"
 ))
 
@@ -35,7 +33,10 @@ sc_demographics <- haven::read_sav(fs::path(
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
-at_full_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "equipment_snapshot")) %>%
+at_full_data <- tbl(
+  db_connection,
+  dbplyr::in_schema("social_care_2", "equipment_snapshot")
+) %>%
   select(
     sending_location,
     social_care_id,
@@ -116,15 +117,27 @@ at_full_clean <- replaced_start_dates %>%
 qtr_merge <- at_full_clean %>%
   # Use lazy_dt() for faster running of code
   dtplyr::lazy_dt() %>%
-  # Sort prior to merging
-  arrange(sending_location, social_care_id, record_keydate1, smrtype, period) %>%
-  group_by(sending_location, social_care_id, record_keydate1, smrtype, period) %>%
+  group_by(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    period
+  ) %>%
   # Create a count for the package number across episodes
   mutate(
     pkg_count = row_number()
   ) %>%
+  # Sort prior to merging
+  arrange(.by_group = TRUE) %>%
   # group for merging episodes
-  group_by(sending_location, social_care_id, record_keydate1, smrtype, pkg_count) %>%
+  group_by(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    pkg_count
+  ) %>%
   # merge episodes with packages across quarters
   # drop variables not needed
   summarise(
@@ -142,9 +155,15 @@ qtr_merge <- at_full_clean %>%
     recid = last(recid),
     person_id = last(person_id),
     sc_send_lca = last(sc_send_lca)
-  )%>%
+  ) %>%
   # sort after merging
-  arrange(sending_location, social_care_id, record_keydate1, smrtype, sc_latest_submission) %>%
+  arrange(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    sc_latest_submission
+  ) %>%
   # end of lazy_dt()
   as_tibble()
 
@@ -153,10 +172,10 @@ qtr_merge <- at_full_clean %>%
 
 qtr_merge %>%
   # save rds file
-  readr::write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.rds")),
+  readr::write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update()}.rds")),
     compress = "gz"
   ) %>%
   # save sav file
-  haven::write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update}.zsav")),
+  haven::write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update()}.zsav")),
     compress = "zsav"
   )
