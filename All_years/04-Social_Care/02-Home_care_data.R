@@ -12,8 +12,6 @@ library(tidyr)
 
 source("All_years/04-Social_Care/00-Social_Care_functions.R")
 
-social_care_dir <- path("/conf/hscdiip/SLF_Extracts/Social_care")
-
 # Open connection to DVPROD
 sc_con <- phs_db_connection(dsn = "DVPROD")
 
