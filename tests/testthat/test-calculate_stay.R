@@ -235,22 +235,28 @@ test_that("Can calculate the correct stay for vectors of dates", {
   )
 })
 
-test_that("normal calculate stay function works", {
-  test_tibble_norm <- tibble::tribble(
-    ~start_date, ~end_date,
-    2019 - 03 - 31, 2019 - 10 - 31,
-    2019 - 06 - 30, 2019 - 08 - 31,
-    2019 - 01 - 01, 2020 - 04 - 01,
-    2019 - 04 - 01, 2020 - 07 - 01,
-    2019 - 03 - 31, NA,
-    2019 - 06 - 30, NA,
-    2019 - 01 - 01, NA,
-    2019 - 04 - 01, NA
-  )
-
-  # Expect snapshot
+test_that("Calculate stay works well in the normal use case", {
   expect_snapshot(
-    test_tibble_norm %>%
+    tibble::tribble(
+      ~start_date,
+      ~end_date,
+      as.Date("2019-03-31"),
+      as.Date("2019-10-31"),
+      as.Date("2019-06-30"),
+      as.Date("2019-08-31"),
+      as.Date("2019-01-01"),
+      as.Date("2020-04-01"),
+      as.Date("2019-04-01"),
+      as.Date("2020-07-01"),
+      as.Date("2019-03-31"),
+      lubridate::NA_Date_,
+      as.Date("2019-06-30"),
+      lubridate::NA_Date_,
+      as.Date("2019-01-01"),
+      lubridate::NA_Date_,
+      as.Date("2019-04-01"),
+      lubridate::NA_Date_
+    ) %>%
       dplyr::mutate(stay = calculate_stay(
         "1920",
         start_date,
@@ -259,27 +265,49 @@ test_that("normal calculate stay function works", {
   )
 })
 
-
-test_that("SC calculate stay function works", {
-  test_tibble_sc <- tibble::tribble(
-    ~start_date, ~end_date, ~sc_qtr,
-    2019 - 03 - 31, NA, "2019Q1",
-    2019 - 06 - 30, NA, "2019Q2",
-    2019 - 01 - 01, NA, "2019Q3",
-    2019 - 04 - 01, NA, "2019Q4",
-    2019 - 07 - 31, NA, "2019Q1",
-    2019 - 10 - 31, NA, "2019Q2",
-    2020 - 01 - 31, NA, "2019Q3",
-    2020 - 04 - 30, NA, "2019Q4",
-    2019 - 03 - 31, 2019 - 10 - 31, "2019Q1",
-    2019 - 06 - 30, 2019 - 08 - 31, "2019Q2",
-    2019 - 01 - 01, 2020 - 04 - 01, "2019Q3",
-    2019 - 04 - 01, 2020 - 07 - 01, "2019Q4"
-  )
-
-  # Expect snapshot
+test_that("Calculate stay works well in the Social Care use case", {
   expect_snapshot(
-    test_tibble_sc %>%
+    tibble::tribble(
+      ~start_date,
+      ~end_date,
+      ~sc_qtr,
+      as.Date("2019-03-31"),
+      lubridate::NA_Date_,
+      "2019Q1",
+      as.Date("2019-06-30"),
+      lubridate::NA_Date_,
+      "2019Q2",
+      as.Date("2019-01-01"),
+      lubridate::NA_Date_,
+      "2019Q3",
+      as.Date("2019-04-01"),
+      lubridate::NA_Date_,
+      "2019Q4",
+      as.Date("2019-07-31"),
+      lubridate::NA_Date_,
+      "2019Q1",
+      as.Date("2019-10-31"),
+      lubridate::NA_Date_,
+      "2019Q2",
+      as.Date("2020-01-31"),
+      lubridate::NA_Date_,
+      "2019Q3",
+      as.Date("2020-04-30"),
+      lubridate::NA_Date_,
+      "2019Q4",
+      as.Date("2019-03-31"),
+      as.Date("2019-10-31"),
+      "2019Q1",
+      as.Date("2019-06-30"),
+      as.Date("2019-08-31"),
+      "2019Q2",
+      as.Date("2019-01-01"),
+      as.Date("2020-04-01"),
+      "2019Q3",
+      as.Date("2019-04-01"),
+      as.Date("2020-07-01"),
+      "2019Q4"
+    ) %>%
       dplyr::mutate(stay = calculate_stay(
         "1920",
         start_date,
