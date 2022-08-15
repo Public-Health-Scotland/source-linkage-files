@@ -259,19 +259,19 @@ test_that("Calculate stay works well in the normal use case", {
 test_that("Calculate stay works well in the Social Care use case", {
   expect_snapshot(
     tibble::tribble(
-      ~start_date,      ~end_date,      ~sc_qtr,
-      as.Date("2019-03-31"),      lubridate::NA_Date_,      "2019Q1",
-      as.Date("2019-06-30"),      lubridate::NA_Date_,      "2019Q2",
-      as.Date("2019-01-01"),      lubridate::NA_Date_,      "2019Q3",
-      as.Date("2019-04-01"),      lubridate::NA_Date_,      "2019Q4",
-      as.Date("2019-07-31"),      lubridate::NA_Date_,      "2019Q1",
-      as.Date("2019-10-31"),      lubridate::NA_Date_,      "2019Q2",
-      as.Date("2020-01-31"),      lubridate::NA_Date_,      "2019Q3",
-      as.Date("2020-04-30"),      lubridate::NA_Date_,      "2019Q4",
-      as.Date("2019-03-31"),      as.Date("2019-10-31"),      "2019Q1",
-      as.Date("2019-06-30"),      as.Date("2019-08-31"),      "2019Q2",
-      as.Date("2019-01-01"),      as.Date("2020-04-01"),      "2019Q3",
-      as.Date("2019-04-01"),      as.Date("2020-07-01"),      "2019Q4"
+      ~start_date, ~end_date, ~sc_qtr,
+      as.Date("2019-03-31"), lubridate::NA_Date_, "2019Q1",
+      as.Date("2019-06-30"), lubridate::NA_Date_, "2019Q2",
+      as.Date("2019-01-01"), lubridate::NA_Date_, "2019Q3",
+      as.Date("2019-04-01"), lubridate::NA_Date_, "2019Q4",
+      as.Date("2019-07-31"), lubridate::NA_Date_, "2019Q1",
+      as.Date("2019-10-31"), lubridate::NA_Date_, "2019Q2",
+      as.Date("2020-01-31"), lubridate::NA_Date_, "2019Q3",
+      as.Date("2020-04-30"), lubridate::NA_Date_, "2019Q4",
+      as.Date("2019-03-31"), as.Date("2019-10-31"), "2019Q1",
+      as.Date("2019-06-30"), as.Date("2019-08-31"), "2019Q2",
+      as.Date("2019-01-01"), as.Date("2020-04-01"), "2019Q3",
+      as.Date("2019-04-01"), as.Date("2020-07-01"), "2019Q4"
     ) %>%
       dplyr::mutate(stay = calculate_stay(
         "1920",
