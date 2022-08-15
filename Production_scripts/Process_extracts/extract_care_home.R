@@ -53,11 +53,11 @@ source_ch_clean <- matched_data %>%
   )) %>%
   create_monthly_beddays(year, record_keydate1, dummy_discharge) %>%
   # year stay
-  mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
-  # total length of stay
-  mutate(stay = time_length(interval(record_keydate1, dummy_discharge),
-    unit = "days"
-  ))
+  mutate(
+    yearstay = rowSums(across(ends_with("_beddays"))),
+    # total length of stay
+    stay = calculate_stay(year, record_keydate1, record_keydate2, sc_latest_submission)
+  )
 
 
 # Costs  ---------------------------------------
