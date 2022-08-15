@@ -17,8 +17,8 @@ year <- check_year_format("1920")
 
 
 # Read in data---------------------------------------
-# TODO update this to use the rds version
-source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
+#TO DO - use RDS version
+source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(update = previous_update(), ext = "zsav")) %>%
   # select episodes for FY
   filter(is_date_in_fyyear(year, record_keydate1, record_keydate2)) %>%
   # remove any episodes where the latest submission was before the current year
