@@ -24,6 +24,10 @@ jobs:
           extra-packages: any::lintr
           needs: lint
 
-      - name: Lint
+      - name: Lint package fucntions and tests
         run: lintr::lint_package()
+        shell: Rscript {0}
+        
+      - name: Lint production scripts
+        run: lintr::lint_dir("Production_scripts/")
         shell: Rscript {0}
