@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
@@ -31,7 +31,8 @@ GET DATA  /TYPE=TXT
       TreatmentNHSBoardCode A9
       KISAccessed A1
       ReferralSource A47
-      ConsultationType A26.
+      ConsultationType A26
+      ConsultationTypeUnmapped AUTO.
 CACHE.
 
 * If they don't have a CHI it isn't useful for linkage.
@@ -48,6 +49,17 @@ Alter type ConsultationStartDateTime ConsultationEndDateTime (DATETIME16).
  * Some episodes are wrongly included.
 Select if ConsultationStartDateTime LE Date.DMY(31, 03, Number(!altFY, F4.0) + 1).
 Select if ConsultationEndDateTime GE Date.DMY(01, 04, Number(!altFY, F4.0)).
+
+* Map COVID type calls to the proper consultation type.
+Do if ConsultationType = "".
+    Do if ConsultationTypeUnmapped = "COVID19 ASSESSMENT".
+        Compute ConsultationType = "COVID19 ASSESSMENT".
+    Else if ConsultationTypeUnmapped = "COVID19 ADVICE".
+        Compute ConsultationType = "COVID19 ADVICE".
+    Else if any(ConsultationTypeUnmapped, "COVID19 HOME VISIT", "COVID19 OBSERVATION", "COVID19 VIDEO CALL", "COVID19 TEST").
+        Compute ConsultationType = "COVID19 OTHER".
+    End if.
+End if.
 
  * Sort out any duplicates or overlaps.
 sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime.

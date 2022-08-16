@@ -3,6 +3,9 @@
 * Created new files for 2022/23.
 * The NSU cohort has been added for 2021/22.
 * Home Care - If the start date is after the end date we will now discard the end date (`sysmis`/`NA`), previously we would have dropped these records entirely.
+* Changes to GP OoH data
+  * Include some new categories to `smrtype` for COVID type consultations. This is consistent with the Unscheduled Care publication.
+  * The `ooh_cc` variable has been replaced with `ooh_case_id`. Each row for GP OoH is a 'consultation' but many consultations can be grouped into a 'case' previously `ooh_cc` simply numbered unique cases for a person in the year e.g. 1,2,3... This could be confusing as cases could reasonably span multiple years. `ooh_case_id` is the unique ID for the case as found in the datamart (called `GUID`), you can count unique `ooh_case_id`s to get a count of cases in the year, or aggregate on it to merge the consultations into a case. Unlike `ooh_cc` this will now work properly across years too.
 
 # June 2022 Update - Released 10-Jun-2022
 
