@@ -96,26 +96,3 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
     ...
   )
 }
-
-
-#' SLF GP Cluster Lookup File Path
-#'
-#' @description Get the full path to the SLF GP Cluster lookup file
-#'
-#' @param update The update month to use,
-#' defaults to [latest_update()]
-#' @param ... additional arguments passed to [get_file_path()]
-#'
-#' @return The path to the SLF GP cluster lookup as an [fs::path()]
-#' @export
-#' @family slf lookup file path
-#' @seealso [get_file_path()] for the generic function.
-get_slf_gp_cluster_path <- function(update = latest_update(), ...) {
-  slf_gp_cluster_file_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = glue::glue("practice_details_{update}.rds"),
-    ...
-  )
-
-  return(slf_gp_cluster_file_path)
-}
