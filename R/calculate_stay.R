@@ -16,8 +16,11 @@
 #'
 #' @family date functions
 calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
+  # Normal calculation
+  # if end_date is missing and sc_qtr is missing use dummy date
   if (missing(sc_qtr)) {
-    # Do normal stay calculation
+    # setup dummy date
+    # if end date is missing then assign to end of the year
     dummy_discharge <- dplyr::if_else(
       is.na(end_date),
       end_fy(year) + lubridate::days(1),
@@ -30,13 +33,15 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     qtr_end <- lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(6, "months"))
     next_qtr <- lubridate::add_with_rollback(lubridate::yq(sc_qtr), lubridate::period(9, "months"))
 
-    # Do SC Calculation - end_date is missing
-    dplyr::if_else(
-      # if qtr_end < start_date then set to next qtr
-      qtr_end < start_date,
-      lubridate::time_length(lubridate::interval(start_date, next_qtr), unit = "days"),
+    dummy_end_date <- dplyr::case_when(
+      # if end date is not missing use the end date
+      !is.na(end_date) ~ end_date,
       # if end date is missing set to end of quarter
-      lubridate::time_length(lubridate::interval(start_date, qtr_end), unit = "days")
+      qtr_end >= start_date ~ qtr_end,
+      # if qtr_end < start_date then set to next qtr
+      qtr_end < start_date ~ next_qtr
     )
+
+    lubridate::time_length(lubridate::interval(start_date, dummy_end_date), unit = "days")
   }
 }
