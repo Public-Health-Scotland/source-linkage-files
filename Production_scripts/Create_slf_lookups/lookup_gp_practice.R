@@ -11,27 +11,41 @@
 
 # Load packages
 library(dplyr)
-library(tidyr)
-library(phsopendata)
-library(janitor)
-library(fs)
 library(createslf)
 
 # Read in data---------------------------------------
 
 # Retrieve the latest resource from the dataset
 opendata <-
-  get_dataset("gp-practice-contact-details-and-list-sizes",
+  phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
     max_resources = 20
   ) %>%
-  clean_names() %>%
-  # Filter and save
+  janitor::clean_names() %>%
+  left_join(
+    phsopendata::get_resource(
+      "944765d7-d0d9-46a0-b377-abb3de51d08e",
+      col_select = c("HSCP", "HSCPName", "HB", "HBName")
+    ) %>%
+      janitor::clean_names(),
+    by = c("hb", "hscp")
+  ) %>%
+  # select variables
   select(
     gpprac = practice_code,
     practice_name = gp_practice_name,
-    gpprac_postcode = postcode,
-    cluster = gp_cluster
+    postcode,
+    cluster = gp_cluster,
+    partnership = hscp_name,
+    health_board = hb_name
   ) %>%
+  # drop NA cluster rows
+  tidyr::drop_na(cluster) %>%
+  # format practice name text
+  mutate(practice_name = stringr::str_to_title(practice_name)) %>%
+  # format postcode
+  mutate(postcode = phsmethods::format_postcode(postcode)) %>%
+  # keep distinct gpprac
+  distinct(gpprac, .keep_all = TRUE) %>%
   # Sort for SPSS matching
   arrange(gpprac) %>%
   # Write out as an SPSS file
@@ -47,7 +61,7 @@ gpprac_ref_file <-
   # select only praccode and postcode
   select(
     gpprac = praccode,
-    gpprac_postcode = postcode
+    postcode
   )
 
 # postcode lookup
@@ -67,16 +81,16 @@ spd_file <- readr::read_rds(get_spd_path()) %>%
 
 gpprac_slf_lookup <-
   ## match cluster information onto the practice reference list ##
-  left_join(opendata, gpprac_ref_file, by = c("gpprac", "gpprac_postcode")) %>%
+  left_join(opendata, gpprac_ref_file, by = c("gpprac", "postcode")) %>%
   # match on geography info - postcode
-  left_join(spd_file, by = c("gpprac_postcode" = "postcode")) %>%
+  left_join(spd_file, by = "postcode") %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
   # order variables
   select(
     gpprac,
     pc7,
-    gpprac_postcode,
+    postcode,
     cluster,
     hbpraccode,
     hscp2018,
@@ -86,13 +100,17 @@ gpprac_slf_lookup <-
   mutate(lca = convert_ca_to_lca(ca2018)) %>%
   # set some known dummy practice codes to consistent Board codes
   mutate(
-    hbpraccode = if_else(gpprac %in% c(99942, 99957, 99961, 99981, 99999), "S08200003", hbpraccode),
+    hbpraccode = if_else(
+      gpprac %in% c(99942, 99957, 99961, 99981, 99999),
+      "S08200003",
+      hbpraccode
+    ),
     hbpraccode = if_else(gpprac == 99995, "S08200001", hbpraccode)
   ) %>%
   # sort by gpprac
   arrange(gpprac) %>%
   # rename pc8 back - saved in output as pc8
-  rename(pc8 = "gpprac_postcode")
+  rename(pc8 = "postcode")
 
 
 ## save outfile ---------------------------------------

@@ -12,7 +12,6 @@
 # for Older People in Scotland.
 # https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/
 # Check and add any new years to 'CH_Costs.xlsx'
-#
 #####################################################
 
 # Load packages
