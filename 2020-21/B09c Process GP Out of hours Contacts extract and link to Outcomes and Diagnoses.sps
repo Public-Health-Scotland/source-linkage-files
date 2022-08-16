@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
  * Run 01-Set up Macros first!.
@@ -49,6 +49,21 @@ Alter type ConsultationStartDateTime ConsultationEndDateTime (DATETIME16).
  * Some episodes are wrongly included.
 Select if ConsultationStartDateTime LE Date.DMY(31, 03, Number(!altFY, F4.0) + 1).
 Select if ConsultationEndDateTime GE Date.DMY(01, 04, Number(!altFY, F4.0)).
+
+* Exclude certain consulations as they are 'Flow navigation centre' data.
+Compute consultation_to_drop = any(ConsultationTypeUnmapped,
+    "ED APPOINTMENT",
+    "ED TELEPHONE ASSESSMENT",
+    "ED TO BOOK",
+    "ED TELEPHONE / REMOTE CONSULTATION",
+    "MIU APPOINTMENT",
+    "MIU TELEPHONE ASSESSMENT",
+    "MIU TO BOOK",
+    "MIU TELEPHONE / REMOTE CONSULTATION",
+    "TELEPHONE ASSESSMENT",
+    "TELEPHONE/VIRTUAL ASSESSMENT").
+
+select if not consultation_to_drop.
 
 * Map COVID type calls to the proper consultation type.
 Do if ConsultationType = "".
