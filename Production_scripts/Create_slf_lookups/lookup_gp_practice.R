@@ -61,7 +61,7 @@ gpprac_ref_file <-
   # select only praccode and postcode
   select(
     gpprac = praccode,
-    gpprac_postcode = postcode
+    postcode
   )
 
 # postcode lookup
