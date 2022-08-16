@@ -68,6 +68,7 @@ end_fy <- function(year, format = c("fyyear", "alternate")) {
 #' @param format the format of the year vector, default is financial year
 #'
 #' @return a vector of dates of the mid date of the FY year
+#'
 #' @export
 #'
 #' @examples
