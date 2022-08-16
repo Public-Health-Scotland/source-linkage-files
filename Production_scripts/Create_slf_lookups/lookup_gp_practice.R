@@ -61,7 +61,7 @@ gpprac_ref_file <-
   # select only praccode and postcode
   select(
     gpprac = praccode,
-    gpprac_postcode = postcode
+    postcode
   )
 
 # postcode lookup
@@ -81,16 +81,16 @@ spd_file <- readr::read_rds(get_spd_path()) %>%
 
 gpprac_slf_lookup <-
   ## match cluster information onto the practice reference list ##
-  left_join(opendata, gpprac_ref_file, by = c("gpprac", "gpprac_postcode")) %>%
+  left_join(opendata, gpprac_ref_file, by = c("gpprac", "postcode")) %>%
   # match on geography info - postcode
-  left_join(spd_file, by = c("gpprac_postcode" = "postcode")) %>%
+  left_join(spd_file, by = "postcode") %>%
   # rename hb2018
   rename(hbpraccode = "hb2018") %>%
   # order variables
   select(
     gpprac,
     pc7,
-    gpprac_postcode,
+    postcode,
     cluster,
     hbpraccode,
     hscp2018,
@@ -110,7 +110,7 @@ gpprac_slf_lookup <-
   # sort by gpprac
   arrange(gpprac) %>%
   # rename pc8 back - saved in output as pc8
-  rename(pc8 = "gpprac_postcode")
+  rename(pc8 = "postcode")
 
 
 ## save outfile ---------------------------------------
