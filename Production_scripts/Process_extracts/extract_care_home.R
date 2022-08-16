@@ -17,9 +17,9 @@ year <- check_year_format("1920")
 
 
 # Read in data---------------------------------------
-# TODO update this to use the rds version
-source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(ext = "zsav")) %>%
-  # select episodes for FY - TODO - Merge this after PR #305 is complete
+# TO DO - use RDS version
+source_ch_data <- haven::read_sav(get_sc_ch_episodes_path(update = previous_update(), ext = "zsav")) %>%
+  # select episodes for FY
   filter(is_date_in_fyyear(year, record_keydate1, record_keydate2)) %>%
   # remove any episodes where the latest submission was before the current year
   filter(substr(sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year))
@@ -45,19 +45,13 @@ source_ch_clean <- matched_data %>%
   # compute lca variable from sending_location
   mutate(lca = convert_sending_location_to_lca(sending_location)) %>%
   # bed days
-  # create dummy end where blank
-  mutate(dummy_discharge = if_else(
-    is.na(record_keydate2),
-    end_fy(year) + days(1),
-    record_keydate2
-  )) %>%
   create_monthly_beddays(year, record_keydate1, dummy_discharge) %>%
   # year stay
-  mutate(yearstay = rowSums(across(ends_with("_beddays")))) %>%
-  # total length of stay
-  mutate(stay = time_length(interval(record_keydate1, dummy_discharge),
-    unit = "days"
-  ))
+  mutate(
+    yearstay = rowSums(across(ends_with("_beddays"))),
+    # total length of stay
+    stay = calculate_stay(year, record_keydate1, record_keydate2, sc_latest_submission)
+  )
 
 
 # Costs  ---------------------------------------

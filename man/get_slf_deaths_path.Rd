@@ -23,7 +23,6 @@ Get the full path to the SLF deaths lookup file
 
 Other slf lookup file path: 
 \code{\link{get_slf_ch_name_lookup_path}()},
-\code{\link{get_slf_gp_cluster_path}()},
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()}
 }

@@ -4,7 +4,6 @@
 # Date: February 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
 # Description - Takes IT extract of LTC data.
 #              Renames and checks types of data.
 #              Flags variables which fall outside FY.

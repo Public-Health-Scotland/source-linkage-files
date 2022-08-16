@@ -22,7 +22,6 @@ Get the full path to the SLF Care Home lookup
 
 Other slf lookup file path: 
 \code{\link{get_slf_deaths_path}()},
-\code{\link{get_slf_gp_cluster_path}()},
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()}
 }
