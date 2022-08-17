@@ -172,10 +172,10 @@ qtr_merge <- at_full_clean %>%
 
 qtr_merge %>%
   # save rds file
-  readr::write_rds(path(social_care_dir, str_glue("all_at_episodes_{latest_update()}.rds")),
-    compress = "gz"
+  readr::write_rds(path(social_care_dir, stringr::str_glue("all_at_episodes_{latest_update()}.rds")),
+    compress = "xz"
   ) %>%
   # save sav file
-  haven::write_sav(path(social_care_dir, str_glue("all_at_episodes_{latest_update()}.zsav")),
+  haven::write_sav(path(social_care_dir, stringr::str_glue("all_at_episodes_{latest_update()}.zsav")),
     compress = "zsav"
   )
