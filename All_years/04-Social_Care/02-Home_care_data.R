@@ -1,4 +1,3 @@
-
 # Setup -------------------------------------------------------------------
 
 library(haven)
@@ -10,9 +9,7 @@ library(readr)
 library(phsmethods)
 library(tidyr)
 
-source("All_years/04-Social_Care/02a-hc_functions.R")
-
-latest_update <- "Jun_2022"
+source("All_years/04-Social_Care/00-Social_Care_functions.R")
 
 # Open connection to DVPROD
 sc_con <- phs_db_connection(dsn = "DVPROD")
@@ -61,10 +58,8 @@ hc_query <-
   mutate(reablement = na_if(reablement, 9L)) %>%
   # Fix any NA hc_service
   mutate(hc_service = if_else(is.na(hc_service), 0L, hc_service)) %>%
-  # Drop bad rows
-  filter(
-    hc_start_date_after_end_date == 0
-  )
+  # If the start is after the end, remove the end date
+  mutate(hc_service_end_date = if_else(hc_service_start_date > hc_service_end_date, NA_Date_, hc_service_end_date))
 
 # Extract the data --------------------------------------------------------
 
