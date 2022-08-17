@@ -77,11 +77,10 @@ sds_full_clean <- sds_full_data %>%
     names_to = "sds_option",
     names_prefix = "sds_option_",
     names_transform = list(sds_option = ~ paste0("SDS-", .x)),
-    values_to = "received",
-    values_transform = list(received = as.integer)
+    values_to = "received"
   ) %>%
   # Only keep rows where they received a package and remove duplicates
-  filter(received == 1) %>%
+  filter(received) %>%
   distinct() %>%
   # Include source variables
   mutate(
