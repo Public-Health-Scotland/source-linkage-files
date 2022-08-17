@@ -54,9 +54,10 @@ sds_full_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "sds_snap
 
 sds_full_clean <- sds_full_data %>%
   # Deal with SDS option 4
+  # First turn the option flags into a logical T/F
   mutate(across(starts_with("sds_option_"), ~ .x == "1")) %>%
-  # SDS option 4 is derived when a person recieves more than one option.
-  # e.g. if person has option 1 and 2 then option 4 will be derived
+  # SDS option 4 is derived when a person receives more than one option.
+  # e.g. if a person has options 1 and 2 then option 4 will be derived
   mutate(sds_option_4 = rowSums(across(starts_with("sds_option_"))) > 1, .after = sds_option_3) %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
