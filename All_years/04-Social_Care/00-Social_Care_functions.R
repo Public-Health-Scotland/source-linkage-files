@@ -1,7 +1,3 @@
-# Shared Social Care dir path
-social_care_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
-
-
 #' Latest update
 #'
 #' @description Get the date of the latest update, e.g 'Jun_2022'
