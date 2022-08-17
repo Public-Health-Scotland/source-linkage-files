@@ -62,7 +62,7 @@ sds_full_clean <- sds_full_data %>%
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # If sds start date is missing, assign start of FY
   mutate(sds_start_date = if_else(is.na(sds_start_date),
-    as.Date(paste0(period, "-04-01")),
+    start_fy(year = period, format = "alternate"),
     sds_start_date
   )) %>%
   # rename for matching source variables
@@ -71,7 +71,7 @@ sds_full_clean <- sds_full_data %>%
     record_keydate2 = sds_end_date
   ) %>%
   # Pivot longer on sds option variables
-  pivot_longer(
+  tidyr::pivot_longer(
     cols = contains("sds_option_"),
     names_to = "sds_option",
     names_prefix = "sds_option_",
