@@ -1,5 +1,9 @@
 # September 2022 Update - Unreleased
 
+* Created new files for 2022/23.
+* The NSU cohort has been added for 2021/22.
+* Home Care - If the start date is after the end date we will now discard the end date (`sysmis`/`NA`), previously we would have dropped these records entirely.
+
 # June 2022 Update - Released 10-Jun-2022
 
 * Fixed a bug where CH costs was not referring to end of year. 
