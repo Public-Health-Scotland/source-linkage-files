@@ -77,7 +77,7 @@ replaced_start_dates <- at_full_data %>%
     start_date_missing = is.na(service_start_date),
     service_start_date = if_else(
       start_date_missing,
-      start_fy(year = substr(period,1, 4), format = "alternate"),
+      start_fy(year = substr(period, 1, 4), format = "alternate"),
       service_start_date
     )
   )
