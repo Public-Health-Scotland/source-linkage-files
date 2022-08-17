@@ -62,7 +62,7 @@ jobs:
       - name: Deploy to Netlify
         if: contains(env.isPR, 'true')
         id: netlify-deploy
-        uses: nwtgck/actions-netlify@v1.12        
+        uses: nwtgck/actions-netlify@v1.2      
         with:
           publish-dir: './docs'
           production-branch: main-R          
