@@ -460,8 +460,13 @@ Else if (recid = "SDS").
 End if.
 
 *************************************************************************************************************************************************.
-* Aggregate over the Care Home 'CIS' episodes.
+* Identify unique OoH cases (not consultations) for counting below.
+Sort cases by chi ooh_case_id.
+add files file = *
+    /first = unique_ooh_case
+    /by = chi ooh_case_id.
 
+* Aggregate over the Care Home 'CIS' episodes.
 aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
@@ -533,9 +538,9 @@ aggregate outfile = *
     = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
     /PIS_dispensed_items PIS_cost = sum(no_dispensed_items PIS_cost)
-    /OoH_cases = Max(OoH_CC)
-    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost
-    = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost)
+    /OoH_cases = sum(unique_ooh_case)
+    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC)
+	/OoH_consultation_time OoH_cost = sum(OoH_consultation_time OoH_cost)
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
     /DN_episodes DN_contacts DN_cost

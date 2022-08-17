@@ -844,7 +844,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ooh_outcome.2
     ooh_outcome.3
     ooh_outcome.4
-    ooh_cc
+    ooh_case_id
     ccm
     totalnodncontacts
     hl1_application_ref

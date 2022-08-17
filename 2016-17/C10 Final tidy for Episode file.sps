@@ -124,16 +124,17 @@ Variable Labels
     feb_cost "Cost from episode in February"
     gender "Gender"
     gpprac "GP Practice code"
+    hc_hours_annual "Total number of home care service hours in the financial year"
     hc_hours_q1 "Total number of home care service hours in Q1 (April - June)"
     hc_hours_q2 "Total number of home care service hours in Q2 (July - September)"
     hc_hours_q3 "Total number of home care service hours in Q3 (October - December)"
     hc_hours_q4 "Total number of home care service hours in Q4 (January - March)"
-    hc_provider "The organisation type that provides the home care service to the client/service user"
-    hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hc_cost_q1 "Total cost of home care hours in Q1 (April - June)"
     hc_cost_q2 "Total cost of home care hours in Q2 (July - September)"
     hc_cost_q3 "Total cost of home care hours in Q3 (October - December)"
     hc_cost_q4 "Total cost of home care hours in Q4 (January - March)"
+    hc_provider "The organisation type that provides the home care service to the client/service user"
+    hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hbpraccode "NHS Board of GP Practice"
     hbrescode "NHS Board of Residence"
     hbtreatcode "NHS Board of Treatment"
@@ -843,7 +844,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ooh_outcome.2
     ooh_outcome.3
     ooh_outcome.4
-    ooh_cc
+    ooh_case_id
     ccm
     totalnodncontacts
     hl1_application_ref
@@ -869,6 +870,10 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     hc_hours_q2
     hc_hours_q3
     hc_hours_q4
+    hc_cost_q1
+    hc_cost_q2
+    hc_cost_q3
+    hc_cost_q4
     hc_provider
     hc_reablement
     sds_option_4
