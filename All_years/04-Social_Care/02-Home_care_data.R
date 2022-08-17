@@ -21,7 +21,7 @@ sc_con <- phs_db_connection(dsn = "DVPROD")
 # TODO replace the demographic file with R code
 demog_file <- read_demog_file(
   social_care_dir = social_care_dir,
-  latest_update = latest_update
+  latest_update = latest_update()
 )
 
 # Query to database -------------------------------------------------------
@@ -323,11 +323,11 @@ merged_data <- pivotted_hours %>%
 # Write data out ----------------------------------------------------------
 
 merged_data %>%
-  write_rds(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.rds")),
+  write_rds(path(social_care_dir, str_glue("all_hc_episodes_{latest_update()}.rds")),
     compress = "xz",
     compression = 9,
     version = 3
   ) %>%
-  write_sav(path(social_care_dir, str_glue("all_hc_episodes_{latest_update}.zsav")),
+  write_sav(path(social_care_dir, str_glue("all_hc_episodes_{latest_update()}.zsav")),
     compress = "zsav"
   )
