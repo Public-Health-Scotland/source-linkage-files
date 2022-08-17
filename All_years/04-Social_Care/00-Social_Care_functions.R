@@ -187,3 +187,33 @@ convert_sc_sl_to_lca <- function(sending_location) {
   )
   return(lca)
 }
+
+#' Return the start date of FY year
+#'
+#' @description Get the start date of the specified financial year
+#'
+#' @param year a vector of years
+#' @param format the format of the year vector, default is financial year
+#'
+#' @return a vector of the start dates of the FY year
+#' @export
+#'
+#' @examples
+#' start_fy("1718")
+#'
+#' @family date functions
+start_fy <- function(year, format = c("fyyear", "alternate")) {
+  if (missing(format)) {
+    format <- "fyyear"
+  }
+
+  format <- match.arg(format)
+
+  if (format == "fyyear") {
+    start_fy <- as.Date(paste0(convert_fyyear_to_year(year), "-04-01"))
+  } else if (format == "alternate") {
+    start_fy <- as.Date(paste0(year, "-04-01"))
+  }
+
+  return(start_fy)
+}
