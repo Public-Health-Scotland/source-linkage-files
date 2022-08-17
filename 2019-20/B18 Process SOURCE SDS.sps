@@ -9,11 +9,6 @@ Alter type
     social_care_id (A10)
     sds_option_1 sds_option_2 sds_option_3 (F1.0).
 
-* Match on the demographics data (chi, gender, dob and postcode).
-match files file = *
-    /table = !SC_dir + "sc_demographics_lookup_" + !LatestUpdate + ".zsav"
-    /by sending_location social_care_id.
-
 * Match on Client data.
 match files file = *
     /table = !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
