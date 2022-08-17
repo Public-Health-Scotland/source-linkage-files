@@ -128,7 +128,6 @@ merge_eps <- sds_full_clean %>%
     postcode = last(postcode),
     sds_option = last(sds_option),
     recid = last(recid),
-    age = last(age),
     person_id = last(person_id),
     sc_send_lca = last(sc_send_lca),
     episode_counter = last(episode_counter)
@@ -139,13 +138,13 @@ merge_eps <- sds_full_clean %>%
 
 # Save outfile------------------------------------------------
 
-outfile %>%
+merge_eps %>%
   # save rds file
-  readr::write_rds(path(social_care_dir, str_glue("all_sds_episodes_{latest_update()}.rds")),
+  readr::write_rds(path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.rds")),
     compress = "xz"
   ) %>%
   # save sav file
-  haven::write_sav(path(social_care_dir, str_glue("all_sds_episodes_{latest_update()}.zsav")),
+  haven::write_sav(path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.zsav")),
     compress = "zsav"
   )
 
