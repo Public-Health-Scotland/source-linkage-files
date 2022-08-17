@@ -14,8 +14,6 @@ source("All_years/04-Social_Care/02a-hc_functions.R")
 
 latest_update <- "Jun_2022"
 
-social_care_dir <- path("/conf/hscdiip/SLF_Extracts/Social_care")
-
 # Open connection to DVPROD
 sc_con <- phs_db_connection(dsn = "DVPROD")
 
