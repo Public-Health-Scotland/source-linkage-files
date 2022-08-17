@@ -110,9 +110,9 @@ merge_eps <- sds_full_clean %>%
   # Create a flag for episodes that are going to be merged
   # Create an episode counter
   mutate(
-    flag = (record_keydate1 > lag(record_keydate2)) %>%
+    distinct_episode = (record_keydate1 > lag(record_keydate2)) %>%
       replace_na(TRUE),
-    episode_counter = cumsum(flag)
+    episode_counter = cumsum(distinct_episode)
   ) %>%
   # Group by episode counter and merge episodes
   group_by(episode_counter, .add = TRUE) %>%
