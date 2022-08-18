@@ -134,7 +134,9 @@ ae_clean <- ae_file %>%
   # Create month variable
   mutate(month = strftime(record_keydate1, "%m")) %>%
   # Allocate the costs to the correct month
-  create_day_episode_costs(record_keydate1, cost_total_net)
+  create_day_episode_costs(record_keydate1, cost_total_net) %>%
+  # Add SMR type
+  mutate(smrtype = add_smr_type(recid))
 
 
 # Factors ---------------------------------------------------
@@ -234,6 +236,7 @@ outfile <-
     record_keydate2,
     keyTime1,
     keyTime2,
+    smrtype,
     chi,
     gender,
     dob,
@@ -309,6 +312,7 @@ outfile <- matched_ae_data %>%
     record_keydate2,
     keyTime1,
     keyTime2,
+    smrtype,
     chi,
     gender,
     dob,
