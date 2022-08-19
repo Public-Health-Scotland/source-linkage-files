@@ -92,7 +92,6 @@ aggregate outfile = SLFnew
     /break
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
-    /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
@@ -248,7 +247,6 @@ aggregate outfile = SLFexisting
     /break
     /n_CHIs = sum(Has_CHI)
     /n_Males n_Females = Sum(Male Female)
-    /avg_Age = mean(age)
     /n_episodes = n
     /Earliest_start Earliest_end = Min(record_keydate1 record_keydate2)
     /Latest_start Latest_end = Max(record_keydate1 record_keydate2)
