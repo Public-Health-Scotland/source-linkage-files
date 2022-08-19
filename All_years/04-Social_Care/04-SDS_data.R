@@ -133,18 +133,23 @@ merge_eps <- sds_full_clean %>%
     episode_counter = last(episode_counter)
   ) %>%
   # end of lazy_dt()
-  as_tibble()
+  as_tibble() %>%
+  # Sort for running SPSS
+  arrange(
+    sending_location,
+    social_care_id
+  )
 
 
 # Save outfile------------------------------------------------
 
 merge_eps %>%
   # save rds file
-  readr::write_rds(path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.rds")),
+  readr::write_rds(fs::path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.rds")),
     compress = "xz"
   ) %>%
   # save sav file
-  haven::write_sav(path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.zsav")),
+  haven::write_sav(fs::path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.zsav")),
     compress = "zsav"
   )
 
