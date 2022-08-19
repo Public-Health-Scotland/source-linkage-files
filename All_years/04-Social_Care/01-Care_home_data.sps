@@ -581,14 +581,6 @@ End if.
 
 * CHI - This won't apply to clients without a CHI but will link up stays across sending locations.
 sort cases by chi ch_admission_date sc_latest_submission.
-* Old method - to be removed.
-If chi NE "" ch_chi_cis_old = 1.
-Do if chi = lag(chi) and chi NE "".
-    Compute ch_chi_cis_old = lag(ch_chi_cis_old).
-    If ch_admission_date > lag(ch_discharge_date) + time.days(1) ch_chi_cis_old = lag(ch_chi_cis_old) + 1.
-End if.
-
-* Logic is the same as above.
 If chi NE "" ch_chi_cis = 1.
 
 Do if sysmis(ch_discharge_date).
@@ -611,60 +603,36 @@ Do if chi = lag(chi) and chi NE "".
     End if.
 End if.
 
-compute sc_id_cis_changed = ch_sc_id_cis NE ch_sc_id_cis_old.
-compute chi_cis_changed = ch_chi_cis NE ch_chi_cis_old.
-frequencies sc_id_cis_changed chi_cis_changed.
+Compute dummy_dis_date = min(record_date, ch_discharge_date).
 
+ * Get the start and end dates for the full stay so we can work out respite.
+aggregate
+    /break CHI ch_sc_id_cis
+    /ch_ep_start = min(ch_admission_date)
+    /ch_ep_end = max(dummy_dis_date).
 
-******************************************************************************************************************************************************************************************************.
-* Code for testing bedday calculations - to be removed.
-Compute include = Range(ch_admission_date, !startFY, !endFY) or (ch_admission_date <= !endFY and (ch_discharge_date >= !startFY or sysmis(ch_discharge_date))) and
-    Not(Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.0) and sysmis(ch_discharge_date) AND ch_admission_date < !startFY) .
+Alter type ch_ep_start ch_ep_end (DATE11).
 
-sort cases by include CHI ch_chi_cis.
-add files file = *
-    /by include CHI ch_chi_cis
-    /first = first_ch_ep.
+* Work out whether the stay was respite (short) or long (> 6 weeks).
+Compute stay_los = datediff(ch_ep_end, ch_ep_start, "days").
+Compute stay_respite = stay_los < (6 * 7).
 
-* Count continuous episodes.
-Do if include.
-    Compute ch_cis_episodes = first_ch_ep.
-    Compute ch_ep_start = ch_admission_date.
-    Compute ch_ep_end = ch_discharge_date.
-    If sysmis(ch_ep_end) ch_ep_end = Datesum(date.qyr(Number(char.substr(sc_latest_submission, 6), F1.0), Number(char.substr(sc_latest_submission, 1, 4), F4.0)), 6, "months").
-End if.
-
-aggregate outfile = * mode = addvariables overwrite = yes
-    /presorted
-    /break include CHI ch_chi_cis
-    /ch_ep_start = min(ch_ep_start)
-    /ch_ep_end = max(ch_ep_end).
-
-Do if include.
-    Compute ch_beddays = datediff(Min(ch_ep_end, !endFY + time.days(1)), Max(!startFY, ch_ep_start), "days").
-
-    * Now all data will appear on all records we only want the first to avoid double counts.
-    Do if Not(first_ch_ep).
-        Compute ch_beddays = 0.
+* Recode reason_for_admission into type_of_admission where we can.
+Do if sysmiss(type_of_admission).
+    Do if reason_for_admission = 1.
+        * Respite.
+        Compute new_type_of_admission = 1.
+    Else if reason_for_admission = 2.
+        * Intermediate Care.
+        Compute new_type_of_admission = 2.
+    Else if stay_respite.
+        * Respite (by length of Stay).
+        Compute new_type_of_admission = 1.
+    Else.
+        * Long Term Care (by length of Stay).
+        Compute new_type_of_admission = 3.
     End if.
 End if.
-
-If chi = "" ch_beddays = $sysmis.
-sort cases by chi ch_admission_date sc_latest_submission.
-
-aggregate
-    /presorted
-    /break CHI
-    /all_beddays = sum(ch_beddays).
-
-Compute error = include and all_beddays > 366.
-Frequencies error.
-
-temporary.
-select if include.
-descriptives all_beddays.
-******************************************************************************************************************************************************************************************************.
-
 
 Rename Variables
     ch_admission_date = record_keydate1
