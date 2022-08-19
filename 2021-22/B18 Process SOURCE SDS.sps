@@ -9,16 +9,12 @@ compute year = !FY.
 
 Alter type
     sending_location (A3)
-    social_care_id (A10)
-    sds_option_1 sds_option_2 sds_option_3 (F1.0).
+    social_care_id (A10).
 
 * Match on Client data.
 match files file = *
     /table = !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
     /By sending_location social_care_id.
-
-String Year (A4).
-Compute Year = !FY.
 
 * In case keydate is needed as F8.0...
 alter type record_keydate1 record_keydate2 (SDATE10).
@@ -35,7 +31,7 @@ sort cases by chi record_keydate1 record_keydate2.
 save outfile = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /Keep year
     recid
-    SMRType
+    smrtype
     chi
     dob
     gender
@@ -49,7 +45,6 @@ save outfile = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     sc_type_of_housing
     sc_meals
     sc_day_care
-    sds_option_4
     /zcompressed.
 
 get file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav".
