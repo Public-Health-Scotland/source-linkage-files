@@ -4,6 +4,9 @@ get file = !SC_dir + "all_at_episodes_" + !LatestUpdate + ".zsav".
 * Now select episodes for given FY.
 select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 <= !endFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
 
+string year (a4).
+compute year = !FY.
+
 Alter type
     sending_location (A3)
     social_care_id (A10).
@@ -26,7 +29,7 @@ alter type record_keydate2 (F8.0).
 sort cases by chi record_keydate1 record_keydate2.
 
 save outfile = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
-    /Keep Year
+    /Keep year
     recid
     SMRType
     chi
