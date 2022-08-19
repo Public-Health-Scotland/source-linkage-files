@@ -3,6 +3,7 @@
 * Created new files for 2022/23.
 * The NSU cohort has been added for 2021/22.
 * Home Care - If the start date is after the end date we will now discard the end date (`sysmis`/`NA`), previously we would have dropped these records entirely.
+* Care Home admission reason - `ch_adm_reason` now uses the variable `type_of_admission` from the V1.4 definitions, instead of the older `reason_for_admission`. Records submitted before 2020/21 which do not have this variable have been re-coded but should be used with some skeptisism.
 
 # June 2022 Update - Released 10-Jun-2022
 
