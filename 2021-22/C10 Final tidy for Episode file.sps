@@ -876,7 +876,6 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     hc_cost_q4
     hc_provider
     hc_reablement
-    sds_option_4
     smr01_cis_marker
     cij_marker
     cij_start_date
