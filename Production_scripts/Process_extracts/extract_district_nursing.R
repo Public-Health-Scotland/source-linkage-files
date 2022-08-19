@@ -95,7 +95,7 @@ dn_costs <- dn_clean %>%
     "S08000023" = "S08000032"
   )) %>%
   # match files with DN Cost Lookup
-  left_join(haven::read_sav(get_dn_costs_path(ext = "sav")),
+  left_join(readr::read_rds(get_dn_costs_path()),
     by = c("hbtreatcode", "year" = "Year")
   ) %>%
   # costs are rough estimates we round them to the nearest pound

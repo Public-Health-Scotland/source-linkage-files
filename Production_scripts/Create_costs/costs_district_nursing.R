@@ -30,7 +30,7 @@ library(createslf)
 # Copy existing file ---------------------------------------
 
 # read data in
-current_file <- haven::read_sav(get_dn_costs_path())
+current_file <- readr::read_rds(get_dn_costs_path())
 
 # Create a copy for comparison
 fs::file_copy(
