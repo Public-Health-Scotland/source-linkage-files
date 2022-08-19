@@ -24,6 +24,7 @@ alter type
     social_care_id (A10)
     nursing_care_provision (F1.0)
     reason_for_admission (F2.0)
+    type_of_admission (F1.0)
     ch_provider (F1.0)
     ch_postcode (A8)
     ch_name (A73).
@@ -320,7 +321,7 @@ crosstabs AccurateData1 by AccurateData2 by AccurateData0.
 
 * Refresh the variables to drop all the ones we no longer need.
 save outfile = !SC_dir + "TEMP-Care_Home_end_of_name_changes.zsav"
-    /keep sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission nursing_care_provision age gender dob postcode
+    /keep sending_location social_care_id chi ch_name ch_postcode ch_admission_date ch_discharge_date financial_year financial_quarter period record_date ch_provider reason_for_admission type_of_admission nursing_care_provision age gender dob postcode
     /zcompressed.
 get file =  !SC_dir + "TEMP-Care_Home_end_of_name_changes.zsav".
 
@@ -418,6 +419,7 @@ aggregate outfile = *
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
     /reason_for_admission = last(reason_for_admission)
+    /type_of_admission = last(type_of_admission)
     /gender dob postcode = first(gender dob postcode)
     /Duplicate = max(duplicate).
 
@@ -667,20 +669,13 @@ descriptives all_beddays.
 Rename Variables
     ch_admission_date = record_keydate1
     ch_discharge_date = record_keydate2
-    reason_for_admission = ch_adm_reason
+    type_of_admission = ch_adm_reason
     nursing_care_provision = ch_nursing.
 
 Value Labels ch_adm_reason
-    1 'Respite'
-    2 'Intermediate Care (includes Step Up/Step Down)'
-    3 'Emergency'
-    4 'Palliative Care'
-    5 'Dementia'
-    6 'Elderly Mental Health'
-    7 'Learning Disability'
-    8 'High Dependency'
-    9 'Choice'
-    10 'Other'.
+    1 "Respite"
+    2 "Intermediate Care"
+    3 "Long Term Care".
 
 Value Labels ch_nursing
     0 'No'
