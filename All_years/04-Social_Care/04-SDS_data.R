@@ -84,6 +84,10 @@ sds_full_clean <- sds_full_data %>%
   distinct() %>%
   # Include source variables
   mutate(
+    smrtype = case_when(sds_option == 1 ~ "SDS-1",
+                        sds_option == 2 ~ "SDS-2",
+                        sds_option == 3 ~ "SDS-3"
+      ),
     recid = "SDS",
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
@@ -126,6 +130,7 @@ merge_eps <- sds_full_clean %>%
     gender = last(gender),
     dob = last(dob),
     postcode = last(postcode),
+    smrtype = last(smrtype),
     sds_option = last(sds_option),
     recid = last(recid),
     person_id = last(person_id),
