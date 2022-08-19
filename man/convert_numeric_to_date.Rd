@@ -24,10 +24,14 @@ Other date functions:
 \code{\link{calculate_stay}()},
 \code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
+\code{\link{end_fy_quarter}()},
 \code{\link{end_fy}()},
+\code{\link{end_next_fy_quarter}()},
 \code{\link{fy_interval}()},
 \code{\link{is_date_in_fyyear}()},
 \code{\link{midpoint_fy}()},
-\code{\link{start_fy}()}
+\code{\link{start_fy_quarter}()},
+\code{\link{start_fy}()},
+\code{\link{start_next_fy_quarter}()}
 }
 \concept{date functions}
