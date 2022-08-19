@@ -9,7 +9,11 @@ compute year = !FY.
 
 Alter type
     sending_location (A3)
-    social_care_id (A10).
+    social_care_id (A10)
+    recid (a3)
+    smrtype (a10)
+    postcode (a8)
+    person_id (A13).
 
 * Match on Client data.
 match files file = *
