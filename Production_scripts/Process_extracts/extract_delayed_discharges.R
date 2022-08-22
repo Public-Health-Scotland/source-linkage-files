@@ -71,7 +71,7 @@ outfile <- dd_clean %>%
     original_admission_date,
     keydate1_dateformat,
     keydate2_dateformat,
-    SMRType,
+    smrtype,
     chi,
     postcode,
     delay_end_reason,
