@@ -13,7 +13,7 @@ Do if Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.
     Compute old_open_record = sysmis(hc_service_end_date) AND hc_service_start_date < !startFY.
 End if.
 
-Select if sysmis(old_open_record).
+Select if sysmis(old_open_record) OR NOT old_open_record.
 
 Alter type
     sending_location (A3)
