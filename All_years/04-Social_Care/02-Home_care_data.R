@@ -65,7 +65,7 @@ hc_query <-
 
 hc_full_data <- collect(hc_query) %>%
   # Clean up variable types
-  tidylog::mutate(
+  mutate(
     # Use integer if applicable
     across(where(is_integer_like), as.integer),
     # Make empty strings NA
@@ -78,7 +78,7 @@ hc_full_data <- collect(hc_query) %>%
   ) %>%
   # Match on the demographic data
   # CHI + other vars
-  tidylog::left_join(demog_file,
+  left_join(demog_file,
     by = c("sending_location", "social_care_id")
   )
 
@@ -134,7 +134,7 @@ pre_compute_record_dates <- hc_full_data %>%
 replaced_start_dates <- hc_full_data %>%
   # Replace missing start dates with the start of the quarter
   left_join(pre_compute_record_dates, by = "period") %>%
-  tidylog::mutate(
+  mutate(
     start_date_missing = is.na(hc_service_start_date),
     hc_service_start_date = if_else(
       start_date_missing,
@@ -143,7 +143,7 @@ replaced_start_dates <- hc_full_data %>%
     )
   ) %>%
   # Replace really early start dates with start of the quarter
-  tidylog::mutate(
+  mutate(
     early_start_date = hc_service_start_date < as.Date("1989-01-01"),
     hc_service_start_date = if_else(
       early_start_date,
@@ -160,7 +160,7 @@ bad_dates <- replaced_start_dates %>%
     # Need to check this as we are potentialsly introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  tidylog::filter(if_any(c(end_before_qtr, start_after_quarter, start_after_end))) %>%
+  filter(if_any(c(end_before_qtr, start_after_quarter, start_after_end))) %>%
   group_by(sending_location_name, period) %>%
   summarise(across(c(end_before_qtr, start_after_quarter, start_after_end), sum, na.rm = TRUE)) %>%
   janitor::adorn_totals(where = c("row", "col"))
@@ -174,7 +174,7 @@ dropped_bad_dates <- replaced_start_dates %>%
     # Need to check this as we are potentialsly introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
-  tidylog::filter(
+  filter(
     !end_before_qtr,
     !start_after_quarter,
     !start_after_end
@@ -185,7 +185,7 @@ fixed_sc_ids <- dropped_bad_dates %>%
   # Sort and take the latest sc_id
   arrange(sending_location, chi, record_date, hc_service_start_date) %>%
   group_by(sending_location, chi) %>%
-  tidylog::mutate(social_care_id = if_else(is.na(chi), social_care_id, last(social_care_id))) %>%
+  mutate(social_care_id = if_else(is.na(chi), social_care_id, last(social_care_id))) %>%
   ungroup()
 
 fixed_reablement <- fixed_sc_ids %>%
@@ -207,12 +207,12 @@ fixed_reablement <- fixed_sc_ids %>%
   ) %>%
   # If reablement is missing fill in from later records (up)
   # If still missing fill in from earlier records (down)
-  tidylog::fill(reablement, .direction = "updown") %>%
+  fill(reablement, .direction = "updown") %>%
   mutate(reablement = replace_na(reablement, 9L)) %>%
   ungroup()
 
 fixed_hours <- fixed_reablement %>%
-  tidylog::mutate(
+  mutate(
     days_in_quarter = time_length(
       interval(
         pmax(qtr_start, hc_service_start_date),
