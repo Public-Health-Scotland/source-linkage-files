@@ -17,6 +17,8 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
     !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
     !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
+    !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
     !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
@@ -36,6 +38,8 @@ add files
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
+    /file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /By chi.
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
@@ -366,9 +370,6 @@ Alter type cij_ppa (F1.0).
 
 sort cases by chi keydate1_dateformat.
 
-* SDS.
-Numeric sds_option_4 (F1.0).
-
 * We are currently not including DN or CMH for FY 2122 but we want the variables for consistency - 04/09/20 Jennifer Thom.
 * District Nursing.
 Numeric
@@ -397,6 +398,8 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
     !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
+    !Year_dir + "SDS-for-source-20" + !FY + ".zsav " +
     !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
