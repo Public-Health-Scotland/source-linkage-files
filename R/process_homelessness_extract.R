@@ -75,6 +75,9 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
       person_in_receipt_of_universal_credit = "Person in Receipt of Universal Credit"
     )
 
+  # Compress the extract
+  R.utils::gzip(homelessness_extract_path)
+
   # Add some variables ------------------------------------------------------
   data <- homelessness_extract %>%
     dplyr::mutate(
