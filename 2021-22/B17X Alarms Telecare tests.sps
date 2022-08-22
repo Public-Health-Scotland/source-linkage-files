@@ -1,54 +1,49 @@
 ﻿* Encoding: UTF-8.
-
-
-
-*Tests for Alarms and Telecare Dataset. 
-get file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav".
-
+* Tests for Alarms and Telecare Dataset. 
+get file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
 
 * Flag to count CHIs.
 Recode chi ("" = 0) (Else = 1) Into Has_CHI.
 
- * Flags to count M/Fs.
+* Flags to count M/Fs.
 Do if gender = 1.
     Compute Male = 1.
 Else if gender = 2.
     Compute Female = 1.
 End if.
 
-*Flags to count SMRtype.
+* Flags to count SMRtype.
 If SMRType = 'AT-Alarm' AT_Alarm = 1.
 If SMRType = 'AT-Tele' AT_Tele = 1.
 
-
-*Flag to count sc support. 
-*sc_living_alone.
+* Flag to count sc support. 
+* sc_living_alone.
 If sc_living_alone = 0 sc_living_alone_no = 1. 
 If sc_living_alone = 1 sc_living_alone_yes = 1. 
 If sc_living_alone = 9 sc_living_alone_unknown = 1. 
 
-*sc_support_from_unpaid_carer.
+* sc_support_from_unpaid_carer.
 If sc_support_from_unpaid_carer = 0 sc_support_from_unpaid_carer_no = 1. 
 If sc_support_from_unpaid_carer = 1 sc_support_from_unpaid_carer_yes = 1.
 If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1. 
 
-*sc_social_worker.
+* sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
 If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
-*sc_meals.
+* sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
 If sc_meals = 1 sc_meals_yes = 1. 
 If sc_meals = 9 sc_meals_unknown = 1. 
 
-*sc_day_care.
+* sc_day_care.
 If sc_day_care = 0 sc_day_care_no = 1.
 If sc_day_care = 1 sc_day_care_yes = 1.
 If sc_day_care = 9 sc_day_care_unknown = 1. 
 
 
-*Flags to count sc_send_lca.
+* Flags to count sc_send_lca.
 If sc_send_lca = '01' Aberdeen_city = 1.
 If sc_send_lca = '02' Aberdeenshire = 1.
 If sc_send_lca = '03' Angus = 1.
@@ -81,7 +76,6 @@ If sc_send_lca = '29' South_Lanarkshire = 1.
 If sc_send_lca = '30' Stirling = 1.
 If sc_send_lca = '31' West_Lothian = 1.
 If sc_send_lca = '32' Na_h_Eileanan_Siar = 1. 
-
 
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
@@ -145,17 +139,14 @@ aggregate outfile = SLFnew
     /All_West_Lothian = Sum(West_Lothian)
     /All_Na_h_Eileanan_Siar = Sum(Na_h_Eileanan_Siar).
 
-
 Dataset activate SLFnew.
 Varstocases
     /Make New_Value from n_CHIs to All_Na_h_Eileanan_Siar
     /Index Measure (New_Value).
 Sort cases by Measure.
 
-
-**************************************************************************************************************************
-
 **************************************************************************************************************************.
+
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
     /Keep recid SMRType Anon_CHI record_keydate1 record_keydate2 gender dob age
               sc_send_lca to sc_day_care.
@@ -171,39 +162,39 @@ Else if gender = 2.
     Compute Female = 1.
 End if.
 
-*Flags to count SMRtype.
+* Flags to count SMRtype.
 If SMRType = 'AT-Alarm' AT_Alarm = 1.
 If SMRType = 'AT-Tele' AT_Tele = 1.
 
 
-*Flag to count sc support. 
-*sc_living_alone.
+* Flag to count sc support. 
+* sc_living_alone.
 If sc_living_alone = 0 sc_living_alone_no = 1. 
 If sc_living_alone = 1 sc_living_alone_yes = 1. 
 If sc_living_alone = 9 sc_living_alone_unknown = 1. 
 
-*sc_support_from_unpaid_carer.
+* sc_support_from_unpaid_carer.
 If sc_support_from_unpaid_carer = 0 sc_support_from_unpaid_carer_no = 1. 
 If sc_support_from_unpaid_carer = 1 sc_support_from_unpaid_carer_yes = 1.
 If sc_support_from_unpaid_carer = 9 sc_support_from_unpaid_carer_unknown = 1. 
 
-*sc_social_worker.
+* sc_social_worker.
 If sc_social_worker = 0 sc_social_worker_no = 1.
 If sc_social_worker = 1 sc_social_worker_yes = 1.
 If sc_social_worker = 9 sc_social_worker_unknown = 1.
 
-*sc_meals.
+* sc_meals.
 If sc_meals = 0 sc_meals_no = 1. 
 If sc_meals = 1 sc_meals_yes = 1. 
 If sc_meals = 9 sc_meals_unknown = 1. 
 
-*sc_day_care.
+* sc_day_care.
 If sc_day_care = 0 sc_day_care_no = 1.
 If sc_day_care = 1 sc_day_care_yes = 1.
 If sc_day_care = 9 sc_day_care_unknown = 1. 
 
 
-*Flags to count sc_send_lca.
+* Flags to count sc_send_lca.
 If sc_send_lca = '01' Aberdeen_city = 1.
 If sc_send_lca = '02' Aberdeenshire = 1.
 If sc_send_lca = '03' Angus = 1.
@@ -236,7 +227,6 @@ If sc_send_lca = '29' South_Lanarkshire = 1.
 If sc_send_lca = '30' Stirling = 1.
 If sc_send_lca = '31' West_Lothian = 1.
 If sc_send_lca = '32' Na_h_Eileanan_Siar = 1. 
-
 
 * Flags to count missing values.
 If sysmis(dob) No_DoB = 1.
@@ -300,17 +290,14 @@ aggregate outfile = SLFexisting
     /All_West_Lothian = Sum(West_Lothian)
     /All_Na_h_Eileanan_Siar = Sum(Na_h_Eileanan_Siar).
 
-
 Dataset activate SLFexisting.
 Varstocases
     /Make Existing_Value from n_CHIs to All_Na_h_Eileanan_Siar
     /Index Measure (Existing_Value).
 Sort cases by Measure.
 
-
-**************************************************************************************************************************
-
 **************************************************************************************************************************.
+
 * Match together.
 match files
     /file = SLFexisting
