@@ -55,8 +55,7 @@ dd_clean <- dd_file %>%
   ) %>%
   # recode blanks to NA
   mutate(
-    primary_delay_reason = na_if(primary_delay_reason, ""),
-    secondary_delay_reason = na_if(secondary_delay_reason, "")
+    mutate(across(ends_with("delay_reason"), na_if, ""))
   ) %>%
   # create flags for no_end_date and correct_dates
   create_dd_flags(year) %>%
