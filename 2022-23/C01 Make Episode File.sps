@@ -15,15 +15,17 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
     !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
     !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
-    !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
-    !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
-    !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
-    !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
     !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "CMH_tests_20" + !FY + ".zsav " +.
 *   !Year_dir + "DN_tests_20" + !FY + ".zsav " +.
+
+* Exclude SC for now - no data for 22/23 available yet.
+    *!Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
+    *!Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
+    *!Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
+    *!Year_dir + "SDS_tests_20" + !FY + ".zsav " +
 
 * Bring all the data sets together.
 add files
@@ -36,15 +38,17 @@ add files
     /file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
-    /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
-    /file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
-    /file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
-    /file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /By chi.
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
 *    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav".
+
+* Exclude SC for now - no data for 22/23 available yet.
+    */file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
+    */file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
+    */file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
+    */file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
 
 * Check that all CHIs are valid.
 Do if chi ne "".
@@ -376,6 +380,44 @@ Numeric
     CCM (F5.0)
     TotalnoDNcontacts (F7.0).
 
+* Social Care variables for consistency.
+* Social Care.
+String
+    sc_send_lca (A2)
+    sc_latest_submission (A6)
+    person_id (A13).
+
+Numeric
+    sc_living_alone
+    sc_support_from_unpaid_carer
+    sc_social_worker
+    sc_type_of_housing
+    sc_meals
+    sc_day_care (F1.0).
+
+* Home Care.
+Numeric
+    hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
+    hc_provider (F1.0)
+    hc_reablement (F1.0)
+    hc_cost_q1 hc_cost_q2 hc_cost_q3 hc_cost_q4 (F22.2).
+
+
+* Care Homes.
+String
+    ch_name (A73)
+    ch_provider (A1).
+
+Numeric
+    ch_adm_reason (F2.0)
+    ch_nursing (F1.0)
+    ch_chi_cis (F8.0)
+    ch_sc_id_cis(F8.0).
+
+* SDS.
+Numeric sds_option (F1.0).
+
+
 save outfile = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
@@ -394,15 +436,16 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
     !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
-    !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
-    !Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
-    !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
-    !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
-    !Year_dir + "SDS-for-source-20" + !FY + ".zsav " +
     !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "DN_for_source-20" + !FY + ".zsav " +.
 *   !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +.
 
+* Exclude SC for now - no data for 22/23 available yet.
+    *!Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
+    *!Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
+    *!Year_dir + "SDS-for-source-20" + !FY + ".zsav " +
+    *!Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
+    *!Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
