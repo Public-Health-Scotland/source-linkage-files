@@ -38,7 +38,7 @@ dd_clean <- dd_file %>%
   mutate(
     month_end = lubridate::ceiling_date(keydate1_dateformat, "month") - 1,
     ammended_dates = case_when(
-      keydate2_dateformat == ymd("1900,1,1") ~ TRUE,
+      keydate2_dateformat == as.Date("1900-01-01") ~ TRUE,
       TRUE ~ FALSE
     ),
     keydate2_dateformat = if_else(ammended_dates == TRUE, month_end, keydate2_dateformat)
