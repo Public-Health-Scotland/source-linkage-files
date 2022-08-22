@@ -71,15 +71,14 @@ read_demog_file <- function(social_care_dir, latest_update) {
 
   if (!fs::file_exists(demog_file_path)) {
     demog_file_path <- fs::path_ext_set(demog_file_path, "zsav")
-  } else {
-    stop(
-      glue::glue(
-        "Demographics file doesn't in rds or zsav format or the name: ",
-        "'{fs::path_ext_remove(fs::path_file(demog_file_path))}' is incorrect"
+  } else if (!fs::file_exists(fs::path_ext_set(demog_file_path, "zsav"))) {
+    cli::cli_abort(c(
+        "The demographics file doesn't exist in {.val rds} or {.val zsav} format
+         or the name: {.val {fs::path_ext_remove(fs::path_file(demog_file_path))}}
+         is incorrect"
       )
     )
   }
-
 
   data <- switch(fs::path_ext(demog_file_path),
     "rds" = readr::read_rds(demog_file_path),
