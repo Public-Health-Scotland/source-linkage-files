@@ -42,6 +42,7 @@ save outfile = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     postcode
     record_keydate1
     record_keydate2
+    sds_option
     sc_send_lca
     sc_living_alone
     sc_support_from_unpaid_carer
