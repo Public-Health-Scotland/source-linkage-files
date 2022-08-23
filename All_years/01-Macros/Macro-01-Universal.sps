@@ -36,9 +36,9 @@ Define !Delayed_Discharge_period()
     "Jul16_Jun22"
 !EndDefine.
 
-* Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
+* Latest 'real' costs we have in the format CCYY e.g. 2022/23 = 2022 (no quotes).
 Define !latest_cost_year()
-    2018
+    2022
 !EndDefine.
 
 *******************************************************.
