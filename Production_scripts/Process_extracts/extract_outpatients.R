@@ -118,7 +118,9 @@ outpatients_clean <- outpatients_file %>%
   # Allocate the costs to the correct month
   create_day_episode_costs(record_keydate1, cost_total_net) %>%
   # sort by chi record_keydate1
-  arrange(chi, record_keydate1)
+  arrange(chi, record_keydate1) %>%
+  # Add SMR type
+  mutate(smrtype = add_smr_type(recid))
 
 
 # Factors ---------------------------------------
@@ -142,6 +144,7 @@ outfile <-
     recid,
     record_keydate1,
     record_keydate2,
+    smrtype,
     chi,
     gender,
     dob,

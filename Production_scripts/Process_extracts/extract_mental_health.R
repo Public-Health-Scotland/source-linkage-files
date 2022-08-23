@@ -178,7 +178,9 @@ mh_clean <- mh_extract %>%
     cost_total_net = rowSums(across(ends_with("_cost"))) %>%
   # total length of stay
     stay = calculate_stay(year, record_keydate1, record_keydate2)
-  )
+  ) %>%
+  # Add SMR type
+  mutate(smrtype = add_smr_type(recid))
 
 
 # Outfile  ---------------------------------------
@@ -195,6 +197,7 @@ outfile <- mh_clean %>%
     recid,
     record_keydate1,
     record_keydate2,
+    smrtype,
     chi,
     gender,
     dob,

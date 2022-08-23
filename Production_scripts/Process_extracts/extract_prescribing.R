@@ -60,7 +60,9 @@ pis_clean <- pis_file %>%
   mutate(
     record_keydate1 = end_fy(year),
     record_keydate2 = record_keydate1
-  )
+  ) %>%
+  # Add SMR type
+  mutate(smrtype = add_smr_type(recid))
 
 # Issue a warning if rows were removed
 if (nrow(pis_clean) != nrow(pis_file)) {

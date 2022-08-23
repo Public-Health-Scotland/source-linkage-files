@@ -166,7 +166,9 @@ maternity_clean <- maternity_file %>%
     discondition = factor(discondition,
       levels = c(1:5, 8)
     )
-  )
+  ) %>%
+  # Add SMR type
+  mutate(smrtype = add_smr_type(recid, mpat))
 
 
 # Save outfile------------------------------------------------
@@ -177,6 +179,7 @@ outfile <- maternity_clean %>%
     recid,
     record_keydate1,
     record_keydate2,
+    smrtype,
     chi,
     gender,
     dob,

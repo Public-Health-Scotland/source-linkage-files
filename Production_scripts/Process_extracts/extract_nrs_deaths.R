@@ -102,7 +102,8 @@ deaths_clean <- deaths_extract %>%
     year = year
   ) %>%
   # fix dummy gpprac codes
-  convert_eng_gpprac_to_dummy(gpprac)
+  convert_eng_gpprac_to_dummy(gpprac) %>%
+  mutate(smrtype = add_smr_type(recid))
 
 # Save--------------------------------------------
 
