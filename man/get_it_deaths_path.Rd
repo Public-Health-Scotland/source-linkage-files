@@ -4,7 +4,7 @@
 \alias{get_it_deaths_path}
 \title{IT Deaths File Path}
 \usage{
-get_it_deaths_path(it_reference = it_extract_ref(), ...)
+get_it_deaths_path(...)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
