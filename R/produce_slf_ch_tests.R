@@ -3,7 +3,7 @@
 #' @description Produce the test for the Care Home
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from [get_source_extract_path(year, "CH")])
+#' (data is from [get_source_extract_path()])
 #'
 #' @return a dataframe with a count of each flag.
 #'
