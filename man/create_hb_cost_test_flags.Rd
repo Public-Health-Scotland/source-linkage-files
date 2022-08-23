@@ -22,6 +22,7 @@ Create flags for each NHS Health Board with cost assigned if present in that rec
 \seealso{
 Other flag functions: 
 \code{\link{create_demog_test_flags}()},
+\code{\link{create_demog_year_ch_test_flags}()},
 \code{\link{create_hb_test_flags}()},
 \code{\link{create_hscp_test_flags}()},
 \code{\link{create_lca_test_flags}()}
