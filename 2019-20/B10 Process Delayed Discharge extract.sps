@@ -110,6 +110,8 @@ Select if Correct_Dates = 1 AND No_End_Date = 0.
 
 sort cases by chi keydate1_dateformat keydate2_dateformat.
 
+Alter type hbtreatcode (A9).
+
 save outfile = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav"
     /Drop Correct_Dates No_End_Date
     /zcompressed.
