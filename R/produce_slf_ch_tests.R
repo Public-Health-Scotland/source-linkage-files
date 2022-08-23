@@ -9,7 +9,7 @@
 #'
 #' @export
 #' @family social care test functions
-produce_slf_ch_tests <- function(data) {
+produce_slf_ch_year_specific_tests <- function(data) {
   data %>%
     # create test flags
     create_demog_test_flags() %>%
