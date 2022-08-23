@@ -57,7 +57,7 @@ opendata <-
 # Read Lookup files ---------------------------------------
 # gp lookup
 gpprac_ref_file <-
-  haven::read_sav(get_gpprac_ref_path()) %>%
+  readr::read_rds(get_gpprac_ref_path()) %>%
   # select only praccode and postcode
   select(
     gpprac = praccode,
