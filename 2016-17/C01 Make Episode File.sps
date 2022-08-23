@@ -396,7 +396,7 @@ Numeric
     ch_sc_id_cis(F8.0).
 
 * SDS.
-Numeric sds_option_4 (F1.0).
+Numeric sds_option (F1.0).
 
 save outfile = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
