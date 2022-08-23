@@ -8,7 +8,7 @@ produce_slf_ch_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \link{get_source_extract_path(year, "CH")})}
+(data is from \code{\link[=get_source_extract_path]{get_source_extract_path()}})}
 }
 \value{
 a dataframe with a count of each flag.
