@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 !create_uplift_var.
@@ -205,7 +205,6 @@ Variable Labels
     sc_type_of_housing "Type of housing in which the client/service resides, see notes"
     sc_meals "An indicator of whether the client/service user received a Meals Service at any point during the quarter"
     sc_day_care "An indicator of whether the client/service user has received a day care service within the reporting period"
-    sds_option "An indicator of whether the client/service user received SDS option 1, 2, 3 or 4"
     selfharm_adm "Indicates self-harm related admission or attendance"
     sep_beddays "Number of Bed days from episode in September"
     sep_cost "Cost from episode in September"

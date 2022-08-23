@@ -86,7 +86,8 @@ sds_full_clean <- sds_full_data %>%
   mutate(
     smrtype = case_when(sds_option == 1 ~ "SDS-1",
                         sds_option == 2 ~ "SDS-2",
-                        sds_option == 3 ~ "SDS-3"
+                        sds_option == 3 ~ "SDS-3",
+						sds_option == 4 ~ "SDS-4"
       ),
     recid = "SDS",
     # Create person id variable
@@ -131,11 +132,9 @@ merge_eps <- sds_full_clean %>%
     dob = last(dob),
     postcode = last(postcode),
     smrtype = last(smrtype),
-    sds_option = last(sds_option),
     recid = last(recid),
     person_id = last(person_id),
-    sc_send_lca = last(sc_send_lca),
-    episode_counter = last(episode_counter)
+    sc_send_lca = last(sc_send_lca)
   ) %>%
   # end of lazy_dt()
   as_tibble() %>%

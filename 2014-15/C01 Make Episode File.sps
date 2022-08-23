@@ -387,9 +387,6 @@ Numeric
     ch_chi_cis (F8.0)
     ch_sc_id_cis(F8.0).
 
-* SDS.
-Numeric sds_option (F1.0).
-
 * Declare variables for Delay Discharge (14/15 and 15/16 only).
 Numeric Delay_End_Reason CIJ_Delay (F1.0).
 String Primary_Delay_Reason (A4).
