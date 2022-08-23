@@ -4,13 +4,10 @@
 \alias{get_it_prescribing_path}
 \title{IT Prescribing File Path}
 \usage{
-get_it_prescribing_path(year, it_reference = it_extract_ref(), ...)
+get_it_prescribing_path(year, ...)
 }
 \arguments{
 \item{year}{the year for the required extract}
-
-\item{it_reference}{The IT reference to use,
-defaults to \code{\link[=it_extract_ref]{it_extract_ref()}}}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
