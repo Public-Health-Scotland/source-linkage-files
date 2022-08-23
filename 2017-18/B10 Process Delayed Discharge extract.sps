@@ -15,15 +15,14 @@ Value Labels recid
     "DD" "Delayed Discharge episode".
 Compute year = !FY.
 
-alter type location (A7).
-
-alter type postcode (A8).
-
-alter type MonthFlag (MOYR8).
-
+alter type
+    location (A7)
+    postcode (A8)
+    MonthFlag (MOYR8)
+    hbtreatcode (A9)
+    DD_Responsible_LCA (A3).
 
 !AddLCADictionaryInfo LCA = DD_Responsible_LCA.
-
 !AddHB2018DictionaryInfo HB = hbtreatcode.
 
 *Add labels to Delay end reason.
@@ -109,8 +108,6 @@ End if.
 Select if Correct_Dates = 1 AND No_End_Date = 0.
 
 sort cases by chi keydate1_dateformat keydate2_dateformat.
-
-Alter type hbtreatcode (A9).
 
 save outfile = !Year_Extracts_dir + "DD_LinkageFile-20" + !FY + ".zsav"
     /Drop Correct_Dates No_End_Date
