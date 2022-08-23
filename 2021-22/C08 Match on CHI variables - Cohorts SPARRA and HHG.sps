@@ -29,7 +29,7 @@ match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
     /table = !HHG_dir + "HHG-20" + !NextFY + ".zsav"
     /Rename
     UPI_Number = chi
-    HHG_RISK_SCORE = HHG_End_FY
+    HHG_SCORE = HHG_End_FY
     /Drop Psychiatry_Cost Maternity_Cost Geriatric_Cost Elective_Inpatient_Cost Limited_Daycases_Cost Single_Emergency_Cost
     Multiple_Emergency_Cost Routine_Daycase_Cost Outpatient_Cost Prescribing_Cost AE2_Cost
     /Drop End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
