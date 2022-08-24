@@ -84,10 +84,10 @@ sds_full_clean <- sds_full_data %>%
   distinct() %>%
   # Include source variables
   mutate(
-    smrtype = case_when(sds_option == 1 ~ "SDS-1",
-                        sds_option == 2 ~ "SDS-2",
-                        sds_option == 3 ~ "SDS-3",
-						sds_option == 4 ~ "SDS-4"
+    smrtype = case_when(sds_option == "SDS-1" ~ "SDS-1",
+                        sds_option == "SDS-2" ~ "SDS-2",
+                        sds_option == "SDS-3" ~ "SDS-3",
+						            sds_option == "SDS-4" ~ "SDS-4"
       ),
     recid = "SDS",
     # Create person id variable
