@@ -151,8 +151,7 @@ Sort cases by Measure.
 **************************************************************************************************************************.
 
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid SMRType Anon_CHI record_keydate1 record_keydate2 gender dob age
-              sds_option_4 sc_send_lca to sc_day_care.
+    /Keep recid SMRType Anon_CHI record_keydate1 record_keydate2 gender dob age sc_send_lca to sc_day_care.
 select if recid = 'SDS'.
 
 * Flag to count CHIs.
