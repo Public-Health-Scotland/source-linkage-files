@@ -1,6 +1,6 @@
 ﻿* Encoding: UTF-8.
 * Tests for Alarms and Telecare Dataset. 
-get file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
+get file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav".
 
 * Flag to count CHIs.
 Recode chi ("" = 0) (Else = 1) Into Has_CHI.
