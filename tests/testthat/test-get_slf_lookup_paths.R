@@ -1,5 +1,3 @@
-skip_on_ci()
-
 test_that("SLF postcode lookup file paths work", {
   expect_s3_class(get_slf_postcode_path(), "fs_path")
   expect_s3_class(get_slf_postcode_path(update = previous_update(), ext = "zsav"), "fs_path")
