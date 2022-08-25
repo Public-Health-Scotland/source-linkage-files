@@ -136,12 +136,12 @@ rm(readcode_lookup, readcodes_not_matched, unrecognised_but_ok_codes, new_bad_co
 ## Data Cleaning
 
 diagnosis_clean <- diagnosis_readcodes %>%
-  dtplyr::lazy_dt() %>%
   select(guid, readcode, description) %>%
   mutate(
     readcode_level = str_locate(readcode, "\\.")[, "start"],
     readcode_level = replace_na(readcode_level, 6)
   ) %>%
+  dtplyr::lazy_dt() %>%
   group_by(guid) %>%
   # Sort so that the 'more specific' readcodes are preferred
   arrange(desc(readcode_level)) %>%
