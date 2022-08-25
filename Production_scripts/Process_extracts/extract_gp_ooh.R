@@ -256,7 +256,8 @@ consultations_file <- read_csv(
     `Treatment NHS Board Code 9` = col_character(),
     `KIS Accessed` = col_factor(levels = c("Y", "N")),
     `Referral Source` = col_character(),
-    `Consultation Type` = col_character()
+    `Consultation Type` = col_character(),
+    `Consultation Type Unmapped` = col_character()
   )
 ) %>%
   # rename variables
@@ -278,7 +279,8 @@ consultations_file <- read_csv(
     hbtreatcode = `Treatment NHS Board Code 9`,
     kis_accessed = `KIS Accessed`,
     refsource = `Referral Source`,
-    smrtype = `Consultation Type`
+    smrtype = `Consultation Type`,
+    conc_type_unmapped = `Consultation Type Unmapped`
   ) %>%
   distinct()
 
