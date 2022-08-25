@@ -113,7 +113,7 @@ diagnosis_readcodes %>%
 # Check any readcodes which are still not matching the lookup
 readcodes_not_matched <- diagnosis_readcodes %>%
   filter(is.na(full_match_final)) %>%
-  count(readcode, description)
+  count(readcode, description, sort = TRUE)
 
 print(readcodes_not_matched)
 
