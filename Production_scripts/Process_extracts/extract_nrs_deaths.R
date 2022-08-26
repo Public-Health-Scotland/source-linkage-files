@@ -8,20 +8,16 @@
 # Description - Process NRS Deaths Extract
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(readr)
 library(createslf)
 
 
-
 # Read in data ---------------------------------------
-
 
 # Specify year
 year <- check_year_format("1920")
-
 
 # Read BOXI extract
 
@@ -90,9 +86,7 @@ deaths_extract <- get_boxi_extract_path(
   )
 
 
-
 # Data Cleaning  ---------------------------------------
-
 
 deaths_clean <- deaths_extract %>%
   mutate(record_keydate2 = record_keydate1) %>%
