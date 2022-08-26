@@ -208,10 +208,8 @@ outfile <- pivotted_hours %>%
   ) %>%
   ungroup()
 
+# Save .rds file
 outfile %>%
-  # .zsav
-  write_sav(get_sc_hc_episodes_path(check_mode = "write", ext = "zsav")) %>%
-  # .rds file
   write_rds(get_sc_hc_episodes_path(check_mode = "write"))
 
 
