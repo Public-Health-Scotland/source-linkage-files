@@ -631,10 +631,12 @@ Dataset Activate !FinalName.
 
  * Compute percentage change from old to new.
  * Highlight any which have a >= 5 % change.
-Numeric Issue (F1.0) PctChange (F8.4).
 Compute Difference = NewValue - OldValue.
-Compute PctChange = Difference / OldValue * 100.
+Do if OldValue NE 0.
+    Compute PctChange = Difference /OldValue * 100.
+End if.
 Compute Issue = abs(PctChange) > 5.
+Alter Type Issue (F1.0) PctChange (PCT4.2).
 
 Sort cases by Issue (D) Measure (A).
 
