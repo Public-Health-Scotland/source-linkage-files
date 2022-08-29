@@ -467,6 +467,7 @@ add files file = *
     /first = unique_ooh_case
     /by = chi ooh_case_id.
 
+Sort cases by chi ch_chi_cis.
 * Aggregate over the Care Home 'CIS' episodes.
 aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
