@@ -8,20 +8,16 @@
 # Description - Process Community Mental Health Extract
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(readr)
 library(createslf)
 
 
-
 # Read in data ---------------------------------------
-
 
 # Specify year
 year <- check_year_format("1920")
-
 
 # Read BOXI extract
 cmh_extract <- get_boxi_extract_path(
@@ -73,7 +69,6 @@ cmh_extract <- get_boxi_extract_path(
 
 # Data Cleaning  ---------------------------------------
 
-
 cmh_clean <- cmh_extract %>%
   # create recid, year, SMRType variables
   mutate(
@@ -93,11 +88,11 @@ cmh_clean <- cmh_extract %>%
   mutate(diag6 = NA)
 
 
-
 # Outfile --------------------------------------------
 
 outfile <- cmh_clean %>%
   select(
+    year,
     recid,
     record_keydate1,
     record_keydate2,
