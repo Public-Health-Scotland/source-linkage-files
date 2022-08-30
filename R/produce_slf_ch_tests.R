@@ -14,8 +14,7 @@ produce_slf_ch_year_specific_tests <- function(data) {
     # create test flags
     create_demog_test_flags() %>%
     # remove variables that won't be summed
-    dplyr::select(.data$valid_chi:.data$missing_dob)
-    ) %>%
+    dplyr::select(.data$valid_chi:.data$missing_dob) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 }
