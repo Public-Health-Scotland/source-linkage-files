@@ -60,7 +60,7 @@ dd_clean <- dd_file %>%
   # create flags for no_end_date and correct_dates
   create_dd_flags(year) %>%
   # Keep only records which have an end date (except Mental Health) and fall within our dates.
-  filter(correct_dates == TRUE & no_end_date == FALSE)
+  filter(correct_dates, !no_end_date == FALSE)
 
 
 ## save outfile ---------------------------------------
