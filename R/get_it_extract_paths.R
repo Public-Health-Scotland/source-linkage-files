@@ -11,7 +11,7 @@
 get_it_ltc_path <- function(...) {
   it_ltc_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name_regexp = "SCTASK[0-9]{7}_LTCs.+",
+    file_name_regexp = "SCTASK[0-9]{7}_LTCs\\.csv(?:\\.gz)?",
     ...
   )
 
@@ -32,7 +32,7 @@ get_it_deaths_path <-
   function(...) {
     it_deaths_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name_regexp = "SCTASK[0-9]{7}_Deaths.+",
+      file_name_regexp = "SCTASK[0-9]{7}_Deaths\\.csv(?:\\.gz)?",
       ...
     )
 
@@ -52,55 +52,10 @@ get_it_deaths_path <-
 #' @seealso [get_file_path()] for the generic function.
 get_it_prescribing_path <-
   function(year, ...) {
-    it_extracts_dir <- fs::path(get_slf_dir(), "IT_extracts")
+    it_pis_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "IT_extracts"),
+      file_name_regexp = glue::glue("SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?")
+    )
 
-    alt_fy <- paste0("20", substr(year, 1, 2))
-
-    # First list all files in the directory which contain
-    # the it_reference
-    file_name <- fs::dir_ls(it_extracts_dir,
-      type = "file",
-      regexp = "SCTASK[0-9]{7}"
-    ) %>%
-      # Get only the file names (not the full path)
-      fs::path_file() %>%
-      # Will return the full name if it matches,
-      # otherwise it will return NA
-      stringr::str_extract(pattern = glue::glue("^.+?{alt_fy}\\.csv(:?\\.gz)?$")) %>%
-      # This drops all the non-matched names ideally leaving only one.
-      stats::na.omit()
-
-    # Abort if there is no file with that name
-    if (length(file_name) == 0) {
-      rlang::abort(glue::glue(
-        "Unable to find file for {year}."
-      ))
-    }
-
-    # If there is more than one file that matches the pattern, ask the user to choose
-    # which one to read in
-    if (length(file_name) > 1) {
-      prompt <- "Multiple files found! Which one would you like?"
-      i <- 1
-      for (val in file_name) {
-        prompt <- stringr::str_c(prompt, glue::glue("{i}. {val}"), sep = "\n")
-        i <- i + 1
-      }
-
-      answer <- as.integer(readline(prompt))
-
-      it_prescribing_path <- get_file_path(
-        directory = it_extracts_dir,
-        file_name = file_name[answer],
-        ...
-      )
-
-      return(it_prescribing_path)
-    } else {
-      it_prescribing_path <- get_file_path(
-        directory = it_extracts_dir,
-        file_name = file_name,
-        ...
-      )
-    }
+    return(it_pis_path)
   }
