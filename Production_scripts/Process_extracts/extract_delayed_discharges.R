@@ -41,7 +41,7 @@ dd_clean <- dd_file %>%
       keydate2_dateformat == as.Date("1900-01-01") ~ TRUE,
       TRUE ~ FALSE
     ),
-    keydate2_dateformat = if_else(ammended_dates == TRUE, month_end, keydate2_dateformat)
+    keydate2_dateformat = if_else(ammended_dates, month_end, keydate2_dateformat)
   ) %>%
   # Drop any records with obviously bad dates
   filter(
