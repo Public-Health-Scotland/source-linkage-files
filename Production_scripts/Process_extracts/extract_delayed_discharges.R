@@ -32,6 +32,9 @@ dd_file <- haven::read_sav(get_dd_path(ext = "zsav")) %>%
 
 # Data Cleaning---------------------------------------
 
+# Specify MH specialties for dealing with correct DD dates
+mh_spec <- c("CC", "G1", "G2", "G21", "G22", "G3", "G4", "G5", "G6", "G61", "G62", "G63")
+
 dd_clean <- dd_file %>%
   # Use end of the month date for records with no end date (but we think have ended)
   # Create a flag for these records
@@ -55,10 +58,23 @@ dd_clean <- dd_file %>%
   ) %>%
   # recode blanks to NA
   mutate(
-    mutate(across(ends_with("delay_reason"), na_if, ""))
+    across(ends_with("delay_reason"), na_if, "")
   ) %>%
   # create flags for no_end_date and correct_dates
-  create_dd_flags(year) %>%
+  mutate(
+    # Flag records with no end date
+    no_end_date = dplyr::if_else(is.na(.data$keydate2_dateformat) & (!(.data$spec %in% mh_spec)),
+      TRUE,
+      FALSE
+    ),
+    # Flag records with correct date
+    correct_dates = dplyr::if_else(is_date_in_fyyear(year, .data$keydate1_dateformat) |
+      is_date_in_fyyear(year, .data$keydate2_dateformat) |
+      is.na(.data$keydate2_dateformat) & .data$spec %in% mh_spec,
+    TRUE,
+    FALSE
+    )
+  ) %>%
   # Keep only records which have an end date (except Mental Health) and fall within our dates.
   filter(correct_dates, !no_end_date == FALSE)
 
