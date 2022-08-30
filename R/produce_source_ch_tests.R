@@ -30,7 +30,7 @@ produce_source_ch_tests <- function(data,
     # create_hb_test_flags(.data$hbtreatcode) %>%
     # create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     dplyr::mutate(n_episodes = 1) %>%
-    create_lca_test_flags(., sc_send_lca) %>%
+    create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison
     dplyr::select(c(.data$valid_chi:.data$West_Lothian)) %>%
     # use function to sum new test flags
