@@ -4,12 +4,16 @@
 \alias{add_smr_type}
 \title{Add smrtype variable based on record ID}
 \usage{
-add_smr_type(recid, mpat = NULL)
+add_smr_type(recid, mpat = NULL, ipdc = NULL, hc_service = NULL)
 }
 \arguments{
 \item{recid}{A vector of record IDs}
 
 \item{mpat}{A vector of mpat values}
+
+\item{ipdc}{A vector of inpatient/day case markers}
+
+\item{hc_service}{A vector of Home Care service markers}
 }
 \value{
 A vector of SMR types
@@ -18,10 +22,8 @@ A vector of SMR types
 Add smrtype variable based on record ID
 }
 \examples{
-x <- tibble::tibble(
-  recid = c("02B", "02B", "02B", "04B", "00B", "AE2", "PIS", "NRS"),
-  mpat = c("1", "2", "0", "", "", "", "", "")
-)
-add_smr_type(x)
+add_smr_type(recid = c("04B", "00B", "AE2", "PIS", "NRS"))
+add_smr_type(recid = c("02B", "02B"), mpat = c("1", "4"))
+add_smr_type(recid = c("01B", "01B", "GLS"), ipdc = c("I", "D", "I"))
 }
 \concept{Codes}
