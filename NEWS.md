@@ -1,5 +1,8 @@
 # September 2022 Update - Unreleased
 * Costs uplifted for 2021 onwards.
+  * 1.5% for 2020/21
+  * 4.1% for 2021/22
+  * 6.2% for 2022/23
 *  Alarms - Telecare and SDS data added.
 * SPARRA and HHG - new 22/23 scores added.  
 * Created new files for 2022/23.
