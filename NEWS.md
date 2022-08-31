@@ -1,5 +1,6 @@
 # September 2022 Update - Unreleased
 
+* SPARRA and HHG - new 22/23 scores added 
 * Created new files for 2022/23.
 * The NSU cohort has been added for 2021/22.
 * Home Care - If the start date is after the end date we will now discard the end date (`sysmis`/`NA`), previously we would have dropped these records entirely.
