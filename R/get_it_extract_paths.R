@@ -11,11 +11,12 @@
 #' @seealso [get_file_path()] for the generic function.
 get_it_ltc_path <- function(it_reference = NULL, ...) {
   if (is.null(it_reference)) {
-  it_ltc_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name_regexp = "SCTASK[0-9]{7}_LTCs\\.csv(?:\\.gz)?",
-    ...
-  )} else {
+    it_ltc_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "IT_extracts"),
+      file_name_regexp = "SCTASK[0-9]{7}_LTCs\\.csv(?:\\.gz)?",
+      ...
+    )
+  } else {
     it_ltc_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "IT_extracts"),
       file_name = glue::glue("SCTASK{it_reference}_LTCs.csv.gz")
@@ -39,11 +40,12 @@ get_it_ltc_path <- function(it_reference = NULL, ...) {
 get_it_deaths_path <-
   function(it_reference = NULL, ...) {
     if (is.null(it_reference)) {
-    it_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name_regexp = "SCTASK[0-9]{7}_Deaths\\.csv(?:\\.gz)?",
-      ...
-    )} else {
+      it_deaths_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts"),
+        file_name_regexp = "SCTASK[0-9]{7}_Deaths\\.csv(?:\\.gz)?",
+        ...
+      )
+    } else {
       it_deaths_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
         file_name = glue::glue("SCTASK{it_reference}_Deaths.csv.gz")
@@ -68,10 +70,11 @@ get_it_deaths_path <-
 get_it_prescribing_path <-
   function(year, it_reference = NULL, ...) {
     if (is.null(it_reference)) {
-    it_pis_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name_regexp = glue::glue("SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?")
-    )} else {
+      it_pis_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts"),
+        file_name_regexp = glue::glue("SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?")
+      )
+    } else {
       it_pis_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
         file_name = glue::glue("SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.csv.gz")
