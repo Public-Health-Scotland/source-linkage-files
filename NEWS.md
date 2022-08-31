@@ -1,5 +1,6 @@
 # September 2022 Update - Unreleased
-* Alarms - Telecare and SDS data added.
+* Costs uplifted for 2021 onwards.
+*  Alarms - Telecare and SDS data added.
 * SPARRA and HHG - new 22/23 scores added.  
 * Created new files for 2022/23.
 * The NSU cohort has been added for 2021/22.
