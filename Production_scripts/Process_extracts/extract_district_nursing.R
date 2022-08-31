@@ -78,7 +78,7 @@ dn_clean <- dn_extract %>%
   mutate(
     year = year,
     recid = "DN",
-    smr_type = "DN"
+    smrtype = add_smr_type(recid = "DN")
   ) %>%
   # deal with gpprac
   convert_eng_gpprac_to_dummy(gpprac)
@@ -118,7 +118,7 @@ dn_episodes <- care_marker %>%
   group_by(year, chi, ccm) %>%
   summarise(
     recid = first(recid),
-    smr_type = first(smr_type),
+    smrtype = first(smrtype),
     record_keydate1 = min(record_keydate1),
     record_keydate2 = max(record_keydate1),
     dob = last(dob),

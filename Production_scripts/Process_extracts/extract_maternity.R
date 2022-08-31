@@ -161,15 +161,13 @@ maternity_clean <- maternity_file %>%
   create_monthly_beddays(year, record_keydate1, record_keydate2) %>%
   # Calculate costs
   create_monthly_costs() %>%
-  # Add discondition as a factor
+  # Add discondition as a factor and SMR type
   mutate(
     discondition = factor(discondition,
       levels = c(1:5, 8)
-    )
-  ) %>%
-  # Add SMR type
-  mutate(smrtype = add_smr_type(recid, mpat))
-
+    ),
+    smrtype = add_smr_type(recid, mpat)
+  )
 
 # Save outfile------------------------------------------------
 
