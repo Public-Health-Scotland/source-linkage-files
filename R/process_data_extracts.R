@@ -14,5 +14,4 @@ process_data_extracts <- function(year) {
   )
 
   return(process_extracts)
-
 }

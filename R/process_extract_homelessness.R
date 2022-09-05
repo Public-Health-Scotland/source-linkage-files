@@ -85,16 +85,16 @@ process_extract_homelessness <- function(year, data, write_to_disk = TRUE) {
   completeness_data <- readr::read_rds(completeness_file_path) %>%
     dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year)) %>%
     dplyr::left_join(la_code_lookup,
-                     by = c("sending_local_authority_code_9" = "CA")
+      by = c("sending_local_authority_code_9" = "CA")
     ) %>%
     dplyr::select(-.data$CAName, -.data$sending_local_authority_code_9)
 
   filtered_data <- data %>%
     dplyr::left_join(la_code_lookup,
-                     by = c("sending_local_authority_code_9" = "CA")
+      by = c("sending_local_authority_code_9" = "CA")
     ) %>%
     dplyr::left_join(completeness_data,
-                     by = c("sending_local_authority_name", "year")
+      by = c("sending_local_authority_name", "year")
     ) %>%
     # Keep where the completeness is between 90% and 110%
     # Or if it's East Ayrshire (S12000008) as they are submitting something different.
