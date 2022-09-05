@@ -14,10 +14,11 @@ library(createslf)
 
 year <- "1920"
 
+# Below is from Homelessness processing
 # Create a list of the years to run
 # Use set_names so that any returned list will be named.
-years_to_run <- convert_year_to_fyyear(as.character(2017:2021)) %>%
-  purrr::set_names()
+#years_to_run <- convert_year_to_fyyear(as.character(2017:2021)) %>%
+#  purrr::set_names()
 
 ------------------------------------------------------
 # PHASE 1 - process extracts
@@ -25,12 +26,15 @@ years_to_run <- convert_year_to_fyyear(as.character(2017:2021)) %>%
 # Process data---------------------------------------
 # Pass the data to process phase for data cleaning
 
+# Below is from homelessness processing
 # Only write to disk (for a standard SLF run)
-purrr::walk(
-  years_to_run,
-  process_homelessness_extract
-)
+#purrr::walk(
+#  years_to_run,
+#  process_data_extracts
+#)
 
+# Test with homelessness and mental health extracts - working
+# This reads in the data and processes ready for SLF episode file
 test <- process_data_extracts(year)
 
 ------------------------------------------------------
