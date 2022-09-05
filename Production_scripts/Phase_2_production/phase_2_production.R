@@ -14,23 +14,24 @@ library(createslf)
 
 year <- "1920"
 
+# Create a list of the years to run
+# Use set_names so that any returned list will be named.
+years_to_run <- convert_year_to_fyyear(as.character(2017:2021)) %>%
+  purrr::set_names()
+
 ------------------------------------------------------
 # PHASE 1 - process extracts
 ------------------------------------------------------
-
-
-# Read in data---------------------------------------
-# Read in raw BOXI extracts
-read_data_extracts(
-  list of extracts - for years which do not run put if statements at the top of scripts
-)
-
 # Process data---------------------------------------
 # Pass the data to process phase for data cleaning
 
-process_data_extracts(
-  list of extracts
+# Only write to disk (for a standard SLF run)
+purrr::walk(
+  years_to_run,
+  process_homelessness_extract
 )
+
+test <- process_data_extracts(year)
 
 ------------------------------------------------------
 # PHASE 2 - Create Episode file
