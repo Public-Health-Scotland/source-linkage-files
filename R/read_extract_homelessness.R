@@ -8,7 +8,7 @@
 read_extract_homelessness <- function(year) {
   extract_homelessness_path <- get_boxi_extract_path(year = year, type = "Homelessness")
 
-  extract_homelessness <- readr::read_csv(homelessness_extract_path,
+  extract_homelessness <- readr::read_csv(extract_homelessness_path,
     col_types = cols(
       "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
       "Case Closed Date" = col_date(format = "%Y/%m/%d %T"),
