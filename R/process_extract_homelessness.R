@@ -5,6 +5,7 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
+#' @param data The extract to process
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
