@@ -63,7 +63,7 @@ add_smr_type <- function(recid,
   }
 
   # Recids that can be recoded with no identifier
-  if (is.null(mpat) & is.null(ipdc)) {
+  if (is.null(mpat) & is.null(ipdc) & is.null(hc_service)) {
     smrtype <- dplyr::case_when(
       recid == "04B" ~ "Psych-IP",
       recid == "00B" ~ "Outpatient",
@@ -93,9 +93,9 @@ add_smr_type <- function(recid,
   # Home care
   else if (recid == "HC" & !is.null(hc_service)) {
     smrtype <- dplyr::case_when(
-      recid == "HC" & hc_service == "1" ~ "HC-Non-Per",
-      recid == "HC" & hc_service == "2" ~ "HC-Per",
-      recid == "HC" & !(hc_service %in% c("1", "2")) ~ "HC-Unknown"
+      recid == "HC" & hc_service == 1 ~ "HC-Non-Per",
+      recid == "HC" & hc_service == 2 ~ "HC-Per",
+      TRUE ~ "HC-Unknown"
     )
   }
 
