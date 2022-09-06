@@ -17,9 +17,7 @@ library(createslf)
 year <- check_year_format("1920")
 
 # Read new data file
-# new_data <- readr::read_rds(get_source_extract_path(year, "HC"))
-new_data <- haven::read_sav("/conf/sourcedev/Source_Linkage_File_Updates/1920/Home_Care_for_source-201920.zsav") %>%
-  dplyr::rename(year = Year)
+new_data <- readr::read_rds(get_source_extract_path(year, "HC"))
 
 # Read current SLF episode file and filter for CH
 existing_data <- get_existing_data_for_tests(new_data = new_data)
