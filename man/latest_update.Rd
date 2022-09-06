@@ -15,7 +15,6 @@ Get the date of the latest update, e.g 'Jun_2022'
 \seealso{
 Other initialisation: 
 \code{\link{get_dd_period}()},
-\code{\link{it_extract_ref}()},
 \code{\link{previous_update}()}
 }
 \concept{initialisation}
