@@ -108,7 +108,9 @@ outpatients_clean <- outpatients_file %>%
   mutate(
     year = year,
     # Set recid variable
-    recid = "00B"
+    recid = "00B",
+    # Set smrtype variable
+    smrtype = add_smr_type(recid)
   ) %>%
   # Recode GP Practice into a 5 digit number
   # assume that if it starts with a letter it's an English practice and so recode to 99995
@@ -118,10 +120,7 @@ outpatients_clean <- outpatients_file %>%
   # Allocate the costs to the correct month
   create_day_episode_costs(record_keydate1, cost_total_net) %>%
   # sort by chi record_keydate1
-  arrange(chi, record_keydate1) %>%
-  # Add SMR type
-  mutate(smrtype = add_smr_type(recid))
-
+  arrange(chi, record_keydate1)
 
 # Factors ---------------------------------------
 outpatients_clean <- outpatients_clean %>%
