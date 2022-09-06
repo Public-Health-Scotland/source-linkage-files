@@ -1,6 +1,6 @@
 #' Source Care Home Tests
 #'
-#' @description Produce a set of tests which can be used by Care Home
+#' @description Produce a set of tests which can be used by Care Home and Home Care
 #' This will produce counts of various demographics
 #' using [create_demog_test_flags()] counts of episodes for every `hbtreatcode`
 #' using [create_lca_test_flags()]
