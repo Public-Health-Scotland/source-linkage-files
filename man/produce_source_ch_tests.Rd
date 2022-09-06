@@ -23,7 +23,7 @@ a dataframe with a count of each flag
 from \code{\link[=calculate_measures]{calculate_measures()}}
 }
 \description{
-Produce a set of tests which can be used by Care Home
+Produce a set of tests which can be used by Care Home and Home Care
 This will produce counts of various demographics
 using \code{\link[=create_demog_test_flags]{create_demog_test_flags()}} counts of episodes for every \code{hbtreatcode}
 using \code{\link[=create_lca_test_flags]{create_lca_test_flags()}}
