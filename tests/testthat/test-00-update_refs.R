@@ -1,10 +1,3 @@
-test_that("IT extract ref number looks valid", {
-  it_ref <- it_extract_ref()
-
-  expect_type(it_ref, "character")
-  expect_match(it_ref, "SCTASK\\d{7}")
-})
-
 test_that("Latest Update string looks valid", {
   latest_update_string <- latest_update()
 
