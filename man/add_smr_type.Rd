@@ -4,7 +4,13 @@
 \alias{add_smr_type}
 \title{Add smrtype variable based on record ID}
 \usage{
-add_smr_type(recid, mpat = NULL, ipdc = NULL, hc_service = NULL)
+add_smr_type(
+  recid,
+  mpat = NULL,
+  ipdc = NULL,
+  hc_service = NULL,
+  main_applicant_flag = NULL
+)
 }
 \arguments{
 \item{recid}{A vector of record IDs}
@@ -14,6 +20,8 @@ add_smr_type(recid, mpat = NULL, ipdc = NULL, hc_service = NULL)
 \item{ipdc}{A vector of inpatient/day case markers}
 
 \item{hc_service}{A vector of Home Care service markers}
+
+\item{main_applicant_flag}{A vector of Homelessness applicant flags}
 }
 \value{
 A vector of SMR types
