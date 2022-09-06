@@ -14,3 +14,8 @@ test_that("SLF Deaths lookup path works", {
   expect_s3_class(get_slf_deaths_path(), "fs_path")
   expect_s3_class(get_slf_deaths_path(previous_update(), ext = "zsav"), "fs_path")
 })
+
+test_that("SLF Care Home names lookup path works", {
+  expect_s3_class(get_slf_ch_name_lookup_path(), "fs_path")
+  expect_s3_class(get_slf_ch_name_lookup_path(previous_update(), ext = "zsav"), "fs_path")
+})
