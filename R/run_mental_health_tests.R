@@ -14,5 +14,5 @@ run_mental_health_tests <- function(data, year) {
     old_data = produce_source_extract_tests(data),
     new_data = produce_source_extract_tests(old_data)
   ) %>%
-    write_tests_xlsx(sheet_name = "mental_health_extract")
+    write_tests_xlsx(sheet_name = "04B", year)
 }

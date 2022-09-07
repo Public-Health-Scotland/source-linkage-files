@@ -14,5 +14,5 @@ run_homelessness_tests <- function(data, year) {
     old_data = produce_slf_homelessness_tests(data),
     new_data = produce_slf_homelessness_tests(old_data)
   ) %>%
-    write_tests_xlsx(sheet_name = "homelessness")
+    write_tests_xlsx(sheet_name = "HL1", year)
 }
