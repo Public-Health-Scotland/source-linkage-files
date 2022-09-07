@@ -34,15 +34,20 @@ years_to_run <- convert_year_to_fyyear(as.character(2020:2021)) %>%
 #)
 
 # Keep the data but don't write to disk (for testing)
-test_data <- purrr::map(
+extract_data <- purrr::map(
   years_to_run,
   process_data_extracts
+)
+
+extract_tests <- purrr::map(
+  years_to_run,
+  run_extract_tests
 )
 
 # Test with homelessness and mental health extracts - working
 # This reads in the data and processes ready for SLF episode file
 process_data_extracts(year)
-
+run_extract_tests(extract_tests, year)
 ------------------------------------------------------
 # PHASE 2 - Create Episode file
 ------------------------------------------------------
