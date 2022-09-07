@@ -170,11 +170,9 @@ outfile <-
     uri
   )
 
-
-# Save as zsav file
+# Save as rds file
 outfile %>%
-  write_sav(get_source_extract_path(year, "Outpatient", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "Outpatients", check_mode = "write"))
+
 
 # End of Script #

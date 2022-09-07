@@ -354,10 +354,8 @@ outfile <- matched_ae_data %>%
     cup_pathway
   )
 
-# Save as zsav file
+# Save as rds file
 outfile %>%
-  write_sav(get_source_extract_path(year, "AE", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "AE", check_mode = "write"))
 
 
