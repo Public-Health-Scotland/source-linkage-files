@@ -89,7 +89,7 @@ outfile <-
 # Save out ----------------------------------------------------------------
 
 outfile %>%
-  # .zsav
-  write_sav(get_slf_postcode_path(ext = "zsav", check_mode = "write")) %>%
-  # .rds file
+  # Save .rds file
   write_rds(get_slf_postcode_path(check_mode = "write"))
+
+# End of Script #

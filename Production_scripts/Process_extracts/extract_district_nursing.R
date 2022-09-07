@@ -155,10 +155,8 @@ dn_episodes <- care_marker %>%
   ungroup()
 
 
-# Save as zsav file
+# Save as rds file
 dn_episodes %>%
-  write_sav(get_source_extract_path(year, "DN", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "DN", check_mode = "write"))
 
 

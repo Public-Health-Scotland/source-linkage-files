@@ -48,9 +48,7 @@ opendata <-
   distinct(gpprac, .keep_all = TRUE) %>%
   # Sort for SPSS matching
   arrange(gpprac) %>%
-  # Write out as an SPSS file
-  write_sav(get_practice_details_path(ext = "zsav", check_mode = "write")) %>%
-  # rds as well
+  # Write rds file
   write_rds(get_practice_details_path(check_mode = "write"))
 
 
@@ -115,10 +113,8 @@ gpprac_slf_lookup <-
 
 ## save outfile ---------------------------------------
 
+# Save .rds file
 gpprac_slf_lookup %>%
-  # .zsav
-  write_sav(get_slf_gpprac_path(ext = "zsav", check_mode = "write")) %>%
-  # .rds file
   write_rds(get_slf_gpprac_path(check_mode = "write"))
 
 
