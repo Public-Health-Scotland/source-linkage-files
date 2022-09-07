@@ -1,16 +1,17 @@
 #' Run SLF extract tests
 #'
-#' @param data_list
-#' @param year
+#' @description This takes the processed data extracts and runs the equivalent
+#' test on the data.
 #'
-#' @return
+#' @param year Year of extract
+#'
+#' @return A list of data containing processed extracts.
 #' @export
 #'
-#' @examples
 run_extract_tests <- function(year) {
-  run_homelessness_tests(extract_data[[year]][["homelessness"]], year)
-  run_mental_health_tests(extract_data[[year]][["mental_health"]], year)
 
+    process_homelessness_tests(extract_data[[year]][["homelessness"]], year)
+    process_mental_health_tests(extract_data[[year]][["mental_health"]], year)
 
   return(run_extract_tests)
 }
