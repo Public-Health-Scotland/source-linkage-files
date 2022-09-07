@@ -40,7 +40,7 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "outpatients_extract")
+write_tests_xlsx(comparison, "00B")
 
 
 ## END OF SCRIPT ##

@@ -29,4 +29,4 @@ duplicates <- new_data %>%
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(duplicates, "chi_ltc_extract")
+write_tests_xlsx(duplicates, "LTC")
