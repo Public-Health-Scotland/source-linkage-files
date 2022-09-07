@@ -10,9 +10,11 @@
 add_ppa_flag <- function(data) {
   matching_data <- data %>%
     # Select out only the columns we need
-    dplyr::select(.data$anon_chi, .data$cij_marker, .data$cij_pattype, .data$recid,
-                  .data$op1a, .data$diag1, .data$diag2, .data$diag3, .data$diag4,
-                  .data$diag5, .data$diag6) %>%
+    dplyr::select(
+      .data$anon_chi, .data$cij_marker, .data$cij_pattype, .data$recid,
+      .data$op1a, .data$diag1, .data$diag2, .data$diag3, .data$diag4,
+      .data$diag5, .data$diag6
+    ) %>%
     # Filter only recids and patient type where admission was preventable
     dplyr::filter(.data$recid %in% c("01B", "02B", "04B", "GLS") & .data$cij_pattype == "Non-Elective") %>%
     # We only want the first record in each cij, and we want to exclude empty cij and empty anon_chi
