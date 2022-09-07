@@ -14,7 +14,7 @@
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
-write_tests_xlsx <- function(comparison_data, sheet_name) {
+write_tests_xlsx <- function(comparison_data, sheet_name, year) {
 
 
   # Set up the workbook -----------------------------------------------------
@@ -34,7 +34,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   }
 
   # add a new sheet for tests
-  sheet_name_dated <- paste0(sheet_name, format(Sys.Date(), "_%d_%b"))
+  sheet_name_dated <- paste0(year, "_", sheet_name, format(Sys.Date(), "_%d_%b"))
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {
