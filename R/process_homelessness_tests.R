@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-run_homelessness_tests <- function(data, year) {
+process_homelessness_tests <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
   comparison <- produce_test_comparison(
