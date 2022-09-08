@@ -96,7 +96,7 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
       tidyselect::ends_with("_cost"),
       .data$uri
     ) %>%
-    dplyr::arrange(chi, record_keydate1)
+    dplyr::arrange(.data$chi, .data$record_keydate1)
 
   # Save as rds file
   outfile %>%
