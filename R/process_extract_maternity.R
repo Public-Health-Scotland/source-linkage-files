@@ -47,7 +47,7 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
     # Add discondition as a factor
     dplyr::mutate(
       discondition = factor(.data$discondition,
-                            levels = c(1:5, 8)
+        levels = c(1:5, 8)
       )
     )
 
@@ -103,5 +103,4 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
     write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"))
 
   return(outfile)
-
 }
