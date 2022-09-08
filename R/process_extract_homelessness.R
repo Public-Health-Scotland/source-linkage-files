@@ -144,12 +144,6 @@ process_extract_homelessness <- function(year, data, write_to_disk = TRUE) {
         glue::glue("homelessness_for_source-20{year}test"),
         ext = "rds",
         check_mode = "write"
-      )) %>%
-      write_sav(get_file_path(
-        get_year_dir(year),
-        glue::glue("homelessness_for_source-20{year}test"),
-        ext = "zsav",
-        check_mode = "write"
       ))
   }
 
