@@ -30,8 +30,8 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     # Set IDPC marker for the cij
     dplyr::mutate(cij_ipdc = dplyr::case_when(
-      cij_ipdc == "IP" ~ "I",
-      cij_ipdc == "DC" ~ "D"
+      .data$cij_ipdc == "IP" ~ "I",
+      .data$cij_ipdc == "DC" ~ "D"
     )) %>%
     # Recode GP practice into 5 digit number
     # We assume that if it starts with a letter it's an English practice and so recode to 99995.
