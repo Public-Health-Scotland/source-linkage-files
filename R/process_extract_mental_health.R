@@ -29,14 +29,14 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
       ipdc = "I"
     ) %>%
     # deal with dummy / english variables
-    convert_eng_gpprac_to_dummy(gpprac) %>%
+    convert_eng_gpprac_to_dummy(.data$gpprac) %>%
     # cij_ipdc
     dplyr::mutate(
       cij_ipdc = dplyr::if_else(.data$cij_inpatient == "MH", "I", "NA"),
       cij_ipdc = dplyr::na_if(.data$cij_ipdc, "NA")
     ) %>%
     # cij_admtype recode unknown to 99
-    dplyr::mutate(cij_admtype = dplyr::if_else(.data$cij_admtype == "Unknown", "99", cij_admtype)) %>%
+    dplyr::mutate(cij_admtype = dplyr::if_else(.data$cij_admtype == "Unknown", "99", .data$cij_admtype)) %>%
     # monthly beddays and costs
     convert_monthly_rows_to_vars(.data$costmonthnum, .data$cost_total_net, .data$yearstay) %>%
     dplyr::mutate(
@@ -54,8 +54,8 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
   outfile <- mh_clean %>%
     # numeric record_keydate
     dplyr::mutate(
-      record_keydate1 = lubridate::month(.data$record_keydate1) + 100 * lubridate::month(.data$record_keydate1) + 10000 * lubridate::year(record_keydate1),
-      record_keydate2 = lubridate::month(.data$record_keydate2) + 100 * lubridate::month(.data$record_keydate2) + 10000 * lubridate::year(record_keydate2)
+      record_keydate1 = lubridate::month(.data$record_keydate1) + 100 * lubridate::month(.data$record_keydate1) + 10000 * lubridate::year(.data$record_keydate1),
+      record_keydate2 = lubridate::month(.data$record_keydate2) + 100 * lubridate::month(.data$record_keydate2) + 10000 * lubridate::year(.data$record_keydate2)
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1) %>%
     dplyr::select(

@@ -7,6 +7,7 @@
 #' @param comparison_data produced by [produce_test_comparison()]
 #' @param sheet_name the name of the dataset, which will be used to create
 #' the sheet name
+#' @param year Year of extract
 #'
 #' @return the path to the xlsx file location
 #'

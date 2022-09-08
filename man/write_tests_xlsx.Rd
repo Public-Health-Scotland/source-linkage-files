@@ -11,6 +11,8 @@ write_tests_xlsx(comparison_data, sheet_name, year)
 
 \item{sheet_name}{the name of the dataset, which will be used to create
 the sheet name}
+
+\item{year}{Year of extract}
 }
 \value{
 the path to the xlsx file location

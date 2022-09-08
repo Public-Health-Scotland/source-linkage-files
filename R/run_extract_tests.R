@@ -9,8 +9,8 @@
 #' @export
 #'
 run_extract_tests <- function(year) {
-  process_homelessness_tests(extract_data[[year]][["homelessness"]], year)
-  process_mental_health_tests(extract_data[[year]][["mental_health"]], year)
+  process_homelessness_tests(.data$extract_data[[year]][["homelessness"]], year)
+  process_mental_health_tests(.data$extract_data[[year]][["mental_health"]], year)
 
   return(run_extract_tests)
 }

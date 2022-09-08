@@ -4,11 +4,15 @@
 \alias{run_extract_tests}
 \title{Run SLF extract tests}
 \usage{
-run_extract_tests(data_list, year)
+run_extract_tests(year)
 }
 \arguments{
-\item{year}{}
+\item{year}{Year of extract}
+}
+\value{
+A list of data containing processed extracts.
 }
 \description{
-Run SLF extract tests
+This takes the processed data extracts and runs the equivalent
+test on the data.
 }
