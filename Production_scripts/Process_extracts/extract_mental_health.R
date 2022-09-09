@@ -8,7 +8,6 @@
 # Description - Process Mental Health Extract
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(createslf)
@@ -17,10 +16,8 @@ library(lubridate)
 
 # Read in data ---------------------------------------
 
-
 # Specify year
 year <- check_year_format("1920")
-
 
 # Read BOXI extract
 mh_extract <- get_boxi_extract_path(
@@ -150,7 +147,6 @@ mh_extract <- get_boxi_extract_path(
   )
 
 
-
 # Data Cleaning  ---------------------------------------
 
 mh_clean <- mh_extract %>%
@@ -234,10 +230,8 @@ outfile <- mh_clean %>%
     uri
   )
 
-
-
+# Save as rds file
 outfile %>%
-  # Save as zsav file
-  write_sav(get_source_extract_path(year, "MH", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "MH", check_mode = "write"))
+
+# End of Script #

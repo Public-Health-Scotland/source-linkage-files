@@ -44,10 +44,8 @@ deaths_clean <- deaths_data %>%
 
 # Save File--------------------------------------------------------
 
+# Save .rds file
 deaths_clean %>%
-  # .zsav file
-  write_sav(get_slf_deaths_path(ext = "zsav", check_mode = "write")) %>%
-  # .rds file
   write_rds(get_slf_deaths_path(check_mode = "write"))
 
 

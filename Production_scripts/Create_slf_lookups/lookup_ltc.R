@@ -100,9 +100,8 @@ ltc_flags <- ltc_file %>%
 # Save Outfile---------------------------------------------
 ltc_flags %>%
   arrange(chi) %>%
-  # .zsav
-  write_sav(get_ltcs_path(year, ext = "zsav", check_mode = "write")) %>%
-  # .rds file
+  # Save .rds file
   write_rds(get_ltcs_path(year, check_mode = "write"))
+
 
 ## END OF SCRIPT ##
