@@ -18,7 +18,7 @@ library(readr)
 library(createslf)
 
 # Financial year
-year <- "1718"
+year <- check_year_format("1920")
 
 # Read data------------------------------------------------
 ltc_file <- read_csv(
@@ -98,13 +98,10 @@ ltc_flags <- ltc_file %>%
 
 
 # Save Outfile---------------------------------------------
-outfile <- ltc_flags %>%
-  arrange(chi)
+ltc_flags %>%
+  arrange(chi) %>%
+  # Save .rds file
+  write_rds(get_ltcs_path(year, check_mode = "write"))
 
-# .zsav
-haven::write_sav(outfile, get_ltcs_path(ext = "zsav", check_mode = "write"))
-
-# .rds file
-readr::write_rds(outfile, get_ltcs_path(check_mode = "write"))
 
 ## END OF SCRIPT ##

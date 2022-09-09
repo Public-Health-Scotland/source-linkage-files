@@ -1,13 +1,3 @@
-#' Get the IT extract ref number
-#'
-#' @return the IT extract ref number
-#' @export
-#'
-#' @family initialisation
-it_extract_ref <- function() {
-  "SCTASK0270905"
-}
-
 #' Latest update
 #'
 #' @description Get the date of the latest update, e.g 'Jun_2022'
@@ -17,7 +7,7 @@ it_extract_ref <- function() {
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Mar_2022"
+  "Sep_2022"
 }
 
 #' Previous update
@@ -29,7 +19,7 @@ latest_update <- function() {
 #'
 #' @family initialisation
 previous_update <- function() {
-  "Dec_2021"
+  "Jun_2022"
 }
 
 #' Delayed Discharge period
@@ -42,5 +32,5 @@ previous_update <- function() {
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Dec21"
+  "Jul16_Jun22"
 }

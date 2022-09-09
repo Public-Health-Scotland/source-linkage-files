@@ -142,12 +142,8 @@ ggplot(data = matched_costs_data, aes(x = year, y = hourly_cost)) +
 ## Outfile  ---------------------------------------
 
 outfile <- hc_costs_uplifted %>%
-  select(-health_board)
-
-outfile %>%
-  # .zsav
-  write_sav(get_hc_costs_path(update = latest_update(), ext = "zsav", check_mode = "write")) %>%
-  # .rds file
+  select(-health_board) %>%
+  # Save .rds file
   write_rds(get_hc_costs_path(update = latest_update(), check_mode = "write"))
 
 

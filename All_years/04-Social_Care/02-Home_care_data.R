@@ -1,7 +1,6 @@
 
 # Setup -------------------------------------------------------------------
 
-library(haven)
 library(fs)
 library(dplyr)
 library(stringr)

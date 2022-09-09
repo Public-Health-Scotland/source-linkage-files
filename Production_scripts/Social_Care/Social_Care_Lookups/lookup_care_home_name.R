@@ -8,19 +8,16 @@
 # Description - Cleans up Care Home Names
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(dbplyr)
 library(createslf)
 library(phsmethods)
 
-
 year <- check_year_format("1920")
 
 
 # Read in data---------------------------------------
-
 
 ch_lookup <- readxl::read_xlsx(get_slf_ch_name_lookup_path())
 
@@ -81,9 +78,7 @@ outfile <- ch_names %>%
 
 
 outfile %>%
-  # .zsav
-  write_sav(get_ch_name_lookup_path(year, ext = "zsav", check_mode = "write")) %>%
-  # .rds file
+  # Save .rds file
   write_rds(get_ch_name_lookup_path(year, check_mode = "write"))
 
 

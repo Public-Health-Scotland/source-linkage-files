@@ -15,7 +15,6 @@ Get the period for Delayed Discharge
 }
 \seealso{
 Other initialisation: 
-\code{\link{it_extract_ref}()},
 \code{\link{latest_update}()},
 \code{\link{previous_update}()}
 }

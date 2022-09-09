@@ -4,11 +4,10 @@
 \alias{get_it_deaths_path}
 \title{IT Deaths File Path}
 \usage{
-get_it_deaths_path(it_reference = it_extract_ref(), ...)
+get_it_deaths_path(it_reference = NULL, ...)
 }
 \arguments{
-\item{it_reference}{The IT reference to use,
-defaults to \code{\link[=it_extract_ref]{it_extract_ref()}}}
+\item{it_reference}{Optional argument for the seven-digit code in the IT extract file name}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
