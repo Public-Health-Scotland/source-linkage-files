@@ -97,16 +97,8 @@ outfile <- monthly_costs %>%
     starts_with("sc_")
   )
 
-
+# Save .rds file
 outfile %>%
-  # .zsav
-  write_sav(get_source_extract_path(
-    year,
-    type = "CH",
-    ext = "zsav",
-    check_mode = "write"
-  )) %>%
-  # .rds file
   write_rds(get_source_extract_path(year, type = "CH", check_mode = "write"))
 
 

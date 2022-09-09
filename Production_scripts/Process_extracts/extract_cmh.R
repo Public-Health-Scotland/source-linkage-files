@@ -116,10 +116,8 @@ outfile <- cmh_clean %>%
     diag6
   )
 
+# Save as rds file
 outfile %>%
-  # Save as zsav file
-  write_sav(get_source_extract_path(year, "CMH", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
 
 
