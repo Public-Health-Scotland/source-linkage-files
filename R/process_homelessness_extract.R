@@ -81,7 +81,7 @@ process_homelessness_extract <- function(year, write_to_disk = TRUE) {
       year = as.character(year),
       recid = "HL1",
       smrtype = add_smr_type(recid = recid, main_applicant_flag = main_applicant_flag)
-      ) %>%
+    ) %>%
     dplyr::mutate(
       dplyr::across(
         c(.data$financial_difficulties_debt_unemployment:.data$refused),

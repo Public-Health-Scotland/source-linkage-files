@@ -22,8 +22,10 @@ add_smr_type <- function(recid,
                          main_applicant_flag = NULL) {
 
   # Situation where some recids are not in the accepted values
-  if (any(!(recid %in% c("02B", "04B", "00B", "AE2", "PIS", "NRS", "01B", "GLS", "CMH", "DN", "HC",
-                         "HL1"))) &
+  if (any(!(recid %in% c(
+    "02B", "04B", "00B", "AE2", "PIS", "NRS", "01B", "GLS", "CMH", "DN", "HC",
+    "HL1"
+  ))) &
     !any(is.na(recid))) {
     cli::cli_warn(c("i" = "One or more values of {.var recid} do not have an
                    assignable {.var smrtype}"))
