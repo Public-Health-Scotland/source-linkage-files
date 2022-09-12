@@ -1,3 +1,20 @@
+# September 2022 Update - Unreleased
+* Costs uplifted for 2021 onwards.
+  * 1.5% for 2020/21
+  * 4.1% for 2021/22
+  * 6.2% for 2022/23
+*  Alarms - Telecare and SDS data added.
+* SPARRA and HHG - new 22/23 scores added.  
+* Created new files for 2022/23.
+* The NSU cohort has been added for 2021/22.
+* Home Care - If the start date is after the end date we will now discard the end date (`sysmis`/`NA`), previously we would have dropped these records entirely.
+* Changes to GP OoH data
+  * Include some new categories to `smrtype` for COVID type consultations. This is consistent with the Unscheduled Care publication.
+  * Exclude some records which were previously included. These were data from 'Flow navigation centres' and are incorrectly being added to the data mart. This is also consistent with what the UC team do.
+  * The `ooh_cc` variable has been replaced with `ooh_case_id`. Each row for GP OoH is a 'consultation' but many consultations can be grouped into a 'case' previously `ooh_cc` simply numbered unique cases for a person in the year e.g. 1,2,3... This could be confusing as cases could reasonably span multiple years. `ooh_case_id` is the unique ID for the case as found in the datamart (called `GUID`), you can count unique `ooh_case_id`s to get a count of cases in the year, or aggregate on it to merge the consultations into a case. Unlike `ooh_cc` this will now work properly across years too
+* Care Home admission reason - `ch_adm_reason` now uses the variable `type_of_admission` from the V1.4 definitions, instead of the older `reason_for_admission`. Records submitted before 2020/21 which do not have this variable have been re-coded but should be used with some skeptisism.
+
+
 # June 2022 Update - Released 10-Jun-2022
 
 * Fixed a bug where CH costs was not referring to end of year. 
