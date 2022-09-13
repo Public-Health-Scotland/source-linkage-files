@@ -8,10 +8,11 @@
 #' @return A list of data containing processed extracts.
 #' @export
 #'
-run_extract_tests <- function(year) {
-  process_homelessness_tests(list$extract_data[[year]][["homelessness"]], year)
-  process_mental_health_tests(list$extract_data[[year]][["mental_health"]], year)
-  process_maternity_tests(list$extract_data[[year]][["maternity"]], year)
+run_extract_tests <- function(data_list, year) {
+
+  process_homelessness_tests(data_list[[year]][["homelessness"]], year)
+  process_mental_health_tests(data_list[[year]][["mental_health"]], year)
+  process_maternity_tests(data_list[[year]][["maternity"]], year)
 
   return(run_extract_tests)
 }
