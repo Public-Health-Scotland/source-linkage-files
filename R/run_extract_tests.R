@@ -9,9 +9,9 @@
 #' @export
 #'
 run_extract_tests <- function(data_list, year) {
-  process_homelessness_tests(data_list[[year]][["homelessness"]], year)
-  process_mental_health_tests(data_list[[year]][["mental_health"]], year)
-  process_maternity_tests(data_list[[year]][["maternity"]], year)
+  process_homelessness_tests(data_list[["homelessness"]], year)
+  process_mental_health_tests(data_list[["mental_health"]], year)
+  process_maternity_tests(data_list[["maternity"]], year)
 
   return(run_extract_tests)
 }

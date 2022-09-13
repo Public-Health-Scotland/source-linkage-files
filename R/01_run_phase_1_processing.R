@@ -13,8 +13,9 @@ run_phase_1_processing <- function(select_years_to_run) {
     run_data_extracts
   )
 
-  extract_tests <- purrr::iwalk(
-    exract_data,
+  extract_tests<- purrr::iwalk(
+    extract_data,
+    select_years_to_run,
     run_extract_tests
   )
 
