@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
 !create_uplift_var.
@@ -124,16 +124,17 @@ Variable Labels
     feb_cost "Cost from episode in February"
     gender "Gender"
     gpprac "GP Practice code"
+    hc_hours_annual "Total number of home care service hours in the financial year"
     hc_hours_q1 "Total number of home care service hours in Q1 (April - June)"
     hc_hours_q2 "Total number of home care service hours in Q2 (July - September)"
     hc_hours_q3 "Total number of home care service hours in Q3 (October - December)"
     hc_hours_q4 "Total number of home care service hours in Q4 (January - March)"
-    hc_provider "The organisation type that provides the home care service to the client/service user"
-    hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hc_cost_q1 "Total cost of home care hours in Q1 (April - June)"
     hc_cost_q2 "Total cost of home care hours in Q2 (July - September)"
     hc_cost_q3 "Total cost of home care hours in Q3 (October - December)"
     hc_cost_q4 "Total cost of home care hours in Q4 (January - March)"
+    hc_provider "The organisation type that provides the home care service to the client/service user"
+    hc_reablement "An indicator of whether the client/service user has received a reablement package within the reporting period"
     hbpraccode "NHS Board of GP Practice"
     hbrescode "NHS Board of Residence"
     hbtreatcode "NHS Board of Treatment"
@@ -204,7 +205,6 @@ Variable Labels
     sc_type_of_housing "Type of housing in which the client/service resides, see notes"
     sc_meals "An indicator of whether the client/service user received a Meals Service at any point during the quarter"
     sc_day_care "An indicator of whether the client/service user has received a day care service within the reporting period"
-    sds_option_4 "A flag to indicate whether the SDS episode could be considered 'option 4' i.e. the client chose a mix of options"
     selfharm_adm "Indicates self-harm related admission or attendance"
     sep_beddays "Number of Bed days from episode in September"
     sep_cost "Cost from episode in September"
@@ -843,7 +843,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     ooh_outcome.2
     ooh_outcome.3
     ooh_outcome.4
-    ooh_cc
+    ooh_case_id
     ccm
     totalnodncontacts
     hl1_application_ref
@@ -869,9 +869,12 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     hc_hours_q2
     hc_hours_q3
     hc_hours_q4
+    hc_cost_q1
+    hc_cost_q2
+    hc_cost_q3
+    hc_cost_q4
     hc_provider
     hc_reablement
-    sds_option_4
     smr01_cis_marker
     cij_marker
     cij_start_date
