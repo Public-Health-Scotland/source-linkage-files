@@ -123,11 +123,13 @@ add_ppa_flag <- function(data) {
           "I10",
           # Congestive HF
           "I50",
-          "J81") &
+          "J81"
+        ) &
           excluding_operation == FALSE ~ TRUE,
         stringr::str_sub(.data$diag1, 1, 4) %in% c(
           # Hypertension
-          "I119", "I110") &
+          "I119", "I110"
+        ) &
           excluding_operation == FALSE ~ TRUE,
 
         # Reliant on diag1 and diag2
