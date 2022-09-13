@@ -71,7 +71,7 @@ cmh_clean <- cmh_extract %>%
   # create recid, year, SMRType variables
   mutate(
     recid = "CMH",
-    SMRType = add_smr_type(recid = recid),
+    smrtype = add_smr_type(recid = recid),
     year = year
   ) %>%
   # contact end time
