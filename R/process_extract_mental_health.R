@@ -45,7 +45,9 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
       # cost total net
       cost_total_net = rowSums(dplyr::across(tidyselect::ends_with("_cost"))),
       # total length of stay
-      stay = calculate_stay(.data$year, .data$record_keydate1, .data$record_keydate2)
+      stay = calculate_stay(.data$year, .data$record_keydate1, .data$record_keydate2),
+      # SMR type
+      smrtype = add_smr_type(recid)
     )
 
 

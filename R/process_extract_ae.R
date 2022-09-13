@@ -51,7 +51,10 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
     ))) %>%
     ## Allocate the costs to the correct month ##
     # Create month variable
-    dplyr::mutate(month = strftime(.data$record_keydate1, "%m")) %>%
+    dplyr::mutate(
+      month = strftime(.data$record_keydate1, "%m"),
+      smrtype = add_smr_type(recid)
+    ) %>%
     # Allocate the costs to the correct month
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
 

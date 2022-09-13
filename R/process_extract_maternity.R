@@ -48,7 +48,8 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
     dplyr::mutate(
       discondition = factor(.data$discondition,
         levels = c(1:5, 8)
-      )
+      ),
+      smrtype = add_smr_type(recid, mpat)
     )
 
 
