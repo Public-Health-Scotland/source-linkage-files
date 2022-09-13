@@ -36,7 +36,8 @@ Alter type
     AT_telecare AT_alarms
     SDS_option_1 SDS_option_2 SDS_option_3
     CIJ_el CIJ_non_el CIJ_mat CIJ_delay
-    preventable_admissions preventable_beddays (F8.0).
+    preventable_admissions preventable_beddays 
+    HHG_Start_FY HHG_End_FY SPARRA_Start_FY SPARRA_End_FY (F8.0).
 
 * Tidy up the display.
 Variable width ALL (10).
@@ -176,7 +177,7 @@ aggregate
     /CH = Max(CH_cis_episodes)
     /HC = Max(hc_episodes)
     /ATA ATT = Max(AT_alarms AT_telecare)
-    /SDS1 SDS2 SDS3 = Max(SDS_option_1 SDS_option_2 SDS_option_3).
+    /SDS1 SDS2 SDS3 SDS4= Max(SDS_option_1 SDS_option_2 SDS_option_3 SDS_option_4).
 
 * If there are no values (i.e. the max is sysmis or 0) then we should set the variable to sysmis to hopefully avoid confusion.
 Do repeat Test = HHG_Start HHG_End SPARRA_Start SPARRA_End

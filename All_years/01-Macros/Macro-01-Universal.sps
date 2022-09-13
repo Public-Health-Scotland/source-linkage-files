@@ -19,26 +19,26 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0323518"
+    "SCTASK0359839"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Jun_2022"
+    "Sep_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Mar_2022"
+    "Jun_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Mar22"
+    "Jul16_Jun22"
 !EndDefine.
 
-* Latest 'real' costs we have in the format CCYY e.g. 2018/19 = 2018 (no quotes).
+* Latest 'real' costs we have in the format CCYY e.g. 2022/23 = 2022 (no quotes).
 Define !latest_cost_year()
-    2018
+    2022
 !EndDefine.
 
 *******************************************************.
@@ -47,7 +47,7 @@ Define !latest_cost_year()
 *******************************************************.
 * Locality file - will need changing when geography files update.
 Define !Locality_file()
-    "HSCP Localities_DZ11_Lookup_20200825.sav"
+    "HSCP Localities_DZ11_Lookup_20220630.sav"
 !EndDefine.
 
 * SPD file - will need changing when geography files update.
@@ -72,7 +72,7 @@ Define !DataZone_pop_file()
 
 * 5-year HSCP Populations file - will need changing when geography files update.
 Define !HSCP_5year_pop_file()
-    "HSCP2019_pop_est_1981_2020.sav"
+    "HSCP2019_pop_est_1981_2021.sav"
 !EndDefine.
 
 *******************************************************.
@@ -283,13 +283,26 @@ Define !ReadCodeLookup()
 * Should not need changing unless something is broken or to update methodology.
 *******************************************************.
 * Creates a variable with the correct uplift factor.
-* It works out the difference in years (minimum of 0).
-* Take 1.01 (for 1%) to the power of the difference in years (minimum of 0).
+* We have set uplifts to use for 2020/21, 2021/22 and 2022/23, provided by Paul Leak.
+* For older years, don't uplift.
+* For years after 2022/23 uplift by an additional 1% per year after the latest cost year (2022/23) 
 * For non plics recids use uplift of 1 so we won't change anything.
 Define !create_uplift_var().
     * Filter to PLICs recids.
     Do if any(recid, "00B", "01B", "GLS", "02B", "04B", "AE2").
-        Compute uplift = ((1.01) ** max(0, !Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
+        Do if !eval(!fy) = "2021".
+            Compute uplift = 1.015.
+        Else if !eval(!fy) = "2122".
+            Compute uplift = 1.015 * 1.041.
+        Else if !eval(!fy) = "2223".
+            Compute uplift = 1.015 * 1.041 * 1.062.
+        Else if !unquote(!eval(!altfy)) > !eval(!latest_cost_year).
+            Compute test2 = !Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)).
+            Compute test =  ((1.01) ** (!Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
+            Compute uplift = (1.015 * 1.041 * 1.062) * ((1.01) ** (!Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
+        Else.
+            Compute uplift = 1.
+        End if.
     Else.
         Compute uplift = 1.
     End if.
