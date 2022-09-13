@@ -277,9 +277,8 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-  # Save as rds file
-  outfile %>%
-    write_rds(get_source_extract_path(year, "AE", check_mode = "write"))
+    # Save as rds file
+    outfile %>%
+      write_rds(get_source_extract_path(year, "AE", check_mode = "write"))
   }
-
 }
