@@ -141,7 +141,7 @@ process_extract_homelessness <- function(year, data, write_to_disk = TRUE) {
     final_data %>%
       write_rds(get_file_path(
         get_year_dir(year),
-        glue::glue("homelessness_for_source-20{year}test"),
+        glue::glue("homelessness_for_source-20{year}"),
         ext = "rds",
         check_mode = "write"
       ))

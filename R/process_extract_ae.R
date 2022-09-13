@@ -215,8 +215,8 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
   # Join data--------------------------------------------
 
   matched_ae_data <- outfile %>%
-    dplyr::left_join(.data$ae_cup_clean, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
-    dppyr::arrange(.data$chi, .data$record_keydate1, .data$keyTime1, .data$record_keydate2, .data$keyTime2)
+    dplyr::left_join(ae_cup_clean, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
+    dplyr::arrange(.data$chi, .data$record_keydate1, .data$keyTime1, .data$record_keydate2, .data$keyTime2)
 
 
   # Save outfile----------------------------------------
