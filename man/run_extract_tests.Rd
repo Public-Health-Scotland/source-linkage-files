@@ -7,6 +7,8 @@
 run_extract_tests(data_list, year)
 }
 \arguments{
+\item{data_list}{List containing data for processed extracts.}
+
 \item{year}{Year of extract}
 }
 \value{

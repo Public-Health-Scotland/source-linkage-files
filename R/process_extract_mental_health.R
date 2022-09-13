@@ -47,7 +47,7 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
       # total length of stay
       stay = calculate_stay(.data$year, .data$record_keydate1, .data$record_keydate2),
       # SMR type
-      smrtype = add_smr_type(recid)
+      smrtype = add_smr_type(.data$recid)
     )
 
 
