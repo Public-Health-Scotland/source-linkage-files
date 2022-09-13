@@ -99,9 +99,11 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1)
 
+  if (write_to_disk) {
   # Save as rds file
   outfile %>%
     write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"))
+  }
 
   return(outfile)
 }

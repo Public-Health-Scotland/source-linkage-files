@@ -104,9 +104,11 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
       .data$uri
     )
 
+  if (write_to_disk) {
   outfile %>%
     # Save as rds file
     write_rds(get_source_extract_path(year, "MH", check_mode = "write"))
+  }
 
   return(outfile)
 }

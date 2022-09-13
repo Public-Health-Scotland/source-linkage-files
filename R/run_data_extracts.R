@@ -11,11 +11,11 @@
 #'
 run_data_extracts <- function(year) {
   process_extracts <- list(
-    "homelessness" = process_extract_homelessness(year, read_extract_homelessness(year)),
-    "mental_health" = process_extract_mental_health(year, read_extract_mental_health(year)),
-    "maternity" = process_extract_maternity(year, read_extract_maternity(year)),
-    "ae" = process_extract_ae(year, read_extract_ae(year)),
-    "acute" = process_extract_acute(year, read_extract_acute(year))
+    "homelessness" = process_extract_homelessness(year, read_extract_homelessness(year), write_to_disk = FALSE),
+    "mental_health" = process_extract_mental_health(year, read_extract_mental_health(year), write_to_disk = FALSE),
+    "maternity" = process_extract_maternity(year, read_extract_maternity(year), write_to_disk = FALSE),
+    "ae" = process_extract_ae(year, read_extract_ae(year), write_to_disk = FALSE),
+    "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = FALSE)
   )
 
 

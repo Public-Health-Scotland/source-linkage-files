@@ -113,7 +113,9 @@ process_extract_acute <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1)
 
+  if (write_to_disk) {
   # Save as rds file
   outfile %>%
     write_rds(get_source_extract_path(year, "Acute", check_mode = "write"))
+  }
 }
