@@ -120,5 +120,4 @@ process_extract_acute <- function(year, data, write_to_disk = TRUE) {
   }
 
   return(outfile)
-
 }

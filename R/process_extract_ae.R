@@ -283,5 +283,4 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
   }
 
   return(outfile)
-
 }
