@@ -12,7 +12,7 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_nrs_deaths<- function(year, data, write_to_disk = TRUE) {
+process_extract_nrs_deaths <- function(year, data, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
@@ -33,11 +33,10 @@ process_extract_nrs_deaths<- function(year, data, write_to_disk = TRUE) {
     dplyr::mutate(smrtype = add_smr_type(.data$recid))
 
   if (write_to_disk) {
-  # Save as rds file
-  deaths_clean %>%
-    write_rds(get_source_extract_path(year, "Deaths", check_mode = "write"))
+    # Save as rds file
+    deaths_clean %>%
+      write_rds(get_source_extract_path(year, "Deaths", check_mode = "write"))
   }
 
   return(deaths_clean)
-
 }
