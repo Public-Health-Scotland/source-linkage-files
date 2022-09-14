@@ -87,7 +87,7 @@ process_extract_outpatients <- function(year, data, write_to_disk = TRUE) {
       .data$nhshosp,
       .data$cost_total_net,
       tidyselect::ends_with("_cost"),
-      .data$.data$uri
+      .data$uri
     )
 
   if (write_to_disk) {
