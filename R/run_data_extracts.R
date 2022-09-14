@@ -15,7 +15,8 @@ run_data_extracts <- function(year) {
     "mental_health" = process_extract_mental_health(year, read_extract_mental_health(year), write_to_disk = FALSE),
     "maternity" = process_extract_maternity(year, read_extract_maternity(year), write_to_disk = FALSE),
     "ae" = process_extract_ae(year, read_extract_ae(year), write_to_disk = FALSE),
-    "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = FALSE)
+    "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = FALSE),
+    "outpatients" = process_extract_outpatients(year, read_extract_outpatients(year), write_to_disk = FALSE)
   )
 
 
