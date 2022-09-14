@@ -118,4 +118,7 @@ process_extract_acute <- function(year, data, write_to_disk = TRUE) {
     outfile %>%
       write_rds(get_source_extract_path(year, "Acute", check_mode = "write"))
   }
+
+  return(outfile)
+
 }
