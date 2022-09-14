@@ -16,6 +16,7 @@ run_extract_tests <- function(data_list, year) {
   process_tests_ae(data_list[["ae"]], year)
   process_tests_acute(data_list[["acute"]], year)
   process_tests_outpatients(data_list[["outpatients"]], year)
+  process_tests_nrs_deaths(data_list[["nrs_deaths"]], year)
 
   return(run_extract_tests)
 }
