@@ -1,6 +1,6 @@
 #' Process NRS deaths tests
 #'
-#' @description This script takes the processed homelessness extract and produces
+#' @description This script takes the processed nrs deaths extract and produces
 #' a test comparison with the previous data. This is written to disk as a csv.
 #'
 #' @param data The processed data extract
