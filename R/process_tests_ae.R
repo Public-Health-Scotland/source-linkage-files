@@ -9,7 +9,7 @@
 #' @return a csv document containing tests for extracts
 #' @export
 #'
-process_ae_tests <- function(data, year) {
+process_tests_ae <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
   comparison <- produce_test_comparison(
