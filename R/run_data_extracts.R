@@ -17,7 +17,8 @@ run_data_extracts <- function(year) {
     "ae" = process_extract_ae(year, read_extract_ae(year), write_to_disk = FALSE),
     "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = FALSE),
     "outpatients" = process_extract_outpatients(year, read_extract_outpatients(year), write_to_disk = FALSE),
-    "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = FALSE)
+    "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = FALSE),
+    "cmh" = process_extract_cmh(year, read_extract_cmh(year), write_to_disk = FALSE)
   )
 
 
