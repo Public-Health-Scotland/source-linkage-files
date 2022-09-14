@@ -10,11 +10,11 @@
 #' @export
 #'
 run_extract_tests <- function(data_list, year) {
-  process_homelessness_tests(data_list[["homelessness"]], year)
-  process_mental_health_tests(data_list[["mental_health"]], year)
-  process_maternity_tests(data_list[["maternity"]], year)
-  process_ae_tests(data_list[["ae"]], year)
-  process_acute_tests(data_list[["acute"]], year)
+  process_tests_homelessness(data_list[["homelessness"]], year)
+  process_tests_mental_health(data_list[["mental_health"]], year)
+  process_tests_maternity(data_list[["maternity"]], year)
+  process_tests_ae(data_list[["ae"]], year)
+  process_tests_acute(data_list[["acute"]], year)
 
   return(run_extract_tests)
 }
