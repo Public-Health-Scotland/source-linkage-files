@@ -9,6 +9,17 @@
 #' @export
 add_ppa_flag <- function(data) {
   matching_data <- data %>%
+
+    expected_vars <- c("anon_chi", "cij_marker", "cij_pattype", "recid",
+                       "op1a", "diag1", "diag2", "diag3", "diag4",
+                       "diag5", "diag6")
+    if (!all(expected_vars %in% names(data))) {
+      missing_vars <- setdiff(expected_vars, names(data))
+
+      cli::cli_abort("{missing_vars} were missing from the data and are needed
+                     to assign preventable admissions")
+    }
+
     # Select out only the columns we need
     dplyr::select(
       .data$anon_chi, .data$cij_marker, .data$cij_pattype, .data$recid,
@@ -25,11 +36,9 @@ add_ppa_flag <- function(data) {
 
       # Excluding operations are op1a codes from K01 to K50, K56, K60, and K61 (dental)
       excluding_operation = stringr::str_sub(.data$op1a, 1, 3) %in%
-        purrr::reduce(list(
-          glue::glue("K{stringr::str_c(\"0\", c(1:9))}"),
-          glue::glue("K{as.character(c(10:50))}"),
-          c("K56", "K60", "K61")
-        ), union),
+        c(glue::glue("K{stringr::str_pad(1:50, 2, 'left', '0')}"), "K56", "K60", "K61"),
+
+      # Adding ppa flag
       ppa = dplyr::case_when(
         # Just reliant on diag1, first 3 characters
         stringr::str_sub(.data$diag1, 1, 3) %in%
@@ -125,25 +134,27 @@ add_ppa_flag <- function(data) {
           "I50",
           "J81"
         ) &
-          excluding_operation == FALSE ~ TRUE,
+          !excluding_operation ~ TRUE,
         stringr::str_sub(.data$diag1, 1, 4) %in% c(
           # Hypertension
           "I119", "I110"
         ) &
-          excluding_operation == FALSE ~ TRUE,
+          !excluding_operation ~ TRUE,
 
         # Reliant on diag1 and diag2
         # Bronchitis
-        stringr::str_sub(.data$diag1, 1, 3) == "J40" &
-          stringr::str_sub(.data$diag2, 1, 3) %in% c("J41", "J42", "J43", "J44") ~ TRUE,
-
-        # Reliant on diag2 only
-        # Bronchitis
-        stringr::str_sub(.data$diag2, 1, 3) == "J47" ~ TRUE,
+        stringr::str_sub(.data$diag1, 1, 3) == "J20" &
+          stringr::str_sub(.data$diag2, 1, 3) %in% c("J41", "J42", "J43", "J44", "J47") ~ TRUE,
 
         # All other values
         TRUE ~ FALSE
       )
-    )
-  return(matching_data)
+    ) %>%
+    # Just select out the chi, cij marker and ppa for ease of joining
+    dplyr::select(.data$anon_chi, .data$cij_marker, `cij_ppa` = .data$ppa)
+
+  # Match on the ppa lookup to original data
+  ppa_cij_data <- dplyr::left_join(data, matching_data, by = c("anon_chi", "cij_marker"))
+
+  return(ppa_cij_data)
 }
