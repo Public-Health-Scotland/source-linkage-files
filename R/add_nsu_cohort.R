@@ -1,0 +1,47 @@
+#' Add NSU cohort to working file
+#'
+#' @param df The input data frame
+#' @param year The year being processed
+#'
+#' @return A data frame containing the Non-Service Users as additional rows
+#' @export
+#'
+#' @seealso [get_nsu_path][createslf::get_nsu_paths()]
+add_nsu_cohort <- function(df, year) {
+  matched <- dplyr::full_join(df,
+    # NSU cohort file
+    haven::read_sav(get_nsu_path(year, ext = "zsav")),
+    # Match on by chi
+    by = "chi",
+    # Name the incoming variables with "_nsu"
+    suffix = c("", "_nsu"),
+    # Keep the chi from both sources
+    keep = TRUE
+  ) %>%
+    dplyr::rename(has_chi = chi_nsu) %>%
+    # Change the chi from the NSU cohort to a boolean
+    dplyr::mutate(has_chi = !is_missing(.data$has_chi))
+
+  return_df <- matched %>%
+    # Get data from non service user lookup if the recid is empty
+    dplyr::mutate(
+      year = year,
+      recid = dplyr::if_else(is_missing(.data$recid), "NSU", as.character(.data$recid)),
+      smrtype = dplyr::if_else(is_missing(.data$recid), "Non-User", as.character(.data$smrtype)),
+      postcode = dplyr::if_else(is_missing(.data$recid), .data$postcode_nsu, .data$postcode),
+      gpprac = dplyr::if_else(is_missing(.data$recid), .data$gpprac_nsu, .data$gpprac),
+      dob = dplyr::if_else(is_missing(.data$recid), .data$dob_nsu, .data$dob),
+      gender = dplyr::if_else(is_missing(.data$recid), .data$gender_nsu, .data$gender)
+    ) %>%
+    # If the data has come from the NSU cohort, use that data for the below variables
+    dplyr::mutate(
+      postcode = dplyr::if_else(is_missing(.data$postcode) & .data$has_chi, .data$postcode_nsu, .data$postcode),
+      gpprac = dplyr::if_else(is.na(.data$gpprac) & .data$has_chi, .data$gpprac_nsu, .data$gpprac),
+      dob = dplyr::if_else(is.na(.data$dob) & .data$has_chi, .data$dob_nsu, .data$dob),
+      gender = dplyr::if_else(is.na(gender) & .data$has_chi, .data$gender_nsu, .data$gender)
+    ) %>%
+    # Remove the additional columns
+    dplyr::select(-dplyr::contains("_nsu"))
+
+  return(return_df)
+}
