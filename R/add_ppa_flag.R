@@ -9,23 +9,24 @@
 #' @export
 add_ppa_flag <- function(data) {
   matching_data <- data %>%
+    expected_vars() <- c(
+    "anon_chi", "cij_marker", "cij_pattype", "recid",
+    "op1a", "diag1", "diag2", "diag3", "diag4",
+    "diag5", "diag6"
+  )
+  if (!all(expected_vars %in% names(data))) {
+    missing_vars <- setdiff(expected_vars, names(data))
 
-    expected_vars <- c("anon_chi", "cij_marker", "cij_pattype", "recid",
-                       "op1a", "diag1", "diag2", "diag3", "diag4",
-                       "diag5", "diag6")
-    if (!all(expected_vars %in% names(data))) {
-      missing_vars <- setdiff(expected_vars, names(data))
-
-      cli::cli_abort("{missing_vars} were missing from the data and are needed
+    cli::cli_abort("{missing_vars} were missing from the data and are needed
                      to assign preventable admissions")
-    }
+  }
 
-    # Select out only the columns we need
-    dplyr::select(
-      .data$anon_chi, .data$cij_marker, .data$cij_pattype, .data$recid,
-      .data$op1a, .data$diag1, .data$diag2, .data$diag3, .data$diag4,
-      .data$diag5, .data$diag6
-    ) %>%
+  # Select out only the columns we need
+  dplyr::select(
+    .data$anon_chi, .data$cij_marker, .data$cij_pattype, .data$recid,
+    .data$op1a, .data$diag1, .data$diag2, .data$diag3, .data$diag4,
+    .data$diag5, .data$diag6
+  ) %>%
     # Filter only recids and patient type where admission was preventable
     dplyr::filter(.data$recid %in% c("01B", "02B", "04B", "GLS") & .data$cij_pattype == "Non-Elective") %>%
     # We only want the first record in each cij, and we want to exclude empty cij and empty anon_chi
