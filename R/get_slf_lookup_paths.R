@@ -58,6 +58,31 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
   return(slf_deaths_file_path)
 }
 
+
+#' SLF Long Term Condition Lookup File Path
+#'
+#' @description Get the full path to the SLF ltc lookup file
+#'
+#' @param update The update month to use,
+#' defaults to [latest_update()]
+#' @param ... additional arguments passed to [get_file_path()]
+#'
+#' @return The path to the costs lookup as an [fs::path()]
+#' @export
+#' @family slf ltc file path
+#' @seealso [get_file_path()] for the generic function.
+get_slf_ltc_path <- function(year, ...) {
+  fyear_year = paste0(convert_fyyear_to_year(year), substr(year, 3, 4))
+  slf_ltc_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "LTCs"),
+    file_name = glue::glue("LTC_patient_reference_file-{fyear_year}.rds"),
+    ...
+  )
+
+  return(slf_ltc_file_path)
+}
+
+
 #' SLF Care Home Lookup File Path
 #'
 #' @description Get the full path to the SLF Care Home lookup

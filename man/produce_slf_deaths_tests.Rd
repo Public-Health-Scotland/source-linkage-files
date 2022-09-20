@@ -21,6 +21,7 @@ Produce the tests for SLF deaths lookup
 Other slf test functions: 
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_homelessness_tests}()},
+\code{\link{produce_slf_ltc_tests}()},
 \code{\link{produce_slf_postcode_tests}()}
 }
 \concept{slf test functions}
