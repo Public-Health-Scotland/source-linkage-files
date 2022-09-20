@@ -161,13 +161,13 @@ maternity_clean <- maternity_file %>%
   create_monthly_beddays(year, record_keydate1, record_keydate2) %>%
   # Calculate costs
   create_monthly_costs() %>%
-  # Add discondition as a factor
+  # Add discondition as a factor and SMR type
   mutate(
     discondition = factor(discondition,
       levels = c(1:5, 8)
-    )
+    ),
+    smrtype = add_smr_type(recid, mpat)
   )
-
 
 # Save outfile------------------------------------------------
 
@@ -177,6 +177,7 @@ outfile <- maternity_clean %>%
     recid,
     record_keydate1,
     record_keydate2,
+    smrtype,
     chi,
     gender,
     dob,
@@ -215,10 +216,9 @@ outfile <- maternity_clean %>%
   ) %>%
   arrange(chi, record_keydate1)
 
+# Save as rds file
 outfile %>%
-  # Save as zsav file
-  write_sav(get_source_extract_path(year, "Maternity", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"))
+
 
 # End of Script #

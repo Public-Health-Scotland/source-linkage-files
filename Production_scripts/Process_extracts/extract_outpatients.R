@@ -108,7 +108,9 @@ outpatients_clean <- outpatients_file %>%
   mutate(
     year = year,
     # Set recid variable
-    recid = "00B"
+    recid = "00B",
+    # Set smrtype variable
+    smrtype = add_smr_type(recid)
   ) %>%
   # Recode GP Practice into a 5 digit number
   # assume that if it starts with a letter it's an English practice and so recode to 99995
@@ -119,7 +121,6 @@ outpatients_clean <- outpatients_file %>%
   create_day_episode_costs(record_keydate1, cost_total_net) %>%
   # sort by chi record_keydate1
   arrange(chi, record_keydate1)
-
 
 # Factors ---------------------------------------
 outpatients_clean <- outpatients_clean %>%
@@ -142,6 +143,7 @@ outfile <-
     recid,
     record_keydate1,
     record_keydate2,
+    smrtype,
     chi,
     gender,
     dob,
@@ -170,11 +172,9 @@ outfile <-
     uri
   )
 
-
-# Save as zsav file
+# Save as rds file
 outfile %>%
-  write_sav(get_source_extract_path(year, "Outpatient", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "Outpatients", check_mode = "write"))
+
 
 # End of Script #

@@ -193,15 +193,9 @@ acute_clean <- acute_file %>%
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # Calculate the total length of stay (for the entire episode, not just within the financial year).
   mutate(
-    stay = calculate_stay(year, record_keydate1, record_keydate2)
-  ) %>%
-  # create and populate SMRType
-  mutate(
-    SMRType = case_when(
-      recid == "01B" & lineno != 330 ~ if_else(ipdc == "I", "Acute-IP", "Acute-DC"),
-      lineno == 330 & ipdc == "I" ~ "GLS-IP",
-      recid == "GLS" ~ "GLS-IP"
-    )
+    stay = calculate_stay(year, record_keydate1, record_keydate2),
+    # create and populate SMRType
+    smrtype = add_smr_type(recid = recid, ipdc = ipdc)
   ) %>%
   # Apply new costs for C3 specialty, these are taken from the 2017/18 file
   fix_c3_costs(year) %>%
@@ -225,7 +219,7 @@ outfile <- acute_clean %>%
     recid,
     record_keydate1,
     record_keydate2,
-    SMRType,
+    smrtype,
     chi,
     gender,
     dob,
@@ -268,10 +262,8 @@ outfile <- acute_clean %>%
   ) %>%
   arrange(chi, record_keydate1)
 
+# Save as rds file
 outfile %>%
-  # Save as zsav file
-  write_sav(get_source_extract_path(year, "Acute", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "Acute", check_mode = "write"))
 
 ## End of Script ##
