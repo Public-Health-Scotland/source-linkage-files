@@ -34,7 +34,7 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "care_home_extract")
+write_tests_xlsx(comparison, "home_care_extract")
 
 
 ## END OF SCRIPT ##
