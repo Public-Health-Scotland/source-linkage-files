@@ -14,7 +14,7 @@
 library(createslf)
 library(openxlsx)
 
-fyear = '1920'
+fyear <- "1920"
 
 
 # Read in Data---------------------------------------

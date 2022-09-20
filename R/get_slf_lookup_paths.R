@@ -72,7 +72,7 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
 #' @family slf ltc file path
 #' @seealso [get_file_path()] for the generic function.
 get_slf_ltc_path <- function(year, ...) {
-  fyear_year = paste0(convert_fyyear_to_year(year), substr(year, 3, 4))
+  fyear_year <- paste0(convert_fyyear_to_year(year), substr(year, 3, 4))
   slf_ltc_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "LTCs"),
     file_name = glue::glue("LTC_patient_reference_file-{fyear_year}.rds"),
