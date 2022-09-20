@@ -25,8 +25,8 @@ It will also produce various summary statistics for episode date variables.
 
 Other extract test functions: 
 \code{\link{calculate_measures}()},
-\code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_cmh_tests}()},
-\code{\link{produce_source_extract_tests}()}
+\code{\link{produce_source_extract_tests}()},
+\code{\link{produce_source_sc_tests}()}
 }
 \concept{extract test functions}
