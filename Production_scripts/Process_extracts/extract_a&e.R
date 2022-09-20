@@ -131,11 +131,13 @@ ae_clean <- ae_file %>%
     .x == "Z" ~ "S08000026"
   ))) %>%
   ## Allocate the costs to the correct month ##
-  # Create month variable
-  mutate(month = strftime(record_keydate1, "%m")) %>%
+  # Create month and SMR type variables
+  mutate(
+    month = strftime(record_keydate1, "%m"),
+    smrtype = add_smr_type(recid)
+  ) %>%
   # Allocate the costs to the correct month
   create_day_episode_costs(record_keydate1, cost_total_net)
-
 
 # Factors ---------------------------------------------------
 
@@ -234,6 +236,7 @@ outfile <-
     record_keydate2,
     keyTime1,
     keyTime2,
+    smrtype,
     chi,
     gender,
     dob,
@@ -309,6 +312,7 @@ outfile <- matched_ae_data %>%
     record_keydate2,
     keyTime1,
     keyTime2,
+    smrtype,
     chi,
     gender,
     dob,
@@ -354,10 +358,8 @@ outfile <- matched_ae_data %>%
     cup_pathway
   )
 
-# Save as zsav file
+# Save as rds file
 outfile %>%
-  write_sav(get_source_extract_path(year, "AE", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "AE", check_mode = "write"))
 
 

@@ -59,7 +59,9 @@ pis_clean <- pis_file %>%
   # Set date to the end of the FY
   mutate(
     record_keydate1 = end_fy(year),
-    record_keydate2 = record_keydate1
+    record_keydate2 = record_keydate1,
+    # Add SMR type variable
+    smrtype = add_smr_type(recid)
   )
 
 # Issue a warning if rows were removed
@@ -73,19 +75,10 @@ if (nrow(pis_clean) != nrow(pis_file)) {
 
 
 # Save out ---------------------------------------
+
+# Save as rds file
 pis_clean %>%
-  # Save as .zsav file
-  write_sav(get_source_extract_path(
-    year = year,
-    type = "PIS",
-    ext = "zsav",
-    check_mode = "write"
-  )) %>%
-  # Save as .rds file
-  write_rds(get_source_extract_path(
-    year = year,
-    type = "PIS",
-    check_mode = "write"
-  ))
+  write_rds(get_source_extract_path(year, "PIS", check_mode = "write"))
+
 
 # End of Script #

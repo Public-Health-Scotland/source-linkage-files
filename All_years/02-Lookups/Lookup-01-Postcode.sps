@@ -14,7 +14,7 @@ sort cases by DataZone2011.
 match files
    /File = * 
    /Table = !Localities_Lookup
-   /Rename (HSCPLocality = Locality)
+   /Rename (hscp_locality = Locality)
    /Drop ca2019name hscp2019name hb2019name
    /By Datazone2011.
 

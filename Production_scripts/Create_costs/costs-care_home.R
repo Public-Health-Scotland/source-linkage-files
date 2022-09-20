@@ -144,10 +144,10 @@ ggplot(
 
 
 ## save outfile ---------------------------------------
+
+# Save .rds file
 ch_costs_uplifted %>%
-  # .zsav
-  write_sav(get_ch_costs_path(ext = "zsav", check_mode = "write")) %>%
-  # .rds file
   write_rds(get_ch_costs_path(check_mode = "write"))
+
 
 ## End of Script ---------------------------------------

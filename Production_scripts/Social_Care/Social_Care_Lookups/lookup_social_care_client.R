@@ -161,19 +161,9 @@ outfile <-
     .data$sc_day_care
   )
 
+# Save .rds file
 outfile %>%
-  # .zsav
-  write_sav(get_source_extract_path(
-    year = year,
-    type = "Client",
-    ext = "zsav",
-    check_mode = "write"
-  )) %>%
-  # .rds file
-  write_rds(get_source_extract_path(
-    year = year,
-    type = "Client",
-    check_mode = "write"
-  ))
+  write_rds(get_source_extract_path(year, "Client", check_mode = "write"))
+
 
 ## End of Script ---------------------------------------

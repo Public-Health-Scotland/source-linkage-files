@@ -8,20 +8,16 @@
 # Description - Process NRS Deaths Extract
 #####################################################
 
-
 # Load packages
 library(dplyr)
 library(readr)
 library(createslf)
 
 
-
 # Read in data ---------------------------------------
-
 
 # Specify year
 year <- check_year_format("1920")
-
 
 # Read BOXI extract
 
@@ -90,9 +86,7 @@ deaths_extract <- get_boxi_extract_path(
   )
 
 
-
 # Data Cleaning  ---------------------------------------
-
 
 deaths_clean <- deaths_extract %>%
   mutate(record_keydate2 = record_keydate1) %>%
@@ -102,14 +96,13 @@ deaths_clean <- deaths_extract %>%
     year = year
   ) %>%
   # fix dummy gpprac codes
-  convert_eng_gpprac_to_dummy(gpprac)
+  convert_eng_gpprac_to_dummy(gpprac) %>%
+  mutate(smrtype = add_smr_type(recid))
 
 # Save--------------------------------------------
 
+# Save as rds file
 deaths_clean %>%
-  # Save as zsav file
-  write_sav(get_source_extract_path(year, "Deaths", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "Deaths", check_mode = "write"))
 
 

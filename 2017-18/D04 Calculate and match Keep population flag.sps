@@ -56,7 +56,7 @@ sort cases by DataZone2011.
 match files
    /File = * 
    /Table = !Localities_Lookup
-   /Rename (HSCPLocality = Locality)
+   /Rename (hscp_locality = Locality)
    /By Datazone2011.
 
  * Aggregate to get populations for Locality/Age Group/Gender.
