@@ -19,8 +19,9 @@ run_data_extracts <- function(year) {
     "outpatients" = process_extract_outpatients(year, read_extract_outpatients(year), write_to_disk = FALSE),
     "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = FALSE),
     "cmh" = process_extract_cmh(year, read_extract_cmh(year), write_to_disk = FALSE),
-    "district_nursing" = process_extract_district_nursing(year, read_extract_district_nursing(year), write_to_disk = FALSE)
-  )
+    "district_nursing" = process_extract_district_nursing(year, read_extract_district_nursing(year), write_to_disk = FALSE),
+    "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = FALSE)
+    )
 
 
   # process_extracts <- list(

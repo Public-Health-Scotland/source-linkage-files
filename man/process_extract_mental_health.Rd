@@ -32,6 +32,7 @@ Other process extracts:
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()},
+\code{\link{process_extract_pis}()},
 \code{\link{process_homelessness_extract}()}
 }
 \concept{process extracts}

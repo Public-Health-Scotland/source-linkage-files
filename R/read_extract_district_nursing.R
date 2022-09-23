@@ -54,4 +54,6 @@ read_extract_district_nursing <- function(year) {
       duration_contact = "Duration of Contact (measure)",
       location_contact = "Location of Contact"
     )
+
+  return(extract_district_nursing)
 }
