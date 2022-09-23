@@ -54,9 +54,9 @@ process_extract_pis <- function(year, data, write_to_disk = TRUE) {
   # Save out ---------------------------------------
 
   if (write_to_disk) {
-  # Save as rds file
-  pis_clean %>%
-    write_rds(get_source_extract_path(year, "PIS", check_mode = "write"))
+    # Save as rds file
+    pis_clean %>%
+      write_rds(get_source_extract_path(year, "PIS", check_mode = "write"))
   }
 
   return(pis_clean)

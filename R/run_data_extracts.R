@@ -21,7 +21,7 @@ run_data_extracts <- function(year) {
     "cmh" = process_extract_cmh(year, read_extract_cmh(year), write_to_disk = FALSE),
     "district_nursing" = process_extract_district_nursing(year, read_extract_district_nursing(year), write_to_disk = FALSE),
     "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = FALSE)
-    )
+  )
 
 
   # process_extracts <- list(
