@@ -15,6 +15,6 @@ produce_slf_ltc_tests <- function(data) {
     dplyr::mutate(
       n_chi = 1
     ) %>%
-    select(n_chi, arth:digestive) %>%
+    dplyr::select(.data$n_chi, .data$arth:.data$digestive) %>%
     calculate_measures(measure = "sum")
 }
