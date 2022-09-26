@@ -13,7 +13,7 @@ library(createslf)
 
 # Read in Data-----------------------------------------
 
-year <- "1920"
+year <- check_year_format("1920")
 
 # Read new data file
 new_data <- readr::read_rds(get_source_extract_path(year, "Homelessness"))
