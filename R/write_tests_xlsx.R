@@ -35,7 +35,8 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
   }
 
   # add a new sheet for tests
-  sheet_name_dated <- paste0(year, "_", sheet_name, format(Sys.Date(), "_%d_%b"))
+  date_today <- format(Sys.Date(), "%d_%b")
+  sheet_name_dated <- glue::glue("{year}_{sheet_name}_{date_today}")
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {
