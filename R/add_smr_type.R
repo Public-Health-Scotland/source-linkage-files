@@ -1,12 +1,12 @@
 #' Add smrtype variable based on record ID
 #'
 #' @param recid A vector of record IDs
-#' @param mpat A vector of mpat values
+#' @param mpat A vector of management of patient values
 #' @param ipdc A vector of inpatient/day case markers
 #' @param hc_service A vector of Home Care service markers
 #' @param main_applicant_flag A vector of Homelessness applicant flags
 #'
-#' @return A vector of SMR types
+#' @return A vector of `smrtype`
 #' @export
 #'
 #' @family Codes

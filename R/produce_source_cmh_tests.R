@@ -18,7 +18,7 @@ produce_source_cmh_tests <- function(data) {
   test_flags <- data %>%
     # create test flags
     create_demog_test_flags() %>%
-    create_hb_test_flags(hb_var = hbrescode) %>%
+    create_hb_test_flags(hb_var = .data$hbrescode) %>%
     dplyr::mutate(n_episodes = 1) %>%
     # keep variables for comparison
     dplyr::select(c(.data$valid_chi:.data$NHS_Lanarkshire)) %>%
