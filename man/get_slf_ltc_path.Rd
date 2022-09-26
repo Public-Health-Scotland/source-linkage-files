@@ -7,10 +7,9 @@
 get_slf_ltc_path(year, ...)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+\item{year}{The financial year for the file in '1920' format}
 
-\item{update}{The update month to use,
-defaults to \code{\link[=latest_update]{latest_update()}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}

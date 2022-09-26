@@ -63,8 +63,7 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
 #'
 #' @description Get the full path to the SLF ltc lookup file
 #'
-#' @param update The update month to use,
-#' defaults to [latest_update()]
+#' @param year The financial year for the file in '1920' format
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the costs lookup as an [fs::path()]
