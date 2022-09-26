@@ -15,7 +15,7 @@ add_smr_type(
 \arguments{
 \item{recid}{A vector of record IDs}
 
-\item{mpat}{A vector of mpat values}
+\item{mpat}{A vector of management of patient values}
 
 \item{ipdc}{A vector of inpatient/day case markers}
 
@@ -24,7 +24,7 @@ add_smr_type(
 \item{main_applicant_flag}{A vector of Homelessness applicant flags}
 }
 \value{
-A vector of SMR types
+A vector of \code{smrtype}
 }
 \description{
 Add smrtype variable based on record ID
