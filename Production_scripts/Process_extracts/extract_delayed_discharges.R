@@ -62,10 +62,7 @@ dd_clean <- dd_file %>%
   # create flags for no_end_date and correct_dates
   mutate(
     # Flag records with no end date
-    no_end_date = dplyr::if_else(is.na(.data$keydate2_dateformat) & (!(.data$spec %in% mh_spec)),
-      TRUE,
-      FALSE
-    ),
+    no_end_date = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec),
     # Flag records with correct date
     correct_dates = dplyr::if_else(is_date_in_fyyear(year, .data$keydate1_dateformat) |
       is_date_in_fyyear(year, .data$keydate2_dateformat) |
