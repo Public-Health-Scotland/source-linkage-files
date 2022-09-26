@@ -12,7 +12,8 @@ produce_slf_homelessness_tests(
 \arguments{
 \item{data}{The data for testing}
 
-\item{max_min_vars}{Shouldn't need to change, currently specifies keydate1 and keydate2}
+\item{max_min_vars}{Shouldn't need to change, currently specifies \code{record_keydate1}
+and \code{record_keydate2}}
 }
 \value{
 a dataframe with a count of each flag
