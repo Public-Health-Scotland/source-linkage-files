@@ -53,7 +53,6 @@ dd_clean <- dd_file %>%
   # set up variables
   mutate(
     recid = "DD",
-    smrtype = "DelayedDis",
     year = year
   ) %>%
   # recode blanks to NA
