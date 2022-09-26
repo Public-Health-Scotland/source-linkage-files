@@ -17,7 +17,7 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
   )
 }
 
-#' SLG GP Lookup File Path
+#' SLF GP Lookup File Path
 #'
 #' @description Get the full path to the SLF GP practice lookup
 #'
