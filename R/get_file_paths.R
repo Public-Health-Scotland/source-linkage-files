@@ -20,7 +20,7 @@
 #' if this is used `file_name` should not be, it will return the most recently
 #' created file using [find_latest_file()]
 #' @param selection_method Passed only to [find_latest_file()], will select the file based
-#' on latest mnodification date (default) or file name
+#' on latest modification date (default) or file name
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable

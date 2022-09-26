@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_gpprac_path}
 \alias{get_slf_gpprac_path}
-\title{SLG GP Lookup File Path}
+\title{SLF GP Lookup File Path}
 \usage{
 get_slf_gpprac_path(update = latest_update(), ...)
 }
