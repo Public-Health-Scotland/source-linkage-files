@@ -18,5 +18,5 @@ A data frame containing the Non-Service Users as additional rows
 Add NSU cohort to working file
 }
 \seealso{
-\link[=get_nsu_paths]{get_nsu_path}
+\code{\link[=get_nsu_path]{get_nsu_path()}}
 }

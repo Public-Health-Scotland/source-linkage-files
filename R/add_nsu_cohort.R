@@ -6,7 +6,7 @@
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
 #'
-#' @seealso [get_nsu_path][createslf::get_nsu_paths()]
+#' @seealso [get_nsu_path()]
 add_nsu_cohort <- function(df, year) {
   matched <- dplyr::full_join(df,
     # NSU cohort file
@@ -18,7 +18,7 @@ add_nsu_cohort <- function(df, year) {
     # Keep the chi from both sources
     keep = TRUE
   ) %>%
-    dplyr::rename(has_chi = chi_nsu) %>%
+    dplyr::rename(has_chi = .data$chi_nsu) %>%
     # Change the chi from the NSU cohort to a boolean
     dplyr::mutate(has_chi = !is_missing(.data$has_chi))
 
@@ -38,7 +38,7 @@ add_nsu_cohort <- function(df, year) {
       postcode = dplyr::if_else(is_missing(.data$postcode) & .data$has_chi, .data$postcode_nsu, .data$postcode),
       gpprac = dplyr::if_else(is.na(.data$gpprac) & .data$has_chi, .data$gpprac_nsu, .data$gpprac),
       dob = dplyr::if_else(is.na(.data$dob) & .data$has_chi, .data$dob_nsu, .data$dob),
-      gender = dplyr::if_else(is.na(gender) & .data$has_chi, .data$gender_nsu, .data$gender)
+      gender = dplyr::if_else(is.na(.data$gender) & .data$has_chi, .data$gender_nsu, .data$gender)
     ) %>%
     # Remove the additional columns
     dplyr::select(-dplyr::contains("_nsu"))
