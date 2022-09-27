@@ -8,7 +8,6 @@
 #' throw an informative error message
 #' @export
 check_variables_exist <- function(data, variables) {
-
   if (!inherits(variables, "character")) {
     cli::cli_abort("{.arg variables} must be a {.cls character} not a
                    {.cls {class(variables)}}.")
