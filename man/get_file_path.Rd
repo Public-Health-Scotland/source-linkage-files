@@ -10,7 +10,8 @@ get_file_path(
   ext = NULL,
   check_mode = "read",
   create = NULL,
-  file_name_regexp = NULL
+  file_name_regexp = NULL,
+  selection_method = "modification_date"
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ the default is to only create a file if we set \code{check_mode = "write"}}
 \item{file_name_regexp}{A regular expression to search for the file name
 if this is used \code{file_name} should not be, it will return the most recently
 created file using \code{\link[=find_latest_file]{find_latest_file()}}}
+
+\item{selection_method}{Passed only to \code{\link[=find_latest_file]{find_latest_file()}}, will select the file based
+on latest modification date (default) or file name}
 }
 \value{
 The full file path, an error will be thrown

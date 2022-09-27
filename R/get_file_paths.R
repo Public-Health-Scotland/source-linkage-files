@@ -19,6 +19,8 @@
 #' @param file_name_regexp A regular expression to search for the file name
 #' if this is used `file_name` should not be, it will return the most recently
 #' created file using [find_latest_file()]
+#' @param selection_method Passed only to [find_latest_file()], will select the file based
+#' on latest modification date (default) or file name
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
@@ -31,7 +33,8 @@ get_file_path <-
            ext = NULL,
            check_mode = "read",
            create = NULL,
-           file_name_regexp = NULL) {
+           file_name_regexp = NULL,
+           selection_method = "modification_date") {
     if (!fs::dir_exists(directory)) {
       rlang::abort(message = glue::glue("The directory {directory} does not exist"))
     }
@@ -40,7 +43,7 @@ get_file_path <-
       file_path <- fs::path(directory, file_name)
     } else if (!is.null(file_name_regexp)) {
       if (check_mode == "read") {
-        file_path <- find_latest_file(directory, regexp = file_name_regexp)
+        file_path <- find_latest_file(directory, regexp = file_name_regexp, selection_method = selection_method)
       } else {
         cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to find the
                    latest file with {.var file_name_regexp}",

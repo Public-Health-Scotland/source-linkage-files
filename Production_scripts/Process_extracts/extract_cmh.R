@@ -13,7 +13,6 @@ library(dplyr)
 library(readr)
 library(createslf)
 
-
 # Read in data ---------------------------------------
 
 # Specify year
@@ -66,14 +65,13 @@ cmh_extract <- get_boxi_extract_path(
     diag5 = "Other Aim of Contact (4)"
   )
 
-
 # Data Cleaning  ---------------------------------------
 
 cmh_clean <- cmh_extract %>%
   # create recid, year, SMRType variables
   mutate(
     recid = "CMH",
-    SMRType = "Comm-MH",
+    smrtype = add_smr_type(recid = recid),
     year = year
   ) %>%
   # contact end time
@@ -87,7 +85,6 @@ cmh_clean <- cmh_extract %>%
   # create blank diag 6
   mutate(diag6 = NA)
 
-
 # Outfile --------------------------------------------
 
 outfile <- cmh_clean %>%
@@ -98,7 +95,7 @@ outfile <- cmh_clean %>%
     record_keydate2,
     keyTime1,
     keyTime2,
-    SMRType,
+    smrtype,
     chi,
     gender,
     dob,
@@ -116,11 +113,8 @@ outfile <- cmh_clean %>%
     diag6
   )
 
+# Save as rds file
 outfile %>%
-  # Save as zsav file
-  write_sav(get_source_extract_path(year, "CMH", ext = "zsav", check_mode = "write")) %>%
-  # Save as rds file
   write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
-
 
 # End of Script #

@@ -31,7 +31,8 @@ GET DATA  /TYPE=TXT
       TreatmentNHSBoardCode A9
       KISAccessed A1
       ReferralSource A47
-      ConsultationType A26.
+      ConsultationType A26
+      ConsultationTypeUnmapped AUTO.
 CACHE.
 
 * If they don't have a CHI it isn't useful for linkage.
@@ -48,6 +49,32 @@ Alter type ConsultationStartDateTime ConsultationEndDateTime (DATETIME16).
  * Some episodes are wrongly included.
 Select if ConsultationStartDateTime LE Date.DMY(31, 03, Number(!altFY, F4.0) + 1).
 Select if ConsultationEndDateTime GE Date.DMY(01, 04, Number(!altFY, F4.0)).
+
+* Exclude certain consulations as they are 'Flow navigation centre' data.
+Compute consultation_to_drop = any(ConsultationTypeUnmapped,
+    "ED APPOINTMENT",
+    "ED TELEPHONE ASSESSMENT",
+    "ED TO BOOK",
+    "ED TELEPHONE / REMOTE CONSULTATION",
+    "MIU APPOINTMENT",
+    "MIU TELEPHONE ASSESSMENT",
+    "MIU TO BOOK",
+    "MIU TELEPHONE / REMOTE CONSULTATION",
+    "TELEPHONE ASSESSMENT",
+    "TELEPHONE/VIRTUAL ASSESSMENT").
+
+select if not consultation_to_drop.
+
+* Map COVID type calls to the proper consultation type.
+Do if ConsultationType = "".
+    Do if ConsultationTypeUnmapped = "COVID19 ASSESSMENT".
+        Compute ConsultationType = "COVID19 ASSESSMENT".
+    Else if ConsultationTypeUnmapped = "COVID19 ADVICE".
+        Compute ConsultationType = "COVID19 ADVICE".
+    Else if any(ConsultationTypeUnmapped, "COVID19 HOME VISIT", "COVID19 OBSERVATION", "COVID19 VIDEO CALL", "COVID19 TEST").
+        Compute ConsultationType = "COVID19 OTHER".
+    End if.
+End if.
 
  * Sort out any duplicates or overlaps.
 sort cases by GUID CHI ConsultationStartDateTime ConsultationEndDateTime.
@@ -273,20 +300,10 @@ Variable Labels
    ooh_outcome.3 "Categorised Out of Hours case outcome"
    ooh_outcome.4 "Categorised Out of Hours case outcome".
 
- * Case counter.
-Sort cases by CHI GUID.
+ * Case ID.
+Rename Variables GUID = ooh_case_id.
 
-Compute ooh_CC = 0.
-If $Casenum = 1 OR (CHI NE lag(CHI)) ooh_CC = 1.
-Do If ooh_CC = 0.
-   Do If GUID NE lag(GUID).
-      Compute ooh_CC = lag(ooh_CC) + 1.
-   Else.
-      Compute ooh_CC = lag(ooh_CC).
-   End if.
-End if.
-
-Variable Labels ooh_CC "Out of Hours case counter".
+Variable Labels ooh_case_id "Out of Hours case ID".
 
  * Alter types (quicker if we do them all together).
 Alter Type
@@ -295,10 +312,9 @@ Alter Type
     age (F3.0)
     attendance_status (F1.0)
     refsource (A3)
-    KIS_Accessed (F1.0)
-    ooh_CC (F1.0).
+    KIS_Accessed (F1.0).
 
-* sort.
+* Sort.
 sort cases by chi record_keydate1 keyTime1.
 
 *Reorder and remove unneeded variables.
@@ -326,6 +342,7 @@ save outfile = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     refsource
     diag1 To diag6
     ooh_outcome.1 to ooh_outcome.4
+    ooh_case_id
     cost_total_net
     apr_cost
     may_cost
@@ -339,7 +356,6 @@ save outfile = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     jan_cost
     feb_cost
     mar_cost
-    ooh_CC
     /zcompressed.
 
 get file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav".

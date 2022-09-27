@@ -1,13 +1,3 @@
-#' Get the IT extract ref number
-#'
-#' @return the IT extract ref number
-#' @export
-#'
-#' @family initialisation
-it_extract_ref <- function() {
-  "SCTASK0270905"
-}
-
 #' Latest update
 #'
 #' @description Get the date of the latest update, e.g 'Jun_2022'

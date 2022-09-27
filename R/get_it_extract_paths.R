@@ -2,20 +2,26 @@
 #'
 #' @description Get the full path to the IT Long Term Conditions extract
 #'
-#' @param it_reference The IT reference to use,
-#' defaults to [it_extract_ref()]
+#' @param it_reference Optional argument for the seven-digit code in the IT extract file name
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the LTC extract as an [fs::path()]
 #' @export
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
-get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
-  it_ltc_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "IT_extracts"),
-    file_name = glue::glue("{it_reference}_LTCs.csv.gz"),
-    ...
-  )
+get_it_ltc_path <- function(it_reference = NULL, ...) {
+  if (is.null(it_reference)) {
+    it_ltc_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "IT_extracts"),
+      file_name_regexp = "SCTASK[0-9]{7}_LTCs\\.csv(?:\\.gz)?",
+      ...
+    )
+  } else {
+    it_ltc_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "IT_extracts"),
+      file_name = glue::glue("SCTASK{it_reference}_LTCs.csv.gz")
+    )
+  }
 
   return(it_ltc_path)
 }
@@ -24,8 +30,7 @@ get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
 #'
 #' @description Get the full path to the IT Deaths extract
 #'
-#' @param it_reference The IT reference to use,
-#' defaults to [it_extract_ref()]
+#' @param it_reference Optional argument for the seven-digit code in the IT extract file name
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the IT Deaths extract as an [fs::path()]
@@ -33,11 +38,19 @@ get_it_ltc_path <- function(it_reference = it_extract_ref(), ...) {
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_it_deaths_path <-
-  function(it_reference = it_extract_ref(), ...) {
-    it_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name = glue::glue("{it_reference}_Deaths.csv.gz")
-    )
+  function(it_reference = NULL, ...) {
+    if (is.null(it_reference)) {
+      it_deaths_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts"),
+        file_name_regexp = "SCTASK[0-9]{7}_Deaths\\.csv(?:\\.gz)?",
+        ...
+      )
+    } else {
+      it_deaths_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts"),
+        file_name = glue::glue("SCTASK{it_reference}_Deaths.csv.gz")
+      )
+    }
 
     return(it_deaths_path)
   }
@@ -47,8 +60,7 @@ get_it_deaths_path <-
 #' @description Get the full path to the IT PIS extract
 #'
 #' @param year the year for the required extract
-#' @param it_reference The IT reference to use,
-#' defaults to [it_extract_ref()]
+#' @param it_reference Optional argument for the seven-digit code in the IT extract file name
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the PIS extract as an [fs::path()]
@@ -56,36 +68,18 @@ get_it_deaths_path <-
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_it_prescribing_path <-
-  function(year, it_reference = it_extract_ref(), ...) {
-    it_extracts_dir <- fs::path(get_slf_dir(), "IT_extracts")
-
-    alt_fy <- paste0("20", substr(year, 1, 2))
-
-    # First list all files in the directory which contain
-    # the it_reference
-    file_name <- fs::dir_ls(it_extracts_dir,
-      type = "file",
-      regexp = it_reference
-    ) %>%
-      # Get only the file names (not the full path)
-      fs::path_file() %>%
-      # Will return the full name if it matches,
-      # otherwise it will return NA
-      stringr::str_extract(pattern = glue::glue("^.+?{alt_fy}\\.csv(:?\\.gz)?$")) %>%
-      # This drops all the non-matched names idealy leaving only one.
-      stats::na.omit()
-
-    if (length(file_name) == 0) {
-      rlang::abort(glue::glue(
-        "Unable to find file for {year} with reference {it_reference}."
-      ))
+  function(year, it_reference = NULL, ...) {
+    if (is.null(it_reference)) {
+      it_pis_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts"),
+        file_name_regexp = glue::glue("SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?")
+      )
+    } else {
+      it_pis_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts"),
+        file_name = glue::glue("SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.csv.gz")
+      )
     }
 
-    it_prescribing_path <- get_file_path(
-      directory = it_extracts_dir,
-      file_name = file_name,
-      ...
-    )
-
-    return(it_prescribing_path)
+    return(it_pis_path)
   }
