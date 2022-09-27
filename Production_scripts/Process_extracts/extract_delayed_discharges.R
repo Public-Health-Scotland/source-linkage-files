@@ -61,14 +61,13 @@ dd_clean <- dd_file %>%
   ) %>%
   # create flags for no_end_date and correct_dates
   mutate(
-    # Flag records with no end date
-    no_end_date = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec),
     # Flag records with correct date
-    correct_dates = is_date_in_fyyear(year, .data$keydate1_dateformat, .data$keydate2_dateformat) &
-      (!is.na(.data$keydate2_dateformat) | .data$spec %in% mh_spec)
+    dates_in_fyyear = is_date_in_fyyear(year, .data$keydate1_dateformat, .data$keydate2_dateformat),
+    # Flag records with no end date
+    not_mh_spec = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec)
   ) %>%
   # Keep only records which have an end date (except Mental Health) and fall within our dates.
-  filter(correct_dates, no_end_date == FALSE)
+  filter(correct_dates, !not_mh_spec)
 
 
 ## save outfile ---------------------------------------
