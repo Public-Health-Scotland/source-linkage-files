@@ -12,5 +12,5 @@
 
 ---
 
-    Variables "recid" and "smrtype" are required, but are missing from `data`.
+    Variables "recid", "smrtype", and "mpat" are required, but are missing from `data`.
 

@@ -35,6 +35,6 @@ test_that("check_variables_exist throws informative errors", {
 
   expect_snapshot_error(check_variables_exist(
     dplyr::starwars,
-    c("name", "height", "recid", "smrtype")
+    c("name", "height", "recid", "smrtype", "mpat")
   ))
 })
