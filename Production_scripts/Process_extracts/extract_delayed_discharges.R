@@ -64,15 +64,11 @@ dd_clean <- dd_file %>%
     # Flag records with no end date
     no_end_date = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec),
     # Flag records with correct date
-    correct_dates = dplyr::if_else(is_date_in_fyyear(year, .data$keydate1_dateformat) |
-      is_date_in_fyyear(year, .data$keydate2_dateformat) |
-      is.na(.data$keydate2_dateformat) & .data$spec %in% mh_spec,
-    TRUE,
-    FALSE
-    )
+    correct_dates = is_date_in_fyyear(year, .data$keydate1_dateformat, .data$keydate2_dateformat) &
+      (!is.na(.data$keydate2_dateformat) | .data$spec %in% mh_spec)
   ) %>%
   # Keep only records which have an end date (except Mental Health) and fall within our dates.
-  filter(correct_dates, !no_end_date == FALSE)
+  filter(correct_dates, no_end_date == FALSE)
 
 
 ## save outfile ---------------------------------------
