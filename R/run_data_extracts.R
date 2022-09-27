@@ -9,18 +9,18 @@
 #'
 #' @export
 #'
-run_data_extracts <- function(year) {
+run_data_extracts <- function(year, write_to_disk = FALSE) {
   process_extracts <- list(
-    "homelessness" = process_extract_homelessness(year, read_extract_homelessness(year), write_to_disk = FALSE),
-    "mental_health" = process_extract_mental_health(year, read_extract_mental_health(year), write_to_disk = FALSE),
-    "maternity" = process_extract_maternity(year, read_extract_maternity(year), write_to_disk = FALSE),
-    "ae" = process_extract_ae(year, read_extract_ae(year), write_to_disk = FALSE),
-    "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = FALSE),
-    "outpatients" = process_extract_outpatients(year, read_extract_outpatients(year), write_to_disk = FALSE),
-    "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = FALSE),
-    "cmh" = process_extract_cmh(year, read_extract_cmh(year), write_to_disk = FALSE),
-    "district_nursing" = process_extract_district_nursing(year, read_extract_district_nursing(year), write_to_disk = FALSE),
-    "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = FALSE)
+    "homelessness" = process_extract_homelessness(year, read_extract_homelessness(year), write_to_disk = write_to_disk),
+    "mental_health" = process_extract_mental_health(year, read_extract_mental_health(year), write_to_disk = write_to_disk),
+    "maternity" = process_extract_maternity(year, read_extract_maternity(year), write_to_disk = write_to_disk),
+    "ae" = process_extract_ae(year, read_extract_ae(year), write_to_disk = write_to_disk),
+    "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = write_to_disk),
+    "outpatients" = process_extract_outpatients(year, read_extract_outpatients(year), write_to_disk = write_to_disk),
+    "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = write_to_disk),
+    "cmh" = process_extract_cmh(year, read_extract_cmh(year), write_to_disk = write_to_disk),
+    "district_nursing" = process_extract_district_nursing(year, read_extract_district_nursing(year), write_to_disk = write_to_disk),
+    "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = write_to_disk)
   )
 
 
