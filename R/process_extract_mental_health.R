@@ -29,9 +29,7 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
       ipdc = "I"
     ) %>%
     # deal with dummy / english variables
-    mutate(
-      gpprac = convert_eng_gpprac_to_dummy(gpprac)
-    ) %>%
+    dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # cij_ipdc
     dplyr::mutate(
       cij_ipdc = dplyr::if_else(.data$cij_inpatient == "MH", "I", "NA"),
