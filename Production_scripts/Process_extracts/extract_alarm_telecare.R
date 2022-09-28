@@ -222,7 +222,4 @@ final_out %>%
     sc_meals,
     sc_day_care
   ) %>%
-  haven::write_sav(fs::path(
-    glue::glue("/conf/sourcedev/Source_Linkage_File_Updates/{year}/Alarms-Telecare-for-source-20{year}"),
-    ext = "zsav"
-  ))
+  write_rds(get_source_extract_path(year, type = "alarm_telecare", check_mode = "write"))
