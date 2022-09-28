@@ -12,7 +12,7 @@ library(createslf)
 library(dplyr)
 library(lubridate)
 
-year <- check_year_format('1920')
+year <- check_year_format("1920")
 
 social_care_dir <-
   fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
@@ -32,8 +32,10 @@ sc_demographics <- haven::read_sav(fs::path(
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 ## read in data - social care 2 demographic
-at_full_data <- tbl(db_connection,
-                    dbplyr::in_schema("social_care_2", "equipment_snapshot")) %>%
+at_full_data <- tbl(
+  db_connection,
+  dbplyr::in_schema("social_care_2", "equipment_snapshot")
+) %>%
   select(
     sending_location,
     social_care_id,
@@ -83,13 +85,17 @@ at_full_clean <- replaced_start_dates %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # rename for matching source variables
-  rename(record_keydate1 = service_start_date,
-         record_keydate2 = service_end_date) %>%
+  rename(
+    record_keydate1 = service_start_date,
+    record_keydate2 = service_end_date
+  ) %>%
   # Include source variables
   mutate(
     recid = "AT",
-    smrtype = case_when(service_type == 1 ~ "AT-Alarm",
-                        service_type == 2 ~ "AT-Tele"),
+    smrtype = case_when(
+      service_type == 1 ~ "AT-Alarm",
+      service_type == 2 ~ "AT-Tele"
+    ),
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
@@ -112,21 +118,25 @@ at_full_clean <- replaced_start_dates %>%
 qtr_merge <- at_full_clean %>%
   # Use lazy_dt() for faster running of code
   dtplyr::lazy_dt() %>%
-  group_by(sending_location,
-           social_care_id,
-           record_keydate1,
-           smrtype,
-           period) %>%
+  group_by(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    period
+  ) %>%
   # Create a count for the package number across episodes
   mutate(pkg_count = row_number()) %>%
   # Sort prior to merging
   arrange(.by_group = TRUE) %>%
   # group for merging episodes
-  group_by(sending_location,
-           social_care_id,
-           record_keydate1,
-           smrtype,
-           pkg_count) %>%
+  group_by(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    pkg_count
+  ) %>%
   # merge episodes with packages across quarters
   # drop variables not needed
   summarise(
@@ -146,16 +156,20 @@ qtr_merge <- at_full_clean %>%
     sc_send_lca = last(sc_send_lca)
   ) %>%
   # sort after merging
-  arrange(sending_location,
-          social_care_id,
-          record_keydate1,
-          smrtype,
-          sc_latest_submission) %>%
+  arrange(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    sc_latest_submission
+  ) %>%
   # end of lazy_dt()
   as_tibble() %>%
   # Sort for running SPSS
-  arrange(sending_location,
-          social_care_id)
+  arrange(
+    sending_location,
+    social_care_id
+  )
 
 
 # Transform B17 ----
@@ -183,8 +197,7 @@ final_out <- qtr_merge %>%
           .data$record_keydate2 >= start_fy(year) |
             is_missing(as.character(.data$record_keydate2))
         )
-    )
-  ) %>%
+    )) %>%
   as.data.frame() %>%
   left_join(client_table, by = c("sending_location", "social_care_id")) %>%
   arrange(chi, record_keydate1, record_keydate2)
