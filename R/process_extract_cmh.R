@@ -30,8 +30,8 @@ process_extract_cmh <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     # contact end time
     dplyr::mutate(
-      keyTime1 = lubridate::hms(.data$keyTime1),
-      duration = lubridate::hms(.data$duration)
+      keyTime1 = lubridate::hms(keyTime1),
+      duration = lubridate::hms(duration)
     ) %>%
     dplyr::mutate(keyTime2 = .data$keyTime1 + .data$duration) %>%
     # record key date 2
