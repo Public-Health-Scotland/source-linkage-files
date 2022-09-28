@@ -29,7 +29,7 @@ process_extract_nrs_deaths <- function(year, data, write_to_disk = TRUE) {
       year = year
     ) %>%
     # fix dummy gpprac codes
-    convert_eng_gpprac_to_dummy(gpprac) %>%
+    mutate(gpprac = convert_eng_gpprac_to_dummy(gpprac)) %>%
     dplyr::mutate(smrtype = add_smr_type(.data$recid))
 
   if (write_to_disk) {

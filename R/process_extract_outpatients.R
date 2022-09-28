@@ -32,7 +32,7 @@ process_extract_outpatients <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     # Recode GP Practice into a 5 digit number
     # assume that if it starts with a letter it's an English practice and so recode to 99995
-    convert_eng_gpprac_to_dummy(gpprac) %>%
+    mutate(gpprac = convert_eng_gpprac_to_dummy(gpprac)) %>%
     # compute record key date2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
     # Allocate the costs to the correct month

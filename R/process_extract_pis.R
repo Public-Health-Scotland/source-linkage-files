@@ -32,7 +32,7 @@ process_extract_pis <- function(year, data, write_to_disk = TRUE) {
     # Recode GP Practice into a 5 digit number
     # assume that if it starts with a letter it's an English practice
     # and so recode to 99995
-    convert_eng_gpprac_to_dummy(gpprac) %>%
+    mutate(gpprac = convert_eng_gpprac_to_dummy(gpprac)) %>%
     # Set date to the end of the FY
     dplyr::mutate(
       record_keydate1 = end_fy(.data$year),
