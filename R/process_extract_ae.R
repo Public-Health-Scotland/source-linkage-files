@@ -29,9 +29,7 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     ## Recode GP Practice into a 5 digit number ##
     # assume that if it starts with a letter it's an English practice and so recode to 99995
-    mutate(
-      gpprac = convert_eng_gpprac_to_dummy(gpprac)
-    ) %>%
+    dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # use the CHI postcode and if that is blank, then use the epi postcode.
     dplyr::mutate(postcode = dplyr::if_else(!is.na(.data$postcode_chi), .data$postcode_chi, .data$postcode_epi)) %>%
     ## recode cypher HB codes ##
