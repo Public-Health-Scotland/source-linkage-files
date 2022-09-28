@@ -45,7 +45,7 @@ process_extract_district_nursing <- function(year, data, write_to_disk = TRUE) {
     )) %>%
     # match files with DN Cost Lookup
     dplyr::left_join(readr::read_rds(get_dn_costs_path()),
-      by = c("hbtreatcode", "year" = "Year")
+      by = c("hbtreatcode", "year")
     ) %>%
     # costs are rough estimates we round them to the nearest pound
     dplyr::mutate(cost_total_net = janitor::round_half_up(.data$cost_total_net)) %>%
