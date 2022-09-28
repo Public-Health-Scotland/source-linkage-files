@@ -41,9 +41,7 @@ process_extract_acute <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     # Recode GP practice into 5 digit number
     # We assume that if it starts with a letter it's an English practice and so recode to 99995.
-    mutate(
-      gpprac = convert_eng_gpprac_to_dummy(gpprac)
-    ) %>%
+    dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # Calculate the total length of stay (for the entire episode, not just within the financial year).
     dplyr::mutate(
       stay = calculate_stay(year, .data$record_keydate1, .data$record_keydate2),
