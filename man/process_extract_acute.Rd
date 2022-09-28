@@ -22,8 +22,4 @@ This will read and process the
 acute extract, it will return the final data
 but also write this out as a zsav and rds.
 }
-\seealso{
-Other process extracts: 
-\code{\link{process_homelessness_extract}()}
-}
 \concept{process extracts}
