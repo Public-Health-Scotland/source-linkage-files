@@ -30,7 +30,7 @@ process_extract_district_nursing <- function(year, data, write_to_disk = TRUE) {
       smrtype = add_smr_type(recid = "DN")
     ) %>%
     # deal with gpprac
-    mutate(gpprac = convert_eng_gpprac_to_dummy(gpprac))
+    dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac))
 
 
   # Costs  ---------------------------------------
