@@ -35,10 +35,12 @@ test_that("Add PPA flag works as expected for various cases", {
 
   example_data_ppa <- add_ppa_flag(example_data)
 
-  expect_equal(example_data_ppa$cij_ppa, c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
-                                           FALSE, FALSE, FALSE,
-                                           TRUE, TRUE, TRUE,
-                                           FALSE, FALSE, FALSE))
+  expect_equal(example_data_ppa$cij_ppa, c(
+    TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
+    FALSE, FALSE, FALSE,
+    TRUE, TRUE, TRUE,
+    FALSE, FALSE, FALSE
+  ))
 })
 
 test_that("Errors are handled as expected", {
@@ -57,8 +59,4 @@ test_that("Errors are handled as expected", {
     3, 1, "Non-Elective", "Wrongest", "", "", "", "", "", "", ""
   )
   expect_error(add_ppa_flag(error_data_2))
-
 })
-
-
-
