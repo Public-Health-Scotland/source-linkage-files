@@ -70,9 +70,9 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
   #   "CH" = process_extract_care_homes(year, read_extract_care_homes(year)),
   #  "HC" = process_extract_home_care(year, read_extract_home_care(year)),
   # "SDS" = process_extract_sds(year, read_extract_sds(year))
-  #)
-  #)
-  #}
+  # )
+  # )
+  # }
 
   return(process_extracts)
 }
