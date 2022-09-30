@@ -24,6 +24,14 @@ but also write this out as a zsav and rds.
 }
 \seealso{
 Other process extracts: 
-\code{\link{process_extract_mental_health}()}
+\code{\link{process_extract_acute}()},
+\code{\link{process_extract_ae}()},
+\code{\link{process_extract_cmh}()},
+\code{\link{process_extract_district_nursing}()},
+\code{\link{process_extract_maternity}()},
+\code{\link{process_extract_mental_health}()},
+\code{\link{process_extract_nrs_deaths}()},
+\code{\link{process_extract_outpatients}()},
+\code{\link{process_extract_pis}()}
 }
 \concept{process extracts}
