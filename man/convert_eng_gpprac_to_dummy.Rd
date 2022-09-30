@@ -4,17 +4,15 @@
 \alias{convert_eng_gpprac_to_dummy}
 \title{Convert GP Practice Codes to a Dummy Code}
 \usage{
-convert_eng_gpprac_to_dummy(data, gpprac, dummy_code = 9995L)
+convert_eng_gpprac_to_dummy(gpprac, dummy_code = 9995L)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
-
-\item{gpprac}{The column containing the GP practice codes}
+\item{gpprac}{A character vector containing the GP practice codes}
 
 \item{dummy_code}{The dummy code to use. Default is 9995}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+An integer vector with only Scottish GP codes
 }
 \description{
 Convert English GP practice codes to a dummy code
