@@ -6,6 +6,7 @@ CH's
 CIJ
 CMD
 CMH
+COVID
 Codecov
 DD
 DN
@@ -23,12 +24,12 @@ MMM
 MMMYY
 NRS
 NSU
+OoH
 PIS
 RStudio
 SDS
 SLF
 SLFs
-SLG
 SMRA
 SPARRA
 SPD
@@ -38,6 +39,7 @@ YYYYMMDD
 bedday
 beddays
 bz
+datamart
 csv
 dd
 dsn
@@ -58,6 +60,7 @@ recids
 sc
 slf
 slfhelper
+smrtype
 sourcedev
 specialty
 sysmis
