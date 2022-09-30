@@ -57,7 +57,7 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
       not_mh_spec = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec)
     ) %>%
     # Keep only records which have an end date (except Mental Health) and fall within our dates.
-    dplyr::filter(.data$correct_dates, !.data$not_mh_spec)
+    dplyr::filter(.data$dates_in_fyyear, !.data$not_mh_spec)
 
 
   ## save outfile ---------------------------------------
@@ -68,7 +68,6 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
       .data$original_admission_date,
       .data$keydate1_dateformat,
       .data$keydate2_dateformat,
-      .data$smrtype,
       .data$chi,
       .data$postcode,
       .data$delay_end_reason,
