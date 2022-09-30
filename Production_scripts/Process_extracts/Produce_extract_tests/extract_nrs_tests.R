@@ -32,7 +32,7 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "NRS")
+write_tests_xlsx(comparison, "nrs_deaths_extract")
 
 
 ## END OF SCRIPT ##

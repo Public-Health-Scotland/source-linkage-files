@@ -34,7 +34,7 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "PIS")
+write_tests_xlsx(comparison, "PIS_extract")
 
 
 ## END OF SCRIPT ##
