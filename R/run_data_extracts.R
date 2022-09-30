@@ -20,7 +20,8 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = write_to_disk),
     "cmh" = process_extract_cmh(year, read_extract_cmh(year), write_to_disk = write_to_disk),
     "district_nursing" = process_extract_district_nursing(year, read_extract_district_nursing(year), write_to_disk = write_to_disk),
-    "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = write_to_disk)
+    "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = write_to_disk),
+    "dd" = process_extract_delayed_discharges(year, read_extract_delayed_discharges(year), write_to_disk = write_to_disk)
   )
 
 
