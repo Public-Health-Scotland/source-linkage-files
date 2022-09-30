@@ -7,11 +7,11 @@
 #'
 read_extract_delayed_discharges <- function(year) {
   extract_delayed_discharges <- haven::read_sav(get_dd_path(ext = "zsav")) %>%
-    clean_names() %>%
+    janitor::clean_names() %>%
     # rename variables
-    rename(
-      keydate1_dateformat = rdd,
-      keydate2_dateformat = delay_end_date
+    dplyr::rename(
+      keydate1_dateformat = .data$rdd,
+      keydate2_dateformat = .data$delay_end_date
     )
 
   return(extract_delayed_discharges)

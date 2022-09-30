@@ -37,7 +37,7 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
       keydate2_dateformat = dplyr::if_else(.data$ammended_dates, .data$month_end, .data$keydate2_dateformat)
     ) %>%
     # Drop any records with obviously bad dates
-    fplyr::filter(
+    dplyr::filter(
       (.data$keydate1_dateformat <= .data$keydate2_dateformat) | is.na(.data$keydate2_dateformat)
     ) %>%
     # set up variables
@@ -47,7 +47,7 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
     ) %>%
     # recode blanks to NA
     dplyr::mutate(
-      dplyr::across(tidyselect::ends_with("delay_reason"), na_if, "")
+      dplyr::across(tidyselect::ends_with("delay_reason"), dplyr::na_if, "")
     ) %>%
     # create flags for no_end_date and correct_dates
     dplyr::mutate(
