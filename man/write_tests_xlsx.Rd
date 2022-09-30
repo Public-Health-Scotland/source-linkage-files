@@ -4,13 +4,15 @@
 \alias{write_tests_xlsx}
 \title{Write out Tests}
 \usage{
-write_tests_xlsx(comparison_data, sheet_name)
+write_tests_xlsx(comparison_data, sheet_name, year)
 }
 \arguments{
 \item{comparison_data}{produced by \code{\link[=produce_test_comparison]{produce_test_comparison()}}}
 
 \item{sheet_name}{the name of the dataset, which will be used to create
 the sheet name}
+
+\item{year}{The financial year of the data file in '1920' format}
 }
 \value{
 the path to the xlsx file location
