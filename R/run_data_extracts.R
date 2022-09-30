@@ -34,7 +34,7 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     "pis" = process_extract_pis(year, read_extract_pis(year), write_to_disk = write_to_disk)
   )
 
-  if (year > 2015 & year < 2020) {
+  if (year > 1516 & year < 2021) {
     process_extracts <- append(
       process_extracts,
       list(
@@ -43,7 +43,7 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     )
   }
 
-  if (year > 2016 & year < 2020) {
+  if (year > 1617 & year < 2021) {
     process_extracts <- append(
       process_extracts,
       list(
@@ -52,7 +52,7 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     )
   }
 
-  if (year > 2016) {
+  if (year > 1617) {
     process_extracts <- append(
       process_extracts,
       list(
