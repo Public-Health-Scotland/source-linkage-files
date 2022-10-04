@@ -42,7 +42,7 @@ get_source_extract_path <- function(year,
   file_name <- dplyr::case_when(
     type == "Acute" ~ "acute_for_source",
     type == "AE" ~ "a&e_for_source",
-    type == "AT" ~ "alarms-Telecare-for-source",
+    type == "AT" ~ "alarms-telecare-for-source",
     type == "CH" ~ "care_home_for_source",
     type == "CMH" ~ "CMH_for_source",
     type == "Client" ~ "client_for_source",
