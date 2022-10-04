@@ -47,7 +47,8 @@ test_that("Errors are handled as expected", {
   # Wrong columns
   error_data <- tibble::tribble(
     ~anon_chi, ~recid, ~diag1, ~something_silly,
-    1, "01B", "A01", "Foo")
+    1, "01B", "A01", "Foo"
+  )
   expect_error(add_ppa_flag(error_data), "Variables .+ are required, but are missing from \`data\`")
 
   # Wrong recids
