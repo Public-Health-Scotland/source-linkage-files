@@ -4,10 +4,10 @@
 \alias{add_nsu_cohort}
 \title{Add NSU cohort to working file}
 \usage{
-add_nsu_cohort(df, year)
+add_nsu_cohort(data, year)
 }
 \arguments{
-\item{df}{The input data frame}
+\item{data}{The input data frame}
 
 \item{year}{The year being processed}
 }
