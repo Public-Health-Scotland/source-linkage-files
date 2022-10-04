@@ -27,13 +27,16 @@ produce_source_ch_tests <- function(data,
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
-    dplyr::mutate(n_episodes = 1,
-                  ch_name_missing = dplyr::if_else(is.na(.data$ch_name), 1, 0),
-                  ch_provider_1_to_5 = dplyr::case_when(.data$ch_provider %in% c('1', '2', '3', '4', '5') ~ 1,
-                                                        TRUE ~ 0),
-                  ch_provider_other = dplyr::if_else(.data$ch_provider == '6', 1, 0),
-                  ch_adm_reason_missing = dplyr::if_else(is.na(.data$ch_adm_reason), 1, 0)
-                  ) %>%
+    dplyr::mutate(
+      n_episodes = 1,
+      ch_name_missing = dplyr::if_else(is.na(.data$ch_name), 1, 0),
+      ch_provider_1_to_5 = dplyr::case_when(
+        .data$ch_provider %in% c("1", "2", "3", "4", "5") ~ 1,
+        TRUE ~ 0
+      ),
+      ch_provider_other = dplyr::if_else(.data$ch_provider == "6", 1, 0),
+      ch_adm_reason_missing = dplyr::if_else(is.na(.data$ch_adm_reason), 1, 0)
+    ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison
     dplyr::select(c(.data$valid_chi:.data$West_Lothian)) %>%
