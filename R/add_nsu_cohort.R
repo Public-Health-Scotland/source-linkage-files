@@ -8,6 +8,10 @@
 #'
 #' @seealso [get_nsu_path()]
 add_nsu_cohort <- function(data, year) {
+  # Check that the variables we need are in the data
+  check_variables_exist(data,
+                        variables = c("chi", "recid", "smrtype", "postcode", "gpprac", "dob", "gender"))
+
   matched <- dplyr::full_join(data,
     # NSU cohort file
     haven::read_sav(get_nsu_path(year, ext = "zsav")),
