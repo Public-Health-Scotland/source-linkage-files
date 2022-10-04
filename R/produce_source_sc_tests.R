@@ -18,7 +18,7 @@
 #'
 #' @family extract test functions
 #' @seealso calculate_measures
-produce_source_sc_tests <- function(data,
+produce_source_hc_tests <- function(data,
                                     sum_mean_vars = c("beddays", "cost", "yearstay", "hours"),
                                     max_min_vars = c(
                                       "record_keydate1", "record_keydate2",
