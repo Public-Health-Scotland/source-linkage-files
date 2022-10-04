@@ -19,10 +19,10 @@
 #' @family extract test functions
 #' @seealso calculate_measures
 produce_source_sc_tests <- function(data,
-                                    sum_mean_vars = c("beddays", "cost", "yearstay"),
+                                    sum_mean_vars = c("beddays", "cost", "yearstay", "hours"),
                                     max_min_vars = c(
                                       "record_keydate1", "record_keydate2",
-                                      "cost_total_net", "yearstay"
+                                      "cost_total_net", "yearstay", "hours"
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
