@@ -22,9 +22,7 @@ client_table <- readr::read_rds(get_source_extract_path(year, type = "Client"))
 
 final_out <- readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
   filter(is_date_in_fyyear(year, record_keydate1, record_keydate2)) %>%
-  as.data.frame() %>%
-  left_join(client_table, by = c("sending_location", "social_care_id")) %>%
-  arrange(chi, record_keydate1, record_keydate2)
+  left_join(client_table, by = c("sending_location", "social_care_id"))
 
 final_out %>%
   select(
