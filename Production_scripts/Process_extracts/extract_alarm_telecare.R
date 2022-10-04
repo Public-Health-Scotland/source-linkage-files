@@ -10,7 +10,6 @@
 
 library(createslf)
 library(dplyr)
-library(lubridate)
 
 year <- check_year_format("1920")
 
