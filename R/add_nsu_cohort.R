@@ -10,7 +10,8 @@
 add_nsu_cohort <- function(data, year) {
   # Check that the variables we need are in the data
   check_variables_exist(data,
-                        variables = c("chi", "recid", "smrtype", "postcode", "gpprac", "dob", "gender"))
+    variables = c("chi", "recid", "smrtype", "postcode", "gpprac", "dob", "gender")
+  )
 
   matched <- dplyr::full_join(data,
     # NSU cohort file
