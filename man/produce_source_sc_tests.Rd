@@ -6,8 +6,9 @@
 \usage{
 produce_source_sc_tests(
   data,
-  sum_mean_vars = c("beddays", "cost", "yearstay"),
-  max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay")
+  sum_mean_vars = c("beddays", "cost", "yearstay", "hours"),
+  max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay",
+    "hours")
 )
 }
 \arguments{
