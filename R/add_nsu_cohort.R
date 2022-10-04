@@ -1,14 +1,14 @@
 #' Add NSU cohort to working file
 #'
-#' @param df The input data frame
+#' @param data The input data frame
 #' @param year The year being processed
 #'
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
 #'
 #' @seealso [get_nsu_path()]
-add_nsu_cohort <- function(df, year) {
-  matched <- dplyr::full_join(df,
+add_nsu_cohort <- function(data, year) {
+  matched <- dplyr::full_join(data,
     # NSU cohort file
     haven::read_sav(get_nsu_path(year, ext = "zsav")),
     # Match on by chi
@@ -18,16 +18,15 @@ add_nsu_cohort <- function(df, year) {
     # Keep the chi from both sources
     keep = TRUE
   ) %>%
-    dplyr::rename(has_chi = .data$chi_nsu) %>%
     # Change the chi from the NSU cohort to a boolean
-    dplyr::mutate(has_chi = !is_missing(.data$has_chi))
+    dplyr::mutate(has_chi = !is_missing(.data$chi_nsu))
 
   return_df <- matched %>%
     # Get data from non service user lookup if the recid is empty
     dplyr::mutate(
       year = year,
-      recid = dplyr::if_else(is_missing(.data$recid), "NSU", as.character(.data$recid)),
-      smrtype = dplyr::if_else(is_missing(.data$recid), "Non-User", as.character(.data$smrtype)),
+      recid = dplyr::if_else(is_missing(.data$recid), "NSU", .data$recid),
+      smrtype = dplyr::if_else(is_missing(.data$recid), "Non-User", .data$smrtype),
       postcode = dplyr::if_else(is_missing(.data$recid), .data$postcode_nsu, .data$postcode),
       gpprac = dplyr::if_else(is_missing(.data$recid), .data$gpprac_nsu, .data$gpprac),
       dob = dplyr::if_else(is_missing(.data$recid), .data$dob_nsu, .data$dob),
