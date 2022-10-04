@@ -7,6 +7,7 @@
 #' @param comparison_data produced by [produce_test_comparison()]
 #' @param sheet_name the name of the dataset, which will be used to create
 #' the sheet name
+#' @param year The financial year of the data file in '1920' format
 #'
 #' @return the path to the xlsx file location
 #'
@@ -14,7 +15,7 @@
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
-write_tests_xlsx <- function(comparison_data, sheet_name) {
+write_tests_xlsx <- function(comparison_data, sheet_name, year) {
 
 
   # Set up the workbook -----------------------------------------------------
@@ -34,7 +35,8 @@ write_tests_xlsx <- function(comparison_data, sheet_name) {
   }
 
   # add a new sheet for tests
-  sheet_name_dated <- paste0(sheet_name, format(Sys.Date(), "_%d_%b"))
+  date_today <- format(Sys.Date(), "%d_%b")
+  sheet_name_dated <- glue::glue("{year}_{sheet_name}_{date_today}")
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {
