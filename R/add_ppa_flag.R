@@ -8,17 +8,11 @@
 #' @return A data frame to use as a lookup of PPAs
 #' @export
 add_ppa_flag <- function(data) {
-  expected_vars <- c(
+  check_variables_exist(data, variables = c(
     "anon_chi", "cij_marker", "cij_pattype", "recid",
     "op1a", "diag1", "diag2", "diag3", "diag4",
     "diag5", "diag6"
-  )
-  if (!all(expected_vars %in% names(data))) {
-    missing_vars <- setdiff(expected_vars, names(data))
-
-    cli::cli_abort("{missing_vars} were missing from the data and are needed
-                     to assign preventable admissions")
-  }
+  ))
 
   if (!(any(data$recid %in% c("01B", "02B", "04B", "GLS")))) {
     nrecids <- length(unique(data$recid))
