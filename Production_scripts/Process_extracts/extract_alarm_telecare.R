@@ -13,8 +13,6 @@ library(dplyr)
 
 year <- check_year_format("1920")
 
-# Transform B17 ----
-
 client_table <- readr::read_rds(get_source_extract_path(year, type = "Client"))
 
 # Now select epsiodes for given FY
