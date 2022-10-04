@@ -21,7 +21,8 @@ add_ppa_flag <- function(data) {
   }
 
   if (!(any(data$recid %in% c("01B", "02B", "04B", "GLS")))) {
-    cli::cli_abort("None of the {.var recid}{?s} provided will relate to PPAs, and the function
+    nrecids <- length(unique(data$recid))
+    cli::cli_abort("None of the {nrecids} recid{?s} provided will relate to PPAs, and the function
                    will abort.")
   }
 

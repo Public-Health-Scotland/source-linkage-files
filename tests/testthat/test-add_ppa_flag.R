@@ -49,7 +49,7 @@ test_that("Errors are handled as expected", {
     ~anon_chi, ~recid, ~diag1, ~something_silly,
     1, "01B", "A01", "Foo"
   )
-  expect_error(add_ppa_flag(error_data))
+  expect_error(add_ppa_flag(error_data), "cij_marker, cij_pattype, op1a, diag2, diag3, diag4, diag5, and diag6 were missing from the data and are needed to assign preventable admissions")
 
   # Wrong recids
   error_data_2 <- tibble::tribble(
@@ -58,5 +58,5 @@ test_that("Errors are handled as expected", {
     2, 1, "Non-Elective", "Wronger", "", "", "", "", "", "", "",
     3, 1, "Non-Elective", "Wrongest", "", "", "", "", "", "", ""
   )
-  expect_error(add_ppa_flag(error_data_2))
+  expect_error(add_ppa_flag(error_data_2), "None of the 3 recids provided will relate to PPAs, and the function will abort.")
 })
