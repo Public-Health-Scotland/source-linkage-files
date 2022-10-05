@@ -115,7 +115,21 @@ get_slf_dir <- function() {
 get_year_dir <- function(year, extracts_dir = FALSE) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
 
-  year_extracts_dir <- fs::path(year_dir, "Extracts")
+  if (!fs::dir_exists(year_dir)) {
+    fs::dir_create(year_dir)
+    cli::cli_alert_info("{.path {year_dir}} did not exist, it has now been created.")
+  }
 
-  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
+  if (extracts_dir) {
+    year_extracts_dir <- fs::path(year_dir, "Extracts")
+
+    if (!fs::dir_exists(year_extracts_dir)) {
+      fs::dir_create(year_extracts_dir)
+      cli::cli_alert_info("{.path {year_extracts_dir}} did not exist, it has now been created.")
+    }
+
+    return(year_extracts_dir)
+  } else {
+    return(year_dir)
+  }
 }
