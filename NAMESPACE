@@ -2,8 +2,8 @@
 
 export("%>%")
 export(add_smr_type)
+export(assign_demographic_cohort)
 export(assign_eol_cohort)
-export(assign_service_use_cohort)
 export(calculate_measures)
 export(calculate_stay)
 export(check_variables_exist)
