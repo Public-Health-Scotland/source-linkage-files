@@ -1,4 +1,4 @@
-#' Assign the service use cohort variables
+#' Assign the demographic cohort variables
 #'
 #' @param data A data frame with the required variables for assignment
 #'
@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
-assign_service_use_cohort <- function(data) {
+assign_demographic_cohort <- function(data) {
   check_variables_exist(data,
     variables =
       c(
