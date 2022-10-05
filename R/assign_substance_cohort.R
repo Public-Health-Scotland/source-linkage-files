@@ -7,9 +7,10 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_substance_cohort <- function(data) {
-
-  check_variables_exist(data, variables =
-                          c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6"))
+  check_variables_exist(data,
+    variables =
+      c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6")
+  )
 
   return_data <- data %>%
     dplyr::mutate(

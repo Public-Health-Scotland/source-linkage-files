@@ -30,30 +30,38 @@ test_that("Substance cohort is assigned correctly", {
   assigned_tester <- assign_substance_cohort(tester)
 
   # Test substance_cohort variable
-  expect_equal(assigned_tester$substance_cohort,
-               c(T, T, T, T, F, F, F, F, F, F, F, F, F, F, F))
+  expect_equal(
+    assigned_tester$substance_cohort,
+    c(T, T, T, T, F, F, F, F, F, F, F, F, F, F, F)
+  )
 
   # Test f11 variable
-  expect_equal(assigned_tester$f11,
-               c(F, F, F, F, F, F, T, F, F, F, F, T, T, T, F))
+  expect_equal(
+    assigned_tester$f11,
+    c(F, F, F, F, F, F, T, F, F, F, F, T, T, T, F)
+  )
 
   # Test f13 variable
-  expect_equal(assigned_tester$f13,
-               c(F, F, F, F, F, F, F, T, F, F, F, F, F, F, T))
+  expect_equal(
+    assigned_tester$f13,
+    c(F, F, F, F, F, F, F, T, F, F, F, F, F, F, T)
+  )
 
   # Test t402_t404 variable
-  expect_equal(assigned_tester$t402_t404,
-               c(F, F, F, F, F, F, F, F, T, T, F, T, T, T, F))
+  expect_equal(
+    assigned_tester$t402_t404,
+    c(F, F, F, F, F, F, F, F, T, T, F, T, T, T, F)
+  )
 
   # Test t424 variable
-  expect_equal(assigned_tester$t424,
-               c(F, F, F, F, F, F, F, F, F, F, T, F, F, F, T))
+  expect_equal(
+    assigned_tester$t424,
+    c(F, F, F, F, F, F, F, F, F, F, T, F, F, F, T)
+  )
 })
 
 test_that("Error throws as expected", {
-
   error_tester <- tibble::tribble(~recid, ~diag1, ~something_silly, ~diag4)
 
   expect_error(assign_substance_cohort(error_tester), regexp = "Variables .+ are required, but are missing from `data`")
-
 })
