@@ -15,4 +15,8 @@ A data frame with ten additional variables relating to the different cohorts
 \description{
 Assign the service use cohort variables
 }
+\seealso{
+Other Demographic and Service Use Cohort functions: 
+\code{\link{assign_eol_cohort}()}
+}
 \concept{Demographic and Service Use Cohort functions}
