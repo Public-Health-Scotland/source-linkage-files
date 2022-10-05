@@ -1,4 +1,6 @@
-# September 2022 Update - Unreleased
+# December 2022 Update - Unreleased
+
+# September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.
   * 1.5% for 2020/21
   * 4.1% for 2021/22
