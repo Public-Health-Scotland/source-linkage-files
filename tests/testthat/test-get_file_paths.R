@@ -49,12 +49,16 @@ test_that("Will correctly create new directories if needed", {
   expect_false(fs::dir_exists(test_year_dir))
   expect_false(fs::dir_exists(test_year_dir_extracts))
 
-  expect_message(get_year_dir("0000"),
-                 " did not exist, it has now been created\\.")
+  expect_message(
+    get_year_dir("0000"),
+    " did not exist, it has now been created\\."
+  )
   expect_true(fs::dir_exists(test_year_dir))
 
-  expect_message(get_year_dir("0000", extracts_dir = TRUE),
-                 " did not exist, it has now been created\\.")
+  expect_message(
+    get_year_dir("0000", extracts_dir = TRUE),
+    " did not exist, it has now been created\\."
+  )
   expect_true(fs::dir_exists(test_year_dir_extracts))
 
   # Clean up
