@@ -7,7 +7,6 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_service_use_cohort <- function(data) {
-
   check_variables_exist(data,
     variables =
       c(
@@ -67,17 +66,23 @@ assign_service_use_cohort <- function(data) {
       # then high_cc_cohort = TRUE
       # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
       high_cc_cohort =
-        purrr::reduce(dplyr::select(.,
-              .data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer), `|`) |
-        .data$spec == "G5",
+        purrr::reduce(dplyr::select(
+          .,
+          .data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer
+        ), `|`) |
+          .data$spec == "G5",
 
       # Medium CC classification
-      medium_cc_cohort = purrr::reduce(dplyr::select(.,
-              .data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms), `|`),
+      medium_cc_cohort = purrr::reduce(dplyr::select(
+        .,
+        .data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms
+      ), `|`),
 
       # Low CC classification
-      low_cc_cohort = purrr::reduce(dplyr::select(.,
-              .data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib), `|`),
+      low_cc_cohort = purrr::reduce(dplyr::select(
+        .,
+        .data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib
+      ), `|`),
 
       # Note from SPSS: we could add CMH here
 
