@@ -1,4 +1,5 @@
 # December 2022 Update - Unreleased
+* Fixed a typo in the Service Use Cohort `substance` where the ICD-10 code `F11` (Opioids) was used instead of the correct `F13` (sedatives or hypnotics). 
 
 # September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.
