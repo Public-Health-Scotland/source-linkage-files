@@ -25,11 +25,7 @@ but also write this out as a zsav and rds.
 \seealso{
 Other process extracts: 
 \code{\link{process_extract_homelessness}()},
-<<<<<<< HEAD
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()}
-=======
-\code{\link{process_extract_nrs_deaths}()}
->>>>>>> 01fcc78f (Update documentation)
 }
 \concept{process extracts}
