@@ -45,7 +45,7 @@ add_nsu_cohort <- function(data, year) {
       gender = dplyr::if_else(is.na(.data$gender) & .data$has_chi, .data$gender_nsu, .data$gender)
     ) %>%
     # Remove the additional columns
-    dplyr::select(-dplyr::contains("_nsu"), .data$has_chi)
+    dplyr::select(-dplyr::contains("_nsu"), -.data$has_chi)
 
   return(return_df)
 }
