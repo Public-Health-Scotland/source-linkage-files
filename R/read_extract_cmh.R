@@ -21,7 +21,7 @@ read_extract_cmh <- function(year) {
       "Treatment NHS Board Code 9" = col_character(),
       "Contact Date" = col_date(format = "%Y/%m/%d %T"),
       "Contact Start Time" = col_time(format = "%T"),
-      "Duration of Contact" = col_time(format = "%M"),
+      "Duration of Contact" = col_integer(),
       "Location of Contact" = col_character(),
       "Main Aim of Contact" = col_character(),
       "Other Aim of Contact (1)" = col_character(),
