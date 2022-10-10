@@ -25,6 +25,7 @@ but also write this out as a zsav and rds.
 \seealso{
 Other process extracts: 
 \code{\link{process_extract_homelessness}()},
+\code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},
 \code{\link{process_extract_nrs_deaths}()}
 }
