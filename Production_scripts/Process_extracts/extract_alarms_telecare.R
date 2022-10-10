@@ -4,7 +4,7 @@
 # Date: September 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input - Social Care Care Home Episodes
+# Input - Social Care Alarms Telecare Episodes
 # Description - Match on Client data and Costs data
 #####################################################
 

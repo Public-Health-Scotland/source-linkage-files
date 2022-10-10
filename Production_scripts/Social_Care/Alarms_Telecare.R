@@ -1,11 +1,12 @@
 ####################################################
-# Home Care Data
-# Author: Catherine Holland
-# Date: February 2022
+# Alarms Telecare Extract
+# Author: Zihao Li
+# Date: October 2022
 # Written on RStudio Server
 # Version of R - 3.6.1
-# Input -
-# Description -
+# Input - Social Care Alarms Telecare Episodes
+# Description - Process Alarms Telecare Episodes from
+#               SC platform
 #####################################################
 
 library(dplyr)
