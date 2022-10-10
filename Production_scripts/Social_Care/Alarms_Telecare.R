@@ -54,8 +54,8 @@ at_full_data <- tbl(
 pre_compute_record_dates <- at_full_data %>%
   distinct(period) %>%
   mutate(
-    record_date = yq(period) %m+% period(6, "months") %m-% days(1),
-    qtr_start = yq(period) %m+% period(3, "months")
+    record_date = end_fy_quarter(period),
+    qtr_start = start_fy_quarter(period)
   )
 
 replaced_start_dates <- at_full_data %>%
