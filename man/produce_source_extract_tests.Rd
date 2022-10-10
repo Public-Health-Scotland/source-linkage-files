@@ -43,6 +43,7 @@ Other extract test functions:
 \code{\link{calculate_measures}()},
 \code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_cmh_tests}()},
+\code{\link{produce_source_hc_tests}()},
 \code{\link{produce_source_nrs_tests}()}
 }
 \concept{extract test functions}
