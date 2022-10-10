@@ -20,7 +20,7 @@ library(createslf)
 # Read in data---------------------------------------
 
 # Set up for get_boxi_extract_path function
-year <- "1920"
+year <- check_year_format("1920")
 
 # Load extract file
 acute_file <- readr::read_csv(
