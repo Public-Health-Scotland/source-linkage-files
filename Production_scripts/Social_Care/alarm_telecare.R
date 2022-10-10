@@ -8,12 +8,11 @@
 # Description -
 #####################################################
 
-library(createslf)
 library(dplyr)
 library(lubridate)
+library(createslf)
 
-# Copy and paste from 03-Alarms_Telecare_data.R ----
-## Read Demographic file----
+# Read Demographic file----------------------------------------------------
 
 sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
 
@@ -36,8 +35,6 @@ at_full_data <- tbl(
     service_end_date
   ) %>%
   # fix bad period (2017, 2020 & 2021)
-  # TODO - ask SC team as last meeting they said to look at extract date - these dont relate.
-  # e.g. extract date later than period
   mutate(
     period = if_else(period == "2017", "2017Q4", period),
     period = if_else(period == "2020", "2020Q4", period),
@@ -91,8 +88,6 @@ at_full_clean <- replaced_start_dates %>%
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
     sc_send_lca = convert_sending_location_to_lca(sending_location)
-    # Changes here compared with 03-Alarms_Telecare_data.R
-    # convert_sending_location_to_lca against convert_sc_to_lca
   ) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
@@ -164,6 +159,6 @@ qtr_merge <- at_full_clean %>%
 
 # Save .rds file ----
 qtr_merge %>%
-  write_rds(get_sc_hc_episodes_path(check_mode = "write"))
+  write_rds(get_sc_at_episodes_path(check_mode = "write"))
 
 # End of Script #
