@@ -34,7 +34,6 @@ produce_source_hc_tests <- function(data,
                   hc_reablement_no = dplyr::if_else(.data$smrtype == 0, 1, 0),
                   hc_reablement_yes = dplyr::if_else(.data$smrtype == 1, 1, 0),
                   hc_reablement_unknown = dplyr::if_else(.data$smrtype == 9, 1, 0)
-                  )
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison

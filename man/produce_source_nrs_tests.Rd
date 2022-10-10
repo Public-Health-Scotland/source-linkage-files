@@ -28,6 +28,6 @@ Other extract test functions:
 \code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_cmh_tests}()},
 \code{\link{produce_source_extract_tests}()},
-\code{\link{produce_source_sc_tests}()}
+\code{\link{produce_source_hc_tests}()}
 }
 \concept{extract test functions}
