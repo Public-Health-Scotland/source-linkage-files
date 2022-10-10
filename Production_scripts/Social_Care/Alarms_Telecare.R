@@ -151,12 +151,8 @@ qtr_merge <- at_full_clean %>%
     sc_latest_submission
   ) %>%
   # end of lazy_dt()
-  as_tibble() %>%
-  # Sort for running SPSS
-  arrange(
-    sending_location,
-    social_care_id
-  )
+  as_tibble()
+
 
 # Save .rds file ----
 qtr_merge %>%
