@@ -13,7 +13,7 @@
 #' @export
 #' @family process extracts
 
-process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE) {
+process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
