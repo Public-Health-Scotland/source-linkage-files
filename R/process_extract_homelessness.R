@@ -4,15 +4,15 @@
 #' homelessness extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param year The year to process, in FY format.
 #' @param data The extract to process
+#' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_homelessness <- function(year, data, write_to_disk = TRUE) {
+process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
