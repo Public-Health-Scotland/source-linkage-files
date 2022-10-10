@@ -30,7 +30,7 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
     # Create a flag for these records
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data$keydate1_dateformat, "month") - 1,
-      ammended_dates = dplyr::case_when(
+      amended_dates = dplyr::case_when(
         .data$keydate2_dateformat == as.Date("1900-01-01") ~ TRUE,
         TRUE ~ FALSE
       ),
