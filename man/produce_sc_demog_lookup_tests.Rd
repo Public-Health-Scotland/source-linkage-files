@@ -18,6 +18,7 @@ Produce the tests for Social Care Demographic Lookup
 }
 \seealso{
 Other social care test functions: 
+\code{\link{produce_at_sds_episodes_tests}()},
 \code{\link{produce_sc_ch_episodes_tests}()}
 }
 \concept{social care test functions}
