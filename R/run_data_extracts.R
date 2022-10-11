@@ -63,6 +63,7 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     )
   }
 
+  # Run year specific social care data
   #  if (year > 2017) {
   #   process_extracts <- append(
   #    process_extracts,
