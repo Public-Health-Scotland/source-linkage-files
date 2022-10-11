@@ -81,7 +81,11 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
       .data$cennum
     )
 
-  outfile %>%
-    # Save as rds file
-    write_rds(get_source_extract_path(year, "DD", check_mode = "write"))
+  if (write_to_disk) {
+    outfile %>%
+      # Save as rds file
+      write_rds(get_source_extract_path(year, "DD", check_mode = "write"))
+  }
+
+  return(outfile)
 }
