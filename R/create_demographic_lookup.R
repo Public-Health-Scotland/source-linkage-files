@@ -58,9 +58,11 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     dplyr::relocate(demographic_cohort, .after = chi)
 
   # Write to disk
-  if (write_to_disk == TRUE){
+  if (write_to_disk == TRUE) {
     write_rds(demo_lookup,
-              path = glue::glue("{get_slf_dir()}/Cohorts/Demographic_Cohorts_{year}.rds"))
+      path = glue::glue("{get_slf_dir()}/Cohorts/Demographic_Cohorts_{year}.rds")
+    )
+  } else {
+    return(demo_lookup)
   }
-  else {return(demo_lookup)}
 }
