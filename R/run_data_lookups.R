@@ -21,5 +21,4 @@ run_data_lookups <- function(year, write_to_disk = FALSE) {
     "sc_client" = process_lookup_sc_client(year, write_to_disk = write_to_disk),
     "sc_ch_name" = process_lookup_sc_ch_name(year, write_to_disk = write_to_disk)
   )
-
 }
