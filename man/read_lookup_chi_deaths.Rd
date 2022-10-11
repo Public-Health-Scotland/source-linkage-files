@@ -4,11 +4,7 @@
 \alias{read_lookup_chi_deaths}
 \title{Process the CHI deaths lookup}
 \usage{
-read_lookup_chi_deaths(write_to_disk = TRUE)
-}
-\arguments{
-\item{write_to_disk}{(optional) Should the data be written to disk default is
-'TRUE' i.e. write the data to disk.}
+read_lookup_chi_deaths()
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

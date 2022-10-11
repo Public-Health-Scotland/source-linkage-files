@@ -4,14 +4,11 @@
 #' CHI deaths lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' 'TRUE' i.e. write the data to disk.
-#'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 
-read_lookup_chi_deaths <- function(write_to_disk = TRUE) {
+read_lookup_chi_deaths <- function() {
 
   # Read data -------------------------------------------------------
   deaths_data <- readr::read_csv(
