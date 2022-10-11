@@ -33,6 +33,6 @@ Other process extracts:
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},
 \code{\link{process_extract_outpatients}()},
-\code{\link{process_extract_pis}()}
+\code{\link{process_extract_prescribing}()}
 }
 \concept{process extracts}
