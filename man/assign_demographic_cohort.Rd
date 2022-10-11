@@ -17,6 +17,8 @@ Assign the demographic cohort variables
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
-\code{\link{assign_eol_cohort}()}
+\code{\link{assign_eol_cohort}()},
+\code{\link{assign_substance_cohort}()},
+\code{\link{create_demographic_lookup}()}
 }
 \concept{Demographic and Service Use Cohort functions}

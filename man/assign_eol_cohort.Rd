@@ -17,6 +17,8 @@ Assign End of Life cohort based on death codes
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
-\code{\link{assign_demographic_cohort}()}
+\code{\link{assign_demographic_cohort}()},
+\code{\link{assign_substance_cohort}()},
+\code{\link{create_demographic_lookup}()}
 }
 \concept{Demographic and Service Use Cohort functions}
