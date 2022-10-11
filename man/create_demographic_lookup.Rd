@@ -4,7 +4,7 @@
 \alias{create_demographic_lookup}
 \title{Create the demographic lookup file}
 \usage{
-create_demographic_lookup(data)
+create_demographic_lookup(data, year, write_to_disk = TRUE)
 }
 \arguments{
 \item{data}{A data frame with the required variables}
