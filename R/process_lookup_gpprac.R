@@ -18,7 +18,7 @@ process_lookup_gpprac <- function(write_to_disk = TRUE) {
   # Retrieve the latest resource from the dataset
   opendata <-
     phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
-                             max_resources = 20
+      max_resources = 20
     ) %>%
     janitor::clean_names() %>%
     dplyr::left_join(
@@ -114,11 +114,10 @@ process_lookup_gpprac <- function(write_to_disk = TRUE) {
   ## save outfile ---------------------------------------
 
   if (write_to_disk) {
-  # Save .rds file
-  gpprac_slf_lookup %>%
-    write_rds(get_slf_gpprac_path(check_mode = "write"))
+    # Save .rds file
+    gpprac_slf_lookup %>%
+      write_rds(get_slf_gpprac_path(check_mode = "write"))
   }
 
   return(gpprac_slf_lookup)
-
 }
