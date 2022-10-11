@@ -20,29 +20,43 @@ year <- "2021"
 select_years_to_run <- convert_year_to_fyyear(as.character(2020:2021)) %>%
   purrr::set_names()
 
-# Lookups
-# Social Care
 
 ------------------------------------------------------
-# PHASE 1 - process extracts
+# PHASE 1a - Process Lookups
+------------------------------------------------------
+# Lookups/costs
+
+run_process_1a_lookups(select_years_to_run)
+
+
+------------------------------------------------------
+# PHASE 1c - Process Social Care data
+------------------------------------------------------
+# Social Care
+  # sc lookups
+  # all files
+run_process_1b_social_care(select_years_to_run)
+
+------------------------------------------------------
+# PHASE 2 - process extracts
 ------------------------------------------------------
 # Process data---------------------------------------
 
 # Process data extracts and tests.
 # Currently, this is set up to write to disk (we may not need this)
-run_phase_1_processing(select_years_to_run)
+run_process_2_extracts(select_years_to_run)
 
 ------------------------------------------------------
-# PHASE 2 - Create Episode file
+# PHASE 3 - Create Episode file
 ------------------------------------------------------
 
 run_phase_2_processing(select_years_to_run)
 
 ------------------------------------------------------
-# PHASE 3 - Create Individual file
+# PHASE 4 - Create Individual file
 ------------------------------------------------------
 
 
 ------------------------------------------------------
-# PHASE 1 - Calculate Anon CHI
+# PHASE 5 - Calculate Anon CHI
 ------------------------------------------------------
