@@ -7,7 +7,7 @@
 #' @return A list of data with the data extracts as a tibble along with the years.
 #' @export
 #'
-run_phase_1_processing <- function(select_years_to_run) {
+run_process_2_extracts <- function(select_years_to_run) {
   extract_data <- purrr::map(
     select_years_to_run,
     run_data_extracts
