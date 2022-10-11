@@ -30,12 +30,18 @@ run_process_1a_lookups(select_years_to_run)
 
 
 ------------------------------------------------------
+  # PHASE 1b - Process Costs
+------------------------------------------------------
+run_process_1b_costs(select_years_to_run)
+
+
+------------------------------------------------------
 # PHASE 1c - Process Social Care data
 ------------------------------------------------------
 # Social Care
   # sc lookups
   # all files
-run_process_1b_social_care(select_years_to_run)
+run_process_1c_social_care(select_years_to_run)
 
 ------------------------------------------------------
 # PHASE 2 - process extracts
