@@ -7,13 +7,16 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_service_cohorts <- function(data) {
-
-  check_variables_exist(data,
-                        c("psychiatry_cost", "maternity_cost", "geriatric_cost",
-                          "elective_inpatient_flag", "elective_instances",
-                          "emergency_instances", "prescribing_cost",
-                          "outpatient_cost", "care_home_cost", "community_health_cost",
-                          "ae2_cost"))
+  check_variables_exist(
+    data,
+    c(
+      "psychiatry_cost", "maternity_cost", "geriatric_cost",
+      "elective_inpatient_flag", "elective_instances",
+      "emergency_instances", "prescribing_cost",
+      "outpatient_cost", "care_home_cost", "community_health_cost",
+      "ae2_cost"
+    )
+  )
 
   return_data <- data %>%
     dplyr::mutate(
