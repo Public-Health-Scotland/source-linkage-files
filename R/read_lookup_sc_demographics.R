@@ -4,7 +4,7 @@
 #' @export
 #'
 read_lookup_sc_demographics <- function() {
-# Read in data---------------------------------------
+  # Read in data---------------------------------------
 
   # set-up conection to platform
   db_connection <- phs_db_connection(dsn = "DVPROD")
@@ -26,5 +26,4 @@ read_lookup_sc_demographics <- function() {
     )
 
   return(sc_demog)
-
 }
