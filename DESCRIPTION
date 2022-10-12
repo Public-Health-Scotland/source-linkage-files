@@ -18,6 +18,7 @@ BugReports:
     https://github.com/Public-Health-Scotland/source-linkage-files/issues
 Imports:
     cli (>= 3.3.0),
+    dbplyr,
     dplyr (>= 1.0.0),
     dtplyr,
     fs (>= 1.5.2),
