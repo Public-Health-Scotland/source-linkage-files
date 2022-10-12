@@ -30,7 +30,7 @@ create_service_costs <- function(data) {
       psychiatry_cost = dplyr::if_else(recid == "04B" & spec != "G4", cost_total_net, 0),
       # Acute Elective
       acute_elective_cost = dplyr::if_else(recid == "01B" & (cij_pattype == "Elective" | cij_ipdc == "D") &
-                                             !(spec %in% c("AB")), cost_total_net, 0),
+        !(spec %in% c("AB")), cost_total_net, 0),
       # Acute Emergency
       acute_emergency_cost = dplyr::if_else(recid == "01B" &
         cij_pattype == "Non-Elective" & !(spec %in% c("AB")),

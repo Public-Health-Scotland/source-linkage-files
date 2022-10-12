@@ -76,7 +76,8 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
 
   if (write_to_disk == TRUE) {
     write_rds(return_data,
-                     path = glue::glue("{get_slf_dir()}/Cohorts/Service_Use_Cohorts_{year}.rds"))
+      path = glue::glue("{get_slf_dir()}/Cohorts/Service_Use_Cohorts_{year}.rds")
+    )
   } else {
     return(return_data)
   }

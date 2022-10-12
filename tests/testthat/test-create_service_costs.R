@@ -121,9 +121,9 @@ test_that("Costs are assigned correctly", {
 })
 
 test_that("Errors are handled correctly", {
-
   error_data <- tibble::tribble(~recid, ~op1a, ~cij_pattype, ~something_silly)
 
   expect_error(create_service_costs(error_data),
-               regexp = "Variables .+ are required, but are missing from `data`")
+    regexp = "Variables .+ are required, but are missing from `data`"
+  )
 })

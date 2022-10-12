@@ -7,13 +7,16 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_cohort_names <- function(data) {
-
-  check_variables_exist(data,
-                        c("psychiatry_cost", "maternity_cost", "geriatric_cost",
-                          "elective_inpatient_cost", "limited_daycases_cost",
-                          "routine_daycase_cost", "single_emergency_cost",
-                          "multiple_emergency_cost", "prescribing_cost",
-                          "outpatient_cost", "ae2_cost", "residential_care_cost"))
+  check_variables_exist(
+    data,
+    c(
+      "psychiatry_cost", "maternity_cost", "geriatric_cost",
+      "elective_inpatient_cost", "limited_daycases_cost",
+      "routine_daycase_cost", "single_emergency_cost",
+      "multiple_emergency_cost", "prescribing_cost",
+      "outpatient_cost", "ae2_cost", "residential_care_cost"
+    )
+  )
 
   return_data <- data %>%
     dplyr::mutate(
@@ -31,7 +34,9 @@ assign_cohort_names <- function(data) {
         # as the mean
         cost_max == rowSums(
           dplyr::across(
-            c(.data$psychiatry_cost:.data$residential_care_cost))) / 12 ~ "Unassigned",
+            c(.data$psychiatry_cost:.data$residential_care_cost)
+          )
+        ) / 12 ~ "Unassigned",
         cost_max == .data$psychiatry_cost ~ "Psychiatry",
         cost_max == .data$maternity_cost ~ "Maternity",
         # Geriatric has to be larger or equal to psychiatry

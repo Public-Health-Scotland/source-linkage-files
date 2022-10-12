@@ -7,8 +7,7 @@
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
-create_service_instances <- function(data){
-
+create_service_instances <- function(data) {
   check_variables_exist(data, variables = c("cij_marker", "cij_pattype", "cij_ipdc", "cost_total_net"))
 
   return_data <- data %>%
@@ -22,5 +21,4 @@ create_service_instances <- function(data){
     )
 
   return(return_data)
-
 }
