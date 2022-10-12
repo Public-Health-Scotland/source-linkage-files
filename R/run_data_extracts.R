@@ -31,7 +31,8 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     "maternity" = process_extract_maternity(year, read_extract_maternity(year), write_to_disk = write_to_disk),
     "nrs_deaths" = process_extract_nrs_deaths(year, read_extract_nrs_deaths(year), write_to_disk = write_to_disk),
     "outpatients" = process_extract_outpatients(year, read_extract_outpatients(year), write_to_disk = write_to_disk),
-    "pis" = process_extract_prescribing(year, read_extract_prescribing(year), write_to_disk = write_to_disk)
+    "pis" = process_extract_prescribing(year, read_extract_prescribing(year), write_to_disk = write_to_disk),
+    "ltc" = process_lookup_ltc(read_lookup_ltc(),year,  write_to_disk = write_to_disk)
     # "ooh" = process_extract_ooh(year, read_extract_ooh(year), write_to_disk = write_to_disk)
   )
 
