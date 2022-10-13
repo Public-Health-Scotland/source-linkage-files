@@ -29,11 +29,7 @@ process_extract_cmh <- function(data, year, write_to_disk = TRUE) {
       year = year
     ) %>%
     # contact end time
-    dplyr::mutate(
-      keyTime1 = lubridate::hms(keyTime1),
-      duration = lubridate::hms(duration)
-    ) %>%
-    dplyr::mutate(keyTime2 = .data$keyTime1 + .data$duration) %>%
+    dplyr::mutate(keyTime2 = hms::as.hms(.data$keyTime1 + lubridate::dminutes(.data$duration))) %>%
     # record key date 2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
     # create blank diag 6
