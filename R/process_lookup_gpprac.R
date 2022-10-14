@@ -55,7 +55,7 @@ process_lookup_gpprac <- function(write_to_disk = TRUE) {
   # Read Lookup files ---------------------------------------
   # gp lookup
   gpprac_ref_file <-
-    readr::read_rds(get_gpprac_ref_path()) %>%
+    haven::read_sav(get_gpprac_ref_path()) %>%
     # select only praccode and postcode
     dplyr::select(
       gpprac = .data$praccode,
