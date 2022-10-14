@@ -26,12 +26,13 @@ but also write this out as a zsav and rds.
 Other process extracts: 
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
+\code{\link{process_extract_cmh}()},
 \code{\link{process_extract_homelessness}()},
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_lookup_chi_deaths}()},
-\code{\link{read_lookup_chi_deaths}()}
+\code{\link{process_lookup_sc_demographics}()}
 }
 \concept{process extracts}
