@@ -16,8 +16,10 @@ run_data_lookups <- function(year, write_to_disk = FALSE) {
     "gpprac" = process_lookup_gpprac(write_to_disk = write_to_disk),
     "chi_deaths" = process_lookup_chi_deaths(read_lookup_chi_deaths(), write_to_disk = write_to_disk),
     ## Social Care lookups
-    "sc_demographics" = process_lookup_sc_demographics(write_to_disk = write_to_disk),
-    "sc_client" = process_lookup_sc_client(year, write_to_disk = write_to_disk),
-    "sc_ch_name" = process_lookup_sc_ch_name(year, write_to_disk = write_to_disk)
+    "sc_demographics" = process_lookup_sc_demographics(read_lookup_sc_demographics(), write_to_disk = write_to_disk),
+    "sc_client" = process_lookup_sc_client(read_lookup_sc_client(), year, write_to_disk = write_to_disk)
+    #"sc_ch_name" = process_lookup_sc_ch_name(year, write_to_disk = write_to_disk)
   )
+
+  return(process_lookups)
 }
