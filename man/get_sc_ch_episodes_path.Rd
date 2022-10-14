@@ -22,6 +22,7 @@ Get the file path for Care Home all episodes file
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other social care episodes file paths: 
+\code{\link{get_sc_at_episodes_path}()},
 \code{\link{get_sc_hc_episodes_path}()}
 }
 \concept{social care episodes file paths}
