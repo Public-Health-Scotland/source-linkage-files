@@ -1,14 +1,13 @@
-#' Read PIS extract
+#' Read Prescribing extract
 #'
-#' @param year Year of BOXI extract
+#' @param year Year of extract
 #'
-#' @return csv data file for PIS
+#' @return csv data file for prescribing
 #' @export
 #'
 read_extract_prescribing <- function(year) {
-  extract_pis_path <- get_it_prescribing_path(year)
-
-  pis_file <- readr::read_csv(extract_pis_path,
+  pis_file <- readr::read_csv(
+    get_it_prescribing_path(year),
     col_type = cols_only(
       `Pat UPI [C]` = col_character(),
       `Pat DoB [C]` = col_date(format = "%d-%m-%Y"),
