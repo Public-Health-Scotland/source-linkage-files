@@ -2,16 +2,16 @@
 % Please edit documentation in R/read_extract_prescribing.R
 \name{read_extract_prescribing}
 \alias{read_extract_prescribing}
-\title{Read PIS extract}
+\title{Read Prescribing extract}
 \usage{
 read_extract_prescribing(year)
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Year of extract}
 }
 \value{
-csv data file for PIS
+csv data file for prescribing
 }
 \description{
-Read PIS extract
+Read Prescribing extract
 }
