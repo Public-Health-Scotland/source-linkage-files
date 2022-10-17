@@ -25,6 +25,7 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
   # )
 
   process_extracts <- list(
+    "sc_client" = process_lookup_sc_client(read_lookup_sc_client(), year, write_to_disk = write_to_disk)
     "acute" = process_extract_acute(year, read_extract_acute(year), write_to_disk = write_to_disk),
     "ae" = process_extract_ae(year, read_extract_ae(year), write_to_disk = write_to_disk),
     "mental_health" = process_extract_mental_health(year, read_extract_mental_health(year), write_to_disk = write_to_disk),
