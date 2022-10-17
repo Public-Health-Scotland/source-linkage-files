@@ -3,9 +3,8 @@
 #' @description This takes the processed data extracts and runs the equivalent
 #' test on the data.
 #'
-#' @param year Year of extract
 #' @param data_list List containing data for processed extracts.
-#'
+#' @param year Year of extract
 #' @return A list of data containing processed extracts.
 #' @export
 #'
