@@ -8,6 +8,10 @@ create_demographic_lookup(data, year, write_to_disk = TRUE)
 }
 \arguments{
 \item{data}{A data frame with the required variables}
+
+\item{year}{The year in standard SLF format}
+
+\item{write_to_disk}{Defaults to TRUE}
 }
 \description{
 Create the demographic lookup file
@@ -15,8 +19,7 @@ Create the demographic lookup file
 \seealso{
 \itemize{\item\code{\link[=assign_demographic_cohort]{assign_demographic_cohort()}}
 \item\code{\link[=assign_eol_cohort]{assign_eol_cohort()}}
-\item\code{\link[=assign_substance_cohort]{assign_substance_cohort()}}
-\item\code{\link[=get_cohorts_paths]{get_cohorts_paths()}}}
+\item\code{\link[=assign_substance_cohort]{assign_substance_cohort()}}}
 
 Other Demographic and Service Use Cohort functions: 
 \code{\link{assign_demographic_cohort}()},
