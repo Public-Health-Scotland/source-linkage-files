@@ -9,7 +9,7 @@
 #'
 #' @export
 #' @family social care test functions
-produce_at_sds_episodes_tests <- function(data) {
+produce_source_at_tests <- function(data) {
   data %>%
     # create test flags
     create_demog_test_flags() %>%
