@@ -24,8 +24,8 @@ existing_data <- get_existing_data_for_tests(new_data = new_data)
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_at_sds_episodes_tests(existing_data),
-  produce_at_sds_episodes_tests(new_data)
+  produce_source_at_tests(existing_data),
+  produce_source_at_tests(new_data)
 )
 
 # Produce Outfile----------------------------------------
