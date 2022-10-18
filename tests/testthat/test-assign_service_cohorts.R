@@ -1,7 +1,7 @@
 test_that("Cohorts are assigned correctly", {
   dummy_data <- tibble::tribble(
     ~psychiatry_cost, ~maternity_cost, ~geriatric_cost, ~elective_inpatient_flag, ~elective_instances,
-    ~emergency_instances, ~prescribing_cost, ~outpatient_cost, ~home_care_cost, ~community_health_cost,
+    ~emergency_instances, ~prescribing_cost, ~outpatient_cost, ~care_home_cost, ~community_health_cost,
     ~ae2_cost,
     10, 0, 0, F, 0, 0, 0, 0, 0, 0, 0,
     0, 10, 0, F, 0, 0, 0, 0, 0, 0, 0,
@@ -64,7 +64,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Routine daycases
   expect_equal(
-    test_output$routine_daycases_cohort,
+    test_output$routine_daycase_cohort,
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
