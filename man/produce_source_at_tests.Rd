@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_source_at_tests.R
 \name{produce_source_at_tests}
 \alias{produce_source_at_tests}
-\title{Alarm Telecare and SDS Episodes Tests}
+\title{Alarm Telecare Episodes Tests}
 \usage{
 produce_source_at_tests(
   data,
@@ -17,7 +17,7 @@ produce_source_at_tests(
 a dataframe with a count of each flag.
 }
 \description{
-Produce the test for the Alarm Telecare and SDS all episodes
+Produce the test for the Alarm Telecare all episodes
 }
 \seealso{
 Other social care test functions: 
