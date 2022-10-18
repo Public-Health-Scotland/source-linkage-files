@@ -40,7 +40,7 @@ add_ppa_flag <- function(data) {
       op1a_3char = stringr::str_sub(.data$op1a, 1, 3),
 
       # Excluding operations are op1a codes from K01 to K50, K56, K60, and K61 (dental)
-      excluding_operation = op1a_3char %in%
+      excluding_operation = .data$op1a_3char %in%
         c(glue::glue("K{stringr::str_pad(1:50, 2, 'left', '0')}"), "K56", "K60", "K61"),
 
       # Adding ppa flag
@@ -124,12 +124,12 @@ add_ppa_flag <- function(data) {
         # Reliant on op1a and diag1
         # Angina
         diag1_3char == "I20" &
-          !(op1a_3char %in% c("K40", "K45", "K49", "K60", "K65", "K66")) ~ TRUE,
+          !(.data$op1a_3char %in% c("K40", "K45", "K49", "K60", "K65", "K66")) ~ TRUE,
         # Cellulitis
         diag1_3char %in% c("L03", "L04") &
-          !(op1a_3char %in% c("S06", "S57", "S68", "S70", "W90", "X11")) ~ TRUE,
+          !(.data$op1a_3char %in% c("S06", "S57", "S68", "S70", "W90", "X11")) ~ TRUE,
         diag1_4char %in% c("L080", "L088", "L089", "L980") &
-          !(op1a_3char %in% c("S06", "S57", "S68", "S70", "W90", "X11")) ~ TRUE,
+          !(.data$op1a_3char %in% c("S06", "S57", "S68", "S70", "W90", "X11")) ~ TRUE,
 
         # Reliant on diag1 and excluding_operation
         diag1_3char %in% c(

@@ -1,6 +1,6 @@
 test_that("Add PPA flag works as expected for various cases", {
   example_data <- tibble::tribble(
-    ~anon_chi, ~cij_marker, ~cij_pattype, ~recid, ~op1a, ~diag1, ~diag2, ~diag3, ~diag4, ~diag5, ~diag6,
+    ~chi, ~cij_marker, ~cij_pattype, ~recid, ~op1a, ~diag1, ~diag2, ~diag3, ~diag4, ~diag5, ~diag6,
     # EXPECT cij_ppa = TRUE
     # Case 1, reliant on diag1, first 3 characters
     1, 1, "Non-Elective", "02B", "", "E40", "", "", "", "", "",
@@ -46,14 +46,14 @@ test_that("Add PPA flag works as expected for various cases", {
 test_that("Errors are handled as expected", {
   # Wrong columns
   error_data <- tibble::tribble(
-    ~anon_chi, ~recid, ~diag1, ~something_silly,
+    ~chi, ~recid, ~diag1, ~something_silly,
     1, "01B", "A01", "Foo"
   )
   expect_error(add_ppa_flag(error_data), "Variables .+ are required, but are missing from \`data\`")
 
   # Wrong recids
   error_data_2 <- tibble::tribble(
-    ~anon_chi, ~cij_marker, ~cij_pattype, ~recid, ~op1a, ~diag1, ~diag2, ~diag3, ~diag4, ~diag5, ~diag6,
+    ~chi, ~cij_marker, ~cij_pattype, ~recid, ~op1a, ~diag1, ~diag2, ~diag3, ~diag4, ~diag5, ~diag6,
     1, 1, "Non-Elective", "Wrong", "", "", "", "", "", "", "",
     2, 1, "Non-Elective", "Wronger", "", "", "", "", "", "", "",
     3, 1, "Non-Elective", "Wrongest", "", "", "", "", "", "", ""
