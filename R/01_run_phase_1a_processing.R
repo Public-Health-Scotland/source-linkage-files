@@ -8,16 +8,7 @@
 #' @export
 #'
 run_process_lookups <- function(years) {
-  lookups_data <- purrr::map(
-    years,
-    run_data_lookups
-  )
-
-  extract_tests <- purrr::map2(
-    lookups_data,
-    years,
-    run_lookups_tests
-  )
+  lookups_data <- run_data_lookups()
 
   return(lookups_data)
 }
