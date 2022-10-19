@@ -4,10 +4,7 @@
 \alias{run_data_lookups}
 \title{Run data lookups}
 \usage{
-run_data_lookups(year, write_to_disk = FALSE)
-}
-\arguments{
-\item{year}{Year of extract}
+run_data_lookups(write_to_disk = FALSE)
 }
 \value{
 A list of data containing processed extracts.

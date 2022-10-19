@@ -22,6 +22,7 @@ but also write this out as a zsav and rds.
 }
 \seealso{
 Other process extracts: 
+\code{\link{process_costs_gp_ooh}()},
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_cmh}()},
