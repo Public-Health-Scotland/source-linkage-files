@@ -8,8 +8,8 @@ read_costs_gp_ooh <- function() {
 
   ## Make a copy of the existing file
   fs::file_copy(get_gp_ooh_costs_path(),
-                get_gp_ooh_costs_path(update = latest_update()),
-                overwrite = TRUE
+    get_gp_ooh_costs_path(update = latest_update()),
+    overwrite = TRUE
   )
 
   # Read in data---------------------------------------
@@ -21,5 +21,4 @@ read_costs_gp_ooh <- function() {
   ))
 
   return(gp_ooh_data)
-
 }
