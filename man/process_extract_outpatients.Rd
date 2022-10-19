@@ -4,12 +4,12 @@
 \alias{process_extract_outpatients}
 \title{Process the Outpatients extract}
 \usage{
-process_extract_outpatients(year, data, write_to_disk = TRUE)
+process_extract_outpatients(data, year, write_to_disk = TRUE)
 }
 \arguments{
-\item{year}{The year to process, in FY format.}
-
 \item{data}{The extract to process}
+
+\item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
