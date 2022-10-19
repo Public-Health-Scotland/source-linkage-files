@@ -36,5 +36,4 @@ read_sc_all_home_care <- function() {
     dplyr::collect()
 
   return(home_care_data)
-
 }
