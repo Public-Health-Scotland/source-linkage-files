@@ -11,4 +11,9 @@ process_costs_gp_ooh_rmd <- function() {
     input = "gp_ooh_costs.Rmd",
     output_file = "gp_ooh_costs.html"
   )
+
+  gp_ooh_lookup <- readr::read_rds(get_gp_ooh_costs_path())
+
+  return(gp_ooh_lookup)
+
 }
