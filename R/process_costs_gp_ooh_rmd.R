@@ -15,5 +15,4 @@ process_costs_gp_ooh_rmd <- function() {
   gp_ooh_lookup <- readr::read_rds(get_gp_ooh_costs_path())
 
   return(gp_ooh_lookup)
-
 }

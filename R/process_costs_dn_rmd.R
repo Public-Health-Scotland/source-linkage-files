@@ -15,5 +15,4 @@ process_costs_dn_rmd <- function() {
   dn_lookup <- readr::read_rds(get_dn_costs_path())
 
   return(dn_lookup)
-
 }
