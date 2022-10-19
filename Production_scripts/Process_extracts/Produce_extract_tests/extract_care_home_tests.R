@@ -1,11 +1,11 @@
 ####################################################
-# Name of file - extract_prescribing_tests.R
-# Original Authors - Jennifer Thom
-# Original Date - July 2022
+# Name of file - extract_care_home_tests.R
+# Original Authors - Zihao Li
+# Original Date - August 2022
 # Written/run on - RStudio Server
 # Version of R - 3.6.1
 # Description - Produce tests for source linkage files:
-#               PIS processed file.
+#               care home processed file.
 #####################################################
 
 # Load packages
@@ -17,24 +17,24 @@ library(createslf)
 year <- check_year_format("1920")
 
 # Read new data file
-new_data <- readr::read_rds(get_source_extract_path(year, "PIS"))
+new_data <- readr::read_rds(get_source_extract_path(year, "CH"))
 
-# Read current SLF episode file and filter for the prescribing (PIS) records
+# Read current SLF episode file and filter for CH
 existing_data <- get_existing_data_for_tests(new_data = new_data)
 
 
 # Produce comparison-------------------------------------
 # Compare new file with existing slf data
 comparison <- produce_test_comparison(
-  produce_source_pis_tests(existing_data),
-  produce_source_pis_tests(new_data)
+  produce_source_ch_tests(existing_data),
+  produce_source_ch_tests(new_data)
 )
 
 
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "PIS_extract")
+write_tests_xlsx(comparison, "CH", year)
 
 
 ## END OF SCRIPT ##
