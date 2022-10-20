@@ -1,7 +1,7 @@
-#' Process the NRS Deaths extract
+#' Process the Nation Records of Scotland (NRS) Deaths extract
 #'
 #' @description This will read and process the
-#' nrs deaths extract, it will return the final data
+#' NRS deaths extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
 #' @param data The extract to process

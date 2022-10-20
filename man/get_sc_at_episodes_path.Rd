@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sc_at_episodes_path.R
 \name{get_sc_at_episodes_path}
 \alias{get_sc_at_episodes_path}
-\title{Alarms Telecare Episodes File Path}
+\title{Alarms and Telecare Episodes File Path}
 \usage{
 get_sc_at_episodes_path(update = latest_update(), ...)
 }
@@ -13,10 +13,10 @@ defaults to \code{\link[=latest_update]{latest_update()}}}
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the alarms telecare episodes file as an \code{\link[fs:path]{fs::path()}}
+The path to the alarms and telecare episodes file as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the file path for Alarms Telecare all episodes file
+Get the file path for Alarms and Telecare all episodes file
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.

@@ -1,8 +1,8 @@
-#' Add Potentially Preventable Admissions Marker
+#' Add Potentially Preventable Admission (PPA) Marker
 #'
 #' @description This function takes a data frame input and determines, based on
-#' a combination of diagnostic codes and operation codes, whether an admission was
-#' preventable or not
+#' a combination of diagnostic codes and operation codes, whether an admission
+#' was preventable or not.
 #' @param data A data frame
 #'
 #' @return A data frame to use as a lookup of PPAs
