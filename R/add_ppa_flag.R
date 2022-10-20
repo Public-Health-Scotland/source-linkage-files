@@ -23,9 +23,9 @@ add_ppa_flag <- function(data) {
   matching_data <- data %>%
     # Select out only the columns we need
     dplyr::select(
-      .data$chi, .data$cij_marker, .data$cij_pattype, .data$recid,
-      .data$op1a, .data$diag1, .data$diag2, .data$diag3, .data$diag4,
-      .data$diag5, .data$diag6
+      "chi", "cij_marker", "cij_pattype", "recid",
+      "op1a", "diag1", "diag2", "diag3", "diag4",
+      "diag5", "diag6"
     ) %>%
     # Filter only recids and patient type where admission was preventable
     dplyr::filter(.data$recid %in% c("01B", "02B", "04B", "GLS") & .data$cij_pattype == "Non-Elective") %>%
@@ -87,7 +87,7 @@ add_ppa_flag <- function(data) {
 
         # Reliant on any of the six diagnosis codes, first three characters
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 3) %in%
             c(
               # Gangrene
@@ -101,7 +101,7 @@ add_ppa_flag <- function(data) {
 
         # Reliant on any of the six diagnosis codes, first four characters
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 4) %in%
             c(
               # Vaccine-preventable
@@ -156,7 +156,7 @@ add_ppa_flag <- function(data) {
       )
     ) %>%
     # Just select out the chi, cij marker and ppa for ease of joining
-    dplyr::select(.data$chi, .data$cij_marker, `cij_ppa` = .data$ppa)
+    dplyr::select("chi", "cij_marker", cij_ppa = "ppa")
 
   # Match on the ppa lookup to original data
   ppa_cij_data <- dplyr::left_join(data, matching_data, by = c("chi", "cij_marker")) %>%
