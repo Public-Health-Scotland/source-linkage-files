@@ -6,7 +6,7 @@
 #'
 read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
 
-   # Read in data---------------------------------------
+  # Read in data---------------------------------------
 
   # read in data - social care 2 home care
   home_care_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "homecare_snapshot")) %>%
