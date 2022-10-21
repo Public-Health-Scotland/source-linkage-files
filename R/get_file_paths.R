@@ -39,6 +39,11 @@ get_file_path <-
       cli::cli_abort("The directory {.path {directory}} does not exist.")
     }
 
+    check_mode <- match.arg(
+      arg = check_mode,
+      choices = c("exists", "read", "write", "execute")
+    )
+
     if (!is.null(file_name)) {
       file_path <- fs::path(directory, file_name)
     } else if (!is.null(file_name_regexp)) {
