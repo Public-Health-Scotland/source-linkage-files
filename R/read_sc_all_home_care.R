@@ -1,16 +1,15 @@
 #' Read Social Care Home Care data
 #'
+#' @param sc_dvprod_connection Connection to the SC platform
+#'
 #' @return an extract of the data as a [tibble][tibble::tibble-package].
 #'
-read_sc_all_home_care <- function() {
+read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
 
-  # Read in data---------------------------------------
-
-  # set-up conection to platform
-  db_connection <- phs_db_connection(dsn = "DVPROD")
+   # Read in data---------------------------------------
 
   # read in data - social care 2 home care
-  home_care_data <- dplyr::tbl(db_connection, dbplyr::in_schema("social_care_2", "homecare_snapshot")) %>%
+  home_care_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "homecare_snapshot")) %>%
     dplyr::select(
       .data$sending_location,
       .data$sending_location_name,
