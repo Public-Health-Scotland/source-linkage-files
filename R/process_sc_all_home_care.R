@@ -162,14 +162,14 @@ process_sc_all_home_care <- function(data, write_to_disk = TRUE) {
     dplyr::arrange(.data$period) %>%
     dplyr::summarise(
       # Take the latest submitted value
-      dplyr::across(c(.data$hc_service_end_date, .data$record_date), dplyr::last),
+      dplyr::across(c("hc_service_end_date", "record_date"), dplyr::last),
       # Store the period for the latest submitted record
       sc_latest_submission = dplyr::last(.data$period),
       # Sum the (quarterly) hours
       dplyr::across(tidyselect::starts_with("hc_hours_20"), sum),
       dplyr::across(tidyselect::starts_with("hc_cost_20"), sum),
       # Shouldn't matter as these are all the same
-      dplyr::across(c(.data$gender, .data$dob, .data$postcode), dplyr::first)
+      dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%
     dplyr::ungroup()
 
