@@ -4,7 +4,10 @@
 \alias{read_sc_all_home_care}
 \title{Read Social Care Home Care data}
 \usage{
-read_sc_all_home_care()
+read_sc_all_home_care(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"))
+}
+\arguments{
+\item{sc_dvprod_connection}{Connection to the SC platform}
 }
 \value{
 an extract of the data as a \link[tibble:tibble-package]{tibble}.
