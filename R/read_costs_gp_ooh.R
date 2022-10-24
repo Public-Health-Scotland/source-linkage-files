@@ -3,7 +3,6 @@
 #' @return csv data file for gp ooh costs
 #'
 read_costs_gp_ooh <- function() {
-
   # Copy existing file-----------------------------------
 
   ## Make a copy of the existing file

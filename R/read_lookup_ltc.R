@@ -4,7 +4,6 @@
 #' @export
 #'
 read_lookup_ltc <- function() {
-
   # Read data------------------------------------------------
   ltc_file <- readr::read_csv(
     file = get_it_ltc_path(),

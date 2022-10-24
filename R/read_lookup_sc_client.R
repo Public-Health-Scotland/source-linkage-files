@@ -9,7 +9,6 @@
 #' @export
 #' @family process extracts
 read_lookup_sc_client <- function(year) {
-
   # set-up conection to platform
   db_connection <- phs_db_connection(dsn = "DVPROD")
 

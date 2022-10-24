@@ -8,7 +8,6 @@ test_that("main SLF directory exists", {
 
 
 test_that("get_year_dir works", {
-
   # Base dir must exist
   expect_true(fs::dir_exists("/conf/sourcedev/Source_Linkage_File_Updates"))
 
