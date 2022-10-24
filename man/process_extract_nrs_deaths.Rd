@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_extract_nrs_deaths.R
 \name{process_extract_nrs_deaths}
 \alias{process_extract_nrs_deaths}
-\title{Process the NRS Deaths extract}
+\title{Process the Nation Records of Scotland (NRS) Deaths extract}
 \usage{
 process_extract_nrs_deaths(data, year, write_to_disk = TRUE)
 }
@@ -19,7 +19,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
-nrs deaths extract, it will return the final data
+NRS deaths extract, it will return the final data
 but also write this out as a zsav and rds.
 }
 \seealso{
