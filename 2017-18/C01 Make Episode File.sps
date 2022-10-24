@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -15,12 +15,12 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "MentalHealth_tests_20" + !FY + ".zsav " +
     !Year_dir + "NRS_tests_20" + !FY + ".zsav " +
     !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
-    !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
-    !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
-    !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
-    !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
     !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
     !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
+    !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
     !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
 
 * Bring all the data sets together.
@@ -41,9 +41,6 @@ add files
     /file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
     /file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /By chi.
-
-* All records should be sorted by CHI, if the above fails, remove the "/By chi" and run again then run the below sort.
-*Sort Cases by chi.
 
 * Check that all CHIs are valid.
 Do if chi ne "".
@@ -387,11 +384,11 @@ Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "a\&e_for_source-20" + !FY + ".zsav " +
     !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "DN_for_source-20" + !FY + ".zsav " +
     !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
-	!Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
-    !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
     !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
     !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
     !Year_dir + "SDS-for-source-20" + !FY + ".zsav " +

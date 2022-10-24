@@ -9,31 +9,38 @@ calculate_stay(year, start_date, end_date, sc_qtr = NULL)
 \arguments{
 \item{year}{The financial year in '1920' format}
 
-\item{start_date}{The admission/start date variable. e.g. record_keydate1}
+\item{start_date}{The admission/start date variable. e.g. \code{record_keydate1}}
 
-\item{end_date}{The discharge/end date variable. e.g record_keydate2}
+\item{end_date}{The discharge/end date variable. e.g. \code{record_keydate2}}
 
-\item{sc_qtr}{The latest submitted quarter. e.g. sc_latest_submission}
+\item{sc_qtr}{The latest submitted quarter. e.g. \code{sc_latest_submission}}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with additional variable \code{stay}.
 If there is no end date use dummy discharge to calculate the total length of stay.
-If there is no end date but sc_qtr is supplied then set this to the end of quarter.
-If the quarter end date < start date and sc_qtr is supplied then set this to the end of next quarter.
+If there is no end date but sc_qtr is supplied then set this to the end of
+the quarter.
+If quarter \code{end_date < start_date} and \code{sc_qtr} is supplied then set this
+to the end of the next quarter.
 }
 \description{
-Calculate the total length of stay between start_date and end_date.
-If the end_date is missing then use the dummy discharge date.
+Calculate the total length of stay between \code{start_date} and
+\code{end_date}.
+If the \code{end_date} is missing then use the dummy discharge date.
 }
 \seealso{
 Other date functions: 
 \code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{convert_numeric_to_date}()},
+\code{\link{end_fy_quarter}()},
 \code{\link{end_fy}()},
+\code{\link{end_next_fy_quarter}()},
 \code{\link{fy_interval}()},
 \code{\link{is_date_in_fyyear}()},
 \code{\link{midpoint_fy}()},
-\code{\link{start_fy}()}
+\code{\link{start_fy_quarter}()},
+\code{\link{start_fy}()},
+\code{\link{start_next_fy_quarter}()}
 }
 \concept{date functions}

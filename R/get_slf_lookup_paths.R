@@ -17,7 +17,7 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
   )
 }
 
-#' SLG GP Lookup File Path
+#' SLF GP Lookup File Path
 #'
 #' @description Get the full path to the SLF GP practice lookup
 #'
@@ -92,7 +92,7 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
     file_name = glue::glue("Care_Home_Lookup_All.xlsx"),
-    check_mode = "write",
+    check_mode = "read",
     ...
   )
 }

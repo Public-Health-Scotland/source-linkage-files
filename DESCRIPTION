@@ -17,20 +17,23 @@ URL: https://public-health-scotland.github.io/source-linkage-files,
 BugReports: 
     https://github.com/Public-Health-Scotland/source-linkage-files/issues
 Imports:
-    dplyr (>= 1.0.0),
     cli (>= 3.3.0),
+    dbplyr,
+    dplyr (>= 1.0.0),
+    dtplyr,
     fs (>= 1.5.2),
     glue (>= 1.6.2),
     haven (>= 2.5.0),
     janitor (>= 2.1.0),
     lubridate (>= 1.8.0),
-    odbc (>= 1.3.1),
     magrittr (>= 2.0.3),
+    odbc (>= 1.3.1),
     openxlsx (>= 4.2.5),
-    readr (>= 2.1.0),
     phsmethods (>= 0.2.1),
     phsopendata (>= 0.0.1.0),
     purrr (>= 0.3.4),
+    R.utils,
+    readr (>= 2.1.0),
     rlang (>= 1.0.2),
     rstudioapi (>= 0.13),
     scales (>= 1.2.0),
@@ -38,8 +41,7 @@ Imports:
     stringr (>= 1.4.0),
     tibble (>= 3.1.7),
     tidyr (>= 1.2.0),
-    tidyselect (>= 1.1.2),
-    dtplyr
+    tidyselect (>= 1.1.2)
 Suggests:
     covr,
     roxygen2,

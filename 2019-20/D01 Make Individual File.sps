@@ -51,7 +51,7 @@ Numeric
     HC_total_hours HC_personal_hours HC_non_personal_hours HC_reablement_hours
     HC_total_cost HC_personal_hours_cost HC_non_personal_hours_cost HC_reablement_hours_cost
     AT_alarms AT_telecare
-    SDS_option_1 SDS_option_2 SDS_option_3
+    SDS_option_1 SDS_option_2 SDS_option_3 SDS_option_4
     CIJ_el
     CIJ_non_el
     CIJ_mat.
@@ -457,11 +457,18 @@ Else if (recid = "SDS").
     If SMRType = "SDS-1" SDS_option_1 = 1.
     If SMRType = "SDS-2" SDS_option_2 = 1.
     If SMRType = "SDS-3" SDS_option_3 = 1.
+    If SMRType = "SDS-4" SDS_option_4 = 1.
 End if.
 
 *************************************************************************************************************************************************.
-* Aggregate over the Care Home 'CIS' episodes.
+* Identify unique OoH cases (not consultations) for counting below.
+Sort cases by chi ooh_case_id.
+add files file = *
+    /first = unique_ooh_case
+    /by = chi ooh_case_id.
 
+Sort cases by chi ch_chi_cis.
+* Aggregate over the Care Home 'CIS' episodes.
 aggregate outfile = * mode = addvariables overwrite = yes
     /presorted
     /break CHI ch_chi_cis
@@ -533,9 +540,9 @@ aggregate outfile = *
     = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
     /PIS_dispensed_items PIS_cost = sum(no_dispensed_items PIS_cost)
-    /OoH_cases = Max(OoH_CC)
-    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost
-    = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time OoH_cost)
+    /OoH_cases = sum(unique_ooh_case)
+    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC)
+    /OoH_consultation_time OoH_cost = sum(OoH_consultation_time OoH_cost)
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
     /DN_episodes DN_contacts DN_cost
@@ -549,8 +556,7 @@ aggregate outfile = *
     /HC_total_cost HC_personal_hours_cost HC_non_personal_hours_cost HC_reablement_hours_cost =
     sum(HC_total_cost HC_personal_hours_cost HC_non_personal_hours_cost HC_reablement_hours_cost)
     /AT_alarms AT_telecare = sum(AT_alarms AT_telecare)
-    /SDS_option_1 SDS_option_2 SDS_option_3 = sum(SDS_option_1 SDS_option_2 SDS_option_3)
-    /SDS_option_4 = Max(SDS_option_4)
+    /SDS_option_1 SDS_option_2 SDS_option_3 SDS_option_4= sum(SDS_option_1 SDS_option_2 SDS_option_3 SDS_option_4)
     /sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care = Max(sc_living_alone sc_support_from_unpaid_carer sc_social_worker sc_type_of_housing sc_meals sc_day_care)
     /HL1_in_FY = Max(HH_in_FY)
     /CIJ_el CIJ_non_el CIJ_mat cij_delay = Sum(CIJ_el CIJ_non_el CIJ_mat cij_delay)

@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 get file = !SC_dir + "all_ch_episodes" + !LatestUpdate + ".zsav".
 
 * Now select episodes for given FY, need to do this now as discharge dates may have been moved out of the FY above.
@@ -9,7 +9,7 @@ Do if Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.
     Compute old_open_record = sysmis(record_keydate2) AND record_keydate1 < !startFY.
 End if.
 
-Select if sysmis(old_open_record).
+Select if sysmis(old_open_record) or NOT(old_open_record).
 
 * Match on Client data.
 match files file = *
