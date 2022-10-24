@@ -14,7 +14,6 @@
 #' @family process extracts
 #'
 process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
-
   # Match on demographic data ---------------------------------------
   if (is.null(sc_demographics)) {
     # read in demographic data

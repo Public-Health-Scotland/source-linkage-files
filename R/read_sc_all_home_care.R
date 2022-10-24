@@ -3,7 +3,6 @@
 #' @return an extract of the data as a [tibble][tibble::tibble-package].
 #'
 read_sc_all_home_care <- function() {
-
   # Read in data---------------------------------------
 
   # set-up conection to platform
@@ -36,5 +35,4 @@ read_sc_all_home_care <- function() {
     dplyr::collect()
 
   return(home_care_data)
-
 }
