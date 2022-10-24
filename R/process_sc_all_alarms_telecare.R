@@ -38,7 +38,7 @@ if (is.null(sc_demographics)) {
     dplyr::mutate(
       start_date_missing = is.na(.data$service_start_date),
       service_start_date = dplyr::if_else(
-        start_date_missing,
+        .data$start_date_missing,
         start_fy(year = substr(.data$period, 1, 4), format = "alternate"),
         .data$service_start_date
       )
