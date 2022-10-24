@@ -11,7 +11,6 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 process_costs_gp_ooh <- function(data, write_to_disk = TRUE) {
-
   # Data Cleaning ---------------------------------------
 
   ## data - wide to long ##
