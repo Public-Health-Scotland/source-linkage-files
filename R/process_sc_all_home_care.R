@@ -10,7 +10,7 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-#' @import lubridate
+#'
 process_sc_all_home_care <- function(data, write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
 
