@@ -31,14 +31,14 @@ year <- check_year_format("1920")
 
 # Read code lookup
 readcode_lookup <- readr::read_rds(get_readcode_lookup_path()) %>%
-  rename(
+  dplyr::rename(
     readcode = "ReadCode",
     description = "Description"
   )
 
 # OOH cost lookup
 ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path()) %>%
-  rename(
+  dplyr::rename(
     hbtreatcode = TreatmentNHSBoardCode
   )
 
@@ -53,19 +53,19 @@ diagnosis_extract <- read_csv(
   )
 ) %>%
   # rename variables
-  rename(
+  dplyr::rename(
     guid = `GUID`,
     readcode = `Diagnosis Code`,
     description = `Diagnosis Description`
   ) %>%
   drop_na(readcode) %>%
-  distinct()
+  dplyr::distinct()
 
 
 ## Deal with Read Codes
 
 diagnosis_readcodes <- diagnosis_extract %>%
-  mutate(
+  dplyr::mutate(
     # Replace question marks with dot
     readcode = str_replace_all(readcode, "\\?", "\\."),
     # Pad with dots up to 5 charaters
@@ -73,6 +73,7 @@ diagnosis_readcodes <- diagnosis_extract %>%
   ) %>%
   # Join diagnosis to readcode lookup
   # Identify diagnosis descriptions which match the readcode lookup
+<<<<<<< HEAD
   left_join(
     readcode_lookup %>%
       mutate(full_match_1 = 1L),
@@ -82,20 +83,37 @@ diagnosis_readcodes <- diagnosis_extract %>%
   left_join(
     readcode_lookup %>%
       rename(true_description = description),
+=======
+  dplyr::left_join(
+    readcode_lookup %>%
+      dplyr::mutate(full_match_1 = 1L),
+    by = c("readcode", "description")
+  ) %>%
+  # match on true description from readcode lookup
+  dplyr::left_join(
+    readcode_lookup %>%
+      dplyr::rename(true_description = description),
+>>>>>>> 19db6531 (Don't require loading dplyr)
     by = c("readcode")
   ) %>%
   # replace description with true description from readcode lookup if this is different
-  mutate(description = if_else(is.na(full_match_1) & !is.na(true_description),
+  dplyr::mutate(description = dplyr::if_else(is.na(full_match_1) & !is.na(true_description),
     true_description, description
   )) %>%
   # Join to readcode lookup again to check
+<<<<<<< HEAD
   left_join(
     readcode_lookup %>%
       mutate(full_match_2 = 1L),
+=======
+  dplyr::left_join(
+    readcode_lookup %>%
+      dplyr::mutate(full_match_2 = 1L),
+>>>>>>> 19db6531 (Don't require loading dplyr)
     by = c("readcode", "description")
   ) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
-  mutate(readcode = if_else(is.na(full_match_2), case_when(
+  dplyr::mutate(readcode = dplyr::if_else(is.na(full_match_2), dplyr::case_when(
     readcode == "Xa1m." ~ "S349",
     readcode == "Xa1mz" ~ "S349",
     readcode == "HO6.." ~ "H06..",
@@ -103,28 +121,34 @@ diagnosis_readcodes <- diagnosis_extract %>%
     TRUE ~ readcode
   ), readcode)) %>%
   # Join to readcode lookup again to check
+<<<<<<< HEAD
   left_join(
     readcode_lookup %>%
       mutate(full_match_final = 1L),
+=======
+  dplyr::left_join(
+    readcode_lookup %>%
+      dplyr::mutate(full_match_final = 1L),
+>>>>>>> 19db6531 (Don't require loading dplyr)
     by = c("readcode", "description")
   )
 
 # See how the code above performed
 diagnosis_readcodes %>%
-  count(full_match_1, full_match_2, full_match_final) %>%
+  dplyr::count(full_match_1, full_match_2, full_match_final) %>%
   print()
 
 # Check any readcodes which are still not matching the lookup
 readcodes_not_matched <- diagnosis_readcodes %>%
-  filter(is.na(full_match_final)) %>%
-  count(readcode, description, sort = TRUE)
+  dplyr::filter(is.na(full_match_final)) %>%
+  dplyr::count(readcode, description, sort = TRUE)
 
 print(readcodes_not_matched)
 
 # Give an error if any new 'bad' readcodes come up.
 unrecognised_but_ok_codes <- c("@1JX.", "@1JXz", "@43jS", "@65PW", "@8CA.", "@8CAK", "@A795")
 
-new_bad_codes <- readcodes_not_matched %>% filter(!(readcode %in% unrecognised_but_ok_codes))
+new_bad_codes <- readcodes_not_matched %>% dplyr::filter(!(readcode %in% unrecognised_but_ok_codes))
 
 if (nrow(new_bad_codes) != 0) {
   cli::cli_abort(c("New unrecognised readcodes",
@@ -140,25 +164,25 @@ rm(readcode_lookup, readcodes_not_matched, unrecognised_but_ok_codes, new_bad_co
 ## Data Cleaning
 
 diagnosis_clean <- diagnosis_readcodes %>%
-  select(guid, readcode, description) %>%
-  mutate(
+  dplyr::select(guid, readcode, description) %>%
+  dplyr::mutate(
     readcode_level = str_locate(readcode, "\\.")[, "start"],
     readcode_level = replace_na(readcode_level, 6)
   ) %>%
   dtplyr::lazy_dt() %>%
-  group_by(guid) %>%
+  dplyr::group_by(guid) %>%
   # Sort so that the 'more specific' readcodes are preferred
-  arrange(desc(readcode_level)) %>%
-  mutate(diag_n = row_number()) %>%
-  ungroup() %>%
-  select(-readcode_level) %>%
+  dplyr::arrange(desc(readcode_level)) %>%
+  dplyr::mutate(diag_n = dplyr::row_number()) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-readcode_level) %>%
   # restructure data
   pivot_wider(
     names_from = diag_n,
     values_from = c(readcode, description),
     names_glue = "{.value}_{diag_n}"
   ) %>%
-  select(
+  dplyr::select(
     guid,
     # Use any of in case we have fewer than 6 diagnoses
     any_of(c(
@@ -185,19 +209,19 @@ outcomes_extract <- read_csv(
   )
 ) %>%
   # rename variables
-  rename(
+  dplyr::rename(
     guid = `GUID`,
     outcome = `Case Outcome`
   ) %>%
   # Remove blank outcomes
-  filter(outcome != "") %>%
-  distinct()
+  dplyr::filter(outcome != "") %>%
+  dplyr::distinct()
 
 ## Data Cleaning
 outcomes_clean <- outcomes_extract %>%
   dtplyr::lazy_dt() %>%
   # Recode outcome
-  mutate(
+  dplyr::mutate(
     outcome = recode(outcome,
       "DEATH" = "00",
       "999/AMBULANCE" = "01",
@@ -213,17 +237,17 @@ outcomes_clean <- outcomes_extract %>%
     )
   ) %>%
   # Sort so we prefer 'lower' outcomes e.g. Death, over things like 'Other'
-  group_by(guid) %>%
-  arrange(outcome) %>%
-  mutate(outcome_n = row_number()) %>%
-  ungroup() %>%
+  dplyr::group_by(guid) %>%
+  dplyr::arrange(outcome) %>%
+  dplyr::mutate(outcome_n = dplyr::row_number()) %>%
+  dplyr::ungroup() %>%
   # use row order to pivot outcomes
   pivot_wider(
     names_from = outcome_n,
     names_prefix = "outcome_",
     values_from = outcome
   ) %>%
-  select(
+  dplyr::select(
     guid,
     any_of(c(
       "outcome_1",
@@ -265,7 +289,7 @@ consultations_file <- read_csv(
   )
 ) %>%
   # rename variables
-  rename(
+  dplyr::rename(
     chi = `UPI Number [C]`,
     dob = `Patient DoB Date [C]`,
     gender = `Gender`,
@@ -286,7 +310,7 @@ consultations_file <- read_csv(
     smrtype = `Consultation Type`,
     conc_type_unmapped = `Consultation Type Unmapped`
   ) %>%
-  distinct()
+  dplyr::distinct()
 
 
 ## Data Cleaning
@@ -294,42 +318,42 @@ consultations_file <- read_csv(
 consultations_clean <- consultations_file %>%
   dtplyr::lazy_dt() %>%
   # Restore CHI leading zero
-  mutate(chi = phsmethods::chi_pad(chi)) %>%
+  dplyr::mutate(chi = phsmethods::chi_pad(chi)) %>%
   # Filter missing / bad CHI numbers
-  filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
+  dplyr::filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
   # Some episodes are wrongly included in the BOXI extract
   # Filter to episodes with any time in the given financial year.
-  filter(
+  dplyr::filter(
     is_date_in_year(record_keydate1, year) | is_date_in_year(record_keydate2, year)
   ) %>%
   # TODO - WIP James to here: I was looking at doing the merge overlapping episodes bit.
-  group_by(chi) %>%
-  arrange(chi, record_keydate1, record_keydate2) %>%
-  mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
+  dplyr::group_by(chi) %>%
+  dplyr::arrange(chi, record_keydate1, record_keydate2) %>%
+  dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
-  ungroup() %>%
+  dplyr::ungroup() %>%
   as_tibble() %>%
   View()
 
 # Where it's a duplicate except for an overlapping time flag it.
-mutate(to_merge = if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
+dplyr::mutate(to_merge = dplyr::if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
   # Repeat in the other direction so both records are flagged to be merged.
   #### CHECK HERE #### Is lead the right thing to do here in R to go the opposite direction?
-  mutate(to_merge = if_else(
+  dplyr::mutate(to_merge = dplyr::if_else(
     guid == lead(guid) & chi == lead(chi) & record_keydate2 > record_keydate1 &
       smrtype == lead(smrtype) & location == lead(location), 1, to_merge
   )) %>%
   # Create counters for unique consultations.
-  arrange(guid, chi, record_keydate1, record_keydate2) %>%
-  group_by(chi, guid) %>%
-  mutate(
-    counter = as.double(row_number())
+  dplyr::arrange(guid, chi, record_keydate1, record_keydate2) %>%
+  dplyr::group_by(chi, guid) %>%
+  dplyr::mutate(
+    counter = as.double(dplyr::row_number())
   ) %>%
   # If we've identified them as duplicates needing merged set the counter to indicate this.
-  mutate(counter = if_else(to_merge == 1, 0, counter)) %>%
-  ungroup() %>%
+  dplyr::mutate(counter = dplyr::if_else(to_merge == 1, 0, counter)) %>%
+  dplyr::ungroup() %>%
   # Aggregate data
-  group_by(
+  dplyr::group_by(
     guid,
     chi,
     attendance_status,
@@ -341,7 +365,7 @@ mutate(to_merge = if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
     smrtype,
     counter
   ) %>%
-  summarise(
+  dplyr::summarise(
     hbrescode = last(hbrescode),
     datazone = last(datazone),
     hscp = last(hscp),
@@ -352,20 +376,20 @@ mutate(to_merge = if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
     record_keydate1 = min(record_keydate1),
     record_keydate2 = max(record_keydate2)
   ) %>%
-  ungroup()
+  dplyr::ungroup()
 
 
 # Join data ---------------------------------
 
 matched_data <- consultations_clean %>%
-  left_join(diagnosis_clean, by = "guid") %>%
-  left_join(outcomes_clean, by = "guid")
+  dplyr::left_join(diagnosis_clean, by = "guid") %>%
+  dplyr::left_join(outcomes_clean, by = "guid")
 
 # Costs ---------------------------------
 
 ooh_costs <- matched_data %>%
-  mutate(
-    hbtreatcode = case_when(
+  dplyr::mutate(
+    hbtreatcode = dplyr::case_when(
       # Recode Fife and Tayside so they match the cost lookup.
       hbtreatcode == "S08000018" ~ "S08000029",
       hbtreatcode == "S08000027" ~ "S08000030",
@@ -377,10 +401,10 @@ ooh_costs <- matched_data %>%
     ),
     year = year
   ) %>%
-  arrange(hbtreatcode, year) %>%
+  dplyr::arrange(hbtreatcode, year) %>%
   # Match to cost lookup
-  left_join(ooh_cost_lookup, by = c("hbtreatcode", "year")) %>%
-  rename(
+  dplyr::left_join(ooh_cost_lookup, by = c("hbtreatcode", "year")) %>%
+  dplyr::rename(
     cost_total_net = cost_per_consultation
   ) %>%
   create_day_episode_costs(record_keydate1, cost_total_net)
@@ -390,17 +414,17 @@ ooh_costs <- matched_data %>%
 
 ooh_clean <- ooh_costs %>%
   # rename outcomes
-  rename(
+  dplyr::rename(
     ooh_outcome.1 = outcome.1,
     ooh_outcome.2 = outcome.2,
     ooh_outcome.3 = outcome.3,
     ooh_outcome.4 = outcome.4
   ) %>%
-  mutate(
+  dplyr::mutate(
     # Replace location unknown with blank. Should this be NA?
-    location = if_else(location == "UNKNOWN", "", location),
+    location = dplyr::if_else(location == "UNKNOWN", "", location),
     recid = "OoH",
-    smrtype = case_when(
+    smrtype = dplyr::case_when(
       smrtype == "DISTRICT NURSE" ~ "OOH-DN",
       smrtype == "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
       smrtype == "HOME VISIT" ~ "OOH-HomeV",
@@ -408,7 +432,7 @@ ooh_clean <- ooh_costs %>%
       smrtype == "PCEC/PCC" ~ "OOH-PCC",
       TRUE ~ "OOH-Other"
     ),
-    kis_accessed = case_when(
+    kis_accessed = dplyr::case_when(
       kis_accessed == "Y" ~ 1,
       kis_accessed == "N" ~ 0,
       TRUE ~ 9
@@ -416,7 +440,7 @@ ooh_clean <- ooh_costs %>%
   ) %>%
   convert_eng_gpprac_to_dummy(gpprac) %>%
   # split time from date
-  mutate(
+  dplyr::mutate(
     key_time1 = hms::as_hms(substr(record_keydate1, 12, 19)),
     key_time2 = hms::as_hms(substr(record_keydate2, 12, 19)),
     record_keydate1 = substr(record_keydate1, 1, 10),
@@ -425,23 +449,23 @@ ooh_clean <- ooh_costs %>%
 
 # Keep the location descriptions as a lookup.
 location_lookup <- ooh_clean %>%
-  group_by(location) %>%
-  summarise(
-    location_description = first(location_description)
+  dplyr::group_by(location) %>%
+  dplyr::summarise(
+    location_description = dplyr::first(location_description)
   ) %>%
-  ungroup()
+  dplyr::ungroup()
 
 ooh_clean <- ooh_clean %>%
-  arrange(guid, chi) %>%
+  dplyr::arrange(guid, chi) %>%
   # group for getting row order
-  group_by(guid, chi) %>%
-  mutate(
-    row_order = row_number(),
+  dplyr::group_by(guid, chi) %>%
+  dplyr::mutate(
+    row_order = dplyr::row_number(),
     ooh_cc = 0,
-    ooh_cc = case_when(
-      ooh_cc == 0 & row_order == 1 | chi != lag(chi, default = first(chi)) ~ 1,
-      ooh_cc == 0 & guid != lag(guid) ~ lag(ooh_cc, default = first(ooh_cc)) + 1,
-      ooh_cc == 0 ~ lag(ooh_cc, default = first(ooh_cc))
+    ooh_cc = dplyr::case_when(
+      ooh_cc == 0 & row_order == 1 | chi != lag(chi, default = dplyr::first(chi)) ~ 1,
+      ooh_cc == 0 & guid != lag(guid) ~ lag(ooh_cc, default = dplyr::first(ooh_cc)) + 1,
+      ooh_cc == 0 ~ lag(ooh_cc, default = dplyr::first(ooh_cc))
     )
   )
 
@@ -449,49 +473,49 @@ ooh_clean <- ooh_clean %>%
 ## Save Outfile -------------------------------------
 
 outfile <- ooh_clean %>%
-  arrange(
+  dplyr::arrange(
     chi,
     record_keydate1,
     key_time1
+  ) %>%
+  dplyr::select(
+    year,
+    recid,
+    smrtype,
+    record_keydate1,
+    record_keydate2,
+    key_time1,
+    key_time2,
+    chi,
+    gender,
+    dob,
+    age,
+    gpprac,
+    postcode,
+    hbrescode,
+    datazone,
+    hscp,
+    hbtreatcode,
+    location,
+    attendance_status,
+    kis_Accessed,
+    refsource,
+    contains("diag"),
+    contains("ooh_outcome"),
+    cost_total_net,
+    apr_cost,
+    may_cost,
+    jun_cost,
+    jul_cost,
+    aug_cost,
+    sep_cost,
+    oct_cost,
+    nov_cost,
+    dec_cost,
+    jan_cost,
+    feb_cost,
+    mar_cost,
+    ooh_CC
   )
-select(
-  year,
-  recid,
-  smrtype,
-  record_keydate1,
-  record_keydate2,
-  key_time1,
-  key_time2,
-  chi,
-  gender,
-  dob,
-  age,
-  gpprac,
-  postcode,
-  hbrescode,
-  datazone,
-  hscp,
-  hbtreatcode,
-  location,
-  attendance_status,
-  kis_Accessed,
-  refsource,
-  contains("diag"),
-  contains("ooh_outcome"),
-  cost_total_net,
-  apr_cost,
-  may_cost,
-  jun_cost,
-  jul_cost,
-  aug_cost,
-  sep_cost,
-  oct_cost,
-  nov_cost,
-  dec_cost,
-  jan_cost,
-  feb_cost,
-  mar_cost,
-  ooh_CC
-)
 
 # End of Script #
