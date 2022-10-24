@@ -7,11 +7,15 @@
 #'
 #' @export
 #'
-run_data_social_care <- function(write_to_disk = FALSE) {
+run_data_social_care <- function(sc_demographics = [data list], write_to_disk = FALSE) {
   process_social_care <- list(
     "care_home" = process_sc_all_care_home(write_to_disk = write_to_disk),
-    "home_care" = process_sc_all_home_care(write_to_disk = write_to_disk),
-    "alarms_telecare" = process_sc_all_alarms_telecare(write_to_disk = write_to_disk),
+    "home_care" = process_sc_all_home_care(read_sc_all_home_care(),
+                                           sc_demographics = sc_demographics,
+                                           write_to_disk = write_to_disk),
+    "alarms_telecare" = process_sc_all_alarms_telecare(read_sc_all_alarms_telecare(),
+                                                       sc_demographics = sc_demographics,
+                                                       write_to_disk = write_to_disk),
     "sds" = process_sc_all_sds(write_to_disk = write_to_disk)
   )
 
