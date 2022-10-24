@@ -27,8 +27,8 @@ process_sc_all_home_care <- function(data, write_to_disk = TRUE) {
   period_dates <- matched_hc_data %>%
     dplyr::distinct(.data$period) %>%
     dplyr::mutate(
-      record_date = lubridate::yq(.data$period) %m+% lubridate::period(6, "months") %m-% lubridate::days(1),
-      qtr_start = lubridate::yq(.data$period) %m+% lubridate::period(3, "months")
+      record_date = end_fy_quarter(period),
+      qtr_start = start_fy_quarter(period)
     )
 
   home_care_clean <- matched_hc_data %>%
