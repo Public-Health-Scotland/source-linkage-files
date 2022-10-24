@@ -1,13 +1,13 @@
-#' Alarms Telecare Episodes File Path
+#' Alarms and Telecare Episodes File Path
 #'
-#' @description Get the file path for Alarms Telecare all episodes file
+#' @description Get the file path for Alarms and Telecare all episodes file
 #'
 #' @param update The update month to use,
 #' defaults to [latest_update()]
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the alarms telecare episodes file as an [fs::path()]
+#' @return The path to the alarms and telecare episodes file as an [fs::path()]
 #' @export
 #' @family social care episodes file paths
 #' @seealso [get_file_path()] for the generic function.

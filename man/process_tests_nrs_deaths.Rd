@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_nrs_deaths.R
 \name{process_tests_nrs_deaths}
 \alias{process_tests_nrs_deaths}
-\title{Process NRS deaths tests}
+\title{Process National Records of Scotland (NRS) deaths tests}
 \usage{
 process_tests_nrs_deaths(data, year)
 }
@@ -15,6 +15,6 @@ process_tests_nrs_deaths(data, year)
 a csv document containing tests for extracts
 }
 \description{
-This script takes the processed nrs deaths extract and produces
+This script takes the processed NRS deaths extract and produces
 a test comparison with the previous data. This is written to disk as a csv.
 }

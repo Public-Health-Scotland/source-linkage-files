@@ -1,7 +1,7 @@
-#' Process the CMH extract
+#' Process the Community Mental Health (CMH) extract
 #'
 #' @description This will read and process the
-#' cmh extract, it will return the final data
+#' CMH extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
 #' @param data The extract to process
