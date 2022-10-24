@@ -15,11 +15,6 @@
 #####################################################
 
 # Load Packages
-library(dplyr)
-library(readr)
-library(stringr)
-library(tidyr)
-library(lubridate)
 library(createslf)
 
 
@@ -45,11 +40,11 @@ ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path()) %>%
 # Diagnosis Data ---------------------------------
 
 ## Load extract file
-diagnosis_extract <- read_csv(
+diagnosis_extract <- readr::read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-d"),
-  col_types = cols(
+  col_types = readr::cols(
     # All columns are character type
-    .default = col_character()
+    .default = readr::col_character()
   )
 ) %>%
   # rename variables
@@ -58,7 +53,7 @@ diagnosis_extract <- read_csv(
     readcode = `Diagnosis Code`,
     description = `Diagnosis Description`
   ) %>%
-  drop_na(readcode) %>%
+  tidyr::drop_na(readcode) %>%
   dplyr::distinct()
 
 
@@ -67,23 +62,12 @@ diagnosis_extract <- read_csv(
 diagnosis_readcodes <- diagnosis_extract %>%
   dplyr::mutate(
     # Replace question marks with dot
-    readcode = str_replace_all(readcode, "\\?", "\\."),
+    readcode = stringr::str_replace_all(readcode, "\\?", "\\."),
     # Pad with dots up to 5 charaters
-    readcode = str_pad(readcode, 5, "right", ".")
+    readcode = stringr::str_pad(readcode, 5, "right", ".")
   ) %>%
   # Join diagnosis to readcode lookup
   # Identify diagnosis descriptions which match the readcode lookup
-<<<<<<< HEAD
-  left_join(
-    readcode_lookup %>%
-      mutate(full_match_1 = 1L),
-    by = c("readcode", "description")
-  ) %>%
-  # match on true description from readcode lookup
-  left_join(
-    readcode_lookup %>%
-      rename(true_description = description),
-=======
   dplyr::left_join(
     readcode_lookup %>%
       dplyr::mutate(full_match_1 = 1L),
@@ -93,7 +77,6 @@ diagnosis_readcodes <- diagnosis_extract %>%
   dplyr::left_join(
     readcode_lookup %>%
       dplyr::rename(true_description = description),
->>>>>>> 19db6531 (Don't require loading dplyr)
     by = c("readcode")
   ) %>%
   # replace description with true description from readcode lookup if this is different
@@ -101,15 +84,9 @@ diagnosis_readcodes <- diagnosis_extract %>%
     true_description, description
   )) %>%
   # Join to readcode lookup again to check
-<<<<<<< HEAD
-  left_join(
-    readcode_lookup %>%
-      mutate(full_match_2 = 1L),
-=======
   dplyr::left_join(
     readcode_lookup %>%
       dplyr::mutate(full_match_2 = 1L),
->>>>>>> 19db6531 (Don't require loading dplyr)
     by = c("readcode", "description")
   ) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
@@ -121,34 +98,28 @@ diagnosis_readcodes <- diagnosis_extract %>%
     TRUE ~ readcode
   ), readcode)) %>%
   # Join to readcode lookup again to check
-<<<<<<< HEAD
-  left_join(
-    readcode_lookup %>%
-      mutate(full_match_final = 1L),
-=======
   dplyr::left_join(
     readcode_lookup %>%
       dplyr::mutate(full_match_final = 1L),
->>>>>>> 19db6531 (Don't require loading dplyr)
     by = c("readcode", "description")
   )
 
 # See how the code above performed
 diagnosis_readcodes %>%
-  dplyr::count(full_match_1, full_match_2, full_match_final) %>%
-  print()
+  dplyr::count(full_match_1, full_match_2, full_match_final)
 
 # Check any readcodes which are still not matching the lookup
 readcodes_not_matched <- diagnosis_readcodes %>%
   dplyr::filter(is.na(full_match_final)) %>%
   dplyr::count(readcode, description, sort = TRUE)
 
-print(readcodes_not_matched)
+readcodes_not_matched
 
 # Give an error if any new 'bad' readcodes come up.
 unrecognised_but_ok_codes <- c("@1JX.", "@1JXz", "@43jS", "@65PW", "@8CA.", "@8CAK", "@A795")
 
-new_bad_codes <- readcodes_not_matched %>% dplyr::filter(!(readcode %in% unrecognised_but_ok_codes))
+new_bad_codes <- readcodes_not_matched %>%
+  dplyr::filter(!(readcode %in% unrecognised_but_ok_codes))
 
 if (nrow(new_bad_codes) != 0) {
   cli::cli_abort(c("New unrecognised readcodes",
@@ -177,7 +148,7 @@ diagnosis_clean <- diagnosis_readcodes %>%
   dplyr::ungroup() %>%
   dplyr::select(-readcode_level) %>%
   # restructure data
-  pivot_wider(
+  tidyr::pivot_wider(
     names_from = diag_n,
     values_from = c(readcode, description),
     names_glue = "{.value}_{diag_n}"
@@ -194,18 +165,18 @@ diagnosis_clean <- diagnosis_readcodes %>%
       "diag_6"
     ))
   ) %>%
-  as_tibble()
+  tibble::as_tibble()
 
 rm(diagnosis_extract, diagnosis_readcodes)
 
 # Outcomes Data ---------------------------------
 
 ## Load extract file
-outcomes_extract <- read_csv(
+outcomes_extract <- readr::read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-o"),
-  col_types = cols(
+  col_types = readr::cols(
     # All columns are character type
-    .default = col_character()
+    .default = readr::col_character()
   )
 ) %>%
   # rename variables
@@ -222,7 +193,7 @@ outcomes_clean <- outcomes_extract %>%
   dtplyr::lazy_dt() %>%
   # Recode outcome
   dplyr::mutate(
-    outcome = recode(outcome,
+    outcome = dplyr::recode(outcome,
       "DEATH" = "00",
       "999/AMBULANCE" = "01",
       "EMERGENCY ADMISSION" = "02",
@@ -242,7 +213,7 @@ outcomes_clean <- outcomes_extract %>%
   dplyr::mutate(outcome_n = dplyr::row_number()) %>%
   dplyr::ungroup() %>%
   # use row order to pivot outcomes
-  pivot_wider(
+  tidyr::pivot_wider(
     names_from = outcome_n,
     names_prefix = "outcome_",
     values_from = outcome
@@ -256,14 +227,14 @@ outcomes_clean <- outcomes_extract %>%
       "outcome_4"
     ))
   ) %>%
-  as_tibble()
+  tibble::as_tibble()
 
 rm(outcomes_extract)
 
 # Consultations Data---------------------------------
 
 # Read consultations data
-consultations_file <- read_csv(
+consultations_file <- readr::read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-c"),
   col_types = cols(
     `UPI Number [C]` = col_character(),
@@ -332,7 +303,7 @@ consultations_clean <- consultations_file %>%
   dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
   dplyr::ungroup() %>%
-  as_tibble() %>%
+  tidyr::as_tibble() %>%
   View()
 
 # Where it's a duplicate except for an overlapping time flag it.
@@ -436,15 +407,15 @@ ooh_clean <- ooh_costs %>%
       kis_accessed == "Y" ~ 1,
       kis_accessed == "N" ~ 0,
       TRUE ~ 9
-    )
+    ),
+    gpprac = convert_eng_gpprac_to_dummy(gpprac)
   ) %>%
-  convert_eng_gpprac_to_dummy(gpprac) %>%
   # split time from date
   dplyr::mutate(
-    key_time1 = hms::as_hms(substr(record_keydate1, 12, 19)),
-    key_time2 = hms::as_hms(substr(record_keydate2, 12, 19)),
-    record_keydate1 = substr(record_keydate1, 1, 10),
-    record_keydate2 = substr(record_keydate2, 1, 10)
+    key_time1 = hms::as_hms(stringr::str_sub(record_keydate1, 12L, 19L)),
+    key_time2 = hms::as_hms(stringr::str_sub(record_keydate2, 12L, 19L)),
+    record_keydate1 = stringr::str_sub(record_keydate1, 1L, 10L),
+    record_keydate2 = stringr::str_sub(record_keydate2, 1L, 10L)
   )
 
 # Keep the location descriptions as a lookup.
