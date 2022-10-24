@@ -5,17 +5,21 @@
 #' but also write this out as a rds.
 #'
 #' @param data The extract to process
+#' @param sc_demographics The sc demographics lookup. Default set to NULL as
+#' we can pass this through data in the environment.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
-process_sc_all_home_care <- function(data, write_to_disk = TRUE) {
-  # Match on demographic data ---------------------------------------
+process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
 
-  # read in demographic data
-  sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
+  # Match on demographic data ---------------------------------------
+  if (is.null(sc_demographics)) {
+    # read in demographic data
+    sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
+  }
 
   matched_hc_data <- data %>%
     dplyr::left_join(sc_demog, by = c("sending_location", "social_care_id"))
@@ -27,8 +31,8 @@ process_sc_all_home_care <- function(data, write_to_disk = TRUE) {
   period_dates <- matched_hc_data %>%
     dplyr::distinct(.data$period) %>%
     dplyr::mutate(
-      record_date = end_fy_quarter(period),
-      qtr_start = start_fy_quarter(period)
+      record_date = end_fy_quarter(.data$period),
+      qtr_start = start_fy_quarter(.data$period)
     )
 
   home_care_clean <- matched_hc_data %>%

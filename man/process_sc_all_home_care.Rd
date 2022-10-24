@@ -4,10 +4,13 @@
 \alias{process_sc_all_home_care}
 \title{Process the all home care extract}
 \usage{
-process_sc_all_home_care(data, write_to_disk = TRUE)
+process_sc_all_home_care(data, sc_demographics = NULL, write_to_disk = TRUE)
 }
 \arguments{
 \item{data}{The extract to process}
+
+\item{sc_demographics}{The sc demographics lookup. Default set to NULL as
+we can pass this through data in the environment.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
