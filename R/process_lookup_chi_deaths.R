@@ -13,7 +13,6 @@
 #' @family process extracts
 
 process_lookup_chi_deaths <- function(data, write_to_disk = TRUE) {
-
   # Data Cleaning------------------------------------------------------
 
   # One record per chi

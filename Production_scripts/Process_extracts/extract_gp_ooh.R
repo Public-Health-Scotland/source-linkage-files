@@ -73,23 +73,26 @@ diagnosis_readcodes <- diagnosis_extract %>%
   ) %>%
   # Join diagnosis to readcode lookup
   # Identify diagnosis descriptions which match the readcode lookup
-  left_join(readcode_lookup %>%
-    mutate(full_match_1 = 1L),
-  by = c("readcode", "description")
+  left_join(
+    readcode_lookup %>%
+      mutate(full_match_1 = 1L),
+    by = c("readcode", "description")
   ) %>%
   # match on true description from readcode lookup
-  left_join(readcode_lookup %>%
-    rename(true_description = description),
-  by = c("readcode")
+  left_join(
+    readcode_lookup %>%
+      rename(true_description = description),
+    by = c("readcode")
   ) %>%
   # replace description with true description from readcode lookup if this is different
   mutate(description = if_else(is.na(full_match_1) & !is.na(true_description),
     true_description, description
   )) %>%
   # Join to readcode lookup again to check
-  left_join(readcode_lookup %>%
-    mutate(full_match_2 = 1L),
-  by = c("readcode", "description")
+  left_join(
+    readcode_lookup %>%
+      mutate(full_match_2 = 1L),
+    by = c("readcode", "description")
   ) %>%
   # Check the output for any dodgy Read codes and try and fix by adding exceptions
   mutate(readcode = if_else(is.na(full_match_2), case_when(
@@ -100,9 +103,10 @@ diagnosis_readcodes <- diagnosis_extract %>%
     TRUE ~ readcode
   ), readcode)) %>%
   # Join to readcode lookup again to check
-  left_join(readcode_lookup %>%
-    mutate(full_match_final = 1L),
-  by = c("readcode", "description")
+  left_join(
+    readcode_lookup %>%
+      mutate(full_match_final = 1L),
+    by = c("readcode", "description")
   )
 
 # See how the code above performed
