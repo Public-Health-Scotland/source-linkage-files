@@ -14,11 +14,10 @@
 #' @family process extracts
 #'
 process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
-
   # Read Demographic file----------------------------------------------------
-if (is.null(sc_demographics)) {
-  sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
-}
+  if (is.null(sc_demographics)) {
+    sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
+  }
 
   ## Data Cleaning-----------------------------------------------------
 
