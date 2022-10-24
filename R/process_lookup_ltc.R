@@ -9,7 +9,6 @@
 #' @export
 #'
 process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
-
   # Create LTC flags 1/0------------------------------------
 
   # Set flags to 1 or 0 based on FY
