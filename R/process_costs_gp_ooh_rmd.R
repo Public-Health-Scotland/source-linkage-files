@@ -8,7 +8,7 @@
 #'
 process_costs_gp_ooh_rmd <- function() {
   rmarkdown::render(
-    input = "gp_ooh_costs.Rmd",
+    input = "Rmarkdown/gp_ooh_costs.Rmd",
     output_file = "gp_ooh_costs.html"
   )
 
