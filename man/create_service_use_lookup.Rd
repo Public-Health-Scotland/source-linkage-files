@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_service_use_lookup.R
 \name{create_service_use_lookup}
 \alias{create_service_use_lookup}
-\title{Title Create the Service Use Cohort lookup file}
+\title{Create the Service Use Cohort lookup file}
 \usage{
 create_service_use_lookup(data, year, write_to_disk = TRUE)
 }
@@ -11,13 +11,14 @@ create_service_use_lookup(data, year, write_to_disk = TRUE)
 
 \item{year}{The financial year}
 
-\item{write_to_disk}{Default \link{TRUE}}
+\item{write_to_disk}{Default \code{TRUE}, will write the lookup to the
+Cohorts folder defined by \link{get_slf_dir}}
 }
 \value{
-Either save out a copy of the lookup, or return it for checks
+The Service Use lookup file
 }
 \description{
-Title Create the Service Use Cohort lookup file
+Create the Service Use Cohort lookup file
 }
 \seealso{
 \itemize{\item \code{\link[=create_service_costs]{create_service_costs()}}
