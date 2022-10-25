@@ -1,10 +1,11 @@
-#' Title Create the Service Use Cohort lookup file
+#' Create the Service Use Cohort lookup file
 #'
 #' @param data A data frame
 #' @param year The financial year
-#' @param write_to_disk Default [TRUE]
+#' @param write_to_disk Default `TRUE`, will write the lookup to the
+#' Cohorts folder defined by [get_slf_dir]
 #'
-#' @return Either save out a copy of the lookup, or return it for checks
+#' @return The Service Use lookup file
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
