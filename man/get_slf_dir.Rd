@@ -10,7 +10,8 @@ get_slf_dir()
 The path to the main SLF Extracts folder
 }
 \description{
-File path for the general SLF directory for accessing HSCDIIP folders/files
+File path for the general SLF directory for accessing HSCDIIP
+folders/files
 }
 \seealso{
 Other directories: 
