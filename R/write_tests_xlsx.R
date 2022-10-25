@@ -15,7 +15,7 @@
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
-write_tests_xlsx <- function(comparison_data, sheet_name, year) {
+write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   # Set up the workbook -----------------------------------------------------
 
   source_tests_path <- fs::path(
@@ -34,7 +34,11 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
 
   # add a new sheet for tests
   date_today <- format(Sys.Date(), "%d_%b")
-  sheet_name_dated <- glue::glue("{year}_{sheet_name}_{date_today}")
+  sheet_name_dated <- ifelse(
+    is_missing(year),
+    glue::glue("{sheet_name}_{date_today}"),
+    glue::glue("{year}_{sheet_name}_{date_today}")
+  )
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {
