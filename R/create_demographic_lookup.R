@@ -12,14 +12,17 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
-
-  check_variables_exist(data,
-                        c("chi", "cij_marker" ,"recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6", "age", "sigfac", "spec",
-                          "dementia", "hefailure", "refailure", "liver", "cancer", "cvd", "copd", "chd", "parkinsons", "ms",
-                          "epilepsy", "asthma", "arth", "diabetes", "atrialfib", "cost_total_net",
-                          "deathdiag1", "deathdiag2", "deathdiag3", "deathdiag4", "deathdiag5",
-                          "deathdiag6", "deathdiag7", "deathdiag8", "deathdiag9", "deathdiag10",
-                          "deathdiag11"))
+  check_variables_exist(
+    data,
+    c(
+      "chi", "cij_marker", "recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6", "age", "sigfac", "spec",
+      "dementia", "hefailure", "refailure", "liver", "cancer", "cvd", "copd", "chd", "parkinsons", "ms",
+      "epilepsy", "asthma", "arth", "diabetes", "atrialfib", "cost_total_net",
+      "deathdiag1", "deathdiag2", "deathdiag3", "deathdiag4", "deathdiag5",
+      "deathdiag6", "deathdiag7", "deathdiag8", "deathdiag9", "deathdiag10",
+      "deathdiag11"
+    )
+  )
 
   demo_lookup <- data %>%
     # Remove missing chi
@@ -72,7 +75,6 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
   }
 
   return(demo_lookup)
-
 }
 
 #' Assign the demographic cohort variables
@@ -145,7 +147,8 @@ assign_demographic_cohort <- function(data) {
         rowSums(
           dplyr::across(
             c(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer)
-          ), na.rm = TRUE
+          ),
+          na.rm = TRUE
         ) >= 1 |
           .data$spec == "G5",
 
@@ -153,14 +156,16 @@ assign_demographic_cohort <- function(data) {
       medium_cc = rowSums(
         dplyr::across(
           c(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms)
-        ), na.rm = TRUE
+        ),
+        na.rm = TRUE
       ) >= 1,
 
       # Low CC classification
       low_cc = rowSums(
         dplyr::across(
           c(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib)
-        ), na.rm = TRUE
+        ),
+        na.rm = TRUE
       ) >= 1,
 
       # Note from SPSS: we could add CMH here
