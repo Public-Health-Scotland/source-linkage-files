@@ -22,8 +22,14 @@ Create the demographic lookup file
 \item\code{\link[=assign_substance_cohort]{assign_substance_cohort()}}}
 
 Other Demographic and Service Use Cohort functions: 
+\code{\link{assign_cohort_names}()},
 \code{\link{assign_demographic_cohort}()},
 \code{\link{assign_eol_cohort}()},
-\code{\link{assign_substance_cohort}()}
+\code{\link{assign_service_cohorts}()},
+\code{\link{assign_substance_cohort}()},
+\code{\link{calculate_service_cohort_costs}()},
+\code{\link{create_service_costs}()},
+\code{\link{create_service_instances}()},
+\code{\link{create_service_use_lookup}()}
 }
 \concept{Demographic and Service Use Cohort functions}
