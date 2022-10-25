@@ -4,7 +4,7 @@
 \alias{write_tests_xlsx}
 \title{Write out Tests}
 \usage{
-write_tests_xlsx(comparison_data, sheet_name, year)
+write_tests_xlsx(comparison_data, sheet_name, year = NULL)
 }
 \arguments{
 \item{comparison_data}{produced by \code{\link[=produce_test_comparison]{produce_test_comparison()}}}
