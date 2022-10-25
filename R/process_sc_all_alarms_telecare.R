@@ -76,8 +76,6 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%
-    # Use lazy_dt() for faster running of code
-    dtplyr::lazy_dt() %>%
     dplyr::group_by(
       .data$sending_location,
       .data$social_care_id,
@@ -122,9 +120,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
       .data$record_keydate1,
       .data$smrtype,
       .data$sc_latest_submission
-    ) %>%
-    # end of lazy_dt()
-    tibble::as_tibble()
+    )
 
   if (write_to_disk) {
     # Save .rds file ----
