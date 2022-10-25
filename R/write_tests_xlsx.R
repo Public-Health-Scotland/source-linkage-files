@@ -16,8 +16,6 @@
 #' @family test functions
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data, sheet_name, year) {
-
-
   # Set up the workbook -----------------------------------------------------
 
   source_tests_path <- fs::path(
