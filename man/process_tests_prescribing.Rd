@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_prescribing.R
 \name{process_tests_prescribing}
 \alias{process_tests_prescribing}
-\title{Process presciribing tests}
+\title{Process prescribing tests}
 \usage{
 process_tests_prescribing(data, year)
 }

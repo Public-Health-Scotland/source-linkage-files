@@ -26,6 +26,8 @@ NRS
 NSU
 OoH
 PIS
+PPA
+PPAs
 RStudio
 SDS
 SLF
@@ -61,6 +63,7 @@ smrtype
 sourcedev
 specialty
 sysmis
+telecare
 tibble
 xz
 zlib
