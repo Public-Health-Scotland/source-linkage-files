@@ -21,7 +21,7 @@ test_that("Fall codes and end_of_life_cohort are assigned correctly", {
   )
 
   expect_equal(
-    assigned_tester$end_of_life_cohort,
+    assigned_tester$end_of_life,
     c(F, F, F, F, F, T, T)
   )
 })
