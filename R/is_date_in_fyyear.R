@@ -27,7 +27,6 @@
 #'
 #' @family date functions
 is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
-
   # Check that date is the correct type
   if (!inherits(date, c("Date", "POSIXct"))) {
     cli::cli_abort(c("{.var date} must be a `Date` or `POSIXct` vector",
