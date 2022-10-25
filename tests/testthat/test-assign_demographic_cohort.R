@@ -31,59 +31,59 @@ test_that("Service use cohorts are applied correctly", {
     "01B", NA, NA, NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 0
   )
 
-  tester_assigned <- assign_service_use_cohort(tester)
+  tester_assigned <- assign_demographic_cohort(tester)
 
   # Mental health
   expect_equal(
-    tester_assigned$mh_cohort,
+    tester_assigned$mh,
     c(T, T, T, F, F, F, F, F, F, F, F, F, F, F, F, F, F)
   )
 
   # Frailty
   expect_equal(
-    tester_assigned$frail_cohort,
+    tester_assigned$frail,
     c(F, F, T, T, T, T, T, T, F, F, F, T, T, F, F, F, F)
   )
 
   # Maternity
   expect_equal(
-    tester_assigned$maternity_cohort,
+    tester_assigned$maternity,
     c(F, F, F, F, F, F, T, F, T, T, T, F, F, F, F, F, F)
   )
 
   # High_CC
   expect_equal(
-    tester_assigned$high_cc_cohort,
+    tester_assigned$high_cc,
     c(F, F, F, F, F, F, F, F, F, T, T, F, F, F, F, F, F)
   )
 
   # Medium_CC
   expect_equal(
-    tester_assigned$medium_cc_cohort,
+    tester_assigned$medium_cc,
     c(F, F, F, F, F, F, F, F, F, F, F, T, F, F, F, F, F)
   )
 
   # Low_CC
   expect_equal(
-    tester_assigned$low_cc_cohort,
+    tester_assigned$low_cc,
     c(F, F, F, F, F, F, F, F, F, F, F, F, T, F, F, F, F)
   )
 
   # Comm living (should always be F until we add this cohort)
   expect_equal(
-    tester_assigned$comm_living_cohort,
+    tester_assigned$comm_living,
     c(F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F)
   )
 
   # Adult major
   expect_equal(
-    tester_assigned$adult_major_cohort,
+    tester_assigned$adult_major,
     c(F, F, F, F, F, F, F, F, F, F, F, F, F, T, T, F, F)
   )
 
   # Child major
   expect_equal(
-    tester_assigned$child_major_cohort,
+    tester_assigned$child_major,
     c(F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, T, T)
   )
 })
@@ -92,5 +92,5 @@ test_that("Service use cohorts are applied correctly", {
 test_that("Errors throw as expected", {
   error_table_1 <- tibble::tribble(~recid, ~diag1, ~arth, ~fake_variable)
 
-  expect_error(assign_service_use_cohort(error_table_1), regexp = "Variables .+ are required, but are missing from `data`")
+  expect_error(assign_demographic_cohort(error_table_1), regexp = "Variables .+ are required, but are missing from `data`")
 })
