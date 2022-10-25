@@ -35,19 +35,28 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     # variables can be dealt with properly
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::summarise(
-      dplyr::across(c(
-        dplyr::contains("cohort"),
-        .data$f11, .data$t402_t404, .data$f13, .data$t424
-      ), any)
+      dplyr::across(c(mh:t424), any)
     ) %>%
     dplyr::ungroup() %>%
     # Assign drug and alcohol misuse
-    dplyr::mutate(substance_cohort = dplyr::if_else(
-      (.data$f11 & .data$t402_t404) | (.data$f13 & .data$t424), TRUE, .data$substance_cohort
+    dplyr::mutate(substance = dplyr::if_else(
+      (.data$f11 & .data$t402_t404) | (.data$f13 & .data$t424), TRUE, .data$substance
     )) %>%
     # Aggregate to CHI level
     dplyr::group_by(.data$chi) %>%
-    dplyr::summarise(dplyr::across(c(dplyr::contains("cohort")), any)) %>%
+    dplyr::summarise(dplyr::across(c(
+      mh,
+      frail,
+      maternity,
+      high_cc,
+      medium_cc,
+      low_cc,
+      comm_living,
+      adult_major,
+      child_major,
+      end_of_life,
+      substance
+    ), any)) %>%
     dplyr::ungroup() %>%
     # Assign demographic_cohort based on hierarchy of each cohort
     dplyr::mutate(demographic_cohort = dplyr::case_when(
@@ -186,7 +195,8 @@ assign_demographic_cohort <- function(data) {
 
       # Make sure any cohorts not assigned return FALSE
       dplyr::across(.data$mh:.data$child_major, ~ tidyr::replace_na(., FALSE))
-    )
+    ) %>%
+    dplyr::select(-prescribing_cost)
 
   return(return_data)
 }
@@ -246,7 +256,7 @@ assign_substance_cohort <- function(data) {
 
   return_data <- data %>%
     dplyr::mutate(
-      substance_cohort =
+      substance =
       # FOR FUTURE, DrugsandAlcoholClientGroup = 'Y'
       # Alcohol codes
         .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
@@ -255,7 +265,6 @@ assign_substance_cohort <- function(data) {
             ~ stringr::str_sub(.x, 1, 3) %in%
               c("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91")
           )) > 0 |
-          # Drug codes
           .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
             rowSums(dplyr::across(
               c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
@@ -264,6 +273,19 @@ assign_substance_cohort <- function(data) {
                   "E244", "E512", "G312", "G621", "G721", "I426", "K292", "K860", "O354", "P043",
                   "Q860", "T510", "T511", "T519", "Y573", "R780", "Z502", "Z714", "Z721", "K852"
                 )
+            )) > 0 |
+          # Drug codes
+          .data$recid %in% c("01B", "04B") &
+            rowSums(dplyr::across(
+              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+              ~ stringr::str_sub(.x, 1, 3) %in%
+                c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19")
+            )) > 0 |
+          .data$recid %in% c("01B", "04B") &
+            rowSums(dplyr::across(
+              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+              ~ stringr::str_sub(.x, 1, 4) %in%
+                c("T400", "T401", "T403", "T405", "T406", "T407", "T408", "T409", "T436")
             )) > 0,
       # Some drug codes only count If other code present in CIJ
       # i.e. T402/T404 only If F11 and T424 only If F13.
