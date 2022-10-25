@@ -113,6 +113,10 @@ matched_costs_data %>%
     values_from = "pct_diff"
   )
 
+# Save .rds file
+ch_costs_uplifted %>%
+  write_rds(get_ch_costs_path(check_mode = "write"))
+
 ```
 
 # Graph showing the cost difference between new and old costs 
