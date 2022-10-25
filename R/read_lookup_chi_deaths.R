@@ -9,7 +9,6 @@
 #' @family process extracts
 
 read_lookup_chi_deaths <- function() {
-
   # Read data -------------------------------------------------------
   deaths_data <- readr::read_csv(
     file = get_it_deaths_path(),

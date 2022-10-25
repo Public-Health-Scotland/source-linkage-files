@@ -91,53 +91,55 @@ client_clean <-
   )) %>%
   ungroup() %>%
   # recode missing with values
-  mutate(across(
-    c(
-      .data$support_from_unpaid_carer,
-      .data$social_worker,
-      .data$meals,
-      .data$living_alone,
-      .data$day_care
+  mutate(
+    across(
+      c(
+        .data$support_from_unpaid_carer,
+        .data$social_worker,
+        .data$meals,
+        .data$living_alone,
+        .data$day_care
+      ),
+      replace_na, 9
     ),
-    replace_na, 9
-  ),
-  type_of_housing = replace_na(.data$type_of_housing, 6)
+    type_of_housing = replace_na(.data$type_of_housing, 6)
   ) %>%
   # factor labels
-  mutate(across(
-    c(
-      .data$dementia,
-      .data$mental_health_problems,
-      .data$learning_disability,
-      .data$physical_and_sensory_disability,
-      .data$drugs,
-      .data$alcohol,
-      .data$palliative_care,
-      .data$carer,
-      .data$elderly_frail,
-      .data$neurological_condition,
-      .data$autism,
-      .data$other_vulnerable_groups
+  mutate(
+    across(
+      c(
+        .data$dementia,
+        .data$mental_health_problems,
+        .data$learning_disability,
+        .data$physical_and_sensory_disability,
+        .data$drugs,
+        .data$alcohol,
+        .data$palliative_care,
+        .data$carer,
+        .data$elderly_frail,
+        .data$neurological_condition,
+        .data$autism,
+        .data$other_vulnerable_groups
+      ),
+      factor,
+      levels = c(0, 1),
+      labels = c("No", "Yes")
     ),
-    factor,
-    levels = c(0, 1),
-    labels = c("No", "Yes")
-  ),
-  across(
-    c(
-      .data$living_alone,
-      .data$support_from_unpaid_carer,
-      .data$social_worker,
-      .data$meals,
-      .data$day_care
+    across(
+      c(
+        .data$living_alone,
+        .data$support_from_unpaid_carer,
+        .data$social_worker,
+        .data$meals,
+        .data$day_care
+      ),
+      factor,
+      levels = c(0, 1, 9),
+      labels = c("No", "Yes", "Not Known")
     ),
-    factor,
-    levels = c(0, 1, 9),
-    labels = c("No", "Yes", "Not Known")
-  ),
-  type_of_housing = factor(.data$type_of_housing,
-    levels = c(1:6)
-  )
+    type_of_housing = factor(.data$type_of_housing,
+      levels = c(1:6)
+    )
   ) %>%
   # rename variables
   rename_with(
