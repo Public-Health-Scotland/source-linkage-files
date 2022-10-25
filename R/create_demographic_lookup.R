@@ -12,6 +12,15 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
+
+  check_variables_exist(data,
+                        c("chi", "cij_marker" ,"recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6", "age", "sigfac", "spec",
+                          "dementia", "hefailure", "refailure", "liver", "cancer", "cvd", "copd", "chd", "parkinsons", "ms",
+                          "epilepsy", "asthma", "arth", "diabetes", "atrialfib", "cost_total_net",
+                          "deathdiag1", "deathdiag2", "deathdiag3", "deathdiag4", "deathdiag5",
+                          "deathdiag6", "deathdiag7", "deathdiag8", "deathdiag9", "deathdiag10",
+                          "deathdiag11"))
+
   demo_lookup <- data %>%
     # Remove missing chi
     dplyr::filter(!is_missing(.data$chi)) %>%
@@ -21,7 +30,6 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     assign_substance_cohort() %>%
     # Aggregate to cij level, specifically so that the drug and alcohol misuse
     # variables can be dealt with properly
-    # dtplyr::lazy_dt() %>%
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::summarise(
       dplyr::across(c(
@@ -30,19 +38,14 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
       ), any)
     ) %>%
     dplyr::ungroup() %>%
-    # tibble::as_tibble() %>%
     # Assign drug and alcohol misuse
     dplyr::mutate(substance_cohort = dplyr::if_else(
       (.data$f11 & .data$t402_t404) | (.data$f13 & .data$t424), TRUE, .data$substance_cohort
     )) %>%
     # Aggregate to CHI level
-    # dtplyr::lazy_dt() %>%
     dplyr::group_by(.data$chi) %>%
     dplyr::summarise(dplyr::across(c(dplyr::contains("cohort")), any)) %>%
     dplyr::ungroup() %>%
-    # tibble::as_tibble() %>%
-    # Rename variables
-    dplyr::rename_with(~ stringr::str_sub(.x, end = -8), dplyr::ends_with("_cohort")) %>%
     # Assign demographic_cohort based on hierarchy of each cohort
     dplyr::mutate(demographic_cohort = dplyr::case_when(
       end_of_life ~ "End of Life",
@@ -66,9 +69,10 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     write_rds(demo_lookup,
       path = glue::glue("{get_slf_dir()}/Cohorts/Demographic_Cohorts_{year}.rds")
     )
-  } else {
-    return(demo_lookup)
   }
+
+  return(demo_lookup)
+
 }
 
 #' Assign the demographic cohort variables
@@ -92,7 +96,7 @@ assign_demographic_cohort <- function(data) {
     # Mental Health classification
     # FOR FUTURE: when variable MentalHealthProblemsClientGroup exists and is "Y", mh_cohort = TRUE
     dplyr::mutate(
-      mh_cohort =
+      mh =
         .data$recid == "04B" |
 
           (.data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
@@ -109,7 +113,7 @@ assign_demographic_cohort <- function(data) {
       # Frailty classification
       # FOR FUTURE: when variable ElderlyFrailClientGroup exists and is "Y", frail_cohort = TRUE,
       # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
-      frail_cohort =
+      frail =
         .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
           (rowSums(dplyr::across(
             c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
@@ -131,32 +135,32 @@ assign_demographic_cohort <- function(data) {
             .data$recid == "GLS"),
 
       # Maternity classification
-      maternity_cohort = .data$recid == "02B",
+      maternity = .data$recid == "02B",
 
       # High CC classification
       # FOR FUTURE: PhysicalandSensoryDisabilityClientGroup or LearningDisabilityClientGroup = "Y",
       # then high_cc_cohort = TRUE
       # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
-      high_cc_cohort =
+      high_cc =
         rowSums(
           dplyr::across(
             c(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer)
-          )
+          ), na.rm = TRUE
         ) >= 1 |
           .data$spec == "G5",
 
       # Medium CC classification
-      medium_cc_cohort = rowSums(
+      medium_cc = rowSums(
         dplyr::across(
           c(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms)
-        )
+        ), na.rm = TRUE
       ) >= 1,
 
       # Low CC classification
-      low_cc_cohort = rowSums(
+      low_cc = rowSums(
         dplyr::across(
           c(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib)
-        )
+        ), na.rm = TRUE
       ) >= 1,
 
       # Note from SPSS: we could add CMH here
@@ -164,19 +168,19 @@ assign_demographic_cohort <- function(data) {
       # Assisted living in the Community
       # Not using this cohort until we have more datasets and Scotland complete DN etc.
       # Code: .data$recid %in% c('HC-', 'HC + ', "RSP", "DN", "MLS", "INS", "CPL", "DC")
-      comm_living_cohort = FALSE,
+      comm_living = FALSE,
 
       # Seperate out prescribing cost for major conditions
       prescribing_cost = dplyr::if_else(.data$recid == "PIS", .data$cost_total_net, 0),
 
       # Adult Major Conditions classification
-      adult_major_cohort = .data$age >= 18 & (.data$prescribing_cost >= 500 | .data$recid == "01B"),
+      adult_major = .data$age >= 18 & (.data$prescribing_cost >= 500 | .data$recid == "01B"),
 
       # Child Major Conditions classification
-      child_major_cohort = .data$age < 18 & (.data$prescribing_cost >= 500 | .data$recid == "01B"),
+      child_major = .data$age < 18 & (.data$prescribing_cost >= 500 | .data$recid == "01B"),
 
       # Make sure any cohorts not assigned return FALSE
-      dplyr::across(.data$mh_cohort:.data$child_major_cohort, ~ tidyr::replace_na(., FALSE))
+      dplyr::across(.data$mh:.data$child_major, ~ tidyr::replace_na(., FALSE))
     )
 
   return(return_data)
@@ -197,13 +201,19 @@ assign_eol_cohort <- function(data) {
   ))
 
   external_deaths <- c(
+    # Codes V01 to V99
     glue::glue("V{stringr::str_pad(1:99, 2, 'left', '0')}"),
+    # Codes W00 to W99
     glue::glue("W{stringr::str_pad(0:99, 2, 'left', '0')}"),
+    # Codes X00 to X99
     glue::glue("X{stringr::str_pad(0:99, 2, 'left', '0')}"),
+    # Codes Y00 to Y84
     glue::glue("Y{stringr::str_pad(0:84, 2, 'left', '0')}")
   )
+  # Codes W00 to W19
   falls_codes <- c(glue::glue("W{stringr::str_pad(0:19, 2, 'left', '0')}"))
 
+  # External causes will be those codes that are in external_codes but are not in falls_codes
   return_data <- data %>% dplyr::mutate(
     external_cause = dplyr::if_else(
       rowSums(dplyr::across(dplyr::contains("deathdiag"), ~ stringr::str_sub(.x, 1, 3)
@@ -211,7 +221,8 @@ assign_eol_cohort <- function(data) {
         rowSums(dplyr::across(dplyr::contains("deathdiag"), ~ stringr::str_sub(.x, 1, 3)
         %in% falls_codes)) == 0, TRUE, NA
     ),
-    end_of_life_cohort = .data$recid == "NRS" & is.na(.data$external_cause)
+    # End of life cohort are records from NRS that are not external causes
+    end_of_life = .data$recid == "NRS" & is.na(.data$external_cause)
   )
 }
 
