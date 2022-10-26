@@ -16,7 +16,6 @@ but also write this out as a zsav and rds.
 }
 \seealso{
 Other process extracts: 
-\code{\link{process_costs_gp_ooh}()},
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_cmh}()},
@@ -33,6 +32,8 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_sc_all_alarms_telecare}()},
+\code{\link{process_sc_all_home_care}()},
 \code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}

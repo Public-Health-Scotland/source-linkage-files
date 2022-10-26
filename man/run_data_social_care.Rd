@@ -4,7 +4,7 @@
 \alias{run_data_social_care}
 \title{Run Social Care data}
 \usage{
-run_data_social_care(write_to_disk = FALSE)
+run_data_social_care(sc_demographics = data_list, write_to_disk = FALSE)
 }
 \value{
 A list of data containing processed extracts.
