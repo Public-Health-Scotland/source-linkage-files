@@ -16,9 +16,8 @@
 #' @export
 #' @family process extracts
 process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = NULL, write_to_disk = TRUE) {
-
   # Include is.null for passing the processed ALL alarms Telecare data through a list
-  if(is.null(data)){
+  if (is.null(data)) {
     readr::read_rds(get_sc_at_episodes_path())
   }
 
