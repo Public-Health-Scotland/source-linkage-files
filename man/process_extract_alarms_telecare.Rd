@@ -5,18 +5,20 @@
 \title{Process the (year specific) Alarms Telecare extract}
 \usage{
 process_extract_alarms_telecare(
-  data,
+  data = NULL,
   year,
   client_lookup = NULL,
   write_to_disk = TRUE
 )
 }
 \arguments{
-\item{data}{The extract to process}
+\item{data}{The extract to process. (Optional) Can be passed through a data list or
+alternatively read the file from disk.}
 
 \item{year}{The year to process, in FY format.}
 
-\item{client_lookup}{The client lookup extract}
+\item{client_lookup}{The client lookup extract (Optional) Can be passed through a data list
+or alternatively read the file from disk.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
