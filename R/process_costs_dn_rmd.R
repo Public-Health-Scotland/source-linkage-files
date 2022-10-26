@@ -8,7 +8,7 @@
 #'
 process_costs_dn_rmd <- function() {
   rmarkdown::render(
-    input = "costs_district_nursing.Rmd",
+    input = "Rmarkdown/costs_district_nursing.Rmd",
     output_file = "costs_district_nursing.html"
   )
 
