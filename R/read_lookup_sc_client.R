@@ -9,7 +9,6 @@
 #' @export
 #' @family process extracts
 read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
-
   # read in data - social care 2 client
   client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
     dplyr::select(
