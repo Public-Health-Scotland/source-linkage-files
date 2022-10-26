@@ -69,10 +69,12 @@ run_episode_file <- function() {
     ep_file %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
   ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
-    dplyr::mutate(cost_total_net_inc_dnas = cost_total_net,
-                  # In the Cost_Total_Net column set the cost for
-                  # those with attendance status 5 or 8 (CNWs and DNAs)
-                  cost_total_net = dplyr::if_else(attendance_status %in% c(5, 8), 0, cost_total_net)) %>%
+    dplyr::mutate(
+      cost_total_net_inc_dnas = cost_total_net,
+      # In the Cost_Total_Net column set the cost for
+      # those with attendance status 5 or 8 (CNWs and DNAs)
+      cost_total_net = dplyr::if_else(attendance_status %in% c(5, 8), 0, cost_total_net)
+    ) %>%
     # Add the flag for Potentially Preventable Admissions
     add_ppa_flag()
 
@@ -107,7 +109,4 @@ run_episode_file <- function() {
 
   # C10X - Create Tests? Possibly for a different function ----
   # Output tests
-
-
-
 }
