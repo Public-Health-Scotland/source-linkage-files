@@ -17,6 +17,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
   # Data Cleaning ---------------------------------------
 
   client_clean <- data %>%
+    dplyr::filter(.data$financial_year == convert_fyyear_to_year(year)) %>%
     # group
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
     # summarise to take last submission
