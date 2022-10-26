@@ -7,7 +7,7 @@
 #'
 #' @export
 #'
-run_data_social_care <- function(sc_demographics = [data list], write_to_disk = FALSE) {
+run_data_social_care <- function(sc_demographics = data_list, write_to_disk = FALSE) {
   process_social_care <- list(
     #"care_home" = process_sc_all_care_home(write_to_disk = write_to_disk),
     "home_care" = process_sc_all_home_care(read_sc_all_home_care(),
