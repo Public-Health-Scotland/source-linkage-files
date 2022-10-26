@@ -33,7 +33,7 @@ process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = N
   }
 
   # Now select epsiodes for given FY
-  outfile <- readr::read_rds(get_sc_hc_episodes_path(update = latest_update())) %>%
+  outfile <- readr::read_rds(get_sc_at_episodes_path(update = latest_update())) %>%
     dplyr::filter(is_date_in_fyyear(.data$year, .data$record_keydate1, .data$record_keydate2)) %>%
     dplyr::left_join(client_table, by = c("sending_location", "social_care_id")) %>%
     dplyr::select(
