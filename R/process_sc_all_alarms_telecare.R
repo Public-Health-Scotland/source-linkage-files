@@ -59,6 +59,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
     ) %>%
     # Include source variables
     dplyr::mutate(
+      year = substr(period, 1, 4),
       recid = "AT",
       smrtype = dplyr::case_when(
         .data$service_type == 1 ~ "AT-Alarm",
@@ -111,6 +112,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
       record_keydate2 = dplyr::last(.data$record_keydate2),
       smrtype = dplyr::last(.data$smrtype),
       pkg_count = dplyr::last(.data$pkg_count),
+      year = last(.data$year),
       chi = dplyr::last(.data$chi),
       gender = dplyr::last(.data$gender),
       dob = dplyr::last(.data$dob),
