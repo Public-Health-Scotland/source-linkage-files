@@ -86,7 +86,6 @@ at_full_clean <- replaced_start_dates %>%
   ) %>%
   # Include source variables
   mutate(
-    year = convert_year_to_fyyear(substr(period, 1, 4)),
     recid = "AT",
     smrtype = case_when(
       service_type == 1 ~ "AT-Alarm",
@@ -141,7 +140,6 @@ qtr_merge <- at_full_clean %>%
     record_keydate2 = last(record_keydate2),
     smrtype = last(smrtype),
     pkg_count = last(pkg_count),
-    year = last(year),
     chi = last(chi),
     gender = last(gender),
     dob = last(dob),
