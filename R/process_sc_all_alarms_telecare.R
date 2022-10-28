@@ -42,12 +42,12 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
         .data$service_start_date
       )
     ) %>%
-  # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
-  dplyr::mutate(service_end_date = dplyr::if_else(
-    .data$service_start_date >= .data$service_end_date,
-    end_fy(year = substr(.data$period, 1, 4), "alternate"),
-    .data$service_end_date
-  ))
+    # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
+    dplyr::mutate(service_end_date = dplyr::if_else(
+      .data$service_start_date >= .data$service_end_date,
+      end_fy(year = substr(.data$period, 1, 4), "alternate"),
+      .data$service_end_date
+    ))
 
   at_full_clean <- replaced_start_dates %>%
     # Match on demographics data (chi, gender, dob and postcode)
