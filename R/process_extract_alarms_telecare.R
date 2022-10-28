@@ -34,9 +34,13 @@ process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = N
 
   # Now select epsiodes for given FY
   outfile <- at_data %>%
-    dplyr::filter(is_date_in_fyyear(.data$year, .data$record_keydate1, .data$record_keydate2)) %>%
+    dplyr::filter(is_date_in_fyyear(convert_year_to_fyyear(substr(.data$sc_latest_submission, 1, 4)), .data$record_keydate1, .data$record_keydate2)) %>%
     dplyr::left_join(client_table, by = c("sending_location", "social_care_id")) %>%
+    dplyr::mutate(
+      year = year
+    ) %>%
     dplyr::select(
+      "year",
       "recid",
       "smrtype",
       "chi",
