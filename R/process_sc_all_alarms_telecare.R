@@ -59,7 +59,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
     ) %>%
     # Include source variables
     dplyr::mutate(
-      year = substr(period, 1, 4),
+      year = convert_year_to_fyyear(substr(period, 1, 4)),
       recid = "AT",
       smrtype = dplyr::case_when(
         .data$service_type == 1 ~ "AT-Alarm",
