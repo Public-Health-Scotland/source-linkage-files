@@ -86,7 +86,7 @@ at_full_clean <- replaced_start_dates %>%
   ) %>%
   # Include source variables
   mutate(
-    year = substr(period, 1, 4),
+    year = convert_year_to_fyyear(substr(period, 1, 4)),
     recid = "AT",
     smrtype = case_when(
       service_type == 1 ~ "AT-Alarm",
