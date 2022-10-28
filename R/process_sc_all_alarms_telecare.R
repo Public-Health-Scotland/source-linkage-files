@@ -41,7 +41,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
         start_fy(year = substr(.data$period, 1, 4), format = "alternate"),
         .data$service_start_date
       )
-    )
+    ) %>%
   # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
   dplyr::mutate(service_end_date = dplyr::if_else(
     .data$service_start_date >= .data$service_end_date,
