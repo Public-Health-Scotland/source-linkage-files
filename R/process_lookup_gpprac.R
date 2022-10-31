@@ -12,7 +12,6 @@
 #' @family process extracts
 
 process_lookup_gpprac <- function(write_to_disk = TRUE) {
-
   # Read lookup files -------------------------------------------------------
 
   # Retrieve the latest resource from the dataset
