@@ -27,7 +27,8 @@ get_source_extract_path <- function(year,
                                       "Maternity",
                                       "MH",
                                       "Outpatients",
-                                      "PIS"
+                                      "PIS",
+                                      "SDS"
                                     ),
                                     ...) {
   type <- match.arg(type)
@@ -56,7 +57,8 @@ get_source_extract_path <- function(year,
     type == "MH" ~ "mental_health_for_source",
     type == "DD" ~ "DD_for_source",
     type == "Outpatients" ~ "outpatients_for_source",
-    type == "PIS" ~ "prescribing_file_for_source"
+    type == "PIS" ~ "prescribing_file_for_source",
+    type == "SDS" ~ "SDS-for-source"
   )
 
   source_extract_path <- get_file_path(
