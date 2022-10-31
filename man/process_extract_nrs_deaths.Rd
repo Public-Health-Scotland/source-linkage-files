@@ -2,14 +2,14 @@
 % Please edit documentation in R/process_extract_nrs_deaths.R
 \name{process_extract_nrs_deaths}
 \alias{process_extract_nrs_deaths}
-\title{Process the NRS Deaths extract}
+\title{Process the Nation Records of Scotland (NRS) Deaths extract}
 \usage{
-process_extract_nrs_deaths(year, data, write_to_disk = TRUE)
+process_extract_nrs_deaths(data, year, write_to_disk = TRUE)
 }
 \arguments{
-\item{year}{The year to process, in FY format.}
-
 \item{data}{The extract to process}
+
+\item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -19,7 +19,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
-nrs deaths extract, it will return the final data
+NRS deaths extract, it will return the final data
 but also write this out as a zsav and rds.
 }
 \seealso{
@@ -34,7 +34,9 @@ Other process extracts:
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
 \code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
-\code{\link{read_lookup_chi_deaths}()}
+\code{\link{read_lookup_chi_deaths}()},
+\code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}

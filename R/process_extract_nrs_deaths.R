@@ -1,18 +1,18 @@
-#' Process the NRS Deaths extract
+#' Process the Nation Records of Scotland (NRS) Deaths extract
 #'
 #' @description This will read and process the
-#' nrs deaths extract, it will return the final data
+#' NRS deaths extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param year The year to process, in FY format.
 #' @param data The extract to process
+#' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_nrs_deaths <- function(year, data, write_to_disk = TRUE) {
+process_extract_nrs_deaths <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 

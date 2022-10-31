@@ -66,6 +66,12 @@ sds_full_clean <- sds_full_data %>%
     start_fy(year = period, format = "alternate"),
     sds_start_date
   )) %>%
+  # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
+  mutate(sds_end_date = if_else(
+    sds_start_date>=sds_end_date,
+    end_fy(year = period, 'alternate'),
+    sds_end_date
+  )) %>%
   # rename for matching source variables
   rename(
     record_keydate1 = sds_start_date,
