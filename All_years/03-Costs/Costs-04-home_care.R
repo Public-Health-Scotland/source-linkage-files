@@ -47,11 +47,12 @@ hc_costs_raw <- readxl::read_xlsx(fs::path(costs_dir, "hc_costs.xlsx")) %>%
 
 ## data - wide to long ##
 hc_costs <- hc_costs_raw %>%
-  left_join(phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
-    col_select = c("CA", "CAName", "HBName")
-  ) %>%
-    distinct(),
-  by = c("gss_code" = "CA")
+  left_join(
+    phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
+      col_select = c("CA", "CAName", "HBName")
+    ) %>%
+      distinct(),
+    by = c("gss_code" = "CA")
   ) %>%
   select(ca_name = CAName, health_board = HBName, starts_with("sw1_")) %>%
   mutate(across(starts_with("sw1_"), as.numeric),
