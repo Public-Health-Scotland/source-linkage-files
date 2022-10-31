@@ -36,17 +36,25 @@ get_file_path <-
            file_name_regexp = NULL,
            selection_method = "modification_date") {
     if (!fs::dir_exists(directory)) {
-      rlang::abort(message = glue::glue("The directory {directory} does not exist"))
+      cli::cli_abort("The directory {.path {directory}} does not exist.")
     }
+
+    check_mode <- match.arg(
+      arg = check_mode,
+      choices = c("exists", "read", "write", "execute")
+    )
 
     if (!is.null(file_name)) {
       file_path <- fs::path(directory, file_name)
     } else if (!is.null(file_name_regexp)) {
       if (check_mode == "read") {
-        file_path <- find_latest_file(directory, regexp = file_name_regexp, selection_method = selection_method)
+        file_path <- find_latest_file(directory,
+          regexp = file_name_regexp,
+          selection_method = selection_method
+        )
       } else {
-        cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to find the
-                   latest file with {.var file_name_regexp}",
+        cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to
+find the latest file with {.arg file_name_regexp}",
           "v" = "Try {.arg check_mode = \"read\"}"
         ))
       }
@@ -60,30 +68,21 @@ get_file_path <-
     }
 
     if (!fs::file_exists(file_path)) {
-      if (is.null(create) && check_mode == "write" | !is.null(create) && create == TRUE) {
+      if (is.null(create) && check_mode == "write" |
+        !is.null(create) && create == TRUE) {
         # The file doesn't exist but we do want to create it
         fs::file_create(file_path)
-        rlang::inform(
-          message = glue::glue(
-            "The file {fs::path_file(file_path)} did not exist in {directory}, it has now been created."
-          )
+        cli::cli_alert_info(
+          "The file {.file {fs::path_file(file_path)}} did not exist in {.path {directory}}, it has now been created."
         )
       } else {
         # The file doesn't exists and we don't want to create it
-        rlang::abort(
-          message = glue::glue(
-            "The file {fs::path_file(file_path)} does not exist in {directory}"
-          )
-        )
+        cli::cli_abort("The file {.file {fs::path_file(file_path)}} does not exist in {.path {directory}}.")
       }
     }
 
     if (!fs::file_access(file_path, mode = check_mode)) {
-      rlang::abort(
-        message = glue::glue(
-          "The file {fs::path_file(file_path)} exists in {directory} but is not {check_mode}able"
-        )
-      )
+      cli::cli_abort("{.file {fs::path_file(file_path)}} exists in {.path {directory}} but is not {check_mode}able.")
     }
 
     return(file_path)
@@ -91,7 +90,8 @@ get_file_path <-
 
 #' SLF directory - hscdiip
 #'
-#' @description File path for the general SLF directory for accessing HSCDIIP folders/files
+#' @description File path for the general SLF directory for accessing HSCDIIP
+#' folders/files
 #'
 #' @return The path to the main SLF Extracts folder
 #' @export
@@ -120,7 +120,21 @@ get_slf_dir <- function() {
 get_year_dir <- function(year, extracts_dir = FALSE) {
   year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
 
-  year_extracts_dir <- fs::path(year_dir, "Extracts")
+  if (!fs::dir_exists(year_dir)) {
+    fs::dir_create(year_dir)
+    cli::cli_alert_info("{.path {year_dir}} did not exist, it has now been created.")
+  }
 
-  return(dplyr::if_else(extracts_dir, year_extracts_dir, year_dir))
+  if (extracts_dir) {
+    year_extracts_dir <- fs::path(year_dir, "Extracts")
+
+    if (!fs::dir_exists(year_extracts_dir)) {
+      fs::dir_create(year_extracts_dir)
+      cli::cli_alert_info("{.path {year_extracts_dir}} did not exist, it has now been created.")
+    }
+
+    return(year_extracts_dir)
+  } else {
+    return(year_dir)
+  }
 }

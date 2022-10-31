@@ -4,12 +4,12 @@
 \alias{process_extract_homelessness}
 \title{Process the homelessness extract}
 \usage{
-process_extract_homelessness(year, data, write_to_disk = TRUE)
+process_extract_homelessness(data, year, write_to_disk = TRUE)
 }
 \arguments{
-\item{year}{The year to process, in FY format.}
-
 \item{data}{The extract to process}
+
+\item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -26,11 +26,18 @@ but also write this out as a zsav and rds.
 Other process extracts: 
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
+\code{\link{process_extract_cmh}()},
 \code{\link{process_extract_district_nursing}()},
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_lookup_postcode}()}
+\code{\link{process_extract_prescribing}()},
+\code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_lookup_sc_client}()},
+\code{\link{process_lookup_sc_demographics}()},
+\code{\link{read_lookup_chi_deaths}()},
+\code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}
