@@ -62,24 +62,24 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
 
   ## save outfile ---------------------------------------
   outfile <- dd_clean %>%
-    dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$original_admission_date,
-      .data$keydate1_dateformat,
-      .data$keydate2_dateformat,
-      .data$chi,
-      .data$postcode,
-      .data$delay_end_reason,
-      .data$primary_delay_reason,
-      .data$secondary_delay_reason,
-      .data$spec,
-      .data$location,
-      .data$hbtreatcode,
-      .data$dd_responsible_lca,
-      .data$monthflag,
-      .data$cennum
-    )
+dplyr::select(
+  "year",
+  "recid",
+  "original_admission_date",
+  "keydate1_dateformat",
+  "keydate2_dateformat",
+  "chi",
+  "postcode",
+  "delay_end_reason",
+  "primary_delay_reason",
+  "secondary_delay_reason",
+  "spec",
+  "location",
+  "hbtreatcode",
+  "dd_responsible_lca",
+  "monthflag",
+  "cennum"
+)
 
   if (write_to_disk) {
     outfile %>%
