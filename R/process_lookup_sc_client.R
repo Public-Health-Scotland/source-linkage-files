@@ -13,7 +13,6 @@
 #' @export
 #' @family process extracts
 process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
-
   # Data Cleaning ---------------------------------------
 
   client_clean <- data %>%
@@ -52,13 +51,14 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
         "meals",
         "living_alone",
         "day_care"
+        ),
+        tidyr::replace_na, 9
       ),
-      tidyr::replace_na, 9
-    ),
-    type_of_housing = tidyr::replace_na(.data$type_of_housing, 6)
+      type_of_housing = tidyr::replace_na(.data$type_of_housing, 6)
     ) %>%
     # factor labels
-    dplyr::mutate(dplyr::across(
+    dplyr::mutate(
+    dplyr::across(
       c(
         "dementia",
         "mental_health_problems",
@@ -84,14 +84,14 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
         "social_worker",
         "meals",
         "day_care"
+        ),
+        factor,
+        levels = c(0, 1, 9),
+        labels = c("No", "Yes", "Not Known")
       ),
-      factor,
-      levels = c(0, 1, 9),
-      labels = c("No", "Yes", "Not Known")
-    ),
-    type_of_housing = factor(.data$type_of_housing,
-      levels = c(1:6)
-    )
+      type_of_housing = factor(.data$type_of_housing,
+        levels = c(1:6)
+      )
     ) %>%
     # rename variables
     dplyr::rename_with(
@@ -116,7 +116,6 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-
     # Save .rds file
     outfile %>%
       write_rds(get_source_extract_path(year, "Client", check_mode = "write"))
