@@ -33,6 +33,7 @@ Other process extracts:
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
 \code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_lookup_gpprac}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{read_lookup_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
