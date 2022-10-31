@@ -44,13 +44,14 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     )) %>%
     dplyr::ungroup() %>%
     # recode missing with values
-    dplyr::mutate(dplyr::across(
-      c(
-        "support_from_unpaid_carer",
-        "social_worker",
-        "meals",
-        "living_alone",
-        "day_care"
+    dplyr::mutate(
+      dplyr::across(
+        c(
+          "support_from_unpaid_carer",
+          "social_worker",
+          "meals",
+          "living_alone",
+          "day_care"
         ),
         tidyr::replace_na, 9
       ),
@@ -58,32 +59,32 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # factor labels
     dplyr::mutate(
-    dplyr::across(
-      c(
-        "dementia",
-        "mental_health_problems",
-        "learning_disability",
-        "physical_and_sensory_disability",
-        "drugs",
-        "alcohol",
-        "palliative_care",
-        "carer",
-        "elderly_frail",
-        "neurological_condition",
-        "autism",
-        "other_vulnerable_groups"
+      dplyr::across(
+        c(
+          "dementia",
+          "mental_health_problems",
+          "learning_disability",
+          "physical_and_sensory_disability",
+          "drugs",
+          "alcohol",
+          "palliative_care",
+          "carer",
+          "elderly_frail",
+          "neurological_condition",
+          "autism",
+          "other_vulnerable_groups"
+        ),
+        factor,
+        levels = c(0, 1),
+        labels = c("No", "Yes")
       ),
-      factor,
-      levels = c(0, 1),
-      labels = c("No", "Yes")
-    ),
-    dplyr::across(
-      c(
-        "living_alone",
-        "support_from_unpaid_carer",
-        "social_worker",
-        "meals",
-        "day_care"
+      dplyr::across(
+        c(
+          "living_alone",
+          "support_from_unpaid_carer",
+          "social_worker",
+          "meals",
+          "day_care"
         ),
         factor,
         levels = c(0, 1, 9),
