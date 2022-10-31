@@ -22,6 +22,7 @@ but also write this out as a zsav and rds.
 Other process extracts: 
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
+\code{\link{process_extract_alarms_telecare}()},
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_delayed_discharges}()},
 \code{\link{process_extract_district_nursing}()},
@@ -31,6 +32,7 @@ Other process extracts:
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
+\code{\link{process_extract_sds}()},
 \code{\link{process_lookup_chi_deaths}()},
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
