@@ -7,7 +7,8 @@
 #' @param comparison_data produced by [produce_test_comparison()]
 #' @param sheet_name the name of the dataset, which will be used to create
 #' the sheet name
-#' @param year The financial year of the data file in '1920' format
+#' @param year If applicable, the financial year of the data in '1920' format
+#' this will be prepended to the sheet name. The default is `NULL`.
 #'
 #' @return the path to the xlsx file location
 #'
