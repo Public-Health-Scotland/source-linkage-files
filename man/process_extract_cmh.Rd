@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_extract_cmh.R
 \name{process_extract_cmh}
 \alias{process_extract_cmh}
-\title{Process the CMH extract}
+\title{Process the Community Mental Health (CMH) extract}
 \usage{
 process_extract_cmh(data, year, write_to_disk = TRUE)
 }
@@ -19,7 +19,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
-cmh extract, it will return the final data
+CMH extract, it will return the final data
 but also write this out as a zsav and rds.
 }
 \seealso{
@@ -33,5 +33,11 @@ Other process extracts:
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_lookup_gpprac}()}
+\code{\link{process_extract_prescribing}()},
+\code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_lookup_sc_client}()},
+\code{\link{process_lookup_sc_demographics}()},
+\code{\link{read_lookup_chi_deaths}()},
+\code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}
