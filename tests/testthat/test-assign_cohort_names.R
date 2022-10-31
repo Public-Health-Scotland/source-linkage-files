@@ -55,12 +55,13 @@ test_that("Cohort names are assigned correctly", {
 })
 
 test_that("Errors throw as expected", {
-  expect_error(assign_cohort_names(tibble::tribble(
-    ~psychiatry_cost, ~maternity_cost, ~geriatric_cost,
-    ~elective_inpatient_cost, ~limited_daycases_cost,
-    ~routine_daycase_cost, ~single_emergency_cost,
-    ~multiple_emergency_cost, ~prescribing_cost, ~silly
-  )),
-  regexp = "Variables .+ are required, but are missing from `data`"
+  expect_error(
+    assign_cohort_names(tibble::tribble(
+      ~psychiatry_cost, ~maternity_cost, ~geriatric_cost,
+      ~elective_inpatient_cost, ~limited_daycases_cost,
+      ~routine_daycase_cost, ~single_emergency_cost,
+      ~multiple_emergency_cost, ~prescribing_cost, ~silly
+    )),
+    regexp = "Variables .+ are required, but are missing from `data`"
   )
 })

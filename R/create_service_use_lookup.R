@@ -91,7 +91,6 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
 #'
 #' @family Demographic and Service Use Cohort functions
 create_service_costs <- function(data) {
-
   # Check data has required variables
   check_variables_exist(data,
     variables =
