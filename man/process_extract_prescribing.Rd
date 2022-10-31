@@ -34,6 +34,7 @@ Other process extracts:
 \code{\link{process_extract_nrs_deaths}()},
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
 \code{\link{read_lookup_chi_deaths}()},
