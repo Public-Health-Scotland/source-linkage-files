@@ -12,7 +12,8 @@ write_tests_xlsx(comparison_data, sheet_name, year = NULL)
 \item{sheet_name}{the name of the dataset, which will be used to create
 the sheet name}
 
-\item{year}{The financial year of the data file in '1920' format}
+\item{year}{If applicable, the financial year of the data in '1920' format
+this will be prepended to the sheet name. The default is \code{NULL}.}
 }
 \value{
 the path to the xlsx file location
