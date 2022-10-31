@@ -28,6 +28,7 @@ Other process extracts:
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_district_nursing}()},
+\code{\link{process_extract_home_care}()},
 \code{\link{process_extract_homelessness}()},
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},
