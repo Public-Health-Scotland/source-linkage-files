@@ -12,7 +12,6 @@
 #' @family process extracts
 
 process_lookup_postcode <- function(write_to_disk = TRUE) {
-
   # Read lookup files -------------------------------------------------------
 
   # postcode data
