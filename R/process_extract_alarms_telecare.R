@@ -18,7 +18,7 @@
 process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = NULL, write_to_disk = TRUE) {
   # Include is.null for passing the processed ALL alarms Telecare data through a list
   if (is.null(data)) {
-    at_data <- readr::read_rds(get_sc_at_episodes_path())
+    data <- readr::read_rds(get_sc_at_episodes_path())
   }
 
   # Only run for a single year
@@ -33,7 +33,7 @@ process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = N
   }
 
   # Now select epsiodes for given FY
-  outfile <- at_data %>%
+  outfile <- data %>%
     dplyr::filter(is_date_in_fyyear(convert_year_to_fyyear(substr(.data$sc_latest_submission, 1, 4)), .data$record_keydate1, .data$record_keydate2)) %>%
     dplyr::left_join(client_table, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(
