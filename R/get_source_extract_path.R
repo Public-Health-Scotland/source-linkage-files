@@ -14,6 +14,7 @@ get_source_extract_path <- function(year,
                                     type = c(
                                       "Acute",
                                       "AE",
+                                      "AT",
                                       "CH",
                                       "Client",
                                       "CMH",
@@ -26,7 +27,8 @@ get_source_extract_path <- function(year,
                                       "Maternity",
                                       "MH",
                                       "Outpatients",
-                                      "PIS"
+                                      "PIS",
+                                      "SDS"
                                     ),
                                     ...) {
   type <- match.arg(type)
@@ -41,6 +43,7 @@ get_source_extract_path <- function(year,
   file_name <- dplyr::case_when(
     type == "Acute" ~ "acute_for_source",
     type == "AE" ~ "a&e_for_source",
+    type == "AT" ~ "alarms-telecare-for-source",
     type == "CH" ~ "care_home_for_source",
     type == "CMH" ~ "CMH_for_source",
     type == "Client" ~ "client_for_source",
@@ -54,7 +57,8 @@ get_source_extract_path <- function(year,
     type == "MH" ~ "mental_health_for_source",
     type == "DD" ~ "DD_for_source",
     type == "Outpatients" ~ "outpatients_for_source",
-    type == "PIS" ~ "prescribing_file_for_source"
+    type == "PIS" ~ "prescribing_file_for_source",
+    type == "SDS" ~ "SDS-for-source"
   )
 
   source_extract_path <- get_file_path(

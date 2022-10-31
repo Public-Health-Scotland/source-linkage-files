@@ -73,7 +73,7 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
     file_name = glue::glue("Care_Home_Lookup_All.xlsx"),
-    check_mode = "write",
+    check_mode = "read",
     ...
   )
 }
