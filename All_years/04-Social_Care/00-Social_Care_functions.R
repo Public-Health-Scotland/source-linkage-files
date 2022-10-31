@@ -217,3 +217,32 @@ start_fy <- function(year, format = c("fyyear", "alternate")) {
 
   return(start_fy)
 }
+
+#' Return the end date of FY years
+#'
+#' @description Get the end date of the specified financial year
+#'
+#' @inheritParams start_fy
+#'
+#' @return a vector of dates of the end date of the FY year
+#' @export
+#'
+#' @examples
+#' end_fy("1718")
+#'
+#' @family date functions
+end_fy <- function(year, format = c("fyyear", "alternate")) {
+  if (missing(format)) {
+    format <- "fyyear"
+  }
+
+  format <- match.arg(format)
+
+  if (format == "fyyear") {
+    end_fy <- as.Date(paste0(as.numeric(convert_fyyear_to_year(year)) + 1, "-03-31"))
+  } else if (format == "alternate") {
+    end_fy <- as.Date(paste0(as.numeric(year) + 1, "-03-31"))
+  }
+
+  return(end_fy)
+}
