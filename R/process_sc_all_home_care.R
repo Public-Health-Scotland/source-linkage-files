@@ -176,9 +176,35 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     ) %>%
     dplyr::ungroup()
 
+
+  # Create Source variables---------------------------------------
+  final_data <- outfile %>%
+    # rename
+    dplyr::rename(
+      record_keydate1 = "hc_service_start_date",
+      record_keydate2 = "hc_service_end_date",
+      hc_reablement = "reablement",
+      hc_provider = "hc_service_provider"
+    ) %>%
+    # year / recid / SMRType variables
+    dplyr::mutate(
+      recid = "HC",
+      SMRType = dplyr::case_when(
+        .data$hc_service == 1 ~ "HC-Non-Per",
+        .data$hc_service == 2 ~ "HC-Per",
+        TRUE ~ "HC-Unknown"
+      )
+    ) %>%
+    # person_id
+    create_person_id(type = "SC") %>%
+    # compute lca variable from sending_location
+    dplyr::mutate(lca = convert_sending_location_to_lca(.data$sending_location))
+
+  # Save outfile---------------------------------------------------
+
   if (write_to_disk) {
     # Save .rds file
-    outfile %>%
+    final_data %>%
       write_rds(get_sc_hc_episodes_path(check_mode = "write"))
   }
 
