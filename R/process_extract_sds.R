@@ -18,7 +18,7 @@
 process_extract_sds <- function(data = NULL, year, client_lookup = NULL, write_to_disk = TRUE) {
   # Include is.null for passing the processed ALL SDS data through a list
   if (is.null(data)) {
-    sds_data <- readr::read_rds(get_sc_sds_episodes_path())
+    data <- readr::read_rds(get_sc_sds_episodes_path())
   }
 
   # Only run for a single year
