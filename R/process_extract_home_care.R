@@ -29,7 +29,7 @@ process_extract_home_care <- function(data = NULL, year, client_lookup = NULL, w
 
   # Read client lookup
   if (is.null(client_lookup)) {
-    client_table <- readr::read_rds(get_source_extract_path(year, type = "Client"))
+    client_lookup <- readr::read_rds(get_source_extract_path(year, type = "Client"))
   }
 
   # Selections for financial year------------------------------------
@@ -43,7 +43,7 @@ process_extract_home_care <- function(data = NULL, year, client_lookup = NULL, w
     # TODO change the client script to use sending location as an integer
     dplyr::mutate(sending_location = as.character(.data$sending_location)) %>%
     # Match to client data
-    dplyr::left_join(client_table, by = c("sending_location", "social_care_id")) %>%
+    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(year = year)
 
   # Home Care Hours ---------------------------------------
