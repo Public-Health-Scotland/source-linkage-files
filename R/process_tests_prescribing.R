@@ -1,4 +1,4 @@
-#' Process presciribing tests
+#' Process prescribing tests
 #'
 #' @description This script takes the processed prescribing extract and produces
 #' a test comparison with the previous data. This is written to disk as a csv.
