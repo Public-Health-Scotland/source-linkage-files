@@ -237,8 +237,11 @@ hc_costs <- read_rds(path("/conf/hscdiip/SLF_Extracts/Costs", "costs_hc_lookup.r
 
 matched_costs <- fixed_hours %>%
   left_join(hc_costs,
-                     by = c("sending_location_name" = "ca_name",
-                            "financial_year" = "year")) %>%
+    by = c(
+      "sending_location_name" = "ca_name",
+      "financial_year" = "year"
+    )
+  ) %>%
   mutate(hc_cost = hc_hours * hourly_cost)
 
 pivotted_hours <- matched_costs %>%
