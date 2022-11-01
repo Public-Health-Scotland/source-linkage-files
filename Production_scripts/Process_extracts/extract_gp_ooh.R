@@ -17,12 +17,11 @@
 # Load Packages
 library(createslf)
 
-
 # Specify year
 year <- check_year_format("1920")
 
 
-## Load Lookups------------------------------------------
+# Diagnosis Data ---------------------------------
 
 # Read code lookup
 readcode_lookup <- readr::read_rds(get_readcode_lookup_path()) %>%
@@ -31,15 +30,7 @@ readcode_lookup <- readr::read_rds(get_readcode_lookup_path()) %>%
     description = "Description"
   )
 
-# OOH cost lookup
-ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path()) %>%
-  dplyr::rename(
-    hbtreatcode = TreatmentNHSBoardCode
-  )
-
-# Diagnosis Data ---------------------------------
-
-## Load extract file
+# Load extract file
 diagnosis_extract <- readr::read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-d"),
   col_types = readr::cols(
@@ -357,6 +348,12 @@ matched_data <- consultations_clean %>%
   dplyr::left_join(outcomes_clean, by = "guid")
 
 # Costs ---------------------------------
+
+# OOH cost lookup
+ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path()) %>%
+  dplyr::rename(
+    hbtreatcode = TreatmentNHSBoardCode
+  )
 
 ooh_costs <- matched_data %>%
   dplyr::mutate(
