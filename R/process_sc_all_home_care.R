@@ -150,7 +150,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
 
   # Outfile ---------------------------------------
 
-  outfile <- pivotted_hours %>%
+  merge_data <- pivotted_hours %>%
     # group the data to be merged
     dplyr::group_by(
       .data$chi,
@@ -178,7 +178,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
 
 
   # Create Source variables---------------------------------------
-  final_data <- outfile %>%
+  final_data <- merge_data %>%
     # rename
     dplyr::rename(
       record_keydate1 = "hc_service_start_date",
