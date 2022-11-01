@@ -145,7 +145,7 @@ diagnosis_clean <- diagnosis_readcodes %>%
     names_glue = "{.value}_{diag_n}"
   ) %>%
   dplyr::select(
-    guid,
+    "guid",
     # Use any of in case we have fewer than 6 diagnoses
     any_of(c(
       "diag_1",
@@ -156,7 +156,7 @@ diagnosis_clean <- diagnosis_readcodes %>%
       "diag_6"
     ))
   ) %>%
-  tibble::as_tibble()
+  dplyr::as_tibble()
 
 rm(diagnosis_extract, diagnosis_readcodes)
 
@@ -447,43 +447,43 @@ outfile <- ooh_clean %>%
     key_time1
   ) %>%
   dplyr::select(
-    year,
-    recid,
-    smrtype,
-    record_keydate1,
-    record_keydate2,
-    key_time1,
-    key_time2,
-    chi,
-    gender,
-    dob,
-    age,
-    gpprac,
-    postcode,
-    hbrescode,
-    datazone,
-    hscp,
-    hbtreatcode,
-    location,
-    attendance_status,
-    kis_Accessed,
-    refsource,
+    "year",
+    "recid",
+    "smrtype",
+    "record_keydate1",
+    "record_keydate2",
+    "key_time1",
+    "key_time2",
+    "chi",
+    "gender",
+    "dob",
+    "age",
+    "gpprac",
+    "postcode",
+    "hbrescode",
+    "datazone",
+    "hscp",
+    "hbtreatcode",
+    "location",
+    "attendance_status",
+    "kis_Accessed",
+    "refsource",
     contains("diag"),
     contains("ooh_outcome"),
-    cost_total_net,
-    apr_cost,
-    may_cost,
-    jun_cost,
-    jul_cost,
-    aug_cost,
-    sep_cost,
-    oct_cost,
-    nov_cost,
-    dec_cost,
-    jan_cost,
-    feb_cost,
-    mar_cost,
-    ooh_CC
+    "cost_total_net",
+    "apr_cost",
+    "may_cost",
+    "jun_cost",
+    "jul_cost",
+    "aug_cost",
+    "sep_cost",
+    "oct_cost",
+    "nov_cost",
+    "dec_cost",
+    "jan_cost",
+    "feb_cost",
+    "mar_cost",
+    "ooh_CC"
   )
 
 # End of Script #
