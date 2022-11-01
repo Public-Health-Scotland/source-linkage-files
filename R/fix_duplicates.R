@@ -19,7 +19,7 @@ fix_west_dun_duplicates <- function(data) {
     dplyr::filter(.data$sending_local_authority_name == "West Dunbartonshire") %>%
     # Remove the leading zeros
     dplyr::mutate(dplyr::across(
-      c(.data$application_reference_number, .data$client_unique_identifier),
+      c("application_reference_number", "client_unique_identifier"),
       ~ stringr::str_remove(.x, "^00")
     )) %>%
     # Sort so the latest case closed date is at the top
@@ -62,7 +62,7 @@ fix_east_ayrshire_duplicates <- function(data) {
     dplyr::filter(.data$sending_local_authority_name == "East Ayrshire") %>%
     # Remove the leading zeros
     dplyr::mutate(dplyr::across(
-      c(.data$application_reference_number, .data$client_unique_identifier),
+      c("application_reference_number", "client_unique_identifier"),
       ~ stringr::str_replace(.x, "^([A-Z]{2,3})([0-9]{2})(.+?)$", "\\1/\\2/\\3")
     )) %>%
     # Sort so the latest case closed date is at the top
