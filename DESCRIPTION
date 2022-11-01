@@ -9,7 +9,8 @@ Authors@R: c(
     person("Catherine", "Holland", , "catherine.holland@phs.scot", role = "aut",
            comment = c(ORCID = "0000-0002-3259-5745")),
     person("Bateman", "McBride", , "Bateman.Mcbride@phs.scot", role = "aut"),
-    person("Zihao", "Li", , "zihao.li@phs.scot", role = "aut")
+    person("Zihao", "Li", , "zihao.li@phs.scot", role = "aut",
+           comment = c(ORCID = "0000-0002-5178-2124"))
   )
 Description: A package with functions used to create the Source Linkage
     Files (SLF)s.
