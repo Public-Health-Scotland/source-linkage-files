@@ -10,7 +10,6 @@
 #' @export
 #'
 process_tests_lookup_pc <- function() {
-
   comparison <- produce_test_comparison(
     old_data = produce_slf_postcode_tests(readr::read_rds(get_slf_postcode_path(update = previous_update()))),
     new_data = produce_slf_postcode_tests(readr::read_rds(get_slf_postcode_path()))
