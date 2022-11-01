@@ -189,7 +189,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     # year / recid / SMRType variables
     dplyr::mutate(
       recid = "HC",
-      SMRType = dplyr::case_when(
+      smrtype = dplyr::case_when(
         .data$hc_service == 1 ~ "HC-Non-Per",
         .data$hc_service == 2 ~ "HC-Per",
         TRUE ~ "HC-Unknown"
