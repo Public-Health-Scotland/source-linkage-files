@@ -17,7 +17,6 @@
 #'
 #' @seealso create_monthly_costs
 create_monthly_beddays <- function(data, year, admission_date, discharge_date, count_last = TRUE) {
-
   # Extract date vectors for checking
   admission_dates_vector <- dplyr::pull(data, {{ admission_date }})
   discharge_dates_vector <- dplyr::pull(data, {{ discharge_date }})
@@ -96,7 +95,7 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
 
   # Join the beddays back to the data
   data <- dplyr::bind_cols(data, beddays) %>%
-    dplyr::select(-.data$stay_interval)
+    dplyr::select(-"stay_interval")
 
   return(data)
 }

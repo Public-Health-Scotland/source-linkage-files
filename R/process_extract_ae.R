@@ -4,15 +4,15 @@
 #' A&E extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param year The year to process, in FY format.
 #' @param data The extract to process
+#' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_ae <- function(year, data, write_to_disk = TRUE) {
+process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
@@ -33,7 +33,7 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
     # use the CHI postcode and if that is blank, then use the epi postcode.
     dplyr::mutate(postcode = dplyr::if_else(!is.na(.data$postcode_chi), .data$postcode_chi, .data$postcode_epi)) %>%
     ## recode cypher HB codes ##
-    dplyr::mutate(dplyr::across(c(.data$hbtreatcode, .data$hbrescode), ~ dplyr::case_when(
+    dplyr::mutate(dplyr::across(c("hbtreatcode", "hbrescode"), ~ dplyr::case_when(
       .x == "A" ~ "S08000015",
       .x == "B" ~ "S08000016",
       .x == "F" ~ "S08000029",
@@ -150,31 +150,31 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
   outfile <-
     ae_clean %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$record_keydate1,
-      .data$record_keydate2,
-      .data$keyTime1,
-      .data$keyTime2,
-      .data$chi,
-      .data$gender,
-      .data$dob,
-      .data$gpprac,
-      .data$postcode,
-      .data$lca,
-      .data$hscp,
-      .data$location,
-      .data$hbrescode,
-      .data$hbtreatcode,
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "keyTime1",
+      "keyTime2",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "postcode",
+      "lca",
+      "hscp",
+      "location",
+      "hbrescode",
+      "hbtreatcode",
       tidyselect::starts_with("diag"),
-      .data$refsource,
-      .data$sigfac,
+      "refsource",
+      "sigfac",
       tidyselect::starts_with("ae_"),
       tidyselect::ends_with("_adm"),
-      .data$cost_total_net,
-      .data$age,
+      "cost_total_net",
+      "age",
       tidyselect::ends_with("_cost"),
-      .data$case_ref_number
+      "case_ref_number"
     )
 
 
@@ -225,55 +225,55 @@ process_extract_ae <- function(year, data, write_to_disk = TRUE) {
   # Save outfile----------------------------------------
   outfile <- matched_ae_data %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$record_keydate1,
-      .data$record_keydate2,
-      .data$keyTime1,
-      .data$keyTime2,
-      .data$chi,
-      .data$gender,
-      .data$dob,
-      .data$gpprac,
-      .data$postcode,
-      .data$lca,
-      .data$hscp,
-      .data$location,
-      .data$hbrescode,
-      .data$hbtreatcode,
-      .data$diag1,
-      .data$diag2,
-      .data$diag3,
-      .data$ae_arrivalmode,
-      .data$refsource,
-      .data$sigfac,
-      .data$ae_attendcat,
-      .data$ae_disdest,
-      .data$ae_patflow,
-      .data$ae_placeinc,
-      .data$ae_reasonwait,
-      .data$ae_bodyloc,
-      .data$ae_alcohol,
-      .data$alcohol_adm,
-      .data$submis_adm,
-      .data$falls_adm,
-      .data$selfharm_adm,
-      .data$cost_total_net,
-      .data$age,
-      .data$apr_cost,
-      .data$may_cost,
-      .data$jun_cost,
-      .data$jul_cost,
-      .data$aug_cost,
-      .data$sep_cost,
-      .data$oct_cost,
-      .data$nov_cost,
-      .data$dec_cost,
-      .data$jan_cost,
-      .data$feb_cost,
-      .data$mar_cost,
-      .data$cup_marker,
-      .data$cup_pathway
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "keyTime1",
+      "keyTime2",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "postcode",
+      "lca",
+      "hscp",
+      "location",
+      "hbrescode",
+      "hbtreatcode",
+      "diag1",
+      "diag2",
+      "diag3",
+      "ae_arrivalmode",
+      "refsource",
+      "sigfac",
+      "ae_attendcat",
+      "ae_disdest",
+      "ae_patflow",
+      "ae_placeinc",
+      "ae_reasonwait",
+      "ae_bodyloc",
+      "ae_alcohol",
+      "alcohol_adm",
+      "submis_adm",
+      "falls_adm",
+      "selfharm_adm",
+      "cost_total_net",
+      "age",
+      "apr_cost",
+      "may_cost",
+      "jun_cost",
+      "jul_cost",
+      "aug_cost",
+      "sep_cost",
+      "oct_cost",
+      "nov_cost",
+      "dec_cost",
+      "jan_cost",
+      "feb_cost",
+      "mar_cost",
+      "cup_marker",
+      "cup_pathway"
     )
 
   if (write_to_disk) {

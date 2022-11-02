@@ -4,15 +4,15 @@
 #' maternity extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param year The year to process, in FY format.
 #' @param data The extract to process
+#' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
+process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
@@ -57,45 +57,45 @@ process_extract_maternity <- function(year, data, write_to_disk = TRUE) {
 
   outfile <- maternity_clean %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$record_keydate1,
-      .data$record_keydate2,
-      .data$chi,
-      .data$gender,
-      .data$dob,
-      .data$gpprac,
-      .data$hbpraccode,
-      .data$postcode,
-      .data$hbrescode,
-      .data$lca,
-      .data$hscp,
-      .data$location,
-      .data$hbtreatcode,
-      .data$stay,
-      .data$yearstay,
-      .data$spec,
-      .data$sigfac,
-      .data$conc,
-      .data$mpat,
-      .data$adtf,
-      .data$admloc,
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "hscp",
+      "location",
+      "hbtreatcode",
+      "stay",
+      "yearstay",
+      "spec",
+      "sigfac",
+      "conc",
+      "mpat",
+      "adtf",
+      "admloc",
       tidyselect::starts_with("disch"),
       tidyselect::starts_with("diag"),
       tidyselect::matches("(date)?op[1-4][ab]?"),
-      .data$age,
-      .data$discondition,
+      "age",
+      "discondition",
       tidyselect::starts_with("cij"),
-      .data$alcohol_adm,
-      .data$submis_adm,
-      .data$falls_adm,
-      .data$selfharm_adm,
-      .data$commhosp,
-      .data$nhshosp,
-      .data$cost_total_net,
+      "alcohol_adm",
+      "submis_adm",
+      "falls_adm",
+      "selfharm_adm",
+      "commhosp",
+      "nhshosp",
+      "cost_total_net",
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
-      .data$uri
+      "uri"
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1)
 

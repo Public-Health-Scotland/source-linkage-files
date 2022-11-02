@@ -4,15 +4,15 @@
 #' mental health extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param year The year to process, in FY format.
 #' @param data The extract to process
+#' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
+process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
@@ -61,47 +61,47 @@ process_extract_mental_health <- function(year, data, write_to_disk = TRUE) {
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1) %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$record_keydate1,
-      .data$record_keydate2,
-      .data$chi,
-      .data$gender,
-      .data$dob,
-      .data$gpprac,
-      .data$hbpraccode,
-      .data$postcode,
-      .data$hbrescode,
-      .data$lca,
-      .data$hscp,
-      .data$datazone,
-      .data$location,
-      .data$hbtreatcode,
-      .data$stay,
-      .data$yearstay,
-      .data$ipdc,
-      .data$spec,
-      .data$sigfac,
-      .data$conc,
-      .data$mpat,
-      .data$cat,
-      .data$tadm,
-      .data$adtf,
-      .data$admloc,
-      .data$disch,
-      .data$dischto,
-      .data$dischloc,
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "hscp",
+      "datazone",
+      "location",
+      "hbtreatcode",
+      "stay",
+      "yearstay",
+      "ipdc",
+      "spec",
+      "sigfac",
+      "conc",
+      "mpat",
+      "cat",
+      "tadm",
+      "adtf",
+      "admloc",
+      "disch",
+      "dischto",
+      "dischloc",
       tidyselect::starts_with("diag"),
-      .data$age,
+      "age",
       tidyselect::starts_with("cij_"),
       tidyselect::ends_with("_adm"),
-      .data$commhosp,
-      .data$cost_total_net,
-      .data$stadm,
+      "commhosp",
+      "cost_total_net",
+      "stadm",
       tidyselect::starts_with("adcon"),
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
-      .data$uri
+      "uri"
     )
 
   if (write_to_disk) {
