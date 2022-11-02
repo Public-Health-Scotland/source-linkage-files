@@ -30,11 +30,8 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
     # Create a flag for these records
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data$keydate1_dateformat, "month") - 1,
-      amended_dates = dplyr::case_when(
-        .data$keydate2_dateformat == as.Date("1900-01-01") ~ TRUE,
-        TRUE ~ FALSE
-      ),
-      keydate2_dateformat = dplyr::if_else(.data$ammended_dates, .data$month_end, .data$keydate2_dateformat)
+      keydate2_dateformat = dplyr::if_else(.data$keydate2_dateformat == as.Date("1900-01-01"),
+                                           .data$month_end, .data$keydate2_dateformat)
     ) %>%
     # Drop any records with obviously bad dates
     dplyr::filter(
@@ -47,7 +44,7 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
     ) %>%
     # recode blanks to NA
     dplyr::mutate(
-      dplyr::across(tidyselect::ends_with("delay_reason"), dplyr::na_if, "")
+      dplyr::across(tidyselect::ends_with("_delay_reason"), dplyr::na_if, "")
     ) %>%
     # create flags for no_end_date and correct_dates
     dplyr::mutate(
