@@ -6,7 +6,6 @@ test_that("main SLF directory exists", {
   expect_true(fs::dir_exists(slf_dir_path))
 })
 
-
 test_that("Can return the top level year directory", {
   # Base dir must exist
   expect_true(fs::dir_exists("/conf/sourcedev/Source_Linkage_File_Updates"))
