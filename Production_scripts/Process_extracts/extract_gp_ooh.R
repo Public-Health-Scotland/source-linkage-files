@@ -310,12 +310,7 @@ consultations_filtered <- consultations_file %>%
   ) %>%
   # Some episodes are wrongly included in the BOXI extract
   # Filter to episodes with any time in the given financial year.
-  dplyr::filter(
-    is_date_in_year(record_keydate1, year) | is_date_in_year(record_keydate2, year)
-  ) %>%
-  # TODO - WIP James to here: I was looking at doing the merge overlapping episodes bit.
-  dplyr::group_by(chi) %>%
-  dplyr::arrange(chi, record_keydate1, record_keydate2) %>%
+  dplyr::filter(is_date_in_fyyear(year, record_keydate1, record_keydate2)) %>%
   # Filter out Flow navigation center data
   dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
   dplyr::as_tibble()
