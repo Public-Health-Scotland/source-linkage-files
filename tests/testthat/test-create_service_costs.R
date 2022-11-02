@@ -1,5 +1,4 @@
 test_that("Costs are assigned correctly", {
-
   # Create some dummy data
   dummy_data <- tibble::tribble(
     ~chi, ~recid, ~cij_pattype, ~cij_ipdc, ~spec, ~op1a, ~cost_total_net,
