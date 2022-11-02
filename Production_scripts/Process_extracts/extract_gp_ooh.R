@@ -325,9 +325,16 @@ consultations_covid <- consultations_filtered %>%
     consultation_type
   ))
 
+
+# TODO - WIP James to here: I was looking at doing the merge overlapping episodes bit.
+consultations_covid %>%
+  dtplyr::lazy_dt() %>%
+  dplyr::arrange(chi, guid, record_keydate1, record_keydate2) %>%
+  dplyr::group_by(chi, guid) %>%
   dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
-  dplyr::ungroup() %>%
+  dplyr::group_by(chi, guid, episode_counter) %>%
+  dplyr::filter(n() > 1) %>%
   tidyr::as_tibble() %>%
   View()
 
