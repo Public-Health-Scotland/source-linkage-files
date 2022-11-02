@@ -296,6 +296,18 @@ consultations_filtered <- consultations_file %>%
   dtplyr::lazy_dt() %>%
   # Filter missing / bad CHI numbers
   dplyr::filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
+  # Fix some times - if end before start, remove the time portion
+  tidylog::mutate(
+    bad_dates = record_keydate1 > record_keydate2,
+    record_keydate1 = dplyr::if_else(bad_dates,
+      lubridate::floor_date(record_keydate1, "day"),
+      record_keydate1
+    ),
+    record_keydate2 = dplyr::if_else(bad_dates,
+      lubridate::floor_date(record_keydate1, "day"),
+      record_keydate2
+    )
+  ) %>%
   # Some episodes are wrongly included in the BOXI extract
   # Filter to episodes with any time in the given financial year.
   dplyr::filter(
