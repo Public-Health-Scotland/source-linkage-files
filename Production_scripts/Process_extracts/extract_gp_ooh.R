@@ -128,8 +128,8 @@ rm(readcode_lookup, readcodes_not_matched, unrecognised_but_ok_codes, new_bad_co
 diagnosis_clean <- diagnosis_readcodes %>%
   dplyr::select(guid, readcode, description) %>%
   dplyr::mutate(
-    readcode_level = str_locate(readcode, "\\.")[, "start"],
-    readcode_level = replace_na(readcode_level, 6)
+    readcode_level = stringr::str_locate(readcode, "\\.")[, "start"],
+    readcode_level = tidyr::replace_na(readcode_level, 6)
   ) %>%
   dtplyr::lazy_dt() %>%
   dplyr::group_by(guid) %>%
@@ -210,7 +210,7 @@ outcomes_clean <- outcomes_extract %>%
     values_from = outcome
   ) %>%
   dplyr::select(
-    guid,
+    "guid",
     any_of(c(
       "outcome_1",
       "outcome_2",
@@ -218,7 +218,7 @@ outcomes_clean <- outcomes_extract %>%
       "outcome_4"
     ))
   ) %>%
-  tibble::as_tibble()
+  dplyr::as_tibble()
 
 rm(outcomes_extract)
 
@@ -227,50 +227,50 @@ rm(outcomes_extract)
 # Read consultations data
 consultations_file <- readr::read_csv(
   file = get_boxi_extract_path(year, "GP_OoH-c"),
-  col_types = cols(
-    `UPI Number [C]` = col_character(),
-    `Patient DoB Date [C]` = col_date(format = "%Y/%m/%d %T"),
-    `Gender` = col_integer(),
-    `Patient Postcode [C]` = col_character(),
-    `Patient NHS Board Code 9 - current` = col_character(),
-    `HSCP of Residence Code Current` = col_character(),
-    `Patient Data Zone 2011` = col_character(),
-    `Practice Code` = col_character(),
-    `Practice NHS Board Code 9 - current` = col_character(),
-    `GUID` = col_character(),
-    `Consultation Recorded` = col_factor(levels = c("Y", "N")),
-    `Consultation Start Date Time` = col_datetime(format = "%Y/%m/%d %H:%M:%S"),
-    `Consultation End Date Time` = col_datetime(format = "%Y/%m/%d %H:%M:%S"),
-    `Treatment Location Code` = col_character(),
-    `Treatment Location Description` = col_character(),
-    `Treatment NHS Board Code 9` = col_character(),
-    `KIS Accessed` = col_factor(levels = c("Y", "N")),
-    `Referral Source` = col_character(),
-    `Consultation Type` = col_character(),
-    `Consultation Type Unmapped` = col_character()
+  col_types = readr::cols(
+    "UPI Number [C]" = readr::col_character(),
+    "Patient DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
+    "Gender" = readr::col_integer(),
+    "Patient Postcode [C]" = readr::col_character(),
+    "Patient NHS Board Code 9 - current" = readr::col_character(),
+    "HSCP of Residence Code Current" = readr::col_character(),
+    "Patient Data Zone 2011" = readr::col_character(),
+    "Practice Code" = readr::col_character(),
+    "Practice NHS Board Code 9 - current" = readr::col_character(),
+    "GUID" = readr::col_character(),
+    "Consultation Recorded" = readr::col_factor(levels = c("Y", "N")),
+    "Consultation Start Date Time" = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
+    "Consultation End Date Time" = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
+    "Treatment Location Code" = readr::col_character(),
+    "Treatment Location Description" = readr::col_character(),
+    "Treatment NHS Board Code 9" = readr::col_character(),
+    "KIS Accessed" = readr::col_factor(levels = c("Y", "N")),
+    "Referral Source" = readr::col_character(),
+    "Consultation Type" = readr::col_character(),
+    "Consultation Type Unmapped" = readr::col_character()
   )
 ) %>%
   # rename variables
   dplyr::rename(
-    chi = `UPI Number [C]`,
-    dob = `Patient DoB Date [C]`,
-    gender = `Gender`,
-    postcode = `Patient Postcode [C]`,
-    hbrescode = `Patient NHS Board Code 9 - current`,
-    hscp = `HSCP of Residence Code Current`,
-    datazone = `Patient Data Zone 2011`,
-    gpprac = `Practice Code`,
-    guid = `GUID`,
-    attendance_status = `Consultation Recorded`,
-    record_keydate1 = `Consultation Start Date Time`,
-    record_keydate2 = `Consultation End Date Time`,
-    location = `Treatment Location Code`,
-    location_description = `Treatment Location Description`,
-    hbtreatcode = `Treatment NHS Board Code 9`,
-    kis_accessed = `KIS Accessed`,
-    refsource = `Referral Source`,
-    smrtype = `Consultation Type`,
-    conc_type_unmapped = `Consultation Type Unmapped`
+    chi = "UPI Number [C]",
+    dob = "Patient DoB Date [C]",
+    gender = "Gender",
+    postcode = "Patient Postcode [C]",
+    hbrescode = "Patient NHS Board Code 9 - current",
+    hscp = "HSCP of Residence Code Current",
+    datazone = "Patient Data Zone 2011",
+    gpprac = "Practice Code",
+    guid = "GUID",
+    attendance_status = "Consultation Recorded",
+    record_keydate1 = "Consultation Start Date Time",
+    record_keydate2 = "Consultation End Date Time",
+    location = "Treatment Location Code",
+    location_description = "Treatment Location Description",
+    hbtreatcode = "Treatment NHS Board Code 9",
+    kis_accessed = "KIS Accessed",
+    refsource = "Referral Source",
+    consultation_type = "Consultation Type",
+    consultation_type_unmapped = "Consultation Type Unmapped"
   ) %>%
   dplyr::distinct()
 
