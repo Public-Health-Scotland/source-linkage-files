@@ -19,11 +19,11 @@ produce_sc_ch_episodes_tests <- function(data) {
     ) %>%
     # remove variables that won't be summed
     dplyr::select(-c(
-      .data$chi, .data$person_id, .data$gender, .data$dob, .data$postcode,
-      .data$sending_location, .data$social_care_id, .data$ch_name,
-      .data$ch_postcode, .data$record_keydate1, .data$record_keydate2,
-      .data$ch_chi_cis, .data$ch_sc_id_cis, .data$ch_provider,
-      .data$ch_nursing, .data$ch_adm_reason, .data$sc_latest_submission
+      "chi", "person_id", "gender", "dob", "postcode",
+      "sending_location", "social_care_id", "ch_name",
+      "ch_postcode", "record_keydate1", "record_keydate2",
+      "ch_chi_cis", "ch_sc_id_cis", "ch_provider",
+      "ch_nursing", "ch_adm_reason", "sc_latest_submission"
     )) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")

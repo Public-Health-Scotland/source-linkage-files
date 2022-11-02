@@ -36,7 +36,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   # add a new sheet for tests
   date_today <- format(Sys.Date(), "%d_%b")
   sheet_name_dated <- ifelse(
-    is_missing(year),
+    is.null(year),
     glue::glue("{sheet_name}_{date_today}"),
     glue::glue("{year}_{sheet_name}_{date_today}")
   )
