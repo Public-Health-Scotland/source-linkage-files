@@ -279,7 +279,20 @@ consultations_file <- readr::read_csv(
 
 ## Data Cleaning
 
-consultations_clean <- consultations_file %>%
+fnc_consulation_types <- c(
+  "ED APPOINTMENT",
+  "ED TELEPHONE ASSESSMENT",
+  "ED TO BOOK",
+  "ED TELEPHONE / REMOTE CONSULTATION",
+  "MIU APPOINTMENT",
+  "MIU TELEPHONE ASSESSMENT",
+  "MIU TO BOOK",
+  "MIU TELEPHONE / REMOTE CONSULTATION",
+  "TELEPHONE ASSESSMENT",
+  "TELEPHONE/VIRTUAL ASSESSMENT"
+)
+
+consultations_filtered <- consultations_file %>%
   dtplyr::lazy_dt() %>%
   # Filter missing / bad CHI numbers
   dplyr::filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
@@ -291,6 +304,9 @@ consultations_clean <- consultations_file %>%
   # TODO - WIP James to here: I was looking at doing the merge overlapping episodes bit.
   dplyr::group_by(chi) %>%
   dplyr::arrange(chi, record_keydate1, record_keydate2) %>%
+  # Filter out Flow navigation center data
+  dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
+  dplyr::as_tibble()
   dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
   dplyr::ungroup() %>%
