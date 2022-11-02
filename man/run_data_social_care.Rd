@@ -4,7 +4,14 @@
 \alias{run_data_social_care}
 \title{Run Social Care data}
 \usage{
-run_data_social_care(sc_demographics = data_list, write_to_disk = FALSE)
+run_data_social_care(sc_demographics = NULL, write_to_disk = FALSE)
+}
+\arguments{
+\item{sc_demographics}{The demographic file. Set to NULL for passing through
+a data list}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 }
 \value{
 A list of data containing processed extracts.

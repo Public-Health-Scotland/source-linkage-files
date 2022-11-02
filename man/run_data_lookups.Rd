@@ -6,6 +6,10 @@
 \usage{
 run_data_lookups(write_to_disk = FALSE)
 }
+\arguments{
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+}
 \value{
 A list of data containing processed extracts.
 }

@@ -8,7 +8,7 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
   # Read in data---------------------------------------
 
   ## read in data - social care 2 demographic
-  at_full_data <- tbl(
+  at_full_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "equipment_snapshot")
   ) %>%

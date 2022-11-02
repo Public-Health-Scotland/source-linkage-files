@@ -2,6 +2,8 @@
 #'
 #' @description Process and data lookups so they are ready for phase 3 production
 #' of the episode file.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
 #' @return A list of data containing processed extracts.
 #'

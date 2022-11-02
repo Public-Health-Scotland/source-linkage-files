@@ -8,6 +8,9 @@ run_data_extracts(year, write_to_disk = FALSE)
 }
 \arguments{
 \item{year}{Year of extract}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 }
 \value{
 A list of data containing processed extracts.

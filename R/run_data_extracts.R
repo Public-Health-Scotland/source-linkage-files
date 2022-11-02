@@ -4,6 +4,8 @@
 #' of the episode file.
 #'
 #' @param year Year of extract
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
 #' @return A list of data containing processed extracts.
 #'
