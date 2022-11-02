@@ -20,10 +20,10 @@ produce_slf_deaths_tests <- function(data) {
     ) %>%
     # remove variables that are not test flags
     dplyr::select(-c(
-      .data$chi,
-      .data$death_date_NRS,
-      .data$death_date_CHI,
-      .data$death_date
+      "chi",
+      "death_date_NRS",
+      "death_date_CHI",
+      "death_date"
     )) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
