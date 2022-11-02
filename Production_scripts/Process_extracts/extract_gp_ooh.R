@@ -272,6 +272,8 @@ consultations_file <- readr::read_csv(
     consultation_type = "Consultation Type",
     consultation_type_unmapped = "Consultation Type Unmapped"
   ) %>%
+  # Restore CHI leading zero
+  dplyr::mutate(chi = phsmethods::chi_pad(chi)) %>%
   dplyr::distinct()
 
 
@@ -279,8 +281,6 @@ consultations_file <- readr::read_csv(
 
 consultations_clean <- consultations_file %>%
   dtplyr::lazy_dt() %>%
-  # Restore CHI leading zero
-  dplyr::mutate(chi = phsmethods::chi_pad(chi)) %>%
   # Filter missing / bad CHI numbers
   dplyr::filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
   # Some episodes are wrongly included in the BOXI extract
