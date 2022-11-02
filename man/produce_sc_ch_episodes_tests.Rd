@@ -18,6 +18,7 @@ Produce the test for the Care Home all episodes
 }
 \seealso{
 Other social care test functions: 
-\code{\link{produce_sc_demog_lookup_tests}()}
+\code{\link{produce_sc_demog_lookup_tests}()},
+\code{\link{produce_source_at_tests}()}
 }
 \concept{social care test functions}
