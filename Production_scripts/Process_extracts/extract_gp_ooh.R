@@ -314,6 +314,17 @@ consultations_filtered <- consultations_file %>%
   # Filter out Flow navigation center data
   dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
   dplyr::as_tibble()
+
+consultations_covid <- consultations_filtered %>%
+  dplyr::mutate(consultation_type = dplyr::if_else(is.na(consultation_type),
+    dplyr::case_when(
+      consultation_type_unmapped == "COVID19 ASSESSMENT" ~ consultation_type_unmapped,
+      consultation_type_unmapped == "COVID19 ADVICE" ~ consultation_type_unmapped,
+      consultation_type_unmapped %in% c("COVID19 HOME VISIT", "COVID19 OBSERVATION", "COVID19 VIDEO CALL", "COVID19 TEST") ~ "COVID19 OTHER"
+    ),
+    consultation_type
+  ))
+
   dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
   dplyr::ungroup() %>%
