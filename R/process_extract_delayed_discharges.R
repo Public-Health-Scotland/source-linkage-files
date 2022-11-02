@@ -31,7 +31,8 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data$keydate1_dateformat, "month") - 1,
       keydate2_dateformat = dplyr::if_else(.data$keydate2_dateformat == as.Date("1900-01-01"),
-                                           .data$month_end, .data$keydate2_dateformat)
+        .data$month_end, .data$keydate2_dateformat
+      )
     ) %>%
     # Drop any records with obviously bad dates
     dplyr::filter(
