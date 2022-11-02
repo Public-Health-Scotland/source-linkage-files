@@ -7,7 +7,10 @@ Authors@R: c(
     person("James", "McMahon", , "james.mcmahon@phs.scot", role = "aut",
            comment = c(ORCID = "0000-0002-5380-2029")),
     person("Catherine", "Holland", , "catherine.holland@phs.scot", role = "aut",
-           comment = c(ORCID = "0000-0002-3259-5745"))
+           comment = c(ORCID = "0000-0002-3259-5745")),
+    person("Bateman", "McBride", , "Bateman.Mcbride@phs.scot", role = "aut"),
+    person("Zihao", "Li", , "zihao.li@phs.scot", role = "aut",
+           comment = c(ORCID = "0000-0002-5178-2124"))
   )
 Description: A package with functions used to create the Source Linkage
     Files (SLF)s.
@@ -24,6 +27,7 @@ Imports:
     fs (>= 1.5.2),
     glue (>= 1.6.2),
     haven (>= 2.5.0),
+    hms (>= 1.1.0),
     janitor (>= 2.1.0),
     lubridate (>= 1.8.0),
     magrittr (>= 2.0.3),
@@ -41,7 +45,7 @@ Imports:
     stringr (>= 1.4.0),
     tibble (>= 3.1.7),
     tidyr (>= 1.2.0),
-    tidyselect (>= 1.1.2)
+    tidyselect (>= 1.2.0)
 Suggests:
     covr,
     roxygen2,
