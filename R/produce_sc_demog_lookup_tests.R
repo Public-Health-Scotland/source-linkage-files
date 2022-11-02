@@ -20,12 +20,12 @@ produce_sc_demog_lookup_tests <- function(data) {
     # remove variables that won't be summed
     dplyr::select(
       -c(
-        .data$sending_location,
-        .data$social_care_id,
-        .data$chi,
-        .data$gender,
-        .data$dob,
-        .data$postcode
+        "sending_location",
+        "social_care_id",
+        "chi",
+        "gender",
+        "dob",
+        "postcode"
       )
     ) %>%
     # use function to sum new test flags
