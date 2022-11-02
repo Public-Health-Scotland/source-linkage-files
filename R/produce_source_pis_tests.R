@@ -23,7 +23,7 @@ produce_source_pis_tests <- function(data) {
     create_demog_test_flags() %>%
     dplyr::mutate(n_episodes = 1) %>%
     # keep variables for comparison
-    dplyr::select(c(.data$valid_chi:.data$n_episodes)) %>%
+    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
