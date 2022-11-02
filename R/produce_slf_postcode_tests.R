@@ -19,8 +19,7 @@ produce_slf_postcode_tests <- function(data) {
     # create other test flags
     dplyr::mutate(n_postcode = 1) %>%
     # remove variables that are not test flags
-    dplyr::select(c(.data$NHS_Ayrshire_and_Arran:.data$n_postcode)
-    ) %>%
+    dplyr::select(c(.data$NHS_Ayrshire_and_Arran:.data$n_postcode)) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 }
