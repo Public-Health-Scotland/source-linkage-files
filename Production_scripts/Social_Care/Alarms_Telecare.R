@@ -68,7 +68,13 @@ replaced_start_dates <- at_full_data %>%
       start_fy(year = substr(period, 1, 4), format = "alternate"),
       service_start_date
     )
-  )
+  ) %>%
+  # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
+  mutate(service_end_date = if_else(
+    service_start_date > service_end_date,
+    end_fy(year = substr(period, 1, 4), "alternate"),
+    service_end_date
+  ))
 
 at_full_clean <- replaced_start_dates %>%
   # Match on demographics data (chi, gender, dob and postcode)
