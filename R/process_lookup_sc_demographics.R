@@ -54,8 +54,8 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     # comparing with regex UK postcode
     dplyr::mutate(dplyr::across(tidyselect::ends_with("_postcode"), ~ dplyr::na_if(.x, !stringr::str_detect(.x, uk_pc_regexp)))) %>%
     dplyr::select(
-      .data$latest_record_flag, .data$extract_date, .data$sending_location, .data$social_care_id, .data$upi, .data$gender,
-      .data$dob, .data$submitted_postcode, .data$chi_postcode
+      "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi", "gender",
+      "dob", "submitted_postcode", "chi_postcode"
     ) %>%
     # check if submitted_postcode matches with postcode lookup
     dplyr::mutate(valid_pc = dplyr::if_else(.data$submitted_postcode %in% valid_spd_postcodes, 1, 0)) %>%

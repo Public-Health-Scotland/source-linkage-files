@@ -28,7 +28,7 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     dplyr::mutate(
       dplyr::across(
-        c(.data$financial_difficulties_debt_unemployment:.data$refused),
+        c("financial_difficulties_debt_unemployment":"refused"),
         tidyr::replace_na, 9L
       ),
       hl1_reason_ftm = paste0(
@@ -84,7 +84,7 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     dplyr::left_join(la_code_lookup,
       by = c("sending_local_authority_code_9" = "CA")
     ) %>%
-    dplyr::select(-.data$CAName, -.data$sending_local_authority_code_9)
+    dplyr::select(-"CAName", -"sending_local_authority_code_9")
 
   filtered_data <- data %>%
     dplyr::left_join(la_code_lookup,
@@ -106,26 +106,26 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     fix_west_dun_duplicates() %>%
     fix_east_ayrshire_duplicates() %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$smrtype,
-      chi = .data$upi_number,
-      dob = .data$client_dob_date,
-      age = .data$age_at_assessment_decision_date,
-      gender = .data$gender_code,
-      postcode = .data$client_postcode,
-      record_keydate1 = .data$assessment_decision_date,
-      record_keydate2 = .data$case_closed_date,
-      hl1_application_ref = .data$application_reference_number,
-      hl1_sending_lca = .data$sending_local_authority_code_9,
-      hl1_property_type = .data$property_type_code,
-      .data$hl1_reason_ftm
+      "year",
+      "recid",
+      "smrtype",
+      chi = "upi_number",
+      dob = "client_dob_date",
+      age = "age_at_assessment_decision_date",
+      gender = "gender_code",
+      postcode = "client_postcode",
+      record_keydate1 = "assessment_decision_date",
+      record_keydate2 = "case_closed_date",
+      hl1_application_ref = "application_reference_number",
+      hl1_sending_lca = "sending_local_authority_code_9",
+      hl1_property_type = "property_type_code",
+      "hl1_reason_ftm"
     )
 
   # Changes only required for SPSS ------------------------------------------
   final_data <- final_data %>%
     tidyr::replace_na(list(chi = "")) %>%
-    dplyr::mutate(dplyr::across(c(.data$record_keydate1, .data$record_keydate2), convert_date_to_numeric)) %>%
+    dplyr::mutate(dplyr::across(c("record_keydate1", "record_keydate2"), convert_date_to_numeric)) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::mutate(
       postcode = stringr::str_pad(.data$postcode, width = 8, side = "right"),

@@ -22,24 +22,24 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     # summarise to take last submission
     dplyr::summarise(dplyr::across(
       c(
-        .data$dementia,
-        .data$mental_health_problems,
-        .data$learning_disability,
-        .data$physical_and_sensory_disability,
-        .data$drugs,
-        .data$alcohol,
-        .data$palliative_care,
-        .data$carer,
-        .data$elderly_frail,
-        .data$neurological_condition,
-        .data$autism,
-        .data$other_vulnerable_groups,
-        .data$living_alone,
-        .data$support_from_unpaid_carer,
-        .data$social_worker,
-        .data$type_of_housing,
-        .data$meals,
-        .data$day_care
+        "dementia",
+        "mental_health_problems",
+        "learning_disability",
+        "physical_and_sensory_disability",
+        "drugs",
+        "alcohol",
+        "palliative_care",
+        "carer",
+        "elderly_frail",
+        "neurological_condition",
+        "autism",
+        "other_vulnerable_groups",
+        "living_alone",
+        "support_from_unpaid_carer",
+        "social_worker",
+        "type_of_housing",
+        "meals",
+        "day_care"
       ),
       ~ as.numeric(dplyr::last(.x))
     )) %>%
@@ -48,11 +48,11 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       dplyr::across(
         c(
-          .data$support_from_unpaid_carer,
-          .data$social_worker,
-          .data$meals,
-          .data$living_alone,
-          .data$day_care
+          "support_from_unpaid_carer",
+          "social_worker",
+          "meals",
+          "living_alone",
+          "day_care"
         ),
         tidyr::replace_na, 9
       ),
@@ -62,18 +62,18 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       dplyr::across(
         c(
-          .data$dementia,
-          .data$mental_health_problems,
-          .data$learning_disability,
-          .data$physical_and_sensory_disability,
-          .data$drugs,
-          .data$alcohol,
-          .data$palliative_care,
-          .data$carer,
-          .data$elderly_frail,
-          .data$neurological_condition,
-          .data$autism,
-          .data$other_vulnerable_groups
+          "dementia",
+          "mental_health_problems",
+          "learning_disability",
+          "physical_and_sensory_disability",
+          "drugs",
+          "alcohol",
+          "palliative_care",
+          "carer",
+          "elderly_frail",
+          "neurological_condition",
+          "autism",
+          "other_vulnerable_groups"
         ),
         factor,
         levels = c(0, 1),
@@ -81,11 +81,11 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
       ),
       dplyr::across(
         c(
-          .data$living_alone,
-          .data$support_from_unpaid_carer,
-          .data$social_worker,
-          .data$meals,
-          .data$day_care
+          "living_alone",
+          "support_from_unpaid_carer",
+          "social_worker",
+          "meals",
+          "day_care"
         ),
         factor,
         levels = c(0, 1, 9),
@@ -97,7 +97,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # rename variables
     dplyr::rename_with(
-      .cols = -c(.data$sending_location, .data$social_care_id),
+      .cols = -c("sending_location", "social_care_id"),
       .fn = ~ paste0("sc_", .x)
     )
 
@@ -107,14 +107,14 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     client_clean %>%
     # reorder
     dplyr::select(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$sc_living_alone,
-      .data$sc_support_from_unpaid_carer,
-      .data$sc_social_worker,
-      .data$sc_type_of_housing,
-      .data$sc_meals,
-      .data$sc_day_care
+      "sending_location",
+      "social_care_id",
+      "sc_living_alone",
+      "sc_support_from_unpaid_carer",
+      "sc_social_worker",
+      "sc_type_of_housing",
+      "sc_meals",
+      "sc_day_care"
     )
 
   if (write_to_disk) {
