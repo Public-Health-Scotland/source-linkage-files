@@ -97,7 +97,8 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
 #' @return A vector of Geriatric Care costs
 calculate_geriatric_cost <- function(recid, spec, cost_total_net) {
   geriatric_cost <- dplyr::if_else(
-    recid %in% c("50B", "GLS") | spec %in% c("AB", "G4"), cost_total_net, 0)
+    recid %in% c("50B", "GLS") | spec %in% c("AB", "G4"), cost_total_net, 0
+  )
   return(geriatric_cost)
 }
 
@@ -112,7 +113,8 @@ calculate_geriatric_cost <- function(recid, spec, cost_total_net) {
 #' @return A vector of Maternity costs
 calculate_maternity_cost <- function(recid, cij_pattype, cost_total_net) {
   maternity_cost <- dplyr::if_else(
-    recid %in% c("02B") | cij_pattype %in% c("Maternity"), cost_total_net, 0)
+    recid %in% c("02B") | cij_pattype %in% c("Maternity"), cost_total_net, 0
+  )
   return(maternity_cost)
 }
 
@@ -127,7 +129,8 @@ calculate_maternity_cost <- function(recid, cij_pattype, cost_total_net) {
 #' @return A vector of Psychiatry costs
 calculate_psychiatry_cost <- function(recid, spec, cost_total_net) {
   psychiatry_cost <- dplyr::if_else(
-    recid %in% c("04B") & !(spec %in% c("G4")), cost_total_net, 0)
+    recid %in% c("04B") & !(spec %in% c("G4")), cost_total_net, 0
+  )
   return(psychiatry_cost)
 }
 
@@ -145,8 +148,8 @@ calculate_psychiatry_cost <- function(recid, spec, cost_total_net) {
 #' @return A vector of Acute Elective costs
 calculate_acute_elective_cost <- function(recid, cij_pattype, cij_ipdc, spec, cost_total_net) {
   acute_elective_cost <- dplyr::if_else(recid %in% c("01B") &
-                                          (cij_pattype %in% c("Elective") | cij_ipdc %in% c("D")) &
-                                          !(spec %in% c("AB")), cost_total_net, 0)
+    (cij_pattype %in% c("Elective") | cij_ipdc %in% c("D")) &
+    !(spec %in% c("AB")), cost_total_net, 0)
   return(acute_elective_cost)
 }
 
@@ -162,8 +165,7 @@ calculate_acute_elective_cost <- function(recid, cij_pattype, cij_ipdc, spec, co
 #' @return A vector of Acute Emergency costs
 calculate_acute_emergency_cost <- function(recid, cij_pattype, spec, cost_total_net) {
   acute_emergency_cost <- dplyr::if_else(recid %in% c("01B") & cij_pattype %in% c("Non-Elective") &
-                                          !(spec %in% c("AB")), cost_total_net, 0
-  )
+    !(spec %in% c("AB")), cost_total_net, 0)
   return(acute_emergency_cost)
 }
 
@@ -179,11 +181,15 @@ calculate_acute_emergency_cost <- function(recid, cij_pattype, spec, cost_total_
 #' @return A list with outpatient costs in index 1 and total outpatient costs in index 2
 calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
   outpatient_cost <- dplyr::if_else(
-    recid %in% c("00B"), cost_total_net - geriatric_cost, 0)
+    recid %in% c("00B"), cost_total_net - geriatric_cost, 0
+  )
   total_outpatient_cost <- dplyr::if_else(
-    recid  %in% c("00B"), cost_total_net, 0)
-  return(list(outpatient_cost = outpatient_cost,
-              total_outpatient_cost = total_outpatient_cost))
+    recid %in% c("00B"), cost_total_net, 0
+  )
+  return(list(
+    outpatient_cost = outpatient_cost,
+    total_outpatient_cost = total_outpatient_cost
+  ))
 }
 
 #' Calculate cost for Home Care records
@@ -196,7 +202,8 @@ calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
 #' @return A vector of home care costs
 calculate_home_care_cost <- function(recid, cost_total_net) {
   home_care_cost <- dplyr::if_else(
-    recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0)
+    recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0
+  )
   return(home_care_cost)
 }
 
@@ -222,7 +229,8 @@ calculate_care_home_cost <- function(recid, cost_total_net) {
 #' @return A vector of Hospital Elective costs
 calculate_hospital_elective_cost <- function(recid, cij_pattype, cost_total_net) {
   hospital_elective_cost <- dplyr::if_else(
-    recid %in% c("01B", "04B", "50B", "GLS") & cij_pattype %in% c("Elective"), cost_total_net, 0)
+    recid %in% c("01B", "04B", "50B", "GLS") & cij_pattype %in% c("Elective"), cost_total_net, 0
+  )
   return(hospital_elective_cost)
 }
 
@@ -237,7 +245,8 @@ calculate_hospital_elective_cost <- function(recid, cij_pattype, cost_total_net)
 #' @return A vector of Hospital Emergency costs
 calculate_hospital_emergency_cost <- function(recid, cij_pattype, cost_total_net) {
   hospital_emergency_cost <- dplyr::if_else(
-    recid %in% c("01B", "04B", "50B", "GLS") & cij_pattype %in% c("Non-Elective"), cost_total_net, 0)
+    recid %in% c("01B", "04B", "50B", "GLS") & cij_pattype %in% c("Non-Elective"), cost_total_net, 0
+  )
   return(hospital_emergency_cost)
 }
 
@@ -274,7 +283,7 @@ calculate_ae2_cost <- function(recid, cost_total_net) {
 #'
 #' @return A vector of Community Health costs
 calculate_community_health_cost <- function(recid, cost_total_net) {
-  community_health_cost = dplyr::if_else(recid %in% c("DN"), cost_total_net, 0)
+  community_health_cost <- dplyr::if_else(recid %in% c("DN"), cost_total_net, 0)
   return(community_health_cost)
 }
 
