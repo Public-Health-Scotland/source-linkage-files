@@ -58,15 +58,19 @@ test_that("Costs are assigned correctly", {
 
   # Acute elective
   expect_equal(
-    calculate_acute_elective_cost(dummy_data$recid, dummy_data$cij_pattype, dummy_data$cij_ipdc,
-                                  dummy_data$spec, dummy_data$cost_total_net),
+    calculate_acute_elective_cost(
+      dummy_data$recid, dummy_data$cij_pattype, dummy_data$cij_ipdc,
+      dummy_data$spec, dummy_data$cost_total_net
+    ),
     c(0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Acute Emergency
   expect_equal(
-    calculate_acute_emergency_cost(dummy_data$recid, dummy_data$cij_pattype,
-                                  dummy_data$spec, dummy_data$cost_total_net),
+    calculate_acute_emergency_cost(
+      dummy_data$recid, dummy_data$cij_pattype,
+      dummy_data$spec, dummy_data$cost_total_net
+    ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
@@ -76,9 +80,11 @@ test_that("Costs are assigned correctly", {
 
   # Outpatient
   expect_equal(
-    calculate_outpatient_costs(dummy_data_op$recid,
-                               dummy_data_op$cost_total_net,
-                               dummy_data_op$geriatric_cost)[[1]],
+    calculate_outpatient_costs(
+      dummy_data_op$recid,
+      dummy_data_op$cost_total_net,
+      dummy_data_op$geriatric_cost
+    )[[1]],
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
   )
 
@@ -90,15 +96,19 @@ test_that("Costs are assigned correctly", {
 
   # Hospital Elective
   expect_equal(
-    calculate_hospital_elective_cost(dummy_data$recid, dummy_data$cij_pattype,
-                                     dummy_data$cost_total_net),
+    calculate_hospital_elective_cost(
+      dummy_data$recid, dummy_data$cij_pattype,
+      dummy_data$cost_total_net
+    ),
     c(0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Hospital Emergency
   expect_equal(
-    calculate_hospital_emergency_cost(dummy_data$recid, dummy_data$cij_pattype,
-                                     dummy_data$cost_total_net),
+    calculate_hospital_emergency_cost(
+      dummy_data$recid, dummy_data$cij_pattype,
+      dummy_data$cost_total_net
+    ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
   )
 
