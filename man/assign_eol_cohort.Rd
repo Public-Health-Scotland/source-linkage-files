@@ -2,29 +2,68 @@
 % Please edit documentation in R/create_demographic_lookup.R
 \name{assign_eol_cohort}
 \alias{assign_eol_cohort}
-\title{Assign End of Life cohort based on death codes}
+\title{Assign End of Life cohort}
 \usage{
-assign_eol_cohort(data)
+assign_eol_cohort(
+  recid,
+  deathdiag1,
+  deathdiag2,
+  deathdiag3,
+  deathdiag4,
+  deathdiag5,
+  deathdiag6,
+  deathdiag7,
+  deathdiag8,
+  deathdiag9,
+  deathdiag10,
+  deathdiag11
+)
 }
 \arguments{
-\item{data}{A data frame containing recid and the eleven death diagnosis variables}
+\item{recid}{A vector of record IDs}
+
+\item{deathdiag1}{A vector of death diagnosis codes}
+
+\item{deathdiag2}{A vector of death diagnosis codes}
+
+\item{deathdiag3}{A vector of death diagnosis codes}
+
+\item{deathdiag4}{A vector of death diagnosis codes}
+
+\item{deathdiag5}{A vector of death diagnosis codes}
+
+\item{deathdiag6}{A vector of death diagnosis codes}
+
+\item{deathdiag7}{A vector of death diagnosis codes}
+
+\item{deathdiag8}{A vector of death diagnosis codes}
+
+\item{deathdiag9}{A vector of death diagnosis codes}
+
+\item{deathdiag10}{A vector of death diagnosis codes}
+
+\item{deathdiag11}{A vector of death diagnosis codes}
 }
 \value{
-A data frame with variables for external causes of death and members of the EoL cohort
+A boolean vector indicating whether a given record is in the End of Life cohort
 }
 \description{
-Assign End of Life cohort based on death codes
+A record is considered to be in the EoL cohort if it is an NRS death record
+and the cause of death is not external. The exception to this is if the cause of death is external
+and is classified as a fall
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
-\code{\link{assign_cohort_names}()},
-\code{\link{assign_demographic_cohort}()},
-\code{\link{assign_service_cohorts}()},
+\code{\link{assign_adult_major_condition_cohort}()},
+\code{\link{assign_child_major_condition_cohort}()},
+\code{\link{assign_comm_living_cohort}()},
+\code{\link{assign_frailty_cohort}()},
+\code{\link{assign_high_cc_cohort}()},
+\code{\link{assign_low_cc_cohort}()},
+\code{\link{assign_maternity_cohort}()},
+\code{\link{assign_medium_cc_cohort}()},
+\code{\link{assign_mh_cohort}()},
 \code{\link{assign_substance_cohort}()},
-\code{\link{calculate_service_cohort_costs}()},
-\code{\link{create_demographic_lookup}()},
-\code{\link{create_service_costs}()},
-\code{\link{create_service_instances}()},
-\code{\link{create_service_use_lookup}()}
+\code{\link{create_demographic_lookup}()}
 }
 \concept{Demographic and Service Use Cohort functions}
