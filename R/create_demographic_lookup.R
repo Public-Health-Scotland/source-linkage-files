@@ -28,34 +28,34 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     # Remove missing chi
     dplyr::filter(!is_missing(.data$chi)) %>%
     # Add the various cohorts
-    assign_demographic_cohort() %>%
-    assign_eol_cohort() %>%
+    dplyr::mutate(
+      mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6),
+      frail = assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac),
+      maternity = assign_maternity_cohort(recid),
+      high_cc = assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec),
+      medium_cc = assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms),
+      low_cc = assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib),
+      comm_living = assign_comm_living_cohort(),
+      adult_major = assign_adult_major_condition_cohort(recid, age, cost_total_net),
+      child_major = assign_child_major_condition_cohort(recid, age, cost_total_net),
+      end_of_life = assign_eol_cohort(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
+                                      deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+                                      deathdiag11)) %>%
     assign_substance_cohort() %>%
-    # Aggregate to cij level, specifically so that the drug and alcohol misuse
-    # variables can be dealt with properly
-    dplyr::group_by(.data$chi, .data$cij_marker) %>%
-    dplyr::summarise(
-      dplyr::across(c(mh:t424), any)
-    ) %>%
-    dplyr::ungroup() %>%
-    # Assign drug and alcohol misuse
-    dplyr::mutate(substance = dplyr::if_else(
-      (.data$f11 & .data$t402_t404) | (.data$f13 & .data$t424), TRUE, .data$substance
-    )) %>%
     # Aggregate to CHI level
     dplyr::group_by(.data$chi) %>%
     dplyr::summarise(dplyr::across(c(
-      mh,
-      frail,
-      maternity,
-      high_cc,
-      medium_cc,
-      low_cc,
-      comm_living,
-      adult_major,
-      child_major,
-      end_of_life,
-      substance
+      "mh",
+      "frail",
+      "maternity",
+      "high_cc",
+      "medium_cc",
+      "low_cc",
+      "comm_living",
+      "adult_major",
+      "child_major",
+      "end_of_life",
+      "substance"
     ), any)) %>%
     dplyr::ungroup() %>%
     # Assign demographic_cohort based on hierarchy of each cohort
@@ -86,135 +86,237 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
   return(demo_lookup)
 }
 
-#' Assign the demographic cohort variables
+#' Assign Mental Health cohort
+#' @description A record is considered to be in the MH cohort if the recid is 04B. Also,
+#' if the recid is one of 01B, GLS, 50B, 02B or AE2 \strong{and} any of the diagnosis codes start with
+#' F2, F3, F067, F070, F072, F078, or F079
 #'
-#' @param data A data frame with the required variables for assignment
+#' @param recid A vector of record IDs
+#' @param diag1 A vector of Diagnosis Code 1
+#' @param diag2 A vector of Diagnosis Code 2
+#' @param diag3 A vector of Diagnosis Code 3
+#' @param diag4 A vector of Diagnosis Code 4
+#' @param diag5 A vector of Diagnosis Code 5
+#' @param diag6 A vector of Diagnosis Code 6
 #'
-#' @return A data frame with ten additional variables relating to the different cohorts
-#'
+#' @return A boolean vector indicating whether a given record is in the Mental Health cohort
 #' @family Demographic and Service Use Cohort functions
-assign_demographic_cohort <- function(data) {
-  check_variables_exist(data,
-    variables =
-      c(
-        "recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6", "age", "sigfac", "spec",
-        "dementia", "hefailure", "refailure", "liver", "cancer", "cvd", "copd", "chd", "parkinsons", "ms",
-        "epilepsy", "asthma", "arth", "diabetes", "atrialfib", "cost_total_net"
-      )
-  )
-
-  return_data <- data %>%
-    # Mental Health classification
+assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
+  mh <-
     # FOR FUTURE: when variable MentalHealthProblemsClientGroup exists and is "Y", mh_cohort = TRUE
-    dplyr::mutate(
-      mh =
-        .data$recid == "04B" |
-
-          (.data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-            (rowSums(dplyr::across(
-              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-              ~ stringr::str_sub(.x, 1, 2) %in%
-                c("F2", "F3")
-            )) > 0 |
-              rowSums(dplyr::across(
-                c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-                ~ stringr::str_sub(.x, 1, 4) %in%
-                  c("F067", "F070", "F072", "F078", "F079")
-              )) > 0)),
-      # Frailty classification
-      # FOR FUTURE: when variable ElderlyFrailClientGroup exists and is "Y", frail_cohort = TRUE,
-      # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
-      frail =
-        .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-          (rowSums(dplyr::across(
-            c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-            ~ stringr::str_sub(.x, 1, 2) %in%
-              c("W0", "W1")
-          )) > 0 |
-            rowSums(dplyr::across(
-              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-              ~ stringr::str_sub(.x, 1, 3) %in%
-                c("F00", "F01", "F02", "F03", "F05", "I61", "I63", "I64", "G20", "G21")
-            )) > 0 |
-            rowSums(dplyr::across(
-              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-              ~ stringr::str_sub(.x, 1, 4) %in%
-                c("R268", "G22X")
-            )) > 0 |
-            .data$spec == "AB" |
-            .data$sigfac %in% c("1E", "1D") |
-            .data$recid == "GLS"),
-
-      # Maternity classification
-      maternity = .data$recid == "02B",
-
-      # High CC classification
-      # FOR FUTURE: PhysicalandSensoryDisabilityClientGroup or LearningDisabilityClientGroup = "Y",
-      # then high_cc_cohort = TRUE
-      # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
-      high_cc =
-        rowSums(
-          dplyr::across(
-            c(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer)
-          ),
-          na.rm = TRUE
-        ) >= 1 |
-          .data$spec == "G5",
-
-      # Medium CC classification
-      medium_cc = rowSums(
-        dplyr::across(
-          c(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms)
-        ),
-        na.rm = TRUE
-      ) >= 1,
-
-      # Low CC classification
-      low_cc = rowSums(
-        dplyr::across(
-          c(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib)
-        ),
-        na.rm = TRUE
-      ) >= 1,
-
-      # Note from SPSS: we could add CMH here
-
-      # Assisted living in the Community
-      # Not using this cohort until we have more datasets and Scotland complete DN etc.
-      # Code: .data$recid %in% c('HC-', 'HC + ', "RSP", "DN", "MLS", "INS", "CPL", "DC")
-      comm_living = FALSE,
-
-      # Seperate out prescribing cost for major conditions
-      prescribing_cost = dplyr::if_else(.data$recid == "PIS", .data$cost_total_net, 0),
-
-      # Adult Major Conditions classification
-      adult_major = .data$age >= 18 & (.data$prescribing_cost >= 500 | .data$recid == "01B"),
-
-      # Child Major Conditions classification
-      child_major = .data$age < 18 & (.data$prescribing_cost >= 500 | .data$recid == "01B"),
-
-      # Make sure any cohorts not assigned return FALSE
-      dplyr::across(.data$mh:.data$child_major, ~ tidyr::replace_na(., FALSE))
-    ) %>%
-    dplyr::select(-prescribing_cost)
-
-  return(return_data)
+    recid == "04B" |
+    (recid %in% c("01B", "GLS", "50B", "02B", "AE2") &
+       (rowSums(dplyr::across(
+         c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+         ~ stringr::str_sub(.x, 1, 2) %in%
+           c("F2", "F3")
+       )) > 0 |
+         rowSums(dplyr::across(
+           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+           ~ stringr::str_sub(.x, 1, 4) %in%
+             c("F067", "F070", "F072", "F078", "F079")
+         )) > 0))
+  return(mh)
 }
 
-#' Assign End of Life cohort based on death codes
+#' Assign Frailty cohort
+#' @description A record is considered to be in the frailty cohort if:
+#' \itemize{
+#'     \item The recid is 01B, 50B, 02B, 04B or AE2 \strong{and}
+#'     \enumerate{\item One of the diagnosis codes starts with W0 or W1
+#'          \item One of the diagnosis codes starts with F00, F01, F02, F03, F05, I61, I63, I64, G20 or G21
+#'          \item One of the diagnosis coes starts with R268 or G22X
+#'    \item The specialty is AB
+#'    \item The significant facility is 1E or 1D
+#'    \item The recid is GLS}}}
 #'
-#' @param data A data frame containing recid and the eleven death diagnosis variables
+#' @param recid A vector of record IDs
+#' @param diag1 A vector of Diagnosis Code 1
+#' @param diag2 A vector of Diagnosis Code 2
+#' @param diag3 A vector of Diagnosis Code 3
+#' @param diag4 A vector of Diagnosis Code 4
+#' @param diag5 A vector of Diagnosis Code 5
+#' @param diag6 A vector of Diagnosis Code 6
+#' @param spec A vector of specialty codes
+#' @param sigfac A vector of significant facilities
 #'
-#' @return A data frame with variables for external causes of death and members of the EoL cohort
+#' @return A boolean vector indicating whether a given record is in the Frailty cohort
+#' @family Demographic and Service Use Cohort functions
+assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac) {
+  frail <-
+    # FOR FUTURE: when variable ElderlyFrailClientGroup exists and is "Y", frail_cohort = TRUE,
+    # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
+    recid %in% c("01B", "50B", "02B", "04B", "AE2") &
+    (rowSums(dplyr::across(
+      c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+      ~ stringr::str_sub(.x, 1, 2) %in%
+        c("W0", "W1")
+    )) > 0 |
+      rowSums(dplyr::across(
+        c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+        ~ stringr::str_sub(.x, 1, 3) %in%
+          c("F00", "F01", "F02", "F03", "F05", "I61", "I63", "I64", "G20", "G21")
+      )) > 0 |
+      rowSums(dplyr::across(
+        c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+        ~ stringr::str_sub(.x, 1, 4) %in%
+          c("R268", "G22X")
+      )) > 0 |
+      spec == "AB" |
+      sigfac %in% c("1E", "1D")) |
+      recid == "GLS"
+  return(frail)
+}
+
+#' Assign Maternity cohort
+#' @description A record is considered to be in the Maternity cohort if the recid
+#' is 02B
+#'
+#' @param recid A vector of recids
+#'
+#' @return A boolean vector indicating whether a given record is in the Maternity cohort
+#' @family Demographic and Service Use Cohort functions
+assign_maternity_cohort <- function(recid) {
+  maternity <- recid == "02B"
+  return(maternity)
+}
+
+#' Assign High Complex Conditions cohort
+#' @description A record is considered to be in the High Complex Conditions cohort if the patient
+#' has any of the listed LTCs, or the specialty is G5
+#'
+#' @param dementia A vector of dementia LTC flags
+#' @param hefailure A vector of heart failure LTC flags
+#' @param refailure A vector of renal failure LTC flags
+#' @param liver A vector of liver disease LTC flags
+#' @param cancer A vector of cancer LTC flags
+#' @param spec A vector of specialties
+#'
+#' @return A boolean vector indicating whether a given record is in the High Complex Conditions cohort
+#' @family Demographic and Service Use Cohort functions
+assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer, spec) {
+  high_cc <-
+    # FOR FUTURE: PhysicalandSensoryDisabilityClientGroup or LearningDisabilityClientGroup = "Y",
+    # then high_cc_cohort = TRUE
+    # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
+    rowSums(dplyr::across(c("dementia", "hefailure", "refailure", "liver", "cancer")), na.rm = TRUE) >= 1 |
+    spec == "G5"
+  return(high_cc)
+}
+
+#' Assign Medium Complex Conditions cohort
+#' @description A record is considered to be in the Medium Complex Conditions cohort if the patient
+#' has any of the listed LTCs
+#'
+#' @param cvd A vector of CVD LTC flags
+#' @param copd A vector of COPD LTC flags
+#' @param chd A vector of CHD LTC flags
+#' @param parkinsons A vector of Parkinson's LTC flags
+#' @param ms A vector of MS LTC flags
+#'
+#' @return A boolean vector indicating whether a given record is in the Medium Complex Conditions cohort
+#' @family Demographic and Service Use Cohort functions
+assign_medium_cc_cohort <- function(cvd, copd, chd, parkinsons, ms) {
+  medium_cc <-
+    rowSums(dplyr::across(c("cvd", "copd", "chd", "parkinsons", "ms")), na.rm = TRUE) >= 1
+  return(medium_cc)
+}
+
+#' Assign Low Complex Conditions cohort
+#' @description A record is considered to be in the Low Complex Conditions cohort if the patient
+#' has any of the listed LTCs
+#'
+#' @param epilepsy A vector of epilepsy LTC flags
+#' @param asthma A vector of asthma LTC flags
+#' @param arth A vector of arthritis LTC flags
+#' @param diabetes A vector of diabetes LTC flags
+#' @param atrialfib A vector of atrial fibrillation LTC flags
+#'
+#' @return A boolean vector indicating whether a given record is in the Low Complex Conditions cohort
+#' @family Demographic and Service Use Cohort functions
+assign_low_cc_cohort <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
+  low_cc <-
+    rowSums(dplyr::across(c("epilepsy", "asthma", "arth", "diabetes", "atrialfib")), na.rm = TRUE) >= 1
+  return(low_cc)
+}
+
+#' Assign Assisted living in the Community cohort
+#' @description Not using this cohort until we have more datasets and Scotland complete DN etc,
+#' so will always return FALSE
+#'
+#' @return A boolean vector indicating whether a given record is in the
+#' Assisted living in the Community cohort
+#' @family Demographic and Service Use Cohort functions
+assign_comm_living_cohort <- function() {
+  # Code: recid %in% c('HC-', 'HC + ', "RSP", "DN", "MLS", "INS", "CPL", "DC")
+  comm_living <- FALSE
+  return(comm_living)
+}
+
+#' Assign Adult Major Conditions cohort
+#' @description A person is considered to be in this cohort if their age is over 18 and
+#' the recid is 01B, or their prescribing cost is £500 or over
+#'
+#' @param recid A vector of record IDs
+#' @param age A vector of ages
+#' @param cost_total_net A vector of total net costs
+#'
+#' @return A boolean vector indicating whether a given record is in the Adult Major Conditions cohort
+#' @family Demographic and Service Use Cohort functions
+assign_adult_major_condition_cohort <- function(recid, age, cost_total_net) {
+  adult_major <- age >= 18 & ((cost_total_net >= 500 & recid == "PIS") | recid == "01B")
+  return(adult_major)
+}
+
+#' Assign Child Major Conditions cohort
+#' @description A person is considered to be in this cohort if their age is under 18 and
+#' the recid is 01B, or their prescribing cost is £500 or over
+#'
+#' @param recid A vector of record IDs
+#' @param age A vector of ages
+#' @param cost_total_net A vector of total net costs
+#'
+#' @return A boolean vector indicating whether a given record is in the Child Major Conditions cohort
+#' @family Demographic and Service Use Cohort functions
+assign_child_major_condition_cohort <- function(recid, age, cost_total_net) {
+  child_major <- age < 18 & (cost_total_net >= 500 & recid == "PIS" | recid == "01B")
+  return(child_major)
+}
+
+#' Pirates of Penzance
+#'
+#' @return Something silly
+assign_modern_major_cohort <- function() {
+  modern_major <- "I am the very model of a modern Major-General
+  I've information vegetable, animal, and mineral
+  I know the kings of England, and I quote the fights historical
+  From Marathon to Waterloo, in order categorical"
+}
+
+#' Assign End of Life cohort
+#' @description A record is considered to be in the EoL cohort if it is an NRS death record
+#' and the cause of death is not external. The exception to this is if the cause of death is external
+#' and is classified as a fall
+#'
+#' @param recid A vector of record IDs
+#' @param deathdiag1 A vector of death diagnosis codes
+#' @param deathdiag2 A vector of death diagnosis codes
+#' @param deathdiag3 A vector of death diagnosis codes
+#' @param deathdiag4 A vector of death diagnosis codes
+#' @param deathdiag5 A vector of death diagnosis codes
+#' @param deathdiag6 A vector of death diagnosis codes
+#' @param deathdiag7 A vector of death diagnosis codes
+#' @param deathdiag8 A vector of death diagnosis codes
+#' @param deathdiag9 A vector of death diagnosis codes
+#' @param deathdiag10 A vector of death diagnosis codes
+#' @param deathdiag11 A vector of death diagnosis codes
+#'
+#' @return A boolean vector indicating whether a given record is in the End of Life cohort
 #'
 #' @family Demographic and Service Use Cohort functions
-assign_eol_cohort <- function(data) {
-  check_variables_exist(data, variables = c(
-    "recid", "deathdiag1", "deathdiag2", "deathdiag3", "deathdiag4", "deathdiag5",
-    "deathdiag6", "deathdiag7", "deathdiag8", "deathdiag9", "deathdiag10",
-    "deathdiag11"
-  ))
-
+assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
+                                deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+                                deathdiag11) {
   external_deaths <- c(
     # Codes V01 to V99
     glue::glue("V{stringr::str_pad(1:99, 2, 'left', '0')}"),
@@ -229,86 +331,99 @@ assign_eol_cohort <- function(data) {
   falls_codes <- c(glue::glue("W{stringr::str_pad(0:19, 2, 'left', '0')}"))
 
   # External causes will be those codes that are in external_codes but are not in falls_codes
-  return_data <- data %>% dplyr::mutate(
-    external_cause = dplyr::if_else(
+  external_cause <-
+    rowSums(dplyr::across(dplyr::contains("deathdiag"), ~ stringr::str_sub(.x, 1, 3)
+    %in% external_deaths)) > 0 &
       rowSums(dplyr::across(dplyr::contains("deathdiag"), ~ stringr::str_sub(.x, 1, 3)
-      %in% external_deaths)) > 0 &
-        rowSums(dplyr::across(dplyr::contains("deathdiag"), ~ stringr::str_sub(.x, 1, 3)
-        %in% falls_codes)) == 0, TRUE, NA
-    ),
-    # End of life cohort are records from NRS that are not external causes
-    end_of_life = .data$recid == "NRS" & is.na(.data$external_cause)
-  )
+      %in% falls_codes)) == 0
+  # End of life cohort are records from NRS that are not external causes
+  end_of_life <- recid == "NRS" & external_cause == FALSE
+
+  return(end_of_life)
 }
 
 #' Assign substance misuse cohort
+#' @description Please see technical documentation for full description of this cohort
 #'
 #' @param data A data frame containing at least recid and the six diagnosis codes
 #'
-#' @return A data frame with five additional variables relating to substance misuse
+#' @return A data framne with an additional boolean variable, substance, which indicates whather a
+#' record is in this cohort
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_substance_cohort <- function(data) {
   check_variables_exist(data,
-    variables =
-      c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6")
+                        variables =
+                          c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6")
   )
 
   return_data <- data %>%
     dplyr::mutate(
       substance =
-      # FOR FUTURE, DrugsandAlcoholClientGroup = 'Y'
-      # Alcohol codes
-        .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-          rowSums(dplyr::across(
-            c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-            ~ stringr::str_sub(.x, 1, 3) %in%
-              c("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91")
-          )) > 0 |
-          .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-            rowSums(dplyr::across(
-              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-              ~ stringr::str_sub(.x, 1, 4) %in%
-                c(
-                  "E244", "E512", "G312", "G621", "G721", "I426", "K292", "K860", "O354", "P043",
-                  "Q860", "T510", "T511", "T519", "Y573", "R780", "Z502", "Z714", "Z721", "K852"
-                )
-            )) > 0 |
-          # Drug codes
-          .data$recid %in% c("01B", "04B") &
-            rowSums(dplyr::across(
-              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-              ~ stringr::str_sub(.x, 1, 3) %in%
-                c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19")
-            )) > 0 |
-          .data$recid %in% c("01B", "04B") &
-            rowSums(dplyr::across(
-              c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-              ~ stringr::str_sub(.x, 1, 4) %in%
-                c("T400", "T401", "T403", "T405", "T406", "T407", "T408", "T409", "T436")
-            )) > 0,
+        # FOR FUTURE, DrugsandAlcoholClientGroup = 'Y'
+        # Alcohol codes
+        recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
+        rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 3) %in%
+            c("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91")
+        )) > 0 |
+        recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
+        rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 4) %in%
+            c(
+              "E244", "E512", "G312", "G621", "G721", "I426", "K292", "K860", "O354", "P043",
+              "Q860", "T510", "T511", "T519", "Y573", "R780", "Z502", "Z714", "Z721", "K852"
+            )
+        )) > 0 |
+        # Drug codes
+        recid %in% c("01B", "04B") &
+        rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 3) %in%
+            c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19")
+        )) > 0 |
+        recid %in% c("01B", "04B") &
+        rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 4) %in%
+            c("T400", "T401", "T403", "T405", "T406", "T407", "T408", "T409", "T436")
+        )) > 0,
       # Some drug codes only count If other code present in CIJ
       # i.e. T402/T404 only If F11 and T424 only If F13.
-      f11 = .data$recid %in% c("01B", "04B") &
+      f11 = recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 3) %in% c("F11")
         )) > 0,
-      f13 = .data$recid %in% c("01B", "04B") &
+      f13 = recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 3) %in% c("F13")
         )) > 0,
-      t402_t404 = .data$recid %in% c("01B", "04B") &
+      t402_t404 = recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 4) %in% c("T402", "T404")
         )) > 0,
-      t424 = .data$recid %in% c("01B", "04B") &
+      t424 = recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 4) %in% c("T424")
         )) > 0
-    )
+    ) %>%
+    # Aggregate to cij level
+    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::summarise(
+      dplyr::across(c("mh":"t424"), any)
+    ) %>%
+    dplyr::ungroup() %>%
+    # Assign drug and alcohol misuse
+    dplyr::mutate(substance = dplyr::if_else(
+      (.data$f11 & .data$t402_t404) | (.data$f13 & .data$t424), TRUE, .data$substance
+    )) %>%
+    dplyr::select(-"f11", -"f13", -"t402_t404", -"t424")
+
   return(return_data)
 }
