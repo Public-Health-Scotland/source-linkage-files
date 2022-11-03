@@ -38,9 +38,12 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
       comm_living = assign_comm_living_cohort(),
       adult_major = assign_adult_major_condition_cohort(recid, age, cost_total_net),
       child_major = assign_child_major_condition_cohort(recid, age, cost_total_net),
-      end_of_life = assign_eol_cohort(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
-                                      deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
-                                      deathdiag11)) %>%
+      end_of_life = assign_eol_cohort(
+        recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
+        deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+        deathdiag11
+      )
+    ) %>%
     assign_substance_cohort() %>%
     # Aggregate to CHI level
     dplyr::group_by(.data$chi) %>%
@@ -105,17 +108,17 @@ assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
   mh <-
     # FOR FUTURE: when variable MentalHealthProblemsClientGroup exists and is "Y", mh_cohort = TRUE
     recid == "04B" |
-    (recid %in% c("01B", "GLS", "50B", "02B", "AE2") &
-       (rowSums(dplyr::across(
-         c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-         ~ stringr::str_sub(.x, 1, 2) %in%
-           c("F2", "F3")
-       )) > 0 |
-         rowSums(dplyr::across(
-           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-           ~ stringr::str_sub(.x, 1, 4) %in%
-             c("F067", "F070", "F072", "F078", "F079")
-         )) > 0))
+      (recid %in% c("01B", "GLS", "50B", "02B", "AE2") &
+        (rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 2) %in%
+            c("F2", "F3")
+        )) > 0 |
+          rowSums(dplyr::across(
+            c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+            ~ stringr::str_sub(.x, 1, 4) %in%
+              c("F067", "F070", "F072", "F078", "F079")
+          )) > 0))
   return(mh)
 }
 
@@ -147,23 +150,23 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
     # FOR FUTURE: when variable ElderlyFrailClientGroup exists and is "Y", frail_cohort = TRUE,
     # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
     recid %in% c("01B", "50B", "02B", "04B", "AE2") &
-    (rowSums(dplyr::across(
-      c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-      ~ stringr::str_sub(.x, 1, 2) %in%
-        c("W0", "W1")
-    )) > 0 |
-      rowSums(dplyr::across(
+      (rowSums(dplyr::across(
         c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-        ~ stringr::str_sub(.x, 1, 3) %in%
-          c("F00", "F01", "F02", "F03", "F05", "I61", "I63", "I64", "G20", "G21")
+        ~ stringr::str_sub(.x, 1, 2) %in%
+          c("W0", "W1")
       )) > 0 |
-      rowSums(dplyr::across(
-        c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-        ~ stringr::str_sub(.x, 1, 4) %in%
-          c("R268", "G22X")
-      )) > 0 |
-      spec == "AB" |
-      sigfac %in% c("1E", "1D")) |
+        rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 3) %in%
+            c("F00", "F01", "F02", "F03", "F05", "I61", "I63", "I64", "G20", "G21")
+        )) > 0 |
+        rowSums(dplyr::across(
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1, 4) %in%
+            c("R268", "G22X")
+        )) > 0 |
+        spec == "AB" |
+        sigfac %in% c("1E", "1D")) |
       recid == "GLS"
   return(frail)
 }
@@ -200,7 +203,7 @@ assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer,
     # then high_cc_cohort = TRUE
     # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
     rowSums(dplyr::across(c("dementia", "hefailure", "refailure", "liver", "cancer")), na.rm = TRUE) >= 1 |
-    spec == "G5"
+      spec == "G5"
   return(high_cc)
 }
 
@@ -315,8 +318,8 @@ assign_modern_major_cohort <- function() {
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
-                                deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
-                                deathdiag11) {
+                              deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+                              deathdiag11) {
   external_deaths <- c(
     # Codes V01 to V99
     glue::glue("V{stringr::str_pad(1:99, 2, 'left', '0')}"),
@@ -353,43 +356,43 @@ assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdi
 #' @family Demographic and Service Use Cohort functions
 assign_substance_cohort <- function(data) {
   check_variables_exist(data,
-                        variables =
-                          c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6")
+    variables =
+      c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6")
   )
 
   return_data <- data %>%
     dplyr::mutate(
       substance =
-        # FOR FUTURE, DrugsandAlcoholClientGroup = 'Y'
-        # Alcohol codes
+      # FOR FUTURE, DrugsandAlcoholClientGroup = 'Y'
+      # Alcohol codes
         recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-        rowSums(dplyr::across(
-          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 3) %in%
-            c("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91")
-        )) > 0 |
-        recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-        rowSums(dplyr::across(
-          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 4) %in%
-            c(
-              "E244", "E512", "G312", "G621", "G721", "I426", "K292", "K860", "O354", "P043",
-              "Q860", "T510", "T511", "T519", "Y573", "R780", "Z502", "Z714", "Z721", "K852"
-            )
-        )) > 0 |
-        # Drug codes
-        recid %in% c("01B", "04B") &
-        rowSums(dplyr::across(
-          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 3) %in%
-            c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19")
-        )) > 0 |
-        recid %in% c("01B", "04B") &
-        rowSums(dplyr::across(
-          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 4) %in%
-            c("T400", "T401", "T403", "T405", "T406", "T407", "T408", "T409", "T436")
-        )) > 0,
+          rowSums(dplyr::across(
+            c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+            ~ stringr::str_sub(.x, 1, 3) %in%
+              c("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91")
+          )) > 0 |
+          recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
+            rowSums(dplyr::across(
+              c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+              ~ stringr::str_sub(.x, 1, 4) %in%
+                c(
+                  "E244", "E512", "G312", "G621", "G721", "I426", "K292", "K860", "O354", "P043",
+                  "Q860", "T510", "T511", "T519", "Y573", "R780", "Z502", "Z714", "Z721", "K852"
+                )
+            )) > 0 |
+          # Drug codes
+          recid %in% c("01B", "04B") &
+            rowSums(dplyr::across(
+              c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+              ~ stringr::str_sub(.x, 1, 3) %in%
+                c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19")
+            )) > 0 |
+          recid %in% c("01B", "04B") &
+            rowSums(dplyr::across(
+              c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+              ~ stringr::str_sub(.x, 1, 4) %in%
+                c("T400", "T401", "T403", "T405", "T406", "T407", "T408", "T409", "T436")
+            )) > 0,
       # Some drug codes only count If other code present in CIJ
       # i.e. T402/T404 only If F11 and T424 only If F13.
       f11 = recid %in% c("01B", "04B") &

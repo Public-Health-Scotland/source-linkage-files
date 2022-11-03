@@ -1,12 +1,12 @@
 test_that("Different cohort functions work", {
-
   # Mental Health
   mh_test <- tibble::tribble(
     ~recid, ~diag1, ~diag2, ~diag3, ~diag4, ~diag5, ~diag6,
     "04B", NA, NA, NA, NA, NA, NA,
     "02B", "F2", NA, NA, NA, NA, NA,
     "AE2", NA, NA, NA, NA, "F067", NA,
-    "CH", "F2", NA, NA, NA, NA, NA)
+    "CH", "F2", NA, NA, NA, NA, NA
+  )
 
   expect_equal(
     (mh_test %>% mutate(mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)))$mh,
@@ -20,12 +20,15 @@ test_that("Different cohort functions work", {
     "04B", "A1", "A2", "I64", NA, NA, NA, NA, NA,
     "AE2", NA, NA, NA, NA, NA, NA, "AB", NA,
     "CH", NA, NA, NA, NA, NA, NA, NA, "1E",
-    "GLS", NA, NA, NA, NA, NA, NA, NA, NA)
+    "GLS", NA, NA, NA, NA, NA, NA, NA, NA
+  )
 
   expect_equal(
     (frail_test %>%
-       mutate(frail =
-                assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac)))$frail,
+      mutate(
+        frail =
+          assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac)
+      ))$frail,
     c(T, T, T, F, T)
   )
 
@@ -35,12 +38,15 @@ test_that("Different cohort functions work", {
     T, T, F, F, F, NA,
     F, F, T, F, F, NA,
     NA, NA, NA, T, NA, NA,
-    F, F, F, F, F, "G5")
+    F, F, F, F, F, "G5"
+  )
 
   expect_equal(
     (high_cc_test %>%
-       mutate(high_cc =
-                assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec)))$high_cc,
+      mutate(
+        high_cc =
+          assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec)
+      ))$high_cc,
     c(T, T, T, T)
   )
 
@@ -55,8 +61,10 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (medium_cc_test %>%
-       mutate(medium_cc =
-                assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms)))$medium_cc,
+      mutate(
+        medium_cc =
+          assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms)
+      ))$medium_cc,
     c(T, T, T, F)
   )
 
@@ -71,16 +79,20 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (low_cc_test %>%
-       mutate(low_cc =
-                assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib)))$low_cc,
+      mutate(
+        low_cc =
+          assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib)
+      ))$low_cc,
     c(T, T, T, F)
   )
 
   # Comm living
   expect_equal(
     (low_cc_test %>%
-       mutate(comm_living =
-                assign_comm_living_cohort()))$comm_living,
+      mutate(
+        comm_living =
+          assign_comm_living_cohort()
+      ))$comm_living,
     c(F, F, F, F)
   )
 
@@ -95,8 +107,10 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (adult_major_test %>%
-       mutate(adult_major =
-                assign_adult_major_condition_cohort(recid, age, cost_total_net)))$adult_major,
+      mutate(
+        adult_major =
+          assign_adult_major_condition_cohort(recid, age, cost_total_net)
+      ))$adult_major,
     c(T, T, F, F)
   )
 
@@ -110,8 +124,10 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (child_major_test %>%
-       mutate(child_major =
-                assign_child_major_condition_cohort(recid, age, cost_total_net)))$child_major,
+      mutate(
+        child_major =
+          assign_child_major_condition_cohort(recid, age, cost_total_net)
+      ))$child_major,
     c(T, T, F, F)
   )
 
@@ -126,9 +142,12 @@ test_that("Different cohort functions work", {
     "NRS", "X00", "X01", "W19", NA, NA, NA, NA, NA, NA, NA, NA
   )
 
-  test2 <- test %>% dplyr::mutate(end_of_life =
-                      assign_eol_cohort(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
-                                                        deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
-                                                        deathdiag11))
-
+  test2 <- test %>% dplyr::mutate(
+    end_of_life =
+      assign_eol_cohort(
+        recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
+        deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+        deathdiag11
+      )
+  )
 })
