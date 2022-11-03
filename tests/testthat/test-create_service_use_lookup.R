@@ -135,6 +135,19 @@ test_that("Costs are assigned correctly", {
     add_operation_flag(dummy_data$op1a),
     c(F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, T)
   )
+
+  dummy_data <- tibble::tribble(
+    ~acute_elective_cost, ~elective_inpatient_cost,
+    1, 2,
+    100, 51,
+    500, 499,
+    20, 10
+  )
+
+  expect_equal(
+    assign_elective_inpatient_flag(dummy_data$acute_elective_cost, dummy_data$elective_inpatient_cost),
+    c(T, T, T, F)
+  )
 })
 
 test_that("Instance flags are assigned correctly", {
@@ -163,26 +176,20 @@ test_that("Instance flags are assigned correctly", {
 
   # Elective inpatient
   expect_equal(
-    test_output$elective_inpatient_instances,
+    assign_elective_inpatient_instances(dummy_data$cij_pattype, dummy_data$cij_ipdc),
     c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE)
   )
 
   # Elective daycase
   expect_equal(
-    test_output$elective_daycase_instances,
+    assign_elective_daycase_instances(dummy_data$cij_pattype, dummy_data$cij_ipdc),
     c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE)
   )
 
   # Death flags
   expect_equal(
-    test_output$death_flag,
+    assign_death_flag(dummy_data$cij_marker),
     c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE)
-  )
-
-  # Elective costs
-  expect_equal(
-    test_output$elective_inpatient_cost,
-    c(0, 1, 0, 0, 0, 0, 0)
   )
 })
 

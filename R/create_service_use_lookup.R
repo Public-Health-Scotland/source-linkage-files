@@ -69,14 +69,43 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     dplyr::ungroup() %>%
 
-    # Create flag for elective inpatients
     dplyr::mutate(
-      elective_inpatient_flag = assign_elective_inpatient_flag(acute_elective_cost, elective_inpatient_cost)
-    ) %>%
-    # Assign service use cohorts
-    assign_service_cohorts() %>%
-    # Calculate costs based on the cohorts
-    calculate_service_cohort_costs() %>%
+      # Create flag for elective inpatients
+      elective_inpatient_flag = assign_elective_inpatient_flag(acute_elective_cost, elective_inpatient_cost),
+      # Assign cohort flags
+      psychiatry_cohort = assign_psychiatry_cohort(psychiatry_cost),
+      maternity_cohort = assign_maternity_cohort(maternity_cost),
+      geriatric_cohort = assign_geriatric_cohort(geriatric_cost),
+      elective_inpatient_cohort = assign_elective_inpatient_cohort(elective_inpatient_flag),
+      limited_daycases_cohort = assign_limited_daycases_cohort(elective_inpatient_flag, elective_instances),
+      routine_daycase_cohort = assign_routine_daycase_cohort(elective_inpatient_flag, elective_instances),
+      single_emergency_cohort = assign_single_emergency_cohort(emergency_instances),
+      multiple_emergency_cohort = assign_multiple_emergency_cohort(emergency_instances),
+      prescribing_cohort = assign_prescribing_cohort(prescribing_cost),
+      outpatient_cohort = assign_outpatient_cohort(outpatient_cost),
+      ae2_cohort = assign_ae2_cohort(ae2_cost),
+      community_care_cohort = assign_community_care_cohort(community_health_cost),
+      # Assign other cohort if none have been assigned
+      other_cohort = rowSums(dplyr::across("psychiatry_cohort":"community_care_cohort")) == 0,
+
+      # Recalculate costs based on the cohorts
+      elective_inpatient_cost = recalculate_elective_inpatient_cost(elective_inpatient_cohort,
+                                                                    acute_elective_cost),
+      limited_daycases_cost = calculate_limited_daycases_cost(limited_daycases_cohort,
+                                                              acute_elective_cost),
+      routine_daycase_cost = calculate_routine_daycase_cost(routine_daycase_cohort,
+                                                            acute_elective_cost),
+      single_emergency_cost = calculate_single_emergency_cost(single_emergency_cohort,
+                                                              acute_emergency_cost),
+      multiple_emergency_cost = calculate_multiple_emergency_cost(multiple_emergency_cohort,
+                                                                  acute_emergency_cost),
+      community_care_cost = calculate_community_care_cost(community_care_cohort,
+                                                         community_health_cost),
+      # Care Home cost is removed for now, so set to zero
+      residential_care_cost = 0,
+      # Replace any missing total costs with zero
+      dplyr::across("cost_total_net", ~ replace(., is.na(.), 0))) %>%
+
     # Add the cohort names
     assign_cohort_names() %>%
     # Select out the required variables
@@ -221,20 +250,13 @@ calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
 #' @param recid A vector of record IDs
 #'
 #' @return A vector of home care costs
-<<<<<<< HEAD
-# calculate_home_care_cost <- function(recid, cost_total_net) {
-#   home_care_cost <- dplyr::if_else(
-#     recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0)
-#   return(home_care_cost)
-# }
-=======
 calculate_home_care_cost <- function(recid, cost_total_net) {
   home_care_cost <- dplyr::if_else(
     recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0
   )
   return(home_care_cost)
 }
->>>>>>> 664a6a736268c297abb9f9eb8dcb2f06e3128b89
+
 
 #' Calculate cost for Care Home records
 #' @description A record is considered to have a home care cost if the recid is CH
@@ -417,56 +439,151 @@ assign_death_flag <- function(cij_marker) {
   return(death_flag)
 }
 
-#' Assign service use cohorts based on costs
+#' Assign psychiatry cohort flag
+#' @description If the record has a psychiatry cost greater than zero, assign `TRUE`
 #'
-#' @param data A data frame
+#' @param psychiatry_cost A vector of psychiatry costs
 #'
-#' @return A data frame with 13 cohort variables added
-#'
-#' @family Demographic and Service Use Cohort functions
-assign_service_cohorts <- function(data) {
-  check_variables_exist(
-    data,
-    c(
-      "psychiatry_cost", "maternity_cost", "geriatric_cost",
-      "elective_inpatient_flag", "elective_instances",
-      "emergency_instances", "prescribing_cost",
-      "outpatient_cost", "care_home_cost", "community_health_cost",
-      "ae2_cost"
-    )
-  )
-
-  return_data <- data %>%
-    dplyr::mutate(
-      # Maternity
-      maternity_cohort = .data$maternity_cost > 0,
-      # Geriatric Medicine
-      geriatric_cohort = .data$geriatric_cost > 0,
-      # Elective inpatient
-      elective_inpatient_cohort = .data$elective_inpatient_flag,
-      # Limited and routine daycases
-      limited_daycases_cohort = !.data$elective_inpatient_flag & .data$elective_instances <= 3,
-      routine_daycase_cohort = !.data$elective_inpatient_flag & .data$elective_instances >= 4,
-      # Single and multiple emergency
-      single_emergency_cohort = .data$emergency_instances == 1,
-      multiple_emergency_cohort = .data$emergency_instances >= 2,
-      # Prescribing
-      prescribing_cohort = .data$prescribing_cost > 0,
-      # For future: residential_care_cohort = .data$care_home_cost > 0
-      # Outpatients
-      outpatient_cohort = .data$outpatient_cost > 0,
-      # Community
-      community_care_cohort = .data$care_home_cost > 0 | .data$community_health_cost > 0,
-      # A&E
-      ae2_cohort = .data$ae2_cost > 0,
-      # Assign other cohort if person isn't in any of the above
-      other_cohort = rowSums(dplyr::across(.data$psychiatry_cohort:.data$ae2_cohort)) == 0
-    )
+#' @return A boolean vector of psychiatry cohort flags
+assign_psychiatry_cohort <- function(psychiatry_cost) {
+  psychiatry_cohort <- psychiatry_cost > 0
+  return(psychiatry_cohort)
 }
 
-assign_psychiatry_cohort <- function(psychiatry_cost) {
-  psychiatry_cohort = psychiatry_cost > 0
-  return(psychiatry_cohort)
+#' Assign maternity cohort flag
+#' @description If the record has a maternity cost greater than zero, assign `TRUE`
+#'
+#' @param maternity_cost A vector of maternity costs
+#'
+#' @return A boolean vector of maternity cohort flags
+assign_maternity_cohort <- function(maternity_cost) {
+  maternity_cohort <- maternity_cost > 0
+  return(maternity_cohort)
+}
+
+#' Assign geriatric cohort flag
+#' @description If the record has a geriatric cost greater than zero, assign `TRUE`
+#'
+#' @param geriatric_cost A vector of geriatric costs
+#'
+#' @return A boolean vector of geriatric cohort flags
+assign_geriatric_cohort <- function(geriatric_cost) {
+  geriatric_cohort <- geriatric_cost > 0
+  return(geriatric_cohort)
+}
+
+#' Assign elective inpatient cohort flag
+#' @description If the record has a elective inpatient flag, assign `TRUE`
+#'
+#' @param elective_inpatient_cost A vector of elective_inpatient costs
+#'
+#' @return A boolean vector of elective inpatient cohort flags
+assign_elective_inpatient_cohort <- function(elective_inpatient_flag) {
+  elective_inpatient_cohort <- elective_inpatient_flag
+  return(elective_inpatient_cohort)
+}
+
+#' Assign limited daycases cohort flag
+#' @description If the record does not have an elective inpatient flag and they have
+#' 3 or fewer elective instances, return `TRUE`
+#'
+#' @param elective_inpatient_flag A vector of elective inpatient flags
+#' @param elective_instances A vector of elective instances
+#'
+#' @return A boolean vector of limited daycases cohort flags
+assign_limited_daycases_cohort <- function(elective_inpatient_flag, elective_instances) {
+  limited_daycases_cohort <- !elective_inpatient_flag & elective_instances <= 3
+  return(limited_daycases_cohort)
+}
+
+#' Assign routine daycase cohort flag
+#' @description If the record does not have an elective inpatient flag and they have
+#' 4 or more elective instances, return `TRUE`
+#'
+#' @param elective_inpatient_flag A vector of elective inpatient flags
+#' @param elective_instances A vector of elective instances
+#'
+#' @return A boolean vector of routine daycase cohort flags
+assign_routine_daycase_cohort <- function(elective_inpatient_flag, elective_instances) {
+  routine_daycase_cohort <- !elective_inpatient_flag & elective_instances >= 4
+  return(routine_daycase_cohort)
+}
+
+#' Assign single emergency cohort flag
+#'
+#' @param emergency_instances A vector of emergency instances
+#'
+#' @return A boolean vector of single emergency cohort flags
+assign_single_emergency_cohort <- function(emergency_instances) {
+  single_emergency_cohort <- emergency_instances == 1
+  return(single_emergency_cohort)
+}
+
+#' Assign multiple emergency cohort flag
+#'
+#' @param emergency_instances A vector of emergency instances
+#'
+#' @return A boolean vector of multiple emergency cohort flags
+assign_multiple_emergency_cohort <- function(emergency_instances) {
+  multiple_emergency_cohort <- emergency_instances >= 2
+  return(multiple_emergency_cohort)
+}
+
+#' Assign prescribing cohort flag
+#' @description If the record has a prescribing cost greater than zero, assign `TRUE`
+#'
+#' @param prescribing_cost A vector of prescribing costs
+#'
+#' @return A boolean vector of prescribing cohort flags
+assign_prescribing_cohort <- function(prescribing_cost) {
+  prescribing_cohort <- prescribing_cost > 0
+  return(prescribing_cohort)
+}
+
+#' Assign outpatient cohort flag
+#' @description If the record has a outpatient cost greater than zero, assign `TRUE`
+#'
+#' @param outpatient_cost A vector of outpatient costs
+#'
+#' @return A boolean vector of outpatient cohort flags
+assign_outpatient_cohort <- function(outpatient_cost) {
+  outpatient_cohort <- outpatient_cost > 0
+  return(outpatient_cohort)
+}
+
+#' Assign residential care cohort flag
+#' @description Please note that this function is not currently in use
+#' If the record has a care home cost greater than zero, assign `TRUE`
+#'
+#' @param care_home_cost A vector of care home costs
+#'
+#' @return A boolean vector of residential care cohort flags
+assign_residential_care_cohort <- function(care_home_cost) {
+  residential_care_cohort <- care_home_cost > 0
+  return(residential_care_cohort)
+}
+
+#' Assign A&E cohort flag
+#' @description If the record has a A&E cost greater than zero, assign `TRUE`
+#'
+#' @param ae2_cost A vector of A&E costs
+#'
+#' @return A boolean vector of A&E cohort flags
+assign_ae2_cohort <- function(ae2_cost) {
+  ae2_cohort <- ae2_cost > 0
+  return(ae2_cohort)
+}
+
+#' Assign Community Care cohort flag
+#' @description If the record has a home care cost or community health
+#' cost greater than zero, assign `TRUE`
+#'
+#' @param community_health_cost A vector of community health costs
+#'
+#' @return A boolean vector of Community Care cohort flags
+assign_community_care_cohort <- function(community_health_cost) {
+  community_care_cohort <- community_health_cost > 0 # | home_care_cost > 0
+  return(community_care_cohort)
 }
 
 #' Calculate costs based on service use cohort
@@ -489,13 +606,6 @@ calculate_service_cohort_costs <- function(data) {
 
   return_data <- data %>%
     dplyr::mutate(
-      elective_inpatient_cost = dplyr::if_else(.data$elective_inpatient_cohort, .data$acute_elective_cost, 0),
-      limited_daycases_cost = dplyr::if_else(.data$limited_daycases_cohort, .data$acute_elective_cost, 0),
-      routine_daycase_cost = dplyr::if_else(.data$routine_daycase_cohort, .data$acute_elective_cost, 0),
-      single_emergency_cost = dplyr::if_else(.data$single_emergency_cohort, .data$acute_emergency_cost, 0),
-      multiple_emergency_cost = dplyr::if_else(.data$multiple_emergency_cohort, .data$acute_emergency_cost, 0),
-      # In the future this will be = .data$community_health_cost + .data$home_care_cost
-      community_care_cost = dplyr::if_else(.data$community_care_cohort, .data$community_health_cost, 0),
       # Care Home cost is removed for now, so set to zero
       residential_care_cost = 0,
       # Replace any missing total costs with zero
@@ -503,6 +613,78 @@ calculate_service_cohort_costs <- function(data) {
     )
 
   return(return_data)
+}
+
+#' Recalculate elective inpatient costs
+#' @description Elective inpatient costs need to be recalculated
+#' once the cohorts have been assigned
+#'
+#' @param elective_inpatient_cohort A vector of elective inpatient cohort flags
+#' @param acute_elective_cost A vector of acute elective costs
+#'
+#' @return A vector of elective inpatient costs
+recalculate_elective_inpatient_cost <- function(elective_inpatient_cohort, acute_elective_cost) {
+  elective_inpatient_cost <- dplyr::if_else(elective_inpatient_cohort, acute_elective_cost, 0)
+  return(elective_inpatient_cost)
+}
+
+#' Calculate limited daycases cost
+#'
+#' @param limited_daycases_cohort A vector of limited daycases cohort flags
+#' @param acute_elective_cost A vector of acute elective costs
+#'
+#' @return A vector of limited daycase costs
+calculate_limited_daycases_cost <- function(limited_daycases_cohort, acute_elective_cost) {
+  limited_daycases_cost <- dplyr::if_else(limited_daycases_cohort, acute_elective_cost, 0)
+  return(limited_daycases_cost)
+}
+
+#' Calculate routine daycase cost
+#'
+#' @param routine_daycase_cohort A vector of routine daycase cohort flags
+#' @param acute_elective_cost A vector of acute elective costs
+#'
+#' @return A vector of routine daycase costs
+calculate_routine_daycase_cost <- function(routine_daycase_cohort, acute_elective_cost) {
+  routine_daycase_cost = dplyr::if_else(routine_daycase_cohort, acute_elective_cost, 0)
+  return(routine_daycase_cost)
+}
+
+#' Calculate single emergency cost
+#'
+#' @param single_emergency_cohort A vector of single emergency cohort flags
+#' @param acute_emergency_cost A vector of acute emergency costs
+#'
+#' @return A vector of single emergency costs
+calculate_single_emergency_cost <- function(single_emergency_cohort, acute_emergency_cost) {
+  single_emergency_cost = dplyr::if_else(single_emergency_cohort, acute_emergency_cost, 0)
+  return(single_emergency_cost)
+}
+
+#' Calculate multiple emergency cost
+#'
+#' @param multiple_emergency_cohort A vector of multiple emergency cohort flags
+#' @param acute_emergency_cost A vector of acute emergency costs
+#'
+#' @return A vector of multiple emergency costs
+calculate_multiple_emergency_cost <- function(multiple_emergency_cohort, acute_emergency_cost) {
+  multiple_emergency_cost = dplyr::if_else(multiple_emergency_cohort, acute_emergency_cost, 0)
+  return(multiple_emergency_cost)
+}
+
+#' Calculate community care cost
+#'
+#' @param community_care_cohort A vector of community care cohort flags
+#' @param community_health_cost A vector of community health costs
+#'
+#' @return A vector of community care costs
+calculate_community_care_cost <- function(community_care_cohort, community_health_cost){
+  community_care_cost <- dplyr::if_else(
+    community_care_cohort, community_health_cost, 0)
+  # FOR FUTURE
+  # community_care_cost <- dplyr::if_else(
+  # community_care_cohort + home_care_cost, community_health_cost, 0)
+  return(community_care_cost)
 }
 
 #' Title Assign service use cohort into string format
