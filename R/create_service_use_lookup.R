@@ -18,16 +18,21 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       cij_attendance = !is.na(.data$cij_marker),
       cij_marker = dplyr::if_else(is.na(.data$cij_marker),
-        .data$recid, as.character(.data$cij_marker)),
+        .data$recid, as.character(.data$cij_marker)
+      ),
 
       # Calculate service costs
       geriatric_cost = calculate_geriatric_cost(recid, spec, cost_total_net),
       maternity_cost = calculate_maternity_cost(recid, cij_pattype, cost_total_net),
       psychiatry_cost = calculate_psychiatry_cost(recid, spec, cost_total_net),
-      acute_elective_cost = calculate_acute_elective_cost(recid, cij_pattype, cij_ipdc,
-                                                          spec, cost_total_net),
-      acute_emergency_cost = calculate_acute_emergency_cost(recid, cij_pattype,
-                                                            spec, cost_total_net),
+      acute_elective_cost = calculate_acute_elective_cost(
+        recid, cij_pattype, cij_ipdc,
+        spec, cost_total_net
+      ),
+      acute_emergency_cost = calculate_acute_emergency_cost(
+        recid, cij_pattype,
+        spec, cost_total_net
+      ),
       outpatient_cost = calculate_outpatient_costs(recid, cost_total_net, geriatric_cost)[[1]],
       total_outpatient_cost = calculate_outpatient_costs(recid, cost_total_net, geriatric_cost)[[2]],
       care_home_cost = calculate_care_home_cost(recid, cost_total_net),
@@ -38,7 +43,6 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       community_health_cost = calculate_community_health_cost(recid, cost_total_net),
       operation_flag = add_operation_flag(op1a)
     ) %>%
-
     # Aggregate to cij-level
     dplyr::group_by(.data$chi, .data$cij_marker, .data$cij_ipdc, .data$cij_pattype) %>%
     dplyr::summarise(
@@ -46,7 +50,6 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       dplyr::across(c("operation_flag", "cij_attendance"), any)
     ) %>%
     dplyr::ungroup() %>%
-
     # Create specific instance counters and compute cost for elective inpatients
     dplyr::mutate(
       emergency_instances = assign_emergency_instances(cij_pattype),
@@ -54,13 +57,13 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       elective_inpatient_instances = assign_elective_inpatient_instances(cij_pattype, cij_ipdc),
       elective_daycase_instances = assign_elective_daycase_instances(cij_pattype, cij_ipdc),
       death_flag = assign_death_flag(cij_marker),
-      elective_inpatient_cost = calculate_elective_inpatient_cost(elective_inpatient_instances,
-                                                                  cost_total_net)
+      elective_inpatient_cost = calculate_elective_inpatient_cost(
+        elective_inpatient_instances,
+        cost_total_net
+      )
     ) %>%
-
     # Move flags to end of data frame
     dplyr::relocate(c("operation_flag", "death_flag"), .after = dplyr::last_col()) %>%
-
     # Aggregate to chi-level
     dplyr::group_by(.data$chi) %>%
     dplyr::summarise(
@@ -68,7 +71,6 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       dplyr::across(c(.data$operation_flag, .data$death_flag), any)
     ) %>%
     dplyr::ungroup() %>%
-
     dplyr::mutate(
       # Create flag for elective inpatients
       elective_inpatient_flag = assign_elective_inpatient_flag(acute_elective_cost, elective_inpatient_cost),
@@ -89,23 +91,35 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       other_cohort = rowSums(dplyr::across("psychiatry_cohort":"community_care_cohort")) == 0,
 
       # Recalculate costs based on the cohorts
-      elective_inpatient_cost = recalculate_elective_inpatient_cost(elective_inpatient_cohort,
-                                                                    acute_elective_cost),
-      limited_daycases_cost = calculate_limited_daycases_cost(limited_daycases_cohort,
-                                                              acute_elective_cost),
-      routine_daycase_cost = calculate_routine_daycase_cost(routine_daycase_cohort,
-                                                            acute_elective_cost),
-      single_emergency_cost = calculate_single_emergency_cost(single_emergency_cohort,
-                                                              acute_emergency_cost),
-      multiple_emergency_cost = calculate_multiple_emergency_cost(multiple_emergency_cohort,
-                                                                  acute_emergency_cost),
-      community_care_cost = calculate_community_care_cost(community_care_cohort,
-                                                         community_health_cost),
+      elective_inpatient_cost = recalculate_elective_inpatient_cost(
+        elective_inpatient_cohort,
+        acute_elective_cost
+      ),
+      limited_daycases_cost = calculate_limited_daycases_cost(
+        limited_daycases_cohort,
+        acute_elective_cost
+      ),
+      routine_daycase_cost = calculate_routine_daycase_cost(
+        routine_daycase_cohort,
+        acute_elective_cost
+      ),
+      single_emergency_cost = calculate_single_emergency_cost(
+        single_emergency_cohort,
+        acute_emergency_cost
+      ),
+      multiple_emergency_cost = calculate_multiple_emergency_cost(
+        multiple_emergency_cohort,
+        acute_emergency_cost
+      ),
+      community_care_cost = calculate_community_care_cost(
+        community_care_cohort,
+        community_health_cost
+      ),
       # Care Home cost is removed for now, so set to zero
       residential_care_cost = 0,
       # Replace any missing total costs with zero
-      dplyr::across("cost_total_net", ~ replace(., is.na(.), 0))) %>%
-
+      dplyr::across("cost_total_net", ~ replace(., is.na(.), 0))
+    ) %>%
     # Add the cohort names
     assign_cohort_names() %>%
     # Select out the required variables
@@ -347,7 +361,8 @@ calculate_community_health_cost <- function(recid, cost_total_net) {
 #' @seealso [assign_elective_inpatient_instances()]
 calculate_elective_inpatient_cost <- function(elective_inpatient_instances, cost_total_net) {
   elective_inpatient_cost <- dplyr::if_else(
-    elective_inpatient_instances, cost_total_net, 0)
+    elective_inpatient_instances, cost_total_net, 0
+  )
   return(elective_inpatient_cost)
 }
 
@@ -420,12 +435,13 @@ assign_elective_daycase_instances <- function(cij_pattype, cij_ipdc) {
 #'
 #' @return A boolean vector indicating whether a record is an elective inpatient one
 assign_elective_inpatient_flag <- function(acute_elective_cost, elective_inpatient_cost) {
-    elective_inpatient_percentage <- dplyr::if_else(
-      acute_elective_cost > 0, elective_inpatient_cost / acute_elective_cost, 0)
+  elective_inpatient_percentage <- dplyr::if_else(
+    acute_elective_cost > 0, elective_inpatient_cost / acute_elective_cost, 0
+  )
 
-    elective_inpatient_flag <- elective_inpatient_percentage > 0.5
+  elective_inpatient_flag <- elective_inpatient_percentage > 0.5
 
-    return(elective_inpatient_flag)
+  return(elective_inpatient_flag)
 }
 
 #' Assign a flag for deaths
@@ -646,7 +662,7 @@ calculate_limited_daycases_cost <- function(limited_daycases_cohort, acute_elect
 #'
 #' @return A vector of routine daycase costs
 calculate_routine_daycase_cost <- function(routine_daycase_cohort, acute_elective_cost) {
-  routine_daycase_cost = dplyr::if_else(routine_daycase_cohort, acute_elective_cost, 0)
+  routine_daycase_cost <- dplyr::if_else(routine_daycase_cohort, acute_elective_cost, 0)
   return(routine_daycase_cost)
 }
 
@@ -657,7 +673,7 @@ calculate_routine_daycase_cost <- function(routine_daycase_cohort, acute_electiv
 #'
 #' @return A vector of single emergency costs
 calculate_single_emergency_cost <- function(single_emergency_cohort, acute_emergency_cost) {
-  single_emergency_cost = dplyr::if_else(single_emergency_cohort, acute_emergency_cost, 0)
+  single_emergency_cost <- dplyr::if_else(single_emergency_cohort, acute_emergency_cost, 0)
   return(single_emergency_cost)
 }
 
@@ -668,7 +684,7 @@ calculate_single_emergency_cost <- function(single_emergency_cohort, acute_emerg
 #'
 #' @return A vector of multiple emergency costs
 calculate_multiple_emergency_cost <- function(multiple_emergency_cohort, acute_emergency_cost) {
-  multiple_emergency_cost = dplyr::if_else(multiple_emergency_cohort, acute_emergency_cost, 0)
+  multiple_emergency_cost <- dplyr::if_else(multiple_emergency_cohort, acute_emergency_cost, 0)
   return(multiple_emergency_cost)
 }
 
@@ -678,9 +694,10 @@ calculate_multiple_emergency_cost <- function(multiple_emergency_cohort, acute_e
 #' @param community_health_cost A vector of community health costs
 #'
 #' @return A vector of community care costs
-calculate_community_care_cost <- function(community_care_cohort, community_health_cost){
+calculate_community_care_cost <- function(community_care_cohort, community_health_cost) {
   community_care_cost <- dplyr::if_else(
-    community_care_cohort, community_health_cost, 0)
+    community_care_cohort, community_health_cost, 0
+  )
   # FOR FUTURE
   # community_care_cost <- dplyr::if_else(
   # community_care_cohort + home_care_cost, community_health_cost, 0)
