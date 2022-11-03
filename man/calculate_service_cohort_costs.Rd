@@ -18,8 +18,6 @@ Calculate costs based on service use cohort
 \seealso{
 Other Demographic and Service Use Cohort functions: 
 \code{\link{assign_cohort_names}()},
-\code{\link{assign_service_cohorts}()},
-\code{\link{create_service_instances}()},
 \code{\link{create_service_use_lookup}()}
 }
 \concept{Demographic and Service Use Cohort functions}

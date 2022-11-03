@@ -21,16 +21,8 @@ The Service Use lookup file
 Create the Service Use Cohort lookup file
 }
 \seealso{
-\itemize{\item \code{\link[=create_service_costs]{create_service_costs()}}
-\item \code{\link[=create_service_instances]{create_service_instances()}}
-\item \code{\link[=assign_service_cohorts]{assign_service_cohorts()}}
-\item \code{\link[=calculate_service_cohort_costs]{calculate_service_cohort_costs()}}
-\item \code{\link[=assign_cohort_names]{assign_cohort_names()}}}
-
 Other Demographic and Service Use Cohort functions: 
 \code{\link{assign_cohort_names}()},
-\code{\link{assign_service_cohorts}()},
-\code{\link{calculate_service_cohort_costs}()},
-\code{\link{create_service_instances}()}
+\code{\link{calculate_service_cohort_costs}()}
 }
 \concept{Demographic and Service Use Cohort functions}
