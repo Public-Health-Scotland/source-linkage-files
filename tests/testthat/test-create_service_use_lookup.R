@@ -38,91 +38,91 @@ test_that("Costs are assigned correctly", {
     "21", "00B", NA, NA, NA, "V092", 1
   )
 
-  test_output <- create_service_costs(dummy_data)
-
   # Geriatric
   expect_equal(
-    test_output$geriatric_cost,
+    calculate_geriatric_cost(dummy_data$recid, dummy_data$spec, dummy_data$cost_total_net),
     c(1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0)
   )
 
   # Maternity
   expect_equal(
-    test_output$maternity_cost,
+    calculate_maternity_cost(dummy_data$recid, dummy_data$cij_pattype, dummy_data$cost_total_net),
     c(0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Psychiatry
   expect_equal(
-    test_output$psychiatry_cost,
+    calculate_psychiatry_cost(dummy_data$recid, dummy_data$spec, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Acute elective
   expect_equal(
-    test_output$acute_elective_cost,
+    calculate_acute_elective_cost(dummy_data$recid, dummy_data$cij_pattype, dummy_data$cij_ipdc,
+                                  dummy_data$spec, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Acute Emergency
   expect_equal(
-    test_output$acute_emergency_cost,
+    calculate_acute_emergency_cost(dummy_data$recid, dummy_data$cij_pattype,
+                                  dummy_data$spec, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
+  # Create geriatric costs for outpatient costs
+  dummy_data_op <- dummy_data %>%
+    dplyr::mutate(geriatric_cost = calculate_geriatric_cost(recid, spec, cost_total_net))
+
   # Outpatient
   expect_equal(
-    test_output$outpatient_cost,
+    calculate_outpatient_costs(dummy_data_op$recid,
+                               dummy_data_op$cost_total_net,
+                               dummy_data_op$geriatric_cost)[[1]],
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
   )
 
   # Care Home
   expect_equal(
-    test_output$care_home_cost,
+    calculate_care_home_cost(dummy_data$recid, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
   )
 
   # Hospital Elective
   expect_equal(
-    test_output$hospital_elective_cost,
+    calculate_hospital_elective_cost(dummy_data$recid, dummy_data$cij_pattype,
+                                     dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Hospital Emergency
   expect_equal(
-    test_output$hospital_emergency_cost,
+    calculate_hospital_emergency_cost(dummy_data$recid, dummy_data$cij_pattype,
+                                     dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
   )
 
   # Prescribing
   expect_equal(
-    test_output$prescribing_cost,
+    calculate_prescribing_cost(dummy_data$recid, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
   )
 
   # A&E
   expect_equal(
-    test_output$ae2_cost,
+    calculate_ae2_cost(dummy_data$recid, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)
   )
 
   # Community
   expect_equal(
-    test_output$community_health_cost,
+    calculate_community_health_cost(dummy_data$recid, dummy_data$cost_total_net),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
   )
 
   # Operation flag
   expect_equal(
-    test_output$operation_flag,
+    add_operation_flag(dummy_data$op1a),
     c(F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, T)
-  )
-})
-
-test_that("Errors are handled correctly", {
-  error_data <- tibble::tribble(~recid, ~op1a, ~cij_pattype, ~something_silly)
-
-  expect_error(create_service_costs(error_data),
-    regexp = "Variables .+ are required, but are missing from `data`"
   )
 })
