@@ -31,7 +31,6 @@ Other Demographic and Service Use Cohort functions:
 \code{\link{assign_cohort_names}()},
 \code{\link{assign_service_cohorts}()},
 \code{\link{calculate_service_cohort_costs}()},
-\code{\link{create_service_costs}()},
 \code{\link{create_service_instances}()}
 }
 \concept{Demographic and Service Use Cohort functions}

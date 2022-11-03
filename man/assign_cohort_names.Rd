@@ -19,7 +19,6 @@ Title Assign service use cohort into string format
 Other Demographic and Service Use Cohort functions: 
 \code{\link{assign_service_cohorts}()},
 \code{\link{calculate_service_cohort_costs}()},
-\code{\link{create_service_costs}()},
 \code{\link{create_service_instances}()},
 \code{\link{create_service_use_lookup}()}
 }

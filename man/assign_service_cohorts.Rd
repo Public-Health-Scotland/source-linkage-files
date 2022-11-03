@@ -19,7 +19,6 @@ Assign service use cohorts based on costs
 Other Demographic and Service Use Cohort functions: 
 \code{\link{assign_cohort_names}()},
 \code{\link{calculate_service_cohort_costs}()},
-\code{\link{create_service_costs}()},
 \code{\link{create_service_instances}()},
 \code{\link{create_service_use_lookup}()}
 }
