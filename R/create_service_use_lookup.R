@@ -9,35 +9,58 @@
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
-#' @seealso \itemize{\item [create_service_costs()]
-#' \item [create_service_instances()]
-#' \item [assign_service_cohorts()]
-#' \item [calculate_service_cohort_costs()]
-#' \item [assign_cohort_names()]}
 create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
   return_data <- data %>%
     # Only select rows with chi
     dplyr::filter(!is_missing(.data$chi)) %>%
-    # Create the cost variables for different services
-    create_service_costs() %>%
     # Create cij_attendance = TRUE when there is a cij_marker,
     # and use recid for cij_marker if there is not a cij_marker
     dplyr::mutate(
       cij_attendance = !is.na(.data$cij_marker),
       cij_marker = dplyr::if_else(is.na(.data$cij_marker),
-        .data$recid, as.character(.data$cij_marker)
-      )
+        .data$recid, as.character(.data$cij_marker)),
+
+      # Calculate service costs
+      geriatric_cost = calculate_geriatric_cost(recid, spec, cost_total_net),
+      maternity_cost = calculate_maternity_cost(recid, cij_pattype, cost_total_net),
+      psychiatry_cost = calculate_psychiatry_cost(recid, spec, cost_total_net),
+      acute_elective_cost = calculate_acute_elective_cost(recid, cij_pattype, cij_ipdc,
+                                                          spec, cost_total_net),
+      acute_emergency_cost = calculate_acute_emergency_cost(recid, cij_pattype,
+                                                            spec, cost_total_net),
+      outpatient_cost = calculate_outpatient_costs(recid, cost_total_net, geriatric_cost)[[1]],
+      total_outpatient_cost = calculate_outpatient_costs(recid, cost_total_net, geriatric_cost)[[2]],
+      care_home_cost = calculate_care_home_cost(recid, cost_total_net),
+      hospital_elective_cost = calculate_hospital_elective_cost(recid, cij_pattype, cost_total_net),
+      hospital_emergency_cost = calculate_hospital_emergency_cost(recid, cij_pattype, cost_total_net),
+      prescribing_cost = calculate_prescribing_cost(recid, cost_total_net),
+      ae2_cost = calculate_ae2_cost(recid, cost_total_net),
+      community_health_cost = calculate_community_health_cost(recid, cost_total_net),
+      operation_flag = add_operation_flag(op1a)
     ) %>%
+
     # Aggregate to cij-level
     dplyr::group_by(.data$chi, .data$cij_marker, .data$cij_ipdc, .data$cij_pattype) %>%
     dplyr::summarise(
-      dplyr::across(c(.data$cost_total_net, .data$geriatric_cost:.data$community_health_cost), sum),
-      dplyr::across(c(.data$operation_flag, .data$cij_attendance), any)
+      dplyr::across(c("cost_total_net", "geriatric_cost":"community_health_cost"), sum),
+      dplyr::across(c("operation_flag", "cij_attendance"), any)
     ) %>%
     dplyr::ungroup() %>%
+
     # Create specific instance counters and compute cost for elective inpatients
-    create_service_instances() %>%
+    dplyr::mutate(
+      emergency_instances = assign_emergency_instances(cij_pattype),
+      elective_instances = assign_elective_instances(cij_pattype, cij_ipdc),
+      elective_inpatient_instances = assign_elective_inpatient_instances(cij_pattype, cij_ipdc),
+      elective_daycase_instances = assign_elective_daycase_instances(cij_pattype, cij_ipdc),
+      death_flag = assign_death_flag(cij_marker),
+      elective_inpatient_cost = calculate_elective_inpatient_cost(elective_inpatient_instances,
+                                                                  cost_total_net)
+    ) %>%
+
+    # Move flags to end of data frame
     dplyr::relocate(c("operation_flag", "death_flag"), .after = dplyr::last_col()) %>%
+
     # Aggregate to chi-level
     dplyr::group_by(.data$chi) %>%
     dplyr::summarise(
@@ -45,12 +68,10 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       dplyr::across(c(.data$operation_flag, .data$death_flag), any)
     ) %>%
     dplyr::ungroup() %>%
+
     # Create flag for elective inpatients
     dplyr::mutate(
-      elective_inpatient_percentage = dplyr::if_else(.data$acute_elective_cost > 0,
-        .data$elective_inpatient_cost / .data$acute_elective_cost, 0
-      ),
-      elective_inpatient_flag = .data$elective_inpatient_percentage > 0.5
+      elective_inpatient_flag = assign_elective_inpatient_flag(acute_elective_cost, elective_inpatient_cost)
     ) %>%
     # Assign service use cohorts
     assign_service_cohorts() %>%
@@ -194,11 +215,11 @@ calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
 #' @param recid A vector of record IDs
 #'
 #' @return A vector of home care costs
-calculate_home_care_cost <- function(recid, cost_total_net) {
-  home_care_cost <- dplyr::if_else(
-    recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0)
-  return(home_care_cost)
-}
+# calculate_home_care_cost <- function(recid, cost_total_net) {
+#   home_care_cost <- dplyr::if_else(
+#     recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0)
+#   return(home_care_cost)
+# }
 
 #' Calculate cost for Care Home records
 #' @description A record is considered to have a home care cost if the recid is CH
@@ -278,6 +299,19 @@ calculate_community_health_cost <- function(recid, cost_total_net) {
   return(community_health_cost)
 }
 
+#' Calculate cost for Elective Inpatient records
+#'
+#' @param elective_inpatient_instances A vector of elective inpatient instances
+#' @param cost_total_net A vector of total net costs
+#'
+#' @return A vector of elective inpatient costs
+#' @seealso [assign_elective_inpatient_instances()]
+calculate_elective_inpatient_cost <- function(elective_inpatient_instances, cost_total_net) {
+  elective_inpatient_cost <- dplyr::if_else(
+    elective_inpatient_instances, cost_total_net, 0)
+  return(elective_inpatient_cost)
+}
+
 #' Add operation flag
 #'
 #' @param op1a A vector of operation codes
@@ -287,29 +321,83 @@ add_operation_flag <- function(op1a) {
   operation_flag <- !is_missing(op1a)
 }
 
-
-#' Create counters for elective and non-elective instances
+#' Assign a flag for emergency instances
+#' @description An emergency instance is defined as when the CIJ patient type is
+#' Non-Elective
 #'
-#' @param data A data frame
+#' @param cij_pattype A vector of CIJ patient types
 #'
-#' @return A data frame with four counters, a death flag, and a cost variable for
-#' elective inpatients
+#' @return A boolean vector showing whether a record is an emergency or not
+assign_emergency_instances <- function(cij_pattype) {
+  emergency_instances <- cij_pattype %in% c("Non-Elective")
+  return(emergency_instances)
+}
+
+#' Assign a flag for elective instances
+#' @description An elective instance is defined as when the CIJ patient type is
+#' Elective and the IPDC marker is D
 #'
-#' @family Demographic and Service Use Cohort functions
-create_service_instances <- function(data) {
-  check_variables_exist(data, variables = c("cij_marker", "cij_pattype", "cij_ipdc", "cost_total_net"))
+#' @param cij_pattype A vector of CIJ patient types
+#' @param cij_ipdc A vector of CIJ IPDC markers
+#'
+#' @return A boolean vector showing whether a record is an elective case or not
+assign_elective_instances <- function(cij_pattype, cij_ipdc) {
+  elective_instances <- cij_pattype %in% c("Elective") | cij_ipdc %in% c("D")
+  return(elective_instances)
+}
 
-  return_data <- data %>%
-    dplyr::mutate(
-      emergency_instances = .data$cij_pattype == "Non-Elective",
-      elective_instances = .data$cij_pattype == "Elective" | .data$cij_ipdc == "D",
-      elective_inpatient_instances = .data$cij_pattype == "Elective" & .data$cij_ipdc == "I",
-      elective_daycase_instances = .data$cij_pattype == "Elective" & .data$cij_ipdc == "D",
-      death_flag = .data$cij_marker == "NRS",
-      elective_inpatient_cost = dplyr::if_else(.data$elective_inpatient_instances, .data$cost_total_net, 0)
-    )
+#' Assign a flag for elective inpatient instances
+#' @description An elective inpatient instance is defined as when the CIJ patient type is
+#' Elective and the IPDC marker is I
+#'
+#' @param cij_pattype A vector of CIJ patient types
+#' @param cij_ipdc A vector of CIJ IPDC markers
+#'
+#' @return A boolean vector showing whether a record is an elective inpatient case or not
+assign_elective_inpatient_instances <- function(cij_pattype, cij_ipdc) {
+  elective_inpatient_instances <- cij_pattype %in% c("Elective") & cij_ipdc %in% c("I")
+  return(elective_inpatient_instances)
+}
 
-  return(return_data)
+#' Assign a flag for elective daycase instances
+#' @description An elective daycase instance is defined as when the CIJ patient type is
+#' Elective and the IPDC marker is D
+#'
+#' @param cij_pattype A vector of CIJ patient types
+#' @param cij_ipdc A vector of CIJ IPDC markers
+#'
+#' @return A boolean vector showing whether a record is an elective inpatient case or not
+assign_elective_daycase_instances <- function(cij_pattype, cij_ipdc) {
+  elective_daycase_instances <- cij_pattype %in% c("Elective") & cij_ipdc %in% c("D")
+  return(elective_daycase_instances)
+}
+
+#' Assign a flag for elective inpatients
+#' @description In this case, an elective inpatient is flagged if over half of the acute elective
+#' cost is for elective inpatient procedures
+#'
+#' @param acute_elective_cost
+#' @param elective_inpatient_cost
+#'
+#' @return A boolean vector indicating whether a record is an elective inpatient one
+assign_elective_inpatient_flag <- function(acute_elective_cost, elective_inpatient_cost) {
+    elective_inpatient_percentage <- dplyr::if_else(
+      acute_elective_cost > 0, elective_inpatient_cost / acute_elective_cost, 0)
+
+    elective_inpatient_flag <- elective_inpatient_percentage > 0.5
+
+    return(elective_inpatient_flag)
+}
+
+#' Assign a flag for deaths
+#' @description A death in this case is marked when the cij_marker is NRS
+#'
+#' @param cij_marker A vector of CIJ markers
+#'
+#' @return A boolean vector of death flags
+assign_death_flag <- function(cij_marker) {
+  death_flag <- cij_marker %in% c("NRS")
+  return(death_flag)
 }
 
 #' Assign service use cohorts based on costs
@@ -333,8 +421,6 @@ assign_service_cohorts <- function(data) {
 
   return_data <- data %>%
     dplyr::mutate(
-      # Psychiatry
-      psychiatry_cohort = .data$psychiatry_cost > 0,
       # Maternity
       maternity_cohort = .data$maternity_cost > 0,
       # Geriatric Medicine
@@ -359,6 +445,11 @@ assign_service_cohorts <- function(data) {
       # Assign other cohort if person isn't in any of the above
       other_cohort = rowSums(dplyr::across(.data$psychiatry_cohort:.data$ae2_cohort)) == 0
     )
+}
+
+assign_psychiatry_cohort <- function(psychiatry_cost) {
+  psychiatry_cohort = psychiatry_cost > 0
+  return(psychiatry_cohort)
 }
 
 #' Calculate costs based on service use cohort
