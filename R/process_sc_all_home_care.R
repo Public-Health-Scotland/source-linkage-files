@@ -26,19 +26,16 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
 
   # Data Cleaning ---------------------------------------
 
-  # period start and end dates
-  period_dates <- matched_hc_data %>%
-    dplyr::distinct(.data$period) %>%
-    dplyr::mutate(
-      record_date = end_fy_quarter(.data$period),
-      qtr_start = start_fy_quarter(.data$period)
-    )
-
   home_care_clean <- matched_hc_data %>%
     # set reablement values == 9 to NA
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, "9")) %>%
     # fix NA hc_service
     dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, "0")) %>%
+    # period start and end dates
+    dplyr::mutate(
+      record_date = end_fy_quarter(.data$period),
+      qtr_start = start_fy_quarter(.data$period)
+    ) %>%
     # join with dates
     dplyr::left_join(.data$period_dates, by = c("period")) %>%
     # Replace missing start dates with the start of the quarter
