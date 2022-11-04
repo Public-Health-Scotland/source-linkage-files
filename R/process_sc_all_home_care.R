@@ -17,11 +17,11 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
   # Match on demographic data ---------------------------------------
   if (is.null(sc_demographics)) {
     # read in demographic data
-    sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
+    sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
   }
 
   matched_hc_data <- data %>%
-    dplyr::left_join(sc_demog, by = c("sending_location", "social_care_id"))
+    dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
 
 
   # Data Cleaning ---------------------------------------
