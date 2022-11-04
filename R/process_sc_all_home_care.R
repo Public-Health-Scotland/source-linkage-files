@@ -71,9 +71,6 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       !.data$start_after_end
     )
 
-  # count changed social_care_id
-  home_care_clean %>% dplyr::count(.data$changed_sc_id)
-
 
   # Home Care Hours ---------------------------------------
 
