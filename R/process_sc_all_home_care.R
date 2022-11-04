@@ -105,7 +105,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     dplyr::left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%
     dplyr::mutate(hc_cost = .data$hc_hours * .data$hourly_cost)
 
-  pivotted_hours <- matched_costs %>%
+  pivoted_hours <- matched_costs %>%
     # Create a copy of the period then pivot the hours on it
     # This creates a new variable per quarter
     # with the hours for that quarter for every record
@@ -150,7 +150,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
 
   # Outfile ---------------------------------------
 
-  merge_data <- pivotted_hours %>%
+  merge_data <- pivoted_hours %>%
     # group the data to be merged
     dplyr::group_by(
       .data$chi,
