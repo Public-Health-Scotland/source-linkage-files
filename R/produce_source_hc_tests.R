@@ -38,7 +38,7 @@ produce_source_hc_tests <- function(data,
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison
-    dplyr::select(c(.data$valid_chi:.data$West_Lothian)) %>%
+    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
