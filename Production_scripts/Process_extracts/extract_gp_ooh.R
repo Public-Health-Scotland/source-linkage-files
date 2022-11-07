@@ -344,7 +344,7 @@ consultations_clean <- consultations_covid %>%
     record_keydate1 = min(record_keydate1),
     record_keydate2 = max(record_keydate2),
     dplyr::across(c(dplyr::everything(), -record_keydate1, -record_keydate2), dplyr::coalesce)
-    ) %>%
+  ) %>%
   dplyr::ungroup() %>%
   dplyr::as_tibble()
 
