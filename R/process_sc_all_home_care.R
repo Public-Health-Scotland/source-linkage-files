@@ -36,8 +36,6 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       record_date = end_fy_quarter(.data$period),
       qtr_start = start_fy_quarter(.data$period)
     ) %>%
-    # join with dates
-    dplyr::left_join(.data$period_dates, by = c("period")) %>%
     # Replace missing start dates with the start of the quarter
     dplyr::mutate(hc_service_start_date = dplyr::if_else(is.na(.data$hc_service_start_date), .data$qtr_start, .data$hc_service_start_date)) %>%
     # Replace really early start dates with start of the quarter
