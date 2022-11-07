@@ -18,9 +18,9 @@ replace_sc_id_with_latest <- function(data) {
 
   change_sc_id <- filter_data %>%
     # Sort (by sending_location, chi and period) for unique chi/sending location
-    dplyr::arrange(sending_location, chi, desc(period)) %>%
+    dplyr::arrange(.data$sending_location, .data$chi, dplyr::desc(.data$period)) %>%
     # Find the latest sc_id for each chi/sending location by keeping latest period
-    dplyr::distinct(sending_location, chi, .keep_all = TRUE) %>%
+    dplyr::distinct(.data$sending_location, .data$chi, .keep_all = TRUE) %>%
     # Rename for latest sc id
     dplyr::rename(latest_sc_id = "social_care_id") %>%
     # drop period for matching
