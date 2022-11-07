@@ -191,5 +191,5 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       write_rds(get_sc_hc_episodes_path(check_mode = "write"))
   }
 
-  return(outfile)
+  return(final_data)
 }
