@@ -128,7 +128,7 @@ assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
 #'     \item The recid is 01B, 50B, 02B, 04B or AE2 \strong{and}
 #'     \enumerate{\item One of the diagnosis codes starts with W0 or W1
 #'          \item One of the diagnosis codes starts with F00, F01, F02, F03, F05, I61, I63, I64, G20 or G21
-#'          \item One of the diagnosis coes starts with R268 or G22X
+#'          \item One of the diagnosis codes starts with R268 or G22X
 #'    \item The specialty is AB
 #'    \item The significant facility is 1E or 1D
 #'    \item The recid is GLS}}}
@@ -286,16 +286,6 @@ assign_child_major_condition_cohort <- function(recid, age, cost_total_net) {
   return(child_major)
 }
 
-#' Pirates of Penzance
-#'
-#' @return Something silly
-assign_modern_major_cohort <- function() {
-  modern_major <- "I am the very model of a modern Major-General
-  I've information vegetable, animal, and mineral
-  I know the kings of England, and I quote the fights historical
-  From Marathon to Waterloo, in order categorical"
-}
-
 #' Assign End of Life cohort
 #' @description A record is considered to be in the EoL cohort if it is an NRS death record
 #' and the cause of death is not external. The exception to this is if the cause of death is external
@@ -350,7 +340,7 @@ assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdi
 #'
 #' @param data A data frame containing at least recid and the six diagnosis codes
 #'
-#' @return A data framne with an additional boolean variable, substance, which indicates whather a
+#' @return A data frame with an additional boolean variable, `substance`, indicating a
 #' record is in this cohort
 #'
 #' @family Demographic and Service Use Cohort functions
