@@ -315,6 +315,8 @@ consultations_filtered <- consultations_file %>%
   dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
   dplyr::as_tibble()
 
+rm(consultations_file)
+
 consultations_covid <- consultations_filtered %>%
   dplyr::mutate(consultation_type = dplyr::if_else(is.na(consultation_type),
     dplyr::case_when(
@@ -381,12 +383,15 @@ dplyr::mutate(to_merge = dplyr::if_else(overlap == 1 & duplicate == 1, 1, 0)) %>
   ) %>%
   dplyr::ungroup()
 
+rm(consultations_filtered, consultations_covid)
 
 # Join data ---------------------------------
 
 matched_data <- consultations_clean %>%
   dplyr::left_join(diagnosis_clean, by = "guid") %>%
   dplyr::left_join(outcomes_clean, by = "guid")
+
+rm(consultations_clean, diagnosis_clean, outcomes_clean)
 
 # Costs ---------------------------------
 
