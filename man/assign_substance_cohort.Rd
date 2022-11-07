@@ -10,7 +10,7 @@ assign_substance_cohort(data)
 \item{data}{A data frame containing at least recid and the six diagnosis codes}
 }
 \value{
-A data framne with an additional boolean variable, substance, which indicates whather a
+A data frame with an additional boolean variable, \code{substance}, indicating a
 record is in this cohort
 }
 \description{
