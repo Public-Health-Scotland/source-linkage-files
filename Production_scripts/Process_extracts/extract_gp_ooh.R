@@ -40,9 +40,9 @@ diagnosis_extract <- readr::read_csv(
 ) %>%
   # rename variables
   dplyr::rename(
-    guid = `GUID`,
-    readcode = `Diagnosis Code`,
-    description = `Diagnosis Description`
+    guid = "GUID",
+    readcode = "Diagnosis Code",
+    description = "Diagnosis Description"
   ) %>%
   tidyr::drop_na(readcode) %>%
   dplyr::distinct()
@@ -147,7 +147,7 @@ diagnosis_clean <- diagnosis_readcodes %>%
   dplyr::select(
     "guid",
     # Use any of in case we have fewer than 6 diagnoses
-    any_of(c(
+    tidyselect::any_of(c(
       "diag_1",
       "diag_2",
       "diag_3",
@@ -172,8 +172,8 @@ outcomes_extract <- readr::read_csv(
 ) %>%
   # rename variables
   dplyr::rename(
-    guid = `GUID`,
-    outcome = `Case Outcome`
+    guid = "GUID",
+    outcome = "Case Outcome"
   ) %>%
   # Remove blank outcomes
   dplyr::filter(outcome != "") %>%
@@ -211,7 +211,7 @@ outcomes_clean <- outcomes_extract %>%
   ) %>%
   dplyr::select(
     "guid",
-    any_of(c(
+    tidyselect::any_of(c(
       "outcome_1",
       "outcome_2",
       "outcome_3",
@@ -514,8 +514,8 @@ outfile <- ooh_clean %>%
     "attendance_status",
     "kis_Accessed",
     "refsource",
-    contains("diag"),
-    contains("ooh_outcome"),
+    tidyselect::contains("diag"),
+    tidyselect::contains("ooh_outcome"),
     "cost_total_net",
     "apr_cost",
     "may_cost",
