@@ -7,7 +7,6 @@
 #' @export
 #'
 replace_sc_id_with_latest <- function(data) {
-
   # Check for required variables
   check_variables_exist(data, c("sending_location", "social_care_id", "chi", "period"))
 
