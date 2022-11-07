@@ -327,61 +327,26 @@ consultations_covid <- consultations_filtered %>%
     consultation_type
   ))
 
-
-# TODO - WIP James to here: I was looking at doing the merge overlapping episodes bit.
-consultations_covid %>%
+# Clean up some overlapping episodes
+# Only merge if they look like duplicates other than the time,
+# In which case take the earliest start and latest end.
+consultations_clean <- consultations_covid %>%
   dtplyr::lazy_dt() %>%
-  dplyr::arrange(chi, guid, record_keydate1, record_keydate2) %>%
-  dplyr::group_by(chi, guid) %>%
+  # Sort in reverse order so we can use coalesce which takes the first non-missing value
+  dplyr::arrange(chi, guid, dplyr::desc(record_keydate1), dplyr::desc(record_keydate2)) %>%
+  # This seems to be enough to identify a unique episode
+  dplyr::group_by(chi, guid, consultation_type, location) %>%
+  # Records will be merged if they don't look unique and there is overlap or no time between them
   dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
     cumsum()) %>%
-  dplyr::group_by(chi, guid, episode_counter) %>%
-  dplyr::filter(n() > 1) %>%
-  tidyr::as_tibble() %>%
-  View()
-
-# Where it's a duplicate except for an overlapping time flag it.
-dplyr::mutate(to_merge = dplyr::if_else(overlap == 1 & duplicate == 1, 1, 0)) %>%
-  # Repeat in the other direction so both records are flagged to be merged.
-  #### CHECK HERE #### Is lead the right thing to do here in R to go the opposite direction?
-  dplyr::mutate(to_merge = dplyr::if_else(
-    guid == lead(guid) & chi == lead(chi) & record_keydate2 > record_keydate1 &
-      smrtype == lead(smrtype) & location == lead(location), 1, to_merge
-  )) %>%
-  # Create counters for unique consultations.
-  dplyr::arrange(guid, chi, record_keydate1, record_keydate2) %>%
-  dplyr::group_by(chi, guid) %>%
-  dplyr::mutate(
-    counter = as.double(dplyr::row_number())
-  ) %>%
-  # If we've identified them as duplicates needing merged set the counter to indicate this.
-  dplyr::mutate(counter = dplyr::if_else(to_merge == 1, 0, counter)) %>%
-  dplyr::ungroup() %>%
-  # Aggregate data
-  dplyr::group_by(
-    guid,
-    chi,
-    attendance_status,
-    hbtreatcode,
-    location,
-    location_description,
-    kis_accessed,
-    refsource,
-    smrtype,
-    counter
-  ) %>%
+  dplyr::group_by(chi, guid, consultation_type, location, episode_counter) %>%
   dplyr::summarise(
-    hbrescode = last(hbrescode),
-    datazone = last(datazone),
-    hscp = last(hscp),
-    dob = last(dob),
-    gender = last(gender),
-    postcode = last(postcode),
-    gpprac = last(gpprac),
     record_keydate1 = min(record_keydate1),
-    record_keydate2 = max(record_keydate2)
-  ) %>%
-  dplyr::ungroup()
+    record_keydate2 = max(record_keydate2),
+    dplyr::across(c(dplyr::everything(), -record_keydate1, -record_keydate2), dplyr::coalesce)
+    ) %>%
+  dplyr::ungroup() %>%
+  dplyr::as_tibble()
 
 rm(consultations_filtered, consultations_covid)
 
