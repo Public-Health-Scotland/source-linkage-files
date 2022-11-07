@@ -42,16 +42,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     dplyr::mutate(hc_service_end_date = dplyr::if_else(.data$hc_service_start_date < as.Date("1989-01-01"), .data$qtr_start, .data$hc_service_start_date)) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
-    dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$social_care_id)) %>%
-    # count changed social_care_id
-    dplyr::mutate(
-      changed_sc_id = dplyr::if_else(!is.na(.data$chi) & .data$social_care_id != .data$latest_sc_id, 1, 0),
-      social_care_id = dplyr::if_else(!is.na(.data$chi) & .data$social_care_id != .data$latest_sc_id,
-        .data$latest_sc_id, .data$social_care_id
-      )
-    ) %>%
-    dplyr::ungroup() %>%
+    replace_sc_id_with_latest() %>%
     # fill reablement when missing but present in group
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$hc_service_start_date) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
