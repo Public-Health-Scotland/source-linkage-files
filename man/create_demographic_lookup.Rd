@@ -17,10 +17,6 @@ create_demographic_lookup(data, year, write_to_disk = TRUE)
 Create the demographic lookup file
 }
 \seealso{
-\itemize{\item\code{\link[=assign_demographic_cohort]{assign_demographic_cohort()}}
-\item\code{\link[=assign_eol_cohort]{assign_eol_cohort()}}
-\item\code{\link[=assign_substance_cohort]{assign_substance_cohort()}}}
-
 Other Demographic and Service Use Cohort functions: 
 \code{\link{assign_adult_major_condition_cohort}()},
 \code{\link{assign_child_major_condition_cohort}()},
