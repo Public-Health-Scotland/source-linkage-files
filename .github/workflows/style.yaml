@@ -65,7 +65,11 @@ jobs:
       - name: Style other scripts
         run: styler::style_dir("Make_R_files/")
         shell: Rscript {0}
-        
+
+      - name: Style Rmarkdown files
+        run: styler::style_dir("Rmarkdown/")
+        shell: Rscript {0}
+
       - name: Style older scripts
         run: styler::style_dir("All_years/")
         shell: Rscript {0}

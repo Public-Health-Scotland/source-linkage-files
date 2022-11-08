@@ -4,16 +4,14 @@
 \alias{process_costs_rmd}
 \title{Process the cost lookup files}
 \usage{
-process_costs_rmd(file_name, directory = "Rmarkdown")
+process_costs_rmd(file_name)
 }
 \arguments{
 \item{file_name}{Rmd file to process}
-
-\item{directory}{directory where the file is, this will also be
-used for the output. The default is \verb{Rmarkdown/}}
 }
 \description{
-This takes a \code{file_name} and optionally \code{directory}
-it will quietly render the \code{.Rmd} file with \code{\link[rmarkdown:render]{rmarkdown::render()}}
-and try to open the rendered html doc.
+This takes a \code{file_name} which must be in the
+\verb{Rmarkdown/} directory it will quietly render the \code{.Rmd}
+file with \code{\link[rmarkdown:render]{rmarkdown::render()}} and try to open the
+rendered html doc.
 }

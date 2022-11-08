@@ -1,15 +1,14 @@
 #' Process the cost lookup files
 #'
-#' @description This takes a `file_name` and optionally `directory`
-#' it will quietly render the `.Rmd` file with [rmarkdown::render()]
-#' and try to open the rendered html doc.
+#' @description This takes a `file_name` which must be in the
+#'  `Rmarkdown/` directory it will quietly render the `.Rmd`
+#'  file with [rmarkdown::render()] and try to open the
+#'  rendered html doc.
 #'
 #' @param file_name Rmd file to process
-#' @param directory directory where the file is, this will also be
-#' used for the output. The default is `Rmarkdown/`
 #'
 #' @return NULL
-process_costs_rmd <- function(file_name, directory = "Rmarkdown") {
+process_costs_rmd <- function(file_name) {
   if (!stringr::str_detect(
     fs::path_ext(file_name),
     stringr::fixed("Rmd", ignore_case = TRUE)
@@ -17,19 +16,35 @@ process_costs_rmd <- function(file_name, directory = "Rmarkdown") {
     cli::cli_abort("{.arg file_name} must be an {.code .Rmd} not a {.code .{fs::path_ext(file_name)}}.")
   }
 
+  input_dir <- "Rmarkdown"
+
+  output_dir <- fs::path(
+    get_slf_dir(),
+    "Tests"
+  )
+
   input_file <- get_file_path(
-    directory = directory,
+    directory = input_dir,
     file_name = file_name
+  )
+
+  date_today <- format(Sys.Date(), "%d_%b")
+
+  output_file <- get_file_path(
+    directory = output_dir,
+    file_name = fs::path_ext_set(glue::glue("{fs::path_ext_remove(file_name)}-{latest_update()}-{date_today}"), "html"),
+    check_mode = "write"
   )
 
   rmarkdown::render(
     input = input_file,
+    output_file = output_file,
     output_format = "html_document",
     envir = new.env(),
     quiet = TRUE
   )
 
-  browseURL(fs::path_ext_set(input_file, "html"))
+  utils::browseURL(output_file)
 
   return(NULL)
 }
