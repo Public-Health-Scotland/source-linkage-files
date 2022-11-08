@@ -6,10 +6,6 @@
 #'
 #' @export
 #'
-#' @seealso \itemize{\item[assign_demographic_cohort()]
-#'                   \item[assign_eol_cohort()]
-#'                   \item[assign_substance_cohort()]}
-#'
 #' @family Demographic and Service Use Cohort functions
 create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
   check_variables_exist(
@@ -113,7 +109,7 @@ assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
         (rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_starts(.x, paste("F2", "F3", "F067", "F070", "F072", "F078", "F079", sep = "|"))
-        )) > 0) ~ TRUE,
+        ), na.rm = TRUE) > 0) ~ TRUE,
       TRUE ~ FALSE
     )
 
@@ -131,13 +127,7 @@ assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
 #'    \item The significant facility is 1E or 1D
 #'    \item The recid is GLS}}}
 #'
-#' @param recid A vector of record IDs
-#' @param diag1 A vector of Diagnosis Code 1
-#' @param diag2 A vector of Diagnosis Code 2
-#' @param diag3 A vector of Diagnosis Code 3
-#' @param diag4 A vector of Diagnosis Code 4
-#' @param diag5 A vector of Diagnosis Code 5
-#' @param diag6 A vector of Diagnosis Code 6
+#' @inheritParams assign_mh_cohort
 #' @param spec A vector of specialty codes
 #' @param sigfac A vector of significant facilities
 #'
@@ -147,25 +137,19 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
   frail <-
     # FOR FUTURE: when variable ElderlyFrailClientGroup exists and is "Y", frail_cohort = TRUE,
     # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
-    recid %in% c("01B", "50B", "02B", "04B", "AE2") &
-      (rowSums(dplyr::across(
-        c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-        ~ stringr::str_sub(.x, 1, 2) %in%
-          c("W0", "W1")
-      )) > 0 |
-        rowSums(dplyr::across(
+    dplyr::case_when(
+      recid == "GLS" ~ TRUE,
+      recid %in% c("01B", "50B", "02B", "04B", "AE2") &
+        (rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 3) %in%
-            c("F00", "F01", "F02", "F03", "F05", "I61", "I63", "I64", "G20", "G21")
-        )) > 0 |
-        rowSums(dplyr::across(
-          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 4) %in%
-            c("R268", "G22X")
-        )) > 0 |
-        spec == "AB" |
-        sigfac %in% c("1E", "1D")) |
-      recid == "GLS"
+          ~ stringr::str_starts(.x, paste("W0", "W1", "F00", "F01", "F02", "F03",
+            "F05", "I61", "I63", "I64", "G20", "G21", "R268", "G22X", sep = "|"
+          ))
+        ), na.rm = TRUE) > 0) ~ TRUE,
+      recid %in% c("01B", "50B", "02B", "04B", "AE2") & spec == "AB" ~ TRUE,
+      recid %in% c("01B", "50B", "02B", "04B", "AE2") & sigfac %in% c("1E", "1D") ~ TRUE,
+      TRUE ~ FALSE
+    )
   return(frail)
 }
 
@@ -273,9 +257,7 @@ assign_adult_major_condition_cohort <- function(recid, age, cost_total_net) {
 #' @description A person is considered to be in this cohort if their age is under 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @param recid A vector of record IDs
-#' @param age A vector of ages
-#' @param cost_total_net A vector of total net costs
+#' @inheritParams assign_adult_major_condition_cohort
 #'
 #' @return A boolean vector indicating whether a given record is in the Child Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
@@ -356,31 +338,25 @@ assign_substance_cohort <- function(data) {
         recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
           rowSums(dplyr::across(
             c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-            ~ stringr::str_sub(.x, 1, 3) %in%
-              c("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91")
-          )) > 0 |
-          recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
-            rowSums(dplyr::across(
-              c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-              ~ stringr::str_sub(.x, 1, 4) %in%
-                c(
-                  "E244", "E512", "G312", "G621", "G721", "I426", "K292", "K860", "O354", "P043",
-                  "Q860", "T510", "T511", "T519", "Y573", "R780", "Z502", "Z714", "Z721", "K852"
-                )
-            )) > 0 |
+            ~ stringr::str_starts(.x, paste("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91",
+              "E244", "E512", "G312", "G621", "G721", "I426",
+              "K292", "K860", "O354", "P043", "Q860", "T510",
+              "T511", "T519", "Y573", "R780", "Z502", "Z714",
+              "Z721", "K852",
+              sep = "|"
+            ))
+          ), na.rm = TRUE) > 0 |
           # Drug codes
           recid %in% c("01B", "04B") &
             rowSums(dplyr::across(
               c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-              ~ stringr::str_sub(.x, 1, 3) %in%
-                c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19")
-            )) > 0 |
-          recid %in% c("01B", "04B") &
-            rowSums(dplyr::across(
-              c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-              ~ stringr::str_sub(.x, 1, 4) %in%
-                c("T400", "T401", "T403", "T405", "T406", "T407", "T408", "T409", "T436")
-            )) > 0,
+              ~ stringr::str_starts(.x, paste("F11", "F12", "F13", "F14", "F15",
+                "F16", "F18", "F19", "T400", "T401",
+                "T403", "T405", "T406", "T407", "T408",
+                "T409", "T436",
+                sep = "|"
+              ))
+            ), na.rm = TRUE) > 0,
       # Some drug codes only count If other code present in CIJ
       # i.e. T402/T404 only If F11 and T424 only If F13.
       f11 = recid %in% c("01B", "04B") &

@@ -9,7 +9,7 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (mh_test %>% mutate(mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)))$mh,
+    (mh_test %>% dplyr::mutate(mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)))$mh,
     c(T, T, T, F)
   )
 
@@ -25,7 +25,7 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (frail_test %>%
-      mutate(
+      dplyr::mutate(
         frail =
           assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac)
       ))$frail,
@@ -43,7 +43,7 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (high_cc_test %>%
-      mutate(
+      dplyr::mutate(
         high_cc =
           assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec)
       ))$high_cc,
@@ -61,7 +61,7 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (medium_cc_test %>%
-      mutate(
+      dplyr::mutate(
         medium_cc =
           assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms)
       ))$medium_cc,
@@ -79,7 +79,7 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (low_cc_test %>%
-      mutate(
+      dplyr::mutate(
         low_cc =
           assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib)
       ))$low_cc,
@@ -89,7 +89,7 @@ test_that("Different cohort functions work", {
   # Comm living
   expect_equal(
     (low_cc_test %>%
-      mutate(
+      dplyr::mutate(
         comm_living =
           assign_comm_living_cohort()
       ))$comm_living,
@@ -107,7 +107,7 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (adult_major_test %>%
-      mutate(
+      dplyr::mutate(
         adult_major =
           assign_adult_major_condition_cohort(recid, age, cost_total_net)
       ))$adult_major,
@@ -124,7 +124,7 @@ test_that("Different cohort functions work", {
 
   expect_equal(
     (child_major_test %>%
-      mutate(
+      dplyr::mutate(
         child_major =
           assign_child_major_condition_cohort(recid, age, cost_total_net)
       ))$child_major,
