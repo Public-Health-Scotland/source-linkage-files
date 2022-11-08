@@ -116,7 +116,7 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
         community_health_cost
       ),
       # Care Home cost is removed for now, so set to zero
-      residential_care_cost = 0,
+      residential_care_cost = calculate_residential_care_cost(),
       # Replace any missing total costs with zero
       dplyr::across("cost_total_net", ~ replace(., is.na(.), 0))
     ) %>%
@@ -124,19 +124,19 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
     assign_cohort_names() %>%
     # Select out the required variables
     dplyr::select(
-      .data$chi,
-      .data$service_use_cohort,
-      .data$psychiatry_cost,
-      .data$maternity_cost,
-      .data$geriatric_cost,
-      .data$elective_inpatient_cost,
-      .data$limited_daycases_cost,
-      .data$single_emergency_cost,
-      .data$multiple_emergency_cost,
-      .data$routine_daycase_cost,
-      .data$outpatient_cost,
-      .data$prescribing_cost,
-      .data$ae2_cost
+      "chi",
+      "service_use_cohort",
+      "psychiatry_cost",
+      "maternity_cost",
+      "geriatric_cost",
+      "elective_inpatient_cost",
+      "limited_daycases_cost",
+      "single_emergency_cost",
+      "multiple_emergency_cost",
+      "routine_daycase_cost",
+      "outpatient_cost",
+      "prescribing_cost",
+      "ae2_cost"
     )
 
   if (write_to_disk == TRUE) {
@@ -159,6 +159,7 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
 #' @param cost_total_net A vector of total net costs
 #'
 #' @return A vector of Geriatric Care costs
+#' @family Demographic and Service Use Cohort functions
 calculate_geriatric_cost <- function(recid, spec, cost_total_net) {
   geriatric_cost <- dplyr::if_else(
     recid %in% c("50B", "GLS") | spec %in% c("AB", "G4"), cost_total_net, 0
@@ -175,6 +176,7 @@ calculate_geriatric_cost <- function(recid, spec, cost_total_net) {
 #' @param cost_total_net A vector of total net costs
 #'
 #' @return A vector of Maternity costs
+#' @family Demographic and Service Use Cohort functions
 calculate_maternity_cost <- function(recid, cij_pattype, cost_total_net) {
   maternity_cost <- dplyr::if_else(
     recid %in% c("02B") | cij_pattype %in% c("Maternity"), cost_total_net, 0
@@ -186,11 +188,10 @@ calculate_maternity_cost <- function(recid, cij_pattype, cost_total_net) {
 #' @description A record is considered to have a Psychiatry cost if the recid is 04B
 #' and the specialty is not G4
 #'
-#' @param recid A vector of record IDs
-#' @param spec A vector of specialty codes
-#' @param cost_total_net A vector of total net costs
+#' @inheritParams calculate_geriatric_cost
 #'
 #' @return A vector of Psychiatry costs
+#' @family Demographic and Service Use Cohort functions
 calculate_psychiatry_cost <- function(recid, spec, cost_total_net) {
   psychiatry_cost <- dplyr::if_else(
     recid %in% c("04B") & !(spec %in% c("G4")), cost_total_net, 0
@@ -203,13 +204,12 @@ calculate_psychiatry_cost <- function(recid, spec, cost_total_net) {
 #' the recid is 01B, the CIJ patient type is Elective or the IPDC shows it is a day case,
 #' and the specialty is not AB
 #'
-#' @param recid A vector of record IDs
+#' @inheritParams calculate_geriatric_cost
 #' @param cij_pattype A vector of CIJ patient types
 #' @param cij_ipdc A vector of CIJ inpatient/daycase markers
-#' @param spec A vector of specialty codes
-#' @param cost_total_net A vector of total net costs
 #'
 #' @return A vector of Acute Elective costs
+#' @family Demographic and Service Use Cohort functions
 calculate_acute_elective_cost <- function(recid, cij_pattype, cij_ipdc, spec, cost_total_net) {
   acute_elective_cost <- dplyr::if_else(recid %in% c("01B") &
     (cij_pattype %in% c("Elective") | cij_ipdc %in% c("D")) &
@@ -221,12 +221,11 @@ calculate_acute_elective_cost <- function(recid, cij_pattype, cij_ipdc, spec, co
 #' @description A record is considered to have an Acute Emergency cost if
 #' the recid is 01B, the CIJ patient type is Non-Elective, and the specialty is not AB
 #'
-#' @param recid A vector of record IDs
+#' @inheritParams calculate_geriatric_cost
 #' @param cij_pattype A vector of CIJ patient types
-#' @param spec A vector of specialty codes
-#' @param cost_total_net A vector of total net costs
 #'
 #' @return A vector of Acute Emergency costs
+#' @family Demographic and Service Use Cohort functions
 calculate_acute_emergency_cost <- function(recid, cij_pattype, spec, cost_total_net) {
   acute_emergency_cost <- dplyr::if_else(recid %in% c("01B") & cij_pattype %in% c("Non-Elective") &
     !(spec %in% c("AB")), cost_total_net, 0)
@@ -243,6 +242,7 @@ calculate_acute_emergency_cost <- function(recid, cij_pattype, spec, cost_total_
 #' @param geriatric_cost A vector of geriatric care costs
 #'
 #' @return A list with outpatient costs in index 1 and total outpatient costs in index 2
+#' @family Demographic and Service Use Cohort functions
 calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
   outpatient_cost <- dplyr::if_else(
     recid %in% c("00B"), cost_total_net - geriatric_cost, 0
@@ -264,6 +264,7 @@ calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
 #' @param recid A vector of record IDs
 #'
 #' @return A vector of home care costs
+#' @family Demographic and Service Use Cohort functions
 calculate_home_care_cost <- function(recid, cost_total_net) {
   home_care_cost <- dplyr::if_else(
     recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0
@@ -278,6 +279,7 @@ calculate_home_care_cost <- function(recid, cost_total_net) {
 #' @param recid A vector of record IDs
 #'
 #' @return A vector of care home costs
+#' @family Demographic and Service Use Cohort functions
 calculate_care_home_cost <- function(recid, cost_total_net) {
   care_home_cost <- dplyr::if_else(recid %in% c("CH"), cost_total_net, 0)
   return(care_home_cost)
@@ -292,6 +294,7 @@ calculate_care_home_cost <- function(recid, cost_total_net) {
 #' @param cost_total_net A vector of total net costs
 #'
 #' @return A vector of Hospital Elective costs
+#' @family Demographic and Service Use Cohort functions
 calculate_hospital_elective_cost <- function(recid, cij_pattype, cost_total_net) {
   hospital_elective_cost <- dplyr::if_else(
     recid %in% c("01B", "04B", "50B", "GLS") & cij_pattype %in% c("Elective"), cost_total_net, 0
@@ -303,11 +306,10 @@ calculate_hospital_elective_cost <- function(recid, cij_pattype, cost_total_net)
 #' @description A record is considered to have a Hospital Emergency cost if the recid is
 #' in c("01B", "04B", "50B", "GLS") and the CIJ patient type is Non-Elective
 #'
-#' @param recid A vector of record IDs
-#' @param cij_pattype A vector of CIJ patient types
-#' @param cost_total_net A vector of total net costs
+#' @inheritParams calculate_hospital_elective_cost
 #'
 #' @return A vector of Hospital Emergency costs
+#' @family Demographic and Service Use Cohort functions
 calculate_hospital_emergency_cost <- function(recid, cij_pattype, cost_total_net) {
   hospital_emergency_cost <- dplyr::if_else(
     recid %in% c("01B", "04B", "50B", "GLS") & cij_pattype %in% c("Non-Elective"), cost_total_net, 0
@@ -322,6 +324,7 @@ calculate_hospital_emergency_cost <- function(recid, cij_pattype, cost_total_net
 #' @param cost_total_net A vector of total net costs
 #'
 #' @return A vector of Prescribing costs
+#' @family Demographic and Service Use Cohort functions
 calculate_prescribing_cost <- function(recid, cost_total_net) {
   prescribing_cost <- dplyr::if_else(recid %in% c("PIS"), cost_total_net, 0)
   return(prescribing_cost)
@@ -331,10 +334,10 @@ calculate_prescribing_cost <- function(recid, cost_total_net) {
 #' @description A record is considered to have an A&E cost if the recid is one of
 #' "AE2", "OoH", "SAS", or "N24"
 #'
-#' @param recid A vector of record IDs
-#' @param cost_total_net A vector of total net costs
+#' @inheritParams calculate_prescribing_cost
 #'
-#' @return A vector of Prescribing costs
+#' @return A vector of A&E costs
+#' @family Demographic and Service Use Cohort functions
 calculate_ae2_cost <- function(recid, cost_total_net) {
   ae2_cost <- dplyr::if_else(recid %in% c("AE2", "OoH", "SAS", "N24"), cost_total_net, 0)
   return(ae2_cost)
@@ -343,10 +346,10 @@ calculate_ae2_cost <- function(recid, cost_total_net) {
 #' Calculate cost for Community Health records
 #' @description A record is considered to have a Community Health cost if the recid is DN
 #'
-#' @param recid A vector of record IDs
-#' @param cost_total_net A vector of total net costs
+#' @inheritParams calculate_prescribing_cost
 #'
 #' @return A vector of Community Health costs
+#' @family Demographic and Service Use Cohort functions
 calculate_community_health_cost <- function(recid, cost_total_net) {
   community_health_cost <- dplyr::if_else(recid %in% c("DN"), cost_total_net, 0)
   return(community_health_cost)
@@ -359,6 +362,7 @@ calculate_community_health_cost <- function(recid, cost_total_net) {
 #'
 #' @return A vector of elective inpatient costs
 #' @seealso [assign_elective_inpatient_instances()]
+#' @family Demographic and Service Use Cohort functions
 calculate_elective_inpatient_cost <- function(elective_inpatient_instances, cost_total_net) {
   elective_inpatient_cost <- dplyr::if_else(
     elective_inpatient_instances, cost_total_net, 0
@@ -371,6 +375,7 @@ calculate_elective_inpatient_cost <- function(elective_inpatient_instances, cost
 #' @param op1a A vector of operation codes
 #'
 #' @return A boolean vector showing whether a record contains an operation or not
+#' @family Demographic and Service Use Cohort functions
 add_operation_flag <- function(op1a) {
   operation_flag <- !is_missing(op1a)
 }
@@ -382,6 +387,7 @@ add_operation_flag <- function(op1a) {
 #' @param cij_pattype A vector of CIJ patient types
 #'
 #' @return A boolean vector showing whether a record is an emergency or not
+#' @family Demographic and Service Use Cohort functions
 assign_emergency_instances <- function(cij_pattype) {
   emergency_instances <- cij_pattype %in% c("Non-Elective")
   return(emergency_instances)
@@ -395,6 +401,7 @@ assign_emergency_instances <- function(cij_pattype) {
 #' @param cij_ipdc A vector of CIJ IPDC markers
 #'
 #' @return A boolean vector showing whether a record is an elective case or not
+#' @family Demographic and Service Use Cohort functions
 assign_elective_instances <- function(cij_pattype, cij_ipdc) {
   elective_instances <- cij_pattype %in% c("Elective") | cij_ipdc %in% c("D")
   return(elective_instances)
@@ -404,10 +411,10 @@ assign_elective_instances <- function(cij_pattype, cij_ipdc) {
 #' @description An elective inpatient instance is defined as when the CIJ patient type is
 #' Elective and the IPDC marker is I
 #'
-#' @param cij_pattype A vector of CIJ patient types
-#' @param cij_ipdc A vector of CIJ IPDC markers
+#' @inheritParams assign_elective_instances
 #'
 #' @return A boolean vector showing whether a record is an elective inpatient case or not
+#' @family Demographic and Service Use Cohort functions
 assign_elective_inpatient_instances <- function(cij_pattype, cij_ipdc) {
   elective_inpatient_instances <- cij_pattype %in% c("Elective") & cij_ipdc %in% c("I")
   return(elective_inpatient_instances)
@@ -417,10 +424,10 @@ assign_elective_inpatient_instances <- function(cij_pattype, cij_ipdc) {
 #' @description An elective daycase instance is defined as when the CIJ patient type is
 #' Elective and the IPDC marker is D
 #'
-#' @param cij_pattype A vector of CIJ patient types
-#' @param cij_ipdc A vector of CIJ IPDC markers
+#' @inheritParams assign_elective_instances
 #'
 #' @return A boolean vector showing whether a record is an elective inpatient case or not
+#' @family Demographic and Service Use Cohort functions
 assign_elective_daycase_instances <- function(cij_pattype, cij_ipdc) {
   elective_daycase_instances <- cij_pattype %in% c("Elective") & cij_ipdc %in% c("D")
   return(elective_daycase_instances)
@@ -434,6 +441,7 @@ assign_elective_daycase_instances <- function(cij_pattype, cij_ipdc) {
 #' @param elective_inpatient_cost
 #'
 #' @return A boolean vector indicating whether a record is an elective inpatient one
+#' @family Demographic and Service Use Cohort functions
 assign_elective_inpatient_flag <- function(acute_elective_cost, elective_inpatient_cost) {
   elective_inpatient_percentage <- dplyr::if_else(
     acute_elective_cost > 0, elective_inpatient_cost / acute_elective_cost, 0
@@ -450,6 +458,7 @@ assign_elective_inpatient_flag <- function(acute_elective_cost, elective_inpatie
 #' @param cij_marker A vector of CIJ markers
 #'
 #' @return A boolean vector of death flags
+#' @family Demographic and Service Use Cohort functions
 assign_death_flag <- function(cij_marker) {
   death_flag <- cij_marker %in% c("NRS")
   return(death_flag)
@@ -461,6 +470,7 @@ assign_death_flag <- function(cij_marker) {
 #' @param psychiatry_cost A vector of psychiatry costs
 #'
 #' @return A boolean vector of psychiatry cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_psychiatry_cohort <- function(psychiatry_cost) {
   psychiatry_cohort <- psychiatry_cost > 0
   return(psychiatry_cohort)
@@ -472,6 +482,7 @@ assign_psychiatry_cohort <- function(psychiatry_cost) {
 #' @param maternity_cost A vector of maternity costs
 #'
 #' @return A boolean vector of maternity cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_maternity_cohort <- function(maternity_cost) {
   maternity_cohort <- maternity_cost > 0
   return(maternity_cohort)
@@ -483,6 +494,7 @@ assign_maternity_cohort <- function(maternity_cost) {
 #' @param geriatric_cost A vector of geriatric costs
 #'
 #' @return A boolean vector of geriatric cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_geriatric_cohort <- function(geriatric_cost) {
   geriatric_cohort <- geriatric_cost > 0
   return(geriatric_cohort)
@@ -494,6 +506,7 @@ assign_geriatric_cohort <- function(geriatric_cost) {
 #' @param elective_inpatient_cost A vector of elective_inpatient costs
 #'
 #' @return A boolean vector of elective inpatient cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_elective_inpatient_cohort <- function(elective_inpatient_flag) {
   elective_inpatient_cohort <- elective_inpatient_flag
   return(elective_inpatient_cohort)
@@ -507,6 +520,7 @@ assign_elective_inpatient_cohort <- function(elective_inpatient_flag) {
 #' @param elective_instances A vector of elective instances
 #'
 #' @return A boolean vector of limited daycases cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_limited_daycases_cohort <- function(elective_inpatient_flag, elective_instances) {
   limited_daycases_cohort <- !elective_inpatient_flag & elective_instances <= 3
   return(limited_daycases_cohort)
@@ -516,10 +530,10 @@ assign_limited_daycases_cohort <- function(elective_inpatient_flag, elective_ins
 #' @description If the record does not have an elective inpatient flag and they have
 #' 4 or more elective instances, return `TRUE`
 #'
-#' @param elective_inpatient_flag A vector of elective inpatient flags
-#' @param elective_instances A vector of elective instances
+#' @inheritParams assign_limited_daycases_cohort
 #'
 #' @return A boolean vector of routine daycase cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_routine_daycase_cohort <- function(elective_inpatient_flag, elective_instances) {
   routine_daycase_cohort <- !elective_inpatient_flag & elective_instances >= 4
   return(routine_daycase_cohort)
@@ -530,6 +544,7 @@ assign_routine_daycase_cohort <- function(elective_inpatient_flag, elective_inst
 #' @param emergency_instances A vector of emergency instances
 #'
 #' @return A boolean vector of single emergency cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_single_emergency_cohort <- function(emergency_instances) {
   single_emergency_cohort <- emergency_instances == 1
   return(single_emergency_cohort)
@@ -537,9 +552,10 @@ assign_single_emergency_cohort <- function(emergency_instances) {
 
 #' Assign multiple emergency cohort flag
 #'
-#' @param emergency_instances A vector of emergency instances
+#' @inheritParams assign_single_emergency_cohort
 #'
 #' @return A boolean vector of multiple emergency cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_multiple_emergency_cohort <- function(emergency_instances) {
   multiple_emergency_cohort <- emergency_instances >= 2
   return(multiple_emergency_cohort)
@@ -551,6 +567,7 @@ assign_multiple_emergency_cohort <- function(emergency_instances) {
 #' @param prescribing_cost A vector of prescribing costs
 #'
 #' @return A boolean vector of prescribing cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_prescribing_cohort <- function(prescribing_cost) {
   prescribing_cohort <- prescribing_cost > 0
   return(prescribing_cohort)
@@ -562,6 +579,7 @@ assign_prescribing_cohort <- function(prescribing_cost) {
 #' @param outpatient_cost A vector of outpatient costs
 #'
 #' @return A boolean vector of outpatient cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_outpatient_cohort <- function(outpatient_cost) {
   outpatient_cohort <- outpatient_cost > 0
   return(outpatient_cohort)
@@ -574,6 +592,7 @@ assign_outpatient_cohort <- function(outpatient_cost) {
 #' @param care_home_cost A vector of care home costs
 #'
 #' @return A boolean vector of residential care cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_residential_care_cohort <- function(care_home_cost) {
   residential_care_cohort <- care_home_cost > 0
   return(residential_care_cohort)
@@ -585,6 +604,7 @@ assign_residential_care_cohort <- function(care_home_cost) {
 #' @param ae2_cost A vector of A&E costs
 #'
 #' @return A boolean vector of A&E cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_ae2_cohort <- function(ae2_cost) {
   ae2_cohort <- ae2_cost > 0
   return(ae2_cohort)
@@ -597,38 +617,10 @@ assign_ae2_cohort <- function(ae2_cost) {
 #' @param community_health_cost A vector of community health costs
 #'
 #' @return A boolean vector of Community Care cohort flags
+#' @family Demographic and Service Use Cohort functions
 assign_community_care_cohort <- function(community_health_cost) {
   community_care_cohort <- community_health_cost > 0 # | home_care_cost > 0
   return(community_care_cohort)
-}
-
-#' Calculate costs based on service use cohort
-#'
-#' @param data A data frame that has service use cohorts assigned
-#'
-#' @return A data frame with adjusted costs based on cohort
-#'
-#' @family Demographic and Service Use Cohort functions
-calculate_service_cohort_costs <- function(data) {
-  check_variables_exist(
-    data,
-    c(
-      "elective_inpatient_cohort", "limited_daycases_cohort", "routine_daycase_cohort",
-      "single_emergency_cohort", "multiple_emergency_cohort", "community_care_cohort",
-      "acute_elective_cost", "acute_emergency_cost", "community_health_cost",
-      "cost_total_net"
-    )
-  )
-
-  return_data <- data %>%
-    dplyr::mutate(
-      # Care Home cost is removed for now, so set to zero
-      residential_care_cost = 0,
-      # Replace any missing total costs with zero
-      dplyr::across(.data$cost_total_net, ~ replace(., is.na(.), 0))
-    )
-
-  return(return_data)
 }
 
 #' Recalculate elective inpatient costs
@@ -639,6 +631,7 @@ calculate_service_cohort_costs <- function(data) {
 #' @param acute_elective_cost A vector of acute elective costs
 #'
 #' @return A vector of elective inpatient costs
+#' @family Demographic and Service Use Cohort functions
 recalculate_elective_inpatient_cost <- function(elective_inpatient_cohort, acute_elective_cost) {
   elective_inpatient_cost <- dplyr::if_else(elective_inpatient_cohort, acute_elective_cost, 0)
   return(elective_inpatient_cost)
@@ -650,6 +643,7 @@ recalculate_elective_inpatient_cost <- function(elective_inpatient_cohort, acute
 #' @param acute_elective_cost A vector of acute elective costs
 #'
 #' @return A vector of limited daycase costs
+#' @family Demographic and Service Use Cohort functions
 calculate_limited_daycases_cost <- function(limited_daycases_cohort, acute_elective_cost) {
   limited_daycases_cost <- dplyr::if_else(limited_daycases_cohort, acute_elective_cost, 0)
   return(limited_daycases_cost)
@@ -661,6 +655,7 @@ calculate_limited_daycases_cost <- function(limited_daycases_cohort, acute_elect
 #' @param acute_elective_cost A vector of acute elective costs
 #'
 #' @return A vector of routine daycase costs
+#' @family Demographic and Service Use Cohort functions
 calculate_routine_daycase_cost <- function(routine_daycase_cohort, acute_elective_cost) {
   routine_daycase_cost <- dplyr::if_else(routine_daycase_cohort, acute_elective_cost, 0)
   return(routine_daycase_cost)
@@ -672,6 +667,7 @@ calculate_routine_daycase_cost <- function(routine_daycase_cohort, acute_electiv
 #' @param acute_emergency_cost A vector of acute emergency costs
 #'
 #' @return A vector of single emergency costs
+#' @family Demographic and Service Use Cohort functions
 calculate_single_emergency_cost <- function(single_emergency_cohort, acute_emergency_cost) {
   single_emergency_cost <- dplyr::if_else(single_emergency_cohort, acute_emergency_cost, 0)
   return(single_emergency_cost)
@@ -683,6 +679,7 @@ calculate_single_emergency_cost <- function(single_emergency_cohort, acute_emerg
 #' @param acute_emergency_cost A vector of acute emergency costs
 #'
 #' @return A vector of multiple emergency costs
+#' @family Demographic and Service Use Cohort functions
 calculate_multiple_emergency_cost <- function(multiple_emergency_cohort, acute_emergency_cost) {
   multiple_emergency_cost <- dplyr::if_else(multiple_emergency_cohort, acute_emergency_cost, 0)
   return(multiple_emergency_cost)
@@ -694,6 +691,7 @@ calculate_multiple_emergency_cost <- function(multiple_emergency_cohort, acute_e
 #' @param community_health_cost A vector of community health costs
 #'
 #' @return A vector of community care costs
+#' @family Demographic and Service Use Cohort functions
 calculate_community_care_cost <- function(community_care_cohort, community_health_cost) {
   community_care_cost <- dplyr::if_else(
     community_care_cohort, community_health_cost, 0
@@ -702,6 +700,16 @@ calculate_community_care_cost <- function(community_care_cohort, community_healt
   # community_care_cost <- dplyr::if_else(
   # community_care_cohort + home_care_cost, community_health_cost, 0)
   return(community_care_cost)
+}
+
+#' Calculate residential care cost
+#' @description This function currenly sets these costs to zero
+#'
+#' @return A vector of community care costs, currently zero
+#' @family Demographic and Service Use Cohort functions
+calculate_residential_care_cost <- function() {
+  residential_care_cost <- 0
+  return(residential_care_cost)
 }
 
 #' Title Assign service use cohort into string format
@@ -762,6 +770,6 @@ assign_cohort_names <- function(data) {
         TRUE ~ "Unassigned"
       )
     ) %>%
-    dplyr::select(-.data$cost_max)
+    dplyr::select(-"cost_max")
   return(return_data)
 }
