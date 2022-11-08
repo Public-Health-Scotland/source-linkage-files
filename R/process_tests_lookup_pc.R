@@ -3,9 +3,6 @@
 #' @description This script takes the processed acute extract and produces
 #' a test comparison with the previous data. This is written to disk as a csv.
 #'
-#' @param data The processed data extract
-#' @param year year of extract
-#'
 #' @return a csv document containing tests for extracts
 #' @export
 #'
