@@ -82,6 +82,8 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%
+    # use as.data.table to change the data format to data.table to accelarate
+    data.table::as.data.table() %>%
     dplyr::group_by(
       .data$sending_location,
       .data$social_care_id,
@@ -126,7 +128,9 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
       .data$record_keydate1,
       .data$smrtype,
       .data$sc_latest_submission
-    )
+    ) %>%
+    # change the data format from data.table to data.frame
+    as_tibble()
 
   if (write_to_disk) {
     # Save .rds file ----
