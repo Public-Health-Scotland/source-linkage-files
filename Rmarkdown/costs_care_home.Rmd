@@ -14,8 +14,10 @@ library(createslf)
 
 ## Make a copy of the existing file
 fs::file_copy(get_ch_costs_path(),
-  get_ch_costs_path(update = latest_update(),
-                    check_mode = "write"),
+  get_ch_costs_path(
+    update = latest_update(),
+    check_mode = "write"
+  ),
   overwrite = TRUE
 )
 
@@ -117,7 +119,6 @@ matched_costs_data %>%
 # Save .rds file
 ch_costs_uplifted %>%
   write_rds(get_ch_costs_path(check_mode = "write"))
-
 ```
 
 # Graph showing the cost difference between new and old costs 
@@ -138,6 +139,5 @@ ggplot(
   scale_y_continuous(labels = scales::label_dollar(prefix = "£")) +
   scale_colour_discrete() +
   labs(y = "Cost per day", color = "Nursing Care provision")
-
 ```
 

@@ -28,11 +28,12 @@ hc_costs_raw <- readxl::read_xlsx(get_hc_raw_costs_path()) %>%
 
 ## data - wide to long ##
 hc_costs <- hc_costs_raw %>%
-  left_join(phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
-    col_select = c("CA", "CAName", "HBName")
-  ) %>%
-    distinct(),
-  by = c("gss_code" = "CA")
+  left_join(
+    phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
+      col_select = c("CA", "CAName", "HBName")
+    ) %>%
+      distinct(),
+    by = c("gss_code" = "CA")
   ) %>%
   select(ca_name = CAName, health_board = HBName, starts_with("sw1_")) %>%
   mutate(across(starts_with("sw1_"), as.numeric),
@@ -90,7 +91,6 @@ outfile <- hc_costs_uplifted %>%
   select(-health_board) %>%
   # Save .rds file
   write_rds(get_hc_costs_path(update = latest_update(), check_mode = "write"))
-
 ```
 
 
@@ -104,7 +104,7 @@ matched_costs_data %>%
   geom_col(position = "dodge") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::label_number()) +
-  labs(fill = "Local Authority", x = "Year", y = "Real difference") 
+  labs(fill = "Local Authority", x = "Year", y = "Real difference")
 ```
 
 
@@ -118,7 +118,7 @@ matched_costs_data %>%
   geom_col(position = "dodge") +
   scale_y_continuous(labels = scales::label_percent()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(fill = "Local Authority", x = "Year", y = "% difference") 
+  labs(fill = "Local Authority", x = "Year", y = "% difference")
 ```
 
 

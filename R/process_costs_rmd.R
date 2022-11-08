@@ -58,7 +58,6 @@ process_costs_rmd <- function(file_name) {
 #' @return a [tibble][tibble::tibble-package] containing the final cost data.
 #' @export
 process_costs_dn_rmd <- function() {
-
   process_costs_rmd(file_name = "costs_district_nursing.Rmd")
 
   dn_lookup <- readr::read_rds(get_dn_costs_path())
@@ -75,7 +74,6 @@ process_costs_dn_rmd <- function() {
 #' @return a [tibble][tibble::tibble-package] containing the final cost data.
 #' @export
 process_costs_ch_rmd <- function() {
-
   process_costs_rmd(file_name = "costs_care_home.Rmd")
 
   ch_cost_lookup <- readr::read_rds(get_ch_costs_path())
@@ -92,7 +90,6 @@ process_costs_ch_rmd <- function() {
 #' @return a [tibble][tibble::tibble-package] containing the final cost data.
 #' @export
 process_costs_gp_ooh_rmd <- function() {
-
   process_costs_rmd(file_name = "costs_gp_ooh.Rmd")
 
   ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path())
@@ -109,7 +106,6 @@ process_costs_gp_ooh_rmd <- function() {
 #' @return a [tibble][tibble::tibble-package] containing the final cost data.
 #' @export
 process_costs_hc_rmd <- function() {
-
   process_costs_rmd(file_name = "costs_home_care.Rmd")
 
   hc_cost_lookup <- readr::read_rds(get_hc_costs_path())
