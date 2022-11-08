@@ -249,8 +249,10 @@ test_that("Cohorts are assigned correctly", {
   )
   # Limited daycases
   expect_equal(
-    assign_limited_daycases_cohort(dummy_data$elective_inpatient_flag,
-                                   dummy_data$elective_instances),
+    assign_limited_daycases_cohort(
+      dummy_data$elective_inpatient_flag,
+      dummy_data$elective_instances
+    ),
     c(
       TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE,
       TRUE, TRUE, TRUE, FALSE, FALSE
@@ -258,8 +260,10 @@ test_that("Cohorts are assigned correctly", {
   )
   # Routine daycases
   expect_equal(
-    assign_routine_daycase_cohort(dummy_data$elective_inpatient_flag,
-                                   dummy_data$elective_instances),
+    assign_routine_daycase_cohort(
+      dummy_data$elective_inpatient_flag,
+      dummy_data$elective_instances
+    ),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
@@ -331,38 +335,50 @@ test_that("Recalculated costs are calculated correctly", {
 
   # Elective
   expect_equal(
-    calculate_elective_inpatient_cost(dummy_data$elective_inpatient_cohort,
-                                      dummy_data$cost_total_net),
+    calculate_elective_inpatient_cost(
+      dummy_data$elective_inpatient_cohort,
+      dummy_data$cost_total_net
+    ),
     c(10, 0, 0, 0, 0, 0, 10)
   )
   # Limited daycases
   expect_equal(
-    calculate_limited_daycases_cost(dummy_data$limited_daycases_cohort,
-                                    dummy_data$acute_elective_cost),
+    calculate_limited_daycases_cost(
+      dummy_data$limited_daycases_cohort,
+      dummy_data$acute_elective_cost
+    ),
     c(0, 10, 0, 0, 0, 0, 10)
   )
   # Routine daycases
   expect_equal(
-    calculate_routine_daycase_cost(dummy_data$routine_daycase_cohort,
-                                    dummy_data$acute_elective_cost),
+    calculate_routine_daycase_cost(
+      dummy_data$routine_daycase_cohort,
+      dummy_data$acute_elective_cost
+    ),
     c(0, 0, 10, 0, 0, 0, 10)
   )
   # Single emergency
   expect_equal(
-    calculate_single_emergency_cost(dummy_data$single_emergency_cohort,
-                                    dummy_data$acute_emergency_cost),
+    calculate_single_emergency_cost(
+      dummy_data$single_emergency_cohort,
+      dummy_data$acute_emergency_cost
+    ),
     c(0, 0, 0, 10, 0, 0, 20)
   )
   # Multiple emergency
   expect_equal(
-    calculate_multiple_emergency_cost(dummy_data$multiple_emergency_cohort,
-                                    dummy_data$acute_emergency_cost),
+    calculate_multiple_emergency_cost(
+      dummy_data$multiple_emergency_cohort,
+      dummy_data$acute_emergency_cost
+    ),
     c(0, 0, 0, 0, 10, 0, 20)
   )
   # Community care
   expect_equal(
-    calculate_community_care_cost(dummy_data$community_care_cohort,
-                                  dummy_data$community_health_cost),
+    calculate_community_care_cost(
+      dummy_data$community_care_cohort,
+      dummy_data$community_health_cost
+    ),
     c(0, 0, 0, 0, 0, 10, 30)
   )
   # Residential care (not used)
@@ -433,5 +449,3 @@ test_that("Errors handled as expected", {
     regexp = "Variables .+ are required, but are missing from `data`"
   )
 })
-
-
