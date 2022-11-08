@@ -143,7 +143,8 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
         (rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_starts(.x, paste("W0", "W1", "F00", "F01", "F02", "F03",
-            "F05", "I61", "I63", "I64", "G20", "G21", "R268", "G22X", sep = "|"
+            "F05", "I61", "I63", "I64", "G20", "G21", "R268", "G22X",
+            sep = "|"
           ))
         ), na.rm = TRUE) > 0) ~ TRUE,
       recid %in% c("01B", "50B", "02B", "04B", "AE2") & spec == "AB" ~ TRUE,
