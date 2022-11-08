@@ -107,18 +107,15 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
 assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
   mh <-
     # FOR FUTURE: when variable MentalHealthProblemsClientGroup exists and is "Y", mh_cohort = TRUE
-    recid == "04B" |
-      (recid %in% c("01B", "GLS", "50B", "02B", "AE2") &
-        (rowSums(dplyr::across(
-          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1, 2) %in%
-            c("F2", "F3")
-        )) > 0 |
-          rowSums(dplyr::across(
-            c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-            ~ stringr::str_sub(.x, 1, 4) %in%
-              c("F067", "F070", "F072", "F078", "F079")
-          )) > 0))
+    dplyr::case_when(
+    recid == "04B" ~ TRUE,
+    recid %in% c("01B", "GLS", "50B", "02B", "AE2") &
+      (rowSums(dplyr::across(
+        c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+        ~ stringr::str_starts(.x, paste("F2", "F3", "F067", "F070", "F072", "F078", "F079", sep = "|")))) > 0) ~ TRUE,
+      TRUE ~ FALSE
+  )
+  
   return(mh)
 }
 
