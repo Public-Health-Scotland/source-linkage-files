@@ -1,42 +1,29 @@
-#####################################################
-# Costs - District Nursing
-# Author: Catherine Holland
-# Date: February 2022
-# Written on RStudio Server
-# Version of R - 3.6.1
-# Input - DN_Costs.xlsx
-# Description - Create Lookup for District Nursing Costs.
-#
-# Download latest costs file from Cost Book website
-# http://www.isdscotland.org/Health-Topics/Finance/Costs/Detailed-Tables/index.asp
-#
-# Check and add costs to the Excel file 'DN_Costs.xlsx'. ##
-#
-# Extract numbers of contacts from the CHAD - District Nursing Datamart
-# using the query: DN-Contacts-Numbers-for-Costs.
-# This should be run/scheduled and downloaded as a .csv
-# Check the numbers in this file as some data completeness issues
-# may mean the numbers can't be used to create costs.
-#####################################################
+---
+title: "District Nursing cost lookup"
+output: html_document
+---
 
-# Load packages #
-library(dplyr)
+```{r setup, include=FALSE}
+library(createslf)
 library(tidyr)
+library(dplyr)
 library(ggplot2)
 library(purrr)
-library(createslf)
 
 
 # Copy existing file ---------------------------------------
 
-# read data in
-current_file <- readr::read_rds(get_dn_costs_path())
-
 # Create a copy for comparison
 fs::file_copy(
   get_dn_costs_path(),
-  get_dn_costs_path(update = latest_update())
+  get_dn_costs_path(update = latest_update(),
+                    check_mode = "write"),
+  overwrite = TRUE
 )
+
+# read data in
+current_file <- readr::read_rds(createslf::get_dn_costs_path())
+
 
 # Read in cost workbook ---------------------------------------
 
@@ -88,7 +75,7 @@ dn_raw_costs_contacts <- left_join(dn_raw_contacts,
 # Of the two HSCPs, Argyll and Bute provides the
 # District Nursing data which is 27% of the population.
 
-population_lookup <- readr::read_rds(get_datazone_pop_path("HSCP2019_pop_est_1981_2020.rds")) %>%
+population_lookup <- readr::read_rds(get_datazone_pop_path("HSCP2019_pop_est_1981_2021.rds")) %>%
   # Select only the HSCPs for NHS Highland & years since 2015
   filter(
     hscp2019 %in% c("S37000004", "S37000016"),
@@ -145,12 +132,6 @@ matched_data <-
   mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
   ungroup()
 
-# plot #
-ggplot(data = matched_data, aes(x = year, y = pct_of_max, group = board_name)) +
-  geom_line(aes(color = board_name)) +
-  labs(color = "NHS Board", x = "Year")
-
-
 # Deal with costs ------------------------------------------
 
 ## costs with pct_of_max < 75 - uplift ##
@@ -169,8 +150,6 @@ while (any(is.na(uplift_data$cost_total_net))) {
 }
 
 uplift_data <- ungroup(uplift_data)
-
-
 
 ## Add in years by copying the most recent year we have ##
 
@@ -195,12 +174,6 @@ new_years_data <-
   select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
   arrange(hbtreatcode, year)
 
-# plot #
-ggplot(data = new_years_data, aes(x = year, y = cost_total_net, group = hbtreatname)) +
-  geom_line(aes(color = hbtreatname)) +
-  geom_vline(xintercept = latest_year, size = 0.2) +
-  labs(color = "NHS Board", x = "Year")
-
 ## Check costs haven't changed radically ##
 # using current_file - from above #
 
@@ -208,8 +181,7 @@ ggplot(data = new_years_data, aes(x = year, y = cost_total_net, group = hbtreatn
 costs_lookup <-
   current_file %>%
   rename(
-    cost_old = "cost_total_net",
-    year = "Year"
+    cost_old = "cost_total_net"
   )
 
 matched_data_costs <-
@@ -219,28 +191,6 @@ matched_data_costs <-
   mutate(difference = cost_total_net - cost_old) %>%
   mutate(pct_diff = difference / cost_old) %>%
   arrange(hbtreatname, year)
-
-
-# Create charts -----------------------------------------------
-
-# plot difference
-matched_data_costs %>%
-  filter(!is.na(difference)) %>%
-  ggplot(aes(x = year, y = difference, group = hbtreatname)) +
-  geom_line(aes(color = hbtreatname)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(color = "NHS Board", x = "Year")
-
-
-# plot pct_diff
-matched_data_costs %>%
-  filter(!is.na(pct_diff)) %>%
-  ggplot(aes(x = year, y = pct_diff, group = hbtreatname)) +
-  geom_line(aes(color = hbtreatname)) +
-  scale_y_continuous(labels = scales::label_percent()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(color = "NHS Board", x = "Year")
-
 
 ## save outfile ---------------------------------------
 outfile <-
@@ -255,6 +205,48 @@ outfile <-
 outfile %>%
   # Save .rds file
   write_rds(get_dn_costs_path(check_mode = "write"))
+```
 
+# Graph showing the number of contacts
 
-## End of Script ---------------------------------------
+```{r graph 1, echo=FALSE}
+# plot showing the number of contacts
+ggplot(data = matched_data, aes(x = year, y = pct_of_max, group = board_name)) +
+  geom_line(aes(color = board_name)) +
+  labs(color = "NHS Board", x = "Year")
+```
+
+## Graph showing the most recent cost years 
+
+```{r graph 2, echo=FALSE}
+# plot #
+ggplot(data = new_years_data, aes(x = year, y = cost_total_net, group = hbtreatname)) +
+  geom_line(aes(color = hbtreatname)) +
+  geom_vline(xintercept = latest_year, size = 0.2) +
+  labs(color = "NHS Board", x = "Year")
+```
+
+## Graph showing the cost difference 
+
+```{r graph 3, echo=FALSE}
+# plot difference
+matched_data_costs %>%
+  filter(!is.na(difference)) %>%
+  ggplot(aes(x = year, y = difference, group = hbtreatname)) +
+  geom_line(aes(color = hbtreatname)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(color = "NHS Board", x = "Year")
+```
+
+## Graph showing the cost percentage difference
+
+```{r graph 4, echo=FALSE}
+# plot pct_diff
+matched_data_costs %>%
+  filter(!is.na(pct_diff)) %>%
+  ggplot(aes(x = year, y = pct_diff, group = hbtreatname)) +
+  geom_line(aes(color = hbtreatname)) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(color = "NHS Board", x = "Year")
+```

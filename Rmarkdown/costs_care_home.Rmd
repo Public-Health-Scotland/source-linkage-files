@@ -1,21 +1,9 @@
-#####################################################
-# Costs - Care Home
-# Author: Catherine Holland
-# Date: February 2022
-# Written on RStudio Server
-# Version of R - 3.6.1
-# Input - Tables from CHC publication
-# Description - Lookup for costs for Care Homes
-#
-# Get the Care Home Census tables
-# Estimated Average Gross Weekly Charge for Long Stay Residents in Care Homes
-# for Older People in Scotland.
-# https://publichealthscotland.scot/publications/care-home-census-for-adults-in-scotland/
-# Check and add any new years to 'CH_Costs.xlsx'
-#####################################################
+---
+title: "Care Homes cost lookup"
+output: html_document
+---
 
-# Load packages
-
+```{r setup, include=FALSE}
 library(dplyr)
 library(purrr)
 library(tidyr)
@@ -26,7 +14,8 @@ library(createslf)
 
 ## Make a copy of the existing file
 fs::file_copy(get_ch_costs_path(),
-  get_ch_costs_path(update = latest_update()),
+  get_ch_costs_path(update = latest_update(),
+                    check_mode = "write"),
   overwrite = TRUE
 )
 
@@ -105,8 +94,7 @@ ch_costs_uplifted <-
 # match files - to make sure costs haven't changed radically
 old_costs <- readr::read_rds(get_ch_costs_path(update = latest_update())) %>%
   rename(
-    cost_old = "cost_per_day",
-    year = "Year"
+    cost_old = "cost_per_day"
   )
 
 matched_costs_data <-
@@ -126,6 +114,15 @@ matched_costs_data %>%
     values_from = "pct_diff"
   )
 
+# Save .rds file
+ch_costs_uplifted %>%
+  write_rds(get_ch_costs_path(check_mode = "write"))
+
+```
+
+# Graph showing the cost difference between new and old costs 
+
+```{r graph 1, echo=FALSE}
 ggplot(
   data = matched_costs_data,
   aes(
@@ -142,12 +139,5 @@ ggplot(
   scale_colour_discrete() +
   labs(y = "Cost per day", color = "Nursing Care provision")
 
+```
 
-## save outfile ---------------------------------------
-
-# Save .rds file
-ch_costs_uplifted %>%
-  write_rds(get_ch_costs_path(check_mode = "write"))
-
-
-## End of Script ---------------------------------------
