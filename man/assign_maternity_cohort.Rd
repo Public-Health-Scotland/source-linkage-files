@@ -10,7 +10,8 @@ assign_maternity_cohort(recid)
 \item{recid}{A vector of recids}
 }
 \value{
-A boolean vector indicating whether a given record is in the Maternity cohort
+A boolean vector indicating whether a given record is in the
+Maternity cohort
 }
 \description{
 A record is considered to be in the Maternity cohort if the recid

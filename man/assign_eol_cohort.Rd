@@ -22,27 +22,7 @@ assign_eol_cohort(
 \arguments{
 \item{recid}{A vector of record IDs}
 
-\item{deathdiag1}{A vector of death diagnosis codes}
-
-\item{deathdiag2}{A vector of death diagnosis codes}
-
-\item{deathdiag3}{A vector of death diagnosis codes}
-
-\item{deathdiag4}{A vector of death diagnosis codes}
-
-\item{deathdiag5}{A vector of death diagnosis codes}
-
-\item{deathdiag6}{A vector of death diagnosis codes}
-
-\item{deathdiag7}{A vector of death diagnosis codes}
-
-\item{deathdiag8}{A vector of death diagnosis codes}
-
-\item{deathdiag9}{A vector of death diagnosis codes}
-
-\item{deathdiag10}{A vector of death diagnosis codes}
-
-\item{deathdiag11}{A vector of death diagnosis codes}
+\item{deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5, deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10, deathdiag11}{Character vectors of ICD-10 death diagnosis codes.}
 }
 \value{
 A boolean vector indicating whether a given record is in the End of Life cohort

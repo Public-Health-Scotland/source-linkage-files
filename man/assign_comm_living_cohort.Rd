@@ -11,8 +11,8 @@ A boolean vector indicating whether a given record is in the
 Assisted living in the Community cohort
 }
 \description{
-Not using this cohort until we have more datasets and Scotland complete DN etc,
-so will always return FALSE
+Not using this cohort until we have more datasets and Scotland
+complete DN etc. so will always return FALSE.
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

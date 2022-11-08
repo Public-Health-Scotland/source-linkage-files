@@ -9,17 +9,7 @@ assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)
 \arguments{
 \item{recid}{A vector of record IDs}
 
-\item{diag1}{A vector of Diagnosis Code 1}
-
-\item{diag2}{A vector of Diagnosis Code 2}
-
-\item{diag3}{A vector of Diagnosis Code 3}
-
-\item{diag4}{A vector of Diagnosis Code 4}
-
-\item{diag5}{A vector of Diagnosis Code 5}
-
-\item{diag6}{A vector of Diagnosis Code 6}
+\item{diag1, diag2, diag3, diag4, diag5, diag6}{Character vectors of ICD-10 diagnosis codes.}
 }
 \value{
 A boolean vector indicating whether a given record is in the Mental Health cohort

@@ -18,11 +18,12 @@ assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms)
 \item{ms}{A vector of MS LTC flags}
 }
 \value{
-A boolean vector indicating whether a given record is in the Medium Complex Conditions cohort
+A boolean vector indicating whether a given record is in the
+Medium Complex Conditions cohort
 }
 \description{
-A record is considered to be in the Medium Complex Conditions cohort if the patient
-has any of the listed LTCs
+A record is considered to be in the Medium Complex Conditions
+cohort if the patient has any of the listed LTCs
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

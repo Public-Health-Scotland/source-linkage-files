@@ -19,27 +19,29 @@ assign_frailty_cohort(
 \arguments{
 \item{recid}{A vector of record IDs}
 
-\item{diag1}{A vector of Diagnosis Code 1}
-
-\item{diag2}{A vector of Diagnosis Code 2}
-
-\item{diag3}{A vector of Diagnosis Code 3}
-
-\item{diag4}{A vector of Diagnosis Code 4}
-
-\item{diag5}{A vector of Diagnosis Code 5}
-
-\item{diag6}{A vector of Diagnosis Code 6}
+\item{diag1, diag2, diag3, diag4, diag5, diag6}{Character vectors of ICD-10 diagnosis codes.}
 
 \item{spec}{A vector of specialty codes}
 
 \item{sigfac}{A vector of significant facilities}
 }
 \value{
-A boolean vector indicating whether a given record is in the Frailty cohort
+A boolean vector indicating whether a given record is in the
+Frailty cohort
 }
 \description{
-
+A record is considered to be in the frailty cohort if:
+\itemize{
+\item The recid is 01B, 50B, 02B, 04B or AE2 \strong{and}
+\enumerate{
+\item One of the diagnosis codes starts with W0 or W1
+\item One of the diagnosis codes starts with F00, F01, F02, F03, F05,
+I61, I63, I64, G20 or G21
+\item One of the diagnosis codes starts with R268 or G22X
+\item The specialty is AB
+\item The significant facility is 1E or 1D
+\item The recid is GLS}
+}
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

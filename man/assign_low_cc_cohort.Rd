@@ -18,11 +18,12 @@ assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib)
 \item{atrialfib}{A vector of atrial fibrillation LTC flags}
 }
 \value{
-A boolean vector indicating whether a given record is in the Low Complex Conditions cohort
+A boolean vector indicating whether a given record is in the
+Low Complex Conditions cohort
 }
 \description{
-A record is considered to be in the Low Complex Conditions cohort if the patient
-has any of the listed LTCs
+A record is considered to be in the Low Complex Conditions
+cohort if the patient has any of the listed LTCs.
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

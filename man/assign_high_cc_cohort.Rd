@@ -20,11 +20,12 @@ assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec)
 \item{spec}{A vector of specialties}
 }
 \value{
-A boolean vector indicating whether a given record is in the High Complex Conditions cohort
+A boolean vector indicating whether a given record is in the
+High Complex Conditions cohort
 }
 \description{
-A record is considered to be in the High Complex Conditions cohort if the patient
-has any of the listed LTCs, or the specialty is G5
+A record is considered to be in the High Complex Conditions
+cohort if the patient has any of the listed LTCs, or the specialty is G5
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

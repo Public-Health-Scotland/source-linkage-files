@@ -91,12 +91,8 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
 #' F2, F3, F067, F070, F072, F078, or F079
 #'
 #' @param recid A vector of record IDs
-#' @param diag1 A vector of Diagnosis Code 1
-#' @param diag2 A vector of Diagnosis Code 2
-#' @param diag3 A vector of Diagnosis Code 3
-#' @param diag4 A vector of Diagnosis Code 4
-#' @param diag5 A vector of Diagnosis Code 5
-#' @param diag6 A vector of Diagnosis Code 6
+#' @param diag1,diag2,diag3,diag4,diag5,diag6
+#' Character vectors of ICD-10 diagnosis codes.
 #'
 #' @return A boolean vector indicating whether a given record is in the Mental Health cohort
 #' @family Demographic and Service Use Cohort functions
@@ -120,18 +116,22 @@ assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
 #' @description A record is considered to be in the frailty cohort if:
 #' \itemize{
 #'     \item The recid is 01B, 50B, 02B, 04B or AE2 \strong{and}
-#'     \enumerate{\item One of the diagnosis codes starts with W0 or W1
-#'          \item One of the diagnosis codes starts with F00, F01, F02, F03, F05, I61, I63, I64, G20 or G21
-#'          \item One of the diagnosis codes starts with R268 or G22X
-#'    \item The specialty is AB
-#'    \item The significant facility is 1E or 1D
-#'    \item The recid is GLS}}}
+#'     \enumerate{
+#'         \item One of the diagnosis codes starts with W0 or W1
+#'         \item One of the diagnosis codes starts with F00, F01, F02, F03, F05,
+#'          I61, I63, I64, G20 or G21
+#'         \item One of the diagnosis codes starts with R268 or G22X
+#'         \item The specialty is AB
+#'         \item The significant facility is 1E or 1D
+#'         \item The recid is GLS}
+#'    }
 #'
 #' @inheritParams assign_mh_cohort
 #' @param spec A vector of specialty codes
 #' @param sigfac A vector of significant facilities
 #'
-#' @return A boolean vector indicating whether a given record is in the Frailty cohort
+#' @return A boolean vector indicating whether a given record is in the
+#' Frailty cohort
 #' @family Demographic and Service Use Cohort functions
 assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac) {
   frail <-
@@ -160,7 +160,8 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
 #'
 #' @param recid A vector of recids
 #'
-#' @return A boolean vector indicating whether a given record is in the Maternity cohort
+#' @return A boolean vector indicating whether a given record is in the
+#' Maternity cohort
 #' @family Demographic and Service Use Cohort functions
 assign_maternity_cohort <- function(recid) {
   maternity <- recid == "02B"
@@ -168,8 +169,8 @@ assign_maternity_cohort <- function(recid) {
 }
 
 #' Assign High Complex Conditions cohort
-#' @description A record is considered to be in the High Complex Conditions cohort if the patient
-#' has any of the listed LTCs, or the specialty is G5
+#' @description A record is considered to be in the High Complex Conditions
+#' cohort if the patient has any of the listed LTCs, or the specialty is G5
 #'
 #' @param dementia A vector of dementia LTC flags
 #' @param hefailure A vector of heart failure LTC flags
@@ -178,7 +179,8 @@ assign_maternity_cohort <- function(recid) {
 #' @param cancer A vector of cancer LTC flags
 #' @param spec A vector of specialties
 #'
-#' @return A boolean vector indicating whether a given record is in the High Complex Conditions cohort
+#' @return A boolean vector indicating whether a given record is in the
+#' High Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer, spec) {
   high_cc <-
@@ -191,8 +193,8 @@ assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer,
 }
 
 #' Assign Medium Complex Conditions cohort
-#' @description A record is considered to be in the Medium Complex Conditions cohort if the patient
-#' has any of the listed LTCs
+#' @description A record is considered to be in the Medium Complex Conditions
+#' cohort if the patient has any of the listed LTCs
 #'
 #' @param cvd A vector of CVD LTC flags
 #' @param copd A vector of COPD LTC flags
@@ -200,7 +202,8 @@ assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer,
 #' @param parkinsons A vector of Parkinson's LTC flags
 #' @param ms A vector of MS LTC flags
 #'
-#' @return A boolean vector indicating whether a given record is in the Medium Complex Conditions cohort
+#' @return A boolean vector indicating whether a given record is in the
+#' Medium Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_medium_cc_cohort <- function(cvd, copd, chd, parkinsons, ms) {
   medium_cc <-
@@ -209,8 +212,8 @@ assign_medium_cc_cohort <- function(cvd, copd, chd, parkinsons, ms) {
 }
 
 #' Assign Low Complex Conditions cohort
-#' @description A record is considered to be in the Low Complex Conditions cohort if the patient
-#' has any of the listed LTCs
+#' @description A record is considered to be in the Low Complex Conditions
+#' cohort if the patient has any of the listed LTCs.
 #'
 #' @param epilepsy A vector of epilepsy LTC flags
 #' @param asthma A vector of asthma LTC flags
@@ -218,7 +221,8 @@ assign_medium_cc_cohort <- function(cvd, copd, chd, parkinsons, ms) {
 #' @param diabetes A vector of diabetes LTC flags
 #' @param atrialfib A vector of atrial fibrillation LTC flags
 #'
-#' @return A boolean vector indicating whether a given record is in the Low Complex Conditions cohort
+#' @return A boolean vector indicating whether a given record is in the
+#' Low Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_low_cc_cohort <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
   low_cc <-
@@ -227,8 +231,8 @@ assign_low_cc_cohort <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
 }
 
 #' Assign Assisted living in the Community cohort
-#' @description Not using this cohort until we have more datasets and Scotland complete DN etc,
-#' so will always return FALSE
+#' @description Not using this cohort until we have more datasets and Scotland
+#' complete DN etc. so will always return FALSE.
 #'
 #' @return A boolean vector indicating whether a given record is in the
 #' Assisted living in the Community cohort
@@ -273,17 +277,8 @@ assign_child_major_condition_cohort <- function(recid, age, cost_total_net) {
 #' and is classified as a fall
 #'
 #' @param recid A vector of record IDs
-#' @param deathdiag1 A vector of death diagnosis codes
-#' @param deathdiag2 A vector of death diagnosis codes
-#' @param deathdiag3 A vector of death diagnosis codes
-#' @param deathdiag4 A vector of death diagnosis codes
-#' @param deathdiag5 A vector of death diagnosis codes
-#' @param deathdiag6 A vector of death diagnosis codes
-#' @param deathdiag7 A vector of death diagnosis codes
-#' @param deathdiag8 A vector of death diagnosis codes
-#' @param deathdiag9 A vector of death diagnosis codes
-#' @param deathdiag10 A vector of death diagnosis codes
-#' @param deathdiag11 A vector of death diagnosis codes
+#' @param deathdiag1,deathdiag2,deathdiag3,deathdiag4,deathdiag5,deathdiag6,deathdiag7,deathdiag8,deathdiag9,deathdiag10,deathdiag11
+#' Character vectors of ICD-10 death diagnosis codes.
 #'
 #' @return A boolean vector indicating whether a given record is in the End of Life cohort
 #'
