@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cohorts_paths.R
 \name{get_service_use_cohorts_path}
 \alias{get_service_use_cohorts_path}
-\title{Service-use cohort lookup Path}
+\title{Service-use cohorts lookup Path}
 \usage{
 get_service_use_cohorts_path(year, ...)
 }
@@ -12,10 +12,10 @@ get_service_use_cohorts_path(year, ...)
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the service-use lookup as an \code{\link[fs:path]{fs::path()}}
+The path to the service-use cohorts lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the path to the service-use cohort lookup, there is one
+Get the path to the service-use cohorts lookup, there is one
 lookup per year.
 }
 \seealso{

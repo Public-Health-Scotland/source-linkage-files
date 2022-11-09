@@ -32,6 +32,6 @@ Other Demographic and Service Use Cohort functions:
 \code{\link{assign_medium_cc_cohort}()},
 \code{\link{assign_mh_cohort}()},
 \code{\link{assign_substance_cohort}()},
-\code{\link{create_demographic_lookup}()}
+\code{\link{create_demographic_cohorts}()}
 }
 \concept{Demographic and Service Use Cohort functions}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cohorts_paths.R
 \name{get_demographic_cohorts_path}
 \alias{get_demographic_cohorts_path}
-\title{Demographic cohort lookup Path}
+\title{Demographic cohorts lookup Path}
 \usage{
 get_demographic_cohorts_path(year, ...)
 }
@@ -12,10 +12,10 @@ get_demographic_cohorts_path(year, ...)
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the demographic lookup as an \code{\link[fs:path]{fs::path()}}
+The path to the demographic cohorts lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the path to the demographic cohort lookup, there is one
+Get the path to the demographic cohorts lookup, there is one
 lookup per year.
 }
 \seealso{
