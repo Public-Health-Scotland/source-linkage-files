@@ -21,7 +21,7 @@ has official Care Home names and addresses provided by the Care Inspectorate.
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other slf lookup file path:
+Other slf lookup file path: 
 \code{\link{get_slf_deaths_path}()},
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()}
