@@ -32,6 +32,7 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_sc_all_home_care}()},
 \code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}

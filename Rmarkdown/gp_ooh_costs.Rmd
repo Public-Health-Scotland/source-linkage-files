@@ -1,38 +1,20 @@
-#####################################################
-# Costs - GP Out of Hours
-# Author: Catherine Holland
-# Date: February 2022
-# Written on RStudio Server
-# Version of R - 3.6.1
-# Input -
-# Description - Attendances taken from 2018 Primary Care Out of Hours Report
-# https://publichealthscotland.scot/publications/out-of-hours-primary-care-services-in-scotland/
+---
+title: "GP OOH cost lookup"
+output: html_document
+---
 
-# Costs taken from R520 (Costbook) report for 2015/16
-# https://beta.isdscotland.org/topics/finance/costs/ (R520)
-
-# The above should be checked / added to the Excel file
-# `OOH_Costs.xlsx` before running this syntax.
-#####################################################
-
-# Packages #
-
+```{r setup, include=FALSE}
 library(dplyr)
 library(ggplot2)
 library(createslf)
 library(tidyr)
 library(purrr)
 
-# Copy existing file-----------------------------------
-
 ## Make a copy of the existing file
 fs::file_copy(get_gp_ooh_costs_path(),
   get_gp_ooh_costs_path(update = latest_update()),
   overwrite = TRUE
 )
-
-
-# Read in data---------------------------------------
 
 # Costs spreadsheet
 gp_ooh_data <- readxl::read_xlsx(paste0(
@@ -98,8 +80,16 @@ matched_costs_data <- gp_ooh_costs_uplifted %>%
     pct_diff = difference / cost_old * 100
   )
 
-# Create charts ---------------------------------------
+  gp_ooh_costs_uplifted %>%
+    dplyr::rename(TreatmentNHSBoardCode = "HB2019") %>%
+    # Save .rds file
+    write_rds(get_gp_ooh_costs_path(check_mode = "write"))
 
+```
+
+# Graph showing the cost difference 
+
+```{r graph 1, echo=FALSE}
 # plot difference
 matched_costs_data %>%
   filter(difference > 0) %>%
@@ -107,8 +97,13 @@ matched_costs_data %>%
   geom_col(position = "dodge") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::label_number()) +
-  labs(fill = "NHS Board", x = "Year", y = "Real difference")
+  labs(fill = "NHS Board", x = "Year", y = "Real difference") 
 
+```
+
+## Graph showing the percentage difference 
+
+```{r graph 2, echo=FALSE}
 # plot pct_diff
 matched_costs_data %>%
   filter(pct_diff > 0) %>%
@@ -116,23 +111,17 @@ matched_costs_data %>%
   geom_col(position = "dodge") +
   scale_y_continuous(labels = scales::label_percent()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(fill = "NHS Board", x = "Year", y = "% difference")
+  labs(fill = "NHS Board", x = "Year", y = "% difference") 
 
+```
 
-## Plot to check for obviously wrong looking costs ##
+## Graph checking for obviously wrong looking costs 
 
+```{r graph 3, echo=FALSE}
 ggplot(data = matched_costs_data, aes(x = year, y = cost_per_consultation)) +
   geom_line(aes(group = Board_Name, color = Board_Name)) +
   scale_y_continuous(labels = scales::label_dollar(prefix = "£")) +
   labs(y = "Cost Per Consultation", color = "NHS Board")
+```
 
 
-## save outfile ---------------------------------------
-
-gp_ooh_costs_uplifted %>%
-  rename(TreatmentNHSBoardCode = "HB2019") %>%
-  # Save .rds file
-  write_rds(get_gp_ooh_costs_path(check_mode = "write"))
-
-
-## End of Script ---------------------------------------
