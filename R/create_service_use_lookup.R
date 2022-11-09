@@ -138,13 +138,13 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
       "ae2_cost"
     )
 
-  if (write_to_disk == TRUE) {
+  if (write_to_disk) {
     write_rds(return_data,
-      path = glue::glue("{get_slf_dir()}/Cohorts/Service_Use_Cohorts_{year}.rds")
+      path = get_service_use_cohorts_path(year)
     )
-  } else {
-    return(return_data)
-  }
+  } 
+  
+return(return_data)
 }
 
 #' Calculate cost for Geriatric Care records
