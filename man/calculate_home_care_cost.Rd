@@ -8,6 +8,8 @@ calculate_home_care_cost(recid, cost_total_net)
 }
 \arguments{
 \item{recid}{A vector of record IDs}
+
+\item{cost_total_net}{A vector of total net costs}
 }
 \value{
 A vector of home care costs

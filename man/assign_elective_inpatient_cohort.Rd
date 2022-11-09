@@ -7,7 +7,7 @@
 assign_elective_inpatient_cohort(elective_inpatient_flag)
 }
 \arguments{
-\item{elective_inpatient_cost}{A vector of elective_inpatient costs}
+\item{elective_inpatient_flag}{A vector of elective_inpatient costs}
 }
 \value{
 A boolean vector of elective inpatient cohort flags

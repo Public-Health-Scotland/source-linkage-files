@@ -7,7 +7,9 @@
 assign_elective_inpatient_flag(acute_elective_cost, elective_inpatient_cost)
 }
 \arguments{
-\item{elective_inpatient_cost}{}
+\item{acute_elective_cost}{a vector}
+
+\item{elective_inpatient_cost}{a vector}
 }
 \value{
 A boolean vector indicating whether a record is an elective inpatient one
