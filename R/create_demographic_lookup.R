@@ -238,7 +238,7 @@ assign_low_cc_cohort <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
 #' Assisted living in the Community cohort
 #' @family Demographic and Service Use Cohort functions
 assign_comm_living_cohort <- function() {
-  # Code: recid %in% c('HC-', 'HC + ', "RSP", "DN", "MLS", "INS", "CPL", "DC")
+  # Code: recid %in% c("HC", "RSP", "DN", "MLS", "INS", "CPL", "DC")
   comm_living <- FALSE
   return(comm_living)
 }
@@ -296,6 +296,7 @@ assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdi
     # Codes Y00 to Y84
     glue::glue("Y{stringr::str_pad(0:84, 2, 'left', '0')}")
   )
+
   # Codes W00 to W19
   falls_codes <- c(glue::glue("W{stringr::str_pad(0:19, 2, 'left', '0')}"))
 
@@ -305,6 +306,7 @@ assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdi
     %in% external_deaths)) > 0 &
       rowSums(dplyr::across(dplyr::contains("deathdiag"), ~ stringr::str_sub(.x, 1, 3)
       %in% falls_codes)) == 0
+
   # End of life cohort are records from NRS that are not external causes
   end_of_life <- recid == "NRS" & external_cause == FALSE
 
