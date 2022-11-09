@@ -19,7 +19,7 @@ produce_slf_homelessness_tests <- function(data,
     create_demog_test_flags() %>%
     create_lca_test_flags(.data$hl1_sending_lca) %>%
     # keep variables for comparison
-    dplyr::select(c(.data$valid_chi:.data$West_Lothian)) %>%
+    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

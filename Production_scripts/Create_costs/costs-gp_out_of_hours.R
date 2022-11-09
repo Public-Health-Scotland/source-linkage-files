@@ -86,13 +86,12 @@ old_costs <- readr::read_rds(get_gp_ooh_costs_path(update = latest_update())) %>
   # rename lookup variables to match
   rename(
     cost_old = "cost_per_consultation",
-    HB2019 = "TreatmentNHSBoardCode",
-    year = "Year"
+    HB2019 = "TreatmentNHSBoardCode"
   )
 
 # match files
 matched_costs_data <- gp_ooh_costs_uplifted %>%
-  full_join(old_costs, by = c("HB2019", "year")) %>%
+  full_join(old_costs, by = c("Board_Name", "HB2019", "year")) %>%
   # compute difference
   mutate(
     difference = cost_per_consultation - cost_old,
@@ -109,7 +108,6 @@ matched_costs_data %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::label_number()) +
   labs(fill = "NHS Board", x = "Year", y = "Real difference")
-
 
 # plot pct_diff
 matched_costs_data %>%
