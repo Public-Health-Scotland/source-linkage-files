@@ -25,17 +25,17 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     dplyr::filter(!is_missing(.data$chi)) %>%
     # Add the various cohorts
     dplyr::mutate(
-      mh = assign_mh_cohort(.data$recid,  .data$diag1,  .data$diag2,  .data$diag3,  .data$diag4,  .data$diag5,  .data$diag6),
-      frail = assign_frailty_cohort(.data$recid,  .data$diag1,  .data$diag2,  .data$diag3,  .data$diag4,  .data$diag5,  .data$diag6,  .data$spec,  .data$sigfac),
+      mh = assign_mh_cohort(.data$recid, .data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+      frail = assign_frailty_cohort(.data$recid, .data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6, .data$spec, .data$sigfac),
       maternity = assign_maternity_cohort(.data$recid),
       high_cc = assign_high_cc_cohort(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer, .data$spec),
       medium_cc = assign_medium_cc_cohort(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms),
       low_cc = assign_low_cc_cohort(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib),
       comm_living = assign_comm_living_cohort(),
-      adult_major = assign_adult_major_condition_cohort(.data$recid,  .data$age, .data$cost_total_net),
-      child_major = assign_child_major_condition_cohort(.data$recid,  .data$age, .data$cost_total_net),
+      adult_major = assign_adult_major_condition_cohort(.data$recid, .data$age, .data$cost_total_net),
+      child_major = assign_child_major_condition_cohort(.data$recid, .data$age, .data$cost_total_net),
       end_of_life = assign_eol_cohort(
-        .data$recid,  .data$deathdiag1, .data$deathdiag2, .data$deathdiag3, .data$deathdiag4, .data$deathdiag5,
+        .data$recid, .data$deathdiag1, .data$deathdiag2, .data$deathdiag3, .data$deathdiag4, .data$deathdiag5,
         .data$deathdiag6, .data$deathdiag7, .data$deathdiag8, .data$deathdiag9, .data$deathdiag10,
         .data$deathdiag11
       )
