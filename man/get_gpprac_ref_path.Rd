@@ -4,7 +4,7 @@
 \alias{get_gpprac_ref_path}
 \title{GP Practice Reference File Path (gpprac)}
 \usage{
-get_gpprac_ref_path()
+get_gpprac_ref_path(ext = "sav")
 }
 \value{
 An \code{\link[fs:path]{fs::path()}} to the file
