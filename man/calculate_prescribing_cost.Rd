@@ -59,7 +59,7 @@ Other Demographic and Service Use Cohort functions:
 \code{\link{calculate_residential_care_cost}()},
 \code{\link{calculate_routine_daycase_cost}()},
 \code{\link{calculate_single_emergency_cost}()},
-\code{\link{create_service_use_lookup}()},
+\code{\link{create_service_use_cohorts}()},
 \code{\link{recalculate_elective_inpatient_cost}()}
 }
 \concept{Demographic and Service Use Cohort functions}
