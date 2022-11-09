@@ -153,12 +153,17 @@ test_that("Different cohort functions work", {
     "NRS", "X00", "X01", "W19", NA, NA, NA, NA, NA, NA, NA, NA
   )
 
-  test2 <- test %>% dplyr::mutate(
-    end_of_life =
-      assign_eol_cohort(
-        recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
-        deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
-        deathdiag11
-      )
+  expect_equal(
+    eol_test %>%
+      dplyr::mutate(
+        end_of_life =
+          assign_eol_cohort(
+            recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
+            deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+            deathdiag11
+          )
+      ) %>%
+      dplyr::pull(end_of_life),
+    c(F, F, T, T)
   )
 })
