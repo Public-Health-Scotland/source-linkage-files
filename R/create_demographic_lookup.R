@@ -1,4 +1,4 @@
-#' Create the demographic lookup file
+#' Create the demographic cohorts lookup file
 #'
 #' @param data A data frame with the required variables
 #' @param year The year in standard SLF format
@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
-create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
+create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
   check_variables_exist(
     data,
     c(

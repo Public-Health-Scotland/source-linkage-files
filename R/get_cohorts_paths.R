@@ -1,12 +1,12 @@
-#' Demographic cohort lookup Path
+#' Demographic cohorts lookup Path
 #'
-#' @description Get the path to the demographic cohort lookup, there is one
+#' @description Get the path to the demographic cohorts lookup, there is one
 #' lookup per year.
 #'
 #' @param year financial year in '1718' format
 #' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the demographic lookup as an [fs::path()]
+#' @return The path to the demographic cohorts lookup as an [fs::path()]
 #' @export
 #' @family cohorts file path
 #' @seealso [get_file_path()] for the generic function.
@@ -20,15 +20,15 @@ get_demographic_cohorts_path <- function(year, ...) {
   return(demographic_cohorts_path)
 }
 
-#' Service-use cohort lookup Path
+#' Service-use cohorts lookup Path
 #'
-#' @description Get the path to the service-use cohort lookup, there is one
+#' @description Get the path to the service-use cohorts lookup, there is one
 #' lookup per year.
 #'
 #' @param year financial year in '1718' format
 #' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the service-use lookup as an [fs::path()]
+#' @return The path to the service-use cohorts lookup as an [fs::path()]
 #' @export
 #' @family cohort lookup file paths
 #' @seealso [get_file_path()] for the generic function.
