@@ -142,9 +142,9 @@ create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
     write_rds(return_data,
       path = get_service_use_cohorts_path(year)
     )
-  } 
-  
-return(return_data)
+  }
+
+  return(return_data)
 }
 
 #' Calculate cost for Geriatric Care records
