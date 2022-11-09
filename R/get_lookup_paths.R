@@ -122,6 +122,8 @@ get_datazone_pop_path <- function(file_name = NULL, ext = "rds") {
 #'
 #' @description Get the path for the centrally held reference file `gpprac`
 #'
+#' @inheritParams get_file_path
+#'
 #' @return  An [fs::path()] to the file
 #' @export
 #'

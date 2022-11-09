@@ -6,6 +6,9 @@
 \usage{
 get_gpprac_ref_path(ext = "sav")
 }
+\arguments{
+\item{ext}{The extension (type of the file) - optional}
+}
 \value{
 An \code{\link[fs:path]{fs::path()}} to the file
 }
