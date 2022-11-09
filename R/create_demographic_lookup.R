@@ -76,7 +76,7 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     dplyr::relocate(.data$demographic_cohort, .after = .data$chi)
 
   # Write to disk
-  if (write_to_disk ) {
+  if (write_to_disk) {
     write_rds(demo_lookup,
       path = get_demographic_cohorts_path(year, check_mode = "write")
     )
