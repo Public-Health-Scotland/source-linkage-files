@@ -25,19 +25,19 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
     dplyr::filter(!is_missing(.data$chi)) %>%
     # Add the various cohorts
     dplyr::mutate(
-      mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6),
-      frail = assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac),
-      maternity = assign_maternity_cohort(recid),
-      high_cc = assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec),
-      medium_cc = assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms),
-      low_cc = assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib),
+      mh = assign_mh_cohort(.data$recid,  .data$diag1,  .data$diag2,  .data$diag3,  .data$diag4,  .data$diag5,  .data$diag6),
+      frail = assign_frailty_cohort(.data$recid,  .data$diag1,  .data$diag2,  .data$diag3,  .data$diag4,  .data$diag5,  .data$diag6,  .data$spec,  .data$sigfac),
+      maternity = assign_maternity_cohort(.data$recid),
+      high_cc = assign_high_cc_cohort(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer, .data$spec),
+      medium_cc = assign_medium_cc_cohort(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms),
+      low_cc = assign_low_cc_cohort(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib),
       comm_living = assign_comm_living_cohort(),
-      adult_major = assign_adult_major_condition_cohort(recid, age, cost_total_net),
-      child_major = assign_child_major_condition_cohort(recid, age, cost_total_net),
+      adult_major = assign_adult_major_condition_cohort(.data$recid,  .data$age, .data$cost_total_net),
+      child_major = assign_child_major_condition_cohort(.data$recid,  .data$age, .data$cost_total_net),
       end_of_life = assign_eol_cohort(
-        recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
-        deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
-        deathdiag11
+        .data$recid,  .data$deathdiag1, .data$deathdiag2, .data$deathdiag3, .data$deathdiag4, .data$deathdiag5,
+        .data$deathdiag6, .data$deathdiag7, .data$deathdiag8, .data$deathdiag9, .data$deathdiag10,
+        .data$deathdiag11
       )
     ) %>%
     assign_substance_cohort() %>%
@@ -73,7 +73,7 @@ create_demographic_lookup <- function(data, year, write_to_disk = TRUE) {
       TRUE ~ "Healthy and Low User"
     )) %>%
     # Reorder variables
-    dplyr::relocate(.data$demographic_cohort, .after = chi)
+    dplyr::relocate(.data$demographic_cohort, .after = .data$chi)
 
   # Write to disk
   if (write_to_disk == TRUE) {
@@ -331,7 +331,7 @@ assign_substance_cohort <- function(data) {
       substance =
       # FOR FUTURE, DrugsandAlcoholClientGroup = 'Y'
       # Alcohol codes
-        recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
+        .data$recid %in% c("01B", "GLS", "50B", "02B", "04B", "AE2") &
           rowSums(dplyr::across(
             c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
             ~ stringr::str_starts(.x, paste("F10", "K70", "X45", "X65", "Y15", "Y90", "Y91",
@@ -343,7 +343,7 @@ assign_substance_cohort <- function(data) {
             ))
           ), na.rm = TRUE) > 0 |
           # Drug codes
-          recid %in% c("01B", "04B") &
+          .data$recid %in% c("01B", "04B") &
             rowSums(dplyr::across(
               c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
               ~ stringr::str_starts(.x, paste("F11", "F12", "F13", "F14", "F15",
@@ -355,22 +355,22 @@ assign_substance_cohort <- function(data) {
             ), na.rm = TRUE) > 0,
       # Some drug codes only count If other code present in CIJ
       # i.e. T402/T404 only If F11 and T424 only If F13.
-      f11 = recid %in% c("01B", "04B") &
+      f11 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 3) %in% c("F11")
         )) > 0,
-      f13 = recid %in% c("01B", "04B") &
+      f13 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 3) %in% c("F13")
         )) > 0,
-      t402_t404 = recid %in% c("01B", "04B") &
+      t402_t404 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 4) %in% c("T402", "T404")
         )) > 0,
-      t424 = recid %in% c("01B", "04B") &
+      t424 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
           ~ stringr::str_sub(.x, 1, 4) %in% c("T424")
