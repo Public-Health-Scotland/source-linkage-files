@@ -9,7 +9,11 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (mh_test %>% dplyr::mutate(mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)))$mh,
+    mh_test %>%
+      dplyr::mutate(
+        mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)
+      ) %>%
+      dplyr::pull(mh),
     c(T, T, T, F)
   )
 
@@ -24,11 +28,12 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (frail_test %>%
+    frail_test %>%
       dplyr::mutate(
         frail =
           assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac)
-      ))$frail,
+      ) %>%
+      dplyr::pull(frail),
     c(T, T, T, F, T)
   )
 
@@ -42,11 +47,12 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (high_cc_test %>%
+    high_cc_test %>%
       dplyr::mutate(
         high_cc =
           assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec)
-      ))$high_cc,
+      ) %>%
+      dplyr::pull(high_cc),
     c(T, T, T, T)
   )
 
@@ -60,11 +66,12 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (medium_cc_test %>%
+    medium_cc_test %>%
       dplyr::mutate(
         medium_cc =
           assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms)
-      ))$medium_cc,
+      ) %>%
+      dplyr::pull(medium_cc),
     c(T, T, T, F)
   )
 
@@ -78,21 +85,23 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (low_cc_test %>%
+    low_cc_test %>%
       dplyr::mutate(
         low_cc =
           assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib)
-      ))$low_cc,
+      ) %>%
+      dplyr::pull(low_cc),
     c(T, T, T, F)
   )
 
   # Comm living
   expect_equal(
-    (low_cc_test %>%
+    low_cc_test %>%
       dplyr::mutate(
         comm_living =
           assign_comm_living_cohort()
-      ))$comm_living,
+      ) %>%
+      dplyr::pull(comm_living),
     c(F, F, F, F)
   )
 
@@ -106,11 +115,12 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (adult_major_test %>%
+    adult_major_test %>%
       dplyr::mutate(
         adult_major =
           assign_adult_major_condition_cohort(recid, age, cost_total_net)
-      ))$adult_major,
+      ) %>%
+      dplyr::pull(adult_major),
     c(T, T, F, F)
   )
 
@@ -123,11 +133,12 @@ test_that("Different cohort functions work", {
   )
 
   expect_equal(
-    (child_major_test %>%
+    child_major_test %>%
       dplyr::mutate(
         child_major =
           assign_child_major_condition_cohort(recid, age, cost_total_net)
-      ))$child_major,
+      ) %>%
+      dplyr::pull(child_major),
     c(T, T, F, F)
   )
 
