@@ -379,6 +379,7 @@ calculate_elective_inpatient_cost <- function(elective_inpatient_instances, cost
 #' @family Demographic and Service Use Cohort functions
 add_operation_flag <- function(op1a) {
   operation_flag <- !is_missing(op1a)
+return(operation_flag)
 }
 
 #' Assign a flag for emergency instances
