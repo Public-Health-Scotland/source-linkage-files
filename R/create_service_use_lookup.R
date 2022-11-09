@@ -1,14 +1,14 @@
-#' Create the Service Use Cohort lookup file
+#' Create the Service Use Cohorts lookup file
 #' @param data A data frame
 #' @param year The financial year
 #' @param write_to_disk Default `TRUE`, will write the lookup to the
 #' Cohorts folder defined by [get_slf_dir]
 #'
-#' @return The Service Use lookup file
+#' @return The service-use cohorts file
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
-create_service_use_lookup <- function(data, year, write_to_disk = TRUE) {
+create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
   return_data <- data %>%
     # Only select rows with chi
     dplyr::filter(!is_missing(.data$chi)) %>%
