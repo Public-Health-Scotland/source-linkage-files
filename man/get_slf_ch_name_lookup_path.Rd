@@ -2,25 +2,26 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_ch_name_lookup_path}
 \alias{get_slf_ch_name_lookup_path}
-\title{SLF Care Home Lookup File Path}
+\title{Care Home Name (Address) Lookup File Path}
 \usage{
 get_slf_ch_name_lookup_path(update = latest_update(), ...)
 }
 \arguments{
-\item{update}{the update month (defaults to use \code{\link{latest_update}})}
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{...}{additional arguments passed to \code{\link{get_file_path}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the SLF Care Home lookup as an \code{\link[fs]{path}}
+The path to the Care Home lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full path to the SLF Care Home lookup
+Get the full path to the Care Home name lookup, which
+has official Care Home names and addresses provided by the Care Inspectorate.
 }
 \seealso{
-\code{\link{get_file_path}} for the generic function.
+\code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other slf lookup file path: 
+Other slf lookup file path:
 \code{\link{get_slf_deaths_path}()},
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()}
