@@ -247,7 +247,7 @@ assign_comm_living_cohort <- function() {
 #' @description A person is considered to be in this cohort if their age is over 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @param recid A vector of record IDs
+#' @inheritParams assign_mh_cohort
 #' @param age A vector of ages
 #' @param cost_total_net A vector of total net costs
 #'
@@ -276,7 +276,7 @@ assign_child_major_condition_cohort <- function(recid, age, cost_total_net) {
 #' and the cause of death is not external. The exception to this is if the cause of death is external
 #' and is classified as a fall
 #'
-#' @param recid A vector of record IDs
+#' @inheritParams assign_mh_cohort
 #' @param deathdiag1,deathdiag2,deathdiag3,deathdiag4,deathdiag5,deathdiag6,deathdiag7,deathdiag8,deathdiag9,deathdiag10,deathdiag11
 #' Character vectors of ICD-10 death diagnosis codes.
 #'
