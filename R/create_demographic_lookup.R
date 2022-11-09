@@ -139,6 +139,8 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
     # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
     dplyr::case_when(
       recid == "GLS" ~ TRUE,
+      recid %in% c("01B", "50B", "02B", "04B", "AE2") & spec == "AB" ~ TRUE,
+      recid %in% c("01B", "50B", "02B", "04B", "AE2") & sigfac %in% c("1E", "1D") ~ TRUE,
       recid %in% c("01B", "50B", "02B", "04B", "AE2") &
         (rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
@@ -147,8 +149,6 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
             sep = "|"
           ))
         ), na.rm = TRUE) > 0) ~ TRUE,
-      recid %in% c("01B", "50B", "02B", "04B", "AE2") & spec == "AB" ~ TRUE,
-      recid %in% c("01B", "50B", "02B", "04B", "AE2") & sigfac %in% c("1E", "1D") ~ TRUE,
       TRUE ~ FALSE
     )
   return(frail)
