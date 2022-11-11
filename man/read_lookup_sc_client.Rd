@@ -4,10 +4,10 @@
 \alias{read_lookup_sc_client}
 \title{Process the social care client lookup}
 \usage{
-read_lookup_sc_client(year)
+read_lookup_sc_client(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"))
 }
 \arguments{
-\item{year}{The year to process}
+\item{sc_dvprod_connection}{The connection to the SC platform.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -20,6 +20,7 @@ social care client lookup
 Other process extracts: 
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
+\code{\link{process_extract_alarms_telecare}()},
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_delayed_discharges}()},
 \code{\link{process_extract_district_nursing}()},
