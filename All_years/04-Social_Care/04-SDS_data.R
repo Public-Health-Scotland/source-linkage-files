@@ -14,20 +14,11 @@ library(readr)
 library(dplyr)
 library(phsmethods)
 library(lubridate)
-
-
-# Set up------------------------------------------------------------------
-
-source("All_years/04-Social_Care/00-Social_Care_functions.R")
-
+library(createslf)
 
 # Read Demographic file----------------------------------------------------
 
-sc_demographics <- haven::read_sav(fs::path(
-  social_care_dir,
-  paste0("sc_demographics_lookup_", latest_update()),
-  ext = "zsav"
-))
+sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
 
 
 # Query to database -------------------------------------------------------
@@ -104,7 +95,7 @@ sds_full_clean <- sds_full_data %>%
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
-    sc_send_lca = convert_sc_sl_to_lca(sending_location)
+    sc_send_lca = convert_sending_location_to_lca(sending_location)
   ) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
