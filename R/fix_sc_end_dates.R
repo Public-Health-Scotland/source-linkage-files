@@ -4,8 +4,8 @@
 #' Set this to the end of the fyear
 #'
 #' @param start_date A vector containing dates.
-#' @param end_date A vector containing dates.  The dummy code to use. Default is 9995
-#'
+#' @param end_date A vector containing dates.
+#' @param period Social care latest submission period.
 #'
 #' @return A date vector with replaced end dates
 #' @export

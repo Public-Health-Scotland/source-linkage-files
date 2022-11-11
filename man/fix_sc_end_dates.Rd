@@ -9,7 +9,9 @@ fix_sc_end_dates(start_date, end_date, period)
 \arguments{
 \item{start_date}{A vector containing dates.}
 
-\item{end_date}{A vector containing dates.  The dummy code to use. Default is 9995}
+\item{end_date}{A vector containing dates.}
+
+\item{period}{Social care latest submission period.}
 }
 \value{
 A date vector with replaced end dates
