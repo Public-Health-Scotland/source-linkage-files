@@ -55,16 +55,30 @@ sds_full_data <- tbl(db_connection, dbplyr::in_schema("social_care_2", "sds_snap
 sds_full_clean <- sds_full_data %>%
   # Deal with SDS option 4
   # First turn the option flags into a logical T/F
-  mutate(across(starts_with("sds_option_"), ~ .x == "1")) %>%
+  mutate(across(starts_with("sds_option_"), ~ case_when(
+    .x == "1" ~ TRUE,
+    .x == "0" ~ FALSE,
+    is.na(.x) ~ FALSE
+  ))) %>%
   # SDS option 4 is derived when a person receives more than one option.
   # e.g. if a person has options 1 and 2 then option 4 will be derived
-  mutate(sds_option_4 = rowSums(across(starts_with("sds_option_"))) > 1, .after = sds_option_3) %>%
+  mutate(
+    sds_option_4 = rowSums(across(starts_with("sds_option_"))) > 1, .after = sds_option_3,
+    # Fix sds option 4 cases where all 3 options are missing
+    sds_option_4 = if_else(sending_location == "120" & all(!sds_option_1, !sds_option_2, !sds_option_3), TRUE, sds_option_4)
+  ) %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # If sds start date is missing, assign start of FY
   mutate(sds_start_date = if_else(is.na(sds_start_date),
     start_fy(year = period, format = "alternate"),
     sds_start_date
+  )) %>%
+  # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
+  mutate(sds_end_date = if_else(
+    sds_start_date >= sds_end_date,
+    end_fy(year = period, "alternate"),
+    sds_end_date
   )) %>%
   # rename for matching source variables
   rename(
@@ -84,11 +98,12 @@ sds_full_clean <- sds_full_data %>%
   distinct() %>%
   # Include source variables
   mutate(
-    smrtype = case_when(sds_option == "SDS-1" ~ "SDS-1",
-                        sds_option == "SDS-2" ~ "SDS-2",
-                        sds_option == "SDS-3" ~ "SDS-3",
-						            sds_option == "SDS-4" ~ "SDS-4"
-      ),
+    smrtype = case_when(
+      sds_option == "SDS-1" ~ "SDS-1",
+      sds_option == "SDS-2" ~ "SDS-2",
+      sds_option == "SDS-3" ~ "SDS-3",
+      sds_option == "SDS-4" ~ "SDS-4"
+    ),
     recid = "SDS",
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
