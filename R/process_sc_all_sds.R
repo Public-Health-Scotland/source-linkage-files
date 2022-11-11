@@ -105,11 +105,9 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     ) %>%
     # change the data format from data.table to data.frame
     as_tibble() %>%
-
-
     # Save outfile------------------------------------------------
-  if (write_to_disk) {
-  merge_eps() %>%
-    write_rds(get_sc_sds_episodes_path(check_mode = "write"))
-}
+    if (write_to_disk) {
+      merge_eps() %>%
+        write_rds(get_sc_sds_episodes_path(check_mode = "write"))
+    }
 }
