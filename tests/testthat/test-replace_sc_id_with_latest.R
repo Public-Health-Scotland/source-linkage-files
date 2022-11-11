@@ -1,5 +1,4 @@
 test_that("Replace sc id with the latest works for various cases", {
-
   dummy_data <- tibble::tribble(
     ~sending_location, ~social_care_id, ~chi, ~period,
     # Case where sc id changes
@@ -61,5 +60,4 @@ test_that("Replace sc id with the latest works for various cases", {
     005, 000005, NA, 000055, "2018Q2",
     005, 000005, NA, 000005, "2018Q3"
   ))
-
 })
