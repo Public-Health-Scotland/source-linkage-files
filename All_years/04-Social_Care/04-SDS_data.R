@@ -110,8 +110,8 @@ sds_full_clean <- sds_full_data %>%
 
 
 merge_eps <- sds_full_clean %>%
-  # Use lazy_dt() for faster running of code
-  dtplyr::lazy_dt() %>%
+  # use as.data.table to change the data format to data.table to accelarate
+  data.table::as.data.table() %>%
   group_by(sending_location, social_care_id, sds_option) %>%
   arrange(period, record_keydate1, .by_group = TRUE) %>%
   # Create a flag for episodes that are going to be merged
@@ -138,26 +138,14 @@ merge_eps <- sds_full_clean %>%
     person_id = last(person_id),
     sc_send_lca = last(sc_send_lca)
   ) %>%
-  # end of lazy_dt()
+  # change the data format from data.table to data.frame
   as_tibble() %>%
-  # Sort for running SPSS
-  arrange(
-    sending_location,
-    social_care_id
-  )
 
 
 # Save outfile------------------------------------------------
 
 merge_eps %>%
-  # save rds file
-  readr::write_rds(fs::path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.rds")),
-    compress = "xz"
-  ) %>%
-  # save sav file
-  haven::write_sav(fs::path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.zsav")),
-    compress = "zsav"
-  )
+  write_rds(get_sc_sds_episodes_path(check_mode = "write"))
 
 
 # End of Script #
