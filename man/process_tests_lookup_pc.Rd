@@ -6,11 +6,6 @@
 \usage{
 process_tests_lookup_pc()
 }
-\arguments{
-\item{data}{The processed data extract}
-
-\item{year}{year of extract}
-}
 \value{
 a csv document containing tests for extracts
 }
