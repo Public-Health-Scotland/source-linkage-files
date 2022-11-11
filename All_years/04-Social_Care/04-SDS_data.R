@@ -99,15 +99,7 @@ sds_full_clean <- sds_full_data %>%
   ) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
-  group_by(sending_location, chi) %>%
-  mutate(latest_sc_id = last(social_care_id)) %>%
-  # count changed social_care_id
-  mutate(
-    changed_sc_id = !is.na(chi) & social_care_id != latest_sc_id,
-    social_care_id = if_else(changed_sc_id, latest_sc_id, social_care_id)
-  ) %>%
-  ungroup()
-
+  replace_sc_id_with_latest()
 
 merge_eps <- sds_full_clean %>%
   # use as.data.table to change the data format to data.table to accelarate
