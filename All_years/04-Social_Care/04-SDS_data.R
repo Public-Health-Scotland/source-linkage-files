@@ -140,11 +140,9 @@ merge_eps <- sds_full_clean %>%
   ) %>%
   # change the data format from data.table to data.frame
   as_tibble() %>%
+  # Save outfile------------------------------------------------
 
-
-# Save outfile------------------------------------------------
-
-merge_eps %>%
+  merge_eps() %>%
   write_rds(get_sc_sds_episodes_path(check_mode = "write"))
 
 
