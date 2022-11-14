@@ -74,7 +74,7 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
     # replace social_care_id with latest
     replace_sc_id_with_latest()
 
-  merge_eps <- sds_full_clean %>%
+  final_data <- sds_full_clean %>%
     # use as.data.table to change the data format to data.table to accelarate
     data.table::as.data.table() %>%
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$sds_option) %>%
@@ -104,12 +104,17 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
       sc_send_lca = dplyr::last(.data$sc_send_lca)
     ) %>%
     # change the data format from data.table to data.frame
-    tibble::as_tibble() %>%
+    tibble::as_tibble()
 
 
     # Save outfile------------------------------------------------
+
   if (write_to_disk) {
-  merge_eps() %>%
-    write_rds(get_sc_sds_episodes_path(check_mode = "write"))
-}
+    # Save .rds file
+    final_data %>%
+      write_rds(get_sc_sds_episodes_path(check_mode = "write"))
+  }
+
+  return(final_data)
+
 }
