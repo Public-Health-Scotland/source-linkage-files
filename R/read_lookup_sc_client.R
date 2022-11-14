@@ -39,7 +39,6 @@ read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "meals",
       "day_care"
     ) %>%
-    dplyr::filter(.data$financial_year == year) %>%
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
