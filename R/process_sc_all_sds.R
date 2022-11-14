@@ -107,7 +107,7 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
     tibble::as_tibble()
 
 
-    # Save outfile------------------------------------------------
+  # Save outfile------------------------------------------------
 
   if (write_to_disk) {
     # Save .rds file
@@ -116,5 +116,4 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
   }
 
   return(final_data)
-
 }
