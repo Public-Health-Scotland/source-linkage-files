@@ -68,7 +68,7 @@ sds_full_clean <- sds_full_data %>%
   )) %>%
   # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
   mutate(sds_end_date = if_else(
-    sds_start_date >= sds_end_date,
+    sds_start_date > sds_end_date,
     end_fy(year = period, "alternate"),
     sds_end_date
   )) %>%
