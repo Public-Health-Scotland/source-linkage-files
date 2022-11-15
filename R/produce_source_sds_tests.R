@@ -3,7 +3,7 @@
 #' @description Produce the test for the Alarm Telecare all episodes
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from [get_sc_ch_episodes_path()])
+#' (data is from [get_sc_sds_episodes_path()])
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #' @return a dataframe with a count of each flag.
 #'
