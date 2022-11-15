@@ -443,9 +443,3 @@ test_that("Cohort names are assigned correctly", {
     )
   )
 })
-
-# test_that("Errors handled as expected", {
-#   expect_error(create_service_instances(tibble::tribble(~cij_marker, ~test_bad)),
-#     regexp = "Variables .+ are required, but are missing from `data`"
-#   )
-# })
