@@ -1,6 +1,6 @@
 #' SDS Episodes Tests
 #'
-#' @description Produce the test for the Alarm Telecare all episodes
+#' @description Produce the test for the SDS all episodes
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_sc_sds_episodes_path()])
