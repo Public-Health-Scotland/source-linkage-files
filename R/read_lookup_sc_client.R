@@ -3,17 +3,18 @@
 #' @description This will read and process the
 #' social care client lookup
 #'
-#' @param year The year to process
+#' @param sc_dvprod_connection The connection to the SC platform.
+#' @param fyyear The year to process, in the standard format '1718'
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-read_lookup_sc_client <- function(year) {
-  # set-up conection to platform
-  db_connection <- phs_db_connection(dsn = "DVPROD")
+read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"), fyyear) {
+  check_year_format(fyyear)
+  year <- convert_fyyear_to_year(fyyear)
 
   # read in data - social care 2 client
-  client_data <- dplyr::tbl(db_connection, dbplyr::in_schema("social_care_2", "client")) %>%
+  client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -38,7 +39,6 @@ read_lookup_sc_client <- function(year) {
       "meals",
       "day_care"
     ) %>%
-    dplyr::filter(.data$financial_year == year) %>%
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
