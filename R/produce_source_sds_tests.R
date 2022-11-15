@@ -1,4 +1,4 @@
-#' Alarm Telecare Episodes Tests
+#' SDS Episodes Tests
 #'
 #' @description Produce the test for the Alarm Telecare all episodes
 #'
