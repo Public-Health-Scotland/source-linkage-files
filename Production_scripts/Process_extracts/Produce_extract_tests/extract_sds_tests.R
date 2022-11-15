@@ -16,7 +16,7 @@ library(createslf)
 year <- check_year_format("1920")
 
 # Read new data file
-new_data <- readr::read_rds(get_source_extract_path(year, "SDS")) %>%
+new_data <- readr::read_rds(get_source_extract_path(year, "SDS"))
 
 # Read current SLF episode file and filter for Death records
 existing_data <- get_existing_data_for_tests(new_data = new_data)
