@@ -31,7 +31,7 @@ comparison <- produce_test_comparison(
 # Produce Outfile----------------------------------------
 
 # Save test comparisons as an excel workbook
-write_tests_xlsx(comparison, "AT_extract")
+write_tests_xlsx(comparison, "SDS")
 
 
 ## END OF SCRIPT ##
