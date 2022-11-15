@@ -2,7 +2,7 @@
 % Please edit documentation in R/produce_source_sds_tests.R
 \name{produce_source_sds_tests}
 \alias{produce_source_sds_tests}
-\title{Alarm Telecare Episodes Tests}
+\title{SDS Episodes Tests}
 \usage{
 produce_source_sds_tests(
   data,
@@ -11,7 +11,7 @@ produce_source_sds_tests(
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link[=get_sc_ch_episodes_path]{get_sc_ch_episodes_path()}})}
+(data is from \code{\link[=get_sc_sds_episodes_path]{get_sc_sds_episodes_path()}})}
 
 \item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
 }
@@ -19,7 +19,7 @@ produce_source_sds_tests(
 a dataframe with a count of each flag.
 }
 \description{
-Produce the test for the Alarm Telecare all episodes
+Produce the test for the SDS all episodes
 }
 \seealso{
 Other social care test functions: 
