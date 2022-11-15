@@ -23,4 +23,5 @@ cost_uplift <- function(data, uplift) {
       feb_cost = feb_cost * uplift,
       mar_cost = mar_cost * uplift
     )
+  return(data)
 }
