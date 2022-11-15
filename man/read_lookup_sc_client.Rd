@@ -4,10 +4,15 @@
 \alias{read_lookup_sc_client}
 \title{Process the social care client lookup}
 \usage{
-read_lookup_sc_client(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"))
+read_lookup_sc_client(
+  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"),
+  fyyear
+)
 }
 \arguments{
 \item{sc_dvprod_connection}{The connection to the SC platform.}
+
+\item{fyyear}{The year to process, in the standard format '1718'}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

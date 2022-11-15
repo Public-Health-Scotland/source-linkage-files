@@ -41,6 +41,7 @@ process_extract_sds <- function(data = NULL, year, client_lookup = NULL, write_t
       year = year
     ) %>%
     dplyr::select(
+      "year",
       "recid",
       "smrtype",
       "chi",
