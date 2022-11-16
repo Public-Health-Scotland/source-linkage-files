@@ -4,8 +4,8 @@
 #' delayed discharges extract, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param year The year to process, in FY format.
 #' @param data The extract to process
+#' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -13,7 +13,7 @@
 #' @export
 #' @family process extracts
 
-process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE) {
+process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1)
 
@@ -30,11 +30,9 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
     # Create a flag for these records
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data$keydate1_dateformat, "month") - 1,
-      ammended_dates = dplyr::case_when(
-        .data$keydate2_dateformat == as.Date("1900-01-01") ~ TRUE,
-        TRUE ~ FALSE
-      ),
-      keydate2_dateformat = dplyr::if_else(.data$ammended_dates, .data$month_end, .data$keydate2_dateformat)
+      keydate2_dateformat = dplyr::if_else(.data$keydate2_dateformat == as.Date("1900-01-01"),
+        .data$month_end, .data$keydate2_dateformat
+      )
     ) %>%
     # Drop any records with obviously bad dates
     dplyr::filter(
@@ -47,7 +45,7 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
     ) %>%
     # recode blanks to NA
     dplyr::mutate(
-      dplyr::across(tidyselect::ends_with("delay_reason"), dplyr::na_if, "")
+      dplyr::across(tidyselect::ends_with("_delay_reason"), dplyr::na_if, "")
     ) %>%
     # create flags for no_end_date and correct_dates
     dplyr::mutate(
@@ -63,25 +61,29 @@ process_extract_delayed_discharges <- function(year, data, write_to_disk = TRUE)
   ## save outfile ---------------------------------------
   outfile <- dd_clean %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$original_admission_date,
-      .data$keydate1_dateformat,
-      .data$keydate2_dateformat,
-      .data$chi,
-      .data$postcode,
-      .data$delay_end_reason,
-      .data$primary_delay_reason,
-      .data$secondary_delay_reason,
-      .data$spec,
-      .data$location,
-      .data$hbtreatcode,
-      .data$dd_responsible_lca,
-      .data$monthflag,
-      .data$cennum
+      "year",
+      "recid",
+      "original_admission_date",
+      "keydate1_dateformat",
+      "keydate2_dateformat",
+      "chi",
+      "postcode",
+      "delay_end_reason",
+      "primary_delay_reason",
+      "secondary_delay_reason",
+      "spec",
+      "location",
+      "hbtreatcode",
+      "dd_responsible_lca",
+      "monthflag",
+      "cennum"
     )
 
-  outfile %>%
-    # Save as rds file
-    write_rds(get_source_extract_path(year, "DD", check_mode = "write"))
+  if (write_to_disk) {
+    outfile %>%
+      # Save as rds file
+      write_rds(get_source_extract_path(year, "DD", check_mode = "write"))
+  }
+
+  return(outfile)
 }

@@ -13,6 +13,16 @@ library(purrr)
 
 # Copy existing file ---------------------------------------
 
+# Create a copy for comparison
+fs::file_copy(
+  get_dn_costs_path(),
+  get_dn_costs_path(
+    update = latest_update(),
+    check_mode = "write"
+  ),
+  overwrite = TRUE
+)
+
 # read data in
 current_file <- readr::read_rds(createslf::get_dn_costs_path())
 
@@ -133,7 +143,7 @@ uplift_data <-
   group_by(board_name)
 
 
-while(any(is.na(uplift_data$cost_total_net))) {
+while (any(is.na(uplift_data$cost_total_net))) {
   uplift_data <- uplift_data %>%
     mutate(cost_total_net = if_else(is.na(cost_total_net),
       lag(cost_total_net) * 1.01,
@@ -197,17 +207,15 @@ outfile <-
 outfile %>%
   # Save .rds file
   write_rds(get_dn_costs_path(check_mode = "write"))
-
 ```
 
 # Graph showing the number of contacts
 
 ```{r graph 1, echo=FALSE}
-# plot showing the number of contacts 
+# plot showing the number of contacts
 ggplot(data = matched_data, aes(x = year, y = pct_of_max, group = board_name)) +
   geom_line(aes(color = board_name)) +
   labs(color = "NHS Board", x = "Year")
-
 ```
 
 ## Graph showing the most recent cost years 
@@ -218,7 +226,6 @@ ggplot(data = new_years_data, aes(x = year, y = cost_total_net, group = hbtreatn
   geom_line(aes(color = hbtreatname)) +
   geom_vline(xintercept = latest_year, size = 0.2) +
   labs(color = "NHS Board", x = "Year")
-
 ```
 
 ## Graph showing the cost difference 

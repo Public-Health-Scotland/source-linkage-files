@@ -17,46 +17,32 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
   # Match on demographic data ---------------------------------------
   if (is.null(sc_demographics)) {
     # read in demographic data
-    sc_demog <- readr::read_rds(get_sc_demog_lookup_path())
+    sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
   }
 
   matched_hc_data <- data %>%
-    dplyr::left_join(sc_demog, by = c("sending_location", "social_care_id"))
+    dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
 
 
   # Data Cleaning ---------------------------------------
-
-  # period start and end dates
-  period_dates <- matched_hc_data %>%
-    dplyr::distinct(.data$period) %>%
-    dplyr::mutate(
-      record_date = end_fy_quarter(.data$period),
-      qtr_start = start_fy_quarter(.data$period)
-    )
 
   home_care_clean <- matched_hc_data %>%
     # set reablement values == 9 to NA
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, "9")) %>%
     # fix NA hc_service
     dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, "0")) %>%
-    # join with dates
-    dplyr::left_join(.data$period_dates, by = c("period")) %>%
+    # period start and end dates
+    dplyr::mutate(
+      record_date = end_fy_quarter(.data$period),
+      qtr_start = start_fy_quarter(.data$period)
+    ) %>%
     # Replace missing start dates with the start of the quarter
     dplyr::mutate(hc_service_start_date = dplyr::if_else(is.na(.data$hc_service_start_date), .data$qtr_start, .data$hc_service_start_date)) %>%
     # Replace really early start dates with start of the quarter
     dplyr::mutate(hc_service_end_date = dplyr::if_else(.data$hc_service_start_date < as.Date("1989-01-01"), .data$qtr_start, .data$hc_service_start_date)) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
-    dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$social_care_id)) %>%
-    # count changed social_care_id
-    dplyr::mutate(
-      changed_sc_id = dplyr::if_else(!is.na(.data$chi) & .data$social_care_id != .data$latest_sc_id, 1, 0),
-      social_care_id = dplyr::if_else(!is.na(.data$chi) & .data$social_care_id != .data$latest_sc_id,
-        .data$latest_sc_id, .data$social_care_id
-      )
-    ) %>%
-    dplyr::ungroup() %>%
+    replace_sc_id_with_latest() %>%
     # fill reablement when missing but present in group
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$hc_service_start_date) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
@@ -73,9 +59,6 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       !.data$start_after_quarter,
       !.data$start_after_end
     )
-
-  # count changed social_care_id
-  home_care_clean %>% dplyr::count(.data$changed_sc_id)
 
 
   # Home Care Hours ---------------------------------------
@@ -105,7 +88,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     dplyr::left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%
     dplyr::mutate(hc_cost = .data$hc_hours * .data$hourly_cost)
 
-  pivotted_hours <- matched_costs %>%
+  pivoted_hours <- matched_costs %>%
     # Create a copy of the period then pivot the hours on it
     # This creates a new variable per quarter
     # with the hours for that quarter for every record
@@ -150,7 +133,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
 
   # Outfile ---------------------------------------
 
-  outfile <- pivotted_hours %>%
+  merge_data <- pivoted_hours %>%
     # group the data to be merged
     dplyr::group_by(
       .data$chi,
@@ -176,11 +159,37 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     ) %>%
     dplyr::ungroup()
 
+
+  # Create Source variables---------------------------------------
+  final_data <- merge_data %>%
+    # rename
+    dplyr::rename(
+      record_keydate1 = "hc_service_start_date",
+      record_keydate2 = "hc_service_end_date",
+      hc_reablement = "reablement",
+      hc_provider = "hc_service_provider"
+    ) %>%
+    # year / recid / SMRType variables
+    dplyr::mutate(
+      recid = "HC",
+      smrtype = dplyr::case_when(
+        .data$hc_service == 1 ~ "HC-Non-Per",
+        .data$hc_service == 2 ~ "HC-Per",
+        TRUE ~ "HC-Unknown"
+      )
+    ) %>%
+    # person_id
+    create_person_id(type = "SC") %>%
+    # compute lca variable from sending_location
+    dplyr::mutate(lca = convert_sending_location_to_lca(.data$sending_location))
+
+  # Save outfile---------------------------------------------------
+
   if (write_to_disk) {
     # Save .rds file
-    outfile %>%
+    final_data %>%
       write_rds(get_sc_hc_episodes_path(check_mode = "write"))
   }
 
-  return(outfile)
+  return(final_data)
 }
