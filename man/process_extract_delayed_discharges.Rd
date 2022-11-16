@@ -4,12 +4,12 @@
 \alias{process_extract_delayed_discharges}
 \title{Process the delayed discharges extract}
 \usage{
-process_extract_delayed_discharges(year, data, write_to_disk = TRUE)
+process_extract_delayed_discharges(data, year, write_to_disk = TRUE)
 }
 \arguments{
-\item{year}{The year to process, in FY format.}
-
 \item{data}{The extract to process}
+
+\item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -29,6 +29,7 @@ Other process extracts:
 \code{\link{process_extract_alarms_telecare}()},
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_district_nursing}()},
+\code{\link{process_extract_home_care}()},
 \code{\link{process_extract_homelessness}()},
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},

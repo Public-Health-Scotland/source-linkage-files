@@ -4,10 +4,7 @@
 \alias{read_extract_delayed_discharges}
 \title{Read Delayed Discharges extract}
 \usage{
-read_extract_delayed_discharges(year)
-}
-\arguments{
-\item{year}{Year of BOXI extract}
+read_extract_delayed_discharges()
 }
 \value{
 zsav/rds data file for Delayed discharges
