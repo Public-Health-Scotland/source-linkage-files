@@ -4,7 +4,7 @@
 \alias{cost_uplift}
 \title{Uplift costs}
 \usage{
-cost_uplift(data, uplift)
+cost_uplift(data)
 }
 \arguments{
 \item{data}{episode data}
