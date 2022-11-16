@@ -70,8 +70,8 @@ uplift_set <- function(data, latest_cost_year = "2223") {
     # For non plics recids use uplift of 1 so we won't change anything.
     dplyr::mutate(uplift = dplyr::if_else(
       recid %in% c("00B", "01B", "GLS", "02B", "04B", "AE2"),
-      1,
-      uplift
+      uplift,
+      1
     ))
 
   return(data)
