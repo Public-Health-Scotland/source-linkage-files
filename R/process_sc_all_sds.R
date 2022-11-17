@@ -11,7 +11,6 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-#'
 process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
   if (is.null(sc_demographics)) {
@@ -24,22 +23,34 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
     dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
 
   # Data Cleaning ---------------------------------------
-
   sds_full_clean <- matched_sds_data %>%
     # Deal with SDS option 4
     # First turn the option flags into a logical T/F
-    dplyr::mutate(dplyr::across(tidyselect::starts_with("sds_option_"), ~ dplyr::case_when(
-      .x == "1" ~ TRUE,
-      .x == "0" ~ FALSE,
-      is.na(.x) ~ FALSE
-    ))) %>%
+    dplyr::mutate(dplyr::across(
+      tidyselect::starts_with("sds_option_"),
+      ~ dplyr::case_when(
+        .x == "1" ~ TRUE,
+        .x == "0" ~ FALSE,
+        is.na(.x) ~ FALSE
+      )
+    )) %>%
     # SDS option 4 is derived when a person receives more than one option.
     # e.g. if a person has options 1 and 2 then option 4 will be derived
-    dplyr::mutate(sds_option_4 = rowSums(dplyr::across(tidyselect::starts_with("sds_option_"))) > 1, .after = .data$sds_option_3) %>%
+    dplyr::mutate(
+      sds_option_4 = rowSums(dplyr::across(tidyselect::starts_with("sds_option_"))) > 1,
+      .after = .data$sds_option_3
+    ) %>%
     # If sds start date is missing, assign start of FY
-    dplyr::mutate(sds_start_date = fix_sc_start_dates(.data$sds_start_date, .data$period)) %>%
+    dplyr::mutate(sds_start_date = fix_sc_start_dates(
+      .data$sds_start_date,
+      .data$period
+    )) %>%
     # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
-    dplyr::mutate(sds_end_date = fix_sc_end_dates(.data$sds_start_date, .data$sds_end_date, .data$period)) %>%
+    dplyr::mutate(sds_end_date = fix_sc_end_dates(
+      .data$sds_start_date,
+      .data$sds_end_date,
+      .data$period
+    )) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$sds_start_date,
