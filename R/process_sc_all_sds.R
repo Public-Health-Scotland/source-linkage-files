@@ -88,7 +88,7 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
   final_data <- sds_full_clean %>%
     # use as.data.table to change the data format to data.table to accelarate
     data.table::as.data.table() %>%
-    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$sds_option) %>%
+    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$smrtype) %>%
     dplyr::arrange(.data$period, .data$record_keydate1, .by_group = TRUE) %>%
     # Create a flag for episodes that are going to be merged
     # Create an episode counter
@@ -109,17 +109,17 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
       gender = dplyr::last(.data$gender),
       dob = dplyr::last(.data$dob),
       postcode = dplyr::last(.data$postcode),
-      smrtype = dplyr::last(.data$smrtype),
       recid = dplyr::last(.data$recid),
       person_id = dplyr::last(.data$person_id),
       sc_send_lca = dplyr::last(.data$sc_send_lca)
     ) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-.data$episode_counter) %>%
     # change the data format from data.table to data.frame
     tibble::as_tibble()
 
 
   # Save outfile------------------------------------------------
-
   if (write_to_disk) {
     # Save .rds file
     final_data %>%
