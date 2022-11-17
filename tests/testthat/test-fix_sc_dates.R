@@ -19,6 +19,17 @@ test_that("fix_sc_start_dates works for various cases", {
     as.Date(c("2019-04-01", "2019-07-01", "2019-10-01", "2020-01-01"))
   )
 
+  # Mixed case
+  # Case where start date is present
+  # Should not replace start date
+  expect_equal(
+    fix_sc_start_dates(
+      as.Date(c("2019-04-05", NA, "2019-10-01", NA)),
+      c("2019Q1", "2019Q2", "2019Q3", "2022Q4")
+    ),
+    as.Date(c("2019-04-05", "2019-04-01", "2019-10-01", "2022-04-01"))
+  )
+
   # Expect an error when parameters return NA
   expect_error(fix_sc_start_dates(NA, NA))
 })
