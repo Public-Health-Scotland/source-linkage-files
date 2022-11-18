@@ -4,9 +4,15 @@
 \alias{run_process_social_care}
 \title{Run Social Care data}
 \usage{
-run_process_social_care(sc_demographics = NULL, write_to_disk = FALSE)
+run_process_social_care(
+  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"),
+  sc_demographics = NULL,
+  write_to_disk = FALSE
+)
 }
 \arguments{
+\item{sc_dvprod_connection}{Connection to the SC platform}
+
 \item{sc_demographics}{The demographic file. Set to NULL for passing through
 a data list}
 
