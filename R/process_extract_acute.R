@@ -58,7 +58,7 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # Add oldtadm as a factor with labels
     dplyr::mutate(oldtadm = factor(.data$oldtadm,
-      levels = c(0L:8L)
+      levels = 0L:8L
     ))
 
 

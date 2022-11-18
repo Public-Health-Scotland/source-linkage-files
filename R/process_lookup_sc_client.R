@@ -92,7 +92,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
         labels = c("No", "Yes", "Not Known")
       ),
       type_of_housing = factor(.data$type_of_housing,
-        levels = c(1L:6L)
+        levels = 1L:6L
       )
     ) %>%
     # rename variables

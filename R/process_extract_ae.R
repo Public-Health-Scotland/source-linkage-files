@@ -82,7 +82,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
           "99"
         )
       ),
-      ae_patflow = factor(.data$ae_patflow, levels = c(1L:5L)),
+      ae_patflow = factor(.data$ae_patflow, levels = 1L:5L),
       ae_placeinc = factor(.data$ae_placeinc,
         levels = c(
           "01", "01A", "01B",
@@ -107,7 +107,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
           "98"
         )
       ),
-      ae_alcohol = factor(.data$ae_alcohol, levels = c(1L:2L)),
+      ae_alcohol = factor(.data$ae_alcohol, levels = 1L:2L),
       ae_bodyloc = factor(.data$ae_bodyloc,
         levels = c(
           "00",

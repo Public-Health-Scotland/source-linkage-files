@@ -44,10 +44,10 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   outpatients_clean <- outpatients_clean %>%
     dplyr::mutate(
       reftype = factor(.data$reftype,
-        levels = c(1L:3L)
+        levels = 1L:3L
       ),
       clinic_type = factor(.data$clinic_type,
-        levels = c(1L:4L)
+        levels = 1L:4L
       )
     )
 
