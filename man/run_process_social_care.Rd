@@ -2,17 +2,21 @@
 % Please edit documentation in R/run_process_social_care.R
 \name{run_process_social_care}
 \alias{run_process_social_care}
-\title{Run Social Care processing.}
+\title{Run Social Care data}
 \usage{
-run_process_social_care(years)
+run_process_social_care(sc_demographics = NULL, write_to_disk = FALSE)
 }
 \arguments{
-\item{years}{Specify years which need to run.}
+\item{sc_demographics}{The demographic file. Set to NULL for passing through
+a data list}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 }
 \value{
-A list of data with the data lookups as a tibble along with the years.
+A list of data containing processed extracts.
 }
 \description{
-This script is the top level processing script for processing
-all social care files
+Process and social care data so they are ready for processing
+social care extracts
 }
