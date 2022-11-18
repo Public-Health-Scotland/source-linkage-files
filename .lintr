@@ -1,5 +1,0 @@
-linters: linters_with_tags(
-    tags = available_tags(),
-    object_name_linter(styles = "snake_case"),
-    infix_spaces_linter = NULL
-  )
