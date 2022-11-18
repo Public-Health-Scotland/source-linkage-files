@@ -48,7 +48,7 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
       process_extracts,
       list(
         "homelessness" = process_extract_homelessness(read_extract_homelessness(year), year),
-        "dd" = process_extract_delayed_discharges(read_extract_delayed_discharges(year), year, write_to_disk = write_to_disk)
+        "dd" = process_extract_delayed_discharges(read_extract_delayed_discharges(), year, write_to_disk = write_to_disk)
       )
     )
   }
