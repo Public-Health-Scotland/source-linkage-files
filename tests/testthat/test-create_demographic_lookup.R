@@ -14,7 +14,7 @@ test_that("Different cohort functions work", {
         mh = assign_mh_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6)
       ) %>%
       dplyr::pull(mh),
-    c(T, T, T, F)
+    c(TRUE, TRUE, TRUE, FALSE)
   )
 
   # Frailty
@@ -34,16 +34,16 @@ test_that("Different cohort functions work", {
           assign_frailty_cohort(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac)
       ) %>%
       dplyr::pull(frail),
-    c(T, T, T, F, T)
+    c(TRUE, TRUE, TRUE, FALSE, TRUE)
   )
 
   # High CC
   high_cc_test <- tibble::tribble(
     ~dementia, ~hefailure, ~refailure, ~liver, ~cancer, ~spec,
-    T, T, F, F, F, NA,
-    F, F, T, F, F, NA,
-    NA, NA, NA, T, NA, NA,
-    F, F, F, F, F, "G5"
+    TRUE, TRUE, FALSE, FALSE, FALSE, NA,
+    FALSE, FALSE, TRUE, FALSE, FALSE, NA,
+    NA, NA, NA, TRUE, NA, NA,
+    FALSE, FALSE, FALSE, FALSE, FALSE, "G5"
   )
 
   expect_equal(
@@ -53,16 +53,16 @@ test_that("Different cohort functions work", {
           assign_high_cc_cohort(dementia, hefailure, refailure, liver, cancer, spec)
       ) %>%
       dplyr::pull(high_cc),
-    c(T, T, T, T)
+    c(TRUE, TRUE, TRUE, TRUE)
   )
 
   # Medium CC
   medium_cc_test <- tibble::tribble(
     ~cvd, ~copd, ~chd, ~parkinsons, ~ms,
-    T, F, F, F, F,
-    F, F, T, T, F,
-    NA, NA, NA, NA, T,
-    F, F, NA, NA, NA
+    TRUE, FALSE, FALSE, FALSE, FALSE,
+    FALSE, FALSE, TRUE, TRUE, FALSE,
+    NA, NA, NA, NA, TRUE,
+    FALSE, FALSE, NA, NA, NA
   )
 
   expect_equal(
@@ -72,16 +72,16 @@ test_that("Different cohort functions work", {
           assign_medium_cc_cohort(cvd, copd, chd, parkinsons, ms)
       ) %>%
       dplyr::pull(medium_cc),
-    c(T, T, T, F)
+    c(TRUE, TRUE, TRUE, FALSE)
   )
 
   # Low CC
   low_cc_test <- tibble::tribble(
     ~epilepsy, ~asthma, ~arth, ~diabetes, ~atrialfib,
-    T, F, F, F, F,
-    F, F, T, T, F,
-    NA, NA, NA, NA, T,
-    F, F, NA, NA, NA
+    TRUE, FALSE, FALSE, FALSE, FALSE,
+    FALSE, FALSE, TRUE, TRUE, FALSE,
+    NA, NA, NA, NA, TRUE,
+    FALSE, FALSE, NA, NA, NA
   )
 
   expect_equal(
@@ -91,7 +91,7 @@ test_that("Different cohort functions work", {
           assign_low_cc_cohort(epilepsy, asthma, arth, diabetes, atrialfib)
       ) %>%
       dplyr::pull(low_cc),
-    c(T, T, T, F)
+    c(TRUE, TRUE, TRUE, FALSE)
   )
 
   # Comm living
@@ -102,7 +102,7 @@ test_that("Different cohort functions work", {
           assign_comm_living_cohort()
       ) %>%
       dplyr::pull(comm_living),
-    c(F, F, F, F)
+    c(FALSE, FALSE, FALSE, FALSE)
   )
 
   # Adult and Child Major
@@ -164,6 +164,6 @@ test_that("Different cohort functions work", {
           )
       ) %>%
       dplyr::pull(end_of_life),
-    c(F, F, T, T)
+    c(FALSE, FALSE, TRUE, TRUE)
   )
 })
