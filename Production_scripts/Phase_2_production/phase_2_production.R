@@ -24,7 +24,7 @@ years <- convert_year_to_fyyear(as.character(2020:2021)) %>%
 # Process Lookups
 ------------------------------------------------------
 # Lookups/costs
-run_process_lookups()
+process_lookups <- run_process_lookups()
 
 
 ------------------------------------------------------
@@ -33,7 +33,7 @@ run_process_lookups()
 # Social Care
   # sc lookups
   # all files
-run_process_social_care()
+process_social_care <- run_process_social_care()
 
 ------------------------------------------------------
 # Process extracts
@@ -42,13 +42,13 @@ run_process_social_care()
 
 # Process data extracts and tests.
 # Currently, this is set up to write to disk (we may not need this)
-run_process_extracts(years)
+process_extracts<- run_process_extracts(years)
 
 ------------------------------------------------------
 # Create Episode file
 ------------------------------------------------------
 
-run_process_ep_file(years)
+process_ep_file <- run_process_ep_file(years)
 
 ------------------------------------------------------
 # Create Individual file
