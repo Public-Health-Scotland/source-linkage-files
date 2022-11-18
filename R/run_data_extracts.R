@@ -12,7 +12,6 @@
 #' @export
 #'
 run_data_extracts <- function(year, write_to_disk = FALSE) {
-
   process_extracts <- list(
     "acute" = process_extract_acute(read_extract_acute(year), year, write_to_disk = write_to_disk),
     "ae" = process_extract_ae(read_extract_ae(year), year, write_to_disk = write_to_disk),
@@ -54,17 +53,17 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
   }
 
   # Run year specific social care data
-   if (year > 2017) {
+  if (year > 2017) {
     process_extracts <- append(
-     process_extracts,
-    list(
-      "sc_client" = process_lookup_sc_client(read_lookup_sc_client(), year, write_to_disk = write_to_disk),
-      "Alarms telecare" = process_extract_alarms_telecare(read_extract_alarms_telecare(year), year),
-      "HC" = process_extract_home_care(read_extract_home_care(year), year),
-      "SDS" = process_extract_sds(read_extract_sds(year), year)
-  # "CH" = process_extract_care_homes(read_extract_care_homes(year), year)
+      process_extracts,
+      list(
+        "sc_client" = process_lookup_sc_client(read_lookup_sc_client(), year, write_to_disk = write_to_disk),
+        "Alarms telecare" = process_extract_alarms_telecare(read_extract_alarms_telecare(year), year),
+        "HC" = process_extract_home_care(read_extract_home_care(year), year),
+        "SDS" = process_extract_sds(read_extract_sds(year), year)
+        # "CH" = process_extract_care_homes(read_extract_care_homes(year), year)
+      )
     )
-  )
   }
 
   return(process_extracts)

@@ -74,11 +74,10 @@ matched_costs_data <- gp_ooh_costs_uplifted %>%
     pct_diff = difference / cost_old * 100
   )
 
-  gp_ooh_costs_uplifted %>%
-    dplyr::rename(TreatmentNHSBoardCode = "HB2019") %>%
-    # Save .rds file
-    write_rds(get_gp_ooh_costs_path(check_mode = "write"))
-
+gp_ooh_costs_uplifted %>%
+  dplyr::rename(TreatmentNHSBoardCode = "HB2019") %>%
+  # Save .rds file
+  write_rds(get_gp_ooh_costs_path(check_mode = "write"))
 ```
 
 # Graph showing the cost difference 
@@ -91,8 +90,7 @@ matched_costs_data %>%
   geom_col(position = "dodge") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   scale_y_continuous(labels = scales::label_number()) +
-  labs(fill = "NHS Board", x = "Year", y = "Real difference") 
-
+  labs(fill = "NHS Board", x = "Year", y = "Real difference")
 ```
 
 ## Graph showing the percentage difference 
@@ -105,8 +103,7 @@ matched_costs_data %>%
   geom_col(position = "dodge") +
   scale_y_continuous(labels = scales::label_percent()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(fill = "NHS Board", x = "Year", y = "% difference") 
-
+  labs(fill = "NHS Board", x = "Year", y = "% difference")
 ```
 
 ## Graph checking for obviously wrong looking costs 
