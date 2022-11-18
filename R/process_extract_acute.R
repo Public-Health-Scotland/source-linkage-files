@@ -21,7 +21,6 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
 
   # Data Cleaning  ---------------------------------------
 
-
   acute_clean <- data %>%
     # Set year variable
     dplyr::mutate(

@@ -37,9 +37,17 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       qtr_start = start_fy_quarter(.data$period)
     ) %>%
     # Replace missing start dates with the start of the quarter
-    dplyr::mutate(hc_service_start_date = dplyr::if_else(is.na(.data$hc_service_start_date), .data$qtr_start, .data$hc_service_start_date)) %>%
+    dplyr::mutate(hc_service_start_date = dplyr::if_else(
+      is.na(.data$hc_service_start_date),
+      .data$qtr_start,
+      .data$hc_service_start_date
+    )) %>%
     # Replace really early start dates with start of the quarter
-    dplyr::mutate(hc_service_end_date = dplyr::if_else(.data$hc_service_start_date < as.Date("1989-01-01"), .data$qtr_start, .data$hc_service_start_date)) %>%
+    dplyr::mutate(hc_service_end_date = dplyr::if_else(
+      .data$hc_service_start_date < as.Date("1989-01-01"),
+      .data$qtr_start,
+      .data$hc_service_start_date
+    )) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
     replace_sc_id_with_latest() %>%
@@ -49,10 +57,12 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
     dplyr::ungroup() %>%
     # Only keep records which have some time in the quarter in which they were submitted
     dplyr::mutate(
-      end_before_qtr = .data$qtr_start > .data$hc_service_end_date & !is.na(.data$hc_service_end_date),
+      end_before_qtr = .data$qtr_start > .data$hc_service_end_date &
+        !is.na(.data$hc_service_end_date),
       start_after_quarter = .data$record_date < .data$hc_service_start_date,
       # Need to check - as we are potentialsly introducing bad start dates above
-      start_after_end = .data$hc_service_start_date > .data$hc_service_end_date & !is.na(.data$hc_service_end_date)
+      start_after_end = .data$hc_service_start_date > .data$hc_service_end_date &
+        !is.na(.data$hc_service_end_date)
     ) %>%
     dplyr::filter(
       !.data$end_before_qtr,
@@ -65,15 +75,22 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
 
   home_care_hours <- home_care_clean %>%
     dplyr::mutate(
-      days_in_quarter = lubridate::time_length(lubridate::interval(
-        pmax(.data$qtr_start, .data$hc_service_start_date), pmin(.data$record_date, .data$hc_service_end_date, na.rm = TRUE)
-      ), "days") + 1,
+      days_in_quarter = lubridate::time_length(
+        lubridate::interval(
+          pmax(.data$qtr_start, .data$hc_service_start_date),
+          pmin(.data$record_date, .data$hc_service_end_date, na.rm = TRUE)
+        ),
+        "days"
+      ) + 1,
       hc_hours = dplyr::case_when(
         # For A&B 2020/21, use multistaff (min = 1) * staff hours
-        .data$sending_location_name == "Argyll and Bute" & stringr::str_starts(.data$period, "2020") & is.na(.data$hc_hours_derived)
+        .data$sending_location_name == "Argyll and Bute" &
+          stringr::str_starts(.data$period, "2020") &
+          is.na(.data$hc_hours_derived)
         ~ pmax(1, multistaff_input) * .data$total_staff_home_care_hours,
         # Angus submit hourly daily instead of weekly hours
-        .data$sending_location_name == "Angus" & .data$period %in% c("2018Q3", "2018Q4", "2019Q1", "2019Q2", "2019Q3")
+        .data$sending_location_name == "Angus" &
+          .data$period %in% c("2018Q3", "2018Q4", "2019Q1", "2019Q2", "2019Q3")
         ~ (.data$hc_hours_derived / 7) * .data$days_in_quarter,
         TRUE ~ .data$hc_hours_derived
       )

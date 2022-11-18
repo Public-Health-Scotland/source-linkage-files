@@ -49,7 +49,10 @@ test_that("Errors are handled as expected", {
     ~chi, ~recid, ~diag1, ~something_silly,
     1, "01B", "A01", "Foo"
   )
-  expect_error(add_ppa_flag(error_data), "Variables .+ are required, but are missing from \`data\`")
+  expect_error(
+    add_ppa_flag(error_data),
+    "Variables .+ are required, but are missing from \`data\`"
+  )
 
   # Wrong recids
   error_data_2 <- tibble::tribble(
@@ -58,5 +61,8 @@ test_that("Errors are handled as expected", {
     2, 1, "Non-Elective", "Wronger", "", "", "", "", "", "", "",
     3, 1, "Non-Elective", "Wrongest", "", "", "", "", "", "", ""
   )
-  expect_error(add_ppa_flag(error_data_2), "None of the 3 recids provided will relate to PPAs, and the function will abort.")
+  expect_error(
+    add_ppa_flag(error_data_2),
+    "None of the 3 recids provided will relate to PPAs, and the function will abort."
+  )
 })

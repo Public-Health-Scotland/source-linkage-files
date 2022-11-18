@@ -95,7 +95,10 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # Keep where the completeness is between 90% and 110%
     # Or if it's East Ayrshire (S12000008) as they are submitting something different.
-    dplyr::filter(dplyr::between(.data$pct_complete_all, 0.90, 1.05) | .data$sending_local_authority_code_9 == "S12000008")
+    dplyr::filter(
+      dplyr::between(.data$pct_complete_all, 0.90, 1.05) |
+        .data$sending_local_authority_code_9 == "S12000008"
+    )
 
 
 
