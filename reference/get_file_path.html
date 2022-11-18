@@ -75,7 +75,8 @@ appropriate permissions.</p>
 <span>  ext <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  check_mode <span class="op">=</span> <span class="st">"read"</span>,</span>
 <span>  create <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  file_name_regexp <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  file_name_regexp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  selection_method <span class="op">=</span> <span class="st">"modification_date"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -109,6 +110,11 @@ the default is to only create a file if we set <code>check_mode = "write"</code>
 if this is used <code>file_name</code> should not be, it will return the most recently
 created file using <code><a href="find_latest_file.html">find_latest_file()</a></code></p></dd>
 
+
+<dt>selection_method</dt>
+<dd><p>Passed only to <code><a href="find_latest_file.html">find_latest_file()</a></code>, will select the file based
+on latest modification date (default) or file name</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -131,7 +137,7 @@ if the path doesn't exist or it's not readable</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Public Health Scotland, Jennifer Thom, James McMahon, Catherine Holland.</p>
+  <p></p><p>Developed by Public Health Scotland, Jennifer Thom, James McMahon, Catherine Holland, Bateman McBride, Zihao Li.</p>
 </div>
 
 <div class="pkgdown-footer-right">

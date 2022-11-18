@@ -51,17 +51,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_eng_gpprac_to_dummy</span><span class="op">(</span><span class="va">data</span>, <span class="va">gpprac</span>, dummy_code <span class="op">=</span> <span class="fl">9995L</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_eng_gpprac_to_dummy</span><span class="op">(</span><span class="va">gpprac</span>, dummy_code <span class="op">=</span> <span class="fl">9995L</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
-<dd><p>a <a href="https://tibble.tidyverse.org/reference/tibble-package.html" class="external-link">tibble</a></p></dd>
-
-
-<dt>gpprac</dt>
-<dd><p>The column containing the GP practice codes</p></dd>
+    <dl><dt>gpprac</dt>
+<dd><p>A character vector containing the GP practice codes</p></dd>
 
 
 <dt>dummy_code</dt>
@@ -72,9 +68,7 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a <a href="https://tibble.tidyverse.org/reference/tibble-package.html" class="external-link">tibble</a></p>
-
-
+<p>An integer vector with only Scottish GP codes</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -82,7 +76,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Public Health Scotland, Jennifer Thom, James McMahon, Catherine Holland.</p>
+  <p></p><p>Developed by Public Health Scotland, Jennifer Thom, James McMahon, Catherine Holland, Bateman McBride, Zihao Li.</p>
 </div>
 
 <div class="pkgdown-footer-right">

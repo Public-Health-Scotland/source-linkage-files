@@ -94,6 +94,11 @@
 
       <dl><dt>
           
+          <code><a href="calculate_stay.html">calculate_stay()</a></code> 
+        </dt>
+        <dd>Calculate total length of stay</dd>
+      </dl><dl><dt>
+          
           <code><a href="compute_mid_year_age.html">compute_mid_year_age()</a></code> 
         </dt>
         <dd>Compute Age at Midpoint of Year</dd>
@@ -114,14 +119,24 @@
         <dd>Return the end date of FY years</dd>
       </dl><dl><dt>
           
+          <code><a href="end_fy_quarter.html">end_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the end of a quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="end_next_fy_quarter.html">end_next_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the end of the next quarter</dd>
+      </dl><dl><dt>
+          
           <code><a href="fy_interval.html">fy_interval()</a></code> 
         </dt>
         <dd>Financial Year interval</dd>
       </dl><dl><dt>
           
-          <code><a href="is_date_in_year.html">is_date_in_year()</a></code> 
+          <code><a href="is_date_in_fyyear.html">is_date_in_fyyear()</a></code> 
         </dt>
-        <dd>Check if a date in the financial year</dd>
+        <dd>Check if a date, or interval is in the financial year</dd>
       </dl><dl><dt>
           
           <code><a href="midpoint_fy.html">midpoint_fy()</a></code> 
@@ -132,6 +147,26 @@
           <code><a href="start_fy.html">start_fy()</a></code> 
         </dt>
         <dd>Return the start date of FY year</dd>
+      </dl><dl><dt>
+          
+          <code><a href="start_fy_quarter.html">start_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the start of a quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="start_next_fy_quarter.html">start_next_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the start of the next quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_sc_end_dates.html">fix_sc_end_dates()</a></code> 
+        </dt>
+        <dd>Fix sc end dates</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_sc_start_dates.html">fix_sc_start_dates()</a></code> 
+        </dt>
+        <dd>Fix sc start dates</dd>
       </dl></div><div class="section level2">
       
       <h3 id="year-format">Year Format<a class="anchor" aria-label="anchor" href="#year-format"></a></h3>
@@ -160,9 +195,9 @@
         <dd>Convert year types - Alternate year form to financial year form</dd>
       </dl><dl><dt>
           
-          <code><a href="is_date_in_year.html">is_date_in_year()</a></code> 
+          <code><a href="is_date_in_fyyear.html">is_date_in_fyyear()</a></code> 
         </dt>
-        <dd>Check if a date in the financial year</dd>
+        <dd>Check if a date, or interval is in the financial year</dd>
       </dl></div><div class="section level2">
       
       <h3 id="ages">Ages<a class="anchor" aria-label="anchor" href="#ages"></a></h3>
@@ -217,6 +252,11 @@
           <code><a href="create_person_id.html">create_person_id()</a></code> 
         </dt>
         <dd>Create the Person ID variable</dd>
+      </dl><dl><dt>
+          
+          <code><a href="replace_sc_id_with_latest.html">replace_sc_id_with_latest()</a></code> 
+        </dt>
+        <dd>Replace sc id with the latest sc id</dd>
       </dl></div><div class="section level2">
       
       <h3 id="costs">Costs<a class="anchor" aria-label="anchor" href="#costs"></a></h3>
@@ -338,6 +378,16 @@
         <dd>Convert GP Practice Codes to a Dummy Code</dd>
       </dl><dl><dt>
           
+          <code><a href="assign_child_major_cohort.html">assign_child_major_cohort()</a></code> 
+        </dt>
+        <dd>Assign Child Major Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_chi_deaths.html">process_lookup_chi_deaths()</a></code> 
+        </dt>
+        <dd>Process the CHI deaths lookup</dd>
+      </dl><dl><dt>
+          
           <code><a href="read_anon_to_chi.html">read_anon_to_chi()</a></code> 
         </dt>
         <dd>Read the Anon to CHI lookup</dd>
@@ -346,6 +396,11 @@
           <code><a href="read_chi_to_anon.html">read_chi_to_anon()</a></code> 
         </dt>
         <dd>Read in the CHI to Anon Lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_chi_deaths.html">read_lookup_chi_deaths()</a></code> 
+        </dt>
+        <dd>Process the CHI deaths lookup</dd>
       </dl><dl><dt>
           
           <code><a href="create_lca_test_flags.html">create_lca_test_flags()</a></code> 
@@ -411,11 +466,6 @@
         <dd>Delayed Discharge period</dd>
       </dl><dl><dt>
           
-          <code><a href="it_extract_ref.html">it_extract_ref()</a></code> 
-        </dt>
-        <dd>Get the IT extract ref number</dd>
-      </dl><dl><dt>
-          
           <code><a href="latest_update.html">latest_update()</a></code> 
         </dt>
         <dd>Latest update</dd>
@@ -443,9 +493,94 @@
 
       <dl><dt>
           
+          <code><a href="add_nsu_cohort.html">add_nsu_cohort()</a></code> 
+        </dt>
+        <dd>Add NSU cohort to working file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="add_ppa_flag.html">add_ppa_flag()</a></code> 
+        </dt>
+        <dd>Add Potentially Preventable Admission (PPA) Marker</dd>
+      </dl><dl><dt>
+          
+          <code><a href="add_smr_type.html">add_smr_type()</a></code> 
+        </dt>
+        <dd>Add smrtype variable based on record ID</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_adult_major_cohort.html">assign_adult_major_cohort()</a></code> 
+        </dt>
+        <dd>Assign Adult Major Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_child_major_cohort.html">assign_child_major_cohort()</a></code> 
+        </dt>
+        <dd>Assign Child Major Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_comm_living_cohort.html">assign_comm_living_cohort()</a></code> 
+        </dt>
+        <dd>Assign Assisted living in the Community cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_eol_cohort.html">assign_eol_cohort()</a></code> 
+        </dt>
+        <dd>Assign End of Life cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_frailty_cohort.html">assign_frailty_cohort()</a></code> 
+        </dt>
+        <dd>Assign Frailty cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_high_cc_cohort.html">assign_high_cc_cohort()</a></code> 
+        </dt>
+        <dd>Assign High Complex Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_low_cc_cohort.html">assign_low_cc_cohort()</a></code> 
+        </dt>
+        <dd>Assign Low Complex Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_maternity_cohort.html">assign_maternity_cohort()</a></code> 
+        </dt>
+        <dd>Assign Maternity cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_medium_cc_cohort.html">assign_medium_cc_cohort()</a></code> 
+        </dt>
+        <dd>Assign Medium Complex Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_mh_cohort.html">assign_mh_cohort()</a></code> 
+        </dt>
+        <dd>Assign Mental Health cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_substance_cohort.html">assign_substance_cohort()</a></code> 
+        </dt>
+        <dd>Assign substance misuse cohort</dd>
+      </dl><dl><dt>
+          
           <code><a href="calculate_measures.html">calculate_measures()</a></code> 
         </dt>
         <dd>Calculate Measures for Testing</dd>
+      </dl><dl><dt>
+          
+          <code><a href="calculate_stay.html">calculate_stay()</a></code> 
+        </dt>
+        <dd>Calculate total length of stay</dd>
+      </dl><dl><dt>
+          
+          <code><a href="check_quarter_format.html">check_quarter_format()</a></code> 
+        </dt>
+        <dd>Check quarter format</dd>
+      </dl><dl><dt>
+          
+          <code><a href="check_variables_exist.html">check_variables_exist()</a></code> 
+        </dt>
+        <dd>Check variables exist in data</dd>
       </dl><dl><dt>
           
           <code><a href="check_year_format.html">check_year_format()</a></code> 
@@ -523,6 +658,11 @@
         <dd>Create demographic test flags</dd>
       </dl><dl><dt>
           
+          <code><a href="create_demographic_cohorts.html">create_demographic_cohorts()</a></code> 
+        </dt>
+        <dd>Create the demographic cohorts lookup file</dd>
+      </dl><dl><dt>
+          
           <code><a href="create_hb_cost_test_flags.html">create_hb_cost_test_flags()</a></code> 
         </dt>
         <dd>Create Health Board cost test flags</dd>
@@ -563,6 +703,16 @@
         <dd>Return the end date of FY years</dd>
       </dl><dl><dt>
           
+          <code><a href="end_fy_quarter.html">end_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the end of a quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="end_next_fy_quarter.html">end_next_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the end of the next quarter</dd>
+      </dl><dl><dt>
+          
           <code><a href="find_latest_file.html">find_latest_file()</a></code> 
         </dt>
         <dd>Find the latest version of a file</dd>
@@ -576,6 +726,16 @@
           <code><a href="fix_east_ayrshire_duplicates.html">fix_east_ayrshire_duplicates()</a></code> 
         </dt>
         <dd>Fix the East Ayrshire duplicates - Homelessness</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_sc_end_dates.html">fix_sc_end_dates()</a></code> 
+        </dt>
+        <dd>Fix sc end dates</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_sc_start_dates.html">fix_sc_start_dates()</a></code> 
+        </dt>
+        <dd>Fix sc start dates</dd>
       </dl><dl><dt>
           
           <code><a href="fix_west_dun_duplicates.html">fix_west_dun_duplicates()</a></code> 
@@ -598,11 +758,6 @@
         <dd>Care Home Costs File Path</dd>
       </dl><dl><dt>
           
-          <code><a href="get_ch_name_lookup_path.html">get_ch_name_lookup_path()</a></code> 
-        </dt>
-        <dd>Year Specific Care Home Name Lookup</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_datazone_pop_path.html">get_datazone_pop_path()</a></code> 
         </dt>
         <dd>Datazone Populations File Path</dd>
@@ -618,9 +773,9 @@
         <dd>Delayed Discharge period</dd>
       </dl><dl><dt>
           
-          <code><a href="get_demog_cohorts_path.html">get_demog_cohorts_path()</a></code> 
+          <code><a href="get_demographic_cohorts_path.html">get_demographic_cohorts_path()</a></code> 
         </dt>
-        <dd>Demographics Cohort File Path</dd>
+        <dd>Demographic cohorts lookup Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_dn_costs_path.html">get_dn_costs_path()</a></code> 
@@ -703,6 +858,11 @@
         <dd>Practice Details File Path</dd>
       </dl><dl><dt>
           
+          <code><a href="get_sc_at_episodes_path.html">get_sc_at_episodes_path()</a></code> 
+        </dt>
+        <dd>Alarms and Telecare Episodes File Path</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_sc_ch_episodes_path.html">get_sc_ch_episodes_path()</a></code> 
         </dt>
         <dd>Care Home Episodes File Path</dd>
@@ -718,9 +878,14 @@
         <dd>Home Care Episodes File Path</dd>
       </dl><dl><dt>
           
+          <code><a href="get_sc_sds_episodes_path.html">get_sc_sds_episodes_path()</a></code> 
+        </dt>
+        <dd>SDS Episodes File Path</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_service_use_cohorts_path.html">get_service_use_cohorts_path()</a></code> 
         </dt>
-        <dd>Service Use Cohort File Path</dd>
+        <dd>Service-use cohorts lookup Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_simd_path.html">get_simd_path()</a></code> 
@@ -730,7 +895,7 @@
           
           <code><a href="get_slf_ch_name_lookup_path.html">get_slf_ch_name_lookup_path()</a></code> 
         </dt>
-        <dd>SLF Care Home Lookup File Path</dd>
+        <dd>Care Home Name (Address) Lookup File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_slf_deaths_path.html">get_slf_deaths_path()</a></code> 
@@ -743,14 +908,9 @@
         <dd>SLF directory - hscdiip</dd>
       </dl><dl><dt>
           
-          <code><a href="get_slf_gp_cluster_path.html">get_slf_gp_cluster_path()</a></code> 
-        </dt>
-        <dd>SLF GP Cluster Lookup File Path</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_slf_gpprac_path.html">get_slf_gpprac_path()</a></code> 
         </dt>
-        <dd>SLG GP Lookup File Path</dd>
+        <dd>SLF GP Lookup File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_slf_postcode_path.html">get_slf_postcode_path()</a></code> 
@@ -778,19 +938,14 @@
         <dd>Year Directory</dd>
       </dl><dl><dt>
           
-          <code><a href="is_date_in_year.html">is_date_in_year()</a></code> 
+          <code><a href="is_date_in_fyyear.html">is_date_in_fyyear()</a></code> 
         </dt>
-        <dd>Check if a date in the financial year</dd>
+        <dd>Check if a date, or interval is in the financial year</dd>
       </dl><dl><dt>
           
           <code><a href="is_missing.html">is_missing()</a></code> 
         </dt>
         <dd>Check for NA or blank values in a character vector</dd>
-      </dl><dl><dt>
-          
-          <code><a href="it_extract_ref.html">it_extract_ref()</a></code> 
-        </dt>
-        <dd>Get the IT extract ref number</dd>
       </dl><dl><dt>
           
           <code><a href="latest_update.html">latest_update()</a></code> 
@@ -813,9 +968,194 @@
         <dd>Previous update</dd>
       </dl><dl><dt>
           
-          <code><a href="process_homelessness_extract.html">process_homelessness_extract()</a></code> 
+          <code><a href="process_costs_ch_rmd.html">process_costs_ch_rmd()</a></code> 
+        </dt>
+        <dd>Process care homes cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_dn_rmd.html">process_costs_dn_rmd()</a></code> 
+        </dt>
+        <dd>Process District Nursing cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_gp_ooh_rmd.html">process_costs_gp_ooh_rmd()</a></code> 
+        </dt>
+        <dd>Process GP ooh cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_hc_rmd.html">process_costs_hc_rmd()</a></code> 
+        </dt>
+        <dd>Process Home Care cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_rmd.html">process_costs_rmd()</a></code> 
+        </dt>
+        <dd>Process the cost lookup files</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_acute.html">process_extract_acute()</a></code> 
+        </dt>
+        <dd>Process the Acute extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_ae.html">process_extract_ae()</a></code> 
+        </dt>
+        <dd>Process the A&amp;E extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_alarms_telecare.html">process_extract_alarms_telecare()</a></code> 
+        </dt>
+        <dd>Process the (year specific) Alarms Telecare extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_cmh.html">process_extract_cmh()</a></code> 
+        </dt>
+        <dd>Process the Community Mental Health (CMH) extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_delayed_discharges.html">process_extract_delayed_discharges()</a></code> 
+        </dt>
+        <dd>Process the delayed discharges extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_district_nursing.html">process_extract_district_nursing()</a></code> 
+        </dt>
+        <dd>Process the District Nursing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_home_care.html">process_extract_home_care()</a></code> 
+        </dt>
+        <dd>Process the (year specific) Home Care extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_homelessness.html">process_extract_homelessness()</a></code> 
         </dt>
         <dd>Process the homelessness extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_maternity.html">process_extract_maternity()</a></code> 
+        </dt>
+        <dd>Process the maternity extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_mental_health.html">process_extract_mental_health()</a></code> 
+        </dt>
+        <dd>Process the mental health extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_nrs_deaths.html">process_extract_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Process the Nation Records of Scotland (NRS) Deaths extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_outpatients.html">process_extract_outpatients()</a></code> 
+        </dt>
+        <dd>Process the Outpatients extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_prescribing.html">process_extract_prescribing()</a></code> 
+        </dt>
+        <dd>Process the prescribing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_sds.html">process_extract_sds()</a></code> 
+        </dt>
+        <dd>Process the (year specific) SDS extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_chi_deaths.html">process_lookup_chi_deaths()</a></code> 
+        </dt>
+        <dd>Process the CHI deaths lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_gpprac.html">process_lookup_gpprac()</a></code> 
+        </dt>
+        <dd>Process the SLF gpprac lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_ltc.html">process_lookup_ltc()</a></code> 
+        </dt>
+        <dd>Process LTC IT extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_postcode.html">process_lookup_postcode()</a></code> 
+        </dt>
+        <dd>Process the SLF postcode lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_sc_client.html">process_lookup_sc_client()</a></code> 
+        </dt>
+        <dd>Process the social care client lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_sc_demographics.html">process_lookup_sc_demographics()</a></code> 
+        </dt>
+        <dd>Process the social care demographic lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_sc_all_home_care.html">process_sc_all_home_care()</a></code> 
+        </dt>
+        <dd>Process the all home care extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_sc_all_sds.html">process_sc_all_sds()</a></code> 
+        </dt>
+        <dd>Process the all SDS extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_acute.html">process_tests_acute()</a></code> 
+        </dt>
+        <dd>Process Acute tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_ae.html">process_tests_ae()</a></code> 
+        </dt>
+        <dd>Process A&amp;E tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_cmh.html">process_tests_cmh()</a></code> 
+        </dt>
+        <dd>Process CMH tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_homelessness.html">process_tests_homelessness()</a></code> 
+        </dt>
+        <dd>Process homelessness tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_lookup_gpprac.html">process_tests_lookup_gpprac()</a></code> 
+        </dt>
+        <dd>Process gpprac Lookup tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_lookup_pc.html">process_tests_lookup_pc()</a></code> 
+        </dt>
+        <dd>Process pc Lookup tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_maternity.html">process_tests_maternity()</a></code> 
+        </dt>
+        <dd>Process Maternity tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_mental_health.html">process_tests_mental_health()</a></code> 
+        </dt>
+        <dd>Process Mental Health tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_nrs_deaths.html">process_tests_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Process National Records of Scotland (NRS) deaths tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_outpatients.html">process_tests_outpatients()</a></code> 
+        </dt>
+        <dd>Process Outpatients tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_prescribing.html">process_tests_prescribing()</a></code> 
+        </dt>
+        <dd>Process prescribing tests</dd>
       </dl><dl><dt>
           
           <code><a href="produce_sc_ch_episodes_tests.html">produce_sc_ch_episodes_tests()</a></code> 
@@ -848,7 +1188,37 @@
         <dd>SLF Postcode Lookup Tests</dd>
       </dl><dl><dt>
           
+          <code><a href="produce_source_at_tests.html">produce_source_at_tests()</a></code> 
+        </dt>
+        <dd>Alarm Telecare Episodes Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_ch_tests.html">produce_source_ch_tests()</a></code> 
+        </dt>
+        <dd>Source Care Home Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_cmh_tests.html">produce_source_cmh_tests()</a></code> 
+        </dt>
+        <dd>Source Extract Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_dn_tests.html">produce_source_dn_tests()</a></code> 
+        </dt>
+        <dd>Source District Nursing Tests</dd>
+      </dl><dl><dt>
+          
           <code><a href="produce_source_extract_tests.html">produce_source_extract_tests()</a></code> 
+        </dt>
+        <dd>Source Extract Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_hc_tests.html">produce_source_hc_tests()</a></code> 
+        </dt>
+        <dd>Source Care Home Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_nrs_tests.html">produce_source_nrs_tests()</a></code> 
         </dt>
         <dd>Source Extract Tests</dd>
       </dl><dl><dt>
@@ -856,6 +1226,11 @@
           <code><a href="produce_source_pis_tests.html">produce_source_pis_tests()</a></code> 
         </dt>
         <dd>Source PIS Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_sds_tests.html">produce_source_sds_tests()</a></code> 
+        </dt>
+        <dd>SDS Episodes Tests</dd>
       </dl><dl><dt>
           
           <code><a href="produce_test_comparison.html">produce_test_comparison()</a></code> 
@@ -873,9 +1248,109 @@
         <dd>Read in the CHI to Anon Lookup</dd>
       </dl><dl><dt>
           
+          <code><a href="read_extract_acute.html">read_extract_acute()</a></code> 
+        </dt>
+        <dd>Read Acute extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_ae.html">read_extract_ae()</a></code> 
+        </dt>
+        <dd>Read A&amp;E extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_cmh.html">read_extract_cmh()</a></code> 
+        </dt>
+        <dd>Read CMH extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_delayed_discharges.html">read_extract_delayed_discharges()</a></code> 
+        </dt>
+        <dd>Read Delayed Discharges extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_district_nursing.html">read_extract_district_nursing()</a></code> 
+        </dt>
+        <dd>Read district nursing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_homelessness.html">read_extract_homelessness()</a></code> 
+        </dt>
+        <dd>Read homelessness extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_maternity.html">read_extract_maternity()</a></code> 
+        </dt>
+        <dd>Read maternity extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_mental_health.html">read_extract_mental_health()</a></code> 
+        </dt>
+        <dd>Read mental health extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_nrs_deaths.html">read_extract_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Read NRS Deaths extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_outpatients.html">read_extract_outpatients()</a></code> 
+        </dt>
+        <dd>Read Outpatients extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_prescribing.html">read_extract_prescribing()</a></code> 
+        </dt>
+        <dd>Read Prescribing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_chi_deaths.html">read_lookup_chi_deaths()</a></code> 
+        </dt>
+        <dd>Process the CHI deaths lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_ltc.html">read_lookup_ltc()</a></code> 
+        </dt>
+        <dd>Read LTC IT extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_sc_client.html">read_lookup_sc_client()</a></code> 
+        </dt>
+        <dd>Process the social care client lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_sc_demographics.html">read_lookup_sc_demographics()</a></code> 
+        </dt>
+        <dd>Read SC demographics</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sc_all_home_care.html">read_sc_all_home_care()</a></code> 
+        </dt>
+        <dd>Read Social Care Home Care data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sc_all_sds.html">read_sc_all_sds()</a></code> 
+        </dt>
+        <dd>Read Social Care SDS data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="replace_sc_id_with_latest.html">replace_sc_id_with_latest()</a></code> 
+        </dt>
+        <dd>Replace sc id with the latest sc id</dd>
+      </dl><dl><dt>
+          
           <code><a href="start_fy.html">start_fy()</a></code> 
         </dt>
         <dd>Return the start date of FY year</dd>
+      </dl><dl><dt>
+          
+          <code><a href="start_fy_quarter.html">start_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the start of a quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="start_next_fy_quarter.html">start_next_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the start of the next quarter</dd>
       </dl><dl><dt>
           
           <code><a href="write_rds.html">write_rds()</a></code> 
@@ -1019,14 +1494,14 @@
         <dd>SPARRA Extract File Path</dd>
       </dl><dl><dt>
           
-          <code><a href="get_ch_name_lookup_path.html">get_ch_name_lookup_path()</a></code> 
-        </dt>
-        <dd>Year Specific Care Home Name Lookup</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_sc_demog_lookup_path.html">get_sc_demog_lookup_path()</a></code> 
         </dt>
         <dd>Social Care Demographic Lookup File Path</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_sc_at_episodes_path.html">get_sc_at_episodes_path()</a></code> 
+        </dt>
+        <dd>Alarms and Telecare Episodes File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_sc_ch_episodes_path.html">get_sc_ch_episodes_path()</a></code> 
@@ -1039,14 +1514,9 @@
         <dd>Home Care Episodes File Path</dd>
       </dl><dl><dt>
           
-          <code><a href="get_demog_cohorts_path.html">get_demog_cohorts_path()</a></code> 
-        </dt>
-        <dd>Demographics Cohort File Path</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_service_use_cohorts_path.html">get_service_use_cohorts_path()</a></code> 
         </dt>
-        <dd>Service Use Cohort File Path</dd>
+        <dd>Service-use cohorts lookup Path</dd>
       </dl><dl><dt>
           
           <code><a href="find_latest_file.html">find_latest_file()</a></code> 
@@ -1054,9 +1524,19 @@
         <dd>Find the latest version of a file</dd>
       </dl><dl><dt>
           
+          <code><a href="get_demographic_cohorts_path.html">get_demographic_cohorts_path()</a></code> 
+        </dt>
+        <dd>Demographic cohorts lookup Path</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_sc_sds_episodes_path.html">get_sc_sds_episodes_path()</a></code> 
+        </dt>
+        <dd>SDS Episodes File Path</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_slf_ch_name_lookup_path.html">get_slf_ch_name_lookup_path()</a></code> 
         </dt>
-        <dd>SLF Care Home Lookup File Path</dd>
+        <dd>Care Home Name (Address) Lookup File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_slf_deaths_path.html">get_slf_deaths_path()</a></code> 
@@ -1064,14 +1544,9 @@
         <dd>SLF Deaths Lookup File Path</dd>
       </dl><dl><dt>
           
-          <code><a href="get_slf_gp_cluster_path.html">get_slf_gp_cluster_path()</a></code> 
-        </dt>
-        <dd>SLF GP Cluster Lookup File Path</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_slf_gpprac_path.html">get_slf_gpprac_path()</a></code> 
         </dt>
-        <dd>SLG GP Lookup File Path</dd>
+        <dd>SLF GP Lookup File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_slf_postcode_path.html">get_slf_postcode_path()</a></code> 
@@ -1090,9 +1565,94 @@
 
       <dl><dt>
           
+          <code><a href="add_nsu_cohort.html">add_nsu_cohort()</a></code> 
+        </dt>
+        <dd>Add NSU cohort to working file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="add_ppa_flag.html">add_ppa_flag()</a></code> 
+        </dt>
+        <dd>Add Potentially Preventable Admission (PPA) Marker</dd>
+      </dl><dl><dt>
+          
+          <code><a href="add_smr_type.html">add_smr_type()</a></code> 
+        </dt>
+        <dd>Add smrtype variable based on record ID</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_adult_major_cohort.html">assign_adult_major_cohort()</a></code> 
+        </dt>
+        <dd>Assign Adult Major Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_child_major_cohort.html">assign_child_major_cohort()</a></code> 
+        </dt>
+        <dd>Assign Child Major Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_comm_living_cohort.html">assign_comm_living_cohort()</a></code> 
+        </dt>
+        <dd>Assign Assisted living in the Community cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_eol_cohort.html">assign_eol_cohort()</a></code> 
+        </dt>
+        <dd>Assign End of Life cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_frailty_cohort.html">assign_frailty_cohort()</a></code> 
+        </dt>
+        <dd>Assign Frailty cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_high_cc_cohort.html">assign_high_cc_cohort()</a></code> 
+        </dt>
+        <dd>Assign High Complex Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_low_cc_cohort.html">assign_low_cc_cohort()</a></code> 
+        </dt>
+        <dd>Assign Low Complex Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_maternity_cohort.html">assign_maternity_cohort()</a></code> 
+        </dt>
+        <dd>Assign Maternity cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_medium_cc_cohort.html">assign_medium_cc_cohort()</a></code> 
+        </dt>
+        <dd>Assign Medium Complex Conditions cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_mh_cohort.html">assign_mh_cohort()</a></code> 
+        </dt>
+        <dd>Assign Mental Health cohort</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assign_substance_cohort.html">assign_substance_cohort()</a></code> 
+        </dt>
+        <dd>Assign substance misuse cohort</dd>
+      </dl><dl><dt>
+          
           <code><a href="calculate_measures.html">calculate_measures()</a></code> 
         </dt>
         <dd>Calculate Measures for Testing</dd>
+      </dl><dl><dt>
+          
+          <code><a href="calculate_stay.html">calculate_stay()</a></code> 
+        </dt>
+        <dd>Calculate total length of stay</dd>
+      </dl><dl><dt>
+          
+          <code><a href="check_quarter_format.html">check_quarter_format()</a></code> 
+        </dt>
+        <dd>Check quarter format</dd>
+      </dl><dl><dt>
+          
+          <code><a href="check_variables_exist.html">check_variables_exist()</a></code> 
+        </dt>
+        <dd>Check variables exist in data</dd>
       </dl><dl><dt>
           
           <code><a href="check_year_format.html">check_year_format()</a></code> 
@@ -1170,6 +1730,11 @@
         <dd>Create demographic test flags</dd>
       </dl><dl><dt>
           
+          <code><a href="create_demographic_cohorts.html">create_demographic_cohorts()</a></code> 
+        </dt>
+        <dd>Create the demographic cohorts lookup file</dd>
+      </dl><dl><dt>
+          
           <code><a href="create_hb_cost_test_flags.html">create_hb_cost_test_flags()</a></code> 
         </dt>
         <dd>Create Health Board cost test flags</dd>
@@ -1210,6 +1775,16 @@
         <dd>Return the end date of FY years</dd>
       </dl><dl><dt>
           
+          <code><a href="end_fy_quarter.html">end_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the end of a quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="end_next_fy_quarter.html">end_next_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the end of the next quarter</dd>
+      </dl><dl><dt>
+          
           <code><a href="find_latest_file.html">find_latest_file()</a></code> 
         </dt>
         <dd>Find the latest version of a file</dd>
@@ -1223,6 +1798,16 @@
           <code><a href="fix_east_ayrshire_duplicates.html">fix_east_ayrshire_duplicates()</a></code> 
         </dt>
         <dd>Fix the East Ayrshire duplicates - Homelessness</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_sc_end_dates.html">fix_sc_end_dates()</a></code> 
+        </dt>
+        <dd>Fix sc end dates</dd>
+      </dl><dl><dt>
+          
+          <code><a href="fix_sc_start_dates.html">fix_sc_start_dates()</a></code> 
+        </dt>
+        <dd>Fix sc start dates</dd>
       </dl><dl><dt>
           
           <code><a href="fix_west_dun_duplicates.html">fix_west_dun_duplicates()</a></code> 
@@ -1245,11 +1830,6 @@
         <dd>Care Home Costs File Path</dd>
       </dl><dl><dt>
           
-          <code><a href="get_ch_name_lookup_path.html">get_ch_name_lookup_path()</a></code> 
-        </dt>
-        <dd>Year Specific Care Home Name Lookup</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_datazone_pop_path.html">get_datazone_pop_path()</a></code> 
         </dt>
         <dd>Datazone Populations File Path</dd>
@@ -1265,9 +1845,9 @@
         <dd>Delayed Discharge period</dd>
       </dl><dl><dt>
           
-          <code><a href="get_demog_cohorts_path.html">get_demog_cohorts_path()</a></code> 
+          <code><a href="get_demographic_cohorts_path.html">get_demographic_cohorts_path()</a></code> 
         </dt>
-        <dd>Demographics Cohort File Path</dd>
+        <dd>Demographic cohorts lookup Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_dn_costs_path.html">get_dn_costs_path()</a></code> 
@@ -1350,6 +1930,11 @@
         <dd>Practice Details File Path</dd>
       </dl><dl><dt>
           
+          <code><a href="get_sc_at_episodes_path.html">get_sc_at_episodes_path()</a></code> 
+        </dt>
+        <dd>Alarms and Telecare Episodes File Path</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_sc_ch_episodes_path.html">get_sc_ch_episodes_path()</a></code> 
         </dt>
         <dd>Care Home Episodes File Path</dd>
@@ -1365,9 +1950,14 @@
         <dd>Home Care Episodes File Path</dd>
       </dl><dl><dt>
           
+          <code><a href="get_sc_sds_episodes_path.html">get_sc_sds_episodes_path()</a></code> 
+        </dt>
+        <dd>SDS Episodes File Path</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_service_use_cohorts_path.html">get_service_use_cohorts_path()</a></code> 
         </dt>
-        <dd>Service Use Cohort File Path</dd>
+        <dd>Service-use cohorts lookup Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_simd_path.html">get_simd_path()</a></code> 
@@ -1377,7 +1967,7 @@
           
           <code><a href="get_slf_ch_name_lookup_path.html">get_slf_ch_name_lookup_path()</a></code> 
         </dt>
-        <dd>SLF Care Home Lookup File Path</dd>
+        <dd>Care Home Name (Address) Lookup File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_slf_deaths_path.html">get_slf_deaths_path()</a></code> 
@@ -1390,14 +1980,9 @@
         <dd>SLF directory - hscdiip</dd>
       </dl><dl><dt>
           
-          <code><a href="get_slf_gp_cluster_path.html">get_slf_gp_cluster_path()</a></code> 
-        </dt>
-        <dd>SLF GP Cluster Lookup File Path</dd>
-      </dl><dl><dt>
-          
           <code><a href="get_slf_gpprac_path.html">get_slf_gpprac_path()</a></code> 
         </dt>
-        <dd>SLG GP Lookup File Path</dd>
+        <dd>SLF GP Lookup File Path</dd>
       </dl><dl><dt>
           
           <code><a href="get_slf_postcode_path.html">get_slf_postcode_path()</a></code> 
@@ -1425,19 +2010,14 @@
         <dd>Year Directory</dd>
       </dl><dl><dt>
           
-          <code><a href="is_date_in_year.html">is_date_in_year()</a></code> 
+          <code><a href="is_date_in_fyyear.html">is_date_in_fyyear()</a></code> 
         </dt>
-        <dd>Check if a date in the financial year</dd>
+        <dd>Check if a date, or interval is in the financial year</dd>
       </dl><dl><dt>
           
           <code><a href="is_missing.html">is_missing()</a></code> 
         </dt>
         <dd>Check for NA or blank values in a character vector</dd>
-      </dl><dl><dt>
-          
-          <code><a href="it_extract_ref.html">it_extract_ref()</a></code> 
-        </dt>
-        <dd>Get the IT extract ref number</dd>
       </dl><dl><dt>
           
           <code><a href="latest_update.html">latest_update()</a></code> 
@@ -1460,9 +2040,194 @@
         <dd>Previous update</dd>
       </dl><dl><dt>
           
-          <code><a href="process_homelessness_extract.html">process_homelessness_extract()</a></code> 
+          <code><a href="process_costs_ch_rmd.html">process_costs_ch_rmd()</a></code> 
+        </dt>
+        <dd>Process care homes cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_dn_rmd.html">process_costs_dn_rmd()</a></code> 
+        </dt>
+        <dd>Process District Nursing cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_gp_ooh_rmd.html">process_costs_gp_ooh_rmd()</a></code> 
+        </dt>
+        <dd>Process GP ooh cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_hc_rmd.html">process_costs_hc_rmd()</a></code> 
+        </dt>
+        <dd>Process Home Care cost lookup Rmd file</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_costs_rmd.html">process_costs_rmd()</a></code> 
+        </dt>
+        <dd>Process the cost lookup files</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_acute.html">process_extract_acute()</a></code> 
+        </dt>
+        <dd>Process the Acute extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_ae.html">process_extract_ae()</a></code> 
+        </dt>
+        <dd>Process the A&amp;E extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_alarms_telecare.html">process_extract_alarms_telecare()</a></code> 
+        </dt>
+        <dd>Process the (year specific) Alarms Telecare extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_cmh.html">process_extract_cmh()</a></code> 
+        </dt>
+        <dd>Process the Community Mental Health (CMH) extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_delayed_discharges.html">process_extract_delayed_discharges()</a></code> 
+        </dt>
+        <dd>Process the delayed discharges extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_district_nursing.html">process_extract_district_nursing()</a></code> 
+        </dt>
+        <dd>Process the District Nursing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_home_care.html">process_extract_home_care()</a></code> 
+        </dt>
+        <dd>Process the (year specific) Home Care extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_homelessness.html">process_extract_homelessness()</a></code> 
         </dt>
         <dd>Process the homelessness extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_maternity.html">process_extract_maternity()</a></code> 
+        </dt>
+        <dd>Process the maternity extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_mental_health.html">process_extract_mental_health()</a></code> 
+        </dt>
+        <dd>Process the mental health extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_nrs_deaths.html">process_extract_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Process the Nation Records of Scotland (NRS) Deaths extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_outpatients.html">process_extract_outpatients()</a></code> 
+        </dt>
+        <dd>Process the Outpatients extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_prescribing.html">process_extract_prescribing()</a></code> 
+        </dt>
+        <dd>Process the prescribing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_extract_sds.html">process_extract_sds()</a></code> 
+        </dt>
+        <dd>Process the (year specific) SDS extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_chi_deaths.html">process_lookup_chi_deaths()</a></code> 
+        </dt>
+        <dd>Process the CHI deaths lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_gpprac.html">process_lookup_gpprac()</a></code> 
+        </dt>
+        <dd>Process the SLF gpprac lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_ltc.html">process_lookup_ltc()</a></code> 
+        </dt>
+        <dd>Process LTC IT extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_postcode.html">process_lookup_postcode()</a></code> 
+        </dt>
+        <dd>Process the SLF postcode lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_sc_client.html">process_lookup_sc_client()</a></code> 
+        </dt>
+        <dd>Process the social care client lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_lookup_sc_demographics.html">process_lookup_sc_demographics()</a></code> 
+        </dt>
+        <dd>Process the social care demographic lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_sc_all_home_care.html">process_sc_all_home_care()</a></code> 
+        </dt>
+        <dd>Process the all home care extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_sc_all_sds.html">process_sc_all_sds()</a></code> 
+        </dt>
+        <dd>Process the all SDS extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_acute.html">process_tests_acute()</a></code> 
+        </dt>
+        <dd>Process Acute tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_ae.html">process_tests_ae()</a></code> 
+        </dt>
+        <dd>Process A&amp;E tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_cmh.html">process_tests_cmh()</a></code> 
+        </dt>
+        <dd>Process CMH tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_homelessness.html">process_tests_homelessness()</a></code> 
+        </dt>
+        <dd>Process homelessness tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_lookup_gpprac.html">process_tests_lookup_gpprac()</a></code> 
+        </dt>
+        <dd>Process gpprac Lookup tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_lookup_pc.html">process_tests_lookup_pc()</a></code> 
+        </dt>
+        <dd>Process pc Lookup tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_maternity.html">process_tests_maternity()</a></code> 
+        </dt>
+        <dd>Process Maternity tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_mental_health.html">process_tests_mental_health()</a></code> 
+        </dt>
+        <dd>Process Mental Health tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_nrs_deaths.html">process_tests_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Process National Records of Scotland (NRS) deaths tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_outpatients.html">process_tests_outpatients()</a></code> 
+        </dt>
+        <dd>Process Outpatients tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_prescribing.html">process_tests_prescribing()</a></code> 
+        </dt>
+        <dd>Process prescribing tests</dd>
       </dl><dl><dt>
           
           <code><a href="produce_sc_ch_episodes_tests.html">produce_sc_ch_episodes_tests()</a></code> 
@@ -1495,7 +2260,37 @@
         <dd>SLF Postcode Lookup Tests</dd>
       </dl><dl><dt>
           
+          <code><a href="produce_source_at_tests.html">produce_source_at_tests()</a></code> 
+        </dt>
+        <dd>Alarm Telecare Episodes Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_ch_tests.html">produce_source_ch_tests()</a></code> 
+        </dt>
+        <dd>Source Care Home Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_cmh_tests.html">produce_source_cmh_tests()</a></code> 
+        </dt>
+        <dd>Source Extract Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_dn_tests.html">produce_source_dn_tests()</a></code> 
+        </dt>
+        <dd>Source District Nursing Tests</dd>
+      </dl><dl><dt>
+          
           <code><a href="produce_source_extract_tests.html">produce_source_extract_tests()</a></code> 
+        </dt>
+        <dd>Source Extract Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_hc_tests.html">produce_source_hc_tests()</a></code> 
+        </dt>
+        <dd>Source Care Home Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_nrs_tests.html">produce_source_nrs_tests()</a></code> 
         </dt>
         <dd>Source Extract Tests</dd>
       </dl><dl><dt>
@@ -1503,6 +2298,11 @@
           <code><a href="produce_source_pis_tests.html">produce_source_pis_tests()</a></code> 
         </dt>
         <dd>Source PIS Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_sds_tests.html">produce_source_sds_tests()</a></code> 
+        </dt>
+        <dd>SDS Episodes Tests</dd>
       </dl><dl><dt>
           
           <code><a href="produce_test_comparison.html">produce_test_comparison()</a></code> 
@@ -1520,9 +2320,109 @@
         <dd>Read in the CHI to Anon Lookup</dd>
       </dl><dl><dt>
           
+          <code><a href="read_extract_acute.html">read_extract_acute()</a></code> 
+        </dt>
+        <dd>Read Acute extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_ae.html">read_extract_ae()</a></code> 
+        </dt>
+        <dd>Read A&amp;E extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_cmh.html">read_extract_cmh()</a></code> 
+        </dt>
+        <dd>Read CMH extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_delayed_discharges.html">read_extract_delayed_discharges()</a></code> 
+        </dt>
+        <dd>Read Delayed Discharges extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_district_nursing.html">read_extract_district_nursing()</a></code> 
+        </dt>
+        <dd>Read district nursing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_homelessness.html">read_extract_homelessness()</a></code> 
+        </dt>
+        <dd>Read homelessness extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_maternity.html">read_extract_maternity()</a></code> 
+        </dt>
+        <dd>Read maternity extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_mental_health.html">read_extract_mental_health()</a></code> 
+        </dt>
+        <dd>Read mental health extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_nrs_deaths.html">read_extract_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Read NRS Deaths extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_outpatients.html">read_extract_outpatients()</a></code> 
+        </dt>
+        <dd>Read Outpatients extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_extract_prescribing.html">read_extract_prescribing()</a></code> 
+        </dt>
+        <dd>Read Prescribing extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_chi_deaths.html">read_lookup_chi_deaths()</a></code> 
+        </dt>
+        <dd>Process the CHI deaths lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_ltc.html">read_lookup_ltc()</a></code> 
+        </dt>
+        <dd>Read LTC IT extract</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_sc_client.html">read_lookup_sc_client()</a></code> 
+        </dt>
+        <dd>Process the social care client lookup</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_lookup_sc_demographics.html">read_lookup_sc_demographics()</a></code> 
+        </dt>
+        <dd>Read SC demographics</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sc_all_home_care.html">read_sc_all_home_care()</a></code> 
+        </dt>
+        <dd>Read Social Care Home Care data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="read_sc_all_sds.html">read_sc_all_sds()</a></code> 
+        </dt>
+        <dd>Read Social Care SDS data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="replace_sc_id_with_latest.html">replace_sc_id_with_latest()</a></code> 
+        </dt>
+        <dd>Replace sc id with the latest sc id</dd>
+      </dl><dl><dt>
+          
           <code><a href="start_fy.html">start_fy()</a></code> 
         </dt>
         <dd>Return the start date of FY year</dd>
+      </dl><dl><dt>
+          
+          <code><a href="start_fy_quarter.html">start_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the start of a quarter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="start_next_fy_quarter.html">start_next_fy_quarter()</a></code> 
+        </dt>
+        <dd>Return the start of the next quarter</dd>
       </dl><dl><dt>
           
           <code><a href="write_rds.html">write_rds()</a></code> 
@@ -1571,7 +2471,32 @@
         <dd>Calculate Measures for Testing</dd>
       </dl><dl><dt>
           
+          <code><a href="produce_source_ch_tests.html">produce_source_ch_tests()</a></code> 
+        </dt>
+        <dd>Source Care Home Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_cmh_tests.html">produce_source_cmh_tests()</a></code> 
+        </dt>
+        <dd>Source Extract Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_dn_tests.html">produce_source_dn_tests()</a></code> 
+        </dt>
+        <dd>Source District Nursing Tests</dd>
+      </dl><dl><dt>
+          
           <code><a href="produce_source_extract_tests.html">produce_source_extract_tests()</a></code> 
+        </dt>
+        <dd>Source Extract Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_hc_tests.html">produce_source_hc_tests()</a></code> 
+        </dt>
+        <dd>Source Care Home Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_nrs_tests.html">produce_source_nrs_tests()</a></code> 
         </dt>
         <dd>Source Extract Tests</dd>
       </dl><dl><dt>
@@ -1609,13 +2534,78 @@
           <code><a href="produce_sc_demog_lookup_tests.html">produce_sc_demog_lookup_tests()</a></code> 
         </dt>
         <dd>Social Care Demographic Lookup Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_at_tests.html">produce_source_at_tests()</a></code> 
+        </dt>
+        <dd>Alarm Telecare Episodes Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="produce_source_sds_tests.html">produce_source_sds_tests()</a></code> 
+        </dt>
+        <dd>SDS Episodes Tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_acute.html">process_tests_acute()</a></code> 
+        </dt>
+        <dd>Process Acute tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_ae.html">process_tests_ae()</a></code> 
+        </dt>
+        <dd>Process A&amp;E tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_cmh.html">process_tests_cmh()</a></code> 
+        </dt>
+        <dd>Process CMH tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_homelessness.html">process_tests_homelessness()</a></code> 
+        </dt>
+        <dd>Process homelessness tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_lookup_gpprac.html">process_tests_lookup_gpprac()</a></code> 
+        </dt>
+        <dd>Process gpprac Lookup tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_lookup_pc.html">process_tests_lookup_pc()</a></code> 
+        </dt>
+        <dd>Process pc Lookup tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_maternity.html">process_tests_maternity()</a></code> 
+        </dt>
+        <dd>Process Maternity tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_mental_health.html">process_tests_mental_health()</a></code> 
+        </dt>
+        <dd>Process Mental Health tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_nrs_deaths.html">process_tests_nrs_deaths()</a></code> 
+        </dt>
+        <dd>Process National Records of Scotland (NRS) deaths tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_outpatients.html">process_tests_outpatients()</a></code> 
+        </dt>
+        <dd>Process Outpatients tests</dd>
+      </dl><dl><dt>
+          
+          <code><a href="process_tests_prescribing.html">process_tests_prescribing()</a></code> 
+        </dt>
+        <dd>Process prescribing tests</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Public Health Scotland, Jennifer Thom, James McMahon, Catherine Holland.</p>
+  <p></p><p>Developed by Public Health Scotland, Jennifer Thom, James McMahon, Catherine Holland, Bateman McBride, Zihao Li.</p>
 </div>
 
 <div class="pkgdown-footer-right">
