@@ -64,15 +64,17 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
 
   # Create the start dates of the months for the financial year
   cal_year <- as.numeric(convert_fyyear_to_year(year))
-  month_start <- c(
-    lubridate::my(paste0(
-      month.abb[4L:12L],
-      cal_year
-    )),
-    lubridate::my(paste0(
-      month.abb[1L:3L],
-      cal_year + 1L
-    ))
+  month_start <- lubridate::my(
+    c(
+      paste0(
+        month.abb[4L:12L],
+        cal_year
+      ),
+      paste0(
+        month.abb[1L:3L],
+        cal_year + 1L
+      )
+    )
   )
 
   # Turn the start dates into 1 month intervals
