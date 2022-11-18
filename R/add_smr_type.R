@@ -90,8 +90,8 @@ add_smr_type <- function(recid,
                    Homelessness records cannot be given an {.var smrtype}")
   }
 
-  # Recids that can be recoded with no identifier
   if (is.null(mpat) & is.null(ipdc) & is.null(hc_service) & is.null(main_applicant_flag)) {
+    # Recids that can be recoded with no identifier
     smrtype <- dplyr::case_when(
       recid == "04B" ~ "Psych-IP",
       recid == "00B" ~ "Outpatient",
@@ -101,33 +101,29 @@ add_smr_type <- function(recid,
       recid == "CMH" ~ "Comm-MH",
       recid == "DN" ~ "DN"
     )
-  }
-  # Maternity recids, identifier is `mpat`
-  else if (all(recid == "02B") & !is.null(mpat)) {
+  } else if (all(recid == "02B") & !is.null(mpat)) {
+    # Maternity recids, identifier is `mpat`
     smrtype <- dplyr::case_when(
       recid == "02B" & mpat %in% c("1", "3", "5", "7", "A") ~ "Matern-IP",
       recid == "02B" & mpat %in% c("2", "4", "6") ~ "Matern-DC",
       recid == "02B" & mpat == "0" ~ "Matern-HB"
     )
-  }
-  # Acute recids, identifier is `ipdc`
-  else if (all(recid %in% c("01B", "GLS")) & !is.null(ipdc)) {
+  } else if (all(recid %in% c("01B", "GLS")) & !is.null(ipdc)) {
+    # Acute recids, identifier is `ipdc`
     smrtype <- dplyr::case_when(
       recid == "01B" & ipdc == "I" ~ "Acute-IP",
       recid == "01B" & ipdc == "D" ~ "Acute-DC",
       recid == "GLS" & ipdc == "I" ~ "GLS-IP"
     )
-  }
-  # Home care
-  else if (all(recid == "HC") & !is.null(hc_service)) {
+  } else if (all(recid == "HC") & !is.null(hc_service)) {
+    # Home care
     smrtype <- dplyr::case_when(
       recid == "HC" & hc_service == 1 ~ "HC-Non-Per",
       recid == "HC" & hc_service == 2 ~ "HC-Per",
       TRUE ~ "HC-Unknown"
     )
-  }
-  # Homelessness
-  else if (all(recid == "HL1") & !is.null(main_applicant_flag)) {
+  } else if (all(recid == "HL1") & !is.null(main_applicant_flag)) {
+    # Homelessness
     smrtype <- dplyr::case_when(
       recid == "HL1" & main_applicant_flag == "Y" ~ "HL1-Main",
       recid == "HL1" & main_applicant_flag == "N" ~ "HL1-Other"
