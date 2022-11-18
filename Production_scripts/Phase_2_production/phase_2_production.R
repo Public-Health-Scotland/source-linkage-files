@@ -24,7 +24,7 @@ years <- convert_year_to_fyyear(as.character(2020:2021)) %>%
 # Process Lookups
 ------------------------------------------------------
 # Lookups/costs
-run_process_lookups(years)
+run_process_lookups()
 
 
 ------------------------------------------------------
@@ -33,7 +33,7 @@ run_process_lookups(years)
 # Social Care
   # sc lookups
   # all files
-run_process_social_care(years)
+run_process_social_care()
 
 ------------------------------------------------------
 # Process extracts

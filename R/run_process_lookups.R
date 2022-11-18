@@ -1,6 +1,6 @@
 #' Run data lookups
 #'
-#' @description Process and data lookups so they are ready for phase 3 production
+#' @description Process and data lookups so they are ready for production
 #' of the episode file.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-run_data_lookups <- function(write_to_disk = FALSE) {
+run_process_lookups <- function(write_to_disk = FALSE) {
   process_lookups <- list(
     ## SLF lookups
     "postcode" = process_lookup_postcode(write_to_disk = write_to_disk),
