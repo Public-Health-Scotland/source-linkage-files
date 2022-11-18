@@ -22,3 +22,4 @@
 ^R_development_SOP\.md$
 ^codecov\.yml$
 ^Rmarkdown$
+^\.lintr$

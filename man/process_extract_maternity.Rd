@@ -30,6 +30,7 @@ Other process extracts:
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_delayed_discharges}()},
 \code{\link{process_extract_district_nursing}()},
+\code{\link{process_extract_home_care}()},
 \code{\link{process_extract_homelessness}()},
 \code{\link{process_extract_mental_health}()},
 \code{\link{process_extract_nrs_deaths}()},
@@ -43,6 +44,7 @@ Other process extracts:
 \code{\link{process_lookup_sc_demographics}()},
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_home_care}()},
+\code{\link{process_sc_all_sds}()},
 \code{\link{read_lookup_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
 }
