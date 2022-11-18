@@ -17,4 +17,6 @@ process_tests_homelessness <- function(data, year) {
     new_data = produce_slf_homelessness_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "HL1", year)
+
+  return(comparison)
 }

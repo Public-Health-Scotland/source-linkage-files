@@ -23,21 +23,21 @@ add_ppa_flag <- function(data) {
   matching_data <- data %>%
     # Select out only the columns we need
     dplyr::select(
-      .data$chi, .data$cij_marker, .data$cij_pattype, .data$recid,
-      .data$op1a, .data$diag1, .data$diag2, .data$diag3, .data$diag4,
-      .data$diag5, .data$diag6
+      "chi", "cij_marker", "cij_pattype", "recid",
+      "op1a", "diag1", "diag2", "diag3", "diag4",
+      "diag5", "diag6"
     ) %>%
     # Filter only recids and patient type where admission was preventable
     dplyr::filter(.data$recid %in% c("01B", "02B", "04B", "GLS") & .data$cij_pattype == "Non-Elective") %>%
     # We only want the first record in each cij, and we want to exclude empty cij and empty chi
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
-    dplyr::filter(dplyr::row_number() == 1 & !is.na(.data$cij_marker) & !is.na(.data$chi)) %>%
+    dplyr::filter(dplyr::row_number() == 1L & !is.na(.data$cij_marker) & !is.na(.data$chi)) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
       # Extract some characters from diagnosis codes for easier reading below
-      diag1_3char = stringr::str_sub(.data$diag1, 1, 3),
-      diag1_4char = stringr::str_sub(.data$diag1, 1, 4),
-      op1a_3char = stringr::str_sub(.data$op1a, 1, 3),
+      diag1_3char = stringr::str_sub(.data$diag1, 1L, 3L),
+      diag1_4char = stringr::str_sub(.data$diag1, 1L, 4L),
+      op1a_3char = stringr::str_sub(.data$op1a, 1L, 3L),
 
       # Excluding operations are op1a codes from K01 to K50, K56, K60, and K61 (dental)
       excluding_operation = .data$op1a_3char %in%
@@ -87,8 +87,8 @@ add_ppa_flag <- function(data) {
 
         # Reliant on any of the six diagnosis codes, first three characters
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-          ~ stringr::str_sub(.x, 1, 3) %in%
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1L, 3L) %in%
             c(
               # Gangrene
               "R02",
@@ -97,12 +97,12 @@ add_ppa_flag <- function(data) {
               # Vaccine-preventable
               "A35", "A36", "A80", "B05", "B06", "B26"
             )
-        )) > 0 ~ TRUE,
+        )) > 0L ~ TRUE,
 
         # Reliant on any of the six diagnosis codes, first four characters
         rowSums(dplyr::across(
-          c(.data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-          ~ stringr::str_sub(.x, 1, 4) %in%
+          c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
+          ~ stringr::str_sub(.x, 1L, 4L) %in%
             c(
               # Vaccine-preventable
               "A370", "A379", "B161", "B169",
@@ -119,7 +119,7 @@ add_ppa_flag <- function(data) {
               # Influenza
               "J181"
             )
-        )) > 0 ~ TRUE,
+        )) > 0L ~ TRUE,
 
         # Reliant on op1a and diag1
         # Angina
@@ -149,14 +149,14 @@ add_ppa_flag <- function(data) {
         # Reliant on diag1 and diag2
         # Bronchitis
         diag1_3char == "J20" &
-          stringr::str_sub(.data$diag2, 1, 3) %in% c("J41", "J42", "J43", "J44", "J47") ~ TRUE,
+          stringr::str_sub(.data$diag2, 1L, 3L) %in% c("J41", "J42", "J43", "J44", "J47") ~ TRUE,
 
         # All other values
         TRUE ~ FALSE
       )
     ) %>%
     # Just select out the chi, cij marker and ppa for ease of joining
-    dplyr::select(.data$chi, .data$cij_marker, `cij_ppa` = .data$ppa)
+    dplyr::select("chi", "cij_marker", cij_ppa = "ppa")
 
   # Match on the ppa lookup to original data
   ppa_cij_data <- dplyr::left_join(data, matching_data, by = c("chi", "cij_marker")) %>%

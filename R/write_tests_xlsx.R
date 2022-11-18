@@ -7,7 +7,8 @@
 #' @param comparison_data produced by [produce_test_comparison()]
 #' @param sheet_name the name of the dataset, which will be used to create
 #' the sheet name
-#' @param year The financial year of the data file in '1920' format
+#' @param year If applicable, the financial year of the data in '1920' format
+#' this will be prepended to the sheet name. The default is `NULL`.
 #'
 #' @return the path to the xlsx file location
 #'
@@ -15,7 +16,7 @@
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
-write_tests_xlsx <- function(comparison_data, sheet_name, year) {
+write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   # Set up the workbook -----------------------------------------------------
 
   source_tests_path <- fs::path(
@@ -34,7 +35,11 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
 
   # add a new sheet for tests
   date_today <- format(Sys.Date(), "%d_%b")
-  sheet_name_dated <- glue::glue("{year}_{sheet_name}_{date_today}")
+  sheet_name_dated <- ifelse(
+    is.null(year),
+    glue::glue("{sheet_name}_{date_today}"),
+    glue::glue("{year}_{sheet_name}_{date_today}")
+  )
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {
@@ -67,7 +72,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
     sheet = sheet_name_dated,
     style = openxlsx::createStyle(numFmt = "0.0%"),
     cols = pct_change_col,
-    rows = 2:(nrow(comparison_data) + 1),
+    rows = 2L:(nrow(comparison_data) + 1L),
     gridExpand = TRUE
   )
 
@@ -77,7 +82,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
     sheet = sheet_name_dated,
     style = openxlsx::createStyle(numFmt = "#,##0"),
     cols = numeric_cols,
-    rows = 2:(nrow(comparison_data) + 1),
+    rows = 2L:(nrow(comparison_data) + 1L),
     gridExpand = TRUE
   )
 
@@ -85,15 +90,15 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
   openxlsx::setColWidths(
     wb = wb,
     sheet = sheet_name_dated,
-    cols = 1,
-    widths = 40
+    cols = 1L,
+    widths = 40L
   )
 
   openxlsx::setColWidths(
     wb = wb,
     sheet = sheet_name_dated,
-    cols = 2:ncol(comparison_data),
-    widths = 15
+    cols = 2L:ncol(comparison_data),
+    widths = 15L
   )
 
   # Apply conditional formatting to highlight issues
@@ -101,7 +106,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year) {
     wb = wb,
     sheet = sheet_name_dated,
     cols = issue_col,
-    rows = 2:(nrow(comparison_data) + 1),
+    rows = 2L:(nrow(comparison_data) + 1L),
     rule = "TRUE",
     type = "contains"
   )

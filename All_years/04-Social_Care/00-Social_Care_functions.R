@@ -73,11 +73,10 @@ read_demog_file <- function(social_care_dir, latest_update) {
     demog_file_path <- fs::path_ext_set(demog_file_path, "zsav")
   } else if (!fs::file_exists(fs::path_ext_set(demog_file_path, "zsav"))) {
     cli::cli_abort(c(
-        "The demographics file doesn't exist in {.val rds} or {.val zsav} format
+      "The demographics file doesn't exist in {.val rds} or {.val zsav} format
          or the name: {.val {fs::path_ext_remove(fs::path_file(demog_file_path))}}
          is incorrect"
-      )
-    )
+    ))
   }
 
   data <- switch(fs::path_ext(demog_file_path),
@@ -183,7 +182,7 @@ convert_sc_sl_to_lca <- function(sending_location) {
     {{ sending_location }} == "380" ~ "29", # South Lanarkshire
     {{ sending_location }} == "390" ~ "30", # Stirling
     {{ sending_location }} == "400" ~ "31", # West Lothian
-    {{ sending_location }} == "235" ~ "32"  # Na_h_Eileanan_Siar
+    {{ sending_location }} == "235" ~ "32" # Na_h_Eileanan_Siar
   )
   return(lca)
 }
@@ -216,4 +215,33 @@ start_fy <- function(year, format = c("fyyear", "alternate")) {
   }
 
   return(start_fy)
+}
+
+#' Return the end date of FY years
+#'
+#' @description Get the end date of the specified financial year
+#'
+#' @inheritParams start_fy
+#'
+#' @return a vector of dates of the end date of the FY year
+#' @export
+#'
+#' @examples
+#' end_fy("1718")
+#'
+#' @family date functions
+end_fy <- function(year, format = c("fyyear", "alternate")) {
+  if (missing(format)) {
+    format <- "fyyear"
+  }
+
+  format <- match.arg(format)
+
+  if (format == "fyyear") {
+    end_fy <- as.Date(paste0(as.numeric(convert_fyyear_to_year(year)) + 1, "-03-31"))
+  } else if (format == "alternate") {
+    end_fy <- as.Date(paste0(as.numeric(year) + 1, "-03-31"))
+  }
+
+  return(end_fy)
 }

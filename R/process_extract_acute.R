@@ -14,13 +14,12 @@
 #' @family process extracts
 process_extract_acute <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
   # Data Cleaning  ---------------------------------------
-
 
   acute_clean <- data %>%
     # Set year variable
@@ -59,57 +58,57 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # Add oldtadm as a factor with labels
     dplyr::mutate(oldtadm = factor(.data$oldtadm,
-      levels = c(0:8)
+      levels = 0L:8L
     ))
 
 
   ## save outfile ---------------------------------------
   outfile <- acute_clean %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$record_keydate1,
-      .data$record_keydate2,
-      .data$smrtype,
-      .data$chi,
-      .data$gender,
-      .data$dob,
-      .data$gpprac,
-      .data$hbpraccode,
-      .data$postcode,
-      .data$hbrescode,
-      .data$lca,
-      .data$HSCP,
-      .data$DataZone,
-      .data$location,
-      .data$hbtreatcode,
-      .data$yearstay,
-      .data$stay,
-      .data$ipdc,
-      .data$spec,
-      .data$sigfac,
-      .data$conc,
-      .data$mpat,
-      .data$cat,
-      .data$tadm,
-      .data$adtf,
-      .data$admloc,
-      .data$oldtadm,
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "smrtype",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "HSCP",
+      "DataZone",
+      "location",
+      "hbtreatcode",
+      "yearstay",
+      "stay",
+      "ipdc",
+      "spec",
+      "sigfac",
+      "conc",
+      "mpat",
+      "cat",
+      "tadm",
+      "adtf",
+      "admloc",
+      "oldtadm",
       tidyselect::starts_with("disch"),
       tidyselect::starts_with("diag"),
       tidyselect::matches("(date)?op[1-4][ab]?"),
-      .data$smr01_cis_marker,
-      .data$age,
+      "smr01_cis_marker",
+      "age",
       tidyselect::starts_with("cij"),
-      .data$alcohol_adm,
-      .data$submis_adm,
-      .data$falls_adm,
-      .data$selfharm_adm,
-      .data$commhosp,
-      .data$cost_total_net,
+      "alcohol_adm",
+      "submis_adm",
+      "falls_adm",
+      "selfharm_adm",
+      "commhosp",
+      "cost_total_net",
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
-      .data$uri
+      "uri"
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1)
 

@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -44,10 +44,10 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   outpatients_clean <- outpatients_clean %>%
     dplyr::mutate(
       reftype = factor(.data$reftype,
-        levels = c(1:3)
+        levels = 1L:3L
       ),
       clinic_type = factor(.data$clinic_type,
-        levels = c(1:4)
+        levels = 1L:4L
       )
     )
 
@@ -57,37 +57,37 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   outfile <-
     outpatients_clean %>%
     dplyr::select(
-      .data$year,
-      .data$recid,
-      .data$record_keydate1,
-      .data$record_keydate2,
-      .data$smrtype,
-      .data$chi,
-      .data$gender,
-      .data$dob,
-      .data$gpprac,
-      .data$hbpraccode,
-      .data$postcode,
-      .data$hbrescode,
-      .data$lca,
-      .data$location,
-      .data$hbtreatcode,
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "smrtype",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "location",
+      "hbtreatcode",
       tidyselect::contains("op"),
-      .data$spec,
-      .data$sigfac,
-      .data$conc,
-      .data$cat,
-      .data$age,
-      .data$refsource,
-      .data$reftype,
-      .data$attendance_status,
-      .data$clinic_type,
+      "spec",
+      "sigfac",
+      "conc",
+      "cat",
+      "age",
+      "refsource",
+      "reftype",
+      "attendance_status",
+      "clinic_type",
       tidyselect::ends_with("_adm"),
-      .data$commhosp,
-      .data$nhshosp,
-      .data$cost_total_net,
+      "commhosp",
+      "nhshosp",
+      "cost_total_net",
       tidyselect::ends_with("_cost"),
-      .data$uri
+      "uri"
     )
 
   if (write_to_disk) {

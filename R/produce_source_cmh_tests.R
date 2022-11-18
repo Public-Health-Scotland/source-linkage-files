@@ -19,9 +19,9 @@ produce_source_cmh_tests <- function(data) {
     # create test flags
     create_demog_test_flags() %>%
     create_hb_test_flags(hb_var = .data$hbrescode) %>%
-    dplyr::mutate(n_episodes = 1) %>%
+    dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison
-    dplyr::select(c(.data$valid_chi:.data$NHS_Lanarkshire)) %>%
+    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

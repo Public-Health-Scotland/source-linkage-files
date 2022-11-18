@@ -29,7 +29,7 @@ get_existing_data_for_tests <- function(new_data) {
     recids = recids,
     columns = variable_names
   )) %>%
-    dplyr::rename(chi = .data$anon_chi)
+    dplyr::rename(chi = "anon_chi")
 
   return(slf_data)
 }

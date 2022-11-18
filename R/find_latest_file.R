@@ -38,7 +38,7 @@ find_latest_file <- function(directory, regexp, selection_method = "modification
                     which was modified on {.val {latest_file_path$modification_time[[1]]}}"))
     latest_file_path <- latest_file_path %>%
       dplyr::pull(.data$path) %>%
-      magrittr::extract(1)
+      magrittr::extract(1L)
   } else if (selection_method == "file_name") {
     latest_file_path <-
       fs::dir_info(
@@ -55,7 +55,7 @@ find_latest_file <- function(directory, regexp, selection_method = "modification
                     as it has the highest IT reference number"))
     latest_file_path <- latest_file_path %>%
       dplyr::pull(.data$path) %>%
-      magrittr::extract(1)
+      magrittr::extract(1L)
   }
 
   if (!is.na(latest_file_path)) {

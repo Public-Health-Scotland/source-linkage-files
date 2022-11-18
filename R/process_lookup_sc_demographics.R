@@ -32,16 +32,23 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
       # use chi if upi is NA
       upi = dplyr::coalesce(.data$upi, .data$chi_upi),
       # check gender code - replace code 99 with 9
-      submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99, 9)
+      submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
     ) %>%
     dplyr::mutate(
       # use chi gender if avaliable
-      gender = dplyr::if_else(is.na(.data$chi_gender_code) | .data$chi_gender_code == 9, .data$submitted_gender, .data$chi_gender_code),
+      gender = dplyr::if_else(
+        is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
+        .data$submitted_gender,
+        .data$chi_gender_code
+      ),
       # use chi dob if avaliable
       dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
     ) %>%
     # format postcodes using `phsmethods`
-    dplyr::mutate(dplyr::across(tidyselect::contains("postcode"), ~ phsmethods::format_postcode(.x, format = "pc7")))
+    dplyr::mutate(dplyr::across(
+      tidyselect::contains("postcode"),
+      ~ phsmethods::format_postcode(.x, format = "pc7")
+    ))
 
   # count number of na postcodes
   na_postcodes <-
@@ -50,23 +57,29 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
 
   sc_demog <- sc_demog %>%
     # remove dummy postcodes invalid postcodes missed by regex check
-    dplyr::mutate(dplyr::across(tidyselect::ends_with("_postcode"), ~ dplyr::na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes)))) %>%
+    dplyr::mutate(dplyr::across(
+      tidyselect::ends_with("_postcode"),
+      ~ dplyr::na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes))
+    )) %>%
     # comparing with regex UK postcode
-    dplyr::mutate(dplyr::across(tidyselect::ends_with("_postcode"), ~ dplyr::na_if(.x, !stringr::str_detect(.x, uk_pc_regexp)))) %>%
+    dplyr::mutate(dplyr::across(
+      tidyselect::ends_with("_postcode"),
+      ~ dplyr::na_if(.x, !stringr::str_detect(.x, uk_pc_regexp))
+    )) %>%
     dplyr::select(
-      .data$latest_record_flag, .data$extract_date, .data$sending_location, .data$social_care_id, .data$upi, .data$gender,
-      .data$dob, .data$submitted_postcode, .data$chi_postcode
+      "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi", "gender",
+      "dob", "submitted_postcode", "chi_postcode"
     ) %>%
     # check if submitted_postcode matches with postcode lookup
-    dplyr::mutate(valid_pc = dplyr::if_else(.data$submitted_postcode %in% valid_spd_postcodes, 1, 0)) %>%
+    dplyr::mutate(valid_pc = dplyr::if_else(.data$submitted_postcode %in% valid_spd_postcodes, 1L, 0L)) %>%
     # use submitted_postcode if valid, otherwise use chi_postcode
     dplyr::mutate(postcode = dplyr::case_when(
-      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1) ~ .data$submitted_postcode,
-      (is.na(.data$submitted_postcode) & .data$valid_pc == 0) ~ .data$chi_postcode
+      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1L) ~ .data$submitted_postcode,
+      (is.na(.data$submitted_postcode) & .data$valid_pc == 0L) ~ .data$chi_postcode
     )) %>%
     dplyr::mutate(postcode_type = dplyr::case_when(
-      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1) ~ "submitted",
-      (is.na(.data$submitted_postcode) & .data$valid_pc == 0) ~ "chi",
+      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1L) ~ "submitted",
+      (is.na(.data$submitted_postcode) & .data$valid_pc == 0L) ~ "chi",
       (is.na(.data$submitted_postcode) & is.na(.data$chi_postcode)) ~ "missing"
     ))
 
