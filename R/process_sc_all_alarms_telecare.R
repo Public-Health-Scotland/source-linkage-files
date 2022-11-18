@@ -21,29 +21,19 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
 
   ## Data Cleaning-----------------------------------------------------
 
-  # Work out the dates for each period
-  # Record date is the last day of the quarter
-  # qtr_start is the first day of the quarter
-  pre_compute_record_dates <- data %>%
-    dplyr::distinct(.data$period) %>%
+  replaced_dates <- data %>%
+    # Replace missing start dates with the start of the FY
+    dplyr::left_join(pre_compute_record_dates, by = "period") %>%
+    # period start and end dates
     dplyr::mutate(
       record_date = end_fy_quarter(.data$period),
       qtr_start = start_fy_quarter(.data$period)
-    )
+    ) %>%
+    dplyr::mutate(service_start_date = fix_sc_start_dates(service_start_date, period)) %>%
+    # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
+    dplyr::mutate(service_end_date = fix_sc_end_dates(service_start_date, service_end_date, period))
 
-  replaced_start_dates <- data %>%
-    # Replace missing start dates with the start of the FY
-    dplyr::left_join(pre_compute_record_dates, by = "period") %>%
-    dplyr::mutate(
-      start_date_missing = is.na(.data$service_start_date),
-      service_start_date = dplyr::if_else(
-        .data$start_date_missing,
-        start_fy(year = substr(.data$period, 1, 4), format = "alternate"),
-        .data$service_start_date
-      )
-    )
-
-  at_full_clean <- replaced_start_dates %>%
+  at_full_clean <- replaced_dates %>%
     # Match on demographics data (chi, gender, dob and postcode)
     dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
     # rename for matching source variables
@@ -76,8 +66,8 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%
-    # Use lazy_dt() for faster running of code
-    dtplyr::lazy_dt() %>%
+    # use as.data.table to change the data format to data.table to accelarate
+    data.table::as.data.table() %>%
     dplyr::group_by(
       .data$sending_location,
       .data$social_care_id,
@@ -123,8 +113,8 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
       .data$smrtype,
       .data$sc_latest_submission
     ) %>%
-    # end of lazy_dt()
-    tibble::as_tibble()
+    # change the data format from data.table to data.frame
+    as_tibble()
 
   if (write_to_disk) {
     # Save .rds file ----
