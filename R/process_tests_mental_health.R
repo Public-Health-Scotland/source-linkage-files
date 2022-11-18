@@ -17,4 +17,6 @@ process_tests_mental_health <- function(data, year) {
     new_data = produce_source_extract_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "04B", year)
+
+  return(comparison)
 }
