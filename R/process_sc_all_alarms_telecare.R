@@ -22,8 +22,6 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
   ## Data Cleaning-----------------------------------------------------
 
   replaced_dates <- data %>%
-    # Replace missing start dates with the start of the FY
-    dplyr::left_join(pre_compute_record_dates, by = "period") %>%
     # period start and end dates
     dplyr::mutate(
       record_date = end_fy_quarter(.data$period),
