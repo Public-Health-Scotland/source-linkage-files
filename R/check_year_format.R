@@ -15,7 +15,7 @@
 #'
 #' @family year functions
 check_year_format <- function(year, format = "fyyear") {
-  if (any(is.na(year))) {
+  if (anyNA(year)) {
     cli::cli_abort("{.var year} must not be {.val NA}")
   }
 

@@ -25,37 +25,37 @@ add_smr_type <- function(recid,
     "02B", "04B", "00B", "AE2", "PIS", "NRS", "01B", "GLS", "CMH", "DN", "HC",
     "HL1"
   ))) &
-    !any(is.na(recid))) {
+    !anyNA(recid)) {
     cli::cli_warn(c("i" = "One or more values of {.var recid} do not have an
                    assignable {.var smrtype}"))
   }
 
   # Situation where some recids are missing
-  if (any(is.na(recid))) {
+  if (anyNA(recid)) {
     cli::cli_abort("One or more values of {.var recid} are {.val NA}. Please check
                    the data before continuing.")
   }
 
   # Situation where maternity records are present without a corresponding mpat
-  if (all(recid == "02B") & any(is.na(mpat))) {
+  if (all(recid == "02B") & anyNA(mpat)) {
     cli::cli_abort("In Maternity records, {.var mpat} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
 
   # Situation where acute records are present without a corresponding ipdc
-  if (all(recid %in% c("01B", "GLS")) & any(is.na(ipdc))) {
+  if (all(recid %in% c("01B", "GLS")) & anyNA(ipdc)) {
     cli::cli_abort("In Acute records, {.var ipdc} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
 
   # Situation where Home Care records are present without a corresponding hc_service
-  if (all(recid == "HC") & any(is.na(hc_service))) {
+  if (all(recid == "HC") & anyNA(hc_service)) {
     cli::cli_abort("In Home Care records, {.var hc_service} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
 
   # Situation where Homelessness records are present without a corresponding main_applicant_flag
-  if (all(recid == "HL1") & any(is.na(main_applicant_flag))) {
+  if (all(recid == "HL1") & anyNA(main_applicant_flag)) {
     cli::cli_abort("In Homelessness records, {.var main_applicant_flag} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }

@@ -35,7 +35,7 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     )
   } else {
     # Check the quarters
-    if (any(is.na(sc_qtr))) {
+    if (anyNA(sc_qtr)) {
       cli::cli_abort("Some of the submitted quarters are missing")
     } else {
       sc_qtr <- check_quarter_format(sc_qtr)
