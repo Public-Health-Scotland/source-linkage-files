@@ -31,16 +31,16 @@ test_that("Can convert a date type to numeric", {
 
 test_that("Can convert a numeric 'date' to a proper date type", {
   numeric_dates <- c(
-    20170913,
-    20180312,
-    20180301,
-    20180706,
-    20190313,
-    20180904,
-    20190527,
-    20200529,
-    20200428,
-    20190524
+    20170913L,
+    20180312L,
+    20180301L,
+    20180706L,
+    20190313L,
+    20180904L,
+    20190527L,
+    20200529L,
+    20200428L,
+    20190524L
   )
 
   expect_equal(

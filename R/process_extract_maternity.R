@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -26,7 +26,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       year = year,
       recid = "02B",
-      gender = 2
+      gender = 2L
     ) %>%
     # Set IDPC marker for the cij
     dplyr::mutate(cij_ipdc = dplyr::case_when(
@@ -47,7 +47,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     # Add discondition as a factor
     dplyr::mutate(
       discondition = factor(.data$discondition,
-        levels = c(1:5, 8)
+        levels = c(1L:5L, 8L)
       ),
       smrtype = add_smr_type(.data$recid, .data$mpat)
     )

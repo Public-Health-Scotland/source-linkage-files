@@ -12,4 +12,6 @@ process_tests_lookup_gpprac <- function() {
     new_data = produce_slf_gpprac_tests(readr::read_rds(get_slf_gpprac_path()))
   ) %>%
     write_tests_xlsx(sheet_name = "source_gpprac_lookup")
+
+  return(comparison)
 }

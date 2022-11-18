@@ -7,7 +7,7 @@ test_that("is_missing works", {
   expect_equal(is_missing(c(NA, NA, "")), c(TRUE, TRUE, TRUE))
 
   expect_error(
-    is_missing(c(1, 2, 3)),
+    is_missing(c(1.0, 2.0, 3.0)),
     ", but numeric was supplied"
   )
   expect_error(

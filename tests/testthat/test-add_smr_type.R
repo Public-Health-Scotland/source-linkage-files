@@ -13,9 +13,9 @@ test_that("SMR type works for single input", {
   expect_equal(add_smr_type(recid = "01B", ipdc = "I"), "Acute-IP")
   expect_equal(add_smr_type(recid = "01B", ipdc = "D"), "Acute-DC")
   expect_equal(add_smr_type(recid = "GLS", ipdc = "I"), "GLS-IP")
-  expect_equal(add_smr_type(recid = "HC", hc_service = 1), "HC-Non-Per")
-  expect_equal(add_smr_type(recid = "HC", hc_service = 2), "HC-Per")
-  expect_equal(add_smr_type(recid = "HC", hc_service = 3), "HC-Unknown")
+  expect_equal(add_smr_type(recid = "HC", hc_service = 1L), "HC-Non-Per")
+  expect_equal(add_smr_type(recid = "HC", hc_service = 2L), "HC-Per")
+  expect_equal(add_smr_type(recid = "HC", hc_service = 3L), "HC-Unknown")
   expect_equal(add_smr_type(recid = "HL1", main_applicant_flag = "Y"), "HL1-Main")
   expect_equal(add_smr_type(recid = "HL1", main_applicant_flag = "N"), "HL1-Other")
 })
@@ -35,7 +35,7 @@ test_that("SMR type works for vector input", {
     c("Acute-IP", "Acute-DC", "GLS-IP")
   )
   expect_equal(
-    add_smr_type(recid = c("HC", "HC", "HC"), hc_service = c(1, 2, 3)),
+    add_smr_type(recid = c("HC", "HC", "HC"), hc_service = c(1L, 2L, 3L)),
     c("HC-Non-Per", "HC-Per", "HC-Unknown")
   )
   expect_equal(
@@ -63,7 +63,7 @@ test_that("Error escapes functions as expected", {
     add_smr_type(recid = c("01B", "GLS"), ipdc = c(NA, "I"))
   )
   expect_error(
-    add_smr_type(recid = c("HC", "HC"), hc_service = c(NA, 1))
+    add_smr_type(recid = c("HC", "HC"), hc_service = c(NA, 1L))
   )
   expect_error(
     add_smr_type(recid = c("HL1", "HL1"), main_applicant_flag = c(NA, "Y"))

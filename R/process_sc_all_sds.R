@@ -37,7 +37,7 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
     # SDS option 4 is derived when a person receives more than one option.
     # e.g. if a person has options 1 and 2 then option 4 will be derived
     dplyr::mutate(
-      sds_option_4 = rowSums(dplyr::across(tidyselect::starts_with("sds_option_"))) > 1,
+      sds_option_4 = rowSums(dplyr::across(tidyselect::starts_with("sds_option_"))) > 1L,
       .after = .data$sds_option_3
     ) %>%
     # If sds start date is missing, assign start of FY
