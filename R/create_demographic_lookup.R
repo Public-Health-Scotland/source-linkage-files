@@ -32,8 +32,8 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
       medium_cc = assign_medium_cc_cohort(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms),
       low_cc = assign_low_cc_cohort(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib),
       comm_living = assign_comm_living_cohort(),
-      adult_major = assign_adult_major_condition_cohort(.data$recid, .data$age, .data$cost_total_net),
-      child_major = assign_child_major_condition_cohort(.data$recid, .data$age, .data$cost_total_net),
+      adult_major = assign_adult_major_cohort(.data$recid, .data$age, .data$cost_total_net),
+      child_major = assign_child_major_cohort(.data$recid, .data$age, .data$cost_total_net),
       end_of_life = assign_eol_cohort(
         .data$recid, .data$deathdiag1, .data$deathdiag2, .data$deathdiag3, .data$deathdiag4, .data$deathdiag5,
         .data$deathdiag6, .data$deathdiag7, .data$deathdiag8, .data$deathdiag9, .data$deathdiag10,
@@ -253,7 +253,7 @@ assign_comm_living_cohort <- function() {
 #'
 #' @return A boolean vector indicating whether a given record is in the Adult Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_adult_major_condition_cohort <- function(recid, age, cost_total_net) {
+assign_adult_major_cohort <- function(recid, age, cost_total_net) {
   adult_major <- age >= 18 & ((cost_total_net >= 500 & recid == "PIS") | recid == "01B")
   return(adult_major)
 }
@@ -262,11 +262,11 @@ assign_adult_major_condition_cohort <- function(recid, age, cost_total_net) {
 #' @description A person is considered to be in this cohort if their age is under 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @inheritParams assign_adult_major_condition_cohort
+#' @inheritParams assign_adult_major_cohort
 #'
 #' @return A boolean vector indicating whether a given record is in the Child Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_child_major_condition_cohort <- function(recid, age, cost_total_net) {
+assign_child_major_cohort <- function(recid, age, cost_total_net) {
   child_major <- age < 18 & (cost_total_net >= 500 & recid == "PIS" | recid == "01B")
   return(child_major)
 }

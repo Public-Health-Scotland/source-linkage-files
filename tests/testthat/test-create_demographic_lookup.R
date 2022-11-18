@@ -118,10 +118,10 @@ test_that("Different cohort functions work", {
     adult_major_test %>%
       dplyr::mutate(
         adult_major =
-          assign_adult_major_condition_cohort(recid, age, cost_total_net)
+          assign_adult_major_cohort(recid, age, cost_total_net)
       ) %>%
       dplyr::pull(adult_major),
-    c(T, T, F, F)
+    c(TRUE, TRUE, FALSE, FALSE)
   )
 
   child_major_test <- tibble::tribble(
@@ -136,10 +136,10 @@ test_that("Different cohort functions work", {
     child_major_test %>%
       dplyr::mutate(
         child_major =
-          assign_child_major_condition_cohort(recid, age, cost_total_net)
+          assign_child_major_cohort(recid, age, cost_total_net)
       ) %>%
       dplyr::pull(child_major),
-    c(T, T, F, F)
+    c(TRUE, TRUE, FALSE, FALSE)
   )
 
   # End of life
