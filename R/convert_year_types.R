@@ -42,7 +42,7 @@ convert_year_to_fyyear <- function(year) {
 
   fyyear <-
     dplyr::if_else(
-      substr(second_part, 1L, 1L) != "0",
+      !startsWith(second_part, "0"),
       paste0(second_part, as.integer(second_part) + 1L),
       paste0(second_part, "0", as.integer(second_part) + 1L)
     )
