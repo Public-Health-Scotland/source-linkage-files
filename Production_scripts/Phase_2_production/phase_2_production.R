@@ -56,5 +56,5 @@ run_process_ep_file(years)
 
 
 ------------------------------------------------------
-# PHASE 5 - Calculate Anon CHI
+# Calculate Anon CHI
 ------------------------------------------------------
