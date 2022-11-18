@@ -17,7 +17,7 @@ process_lookup_gpprac <- function(write_to_disk = TRUE) {
   # Retrieve the latest resource from the dataset
   opendata <-
     phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
-      max_resources = 20
+      max_resources = 20L
     ) %>%
     janitor::clean_names() %>%
     dplyr::left_join(
@@ -98,11 +98,11 @@ process_lookup_gpprac <- function(write_to_disk = TRUE) {
     # set some known dummy practice codes to consistent Board codes
     dplyr::mutate(
       hbpraccode = dplyr::if_else(
-        .data$gpprac %in% c(99942, 99957, 99961, 99981, 99999),
+        .data$gpprac %in% c(99942L, 99957L, 99961L, 99981L, 99999L),
         "S08200003",
         .data$hbpraccode
       ),
-      hbpraccode = dplyr::if_else(.data$gpprac == 99995, "S08200001", .data$hbpraccode)
+      hbpraccode = dplyr::if_else(.data$gpprac == 99995L, "S08200001", .data$hbpraccode)
     ) %>%
     # sort by gpprac
     dplyr::arrange(.data$gpprac) %>%

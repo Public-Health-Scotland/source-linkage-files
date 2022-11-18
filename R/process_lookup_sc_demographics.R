@@ -32,12 +32,12 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
       # use chi if upi is NA
       upi = dplyr::coalesce(.data$upi, .data$chi_upi),
       # check gender code - replace code 99 with 9
-      submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99, 9)
+      submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
     ) %>%
     dplyr::mutate(
       # use chi gender if avaliable
       gender = dplyr::if_else(
-        is.na(.data$chi_gender_code) | .data$chi_gender_code == 9,
+        is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
         .data$submitted_gender,
         .data$chi_gender_code
       ),
@@ -71,15 +71,15 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
       "dob", "submitted_postcode", "chi_postcode"
     ) %>%
     # check if submitted_postcode matches with postcode lookup
-    dplyr::mutate(valid_pc = dplyr::if_else(.data$submitted_postcode %in% valid_spd_postcodes, 1, 0)) %>%
+    dplyr::mutate(valid_pc = dplyr::if_else(.data$submitted_postcode %in% valid_spd_postcodes, 1L, 0L)) %>%
     # use submitted_postcode if valid, otherwise use chi_postcode
     dplyr::mutate(postcode = dplyr::case_when(
-      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1) ~ .data$submitted_postcode,
-      (is.na(.data$submitted_postcode) & .data$valid_pc == 0) ~ .data$chi_postcode
+      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1L) ~ .data$submitted_postcode,
+      (is.na(.data$submitted_postcode) & .data$valid_pc == 0L) ~ .data$chi_postcode
     )) %>%
     dplyr::mutate(postcode_type = dplyr::case_when(
-      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1) ~ "submitted",
-      (is.na(.data$submitted_postcode) & .data$valid_pc == 0) ~ "chi",
+      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1L) ~ "submitted",
+      (is.na(.data$submitted_postcode) & .data$valid_pc == 0L) ~ "chi",
       (is.na(.data$submitted_postcode) & is.na(.data$chi_postcode)) ~ "missing"
     ))
 

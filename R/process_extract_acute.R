@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_acute <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -58,7 +58,7 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # Add oldtadm as a factor with labels
     dplyr::mutate(oldtadm = factor(.data$oldtadm,
-      levels = c(0:8)
+      levels = c(0L:8L)
     ))
 
 

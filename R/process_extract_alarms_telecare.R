@@ -22,7 +22,7 @@ process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = N
   }
 
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -35,7 +35,7 @@ process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = N
   # Now select epsiodes for given FY
   outfile <- data %>%
     dplyr::filter(is_date_in_fyyear(
-      convert_year_to_fyyear(substr(.data$sc_latest_submission, 1, 4)),
+      convert_year_to_fyyear(substr(.data$sc_latest_submission, 1L, 4L)),
       .data$record_keydate1,
       .data$record_keydate2
     )) %>%

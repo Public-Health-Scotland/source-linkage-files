@@ -48,7 +48,7 @@ test_that("is_date_in_fyyear works for a single year", {
 })
 
 test_that("is_date_in_fyyear works for a year range (interval)", {
-  expect_type(is_date_in_fyyear("1718", Sys.Date(), Sys.Date() + 1), "logical")
+  expect_type(is_date_in_fyyear("1718", Sys.Date(), Sys.Date() + 1L), "logical")
 
   # Start before, end before
   expect_false(is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2017-03-31")))

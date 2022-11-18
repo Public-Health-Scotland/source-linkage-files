@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -44,10 +44,10 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   outpatients_clean <- outpatients_clean %>%
     dplyr::mutate(
       reftype = factor(.data$reftype,
-        levels = c(1:3)
+        levels = c(1L:3L)
       ),
       clinic_type = factor(.data$clinic_type,
-        levels = c(1:4)
+        levels = c(1L:4L)
       )
     )
 

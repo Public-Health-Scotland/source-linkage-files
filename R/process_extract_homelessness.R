@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -131,9 +131,9 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(dplyr::across(c("record_keydate1", "record_keydate2"), convert_date_to_numeric)) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::mutate(
-      postcode = stringr::str_pad(.data$postcode, width = 8, side = "right"),
-      smrtype = stringr::str_pad(.data$smrtype, width = 10, side = "right"),
-      hl1_application_ref = stringr::str_pad(.data$hl1_application_ref, width = 15, side = "right")
+      postcode = stringr::str_pad(.data$postcode, width = 8L, side = "right"),
+      smrtype = stringr::str_pad(.data$smrtype, width = 10L, side = "right"),
+      hl1_application_ref = stringr::str_pad(.data$hl1_application_ref, width = 15L, side = "right")
     )
 
   # Write data --------------------------------------------------------------

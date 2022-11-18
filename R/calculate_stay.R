@@ -26,7 +26,7 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     # If end_date is missing then assign to end of the year
     dummy_discharge <- dplyr::if_else(
       is.na(end_date),
-      end_fy(year) + lubridate::days(1),
+      end_fy(year) + lubridate::days(1L),
       end_date
     )
 
@@ -44,11 +44,11 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     # Set Quarters
     qtr_end <- lubridate::add_with_rollback(
       end_fy_quarter(sc_qtr),
-      lubridate::period(1, "days")
+      lubridate::period(1L, "days")
     )
     next_qtr <- lubridate::add_with_rollback(
       end_next_fy_quarter(sc_qtr),
-      lubridate::period(1, "days")
+      lubridate::period(1L, "days")
     )
 
     dummy_end_date <- dplyr::case_when(

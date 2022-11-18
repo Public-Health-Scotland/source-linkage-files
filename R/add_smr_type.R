@@ -118,8 +118,8 @@ add_smr_type <- function(recid,
   } else if (all(recid == "HC") & !is.null(hc_service)) {
     # Home care
     smrtype <- dplyr::case_when(
-      recid == "HC" & hc_service == 1 ~ "HC-Non-Per",
-      recid == "HC" & hc_service == 2 ~ "HC-Per",
+      recid == "HC" & hc_service == 1L ~ "HC-Non-Per",
+      recid == "HC" & hc_service == 2L ~ "HC-Per",
       TRUE ~ "HC-Unknown"
     )
   } else if (all(recid == "HL1") & !is.null(main_applicant_flag)) {
