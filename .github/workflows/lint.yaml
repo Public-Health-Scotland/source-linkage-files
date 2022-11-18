@@ -28,21 +28,21 @@ jobs:
           needs: lint
 
       - name: Lint package functions and tests
-        run: lintr::lint_package(path = ".", linters_with_tags(available_tags()))
+        run: lintr::lint_package(path = ".", lintr::linters_with_tags(lintr::available_tags()))
         shell: Rscript {0}
 
       - name: Lint production scripts
-        run: lintr::lint_dir("Production_scripts/", linters_with_tags(available_tags()))
+        run: lintr::lint_dir("Production_scripts/", lintr::linters_with_tags(lintr::available_tags()))
         shell: Rscript {0}
 
       - name: Lint other scripts
-        run: lintr::lint_dir("Make_R_files/", linters_with_tags(available_tags()))
+        run: lintr::lint_dir("Make_R_files/", lintr::linters_with_tags(lintr::available_tags()))
         shell: Rscript {0}
 
       - name: Lint Rmarkdown files
-        run: lintr::lint_dir("Rmarkdown/", linters_with_tags(available_tags()))
+        run: lintr::lint_dir("Rmarkdown/", lintr::linters_with_tags(lintr::available_tags()))
         shell: Rscript {0}
 
       - name: Lint older scripts
-        run: lintr::lint_dir("All_years/", linters_with_tags(available_tags()))
+        run: lintr::lint_dir("All_years/", lintr::linters_with_tags(lintr::available_tags()))
         shell: Rscript {0}
