@@ -12,4 +12,6 @@ process_tests_lookup_pc <- function() {
     new_data = produce_slf_postcode_tests(readr::read_rds(get_slf_postcode_path()))
   ) %>%
     write_tests_xlsx(sheet_name = "source_pc_lookup")
+
+  return(comparison)
 }

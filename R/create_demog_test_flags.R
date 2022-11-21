@@ -14,13 +14,13 @@ create_demog_test_flags <- function(data) {
     dplyr::arrange(.data$chi) %>%
     # create test flags
     dplyr::mutate(
-      valid_chi = dplyr::if_else(phsmethods::chi_check(.data$chi) == "Valid CHI", 1, 0),
-      unique_chi = dplyr::if_else(dplyr::lag(.data$chi) != .data$chi, 1, 0),
-      n_missing_chi = dplyr::if_else(is_missing(.data$chi), 1, 0),
-      n_males = dplyr::if_else(.data$gender == 1, 1, 0),
-      n_females = dplyr::if_else(.data$gender == 2, 1, 0),
-      n_postcode = dplyr::if_else(is.na(.data$postcode) | .data$postcode == "", 0, 1),
-      n_missing_postcode = dplyr::if_else(is_missing(.data$postcode), 1, 0),
-      missing_dob = dplyr::if_else(is.na(.data$dob), 1, 0)
+      valid_chi = dplyr::if_else(phsmethods::chi_check(.data$chi) == "Valid CHI", 1L, 0L),
+      unique_chi = dplyr::if_else(dplyr::lag(.data$chi) != .data$chi, 1L, 0L),
+      n_missing_chi = dplyr::if_else(is_missing(.data$chi), 1L, 0L),
+      n_males = dplyr::if_else(.data$gender == 1L, 1L, 0L),
+      n_females = dplyr::if_else(.data$gender == 2L, 1L, 0L),
+      n_postcode = dplyr::if_else(is.na(.data$postcode) | .data$postcode == "", 0L, 1L),
+      n_missing_postcode = dplyr::if_else(is_missing(.data$postcode), 1L, 0L),
+      missing_dob = dplyr::if_else(is.na(.data$dob), 1L, 0L)
     )
 }

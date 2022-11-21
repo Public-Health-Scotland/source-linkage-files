@@ -17,4 +17,6 @@ process_tests_maternity <- function(data, year) {
     new_data = produce_source_extract_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "02B", year)
+
+  return(comparison)
 }

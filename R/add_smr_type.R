@@ -25,37 +25,37 @@ add_smr_type <- function(recid,
     "02B", "04B", "00B", "AE2", "PIS", "NRS", "01B", "GLS", "CMH", "DN", "HC",
     "HL1"
   ))) &
-    !any(is.na(recid))) {
+    !anyNA(recid)) {
     cli::cli_warn(c("i" = "One or more values of {.var recid} do not have an
                    assignable {.var smrtype}"))
   }
 
   # Situation where some recids are missing
-  if (any(is.na(recid))) {
+  if (anyNA(recid)) {
     cli::cli_abort("One or more values of {.var recid} are {.val NA}. Please check
                    the data before continuing.")
   }
 
   # Situation where maternity records are present without a corresponding mpat
-  if (all(recid == "02B") & any(is.na(mpat))) {
+  if (all(recid == "02B") & anyNA(mpat)) {
     cli::cli_abort("In Maternity records, {.var mpat} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
 
   # Situation where acute records are present without a corresponding ipdc
-  if (all(recid %in% c("01B", "GLS")) & any(is.na(ipdc))) {
+  if (all(recid %in% c("01B", "GLS")) & anyNA(ipdc)) {
     cli::cli_abort("In Acute records, {.var ipdc} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
 
   # Situation where Home Care records are present without a corresponding hc_service
-  if (all(recid == "HC") & any(is.na(hc_service))) {
+  if (all(recid == "HC") & anyNA(hc_service)) {
     cli::cli_abort("In Home Care records, {.var hc_service} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
 
   # Situation where Homelessness records are present without a corresponding main_applicant_flag
-  if (all(recid == "HL1") & any(is.na(main_applicant_flag))) {
+  if (all(recid == "HL1") & anyNA(main_applicant_flag)) {
     cli::cli_abort("In Homelessness records, {.var main_applicant_flag} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data.")
   }
@@ -90,8 +90,8 @@ add_smr_type <- function(recid,
                    Homelessness records cannot be given an {.var smrtype}")
   }
 
-  # Recids that can be recoded with no identifier
   if (is.null(mpat) & is.null(ipdc) & is.null(hc_service) & is.null(main_applicant_flag)) {
+    # Recids that can be recoded with no identifier
     smrtype <- dplyr::case_when(
       recid == "04B" ~ "Psych-IP",
       recid == "00B" ~ "Outpatient",
@@ -101,33 +101,29 @@ add_smr_type <- function(recid,
       recid == "CMH" ~ "Comm-MH",
       recid == "DN" ~ "DN"
     )
-  }
-  # Maternity recids, identifier is `mpat`
-  else if (all(recid == "02B") & !is.null(mpat)) {
+  } else if (all(recid == "02B") & !is.null(mpat)) {
+    # Maternity recids, identifier is `mpat`
     smrtype <- dplyr::case_when(
       recid == "02B" & mpat %in% c("1", "3", "5", "7", "A") ~ "Matern-IP",
       recid == "02B" & mpat %in% c("2", "4", "6") ~ "Matern-DC",
       recid == "02B" & mpat == "0" ~ "Matern-HB"
     )
-  }
-  # Acute recids, identifier is `ipdc`
-  else if (all(recid %in% c("01B", "GLS")) & !is.null(ipdc)) {
+  } else if (all(recid %in% c("01B", "GLS")) & !is.null(ipdc)) {
+    # Acute recids, identifier is `ipdc`
     smrtype <- dplyr::case_when(
       recid == "01B" & ipdc == "I" ~ "Acute-IP",
       recid == "01B" & ipdc == "D" ~ "Acute-DC",
       recid == "GLS" & ipdc == "I" ~ "GLS-IP"
     )
-  }
-  # Home care
-  else if (all(recid == "HC") & !is.null(hc_service)) {
+  } else if (all(recid == "HC") & !is.null(hc_service)) {
+    # Home care
     smrtype <- dplyr::case_when(
-      recid == "HC" & hc_service == 1 ~ "HC-Non-Per",
-      recid == "HC" & hc_service == 2 ~ "HC-Per",
+      recid == "HC" & hc_service == 1L ~ "HC-Non-Per",
+      recid == "HC" & hc_service == 2L ~ "HC-Per",
       TRUE ~ "HC-Unknown"
     )
-  }
-  # Homelessness
-  else if (all(recid == "HL1") & !is.null(main_applicant_flag)) {
+  } else if (all(recid == "HL1") & !is.null(main_applicant_flag)) {
+    # Homelessness
     smrtype <- dplyr::case_when(
       recid == "HL1" & main_applicant_flag == "Y" ~ "HL1-Main",
       recid == "HL1" & main_applicant_flag == "N" ~ "HL1-Other"

@@ -72,7 +72,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     sheet = sheet_name_dated,
     style = openxlsx::createStyle(numFmt = "0.0%"),
     cols = pct_change_col,
-    rows = 2:(nrow(comparison_data) + 1),
+    rows = 2L:(nrow(comparison_data) + 1L),
     gridExpand = TRUE
   )
 
@@ -82,7 +82,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     sheet = sheet_name_dated,
     style = openxlsx::createStyle(numFmt = "#,##0"),
     cols = numeric_cols,
-    rows = 2:(nrow(comparison_data) + 1),
+    rows = 2L:(nrow(comparison_data) + 1L),
     gridExpand = TRUE
   )
 
@@ -90,15 +90,15 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   openxlsx::setColWidths(
     wb = wb,
     sheet = sheet_name_dated,
-    cols = 1,
-    widths = 40
+    cols = 1L,
+    widths = 40L
   )
 
   openxlsx::setColWidths(
     wb = wb,
     sheet = sheet_name_dated,
-    cols = 2:ncol(comparison_data),
-    widths = 15
+    cols = 2L:ncol(comparison_data),
+    widths = 15L
   )
 
   # Apply conditional formatting to highlight issues
@@ -106,7 +106,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     wb = wb,
     sheet = sheet_name_dated,
     cols = issue_col,
-    rows = 2:(nrow(comparison_data) + 1),
+    rows = 2L:(nrow(comparison_data) + 1L),
     rule = "TRUE",
     type = "contains"
   )

@@ -22,7 +22,7 @@ process_extract_home_care <- function(data = NULL, year, client_lookup = NULL, w
   }
 
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -38,7 +38,7 @@ process_extract_home_care <- function(data = NULL, year, client_lookup = NULL, w
     # select episodes for FY
     dplyr::filter(is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)) %>%
     # remove any episodes where the latest submission was before the current year
-    dplyr::filter(substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
+    dplyr::filter(substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)) %>%
     # alter sending location type to allow match
     # TODO change the client script to use sending location as an integer
     dplyr::mutate(sending_location = as.character(.data$sending_location)) %>%
