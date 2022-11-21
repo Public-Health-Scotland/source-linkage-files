@@ -27,11 +27,7 @@ get_boxi_extract_path <-
            )) {
     type <- match.arg(type)
 
-    year_dir <- fs::path(
-      "/conf/sourcedev/Source_Linkage_File_Updates",
-      year,
-      "Extracts"
-    )
+    year_dir <- get_year_dir(year, extracts_dir = TRUE)
 
     file_name <- dplyr::case_when(
       type == "Acute" ~ "Acute-episode-level-extract",
