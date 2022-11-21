@@ -24,16 +24,16 @@ Define !IT_extract_ref()
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Sep_2022"
+    "Dec_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Jun_2022"
+    "Sep_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Jun22"
+    "Jul16_Sep22"
 !EndDefine.
 
 * Latest 'real' costs we have in the format CCYY e.g. 2022/23 = 2022 (no quotes).
