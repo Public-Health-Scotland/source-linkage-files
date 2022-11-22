@@ -45,7 +45,7 @@ uplift_set <- function(data, latest_cost_year = "2223") {
   # to accelerate, create a data frame of year and uplift for match-joining
   start_year <- 10L
   end_year <- as.integer(format(Sys.Date(), "%y"))
-  year <- paste0(start_year:end_year, (start_year + 1):(end_year + 1)) %>% as.numeric()
+  year <- paste0(start_year:end_year, (start_year + 1):(end_year + 1)) %>% as.integer()
   uplift_df <- tibble::tibble(year, uplift = 1) %>%
     dplyr::mutate(row_no = dplyr::row_number())
   latest_cost_year_row <- uplift_df[year == as.numeric(latest_cost_year), ]$row_no
