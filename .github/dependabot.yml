@@ -10,4 +10,5 @@ updates:
     schedule:
       interval: "weekly"
       day: "sunday"
-    reviewers: "Public-Health-Scotland/source-linkage-files"   
+    reviewers: 
+      - "Public-Health-Scotland/source-linkage-files"   
