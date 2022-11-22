@@ -24,8 +24,7 @@ fix_sc_start_dates <- function(start_date, period) {
 #' Fix sc end dates
 #'
 #' @description Fix social care end dates when the end date is earlier than the
-#' start date.
-#' Set this to the end of the fyear
+#' start date. Set this to the end of the fyear
 #'
 #' @param start_date A vector containing dates.
 #' @param end_date A vector containing dates.
