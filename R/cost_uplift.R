@@ -36,7 +36,6 @@ cost_uplift <- function(data) {
 #' @param latest_cost_year default financial year '2223'
 #'
 #' @return episode data with a uplift scale
-#' @export
 uplift_set <- function(data, latest_cost_year = "2223") {
   # We have set uplifts to use for 2020/21, 2021/22 and 2022/23, provided by Paul Leak.
   # For older years, don't uplift.
