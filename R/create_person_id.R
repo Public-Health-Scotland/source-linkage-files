@@ -19,9 +19,9 @@ create_person_id <- function(data, type = c("SC")) {
 
   if (type == "SC") {
     if (!all(c("sending_location", "social_care_id") %in% names(data))) {
-      cli::cli_abort(message = c("The variables {.var sending_location} and
+      cli::cli_abort(message = "The variables {.var sending_location} and
                                  {.var social_care_id} are both needed to create a
-                                 Social Care person_id"))
+                                 Social Care person_id")
     }
     dplyr::mutate(data, person_id = paste0(.data$sending_location, "-", .data$social_care_id))
   } else {

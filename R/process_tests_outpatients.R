@@ -23,4 +23,6 @@ process_tests_outpatients <- function(data, year) {
     )
   ) %>%
     write_tests_xlsx(sheet_name = "00B", year)
+
+  return(comparison)
 }

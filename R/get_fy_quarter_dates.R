@@ -21,7 +21,7 @@ start_fy_quarter <- function(quarter) {
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
     cal_quarter_date_unique,
-    lubridate::period(3, "months")
+    lubridate::period(3L, "months")
   ) %>%
     purrr::set_names(quarter_unique)
 
@@ -53,9 +53,9 @@ end_fy_quarter <- function(quarter) {
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
     cal_quarter_date_unique,
-    lubridate::period(6, "months")
+    lubridate::period(6L, "months")
   ) %>%
-    lubridate::add_with_rollback(lubridate::period(-1, "days")) %>%
+    lubridate::add_with_rollback(lubridate::period(-1L, "days")) %>%
     purrr::set_names(quarter_unique)
 
   end_fy_quarter <- fy_quarter_date_unique[quarter] %>%
@@ -86,7 +86,7 @@ start_next_fy_quarter <- function(quarter) {
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
     cal_quarter_date_unique,
-    lubridate::period(6, "months")
+    lubridate::period(6L, "months")
   ) %>%
     purrr::set_names(quarter_unique)
 
@@ -118,9 +118,9 @@ end_next_fy_quarter <- function(quarter) {
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
     cal_quarter_date_unique,
-    lubridate::period(9, "months")
+    lubridate::period(9L, "months")
   ) %>%
-    lubridate::add_with_rollback(lubridate::period(-1, "days")) %>%
+    lubridate::add_with_rollback(lubridate::period(-1L, "days")) %>%
     purrr::set_names(quarter_unique)
 
   end_next_fy_quarter <- fy_quarter_date_unique[quarter] %>%

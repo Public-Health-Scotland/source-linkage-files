@@ -12,8 +12,8 @@
 #'
 #' @family date functions
 convert_date_to_numeric <- function(date) {
-  lubridate::year(date) * 10000 +
-    lubridate::month(date) * 100 +
+  lubridate::year(date) * 10000L +
+    lubridate::month(date) * 100L +
     lubridate::day(date)
 }
 

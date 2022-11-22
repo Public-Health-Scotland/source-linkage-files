@@ -34,3 +34,15 @@ jobs:
       - name: Lint production scripts
         run: lintr::lint_dir("Production_scripts/")
         shell: Rscript {0}
+
+      - name: Lint other scripts
+        run: lintr::lint_dir("Make_R_files/")
+        shell: Rscript {0}
+
+      - name: Lint Rmarkdown files
+        run: lintr::lint_dir("Rmarkdown/")
+        shell: Rscript {0}
+
+      - name: Lint older scripts
+        run: lintr::lint_dir("All_years/")
+        shell: Rscript {0}

@@ -26,22 +26,30 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     # If end_date is missing then assign to end of the year
     dummy_discharge <- dplyr::if_else(
       is.na(end_date),
-      end_fy(year) + lubridate::days(1),
+      end_fy(year) + lubridate::days(1L),
       end_date
     )
 
-    lubridate::time_length(lubridate::interval(start_date, dummy_discharge), unit = "days")
+    lubridate::time_length(lubridate::interval(start_date, dummy_discharge),
+      unit = "days"
+    )
   } else {
     # Check the quarters
-    if (any(is.na(sc_qtr))) {
+    if (anyNA(sc_qtr)) {
       cli::cli_abort("Some of the submitted quarters are missing")
     } else {
       sc_qtr <- check_quarter_format(sc_qtr)
     }
 
     # Set Quarters
-    qtr_end <- lubridate::add_with_rollback(end_fy_quarter(sc_qtr), lubridate::period(1, "days"))
-    next_qtr <- lubridate::add_with_rollback(end_next_fy_quarter(sc_qtr), lubridate::period(1, "days"))
+    qtr_end <- lubridate::add_with_rollback(
+      end_fy_quarter(sc_qtr),
+      lubridate::period(1L, "days")
+    )
+    next_qtr <- lubridate::add_with_rollback(
+      end_next_fy_quarter(sc_qtr),
+      lubridate::period(1L, "days")
+    )
 
     dummy_end_date <- dplyr::case_when(
       # If end_date is not missing use the end date
@@ -52,6 +60,8 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
       qtr_end < start_date ~ next_qtr
     )
 
-    lubridate::time_length(lubridate::interval(start_date, dummy_end_date), unit = "days")
+    lubridate::time_length(lubridate::interval(start_date, dummy_end_date),
+      unit = "days"
+    )
   }
 }
