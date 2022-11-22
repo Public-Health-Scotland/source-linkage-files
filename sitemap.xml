@@ -388,6 +388,9 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/process_lookup_sc_demographics.html</loc>
   </url>
   <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/process_sc_all_alarms_telecare.html</loc>
+  </url>
+  <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/process_sc_all_home_care.html</loc>
   </url>
   <url>
@@ -524,6 +527,9 @@
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_lookup_sc_demographics.html</loc>
+  </url>
+  <url>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_sc_all_alarms_telecare.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/read_sc_all_home_care.html</loc>
