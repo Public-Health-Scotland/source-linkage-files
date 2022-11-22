@@ -1,5 +1,10 @@
 # December 2022 Update - Unreleased
-* Fixed a typo in the Service Use Cohort `substance` where the ICD-10 code `F11` (Opioids) was used instead of the correct `F13` (sedatives or hypnotics). 
+* Fixed a typo in the Service Use Cohort `substance` where the ICD-10 code `F11` (Opioids) was used instead of the correct `F13` (sedatives or hypnotics).
+* Prescribing (PIS) changes
+  * Changed from using 'dispensed items' (count and cost) to 'paid items'.
+  * Changed from using the Net cost (in `cost_total_net`) to using the Gross cost.
+  * `no_dispensed_items` has been replaced with `no_paid_items` in the episode file.
+  * `pis_dispensed_items` has been replaced with `pis_paid_items` in the individual file.
 
 # September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.
