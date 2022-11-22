@@ -8,7 +8,7 @@
 cost_uplift <- function(data) {
   data <- data %>%
     # attach a uplift scale as the last column
-    uplift_set() %>%
+    lookup_uplift() %>%
     dplyr::mutate(
       cost_total_net = cost_total_net * uplift,
       cost_total_net_incdnas = cost_total_net_incdnas * uplift,
@@ -36,7 +36,7 @@ cost_uplift <- function(data) {
 #' @param latest_cost_year default financial year '2223'
 #'
 #' @return episode data with a uplift scale
-uplift_set <- function(data, latest_cost_year = "2223") {
+lookup_uplift <- function(data) {
   # We have set uplifts to use for 2020/21, 2021/22 and 2022/23, provided by Paul Leak.
   # For older years, don't uplift.
   # For years after 2022/23 uplift by an additional 1% per year after the latest cost year (2022/23)
@@ -48,7 +48,7 @@ uplift_set <- function(data, latest_cost_year = "2223") {
   year <- paste0(start_year:end_year, (start_year + 1):(end_year + 1)) %>% as.integer()
   uplift_df <- tibble::tibble(year, uplift = 1) %>%
     dplyr::mutate(row_no = dplyr::row_number())
-  latest_cost_year_row <- uplift_df[year == as.numeric(latest_cost_year), ]$row_no
+  latest_cost_year_row <- uplift_df[year == as.integer(latest_cost_year()), ]$row_no
 
   uplift_df <- uplift_df %>%
     dplyr::mutate(uplift = dplyr::case_when(
@@ -57,7 +57,7 @@ uplift_set <- function(data, latest_cost_year = "2223") {
       year == 2122L ~ 1.015 * 1.041,
       year == 2223L ~ 1.015 * 1.041 * 1.062,
       # For years after 2022/23 uplift by an additional 1% per year after the latest cost year (2022/23)
-      year > as.numeric(latest_cost_year) ~ (1.015 * 1.041 * 1.062) * (1.01^(row_no - latest_cost_year_row)),
+      year > as.integer(latest_cost_year()) ~ (1.015 * 1.041 * 1.062) * (1.01^(row_no - latest_cost_year_row)),
       # For older years, don't uplift.
       TRUE ~ 1
     )) %>%
