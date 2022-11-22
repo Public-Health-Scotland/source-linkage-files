@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -19,7 +19,7 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0359839"
+    "SCTASK0394587"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
