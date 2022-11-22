@@ -22,9 +22,9 @@ aggregate outfile = SLFnew
     /n_chis n_missing_dob = sum(has_chi_number no_dob)
     /males females = Sum(male female)
     /n_episodes = n
-    /dispensed_items_mean cost_mean = mean(no_dispensed_items cost_total_net)
-    /dispensed_items_total cost_total = sum(no_dispensed_items cost_total_net)
-    /dispensed_items_sd cost_sd = sd(no_dispensed_items cost).
+    /dispensed_items_mean paid_items_mean cost_mean = mean(no_dispensed_items no_paid_items cost_total_net)
+    /dispensed_items_total paid_items_total cost_total = sum(no_dispensed_items no_paid_items cost_total_net)
+    /dispensed_items_sd paid_items_sd cost_sd = sd(no_dispensed_items no_paid_items cost_total_net).
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
@@ -52,16 +52,19 @@ End if.
  * Flags to count missing values.
 If sysmis(dob) no_dob = 1.
 
+ * TODO remove this line after one update.
+Compute no_paid_items = 0.
+
  * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
     /break
-    /n_CHIs = sum(has_chi_number)
+    /n_chis n_missing_dob = sum(has_chi_number no_dob)
     /males females = Sum(male female)
     /n_episodes = n
-    /dispensed_items_mean cost_mean = mean(no_dispensed_items cost_total_net)
-    /dispensed_items_total cost_total = sum(no_dispensed_items cost_total_net)
-    /dispensed_items_sd cost_sd = sd(no_dispensed_items cost).
+    /dispensed_items_mean paid_items_mean cost_mean = mean(no_dispensed_items no_paid_items cost_total_net)
+    /dispensed_items_total paid_items_total cost_total = sum(no_dispensed_items no_paid_items cost_total_net)
+    /dispensed_items_sd paid_items_sd cost_sd = sd(no_dispensed_items no_paid_items cost_total_net).
 
 Dataset activate SLFexisting.
 Varstocases
