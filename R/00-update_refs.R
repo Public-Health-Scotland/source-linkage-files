@@ -44,6 +44,6 @@ get_dd_period <- function() {
 #' @export
 #'
 #' @family initialisation
-latest_cost_year <- function(){
+latest_cost_year <- function() {
   "2223"
 }
