@@ -7,7 +7,7 @@
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Sep_2022"
+  "Dec_2023"
 }
 
 #' Previous update
