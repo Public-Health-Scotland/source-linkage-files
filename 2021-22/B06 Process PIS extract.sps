@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
@@ -20,9 +20,12 @@ GET DATA  /TYPE=TXT
     PatGender F1.0
     PatPostcode A8
     PracticeCode A6
-    NumberofDispensedItems F2.0
+    NumberofDispensedItems F4.0
     DIPaidNICexcl.BB F6.2
     DIPaidGICexcl.BB F6.2
+    NumberofPaidItems F4.0
+    PDPaidNICexcl.BB F6.2
+    PDPaidGICexcl.BB F6.2
     /MAP.
 CACHE.
 
@@ -32,8 +35,9 @@ rename variables
     PatGender = gender
     PatPostcode = postcode
     PracticeCode = gpprac
+    NumberofPaidItems = no_paid_items
     NumberofDispensedItems = no_dispensed_items
-    DIPaidNICexcl.BB = cost_total_net.
+    PDPaidGICexcl.BB = cost_total_net.
 
 select if chi ne "".
 
@@ -56,7 +60,7 @@ compute year = !FY.
 sort cases by chi.
 
 save outfile = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
-    /Drop DIPaidGICexcl.BB
+    /Drop DIPaidGICexcl.BB DIPaidNICexcl.BB PDPaidNICexcl.BB
     /zcompressed.
 
 get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
