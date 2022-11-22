@@ -26,7 +26,7 @@ Alter type
     GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
-    PIS_dispensed_items
+    PIS_paid_items
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
     DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     DN_episodes DN_contacts
@@ -116,8 +116,8 @@ Variable Labels
     OP_cost_dnas "Cost of new outpatient appointments which were not attended"
     ae_attendances "Number of A&E attendances"
     ae_cost "Cost of A&E attendances"
-    pis_dispensed_items "Number of prescribing items dispensed"
-    pis_cost "Cost of prescribing items dispensed "
+    pis_paid_items "Number of prescribing items paid"
+    pis_cost "Cost of prescribing items"
     ooh_cases "Number of GP OoH cases (multiple consultations per case)"
     ooh_homeV "Number of GP OoH Home visit consultations"
     ooh_advice "Number of GP OoH Doctor / Nurse advice consultations"
@@ -299,7 +299,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     op_cost_dnas
     ae_attendances
     ae_cost
-    pis_dispensed_items
+    pis_paid_items
     pis_cost
     ooh_cases
     ooh_homev
