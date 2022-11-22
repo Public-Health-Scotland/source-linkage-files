@@ -32,5 +32,5 @@ previous_update <- function() {
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Jun22"
+  "Jul16_Dec22"
 }
