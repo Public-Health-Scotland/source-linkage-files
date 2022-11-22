@@ -16,8 +16,9 @@ create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
     # and use recid for cij_marker if there is not a cij_marker
     dplyr::mutate(
       cij_attendance = !is.na(.data$cij_marker),
-      cij_marker = dplyr::if_else(is.na(.data$cij_marker),
-        .data$recid, as.character(.data$cij_marker)
+      cij_marker = dplyr::if_else(cij_attendance,
+         as.character(.data$cij_marker),
+         .data$recid
       ),
 
       # Calculate service costs
