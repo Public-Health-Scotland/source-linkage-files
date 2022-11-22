@@ -7,7 +7,7 @@
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Sep_2022"
+  "Dec_2022"
 }
 
 #' Previous update
@@ -19,7 +19,7 @@ latest_update <- function() {
 #'
 #' @family initialisation
 previous_update <- function() {
-  "Jun_2022"
+  "Sep_2022"
 }
 
 #' Delayed Discharge period
