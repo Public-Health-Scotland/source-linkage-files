@@ -16,8 +16,8 @@ complete DN etc. so will always return FALSE.
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
-\code{\link{assign_adult_major_condition_cohort}()},
-\code{\link{assign_child_major_condition_cohort}()},
+\code{\link{assign_adult_major_cohort}()},
+\code{\link{assign_child_major_cohort}()},
 \code{\link{assign_eol_cohort}()},
 \code{\link{assign_frailty_cohort}()},
 \code{\link{assign_high_cc_cohort}()},

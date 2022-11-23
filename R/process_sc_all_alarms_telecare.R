@@ -112,7 +112,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
       .data$sc_latest_submission
     ) %>%
     # change the data format from data.table to data.frame
-    as_tibble()
+    tibble::as_tibble()
 
   if (write_to_disk) {
     # Save .rds file ----

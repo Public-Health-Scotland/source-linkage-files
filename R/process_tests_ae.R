@@ -23,4 +23,6 @@ process_tests_ae <- function(data, year) {
     )
   ) %>%
     write_tests_xlsx(sheet_name = "AE2", year)
+
+  return(comparison)
 }

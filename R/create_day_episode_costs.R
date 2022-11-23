@@ -16,17 +16,17 @@ create_day_episode_costs <- function(data, date_var, cost_var) {
     # month and month_cost variable
     dplyr::mutate(month = strftime({{ date_var }}, "%m")) %>%
     dplyr::mutate(
-      apr_cost = dplyr::if_else(.data$month == "04", {{ cost_var }}, 0),
-      may_cost = dplyr::if_else(.data$month == "05", {{ cost_var }}, 0),
-      jun_cost = dplyr::if_else(.data$month == "06", {{ cost_var }}, 0),
-      jul_cost = dplyr::if_else(.data$month == "07", {{ cost_var }}, 0),
-      aug_cost = dplyr::if_else(.data$month == "08", {{ cost_var }}, 0),
-      sep_cost = dplyr::if_else(.data$month == "09", {{ cost_var }}, 0),
-      oct_cost = dplyr::if_else(.data$month == "10", {{ cost_var }}, 0),
-      nov_cost = dplyr::if_else(.data$month == "11", {{ cost_var }}, 0),
-      dec_cost = dplyr::if_else(.data$month == "12", {{ cost_var }}, 0),
-      jan_cost = dplyr::if_else(.data$month == "01", {{ cost_var }}, 0),
-      feb_cost = dplyr::if_else(.data$month == "02", {{ cost_var }}, 0),
-      mar_cost = dplyr::if_else(.data$month == "03", {{ cost_var }}, 0)
+      apr_cost = dplyr::if_else(.data$month == "04", {{ cost_var }}, 0.0),
+      may_cost = dplyr::if_else(.data$month == "05", {{ cost_var }}, 0.0),
+      jun_cost = dplyr::if_else(.data$month == "06", {{ cost_var }}, 0.0),
+      jul_cost = dplyr::if_else(.data$month == "07", {{ cost_var }}, 0.0),
+      aug_cost = dplyr::if_else(.data$month == "08", {{ cost_var }}, 0.0),
+      sep_cost = dplyr::if_else(.data$month == "09", {{ cost_var }}, 0.0),
+      oct_cost = dplyr::if_else(.data$month == "10", {{ cost_var }}, 0.0),
+      nov_cost = dplyr::if_else(.data$month == "11", {{ cost_var }}, 0.0),
+      dec_cost = dplyr::if_else(.data$month == "12", {{ cost_var }}, 0.0),
+      jan_cost = dplyr::if_else(.data$month == "01", {{ cost_var }}, 0.0),
+      feb_cost = dplyr::if_else(.data$month == "02", {{ cost_var }}, 0.0),
+      mar_cost = dplyr::if_else(.data$month == "03", {{ cost_var }}, 0.0)
     )
 }

@@ -1,7 +1,7 @@
 dummy_data <- tibble(
-  chr = sample(LETTERS, 100, replace = TRUE),
-  int = sample(0:9, 100, replace = TRUE),
-  num = runif(100)
+  chr = sample(LETTERS, 100L, replace = TRUE),
+  int = sample(0L:9L, 100L, replace = TRUE),
+  num = runif(100L)
 )
 
 test_that("write_sav creates a file with the correct permissions", {

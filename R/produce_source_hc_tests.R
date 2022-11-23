@@ -28,13 +28,13 @@ produce_source_hc_tests <- function(data,
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     dplyr::mutate(
-      n_episodes = 1,
-      hc_per = dplyr::if_else(.data$smrtype == "HC-Per", 1, 0),
-      hc_non_per = dplyr::if_else(.data$smrtype == "HC-Non-Per", 1, 0),
-      hc_unknown = dplyr::if_else(.data$smrtype == "HC-Unknown", 1, 0),
-      hc_reablement_no = dplyr::if_else(.data$smrtype == 0, 1, 0),
-      hc_reablement_yes = dplyr::if_else(.data$smrtype == 1, 1, 0),
-      hc_reablement_unknown = dplyr::if_else(.data$smrtype == 9, 1, 0)
+      n_episodes = 1L,
+      hc_per = dplyr::if_else(.data$smrtype == "HC-Per", 1L, 0L),
+      hc_non_per = dplyr::if_else(.data$smrtype == "HC-Non-Per", 1L, 0L),
+      hc_unknown = dplyr::if_else(.data$smrtype == "HC-Unknown", 1L, 0L),
+      hc_reablement_no = dplyr::if_else(.data$hc_reablement == 0L, 1L, 0L),
+      hc_reablement_yes = dplyr::if_else(.data$hc_reablement == 1L, 1L, 0L),
+      hc_reablement_unknown = dplyr::if_else(.data$hc_reablement == 9L, 1L, 0L)
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison

@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -60,7 +60,7 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
     dplyr::arrange(.data$record_keydate1, .by_group = TRUE) %>%
     # Create ccm (Contiuous Care Marker) which will group contacts which occur less
     # than 7 days apart
-    dplyr::mutate(ccm = pmax((.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7, FALSE, na.rm = TRUE) %>%
+    dplyr::mutate(ccm = pmax((.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L, FALSE, na.rm = TRUE) %>%
       cumsum())
 
   dn_episodes <- care_marker %>%

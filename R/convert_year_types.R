@@ -15,7 +15,7 @@
 convert_fyyear_to_year <- function(fyyear) {
   fyyear <- check_year_format(year = fyyear, format = "fyyear")
 
-  year <- paste0("20", substr(fyyear, 1, 2))
+  year <- paste0("20", substr(fyyear, 1L, 2L))
 
   return(year)
 }
@@ -37,17 +37,17 @@ convert_fyyear_to_year <- function(fyyear) {
 convert_year_to_fyyear <- function(year) {
   year <- check_year_format(year = year, format = "alternate")
 
-  first_part <- substr(year, 1, 2)
-  second_part <- substr(year, 3, 4)
+  first_part <- substr(year, 1L, 2L)
+  second_part <- substr(year, 3L, 4L)
 
   fyyear <-
     dplyr::if_else(
-      substr(second_part, 1, 1) != "0",
+      !startsWith(second_part, "0"),
       paste0(second_part, as.integer(second_part) + 1L),
       paste0(second_part, "0", as.integer(second_part) + 1L)
     )
 
-  if (length(year) > 1 && any(first_part != "20")) {
+  if (length(year) > 1L && any(first_part != "20")) {
     non_21c <- which(first_part != "20")
 
     cli::cli_warn(c(
