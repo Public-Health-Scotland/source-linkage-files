@@ -29,7 +29,11 @@ get_existing_data_for_tests <- function(new_data) {
     recids = recids,
     columns = variable_names
   )) %>%
-    dplyr::rename(chi = "anon_chi")
+    # Do a quick conversion of anon_chi back to CHI
+    dplyr::mutate(chi = openssl::base64_decode(.data[["anon_chi"]]) %>%
+                    substr(2, 2) %>%
+                    paste0(collapse = "")) %>%
+    dplyr::select(-"anon_chi")
 
   return(slf_data)
 }
