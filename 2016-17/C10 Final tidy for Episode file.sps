@@ -1,6 +1,9 @@
 ﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-episode-file-8-" + !FY + ".zsav".
 
+Alter type 
+dd_responsible_lca (A2).
+
 !create_uplift_var.
 Do repeat cost_var = cost_total_net  cost_total_net_incdnas apr_cost to mar_cost.
     * Uplift costs.
@@ -938,10 +941,10 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     simd2020v2_hb2019_quintile
     simd2020v2_hscp2019_decile
     simd2020v2_hscp2019_quintile
-    ur8_2016
-    ur6_2016
-    ur3_2016
-    ur2_2016
+    ur8_2020
+    ur6_2020
+    ur3_2020
+    ur2_2020
     cluster
     arth
     asthma
