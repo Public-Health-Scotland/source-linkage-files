@@ -9,6 +9,17 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
+  check_variables_exist(data, variables = c(
+    "chi",
+    "recid",
+    "cij_marker",
+    "cij_pattype",
+    "cij_ipdc",
+    "op1a",
+    "spec",
+    "cost_total_net"
+  ))
+
   return_data <- data %>%
     # Only select rows with chi
     dplyr::filter(!is_missing(.data$chi)) %>%
