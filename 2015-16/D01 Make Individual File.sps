@@ -38,7 +38,7 @@ Numeric
     OP_cost_attend OP_cost_dnas
     AE_attendances
     AE_cost
-    PIS_dispensed_items
+    PIS_paid_items
     PIS_cost
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
     OoH_cost
@@ -273,7 +273,7 @@ Else if (recid = "PIS").
     Compute PIS_postcode = postcode.
     Compute PIS_gpprac = gpprac.
 
-    Compute PIS_dispensed_items = no_dispensed_items.
+    Compute PIS_paid_items = no_paid_items.
     Compute PIS_cost = Cost_Total_Net.
 
 Else if (recid = "OoH").
@@ -539,7 +539,7 @@ aggregate outfile = *
     /OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas
     = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
-    /PIS_dispensed_items PIS_cost = sum(no_dispensed_items PIS_cost)
+    /PIS_paid_items PIS_cost = sum(no_paid_items PIS_cost)
     /OoH_cases = sum(unique_ooh_case)
     /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC)
     /OoH_consultation_time OoH_cost = sum(OoH_consultation_time OoH_cost)

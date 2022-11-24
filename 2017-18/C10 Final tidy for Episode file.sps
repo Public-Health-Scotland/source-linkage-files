@@ -173,7 +173,7 @@ Variable Labels
     ms "Multiple Sclerosis LTC marker"
     ms_date "Multiple Sclerosis LTC incidence date"
     nhshosp "NHS Hospital flag"
-    no_dispensed_items "Number of dispensed items"
+    no_paid_items "Number of paid (prescription) items"
     nov_beddays "Number of Bed days from episode in November"
     nov_cost "Cost from episode in November"
     oct_beddays "Number of Bed days from episode in October"
@@ -897,7 +897,7 @@ save outfile = !Year_dir + "source-episode-file-20" + !FY + ".zsav"
     hh_ep
     hh_6after_ep
     hh_6before_ep
-    no_dispensed_items
+    no_paid_items
     yearstay
     stay
     apr_beddays
