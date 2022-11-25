@@ -398,10 +398,10 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     simd2020v2_hb2019_quintile
     simd2020v2_hscp2019_decile
     simd2020v2_hscp2019_quintile
-    ur8_2016
-    ur6_2016
-    ur3_2016
-    ur2_2016
+    ur8_2020
+    ur6_2020
+    ur3_2020
+    ur2_2020
     hb2019
     hscp2019
     ca2019
