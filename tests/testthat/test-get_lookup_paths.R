@@ -1,11 +1,14 @@
 skip_on_ci()
 
 test_that("top-level lookup dir works as expected", {
+  suppressMessages({
   expect_s3_class(get_lookups_dir(), "fs_path")
   expect_true(fs::dir_exists(get_lookups_dir()))
+  })
 })
 
 test_that("locality file path returns as expected", {
+  suppressMessages({
   expect_s3_class(get_locality_path(), "fs_path")
 
   expect_equal(fs::path_ext(get_locality_path()), "rds")
@@ -15,9 +18,11 @@ test_that("locality file path returns as expected", {
 
   expect_true(fs::file_exists(get_locality_path()))
   expect_true(fs::file_exists(get_locality_path(ext = "sav")))
+  })
 })
 
 test_that("SPD file path returns as expected", {
+  suppressMessages({
   expect_s3_class(get_spd_path(), "fs_path")
 
   expect_equal(fs::path_ext(get_spd_path()), "rds")
@@ -27,9 +32,11 @@ test_that("SPD file path returns as expected", {
 
   expect_true(fs::file_exists(get_spd_path()))
   expect_true(fs::file_exists(get_spd_path(ext = "zsav")))
+  })
 })
 
 test_that("SIMD file path returns as expected", {
+  suppressMessages({
   expect_s3_class(get_simd_path(), "fs_path")
 
   expect_equal(fs::path_ext(get_simd_path()), "rds")
@@ -39,9 +46,11 @@ test_that("SIMD file path returns as expected", {
 
   expect_true(fs::file_exists(get_simd_path()))
   expect_true(fs::file_exists(get_simd_path(ext = "zsav")))
+  })
 })
 
 test_that("population estimates file path returns as expected", {
+  suppressMessages({
   expect_s3_class(get_datazone_pop_path(), "fs_path")
 
   expect_equal(fs::path_ext(get_datazone_pop_path()), "rds")
@@ -51,6 +60,7 @@ test_that("population estimates file path returns as expected", {
 
   expect_true(fs::file_exists(get_datazone_pop_path()))
   expect_true(fs::file_exists(get_datazone_pop_path(ext = "sav")))
+  })
 })
 
 test_that("gpprac reference file path returns as expected", {
