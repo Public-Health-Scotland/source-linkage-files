@@ -18,6 +18,5 @@ A date vector with replaced end dates
 }
 \description{
 Fix social care end dates when the end date is earlier than the
-start date.
-Set this to the end of the fyear
+start date. Set this to the end of the fyear
 }
