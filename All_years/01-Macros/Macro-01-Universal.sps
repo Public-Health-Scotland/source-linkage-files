@@ -297,8 +297,6 @@ Define !create_uplift_var().
         Else if !eval(!fy) = "2223".
             Compute uplift = 1.015 * 1.041 * 1.062.
         Else if !unquote(!eval(!altfy)) > !eval(!latest_cost_year).
-            Compute test2 = !Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)).
-            Compute test =  ((1.01) ** (!Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
             Compute uplift = (1.015 * 1.041 * 1.062) * ((1.01) ** (!Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
         Else.
             Compute uplift = 1.
