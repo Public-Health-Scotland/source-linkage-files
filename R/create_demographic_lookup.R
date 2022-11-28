@@ -284,8 +284,8 @@ assign_d_cohort_child_major <- function(recid, age, cost_total_net) {
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_eol <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
-                              deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
-                              deathdiag11) {
+                                deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
+                                deathdiag11) {
   external_deaths <- c(
     # Codes V01 to V99
     glue::glue("V{stringr::str_pad(1:99, 2, 'left', '0')}"),
