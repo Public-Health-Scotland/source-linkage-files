@@ -58,17 +58,18 @@ get_slf_deaths_path <- function(update = latest_update(), ...) {
   return(slf_deaths_file_path)
 }
 
-#' SLF Care Home Lookup File Path
+#' Care Home Name (Address) Lookup File Path
 #'
-#' @description Get the full path to the SLF Care Home lookup
+#' @description Get the full path to the Care Home name lookup, which
+#' has official Care Home names and addresses provided by the Care Inspectorate.
 #'
-#' @param update the update month (defaults to use \code{\link{latest_update}})
-#' @param ... additional arguments passed to \code{\link{get_file_path}}
+#' @param update the update month (defaults to use [latest_update()])
+#' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the SLF Care Home lookup as an \code{\link[fs]{path}}
+#' @return The path to the Care Home lookup as an [fs::path()]
 #' @export
 #' @family slf lookup file path
-#' @seealso \code{\link{get_file_path}} for the generic function.
+#' @seealso [get_file_path()] for the generic function.
 get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),

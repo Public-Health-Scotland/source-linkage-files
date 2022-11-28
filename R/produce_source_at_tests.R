@@ -14,8 +14,8 @@ produce_source_at_tests <- function(data, max_min_vars = c("record_keydate1", "r
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
-      n_at_alarms = dplyr::if_else(.data$smrtype == "AT-Alarm", 1, 0),
-      n_at_telecare = dplyr::if_else(.data$smrtype == "AT-Tele", 1, 0)
+      n_at_alarms = dplyr::if_else(.data$smrtype == "AT-Alarm", 1L, 0L),
+      n_at_telecare = dplyr::if_else(.data$smrtype == "AT-Tele", 1L, 0L)
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed

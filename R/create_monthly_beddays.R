@@ -54,34 +54,36 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
       {{ admission_date }},
       # If discharge date is NA then calculate beddays to the end of the year
       dplyr::if_else(is.na({{ discharge_date }}),
-        end_fy(year) + lubridate::days(1),
+        end_fy(year) + lubridate::days(1L),
         {{ discharge_date }}
       )
     ) %>%
       # Shift it forward by a day (default)
       # so we will count the last day and not the first.
-      lubridate::int_shift(by = lubridate::days(ifelse(count_last, 1, 0))))
+      lubridate::int_shift(by = lubridate::days(dplyr::if_else(count_last, 1L, 0L))))
 
   # Create the start dates of the months for the financial year
   cal_year <- as.numeric(convert_fyyear_to_year(year))
-  month_start <- c(
-    lubridate::my(paste0(
-      month.abb[4:12],
-      cal_year
-    )),
-    lubridate::my(paste0(
-      month.abb[1:3],
-      cal_year + 1
-    ))
+  month_start <- lubridate::my(
+    c(
+      paste0(
+        month.abb[4L:12L],
+        cal_year
+      ),
+      paste0(
+        month.abb[1L:3L],
+        cal_year + 1L
+      )
+    )
   )
 
   # Turn the start dates into 1 month intervals
   month_intervals <- lubridate::interval(
     month_start,
-    month_start + months(1)
+    month_start + months(1L)
   ) %>%
     # Name the intervals for use later
-    rlang::set_names(paste0(tolower(month.abb[c(4:12, 1:3)]), "_beddays"))
+    rlang::set_names(paste0(tolower(month.abb[c(4L:12L, 1L:3L)]), "_beddays"))
 
   # Work out the beddays for each month
   beddays <- purrr::map_dfc(
@@ -89,7 +91,7 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
     ~ lubridate::intersect(data$stay_interval, .x) %>%
       lubridate::time_length(unit = "days") %>%
       # Replace any NAs with zero
-      tidyr::replace_na(0) %>%
+      tidyr::replace_na(0L) %>%
       as.integer()
   )
 

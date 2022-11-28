@@ -1,14 +1,14 @@
 test_that("check_variables_exist accepts proper input", {
-  expect_true(check_variables_exist(tibble(a = 1:3), "a"))
-  expect_true(check_variables_exist(tibble(a = 1:26, b = letters), "a"))
-  expect_true(check_variables_exist(tibble(a = 1:26, b = letters), c("a", "b")))
+  expect_true(check_variables_exist(tibble(a = 1L:3L), "a"))
+  expect_true(check_variables_exist(tibble(a = 1L:26L, b = letters), "a"))
+  expect_true(check_variables_exist(tibble(a = 1L:26L, b = letters), c("a", "b")))
 
   expect_error(
-    check_variables_exist(tibble(a = 1:26, b = letters), a),
+    check_variables_exist(tibble(a = 1L:26L, b = letters), a),
     "object 'a' not found"
   )
   expect_error(
-    check_variables_exist(tibble(a = 1:26, b = letters), 1),
+    check_variables_exist(tibble(a = 1L:26L, b = letters), 1.0),
     "`variables` must be a .+?character.+? not a .+?numeric.+?\\."
   )
   expect_error(
@@ -19,7 +19,7 @@ test_that("check_variables_exist accepts proper input", {
 
 test_that("check_variables_exist throws informative errors", {
   test_data <- tibble(
-    a = 1:26,
+    a = 1L:26L,
     b = letters,
     c = LETTERS
   )

@@ -19,7 +19,10 @@ create_monthly_costs <- function(data, yearstay = yearstay, cost_total_net = cos
     dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
 
   data <- dplyr::bind_cols(data, costs) %>%
-    dplyr::mutate(dplyr::across(dplyr::ends_with("_cost"), ~ dplyr::if_else(.x != 0, .x / {{ yearstay }} * {{ cost_total_net }}, 0)))
+    dplyr::mutate(dplyr::across(
+      dplyr::ends_with("_cost"),
+      ~ dplyr::if_else(.x != 0.0, .x / {{ yearstay }} * {{ cost_total_net }}, 0.0)
+    ))
 
   return(data)
 }

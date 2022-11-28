@@ -66,7 +66,7 @@ process_lookup_postcode <- function(write_to_disk = TRUE) {
       .data$postcode,
       .data$lca,
       .data$locality,
-      tidyselect::matches("datazone\\d{4}$")[1],
+      tidyselect::matches("datazone\\d{4}$")[1L],
       tidyselect::matches("hb\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
       tidyselect::matches("hscp\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
       tidyselect::matches("ca\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
