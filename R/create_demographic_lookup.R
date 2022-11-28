@@ -25,22 +25,22 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
     dplyr::filter(!is_missing(.data$chi)) %>%
     # Add the various cohorts
     dplyr::mutate(
-      mh = assign_mh_cohort(.data$recid, .data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
-      frail = assign_frailty_cohort(.data$recid, .data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6, .data$spec, .data$sigfac),
-      maternity = assign_maternity_cohort(.data$recid),
-      high_cc = assign_high_cc_cohort(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer, .data$spec),
-      medium_cc = assign_medium_cc_cohort(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms),
-      low_cc = assign_low_cc_cohort(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib),
-      comm_living = assign_comm_living_cohort(),
-      adult_major = assign_adult_major_cohort(.data$recid, .data$age, .data$cost_total_net),
-      child_major = assign_child_major_cohort(.data$recid, .data$age, .data$cost_total_net),
-      end_of_life = assign_eol_cohort(
+      mh = assign_d_cohort_mh(.data$recid, .data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6),
+      frail = assign_d_cohort_frailty(.data$recid, .data$diag1, .data$diag2, .data$diag3, .data$diag4, .data$diag5, .data$diag6, .data$spec, .data$sigfac),
+      maternity = assign_d_cohort_maternity(.data$recid),
+      high_cc = assign_d_cohort_high_cc(.data$dementia, .data$hefailure, .data$refailure, .data$liver, .data$cancer, .data$spec),
+      medium_cc = assign_d_cohort_medium_cc(.data$cvd, .data$copd, .data$chd, .data$parkinsons, .data$ms),
+      low_cc = assign_d_cohort_low_cc(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib),
+      comm_living = assign_d_cohort_comm_living(),
+      adult_major = assign_d_cohort_adult_major(.data$recid, .data$age, .data$cost_total_net),
+      child_major = assign_d_cohort_child_major_cohort(.data$recid, .data$age, .data$cost_total_net),
+      end_of_life = assign_d_cohort_eol(
         .data$recid, .data$deathdiag1, .data$deathdiag2, .data$deathdiag3, .data$deathdiag4, .data$deathdiag5,
         .data$deathdiag6, .data$deathdiag7, .data$deathdiag8, .data$deathdiag9, .data$deathdiag10,
         .data$deathdiag11
       )
     ) %>%
-    assign_substance_cohort() %>%
+    assign_d_cohort_substance() %>%
     # Aggregate to CHI level
     dplyr::group_by(.data$chi) %>%
     dplyr::summarise(dplyr::across(c(
@@ -96,7 +96,7 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
 #'
 #' @return A boolean vector indicating whether a given record is in the Mental Health cohort
 #' @family Demographic and Service Use Cohort functions
-assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
+assign_d_cohort_mh <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
   mh <-
     # FOR FUTURE: when variable MentalHealthProblemsClientGroup exists and is "Y", mh_cohort = TRUE
     dplyr::case_when(
@@ -126,14 +126,14 @@ assign_mh_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
 #'         \item The recid is GLS}
 #'    }
 #'
-#' @inheritParams assign_mh_cohort
+#' @inheritParams assign_d_cohort_mh
 #' @param spec A vector of specialty codes
 #' @param sigfac A vector of significant facilities
 #'
 #' @return A boolean vector indicating whether a given record is in the
 #' Frailty cohort
 #' @family Demographic and Service Use Cohort functions
-assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac) {
+assign_d_cohort_frailty <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac) {
   frail <-
     # FOR FUTURE: when variable ElderlyFrailClientGroup exists and is "Y", frail_cohort = TRUE,
     # FOR FUTURE: Care Home removed, here's the code: .data$recid == "CH" & age >= 65
@@ -163,7 +163,7 @@ assign_frailty_cohort <- function(recid, diag1, diag2, diag3, diag4, diag5, diag
 #' @return A boolean vector indicating whether a given record is in the
 #' Maternity cohort
 #' @family Demographic and Service Use Cohort functions
-assign_maternity_cohort <- function(recid) {
+assign_d_cohort_maternity <- function(recid) {
   maternity <- recid == "02B"
   return(maternity)
 }
@@ -182,7 +182,7 @@ assign_maternity_cohort <- function(recid) {
 #' @return A boolean vector indicating whether a given record is in the
 #' High Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer, spec) {
+assign_d_cohort_high_cc <- function(dementia, hefailure, refailure, liver, cancer, spec) {
   high_cc <-
     # FOR FUTURE: PhysicalandSensoryDisabilityClientGroup or LearningDisabilityClientGroup = "Y",
     # then high_cc_cohort = TRUE
@@ -205,7 +205,7 @@ assign_high_cc_cohort <- function(dementia, hefailure, refailure, liver, cancer,
 #' @return A boolean vector indicating whether a given record is in the
 #' Medium Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_medium_cc_cohort <- function(cvd, copd, chd, parkinsons, ms) {
+assign_d_cohort_medium_cc <- function(cvd, copd, chd, parkinsons, ms) {
   medium_cc <-
     rowSums(dplyr::across(c("cvd", "copd", "chd", "parkinsons", "ms")), na.rm = TRUE) >= 1L
   return(medium_cc)
@@ -224,7 +224,7 @@ assign_medium_cc_cohort <- function(cvd, copd, chd, parkinsons, ms) {
 #' @return A boolean vector indicating whether a given record is in the
 #' Low Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_low_cc_cohort <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
+assign_d_cohort_low_cc <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
   low_cc <-
     rowSums(dplyr::across(c("epilepsy", "asthma", "arth", "diabetes", "atrialfib")), na.rm = TRUE) >= 1L
   return(low_cc)
@@ -237,7 +237,7 @@ assign_low_cc_cohort <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
 #' @return A boolean vector indicating whether a given record is in the
 #' Assisted living in the Community cohort
 #' @family Demographic and Service Use Cohort functions
-assign_comm_living_cohort <- function() {
+assign_d_cohort_comm_living <- function() {
   # Code: recid %in% c("HC", "RSP", "DN", "MLS", "INS", "CPL", "DC")
   comm_living <- FALSE
   return(comm_living)
@@ -247,13 +247,13 @@ assign_comm_living_cohort <- function() {
 #' @description A person is considered to be in this cohort if their age is over 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @inheritParams assign_mh_cohort
+#' @inheritParams assign_d_cohort_mh
 #' @param age A vector of ages
 #' @param cost_total_net A vector of total net costs
 #'
 #' @return A boolean vector indicating whether a given record is in the Adult Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_adult_major_cohort <- function(recid, age, cost_total_net) {
+assign_d_cohort_adult_major <- function(recid, age, cost_total_net) {
   adult_major <- age >= 18L & ((cost_total_net >= 500.0 & recid == "PIS") | recid == "01B")
   return(adult_major)
 }
@@ -262,11 +262,11 @@ assign_adult_major_cohort <- function(recid, age, cost_total_net) {
 #' @description A person is considered to be in this cohort if their age is under 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @inheritParams assign_adult_major_cohort
+#' @inheritParams assign_d_cohort_adult_major
 #'
 #' @return A boolean vector indicating whether a given record is in the Child Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
-assign_child_major_cohort <- function(recid, age, cost_total_net) {
+assign_d_cohort_child_major <- function(recid, age, cost_total_net) {
   child_major <- age < 18L & (cost_total_net >= 500.0 & recid == "PIS" | recid == "01B")
   return(child_major)
 }
@@ -276,14 +276,14 @@ assign_child_major_cohort <- function(recid, age, cost_total_net) {
 #' and the cause of death is not external. The exception to this is if the cause of death is external
 #' and is classified as a fall
 #'
-#' @inheritParams assign_mh_cohort
+#' @inheritParams assign_d_cohort_mh
 #' @param deathdiag1,deathdiag2,deathdiag3,deathdiag4,deathdiag5,deathdiag6,deathdiag7,deathdiag8,deathdiag9,deathdiag10,deathdiag11
 #' Character vectors of ICD-10 death diagnosis codes.
 #'
 #' @return A boolean vector indicating whether a given record is in the End of Life cohort
 #'
 #' @family Demographic and Service Use Cohort functions
-assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
+assign_d_cohort_eol <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
                               deathdiag6, deathdiag7, deathdiag8, deathdiag9, deathdiag10,
                               deathdiag11) {
   external_deaths <- c(
@@ -322,7 +322,7 @@ assign_eol_cohort <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdi
 #' record is in this cohort
 #'
 #' @family Demographic and Service Use Cohort functions
-assign_substance_cohort <- function(data) {
+assign_d_cohort_substance <- function(data) {
   check_variables_exist(data,
     variables =
       c("recid", "diag1", "diag2", "diag3", "diag4", "diag5", "diag6")
