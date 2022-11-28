@@ -86,15 +86,20 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
 }
 
 #' Assign Mental Health cohort
+#'
 #' @description A record is considered to be in the MH cohort if the recid is 04B. Also,
 #' if the recid is one of 01B, GLS, 50B, 02B or AE2 \strong{and} any of the diagnosis codes start with
 #' F2, F3, F067, F070, F072, F078, or F079
+#'
+#' @rdname assign_demographic_cohorts
 #'
 #' @param recid A vector of record IDs
 #' @param diag1,diag2,diag3,diag4,diag5,diag6
 #' Character vectors of ICD-10 diagnosis codes.
 #'
-#' @return A boolean vector indicating whether a given record is in the Mental Health cohort
+#' @return A boolean vector indicating whether a record is in the particular
+#' demographic cohort.
+#'
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_mh <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) {
   mh <-
@@ -126,12 +131,10 @@ assign_d_cohort_mh <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6) 
 #'         \item The recid is GLS}
 #'    }
 #'
-#' @inheritParams assign_d_cohort_mh
+#' @rdname assign_demographic_cohorts
 #' @param spec A vector of specialty codes
 #' @param sigfac A vector of significant facilities
 #'
-#' @return A boolean vector indicating whether a given record is in the
-#' Frailty cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_frailty <- function(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac) {
   frail <-
@@ -158,10 +161,10 @@ assign_d_cohort_frailty <- function(recid, diag1, diag2, diag3, diag4, diag5, di
 #' @description A record is considered to be in the Maternity cohort if the recid
 #' is 02B
 #'
+#' @rdname assign_demographic_cohorts
+#'
 #' @param recid A vector of recids
 #'
-#' @return A boolean vector indicating whether a given record is in the
-#' Maternity cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_maternity <- function(recid) {
   maternity <- recid == "02B"
@@ -172,6 +175,8 @@ assign_d_cohort_maternity <- function(recid) {
 #' @description A record is considered to be in the High Complex Conditions
 #' cohort if the patient has any of the listed LTCs, or the specialty is G5
 #'
+#' @rdname assign_demographic_cohorts
+#'
 #' @param dementia A vector of dementia LTC flags
 #' @param hefailure A vector of heart failure LTC flags
 #' @param refailure A vector of renal failure LTC flags
@@ -179,8 +184,6 @@ assign_d_cohort_maternity <- function(recid) {
 #' @param cancer A vector of cancer LTC flags
 #' @param spec A vector of specialties
 #'
-#' @return A boolean vector indicating whether a given record is in the
-#' High Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_high_cc <- function(dementia, hefailure, refailure, liver, cancer, spec) {
   high_cc <-
@@ -196,14 +199,14 @@ assign_d_cohort_high_cc <- function(dementia, hefailure, refailure, liver, cance
 #' @description A record is considered to be in the Medium Complex Conditions
 #' cohort if the patient has any of the listed LTCs
 #'
+#' @rdname assign_demographic_cohorts
+#'
 #' @param cvd A vector of CVD LTC flags
 #' @param copd A vector of COPD LTC flags
 #' @param chd A vector of CHD LTC flags
 #' @param parkinsons A vector of Parkinson's LTC flags
 #' @param ms A vector of MS LTC flags
 #'
-#' @return A boolean vector indicating whether a given record is in the
-#' Medium Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_medium_cc <- function(cvd, copd, chd, parkinsons, ms) {
   medium_cc <-
@@ -215,14 +218,14 @@ assign_d_cohort_medium_cc <- function(cvd, copd, chd, parkinsons, ms) {
 #' @description A record is considered to be in the Low Complex Conditions
 #' cohort if the patient has any of the listed LTCs.
 #'
+#' @rdname assign_demographic_cohorts
+#'
 #' @param epilepsy A vector of epilepsy LTC flags
 #' @param asthma A vector of asthma LTC flags
 #' @param arth A vector of arthritis LTC flags
 #' @param diabetes A vector of diabetes LTC flags
 #' @param atrialfib A vector of atrial fibrillation LTC flags
 #'
-#' @return A boolean vector indicating whether a given record is in the
-#' Low Complex Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_low_cc <- function(epilepsy, asthma, arth, diabetes, atrialfib) {
   low_cc <-
@@ -234,8 +237,8 @@ assign_d_cohort_low_cc <- function(epilepsy, asthma, arth, diabetes, atrialfib) 
 #' @description Not using this cohort until we have more datasets and Scotland
 #' complete DN etc. so will always return FALSE.
 #'
-#' @return A boolean vector indicating whether a given record is in the
-#' Assisted living in the Community cohort
+#' @rdname assign_demographic_cohorts
+#'
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_comm_living <- function() {
   # Code: recid %in% c("HC", "RSP", "DN", "MLS", "INS", "CPL", "DC")
@@ -247,11 +250,11 @@ assign_d_cohort_comm_living <- function() {
 #' @description A person is considered to be in this cohort if their age is over 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @inheritParams assign_d_cohort_mh
+#' @rdname assign_demographic_cohorts
+#'
 #' @param age A vector of ages
 #' @param cost_total_net A vector of total net costs
 #'
-#' @return A boolean vector indicating whether a given record is in the Adult Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_adult_major <- function(recid, age, cost_total_net) {
   adult_major <- age >= 18L & ((cost_total_net >= 500.0 & recid == "PIS") | recid == "01B")
@@ -262,9 +265,8 @@ assign_d_cohort_adult_major <- function(recid, age, cost_total_net) {
 #' @description A person is considered to be in this cohort if their age is under 18 and
 #' the recid is 01B, or their prescribing cost is £500 or over
 #'
-#' @inheritParams assign_d_cohort_adult_major
+#' @rdname assign_demographic_cohorts
 #'
-#' @return A boolean vector indicating whether a given record is in the Child Major Conditions cohort
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_child_major <- function(recid, age, cost_total_net) {
   child_major <- age < 18L & (cost_total_net >= 500.0 & recid == "PIS" | recid == "01B")
@@ -276,11 +278,10 @@ assign_d_cohort_child_major <- function(recid, age, cost_total_net) {
 #' and the cause of death is not external. The exception to this is if the cause of death is external
 #' and is classified as a fall
 #'
-#' @inheritParams assign_d_cohort_mh
+#' @rdname assign_demographic_cohorts
+#'
 #' @param deathdiag1,deathdiag2,deathdiag3,deathdiag4,deathdiag5,deathdiag6,deathdiag7,deathdiag8,deathdiag9,deathdiag10,deathdiag11
 #' Character vectors of ICD-10 death diagnosis codes.
-#'
-#' @return A boolean vector indicating whether a given record is in the End of Life cohort
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_eol <- function(recid, deathdiag1, deathdiag2, deathdiag3, deathdiag4, deathdiag5,
@@ -314,12 +315,17 @@ assign_d_cohort_eol <- function(recid, deathdiag1, deathdiag2, deathdiag3, death
 }
 
 #' Assign substance misuse cohort
-#' @description Please see technical documentation for full description of this cohort
 #'
-#' @param data A data frame containing at least recid and the six diagnosis codes
+#' @description Please see technical documentation for full description of
+#' the Substance Misuse cohort
 #'
-#' @return A data frame with an additional boolean variable, `substance`, indicating a
-#' record is in this cohort
+#' @rdname assign_demographic_cohorts
+#'
+#' @param data A data frame containing at least `recid`` and the six diagnosis
+#' codes (`diag`:`diag6`)
+#'
+#' @return A data frame with an additional boolean variable, `substance`,
+#' indicating a record is in the substance misuse cohort.
 #'
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_substance <- function(data) {

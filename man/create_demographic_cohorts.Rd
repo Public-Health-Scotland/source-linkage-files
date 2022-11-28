@@ -18,16 +18,6 @@ Create the demographic cohorts lookup file
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
-\code{\link{assign_d_cohort_adult_major}()},
-\code{\link{assign_d_cohort_child_major}()},
-\code{\link{assign_d_cohort_comm_living}()},
-\code{\link{assign_d_cohort_eol}()},
-\code{\link{assign_d_cohort_frailty}()},
-\code{\link{assign_d_cohort_high_cc}()},
-\code{\link{assign_d_cohort_low_cc}()},
-\code{\link{assign_d_cohort_maternity}()},
-\code{\link{assign_d_cohort_medium_cc}()},
-\code{\link{assign_d_cohort_mh}()},
-\code{\link{assign_d_cohort_substance}()}
+\code{\link{assign_d_cohort_mh}()}
 }
 \concept{Demographic and Service Use Cohort functions}
