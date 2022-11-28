@@ -33,7 +33,7 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
       low_cc = assign_d_cohort_low_cc(.data$epilepsy, .data$asthma, .data$arth, .data$diabetes, .data$atrialfib),
       comm_living = assign_d_cohort_comm_living(),
       adult_major = assign_d_cohort_adult_major(.data$recid, .data$age, .data$cost_total_net),
-      child_major = assign_d_cohort_child_major_cohort(.data$recid, .data$age, .data$cost_total_net),
+      child_major = assign_d_cohort_child_major(.data$recid, .data$age, .data$cost_total_net),
       end_of_life = assign_d_cohort_eol(
         .data$recid, .data$deathdiag1, .data$deathdiag2, .data$deathdiag3, .data$deathdiag4, .data$deathdiag5,
         .data$deathdiag6, .data$deathdiag7, .data$deathdiag8, .data$deathdiag9, .data$deathdiag10,
