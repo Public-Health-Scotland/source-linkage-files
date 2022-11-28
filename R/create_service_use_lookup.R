@@ -86,18 +86,18 @@ create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
       # Create flag for elective inpatients
       elective_inpatient_flag = assign_elective_inpatient_flag(.data$acute_elective_cost, .data$elective_inpatient_cost),
       # Assign cohort flags
-      psychiatry_cohort = assign_psychiatry_cohort(.data$psychiatry_cost),
-      maternity_cohort = assign_maternity_cohort(.data$maternity_cost),
-      geriatric_cohort = assign_geriatric_cohort(.data$geriatric_cost),
-      elective_inpatient_cohort = assign_elective_inpatient_cohort(.data$elective_inpatient_flag),
-      limited_daycases_cohort = assign_limited_daycases_cohort(.data$elective_inpatient_flag, .data$elective_instances),
-      routine_daycase_cohort = assign_routine_daycase_cohort(.data$elective_inpatient_flag, .data$elective_instances),
-      single_emergency_cohort = assign_single_emergency_cohort(.data$emergency_instances),
-      multiple_emergency_cohort = assign_multiple_emergency_cohort(.data$emergency_instances),
-      prescribing_cohort = assign_prescribing_cohort(.data$prescribing_cost),
-      outpatient_cohort = assign_outpatient_cohort(.data$outpatient_cost),
-      ae2_cohort = assign_ae2_cohort(.data$ae2_cost),
-      community_care_cohort = assign_community_care_cohort(.data$community_health_cost),
+      psychiatry_cohort = assign_s_cohort_psychiatry(.data$psychiatry_cost),
+      maternity_cohort = assign_s_cohort_maternity(.data$maternity_cost),
+      geriatric_cohort = assign_s_cohort_geriatric(.data$geriatric_cost),
+      elective_inpatient_cohort = assign_s_cohort_elective_inpatient(.data$elective_inpatient_flag),
+      limited_daycases_cohort = assign_s_cohort_limited_daycases(.data$elective_inpatient_flag, .data$elective_instances),
+      routine_daycase_cohort = assign_s_cohort_routine_daycase(.data$elective_inpatient_flag, .data$elective_instances),
+      single_emergency_cohort = assign_s_cohort_single_emergency(.data$emergency_instances),
+      multiple_emergency_cohort = assign_s_cohort_multiple_emergency(.data$emergency_instances),
+      prescribing_cohort = assign_s_cohort_prescribing(.data$prescribing_cost),
+      outpatient_cohort = assign_s_cohort_outpatient(.data$outpatient_cost),
+      ae2_cohort = assign_s_cohort_ae2(.data$ae2_cost),
+      community_care_cohort = assign_s_cohort_community_care(.data$community_health_cost),
       # Assign other cohort if none have been assigned
       other_cohort = rowSums(dplyr::across("psychiatry_cohort":"community_care_cohort")) == 0,
 
@@ -485,7 +485,7 @@ assign_death_flag <- function(cij_marker) {
 #'
 #' @return A boolean vector of psychiatry cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_psychiatry_cohort <- function(psychiatry_cost) {
+assign_s_cohort_psychiatry <- function(psychiatry_cost) {
   psychiatry_cohort <- psychiatry_cost > 0
   return(psychiatry_cohort)
 }
@@ -497,7 +497,7 @@ assign_psychiatry_cohort <- function(psychiatry_cost) {
 #'
 #' @return A boolean vector of maternity cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_maternity_cohort <- function(maternity_cost) {
+assign_s_cohort_maternity <- function(maternity_cost) {
   maternity_cohort <- maternity_cost > 0
   return(maternity_cohort)
 }
@@ -509,7 +509,7 @@ assign_maternity_cohort <- function(maternity_cost) {
 #'
 #' @return A boolean vector of geriatric cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_geriatric_cohort <- function(geriatric_cost) {
+assign_s_cohort_geriatric <- function(geriatric_cost) {
   geriatric_cohort <- geriatric_cost > 0
   return(geriatric_cohort)
 }
@@ -521,7 +521,7 @@ assign_geriatric_cohort <- function(geriatric_cost) {
 #'
 #' @return A boolean vector of elective inpatient cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_elective_inpatient_cohort <- function(elective_inpatient_flag) {
+assign_s_cohort_elective_inpatient <- function(elective_inpatient_flag) {
   elective_inpatient_cohort <- elective_inpatient_flag
   return(elective_inpatient_cohort)
 }
@@ -535,7 +535,7 @@ assign_elective_inpatient_cohort <- function(elective_inpatient_flag) {
 #'
 #' @return A boolean vector of limited daycases cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_limited_daycases_cohort <- function(elective_inpatient_flag, elective_instances) {
+assign_s_cohort_limited_daycases <- function(elective_inpatient_flag, elective_instances) {
   limited_daycases_cohort <- !elective_inpatient_flag & elective_instances <= 3
   return(limited_daycases_cohort)
 }
@@ -544,11 +544,11 @@ assign_limited_daycases_cohort <- function(elective_inpatient_flag, elective_ins
 #' @description If the record does not have an elective inpatient flag and they have
 #' 4 or more elective instances, return `TRUE`
 #'
-#' @inheritParams assign_limited_daycases_cohort
+#' @inheritParams assign_s_cohort_limited_daycases
 #'
 #' @return A boolean vector of routine daycase cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_routine_daycase_cohort <- function(elective_inpatient_flag, elective_instances) {
+assign_s_cohort_routine_daycase <- function(elective_inpatient_flag, elective_instances) {
   routine_daycase_cohort <- !elective_inpatient_flag & elective_instances >= 4
   return(routine_daycase_cohort)
 }
@@ -559,18 +559,18 @@ assign_routine_daycase_cohort <- function(elective_inpatient_flag, elective_inst
 #'
 #' @return A boolean vector of single emergency cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_single_emergency_cohort <- function(emergency_instances) {
+assign_s_cohort_single_emergency <- function(emergency_instances) {
   single_emergency_cohort <- emergency_instances == 1
   return(single_emergency_cohort)
 }
 
 #' Assign multiple emergency cohort flag
 #'
-#' @inheritParams assign_single_emergency_cohort
+#' @inheritParams assign_s_cohort_single_emergency
 #'
 #' @return A boolean vector of multiple emergency cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_multiple_emergency_cohort <- function(emergency_instances) {
+assign_s_cohort_multiple_emergency <- function(emergency_instances) {
   multiple_emergency_cohort <- emergency_instances >= 2
   return(multiple_emergency_cohort)
 }
@@ -582,7 +582,7 @@ assign_multiple_emergency_cohort <- function(emergency_instances) {
 #'
 #' @return A boolean vector of prescribing cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_prescribing_cohort <- function(prescribing_cost) {
+assign_s_cohort_prescribing <- function(prescribing_cost) {
   prescribing_cohort <- prescribing_cost > 0
   return(prescribing_cohort)
 }
@@ -594,7 +594,7 @@ assign_prescribing_cohort <- function(prescribing_cost) {
 #'
 #' @return A boolean vector of outpatient cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_outpatient_cohort <- function(outpatient_cost) {
+assign_s_cohort_outpatient <- function(outpatient_cost) {
   outpatient_cohort <- outpatient_cost > 0
   return(outpatient_cohort)
 }
@@ -607,7 +607,7 @@ assign_outpatient_cohort <- function(outpatient_cost) {
 #'
 #' @return A boolean vector of residential care cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_residential_care_cohort <- function(care_home_cost) {
+assign_s_cohort_residential_care <- function(care_home_cost) {
   residential_care_cohort <- care_home_cost > 0
   return(residential_care_cohort)
 }
@@ -619,7 +619,7 @@ assign_residential_care_cohort <- function(care_home_cost) {
 #'
 #' @return A boolean vector of A&E cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_ae2_cohort <- function(ae2_cost) {
+assign_s_cohort_ae2 <- function(ae2_cost) {
   ae2_cohort <- ae2_cost > 0
   return(ae2_cohort)
 }
@@ -632,7 +632,7 @@ assign_ae2_cohort <- function(ae2_cost) {
 #'
 #' @return A boolean vector of Community Care cohort flags
 #' @family Demographic and Service Use Cohort functions
-assign_community_care_cohort <- function(community_health_cost) {
+assign_s_cohort_community_care <- function(community_health_cost) {
   community_care_cohort <- community_health_cost > 0 # | home_care_cost > 0
   return(community_care_cohort)
 }
