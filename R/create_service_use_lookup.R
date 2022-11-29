@@ -761,7 +761,7 @@ assign_cohort_names <- function(data) {
         # as the mean
         .data$cost_max == rowSums(
           dplyr::across(
-            c(.data$psychiatry_cost:.data$residential_care_cost)
+            c("psychiatry_cost":"residential_care_cost")
           )
         ) / 12 ~ "Unassigned",
         .data$cost_max == .data$psychiatry_cost ~ "Psychiatry",
