@@ -237,29 +237,28 @@ test_that("Instance flags are assigned correctly", {
   )
 })
 
-test_that("Cohorts are assigned correctly", {
-  dummy_data <- tibble::tribble(
-    ~psychiatry_cost, ~maternity_cost, ~geriatric_cost, ~elective_inpatient_flag, ~elective_instances,
-    ~emergency_instances, ~prescribing_cost, ~outpatient_cost, ~care_home_cost, ~community_health_cost,
-    ~ae2_cost,
-    10, 0, 0, F, 0, 0, 0, 0, 0, 0, 0,
-    0, 10, 0, F, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 10, F, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, T, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, F, 2, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, F, 15, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, F, 0, 1, 0, 0, 0, 0, 0,
-    0, 0, 0, F, 0, 4, 0, 0, 0, 0, 0,
-    0, 0, 0, F, 0, 0, 10, 0, 0, 0, 0,
-    0, 0, 0, F, 0, 0, 0, 10, 0, 0, 0,
-    0, 0, 0, F, 0, 0, 0, 0, 10, 0, 0,
-    0, 0, 0, F, 0, 0, 0, 0, 0, 10, 0,
-    0, 0, 0, F, 0, 0, 0, 0, 0, 0, 10,
-    0, 0, 0, F, 3.5, 0, 0, 0, 0, 0, 0,
-    10, 10, 10, T, 10, 10, 10, 10, 10, 10, 10
-  )
+dummy_data <- tibble::tribble(
+  ~psychiatry_cost, ~maternity_cost, ~geriatric_cost, ~elective_inpatient_flag, ~elective_instances,
+  ~emergency_instances, ~prescribing_cost, ~outpatient_cost, ~care_home_cost, ~community_health_cost,
+  ~ae2_cost,
+  10, 0, 0, F, 0, 0, 0, 0, 0, 0, 0,
+  0, 10, 0, F, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 10, F, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, T, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, F, 2, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, F, 15, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, F, 0, 1, 0, 0, 0, 0, 0,
+  0, 0, 0, F, 0, 4, 0, 0, 0, 0, 0,
+  0, 0, 0, F, 0, 0, 10, 0, 0, 0, 0,
+  0, 0, 0, F, 0, 0, 0, 10, 0, 0, 0,
+  0, 0, 0, F, 0, 0, 0, 0, 10, 0, 0,
+  0, 0, 0, F, 0, 0, 0, 0, 0, 10, 0,
+  0, 0, 0, F, 0, 0, 0, 0, 0, 0, 10,
+  0, 0, 0, F, 3.5, 0, 0, 0, 0, 0, 0,
+  10, 10, 10, T, 10, 10, 10, 10, 10, 10, 10
+)
 
-  # Psychiatry
+test_that("Psychiatry cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_psychiatry(dummy_data[["psychiatry_cost"]]),
     c(
@@ -267,7 +266,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Maternity
+})
+
+test_that("Maternity cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_maternity(dummy_data[["maternity_cost"]]),
     c(
@@ -275,7 +276,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Geriatric
+})
+
+test_that("Geriatric cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_geriatric(dummy_data[["geriatric_cost"]]),
     c(
@@ -283,7 +286,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Elective inpatient
+})
+
+test_that("Elective inpatient cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_elective_inpatient(dummy_data[["elective_inpatient_flag"]]),
     c(
@@ -291,7 +296,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Limited daycases
+})
+
+test_that("Limited daycase cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_limited_daycases(
       dummy_data[["elective_inpatient_flag"]],
@@ -302,7 +309,9 @@ test_that("Cohorts are assigned correctly", {
       TRUE, TRUE, TRUE, FALSE, FALSE
     )
   )
-  # Routine daycases
+})
+
+test_that("Routine daycase cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_routine_daycase(
       dummy_data[["elective_inpatient_flag"]],
@@ -313,7 +322,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
     )
   )
-  # Single emergency
+})
+
+test_that("Single emergency cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_single_emergency(dummy_data[["emergency_instances"]]),
     c(
@@ -321,7 +332,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
     )
   )
-  # Multiple emergency
+})
+
+test_that("Multiple emergency cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_multiple_emergency(dummy_data[["emergency_instances"]]),
     c(
@@ -329,7 +342,8 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Prescribing
+})
+test_that("Prescribing cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_prescribing(dummy_data[["prescribing_cost"]]),
     c(
@@ -337,7 +351,9 @@ test_that("Cohorts are assigned correctly", {
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Outpatients
+})
+
+test_that("Outpatients cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_outpatient(dummy_data[["outpatient_cost"]]),
     c(
@@ -345,17 +361,21 @@ test_that("Cohorts are assigned correctly", {
       TRUE, FALSE, FALSE, FALSE, FALSE, TRUE
     )
   )
-  # Community
+})
+
+test_that("Community cohort is assigned correctly", {
   expect_equal(
-    assign_s_cohort_ae2(dummy_data[["community_health_cost"]]),
+    assign_s_cohort_community_care(dummy_data[["community_health_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-      FALSE, TRUE, TRUE, FALSE, FALSE, TRUE
+      FALSE, FALSE, TRUE, FALSE, FALSE, TRUE
     )
   )
-  # A&E
+})
+
+test_that("A&E cohort is assigned correctly", {
   expect_equal(
-    assign_s_cohort_community_care(dummy_data[["ae2_cost"]]),
+    assign_s_cohort_ae2(dummy_data[["ae2_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, TRUE, FALSE, TRUE
