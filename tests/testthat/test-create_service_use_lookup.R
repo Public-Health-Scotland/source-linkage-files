@@ -40,27 +40,42 @@ test_that("Costs are assigned correctly", {
 
   # Geriatric
   expect_equal(
-    calculate_geriatric_cost(dummy_data$recid, dummy_data$spec, dummy_data$cost_total_net),
+    calculate_geriatric_cost(
+      dummy_data[["recid"]],
+      dummy_data[["spec"]],
+      dummy_data[["cost_total_net"]]
+    ),
     c(1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0)
   )
 
   # Maternity
   expect_equal(
-    calculate_maternity_cost(dummy_data$recid, dummy_data$cij_pattype, dummy_data$cost_total_net),
+    calculate_maternity_cost(
+      dummy_data[["recid"]],
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cost_total_net"]]
+    ),
     c(0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Psychiatry
   expect_equal(
-    calculate_psychiatry_cost(dummy_data$recid, dummy_data$spec, dummy_data$cost_total_net),
+    calculate_psychiatry_cost(
+      dummy_data[["recid"]],
+      dummy_data[["spec"]],
+      dummy_data[["cost_total_net"]]
+    ),
     c(0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Acute elective
   expect_equal(
     calculate_acute_elective_cost(
-      dummy_data$recid, dummy_data$cij_pattype, dummy_data$cij_ipdc,
-      dummy_data$spec, dummy_data$cost_total_net
+      dummy_data[["recid"]],
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cij_ipdc"]],
+      dummy_data[["spec"]],
+      dummy_data[["cost_total_net"]]
     ),
     c(0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
   )
@@ -68,37 +83,44 @@ test_that("Costs are assigned correctly", {
   # Acute Emergency
   expect_equal(
     calculate_acute_emergency_cost(
-      dummy_data$recid, dummy_data$cij_pattype,
-      dummy_data$spec, dummy_data$cost_total_net
+      dummy_data[["recid"]],
+      dummy_data[["cij_pattype"]],
+      dummy_data[["spec"]],
+      dummy_data[["cost_total_net"]]
     ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
   )
 
   # Create geriatric costs for outpatient costs
   dummy_data_op <- dummy_data %>%
-    dplyr::mutate(geriatric_cost = calculate_geriatric_cost(recid, spec, cost_total_net))
+    dplyr::mutate(geriatric_cost = calculate_geriatric_cost(
+      recid,
+      spec,
+      cost_total_net
+    ))
 
   # Outpatient
   expect_equal(
     calculate_outpatient_costs(
-      dummy_data_op$recid,
-      dummy_data_op$cost_total_net,
-      dummy_data_op$geriatric_cost
+      dummy_data_op[["recid"]],
+      dummy_data_op[["cost_total_net"]],
+      dummy_data_op[["geriatric_cost"]]
     )[[1]],
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
   )
 
   # Care Home
   expect_equal(
-    calculate_care_home_cost(dummy_data$recid, dummy_data$cost_total_net),
+    calculate_care_home_cost(dummy_data[["recid"]], dummy_data[["cost_total_net"]]),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
   )
 
   # Hospital Elective
   expect_equal(
     calculate_hospital_elective_cost(
-      dummy_data$recid, dummy_data$cij_pattype,
-      dummy_data$cost_total_net
+      dummy_data[["recid"]],
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cost_total_net"]]
     ),
     c(0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
   )
@@ -106,33 +128,43 @@ test_that("Costs are assigned correctly", {
   # Hospital Emergency
   expect_equal(
     calculate_hospital_emergency_cost(
-      dummy_data$recid, dummy_data$cij_pattype,
-      dummy_data$cost_total_net
+      dummy_data[["recid"]],
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cost_total_net"]]
     ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
   )
 
   # Prescribing
   expect_equal(
-    calculate_prescribing_cost(dummy_data$recid, dummy_data$cost_total_net),
+    calculate_prescribing_cost(
+      dummy_data[["recid"]],
+      dummy_data[["cost_total_net"]]
+    ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
   )
 
   # A&E
   expect_equal(
-    calculate_ae2_cost(dummy_data$recid, dummy_data$cost_total_net),
+    calculate_ae2_cost(
+      dummy_data[["recid"]],
+      dummy_data[["cost_total_net"]]
+    ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)
   )
 
   # Community
   expect_equal(
-    calculate_community_health_cost(dummy_data$recid, dummy_data$cost_total_net),
+    calculate_community_health_cost(
+      dummy_data[["recid"]],
+      dummy_data[["cost_total_net"]]
+    ),
     c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
   )
 
   # Operation flag
   expect_equal(
-    add_operation_flag(dummy_data$op1a),
+    add_operation_flag(dummy_data[["op1a"]]),
     c(F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, T)
   )
 
@@ -145,7 +177,10 @@ test_that("Costs are assigned correctly", {
   )
 
   expect_equal(
-    assign_elective_inpatient_flag(dummy_data$acute_elective_cost, dummy_data$elective_inpatient_cost),
+    assign_elective_inpatient_flag(
+      dummy_data[["acute_elective_cost"]],
+      dummy_data[["elective_inpatient_cost"]]
+    ),
     c(T, T, T, F)
   )
 })
@@ -164,31 +199,40 @@ test_that("Instance flags are assigned correctly", {
 
   # Emergency
   expect_equal(
-    assign_emergency_instances(dummy_data$cij_pattype),
+    assign_emergency_instances(dummy_data[["cij_pattype"]]),
     c(TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE)
   )
 
   # Elective
   expect_equal(
-    assign_elective_instances(dummy_data$cij_pattype, dummy_data$cij_ipdc),
+    assign_elective_instances(
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cij_ipdc"]]
+    ),
     c(TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE)
   )
 
   # Elective inpatient
   expect_equal(
-    assign_elective_inpatient_instances(dummy_data$cij_pattype, dummy_data$cij_ipdc),
+    assign_elective_inpatient_instances(
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cij_ipdc"]]
+    ),
     c(FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE)
   )
 
   # Elective daycase
   expect_equal(
-    assign_elective_daycase_instances(dummy_data$cij_pattype, dummy_data$cij_ipdc),
+    assign_elective_daycase_instances(
+      dummy_data[["cij_pattype"]],
+      dummy_data[["cij_ipdc"]]
+    ),
     c(FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE)
   )
 
   # Death flags
   expect_equal(
-    assign_death_flag(dummy_data$cij_marker),
+    assign_death_flag(dummy_data[["cij_marker"]]),
     c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE)
   )
 })
@@ -217,7 +261,7 @@ test_that("Cohorts are assigned correctly", {
 
   # Psychiatry
   expect_equal(
-    assign_psychiatry_cohort(dummy_data$psychiatry_cost),
+    assign_psychiatry_cohort(dummy_data[["psychiatry_cost"]]),
     c(
       TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -225,7 +269,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Maternity
   expect_equal(
-    assign_maternity_cohort(dummy_data$maternity_cost),
+    assign_maternity_cohort(dummy_data[["maternity_cost"]]),
     c(
       FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -233,7 +277,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Geriatric
   expect_equal(
-    assign_geriatric_cohort(dummy_data$geriatric_cost),
+    assign_geriatric_cohort(dummy_data[["geriatric_cost"]]),
     c(
       FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -241,7 +285,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Elective inpatient
   expect_equal(
-    assign_elective_inpatient_cohort(dummy_data$elective_inpatient_flag),
+    assign_elective_inpatient_cohort(dummy_data[["elective_inpatient_flag"]]),
     c(
       FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -250,8 +294,8 @@ test_that("Cohorts are assigned correctly", {
   # Limited daycases
   expect_equal(
     assign_limited_daycases_cohort(
-      dummy_data$elective_inpatient_flag,
-      dummy_data$elective_instances
+      dummy_data[["elective_inpatient_flag"]],
+      dummy_data[["elective_instances"]]
     ),
     c(
       TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE,
@@ -261,8 +305,8 @@ test_that("Cohorts are assigned correctly", {
   # Routine daycases
   expect_equal(
     assign_routine_daycase_cohort(
-      dummy_data$elective_inpatient_flag,
-      dummy_data$elective_instances
+      dummy_data[["elective_inpatient_flag"]],
+      dummy_data[["elective_instances"]]
     ),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE,
@@ -271,7 +315,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Single emergency
   expect_equal(
-    assign_single_emergency_cohort(dummy_data$emergency_instances),
+    assign_single_emergency_cohort(dummy_data[["emergency_instances"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
@@ -279,7 +323,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Multiple emergency
   expect_equal(
-    assign_multiple_emergency_cohort(dummy_data$emergency_instances),
+    assign_multiple_emergency_cohort(dummy_data[["emergency_instances"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -287,7 +331,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Prescribing
   expect_equal(
-    assign_prescribing_cohort(dummy_data$prescribing_cost),
+    assign_prescribing_cohort(dummy_data[["prescribing_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -295,7 +339,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Outpatients
   expect_equal(
-    assign_outpatient_cohort(dummy_data$outpatient_cost),
+    assign_outpatient_cohort(dummy_data[["outpatient_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       TRUE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -303,7 +347,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Community
   expect_equal(
-    assign_community_care_cohort(dummy_data$community_health_cost),
+    assign_community_care_cohort(dummy_data[["community_health_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, TRUE, TRUE, FALSE, FALSE, TRUE
@@ -311,7 +355,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # A&E
   expect_equal(
-    assign_ae2_cohort(dummy_data$ae2_cost),
+    assign_ae2_cohort(dummy_data[["ae2_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, TRUE, FALSE, TRUE
@@ -336,48 +380,48 @@ test_that("Recalculated costs are calculated correctly", {
   # Elective
   expect_equal(
     calculate_elective_inpatient_cost(
-      dummy_data$elective_inpatient_cohort,
-      dummy_data$cost_total_net
+      dummy_data[["elective_inpatient_cohort"]],
+      dummy_data[["cost_total_net"]]
     ),
     c(10, 0, 0, 0, 0, 0, 10)
   )
   # Limited daycases
   expect_equal(
     calculate_limited_daycases_cost(
-      dummy_data$limited_daycases_cohort,
-      dummy_data$acute_elective_cost
+      dummy_data[["limited_daycases_cohort"]],
+      dummy_data[["acute_elective_cost"]]
     ),
     c(0, 10, 0, 0, 0, 0, 10)
   )
   # Routine daycases
   expect_equal(
     calculate_routine_daycase_cost(
-      dummy_data$routine_daycase_cohort,
-      dummy_data$acute_elective_cost
+      dummy_data[["routine_daycase_cohort"]],
+      dummy_data[["acute_elective_cost"]]
     ),
     c(0, 0, 10, 0, 0, 0, 10)
   )
   # Single emergency
   expect_equal(
     calculate_single_emergency_cost(
-      dummy_data$single_emergency_cohort,
-      dummy_data$acute_emergency_cost
+      dummy_data[["single_emergency_cohort"]],
+      dummy_data[["acute_emergency_cost"]]
     ),
     c(0, 0, 0, 10, 0, 0, 20)
   )
   # Multiple emergency
   expect_equal(
     calculate_multiple_emergency_cost(
-      dummy_data$multiple_emergency_cohort,
-      dummy_data$acute_emergency_cost
+      dummy_data[["multiple_emergency_cohort"]],
+      dummy_data[["acute_emergency_cost"]]
     ),
     c(0, 0, 0, 0, 10, 0, 20)
   )
   # Community care
   expect_equal(
     calculate_community_care_cost(
-      dummy_data$community_care_cohort,
-      dummy_data$community_health_cost
+      dummy_data[["community_care_cohort"]],
+      dummy_data[["community_health_cost"]]
     ),
     c(0, 0, 0, 0, 0, 10, 30)
   )
@@ -434,7 +478,7 @@ test_that("Cohort names are assigned correctly", {
   test_output <- assign_cohort_names(dummy_data)
 
   expect_equal(
-    test_output$service_use_cohort,
+    test_output[["service_use_cohort"]],
     c(
       "Psychiatry", "Maternity", "Geriatric", "Psychiatry", "Elective Inpatient",
       "Limited Daycases", "Routine Daycase", "Outpatients", "Single Emergency",
