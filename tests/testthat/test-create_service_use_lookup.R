@@ -261,7 +261,7 @@ test_that("Cohorts are assigned correctly", {
 
   # Psychiatry
   expect_equal(
-    assign_psychiatry_cohort(dummy_data[["psychiatry_cost"]]),
+    assign_s_cohort_psychiatry(dummy_data[["psychiatry_cost"]]),
     c(
       TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -269,7 +269,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Maternity
   expect_equal(
-    assign_maternity_cohort(dummy_data[["maternity_cost"]]),
+    assign_s_cohort_maternity(dummy_data[["maternity_cost"]]),
     c(
       FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -277,7 +277,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Geriatric
   expect_equal(
-    assign_geriatric_cohort(dummy_data[["geriatric_cost"]]),
+    assign_s_cohort_geriatric(dummy_data[["geriatric_cost"]]),
     c(
       FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -285,7 +285,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Elective inpatient
   expect_equal(
-    assign_elective_inpatient_cohort(dummy_data[["elective_inpatient_flag"]]),
+    assign_s_cohort_elective_inpatient(dummy_data[["elective_inpatient_flag"]]),
     c(
       FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -293,7 +293,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Limited daycases
   expect_equal(
-    assign_limited_daycases_cohort(
+    assign_s_cohort_limited_daycases(
       dummy_data[["elective_inpatient_flag"]],
       dummy_data[["elective_instances"]]
     ),
@@ -304,7 +304,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Routine daycases
   expect_equal(
-    assign_routine_daycase_cohort(
+    assign_s_cohort_routine_daycase(
       dummy_data[["elective_inpatient_flag"]],
       dummy_data[["elective_instances"]]
     ),
@@ -315,7 +315,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Single emergency
   expect_equal(
-    assign_single_emergency_cohort(dummy_data[["emergency_instances"]]),
+    assign_s_cohort_single_emergency(dummy_data[["emergency_instances"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE
@@ -323,7 +323,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Multiple emergency
   expect_equal(
-    assign_multiple_emergency_cohort(dummy_data[["emergency_instances"]]),
+    assign_s_cohort_multiple_emergency(dummy_data[["emergency_instances"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -331,7 +331,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Prescribing
   expect_equal(
-    assign_prescribing_cohort(dummy_data[["prescribing_cost"]]),
+    assign_s_cohort_prescribing(dummy_data[["prescribing_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE,
       FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -339,7 +339,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Outpatients
   expect_equal(
-    assign_outpatient_cohort(dummy_data[["outpatient_cost"]]),
+    assign_s_cohort_outpatient(dummy_data[["outpatient_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       TRUE, FALSE, FALSE, FALSE, FALSE, TRUE
@@ -347,7 +347,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # Community
   expect_equal(
-    assign_community_care_cohort(dummy_data[["community_health_cost"]]),
+    assign_s_cohort_ae2(dummy_data[["community_health_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, TRUE, TRUE, FALSE, FALSE, TRUE
@@ -355,7 +355,7 @@ test_that("Cohorts are assigned correctly", {
   )
   # A&E
   expect_equal(
-    assign_ae2_cohort(dummy_data[["ae2_cost"]]),
+    assign_s_cohort_community_care(dummy_data[["ae2_cost"]]),
     c(
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
       FALSE, FALSE, FALSE, TRUE, FALSE, TRUE
