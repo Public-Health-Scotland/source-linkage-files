@@ -173,7 +173,7 @@ create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
 #' @family Demographic and Service Use Cohort functions
 calculate_geriatric_cost <- function(recid, spec, cost_total_net) {
   geriatric_cost <- dplyr::if_else(
-    .data$recid %in% c("50B", "GLS") | .data$spec %in% c("AB", "G4"), .data$cost_total_net, 0
+    recid %in% c("50B", "GLS") | spec %in% c("AB", "G4"), cost_total_net, 0
   )
   return(geriatric_cost)
 }
