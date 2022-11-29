@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_service_use_lookup.R
 \name{assign_cohort_names}
 \alias{assign_cohort_names}
-\title{Title Assign service use cohort into string format}
+\title{Assign service use cohort into string format}
 \usage{
 assign_cohort_names(data)
 }
@@ -13,7 +13,7 @@ assign_cohort_names(data)
 A data frame with an additional variable containing the assigned cohort
 }
 \description{
-Title Assign service use cohort into string format
+Assign service use cohort into string format
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

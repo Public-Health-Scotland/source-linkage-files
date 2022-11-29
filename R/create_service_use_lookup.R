@@ -726,7 +726,7 @@ calculate_residential_care_cost <- function() {
   return(residential_care_cost)
 }
 
-#' Title Assign service use cohort into string format
+#' Assign service use cohort into string format
 #'
 #' @param data A data frame
 #'
