@@ -59,7 +59,6 @@ Variable Labels
     HL1_in_FY "CHI had an active homelessness application during this financial year"
     health_net_cost "Total net cost"
     health_net_costincDNAs "Total net cost including 'did not attend'"
-    health_net_costincIncomplete "Total net cost including CH and DN (not DNAs)"
     acute_episodes "Number of acute episodes"
     acute_daycase_episodes "Number of acute day case episodes"
     acute_inpatient_episodes "Number of acute inpatient episodes"
@@ -243,7 +242,6 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     gpprac
     health_net_cost
     health_net_costincdnas
-    health_net_costincincomplete
     nsu
     preventable_admissions
     preventable_beddays

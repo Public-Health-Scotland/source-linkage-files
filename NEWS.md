@@ -8,6 +8,8 @@
   * Changed from using the Net cost (in `cost_total_net`) to using the Gross cost.
   * `no_dispensed_items` has been replaced with `no_paid_items` in the episode file.
   * `pis_dispensed_items` has been replaced with `pis_paid_items` in the individual file.
+* `health_net_costincIncomplete` has been removed from the indiviual file. This was only relevant to District Nursing, so was deemed to be not worth keeping as a seperate variable.
+
 
 # September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.

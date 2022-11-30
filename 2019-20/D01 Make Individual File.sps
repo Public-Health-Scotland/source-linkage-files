@@ -900,9 +900,6 @@ Recode Acute_episodes to deceased (sysmis = 0).
 Compute health_net_cost = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + AE_cost + PIS_cost + OoH_cost.
 Compute health_net_costincDNAs = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + OP_cost_dnas + AE_cost + PIS_cost + OoH_cost.
 
-* Care home and DN costs aren't included in the above as we do not have data for all LCAs / HBs (also the completeness of what we do have is questionable).
-Compute health_net_costincIncomplete = health_net_cost + CH_cost + DN_cost.
-
 * Create a year variable for time-series linking.
 String year (A4).
 Compute year = !FY.
@@ -910,7 +907,7 @@ Compute year = !FY.
 * Delete the record specific DoB gpprac and postcode, and reorder others whilst we're here.
 save outfile = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav"
     /Keep year chi gender DoB age postcode gpprac
-    health_net_cost health_net_costincDNAs health_net_costincIncomplete
+    health_net_cost health_net_costincDNAs
     deceased death_date
     ALL
     /zcompressed.
