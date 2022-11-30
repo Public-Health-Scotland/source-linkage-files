@@ -11,6 +11,7 @@
 * `health_net_costincIncomplete` has been removed from the indiviual file. This was only relevant to District Nursing, so was deemed to be not worth keeping as a seperate variable.
 * HRI changes and fixes
   * The variables `hri_lca_incDN` and `hri_lcap_incdn` have been removed. They were dependent on `health_net_costincIncomplete` which has now been removed.
+  * Only people with health activity, not Social (Care Home, Home Care, SDS or Alarms and Telecare), or Community care (District Nursing or Community Mental Health) will be included in the HRI calculation.
 
 # September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.
