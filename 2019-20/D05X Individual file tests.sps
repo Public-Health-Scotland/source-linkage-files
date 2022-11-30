@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 *Individual File checks.
 *Run A01 for the individual year.
 
@@ -31,6 +31,13 @@ if sysmis(gpprac) No_GPprac = 1.
 
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
+
+* Count HRI groups.
+Do if HRI_ScotP <= 20.
+ Compute HRI_Scot_High = 1.
+Else if HRI_ScotP >= 80.
+  Compute HRI_Scot_Low = 1.
+End if.
 
 *Flag to count how many patients in each HB by rescode. 
 If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
@@ -275,7 +282,7 @@ aggregate outfile = New_Summary
     /mean_endomet = Mean(endomet)
     /mean_digestive = Mean(digestive)
     /n_Population = Sum(Keep_Population)
-    /HRI_Scot HRI_HB HRI_LCA = Sum(HRI_Scot HRI_HB HRI_LCA)
+    /HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low = Sum(HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
@@ -340,6 +347,13 @@ if sysmis(gpprac) No_GPprac = 1.
 
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
+
+* Count HRI groups.
+Do if HRI_ScotP <= 20.
+ Compute HRI_Scot_High = 1.
+Else if HRI_ScotP >= 80.
+  Compute HRI_Scot_Low = 1.
+End if.
 
 *Flag to count how many patients in each HB by rescode. 
 If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
@@ -588,7 +602,7 @@ aggregate outfile = Old_Summary
     /mean_endomet = Mean(endomet)
     /mean_digestive = Mean(digestive)
     /n_Population = Sum(Keep_Population)
-    /HRI_Scot HRI_HB HRI_LCA = Sum(HRI_Scot HRI_HB HRI_LCA)
+    /HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low = Sum(HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
