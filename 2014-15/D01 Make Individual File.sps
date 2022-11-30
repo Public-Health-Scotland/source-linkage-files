@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -466,6 +466,9 @@ Sort cases by chi ooh_case_id.
 add files file = *
     /first = unique_ooh_case
     /by = chi ooh_case_id.
+
+* Correct for the above counting 1 case when the person has no ooh_case_id (it counts the sysmiss as 1 or something).
+If recid NE "OoH" unique_ooh_case = 0.
 
 Sort cases by chi ch_chi_cis.
 * Aggregate over the Care Home 'CIS' episodes.
