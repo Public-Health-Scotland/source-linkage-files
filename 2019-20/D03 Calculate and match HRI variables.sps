@@ -1,16 +1,16 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Calculating HRIs (high resource individuals) which are patients whose total health costs account for more than 50% of their council, health board of
-   residence, or Scotland's total health costs.
- * Originally created by Kara Sellar 18/10/13.
- * Amended and updated by ML March 2013.
- * Edited and updated by Alison McClelland Apr 2015 for HRI 200,000 days.
- * Re-written to simplify reading by James McMahon Aug 2019.
+    residence, or Scotland's total health costs.
+* Originally created by Kara Sellar 18/10/13.
+* Amended and updated by ML March 2013.
+* Edited and updated by Alison McClelland Apr 2015 for HRI 200,000 days.
+* Re-written to simplify reading by James McMahon Aug 2019.
 
- * Step 1 - Remove non-Scottish residents
- * Step 2 - Work out total cost for Scotland, HBs and LCAs.
- * Step 3 - Create a cumulative percentage using the percentage of resource used by each CHI.
- * Step 4 - Identify those CHIs which are jointly using 50% of the resources for an area, these are the HRIs.
- * Step 5 - Save out and link back to the SLF.
+* Step 1 - Remove non-Scottish residents
+    * Step 2 - Work out total cost for Scotland, HBs and LCAs.
+* Step 3 - Create a cumulative percentage using the percentage of resource used by each CHI.
+* Step 4 - Identify those CHIs which are jointly using 50% of the resources for an area, these are the HRIs.
+* Step 5 - Save out and link back to the SLF.
 
 
 * First quickly create a lookup for Postcode district, use the lookup file which has all Scottish Postcodes in it.
@@ -41,12 +41,12 @@ select if health_activity >= 1.
 String PCArea (A3).
 * Workout the postcode area.
 * Take the first bit of the postcode which will be 1, 2 or 3 chars, to work this out find the first number and take everything before this. e.g. EH5 1HU -> EH.
-If postcode NE '' PCArea = char.substr(postcode, 1, char.index(postcode, "0123456789", 1) - 1).
+If postcode NE "" PCArea = char.substr(postcode, 1, char.index(postcode, "0123456789", 1) - 1).
 
 sort cases by PCArea.
 
 match files
-    /file =  *
+    /file = *
     /table = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
     /In = ScotFlag
     /by PCArea.
@@ -113,16 +113,16 @@ Compute lca_pct = health_net_cost / lca_cost * 100.
 Sort cases by health_net_cost (D).
 
 Do if $casenum = 1.
-     * The first case will just be its own percentage.
+    * The first case will just be its own percentage.
     Compute HRI_scotP = scotland_pct.
 Else.
-     * Subsequent cases are the cumulative sum of percentages.
+    * Subsequent cases are the cumulative sum of percentages.
     Compute HRI_scotP = lag(HRI_scotP) + scotland_pct.
 End if.
 
 * HBs.
 Sort cases by hbrescode (A) health_net_cost (D).
- * As above but we also start again when the Health Board changes.
+* As above but we also start again when the Health Board changes.
 Do if $casenum = 1 or hbrescode NE lag(hbrescode).
     Compute HRI_hbP = hb_pct.
 Else.
@@ -160,20 +160,20 @@ Do if LCA = "".
     Compute HRI_LCAP = $sysmis.
 End if.
 
- * Sort back by CHI ready for matching.
+* Sort back by CHI ready for matching.
 sort cases by CHI.
 
-save outfile = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
+save outfile = !Year_dir + "HRI_lookup_" + !FY + ".zsav"
     /keep chi
     HRI_scot to HRI_lca
     HRI_scotP to HRI_lcaP
     /zcompressed.
 
 
- * Match to individual file.
+* Match to individual file.
 match files
     /file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
-    /table = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
+    /table = !Year_dir + "HRI_lookup_" + !FY + ".zsav"
     /By chi.
 
 save outfile = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
@@ -181,5 +181,5 @@ save outfile = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
 
 get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav".
 
- * Housekeeping.
+* Housekeeping.
 Erase file = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav".
