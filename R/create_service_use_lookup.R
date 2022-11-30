@@ -278,9 +278,11 @@ calculate_outpatient_costs <- function(recid, cost_total_net, geriatric_cost) {
 #' @return A vector of home care costs
 #' @family Demographic and Service Use Cohort functions
 calculate_home_care_cost <- function(recid, cost_total_net) {
-  home_care_cost <- dplyr::if_else(
-    recid %in% c("HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"), cost_total_net, 0
-  )
+  # Home Care cost will include Home Care and maybe some other future data
+  # "HC-", "HC + ", "INS", "RSP", "MLS", "DC", "CPL"
+
+  home_care_cost <- 0.0
+
   return(home_care_cost)
 }
 
