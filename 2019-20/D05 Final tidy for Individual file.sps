@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
@@ -155,11 +155,9 @@ Variable Labels
     CIJ_mat "Number of Continous Inpatient Journeys (CIJ) which began with an Maternity admission"
     cij_delay "Number of Continuous Inpatient Journeys (CIJ) which had a delay at some point"
     HRI_lca "HRIs in LCA excluding District Nursing and Care Home costs"
-    HRI_lca_incDN "HRIs in LCA including District Nursing costs"
     HRI_hb "HRIs in HB excluding District Nursing and Care Home costs"
     HRI_scot "HRIs in Scotland excluding District Nursing and Care Home costs"
     HRI_lcaP "Cumulative percent in LCA excluding District Nursing and Care Home costs"
-    HRI_lcaP_incDN "Cumulative percent in LCA including District Nursing costs"
     HRI_hbP "Cumulative percent in HB excluding District Nursing and Care Home costs"
     HRI_scotP "Cumulative percent in Scotland excluding District Nursing and Care Home costs"
     Keep_Population "Flag indicating whether this CHI should be kept or discarded when scaling the whole population to be more in line with official population estimates".
@@ -410,11 +408,9 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     hscp2019
     ca2019
     hri_lca
-    hri_lca_incdn
     hri_hb
     hri_scot
     hri_lcap
-    hri_lcap_incdn
     hri_hbp
     hri_scotp
     sparra_start_fy

@@ -9,7 +9,8 @@
   * `no_dispensed_items` has been replaced with `no_paid_items` in the episode file.
   * `pis_dispensed_items` has been replaced with `pis_paid_items` in the individual file.
 * `health_net_costincIncomplete` has been removed from the indiviual file. This was only relevant to District Nursing, so was deemed to be not worth keeping as a seperate variable.
-
+* HRI changes and fixes
+  * The variables `hri_lca_incDN` and `hri_lcap_incdn` have been removed. They were dependent on `health_net_costincIncomplete` which has now been removed.
 
 # September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.
