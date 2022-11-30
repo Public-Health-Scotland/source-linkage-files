@@ -33,6 +33,11 @@ get file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
     /Keep year chi postcode gpprac lca hbrescode Health_net_cost
     Acute_episodes Mat_episodes MH_episodes GLS_episodes OP_newcons_attendances OP_newcons_dnas AE_attendances PIS_paid_items OoH_cases.
 
+* Exclude people who didn't have health activity.
+compute health_activity = Acute_episodes + Mat_episodes + MH_episodes + GLS_episodes + OP_newcons_attendances + OP_newcons_dnas + AE_attendances + PIS_paid_items + OoH_cases.
+
+select if health_activity >= 1.
+
 String PCArea (A3).
 * Workout the postcode area.
 * Take the first bit of the postcode which will be 1, 2 or 3 chars, to work this out find the first number and take everything before this. e.g. EH5 1HU -> EH.
