@@ -2,6 +2,7 @@
 * Fixed a typo in the Service Use Cohort `substance` where the ICD-10 code `F11` (Opioids) was used instead of the correct `F13` (sedatives or hypnotics).
 * GP OoH costs updated - Now using real contact numbers (from unscheduled care team publication) for 2020/21, and 2021/22. Costs are upflited from 2019/20 using the same methodology as with PLICS. 2022/23 now has costs (previously missing).
 * Fixed `ooh_cases` - this was overcounting, such that everyone had at least one case and the majority of people had one more case than they should have had.
+* Added new variables to the individual file to count the recently added consultation types for GP OoHs - `ooh_covid_advice`, `ooh_covid_assesment` and `ooh_covid_other`.
 * Prescribing (PIS) changes
   * Changed from using 'dispensed items' (count and cost) to 'paid items'.
   * Changed from using the Net cost (in `cost_total_net`) to using the Gross cost.

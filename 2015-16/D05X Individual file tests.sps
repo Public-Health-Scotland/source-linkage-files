@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 *Individual File checks.
 *Run A01 for the individual year.
 
@@ -7,8 +7,8 @@ Define !FinalName()
 !EndDefine.
 
 get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
- * Set up some flags.
 
+ * Set up some flags.
  * Flag to count the males and females.
 Do if gender = 1.
     Compute Male = 1.
@@ -147,6 +147,9 @@ aggregate outfile = New_Summary
     /total_OoH_PCC = Sum(OoH_PCC)
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
+    /total_ooh_covid_advice = sum(ooh_covid_advice)
+    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
     /total_DN_cost = Sum(DN_cost)
@@ -241,6 +244,9 @@ aggregate outfile = New_Summary
     /mean_OoH_NHS24 = Mean(OoH_NHS24)
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
+    /mean_ooh_covid_advice = Mean(ooh_covid_advice)
+    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
     /mean_DN_episodes = Mean(DN_episodes)
@@ -313,9 +319,7 @@ get file = "/conf/hscdiip/01-Source-linkage-files/source-individual-file-20" + !
 Dataset Name OldFile.
 Dataset Activate OldFile.
 
-
  * Set up some flags.
-
  * Flag to count the males and females.
 Do if gender = 1.
     Compute Male = 1.
@@ -439,7 +443,7 @@ aggregate outfile = Old_Summary
     /total_OP_cost_dnas = Sum(OP_cost_dnas)
     /total_AE_attendances = Sum(AE_attendances)
     /total_AE_cost = Sum(AE_cost)
-    /total_pis_paid_items = Sum(pis_paid_items)
+    /total_pis_paid_items = Sum(pis_dispensed_items)
     /total_PIS_cost = Sum(PIS_cost)
     /total_CH_cis_episodes = Sum(CH_cis_episodes)
     /total_CH_beddays = Sum(CH_beddays)
@@ -453,6 +457,9 @@ aggregate outfile = Old_Summary
     /total_OoH_PCC = Sum(OoH_PCC)
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
+    /total_ooh_covid_advice = sum(ooh_covid_advice)
+    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
     /total_DN_cost = Sum(DN_cost)
@@ -535,7 +542,7 @@ aggregate outfile = Old_Summary
     /mean_OP_cost_dnas = Mean(OP_cost_dnas)
     /mean_AE_attendances = Mean(AE_attendances)
     /mean_AE_cost = Mean(AE_cost)
-    /mean_pis_paid_items = Mean(pis_paid_items)
+    /mean_pis_paid_items = Mean(pis_dispensed_items)
     /mean_PIS_cost = Mean(PIS_cost)
     /mean_CH_cis_episodes = Mean(CH_cis_episodes)
     /mean_CH_beddays = Mean(CH_beddays)
@@ -547,6 +554,9 @@ aggregate outfile = Old_Summary
     /mean_OoH_NHS24 = Mean(OoH_NHS24)
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
+    /mean_ooh_covid_advice = Mean(ooh_covid_advice)
+    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
     /mean_DN_episodes = Mean(DN_episodes)

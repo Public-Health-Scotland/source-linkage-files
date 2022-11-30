@@ -27,7 +27,7 @@ Alter type
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
     PIS_paid_items
-    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
+    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time ooh_covid_advice ooh_covid_assesment ooh_covid_other
     DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     DN_episodes DN_contacts
     CMH_contacts
@@ -36,7 +36,7 @@ Alter type
     AT_telecare AT_alarms
     SDS_option_1 SDS_option_2 SDS_option_3
     CIJ_el CIJ_non_el CIJ_mat CIJ_delay
-    preventable_admissions preventable_beddays 
+    preventable_admissions preventable_beddays
     HHG_Start_FY HHG_End_FY SPARRA_Start_FY SPARRA_End_FY (F8.0).
 
 * Tidy up the display.
@@ -125,6 +125,9 @@ Variable Labels
     ooh_NHS24 "Number of GP OoH NHS24 consultations"
     ooh_other "Number of GP OoH Other consultations"
     ooh_PCC "Number of GP OoH Primary Care Centre / Emergency Primary Care Centre consultations"
+    ooh_covid_advice "Number of GP OoH COVID-19 Advice consultations"
+    ooh_covid_assesment "Number of GP OoH COVID-19 Advice assesment consultations"
+    ooh_covid_other "Number of GP OoH COVID-19 Other consultations"
     ooh_cost "Cost of all GP OoHs"
     ooh_consultation_time "Total time for GP OoH Consultations"
     DN_episodes "Number of District Nursing episodes (consultations more than 7-days apart)"
@@ -308,6 +311,9 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     ooh_nhs24
     ooh_other
     ooh_pcc
+    ooh_covid_advice
+    ooh_covid_assesment
+    ooh_covid_other
     ooh_consultation_time
     ooh_cost
     dn_episodes

@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * We create a row per chi by producing various summaries from the episode file.
 
 * Produced, based on the original, by James McMahon.
@@ -297,8 +297,14 @@ Else if (recid = "OoH").
         Compute OoH_other = 1.
     Else If SMRType = "OOH-PCC".
         Compute OoH_PCC = 1.
+    Else if smrtype = "OOH-C19Adv".
+        Compute ooh_covid_advice = 1.
+    Else if smrtype = "OOH-C19Ass".
+        Compute ooh_covid_assesment = 1.
+    Else if smrtype = "OOH-C19Oth".
+        Compute ooh_covid_other = 1.
     End If.
-
+    
     * Cost (use the Cost_Total_Net).
     Compute OoH_cost = Cost_Total_Net.
 
@@ -544,7 +550,8 @@ aggregate outfile = *
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
     /PIS_paid_items PIS_cost = sum(no_paid_items PIS_cost)
     /OoH_cases = sum(unique_ooh_case)
-    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC)
+    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assesment ooh_covid_other =
+    sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assesment ooh_covid_other)
     /OoH_consultation_time OoH_cost = sum(OoH_consultation_time OoH_cost)
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
