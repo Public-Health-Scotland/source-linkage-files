@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 *Individual File checks.
 *Run A01 for the individual year.
 
@@ -375,6 +375,11 @@ If NHS_Western_Isles = 1 NHS_Western_Isles_cost = health_net_cost.
 If NHS_Fife = 1 NHS_Fife_cost = health_net_cost.
 If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
 
+* Add in variables which didn't exist in the previous update (Dec 2022).
+Numeric
+    ooh_covid_advice
+    ooh_covid_assesment
+    ooh_covid_other (F2.0).
 
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
