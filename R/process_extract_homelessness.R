@@ -86,21 +86,27 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     dplyr::select(-"CAName", -"sending_local_authority_code_9")
 
-  filtered_data <- data %>%
-    dplyr::left_join(la_code_lookup,
-      by = c("sending_local_authority_code_9" = "CA")
-    ) %>%
-    dplyr::left_join(completeness_data,
-      by = c("sending_local_authority_name", "year")
-    ) %>%
-    # Keep where the completeness is between 90% and 110%
-    # Or if it's East Ayrshire (S12000008) as they are submitting something different.
-    dplyr::filter(
-      dplyr::between(.data$pct_complete_all, 0.90, 1.05) |
-        .data$sending_local_authority_code_9 == "S12000008"
-    )
-
-
+  if (year <= max(completeness_data %>% dplyr::pull("year"))) {
+    filtered_data <- data %>%
+      dplyr::left_join(la_code_lookup,
+        by = c("sending_local_authority_code_9" = "CA")
+      ) %>%
+      dplyr::left_join(completeness_data,
+        by = c("sending_local_authority_name", "year")
+      ) %>%
+      # Keep where the completeness is between 90% and 110%
+      # Or if it's East Ayrshire (S12000008) as they are submitting something different.
+      dplyr::filter(
+        dplyr::between(.data$pct_complete_all, 0.90, 1.05) |
+          .data$sending_local_authority_code_9 == "S12000008"
+      )
+  } else {
+    filtered_data <- data %>%
+      dplyr::left_join(la_code_lookup,
+        by = c("sending_local_authority_code_9" = "CA")
+      )
+    cli::cli_alert_info("There is no completeness data for {.val {year}}, so the homelessness data won't be filtered.")
+  }
 
   # dplyr::rename and select ---------------------------------------------------------
   # TODO - Include person_id (from client_id)
