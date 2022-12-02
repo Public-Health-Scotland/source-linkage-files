@@ -19,7 +19,7 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
     !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
     !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
-    !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
+    !Year_dir + "prescribing_tests_20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "CMH_tests_20" + !FY + ".zsav " +.
