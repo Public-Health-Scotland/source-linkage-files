@@ -66,4 +66,4 @@ save outfile = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
 get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
 * zip raw data back up.
-Host Command = ["gzip " + !PIS_extract_file].
+Host Command = ["gzip -v9 " + !PIS_extract_file].
