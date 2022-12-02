@@ -4,7 +4,7 @@
 \alias{run_data_extracts}
 \title{Run data extracts}
 \usage{
-run_data_extracts(year, write_to_disk = FALSE)
+run_data_extracts(year, write_to_disk = TRUE)
 }
 \arguments{
 \item{year}{Year of extract}
