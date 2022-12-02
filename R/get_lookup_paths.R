@@ -8,7 +8,7 @@
 #' @family lookup file paths
 #' @family directories
 get_lookups_dir <- function() {
-  fs::path("/conf/linkage/output/lookups/Unicode")
+  fs::path("/", "conf", "linkage", "output", "lookups", "Unicode")
 }
 
 
