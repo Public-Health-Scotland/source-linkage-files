@@ -31,37 +31,7 @@
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_smr_type.html</loc>
   </url>
   <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_adult_major_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_child_major_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_comm_living_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_eol_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_frailty_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_high_cc_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_low_cc_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_maternity_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_medium_cc_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_mh_cohort.html</loc>
-  </url>
-  <url>
-    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_substance_cohort.html</loc>
+    <loc>https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.html</loc>
   </url>
   <url>
     <loc>https://public-health-scotland.github.io/source-linkage-files/reference/calculate_measures.html</loc>
