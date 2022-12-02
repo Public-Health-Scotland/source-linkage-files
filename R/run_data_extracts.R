@@ -11,16 +11,16 @@
 #'
 #' @export
 #'
-run_data_extracts <- function(year, write_to_disk = FALSE) {
+run_data_extracts <- function(year, write_to_disk = TRUE) {
   process_extracts <- list(
     "acute" = process_extract_acute(read_extract_acute(year), year, write_to_disk = write_to_disk),
     "ae" = process_extract_ae(read_extract_ae(year), year, write_to_disk = write_to_disk),
     "mental_health" = process_extract_mental_health(read_extract_mental_health(year), year, write_to_disk = write_to_disk),
     "maternity" = process_extract_maternity(read_extract_maternity(year), year, write_to_disk = write_to_disk),
     "nrs_deaths" = process_extract_nrs_deaths(read_extract_nrs_deaths(year), year, write_to_disk = write_to_disk),
-    "outpatients" = process_extract_outpatients(read_extract_outpatients(year), year, write_to_disk = write_to_disk),
-    "pis" = process_extract_prescribing(read_extract_prescribing(year), year, write_to_disk = write_to_disk),
-    "ltc" = process_lookup_ltc(read_lookup_ltc(), year, write_to_disk = write_to_disk)
+    "outpatients" = process_extract_outpatients(read_extract_outpatients(year), year, write_to_disk = write_to_disk)#,
+    #"pis" = process_extract_prescribing(read_extract_prescribing(year), year, write_to_disk = write_to_disk),
+    #"ltc" = process_lookup_ltc(read_lookup_ltc(), year, write_to_disk = write_to_disk)
     # "ooh" = process_extract_ooh(read_extract_ooh(year), year, write_to_disk = write_to_disk)
   )
 
@@ -46,25 +46,25 @@ run_data_extracts <- function(year, write_to_disk = FALSE) {
     process_extracts <- append(
       process_extracts,
       list(
-        "homelessness" = process_extract_homelessness(read_extract_homelessness(year), year),
+        #"homelessness" = process_extract_homelessness(read_extract_homelessness(year), year),
         "dd" = process_extract_delayed_discharges(read_extract_delayed_discharges(), year, write_to_disk = write_to_disk)
       )
     )
   }
 
-  # Run year specific social care data
-  if (year > 2017) {
-    process_extracts <- append(
-      process_extracts,
-      list(
-        "sc_client" = process_lookup_sc_client(read_lookup_sc_client(), year, write_to_disk = write_to_disk),
-        "Alarms telecare" = process_extract_alarms_telecare(read_extract_alarms_telecare(year), year),
-        "HC" = process_extract_home_care(read_extract_home_care(year), year),
-        "SDS" = process_extract_sds(read_extract_sds(year), year)
-        # "CH" = process_extract_care_homes(read_extract_care_homes(year), year)
-      )
-    )
-  }
+  # # Run year specific social care data
+  # if (year > 2017) {
+  #   process_extracts <- append(
+  #     process_extracts,
+  #     list(
+  #       "sc_client" = process_lookup_sc_client(read_lookup_sc_client(), year, write_to_disk = write_to_disk),
+  #       "Alarms telecare" = process_extract_alarms_telecare(read_extract_alarms_telecare(year), year),
+  #       "HC" = process_extract_home_care(read_extract_home_care(year), year),
+  #       "SDS" = process_extract_sds(read_extract_sds(year), year)
+  #       # "CH" = process_extract_care_homes(read_extract_care_homes(year), year)
+  #     )
+  #   )
+  # }
 
   return(process_extracts)
 }
