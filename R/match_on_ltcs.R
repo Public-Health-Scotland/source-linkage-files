@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-match_on_ltcs <- function(){
+match_on_ltcs <- function() {
   # Get temp file
   temp <-
     haven::read_sav(
@@ -20,9 +20,9 @@ match_on_ltcs <- function(){
 
   # Match on LTC lookup
   matched <- dplyr::left_join(temp,
-                              readr::read_rds(get_ltcs_path("1920")),
-                              by = "chi",
-                              suffix = c("", "_ltc")
+    readr::read_rds(get_ltcs_path("1920")),
+    by = "chi",
+    suffix = c("", "_ltc")
   ) %>%
     # Replace any NA values with 0 for the LTC flags
     dplyr::mutate(dplyr::across(arth:digestive, ~ tidyr::replace_na(., 0)))
@@ -120,7 +120,6 @@ match_on_ltcs <- function(){
         chi_age_max > 113 ~ 9
       )
     ) %>%
-
     # If we still don't have an age, try and fill it in from a previous record.
     dplyr::mutate(
       dob = dplyr::case_when(
@@ -139,10 +138,8 @@ match_on_ltcs <- function(){
         TRUE ~ changed_dob
       )
     ) %>%
-
     # Fill in ages for any that are left.
     dplyr::mutate(age = dplyr::if_else(is.na(age), compute_mid_year_age(year, dob), age)) %>%
-
     # If any gender codes are missing or 0 recode to CHI gender.
     dplyr::mutate(chi_gender = phsmethods::sex_from_chi(chi)) %>%
     # I cannot see why this is complicated in spss but I follow
@@ -152,7 +149,6 @@ match_on_ltcs <- function(){
         (is.na(gender) | gender == 0) & (chi_gender %% 2 == 0) ~ 2
       )
     ) %>%
-
     # explain changed_dob
     dplyr::mutate(
       labels = dplyr::case_when(
