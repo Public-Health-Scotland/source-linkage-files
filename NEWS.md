@@ -1,4 +1,7 @@
 # December 2022 Update - Unreleased
+* Now using the 2022v2 Scottish Postcode Directory.
+* Now using the 2020 Urban Rural classifications (instead of the older 2016 ones), this means variables such as `URx_2016` will now be called `URx_2020`.
+* Now using the 2021 Datazone population estimates to derive the `keep_population` flag.
 * Fixed a typo in the Service Use Cohort `substance` where the ICD-10 code `F11` (Opioids) was used instead of the correct `F13` (sedatives or hypnotics).
 * Prescribing (PIS) changes
   * Changed from using 'dispensed items' (count and cost) to 'paid items'.
