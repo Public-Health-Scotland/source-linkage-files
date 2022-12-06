@@ -7,8 +7,7 @@
 get_spd_path(file_name = NULL, ext = "rds")
 }
 \arguments{
-\item{file_name}{(optional) the file name of the SPD, if not supplied it will
-try to return the latest file automatically (using \code{\link[=find_latest_file]{find_latest_file()}})}
+\item{file_name}{The file name (with extension if not supplied to \code{ext})}
 
 \item{ext}{The extension (type of the file) - optional}
 }
