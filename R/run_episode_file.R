@@ -1,12 +1,16 @@
-run_episode_file <- function() {
+run_episode_file <- function(processed_data_list, year) {
   # Bring all the datasets together from Jen's process functions
   ep_file <- dplyr::bind_rows(processed_data_list)
 
   # From C01 ----
   # Check chi is valid using phsmethods function
   # If the CHI is invalid for whatever reason, set the CHI to blank string
-  temp_file <- test %>%
-    dplyr::mutate(chi = dplyr::if_else(phsmethods::chi_check(.data$chi) != "Valid CHI", "", .data$chi)) %>%
+  temp_file <- ep_file %>%
+    dplyr::mutate(chi = dplyr::if_else(
+      phsmethods::chi_check(.data$chi) != "Valid CHI",
+      "",
+      .data$chi
+    )) %>%
     # In original C01, set dates to date format - this doesn't need to be done
     # Set SMRtype, doesn't need to be done
     # Recode any cij_admtype "Un" to "99"
@@ -40,9 +44,11 @@ run_episode_file <- function() {
     dplyr::group_by(.data$chi) %>%
     # We want any NA cij_markers to be filled in, if they are the first in the group and
     # are NA. This is why we use this arrange() before the mutate()
-    dplyr::arrange(desc(is.na(cij_marker)), .by_group = TRUE) %>%
+    dplyr::arrange(dplyr::desc(is.na(.data$cij_marker)), .by_group = TRUE) %>%
     dplyr::mutate(cij_marker = dplyr::if_else(
-      .data$chi != "" & is.na(.data$cij_marker) & dplyr::row_number() == 1, 1, .data$cij_marker
+      .data$chi != "" & is.na(.data$cij_marker) & dplyr::row_number() == 1L,
+      1,
+      .data$cij_marker
     )) %>%
     dplyr::ungroup() %>%
     # Tidy up cij_ipdc
@@ -70,19 +76,25 @@ run_episode_file <- function() {
   ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
     dplyr::mutate(
-      cost_total_net_inc_dnas = cost_total_net,
+      cost_total_net_inc_dnas = .data$cost_total_net,
       # In the Cost_Total_Net column set the cost for
       # those with attendance status 5 or 8 (CNWs and DNAs)
-      cost_total_net = dplyr::if_else(attendance_status %in% c(5, 8), 0, cost_total_net)
+      cost_total_net = dplyr::if_else(
+        .data$attendance_status %in% c(5, 8),
+        0.0,
+        .data$cost_total_net
+      )
     ) %>%
     # Add the flag for Potentially Preventable Admissions
     add_ppa_flag()
 
   # From C02 - Link Delayed Discharge Episodes ----
   # Create Temp File 2
+  temp_file_2 <- tibble()
 
   # From C03 - Link Homelessness ----
   # Create Temp File 3
+  temp_file_3 <- tibble()
 
   # From C04 - Add NSU cohort ----
 
@@ -90,9 +102,11 @@ run_episode_file <- function() {
 
   # From C05 - Match on LTCs ----
   # Create Temp File 5
+  temp_file_5 <- tibble()
 
   # From C06 - Deaths Fixes ----
   # Create Temp File 6
+  temp_file_6 <- tibble()
 
   # From C07 - Calculate and write out pathways cohorts ----
   create_demographic_lookup(temp_file_6, year, write_to_disk = TRUE)

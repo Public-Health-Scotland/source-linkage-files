@@ -8,8 +8,6 @@ cost_uplift(data)
 }
 \arguments{
 \item{data}{episode data}
-
-\item{uplift}{}
 }
 \value{
 episode data with uplifted costs

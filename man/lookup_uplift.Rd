@@ -2,18 +2,16 @@
 % Please edit documentation in R/cost_uplift.R
 \name{lookup_uplift}
 \alias{lookup_uplift}
-\title{set uplift scale}
+\title{Set uplift scale}
 \usage{
 lookup_uplift(data)
 }
 \arguments{
 \item{data}{episode data}
-
-\item{latest_cost_year}{default financial year '2223'}
 }
 \value{
 episode data with a uplift scale
 }
 \description{
-set uplift scale
+Set uplift scale
 }
