@@ -1,4 +1,4 @@
-# December 2022 Update - Unreleased
+# December 2022 Update - Released 07-Dec-2022
 * Now using the 2022v2 Scottish Postcode Directory.
 * Now using the 2020 Urban Rural classifications (instead of the older 2016 ones), this means variables such as `URx_2016` will now be called `URx_2020`.
 * Now using the 2021 Datazone population estimates to derive the `keep_population` flag.
