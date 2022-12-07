@@ -169,6 +169,7 @@ correct_demographics <- function(data, year) {
       )
     )
 
-  # save the data
-  # write_rds()
+  # return the data
+  
+  return(data)
 }
