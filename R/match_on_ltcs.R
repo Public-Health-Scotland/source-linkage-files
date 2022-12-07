@@ -119,24 +119,10 @@ correct_demographics <- function(data, year) {
         chi_age_max > 113 ~ 9
       )
     ) %>%
-    # If we still don't have an age, try and fill it in from a previous record.
-    dplyr::mutate(
-      dob = dplyr::case_when(
-        ((is.na(age) & chi == dplyr::lag(chi)) & (chi_age_max == dplyr::lag(age) | chi_dob_min == dplyr::lag(dob))) ~ chi_dob_min,
-        ((is.na(age) & chi == dplyr::lag(chi)) & (chi_age_min == dplyr::lag(age) | chi_dob_max == dplyr::lag(dob))) ~ chi_dob_max,
-        TRUE ~ dob
-      ),
-      age = dplyr::case_when(
-        ((is.na(age) & chi == dplyr::lag(chi)) & (chi_age_max == dplyr::lag(age) | chi_dob_min == dplyr::lag(dob))) ~ chi_age_max,
-        ((is.na(age) & chi == dplyr::lag(chi)) & (chi_age_min == dplyr::lag(age) | chi_dob_max == dplyr::lag(dob))) ~ chi_age_min,
-        TRUE ~ age
-      ),
-      changed_dob = dplyr::case_when(
-        ((is.na(age) & chi == dplyr::lag(chi)) & (chi_age_max == dplyr::lag(age) | chi_dob_min == dplyr::lag(dob))) ~ 10,
-        ((is.na(age) & chi == dplyr::lag(chi)) & (chi_age_min == dplyr::lag(age) | chi_dob_max == dplyr::lag(dob))) ~ 10,
-        TRUE ~ changed_dob
-      )
-    ) %>%
+    # If we still don't have an age, try and fill it in from other records.
+  dplyr::group_by(chi) %>%
+  tidyr::fill(dob, .direction = "downup") %>%
+  dplyr::ungroup()
     # Fill in ages for any that are left.
     dplyr::mutate(age = dplyr::if_else(is.na(age), compute_mid_year_age(year, dob), age)) %>%
     # If any gender codes are missing or 0 recode to CHI gender.
