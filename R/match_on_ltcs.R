@@ -58,8 +58,6 @@ correct_demographics <- function(data, year) {
         # If one option for dob isn't there, use the other
         is.na(chi_dob_min) & !is.na(chi_dob_max) ~ chi_age_min,
         !is.na(chi_dob_min) & is.na(chi_dob_max) ~ chi_age_max,
-        # If they have activity before birth date, assume older
-        chi_dob_max > keydate1_dateformat ~ chi_age_max,
         # If they have an LTC date before birth date, assume older
         chi_dob_max > purrr::reduce(dplyr::select(., arth_date:digestive_date), `min`) ~ chi_age_max,
         # If they have a maternity record, assume the younger age
