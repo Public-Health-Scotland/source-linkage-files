@@ -25,7 +25,7 @@ match_on_ltcs <- function(data, year) {
     suffix = c("", "_ltc")
   ) %>%
     # Replace any NA values with 0 for the LTC flags
-    dplyr::mutate(dplyr::across(arth:digestive, ~ tidyr::replace_na(., 0)))
+    dplyr::mutate(dplyr::across("arth":"digestive", ~ tidyr::replace_na(., 0)))
     }
 
 correct_demographics <- function(data, year) {
