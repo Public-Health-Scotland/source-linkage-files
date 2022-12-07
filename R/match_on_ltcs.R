@@ -26,7 +26,9 @@ match_on_ltcs <- function() {
   ) %>%
     # Replace any NA values with 0 for the LTC flags
     dplyr::mutate(dplyr::across(arth:digestive, ~ tidyr::replace_na(., 0)))
+    }
 
+correct_demographics <- function(data, year) {
   # Checking and changing DOB and age
   test <- matched %>%
     dplyr::filter(!is_missing(chi)) %>%
