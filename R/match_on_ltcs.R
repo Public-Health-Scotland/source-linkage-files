@@ -38,7 +38,7 @@ correct_demographics <- function(data, year) {
         chi_number = chi,
         chi_check = FALSE,
         min_date = lubridate::ymd("1900-01-01"),
-        max_date = lubridate::ymd("2000-01-01")
+        max_date = lubridate::ymd("1999-12-31")
       ),
       # Create a dob in the current century from chi (will return NA if in the future)
       chi_dob_max = phsmethods::dob_from_chi(
