@@ -17,14 +17,14 @@
 
     Code
       tibble::tibble(chi = chi) %>% dplyr::mutate(anon_chi = convert_chi_to_anon_chi(
-        anon_chi))
+        chi))
     Output
       # A tibble: 5 x 2
-        chi        anon_chi                
-        <chr>      <chr>                   
-      1 0901965286 TURrd01UazJOVEk0Tmc9PQ==
-      2 0608626805 TURZd09EWXlOamd3TlE9PQ==
-      3 0904746216 TURrd05EYzBOakl4Tmc9PQ==
-      4 1812631146 TVRneE1qWXpNVEUwTmc9PQ==
-      5 2004533447 TWpBd05EVXpNelEwTnc9PQ==
+        chi        anon_chi        
+        <chr>      <chr>           
+      1 0901965286 MDkwMTk2NTI4Ng==
+      2 0608626805 MDYwODYyNjgwNQ==
+      3 0904746216 MDkwNDc0NjIxNg==
+      4 1812631146 MTgxMjYzMTE0Ng==
+      5 2004533447 MjAwNDUzMzQ0Nw==
 

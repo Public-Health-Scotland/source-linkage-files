@@ -43,5 +43,5 @@ test_that("convert from CHI to anon_chi", {
   )
 
   expect_snapshot(tibble::tibble(chi = chi) %>%
-    dplyr::mutate(anon_chi = convert_chi_to_anon_chi(anon_chi)))
+    dplyr::mutate(anon_chi = convert_chi_to_anon_chi(chi)))
 })
