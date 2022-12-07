@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-match_on_ltcs <- function() {
+match_on_ltcs <- function(data, year) {
   # Get temp file
   temp <-
     haven::read_sav(
