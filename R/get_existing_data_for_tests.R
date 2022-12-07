@@ -30,7 +30,7 @@ get_existing_data_for_tests <- function(new_data) {
     columns = variable_names
   )) %>%
     # Convert anon_chi back to CHI
-    dplyr::mutate(chi = convert_anon_chi_to_chi(.data[["anon_chi"]])) %>%
+    dplyr::mutate(chi = convert_anon_chi_to_chi(.data[["anon_chi"]]), .after = "anon_chi") %>%
     dplyr::select(-"anon_chi")
 
   return(slf_data)
