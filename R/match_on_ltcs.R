@@ -44,7 +44,8 @@ correct_demographics <- function(data, year) {
       chi_dob_max = phsmethods::dob_from_chi(
         chi_number = chi,
         chi_check = FALSE,
-        min_date = lubridate::ymd("2000-01-01")
+        min_date = lubridate::ymd("2000-01-01"),
+        max_date = max_date = pmin(keydate1_dateformat, end_fy(year))
       ),
       # Compute two ages for each chi, the maximum and minimum it could be
       chi_age_max = compute_mid_year_age("1920", chi_dob_min),
