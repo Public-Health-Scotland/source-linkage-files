@@ -4,7 +4,7 @@
 \alias{match_on_ltcs}
 \title{Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)}
 \usage{
-match_on_ltcs()
+match_on_ltcs(data, year)
 }
 \description{
 Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)
