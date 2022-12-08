@@ -52,7 +52,7 @@ correct_demographics <- function(data, year) {
         .data$dob == chi_dob_max ~ chi_age_min,
         # If one option for dob isn't there, use the other
         is.na(chi_dob_min) &
-          !is.na(chi_dob_max) ~ chi_age_min,!is.na(chi_dob_min) &
+          !is.na(chi_dob_max) ~ chi_age_min, !is.na(chi_dob_min) &
           is.na(chi_dob_max) ~ chi_age_max,
         # If they have an LTC date before birth date, assume older
         chi_dob_max > purrr::reduce(dplyr::select(., "arth_date":"digestive_date"), `min`) ~ chi_age_max,
@@ -72,7 +72,7 @@ correct_demographics <- function(data, year) {
         .data$dob == chi_dob_max ~ dob,
         # If one option for dob isn't there, use the other
         is.na(chi_dob_min) &
-          !is.na(chi_dob_max) ~ chi_dob_max,!is.na(chi_dob_min) &
+          !is.na(chi_dob_max) ~ chi_dob_max, !is.na(chi_dob_min) &
           is.na(chi_dob_max) ~ chi_dob_min,
         # If they have an LTC date before birth date, assume older
         chi_dob_max > purrr::reduce(dplyr::select(., "arth_date":"digestive_date"), `min`) ~ chi_dob_min,
@@ -86,12 +86,10 @@ correct_demographics <- function(data, year) {
         chi_age_max > 113 ~ chi_dob_max
       )
     ) %>%
-
     # If we still don't have an age, try and fill it in from other records.
     dplyr::group_by(chi) %>%
     tidyr::fill(dob, .direction = "downup") %>%
     dplyr::ungroup() %>%
-
     # Fill in ages for any that are left.
     dplyr::mutate(age = dplyr::if_else(is.na(age), compute_mid_year_age(year, dob), age)) %>%
     # If any gender codes are missing or 0 recode to CHI gender.
