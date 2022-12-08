@@ -299,7 +299,7 @@ consultations_filtered <- consultations_file %>%
   dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
   dplyr::as_tibble()
 
-rm(consultations_file)
+rm(consultations_file, fnc_consulation_types)
 
 consultations_covid <- consultations_filtered %>%
   dplyr::mutate(consultation_type = dplyr::if_else(is.na(consultation_type),
@@ -457,4 +457,5 @@ final_data <- ooh_clean %>%
     "ooh_case_id"
   )
 
+rm(location_lookup, ooh_clean, ooh_costs)
 # End of Script #
