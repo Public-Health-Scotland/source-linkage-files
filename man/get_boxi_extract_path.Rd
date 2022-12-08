@@ -19,7 +19,8 @@ get_boxi_extract_path(
 BOXI extracts containing data for each dataset
 }
 \description{
-Get the BOXI extract path for a given extract and year, returns an error message if the extract does not exist
+Get the BOXI extract path for a given extract and year,
+returns an error message if the extract does not exist
 }
 \seealso{
 Other extract file paths: 

@@ -58,9 +58,9 @@ write_rds <- function(data, path, compress = "xz", ...) {
     x = data,
     file = path,
     compress = compress,
-    version = 3,
+    version = 3L,
     ...,
-    compression = 9
+    compression = 9L
   )
 
   if (fs::file_info(path)$user == Sys.getenv("USER")) {

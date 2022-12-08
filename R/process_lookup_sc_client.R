@@ -53,9 +53,9 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
           "living_alone",
           "day_care"
         ),
-        tidyr::replace_na, 9
+        tidyr::replace_na, 9L
       ),
-      type_of_housing = tidyr::replace_na(.data$type_of_housing, 6)
+      type_of_housing = tidyr::replace_na(.data$type_of_housing, 6L)
     ) %>%
     # factor labels
     dplyr::mutate(
@@ -75,7 +75,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
           "other_vulnerable_groups"
         ),
         factor,
-        levels = c(0, 1),
+        levels = c(0L, 1L),
         labels = c("No", "Yes")
       ),
       dplyr::across(
@@ -87,11 +87,11 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
           "day_care"
         ),
         factor,
-        levels = c(0, 1, 9),
+        levels = c(0L, 1L, 9L),
         labels = c("No", "Yes", "Not Known")
       ),
       type_of_housing = factor(.data$type_of_housing,
-        levels = c(1:6)
+        levels = 1L:6L
       )
     ) %>%
     # rename variables

@@ -1,6 +1,7 @@
 #' Get BOXI extract
 #'
-#' @description Get the BOXI extract path for a given extract and year, returns an error message if the extract does not exist
+#' @description Get the BOXI extract path for a given extract and year,
+#' returns an error message if the extract does not exist
 #'
 #' @param year Year of extract
 #' @param type Name of BOXI extract
@@ -28,11 +29,7 @@ get_boxi_extract_path <-
            )) {
     type <- match.arg(type)
 
-    year_dir <- fs::path(
-      "/conf/sourcedev/Source_Linkage_File_Updates",
-      year,
-      "Extracts"
-    )
+    year_dir <- get_year_dir(year, extracts_dir = TRUE)
 
     file_name <- dplyr::case_when(
       type == "Acute" ~ "Acute-episode-level-extract",

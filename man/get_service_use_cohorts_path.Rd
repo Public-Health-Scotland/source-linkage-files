@@ -2,26 +2,23 @@
 % Please edit documentation in R/get_cohorts_paths.R
 \name{get_service_use_cohorts_path}
 \alias{get_service_use_cohorts_path}
-\title{Service Use Cohort File Path}
+\title{Service-use cohorts lookup Path}
 \usage{
 get_service_use_cohorts_path(year, ...)
 }
 \arguments{
-\item{year}{The year for the cohorts extract}
+\item{year}{financial year in '1718' format}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the Service Use Cohort lookup
-as a \code{\link[fs:path]{fs::path()}}
+The path to the service-use cohorts lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full path to the Service Use Cohort lookup
+Get the path to the service-use cohorts lookup, there is one
+lookup per year.
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
-
-Other cohort lookup file paths: 
-\code{\link{get_demog_cohorts_path}()}
 }
 \concept{cohort lookup file paths}

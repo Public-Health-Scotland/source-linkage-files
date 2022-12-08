@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
   # Only run for a single year
-  stopifnot(length(year) == 1)
+  stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
@@ -54,11 +54,6 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
   # Outfile  ---------------------------------------
 
   outfile <- mh_clean %>%
-    # numeric record_keydate
-    dplyr::mutate(
-      record_keydate1 = lubridate::month(.data$record_keydate1) + 100 * lubridate::month(.data$record_keydate1) + 10000 * lubridate::year(.data$record_keydate1),
-      record_keydate2 = lubridate::month(.data$record_keydate2) + 100 * lubridate::month(.data$record_keydate2) + 10000 * lubridate::year(.data$record_keydate2)
-    ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1) %>%
     dplyr::select(
       "year",

@@ -17,4 +17,6 @@ process_tests_prescribing <- function(data, year) {
     new_data = produce_source_pis_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "PIS", year)
+
+  return(comparison)
 }
