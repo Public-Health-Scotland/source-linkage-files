@@ -1,18 +1,4 @@
-#####################################################
-# Draft pre processing code for Gp Out of Hours
-# Author: Jennifer Thom
-# Date: April 2022
-# Written on RStudio Server
-# Version of R - 3.6.1
-# Input - GP-OoH-
-#         # diagnosis-extract-.csv
-#         # outcomes-extract-.csv
-#         # consultations-extract-.csv
-#
-# Description - Preprocessing of GP out of hours raw BOXI file.
-#              Tidy up file in line with SLF format
-#              prior to processing.
-#####################################################
+# Preprocessing code for GP Out of Hours
 
 # Load Packages
 library(createslf)
