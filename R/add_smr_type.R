@@ -98,18 +98,8 @@ add_smr_type <- function(recid,
                    GP Out of Hours records cannot be given an {.var smrtype}")
   }
 
-  if (missing(mpat) && missing(ipdc) && missing(hc_service) && missing(main_applicant_flag)) {
-    # Recids that can be recoded with no identifier
-    smrtype <- dplyr::case_when(
-      recid == "04B" ~ "Psych-IP",
-      recid == "00B" ~ "Outpatient",
-      recid == "AE2" ~ "A & E",
-      recid == "PIS" ~ "PIS",
-      recid == "NRS" ~ "NRS Deaths",
-      recid == "CMH" ~ "Comm-MH",
-      recid == "DN" ~ "DN"
-    )
-  } else if (all(recid == "02B")) {
+
+  if (all(recid == "02B")) {
     # Maternity recids, identifier is `mpat`
     smrtype <- dplyr::case_when(
       recid == "02B" & mpat %in% c("1", "3", "5", "7", "A") ~ "Matern-IP",
@@ -149,7 +139,20 @@ add_smr_type <- function(recid,
       TRUE ~ "OOH-Other"
     )
   } else {
-    cli::cli_abort("There was an error with {.fun add_smrtype}.")
+    # Recids that can be recoded with no identifier
+    smrtype <- dplyr::case_when(
+      recid == "04B" ~ "Psych-IP",
+      recid == "00B" ~ "Outpatient",
+      recid == "AE2" ~ "A & E",
+      recid == "PIS" ~ "PIS",
+      recid == "NRS" ~ "NRS Deaths",
+      recid == "CMH" ~ "Comm-MH",
+      recid == "DN" ~ "DN"
+    )
+  }
+
+  if (anyNA(smrtype)) {
+    cli::cli_warn("Some {.var smrtype}s were not properly set by {.fun add_smr_type}.")
   }
 
   # Return a vector

@@ -387,7 +387,7 @@ ooh_clean <- ooh_costs %>%
     # Replace location unknown with NA
     location = dplyr::na_if(location, "UNKNOWN"),
     recid = "OoH",
-    smrtype = add_smr_type("OoH", consultation_type = consultation_type),
+    smrtype = add_smr_type(recid, consultation_type = consultation_type),
     kis_accessed = factor(
       dplyr::case_when(
         kis_accessed == "Y" ~ 1L,
