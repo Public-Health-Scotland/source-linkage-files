@@ -6,6 +6,17 @@
 \usage{
 match_on_ltcs(data, year)
 }
+\arguments{
+\item{data}{episode files}
+
+\item{year}{financial year, eg '1920'}
+}
+\value{
+data matched with long term conditions
+}
 \description{
 Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)
+}
+\examples{
+match_on_ltcs(data, '1920')
 }
