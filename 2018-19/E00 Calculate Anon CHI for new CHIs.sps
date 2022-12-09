@@ -13,12 +13,15 @@ CD "/conf/sourcedev/Source_Linkage_File_Updates".
 * Add the file paths for any year which has been updated e.g.
 * "YEAR/source-individual-file-20YEAR.zsav".
 add files
+    /File = "1415/source-individual-file-201415.zsav"
     /File = "1516/source-individual-file-201516.zsav"
     /File = "1617/source-individual-file-201617.zsav"
     /File = "1718/source-individual-file-201718.zsav"
     /File = "1819/source-individual-file-201819.zsav"
     /File = "1920/source-individual-file-201920.zsav"
     /File = "2021/source-individual-file-202021.zsav"
+    /File = "2122/source-individual-file-202122.zsav"
+    /File = "2223/source-individual-file-202223.zsav"
     /Keep CHI Year
     /By CHI.
 

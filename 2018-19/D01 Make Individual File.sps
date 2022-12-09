@@ -38,7 +38,7 @@ Numeric
     OP_cost_attend OP_cost_dnas
     AE_attendances
     AE_cost
-    PIS_dispensed_items
+    PIS_paid_items
     PIS_cost
     OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
     OoH_cost
@@ -273,7 +273,7 @@ Else if (recid = "PIS").
     Compute PIS_postcode = postcode.
     Compute PIS_gpprac = gpprac.
 
-    Compute PIS_dispensed_items = no_dispensed_items.
+    Compute PIS_paid_items = no_paid_items.
     Compute PIS_cost = Cost_Total_Net.
 
 Else if (recid = "OoH").
@@ -297,8 +297,14 @@ Else if (recid = "OoH").
         Compute OoH_other = 1.
     Else If SMRType = "OOH-PCC".
         Compute OoH_PCC = 1.
+    Else if smrtype = "OOH-C19Adv".
+        Compute ooh_covid_advice = 1.
+    Else if smrtype = "OOH-C19Ass".
+        Compute ooh_covid_assesment = 1.
+    Else if smrtype = "OOH-C19Oth".
+        Compute ooh_covid_other = 1.
     End If.
-
+    
     * Cost (use the Cost_Total_Net).
     Compute OoH_cost = Cost_Total_Net.
 
@@ -467,6 +473,9 @@ add files file = *
     /first = unique_ooh_case
     /by = chi ooh_case_id.
 
+* Correct for the above counting 1 case when the person has no ooh_case_id (it counts the sysmiss as 1 or something).
+If recid NE "OoH" unique_ooh_case = 0.
+
 Sort cases by chi ch_chi_cis.
 * Aggregate over the Care Home 'CIS' episodes.
 aggregate outfile = * mode = addvariables overwrite = yes
@@ -539,9 +548,10 @@ aggregate outfile = *
     /OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas
     = sum(OP_newcons_attendances OP_newcons_dnas OP_cost_attend OP_cost_dnas)
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
-    /PIS_dispensed_items PIS_cost = sum(no_dispensed_items PIS_cost)
+    /PIS_paid_items PIS_cost = sum(no_paid_items PIS_cost)
     /OoH_cases = sum(unique_ooh_case)
-    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC = sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC)
+    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assesment ooh_covid_other =
+    sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assesment ooh_covid_other)
     /OoH_consultation_time OoH_cost = sum(OoH_consultation_time OoH_cost)
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)
@@ -890,9 +900,6 @@ Recode Acute_episodes to deceased (sysmis = 0).
 Compute health_net_cost = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + AE_cost + PIS_cost + OoH_cost.
 Compute health_net_costincDNAs = Acute_cost + Mat_cost + MH_cost + GLS_cost + OP_cost_attend + OP_cost_dnas + AE_cost + PIS_cost + OoH_cost.
 
-* Care home and DN costs aren't included in the above as we do not have data for all LCAs / HBs (also the completeness of what we do have is questionable).
-Compute health_net_costincIncomplete = health_net_cost + CH_cost + DN_cost.
-
 * Create a year variable for time-series linking.
 String year (A4).
 Compute year = !FY.
@@ -900,7 +907,7 @@ Compute year = !FY.
 * Delete the record specific DoB gpprac and postcode, and reorder others whilst we're here.
 save outfile = !Year_dir + "temp-source-individual-file-2-20" + !FY + ".zsav"
     /Keep year chi gender DoB age postcode gpprac
-    health_net_cost health_net_costincDNAs health_net_costincIncomplete
+    health_net_cost health_net_costincDNAs
     deceased death_date
     ALL
     /zcompressed.
