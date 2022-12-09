@@ -9,7 +9,7 @@ test_that("Get existing data works", {
     diag2 = 2
   )
 
-  slf_data <- get_existing_data_for_tests(dummy_new_data)
+  slf_data <- suppressWarnings(get_existing_data_for_tests(dummy_new_data))
 
   expect_named(slf_data, c("chi", "year", "recid", "diag1", "diag2"))
   expect_gte(nrow(slf_data), 20000)
