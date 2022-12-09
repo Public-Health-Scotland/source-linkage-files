@@ -42,7 +42,7 @@ save outfile = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".z
       simd2020v2_sc_decile simd2020v2_sc_quintile
       simd2020v2_hb2019_decile simd2020v2_hb2019_quintile
       simd2020v2_hscp2019_decile simd2020v2_hscp2019_quintile
-      UR8_2016 UR6_2016 UR3_2016 UR2_2016 
+      UR8_2020 UR6_2020 UR3_2020 UR2_2020 
    /Zcompressed.
 
 get file = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav".
