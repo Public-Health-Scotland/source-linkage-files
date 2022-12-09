@@ -46,7 +46,7 @@ Rename Variables
 match files file = *
     /table = !Lookup_dir_slf + "source_postcode_lookup_" + !LatestUpdate + ".zsav"
     /In = PostcodeMatch
-    /Drop HB2018 to UR2_2016
+    /Drop HB2018 to UR2_2020
     /by postcode.
 
 * Where there are blank postcodes try to fill in from other episodes.

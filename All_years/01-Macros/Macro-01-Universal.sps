@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Run Macros before SLF update.
 ************************************************************************************************************.
 * AUTHOR:	James McMahon (james.mcmahon@phs.scot).
@@ -19,21 +19,21 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0359839"
+    "SCTASK0394587"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
 Define !LatestUpdate()
-    "Sep_2022"
+    "Dec_2022"
 !EndDefine.
 
 *Previous update month for creating tests.
 Define !PreviousUpdate()
-    "Jun_2022"
+    "Sep_2022"
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Jun22"
+    "Jul16_Sep22"
 !EndDefine.
 
 * Latest 'real' costs we have in the format CCYY e.g. 2022/23 = 2022 (no quotes).
@@ -52,7 +52,7 @@ Define !Locality_file()
 
 * SPD file - will need changing when geography files update.
 Define !SPD_file()
-    "Scottish_Postcode_Directory_2022_1.zsav"
+    "Scottish_Postcode_Directory_2022_2.zsav"
 !EndDefine.
 
 * gpprac file.
@@ -62,12 +62,12 @@ Define !gpprac_file()
 
 * SIMD file - will need changing when geography files update.
 Define !SIMD_file()
-    "postcode_2022_1_simd2020v2.zsav"
+    "postcode_2022_2_simd2020v2.zsav"
 !EndDefine.
 
 * DataZone Populations file - will need changing when geography files update.
 Define !DataZone_pop_file()
-    "DataZone2011_pop_est_2011_2020.sav"
+    "DataZone2011_pop_est_2011_2021.sav"
 !EndDefine.
 
 * 5-year HSCP Populations file - will need changing when geography files update.
@@ -297,8 +297,6 @@ Define !create_uplift_var().
         Else if !eval(!fy) = "2223".
             Compute uplift = 1.015 * 1.041 * 1.062.
         Else if !unquote(!eval(!altfy)) > !eval(!latest_cost_year).
-            Compute test2 = !Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)).
-            Compute test =  ((1.01) ** (!Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
             Compute uplift = (1.015 * 1.041 * 1.062) * ((1.01) ** (!Concat(!unquote(!eval(!altfy)),  " - ", !eval(!latest_cost_year)))).
         Else.
             Compute uplift = 1.

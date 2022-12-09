@@ -16,6 +16,9 @@
 get file = !DataZone_Pop_Lookup
     /Keep Year DataZone2011 sex age0 to age90plus.
 
+* Deal with issue where lookup had wrong length variable (Dec 2022).
+alter type datazone2011 (A9).
+
  * Select out the estimates for the year of interest.
  * This may need to be changed if we don't have estimates yet.
 
