@@ -18,7 +18,7 @@ Clean up .csv or .gz files not needed before or after an update. Need confirmati
 }
 \examples{
 clean_files_function(clean_slf_dir = TRUE, clean_years = "all")
-clean_files_function(clean_slf_dir = TRUE, clean_years = c(1213,1415))
+clean_files_function(clean_slf_dir = TRUE, clean_years = c(1213, 1415))
 clean_files_function(clean_slf_dir = TRUE)
-clean_files_function(clean_slf_dir = FALSE, clean_years = c(1213,1415))
+clean_files_function(clean_slf_dir = FALSE, clean_years = c(1213, 1415))
 }
