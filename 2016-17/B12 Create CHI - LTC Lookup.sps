@@ -74,4 +74,4 @@ save outfile = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav"
 get file = !LTCs_dir + "LTCs_patient_reference_file-20" + !FY + ".zsav".
 
 * Zip back up.
-Host Command = ["gzip " + !LTC_extract_file].
+Host Command = ["gzip -v9 " + !LTC_extract_file].
