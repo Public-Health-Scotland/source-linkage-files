@@ -8,25 +8,26 @@
 #' @return episode files with updated date of birth and ages
 #' @export
 #'
-#' @examples match_on_ltcs(data, '1920')
+#' @examples match_on_ltcs(data, "1920")
 correct_demographics <- function(data, year) {
   # Checking and changing DOB and age
   data <- data %>%
     dplyr::filter(!is_missing(chi)) %>%
-
     dplyr::mutate(
       # Create a dob in the previous century from the chi number
       chi_dob_min = phsmethods::dob_from_chi(
         chi_number = chi,
         chi_check = FALSE,
         min_date = lubridate::ymd("1900-01-01"),
-        max_date = pmin(keydate1_dateformat, lubridate::ymd("1999-12-31"), na.rm = TRUE)),
+        max_date = pmin(keydate1_dateformat, lubridate::ymd("1999-12-31"), na.rm = TRUE)
+      ),
       # Create a dob in the current century from chi (will return NA if in the future)
       chi_dob_max = phsmethods::dob_from_chi(
         chi_number = chi,
         chi_check = FALSE,
         min_date = lubridate::ymd("2000-01-01"),
-        max_date = pmax(keydate1_dateformat, lubridate::ymd("2000-01-01"), na.rm = TRUE)),
+        max_date = pmax(keydate1_dateformat, lubridate::ymd("2000-01-01"), na.rm = TRUE)
+      ),
 
       # Compute two ages for each chi, the maximum and minimum it could be
       chi_age_max = compute_mid_year_age(year, chi_dob_min),
@@ -39,7 +40,7 @@ correct_demographics <- function(data, year) {
         .data$dob == chi_dob_max ~ dob,
         # If one option for dob isn't there, use the other
         is.na(chi_dob_min) &
-          !is.na(chi_dob_max) ~ chi_dob_max,!is.na(chi_dob_min) &
+          !is.na(chi_dob_max) ~ chi_dob_max, !is.na(chi_dob_min) &
           is.na(chi_dob_max) ~ chi_dob_min,
         # If they have an LTC date before birth date, assume older
         chi_dob_max > purrr::reduce(dplyr::select(., "arth_date":"digestive_date"), `min`) ~ chi_dob_min,
@@ -53,23 +54,22 @@ correct_demographics <- function(data, year) {
         chi_age_max > 113 ~ chi_dob_max
       )
     ) %>%
-
     # If we still don't have an age, try and fill it in from other records.
     dplyr::group_by(chi) %>%
     tidyr::fill(dob, .direction = "downup") %>%
     dplyr::ungroup() %>%
-
     # Fill in ages for any that are left.
     dplyr::mutate(
       age = compute_mid_year_age(year, dob),
 
-    # fix gender
+      # fix gender
       chi_gender = phsmethods::sex_from_chi(chi),
       gender = as.integer(gender),
       gender = dplyr::if_else(!is.na(chi_gender) &
-                                (is.na(gender) | gender == 0L),
-                              chi_gender,
-                              gender)
+        (is.na(gender) | gender == 0L),
+      chi_gender,
+      gender
+      )
     ) %>%
     # delete temporary variables
     select(-c(
