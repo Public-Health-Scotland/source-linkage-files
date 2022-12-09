@@ -73,11 +73,10 @@ read_demog_file <- function(social_care_dir, latest_update) {
     demog_file_path <- fs::path_ext_set(demog_file_path, "zsav")
   } else if (!fs::file_exists(fs::path_ext_set(demog_file_path, "zsav"))) {
     cli::cli_abort(c(
-        "The demographics file doesn't exist in {.val rds} or {.val zsav} format
+      "The demographics file doesn't exist in {.val rds} or {.val zsav} format
          or the name: {.val {fs::path_ext_remove(fs::path_file(demog_file_path))}}
          is incorrect"
-      )
-    )
+    ))
   }
 
   data <- switch(fs::path_ext(demog_file_path),
@@ -183,7 +182,7 @@ convert_sc_sl_to_lca <- function(sending_location) {
     {{ sending_location }} == "380" ~ "29", # South Lanarkshire
     {{ sending_location }} == "390" ~ "30", # Stirling
     {{ sending_location }} == "400" ~ "31", # West Lothian
-    {{ sending_location }} == "235" ~ "32"  # Na_h_Eileanan_Siar
+    {{ sending_location }} == "235" ~ "32" # Na_h_Eileanan_Siar
   )
   return(lca)
 }
