@@ -18,5 +18,5 @@ data matched with long term conditions
 Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)
 }
 \examples{
-match_on_ltcs(data, '1920')
+match_on_ltcs(data, "1920")
 }

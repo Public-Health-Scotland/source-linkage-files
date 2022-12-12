@@ -18,5 +18,5 @@ episode files with updated date of birth and ages
 Correct date of birth and ages of records
 }
 \examples{
-match_on_ltcs(data, '1920')
+match_on_ltcs(data, "1920")
 }
