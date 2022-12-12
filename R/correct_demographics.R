@@ -72,7 +72,7 @@ correct_demographics <- function(data, year) {
       )
     ) %>%
     # delete temporary variables
-    select(-c(
+    dplyr::select(-c(
       "chi_dob_min",
       "chi_dob_max",
       "chi_age_max",
