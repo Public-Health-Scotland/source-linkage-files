@@ -17,7 +17,16 @@ match_on_ltcs <- function(data, year) {
     by = "chi",
     suffix = c("", "_ltc")
   ) %>%
+    dplyr::mutate(
     # Replace any NA values with 0 for the LTC flags
-    dplyr::mutate(dplyr::across("arth":"digestive", ~ tidyr::replace_na(., 0)))
+      dplyr::across("arth":"digestive", ~ tidyr::replace_na(., 0)),
+    # Use the postcode from the LTC file if it's otherwise missing
+    postcode = dplyr::if_else(is.na(.data$postcode),
+                              .data$postcode_ltc,
+                              .data$postcode)
+      ) %>%
+    dplyr::select(-tidyselect::ends_with("_ltc"))
+
+
   return(matched)
 }
