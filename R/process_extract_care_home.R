@@ -108,9 +108,8 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
     )
 
   if (write_to_disk) {
-  # Save .rds file
-  outfile %>%
-    write_rds(get_source_extract_path(year, type = "CH", check_mode = "write"))
+    # Save .rds file
+    outfile %>%
+      write_rds(get_source_extract_path(year, type = "CH", check_mode = "write"))
   }
-
 }
