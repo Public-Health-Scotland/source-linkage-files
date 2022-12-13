@@ -41,4 +41,4 @@ save outfile = !Deaths_dir + "all_deaths_" + !LatestUpdate + ".zsav"
 get file = !Deaths_dir +  "all_deaths_" + !LatestUpdate + ".zsav".
 
 * Zip back up.
-Host Command = ["gzip " + !Deaths_extract_file].
+Host Command = ["gzip -v9 " + !Deaths_extract_file].

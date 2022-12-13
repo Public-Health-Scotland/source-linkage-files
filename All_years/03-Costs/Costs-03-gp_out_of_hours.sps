@@ -26,8 +26,8 @@ GET DATA
 EXECUTE.
 
 varstocases
-    /Make Consultations from @1415_Consultations to @1920_Consultations
-    /Make Cost from @1415_Cost to @1920_Cost
+    /Make Consultations from @1415_Consultations to @2122_Consultations
+    /Make Cost from @1415_Cost to @2122_Cost
     /Index Year(Cost).
 
 Compute Year = char.substr(Year, 2, 4).
@@ -39,20 +39,18 @@ Compute cost_per_consultation = Cost * 1000 / Consultations.
 * This bit will need changing to accommodate new costs ***.
 * Most recent costs year available.
 String TempYear1 TempYear2 (A4).
-Do if Year = "1920".
+Do if Year = "2122".
     * Make costs for other years.
-    Compute TempYear1 = "2021".
-    Compute TempYear2 = "2122".
+    Compute TempYear1 = "2223".
+    Compute TempYear2 = "2324".
 End if.
 
 Varstocases /make Year from Year TempYear1 TempYear2.
 
 * Uplift costs for Years after the latest year.
-* increase by 1% for every year after the latest.
+* increase by 1% for every year after the latest we a have a cost uplift for.
 * Add/delete lines as appropriate.
-if year > "1920" cost_per_consultation = cost_per_consultation * 1.01.
-if year > "2021" cost_per_consultation = cost_per_consultation * 1.01.
-if year > "2122" cost_per_consultation = cost_per_consultation * 1.01.
+if year > "2122" cost_per_consultation = cost_per_consultation * 1.062.
 if year > "2223" cost_per_consultation = cost_per_consultation * 1.01.
 
 sort cases by HB2019 year.

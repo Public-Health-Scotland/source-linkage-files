@@ -334,4 +334,4 @@ Erase File = !Year_dir + "DD_Temp-2.zsav".
 Erase file = !Year_dir + "slf_reduced_for_DD.zsav".
 
 * Add the Delayed Discharge extract to the 'Activities zip'.
-Host  Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' '" + !Year_dir + "DD_for_source-20" + !FY + ".zsav'"].
+Host  Command = ["zip -mjv9 '" + !Year_dir + "Activity_20" + !FY + ".zip' '" + !Year_dir + "DD_for_source-20" + !FY + ".zsav'"].

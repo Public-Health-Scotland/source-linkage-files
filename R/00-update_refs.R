@@ -7,7 +7,7 @@
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Sep_2022"
+  "Dec_2022"
 }
 
 #' Previous update
@@ -19,7 +19,7 @@ latest_update <- function() {
 #'
 #' @family initialisation
 previous_update <- function() {
-  "Jun_2022"
+  "Sep_2022"
 }
 
 #' Delayed Discharge period
@@ -32,5 +32,18 @@ previous_update <- function() {
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Jun22"
+  "Jul16_Sep22"
+}
+
+#' The latest financial year for Cost uplift setting
+#'
+#' @description Get the latest year for cost uplift
+#'
+#' @return The financial year format
+#'
+#' @export
+#'
+#' @family initialisation
+latest_cost_year <- function() {
+  "2223"
 }
