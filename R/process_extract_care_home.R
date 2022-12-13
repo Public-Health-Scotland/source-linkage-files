@@ -53,7 +53,7 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
       smrtype = "Care-Home"
     ) %>%
     # compute lca variable from sending_location
-    dplyr::mutate(lca = convert_sending_location_to_lca(.data$sending_location)) %>%
+    dplyr::mutate(sc_send_lca = convert_sending_location_to_lca(.data$sending_location)) %>%
     # bed days
     create_monthly_beddays(year, .data$record_keydate1, .data$record_keydate2) %>%
     # year stay
