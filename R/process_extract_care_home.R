@@ -61,6 +61,10 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
       yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
       # total length of stay
       stay = calculate_stay(year, .data$record_keydate1, .data$record_keydate2, .data$sc_latest_submission)
+    ) %>%
+    # Change ch provider to numeric
+    dplyr::mutate(
+      ch_provider = as.numeric(ch_provider)
     )
 
 
