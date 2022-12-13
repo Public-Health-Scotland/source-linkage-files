@@ -94,7 +94,7 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
       "dob",
       "gender",
       "postcode",
-      "lca",
+      "sc_send_lca",
       "record_keydate1",
       "record_keydate2",
       "sc_latest_submission",
