@@ -7,7 +7,6 @@
 #' @export
 #'
 process_tests_sc_demographics <- function() {
-
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(readr::read_rds(get_sc_demog_lookup_path(update = previous_update()))),
     new_data = produce_sc_demog_lookup_tests(readr::read_rds(get_sc_demog_lookup_path()))
