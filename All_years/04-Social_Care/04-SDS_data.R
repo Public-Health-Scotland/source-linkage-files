@@ -14,11 +14,20 @@ library(readr)
 library(dplyr)
 library(phsmethods)
 library(lubridate)
-library(createslf)
+
+
+# Set up------------------------------------------------------------------
+
+source("All_years/04-Social_Care/00-Social_Care_functions.R")
+
 
 # Read Demographic file----------------------------------------------------
 
-sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
+sc_demographics <- haven::read_sav(fs::path(
+  social_care_dir,
+  paste0("sc_demographics_lookup_", latest_update()),
+  ext = "zsav"
+))
 
 
 # Query to database -------------------------------------------------------
@@ -56,14 +65,21 @@ sds_full_clean <- sds_full_data %>%
   mutate(
     sds_option_4 = rowSums(across(starts_with("sds_option_"))) > 1, .after = sds_option_3,
     # Fix sds option 4 cases where all 3 options are missing
-    sds_option_4 = if_else(sds_option_1 == FALSE & sds_option_2 == FALSE & sds_option_3 == FALSE, TRUE, sds_option_4)
+    sds_option_4 = if_else(sending_location == "120" & all(!sds_option_1, !sds_option_2, !sds_option_3), TRUE, sds_option_4)
   ) %>%
   # Match on demographics data (chi, gender, dob and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # If sds start date is missing, assign start of FY
-  mutate(sds_start_date = fix_sc_start_dates(sds_start_date, period)) %>%
+  mutate(sds_start_date = if_else(is.na(sds_start_date),
+    start_fy(year = period, format = "alternate"),
+    sds_start_date
+  )) %>%
   # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
-  mutate(sds_end_date = fix_sc_end_dates(sds_start_date, sds_end_date, period)) %>%
+  mutate(sds_end_date = if_else(
+    sds_start_date >= sds_end_date,
+    end_fy(year = period, "alternate"),
+    sds_end_date
+  )) %>%
   # rename for matching source variables
   rename(
     record_keydate1 = sds_start_date,
@@ -92,15 +108,23 @@ sds_full_clean <- sds_full_data %>%
     # Create person id variable
     person_id = glue::glue("{sending_location}-{social_care_id}"),
     # Use function for creating sc send lca variables
-    sc_send_lca = convert_sending_location_to_lca(sending_location)
+    sc_send_lca = convert_sc_sl_to_lca(sending_location)
   ) %>%
   # when multiple social_care_id from sending_location for single CHI
   # replace social_care_id with latest
-  replace_sc_id_with_latest()
+  group_by(sending_location, chi) %>%
+  mutate(latest_sc_id = last(social_care_id)) %>%
+  # count changed social_care_id
+  mutate(
+    changed_sc_id = !is.na(chi) & social_care_id != latest_sc_id,
+    social_care_id = if_else(changed_sc_id, latest_sc_id, social_care_id)
+  ) %>%
+  ungroup()
+
 
 merge_eps <- sds_full_clean %>%
-  # use as.data.table to change the data format to data.table to accelarate
-  data.table::as.data.table() %>%
+  # Use lazy_dt() for faster running of code
+  dtplyr::lazy_dt() %>%
   group_by(sending_location, social_care_id, sds_option) %>%
   arrange(period, record_keydate1, .by_group = TRUE) %>%
   # Create a flag for episodes that are going to be merged
@@ -127,12 +151,26 @@ merge_eps <- sds_full_clean %>%
     person_id = last(person_id),
     sc_send_lca = last(sc_send_lca)
   ) %>%
-  # change the data format from data.table to data.frame
+  # end of lazy_dt()
   as_tibble() %>%
-  # Save outfile------------------------------------------------
+  # Sort for running SPSS
+  arrange(
+    sending_location,
+    social_care_id
+  )
 
-  merge_eps() %>%
-  write_rds(get_sc_sds_episodes_path(check_mode = "write"))
+
+# Save outfile------------------------------------------------
+
+merge_eps %>%
+  # save rds file
+  readr::write_rds(fs::path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.rds")),
+    compress = "xz"
+  ) %>%
+  # save sav file
+  haven::write_sav(fs::path(social_care_dir, stringr::str_glue("all_sds_episodes_{latest_update()}.zsav")),
+    compress = "zsav"
+  )
 
 
 # End of Script #

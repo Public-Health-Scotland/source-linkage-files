@@ -1,16 +1,16 @@
 ﻿* Encoding: UTF-8.
 * Calculating HRIs (high resource individuals) which are patients whose total health costs account for more than 50% of their council, health board of
-   residence, or Scotland's total health costs.
- * Originally created by Kara Sellar 18/10/13.
- * Amended and updated by ML March 2013.
- * Edited and updated by Alison McClelland Apr 2015 for HRI 200,000 days.
- * Re-written to simplify reading by James McMahon Aug 2019.
+    residence, or Scotland's total health costs.
+* Originally created by Kara Sellar 18/10/13.
+* Amended and updated by ML March 2013.
+* Edited and updated by Alison McClelland Apr 2015 for HRI 200,000 days.
+* Re-written to simplify reading by James McMahon Aug 2019.
 
- * Step 1 - Remove non-Scottish residents
- * Step 2 - Work out total cost for Scotland, HBs and LCAs.
- * Step 3 - Create a cumulative percentage using the percentage of resource used by each CHI.
- * Step 4 - Identify those CHIs which are jointly using 50% of the resources for an area, these are the HRIs.
- * Step 5 - Save out and link back to the SLF.
+* Step 1 - Remove non-Scottish residents
+    * Step 2 - Work out total cost for Scotland, HBs and LCAs.
+* Step 3 - Create a cumulative percentage using the percentage of resource used by each CHI.
+* Step 4 - Identify those CHIs which are jointly using 50% of the resources for an area, these are the HRIs.
+* Step 5 - Save out and link back to the SLF.
 
 
 * First quickly create a lookup for Postcode district, use the lookup file which has all Scottish Postcodes in it.
@@ -30,17 +30,23 @@ save outfile = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
 
 
 get file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
-    /Keep year chi postcode gpprac lca hbrescode Health_net_cost Health_net_costincincomplete ch_cost.
+    /Keep year chi postcode gpprac lca hbrescode Health_net_cost
+    Acute_episodes Mat_episodes MH_episodes GLS_episodes OP_newcons_attendances OP_newcons_dnas AE_attendances PIS_paid_items OoH_cases.
+
+* Exclude people who didn't have health activity.
+compute health_activity = Acute_episodes + Mat_episodes + MH_episodes + GLS_episodes + OP_newcons_attendances + OP_newcons_dnas + AE_attendances + PIS_paid_items + OoH_cases.
+
+select if health_activity >= 1.
 
 String PCArea (A3).
 * Workout the postcode area.
 * Take the first bit of the postcode which will be 1, 2 or 3 chars, to work this out find the first number and take everything before this. e.g. EH5 1HU -> EH.
-If postcode NE '' PCArea = char.substr(postcode, 1, char.index(postcode, "0123456789", 1) - 1).
+If postcode NE "" PCArea = char.substr(postcode, 1, char.index(postcode, "0123456789", 1) - 1).
 
 sort cases by PCArea.
 
 match files
-    /file =  *
+    /file = *
     /table = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav"
     /In = ScotFlag
     /by PCArea.
@@ -77,8 +83,6 @@ if Scotflag = 0 NonScot = PCArea.
 
 select if ScotFlag NE 0.
 
-* Modification to exclude Care Home costs as we only cost over 65s.
-Compute health_net_costincIncomplete = health_net_costincIncomplete - ch_cost.
 sort cases by chi.
 Delete Variables NonScot ScotFlag Eng_Prac postcode PCArea gpprac.
 
@@ -97,30 +101,28 @@ aggregate
 * Council area total cost, including incomplete datasets.
 aggregate
     /Break lca
-    /lca_cost = Sum(health_net_cost)
-    /lca_inc_cost = Sum(health_net_costincIncomplete).
+    /lca_cost = Sum(health_net_cost).
 
- * Work out what percentage of the total cost each CHI used for the different geographies.
+* Work out what percentage of the total cost each CHI used for the different geographies.
 Compute scotland_pct = health_net_cost / scotland_cost * 100.
 Compute hb_pct = health_net_cost / hb_cost * 100.
 Compute lca_pct = health_net_cost / lca_cost * 100.
-Compute lca_inc_pct = health_net_costincIncomplete / lca_inc_cost * 100.
 
- * Work out the cumulative percentages for each geography.
- * Scotland.
+* Work out the cumulative percentages for each geography.
+* Scotland.
 Sort cases by health_net_cost (D).
 
 Do if $casenum = 1.
-     * The first case will just be its own percentage.
+    * The first case will just be its own percentage.
     Compute HRI_scotP = scotland_pct.
 Else.
-     * Subsequent cases are the cumulative sum of percentages.
+    * Subsequent cases are the cumulative sum of percentages.
     Compute HRI_scotP = lag(HRI_scotP) + scotland_pct.
 End if.
 
 * HBs.
 Sort cases by hbrescode (A) health_net_cost (D).
- * As above but we also start again when the Health Board changes.
+* As above but we also start again when the Health Board changes.
 Do if $casenum = 1 or hbrescode NE lag(hbrescode).
     Compute HRI_hbP = hb_pct.
 Else.
@@ -135,25 +137,17 @@ Else.
     Compute HRI_lcaP = lag(HRI_lcaP) + lca_pct.
 End if.
 
-Sort cases by lca (A) health_net_costincIncomplete (D).
-Do if $casenum = 1 or lca NE lag(lca).
-    Compute HRI_lcaP_incDN = lca_inc_pct.
-Else.
-    Compute HRI_lcaP_incDN = lag(HRI_lcaP_incDN) + lca_inc_pct.
-End if.
-
- * Flag the CHIs who together are using the 'first' 50% of resource
- * These are the HRIs and are usually around 2% of the total population.
+* Flag the CHIs who together are using the 'first' 50% of resource
+    * These are the HRIs and are usually around 2% of the total population.
 if (HRI_scotP <= 50) HRI_scot = 1.
 if (HRI_hbP <= 50) HRI_hb = 1.
 if (HRI_lcaP <= 50) HRI_lca = 1.
-if (HRI_lcaP_incDN <= 50) HRI_lca_incDN = 1.
 
 * Recode to make it a 1/0 flag.
-Recode HRI_scot to HRI_lca_incDN (sysmis = 0).
+Recode HRI_scot to HRI_lca (sysmis = 0).
 Alter type
-    HRI_scot to HRI_lca_incDN (F1.0)
-    HRI_scotP to HRI_lcaP_incDN (F3.1).
+    HRI_scot to HRI_lca (F1.0)
+    HRI_scotP to HRI_lcaP (F3.1).
 
 * Remove values for chis with no HB or LCA.
 Do if hbrescode = "".
@@ -164,24 +158,22 @@ End if.
 Do if LCA = "".
     Compute HRI_LCA = 0.
     Compute HRI_LCAP = $sysmis.
-    Compute HRI_lca_incDN = 0.
-    Compute HRI_lcaP_incDN = $sysmis.
 End if.
 
- * Sort back by CHI ready for matching.
+* Sort back by CHI ready for matching.
 sort cases by CHI.
 
-save outfile = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
+save outfile = !Year_dir + "HRI_lookup_" + !FY + ".zsav"
     /keep chi
-    HRI_scot to HRI_lca_incDN
-    HRI_scotP to HRI_lcaP_incDN
+    HRI_scot to HRI_lca
+    HRI_scotP to HRI_lcaP
     /zcompressed.
 
 
- * Match to individual file.
+* Match to individual file.
 match files
     /file = !Year_dir + "temp-source-individual-file-3-20" + !FY + ".zsav"
-    /table = !Year_dir + 'HRI_lookup_' + !FY + '.zsav'
+    /table = !Year_dir + "HRI_lookup_" + !FY + ".zsav"
     /By chi.
 
 save outfile = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
@@ -189,5 +181,5 @@ save outfile = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav"
 
 get file = !Year_dir + "temp-source-individual-file-4-20" + !FY + ".zsav".
 
- * Housekeeping.
+* Housekeeping.
 Erase file = !Year_dir + "temp-PCArea-lookup-for-HRIs-20" + !FY + ".zsav".

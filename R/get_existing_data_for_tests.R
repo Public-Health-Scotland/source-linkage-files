@@ -24,12 +24,14 @@ get_existing_data_for_tests <- function(new_data) {
 
   variable_names <- c("anon_chi", dplyr::intersect(slfhelper::ep_file_vars, names(new_data)))
 
-  slf_data <- suppressWarnings(slfhelper::read_slf_episode(
+  slf_data <- suppressMessages(slfhelper::read_slf_episode(
     year = year,
     recids = recids,
     columns = variable_names
   )) %>%
-    dplyr::rename(chi = "anon_chi")
+    # Convert anon_chi back to CHI
+    dplyr::mutate(chi = convert_anon_chi_to_chi(.data[["anon_chi"]]), .after = "anon_chi") %>%
+    dplyr::select(-"anon_chi")
 
   return(slf_data)
 }

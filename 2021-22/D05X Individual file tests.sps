@@ -7,8 +7,8 @@ Define !FinalName()
 !EndDefine.
 
 get file = !Year_dir + "source-individual-file-20" + !FY + ".zsav".
- * Set up some flags.
 
+ * Set up some flags.
  * Flag to count the males and females.
 Do if gender = 1.
     Compute Male = 1.
@@ -31,6 +31,13 @@ if sysmis(gpprac) No_GPprac = 1.
 
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
+
+* Count HRI groups.
+Do if HRI_ScotP <= 20.
+ Compute HRI_Scot_High = 1.
+Else if HRI_ScotP >= 80.
+  Compute HRI_Scot_Low = 1.
+End if.
 
 *Flag to count how many patients in each HB by rescode. 
 If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
@@ -80,7 +87,6 @@ aggregate outfile = New_Summary
     /total_preventable_beddays = Sum(preventable_beddays)
     /total_health_net_cost = Sum(health_net_cost)
     /total_health_net_costincDNAs = Sum(health_net_costincDNAs)
-    /total_health_net_costincIncomplete = Sum(health_net_costincIncomplete)
     /total_Acute_episodes = Sum(Acute_episodes)
     /total_Acute_daycase_episodes = Sum(Acute_daycase_episodes)
     /total_Acute_inpatient_episodes = Sum(Acute_inpatient_episodes)
@@ -133,7 +139,7 @@ aggregate outfile = New_Summary
     /total_OP_cost_dnas = Sum(OP_cost_dnas)
     /total_AE_attendances = Sum(AE_attendances)
     /total_AE_cost = Sum(AE_cost)
-    /total_PIS_dispensed_items = Sum(PIS_dispensed_items)
+    /total_pis_paid_items = Sum(pis_paid_items)
     /total_PIS_cost = Sum(PIS_cost)
     /total_CH_cis_episodes = Sum(CH_cis_episodes)
     /total_CH_beddays = Sum(CH_beddays)
@@ -147,6 +153,9 @@ aggregate outfile = New_Summary
     /total_OoH_PCC = Sum(OoH_PCC)
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
+    /total_ooh_covid_advice = sum(ooh_covid_advice)
+    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
     /total_DN_cost = Sum(DN_cost)
@@ -176,7 +185,6 @@ aggregate outfile = New_Summary
     /total_digestive = Sum(digestive)
     /mean_health_net_cost = Mean(health_net_cost)
     /mean_health_net_costincDNAs = Mean(health_net_costincDNAs)
-    /mean_health_net_costincIncomplete = Mean(health_net_costincIncomplete)
     /mean_Acute_episodes = Mean(Acute_episodes)
     /mean_Acute_daycase_episodes = Mean(Acute_daycase_episodes)
     /mean_Acute_inpatient_episodes = Mean(Acute_inpatient_episodes)
@@ -229,7 +237,7 @@ aggregate outfile = New_Summary
     /mean_OP_cost_dnas = Mean(OP_cost_dnas)
     /mean_AE_attendances = Mean(AE_attendances)
     /mean_AE_cost = Mean(AE_cost)
-    /mean_PIS_dispensed_items = Mean(PIS_dispensed_items)
+    /mean_pis_paid_items = Mean(pis_paid_items)
     /mean_PIS_cost = Mean(PIS_cost)
     /mean_CH_cis_episodes = Mean(CH_cis_episodes)
     /mean_CH_beddays = Mean(CH_beddays)
@@ -241,6 +249,9 @@ aggregate outfile = New_Summary
     /mean_OoH_NHS24 = Mean(OoH_NHS24)
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
+    /mean_ooh_covid_advice = Mean(ooh_covid_advice)
+    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
     /mean_DN_episodes = Mean(DN_episodes)
@@ -271,7 +282,7 @@ aggregate outfile = New_Summary
     /mean_endomet = Mean(endomet)
     /mean_digestive = Mean(digestive)
     /n_Population = Sum(Keep_Population)
-    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN)
+    /HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low = Sum(HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)
@@ -313,9 +324,7 @@ get file = "/conf/hscdiip/01-Source-linkage-files/source-individual-file-20" + !
 Dataset Name OldFile.
 Dataset Activate OldFile.
 
-
  * Set up some flags.
-
  * Flag to count the males and females.
 Do if gender = 1.
     Compute Male = 1.
@@ -338,6 +347,13 @@ if sysmis(gpprac) No_GPprac = 1.
 
  * Recode SPARRA and HHG to count numbers of records without this data.
 Recode SPARRA_Start_FY SPARRA_End_FY HHG_Start_FY HHG_End_FY (sysmis = 1) (else = 0).
+
+* Count HRI groups.
+Do if HRI_ScotP <= 20.
+ Compute HRI_Scot_High = 1.
+Else if HRI_ScotP >= 80.
+  Compute HRI_Scot_Low = 1.
+End if.
 
 *Flag to count how many patients in each HB by rescode. 
 If hbrescode = 'S08000015' NHS_Ayrshire_and_Arran = 1.
@@ -371,6 +387,11 @@ If NHS_Western_Isles = 1 NHS_Western_Isles_cost = health_net_cost.
 If NHS_Fife = 1 NHS_Fife_cost = health_net_cost.
 If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
 
+* Add in variables which didn't exist in the previous update (Dec 2022).
+Numeric
+    ooh_covid_advice
+    ooh_covid_assesment
+    ooh_covid_other (F2.0).
 
 Dataset declare Old_Summary.
 aggregate outfile = Old_Summary
@@ -386,7 +407,6 @@ aggregate outfile = Old_Summary
     /total_preventable_beddays = Sum(preventable_beddays)
     /total_health_net_cost = Sum(health_net_cost)
     /total_health_net_costincDNAs = Sum(health_net_costincDNAs)
-    /total_health_net_costincIncomplete = Sum(health_net_costincIncomplete)
     /total_Acute_episodes = Sum(Acute_episodes)
     /total_Acute_daycase_episodes = Sum(Acute_daycase_episodes)
     /total_Acute_inpatient_episodes = Sum(Acute_inpatient_episodes)
@@ -439,7 +459,7 @@ aggregate outfile = Old_Summary
     /total_OP_cost_dnas = Sum(OP_cost_dnas)
     /total_AE_attendances = Sum(AE_attendances)
     /total_AE_cost = Sum(AE_cost)
-    /total_PIS_dispensed_items = Sum(PIS_dispensed_items)
+    /total_pis_paid_items = Sum(pis_dispensed_items)
     /total_PIS_cost = Sum(PIS_cost)
     /total_CH_cis_episodes = Sum(CH_cis_episodes)
     /total_CH_beddays = Sum(CH_beddays)
@@ -453,6 +473,9 @@ aggregate outfile = Old_Summary
     /total_OoH_PCC = Sum(OoH_PCC)
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
+    /total_ooh_covid_advice = sum(ooh_covid_advice)
+    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
     /total_DN_cost = Sum(DN_cost)
@@ -482,7 +505,6 @@ aggregate outfile = Old_Summary
     /total_digestive = Sum(digestive)
     /mean_health_net_cost = Mean(health_net_cost)
     /mean_health_net_costincDNAs = Mean(health_net_costincDNAs)
-    /mean_health_net_costincIncomplete = Mean(health_net_costincIncomplete)
     /mean_Acute_episodes = Mean(Acute_episodes)
     /mean_Acute_daycase_episodes = Mean(Acute_daycase_episodes)
     /mean_Acute_inpatient_episodes = Mean(Acute_inpatient_episodes)
@@ -535,7 +557,7 @@ aggregate outfile = Old_Summary
     /mean_OP_cost_dnas = Mean(OP_cost_dnas)
     /mean_AE_attendances = Mean(AE_attendances)
     /mean_AE_cost = Mean(AE_cost)
-    /mean_PIS_dispensed_items = Mean(PIS_dispensed_items)
+    /mean_pis_paid_items = Mean(pis_dispensed_items)
     /mean_PIS_cost = Mean(PIS_cost)
     /mean_CH_cis_episodes = Mean(CH_cis_episodes)
     /mean_CH_beddays = Mean(CH_beddays)
@@ -547,6 +569,9 @@ aggregate outfile = Old_Summary
     /mean_OoH_NHS24 = Mean(OoH_NHS24)
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
+    /mean_ooh_covid_advice = Mean(ooh_covid_advice)
+    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
     /mean_DN_episodes = Mean(DN_episodes)
@@ -577,7 +602,7 @@ aggregate outfile = Old_Summary
     /mean_endomet = Mean(endomet)
     /mean_digestive = Mean(digestive)
     /n_Population = Sum(Keep_Population)
-    /HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN = Sum(HRI_Scot HRI_HB HRI_LCA HRI_LCA_incDN)
+    /HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low = Sum(HRI_Scot HRI_HB HRI_LCA HRI_Scot_High HRI_Scot_Low)
     /All_NHS_Ayrshire_and_Arran = Sum(NHS_Ayrshire_and_Arran)
     /All_NHS_Borders = Sum(NHS_Borders)
     /All_NHS_Dumfries_and_Galloway = Sum(NHS_Dumfries_and_Galloway)

@@ -155,7 +155,7 @@ end repeat.
 compute F13 = 0.
 
 do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
-    Do If (any(recid, "01B", "04B") and (any(char.substr(diag, 1, 3), "F11"))).
+    Do If (any(recid, "01B", "04B") and (any(char.substr(diag, 1, 3), "F13"))).
         compute F13 = 1.
     End If.
 end repeat.
