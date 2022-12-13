@@ -64,7 +64,7 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
     ) %>%
     # Change ch provider to numeric
     dplyr::mutate(
-      ch_provider = as.numeric(ch_provider)
+      ch_provider = as.numeric(.data$ch_provider)
     )
 
 
