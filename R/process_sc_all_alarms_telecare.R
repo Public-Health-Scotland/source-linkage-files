@@ -28,13 +28,15 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
       qtr_start = start_fy_quarter(.data$period)
     ) %>%
     dplyr::mutate(service_start_date = fix_sc_start_dates(
-    .data$service_start_date,
-     .data$period)) %>%
+      .data$service_start_date,
+      .data$period
+    )) %>%
     # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
     dplyr::mutate(service_end_date = fix_sc_end_dates(
-    .data$service_start_date, 
-    .data$service_end_date, 
-    .data$period))
+      .data$service_start_date,
+      .data$service_end_date,
+      .data$period
+    ))
 
   at_full_clean <- replaced_dates %>%
     # Match on demographics data (chi, gender, dob and postcode)
