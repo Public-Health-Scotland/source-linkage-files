@@ -33,8 +33,10 @@ correct_demographics <- function(data, year) {
       chi_age_max = compute_mid_year_age(year, chi_dob_min),
       chi_age_min = compute_mid_year_age(year, chi_dob_max),
 
-      # For the same scenarios, mutate dob
+      # change dob based on scenarios ONLY IF dob is missing
       dob = dplyr::case_when(
+        # DO NOT change dob when it is already there
+        !is_missing(.data$dob %>% as.character()) ~ dob,
         # Case when the dob is already valid
         .data$dob == chi_dob_min ~ dob,
         .data$dob == chi_dob_max ~ dob,
