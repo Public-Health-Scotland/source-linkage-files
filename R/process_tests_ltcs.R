@@ -9,7 +9,6 @@
 #' @export
 #'
 process_tests_ltcs <- function(year) {
-
   year <- check_year_format(year)
 
   new_data <- readr::read_rds(get_ltcs_path(year))
@@ -27,8 +26,8 @@ process_tests_ltcs <- function(year) {
       pct_change = NA,
       issue = NA
     ) %>%
-  # Save test comparisons as an excel workbook
-  write_tests_xlsx(sheet_name = "chi_ltc_extract")
+    # Save test comparisons as an excel workbook
+    write_tests_xlsx(sheet_name = "chi_ltc_extract")
 
   return(duplicates)
 }
