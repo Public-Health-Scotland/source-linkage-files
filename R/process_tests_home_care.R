@@ -6,7 +6,7 @@
 #' @param data The processed data extract
 #' @param year year of extract
 #'
-#' @return a csv document containing tests for extracts
+#' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #' @export
 #'
 process_tests_home_care <- function(data, year) {
@@ -15,8 +15,10 @@ process_tests_home_care <- function(data, year) {
   comparison <- produce_test_comparison(
     old_data = produce_source_hc_tests(old_data),
     new_data = produce_source_hc_tests(data)
-  ) %>%
-    write_tests_xlsx(sheet_name = "HC", year)
+  )
+
+  comparison %>%
+    write_tests_xlsx(sheet_name = "home_care", year)
 
   return(comparison)
 }
