@@ -23,7 +23,7 @@ add_smr_type <- function(recid,
   # Situation where some recids are not in the accepted values
   if (any(!(recid %in% c(
     "02B", "04B", "00B", "AE2", "PIS", "NRS", "01B", "GLS", "CMH", "DN", "HC",
-    "HL1"
+    "HL1", "CH"
   ))) &
     !anyNA(recid)) {
     cli::cli_warn(c("i" = "One or more values of {.var recid} do not have an
@@ -99,7 +99,8 @@ add_smr_type <- function(recid,
       recid == "PIS" ~ "PIS",
       recid == "NRS" ~ "NRS Deaths",
       recid == "CMH" ~ "Comm-MH",
-      recid == "DN" ~ "DN"
+      recid == "DN" ~ "DN",
+      recid == "CH" ~ "Care-Home"
     )
   } else if (all(recid == "02B") & !is.null(mpat)) {
     # Maternity recids, identifier is `mpat`
