@@ -87,6 +87,7 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
       diag4 = dplyr::last(.data$primary_intervention),
       diag5 = dplyr::last(.data$intervention_1),
       diag6 = dplyr::last(.data$intervention_2),
+      total_no_dn_contacts = dplyr::n(),
       cost_total_net = sum(.data$cost_total_net),
       apr_cost = sum(.data$apr_cost),
       may_cost = sum(.data$may_cost),
