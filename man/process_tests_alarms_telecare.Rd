@@ -12,7 +12,7 @@ process_tests_alarms_telecare(data, year)
 \item{year}{year of extract}
 }
 \value{
-a csv document containing tests for extracts
+a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
 This script takes the processed Alarms Telecare extract and produces
