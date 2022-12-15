@@ -12,8 +12,10 @@ match_hscp_lca_code <- function(data) {
   data <- data %>%
     # Recode some strange dummy codes which seem to come from A&E
     tidylog::mutate(
-      hscp2018 = dplyr::case_when(hscp2018 %in% c("S37999998", "S37999999") ~ "",
-                                  TRUE ~ hscp2018),
+      hscp2018 = dplyr::case_when(
+        hscp2018 %in% c("S37999998", "S37999999") ~ "",
+        TRUE ~ hscp2018
+      ),
       # If we can, 'cascade' the geographies upwards
       # i.e. if they have an LCA use this to fill in HSCP2018 and so on for hbrescode
       # Codes are correct as at August 2018
@@ -146,8 +148,10 @@ match_hscp_lca_code <- function(data) {
           hscp2019 %in% c("S37000004", "S37000016") ~ "S08000022",
         is_missing(hbrescode) &
           hscp2019 %in% c("S37000021", "S37000028") ~ "S08000023",
-        is_missing(hbrescode) & hscp2019 %in% c("S37000010", "S37000012", "S37000018",
-                                                "S37000030") ~ "S08000024",
+        is_missing(hbrescode) & hscp2019 %in% c(
+          "S37000010", "S37000012", "S37000018",
+          "S37000030"
+        ) ~ "S08000024",
         is_missing(hbrescode) &
           hscp2019 %in% c("S37000022") ~ "S08000025",
         is_missing(hbrescode) &
