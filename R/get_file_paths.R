@@ -76,8 +76,22 @@ find the latest file with {.arg file_name_regexp}",
           "The file {.file {fs::path_file(file_path)}} did not exist in {.path {directory}}, it has now been created."
         )
       } else {
-        # The file doesn't exists and we don't want to create it
-        cli::cli_abort("The file {.file {fs::path_file(file_path)}} does not exist in {.path {directory}}.")
+        possible_file_name <- fs::path_file(
+          fs::dir_ls(directory, regexp = file_path, ignore.case = TRUE)
+        )
+
+        error_text <- "The file {.file {fs::path_file(file_path)}} does not exist in {.path {directory}}"
+
+        if (length(possible_file_name) == 1L) {
+          # There was a file matching the name, except for case differences.
+          error_text <- c(
+            error_text,
+            ">" = "Did you mean {.file {possible_file_name}}?"
+          )
+        }
+
+        # The file doesn't exist and we don't want to create it
+        cli::cli_abort(error_text)
       }
     }
 
