@@ -2,7 +2,7 @@
 get file = !SC_dir + "all_hc_episodes_" + !LatestUpdate + ".zsav".
 
 * Now select episodes for given FY.
-select if Range(record_keydate1, !startFY, !endFY) or (record_keydate1 <= !endFY and (record_keydate2 >= !startFY or sysmis(record_keydate2))).
+select if Range(hc_service_start_date, !startFY, !endFY) or (hc_service_start_date <= !endFY and (hc_service_end_date >= !startFY or sysmis(hc_service_end_date))).
 
 * Convert from R factor which is a labelled numeric in SPSS.
 Alter type sc_latest_submission (A6).
@@ -10,7 +10,7 @@ compute sc_latest_submission = ValueLabel(sc_latest_submission).
 
 * Remove any episodes where the latest submission was before the current year and the record started earlier with an open end date.
 Do if Number(!altFY, F4.0) > Number(char.substr(sc_latest_submission, 1, 4), F4.0).
-    Compute old_open_record = sysmis(record_keydate2) AND record_keydate1 < !startFY.
+    Compute old_open_record = sysmis(hc_service_end_date) AND hc_service_start_date < !startFY.
 End if.
 
 Select if sysmis(old_open_record) OR NOT old_open_record.
@@ -19,10 +19,10 @@ Alter type
     sending_location (A3)
     social_care_id (A10)
     postcode (A8)
-    hc_reablement (F1.0)
-    hc_provider (F1.0).
+    reablement (F1.0)
+    hc_service_provider (F1.0).
 
-Recode hc_reablement (SYSMIS = 9).
+Recode reablement (SYSMIS = 9).
 
 sort cases by sending_location social_care_id.
 
@@ -31,12 +31,38 @@ match files file = *
     /table = !Year_dir + "Client_for_Source-20" + !FY + ".zsav"
     /By sending_location social_care_id.
 
+Rename Variables
+    hc_service_start_date = record_keydate1
+    hc_service_end_date = record_keydate2
+    reablement = hc_reablement
+    hc_service_provider = hc_provider.
+
 String Year (A4).
 Compute Year = !FY.
+
+string recid (A3).
+Compute recid = "HC".
+
+* Use hc_service to create the SMRType.
+string SMRType (A10).
+Do if hc_service = 1.
+    compute SMRType = "HC-Non-Per".
+Else if hc_service = 2.
+    compute SMRType = "HC-Per".
+Else.
+    compute SMRType = "HC-Unknown".
+End if.
 
 *  Derive age from dob.
 Numeric age (F3.0).
 Compute age = datediff(!midFY, dob, "years").
+
+* Include the sc_id as a unique person identifier (first merge with sending loc).
+String person_id (A13).
+Compute person_id = concat(sending_location, "-", social_care_id).
+
+* Uses sending_location and recodes into sc_sending_location using actual codes.
+!Create_sc_sending_location.
 
 Value Labels hc_provider
     1 'Local Authority / Health & Social Care Partnership / NHS Board'
