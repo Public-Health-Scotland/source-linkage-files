@@ -26,7 +26,7 @@ get_slf_temp_path <-
     ) %>%
       stringr::str_match(
         glue::glue(
-          "temp-source-{file_version}-file-(?<version>[1-9])-20{year}\\.rds"
+          "temp-source-{file_version}-file-(?<version>[1-9])-{year}\\.rds"
         )
       ) %>%
       .[, "version"]
@@ -42,7 +42,7 @@ get_slf_temp_path <-
       ) %>%
         stringr::str_match(
           glue::glue(
-            "temp-source-{file_version}-file-[1-9]-20(?<year>[0-9]{{4}})\\.rds"
+            "temp-source-{file_version}-file-[1-9]-(?<year>[0-9]{{4}})\\.rds"
           )
         ) %>%
         .[, "year"] %>%
