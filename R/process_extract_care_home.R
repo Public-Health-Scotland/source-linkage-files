@@ -55,12 +55,17 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
     # compute lca variable from sending_location
     dplyr::mutate(sc_send_lca = convert_sending_location_to_lca(.data$sending_location)) %>%
     # bed days
-    create_monthly_beddays(year, .data$record_keydate1, .data$record_keydate2) %>%
+    create_monthly_beddays(year,
+                           admission_date = .data$record_keydate1,
+                           discharge_date = .data$record_keydate2) %>%
     # year stay
     dplyr::mutate(
       yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
       # total length of stay
-      stay = calculate_stay(year, .data$record_keydate1, .data$record_keydate2, .data$sc_latest_submission)
+      stay = calculate_stay(year,
+                            start_date = .data$record_keydate1,
+                            end_date = .data$record_keydate2,
+                            sc_qtr = .data$sc_latest_submission)
     ) %>%
     # Change ch provider to numeric
     dplyr::mutate(
