@@ -77,7 +77,7 @@ find the latest file with {.arg file_name_regexp}",
         )
       } else {
         # The file doesn't exists and we don't want to create it
-        cli::cli_abort("The file {.file {fs::path_file(file_path)}} does not exist in {.path {directory}}.")
+        cli::cli_abort("The file {.file {fs::path_file(file_path)}} does not exist in {.path {directory}}")
       }
     }
 
