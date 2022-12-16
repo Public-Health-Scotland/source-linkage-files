@@ -9,10 +9,10 @@
 process_tests_sc_ch_episodes <- function() {
   comparison <- produce_test_comparison(
     old_data = produce_sc_ch_episodes_tests(
-    readr::read_rds(get_sc_ch_episodes_path(update = previous_update()))
+      readr::read_rds(get_sc_ch_episodes_path(update = previous_update()))
     ),
     new_data = produce_sc_ch_episodes_tests(
-    readr::read_rds(get_sc_ch_episodes_path())
+      readr::read_rds(get_sc_ch_episodes_path())
     )
   )
 
