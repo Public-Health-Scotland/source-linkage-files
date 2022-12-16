@@ -35,29 +35,28 @@ match_pc_gpprac <- function(data) {
         TRUE ~ HSCP
       )
     ) %>%
-
     # Making postcodes into 7-character format ----
-  dplyr::mutate(
-    postcode = dplyr::case_when(
-      # When postcode is format "G11AB" make it "G1  1AB"
-      stringr::str_length(postcode) == 5 ~ stringr::str_c(
-        stringr::str_sub(postcode, 1, stringr::str_length(postcode) - 3),
-        "  ",
-        stringr::str_sub(postcode, stringr::str_length(postcode) - 2,-1)
-      ),
-      # When postcode is format "G121AB" make it "G12 1AB"
-      stringr::str_length(postcode) == 6 ~ stringr::str_c(
-        stringr::str_sub(postcode, 1, stringr::str_length(postcode) - 3),
-        " ",
-        stringr::str_sub(postcode, stringr::str_length(postcode) - 2,-1)
-      ),
-      # Don't change postcodes that are already length 7
-      stringr::str_length(postcode) == 7 ~ postcode,
-      # Remove the spaces in any postcode of length 8
-      stringr::str_length(postcode) == 8 ~ stringr::str_remove(postcode, " "),
-      TRUE ~ postcode
+    dplyr::mutate(
+      postcode = dplyr::case_when(
+        # When postcode is format "G11AB" make it "G1  1AB"
+        stringr::str_length(postcode) == 5 ~ stringr::str_c(
+          stringr::str_sub(postcode, 1, stringr::str_length(postcode) - 3),
+          "  ",
+          stringr::str_sub(postcode, stringr::str_length(postcode) - 2, -1)
+        ),
+        # When postcode is format "G121AB" make it "G12 1AB"
+        stringr::str_length(postcode) == 6 ~ stringr::str_c(
+          stringr::str_sub(postcode, 1, stringr::str_length(postcode) - 3),
+          " ",
+          stringr::str_sub(postcode, stringr::str_length(postcode) - 2, -1)
+        ),
+        # Don't change postcodes that are already length 7
+        stringr::str_length(postcode) == 7 ~ postcode,
+        # Remove the spaces in any postcode of length 8
+        stringr::str_length(postcode) == 8 ~ stringr::str_remove(postcode, " "),
+        TRUE ~ postcode
+      )
     )
-  )
 
   ## Rename to keep the existing geographies for now, in case the postcode can't be matched ----
   data_hb_pc_1 <- data_hb_pc %>% dplyr::rename(
@@ -77,17 +76,19 @@ match_pc_gpprac <- function(data) {
   data_hb_pc_2 <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable postcode_match = 1
     dplyr::inner_join(data_hb_pc_1,
-                      pc_lookup %>% dplyr::select(-c(
-                        "hb2018":dplyr::last_col()
-                      )),
-                      by = "postcode") %>%
+      pc_lookup %>% dplyr::select(-c(
+        "hb2018":dplyr::last_col()
+      )),
+      by = "postcode"
+    ) %>%
       dplyr::mutate(postcode_match = 1),
     # For the rows that do not match, give value of postcode_match = 0
     dplyr::anti_join(data_hb_pc_1,
-                     pc_lookup %>% dplyr::select(-c(
-                       "hb2018":dplyr::last_col()
-                     )),
-                     by = "postcode") %>%
+      pc_lookup %>% dplyr::select(-c(
+        "hb2018":dplyr::last_col()
+      )),
+      by = "postcode"
+    ) %>%
       dplyr::mutate(postcode_match = 0)
   )
 
@@ -103,9 +104,11 @@ match_pc_gpprac <- function(data) {
   ## Fill in NA postcodes ----
   data_pc_fill_na <-
     dplyr::left_join(data_hb_pc_2, data_match_info, by = "chi") %>%
-    dplyr::mutate(potentially_fixable =
-                    !is_missing(chi) &
-                    (all_match != 0 & all_match != 1)) %>%
+    dplyr::mutate(
+      potentially_fixable =
+        !is_missing(chi) &
+          (all_match != 0 & all_match != 1)
+    ) %>%
     dplyr::filter(potentially_fixable == TRUE) %>%
     dplyr::group_by(chi) %>%
     # Arrange by one of the keydates so the most recent postcode is at the top even if it's NA
@@ -135,7 +138,7 @@ match_pc_gpprac <- function(data) {
       ) %>%
       dplyr::filter(potentially_fixable == FALSE)
   ) %>%
-    dplyr::select(-all_match,-potentially_fixable,-postcode_match)
+    dplyr::select(-all_match, -potentially_fixable, -postcode_match)
 
   ## Same as before, but this time we want to keep the geography variables ----
   data_geo_keep <- dplyr::bind_rows(
@@ -180,18 +183,20 @@ match_pc_gpprac <- function(data) {
   data_gpprac_match <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable gpprac_match = 1
     dplyr::inner_join(data_gpprac,
-                      ggprac_lookup %>%
-                        dplyr::select(-(
-                          2:dplyr::last_col()
-                        )),
-                      by = "gpprac") %>% dplyr::mutate(gpprac_match = 1),
+      ggprac_lookup %>%
+        dplyr::select(-(
+          2:dplyr::last_col()
+        )),
+      by = "gpprac"
+    ) %>% dplyr::mutate(gpprac_match = 1),
     # For the rows that do not match, give value of gpprac_match = 0
     dplyr::anti_join(data_gpprac,
-                     ggprac_lookup %>%
-                       dplyr::select(-(
-                         2:dplyr::last_col()
-                       )),
-                     by = "gpprac") %>% dplyr::mutate(gpprac_match = 0)
+      ggprac_lookup %>%
+        dplyr::select(-(
+          2:dplyr::last_col()
+        )),
+      by = "gpprac"
+    ) %>% dplyr::mutate(gpprac_match = 0)
   )
 
   data_gpprac_match_info <- data_gpprac_match %>%
@@ -209,7 +214,7 @@ match_pc_gpprac <- function(data) {
   data_gpprac_2 <-
     dplyr::left_join(data_gpprac_match, data_gpprac_match_info, by = "chi") %>%
     dplyr::mutate(potentially_fixable = !is_missing(chi) &
-                    (all_match != 0 & all_match != 1)) %>%
+      (all_match != 0 & all_match != 1)) %>%
     dplyr::filter(potentially_fixable == TRUE) %>%
     dplyr::group_by(chi) %>%
     # Arrange by one of the keydates so the most recent gpprac is at the top even if it's NA
@@ -228,7 +233,7 @@ match_pc_gpprac <- function(data) {
       ) %>%
       dplyr::filter(potentially_fixable == FALSE)
   ) %>%
-    dplyr::select(-all_match,-potentially_fixable,-gpprac_match)
+    dplyr::select(-all_match, -potentially_fixable, -gpprac_match)
 
   data_gpprac_4 <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable gpprac_match = 1
@@ -249,7 +254,7 @@ match_pc_gpprac <- function(data) {
     dplyr::mutate(
       hbpraccode = dplyr::if_else(gpprac_match == 0, hbpraccode_old, hbpraccode),
       gpprac = dplyr::if_else(gpprac_match == 0 &
-                                is_missing(hbpraccode), NA_real_, gpprac)
+        is_missing(hbpraccode), NA_real_, gpprac)
     )
 
   # Here is a section in SPSS for adding value labels. I think those may be redundant?
