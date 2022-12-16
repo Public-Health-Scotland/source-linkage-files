@@ -98,7 +98,7 @@ find the latest file with {.arg file_name_regexp}",
 #'
 #' @family directories
 get_slf_dir <- function() {
-  slf_dir <- fs::path("/conf/hscdiip/SLF_Extracts")
+  slf_dir <- fs::path("/", "conf", "hscdiip", "SLF_Extracts")
 
   return(slf_dir)
 }
@@ -118,7 +118,7 @@ get_slf_dir <- function() {
 #'
 #' @family directories
 get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates", year)
+  year_dir <- fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates", year)
 
   if (!fs::dir_exists(year_dir)) {
     fs::dir_create(year_dir)
