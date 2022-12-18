@@ -16,7 +16,7 @@ process_tests_district_nursing <- function(data, year) {
     old_data = produce_source_dn_tests(old_data),
     new_data = produce_source_dn_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "DN", year)
+    write_tests_xlsx(sheet_name = "dn", year)
 
   return(comparison)
 }
