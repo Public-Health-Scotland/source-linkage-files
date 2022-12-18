@@ -28,6 +28,5 @@ match_on_ltcs <- function(data, year) {
     ) %>%
     dplyr::select(-tidyselect::ends_with("_ltc"))
 
-
   return(matched)
 }

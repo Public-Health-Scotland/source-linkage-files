@@ -36,7 +36,7 @@ correct_demographics <- function(data, year) {
       # change dob based on scenarios ONLY IF dob is missing
       dob = dplyr::case_when(
         # DO NOT change dob when it is already there
-        !is_missing(.data$dob %>% as.character()) ~ dob,
+        !is.na(.data$dob) ~ dob,
         # Case when the dob is already valid
         .data$dob == chi_dob_min ~ dob,
         .data$dob == chi_dob_max ~ dob,
@@ -60,11 +60,12 @@ correct_demographics <- function(data, year) {
     dplyr::group_by(chi) %>%
     tidyr::fill(dob, .direction = "downup") %>%
     dplyr::ungroup() %>%
-    # Fill in ages for any that are left.
+    # Fill in the ages for any that are left.
     dplyr::mutate(
       age = compute_mid_year_age(year, dob),
-
-      # fix gender
+) %>% 
+      # Fill in gender from CHI if it's missing.
+      dplyr::mutate(
       chi_gender = phsmethods::sex_from_chi(chi),
       gender = as.integer(gender),
       gender = dplyr::if_else(!is.na(chi_gender) &
