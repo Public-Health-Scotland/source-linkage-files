@@ -16,7 +16,7 @@ process_tests_sds <- function(data, year) {
     old_data = produce_source_sds_tests(old_data),
     new_data = produce_source_sds_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "SDS", year)
+    write_tests_xlsx(sheet_name = "sds", year)
 
   return(comparison)
 }
