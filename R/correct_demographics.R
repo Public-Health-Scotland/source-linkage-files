@@ -63,9 +63,9 @@ correct_demographics <- function(data, year) {
     # Fill in the ages for any that are left.
     dplyr::mutate(
       age = compute_mid_year_age(year, dob),
-) %>% 
-      # Fill in gender from CHI if it's missing.
-      dplyr::mutate(
+    ) %>%
+    # Fill in gender from CHI if it's missing.
+    dplyr::mutate(
       chi_gender = phsmethods::sex_from_chi(chi),
       gender = as.integer(gender),
       gender = dplyr::if_else(!is.na(chi_gender) &
