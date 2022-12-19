@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_ch_name_lookup_path}
 \alias{get_slf_ch_name_lookup_path}
-\title{Care Home Name (Address) Lookup File Path}
+\title{SLF Care Home Lookup File Path}
 \usage{
 get_slf_ch_name_lookup_path(update = latest_update(), ...)
 }
