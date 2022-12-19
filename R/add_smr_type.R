@@ -24,9 +24,22 @@ add_smr_type <- function(recid,
                          consultation_type = NULL) {
   # Situation where some recids are not in the accepted values
   if (any(!(recid %in% c(
-    "02B", "04B", "00B", "AE2", "PIS", "NRS", "01B", "GLS", "CMH", "DN", "HC",
-    "HL1", "CH", "OoH"
-  ))) &
+    "00B",
+    "01B",
+    "02B",
+    "04B",
+    "AE2",
+    "CH",
+    "CMH",
+    "DN",
+    "GLS",
+    "HC",
+    "HL1",
+    "NRS",
+    "OoH",
+    "PIS"
+  )
+  )) &
     !anyNA(recid)) {
     cli::cli_warn(c("i" = "One or more values of {.var recid} do not have an
                    assignable {.var smrtype}"))
@@ -92,25 +105,6 @@ add_smr_type <- function(recid,
                    Homelessness records cannot be given an {.var smrtype}")
   }
 
-  if (is.null(mpat) & is.null(ipdc) & is.null(hc_service) & is.null(main_applicant_flag)) {
-    # Recids that can be recoded with no identifier
-    smrtype <- dplyr::case_when(
-      recid == "04B" ~ "Psych-IP",
-      recid == "00B" ~ "Outpatient",
-      recid == "AE2" ~ "A & E",
-      recid == "PIS" ~ "PIS",
-      recid == "NRS" ~ "NRS Deaths",
-      recid == "CMH" ~ "Comm-MH",
-      recid == "DN" ~ "DN",
-      recid == "CH" ~ "Care-Home"
-    )
-  } else if (all(recid == "02B") & !is.null(mpat)) {
-# Situation where a GP OoH recid is given but no consultation_type
-  if (any(recid == "OoH") & missing(consultation_type)) {
-    cli::cli_abort("A {.var consultation_type} vector has not been supplied, and therefore
-                   GP Out of Hours records cannot be given an {.var smrtype}")
-  }
-
   if (all(recid == "02B")) {
     # Maternity recids, identifier is `mpat`
     smrtype <- dplyr::case_when(
@@ -153,13 +147,14 @@ add_smr_type <- function(recid,
   } else {
     # Recids that can be recoded with no identifier
     smrtype <- dplyr::case_when(
-      recid == "04B" ~ "Psych-IP",
       recid == "00B" ~ "Outpatient",
+      recid == "04B" ~ "Psych-IP",
       recid == "AE2" ~ "A & E",
-      recid == "PIS" ~ "PIS",
-      recid == "NRS" ~ "NRS Deaths",
+      recid == "CH" ~ "Care-Home",
       recid == "CMH" ~ "Comm-MH",
-      recid == "DN" ~ "DN"
+      recid == "DN" ~ "DN",
+      recid == "NRS" ~ "NRS Deaths",
+      recid == "PIS" ~ "PIS"
     )
   }
 
