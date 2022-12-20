@@ -157,7 +157,7 @@ bad_dates <- replaced_start_dates %>%
   mutate(
     end_before_qtr = qtr_start > hc_service_end_date & !is.na(hc_service_end_date),
     start_after_quarter = record_date < hc_service_start_date,
-    # Need to check this as we are potentialsly introducing bad start dates above
+    # Need to check this as we are potentially introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
   filter(if_any(c(end_before_qtr, start_after_quarter, start_after_end))) %>%
@@ -171,7 +171,7 @@ dropped_bad_dates <- replaced_start_dates %>%
   mutate(
     end_before_qtr = qtr_start > hc_service_end_date & !is.na(hc_service_end_date),
     start_after_quarter = record_date < hc_service_start_date,
-    # Need to check this as we are potentialsly introducing bad start dates above
+    # Need to check this as we are potentially introducing bad start dates above
     start_after_end = hc_service_start_date > hc_service_end_date & !is.na(hc_service_end_date)
   ) %>%
   filter(

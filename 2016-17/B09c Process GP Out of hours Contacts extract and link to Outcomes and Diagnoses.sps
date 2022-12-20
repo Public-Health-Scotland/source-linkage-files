@@ -50,7 +50,7 @@ Alter type ConsultationStartDateTime ConsultationEndDateTime (DATETIME16).
 Select if ConsultationStartDateTime LE Date.DMY(31, 03, Number(!altFY, F4.0) + 1).
 Select if ConsultationEndDateTime GE Date.DMY(01, 04, Number(!altFY, F4.0)).
 
-* Exclude certain consulations as they are 'Flow navigation centre' data.
+* Exclude certain consultations as they are 'Flow navigation centre' data.
 Compute consultation_to_drop = any(ConsultationTypeUnmapped,
     "ED APPOINTMENT",
     "ED TELEPHONE ASSESSMENT",
@@ -226,7 +226,7 @@ add Value Labels SMRType
    "OOH-HomeV" "Out of Hours - Home Visit"
    "OOH-NHS24" "Out of Hours - NHS24 Nurse Advice"
    "OOH-PCC" "Out of Hours - Primary Care Emergency Centre / Primary Care Centre"
-   "OOH-C19Ass" "COVID-19 Assesment"
+   "OOH-C19Ass" "COVID-19 Assessment"
    "OOH-C19Adv" "COVID-19 Advice"
    "OOH-C19Oth" "Other COVID-19 consultation"
    "OOH-Other" "Out of Hours - Other".

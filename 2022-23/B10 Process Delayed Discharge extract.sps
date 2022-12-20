@@ -75,14 +75,14 @@ Value Labels Secondary_Delay_Reason
     '51X' "Legal/Financial (51X)"
     '71X' "Other (71X)".
 
-Numeric Ammended_Dates No_End_Date Correct_dates (F1.0).
+Numeric Amended_Dates No_End_Date Correct_dates (F1.0).
 * Use end of month as date for records where we don't have an end date (but we think they have ended).
 * Flag these records.
 Do if keydate2_dateformat = Date.DMY(1, 1, 1900).
     Compute keydate2_dateformat = Date.DMY(1, xdate.month(MonthFlag) + 1, xdate.year(MonthFlag)) - time.days(1).
-    Compute Ammended_Dates = 1.
+    Compute Amended_Dates = 1.
 Else.
-    Compute Ammended_Dates = 0.
+    Compute Amended_Dates = 0.
 End if.
 
 * Flag the records that don't have an end date.

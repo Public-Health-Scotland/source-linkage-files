@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Merge data
 
-  1. Merge records together, by the grouping mentioned above, records are the same epsiode if they are for the same person, same service type and start on the same date.
+  1. Merge records together, by the grouping mentioned above, records are the same episode if they are for the same person, same service type and start on the same date.
     1. If `reablement` changes within the episode, split the episode at the quarter date between the change. ** We could replicate this logic for `hc_service_provider` **
     1. For Argyll and Bute 2020/21 use `multistaff_input * total_staff_home_care_hours` where `multistaff_input` must be at least 1, for the hours.
     1. For Angus 2018Q3-2019Q3 inclusive recalculate the hours as they were submitted as average weekly hours, so divide by 7 (days) then multiply by the number of days in the quarter to get quarterly hours.
