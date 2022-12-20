@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 ********************************************************************************************************.
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
@@ -23,10 +23,10 @@ match files file = !Year_dir + "temp-source-episode-file-6-" + !FY + ".zsav"
     /Drop End_of_Life Frailty High_CC Maternity MH Substance Medium_CC Low_CC Child_Major Adult_Major Comm_Living
     /by CHI.
 
-* Declare variables for SPARRA and HHG which are not avaliable. 
-Numeric 
-    SPARRA_Start_FY (F8.0) 
-    HHG_Start_FY(F2.0) 
+* Declare variables for SPARRA and HHG which are not available.
+Numeric
+    SPARRA_Start_FY (F8.0)
+    HHG_Start_FY(F2.0)
     HHG_End_FY(F2.0).
 
 save outfile = !Year_dir + "temp-source-episode-file-7-" + !FY + ".zsav"
