@@ -15,6 +15,3 @@ data with matched hscp and lca codes
 \description{
 Match dummy HSCP and LCA codes
 }
-\examples{
-match_hscp_lca_code(data)
-}

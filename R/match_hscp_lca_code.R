@@ -6,8 +6,6 @@
 #'
 #' @return data with matched hscp and lca codes
 #' @export
-#'
-#' @examples match_hscp_lca_code(data)
 match_hscp_lca_code <- function(data) {
   data <- data %>%
     # Recode some strange dummy codes which seem to come from A&E

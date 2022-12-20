@@ -6,8 +6,6 @@
 #'
 #' @return data with matched postcode
 #' @export
-#'
-#' @examples match_pc_gpprac(data)
 match_pc_gpprac <- function(data) {
   # Recoding hb codes to 2018 standard ----
   data_hb_pc <- data %>%

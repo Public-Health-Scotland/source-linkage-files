@@ -15,6 +15,3 @@ data with matched postcode
 \description{
 Match postcode with GP Practice
 }
-\examples{
-match_pc_gpprac(data)
-}
