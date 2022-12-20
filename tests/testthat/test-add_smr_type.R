@@ -47,8 +47,12 @@ test_that("SMR type works for vector input", {
 # Informational messages
 test_that("Warnings return as expected", {
   expect_warning(
-    add_smr_type(recid = c("00B", "AE2", "Bum", "PIS"))
-  )
+    add_smr_type(recid = c("00B", "AE2", "Bum", "PIS")),
+    "One or more values of `recid` do not"
+  ) %>%
+    expect_warning(
+      "Some `smrtype`s were not properly set"
+    )
 })
 
 # Errors that abort the function

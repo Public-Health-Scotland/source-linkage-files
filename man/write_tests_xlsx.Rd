@@ -16,7 +16,7 @@ the sheet name}
 this will be prepended to the sheet name. The default is \code{NULL}.}
 }
 \value{
-the path to the xlsx file location
+a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
 Write test output as an xlsx workbook, with a specific sheet

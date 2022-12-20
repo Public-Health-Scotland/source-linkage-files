@@ -1,6 +1,11 @@
 #!/usr/bin/bash
-set -x #echo on
+# Take the years from the input e.g. bash unzip_for_episode.sh 1718 1819
+years=$@
 
+if [ -z $1 ]; then
+    echo "You need to provide one or more years in the form 'bash unzip_for_episode.sh 1718 1819'"
+    exit 1
+fi
 # Set folders
 input_folder=/conf/sourcedev/Source_Linkage_File_Updates
 output_folder=/conf/hscdiip/01-Source-linkage-files
@@ -16,10 +21,10 @@ for year in $years; do
 
 	# Copy the files for the given year
 	cp -vt $output_folder/ \
-		$input_folder/$year/source-episode-file-20$year.zsav \
-		$input_folder/$year/source-episode-file-20$year.fst \
-		$input_folder/$year/source-individual-file-20$year.zsav \
-		$input_folder/$year/source-individual-file-20$year.fst
+	$input_folder/$year/source-episode-file-20$year.zsav \
+	$input_folder/$year/source-episode-file-20$year.fst \
+	$input_folder/$year/source-individual-file-20$year.zsav \
+	$input_folder/$year/source-individual-file-20$year.fst
 
 	# Set the files back to read-only
 	chmod 440 $output_folder/*$year.*
