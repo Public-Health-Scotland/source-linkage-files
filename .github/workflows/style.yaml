@@ -2,9 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
+    paths: ["**.[rR]", "**.[qrR]md", "**.[rR]markdown", "**.[rR]nw"]
   pull_request:
-    paths: ["**.[rR]", "**.[rR]md", "**.[rR]markdown", "**.[rR]nw"]
+    paths: ["**.[rR]", "**.[qrR]md", "**.[rR]markdown", "**.[rR]nw"]
 
 name: Style
 
@@ -38,9 +38,11 @@ jobs:
         id: styler-location
         run: |
           cat(
-            "##[set-output name=location;]",
+            "location=", 
             styler::cache_info(format = "tabular")$location,
             "\n",
+            file = Sys.getenv("GITHUB_OUTPUT"),
+            append = TRUE,
             sep = ""
           )
         shell: Rscript {0}
@@ -64,6 +66,10 @@ jobs:
 
       - name: Style other scripts
         run: styler::style_dir("Make_R_files/")
+        shell: Rscript {0}
+
+      - name: Style Rmarkdown files
+        run: styler::style_dir("Rmarkdown/")
         shell: Rscript {0}
 
       - name: Style older scripts
