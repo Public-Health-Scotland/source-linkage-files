@@ -10,7 +10,7 @@ match_pc_gpprac(data)
 \item{data}{episode files}
 }
 \value{
-any return needed?
+data with matched postcode
 }
 \description{
 Match postcode with GP Practice
