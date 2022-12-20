@@ -88,7 +88,7 @@ match_hscp_lca_code <- function(data) {
         ),
       # Next, use LCA to fill in ca2018
       ca2018 = dplyr::case_when(
-        !is_missing(ca2018) ~ ca2018
+        !is_missing(ca2018) ~ ca2018,
         lca == "01" ~ "S12000033",
         lca == "02" ~ "S12000034",
         lca == "03" ~ "S12000041",
