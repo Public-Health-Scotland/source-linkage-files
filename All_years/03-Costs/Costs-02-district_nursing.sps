@@ -184,7 +184,7 @@ Compute cost_total_net = cost_total_net * ((1.01) ** uplift).
 
 * Add in years by copying the most recent year we have.
 * This bit will need changing to accomodate new costs ***.
-* Most recent costs year availiable.
+* Most recent costs year available.
 String TempYear1 TempYear2 (A4).
 Do if Year = "1920".
     * Make costs for other years.
