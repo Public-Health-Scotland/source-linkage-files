@@ -76,17 +76,19 @@ match_pc_gpprac <- function(data) {
   data_hb_pc_2 <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable postcode_match = 1
     dplyr::inner_join(data_hb_pc_1,
-                      pc_lookup %>% dplyr::select(-c(
-                        "hb2018":dplyr::last_col()
-                      )),
-                      by = "postcode") %>%
+      pc_lookup %>% dplyr::select(-c(
+        "hb2018":dplyr::last_col()
+      )),
+      by = "postcode"
+    ) %>%
       dplyr::mutate(postcode_match = 1),
     # For the rows that do not match, give value of postcode_match = 0
     dplyr::anti_join(data_hb_pc_1,
-                     pc_lookup %>% dplyr::select(-c(
-                       "hb2018":dplyr::last_col()
-                     )),
-                     by = "postcode") %>%
+      pc_lookup %>% dplyr::select(-c(
+        "hb2018":dplyr::last_col()
+      )),
+      by = "postcode"
+    ) %>%
       dplyr::mutate(postcode_match = 0)
   )
 
