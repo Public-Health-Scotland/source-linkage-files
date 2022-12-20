@@ -35,25 +35,7 @@ match_pc_gpprac <- function(data) {
     ) %>%
     # Making postcodes into 7-character format ----
     dplyr::mutate(
-      postcode = dplyr::case_when(
-        # When postcode is format "G11AB" make it "G1  1AB"
-        stringr::str_length(postcode) == 5 ~ stringr::str_c(
-          stringr::str_sub(postcode, 1, stringr::str_length(postcode) - 3),
-          "  ",
-          stringr::str_sub(postcode, stringr::str_length(postcode) - 2, -1)
-        ),
-        # When postcode is format "G121AB" make it "G12 1AB"
-        stringr::str_length(postcode) == 6 ~ stringr::str_c(
-          stringr::str_sub(postcode, 1, stringr::str_length(postcode) - 3),
-          " ",
-          stringr::str_sub(postcode, stringr::str_length(postcode) - 2, -1)
-        ),
-        # Don't change postcodes that are already length 7
-        stringr::str_length(postcode) == 7 ~ postcode,
-        # Remove the spaces in any postcode of length 8
-        stringr::str_length(postcode) == 8 ~ stringr::str_remove(postcode, " "),
-        TRUE ~ postcode
-      )
+      postcode = phsmethods::format_postcode(postcode, format = "pc7")
     )
 
   ## Rename to keep the existing geographies for now, in case the postcode can't be matched ----
