@@ -4,7 +4,7 @@
 #'
 #' @param data episode files
 #'
-#' @return any return needed?
+#' @return data with matched postcode
 #' @export
 #'
 #' @examples match_pc_gpprac(data)
@@ -76,19 +76,17 @@ match_pc_gpprac <- function(data) {
   data_hb_pc_2 <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable postcode_match = 1
     dplyr::inner_join(data_hb_pc_1,
-      pc_lookup %>% dplyr::select(-c(
-        "hb2018":dplyr::last_col()
-      )),
-      by = "postcode"
-    ) %>%
+                      pc_lookup %>% dplyr::select(-c(
+                        "hb2018":dplyr::last_col()
+                      )),
+                      by = "postcode") %>%
       dplyr::mutate(postcode_match = 1),
     # For the rows that do not match, give value of postcode_match = 0
     dplyr::anti_join(data_hb_pc_1,
-      pc_lookup %>% dplyr::select(-c(
-        "hb2018":dplyr::last_col()
-      )),
-      by = "postcode"
-    ) %>%
+                     pc_lookup %>% dplyr::select(-c(
+                       "hb2018":dplyr::last_col()
+                     )),
+                     by = "postcode") %>%
       dplyr::mutate(postcode_match = 0)
   )
 
@@ -257,12 +255,7 @@ match_pc_gpprac <- function(data) {
         is_missing(hbpraccode), NA_real_, gpprac)
     )
 
-  # Here is a section in SPSS for adding value labels. I think those may be redundant?
-  # * All geographies should now have a label and be from the 2018 (or dummy) geographies.
 
-  # save the data to the folder
-  # write_rds()
-
-  # return()
+  return(data_gpprac_4)
   # The end
 }
