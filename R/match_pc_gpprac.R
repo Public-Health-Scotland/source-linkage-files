@@ -12,7 +12,7 @@ match_pc_gpprac <- function(data) {
     dplyr::mutate(hbtreatcode = as.character.Date(hbtreatcode)) %>%
     dplyr::mutate(
       dplyr::across(
-        c(hbrescode, hbpraccode, hbtreatcode),
+        c("hbrescode", "hbpraccode", "hbtreatcode"),
         ~ dplyr::case_when(
           # HB2014 to HB2018
           .data == "S08000018" ~ "S08000029",
@@ -39,12 +39,13 @@ match_pc_gpprac <- function(data) {
     )
 
   ## Rename to keep the existing geographies for now, in case the postcode can't be matched ----
-  data_hb_pc_1 <- data_hb_pc %>% dplyr::rename(
-    lca_old = lca,
-    hscp_old = HSCP,
-    datazone_old = DataZone,
-    hbrescode_old = hbrescode
-  )
+  data_hb_pc_1 <- data_hb_pc %>%
+    dplyr::rename(
+      lca_old = "lca",
+      hscp_old = "HSCP",
+      datazone_old = "DataZone",
+      hbrescode_old = "hbrescode"
+    )
 
   pc_lookup <-
     readr::read_rds(fs::path(
@@ -54,22 +55,23 @@ match_pc_gpprac <- function(data) {
 
   ## Get a data frame with the rows that can and can't be matched ----
   data_hb_pc_2 <- dplyr::bind_rows(
-    # First, get all the rows that do match, and give the variable postcode_match = 1
-    dplyr::inner_join(data_hb_pc_1,
-      pc_lookup %>% dplyr::select(-c(
-        "hb2018":dplyr::last_col()
-      )),
+    # First, get all the rows that do match,
+    # and give the variable postcode_match = 1
+    dplyr::inner_join(
+      data_hb_pc_1,
+      pc_lookup %>%
+        dplyr::select(-c("hb2018":dplyr::last_col())),
       by = "postcode"
     ) %>%
-      dplyr::mutate(postcode_match = 1),
+      dplyr::mutate(postcode_match = 1L),
     # For the rows that do not match, give value of postcode_match = 0
-    dplyr::anti_join(data_hb_pc_1,
-      pc_lookup %>% dplyr::select(-c(
-        "hb2018":dplyr::last_col()
-      )),
+    dplyr::anti_join(
+      data_hb_pc_1,
+      pc_lookup %>%
+        dplyr::select(-c("hb2018":dplyr::last_col())),
       by = "postcode"
     ) %>%
-      dplyr::mutate(postcode_match = 0)
+      dplyr::mutate(postcode_match = 0L)
   )
 
   # Create all_match, the mean of postcode_match, for those chis that have
@@ -87,14 +89,18 @@ match_pc_gpprac <- function(data) {
     dplyr::mutate(
       potentially_fixable =
         !is_missing(chi) &
-          (all_match != 0 & all_match != 1)
+          (all_match != 0L & all_match != 1L)
     ) %>%
     dplyr::filter(potentially_fixable == TRUE) %>%
     dplyr::group_by(chi) %>%
     # Arrange by one of the keydates so the most recent postcode is at the top even if it's NA
     # Then fill the values of postcode upwards so the NA is filled in
-    dplyr::arrange(desc(is.na(postcode)), desc(keydate2_dateformat), .by_group = TRUE) %>%
-    tidylog::mutate(postcode = dplyr::if_else(postcode == "NK010AA", NA_character_, postcode)) %>%
+    dplyr::arrange(
+      dplyr::desc(is.na(postcode)),
+      dplyr::desc(keydate2_dateformat),
+      .by_group = TRUE
+    ) %>%
+    dplyr::mutate(postcode = dplyr::if_else(postcode == "NK010AA", NA_character_, postcode)) %>%
     tidyr::fill(postcode, .direction = "up") %>%
     dplyr::ungroup()
 
@@ -103,8 +109,8 @@ match_pc_gpprac <- function(data) {
   data_pc_fill_na_2 <- data_pc_fill_na %>%
     dplyr::group_by(chi) %>%
     dplyr::mutate(postcode_count = dplyr::n_distinct(postcode)) %>%
-    dplyr::select(chi, postcode, postcode_count, keydate2_dateformat) %>%
-    dplyr::arrange(desc(keydate2_dateformat), .by_group = TRUE) %>%
+    dplyr::select("chi", "postcode", "postcode_count", "keydate2_dateformat") %>%
+    dplyr::arrange(dplyr::desc(keydate2_dateformat), .by_group = TRUE) %>%
     dplyr::mutate(postcode = dplyr::if_else(dplyr::row_number() != 1, NA_character_, postcode)) %>%
     tidyr::fill(postcode, .direction = "down")
 
@@ -114,37 +120,38 @@ match_pc_gpprac <- function(data) {
     dplyr::left_join(data_hb_pc_2, data_match_info, by = "chi") %>%
       dplyr::mutate(
         potentially_fixable = !is_missing(chi) &
-          (all_match != 0 & all_match != 1)
+          (all_match != 0L & all_match != 1L)
       ) %>%
-      dplyr::filter(potentially_fixable == FALSE)
+      dplyr::filter(!potentially_fixable)
   ) %>%
-    dplyr::select(-all_match, -potentially_fixable, -postcode_match)
+    dplyr::select(-"all_match", -"potentially_fixable", -"postcode_match")
 
   ## Same as before, but this time we want to keep the geography variables ----
   data_geo_keep <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable postcode_match = 1
     dplyr::inner_join(
       data_pc_full,
-      pc_lookup %>% dplyr::rename(hbrescode = hb2018),
+      pc_lookup %>% dplyr::rename(hbrescode = "hb2018"),
       by = "postcode"
     ) %>%
-      dplyr::mutate(postcode_match = 1),
+      dplyr::mutate(postcode_match = 1L),
     # For the rows that do not match, give value of postcode_match = 0
     dplyr::anti_join(
       data_pc_full,
-      pc_lookup %>% dplyr::rename(hbrescode = hb2018),
+      pc_lookup %>% dplyr::rename(hbrescode = "hb2018"),
       by = "postcode"
     ) %>%
-      dplyr::mutate(postcode_match = 0)
+      dplyr::mutate(postcode_match = 0L)
   )
 
   ## If there's still not a match, use the variables from our original file ----
-  data_with_original <- data_geo_keep %>% dplyr::mutate(
-    lca = dplyr::if_else(postcode_match == 0, lca_old, lca),
-    hscp2018 = dplyr::if_else(postcode_match == 0, hscp_old, hscp2018),
-    datazone2011 = dplyr::if_else(postcode_match == 0, datazone_old, datazone2011),
-    hbrescode = dplyr::if_else(postcode_match == 0, hbrescode_old, hbrescode)
-  )
+  data_with_original <- data_geo_keep %>%
+    dplyr::mutate(
+      lca = dplyr::if_else(postcode_match == 0L, lca_old, lca),
+      hscp2018 = dplyr::if_else(postcode_match == 0L, hscp_old, hscp2018),
+      datazone2011 = dplyr::if_else(postcode_match == 0L, datazone_old, datazone2011),
+      hbrescode = dplyr::if_else(postcode_match == 0L, hbrescode_old, hbrescode)
+    )
 
   ## Recoding the geographies ----
   data_geo_recode <- match_hscp_lca_code(data_with_original)
@@ -168,7 +175,7 @@ match_pc_gpprac <- function(data) {
           2:dplyr::last_col()
         )),
       by = "gpprac"
-    ) %>% dplyr::mutate(gpprac_match = 1),
+    ) %>% dplyr::mutate(gpprac_match = 1L),
     # For the rows that do not match, give value of gpprac_match = 0
     dplyr::anti_join(data_gpprac,
       ggprac_lookup %>%
@@ -176,13 +183,21 @@ match_pc_gpprac <- function(data) {
           2:dplyr::last_col()
         )),
       by = "gpprac"
-    ) %>% dplyr::mutate(gpprac_match = 0)
+    ) %>% dplyr::mutate(gpprac_match = 0L)
   )
 
   data_gpprac_match_info <- data_gpprac_match %>%
     dplyr::mutate(gpprac_match = dplyr::if_else(
-      gpprac %in% c(99942, 99957, 99961, 99976, 99981, 99995, 99999),
-      0,
+      gpprac %in% c(
+        99942L,
+        99957L,
+        99961L,
+        99976L,
+        99981L,
+        99995L,
+        99999L
+      ),
+      0L,
       gpprac_match
     )) %>%
     dtplyr::lazy_dt() %>%
@@ -199,7 +214,7 @@ match_pc_gpprac <- function(data) {
     dplyr::group_by(chi) %>%
     # Arrange by one of the keydates so the most recent gpprac is at the top even if it's NA
     # Then fill the values of gpprac upwards so the NA is filled in
-    dplyr::arrange(desc(is.na(gpprac)), desc(keydate2_dateformat), .by_group = TRUE) %>%
+    dplyr::arrange(dplyr::desc(is.na(gpprac)), dplyr::desc(keydate2_dateformat), .by_group = TRUE) %>%
     tidylog::mutate(gpprac = dplyr::if_else(postcode == 9999, NA_real_, gpprac)) %>%
     tidyr::fill(postcode, .direction = "up") %>%
     dplyr::ungroup()
@@ -211,23 +226,23 @@ match_pc_gpprac <- function(data) {
         potentially_fixable = !is_missing(chi) &
           (all_match != 0 & all_match != 1)
       ) %>%
-      dplyr::filter(potentially_fixable == FALSE)
+      dplyr::filter(!potentially_fixable)
   ) %>%
-    dplyr::select(-all_match, -potentially_fixable, -gpprac_match)
+    dplyr::select(-"all_match", -"potentially_fixable", -"gpprac_match")
 
   data_gpprac_4 <- dplyr::bind_rows(
     # First, get all the rows that do match, and give the variable gpprac_match = 1
     dplyr::inner_join(
       data_gpprac_3,
       ggprac_lookup %>%
-        dplyr::select(gpprac, hbpraccode, cluster),
+        dplyr::select("gpprac", "hbpraccode", "cluster"),
       by = "gpprac"
     ) %>% dplyr::mutate(gpprac_match = 1),
     # For the rows that do not match, give value of gpprac_match = 0
     dplyr::anti_join(
       data_gpprac_3,
       ggprac_lookup %>%
-        dplyr::select(gpprac, hbpraccode, cluster),
+        dplyr::select("gpprac", "hbpraccode", "cluster"),
       by = "gpprac"
     ) %>% dplyr::mutate(gpprac_match = 0)
   ) %>%
@@ -237,7 +252,5 @@ match_pc_gpprac <- function(data) {
         is_missing(hbpraccode), NA_real_, gpprac)
     )
 
-
   return(data_gpprac_4)
-  # The end
 }
