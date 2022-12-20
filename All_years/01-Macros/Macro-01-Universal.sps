@@ -413,7 +413,7 @@ Define !AddLCADictionaryInfo (LCA = !CMDEND)
     '32' "Na h-Eileanan Siar"
 !EndDefine.
 
-* Recode the Social care loation codes into LCA codes.
+* Recode the Social care location codes into LCA codes.
 Define !Create_sc_sending_location ()
     String sc_send_lca (A2).
     Recode sending_location
