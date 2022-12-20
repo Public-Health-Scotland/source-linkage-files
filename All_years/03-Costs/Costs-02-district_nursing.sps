@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Create Lookup for District Nursing Costs.
 
 * 1.  Download latest costs file from Cost Book website
@@ -113,7 +113,7 @@ sort cases by HB2019.
 select if Not(Sysmis(cost_total_net)).
 
 *****************************************************************.
-* Fixes for incomplete submisssions.
+* Fixes for incomplete submissions.
 * If a Partnership has abnormally low contacts this will affect the cost so use the previous year until we have a complete submission.
 * This section should be reviewed periodically to check if these fixes are still needed.
 * Check the latest highlight report!.
