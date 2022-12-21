@@ -40,5 +40,10 @@ knitr::opts_chunk$set(echo = TRUE)
   1. Where an episode is split (due to reablement changing) recalculate the dates so that they start/end at the start and end of the quarter where the 'change' happens.
 
 ```{r sc_id, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-replaced_start_dates %>% group_by(sending_location_name) %>% summarise(before = n_distinct(social_care_id)) %>% left_join(fixed_sc_ids %>% group_by(sending_location_name) %>% summarise(after = n_distinct(social_care_id))) %>% mutate(diff = before - after, diff_pct = scales::percent(diff/ before, accuracy = 0.1)) %>% gt::gt()
+replaced_start_dates %>%
+  group_by(sending_location_name) %>%
+  summarise(before = n_distinct(social_care_id)) %>%
+  left_join(fixed_sc_ids %>% group_by(sending_location_name) %>% summarise(after = n_distinct(social_care_id))) %>%
+  mutate(diff = before - after, diff_pct = scales::percent(diff / before, accuracy = 0.1)) %>%
+  gt::gt()
 ```
