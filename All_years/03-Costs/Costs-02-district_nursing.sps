@@ -1,4 +1,4 @@
-﻿* Encoding: UTF-8.
+* Encoding: UTF-8.
 * Create Lookup for District Nursing Costs.
 
 * 1.  Download latest costs file from Cost Book website
@@ -11,7 +11,6 @@
     Check the numbers in this file as some data completeness issues may mean the numbers can't be used to create costs.
 
 * Make a copy of the existing file, in case something wierd has happened to the data!.
-* Get an error because of the -p flag: This keeps the ammend date but fails on permissions - command works fine though.
 * If this doesn't work manually make a copy.
 Host Command = ["cp " + !Costs_dir + "Cost_DN_Lookup.sav " +  !Costs_dir + "Cost_DN_Lookup_pre" + !LatestUpdate + ".sav"].
 
@@ -104,8 +103,8 @@ match files File = !Costs_dir + "raw_dn_costs_with_contacts.sav"
 
 Recode PopProportion (sysmiss = 1).
 
-* Cost is curently measured in £1000s. Make it in £.
-* Then make it per contact (weighted by the propoprtion).
+* Cost is currently measured in £1000s. Make it in £.
+* Then make it per contact (weighted by the proportion).
 Compute cost_total_net = ((Cost * 1000) / (NumberofContacts / PopProportion)).
 
 sort cases by HB2019.
@@ -113,7 +112,7 @@ sort cases by HB2019.
 select if Not(Sysmis(cost_total_net)).
 
 *****************************************************************.
-* Fixes for incomplete submisssions.
+* Fixes for incomplete submissions.
 * If a Partnership has abnormally low contacts this will affect the cost so use the previous year until we have a complete submission.
 * This section should be reviewed periodically to check if these fixes are still needed.
 * Check the latest highlight report!.
@@ -140,9 +139,9 @@ BEGIN GPL
     ELEMENT: line(position(Year*pct_of_max), color.interior(Board_Name), missing.interpolate())
 END GPL.
 
-* Also upflift any 'copied' costs.
-* So for some boards / years we will upflift twice.
-* e.g. Forth Valley we use 1819 costs in place of 1920 cost, so we upflift 1819 to get a 'new' 1920 costs.
+* Also uplift any 'copied' costs.
+* So for some boards / years we will uplift twice.
+* e.g. Forth Valley we use 1819 costs in place of 1920 cost, so we uplift 1819 to get a 'new' 1920 costs.
 * This cost is then uplifted again as needed to produce costs we don't have, e.g. 2021.
 Compute uplift = 0.
 String TempYear1 TempYear2 (A4).
@@ -184,7 +183,7 @@ Compute cost_total_net = cost_total_net * ((1.01) ** uplift).
 
 * Add in years by copying the most recent year we have.
 * This bit will need changing to accomodate new costs ***.
-* Most recent costs year availiable.
+* Most recent costs year available.
 String TempYear1 TempYear2 (A4).
 Do if Year = "1920".
     * Make costs for other years.

@@ -29,7 +29,7 @@ end repeat.
 
 * If MentalHealthProblemsClientGroup = 'Y' MH_Cohort = 1.
 
-* Frailty ClassIfication.
+* Frailty Classification.
 * If ElderlyFrailClientGroup = 'Y' Frail_Cohort = 1.
 compute Frail_Cohort = 0.
 * If (recid = "CH" and age GE 65) Frail_Cohort = 1. /* Removing CH for now as it makes a mess in 1718 */.
@@ -41,11 +41,11 @@ do repeat diag = diag1 diag2 diag3 diag4 diag5 diag6.
         End If.
     End if.
 end repeat.
-* Maternity ClassIfication.
+* Maternity Classification.
 compute Maternity_Cohort = 0.
 If recid = "02B" Maternity_Cohort = 1.
 
-* High CC ClassIfication.
+* High CC Classification.
 compute High_CC_Cohort = 0.
 If (Dementia = 1 or hefailure = 1 or refailure = 1 or liver = 1 or Cancer = 1) High_CC_Cohort = 1.
 * If (recid = "CH" and age LT 65) High_CC_Cohort = 1. /* Removing CH for now as it makes a mess in 1718 */.
@@ -53,11 +53,11 @@ If (Dementia = 1 or hefailure = 1 or refailure = 1 or liver = 1 or Cancer = 1) H
 If spec = "G5" High_CC_Cohort = 1.
 * If LearningDisabilityClientGroup = 'Y' High_CC_Cohort = 1.
 
-* Medium CC ClassIfication.
+* Medium CC Classification.
 compute Medium_CC_Cohort = 0.
 If (CVD = 1 or COPD = 1 or CHD = 1 or Parkinsons = 1 or MS = 1) Medium_CC_Cohort = 1.
 
-* Low CC ClassIfication.
+* Low CC Classification.
 compute Low_CC_Cohort = 0.
 If (Epilepsy = 1 or Asthma = 1 or Arth = 1 or Diabetes = 1 or atrialfib = 1) Low_CC_Cohort = 1.
 
@@ -71,11 +71,11 @@ compute Comm_Living_Cohort = 0.
 compute Prescribing_Cost = 0.
 If recid = "PIS" Prescribing_Cost = Cost_Total_Net.
 
-* Adult Major Conditions ClassIfication.
+* Adult Major Conditions Classification.
 compute Adult_Major_Cohort = 0.
 If ((Prescribing_Cost GE 500 or recid = "01B") and age GE 18) Adult_Major_Cohort = 1.
 
-* Child Major Conditions ClassIfication.
+* Child Major Conditions Classification.
 compute Child_Major_Cohort = 0.
 If ((Prescribing_Cost GE 500 or recid = "01B") and age LT 18) Child_Major_Cohort = 1.
 
@@ -109,11 +109,11 @@ If range (deathdiag1, "W00", "W19")
     or range (deathdiag10, "W00", "W19")
     or range (deathdiag11, "W00", "W19") ExternalCause = $sysmis.
 ************************************************************.
-* End of LIfe ClassIfication.
+* End of LIfe Classification.
 compute End_of_LIfe_Cohort = 0.
 If (recid = "NRS" and sysmis(ExternalCause)) End_of_LIfe_Cohort = 1.
 
-* Substance Misuse ClassIfication.
+* Substance Misuse Classification.
 compute Substance_Cohort = 0.
 
 * Alcohol Codes.

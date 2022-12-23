@@ -35,6 +35,8 @@ name: Check Spelling
 
 on:
   push:
+    branches:
+    - "**"
   pull_request_target:
     branches:
     - "**"
@@ -42,6 +44,7 @@ on:
     - 'opened'
     - 'reopened'
     - 'synchronize'
+    - 'ready_for_review'
   issue_comment:
     types:
     - 'created'
@@ -74,10 +77,12 @@ jobs:
         post_comment: 0
         use_magic_file: 1
         experimental_apply_changes_via_bot: 1
-        use_sarif: 1
+        use_sarif: 0
+        only_check_changed_files: 1
         extra_dictionary_limit: 10
         extra_dictionaries:
-          cspell:r/src/r.txt
+           - 'cspell:r/src/r.txt'
+           - 'cspell:software-terms/src/software-terms.txt'
         check_commit_messages: commits title description
 
   comment-pr:
@@ -96,8 +101,6 @@ jobs:
         spell_check_this: check-spelling/spell-check-this@prerelease
         task: ${{ needs.spelling.outputs.followup }}
         experimental_apply_changes_via_bot: 1
-        extra_dictionaries:
-          cspell:r/src/r.txt
 
   update:
     name: Update PR
@@ -121,5 +124,3 @@ jobs:
         experimental_apply_changes_via_bot: 1
         checkout: true
         ssh_key: "${{ secrets.CHECK_SPELLING }}"
-        extra_dictionaries:
-          cspell:r/src/r.txt

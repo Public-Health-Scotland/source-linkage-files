@@ -33,7 +33,7 @@ Alter Type max_records (AMIN).
  * However the way to do this without Python is to write out to a new file.
 do if $casenum = 1.
     write out = !Year_dir + "Temp macro definitions.sps"
-        /"Define !maxAssesment() !Concat('AssessmentDecisionDate.', '" max_records "') !EndDefine.".
+        /"Define !maxAssessment() !Concat('AssessmentDecisionDate.', '" max_records "') !EndDefine.".
 end if.
 
 * Sort for restructure.
@@ -74,7 +74,7 @@ Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "C
     Compute HH_6before_ep = 0.
 
     * May need to change the numbers here depending on the max number of episodes someone has.
-    Do repeat AssessmentDecisionDate = AssessmentDecisionDate.1 to !maxAssesment.
+    Do repeat AssessmentDecisionDate = AssessmentDecisionDate.1 to !maxAssessment.
         * If there was an application decision made during episode.
         * HH started during episode.
         If Range(AssessmentDecisionDate, keydate1_dateformat, keydate2_dateformat) HH_ep = 1.
