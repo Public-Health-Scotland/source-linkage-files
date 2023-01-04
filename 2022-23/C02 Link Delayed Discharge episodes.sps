@@ -74,7 +74,7 @@ Do if chi = lag(chi) and sysmis(temp_cij_marker).
             If (keydate1_dateformat GE lag(CIJ_start_date)) and (keydate2_dateformat LE lag(CIJ_end_date)) Flag_2 = 2.
             compute Flag_6 = 0.
             * If we know the date has changed flag it and work out how off that dates are.
-            Do if Ammended_Dates = 1.
+            Do if Amended_Dates = 1.
                 Compute Flag_6 = 1.
                 Compute days_wrong = DateDiff(lag(CIJ_end_date), keydate2_dateformat, "days").
             End if.
@@ -86,7 +86,7 @@ Do if chi = lag(chi) and sysmis(temp_cij_marker).
             Compute Flag_7 = 0.
             Compute Flag_9 = 0.
             * If we know the date has changed flag it and work out how off that dates are.
-            Do if Ammended_Dates = 1 AND xdate.month(MonthFlag) = xdate.month(lag(CIJ_end_date)).
+            Do if Amended_Dates = 1 AND xdate.month(MonthFlag) = xdate.month(lag(CIJ_end_date)).
                 Compute Flag_7 = 1.
                 If Range(keydate1_dateformat, lag(CIJ_start_date), lag(CIJ_end_date)) Flag_7 = 2.
                 Compute temp_cij_marker = lag(temp_cij_marker).
@@ -334,4 +334,4 @@ Erase File = !Year_dir + "DD_Temp-2.zsav".
 Erase file = !Year_dir + "slf_reduced_for_DD.zsav".
 
 * Add the Delayed Discharge extract to the 'Activities zip'.
-Host  Command = ["zip -mjv '" + !Year_dir + "Activity_20" + !FY + ".zip' '" + !Year_dir + "DD_for_source-20" + !FY + ".zsav'"].
+Host  Command = ["zip -mjv9 '" + !Year_dir + "Activity_20" + !FY + ".zip' '" + !Year_dir + "DD_for_source-20" + !FY + ".zsav'"].

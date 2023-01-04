@@ -35,6 +35,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       cij_ipdc = dplyr::if_else(.data$cij_inpatient == "MH", "I", "NA"),
       cij_ipdc = dplyr::na_if(.data$cij_ipdc, "NA")
     ) %>%
+    dplyr::select(-cij_inpatient) %>%
     # cij_admtype recode unknown to 99
     dplyr::mutate(cij_admtype = dplyr::if_else(.data$cij_admtype == "Unknown", "99", .data$cij_admtype)) %>%
     # monthly beddays and costs

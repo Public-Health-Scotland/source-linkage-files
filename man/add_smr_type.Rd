@@ -9,7 +9,8 @@ add_smr_type(
   mpat = NULL,
   ipdc = NULL,
   hc_service = NULL,
-  main_applicant_flag = NULL
+  main_applicant_flag = NULL,
+  consultation_type = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ add_smr_type(
 \item{hc_service}{A vector of Home Care service markers}
 
 \item{main_applicant_flag}{A vector of Homelessness applicant flags}
+
+\item{consultation_type}{A vector of GP Out of hours consultation types}
 }
 \value{
 A vector of \code{smrtype}

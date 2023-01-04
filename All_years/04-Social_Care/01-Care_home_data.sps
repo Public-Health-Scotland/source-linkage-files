@@ -119,7 +119,7 @@ Do if char.Index(ch_name, "(") > 0.
 End if.
 
 * Compare the initial data to the lookup.
-* TODO: CH name lookup needs to be year independant.
+* TODO: CH name lookup needs to be year independent.
 Sort Cases by ch_postcode ch_name.
 match files
     /file = *
@@ -415,7 +415,7 @@ aggregate outfile = *
     /ch_discharge_date = last(ch_discharge_date)
     /record_date = max(record_date)
     /sc_latest_submission = max(period)
-    /lastest_submission_dis_missing = max(dis_date_missing)
+    /latest_submission_dis_missing = max(dis_date_missing)
     /ch_name = last(ch_name)
     /ch_postcode = last(ch_postcode)
     /reason_for_admission = last(reason_for_admission)
@@ -427,7 +427,7 @@ aggregate outfile = *
 * However some (~1/3) episodes have subsequent episodes starting on the same day, in this case keep the episode closed.
 sort cases by chi sending_location social_care_id (A) ch_admission_date record_date (D) .
 * Find cases where dis was missing in last submission but isn't after the aggregate.
-Do if lastest_submission_dis_missing = sc_latest_submission and not sysmis(ch_discharge_date).
+Do if latest_submission_dis_missing = sc_latest_submission and not sysmis(ch_discharge_date).
     * Clear case where the dis 'should' be missing but this would result in an overlap.
     Do if lag(sending_location) = sending_location and lag(social_care_id) = social_care_id and lag(ch_admission_date) = ch_discharge_date.
         Compute corrected_open_end_date = 0.

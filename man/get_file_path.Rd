@@ -53,6 +53,7 @@ Other file path functions:
 \code{\link{get_dd_path}()},
 \code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
-\code{\link{get_practice_details_path}()}
+\code{\link{get_practice_details_path}()},
+\code{\link{get_readcode_lookup_path}()}
 }
 \concept{file path functions}

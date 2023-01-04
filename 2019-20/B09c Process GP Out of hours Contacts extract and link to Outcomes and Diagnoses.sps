@@ -50,7 +50,7 @@ Alter type ConsultationStartDateTime ConsultationEndDateTime (DATETIME16).
 Select if ConsultationStartDateTime LE Date.DMY(31, 03, Number(!altFY, F4.0) + 1).
 Select if ConsultationEndDateTime GE Date.DMY(01, 04, Number(!altFY, F4.0)).
 
-* Exclude certain consulations as they are 'Flow navigation centre' data.
+* Exclude certain consultations as they are 'Flow navigation centre' data.
 Compute consultation_to_drop = any(ConsultationTypeUnmapped,
     "ED APPOINTMENT",
     "ED TELEPHONE ASSESSMENT",
@@ -209,8 +209,15 @@ alter type record_keydate1 record_keydate2 (F8.0).
 
 * SMRType.
 Rename Variables ConsultationType = SMRType.
-Recode SMRType ("DISTRICT NURSE" = "OOH-DN") ("DOCTOR ADVICE/NURSE ADVICE" = "OOH-Advice")
-   ("HOME VISIT" = "OOH-HomeV") ("NHS 24 NURSE ADVICE" = "OOH-NHS24") ("PCEC/PCC" = "OOH-PCC")
+Recode SMRType 
+   ("DISTRICT NURSE" = "OOH-DN") 
+   ("DOCTOR ADVICE/NURSE ADVICE" = "OOH-Advice")
+   ("HOME VISIT" = "OOH-HomeV") 
+   ("NHS 24 NURSE ADVICE" = "OOH-NHS24") 
+   ("PCEC/PCC" = "OOH-PCC")
+   ("COVID19 ASSESSMENT" = "OOH-C19Ass")
+   ("COVID19 ADVICE" = "OOH-C19Adv")
+   ("COVID19 OTHER" = "OOH-C19Oth")   
    (Else = "OOH-Other").
 
 add Value Labels SMRType
@@ -219,6 +226,9 @@ add Value Labels SMRType
    "OOH-HomeV" "Out of Hours - Home Visit"
    "OOH-NHS24" "Out of Hours - NHS24 Nurse Advice"
    "OOH-PCC" "Out of Hours - Primary Care Emergency Centre / Primary Care Centre"
+   "OOH-C19Ass" "COVID-19 Assessment"
+   "OOH-C19Adv" "COVID-19 Advice"
+   "OOH-C19Oth" "Other COVID-19 consultation"
    "OOH-Other" "Out of Hours - Other".
 
 * age.
@@ -369,4 +379,4 @@ Erase file = !Year_dir + "GP-Diagnosis-Data-" + !FY + ".zsav".
 Erase file = !Year_dir + "GP-Outcomes-Data-" + !FY + ".zsav".
 
  * zip up the raw data.
-Host Command = ["gzip " + !Year_Extracts_dir + "GP-OoH-consultations-extract-20" + !FY + ".csv"].
+Host Command = ["gzip -v9 " + !Year_Extracts_dir + "GP-OoH-consultations-extract-20" + !FY + ".csv"].

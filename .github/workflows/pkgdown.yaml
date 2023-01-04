@@ -22,7 +22,7 @@ jobs:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
       isPush: ${{ github.event_name == 'push' }}
-      isPR: ${{ github.event.issue.pull_request && github.event.comment.body == '/pkgdown' }}
+      isPR: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/pkgdown') }}
 
     steps:
       - name: Checkout repo
@@ -71,7 +71,7 @@ jobs:
       - name: Deploy to Netlify
         if: contains(env.isPR, 'true')
         id: netlify-deploy
-        uses: nwtgck/actions-netlify@v1
+        uses: nwtgck/actions-netlify@v2
         with:
           publish-dir: './docs'
           production-branch: main-R          

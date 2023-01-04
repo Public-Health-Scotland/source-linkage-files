@@ -35,6 +35,7 @@ but also write this out as rds.
 Other process extracts: 
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
+\code{\link{process_extract_care_home}()},
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_delayed_discharges}()},
 \code{\link{process_extract_district_nursing}()},

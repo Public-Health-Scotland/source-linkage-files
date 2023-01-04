@@ -10,7 +10,7 @@
 #' @param year If applicable, the financial year of the data in '1920' format
 #' this will be prepended to the sheet name. The default is `NULL`.
 #'
-#' @return the path to the xlsx file location
+#' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @export
 #'
@@ -125,5 +125,5 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     fs::file_chmod(path = source_tests_path, mode = "660")
   }
 
-  return(source_tests_path)
+  return(comparison_data)
 }

@@ -28,7 +28,13 @@ produce_source_pis_tests <- function(data) {
     calculate_measures(measure = "sum")
 
   all_measures <- data %>%
-    calculate_measures(vars = c("cost", "no_dispensed_items"), measure = "all")
+    calculate_measures(
+      vars = c(
+        "cost",
+        "no_paid_items"
+      ),
+      measure = "all"
+    )
 
   join_output <- list(
     test_flags,

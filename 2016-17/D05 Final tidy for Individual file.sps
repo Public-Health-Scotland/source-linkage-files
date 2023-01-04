@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Year_dir + "temp-source-individual-file-5-20" + !FY + ".zsav".
 
 Value Labels year
@@ -26,8 +26,8 @@ Alter type
     GLS_episodes GLS_inpatient_episodes GLS_el_inpatient_episodes GLS_non_el_inpatient_episodes GLS_inpatient_beddays GLS_el_inpatient_beddays GLS_non_el_inpatient_beddays
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
-    PIS_dispensed_items
-    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time
+    PIS_paid_items
+    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time ooh_covid_advice ooh_covid_assesment ooh_covid_other
     DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     DN_episodes DN_contacts
     CMH_contacts
@@ -36,7 +36,7 @@ Alter type
     AT_telecare AT_alarms
     SDS_option_1 SDS_option_2 SDS_option_3
     CIJ_el CIJ_non_el CIJ_mat CIJ_delay
-    preventable_admissions preventable_beddays 
+    preventable_admissions preventable_beddays
     HHG_Start_FY HHG_End_FY SPARRA_Start_FY SPARRA_End_FY (F8.0).
 
 * Tidy up the display.
@@ -59,7 +59,6 @@ Variable Labels
     HL1_in_FY "CHI had an active homelessness application during this financial year"
     health_net_cost "Total net cost"
     health_net_costincDNAs "Total net cost including 'did not attend'"
-    health_net_costincIncomplete "Total net cost including CH and DN (not DNAs)"
     acute_episodes "Number of acute episodes"
     acute_daycase_episodes "Number of acute day case episodes"
     acute_inpatient_episodes "Number of acute inpatient episodes"
@@ -116,8 +115,8 @@ Variable Labels
     OP_cost_dnas "Cost of new outpatient appointments which were not attended"
     ae_attendances "Number of A&E attendances"
     ae_cost "Cost of A&E attendances"
-    pis_dispensed_items "Number of prescribing items dispensed"
-    pis_cost "Cost of prescribing items dispensed "
+    pis_paid_items "Number of prescribing items paid"
+    pis_cost "Cost of prescribing items"
     ooh_cases "Number of GP OoH cases (multiple consultations per case)"
     ooh_homeV "Number of GP OoH Home visit consultations"
     ooh_advice "Number of GP OoH Doctor / Nurse advice consultations"
@@ -125,6 +124,9 @@ Variable Labels
     ooh_NHS24 "Number of GP OoH NHS24 consultations"
     ooh_other "Number of GP OoH Other consultations"
     ooh_PCC "Number of GP OoH Primary Care Centre / Emergency Primary Care Centre consultations"
+    ooh_covid_advice "Number of GP OoH COVID-19 Advice consultations"
+    ooh_covid_assesment "Number of GP OoH COVID-19 Advice assessment consultations"
+    ooh_covid_other "Number of GP OoH COVID-19 Other consultations"
     ooh_cost "Cost of all GP OoHs"
     ooh_consultation_time "Total time for GP OoH Consultations"
     DN_episodes "Number of District Nursing episodes (consultations more than 7-days apart)"
@@ -148,16 +150,14 @@ Variable Labels
     SDS_option_2 "Total number of SDS packages (option 2)"
     SDS_option_3 "Total number of SDS packages (option 3)"
     SDS_option_4 "A flag to indicate whether the client had an SDS option 4 (a mix) within the year - not a count"
-    CIJ_el "Number of Continous Inpatient Journeys (CIJ) which began with an Elective admission"
-    CIJ_non_el "Number of Continous Inpatient Journeys (CIJ) which began with a Non-Elective admission"
-    CIJ_mat "Number of Continous Inpatient Journeys (CIJ) which began with an Maternity admission"
+    CIJ_el "Number of Continuous Inpatient Journeys (CIJ) which began with an Elective admission"
+    CIJ_non_el "Number of Continuous Inpatient Journeys (CIJ) which began with a Non-Elective admission"
+    CIJ_mat "Number of Continuous Inpatient Journeys (CIJ) which began with an Maternity admission"
     cij_delay "Number of Continuous Inpatient Journeys (CIJ) which had a delay at some point"
     HRI_lca "HRIs in LCA excluding District Nursing and Care Home costs"
-    HRI_lca_incDN "HRIs in LCA including District Nursing costs"
     HRI_hb "HRIs in HB excluding District Nursing and Care Home costs"
     HRI_scot "HRIs in Scotland excluding District Nursing and Care Home costs"
     HRI_lcaP "Cumulative percent in LCA excluding District Nursing and Care Home costs"
-    HRI_lcaP_incDN "Cumulative percent in LCA including District Nursing costs"
     HRI_hbP "Cumulative percent in HB excluding District Nursing and Care Home costs"
     HRI_scotP "Cumulative percent in Scotland excluding District Nursing and Care Home costs"
     Keep_Population "Flag indicating whether this CHI should be kept or discarded when scaling the whole population to be more in line with official population estimates".
@@ -240,7 +240,6 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     gpprac
     health_net_cost
     health_net_costincdnas
-    health_net_costincincomplete
     nsu
     preventable_admissions
     preventable_beddays
@@ -299,7 +298,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     op_cost_dnas
     ae_attendances
     ae_cost
-    pis_dispensed_items
+    pis_paid_items
     pis_cost
     ooh_cases
     ooh_homev
@@ -308,6 +307,9 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     ooh_nhs24
     ooh_other
     ooh_pcc
+    ooh_covid_advice
+    ooh_covid_assesment
+    ooh_covid_other
     ooh_consultation_time
     ooh_cost
     dn_episodes
@@ -398,19 +400,17 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     simd2020v2_hb2019_quintile
     simd2020v2_hscp2019_decile
     simd2020v2_hscp2019_quintile
-    ur8_2016
-    ur6_2016
-    ur3_2016
-    ur2_2016
+    ur8_2020
+    ur6_2020
+    ur3_2020
+    ur2_2020
     hb2019
     hscp2019
     ca2019
     hri_lca
-    hri_lca_incdn
     hri_hb
     hri_scot
     hri_lcap
-    hri_lcap_incdn
     hri_hbp
     hri_scotp
     sparra_start_fy

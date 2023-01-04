@@ -4,7 +4,7 @@
 * Run 01-Set up Macros first!.
 ********************************************************************************************************.
 * Zip up all BXX test files.
-Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
+Host Command = ["zip -mjv9 " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "A\&E_tests_20" + !FY + ".zsav " +
     !Year_dir + "acute_tests_20" + !FY + ".zsav " +
     !Year_dir + "CMH_tests_20" + !FY + ".zsav " +
@@ -21,7 +21,7 @@ Host Command = ["zip -mjv " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
     !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
     !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
-    !Year_dir + "PIS_tests_20" + !FY + ".zsav " ].
+    !Year_dir + "prescribing_tests_20" + !FY + ".zsav " ].
 
 * Bring all the data sets together.
 add files
@@ -376,7 +376,7 @@ get file = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav".
 Erase file = !Year_dir + "temp-source-episode-file-Non-CIJ-" + !FY + ".zsav".
 
 * Zip all activity (this doesn't really save any space but tidies things up for now).
-Host Command = ["zip -mjv " + !Year_dir + "Activity_20" + !FY + ".zip " +
+Host Command = ["zip -mjv9 " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "acute_for_source-20" + !FY + ".zsav " +
     !Year_dir + "maternity_for_source-20" + !FY + ".zsav " +
     !Year_dir + "mental_health_for_source-20" + !FY + ".zsav " +
