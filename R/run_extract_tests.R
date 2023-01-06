@@ -17,6 +17,12 @@ run_extract_tests <- function(data_list, year) {
   process_tests_outpatients(data_list[["outpatients"]], year)
   process_tests_nrs_deaths(data_list[["nrs_deaths"]], year)
   process_tests_cmh(data_list[["cmh"]], year)
+  process_tests_district_nursing(data_list[["district_nursing"]], year)
 
+  # social care tests
+  process_tests_care_home(data_list[["care_home"]], year)
+  process_tests_alarms_telecare(data_list[["alarms_telecare"]], year)
+  process_tests_home_care(data_list[["home_care"]], year)
+  process_tests_sds(data_list[["sds"]], year)
   return(run_extract_tests)
 }
