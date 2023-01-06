@@ -16,7 +16,7 @@ library(createslf)
 year <- "2021"
 
 # Create a list of the years to run
-years <- convert_year_to_fyyear(as.character(2017:2018)) %>%
+years <- convert_year_to_fyyear(as.character(2017)) %>%
   purrr::set_names()
 
 
