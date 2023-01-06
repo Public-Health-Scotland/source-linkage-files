@@ -13,11 +13,11 @@ run_process_extracts <- function(years) {
     run_data_extracts
   )
 
-  extract_tests <- purrr::map2(
-    extract_data,
-    years,
-    run_extract_tests
-  )
+  # extract_tests <- purrr::map2(
+  #   extract_data,
+  #   years,
+  #   run_extract_tests
+  # )
 
   return(extract_data)
 }
