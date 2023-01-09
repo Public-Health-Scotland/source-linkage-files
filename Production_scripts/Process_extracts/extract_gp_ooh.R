@@ -458,4 +458,9 @@ final_data <- ooh_clean %>%
   )
 
 rm(location_lookup, ooh_clean, ooh_costs)
+
+  # Save as rds file
+  final_data %>%
+    write_rds(get_source_extract_path(year, "GPOoH", check_mode = "write"))
+
 # End of Script #
