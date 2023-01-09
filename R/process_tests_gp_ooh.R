@@ -14,9 +14,11 @@ process_tests_gp_ooh <- function(data, year) {
 
   comparison <- produce_test_comparison(
     old_data = produce_source_extract_tests(old_data,
-                                            sum_mean_vars = "cost"),
+      sum_mean_vars = "cost"
+    ),
     new_data = produce_source_extract_tests(data,
-                                            sum_mean_vars = "cost")
+      sum_mean_vars = "cost"
+    )
   ) %>%
     write_tests_xlsx(sheet_name = "GPOoH", year)
 
