@@ -27,11 +27,11 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       recid = "PIS",
       year = year,
-      # Recode GP Practice into a 5 digit number
-      # assume that if it starts with a letter it's an English practice
-      # and so recode to 99995
-      gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)
-    ) %>%
+    # Recode GP Practice into a 5 digit number
+    # assume that if it starts with a letter it's an English practice
+    # and so recode to 99995
+    gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)
+      ) %>%
     # Set date to the end of the FY
     dplyr::mutate(
       record_keydate1 = end_fy(year),
