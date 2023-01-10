@@ -13,7 +13,6 @@
 #' @export
 #' @family process extracts
 process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
-
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
   outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
   consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
