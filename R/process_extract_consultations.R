@@ -34,7 +34,7 @@ process_extract_ooh_consultations <- function(data, year) {
   )
 
   consultations_filtered <- consultations_file %>%
-    dtplyr::lazy_dt() %>%
+    data.table::as.data.table() %>%
     # Filter missing / bad CHI numbers
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
     # Fix some times - if end before start, remove the time portion

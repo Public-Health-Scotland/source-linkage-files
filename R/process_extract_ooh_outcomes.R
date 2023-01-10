@@ -21,7 +21,7 @@ process_extract_ooh_outcomes <- function(data, year) {
   # Outcomes Data ---------------------------------
   ## Data Cleaning
   outcomes_clean <- data %>%
-    dtplyr::lazy_dt() %>%
+    data.table::as.data.table() %>%
     # Recode outcome
     dplyr::mutate(
       outcome = dplyr::recode(.data$outcome,
