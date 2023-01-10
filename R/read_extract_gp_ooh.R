@@ -10,13 +10,11 @@
 #' @export
 #' @family process extracts
 read_extract_gp_ooh <- function(year) {
-
   ooh_extracts <- list(
-    "diagnosis"  = read_extract_ooh_diagnosis(year),
+    "diagnosis" = read_extract_ooh_diagnosis(year),
     "outcomes" = read_extract_ooh_outcomes(year),
     "consultations" = read_extract_ooh_consultations(year)
   )
 
   return(ooh_extracts)
-
 }
