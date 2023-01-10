@@ -1,10 +1,8 @@
 #' Read A&E extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for A&E
 #' @export
-#'
 read_extract_ae <- function(year) {
   extract_ae_path <- get_boxi_extract_path(year = year, type = "AE")
 

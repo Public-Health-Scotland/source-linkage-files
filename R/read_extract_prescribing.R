@@ -1,10 +1,8 @@
 #' Read Prescribing extract
 #'
-#' @param year Year of extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for prescribing
 #' @export
-#'
 read_extract_prescribing <- function(year) {
   # TODO remove Number of Dispensed Items, DI Paid NIC excl. BB, DI Paid GIC excl. BB and PD Paid NIC excl. BB when the extract changes.
   pis_file <- readr::read_csv(

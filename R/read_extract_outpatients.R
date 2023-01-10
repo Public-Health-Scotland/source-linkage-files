@@ -1,10 +1,8 @@
 #' Read Outpatients extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for Acute
 #' @export
-#'
 read_extract_outpatients <- function(year) {
   extract_outpatients_path <- get_boxi_extract_path(year = year, type = "Outpatient")
 

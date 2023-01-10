@@ -2,16 +2,16 @@
 % Please edit documentation in R/read_extract_mental_health.R
 \name{read_extract_mental_health}
 \alias{read_extract_mental_health}
-\title{Read mental health extract}
+\title{Read Mental Health extract}
 \usage{
 read_extract_mental_health(year)
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
 }
 \value{
-csv data file for homelessness
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-Read mental health extract
+Read Mental Health extract
 }

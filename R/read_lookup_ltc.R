@@ -1,8 +1,8 @@
 #' Read LTC IT extract
 #'
-#' @return csv data file
-#' @export
+#' @return a [tibble][tibble::tibble-package].
 #'
+#' @export
 read_lookup_ltc <- function() {
   # Read data------------------------------------------------
   ltc_file <- readr::read_csv(

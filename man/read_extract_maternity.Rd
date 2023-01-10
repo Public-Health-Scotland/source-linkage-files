@@ -2,16 +2,16 @@
 % Please edit documentation in R/read_extract_maternity.R
 \name{read_extract_maternity}
 \alias{read_extract_maternity}
-\title{Read maternity extract}
+\title{Read Maternity extract}
 \usage{
 read_extract_maternity(year)
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
 }
 \value{
-csv data file for homelessness
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-Read maternity extract
+Read Maternity extract
 }
