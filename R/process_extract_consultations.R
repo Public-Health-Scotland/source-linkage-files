@@ -8,7 +8,6 @@
 #' @param year The year to process, in FY format.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
-#' @export
 #' @family process extracts
 process_extract_ooh_consultations <- function(data, year) {
   # Only run for a single year
