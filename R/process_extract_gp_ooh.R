@@ -11,11 +11,11 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_gp_ooh <- function(year, write_to_disk = TRUE) {
+process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
 
-    diagnosis_extract <- process_extract_ooh_diagnosis([diagnosis], year)
-    outcomes_extract <- process_extract_ooh_outcomes([outcomes], year)
-    consultations_extract <- process_extract_ooh_consultations([consultations], year)
+    diagnosis_extract <- process_extract_ooh_diagnosis(ooh_extracts[["diagnosis"]], year)
+    outcomes_extract <- process_extract_ooh_outcomes(ooh_extracts[["outcomes"]], year)
+    consultations_extract <- process_extract_ooh_consultations(ooh_extracts[["consultations"]], year)
 
 
     # Join data ---------------------------------
