@@ -19,7 +19,7 @@ read_extract_ooh_outcomes <- function(year) {
       outcome = "Case Outcome"
     ) %>%
     # Remove blank outcomes
-    dplyr::filter(outcome != "") %>%
+    dplyr::filter(.data$outcome != "") %>%
     dplyr::distinct()
 
   return(outcomes_extract)

@@ -36,22 +36,22 @@ process_extract_ooh_consultations <- function(data, year) {
   consultations_filtered <- consultations_file %>%
     dtplyr::lazy_dt() %>%
     # Filter missing / bad CHI numbers
-    dplyr::filter(phsmethods::chi_check(chi) == "Valid CHI") %>%
+    dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
     # Fix some times - if end before start, remove the time portion
     dplyr::mutate(
-      bad_dates = record_keydate1 > record_keydate2,
-      record_keydate1 = dplyr::if_else(bad_dates,
-        lubridate::floor_date(record_keydate1, "day"),
-        record_keydate1
+      bad_dates = .data$record_keydate1 > .data$record_keydate2,
+      record_keydate1 = dplyr::if_else(.data$bad_dates,
+        lubridate::floor_date(.data$record_keydate1, "day"),
+        .data$record_keydate1
       ),
-      record_keydate2 = dplyr::if_else(bad_dates,
-        lubridate::floor_date(record_keydate1, "day"),
-        record_keydate2
+      record_keydate2 = dplyr::if_else(.data$bad_dates,
+        lubridate::floor_date(.data$record_keydate1, "day"),
+        .data$record_keydate2
       )
     ) %>%
     # Some episodes are wrongly included in the BOXI extract
     # Filter to episodes with any time in the given financial year.
-    dplyr::filter(is_date_in_fyyear(year, record_keydate1, record_keydate2)) %>%
+    dplyr::filter(is_date_in_fyyear(.data$year, .data$record_keydate1, .data$record_keydate2)) %>%
     # Filter out Flow navigation center data
     dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
     dplyr::as_tibble()
@@ -59,18 +59,18 @@ process_extract_ooh_consultations <- function(data, year) {
   rm(consultations_file, fnc_consulation_types)
 
   consultations_covid <- consultations_filtered %>%
-    dplyr::mutate(consultation_type = dplyr::if_else(is.na(consultation_type),
+    dplyr::mutate(consultation_type = dplyr::if_else(is.na(.data$consultation_type),
       dplyr::case_when(
-        consultation_type_unmapped == "COVID19 ASSESSMENT" ~ consultation_type_unmapped,
-        consultation_type_unmapped == "COVID19 ADVICE" ~ consultation_type_unmapped,
-        consultation_type_unmapped %in% c(
+        .data$consultation_type_unmapped == "COVID19 ASSESSMENT" ~ .data$consultation_type_unmapped,
+        .data$consultation_type_unmapped == "COVID19 ADVICE" ~ .data$consultation_type_unmapped,
+        .data$consultation_type_unmapped %in% c(
           "COVID19 HOME VISIT",
           "COVID19 OBSERVATION",
           "COVID19 VIDEO CALL",
           "COVID19 TEST"
         ) ~ "COVID19 OTHER"
       ),
-      consultation_type
+      .data$consultation_type
     ))
 
   # Clean up some overlapping episodes

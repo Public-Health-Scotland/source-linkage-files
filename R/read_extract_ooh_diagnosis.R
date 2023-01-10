@@ -19,7 +19,7 @@ read_extract_ooh_diagnosis <- function(year) {
       readcode = "Diagnosis Code",
       description = "Diagnosis Description"
     ) %>%
-    tidyr::drop_na(readcode) %>%
+    tidyr::drop_na(.data$readcode) %>%
     dplyr::distinct()
 
   return(diagnosis_extract)

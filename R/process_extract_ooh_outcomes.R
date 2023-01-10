@@ -24,7 +24,7 @@ process_extract_ooh_outcomes <- function(data, year) {
     dtplyr::lazy_dt() %>%
     # Recode outcome
     dplyr::mutate(
-      outcome = dplyr::recode(outcome,
+      outcome = dplyr::recode(.data$outcome,
         "DEATH" = "00",
         "999/AMBULANCE" = "01",
         "EMERGENCY ADMISSION" = "02",
@@ -39,15 +39,15 @@ process_extract_ooh_outcomes <- function(data, year) {
       )
     ) %>%
     # Sort so we prefer 'lower' outcomes e.g. Death, over things like 'Other'
-    dplyr::group_by(ooh_case_id) %>%
-    dplyr::arrange(outcome) %>%
+    dplyr::group_by(.data$ooh_case_id) %>%
+    dplyr::arrange(.data$outcome) %>%
     dplyr::mutate(outcome_n = dplyr::row_number()) %>%
     dplyr::ungroup() %>%
     # use row order to pivot outcomes
     tidyr::pivot_wider(
-      names_from = outcome_n,
+      names_from = .data$outcome_n,
       names_prefix = "outcome_",
-      values_from = outcome
+      values_from = .data$outcome
     ) %>%
     dplyr::select(
       "ooh_case_id",

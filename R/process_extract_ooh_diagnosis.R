@@ -32,7 +32,7 @@ process_extract_ooh_diagnosis <- function(data, year) {
   diagnosis_readcodes <- data %>%
     dplyr::mutate(
       # Replace question marks with dot
-      readcode = stringr::str_replace_all(readcode, "\\?", "\\.") %>%
+      readcode = stringr::str_replace_all(.data$readcode, "\\?", "\\.") %>%
         # Pad with dots up to 5 charaters
         stringr::str_pad(5L, "right", ".")
     ) %>%
@@ -51,8 +51,8 @@ process_extract_ooh_diagnosis <- function(data, year) {
     ) %>%
     # Replace  the description with the true description from the Readcode Lookup.
     dplyr::mutate(
-      description = dplyr::if_else(is.na(full_match_1) & !is.na(true_description),
-        true_description, description
+      description = dplyr::if_else(is.na(.data$full_match_1) & !is.na(.data$true_description),
+        .data$true_description, .data$description
       )
     ) %>%
     # Join to readcode lookup again to check
@@ -63,14 +63,14 @@ process_extract_ooh_diagnosis <- function(data, year) {
     ) %>%
     # Check the output for any bad Read codes and try and fix by adding exceptions
     dplyr::mutate(
-      readcode = dplyr::if_else(is.na(full_match_2),
+      readcode = dplyr::if_else(is.na(.data$full_match_2),
         dplyr::case_when(
-          readcode == "Xa1m." ~ "S349",
-          readcode == "Xa1mz" ~ "S349",
-          readcode == "HO6.." ~ "H06..",
-          readcode == "zV6.." ~ "ZV6..",
-          TRUE ~ readcode
-        ), readcode
+          .data$readcode == "Xa1m." ~ "S349",
+          .data$readcode == "Xa1mz" ~ "S349",
+          .data$readcode == "HO6.." ~ "H06..",
+          .data$readcode == "zV6.." ~ "ZV6..",
+          TRUE ~ .data$readcode
+        ), .data$readcode
       )
     ) %>%
     # Join to readcode lookup again to check
@@ -82,12 +82,12 @@ process_extract_ooh_diagnosis <- function(data, year) {
 
   # See how the code above performed
   diagnosis_readcodes %>%
-    dplyr::count(full_match_1, full_match_2, full_match_final)
+    dplyr::count(.data$full_match_1, .data$full_match_2, .data$full_match_final)
 
   # Check any readcodes which are still not matching the lookup
   readcodes_not_matched <- diagnosis_readcodes %>%
-    dplyr::filter(is.na(full_match_final)) %>%
-    dplyr::count(readcode, description, sort = TRUE)
+    dplyr::filter(is.na(.data$full_match_final)) %>%
+    dplyr::count(.data$readcode, .data$description, sort = TRUE)
 
   readcodes_not_matched
 
@@ -95,9 +95,9 @@ process_extract_ooh_diagnosis <- function(data, year) {
   unrecognised_but_ok_codes <- c("@1JX.", "@1JXz", "@43jS", "@65PW", "@8CA.", "@8CAK", "@A795")
 
   new_bad_codes <- readcodes_not_matched %>%
-    dplyr::filter(!(readcode %in% unrecognised_but_ok_codes))
+    dplyr::filter(!(.data$readcode %in% unrecognised_but_ok_codes))
 
-  if (nrow(new_bad_codes) != 0L) {
+  if (nrow(.data$new_bad_codes) != 0L) {
     cli::cli_abort(c("New unrecognised readcodes",
       "i" = "There {?is/are} {nrow(new_bad_codes)} new unrecognised readcode{?s} in the data.",
       " " = "Check the {cli::qty(nrow(new_bad_codes))} code{?s} then either fix, or add {?it/them} to the {.var unrecognised_but_ok_codes} vector",
@@ -118,20 +118,20 @@ process_extract_ooh_diagnosis <- function(data, year) {
   diagnosis_clean <- diagnosis_readcodes %>%
     dplyr::select("ooh_case_id", "readcode", "description") %>%
     dplyr::mutate(
-      readcode_level = stringr::str_locate(readcode, "\\.")[, "start"] %>%
+      readcode_level = stringr::str_locate(.data$readcode, "\\.")[, "start"] %>%
         tidyr::replace_na(6L)
     ) %>%
-    dplyr::group_by(ooh_case_id) %>%
+    dplyr::group_by(.data$ooh_case_id) %>%
     # Sort so that the 'more specific' readcodes are preferred
-    dplyr::arrange(dplyr::desc(readcode_level)) %>%
+    dplyr::arrange(dplyr::desc(.data$readcode_level)) %>%
     dplyr::mutate(diag_n = dplyr::row_number()) %>%
     dplyr::ungroup() %>%
     dplyr::select(-"readcode_level") %>%
     dplyr::rename(diag = "readcode") %>%
     # restructure data
     tidyr::pivot_wider(
-      names_from = diag_n,
-      values_from = c(diag, description),
+      names_from = .data$diag_n,
+      values_from = c(.data$diag, .data$description),
       names_glue = "{.value}_{diag_n}"
     ) %>%
     dplyr::select(
