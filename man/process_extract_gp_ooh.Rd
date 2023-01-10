@@ -9,6 +9,8 @@ process_extract_gp_ooh(year, data_list, write_to_disk = TRUE)
 \arguments{
 \item{year}{The year to process, in FY format.}
 
+\item{data_list}{A list containing the extracts.}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }

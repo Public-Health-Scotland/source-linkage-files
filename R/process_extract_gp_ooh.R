@@ -5,6 +5,7 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
+#' @param data_list A list containing the extracts.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -12,9 +13,10 @@
 #' @export
 #' @family process extracts
 process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
-  diagnosis_extract <- process_extract_ooh_diagnosis(ooh_extracts[["diagnosis"]], year)
-  outcomes_extract <- process_extract_ooh_outcomes(ooh_extracts[["outcomes"]], year)
-  consultations_extract <- process_extract_ooh_consultations(ooh_extracts[["consultations"]], year)
+
+  diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
+  outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
+  consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
 
 
   # Join data ---------------------------------
@@ -23,7 +25,6 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
     dplyr::left_join(diagnosis_extract, by = "ooh_case_id") %>%
     dplyr::left_join(outcomes_extract, by = "ooh_case_id")
 
-  rm(consultations_clean, diagnosis_clean, outcomes_clean)
 
   # Costs ---------------------------------
 
@@ -89,7 +90,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
   location_lookup <- ooh_clean %>%
     dplyr::group_by(.data$location) %>%
     dplyr::summarise(
-      location_description = dplyr::first(location_description)
+      location_description = dplyr::first(.data$location_description)
     ) %>%
     dplyr::ungroup()
 
