@@ -25,17 +25,17 @@ process_extract_ooh_outcomes <- function(data, year) {
     # Recode outcome
     dplyr::mutate(
       outcome = dplyr::recode(outcome,
-                              "DEATH" = "00",
-                              "999/AMBULANCE" = "01",
-                              "EMERGENCY ADMISSION" = "02",
-                              "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
-                              "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
-                              "REFERRED TO A&E" = "21",
-                              "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
-                              "REFERRED TO MIU" = "21",
-                              "REFERRED TO SOCIAL SERVICES" = "24",
-                              "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
-                              "OTHER" = "99"
+        "DEATH" = "00",
+        "999/AMBULANCE" = "01",
+        "EMERGENCY ADMISSION" = "02",
+        "ADVISED TO CONTACT OWN GP SURGERY/GP TO CONTACT PATIENT" = "03",
+        "TREATMENT COMPLETED AT OOH/DISCHARGED/NO FOLLOW-UP" = "98",
+        "REFERRED TO A&E" = "21",
+        "REFERRED TO CPN/DISTRICT NURSE/MIDWIFE" = "22",
+        "REFERRED TO MIU" = "21",
+        "REFERRED TO SOCIAL SERVICES" = "24",
+        "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" = "29",
+        "OTHER" = "99"
       )
     ) %>%
     # Sort so we prefer 'lower' outcomes e.g. Death, over things like 'Other'
@@ -63,5 +63,4 @@ process_extract_ooh_outcomes <- function(data, year) {
   rm(outcomes_extract)
 
   return(outcomes_clean)
-
 }

@@ -48,5 +48,4 @@ read_extract_ooh_consultations <- function(year) {
     dplyr::distinct()
 
   return(consultations_extract)
-
 }
