@@ -54,7 +54,6 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
     ) %>%
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
 
-  rm(matched_data, ooh_cost_lookup)
 
   # Final cleaning  ---------------------------------
 
@@ -136,8 +135,6 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       "mar_cost",
       "ooh_case_id"
     )
-
-  rm(location_lookup, ooh_clean, ooh_costs)
 
   if (write_to_disk) {
     final_data %>%

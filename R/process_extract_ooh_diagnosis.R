@@ -106,12 +106,6 @@ process_extract_ooh_diagnosis <- function(data, year) {
     ))
   }
 
-  rm(
-    readcode_lookup,
-    readcodes_not_matched,
-    unrecognised_but_ok_codes,
-    new_bad_codes
-  )
 
   ## Data Cleaning------------------------------------------------------------
 
@@ -146,8 +140,6 @@ process_extract_ooh_diagnosis <- function(data, year) {
         "diag_6"
       ))
     )
-
-  rm(diagnosis_extract, diagnosis_readcodes)
 
   return(diagnosis_clean)
 }

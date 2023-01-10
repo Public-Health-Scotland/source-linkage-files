@@ -56,7 +56,6 @@ process_extract_ooh_consultations <- function(data, year) {
     dplyr::filter(!(consultation_type_unmapped %in% fnc_consulation_types)) %>%
     dplyr::as_tibble()
 
-  rm(consultations_file, fnc_consulation_types)
 
   consultations_covid <- consultations_filtered %>%
     dplyr::mutate(consultation_type = dplyr::if_else(is.na(.data$consultation_type),
@@ -95,8 +94,6 @@ process_extract_ooh_consultations <- function(data, year) {
   # ) %>%
   # dplyr::ungroup() %>%
   # dplyr::as_tibble()
-
-  rm(consultations_filtered, consultations_covid)
 
   return(consultations_clean)
 }

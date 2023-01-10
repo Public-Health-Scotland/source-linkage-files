@@ -60,7 +60,5 @@ process_extract_ooh_outcomes <- function(data, year) {
     ) %>%
     dplyr::as_tibble()
 
-  rm(outcomes_extract)
-
   return(outcomes_clean)
 }
