@@ -33,7 +33,7 @@ process_extract_ooh_consultations <- function(data, year) {
     "TELEPHONE/VIRTUAL ASSESSMENT"
   )
 
-  consultations_filtered <- consultations_file %>%
+  consultations_filtered <- data %>%
     data.table::as.data.table() %>%
     # Filter missing / bad CHI numbers
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
