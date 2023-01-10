@@ -4,7 +4,7 @@
 library(createslf)
 
 # Specify year
-year <- check_year_format("1920")
+year <- check_year_format("1718")
 
 
 # Diagnosis Data ---------------------------------
@@ -403,6 +403,10 @@ ooh_clean <- ooh_costs %>%
     key_time2 = hms::as_hms(record_keydate2),
     record_keydate1 = trunc(record_keydate1, "days"),
     record_keydate2 = trunc(record_keydate2, "days")
+  ) %>%
+  dplyr::mutate(
+    record_keydate1 = as.Date(record_keydate1),
+    record_keydate2 = as.Date(record_keydate2)
   )
 
 # Keep the location descriptions as a lookup.
@@ -458,4 +462,9 @@ final_data <- ooh_clean %>%
   )
 
 rm(location_lookup, ooh_clean, ooh_costs)
+
+# Save as rds file
+final_data %>%
+  write_rds(get_source_extract_path(year, "GPOoH", check_mode = "write"))
+
 # End of Script #
