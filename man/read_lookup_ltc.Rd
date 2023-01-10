@@ -7,7 +7,7 @@
 read_lookup_ltc()
 }
 \value{
-csv data file
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read LTC IT extract

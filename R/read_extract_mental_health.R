@@ -1,10 +1,8 @@
-#' Read mental health extract
+#' Read Mental Health extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for homelessness
 #' @export
-#'
 read_extract_mental_health <- function(year) {
   extract_mental_health_path <- get_boxi_extract_path(year = year, type = "MH")
 
