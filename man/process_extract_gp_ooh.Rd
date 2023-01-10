@@ -4,15 +4,13 @@
 \alias{process_extract_gp_ooh}
 \title{Process the GP OoH extract}
 \usage{
-process_extract_gp_ooh(year, write_to_disk = TRUE)
+process_extract_gp_ooh(year, data_list, write_to_disk = TRUE)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
-
-\item{data}{The extract to process}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -50,6 +48,7 @@ Other process extracts:
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
+\code{\link{read_extract_gp_ooh}()},
 \code{\link{read_lookup_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
 }

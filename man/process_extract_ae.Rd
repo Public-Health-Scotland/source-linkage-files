@@ -50,6 +50,7 @@ Other process extracts:
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
+\code{\link{read_extract_gp_ooh}()},
 \code{\link{read_lookup_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
 }
