@@ -97,7 +97,7 @@ process_extract_ooh_diagnosis <- function(data, year) {
   new_bad_codes <- readcodes_not_matched %>%
     dplyr::filter(!(.data$readcode %in% unrecognised_but_ok_codes))
 
-  if (nrow(.data$new_bad_codes) != 0L) {
+  if (nrow(new_bad_codes) != 0L) {
     cli::cli_abort(c("New unrecognised readcodes",
       "i" = "There {?is/are} {nrow(new_bad_codes)} new unrecognised readcode{?s} in the data.",
       " " = "Check the {cli::qty(nrow(new_bad_codes))} code{?s} then either fix, or add {?it/them} to the {.var unrecognised_but_ok_codes} vector",
