@@ -140,4 +140,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
     final_data %>%
       write_rds(get_source_extract_path(year, "GPOoH", check_mode = "write"))
   }
+
+  return(final_data)
+
 }
