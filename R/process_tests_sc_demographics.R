@@ -1,11 +1,11 @@
 #' Process sc demographics tests
 #'
 #' @description This script takes the processed demographic extract and produces
-#' a test comparison with the previous data. This is written to disk as a csv.
+#' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @return a csv document containing tests
+#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#'
 #' @export
-#'
 process_tests_sc_demographics <- function() {
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
