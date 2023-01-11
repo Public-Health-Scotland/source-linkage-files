@@ -29,3 +29,35 @@ test_that("HSCP codes are recoded properly", {
   )
 
 })
+
+test_that("Geographies are renamed correctly", {
+
+  # Expected variables
+  dummy <- tibble::tribble(~lca, ~HSCP, ~DataZone, ~hbrescode)
+  expect_equal(
+    colnames(rename_existing_geographies(dummy)),
+    c("lca_old", "HSCP_old", "DataZone_old", "hbrescode_old")
+  )
+
+  # Custom variables
+  dummy <- tibble::tribble(~one, ~two, ~three)
+  expect_equal(
+    colnames(rename_existing_geographies(dummy, c("one", "two", "three"))),
+    c("one_old", "two_old", "three_old")
+  )
+
+  # Some variables but not others
+  dummy <- tibble::tribble(~lca, ~HSCP, ~DataZone, ~dummy_one, ~hbrescode, ~dummy_two)
+  expect_equal(
+    colnames(rename_existing_geographies(dummy)),
+    c("lca_old", "HSCP_old", "DataZone_old", "dummy_one", "hbrescode_old", "dummy_two")
+  )
+
+  # Error
+  dummy <- tibble::tribble(~lca, ~HSCP, ~DataZone)
+  expect_error(colnames(rename_existing_geographies(dummy)))
+
+})
+
+
+
