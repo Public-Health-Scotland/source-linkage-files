@@ -1,3 +1,39 @@
+#' Recode Health Board code to 2018 standard
+#'
+#' @param hb_variable A vector of Health Board codes
+#'
+#' @return A vector of Health Board codes in the 2018 standard
+recode_health_boards <- function(hb_variable) {
+  hb_recoded <- dplyr::case_when(
+    # HB2014 to HB2018
+    hb_variable == "S08000018" ~ "S08000029",
+    hb_variable == "S08000027" ~ "S08000030",
+    # HB2019 to HB2018
+    hb_variable == "S08000031" ~ "S08000021",
+    hb_variable == "S08000032" ~ "S08000023",
+    TRUE ~ hb_variable
+  )
+  return(hb_recoded)
+}
+
+#' Recode HSCP code to 2018 standard
+#'
+#' @param hscp_variable A vector of HSCP codes
+#'
+#' @return A vector of HSCP codes in the 2018 standard
+recode_hscp <- function(hscp_variable) {
+  hscp_recoded <- dplyr::case_when(
+    # HSCP2016 to HSCP2018
+    hscp_variable == "S37000014" ~ "S37000032",
+    hscp_variable == "S37000023" ~ "S37000033",
+    # HSCP2019 to HSCP2018
+    hscp_variable == "S37000034" ~ "S37000015",
+    hscp_variable == "S37000035" ~ "S37000021",
+    TRUE ~ hscp_variable
+  )
+  return(hscp_recoded)
+}
+
 #' Match postcode with GP Practice
 #'
 #' @description Match postcode with GP Practice
@@ -7,34 +43,16 @@
 #' @return data with matched postcode
 #' @export
 match_pc_gpprac <- function(data) {
-  # Recoding hb codes to 2018 standard ----
+
   data_hb_pc <- data %>%
-    dplyr::mutate(hbtreatcode = as.character.Date(hbtreatcode)) %>%
     dplyr::mutate(
+      hbtreatcode = as.character.Date(hbtreatcode),
+      # Recoding hb codes to 2018 standard
       dplyr::across(
-        c("hbrescode", "hbpraccode", "hbtreatcode"),
-        ~ dplyr::case_when(
-          # HB2014 to HB2018
-          .data == "S08000018" ~ "S08000029",
-          .data == "S08000027" ~ "S08000030",
-          # HB2019 to HB2018
-          .data == "S08000031" ~ "S08000021",
-          .data == "S08000032" ~ "S08000023",
-          TRUE ~ .
-        )
-      ),
-      HSCP = dplyr::case_when(
-        # HSCP2016 to HSCP2018
-        HSCP == "S37000014" ~ "S37000032",
-        HSCP == "S37000023" ~ "S37000033",
-        # HSCP2019 to HSCP2018
-        HSCP == "S37000034" ~ "S37000015",
-        HSCP == "S37000035" ~ "S37000021",
-        TRUE ~ HSCP
-      )
-    ) %>%
-    # Making postcodes into 7-character format ----
-    dplyr::mutate(
+        c("hbrescode", "hbpraccode", "hbtreatcode"), ~ recode_health_boards()),
+      # Recoding hscp codes to 2018 standard
+      HSCP = recode_hscp(hscp_variable = HSCP),
+      # Making postcodes into 7-character format
       postcode = phsmethods::format_postcode(postcode, format = "pc7")
     )
 
