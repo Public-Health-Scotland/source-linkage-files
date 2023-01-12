@@ -169,7 +169,11 @@ fill_data_from_chi <- function(data, matching_data, type = c("pc", "gp")) {
 #' @type Either pc for postcodes or gp for GP practices
 #'
 #' @return A data frame with some missing data filled
+<<<<<<< HEAD
 fill_data_from_keydate <- function(data, type = c("pc", "gp")) {
+=======
+fill_data_from_keydate <- function(data, var_to_fill, type = c("pc", "gp")) {
+>>>>>>> 3e001fde84178abc0abe8e038bb6952e69a1111c
   if (type == "pc") {
     na_type <- NA_character_
     return_data <- data %>%
@@ -260,7 +264,11 @@ match_postcodes_and_fill_missing <- function(data) {
 
   data_postcode_flagged <- data_recoded %>%
     flag_matching_data(
+<<<<<<< HEAD
       lookup = read_and_trim_lookup(lookup = "pc", trim = TRUE),
+=======
+      lookup = read_and_trim_pc_lookup(lookup = "pc", trim = TRUE),
+>>>>>>> 3e001fde84178abc0abe8e038bb6952e69a1111c
       type = "pc"
     )
 
@@ -282,7 +290,13 @@ match_postcodes_and_fill_missing <- function(data) {
     ) %>%
     # Remove unnecessary variables
     dplyr::select(-"all_match", -"postcode_match")
+<<<<<<< HEAD
 
+=======
+}
+
+match_gp_practice <- function(data) {
+>>>>>>> 3e001fde84178abc0abe8e038bb6952e69a1111c
   # Same as before, but this time we want to keep the geography variables
   data_final <- data_postcode_filled %>%
     flag_matching_data(read_and_trim_lookup(lookup = "pc", trim = FALSE), type = "pc") %>%
@@ -297,6 +311,7 @@ match_postcodes_and_fill_missing <- function(data) {
     match_hscp_lca_code() %>%
     dplyr::rename(hbpraccode_old = hbpraccode)
 
+<<<<<<< HEAD
   return(data_final)
 }
 
@@ -326,6 +341,7 @@ match_gp_practice_and_fill_missing <- function(data) {
     fill_data_from_chi(
       matching_data = data_for_matching,
       type = "gp"
+<<<<<<< HEAD
     ) %>%
     fill_data_from_keydate(var_to_fill = gpprac, type = "gp") %>%
     dplyr::bind_rows(
