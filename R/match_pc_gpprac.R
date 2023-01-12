@@ -43,7 +43,7 @@ recode_hscp <- function(hscp_variable) {
 #'
 #' @return A data frame with the variables from vars appended with "_old"
 rename_existing_geographies <- function(data,
-                                        vars = c("lca", "HSCP", "DataZone", "hbrescode")) {
+                                        vars = c("lca", "hscp2018", "datazone2011", "hbrescode")) {
   check_variables_exist(data, vars)
 
   return_data <- data %>%
@@ -70,10 +70,10 @@ flag_matching_data <- function(data, lookup, type = c("pc", "gp")) {
     return_data <- dplyr::bind_rows(
       # First, get all the rows that do match,
       # and give the variable postcode_match = 1
-      dplyr::inner_join(data, pc_lookup, by = "postcode") %>%
+      dplyr::inner_join(data, lookup, by = "postcode") %>%
         dplyr::mutate(postcode_match = 1L),
       # For the rows that do not match, give value of postcode_match = 0
-      dplyr::anti_join(data, pc_lookup, by = "postcode") %>%
+      dplyr::anti_join(data, lookup, by = "postcode") %>%
         dplyr::mutate(postcode_match = 0L)
     )
   } else if (type == "gp") {
@@ -99,12 +99,11 @@ flag_matching_data <- function(data, lookup, type = c("pc", "gp")) {
 #' @return A data frame with variable all_match, which is 0 or 1 if all
 #' postcodes match and a real number between 0 and 1 when they don't
 find_matching_data_by_chi <- function(data, match_variable) {
-
   # Create all_match, the mean of the match variable, for those chis that have
   # some matched and some unmatched
   return_data <- data %>%
     dplyr::group_by(chi) %>%
-    dplyr::summarise(all_match = mean({{match_variable}})) %>%
+    dplyr::summarise(all_match = mean({{ match_variable }})) %>%
     dplyr::ungroup()
 
   return(return_data)
@@ -167,37 +166,48 @@ fill_data_from_chi <- function(data, matching_data, type = c("pc", "gp")) {
 #' individual to fill missing data
 #'
 #' @param data A data frame
-#' @param var_to_fill The variable we're looking to fill
-#' @type Either pc for pastcodes or gp for GP practices
+#' @type Either pc for postcodes or gp for GP practices
 #'
 #' @return A data frame with some missing data filled
-fill_data_from_keydate <- function(data, var_to_fill, type = c("pc", "gp")) {
-
+fill_data_from_keydate <- function(data, type = c("pc", "gp")) {
   if (type == "pc") {
     na_type <- NA_character_
+    return_data <- data %>%
+      dplyr::group_by(chi) %>%
+      # Determine whether a chi has multiple postcodes
+      dplyr::mutate(count = dplyr::n_distinct(postcode)) %>%
+      dplyr::select("chi", "postcode", "count", "keydate2_dateformat") %>%
+      # Put the most recent contact at the top of each chi group
+      dplyr::arrange(dplyr::desc(keydate2_dateformat), .by_group = TRUE) %>%
+      # Recode any postcodes that are not the most recent with NA
+      dplyr::mutate(postcode = dplyr::if_else(dplyr::row_number() != 1,
+                                                 na_type,
+                                                 postcode
+      )) %>%
+      # Fill all the new NAs with the most recent postcode
+      tidyr::fill(postcode, .direction = "down")
   } else if (type == "gp") {
     na_type <- NA_integer_
+    return_data <- data %>%
+      dplyr::group_by(chi) %>%
+      # Determine whether a chi has multiple postcodes
+      dplyr::mutate(count = dplyr::n_distinct(gpprac)) %>%
+      dplyr::select("chi", "gpprac", "count", "keydate2_dateformat") %>%
+      # Put the most recent contact at the top of each chi group
+      dplyr::arrange(dplyr::desc(keydate2_dateformat), .by_group = TRUE) %>%
+      # Recode any postcodes that are not the most recent with NA
+      dplyr::mutate(var_to_fill = dplyr::if_else(dplyr::row_number() != 1,
+                                                 na_type,
+                                                 gpprac
+      )) %>%
+      # Fill all the new NAs with the most recent postcode
+      tidyr::fill(gpprac, .direction = "down")
   }
-
-  return_data <- data %>%
-    dplyr::group_by(chi) %>%
-    # Determine whether a chi has multiple postcodes
-    dplyr::mutate(count = dplyr::n_distinct({{ var_to_fill }})) %>%
-    dplyr::select("chi", "var_to_fill", "count", "keydate2_dateformat") %>%
-    # Put the most recent contact at the top of each chi group
-    dplyr::arrange(dplyr::desc(keydate2_dateformat), .by_group = TRUE) %>%
-    # Recode any postcodes that are not the most recent with NA
-    dplyr::mutate(var_to_fill = dplyr::if_else(dplyr::row_number() != 1,
-      na_type,
-      {{ var_to_fill }}
-    )) %>%
-    # Fill all the new NAs with the most recent postcode
-    tidyr::fill({{ var_to_fill }}, .direction = "down")
 
   return(return_data)
 }
 
-#' Read the SLF postcode lookup and remove unnecessary variables
+#' Read the appropriate SLF lookup and remove unnecessary variables
 #'
 #' @param lookup Can be either "pc" for Postcode or "gp" for GP Practice
 #' @param trim When TRUE then trims the selected lookup to have limited geographies
@@ -205,7 +215,6 @@ fill_data_from_keydate <- function(data, var_to_fill, type = c("pc", "gp")) {
 #' @return The lookup of the selected type
 #' @seealso [get_slf_postcode_path()] and [get_slf_gpprac_path()]
 read_and_trim_lookup <- function(lookup = c("pc", "gp"), trim = TRUE) {
-
   if (lookup == "pc") {
     if (trim == TRUE) {
       lookup <- readr::read_rds(get_slf_postcode_path()) %>%
@@ -216,7 +225,7 @@ read_and_trim_lookup <- function(lookup = c("pc", "gp"), trim = TRUE) {
     }
   }
 
-  if (lookup == "gp") {
+  else if (lookup == "gp") {
     if (trim == TRUE) {
       lookup <- readr::read_rds(get_slf_gpprac_path()) %>%
         dplyr::select(-(2:dplyr::last_col()))
@@ -234,108 +243,121 @@ read_and_trim_lookup <- function(lookup = c("pc", "gp"), trim = TRUE) {
 #' @param data An episode file
 #'
 #' @return Data with any potentially fixable postcodes filled in
-#' @export
 match_postcodes_and_fill_missing <- function(data) {
-
   data_recoded <- data %>%
     dplyr::mutate(
       hbtreatcode = as.character.Date(hbtreatcode),
       # Recoding hb codes to 2018 standard
       dplyr::across(
-        c("hbrescode", "hbpraccode", "hbtreatcode"), ~ recode_health_boards(.)),
+        c("hbrescode", "hbpraccode", "hbtreatcode"), ~ recode_health_boards(.)
+      ),
       # Recoding hscp codes to 2018 standard
-      HSCP = recode_hscp(hscp_variable = HSCP),
+      hscp2018 = recode_hscp(hscp_variable = hscp2018),
       # Making postcodes into 7-character format
       postcode = phsmethods::format_postcode(postcode, format = "pc7")
     ) %>%
     rename_existing_geographies()
 
   data_postcode_flagged <- data_recoded %>%
-    flag_matching_data(lookup = read_and_trim_pc_lookup(lookup = "pc", trim = TRUE),
-                       type = "pc")
+    flag_matching_data(
+      lookup = read_and_trim_lookup(lookup = "pc", trim = TRUE),
+      type = "pc"
+    )
 
   data_for_matching <- data_postcode_flagged %>%
     find_matching_data_by_chi(match_variable = postcode_match)
 
   data_postcode_filled <- data_postcode_flagged %>%
     fill_data_from_chi(matching_data = data_for_matching, type = "pc") %>%
-    fill_data_from_keydate(var_to_fill = postcode, type = "pc") %>%
+    fill_data_from_keydate(type = "pc") %>%
     # Bind together our filled data frame with the subset
     # where the postcodes were not potentially fixable
-    dplyr::bind_rows(.,
+    dplyr::bind_rows(
+      .,
       dplyr::left_join(data_postcode_flagged,
-                       data_for_matching,
-                       by = "chi") %>%
-      dplyr::filter(!(!is_missing(chi) & !is.integer(all_match)))) %>%
+        data_for_matching,
+        by = "chi"
+      ) %>%
+        dplyr::filter(!(!is_missing(chi) & !is.integer(all_match)))
+    ) %>%
     # Remove unnecessary variables
     dplyr::select(-"all_match", -"postcode_match")
-}
-
-match_gp_practice <- function(data) {
 
   # Same as before, but this time we want to keep the geography variables
-  data_gpprac <- data %>%
-    flag_matching_postcodes(read_and_trim_pc_lookup(lookup = "pc", trim = FALSE)) %>%
+  data_final <- data_postcode_filled %>%
+    flag_matching_data(read_and_trim_lookup(lookup = "pc", trim = FALSE), type = "pc") %>%
     # If there's still not a match, use the variables from our original file
     dplyr::mutate(
       lca = dplyr::if_else(postcode_match == 0L, lca_old, lca),
-      hscp2018 = dplyr::if_else(postcode_match == 0L, hscp_old, hscp2018),
-      datazone2011 = dplyr::if_else(postcode_match == 0L, datazone_old, datazone2011),
+      hscp2018 = dplyr::if_else(postcode_match == 0L, hscp2018_old, hscp2018),
+      datazone2011 = dplyr::if_else(postcode_match == 0L, datazone2011_old, datazone2011),
       hbrescode = dplyr::if_else(postcode_match == 0L, hbrescode_old, hbrescode)
     ) %>%
     # Recoding the geographies
     match_hscp_lca_code() %>%
-    # Doing a similar process with gpprac as we did with postcode ----
     dplyr::rename(hbpraccode_old = hbpraccode)
 
-  data_gpprac_flagged <- data_gpprac %>%
-    flag_matching_data(lookup = read_and_trim_lookup(lookup = "gp", trim = TRUE),
-                       type = "gp")
+  return(data_final)
+}
+
+#' Use the SLF gpprac lookup to ensure missing practice codes are filled
+#'
+#' @param data An episode file with filled postcodes
+#'
+#' @return Data with any potentially fixable gp practices filled in
+match_gp_practice_and_fill_missing <- function(data) {
+
+  data_gpprac_flagged <- data %>%
+    flag_matching_data(
+      lookup = read_and_trim_lookup(lookup = "gp", trim = TRUE),
+      type = "gp"
+    )
 
   data_for_matching <- data_gpprac_flagged %>%
     # Replace known dummy practice codes with zero
     dplyr::mutate(gpprac_match = dplyr::if_else(
       gpprac %in% c(99942L, 99957L, 99961L, 99976L, 99981L, 99995L, 99999L),
       0L,
-      gpprac_match)) %>%
+      gpprac_match
+    )) %>%
     find_matching_data_by_chi(match_variable = gpprac_match)
 
   data_gpprac_filled <- data_gpprac_flagged %>%
-    fill_data_from_chi(matching_data = data_for_matching,
-                      type = "gp")
-
-  data_gpprac_3 <- dplyr::bind_rows(
-    data_gpprac_2,
-    dplyr::left_join(data_gpprac_match, data_gpprac_match_info, by = "chi") %>%
-      dplyr::mutate(
-        potentially_fixable = !is_missing(chi) &
-          (all_match != 0 & all_match != 1)
+    fill_data_from_chi(
+      matching_data = data_for_matching,
+      type = "gp"
+    ) %>%
+    fill_data_from_keydate(var_to_fill = gpprac, type = "gp") %>%
+    dplyr::bind_rows(
+      .,
+      dplyr::left_join(data_gpprac_flagged,
+        data_for_matching,
+        by = "chi"
       ) %>%
-      dplyr::filter(!potentially_fixable)
-  ) %>%
-    dplyr::select(-"all_match", -"potentially_fixable", -"gpprac_match")
+        dplyr::filter(!(!is_missing(chi) & !is.integer(all_match)))
+    ) %>%
+    dplyr::select(-"all_match", -"gpprac_match")
 
-  data_gpprac_4 <- dplyr::bind_rows(
-    # First, get all the rows that do match, and give the variable gpprac_match = 1
-    dplyr::inner_join(
-      data_gpprac_3,
-      ggprac_lookup %>%
-        dplyr::select("gpprac", "hbpraccode", "cluster"),
-      by = "gpprac"
-    ) %>% dplyr::mutate(gpprac_match = 1),
-    # For the rows that do not match, give value of gpprac_match = 0
-    dplyr::anti_join(
-      data_gpprac_3,
-      ggprac_lookup %>%
-        dplyr::select("gpprac", "hbpraccode", "cluster"),
-      by = "gpprac"
-    ) %>% dplyr::mutate(gpprac_match = 0)
+  data_gpprac_final <- flag_matching_data(data_gpprac_filled,
+    lookup = read_and_trim_lookup(lookup = "gp", trim = FALSE),
+    type = "gp"
   ) %>%
     dplyr::mutate(
       hbpraccode = dplyr::if_else(gpprac_match == 0, hbpraccode_old, hbpraccode),
-      gpprac = dplyr::if_else(gpprac_match == 0 &
-        is_missing(hbpraccode), NA_real_, gpprac)
+      gpprac = dplyr::if_else(gpprac_match == 0 & is_missing(hbpraccode),
+        NA_real_,
+        gpprac
+      )
     )
 
-  return(data_gpprac_4)
+  return(data_gpprac_final)
+}
+
+match_pc_gpprac <- function(data) {
+  return_data <-
+    data %>%
+    match_postcodes_and_fill_missing() %>%
+    match_gp_practice_and_fill_missing()
+
+  return(return_data)
 }
