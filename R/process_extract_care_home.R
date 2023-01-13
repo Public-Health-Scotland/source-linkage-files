@@ -123,4 +123,6 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
     outfile %>%
       write_rds(get_source_extract_path(year, type = "CH", check_mode = "write"))
   }
+  
+  return(outfile)
 }
