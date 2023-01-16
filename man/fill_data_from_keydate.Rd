@@ -10,7 +10,7 @@ fill_data_from_keydate(data, var_to_fill, type = c("pc", "gp"))
 \arguments{
 \item{data}{A data frame}
 
-\item{var_to_fill}{The variable we're looking to fill}
+\item{type}{Either pc for postcodes or gp for GP practices}
 }
 \value{
 A data frame with some missing data filled

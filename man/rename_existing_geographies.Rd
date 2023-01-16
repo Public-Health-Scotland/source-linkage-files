@@ -7,7 +7,7 @@ during transformations}
 \usage{
 rename_existing_geographies(
   data,
-  vars = c("lca", "HSCP", "DataZone", "hbrescode")
+  vars = c("lca", "hscp2018", "datazone2011", "hbrescode")
 )
 }
 \arguments{

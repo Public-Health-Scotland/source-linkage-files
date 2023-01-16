@@ -2,7 +2,7 @@
 % Please edit documentation in R/match_pc_gpprac.R
 \name{read_and_trim_lookup}
 \alias{read_and_trim_lookup}
-\title{Read the SLF postcode lookup and remove unnecessary variables}
+\title{Read the appropriate SLF lookup and remove unnecessary variables}
 \usage{
 read_and_trim_lookup(lookup = c("pc", "gp"), trim = TRUE)
 }
@@ -15,7 +15,7 @@ read_and_trim_lookup(lookup = c("pc", "gp"), trim = TRUE)
 The lookup of the selected type
 }
 \description{
-Read the SLF postcode lookup and remove unnecessary variables
+Read the appropriate SLF lookup and remove unnecessary variables
 }
 \seealso{
 \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}} and \code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}}
