@@ -5,12 +5,12 @@
 \title{Use the SLF postcode lookup to determine which rows have a known postcode and
 which do not, or which have a matching GP practice and which do not}
 \usage{
-flag_matching_data(data, lookup, type = c("pc", "gp"))
+flag_matching_data(data, lookup, type = c("postcode", "gpprac"))
 }
 \arguments{
 \item{data}{A data frame with a postcode variable}
 
-\item{lookup}{The SLF postcode lookup}
+\item{lookup}{The lookup to use}
 
 \item{type}{Either "pc" for postcode or "gp" for GP}
 }

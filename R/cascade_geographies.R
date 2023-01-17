@@ -5,15 +5,9 @@
 #' @param data episode files
 #'
 #' @return data with matched hscp and lca codes
-#' @export
-match_hscp_lca_code <- function(data) {
+cascade_geographies <- function(data) {
   data <- data %>%
-    # Recode some strange dummy codes which seem to come from A&E
     tidylog::mutate(
-      hscp2018 = dplyr::case_when(
-        hscp2018 %in% c("S37999998", "S37999999") ~ "",
-        TRUE ~ hscp2018
-      ),
       # If we can, 'cascade' the geographies upwards
       # i.e. if they have an LCA use this to fill in HSCP2018 and so on for hbrescode
       # Codes are correct as at August 2018
@@ -125,23 +119,23 @@ match_hscp_lca_code <- function(data) {
       # Finally, use hscp2018 to fill hbrescode
       hbrescode = dplyr::case_when(
         !is_missing(hbrescode) ~ hbrescode,
-        hscp2019 %in% c(
+        hscp2018 %in% c(
           "S37000008",
           "S37000020",
           "S37000027"
         ) ~ "S08000015",
-        hscp2019 %in% c("S37000025") ~ "S08000016",
-        hscp2019 %in% c("S37000006") ~ "S08000017",
-        hscp2019 %in% c(
+        hscp2018 %in% c("S37000025") ~ "S08000016",
+        hscp2018 %in% c("S37000006") ~ "S08000017",
+        hscp2018 %in% c(
           "S37000005",
           "S37000013"
         ) ~ "S08000019",
-        hscp2019 %in% c(
+        hscp2018 %in% c(
           "S37000001",
           "S37000002",
           "S37000019"
         ) ~ "S08000020",
-        hscp2019 %in% c(
+        hscp2018 %in% c(
           "S37000009",
           "S37000011",
           "S37000015",
@@ -149,25 +143,25 @@ match_hscp_lca_code <- function(data) {
           "S37000024",
           "S37000029"
         ) ~ "S08000021",
-        hscp2019 %in% c(
+        hscp2018 %in% c(
           "S37000004",
           "S37000016"
         ) ~ "S08000022",
-        hscp2019 %in% c(
+        hscp2018 %in% c(
           "S37000021",
           "S37000028"
         ) ~ "S08000023",
-        hscp2019 %in% c(
+        hscp2018 %in% c(
           "S37000010",
           "S37000012",
           "S37000018",
           "S37000030"
         ) ~ "S08000024",
-        hscp2019 %in% c("S37000022") ~ "S08000025",
-        hscp2019 %in% c("S37000026") ~ "S08000026",
-        hscp2019 %in% c("S37000031") ~ "S08000028",
-        hscp2019 %in% c("S37000032") ~ "S08000029",
-        hscp2019 %in% c(
+        hscp2018 %in% c("S37000022") ~ "S08000025",
+        hscp2018 %in% c("S37000026") ~ "S08000026",
+        hscp2018 %in% c("S37000031") ~ "S08000028",
+        hscp2018 %in% c("S37000032") ~ "S08000029",
+        hscp2018 %in% c(
           "S37000003",
           "S37000007",
           "S37000033"
@@ -176,4 +170,43 @@ match_hscp_lca_code <- function(data) {
     )
 
   return(data)
+}
+
+#' Recode Health Board code to 2018 standard
+#'
+#' @param hb_variable A vector of Health Board codes
+#'
+#' @return A vector of Health Board codes in the 2018 standard
+recode_health_boards <- function(hb_variable) {
+  hb_recoded <- dplyr::case_when(
+    # HB2014 to HB2018
+    hb_variable == "S08000018" ~ "S08000029",
+    hb_variable == "S08000027" ~ "S08000030",
+    # HB2019 to HB2018
+    hb_variable == "S08000031" ~ "S08000021",
+    hb_variable == "S08000032" ~ "S08000023",
+    TRUE ~ hb_variable
+  )
+  return(hb_recoded)
+}
+
+#' Recode HSCP code to 2018 standard
+#'
+#' @param hscp_variable A vector of HSCP codes
+#'
+#' @return A vector of HSCP codes in the 2018 standard
+recode_hscp <- function(hscp_variable) {
+  hscp_recoded <- dplyr::case_when(
+    # HSCP2016 to HSCP2018
+    {{ hscp_variable }} == "S37000014" ~ "S37000032",
+    {{ hscp_variable }} == "S37000023" ~ "S37000033",
+    # hscp2018 to HSCP2018
+    {{ hscp_variable }} == "S37000034" ~ "S37000015",
+    {{ hscp_variable }} == "S37000035" ~ "S37000021",
+    # Recode some strange dummy codes which seem to come from A&E
+    {{ hscp_variable }} %in% c("S37999998", "S37999999") ~ NA_character_,
+    TRUE ~ {{ hscp_variable }}
+  )
+
+  return(hscp_recoded)
 }
