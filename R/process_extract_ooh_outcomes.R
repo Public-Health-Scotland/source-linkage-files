@@ -45,16 +45,16 @@ process_extract_ooh_outcomes <- function(data, year) {
     # use row order to pivot outcomes
     tidyr::pivot_wider(
       names_from = .data$outcome_n,
-      names_prefix = "outcome_",
+      names_prefix = "ooh_outcome",
       values_from = .data$outcome
     ) %>%
     dplyr::select(
       "ooh_case_id",
       tidyselect::any_of(c(
-        "outcome_1",
-        "outcome_2",
-        "outcome_3",
-        "outcome_4"
+        "ooh_outcome1",
+        "ooh_outcome2",
+        "ooh_outcome3",
+        "ooh_outcome4"
       ))
     ) %>%
     dplyr::as_tibble()
