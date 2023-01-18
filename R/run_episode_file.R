@@ -36,42 +36,11 @@ run_episode_file <- function(processed_data_list, year) {
       )
     )
 
-  # Work on cij_only records
-
-  cij_only <- ep_file %>%
-    # Get cij-only records
-    dplyr::filter(.data$recid %in% c("01B", "04B", "GLS", "02B")) %>%
-    dplyr::group_by(.data$chi) %>%
-    # We want any NA cij_markers to be filled in, if they are the first in the group and
-    # are NA. This is why we use this arrange() before the mutate()
-    dplyr::arrange(dplyr::desc(is.na(.data$cij_marker)), .by_group = TRUE) %>%
-    dplyr::mutate(cij_marker = dplyr::if_else(
-      .data$chi != "" & is.na(.data$cij_marker) & dplyr::row_number() == 1L,
-      1,
-      .data$cij_marker
-    )) %>%
-    dplyr::ungroup() %>%
-    # Tidy up cij_ipdc
-    dplyr::mutate(cij_ipdc = dplyr::case_when(
-      .data$chi != "" & is_missing(.data$cij_ipdc) & .data$ipdc == "I" ~ "I",
-      .data$chi != "" & is_missing(.data$cij_ipdc) & .data$recid == "01B" & .data$ipdc == "D" ~ "D",
-      TRUE ~ .data$cij_ipdc
-    )) %>%
-    # Ensure every record with a chi has a valid cij marker
-    dplyr::group_by(.data$chi, .data$cij_marker) %>%
-    dplyr::mutate(
-      cij_ipdc = max(.data$cij_ipdc),
-      cij_admtype = dplyr::first(.data$cij_admtype),
-      cij_pattype_code = dplyr::first(.data$cij_pattype_code),
-      cij_pattype = dplyr::first(.data$cij_pattype),
-      cij_adm_spec = dplyr::first(.data$cij_adm_spec),
-      cij_dis_spec = dplyr::last(.data$cij_dis_spec)
-    ) %>%
-    dplyr::ungroup()
-
   # Combine the cij-only records with the non-cij records
   temp_file_1 <- dplyr::bind_rows(
-    cij_only,
+    # Fill missing cij markers for those records that should have them
+    ep_file %>% fill_missing_cij_markers(),
+    # Bind the cij records with the non-cij records, determined by recid
     ep_file %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
   ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
@@ -102,7 +71,8 @@ run_episode_file <- function(processed_data_list, year) {
 
   # From C05 - Match on LTCs ----
   # Create Temp File 5
-  temp_file_5 <- tibble()
+  temp_file_5 <- correct_demographics(temp_file_4, year) %>%
+    match_on_ltcs(., year)
 
   # From C06 - Deaths Fixes ----
   # Create Temp File 6
@@ -124,3 +94,45 @@ run_episode_file <- function(processed_data_list, year) {
   # C10X - Create Tests? Possibly for a different function ----
   # Output tests
 }
+
+#' Fill any missing cij markers for records that should have them
+#'
+#' @param data A data frame
+#'
+#' @return A data frame with cij markers filled in for those missing. Will not
+#' fill cij markers for records with missing chi
+fill_missing_cij_markers <- function(data) {
+  return_data <- data %>%
+    # Get cij-only records
+    dplyr::filter(.data$recid %in% c("01B", "04B", "GLS", "02B")) %>%
+    dplyr::group_by(.data$chi) %>%
+    # We want any NA cij_markers to be filled in, if they are the first in the group and
+    # are NA. This is why we use this arrange() before the mutate()
+    dplyr::arrange(dplyr::desc(is.na(.data$cij_marker)), .by_group = TRUE) %>%
+    dplyr::mutate(cij_marker = dplyr::if_else(
+      .data$chi != "" & is.na(.data$cij_marker) & dplyr::row_number() == 1L,
+      1,
+      .data$cij_marker
+    )) %>%
+    dplyr::ungroup() %>%
+    # Tidy up cij_ipdc
+    dplyr::mutate(cij_ipdc = dplyr::case_when(
+      .data$chi != "" & is_missing(.data$cij_ipdc) & .data$ipdc == "I" ~ "I",
+      .data$chi != "" & is_missing(.data$cij_ipdc) & .data$recid == "01B" & .data$ipdc == "D" ~ "D",
+      TRUE ~ .data$cij_ipdc
+    )) %>%
+    # Ensure every record with a chi has a valid cij marker
+    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::mutate(
+      cij_ipdc = max(.data$cij_ipdc),
+      cij_admtype = dplyr::first(.data$cij_admtype),
+      cij_pattype_code = dplyr::first(.data$cij_pattype_code),
+      cij_pattype = dplyr::first(.data$cij_pattype),
+      cij_adm_spec = dplyr::first(.data$cij_adm_spec),
+      cij_dis_spec = dplyr::last(.data$cij_dis_spec)
+    ) %>%
+    dplyr::ungroup()
+
+  return(return_data)
+}
+
