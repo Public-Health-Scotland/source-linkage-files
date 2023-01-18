@@ -1,4 +1,4 @@
-#' Process th GP OOH Consultations extract
+#' Process the GP OOH Consultations extract
 #'
 #' @description This will read and process the
 #' GP OOH Consultations extract, it will return the final data

@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_extract_ooh_diagnosis.R
 \name{process_extract_ooh_diagnosis}
 \alias{process_extract_ooh_diagnosis}
-\title{Process th GP OOH Diagnosis extract}
+\title{Process the GP OOH Diagnosis extract}
 \usage{
 process_extract_ooh_diagnosis(data, year)
 }

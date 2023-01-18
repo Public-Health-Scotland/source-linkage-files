@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_extract_ooh_outcomes.R
 \name{process_extract_ooh_outcomes}
 \alias{process_extract_ooh_outcomes}
-\title{Process th GP OOH Outcomes extract}
+\title{Process the GP OOH Outcomes extract}
 \usage{
 process_extract_ooh_outcomes(data, year)
 }

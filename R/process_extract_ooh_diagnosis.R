@@ -1,4 +1,4 @@
-#' Process th GP OOH Diagnosis extract
+#' Process the GP OOH Diagnosis extract
 #'
 #' @description This will read and process the
 #' GP OOH Diagnosis extract, it will return the final data

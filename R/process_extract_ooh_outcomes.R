@@ -1,4 +1,4 @@
-#' Process th GP OOH Outcomes extract
+#' Process the GP OOH Outcomes extract
 #'
 #' @description This will read and process the
 #' GP OOH Outcomes extract, it will return the final data

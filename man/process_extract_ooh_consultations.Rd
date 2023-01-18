@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_extract_consultations.R
 \name{process_extract_ooh_consultations}
 \alias{process_extract_ooh_consultations}
-\title{Process th GP OOH Consultations extract}
+\title{Process the GP OOH Consultations extract}
 \usage{
 process_extract_ooh_consultations(data, year)
 }
