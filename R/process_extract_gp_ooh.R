@@ -74,8 +74,8 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       ),
       gpprac = convert_eng_gpprac_to_dummy(.data$gpprac),
       # Split the time from the date
-      key_time1 = hms::as_hms(.data$record_keydate1),
-      key_time2 = hms::as_hms(.data$record_keydate2),
+      keytime1 = hms::as_hms(.data$record_keydate1),
+      keytime2 = hms::as_hms(.data$record_keydate2),
       record_keydate1 = trunc(.data$record_keydate1, "days"),
       record_keydate2 = trunc(.data$record_keydate2, "days")
     ) %>%
@@ -103,8 +103,8 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       "smrtype",
       "record_keydate1",
       "record_keydate2",
-      "key_time1",
-      "key_time2",
+      "keytime1",
+      "keytime2",
       "chi",
       "gender",
       "dob",
