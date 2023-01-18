@@ -125,18 +125,18 @@ process_extract_ooh_diagnosis <- function(data, year) {
     tidyr::pivot_wider(
       names_from = .data$diag_n,
       values_from = c(.data$diag, .data$description),
-      names_glue = "{.value}_{diag_n}"
+      names_glue = "{.value}{diag_n}"
     ) %>%
     dplyr::select(
       "ooh_case_id",
       # Use any of in case we have fewer than 6 diagnoses
       tidyselect::any_of(c(
-        "diag_1",
-        "diag_2",
-        "diag_3",
-        "diag_4",
-        "diag_5",
-        "diag_6"
+        "diag1",
+        "diag2",
+        "diag3",
+        "diag4",
+        "diag5",
+        "diag6"
       ))
     )
 
