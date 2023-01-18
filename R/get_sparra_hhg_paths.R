@@ -1,4 +1,3 @@
-
 #' HHG Extract File Path
 #'
 #' @description Get the path to the HHG extract
