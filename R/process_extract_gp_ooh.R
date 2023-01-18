@@ -121,18 +121,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       tidyselect::starts_with("diag"),
       tidyselect::starts_with("ooh_outcome"),
       "cost_total_net",
-      "apr_cost",
-      "may_cost",
-      "jun_cost",
-      "jul_cost",
-      "aug_cost",
-      "sep_cost",
-      "oct_cost",
-      "nov_cost",
-      "dec_cost",
-      "jan_cost",
-      "feb_cost",
-      "mar_cost",
+      tidyselect::ends_with("_cost"),
       "ooh_case_id"
     )
 
