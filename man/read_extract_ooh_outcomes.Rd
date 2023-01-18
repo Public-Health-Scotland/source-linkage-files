@@ -10,7 +10,7 @@ read_extract_ooh_outcomes(year)
 \item{year}{Year of BOXI extract}
 }
 \value{
-csv data file for OOH Outcomes
+a \link[tibble:tibble-package]{tibble} with OOH Outcomes extract data
 }
 \description{
 Read GP OOH Outcomes extract

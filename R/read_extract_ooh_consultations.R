@@ -2,7 +2,7 @@
 #'
 #' @param year Year of BOXI extract
 #'
-#' @return csv data file for OOH Consultations
+#' @return a [tibble][tibble::tibble-package] with OOH Consultations extract data
 read_extract_ooh_consultations <- function(year) {
   extract_consultations_path <- get_boxi_extract_path(year = year, type = "GP_OoH-c")
 

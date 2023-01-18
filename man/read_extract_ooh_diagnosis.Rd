@@ -10,7 +10,7 @@ read_extract_ooh_diagnosis(year)
 \item{year}{Year of BOXI extract}
 }
 \value{
-csv data file for OOH Diagnosis
+a \link[tibble:tibble-package]{tibble} with OOH Diagnosis extract data
 }
 \description{
 Read GP OOH Diagnosis extract
