@@ -7,7 +7,7 @@
 #' @return data with matched hscp and lca codes
 cascade_geographies <- function(data) {
   data <- data %>%
-    tidylog::mutate(
+    dplyr::mutate(
       # If we can, 'cascade' the geographies upwards
       # i.e. if they have an LCA use this to fill in HSCP2018 and so on for hbrescode
       # Codes are correct as at August 2018
