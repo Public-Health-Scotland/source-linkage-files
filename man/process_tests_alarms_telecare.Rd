@@ -7,14 +7,15 @@
 process_tests_alarms_telecare(data, year)
 }
 \arguments{
-\item{data}{The processed data extract}
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
 
-\item{year}{year of extract}
+\item{year}{the financial year of the extract in the format '1718'.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed Alarms Telecare extract and produces
-a test comparison with the previous data. This is written to disk as a csv.
+This script takes the processed Alarms Telecare extract and
+produces a test comparison with the previous data. This is written to
+disk as a CSV.
 }

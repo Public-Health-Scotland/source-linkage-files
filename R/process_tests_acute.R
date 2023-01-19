@@ -1,14 +1,14 @@
 #' Process Acute tests
 #'
-#' @description This script takes the processed acute extract and produces
-#' a test comparison with the previous data. This is written to disk as a csv.
+#' @description Takes the processed Acute extract and produces
+#' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @param data The processed data extract
-#' @param year year of extract
+#' @param data a [tibble][tibble::tibble-package] of the processed data extract.
+#' @param year the financial year of the extract in the format '1718'.
 #'
-#' @return a csv document containing tests for extracts
+#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#'
 #' @export
-#'
 process_tests_acute <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 

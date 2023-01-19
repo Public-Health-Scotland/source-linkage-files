@@ -30,11 +30,15 @@ Other process extracts:
 \code{\link{process_extract_cmh}()},
 \code{\link{process_extract_delayed_discharges}()},
 \code{\link{process_extract_district_nursing}()},
+\code{\link{process_extract_gp_ooh}()},
 \code{\link{process_extract_home_care}()},
 \code{\link{process_extract_homelessness}()},
 \code{\link{process_extract_maternity}()},
 \code{\link{process_extract_mental_health}()},
 \code{\link{process_extract_nrs_deaths}()},
+\code{\link{process_extract_ooh_consultations}()},
+\code{\link{process_extract_ooh_diagnosis}()},
+\code{\link{process_extract_ooh_outcomes}()},
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
 \code{\link{process_extract_sds}()},
@@ -46,6 +50,7 @@ Other process extracts:
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
+\code{\link{read_extract_gp_ooh}()},
 \code{\link{read_lookup_chi_deaths}()}
 }
 \concept{process extracts}

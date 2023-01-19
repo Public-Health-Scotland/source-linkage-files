@@ -1,11 +1,11 @@
 #' Process gpprac Lookup tests
 #'
 #' @description This script takes the processed gpprac lookup and produces
-#' a test comparison with the previous data. This is written to disk as a csv.
+#' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @return a csv document containing tests for extracts
+#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#'
 #' @export
-#'
 process_tests_lookup_gpprac <- function() {
   comparison <- produce_test_comparison(
     old_data = produce_slf_gpprac_tests(readr::read_rds(get_slf_gpprac_path(update = previous_update()))),

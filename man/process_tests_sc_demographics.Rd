@@ -7,9 +7,9 @@
 process_tests_sc_demographics()
 }
 \value{
-a csv document containing tests
+a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
 This script takes the processed demographic extract and produces
-a test comparison with the previous data. This is written to disk as a csv.
+a test comparison with the previous data. This is written to disk as a CSV.
 }
