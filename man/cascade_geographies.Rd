@@ -10,7 +10,7 @@ cascade_geographies(data)
 \item{data}{episode files}
 }
 \value{
-data with matched hscp and lca codes
+data with matched HSCP and LCA codes
 }
 \description{
 Match dummy HSCP and LCA codes

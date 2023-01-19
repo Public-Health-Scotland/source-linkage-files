@@ -3,7 +3,7 @@
 #' @description Correct date of birth and ages of records
 #'
 #' @param data episode files
-#' @param year financial year, eg '1920'
+#' @param year financial year, e.g. '1920'
 #'
 #' @return episode files with updated date of birth and ages
 #' @export

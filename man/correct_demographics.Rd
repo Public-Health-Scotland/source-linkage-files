@@ -9,7 +9,7 @@ correct_demographics(data, year)
 \arguments{
 \item{data}{episode files}
 
-\item{year}{financial year, eg '1920'}
+\item{year}{financial year, e.g. '1920'}
 }
 \value{
 episode files with updated date of birth and ages

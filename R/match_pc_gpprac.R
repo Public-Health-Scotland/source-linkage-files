@@ -1,21 +1,14 @@
-#' Correct and fill postcode and gpprac
+#' Fill postcode and GP practice geographies
 #'
-#' @param data
+#' @description First improve the completion if possible
+#' then use the lookups to match on additional variables.
 #'
-#' @return
+#' @param data the SLF
+#'
+#' @return a [tibble][tibble::tibble-package] of the SLF with improved
+#' Postcode and GP Practice details.
 #' @export
-correct_geographies <- function(data) {
-  data %>%
-    correct_postcode_geographies() %>%
-    correct_gpprac_geographies()
-}
-
-#' Correct and fill postcode geographies
-#'
-#' @param data
-#'
-#' @return
-correct_postcode_geographies <- function(data) {
+fill_geographies <- function(data) {
   check_variables_exist(data, c(
     "chi",
     "postcode",
@@ -24,9 +17,17 @@ correct_postcode_geographies <- function(data) {
     "lca",
     "datazone",
     "hbpraccode",
-    "hbtreatcode"
+    "hbtreatcode",
+    "gpprac",
+    "hbpraccode"
   ))
 
+  data %>%
+    fill_postcode_geogs() %>%
+    correct_gpprac_geographies()
+}
+
+fill_postcode_geogs <- function(data) {
   spd <- readr::read_rds(get_slf_postcode_path())
 
   filled_postcodes <- data %>%
@@ -60,18 +61,7 @@ correct_postcode_geographies <- function(data) {
   return(filled_geographies)
 }
 
-#' Correct and fill GP practice values
-#'
-#' @param data
-#'
-#' @return
 correct_gpprac_geographies <- function(data) {
-  check_variables_exist(data, c(
-    "chi",
-    "gpprac",
-    "hbpraccode"
-  ))
-
   gpprac_ref <- readr::read_rds(get_slf_gpprac_path()) %>%
     dplyr::select(c("gpprac", "cluster", "hbpraccode"))
 
@@ -93,14 +83,10 @@ correct_gpprac_geographies <- function(data) {
   return(filled_geographies)
 }
 
-#' Use the SLF postcode lookup to ensure missing postcodes are filled
-#'
-#' @param data An episode file
-#' @param lookup
-#' @param type
-#'
-#' @return Data with any potentially fixable postcodes filled in
 fill_values <- function(data, lookup, type = c("postcode", "gpprac")) {
+
+  type <- match.arg(type)
+
   data_values_flagged <- data %>%
     flag_matching_data(
       lookup = lookup,
@@ -116,17 +102,6 @@ fill_values <- function(data, lookup, type = c("postcode", "gpprac")) {
   return(data_values_filled)
 }
 
-#' Use the SLF postcode lookup to determine which rows have a known postcode and
-#' which do not, or which have a matching GP practice and which do not
-#'
-#' @param data A data frame with a postcode variable
-#' @param lookup The lookup to use
-#' @param type Either "pc" for postcode or "gp" for GP
-#'
-#' @seealso [get_slf_postcode_path()]
-#'
-#' @return A data frame with an integer variable postcode_match, where 1 denotes
-#' a match in the lookup and 0 denotes no match
 flag_matching_data <- function(data, lookup, type = c("postcode", "gpprac")) {
   type <- match.arg(type)
 
@@ -147,14 +122,10 @@ flag_matching_data <- function(data, lookup, type = c("postcode", "gpprac")) {
 }
 
 
-#' Use situations where some records for a chi have a postcode to fill
-#' those that are missing
-#'
-#' @param data A data frame
-#' @param type Either pc for postcodes or gp for GP practices
-#'
-#' @return A data frame with some missing data filled based on type
 fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
+
+  type <- match.arg(type)
+
   potentially_fixable <- data %>%
     # If the CHI isn't missing and all_match isn't exactly 0 or 1,
     # we can potentially fill the postcodes for that CHI

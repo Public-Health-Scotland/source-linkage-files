@@ -4,7 +4,7 @@
 #'
 #' @param data episode files
 #'
-#' @return data with matched hscp and lca codes
+#' @return data with matched HSCP and LCA codes
 cascade_geographies <- function(data) {
   data <- data %>%
     dplyr::mutate(
