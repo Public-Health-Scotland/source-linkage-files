@@ -85,7 +85,7 @@ read_demog_file <- function(social_care_dir, latest_update) {
   )
 
   clean_data <- data %>%
-    tidylog::mutate(
+    dplyr::mutate(
       across(c(where(is_integer_like), -chi), as.integer),
       across(where(is.character), zap_empty)
     ) %>%

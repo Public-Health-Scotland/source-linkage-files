@@ -1,10 +1,8 @@
 #' Read CMH extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for Acute
 #' @export
-#'
 read_extract_cmh <- function(year) {
   extract_cmh_path <- get_boxi_extract_path(year = year, type = "CMH")
 

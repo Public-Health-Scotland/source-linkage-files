@@ -2,19 +2,20 @@
 % Please edit documentation in R/process_tests_homelessness.R
 \name{process_tests_homelessness}
 \alias{process_tests_homelessness}
-\title{Process homelessness tests}
+\title{Process Homelessness tests}
 \usage{
 process_tests_homelessness(data, year)
 }
 \arguments{
-\item{data}{The processed data extract}
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
 
-\item{year}{year of extract}
+\item{year}{the financial year of the extract in the format '1718'.}
 }
 \value{
-a csv document containing tests for extracts
+a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed homelessness extract and produces
-a test comparison with the previous data. This is written to disk as a csv.
+This script takes the processed homelessness extract and
+produces a test comparison with the previous data. This is written to
+disk as a CSV.
 }

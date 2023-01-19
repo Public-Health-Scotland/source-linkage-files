@@ -7,12 +7,12 @@
 process_tests_ltcs(year)
 }
 \arguments{
-\item{year}{The year to process}
+\item{year}{The financial year to process}
 }
 \value{
-a csv document containing tests
+a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
 This script takes the processed LTCs extract and produces
-a test comparison with the previous data. This is written to disk as a csv.
+a test comparison with the previous data. This is written to disk as a CSV.
 }
