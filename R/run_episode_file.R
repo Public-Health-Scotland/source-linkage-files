@@ -1,4 +1,4 @@
-run_episode_file <- function(processed_data_list, year) {
+run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   ep_file <- dplyr::bind_rows(processed_data_list)
 
@@ -93,6 +93,13 @@ run_episode_file <- function(processed_data_list, year) {
 
   # C10X - Create Tests? Possibly for a different function ----
   # Output tests
+  final_data <- temp_file_6
+
+  if (write_to_disk) {
+
+  }
+
+  return(final_data)
 }
 
 #' Fill any missing cij markers for records that should have them
