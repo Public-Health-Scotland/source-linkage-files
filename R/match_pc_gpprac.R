@@ -108,7 +108,7 @@ fill_values <- function(data, lookup, type = c("postcode", "gpprac")) {
     )
 
   data_values_filled <- data_values_flagged %>%
-    fill_data_from_chi(match_var = type) %>%
+    fill_data_from_chi(type = type) %>%
     # Remove unnecessary variables
     dplyr::select(-c("all_match", "lookup_match"))
 
