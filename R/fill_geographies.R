@@ -84,7 +84,6 @@ correct_gpprac_geographies <- function(data) {
 }
 
 fill_values <- function(data, lookup, type = c("postcode", "gpprac")) {
-
   type <- match.arg(type)
 
   data_values_flagged <- data %>%
@@ -341,7 +340,6 @@ flag_matching_data <- function(data, lookup, type = c("postcode", "gpprac")) {
 
 
 fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
-
   type <- match.arg(type)
 
   potentially_fixable <- data %>%
