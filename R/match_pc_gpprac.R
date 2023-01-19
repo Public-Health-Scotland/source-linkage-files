@@ -86,7 +86,7 @@ correct_gpprac_geographies <- function(data) {
 
   filled_geographies <- data_geographies %>%
     dplyr::mutate(
-      hbpraccode = dplyr::coalesce(.data$hbpraccode, .data$hbpraccode_old),
+      hbpraccode = dplyr::coalesce(.data$hbpraccode, .data$hbpraccode_old)
     ) %>%
     dplyr::select(-"hbpraccode_old")
 
