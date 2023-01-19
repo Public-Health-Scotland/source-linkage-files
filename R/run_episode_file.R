@@ -59,11 +59,11 @@ run_episode_file <- function(processed_data_list, year) {
 
   # From C02 - Link Delayed Discharge Episodes ----
   # Create Temp File 2
-  temp_file_2 <- tibble()
+  temp_file_2 <- temp_file_1
 
   # From C03 - Link Homelessness ----
   # Create Temp File 3
-  temp_file_3 <- tibble()
+  temp_file_3 <- temp_file_2
 
   # From C04 - Add NSU cohort ----
 
@@ -72,11 +72,11 @@ run_episode_file <- function(processed_data_list, year) {
   # From C05 - Match on LTCs ----
   # Create Temp File 5
   temp_file_5 <- correct_demographics(temp_file_4, year) %>%
-    match_on_ltcs(., year)
+    match_on_ltcs(year)
 
   # From C06 - Deaths Fixes ----
   # Create Temp File 6
-  temp_file_6 <- tibble()
+  temp_file_6 <- temp_file_5
 
   # From C07 - Calculate and write out pathways cohorts ----
   create_demographic_lookup(temp_file_6, year, write_to_disk = TRUE)
