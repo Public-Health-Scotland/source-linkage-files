@@ -7,10 +7,10 @@
 read_extract_cmh(year)
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
 }
 \value{
-csv data file for Acute
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read CMH extract

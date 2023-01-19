@@ -73,7 +73,7 @@ pre_compute_record_dates <- at_full_data %>%
 replaced_start_dates <- at_full_data %>%
   # Replace missing start dates with the start of the FY
   left_join(pre_compute_record_dates, by = "period") %>%
-  tidylog::mutate(
+  dplyr::mutate(
     start_date_missing = is.na(service_start_date),
     service_start_date = if_else(
       start_date_missing,

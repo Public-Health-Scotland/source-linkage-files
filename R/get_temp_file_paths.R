@@ -25,11 +25,11 @@ get_slf_temp_path <-
       glob = "*temp-*"
     ) %>%
       stringr::str_match(
-        glue::glue(
+        pattern = glue::glue(
           "temp-source-{file_version}-file-(?<version>[1-9])-{year}\\.rds"
         )
       ) %>%
-      .[, "version"]
+      magrittr::extract(, "version")
 
     temp_files_availiable <-
       temp_files_availiable[!is.na(temp_files_availiable)]
@@ -41,11 +41,11 @@ get_slf_temp_path <-
         glob = glue::glue("*temp-source-{file_version}*")
       ) %>%
         stringr::str_match(
-          glue::glue(
+          pattern = glue::glue(
             "temp-source-{file_version}-file-[1-9]-(?<year>[0-9]{{4}})\\.rds"
           )
         ) %>%
-        .[, "year"] %>%
+        magrittr::extract(, "year") %>%
         unique()
 
       years_formatted <-

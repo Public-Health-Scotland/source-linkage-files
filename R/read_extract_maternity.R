@@ -1,10 +1,8 @@
-#' Read maternity extract
+#' Read Maternity extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for homelessness
 #' @export
-#'
 read_extract_maternity <- function(year) {
   extract_maternity_path <- get_boxi_extract_path(year = year, type = "Maternity")
 

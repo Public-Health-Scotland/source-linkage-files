@@ -1,4 +1,4 @@
-run_episode_file <- function(processed_data_list, year) {
+run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   ep_file <- dplyr::bind_rows(processed_data_list)
 
@@ -36,9 +36,80 @@ run_episode_file <- function(processed_data_list, year) {
       )
     )
 
-  # Work on cij_only records
+  # Combine the cij-only records with the non-cij records
+  temp_file_1 <- dplyr::bind_rows(
+    # Fill missing cij markers for those records that should have them
+    ep_file %>% fill_missing_cij_markers(),
+    # Bind the cij records with the non-cij records, determined by recid
+    ep_file %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
+  ) %>%
+    # Create cost including DNAs and modify cost not including DNAs using cattend
+    dplyr::mutate(
+      cost_total_net_inc_dnas = .data$cost_total_net,
+      # In the Cost_Total_Net column set the cost for
+      # those with attendance status 5 or 8 (CNWs and DNAs)
+      cost_total_net = dplyr::if_else(
+        .data$attendance_status %in% c(5, 8),
+        0.0,
+        .data$cost_total_net
+      )
+    ) %>%
+    # Add the flag for Potentially Preventable Admissions
+    add_ppa_flag()
 
-  cij_only <- ep_file %>%
+  # From C02 - Link Delayed Discharge Episodes ----
+  # Create Temp File 2
+  temp_file_2 <- temp_file_1
+
+  # From C03 - Link Homelessness ----
+  # Create Temp File 3
+  temp_file_3 <- temp_file_2
+
+  # From C04 - Add NSU cohort ----
+
+  temp_file_4 <- add_nsu_cohort(temp_file_3, year)
+
+  # From C05 - Match on LTCs ----
+  # Create Temp File 5
+  temp_file_5 <- correct_demographics(temp_file_4, year) %>%
+    match_on_ltcs(year)
+
+  # From C06 - Deaths Fixes ----
+  # Create Temp File 6
+  temp_file_6 <- temp_file_5
+
+  # From C07 - Calculate and write out pathways cohorts ----
+  create_demographic_lookup(temp_file_6, year, write_to_disk = TRUE)
+  create_service_use_lookup(temp_file_6, year, write_to_disk = TRUE)
+
+  # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
+  # Create Temp File 7
+
+  # From C09 - Match on postcode and gpprac variables ----
+  # Create Temp File 8
+
+  # From C10 - Final tidy-up (mostly variable labels) ----
+  # Create Episode File
+
+  # C10X - Create Tests? Possibly for a different function ----
+  # Output tests
+  final_data <- temp_file_6
+
+  if (write_to_disk) {
+
+  }
+
+  return(final_data)
+}
+
+#' Fill any missing cij markers for records that should have them
+#'
+#' @param data A data frame
+#'
+#' @return A data frame with cij markers filled in for those missing. Will not
+#' fill cij markers for records with missing chi
+fill_missing_cij_markers <- function(data) {
+  return_data <- data %>%
     # Get cij-only records
     dplyr::filter(.data$recid %in% c("01B", "04B", "GLS", "02B")) %>%
     dplyr::group_by(.data$chi) %>%
@@ -69,58 +140,5 @@ run_episode_file <- function(processed_data_list, year) {
     ) %>%
     dplyr::ungroup()
 
-  # Combine the cij-only records with the non-cij records
-  temp_file_1 <- dplyr::bind_rows(
-    cij_only,
-    ep_file %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
-  ) %>%
-    # Create cost including DNAs and modify cost not including DNAs using cattend
-    dplyr::mutate(
-      cost_total_net_inc_dnas = .data$cost_total_net,
-      # In the Cost_Total_Net column set the cost for
-      # those with attendance status 5 or 8 (CNWs and DNAs)
-      cost_total_net = dplyr::if_else(
-        .data$attendance_status %in% c(5, 8),
-        0.0,
-        .data$cost_total_net
-      )
-    ) %>%
-    # Add the flag for Potentially Preventable Admissions
-    add_ppa_flag()
-
-  # From C02 - Link Delayed Discharge Episodes ----
-  # Create Temp File 2
-  temp_file_2 <- tibble()
-
-  # From C03 - Link Homelessness ----
-  # Create Temp File 3
-  temp_file_3 <- tibble()
-
-  # From C04 - Add NSU cohort ----
-
-  temp_file_4 <- add_nsu_cohort(temp_file_3, year)
-
-  # From C05 - Match on LTCs ----
-  # Create Temp File 5
-  temp_file_5 <- tibble()
-
-  # From C06 - Deaths Fixes ----
-  # Create Temp File 6
-  temp_file_6 <- tibble()
-
-  # From C07 - Calculate and write out pathways cohorts ----
-  create_demographic_lookup(temp_file_6, year, write_to_disk = TRUE)
-  create_service_use_lookup(temp_file_6, year, write_to_disk = TRUE)
-
-  # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
-  # Create Temp File 7
-
-  # From C09 - Match on postcode and gpprac variables ----
-  # Create Temp File 8
-
-  # From C10 - Final tidy-up (mostly variable labels) ----
-  # Create Episode File
-
-  # C10X - Create Tests? Possibly for a different function ----
-  # Output tests
+  return(return_data)
 }

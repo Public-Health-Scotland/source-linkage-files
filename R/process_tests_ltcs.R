@@ -1,13 +1,13 @@
 #' Process LTCs tests
 #'
-#' @param year The year to process
-#'
 #' @description This script takes the processed LTCs extract and produces
-#' a test comparison with the previous data. This is written to disk as a csv.
+#' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @return a csv document containing tests
+#' @param year The financial year to process
+#'
+#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#'
 #' @export
-#'
 process_tests_ltcs <- function(year) {
   year <- check_year_format(year)
 

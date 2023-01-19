@@ -1,10 +1,8 @@
-#' Read homelessness extract
+#' Read Homelessness extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for homelessness
 #' @export
-#'
 read_extract_homelessness <- function(year) {
   extract_homelessness_path <- get_boxi_extract_path(year = year, type = "Homelessness")
 

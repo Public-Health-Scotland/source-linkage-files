@@ -7,9 +7,9 @@
 process_tests_lookup_gpprac()
 }
 \value{
-a csv document containing tests for extracts
+a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
 This script takes the processed gpprac lookup and produces
-a test comparison with the previous data. This is written to disk as a csv.
+a test comparison with the previous data. This is written to disk as a CSV.
 }
