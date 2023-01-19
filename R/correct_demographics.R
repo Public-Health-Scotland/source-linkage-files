@@ -7,8 +7,6 @@
 #'
 #' @return episode files with updated date of birth and ages
 #' @export
-#'
-#' @examples match_on_ltcs(data, "1920")
 correct_demographics <- function(data, year) {
   # Checking and changing DOB and age
   data <- data %>%
