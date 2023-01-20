@@ -7,7 +7,6 @@
 #' @export
 #'
 read_extract_nrs_deaths <- function(year, file_path = get_boxi_extract_path(year = year, type = "Deaths")) {
-
   # Read BOXI extract
   extract_nrs_deaths <- readr::read_csv(file_path,
     col_types = cols_only(
