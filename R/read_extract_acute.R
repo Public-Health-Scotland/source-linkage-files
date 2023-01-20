@@ -5,6 +5,7 @@
 #'
 #' @return a [tibble][tibble::tibble-package].
 #'
+#' @export
 read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = year, type = "Acute")) {
   # Read BOXI extract
   extract_acute <- readr::read_csv(file_path,
