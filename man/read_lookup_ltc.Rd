@@ -4,10 +4,13 @@
 \alias{read_lookup_ltc}
 \title{Read LTC IT extract}
 \usage{
-read_lookup_ltc()
+read_lookup_ltc(file_path = get_it_ltc_path())
+}
+\arguments{
+\item{file_path}{Path to the LTC file}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}.
+csv data file
 }
 \description{
 Read LTC IT extract

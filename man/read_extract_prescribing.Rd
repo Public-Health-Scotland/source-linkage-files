@@ -4,13 +4,12 @@
 \alias{read_extract_prescribing}
 \title{Read Prescribing extract}
 \usage{
-read_extract_prescribing(year)
+read_extract_prescribing(year, file_path = get_it_prescribing_path(year))
 }
 \arguments{
-\item{year}{Financial year for the BOXI extract.}
-}
-\value{
-a \link[tibble:tibble-package]{tibble}.
+\item{year}{Year of extract}
+
+\item{file_path}{Prescribing file location}
 }
 \description{
 Read Prescribing extract

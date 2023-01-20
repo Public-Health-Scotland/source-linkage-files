@@ -4,13 +4,15 @@
 \alias{read_extract_cmh}
 \title{Read CMH extract}
 \usage{
-read_extract_cmh(year)
+read_extract_cmh(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "CMH")
+)
 }
 \arguments{
-\item{year}{Financial year for the BOXI extract.}
-}
-\value{
-a \link[tibble:tibble-package]{tibble}.
+\item{year}{Year of BOXI extract}
+
+\item{file_path}{BOXI extract location}
 }
 \description{
 Read CMH extract
