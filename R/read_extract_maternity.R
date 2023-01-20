@@ -1,13 +1,14 @@
 #' Read Maternity extract
 #'
-#' @inherit read_extract_acute
+#' @param year Year of BOXI extract
+#' @param file_path BOXI extract location
 #'
 #' @export
-read_extract_maternity <- function(year) {
-  extract_maternity_path <- get_boxi_extract_path(year = year, type = "Maternity")
+#'
+read_extract_maternity <- function(year, file_path = get_boxi_extract_path(year = year, type = "Maternity")) {
 
   # Read BOXI extract
-  extract_maternity <- readr::read_csv(extract_maternity_path,
+  extract_maternity <- readr::read_csv(file_path,
     col_type = cols(
       "Costs Financial Year" = col_double(),
       "Date of Admission Full Date" = col_date(format = "%Y/%m/%d %T"),

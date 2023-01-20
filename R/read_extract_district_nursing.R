@@ -1,13 +1,14 @@
 #' Read district nursing extract
 #'
-#' @inherit read_extract_acute
+#' @param year Year of BOXI extract
+#' @param file_path BOXI extract location
 #'
 #' @export
-read_extract_district_nursing <- function(year) {
-  extract_district_nursing_path <- get_boxi_extract_path(year = year, type = "DN")
+#'
+read_extract_district_nursing <- function(year, file_path = get_boxi_extract_path(year = year, type = "DN")) {
 
   # Read BOXI extract
-  extract_district_nursing <- readr::read_csv(extract_district_nursing_path,
+  extract_district_nursing <- readr::read_csv(file_path,
     col_types = cols_only(
       `Treatment NHS Board Code 9` = col_character(),
       `Age at Contact Date` = col_integer(),

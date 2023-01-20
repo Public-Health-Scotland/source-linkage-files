@@ -1,13 +1,14 @@
 #' Read Mental Health extract
 #'
-#' @inherit read_extract_acute
+#' @param year Year of BOXI extract
+#' @param file_path BOXI extract location
 #'
 #' @export
-read_extract_mental_health <- function(year) {
-  extract_mental_health_path <- get_boxi_extract_path(year = year, type = "MH")
+#'
+read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(year = year, type = "MH")) {
 
   # Read BOXI extract
-  extract_mental_health <- readr::read_csv(extract_mental_health_path,
+  extract_mental_health <- readr::read_csv(file_path,
     col_types = cols_only(
       "Costs Financial Year (04)" = col_double(),
       "Costs Financial Month Number (04)" = col_double(),
