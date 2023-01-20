@@ -1,14 +1,14 @@
 #' Read A&E extract
 #'
 #' @param year Year of BOXI extract
+#' @param file_path BOXI extract location
 #'
 #' @return csv data file for A&E
 #' @export
 #'
-read_extract_ae <- function(year) {
-  extract_ae_path <- get_boxi_extract_path(year = year, type = "AE")
+read_extract_ae <- function(year, file_path = get_boxi_extract_path(year = year, type = "AE")) {
 
-  extract_ae <- readr::read_csv(extract_ae_path,
+  extract_ae <- readr::read_csv(file_path,
     col_type = cols(
       `Arrival Date` = col_date(format = "%Y/%m/%d %T"),
       `DAT Date` = col_date(format = "%Y/%m/%d %T"),

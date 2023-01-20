@@ -1,14 +1,14 @@
 #' Read Prescribing extract
 #'
 #' @param year Year of extract
+#' @param file_path Prescribing file location
 #'
 #' @return csv data file for prescribing
 #' @export
 #'
-read_extract_prescribing <- function(year) {
+read_extract_prescribing <- function(year, file_path = get_it_prescribing_path(year)) {
   # TODO remove Number of Dispensed Items, DI Paid NIC excl. BB, DI Paid GIC excl. BB and PD Paid NIC excl. BB when the extract changes.
-  pis_file <- readr::read_csv(
-    get_it_prescribing_path(year),
+  pis_file <- readr::read_csv(file_path,
     col_type = cols_only(
       "Pat UPI [C]" = col_character(),
       "Pat DoB [C]" = col_date(format = "%d-%m-%Y"),

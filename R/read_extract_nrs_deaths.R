@@ -1,15 +1,15 @@
 #' Read NRS Deaths extract
 #'
 #' @param year Year of BOXI extract
+#' @param file_path BOXI extract location
 #'
 #' @return csv data file for Acute
 #' @export
 #'
-read_extract_nrs_deaths <- function(year) {
-  extract_nrs_deaths_path <- get_boxi_extract_path(year = year, type = "Deaths")
+read_extract_nrs_deaths <- function(year, file_path = get_boxi_extract_path(year = year, type = "Deaths")) {
 
   # Read BOXI extract
-  extract_nrs_deaths <- readr::read_csv(extract_nrs_deaths_path,
+  extract_nrs_deaths <- readr::read_csv(file_path,
     col_types = cols_only(
       "Death Location Code" = col_character(),
       "Geo Council Area Code" = col_character(),
