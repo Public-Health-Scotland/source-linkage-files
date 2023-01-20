@@ -12,15 +12,30 @@ future::plan(future::multisession)
 list(
   tar_target(write_to_disk, FALSE),
   tarchetypes::tar_map(
-    list(year = c("1819", "1920")),
-    tar_target(acute, process_extract_acute(read_extract_acute(year), year, write_to_disk = write_to_disk)),
-    tar_target(ae, process_extract_ae(read_extract_ae(year), year, write_to_disk = write_to_disk)),
-    tar_target(mental_health, process_extract_mental_health(read_extract_mental_health(year), year, write_to_disk = write_to_disk)),
-    tar_target(maternity, process_extract_maternity(read_extract_maternity(year), year, write_to_disk = write_to_disk)),
-    tar_target(nrs_deaths, process_extract_nrs_deaths(read_extract_nrs_deaths(year), year, write_to_disk = write_to_disk)),
-    tar_target(outpatients, process_extract_outpatients(read_extract_outpatients(year), year, write_to_disk = write_to_disk)),
-    tar_target(pis, process_extract_prescribing(read_extract_prescribing(year), year, write_to_disk = write_to_disk)),
-    tar_target(ltc, process_lookup_ltc(read_lookup_ltc(), year, write_to_disk = write_to_disk)) # ,
-    # tar_target(ooh, process_extract_ooh(read_extract_ooh(year), year, write_to_disk = write_to_disk))
+    list(year = c("1819","1920")),
+    tar_target(acute_data, get_boxi_extract_path(year, type = "Acute")),
+    tar_target(acute_source_extract, process_extract_acute(read_extract_acute(year, acute_data), year, write_to_disk = write_to_disk)),
+    tar_target(ae_data, get_boxi_extract_path(year, type = "AE")),
+    tar_target(ae_source_extract, process_extract_ae(read_extract_ae(year, ae_data), year, write_to_disk = write_to_disk)),
+    tar_target(maternity_data, get_boxi_extract_path(year, type = "Maternity")),
+    tar_target(maternity_source_extract, process_extract_maternity(read_extract_maternity(year, maternity_data), year, write_to_disk = write_to_disk)),
+    tar_target(mental_health_data, get_boxi_extract_path(year, type = "MH")),
+    tar_target(mental_health_source_extract, process_extract_mental_health(read_extract_mental_health(year, mental_health_data), year, write_to_disk = write_to_disk)),
+    tar_target(nrs_deaths_data, get_boxi_extract_path(year, type = "Deaths")),
+    tar_target(nrs_deaths_source_extract, process_extract_nrs_deaths(read_extract_nrs_deaths(year, nrs_deaths_data), year, write_to_disk = write_to_disk)),
+    tar_target(outpatients_data, get_boxi_extract_path(year, type = "Outpatient")),
+    tar_target(outpatients_source_extract, process_extract_outpatients(read_extract_outpatients(year, outpatients_data), year, write_to_disk = write_to_disk)),
+    tar_target(pis_data, get_it_prescribing_path(year)),
+    tar_target(pis_source_extract, process_extract_prescribing(read_extract_prescribing(year, pis_data), year, write_to_disk = write_to_disk)),
+    # tar_target(ltc_data, get_it_ltc_path()),
+    # tar_target(ltc_source_extract, process_lookup_ltc(ltc_data, year, write_to_disk = write_to_disk)) # ,
+    # # tar_target(ooh_source_extract, process_extract_ooh(read_extract_ooh(year), year, write_to_disk = write_to_disk))
   )
 )
+
+
+# Read year dependent extracts
+# tar_target(cmh_data, get_boxi_extract_path(year, type = "CMH")),
+# tar_target(dd_data, get_dd_path(ext = "zsav"))
+# tar_target(dn_data, get_boxi_extract_path(year, type = "DN"))
+# tar_target(homelessness_data, get_boxi_extract_path(year, type = "Homelessness"))
