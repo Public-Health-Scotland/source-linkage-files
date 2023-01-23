@@ -9,10 +9,12 @@ find_latest_file(directory, regexp, selection_method = "modification_date")
 \arguments{
 \item{directory}{The directory to look in}
 
-\item{regexp}{a \href{https://www.regular-expressions.info/quickstart.html}{regular expression}
+\item{regexp}{a
+\href{https://www.regular-expressions.info/quickstart.html}{regular expression}
 passed to \code{\link[fs:dir_ls]{fs::dir_info()}} to search for the file}
 
-\item{selection_method}{Valid arguments are "modification_date" (the default) or "file_name"}
+\item{selection_method}{Valid arguments are "modification_date"
+(the default) or "file_name"}
 }
 \value{
 the \code{\link[fs:path]{fs::path()}} to the file
