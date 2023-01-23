@@ -11,6 +11,8 @@ read_extract_mental_health(
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.

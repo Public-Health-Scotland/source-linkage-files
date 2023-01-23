@@ -4,7 +4,12 @@
 \alias{read_extract_gp_ooh}
 \title{Process the GP OoH extract}
 \usage{
-read_extract_gp_ooh(year)
+read_extract_gp_ooh(
+  year,
+  diagnosis_path = get_boxi_extract_path(year = year, type = "GP_OoH-d"),
+  outcomes_path = get_boxi_extract_path(year = year, type = "GP_OoH-o"),
+  consultations_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")
+)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}

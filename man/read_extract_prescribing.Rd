@@ -8,6 +8,8 @@ read_extract_prescribing(year, file_path = get_it_prescribing_path(year))
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
