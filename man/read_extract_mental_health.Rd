@@ -14,6 +14,9 @@ read_extract_mental_health(
 
 \item{file_path}{BOXI extract location}
 }
+\value{
+a \link[tibble:tibble-package]{tibble}.
+}
 \description{
 Read Mental Health extract
 }

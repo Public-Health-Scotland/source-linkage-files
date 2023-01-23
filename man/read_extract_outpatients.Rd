@@ -14,6 +14,9 @@ read_extract_outpatients(
 
 \item{file_path}{BOXI extract location}
 }
+\value{
+a \link[tibble:tibble-package]{tibble}.
+}
 \description{
 Read Outpatients extract
 }

@@ -14,6 +14,9 @@ read_extract_nrs_deaths(
 
 \item{file_path}{BOXI extract location}
 }
+\value{
+a \link[tibble:tibble-package]{tibble}.
+}
 \description{
 Read NRS Deaths extract
 }
