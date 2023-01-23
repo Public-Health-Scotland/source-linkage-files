@@ -1,9 +1,7 @@
 #' Read LTC IT extract
 #'
 #' @param file_path Path to the LTC file
-#'
-#' @return csv data file
-#' @export
+#' @return a [tibble][tibble::tibble-package].
 #'
 read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
   # Read data------------------------------------------------

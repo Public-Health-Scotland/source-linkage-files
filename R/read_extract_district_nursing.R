@@ -1,9 +1,7 @@
 #' Read district nursing extract
 #'
-#' @param year Year of BOXI extract
-#' @param file_path BOXI extract location
+#' @inherit read_extract_acute
 #'
-#' @return csv data file for district nursing
 #' @export
 #'
 read_extract_district_nursing <- function(year, file_path = get_boxi_extract_path(year = year, type = "DN")) {

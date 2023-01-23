@@ -10,12 +10,12 @@ read_extract_district_nursing(
 )
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
 
 \item{file_path}{BOXI extract location}
 }
 \value{
-csv data file for district nursing
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read district nursing extract

@@ -10,7 +10,7 @@ read_lookup_ltc(file_path = get_it_ltc_path())
 \item{file_path}{Path to the LTC file}
 }
 \value{
-csv data file
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read LTC IT extract

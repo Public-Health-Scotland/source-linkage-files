@@ -1,14 +1,11 @@
 #' Process SDS tests
 #'
 #' @description This script takes the processed SDS extract and produces
-#' a test comparison with the previous data. This is written to disk as a csv.
+#' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @param data The processed data extract
-#' @param year year of extract
+#' @inherit process_tests_acute
 #'
-#' @return a csv document containing tests for extracts
 #' @export
-#'
 process_tests_sds <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 

@@ -15,6 +15,7 @@ Get the period for Delayed Discharge
 }
 \seealso{
 Other initialisation: 
+\code{\link{latest_cost_year}()},
 \code{\link{latest_update}()},
 \code{\link{previous_update}()}
 }
