@@ -1,7 +1,6 @@
 #' Read Prescribing extract
 #'
-#' @param year Year of extract
-#' @param file_path Prescribing file location
+#' @inherit read_extract_acute
 #'
 #' @export
 #'

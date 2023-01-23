@@ -1,7 +1,6 @@
 #' Read Mental Health extract
 #'
-#' @param year Year of BOXI extract
-#' @param file_path BOXI extract location
+#' @inherit read_extract_acute
 #'
 #' @export
 #'

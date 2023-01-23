@@ -2,7 +2,7 @@
 #'
 #' @param file_path Path to DD extract
 #'
-#' @return zsav/rds data file for Delayed discharges
+#' @return a [tibble][tibble::tibble-package].
 #' @export
 #'
 read_extract_delayed_discharges <- function(file_path = get_dd_path(ext = "zsav")) {
