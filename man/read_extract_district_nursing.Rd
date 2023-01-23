@@ -4,10 +4,15 @@
 \alias{read_extract_district_nursing}
 \title{Read district nursing extract}
 \usage{
-read_extract_district_nursing(year)
+read_extract_district_nursing(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "DN")
+)
 }
 \arguments{
 \item{year}{Year of BOXI extract}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 csv data file for district nursing

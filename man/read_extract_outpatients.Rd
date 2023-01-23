@@ -4,10 +4,15 @@
 \alias{read_extract_outpatients}
 \title{Read Outpatients extract}
 \usage{
-read_extract_outpatients(year)
+read_extract_outpatients(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "Outpatient")
+)
 }
 \arguments{
 \item{year}{Year of BOXI extract}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 csv data file for Acute

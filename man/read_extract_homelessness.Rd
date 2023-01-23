@@ -4,10 +4,15 @@
 \alias{read_extract_homelessness}
 \title{Read homelessness extract}
 \usage{
-read_extract_homelessness(year)
+read_extract_homelessness(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "Homelessness")
+)
 }
 \arguments{
 \item{year}{Year of BOXI extract}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 csv data file for homelessness

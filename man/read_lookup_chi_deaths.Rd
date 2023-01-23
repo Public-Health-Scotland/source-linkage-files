@@ -4,7 +4,10 @@
 \alias{read_lookup_chi_deaths}
 \title{Process the CHI deaths lookup}
 \usage{
-read_lookup_chi_deaths()
+read_lookup_chi_deaths(file_path = get_it_deaths_path())
+}
+\arguments{
+\item{file_path}{Path to CHI Deaths file}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

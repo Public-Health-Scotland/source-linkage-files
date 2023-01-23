@@ -4,10 +4,15 @@
 \alias{read_extract_cmh}
 \title{Read CMH extract}
 \usage{
-read_extract_cmh(year)
+read_extract_cmh(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "CMH")
+)
 }
 \arguments{
 \item{year}{Year of BOXI extract}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 csv data file for Acute

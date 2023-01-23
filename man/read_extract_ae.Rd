@@ -4,10 +4,15 @@
 \alias{read_extract_ae}
 \title{Read A&E extract}
 \usage{
-read_extract_ae(year)
+read_extract_ae(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "AE")
+)
 }
 \arguments{
 \item{year}{Year of BOXI extract}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 csv data file for A&E
