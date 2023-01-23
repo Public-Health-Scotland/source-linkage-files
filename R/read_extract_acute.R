@@ -1,6 +1,7 @@
 #' Read Acute extract
 #'
 #' @param year Financial year for the BOXI extract.
+#' @param file_path BOXI extract location.
 #'
 #' @return a [tibble][tibble::tibble-package].
 #'
