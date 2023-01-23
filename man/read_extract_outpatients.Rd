@@ -10,7 +10,7 @@ read_extract_outpatients(
 )
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
 
 \item{file_path}{BOXI extract location}
 }

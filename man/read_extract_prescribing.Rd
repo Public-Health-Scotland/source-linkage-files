@@ -7,7 +7,7 @@
 read_extract_prescribing(year, file_path = get_it_prescribing_path(year))
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
 
 \item{file_path}{BOXI extract location}
 }
