@@ -4,7 +4,10 @@
 #'
 #' @export
 read_extract_outpatients <- function(year) {
-  extract_outpatients_path <- get_boxi_extract_path(year = year, type = "Outpatient")
+  extract_outpatients_path <- get_boxi_extract_path(
+    year = year,
+    type = "Outpatient"
+  )
 
   # Read BOXI extract
   extract_outpatients <- readr::read_csv(extract_outpatients_path,
