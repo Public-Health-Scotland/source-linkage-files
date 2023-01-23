@@ -77,7 +77,8 @@ jobs:
         use_sarif: 1
         extra_dictionary_limit: 10
         extra_dictionaries:
-          cspell:r/src/r.txt
+           cspell:r/src/r.txt
+           cspell:software-terms/src/software-terms.txt
         check_commit_messages: commits title description
 
   comment-pr:
