@@ -4,10 +4,15 @@
 \alias{read_extract_mental_health}
 \title{Read Mental Health extract}
 \usage{
-read_extract_mental_health(year)
+read_extract_mental_health(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "MH")
+)
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
