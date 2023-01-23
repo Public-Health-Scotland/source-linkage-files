@@ -4,10 +4,13 @@
 \alias{read_extract_delayed_discharges}
 \title{Read Delayed Discharges extract}
 \usage{
-read_extract_delayed_discharges()
+read_extract_delayed_discharges(file_path = get_dd_path(ext = "zsav"))
+}
+\arguments{
+\item{file_path}{Path to DD extract}
 }
 \value{
-zsav/rds data file for Delayed discharges
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read Delayed Discharges extract

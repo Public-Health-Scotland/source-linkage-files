@@ -4,10 +4,15 @@
 \alias{read_extract_maternity}
 \title{Read Maternity extract}
 \usage{
-read_extract_maternity(year)
+read_extract_maternity(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "Maternity")
+)
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
