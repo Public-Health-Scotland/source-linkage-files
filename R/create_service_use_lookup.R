@@ -54,7 +54,7 @@ create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
       community_health_cost = calculate_community_health_cost(.data$recid, .data$cost_total_net),
       operation_flag = add_operation_flag(.data$op1a)
     ) %>%
-    # Aggregate to cij-level
+    # Aggregate to CIJ level
     dplyr::group_by(.data$chi, .data$cij_marker, .data$cij_ipdc, .data$cij_pattype) %>%
     dplyr::summarise(
       dplyr::across(c("cost_total_net", "geriatric_cost":"community_health_cost"), sum),
@@ -180,7 +180,7 @@ calculate_geriatric_cost <- function(recid, spec, cost_total_net) {
 
 #' Calculate cost for Maternity records
 #' @description A record is considered to have a Maternity cost if the recid is
-#' 02B or the cij_pattype is "Maternity"
+#' 02B or the CIJ Patient type is Maternity
 #'
 #' @param recid A vector of record IDs
 #' @param cij_pattype A vector of CIJ patient types
@@ -469,7 +469,8 @@ assign_elective_inpatient_flag <- function(acute_elective_cost, elective_inpatie
 }
 
 #' Assign a flag for deaths
-#' @description A death in this case is marked when the cij_marker is NRS
+#' @description A death in this case is marked when the recid
+#' (CIJ Marker) is NRS.
 #'
 #' @param cij_marker A vector of CIJ markers
 #'
@@ -719,7 +720,7 @@ calculate_community_care_cost <- function(community_care_cohort, community_healt
 }
 
 #' Calculate residential care cost
-#' @description This function currenly sets these costs to zero
+#' @description This function currently sets these costs to zero
 #'
 #' @return A vector of community care costs, currently zero
 #' @family Demographic and Service Use Cohort functions

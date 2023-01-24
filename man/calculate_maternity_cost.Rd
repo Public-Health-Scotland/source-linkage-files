@@ -18,7 +18,7 @@ A vector of Maternity costs
 }
 \description{
 A record is considered to have a Maternity cost if the recid is
-02B or the cij_pattype is "Maternity"
+02B or the CIJ Patient type is Maternity
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

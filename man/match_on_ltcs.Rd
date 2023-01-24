@@ -2,20 +2,21 @@
 % Please edit documentation in R/match_on_ltcs.R
 \name{match_on_ltcs}
 \alias{match_on_ltcs}
-\title{Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)}
+\title{Match on LTC DoB and dates of LTC incidence}
 \usage{
 match_on_ltcs(data, year)
 }
 \arguments{
 \item{data}{episode files}
 
-\item{year}{financial year, eg '1920'}
+\item{year}{financial year, e.g. '1920'}
 }
 \value{
 data matched with long term conditions
 }
 \description{
-Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)
+Match on LTC changed_dob and dates of LTC incidence
+(based on hospital incidence only).
 }
 \examples{
 match_on_ltcs(data, "1920")

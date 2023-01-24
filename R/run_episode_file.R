@@ -36,11 +36,11 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       )
     )
 
-  # Combine the cij-only records with the non-cij records
+  # Combine the CIJ-only records with the non-CIJ records
   temp_file_1 <- dplyr::bind_rows(
-    # Fill missing cij markers for those records that should have them
+    # Fill missing CIJ markers for those records that should have them
     ep_file %>% fill_missing_cij_markers(),
-    # Bind the cij records with the non-cij records, determined by recid
+    # Bind the CIJ records with the non-cij records, determined by recid
     ep_file %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
   ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
@@ -102,15 +102,15 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   return(final_data)
 }
 
-#' Fill any missing cij markers for records that should have them
+#' Fill any missing CIJ markers for records that should have them
 #'
 #' @param data A data frame
 #'
-#' @return A data frame with cij markers filled in for those missing. Will not
-#' fill cij markers for records with missing chi
+#' @return A data frame with CIJ markers filled in for those missing. Will not
+#' fill CIJ markers for records with missing CHI
 fill_missing_cij_markers <- function(data) {
   return_data <- data %>%
-    # Get cij-only records
+    # Get CIJ-only records
     dplyr::filter(.data$recid %in% c("01B", "04B", "GLS", "02B")) %>%
     dplyr::group_by(.data$chi) %>%
     # We want any NA cij_markers to be filled in, if they are the first in the group and
@@ -128,7 +128,7 @@ fill_missing_cij_markers <- function(data) {
       .data$chi != "" & is_missing(.data$cij_ipdc) & .data$recid == "01B" & .data$ipdc == "D" ~ "D",
       TRUE ~ .data$cij_ipdc
     )) %>%
-    # Ensure every record with a chi has a valid cij marker
+    # Ensure every record with a CHI has a valid CIJ marker
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(
       cij_ipdc = max(.data$cij_ipdc),

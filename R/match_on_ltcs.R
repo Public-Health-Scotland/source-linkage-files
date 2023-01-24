@@ -1,9 +1,10 @@
-#' Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)
+#' Match on LTC DoB and dates of LTC incidence
 #'
-#' @description Match on LTC changed_dob and dates of LTC incidence (based on hospital incidence only)
+#' @description Match on LTC changed_dob and dates of LTC incidence
+#' (based on hospital incidence only).
 #'
 #' @param data episode files
-#' @param year financial year, eg '1920'
+#' @param year financial year, e.g. '1920'
 #'
 #' @return data matched with long term conditions
 #' @export

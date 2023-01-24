@@ -10,7 +10,7 @@ calculate_residential_care_cost()
 A vector of community care costs, currently zero
 }
 \description{
-This function currenly sets these costs to zero
+This function currently sets these costs to zero
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
