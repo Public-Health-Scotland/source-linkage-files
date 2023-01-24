@@ -384,7 +384,7 @@ assign_d_cohort_substance <- function(data) {
           ~ stringr::str_sub(.x, 1L, 4L) %in% c("T424")
         )) > 0L
     ) %>%
-    # Aggregate to cij level
+    # Aggregate to CIJ level
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::summarise(
       dplyr::across(c("mh":"t424"), any)

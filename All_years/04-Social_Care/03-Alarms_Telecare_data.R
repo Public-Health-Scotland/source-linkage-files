@@ -83,7 +83,7 @@ replaced_start_dates <- at_full_data %>%
   )
 
 at_full_clean <- replaced_start_dates %>%
-  # Match on demographics data (chi, gender, dob and postcode)
+  # Match on demographics data (CHI, gender, DoB and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # rename for matching source variables
   rename(

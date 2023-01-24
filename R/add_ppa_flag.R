@@ -29,7 +29,8 @@ add_ppa_flag <- function(data) {
     ) %>%
     # Filter only recids and patient type where admission was preventable
     dplyr::filter(.data$recid %in% c("01B", "02B", "04B", "GLS") & .data$cij_pattype == "Non-Elective") %>%
-    # We only want the first record in each cij, and we want to exclude empty cij and empty chi
+    # We only want the first record in each CIJ, and we want to exclude
+    # empty CIJ and empty CHI
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::filter(dplyr::row_number() == 1L & !is.na(.data$cij_marker) & !is.na(.data$chi)) %>%
     dplyr::ungroup() %>%
@@ -155,7 +156,6 @@ add_ppa_flag <- function(data) {
         TRUE ~ FALSE
       )
     ) %>%
-    # Just select out the chi, cij marker and ppa for ease of joining
     dplyr::select("chi", "cij_marker", cij_ppa = "ppa")
 
   # Match on the ppa lookup to original data

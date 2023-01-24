@@ -13,7 +13,8 @@ assign_death_flag(cij_marker)
 A boolean vector of death flags
 }
 \description{
-A death in this case is marked when the cij_marker is NRS
+A death in this case is marked when the recid
+(CIJ Marker) is NRS.
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

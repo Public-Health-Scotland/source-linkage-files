@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_episode_file.R
 \name{fill_missing_cij_markers}
 \alias{fill_missing_cij_markers}
-\title{Fill any missing cij markers for records that should have them}
+\title{Fill any missing CIJ markers for records that should have them}
 \usage{
 fill_missing_cij_markers(data)
 }
@@ -10,9 +10,9 @@ fill_missing_cij_markers(data)
 \item{data}{A data frame}
 }
 \value{
-A data frame with cij markers filled in for those missing. Will not
-fill cij markers for records with missing chi
+A data frame with CIJ markers filled in for those missing. Will not
+fill CIJ markers for records with missing CHI
 }
 \description{
-Fill any missing cij markers for records that should have them
+Fill any missing CIJ markers for records that should have them
 }
