@@ -4,6 +4,7 @@
 #' gpprac lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
+#' @param file_path Link to phs open dataset
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -11,14 +12,14 @@
 #' @export
 #' @family process extracts
 
-process_lookup_gpprac <- function(write_to_disk = TRUE) {
+process_lookup_gpprac <- function(file_path = phsopendata::get_dataset(
+                                    "gp-practice-contact-details-and-list-sizes",
+                                    max_resources = 20L
+                                  ), write_to_disk = TRUE) {
   # Read lookup files -------------------------------------------------------
 
   # Retrieve the latest resource from the dataset
-  opendata <-
-    phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
-      max_resources = 20L
-    ) %>%
+  opendata <- file_path %>%
     janitor::clean_names() %>%
     dplyr::left_join(
       phsopendata::get_resource(

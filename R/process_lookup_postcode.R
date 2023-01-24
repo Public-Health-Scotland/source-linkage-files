@@ -4,6 +4,7 @@
 #' postcode lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
+#' @param file_path Path to spd lookup.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -11,11 +12,11 @@
 #' @export
 #' @family process extracts
 
-process_lookup_postcode <- function(write_to_disk = TRUE) {
+process_lookup_postcode <- function(file_path = get_spd_path(), write_to_disk = TRUE) {
   # Read lookup files -------------------------------------------------------
 
   # postcode data
-  spd_file <- readr::read_rds(get_spd_path()) %>%
+  spd_file <- readr::read_rds(file_path) %>%
     dplyr::select(
       .data$pc7,
       tidyselect::matches("datazone\\d{4}$"),
