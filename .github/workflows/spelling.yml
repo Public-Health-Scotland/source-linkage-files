@@ -81,8 +81,8 @@ jobs:
         only_check_changed_files: 1
         extra_dictionary_limit: 10
         extra_dictionaries:
-           - 'cspell:r/src/r.txt'
-           - 'cspell:software-terms/src/software-terms.txt'
+           cspell:r/src/r.txt
+           cspell:software-terms/src/software-terms.txt
         check_commit_messages: commits title description
 
   comment-pr:

@@ -1,10 +1,11 @@
 #' Read Acute extract
 #'
 #' @param year Financial year for the BOXI extract.
-#' @param file_path BOXI extract location.
+#' @param file_path BOXI extract location
 #'
 #' @return a [tibble][tibble::tibble-package].
 #'
+#' @export
 read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = year, type = "Acute")) {
   # Read BOXI extract
   extract_acute <- readr::read_csv(file_path,

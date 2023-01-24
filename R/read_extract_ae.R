@@ -3,6 +3,7 @@
 #' @inherit read_extract_acute
 #'
 #' @export
+#'
 read_extract_ae <- function(year, file_path = get_boxi_extract_path(year = year, type = "AE")) {
   extract_ae <- readr::read_csv(file_path,
     col_type = cols(
