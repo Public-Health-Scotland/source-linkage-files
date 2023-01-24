@@ -4,9 +4,15 @@
 \alias{process_lookup_gpprac}
 \title{Process the SLF gpprac lookup}
 \usage{
-process_lookup_gpprac(write_to_disk = TRUE)
+process_lookup_gpprac(
+  file_path = phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
+    max_resources = 20L),
+  write_to_disk = TRUE
+)
 }
 \arguments{
+\item{file_path}{Link to phs open dataset}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
