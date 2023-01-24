@@ -8,8 +8,6 @@
 #'
 #' @return data matched with long term conditions
 #' @export
-#'
-#' @examples match_on_ltcs(data, "1920")
 match_on_ltcs <- function(data, year) {
   # Match on LTC lookup
   matched <- dplyr::left_join(
