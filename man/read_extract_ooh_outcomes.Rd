@@ -12,7 +12,7 @@ read_extract_ooh_outcomes(
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
 
-\item{file_path}{BOXI extract location.}
+\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with OOH Outcomes extract data
