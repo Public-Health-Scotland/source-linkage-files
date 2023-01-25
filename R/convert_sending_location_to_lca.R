@@ -1,6 +1,7 @@
 #' Convert Social Care Sending Location Codes into LCA Codes
 #'
-#' @description Convert Social Care Sending Location Codes into the Local Council Authority Codes
+#' @description Convert Social Care Sending Location Codes into the
+#' Local Council Authority Codes.
 #'
 #' @param sending_location vector of sending location codes
 #'

@@ -30,8 +30,6 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       # Set smrtype variable
       smrtype = add_smr_type(.data$recid)
     ) %>%
-    # Recode GP Practice into a 5 digit number
-    # assume that if it starts with a letter it's an English practice and so recode to 99995
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # compute record key date2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
@@ -93,7 +91,9 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, "Outpatients", check_mode = "write"))
+      write_rds(
+        get_source_extract_path(year, "Outpatients", check_mode = "write")
+      )
   }
 
   return(outfile)

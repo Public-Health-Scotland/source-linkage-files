@@ -26,7 +26,10 @@ produce_source_cmh_tests <- function(data) {
     calculate_measures(measure = "sum")
 
   min_max <- data %>%
-    calculate_measures(vars = c("record_keydate1", "record_keydate2"), measure = "min-max")
+    calculate_measures(
+      vars = c("record_keydate1", "record_keydate2"),
+      measure = "min-max"
+    )
 
   join_output <- list(
     test_flags,

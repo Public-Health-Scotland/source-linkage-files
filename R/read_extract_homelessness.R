@@ -3,8 +3,9 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-#'
-read_extract_homelessness <- function(year, file_path = get_boxi_extract_path(year = year, type = "Homelessness")) {
+read_extract_homelessness <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "Homelessness")) {
   extract_homelessness <- readr::read_csv(file_path,
     col_types = cols(
       "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),

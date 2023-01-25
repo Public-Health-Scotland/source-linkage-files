@@ -41,9 +41,13 @@ process_lookup_gpprac <- function(file_path = phsopendata::get_dataset(
     # drop NA cluster rows
     tidyr::drop_na(.data$cluster) %>%
     # format practice name text
-    dplyr::mutate(practice_name = stringr::str_to_title(.data$practice_name)) %>%
+    dplyr::mutate(
+      practice_name = stringr::str_to_title(.data$practice_name)
+    ) %>%
     # format postcode
-    dplyr::mutate(postcode = phsmethods::format_postcode(.data$postcode)) %>%
+    dplyr::mutate(
+      postcode = phsmethods::format_postcode(.data$postcode)
+    ) %>%
     # keep distinct gpprac
     dplyr::distinct(.data$gpprac, .keep_all = TRUE) %>%
     # Sort for SPSS matching
@@ -79,7 +83,11 @@ process_lookup_gpprac <- function(file_path = phsopendata::get_dataset(
 
   gpprac_slf_lookup <-
     ## match cluster information onto the practice reference list ##
-    dplyr::left_join(opendata, gpprac_ref_file, by = c("gpprac", "postcode")) %>%
+    dplyr::left_join(
+      opendata,
+      gpprac_ref_file,
+      by = c("gpprac", "postcode")
+    ) %>%
     # match on geography info - postcode
     dplyr::left_join(spd_file, by = "postcode") %>%
     # rename hb2018
@@ -103,7 +111,11 @@ process_lookup_gpprac <- function(file_path = phsopendata::get_dataset(
         "S08200003",
         .data$hbpraccode
       ),
-      hbpraccode = dplyr::if_else(.data$gpprac == 99995L, "S08200001", .data$hbpraccode)
+      hbpraccode = dplyr::if_else(
+        .data$gpprac == 99995L,
+        "S08200001",
+        .data$hbpraccode
+      )
     ) %>%
     # sort by gpprac
     dplyr::arrange(.data$gpprac) %>%

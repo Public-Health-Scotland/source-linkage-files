@@ -17,10 +17,15 @@ process_lookup_chi_deaths <- function(data, write_to_disk = TRUE) {
 
   # One record per chi
   deaths_clean <- data %>%
-    dplyr::arrange(dplyr::desc(.data$death_date_nrs), dplyr::desc(.data$death_date_chi)) %>%
+    dplyr::arrange(
+      dplyr::desc(.data$death_date_nrs),
+      dplyr::desc(.data$death_date_chi)
+    ) %>%
     dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
     # Use the NRS deathdate unless it isn't there
-    dplyr::mutate(death_date = dplyr::coalesce(.data$death_date_nrs, .data$death_date_chi))
+    dplyr::mutate(
+      death_date = dplyr::coalesce(.data$death_date_nrs, .data$death_date_chi)
+    )
 
 
   # Save File--------------------------------------------------------

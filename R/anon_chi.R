@@ -17,10 +17,16 @@ convert_anon_chi_to_chi <- Vectorize(function(anon_chi) {
 #' @return a character vector of the corresponding anon_chi.
 #' @family anon_chi
 convert_chi_to_anon_chi <- Vectorize(function(chi) {
-  if (!all(phsmethods::chi_check(chi) %in% c("Valid CHI", "Missing (Blank)", "Missing (NA)"))) {
-    cli::cli_abort(c("There were bad CHI numbers according to {.help {.fun phsmethods::chi_check}}.",
-      "i" = "{.param chi} must contain only valid or missing CHI numbers."
-    ))
+  if (!all(phsmethods::chi_check(chi) %in% c(
+    "Valid CHI",
+    "Missing (Blank)",
+    "Missing (NA)"
+  ))) {
+    cli::cli_abort(
+      c("There were bad CHI numbers according to {.help {.fun phsmethods::chi_check}}.",
+        "i" = "{.param chi} must contain only valid or missing CHI numbers."
+      )
+    )
   }
 
   openssl::base64_encode(chi)

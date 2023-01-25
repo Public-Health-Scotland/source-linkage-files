@@ -20,7 +20,9 @@ check_year_format <- function(year, format = "fyyear") {
   }
 
   if (!is.character(year)) {
-    cli::cli_inform(c("i" = "{.var year} will be converted to a {.class character}."))
+    cli::cli_inform(
+      c("i" = "{.var year} will be converted to a {.class character}.")
+    )
     year <- as.character(year)
   }
 

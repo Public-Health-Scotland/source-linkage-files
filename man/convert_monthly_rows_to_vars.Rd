@@ -19,5 +19,6 @@ convert_monthly_rows_to_vars(data, month_num_var, cost_var, beddays_var)
 A dataframe with monthly cost and bed day variables
 }
 \description{
-Creates data with monthly cost and beddays variables using assigned cost vector
+Creates data with monthly cost and beddays variables using
+assigned cost vector.
 }

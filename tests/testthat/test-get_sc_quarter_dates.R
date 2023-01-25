@@ -100,22 +100,58 @@ test_that("end_next_fy_quarter works", {
 
 test_that("bad inputs for quarter error properly", {
   # Single NA
-  expect_error(start_fy_quarter(NA), "typeof\\(quarter\\) == \"character\" is not TRUE")
-  expect_error(end_fy_quarter(NA), "typeof\\(quarter\\) == \"character\" is not TRUE")
-  expect_error(start_next_fy_quarter(NA), "typeof\\(quarter\\) == \"character\" is not TRUE")
-  expect_error(end_next_fy_quarter(NA), "typeof\\(quarter\\) == \"character\" is not TRUE")
+  expect_error(
+    start_fy_quarter(NA),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
+  expect_error(
+    end_fy_quarter(NA),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
+  expect_error(
+    start_next_fy_quarter(NA),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
+  expect_error(
+    end_next_fy_quarter(NA),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
 
   # All NA
-  expect_error(start_fy_quarter(c(NA, NA)), "typeof\\(quarter\\) == \"character\" is not TRUE")
-  expect_error(end_fy_quarter(c(NA, NA)), "typeof\\(quarter\\) == \"character\" is not TRUE")
-  expect_error(start_next_fy_quarter(c(NA, NA)), "typeof\\(quarter\\) == \"character\" is not TRUE")
-  expect_error(end_next_fy_quarter(c(NA, NA)), "typeof\\(quarter\\) == \"character\" is not TRUE")
+  expect_error(
+    start_fy_quarter(c(NA, NA)),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
+  expect_error(
+    end_fy_quarter(c(NA, NA)),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
+  expect_error(
+    start_next_fy_quarter(c(NA, NA)),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
+  expect_error(
+    end_next_fy_quarter(c(NA, NA)),
+    "typeof\\(quarter\\) == \"character\" is not TRUE"
+  )
 
   # Not all NA
-  expect_equal(start_fy_quarter(c("2017Q1", NA)), as.Date(c("2017-04-01", NA)))
-  expect_equal(end_fy_quarter(c("2017Q1", NA)), as.Date(c("2017-06-30", NA)))
-  expect_equal(start_next_fy_quarter(c("2017Q1", NA)), as.Date(c("2017-07-01", NA)))
-  expect_equal(end_next_fy_quarter(c("2017Q1", NA)), as.Date(c("2017-09-30", NA)))
+  expect_equal(
+    start_fy_quarter(c("2017Q1", NA)),
+    as.Date(c("2017-04-01", NA))
+  )
+  expect_equal(
+    end_fy_quarter(c("2017Q1", NA)),
+    as.Date(c("2017-06-30", NA))
+  )
+  expect_equal(
+    start_next_fy_quarter(c("2017Q1", NA)),
+    as.Date(c("2017-07-01", NA))
+  )
+  expect_equal(
+    end_next_fy_quarter(c("2017Q1", NA)),
+    as.Date(c("2017-09-30", NA))
+  )
 
   # Bad quarter format
   expect_error(start_fy_quarter("2017-4"))

@@ -1,6 +1,7 @@
 #' Convert HSCP Codes to Names
 #'
-#' @description Convert Health & Social Care Partnership Codes to the Health & Social Care Partnership Name
+#' @description Convert Health & Social Care Partnership Codes to the
+#' Health & Social Care Partnership Name.
 #'
 #' @param hscp vector of HSCP codes
 #'

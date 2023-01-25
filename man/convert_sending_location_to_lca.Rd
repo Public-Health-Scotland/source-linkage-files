@@ -13,7 +13,8 @@ convert_sending_location_to_lca(sending_location)
 a vector of local council authority codes
 }
 \description{
-Convert Social Care Sending Location Codes into the Local Council Authority Codes
+Convert Social Care Sending Location Codes into the
+Local Council Authority Codes.
 }
 \examples{
 sending_location <- c("100", "120")

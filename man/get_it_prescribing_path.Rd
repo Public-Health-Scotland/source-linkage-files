@@ -9,7 +9,8 @@ get_it_prescribing_path(year, it_reference = NULL, ...)
 \arguments{
 \item{year}{the year for the required extract}
 
-\item{it_reference}{Optional argument for the seven-digit code in the IT extract file name}
+\item{it_reference}{Optional argument for the seven-digit code in the
+IT extract file name}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }

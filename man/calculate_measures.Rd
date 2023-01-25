@@ -7,11 +7,12 @@
 calculate_measures(data, vars = NULL, measure = c("sum", "all", "min-max"))
 }
 \arguments{
-\item{data}{A processed dataframe containing a summary of the mean and sum of variables}
+\item{data}{A processed dataframe containing a
+summary of the mean and sum of variables.}
 
 \item{vars}{Specify variables you want to test.
-This will match this e.g c(\code{beddays}, \code{cost}, \code{yearstay}). Default as NULL for summarising
-everything in a dataframe.}
+This will match this e.g c(\code{beddays}, \code{cost}, \code{yearstay}).
+Default as NULL for summarising everything.}
 
 \item{measure}{The measure you want to apply to variables}
 }
@@ -19,7 +20,8 @@ everything in a dataframe.}
 a tibble with a summary
 }
 \description{
-Produces measures used within testing extracts. Computes various measures for the variables specified.
+Produces measures used within testing extracts.
+Computes various measures for the variables specified.
 }
 \seealso{
 produce_source_extract_tests
