@@ -7,9 +7,11 @@
 #' \code{birthtime}
 #'
 #' @param directory The directory to look in
-#' @param regexp a [regular expression](https://www.regular-expressions.info/quickstart.html)
+#' @param regexp a
+#' [regular expression](https://www.regular-expressions.info/quickstart.html)
 #' passed to [fs::dir_info()] to search for the file
-#' @param selection_method Valid arguments are "modification_date" (the default) or "file_name"
+#' @param selection_method Valid arguments are "modification_date"
+#' (the default) or "file_name"
 #'
 #' @return the [fs::path()] to the file
 #' @export
@@ -20,7 +22,9 @@
 #'   regexp = "Scottish_Postcode_Directory_.+?\\.rds"
 #' )
 #' }
-find_latest_file <- function(directory, regexp, selection_method = "modification_date") {
+find_latest_file <- function(directory,
+                             regexp,
+                             selection_method = "modification_date") {
   if (selection_method == "modification_date") {
     latest_file_path <-
       fs::dir_info(
@@ -33,9 +37,11 @@ find_latest_file <- function(directory, regexp, selection_method = "modification
         dplyr::desc(.data$birth_time),
         dplyr::desc(.data$modification_time)
       )
-    cli::cli_inform(c(i = "There were {.val {nrow(latest_file_path)}} files matching the
+    cli::cli_inform(
+      c(i = "There were {.val {nrow(latest_file_path)}} files matching the
                     regexp {.val {regexp}}. {.val {latest_file_path$path[[1]]}} has been selected,
-                    which was modified on {.val {latest_file_path$modification_time[[1]]}}"))
+                    which was modified on {.val {latest_file_path$modification_time[[1]]}}")
+    )
     latest_file_path <- latest_file_path %>%
       dplyr::pull(.data$path) %>%
       magrittr::extract(1L)
@@ -50,9 +56,11 @@ find_latest_file <- function(directory, regexp, selection_method = "modification
       dplyr::arrange(
         dplyr::desc(.data$path)
       )
-    cli::cli_inform(c(i = "There were {.val {nrow(latest_file_path)}} files matching the
+    cli::cli_inform(
+      c(i = "There were {.val {nrow(latest_file_path)}} files matching the
                     regexp {.val {regexp}}. {.val {latest_file_path$path[[1]]}} has been selected,
-                    as it has the highest IT reference number"))
+                    as it has the highest IT reference number")
+    )
     latest_file_path <- latest_file_path %>%
       dplyr::pull(.data$path) %>%
       magrittr::extract(1L)
@@ -61,7 +69,9 @@ find_latest_file <- function(directory, regexp, selection_method = "modification
   if (!is.na(latest_file_path)) {
     return(latest_file_path)
   } else {
-    cli::cli_abort("There was no file in {.path {directory}} that matched the
-                   regular expression {.arg {regexp}}")
+    cli::cli_abort(
+      "There was no file in {.path {directory}} that matched the
+                   regular expression {.arg {regexp}}"
+    )
   }
 }

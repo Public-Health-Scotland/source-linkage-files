@@ -7,9 +7,10 @@
 create_day_episode_costs(data, date_var, cost_var)
 }
 \arguments{
-\item{data}{Data to assign costs for}
+\item{data}{Data to assign costs}
 
-\item{date_var}{Date vector for the costs, e.g admission date or discharge date}
+\item{date_var}{Date vector for the costs, e.g admission date or
+discharge date}
 
 \item{cost_var}{Cost variable containing the costs e.g. cost_total_net}
 }

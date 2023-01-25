@@ -9,7 +9,8 @@
 #'
 #' @export
 #' @family social care test functions
-produce_source_at_tests <- function(data, max_min_vars = c("record_keydate1", "record_keydate2")) {
+produce_source_at_tests <- function(data,
+                                    max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
     # create test flags
     create_demog_test_flags() %>%

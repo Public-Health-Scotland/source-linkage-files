@@ -114,9 +114,10 @@ A data frame with an additional boolean variable, \code{substance},
 indicating a record is in the substance misuse cohort.
 }
 \description{
-A record is considered to be in the MH cohort if the recid is 04B. Also,
-if the recid is one of 01B, GLS, 50B, 02B or AE2 \strong{and} any of the diagnosis codes start with
-F2, F3, F067, F070, F072, F078, or F079
+A record is considered to be in the MH cohort if the
+recid is 04B. Also, if the recid is one of 01B, GLS, 50B, 02B or AE2
+\strong{and} any of the diagnosis codes start with F2, F3, F067, F070, F072,
+F078, or F079.
 
 A record is considered to be in the frailty cohort if:
 \itemize{

@@ -16,7 +16,11 @@
 #' @export
 #'
 #' @seealso create_monthly_costs
-create_monthly_beddays <- function(data, year, admission_date, discharge_date, count_last = TRUE) {
+create_monthly_beddays <- function(data,
+                                   year,
+                                   admission_date,
+                                   discharge_date,
+                                   count_last = TRUE) {
   # Extract date vectors for checking
   admission_dates_vector <- dplyr::pull(data, {{ admission_date }})
   discharge_dates_vector <- dplyr::pull(data, {{ discharge_date }})
@@ -34,17 +38,22 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
   }
 
   # Check that discharge_date always comes after admission_date (or all discharge_dates_vector is NA)
-  if (any(admission_dates_vector > discharge_dates_vector, na.rm = TRUE) & !all(is.na(discharge_dates_vector))) {
+  if (any(
+    admission_dates_vector > discharge_dates_vector,
+    na.rm = TRUE
+  ) & !all(is.na(discharge_dates_vector))) {
     first_error <- which.max(admission_dates_vector > discharge_dates_vector)
 
-    cli::cli_abort(c("{.var discharge_date} must not be earlier than
+    cli::cli_abort(
+      c("{.var discharge_date} must not be earlier than
                        {.var admission_date}",
-      "i" = "See case {first_error} where
+        "i" = "See case {first_error} where
          {.var admission_date} = '{admission_dates_vector[first_error]}' and
          {.var discharge_date} = '{discharge_dates_vector[first_error]}'",
-      "There {?is/are} {sum(admission_dates_vector > discharge_dates_vector, na.rm = TRUE)}
+        "There {?is/are} {sum(admission_dates_vector > discharge_dates_vector, na.rm = TRUE)}
         error{?s} in total."
-    ))
+      )
+    )
   }
 
 
@@ -60,7 +69,9 @@ create_monthly_beddays <- function(data, year, admission_date, discharge_date, c
     ) %>%
       # Shift it forward by a day (default)
       # so we will count the last day and not the first.
-      lubridate::int_shift(by = lubridate::days(dplyr::if_else(count_last, 1L, 0L))))
+      lubridate::int_shift(
+        by = lubridate::days(dplyr::if_else(count_last, 1L, 0L))
+      ))
 
   # Create the start dates of the months for the financial year
   cal_year <- as.numeric(convert_fyyear_to_year(year))

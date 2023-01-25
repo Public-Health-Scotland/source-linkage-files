@@ -48,7 +48,9 @@ process_lookup_postcode <- function(write_to_disk = TRUE) {
       locality = .data$hscp_locality,
       tidyselect::matches("datazone\\d{4}$")
     ) %>%
-    dplyr::mutate(locality = tidyr::replace_na(.data$locality, "No Locality Information"))
+    dplyr::mutate(
+      locality = tidyr::replace_na(.data$locality, "No Locality Information")
+    )
 
 
   # Join data together  -----------------------------------------------------

@@ -31,7 +31,17 @@ test_that("Fraility demographic cohort functions work", {
     frail_test %>%
       dplyr::mutate(
         frail =
-          assign_d_cohort_frailty(recid, diag1, diag2, diag3, diag4, diag5, diag6, spec, sigfac)
+          assign_d_cohort_frailty(
+            recid,
+            diag1,
+            diag2,
+            diag3,
+            diag4,
+            diag5,
+            diag6,
+            spec,
+            sigfac
+          )
       ) %>%
       dplyr::pull(frail),
     c(TRUE, TRUE, TRUE, FALSE, TRUE)
@@ -52,7 +62,14 @@ test_that("High Complex conditions demographic cohort functions work", {
     high_cc_test %>%
       dplyr::mutate(
         high_cc =
-          assign_d_cohort_high_cc(dementia, hefailure, refailure, liver, cancer, spec)
+          assign_d_cohort_high_cc(
+            dementia,
+            hefailure,
+            refailure,
+            liver,
+            cancer,
+            spec
+          )
       ) %>%
       dplyr::pull(high_cc),
     c(TRUE, TRUE, TRUE, TRUE)

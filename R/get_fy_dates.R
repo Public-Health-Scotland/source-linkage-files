@@ -50,9 +50,13 @@ end_fy <- function(year, format = c("fyyear", "alternate")) {
   format <- match.arg(format)
 
   if (format == "fyyear") {
-    end_fy <- as.Date(paste0(as.numeric(convert_fyyear_to_year(year)) + 1L, "-03-31"))
+    end_fy <- as.Date(
+      paste0(as.numeric(convert_fyyear_to_year(year)) + 1L, "-03-31")
+    )
   } else if (format == "alternate") {
-    end_fy <- as.Date(paste0(as.numeric(year) + 1L, "-03-31"))
+    end_fy <- as.Date(
+      paste0(as.numeric(year) + 1L, "-03-31")
+    )
   }
 
   return(end_fy)

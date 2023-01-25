@@ -16,7 +16,9 @@
 #' @seealso process_homelessness_extract
 fix_west_dun_duplicates <- function(data) {
   west_dun_fixed <- data %>%
-    dplyr::filter(.data$sending_local_authority_name == "West Dunbartonshire") %>%
+    dplyr::filter(
+      .data$sending_local_authority_name == "West Dunbartonshire"
+    ) %>%
     # Remove the leading zeros
     dplyr::mutate(dplyr::across(
       c("application_reference_number", "client_unique_identifier"),
@@ -25,13 +27,18 @@ fix_west_dun_duplicates <- function(data) {
     # Sort so the latest case closed date is at the top
     dplyr::arrange(dplyr::desc(.data$case_closed_date)) %>%
     # Keep only the first record for app_ref, client_id, decision_date.
-    dplyr::distinct(.data$application_reference_number, .data$client_unique_identifier, .data$assessment_decision_date,
+    dplyr::distinct(
+      .data$application_reference_number,
+      .data$client_unique_identifier,
+      .data$assessment_decision_date,
       .keep_all = TRUE
     )
 
   fixed_data <- dplyr::bind_rows(
     data %>%
-      dplyr::filter(.data$sending_local_authority_name != "West Dunbartonshire"),
+      dplyr::filter(
+        .data$sending_local_authority_name != "West Dunbartonshire"
+      ),
     west_dun_fixed
   )
 
@@ -63,12 +70,19 @@ fix_east_ayrshire_duplicates <- function(data) {
     # Remove the leading zeros
     dplyr::mutate(dplyr::across(
       c("application_reference_number", "client_unique_identifier"),
-      ~ stringr::str_replace(.x, "^([A-Z]{2,3})([0-9]{2})(.+?)$", "\\1/\\2/\\3")
+      ~ stringr::str_replace(
+        .x,
+        "^([A-Z]{2,3})([0-9]{2})(.+?)$",
+        "\\1/\\2/\\3"
+      )
     )) %>%
     # Sort so the latest case closed date is at the top
     dplyr::arrange(dplyr::desc(.data$case_closed_date)) %>%
     # Keep only the first record for app_ref, client_id, decision_date.
-    dplyr::distinct(.data$application_reference_number, .data$client_unique_identifier, .data$assessment_decision_date,
+    dplyr::distinct(
+      .data$application_reference_number,
+      .data$client_unique_identifier,
+      .data$assessment_decision_date,
       .keep_all = TRUE
     )
 
