@@ -10,7 +10,8 @@
 #' @param sc_qtr The latest submitted quarter. e.g. `sc_latest_submission`
 #'
 #' @return a [tibble][tibble::tibble-package] with additional variable `stay`.
-#' If there is no end date use dummy discharge to calculate the total length of stay.
+#' If there is no end date use dummy discharge to calculate the total
+#' length of stay.
 #' If there is no end date but sc_qtr is supplied then set this to the end of
 #' the quarter.
 #' If quarter `end_date < start_date` and `sc_qtr` is supplied then set this

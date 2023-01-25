@@ -3,8 +3,9 @@
 #' @description Assign costs for single day episodes to the
 #' relevant month using a cost vector
 #'
-#' @param data Data to assign costs for
-#' @param date_var Date vector for the costs, e.g admission date or discharge date
+#' @param data Data to assign costs
+#' @param date_var Date vector for the costs, e.g admission date or
+#' discharge date
 #' @param cost_var Cost variable containing the costs e.g. cost_total_net
 #'
 #' @return The data with additional variables `apr_cost` to `mar_cost`

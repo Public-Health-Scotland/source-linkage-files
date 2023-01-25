@@ -2,7 +2,8 @@
 #'
 #' @description Get the full path to the IT Long Term Conditions extract
 #'
-#' @param it_reference Optional argument for the seven-digit code in the IT extract file name
+#' @param it_reference Optional argument for the seven-digit code in the
+#' IT extract file name
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the LTC extract as an [fs::path()]
@@ -30,7 +31,8 @@ get_it_ltc_path <- function(it_reference = NULL, ...) {
 #'
 #' @description Get the full path to the IT Deaths extract
 #'
-#' @param it_reference Optional argument for the seven-digit code in the IT extract file name
+#' @param it_reference Optional argument for the seven-digit code in the
+#' IT extract file name
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the IT Deaths extract as an [fs::path()]
@@ -60,7 +62,8 @@ get_it_deaths_path <-
 #' @description Get the full path to the IT PIS extract
 #'
 #' @param year the year for the required extract
-#' @param it_reference Optional argument for the seven-digit code in the IT extract file name
+#' @param it_reference Optional argument for the seven-digit code in the
+#' IT extract file name
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the PIS extract as an [fs::path()]
@@ -72,12 +75,16 @@ get_it_prescribing_path <-
     if (is.null(it_reference)) {
       it_pis_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
-        file_name_regexp = glue::glue("SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?")
+        file_name_regexp = glue::glue(
+          "SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?"
+        )
       )
     } else {
       it_pis_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
-        file_name = glue::glue("SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.csv.gz")
+        file_name = glue::glue(
+          "SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.csv.gz"
+        )
       )
     }
 

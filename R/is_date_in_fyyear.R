@@ -46,12 +46,11 @@ is_date_in_fyyear <- function(fyyear, date, date_end = NULL) {
     if (any(date > date_end, na.rm = TRUE) & !all(is.na(date_end))) {
       first_error <- which.max(date > date_end)
 
-      cli::cli_abort(c("{.var date_end} must not be earlier than {.var date}",
-        "i" = "See case {first_error} where
+      cli::cli_abort(
+        c("{.var date_end} must not be earlier than {.var date}", "i" = "See case {first_error} where
                          {.var date} = '{date[first_error]}'and
-                         {.var date_end} = '{date_end[first_error]}'",
-        "There {?is/are} {sum(date > date_end, na.rm = TRUE)} error{?s} in total."
-      ))
+                         {.var date_end} = '{date_end[first_error]}'", "There {?is/are} {sum(date > date_end, na.rm = TRUE)} error{?s} in total.")
+      )
     }
   }
 
