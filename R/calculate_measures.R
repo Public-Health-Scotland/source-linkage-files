@@ -1,11 +1,15 @@
 #' Calculate Measures for Testing
 #'
-#' @description Produces measures used within testing extracts. Computes various measures for the variables specified.
+#' @description Produces measures used within testing extracts.
+#' Computes various measures for the variables specified.
 #'
-#' @param data A processed dataframe containing a summary of the mean and sum of variables
+#' @param data A processed dataframe containing a
+#' summary of the mean and sum of variables.
+#'
 #' @param vars Specify variables you want to test.
-#' This will match this e.g c(`beddays`, `cost`, `yearstay`). Default as NULL for summarising
-#' everything in a dataframe.
+#' This will match this e.g c(`beddays`, `cost`, `yearstay`).
+#' Default as NULL for summarising everything.
+#'
 #' @param measure The measure you want to apply to variables
 #'
 #' @return a tibble with a summary
@@ -13,7 +17,9 @@
 #'
 #' @family extract test functions
 #' @seealso produce_source_extract_tests
-calculate_measures <- function(data, vars = NULL, measure = c("sum", "all", "min-max")) {
+calculate_measures <- function(data,
+                               vars = NULL,
+                               measure = c("sum", "all", "min-max")) {
   measure <- match.arg(measure)
 
   if (measure == "all") {

@@ -37,16 +37,30 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     dplyr::select(-.data$cij_inpatient) %>%
     # cij_admtype recode unknown to 99
-    dplyr::mutate(cij_admtype = dplyr::if_else(.data$cij_admtype == "Unknown", "99", .data$cij_admtype)) %>%
+    dplyr::mutate(
+      cij_admtype = dplyr::if_else(
+        .data$cij_admtype == "Unknown",
+        "99",
+        .data$cij_admtype
+      )
+    ) %>%
     # monthly beddays and costs
-    convert_monthly_rows_to_vars(.data$costmonthnum, .data$cost_total_net, .data$yearstay) %>%
+    convert_monthly_rows_to_vars(
+      .data$costmonthnum,
+      .data$cost_total_net,
+      .data$yearstay
+    ) %>%
     dplyr::mutate(
       # yearstay
       yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
       # cost total net
       cost_total_net = rowSums(dplyr::across(tidyselect::ends_with("_cost"))),
       # total length of stay
-      stay = calculate_stay(.data$year, .data$record_keydate1, .data$record_keydate2),
+      stay = calculate_stay(
+        .data$year,
+        .data$record_keydate1,
+        .data$record_keydate2
+      ),
       # SMR type
       smrtype = add_smr_type(.data$recid)
     )

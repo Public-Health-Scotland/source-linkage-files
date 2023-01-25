@@ -1,6 +1,7 @@
 #' Convert Monthly Rows to Variables
 #'
-#' @description Creates data with monthly cost and beddays variables using assigned cost vector
+#' @description Creates data with monthly cost and beddays variables using
+#' assigned cost vector.
 #'
 #' @param data a dataframe containing cost and bed day variables
 #' @param month_num_var a variable containing month number e.g. `cost_month_num`
@@ -9,7 +10,10 @@
 #'
 #' @return A dataframe with monthly cost and bed day variables
 #'
-convert_monthly_rows_to_vars <- function(data, month_num_var, cost_var, beddays_var) {
+convert_monthly_rows_to_vars <- function(data,
+                                         month_num_var,
+                                         cost_var,
+                                         beddays_var) {
   month_order <- tolower(month.abb[c(4L:12L, 1L:3L)])
 
   data %>%

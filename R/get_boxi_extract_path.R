@@ -47,8 +47,14 @@ get_boxi_extract_path <-
       type == "Homelessness" ~ "Homelessness-extract"
     )
 
-    boxi_extract_path_csv_gz <- fs::path(year_dir, glue::glue("{file_name}-20{year}.csv.gz"))
-    boxi_extract_path_csv <- fs::path(year_dir, glue::glue("{file_name}-20{year}.csv"))
+    boxi_extract_path_csv_gz <- fs::path(
+      year_dir,
+      glue::glue("{file_name}-20{year}.csv.gz")
+    )
+    boxi_extract_path_csv <- fs::path(
+      year_dir,
+      glue::glue("{file_name}-20{year}.csv")
+    )
 
     # If the csv.gz file doesn't exist look for the unzipped csv.
     if (fs::file_exists(boxi_extract_path_csv_gz)) {

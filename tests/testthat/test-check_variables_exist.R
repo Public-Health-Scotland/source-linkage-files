@@ -1,7 +1,13 @@
 test_that("check_variables_exist accepts proper input", {
-  expect_true(check_variables_exist(tibble(a = 1L:3L), "a"))
-  expect_true(check_variables_exist(tibble(a = 1L:26L, b = letters), "a"))
-  expect_true(check_variables_exist(tibble(a = 1L:26L, b = letters), c("a", "b")))
+  expect_true(
+    check_variables_exist(tibble(a = 1L:3L), "a")
+  )
+  expect_true(
+    check_variables_exist(tibble(a = 1L:26L, b = letters), "a")
+  )
+  expect_true(
+    check_variables_exist(tibble(a = 1L:26L, b = letters), c("a", "b"))
+  )
 
   expect_error(
     check_variables_exist(tibble(a = 1L:26L, b = letters), a),

@@ -13,7 +13,9 @@
 #' @export
 #' @family process extracts
 
-process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE) {
+process_extract_delayed_discharges <- function(data,
+                                               year,
+                                               write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -23,15 +25,33 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
   # Data Cleaning---------------------------------------
 
   # Specify MH specialties for dealing with correct DD dates
-  mh_spec <- c("CC", "G1", "G2", "G21", "G22", "G3", "G4", "G5", "G6", "G61", "G62", "G63")
+  mh_spec <- c(
+    "CC",
+    "G1",
+    "G2",
+    "G21",
+    "G22",
+    "G3",
+    "G4",
+    "G5",
+    "G6",
+    "G61",
+    "G62",
+    "G63"
+  )
 
   dd_clean <- data %>%
     # Use end of the month date for records with no end date (but we think have ended)
     # Create a flag for these records
     dplyr::mutate(
-      month_end = lubridate::ceiling_date(.data$keydate1_dateformat, "month") - 1L,
-      keydate2_dateformat = dplyr::if_else(.data$keydate2_dateformat == as.Date("1900-01-01"),
-        .data$month_end, .data$keydate2_dateformat
+      month_end = lubridate::ceiling_date(
+        .data$keydate1_dateformat,
+        "month"
+      ) - 1L,
+      keydate2_dateformat = dplyr::if_else(
+        .data$keydate2_dateformat == as.Date("1900-01-01"),
+        .data$month_end,
+        .data$keydate2_dateformat
       )
     ) %>%
     # Drop any records with obviously bad dates
@@ -50,7 +70,11 @@ process_extract_delayed_discharges <- function(data, year, write_to_disk = TRUE)
     # create flags for no_end_date and correct_dates
     dplyr::mutate(
       # Flag records with correct date
-      dates_in_fyyear = is_date_in_fyyear(year, .data$keydate1_dateformat, .data$keydate2_dateformat),
+      dates_in_fyyear = is_date_in_fyyear(
+        year,
+        .data$keydate1_dateformat,
+        .data$keydate2_dateformat
+      ),
       # Flag records with no end date
       not_mh_spec = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec)
     ) %>%

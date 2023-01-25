@@ -53,14 +53,18 @@ get_file_path <-
           selection_method = selection_method
         )
       } else {
-        cli::cli_abort(c("{.arg check_mode = \"{check_mode}\"} can't be used to
+        cli::cli_abort(
+          c("{.arg check_mode = \"{check_mode}\"} can't be used to
 find the latest file with {.arg file_name_regexp}",
-          "v" = "Try {.arg check_mode = \"read\"}"
-        ))
+            "v" = "Try {.arg check_mode = \"read\"}"
+          )
+        )
       }
     } else {
-      cli::cli_abort("You must specify a {.var file_name} or a regular expression
-                     to search for with {.var file_name_regexp}")
+      cli::cli_abort(
+        "You must specify a {.var file_name} or a regular expression
+                     to search for with {.var file_name_regexp}"
+      )
     }
 
     if (!is.null(ext)) {
@@ -96,7 +100,9 @@ find the latest file with {.arg file_name_regexp}",
     }
 
     if (!fs::file_access(file_path, mode = check_mode)) {
-      cli::cli_abort("{.file {fs::path_file(file_path)}} exists in {.path {directory}} but is not {check_mode}able.")
+      cli::cli_abort(
+        "{.file {fs::path_file(file_path)}} exists in {.path {directory}} but is not {check_mode}able."
+      )
     }
 
     return(file_path)
@@ -132,11 +138,19 @@ get_slf_dir <- function() {
 #'
 #' @family directories
 get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates", year)
+  year_dir <- fs::path(
+    "/",
+    "conf",
+    "sourcedev",
+    "Source_Linkage_File_Updates",
+    year
+  )
 
   if (!fs::dir_exists(year_dir)) {
     fs::dir_create(year_dir)
-    cli::cli_alert_info("{.path {year_dir}} did not exist, it has now been created.")
+    cli::cli_alert_info(
+      "{.path {year_dir}} did not exist, it has now been created."
+    )
   }
 
   if (extracts_dir) {
@@ -144,7 +158,9 @@ get_year_dir <- function(year, extracts_dir = FALSE) {
 
     if (!fs::dir_exists(year_extracts_dir)) {
       fs::dir_create(year_extracts_dir)
-      cli::cli_alert_info("{.path {year_extracts_dir}} did not exist, it has now been created.")
+      cli::cli_alert_info(
+        "{.path {year_extracts_dir}} did not exist, it has now been created."
+      )
     }
 
     return(year_extracts_dir)

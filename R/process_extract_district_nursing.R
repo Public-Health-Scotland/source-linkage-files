@@ -48,7 +48,9 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
       by = c("hbtreatcode", "year")
     ) %>%
     # costs are rough estimates we round them to the nearest pound
-    dplyr::mutate(cost_total_net = janitor::round_half_up(.data$cost_total_net)) %>%
+    dplyr::mutate(
+      cost_total_net = janitor::round_half_up(.data$cost_total_net)
+    ) %>%
     # Create monthly cost vars
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
 
@@ -58,10 +60,16 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   care_marker <- dn_costs %>%
     dplyr::group_by(.data$chi) %>%
     dplyr::arrange(.data$record_keydate1, .by_group = TRUE) %>%
-    # Create ccm (Contiuous Care Marker) which will group contacts which occur less
+    # Create ccm (Continuous Care Marker) which will group contacts which occur less
     # than 7 days apart
-    dplyr::mutate(ccm = pmax((.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L, FALSE, na.rm = TRUE) %>%
-      cumsum())
+    dplyr::mutate(
+      ccm = pmax(
+        (.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L,
+        FALSE,
+        na.rm = TRUE
+      ) %>%
+        cumsum()
+    )
 
   dn_episodes <- care_marker %>%
     dplyr::group_by(.data$year, .data$chi, .data$ccm) %>%
