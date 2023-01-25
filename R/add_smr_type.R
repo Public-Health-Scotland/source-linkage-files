@@ -47,62 +47,82 @@ add_smr_type <- function(recid,
 
   # Situation where some recids are missing
   if (anyNA(recid)) {
-    cli::cli_abort("One or more values of {.var recid} are {.val NA}. Please check
-                   the data before continuing.")
+    cli::cli_abort(
+      "One or more values of {.var recid} are {.val NA}. Please check
+                   the data before continuing."
+    )
   }
 
   # Situation where maternity records are present without a corresponding mpat
   if (all(recid == "02B") & anyNA(mpat)) {
-    cli::cli_abort("In Maternity records, {.var mpat} is required to assign an smrtype,
-                    and there are some {.val NA} values. Please check the data.")
+    cli::cli_abort(
+      "In Maternity records, {.var mpat} is required to assign an smrtype,
+                    and there are some {.val NA} values. Please check the data."
+    )
   }
 
   # Situation where acute records are present without a corresponding ipdc
   if (all(recid %in% c("01B", "GLS")) & anyNA(ipdc)) {
-    cli::cli_abort("In Acute records, {.var ipdc} is required to assign an smrtype,
-                    and there are some {.val NA} values. Please check the data.")
+    cli::cli_abort(
+      "In Acute records, {.var ipdc} is required to assign an smrtype,
+                    and there are some {.val NA} values. Please check the data."
+    )
   }
 
   # Situation where Home Care records are present without a corresponding hc_service
   if (all(recid == "HC") & anyNA(hc_service)) {
-    cli::cli_abort("In Home Care records, {.var hc_service} is required to assign an smrtype,
-                    and there are some {.val NA} values. Please check the data.")
+    cli::cli_abort(
+      "In Home Care records, {.var hc_service} is required to assign an smrtype,
+                    and there are some {.val NA} values. Please check the data."
+    )
   }
 
   # Situation where Homelessness records are present without a corresponding main_applicant_flag
   if (all(recid == "HL1") & anyNA(main_applicant_flag)) {
-    cli::cli_abort("In Homelessness records, {.var main_applicant_flag} is required to assign an smrtype,
-                    and there are some {.val NA} values. Please check the data.")
+    cli::cli_abort(
+      "In Homelessness records, {.var main_applicant_flag} is required to assign an smrtype,
+                    and there are some {.val NA} values. Please check the data."
+    )
   }
 
   # Situation where there are no recid values
   if (all(is.na(recid))) {
-    cli::cli_abort("Cannot assign {.var smrtype} when all {.var recid} are {.val NA},
-                   please check the data")
+    cli::cli_abort(
+      "Cannot assign {.var smrtype} when all {.var recid} are {.val NA},
+                   please check the data"
+    )
   }
 
   # Situation where a maternity recid is given but no mpat marker
   if (all(recid == "02B") & missing(mpat)) {
-    cli::cli_abort("An {.var mpat} vector has not been supplied, and therefore Maternity
-                   records cannot be given an {.var smrtype}")
+    cli::cli_abort(
+      "An {.var mpat} vector has not been supplied, and therefore Maternity
+                   records cannot be given an {.var smrtype}"
+    )
   }
 
   # Situation where an Acute/GLS recid is given but no ipdc marker
   if (any(recid %in% c("01B", "GLS")) & missing(ipdc)) {
-    cli::cli_abort("An {.var ipdc} vector has not been supplied, and therefore Acute/GLS
-                   records cannot be given an {.var smrtype}")
+    cli::cli_abort(
+      "An {.var ipdc} vector has not been supplied, and therefore Acute/GLS
+                   records cannot be given an {.var smrtype}"
+    )
   }
 
   # Situation where a Home Care recid is given but no hc_service marker
   if (any(recid == "HC") & missing(hc_service)) {
-    cli::cli_abort("An {.var hc_service} vector has not been supplied, and therefore Home Care
-                   records cannot be given an {.var smrtype}")
+    cli::cli_abort(
+      "An {.var hc_service} vector has not been supplied, and therefore Home Care
+                   records cannot be given an {.var smrtype}"
+    )
   }
 
   # Situation where a Homelessness recid is given but no main_applicant_flag marker
   if (any(recid == "HL1") & missing(main_applicant_flag)) {
-    cli::cli_abort("A {.var main_applicant_flag} vector has not been supplied, and therefore
-                   Homelessness records cannot be given an {.var smrtype}")
+    cli::cli_abort(
+      "A {.var main_applicant_flag} vector has not been supplied, and therefore
+                   Homelessness records cannot be given an {.var smrtype}"
+    )
   }
 
   if (all(recid == "02B")) {
@@ -159,7 +179,9 @@ add_smr_type <- function(recid,
   }
 
   if (anyNA(smrtype)) {
-    cli::cli_warn("Some {.var smrtype}s were not properly set by {.fun add_smr_type}.")
+    cli::cli_warn(
+      "Some {.var smrtype}s were not properly set by {.fun add_smr_type}."
+    )
   }
 
   # Return a vector

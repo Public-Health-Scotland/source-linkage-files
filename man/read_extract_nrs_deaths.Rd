@@ -4,10 +4,15 @@
 \alias{read_extract_nrs_deaths}
 \title{Read NRS Deaths extract}
 \usage{
-read_extract_nrs_deaths(year)
+read_extract_nrs_deaths(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "Deaths")
+)
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.

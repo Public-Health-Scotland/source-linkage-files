@@ -5,25 +5,49 @@ test_that("Can return correct length of stay", {
   # if start and end dates are both supplied, calculate length of stay
 
   # Start before FY, end during FY
-  expect_equal(calculate_stay("1920", as.Date("2019/03/31"), as.Date("2019/10/31")), 214L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/03/31"), as.Date("2019/10/31")),
+    214L
+  )
   # Start during FY, end during FY
-  expect_equal(calculate_stay("1920", as.Date("2019/06/30"), as.Date("2019/08/31")), 62L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/06/30"), as.Date("2019/08/31")),
+    62L
+  )
   # Start before FY, end after FY
-  expect_equal(calculate_stay("1920", as.Date("2019/01/01"), as.Date("2020/04/01")), 456L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/01/01"), as.Date("2020/04/01")),
+    456L
+  )
   # Start during FY, end after FY
-  expect_equal(calculate_stay("1920", as.Date("2019/04/01"), as.Date("2020/07/01")), 457L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/04/01"), as.Date("2020/07/01")),
+    457L
+  )
 
   # Normal calculation - no sc_qtr supplied
   # if start date supplied but end date missing, use dummy date (end_FY + 1) to calculate length of stay
 
   # Start before FY, end missing
-  expect_equal(calculate_stay("1920", as.Date("2019/03/31"), lubridate::NA_Date_), 367L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/03/31"), lubridate::NA_Date_),
+    367L
+  )
   # Start during FY, end missing
-  expect_equal(calculate_stay("1920", as.Date("2019/06/30"), lubridate::NA_Date_), 276L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/06/30"), lubridate::NA_Date_),
+    276L
+  )
   # Start before FY, end missing
-  expect_equal(calculate_stay("1920", as.Date("2019/01/01"), lubridate::NA_Date_), 456L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/01/01"), lubridate::NA_Date_),
+    456L
+  )
   # Start during FY, end missing
-  expect_equal(calculate_stay("1920", as.Date("2019/04/01"), lubridate::NA_Date_), 366L)
+  expect_equal(
+    calculate_stay("1920", as.Date("2019/04/01"), lubridate::NA_Date_),
+    366L
+  )
 
 
   # SC calculation - sc_qtr supplied
@@ -216,7 +240,8 @@ test_that("Can calculate the correct stay for vectors of dates", {
     c(62L, 62L, 61L, 62L)
   )
 
-  # SC calculation - if sc_qtr is supplied but end_date is not missing use end_date
+  # SC calculation
+  # If sc_qtr is supplied but end_date is not missing use end_date
   # Start before FY, end during FY
   expect_equal(
     calculate_stay(

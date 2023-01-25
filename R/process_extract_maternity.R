@@ -35,13 +35,19 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     )) %>%
     # Recode GP practice into 5 digit number
     # We assume that if it starts with a letter it's an English practice and so recode to 99995.
-    dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
+    dplyr::mutate(
+      gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)
+    ) %>%
     # Calculate the total length of stay (for the entire episode, not just within the financial year).
     dplyr::mutate(
       stay = calculate_stay(year, .data$record_keydate1, .data$record_keydate2)
     ) %>%
     # Calculate beddays
-    create_monthly_beddays(year, .data$record_keydate1, .data$record_keydate2) %>%
+    create_monthly_beddays(
+      year,
+      .data$record_keydate1,
+      .data$record_keydate2
+    ) %>%
     # Calculate costs
     create_monthly_costs() %>%
     # Add discondition as a factor
@@ -102,7 +108,9 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, "Maternity", check_mode = "write"))
+      write_rds(
+        get_source_extract_path(year, "Maternity", check_mode = "write")
+      )
   }
 
   return(outfile)

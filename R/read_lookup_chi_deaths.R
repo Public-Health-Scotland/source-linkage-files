@@ -4,14 +4,15 @@
 #' CHI deaths lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
+#' @param file_path Path to CHI Deaths file
+#'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 
-read_lookup_chi_deaths <- function() {
+read_lookup_chi_deaths <- function(file_path = get_it_deaths_path()) {
   # Read data -------------------------------------------------------
-  deaths_data <- readr::read_csv(
-    file = get_it_deaths_path(),
+  deaths_data <- readr::read_csv(file_path,
     col_type = cols(
       "PATIENT_UPI [C]" = col_character(),
       "PATIENT DoD DATE (NRS)" = col_date(format = "%d-%m-%Y"),

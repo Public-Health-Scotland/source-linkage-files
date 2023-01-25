@@ -86,7 +86,9 @@ get_simd_path <- function(file_name = NULL, ext = "rds") {
     directory = simd_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = glue::glue("postcode_\\d\\d\\d\\d_\\d_simd\\d\\d\\d\\d.*?\\.{ext}")
+    file_name_regexp = glue::glue(
+      "postcode_\\d\\d\\d\\d_\\d_simd\\d\\d\\d\\d.*?\\.{ext}"
+    )
   )
 
   return(simd_path)

@@ -4,12 +4,14 @@
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_sc_sds_episodes_path()])
-#' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
+#' @param max_min_vars variables used when selecting 'min-max'
+#' from [calculate_measures()]
 #' @return a dataframe with a count of each flag.
 #'
 #' @export
 #' @family social care test functions
-produce_source_sds_tests <- function(data, max_min_vars = c("record_keydate1", "record_keydate2")) {
+produce_source_sds_tests <- function(data,
+                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
     # create test flags
     create_demog_test_flags() %>%

@@ -3,11 +3,10 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-read_extract_cmh <- function(year) {
-  extract_cmh_path <- get_boxi_extract_path(year = year, type = "CMH")
-
+#'
+read_extract_cmh <- function(year, file_path = get_boxi_extract_path(year = year, type = "CMH")) {
   # Read BOXI extract
-  extract_cmh <- readr::read_csv(extract_cmh_path,
+  extract_cmh <- readr::read_csv(file_path,
     col_types = cols_only(
       "UPI Number [C]" = col_character(),
       "Patient DoB Date [C]" = col_date(format = "%Y/%m/%d %T"),

@@ -13,7 +13,9 @@ process_costs_rmd <- function(file_name) {
     fs::path_ext(file_name),
     stringr::fixed("Rmd", ignore_case = TRUE)
   )) {
-    cli::cli_abort("{.arg file_name} must be an {.code .Rmd} not a {.code .{fs::path_ext(file_name)}}.")
+    cli::cli_abort(
+      "{.arg file_name} must be an {.code .Rmd} not a {.code .{fs::path_ext(file_name)}}."
+    )
   }
 
   input_dir <- "Rmarkdown"

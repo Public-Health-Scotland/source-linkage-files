@@ -48,28 +48,49 @@ test_that("is_date_in_fyyear works for a single year", {
 })
 
 test_that("is_date_in_fyyear works for a year range (interval)", {
-  expect_type(is_date_in_fyyear("1718", Sys.Date(), Sys.Date() + 1L), "logical")
+  expect_type(
+    is_date_in_fyyear("1718", Sys.Date(), Sys.Date() + 1L),
+    "logical"
+  )
 
   # Start before, end before
-  expect_false(is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2017-03-31")))
+  expect_false(
+    is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2017-03-31"))
+  )
   # Start before, end during
-  expect_true(is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2018-01-01")))
+  expect_true(
+    is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2018-01-01"))
+  )
   # Start before, end after
-  expect_true(is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2019-01-01")))
+  expect_true(
+    is_date_in_fyyear("1718", as.Date("2017-01-01"), as.Date("2019-01-01"))
+  )
   # Start before, missing end date
-  expect_true(is_date_in_fyyear("1718", as.Date("2017-01-01"), lubridate::NA_Date_))
+  expect_true(
+    is_date_in_fyyear("1718", as.Date("2017-01-01"), lubridate::NA_Date_)
+  )
 
   # Start during, end during
-  expect_true(is_date_in_fyyear("1718", as.Date("2017-04-01"), as.Date("2018-01-01")))
+  expect_true(
+    is_date_in_fyyear("1718", as.Date("2017-04-01"), as.Date("2018-01-01"))
+  )
   # Start during, end after
-  expect_true(is_date_in_fyyear("1718", as.Date("2017-04-01"), as.Date("2019-01-01")))
+  expect_true(
+    is_date_in_fyyear("1718", as.Date("2017-04-01"), as.Date("2019-01-01"))
+  )
   # Start during, missing end date
-  expect_true(is_date_in_fyyear("1718", as.Date("2017-04-01"), lubridate::NA_Date_))
+  expect_true(
+    is_date_in_fyyear("1718", as.Date("2017-04-01"), lubridate::NA_Date_)
+  )
 
   # Start after, end after
-  expect_false(is_date_in_fyyear("1718", as.Date("2018-04-01"), as.Date("2019-01-01")))
+  expect_false(
+    is_date_in_fyyear("1718", as.Date("2018-04-01"), as.Date("2019-01-01"))
+  )
   # Start after, missing end date
-  expect_false(is_date_in_fyyear("1718", as.Date("2018-04-01"), lubridate::NA_Date_))
+  expect_false(
+    is_date_in_fyyear("1718", as.Date("2018-04-01"), lubridate::NA_Date_)
+  )
 
   expect_identical(
     is_date_in_fyyear(

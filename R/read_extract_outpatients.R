@@ -3,11 +3,11 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-read_extract_outpatients <- function(year) {
-  extract_outpatients_path <- get_boxi_extract_path(year = year, type = "Outpatient")
-
+read_extract_outpatients <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "Outpatient")) {
   # Read BOXI extract
-  extract_outpatients <- readr::read_csv(extract_outpatients_path,
+  extract_outpatients <- readr::read_csv(file_path,
     col_type = cols(
       "Clinic Date Fin Year" = col_double(),
       "Clinic Date (00)" = col_date(format = "%Y/%m/%d %T"),

@@ -14,8 +14,16 @@ produce_sc_demog_lookup_tests <- function(data) {
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
-      n_missing_sending_loc = dplyr::if_else(is_missing(.data$sending_location), 1L, 0L),
-      n_missing_sc_id = dplyr::if_else(is_missing(.data$social_care_id), 1L, 0L)
+      n_missing_sending_loc = dplyr::if_else(
+        is_missing(.data$sending_location),
+        1L,
+        0L
+      ),
+      n_missing_sc_id = dplyr::if_else(
+        is_missing(.data$social_care_id),
+        1L,
+        0L
+      )
     ) %>%
     # remove variables that won't be summed
     dplyr::select(
