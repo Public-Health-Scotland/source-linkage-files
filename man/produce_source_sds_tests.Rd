@@ -13,7 +13,8 @@ produce_source_sds_tests(
 \item{data}{new or old data for testing summary flags
 (data is from \code{\link[=get_sc_sds_episodes_path]{get_sc_sds_episodes_path()}})}
 
-\item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
+\item{max_min_vars}{variables used when selecting 'min-max'
+from \code{\link[=calculate_measures]{calculate_measures()}}}
 }
 \value{
 a dataframe with a count of each flag.

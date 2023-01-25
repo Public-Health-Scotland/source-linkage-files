@@ -22,7 +22,10 @@ get_existing_data_for_tests <- function(new_data) {
     dplyr::pull(.data$recid) %>%
     unique()
 
-  variable_names <- c("anon_chi", dplyr::intersect(slfhelper::ep_file_vars, names(new_data)))
+  variable_names <- c(
+    "anon_chi",
+    dplyr::intersect(slfhelper::ep_file_vars, names(new_data))
+  )
 
   slf_data <- suppressMessages(slfhelper::read_slf_episode(
     year = year,
@@ -30,7 +33,10 @@ get_existing_data_for_tests <- function(new_data) {
     columns = variable_names
   )) %>%
     # Convert anon_chi back to CHI
-    dplyr::mutate(chi = convert_anon_chi_to_chi(.data[["anon_chi"]]), .after = "anon_chi") %>%
+    dplyr::mutate(
+      chi = convert_anon_chi_to_chi(.data[["anon_chi"]]),
+      .after = "anon_chi"
+    ) %>%
     dplyr::select(-"anon_chi")
 
   return(slf_data)

@@ -17,7 +17,8 @@ create_hb_cost_test_flags(data, hb_var, cost_var)
 a dataframe with flag (1 or 0) for each Health Board
 }
 \description{
-Create flags for each NHS Health Board with cost assigned if present in that record
+Create flags for each NHS Health Board with cost assigned
+if present in that record.
 }
 \seealso{
 Other flag functions: 

@@ -13,7 +13,8 @@ is_missing(x)
 a logical vector indicating if each value is missing
 }
 \description{
-Checks within a vector if there are any missing (NA) or blank characters
+Checks within a vector if there are any missing (NA)
+or blank characters
 }
 \examples{
 x <- c("string", " ", NA)

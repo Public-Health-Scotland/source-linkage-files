@@ -62,9 +62,15 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   # Formatting --------------------------------------------------------------
 
   # Get the column numbers
-  pct_change_col <- which(names(comparison_data) == "pct_change")
-  issue_col <- which(names(comparison_data) == "issue")
-  numeric_cols <- which(names(comparison_data) %in% c("value_old", "value_new", "diff"))
+  pct_change_col <- which(
+    names(comparison_data) == "pct_change"
+  )
+  issue_col <- which(
+    names(comparison_data) == "issue"
+  )
+  numeric_cols <- which(
+    names(comparison_data) %in% c("value_old", "value_new", "diff")
+  )
 
   # Format the pct_chnange column as a percentage
   openxlsx::addStyle(

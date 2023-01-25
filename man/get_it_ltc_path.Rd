@@ -7,7 +7,8 @@
 get_it_ltc_path(it_reference = NULL, ...)
 }
 \arguments{
-\item{it_reference}{Optional argument for the seven-digit code in the IT extract file name}
+\item{it_reference}{Optional argument for the seven-digit code in the
+IT extract file name}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }

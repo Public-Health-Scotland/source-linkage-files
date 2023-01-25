@@ -1,23 +1,77 @@
 # Single character input
 test_that("SMR type works for single input", {
-  expect_equal(add_smr_type(recid = "02B", mpat = "0"), "Matern-HB")
-  expect_equal(add_smr_type(recid = "02B", mpat = "1"), "Matern-IP")
-  expect_equal(add_smr_type(recid = "02B", mpat = "4"), "Matern-DC")
-  expect_equal(add_smr_type(recid = "04B"), "Psych-IP")
-  expect_equal(add_smr_type(recid = "00B"), "Outpatient")
-  expect_equal(add_smr_type(recid = "AE2"), "A & E")
-  expect_equal(add_smr_type(recid = "PIS"), "PIS")
-  expect_equal(add_smr_type(recid = "NRS"), "NRS Deaths")
-  expect_equal(add_smr_type(recid = "CMH"), "Comm-MH")
-  expect_equal(add_smr_type(recid = "DN"), "DN")
-  expect_equal(add_smr_type(recid = "01B", ipdc = "I"), "Acute-IP")
-  expect_equal(add_smr_type(recid = "01B", ipdc = "D"), "Acute-DC")
-  expect_equal(add_smr_type(recid = "GLS", ipdc = "I"), "GLS-IP")
-  expect_equal(add_smr_type(recid = "HC", hc_service = 1L), "HC-Non-Per")
-  expect_equal(add_smr_type(recid = "HC", hc_service = 2L), "HC-Per")
-  expect_equal(add_smr_type(recid = "HC", hc_service = 3L), "HC-Unknown")
-  expect_equal(add_smr_type(recid = "HL1", main_applicant_flag = "Y"), "HL1-Main")
-  expect_equal(add_smr_type(recid = "HL1", main_applicant_flag = "N"), "HL1-Other")
+  expect_equal(
+    add_smr_type(recid = "02B", mpat = "0"),
+    "Matern-HB"
+  )
+  expect_equal(
+    add_smr_type(recid = "02B", mpat = "1"),
+    "Matern-IP"
+  )
+  expect_equal(
+    add_smr_type(recid = "02B", mpat = "4"),
+    "Matern-DC"
+  )
+  expect_equal(
+    add_smr_type(recid = "04B"),
+    "Psych-IP"
+  )
+  expect_equal(
+    add_smr_type(recid = "00B"),
+    "Outpatient"
+  )
+  expect_equal(
+    add_smr_type(recid = "AE2"),
+    "A & E"
+  )
+  expect_equal(
+    add_smr_type(recid = "PIS"),
+    "PIS"
+  )
+  expect_equal(
+    add_smr_type(recid = "NRS"),
+    "NRS Deaths"
+  )
+  expect_equal(
+    add_smr_type(recid = "CMH"),
+    "Comm-MH"
+  )
+  expect_equal(
+    add_smr_type(recid = "DN"),
+    "DN"
+  )
+  expect_equal(
+    add_smr_type(recid = "01B", ipdc = "I"),
+    "Acute-IP"
+  )
+  expect_equal(
+    add_smr_type(recid = "01B", ipdc = "D"),
+    "Acute-DC"
+  )
+  expect_equal(
+    add_smr_type(recid = "GLS", ipdc = "I"),
+    "GLS-IP"
+  )
+  expect_equal(
+    add_smr_type(recid = "HC", hc_service = 1L),
+    "HC-Non-Per"
+  )
+  expect_equal(
+    add_smr_type(recid = "HC", hc_service = 2L),
+    "HC-Per"
+  )
+  expect_equal(
+    add_smr_type(recid = "HC", hc_service = 3L),
+    "HC-Unknown"
+  )
+  expect_equal(
+    add_smr_type(recid = "HL1", main_applicant_flag = "Y"),
+    "HL1-Main"
+  )
+  expect_equal(
+    add_smr_type(recid = "HL1", main_applicant_flag = "N"),
+    "HL1-Other"
+  )
 })
 
 # Vector input

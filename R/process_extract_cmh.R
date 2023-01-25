@@ -12,7 +12,9 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_cmh <- function(data, year, write_to_disk = TRUE) {
+process_extract_cmh <- function(data,
+                                year,
+                                write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -29,7 +31,9 @@ process_extract_cmh <- function(data, year, write_to_disk = TRUE) {
       year = year
     ) %>%
     # contact end time
-    dplyr::mutate(keyTime2 = hms::as.hms(.data$keyTime1 + lubridate::dminutes(.data$duration))) %>%
+    dplyr::mutate(keyTime2 = hms::as.hms(
+      .data$keyTime1 + lubridate::dminutes(.data$duration)
+    )) %>%
     # record key date 2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
     # create blank diag 6
