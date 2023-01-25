@@ -5,9 +5,13 @@
 #' @return a [tibble][tibble::tibble-package]
 #' @export
 #'
-read_lookup_sc_demographics <- function(file_path = dplyr::tbl(phs_db_connection(dsn = "DVPROD"),
-                                                               dbplyr::in_schema("social_care_2",
-                                                                                 "demographic_snapshot"))) {
+read_lookup_sc_demographics <- function(file_path = dplyr::tbl(
+                                          phs_db_connection(dsn = "DVPROD"),
+                                          dbplyr::in_schema(
+                                            "social_care_2",
+                                            "demographic_snapshot"
+                                          )
+                                        )) {
   # Read in data---------------------------------------
 
   # read in data - social care 2 demographic

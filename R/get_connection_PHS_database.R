@@ -31,7 +31,7 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
     dsn = dsn,
     uid = username,
     pwd = keyring::key_get(service = "db_password")
-    #pwd = rstudioapi::askForPassword(password_text)
+    # pwd = rstudioapi::askForPassword(password_text)
   )
 
   return(db_connection)
