@@ -35,9 +35,11 @@ process_extract_sds <- function(data = NULL, year, client_lookup = NULL, write_t
   # Now select epsiodes for given FY
 
   outfile <- data %>%
-    dplyr::filter(is_date_in_fyyear(year,
-                                    .data$record_keydate1,
-                                    .data$record_keydate2)) %>%
+    dplyr::filter(is_date_in_fyyear(
+      year,
+      .data$record_keydate1,
+      .data$record_keydate2
+    )) %>%
     dplyr::left_join(client_table, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(
       year = year
