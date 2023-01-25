@@ -1,16 +1,17 @@
 #' Read SC demographics
 #'
+#' @param file_path Path to sc platform.
+#'
 #' @return a [tibble][tibble::tibble-package]
 #' @export
 #'
-read_lookup_sc_demographics <- function() {
+read_lookup_sc_demographics <- function(file_path = dplyr::tbl(phs_db_connection(dsn = "DVPROD"),
+                                                               dbplyr::in_schema("social_care_2",
+                                                                                 "demographic_snapshot"))) {
   # Read in data---------------------------------------
 
-  # set-up conection to platform
-  db_connection <- phs_db_connection(dsn = "DVPROD")
-
   # read in data - social care 2 demographic
-  sc_demog <- dplyr::tbl(db_connection, dbplyr::in_schema("social_care_2", "demographic_snapshot")) %>%
+  sc_demog <- file_path %>%
     dplyr::select(
       "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi",
       "chi_upi", "submitted_postcode", "chi_postcode", "submitted_date_of_birth",
