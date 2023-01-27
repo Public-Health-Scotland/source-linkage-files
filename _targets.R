@@ -16,12 +16,12 @@ tar_option_set(
 
 list(
   tar_target(write_to_disk, FALSE),
-  tar_target(sc_connection, phs_db_connection(dsn = "DVPROD")),
-  tar_target(sc_demog_data, dplyr::tbl(sc_connection,
-                                       dbplyr::in_schema("social_care_2", "demographic_snapshot"))),
-  tar_target(sc_demog_lookup, process_lookup_sc_demographics(read_lookup_sc_demographics(sc_demog_data), write_to_disk = write_to_disk)),
+  # tar_target(sc_connection, phs_db_connection(dsn = "DVPROD")),
+  # tar_target(sc_demog_data, dplyr::tbl(sc_connection,
+  #                                      dbplyr::in_schema("social_care_2", "demographic_snapshot"))),
+  # tar_target(sc_demog_lookup, process_lookup_sc_demographics(read_lookup_sc_demographics(sc_demog_data), write_to_disk = write_to_disk)),
  # ALL WORKING - Commented for faster running
-   # tar_target(spd_data, get_spd_path(), format = "file"),
+  # tar_target(spd_data, get_spd_path(), format = "file"),
   # tar_target(source_pc_lookup, process_lookup_postcode(spd_data, write_to_disk = write_to_disk)),
   # tar_target(gpprac_data, phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes", max_resources = 20L), format = "file"),
   # tar_target(source_gp_lookup, process_lookup_gpprac(gpprac_data, write_to_disk = write_to_disk)),
@@ -54,15 +54,21 @@ list(
     #                                                                                 outcomes_data,
     #                                                                                 consultations_data),
     #                                                       write_to_disk = write_to_disk))
+
+
   )
 )
 
 
 # Read year dependent extracts
 # tar_target(cmh_data, get_boxi_extract_path(year, type = "CMH")),
-# tar_target(dd_data, get_dd_path(ext = "zsav"))
-# tar_target(dn_data, get_boxi_extract_path(year, type = "DN"))
-# tar_target(homelessness_data, get_boxi_extract_path(year, type = "Homelessness"))
+# tar_target(source_cmh_extract, process_extract_cmh(read_extract_cmh(year, cmh_data), year, write_to_disk = write_to_disk),
+# tar_target(dd_data, get_dd_path(ext = "zsav")),
+# tar_target(source_dd_extract, process_extract_delayed_discharges(read_extract_delayed_discharges(year, dd_data), year, write_to_disk = write_to_disk),
+# tar_target(dn_data, get_boxi_extract_path(year, type = "DN")),
+# tar_target(source_dn_extract, process_extract_district_nursing(read_extract_district_nursing(year, dn_data), year, write_to_disk = write_to_disk),
+# tar_target(homelessness_data, get_boxi_extract_path(year, type = "Homelessness")),
+# tar_target(source_homelessness_extract, process_extract_homelessness(read_extract_homelessness(year, homelessness_data), year, write_to_disk = write_to_disk)
 
 
 # # Lookups
