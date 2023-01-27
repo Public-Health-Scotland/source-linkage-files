@@ -24,7 +24,6 @@ process_extract_delayed_discharges <- function(data,
 
   # Specify years available for running
   if (year >= 1617) {
-
     # Data Cleaning---------------------------------------
 
     # Specify MH specialties for dealing with correct DD dates
