@@ -1,16 +1,13 @@
 #' Read GP OOH Diagnosis extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Diagnosis extract data
-read_extract_ooh_diagnosis <- function(year) {
-  extract_diagnosis_path <- get_boxi_extract_path(
-    year = year,
-    type = "GP_OoH-d"
-  )
+#'
+read_extract_ooh_diagnosis <- function(year, file_path = get_boxi_extract_path(year = year, type = "GP_OoH-d")) {
 
   # Load extract file
-  diagnosis_extract <- readr::read_csv(extract_diagnosis_path,
+  diagnosis_extract <- readr::read_csv(file_path,
     # All columns are character type
     col_types = readr::cols(.default = readr::col_character())
   ) %>%

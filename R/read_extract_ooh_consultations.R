@@ -1,17 +1,12 @@
 #' Read GP OOH Consultations extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Consultations extract data
-read_extract_ooh_consultations <- function(year) {
-  extract_consultations_path <- get_boxi_extract_path(
-    year = year,
-    type = "GP_OoH-c"
-  )
+read_extract_ooh_consultations <- function(year, file_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")) {
 
   # Read consultations data
-  consultations_extract <- readr::read_csv(
-    extract_consultations_path,
+  consultations_extract <- readr::read_csv(file_path,
     col_types = readr::cols(
       "Patient DoB Date [C]" = readr::col_date(
         format = "%Y/%m/%d %T"
