@@ -24,7 +24,6 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   if (is.null(data)) {
     dn_episodes <- NULL
   } else {
-
     # Data Cleaning  ---------------------------------------
     dn_clean <- data %>%
       # filter for valid chi only

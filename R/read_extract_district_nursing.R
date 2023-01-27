@@ -5,10 +5,8 @@
 #' @export
 read_extract_district_nursing <- function(year,
                                           file_path = get_boxi_extract_path(year = year, type = "DN")) {
-
   # Specify years available for running
   if (year >= 1516 & year <= 2021) {
-
     # Read BOXI extract
     extract_district_nursing <- readr::read_csv(file_path,
       col_types = cols_only(

@@ -26,7 +26,6 @@ process_extract_cmh <- function(data,
   if (is.null(data)) {
     outfile <- NULL
   } else {
-
     # Data Cleaning  ---------------------------------------
 
     cmh_clean <- data %>%
