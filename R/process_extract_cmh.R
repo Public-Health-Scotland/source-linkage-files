@@ -21,56 +21,63 @@ process_extract_cmh <- function(data,
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-  # Data Cleaning  ---------------------------------------
+  # If data is available in the FY then run processing.
+  # If no data has passed through, return NULL.
+  if (is.null(data)) {
+    outfile <- NULL
+  } else {
 
-  cmh_clean <- data %>%
-    # create recid, year, SMRType variables
-    dplyr::mutate(
-      recid = "CMH",
-      smrtype = add_smr_type(recid = .data$recid),
-      year = year
-    ) %>%
-    # contact end time
-    dplyr::mutate(keyTime2 = hms::as.hms(
-      .data$keyTime1 + lubridate::dminutes(.data$duration)
-    )) %>%
-    # record key date 2
-    dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
-    # create blank diag 6
-    dplyr::mutate(diag6 = NA)
+    # Data Cleaning  ---------------------------------------
 
-  # Outfile --------------------------------------------
+    cmh_clean <- data %>%
+      # create recid, year, SMRType variables
+      dplyr::mutate(
+        recid = "CMH",
+        smrtype = add_smr_type(recid = .data$recid),
+        year = year
+      ) %>%
+      # contact end time
+      dplyr::mutate(keyTime2 = hms::as.hms(
+        .data$keyTime1 + lubridate::dminutes(.data$duration)
+      )) %>%
+      # record key date 2
+      dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
+      # create blank diag 6
+      dplyr::mutate(diag6 = NA)
 
-  outfile <- cmh_clean %>%
-    dplyr::select(
-      "year",
-      "recid",
-      "record_keydate1",
-      "record_keydate2",
-      "keyTime1",
-      "keyTime2",
-      "smrtype",
-      "chi",
-      "gender",
-      "dob",
-      "gpprac",
-      "postcode",
-      "hbrescode",
-      "hscp",
-      "location",
-      "hbtreatcode",
-      "diag1",
-      "diag2",
-      "diag3",
-      "diag4",
-      "diag5",
-      "diag6"
-    )
+    # Outfile --------------------------------------------
 
-  if (write_to_disk) {
-    # Save as rds file
-    outfile %>%
-      write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
+    outfile <- cmh_clean %>%
+      dplyr::select(
+        "year",
+        "recid",
+        "record_keydate1",
+        "record_keydate2",
+        "keyTime1",
+        "keyTime2",
+        "smrtype",
+        "chi",
+        "gender",
+        "dob",
+        "gpprac",
+        "postcode",
+        "hbrescode",
+        "hscp",
+        "location",
+        "hbtreatcode",
+        "diag1",
+        "diag2",
+        "diag3",
+        "diag4",
+        "diag5",
+        "diag6"
+      )
+
+    if (write_to_disk) {
+      # Save as rds file
+      outfile %>%
+        write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
+    }
   }
 
   return(outfile)

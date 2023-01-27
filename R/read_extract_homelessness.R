@@ -6,6 +6,9 @@
 read_extract_homelessness <- function(
     year,
     file_path = get_boxi_extract_path(year = year, type = "Homelessness")) {
+
+  # Specify years available for running
+  if (year >= 1617) {
   extract_homelessness <- readr::read_csv(file_path,
     col_types = cols(
       "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
@@ -58,6 +61,9 @@ read_extract_homelessness <- function(
       refused = "Refused",
       person_in_receipt_of_universal_credit = "Person in Receipt of Universal Credit"
     )
+  } else {
 
+    extract_homelessness <- NULL
+}
   return(extract_homelessness)
 }
