@@ -6,7 +6,7 @@
 #'
 read_extract_cmh <- function(year, file_path = get_boxi_extract_path(year = year, type = "CMH")) {
   # Specify years available for running
-  if (year >= 1617 & year <= 2021) {
+  if (is.na(file_path)) {
     return(NULL)
   }
 
