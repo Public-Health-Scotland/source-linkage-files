@@ -5,6 +5,8 @@ DVPROD
 keyring
 odbc
 phs
+rlang
+Rprofile
 rstudioapi
 SMRA
 uid
