@@ -7,12 +7,12 @@ spd_path <- get_spd_path()
 ch_name_lookup_path <- get_slf_ch_name_lookup_path()
 slf_deaths_path <- get_slf_deaths_path()
 
-db_connection <- phs_db_connection(dsn = "DVPROD")
+sc_connection <- phs_db_connection(dsn = "DVPROD")
 
 # Read in data
 ch_data <-
   dplyr::tbl(
-    db_connection,
+    sc_connection,
     dbplyr::in_schema("social_care_2", "carehome_snapshot")
   ) %>%
   dplyr::select(
