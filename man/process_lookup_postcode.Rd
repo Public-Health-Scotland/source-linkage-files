@@ -4,10 +4,19 @@
 \alias{process_lookup_postcode}
 \title{Process the SLF postcode lookup}
 \usage{
-process_lookup_postcode(file_path = get_spd_path(), write_to_disk = TRUE)
+process_lookup_postcode(
+  spd_path = get_spd_path(),
+  simd_path = get_simd_path(),
+  locality_path = get_locality_path(),
+  write_to_disk = TRUE
+)
 }
 \arguments{
-\item{file_path}{Path to spd lookup.}
+\item{spd_path}{Path to spd lookup.}
+
+\item{simd_path}{Path to simd lookup.}
+
+\item{locality_path}{Path to locality lookup.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
