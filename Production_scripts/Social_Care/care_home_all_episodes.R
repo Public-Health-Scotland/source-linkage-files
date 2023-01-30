@@ -291,7 +291,7 @@ ch_data_clean <- name_postcode_clean %>%
 ch_data_clean %>%
   dplyr::count(changed_sc_id)
 
-# Megre records to a single row per episode
+# Merge records to a single row per episode
 # where admission is the same
 ch_episode <- ch_data_clean %>%
   # when nursing_care_provision is different on
