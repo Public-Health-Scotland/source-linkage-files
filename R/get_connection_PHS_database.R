@@ -24,7 +24,7 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
         default = ""
       )
     } else {
-      cli::cli_abort("no username supplied")
+      cli::cli_abort("No username found, you should supply one with {.arg username}")
     }
   }
 
@@ -35,22 +35,22 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   # key_set(keyring = "createslf", service = "db_password")
 
   if (!("createslf" %in% keyring::keyring_list()[["keyring"]])) {
-    cli::cli_abort("The keyring for createslf does not exist. Please set this up by updating your R profile")
+    cli::cli_abort("The {.val createslf} keyring does not exist.")
   }
 
   if (!("db_password" %in% keyring::key_list(keyring = "createslf")[["service"]])) {
-    cli::cli_abort("The keyring password has not been supplied. Please set this up in your R profile")
+    cli::cli_abort("{.val db_password} is missing from the {.val createslf} keyring.")
   }
 
   if (Sys.getenv("CREATESLF_KEYRING_PASS") == "") {
-    cli::cli_abort("createslf keyring pw needs to be set in the environment variable
-                   {.env CREATESLF_KEYRING_PASS}")
+    cli::cli_abort("You must have the password to unlock the {.val createslf} keyring in your environment as
+                   {.envvar CREATESLF_KEYRING_PASS}. Please set this up in your {.file .Renviron} or {.file .Rprofile}")
   }
 
   keyring::keyring_unlock(keyring = "createslf", password = Sys.getenv("CREATESLF_KEYRING_PASS"))
 
   if (keyring::keyring_is_locked(keyring = "createslf")) {
-    cli::cli_abort("Keyring is locked. To unlock createslf keyring, please use {.fun keyring_unlock}")
+    cli::cli_abort("Keyring is locked. To unlock createslf keyring, please use {.fun keyring::keyring_unlock}")
   }
 
 
