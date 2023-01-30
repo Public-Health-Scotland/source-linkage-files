@@ -31,9 +31,9 @@ get_boxi_extract_path <-
 
     year_dir <- get_year_dir(year, extracts_dir = TRUE)
 
-if (!check_year_valid(year,type)){
-  return(NA)
-}
+    if (!check_year_valid(year, type)) {
+      return(NA)
+    }
 
     file_name <- dplyr::case_when(
       type == "AE" ~ "A&E-episode-level-extract",
