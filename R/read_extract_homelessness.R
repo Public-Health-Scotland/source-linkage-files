@@ -5,7 +5,6 @@
 #' @export
 read_extract_homelessness <- function(year,
                                       file_path = get_boxi_extract_path(year = year, type = "Homelessness")) {
-
   # Specify years available for running
   if (year < 1617) {
     return(NULL)
