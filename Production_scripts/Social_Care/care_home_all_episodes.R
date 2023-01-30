@@ -93,7 +93,7 @@ matched_ch_data <- ch_clean %>%
 # Care Home Name lookup
 ch_name_lookup <-
   # Care Home name lookup from the Care Inspectorate
-  # Previous contact Al Scrougal - Al.Scougal@careinspectorate.gov.scot
+  # Previous contact 'Al Scougal' <Al.Scougal@careinspectorate.gov.scot>
   readxl::read_xlsx(ch_name_lookup_path) %>%
   # Drop any Care Homes that were closed before 2017/18
   dplyr::filter(is.na(DateCanx) | DateCanx >= start_fy("1718")) %>%
