@@ -4,13 +4,10 @@
 \alias{read_lookup_sc_demographics}
 \title{Read SC demographics}
 \usage{
-read_lookup_sc_demographics(
-  file_path = dplyr::tbl(phs_db_connection(dsn = "DVPROD"),
-    dbplyr::in_schema("social_care_2", "demographic_snapshot"))
-)
+read_lookup_sc_demographics(sc_connection = phs_db_connection(dsn = "DVPROD"))
 }
 \arguments{
-\item{file_path}{Path to sc platform.}
+\item{sc_connection}{Connection to the sc platform}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
