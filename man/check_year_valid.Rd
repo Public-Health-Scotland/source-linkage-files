@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_year_valid.R
 \name{check_year_valid}
 \alias{check_year_valid}
-\title{Check there is data available for a given year.
+\title{Check there is data available for a given year
 as some extracts are year dependent. E.g Homelessness
 is only available from 2016/17 onwards.}
 \usage{
@@ -21,7 +21,7 @@ check_year_valid(
 A logical TRUE/FALSE
 }
 \description{
-Check there is data available for a given year.
+Check there is data available for a given year
 as some extracts are year dependent. E.g Homelessness
 is only available from 2016/17 onwards.
 }
