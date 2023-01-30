@@ -23,7 +23,7 @@ process_extract_delayed_discharges <- function(data,
   year <- check_year_format(year)
 
   # Specify years available for running
-  if (year < 1617) {
+  if (year < "1617") {
     return(NULL)
   }
   # Data Cleaning---------------------------------------
