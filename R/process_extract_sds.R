@@ -32,8 +32,7 @@ process_extract_sds <- function(data = NULL, year, client_lookup = NULL, write_t
     client_table <- readr::read_rds(get_source_extract_path(year, type = "Client"))
   }
 
-  # Now select epsiodes for given FY
-
+  # Now select episodes for given FY
   outfile <- data %>%
     dplyr::filter(is_date_in_fyyear(
       year,
