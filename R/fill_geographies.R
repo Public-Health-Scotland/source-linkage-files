@@ -24,7 +24,7 @@ fill_geographies <- function(data) {
 
   data %>%
     fill_postcode_geogs() %>%
-    correct_gpprac_geographies()
+    fill_gpprac_geographies()
 }
 
 fill_postcode_geogs <- function(data) {
@@ -61,7 +61,7 @@ fill_postcode_geogs <- function(data) {
   return(filled_geographies)
 }
 
-correct_gpprac_geographies <- function(data) {
+fill_gpprac_geographies <- function(data) {
   gpprac_ref <- readr::read_rds(get_slf_gpprac_path()) %>%
     dplyr::select(c("gpprac", "cluster", "hbpraccode"))
 
