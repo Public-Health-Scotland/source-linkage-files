@@ -24,8 +24,8 @@ process_extract_cmh <- function(data,
   # If data is available in the FY then run processing.
   # If no data has passed through, return NULL.
   if (is.null(data)) {
-    outfile <- NULL
-  } else {
+    return(NULL)
+  }
     # Data Cleaning  ---------------------------------------
 
     cmh_clean <- data %>%
@@ -77,7 +77,6 @@ process_extract_cmh <- function(data,
       outfile %>%
         write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
     }
-  }
 
   return(outfile)
 }
