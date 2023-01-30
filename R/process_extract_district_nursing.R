@@ -22,8 +22,8 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   # If data is available in the FY then run processing.
   # If no data has passed through, return NULL.
   if (is.null(data)) {
-    dn_episodes <- NULL
-  } else {
+    return(NULL)
+  }
     # Data Cleaning  ---------------------------------------
     dn_clean <- data %>%
       # filter for valid chi only
@@ -122,7 +122,6 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
       dn_episodes %>%
         write_rds(get_source_extract_path(year, "DN", check_mode = "write"))
     }
-  }
 
   return(dn_episodes)
 }

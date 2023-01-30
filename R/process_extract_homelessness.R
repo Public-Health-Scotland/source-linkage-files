@@ -24,8 +24,8 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   # If data is available in the FY then run processing.
   # If no data has passed through, return NULL.
   if (is.null(data)) {
-    final_data <- NULL
-  } else {
+    return(NULL)
+  }
     data <- data %>%
       dplyr::mutate(
         year = as.character(year),
@@ -222,7 +222,6 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
           check_mode = "write"
         ))
     }
-  }
 
   return(final_data)
 }
