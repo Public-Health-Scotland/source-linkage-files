@@ -17,13 +17,13 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
 
   # Check the username is not empty and take input if not
   if (is.na(username) | username == "") {
-    if(interactive()) {
-    username <- rstudioapi::showPrompt(
-      title = "Username",
-      message = "Username",
-      default = ""
-    )
-    }else{
+    if (interactive()) {
+      username <- rstudioapi::showPrompt(
+        title = "Username",
+        message = "Username",
+        default = ""
+      )
+    } else {
       cli::cli_abort("no username supplied")
     }
   }
@@ -34,22 +34,22 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   # keyring_create("createslf", password = Sys.getenv("CREATESLF_KEYRING_PASS")),
   # key_set(keyring = "createslf", service = "db_password")
 
-  if (!("createslf" %in% keyring::keyring_list()[["keyring"]])){
+  if (!("createslf" %in% keyring::keyring_list()[["keyring"]])) {
     cli::cli_abort("The keyring for createslf does not exist. Please set this up by updating your R profile")
   }
 
-  if (!("db_password" %in% keyring::key_list(keyring ="createslf")[["service"]])) {
+  if (!("db_password" %in% keyring::key_list(keyring = "createslf")[["service"]])) {
     cli::cli_abort("The keyring password has not been supplied. Please set this up in your R profile")
   }
 
-  if (Sys.getenv("CREATESLF_KEYRING_PASS") == ""){
+  if (Sys.getenv("CREATESLF_KEYRING_PASS") == "") {
     cli::cli_abort("createslf keyring pw needs to be set in the environment variable
                    {.env CREATESLF_KEYRING_PASS}")
   }
 
-keyring::keyring_unlock(keyring ="createslf", password = Sys.getenv("CREATESLF_KEYRING_PASS"))
+  keyring::keyring_unlock(keyring = "createslf", password = Sys.getenv("CREATESLF_KEYRING_PASS"))
 
-  if(keyring::keyring_is_locked(keyring ="createslf")) {
+  if (keyring::keyring_is_locked(keyring = "createslf")) {
     cli::cli_abort("Keyring is locked. To unlock createslf keyring, please use {.fun keyring_unlock}")
   }
 
@@ -60,10 +60,10 @@ keyring::keyring_unlock(keyring ="createslf", password = Sys.getenv("CREATESLF_K
     odbc::odbc(),
     dsn = dsn,
     uid = username,
-    pwd = keyring::key_get(keyring ="createslf", service = "db_password")
+    pwd = keyring::key_get(keyring = "createslf", service = "db_password")
   )
 
-  keyring::keyring_lock(keyring ="createslf")
+  keyring::keyring_lock(keyring = "createslf")
 
   return(db_connection)
 }
