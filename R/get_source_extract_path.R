@@ -40,6 +40,10 @@ get_source_extract_path <- function(year,
     year
   )
 
+  if (!check_year_valid(year, type)) {
+    return(NA)
+  }
+
   file_name <- dplyr::case_when(
     type == "Acute" ~ "acute_for_source",
     type == "AE" ~ "a&e_for_source",
