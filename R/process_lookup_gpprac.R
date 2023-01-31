@@ -4,7 +4,9 @@
 #' gpprac lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param file_path Link to phs open dataset
+#' @param open_data PHS open dataset link to gp practice details
+#' @param gpprac_ref_file Path to GP Practice reference file
+#' @param spd_path Path to Scottish Postcode Directory.#'
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -12,54 +14,20 @@
 #' @export
 #' @family process extracts
 
-process_lookup_gpprac <- function(file_path = phsopendata::get_dataset(
-                                    "gp-practice-contact-details-and-list-sizes",
-                                    max_resources = 20L
-                                  ), write_to_disk = TRUE) {
+process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
+                                  gpprac_ref_file = get_gpprac_ref_path(),
+                                  spd_path = get_spd_path(),
+                                  write_to_disk = TRUE) {
   # Read lookup files -------------------------------------------------------
 
   # Retrieve the latest resource from the dataset
-  opendata <- file_path %>%
-    janitor::clean_names() %>%
-    dplyr::left_join(
-      phsopendata::get_resource(
-        "944765d7-d0d9-46a0-b377-abb3de51d08e",
-        col_select = c("HSCP", "HSCPName", "HB", "HBName")
-      ) %>%
-        janitor::clean_names(),
-      by = c("hb", "hscp")
-    ) %>%
-    # select variables
-    dplyr::select(
-      gpprac = .data$practice_code,
-      practice_name = .data$gp_practice_name,
-      .data$postcode,
-      cluster = .data$gp_cluster,
-      partnership = .data$hscp_name,
-      health_board = .data$hb_name
-    ) %>%
-    # drop NA cluster rows
-    tidyr::drop_na(.data$cluster) %>%
-    # format practice name text
-    dplyr::mutate(
-      practice_name = stringr::str_to_title(.data$practice_name)
-    ) %>%
-    # format postcode
-    dplyr::mutate(
-      postcode = phsmethods::format_postcode(.data$postcode)
-    ) %>%
-    # keep distinct gpprac
-    dplyr::distinct(.data$gpprac, .keep_all = TRUE) %>%
-    # Sort for SPSS matching
-    dplyr::arrange(.data$gpprac) %>%
-    # Write rds file
-    write_rds(get_practice_details_path(check_mode = "write"))
+  opendata <- open_data
 
 
   # Read Lookup files ---------------------------------------
   # gp lookup
   gpprac_ref_file <-
-    haven::read_sav(get_gpprac_ref_path()) %>%
+    haven::read_sav(gpprac_ref_file) %>%
     # select only praccode and postcode
     dplyr::select(
       gpprac = .data$praccode,
@@ -67,7 +35,7 @@ process_lookup_gpprac <- function(file_path = phsopendata::get_dataset(
     )
 
   # postcode lookup
-  spd_file <- readr::read_rds(get_spd_path()) %>%
+  spd_file <- readr::read_rds(spd_path) %>%
     dplyr::select(
       .data$pc7,
       .data$pc8,
