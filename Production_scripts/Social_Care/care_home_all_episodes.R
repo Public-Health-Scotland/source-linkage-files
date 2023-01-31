@@ -61,6 +61,7 @@ ch_clean <- ch_data %>%
       qtr_start,
       ch_admission_date
     ),
+    # TODO check if we should set the dis date to the end of the period?
     # If the dis date is before admission, remove the dis date
     ch_discharge_date = dplyr::if_else(
       ch_admission_date > ch_discharge_date,
