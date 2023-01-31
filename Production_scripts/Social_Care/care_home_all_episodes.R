@@ -86,7 +86,7 @@ matched_ch_data <- ch_clean %>%
     dplyr::across(
       tidyselect::contains("postcode"),
       phsmethods::format_postcode
-      ),
+    ),
     # Replace invalid postcode with NA
     ch_postcode = dplyr::na_if(
       ch_postcode,
