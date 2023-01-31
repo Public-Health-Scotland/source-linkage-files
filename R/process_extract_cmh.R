@@ -21,6 +21,11 @@ process_extract_cmh <- function(data,
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # If data is available in the FY then run processing.
+  # If no data has passed through, return NULL.
+  if (is.null(data)) {
+    return(NULL)
+  }
   # Data Cleaning  ---------------------------------------
 
   cmh_clean <- data %>%

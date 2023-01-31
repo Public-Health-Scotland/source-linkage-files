@@ -3,9 +3,12 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-read_extract_district_nursing <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "DN")) {
+read_extract_district_nursing <- function(year,
+                                          file_path = get_boxi_extract_path(year = year, type = "DN")) {
+  if (is.na(file_path)) {
+    return(NULL)
+  }
+
   # Read BOXI extract
   extract_district_nursing <- readr::read_csv(file_path,
     col_types = cols_only(
