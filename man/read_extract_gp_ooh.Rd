@@ -13,6 +13,12 @@ read_extract_gp_ooh(
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
+
+\item{diagnosis_path}{Path to diagnosis BOXI extract location.}
+
+\item{outcomes_path}{Path to outcomes BOXI extract location.}
+
+\item{consultations_path}{Path to consultations BOXI extract location.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
