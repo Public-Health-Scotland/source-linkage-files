@@ -27,5 +27,4 @@ test_that("Check year valid works for specific datasets ", {
   expect_equal(check_year_valid("1920", "Maternity"), TRUE)
   expect_equal(check_year_valid("1819", "MH"), TRUE)
   expect_equal(check_year_valid("1718", "Outpatients"), TRUE)
-
 })
