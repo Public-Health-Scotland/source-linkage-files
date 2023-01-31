@@ -1,9 +1,11 @@
 aut
+birthtime
 covr
 cph
 createslf
 dbconnect
 dbplyr
+dontrun
 dplyr
 dsn
 dtplyr
@@ -22,6 +24,8 @@ phs
 phsmethods
 phsopendata
 purrr
+quickstart
+rds
 readr
 readxl
 rlang
