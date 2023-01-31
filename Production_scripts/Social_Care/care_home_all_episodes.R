@@ -82,19 +82,20 @@ matched_ch_data <- ch_clean %>%
   dplyr::mutate(ch_name = clean_up_free_text(ch_name)) %>%
   # correct postcode formatting
   dplyr::mutate(
-    dplyr::across(tidyselect::contains("postcode"), phsmethods::format_postcode),
-    # replace invalid postcode with NA
+    dplyr::across(
+      tidyselect::contains("postcode"),
+      phsmethods::format_postcode
+      ),
+    # Replace invalid postcode with NA
     ch_postcode = dplyr::na_if(
       ch_postcode,
       ch_postcode %in% valid_spd_postcodes
     )
   )
 
-# Care Home Name lookup
-ch_name_lookup <-
-  # Care Home name lookup from the Care Inspectorate
-  # Previous contact 'Al Scougal' <Al.Scougal@careinspectorate.gov.scot>
-  readxl::read_xlsx(ch_name_lookup_path) %>%
+# Care Home name lookup from the Care Inspectorate
+# Previous contact 'Al Scougal' <Al.Scougal@careinspectorate.gov.scot>
+ch_name_lookup <- readxl::read_xlsx(ch_name_lookup_path) %>%
   # Drop any Care Homes that were closed before 2017/18
   dplyr::filter(is.na(DateCanx) | DateCanx >= start_fy("1718")) %>%
   dplyr::rename(
