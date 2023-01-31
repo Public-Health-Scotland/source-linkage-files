@@ -12,9 +12,9 @@ process_lookup_postcode(
 )
 }
 \arguments{
-\item{spd_path}{Path to spd lookup.}
+\item{spd_path}{Path to Scottish Postcode Directory..}
 
-\item{simd_path}{Path to simd lookup.}
+\item{simd_path}{Path to SIMD lookup.}
 
 \item{locality_path}{Path to locality lookup.}
 
