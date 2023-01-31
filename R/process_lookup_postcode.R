@@ -4,7 +4,7 @@
 #' postcode lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param spd_path Path to Scottish Postcode Directory..
+#' @param spd_path Path to Scottish Postcode Directory.
 #' @param simd_path Path to SIMD lookup.
 #' @param locality_path Path to locality lookup.
 #'
