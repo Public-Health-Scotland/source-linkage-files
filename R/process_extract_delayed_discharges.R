@@ -22,6 +22,10 @@ process_extract_delayed_discharges <- function(data,
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # Specify years available for running
+  if (year < "1617") {
+    return(NULL)
+  }
   # Data Cleaning---------------------------------------
 
   # Specify MH specialties for dealing with correct DD dates

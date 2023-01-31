@@ -35,7 +35,7 @@ process_extract_alarms_telecare <- function(data = NULL, year, client_lookup = N
   # Now select episodes for given FY
   outfile <- data %>%
     dplyr::filter(is_date_in_fyyear(
-      convert_year_to_fyyear(substr(.data$sc_latest_submission, 1L, 4L)),
+      year,
       .data$record_keydate1,
       .data$record_keydate2
     )) %>%

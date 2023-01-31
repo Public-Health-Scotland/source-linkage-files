@@ -1,8 +1,8 @@
 Accom
 aut
-Canx
 carehome
 careinspectorate
+birthtime
 covr
 cph
 createslf
@@ -10,6 +10,7 @@ dbconnect
 dbplyr
 demog
 downup
+dontrun
 dplyr
 dsn
 dtplyr
@@ -33,6 +34,7 @@ phsmethods
 phsopendata
 postcodes
 purrr
+quickstart
 rds
 readr
 readxl
