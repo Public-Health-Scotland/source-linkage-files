@@ -23,3 +23,5 @@
 ^codecov\.yml$
 ^Rmarkdown$
 ^\.lintr$
+^_targets\.R$
+^_targets$
