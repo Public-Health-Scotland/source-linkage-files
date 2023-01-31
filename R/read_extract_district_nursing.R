@@ -5,7 +5,6 @@
 #' @export
 read_extract_district_nursing <- function(year,
                                           file_path = get_boxi_extract_path(year = year, type = "DN")) {
-  # Specify years available for running
   if (is.na(file_path)) {
     return(NULL)
   }
