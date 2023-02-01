@@ -39,7 +39,6 @@ check_year_valid <- function(year, type = c(
     if (type %in% c("CMH", "DN")) {
       return(FALSE)
     }
-  } else {
-    return(TRUE)
   }
+  return(TRUE)
 }

@@ -40,13 +40,17 @@ get_source_extract_path <- function(year,
     year
   )
 
+  if (!check_year_valid(year, type)) {
+    return(NA)
+  }
+
   file_name <- dplyr::case_when(
     type == "Acute" ~ "acute_for_source",
     type == "AE" ~ "a&e_for_source",
     type == "AT" ~ "Alarms-Telecare-for-source",
     type == "CH" ~ "care_home_for_source",
     type == "CMH" ~ "CMH_for_source",
-    type == "Client" ~ "Client_for_source",
+    type == "Client" ~ "client_for_source",
     type == "DD" ~ "DD_for_source",
     type == "Deaths" ~ "deaths_for_source",
     type == "DN" ~ "DN_for_source",
