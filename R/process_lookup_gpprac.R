@@ -18,7 +18,6 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
                                   gpprac_ref_file = get_gpprac_ref_path(),
                                   spd_path = get_spd_path(),
                                   write_to_disk = TRUE) {
-
   # Read Lookup files ---------------------------------------
   # gp lookup
   gpprac_ref_file <-
