@@ -18,11 +18,6 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
                                   gpprac_ref_file = get_gpprac_ref_path(),
                                   spd_path = get_spd_path(),
                                   write_to_disk = TRUE) {
-  # Read lookup files -------------------------------------------------------
-
-  # Retrieve the latest resource from the dataset
-  opendata <- open_data
-
 
   # Read Lookup files ---------------------------------------
   # gp lookup
@@ -52,7 +47,7 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
   gpprac_slf_lookup <-
     ## match cluster information onto the practice reference list ##
     dplyr::left_join(
-      opendata,
+      open_data,
       gpprac_ref_file,
       by = c("gpprac", "postcode")
     ) %>%
