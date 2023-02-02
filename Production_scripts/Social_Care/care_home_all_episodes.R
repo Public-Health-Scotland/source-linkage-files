@@ -53,24 +53,24 @@ ch_clean <- ch_data %>%
       ),
       as.integer
     ),
-    record_date = end_fy_quarter(period),
-    qtr_start = start_fy_quarter(period),
+    record_date = end_fy_quarter(.data[["period"]]),
+    qtr_start = start_fy_quarter(.data[["period"]]),
     # Set missing admission date to start of the submitted quarter
     ch_admission_date = dplyr::if_else(
-      is.na(ch_admission_date),
-      qtr_start,
-      ch_admission_date
+      is.na(.data[["ch_admission_date"]]),
+      .data[["qtr_start"]],
+      .data[["ch_admission_date"]]
     ),
     # TODO check if we should set the dis date to the end of the period?
     # If the dis date is before admission, remove the dis date
     ch_discharge_date = dplyr::if_else(
-      ch_admission_date > ch_discharge_date,
+      .data[["ch_admission_date"]] > .data[["ch_discharge_date"]],
       lubridate::NA_Date_,
-      ch_discharge_date
+      .data[["ch_discharge_date"]]
     )
   )
 
-# read in demographic data
+# Read in demographic data
 sc_demog <- readr::read_rds(sc_demog_lookup_path)
 
 # Get a list of confirmed valid Scottish postcodes from the SPD
@@ -80,17 +80,18 @@ valid_spd_postcodes <- readr::read_rds(spd_path) %>%
 matched_ch_data <- ch_clean %>%
   dplyr::left_join(sc_demog, by = c("sending_location", "social_care_id")) %>%
   # Make the care home name more uniform
-  dplyr::mutate(ch_name = clean_up_free_text(ch_name)) %>%
+  dplyr::mutate(ch_name = clean_up_free_text(.data[["ch_name"]])) %>%
   # correct postcode formatting
   dplyr::mutate(
     dplyr::across(
-      tidyselect::contains("postcode"),
+      dplyr::contains("postcode"),
       phsmethods::format_postcode
     ),
     # Replace invalid postcode with NA
-    ch_postcode = dplyr::na_if(
-      ch_postcode,
-      ch_postcode %in% valid_spd_postcodes
+    ch_postcode = dplyr::if_else(
+      .data[["ch_postcode"]] %in% valid_spd_postcodes,
+      .data[["ch_postcode"]],
+      NA_character_
     )
   )
 
