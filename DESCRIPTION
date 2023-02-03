@@ -47,6 +47,7 @@ Imports:
     rstudioapi (>= 0.13),
     scales (>= 1.2.0),
     slfhelper (>= 0.8.0),
+    stringdist,
     stringr (>= 1.4.0),
     tibble (>= 3.1.7),
     tidyr (>= 1.2.0),
