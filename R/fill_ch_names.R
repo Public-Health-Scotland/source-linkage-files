@@ -119,18 +119,18 @@ fill_ch_names <- function(ch_data,
     ) %>%
     dplyr::filter(!is.na(.data[["ch_name"]]) & !is.na(.data[["ch_postcode"]])) %>%
     dplyr::left_join(ch_name_best_match,
-                     by = dplyr::join_by(
-                       "ch_name",
-                       closest("ch_admission_date" <= "latest_close_date")
-                     ),
-                     multiple = "last",
-                     na_matches = "never",
-                     suffix = c("_old", "")
+      by = dplyr::join_by(
+        "ch_name",
+        closest("ch_admission_date" <= "latest_close_date")
+      ),
+      multiple = "last",
+      na_matches = "never",
+      suffix = c("_old", "")
     ) %>%
     dplyr::mutate(
       ch_postcode = dplyr::if_else(!is_missing(.data[["ch_postcode"]]),
-                               .data[["ch_postcode"]],
-                               .data[["ch_postcode_old"]]
+        .data[["ch_postcode"]],
+        .data[["ch_postcode_old"]]
       )
     )
 
@@ -148,18 +148,18 @@ fill_ch_names <- function(ch_data,
     ) %>%
     dplyr::filter(!is.na(.data[["ch_name"]]) & is.na(.data[["ch_postcode"]])) %>%
     dplyr::left_join(ch_name_best_match,
-                     by = dplyr::join_by(
-                       "ch_name",
-                       closest("ch_admission_date" <= "latest_close_date")
-                     ),
-                     multiple = "last",
-                     na_matches = "never",
-                     suffix = c("_old", "")
+      by = dplyr::join_by(
+        "ch_name",
+        closest("ch_admission_date" <= "latest_close_date")
+      ),
+      multiple = "last",
+      na_matches = "never",
+      suffix = c("_old", "")
     ) %>%
     dplyr::mutate(
       ch_postcode = dplyr::if_else(!is_missing(.data[["ch_postcode"]]),
-                                   .data[["ch_postcode"]],
-                                   .data[["ch_postcode_old"]]
+        .data[["ch_postcode"]],
+        .data[["ch_postcode_old"]]
       )
     )
 
