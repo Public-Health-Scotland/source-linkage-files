@@ -43,23 +43,33 @@ fill_ch_names <- function(ch_data,
     # Standardise the postcode and CH name
     dplyr::mutate(
       ch_postcode = phsmethods::format_postcode(.data[["ch_postcode"]]),
-      ch_name_validated = clean_up_free_text(.data[["ch_name_validated"]])
+      ch_name_validated = clean_up_free_text(.data[["ch_name_validated"]]),
+      ch_date_registered = lubridate::as_date(.data[["ch_date_registered"]]),
+      ch_date_cancelled = lubridate::as_date(.data[["ch_date_cancelled"]])
     ) %>%
     # Merge any duplicates, and get the interval each CH name was active
     dplyr::group_by(.data[["ch_postcode"]], .data[["ch_name_validated"]]) %>%
-    dplyr::summarise(open_interval = lubridate::interval(
-      min(.data[["ch_date_registered"]]),
-      pmin(max(.data[["ch_date_cancelled"]]), Sys.Date(), na.rm = TRUE)
-    )) %>%
-    dplyr::ungroup() %>%
-    # Find the latest date for each CH name
-    dplyr::mutate(latest_close_date = lubridate::int_end(.data[["open_interval"]])) %>%
-    dplyr::arrange("open_interval")
+    dplyr::summarise(
+      # Find the latest date for each CH name / postcode
+      latest_close_date = dplyr::if_else(is.na(max(.data[["ch_date_cancelled"]])),
+        Sys.Date(),
+        max(.data[["ch_date_cancelled"]])
+      ),
+      open_interval = lubridate::interval(
+        min(.data[["ch_date_registered"]]),
+        .data[["latest_close_date"]]
+      )
+    ) %>%
+    dplyr::ungroup()
 
   # Generate some metrics for how the submitted names connect to the valid names
-  ch_name_match_metrics <- ch_data %>%
+  ch_name_best_match <- ch_data %>%
     dplyr::distinct(.data[["ch_postcode"]], .data[["ch_name"]]) %>%
-    dplyr::left_join(ch_name_lookup, by = "ch_postcode") %>%
+    dplyr::left_join(ch_name_lookup,
+      by = dplyr::join_by("ch_postcode"),
+      multiple = "all",
+      na_matches = "never"
+    ) %>%
     tidyr::drop_na() %>%
     # Work out string distances between names for each postcode
     dplyr::mutate(
@@ -74,96 +84,122 @@ fill_ch_names <- function(ch_data,
     # Drop any name matches which aren't very close
     dplyr::filter(.data[["match_distance_jaccard"]] <= 0.25 |
       .data[["match_distance_cosine"]] <= 0.3) %>%
-    dplyr::group_by(.data[["ch_postcode"]], .data[["ch_name"]]) %>%
-    # Identify the closest match in case there are multiple close matches
+    dplyr::group_by(.data[["ch_postcode"]], .data[["ch_name"]], .data[["open_interval"]]) %>%
     dplyr::mutate(
-      min_jaccard = min(.data[["match_distance_jaccard"]], na.rm = TRUE),
-      min_cosine = min(.data[["match_distance_cosine"]], na.rm = TRUE),
       min_match_mean = min(.data[["match_mean"]], na.rm = TRUE)
     ) %>%
-    dplyr::ungroup()
-
-  no_postcode_match <- ch_data %>%
-    dplyr::anti_join(ch_name_lookup, by = "ch_postcode")
-
-  name_postcode_clean <- ch_data %>%
-    # Remove records with no matching postcode, we'll add them back later
-    dplyr::semi_join(ch_name_lookup, by = "ch_postcode") %>%
-    # Create a unique ID per row so we can get rid of duplicates later
-    dplyr::mutate(ch_record_id = dplyr::row_number()) %>%
-    # Match CH names with the generated metrics and the lookup. This will create
-    # duplicates which should be filtered out as we identify matches
-    dplyr::left_join(ch_name_match_metrics, by = c("ch_postcode", "ch_name")) %>%
-    dplyr::mutate(
-      # Work out the duration of the stay
-      # If the end date is missing set this to the end of the quarter
-      stay_interval = lubridate::interval(
-        .data[["ch_admission_date"]],
-        min(.data[["ch_discharge_date"]], .data[["record_date"]], na.rm = TRUE)
-      ),
-      # Highlight which stays overlap with an open care home name
-      stay_overlaps_open = lubridate::int_overlaps(
-        .data[["stay_interval"]], .data[["open_interval"]]
-      ) &
-        lubridate::int_start(.data[["stay_interval"]]) >= lubridate::int_start(.data[["open_interval"]]),
-      # Highlight which names seem to be good matches
-      name_match = dplyr::case_when(
-        # Exact match
-        ch_name == ch_name_validated ~ TRUE,
-        # Submitted name is missing and stay dates are valid for the CH
-        is.na(ch_name) & stay_overlaps_open ~ TRUE,
-        # This name had the closest 'jaccard' distance of all possibilities
-        (min_jaccard == match_distance_jaccard) &
-          match_distance_jaccard <= 0.25 ~ TRUE,
-        # This name had the closest 'cosine' distance of all possibilities
-        (min_cosine == match_distance_cosine) &
-          match_distance_cosine <= 0.3 ~ TRUE,
-        # This name had the closest 'mean' distance (used when the above disagree)
-        (min_match_mean == match_mean) & match_mean <= 0.25 ~ TRUE,
-        # No good match
-        TRUE ~ FALSE
-      )
+    # Identify the closest match in case there are multiple close matches
+    # If there's still multiple matches just pick the shortest
+    dplyr::arrange(
+      "min_match_mean",
+      length(.data[["ch_name_validated"]])
     ) %>%
-    # Group by record
-    # - There will be duplicate rows per record if there are
-    # multiple 'options' for the possible CH name.
-    dplyr::group_by(.data[["ch_record_id"]]) %>%
-    dplyr::mutate(
-      # Highlight where the record has no matches out of any of the options
-      no_name_matches = !any(.data[["name_match"]]),
-      # Highlight where the record has no overlaps with any of the options
-      no_overlaps = !any(.data[["stay_overlaps_open"]])
-    ) %>%
-    # Keep a record if:
-    # 1) It's name matches `name_match`
-    # Or either
-    # 2)a) None of the option's names match AND this option overlaps in dates
-    # e.g. the submitted name is missing but the dates match)
-    # or 2)b) None of the option's names match AND none of the dates overlap
-    # (i.e. we don't have any idea what name to use)
-    dplyr::filter(dplyr::n() == 1L |
-      sum(.data[["name_match"]]) == 1L | !any(.data[["name_match"]])) %>%
-    # For the records which still have multiple options
-    # (usually multiple names matched)
-    dplyr::filter(dplyr::n() == 1L |
-      lubridate::int_end(.data[["open_interval"]]) == .data[["latest_close_date"]]) %>%
-    dplyr::filter(dplyr::n() == 1L | .data[["match_mean"]] == .data[["min_match_mean"]]) %>%
     dplyr::ungroup() %>%
-    # Bring back to single record with no duplicates introduce by the lookup
-    dplyr::distinct(.data[["ch_record_id"]], .keep_all = TRUE) %>%
-    # Replace the ch name with our best guess at the proper name from the lookup
+    dplyr::distinct(.data[["ch_postcode"]],
+      .data[["ch_name"]],
+      .keep_all = TRUE
+    ) %>%
+    dplyr::select(
+      "ch_postcode",
+      "ch_name",
+      "ch_name_validated",
+      "open_interval",
+      "latest_close_date"
+    ) %>%
+    dplyr::arrange(
+      "ch_postcode",
+      "ch_name",
+      "open_interval"
+    )
+
+  no_match_pc_name_bad <- ch_data %>%
+    dplyr::anti_join(ch_name_lookup,
+      by = dplyr::join_by("ch_postcode"),
+      na_matches = "never"
+    ) %>%
+    dplyr::filter(!is.na(.data[["ch_name"]]) & !is.na(.data[["ch_postcode"]])) %>%
+    dplyr::left_join(ch_name_best_match,
+                     by = dplyr::join_by(
+                       "ch_name",
+                       closest("ch_admission_date" <= "latest_close_date")
+                     ),
+                     multiple = "last",
+                     na_matches = "never",
+                     suffix = c("_old", "")
+    ) %>%
+    dplyr::mutate(
+      ch_postcode = dplyr::if_else(!is_missing(.data[["ch_postcode"]]),
+                               .data[["ch_postcode"]],
+                               .data[["ch_postcode_old"]]
+      )
+    )
+
+  no_match_pc_name_missing <- ch_data %>%
+    dplyr::anti_join(ch_name_lookup,
+      by = dplyr::join_by("ch_postcode"),
+      na_matches = "never"
+    ) %>%
+    dplyr::filter(is.na(.data[["ch_name"]]) & is.na(.data[["ch_postcode"]]))
+
+  no_match_pc_missing <- ch_data %>%
+    dplyr::anti_join(ch_name_lookup,
+      by = dplyr::join_by("ch_postcode"),
+      na_matches = "never"
+    ) %>%
+    dplyr::filter(!is.na(.data[["ch_name"]]) & is.na(.data[["ch_postcode"]])) %>%
+    dplyr::left_join(ch_name_best_match,
+                     by = dplyr::join_by(
+                       "ch_name",
+                       closest("ch_admission_date" <= "latest_close_date")
+                     ),
+                     multiple = "last",
+                     na_matches = "never",
+                     suffix = c("_old", "")
+    ) %>%
+    dplyr::mutate(
+      ch_postcode = dplyr::if_else(!is_missing(.data[["ch_postcode"]]),
+                                   .data[["ch_postcode"]],
+                                   .data[["ch_postcode_old"]]
+      )
+    )
+
+  no_match_name_missing <- ch_data %>%
+    dplyr::anti_join(ch_name_lookup,
+      by = dplyr::join_by("ch_postcode"),
+      na_matches = "never"
+    ) %>%
+    dplyr::filter(is.na(.data[["ch_name"]]) & !is.na(.data[["ch_postcode"]]))
+
+  ch_name_pc_clean <- ch_data %>%
+    # Remove records with no matching postcode, we'll add them back later
+    dplyr::semi_join(ch_name_lookup,
+      by = dplyr::join_by("ch_postcode"),
+      na_matches = "never"
+    ) %>%
+    dplyr::left_join(ch_name_best_match,
+      by = dplyr::join_by(
+        "ch_postcode",
+        "ch_name",
+        closest("ch_admission_date" <= "latest_close_date")
+      ),
+      na_matches = "never"
+    ) %>%
     dplyr::mutate(
       ch_name_old = .data[["ch_name"]],
-      ch_name = dplyr::if_else(is.na(.data[["ch_name_validated"]]),
-        .data[["ch_name"]],
-        .data[["ch_name_validated"]]
+      ch_name = dplyr::if_else(!is_missing(.data[["ch_name_validated"]]),
+        .data[["ch_name_validated"]],
+        .data[["ch_name"]]
       )
     ) %>%
     # Bring back the records which had no postcode match
-    dplyr::bind_rows(no_postcode_match)
+    dplyr::bind_rows(
+      no_match_pc_name_bad,
+      no_match_pc_name_missing,
+      no_match_pc_missing,
+      no_match_name_missing
+    )
 
-  (check_names <- name_postcode_clean %>%
-    dplyr::count(.data[["ch_name_old"]], .data[["ch_name"]], sort = TRUE))
+  # TODO Check if we can fill in ch_names or ch_postcodes when a client has multiple episodes
 
-  return(name_postcode_clean)
+  return(ch_name_pc_clean)
 }

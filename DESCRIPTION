@@ -23,7 +23,7 @@ Imports:
     cli (>= 3.4.1),
     data.table (>= 1.14.6),
     dbplyr (>= 2.3.0),
-    dplyr (>= 1.0.0),
+    dplyr (>= 1.1.0),
     dtplyr (>= 1.2.2),
     fs (>= 1.5.2),
     glue (>= 1.6.2),
