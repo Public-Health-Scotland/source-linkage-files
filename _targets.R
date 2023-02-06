@@ -14,10 +14,12 @@ tar_option_set(
 list(
   tar_target(write_to_disk, FALSE),
   tar_target(sc_connection, phs_db_connection(dsn = "DVPROD")),
+  tar_target(sc_data, read_lookup_sc_demographics(sc_connection)),
+
   # tar_target(sc_demog_lookup,
-  #            process_lookup_sc_demographics(read_lookup_sc_demographics(sc_connection),
-  #                                           write_to_disk = write_to_disk)),
-  # ALL WORKING - Commented for faster running
+  #             process_lookup_sc_demographics(read_lookup_sc_demographics(sc_connection),
+  #                                            write_to_disk = write_to_disk)),
+  # # ALL WORKING - Commented for faster running
   # Target lookup data
   # tar_target(spd_data, get_spd_path(), format = "file"),
   # tar_target(simd_data, get_simd_path(), format = "file"),
@@ -30,6 +32,15 @@ list(
   # tar_target(source_pc_lookup, process_lookup_postcode(spd_data, simd_data, locality_data, write_to_disk = write_to_disk)),
   # tar_target(source_gp_lookup, process_lookup_gpprac(gpprac_data, write_to_disk = write_to_disk)),
   # tar_target(source_chi_deaths_lookup, process_lookup_chi_deaths(read_lookup_chi_deaths(chi_deaths_data), write_to_disk = write_to_disk)),
+
+
+  ###Target cost lookups###
+  #tar_target(ch_costs, process_costs_ch_rmd()),
+  #tar_target(hc_costs, process_costs_hc_rmd()),
+  #tar_target(gp_ooh_costs, process_costs_gp_ooh_rmd()),
+  #tar_target(dn_costs, process_costs_dn_rmd()),
+
+
   tarchetypes::tar_map(
     list(year = c("1920")),
     # All WORKING - Commented for faster running
@@ -113,8 +124,8 @@ list(
     tar_target(sc_client, process_lookup_sc_client(read_lookup_sc_client(sc_connection, year),
                                                    year,
                                                    write_to_disk = write_to_disk))
-    # tar_target(sc_alarms_tele, process_extract_alarms_telecare(read_sc_all_alarms_telecare(sc_connection),
-    #                                                year,
-    #                                                write_to_disk = write_to_disk))
+    #tar_target(sc_alarms_tele, process_extract_alarms_telecare(read_sc_all_alarms_telecare(sc_connection),
+    #                                               year,
+    #                                               write_to_disk = write_to_disk))
   )
 )
