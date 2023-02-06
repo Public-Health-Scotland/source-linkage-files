@@ -4,15 +4,17 @@
 #' District Nursing cost lookup, it will return the final data
 #' but also write this out as a rds.
 #'
+#' @inheritParams process_costs_ch_rmd
+#'
 #' @return the final data as a html document.
 #'
-process_costs_dn_rmd <- function() {
+process_costs_dn_rmd <- function(file_path = get_dn_costs_path()) {
   rmarkdown::render(
     input = "Rmarkdown/costs_district_nursing.Rmd",
     output_file = "costs_district_nursing.html"
   )
 
-  dn_lookup <- readr::read_rds(get_dn_costs_path())
+  dn_lookup <- readr::read_rds(file_path)
 
   return(dn_lookup)
 }

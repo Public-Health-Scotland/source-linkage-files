@@ -4,15 +4,17 @@
 #' GP ooh cost lookup, it will return the final data
 #' but also write this out as a rds.
 #'
+#' @inheritParams process_costs_ch_rmd
+#'
 #' @return the final data as a html document.
 #'
-process_costs_gp_ooh_rmd <- function() {
+process_costs_gp_ooh_rmd <- function(file_path = get_gp_ooh_costs_path()) {
   rmarkdown::render(
     input = "Rmarkdown/gp_ooh_costs.Rmd",
     output_file = "gp_ooh_costs.html"
   )
 
-  gp_ooh_lookup <- readr::read_rds(get_gp_ooh_costs_path())
+  gp_ooh_lookup <- readr::read_rds(file_path)
 
   return(gp_ooh_lookup)
 }

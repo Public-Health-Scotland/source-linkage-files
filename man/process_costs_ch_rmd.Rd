@@ -8,6 +8,9 @@ process_costs_ch_rmd()
 
 process_costs_ch_rmd()
 }
+\arguments{
+\item{file_path}{Path to cost lookup.}
+}
 \value{
 the final data as a html document.
 
