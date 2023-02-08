@@ -7,6 +7,8 @@
 create_col(episode_file, col, prefix, condition)
 }
 \arguments{
+\item{episode_file}{Tibble containing episodic data}
+
 \item{col}{Which column to create ("DoB", "postcode", or "gpprac")}
 
 \item{prefix}{Prefix to add to related columns, e.g. "Acute"}
