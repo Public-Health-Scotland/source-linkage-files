@@ -48,16 +48,16 @@ add_cij_columns <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
       CIJ_non_el = dplyr::if_else(.data$cij_pattype_code == 0,
-                                  .data$Distinct_CIJ,
-                                  NA_real_
+        .data$Distinct_CIJ,
+        NA_real_
       ),
       CIJ_el = dplyr::if_else(.data$cij_pattype_code == 1,
-                              .data$Distinct_CIJ,
-                              NA_real_
+        .data$Distinct_CIJ,
+        NA_real_
       ),
       CIJ_mat = dplyr::if_else(.data$cij_pattype_code == 2,
-                               .data$Distinct_CIJ,
-                               NA_real_
+        .data$Distinct_CIJ,
+        NA_real_
       )
     ) %>%
     dplyr::mutate(cij_delay = dplyr::if_else(
@@ -469,4 +469,3 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
   )
   return(na_type)
 }
-
