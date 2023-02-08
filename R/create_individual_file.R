@@ -265,7 +265,7 @@ add_nsu_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
-    dplyr::mutate("{prefix}", dplyr::if_else(eval(condition), 1, NA_real_))
+    dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1, NA_real_))
 }
 
 #' Add NRS columns
@@ -275,7 +275,7 @@ add_nrs_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
-    dplyr::mutate("{prefix}", dplyr::if_else(eval(condition), 1, NA_real_))
+    dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1, NA_real_))
 }
 
 #' Add HL1 columns
