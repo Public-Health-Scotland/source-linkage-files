@@ -14,8 +14,11 @@ fill_ch_names(
 \item{ch_data}{partially cleaned up care home data as a
 \link[tibble:tibble-package]{tibble}}
 
-\item{ch_name_lookup_path}{path to the 'official' Care Home name Excel
+\item{ch_name_lookup_path}{Path to the 'official' Care Home name Excel
 Workbook, this defaults to \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}}}
+
+\item{spd_path}{Path to the Scottish Postcode Directory (rds) version, this
+defaults to \code{\link[=get_spd_path]{get_spd_path()}}}
 }
 \value{
 the same data with improved accuracy and completeness of the Care
