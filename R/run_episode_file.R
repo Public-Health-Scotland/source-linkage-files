@@ -1,11 +1,19 @@
+#' Function for running the Source Episode file
+#'
+#' @param processed_data_list
+#' @param year
+#' @param write_to_disk
+#'
+#' @return
+#' @export
+#'
+#' @examples
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
-  ep_file <- dplyr::bind_rows(processed_data_list)
-
-  # From C01 ----
-  # Check chi is valid using phsmethods function
-  # If the CHI is invalid for whatever reason, set the CHI to blank string
-  temp_file <- ep_file %>%
+  ep_file <- dplyr::bind_rows(processed_data_list) %>%
+    # From C01 ----
+    # Check chi is valid using phsmethods function
+    # If the CHI is invalid for whatever reason, set the CHI to blank string
     dplyr::mutate(chi = dplyr::if_else(
       phsmethods::chi_check(.data$chi) != "Valid CHI",
       "",
@@ -34,15 +42,14 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         .data$cij_pattype_code == 2 ~ "Maternity",
         .data$cij_pattype_code == 9 ~ "Other"
       )
-    )
-
-  # Combine the CIJ-only records with the non-CIJ records
-  temp_file_1 <- dplyr::bind_rows(
-    # Fill missing CIJ markers for those records that should have them
-    ep_file %>% fill_missing_cij_markers(),
-    # Bind the CIJ records with the non-cij records, determined by recid
-    ep_file %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
-  ) %>%
+    ) %>%
+    # Combine the CIJ-only records with the non-CIJ records
+    dplyr::bind_rows(
+      # Fill missing CIJ markers for those records that should have them
+      . %>% fill_missing_cij_markers(),
+      # Bind the CIJ records with the non-cij records, determined by recid
+      . %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
+    ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
     dplyr::mutate(
       cost_total_net_inc_dnas = .data$cost_total_net,
@@ -55,47 +62,43 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       )
     ) %>%
     # Add the flag for Potentially Preventable Admissions
-    add_ppa_flag()
+    add_ppa_flag() %>%
+    # From C02 - Link Delayed Discharge Episodes ----
+    # Create Temp File 2
+    # temp_file_2 <- temp_file_1
 
-  # From C02 - Link Delayed Discharge Episodes ----
-  # Create Temp File 2
-  temp_file_2 <- temp_file_1
+    # From C03 - Link Homelessness ----
+    # Create Temp File 3
+    # temp_file_3 <- temp_file_2
 
-  # From C03 - Link Homelessness ----
-  # Create Temp File 3
-  temp_file_3 <- temp_file_2
-
-  # From C04 - Add NSU cohort ----
-
-  temp_file_4 <- add_nsu_cohort(temp_file_3, year)
-
-  # From C05 - Match on LTCs ----
-  # Create Temp File 5
-  temp_file_5 <- correct_demographics(temp_file_4, year) %>%
+    # From C04 - Add NSU cohort ----
+    add_nsu_cohort(., year) %>%
+    # From C05 - Match on LTCs ----
+    # Create Temp File 5
+    correct_demographics(., year) %>%
     match_on_ltcs(year)
 
   # From C06 - Deaths Fixes ----
   # Create Temp File 6
-  temp_file_6 <- temp_file_5
+  # temp_file_6 <- temp_file_5
 
   # From C07 - Calculate and write out pathways cohorts ----
-  create_demographic_lookup(temp_file_6, year, write_to_disk = TRUE)
-  create_service_use_lookup(temp_file_6, year, write_to_disk = TRUE)
+  create_demographic_lookup(ep_file, year, write_to_disk = TRUE)
+  create_service_use_lookup(ep_file, year, write_to_disk = TRUE)
 
   # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
   # Create Temp File 7
 
   # From C09 - Match on postcode and gpprac variables ----
-  # Create Temp File 8
+  ep_file <- ep_file %>% fill_geographies()
 
   # From C10 - Final tidy-up (mostly variable labels) ----
   # Create Episode File
 
   # C10X - Create Tests? Possibly for a different function ----
   # Output tests
-  final_data <- temp_file_6
 
-  if (write_to_disk) {
+  if (write_to_disk == TRUE) {
 
   }
 
