@@ -408,7 +408,7 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
   return(episode_file)
 }
 
-#' Add columns based on IPDC
+#' Add standard columns
 #'
 #' @description Add standard columns (DoB, postcode, gpprac, episodes, cost) to episode file.
 #'
