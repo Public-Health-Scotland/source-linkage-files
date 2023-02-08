@@ -43,7 +43,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       .data$hc_service_start_date
     )) %>%
     # Replace really early start dates with start of the quarter
-    dplyr::mutate(hc_service_end_date = dplyr::if_else(
+    dplyr::mutate(hc_service_start_date = dplyr::if_else(
       .data$hc_service_start_date < as.Date("1989-01-01"),
       .data$qtr_start,
       .data$hc_service_start_date
