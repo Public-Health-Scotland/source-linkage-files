@@ -35,13 +35,13 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
       submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
     ) %>%
     dplyr::mutate(
-      # use chi gender if avaliable
+      # use chi gender if available
       gender = dplyr::if_else(
         is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
         .data$submitted_gender,
         .data$chi_gender_code
       ),
-      # use chi dob if avaliable
+      # use chi dob if available
       dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
     ) %>%
     # format postcodes using `phsmethods`
