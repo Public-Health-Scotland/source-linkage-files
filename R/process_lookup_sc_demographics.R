@@ -59,12 +59,12 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     # remove dummy postcodes invalid postcodes missed by regex check
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
-      ~ dplyr::na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes))
+      ~ dplyr::if_else(.x %in% c(dummy_postcodes, non_existant_postcodes), NA, .x)
     )) %>%
     # comparing with regex UK postcode
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
-      ~ dplyr::na_if(.x, !stringr::str_detect(.x, uk_pc_regexp))
+      ~ dplyr::if_else(stringr::str_detect(.x, uk_pc_regexp), .x, NA)
     )) %>%
     dplyr::select(
       "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi", "gender",
