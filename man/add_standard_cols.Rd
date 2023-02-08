@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_individual_file.R
 \name{add_standard_cols}
 \alias{add_standard_cols}
-\title{Add columns based on IPDC}
+\title{Add standard columns}
 \usage{
 add_standard_cols(
   episode_file,
