@@ -74,7 +74,7 @@ ch_clean <- ch_data %>%
 
 name_postcode_clean <- fill_ch_names(ch_clean)
 
-ch_data_clean <- name_postcode_clean %>%
+fixed_ch_provider <- name_postcode_clean %>%
   # sort data
   dplyr::arrange(
     "sending_location",
@@ -94,22 +94,12 @@ ch_data_clean <- name_postcode_clean %>%
   dplyr::select(
     -"min_ch_provider",
     -"max_ch_provider"
-  ) %>%
-  # when multiple social_care_id from sending_location for
-  # single CHI replace social_care_id with latest
-  dplyr::group_by(.data[["sending_location"]], .data[["chi"]]) %>%
-  dplyr::mutate(latest_sc_id = dplyr::last(.data[["social_care_id"]])) %>%
-  # count changed social_care_id
-  dplyr::mutate(
-    changed_sc_id = !is.na(.data[["chi"]]) &
-      (.data[["social_care_id"]] != .data[["latest_sc_id"]]),
-    social_care_id = dplyr::if_else(
-      .data[["changed_sc_id"]],
-      .data[["latest_sc_id"]],
-      .data[["social_care_id"]]
-    )
-  ) %>%
-  dplyr::ungroup() %>%
+  )
+
+fixed_sc_id <- fixed_ch_provider %>%
+  replace_sc_id_with_latest()
+
+fixed_nursing_provision <- fixed_sc_id %>%
   dplyr::group_by(
     .data[["sending_location"]],
     .data[["social_care_id"]],
@@ -122,7 +112,9 @@ ch_data_clean <- name_postcode_clean %>%
   ) %>%
   tidyr::fill(.data[["nursing_care_provision"]], .direction = "downup") %>%
   # tidy up ch_provider using 6 when disagreeing values
-  tidyr::fill(.data[["ch_provider"]], .direction = "downup") %>%
+  tidyr::fill(.data[["ch_provider"]], .direction = "downup")
+
+ready_to_merge <- fixed_nursing_provision %>%
   # remove any duplicate records before merging for speed and simplicity
   dplyr::distinct() %>%
   # counter for split episodes
@@ -138,13 +130,9 @@ ch_data_clean <- name_postcode_clean %>%
   dplyr::ungroup()
 
 
-# count changed social_care_id
-ch_data_clean %>%
-  dplyr::count(.data[["changed_sc_id"]])
-
 # Merge records to a single row per episode
 # where admission is the same
-ch_episode <- ch_data_clean %>%
+ch_episode <- ready_to_merge %>%
   # when nursing_care_provision is different on
   # records within the episode, split the episode
   # at this point.
