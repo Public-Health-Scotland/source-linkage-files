@@ -9,7 +9,10 @@ create_individual_file <- function(episode_file) {
     find_non_duplicates(.data$cij_marker, "Distinct_CIJ") %>%
     add_cij_columns() %>%
     find_non_duplicates(.data$ch_chi_cis, "first_ch_ep") %>%
-    add_all_columns()
+    add_all_columns() %>%
+    find_non_duplicates(.data$ooh_case_id, "unique_ooh_case") %>%
+    dplyr::mutate(unique_ooh_case = dplyr::if_else(recid != "OoH", 0, unique_ooh_case)) %>%
+    aggregate_cis_episodes()
 }
 
 #' Remove blank CHI
@@ -468,4 +471,15 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
     "gpprac" = NA_real_
   )
   return(na_type)
+}
+
+aggregate_cis_episodes <- function(episode_file) {
+  episode_file %>%
+    dplyr::group_by(.data$chi, .data$ch_chi_cis == 1) %>%
+    dplyr::mutate(
+      ch_no_cost = max(.data$ch_no_cost),
+      ch_ep_start = min(.data$keydate1_dateformat),
+      ch_ep_end = max(.data$ch_ep_end),
+      ch_cost_per_day = mean(.data$ch_cost_per_day)
+    )
 }
