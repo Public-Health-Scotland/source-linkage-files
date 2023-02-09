@@ -352,7 +352,8 @@ fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
 
   fixed <- potentially_fixable %>%
     dplyr::group_by(.data$chi) %>%
-    # Sort by episode dates so that the fill will use the 'nearest in time' postcode
+    # Sort by episode dates so that the fill will use the
+    # 'nearest in time' postcode/gpprac
     dplyr::arrange(
       .data$keydate1_dateformat,
       .data$keydate2_dateformat,
