@@ -374,8 +374,8 @@ fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
   }
 
   fixed <- ready_to_fix_no_dummy %>%
-  # Now we can fill the variables for these CHIs
-  tidyr::fill({{ type }}, .direction = "downup") %>%
+    # Now we can fill the variables for these CHIs
+    tidyr::fill({{ type }}, .direction = "downup") %>%
     dplyr::ungroup()
 
   fixed_data <- dplyr::bind_rows(
