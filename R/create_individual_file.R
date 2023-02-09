@@ -299,7 +299,8 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay > 0, .data$cost_total_net / .data$yearstay, NA_real_),
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay == 0, .data$cost_total_net / .data$yearstay, .data$ch_cost_per_day),
       ch_no_cost = eval(condition) & is.na(ch_cost_per_day),
-      ch_ep_end = dplyr::if_else(eval(condition), .data$keydate2_dateformat, lubridate::NA_Date_)) %>%
+      ch_ep_end = dplyr::if_else(eval(condition), .data$keydate2_dateformat, lubridate::NA_Date_)
+    ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
       ch_ep_end = dplyr::if_else(eval(condition) & is.na(ch_ep_end), lubridate::quarter(zoo::as.yearqtr(.data$sc_latest_submission), type = "date_first"), .data$ch_ep_end)
@@ -472,4 +473,3 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
   )
   return(na_type)
 }
-
