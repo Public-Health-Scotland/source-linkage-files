@@ -358,17 +358,16 @@ fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
       .data$keydate1_dateformat,
       .data$keydate2_dateformat,
       .by_group = TRUE
-    ) %>%
-    dplyr::mutate(
-      {{ type }} := dplyr::if_else(.data$lookup_match, .data[[type]], NA)
     )
 
   if (type == "postcode") {
     ready_to_fix_no_dummy <- dplyr::mutate(ready_to_fix,
+      postcode = dplyr::if_else(.data$lookup_match, .data$postcode, NA_character_),
       postcode = dplyr::na_if(.data$postcode, "NK010AA")
     )
   } else if (type == "gpprac") {
     ready_to_fix_no_dummy <- dplyr::mutate(ready_to_fix,
+      gpprac = dplyr::if_else(.data$lookup_match, .data$gpprac, NA_real_),
       gpprac = dplyr::na_if(.data$gpprac, 99999L)
     )
   }
