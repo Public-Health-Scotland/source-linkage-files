@@ -7,6 +7,8 @@
 add_cmh_columns(episode_file, prefix, condition)
 }
 \arguments{
+\item{episode_file}{Tibble containing episodic data}
+
 \item{prefix}{Prefix to add to related columns, e.g. "Acute"}
 
 \item{condition}{Condition to create new columns based on}
