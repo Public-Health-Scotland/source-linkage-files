@@ -20,6 +20,12 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   year <- check_year_format(year)
 
   # Add some variables ------------------------------------------------------
+
+  # If data is available in the FY then run processing.
+  # If no data has passed through, return NULL.
+  if (is.null(data)) {
+    return(NULL)
+  }
   data <- data %>%
     dplyr::mutate(
       year = as.character(year),
@@ -111,10 +117,11 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   ) %>%
     dplyr::distinct(.data$CA, .data$CAName) %>%
     dplyr::mutate(
-      sending_local_authority_name = dplyr::recode(
+      sending_local_authority_name = dplyr::case_match(
         .data$CAName,
-        "City of Edinburgh" = "Edinburgh",
-        "Na h-Eileanan Siar" = "Eilean Siar"
+        "City of Edinburgh" ~ "Edinburgh",
+        "Na h-Eileanan Siar" ~ "Eilean Siar",
+        .default = .data$CAName
       ) %>%
         stringr::str_replace("\\sand\\s", " \\& ")
     )

@@ -5,6 +5,11 @@
 #' @export
 #'
 read_extract_cmh <- function(year, file_path = get_boxi_extract_path(year = year, type = "CMH")) {
+  # Specify years available for running
+  if (is.na(file_path)) {
+    return(NULL)
+  }
+
   # Read BOXI extract
   extract_cmh <- readr::read_csv(file_path,
     col_types = cols_only(
