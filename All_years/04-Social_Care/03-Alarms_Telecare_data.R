@@ -29,7 +29,7 @@ sc_demographics <- haven::read_sav(fs::path(
 
 # Query to database -------------------------------------------------------
 
-# set-up connection to platform
+# set-up conection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
