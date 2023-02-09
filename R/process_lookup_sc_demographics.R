@@ -101,7 +101,7 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     sc_demog %>%
     # group by sending location and ID
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
-    # arrange so lastest submissions are last
+    # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
