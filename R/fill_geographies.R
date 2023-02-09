@@ -350,7 +350,7 @@ fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
   no_change <- data %>%
     dplyr::filter(is_missing(.data$chi) | .data$all_match %in% c(0L, 1L))
 
-  fixed <- potentially_fixable %>%
+  ready_to_fix <- potentially_fixable %>%
     dplyr::group_by(.data$chi) %>%
     # Sort by episode dates so that the fill will use the
     # 'nearest in time' postcode/gpprac
@@ -360,12 +360,22 @@ fill_data_from_chi <- function(data, type = c("postcode", "gpprac")) {
       .by_group = TRUE
     ) %>%
     dplyr::mutate(
-      {{ type }} := ifelse(.data$lookup_match, .data[[type]], NA),
-      {{ type }} := dplyr::na_if(.data[[type]], "NK010AA"),
-      {{ type }} := dplyr::na_if(.data[[type]], 99999L)
-    ) %>%
-    # Now we can fill the variables for these CHIs
-    tidyr::fill({{ type }}, .direction = "downup") %>%
+      {{ type }} := dplyr::if_else(.data$lookup_match, .data[[type]], NA)
+    )
+
+  if (type == "postcode") {
+    ready_to_fix_no_dummy <- dplyr::mutate(ready_to_fix,
+      postcode = dplyr::na_if(.data$postcode, "NK010AA")
+    )
+  } else if (type == "gpprac") {
+    ready_to_fix_no_dummy <- dplyr::mutate(ready_to_fix,
+      gpprac = dplyr::na_if(.data$gpprac, 99999L)
+    )
+  }
+
+  fixed <- ready_to_fix_no_dummy %>%
+  # Now we can fill the variables for these CHIs
+  tidyr::fill({{ type }}, .direction = "downup") %>%
     dplyr::ungroup()
 
   fixed_data <- dplyr::bind_rows(
