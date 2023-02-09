@@ -105,7 +105,7 @@ create_monthly_beddays <- function(data,
       tidyr::replace_na(0L) %>%
       as.integer()
   ) %>%
-    purrr::list_rbind()
+    dplyr::bind_cols()
 
   # Join the beddays back to the data
   data <- dplyr::bind_cols(data, beddays) %>%
