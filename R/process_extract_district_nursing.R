@@ -42,12 +42,16 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
 
   # Recode HB codes to HB2019 so they match the cost lookup
   dn_costs <- dn_clean %>%
-    dplyr::mutate(hbtreatcode = dplyr::recode(.data$hbtreatcode,
-      "S08000018" = "S08000029",
-      "S08000027" = "S08000030",
-      "S08000021" = "S08000031",
-      "S08000023" = "S08000032"
-    )) %>%
+    dplyr::mutate(
+      hbtreatcode = dplyr::case_match(
+        .data$hbtreatcode,
+        "S08000018" ~ "S08000029",
+        "S08000027" ~ "S08000030",
+        "S08000021" ~ "S08000031",
+        "S08000023" ~ "S08000032",
+        .default = .data$hbtreatcode
+      )
+    ) %>%
     # match files with DN Cost Lookup
     dplyr::left_join(readr::read_rds(get_dn_costs_path()),
       by = c("hbtreatcode", "year")
