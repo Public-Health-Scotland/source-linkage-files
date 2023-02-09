@@ -60,7 +60,7 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       end_before_qtr = .data$qtr_start > .data$hc_service_end_date &
         !is.na(.data$hc_service_end_date),
       start_after_quarter = .data$record_date < .data$hc_service_start_date,
-      # Need to check - as we are potentialsly introducing bad start dates above
+      # Need to check - as we are potentially introducing bad start dates above
       start_after_end = .data$hc_service_start_date > .data$hc_service_end_date &
         !is.na(.data$hc_service_end_date)
     ) %>%
