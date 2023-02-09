@@ -14,11 +14,14 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # From C01 ----
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
-    dplyr::mutate(chi = dplyr::if_else(
-      phsmethods::chi_check(.data$chi) != "Valid CHI",
-      "",
-      .data$chi),
-    gpprac = as.numeric(gpprac)) %>%
+    dplyr::mutate(
+      chi = dplyr::if_else(
+        phsmethods::chi_check(.data$chi) != "Valid CHI",
+        "",
+        .data$chi
+      ),
+      gpprac = as.numeric(gpprac)
+    ) %>%
     # In original C01, set dates to date format - this doesn't need to be done
     # Set SMRtype, doesn't need to be done
     # Recode any cij_admtype "Un" to "99"
@@ -43,16 +46,16 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         .data$cij_pattype_code == 9 ~ "Other"
       )
     )
-    # Combine the CIJ-only records with the non-CIJ records
+  # Combine the CIJ-only records with the non-CIJ records
 
   ep_file <- dplyr::bind_rows(
-      # Fill missing CIJ markers for those records that should have them
+    # Fill missing CIJ markers for those records that should have them
     fixed_patient_types %>%
       fill_missing_cij_markers(),
-      # Bind the CIJ records with the non-cij records, determined by recid
+    # Bind the CIJ records with the non-cij records, determined by recid
     fixed_patient_types %>%
       dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
-    ) %>%
+  ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
     dplyr::mutate(
       cost_total_net_inc_dnas = .data$cost_total_net,
