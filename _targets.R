@@ -13,9 +13,9 @@ tar_option_set(
 
 list(
   tar_target(write_to_disk, FALSE),
-  tar_target(sc_demog_lookup,
-              process_lookup_sc_demographics(read_lookup_sc_demographics(),
-                                             write_to_disk = write_to_disk)),
+  # tar_target(sc_demog_lookup,
+  #             process_lookup_sc_demographics(read_lookup_sc_demographics(),
+  #                                            write_to_disk = write_to_disk)),
 
   ## Social Care - 'All' data ##
   # Ask James if this is needed here, or we can target from above?
@@ -23,10 +23,14 @@ list(
   tar_target(all_at, process_sc_all_alarms_telecare(read_sc_all_alarms_telecare(),
                                                     sc_demographics = sc_demographic_data,
                                                     write_to_disk = write_to_disk)),
-  #tar_target(all_sds, process_sc_all_sds(),
+  tar_target(all_sds, process_sc_all_sds(read_sc_all_sds(),
+                                                    sc_demographics = sc_demographic_data,
+                                                    write_to_disk = write_to_disk)),
+  tar_target(all_home_care, process_sc_all_home_care(read_sc_all_home_care(),
+                                                    sc_demographics = sc_demographic_data,
+                                                    write_to_disk = write_to_disk)),
 
   # Still WIP sc functions.
-  # tar_target(all_hc, process_sc_all_home_care()
   # tar_target(all_ch,)
 
 
@@ -57,7 +61,7 @@ list(
     # All WORKING - Commented for faster running
 
     ### target data extracts ###
-    tar_target(cmh_data, get_boxi_extract_path(year, type = "CMH")),
+    tar_target(cmh_data, get_boxi_extract_path(year, type = "CMH"))#,
     #   tar_target(dd_data, get_dd_path(ext = "zsav")),
     #   tar_target(dn_data, get_boxi_extract_path(year, type = "DN")),
     #   tar_target(homelessness_data, get_boxi_extract_path(year, type = "Homelessness")),
@@ -132,9 +136,9 @@ list(
 
     ### Target social care data ###
 
-    tar_target(sc_client, process_lookup_sc_client(read_lookup_sc_client(fyyear = year),
-                                                   year,
-                                                   write_to_disk = write_to_disk))
+    # tar_target(sc_client, process_lookup_sc_client(read_lookup_sc_client(fyyear = year),
+    #                                                year,
+    #                                                write_to_disk = write_to_disk))
     #tar_target(sc_alarms_tele, process_extract_alarms_telecare(read_sc_all_alarms_telecare(sc_connection),
     #                                               year,
     #                                               write_to_disk = write_to_disk))
