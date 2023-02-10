@@ -14,8 +14,8 @@
 #'
 process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
-    # read in demographic data
-    sc_demographics <- readr::read_rds(sc_demographics)
+  # read in demographic data
+  sc_demographics <- readr::read_rds(sc_demographics)
 
 
   matched_hc_data <- data %>%
