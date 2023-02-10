@@ -61,10 +61,10 @@ list(
     # All WORKING - Commented for faster running
 
     ### target data extracts ###
-    tar_target(cmh_data, get_boxi_extract_path(year, type = "CMH"))#,
-    #   tar_target(dd_data, get_dd_path(ext = "zsav")),
-    #   tar_target(dn_data, get_boxi_extract_path(year, type = "DN")),
-    #   tar_target(homelessness_data, get_boxi_extract_path(year, type = "Homelessness")),
+    tar_target(cmh_data, get_boxi_extract_path(year, type = "CMH"), format = "file")#,
+    #   tar_target(dd_data, get_dd_path(ext = "zsav"), format = "file"),
+    #   tar_target(dn_data, get_boxi_extract_path(year, type = "DN"), format = "file"),
+    #   tar_target(homelessness_data, get_boxi_extract_path(year, type = "Homelessness"), format = "file"),
     #   tar_target(acute_data, get_boxi_extract_path(year, type = "Acute"), format = "file"),
     #   tar_target(ae_data, get_boxi_extract_path(year, type = "AE"), format = "file"),
     #   tar_target(maternity_data, get_boxi_extract_path(year, type = "Maternity"), format = "file"),
@@ -135,12 +135,32 @@ list(
     #                                      write_to_disk = write_to_disk))
 
     ### Target social care data ###
+    # tar_target(all_at_data, get_sc_at_episodes_path(), format = "file"),
+    # tar_target(all_sds_data, get_sc_sds_episodes_path(), format = "file"),
+    # tar_target(all_hc_data, get_sc_hc_episodes_path(), format = "file"),
+    # tar_target(all_ch_data, get_sc_ch_episodes_path(update = latest_update(), ext = "zsav"), format = "file")
 
+
+    ### Target process year specific social care ###
     # tar_target(sc_client, process_lookup_sc_client(read_lookup_sc_client(fyyear = year),
     #                                                year,
     #                                                write_to_disk = write_to_disk))
-    #tar_target(sc_alarms_tele, process_extract_alarms_telecare(read_sc_all_alarms_telecare(sc_connection),
+    #tar_target(source_sc_alarms_tele, process_extract_alarms_telecare(all_at),
     #                                               year,
+    #                                               client_lookup = sc_client
+    #                                               write_to_disk = write_to_disk)),
+    #tar_target(source_sc_sds, process_extract_sds(all_sds),
+    #                                               year,
+    #                                               client_lookup = sc_client
+    #                                               write_to_disk = write_to_disk)),
+    #tar_target(source_sc_home_care, process_extract_home_care(all_home_care),
+    #                                               year,
+    #                                               client_lookup = sc_client
+    #                                               write_to_disk = write_to_disk)),
+    #tar_target(source_sc_care_homes, process_extract_care_home(all_ch),
+    #                                               year,
+    #                                               client_lookup = sc_client
     #                                               write_to_disk = write_to_disk))
+
   )
 )
