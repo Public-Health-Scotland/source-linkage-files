@@ -211,7 +211,6 @@ add_ppa_flag <- function(data) {
         TRUE ~ FALSE
       )
     ) %>%
-    # Just select out the chi, cij marker and ppa for ease of joining
     dplyr::select("chi", "cij_marker", cij_ppa = "ppa")
 
   # Match on the ppa lookup to original data

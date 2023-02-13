@@ -35,13 +35,13 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
       submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
     ) %>%
     dplyr::mutate(
-      # use chi gender if available
+      # use chi gender if avaliable
       gender = dplyr::if_else(
         is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
         .data$submitted_gender,
         .data$chi_gender_code
       ),
-      # use chi dob if available
+      # Use CHI DoB if avaliable
       dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
     ) %>%
     # format postcodes using `phsmethods`
@@ -59,12 +59,12 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     # remove dummy postcodes invalid postcodes missed by regex check
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
-      ~ dplyr::if_else(.x %in% c(dummy_postcodes, non_existant_postcodes), NA, .x)
+      ~ dplyr::na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes))
     )) %>%
     # comparing with regex UK postcode
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
-      ~ dplyr::if_else(stringr::str_detect(.x, uk_pc_regexp), .x, NA)
+      ~ dplyr::na_if(.x, !stringr::str_detect(.x, uk_pc_regexp))
     )) %>%
     dplyr::select(
       "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi", "gender",
@@ -101,7 +101,7 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     sc_demog %>%
     # group by sending location and ID
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
-    # arrange so latest submissions are last
+    # arrange so lastest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,

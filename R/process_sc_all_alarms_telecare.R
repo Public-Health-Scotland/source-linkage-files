@@ -13,6 +13,8 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
+#' @export
+#'
 process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
   if (is.null(sc_demographics)) {
@@ -71,7 +73,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_t
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%
-    # use as.data.table to change the data format to data.table to accelarate
+    # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
     dplyr::group_by(
       .data$sending_location,

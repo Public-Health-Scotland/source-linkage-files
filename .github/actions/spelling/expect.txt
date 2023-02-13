@@ -16,7 +16,9 @@ dplyr
 dsn
 dtplyr
 DVPROD
+envir
 Finalise
+fyear
 fyyear
 gpprac
 hbnames
@@ -25,9 +27,9 @@ hbrescode
 hbtreatcode
 hhg
 hms
+homecare
 hscp
 hscpnames
-itle
 jennifer
 keydate
 keyring
@@ -35,8 +37,9 @@ kis
 ltc
 lubridate
 magrittr
-Mcbride
-mcmahon
+McBride
+McMahon
+multistaff
 nrs
 nsu
 odbc
@@ -51,9 +54,11 @@ praccode
 purrr
 quickstart
 rds
+reablement
 readcode
 readr
 readxl
+recid
 refsource
 rlang
 rmarkdown
@@ -67,10 +72,12 @@ slf
 slfhelper
 smr
 SMRA
+smrtype
 sparra
 spd
 SPSS
 stringr
+tbl
 telecare
 testthat
 thom
@@ -78,6 +85,8 @@ tibble
 tidyr
 tidyselect
 uid
+ungroup
+updown
 xlsx
 zihao
 zsav
