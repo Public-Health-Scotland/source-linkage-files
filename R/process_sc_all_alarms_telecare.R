@@ -13,6 +13,8 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
+#' @export
+#'
 process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
   if (is.null(sc_demographics)) {

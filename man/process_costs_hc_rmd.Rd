@@ -4,7 +4,10 @@
 \alias{process_costs_hc_rmd}
 \title{Process Home Care cost lookup Rmd file}
 \usage{
-process_costs_hc_rmd()
+process_costs_hc_rmd(file_path = get_hc_costs_path())
+}
+\arguments{
+\item{file_path}{Path to the cost lookup.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the final cost data.
