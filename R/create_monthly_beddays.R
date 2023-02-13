@@ -97,14 +97,15 @@ create_monthly_beddays <- function(data,
     rlang::set_names(paste0(tolower(month.abb[c(4L:12L, 1L:3L)]), "_beddays"))
 
   # Work out the beddays for each month
-  beddays <- purrr::map_dfc(
+  beddays <- purrr::map(
     month_intervals,
     ~ lubridate::intersect(data$stay_interval, .x) %>%
       lubridate::time_length(unit = "days") %>%
       # Replace any NAs with zero
       tidyr::replace_na(0L) %>%
       as.integer()
-  )
+  ) %>%
+    dplyr::bind_cols()
 
   # Join the beddays back to the data
   data <- dplyr::bind_cols(data, beddays) %>%

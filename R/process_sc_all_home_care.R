@@ -41,7 +41,7 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
       .data$hc_service_start_date
     )) %>%
     # Replace really early start dates with start of the quarter
-    dplyr::mutate(hc_service_end_date = dplyr::if_else(
+    dplyr::mutate(hc_service_start_date = dplyr::if_else(
       .data$hc_service_start_date < as.Date("1989-01-01"),
       .data$qtr_start,
       .data$hc_service_start_date
@@ -58,7 +58,7 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
       end_before_qtr = .data$qtr_start > .data$hc_service_end_date &
         !is.na(.data$hc_service_end_date),
       start_after_quarter = .data$record_date < .data$hc_service_start_date,
-      # Need to check - as we are potentialsly introducing bad start dates above
+      # Need to check - as we are potentially introducing bad start dates above
       start_after_end = .data$hc_service_start_date > .data$hc_service_end_date &
         !is.na(.data$hc_service_end_date)
     ) %>%
