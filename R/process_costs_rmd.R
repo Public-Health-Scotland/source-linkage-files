@@ -61,7 +61,7 @@ process_costs_rmd <- function(file_name) {
 #'
 #' @return a [tibble][tibble::tibble-package] containing the final cost data.
 #' @export
-process_costs_dn_rmd <- function(file_path = get_dn_costs_path() ) {
+process_costs_dn_rmd <- function(file_path = get_dn_costs_path()) {
   process_costs_rmd(file_name = "costs_district_nursing.Rmd")
 
   dn_lookup <- readr::read_rds(file_path)
