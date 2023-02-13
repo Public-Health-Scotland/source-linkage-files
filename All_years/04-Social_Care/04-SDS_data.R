@@ -67,7 +67,7 @@ sds_full_clean <- sds_full_data %>%
     # Fix sds option 4 cases where all 3 options are missing
     sds_option_4 = if_else(sending_location == "120" & all(!sds_option_1, !sds_option_2, !sds_option_3), TRUE, sds_option_4)
   ) %>%
-  # Match on demographics data (chi, gender, dob and postcode)
+  # Match on demographics data (CHI, gender, DoB and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # If sds start date is missing, assign start of FY
   mutate(sds_start_date = if_else(is.na(sds_start_date),

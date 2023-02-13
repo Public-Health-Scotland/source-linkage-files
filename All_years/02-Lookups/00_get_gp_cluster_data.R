@@ -17,7 +17,7 @@ gp_clusters <- get_dataset("gp-practice-contact-details-and-list-sizes",
   clean_names() %>%
   # Get the code lookups so we have the names
   # Using the latest version of phsopendata for col_select
-  tidylog::left_join(get_resource("944765d7-d0d9-46a0-b377-abb3de51d08e",
+  dplyr::left_join(get_resource("944765d7-d0d9-46a0-b377-abb3de51d08e",
     col_select = c("HSCP", "HSCPName", "HB", "HBName")
   ) %>%
     clean_names()) %>%
