@@ -11,6 +11,9 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
+#'
+#' @export
+#'
 process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
   if (is.null(sc_demographics)) {
