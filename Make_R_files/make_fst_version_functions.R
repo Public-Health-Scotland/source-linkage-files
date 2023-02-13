@@ -16,7 +16,7 @@ pretty_time_diff <- function(start_time, end_time, units = "mins", digits = 1) {
 zsav_to_fst <- function(path, compress) {
   # Read the zsav file
   data <- haven::read_sav(path) %>%
-    dplyr::rename_all(tolower)
+    dplyr::rename_with(tolower)
 
   # Make a copy
   copy_path <- fs::path(

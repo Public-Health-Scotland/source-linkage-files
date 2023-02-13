@@ -41,7 +41,7 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
         .data$submitted_gender,
         .data$chi_gender_code
       ),
-      # Use CHI DoB if avaliable
+      # Use CHI DoB if available
       dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
     ) %>%
     # format postcodes using `phsmethods`

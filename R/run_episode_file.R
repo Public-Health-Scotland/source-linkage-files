@@ -10,15 +10,18 @@
 #' @examples
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
-  ep_file <- dplyr::bind_rows(processed_data_list) %>%
+  fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
     # From C01 ----
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
-    dplyr::mutate(chi = dplyr::if_else(
-      phsmethods::chi_check(.data$chi) != "Valid CHI",
-      "",
-      .data$chi
-    )) %>%
+    dplyr::mutate(
+      chi = dplyr::if_else(
+        phsmethods::chi_check(.data$chi) != "Valid CHI",
+        "",
+        .data$chi
+      ),
+      gpprac = as.numeric(gpprac)
+    ) %>%
     # In original C01, set dates to date format - this doesn't need to be done
     # Set SMRtype, doesn't need to be done
     # Recode any cij_admtype "Un" to "99"
@@ -42,14 +45,17 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         .data$cij_pattype_code == 2 ~ "Maternity",
         .data$cij_pattype_code == 9 ~ "Other"
       )
-    ) %>%
-    # Combine the CIJ-only records with the non-CIJ records
-    dplyr::bind_rows(
-      # Fill missing CIJ markers for those records that should have them
-      . %>% fill_missing_cij_markers(),
-      # Bind the CIJ records with the non-cij records, determined by recid
-      . %>% dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
-    ) %>%
+    )
+  # Combine the CIJ-only records with the non-CIJ records
+
+  ep_file <- dplyr::bind_rows(
+    # Fill missing CIJ markers for those records that should have them
+    fixed_patient_types %>%
+      fill_missing_cij_markers(),
+    # Bind the CIJ records with the non-cij records, determined by recid
+    fixed_patient_types %>%
+      dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
+  ) %>%
     # Create cost including DNAs and modify cost not including DNAs using cattend
     dplyr::mutate(
       cost_total_net_inc_dnas = .data$cost_total_net,
@@ -75,22 +81,25 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     add_nsu_cohort(., year) %>%
     # From C05 - Match on LTCs ----
     # Create Temp File 5
-    correct_demographics(., year) %>%
-    match_on_ltcs(year)
+    match_on_ltcs(year) %>%
+    correct_demographics(., year)
+
 
   # From C06 - Deaths Fixes ----
   # Create Temp File 6
   # temp_file_6 <- temp_file_5
 
   # From C07 - Calculate and write out pathways cohorts ----
-  create_demographic_lookup(ep_file, year, write_to_disk = TRUE)
-  create_service_use_lookup(ep_file, year, write_to_disk = TRUE)
+  # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
+  # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
 
   # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
   # Create Temp File 7
 
+  return(ep_file)
+
   # From C09 - Match on postcode and gpprac variables ----
-  ep_file <- ep_file %>% fill_geographies()
+  # ep_file_2 <- ep_file %>% fill_geographies()
 
   # From C10 - Final tidy-up (mostly variable labels) ----
   # Create Episode File
@@ -101,8 +110,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   if (write_to_disk == TRUE) {
 
   }
-
-  return(final_data)
 }
 
 #' Fill any missing CIJ markers for records that should have them
