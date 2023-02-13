@@ -86,7 +86,7 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
     replace_sc_id_with_latest()
 
   final_data <- sds_full_clean %>%
-    # use as.data.table to change the data format to data.table to accelarate
+    # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$smrtype) %>%
     dplyr::arrange(.data$period, .data$record_keydate1, .by_group = TRUE) %>%
