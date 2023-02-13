@@ -19,7 +19,7 @@
   * GP OoH costs updated - Now using real contact numbers (from unscheduled care team publication) for 2020/21, and 2021/22. Costs are uplifted from 2019/20 using the same methodology as with PLICS. 2022/23 now has costs (previously missing).
   * New COVID-19 related consultation types have now been included in `smrtype`. This was an oversight as it should have been included at the last update.
   * `ooh_case_id` has replaced `ooh_CC` in the older files. This was implemented for years 2017/18 -> 2022/23 at the last update, so this completes that change.
-  * Added new variables to the individual file to count the recently added consultation types for GP OoHs - `ooh_covid_advice`, `ooh_covid_assesment` and `ooh_covid_other`.
+  * Added new variables to the individual file to count the recently added consultation types for GP OoHs - `ooh_covid_advice`, `ooh_covid_assessment` and `ooh_covid_other`.
   * Fixed `ooh_cases` - this was overcounting, such that everyone had at least one case and the majority of people had one more case than they should have had.
 
 

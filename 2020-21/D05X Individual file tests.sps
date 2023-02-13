@@ -154,7 +154,7 @@ aggregate outfile = New_Summary
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
     /total_ooh_covid_advice = sum(ooh_covid_advice)
-    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_assessment = sum(ooh_covid_assessment)
     /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
@@ -250,7 +250,7 @@ aggregate outfile = New_Summary
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
     /mean_ooh_covid_advice = Mean(ooh_covid_advice)
-    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_assessment = Mean(ooh_covid_assessment)
     /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
@@ -390,7 +390,7 @@ If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
 * Add in variables which didn't exist in the previous update (Dec 2022).
 Numeric
     ooh_covid_advice
-    ooh_covid_assesment
+    ooh_covid_assessment
     ooh_covid_other (F2.0).
 
 Dataset declare Old_Summary.
@@ -474,7 +474,7 @@ aggregate outfile = Old_Summary
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
     /total_ooh_covid_advice = sum(ooh_covid_advice)
-    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_assessment = sum(ooh_covid_assessment)
     /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
@@ -570,7 +570,7 @@ aggregate outfile = Old_Summary
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
     /mean_ooh_covid_advice = Mean(ooh_covid_advice)
-    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_assessment = Mean(ooh_covid_assessment)
     /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
