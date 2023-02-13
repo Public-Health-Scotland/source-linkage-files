@@ -5,9 +5,10 @@
 \alias{process_costs_gp_ooh_rmd}
 \title{Process GP ooh cost lookup RMD file}
 \usage{
-process_costs_gp_ooh_rmd()
-
-process_costs_gp_ooh_rmd()
+process_costs_gp_ooh_rmd(file_path = get_gp_ooh_costs_path())
+}
+\arguments{
+\item{file_path}{Path to the cost lookup.}
 }
 \value{
 the final data as a html document.

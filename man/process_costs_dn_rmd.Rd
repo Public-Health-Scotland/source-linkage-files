@@ -4,9 +4,10 @@
 \alias{process_costs_dn_rmd}
 \title{Process District Nursing cost lookup RMD file}
 \usage{
-process_costs_dn_rmd()
-
-process_costs_dn_rmd()
+process_costs_dn_rmd(file_path = get_dn_costs_path())
+}
+\arguments{
+\item{file_path}{Path to the cost lookup.}
 }
 \value{
 the final data as a html document.

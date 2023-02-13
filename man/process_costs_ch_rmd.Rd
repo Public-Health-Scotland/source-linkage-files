@@ -4,12 +4,10 @@
 \alias{process_costs_ch_rmd}
 \title{Process care homes cost lookup RMD file}
 \usage{
-process_costs_ch_rmd()
-
-process_costs_ch_rmd()
+process_costs_ch_rmd(file_path = get_ch_costs_path())
 }
 \arguments{
-\item{file_path}{Path to cost lookup.}
+\item{file_path}{Path to the cost lookup.}
 }
 \value{
 the final data as a html document.
