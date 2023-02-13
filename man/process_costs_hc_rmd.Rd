@@ -5,9 +5,11 @@
 \title{Process Home Care cost lookup RMD file}
 \usage{
 process_costs_hc_rmd(file_path = get_hc_costs_path())
+
+process_costs_hc_rmd(file_path = get_hc_costs_path())
 }
 \arguments{
-\item{file_path}{Path to the cost lookup.}
+\item{file_path}{Path to cost lookup.}
 }
 \value{
 the final data as a html document.
