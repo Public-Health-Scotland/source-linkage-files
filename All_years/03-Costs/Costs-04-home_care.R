@@ -6,7 +6,7 @@
 # Version of R - 3.6.1
 # Input - hc_costs.xlsx
 # Description - Update the costs in hc_costs.xlsx first
-# These came from Improvment Service
+# These came from Improvement Service
 # Table: Cash Num-Den_Indi
 # Columns: XQ-XS
 # https://www.improvementservice.org.uk/benchmarking/explore-the-data
