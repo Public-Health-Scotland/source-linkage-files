@@ -4,10 +4,21 @@
 \alias{read_extract_gp_ooh}
 \title{Process the GP OoH extract}
 \usage{
-read_extract_gp_ooh(year)
+read_extract_gp_ooh(
+  year,
+  diagnosis_path = get_boxi_extract_path(year = year, type = "GP_OoH-d"),
+  outcomes_path = get_boxi_extract_path(year = year, type = "GP_OoH-o"),
+  consultations_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")
+)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
+
+\item{diagnosis_path}{Path to diagnosis BOXI extract location.}
+
+\item{outcomes_path}{Path to outcomes BOXI extract location.}
+
+\item{consultations_path}{Path to consultations BOXI extract location.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
