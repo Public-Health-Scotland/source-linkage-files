@@ -4,7 +4,10 @@
 \alias{process_costs_gp_ooh_rmd}
 \title{Process GP ooh cost lookup Rmd file}
 \usage{
-process_costs_gp_ooh_rmd()
+process_costs_gp_ooh_rmd(file_path = get_gp_ooh_costs_path())
+}
+\arguments{
+\item{file_path}{Path to the cost lookup.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the final cost data.
