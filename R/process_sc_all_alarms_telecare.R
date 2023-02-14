@@ -12,6 +12,8 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
+#' @export
+#'
 process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 

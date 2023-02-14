@@ -10,6 +10,9 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
+#'
+#' @export
+#'
 process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
   # read in demographic data
