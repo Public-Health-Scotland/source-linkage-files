@@ -7,11 +7,13 @@ covr
 cph
 createslf
 datazone
+dateformat
 datetime
 dbconnect
 dbplyr
 demog
 dontrun
+downup
 dplyr
 dsn
 dtplyr
@@ -20,8 +22,12 @@ dvprod
 envir
 fyear
 fyyear
+geogs
 gpprac
 hbnames
+hbpraccode
+hbrescode
+hbtreatcode
 hhg
 hms
 homecare
@@ -46,6 +52,7 @@ outfile
 phs
 phsmethods
 phsopendata
+postcodes
 purrr
 quickstart
 rds
