@@ -25,7 +25,7 @@ add_nsu_cohort <- function(data, year) {
   matched <- dplyr::full_join(data,
     # NSU cohort file
     haven::read_sav(get_nsu_path(year, ext = "zsav")) %>%
-      dplyr::mutate(gpprac = as.integer(.data$gpprac)),
+      dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)),
     # Match on by chi
     by = "chi",
     # Name the incoming variables with "_nsu"
