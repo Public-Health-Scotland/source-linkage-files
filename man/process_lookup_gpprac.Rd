@@ -6,7 +6,7 @@
 \usage{
 process_lookup_gpprac(
   open_data = get_gpprac_opendata(),
-  gpprac_ref_file = get_gpprac_ref_path(),
+  gpprac_ref_path = get_gpprac_ref_path(),
   spd_path = get_spd_path(),
   write_to_disk = TRUE
 )
@@ -14,7 +14,7 @@ process_lookup_gpprac(
 \arguments{
 \item{open_data}{PHS open dataset link to gp practice details}
 
-\item{gpprac_ref_file}{Path to GP Practice reference file}
+\item{gpprac_ref_path}{Path to GP Practice reference file}
 
 \item{spd_path}{Path to Scottish Postcode Directory.#'}
 

@@ -5,7 +5,7 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param open_data PHS open dataset link to gp practice details
-#' @param gpprac_ref_file Path to GP Practice reference file
+#' @param gpprac_ref_path Path to GP Practice reference file
 #' @param spd_path Path to Scottish Postcode Directory.#'
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
@@ -15,13 +15,13 @@
 #' @family process extracts
 
 process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
-                                  gpprac_ref_file = get_gpprac_ref_path(),
+                                  gpprac_ref_path = get_gpprac_ref_path(),
                                   spd_path = get_spd_path(),
                                   write_to_disk = TRUE) {
   # Read Lookup files ---------------------------------------
   # gp lookup
   gpprac_ref_file <-
-    haven::read_sav(gpprac_ref_file) %>%
+    haven::read_sav(gpprac_ref_path) %>%
     # select only praccode and postcode
     dplyr::select(
       gpprac = .data$praccode,
