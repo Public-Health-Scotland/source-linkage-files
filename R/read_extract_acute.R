@@ -61,7 +61,7 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
       "Date of Operation 4 (01)" = col_date(format = "%Y/%m/%d %T"),
       "Age at Midpoint of Financial Year (01)" = col_integer(),
       "Continuous Inpatient Stay(SMR01) (inc GLS)" = col_integer(),
-      "Continuous Inpatient Journey Marker (01)" = col_character(),
+      "Continuous Inpatient Journey Marker (01)" = col_integer(),
       "CIJ Planned Admission Code (01)" = col_integer(),
       "CIJ Inpatient Day Case Identifier Code (01)" = col_character(),
       "CIJ Type of Admission Code (01)" = col_character(),
