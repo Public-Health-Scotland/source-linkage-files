@@ -12,7 +12,10 @@ create_individual_file <- function(episode_file) {
     add_all_columns() %>%
     find_non_duplicates(.data$ooh_case_id, "unique_ooh_case") %>%
     dplyr::mutate(unique_ooh_case = dplyr::if_else(recid != "OoH", 0, unique_ooh_case)) %>%
-    aggregate_cis_episodes()
+    aggregate_cis_episodes() %>%
+    clean_up_ch() %>%
+    recode_gender() %>%
+    aggregate_by_chi()
 }
 
 #' Remove blank CHI
@@ -305,7 +308,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ch_ep_end = dplyr::if_else(eval(condition), .data$keydate2_dateformat, lubridate::NA_Date_)) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      ch_ep_end = dplyr::if_else(eval(condition) & is.na(ch_ep_end), lubridate::quarter(zoo::as.yearqtr(.data$sc_latest_submission), type = "date_first"), .data$ch_ep_end)
+      ch_ep_end = dplyr::if_else(eval(condition) & is.na(ch_ep_end), lubridate::quarter(zoo::as.yearqtr(.data$sc_latest_submission), type = "date_first", fiscal_start = 4), .data$ch_ep_end)
     ) %>%
     dplyr::ungroup()
 }
@@ -478,11 +481,169 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
 
 aggregate_cis_episodes <- function(episode_file) {
   episode_file %>%
-    dplyr::group_by(.data$chi, .data$ch_chi_cis == 1) %>%
+    dplyr::group_by(.data$chi, .data$ch_chi_cis) %>%
     dplyr::mutate(
       ch_no_cost = max(.data$ch_no_cost),
       ch_ep_start = min(.data$keydate1_dateformat),
       ch_ep_end = max(.data$ch_ep_end),
       ch_cost_per_day = mean(.data$ch_cost_per_day)
+    ) %>%
+    dplyr::ungroup()
+}
+
+#' @inheritParams create_individual_file
+clean_up_ch <- function(episode_file) {
+  episode_file %>%
+    dplyr::mutate(
+        fy_end = date_from_fy(year, "end") + 1,
+        fy_start = date_from_fy(year, "start")) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+        term_1 = min(ch_ep_end, fy_end + 1),
+        term_2 = max(ch_ep_start, fy_start)
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      ch_beddays = dplyr::if_else(
+        recid == "CH",
+        as.numeric(term_1 - term_2),
+        NA_real_
+      ),
+      ch_cost = dplyr::if_else(
+        recid == "CH" & ch_no_cost == 0,
+        ch_beddays * ch_cost_per_day,
+        NA_real_
+      ),
+      ch_beddays = dplyr::if_else(
+        recid == "CH" & first_ch_ep == 0,
+        0,
+        ch_beddays
+      ),
+      ch_cost = dplyr::if_else(
+        recid == "CH" & first_ch_ep == 0,
+        0,
+        ch_cost
+      )
+    ) %>%
+    dplyr::select(
+      -fy_end, -fy_start, -term_1, -term_2
     )
 }
+
+date_from_fy <- function(financial_year, type = c("start", "end")) {
+  match.arg(type)
+  n <- switch(type,
+              "start" = 0,
+              "end" = 2)
+  year = as.numeric(paste0("20", substr(financial_year, 1 + n, 2 + n)))
+  if (type == "start") {
+    date <- lubridate::make_date(year, 4, 1)
+    return(date)
+  }
+  date <- lubridate::make_date(year, 3, 31)
+  return(date)
+}
+
+recode_gender <- function(episode_file) {
+  episode_file %>%
+    dplyr::mutate(
+      gender = dplyr::if_else(
+        gender == 0 | gender == 9,
+        1.5,
+        gender
+      )
+    )
+}
+
+aggregate_by_chi <- function(episode_file) {
+  episode_file %>%
+    dplyr::arrange(chi,
+                   keydate1_dateformat,
+                   keytime1,
+                   keydate2_dateformat,
+                   keytime2) %>%
+    dplyr::group_by(chi) %>%
+    dplyr::summarise(
+      gender = mean(gender),
+      dplyr::across(dplyr::ends_with(c(
+        "postcode", "DoB", "gpprac"
+      )), ~ dplyr::last(., na_rm = TRUE)),
+      dplyr::across(
+        c(
+          "CIJ_el",
+          "CIJ_non_el",
+          "CIJ_mat",
+          "cij_delay",
+          dplyr::ends_with(
+            c(
+              "episodes",
+              "beddays",
+              "cost",
+              "attendances",
+              "case",
+              "attend",
+              "contacts",
+              "hours",
+              "alarms",
+              "telecare",
+              "paid_items",
+              "advice",
+              "homeV",
+              "time",
+              "admissions"
+            )
+          ),
+          dplyr::starts_with("SDS_option")
+        ),
+        ~ sum(., na.rm = TRUE)
+      ),
+      dplyr::across(
+        c(
+          dplyr::starts_with("sc_"),
+          -"sc_send_lca",
+          -"sc_latest_submission",
+          "hh_in_FY",
+          "NSU"
+        ),
+        ~ max(., na.rm = TRUE)
+      ),
+      dplyr::across(
+        c(condition_cols(),
+          dplyr::ends_with(c(
+            "_Cohort", "end_fy", "start_fy"
+          )),),
+        ~ dplyr::first(., na_rm = TRUE)
+      )
+    )
+}
+
+
+conditions_cols <- function() {
+  condition_cols <- c(
+    "arth",
+    "asthma",
+    "atrialfib",
+    "cancer",
+    "cvd",
+    "liver",
+    "copd",
+    "dementia",
+    "diabetes",
+    "epilepsy",
+    "chd",
+    "hefailure",
+    "ms",
+    "parkinsons",
+    "refailure",
+    "congen" ,
+    "bloodbfo",
+    "endomet",
+    "digestive"
+  )
+  date_cols <- paste0(conditions, "_date")
+  all_cols <- c(condition_cols, date_cols)
+  return(all_cols)
+}
+
+
+# need to rename: OoH_cases, HL1_in_FY
