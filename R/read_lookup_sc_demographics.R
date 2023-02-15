@@ -8,9 +8,6 @@
 read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = "DVPROD")) {
   # Read in data---------------------------------------
 
-  # set-up connection to platform
-  db_connection <- phs_db_connection(dsn = "DVPROD")
-
   # read in data - social care 2 demographic
   sc_demog <- dplyr::tbl(
     sc_connection,
