@@ -5,8 +5,7 @@
 #' but also write this out as a rds.
 #'
 #' @param data The extract to process
-#' @param sc_demographics The sc demographics lookup. Default set to NULL as
-#' we can pass this through data in the environment.
+#' @param sc_demographics The sc demographics lookup.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,11 +14,11 @@
 #'
 #' @export
 #'
-process_sc_all_alarms_telecare <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
-  # Read Demographic file----------------------------------------------------
-  if (is.null(sc_demographics)) {
-    sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
-  }
+process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
+
+   # Read Demographic file----------------------------------------------------
+
+  sc_demographics <- readr::read_rds(sc_demographics)
 
   ## Data Cleaning-----------------------------------------------------
 
