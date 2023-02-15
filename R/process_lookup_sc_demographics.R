@@ -4,14 +4,15 @@
 #' social care demographic lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param data The extract to process
+#' @param data The extract to process.
+#' @param spd_path Path to the Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
+process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), write_to_disk = TRUE) {
   ## Deal with postcodes---------------------------------------
 
   # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
@@ -21,7 +22,7 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
   ## postcode type ##
-  valid_spd_postcodes <- readr::read_rds(get_spd_path()) %>%
+  valid_spd_postcodes <- readr::read_rds(spd_path) %>%
     dplyr::pull(.data$pc7)
 
 
