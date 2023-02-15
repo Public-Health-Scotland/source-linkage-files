@@ -4,12 +4,13 @@
 #' postcode lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param spd_path Path to spd lookup.
-#' @param simd_path Path to simd lookup.
+#' @param simd_path Path to SIMD lookup.
 #' @param locality_path Path to locality lookup.
 #'
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#'
+#' @inheritParams process_lookup_gpprac
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export

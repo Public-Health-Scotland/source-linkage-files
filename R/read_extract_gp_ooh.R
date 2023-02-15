@@ -5,6 +5,9 @@
 #' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
+#' @param diagnosis_path Path to diagnosis BOXI extract location.
+#' @param outcomes_path Path to outcomes BOXI extract location.
+#' @param consultations_path Path to consultations BOXI extract location.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export

@@ -3,6 +3,7 @@
 #' @inherit read_extract_acute
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Diagnosis extract data
+#'
 read_extract_ooh_diagnosis <- function(
     year,
     file_path = get_boxi_extract_path(year = year, type = "GP_OoH-d")) {

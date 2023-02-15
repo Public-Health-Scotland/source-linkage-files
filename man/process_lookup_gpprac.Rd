@@ -5,13 +5,18 @@
 \title{Process the SLF gpprac lookup}
 \usage{
 process_lookup_gpprac(
-  file_path = phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes",
-    max_resources = 20L),
+  open_data = get_gpprac_opendata(),
+  gpprac_ref_path = get_gpprac_ref_path(),
+  spd_path = get_spd_path(),
   write_to_disk = TRUE
 )
 }
 \arguments{
-\item{file_path}{Link to phs open dataset}
+\item{open_data}{PHS open dataset link to gp practice details}
+
+\item{gpprac_ref_path}{Path to GP Practice reference file}
+
+\item{spd_path}{Path to Scottish Postcode Directory.#'}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
