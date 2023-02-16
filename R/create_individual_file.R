@@ -15,7 +15,8 @@ create_individual_file <- function(episode_file) {
     aggregate_cis_episodes() %>%
     clean_up_ch() %>%
     recode_gender() %>%
-    aggregate_by_chi()
+    aggregate_by_chi() %>%
+    clean_individual_file()
 }
 
 #' Remove blank CHI
@@ -212,7 +213,7 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
       "{prefix}_other" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-Other", 1, NA_real_),
       "{prefix}_PCC" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-PCC", 1, NA_real_),
       ooh_covid_advice = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Adv", 1, NA_real_),
-      ooh_covid_assessment = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Ass", 1, NA_real_),
+      ooh_covid_assesment = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Ass", 1, NA_real_),
       ooh_covid_other = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C190th", 1, NA_real_)
     )
 
@@ -387,6 +388,7 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
   condition_i <- substitute(eval(condition) & ipdc == "I")
   episode_file <- episode_file %>%
     dplyr::mutate(
+      "{prefix}_inpatient_cost" := dplyr::if_else(eval(condition_i), .data$cost_total_net, NA_real_),
       "{prefix}_inpatient_episodes" := dplyr::if_else(eval(condition_i), 1, NA_real_),
       "{prefix}_inpatient_beddays" := dplyr::if_else(eval(condition_i), .data$yearstay, NA_real_)
     )
@@ -530,17 +532,21 @@ clean_up_ch <- function(episode_file) {
     )
 }
 
-date_from_fy <- function(financial_year, type = c("start", "end")) {
+date_from_fy <- function(financial_year, type = c("start", "end", "mid")) {
   match.arg(type)
   n <- switch(type,
               "start" = 0,
+              "mid" = 0,
               "end" = 2)
   year = as.numeric(paste0("20", substr(financial_year, 1 + n, 2 + n)))
   if (type == "start") {
     date <- lubridate::make_date(year, 4, 1)
     return(date)
+  } else if (type == "end") {
+    date <- lubridate::make_date(year, 3, 31)
+    return(date)
   }
-  date <- lubridate::make_date(year, 3, 31)
+  date <- lubridate::make_date(year, 9, 30)
   return(date)
 }
 
@@ -574,13 +580,13 @@ aggregate_by_chi <- function(episode_file) {
           "CIJ_non_el",
           "CIJ_mat",
           "cij_delay",
+          "OoH_cases" = "unique_ooh_case",
           dplyr::ends_with(
             c(
               "episodes",
               "beddays",
               "cost",
               "attendances",
-              "case",
               "attend",
               "contacts",
               "hours",
@@ -590,7 +596,13 @@ aggregate_by_chi <- function(episode_file) {
               "advice",
               "homeV",
               "time",
-              "admissions"
+              "admissions",
+              "assesment",
+              "other",
+              "DN",
+              "NHS24",
+              "PCC",
+              "_dnas"
             )
           ),
           dplyr::starts_with("SDS_option")
@@ -602,13 +614,16 @@ aggregate_by_chi <- function(episode_file) {
           dplyr::starts_with("sc_"),
           -"sc_send_lca",
           -"sc_latest_submission",
-          "hh_in_FY",
+          "HL1_in_FY" = "hh_in_fy",
           "NSU"
         ),
-        ~ max(., na.rm = TRUE)
+        ~ max_no_inf(.)
       ),
       dplyr::across(
         c(condition_cols(),
+          "death_date",
+          "deceased",
+          "year",
           dplyr::ends_with(c(
             "_Cohort", "end_fy", "start_fy"
           )),),
@@ -618,8 +633,8 @@ aggregate_by_chi <- function(episode_file) {
 }
 
 
-conditions_cols <- function() {
-  condition_cols <- c(
+condition_cols <- function() {
+  conditions <- c(
     "arth",
     "asthma",
     "atrialfib",
@@ -641,9 +656,98 @@ conditions_cols <- function() {
     "digestive"
   )
   date_cols <- paste0(conditions, "_date")
-  all_cols <- c(condition_cols, date_cols)
+  all_cols <- c(conditions, date_cols)
   return(all_cols)
 }
 
+max_no_inf <- function(x) {
+  ifelse(!all(is.na(x)), max(x, na.rm = TRUE), NA)
+}
 
-# need to rename: OoH_cases, HL1_in_FY
+clean_individual_file <- function(individual_file) {
+  individual_file %>%
+    drop_cols() %>%
+    clean_up_gender() %>%
+    clean_up_dob()
+}
+
+drop_cols <- function(individual_file) {
+  individual_file %>%
+    dplyr::select(
+      -month_cols(),
+      -"ch_no_cost",
+      -"dob",
+      -"postcode",
+      -"gpprac",
+      -"no_paid_items",
+      -"totalnodncontacts"
+    )
+}
+
+month_cols <- function() {
+  suffix <- c("_beddays", "_cost")
+  months <- tolower(c(rep(month.abb, each = 2)))
+  month_cols <- paste0(months, suffix)
+  return(month_cols)
+}
+
+clean_up_gender <- function(individual_file) {
+  individual_file %>%
+    dplyr::mutate(
+      gender = dplyr::case_when(
+        gender != 1.5 ~ round(gender),
+        as.numeric(substr(chi_subset, 9, 9)) %% 2 == 1 ~ 1,
+        TRUE ~ 2
+      ),
+      gender = dplyr::case_when(
+        gender == 1 ~ "Male",
+        gender == 2 ~ "Female"
+      )
+    )
+}
+
+clean_up_dob <- function(individual_file) {
+  individual_file %>%
+    dplyr::mutate(
+      chi_dob_1 = lubridate::dmy(paste0(substr(.data$chi, 1, 4), "19", substr(.data$chi, 5, 6))),
+      chi_dob_2 = lubridate::dmy(paste0(substr(.data$chi, 1, 4), "20", substr(.data$chi, 5, 6))),
+      chi_age_1 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_1), date_from_fy(year, "mid")), "years"), #  date_from_fy(year, "mid") - lubridate::ymd(.data$chi_dob_1)
+      chi_age_2 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_2), date_from_fy(year, "mid")), "years") #  date_from_fy(year, "mid") - lubridate::ymd(.data$chi_dob_2)
+    ) %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      dob_condition_1 = .data$chi_dob_1 %in% dplyr::pick(dplyr::ends_with("_DoB")) & !(chi_dob_2 %in% dplyr::pick(dplyr::ends_with("_DoB"))),
+      dob_condition_2 = .data$chi_dob_2 %in% dplyr::pick(dplyr::ends_with("_DoB")) & !(chi_dob_1 %in% dplyr::pick(dplyr::ends_with("_DoB"))),
+      dob_condition_3 = .data$chi_dob_2 > min(lubridate::today(), date_from_fy(year, "end")),
+      dob_condition_4 = .data$chi_dob_2 > min(dplyr::pick(.data$arth_date:.data$death_date)),
+      dob_condition_5 = .data$congen_date %in% c(.data$chi_dob_1, .data$chi_dob_2)
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      DoB = dplyr::case_when(
+        .data$dob_condition_1 ~ .data$chi_dob_1,
+        .data$dob_condition_2 ~ .data$chi_dob_2
+      )
+    ) %>%
+    dplyr::mutate(
+      DoB = dplyr::case_when(
+        is.na(.data$DoB) & is.na(.data$chi_dob_1) & !is.na(.data$chi_dob_2) ~ .data$chi_dob_2,
+        is.na(.data$DoB) & is.na(.data$chi_dob_2) & !is.na(.data$chi_dob_1) ~ .data$chi_dob_1,
+        is.na(.data$DoB) & .data$chi_age_2 < 0 ~ .data$chi_dob_1,
+        is.na(.data$DoB) & .data$dob_condition_3 ~ .data$chi_dob_1,
+        is.na(.data$DoB) & .data$dob_condition_4 ~ .data$chi_dob_1,
+        is.na(.data$DoB) & .data$dob_condition_5 ~ .data$congen_date,
+        is.na(.data$DoB) & .data$chi_age_1 > 115 ~ .data$chi_dob_2
+      )
+    ) %>%
+    dplyr::select(
+      -dplyr::starts_with(c("dob_condition_", "chi_dob_", "chi_age_"))
+    )
+}
+
+clean_up_age <- function(individual_file) {
+  individual_file %>%
+    dplyr::mutate(
+
+    )
+}
