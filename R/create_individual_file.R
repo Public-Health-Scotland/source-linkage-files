@@ -12,7 +12,7 @@ create_individual_file <- function(episode_file) {
     add_all_columns() %>%
     find_non_duplicates(.data$ooh_case_id, "unique_ooh_case") %>%
     dplyr::mutate(unique_ooh_case = dplyr::if_else(recid != "OoH", 0, unique_ooh_case)) %>%
-    aggregate_cis_episodes() %>%
+    aggregate_ch_episodes() %>%
     clean_up_ch() %>%
     recode_gender() %>%
     aggregate_by_chi() %>%
@@ -481,7 +481,12 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
   return(na_type)
 }
 
-aggregate_cis_episodes <- function(episode_file) {
+#' Aggregate CIS episodes
+#'
+#' @description Aggregate CH variables by CHI and CIS.
+#'
+#' @inheritParams create_individual_file
+aggregate_ch_episodes <- function(episode_file) {
   episode_file %>%
     dplyr::group_by(.data$chi, .data$ch_chi_cis) %>%
     dplyr::mutate(
@@ -493,6 +498,10 @@ aggregate_cis_episodes <- function(episode_file) {
     dplyr::ungroup()
 }
 
+#' Clean up CH
+#'
+#' @description Clean up CH-related columns.
+#'
 #' @inheritParams create_individual_file
 clean_up_ch <- function(episode_file) {
   episode_file %>%
@@ -532,6 +541,12 @@ clean_up_ch <- function(episode_file) {
     )
 }
 
+#' Date from FY
+#'
+#' @description Return start, mid, or end date from financial year in format "2122".
+#'
+#' @param financial_year Financial year represented in "YYYY" format e.g. "2122"
+#' @param type One of "start", "end", and "mid", representing the date to return
 date_from_fy <- function(financial_year, type = c("start", "end", "mid")) {
   match.arg(type)
   n <- switch(type,
@@ -550,6 +565,11 @@ date_from_fy <- function(financial_year, type = c("start", "end", "mid")) {
   return(date)
 }
 
+#' Recode gender
+#'
+#' @description Recode gender to 1.5 if 0 or 9.
+#'
+#' @inheritParams create_individual_file
 recode_gender <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
@@ -561,6 +581,12 @@ recode_gender <- function(episode_file) {
     )
 }
 
+#' Aggregate by CHI
+#'
+#' @description Aggregate episode file by CHI to convert into
+#' individual file.
+#'
+#' @inheritParams create_individual_file
 aggregate_by_chi <- function(episode_file) {
   episode_file %>%
     dplyr::arrange(chi,
@@ -632,7 +658,11 @@ aggregate_by_chi <- function(episode_file) {
     )
 }
 
-
+#' Condition columns
+#'
+#' @description Returns chr vector of column names
+#' which follow format "condition" and "condition_date" e.g.
+#' "dementia" and "dementia_date"
 condition_cols <- function() {
   conditions <- c(
     "arth",
@@ -660,17 +690,48 @@ condition_cols <- function() {
   return(all_cols)
 }
 
+#' Custom maximum
+#'
+#' @description Custom maximum function which removes
+#' missing values but doesn't return Inf if all values
+#' are missing (instead returns NA)
+#'
+#' @param x Vector to return max of
 max_no_inf <- function(x) {
   ifelse(!all(is.na(x)), max(x, na.rm = TRUE), NA)
 }
 
+#' Custom minimum
+#'
+#' @description Custom minimum function which removes
+#' missing values but doesn't return Inf if all values
+#' are missing (instead returns NA)
+#'
+#' @param x Vector to return min of
+min_no_inf <- function(x) {
+  ifelse(!all(is.na(x)), min(x, na.rm = TRUE), NA)
+}
+
+#' Clean individual file
+#'
+#' @description Clean up columns in individual file
+#'
+#' @param individual_file Individual file where each row represents a unique CHI
 clean_individual_file <- function(individual_file) {
   individual_file %>%
     drop_cols() %>%
     clean_up_gender() %>%
-    clean_up_dob()
+    clean_up_dob() %>%
+    dplyr::mutate(
+      age = floor(as.numeric(lubridate::interval(.data$DoB, date_from_fy(year, "mid")), "years"))
+    )
 }
 
+#' Drop redundant columns
+#'
+#' @description Drop redundant columns from individual file.
+#'
+#' @inheritParams clean_individual_file
 drop_cols <- function(individual_file) {
   individual_file %>%
     dplyr::select(
@@ -684,6 +745,10 @@ drop_cols <- function(individual_file) {
     )
 }
 
+#' Month columns
+#'
+#' @description Return chr of column names following pattern
+#' "month_beddays" and "month_cost" e.g. apr_beddays" and "apr_cost"
 month_cols <- function() {
   suffix <- c("_beddays", "_cost")
   months <- tolower(c(rep(month.abb, each = 2)))
@@ -691,35 +756,45 @@ month_cols <- function() {
   return(month_cols)
 }
 
+#' Clean up gender column
+#'
+#' @description Clean up column containing gender.
+#'
+#' @inheritParams clean_individual_file
 clean_up_gender <- function(individual_file) {
   individual_file %>%
     dplyr::mutate(
       gender = dplyr::case_when(
-        gender != 1.5 ~ round(gender),
-        as.numeric(substr(chi_subset, 9, 9)) %% 2 == 1 ~ 1,
+        .data$gender != 1.5 ~ round(.data$gender),
+        as.numeric(substr(.data$chi, 9, 9)) %% 2 == 1 ~ 1,
         TRUE ~ 2
       ),
       gender = dplyr::case_when(
-        gender == 1 ~ "Male",
-        gender == 2 ~ "Female"
+        .data$gender == 1 ~ "Male",
+        .data$gender == 2 ~ "Female"
       )
     )
 }
 
+#' Clean up date of birth column
+#'
+#' @description Clean up column containing date of birth.
+#'
+#' @inheritParams clean_individual_file
 clean_up_dob <- function(individual_file) {
   individual_file %>%
     dplyr::mutate(
       chi_dob_1 = lubridate::dmy(paste0(substr(.data$chi, 1, 4), "19", substr(.data$chi, 5, 6))),
       chi_dob_2 = lubridate::dmy(paste0(substr(.data$chi, 1, 4), "20", substr(.data$chi, 5, 6))),
-      chi_age_1 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_1), date_from_fy(year, "mid")), "years"), #  date_from_fy(year, "mid") - lubridate::ymd(.data$chi_dob_1)
-      chi_age_2 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_2), date_from_fy(year, "mid")), "years") #  date_from_fy(year, "mid") - lubridate::ymd(.data$chi_dob_2)
+      chi_age_1 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_1), date_from_fy(year, "mid")), "years"),
+      chi_age_2 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_2), date_from_fy(year, "mid")), "years")
     ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
       dob_condition_1 = .data$chi_dob_1 %in% dplyr::pick(dplyr::ends_with("_DoB")) & !(chi_dob_2 %in% dplyr::pick(dplyr::ends_with("_DoB"))),
       dob_condition_2 = .data$chi_dob_2 %in% dplyr::pick(dplyr::ends_with("_DoB")) & !(chi_dob_1 %in% dplyr::pick(dplyr::ends_with("_DoB"))),
       dob_condition_3 = .data$chi_dob_2 > min(lubridate::today(), date_from_fy(year, "end")),
-      dob_condition_4 = .data$chi_dob_2 > min(dplyr::pick(.data$arth_date:.data$death_date)),
+      dob_condition_4 = unclass(.data$chi_dob_2) > min_no_inf(as.numeric(dplyr::pick(.data$arth_date:.data$death_date))),
       dob_condition_5 = .data$congen_date %in% c(.data$chi_dob_1, .data$chi_dob_2)
     ) %>%
     dplyr::ungroup() %>%
@@ -737,17 +812,68 @@ clean_up_dob <- function(individual_file) {
         is.na(.data$DoB) & .data$dob_condition_3 ~ .data$chi_dob_1,
         is.na(.data$DoB) & .data$dob_condition_4 ~ .data$chi_dob_1,
         is.na(.data$DoB) & .data$dob_condition_5 ~ .data$congen_date,
-        is.na(.data$DoB) & .data$chi_age_1 > 115 ~ .data$chi_dob_2
+        is.na(.data$DoB) & .data$chi_age_1 > 115 ~ .data$chi_dob_2,
+        TRUE ~ .data$DoB
       )
     ) %>%
+    fill_dob() %>%
     dplyr::select(
       -dplyr::starts_with(c("dob_condition_", "chi_dob_", "chi_age_"))
     )
 }
 
-clean_up_age <- function(individual_file) {
+#' Fill missing date of births
+#'
+#' @description Fill missing date of births with
+#' date of births from specific episode columns in hierarchy.
+#'
+#' @inheritParams clean_individual_file
+fill_dob <- function(individual_file) {
+  column_prefix <- c("PIS", "AE", "OoH", "OP", "Acute", "Mat", "DN", "CMH", "MH",
+              "GLS", "HL1", "CH", "HC", "AT", "SDS", "NSU", "NRS")
+  columns <- paste0(column_prefix, "_DoB")
+  for (i in length(columns)) {
+    individual_file = replace_dob_with_col(individual_file, columns[i])
+  }
+  return(individual_file)
+}
+
+#' Fill missing date of births
+#'
+#' @description Fill missing date of births with
+#' date of births from an episode date of birth column.
+#'
+#' @inheritParams clean_individual_file
+#' @param col Column containing date of birth for episode
+replace_dob_with_col <- function(individual_file, col) {
   individual_file %>%
     dplyr::mutate(
-
+      DoB = dplyr::if_else(
+        is.na(.data$DoB) & !is.na(.data[[col]]),
+        .data[[col]],
+        .data$DoB
+      )
     )
 }
+
+# WIP function to clean up postcodes L721-L805 Of D01 Make Individual File.sps
+clean_up_postcode <- function(individual_file) {
+  postcode_lookup <- readr::read_rds(get_slf_postcode_path())
+  testy2= testy %>%
+    dplyr::mutate(
+      all_blank = dplyr::if_else(
+        all(is.na(dplyr::pick(dplyr::ends_with("_postcode")))),
+        1,
+        0
+      )
+    ) %>%
+    dplyr::mutate(
+      HL1_postcode = dplyr::if_else(
+        all_blank == 1,
+        "XXX XXX",
+        .data$HL1_postcode
+      )
+    )
+
+}
+
