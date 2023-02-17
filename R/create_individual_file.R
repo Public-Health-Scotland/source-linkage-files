@@ -859,7 +859,7 @@ replace_dob_with_col <- function(individual_file, col) {
 # WIP function to clean up postcodes L721-L805 Of D01 Make Individual File.sps
 clean_up_postcode <- function(individual_file) {
   postcode_lookup <- readr::read_rds(get_slf_postcode_path())
-  testy2= testy %>%
+  individual_file %>%
     dplyr::mutate(
       all_blank = dplyr::if_else(
         all(is.na(dplyr::pick(dplyr::ends_with("_postcode")))),
