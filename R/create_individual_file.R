@@ -306,7 +306,8 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay > 0, .data$cost_total_net / .data$yearstay, NA_real_),
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay == 0, .data$cost_total_net / .data$yearstay, .data$ch_cost_per_day),
       ch_no_cost = eval(condition) & is.na(ch_cost_per_day),
-      ch_ep_end = dplyr::if_else(eval(condition), .data$keydate2_dateformat, lubridate::NA_Date_)) %>%
+      ch_ep_end = dplyr::if_else(eval(condition), .data$keydate2_dateformat, lubridate::NA_Date_)
+    ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
       ch_ep_end = dplyr::if_else(eval(condition) & is.na(ch_ep_end), lubridate::quarter(zoo::as.yearqtr(.data$sc_latest_submission), type = "date_first", fiscal_start = 4), .data$ch_ep_end)
@@ -506,12 +507,13 @@ aggregate_ch_episodes <- function(episode_file) {
 clean_up_ch <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
-        fy_end = date_from_fy(year, "end") + 1,
-        fy_start = date_from_fy(year, "start")) %>%
+      fy_end = date_from_fy(year, "end") + 1,
+      fy_start = date_from_fy(year, "start")
+    ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-        term_1 = min(ch_ep_end, fy_end + 1),
-        term_2 = max(ch_ep_start, fy_start)
+      term_1 = min(ch_ep_end, fy_end + 1),
+      term_2 = max(ch_ep_start, fy_start)
     ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
@@ -550,10 +552,11 @@ clean_up_ch <- function(episode_file) {
 date_from_fy <- function(financial_year, type = c("start", "end", "mid")) {
   match.arg(type)
   n <- switch(type,
-              "start" = 0,
-              "mid" = 0,
-              "end" = 2)
-  year = as.numeric(paste0("20", substr(financial_year, 1 + n, 2 + n)))
+    "start" = 0,
+    "mid" = 0,
+    "end" = 2
+  )
+  year <- as.numeric(paste0("20", substr(financial_year, 1 + n, 2 + n)))
   if (type == "start") {
     date <- lubridate::make_date(year, 4, 1)
     return(date)
@@ -589,11 +592,13 @@ recode_gender <- function(episode_file) {
 #' @inheritParams create_individual_file
 aggregate_by_chi <- function(episode_file) {
   episode_file %>%
-    dplyr::arrange(chi,
-                   keydate1_dateformat,
-                   keytime1,
-                   keydate2_dateformat,
-                   keytime2) %>%
+    dplyr::arrange(
+      chi,
+      keydate1_dateformat,
+      keytime1,
+      keydate2_dateformat,
+      keytime2
+    ) %>%
     dplyr::group_by(chi) %>%
     dplyr::summarise(
       gender = mean(gender),
@@ -646,13 +651,15 @@ aggregate_by_chi <- function(episode_file) {
         ~ max_no_inf(.)
       ),
       dplyr::across(
-        c(condition_cols(),
+        c(
+          condition_cols(),
           "death_date",
           "deceased",
           "year",
           dplyr::ends_with(c(
             "_Cohort", "end_fy", "start_fy"
-          )),),
+          )),
+        ),
         ~ dplyr::first(., na_rm = TRUE)
       )
     )
@@ -680,7 +687,7 @@ condition_cols <- function() {
     "ms",
     "parkinsons",
     "refailure",
-    "congen" ,
+    "congen",
     "bloodbfo",
     "endomet",
     "digestive"
@@ -829,11 +836,13 @@ clean_up_dob <- function(individual_file) {
 #'
 #' @inheritParams clean_individual_file
 fill_dob <- function(individual_file) {
-  column_prefix <- c("PIS", "AE", "OoH", "OP", "Acute", "Mat", "DN", "CMH", "MH",
-              "GLS", "HL1", "CH", "HC", "AT", "SDS", "NSU", "NRS")
+  column_prefix <- c(
+    "PIS", "AE", "OoH", "OP", "Acute", "Mat", "DN", "CMH", "MH",
+    "GLS", "HL1", "CH", "HC", "AT", "SDS", "NSU", "NRS"
+  )
   columns <- paste0(column_prefix, "_DoB")
   for (i in length(columns)) {
-    individual_file = replace_dob_with_col(individual_file, columns[i])
+    individual_file <- replace_dob_with_col(individual_file, columns[i])
   }
   return(individual_file)
 }
@@ -874,6 +883,4 @@ clean_up_postcode <- function(individual_file) {
         .data$HL1_postcode
       )
     )
-
 }
-
