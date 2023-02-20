@@ -181,7 +181,6 @@ ch_episode <- ready_to_merge %>%
     ),
     sum_latest_submission = cumsum(.data[["latest_submission_counter"]])
   ) %>%
-  # TODO double check this works
   dplyr::mutate(
     # If it's the first episode(s) then keep the admission date(s),
     # otherwise use the start of the quarter
