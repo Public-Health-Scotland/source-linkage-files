@@ -17,14 +17,14 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     # Replace 'unknown' responses with NA
     dplyr::mutate(
       dplyr::across(c(
-      "support_from_unpaid_carer",
-      "social_worker",
-      "meals",
-      "living_alone",
-      "day_care"
-    ), dplyr::na_if, 9L),
-    type_of_housing = dplyr::na_if(.data$type_of_housing, 6L)
-  ) %>%
+        "support_from_unpaid_carer",
+        "social_worker",
+        "meals",
+        "living_alone",
+        "day_care"
+      ), dplyr::na_if, 9L),
+      type_of_housing = dplyr::na_if(.data$type_of_housing, 6L)
+    ) %>%
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
     # summarise to take last submission
     dplyr::summarise(dplyr::across(
@@ -99,7 +99,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
         labels = c("No", "Yes", "Not Known")
       ),
       type_of_housing = factor(.data$type_of_housing,
-                               levels = 1L:6L
+        levels = 1L:6L
       )
     ) %>%
     # rename variables

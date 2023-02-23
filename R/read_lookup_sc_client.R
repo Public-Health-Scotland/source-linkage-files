@@ -42,29 +42,32 @@ read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn =
     dplyr::filter(.data$financial_year == year) %>%
     dplyr::mutate(
       dplyr::across(
-        c(    "sending_location",
-              "financial_year",
-              "financial_quarter",
-              "dementia",
-              "mental_health_problems",
-              "learning_disability",
-              "physical_and_sensory_disability",
-              "drugs",
-              "alcohol",
-              "palliative_care",
-              "carer",
-              "elderly_frail",
-              "neurological_condition",
-              "autism",
-              "other_vulnerable_groups",
-              "living_alone",
-              "support_from_unpaid_carer",
-              "social_worker",
-              "type_of_housing",
-              "meals",
-              "day_care"),
-      as.integer
-    )) %>%
+        c(
+          "sending_location",
+          "financial_year",
+          "financial_quarter",
+          "dementia",
+          "mental_health_problems",
+          "learning_disability",
+          "physical_and_sensory_disability",
+          "drugs",
+          "alcohol",
+          "palliative_care",
+          "carer",
+          "elderly_frail",
+          "neurological_condition",
+          "autism",
+          "other_vulnerable_groups",
+          "living_alone",
+          "support_from_unpaid_carer",
+          "social_worker",
+          "type_of_housing",
+          "meals",
+          "day_care"
+        ),
+        as.integer
+      )
+    ) %>%
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
