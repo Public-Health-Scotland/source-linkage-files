@@ -249,7 +249,7 @@ ch_markers <- matched_deaths_data %>%
   # uses the social care id and sending location so can be used for
   # episodes that are not attached to a CHI number
   # This will restrict continuous stays to each Local Authority
-  dplyr::group_by(social_care_id, sending_location) %>%
+  dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]]) %>%
   dplyr::mutate(
     continuous_stay_sc = tidyr::replace_na(
       .data[["ch_admission_date"]] <= dplyr::lag(
