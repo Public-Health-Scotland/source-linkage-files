@@ -2,6 +2,7 @@
 library(createslf)
 
 # Variables to be used as function parameters
+write_to_disk <- FALSE
 sc_demog_lookup_path <- get_sc_demog_lookup_path()
 slf_deaths_path <- get_slf_deaths_path()
 
@@ -292,7 +293,8 @@ outfile <- ch_markers %>%
     "sc_latest_submission"
   )
 
-outfile %>%
-  write_rds(get_sc_ch_episodes_path(check_mode = "write"))
+if (write_to_disk) {
+  write_rds(outfile, get_sc_ch_episodes_path(check_mode = "write"))
+}
 
 # End of Script #
