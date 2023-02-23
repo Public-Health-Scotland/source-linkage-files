@@ -157,7 +157,8 @@ ch_episode <- ready_to_merge %>%
         "qtr_start",
         "ch_name",
         "ch_postcode",
-        "reason_for_admission"
+        "reason_for_admission",
+        "type_of_admission"
       ),
       dplyr::last
     ),
@@ -267,12 +268,44 @@ ch_markers <- matched_deaths_data %>%
   ) %>%
   dplyr::ungroup()
 
-outfile <- ch_markers %>%
+# Do a recode on the old reason for admission
+adm_reason_recoded <- ch_markers %>%
+  dplyr::group_by(.data[["social_care_id"]],
+                  .data[["sending_location"]],
+                  .data[["ch_sc_id_cis"]]) %>%
+  dplyr::mutate(ch_ep_start = min(.data[["ch_admission_date"]]),
+                ch_ep_end = max(
+                  pmin(
+                    .data[["record_date"]],
+                    .data[["ch_discharge_date"]],
+                    na.rm = TRUE
+                  )
+                )) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    stay_los = lubridate::time_length(
+      lubridate::interval(.data[["ch_ep_start"]], .data[["ch_ep_end"]]),
+      "weeks"
+    ),
+    stay_respite = .data[["stay_los"]] < 6.0,
+    type_of_admission = dplyr::if_else(
+      is.na(.data[["type_of_admission"]]),
+      dplyr::case_when(
+        .data[["reason_for_admission"]] == 1L ~ 1L,
+        .data[["reason_for_admission"]] == 2L ~ 2L,
+        stay_respite ~ 1L,
+        .default = 3L
+      ),
+      .data[["type_of_admission"]]
+    )
+  )
+
+outfile <- adm_reason_recoded %>%
   create_person_id() %>%
   dplyr::rename(
     record_keydate1 = "ch_admission_date",
     record_keydate2 = "ch_discharge_date",
-    ch_adm_reason = "reason_for_admission",
+    ch_adm_reason = "type_of_admission",
     ch_nursing = "nursing_care_provision"
   ) %>%
   dplyr::select(
