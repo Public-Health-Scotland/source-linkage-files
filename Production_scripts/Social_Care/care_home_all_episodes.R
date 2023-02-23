@@ -270,17 +270,21 @@ ch_markers <- matched_deaths_data %>%
 
 # Do a recode on the old reason for admission
 adm_reason_recoded <- ch_markers %>%
-  dplyr::group_by(.data[["social_care_id"]],
-                  .data[["sending_location"]],
-                  .data[["ch_sc_id_cis"]]) %>%
-  dplyr::mutate(ch_ep_start = min(.data[["ch_admission_date"]]),
-                ch_ep_end = max(
-                  pmin(
-                    .data[["record_date"]],
-                    .data[["ch_discharge_date"]],
-                    na.rm = TRUE
-                  )
-                )) %>%
+  dplyr::group_by(
+    .data[["social_care_id"]],
+    .data[["sending_location"]],
+    .data[["ch_sc_id_cis"]]
+  ) %>%
+  dplyr::mutate(
+    ch_ep_start = min(.data[["ch_admission_date"]]),
+    ch_ep_end = max(
+      pmin(
+        .data[["record_date"]],
+        .data[["ch_discharge_date"]],
+        na.rm = TRUE
+      )
+    )
+  ) %>%
   dplyr::ungroup() %>%
   dplyr::mutate(
     stay_los = lubridate::time_length(
