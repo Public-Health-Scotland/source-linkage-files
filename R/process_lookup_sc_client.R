@@ -13,10 +13,18 @@
 #' @export
 #' @family process extracts
 process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
-  # Data Cleaning ---------------------------------------
-
   client_clean <- data %>%
-    # group
+    # Replace 'unknown' responses with NA
+    dplyr::mutate(
+      dplyr::across(c(
+      "support_from_unpaid_carer",
+      "social_worker",
+      "meals",
+      "living_alone",
+      "day_care"
+    ), dplyr::na_if, 9L),
+    type_of_housing = dplyr::na_if(.data$type_of_housing, 6L)
+  ) %>%
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
     # summarise to take last submission
     dplyr::summarise(dplyr::across(
@@ -40,10 +48,10 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
         "meals",
         "day_care"
       ),
-      ~ as.numeric(dplyr::last(.x))
+      dplyr::last
     )) %>%
     dplyr::ungroup() %>%
-    # recode missing with values
+    # Recode NA with 'unknown' values
     dplyr::mutate(
       dplyr::across(
         c(
@@ -91,7 +99,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
         labels = c("No", "Yes", "Not Known")
       ),
       type_of_housing = factor(.data$type_of_housing,
-        levels = 1L:6L
+                               levels = 1L:6L
       )
     ) %>%
     # rename variables
