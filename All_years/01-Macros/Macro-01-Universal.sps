@@ -19,7 +19,7 @@
 * IT Extracts *.
 * Replace the number with the CSD ref.
 Define !IT_extract_ref()
-    "SCTASK0394587"
+    "SCTASK0415711"
 !EndDefine.
 
 * Latest update month for postcode and gp prac lookups.
@@ -33,7 +33,7 @@ Define !PreviousUpdate()
 !EndDefine.
 
 Define !Delayed_Discharge_period()
-    "Jul16_Sep22"
+    "Jul16_Dec22"
 !EndDefine.
 
 * Latest 'real' costs we have in the format CCYY e.g. 2022/23 = 2022 (no quotes).
