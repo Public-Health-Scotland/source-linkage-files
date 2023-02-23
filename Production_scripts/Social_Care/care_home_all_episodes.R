@@ -31,14 +31,18 @@ ch_data <-
     "age"
   ) %>%
   # Correct FY 2017
-  dplyr::mutate(financial_quarter = dplyr::if_else(
-    financial_year == 2017L &
-      is.na(financial_quarter),
-    4L,
-    financial_quarter
-  )) %>%
-  dplyr::mutate(period = dplyr::if_else(financial_year == 2017L &
-    financial_quarter == 4L, "2017Q4", period)) %>%
+  dplyr::mutate(
+    financial_quarter = dplyr::if_else(
+      financial_year == 2017L & is.na(financial_quarter),
+      4L,
+      financial_quarter
+    ),
+    period = dplyr::if_else(
+      financial_year == 2017L & financial_quarter == 4L,
+      "2017Q4",
+      period
+    )
+  ) %>%
   dplyr::collect()
 
 ch_clean <- ch_data %>%
@@ -84,13 +88,13 @@ fixed_ch_provider <- name_postcode_clean %>%
   ) %>%
   dplyr::mutate(
     min_ch_provider = min(.data[["ch_provider"]]),
-    max_ch_provider = max(.data[["ch_provider"]])
+    max_ch_provider = max(.data[["ch_provider"]]),
+    ch_provider = dplyr::if_else(
+      .data[["min_ch_provider"]] != .data[["max_ch_provider"]],
+      6L,
+      .data[["ch_provider"]]
+    )
   ) %>%
-  dplyr::mutate(ch_provider = dplyr::if_else(
-    .data[["min_ch_provider"]] != .data[["max_ch_provider"]],
-    6L,
-    .data[["ch_provider"]]
-  )) %>%
   dplyr::select(
     -"min_ch_provider",
     -"max_ch_provider"
@@ -209,15 +213,17 @@ matched_deaths_data <- ch_episode %>%
   # if either of the dates are 5 or fewer days before discharge
   # adjust the discharge date to the date of death
   # corrects most cases of ‘discharge after death’
-  dplyr::mutate(dis_after_death = tidyr::replace_na(
-    .data[["death_date"]] > (.data[["ch_discharge_date"]] - lubridate::days(5L)) &
-      .data[["death_date"]] < .data[["ch_discharge_date"]],
-    FALSE
-  )) %>%
-  dplyr::mutate(ch_discharge_date = dplyr::if_else(.data[["dis_after_death"]],
-    .data[["death_date"]],
-    .data[["ch_discharge_date"]]
-  )) %>%
+  dplyr::mutate(
+    dis_after_death = tidyr::replace_na(
+      .data[["death_date"]] > (.data[["ch_discharge_date"]] - lubridate::days(5L)) &
+        .data[["death_date"]] < .data[["ch_discharge_date"]],
+      FALSE
+    ),
+    ch_discharge_date = dplyr::if_else(.data[["dis_after_death"]],
+      .data[["death_date"]],
+      .data[["ch_discharge_date"]]
+    )
+  ) %>%
   dplyr::ungroup() %>%
   # remove any episodes where discharge is now before admission,
   # i.e. death was before admission
