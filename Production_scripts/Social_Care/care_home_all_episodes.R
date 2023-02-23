@@ -72,7 +72,6 @@ ch_clean <- ch_data %>%
     by = c("sending_location", "social_care_id")
   )
 
-
 name_postcode_clean <- fill_ch_names(ch_clean)
 
 fixed_ch_provider <- name_postcode_clean %>%
@@ -129,7 +128,6 @@ ready_to_merge <- fixed_nursing_provision %>%
     split_episode_counter = cumsum(.data[["split_episode"]])
   ) %>%
   dplyr::ungroup()
-
 
 # Merge records to a single row per episode
 # where admission is the same
@@ -230,10 +228,8 @@ matched_deaths_data <- ch_episode %>%
     )
   )
 
-
 # Continuous Care Home Stays
-
-# stay will be continuous as long as the admission date is the next day or
+# Stay will be continuous as long as the admission date is the next day or
 # earlier than the previous discharge date
 
 ch_markers <- matched_deaths_data %>%
