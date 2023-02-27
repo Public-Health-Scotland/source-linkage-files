@@ -378,44 +378,6 @@ Numeric
     CCM (F5.0)
     TotalnoDNcontacts (F7.0).
 
-* Social Care variables for consistency.
-* Social Care.
-String
-    sc_send_lca (A2)
-    sc_latest_submission (A6)
-    person_id (A13).
-
-Numeric
-    sc_living_alone
-    sc_support_from_unpaid_carer
-    sc_social_worker
-    sc_type_of_housing
-    sc_meals
-    sc_day_care (F1.0).
-
-* Home Care.
-Numeric
-    hc_hours_annual hc_hours_q1 hc_hours_q2 hc_hours_q3 hc_hours_q4 (F22.2)
-    hc_provider (F1.0)
-    hc_reablement (F1.0)
-    hc_cost_q1 hc_cost_q2 hc_cost_q3 hc_cost_q4 (F22.2).
-
-
-* Care Homes.
-String
-    ch_name (A73)
-    ch_provider (A1).
-
-Numeric
-    ch_adm_reason (F2.0)
-    ch_nursing (F1.0)
-    ch_chi_cis (F8.0)
-    ch_sc_id_cis(F8.0).
-
-* SDS.
-Numeric sds_option (F1.0).
-
-
 save outfile = !Year_dir + "temp-source-episode-file-1-" + !FY + ".zsav"
     /Keep year recid keydate1_dateformat keydate2_dateformat ALL
     /Drop Valid_CHI PPA
