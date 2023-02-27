@@ -15,17 +15,16 @@ Host Command = ["zip -mjv9 " + !Year_dir + "BXX_tests_20" + !FY + ".zip " +
     !Year_dir + "Outpatient_tests_20" + !FY + ".zsav " +
     !Year_dir + "Homelessness_tests_20" + !FY + ".zsav " +
     !Year_dir + "LTC_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
+    !Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
+    !Year_dir + "SDS_tests_20" + !FY + ".zsav " +
     !Year_dir + "prescribing_tests_20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "CMH_tests_20" + !FY + ".zsav " +.
 *   !Year_dir + "DN_tests_20" + !FY + ".zsav " +.
 
-* Exclude SC for now - no data for 22/23 available yet.
-    *!Year_dir + "Care_Home_tests_20" + !FY + ".zsav " +
-    *!Year_dir + "Home_Care_tests_20" + !FY + ".zsav " +
-    *!Year_dir + "Alarms_Telecare_tests_20" + !FY + ".zsav " +
-    *!Year_dir + "SDS_tests_20" + !FY + ".zsav " +
 
 * Bring all the data sets together.
 add files
@@ -38,17 +37,16 @@ add files
     /file = !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav"
     /file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav"
     /file = !Year_dir + "homelessness_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
+    /file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
+    /file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
     /By chi.
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *    /file = !Year_dir + "DN_for_source-20" + !FY + ".zsav".
 *    /file = !Year_dir + "CMH_for_source-20" + !FY + ".zsav".
 
-* Exclude SC for now - no data for 22/23 available yet.
-    */file = !Year_dir + "care_home_for_source-20" + !FY + ".zsav"
-    */file = !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav"
-    */file = !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav"
-    */file = !Year_dir + "SDS-for-source-20" + !FY + ".zsav"
 
 * Check that all CHIs are valid.
 Do if chi ne "".
@@ -437,15 +435,13 @@ Host Command = ["zip -mjv9 " + !Year_dir + "Activity_20" + !FY + ".zip " +
     !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav " +
     !Year_dir + "deaths_for_source-20" + !FY + ".zsav " +
     !Year_dir + "homelessness_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
+    !Year_dir + "SDS-for-source-20" + !FY + ".zsav " +
+    !Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
+    !Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
     !Year_dir + "GP_OOH_for_Source-20" + !FY + ".zsav " ].
 
 * We are currently not including DN or CMH extracts for FY 2122 - 16 Nov 2021 JMc.
 *   !Year_dir + "DN_for_source-20" + !FY + ".zsav " +.
 *   !Year_dir + "CMH_for_source-20" + !FY + ".zsav " +.
-
-* Exclude SC for now - no data for 22/23 available yet.
-    *!Year_dir + "Home_Care_for_source-20" + !FY + ".zsav " +
-    *!Year_dir + "Alarms-Telecare-for-source-20" + !FY + ".zsav " +
-    *!Year_dir + "SDS-for-source-20" + !FY + ".zsav " +
-    *!Year_dir + "care_home_for_source-20" + !FY + ".zsav " +
-    *!Year_dir + "Client_for_Source-20" + !FY + ".zsav " +
