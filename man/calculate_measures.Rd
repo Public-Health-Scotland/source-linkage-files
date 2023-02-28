@@ -4,7 +4,12 @@
 \alias{calculate_measures}
 \title{Calculate Measures for Testing}
 \usage{
-calculate_measures(data, vars = NULL, measure = c("sum", "all", "min-max"))
+calculate_measures(
+  data,
+  vars = NULL,
+  measure = c("sum", "all", "min-max"),
+  group_by = FALSE
+)
 }
 \arguments{
 \item{data}{A processed dataframe containing a
@@ -15,6 +20,9 @@ This will match this e.g c(\code{beddays}, \code{cost}, \code{yearstay}).
 Default as NULL for summarising everything.}
 
 \item{measure}{The measure you want to apply to variables}
+
+\item{group_by}{Grouping variables logical T/F to be used
+when testing the episode/individual file.}
 }
 \value{
 a tibble with a summary
@@ -27,6 +35,7 @@ Computes various measures for the variables specified.
 produce_source_extract_tests
 
 Other extract test functions: 
+\code{\link{produce_episode_file_tests}()},
 \code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_cmh_tests}()},
 \code{\link{produce_source_dn_tests}()},
