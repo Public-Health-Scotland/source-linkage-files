@@ -12,6 +12,9 @@
 #'
 #' @param measure The measure you want to apply to variables
 #'
+#' @param group_by Grouping variables logical T/F to be used
+#' when testing the episode/individual file.
+#'
 #' @return a tibble with a summary
 #' @export
 #'
@@ -19,8 +22,15 @@
 #' @seealso produce_source_extract_tests
 calculate_measures <- function(data,
                                vars = NULL,
-                               measure = c("sum", "all", "min-max")) {
+                               measure = c("sum", "all", "min-max"),
+                               group_by = FALSE
+                               ) {
   measure <- match.arg(measure)
+
+  if(group_by){
+    data <- data %>%
+      dplyr::group_by(.data$recid)
+  }
 
   if (measure == "all") {
     data <- data %>%
@@ -64,12 +74,22 @@ calculate_measures <- function(data,
       ))
   }
 
+
+  if (group_by){
+    pivot_data <- data %>%
+      tidyr::pivot_longer(
+        cols = dplyr::select(-recid),
+        names_to = "measure",
+        values_to = "value"
+      )
+  }else{
   pivot_data <- data %>%
     tidyr::pivot_longer(
       cols = tidyselect::everything(),
       names_to = "measure",
       values_to = "value"
     )
+  }
 
-  return(pivot_data)
+  return(data)
 }
