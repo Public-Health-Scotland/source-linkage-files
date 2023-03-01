@@ -24,13 +24,13 @@
 #' for creating test flags
 #' @seealso calculate_measures
 produce_episode_file_tests <- function(data,
-                                         sum_mean_vars = c("beddays", "cost", "yearstay"),
-                                         max_min_vars = c(
-                                           "record_keydate1", "record_keydate2",
-                                           "cost_total_net", "yearstay"
-                                         )) {
+                                       sum_mean_vars = c("beddays", "cost", "yearstay"),
+                                       max_min_vars = c(
+                                         "record_keydate1", "record_keydate2",
+                                         "cost_total_net", "yearstay"
+                                       )) {
   test_flags <- data %>%
-    group_by(.data$recid) %>%
+    dplyr::group_by(.data$recid) %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
@@ -44,26 +44,23 @@ produce_episode_file_tests <- function(data,
     ) %>%
     # keep variables for comparison
     dplyr::select(c("valid_chi":dplyr::last_col())) %>%
-    # dplyr::mutate(
-    #   year = as.integer(year)
-    # ) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum", group_by = TRUE)
 
   all_measures <- data %>%
-    group_by(.data$year, .data$recid) %>%
-    calculate_measures(vars = {{ sum_mean_vars }}, measure = "all")
+    group_by(.data$recid) %>%
+    calculate_measures(vars = {{ sum_mean_vars }}, measure = "all", group_by = TRUE)
 
   min_max <- data %>%
-    group_by(.data$year, .data$recid) %>%
-    calculate_measures(vars = {{ max_min_vars }}, measure = "min-max")
+    group_by(.data$recid) %>%
+    calculate_measures(vars = {{ max_min_vars }}, measure = "min-max", group_by = TRUE)
 
   join_output <- list(
     test_flags,
     all_measures,
     min_max
   ) %>%
-    purrr::reduce(dplyr::full_join, by = c("measure", "value"))
+    purrr::reduce(dplyr::full_join, by = c("recid", "measure", "value"))
 
   return(join_output)
 }
