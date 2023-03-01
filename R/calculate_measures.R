@@ -19,8 +19,14 @@
 #' @seealso produce_source_extract_tests
 calculate_measures <- function(data,
                                vars = NULL,
-                               measure = c("sum", "all", "min-max")) {
+                               measure = c("sum", "all", "min-max"),
+                               group_by = FALSE) {
   measure <- match.arg(measure)
+
+  if (group_by) {
+    data <- data %>%
+      dplyr::group_by(.data$recid)
+  }
 
   if (measure == "all") {
     data <- data %>%
@@ -64,12 +70,22 @@ calculate_measures <- function(data,
       ))
   }
 
-  pivot_data <- data %>%
-    tidyr::pivot_longer(
-      cols = tidyselect::everything(),
-      names_to = "measure",
-      values_to = "value"
-    )
+
+  if (group_by) {
+    pivot_data <- data %>%
+      tidyr::pivot_longer(
+        cols = !recid,
+        names_to = "measure",
+        values_to = "value"
+      )
+  } else {
+    pivot_data <- data %>%
+      tidyr::pivot_longer(
+        cols = tidyselect::everything(),
+        names_to = "measure",
+        values_to = "value"
+      )
+  }
 
   return(pivot_data)
 }
