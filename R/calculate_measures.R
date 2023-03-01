@@ -23,11 +23,10 @@
 calculate_measures <- function(data,
                                vars = NULL,
                                measure = c("sum", "all", "min-max"),
-                               group_by = FALSE
-                               ) {
+                               group_by = FALSE) {
   measure <- match.arg(measure)
 
-  if(group_by){
+  if (group_by) {
     data <- data %>%
       dplyr::group_by(.data$recid)
   }
@@ -75,21 +74,21 @@ calculate_measures <- function(data,
   }
 
 
-  if (group_by){
+  if (group_by) {
     pivot_data <- data %>%
       tidyr::pivot_longer(
-        cols = dplyr::select(-recid),
+        cols = !recid,
         names_to = "measure",
         values_to = "value"
       )
-  }else{
-  pivot_data <- data %>%
-    tidyr::pivot_longer(
-      cols = tidyselect::everything(),
-      names_to = "measure",
-      values_to = "value"
-    )
+  } else {
+    pivot_data <- data %>%
+      tidyr::pivot_longer(
+        cols = tidyselect::everything(),
+        names_to = "measure",
+        values_to = "value"
+      )
   }
 
-  return(data)
+  return(pivot_data)
 }
