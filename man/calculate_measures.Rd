@@ -4,7 +4,12 @@
 \alias{calculate_measures}
 \title{Calculate Measures for Testing}
 \usage{
-calculate_measures(data, vars = NULL, measure = c("sum", "all", "min-max"))
+calculate_measures(
+  data,
+  vars = NULL,
+  measure = c("sum", "all", "min-max"),
+  group_by = FALSE
+)
 }
 \arguments{
 \item{data}{A processed dataframe containing a
