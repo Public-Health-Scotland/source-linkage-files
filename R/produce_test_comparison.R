@@ -37,5 +37,4 @@ produce_test_comparison <- function(old_data, new_data, recid = FALSE) {
         issue = !dplyr::between(.data$difference / .data$value_old, -0.05, 0.05)
       )
   }
-
 }
