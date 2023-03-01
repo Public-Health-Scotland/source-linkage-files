@@ -15,25 +15,27 @@
 #' @seealso write_tests_xlsx
 produce_test_comparison <- function(old_data, new_data, recid = FALSE) {
   if (recid) {
-    join <- dplyr::full_join(old_data,
-                             new_data,
-                             by = c("recid", "measure"),
-                             suffix = c("_old", "_new")
-    )
+    dplyr::full_join(old_data,
+      new_data,
+      by = c("recid", "measure"),
+      suffix = c("_old", "_new")
+    ) %>%
+      dplyr::mutate(
+        difference = round(.data$value_new - .data$value_old, digits = 2L),
+        pct_change = scales::percent(.data$difference / .data$value_old),
+        issue = !dplyr::between(.data$difference / .data$value_old, -0.05, 0.05)
+      )
   } else {
-    join <- dplyr::full_join(old_data,
-                             new_data,
-                             by = "measure",
-                             suffix = c("_old", "_new")
-    )
+    dplyr::full_join(old_data,
+      new_data,
+      by = "measure",
+      suffix = c("_old", "_new")
+    ) %>%
+      dplyr::mutate(
+        difference = round(.data$value_new - .data$value_old, digits = 2L),
+        pct_change = scales::percent(.data$difference / .data$value_old),
+        issue = !dplyr::between(.data$difference / .data$value_old, -0.05, 0.05)
+      )
   }
 
-  comparison <- join %>%
-    dplyr::mutate(
-      difference = round(.data$value_new - .data$value_old, digits = 2L),
-      pct_change = scales::percent(.data$difference / .data$value_old),
-      issue = !dplyr::between(.data$difference / .data$value_old, -0.05, 0.05)
-    )
-
-  return(comparison)
 }
