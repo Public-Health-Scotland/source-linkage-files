@@ -16,15 +16,15 @@
 produce_test_comparison <- function(old_data, new_data, recid = FALSE) {
   if (recid) {
     join <- dplyr::full_join(old_data,
-                             new_data,
-                             by = c("recid", "measure"),
-                             suffix = c("_old", "_new")
+      new_data,
+      by = c("recid", "measure"),
+      suffix = c("_old", "_new")
     )
   } else {
     join <- dplyr::full_join(old_data,
-                             new_data,
-                             by = "measure",
-                             suffix = c("_old", "_new")
+      new_data,
+      by = "measure",
+      suffix = c("_old", "_new")
     )
   }
 
