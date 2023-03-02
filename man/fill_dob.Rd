@@ -5,6 +5,8 @@
 \title{Fill missing date of births}
 \usage{
 fill_dob(individual_file)
+
+fill_dob(individual_file)
 }
 \arguments{
 \item{individual_file}{Individual file where each row represents a unique CHI}
@@ -12,4 +14,7 @@ fill_dob(individual_file)
 \description{
 Fill missing date of births with
 date of births from specific episode columns in hierarchy.
+
+Fill missing postcodes with
+postcodes from specific episode columns in hierarchy.
 }
