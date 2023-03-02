@@ -731,7 +731,8 @@ clean_individual_file <- function(individual_file) {
     clean_up_dob() %>%
     dplyr::mutate(
       age = floor(as.numeric(lubridate::interval(.data$DoB, date_from_fy(year, "mid")), "years"))
-    )
+    ) %>%
+    clean_up_postcode()
 }
 
 #' Drop redundant columns
@@ -865,22 +866,59 @@ replace_dob_with_col <- function(individual_file, col) {
     )
 }
 
-# WIP function to clean up postcodes L721-L805 Of D01 Make Individual File.sps
+#' Clean up postcode column
+#'
+#' @description Clean up column containing postcode.
+#'
+#' @inheritParams clean_individual_file
 clean_up_postcode <- function(individual_file) {
   postcode_lookup <- readr::read_rds(get_slf_postcode_path())
   individual_file %>%
     dplyr::mutate(
-      all_blank = dplyr::if_else(
-        all(is.na(dplyr::pick(dplyr::ends_with("_postcode")))),
-        1,
-        0
-      )
-    ) %>%
-    dplyr::mutate(
+      # all_blank is TRUE when all postcode variables are blank
+      all_blank = all(is.na(dplyr::pick(dplyr::ends_with("_postcode")))),
+      # Use NRS_postcode to store the dummy for no other reason than it's last
+      # in the hierarchy
       HL1_postcode = dplyr::if_else(
         all_blank == 1,
         "XXX XXX",
         .data$HL1_postcode
+      )
+    )
+}
+
+#' Fill missing postcodes
+#'
+#' @description Fill missing postcodes with
+#' postcodes from specific episode columns in hierarchy.
+#'
+#' @inheritParams clean_individual_file
+fill_dob <- function(individual_file) {
+  column_prefix <- c(
+    "PIS", "AE", "OoH", "OP", "Acute", "Mat", "HC", "DN", "CMH", "MH",
+    "GLS", "AT", "SDS", "CH", "NSU", "NRS", "HL1"
+  )
+  columns <- paste0(column_prefix, "_postcode")
+  for (i in length(columns)) {
+    individual_file <- replace_postcode_with_col(individual_file, columns[i])
+  }
+  return(individual_file)
+}
+
+#' Fill missing postcode
+#'
+#' @description Fill missing postcode with
+#' postcodes from an episode postcode column.
+#'
+#' @inheritParams clean_individual_file
+#' @param col Column containing postcode for episode
+replace_postcode_with_col <- function(individual_file, col) {
+  individual_file %>%
+    dplyr::mutate(
+      postcode = dplyr::if_else(
+        is.na(.data$postcode) & !is.na(.data[[col]]),
+        .data[[col]],
+        .data$postcode
       )
     )
 }
