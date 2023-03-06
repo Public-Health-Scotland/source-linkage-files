@@ -5,7 +5,6 @@
 (?:^|/)go\.sum$
 (?:^|/)package(?:-lock|)\.json$
 (?:^|/)vendor/
-ignore$
 \.a$
 \.ai$
 \.avi$
@@ -56,3 +55,5 @@ ignore$
 \.zip$
 ^\.github/actions/spelling/
 ^\Q.github/workflows/spelling.yml\E$
+^\Q/tmp/check-spelling/Public-Health-Scotland/source-linkage-files/commits/f13483ca341940e8549dc23c930da2f23dd0ac43.message\E$
+ignore$

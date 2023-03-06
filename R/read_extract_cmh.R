@@ -19,7 +19,7 @@ read_extract_cmh <- function(year, file_path = get_boxi_extract_path(year = year
       "Patient Postcode [C]" = col_character(),
       "NHS Board of Residence Code 9" = col_character(),
       "Patient HSCP Code - current" = col_character(),
-      "Practice Code" = col_character(),
+      "Practice Code" = col_integer(),
       "Treatment NHS Board Code 9" = col_character(),
       "Contact Date" = col_date(format = "%Y/%m/%d %T"),
       "Contact Start Time" = col_time(format = "%T"),
