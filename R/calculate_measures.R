@@ -12,6 +12,9 @@
 #'
 #' @param measure The measure you want to apply to variables
 #'
+#' @param group_by Default as NULL for grouping variables. Specify
+#' variables for grouping e.g recid for episode file testing.
+#'
 #' @return a tibble with a summary
 #' @export
 #'
@@ -20,10 +23,10 @@
 calculate_measures <- function(data,
                                vars = NULL,
                                measure = c("sum", "all", "min-max"),
-                               group_by = FALSE) {
+                               group_by = NULL) {
   measure <- match.arg(measure)
 
-  if (group_by) {
+  if (group_by == "recid") {
     data <- data %>%
       dplyr::group_by(.data$recid)
   }
@@ -71,7 +74,7 @@ calculate_measures <- function(data,
   }
 
 
-  if (group_by) {
+  if (group_by == "recid") {
     pivot_data <- data %>%
       tidyr::pivot_longer(
         cols = !recid,
