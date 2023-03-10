@@ -64,10 +64,10 @@ process_extract_home_care <- function(data = NULL, year, client_lookup = NULL, w
   hc_costs <- hc_hours %>%
     # rename costs variables
     dplyr::rename(
-      hc_costs_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
-      hc_costs_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
-      hc_costs_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
-      hc_costs_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")
+      hc_cost_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
+      hc_cost_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
+      hc_cost_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
+      hc_cost_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")
     ) %>%
     # remove cost variables not from current year
     dplyr::select(-(tidyselect::contains("hc_cost_2"))) %>%
@@ -89,8 +89,8 @@ process_extract_home_care <- function(data = NULL, year, client_lookup = NULL, w
       "sc_send_lca",
       "record_keydate1",
       "record_keydate2",
-      tidyselect::starts_with("hc_hours"),
-      tidyselect::starts_with("hc_cost"),
+      tidyselect::starts_with("hc_hours_"),
+      tidyselect::starts_with("hc_cost_"),
       "cost_total_net",
       "hc_provider",
       "hc_reablement",
