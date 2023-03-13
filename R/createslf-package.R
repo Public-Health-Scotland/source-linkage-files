@@ -6,5 +6,6 @@
 ## usethis namespace: end
 NULL
 
-# Import `where` from tidyselect which isn't exported by default.
+# Import functions
 utils::globalVariables("where")
+utils::globalVariables("closest")
