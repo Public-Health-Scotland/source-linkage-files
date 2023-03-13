@@ -36,13 +36,13 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
       submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
     ) %>%
     dplyr::mutate(
-      # use chi gender if avaliable
+      # use CHI sex if available
       gender = dplyr::if_else(
         is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
         .data$submitted_gender,
         .data$chi_gender_code
       ),
-      # Use CHI DoB if avaliable
+      # Use CHI DoB if available
       dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
     ) %>%
     # format postcodes using `phsmethods`
@@ -102,7 +102,7 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
     sc_demog %>%
     # group by sending location and ID
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
-    # arrange so lastest submissions are last
+    # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
