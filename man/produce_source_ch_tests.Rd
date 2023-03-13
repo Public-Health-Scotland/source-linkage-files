@@ -35,6 +35,7 @@ calculate_measures
 
 Other extract test functions: 
 \code{\link{calculate_measures}()},
+\code{\link{produce_episode_file_tests}()},
 \code{\link{produce_source_cmh_tests}()},
 \code{\link{produce_source_dn_tests}()},
 \code{\link{produce_source_extract_tests}()},
