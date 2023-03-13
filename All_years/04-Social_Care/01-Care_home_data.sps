@@ -274,7 +274,7 @@ SPSSINC TRANS result = ratio type = 0
 If ratio >= 0.95 ch_name = best_guess_name.
 
 * Fill in more blank care home names by looking for cases where we have:.
-* A postcode with a commonly occuring name and some blanks.
+* A postcode with a commonly occurring name and some blanks.
 * in these cases use the name to fill in the blanks.
 
 sort cases by ch_postcode ch_name.

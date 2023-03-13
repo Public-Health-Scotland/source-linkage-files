@@ -73,7 +73,6 @@ calculate_measures <- function(data,
       ))
   }
 
-
   if (group_by == "recid") {
     pivot_data <- data %>%
       tidyr::pivot_longer(
