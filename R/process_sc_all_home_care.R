@@ -5,8 +5,7 @@
 #' but also write this out as a rds.
 #'
 #' @param data The extract to process
-#' @param sc_demographics The sc demographics lookup. Default set to NULL as
-#' we can pass this through data in the environment.
+#' @param sc_demographics The path to the sc demographics lookup.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,12 +14,11 @@
 #'
 #' @export
 #'
-process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
+process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
-  if (is.null(sc_demographics)) {
-    # read in demographic data
-    sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
-  }
+  # read in demographic data
+  sc_demographics <- readr::read_rds(sc_demographics)
+
 
   matched_hc_data <- data %>%
     dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
@@ -171,8 +169,8 @@ process_sc_all_home_care <- function(data, sc_demographics = NULL, write_to_disk
       # Store the period for the latest submitted record
       sc_latest_submission = dplyr::last(.data$period),
       # Sum the (quarterly) hours
-      dplyr::across(tidyselect::starts_with("hc_hours_20"), sum),
-      dplyr::across(tidyselect::starts_with("hc_cost_20"), sum),
+      dplyr::across(tidyselect::starts_with("hc_hours_"), sum),
+      dplyr::across(tidyselect::starts_with("hc_cost_"), sum),
       # Shouldn't matter as these are all the same
       dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%

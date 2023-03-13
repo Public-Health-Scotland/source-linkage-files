@@ -4,7 +4,12 @@
 \alias{calculate_measures}
 \title{Calculate Measures for Testing}
 \usage{
-calculate_measures(data, vars = NULL, measure = c("sum", "all", "min-max"))
+calculate_measures(
+  data,
+  vars = NULL,
+  measure = c("sum", "all", "min-max"),
+  group_by = NULL
+)
 }
 \arguments{
 \item{data}{A processed dataframe containing a
@@ -15,6 +20,9 @@ This will match this e.g c(\code{beddays}, \code{cost}, \code{yearstay}).
 Default as NULL for summarising everything.}
 
 \item{measure}{The measure you want to apply to variables}
+
+\item{group_by}{Default as NULL for grouping variables. Specify
+variables for grouping e.g recid for episode file testing.}
 }
 \value{
 a tibble with a summary
