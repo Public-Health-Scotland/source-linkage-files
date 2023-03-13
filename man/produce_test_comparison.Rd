@@ -4,12 +4,14 @@
 \alias{produce_test_comparison}
 \title{Test Comparison}
 \usage{
-produce_test_comparison(old_data, new_data)
+produce_test_comparison(old_data, new_data, recid = FALSE)
 }
 \arguments{
 \item{old_data}{dataframe containing the old data test flags}
 
 \item{new_data}{dataframe containing the new file data test flags}
+
+\item{recid}{Logical True/False. Use True when comparing the ep file.}
 }
 \value{
 a dataframe with a comparison of new and old data

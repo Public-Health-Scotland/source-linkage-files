@@ -4,6 +4,8 @@ adtf
 arrivalmode
 attendcat
 aut
+carehome
+careinspectorate
 beddays
 birthtime
 bodyloc
@@ -46,6 +48,7 @@ hbtreatcode
 HCP
 hhg
 hms
+jaccard
 homecare
 hscp
 hscpnames
@@ -101,6 +104,9 @@ slf
 slfhelper
 smr
 SMRA
+spd
+stringdist
+stringr
 smrtype
 sparra
 spd
