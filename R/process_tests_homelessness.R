@@ -55,4 +55,3 @@ produce_slf_homelessness_tests <- function(data,
 
   return(join_output)
 }
-

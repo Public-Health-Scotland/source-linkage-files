@@ -54,4 +54,3 @@ produce_source_at_tests <- function(data,
 
   return(join_output)
 }
-

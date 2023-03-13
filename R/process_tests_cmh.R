@@ -58,4 +58,3 @@ produce_source_cmh_tests <- function(data) {
 
   return(join_output)
 }
-

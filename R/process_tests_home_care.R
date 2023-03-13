@@ -78,4 +78,3 @@ produce_source_hc_tests <- function(data,
 
   return(join_output)
 }
-

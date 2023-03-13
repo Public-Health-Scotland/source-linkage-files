@@ -59,4 +59,3 @@ produce_sc_ch_episodes_tests <- function(data) {
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 }
-
