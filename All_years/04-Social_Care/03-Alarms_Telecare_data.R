@@ -29,7 +29,7 @@ sc_demographics <- haven::read_sav(fs::path(
 
 # Query to database -------------------------------------------------------
 
-# set-up conection to platform
+# set-up connection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
@@ -73,7 +73,7 @@ pre_compute_record_dates <- at_full_data %>%
 replaced_start_dates <- at_full_data %>%
   # Replace missing start dates with the start of the FY
   left_join(pre_compute_record_dates, by = "period") %>%
-  tidylog::mutate(
+  dplyr::mutate(
     start_date_missing = is.na(service_start_date),
     service_start_date = if_else(
       start_date_missing,
@@ -83,7 +83,7 @@ replaced_start_dates <- at_full_data %>%
   )
 
 at_full_clean <- replaced_start_dates %>%
-  # Match on demographics data (chi, gender, dob and postcode)
+  # Match on demographics data (CHI, gender, DoB and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # rename for matching source variables
   rename(

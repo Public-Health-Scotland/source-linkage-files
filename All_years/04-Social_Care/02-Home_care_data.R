@@ -1,6 +1,5 @@
 # Setup -------------------------------------------------------------------
 
-library(haven)
 library(fs)
 library(dplyr)
 library(stringr)
@@ -238,11 +237,14 @@ hc_costs <- read_rds(path("/conf/hscdiip/SLF_Extracts/Costs", "costs_hc_lookup.r
 
 matched_costs <- fixed_hours %>%
   left_join(hc_costs,
-                     by = c("sending_location_name" = "ca_name",
-                            "financial_year" = "year")) %>%
+    by = c(
+      "sending_location_name" = "ca_name",
+      "financial_year" = "year"
+    )
+  ) %>%
   mutate(hc_cost = hc_hours * hourly_cost)
 
-pivotted_hours <- matched_costs %>%
+pivoted_hours <- matched_costs %>%
   # Create a copy of the period then pivot the hours on it
   # This creates a new variable per quarter
   # with the hours for that quarter for every record
@@ -285,7 +287,7 @@ pivotted_hours <- matched_costs %>%
       )
   )
 
-merged_data <- pivotted_hours %>%
+merged_data <- pivoted_hours %>%
   # Group the data to be merged
   group_by(
     chi,
