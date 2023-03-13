@@ -8,7 +8,7 @@ calculate_measures(
   data,
   vars = NULL,
   measure = c("sum", "all", "min-max"),
-  group_by = FALSE
+  group_by = NULL
 )
 }
 \arguments{
@@ -21,8 +21,8 @@ Default as NULL for summarising everything.}
 
 \item{measure}{The measure you want to apply to variables}
 
-\item{group_by}{Grouping variables logical T/F to be used
-when testing the episode/individual file.}
+\item{group_by}{Default as NULL for grouping variables. Specify
+variables for grouping e.g recid for episode file testing.}
 }
 \value{
 a tibble with a summary
