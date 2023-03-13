@@ -13,6 +13,7 @@
 #' (data is from [get_source_extract_path()])
 #' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
+#' @inheritParams calculate_measures
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
@@ -28,7 +29,8 @@ produce_episode_file_tests <- function(data,
                                        max_min_vars = c(
                                          "record_keydate1", "record_keydate2",
                                          "cost_total_net", "yearstay"
-                                       )) {
+                                       ),
+                                       group_by = "recid") {
   test_flags <- data %>%
     dplyr::group_by(.data$recid) %>%
     # use functions to create HB and partnership flags
@@ -45,7 +47,7 @@ produce_episode_file_tests <- function(data,
     # keep variables for comparison
     dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
-    calculate_measures(measure = "sum", group_by = TRUE)
+    calculate_measures(measure = "sum", group_by = group_by)
 
   all_measures <- data %>%
     group_by(.data$recid) %>%
