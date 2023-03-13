@@ -7,7 +7,8 @@
 produce_episode_file_tests(
   data,
   sum_mean_vars = c("beddays", "cost", "yearstay"),
-  max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay")
+  max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"),
+  group_by = "recid"
 )
 }
 \arguments{
@@ -17,6 +18,9 @@ produce_episode_file_tests(
 \item{sum_mean_vars}{variables used when selecting 'all' measures from \code{\link[=calculate_measures]{calculate_measures()}}}
 
 \item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
+
+\item{group_by}{Default as NULL for grouping variables. Specify
+variables for grouping e.g recid for episode file testing.}
 }
 \value{
 a dataframe with a count of each flag
