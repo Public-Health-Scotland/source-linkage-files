@@ -17,7 +17,6 @@
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
-#' @export
 #'
 #' @family extract test functions
 #' @seealso [create_hb_test_flags()],
