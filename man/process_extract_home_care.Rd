@@ -5,20 +5,18 @@
 \title{Process the (year specific) Home Care extract}
 \usage{
 process_extract_home_care(
-  data = NULL,
+  file_path = get_sc_hc_episodes_path(),
   year,
-  client_lookup = NULL,
+  client_lookup_path = get_source_extract_path(year, type = "Client"),
   write_to_disk = TRUE
 )
 }
 \arguments{
-\item{data}{The extract to process. (Optional) Can be passed through a data list or
-alternatively read the file from disk.}
+\item{file_path}{The extract to process - Read the file from disk.}
 
 \item{year}{The year to process, in FY format.}
 
-\item{client_lookup}{The client lookup extract (Optional) Can be passed through a data list
-or alternatively read the file from disk.}
+\item{client_lookup_path}{The client lookup extract - Read the file from disk.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
