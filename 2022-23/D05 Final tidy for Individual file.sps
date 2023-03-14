@@ -27,7 +27,7 @@ Alter type
     OP_newcons_attendances OP_newcons_dnas
     AE_attendances
     PIS_paid_items
-    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time ooh_covid_advice ooh_covid_assesment ooh_covid_other
+    OoH_cases OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC OoH_consultation_time ooh_covid_advice ooh_covid_assessment ooh_covid_other
     DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     DN_episodes DN_contacts
     CMH_contacts
@@ -125,7 +125,7 @@ Variable Labels
     ooh_other "Number of GP OoH Other consultations"
     ooh_PCC "Number of GP OoH Primary Care Centre / Emergency Primary Care Centre consultations"
     ooh_covid_advice "Number of GP OoH COVID-19 Advice consultations"
-    ooh_covid_assesment "Number of GP OoH COVID-19 Advice assessment consultations"
+    ooh_covid_assessment "Number of GP OoH COVID-19 Advice assessment consultations"
     ooh_covid_other "Number of GP OoH COVID-19 Other consultations"
     ooh_cost "Cost of all GP OoHs"
     ooh_consultation_time "Total time for GP OoH Consultations"
@@ -308,7 +308,7 @@ save outfile = !Year_dir + "source-individual-file-20" + !FY + ".zsav"
     ooh_other
     ooh_pcc
     ooh_covid_advice
-    ooh_covid_assesment
+    ooh_covid_assessment
     ooh_covid_other
     ooh_consultation_time
     ooh_cost

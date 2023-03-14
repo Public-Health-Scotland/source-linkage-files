@@ -4,18 +4,18 @@
 #' (year specific) SDS extract, it will return the final data
 #' but also write this out as rds.
 #'
-#' @param data The extract to process - Read the file from disk.
+#' @param file_path The extract to process - Read the file from disk.
 #' @param year The year to process, in FY format.
-#' @param client_lookup The client lookup extract - Read the file from disk.
+#' @param client_lookup_path The client lookup extract - Read the file from disk.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_sds <- function(data = get_sc_sds_episodes_path(),
+process_extract_sds <- function(file_path = get_sc_sds_episodes_path(),
                                 year,
-                                client_lookup = get_source_extract_path(year, type = "Client"),
+                                client_lookup_path = get_source_extract_path(year, type = "Client"),
                                 write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -24,10 +24,10 @@ process_extract_sds <- function(data = get_sc_sds_episodes_path(),
   year <- check_year_format(year)
 
   # Read client lookup
-  client_table <- readr::read_rds(client_lookup)
+  client_table <- readr::read_rds(client_lookup_path)
 
   # Read Data
-  data <- readr::read_rds(data)
+  data <- readr::read_rds(file_path)
 
   # Process data-----------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 *Individual File checks.
 *Run A01 for the individual year.
 
@@ -154,7 +154,7 @@ aggregate outfile = New_Summary
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
     /total_ooh_covid_advice = sum(ooh_covid_advice)
-    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_assessment = sum(ooh_covid_assessment)
     /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
@@ -250,7 +250,7 @@ aggregate outfile = New_Summary
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
     /mean_ooh_covid_advice = Mean(ooh_covid_advice)
-    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_assessment = Mean(ooh_covid_assessment)
     /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)
@@ -388,9 +388,9 @@ If NHS_Fife = 1 NHS_Fife_cost = health_net_cost.
 If NHS_Tayside = 1 NHS_Tayside_cost = health_net_cost.
 
 * Add in variables which didn't exist in the previous update (Dec 2022).
-Numeric
+*Numeric
     ooh_covid_advice
-    ooh_covid_assesment
+    ooh_covid_assessment
     ooh_covid_other (F2.0).
 
 Dataset declare Old_Summary.
@@ -459,7 +459,7 @@ aggregate outfile = Old_Summary
     /total_OP_cost_dnas = Sum(OP_cost_dnas)
     /total_AE_attendances = Sum(AE_attendances)
     /total_AE_cost = Sum(AE_cost)
-    /total_pis_paid_items = Sum(pis_dispensed_items)
+    /total_pis_paid_items = Sum(pis_paid_items)
     /total_PIS_cost = Sum(PIS_cost)
     /total_CH_cis_episodes = Sum(CH_cis_episodes)
     /total_CH_beddays = Sum(CH_beddays)
@@ -474,7 +474,7 @@ aggregate outfile = Old_Summary
     /total_OoH_consultation_time = Sum(OoH_consultation_time)
     /total_OoH_cost = Sum(OoH_cost)
     /total_ooh_covid_advice = sum(ooh_covid_advice)
-    /total_ooh_covid_assesment = sum(ooh_covid_assesment)
+    /total_ooh_covid_assessment = sum(ooh_covid_assesment)
     /total_ooh_covid_other = sum(ooh_covid_other)
     /total_DN_episodes = Sum(DN_episodes)
     /total_DN_contacts = Sum(DN_contacts)
@@ -557,7 +557,7 @@ aggregate outfile = Old_Summary
     /mean_OP_cost_dnas = Mean(OP_cost_dnas)
     /mean_AE_attendances = Mean(AE_attendances)
     /mean_AE_cost = Mean(AE_cost)
-    /mean_pis_paid_items = Mean(pis_dispensed_items)
+    /mean_pis_paid_items = Mean(pis_paid_items)
     /mean_PIS_cost = Mean(PIS_cost)
     /mean_CH_cis_episodes = Mean(CH_cis_episodes)
     /mean_CH_beddays = Mean(CH_beddays)
@@ -570,7 +570,7 @@ aggregate outfile = Old_Summary
     /mean_OoH_other = Mean(OoH_other)
     /mean_OoH_PCC = Mean(OoH_PCC)
     /mean_ooh_covid_advice = Mean(ooh_covid_advice)
-    /mean_ooh_covid_assesment = Mean(ooh_covid_assesment)
+    /mean_ooh_covid_assessment = Mean(ooh_covid_assesment)
     /mean_ooh_covid_other = Mean(ooh_covid_other)
     /mean_OoH_consultation_time = Mean(OoH_consultation_time)
     /mean_OoH_cost = Mean(OoH_cost)

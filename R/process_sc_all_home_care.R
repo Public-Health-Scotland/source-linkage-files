@@ -169,8 +169,8 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
       # Store the period for the latest submitted record
       sc_latest_submission = dplyr::last(.data$period),
       # Sum the (quarterly) hours
-      dplyr::across(tidyselect::starts_with("hc_hours_20"), sum),
-      dplyr::across(tidyselect::starts_with("hc_cost_20"), sum),
+      dplyr::across(tidyselect::starts_with("hc_hours_"), sum),
+      dplyr::across(tidyselect::starts_with("hc_cost_"), sum),
       # Shouldn't matter as these are all the same
       dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%

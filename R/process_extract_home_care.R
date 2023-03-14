@@ -4,18 +4,18 @@
 #' (year specific) Home Care extract, it will return the final data
 #' but also write this out as rds.
 #'
-#' @param data The extract to process - Read the file from disk.
+#' @param file_path The extract to process - Read the file from disk.
 #' @param year The year to process, in FY format.
-#' @param client_lookup The client lookup extract - Read the file from disk.
+#' @param client_lookup_path The client lookup extract - Read the file from disk.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_home_care <- function(data = get_sc_hc_episodes_path(),
+process_extract_home_care <- function(file_path = get_sc_hc_episodes_path(),
                                       year,
-                                      client_lookup = get_source_extract_path(year, type = "Client"),
+                                      client_lookup_path = get_source_extract_path(year, type = "Client"),
                                       write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -24,10 +24,10 @@ process_extract_home_care <- function(data = get_sc_hc_episodes_path(),
   year <- check_year_format(year)
 
   # Read client lookup
-  client_lookup <- readr::read_rds(client_lookup)
+  client_lookup <- readr::read_rds(client_lookup_path)
 
   # Read Data
-  data <- readr::read_rds(data)
+  data <- readr::read_rds(file_path)
 
   # Selections for financial year------------------------------------
 
@@ -61,10 +61,10 @@ process_extract_home_care <- function(data = get_sc_hc_episodes_path(),
   hc_costs <- hc_hours %>%
     # rename costs variables
     dplyr::rename(
-      hc_costs_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
-      hc_costs_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
-      hc_costs_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
-      hc_costs_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")
+      hc_cost_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
+      hc_cost_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
+      hc_cost_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
+      hc_cost_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")
     ) %>%
     # remove cost variables not from current year
     dplyr::select(-(tidyselect::contains("hc_cost_2"))) %>%
@@ -86,8 +86,8 @@ process_extract_home_care <- function(data = get_sc_hc_episodes_path(),
       "sc_send_lca",
       "record_keydate1",
       "record_keydate2",
-      tidyselect::starts_with("hc_hours"),
-      tidyselect::starts_with("hc_cost"),
+      tidyselect::starts_with("hc_hours_"),
+      tidyselect::starts_with("hc_cost_"),
       "cost_total_net",
       "hc_provider",
       "hc_reablement",
