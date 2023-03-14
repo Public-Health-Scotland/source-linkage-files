@@ -39,7 +39,9 @@ replace_sc_id_with_latest <- function(data) {
 
   return_data <- change_sc_id %>%
     # Match back onto data
-    dplyr::right_join(data, by = c("sending_location", "chi")) %>%
+    dplyr::right_join(data,
+                      by = c("sending_location", "chi"),
+                      multiple = "all") %>%
     # Overwrite sc id with the latest
     dplyr::mutate(
       social_care_id = dplyr::if_else(
