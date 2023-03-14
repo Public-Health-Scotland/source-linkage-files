@@ -1,11 +1,14 @@
 aut
+bedday
 beddays
 birthtime
 boxi
+cij
 cmh
 covr
 cph
 createslf
+dataframe
 datazone
 dateformat
 dateop
@@ -27,6 +30,9 @@ geogs
 GLS
 gpprac
 hbnames
+hbpraccode
+hbrescode
+hbtreatcode
 hhg
 hms
 homecare
@@ -45,15 +51,18 @@ multistaff
 nrs
 nsu
 odbc
+opendata
 openxlsx
 ORCID
 outfile
+pattype
 phs
 phsmethods
 phsopendata
 postcodes
 placeinc
 praccode
+prac
 purrr
 quickstart
 rds
@@ -67,6 +76,7 @@ rmarkdown
 roxygen
 Rprofile
 rstudioapi
+seealso
 simd
 SLF
 slf
@@ -88,4 +98,5 @@ uid
 ungroup
 updown
 xlsx
+yearstay
 zihao
