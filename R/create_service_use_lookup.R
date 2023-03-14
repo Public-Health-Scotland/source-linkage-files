@@ -760,8 +760,8 @@ assign_cohort_names <- function(data) {
       ),
       # Assign service use cohort based on highest cost
       service_use_cohort = dplyr::case_when(
-        # Situation where no cost is greater than another, so the maxiumum is the same
-        # as the mean
+        # Situation where no cost is greater than another,
+        # so the maximum is the same  as the mean
         .data$cost_max == rowSums(
           dplyr::across(
             c("psychiatry_cost":"residential_care_cost")
