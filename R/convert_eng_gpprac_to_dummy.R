@@ -12,7 +12,7 @@ convert_eng_gpprac_to_dummy <- function(gpprac, dummy_code = 9995L) {
   gpprac <- dplyr::if_else(
     stringr::str_detect(gpprac, "[A-Z]"),
     dummy_code,
-    suppressWarnings(readr::parse_integer(gpprac))
+    suppressWarnings(as.integer(gpprac)
   )
 
   return(gpprac)
