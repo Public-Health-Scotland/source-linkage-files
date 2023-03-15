@@ -8,8 +8,11 @@
 #' @return episode files with updated date of birth and ages
 #' @export
 correct_demographics <- function(data, year) {
+  # keep episodes with missing chi
+  data_no_chi <- data %>% 
+    dplyr::filter(is_missing(.data$chi))
   # Checking and changing DOB and age
-  data <- data %>%
+  data_chi <- data %>%
     dplyr::filter(!is_missing(.data$chi)) %>%
     dplyr::mutate(
       # Create a dob in the previous century from the chi number
@@ -80,7 +83,13 @@ correct_demographics <- function(data, year) {
       "chi_age_min",
       "chi_gender"
     ))
-
+  
+  # combine data_chi and data_no_chi
+  data <- dplyr::bind_rows(
+    data_no_chi,
+    data_chi
+  )
+  
   # return the data
   return(data)
 }
