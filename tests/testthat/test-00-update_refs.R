@@ -42,8 +42,8 @@ test_that("Previous Update works for different month values", {
 })
 
 test_that("Previous Update override works", {
- expect_equal(previous_update(override = "May_2023"), "May_2023")
- expect_equal(previous_update(override = "XYZ_1234"), "XYZ_1234")
+  expect_equal(previous_update(override = "May_2023"), "May_2023")
+  expect_equal(previous_update(override = "XYZ_1234"), "XYZ_1234")
 })
 
 test_that("Delayed Discharge period string looks valid", {
