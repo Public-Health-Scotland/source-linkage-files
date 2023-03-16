@@ -13,49 +13,50 @@ tar_option_set(
 
 list(
   tar_target(write_to_disk, FALSE),
-  # tar_target(sc_demog_lookup,
-  #             process_lookup_sc_demographics(read_lookup_sc_demographics(),
-  #                                            write_to_disk = write_to_disk)),
+  ## Lookup data ##
+  tar_target(spd_data, get_spd_path(), format = "file"),
+  tar_target(simd_data, get_simd_path(), format = "file"),
+  tar_target(locality_data, get_locality_path(), format = "file"),
+  tar_target(chi_deaths_data, get_it_deaths_path(), format = "file"),
+  ## Process Lookups ##
+  tar_target(sc_demog_lookup,
+              process_lookup_sc_demographics(read_lookup_sc_demographics(),
+                                             write_to_disk = write_to_disk)),
+  tar_target(source_pc_lookup,
+             process_lookup_postcode(spd_data,
+                                     simd_data,
+                                     locality_data,
+                                     write_to_disk = write_to_disk)),
+  tar_target(source_gp_lookup,
+             process_lookup_gpprac(gpprac_data,
+                                   write_to_disk = write_to_disk)),
+  tar_target(source_chi_deaths_lookup,
+             process_lookup_chi_deaths(read_lookup_chi_deaths(chi_deaths_data),
+                                       write_to_disk = write_to_disk)),
+  # CHECK gpprac data!
+  # tar_target(gpprac_data, phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes", max_resources = 20L), format = "file"),
 
+  ## Cost Lookups ##
+  tar_target(ch_costs, process_costs_ch_rmd()),
+  tar_target(hc_costs, process_costs_hc_rmd()),
+  tar_target(gp_ooh_costs, process_costs_gp_ooh_rmd()),
+  tar_target(dn_costs, process_costs_dn_rmd()),
   ## Social Care - 'All' data ##
-  # Ask James if this is needed here, or we can target from above?
   tar_target(sc_demographic_data, get_sc_demog_lookup_path(), format = "file"),
+  tar_target(slf_deaths_data, get_slf_deaths_path(), format = "file"),
   tar_target(all_at, process_sc_all_alarms_telecare(read_sc_all_alarms_telecare(),
                                                     sc_demographics = sc_demographic_data,
                                                     write_to_disk = write_to_disk)),
-  # tar_target(all_sds, process_sc_all_sds(read_sc_all_sds(),
-  #                                                   sc_demographics = sc_demographic_data,
-  #                                                   write_to_disk = write_to_disk)),
-  # tar_target(all_home_care, process_sc_all_home_care(read_sc_all_home_care(),
-  #                                                   sc_demographics = sc_demographic_data,
-  #                                                   write_to_disk = write_to_disk)),
-
-  # Still WIP sc functions.
-  # tar_target(all_ch,)
-
-
-  # # ALL WORKING - Commented for faster running
-  # Target lookup data
-  # tar_target(spd_data, get_spd_path(), format = "file"),
-  # tar_target(simd_data, get_simd_path(), format = "file"),
-  # tar_target(locality_data, get_locality_path(), format = "file"),
-  # tar_target(gpprac_data, phsopendata::get_dataset("gp-practice-contact-details-and-list-sizes", max_resources = 20L), format = "file"),
-  # tar_target(chi_deaths_data, get_it_deaths_path(), format = "file"),
-
-
-  ### Target processed lookups ###
-  # tar_target(source_pc_lookup, process_lookup_postcode(spd_data, simd_data, locality_data, write_to_disk = write_to_disk)),
-  # tar_target(source_gp_lookup, process_lookup_gpprac(gpprac_data, write_to_disk = write_to_disk)),
-  # tar_target(source_chi_deaths_lookup, process_lookup_chi_deaths(read_lookup_chi_deaths(chi_deaths_data), write_to_disk = write_to_disk)),
-
-
-  ###Target cost lookups###
-  #tar_target(ch_costs, process_costs_ch_rmd()),
-  #tar_target(hc_costs, process_costs_hc_rmd()),
-  #tar_target(gp_ooh_costs, process_costs_gp_ooh_rmd()),
-  #tar_target(dn_costs, process_costs_dn_rmd()),
-
-
+  tar_target(all_sds, process_sc_all_sds(read_sc_all_sds(),
+                                                    sc_demographics = sc_demographic_data,
+                                                    write_to_disk = write_to_disk)),
+  tar_target(all_home_care, process_sc_all_home_care(read_sc_all_home_care(),
+                                                    sc_demographics = sc_demographic_data,
+                                                    write_to_disk = write_to_disk)),
+  tar_target(all_care_home, process_sc_all_care_home(read_sc_all_care_home(),
+                                                     sc_demographics = sc_demographic_data,
+                                                     slf_deaths_path = slf_deaths_data,
+                                                     write_to_disk = write_to_disk)),
   tarchetypes::tar_map(
     list(year = c(1920)),
     # All WORKING - Commented for faster running
