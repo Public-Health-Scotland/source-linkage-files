@@ -8,6 +8,8 @@
 #'
 #' @seealso [get_nsu_path()]
 add_nsu_cohort <- function(data, year) {
+  year_param <- year
+
   # Check that the variables we need are in the data
   check_variables_exist(data,
     variables = c(
@@ -42,7 +44,7 @@ add_nsu_cohort <- function(data, year) {
   return_df <- matched %>%
     # Get data from non service user lookup if the recid is empty
     dplyr::mutate(
-      year = year,
+      year = year_param,
       recid = dplyr::if_else(
         is_missing(.data$recid),
         "NSU",
