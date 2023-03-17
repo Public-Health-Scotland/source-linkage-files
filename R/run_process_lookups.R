@@ -1,0 +1,28 @@
+#' Run data lookups
+#'
+#' @description Process and data lookups so they are ready for production
+#' of the episode file.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#'
+#' @return A list of data containing processed extracts.
+#'
+#' @export
+#'
+run_process_lookups <- function(write_to_disk = FALSE) {
+  process_lookups <- list(
+    ## SLF lookups
+    "postcode" = process_lookup_postcode(write_to_disk = write_to_disk),
+    "gpprac" = process_lookup_gpprac(write_to_disk = write_to_disk),
+    "chi_deaths" = process_lookup_chi_deaths(read_lookup_chi_deaths(), write_to_disk = write_to_disk),
+    ## Cost lookups
+    "costs_gp_ooh" = process_costs_gp_ooh_rmd(),
+    "costs_district_nursing" = process_costs_dn_rmd(),
+    "costs_care_home" = process_costs_ch_rmd(),
+    "costs_home_care" = process_costs_hc_rmd(),
+    ## Social Care lookups
+    "sc_demographics" = process_lookup_sc_demographics(read_lookup_sc_demographics(), write_to_disk = write_to_disk)
+  )
+
+  return(process_lookups)
+}
