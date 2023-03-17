@@ -17,7 +17,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
-        "",
+        NA_character,
         .data$chi
       ),
       gpprac = as.numeric(gpprac)
