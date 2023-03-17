@@ -10,11 +10,14 @@ cph
 createslf
 dataframe
 datazone
+dateformat
+dateop
 datetime
 dbconnect
 dbplyr
 demog
 dontrun
+downup
 dplyr
 dsn
 dtplyr
@@ -23,6 +26,8 @@ dvprod
 envir
 fyear
 fyyear
+geogs
+GLS
 gpprac
 hbnames
 hbpraccode
@@ -54,6 +59,9 @@ pattype
 phs
 phsmethods
 phsopendata
+postcodes
+placeinc
+praccode
 prac
 purrr
 quickstart
