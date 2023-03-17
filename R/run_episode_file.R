@@ -27,6 +27,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # Recode any cij_admtype "Un" to "99"
     # There are lots of blanks - do these need to be recoded or ignored?
     # Change some values of cij_pattype_code based on cij_admtype
+    ### TODO put lines 31-49 into a function ###
     dplyr::mutate(
       cij_pattype_code = dplyr::case_when(
         .data$chi != "" &
@@ -37,7 +38,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
           .data$cij_admtype %in% c("48", "49", "99") ~ 9,
         .data$cij_admtype == "18" ~ 0,
         TRUE ~ .data$cij_pattype_code
-      ),
+      ),-
       # Recode cij_pattype based on above
       cij_pattype = dplyr::case_when(
         .data$cij_pattype_code == 0 ~ "Non-Elective",
