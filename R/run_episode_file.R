@@ -17,7 +17,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
-        NA_character,
+        NA_character_,
         .data$chi
       ),
       gpprac = as.numeric(gpprac)
@@ -38,7 +38,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
           .data$cij_admtype %in% c("48", "49", "99") ~ 9,
         .data$cij_admtype == "18" ~ 0,
         TRUE ~ .data$cij_pattype_code
-      ),-
+      ),
       # Recode cij_pattype based on above
       cij_pattype = dplyr::case_when(
         .data$cij_pattype_code == 0 ~ "Non-Elective",
