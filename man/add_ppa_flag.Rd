@@ -18,7 +18,7 @@ a combination of diagnostic codes and operation codes, whether an admission
 was preventable or not.
 }
 \seealso{
-Other \link{episode file}: 
+Other episode file: 
 \code{\link{add_nsu_cohort}()}
 }
-\concept{\link{episode file}}
+\concept{episode file}
