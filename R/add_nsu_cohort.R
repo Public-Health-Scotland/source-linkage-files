@@ -9,6 +9,8 @@
 #' @family episode file
 #' @seealso [get_nsu_path()]
 add_nsu_cohort <- function(data, year) {
+  year_param <- year
+
   # Check that the variables we need are in the data
   check_variables_exist(data,
     variables = c(
@@ -26,7 +28,10 @@ add_nsu_cohort <- function(data, year) {
   matched <- dplyr::full_join(data,
     # NSU cohort file
     haven::read_sav(get_nsu_path(year, ext = "zsav")) %>%
-      dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)),
+      dplyr::mutate(
+        dob = as.Date(.data[["dob"]]),
+        gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
+      ),
     # Match on by chi
     by = "chi",
     # Name the incoming variables with "_nsu"
@@ -35,65 +40,70 @@ add_nsu_cohort <- function(data, year) {
     keep = TRUE
   ) %>%
     # Change the chi from the NSU cohort to a boolean
-    dplyr::mutate(has_chi = !is_missing(.data$chi_nsu))
+    dplyr::mutate(has_chi = !is_missing(.data[["chi_nsu"]]))
 
   return_df <- matched %>%
     # Get data from non service user lookup if the recid is empty
     dplyr::mutate(
-      year = year,
+      year = year_param,
       recid = dplyr::if_else(
-        is_missing(.data$recid),
+        is_missing(.data[["recid"]]),
         "NSU",
-        .data$recid
+        .data[["recid"]]
       ),
       smrtype = dplyr::if_else(
-        is_missing(.data$recid),
+        is_missing(.data[["recid"]]),
         "Non-User",
-        .data$smrtype
+        .data[["smrtype"]]
       ),
       postcode = dplyr::if_else(
-        is_missing(.data$recid),
-        .data$postcode_nsu,
-        .data$postcode
+        is_missing(.data[["recid"]]),
+        .data[["postcode_nsu"]],
+        .data[["postcode"]]
       ),
       gpprac = dplyr::if_else(
-        is_missing(.data$recid),
-        .data$gpprac_nsu,
-        .data$gpprac
+        is_missing(.data[["recid"]]),
+        .data[["gpprac_nsu"]],
+        .data[["gpprac"]]
       ),
       dob = dplyr::if_else(
-        is_missing(.data$recid),
-        .data$dob_nsu,
-        .data$dob
+        is_missing(.data[["recid"]]),
+        .data[["dob_nsu"]],
+        .data[["dob"]]
       ),
       gender = dplyr::if_else(
-        is_missing(.data$recid),
-        .data$gender_nsu,
-        .data$gender
+        is_missing(.data[["recid"]]),
+        .data[["gender_nsu"]],
+        .data[["gender"]]
       )
     ) %>%
     # If the data has come from the NSU cohort,
     # use that data for the below variables
     dplyr::mutate(
       postcode = dplyr::if_else(
-        is_missing(.data$postcode) & .data$has_chi,
-        .data$postcode_nsu,
-        .data$postcode
+        is_missing(.data[["postcode"]]) & .data[["has_chi"]],
+        .data[["postcode_nsu"]],
+        .data[["postcode"]]
       ),
       gpprac = dplyr::if_else(
-        is.na(.data$gpprac) & .data$has_chi,
-        .data$gpprac_nsu,
-        .data$gpprac
+        is.na(.data[["gpprac"]]) & .data[["has_chi"]],
+        .data[["gpprac_nsu"]],
+        .data[["gpprac"]]
       ),
       dob = dplyr::if_else(
-        is.na(.data$dob) & .data$has_chi,
-        .data$dob_nsu,
-        .data$dob
+        is.na(.data[["dob"]]) & .data[["has_chi"]],
+        .data[["dob_nsu"]],
+        .data[["dob"]]
       ),
       gender = dplyr::if_else(
-        is.na(.data$gender) & .data$has_chi,
-        .data$gender_nsu,
-        .data$gender
+        is.na(.data[["gender"]]) & .data[["has_chi"]],
+        .data[["gender_nsu"]],
+        .data[["gender"]]
+      ),
+      chi = dplyr::if_else(
+        is_missing(.data[["chi"]]) & .data[["has_chi"]],
+        .data[["chi_nsu"]],
+        .data[["chi"]]
       )
     ) %>%
     # Remove the additional columns
