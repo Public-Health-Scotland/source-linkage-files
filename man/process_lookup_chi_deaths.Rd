@@ -46,6 +46,7 @@ Other process extracts:
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
 \code{\link{process_sc_all_alarms_telecare}()},
+\code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},

@@ -22,9 +22,11 @@ Get the NSU file path for the given year
 
 Other file path functions: 
 \code{\link{get_dd_path}()},
+\code{\link{get_demographic_cohorts_path}()},
 \code{\link{get_file_path}()},
 \code{\link{get_ltcs_path}()},
 \code{\link{get_practice_details_path}()},
-\code{\link{get_readcode_lookup_path}()}
+\code{\link{get_readcode_lookup_path}()},
+\code{\link{get_service_use_cohorts_path}()}
 }
 \concept{file path functions}

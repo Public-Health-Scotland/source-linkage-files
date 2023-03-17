@@ -6,6 +6,7 @@
 #' @param data A data frame
 #'
 #' @return A data frame to use as a lookup of PPAs
+#' @family episode file
 #' @export
 add_ppa_flag <- function(data) {
   check_variables_exist(
