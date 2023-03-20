@@ -15,7 +15,6 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-
 process_lookup_postcode <- function(spd_path = get_spd_path(),
                                     simd_path = get_simd_path(),
                                     locality_path = get_locality_path(),
