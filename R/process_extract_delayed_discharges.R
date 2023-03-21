@@ -52,10 +52,7 @@ process_extract_delayed_discharges <- function(data,
     # Use end of the month date for records with no end date (but we think have ended)
     # Create a flag for these records
     dplyr::mutate(
-      month_end = lubridate::ceiling_date(
-        .data$keydate1_dateformat,
-        "month"
-      ) - 1L,
+      month_end = lubridate::ceiling_date(.data[["monthflag"]], "month") - 1L,
       keydate2_dateformat = dplyr::if_else(
         .data$keydate2_dateformat == as.Date("1900-01-01"),
         .data$month_end,
