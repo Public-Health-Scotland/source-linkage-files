@@ -5,8 +5,8 @@
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 #'
-read_extract_delayed_discharges <- function(file_path = get_dd_path(ext = "zsav")) {
-  extract_delayed_discharges <- haven::read_sav(file_path) %>%
+read_extract_delayed_discharges <- function(file_path = get_dd_path()) {
+  extract_delayed_discharges <- readr::read_rds(file_path) %>%
     janitor::clean_names() %>%
     # rename variables
     dplyr::rename(
