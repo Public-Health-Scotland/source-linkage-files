@@ -7,7 +7,8 @@
 #'
 read_extract_delayed_discharges <- function(file_path = get_dd_path()) {
   extract_delayed_discharges <- readr::read_rds(file_path) %>%
-    janitor::clean_names()
+    janitor::clean_names() %>%
+    dplyr::select(-.data[["cennum"]])
 
   return(extract_delayed_discharges)
 }
