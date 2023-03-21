@@ -7,12 +7,7 @@
 #'
 read_extract_delayed_discharges <- function(file_path = get_dd_path()) {
   extract_delayed_discharges <- readr::read_rds(file_path) %>%
-    janitor::clean_names() %>%
-    # rename variables
-    dplyr::rename(
-      keydate1_dateformat = .data$rdd,
-      keydate2_dateformat = .data$delay_end_date
-    )
+    janitor::clean_names()
 
   return(extract_delayed_discharges)
 }

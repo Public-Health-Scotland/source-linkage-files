@@ -45,6 +45,10 @@ process_extract_delayed_discharges <- function(data,
   )
 
   dd_clean <- data %>%
+    dplyr::rename(
+      keydate1_dateformat = .data[["rdd"]],
+      keydate2_dateformat = .data[["delay_end_date"]]
+    ) %>%
     # Use end of the month date for records with no end date (but we think have ended)
     # Create a flag for these records
     dplyr::mutate(
