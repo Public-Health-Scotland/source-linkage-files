@@ -26,7 +26,6 @@ process_extract_delayed_discharges <- function(data,
   if (year < "1617") {
     return(NULL)
   }
-  # Data Cleaning---------------------------------------
 
   # Specify MH specialties for dealing with correct DD dates
   mh_spec <- c(
@@ -87,33 +86,30 @@ process_extract_delayed_discharges <- function(data,
     # Keep only records which have an end date (except Mental Health) and fall within our dates.
     dplyr::filter(.data$dates_in_fyyear, !.data$not_mh_spec)
 
-
-  ## save outfile ---------------------------------------
-  outfile <- dd_clean %>%
+  dd_final <- dd_clean %>%
     dplyr::select(
       "year",
       "recid",
+      "chi",
+      "postcode",
+      "dd_responsible_lca",
       "original_admission_date",
       "keydate1_dateformat",
       "keydate2_dateformat",
-      "chi",
-      "postcode",
+      "amended_dates",
       "delay_end_reason",
       "primary_delay_reason",
       "secondary_delay_reason",
-      "spec",
-      "location",
       "hbtreatcode",
-      "dd_responsible_lca",
-      "monthflag",
-      "cennum"
+      "location",
+      "spec"
     )
 
   if (write_to_disk) {
-    outfile %>%
+    dd_final %>%
       # Save as rds file
       write_rds(get_source_extract_path(year, "DD", check_mode = "write"))
   }
 
-  return(outfile)
+  return(dd_final)
 }
