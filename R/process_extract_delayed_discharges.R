@@ -53,6 +53,7 @@ process_extract_delayed_discharges <- function(data,
     # Create a flag for these records
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data[["monthflag"]], "month") - 1L,
+      amended_dates = .data[["keydate2_dateformat"]] == as.Date("1900-01-01"),
       keydate2_dateformat = dplyr::if_else(
         .data$keydate2_dateformat == as.Date("1900-01-01"),
         .data$month_end,
