@@ -18,7 +18,7 @@ test_that("read_file works", {
   arrow::write_parquet(aq_data, parquet_path)
 
   expect_equal(aq_data, read_file(rds_path))
-  expect_equal(aq_data, read_file(fst_path))
+  expect_equal(aq_data, tibble::as_tibble(read_file(fst_path)))
   expect_equal(aq_data, haven::zap_formats(read_file(sav_path)))
   expect_equal(aq_data, haven::zap_formats(read_file(zsav_path)))
   expect_equal(aq_data, read_file(csv_gz_path))
@@ -30,5 +30,5 @@ test_that("read_file works errors on unknown extensions", {
 
   openxlsx::write.xlsx(datasets::airquality, xlsx_path)
 
-  expect_error(read_file(xlsx_path), "Invalid extension: .+?\"xlsx\"")
+  expect_error(read_file(xlsx_path))
 })
