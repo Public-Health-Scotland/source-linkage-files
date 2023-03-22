@@ -20,10 +20,11 @@ read_file <- function(path, ...) {
   ext <- fs::path_ext(path)
 
   if (!(ext %in% valid_extensions)) {
-    cli::cli_abort(c("x" = "Invalid extension: {.val {ext}}",
-                     "i" = "{.fun read_file} supports
-                     {.val {valid_extensions}}")
-    )
+    cli::cli_abort(c(
+      "x" = "Invalid extension: {.val {ext}}",
+      "i" = "{.fun read_file} supports
+                     {.val {valid_extensions}}"
+    ))
   }
 
   data <- switch(ext,
