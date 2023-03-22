@@ -40,7 +40,6 @@ process_tests_episode_file <- function(data, year) {
 #' 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting
 #' 'min-max' from [calculate_measures()]
-#' @inheritParams calculate_measures
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
