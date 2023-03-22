@@ -1,3 +1,18 @@
+#' Read a file
+#'
+#' @description Read a file, the function chosen to read the file is dependant
+#' on the file path.
+#'  * `.rds` uses [readr::read_rds()].
+#'  * `.sav` and `.zsav` use [haven::read_spss()].
+#'  * `.csv` and `.gz` use [readr::read_csv()]. Note that this assumes any file
+#'  ending with `.gz` is a zipped CSV which isn't necessarily true!
+#'  * `.parquet` uses [arrow::read_parquet()]
+#'
+#' @param path The file path to be read
+#' @param ... Addition arguments passed to the relevant function.
+#'
+#' @return the data a [tibble][tibble::tibble-package]
+#' @export
 read_file <- function(path, ...) {
   valid_extensions <- c("rds", "sav", "zsav", "csv", "gz", "parquet")
 
