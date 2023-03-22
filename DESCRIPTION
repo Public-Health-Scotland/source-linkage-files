@@ -27,6 +27,7 @@ Imports:
     dplyr (>= 1.1.0),
     dtplyr (>= 1.2.2),
     fs (>= 1.5.2),
+    fst,
     glue (>= 1.6.2),
     haven (>= 2.5.0),
     hms (>= 1.1.0),
