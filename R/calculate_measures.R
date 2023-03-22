@@ -76,7 +76,7 @@ calculate_measures <- function(data,
   if (group_by == "recid") {
     pivot_data <- data %>%
       tidyr::pivot_longer(
-        cols = !"recid",
+        cols = !.data$recid,
         names_to = "measure",
         values_to = "value"
       )
