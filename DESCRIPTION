@@ -20,6 +20,7 @@ URL: https://public-health-scotland.github.io/source-linkage-files,
 BugReports: 
     https://github.com/Public-Health-Scotland/source-linkage-files/issues
 Imports:
+    arrow,
     cli (>= 3.4.1),
     data.table (>= 1.14.6),
     dbplyr (>= 2.3.0),
