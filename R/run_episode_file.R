@@ -1,13 +1,13 @@
 #' Function for running the Source Episode file
 #'
-#' @param processed_data_list
-#' @param year
-#' @param write_to_disk
+#' @param processed_data_list containing data from processed extracts.
+#' @param year The year to process, in FY format.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
-#' @return
+#' @return a dataframe containing the ep file
 #' @export
 #'
-#' @examples
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
