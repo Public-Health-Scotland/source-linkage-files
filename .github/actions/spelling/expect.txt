@@ -24,6 +24,8 @@ dtplyr
 DVPROD
 dvprod
 envir
+fileext
+fst
 fyear
 fyyear
 geogs
@@ -88,6 +90,8 @@ SMRA
 smrtype
 sparra
 spd
+spss
+stringdist
 stringr
 tbl
 telecare
@@ -102,3 +106,4 @@ updown
 xlsx
 yearstay
 zihao
+zsav
