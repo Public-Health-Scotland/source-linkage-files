@@ -49,7 +49,6 @@ previous_update <- function(months_ago = 3L, override = NULL) {
   )
 
   return(previous_update)
-
 }
 
 #' Delayed Discharge period
