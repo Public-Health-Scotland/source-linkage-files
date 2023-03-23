@@ -7,7 +7,15 @@
 run_episode_file(processed_data_list, year, write_to_disk = TRUE)
 }
 \arguments{
-\item{write_to_disk}{}
+\item{processed_data_list}{containing data from processed extracts.}
+
+\item{year}{The year to process, in FY format.}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+}
+\value{
+a dataframe containing the ep file
 }
 \description{
 Function for running the Source Episode file
