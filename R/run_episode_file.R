@@ -20,7 +20,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         NA_character_,
         .data$chi
       ),
-      gpprac = as.integer(.data[["gpprac"]])
+      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
     ) %>%
     # In original C01, set dates to date format - this doesn't need to be done
     # Set SMRtype, doesn't need to be done
