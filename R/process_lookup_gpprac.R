@@ -28,7 +28,7 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
     )
 
   # postcode lookup
-  spd_file <- readr::read_rds(spd_path) %>%
+  spd_file <- read_file(spd_path) %>%
     dplyr::select(
       .data$pc7,
       .data$pc8,

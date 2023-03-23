@@ -28,7 +28,7 @@ fill_geographies <- function(data) {
 }
 
 fill_postcode_geogs <- function(data) {
-  spd <- readr::read_rds(get_slf_postcode_path())
+  spd <- read_file(get_slf_postcode_path())
 
   filled_postcodes <- data %>%
     dplyr::mutate(postcode = phsmethods::format_postcode("postcode")) %>%
@@ -62,7 +62,7 @@ fill_postcode_geogs <- function(data) {
 }
 
 fill_gpprac_geographies <- function(data) {
-  gpprac_ref <- readr::read_rds(get_slf_gpprac_path()) %>%
+  gpprac_ref <- read_file(get_slf_gpprac_path()) %>%
     dplyr::select(c("gpprac", "cluster", "hbpraccode"))
 
   filled_gpprac <- fill_values(data, dplyr::select(gpprac_ref, "gpprac"), "gpprac")

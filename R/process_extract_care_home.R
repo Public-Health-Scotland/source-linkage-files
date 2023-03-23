@@ -24,7 +24,7 @@ process_extract_care_home <- function(file_path = get_sc_ch_episodes_path(update
   year <- check_year_format(year)
 
   # Read client lookup
-  client_lookup <- readr::read_rds(client_lookup_path)
+  client_lookup <- read_file(client_lookup_path)
 
   data <- read_file(file_path)
 
@@ -72,7 +72,7 @@ process_extract_care_home <- function(file_path = get_sc_ch_episodes_path(update
 
   # Costs  ---------------------------------------
   # read in CH Costs Lookup
-  ch_costs <- readr::read_rds(get_ch_costs_path()) %>%
+  ch_costs <- read_file(get_ch_costs_path()) %>%
     dplyr::rename(
       ch_nursing = "nursing_care_provision"
     )
