@@ -20,7 +20,7 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
   # Read Lookup files ---------------------------------------
   # gp lookup
   gpprac_ref_file <-
-    haven::read_sav(gpprac_ref_path) %>%
+    read_file(gpprac_ref_path) %>%
     # select only praccode and postcode
     dplyr::select(
       gpprac = .data$praccode,
