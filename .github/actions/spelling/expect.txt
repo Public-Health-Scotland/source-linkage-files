@@ -47,6 +47,7 @@ lubridate
 magrittr
 Mcbride
 mcmahon
+MMMYY
 multistaff
 nrs
 nsu
@@ -59,10 +60,11 @@ pattype
 phs
 phsmethods
 phsopendata
-postcodes
 placeinc
-praccode
+postcodes
+PPAs
 prac
+praccode
 purrr
 quickstart
 rds
