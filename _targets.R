@@ -109,7 +109,7 @@ list(
     format = "file"
   ),
   tarchetypes::tar_map(
-    list(year = c(1920)),
+    list(year = c("1920")),
     ### target data extracts ###
     tar_target(
       cmh_data,
@@ -118,7 +118,7 @@ list(
     ),
     tar_target(
       dd_data,
-      get_dd_path(ext = "zsav"),
+      get_dd_path(),
       format = "file"
     ),
     tar_target(
