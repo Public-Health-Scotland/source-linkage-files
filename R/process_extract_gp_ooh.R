@@ -82,6 +82,10 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
     dplyr::mutate(
       record_keydate1 = as.Date(.data$record_keydate1),
       record_keydate2 = as.Date(.data$record_keydate2)
+    ) %>%
+    # change attendance_status into numeric
+    mutate(
+      attendance_status = as.double(attendance_status)
     )
 
   # Keep the location descriptions as a lookup.
