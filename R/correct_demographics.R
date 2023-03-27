@@ -24,7 +24,11 @@ correct_demographics <- function(data, year) {
         chi_number = .data$chi,
         chi_check = FALSE,
         min_date = lubridate::ymd("2000-01-01"),
-        max_date = pmax(.data$keydate1_dateformat, lubridate::ymd("2000-01-01"), na.rm = TRUE)
+        max_date = pmax(
+          .data$keydate1_dateformat,
+          lubridate::ymd("2099-12-31"),
+          na.rm = TRUE
+        )
       ),
 
       # Compute two ages for each chi, the maximum and minimum it could be
