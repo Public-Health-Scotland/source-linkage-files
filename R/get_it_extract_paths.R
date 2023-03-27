@@ -20,7 +20,7 @@ get_it_ltc_path <- function(it_reference = NULL, ...) {
   } else {
     it_ltc_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name = glue::glue("SCTASK{it_reference}_LTCs.csv.gz")
+      file_name = stringr::str_glue("SCTASK{it_reference}_LTCs.csv.gz")
     )
   }
 
@@ -50,7 +50,7 @@ get_it_deaths_path <-
     } else {
       it_deaths_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
-        file_name = glue::glue("SCTASK{it_reference}_Deaths.csv.gz")
+        file_name = stringr::str_glue("SCTASK{it_reference}_Deaths.csv.gz")
       )
     }
 
@@ -75,14 +75,14 @@ get_it_prescribing_path <-
     if (is.null(it_reference)) {
       it_pis_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
-        file_name_regexp = glue::glue(
+        file_name_regexp = stringr::str_glue(
           "SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?"
         )
       )
     } else {
       it_pis_path <- get_file_path(
         directory = fs::path(get_slf_dir(), "IT_extracts"),
-        file_name = glue::glue(
+        file_name = stringr::str_glue(
           "SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.csv.gz"
         )
       )

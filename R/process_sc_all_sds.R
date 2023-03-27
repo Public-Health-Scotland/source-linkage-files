@@ -77,7 +77,7 @@ process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(
       ),
       recid = "SDS",
       # Create person id variable
-      person_id = glue::glue("{sending_location}-{social_care_id}"),
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
     ) %>%

@@ -128,7 +128,7 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
 
   completeness_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Homelessness"),
-    file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
+    file_name = stringr::str_glue("homelessness_completeness_{latest_update()}.rds")
   )
 
   completeness_data <- readr::read_rds(completeness_file_path) %>%
@@ -218,7 +218,7 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     final_data %>%
       write_rds(get_file_path(
         get_year_dir(year),
-        glue::glue("homelessness_for_source-20{year}"),
+        stringr::str_glue("homelessness_for_source-20{year}"),
         ext = "rds",
         check_mode = "write"
       ))
