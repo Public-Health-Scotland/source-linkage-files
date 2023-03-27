@@ -96,12 +96,10 @@ correct_demographics <- function(data, year) {
       "chi_gender"
     ))
 
-  # combine data_chi and data_no_chi
   data <- dplyr::bind_rows(
     data_no_chi,
     data_chi
   )
 
-  # return the data
   return(data)
 }

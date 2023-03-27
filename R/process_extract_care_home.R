@@ -26,7 +26,6 @@ process_extract_care_home <- function(file_path = get_sc_ch_episodes_path(update
   # Read client lookup
   client_lookup <- readr::read_rds(client_lookup_path)
 
-
   # TODO - use RDS version, ALL ch data still WIP
   data <- haven::read_sav(file_path)
 

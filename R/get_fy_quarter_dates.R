@@ -134,6 +134,8 @@ end_next_fy_quarter <- function(quarter) {
 #' @inheritParams start_fy_quarter
 #'
 #' @return `quarter` invisibly if no issues were found
+#'
+#' @family date functions
 check_quarter_format <- function(quarter) {
   stopifnot(typeof(quarter) == "character")
 

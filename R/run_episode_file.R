@@ -1,13 +1,13 @@
 #' Function for running the Source Episode file
 #'
-#' @param processed_data_list
-#' @param year
-#' @param write_to_disk
+#' @param processed_data_list containing data from processed extracts.
+#' @param year The year to process, in FY format.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
-#' @return
+#' @return a dataframe containing the ep file
 #' @export
 #'
-#' @examples
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
@@ -17,16 +17,17 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
-        "",
+        NA_character_,
         .data$chi
       ),
-      gpprac = as.numeric(gpprac)
+      gpprac = as.integer(.data[["gpprac"]])
     ) %>%
     # In original C01, set dates to date format - this doesn't need to be done
     # Set SMRtype, doesn't need to be done
     # Recode any cij_admtype "Un" to "99"
     # There are lots of blanks - do these need to be recoded or ignored?
     # Change some values of cij_pattype_code based on cij_admtype
+    ### TODO put lines 31-49 into a function ###
     dplyr::mutate(
       cij_pattype_code = dplyr::case_when(
         .data$chi != "" &
@@ -78,12 +79,11 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # temp_file_3 <- temp_file_2
 
     # From C04 - Add NSU cohort ----
-    add_nsu_cohort(., year) %>%
+    add_nsu_cohort(year) %>%
     # From C05 - Match on LTCs ----
     # Create Temp File 5
     match_on_ltcs(year) %>%
-    correct_demographics(., year)
-
+    correct_demographics(year)
 
   # From C06 - Deaths Fixes ----
   # Create Temp File 6

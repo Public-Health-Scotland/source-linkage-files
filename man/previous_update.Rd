@@ -4,13 +4,25 @@
 \alias{previous_update}
 \title{Previous update}
 \usage{
-previous_update()
+previous_update(months_ago = 3L, override = NULL)
+}
+\arguments{
+\item{months_ago}{Number of months since the previous update
+the default is 3 i.e. one quarter ago.}
+
+\item{override}{This allows specifying a specific update month if
+required.}
 }
 \value{
 previous update as MMM_YYYY
 }
 \description{
 Get the date of the previous update, e.g 'Mar_2022'
+}
+\examples{
+previous_update() # Default 3 months
+previous_update(1) # 1 month ago
+previous_update(override = "May_2023") # Specific Month
 }
 \seealso{
 Other initialisation: 
