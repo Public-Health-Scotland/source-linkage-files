@@ -6,15 +6,15 @@ tar_option_set(
   imports = "createslf",
   packages = "createslf",
   garbage_collection = TRUE,
-  format = "parquet",
+  #format = "parquet",
   resources = tar_resources(
-              parquet = tar_resources_parquet(compression = "zstd"),
+              #parquet = tar_resources_parquet(compression = "zstd"),
               future = tar_resources_future(plan = future::multisession)),
   error = "continue",
   # default option
   storage = "main",
   # default option
-  memory = "persistant"
+  memory = "persistent"
 )
 
 
@@ -302,7 +302,7 @@ list(
           file_path = all_ch_data_path,
           year = year,
           client_lookup_path = client_lookup_path,
-          write_to_disk = write_to_disk
+          write_to_disk
         )
       ),
     # Option 2  - preferred
