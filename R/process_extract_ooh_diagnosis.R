@@ -32,7 +32,7 @@ process_extract_ooh_diagnosis <- function(data, year) {
     dplyr::mutate(
       # Replace question marks with dot
       readcode = stringr::str_replace_all(.data$readcode, "\\?", "\\.") %>%
-        # Pad with dots up to 5 charaters
+        # Pad with dots up to 5 characters
         stringr::str_pad(5L, "right", ".")
     ) %>%
     # Join diagnosis to readcode lookup
