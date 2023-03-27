@@ -85,7 +85,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     match_on_ltcs(year) %>%
     correct_demographics(year)
 
-
   # From C06 - Deaths Fixes ----
   # Create Temp File 6
   # temp_file_6 <- temp_file_5
