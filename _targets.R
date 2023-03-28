@@ -96,7 +96,7 @@ list(
     ),
     tar_target(
       dd_data_path,
-      get_dd_path(ext = "zsav"),
+      get_dd_path(),
       format = "file"
     ),
     tar_target(
