@@ -5,7 +5,7 @@ library(tarchetypes)
 tar_option_set(
   imports = "createslf",
   packages = "createslf",
-  garbage_collection = TRUE,
+  #garbage_collection = TRUE,
   #format = "parquet",
   resources = tar_resources(
               #parquet = tar_resources_parquet(compression = "zstd"),
