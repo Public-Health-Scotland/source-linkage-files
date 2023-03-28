@@ -20,12 +20,15 @@ URL: https://public-health-scotland.github.io/source-linkage-files,
 BugReports: 
     https://github.com/Public-Health-Scotland/source-linkage-files/issues
 Imports:
+    arrow,
     cli (>= 3.4.1),
     data.table (>= 1.14.6),
     dbplyr (>= 2.3.0),
     dplyr (>= 1.1.0),
     dtplyr (>= 1.2.2),
     fs (>= 1.5.2),
+    fst,
+    glue (>= 1.6.2),
     haven (>= 2.5.0),
     hms (>= 1.1.0),
     janitor (>= 2.1.0),
