@@ -15,7 +15,7 @@ tar_option_set(
   # default option
   storage = "main",
   # default option
-  memory = "persistant"
+  memory = "persistent"
 )
 
 
