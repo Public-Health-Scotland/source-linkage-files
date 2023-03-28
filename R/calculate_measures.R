@@ -26,20 +26,25 @@ calculate_measures <- function(data,
                                group_by = NULL) {
   measure <- match.arg(measure)
 
-  if (group_by == "recid") {
-    data <- data %>%
-      dplyr::group_by(.data$recid)
+  if (!is.null(group_by)) {
+    if (group_by == "recid") {
+      data <- data %>%
+        dplyr::group_by(.data$recid)
+    }
   }
+
 
   if (measure == "all") {
     data <- data %>%
-      dplyr::select(tidyselect::matches({{ vars }})) %>%
+      dplyr::select(tidyselect::matches({
+        {
+          vars
+        }
+      })) %>%
       dplyr::summarise(
-        dplyr::across(
-          tidyselect::everything(),
-          ~ sum(.x, na.rm = TRUE),
-          .names = "total_{col}"
-        ),
+        dplyr::across(tidyselect::everything(),
+                      ~ sum(.x, na.rm = TRUE),
+                      .names = "total_{col}"),
         dplyr::across(
           tidyselect::everything(!tidyselect::starts_with("total_")),
           ~ mean(.x, na.rm = TRUE),
@@ -48,38 +53,38 @@ calculate_measures <- function(data,
       )
   } else if (measure == "sum") {
     data <- data %>%
-      dplyr::summarise(dplyr::across(
-        tidyselect::everything(),
-        ~ sum(.x, na.rm = TRUE)
-      ))
+      dplyr::summarise(dplyr::across(tidyselect::everything(),
+                                     ~ sum(.x, na.rm = TRUE)))
   } else if (measure == "min-max") {
     data <- data %>%
-      dplyr::select(tidyselect::matches({{ vars }})) %>%
+      dplyr::select(tidyselect::matches({
+        {
+          vars
+        }
+      })) %>%
       dplyr::summarise(
-        dplyr::across(
-          tidyselect::everything(),
-          ~ min(.x, na.rm = TRUE),
-          .names = "min_{col}"
-        ),
+        dplyr::across(tidyselect::everything(),
+                      ~ min(.x, na.rm = TRUE),
+                      .names = "min_{col}"),
         dplyr::across(
           tidyselect::everything(!tidyselect::starts_with("min_")),
           ~ max(.x, na.rm = TRUE),
           .names = "max_{col}"
         )
       ) %>%
-      dplyr::mutate(dplyr::across(
-        where(lubridate::is.Date),
-        ~ convert_date_to_numeric(.)
-      ))
+      dplyr::mutate(dplyr::across(where(lubridate::is.Date),
+                                  ~ convert_date_to_numeric(.)))
   }
 
-  if (group_by == "recid") {
-    pivot_data <- data %>%
-      tidyr::pivot_longer(
-        cols = !.data$recid,
-        names_to = "measure",
-        values_to = "value"
-      )
+  if (!is.null(group_by)) {
+    if (group_by == "recid") {
+      pivot_data <- data %>%
+        tidyr::pivot_longer(
+          cols = !.data$recid,
+          names_to = "measure",
+          values_to = "value"
+        )
+    }
   } else {
     pivot_data <- data %>%
       tidyr::pivot_longer(
