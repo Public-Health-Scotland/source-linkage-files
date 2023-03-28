@@ -1,10 +1,13 @@
+admtype
 aut
 bedday
 beddays
 birthtime
 boxi
+cattend
 cij
 cmh
+CNWs
 covr
 cph
 createslf
@@ -16,6 +19,7 @@ datetime
 dbconnect
 dbplyr
 demog
+dnas
 dontrun
 downup
 dplyr
@@ -40,6 +44,7 @@ hms
 homecare
 hscp
 hscpnames
+ipdc
 itle
 jennifer
 keydate
@@ -62,9 +67,10 @@ pattype
 phs
 phsmethods
 phsopendata
-placeinc
 postcodes
+placeinc
 PPAs
+praccode
 prac
 praccode
 purrr
@@ -80,6 +86,7 @@ rmarkdown
 roxygen
 Rprofile
 rstudioapi
+Rtype
 seealso
 simd
 SLF
