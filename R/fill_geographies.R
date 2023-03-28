@@ -31,7 +31,7 @@ fill_postcode_geogs <- function(data) {
   spd <- readr::read_rds(get_slf_postcode_path())
 
   filled_postcodes <- data %>%
-    dplyr::mutate(postcode = phsmethods::format_postcode("postcode")) %>%
+    dplyr::mutate(postcode = phsmethods::format_postcode(.data$postcode)) %>%
     fill_values(dplyr::select(spd, "postcode"), "postcode")
 
   data_geographies <- dplyr::left_join(
