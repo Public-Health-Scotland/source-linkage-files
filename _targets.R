@@ -6,10 +6,11 @@ tar_option_set(
   imports = "createslf",
   packages = "createslf",
   garbage_collection = TRUE,
-  #format = "parquet",
+  # format = "parquet",
   resources = tar_resources(
-              #parquet = tar_resources_parquet(compression = "zstd"),
-              future = tar_resources_future(plan = future::multisession)),
+    # parquet = tar_resources_parquet(compression = "zstd"),
+    future = tar_resources_future(plan = future::multisession)
+  ),
   error = "continue",
   # default option
   storage = "main",
