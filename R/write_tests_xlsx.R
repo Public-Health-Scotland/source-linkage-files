@@ -72,7 +72,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     names(comparison_data) %in% c("value_old", "value_new", "diff")
   )
 
-  # Format the pct_chnange column as a percentage
+  # Format the pct_change column as a percentage
   openxlsx::addStyle(
     wb = wb,
     sheet = sheet_name_dated,
