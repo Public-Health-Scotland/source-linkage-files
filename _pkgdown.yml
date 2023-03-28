@@ -109,7 +109,7 @@ reference:
   - subtitle: Directories
     desc: File Directories for SLF's
   - contents:
-    - has_concept("directiories")
+    - has_concept("directories")
     - ends_with("_dir")
   - subtitle: Paths
     desc: File Paths for SLF's
@@ -136,7 +136,7 @@ reference:
   - title: Process extracts
     desc: Process SLF Extracts
   - contents:
-    - has_concept("prcoess extracts")
+    - has_concept("process extracts")
     - starts_with("process_")
 
 
