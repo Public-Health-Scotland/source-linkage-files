@@ -12,8 +12,8 @@ tar_option_set(
     future = tar_resources_future(plan = future::multisession)
   ),
   error = "continue",
-  storage = "main",   # default option
-  memory = "persistent"   # default option
+  storage = "main", # default option
+  memory = "persistent" # default option
 )
 
 
