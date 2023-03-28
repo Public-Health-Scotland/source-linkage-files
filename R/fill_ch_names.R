@@ -36,7 +36,8 @@ fill_ch_names <- function(ch_data,
 
   # Care Home name lookup from the Care Inspectorate
   # Previous contact 'Al Scougal' <Al.Scougal@careinspectorate.gov.scot>
-  ch_name_lookup <- readxl::read_xlsx(ch_name_lookup_path) %>%
+  ch_name_lookup <- openxlsx::read.xlsx(ch_name_lookup_path,
+                                        detectDates = TRUE) %>%
     # Drop any Care Homes that were closed before 2017/18
     dplyr::select(
       ch_postcode = "AccomPostCodeNo",
