@@ -19,16 +19,46 @@ create_monthly_costs <- function(data,
   costs <- data %>%
     dplyr::select(dplyr::ends_with("_beddays")) %>%
     dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
+  # Fix the instances where the episode is a daycase;
+  # these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
+  costs_daycase <- data %>%
+    dplyr::select(-dplyr::ends_with("_beddays")) %>%
+    dplyr::mutate(daycase_added = (record_keydate1 == record_keydate2)) %>%
+    dplyr::mutate(daycase_check = daycase_added) %>%
+    dplyr::mutate(whichmonth = dplyr::if_else(
+      daycase_added,
+      lubridate::month(data$record_keydate1),
+      NA
+    )) %>%
+    dplyr::mutate(
+      whichmonth = month.abb[whichmonth] %>%
+        tolower() %>%
+        paste0("_cost"),
+      daycase_added = dplyr::if_else(daycase_added, 1, 0)
+    ) %>%
+    tidyr::pivot_wider(names_from = whichmonth,
+                       values_from = daycase_added,
+                       values_fill = 0) %>%
+    dplyr::select(month.abb[c(4:12, 1:3)] %>%
+                    tolower() %>%
+                    paste0("_cost"),
+                  daycase_check)
+
+  costs <- (costs_daycase[1:12] + costs) %>%
+    dplyr::bind_cols(daycase_check = costs_daycase$daycase_check)
 
   data <- dplyr::bind_cols(data, costs) %>%
+    dplyr::mutate(yearstay2 = dplyr::if_else(
+      {{ yearstay }} < 0.99, 0, {{ yearstay }})) %>%
     dplyr::mutate(dplyr::across(
       dplyr::ends_with("_cost"),
       ~ dplyr::if_else(
-        .x != 0.0,
-        .x / {{ yearstay }} * {{ cost_total_net }},
-        0.0
-      )
-    ))
+        .x != 0.0 & !daycase_check,
+        .x / yearstay2 * {{ cost_total_net }},
+        dplyr::if_else(.x != 0.0 & daycase_check,
+                       cost_total_net,
+                       0)))) %>%
+    dplyr::select(-c(yearstay2, daycase_check))
 
   return(data)
 }
