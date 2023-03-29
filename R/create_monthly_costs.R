@@ -25,22 +25,24 @@ create_monthly_costs <- function(data,
   # this should be applied to the relevant month.
   costs_daycase <- data %>%
     dplyr::select(-dplyr::ends_with("_beddays")) %>%
-    dplyr::mutate(daycase_added = (record_keydate1 == record_keydate2)) %>%
-    dplyr::mutate(daycase_check = daycase_added) %>%
+    dplyr::mutate(
+      daycase_added = (.data$record_keydate1 == .data$record_keydate2)
+    ) %>%
+    dplyr::mutate(daycase_check = .data$daycase_added) %>%
     dplyr::mutate(whichmonth = dplyr::if_else(
-      daycase_added,
+      .data$daycase_added,
       lubridate::month(data$record_keydate1),
       NA
     )) %>%
     dplyr::mutate(
-      whichmonth = month.abb[whichmonth] %>%
+      whichmonth = month.abb[.data$whichmonth] %>%
         tolower() %>%
         paste0("_cost"),
-      daycase_added = dplyr::if_else(daycase_added, 1, 0)
+      daycase_added = dplyr::if_else(.data$daycase_added, 1, 0)
     ) %>%
     tidyr::pivot_wider(
-      names_from = whichmonth,
-      values_from = daycase_added,
+      names_from = .data$whichmonth,
+      values_from = .data$daycase_added,
       values_fill = 0
     ) %>%
     dplyr::select(
@@ -68,7 +70,7 @@ create_monthly_costs <- function(data,
         )
       )
     )) %>%
-    dplyr::select(-c(yearstay2, daycase_check))
+    dplyr::select(-c(.data$yearstay2, .data$daycase_check))
 
   return(data)
 }
