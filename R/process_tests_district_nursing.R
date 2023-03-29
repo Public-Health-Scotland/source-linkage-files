@@ -9,6 +9,7 @@
 #' @export
 process_tests_district_nursing <- function(data, year) {
   old_data <- get_existing_data_for_tests(data) %>%
+    # TODO: remove this bit after SPSS stopped
     # replace NA by 0 in monthly costs
     dplyr::mutate(dplyr::across(
       dplyr::ends_with("_cost"),
