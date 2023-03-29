@@ -16,9 +16,8 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-
 list(
-  tar_target(write_to_disk, FALSE),
+  tar_target(write_to_disk, FALSE, format = "rds"),
   ## Lookup data ##
   tar_target(spd_data_path, get_spd_path(), format = "file"),
   tar_target(simd_data_path, get_simd_path(), format = "file"),
@@ -59,6 +58,8 @@ list(
       write_to_disk = write_to_disk
     )
   ),
+  tar_target(ltc_data, read_lookup_ltc(ltc_data_path)),
+  tar_target(dd_data, read_extract_delayed_discharges(dd_data_path)),
   ## Cost Lookups ##
   tar_target(ch_costs, process_costs_ch_rmd()),
   tar_target(hc_costs, process_costs_hc_rmd()),
@@ -163,7 +164,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(source_dd_extract, process_extract_delayed_discharges(
-      read_extract_delayed_discharges(dd_data_path),
+      dd_data,
       year,
       write_to_disk = write_to_disk
     )),
@@ -213,7 +214,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(ltc_source_extract, process_lookup_ltc(
-      read_lookup_ltc(ltc_data_path),
+      ltc_data,
       year,
       write_to_disk = write_to_disk
     )),
