@@ -89,6 +89,26 @@ list(
     slf_deaths_path = slf_deaths_data_path,
     write_to_disk = write_to_disk
   )),
+  tar_target(
+    all_at_data_path,
+    get_sc_at_episodes_path(),
+    format = "file"
+  ),
+  tar_target(
+    all_sds_data_path,
+    get_sc_sds_episodes_path(),
+    format = "file"
+  ),
+  tar_target(
+    all_hc_data_path,
+    get_sc_hc_episodes_path(),
+    format = "file"
+  ),
+  tar_target(
+    all_ch_data_path,
+    get_sc_ch_episodes_path(),
+    format = "file"
+  ),
   tarchetypes::tar_map(
     list(year = c(1920)),
     ### target data extracts ###
@@ -231,26 +251,6 @@ list(
     tar_target(
       client_lookup_path,
       get_source_extract_path(year, type = "Client"),
-      format = "file"
-    ),
-    tar_target(
-      all_at_data_path,
-      get_sc_at_episodes_path(),
-      format = "file"
-    ),
-    tar_target(
-      all_sds_data_path,
-      get_sc_sds_episodes_path(),
-      format = "file"
-    ),
-    tar_target(
-      all_hc_data_path,
-      get_sc_hc_episodes_path(),
-      format = "file"
-    ),
-    tar_target(
-      all_ch_data_path,
-      get_sc_ch_episodes_path(update = latest_update(), ext = "zsav"),
       format = "file"
     ),
     ### Target process year specific social care ###
