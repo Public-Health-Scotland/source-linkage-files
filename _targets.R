@@ -243,7 +243,7 @@ list(
         year,
         diagnosis_data_path,
         outcomes_data_path,
-        consultations_data
+        consultations_data_path
       ),
       write_to_disk = write_to_disk
     )),
