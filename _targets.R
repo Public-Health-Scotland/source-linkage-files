@@ -26,6 +26,8 @@ list(
   tar_target(gpprac_data_path, get_gpprac_opendata()),
   tar_target(gpprac_ref_data_path, get_gpprac_ref_path(), format = "file"),
   tar_target(chi_deaths_data_path, get_it_deaths_path(), format = "file"),
+  tar_target(ltc_data_path, get_it_ltc_path(), format = "file"),
+  tar_target(dd_data_path, get_dd_path(), format = "file"),
   ## Process Lookups ##
   tar_target(
     sc_demog_lookup,
@@ -95,11 +97,6 @@ list(
       format = "file"
     ),
     tar_target(
-      dd_data_path,
-      get_dd_path(),
-      format = "file"
-    ),
-    tar_target(
       dn_data_path,
       get_boxi_extract_path(year, type = "DN"),
       format = "file"
@@ -142,11 +139,6 @@ list(
     tar_target(
       outpatients_data_path,
       get_boxi_extract_path(year, type = "Outpatient"),
-      format = "file"
-    ),
-    tar_target(
-      ltc_data_path,
-      get_it_ltc_path(),
       format = "file"
     ),
     tar_target(
