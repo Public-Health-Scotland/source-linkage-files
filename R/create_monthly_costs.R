@@ -1,6 +1,7 @@
 #' Create Monthly Costs
 #'
-#' @description Assign monthly costs using a cost variable and vector containing monthly beddays
+#' @description Assign monthly costs using a cost variable
+#' and vector containing monthly beddays.
 #'
 #' @param data Data containing bedday variables,
 #' see [create_monthly_beddays] to create
@@ -20,7 +21,8 @@ create_monthly_costs <- function(data,
     dplyr::select(dplyr::ends_with("_beddays")) %>%
     dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
   # Fix the instances where the episode is a daycase;
-  # these will sometimes have 0.33 for the yearstay, this should be applied to the relevant month.
+  # these will sometimes have 0.33 for the yearstay,
+  # this should be applied to the relevant month.
   costs_daycase <- data %>%
     dplyr::select(-dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(daycase_added = (record_keydate1 == record_keydate2)) %>%
