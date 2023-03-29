@@ -31,12 +31,13 @@ create_monthly_costs <- function(data,
     dplyr::mutate(daycase_check = .data$daycase_added) %>%
     dplyr::mutate(whichmonth = dplyr::if_else(
       .data$daycase_added,
-      lubridate::month(data$record_keydate1, label = TRUE) %>%
-        tolower() %>%
-        paste0("_cost"),
+      lubridate::month(data$record_keydate1),
       NA
     )) %>%
     dplyr::mutate(
+      whichmonth = month.abb[.data$whichmonth] %>%
+        tolower() %>%
+        paste0("_cost"),
       daycase_added = dplyr::if_else(.data$daycase_added, 1, 0)
     ) %>%
     tidyr::pivot_wider(
