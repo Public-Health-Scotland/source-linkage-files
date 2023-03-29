@@ -12,16 +12,16 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
     # From C01 ----
-  # Check chi is valid using phsmethods function
-  # If the CHI is invalid for whatever reason, set the CHI to blank string
-  dplyr::mutate(
-    chi = dplyr::if_else(
-      phsmethods::chi_check(.data$chi) != "Valid CHI",
-      "",
-      .data$chi
-    ),
-    gpprac = as.numeric(gpprac)
-  ) %>%
+    # Check chi is valid using phsmethods function
+    # If the CHI is invalid for whatever reason, set the CHI to blank string
+    dplyr::mutate(
+      chi = dplyr::if_else(
+        phsmethods::chi_check(.data$chi) != "Valid CHI",
+        "",
+        .data$chi
+      ),
+      gpprac = as.numeric(gpprac)
+    ) %>%
     # Change some values of cij_pattype_code based on cij_admtype
     dplyr::mutate(
       cij_admtype = dplyr::if_else(cij_admtype == "Unknown", "99", cij_admtype),
@@ -67,26 +67,25 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # Add the flag for Potentially Preventable Admissions
     add_ppa_flag() %>%
     # From C02 - Link Delayed Discharge Episodes ----
-  # Create Temp File 2
-  # temp_file_2 <- temp_file_1
+    # Create Temp File 2
+    # temp_file_2 <- temp_file_1
 
-  # From C03 - Link Homelessness ----
-  # Create Temp File 3
-  # temp_file_3 <- temp_file_2
+    # From C03 - Link Homelessness ----
+    # Create Temp File 3
+    # temp_file_3 <- temp_file_2
 
-  # From C04 - Add NSU cohort ----
-  add_nsu_cohort(., year) %>%
+    # From C04 - Add NSU cohort ----
+    add_nsu_cohort(., year) %>%
     # From C05 - Match on LTCs ----
-  # Create Temp File 5
-  match_on_ltcs(year) %>%
+    # Create Temp File 5
+    match_on_ltcs(year) %>%
     correct_demographics(., year) %>%
-
     # From C07 - Calculate and write out pathways cohorts ----
-  # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
-  # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
+    # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
+    # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
 
-  # From C09 - Match on postcode and gpprac variables ----
-  fill_geographies()
+    # From C09 - Match on postcode and gpprac variables ----
+    fill_geographies()
 
 
 
