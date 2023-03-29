@@ -1,4 +1,6 @@
+admloc
 admtype
+adtf
 aut
 bedday
 beddays
@@ -7,8 +9,12 @@ boxi
 buildignore
 cattend
 cij
+Classificat
 cmh
 CNWs
+commhosp
+costmonthnum
+costsfy
 covr
 cph
 createslf
@@ -20,6 +26,9 @@ datetime
 dbconnect
 dbplyr
 demog
+disch
+dischloc
+dischto
 dnas
 dontrun
 downup
@@ -40,6 +49,7 @@ hbnames
 hbpraccode
 hbrescode
 hbtreatcode
+HCP
 hhg
 hms
 homecare
@@ -59,11 +69,14 @@ Mcbride
 mcmahon
 MMMYY
 Moohan
+mpat
 multisession
 multistaff
+nhshosp
 nrs
 nsu
 odbc
+oldtadm
 opendata
 openxlsx
 ORCID
@@ -95,6 +108,8 @@ rspm
 rstudioapi
 Rtype
 seealso
+selfharm
+sigfac
 simd
 slf
 slfhelper
@@ -104,12 +119,14 @@ smrtype
 sourcedev
 sparra
 spd
-specfic
 spss
+stadm
 stefanzweifel
 stringdist
 stringr
+submis
 tarchetypes
+tadm
 tbl
 telecare
 testthat
