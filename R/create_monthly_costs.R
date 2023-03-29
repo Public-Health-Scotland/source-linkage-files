@@ -31,7 +31,7 @@ create_monthly_costs <- function(data,
     dplyr::mutate(daycase_check = .data$daycase_added) %>%
     dplyr::mutate(whichmonth = dplyr::if_else(
       .data$daycase_added,
-      lubridate::month(data$record_keydate1),
+      lubridate::month(.data$record_keydate1),
       NA
     )) %>%
     dplyr::mutate(
@@ -64,7 +64,7 @@ create_monthly_costs <- function(data,
       ~ dplyr::case_when(
         .x != 0.0 & !daycase_check ~ .x / yearstay2 * {{ cost_total_net }},
         .x != 0.0 & daycase_check ~ {{ cost_total_net }},
-        default ~ 0
+        TRUE ~ 0
       )
     )) %>%
     dplyr::select(-c(.data$yearstay2, .data$daycase_check))
