@@ -89,7 +89,6 @@ rstudioapi
 Rtype
 seealso
 simd
-SLF
 slf
 slfhelper
 smr
