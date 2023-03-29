@@ -26,17 +26,19 @@ calculate_measures <- function(data,
                                group_by = NULL) {
   measure <- match.arg(measure)
 
-  if (group_by == "recid") {
-    data <- data %>%
-      dplyr::group_by(.data$recid)
+  if (!is.null(group_by)) {
+    if (group_by == "recid") {
+      data <- data %>%
+        dplyr::group_by(.data$recid)
+    }
   }
+
 
   if (measure == "all") {
     data <- data %>%
       dplyr::select(tidyselect::matches({{ vars }})) %>%
       dplyr::summarise(
-        dplyr::across(
-          tidyselect::everything(),
+        dplyr::across(tidyselect::everything(),
           ~ sum(.x, na.rm = TRUE),
           .names = "total_{col}"
         ),
@@ -56,8 +58,7 @@ calculate_measures <- function(data,
     data <- data %>%
       dplyr::select(tidyselect::matches({{ vars }})) %>%
       dplyr::summarise(
-        dplyr::across(
-          tidyselect::everything(),
+        dplyr::across(tidyselect::everything(),
           ~ min(.x, na.rm = TRUE),
           .names = "min_{col}"
         ),
@@ -73,13 +74,15 @@ calculate_measures <- function(data,
       ))
   }
 
-  if (group_by == "recid") {
-    pivot_data <- data %>%
-      tidyr::pivot_longer(
-        cols = !.data$recid,
-        names_to = "measure",
-        values_to = "value"
-      )
+  if (!is.null(group_by)) {
+    if (group_by == "recid") {
+      pivot_data <- data %>%
+        tidyr::pivot_longer(
+          cols = !.data$recid,
+          names_to = "measure",
+          values_to = "value"
+        )
+    }
   } else {
     pivot_data <- data %>%
       tidyr::pivot_longer(

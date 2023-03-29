@@ -8,8 +8,11 @@
 #' @return episode files with updated date of birth and ages
 #' @export
 correct_demographics <- function(data, year) {
+  # keep episodes with missing chi
+  data_no_chi <- data %>%
+    dplyr::filter(is_missing(.data$chi))
   # Checking and changing DOB and age
-  data <- data %>%
+  data_chi <- data %>%
     dplyr::filter(!is_missing(.data$chi)) %>%
     dplyr::mutate(
       # Create a dob in the previous century from the chi number
@@ -17,14 +20,23 @@ correct_demographics <- function(data, year) {
         chi_number = .data$chi,
         chi_check = FALSE,
         min_date = lubridate::ymd("1900-01-01"),
-        max_date = pmin(.data$keydate1_dateformat, lubridate::ymd("1999-12-31"), na.rm = TRUE)
+        max_date = pmin(
+          .data$keydate1_dateformat,
+          lubridate::ymd("1999-12-31"),
+          na.rm = TRUE
+        )
       ),
-      # Create a dob in the current century from chi (will return NA if in the future)
+      # Create a DoB in the current century from chi
+      # (will return NA if in the future)
       chi_dob_max = phsmethods::dob_from_chi(
         chi_number = .data$chi,
         chi_check = FALSE,
         min_date = lubridate::ymd("2000-01-01"),
-        max_date = pmax(.data$keydate1_dateformat, lubridate::ymd("2000-01-01"), na.rm = TRUE)
+        max_date = pmax(
+          .data$keydate1_dateformat,
+          lubridate::ymd("2000-01-01"),
+          na.rm = TRUE
+        )
       ),
 
       # Compute two ages for each chi, the maximum and minimum it could be
@@ -43,7 +55,10 @@ correct_demographics <- function(data, year) {
           !is.na(chi_dob_max) ~ chi_dob_max, !is.na(chi_dob_min) &
           is.na(chi_dob_max) ~ chi_dob_min,
         # If they have an LTC date before birth date, assume older
-        chi_dob_max > purrr::reduce(dplyr::select(., "arth_date":"digestive_date"), `min`) ~ chi_dob_min,
+        chi_dob_max > purrr::reduce(
+          dplyr::select(., "arth_date":"digestive_date"),
+          `min`
+        ) ~ chi_dob_min,
         # If they have a GLS record and the age is broadly correct, assume older
         dplyr::between(chi_age_max, 50, 130) &
           recid == "GLS" ~ chi_dob_min,
@@ -81,6 +96,10 @@ correct_demographics <- function(data, year) {
       "chi_gender"
     ))
 
-  # return the data
+  data <- dplyr::bind_rows(
+    data_no_chi,
+    data_chi
+  )
+
   return(data)
 }
