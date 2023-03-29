@@ -110,6 +110,7 @@ SMRA
 smrtype
 sparra
 spd
+SPSS
 spss
 stadm
 stringdist
