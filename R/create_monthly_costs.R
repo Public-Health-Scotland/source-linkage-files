@@ -41,9 +41,8 @@ create_monthly_costs <- function(data,
       daycase_added = dplyr::if_else(.data$daycase_added, 1, 0)
     ) %>%
     tidyr::pivot_wider(
-      names_from = "whichmonth",
-      names_glue = "{whichmonth}_cost",
-      values_from = "daycase_added",
+      names_from = .data$whichmonth,
+      values_from = .data$daycase_added,
       values_fill = 0
     ) %>%
     dplyr::select(
