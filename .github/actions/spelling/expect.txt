@@ -67,10 +67,9 @@ pattype
 phs
 phsmethods
 phsopendata
-postcodes
 placeinc
+postcodes
 PPAs
-praccode
 prac
 praccode
 purrr
@@ -96,6 +95,7 @@ SMRA
 smrtype
 sparra
 spd
+SPSS
 spss
 stringdist
 stringr
