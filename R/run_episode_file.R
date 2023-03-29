@@ -12,31 +12,27 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
     # From C01 ----
-    # Check chi is valid using phsmethods function
-    # If the CHI is invalid for whatever reason, set the CHI to blank string
-    dplyr::mutate(
-      chi = dplyr::if_else(
-        phsmethods::chi_check(.data$chi) != "Valid CHI",
-        NA_character_,
-        .data$chi
-      ),
-      gpprac = as.integer(.data[["gpprac"]])
-    ) %>%
-    # In original C01, set dates to date format - this doesn't need to be done
-    # Set SMRtype, doesn't need to be done
-    # Recode any cij_admtype "Un" to "99"
-    # There are lots of blanks - do these need to be recoded or ignored?
+  # Check chi is valid using phsmethods function
+  # If the CHI is invalid for whatever reason, set the CHI to blank string
+  dplyr::mutate(
+    chi = dplyr::if_else(
+      phsmethods::chi_check(.data$chi) != "Valid CHI",
+      "",
+      .data$chi
+    ),
+    gpprac = as.numeric(gpprac)
+  ) %>%
     # Change some values of cij_pattype_code based on cij_admtype
-    ### TODO put lines 31-49 into a function ###
     dplyr::mutate(
+      cij_admtype = dplyr::if_else(cij_admtype == "Unknown", "99", cij_admtype),
       cij_pattype_code = dplyr::case_when(
-        .data$chi != "" &
+        !is_missing(.data$chi) &
           .data$recid %in% c("01B", "04B", "GLS", "02B") &
           .data$cij_admtype %in% c("41", "42") ~ 2,
-        .data$chi != "" &
+        !is_missing(.data$chi) &
           .data$recid %in% c("01B", "04B", "GLS", "02B") &
-          .data$cij_admtype %in% c("48", "49", "99") ~ 9,
-        .data$cij_admtype == "18" ~ 0,
+          .data$cij_admtype %in% c("40", "48", "99") ~ 9,
+        .data$cij_admtype %in% c("18") ~ 0,
         TRUE ~ .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
@@ -71,35 +67,33 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # Add the flag for Potentially Preventable Admissions
     add_ppa_flag() %>%
     # From C02 - Link Delayed Discharge Episodes ----
-    # Create Temp File 2
-    # temp_file_2 <- temp_file_1
+  # Create Temp File 2
+  # temp_file_2 <- temp_file_1
 
-    # From C03 - Link Homelessness ----
-    # Create Temp File 3
-    # temp_file_3 <- temp_file_2
+  # From C03 - Link Homelessness ----
+  # Create Temp File 3
+  # temp_file_3 <- temp_file_2
 
-    # From C04 - Add NSU cohort ----
-    add_nsu_cohort(year) %>%
+  # From C04 - Add NSU cohort ----
+  add_nsu_cohort(., year) %>%
     # From C05 - Match on LTCs ----
-    # Create Temp File 5
-    match_on_ltcs(year) %>%
-    correct_demographics(year)
+  # Create Temp File 5
+  match_on_ltcs(year) %>%
+    correct_demographics(., year) %>%
 
-  # From C06 - Deaths Fixes ----
-  # Create Temp File 6
-  # temp_file_6 <- temp_file_5
-
-  # From C07 - Calculate and write out pathways cohorts ----
+    # From C07 - Calculate and write out pathways cohorts ----
   # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
   # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
+
+  # From C09 - Match on postcode and gpprac variables ----
+  fill_geographies()
+
+
 
   # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
   # Create Temp File 7
 
   return(ep_file)
-
-  # From C09 - Match on postcode and gpprac variables ----
-  # ep_file_2 <- ep_file %>% fill_geographies()
 
   # From C10 - Final tidy-up (mostly variable labels) ----
   # Create Episode File
