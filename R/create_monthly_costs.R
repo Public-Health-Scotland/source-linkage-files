@@ -17,7 +17,6 @@
 create_monthly_costs <- function(data,
                                  yearstay = yearstay,
                                  cost_total_net = cost_total_net) {
-
   check_variables_exist(data, c(
     "record_keydate1",
     "record_keydate2",
