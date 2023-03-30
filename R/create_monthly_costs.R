@@ -31,7 +31,7 @@ create_monthly_costs <- function(data,
   # these will sometimes have 0.33 for the yearstay,
   # this should be applied to the relevant month.
   costs_daycase <- data %>%
-    dplyr::select(-dplyr::ends_with("_beddays")) %>%
+    dplyr::select(!dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(
       daycase_added = (.data$record_keydate1 == .data$record_keydate2)
     ) %>%
@@ -75,7 +75,7 @@ create_monthly_costs <- function(data,
         .default = 0.0
       )
     )) %>%
-    dplyr::select(-c(.data$daycase_check))
+    dplyr::select(!"daycase_check")
 
   return(data)
 }
