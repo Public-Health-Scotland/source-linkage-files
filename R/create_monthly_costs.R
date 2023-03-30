@@ -17,6 +17,13 @@
 create_monthly_costs <- function(data,
                                  yearstay = yearstay,
                                  cost_total_net = cost_total_net) {
+
+  check_variables_exist(data, c(
+    "record_keydate1",
+    "record_keydate2",
+    paste0(tolower(month.abb[c(4:12, 1:3)]), "_beddays")
+  ))
+
   costs <- data %>%
     dplyr::select(dplyr::ends_with("_beddays")) %>%
     dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
