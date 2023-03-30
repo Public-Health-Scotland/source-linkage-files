@@ -62,10 +62,10 @@ create_monthly_costs <- function(data,
         {{ cost_total_net }} == 0.0 ~ 0.0,
         .x != 0L ~ dplyr::if_else(
           daycase_check,
-          {{cost_total_net}},
+          {{ cost_total_net }},
           .x / yearstay * {{ cost_total_net }}
-          ),
-        .default =  0.0
+        ),
+        .default = 0.0
       )
     )) %>%
     dplyr::select(-c(.data$daycase_check))
