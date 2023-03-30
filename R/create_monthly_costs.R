@@ -56,18 +56,19 @@ create_monthly_costs <- function(data,
     dplyr::bind_cols(daycase_check = costs_daycase$daycase_check)
 
   data <- dplyr::bind_cols(data, costs) %>%
-    dplyr::mutate(yearstay2 = dplyr::if_else(
-      {{ yearstay }} < 0.99, 0, {{ yearstay }}
-    )) %>%
     dplyr::mutate(dplyr::across(
       dplyr::ends_with("_cost"),
       ~ dplyr::case_when(
-        .x != 0.0 & !daycase_check ~ .x / yearstay2 * {{ cost_total_net }},
-        .x != 0.0 & daycase_check ~ {{ cost_total_net }},
-        TRUE ~ 0
+        {{ cost_total_net }} == 0.0 ~ 0.0,
+        .x != 0L ~ dplyr::if_else(
+          daycase_check,
+          {{cost_total_net}},
+          .x / yearstay * {{ cost_total_net }}
+          ),
+        .default =  0.0
       )
     )) %>%
-    dplyr::select(-c(.data$yearstay2, .data$daycase_check))
+    dplyr::select(-c(.data$daycase_check))
 
   return(data)
 }
