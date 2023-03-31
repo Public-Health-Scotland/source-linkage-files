@@ -87,6 +87,8 @@ list(
     read_sc_all_care_home(),
     sc_demographics = sc_demographic_data_path,
     slf_deaths_path = slf_deaths_data_path,
+    ch_name_lookup_path = slf_ch_name_lookup_path,
+    spd_path = spd_data_path,
     write_to_disk = write_to_disk
   )),
   tar_target(
