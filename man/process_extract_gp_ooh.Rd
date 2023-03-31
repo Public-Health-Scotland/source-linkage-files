@@ -4,12 +4,12 @@
 \alias{process_extract_gp_ooh}
 \title{Process the GP OoH extract}
 \usage{
-process_extract_gp_ooh(year, data_list, write_to_disk = TRUE)
+process_extract_gp_ooh(year, ooh_extracts, write_to_disk = TRUE)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
 
-\item{data_list}{A list containing the extracts.}
+\item{ooh_extracts}{A list containing the extracts.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -20,7 +20,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 GP OoH extract, it will return the final data
-but also write this out as a zsav and rds.
+and also write out as an rds.
 }
 \seealso{
 Other process extracts: 
