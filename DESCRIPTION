@@ -58,6 +58,8 @@ Suggests:
     covr (>= 3.6.1),
     roxygen2 (>= 7.2.3),
     spelling (>= 2.2),
+    tarchetypes,
+    targets,
     testthat (>= 3.1.7)
 Remotes: 
     Public-Health-Scotland/phsmethods,
