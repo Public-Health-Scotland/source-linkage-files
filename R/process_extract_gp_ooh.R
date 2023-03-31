@@ -2,33 +2,20 @@
 #'
 #' @description This will read and process the
 #' GP OoH extract, it will return the final data
-#' and also write out as an rds.
+#' but also write this out as a zsav and rds.
 #'
 #' @param year The year to process, in FY format.
-#' @param ooh_extracts A list containing the extracts.
+#' @param data_list A list containing the extracts.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_gp_ooh <- function(
-    year,
-    ooh_extracts,
-    write_to_disk = TRUE
-) {
-  diagnosis_extract <- process_extract_ooh_diagnosis(
-    ooh_extracts[["diagnosis"]],
-    year
-  )
-  outcomes_extract <- process_extract_ooh_outcomes(
-    ooh_extracts[["outcomes"]],
-    year
-  )
-  consultations_extract <- process_extract_ooh_consultations(
-    ooh_extracts[["consultations"]],
-    year
-  )
+process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
+  diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
+  outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
+  consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
 
 
   # Join data ---------------------------------
