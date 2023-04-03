@@ -1,4 +1,4 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 * Prescribing (PIS) tests.
 get file = !Year_dir + "prescribing_file_for_source-20" + !FY + ".zsav".
 
@@ -22,9 +22,9 @@ aggregate outfile = SLFnew
     /n_chis n_missing_dob = sum(has_chi_number no_dob)
     /males females = Sum(male female)
     /n_episodes = n
-    /dispensed_items_mean paid_items_mean cost_mean = mean(no_dispensed_items no_paid_items cost_total_net)
-    /dispensed_items_total paid_items_total cost_total = sum(no_dispensed_items no_paid_items cost_total_net)
-    /dispensed_items_sd paid_items_sd cost_sd = sd(no_dispensed_items no_paid_items cost_total_net).
+    /paid_items_mean cost_mean = mean(no_paid_items cost_total_net)
+    /paid_items_total cost_total = sum(no_paid_items cost_total_net)
+    /paid_items_sd cost_sd = sd(no_paid_items cost_total_net).
 
  * Restructure for easy analysis and viewing.
 Dataset activate SLFnew.
@@ -36,7 +36,7 @@ Sort cases by measure.
 *******************************************************************************.
 
 get file = '/conf/hscdiip/01-Source-linkage-files/source-episode-file-20' + !FY + '.zsav'
-    /Keep recid anon_chi gender dob cost_total_net no_dispensed_items.
+    /Keep recid anon_chi gender dob cost_total_net no_paid_items.
 select if recid = 'PIS'.
 
  * Flag to count CHIs.
@@ -52,9 +52,6 @@ End if.
  * Flags to count missing values.
 If sysmis(dob) no_dob = 1.
 
- * TODO remove this line after one update.
-Compute no_paid_items = 0.
-
  * Get values for whole file.
 Dataset Declare SLFexisting.
 aggregate outfile = SLFexisting
@@ -62,9 +59,9 @@ aggregate outfile = SLFexisting
     /n_chis n_missing_dob = sum(has_chi_number no_dob)
     /males females = Sum(male female)
     /n_episodes = n
-    /dispensed_items_mean paid_items_mean cost_mean = mean(no_dispensed_items no_paid_items cost_total_net)
-    /dispensed_items_total paid_items_total cost_total = sum(no_dispensed_items no_paid_items cost_total_net)
-    /dispensed_items_sd paid_items_sd cost_sd = sd(no_dispensed_items no_paid_items cost_total_net).
+    /paid_items_mean cost_mean = mean(no_paid_items cost_total_net)
+    /paid_items_total cost_total = sum(no_paid_items cost_total_net)
+    /paid_items_sd cost_sd = sd(no_paid_items cost_total_net).
 
 Dataset activate SLFexisting.
 Varstocases

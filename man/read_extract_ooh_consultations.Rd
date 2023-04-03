@@ -4,10 +4,15 @@
 \alias{read_extract_ooh_consultations}
 \title{Read GP OOH Consultations extract}
 \usage{
-read_extract_ooh_consultations(year)
+read_extract_ooh_consultations(
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")
+)
 }
 \arguments{
-\item{year}{Year of BOXI extract}
+\item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with OOH Consultations extract data

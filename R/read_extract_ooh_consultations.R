@@ -1,19 +1,27 @@
 #' Read GP OOH Consultations extract
 #'
-#' @param year Year of BOXI extract
+#' @inherit read_extract_acute
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Consultations extract data
-read_extract_ooh_consultations <- function(year) {
-  extract_consultations_path <- get_boxi_extract_path(year = year, type = "GP_OoH-c")
-
+read_extract_ooh_consultations <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")) {
   # Read consultations data
-  consultations_extract <- readr::read_csv(extract_consultations_path,
+  consultations_extract <- readr::read_csv(file_path,
     col_types = readr::cols(
-      "Patient DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Patient DoB Date [C]" = readr::col_date(
+        format = "%Y/%m/%d %T"
+      ),
       "Gender" = readr::col_integer(),
-      "Consultation Recorded" = readr::col_factor(levels = c("Y", "N")),
-      "Consultation Start Date Time" = readr::col_datetime(format = "%Y/%m/%d %T"),
-      "Consultation End Date Time" = readr::col_datetime(format = "%Y/%m/%d %T"),
+      "Consultation Recorded" = readr::col_factor(
+        levels = c("Y", "N")
+      ),
+      "Consultation Start Date Time" = readr::col_datetime(
+        format = "%Y/%m/%d %T"
+      ),
+      "Consultation End Date Time" = readr::col_datetime(
+        format = "%Y/%m/%d %T"
+      ),
       "KIS Accessed" = readr::col_factor(levels = c("Y", "N")),
       # All other columns are character type
       .default = readr::col_character()

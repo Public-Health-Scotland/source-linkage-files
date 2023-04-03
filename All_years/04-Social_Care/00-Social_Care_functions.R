@@ -11,7 +11,7 @@ social_care_dir <- fs::path("/conf/hscdiip/SLF_Extracts/Social_care")
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Sep_2022"
+  "Dec_2022"
 }
 
 #' Open a connection to a PHS database

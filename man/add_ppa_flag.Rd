@@ -17,3 +17,8 @@ This function takes a data frame input and determines, based on
 a combination of diagnostic codes and operation codes, whether an admission
 was preventable or not.
 }
+\seealso{
+Other episode file: 
+\code{\link{add_nsu_cohort}()}
+}
+\concept{episode file}

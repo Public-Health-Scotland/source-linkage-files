@@ -61,7 +61,7 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
       "Date of Operation 4 (01)" = col_date(format = "%Y/%m/%d %T"),
       "Age at Midpoint of Financial Year (01)" = col_integer(),
       "Continuous Inpatient Stay(SMR01) (inc GLS)" = col_integer(),
-      "Continuous Inpatient Journey Marker (01)" = col_character(),
+      "Continuous Inpatient Journey Marker (01)" = col_integer(),
       "CIJ Planned Admission Code (01)" = col_integer(),
       "CIJ Inpatient Day Case Identifier Code (01)" = col_character(),
       "CIJ Type of Admission Code (01)" = col_character(),
@@ -150,7 +150,9 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
       cij_ipdc = "CIJ Inpatient Day Case Identifier Code (01)",
       lineno = "Line Number (01)",
       GLS_record = "GLS Record"
-    )
+    ) %>%
+    # replace NA in cost_total_net by 0
+    dplyr::mutate(cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0))
 
   return(extract_acute)
 }

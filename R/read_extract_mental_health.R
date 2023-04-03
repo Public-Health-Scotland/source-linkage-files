@@ -3,8 +3,9 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-#'
-read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(year = year, type = "MH")) {
+read_extract_mental_health <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "MH")) {
   # Read BOXI extract
   extract_mental_health <- readr::read_csv(file_path,
     col_types = cols_only(
@@ -19,7 +20,7 @@ read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(y
       "Practice NHS Board Code - current" = col_character(),
       "Geo Postcode [C]" = col_character(),
       "NHS Board of Residence Code - current" = col_character(),
-      "Geo Council Area Code" = col_integer(),
+      "Geo Council Area Code" = col_character(),
       "Geo HSCP of Residence Code - current" = col_character(),
       "Geo Data Zone 2011" = col_character(),
       "Treatment Location Code" = col_character(),
@@ -27,13 +28,13 @@ read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(y
       "Occupied Bed Days (04)" = col_double(),
       "Specialty Classificat. 1/4/97 Code" = col_character(),
       "Significant Facility Code" = col_character(),
-      "Lead Consultant/HCP Code" = col_double(),
+      "Lead Consultant/HCP Code" = col_character(),
       "Management of Patient Code" = col_character(),
-      "Patient Category Code" = col_double(),
-      "Admission Type Code" = col_double(),
+      "Patient Category Code" = col_character(),
+      "Admission Type Code" = col_character(),
       "Admitted Trans From Code" = col_character(),
       "Location Admitted Trans From Code" = col_character(),
-      "Discharge Type Code" = col_integer(),
+      "Discharge Type Code" = col_character(),
       "Discharge Trans To Code" = col_character(),
       "Location Discharged Trans To Code" = col_character(),
       "Diagnosis 1 Code (6 char)" = col_character(),
@@ -54,8 +55,8 @@ read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(y
       "CIJ Type of Admission Code (04)" = col_character(),
       "CIJ Admission Specialty Code (04)" = col_character(),
       "CIJ Discharge Specialty Code (04)" = col_character(),
-      "CIJ Start Date (04)" = col_character(),
-      "CIJ End Date (04)" = col_character(),
+      "CIJ Start Date (04)" = col_date(format = "%Y/%m/%d %T"),
+      "CIJ End Date (04)" = col_date(format = "%Y/%m/%d %T"),
       "Total Net Costs (04)" = col_double(),
       "Alcohol Related Admission (04)" = col_factor(levels = c("Y", "N")),
       "Substance Misuse Related Admission (04)" = col_factor(levels = c("Y", "N")),
@@ -64,7 +65,7 @@ read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(y
       "Duplicate Record Flag (04)" = col_factor(levels = c("Y", "N")),
       "NHS Hospital Flag (04)" = col_factor(levels = c("Y", "N")),
       "Community Hospital Flag (04)" = col_factor(levels = c("Y", "N")),
-      "Unique Record Identifier" = col_integer()
+      "Unique Record Identifier" = col_character()
     )
   ) %>%
     # rename variables
@@ -126,7 +127,9 @@ read_extract_mental_health <- function(year, file_path = get_boxi_extract_path(y
       nhshosp = "NHS Hospital Flag (04)",
       commhosp = "Community Hospital Flag (04)",
       uri = "Unique Record Identifier"
-    )
+    ) %>%
+    # replace NA in cost_total_net by 0
+    dplyr::mutate(cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0))
 
   return(extract_mental_health)
 }

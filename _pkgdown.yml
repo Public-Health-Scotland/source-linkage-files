@@ -16,6 +16,8 @@ reference:
     desc: Checks within vectors
   - contents:
     - is_missing
+    - check_variables_exist
+    - check_year_valid
 
 
   - title: Years & Dates
@@ -42,6 +44,7 @@ reference:
     desc: Clean up the data
   - contents:
     - starts_with("clean_up")
+    - fill_ch_names
 
 
   - title: Create
@@ -70,6 +73,7 @@ reference:
     desc: Convert various codes to alternate forms
   - contents:
     - has_concept("code functions")
+    - has_concept("Codes")
     - contains("_to_lca")
     - contains("to_dummy")
     - contains("_hb_to")
@@ -105,7 +109,7 @@ reference:
   - subtitle: Directories
     desc: File Directories for SLF's
   - contents:
-    - has_concept("directiories")
+    - has_concept("directories")
     - ends_with("_dir")
   - subtitle: Paths
     desc: File Paths for SLF's
@@ -121,12 +125,28 @@ reference:
     - ends_with("_file")
     - ends_with("_path")
 
-
-  - title: Process
+  - title: Read extracts
     desc: Process SLF Extracts
   - contents:
-    - has_concept("prcoess extracts")
+    - has_concept("read extracts")
+    - starts_with("read_")
+    - get_gpprac_opendata
+
+
+  - title: Process extracts
+    desc: Process SLF Extracts
+  - contents:
+    - has_concept("process extracts")
     - starts_with("process_")
+
+
+  - title: Episode file
+    desc: Building the episode file
+  - contents:
+    - has_concept("episode file")
+  - subtitle: Cohorts
+  - contents:
+    - has_concept("Demographic and Service Use Cohort functions")
 
 
   - title: Testing

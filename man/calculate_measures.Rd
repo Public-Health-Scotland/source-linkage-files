@@ -4,27 +4,38 @@
 \alias{calculate_measures}
 \title{Calculate Measures for Testing}
 \usage{
-calculate_measures(data, vars = NULL, measure = c("sum", "all", "min-max"))
+calculate_measures(
+  data,
+  vars = NULL,
+  measure = c("sum", "all", "min-max"),
+  group_by = NULL
+)
 }
 \arguments{
-\item{data}{A processed dataframe containing a summary of the mean and sum of variables}
+\item{data}{A processed dataframe containing a
+summary of the mean and sum of variables.}
 
 \item{vars}{Specify variables you want to test.
-This will match this e.g c(\code{beddays}, \code{cost}, \code{yearstay}). Default as NULL for summarising
-everything in a dataframe.}
+This will match this e.g c(\code{beddays}, \code{cost}, \code{yearstay}).
+Default as NULL for summarising everything.}
 
 \item{measure}{The measure you want to apply to variables}
+
+\item{group_by}{Default as NULL for grouping variables. Specify
+variables for grouping e.g recid for episode file testing.}
 }
 \value{
 a tibble with a summary
 }
 \description{
-Produces measures used within testing extracts. Computes various measures for the variables specified.
+Produces measures used within testing extracts.
+Computes various measures for the variables specified.
 }
 \seealso{
 produce_source_extract_tests
 
 Other extract test functions: 
+\code{\link{produce_episode_file_tests}()},
 \code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_cmh_tests}()},
 \code{\link{produce_source_dn_tests}()},

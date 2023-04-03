@@ -1,5 +1,7 @@
-* Encoding: UTF-8.
+﻿* Encoding: UTF-8.
 get file = !Delayed_Discharge_file.
+
+alter type rdd delay_end_date originaladmissiondate (Date11).
 
 Rename Variables
     RDD = keydate1_dateformat

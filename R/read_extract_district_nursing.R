@@ -3,8 +3,12 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-#'
-read_extract_district_nursing <- function(year, file_path = get_boxi_extract_path(year = year, type = "DN")) {
+read_extract_district_nursing <- function(year,
+                                          file_path = get_boxi_extract_path(year = year, type = "DN")) {
+  if (is.na(file_path)) {
+    return(NULL)
+  }
+
   # Read BOXI extract
   extract_district_nursing <- readr::read_csv(file_path,
     col_types = cols_only(
@@ -21,7 +25,7 @@ read_extract_district_nursing <- function(year, file_path = get_boxi_extract_pat
       `Patient Postcode [C] (Contact)` = col_character(),
       `Duration of Contact (measure)` = col_double(),
       Gender = col_double(),
-      `Location of Contact` = col_double(),
+      `Location of Contact` = col_character(),
       `Practice NHS Board Code 9 (Contact)` = col_character(),
       `Patient Council Area Code (Contact)` = col_character(),
       `Practice Code (Contact)` = col_character(),

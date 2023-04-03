@@ -4,19 +4,19 @@
 #' but also write this out as a rds.
 #'
 #' @param data The extract to process
-#' @param sc_demographics The sc demographics lookup. Default set to NULL as
-#' we can pass this through data in the environment.
+#' @param sc_demographics The path to the sc demographics lookup.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRUE) {
+#'
+#' @export
+#'
+process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
-  if (is.null(sc_demographics)) {
-    # read in demographic data
-    sc_demographics <- readr::read_rds(get_sc_demog_lookup_path())
-  }
+  # read in demographic data
+  sc_demographics <- readr::read_rds(sc_demographics)
 
   # Match on demographics data (chi, gender, dob and postcode)
   matched_sds_data <- data %>%
@@ -86,7 +86,7 @@ process_sc_all_sds <- function(data, sc_demographics = NULL, write_to_disk = TRU
     replace_sc_id_with_latest()
 
   final_data <- sds_full_clean %>%
-    # use as.data.table to change the data format to data.table to accelarate
+    # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$smrtype) %>%
     dplyr::arrange(.data$period, .data$record_keydate1, .by_group = TRUE) %>%

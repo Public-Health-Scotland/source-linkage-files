@@ -49,9 +49,6 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
     ))
   }
 
-
-  # Save outfile ---------------------------------------
-
   if (write_to_disk) {
     # Save as rds file
     pis_clean %>%

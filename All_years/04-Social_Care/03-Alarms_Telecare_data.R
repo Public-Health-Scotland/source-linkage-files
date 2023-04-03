@@ -29,7 +29,7 @@ sc_demographics <- haven::read_sav(fs::path(
 
 # Query to database -------------------------------------------------------
 
-# set-up conection to platform
+# set-up connection to platform
 db_connection <- phs_db_connection(dsn = "DVPROD")
 
 # read in data - social care 2 demographic
@@ -83,7 +83,7 @@ replaced_start_dates <- at_full_data %>%
   )
 
 at_full_clean <- replaced_start_dates %>%
-  # Match on demographics data (chi, gender, dob and postcode)
+  # Match on demographics data (CHI, gender, DoB and postcode)
   left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
   # rename for matching source variables
   rename(

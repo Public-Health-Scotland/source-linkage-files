@@ -6,32 +6,60 @@
 #' @param data A data frame
 #'
 #' @return A data frame to use as a lookup of PPAs
+#' @family episode file
 #' @export
 add_ppa_flag <- function(data) {
-  check_variables_exist(data, variables = c(
-    "chi", "cij_marker", "cij_pattype", "recid",
-    "op1a", "diag1", "diag2", "diag3", "diag4",
-    "diag5", "diag6"
-  ))
+  check_variables_exist(
+    data,
+    variables = c(
+      "chi",
+      "cij_marker",
+      "cij_pattype",
+      "recid",
+      "op1a",
+      "diag1",
+      "diag2",
+      "diag3",
+      "diag4",
+      "diag5",
+      "diag6"
+    )
+  )
 
   if (!(any(data$recid %in% c("01B", "02B", "04B", "GLS")))) {
     nrecids <- length(unique(data$recid))
-    cli::cli_abort("None of the {nrecids} recid{?s} provided will relate to PPAs, and the function
-                   will abort.")
+    cli::cli_abort(
+      "None of the {nrecids} recid{?s} provided will relate to PPAs,
+      and the function will abort."
+    )
   }
 
   matching_data <- data %>%
     # Select out only the columns we need
     dplyr::select(
-      "chi", "cij_marker", "cij_pattype", "recid",
-      "op1a", "diag1", "diag2", "diag3", "diag4",
-      "diag5", "diag6"
+      "chi",
+      "cij_marker",
+      "cij_pattype",
+      "recid",
+      "op1a",
+      "diag1",
+      "diag2",
+      "diag3",
+      "diag4",
+      "diag5",
+      "diag6"
     ) %>%
     # Filter only recids and patient type where admission was preventable
-    dplyr::filter(.data$recid %in% c("01B", "02B", "04B", "GLS") & .data$cij_pattype == "Non-Elective") %>%
-    # We only want the first record in each cij, and we want to exclude empty cij and empty chi
+    dplyr::filter(
+      .data$recid %in% c("01B", "02B", "04B", "GLS") &
+        .data$cij_pattype == "Non-Elective"
+    ) %>%
+    # We only want the first record in each CIJ,
+    # and we want to exclude empty CIJ and empty CHI
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
-    dplyr::filter(dplyr::row_number() == 1L & !is.na(.data$cij_marker) & !is.na(.data$chi)) %>%
+    dplyr::filter(
+      dplyr::row_number() == 1L & !is.na(.data$cij_marker) & !is.na(.data$chi)
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
       # Extract some characters from diagnosis codes for easier reading below
@@ -41,7 +69,9 @@ add_ppa_flag <- function(data) {
 
       # Excluding operations are op1a codes from K01 to K50, K56, K60, and K61 (dental)
       excluding_operation = .data$op1a_3char %in%
-        c(glue::glue("K{stringr::str_pad(1:50, 2, 'left', '0')}"), "K56", "K60", "K61"),
+        c(glue::glue(
+          "K{stringr::str_pad(1:50, 2, 'left', '0')}"
+        ), "K56", "K60", "K61"),
 
       # Adding ppa flag
       ppa = dplyr::case_when(
@@ -124,12 +154,33 @@ add_ppa_flag <- function(data) {
         # Reliant on op1a and diag1
         # Angina
         diag1_3char == "I20" &
-          !(.data$op1a_3char %in% c("K40", "K45", "K49", "K60", "K65", "K66")) ~ TRUE,
+          !(.data$op1a_3char %in% c(
+            "K40",
+            "K45",
+            "K49",
+            "K60",
+            "K65",
+            "K66"
+          )) ~ TRUE,
         # Cellulitis
         diag1_3char %in% c("L03", "L04") &
-          !(.data$op1a_3char %in% c("S06", "S57", "S68", "S70", "W90", "X11")) ~ TRUE,
+          !(.data$op1a_3char %in% c(
+            "S06",
+            "S57",
+            "S68",
+            "S70",
+            "W90",
+            "X11"
+          )) ~ TRUE,
         diag1_4char %in% c("L080", "L088", "L089", "L980") &
-          !(.data$op1a_3char %in% c("S06", "S57", "S68", "S70", "W90", "X11")) ~ TRUE,
+          !(.data$op1a_3char %in% c(
+            "S06",
+            "S57",
+            "S68",
+            "S70",
+            "W90",
+            "X11"
+          )) ~ TRUE,
 
         # Reliant on diag1 and excluding_operation
         diag1_3char %in% c(
@@ -149,18 +200,31 @@ add_ppa_flag <- function(data) {
         # Reliant on diag1 and diag2
         # Bronchitis
         diag1_3char == "J20" &
-          stringr::str_sub(.data$diag2, 1L, 3L) %in% c("J41", "J42", "J43", "J44", "J47") ~ TRUE,
+          stringr::str_sub(.data$diag2, 1L, 3L) %in% c(
+            "J41",
+            "J42",
+            "J43",
+            "J44",
+            "J47"
+          ) ~ TRUE,
 
         # All other values
         TRUE ~ FALSE
       )
     ) %>%
-    # Just select out the chi, cij marker and ppa for ease of joining
     dplyr::select("chi", "cij_marker", cij_ppa = "ppa")
 
   # Match on the ppa lookup to original data
-  ppa_cij_data <- dplyr::left_join(data, matching_data, by = c("chi", "cij_marker")) %>%
-    dplyr::mutate(cij_ppa = dplyr::if_else(is.na(.data$cij_ppa), FALSE, .data$cij_ppa))
+  ppa_cij_data <- dplyr::left_join(
+    data,
+    matching_data,
+    by = c("chi", "cij_marker")
+  ) %>%
+    dplyr::mutate(cij_ppa = dplyr::if_else(
+      is.na(.data$cij_ppa),
+      FALSE,
+      .data$cij_ppa
+    ))
 
   return(ppa_cij_data)
 }
