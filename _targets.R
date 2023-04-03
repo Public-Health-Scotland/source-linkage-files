@@ -27,8 +27,9 @@ list(
   tar_target(gpprac_data_path, get_gpprac_opendata()),
   tar_target(gpprac_ref_data_path, get_gpprac_ref_path(), format = "file"),
   tar_file_read(chi_deaths_data,
-                command = get_it_deaths_path(),
-                read = read_lookup_chi_deaths(!!.x)),
+    command = get_it_deaths_path(),
+    read = read_lookup_chi_deaths(!!.x)
+  ),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
   tar_target(slf_ch_name_lookup_path, get_slf_ch_name_lookup_path(), format = "file"),
@@ -189,13 +190,14 @@ list(
       format = "file"
     ),
     tar_target(ooh_data,
-               read_extract_gp_ooh(
-                 year,
-                 diagnosis_data_path,
-                 outcomes_data_path,
-                 consultations_data_path
-               ),
-               format = "rds"),
+      read_extract_gp_ooh(
+        year,
+        diagnosis_data_path,
+        outcomes_data_path,
+        consultations_data_path
+      ),
+      format = "rds"
+    ),
     ### Target source processed extracts ###
     tar_target(source_cmh_extract, process_extract_cmh(
       cmh_data,
@@ -269,8 +271,10 @@ list(
       format = "file"
     ),
     ### Target process year specific social care ###
-    tar_target(sc_client_data,
-               read_lookup_sc_client(fyyear = year)),
+    tar_target(
+      sc_client_data,
+      read_lookup_sc_client(fyyear = year)
+    ),
     tar_target(sc_client_lookup, process_lookup_sc_client(
       sc_client_data,
       year,

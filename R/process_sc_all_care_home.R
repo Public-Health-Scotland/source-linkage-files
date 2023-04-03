@@ -21,8 +21,7 @@ process_sc_all_care_home <- function(
     slf_deaths_path = get_slf_deaths_path(),
     ch_name_lookup_path = get_slf_ch_name_lookup_path(),
     spd_path = get_spd_path(),
-    write_to_disk = TRUE
-) {
+    write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 
   sc_demographics <- readr::read_rds(sc_demographics)
