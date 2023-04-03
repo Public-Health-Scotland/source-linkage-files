@@ -37,7 +37,11 @@ list(
   ## Process Lookups ##
   tar_target(
     sc_demog_data,
-    read_lookup_sc_demographics()
+    read_lookup_sc_demographics(),
+    cue = tar_cue_age(
+      name = sc_demog_data,
+      age = as.difftime(28, units = "days")
+    )
   ),
   tar_target(
     sc_demog_lookup,
@@ -79,29 +83,73 @@ list(
   ## Social Care - 'All' data ##
   tar_target(sc_demographic_data_path, get_sc_demog_lookup_path(), format = "file"),
   tar_target(slf_deaths_data_path, get_slf_deaths_path(), format = "file"),
-  tar_target(all_at, process_sc_all_alarms_telecare(
+  tar_target(
+    all_at_extract,
     read_sc_all_alarms_telecare(),
-    sc_demographics = sc_demographic_data_path,
-    write_to_disk = write_to_disk
-  )),
-  tar_target(all_sds, process_sc_all_sds(
+    cue = tar_cue_age(
+      name = all_at_extract,
+      age = as.difftime(28, units = "days")
+    )
+  ),
+  tar_target(
+    all_at,
+    process_sc_all_alarms_telecare(
+      all_at_extract,
+      sc_demographics = sc_demographic_data_path,
+      write_to_disk = write_to_disk
+    )
+  ),
+  tar_target(
+    all_sds_extract,
     read_sc_all_sds(),
-    sc_demographics = sc_demographic_data_path,
-    write_to_disk = write_to_disk
-  )),
-  tar_target(all_home_care, process_sc_all_home_care(
+    cue = tar_cue_age(
+      name = all_sds_extract,
+      age = as.difftime(28, units = "days")
+    )
+  ),
+  tar_target(
+    all_sds,
+    process_sc_all_sds(
+      all_sds_extract,
+      sc_demographics = sc_demographic_data_path,
+      write_to_disk = write_to_disk
+    )
+  ),
+  tar_target(
+    all_home_care_extract,
     read_sc_all_home_care(),
-    sc_demographics = sc_demographic_data_path,
-    write_to_disk = write_to_disk
-  )),
-  tar_target(all_care_home, process_sc_all_care_home(
+    cue = tar_cue_age(
+      name = all_home_care_extract,
+      age = as.difftime(28, units = "days")
+    )
+  ),
+  tar_target(
+    all_home_care,
+    process_sc_all_home_care(
+      all_home_care_extract,
+      sc_demographics = sc_demographic_data_path,
+      write_to_disk = write_to_disk
+    )
+  ),
+  tar_target(
+    all_care_home_extract,
     read_sc_all_care_home(),
-    sc_demographics = sc_demographic_data_path,
-    slf_deaths_path = slf_deaths_data_path,
-    ch_name_lookup_path = slf_ch_name_lookup_path,
-    spd_path = spd_data_path,
-    write_to_disk = write_to_disk
-  )),
+    cue = tar_cue_age(
+      name = all_care_home_extract,
+      age = as.difftime(28, units = "days")
+    )
+  ),
+  tar_target(
+    all_care_home,
+    process_sc_all_care_home(
+      all_care_home_extract,
+      sc_demographics = sc_demographic_data_path,
+      slf_deaths_path = slf_deaths_data_path,
+      ch_name_lookup_path = slf_ch_name_lookup_path,
+      spd_path = spd_data_path,
+      write_to_disk = write_to_disk
+    )
+  ),
   tar_target(
     all_at_data_path,
     get_sc_at_episodes_path(),
