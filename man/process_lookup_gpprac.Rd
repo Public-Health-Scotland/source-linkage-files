@@ -4,9 +4,20 @@
 \alias{process_lookup_gpprac}
 \title{Process the SLF gpprac lookup}
 \usage{
-process_lookup_gpprac(write_to_disk = TRUE)
+process_lookup_gpprac(
+  open_data = get_gpprac_opendata(),
+  gpprac_ref_path = get_gpprac_ref_path(),
+  spd_path = get_spd_path(),
+  write_to_disk = TRUE
+)
 }
 \arguments{
+\item{open_data}{PHS open dataset link to gp practice details}
+
+\item{gpprac_ref_path}{Path to GP Practice reference file}
+
+\item{spd_path}{Path to Scottish Postcode Directory.#'}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
@@ -44,6 +55,7 @@ Other process extracts:
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
 \code{\link{process_sc_all_alarms_telecare}()},
+\code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},

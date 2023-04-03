@@ -8,7 +8,7 @@
 #'
 #' @return The path to the demographic cohorts lookup as an [fs::path()]
 #' @export
-#' @family cohorts file path
+#' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_demographic_cohorts_path <- function(year, ...) {
   demographic_cohorts_path <- get_file_path(
@@ -30,7 +30,7 @@ get_demographic_cohorts_path <- function(year, ...) {
 #'
 #' @return The path to the service-use cohorts lookup as an [fs::path()]
 #' @export
-#' @family cohort lookup file paths
+#' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_service_use_cohorts_path <- function(year, ...) {
   service_use_cohorts_path <- get_file_path(

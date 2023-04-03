@@ -4,14 +4,15 @@
 #' social care demographic lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param data The extract to process
+#' @param data The extract to process.
+#' @param spd_path Path to the Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
+process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), write_to_disk = TRUE) {
   ## Deal with postcodes---------------------------------------
 
   # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
@@ -21,7 +22,7 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
   ## postcode type ##
-  valid_spd_postcodes <- readr::read_rds(get_spd_path()) %>%
+  valid_spd_postcodes <- readr::read_rds(spd_path) %>%
     dplyr::pull(.data$pc7)
 
 
@@ -35,13 +36,13 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
       submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
     ) %>%
     dplyr::mutate(
-      # use chi gender if avaliable
+      # use CHI sex if available
       gender = dplyr::if_else(
         is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
         .data$submitted_gender,
         .data$chi_gender_code
       ),
-      # use chi dob if avaliable
+      # Use CHI DoB if available
       dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
     ) %>%
     # format postcodes using `phsmethods`
@@ -59,12 +60,12 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     # remove dummy postcodes invalid postcodes missed by regex check
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
-      ~ dplyr::na_if(.x, .x %in% c(dummy_postcodes, non_existant_postcodes))
+      ~ dplyr::if_else(.x %in% c(dummy_postcodes, non_existant_postcodes), NA, .x)
     )) %>%
     # comparing with regex UK postcode
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
-      ~ dplyr::na_if(.x, !stringr::str_detect(.x, uk_pc_regexp))
+      ~ dplyr::if_else(stringr::str_detect(.x, uk_pc_regexp), .x, NA)
     )) %>%
     dplyr::select(
       "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi", "gender",
@@ -101,7 +102,7 @@ process_lookup_sc_demographics <- function(data, write_to_disk = TRUE) {
     sc_demog %>%
     # group by sending location and ID
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
-    # arrange so lastest submissions are last
+    # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,

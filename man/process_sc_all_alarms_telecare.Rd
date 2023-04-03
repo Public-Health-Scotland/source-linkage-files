@@ -6,15 +6,14 @@
 \usage{
 process_sc_all_alarms_telecare(
   data,
-  sc_demographics = NULL,
+  sc_demographics = get_sc_demog_lookup_path(),
   write_to_disk = TRUE
 )
 }
 \arguments{
 \item{data}{The extract to process}
 
-\item{sc_demographics}{The sc demographics lookup. Default set to NULL as
-we can pass this through data in the environment.}
+\item{sc_demographics}{The sc demographics lookup.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -53,6 +52,7 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},

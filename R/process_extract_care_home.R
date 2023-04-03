@@ -4,24 +4,19 @@
 #' (year specific) Care Home extract, it will return the final data
 #' but also write this out as rds.
 #'
-#' @param data The extract to process. (Optional) Can be passed through a data list or
-#' alternatively read the file from disk.
+#' @param file_path The extract to process - Read the file from disk.
 #' @param year The year to process, in FY format.
-#' @param client_lookup The client lookup extract (Optional) Can be passed through a data list
-#' or alternatively read the file from disk.
+#' @param client_lookup_path The client lookup extract - Read the file from disk.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, write_to_disk = TRUE) {
-  # Include is.null for passing the processed ALL care home data through a list
-  if (is.null(data)) {
-    # TODO - use RDS version, ALL ch data still WIP
-    data <- haven::read_sav(get_sc_ch_episodes_path(update = latest_update(), ext = "zsav"))
-  }
-
+process_extract_care_home <- function(file_path = get_sc_ch_episodes_path(update = latest_update(), ext = "zsav"),
+                                      year,
+                                      client_lookup_path = get_source_extract_path(year, type = "Client"),
+                                      write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -29,9 +24,10 @@ process_extract_care_home <- function(data = NULL, year, client_lookup = NULL, w
   year <- check_year_format(year)
 
   # Read client lookup
-  if (is.null(client_lookup)) {
-    client_lookup <- readr::read_rds(get_source_extract_path(year, type = "Client"))
-  }
+  client_lookup <- readr::read_rds(client_lookup_path)
+
+  # TODO - use RDS version, ALL ch data still WIP
+  data <- haven::read_sav(file_path)
 
   # Selections for financial year------------------------------------
 

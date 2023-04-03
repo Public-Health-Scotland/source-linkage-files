@@ -32,7 +32,7 @@ process_extract_ooh_diagnosis <- function(data, year) {
     dplyr::mutate(
       # Replace question marks with dot
       readcode = stringr::str_replace_all(.data$readcode, "\\?", "\\.") %>%
-        # Pad with dots up to 5 charaters
+        # Pad with dots up to 5 characters
         stringr::str_pad(5L, "right", ".")
     ) %>%
     # Join diagnosis to readcode lookup
@@ -50,8 +50,10 @@ process_extract_ooh_diagnosis <- function(data, year) {
     ) %>%
     # Replace  the description with the true description from the Readcode Lookup.
     dplyr::mutate(
-      description = dplyr::if_else(is.na(.data$full_match_1) & !is.na(.data$true_description),
-        .data$true_description, .data$description
+      description = dplyr::if_else(
+        is.na(.data$full_match_1) & !is.na(.data$true_description),
+        .data$true_description,
+        .data$description
       )
     ) %>%
     # Join to readcode lookup again to check
@@ -81,7 +83,11 @@ process_extract_ooh_diagnosis <- function(data, year) {
 
   # See how the code above performed
   diagnosis_readcodes %>%
-    dplyr::count(.data$full_match_1, .data$full_match_2, .data$full_match_final)
+    dplyr::count(
+      .data$full_match_1,
+      .data$full_match_2,
+      .data$full_match_final
+    )
 
   # Check any readcodes which are still not matching the lookup
   readcodes_not_matched <- diagnosis_readcodes %>%
@@ -91,18 +97,28 @@ process_extract_ooh_diagnosis <- function(data, year) {
   readcodes_not_matched
 
   # Give an error if any new 'bad' readcodes come up.
-  unrecognised_but_ok_codes <- c("@1JX.", "@1JXz", "@43jS", "@65PW", "@8CA.", "@8CAK", "@A795")
+  unrecognised_but_ok_codes <- c(
+    "@1JX.",
+    "@1JXz",
+    "@43jS",
+    "@65PW",
+    "@8CA.",
+    "@8CAK",
+    "@A795"
+  )
 
   new_bad_codes <- readcodes_not_matched %>%
     dplyr::filter(!(.data$readcode %in% unrecognised_but_ok_codes))
 
   if (nrow(new_bad_codes) != 0L) {
-    cli::cli_abort(c("New unrecognised readcodes",
-      "i" = "There {?is/are} {nrow(new_bad_codes)} new unrecognised readcode{?s} in the data.",
-      " " = "Check the {cli::qty(nrow(new_bad_codes))} code{?s} then either fix, or add {?it/them} to the {.var unrecognised_but_ok_codes} vector",
-      "",
-      ">" = "New bad {cli::qty(nrow(new_bad_codes))} code{?s}: {new_bad_codes$readcode}"
-    ))
+    cli::cli_abort(
+      c("New unrecognised readcodes",
+        "i" = "There {?is/are} {nrow(new_bad_codes)} new unrecognised readcode{?s} in the data.",
+        " " = "Check the {cli::qty(nrow(new_bad_codes))} code{?s} then either fix, or add {?it/them} to the {.var unrecognised_but_ok_codes} vector",
+        "",
+        ">" = "New bad {cli::qty(nrow(new_bad_codes))} code{?s}: {new_bad_codes$readcode}"
+      )
+    )
   }
 
 

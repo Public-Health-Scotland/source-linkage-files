@@ -18,8 +18,8 @@
 ^missing_derived_hours\.html$
 ^All_years$
 ^Make_R_files$
-^Production_scripts$
 ^R_development_SOP\.md$
 ^codecov\.yml$
 ^Rmarkdown$
 ^\.lintr$
+^_targets\.R$

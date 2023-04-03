@@ -31,7 +31,11 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     # assume that if it starts with a letter it's an English practice and so recode to 99995
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # use the CHI postcode and if that is blank, then use the epi postcode.
-    dplyr::mutate(postcode = dplyr::if_else(!is.na(.data$postcode_chi), .data$postcode_chi, .data$postcode_epi)) %>%
+    dplyr::mutate(postcode = dplyr::if_else(
+      !is.na(.data$postcode_chi),
+      .data$postcode_chi,
+      .data$postcode_epi
+    )) %>%
     ## recode cypher HB codes ##
     dplyr::mutate(dplyr::across(c("hbtreatcode", "hbrescode"), ~ dplyr::case_when(
       .x == "A" ~ "S08000015",
@@ -218,8 +222,17 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   # Join data--------------------------------------------
 
   matched_ae_data <- outfile %>%
-    dplyr::left_join(ae_cup_clean, by = c("record_keydate1", "keyTime1", "case_ref_number")) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1, .data$keyTime1, .data$record_keydate2, .data$keyTime2)
+    dplyr::left_join(
+      ae_cup_clean,
+      by = c("record_keydate1", "keyTime1", "case_ref_number")
+    ) %>%
+    dplyr::arrange(
+      .data$chi,
+      .data$record_keydate1,
+      .data$keyTime1,
+      .data$record_keydate2,
+      .data$keyTime2
+    )
 
 
   # Save outfile----------------------------------------

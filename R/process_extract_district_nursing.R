@@ -19,6 +19,11 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # If data is available in the FY then run processing.
+  # If no data has passed through, return NULL.
+  if (is.null(data)) {
+    return(NULL)
+  }
   # Data Cleaning  ---------------------------------------
   dn_clean <- data %>%
     # filter for valid chi only
@@ -37,18 +42,24 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
 
   # Recode HB codes to HB2019 so they match the cost lookup
   dn_costs <- dn_clean %>%
-    dplyr::mutate(hbtreatcode = dplyr::recode(.data$hbtreatcode,
-      "S08000018" = "S08000029",
-      "S08000027" = "S08000030",
-      "S08000021" = "S08000031",
-      "S08000023" = "S08000032"
-    )) %>%
+    dplyr::mutate(
+      hbtreatcode = dplyr::case_match(
+        .data$hbtreatcode,
+        "S08000018" ~ "S08000029",
+        "S08000027" ~ "S08000030",
+        "S08000021" ~ "S08000031",
+        "S08000023" ~ "S08000032",
+        .default = .data$hbtreatcode
+      )
+    ) %>%
     # match files with DN Cost Lookup
     dplyr::left_join(readr::read_rds(get_dn_costs_path()),
       by = c("hbtreatcode", "year")
     ) %>%
     # costs are rough estimates we round them to the nearest pound
-    dplyr::mutate(cost_total_net = janitor::round_half_up(.data$cost_total_net)) %>%
+    dplyr::mutate(
+      cost_total_net = janitor::round_half_up(.data$cost_total_net)
+    ) %>%
     # Create monthly cost vars
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
 
@@ -58,10 +69,16 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   care_marker <- dn_costs %>%
     dplyr::group_by(.data$chi) %>%
     dplyr::arrange(.data$record_keydate1, .by_group = TRUE) %>%
-    # Create ccm (Contiuous Care Marker) which will group contacts which occur less
+    # Create ccm (Continuous Care Marker) which will group contacts which occur less
     # than 7 days apart
-    dplyr::mutate(ccm = pmax((.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L, FALSE, na.rm = TRUE) %>%
-      cumsum())
+    dplyr::mutate(
+      ccm = pmax(
+        (.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L,
+        FALSE,
+        na.rm = TRUE
+      ) %>%
+        cumsum()
+    )
 
   dn_episodes <- care_marker %>%
     dplyr::group_by(.data$year, .data$chi, .data$ccm) %>%

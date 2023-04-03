@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_lookup_gpprac.R
 \name{process_tests_lookup_gpprac}
 \alias{process_tests_lookup_gpprac}
-\title{Process gpprac Lookup tests}
+\title{Process GP (gpprac) Lookup tests}
 \usage{
 process_tests_lookup_gpprac()
 }

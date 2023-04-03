@@ -19,7 +19,7 @@ process_extract_ooh_consultations <- function(data, year) {
   # Consultations Data ---------------------------------
   ## Data Cleaning
 
-  fnc_consulation_types <- c(
+  fnc_consultation_types <- c(
     "ED APPOINTMENT",
     "ED TELEPHONE ASSESSMENT",
     "ED TO BOOK",
@@ -52,7 +52,7 @@ process_extract_ooh_consultations <- function(data, year) {
     # Filter to episodes with any time in the given financial year.
     dplyr::filter(is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)) %>%
     # Filter out Flow navigation center data
-    dplyr::filter(!(.data$consultation_type_unmapped %in% fnc_consulation_types)) %>%
+    dplyr::filter(!(.data$consultation_type_unmapped %in% fnc_consultation_types)) %>%
     dplyr::as_tibble()
 
 

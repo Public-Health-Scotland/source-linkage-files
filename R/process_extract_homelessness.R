@@ -20,11 +20,20 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   year <- check_year_format(year)
 
   # Add some variables ------------------------------------------------------
+
+  # If data is available in the FY then run processing.
+  # If no data has passed through, return NULL.
+  if (is.null(data)) {
+    return(NULL)
+  }
   data <- data %>%
     dplyr::mutate(
       year = as.character(year),
       recid = "HL1",
-      smrtype = add_smr_type(recid = .data$recid, main_applicant_flag = .data$main_applicant_flag)
+      smrtype = add_smr_type(
+        recid = .data$recid,
+        main_applicant_flag = .data$main_applicant_flag
+      )
     ) %>%
     dplyr::mutate(
       dplyr::across(
@@ -32,16 +41,56 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
         tidyr::replace_na, 9L
       ),
       hl1_reason_ftm = paste0(
-        dplyr::if_else(.data$financial_difficulties_debt_unemployment == 1L, "F", ""),
-        dplyr::if_else(.data$physical_health_reasons == 1L, "Ph", ""),
-        dplyr::if_else(.data$mental_health_reasons == 1L, "M", ""),
-        dplyr::if_else(.data$unmet_need_for_support_from_housing_social_work_health_services == 1L, "U", ""),
-        dplyr::if_else(.data$lack_of_support_from_friends_family == 1L, "L", ""),
-        dplyr::if_else(.data$difficulties_managing_on_own == 1L, "O", ""),
-        dplyr::if_else(.data$drug_alcohol_dependency == 1L, "D", ""),
-        dplyr::if_else(.data$criminal_anti_social_behaviour == 1L, "C", ""),
-        dplyr::if_else(.data$not_to_do_with_applicant_household == 1L, "N", ""),
-        dplyr::if_else(.data$refused == 1L, "R", "")
+        dplyr::if_else(
+          .data$financial_difficulties_debt_unemployment == 1L,
+          "F",
+          ""
+        ),
+        dplyr::if_else(
+          .data$physical_health_reasons == 1L,
+          "Ph",
+          ""
+        ),
+        dplyr::if_else(
+          .data$mental_health_reasons == 1L,
+          "M",
+          ""
+        ),
+        dplyr::if_else(
+          .data$unmet_need_for_support_from_housing_social_work_health_services == 1L,
+          "U",
+          ""
+        ),
+        dplyr::if_else(
+          .data$lack_of_support_from_friends_family == 1L,
+          "L",
+          ""
+        ),
+        dplyr::if_else(
+          .data$difficulties_managing_on_own == 1L,
+          "O",
+          ""
+        ),
+        dplyr::if_else(
+          .data$drug_alcohol_dependency == 1L,
+          "D",
+          ""
+        ),
+        dplyr::if_else(
+          .data$criminal_anti_social_behaviour == 1L,
+          "C",
+          ""
+        ),
+        dplyr::if_else(
+          .data$not_to_do_with_applicant_household == 1L,
+          "N",
+          ""
+        ),
+        dplyr::if_else(
+          .data$refused == 1L,
+          "R",
+          ""
+        )
       )
     )
 
@@ -63,13 +112,16 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   # For now I've just created the file elsewhere to be picked up here!
 
   # TODO make the la_code_lookup a testable function
-  la_code_lookup <- phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5") %>%
+  la_code_lookup <- phsopendata::get_resource(
+    "967937c4-8d67-4f39-974f-fd58c4acfda5"
+  ) %>%
     dplyr::distinct(.data$CA, .data$CAName) %>%
     dplyr::mutate(
-      sending_local_authority_name = dplyr::recode(
+      sending_local_authority_name = dplyr::case_match(
         .data$CAName,
-        "City of Edinburgh" = "Edinburgh",
-        "Na h-Eileanan Siar" = "Eilean Siar"
+        "City of Edinburgh" ~ "Edinburgh",
+        "Na h-Eileanan Siar" ~ "Eilean Siar",
+        .default = .data$CAName
       ) %>%
         stringr::str_replace("\\sand\\s", " \\& ")
     )
@@ -105,10 +157,12 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
       dplyr::left_join(la_code_lookup,
         by = c("sending_local_authority_code_9" = "CA")
       )
-    cli::cli_alert_info("There is no completeness data for {.val {year}}, so the homelessness data won't be filtered.")
+    cli::cli_alert_info(
+      "There is no completeness data for {.val {year}}, so the homelessness data won't be filtered."
+    )
   }
 
-  # dplyr::rename and select ---------------------------------------------------------
+  # dplyr::rename and select --------------------------------------------------
   # TODO - Include person_id (from client_id)
   final_data <- filtered_data %>%
     # Filter out duplicates
@@ -134,12 +188,29 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
   # Changes only required for SPSS ------------------------------------------
   final_data <- final_data %>%
     tidyr::replace_na(list(chi = "")) %>%
-    dplyr::mutate(dplyr::across(c("record_keydate1", "record_keydate2"), convert_date_to_numeric)) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::mutate(
-      postcode = stringr::str_pad(.data$postcode, width = 8L, side = "right"),
+      dplyr::across(
+        c("record_keydate1", "record_keydate2"),
+        convert_date_to_numeric
+      )
+    ) %>%
+    dplyr::arrange(
+      .data$chi,
+      .data$record_keydate1,
+      .data$record_keydate2
+    ) %>%
+    dplyr::mutate(
+      postcode = stringr::str_pad(
+        .data$postcode,
+        width = 8L,
+        side = "right"
+      ),
       smrtype = stringr::str_pad(.data$smrtype, width = 10L, side = "right"),
-      hl1_application_ref = stringr::str_pad(.data$hl1_application_ref, width = 15L, side = "right")
+      hl1_application_ref = stringr::str_pad(
+        .data$hl1_application_ref,
+        width = 15L,
+        side = "right"
+      )
     )
 
   # Write data --------------------------------------------------------------

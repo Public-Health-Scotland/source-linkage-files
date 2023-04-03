@@ -41,7 +41,7 @@ read_extract_ae <- function(year, file_path = get_boxi_extract_path(year = year,
       `Total Net Costs` = col_double(),
       `Age at Midpoint of Financial Year` = col_double(),
       `Case Reference Number` = col_character(),
-      `Significant Facility Code` = col_double()
+      `Significant Facility Code` = col_character()
     )
   ) %>%
     # rename variables

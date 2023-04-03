@@ -4,18 +4,22 @@
 #' postcode lookup, it will return the final data
 #' but also write this out as a zsav and rds.
 #'
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @param simd_path Path to SIMD lookup.
+#' @param locality_path Path to locality lookup.
+#'
+#' @inheritParams process_lookup_gpprac
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-
-process_lookup_postcode <- function(write_to_disk = TRUE) {
+process_lookup_postcode <- function(spd_path = get_spd_path(),
+                                    simd_path = get_simd_path(),
+                                    locality_path = get_locality_path(),
+                                    write_to_disk = TRUE) {
   # Read lookup files -------------------------------------------------------
 
   # postcode data
-  spd_file <- readr::read_rds(get_spd_path()) %>%
+  spd_file <- readr::read_rds(spd_path) %>%
     dplyr::select(
       .data$pc7,
       tidyselect::matches("datazone\\d{4}$"),
@@ -30,7 +34,7 @@ process_lookup_postcode <- function(write_to_disk = TRUE) {
     dplyr::mutate(lca = convert_ca_to_lca(.data$ca2019))
 
   # simd data
-  simd_file <- readr::read_rds(get_simd_path()) %>%
+  simd_file <- readr::read_rds(simd_path) %>%
     dplyr::select(
       .data$pc7,
       tidyselect::matches("simd\\d{4}.?.?_rank"),
@@ -43,12 +47,14 @@ process_lookup_postcode <- function(write_to_disk = TRUE) {
     )
 
   # locality
-  locality_file <- readr::read_rds(get_locality_path()) %>%
+  locality_file <- readr::read_rds(locality_path) %>%
     dplyr::select(
       locality = .data$hscp_locality,
       tidyselect::matches("datazone\\d{4}$")
     ) %>%
-    dplyr::mutate(locality = tidyr::replace_na(.data$locality, "No Locality Information"))
+    dplyr::mutate(
+      locality = tidyr::replace_na(.data$locality, "No Locality Information")
+    )
 
 
   # Join data together  -----------------------------------------------------

@@ -19,4 +19,8 @@ Add NSU cohort to working file
 }
 \seealso{
 \code{\link[=get_nsu_path]{get_nsu_path()}}
+
+Other episode file: 
+\code{\link{add_ppa_flag}()}
 }
+\concept{episode file}

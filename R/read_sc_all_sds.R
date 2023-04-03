@@ -4,6 +4,8 @@
 #'
 #' @return an extract of the data as a [tibble][tibble::tibble-package].
 #'
+#' @export
+#'
 read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   # Read in data---------------------------------------
   sds_full_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "sds_snapshot")) %>%

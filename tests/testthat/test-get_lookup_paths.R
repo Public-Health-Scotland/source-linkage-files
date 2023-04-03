@@ -42,7 +42,10 @@ test_that("SIMD file path returns as expected", {
     expect_equal(fs::path_ext(get_simd_path()), "rds")
     expect_equal(fs::path_ext(get_simd_path(ext = "zsav")), "zsav")
 
-    expect_match(get_simd_path(), "postcode_\\d\\d\\d\\d_\\d_simd\\d\\d\\d\\d.*?")
+    expect_match(
+      get_simd_path(),
+      "postcode_\\d\\d\\d\\d_\\d_simd\\d\\d\\d\\d.*?"
+    )
 
     expect_true(fs::file_exists(get_simd_path()))
     expect_true(fs::file_exists(get_simd_path(ext = "zsav")))

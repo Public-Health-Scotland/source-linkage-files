@@ -4,9 +4,20 @@
 \alias{process_lookup_postcode}
 \title{Process the SLF postcode lookup}
 \usage{
-process_lookup_postcode(write_to_disk = TRUE)
+process_lookup_postcode(
+  spd_path = get_spd_path(),
+  simd_path = get_simd_path(),
+  locality_path = get_locality_path(),
+  write_to_disk = TRUE
+)
 }
 \arguments{
+\item{spd_path}{Path to Scottish Postcode Directory.#'}
+
+\item{simd_path}{Path to SIMD lookup.}
+
+\item{locality_path}{Path to locality lookup.}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
@@ -44,6 +55,7 @@ Other process extracts:
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
 \code{\link{process_sc_all_alarms_telecare}()},
+\code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},

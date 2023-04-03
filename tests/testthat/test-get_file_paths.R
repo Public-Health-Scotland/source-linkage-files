@@ -1,6 +1,11 @@
 skip_on_ci()
 
-slf_updates_dir <- fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates")
+slf_updates_dir <- fs::path(
+  "/",
+  "conf",
+  "sourcedev",
+  "Source_Linkage_File_Updates"
+)
 
 test_that("main SLF directory exists", {
   slf_dir_path <- get_slf_dir()

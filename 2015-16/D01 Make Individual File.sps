@@ -300,7 +300,7 @@ Else if (recid = "OoH").
     Else if smrtype = "OOH-C19Adv".
         Compute ooh_covid_advice = 1.
     Else if smrtype = "OOH-C19Ass".
-        Compute ooh_covid_assesment = 1.
+        Compute ooh_covid_assessment = 1.
     Else if smrtype = "OOH-C19Oth".
         Compute ooh_covid_other = 1.
     End If.
@@ -550,8 +550,8 @@ aggregate outfile = *
     /AE_attendances AE_cost = sum(AE_attendances AE_cost)
     /PIS_paid_items PIS_cost = sum(no_paid_items PIS_cost)
     /OoH_cases = sum(unique_ooh_case)
-    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assesment ooh_covid_other =
-    sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assesment ooh_covid_other)
+    /OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assessment ooh_covid_other =
+    sum(OoH_homeV OoH_advice OoH_DN OoH_NHS24 OoH_other OoH_PCC ooh_covid_advice ooh_covid_assessment ooh_covid_other)
     /OoH_consultation_time OoH_cost = sum(OoH_consultation_time OoH_cost)
     /DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays
     = sum(DD_NonCode9_episodes DD_NonCode9_beddays DD_Code9_episodes DD_Code9_beddays)

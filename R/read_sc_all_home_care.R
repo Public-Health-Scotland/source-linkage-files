@@ -4,6 +4,8 @@
 #'
 #' @return an extract of the data as a [tibble][tibble::tibble-package].
 #'
+#' @export
+#'
 read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   # Read in data---------------------------------------
 
