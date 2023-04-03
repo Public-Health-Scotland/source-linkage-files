@@ -12,9 +12,11 @@ tar_option_set(
     future = tar_resources_future(plan = future::multisession)
   ),
   error = "continue",
-  storage = "main", # default option
+  storage = "worker",
   memory = "persistent" # default option
 )
+
+years_to_run <- c("1920")
 
 list(
   tar_target(write_to_disk, FALSE, format = "rds"),
@@ -24,13 +26,21 @@ list(
   tar_target(locality_data_path, get_locality_path(), format = "file"),
   tar_target(gpprac_data_path, get_gpprac_opendata()),
   tar_target(gpprac_ref_data_path, get_gpprac_ref_path(), format = "file"),
-  tar_target(chi_deaths_data_path, get_it_deaths_path(), format = "file"),
-  tar_target(ltc_data_path, get_it_ltc_path(), format = "file"),
-  tar_target(dd_data_path, get_dd_path(), format = "file"),
+  tar_file_read(chi_deaths_data,
+                command = get_it_deaths_path(),
+                read = read_lookup_chi_deaths(!!.x)),
+  tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
+  tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
+  tar_target(slf_ch_name_lookup_path, get_slf_ch_name_lookup_path(), format = "file"),
   ## Process Lookups ##
   tar_target(
+    sc_demog_data,
+    read_lookup_sc_demographics()
+  ),
+  tar_target(
     sc_demog_lookup,
-    process_lookup_sc_demographics(read_lookup_sc_demographics(),
+    process_lookup_sc_demographics(
+      sc_demog_data,
       write_to_disk = write_to_disk
     )
   ),
@@ -54,12 +64,11 @@ list(
   ),
   tar_target(
     source_chi_deaths_lookup,
-    process_lookup_chi_deaths(read_lookup_chi_deaths(chi_deaths_data_path),
+    process_lookup_chi_deaths(
+      data = chi_deaths_data,
       write_to_disk = write_to_disk
     )
   ),
-  tar_target(ltc_data, read_lookup_ltc(ltc_data_path)),
-  tar_target(dd_data, read_extract_delayed_discharges(dd_data_path)),
   ## Cost Lookups ##
   tar_target(ch_costs, process_costs_ch_rmd()),
   tar_target(hc_costs, process_costs_hc_rmd()),
@@ -112,57 +121,57 @@ list(
     format = "file"
   ),
   tarchetypes::tar_map(
-    list(year = c(1920)),
+    list(year = years_to_run),
     ### target data extracts ###
-    tar_target(
-      cmh_data_path,
+    tar_file_read(
+      cmh_data,
       get_boxi_extract_path(year, type = "CMH"),
-      format = "file"
+      read_extract_cmh(year, !!.x)
     ),
-    tar_target(
-      dn_data_path,
+    tar_file_read(
+      dn_data,
       get_boxi_extract_path(year, type = "DN"),
-      format = "file"
+      read_extract_district_nursing(year, !!.x)
     ),
-    tar_target(
-      homelessness_data_path,
+    tar_file_read(
+      homelessness_data,
       get_boxi_extract_path(year, type = "Homelessness"),
-      format = "file"
+      read_extract_homelessness(year, !!.x)
     ),
-    tar_target(
-      acute_data_path,
+    tar_file_read(
+      acute_data,
       get_boxi_extract_path(year, type = "Acute"),
-      format = "file"
+      read_extract_acute(year, !!.x)
     ),
-    tar_target(
-      ae_data_path,
+    tar_file_read(
+      ae_data,
       get_boxi_extract_path(year, type = "AE"),
-      format = "file"
+      read_extract_ae(year, !!.x)
     ),
-    tar_target(
-      maternity_data_path,
+    tar_file_read(
+      maternity_data,
       get_boxi_extract_path(year, type = "Maternity"),
-      format = "file"
+      read_extract_maternity(year, !!.x)
     ),
-    tar_target(
-      mental_health_data_path,
+    tar_file_read(
+      mental_health_data,
       get_boxi_extract_path(year, type = "MH"),
-      format = "file"
+      read_extract_mental_health(year, !!.x)
     ),
-    tar_target(
-      nrs_deaths_data_path,
+    tar_file_read(
+      nrs_deaths_data,
       get_boxi_extract_path(year, type = "Deaths"),
-      format = "file"
+      read_extract_nrs_deaths(year, !!.x)
     ),
-    tar_target(
-      pis_data_path,
+    tar_file_read(
+      prescribing_data,
       get_it_prescribing_path(year),
-      format = "file"
+      read_extract_prescribing(year, !!.x)
     ),
-    tar_target(
-      outpatients_data_path,
+    tar_file_read(
+      outpatients_data,
       get_boxi_extract_path(year, type = "Outpatient"),
-      format = "file"
+      read_extract_outpatients(year, !!.x)
     ),
     tar_target(
       diagnosis_data_path,
@@ -179,9 +188,17 @@ list(
       get_boxi_extract_path(year = year, type = "GP_OoH-c"),
       format = "file"
     ),
+    tar_target(ooh_data,
+               read_extract_gp_ooh(
+                 year,
+                 diagnosis_data_path,
+                 outcomes_data_path,
+                 consultations_data_path
+               ),
+               format = "rds"),
     ### Target source processed extracts ###
     tar_target(source_cmh_extract, process_extract_cmh(
-      read_extract_cmh(year, cmh_data_path),
+      cmh_data,
       year,
       write_to_disk = write_to_disk
     )),
@@ -191,47 +208,47 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(source_dn_extract, process_extract_district_nursing(
-      read_extract_district_nursing(year, dn_data_path),
+      dn_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(source_homelessness_extract, process_extract_homelessness(
-      read_extract_homelessness(year, homelessness_data_path),
+      homelessness_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(acute_source_extract, process_extract_acute(
-      read_extract_acute(year, acute_data_path),
+      acute_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(ae_source_extract, process_extract_ae(
-      read_extract_ae(year, ae_data_path),
+      ae_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(maternity_source_extract, process_extract_maternity(
-      read_extract_maternity(year, maternity_data_path),
+      maternity_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(mental_health_source_extract, process_extract_mental_health(
-      read_extract_mental_health(year, mental_health_data_path),
+      mental_health_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(nrs_deaths_source_extract, process_extract_nrs_deaths(
-      read_extract_nrs_deaths(year, nrs_deaths_data_path),
+      nrs_deaths_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(outpatients_source_extract, process_extract_outpatients(
-      read_extract_outpatients(year, outpatients_data_path),
+      outpatients_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(pis_source_extract, process_extract_prescribing(
-      read_extract_prescribing(year, pis_data_path),
+      prescribing_data,
       year,
       write_to_disk = write_to_disk
     )),
@@ -240,13 +257,9 @@ list(
       year,
       write_to_disk = write_to_disk
     )),
-    tar_target(ooh_source_extract, process_extract_gp_ooh(year,
-      read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
-      ),
+    tar_target(ooh_source_extract, process_extract_gp_ooh(
+      year,
+      ooh_data,
       write_to_disk = write_to_disk
     )),
     ### Target social care data ###
@@ -256,8 +269,10 @@ list(
       format = "file"
     ),
     ### Target process year specific social care ###
-    tar_target(sc_client, process_lookup_sc_client(
-      read_lookup_sc_client(fyyear = year),
+    tar_target(sc_client_data,
+               read_lookup_sc_client(fyyear = year)),
+    tar_target(sc_client_lookup, process_lookup_sc_client(
+      sc_client_data,
       year,
       write_to_disk = write_to_disk
     )),
