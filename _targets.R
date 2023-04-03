@@ -1,6 +1,7 @@
 # _targets.R file
 library(targets)
 library(tarchetypes)
+library(future.callr)
 
 tar_option_set(
   imports = "createslf",
@@ -9,7 +10,7 @@ tar_option_set(
   format = "parquet",
   resources = tar_resources(
     parquet = tar_resources_parquet(compression = "zstd"),
-    future = tar_resources_future(plan = future::multisession)
+    future = tar_resources_future(plan = callr)
   ),
   error = "continue",
   storage = "worker",
