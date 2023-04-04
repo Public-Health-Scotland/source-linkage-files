@@ -20,7 +20,7 @@ create_monthly_beddays <- function(data,
                                    year,
                                    admission_date,
                                    discharge_date,
-                                   count_last = TRUE) {
+                                   count_last = FALSE) {
   # Extract date vectors for checking
   admission_dates_vector <- dplyr::pull(data, {{ admission_date }})
   discharge_dates_vector <- dplyr::pull(data, {{ discharge_date }})
