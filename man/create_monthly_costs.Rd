@@ -25,7 +25,8 @@ The data with additional variables \code{apr_cost} to \code{mar_cost}
 that assigns the cost to each month
 }
 \description{
-Assign monthly costs using a cost variable and vector containing monthly beddays
+Assign monthly costs using a cost variable
+and vector containing monthly beddays.
 }
 \seealso{
 create_monthly_beddays
