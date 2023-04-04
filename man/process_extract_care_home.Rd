@@ -5,7 +5,7 @@
 \title{Process the (year specific) Care Home extract}
 \usage{
 process_extract_care_home(
-  file_path = get_sc_ch_episodes_path(update = latest_update(), ext = "zsav"),
+  file_path = get_sc_ch_episodes_path(),
   year,
   client_lookup_path = get_source_extract_path(year, type = "Client"),
   write_to_disk = TRUE
