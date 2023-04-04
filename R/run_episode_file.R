@@ -33,7 +33,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
           .data$recid %in% c("01B", "04B", "GLS", "02B") &
           .data$cij_admtype %in% c("40", "48", "99") ~ 9,
         .data$cij_admtype %in% c("18") ~ 0,
-        TRUE ~ .data$cij_pattype_code
+        .default = .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
       cij_pattype = dplyr::case_when(
