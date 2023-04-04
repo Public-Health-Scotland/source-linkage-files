@@ -23,6 +23,7 @@ datazone
 dateformat
 dateop
 datetime
+daycase
 dbconnect
 dbplyr
 demog
