@@ -13,10 +13,11 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_care_home <- function(file_path = get_sc_ch_episodes_path(update = latest_update(), ext = "zsav"),
-                                      year,
-                                      client_lookup_path = get_source_extract_path(year, type = "Client"),
-                                      write_to_disk = TRUE) {
+process_extract_care_home <- function(
+    file_path = get_sc_ch_episodes_path(),
+    year,
+    client_lookup_path = get_source_extract_path(year, type = "Client"),
+    write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -26,8 +27,7 @@ process_extract_care_home <- function(file_path = get_sc_ch_episodes_path(update
   # Read client lookup
   client_lookup <- readr::read_rds(client_lookup_path)
 
-  # TODO - use RDS version, ALL ch data still WIP
-  data <- haven::read_sav(file_path)
+  data <- read_file(file_path)
 
   # Selections for financial year------------------------------------
 
