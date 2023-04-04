@@ -9,7 +9,7 @@ create_monthly_beddays(
   year,
   admission_date,
   discharge_date,
-  count_last = TRUE
+  count_last = FALSE
 )
 }
 \arguments{
