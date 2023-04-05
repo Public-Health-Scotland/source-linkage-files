@@ -24,9 +24,11 @@ Other file path functions:
 \code{\link{get_dd_path}()},
 \code{\link{get_demographic_cohorts_path}()},
 \code{\link{get_file_path}()},
+\code{\link{get_homlessness_completeness_path}()},
 \code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_readcode_lookup_path}()},
-\code{\link{get_service_use_cohorts_path}()}
+\code{\link{get_service_use_cohorts_path}()},
+\code{\link{get_sg_homelessness_pub_path}()}
 }
 \concept{file path functions}
