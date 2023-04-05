@@ -52,7 +52,7 @@ appropriate permissions.
 Other file path functions: 
 \code{\link{get_dd_path}()},
 \code{\link{get_demographic_cohorts_path}()},
-\code{\link{get_homlessness_completeness_path}()},
+\code{\link{get_homelessness_completeness_path}()},
 \code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},

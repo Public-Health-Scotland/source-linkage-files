@@ -37,7 +37,7 @@ produce_homelessness_completeness <- function(
       .groups = "drop"
     )
 
-  sg_all_assesments_annual <-
+  sg_all_assessments_annual <-
     openxlsx::read.xlsx(
       sg_pub_path,
       sheet = "Table 1",
@@ -62,24 +62,24 @@ produce_homelessness_completeness <- function(
         fin_year = as.integer,
         fin_quarter = as.integer
       ),
-      values_to = "sg_all_assesments",
-      values_ptypes = list(sg_all_assesments = integer())
+      values_to = "sg_all_assessments",
+      values_ptypes = list(sg_all_assessments = integer())
     ) %>%
     dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
     dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
-    dplyr::summarise(dplyr::across("sg_all_assesments", sum), .groups = "drop")
+    dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
 
 
   annual_comparison <- dplyr::left_join(
     application_counts,
-    sg_all_assesments_annual,
+    sg_all_assessments_annual,
     by = dplyr::join_by(
       "sending_local_authority_name" == "CAName",
       "year" == "sg_year"
     )
   ) %>%
     dplyr::mutate(
-      pct_complete_all = .data[["applications_boxi"]] / .data[["sg_all_assesments"]]
+      pct_complete_all = .data[["applications_boxi"]] / .data[["sg_all_assessments"]]
     )
 
   if (anyNA(annual_comparison[["sg_year"]])) {
@@ -96,7 +96,7 @@ produce_homelessness_completeness <- function(
 
   write_rds(
     annual_comparison,
-    get_homlessness_completeness_path(
+    get_homelessness_completeness_path(
       year = year,
       update = update,
       check_mode = "write"
@@ -162,7 +162,7 @@ get_sg_homelessness_pub_path <- function(...) {
 #' @export
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
-get_homlessness_completeness_path <- function(
+get_homelessness_completeness_path <- function(
     year,
     update = latest_update(),
     ...) {
