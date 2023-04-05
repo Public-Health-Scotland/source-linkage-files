@@ -9,8 +9,6 @@
 #' @param slf_deaths_path The path to slf deaths lookup.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
-#' @param spd_path Path the Scottish Postcode Directory.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
