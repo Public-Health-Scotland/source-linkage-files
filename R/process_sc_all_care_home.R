@@ -7,6 +7,8 @@
 #' @param data The extract to process
 #' @param sc_demographics The sc demographics lookup.
 #' @param slf_deaths_path The path to slf deaths lookup.
+#' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
+#' @param spd_path Path the Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'

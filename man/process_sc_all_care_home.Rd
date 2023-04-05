@@ -20,6 +20,10 @@ process_sc_all_care_home(
 
 \item{slf_deaths_path}{The path to slf deaths lookup.}
 
+\item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
+
+\item{spd_path}{Path the Scottish Postcode Directory.}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
