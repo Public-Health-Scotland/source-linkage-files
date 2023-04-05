@@ -37,9 +37,12 @@ dsn
 dtplyr
 DVPROD
 dvprod
+Eilean
+Eileanan
 envir
 fileext
 fst
+ftm
 fyear
 fyyear
 geogs
@@ -60,6 +63,7 @@ itle
 jennifer
 keydate
 keyring
+los
 ltc
 lubridate
 magrittr
@@ -68,6 +72,7 @@ mcmahon
 MMMYY
 mpat
 multistaff
+nhs
 nhshosp
 nrs
 nsu
@@ -86,6 +91,7 @@ postcodes
 PPAs
 prac
 praccode
+ptypes
 purrr
 quickstart
 rds
@@ -102,6 +108,7 @@ rstudioapi
 Rtype
 seealso
 selfharm
+Siar
 sigfac
 simd
 slf
@@ -128,6 +135,7 @@ tidyselect
 uid
 ungroup
 updown
+upi
 xlsx
 yearstay
 zihao
