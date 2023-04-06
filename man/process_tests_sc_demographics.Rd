@@ -4,7 +4,7 @@
 \alias{process_tests_sc_demographics}
 \title{Process sc demographics tests}
 \usage{
-process_tests_sc_demographics()
+process_tests_sc_demographics(data)
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
