@@ -140,7 +140,7 @@ process_sc_all_care_home <- function(
       .data[["split_episode_counter"]]
     ) %>%
     dplyr::summarise(
-      sc_latest_submission = dplyr::last("period"),
+      sc_latest_submission = dplyr::last(.data[["period"]]),
       dplyr::across(
         c(
           "ch_discharge_date",
