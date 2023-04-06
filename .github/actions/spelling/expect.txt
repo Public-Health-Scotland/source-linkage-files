@@ -6,6 +6,7 @@ bedday
 beddays
 birthtime
 boxi
+carehome
 cattend
 cij
 Classificat
@@ -60,6 +61,7 @@ itle
 jennifer
 keydate
 keyring
+los
 ltc
 lubridate
 magrittr
@@ -69,6 +71,7 @@ MMMYY
 mpat
 multistaff
 nhshosp
+NRS
 nrs
 nsu
 odbc
@@ -128,6 +131,7 @@ tidyselect
 uid
 ungroup
 updown
+upi
 xlsx
 yearstay
 zihao
