@@ -51,6 +51,10 @@ list(
     )
   ),
   tar_target(
+    sc_demog_lookup_tests,
+    process_tests_sc_demographics(sc_demog_lookup)
+  ),
+  tar_target(
     source_pc_lookup,
     process_lookup_postcode(
       spd_path = spd_data_path,
