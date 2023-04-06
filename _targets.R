@@ -170,7 +170,7 @@ list(
     get_sc_ch_episodes_path(),
     format = "file"
   ),
-  tarchetypes::tar_map(
+  tar_map(
     list(year = years_to_run),
     ### target data extracts ###
     tar_file_read(
