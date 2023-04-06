@@ -80,10 +80,10 @@ list(
     )
   ),
   ## Cost Lookups ##
-  tar_target(ch_costs, process_costs_ch_rmd()),
-  tar_target(hc_costs, process_costs_hc_rmd()),
-  tar_target(gp_ooh_costs, process_costs_gp_ooh_rmd()),
-  tar_target(dn_costs, process_costs_dn_rmd()),
+  tar_target(ch_cost_lookup, process_costs_ch_rmd()),
+  tar_target(hc_cost_lookup, process_costs_hc_rmd()),
+  tar_target(gp_ooh_cost_lookup, process_costs_gp_ooh_rmd()),
+  tar_target(dn_cost_lookup, process_costs_dn_rmd()),
   ## Social Care - 'All' data ##
   tar_target(sc_demographic_data_path, get_sc_demog_lookup_path(), format = "file"),
   tar_target(slf_deaths_data_path, get_slf_deaths_path(), format = "file"),
