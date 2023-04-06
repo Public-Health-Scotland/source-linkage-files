@@ -1,7 +1,10 @@
-#' Process sc demographics tests
+#' Process Social Care Demographics tests
 #'
-#' @description This script takes the processed demographic extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' @param data The processed demographic data produced by
+#' [process_lookup_sc_demographics()].
+#'
+#' @description Take the processed demographics extract and produces
+#' a test comparison with the previous data.
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'

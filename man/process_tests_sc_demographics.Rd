@@ -2,14 +2,18 @@
 % Please edit documentation in R/process_tests_sc_demographics.R
 \name{process_tests_sc_demographics}
 \alias{process_tests_sc_demographics}
-\title{Process sc demographics tests}
+\title{Process Social Care Demographics tests}
 \usage{
 process_tests_sc_demographics(data)
+}
+\arguments{
+\item{data}{The processed demographic data produced by
+\code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed demographic extract and produces
-a test comparison with the previous data. This is written to disk as a CSV.
+Take the processed demographics extract and produces
+a test comparison with the previous data.
 }
