@@ -295,7 +295,7 @@ process_sc_all_care_home <- function(
       )
     )
 
-  outfile <- adm_reason_recoded %>%
+  ch_data_final <- adm_reason_recoded %>%
     create_person_id() %>%
     dplyr::rename(
       record_keydate1 = "ch_admission_date",
@@ -324,7 +324,9 @@ process_sc_all_care_home <- function(
     )
 
   if (write_to_disk) {
-    outfile %>%
+    ch_data_final %>%
       write_rds(get_sc_ch_episodes_path(check_mode = "write"))
   }
+
+  return(ch_data_final)
 }
