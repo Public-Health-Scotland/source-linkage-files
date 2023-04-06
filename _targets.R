@@ -22,11 +22,11 @@ years_to_run <- c("1920")
 list(
   tar_rds(write_to_disk, FALSE),
   ## Lookup data ##
-  tar_target(spd_data_path, get_spd_path(), format = "file"),
-  tar_target(simd_data_path, get_simd_path(), format = "file"),
-  tar_target(locality_data_path, get_locality_path(), format = "file"),
-  tar_target(gpprac_data_path, get_gpprac_opendata()),
-  tar_target(gpprac_ref_data_path, get_gpprac_ref_path(), format = "file"),
+  tar_target(spd_path, get_spd_path(), format = "file"),
+  tar_target(simd_path, get_simd_path(), format = "file"),
+  tar_target(locality_path, get_locality_path(), format = "file"),
+  tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
+  tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_file_read(chi_deaths_data,
     command = get_it_deaths_path(),
     read = read_lookup_chi_deaths(!!.x)
@@ -57,23 +57,23 @@ list(
   tar_target(
     source_pc_lookup,
     process_lookup_postcode(
-      spd_path = spd_data_path,
-      simd_path = simd_data_path,
-      locality_path = locality_data_path,
+      spd_path = spd_path,
+      simd_path = simd_path,
+      locality_path = locality_path,
       write_to_disk = write_to_disk
     )
   ),
   tar_target(
     source_gp_lookup,
     process_lookup_gpprac(
-      open_data = gpprac_data_path,
-      gpprac_ref_path = gpprac_ref_data_path,
-      spd_path = spd_data_path,
+      open_data = gpprac_opendata,
+      gpprac_ref_path = gpprac_ref_path,
+      spd_path = spd_path,
       write_to_disk = write_to_disk
     )
   ),
   tar_target(
-    source_chi_deaths_lookup,
+    slf_chi_deaths_lookup,
     process_lookup_chi_deaths(
       data = chi_deaths_data,
       write_to_disk = write_to_disk
@@ -150,7 +150,7 @@ list(
       sc_demographics = sc_demographic_data_path,
       slf_deaths_path = slf_deaths_data_path,
       ch_name_lookup_path = slf_ch_name_lookup_path,
-      spd_path = spd_data_path,
+      spd_path = spd_path,
       write_to_disk = write_to_disk
     )
   ),
