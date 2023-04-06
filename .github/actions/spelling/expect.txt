@@ -60,6 +60,7 @@ itle
 jennifer
 keydate
 keyring
+los
 ltc
 lubridate
 magrittr
@@ -69,6 +70,7 @@ MMMYY
 mpat
 multistaff
 nhshosp
+NRS
 nrs
 nsu
 odbc
