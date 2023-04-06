@@ -343,12 +343,26 @@ list(
       )
     ),
     tar_target(
+      tests_alarms_telecare,
+      process_tests_alarms_telecare(
+        data = source_sc_alarms_tele,
+        year = year
+      )
+    ),
+    tar_target(
       source_sc_sds,
       process_extract_sds(
         file_path = all_sds_data_path,
         year = year,
         client_lookup_path = client_lookup_path,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_target(
+      tests_sds,
+      process_tests_sds(
+        data = source_sc_sds,
+        year = year
       )
     ),
     tar_target(
@@ -361,12 +375,26 @@ list(
       )
     ),
     tar_target(
+      tests_home_care,
+      process_tests_home_care(
+        data = source_sc_home_care,
+        year = year
+      )
+    ),
+    tar_target(
       source_sc_care_home,
       process_extract_care_home(
         file_path = all_ch_data_path,
         year = year,
         client_lookup_path = client_lookup_path,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_target(
+      tests_care_home,
+      process_tests_care_home(
+        data = source_sc_care_home,
+        year = year
       )
     )
   )
