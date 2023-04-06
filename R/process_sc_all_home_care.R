@@ -4,25 +4,24 @@
 #' all home care extract, it will return the final data
 #' but also write this out as a rds.
 #'
-#' @param data The extract to process
-#' @param sc_demographics The path to the sc demographics lookup.
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @inheritParams process_sc_all_care_home
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
 #' @export
 #'
-process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
+process_sc_all_home_care <- function(
+    data,
+    sc_demog_lookup,
+    write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
-  # read in demographic data
-  sc_demographics <- readr::read_rds(sc_demographics)
-
 
   matched_hc_data <- data %>%
-    dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
-
+    dplyr::left_join(
+      sc_demog_lookup,
+      by = c("sending_location", "social_care_id")
+    )
 
   # Data Cleaning ---------------------------------------
 
