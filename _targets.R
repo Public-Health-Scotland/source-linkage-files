@@ -20,7 +20,7 @@ tar_option_set(
 years_to_run <- c("1920")
 
 list(
-  tar_target(write_to_disk, FALSE, format = "rds"),
+  tar_rds(write_to_disk, FALSE),
   ## Lookup data ##
   tar_target(spd_data_path, get_spd_path(), format = "file"),
   tar_target(simd_data_path, get_simd_path(), format = "file"),
