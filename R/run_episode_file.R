@@ -9,10 +9,6 @@
 #' @export
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
-  # Bring all the datasets together from Jen's process functions
-  fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
-    # From C01 ----
-    # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
     dplyr::mutate(
       chi = dplyr::if_else(
@@ -66,18 +62,8 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     ) %>%
     # Add the flag for Potentially Preventable Admissions
     add_ppa_flag() %>%
-    # From C02 - Link Delayed Discharge Episodes ----
-    # Create Temp File 2
-    # temp_file_2 <- temp_file_1
-
-    # From C03 - Link Homelessness ----
-    # Create Temp File 3
-    # temp_file_3 <- temp_file_2
-
-    # From C04 - Add NSU cohort ----
+    # TODO add Link Delayed Discharge here (From C02)
     add_nsu_cohort(year) %>%
-    # From C05 - Match on LTCs ----
-    # Create Temp File 5
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
     # From C07 - Calculate and write out pathways cohorts ----
@@ -87,21 +73,9 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # From C09 - Match on postcode and gpprac variables ----
     fill_geographies()
 
-
-
-  # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
-  # Create Temp File 7
-
   return(ep_file)
-
-  # From C10 - Final tidy-up (mostly variable labels) ----
-  # Create Episode File
-
-  # C10X - Create Tests? Possibly for a different function ----
-  # Output tests
-
   if (write_to_disk == TRUE) {
-
+    # TODO write out as an arrow dataset possibly also as an rds
   }
 }
 
