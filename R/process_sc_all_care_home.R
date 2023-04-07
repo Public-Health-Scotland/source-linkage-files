@@ -132,7 +132,7 @@ process_sc_all_care_home <- function(data,
       .data[["split_episode_counter"]]
     ) %>%
     dplyr::summarise(
-      sc_latest_submission = dplyr::last("period"),
+      sc_latest_submission = dplyr::last(.data[["period"]]),
       dplyr::across(
         c(
           "ch_discharge_date",
@@ -287,7 +287,7 @@ process_sc_all_care_home <- function(data,
       )
     )
 
-  outfile <- adm_reason_recoded %>%
+  ch_data_final <- adm_reason_recoded %>%
     create_person_id() %>%
     dplyr::rename(
       record_keydate1 = "ch_admission_date",
@@ -316,7 +316,9 @@ process_sc_all_care_home <- function(data,
     )
 
   if (write_to_disk) {
-    outfile %>%
+    ch_data_final %>%
       write_rds(get_sc_ch_episodes_path(check_mode = "write"))
   }
+
+  return(ch_data_final)
 }
