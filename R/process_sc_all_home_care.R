@@ -54,6 +54,7 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
     # fill reablement when missing but present in group
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$hc_service_start_date) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
+    dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
     dplyr::ungroup() %>%
     # Only keep records which have some time in the quarter in which they were submitted
     dplyr::mutate(
