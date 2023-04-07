@@ -51,6 +51,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 HCP
+HHG
 hhg
 hms
 homecare
@@ -63,6 +64,7 @@ keydate
 keyring
 los
 ltc
+ltcs
 lubridate
 magrittr
 Mcbride
@@ -70,6 +72,7 @@ mcmahon
 MMMYY
 mpat
 multistaff
+NAs
 nhshosp
 NRS
 nrs
@@ -112,6 +115,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 SPSS
