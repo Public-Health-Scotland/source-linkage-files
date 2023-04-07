@@ -16,7 +16,7 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
   ## Deal with postcodes---------------------------------------
 
   # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
-  uk_pc_regexp <- "^[a-z]{1,2}\\d[a-z\\d]?\\s*\\d[a-z]{2}$"
+  uk_pc_regexp <- "^[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}$"
 
   dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
