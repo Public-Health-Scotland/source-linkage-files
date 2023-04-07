@@ -6,6 +6,7 @@ bedday
 beddays
 birthtime
 boxi
+carehome
 cattend
 cij
 Classificat

@@ -31,15 +31,6 @@ process_sc_all_care_home <- function(data,
   ## Data Cleaning-----------------------------------------------------
   ch_clean <- data %>%
     dplyr::mutate(
-      dplyr::across(
-        c(
-          "ch_provider",
-          "reason_for_admission",
-          "type_of_admission",
-          "nursing_care_provision"
-        ),
-        as.integer
-      ),
       record_date = end_fy_quarter(.data[["period"]]),
       qtr_start = start_fy_quarter(.data[["period"]]),
       # Set missing admission date to start of the submitted quarter

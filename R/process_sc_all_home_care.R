@@ -28,9 +28,9 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
 
   home_care_clean <- matched_hc_data %>%
     # set reablement values == 9 to NA
-    dplyr::mutate(reablement = dplyr::na_if(.data$reablement, "9")) %>%
+    dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
-    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, "0")) %>%
+    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
     # period start and end dates
     dplyr::mutate(
       record_date = end_fy_quarter(.data$period),

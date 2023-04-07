@@ -29,8 +29,8 @@ process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(
     dplyr::mutate(dplyr::across(
       tidyselect::starts_with("sds_option_"),
       ~ dplyr::case_when(
-        .x == "1" ~ TRUE,
-        .x == "0" ~ FALSE,
+        .x == 1L ~ TRUE,
+        .x == 0L ~ FALSE,
         is.na(.x) ~ FALSE
       )
     )) %>%
