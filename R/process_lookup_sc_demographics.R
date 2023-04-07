@@ -22,7 +22,7 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
   ## postcode type ##
-  valid_spd_postcodes <- readr::read_rds(spd_path) %>%
+  valid_spd_postcodes <- read_file(spd_path) %>%
     dplyr::pull(.data$pc7)
 
 

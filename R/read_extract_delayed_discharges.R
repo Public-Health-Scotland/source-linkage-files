@@ -6,7 +6,7 @@
 #' @export
 #'
 read_extract_delayed_discharges <- function(file_path = get_dd_path()) {
-  extract_delayed_discharges <- readr::read_rds(file_path) %>%
+  extract_delayed_discharges <- read_file(file_path) %>%
     janitor::clean_names() %>%
     dplyr::mutate(
       dplyr::across(
