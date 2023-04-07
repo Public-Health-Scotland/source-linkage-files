@@ -20,7 +20,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         "",
         .data$chi
       ),
-      gpprac = as.numeric(gpprac)
+      gpprac = as.integer(.data[["gpprac"]])
     ) %>%
     # Change some values of cij_pattype_code based on cij_admtype
     dplyr::mutate(
