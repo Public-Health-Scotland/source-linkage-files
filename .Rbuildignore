@@ -23,4 +23,4 @@
 ^Rmarkdown$
 ^\.lintr$
 ^_targets\.R$
-^_targets$
+^_targets\.yaml$

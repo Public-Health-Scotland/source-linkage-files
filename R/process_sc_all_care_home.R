@@ -7,6 +7,8 @@
 #' @param data The extract to process
 #' @param sc_demographics The sc demographics lookup.
 #' @param slf_deaths_path The path to slf deaths lookup.
+#' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
+#' @param spd_path Path the Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,10 +17,13 @@
 #'
 #' @export
 #'
-process_sc_all_care_home <- function(data,
-                                     sc_demographics = get_sc_demog_lookup_path(),
-                                     slf_deaths_path = get_slf_deaths_path(),
-                                     write_to_disk = TRUE) {
+process_sc_all_care_home <- function(
+    data,
+    sc_demographics = get_sc_demog_lookup_path(),
+    slf_deaths_path = get_slf_deaths_path(),
+    ch_name_lookup_path = get_slf_ch_name_lookup_path(),
+    spd_path = get_spd_path(),
+    write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 
   sc_demographics <- readr::read_rds(sc_demographics)
@@ -26,7 +31,6 @@ process_sc_all_care_home <- function(data,
   # Read slf deaths file----------------------------------------------------
 
   slf_deaths <- readr::read_rds(slf_deaths_path)
-
 
   ## Data Cleaning-----------------------------------------------------
   ch_clean <- data %>%
@@ -60,7 +64,11 @@ process_sc_all_care_home <- function(data,
       by = c("sending_location", "social_care_id")
     )
 
-  name_postcode_clean <- fill_ch_names(ch_clean)
+  name_postcode_clean <- fill_ch_names(
+    ch_data = ch_clean,
+    ch_name_lookup_path = ch_name_lookup_path,
+    spd_path = spd_path
+  )
 
   fixed_ch_provider <- name_postcode_clean %>%
     # sort data

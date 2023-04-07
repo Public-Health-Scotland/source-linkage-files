@@ -6,6 +6,7 @@ bedday
 beddays
 birthtime
 boxi
+buildignore
 cattend
 cij
 Classificat
@@ -55,8 +56,10 @@ hms
 homecare
 hscp
 hscpnames
+infyyear
 ipdc
 itle
+iwalk
 jennifer
 keydate
 keyring
@@ -66,7 +69,9 @@ magrittr
 Mcbride
 mcmahon
 MMMYY
+Moohan
 mpat
+multisession
 multistaff
 nhshosp
 nrs
@@ -88,6 +93,7 @@ prac
 praccode
 purrr
 quickstart
+Rbuildignore
 rds
 reablement
 readcode
@@ -98,6 +104,8 @@ rlang
 rmarkdown
 roxygen
 Rprofile
+Rscript
+rspm
 rstudioapi
 Rtype
 seealso
@@ -109,14 +117,16 @@ slfhelper
 smr
 SMRA
 smrtype
+sourcedev
 sparra
 spd
-SPSS
 spss
 stadm
+stefanzweifel
 stringdist
 stringr
 submis
+tarchetypes
 tadm
 tbl
 telecare
@@ -128,7 +138,10 @@ tidyselect
 uid
 ungroup
 updown
+WORDLIST
+workflows
 xlsx
 yearstay
 zihao
 zsav
+zstd

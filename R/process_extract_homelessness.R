@@ -42,52 +42,52 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
       ),
       hl1_reason_ftm = paste0(
         dplyr::if_else(
-          .data$financial_difficulties_debt_unemployment == 1L,
+          .data$financial_difficulties_debt_unemployment,
           "F",
           ""
         ),
         dplyr::if_else(
-          .data$physical_health_reasons == 1L,
+          .data$physical_health_reasons,
           "Ph",
           ""
         ),
         dplyr::if_else(
-          .data$mental_health_reasons == 1L,
+          .data$mental_health_reasons,
           "M",
           ""
         ),
         dplyr::if_else(
-          .data$unmet_need_for_support_from_housing_social_work_health_services == 1L,
+          .data$unmet_need_for_support_from_housing_social_work_health_services,
           "U",
           ""
         ),
         dplyr::if_else(
-          .data$lack_of_support_from_friends_family == 1L,
+          .data$lack_of_support_from_friends_family,
           "L",
           ""
         ),
         dplyr::if_else(
-          .data$difficulties_managing_on_own == 1L,
+          .data$difficulties_managing_on_own,
           "O",
           ""
         ),
         dplyr::if_else(
-          .data$drug_alcohol_dependency == 1L,
+          .data$drug_alcohol_dependency,
           "D",
           ""
         ),
         dplyr::if_else(
-          .data$criminal_anti_social_behaviour == 1L,
+          .data$criminal_anti_social_behaviour,
           "C",
           ""
         ),
         dplyr::if_else(
-          .data$not_to_do_with_applicant_household == 1L,
+          .data$not_to_do_with_applicant_household,
           "N",
           ""
         ),
         dplyr::if_else(
-          .data$refused == 1L,
+          .data$refused,
           "R",
           ""
         )

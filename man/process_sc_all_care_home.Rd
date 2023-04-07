@@ -8,6 +8,8 @@ process_sc_all_care_home(
   data,
   sc_demographics = get_sc_demog_lookup_path(),
   slf_deaths_path = get_slf_deaths_path(),
+  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
+  spd_path = get_spd_path(),
   write_to_disk = TRUE
 )
 }
@@ -17,6 +19,10 @@ process_sc_all_care_home(
 \item{sc_demographics}{The sc demographics lookup.}
 
 \item{slf_deaths_path}{The path to slf deaths lookup.}
+
+\item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
+
+\item{spd_path}{Path the Scottish Postcode Directory.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
