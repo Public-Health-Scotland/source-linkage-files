@@ -50,6 +50,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 HCP
+HHG
 hhg
 hms
 homecare
@@ -61,6 +62,7 @@ jennifer
 keydate
 keyring
 ltc
+ltcs
 lubridate
 magrittr
 Mcbride
@@ -109,6 +111,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 SPSS

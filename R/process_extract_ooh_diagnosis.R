@@ -20,7 +20,7 @@ process_extract_ooh_diagnosis <- function(data, year) {
   # Diagnosis Data ---------------------------------
 
   # Read code lookup
-  readcode_lookup <- readr::read_rds(get_readcode_lookup_path()) %>%
+  readcode_lookup <- read_file(get_readcode_lookup_path()) %>%
     dplyr::rename(
       readcode = "ReadCode",
       description = "Description"

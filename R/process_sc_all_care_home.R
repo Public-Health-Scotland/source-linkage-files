@@ -21,11 +21,11 @@ process_sc_all_care_home <- function(data,
                                      write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 
-  sc_demographics <- readr::read_rds(sc_demographics)
+  sc_demographics <- read_file(sc_demographics)
 
   # Read slf deaths file----------------------------------------------------
 
-  slf_deaths <- readr::read_rds(slf_deaths_path)
+  slf_deaths <- read_file(slf_deaths_path)
 
 
   ## Data Cleaning-----------------------------------------------------

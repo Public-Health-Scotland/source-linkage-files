@@ -19,7 +19,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   # Read lookup files -------------------------------------------------------
 
   # postcode data
-  spd_file <- readr::read_rds(spd_path) %>%
+  spd_file <- read_file(spd_path) %>%
     dplyr::select(
       .data$pc7,
       tidyselect::matches("datazone\\d{4}$"),
@@ -34,7 +34,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
     dplyr::mutate(lca = convert_ca_to_lca(.data$ca2019))
 
   # simd data
-  simd_file <- readr::read_rds(simd_path) %>%
+  simd_file <- read_file(simd_path) %>%
     dplyr::select(
       .data$pc7,
       tidyselect::matches("simd\\d{4}.?.?_rank"),
@@ -47,7 +47,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
     )
 
   # locality
-  locality_file <- readr::read_rds(locality_path) %>%
+  locality_file <- read_file(locality_path) %>%
     dplyr::select(
       locality = .data$hscp_locality,
       tidyselect::matches("datazone\\d{4}$")
