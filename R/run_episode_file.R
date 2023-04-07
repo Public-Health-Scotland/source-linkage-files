@@ -75,11 +75,11 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # temp_file_3 <- temp_file_2
 
     # From C04 - Add NSU cohort ----
-    add_nsu_cohort(., year) %>%
+    add_nsu_cohort(year) %>%
     # From C05 - Match on LTCs ----
     # Create Temp File 5
     match_on_ltcs(year) %>%
-    correct_demographics(., year) %>%
+    correct_demographics(year) %>%
     # From C07 - Calculate and write out pathways cohorts ----
     # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
     # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
