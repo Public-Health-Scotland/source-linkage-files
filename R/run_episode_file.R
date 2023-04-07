@@ -9,101 +9,79 @@
 #' @export
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
-    # If the CHI is invalid for whatever reason, set the CHI to blank string
+  episode_file <- dplyr::bind_rows(ep_data) %>%
+    # If the CHI is invalid for whatever reason, set the CHI to NA
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
-        "",
+        NA_character_,
         .data$chi
       ),
       gpprac = as.integer(.data[["gpprac"]])
     ) %>%
-    # Change some values of cij_pattype_code based on cij_admtype
-    dplyr::mutate(
-      cij_admtype = dplyr::if_else(cij_admtype == "Unknown", "99", cij_admtype),
-      cij_pattype_code = dplyr::case_when(
-        !is_missing(.data$chi) &
-          .data$recid %in% c("01B", "04B", "GLS", "02B") &
-          .data$cij_admtype %in% c("41", "42") ~ 2,
-        !is_missing(.data$chi) &
-          .data$recid %in% c("01B", "04B", "GLS", "02B") &
-          .data$cij_admtype %in% c("40", "48", "99") ~ 9,
-        .data$cij_admtype %in% c("18") ~ 0,
-        .default = .data$cij_pattype_code
-      ),
-      # Recode cij_pattype based on above
-      cij_pattype = dplyr::case_when(
-        .data$cij_pattype_code == 0 ~ "Non-Elective",
-        .data$cij_pattype_code == 1 ~ "Elective",
-        .data$cij_pattype_code == 2 ~ "Maternity",
-        .data$cij_pattype_code == 9 ~ "Other"
-      )
-    )
-  # Combine the CIJ-only records with the non-CIJ records
-
-  ep_file <- dplyr::bind_rows(
-    # Fill missing CIJ markers for those records that should have them
-    fixed_patient_types %>%
-      fill_missing_cij_markers(),
-    # Bind the CIJ records with the non-cij records, determined by recid
-    fixed_patient_types %>%
-      dplyr::filter(!(.data$recid %in% c("01B", "04B", "GLS", "02B")))
-  ) %>%
-    # Create cost including DNAs and modify cost not including DNAs using cattend
-    dplyr::mutate(
-      cost_total_net_inc_dnas = .data$cost_total_net,
-      # In the Cost_Total_Net column set the cost for
-      # those with attendance status 5 or 8 (CNWs and DNAs)
-      cost_total_net = dplyr::if_else(
-        .data$attendance_status %in% c(5, 8),
-        0.0,
-        .data$cost_total_net
-      )
-    ) %>%
+    correct_cij_vars() %>%
+    fill_missing_cij_markers() %>%
+    create_cost_inc_dna() %>%
     # Add the flag for Potentially Preventable Admissions
     add_ppa_flag() %>%
     # TODO add Link Delayed Discharge here (From C02)
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
-    # From C07 - Calculate and write out pathways cohorts ----
-    # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
-    # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
-
+    dplyr::left_join(
+      create_demographic_cohorts(., year, write_to_disk = TRUE)
+    ) %>%
+    dplyr::left_join(
+      create_service_use_cohorts(., year, write_to_disk = TRUE)
+    ) %>%
+    # TODO match on SPARRA and HHG here
     # From C09 - Match on postcode and gpprac variables ----
     fill_geographies()
 
-  return(ep_file)
   if (write_to_disk == TRUE) {
     # TODO write out as an arrow dataset possibly also as an rds
   }
+
+  return(episode_file)
 }
 
 #' Fill any missing CIJ markers for records that should have them
 #'
-#' @param data A data frame
+#' @param ep_file_data A data frame containing only `recid %in% c("01B", "04B",
+#' "GLS", "02B")` with a valid CHI number.
 #'
-#' @return A data frame with CIJ markers filled in for those missing. Will not
-#' fill CIJ markers for records with missing CHI
-fill_missing_cij_markers <- function(data) {
-  return_data <- data %>%
-    # Get CIJ-only records
-    dplyr::filter(.data$recid %in% c("01B", "04B", "GLS", "02B")) %>%
+#' @return A data frame with CIJ markers filled in for those missing.
+fill_missing_cij_markers <- function(ep_file_data) {
+  fixable_data <- ep_file_data %>%
+    dplyr::filter(
+      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B") & !is.na(.data[["chi"]])
+    )
+
+  non_fixable_data <- ep_file_data %>%
+    dplyr::filter(
+      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B")) | is.na(.data[["chi"]])
+    )
+
+  fixed_data <- fixable_data %>%
     dplyr::group_by(.data$chi) %>%
-    # We want any NA cij_markers to be filled in, if they are the first in the group and
-    # are NA. This is why we use this arrange() before the mutate()
+    # We want any NA cij_markers to be filled in, if they are the first in the
+    # group and are NA. This is why we use this arrange() before the mutate()
     dplyr::arrange(dplyr::desc(is.na(.data$cij_marker)), .by_group = TRUE) %>%
     dplyr::mutate(cij_marker = dplyr::if_else(
-      .data$chi != "" & is.na(.data$cij_marker) & dplyr::row_number() == 1L,
-      1,
+      is.na(.data$cij_marker) & dplyr::row_number() == 1L,
+      1L,
       .data$cij_marker
     )) %>%
     dplyr::ungroup() %>%
     # Tidy up cij_ipdc
-    dplyr::mutate(cij_ipdc = dplyr::case_when(
-      .data$chi != "" & is_missing(.data$cij_ipdc) & .data$ipdc == "I" ~ "I",
-      .data$chi != "" & is_missing(.data$cij_ipdc) & .data$recid == "01B" & .data$ipdc == "D" ~ "D",
-      TRUE ~ .data$cij_ipdc
+    dplyr::mutate(cij_ipdc = dplyr::if_else(
+      is_missing(.data$cij_ipdc),
+      dplyr::case_when(
+        .data$ipdc == "I" ~ "I",
+        .data$recid == "01B" & .data$ipdc == "D" ~ "D",
+        .default = .data$cij_ipdc
+      ),
+      .data$cij_ipdc
     )) %>%
     # Ensure every record with a CHI has a valid CIJ marker
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
@@ -117,5 +95,70 @@ fill_missing_cij_markers <- function(data) {
     ) %>%
     dplyr::ungroup()
 
+  return_data <- dplyr::bind_rows(non_fixable_data, fixed_data)
+
   return(return_data)
+}
+
+#' Correct the CIJ variables
+#'
+#' @param ep_file_data The episode file data in progress.
+#'
+#' @return The data with CIJ variables corrected.
+correct_cij_vars <- function(ep_file_data) {
+  check_variables_exist(
+    ep_file_data,
+    c("chi", "recid", "cij_admtype", "cij_pattype_code")
+  )
+
+  ep_file_data %>%
+    # Change some values of cij_pattype_code based on cij_admtype
+    dplyr::mutate(
+      cij_admtype = dplyr::if_else(
+        .data[["cij_admtype"]] == "Unknown",
+        "99",
+        .data[["cij_admtype"]]
+      ),
+      cij_pattype_code = dplyr::if_else(
+        !is.na(.data$chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
+        dplyr::case_match(.data$cij_admtype,
+          c("41", "42") ~ 2,
+          c("40", "48", "99") ~ 9,
+          "18" ~ 0,
+          .default = .data$cij_pattype_code
+        ),
+        .data$cij_pattype_code
+      ),
+      # Recode cij_pattype based on above
+      cij_pattype = dplyr::case_match(
+        .data$cij_pattype_code,
+        0 ~ "Non-Elective",
+        1 ~ "Elective",
+        2 ~ "Maternity",
+        9 ~ "Other"
+      )
+    )
+}
+
+#' Create cost total net inc DNA
+#'
+#' @param ep_file_data
+#'
+#' @return
+create_cost_inc_dna <- function(ep_file_data) {
+  check_variables_exist(ep_file_data, c("cost_total_net", "attendance_status"))
+
+  # Create cost including DNAs and modify costs
+  # not including DNAs using cattend
+  ep_file_data %>%
+    dplyr::mutate(
+      cost_total_net_inc_dnas = .data$cost_total_net,
+      # In the Cost_Total_Net column set the cost for
+      # those with attendance status 5 or 8 (CNWs and DNAs)
+      cost_total_net = dplyr::if_else(
+        .data$attendance_status %in% c(5, 8),
+        0.0,
+        .data$cost_total_net
+      )
+    )
 }
