@@ -17,7 +17,7 @@
 process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
   # read in demographic data
-  sc_demographics <- readr::read_rds(sc_demographics)
+  sc_demographics <- read_file(sc_demographics)
 
 
   matched_hc_data <- data %>%
@@ -100,7 +100,7 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
 
   # Home Care Costs ---------------------------------------
 
-  home_care_costs <- readr::read_rds(get_hc_costs_path())
+  home_care_costs <- read_file(get_hc_costs_path())
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%

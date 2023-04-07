@@ -9,10 +9,10 @@
 process_tests_lookup_gpprac <- function() {
   comparison <- produce_test_comparison(
     old_data = produce_slf_gpprac_tests(
-      readr::read_rds(get_slf_gpprac_path(update = previous_update()))
+      read_file(get_slf_gpprac_path(update = previous_update()))
     ),
     new_data = produce_slf_gpprac_tests(
-      readr::read_rds(get_slf_gpprac_path())
+      read_file(get_slf_gpprac_path())
     )
   ) %>%
     write_tests_xlsx(sheet_name = "source_gpprac_lookup")

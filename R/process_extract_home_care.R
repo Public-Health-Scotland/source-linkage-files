@@ -24,10 +24,10 @@ process_extract_home_care <- function(file_path = get_sc_hc_episodes_path(),
   year <- check_year_format(year)
 
   # Read client lookup
-  client_lookup <- readr::read_rds(client_lookup_path)
+  client_lookup <- read_file(client_lookup_path)
 
   # Read Data
-  data <- readr::read_rds(file_path)
+  data <- read_file(file_path)
 
   # Selections for financial year------------------------------------
 

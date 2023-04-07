@@ -50,6 +50,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 HCP
+HHG
 hhg
 hms
 homecare
@@ -60,7 +61,9 @@ itle
 jennifer
 keydate
 keyring
+los
 ltc
+ltcs
 lubridate
 magrittr
 Mcbride
@@ -70,6 +73,7 @@ mpat
 multistaff
 NAs
 nhshosp
+NRS
 nrs
 nsu
 odbc
@@ -110,6 +114,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 SPSS
@@ -129,6 +134,7 @@ tidyselect
 uid
 ungroup
 updown
+upi
 xlsx
 yearstay
 zihao
