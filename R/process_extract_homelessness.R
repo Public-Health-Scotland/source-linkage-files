@@ -131,7 +131,7 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
   )
 
-  completeness_data <- readr::read_rds(completeness_file_path) %>%
+  completeness_data <- read_file(completeness_file_path) %>%
     dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year)) %>%
     dplyr::left_join(la_code_lookup,
       by = c("sending_local_authority_code_9" = "CA")

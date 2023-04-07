@@ -9,7 +9,7 @@ read_extract_homelessness <- function(year,
     return(NULL)
   }
 
-  extract_homelessness <- readr::read_csv(file_path,
+  extract_homelessness <- read_file(file_path,
     col_types = cols(
       "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
       "Case Closed Date" = col_date(format = "%Y/%m/%d %T"),

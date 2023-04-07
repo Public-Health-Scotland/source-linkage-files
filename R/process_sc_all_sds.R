@@ -16,7 +16,7 @@
 process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
   # read in demographic data
-  sc_demographics <- readr::read_rds(sc_demographics)
+  sc_demographics <- read_file(sc_demographics)
 
   # Match on demographics data (chi, gender, dob and postcode)
   matched_sds_data <- data %>%
@@ -29,8 +29,8 @@ process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(
     dplyr::mutate(dplyr::across(
       tidyselect::starts_with("sds_option_"),
       ~ dplyr::case_when(
-        .x == "1" ~ TRUE,
-        .x == "0" ~ FALSE,
+        .x == 1L ~ TRUE,
+        .x == 0L ~ FALSE,
         is.na(.x) ~ FALSE
       )
     )) %>%

@@ -17,7 +17,7 @@
 process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 
-  sc_demographics <- readr::read_rds(sc_demographics)
+  sc_demographics <- read_file(sc_demographics)
 
   ## Data Cleaning-----------------------------------------------------
 
@@ -50,8 +50,8 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_
     dplyr::mutate(
       recid = "AT",
       smrtype = dplyr::case_when(
-        .data$service_type == 1 ~ "AT-Alarm",
-        .data$service_type == 2 ~ "AT-Tele"
+        .data$service_type == 1L ~ "AT-Alarm",
+        .data$service_type == 2L ~ "AT-Tele"
       ),
       # Create person id variable
       person_id = glue::glue("{sending_location}-{social_care_id}"),
