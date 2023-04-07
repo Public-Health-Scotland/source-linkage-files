@@ -7,7 +7,7 @@ read_extract_ooh_consultations <- function(
     year,
     file_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")) {
   # Read consultations data
-  consultations_extract <- readr::read_csv(file_path,
+  consultations_extract <- read_file(file_path,
     col_types = readr::cols(
       "Patient DoB Date [C]" = readr::col_date(
         format = "%Y/%m/%d %T"

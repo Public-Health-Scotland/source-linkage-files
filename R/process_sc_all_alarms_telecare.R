@@ -17,7 +17,7 @@
 process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 
-  sc_demographics <- readr::read_rds(sc_demographics)
+  sc_demographics <- read_file(sc_demographics)
 
   ## Data Cleaning-----------------------------------------------------
 

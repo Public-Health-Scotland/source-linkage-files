@@ -8,7 +8,7 @@
 #' @export
 read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = year, type = "Acute")) {
   # Read BOXI extract
-  extract_acute <- readr::read_csv(file_path,
+  extract_acute <- read_file(file_path,
     col_type = cols(
       "Costs Financial Year (01)" = col_integer(),
       "Costs Financial Month Number (01)" = col_double(),
