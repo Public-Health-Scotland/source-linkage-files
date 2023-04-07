@@ -16,8 +16,6 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "ch_postcode",
       "sending_location",
       "social_care_id",
-      "financial_year",
-      "financial_quarter",
       "period",
       "ch_provider",
       "reason_for_admission",
@@ -28,19 +26,11 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "age"
     ) %>%
     # Correct FY 2017
-    dplyr::mutate(
-      financial_quarter = dplyr::if_else(
-        .data$financial_year == 2017L & is.na(.data$financial_quarter),
-        4L,
-        .data$financial_quarter
-      ),
-      period = dplyr::if_else(
-        .data$financial_year == 2017L & .data$financial_quarter == 4L,
-        "2017Q4",
-        .data$period
-      )
-    ) %>%
-    dplyr::select(!c("financial_year", "financial_quarter")) %>%
+    dplyr::mutate(period = dplyr::if_else(
+      .data$period == "2017",
+      "2017Q4",
+      .data$period
+    )) %>%
     dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(c(

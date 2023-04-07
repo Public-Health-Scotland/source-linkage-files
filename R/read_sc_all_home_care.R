@@ -19,7 +19,6 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "hc_service_end_date",
       "period",
       "financial_year",
-      "financial_quarter",
       "hc_service",
       "hc_service_provider",
       "reablement",
@@ -29,14 +28,6 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "hc_start_date_after_end_date"
     ) %>%
     # fix 2017
-    dplyr::mutate(
-      financial_quarter =
-        dplyr::if_else(
-          .data$financial_year == 2017L & is.na(.data$financial_quarter),
-          4,
-          .data$financial_quarter
-        )
-    ) %>%
     dplyr::mutate(period = dplyr::if_else(
       .data$period == "2017",
       "2017Q4",
@@ -44,7 +35,7 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
     )) %>%
     # drop rows start date after end date
     dplyr::filter(.data$hc_start_date_after_end_date == 0L) %>%
-    dplyr::select(!c("financial_quarter", "hc_start_date_after_end_date")) %>%
+    dplyr::select(!"hc_start_date_after_end_date") %>%
     dplyr::collect() %>%
     dplyr::mutate(dplyr::across(c(
       "sending_location",
