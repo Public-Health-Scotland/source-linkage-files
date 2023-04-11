@@ -2,17 +2,28 @@
 % Please edit documentation in R/process_extract_homelessness.R
 \name{process_extract_homelessness}
 \alias{process_extract_homelessness}
-\title{Process the homelessness extract}
+\title{Process the Homelessness Extract}
 \usage{
-process_extract_homelessness(data, year, write_to_disk = TRUE)
+process_extract_homelessness(
+  data,
+  year,
+  write_to_disk = TRUE,
+  update = latest_update(),
+  sg_pub_path = get_sg_homelessness_pub_path()
+)
 }
 \arguments{
-\item{data}{The extract to process}
+\item{data}{The extract to process from \code{\link[=read_extract_homelessness]{read_extract_homelessness()}}.}
 
 \item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{update}{The update to use (default is \code{\link[=latest_update]{latest_update()}}).}
+
+\item{sg_pub_path}{The path to the SG pub figures (default is
+\code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}).}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -20,7 +31,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 homelessness extract, it will return the final data
-but also write this out as a zsav and rds.
+and optionally write it out as rds.
 }
 \seealso{
 Other process extracts: 

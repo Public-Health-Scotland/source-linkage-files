@@ -1,18 +1,26 @@
-#' Process the homelessness extract
+#' Process the Homelessness Extract
 #'
 #' @description This will read and process the
 #' homelessness extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' and optionally write it out as rds.
 #'
-#' @param data The extract to process
+#' @param data The extract to process from [read_extract_homelessness()].
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param update The update to use (default is [latest_update()]).
+#' @param sg_pub_path The path to the SG pub figures (default is
+#' [get_sg_homelessness_pub_path()]).
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
+process_extract_homelessness <- function(
+    data,
+    year,
+    write_to_disk = TRUE,
+    update = latest_update(),
+    sg_pub_path = get_sg_homelessness_pub_path()) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -38,7 +46,7 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       dplyr::across(
         c("financial_difficulties_debt_unemployment":"refused"),
-        tidyr::replace_na, 9L
+        ~ tidyr::replace_na(.x, 9L)
       ),
       hl1_reason_ftm = paste0(
         dplyr::if_else(
@@ -92,82 +100,37 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
           ""
         )
       )
-    )
-
-  # Filter data -------------------------------------------------------------
-  # TODO - Move completeness code to SLF branch
-  # Need a file from SG - goes in SLF_Extracts/Homelessness
-  # Take a full extract from BOXI then run the below code (or similar)
-  # annual_comparison %>%
-  #   dplyr::left_join(la_code_lookup, by = c(sending_local_authority_name = "CAName")) %>%
-  #  dplyr::select(sending_local_authority_code_9 = CA, fin_year, pct_complete_all) %>%
-  #   # When we don't have completeness (e.g. for the latest year)
-  #   # Use the previous year's completeness
-  #   group_by(sending_local_authority_code_9) %>%
-  #   fill(pct_complete_all) %>%
-  #   ungroup() %>%
-  #   readr::write_rds(fs::path("/conf/hscdiip/SLF_Extracts/Homelessness/homelessness_completeness_Mar_2022.rds"))
-  #
-  # Then will use the single 'full' boxi extract to pick out each year.
-  # For now I've just created the file elsewhere to be picked up here!
-
-  # TODO make the la_code_lookup a testable function
-  la_code_lookup <- phsopendata::get_resource(
-    "967937c4-8d67-4f39-974f-fd58c4acfda5"
-  ) %>%
-    dplyr::distinct(.data$CA, .data$CAName) %>%
-    dplyr::mutate(
-      sending_local_authority_name = dplyr::case_match(
-        .data$CAName,
-        "City of Edinburgh" ~ "Edinburgh",
-        "Na h-Eileanan Siar" ~ "Eilean Siar",
-        .default = .data$CAName
-      ) %>%
-        stringr::str_replace("\\sand\\s", " \\& ")
-    )
-
-  completeness_file_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Homelessness"),
-    file_name = glue::glue("homelessness_completeness_{latest_update()}.rds")
-  )
-
-  completeness_data <- read_file(completeness_file_path) %>%
-    dplyr::mutate(year = convert_year_to_fyyear(.data$fin_year)) %>%
-    dplyr::left_join(la_code_lookup,
-      by = c("sending_local_authority_code_9" = "CA")
     ) %>%
-    dplyr::select(-"CAName", -"sending_local_authority_code_9")
-
-  if (year <= max(completeness_data %>% dplyr::pull("year"))) {
-    filtered_data <- data %>%
-      dplyr::left_join(la_code_lookup,
-        by = c("sending_local_authority_code_9" = "CA")
-      ) %>%
-      dplyr::left_join(completeness_data,
-        by = c("sending_local_authority_name", "year")
-      ) %>%
-      # Keep where the completeness is between 90% and 110%
-      # Or if it's East Ayrshire (S12000008) as they are submitting something different.
-      dplyr::filter(
-        dplyr::between(.data$pct_complete_all, 0.90, 1.05) |
-          .data$sending_local_authority_code_9 == "S12000008"
-      )
-  } else {
-    filtered_data <- data %>%
-      dplyr::left_join(la_code_lookup,
-        by = c("sending_local_authority_code_9" = "CA")
-      )
-    cli::cli_alert_info(
-      "There is no completeness data for {.val {year}}, so the homelessness data won't be filtered."
-    )
-  }
-
-  # dplyr::rename and select --------------------------------------------------
-  # TODO - Include person_id (from client_id)
-  final_data <- filtered_data %>%
+    dplyr::left_join(
+      la_code_lookup(),
+      by = dplyr::join_by("sending_local_authority_code_9" == "CA")
+    ) %>%
     # Filter out duplicates
     fix_west_dun_duplicates() %>%
-    fix_east_ayrshire_duplicates() %>%
+    fix_east_ayrshire_duplicates()
+
+
+  completeness_data <- produce_homelessness_completeness(
+    homelessness_data = data,
+    update = update,
+    sg_pub_path = sg_pub_path
+  )
+
+  if (!is.null(completeness_data)) {
+    filtered_data <- data %>%
+      dplyr::left_join(completeness_data,
+        by = c("year", "sending_local_authority_name")
+      ) %>%
+      dplyr::filter(
+        dplyr::between(.data[["pct_complete_all"]], 0.90, 1.05) |
+          .data[["sending_local_authority_name"]] == "East Ayrshire"
+      )
+  } else {
+    filtered_data <- data
+  }
+
+  # TODO - Include person_id (from client_id)
+  final_data <- filtered_data %>%
     dplyr::select(
       "year",
       "recid",
@@ -185,35 +148,6 @@ process_extract_homelessness <- function(data, year, write_to_disk = TRUE) {
       "hl1_reason_ftm"
     )
 
-  # Changes only required for SPSS ------------------------------------------
-  final_data <- final_data %>%
-    tidyr::replace_na(list(chi = "")) %>%
-    dplyr::mutate(
-      dplyr::across(
-        c("record_keydate1", "record_keydate2"),
-        convert_date_to_numeric
-      )
-    ) %>%
-    dplyr::arrange(
-      .data$chi,
-      .data$record_keydate1,
-      .data$record_keydate2
-    ) %>%
-    dplyr::mutate(
-      postcode = stringr::str_pad(
-        .data$postcode,
-        width = 8L,
-        side = "right"
-      ),
-      smrtype = stringr::str_pad(.data$smrtype, width = 10L, side = "right"),
-      hl1_application_ref = stringr::str_pad(
-        .data$hl1_application_ref,
-        width = 15L,
-        side = "right"
-      )
-    )
-
-  # Write data --------------------------------------------------------------
   if (write_to_disk) {
     final_data %>%
       write_rds(get_file_path(
