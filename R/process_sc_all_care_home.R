@@ -21,25 +21,16 @@ process_sc_all_care_home <- function(data,
                                      write_to_disk = TRUE) {
   # Read Demographic file----------------------------------------------------
 
-  sc_demographics <- readr::read_rds(sc_demographics)
+  sc_demographics <- read_file(sc_demographics)
 
   # Read slf deaths file----------------------------------------------------
 
-  slf_deaths <- readr::read_rds(slf_deaths_path)
+  slf_deaths <- read_file(slf_deaths_path)
 
 
   ## Data Cleaning-----------------------------------------------------
   ch_clean <- data %>%
     dplyr::mutate(
-      dplyr::across(
-        c(
-          "ch_provider",
-          "reason_for_admission",
-          "type_of_admission",
-          "nursing_care_provision"
-        ),
-        as.integer
-      ),
       record_date = end_fy_quarter(.data[["period"]]),
       qtr_start = start_fy_quarter(.data[["period"]]),
       # Set missing admission date to start of the submitted quarter
@@ -132,7 +123,7 @@ process_sc_all_care_home <- function(data,
       .data[["split_episode_counter"]]
     ) %>%
     dplyr::summarise(
-      sc_latest_submission = dplyr::last("period"),
+      sc_latest_submission = dplyr::last(.data[["period"]]),
       dplyr::across(
         c(
           "ch_discharge_date",
@@ -287,7 +278,7 @@ process_sc_all_care_home <- function(data,
       )
     )
 
-  outfile <- adm_reason_recoded %>%
+  ch_data_final <- adm_reason_recoded %>%
     create_person_id() %>%
     dplyr::rename(
       record_keydate1 = "ch_admission_date",
@@ -316,7 +307,9 @@ process_sc_all_care_home <- function(data,
     )
 
   if (write_to_disk) {
-    outfile %>%
+    ch_data_final %>%
       write_rds(get_sc_ch_episodes_path(check_mode = "write"))
   }
+
+  return(ch_data_final)
 }

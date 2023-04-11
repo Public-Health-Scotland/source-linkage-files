@@ -7,7 +7,7 @@ read_extract_outpatients <- function(
     year,
     file_path = get_boxi_extract_path(year = year, type = "Outpatient")) {
   # Read BOXI extract
-  extract_outpatients <- readr::read_csv(file_path,
+  extract_outpatients <- read_file(file_path,
     col_type = cols(
       "Clinic Date Fin Year" = col_double(),
       "Clinic Date (00)" = col_date(format = "%Y/%m/%d %T"),

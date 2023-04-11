@@ -6,6 +6,7 @@ bedday
 beddays
 birthtime
 boxi
+carehome
 cattend
 cij
 Classificat
@@ -53,6 +54,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 HCP
+HHG
 hhg
 hms
 homecare
@@ -65,6 +67,7 @@ keydate
 keyring
 los
 ltc
+ltcs
 lubridate
 magrittr
 Mcbride
@@ -73,7 +76,9 @@ MMMYY
 mpat
 multistaff
 nhs
+NAs
 nhshosp
+NRS
 nrs
 nsu
 odbc
@@ -116,6 +121,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 SPSS

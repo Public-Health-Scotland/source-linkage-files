@@ -9,10 +9,10 @@
 process_tests_sc_demographics <- function() {
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
-      readr::read_rds(get_sc_demog_lookup_path(update = previous_update()))
+      read_file(get_sc_demog_lookup_path(update = previous_update()))
     ),
     new_data = produce_sc_demog_lookup_tests(
-      readr::read_rds(get_sc_demog_lookup_path())
+      read_file(get_sc_demog_lookup_path())
     )
   ) %>%
     write_tests_xlsx(sheet_name = "sc_demographics")
@@ -35,16 +35,8 @@ produce_sc_demog_lookup_tests <- function(data) {
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
-      n_missing_sending_loc = dplyr::if_else(
-        is_missing(.data$sending_location),
-        1L,
-        0L
-      ),
-      n_missing_sc_id = dplyr::if_else(
-        is_missing(.data$social_care_id),
-        1L,
-        0L
-      )
+      n_missing_sending_loc = is.na(.data$sending_location),
+      n_missing_sc_id = is.na(.data$social_care_id)
     ) %>%
     # remove variables that won't be summed
     dplyr::select(
