@@ -30,7 +30,10 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     ) %>%
     # order
     dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::mutate(
+      dplyr::across(c("sending_location", "service_type"), as.integer)
+    )
 
   return(at_full_data)
 }

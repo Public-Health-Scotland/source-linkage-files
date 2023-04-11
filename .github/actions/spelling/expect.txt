@@ -6,6 +6,7 @@ bedday
 beddays
 birthtime
 boxi
+carehome
 cattend
 cij
 Classificat
@@ -37,9 +38,12 @@ dsn
 dtplyr
 DVPROD
 dvprod
+Eilean
+Eileanan
 envir
 fileext
 fst
+ftm
 fyear
 fyyear
 geogs
@@ -50,6 +54,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 HCP
+HHG
 hhg
 hms
 homecare
@@ -60,7 +65,9 @@ itle
 jennifer
 keydate
 keyring
+los
 ltc
+ltcs
 lubridate
 magrittr
 Mcbride
@@ -68,7 +75,10 @@ mcmahon
 MMMYY
 mpat
 multistaff
+nhs
+NAs
 nhshosp
+NRS
 nrs
 nsu
 odbc
@@ -86,6 +96,7 @@ postcodes
 PPAs
 prac
 praccode
+ptypes
 purrr
 quickstart
 rds
@@ -102,6 +113,7 @@ rstudioapi
 Rtype
 seealso
 selfharm
+Siar
 sigfac
 simd
 slf
@@ -109,6 +121,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 SPSS
@@ -128,6 +141,7 @@ tidyselect
 uid
 ungroup
 updown
+upi
 xlsx
 yearstay
 zihao
