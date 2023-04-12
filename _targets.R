@@ -28,8 +28,8 @@ list(
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
   tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_file_read(chi_deaths_data,
-    command = get_it_deaths_path(),
-    read = read_lookup_chi_deaths(!!.x)
+                command = get_it_deaths_path(),
+                read = read_lookup_chi_deaths(!!.x)
   ),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
@@ -239,13 +239,13 @@ list(
       format = "file"
     ),
     tar_target(ooh_data,
-      read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
-      ),
-      format = "rds"
+               read_extract_gp_ooh(
+                 year,
+                 diagnosis_data_path,
+                 outcomes_data_path,
+                 consultations_data_path
+               ),
+               format = "rds"
     ),
     ### Target source processed extracts ###
     tar_target(source_cmh_extract, process_extract_cmh(
@@ -364,56 +364,7 @@ list(
         client_lookup_path = client_lookup_path,
         write_to_disk = write_to_disk
       )
-    ),
-    # Option 2  - preferred
-    tar_target(ep_file, run_episode_file(
-      list(
-        "cmh" = source_cmh_extract,
-        "delayed_discharges" = source_dd_extract,
-        "district_nursing" = source_dn_extract,
-        # "homelessness" = source_homelessness_extract,
-        "acute" = acute_source_extract,
-        "ae" = ae_source_extract,
-        "maternity" = maternity_source_extract,
-        "mental_health" = mental_health_source_extract,
-        "nrs_deaths" = nrs_deaths_source_extract,
-        "outpatients" = outpatients_source_extract,
-        "pis" = pis_source_extract,
-        "ltc" = ltc_source_extract,
-        "gp_ooh" = ooh_source_extract,
-        "alarms_telecare" = source_sc_alarms_tele,
-        "sds" = source_sc_sds,
-        "home_care" = source_sc_home_care,
-        "care_home" = source_sc_care_home
-      ),
-      year = year,
-      write_to_disk = TRUE
-    ))
-    # Tar map
+    )
   )
-  # end of targets
 )
 
-
-# # Option 1
-# tar_target(processed_extracts, list(
-#   "cmh" = source_cmh_extract,
-#   "delayed_discharges" = source_dd_extract,
-#   "district_nursing" = source_dn_extract,
-#   "homelessness" = source_homelessness_extract,
-#   "acute" = acute_source_extract,
-#   "ae" = ae_source_extract,
-#   "maternity" = maternity_source_extract,
-#   "mental_health" = mental_health_source_extract,
-#   "nrs_deaths" = nrs_deaths_source_extract,
-#   "outpatients" = outpatients_source_extract,
-#   "pis" = pis_source_extract,
-#   "ltc" = ltc_source_extract,
-#   "gp_ooh" = ooh_source_extract,
-#   "alarms_telecare" = source_sc_alarms_tele,
-#   "sds" = source_sc_sds,
-#   "home_care" = source_sc_home_care,
-#   "care_home" = source_sc_care_home)),
-# tar_target(ep_file, run_episode_file(processed_extracts,
-#                                      year = year,
-#                                      write_to_disk)),
