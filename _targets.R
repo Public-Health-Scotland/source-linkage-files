@@ -51,6 +51,10 @@ list(
     )
   ),
   tar_target(
+    sc_demog_lookup_tests,
+    process_tests_sc_demographics(sc_demog_lookup)
+  ),
+  tar_target(
     source_pc_lookup,
     process_lookup_postcode(
       spd_path = spd_path,
@@ -81,8 +85,6 @@ list(
   tar_target(gp_ooh_cost_lookup, process_costs_gp_ooh_rmd()),
   tar_target(dn_cost_lookup, process_costs_dn_rmd()),
   ## Social Care - 'All' data ##
-  tar_target(sc_demographic_data_path, get_sc_demog_lookup_path(), format = "file"),
-  tar_target(slf_deaths_data_path, get_slf_deaths_path(), format = "file"),
   tar_target(
     all_at_extract,
     read_sc_all_alarms_telecare(),
@@ -95,7 +97,7 @@ list(
     all_at,
     process_sc_all_alarms_telecare(
       all_at_extract,
-      sc_demographics = sc_demographic_data_path,
+      sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
     )
   ),
@@ -111,7 +113,7 @@ list(
     all_sds,
     process_sc_all_sds(
       all_sds_extract,
-      sc_demographics = sc_demographic_data_path,
+      sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
     )
   ),
@@ -127,7 +129,7 @@ list(
     all_home_care,
     process_sc_all_home_care(
       all_home_care_extract,
-      sc_demographics = sc_demographic_data_path,
+      sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
     )
   ),
@@ -143,32 +145,16 @@ list(
     all_care_home,
     process_sc_all_care_home(
       all_care_home_extract,
-      sc_demographics = sc_demographic_data_path,
-      slf_deaths_path = slf_deaths_data_path,
+      sc_demog_lookup = sc_demog_lookup,
+      slf_deaths_lookup = slf_chi_deaths_lookup,
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
     )
   ),
   tar_target(
-    all_at_data_path,
-    get_sc_at_episodes_path(),
-    format = "file"
-  ),
-  tar_target(
-    all_sds_data_path,
-    get_sc_sds_episodes_path(),
-    format = "file"
-  ),
-  tar_target(
-    all_hc_data_path,
-    get_sc_hc_episodes_path(),
-    format = "file"
-  ),
-  tar_target(
-    all_ch_data_path,
-    get_sc_ch_episodes_path(),
-    format = "file"
+    all_care_home_tests,
+    process_tests_sc_ch_episodes(all_care_home)
   ),
   tar_map(
     list(year = years_to_run),
@@ -313,56 +299,81 @@ list(
       ooh_data,
       write_to_disk = write_to_disk
     )),
-    ### Target social care data ###
-    tar_target(
-      client_lookup_path,
-      get_source_extract_path(year, type = "Client"),
-      format = "file"
-    ),
     ### Target process year specific social care ###
     tar_target(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
     ),
-    tar_target(sc_client_lookup, process_lookup_sc_client(
-      sc_client_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
+    tar_target(
+      sc_client_lookup,
+      process_lookup_sc_client(
+        data = sc_client_data,
+        year = year,
+        write_to_disk = write_to_disk
+      )
+    ),
     tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
-        file_path = all_at_data_path,
+        data = all_at,
         year = year,
-        client_lookup_path = client_lookup_path,
+        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_target(
+      tests_alarms_telecare,
+      process_tests_alarms_telecare(
+        data = source_sc_alarms_tele,
+        year = year
       )
     ),
     tar_target(
       source_sc_sds,
       process_extract_sds(
-        file_path = all_sds_data_path,
+        data = all_sds,
         year = year,
-        client_lookup_path = client_lookup_path,
+        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_target(
+      tests_sds,
+      process_tests_sds(
+        data = source_sc_sds,
+        year = year
       )
     ),
     tar_target(
       source_sc_home_care,
       process_extract_home_care(
-        file_path = all_hc_data_path,
-        year,
-        client_lookup_path = client_lookup_path,
+        data = all_home_care,
+        year = year,
+        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_target(
+      tests_home_care,
+      process_tests_home_care(
+        data = source_sc_home_care,
+        year = year
       )
     ),
     tar_target(
       source_sc_care_home,
       process_extract_care_home(
-        file_path = all_ch_data_path,
+        data = all_care_home,
         year = year,
-        client_lookup_path = client_lookup_path,
+        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_target(
+      tests_care_home,
+      process_tests_care_home(
+        data = source_sc_care_home,
+        year = year
       )
     )
   )

@@ -5,11 +5,14 @@
 #' but also write this out as a rds.
 #'
 #' @param data The extract to process
-#' @param sc_demographics The sc demographics lookup.
-#' @param slf_deaths_path The path to slf deaths lookup.
+#' @param sc_demog_lookup The Social Care Demographics lookup produced by
+#' [process_lookup_sc_demographics()].
+#' @param slf_deaths_lookup The SLF CHI Deaths lookup, produced by
+#' [process_lookup_chi_deaths()].
 #' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
-#' @param spd_path Path the Scottish Postcode Directory.
-#' @param write_to_disk (optional) Should the data be written to disk default is
+#' @param spd_path (Optional) Path the Scottish Postcode Directory, default is
+#' to use [get_spd_path()].
+#' @param write_to_disk (Optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
@@ -19,31 +22,14 @@
 #'
 process_sc_all_care_home <- function(
     data,
-    sc_demographics = get_sc_demog_lookup_path(),
-    slf_deaths_path = get_slf_deaths_path(),
+    sc_demog_lookup,
+    slf_deaths_lookup,
     ch_name_lookup_path = get_slf_ch_name_lookup_path(),
     spd_path = get_spd_path(),
     write_to_disk = TRUE) {
-  # Read Demographic file----------------------------------------------------
-
-  sc_demographics <- readr::read_rds(sc_demographics)
-
-  # Read slf deaths file----------------------------------------------------
-
-  slf_deaths <- readr::read_rds(slf_deaths_path)
-
-  ## Data Cleaning-----------------------------------------------------
+  # Data Cleaning-----------------------------------------------------
   ch_clean <- data %>%
     dplyr::mutate(
-      dplyr::across(
-        c(
-          "ch_provider",
-          "reason_for_admission",
-          "type_of_admission",
-          "nursing_care_provision"
-        ),
-        as.integer
-      ),
       record_date = end_fy_quarter(.data[["period"]]),
       qtr_start = start_fy_quarter(.data[["period"]]),
       # Set missing admission date to start of the submitted quarter
@@ -60,7 +46,7 @@ process_sc_all_care_home <- function(
         .data[["ch_discharge_date"]]
       )
     ) %>%
-    dplyr::left_join(sc_demographics,
+    dplyr::left_join(sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     )
 
@@ -140,7 +126,7 @@ process_sc_all_care_home <- function(
       .data[["split_episode_counter"]]
     ) %>%
     dplyr::summarise(
-      sc_latest_submission = dplyr::last("period"),
+      sc_latest_submission = dplyr::last(.data[["period"]]),
       dplyr::across(
         c(
           "ch_discharge_date",
@@ -198,7 +184,7 @@ process_sc_all_care_home <- function(
   # Compare to Deaths Data
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
-    dplyr::left_join(slf_deaths,
+    dplyr::left_join(slf_deaths_lookup,
       by = "chi"
     ) %>%
     # compare discharge date with NRS and CHI death date
@@ -295,7 +281,7 @@ process_sc_all_care_home <- function(
       )
     )
 
-  outfile <- adm_reason_recoded %>%
+  ch_data_final <- adm_reason_recoded %>%
     create_person_id() %>%
     dplyr::rename(
       record_keydate1 = "ch_admission_date",
@@ -324,7 +310,9 @@ process_sc_all_care_home <- function(
     )
 
   if (write_to_disk) {
-    outfile %>%
+    ch_data_final %>%
       write_rds(get_sc_ch_episodes_path(check_mode = "write"))
   }
+
+  return(ch_data_final)
 }

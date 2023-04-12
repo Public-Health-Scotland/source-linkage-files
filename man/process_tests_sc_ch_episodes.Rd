@@ -2,14 +2,18 @@
 % Please edit documentation in R/process_tests_sc_ch_episodes.R
 \name{process_tests_sc_ch_episodes}
 \alias{process_tests_sc_ch_episodes}
-\title{Process Social Care Care Home episodes tests}
+\title{Process Social Care Care Home all episodes tests}
 \usage{
-process_tests_sc_ch_episodes()
+process_tests_sc_ch_episodes(data)
+}
+\arguments{
+\item{data}{The processed Care Home all episode data produced by
+\code{\link[=process_extract_care_home]{process_extract_care_home()}}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed demographic extract and produces
-a test comparison with the previous data. This is written to disk as a CSV.
+This script takes the processed all Care Home file and produces
+a test comparison with the previous data.
 }

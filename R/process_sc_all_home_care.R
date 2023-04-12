@@ -4,33 +4,32 @@
 #' all home care extract, it will return the final data
 #' but also write this out as a rds.
 #'
-#' @param data The extract to process
-#' @param sc_demographics The path to the sc demographics lookup.
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @inheritParams process_sc_all_care_home
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
 #' @export
 #'
-process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
+process_sc_all_home_care <- function(
+    data,
+    sc_demog_lookup,
+    write_to_disk = TRUE) {
   # Match on demographic data ---------------------------------------
-  # read in demographic data
-  sc_demographics <- readr::read_rds(sc_demographics)
-
 
   matched_hc_data <- data %>%
-    dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
-
+    dplyr::left_join(
+      sc_demog_lookup,
+      by = c("sending_location", "social_care_id")
+    )
 
   # Data Cleaning ---------------------------------------
 
   home_care_clean <- matched_hc_data %>%
     # set reablement values == 9 to NA
-    dplyr::mutate(reablement = dplyr::na_if(.data$reablement, "9")) %>%
+    dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
-    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, "0")) %>%
+    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
     # period start and end dates
     dplyr::mutate(
       record_date = end_fy_quarter(.data$period),
@@ -54,6 +53,7 @@ process_sc_all_home_care <- function(data, sc_demographics = get_sc_demog_lookup
     # fill reablement when missing but present in group
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$hc_service_start_date) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
+    dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
     dplyr::ungroup() %>%
     # Only keep records which have some time in the quarter in which they were submitted
     dplyr::mutate(
