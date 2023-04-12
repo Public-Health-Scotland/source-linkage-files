@@ -7,9 +7,6 @@
 #' @export
 #'
 read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
-  # Read in data---------------------------------------
-
-  ## read in data - social care 2 demographic
   ch_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "carehome_snapshot")
@@ -43,7 +40,17 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
         .data$period
       )
     ) %>%
-    dplyr::collect()
+    dplyr::select(!c("financial_year", "financial_quarter")) %>%
+    dplyr::collect() %>%
+    dplyr::mutate(
+      dplyr::across(c(
+        "sending_location",
+        "ch_provider",
+        "reason_for_admission",
+        "type_of_admission",
+        "nursing_care_provision"
+      ), as.integer)
+    )
 
   return(ch_data)
 }

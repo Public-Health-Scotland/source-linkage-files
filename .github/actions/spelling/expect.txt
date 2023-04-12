@@ -7,6 +7,8 @@ beddays
 birthtime
 boxi
 buildignore
+callr
+carehome
 cattend
 cij
 Classificat
@@ -63,6 +65,7 @@ iwalk
 jennifer
 keydate
 keyring
+los
 ltc
 lubridate
 magrittr
@@ -126,8 +129,8 @@ stefanzweifel
 stringdist
 stringr
 submis
-tarchetypes
 tadm
+tarchetypes
 tbl
 telecare
 testthat
@@ -138,6 +141,7 @@ tidyselect
 uid
 ungroup
 updown
+upi
 WORDLIST
 workflows
 xlsx
