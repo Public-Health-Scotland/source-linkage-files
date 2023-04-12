@@ -22,17 +22,17 @@ years_to_run <- c("1920")
 list(
   tar_rds(write_to_disk, FALSE),
   ## Lookup data ##
-  tar_target(spd_path, get_spd_path(), format = "file"),
-  tar_target(simd_path, get_simd_path(), format = "file"),
-  tar_target(locality_path, get_locality_path(), format = "file"),
-  tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
   tar_target(gpprac_opendata, get_gpprac_opendata()),
+  tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
+  tar_target(locality_path, get_locality_path(), format = "file"),
+  tar_target(simd_path, get_simd_path(), format = "file"),
+  tar_target(spd_path, get_spd_path(), format = "file"),
   tar_file_read(chi_deaths_data,
     command = get_it_deaths_path(),
     read = read_lookup_chi_deaths(!!.x)
   ),
-  tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
+  tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
   tar_target(slf_ch_name_lookup_path, get_slf_ch_name_lookup_path(), format = "file"),
   ## Process Lookups ##
   tar_target(
@@ -55,11 +55,9 @@ list(
     process_tests_sc_demographics(sc_demog_lookup)
   ),
   tar_target(
-    source_pc_lookup,
-    process_lookup_postcode(
-      spd_path = spd_path,
-      simd_path = simd_path,
-      locality_path = locality_path,
+    slf_chi_deaths_lookup,
+    process_lookup_chi_deaths(
+      data = chi_deaths_data,
       write_to_disk = write_to_disk
     )
   ),
@@ -73,17 +71,19 @@ list(
     )
   ),
   tar_target(
-    slf_chi_deaths_lookup,
-    process_lookup_chi_deaths(
-      data = chi_deaths_data,
+    source_pc_lookup,
+    process_lookup_postcode(
+      spd_path = spd_path,
+      simd_path = simd_path,
+      locality_path = locality_path,
       write_to_disk = write_to_disk
     )
   ),
   ## Cost Lookups ##
   tar_target(ch_cost_lookup, process_costs_ch_rmd()),
+  tar_target(dn_cost_lookup, process_costs_dn_rmd()),
   tar_target(hc_cost_lookup, process_costs_hc_rmd()),
   tar_target(gp_ooh_cost_lookup, process_costs_gp_ooh_rmd()),
-  tar_target(dn_cost_lookup, process_costs_dn_rmd()),
   ## Social Care - 'All' data ##
   tar_target(
     all_at_extract,
@@ -97,22 +97,6 @@ list(
     all_at,
     process_sc_all_alarms_telecare(
       all_at_extract,
-      sc_demog_lookup = sc_demog_lookup,
-      write_to_disk = write_to_disk
-    )
-  ),
-  tar_target(
-    all_sds_extract,
-    read_sc_all_sds(),
-    cue = tar_cue_age(
-      name = all_sds_extract,
-      age = as.difftime(28, units = "days")
-    )
-  ),
-  tar_target(
-    all_sds,
-    process_sc_all_sds(
-      all_sds_extract,
       sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
     )
@@ -155,6 +139,22 @@ list(
   tar_target(
     all_care_home_tests,
     process_tests_sc_ch_episodes(all_care_home)
+  ),
+  tar_target(
+    all_sds_extract,
+    read_sc_all_sds(),
+    cue = tar_cue_age(
+      name = all_sds_extract,
+      age = as.difftime(28, units = "days")
+    )
+  ),
+  tar_target(
+    all_sds,
+    process_sc_all_sds(
+      all_sds_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      write_to_disk = write_to_disk
+    )
   ),
   tar_map(
     list(year = years_to_run),
