@@ -160,6 +160,16 @@ list(
     list(year = years_to_run),
     ### target data extracts ###
     tar_file_read(
+      acute_data,
+      get_boxi_extract_path(year, type = "Acute"),
+      read_extract_acute(year, !!.x)
+    ),
+    tar_file_read(
+      ae_data,
+      get_boxi_extract_path(year, type = "AE"),
+      read_extract_ae(year, !!.x)
+    ),
+    tar_file_read(
       cmh_data,
       get_boxi_extract_path(year, type = "CMH"),
       read_extract_cmh(year, !!.x)
@@ -173,16 +183,6 @@ list(
       homelessness_data,
       get_boxi_extract_path(year, type = "Homelessness"),
       read_extract_homelessness(year, !!.x)
-    ),
-    tar_file_read(
-      acute_data,
-      get_boxi_extract_path(year, type = "Acute"),
-      read_extract_acute(year, !!.x)
-    ),
-    tar_file_read(
-      ae_data,
-      get_boxi_extract_path(year, type = "AE"),
-      read_extract_ae(year, !!.x)
     ),
     tar_file_read(
       maternity_data,
@@ -200,14 +200,14 @@ list(
       read_extract_nrs_deaths(year, !!.x)
     ),
     tar_file_read(
-      prescribing_data,
-      get_it_prescribing_path(year),
-      read_extract_prescribing(year, !!.x)
-    ),
-    tar_file_read(
       outpatients_data,
       get_boxi_extract_path(year, type = "Outpatient"),
       read_extract_outpatients(year, !!.x)
+    ),
+    tar_file_read(
+      prescribing_data,
+      get_it_prescribing_path(year),
+      read_extract_prescribing(year, !!.x)
     ),
     tar_target(
       diagnosis_data_path,
@@ -234,6 +234,16 @@ list(
       format = "rds"
     ),
     ### Target source processed extracts ###
+    tar_target(acute_source_extract, process_extract_acute(
+      acute_data,
+      year,
+      write_to_disk = write_to_disk
+    )),
+    tar_target(ae_source_extract, process_extract_ae(
+      ae_data,
+      year,
+      write_to_disk = write_to_disk
+    )),
     tar_target(source_cmh_extract, process_extract_cmh(
       cmh_data,
       year,
@@ -254,13 +264,8 @@ list(
       year,
       write_to_disk = write_to_disk
     )),
-    tar_target(acute_source_extract, process_extract_acute(
-      acute_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
-    tar_target(ae_source_extract, process_extract_ae(
-      ae_data,
+    tar_target(ltc_source_extract, process_lookup_ltc(
+      ltc_data,
       year,
       write_to_disk = write_to_disk
     )),
@@ -279,6 +284,11 @@ list(
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(ooh_source_extract, process_extract_gp_ooh(
+      year,
+      ooh_data,
+      write_to_disk = write_to_disk
+    )),
     tar_target(outpatients_source_extract, process_extract_outpatients(
       outpatients_data,
       year,
@@ -287,16 +297,6 @@ list(
     tar_target(pis_source_extract, process_extract_prescribing(
       prescribing_data,
       year,
-      write_to_disk = write_to_disk
-    )),
-    tar_target(ltc_source_extract, process_lookup_ltc(
-      ltc_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
-    tar_target(ooh_source_extract, process_extract_gp_ooh(
-      year,
-      ooh_data,
       write_to_disk = write_to_disk
     )),
     ### Target process year specific social care ###
@@ -329,18 +329,18 @@ list(
       )
     ),
     tar_target(
-      source_sc_sds,
-      process_extract_sds(
-        data = all_sds,
+      source_sc_care_home,
+      process_extract_care_home(
+        data = all_care_home,
         year = year,
         client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
     tar_target(
-      tests_sds,
-      process_tests_sds(
-        data = source_sc_sds,
+      tests_care_home,
+      process_tests_care_home(
+        data = source_sc_care_home,
         year = year
       )
     ),
@@ -361,18 +361,18 @@ list(
       )
     ),
     tar_target(
-      source_sc_care_home,
-      process_extract_care_home(
-        data = all_care_home,
+      source_sc_sds,
+      process_extract_sds(
+        data = all_sds,
         year = year,
         client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
     tar_target(
-      tests_care_home,
-      process_tests_care_home(
-        data = source_sc_care_home,
+      tests_sds,
+      process_tests_sds(
+        data = source_sc_sds,
         year = year
       )
     )
