@@ -28,8 +28,8 @@ list(
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
   tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_file_read(chi_deaths_data,
-                command = get_it_deaths_path(),
-                read = read_lookup_chi_deaths(!!.x)
+    command = get_it_deaths_path(),
+    read = read_lookup_chi_deaths(!!.x)
   ),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
@@ -225,13 +225,13 @@ list(
       format = "file"
     ),
     tar_target(ooh_data,
-               read_extract_gp_ooh(
-                 year,
-                 diagnosis_data_path,
-                 outcomes_data_path,
-                 consultations_data_path
-               ),
-               format = "rds"
+      read_extract_gp_ooh(
+        year,
+        diagnosis_data_path,
+        outcomes_data_path,
+        consultations_data_path
+      ),
+      format = "rds"
     ),
     ### Target source processed extracts ###
     tar_target(source_cmh_extract, process_extract_cmh(
@@ -378,4 +378,3 @@ list(
     )
   )
 )
-
