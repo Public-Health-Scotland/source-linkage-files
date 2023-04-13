@@ -6,8 +6,6 @@ bedday
 beddays
 birthtime
 boxi
-buildignore
-callr
 carehome
 cattend
 cij
@@ -40,9 +38,12 @@ dsn
 dtplyr
 DVPROD
 dvprod
+Eilean
+Eileanan
 envir
 fileext
 fst
+ftm
 fyear
 fyyear
 geogs
@@ -53,6 +54,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 HCP
+HHG
 hhg
 hms
 homecare
@@ -67,6 +69,7 @@ keydate
 keyring
 los
 ltc
+ltcs
 lubridate
 magrittr
 Mcbride
@@ -76,7 +79,10 @@ Moohan
 mpat
 multisession
 multistaff
+nhs
+NAs
 nhshosp
+NRS
 nrs
 nsu
 odbc
@@ -94,6 +100,7 @@ postcodes
 PPAs
 prac
 praccode
+ptypes
 purrr
 quickstart
 Rbuildignore
@@ -113,6 +120,7 @@ rstudioapi
 Rtype
 seealso
 selfharm
+Siar
 sigfac
 simd
 slf
@@ -120,7 +128,6 @@ slfhelper
 smr
 SMRA
 smrtype
-sourcedev
 sparra
 spd
 spss
@@ -142,8 +149,6 @@ uid
 ungroup
 updown
 upi
-WORDLIST
-workflows
 xlsx
 yearstay
 zihao

@@ -99,7 +99,7 @@ process_sc_all_home_care <- function(
 
   # Home Care Costs ---------------------------------------
 
-  home_care_costs <- readr::read_rds(get_hc_costs_path())
+  home_care_costs <- read_file(get_hc_costs_path())
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%

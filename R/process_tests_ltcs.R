@@ -11,7 +11,7 @@
 process_tests_ltcs <- function(year) {
   year <- check_year_format(year)
 
-  new_data <- readr::read_rds(get_ltcs_path(year))
+  new_data <- read_file(get_ltcs_path(year))
 
   # Find and flag any duplicate chis and chi/postcode combinations
   duplicates <- new_data %>%

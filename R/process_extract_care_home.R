@@ -70,7 +70,7 @@ process_extract_care_home <- function(
 
   # Costs  ---------------------------------------
   # read in CH Costs Lookup
-  ch_costs <- readr::read_rds(get_ch_costs_path()) %>%
+  ch_costs <- read_file(get_ch_costs_path()) %>%
     dplyr::rename(
       ch_nursing = "nursing_care_provision"
     )

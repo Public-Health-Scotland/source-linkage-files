@@ -7,7 +7,7 @@ read_extract_maternity <- function(
     year,
     file_path = get_boxi_extract_path(year = year, type = "Maternity")) {
   # Read BOXI extract
-  extract_maternity <- readr::read_csv(file_path,
+  extract_maternity <- read_file(file_path,
     col_type = cols(
       "Costs Financial Year" = col_double(),
       "Date of Admission Full Date" = col_date(format = "%Y/%m/%d %T"),

@@ -28,7 +28,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
   # Costs ---------------------------------
 
   # OOH cost lookup
-  ooh_cost_lookup <- readr::read_rds(get_gp_ooh_costs_path()) %>%
+  ooh_cost_lookup <- read_file(get_gp_ooh_costs_path()) %>%
     dplyr::rename(
       hbtreatcode = "TreatmentNHSBoardCode"
     )
