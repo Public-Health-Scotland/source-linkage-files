@@ -34,7 +34,7 @@ process_costs_rmd <- function(file_name) {
 
   output_file <- get_file_path(
     directory = output_dir,
-    file_name = fs::path_ext_set(glue::glue("{fs::path_ext_remove(file_name)}-{latest_update()}-{date_today}"), "html"),
+    file_name = fs::path_ext_set(stringr::str_glue("{fs::path_ext_remove(file_name)}-{latest_update()}-{date_today}"), "html"),
     check_mode = "write"
   )
 

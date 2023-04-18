@@ -12,7 +12,7 @@
 get_ch_costs_path <- function(..., update = NULL) {
   ch_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue(
+    file_name = stringr::str_glue(
       "Cost_CH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"
     ),
     ...
@@ -35,7 +35,7 @@ get_ch_costs_path <- function(..., update = NULL) {
 get_dn_costs_path <- function(..., update = NULL) {
   dn_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue(
+    file_name = stringr::str_glue(
       "Cost_DN_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"
     ),
     ...
@@ -59,7 +59,7 @@ get_dn_costs_path <- function(..., update = NULL) {
 get_gp_ooh_costs_path <- function(..., update = NULL) {
   gp_ooh_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue(
+    file_name = stringr::str_glue(
       "Cost_GPOoH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"
     ),
     ...
@@ -83,7 +83,7 @@ get_gp_ooh_costs_path <- function(..., update = NULL) {
 get_hc_costs_path <- function(..., update = NULL) {
   hc_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue(
+    file_name = stringr::str_glue(
       "costs_hc_lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.rds"
     ),
     ...
@@ -107,7 +107,7 @@ get_hc_costs_path <- function(..., update = NULL) {
 get_hc_raw_costs_path <- function(..., update = NULL) {
   hc_raw_costs_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = glue::glue("hc_costs.xlsx"),
+    file_name = stringr::str_glue("hc_costs.xlsx"),
     ...
   )
 
