@@ -5,8 +5,7 @@
 #' @export
 read_extract_cmh <- function(
     year,
-    file_path = get_boxi_extract_path(year = year, type = "CMH")
-) {
+    file_path = get_boxi_extract_path(year = year, type = "CMH")) {
   # Specify years available for running
   if (is.na(file_path)) {
     return(NULL)
