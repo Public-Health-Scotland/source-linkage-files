@@ -12,8 +12,6 @@ write_parquet(data, path, compression = "zstd", ...)
 \item{path}{Path to where the data will be written.}
 
 \item{...}{Additional arguments to \link[arrow:write_parquet]{write_parquet()}
-and the subsequent connection function. For example, control the space-time
-trade-off of different compression methods with \code{compression}. See \code{\link[=connections]{connections()}}
 for more details.}
 
 \item{compress}{Compression method to use:
