@@ -1,3 +1,4 @@
+Accom
 admloc
 admtype
 adtf
@@ -5,9 +6,13 @@ aut
 bedday
 beddays
 birthtime
+BOXI
 boxi
+Canx
 carehome
+careinspectorate
 cattend
+CCYY
 cij
 Classificat
 cls
@@ -48,15 +53,19 @@ ftm
 fyear
 fyyear
 geogs
+ggplot
 GLS
 gpprac
+gss
 hbnames
 hbpraccode
 hbrescode
 hbtreatcode
+hbtreatname
 HCP
 HHG
 hhg
+hjust
 hms
 homecare
 hscp
@@ -65,6 +74,7 @@ infyyear
 ipdc
 itle
 iwalk
+jaccard
 jennifer
 keydate
 keyring
@@ -89,6 +99,7 @@ nsu
 odbc
 oldtadm
 opendata
+openxl
 openxlsx
 ORCID
 outfile
@@ -119,6 +130,7 @@ Rscript
 rspm
 rstudioapi
 Rtype
+Scougal
 seealso
 selfharm
 Siar
@@ -150,6 +162,8 @@ uid
 ungroup
 updown
 upi
+vline
+xintercept
 xlsx
 yearstay
 zihao
