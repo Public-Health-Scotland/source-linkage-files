@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_episode_file.R
 \name{run_episode_file}
 \alias{run_episode_file}
-\title{Function for running the Source Episode file}
+\title{Produce the Source Episode file}
 \usage{
 run_episode_file(processed_data_list, year, write_to_disk = TRUE)
 }
@@ -15,8 +15,8 @@ run_episode_file(processed_data_list, year, write_to_disk = TRUE)
 \code{TRUE} i.e. write the data to disk.}
 }
 \value{
-a dataframe containing the ep file
+a \link[tibble:tibble-package]{tibble} containing the episode file
 }
 \description{
-Function for running the Source Episode file
+Produce the Source Episode file
 }
