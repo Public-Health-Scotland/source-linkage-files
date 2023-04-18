@@ -1,11 +1,11 @@
-#' Function for running the Source Episode file
+#' Produce the Source Episode file
 #'
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
-#' @return a dataframe containing the ep file
+#' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
@@ -20,11 +20,11 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         "",
         .data$chi
       ),
-      gpprac = as.integer(.data[["gpprac"]])
+      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
     ) %>%
     # Change some values of cij_pattype_code based on cij_admtype
     dplyr::mutate(
-      cij_admtype = dplyr::if_else(cij_admtype == "Unknown", "99", cij_admtype),
+      cij_admtype = dplyr::if_else(.data$cij_admtype == "Unknown", "99", .data$cij_admtype),
       cij_pattype_code = dplyr::case_when(
         !is_missing(.data$chi) &
           .data$recid %in% c("01B", "04B", "GLS", "02B") &

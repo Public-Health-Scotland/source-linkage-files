@@ -67,7 +67,7 @@ get_source_extract_path <- function(year,
 
   source_extract_path <- get_file_path(
     directory = year_dir,
-    file_name = glue::glue("{file_name}-20{year}.rds"),
+    file_name = stringr::str_glue("{file_name}-20{year}.rds"),
     ...
   )
 

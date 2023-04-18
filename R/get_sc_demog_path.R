@@ -15,7 +15,7 @@
 get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
   sc_demog_lookup_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Social_care"),
-    file_name = glue::glue("sc_demographics_lookup_{update}.rds"),
+    file_name = stringr::str_glue("sc_demographics_lookup_{update}.rds"),
     ...
   )
 

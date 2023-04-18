@@ -8,6 +8,6 @@ test_that("GP clusters file (Practice Details) path works", {
 
   expect_match(
     get_practice_details_path(),
-    glue::glue("practice_details_{latest_update()}")
+    stringr::str_glue("practice_details_{latest_update()}")
   )
 })

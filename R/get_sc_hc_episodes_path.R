@@ -14,7 +14,7 @@
 get_sc_hc_episodes_path <- function(update = latest_update(), ...) {
   sc_hc_episodes_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Social_care"),
-    file_name = glue::glue("all_hc_episodes_{update}.rds"),
+    file_name = stringr::str_glue("all_hc_episodes_{update}.rds"),
     ...
   )
 
