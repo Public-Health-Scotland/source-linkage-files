@@ -54,7 +54,7 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_
         .data$service_type == 2L ~ "AT-Tele"
       ),
       # Create person id variable
-      person_id = glue::glue("{sending_location}-{social_care_id}"),
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
     ) %>%
