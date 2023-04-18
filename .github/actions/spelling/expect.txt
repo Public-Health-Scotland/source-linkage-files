@@ -2,6 +2,7 @@ Accom
 admloc
 admtype
 adtf
+arth
 aut
 bedday
 beddays
@@ -19,6 +20,7 @@ cls
 cmh
 CNWs
 commhosp
+congen
 costmonthnum
 costsfy
 covr
