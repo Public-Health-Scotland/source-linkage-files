@@ -7,8 +7,8 @@
 #' @param year The financial year in '1718' format.
 #' @param admission_date The admission/start date variable.
 #' @param discharge_date The admission/start date variable
-#' @param count_last (default `TRUE`) - Should the last day be counted,
-#' instead of the first?
+#' @param count_last (default `FALSE`) - The first day be counted,
+#' instead of the last.
 #'
 #' @return a [tibble][tibble::tibble-package] with additional variables `apr_beddays` to `mar_beddays`
 #' that count the beddays which occurred in the month.
@@ -20,7 +20,7 @@ create_monthly_beddays <- function(data,
                                    year,
                                    admission_date,
                                    discharge_date,
-                                   count_last = TRUE) {
+                                   count_last = FALSE) {
   # Extract date vectors for checking
   admission_dates_vector <- dplyr::pull(data, {{ admission_date }})
   discharge_dates_vector <- dplyr::pull(data, {{ discharge_date }})
