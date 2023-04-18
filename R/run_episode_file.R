@@ -105,6 +105,49 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   }
 }
 
+select_variables <- function(data, year, vars_to_keep) {
+  check_variables_exist(data, vars_to_keep)
+
+  vars_to_store <- setdiff(names(data), vars_to_keep)
+
+  data <- data %>%
+    dplyr::mutate(ep_file_row_id = dplyr::row_number()) %>%
+    dplyr::select(
+      data,
+      dplyr::all_of(c("ep_file_row_id", vars_to_store))
+    ) %>%
+    arrow::write_parquet(
+      sink = fs::path(
+        get_year_dir(year),
+        stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
+      ),
+      version = "latest",
+      compression = "zstd"
+    )
+
+  return(
+    dplyr::select(
+      data,
+      dplyr::all_of(c("ep_file_row_id", vars_to_keep))
+    )
+  )
+}
+
+load_variables <- function(data, year) {
+  data %>%
+    dplyr::left_join(
+      arrow::read_parquet(
+        file = fs::path(
+          get_year_dir(year),
+          stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
+        )
+      ),
+      by = "ep_file_row_id",
+      unmatched = "error",
+      relationship = "one-to-one"
+    )
+}
+
 #' Fill any missing CIJ markers for records that should have them
 #'
 #' @param data A data frame
