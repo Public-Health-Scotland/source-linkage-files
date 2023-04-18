@@ -19,6 +19,7 @@ was preventable or not.
 }
 \seealso{
 Other episode file: 
+\code{\link{add_dd}()},
 \code{\link{add_nsu_cohort}()}
 }
 \concept{episode file}
