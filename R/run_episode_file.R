@@ -106,21 +106,26 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
 }
 
 select_variables <- function(data, year, vars_to_keep) {
+  tempfile_path <- get_file_path(
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+    check_mode = "write",
+    create = TRUE
+  )
+
   check_variables_exist(data, vars_to_keep)
 
-  vars_to_store <- setdiff(names(data), vars_to_keep)
-
   data <- data %>%
-    dplyr::mutate(ep_file_row_id = dplyr::row_number()) %>%
-    dplyr::select(
-      data,
-      dplyr::all_of(c("ep_file_row_id", vars_to_store))
-    ) %>%
+    dplyr::mutate(ep_file_row_id = dplyr::row_number())
+
+  vars_to_store <- c("ep_file_row_id", setdiff(names(data), vars_to_keep))
+
+  dplyr::select(
+    data,
+    dplyr::all_of(vars_to_store)
+  ) %>%
     arrow::write_parquet(
-      sink = fs::path(
-        get_year_dir(year),
-        stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
-      ),
+      sink = tempfile_path,
       version = "latest",
       compression = "zstd"
     )
@@ -134,18 +139,27 @@ select_variables <- function(data, year, vars_to_keep) {
 }
 
 load_variables <- function(data, year) {
-  data %>%
+  tempfile_path <- get_file_path(
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+    check_mode = "write",
+    create = FALSE
+  )
+
+  full_data <- data %>%
     dplyr::left_join(
       arrow::read_parquet(
-        file = fs::path(
-          get_year_dir(year),
-          stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
-        )
+        file = tempfile_path
       ),
       by = "ep_file_row_id",
       unmatched = "error",
       relationship = "one-to-one"
-    )
+    ) %>%
+    dplyr::select(!"ep_file_row_id")
+
+  fs::file_delete(tempfile_path)
+
+  return(full_data)
 }
 
 #' Fill any missing CIJ markers for records that should have them
