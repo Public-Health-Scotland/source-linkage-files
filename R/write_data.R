@@ -73,7 +73,7 @@ write_rds <- function(data, path, compress = "xz", ...) {
 
 #' Write an R parquet file
 #'
-#' Wrapper around [arrow::write_parquet()], but with 'ztsd' compression as
+#' Wrapper around [arrow::write_parquet()], but with 'zstd' compression as
 #' default.
 #'
 #' @param data R object to write to serialise.
