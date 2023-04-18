@@ -84,7 +84,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       record_keydate2 = as.Date(.data$record_keydate2)
     ) %>%
     # change attendance_status into numeric
-    mutate(
+    dplyr::mutate(
       attendance_status = as.double(attendance_status)
     )
 
