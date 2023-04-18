@@ -7,7 +7,7 @@
 #'
 read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
   # Read data------------------------------------------------
-  ltc_file <- readr::read_csv(
+  ltc_file <- read_file(
     file_path,
     col_type = cols(
       "PATIENT_UPI [C]" = col_character(),
