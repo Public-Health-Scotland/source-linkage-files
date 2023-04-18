@@ -21,7 +21,7 @@ for more details.}
 \code{write_parquet()} returns the input \code{data} invisibly.
 }
 \description{
-Wrapper around \code{\link[arrow:write_parquet]{arrow::write_parquet()}}, but with 'ztsd' compression as
+Wrapper around \code{\link[arrow:write_parquet]{arrow::write_parquet()}}, but with 'zstd' compression as
 default.
 }
 \seealso{
