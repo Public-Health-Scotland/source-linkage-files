@@ -33,10 +33,10 @@ current_file <- readr::read_rds(createslf::get_dn_costs_path())
 latest_year <- check_year_format("1920")
 
 ## data ##
-dn_raw_costs <- readxl::read_excel(
-  fs::path(get_slf_dir(), "Costs", "DN_Costs.xlsx"),
-  .name_repair = janitor::make_clean_names
+dn_raw_costs <- openxlsx::read.xlsx(
+  fs::path(get_slf_dir(), "Costs", "DN_Costs.xlsx")
 ) %>%
+  janitor::clean_names() %>%
   # change 1718 type to numeric - reads in as a character
   mutate(across(ends_with("_cost"), as.numeric)) %>%
   # pivot longer
