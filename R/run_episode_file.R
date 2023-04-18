@@ -9,7 +9,7 @@
 #' @export
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
-  episode_file <- dplyr::bind_rows(ep_data) %>%
+  episode_file <- dplyr::bind_rows(processed_data_list) %>%
     # If the CHI is invalid for whatever reason, set the CHI to NA
     dplyr::mutate(
       chi = dplyr::if_else(
