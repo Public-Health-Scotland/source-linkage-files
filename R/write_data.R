@@ -49,7 +49,7 @@ write_sav <- function(data, path, compress = "zsav") {
 #' subsequent connection function. For example, control the space-time trade-off
 #'  of different compression methods with `compression`. See [connections()]
 #' for more details.
-#' @return `write_sav()` returns the input `data` invisibly.
+#' @return `write_rds()` returns the input `data` invisibly.
 #' @export
 #'
 #' @family write out data
@@ -61,6 +61,40 @@ write_rds <- function(data, path, compress = "xz", ...) {
     version = 3L,
     ...,
     compression = 9L
+  )
+
+  if (fs::file_info(path)$user == Sys.getenv("USER")) {
+    # Set the correct permissions
+    fs::file_chmod(path = path, mode = "660")
+  }
+
+  return(invisible(data))
+}
+
+#' Write an R parquet file
+#'
+#' Wrapper around [arrow::write_parquet()], but with 'ztsd' compression as
+#' default.
+#'
+#' @param data R object to write to serialise.
+#' @param path Path to where the data will be written.
+#' @param compress Compression method to use:
+#'     "uncompressed", "snappy", "gzip", "brotli", "zstd", "lz4", "lzo" or "bz2".
+#' @param ... Additional arguments to [write_parquet()][arrow::write_parquet()]
+#' and the subsequent connection function. For example, control the space-time
+#' trade-off of different compression methods with `compression`. See [connections()]
+#' for more details.
+#' @return `write_parquet()` returns the input `data` invisibly.
+#' @export
+#'
+#' @family write out data
+write_parquet <- function(data, path, compression = "zstd", ...) {
+  arrow::write_parquet(
+    x = data,
+    sink = path,
+    compression = compression,
+    version = "2.4",
+    ...,
   )
 
   if (fs::file_info(path)$user == Sys.getenv("USER")) {
