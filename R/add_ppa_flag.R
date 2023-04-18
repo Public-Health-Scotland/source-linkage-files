@@ -69,7 +69,7 @@ add_ppa_flag <- function(data) {
 
       # Excluding operations are op1a codes from K01 to K50, K56, K60, and K61 (dental)
       excluding_operation = .data$op1a_3char %in%
-        c(glue::glue(
+        c(stringr::str_glue(
           "K{stringr::str_pad(1:50, 2, 'left', '0')}"
         ), "K56", "K60", "K61"),
 
