@@ -30,7 +30,7 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
     directory = locality_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = glue::glue("HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}")
+    file_name_regexp = stringr::str_glue("HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}")
   )
 
   return(locality_path)
@@ -60,7 +60,7 @@ get_spd_path <- function(file_name = NULL, ext = "rds") {
     directory = spd_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = glue::glue("Scottish_Postcode_Directory_.+?\\.{ext}")
+    file_name_regexp = stringr::str_glue("Scottish_Postcode_Directory_.+?\\.{ext}")
   )
 
   return(spd_path)
@@ -86,7 +86,7 @@ get_simd_path <- function(file_name = NULL, ext = "rds") {
     directory = simd_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = glue::glue(
+    file_name_regexp = stringr::str_glue(
       "postcode_\\d\\d\\d\\d_\\d_simd\\d\\d\\d\\d.*?\\.{ext}"
     )
   )
@@ -113,7 +113,7 @@ get_datazone_pop_path <- function(file_name = NULL, ext = "rds") {
     directory = datazone_pop_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = glue::glue("DataZone2011_pop_est_2001_\\d+?\\.{ext}")
+    file_name_regexp = stringr::str_glue("DataZone2011_pop_est_2001_\\d+?\\.{ext}")
   )
 
   return(datazone_pop_path)

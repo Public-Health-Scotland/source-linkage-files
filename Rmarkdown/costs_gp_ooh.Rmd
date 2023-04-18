@@ -20,10 +20,9 @@ fs::file_copy(get_gp_ooh_costs_path(),
 )
 
 # Costs spreadsheet
-gp_ooh_data <- readxl::read_xlsx(paste0(
-  get_slf_dir(),
-  "/Costs/OOH_Costs.xlsx"
-))
+gp_ooh_data <- openxlsx::read.xlsx(
+  fs::path(get_slf_dir(), "Costs", "OOH_Costs.xlsx")
+)
 
 
 # Data Cleaning ---------------------------------------
@@ -123,5 +122,3 @@ ggplot(data = matched_costs_data, aes(x = year, y = cost_per_consultation)) +
   scale_y_continuous(labels = scales::label_dollar(prefix = "£")) +
   labs(y = "Cost Per Consultation", color = "NHS Board")
 ```
-
-

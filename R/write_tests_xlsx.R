@@ -22,7 +22,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   source_tests_path <- fs::path(
     get_slf_dir(),
     "Tests",
-    glue::glue(latest_update(), "_tests.xlsx")
+    stringr::str_glue(latest_update(), "_tests.xlsx")
   )
 
   if (fs::file_exists(source_tests_path)) {
@@ -37,8 +37,8 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   date_today <- format(Sys.Date(), "%d_%b")
   sheet_name_dated <- ifelse(
     is.null(year),
-    glue::glue("{sheet_name}_{date_today}"),
-    glue::glue("{year}_{sheet_name}_{date_today}")
+    stringr::str_glue("{sheet_name}_{date_today}"),
+    stringr::str_glue("{year}_{sheet_name}_{date_today}")
   )
 
   # If there has already been a sheet created today, append the time

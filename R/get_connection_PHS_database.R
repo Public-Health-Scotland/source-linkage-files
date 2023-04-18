@@ -55,7 +55,7 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
 
 
   # Create the connection
-  password_text <- glue::glue("{dsn} password for user: {username}")
+  password_text <- stringr::str_glue("{dsn} password for user: {username}")
   db_connection <- odbc::dbConnect(
     odbc::odbc(),
     dsn = dsn,
