@@ -36,8 +36,8 @@ process_extract_cmh <- function(data,
       year = year
     ) %>%
     # contact end time
-    dplyr::mutate(keyTime2 = hms::as.hms(
-      .data$keyTime1 + lubridate::dminutes(.data$duration)
+    dplyr::mutate(keytime2 = hms::as.hms(
+      .data$keytime1 + lubridate::dminutes(.data$duration)
     )) %>%
     # record key date 2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
@@ -52,8 +52,8 @@ process_extract_cmh <- function(data,
       "recid",
       "record_keydate1",
       "record_keydate2",
-      "keyTime1",
-      "keyTime2",
+      "keytime1",
+      "keytime2",
       "smrtype",
       "chi",
       "gender",
