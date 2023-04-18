@@ -24,10 +24,10 @@ process_extract_alarms_telecare <- function(file_path = get_sc_at_episodes_path(
   year <- check_year_format(year)
 
   # Read client lookup
-  client_table <- readr::read_rds(client_lookup_path)
+  client_table <- read_file(client_lookup_path)
 
   # Read data
-  data <- readr::read_rds(file_path)
+  data <- read_file(file_path)
 
   # process extract------------------------------------------------------
 
