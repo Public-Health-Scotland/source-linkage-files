@@ -24,7 +24,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     ) %>%
     # Change some values of cij_pattype_code based on cij_admtype
     dplyr::mutate(
-      cij_admtype = dplyr::if_else(cij_admtype == "Unknown", "99", cij_admtype),
+      cij_admtype = dplyr::if_else(.data$cij_admtype == "Unknown", "99", .data$cij_admtype),
       cij_pattype_code = dplyr::case_when(
         !is_missing(.data$chi) &
           .data$recid %in% c("01B", "04B", "GLS", "02B") &
