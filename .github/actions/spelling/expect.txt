@@ -32,6 +32,7 @@ datetime
 daycase
 dbconnect
 dbplyr
+deathdiag
 demog
 disch
 dischloc
@@ -47,6 +48,7 @@ dvprod
 Eilean
 Eileanan
 envir
+feb
 fileext
 fst
 ftm
@@ -73,7 +75,9 @@ hscpnames
 ipdc
 itle
 jaccard
+jan
 jennifer
+jul
 keydate
 keyring
 los
@@ -161,3 +165,4 @@ xlsx
 yearstay
 zihao
 zsav
+zstd
