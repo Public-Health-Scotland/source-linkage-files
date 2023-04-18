@@ -36,6 +36,7 @@ demog
 disch
 dischloc
 dischto
+dminutes
 dnas
 dontrun
 downup
@@ -76,6 +77,8 @@ jaccard
 jennifer
 keydate
 keyring
+keytime
+keytimex
 los
 ltc
 ltcs
