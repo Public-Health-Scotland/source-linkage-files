@@ -9,7 +9,7 @@ create_monthly_beddays(
   year,
   admission_date,
   discharge_date,
-  count_last = TRUE
+  count_last = FALSE
 )
 }
 \arguments{
@@ -21,8 +21,8 @@ create_monthly_beddays(
 
 \item{discharge_date}{The admission/start date variable}
 
-\item{count_last}{(default \code{TRUE}) - Should the last day be counted,
-instead of the first?}
+\item{count_last}{(default \code{FALSE}) - The first day be counted,
+instead of the last.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with additional variables \code{apr_beddays} to \code{mar_beddays}
