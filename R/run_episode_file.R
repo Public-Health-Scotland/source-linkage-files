@@ -11,6 +11,78 @@
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
+    select_variables(year, vars_to_keep = c(
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "smrtype",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "location",
+      "hbtreatcode",
+      "yearstay",
+      "ipdc",
+      "spec",
+      "sigfac",
+      "mpat",
+      "diag1",
+      "diag2",
+      "diag3",
+      "diag4",
+      "diag5",
+      "diag6",
+      "op1a",
+      "op1b",
+      "op2a",
+      "op2b",
+      "op3a",
+      "op3b",
+      "op4a",
+      "op4b",
+      "age",
+      "cij_marker",
+      "cij_pattype_code",
+      "cij_ipdc",
+      "cij_admtype",
+      "cij_adm_spec",
+      "cij_dis_spec",
+      "cij_start_date",
+      "cij_end_date",
+      "cost_total_net",
+      "apr_cost",
+      "may_cost",
+      "jun_cost",
+      "jul_cost",
+      "aug_cost",
+      "sep_cost",
+      "oct_cost",
+      "nov_cost",
+      "dec_cost",
+      "jan_cost",
+      "feb_cost",
+      "mar_cost",
+      "hscp",
+      "datazone",
+      "attendance_status",
+      "deathdiag1",
+      "deathdiag2",
+      "deathdiag3",
+      "deathdiag4",
+      "deathdiag5",
+      "deathdiag6",
+      "deathdiag7",
+      "deathdiag8",
+      "deathdiag9",
+      "deathdiag10",
+      "deathdiag11"
+    )) %>%
     # From C01 ----
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
@@ -85,7 +157,8 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # create_service_use_cohorts(ep_file, year, write_to_disk = TRUE)
 
     # From C09 - Match on postcode and gpprac variables ----
-    fill_geographies()
+    fill_geographies() %>%
+    load_variables(year)
 
 
 
