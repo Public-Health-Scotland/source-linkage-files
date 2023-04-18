@@ -19,7 +19,7 @@ of different compression methods with \code{compression}. See \code{\link[=conne
 for more details.}
 }
 \value{
-\code{write_sav()} returns the input \code{data} invisibly.
+\code{write_rds()} returns the input \code{data} invisibly.
 }
 \description{
 Wrapper around \code{\link[readr:read_rds]{readr::write_rds()}}, but with maximum 'xz' compression as
@@ -28,6 +28,7 @@ which is often an issue in the PHS RStudio server.
 }
 \seealso{
 Other write out data: 
+\code{\link{write_parquet}()},
 \code{\link{write_sav}()}
 }
 \concept{write out data}

@@ -33,6 +33,7 @@ which is often an issue in the PHS RStudio server.
 }
 \seealso{
 Other write out data: 
+\code{\link{write_parquet}()},
 \code{\link{write_rds}()}
 }
 \concept{write out data}
