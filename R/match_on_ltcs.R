@@ -12,7 +12,7 @@ match_on_ltcs <- function(data, year) {
   # Match on LTC lookup
   matched <- dplyr::left_join(
     data,
-    readr::read_rds(get_ltcs_path(year)),
+    read_file(get_ltcs_path(year)),
     by = "chi",
     suffix = c("", "_ltc")
   ) %>%

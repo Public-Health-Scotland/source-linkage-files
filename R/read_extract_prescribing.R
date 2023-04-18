@@ -4,7 +4,7 @@
 #'
 #' @export
 read_extract_prescribing <- function(year, file_path = get_it_prescribing_path(year)) {
-  pis_file <- readr::read_csv(file_path,
+  pis_file <- read_file(file_path,
     col_type = cols_only(
       "Pat UPI [C]" = col_character(),
       "Pat DoB [C]" = col_date(format = "%d-%m-%Y"),
