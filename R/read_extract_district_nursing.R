@@ -10,7 +10,7 @@ read_extract_district_nursing <- function(year,
   }
 
   # Read BOXI extract
-  extract_district_nursing <- readr::read_csv(file_path,
+  extract_district_nursing <- read_file(file_path,
     col_types = cols_only(
       `Treatment NHS Board Code 9` = col_character(),
       `Age at Contact Date` = col_integer(),
