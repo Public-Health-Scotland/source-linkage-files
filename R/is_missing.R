@@ -14,7 +14,7 @@
 is_missing <- function(x) {
   if (typeof(x) != "character") {
     rlang::abort(
-      message = glue::glue(
+      message = stringr::str_glue(
         "You must supply a character vector, but {class(x)} was supplied."
       )
     )

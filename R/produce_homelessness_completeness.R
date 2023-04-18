@@ -168,7 +168,7 @@ get_homelessness_completeness_path <- function(
     ...) {
   completeness_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Homelessness"),
-    file_name = glue::glue("homelessness_completeness_{year}_{update}.rds"),
+    file_name = stringr::str_glue("homelessness_completeness_{year}_{update}.rds"),
     ...
   )
 
