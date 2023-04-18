@@ -81,8 +81,6 @@ write_rds <- function(data, path, compress = "xz", ...) {
 #' @param compress Compression method to use:
 #'     "uncompressed", "snappy", "gzip", "brotli", "zstd", "lz4", "lzo" or "bz2".
 #' @param ... Additional arguments to [write_parquet()][arrow::write_parquet()]
-#' and the subsequent connection function. For example, control the space-time
-#' trade-off of different compression methods with `compression`. See [connections()]
 #' for more details.
 #' @return `write_parquet()` returns the input `data` invisibly.
 #' @export
