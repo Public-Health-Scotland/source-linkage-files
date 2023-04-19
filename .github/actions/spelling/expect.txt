@@ -4,6 +4,7 @@ admtype
 adtf
 arrivalmode
 attendcat
+arth
 aut
 bedday
 beddays
@@ -22,6 +23,7 @@ cls
 cmh
 CNWs
 commhosp
+congen
 costmonthnum
 costsfy
 covr
@@ -40,6 +42,7 @@ disch
 dischloc
 dischto
 disdest
+dminutes
 dnas
 dontrun
 downup
