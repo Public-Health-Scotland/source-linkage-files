@@ -44,8 +44,8 @@ make_postcode_lookup <- function(data) {
       postcode = phsmethods::format_postcode(postcode, format = "pc7"),
       postcode = dplyr::na_if(.data$postcode, "NK010AA")
     ) %>%
-    # Arrange with most recent date at the top for each CHI
-    dplyr::arrange(.data$chi, desc(.data$record_keydate2)) %>%
+    # Arrange with the most recent date at the top for each CHI
+    dplyr::arrange(.data$chi, dplyr::desc(.data$record_keydate2)) %>%
     # Take only the first of each chi
     dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
     # Rename
