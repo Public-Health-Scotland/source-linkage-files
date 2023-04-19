@@ -37,49 +37,65 @@ add_dd <- function(data, year) {
     dplyr::filter(!(recid == "DD" & chi != dplyr::lag(chi))) %>%
     # sort so that DD is roughly where we expect it to fit
     dplyr::arrange(chi, keydate1_dateformat) %>%
+    # add row number to restore the order later
+    dplyr::mutate(row_no = dplyr::row_number())
 
-    # Capture the Mental Health delays with no end dates.
+  # Capture the Mental Health delays with no end dates.
+  data_chi_1 <- data_chi %>%
+    dplyr::select(
+      chi,
+      recid,
+      keydate1_dateformat,
+      keydate2_dateformat,
+      CIJ_start_date,
+      CIJ_end_date,
+      temp_cij_marker,
+      row_no
+    ) %>%
+
+    dplyr::filter(
+      chi == lag(chi) & recid == "DD" &
+        lag(recid) == "04B" &
+        is.na(keydate2_dateformat) &
+        is.na(lag(keydate2_dateformat)) &
+        keydate1_dateformat >= lag(CIJ_start_date) - lubridate::days(1)
+    ) %>%
     dplyr::mutate(
-      Flag_8 = dplyr::if_else((
-        chi = dplyr::lag(chi) & recid == "DD" & lag(recid) == "04B" &
-          is.na(keydate2_dateformat) &
-          is.na(lag(keydate2_dateformat)) &
-          keydate1_dateformat > (lag(CIJ_start_date) - lubridate::days(1))),
-      dplyr::if_else(keydate1_dateformat > (lag(CIJ_start_date)), 2, 1),
-      NA
-    ),
-    temp_cij_maker = dplyr::if_else((
-      chi = dplyr::lag(chi) & recid == "DD" & lag(recid) == "04B" &
-        is.na(keydate2_dateformat) &
-        is.na(lag(keydate2_dateformat)) &
-        keydate1_dateformat > (lag(CIJ_start_date) - lubridate::days(1))),
-      dplyr::lag(temp_cij_maker),
-      NA
-    ),
-    CIJ_start_date = dplyr::if_else((
-      chi = dplyr::lag(chi) & recid == "DD" & lag(recid) == "04B" &
-        is.na(keydate2_dateformat) &
-        is.na(lag(keydate2_dateformat)) &
-        keydate1_dateformat > (lag(CIJ_start_date) - lubridate::days(1))),
-      dplyr::lag(CIJ_start_date),
-      NA
-    ),
-    CIJ_end_date = dplyr::if_else((
-      chi = dplyr::lag(chi) & recid == "DD" & lag(recid) == "04B" &
-        is.na(keydate2_dateformat) &
-        is.na(lag(keydate2_dateformat)) &
-        keydate1_dateformat > (lag(CIJ_start_date) - lubridate::days(1))),
-      dplyr::lag(CIJ_end_date),
-      NA
-    )) %>%
+      Flag_8 = dplyr::if_else(keydate1_dateformat >= lag(CIJ_start_date), 2, 1),
+      temp_cij_marker = lag(temp_cij_marker),
+      CIJ_start_date = lag(CIJ_start_date),
+      CIJ_end_date = lag(CIJ_end_date)
+    )
 
-    # Use Min and Max CIJ dates to fill in temp_cij_marker -
-    # where possible - DD episodes with no CIJ.
+  data_chi <- data_chi %>%
+    dplyr::left_join(data_chi_1, suffix = c("", "_redundancy")) %>%
+    dplyr::select(-ends_with("_redundancy"))
+  # As I imagine, this will possibly leave some NA in columns including
+  # CIJ_start_date, CIJ_end_date
+
+  # Use Min and Max CIJ dates to fill in temp_cij_marker -
+  # where possible - DD episodes with no CIJ.
+  ## difficult parts. hard to vectorize it.
+  # data_chi_1 <- data_chi %>%
+  #   dplyr::if_else(
+  #     chi == lag(chi) & is.na(temp_cij_marker),
+  #     Flag_1 = 0,
+  #
+  #   )
+
+  # ## non-vectorized version. for loop
+  # for(ii in 2:max(data_chi$row_no)){
+  #   if(chi[ii] == chi[ii - 1] & is.na(temp_cij_marker[ii])){
+  #
+  #   }
+  # }
 
 
 
 
 
+
+    # Eventually, bind non_chi back
     data_return <- row_bind(
       data_chi,
       data %>%
