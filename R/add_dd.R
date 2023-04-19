@@ -52,7 +52,6 @@ add_dd <- function(data, year) {
       temp_cij_marker,
       row_no
     ) %>%
-
     dplyr::filter(
       chi == lag(chi) & recid == "DD" &
         lag(recid) == "04B" &
@@ -95,15 +94,15 @@ add_dd <- function(data, year) {
 
 
 
-    # Eventually, bind non_chi back
-    data_return <- row_bind(
-      data_chi,
-      data %>%
-        dplyr::filter(is.na(chi)) %>%
-        dplyr::filter(!(recid %in% c("01B", "02B", "04B", "GLS"))),
-      data %>%
-        dplyr::filter(!is.na(chi))
-    )
+  # Eventually, bind non_chi back
+  data_return <- row_bind(
+    data_chi,
+    data %>%
+      dplyr::filter(is.na(chi)) %>%
+      dplyr::filter(!(recid %in% c("01B", "02B", "04B", "GLS"))),
+    data %>%
+      dplyr::filter(!is.na(chi))
+  )
 
   return()
 }
