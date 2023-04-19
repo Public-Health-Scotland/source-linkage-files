@@ -78,19 +78,16 @@ write_rds <- function(data, path, compress = "xz", ...) {
 #'
 #' @param data R object to write to serialise.
 #' @param path Path to where the data will be written.
-#' @param compress Compression method to use:
-#'     "uncompressed", "snappy", "gzip", "brotli", "zstd", "lz4", "lzo" or "bz2".
-#' @param ... Additional arguments to [write_parquet()][arrow::write_parquet()]
-#' for more details.
+#' @param ... Additional arguments to [write_parquet()][arrow::write_parquet()].
 #' @return `write_parquet()` returns the input `data` invisibly.
 #' @export
 #'
 #' @family write out data
-write_parquet <- function(data, path, compression = "zstd", ...) {
+write_parquet <- function(data, path, ...) {
   arrow::write_parquet(
     x = data,
     sink = path,
-    compression = compression,
+    compression = "zstd",
     version = "latest",
     ...,
   )
