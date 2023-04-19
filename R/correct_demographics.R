@@ -21,7 +21,7 @@ correct_demographics <- function(data, year) {
         chi_check = FALSE,
         min_date = lubridate::ymd("1900-01-01"),
         max_date = pmin(
-          .data$keydate1_dateformat,
+          .data$record_keydate1,
           lubridate::ymd("1999-12-31"),
           na.rm = TRUE
         )
@@ -33,7 +33,7 @@ correct_demographics <- function(data, year) {
         chi_check = FALSE,
         min_date = lubridate::ymd("2000-01-01"),
         max_date = pmax(
-          .data$keydate1_dateformat,
+          .data$record_keydate1,
           lubridate::ymd("2000-01-01"),
           na.rm = TRUE
         )
