@@ -4,18 +4,14 @@
 \alias{write_parquet}
 \title{Write an R parquet file}
 \usage{
-write_parquet(data, path, compression = "zstd", ...)
+write_parquet(data, path, ...)
 }
 \arguments{
 \item{data}{R object to write to serialise.}
 
 \item{path}{Path to where the data will be written.}
 
-\item{...}{Additional arguments to \link[arrow:write_parquet]{write_parquet()}
-for more details.}
-
-\item{compress}{Compression method to use:
-"uncompressed", "snappy", "gzip", "brotli", "zstd", "lz4", "lzo" or "bz2".}
+\item{...}{Additional arguments to \link[arrow:write_parquet]{write_parquet()}.}
 }
 \value{
 \code{write_parquet()} returns the input \code{data} invisibly.
