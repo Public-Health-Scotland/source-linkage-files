@@ -90,7 +90,7 @@ fill_postcode_geogs <- function(data) {
     dplyr::select(-postcode) %>%
     dplyr::rename(postcode = most_recent_postcode) %>%
     # Fill geographies
-    dplyr::left_join(., spd, by = "postcode", suffix = c("_old", "")) %>%
+    dplyr::left_join(spd, by = "postcode", suffix = c("_old", "")) %>%
     dplyr::mutate(
       # Recode Health Board codes to consistent boundaries
       dplyr::across(
@@ -118,7 +118,7 @@ fill_gpprac_geographies <- function(data) {
     dplyr::left_join(data, make_gpprac_lookup(data), by = "chi") %>%
     dplyr::select(-gpprac) %>%
     dplyr::rename(gpprac = most_recent_gpprac) %>%
-    dplyr::left_join(., gpprac_ref, by = "gpprac", suffix = c("_old", "")) %>%
+    dplyr::left_join(gpprac_ref, by = "gpprac", suffix = c("_old", "")) %>%
     dplyr::mutate(
       hbpraccode = dplyr::coalesce(.data$hbpraccode, .data$hbpraccode_old)
     ) %>%
