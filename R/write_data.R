@@ -91,7 +91,7 @@ write_parquet <- function(data, path, compression = "zstd", ...) {
     x = data,
     sink = path,
     compression = compression,
-    version = "2.4",
+    version = "latest",
     ...,
   )
 
