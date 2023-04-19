@@ -33,7 +33,6 @@ fill_geographies <- function(data) {
 #'
 #' @return A lookup containing CHI numbers and their most recent postcodes
 make_postcode_lookup <- function(data) {
-
   postcode_lookup <-
     data %>%
     # Get just the chi, postcode and discharge date
@@ -41,8 +40,10 @@ make_postcode_lookup <- function(data) {
     # Get rid of missing chis
     dplyr::filter(!is_missing(.data$chi)) %>%
     # Format postcodes to 7-character format and replace dummy with NA
-    dplyr::mutate(postcode = phsmethods::format_postcode(postcode, format = "pc7"),
-                  postcode = dplyr::na_if(.data$postcode, "NK010AA")) %>%
+    dplyr::mutate(
+      postcode = phsmethods::format_postcode(postcode, format = "pc7"),
+      postcode = dplyr::na_if(.data$postcode, "NK010AA")
+    ) %>%
     # Arrange with most recent date at the top for each CHI
     dplyr::arrange(.data$chi, desc(.data$record_keydate2)) %>%
     # Take only the first of each chi
@@ -61,7 +62,6 @@ make_postcode_lookup <- function(data) {
 #'
 #' @return A lookup containing CHI numbers and their most recent GP practices
 make_gpprac_lookup <- function(data) {
-
   gpprac_lookup <-
     data %>%
     # Get just the chi, gpprac and discharge date
@@ -89,7 +89,6 @@ fill_postcode_geogs <- function(data) {
     dplyr::left_join(data, make_postcode_lookup(data), by = "chi") %>%
     dplyr::select(-postcode) %>%
     dplyr::rename(postcode = most_recent_postcode) %>%
-
     # Fill geographies
     dplyr::left_join(., spd, by = "postcode", suffix = c("_old", "")) %>%
     dplyr::mutate(
