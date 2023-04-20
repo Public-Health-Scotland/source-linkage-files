@@ -8,9 +8,18 @@
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 #'
-run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
+run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni_only = FALSE) {
   # Bring all the datasets together from Jen's process functions
   fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
+    {
+      if (ni_only) {
+        # Drop datasets not needed for NIs ()
+        dplyr::filter(., .data$recid %in% c("01B", "02B", "04B", "GLS", "00B", "PIS")) %>%
+          dplyr::select(dplyr::where(~any(!is.na(.x))))
+      } else {
+        .
+      }
+    } %>%
     # From C01 ----
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
@@ -65,7 +74,16 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       )
     ) %>%
     # Add the flag for Potentially Preventable Admissions
-    add_ppa_flag() %>%
+    {
+      if (ni_only) {
+        .
+      } else {
+        add_ppa_flag(.) %>%
+          add_nsu_cohort(year)
+
+      }
+    } %>%
+    match_on_ltcs(year) %>%
     # From C02 - Link Delayed Discharge Episodes ----
     # Create Temp File 2
     # temp_file_2 <- temp_file_1
@@ -75,10 +93,9 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # temp_file_3 <- temp_file_2
 
     # From C04 - Add NSU cohort ----
-    add_nsu_cohort(year) %>%
+
     # From C05 - Match on LTCs ----
     # Create Temp File 5
-    match_on_ltcs(year) %>%
     correct_demographics(year) %>%
     # From C07 - Calculate and write out pathways cohorts ----
     # create_demographic_cohorts(ep_file, year, write_to_disk = TRUE)
