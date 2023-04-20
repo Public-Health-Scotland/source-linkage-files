@@ -4,7 +4,12 @@
 \alias{run_episode_file}
 \title{Produce the Source Episode file}
 \usage{
-run_episode_file(processed_data_list, year, write_to_disk = TRUE)
+run_episode_file(
+  processed_data_list,
+  year,
+  write_to_disk = TRUE,
+  ni_only = FALSE
+)
 }
 \arguments{
 \item{processed_data_list}{containing data from processed extracts.}
