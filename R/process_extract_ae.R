@@ -27,8 +27,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       year = year,
       recid = "AE2"
     ) %>%
-    ## Recode GP Practice into a 5 digit number ##
-    # assume that if it starts with a letter it's an English practice and so recode to 99995
+    # Recode GP Practice
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # use the CHI postcode and if that is blank, then use the epi postcode.
     dplyr::mutate(postcode = dplyr::if_else(
@@ -37,22 +36,24 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       .data$postcode_epi
     )) %>%
     ## recode cypher HB codes ##
-    dplyr::mutate(dplyr::across(c("hbtreatcode", "hbrescode"), ~ dplyr::case_when(
-      .x == "A" ~ "S08000015",
-      .x == "B" ~ "S08000016",
-      .x == "F" ~ "S08000029",
-      .x == "G" ~ "S08000021",
-      .x == "H" ~ "S08000022",
-      .x == "L" ~ "S08000023",
-      .x == "N" ~ "S08000020",
-      .x == "R" ~ "S08000025",
-      .x == "S" ~ "S08000024",
-      .x == "T" ~ "S08000030",
-      .x == "V" ~ "S08000019",
-      .x == "W" ~ "S08000028",
-      .x == "Y" ~ "S08000017",
-      .x == "Z" ~ "S08000026"
-    ))) %>%
+    dplyr::mutate(
+      dplyr::across(c("hbtreatcode", "hbrescode"), ~ dplyr::case_when(
+        .x == "A" ~ "S08000015",
+        .x == "B" ~ "S08000016",
+        .x == "F" ~ "S08000029",
+        .x == "G" ~ "S08000021",
+        .x == "H" ~ "S08000022",
+        .x == "L" ~ "S08000023",
+        .x == "N" ~ "S08000020",
+        .x == "R" ~ "S08000025",
+        .x == "S" ~ "S08000024",
+        .x == "T" ~ "S08000030",
+        .x == "V" ~ "S08000019",
+        .x == "W" ~ "S08000028",
+        .x == "Y" ~ "S08000017",
+        .x == "Z" ~ "S08000026"
+      ))
+    ) %>%
     ## Allocate the costs to the correct month ##
     # Create month variable
     dplyr::mutate(
@@ -158,8 +159,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "recid",
       "record_keydate1",
       "record_keydate2",
-      "keyTime1",
-      "keyTime2",
+      "keytime1",
+      "keytime2",
       "chi",
       "gender",
       "dob",
@@ -181,9 +182,6 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "case_ref_number"
     )
 
-
-  # ------------------------------------------------------------------------------------------------------------
-
   ## CUP Marker ##
 
   # Read in data---------------------------------------
@@ -191,17 +189,17 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   ae_cup_file <- read_file(
     path = get_boxi_extract_path(year, "AE_CUP"),
     col_type = cols(
-      `ED Arrival Date` = col_date(format = "%Y/%m/%d %T"),
-      `ED Arrival Time` = col_time(""),
-      `ED Case Reference Number [C]` = col_character(),
-      `CUP Marker` = col_double(),
-      `CUP Pathway Name` = col_character()
+      "ED Arrival Date" = col_date(format = "%Y/%m/%d %T"),
+      "ED Arrival Time" = col_time(""),
+      "ED Case Reference Number [C]" = col_character(),
+      "CUP Marker" = col_double(),
+      "CUP Pathway Name" = col_character()
     )
   ) %>%
     # rename variables
     dplyr::rename(
       record_keydate1 = "ED Arrival Date",
-      keyTime1 = "ED Arrival Time",
+      keytime1 = "ED Arrival Time",
       case_ref_number = "ED Case Reference Number [C]",
       cup_marker = "CUP Marker",
       cup_pathway = "CUP Pathway Name"
@@ -213,7 +211,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   ae_cup_clean <- ae_cup_file %>%
     # Remove any duplicates
     dplyr::distinct(.data$record_keydate1,
-      .data$keyTime1,
+      .data$keytime1,
       .data$case_ref_number,
       .keep_all = TRUE
     )
@@ -224,14 +222,14 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   matched_ae_data <- outfile %>%
     dplyr::left_join(
       ae_cup_clean,
-      by = c("record_keydate1", "keyTime1", "case_ref_number")
+      by = c("record_keydate1", "keytime1", "case_ref_number")
     ) %>%
     dplyr::arrange(
       .data$chi,
       .data$record_keydate1,
-      .data$keyTime1,
+      .data$keytime1,
       .data$record_keydate2,
-      .data$keyTime2
+      .data$keytime2
     )
 
 
@@ -242,8 +240,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "recid",
       "record_keydate1",
       "record_keydate2",
-      "keyTime1",
-      "keyTime2",
+      "keytime1",
+      "keytime2",
       "chi",
       "gender",
       "dob",

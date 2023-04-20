@@ -3,8 +3,9 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-#'
-read_extract_cmh <- function(year, file_path = get_boxi_extract_path(year = year, type = "CMH")) {
+read_extract_cmh <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "CMH")) {
   # Specify years available for running
   if (is.na(file_path)) {
     return(NULL)
@@ -43,7 +44,7 @@ read_extract_cmh <- function(year, file_path = get_boxi_extract_path(year = year
       gpprac = "Practice Code",
       hbtreatcode = "Treatment NHS Board Code 9",
       record_keydate1 = "Contact Date",
-      keyTime1 = "Contact Start Time",
+      keytime1 = "Contact Start Time",
       duration = "Duration of Contact",
       location = "Location of Contact",
       diag1 = "Main Aim of Contact",
