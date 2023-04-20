@@ -4,30 +4,21 @@
 #' (year specific) Home Care extract, it will return the final data
 #' but also write this out as rds.
 #'
-#' @param file_path The extract to process - Read the file from disk.
-#' @param year The year to process, in FY format.
-#' @param client_lookup_path The client lookup extract - Read the file from disk.
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @inheritParams process_extract_care_home
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_home_care <- function(file_path = get_sc_hc_episodes_path(),
-                                      year,
-                                      client_lookup_path = get_source_extract_path(year, type = "Client"),
-                                      write_to_disk = TRUE) {
+process_extract_home_care <- function(
+    data,
+    year,
+    client_lookup,
+    write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
-
-  # Read client lookup
-  client_lookup <- read_file(client_lookup_path)
-
-  # Read Data
-  data <- read_file(file_path)
 
   # Selections for financial year------------------------------------
 
