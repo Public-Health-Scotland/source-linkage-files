@@ -79,8 +79,10 @@ hms
 homecare
 hscp
 hscpnames
+infyyear
 ipdc
 itle
+iwalk
 jaccard
 jan
 jennifer
@@ -97,7 +99,9 @@ magrittr
 Mcbride
 mcmahon
 MMMYY
+Moohan
 mpat
+multisession
 multistaff
 NAs
 nhs
@@ -125,6 +129,7 @@ praccode
 ptypes
 purrr
 quickstart
+Rbuildignore
 rds
 reablement
 readcode
@@ -137,6 +142,8 @@ rlang
 rmarkdown
 roxygen
 Rprofile
+Rscript
+rspm
 rstudioapi
 Rtype
 Scougal
@@ -150,16 +157,16 @@ slfhelper
 smr
 SMRA
 smrtype
-SPARRA
 sparra
 spd
-SPSS
 spss
 stadm
+stefanzweifel
 stringdist
 stringr
 submis
 tadm
+tarchetypes
 tbl
 telecare
 testthat

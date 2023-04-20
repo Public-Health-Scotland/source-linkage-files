@@ -4,22 +4,18 @@
 #' all Alarms Telecare extract, it will return the final data
 #' but also write this out as a rds.
 #'
-#' @param data The extract to process
-#' @param sc_demographics The sc demographics lookup.
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @inheritParams process_sc_all_care_home
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
 #' @export
 #'
-process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
-  # Read Demographic file----------------------------------------------------
-
-  sc_demographics <- read_file(sc_demographics)
-
-  ## Data Cleaning-----------------------------------------------------
+process_sc_all_alarms_telecare <- function(
+    data,
+    sc_demog_lookup,
+    write_to_disk = TRUE) {
+  # Data Cleaning-----------------------------------------------------
 
   replaced_dates <- data %>%
     # period start and end dates
@@ -40,7 +36,10 @@ process_sc_all_alarms_telecare <- function(data, sc_demographics = get_sc_demog_
 
   at_full_clean <- replaced_dates %>%
     # Match on demographics data (chi, gender, dob and postcode)
-    dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id")) %>%
+    dplyr::left_join(
+      sc_demog_lookup,
+      by = c("sending_location", "social_care_id")
+    ) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$service_start_date,
