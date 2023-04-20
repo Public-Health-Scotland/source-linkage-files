@@ -15,7 +15,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
       if (ni_only) {
         # Drop datasets not needed for NIs ()
         dplyr::filter(., .data$recid %in% c("01B", "02B", "04B", "GLS", "00B", "PIS")) %>%
-          dplyr::select(dplyr::where(~any(!is.na(.x))))
+          dplyr::select(dplyr::where(~ any(!is.na(.x))))
       } else {
         .
       }
@@ -80,7 +80,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
       } else {
         add_ppa_flag(.) %>%
           add_nsu_cohort(year)
-
       }
     } %>%
     match_on_ltcs(year) %>%
