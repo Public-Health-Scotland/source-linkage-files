@@ -2,10 +2,14 @@ Accom
 admloc
 admtype
 adtf
+arrivalmode
+arth
+attendcat
 aut
 bedday
 beddays
 birthtime
+bodyloc
 BOXI
 boxi
 Canx
@@ -19,6 +23,7 @@ cls
 cmh
 CNWs
 commhosp
+congen
 costmonthnum
 costsfy
 covr
@@ -36,6 +41,8 @@ demog
 disch
 dischloc
 dischto
+disdest
+dminutes
 dnas
 dontrun
 downup
@@ -47,6 +54,7 @@ dvprod
 Eilean
 Eileanan
 envir
+feb
 fileext
 fst
 ftm
@@ -73,7 +81,9 @@ hscpnames
 ipdc
 itle
 jaccard
+jan
 jennifer
+jul
 keydate
 keyring
 los
@@ -99,6 +109,7 @@ openxl
 openxlsx
 ORCID
 outfile
+patflow
 pattype
 phs
 phsmethods
@@ -116,7 +127,9 @@ reablement
 readcode
 readr
 readxl
+reasonwait
 recid
+refsource
 rlang
 rmarkdown
 roxygen
