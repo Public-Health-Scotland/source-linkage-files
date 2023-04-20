@@ -57,7 +57,7 @@ read_extract_ae <- function(
       ae_alcohol = "Alcohol Involved Code",
       alcohol_adm = "Alcohol Related Admission",
       ae_arrivalmode = "Arrival Mode Code",
-      keyTime1 = "Arrival Time",
+      keytime1 = "Arrival Time",
       ae_attendcat = "Attendance Category Code",
       ae_bodyloc = "Bodily Location Of Injury Code",
       lca = "Council Area Code",
