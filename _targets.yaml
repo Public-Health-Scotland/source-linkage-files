@@ -1,0 +1,3 @@
+main:
+  store: /conf/sourcedev/Source_Linkage_File_Updates/_targets
+  workers: '18'

@@ -36,6 +36,13 @@ process_extract_ooh_consultations <- function(data, year) {
     data.table::as.data.table() %>%
     # Filter missing / bad CHI numbers
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
+    dplyr::mutate(
+      attendance_status = dplyr::case_match(
+        .data$attendance_status,
+        "Y" ~ 1L,
+        "N" ~ 8L
+      )
+    ) %>%
     # Fix some times - if end before start, remove the time portion
     dplyr::mutate(
       bad_dates = .data$record_keydate1 > .data$record_keydate2,
