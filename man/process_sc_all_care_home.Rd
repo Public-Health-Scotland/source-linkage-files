@@ -6,19 +6,28 @@
 \usage{
 process_sc_all_care_home(
   data,
-  sc_demographics = get_sc_demog_lookup_path(),
-  slf_deaths_path = get_slf_deaths_path(),
+  sc_demog_lookup,
+  slf_deaths_lookup,
+  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
+  spd_path = get_spd_path(),
   write_to_disk = TRUE
 )
 }
 \arguments{
 \item{data}{The extract to process}
 
-\item{sc_demographics}{The sc demographics lookup.}
+\item{sc_demog_lookup}{The Social Care Demographics lookup produced by
+\code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
-\item{slf_deaths_path}{The path to slf deaths lookup.}
+\item{slf_deaths_lookup}{The SLF CHI Deaths lookup, produced by
+\code{\link[=process_lookup_chi_deaths]{process_lookup_chi_deaths()}}.}
 
-\item{write_to_disk}{(optional) Should the data be written to disk default is
+\item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
+
+\item{spd_path}{(Optional) Path the Scottish Postcode Directory, default is
+to use \code{\link[=get_spd_path]{get_spd_path()}}.}
+
+\item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
 \value{

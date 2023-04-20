@@ -27,7 +27,7 @@ add_nsu_cohort <- function(data, year) {
 
   matched <- dplyr::full_join(data,
     # NSU cohort file
-    read_file(get_nsu_path(year, ext = "zsav")) %>%
+    read_file(get_nsu_path(year)) %>%
       dplyr::mutate(
         dob = as.Date(.data[["dob"]]),
         gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])

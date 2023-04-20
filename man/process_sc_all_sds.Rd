@@ -4,18 +4,15 @@
 \alias{process_sc_all_sds}
 \title{Process the all SDS extract}
 \usage{
-process_sc_all_sds(
-  data,
-  sc_demographics = get_sc_demog_lookup_path(),
-  write_to_disk = TRUE
-)
+process_sc_all_sds(data, sc_demog_lookup, write_to_disk = TRUE)
 }
 \arguments{
 \item{data}{The extract to process}
 
-\item{sc_demographics}{The path to the sc demographics lookup.}
+\item{sc_demog_lookup}{The Social Care Demographics lookup produced by
+\code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
-\item{write_to_disk}{(optional) Should the data be written to disk default is
+\item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
 \value{

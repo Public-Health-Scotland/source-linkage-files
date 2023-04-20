@@ -4,9 +4,11 @@
 #' (year specific) Care Home extract, it will return the final data
 #' but also write this out as rds.
 #'
-#' @param file_path The extract to process - Read the file from disk.
+#' @param data The full processed data which will be selected from to create
+#' the year specific data.
 #' @param year The year to process, in FY format.
-#' @param client_lookup_path The client lookup extract - Read the file from disk.
+#' @param client_lookup The Social Care Client lookup, created by
+#' [process_lookup_sc_client()].
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -14,20 +16,15 @@
 #' @export
 #' @family process extracts
 process_extract_care_home <- function(
-    file_path = get_sc_ch_episodes_path(),
+    data,
     year,
-    client_lookup_path = get_source_extract_path(year, type = "Client"),
+    client_lookup,
     write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
-
-  # Read client lookup
-  client_lookup <- read_file(client_lookup_path)
-
-  data <- read_file(file_path)
 
   # Selections for financial year------------------------------------
 
