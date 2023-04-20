@@ -3,8 +3,8 @@ admloc
 admtype
 adtf
 arrivalmode
-attendcat
 arth
+attendcat
 aut
 bedday
 beddays
@@ -143,6 +143,7 @@ roxygen
 Rprofile
 Rscript
 rspm
+RStudio
 rstudioapi
 Rtype
 Scougal
