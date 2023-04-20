@@ -1,18 +1,21 @@
-#' Process Social Care Care Home episodes tests
+#' Process Social Care Care Home all episodes tests
 #'
-#' @description This script takes the processed demographic extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' @param data The processed Care Home all episode data produced by
+#' [process_extract_care_home()].
+#'
+#' @description This script takes the processed all Care Home file and produces
+#' a test comparison with the previous data.
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @export
-process_tests_sc_ch_episodes <- function() {
+process_tests_sc_ch_episodes <- function(data) {
   comparison <- produce_test_comparison(
     old_data = produce_sc_ch_episodes_tests(
       read_file(get_sc_ch_episodes_path(update = previous_update()))
     ),
     new_data = produce_sc_ch_episodes_tests(
-      read_file(get_sc_ch_episodes_path())
+      data
     )
   )
 

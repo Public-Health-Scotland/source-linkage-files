@@ -4,19 +4,16 @@
 \alias{process_extract_home_care}
 \title{Process the (year specific) Home Care extract}
 \usage{
-process_extract_home_care(
-  file_path = get_sc_hc_episodes_path(),
-  year,
-  client_lookup_path = get_source_extract_path(year, type = "Client"),
-  write_to_disk = TRUE
-)
+process_extract_home_care(data, year, client_lookup, write_to_disk = TRUE)
 }
 \arguments{
-\item{file_path}{The extract to process - Read the file from disk.}
+\item{data}{The full processed data which will be selected from to create
+the year specific data.}
 
 \item{year}{The year to process, in FY format.}
 
-\item{client_lookup_path}{The client lookup extract - Read the file from disk.}
+\item{client_lookup}{The Social Care Client lookup, created by
+\code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}}.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
