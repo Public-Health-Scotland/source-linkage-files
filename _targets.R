@@ -3,6 +3,8 @@ library(targets)
 library(tarchetypes)
 library(future.callr)
 
+options(readr.read_lazy = TRUE)
+
 tar_option_set(
   imports = "createslf",
   packages = "createslf",
