@@ -12,7 +12,7 @@
 get_ltcs_path <- function(year, ...) {
   ltcs_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "LTCs"),
-    file_name = stringr::str_glue("LTCs_patient_reference_file-20{year}.gz.parquet"),
+    file_name = stringr::str_glue("LTCs_patient_reference_file-20{year}.parquet"),
     ...
   )
 
