@@ -187,7 +187,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   # Read in data---------------------------------------
 
   ae_cup_file <- read_file(
-    file = get_boxi_extract_path(year, "AE_CUP"),
+    path = get_boxi_extract_path(year, "AE_CUP"),
     col_type = cols(
       "ED Arrival Date" = col_date(format = "%Y/%m/%d %T"),
       "ED Arrival Time" = col_time(""),
