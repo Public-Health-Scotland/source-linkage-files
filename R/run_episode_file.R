@@ -108,7 +108,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
   # From C08 - Match on CHI from Service Use cohort, Demographic cohort, SPARRA and HHG ----
   # Create Temp File 7
 
-  return(ep_file)
 
   # From C10 - Final tidy-up (mostly variable labels) ----
   # Create Episode File
@@ -117,8 +116,23 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
   # Output tests
 
   if (write_to_disk == TRUE) {
+    slf_path <- get_file_path(
+      get_year_dir(year),
+      stringr::str_glue(
+        "source-episode-file-{year}{ifelse(ni_only, '_ni_version', '')}.parquet"
+      ),
+      check_mode = "write"
+    )
 
+    arrow::write_parquet(
+      ep_file,
+      slf_path,
+      version = "latest",
+      compression = "zstd"
+    )
   }
+
+  return(ep_file)
 }
 
 #' Fill any missing CIJ markers for records that should have them
