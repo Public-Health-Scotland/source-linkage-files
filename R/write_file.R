@@ -28,12 +28,12 @@ write_file <- function(data, path, ...) {
   }
 
   switch(ext,
-                 "rds" = write_rds(data, path),
-                 "fst" = fst::write_fst(data, path),
-                 "sav" = haven::write_sav(data, path, compress = "none", ...),
-                 "zsav" = haven::write_sav(data, path, compress = "zsav", ...),
-                 "csv" = readr::write_csv(data, path, ...),
-                 "gz" = readr::write_csv(data, path, ...),
-                 "parquet" = arrow::write_parquet(data, path, ...)
+    "rds" = write_rds(data, path),
+    "fst" = fst::write_fst(data, path),
+    "sav" = haven::write_sav(data, path, compress = "none", ...),
+    "zsav" = haven::write_sav(data, path, compress = "zsav", ...),
+    "csv" = readr::write_csv(data, path, ...),
+    "gz" = readr::write_csv(data, path, ...),
+    "parquet" = arrow::write_parquet(data, path, ...)
   )
 }
