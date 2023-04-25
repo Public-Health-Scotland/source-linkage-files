@@ -94,7 +94,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   if (write_to_disk) {
     outfile %>%
       # Save .rds file
-      write_rds(get_slf_postcode_path(check_mode = "write"))
+      write_file(get_slf_postcode_path(check_mode = "write"))
   }
 
   return(outfile)

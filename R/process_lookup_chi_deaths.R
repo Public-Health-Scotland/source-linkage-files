@@ -33,7 +33,7 @@ process_lookup_chi_deaths <- function(data, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save .rds file
     deaths_clean %>%
-      write_rds(get_slf_deaths_path(check_mode = "write"))
+      write_file(get_slf_deaths_path(check_mode = "write"))
   }
 
   return(deaths_clean)

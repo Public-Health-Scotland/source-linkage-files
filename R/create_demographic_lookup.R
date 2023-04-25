@@ -166,7 +166,7 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
 
   # Write to disk
   if (write_to_disk) {
-    write_rds(demo_lookup,
+    write_file(demo_lookup,
       path = get_demographic_cohorts_path(year, check_mode = "write")
     )
   }

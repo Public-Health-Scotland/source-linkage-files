@@ -35,7 +35,7 @@ process_extract_nrs_deaths <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     deaths_clean %>%
-      write_rds(get_source_extract_path(year, "Deaths", check_mode = "write"))
+      write_file(get_source_extract_path(year, "Deaths", check_mode = "write"))
   }
 
   return(deaths_clean)

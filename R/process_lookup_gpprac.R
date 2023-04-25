@@ -89,7 +89,7 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
   if (write_to_disk) {
     # Save .rds file
     gpprac_slf_lookup %>%
-      write_rds(get_slf_gpprac_path(check_mode = "write"))
+      write_file(get_slf_gpprac_path(check_mode = "write"))
   }
 
   return(gpprac_slf_lookup)
