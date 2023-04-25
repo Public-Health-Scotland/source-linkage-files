@@ -34,6 +34,6 @@ write_file <- function(data, path, ...) {
     "zsav" = haven::write_sav(data, path, compress = "zsav", ...),
     "csv" = readr::write_csv(data, path, ...),
     "gz" = readr::write_csv(data, path, ...),
-    "parquet" = arrow::write_parquet(data, path, ...)
+    "parquet" = write_parquet(data, path, ...)
   )
 }
