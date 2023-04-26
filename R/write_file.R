@@ -24,6 +24,7 @@ write_file <- function(data, path, ...) {
     ))
   }
 
+  # TODO remove the `write_*` functions and add their functionality here.
   switch(ext,
     "rds" = write_rds(data, path),
     "parquet" = write_parquet(data, path, ...)
