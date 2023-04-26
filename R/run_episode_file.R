@@ -10,7 +10,7 @@
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
-  fixed_patient_types <- dplyr::bind_rows(processed_data_list) %>%
+  episode_file <- dplyr::bind_rows(processed_data_list) %>%
     select_variables(year, vars_to_keep = c(
       "year",
       "recid",
