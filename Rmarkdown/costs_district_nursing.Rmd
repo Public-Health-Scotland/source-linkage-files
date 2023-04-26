@@ -206,7 +206,7 @@ outfile <-
 
 outfile %>%
   # Save .rds file
-  write_rds(get_dn_costs_path(check_mode = "write"))
+  write_file(get_dn_costs_path(check_mode = "write"))
 ```
 
 # Graph showing the number of contacts
