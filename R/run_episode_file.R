@@ -11,7 +11,7 @@
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   # Bring all the datasets together from Jen's process functions
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
-    select_variables(year, vars_to_keep = c(
+    store_ep_file_vars(year, vars_to_keep = c(
       "year",
       "recid",
       "record_keydate1",
@@ -107,7 +107,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     # TODO match on SPARRA and HHG here
     # From C09 - Match on postcode and gpprac variables ----
     fill_geographies() %>%
-    load_variables(year)
+    load_ep_file_vars(year)
 
   if (write_to_disk == TRUE) {
     slf_path <- get_file_path(
@@ -124,12 +124,11 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   return(episode_file)
 }
 
-select_variables <- function(data, year, vars_to_keep) {
+store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write",
-    create = TRUE
+    check_mode = "write"
   )
 
   check_variables_exist(data, vars_to_keep)
@@ -155,7 +154,7 @@ select_variables <- function(data, year, vars_to_keep) {
   )
 }
 
-load_variables <- function(data, year) {
+load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
