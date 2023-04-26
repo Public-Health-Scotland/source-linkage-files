@@ -142,7 +142,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
     data,
     dplyr::all_of(vars_to_store)
   ) %>%
-   write_file(
+    write_file(
       path = tempfile_path
     )
 
