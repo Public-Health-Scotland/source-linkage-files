@@ -28,12 +28,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
-    dplyr::left_join(
-      create_demographic_cohorts(., year, write_to_disk = TRUE)
-    ) %>%
-    dplyr::left_join(
-      create_service_use_cohorts(., year, write_to_disk = TRUE)
-    ) %>%
+    join_cohort_lookups() %>%
     # TODO match on SPARRA and HHG here
     # From C09 - Match on postcode and gpprac variables ----
     fill_geographies()
@@ -162,3 +157,22 @@ create_cost_inc_dna <- function(ep_file_data) {
       )
     )
 }
+
+
+#' Join cohort lookups
+#'
+#' @param ep_file_data Episode file data.
+#'
+#' @return The data including the demographic and service use lookups matched
+#' on to the episode file.
+#'
+join_cohort_lookups <- function(ep_file_data) {
+  join_cohort_lookups <- ep_file_data %>%
+    dplyr::left_join(
+      create_demographic_cohorts(year, write_to_disk = TRUE)
+    ) %>%
+    dplyr::left_join(
+      create_service_use_cohorts(year, write_to_disk = TRUE)
+    )
+
+  return(join_cohort_lookups)
