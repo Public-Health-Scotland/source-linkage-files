@@ -7,7 +7,10 @@
 create_cost_inc_dna(ep_file_data)
 }
 \arguments{
-\item{ep_file_data}{}
+\item{ep_file_data}{The episode file data in progress.}
+}
+\value{
+The data with cost including dna.
 }
 \description{
 Create cost total net inc DNA

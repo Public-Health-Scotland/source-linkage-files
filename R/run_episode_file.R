@@ -137,9 +137,9 @@ correct_cij_vars <- function(ep_file_data) {
 
 #' Create cost total net inc DNA
 #'
-#' @param ep_file_data
+#' @param ep_file_data The episode file data in progress.
 #'
-#' @return
+#' @return The data with cost including dna.
 create_cost_inc_dna <- function(ep_file_data) {
   check_variables_exist(ep_file_data, c("cost_total_net", "attendance_status"))
 
@@ -176,3 +176,4 @@ join_cohort_lookups <- function(ep_file_data) {
     )
 
   return(join_cohort_lookups)
+}
