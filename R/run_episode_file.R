@@ -69,7 +69,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
   }
 
   return(episode_file)
-
 }
 
 #' Fill any missing CIJ markers for records that should have them
