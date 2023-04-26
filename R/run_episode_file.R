@@ -124,6 +124,14 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   return(episode_file)
 }
 
+#' Store the unneeded episode file variables
+#'
+#' @param data The full SLF input data
+#' @inheritParams run_episode_file
+#' @param vars_to_keep a character vector of variable to keep, all others will
+#' be stored.
+#'
+#' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
@@ -154,6 +162,12 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
   )
 }
 
+#' Load the unneeded episode file variables
+#'
+#' @param data The SLF data to which the stored vars will be added
+#' @inheritParams run_episode_file
+#'
+#' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
