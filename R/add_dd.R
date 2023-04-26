@@ -26,7 +26,7 @@ add_dd <- function(data, year) {
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
-      by_dd,
+      by = by_dd,
       suffix = c("_dd", "")
     ) %>%
     dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
