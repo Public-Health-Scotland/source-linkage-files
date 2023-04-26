@@ -25,7 +25,7 @@ get_slf_temp_path <-
       glob = "*temp-*"
     ) %>%
       stringr::str_match(
-        pattern = glue::glue(
+        pattern = stringr::str_glue(
           "temp-source-{file_version}-file-(?<version>[1-9])-{year}\\.rds"
         )
       ) %>%
@@ -38,10 +38,10 @@ get_slf_temp_path <-
       years_availiable <- fs::dir_ls(
         base_dir,
         recurse = TRUE,
-        glob = glue::glue("*temp-source-{file_version}*")
+        glob = stringr::str_glue("*temp-source-{file_version}*")
       ) %>%
         stringr::str_match(
-          pattern = glue::glue(
+          pattern = stringr::str_glue(
             "temp-source-{file_version}-file-[1-9]-(?<year>[0-9]{{4}})\\.rds"
           )
         ) %>%
@@ -80,7 +80,7 @@ get_slf_temp_path <-
     # Return nice error if it doesn't work
 
     file_name <-
-      glue::glue("temp-source-{file_version}-file-{temp_version}-{year}.rds")
+      stringr::str_glue("temp-source-{file_version}-file-{temp_version}-{year}.rds")
 
     file_path <- get_file_path(
       directory = year_dir,

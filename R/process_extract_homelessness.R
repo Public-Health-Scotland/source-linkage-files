@@ -109,7 +109,6 @@ process_extract_homelessness <- function(
     fix_west_dun_duplicates() %>%
     fix_east_ayrshire_duplicates()
 
-
   completeness_data <- produce_homelessness_completeness(
     homelessness_data = data,
     update = update,
@@ -150,9 +149,9 @@ process_extract_homelessness <- function(
 
   if (write_to_disk) {
     final_data %>%
-      write_rds(get_file_path(
+      write_file(get_file_path(
         get_year_dir(year),
-        glue::glue("homelessness_for_source-20{year}"),
+        stringr::str_glue("homelessness_for_source-20{year}"),
         ext = "rds",
         check_mode = "write"
       ))

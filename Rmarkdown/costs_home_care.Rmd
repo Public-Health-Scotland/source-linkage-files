@@ -18,7 +18,7 @@ fs::file_copy(get_hc_costs_path(),
 )
 
 ## Read raw costs
-hc_costs_raw <- readxl::read_xlsx(get_hc_raw_costs_path()) %>%
+hc_costs_raw <- openxlsx::read.xlsx(get_hc_raw_costs_path()) %>%
   janitor::clean_names() %>%
   tidyr::drop_na(gss_code)
 
@@ -89,7 +89,7 @@ matched_costs_data <- hc_costs_uplifted %>%
 outfile <- hc_costs_uplifted %>%
   select(-health_board) %>%
   # Save .rds file
-  write_rds(get_hc_costs_path(update = latest_update(), check_mode = "write"))
+  write_file(get_hc_costs_path(check_mode = "write"))
 ```
 
 

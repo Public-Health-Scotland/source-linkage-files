@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' delayed discharges extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -108,7 +108,7 @@ process_extract_delayed_discharges <- function(data,
   if (write_to_disk) {
     dd_final %>%
       # Save as rds file
-      write_rds(get_source_extract_path(year, "DD", check_mode = "write"))
+      write_file(get_source_extract_path(year, "DD", check_mode = "write"))
   }
 
   return(dd_final)

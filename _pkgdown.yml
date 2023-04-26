@@ -91,9 +91,7 @@ reference:
   - title: Writing data
     desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
   - contents:
-    - has_concept("write out data")
-    - write_sav
-    - write_rds
+    - write_file
 
 
   - title: Initialisation

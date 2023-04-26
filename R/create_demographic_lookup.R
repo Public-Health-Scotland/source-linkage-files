@@ -166,7 +166,7 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
 
   # Write to disk
   if (write_to_disk) {
-    write_rds(demo_lookup,
+    write_file(demo_lookup,
       path = get_demographic_cohorts_path(year, check_mode = "write")
     )
   }
@@ -472,17 +472,17 @@ assign_d_cohort_eol <- function(recid,
                                 deathdiag11) {
   external_deaths <- c(
     # Codes V01 to V99
-    glue::glue("V{stringr::str_pad(1:99, 2, 'left', '0')}"),
+    stringr::str_glue("V{stringr::str_pad(1:99, 2, 'left', '0')}"),
     # Codes W00 to W99
-    glue::glue("W{stringr::str_pad(0:99, 2, 'left', '0')}"),
+    stringr::str_glue("W{stringr::str_pad(0:99, 2, 'left', '0')}"),
     # Codes X00 to X99
-    glue::glue("X{stringr::str_pad(0:99, 2, 'left', '0')}"),
+    stringr::str_glue("X{stringr::str_pad(0:99, 2, 'left', '0')}"),
     # Codes Y00 to Y84
-    glue::glue("Y{stringr::str_pad(0:84, 2, 'left', '0')}")
+    stringr::str_glue("Y{stringr::str_pad(0:84, 2, 'left', '0')}")
   )
 
   # Codes W00 to W19
-  falls_codes <- c(glue::glue("W{stringr::str_pad(0:19, 2, 'left', '0')}"))
+  falls_codes <- c(stringr::str_glue("W{stringr::str_pad(0:19, 2, 'left', '0')}"))
 
   # External causes will be those codes that are in external_codes but are not in falls_codes
   external_cause <-

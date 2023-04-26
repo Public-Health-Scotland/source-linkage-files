@@ -3,24 +3,23 @@
 #' all SDS extract, it will return the final data
 #' but also write this out as a rds.
 #'
-#' @param data The extract to process
-#' @param sc_demographics The path to the sc demographics lookup.
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @inheritParams process_sc_all_care_home
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
 #' @export
 #'
-process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(), write_to_disk = TRUE) {
-  # Match on demographic data ---------------------------------------
-  # read in demographic data
-  sc_demographics <- read_file(sc_demographics)
-
+process_sc_all_sds <- function(
+    data,
+    sc_demog_lookup,
+    write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
   matched_sds_data <- data %>%
-    dplyr::left_join(sc_demographics, by = c("sending_location", "social_care_id"))
+    dplyr::left_join(
+      sc_demog_lookup,
+      by = c("sending_location", "social_care_id")
+    )
 
   # Data Cleaning ---------------------------------------
   sds_full_clean <- matched_sds_data %>%
@@ -77,7 +76,7 @@ process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(
       ),
       recid = "SDS",
       # Create person id variable
-      person_id = glue::glue("{sending_location}-{social_care_id}"),
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
     ) %>%
@@ -123,7 +122,7 @@ process_sc_all_sds <- function(data, sc_demographics = get_sc_demog_lookup_path(
   if (write_to_disk) {
     # Save .rds file
     final_data %>%
-      write_rds(get_sc_sds_episodes_path(check_mode = "write"))
+      write_file(get_sc_sds_episodes_path(check_mode = "write"))
   }
 
   return(final_data)

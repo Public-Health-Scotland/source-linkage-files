@@ -1,18 +1,21 @@
-#' Process sc demographics tests
+#' Process Social Care Demographics tests
 #'
-#' @description This script takes the processed demographic extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' @param data The processed demographic data produced by
+#' [process_lookup_sc_demographics()].
+#'
+#' @description Take the processed demographics extract and produces
+#' a test comparison with the previous data.
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @export
-process_tests_sc_demographics <- function() {
+process_tests_sc_demographics <- function(data) {
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
       read_file(get_sc_demog_lookup_path(update = previous_update()))
     ),
     new_data = produce_sc_demog_lookup_tests(
-      read_file(get_sc_demog_lookup_path())
+      data
     )
   ) %>%
     write_tests_xlsx(sheet_name = "sc_demographics")
