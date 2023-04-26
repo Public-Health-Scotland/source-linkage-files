@@ -33,9 +33,7 @@ current_file <- readr::read_rds(createslf::get_dn_costs_path())
 latest_year <- check_year_format("1920")
 
 ## data ##
-dn_raw_costs <- openxlsx::read.xlsx(
-  fs::path(get_slf_dir(), "Costs", "DN_Costs.xlsx")
-) %>%
+dn_raw_costs <- openxlsx::read.xlsx(get_dn_raw_costs_path()) %>%
   janitor::clean_names() %>%
   # change 1718 type to numeric - reads in as a character
   mutate(across(ends_with("_cost"), as.numeric)) %>%
