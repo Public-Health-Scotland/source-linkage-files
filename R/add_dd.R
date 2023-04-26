@@ -32,6 +32,7 @@ add_dd <- function(data, year) {
     dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
     # remove duplicate columns
     dplyr::distinct(
+      chi,
       cij_start_date,
       cij_end_date,
       cij_marker,
