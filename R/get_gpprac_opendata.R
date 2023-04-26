@@ -41,7 +41,7 @@ get_gpprac_opendata <- function() {
     # Sort for SPSS matching
     dplyr::arrange(.data$gpprac) %>%
     # Write rds file
-    write_rds(get_practice_details_path(check_mode = "write"))
+    write_file(get_practice_details_path(check_mode = "write"))
 
   return(gpprac_data)
 }

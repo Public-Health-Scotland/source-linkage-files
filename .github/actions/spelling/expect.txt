@@ -144,6 +144,7 @@ roxygen
 Rprofile
 Rscript
 rspm
+RStudio
 rstudioapi
 Rtype
 Scougal
