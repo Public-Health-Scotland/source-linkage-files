@@ -22,7 +22,7 @@ add_dd <- function(data, year) {
   by_dd <- dplyr::join_by(
     chi,
     x$keydate1_dateformat >= y$cij_start_date_lower,
-    x$keydate2_dateformat <= y$cij_end_date_upper
+    x$keydate2_dateformat <= y$<end of the month when the CIJ ends>
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
