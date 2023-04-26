@@ -3,19 +3,16 @@
 #' @description Write a file, the function chosen to write the file is dependant
 #' on the file path.
 #'  * `.rds` uses [write_rds()].
-#'  * `.fst` uses [fst::write_fst()].
-#'  * `.sav` and `.zsav` use [haven::write_sav()].
-#'  * `.csv` and `.gz` use [readr::write_csv()]. Note that this assumes any file
-#'  ending with `.gz` is a zipped CSV which isn't necessarily true!
-#'  * `.parquet` uses [arrow::write_parquet()].
+#'  * `.parquet` uses [write_parquet()].
 #'
+#' @param data The data to be written
 #' @param path The file path to be write
 #' @param ... Addition arguments passed to the relevant function.
 #'
 #' @return the data a [tibble][tibble::tibble-package]
 #' @export
 write_file <- function(data, path, ...) {
-  valid_extensions <- c("rds", "fst", "sav", "zsav", "csv", "gz", "parquet")
+  valid_extensions <- c("rds", "parquet")
 
   ext <- fs::path_ext(path)
 

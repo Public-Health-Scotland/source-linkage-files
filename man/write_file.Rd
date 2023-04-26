@@ -7,6 +7,8 @@
 write_file(data, path, ...)
 }
 \arguments{
+\item{data}{The data to be written}
+
 \item{path}{The file path to be write}
 
 \item{...}{Addition arguments passed to the relevant function.}
@@ -19,10 +21,6 @@ Write a file, the function chosen to write the file is dependant
 on the file path.
 \itemize{
 \item \code{.rds} uses \code{\link[=write_rds]{write_rds()}}.
-\item \code{.fst} uses \code{\link[fst:write_fst]{fst::write_fst()}}.
-\item \code{.sav} and \code{.zsav} use \code{\link[haven:read_spss]{haven::write_sav()}}.
-\item \code{.csv} and \code{.gz} use \code{\link[readr:write_delim]{readr::write_csv()}}. Note that this assumes any file
-ending with \code{.gz} is a zipped CSV which isn't necessarily true!
-\item \code{.parquet} uses \code{\link[arrow:write_parquet]{arrow::write_parquet()}}.
+\item \code{.parquet} uses \code{\link[=write_parquet]{write_parquet()}}.
 }
 }
