@@ -25,7 +25,7 @@ test_that("read_file works", {
   expect_equal(aq_data, read_file(parquet_path))
 })
 
-test_that("read_file works errors on unknown extensions", {
+test_that("read_file errors on unknown extensions", {
   xlsx_path <- tempfile(fileext = ".xlsx")
 
   openxlsx::write.xlsx(datasets::airquality, xlsx_path)
