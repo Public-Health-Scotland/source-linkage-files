@@ -143,10 +143,8 @@ select_variables <- function(data, year, vars_to_keep) {
     data,
     dplyr::all_of(vars_to_store)
   ) %>%
-    arrow::write_parquet(
-      sink = tempfile_path,
-      version = "latest",
-      compression = "zstd"
+   write_file(
+      path = tempfile_path
     )
 
   return(
@@ -161,15 +159,12 @@ load_variables <- function(data, year) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write",
-    create = FALSE
+    check_mode = "read"
   )
 
   full_data <- data %>%
     dplyr::left_join(
-      arrow::read_parquet(
-        file = tempfile_path
-      ),
+      read_file(path = tempfile_path),
       by = "ep_file_row_id",
       unmatched = "error",
       relationship = "one-to-one"
