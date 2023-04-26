@@ -92,7 +92,8 @@ fill_postcode_geogs <- function(data) {
   filled_postcodes <-
     dplyr::left_join(data, make_postcode_lookup(data), by = "chi") %>%
     dplyr::select(-postcode) %>%
-    dplyr::rename(postcode = most_recent_postcode) %>%
+    # If the existing postcode is missing or not known (NK010AA) replace it.
+    dplyr::mutate(postcode = dplyr::if_else(is.na(.data$postcode) || .data$postcode == "NK010AA", .data$most_recent_postcode, .data$postcode)) %>%
     # Fill geographies
     dplyr::left_join(spd, by = "postcode", suffix = c("_old", "")) %>%
     dplyr::mutate(
@@ -121,7 +122,8 @@ fill_gpprac_geographies <- function(data) {
   filled_gpprac <-
     dplyr::left_join(data, make_gpprac_lookup(data), by = "chi") %>%
     dplyr::select(-gpprac) %>%
-    dplyr::rename(gpprac = most_recent_gpprac) %>%
+    # If the existing gpprac is missing or not known (99999) replace it.
+    dplyr::mutate(gpprac = dplyr::if_else(is.na(.data$gpprac) || .data$gpprac == 99999L, .data$most_recent_gpprac, .data$gpprac)) %>%
     dplyr::left_join(gpprac_ref, by = "gpprac", suffix = c("_old", "")) %>%
     dplyr::mutate(
       hbpraccode = dplyr::coalesce(.data$hbpraccode, .data$hbpraccode_old)
