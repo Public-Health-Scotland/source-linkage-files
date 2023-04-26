@@ -10,7 +10,7 @@
 add_dd <- function(data, year) {
   year_param <- year
 
-  data = data %>%
+  data <- data %>%
     dplyr::arrange(chi, cij_marker) %>%
     dplyr::mutate(
       cij_start_date_lower = cij_start_date - lubridate::days(1),
@@ -18,16 +18,17 @@ add_dd <- function(data, year) {
     )
 
   ## handling DD ----
-  dd_data = read_file(get_source_extract_path(year_param, "DD"))
-  by_dd = dplyr::join_by(
+  dd_data <- read_file(get_source_extract_path(year_param, "DD"))
+  by_dd <- dplyr::join_by(
     chi,
     x$keydate1_dateformat >= y$cij_start_date_lower,
     x$keydate2_dateformat <= y$cij_end_date_upper
   )
-  data = dd_data %>%
+  data <- dd_data %>%
     dplyr::inner_join(data,
-                      by_dd,
-                      suffix = c("_dd", "")) %>%
+      by_dd,
+      suffix = c("_dd", "")
+    ) %>%
     dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
     # remove duplicate columns
     dplyr::distinct(
