@@ -3,14 +3,13 @@ admloc
 admtype
 adtf
 arrivalmode
-attendcat
 arth
+attendcat
 aut
 bedday
 beddays
 birthtime
 bodyloc
-BOXI
 boxi
 Canx
 carehome
@@ -43,6 +42,7 @@ dischloc
 dischto
 disdest
 dminutes
+dna
 dnas
 dontrun
 downup
@@ -173,6 +173,7 @@ thom
 tibble
 tidyr
 tidyselect
+TODOs
 uid
 ungroup
 updown
