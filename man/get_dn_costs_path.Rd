@@ -7,7 +7,7 @@
 get_dn_costs_path(..., update = NULL)
 }
 \arguments{
-\item{...}{additional arguments passed to  \code{\link[=get_file_path]{get_file_path()}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 
 \item{update}{passed through \code{\link[=latest_update]{latest_update()}}}
 }
@@ -22,7 +22,9 @@ Get the full District Nursing costs lookup path
 
 Other costs lookup file paths: 
 \code{\link{get_ch_costs_path}()},
+\code{\link{get_dn_raw_costs_path}()},
 \code{\link{get_gp_ooh_costs_path}()},
+\code{\link{get_gp_ooh_raw_costs_path}()},
 \code{\link{get_hc_costs_path}()},
 \code{\link{get_hc_raw_costs_path}()}
 }

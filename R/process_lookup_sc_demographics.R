@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' social care demographic lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process.
 #' @param spd_path Path to the Scottish Postcode Directory.
