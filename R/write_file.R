@@ -24,7 +24,7 @@ write_file <- function(data, path, ...) {
   }
 
   switch(ext,
-    "rds" =  readr::write_rds(
+    "rds" = readr::write_rds(
       x = data,
       file = path,
       compress = "xz",
