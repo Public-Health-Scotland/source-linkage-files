@@ -34,7 +34,15 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     fill_geographies()
 
   if (write_to_disk == TRUE) {
-    # TODO write out as an arrow dataset possibly also as an rds
+    slf_path <- get_file_path(
+      get_year_dir(year),
+      stringr::str_glue(
+        "source-episode-file-{year}.parquet"
+      ),
+      check_mode = "write"
+    )
+
+    write_file(episode_file, slf_path)
   }
 
   return(episode_file)
