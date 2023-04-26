@@ -51,7 +51,9 @@ make_postcode_lookup <- function(data) {
     # Rename
     dplyr::rename(most_recent_postcode = postcode) %>%
     # We don't need to keep discharge date after this point
-    dplyr::select(-"record_keydate2")
+    dplyr::select(-"record_keydate2") %>%
+    # Drop any CHIs with no postcode
+    tidyr::drop_na()
 
   return(postcode_lookup)
 }
@@ -77,7 +79,9 @@ make_gpprac_lookup <- function(data) {
     # Rename
     dplyr::rename(most_recent_gpprac = gpprac) %>%
     # We don't need to keep discharge date after this point
-    dplyr::select(-"record_keydate2")
+    dplyr::select(-"record_keydate2") %>%
+    # Drop any CHIs with no gpprac code
+    tidyr::drop_na()
 
   return(gpprac_lookup)
 }
