@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' postcode lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param simd_path Path to SIMD lookup.
 #' @param locality_path Path to locality lookup.

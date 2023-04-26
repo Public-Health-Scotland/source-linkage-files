@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' gpprac lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param open_data PHS open dataset link to gp practice details
 #' @param gpprac_ref_path Path to GP Practice reference file

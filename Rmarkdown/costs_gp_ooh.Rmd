@@ -20,9 +20,7 @@ fs::file_copy(get_gp_ooh_costs_path(),
 )
 
 # Costs spreadsheet
-gp_ooh_data <- openxlsx::read.xlsx(
-  fs::path(get_slf_dir(), "Costs", "OOH_Costs.xlsx")
-)
+gp_ooh_data <- openxlsx::read.xlsx(get_gp_ooh_raw_costs_path())
 
 
 # Data Cleaning ---------------------------------------

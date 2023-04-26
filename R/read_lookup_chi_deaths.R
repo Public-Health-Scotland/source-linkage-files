@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' CHI deaths lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param file_path Path to CHI Deaths file
 #'
