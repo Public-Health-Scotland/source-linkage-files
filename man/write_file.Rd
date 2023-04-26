@@ -20,7 +20,7 @@ the data (invisibly) as a \link[tibble:tibble-package]{tibble}.
 Write data to a file, the function chosen to write the file is
 dependant on the file path extension.
 \itemize{
-\item \code{.rds} uses \code{\link[=write_rds]{write_rds()}}.
-\item \code{.parquet} uses \code{\link[=write_parquet]{write_parquet()}}.
+\item \code{.rds} uses \code{\link[readr:read_rds]{readr::write_rds()}}.
+\item \code{.parquet} uses \code{\link[arrow:write_parquet]{arrow::write_parquet()}}.
 }
 }
