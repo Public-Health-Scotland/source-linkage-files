@@ -123,7 +123,7 @@ process_sc_all_alarms_telecare <- function(
   if (write_to_disk) {
     # Save .rds file ----
     qtr_merge %>%
-      write_rds(get_sc_at_episodes_path(check_mode = "write"))
+      write_file(get_sc_at_episodes_path(check_mode = "write"))
   }
 
   return(qtr_merge)

@@ -124,7 +124,7 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
   if (write_to_disk) {
     # Save .rds file
     outfile %>%
-      write_rds(get_sc_demog_lookup_path(check_mode = "write"))
+      write_file(get_sc_demog_lookup_path(check_mode = "write"))
   }
 
   return(outfile)

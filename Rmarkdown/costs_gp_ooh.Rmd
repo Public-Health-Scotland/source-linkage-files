@@ -83,7 +83,7 @@ matched_costs_data <- gp_ooh_costs_uplifted %>%
 gp_ooh_costs_uplifted %>%
   dplyr::rename(TreatmentNHSBoardCode = "HB2019") %>%
   # Save .rds file
-  write_rds(get_gp_ooh_costs_path(check_mode = "write"))
+  write_file(get_gp_ooh_costs_path(check_mode = "write"))
 ```
 
 # Graph showing the cost difference 

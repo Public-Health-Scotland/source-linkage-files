@@ -75,7 +75,7 @@ process_extract_cmh <- function(data,
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
+      write_file(get_source_extract_path(year, "CMH", check_mode = "write"))
   }
 
   return(outfile)
