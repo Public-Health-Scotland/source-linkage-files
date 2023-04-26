@@ -35,10 +35,10 @@ fill_geographies <- function(data) {
 make_postcode_lookup <- function(data) {
   postcode_lookup <-
     data %>%
-    # Get just the chi, postcode and discharge date
-    dplyr::select("chi", "postcode", "record_keydate2") %>%
-    # Get rid of missing chis
+    # Get rid of records with missing CHIs
     dplyr::filter(!is_missing(.data$chi)) %>%
+    # Keep one row for each CHI, postcode, and date combination.
+    dplyr::distinct("chi", "postcode", "record_keydate2") %>%
     # Format postcodes to 7-character format and replace dummy with NA
     dplyr::mutate(
       postcode = phsmethods::format_postcode(postcode, format = "pc7"),
