@@ -2,7 +2,7 @@
 % Please edit documentation in R/write_file.R
 \name{write_file}
 \alias{write_file}
-\title{Write a file}
+\title{Write a data to a file}
 \usage{
 write_file(data, path, ...)
 }
@@ -11,14 +11,14 @@ write_file(data, path, ...)
 
 \item{path}{The file path to be write}
 
-\item{...}{Addition arguments passed to the relevant function.}
+\item{...}{Additional arguments passed to the relevant function.}
 }
 \value{
-the data a \link[tibble:tibble-package]{tibble}
+the data (invisibly) as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-Write a file, the function chosen to write the file is dependant
-on the file path.
+Write data to a file, the function chosen to write the file is
+dependant on the file path extension.
 \itemize{
 \item \code{.rds} uses \code{\link[=write_rds]{write_rds()}}.
 \item \code{.parquet} uses \code{\link[=write_parquet]{write_parquet()}}.
