@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' gpprac lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param open_data PHS open dataset link to gp practice details
 #' @param gpprac_ref_path Path to GP Practice reference file
@@ -89,7 +89,7 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
   if (write_to_disk) {
     # Save .rds file
     gpprac_slf_lookup %>%
-      write_rds(get_slf_gpprac_path(check_mode = "write"))
+      write_file(get_slf_gpprac_path(check_mode = "write"))
   }
 
   return(gpprac_slf_lookup)

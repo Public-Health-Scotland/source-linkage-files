@@ -34,7 +34,15 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     fill_geographies()
 
   if (write_to_disk == TRUE) {
-    # TODO write out as an arrow dataset possibly also as an rds
+    slf_path <- get_file_path(
+      get_year_dir(year),
+      stringr::str_glue(
+        "source-episode-file-{year}.parquet"
+      ),
+      check_mode = "write"
+    )
+
+    write_file(episode_file, slf_path)
   }
 
   return(episode_file)
@@ -168,13 +176,20 @@ create_cost_inc_dna <- function(ep_file_data) {
 #' on to the episode file.
 #'
 join_cohort_lookups <- function(ep_file_data, year) {
+  demographic_cohorts <- create_demographic_cohorts(
+    ep_file_data,
+    year,
+    write_to_disk = TRUE
+  )
+  service_use_cohorts <- create_service_use_cohorts(
+    ep_file_data,
+    year,
+    write_to_disk = TRUE
+  )
+
   join_cohort_lookups <- ep_file_data %>%
-    dplyr::left_join(
-      create_demographic_cohorts(year, write_to_disk = TRUE)
-    ) %>%
-    dplyr::left_join(
-      create_service_use_cohorts(year, write_to_disk = TRUE)
-    )
+    dplyr::left_join(demographic_cohorts, by = "chi") %>%
+    dplyr::left_join(service_use_cohorts, by = "chi")
 
   return(join_cohort_lookups)
 }

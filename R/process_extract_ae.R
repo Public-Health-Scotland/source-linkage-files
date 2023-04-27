@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' A&E extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -157,6 +157,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     dplyr::select(
       "year",
       "recid",
+      "smrtype",
       "record_keydate1",
       "record_keydate2",
       "keytime1",
@@ -238,6 +239,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     dplyr::select(
       "year",
       "recid",
+      "smrtype",
       "record_keydate1",
       "record_keydate2",
       "keytime1",
@@ -290,7 +292,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, "AE", check_mode = "write"))
+      write_file(get_source_extract_path(year, "AE", check_mode = "write"))
   }
 
   return(outfile)

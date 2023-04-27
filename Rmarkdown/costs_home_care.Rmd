@@ -71,7 +71,7 @@ hc_costs_uplifted <-
 # match files - to make sure costs haven't changed radically
 
 # read in old costs
-old_costs <- readr::read_rds(get_hc_costs_path(update = latest_update())) %>%
+old_costs <- read_file(get_hc_costs_path(update = latest_update())) %>%
   rename(hourly_cost_old = hourly_cost)
 
 
@@ -89,7 +89,7 @@ matched_costs_data <- hc_costs_uplifted %>%
 outfile <- hc_costs_uplifted %>%
   select(-health_board) %>%
   # Save .rds file
-  write_rds(get_hc_costs_path(update = latest_update(), check_mode = "write"))
+  write_file(get_hc_costs_path(check_mode = "write"))
 ```
 
 

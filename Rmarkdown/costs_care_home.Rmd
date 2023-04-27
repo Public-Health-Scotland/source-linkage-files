@@ -94,7 +94,7 @@ ch_costs_uplifted <-
 # Join data together  -----------------------------------------------------
 
 # match files - to make sure costs haven't changed radically
-old_costs <- readr::read_rds(get_ch_costs_path(update = latest_update())) %>%
+old_costs <- read_file(get_ch_costs_path(update = latest_update())) %>%
   rename(
     cost_old = "cost_per_day"
   )
@@ -118,7 +118,7 @@ matched_costs_data %>%
 
 # Save .rds file
 ch_costs_uplifted %>%
-  write_rds(get_ch_costs_path(check_mode = "write"))
+  write_file(get_ch_costs_path(check_mode = "write"))
 ```
 
 # Graph showing the cost difference between new and old costs 

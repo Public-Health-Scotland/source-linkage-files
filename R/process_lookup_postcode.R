@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' postcode lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param simd_path Path to SIMD lookup.
 #' @param locality_path Path to locality lookup.
@@ -94,7 +94,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   if (write_to_disk) {
     outfile %>%
       # Save .rds file
-      write_rds(get_slf_postcode_path(check_mode = "write"))
+      write_file(get_slf_postcode_path(check_mode = "write"))
   }
 
   return(outfile)

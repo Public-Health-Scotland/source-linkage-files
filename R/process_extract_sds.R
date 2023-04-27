@@ -52,7 +52,7 @@ process_extract_sds <- function(
 
   if (write_to_disk) {
     outfile %>%
-      write_rds(get_source_extract_path(year, type = "SDS", check_mode = "write"))
+      write_file(get_source_extract_path(year, type = "SDS", check_mode = "write"))
   }
 
   return(outfile)

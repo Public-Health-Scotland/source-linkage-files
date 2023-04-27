@@ -311,7 +311,7 @@ process_sc_all_care_home <- function(
 
   if (write_to_disk) {
     ch_data_final %>%
-      write_rds(get_sc_ch_episodes_path(check_mode = "write"))
+      write_file(get_sc_ch_episodes_path(check_mode = "write"))
   }
 
   return(ch_data_final)

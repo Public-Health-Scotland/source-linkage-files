@@ -30,7 +30,7 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
     # Save .rds file
     ltc_flags %>%
       dplyr::arrange(.data$chi) %>%
-      write_rds(get_ltcs_path(year, check_mode = "write"))
+      write_file(get_ltcs_path(year, check_mode = "write"))
   }
 
   return(ltc_flags)
