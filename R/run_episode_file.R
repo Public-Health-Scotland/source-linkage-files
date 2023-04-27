@@ -9,7 +9,6 @@
 #' @export
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
-  # Bring all the datasets together from Jen's process functions
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     store_ep_file_vars(year, vars_to_keep = c(
       "year",
@@ -83,7 +82,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       "deathdiag10",
       "deathdiag11"
     )) %>%
-    # From C01 ----
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
     dplyr::mutate(
@@ -97,7 +95,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     create_cost_inc_dna() %>%
-    # Add the flag for Potentially Preventable Admissions
     add_ppa_flag() %>%
     # TODO add Link Delayed Discharge here (From C02)
     add_nsu_cohort(year) %>%
@@ -105,11 +102,10 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     correct_demographics(year) %>%
     join_cohort_lookups(year) %>%
     # TODO match on SPARRA and HHG here
-    # From C09 - Match on postcode and gpprac variables ----
     fill_geographies() %>%
     load_ep_file_vars(year)
 
-  if (write_to_disk == TRUE) {
+  if (write_to_disk) {
     slf_path <- get_file_path(
       get_year_dir(year),
       stringr::str_glue(
