@@ -89,7 +89,7 @@ process_extract_home_care <- function(
   if (write_to_disk) {
     # Save .rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, type = "HC", check_mode = "write"))
+      write_file(get_source_extract_path(year, type = "HC", check_mode = "write"))
   }
 
   return(outfile)

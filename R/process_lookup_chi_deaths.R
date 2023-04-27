@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' CHI deaths lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process
 #' @param write_to_disk (optional) Should the data be written to disk default is
@@ -33,7 +33,7 @@ process_lookup_chi_deaths <- function(data, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save .rds file
     deaths_clean %>%
-      write_rds(get_slf_deaths_path(check_mode = "write"))
+      write_file(get_slf_deaths_path(check_mode = "write"))
   }
 
   return(deaths_clean)

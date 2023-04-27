@@ -94,7 +94,7 @@ produce_homelessness_completeness <- function(
     return(NULL)
   }
 
-  write_rds(
+  write_file(
     annual_comparison,
     get_homelessness_completeness_path(
       year = year,
