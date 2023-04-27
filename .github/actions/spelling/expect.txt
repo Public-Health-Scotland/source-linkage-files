@@ -158,6 +158,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 spss
