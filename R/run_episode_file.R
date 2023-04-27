@@ -132,7 +132,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write"
+    check_mode = "write",
+    create = TRUE
   )
 
   check_variables_exist(data, vars_to_keep)
@@ -168,7 +169,8 @@ load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "read"
+    check_mode = "write",
+    create = TRUE
   )
 
   full_data <- data %>%
