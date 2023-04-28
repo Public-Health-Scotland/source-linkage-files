@@ -47,7 +47,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       # "op4b",
       "age",
       "cij_marker",
-      "cij_pattype",
       "cij_pattype_code",
       "cij_ipdc",
       "cij_admtype",
