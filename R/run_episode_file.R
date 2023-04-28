@@ -46,7 +46,13 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
     # TODO add Link Delayed Discharge here (From C02)
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
-    join_cohort_lookups(year) %>%
+    {
+      if (ni_only) {
+        .
+      } else {
+        join_cohort_lookups(., year)
+      }
+    } %>%
     # TODO match on SPARRA and HHG here
     # From C09 - Match on postcode and gpprac variables ----
     fill_geographies()
