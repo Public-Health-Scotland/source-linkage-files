@@ -18,8 +18,7 @@ fill_geographies <- function(data) {
     "datazone",
     "hbpraccode",
     "hbtreatcode",
-    "gpprac",
-    "hbpraccode"
+    "gpprac"
   ))
 
   data %>%
