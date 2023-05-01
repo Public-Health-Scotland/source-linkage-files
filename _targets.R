@@ -19,10 +19,10 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1920")
+years_to_run <- c("1819")
 
 list(
-  tar_rds(write_to_disk, FALSE),
+  tar_rds(write_to_disk, TRUE),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
@@ -377,6 +377,29 @@ list(
         data = source_sc_sds,
         year = year
       )
-    )
+    ),
+    tar_target(ep_file, run_episode_file(
+      list(
+        "acute" = tar_read(acute_source_extract),
+        # "ae" = tar_read(ae_source_extract),
+        "cmh" = tar_read(source_cmh_extract),
+        "delayed_discharges" = tar_read(source_dd_extract),
+        "district_nursing" = tar_read(source_dn_extract),
+        "gp_ooh" = tar_read(ooh_source_extract),
+        # "homelessness" = tar_read(source_homelessness_extract),
+        "ltc" = tar_read(ltc_source_extract),
+        "maternity" = tar_read(maternity_source_extract),
+        "mental_health" = tar_read(mental_health_source_extract),
+        "nrs_deaths" = tar_read(nrs_deaths_source_extract),
+        "outpatients" = tar_read(outpatients_source_extract),
+        "pis" = tar_read(pis_source_extract),
+        "alarms_telecare" = tar_read(source_sc_alarms_tele),
+        "care_home" = tar_read(source_sc_care_home),
+        "home_care" = tar_read(source_sc_home_care),
+        "sds" = tar_read(source_sc_sds)
+      ),
+      year = years_to_run,
+      write_to_disk
+    ))
   )
 )
