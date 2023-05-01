@@ -31,7 +31,7 @@ convert_monthly_rows_to_vars <- function(data,
     ) %>%
     dplyr::select(
       !dplyr::ends_with(c("_beddays", "_cost")),
-      stringr::str_glue("{month_order}_beddays"),
-      stringr::str_glue("{month_order}_cost")
+      dplyr::any_of(paste0(month_order, "_beddays")),
+      dplyr::any_of(paste0(month_order, "_cost"))
     )
 }
