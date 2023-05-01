@@ -3,10 +3,13 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-read_extract_homelessness <- function(year,
-                                      file_path = get_boxi_extract_path(year = year, type = "Homelessness")) {
-  if (is.na(file_path)) {
-    return(NULL)
+read_extract_homelessness <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "Homelessness")
+) {
+  # Specify years available for running
+  if (file_path == get_dummy_boxi_extract_path()) {
+    return(tibble::tibble())
   }
 
   extract_homelessness <- read_file(file_path,

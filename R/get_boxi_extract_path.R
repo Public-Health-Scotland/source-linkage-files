@@ -10,29 +10,30 @@
 #' @export
 #'
 #' @family extract file paths
-get_boxi_extract_path <-
-  function(year,
-           type = c(
-             "AE",
-             "AE_CUP",
-             "Acute",
-             "CMH",
-             "Deaths",
-             "DN",
-             "GP_OoH-c",
-             "GP_OoH-d",
-             "GP_OoH-o",
-             "Homelessness",
-             "Maternity",
-             "MH",
-             "Outpatients"
-           )) {
+get_boxi_extract_path <- function(
+    year,
+    type = c(
+  "AE",
+  "AE_CUP",
+  "Acute",
+  "CMH",
+  "Deaths",
+  "DN",
+  "GP_OoH-c",
+  "GP_OoH-d",
+  "GP_OoH-o",
+  "Homelessness",
+  "Maternity",
+  "MH",
+  "Outpatients"
+)
+) {
     type <- match.arg(type)
 
     year_dir <- get_year_dir(year, extracts_dir = TRUE)
 
     if (!check_year_valid(year, type)) {
-      return(NA)
+      return(get_dummy_boxi_extract_path())
     }
 
     file_name <- dplyr::case_when(
@@ -71,3 +72,14 @@ get_boxi_extract_path <-
 
     return(boxi_extract_path)
   }
+
+#' Get a path to a dummy file
+#'
+#' @return an [fs::path()] to a dummy file which can be used with targets.
+get_dummy_boxi_extract_path <- function() {
+  get_file_path(
+    directory = get_dev_dir(),
+    file_name = ".dummy",
+    create = TRUE
+  )
+}
