@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' GP OOH Consultations extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -36,6 +36,13 @@ process_extract_ooh_consultations <- function(data, year) {
     data.table::as.data.table() %>%
     # Filter missing / bad CHI numbers
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
+    dplyr::mutate(
+      attendance_status = dplyr::case_match(
+        .data$attendance_status,
+        "Y" ~ 1L,
+        "N" ~ 8L
+      )
+    ) %>%
     # Fix some times - if end before start, remove the time portion
     dplyr::mutate(
       bad_dates = .data$record_keydate1 > .data$record_keydate2,

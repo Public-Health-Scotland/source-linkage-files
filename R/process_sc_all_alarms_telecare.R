@@ -53,7 +53,7 @@ process_sc_all_alarms_telecare <- function(
         .data$service_type == 2L ~ "AT-Tele"
       ),
       # Create person id variable
-      person_id = glue::glue("{sending_location}-{social_care_id}"),
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
     ) %>%
@@ -123,7 +123,7 @@ process_sc_all_alarms_telecare <- function(
   if (write_to_disk) {
     # Save .rds file ----
     qtr_merge %>%
-      write_rds(get_sc_at_episodes_path(check_mode = "write"))
+      write_file(get_sc_at_episodes_path(check_mode = "write"))
   }
 
   return(qtr_merge)

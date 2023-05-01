@@ -12,7 +12,7 @@
 get_practice_details_path <- function(update = latest_update(), ...) {
   practice_details_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = glue::glue("practice_details_{update}.rds"),
+    file_name = stringr::str_glue("practice_details_{update}.rds"),
     ...
   )
 

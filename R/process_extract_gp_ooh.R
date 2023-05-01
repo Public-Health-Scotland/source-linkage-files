@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' GP OoH extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out an rds.
 #'
 #' @param year The year to process, in FY format.
 #' @param data_list A list containing the extracts.
@@ -131,7 +131,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     final_data %>%
-      write_rds(get_source_extract_path(year, "GPOoH", check_mode = "write"))
+      write_file(get_source_extract_path(year, "GPOoH", check_mode = "write"))
   }
 
   return(final_data)

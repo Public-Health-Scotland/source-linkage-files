@@ -76,7 +76,7 @@ process_sc_all_sds <- function(
       ),
       recid = "SDS",
       # Create person id variable
-      person_id = glue::glue("{sending_location}-{social_care_id}"),
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
     ) %>%
@@ -122,7 +122,7 @@ process_sc_all_sds <- function(
   if (write_to_disk) {
     # Save .rds file
     final_data %>%
-      write_rds(get_sc_sds_episodes_path(check_mode = "write"))
+      write_file(get_sc_sds_episodes_path(check_mode = "write"))
   }
 
   return(final_data)

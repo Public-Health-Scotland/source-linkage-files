@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' maternity extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -65,6 +65,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     dplyr::select(
       "year",
       "recid",
+      "smrtype",
       "record_keydate1",
       "record_keydate2",
       "chi",
@@ -108,7 +109,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_rds(
+      write_file(
         get_source_extract_path(year, "Maternity", check_mode = "write")
       )
   }

@@ -33,13 +33,6 @@ get_source_extract_path <- function(year,
                                     ...) {
   type <- match.arg(type)
 
-  year_dir <- fs::path(
-    "/conf",
-    "sourcedev",
-    "Source_Linkage_File_Updates",
-    year
-  )
-
   if (!check_year_valid(year, type)) {
     return(NA)
   }
@@ -66,8 +59,8 @@ get_source_extract_path <- function(year,
   )
 
   source_extract_path <- get_file_path(
-    directory = year_dir,
-    file_name = glue::glue("{file_name}-20{year}.rds"),
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("{file_name}-20{year}.parquet"),
     ...
   )
 

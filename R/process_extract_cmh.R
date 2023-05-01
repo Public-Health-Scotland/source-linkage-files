@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' CMH extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -36,8 +36,8 @@ process_extract_cmh <- function(data,
       year = year
     ) %>%
     # contact end time
-    dplyr::mutate(keyTime2 = hms::as.hms(
-      .data$keyTime1 + lubridate::dminutes(.data$duration)
+    dplyr::mutate(keytime2 = hms::as.hms(
+      .data$keytime1 + lubridate::dminutes(.data$duration)
     )) %>%
     # record key date 2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
@@ -52,8 +52,8 @@ process_extract_cmh <- function(data,
       "recid",
       "record_keydate1",
       "record_keydate2",
-      "keyTime1",
-      "keyTime2",
+      "keytime1",
+      "keytime2",
       "smrtype",
       "chi",
       "gender",
@@ -75,7 +75,7 @@ process_extract_cmh <- function(data,
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, "CMH", check_mode = "write"))
+      write_file(get_source_extract_path(year, "CMH", check_mode = "write"))
   }
 
   return(outfile)

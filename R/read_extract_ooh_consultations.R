@@ -13,9 +13,7 @@ read_extract_ooh_consultations <- function(
         format = "%Y/%m/%d %T"
       ),
       "Gender" = readr::col_integer(),
-      "Consultation Recorded" = readr::col_factor(
-        levels = c("Y", "N")
-      ),
+      "Consultation Recorded" = readr::col_character(),
       "Consultation Start Date Time" = readr::col_datetime(
         format = "%Y/%m/%d %T"
       ),
@@ -27,6 +25,7 @@ read_extract_ooh_consultations <- function(
       .default = readr::col_character()
     )
   ) %>%
+    dplyr::select(!"Practice NHS Board Code 9 - current") %>%
     # rename variables
     dplyr::rename(
       chi = "UPI Number [C]",
