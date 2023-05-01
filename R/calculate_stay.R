@@ -16,8 +16,6 @@
 #' the quarter.
 #' If quarter `end_date < start_date` and `sc_qtr` is supplied then set this
 #' to the end of the next quarter.
-#' @export
-#'
 #' @family date functions
 calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
   # Normal calculation

@@ -6,8 +6,6 @@
 #' @param type name of extract
 #'
 #' @return A logical TRUE/FALSE
-#' @export
-#'
 check_year_valid <- function(year, type = c(
                                "Acute",
                                "AE",

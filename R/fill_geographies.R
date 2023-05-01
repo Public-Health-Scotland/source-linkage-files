@@ -7,7 +7,6 @@
 #'
 #' @return a [tibble][tibble::tibble-package] of the SLF with improved
 #' Postcode and GP Practice details.
-#' @export
 fill_geographies <- function(data) {
   check_variables_exist(data, c(
     "chi",

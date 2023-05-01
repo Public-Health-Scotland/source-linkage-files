@@ -8,7 +8,6 @@
 #' @param consultation_type A vector of GP Out of hours consultation types
 #'
 #' @return A vector of `smrtype`
-#' @export
 #'
 #' @family Codes
 #'

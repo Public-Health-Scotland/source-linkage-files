@@ -7,7 +7,6 @@
 #' @param year financial year, e.g. '1920'
 #'
 #' @return data matched with long term conditions
-#' @export
 match_on_ltcs <- function(data, year) {
   # Match on LTC lookup
   matched <- dplyr::left_join(

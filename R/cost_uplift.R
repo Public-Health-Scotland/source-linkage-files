@@ -3,7 +3,6 @@
 #' @param data episode data
 #'
 #' @return episode data with uplifted costs
-#' @export
 cost_uplift <- function(data) {
   data <- data %>%
     # attach a uplift scale as the last column
