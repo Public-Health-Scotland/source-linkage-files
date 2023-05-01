@@ -50,52 +50,52 @@ process_extract_homelessness <- function(
       ),
       hl1_reason_ftm = paste0(
         dplyr::if_else(
-          .data$financial_difficulties_debt_unemployment,
+          .data$financial_difficulties_debt_unemployment == 1L,
           "F",
           ""
         ),
         dplyr::if_else(
-          .data$physical_health_reasons,
+          .data$physical_health_reasons == 1L,
           "Ph",
           ""
         ),
         dplyr::if_else(
-          .data$mental_health_reasons,
+          .data$mental_health_reasons == 1L,
           "M",
           ""
         ),
         dplyr::if_else(
-          .data$unmet_need_for_support_from_housing_social_work_health_services,
+          .data$unmet_need_for_support_from_housing_social_work_health_services == 1L,
           "U",
           ""
         ),
         dplyr::if_else(
-          .data$lack_of_support_from_friends_family,
+          .data$lack_of_support_from_friends_family == 1L,
           "L",
           ""
         ),
         dplyr::if_else(
-          .data$difficulties_managing_on_own,
+          .data$difficulties_managing_on_own == 1L,
           "O",
           ""
         ),
         dplyr::if_else(
-          .data$drug_alcohol_dependency,
+          .data$drug_alcohol_dependency == 1L,
           "D",
           ""
         ),
         dplyr::if_else(
-          .data$criminal_anti_social_behaviour,
+          .data$criminal_anti_social_behaviour == 1L,
           "C",
           ""
         ),
         dplyr::if_else(
-          .data$not_to_do_with_applicant_household,
+          .data$not_to_do_with_applicant_household == 1L,
           "N",
           ""
         ),
         dplyr::if_else(
-          .data$refused,
+          .data$refused == 1L,
           "R",
           ""
         )
@@ -118,7 +118,7 @@ process_extract_homelessness <- function(
   if (!is.null(completeness_data)) {
     filtered_data <- data %>%
       dplyr::left_join(completeness_data,
-        by = c("year", "sending_local_authority_name")
+                       by = c("year", "sending_local_authority_name")
       ) %>%
       dplyr::filter(
         dplyr::between(.data[["pct_complete_all"]], 0.90, 1.05) |
