@@ -19,10 +19,10 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1920")
+years_to_run <- c("1819")
 
 list(
-  tar_rds(write_to_disk, FALSE),
+  tar_rds(write_to_disk, TRUE),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
@@ -381,12 +381,12 @@ list(
     tar_target(ep_file, run_episode_file(
       list(
         "acute" = tar_read(acute_source_extract),
-        # "ae" = tar_read(ae_source_extract),
+        "ae" = tar_read(ae_source_extract),
         "cmh" = tar_read(source_cmh_extract),
         "delayed_discharges" = tar_read(source_dd_extract),
         "district_nursing" = tar_read(source_dn_extract),
         "gp_ooh" = tar_read(ooh_source_extract),
-        # "homelessness" = tar_read(source_homelessness_extract),
+        "homelessness" = tar_read(source_homelessness_extract),
         "ltc" = tar_read(ltc_source_extract),
         "maternity" = tar_read(maternity_source_extract),
         "mental_health" = tar_read(mental_health_source_extract),
