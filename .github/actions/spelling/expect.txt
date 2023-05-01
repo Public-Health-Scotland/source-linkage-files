@@ -74,13 +74,13 @@ hbtreatcode
 hbtreatname
 HCP
 HHG
-hhg
 hjust
 hms
 homecare
 hscp
 hscpnames
 infyyear
+Inverclyde
 ipdc
 itle
 iwalk
@@ -123,6 +123,7 @@ phs
 phsmethods
 phsopendata
 placeinc
+plics
 postcodes
 PPAs
 prac
@@ -160,7 +161,6 @@ smr
 SMRA
 smrtype
 SPARRA
-sparra
 spd
 spss
 stadm
