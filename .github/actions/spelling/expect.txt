@@ -50,6 +50,7 @@ downup
 dplyr
 dsn
 dtplyr
+Dunbartonshire
 DVPROD
 dvprod
 Eilean
@@ -169,6 +170,7 @@ stringr
 submis
 tadm
 tarchetypes
+Tayside
 tbl
 telecare
 testthat
