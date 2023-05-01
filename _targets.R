@@ -19,10 +19,10 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1819")
+years_to_run <- c("1920")
 
 list(
-  tar_rds(write_to_disk, TRUE),
+  tar_rds(write_to_disk, FALSE),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
@@ -30,8 +30,8 @@ list(
   tar_target(simd_path, get_simd_path(), format = "file"),
   tar_target(spd_path, get_spd_path(), format = "file"),
   tar_file_read(chi_deaths_data,
-    command = get_it_deaths_path(),
-    read = read_lookup_chi_deaths(!!.x)
+                command = get_it_deaths_path(),
+                read = read_lookup_chi_deaths(!!.x)
   ),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
@@ -227,13 +227,13 @@ list(
       format = "file"
     ),
     tar_target(ooh_data,
-      read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
-      ),
-      format = "rds"
+               read_extract_gp_ooh(
+                 year,
+                 diagnosis_data_path,
+                 outcomes_data_path,
+                 consultations_data_path
+               ),
+               format = "rds"
     ),
     ### Target source processed extracts ###
     tar_target(acute_source_extract, process_extract_acute(
@@ -377,29 +377,7 @@ list(
         data = source_sc_sds,
         year = year
       )
-    ),
-    tar_target(ep_file, run_episode_file(
-      list(
-        "acute" = tar_read(acute_source_extract),
-        "ae" = tar_read(ae_source_extract),
-        "cmh" = tar_read(source_cmh_extract),
-        "delayed_discharges" = tar_read(source_dd_extract),
-        "district_nursing" = tar_read(source_dn_extract),
-        "gp_ooh" = tar_read(ooh_source_extract),
-        "homelessness" = tar_read(source_homelessness_extract),
-        "ltc" = tar_read(ltc_source_extract),
-        "maternity" = tar_read(maternity_source_extract),
-        "mental_health" = tar_read(mental_health_source_extract),
-        "nrs_deaths" = tar_read(nrs_deaths_source_extract),
-        "outpatients" = tar_read(outpatients_source_extract),
-        "pis" = tar_read(pis_source_extract),
-        "alarms_telecare" = tar_read(source_sc_alarms_tele),
-        "care_home" = tar_read(source_sc_care_home),
-        "home_care" = tar_read(source_sc_home_care),
-        "sds" = tar_read(source_sc_sds)
-      ),
-      year = years_to_run,
-      write_to_disk
-    ))
+    )
   )
 )
+
