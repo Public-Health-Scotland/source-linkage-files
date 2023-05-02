@@ -21,7 +21,7 @@ process_extract_home_care <- function(
   year <- check_year_format(year)
 
   # Check that we have data for this year
-  if (!check_year_valid(year, "CH")) {
+  if (!check_year_valid(year, "HC")) {
     # If not return an empty tibble
     return(tibble::tibble())
   }
