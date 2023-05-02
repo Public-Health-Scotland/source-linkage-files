@@ -68,7 +68,7 @@ add_smr_type <- function(recid,
         "In Acute records, {.var ipdc} is required to assign an smrtype, but
         all values are {.val NA}. Please check the code/data."
       )
-                    }
+    }
     cli::cli_warn(
       "In Acute records, {.var ipdc} is required to assign an smrtype, and
       there are some {.val NA} values. Please check the data."
