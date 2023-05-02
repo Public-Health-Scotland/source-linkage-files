@@ -123,6 +123,17 @@ get_slf_dir <- function() {
   return(slf_dir)
 }
 
+#' SLF directory - sourcedev / Source_Linkage_File_Updates
+#'
+#' @description File path for the SLF development directory on `sourcedev`
+#'
+#' @return The path to the main SLF dev folder
+#' @export
+#'
+#' @family directories
+get_dev_dir <- function() {
+  fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates")
+}
 
 #' Year Directory
 #'
@@ -138,13 +149,7 @@ get_slf_dir <- function() {
 #'
 #' @family directories
 get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path(
-    "/",
-    "conf",
-    "sourcedev",
-    "Source_Linkage_File_Updates",
-    year
-  )
+  year_dir <- fs::path(get_dev_dir(), year)
 
   if (!fs::dir_exists(year_dir)) {
     fs::dir_create(year_dir)

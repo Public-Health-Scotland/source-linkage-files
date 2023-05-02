@@ -22,7 +22,7 @@ tar_option_set(
 years_to_run <- c("1920")
 
 list(
-  tar_rds(write_to_disk, FALSE),
+  tar_rds(write_to_disk, TRUE),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
