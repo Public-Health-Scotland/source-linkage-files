@@ -152,7 +152,7 @@ add_smr_type <- function(recid,
     smrtype <- dplyr::case_when(
       recid == "HC" & hc_service == 1L ~ "HC-Non-Per",
       recid == "HC" & hc_service == 2L ~ "HC-Per",
-      TRUE ~ "HC-Unknown"
+      .default = "HC-Unknown"
     )
   } else if (all(recid == "HL1")) {
     # Homelessness
@@ -170,7 +170,7 @@ add_smr_type <- function(recid,
       consultation_type == "COVID19 ASSESSMENT" ~ "OOH-C19Ass",
       consultation_type == "COVID19 ADVICE" ~ "OOH-C19Adv",
       consultation_type == "COVID19 OTHER" ~ "OOH-C19Oth",
-      TRUE ~ "OOH-Other"
+      .default = "OOH-Other"
     )
   } else {
     # Recids that can be recoded with no identifier
