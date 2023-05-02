@@ -20,7 +20,54 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
         .
       }
     } %>%
-    # From C01 ----
+    store_ep_file_vars(year, vars_to_keep = c(
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "smrtype",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "hbtreatcode",
+      "ipdc",
+      "spec",
+      "sigfac",
+      "diag1",
+      "diag2",
+      "diag3",
+      "diag4",
+      "diag5",
+      "diag6",
+      "op1a",
+      "age",
+      "cij_marker",
+      "cij_pattype_code",
+      "cij_ipdc",
+      "cij_admtype",
+      "cij_adm_spec",
+      "cij_dis_spec",
+      "cost_total_net",
+      "hscp",
+      "datazone",
+      "attendance_status",
+      "deathdiag1",
+      "deathdiag2",
+      "deathdiag3",
+      "deathdiag4",
+      "deathdiag5",
+      "deathdiag6",
+      "deathdiag7",
+      "deathdiag8",
+      "deathdiag9",
+      "deathdiag10",
+      "deathdiag11"
+    )) %>%
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
     dplyr::mutate(
@@ -54,10 +101,10 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
       }
     } %>%
     # TODO match on SPARRA and HHG here
-    # From C09 - Match on postcode and gpprac variables ----
-    fill_geographies()
+    fill_geographies() %>%
+    load_ep_file_vars(year)
 
-  if (write_to_disk == TRUE) {
+  if (write_to_disk) {
     slf_path <- get_file_path(
       get_year_dir(year),
       stringr::str_glue(
@@ -70,6 +117,73 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
   }
 
   return(episode_file)
+}
+
+#' Store the unneeded episode file variables
+#'
+#' @param data The full SLF input data
+#' @inheritParams run_episode_file
+#' @param vars_to_keep a character vector of variable to keep, all others will
+#' be stored.
+#'
+#' @return `data` with only the `vars_to_keep` kept
+store_ep_file_vars <- function(data, year, vars_to_keep) {
+  tempfile_path <- get_file_path(
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+    check_mode = "write",
+    create = TRUE
+  )
+
+  check_variables_exist(data, vars_to_keep)
+
+  data <- data %>%
+    dplyr::mutate(ep_file_row_id = dplyr::row_number())
+
+  vars_to_store <- c("ep_file_row_id", setdiff(names(data), vars_to_keep))
+
+  dplyr::select(
+    data,
+    dplyr::all_of(vars_to_store)
+  ) %>%
+    write_file(
+      path = tempfile_path
+    )
+
+  return(
+    dplyr::select(
+      data,
+      dplyr::all_of(c("ep_file_row_id", vars_to_keep))
+    )
+  )
+}
+
+#' Load the unneeded episode file variables
+#'
+#' @param data The SLF data to which the stored vars will be added
+#' @inheritParams run_episode_file
+#'
+#' @return The full SLF data.
+load_ep_file_vars <- function(data, year) {
+  tempfile_path <- get_file_path(
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+    check_mode = "write",
+    create = TRUE
+  )
+
+  full_data <- data %>%
+    dplyr::left_join(
+      read_file(path = tempfile_path),
+      by = "ep_file_row_id",
+      unmatched = "error",
+      relationship = "one-to-one"
+    ) %>%
+    dplyr::select(!"ep_file_row_id")
+
+  fs::file_delete(tempfile_path)
+
+  return(full_data)
 }
 
 #' Fill any missing CIJ markers for records that should have them
