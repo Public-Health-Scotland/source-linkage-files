@@ -11,26 +11,50 @@ add_dd <- function(data, year) {
   year_param <- year
 
   data <- data %>%
-    dplyr::arrange(chi, cij_marker) %>%
     dplyr::mutate(
+      # remember to revoke the cij_end_date with dummy_cij_end
       cij_start_date_lower = cij_start_date - lubridate::days(1),
-      cij_end_date_upper = cij_end_date + lubridate::days(1)
+      cij_end_date_upper = cij_end_date + lubridate::days(1),
+      cij_end_month = last_date_month(cij_end_date),
+
+      is_dummy_cij_start = is.na(cij_start_date) & !is.na(cij_end_date),
+      dummy_cij_start = dplyr::if_else(
+        is_dummy_cij_start,
+        lubridate::as_date("1900-01-01"),
+        cij_start_date_lower
+      ),
+      is_dummy_cij_end = !is.na(cij_start_date) & is.na(cij_end_date),
+      dummy_cij_end = dplyr::if_else(
+        is_dummy_cij_end,
+        lubridate::today(),
+        cij_end_month
+      )
     )
 
   ## handling DD ----
-  dd_data <- read_file(get_source_extract_path(year_param, "DD"))
+  # no flag for last reported
+  dd_data <-
+    read_file(get_source_extract_path(year_param, "DD")) %>%
+    dplyr::mutate(
+      # remember to revoke the keydate2 and amended_dates with dummy_keydate2
+      is_dummy_keydate2 = is.na(keydate2_dateformat),
+      dummy_keydate2 = dplyr::if_else(is_dummy_keydate2,
+                                      lubridate::today(),
+                                      keydate2_dateformat),
+      dummy_id = dplyr::row_number()
+    )
+
   by_dd <- dplyr::join_by(
     chi,
-    x$keydate1_dateformat >= y$cij_start_date_lower,
-    x$keydate2_dateformat <= y$<end of the month when the CIJ ends>
+    x$keydate1_dateformat >= y$dummy_cij_start,
+    x$dummy_keydate2 <= y$dummy_cij_end
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
-      by = by_dd,
-      suffix = c("_dd", "")
-    ) %>%
+                      by = by_dd,
+                      suffix = c("_dd", "")) %>%
     dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
-    # remove duplicate columns
+    # remove duplicate rows, but still got some duplicate mis-matches
     dplyr::distinct(
       chi,
       cij_start_date,
@@ -40,6 +64,7 @@ add_dd <- function(data, year) {
       keydate2_dateformat_dd,
       .keep_all = TRUE
     ) %>%
+
     # determine DD quality
     dplyr::mutate(dd_type = dplyr::if_else(
       is.na(cij_marker),
@@ -61,6 +86,13 @@ add_dd <- function(data, year) {
         # "4P" "Matches unended MH record (allowing -1 day) - (4P)"
         # "-" "No Match (We don't keep these)".
 
+        # If we use keydate2_dateformat_dd,
+        # we implicitly mean is_dummy_keydate2 needs to be FALSE.
+        # Given that in DD files,
+        # we only keep the records with missing keydate2 for 04B, mental health,
+        # and drop the records with missing keydate2 for other recid,
+        # it should be ok to only use dummy_keydate2 for "4"(s).
+
         # "1"	"Accurate Match - (1)"
         keydate1_dateformat_dd >= cij_start_date &
           keydate2_dateformat_dd <= cij_end_date &
@@ -74,70 +106,84 @@ add_dd <- function(data, year) {
         # "1A"	"Accurate Match (has an assumed end date) - (1A)"
         keydate1_dateformat_dd >= cij_start_date &
           keydate2_dateformat_dd <= cij_end_date &
-          amended_dates ~ "1P",
+          amended_dates ~ "1A",
 
         # "1AP"	"Accurate Match (allowing +-1 day and has an assumed end date) - (1AP)"
         keydate1_dateformat_dd >= cij_start_date_lower &
           keydate2_dateformat_dd <= cij_end_date_upper &
           amended_dates ~ "1AP",
 
+        # "1APE"	the CIJ ends during the month but the delay has an end date of the end of the month
+        keydate1_dateformat_dd >= cij_start_date_lower &
+          keydate2_dateformat_dd == cij_end_month &
+          amended_dates ~ "1APE",
+
         # "2"	"Starts in CIJ - (2)"
         keydate1_dateformat_dd >= cij_start_date &
           keydate1_dateformat_dd <= cij_end_date &
-          keydate2_dateformat_dd >= cij_end_date &
+          keydate2_dateformat_dd > cij_end_date &
           !amended_dates ~ "2",
 
         # "2D"	"Starts in CIJ (ends one day after) - (2D)"
         keydate1_dateformat_dd >= cij_start_date &
           keydate1_dateformat_dd <= cij_end_date &
-          keydate2_dateformat_dd >= cij_end_date_upper &
+          keydate2_dateformat_dd > cij_end_date_upper &
           !amended_dates ~ "2D",
 
         # "2DP"	"Starts in CIJ (allowing +-1 day and ends one day after) - (2DP)"
         keydate1_dateformat_dd >= cij_start_date_lower &
           keydate1_dateformat_dd <= cij_end_date_upper &
-          keydate2_dateformat_dd >= cij_end_date_upper &
+          keydate2_dateformat_dd > cij_end_date_upper &
           !amended_dates ~ "2DP",
 
         # "2A"	"Starts in CIJ (Accurate Match after correcting assumed end date) - (2A)"
         keydate1_dateformat_dd >= cij_start_date &
           keydate1_dateformat_dd <= cij_end_date &
-          keydate2_dateformat_dd >= cij_end_date &
+          keydate2_dateformat_dd > cij_end_date &
           amended_dates ~ "2A",
 
         # "2AP"	"Starts in CIJ (Accurate Match (allowing +-1 day) after correcting assumed end date) - (2AP)"
         keydate1_dateformat_dd >= cij_start_date_lower &
           keydate1_dateformat_dd <= cij_end_date_upper &
-          keydate2_dateformat_dd >= cij_end_date_upper &
+          keydate2_dateformat_dd > cij_end_date_upper &
+          # keydate2_dateformat_dd == cij_end_month &
           amended_dates ~ "2AP",
 
         # "3"	"Ends in CIJ - (3)"
         keydate1_dateformat_dd <= cij_start_date &
           keydate2_dateformat_dd >= cij_start_date &
-          keydate2_dateformat_dd >= cij_end_date &
+          keydate2_dateformat_dd <= cij_end_date &
           !amended_dates ~ "3",
 
         # "3D"	"Ends in CIJ (starts one day before) - (3D)"
         keydate1_dateformat_dd <= cij_start_date_lower &
           keydate2_dateformat_dd >= cij_start_date &
-          keydate2_dateformat_dd >= cij_end_date &
+          keydate2_dateformat_dd <= cij_end_date &
           !amended_dates ~ "3D",
 
         # "3DP"	"Ends in CIJ (allowing +-1 day and starts one day before) - (3DP)"
         keydate1_dateformat_dd <= cij_start_date_lower &
           keydate2_dateformat_dd >= cij_start_date_lower &
-          keydate2_dateformat_dd >= cij_end_date_upper &
+          keydate2_dateformat_dd <= cij_end_date_upper &
           !amended_dates ~ "3DP",
+
+        # "3ADPE"
+        keydate1_dateformat_dd <= cij_start_date_lower &
+          keydate2_dateformat_dd >= cij_start_date_lower &
+          keydate2_dateformat_dd <= cij_end_month &
+          amended_dates ~ "3ADPE",
+
+
 
         # "4"	"Matches unended MH record - (4)"
         recid == "04B" &
           keydate1_dateformat_dd >= cij_start_date &
-          amended_dates ~ "4",
+          is_dummy_cij_end ~ "4",
 
         # "4P"	"Matches unended MH record (allowing -1 day) - (4P)"
         recid == "04B" &
           keydate1_dateformat_dd >= cij_start_date_lower &
-          amended_dates ~ "4P",
+          is_dummy_cij_end ~ "4P",
 
         # "-" "No Match (We don't keep these)"
         .default = "-"
@@ -150,6 +196,7 @@ add_dd <- function(data, year) {
         "1P",
         "1A",
         "1AP",
+        "1APE",
         "2",
         "2D",
         "2DP",
@@ -158,6 +205,7 @@ add_dd <- function(data, year) {
         "3",
         "3D",
         "3DP",
+        "3ADPE",
         "4",
         "4P"
       ) ~ "DD-CIJ",
@@ -165,20 +213,55 @@ add_dd <- function(data, year) {
     )) %>%
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
-      chi,
       recid = recid_dd,
+      chi,
       keydate1_dateformat = keydate1_dateformat_dd,
       keydate2_dateformat = keydate2_dateformat_dd,
+      amended_dates,
+      delay_end_reason,
+      primary_delay_reason,
+      primary_delay_reason,
+      hbtreatcode,
+      location,
+      spec,
       smrtype = smrtype_dd,
       cij_marker,
       cij_start_date,
       cij_end_date,
-      postcode = postcode_dd
+      postcode = postcode_dd,
+      dd_responsible_lca,
+      original_admission_date,
+      dd_type
     ) %>%
-    # combind DD with episode data
-    dplyr::bind_rows(data %>% dplyr::select(-c(
-      "cij_start_date_lower", "cij_end_date_upper"
-    )))
+    # combine DD with episode data
+    dplyr::bind_rows(# restore cij_end_date
+      data %>%
+        dplyr::select(
+          -c(
+            "cij_start_date_lower",
+            "cij_end_date_upper",
+            "cij_end_month",
+            "is_dummy_cij_start",
+            "dummy_cij_start",
+            "is_dummy_cij_end",
+            "dummy_cij_end"
+          )
+        ))
+
+  data_summary = data %>%
+    filter(recid == "DD") %>%
+    dplyr::group_by(dd_type) %>%
+    dplyr::summarise(frequency = dplyr::n()) %>%
+    dplyr::mutate(total = nrow(dd_data),
+                  percentage = round(frequency / total * 100, 2))
+
+  data_summary = data.frame(
+    dd_type = "-",
+    frequency = data_summary$total[1] - sum(data_summary$frequency),
+    total = data_summary$total[1]
+  ) %>%
+    dplyr::mutate(percentage = round(frequency/total*100, 2)) %>%
+    dplyr::bind_rows(data_summary)
 
   return(data)
 }
