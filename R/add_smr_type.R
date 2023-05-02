@@ -138,7 +138,8 @@ add_smr_type <- function(recid,
       recid == "01B" & ipdc == "I" ~ "Acute-IP",
       recid == "01B" & ipdc == "D" ~ "Acute-DC",
       recid == "GLS" & ipdc == "I" ~ "GLS-IP",
-      TRUE ~ "Acute-Unknown"
+      recid == "GLS" ~ "GLS-Unknown",
+      .default = "Acute-Unknown"
     )
   } else if (all(recid == "HC")) {
     # Home care
