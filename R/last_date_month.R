@@ -11,6 +11,6 @@
 #' last_date_month(lubridate::as_date("2020-02-05"))
 #'
 #' @family date functions
-last_date_month = function(x){
+last_date_month <- function(x) {
   return(lubridate::ceiling_date(x, "month") - lubridate::days(1))
 }

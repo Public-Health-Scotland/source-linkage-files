@@ -16,7 +16,6 @@ add_dd <- function(data, year) {
       cij_start_date_lower = cij_start_date - lubridate::days(1),
       cij_end_date_upper = cij_end_date + lubridate::days(1),
       cij_end_month = last_date_month(cij_end_date),
-
       is_dummy_cij_start = is.na(cij_start_date) & !is.na(cij_end_date),
       dummy_cij_start = dplyr::if_else(
         is_dummy_cij_start,
@@ -39,8 +38,9 @@ add_dd <- function(data, year) {
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(keydate2_dateformat),
       dummy_keydate2 = dplyr::if_else(is_dummy_keydate2,
-                                      lubridate::today(),
-                                      keydate2_dateformat),
+        lubridate::today(),
+        keydate2_dateformat
+      ),
       dummy_id = dplyr::row_number()
     )
 
@@ -51,8 +51,9 @@ add_dd <- function(data, year) {
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
-                      by = by_dd,
-                      suffix = c("_dd", "")) %>%
+      by = by_dd,
+      suffix = c("_dd", "")
+    ) %>%
     dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
     # remove duplicate rows, but still got some duplicate mis-matches
     dplyr::distinct(
@@ -64,7 +65,6 @@ add_dd <- function(data, year) {
       keydate2_dateformat_dd,
       .keep_all = TRUE
     ) %>%
-
     # determine DD quality
     dplyr::mutate(dd_type = dplyr::if_else(
       is.na(cij_marker),
@@ -234,7 +234,7 @@ add_dd <- function(data, year) {
       dd_type
     ) %>%
     # combine DD with episode data
-    dplyr::bind_rows(# restore cij_end_date
+    dplyr::bind_rows( # restore cij_end_date
       data %>%
         dplyr::select(
           -c(
@@ -246,21 +246,24 @@ add_dd <- function(data, year) {
             "is_dummy_cij_end",
             "dummy_cij_end"
           )
-        ))
+        )
+    )
 
-  data_summary = data %>%
+  data_summary <- data %>%
     filter(recid == "DD") %>%
     dplyr::group_by(dd_type) %>%
     dplyr::summarise(frequency = dplyr::n()) %>%
-    dplyr::mutate(total = nrow(dd_data),
-                  percentage = round(frequency / total * 100, 2))
+    dplyr::mutate(
+      total = nrow(dd_data),
+      percentage = round(frequency / total * 100, 2)
+    )
 
-  data_summary = data.frame(
+  data_summary <- data.frame(
     dd_type = "-",
     frequency = data_summary$total[1] - sum(data_summary$frequency),
     total = data_summary$total[1]
   ) %>%
-    dplyr::mutate(percentage = round(frequency/total*100, 2)) %>%
+    dplyr::mutate(percentage = round(frequency / total * 100, 2)) %>%
     dplyr::bind_rows(data_summary)
 
   return(data)
