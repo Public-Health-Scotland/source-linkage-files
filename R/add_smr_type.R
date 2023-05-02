@@ -63,7 +63,7 @@ add_smr_type <- function(recid,
 
   # Situation where acute records are present without a corresponding ipdc
   if (all(recid %in% c("01B", "GLS")) & anyNA(ipdc)) {
-    cli::cli_abort(
+    cli::cli_warn(
       "In Acute records, {.var ipdc} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data."
     )
@@ -103,7 +103,7 @@ add_smr_type <- function(recid,
 
   # Situation where an Acute/GLS recid is given but no ipdc marker
   if (any(recid %in% c("01B", "GLS")) & missing(ipdc)) {
-    cli::cli_abort(
+    cli::cli_warn(
       "An {.var ipdc} vector has not been supplied, and therefore Acute/GLS
                    records cannot be given an {.var smrtype}"
     )
@@ -137,7 +137,8 @@ add_smr_type <- function(recid,
     smrtype <- dplyr::case_when(
       recid == "01B" & ipdc == "I" ~ "Acute-IP",
       recid == "01B" & ipdc == "D" ~ "Acute-DC",
-      recid == "GLS" & ipdc == "I" ~ "GLS-IP"
+      recid == "GLS" & ipdc == "I" ~ "GLS-IP",
+      TRUE ~ "Acute-Unknown"
     )
   } else if (all(recid == "HC")) {
     # Home care
