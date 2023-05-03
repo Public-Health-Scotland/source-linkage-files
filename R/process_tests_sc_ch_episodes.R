@@ -41,7 +41,7 @@ produce_sc_ch_episodes_tests <- function(data) {
     create_demog_test_flags() %>%
     dplyr::mutate(
       n_missing_sending_loc = dplyr::if_else(
-        is_missing(.data$sending_location),
+        is.na(.data$sending_location),
         1L,
         0L
       ),
