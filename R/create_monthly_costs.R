@@ -23,13 +23,13 @@ create_monthly_costs <- function(data,
     paste0(tolower(month.abb[c(4:12, 1:3)]), "_beddays")
   ))
 
-  costs <- data %>%
+  beddays_months <- data %>%
     dplyr::select(dplyr::ends_with("_beddays")) %>%
     dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
   # Fix the instances where the episode is a daycase;
   # these will sometimes have 0.33 for the yearstay,
   # this should be applied to the relevant month.
-  costs_daycase <- data %>%
+  daycase_cost_months <- data %>%
     dplyr::select(!dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(
       daycase_added = (.data$record_keydate1 == .data$record_keydate2)
@@ -60,12 +60,12 @@ create_monthly_costs <- function(data,
       "daycase_check"
     )
 
-  avaliable_months <- setdiff(names(costs_daycase), "daycase_check")
+  avaliable_months <- setdiff(names(daycase_cost_months), "daycase_check")
 
-  costs <- (costs_daycase[avaliable_months] + costs[avaliable_months]) %>%
-    dplyr::bind_cols(daycase_check = costs_daycase$daycase_check)
+  final_costs <- (daycase_cost_months[avaliable_months] + beddays_months[avaliable_months]) %>%
+    dplyr::bind_cols(daycase_check = daycase_cost_months$daycase_check)
 
-  data <- dplyr::bind_cols(data, costs) %>%
+  data <- dplyr::bind_cols(data, final_costs) %>%
     dplyr::mutate(dplyr::across(
       dplyr::ends_with("_cost"),
       ~ dplyr::case_when(
