@@ -36,6 +36,7 @@ datetime
 daycase
 dbconnect
 dbplyr
+deathdiag
 demog
 disch
 dischloc
@@ -157,6 +158,7 @@ slfhelper
 smr
 SMRA
 smrtype
+SPARRA
 sparra
 spd
 spss

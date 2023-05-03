@@ -73,6 +73,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     dplyr::select(
       "year",
       "recid",
+      "smrtype",
       "record_keydate1",
       "record_keydate2",
       "chi",

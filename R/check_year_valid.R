@@ -6,8 +6,6 @@
 #' @param type name of extract
 #'
 #' @return A logical TRUE/FALSE
-#' @export
-#'
 check_year_valid <- function(year, type = c(
                                "Acute",
                                "AE",
@@ -33,6 +31,10 @@ check_year_valid <- function(year, type = c(
     }
   } else if (year <= "1516") {
     if (type %in% c("CMH", "Homelessness")) {
+      return(FALSE)
+    }
+  } else if (year <= "1617") {
+    if (type %in% c("CH", "HC", "SDS", "AT")) {
       return(FALSE)
     }
   } else if (year >= "2122") {

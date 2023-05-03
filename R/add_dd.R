@@ -260,7 +260,6 @@ add_dd <- function(data, year) {
       keydate2_dateformat_dd,
       .keep_all = TRUE
     ) %>%
-
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       recid = recid_dd,
@@ -284,7 +283,7 @@ add_dd <- function(data, year) {
       dd_type
     ) %>%
     # combine DD with episode data
-    dplyr::bind_rows(# restore cij_end_date
+    dplyr::bind_rows( # restore cij_end_date
       data %>%
         dplyr::select(
           -c(
@@ -296,7 +295,8 @@ add_dd <- function(data, year) {
             "is_dummy_cij_end",
             "dummy_cij_end"
           )
-        ))
+        )
+    )
 
   return(data)
 }
