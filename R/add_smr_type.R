@@ -10,11 +10,6 @@
 #' @return A vector of `smrtype`
 #'
 #' @family Codes
-#'
-#' @examples
-#' add_smr_type(recid = c("04B", "00B", "AE2", "PIS", "NRS"))
-#' add_smr_type(recid = c("02B", "02B"), mpat = c("1", "4"))
-#' add_smr_type(recid = c("01B", "01B", "GLS"), ipdc = c("I", "D", "I"))
 add_smr_type <- function(recid,
                          mpat = NULL,
                          ipdc = NULL,
