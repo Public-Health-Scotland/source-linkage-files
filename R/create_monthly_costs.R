@@ -60,9 +60,9 @@ create_monthly_costs <- function(data,
       "daycase_check"
     )
 
-  avaliable_months <- setdiff(names(daycase_cost_months), "daycase_check")
+  available_months <- setdiff(names(daycase_cost_months), "daycase_check")
 
-  final_costs <- (daycase_cost_months[avaliable_months] + beddays_months[avaliable_months]) %>%
+  final_costs <- (daycase_cost_months[available_months] + beddays_months[available_months]) %>%
     dplyr::bind_cols(daycase_check = daycase_cost_months$daycase_check)
 
   data <- dplyr::bind_cols(data, final_costs) %>%
