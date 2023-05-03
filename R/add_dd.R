@@ -174,19 +174,15 @@ add_dd <- function(data, year) {
             keydate2_dateformat_dd <= cij_end_month &
             amended_dates ~ "3ADPE",
 
-
-
           # "4"	"Matches unended MH record - (4)"
           recid == "04B" &
             keydate1_dateformat_dd >= cij_start_date &
             is_dummy_cij_end ~ "4",
-          # is_dummy_cij_end & is_dummy_keydate2 ~ "4",
 
           # "4P"	"Matches unended MH record (allowing -1 day) - (4P)"
           recid == "04B" &
             keydate1_dateformat_dd >= cij_start_date_lower &
             is_dummy_cij_end ~ "4P",
-          # is_dummy_cij_end & is_dummy_keydate2  ~ "4P",
 
           # "-" "No Match (We don't keep these)"
           .default = "-"
@@ -214,9 +210,18 @@ add_dd <- function(data, year) {
           "-"
         )
       ),
+
+      # For "1APE", assign 1APE cij_end_date to keydate2_dateformat_dd
+      keydate2_dateformat_dd = dplyr::if_else(
+        dd_type == "1APE" | dd_type == "3ADPE",
+        cij_end_date,
+        keydate2_dateformat_dd,
+      ),
+
       datediff_end = abs(cij_end_date - keydate2_dateformat_dd),
       datediff_start = cij_start_date - keydate1_dateformat_dd
     ) %>%
+
     dplyr::filter(dd_type != "-") %>%
     dplyr::mutate(smrtype_dd = dplyr::case_when(
       dd_type %in% c(
