@@ -60,7 +60,9 @@ create_monthly_costs <- function(data,
       "daycase_check"
     )
 
-  costs <- (costs_daycase[1:12] + costs) %>%
+  avaliable_months <- setdiff(names(costs_daycase), "daycase_check")
+
+  costs <- (costs_daycase[avaliable_months] + costs[avaliable_months]) %>%
     dplyr::bind_cols(daycase_check = costs_daycase$daycase_check)
 
   data <- dplyr::bind_cols(data, costs) %>%
