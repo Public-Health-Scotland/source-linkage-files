@@ -180,11 +180,13 @@ add_dd <- function(data, year) {
           recid == "04B" &
             keydate1_dateformat_dd >= cij_start_date &
             is_dummy_cij_end ~ "4",
+          # is_dummy_cij_end & is_dummy_keydate2 ~ "4",
 
           # "4P"	"Matches unended MH record (allowing -1 day) - (4P)"
           recid == "04B" &
             keydate1_dateformat_dd >= cij_start_date_lower &
             is_dummy_cij_end ~ "4P",
+          # is_dummy_cij_end & is_dummy_keydate2  ~ "4P",
 
           # "-" "No Match (We don't keep these)"
           .default = "-"
@@ -252,32 +254,32 @@ add_dd <- function(data, year) {
       keydate1_dateformat_dd,
       keydate2_dateformat_dd,
       .keep_all = TRUE
-    )
+    ) %>%
 
-  # tidy up and rename columns to match the format of episode files
-  dplyr::select(
-    recid = recid_dd,
-    chi,
-    keydate1_dateformat = keydate1_dateformat_dd,
-    keydate2_dateformat = keydate2_dateformat_dd,
-    amended_dates,
-    delay_end_reason,
-    primary_delay_reason,
-    primary_delay_reason,
-    hbtreatcode,
-    location,
-    spec,
-    smrtype = smrtype_dd,
-    cij_marker,
-    cij_start_date,
-    cij_end_date,
-    postcode = postcode_dd,
-    dd_responsible_lca,
-    original_admission_date,
-    dd_type
-  ) %>%
+    # tidy up and rename columns to match the format of episode files
+    dplyr::select(
+      recid = recid_dd,
+      chi,
+      keydate1_dateformat = keydate1_dateformat_dd,
+      keydate2_dateformat = keydate2_dateformat_dd,
+      amended_dates,
+      delay_end_reason,
+      primary_delay_reason,
+      primary_delay_reason,
+      hbtreatcode,
+      location,
+      spec,
+      smrtype = smrtype_dd,
+      cij_marker,
+      cij_start_date,
+      cij_end_date,
+      postcode = postcode_dd,
+      dd_responsible_lca,
+      original_admission_date,
+      dd_type
+    ) %>%
     # combine DD with episode data
-    dplyr::bind_rows( # restore cij_end_date
+    dplyr::bind_rows(# restore cij_end_date
       data %>%
         dplyr::select(
           -c(
@@ -289,8 +291,7 @@ add_dd <- function(data, year) {
             "is_dummy_cij_end",
             "dummy_cij_end"
           )
-        )
-    )
+        ))
 
   return(data)
 }
