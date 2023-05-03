@@ -217,11 +217,9 @@ add_dd <- function(data, year) {
         cij_end_date,
         keydate2_dateformat_dd,
       ),
-
       datediff_end = abs(cij_end_date - keydate2_dateformat_dd),
       datediff_start = cij_start_date - keydate1_dateformat_dd
     ) %>%
-
     dplyr::filter(dd_type != "-") %>%
     dplyr::mutate(smrtype_dd = dplyr::case_when(
       dd_type %in% c(
