@@ -18,7 +18,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 CHI deaths lookup, it will return the final data
-but also write this out as a zsav and rds.
+but also write this out as an rds.
 }
 \seealso{
 Other process extracts: 

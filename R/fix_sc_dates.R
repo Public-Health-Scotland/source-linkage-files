@@ -7,7 +7,6 @@
 #' @param period Social care latest submission period.
 #'
 #' @return A date vector with replaced end dates
-#' @export
 fix_sc_start_dates <- function(start_date, period) {
   # Fix sds_start_date is missing by setting start_date to be the start of
   # financial year
@@ -31,7 +30,6 @@ fix_sc_start_dates <- function(start_date, period) {
 #' @param period Social care latest submission period.
 #'
 #' @return A date vector with replaced end dates
-#' @export
 fix_sc_end_dates <- function(start_date, end_date, period) {
   # Fix sds_end_date is earlier than sds_start_date by setting end_date to be
   # the end of financial year

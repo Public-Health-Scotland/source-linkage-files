@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' GP OoH extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param year The year to process, in FY format.
 #' @param diagnosis_path Path to diagnosis BOXI extract location.

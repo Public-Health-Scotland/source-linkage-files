@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' social care client lookup, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out as an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process
@@ -127,7 +127,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save .rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, "Client", check_mode = "write"))
+      write_file(get_source_extract_path(year, "Client", check_mode = "write"))
   }
 
   return(outfile)

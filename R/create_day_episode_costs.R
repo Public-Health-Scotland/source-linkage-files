@@ -10,8 +10,6 @@
 #'
 #' @return The data with additional variables `apr_cost` to `mar_cost`
 #' that assigns the cost to each month
-#' @export
-#'
 create_day_episode_costs <- function(data, date_var, cost_var) {
   data <- data %>%
     # month and month_cost variable

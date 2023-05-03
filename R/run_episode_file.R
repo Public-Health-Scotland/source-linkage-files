@@ -10,7 +10,56 @@
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
-    # If the CHI is invalid for whatever reason, set the CHI to NA
+    store_ep_file_vars(year, vars_to_keep = c(
+      "year",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "smrtype",
+      "chi",
+      "gender",
+      "dob",
+      "gpprac",
+      "hbpraccode",
+      "postcode",
+      "hbrescode",
+      "lca",
+      "hbtreatcode",
+      "ipdc",
+      "spec",
+      "sigfac",
+      "diag1",
+      "diag2",
+      "diag3",
+      "diag4",
+      "diag5",
+      "diag6",
+      "op1a",
+      "age",
+      "cij_marker",
+      "cij_pattype_code",
+      "cij_ipdc",
+      "cij_admtype",
+      "cij_adm_spec",
+      "cij_dis_spec",
+      "cost_total_net",
+      "hscp",
+      "datazone",
+      "attendance_status",
+      "deathdiag1",
+      "deathdiag2",
+      "deathdiag3",
+      "deathdiag4",
+      "deathdiag5",
+      "deathdiag6",
+      "deathdiag7",
+      "deathdiag8",
+      "deathdiag9",
+      "deathdiag10",
+      "deathdiag11"
+    )) %>%
+    # Check chi is valid using phsmethods function
+    # If the CHI is invalid for whatever reason, set the CHI to blank string
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
@@ -22,7 +71,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     create_cost_inc_dna() %>%
-    # Add the flag for Potentially Preventable Admissions
     add_ppa_flag() %>%
     # TODO add Link Delayed Discharge here (From C02)
     add_nsu_cohort(year) %>%
@@ -30,14 +78,89 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     correct_demographics(year) %>%
     join_cohort_lookups(year) %>%
     # TODO match on SPARRA and HHG here
-    # From C09 - Match on postcode and gpprac variables ----
-    fill_geographies()
+    fill_geographies() %>%
+    load_ep_file_vars(year)
 
-  if (write_to_disk == TRUE) {
-    # TODO write out as an arrow dataset possibly also as an rds
+  if (write_to_disk) {
+    slf_path <- get_file_path(
+      get_year_dir(year),
+      stringr::str_glue(
+        "source-episode-file-{year}.parquet"
+      ),
+      check_mode = "write"
+    )
+
+    write_file(episode_file, slf_path)
   }
 
   return(episode_file)
+}
+
+#' Store the unneeded episode file variables
+#'
+#' @param data The full SLF input data
+#' @inheritParams run_episode_file
+#' @param vars_to_keep a character vector of variable to keep, all others will
+#' be stored.
+#'
+#' @return `data` with only the `vars_to_keep` kept
+store_ep_file_vars <- function(data, year, vars_to_keep) {
+  tempfile_path <- get_file_path(
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+    check_mode = "write",
+    create = TRUE
+  )
+
+  check_variables_exist(data, vars_to_keep)
+
+  data <- data %>%
+    dplyr::mutate(ep_file_row_id = dplyr::row_number())
+
+  vars_to_store <- c("ep_file_row_id", setdiff(names(data), vars_to_keep))
+
+  dplyr::select(
+    data,
+    dplyr::all_of(vars_to_store)
+  ) %>%
+    write_file(
+      path = tempfile_path
+    )
+
+  return(
+    dplyr::select(
+      data,
+      dplyr::all_of(c("ep_file_row_id", vars_to_keep))
+    )
+  )
+}
+
+#' Load the unneeded episode file variables
+#'
+#' @param data The SLF data to which the stored vars will be added
+#' @inheritParams run_episode_file
+#'
+#' @return The full SLF data.
+load_ep_file_vars <- function(data, year) {
+  tempfile_path <- get_file_path(
+    directory = get_year_dir(year),
+    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+    check_mode = "write",
+    create = TRUE
+  )
+
+  full_data <- data %>%
+    dplyr::left_join(
+      read_file(path = tempfile_path),
+      by = "ep_file_row_id",
+      unmatched = "error",
+      relationship = "one-to-one"
+    ) %>%
+    dplyr::select(!"ep_file_row_id")
+
+  fs::file_delete(tempfile_path)
+
+  return(full_data)
 }
 
 #' Fill any missing CIJ markers for records that should have them
@@ -168,13 +291,20 @@ create_cost_inc_dna <- function(ep_file_data) {
 #' on to the episode file.
 #'
 join_cohort_lookups <- function(ep_file_data, year) {
+  demographic_cohorts <- create_demographic_cohorts(
+    ep_file_data,
+    year,
+    write_to_disk = TRUE
+  )
+  service_use_cohorts <- create_service_use_cohorts(
+    ep_file_data,
+    year,
+    write_to_disk = TRUE
+  )
+
   join_cohort_lookups <- ep_file_data %>%
-    dplyr::left_join(
-      create_demographic_cohorts(year, write_to_disk = TRUE)
-    ) %>%
-    dplyr::left_join(
-      create_service_use_cohorts(year, write_to_disk = TRUE)
-    )
+    dplyr::left_join(demographic_cohorts, by = "chi") %>%
+    dplyr::left_join(service_use_cohorts, by = "chi")
 
   return(join_cohort_lookups)
 }

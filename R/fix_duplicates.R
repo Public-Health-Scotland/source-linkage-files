@@ -11,7 +11,6 @@
 #' `case_closed_date`.
 #'
 #' @return The fixed data
-#' @export
 #'
 #' @seealso process_homelessness_extract
 fix_west_dun_duplicates <- function(data) {
@@ -61,7 +60,6 @@ fix_west_dun_duplicates <- function(data) {
 #' `case_closed_date`.
 #'
 #' @return The fixed data
-#' @export
 #'
 #' @seealso process_homelessness_extract
 fix_east_ayrshire_duplicates <- function(data) {

@@ -122,7 +122,7 @@ process_sc_all_sds <- function(
   if (write_to_disk) {
     # Save .rds file
     final_data %>%
-      write_rds(get_sc_sds_episodes_path(check_mode = "write"))
+      write_file(get_sc_sds_episodes_path(check_mode = "write"))
   }
 
   return(final_data)

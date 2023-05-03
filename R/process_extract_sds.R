@@ -20,6 +20,12 @@ process_extract_sds <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # Check that we have data for this year
+  if (!check_year_valid(year, "SDS")) {
+    # If not return an empty tibble
+    return(tibble::tibble())
+  }
+
   outfile <- data %>%
     # Select episodes for given FY
     dplyr::filter(is_date_in_fyyear(
@@ -52,7 +58,7 @@ process_extract_sds <- function(
 
   if (write_to_disk) {
     outfile %>%
-      write_rds(get_source_extract_path(year, type = "SDS", check_mode = "write"))
+      write_file(get_source_extract_path(year, type = "SDS", check_mode = "write"))
   }
 
   return(outfile)

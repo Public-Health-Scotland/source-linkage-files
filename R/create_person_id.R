@@ -11,7 +11,6 @@
 #'  * 'SC' (Social Care)
 #'
 #' @return The data with the `person_id` variable added
-#' @export
 #'
 #' @family id functions
 create_person_id <- function(data, type = c("SC")) {

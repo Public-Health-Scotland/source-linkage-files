@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' District Nursing extract, it will return the final data
-#' but also write this out as a zsav and rds.
+#' but also write this out an rds.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -20,10 +20,10 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   year <- check_year_format(year)
 
   # If data is available in the FY then run processing.
-  # If no data has passed through, return NULL.
-  if (is.null(data)) {
-    return(NULL)
+  if (identical(data, tibble::tibble())) {
+    return(data)
   }
+
   # Data Cleaning  ---------------------------------------
   dn_clean <- data %>%
     # filter for valid chi only
@@ -124,7 +124,7 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     dn_episodes %>%
-      write_rds(get_source_extract_path(year, "DN", check_mode = "write"))
+      write_file(get_source_extract_path(year, "DN", check_mode = "write"))
   }
 
   return(dn_episodes)

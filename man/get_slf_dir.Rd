@@ -15,6 +15,7 @@ folders/files
 }
 \seealso{
 Other directories: 
+\code{\link{get_dev_dir}()},
 \code{\link{get_lookups_dir}()},
 \code{\link{get_year_dir}()}
 }
