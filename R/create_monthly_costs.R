@@ -52,9 +52,11 @@ create_monthly_costs <- function(data,
       values_fill = 0
     ) %>%
     dplyr::select(
-      month.abb[c(4:12, 1:3)] %>%
-        tolower() %>%
-        paste0("_cost"),
+      tidyselect::any_of(
+        month.abb[c(4:12, 1:3)] %>%
+          tolower() %>%
+          paste0("_cost")
+      ),
       "daycase_check"
     )
 
