@@ -16,7 +16,6 @@
 #' variables for grouping e.g recid for episode file testing.
 #'
 #' @return a tibble with a summary
-#' @export
 #'
 #' @family extract test functions
 #' @seealso produce_source_extract_tests

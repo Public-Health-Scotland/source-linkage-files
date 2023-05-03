@@ -6,7 +6,7 @@
 #' @param lca_var LCA variable e.g. CA2019, CA2011
 #'
 #' @return a dataframe with flag (1 or 0) for each LCA
-#' @export
+#'
 #' @family flag functions
 create_lca_test_flags <- function(data, lca_var) {
   data <- data %>%
