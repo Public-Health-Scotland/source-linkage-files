@@ -6,7 +6,7 @@
 #' @param hb_var Health board variable e.g. HB2019 HB2018 hbpraccode
 #'
 #' @return a dataframe with flag (1 or 0) for each Health Board
-#' @export
+#'
 #' @family flag functions
 create_hb_test_flags <- function(data, hb_var) {
   data <- data %>%
