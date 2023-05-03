@@ -6,7 +6,6 @@
 #' @param year financial year, e.g. '1920'
 #'
 #' @return episode files with updated date of birth and ages
-#' @export
 correct_demographics <- function(data, year) {
   # keep episodes with missing chi
   data_no_chi <- data %>%

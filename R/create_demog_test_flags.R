@@ -6,7 +6,6 @@
 #'
 #' @return a dataframe with flag (1 or 0) for each demographic variable.
 #' Missing value flag from [is_missing()]
-#' @export
 #'
 #' @family flag functions
 create_demog_test_flags <- function(data) {
