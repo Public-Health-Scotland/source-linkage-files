@@ -36,6 +36,7 @@ datetime
 daycase
 dbconnect
 dbplyr
+deathdiag
 demog
 disch
 dischloc
@@ -49,6 +50,7 @@ downup
 dplyr
 dsn
 dtplyr
+Dunbartonshire
 DVPROD
 dvprod
 Eilean
@@ -72,13 +74,13 @@ hbtreatcode
 hbtreatname
 HCP
 HHG
-hhg
 hjust
 hms
 homecare
 hscp
 hscpnames
 infyyear
+Inverclyde
 ipdc
 itle
 iwalk
@@ -121,6 +123,7 @@ phs
 phsmethods
 phsopendata
 placeinc
+plics
 postcodes
 PPAs
 prac
@@ -143,6 +146,7 @@ roxygen
 Rprofile
 Rscript
 rspm
+RStudio
 rstudioapi
 Rtype
 Scougal
@@ -156,7 +160,7 @@ slfhelper
 smr
 SMRA
 smrtype
-sparra
+SPARRA
 spd
 spss
 stadm
@@ -166,6 +170,7 @@ stringr
 submis
 tadm
 tarchetypes
+Tayside
 tbl
 telecare
 testthat

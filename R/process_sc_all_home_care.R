@@ -205,7 +205,7 @@ process_sc_all_home_care <- function(
   if (write_to_disk) {
     # Save .rds file
     final_data %>%
-      write_rds(get_sc_hc_episodes_path(check_mode = "write"))
+      write_file(get_sc_hc_episodes_path(check_mode = "write"))
   }
 
   return(final_data)

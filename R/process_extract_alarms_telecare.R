@@ -20,6 +20,12 @@ process_extract_alarms_telecare <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # Check that we have data for this year
+  if (!check_year_valid(year, "AT")) {
+    # If not return an empty tibble
+    return(tibble::tibble())
+  }
+
   # Now select episodes for given FY
   at_data <- data %>%
     dplyr::filter(is_date_in_fyyear(
@@ -57,7 +63,7 @@ process_extract_alarms_telecare <- function(
 
   if (write_to_disk) {
     at_data %>%
-      write_rds(
+      write_file(
         get_source_extract_path(year, type = "AT", check_mode = "write")
       )
   }

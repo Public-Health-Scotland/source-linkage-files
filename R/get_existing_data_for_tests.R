@@ -9,7 +9,6 @@
 #'
 #' @return a [tibble][tibble::tibble-package] from the
 #' SLF with the relevant recids and variables.
-#' @export
 #'
 #' @family test functions
 #' @seealso produce_source_extract_tests

@@ -9,7 +9,6 @@
 #'
 #' @return the same data with improved accuracy and completeness of the Care
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
-#' @export
 fill_ch_names <- function(ch_data,
                           ch_name_lookup_path = get_slf_ch_name_lookup_path(),
                           spd_path = get_spd_path()) {

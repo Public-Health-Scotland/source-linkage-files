@@ -20,6 +20,12 @@ process_extract_home_care <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # Check that we have data for this year
+  if (!check_year_valid(year, "HC")) {
+    # If not return an empty tibble
+    return(tibble::tibble())
+  }
+
   # Selections for financial year------------------------------------
 
   hc_data <- data %>%
@@ -89,7 +95,7 @@ process_extract_home_care <- function(
   if (write_to_disk) {
     # Save .rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, type = "HC", check_mode = "write"))
+      write_file(get_source_extract_path(year, type = "HC", check_mode = "write"))
   }
 
   return(outfile)

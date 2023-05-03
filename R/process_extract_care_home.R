@@ -26,6 +26,12 @@ process_extract_care_home <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # Check that we have data for this year
+  if (!check_year_valid(year, "CH")) {
+    # If not return an empty tibble
+    return(tibble::tibble())
+  }
+
   # Selections for financial year------------------------------------
 
   ch_data <- data %>%
@@ -114,7 +120,7 @@ process_extract_care_home <- function(
   if (write_to_disk) {
     # Save .rds file
     outfile %>%
-      write_rds(get_source_extract_path(year, type = "CH", check_mode = "write"))
+      write_file(get_source_extract_path(year, type = "CH", check_mode = "write"))
   }
 
   return(outfile)

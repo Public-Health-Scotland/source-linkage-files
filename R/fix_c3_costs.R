@@ -6,7 +6,6 @@
 #' @param year Financial year e.g. 1819
 #'
 #' @return A data frame with costs applied
-#' @export
 fix_c3_costs <- function(data, year) {
   year <- check_year_format(year)
 

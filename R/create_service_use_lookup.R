@@ -151,8 +151,8 @@ create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-    write_rds(return_data,
-      path = get_service_use_cohorts_path(year)
+    write_file(return_data,
+      path = get_service_use_cohorts_path(year, check_mode = "write")
     )
   }
 
