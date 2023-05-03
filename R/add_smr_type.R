@@ -57,9 +57,15 @@ add_smr_type <- function(recid,
 
   # Situation where acute records are present without a corresponding ipdc
   if (all(recid %in% c("01B", "GLS")) & anyNA(ipdc)) {
-    cli::cli_abort(
-      "In Acute records, {.var ipdc} is required to assign an smrtype,
-                    and there are some {.val NA} values. Please check the data."
+    if (all(is.na(ipdc))) {
+      cli::cli_abort(
+        "In Acute records, {.var ipdc} is required to assign an smrtype, but
+        all values are {.val NA}. Please check the code/data."
+      )
+    }
+    cli::cli_warn(
+      "In Acute records, {.var ipdc} is required to assign an smrtype, and
+      there are some {.val NA} values. Please check the data."
     )
   }
 
@@ -97,7 +103,7 @@ add_smr_type <- function(recid,
 
   # Situation where an Acute/GLS recid is given but no ipdc marker
   if (any(recid %in% c("01B", "GLS")) & missing(ipdc)) {
-    cli::cli_abort(
+    cli::cli_warn(
       "An {.var ipdc} vector has not been supplied, and therefore Acute/GLS
                    records cannot be given an {.var smrtype}"
     )
@@ -131,14 +137,16 @@ add_smr_type <- function(recid,
     smrtype <- dplyr::case_when(
       recid == "01B" & ipdc == "I" ~ "Acute-IP",
       recid == "01B" & ipdc == "D" ~ "Acute-DC",
-      recid == "GLS" & ipdc == "I" ~ "GLS-IP"
+      recid == "GLS" & ipdc == "I" ~ "GLS-IP",
+      recid == "GLS" ~ "GLS-Unknown",
+      .default = "Acute-Unknown"
     )
   } else if (all(recid == "HC")) {
     # Home care
     smrtype <- dplyr::case_when(
       recid == "HC" & hc_service == 1L ~ "HC-Non-Per",
       recid == "HC" & hc_service == 2L ~ "HC-Per",
-      TRUE ~ "HC-Unknown"
+      .default = "HC-Unknown"
     )
   } else if (all(recid == "HL1")) {
     # Homelessness
@@ -156,7 +164,7 @@ add_smr_type <- function(recid,
       consultation_type == "COVID19 ASSESSMENT" ~ "OOH-C19Ass",
       consultation_type == "COVID19 ADVICE" ~ "OOH-C19Adv",
       consultation_type == "COVID19 OTHER" ~ "OOH-C19Oth",
-      TRUE ~ "OOH-Other"
+      .default = "OOH-Other"
     )
   } else {
     # Recids that can be recoded with no identifier

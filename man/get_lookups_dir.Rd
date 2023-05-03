@@ -21,6 +21,7 @@ Other lookup file paths:
 \code{\link{get_spd_path}()}
 
 Other directories: 
+\code{\link{get_dev_dir}()},
 \code{\link{get_slf_dir}()},
 \code{\link{get_year_dir}()}
 }

@@ -27,13 +27,11 @@ process_extract_homelessness <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-  # Add some variables ------------------------------------------------------
-
   # If data is available in the FY then run processing.
-  # If no data has passed through, return NULL.
-  if (is.null(data)) {
-    return(NULL)
+  if (identical(data, tibble::tibble())) {
+    return(data)
   }
+
   data <- data %>%
     dplyr::mutate(
       year = as.character(year),

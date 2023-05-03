@@ -33,6 +33,10 @@ check_year_valid <- function(year, type = c(
     if (type %in% c("CMH", "Homelessness")) {
       return(FALSE)
     }
+  } else if (year <= "1617") {
+    if (type %in% c("CH", "HC", "SDS", "AT")) {
+      return(FALSE)
+    }
   } else if (year >= "2122") {
     if (type %in% c("CMH", "DN")) {
       return(FALSE)

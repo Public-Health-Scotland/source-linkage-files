@@ -3,10 +3,11 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-read_extract_district_nursing <- function(year,
-                                          file_path = get_boxi_extract_path(year = year, type = "DN")) {
-  if (is.na(file_path)) {
-    return(NULL)
+read_extract_district_nursing <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "DN")) {
+  if (file_path == get_dummy_boxi_extract_path()) {
+    return(tibble::tibble())
   }
 
   # Read BOXI extract
