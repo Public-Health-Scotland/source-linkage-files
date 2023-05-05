@@ -16,6 +16,9 @@ add_smr_type <- function(recid,
                          hc_service = NULL,
                          main_applicant_flag = NULL,
                          consultation_type = NULL) {
+  # TODO rename this function to `add_smrtype()` to match the name of the
+  # variable. Need to make sure to change all places where it is used as well.
+
   # Situation where some recids are not in the accepted values
   if (any(!(recid %in% c(
     "00B",
@@ -103,7 +106,7 @@ add_smr_type <- function(recid,
 
   # Situation where an Acute/GLS recid is given but no ipdc marker
   if (any(recid %in% c("01B", "GLS")) & missing(ipdc)) {
-    cli::cli_warn(
+    cli::cli_abort(
       "An {.var ipdc} vector has not been supplied, and therefore Acute/GLS
                    records cannot be given an {.var smrtype}"
     )
