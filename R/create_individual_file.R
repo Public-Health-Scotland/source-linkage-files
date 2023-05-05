@@ -173,7 +173,7 @@ add_op_columns <- function(episode_file, prefix, condition) {
   episode_file <- episode_file %>%
     dplyr::mutate(
       "{prefix}_newcons_dnas" := dplyr::if_else(eval(condition_5_8), 1, NA_real_),
-      "{prefix}_cost_dnas" := dplyr::if_else(eval(condition_5_8), .data$cost_total_net_incdnas, NA_real_)
+      "{prefix}_cost_dnas" := dplyr::if_else(eval(condition_5_8), .data$cost_total_net_inc_dnas, NA_real_)
     )
   return(episode_file)
 }
@@ -219,7 +219,7 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
 
   episode_file <- episode_file %>%
     dplyr::mutate(
-      OoH_consultation_time = dplyr::if_else(eval(condition), as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$keydate2_dateformat) - (lubridate::seconds_to_period(.data$keytime1) + .data$keydate1_dateformat), units = "mins"), NA_real_),
+      OoH_consultation_time = dplyr::if_else(eval(condition), as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$record_keydate2) - (lubridate::seconds_to_period(.data$keytime1) + .data$record_keydate1), units = "mins"), NA_real_),
       OoH_consultation_time = dplyr::if_else(OoH_consultation_time < 0, 0, .data$OoH_consultation_time)
     )
   return(episode_file)
@@ -232,7 +232,7 @@ add_dn_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), .data$totalnodncontacts, NA_real_))
+    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), .data$total_no_dn_contacts, NA_real_))
 }
 
 #' Add CMH columns
@@ -306,7 +306,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay > 0, .data$cost_total_net / .data$yearstay, NA_real_),
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay == 0, .data$cost_total_net / .data$yearstay, .data$ch_cost_per_day),
       ch_no_cost = eval(condition) & is.na(ch_cost_per_day),
-      ch_ep_end = dplyr::if_else(eval(condition), .data$keydate2_dateformat, lubridate::NA_Date_)
+      ch_ep_end = dplyr::if_else(eval(condition), .data$record_keydate2, lubridate::NA_Date_)
     ) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
@@ -492,7 +492,7 @@ aggregate_ch_episodes <- function(episode_file) {
     dplyr::group_by(.data$chi, .data$ch_chi_cis) %>%
     dplyr::mutate(
       ch_no_cost = max(.data$ch_no_cost),
-      ch_ep_start = min(.data$keydate1_dateformat),
+      ch_ep_start = min(.data$record_keydate1),
       ch_ep_end = max(.data$ch_ep_end),
       ch_cost_per_day = mean(.data$ch_cost_per_day)
     ) %>%
@@ -594,9 +594,9 @@ aggregate_by_chi <- function(episode_file) {
   episode_file %>%
     dplyr::arrange(
       chi,
-      keydate1_dateformat,
+      record_keydate1,
       keytime1,
-      keydate2_dateformat,
+      record_keydate2,
       keytime2
     ) %>%
     dplyr::group_by(chi) %>%
@@ -749,7 +749,7 @@ drop_cols <- function(individual_file) {
       -"postcode",
       -"gpprac",
       -"no_paid_items",
-      -"totalnodncontacts"
+      -"total_no_dn_contacts"
     )
 }
 
