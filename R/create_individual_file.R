@@ -67,11 +67,11 @@ add_cij_columns <- function(episode_file) {
         NA_real_
       )
     ) %>%
-    dplyr::mutate(cij_delay = dplyr::if_else(
-      (.data$cij_delay == 1 & .data$Distinct_CIJ == 1),
-      1,
-      0
-    )) %>%
+    # dplyr::mutate(cij_delay = dplyr::if_else(
+    #   (.data$cij_delay == 1 & .data$Distinct_CIJ == 1),
+    #   1,
+    #   0
+    # )) %>%
     dplyr::mutate(
       preventable_admissions = dplyr::if_else(
         (.data$cij_ppa == 1 & .data$Distinct_CIJ == 1),
@@ -104,7 +104,7 @@ add_all_columns <- function(episode_file) {
     add_ooh_columns("OoH", .data$recid == "OoH") %>%
     add_dn_columns("DN", .data$recid == "DN") %>%
     add_cmh_columns("CMH", .data$recid == "CMH") %>%
-    add_dd_columns("DD", .data$recid == "DD") %>%
+    #add_dd_columns("DD", .data$recid == "DD") %>%
     add_nsu_columns("NSU", .data$recid == "NSU") %>%
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
     add_hl1_columns("HL1", .data$recid == "HL1") %>%
