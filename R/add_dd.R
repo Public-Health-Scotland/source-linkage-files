@@ -42,8 +42,8 @@ add_dd <- function(data, year) {
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(record_keydate2),
       dummy_keydate2 = dplyr::if_else(is_dummy_keydate2,
-                                      lubridate::today(),
-                                      record_keydate2
+        lubridate::today(),
+        record_keydate2
       ),
       dummy_id = dplyr::row_number()
     )
@@ -55,8 +55,8 @@ add_dd <- function(data, year) {
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
-                      by = by_dd,
-                      suffix = c("_dd", "")
+      by = by_dd,
+      suffix = c("_dd", "")
     ) %>%
     dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
     # remove duplicate rows, but still got some duplicate mis-matches
@@ -258,9 +258,9 @@ add_dd <- function(data, year) {
       datediff_end, -datediff_start
     ) %>%
     dplyr::distinct(postcode,
-                    record_keydate1_dd,
-                    record_keydate2_dd,
-                    .keep_all = TRUE
+      record_keydate1_dd,
+      record_keydate2_dd,
+      .keep_all = TRUE
     ) %>%
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
