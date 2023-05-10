@@ -32,7 +32,8 @@ create_monthly_costs <- function(data,
   daycase_cost_months <- data %>%
     dplyr::select(!dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(
-      daycase_added = (.data$record_keydate1 == .data$record_keydate2)
+      daycase_added = (.data$record_keydate1 == .data$record_keydate2),
+      daycase_added = tidyr::replace_na(daycase_added, FALSE)
     ) %>%
     dplyr::mutate(daycase_check = .data$daycase_added) %>%
     dplyr::mutate(cost_month = dplyr::if_else(
