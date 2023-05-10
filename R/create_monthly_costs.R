@@ -29,7 +29,7 @@ create_monthly_costs <- function(data,
   # Fix the instances where the episode is a daycase;
   # these will sometimes have 0.33 for the yearstay,
   # this should be applied to the relevant month.
-  full_cost_col = month.abb[c(4:12, 1:3)] %>%
+  full_cost_col <- month.abb[c(4:12, 1:3)] %>%
     tolower() %>%
     paste0("_cost")
 
