@@ -610,7 +610,7 @@ aggregate_by_chi <- function(episode_file) {
           "CIJ_el",
           "CIJ_non_el",
           "CIJ_mat",
-          "cij_delay",
+          #"cij_delay",
           "OoH_cases" = "unique_ooh_case",
           dplyr::ends_with(
             c(
