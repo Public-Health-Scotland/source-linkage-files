@@ -21,16 +21,21 @@ check_year_valid <- function(year, type = c(
                                "Homelessness",
                                "Maternity",
                                "MH",
+                               "NSU",
                                "Outpatients",
                                "PIS",
                                "SDS"
                              )) {
+  if (year >= "2223" & type == "NSU"){
+    return(FALSE)
+  }
+
   if (year <= "1415") {
-    if (type %in% c("CMH", "DN", "Homelessness")) {
+    if (type %in% c("CMH", "DN", "Homelessness", "CH", "HC", "SDS", "AT")) {
       return(FALSE)
     }
   } else if (year <= "1516") {
-    if (type %in% c("CMH", "Homelessness")) {
+    if (type %in% c("CMH", "Homelessness", "CH", "HC", "SDS", "AT")) {
       return(FALSE)
     }
   } else if (year <= "1617") {
