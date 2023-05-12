@@ -11,7 +11,7 @@
 add_nsu_cohort <- function(data, year) {
   year_param <- year
 
-  if (!check_year_valid("2223", "NSU")) {
+  if (check_year_valid("2223", "NSU")) {
     return(data)
   } else {
     # Check that the variables we need are in the data
