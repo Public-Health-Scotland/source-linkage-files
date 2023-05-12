@@ -62,5 +62,4 @@ test_that("Check year valid works for specific datasets ", {
   expect_equal(check_year_valid("1920", "CH"), TRUE)
   expect_equal(check_year_valid("2021", "HC"), TRUE)
   expect_equal(check_year_valid("2122", "SDS"), TRUE)
-
 })

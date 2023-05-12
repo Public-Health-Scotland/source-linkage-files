@@ -26,7 +26,7 @@ check_year_valid <- function(year, type = c(
                                "PIS",
                                "SDS"
                              )) {
-  if (year >= "2223" & type == "NSU"){
+  if (year >= "2223" & type == "NSU") {
     return(FALSE)
   }
 
