@@ -118,6 +118,9 @@ test_that("Error escapes functions as expected", {
     add_smr_type(recid = c("02B", "02B"), mpat = c(NA, "1"))
   )
   expect_error(
+    add_smr_type(recid = c("01B", "GLS"), ipdc = c(NA, NA))
+  )
+  expect_warning(
     add_smr_type(recid = c("01B", "GLS"), ipdc = c(NA, "I"))
   )
   expect_error(

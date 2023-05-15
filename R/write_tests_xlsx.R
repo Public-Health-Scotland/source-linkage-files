@@ -12,8 +12,6 @@
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
-#' @export
-#'
 #' @family test functions
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {

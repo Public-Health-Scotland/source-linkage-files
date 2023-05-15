@@ -8,20 +8,17 @@
 #' @param consultation_type A vector of GP Out of hours consultation types
 #'
 #' @return A vector of `smrtype`
-#' @export
 #'
 #' @family Codes
-#'
-#' @examples
-#' add_smr_type(recid = c("04B", "00B", "AE2", "PIS", "NRS"))
-#' add_smr_type(recid = c("02B", "02B"), mpat = c("1", "4"))
-#' add_smr_type(recid = c("01B", "01B", "GLS"), ipdc = c("I", "D", "I"))
 add_smr_type <- function(recid,
                          mpat = NULL,
                          ipdc = NULL,
                          hc_service = NULL,
                          main_applicant_flag = NULL,
                          consultation_type = NULL) {
+  # TODO rename this function to `add_smrtype()` to match the name of the
+  # variable. Need to make sure to change all places where it is used as well.
+
   # Situation where some recids are not in the accepted values
   if (any(!(recid %in% c(
     "00B",
@@ -109,7 +106,7 @@ add_smr_type <- function(recid,
 
   # Situation where an Acute/GLS recid is given but no ipdc marker
   if (any(recid %in% c("01B", "GLS")) & missing(ipdc)) {
-    cli::cli_warn(
+    cli::cli_abort(
       "An {.var ipdc} vector has not been supplied, and therefore Acute/GLS
                    records cannot be given an {.var smrtype}"
     )
