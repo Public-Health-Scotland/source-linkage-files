@@ -21,7 +21,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   # postcode data
   spd_file <- read_file(spd_path) %>%
     dplyr::select(
-      .data$pc7,
+      "pc7",
       tidyselect::matches("datazone\\d{4}$"),
       tidyselect::matches("hb\\d{4}$"),
       tidyselect::matches("hscp\\d{4}$"),
@@ -36,7 +36,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   # simd data
   simd_file <- read_file(simd_path) %>%
     dplyr::select(
-      .data$pc7,
+      "pc7",
       tidyselect::matches("simd\\d{4}.?.?_rank"),
       tidyselect::matches("simd\\d{4}.?.?_sc_decile"),
       tidyselect::matches("simd\\d{4}.?.?_sc_quintile"),
@@ -49,11 +49,11 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   # locality
   locality_file <- read_file(locality_path) %>%
     dplyr::select(
-      locality = .data$hscp_locality,
+      locality = "hscp_locality",
       tidyselect::matches("datazone\\d{4}$")
     ) %>%
     dplyr::mutate(
-      locality = tidyr::replace_na(.data$locality, "No Locality Information")
+      locality = tidyr::replace_na("locality", "No Locality Information")
     )
 
 
@@ -69,9 +69,9 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   outfile <-
     data %>%
     dplyr::select(
-      .data$postcode,
-      .data$lca,
-      .data$locality,
+      "postcode",
+      "lca",
+      "locality",
       tidyselect::matches("datazone\\d{4}$")[1L],
       tidyselect::matches("hb\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
       tidyselect::matches("hscp\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
