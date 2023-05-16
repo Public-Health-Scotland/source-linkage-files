@@ -220,8 +220,10 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
   episode_file <- episode_file %>%
     dplyr::mutate(
       OoH_consultation_time = dplyr::if_else(eval(condition), as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$record_keydate2) - (lubridate::seconds_to_period(.data$keytime1) + .data$record_keydate1), units = "mins"), NA_real_),
-      OoH_consultation_time = dplyr::if_else(OoH_consultation_time < 0, 0, .data$OoH_consultation_time)
+      OoH_consultation_time = dplyr::if_else(OoH_consultation_time < 0, 0, .data$OoH_consultation_time),
+      unique_ooh_case = dplyr::if_else(recid != "OoH", 0, n_distinct(ooh_case_id))
     )
+
   return(episode_file)
 }
 
