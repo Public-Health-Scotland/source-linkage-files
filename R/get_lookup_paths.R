@@ -130,9 +130,12 @@ get_datazone_pop_path <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-get_gpprac_ref_path <- function(ext = "sav") {
-  gpprac_dir <-
-    fs::path(get_lookups_dir(), "National Reference Files")
+get_gpprac_ref_path <- function(ext = "csv") {
+  gpprac_dir <- fs::path(get_lookups_dir(), "National Reference Files")
+
+  if (ext == "csv") {
+    gpprac_dir <- fs::path(gpprac_dir, "csv files")
+  }
 
   gpprac_path <- get_file_path(
     directory = gpprac_dir,
