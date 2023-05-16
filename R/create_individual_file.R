@@ -489,6 +489,7 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
 #' @inheritParams create_individual_file
 aggregate_ch_episodes <- function(episode_file) {
   episode_file %>%
+    dplyr::filter(!is.na(.data$ch_chi_cis)) %>%
     dplyr::group_by(.data$chi, .data$ch_chi_cis) %>%
     dplyr::mutate(
       ch_no_cost = max(.data$ch_no_cost),
@@ -496,7 +497,10 @@ aggregate_ch_episodes <- function(episode_file) {
       ch_ep_end = max(.data$ch_ep_end),
       ch_cost_per_day = mean(.data$ch_cost_per_day)
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::distinct(.data$chi, .data$ch_chi_cis) %>%
+    dplyr::select(.data$chi, .data$ch_chi_cis, ch_no_cost, ch_ep_start, ch_ep_end, ch_cost_per_day) %>%
+    dplyr::right_join(episode_file, by = c(.data$chi, .data$ch_chi_cis))
 }
 
 #' Clean up CH
