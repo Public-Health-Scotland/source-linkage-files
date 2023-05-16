@@ -510,12 +510,10 @@ clean_up_ch <- function(episode_file) {
       fy_end = date_from_fy(year, "end") + 1,
       fy_start = date_from_fy(year, "start")
     ) %>%
-    dplyr::rowwise() %>%
     dplyr::mutate(
-      term_1 = min(ch_ep_end, fy_end + 1),
-      term_2 = max(ch_ep_start, fy_start)
+      term_1 = pmin(ch_ep_end, fy_end + 1),
+      term_2 = pmax(ch_ep_start, fy_start)
     ) %>%
-    dplyr::ungroup() %>%
     dplyr::mutate(
       ch_beddays = dplyr::if_else(
         recid == "CH",
