@@ -705,7 +705,7 @@ condition_cols <- function() {
 #'
 #' @param x Vector to return max of
 max_no_inf <- function(x) {
-  ifelse(!all(is.na(x)), max(x, na.rm = TRUE), NA)
+  dplyr::if_else(all(is.na(x)), NA, max(x, na.rm = TRUE))
 }
 
 #' Custom minimum
