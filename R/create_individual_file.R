@@ -8,10 +8,7 @@ create_individual_file <- function(episode_file) {
     remove_blank_chi() %>%
     find_non_duplicates(.data$cij_marker, "Distinct_CIJ") %>%
     add_cij_columns() %>%
-    find_non_duplicates(.data$ch_chi_cis, "first_ch_ep") %>%
     add_all_columns() %>%
-    find_non_duplicates(.data$ooh_case_id, "unique_ooh_case") %>%
-    dplyr::mutate(unique_ooh_case = dplyr::if_else(recid != "OoH", 0, unique_ooh_case)) %>%
     aggregate_ch_episodes() %>%
     clean_up_ch() %>%
     recode_gender() %>%
