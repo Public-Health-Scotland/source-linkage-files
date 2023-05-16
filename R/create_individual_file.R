@@ -599,6 +599,7 @@ aggregate_by_chi <- function(episode_file) {
     ) %>%
     dplyr::group_by(chi) %>%
     dplyr::summarise(
+      distinct_cij = n_distinct(cij_marker),
       gender = mean(gender),
       dplyr::across(dplyr::ends_with(c(
         "postcode", "DoB", "gpprac"
