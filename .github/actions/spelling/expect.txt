@@ -65,6 +65,7 @@ fyyear
 geogs
 ggplot
 GLS
+GPOo
 gpprac
 gss
 hbnames
