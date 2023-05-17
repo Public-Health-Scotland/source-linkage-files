@@ -709,7 +709,7 @@ clean_individual_file <- function(individual_file) {
     drop_cols() %>%
     clean_up_gender() %>%
     dplyr::mutate(
-      age = floor(as.numeric(lubridate::interval(.data$DoB, date_from_fy(year, "mid")), "years"))
+      age = compute_mid_year_age(year, .data$DoB)
     ) %>%
     clean_up_postcode()
 }
