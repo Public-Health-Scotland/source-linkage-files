@@ -47,7 +47,7 @@ process_sc_all_care_home <- function(
       )
     ) %>%
     dplyr::left_join(sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
+                     by = c("sending_location", "social_care_id")
     )
 
   name_postcode_clean <- fill_ch_names(
@@ -125,8 +125,22 @@ process_sc_all_care_home <- function(
       .data[["nursing_care_provision"]],
       .data[["split_episode_counter"]]
     ) %>%
+    dplyr::arrange(
+      desc(.data[["period"]]),
+      desc(.data[["ch_discharge_date"]]),
+      desc(.data[["ch_provider"]]),
+      desc(.data[["record_date"]]),
+      desc(.data[["qtr_start"]]),
+      desc(.data[["ch_name"]]),
+      desc(.data[["ch_postcode"]]),
+      desc(.data[["reason_for_admission"]]),
+      desc(.data[["type_of_admission"]]),
+      .data[["gender"]],
+      .data[["dob"]],
+      .data[["postcode"]]
+    ) %>%
     dplyr::summarise(
-      sc_latest_submission = dplyr::last(.data[["period"]]),
+      sc_latest_submission = dplyr::first(.data[["period"]]),
       dplyr::across(
         c(
           "ch_discharge_date",
@@ -138,7 +152,7 @@ process_sc_all_care_home <- function(
           "reason_for_admission",
           "type_of_admission"
         ),
-        dplyr::last
+        dplyr::first
       ),
       dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%
@@ -185,7 +199,7 @@ process_sc_all_care_home <- function(
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(slf_deaths_lookup,
-      by = "chi"
+                     by = "chi"
     ) %>%
     # compare discharge date with NRS and CHI death date
     # if either of the dates are 5 or fewer days before discharge
@@ -198,8 +212,8 @@ process_sc_all_care_home <- function(
         FALSE
       ),
       ch_discharge_date = dplyr::if_else(.data[["dis_after_death"]],
-        .data[["death_date"]],
-        .data[["ch_discharge_date"]]
+                                         .data[["death_date"]],
+                                         .data[["ch_discharge_date"]]
       )
     ) %>%
     dplyr::ungroup() %>%
