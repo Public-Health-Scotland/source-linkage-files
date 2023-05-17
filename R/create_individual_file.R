@@ -711,7 +711,6 @@ clean_individual_file <- function(individual_file) {
   individual_file %>%
     drop_cols() %>%
     clean_up_gender() %>%
-    clean_up_dob() %>%
     dplyr::mutate(
       age = floor(as.numeric(lubridate::interval(.data$DoB, date_from_fy(year, "mid")), "years"))
     ) %>%
@@ -767,51 +766,6 @@ clean_up_gender <- function(individual_file) {
     )
 }
 
-#' Clean up date of birth column
-#'
-#' @description Clean up column containing date of birth.
-#'
-#' @inheritParams clean_individual_file
-clean_up_dob <- function(individual_file) {
-  individual_file %>%
-    dplyr::mutate(
-      chi_dob_1 = lubridate::dmy(paste0(substr(.data$chi, 1, 4), "19", substr(.data$chi, 5, 6))),
-      chi_dob_2 = lubridate::dmy(paste0(substr(.data$chi, 1, 4), "20", substr(.data$chi, 5, 6))),
-      chi_age_1 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_1), date_from_fy(year, "mid")), "years"),
-      chi_age_2 = as.numeric(lubridate::interval(lubridate::ymd(.data$chi_dob_2), date_from_fy(year, "mid")), "years")
-    ) %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      dob_condition_1 = .data$chi_dob_1 %in% dplyr::pick(dplyr::ends_with("_DoB")) & !(chi_dob_2 %in% dplyr::pick(dplyr::ends_with("_DoB"))),
-      dob_condition_2 = .data$chi_dob_2 %in% dplyr::pick(dplyr::ends_with("_DoB")) & !(chi_dob_1 %in% dplyr::pick(dplyr::ends_with("_DoB"))),
-      dob_condition_3 = .data$chi_dob_2 > min(lubridate::today(), date_from_fy(year, "end")),
-      dob_condition_4 = unclass(.data$chi_dob_2) > min_no_inf(as.numeric(dplyr::pick(.data$arth_date:.data$death_date))),
-      dob_condition_5 = .data$congen_date %in% c(.data$chi_dob_1, .data$chi_dob_2)
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      DoB = dplyr::case_when(
-        .data$dob_condition_1 ~ .data$chi_dob_1,
-        .data$dob_condition_2 ~ .data$chi_dob_2
-      )
-    ) %>%
-    dplyr::mutate(
-      DoB = dplyr::case_when(
-        is.na(.data$DoB) & is.na(.data$chi_dob_1) & !is.na(.data$chi_dob_2) ~ .data$chi_dob_2,
-        is.na(.data$DoB) & is.na(.data$chi_dob_2) & !is.na(.data$chi_dob_1) ~ .data$chi_dob_1,
-        is.na(.data$DoB) & .data$chi_age_2 < 0 ~ .data$chi_dob_1,
-        is.na(.data$DoB) & .data$dob_condition_3 ~ .data$chi_dob_1,
-        is.na(.data$DoB) & .data$dob_condition_4 ~ .data$chi_dob_1,
-        is.na(.data$DoB) & .data$dob_condition_5 ~ .data$congen_date,
-        is.na(.data$DoB) & .data$chi_age_1 > 115 ~ .data$chi_dob_2,
-        TRUE ~ .data$DoB
-      )
-    ) %>%
-    fill_dob() %>%
-    dplyr::select(
-      -dplyr::starts_with(c("dob_condition_", "chi_dob_", "chi_age_"))
-    )
-}
 
 #' Fill missing date of births
 #'
