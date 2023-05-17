@@ -6,7 +6,6 @@
 create_individual_file <- function(episode_file) {
   episode_file %>%
     remove_blank_chi() %>%
-    find_non_duplicates(.data$cij_marker, "Distinct_CIJ") %>%
     add_cij_columns() %>%
     add_all_columns() %>%
     aggregate_ch_episodes() %>%
@@ -22,26 +21,14 @@ create_individual_file <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
+
+  cli::cli_alert_info("Remove blank CHI at {Sys.time()} and the memory usage was {object.size()}")
+
   episode_file %>%
     dplyr::mutate(chi = dplyr::na_if(.data$chi, "")) %>%
     dplyr::filter(!is.na(.data$chi))
 }
 
-#' Find non-duplicates
-#'
-#' @description Create new column which marks first (per group)
-#' non-duplicated observation as 1, with any duplicates marked as 0.
-#'
-#' @inheritParams create_individual_file
-#' @param group Column to group by
-#' @param col_name Name of new column
-find_non_duplicates <- function(episode_file, group, col_name) {
-  episode_file %>%
-    dplyr::group_by(.data$chi, {{ group }}) %>%
-    dplyr::mutate("{col_name}" := dplyr::if_else(duplicated({{ group }}), 0, 1)) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate("{col_name}" := dplyr::if_else(is.na({{ group }}), 0, .data[[col_name]]))
-}
 
 #' Add CIJ-related columns
 #'
@@ -52,34 +39,35 @@ add_cij_columns <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
       CIJ_non_el = dplyr::if_else(.data$cij_pattype_code == 0,
-        .data$Distinct_CIJ,
+        .data$cij_marker,
         NA_real_
       ),
       CIJ_el = dplyr::if_else(.data$cij_pattype_code == 1,
-        .data$Distinct_CIJ,
+        .data$cij_marker,
         NA_real_
       ),
       CIJ_mat = dplyr::if_else(.data$cij_pattype_code == 2,
-        .data$Distinct_CIJ,
+        .data$cij_marker,
         NA_real_
       )
     ) %>%
     # dplyr::mutate(cij_delay = dplyr::if_else(
-    #   (.data$cij_delay == 1 & .data$Distinct_CIJ == 1),
+    #   (.data$cij_delay == 1 & .data$cij_marker == 1),
     #   1,
     #   0
     # )) %>%
     dplyr::mutate(
       preventable_admissions = dplyr::if_else(
-        (.data$cij_ppa == 1 & .data$Distinct_CIJ == 1),
+        (.data$cij_ppa == 1 & .data$cij_marker == 1),
         1,
         0
-      ),
-      preventable_beddays = dplyr::if_else(
-        (.data$cij_ppa == 1 & .data$Distinct_CIJ == 1),
-        as.numeric(.data$cij_end_date - .data$cij_start_date),
-        0
-      )
+      ) # ,
+      # Come back to here
+      # preventable_beddays = dplyr::if_else(
+      #   (.data$cij_ppa == 1 & .data$Distinct_cij == 1),
+      #   as.numeric(.data$cij_end_date - .data$cij_start_date),
+      #   0
+      # )
     )
 }
 
@@ -218,7 +206,6 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
     dplyr::mutate(
       OoH_consultation_time = dplyr::if_else(eval(condition), as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$record_keydate2) - (lubridate::seconds_to_period(.data$keytime1) + .data$record_keydate1), units = "mins"), NA_real_),
       OoH_consultation_time = dplyr::if_else(OoH_consultation_time < 0, 0, .data$OoH_consultation_time),
-      unique_ooh_case = dplyr::if_else(recid != "OoH", 0, n_distinct(ooh_case_id))
     )
 
   return(episode_file)
@@ -565,6 +552,8 @@ recode_gender <- function(episode_file) {
 #' @inheritParams create_individual_file
 aggregate_by_chi <- function(episode_file) {
   episode_file %>%
+    # use as.data.table to change the data format to data.table to accelerate
+    data.table::as.data.table() %>%
     dplyr::arrange(
       chi,
       record_keydate1,
@@ -572,23 +561,26 @@ aggregate_by_chi <- function(episode_file) {
       record_keydate2,
       keytime2
     ) %>%
-    # use as.data.table to change the data format to data.table to accelerate
-    data.table::as.data.table() %>%
     dplyr::group_by("chi") %>%
     dplyr::summarise(
-      distinct_cij = n_distinct("cij_marker"),
-      ooh_cases = n_distinct("ooh_case_id"),
       gender = mean(gender),
       dplyr::across(dplyr::ends_with(c(
         "postcode", "DoB", "gpprac"
       )), ~ dplyr::last(., na_rm = TRUE)),
       dplyr::across(
         c(
+          "cij_total" = "cij_marker",
           "CIJ_el",
           "CIJ_non_el",
           "CIJ_mat",
           # "cij_delay",
-          "OoH_cases" = "unique_ooh_case",
+          "ooh_cases" = "ooh_case_id",
+          "preventable_admissions"
+        ),
+        ~ dplyr::n_distinct(.x, na.rm = TRUE)
+      ),
+      dplyr::across(
+        c(
           dplyr::ends_with(
             c(
               "episodes",
@@ -605,13 +597,14 @@ aggregate_by_chi <- function(episode_file) {
               "homeV",
               "time",
               "admissions",
-              "assesment",
+              "assessment",
               "other",
               "DN",
               "NHS24",
               "PCC",
               "_dnas"
-            )
+            ),
+            -"preventable_admissions"
           ),
           dplyr::starts_with("SDS_option")
         ),
