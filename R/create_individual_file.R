@@ -597,7 +597,9 @@ aggregate_by_chi <- function(episode_file) {
       record_keydate2,
       keytime2
     ) %>%
-    dplyr::group_by(chi) %>%
+    # use as.data.table to change the data format to data.table to accelerate
+    data.table::as.data.table() %>%
+    dplyr::group_by("chi") %>%
     dplyr::summarise(
       distinct_cij = n_distinct("cij_marker"),
       ooh_cases = n_distinct("ooh_case_id"),
@@ -662,7 +664,9 @@ aggregate_by_chi <- function(episode_file) {
         ),
         ~ dplyr::first(., na_rm = TRUE)
       )
-    )
+    ) %>%
+    # change the data format from data.table to data.frame
+    tibble::as_tibble()
 }
 
 #' Condition columns
