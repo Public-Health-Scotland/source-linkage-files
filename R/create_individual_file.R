@@ -21,7 +21,6 @@ create_individual_file <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
-
   cli::cli_alert_info("Remove blank CHI at {Sys.time()} and the memory usage was {object.size()}")
 
   episode_file %>%
