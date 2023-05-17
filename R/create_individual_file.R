@@ -674,27 +674,7 @@ aggregate_by_chi <- function(episode_file) {
 #' which follow format "condition" and "condition_date" e.g.
 #' "dementia" and "dementia_date"
 condition_cols <- function() {
-  conditions <- c(
-    "arth",
-    "asthma",
-    "atrialfib",
-    "cancer",
-    "cvd",
-    "liver",
-    "copd",
-    "dementia",
-    "diabetes",
-    "epilepsy",
-    "chd",
-    "hefailure",
-    "ms",
-    "parkinsons",
-    "refailure",
-    "congen",
-    "bloodbfo",
-    "endomet",
-    "digestive"
-  )
+  conditions <- slfhelper::ltc_vars
   date_cols <- paste0(conditions, "_date")
   all_cols <- c(conditions, date_cols)
   return(all_cols)
