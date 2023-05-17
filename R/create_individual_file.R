@@ -507,8 +507,8 @@ aggregate_ch_episodes <- function(episode_file) {
 clean_up_ch <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
-      fy_end = date_from_fy(year, "end") + 1,
-      fy_start = date_from_fy(year, "start")
+      fy_end = end_fy(year),
+      fy_start = start_fy(year)
     ) %>%
     dplyr::mutate(
       term_1 = pmin(ch_ep_end, fy_end + 1),
@@ -539,31 +539,6 @@ clean_up_ch <- function(episode_file) {
     dplyr::select(
       -fy_end, -fy_start, -term_1, -term_2
     )
-}
-
-#' Date from FY
-#'
-#' @description Return start, mid, or end date from financial year in format "2122".
-#'
-#' @param financial_year Financial year represented in "YYYY" format e.g. "2122"
-#' @param type One of "start", "end", and "mid", representing the date to return
-date_from_fy <- function(financial_year, type = c("start", "end", "mid")) {
-  match.arg(type)
-  n <- switch(type,
-    "start" = 0,
-    "mid" = 0,
-    "end" = 2
-  )
-  year <- as.numeric(paste0("20", substr(financial_year, 1 + n, 2 + n)))
-  if (type == "start") {
-    date <- lubridate::make_date(year, 4, 1)
-    return(date)
-  } else if (type == "end") {
-    date <- lubridate::make_date(year, 3, 31)
-    return(date)
-  }
-  date <- lubridate::make_date(year, 9, 30)
-  return(date)
 }
 
 #' Recode gender
