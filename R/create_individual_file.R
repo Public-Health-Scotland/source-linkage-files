@@ -35,7 +35,6 @@ remove_blank_chi <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 add_cij_columns <- function(episode_file) {
-
   cli::cli_alert_info("Add cij columns function started at {Sys.time()}")
 
   episode_file %>%
@@ -80,7 +79,6 @@ add_cij_columns <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 add_all_columns <- function(episode_file) {
-
   cli::cli_alert_info("Add all columns function started at {Sys.time()}")
 
   episode_file %>%
@@ -476,7 +474,6 @@ na_type <- function(col = c("DoB", "postcode", "gpprac")) {
 #'
 #' @inheritParams create_individual_file
 aggregate_ch_episodes <- function(episode_file) {
-
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
   episode_file %>%
@@ -500,7 +497,6 @@ aggregate_ch_episodes <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 clean_up_ch <- function(episode_file) {
-
   cli::cli_alert_info("Clean up CH function started at {Sys.time()}")
 
   episode_file %>%
@@ -545,7 +541,6 @@ clean_up_ch <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 recode_gender <- function(episode_file) {
-
   cli::cli_alert_info("Recode Gender function started at {Sys.time()}")
 
   episode_file %>%
@@ -565,7 +560,6 @@ recode_gender <- function(episode_file) {
 #'
 #' @inheritParams create_individual_file
 aggregate_by_chi <- function(episode_file) {
-
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   episode_file %>%
@@ -694,7 +688,6 @@ min_no_inf <- function(x) {
 #'
 #' @param individual_file Individual file where each row represents a unique CHI
 clean_individual_file <- function(individual_file) {
-
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
   individual_file %>%
