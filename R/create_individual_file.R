@@ -718,7 +718,7 @@ max_no_inf <- function(x) {
 #'
 #' @param x Vector to return min of
 min_no_inf <- function(x) {
-  ifelse(all(is.na(x)), NA, min(x, na.rm = TRUE))
+  dplyr::if_else(all(is.na(x)), NA, min(x, na.rm = TRUE))
 }
 
 #' Clean individual file
