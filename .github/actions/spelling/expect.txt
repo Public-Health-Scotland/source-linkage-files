@@ -58,6 +58,7 @@ Eileanan
 envir
 feb
 fileext
+Finalise
 fst
 ftm
 fyear
@@ -181,6 +182,7 @@ tidyselect
 TODOs
 uid
 ungroup
+Unicode
 updown
 upi
 vline
