@@ -309,7 +309,6 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       # If end date is missing use the first day of next FY quarter
       ch_ep_end = dplyr::if_else(eval(condition) & is.na(ch_ep_end), start_next_fy_quarter(sc_latest_submission), .data$ch_ep_end)
     )
-
 }
 
 #' Add HC columns
