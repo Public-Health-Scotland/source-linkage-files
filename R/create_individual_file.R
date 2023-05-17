@@ -779,26 +779,6 @@ replace_dob_with_col <- function(individual_file, col) {
     )
 }
 
-#' Clean up postcode column
-#'
-#' @description Clean up column containing postcode.
-#'
-#' @inheritParams clean_individual_file
-clean_up_postcode <- function(individual_file) {
-  postcode_lookup <- readr::read_rds(get_slf_postcode_path())
-  individual_file %>%
-    dplyr::mutate(
-      # all_blank is TRUE when all postcode variables are blank
-      all_blank = all(is.na(dplyr::pick(dplyr::ends_with("_postcode")))),
-      # Use NRS_postcode to store the dummy for no other reason than it's last
-      # in the hierarchy
-      HL1_postcode = dplyr::if_else(
-        all_blank == 1,
-        "XXX XXX",
-        .data$HL1_postcode
-      )
-    )
-}
 
 #' Fill missing postcodes
 #'
