@@ -524,12 +524,12 @@ clean_up_ch <- function(episode_file) {
         NA_real_
       ),
       ch_beddays = dplyr::if_else(
-        recid == "CH" & first_ch_ep == 0,
+        recid == "CH" & ch_chi_cis == 0,
         0,
         ch_beddays
       ),
       ch_cost = dplyr::if_else(
-        recid == "CH" & first_ch_ep == 0,
+        recid == "CH" & ch_chi_cis == 0,
         0,
         ch_cost
       )
