@@ -636,8 +636,8 @@ aggregate_by_chi <- function(episode_file) {
         dplyr::across(
           c(
             condition_cols(),
-            "death_date",
-            "deceased",
+            #"death_date",
+            #"deceased",
             "year",
             dplyr::ends_with(c(
               "_Cohort", "end_fy", "start_fy"
