@@ -291,7 +291,6 @@ add_ch_columns <- function(episode_file, prefix, condition) {
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
-      ch_cis_episodes = dplyr::if_else(eval(condition), .data$first_ch_ep, NA_real_),
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay > 0, .data$cost_total_net / .data$yearstay, NA_real_),
       ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay == 0, .data$cost_total_net / .data$yearstay, .data$ch_cost_per_day),
       ch_no_cost = eval(condition) & is.na(ch_cost_per_day),
@@ -579,7 +578,7 @@ aggregate_by_chi <- function(episode_file) {
         "postcode", "DoB", "gpprac"
       )), ~ dplyr::last(., na_rm = TRUE)),
       dplyr::across(
-        c(
+        c("ch_cis_episodes" = "ch_chi_cis",
           "cij_total" = "cij_marker",
           "CIJ_el",
           "CIJ_non_el",
