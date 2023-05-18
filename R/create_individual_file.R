@@ -612,7 +612,6 @@ aggregate_by_chi <- function(episode_file) {
               "advice",
               "homeV",
               "time",
-              "admissions",
               "assessment",
               "other",
               "DN",
@@ -620,33 +619,32 @@ aggregate_by_chi <- function(episode_file) {
               "PCC",
               "_dnas"
             ),
-            -"preventable_admissions"
+            dplyr::starts_with("SDS_option")
           ),
-          dplyr::starts_with("SDS_option")
+          ~ sum(., na.rm = TRUE)
         ),
-        ~ sum(., na.rm = TRUE)
-      ),
-      dplyr::across(
-        c(
-          dplyr::starts_with("sc_"),
-          -"sc_send_lca",
-          -"sc_latest_submission",
-          "HL1_in_FY" = "hh_in_fy",
-          "NSU"
+        dplyr::across(
+          c(
+            dplyr::starts_with("sc_"),
+            -"sc_send_lca",
+            -"sc_latest_submission",
+            "HL1_in_FY" = "hh_in_fy",
+            "NSU"
+          ),
+          ~ max_no_inf(.)
         ),
-        ~ max_no_inf(.)
-      ),
-      dplyr::across(
-        c(
-          condition_cols(),
-          "death_date",
-          "deceased",
-          "year",
-          dplyr::ends_with(c(
-            "_Cohort", "end_fy", "start_fy"
-          )),
-        ),
-        ~ dplyr::first(., na_rm = TRUE)
+        dplyr::across(
+          c(
+            condition_cols(),
+            "death_date",
+            "deceased",
+            "year",
+            dplyr::ends_with(c(
+              "_Cohort", "end_fy", "start_fy"
+            )),
+          ),
+          ~ dplyr::first(., na_rm = TRUE)
+        )
       )
     ) %>%
     # change the data format from data.table to data.frame
