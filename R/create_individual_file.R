@@ -695,8 +695,7 @@ clean_individual_file <- function(individual_file) {
     clean_up_gender() %>%
     dplyr::mutate(
       age = compute_mid_year_age(year, .data$DoB)
-    ) %>%
-    clean_up_postcode()
+    )
 }
 
 #' Drop redundant columns
