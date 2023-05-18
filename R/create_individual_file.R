@@ -476,7 +476,7 @@ aggregate_ch_episodes <- function(episode_file) {
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
   episode_file %>%
-   # dplyr::filter(!is.na(.data$ch_chi_cis)) %>%
+    # dplyr::filter(!is.na(.data$ch_chi_cis)) %>%
     # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
     dplyr::group_by(.data$chi, .data$ch_chi_cis) %>%
@@ -490,9 +490,9 @@ aggregate_ch_episodes <- function(episode_file) {
     # change the data format from data.table to data.frame
     tibble::as_tibble()
 
-   # dplyr::distinct(.data$chi, .data$ch_chi_cis) %>%
-   # dplyr::select(.data$chi, .data$ch_chi_cis, .data$ch_no_cost, .data$ch_ep_start, .data$ch_ep_end, .data$ch_cost_per_day) %>%
-   # dplyr::right_join(episode_file, by = c(.data$chi, .data$ch_chi_cis))
+  # dplyr::distinct(.data$chi, .data$ch_chi_cis) %>%
+  # dplyr::select(.data$chi, .data$ch_chi_cis, .data$ch_no_cost, .data$ch_ep_start, .data$ch_ep_end, .data$ch_cost_per_day) %>%
+  # dplyr::right_join(episode_file, by = c(.data$chi, .data$ch_chi_cis))
 }
 
 #' Clean up CH
