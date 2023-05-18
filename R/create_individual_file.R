@@ -578,7 +578,8 @@ aggregate_by_chi <- function(episode_file) {
         "postcode", "DoB", "gpprac"
       )), ~ dplyr::last(., na_rm = TRUE)),
       dplyr::across(
-        c("ch_cis_episodes" = "ch_chi_cis",
+        c(
+          "ch_cis_episodes" = "ch_chi_cis",
           "cij_total" = "cij_marker",
           "CIJ_el",
           "CIJ_non_el",
