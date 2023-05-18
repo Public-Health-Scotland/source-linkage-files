@@ -623,16 +623,16 @@ aggregate_by_chi <- function(episode_file) {
           ),
           ~ sum(., na.rm = TRUE)
         ),
-        dplyr::across(
-          c(
-            # dplyr::starts_with("sc_"),
-            #-"sc_send_lca",
-            #-"sc_latest_submission",
-            # "HL1_in_FY" = "hh_in_fy",
-            "NSU"
-          ),
-          ~ max_no_inf(.)
-        ),
+        # dplyr::across(
+        #   c(
+        #     # dplyr::starts_with("sc_"),
+        #     #-"sc_send_lca",
+        #     #-"sc_latest_submission",
+        #     # "HL1_in_FY" = "hh_in_fy",
+        #     "NSU"
+        #   ),
+        #   ~ max_no_inf(.)
+        # ),
         dplyr::across(
           c(
             condition_cols(),
