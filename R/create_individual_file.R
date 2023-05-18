@@ -628,7 +628,7 @@ aggregate_by_chi <- function(episode_file) {
             dplyr::starts_with("sc_"),
             -"sc_send_lca",
             -"sc_latest_submission",
-            #"HL1_in_FY" = "hh_in_fy",
+            # "HL1_in_FY" = "hh_in_fy",
             "NSU"
           ),
           ~ max_no_inf(.)
