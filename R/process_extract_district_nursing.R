@@ -46,15 +46,15 @@ process_extract_district_nursing <- function(
 
   # Costs  ---------------------------------------
 
-  # Recode HB codes to HB2019 so they match the cost lookup
   dn_costs <- dn_clean %>%
+    # Recode HB codes to HB2019 so they match the cost lookup
     dplyr::mutate(
       hbtreatcode = dplyr::case_match(
         .data$hbtreatcode,
-        "S08000018" ~ "S08000029",
-        "S08000027" ~ "S08000030",
-        "S08000021" ~ "S08000031",
-        "S08000023" ~ "S08000032",
+        "S08000018" ~ "S08000029", # Fife 2014
+        "S08000027" ~ "S08000030", # Tayside 2014
+        "S08000021" ~ "S08000031", # Glasgow 2018
+        "S08000023" ~ "S08000032", # Lanarkshire 2018
         .default = .data$hbtreatcode
       )
     ) %>%
@@ -67,16 +67,24 @@ process_extract_district_nursing <- function(
       cost_total_net = janitor::round_half_up(.data$cost_total_net)
     ) %>%
     # Create monthly cost vars
-    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
-
+    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
+    # Return HB values to HB2018
+    dplyr::mutate(
+      hbtreatcode = dplyr::case_match(
+        .data$hbtreatcode,
+        "S08000031" ~ "S08000021", # Glasgow
+        "S08000032" ~ "S08000023", # Lanarkshire
+        .default = .data$hbtreatcode
+      )
+    )
 
   ## Aggregate to episodes  ---------------------------------------
 
   care_marker <- dn_costs %>%
     dplyr::group_by(.data$chi) %>%
     dplyr::arrange(.data$record_keydate1, .by_group = TRUE) %>%
-    # Create ccm (Continuous Care Marker) which will group contacts which occur less
-    # than 7 days apart
+    # Create CCM (Continuous Care Marker) which will group contacts
+    # which occur less than 7 days apart
     dplyr::mutate(
       ccm = pmax(
         (.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L,
