@@ -6,13 +6,19 @@
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
+#' @param costs The cost lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
+process_extract_district_nursing <- function(
+    data,
+    year,
+    costs = read_file(get_dn_costs_path()),
+    write_to_disk = TRUE
+    ) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -53,7 +59,7 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
       )
     ) %>%
     # match files with DN Cost Lookup
-    dplyr::left_join(read_file(get_dn_costs_path()),
+    dplyr::left_join(costs,
       by = c("hbtreatcode", "year")
     ) %>%
     # costs are rough estimates we round them to the nearest pound
