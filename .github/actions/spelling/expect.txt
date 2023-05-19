@@ -11,6 +11,7 @@ beddays
 birthtime
 bodyloc
 boxi
+callr
 Canx
 carehome
 careinspectorate
@@ -29,6 +30,7 @@ covr
 cph
 createslf
 dataframe
+datamart
 datazone
 dateformat
 dateop
@@ -163,6 +165,7 @@ SMRA
 smrtype
 SPARRA
 spd
+SPSS
 spss
 stadm
 stefanzweifel
