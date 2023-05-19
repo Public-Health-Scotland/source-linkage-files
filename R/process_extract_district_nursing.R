@@ -97,20 +97,25 @@ process_extract_district_nursing <- function(
   dn_episodes <- care_marker %>%
     dplyr::group_by(.data$year, .data$chi, .data$ccm) %>%
     dplyr::summarise(
-      recid = dplyr::first(.data$recid),
-      smrtype = dplyr::first(.data$smrtype),
       record_keydate1 = min(.data$record_keydate1),
       record_keydate2 = max(.data$record_keydate1),
-      dob = dplyr::last(.data$dob),
-      gender = dplyr::last(.data$gender),
-      gpprac = dplyr::last(.data$gpprac),
-      age = dplyr::last(.data$age),
-      postcode = dplyr::last(.data$postcode),
-      datazone = dplyr::last(.data$datazone),
-      lca = dplyr::last(.data$lca),
-      hscp = dplyr::last(.data$hscp),
-      hbrescode = dplyr::last(.data$hbrescode),
-      hbtreatcode = dplyr::last(.data$hbtreatcode),
+      dplyr::across(
+        c(
+          "recid",
+          "smrtype",
+          "dob",
+          "age",
+          "gender",
+          "gpprac",
+          "postcode",
+          "datazone",
+          "lca",
+          "hscp",
+          "hbrescode",
+          "hbtreatcode"
+        ),
+        ~ dplyr::last(.x)
+      ),
       location = dplyr::first(.data$location_contact),
       diag1 = dplyr::first(.data$primary_intervention),
       diag2 = dplyr::first(.data$intervention_1),
@@ -119,24 +124,17 @@ process_extract_district_nursing <- function(
       diag5 = dplyr::last(.data$intervention_1),
       diag6 = dplyr::last(.data$intervention_2),
       total_no_dn_contacts = dplyr::n(),
-      cost_total_net = sum(.data$cost_total_net),
-      apr_cost = sum(.data$apr_cost),
-      may_cost = sum(.data$may_cost),
-      jun_cost = sum(.data$jun_cost),
-      jul_cost = sum(.data$jul_cost),
-      aug_cost = sum(.data$aug_cost),
-      sep_cost = sum(.data$sep_cost),
-      oct_cost = sum(.data$oct_cost),
-      nov_cost = sum(.data$nov_cost),
-      dec_cost = sum(.data$dec_cost),
-      jan_cost = sum(.data$jan_cost),
-      feb_cost = sum(.data$feb_cost),
-      mar_cost = sum(.data$mar_cost)
+      dplyr::across(
+        c(
+          "cost_total_net",
+          dplyr::ends_with("_cost")
+        ),
+        ~ sum(.x)
+      )
     ) %>%
     dplyr::ungroup()
 
   if (write_to_disk) {
-    # Save as rds file
     dn_episodes %>%
       write_file(get_source_extract_path(year, "DN", check_mode = "write"))
   }
