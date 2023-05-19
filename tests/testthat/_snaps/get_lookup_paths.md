@@ -11,12 +11,3 @@
       [11] "Start"                   "End"                    
       [13] "Date CHP status"         "Health Centre Indicator"
 
----
-
-    Code
-      names(read_file(get_gpprac_ref_path(ext = "sav")))
-    Output
-       [1] "cypher"    "praccode"  "add1"      "add2"      "add3"      "add4"     
-       [7] "postcode"  "telephone" "gms"       "chp"       "start"     "end"      
-      [13] "chpstart"  "hci"      
-
