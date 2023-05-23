@@ -10,16 +10,15 @@
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_nsu_path <- function(year, ...) {
-
   if (!check_year_valid(year, "NSU")) {
     return(get_dummy_boxi_extract_path())
   }
 
-    nsu_file_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "NSU"),
-      file_name = stringr::str_glue("All_CHIs_20{year}.parquet"),
-      ...
-    )
+  nsu_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "NSU"),
+    file_name = stringr::str_glue("All_CHIs_20{year}.parquet"),
+    ...
+  )
 
   return(nsu_file_path)
 }
