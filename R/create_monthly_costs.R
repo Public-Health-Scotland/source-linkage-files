@@ -70,7 +70,7 @@ add_months_df <- dplyr::as_tibble(
   names(add_months_df) <- add_months
 
   daycase_cost_months <- daycase_cost_months %>%
-    cbind(add_months_df) %>%
+    dplyr::bind_cols(add_months_df) %>%
     dplyr::select(c(
       full_cost_col,
       "daycase_check"
