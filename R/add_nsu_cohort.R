@@ -11,9 +11,10 @@
 add_nsu_cohort <- function(data, year) {
   year_param <- year
 
-  if (check_year_valid("2223", "NSU")) {
+  if (!check_year_valid(year, "NSU")) {
     return(data)
-  } else {
+  }
+
     # Check that the variables we need are in the data
     check_variables_exist(data,
       variables = c(
@@ -113,5 +114,4 @@ add_nsu_cohort <- function(data, year) {
       dplyr::select(-dplyr::contains("_nsu"), -"has_chi")
 
     return(return_df)
-  }
 }
