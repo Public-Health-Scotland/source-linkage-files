@@ -31,7 +31,7 @@ test_that("fix_sc_start_dates works for various cases", {
   )
 
   # Expect an error when parameters return NA
-  expect_error(fix_sc_start_dates(NA, NA))
+  expect_equal(fix_sc_start_dates(NA, NA), lubridate::NA_Date_)
 })
 
 
@@ -59,5 +59,7 @@ test_that("fix_sc_end_dates works for various cases", {
   )
 
   # Expect an error when parameters return NA
-  expect_error(fix_sc_end_dates(NA, NA, NA))
+  fix_sc_end_dates(NA, NA, NA) %>%
+    expect_equal(lubridate::NA_Date_) %>%
+    expect_warning()
 })
