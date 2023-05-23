@@ -48,7 +48,7 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-get_spd_path <- function(file_name = NULL, ext = "rds") {
+get_spd_path <- function(file_name = NULL, ext = "parquet") {
   spd_dir <-
     fs::path(
       get_lookups_dir(),
@@ -78,7 +78,7 @@ get_spd_path <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-get_simd_path <- function(file_name = NULL, ext = "rds") {
+get_simd_path <- function(file_name = NULL, ext = "parquet") {
   simd_dir <-
     fs::path(get_lookups_dir(), "Deprivation")
 
