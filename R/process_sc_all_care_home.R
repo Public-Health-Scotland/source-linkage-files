@@ -126,15 +126,15 @@ process_sc_all_care_home <- function(
       .data[["split_episode_counter"]]
     ) %>%
     dplyr::arrange(
-      desc(.data[["period"]]),
-      desc(.data[["ch_discharge_date"]]),
-      desc(.data[["ch_provider"]]),
-      desc(.data[["record_date"]]),
-      desc(.data[["qtr_start"]]),
-      desc(.data[["ch_name"]]),
-      desc(.data[["ch_postcode"]]),
-      desc(.data[["reason_for_admission"]]),
-      desc(.data[["type_of_admission"]]),
+      dplyr::desc(.data[["period"]]),
+      dplyr::desc(.data[["ch_discharge_date"]]),
+      dplyr::desc(.data[["ch_provider"]]),
+      dplyr::desc(.data[["record_date"]]),
+      dplyr::desc(.data[["qtr_start"]]),
+      dplyr::desc(.data[["ch_name"]]),
+      dplyr::desc(.data[["ch_postcode"]]),
+      dplyr::desc(.data[["reason_for_admission"]]),
+      dplyr::desc(.data[["type_of_admission"]]),
       .data[["gender"]],
       .data[["dob"]],
       .data[["postcode"]]
