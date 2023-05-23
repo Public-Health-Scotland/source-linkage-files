@@ -21,7 +21,7 @@ get_slf_temp_path <-
 
     year_dir <- fs::path(base_dir, year)
 
-    temp_files_availiable <- fs::dir_ls(year_dir,
+    temp_files_available <- fs::dir_ls(year_dir,
       glob = "*temp-*"
     ) %>%
       stringr::str_match(
@@ -31,11 +31,11 @@ get_slf_temp_path <-
       ) %>%
       magrittr::extract(, "version")
 
-    temp_files_availiable <-
-      temp_files_availiable[!is.na(temp_files_availiable)]
+    temp_files_available <-
+      temp_files_available[!is.na(temp_files_available)]
 
-    if (length(temp_files_availiable) == 0L) {
-      years_availiable <- fs::dir_ls(
+    if (length(temp_files_available) == 0L) {
+      years_available <- fs::dir_ls(
         base_dir,
         recurse = TRUE,
         glob = stringr::str_glue("*temp-source-{file_version}*")
@@ -49,28 +49,28 @@ get_slf_temp_path <-
         unique()
 
       years_formatted <-
-        cli::cli_vec(years_availiable[!is.na(years_availiable)],
+        cli::cli_vec(years_available[!is.na(years_available)],
           style = list("vec-last" = " or ")
         )
 
       cli::cli_abort(
         c(
           "No temp {file_version} files for {.val {year}}",
-          "{cli::qty(years_availiable)}{?There is only/You can choose from} {.val {years_formatted}}."
+          "{cli::qty(years_available)}{?There is only/You can choose from} {.val {years_formatted}}."
         ),
         call = rlang::caller_env()
       )
     }
 
-    if (!(temp_version %in% temp_files_availiable)) {
-      temp_files_formatted <- cli::cli_vec(temp_files_availiable,
+    if (!(temp_version %in% temp_files_available)) {
+      temp_files_formatted <- cli::cli_vec(temp_files_available,
         style = list("vec-last" = " or ")
       )
 
       cli::cli_abort(
         c(
-          "Temp {file_version} file {.val {temp_version}} isn't availiable for {.val {year}}.",
-          "{cli::qty(temp_files_availiable)}{?There is only/You can choose from} {.val {temp_files_formatted}}."
+          "Temp {file_version} file {.val {temp_version}} isn't available for {.val {year}}.",
+          "{cli::qty(temp_files_available)}{?There is only/You can choose from} {.val {temp_files_formatted}}."
         ),
         call = rlang::caller_env()
       )
