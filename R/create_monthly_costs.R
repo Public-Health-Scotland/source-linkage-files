@@ -26,7 +26,7 @@ create_monthly_costs <- function(data,
   beddays_months <- data %>%
     dplyr::select(dplyr::ends_with("_beddays")) %>%
     dplyr::rename_with(~ stringr::str_replace(., "_beddays", "_cost"))
-  # Fix the instances where the episode is a daycase;
+  # Fix the instances where the episode is a daycase (in maternity data);
   # these will sometimes have 0.33 for the yearstay,
   # this should be applied to the relevant month.
   full_cost_col <- month.abb[c(4:12, 1:3)] %>%
@@ -64,9 +64,9 @@ create_monthly_costs <- function(data,
   available_months <- setdiff(names(daycase_cost_months), "daycase_check")
   add_months <- setdiff(full_cost_col, available_months)
 
-add_months_df <- dplyr::as_tibble(
-  matrix(0, nrow = nrow(data), ncol = length(add_months))
-)
+  add_months_df <- dplyr::as_tibble(
+    matrix(0, nrow = nrow(data), ncol = length(add_months))
+  )
   names(add_months_df) <- add_months
 
   daycase_cost_months <- daycase_cost_months %>%
