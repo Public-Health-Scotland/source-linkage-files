@@ -13,7 +13,7 @@ add_dd <- function(data, year) {
   data <- data %>%
     dplyr::mutate(
       # remember to revoke the cij_end_date with dummy_cij_end
-      cij_start_date_lower = cij_start_date - lubridate::days(1),
+      cij_start_date_lower = .data$cij_start_date - lubridate::days(1),
       cij_end_date_upper = cij_end_date + lubridate::days(1),
       cij_end_month = last_date_month(cij_end_date),
       is_dummy_cij_start = is.na(cij_start_date) & !is.na(cij_end_date),
