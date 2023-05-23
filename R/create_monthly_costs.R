@@ -67,7 +67,7 @@ create_monthly_costs <- function(data,
 add_months_df <- dplyr::as_tibble(
   matrix(0, nrow = nrow(data), ncol = length(add_months))
 )```
-  colnames(add_months_df) <- add_months
+  names(add_months_df) <- add_months
 
   daycase_cost_months <- daycase_cost_months %>%
     cbind(add_months_df) %>%
