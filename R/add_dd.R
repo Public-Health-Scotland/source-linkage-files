@@ -262,38 +262,38 @@ add_dd <- function(data, year) {
       record_keydate2_dd,
       .keep_all = TRUE
     ) %>%
-  # tidy up and rename columns to match the format of episode files
-  dplyr::select(
-    "year" = "year_dd",
-    "recid" = "recid_dd",
-    "record_keydate1" = "record_keydate1_dd",
-    "record_keydate2" = "record_keydate2_dd",
-    "smrtype" = "smrtype_dd",
-    "chi",
-    "gender",
-    "dob",
-    "age",
-    "gpprac",
-    "postcode" = "postcode_dd",
-    "lca" = "dd_responsible_lca",
-    "hbtreatcode" = "hbtreatcode_dd",
-    "original_admission_date",
-    "amended_dates",
-    "delay_end_reason",
-    "primary_delay_reason",
-    "secondary_delay_reason",
-    "cij_marker",
-    "cij_start_date",
-    "cij_end_date",
-    "cij_pattype_code",
-    "cij_ipdc",
-    "cij_admtype",
-    "cij_adm_spec",
-    "cij_dis_spec",
-    "location",
-    "spec" = "spec_dd",
-    "dd_type"
-  ) %>%
+    # tidy up and rename columns to match the format of episode files
+    dplyr::select(
+      "year" = "year_dd",
+      "recid" = "recid_dd",
+      "record_keydate1" = "record_keydate1_dd",
+      "record_keydate2" = "record_keydate2_dd",
+      "smrtype" = "smrtype_dd",
+      "chi",
+      "gender",
+      "dob",
+      "age",
+      "gpprac",
+      "postcode" = "postcode_dd",
+      "lca" = "dd_responsible_lca",
+      "hbtreatcode" = "hbtreatcode_dd",
+      "original_admission_date",
+      "amended_dates",
+      "delay_end_reason",
+      "primary_delay_reason",
+      "secondary_delay_reason",
+      "cij_marker",
+      "cij_start_date",
+      "cij_end_date",
+      "cij_pattype_code",
+      "cij_ipdc",
+      "cij_admtype",
+      "cij_adm_spec",
+      "cij_dis_spec",
+      "location",
+      "spec" = "spec_dd",
+      "dd_type"
+    ) %>%
     # combine DD with episode data
     dplyr::bind_rows( # restore cij_end_date
       data %>%
