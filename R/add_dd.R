@@ -275,7 +275,7 @@ add_dd <- function(data, year) {
     "age",
     "gpprac",
     "postcode" = "postcode_dd",
-    "lca" = "dd_responsible_lca",# ???
+    "lca" = "dd_responsible_lca",
     "hbtreatcode" = "hbtreatcode_dd",
     "original_admission_date",
     "amended_dates",
