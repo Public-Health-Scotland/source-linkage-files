@@ -1,6 +1,7 @@
 Accom
 admloc
 admtype
+ADPE
 adtf
 arrivalmode
 arth
@@ -30,6 +31,7 @@ cph
 createslf
 dataframe
 datazone
+datediff
 dateformat
 dateop
 datetime
@@ -58,6 +60,7 @@ Eileanan
 envir
 feb
 fileext
+Finalise
 fst
 ftm
 fyear
@@ -74,6 +77,7 @@ hbtreatcode
 hbtreatname
 HCP
 HHG
+hhg
 hjust
 hms
 homecare
@@ -161,7 +165,9 @@ smr
 SMRA
 smrtype
 SPARRA
+sparra
 spd
+SPSS
 spss
 stadm
 stefanzweifel
@@ -181,12 +187,14 @@ tidyselect
 TODOs
 uid
 ungroup
+Unicode
 updown
 upi
 vline
 xintercept
 xlsx
 yearstay
+YYYYQX
 zihao
 zsav
 zstd
