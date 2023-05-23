@@ -64,9 +64,9 @@ create_monthly_costs <- function(data,
   available_months <- setdiff(names(daycase_cost_months), "daycase_check")
   add_months <- setdiff(full_cost_col, available_months)
 
-add_months_df <- dplyr::as_tibble(
-  matrix(0, nrow = nrow(data), ncol = length(add_months))
-)
+  add_months_df <- dplyr::as_tibble(
+    matrix(0, nrow = nrow(data), ncol = length(add_months))
+  )
   names(add_months_df) <- add_months
 
   daycase_cost_months <- daycase_cost_months %>%
