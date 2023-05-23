@@ -37,7 +37,7 @@ create_monthly_costs <- function(data,
     dplyr::select(!dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(
       daycase_added = (yearstay == 0.33),
-      daycase_added = tidyr::replace_na(daycase_added, FALSE)
+      daycase_added = tidyr::replace_na(.data$daycase_added, FALSE)
     ) %>%
     dplyr::mutate(daycase_check = .data$daycase_added) %>%
     dplyr::mutate(cost_month = dplyr::if_else(
