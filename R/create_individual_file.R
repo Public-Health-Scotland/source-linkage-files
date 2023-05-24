@@ -576,12 +576,13 @@ aggregate_by_chi <- function(episode_file) {
       record_keydate2,
       keytime2
     ) %>%
-    dplyr::group_by("chi") %>%
+    dplyr::group_by(.data$chi) %>%
     dplyr::summarise(
       gender = mean(gender),
-      dplyr::across(dplyr::ends_with(c(
-        "postcode", "DoB", "gpprac"
-      )), ~ dplyr::last(., na_rm = TRUE)),
+      dplyr::across(
+        dplyr::ends_with(c("postcode", "DoB", "gpprac")),
+        ~ dplyr::last(., na_rm = TRUE)
+      ),
       dplyr::across(
         c(
           "ch_cis_episodes" = "ch_chi_cis",
@@ -614,37 +615,37 @@ aggregate_by_chi <- function(episode_file) {
               "time",
               "assessment",
               "other",
-              "DN",
+              # "DN",
               "NHS24",
               "PCC",
               "_dnas"
-            ),
-            dplyr::starts_with("SDS_option")
+            )
           ),
-          ~ sum(., na.rm = TRUE)
+          dplyr::starts_with("SDS_option")
         ),
-        # dplyr::across(
-        #   c(
-        #     # dplyr::starts_with("sc_"),
-        #     #-"sc_send_lca",
-        #     #-"sc_latest_submission",
-        #     # "HL1_in_FY" = "hh_in_fy",
-        #     "NSU"
-        #   ),
-        #   ~ max_no_inf(.)
-        # ),
-        dplyr::across(
-          c(
-            condition_cols(),
-            # "death_date",
-            # "deceased",
-            "year",
-            dplyr::ends_with(c(
-              "_Cohort", "end_fy", "start_fy"
-            )),
-          ),
-          ~ dplyr::first(., na_rm = TRUE)
-        )
+        ~ sum(., na.rm = TRUE)
+      ),
+      # dplyr::across(
+      #   c(
+      #     # dplyr::starts_with("sc_"),
+      #     #-"sc_send_lca",
+      #     #-"sc_latest_submission",
+      #     # "HL1_in_FY" = "hh_in_fy",
+      #     "NSU"
+      #   ),
+      #   ~ max_no_inf(.)
+      # ),
+      dplyr::across(
+        c(
+          condition_cols(),
+          # "death_date",
+          # "deceased",
+          "year",
+          dplyr::ends_with(c(
+            "_Cohort", "end_fy", "start_fy"
+          )),
+        ),
+        ~ dplyr::first(., na_rm = TRUE)
       )
     ) %>%
     # change the data format from data.table to data.frame
