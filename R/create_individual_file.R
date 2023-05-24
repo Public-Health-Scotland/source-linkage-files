@@ -715,7 +715,7 @@ drop_cols <- function(individual_file) {
       -"dob",
       -"postcode",
       -"gpprac",
-      -"no_paid_items"#,
+      -"no_paid_items" # ,
       #-"total_no_dn_contacts"
     )
 }
