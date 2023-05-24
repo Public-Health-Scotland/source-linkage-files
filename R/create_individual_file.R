@@ -90,8 +90,8 @@ add_all_columns <- function(episode_file) {
     add_ae_columns("AE", .data$recid == "AE2") %>%
     add_pis_columns("PIS", .data$recid == "PIS") %>%
     add_ooh_columns("OoH", .data$recid == "OoH") %>%
-    add_dn_columns("DN", .data$recid == "DN") %>%
-    add_cmh_columns("CMH", .data$recid == "CMH") %>%
+    # add_dn_columns("DN", .data$recid == "DN") %>%
+    # add_cmh_columns("CMH", .data$recid == "CMH") %>%
     # add_dd_columns("DD", .data$recid == "DD") %>%
     add_nsu_columns("NSU", .data$recid == "NSU") %>%
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
@@ -715,8 +715,8 @@ drop_cols <- function(individual_file) {
       -"dob",
       -"postcode",
       -"gpprac",
-      -"no_paid_items",
-      -"total_no_dn_contacts"
+      -"no_paid_items"#,
+      #-"total_no_dn_contacts"
     )
 }
 
