@@ -61,10 +61,10 @@ test_that("population estimates file path returns as expected", {
 test_that("gpprac reference file path returns as expected", {
   expect_s3_class(get_gpprac_ref_path(), "fs_path")
 
-  expect_equal(fs::path_ext(get_gpprac_ref_path()), "sav")
+  expect_equal(fs::path_ext(get_gpprac_ref_path()), "csv")
 
   expect_error(fs::path_ext(get_gpprac_ref_path(ext = "rds")))
   expect_error(fs::path_ext(get_gpprac_ref_path(ext = "parquet")))
 
-  expect_true(fs::file_exists(get_gpprac_ref_path()))
+  expect_snapshot(names(read_file(get_gpprac_ref_path())))
 })

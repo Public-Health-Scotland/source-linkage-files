@@ -4,12 +4,19 @@
 \alias{process_extract_district_nursing}
 \title{Process the District Nursing extract}
 \usage{
-process_extract_district_nursing(data, year, write_to_disk = TRUE)
+process_extract_district_nursing(
+  data,
+  year,
+  costs = read_file(get_dn_costs_path()),
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{data}{The extract to process}
 
 \item{year}{The year to process, in FY format.}
+
+\item{costs}{The cost lookup}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
