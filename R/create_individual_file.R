@@ -741,12 +741,7 @@ clean_up_gender <- function(individual_file) {
     dplyr::mutate(
       gender = dplyr::case_when(
         .data$gender != 1.5 ~ round(.data$gender),
-        as.numeric(substr(.data$chi, 9, 9)) %% 2 == 1 ~ 1,
-        TRUE ~ 2
-      ),
-      gender = dplyr::case_when(
-        .data$gender == 1 ~ "Male",
-        .data$gender == 2 ~ "Female"
+        .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
     )
 }
