@@ -3,9 +3,6 @@
 #' @param data a dataframe containing the required variables
 #'
 #' @return a dataframe overwritten with the latest sc id.
-#'
-#' @export
-#'
 replace_sc_id_with_latest <- function(data) {
   # Check for required variables
   check_variables_exist(

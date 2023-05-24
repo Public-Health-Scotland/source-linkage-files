@@ -8,7 +8,7 @@
 #' @param cost_var Cost variable e.g. cost_total_net
 #'
 #' @return a dataframe with flag (1 or 0) for each Health Board
-#' @export
+#'
 #' @family flag functions
 create_hb_cost_test_flags <- function(data, hb_var, cost_var) {
   data <- data %>%

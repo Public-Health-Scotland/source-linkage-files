@@ -20,6 +20,12 @@ process_extract_home_care <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  # Check that we have data for this year
+  if (!check_year_valid(year, "HC")) {
+    # If not return an empty tibble
+    return(tibble::tibble())
+  }
+
   # Selections for financial year------------------------------------
 
   hc_data <- data %>%
@@ -60,7 +66,7 @@ process_extract_home_care <- function(
     # remove cost variables not from current year
     dplyr::select(-(tidyselect::contains("hc_cost_2"))) %>%
     # create cost total net
-    dplyr::mutate(cost_total_net = rowSums(dplyr::across(tidyselect::contains("hc_costs_q"))))
+    dplyr::mutate(cost_total_net = rowSums(dplyr::pick(tidyselect::contains("hc_cost_q"))))
 
 
   # Outfile ---------------------------------------

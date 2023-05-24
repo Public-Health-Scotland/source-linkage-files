@@ -22,10 +22,10 @@ process_extract_cmh <- function(data,
   year <- check_year_format(year)
 
   # If data is available in the FY then run processing.
-  # If no data has passed through, return NULL.
-  if (is.null(data)) {
-    return(NULL)
+  if (identical(data, tibble::tibble())) {
+    return(data)
   }
+
   # Data Cleaning  ---------------------------------------
 
   cmh_clean <- data %>%
