@@ -648,6 +648,7 @@ aggregate_by_chi <- function(episode_file) {
         ~ dplyr::first(., na_rm = TRUE)
       )
     ) %>%
+    ungroup() %>%
     # change the data format from data.table to data.frame
     tibble::as_tibble()
 }
