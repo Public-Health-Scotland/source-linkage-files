@@ -12,11 +12,14 @@ beddays
 birthtime
 bodyloc
 boxi
+callr
 Canx
 carehome
 careinspectorate
 cattend
 CCYY
+chp
+chpstart
 cij
 Classificat
 cls
@@ -30,6 +33,7 @@ covr
 cph
 createslf
 dataframe
+datamart
 datazone
 datediff
 dateformat
@@ -68,6 +72,8 @@ fyyear
 geogs
 ggplot
 GLS
+gms
+GPOo
 gpprac
 gss
 hbnames
@@ -75,6 +81,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 hbtreatname
+hci
 HCP
 HHG
 hhg
@@ -106,6 +113,7 @@ mcmahon
 MMMYY
 Moohan
 mpat
+multiday
 multisession
 multistaff
 NAs
@@ -128,8 +136,10 @@ phsmethods
 phsopendata
 placeinc
 plics
+PMS
 postcodes
 PPAs
+Prac
 prac
 praccode
 ptypes
