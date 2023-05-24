@@ -109,6 +109,7 @@ mcmahon
 MMMYY
 Moohan
 mpat
+multiday
 multisession
 multistaff
 NAs

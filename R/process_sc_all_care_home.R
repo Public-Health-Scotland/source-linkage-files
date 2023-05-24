@@ -125,8 +125,22 @@ process_sc_all_care_home <- function(
       .data[["nursing_care_provision"]],
       .data[["split_episode_counter"]]
     ) %>%
+    dplyr::arrange(
+      dplyr::desc(.data[["period"]]),
+      dplyr::desc(.data[["ch_discharge_date"]]),
+      dplyr::desc(.data[["ch_provider"]]),
+      dplyr::desc(.data[["record_date"]]),
+      dplyr::desc(.data[["qtr_start"]]),
+      dplyr::desc(.data[["ch_name"]]),
+      dplyr::desc(.data[["ch_postcode"]]),
+      dplyr::desc(.data[["reason_for_admission"]]),
+      dplyr::desc(.data[["type_of_admission"]]),
+      .data[["gender"]],
+      .data[["dob"]],
+      .data[["postcode"]]
+    ) %>%
     dplyr::summarise(
-      sc_latest_submission = dplyr::last(.data[["period"]]),
+      sc_latest_submission = dplyr::first(.data[["period"]]),
       dplyr::across(
         c(
           "ch_discharge_date",
@@ -138,7 +152,7 @@ process_sc_all_care_home <- function(
           "reason_for_admission",
           "type_of_admission"
         ),
-        dplyr::last
+        dplyr::first
       ),
       dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%
