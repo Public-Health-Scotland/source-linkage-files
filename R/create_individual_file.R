@@ -699,7 +699,7 @@ clean_individual_file <- function(individual_file) {
     drop_cols() %>%
     clean_up_gender() %>%
     dplyr::mutate(
-      age = compute_mid_year_age(year, .data$DoB)
+      age = compute_mid_year_age(year, .data$dob)
     )
 }
 
