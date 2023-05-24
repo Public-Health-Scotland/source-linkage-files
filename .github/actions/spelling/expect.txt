@@ -71,6 +71,7 @@ geogs
 ggplot
 GLS
 gms
+GPOo
 gpprac
 gss
 hbnames
