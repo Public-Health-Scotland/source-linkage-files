@@ -17,6 +17,8 @@ carehome
 careinspectorate
 cattend
 CCYY
+chp
+chpstart
 cij
 Classificat
 cls
@@ -68,6 +70,7 @@ fyyear
 geogs
 ggplot
 GLS
+gms
 gpprac
 gss
 hbnames
@@ -75,6 +78,7 @@ hbpraccode
 hbrescode
 hbtreatcode
 hbtreatname
+hci
 HCP
 HHG
 hjust
@@ -127,8 +131,10 @@ phsmethods
 phsopendata
 placeinc
 plics
+PMS
 postcodes
 PPAs
+Prac
 prac
 praccode
 ptypes
