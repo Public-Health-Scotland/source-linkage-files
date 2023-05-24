@@ -103,6 +103,7 @@ mcmahon
 MMMYY
 Moohan
 mpat
+multiday
 multisession
 multistaff
 NAs
@@ -163,6 +164,7 @@ SMRA
 smrtype
 SPARRA
 spd
+SPSS
 spss
 stadm
 stefanzweifel
