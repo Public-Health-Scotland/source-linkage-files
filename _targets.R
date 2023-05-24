@@ -398,7 +398,7 @@ list(
         "home_care" = tar_read(source_sc_home_care),
         "sds" = tar_read(source_sc_sds)
       ),
-      year = years_to_run,
+      year,
       write_to_disk
     ))
   )
