@@ -259,6 +259,7 @@ list(
     tar_target(source_dn_extract, process_extract_district_nursing(
       dn_data,
       year,
+      costs = dn_cost_lookup,
       write_to_disk = write_to_disk
     )),
     tar_target(source_homelessness_extract, process_extract_homelessness(
