@@ -74,6 +74,10 @@ list(
     )
   ),
   tar_target(
+    source_gp_lookup_tests,
+    process_tests_lookup_gpprac(source_gp_lookup)
+  ),
+  tar_target(
     source_pc_lookup,
     process_lookup_postcode(
       spd_path = spd_path,
@@ -81,6 +85,10 @@ list(
       locality_path = locality_path,
       write_to_disk = write_to_disk
     )
+  ),
+  tar_target(
+    source_pc_lookup_tests,
+    process_tests_lookup_pc(source_pc_lookup)
   ),
   ## Cost Lookups ##
   tar_target(ch_cost_lookup, process_costs_ch_rmd()),

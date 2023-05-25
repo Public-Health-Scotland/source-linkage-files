@@ -1,4 +1,8 @@
-#' Process pc Lookup tests
+#' Process PC (postcode) Lookup tests
+#'
+#' @inheritParams process_tests_acute
+#' @param update The update to compare the lookup to, defaults to
+#' [previous_update()].
 #'
 #' @description This script takes the processed acute extract and produces
 #' a test comparison with the previous data. This is written to disk as a CSV.
@@ -6,14 +10,12 @@
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @export
-process_tests_lookup_pc <- function() {
+process_tests_lookup_pc <- function(data, update = previous_update()) {
   comparison <- produce_test_comparison(
     old_data = produce_slf_postcode_tests(
-      read_file(get_slf_postcode_path(update = previous_update()))
+      read_file(get_slf_postcode_path(update = update))
     ),
-    new_data = produce_slf_postcode_tests(
-      read_file(get_slf_postcode_path())
-    )
+    new_data = produce_slf_postcode_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "source_pc_lookup")
 
