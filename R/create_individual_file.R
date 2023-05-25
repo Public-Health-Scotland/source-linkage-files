@@ -567,8 +567,6 @@ aggregate_by_chi <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   episode_file %>%
-    # use as.data.table to change the data format to data.table to accelerate
-    data.table::as.data.table() %>%
     dplyr::arrange(
       chi,
       record_keydate1,
@@ -648,9 +646,7 @@ aggregate_by_chi <- function(episode_file) {
         ~ dplyr::first(., na_rm = TRUE)
       )
     ) %>%
-    ungroup() %>%
-    # change the data format from data.table to data.frame
-    tibble::as_tibble()
+    dplyr::ungroup()
 }
 
 #' Condition columns
