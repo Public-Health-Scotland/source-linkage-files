@@ -56,6 +56,7 @@ list(
     sc_demog_lookup_tests,
     process_tests_sc_demographics(sc_demog_lookup)
   ),
+  # TODO add tests for the CHI deaths lookup
   tar_target(
     slf_chi_deaths_lookup,
     process_lookup_chi_deaths(
