@@ -20,7 +20,6 @@ tar_option_set(
 )
 
 years_to_run <- c("1819", "1920", "2021", "2122", "2223")
-years_to_run <- check_year_format(years_to_run)
 
 list(
   tar_rds(write_to_disk, TRUE),
