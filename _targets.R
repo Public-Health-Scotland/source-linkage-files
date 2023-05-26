@@ -253,7 +253,7 @@ list(
     tar_target(
       acute_source_extract_tests,
       process_tests_acute(
-        acute_data,
+        acute_source_extract,
         year
       )
     ),
@@ -265,7 +265,7 @@ list(
     tar_target(
       ae_source_extract_tests,
       process_tests_ae(
-        ae_data,
+        ae_source_extract,
         year
       )
     ),
