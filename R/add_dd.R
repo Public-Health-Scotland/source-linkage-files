@@ -14,15 +14,15 @@ add_dd <- function(data, year) {
     dplyr::mutate(
       # remember to revoke the cij_end_date with dummy_cij_end
       cij_start_date_lower = .data$cij_start_date - lubridate::days(1),
-      cij_end_date_upper = cij_end_date + lubridate::days(1),
-      cij_end_month = last_date_month(cij_end_date),
-      is_dummy_cij_start = is.na(cij_start_date) & !is.na(cij_end_date),
+      cij_end_date_upper = .data$cij_end_date + lubridate::days(1),
+      cij_end_month = last_date_month(.data$cij_end_date),
+      is_dummy_cij_start = is.na(.data$cij_start_date) & !is.na(.data$cij_end_date),
       dummy_cij_start = dplyr::if_else(
         is_dummy_cij_start,
         lubridate::as_date("1900-01-01"),
-        cij_start_date_lower
+        .data$cij_start_date_lower
       ),
-      is_dummy_cij_end = !is.na(cij_start_date) & is.na(cij_end_date),
+      is_dummy_cij_end = !is.na(.data$cij_start_date) & is.na(.data$cij_end_date),
       dummy_cij_end = dplyr::if_else(
         is_dummy_cij_end,
         lubridate::today(),
