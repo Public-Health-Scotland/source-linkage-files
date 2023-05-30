@@ -50,8 +50,8 @@ add_dd <- function(data, year) {
 
   by_dd <- dplyr::join_by(
     chi,
-    x$record_keydate1 >= y$dummy_cij_start,
-    x$dummy_keydate2 <= y$dummy_cij_end
+    record_keydate1 >= dummy_cij_start,
+    dummy_keydate2 <= dummy_cij_end
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
