@@ -8,6 +8,11 @@
 #'
 #' @export
 process_tests_district_nursing <- function(data, year) {
+  if (identical(data, tibble::tibble())) {
+    # Deal with years where we have no data
+    return(data)
+  }
+
   old_data <- get_existing_data_for_tests(data) %>%
     # TODO: remove this bit after SPSS stopped
     # replace NA by 0 in monthly costs
