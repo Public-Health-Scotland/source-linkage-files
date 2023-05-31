@@ -709,7 +709,7 @@ drop_cols <- function(individual_file) {
     dplyr::select(
       -month_cols(),
       -"ch_no_cost",
-      -"dob",
+      # -"dob",
       -"postcode",
       -"gpprac",
       -"no_paid_items" # ,
