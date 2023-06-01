@@ -23,8 +23,7 @@ calculate_measures <- function(
     data,
     vars = NULL,
     measure = c("sum", "all", "min-max"),
-    group_by = NULL
-) {
+    group_by = NULL) {
   measure <- match.arg(measure)
 
   if (!is.null(group_by)) {

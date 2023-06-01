@@ -75,7 +75,7 @@ produce_individual_file_tests <- function(data) {
     calculate_measures(
       vars = c(
         slfhelper::ltc_vars
-        ),
+      ),
       measure = "sum"
     )
 
