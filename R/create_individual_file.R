@@ -11,7 +11,7 @@ create_individual_file <- function(episode_file) {
     aggregate_ch_episodes() %>%
     clean_up_ch() %>%
     recode_gender() %>%
-    aggregate_by_chi() %>%
+    aggregate_by_chi_zihao() %>%
     clean_individual_file()
 }
 
