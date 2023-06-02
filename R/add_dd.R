@@ -35,8 +35,9 @@ add_dd <- function(data, year) {
   dd_data <-
     read_file(get_source_extract_path(year_param, "DD")) %>%
     dplyr::rename(
-      record_keydate1 = keydate1_dateformat,
-      record_keydate2 = keydate2_dateformat
+      # TODO Change the name of the variables in the DD extract rather than here.
+      record_keydate1 = "keydate1_dateformat",
+      record_keydate2 = "keydate2_dateformat"
     ) %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
