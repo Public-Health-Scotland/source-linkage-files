@@ -7,6 +7,11 @@
 #'
 #' @export
 process_tests_cmh <- function(data, year) {
+  if (identical(data, tibble::tibble())) {
+    # Deal with years where we have no data
+    return(data)
+  }
+
   old_data <- get_existing_data_for_tests(data)
 
   comparison <- produce_test_comparison(
