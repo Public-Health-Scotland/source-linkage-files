@@ -21,6 +21,7 @@ Add NSU cohort to working file
 \code{\link[=get_nsu_path]{get_nsu_path()}}
 
 Other episode file: 
-\code{\link{add_ppa_flag}()}
+\code{\link{add_ppa_flag}()},
+\code{\link{link_delayed_discharge_eps}()}
 }
 \concept{episode file}
