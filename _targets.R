@@ -19,7 +19,7 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1819")
+years_to_run <- c("1920")
 
 list(
   tar_rds(write_to_disk, TRUE),
