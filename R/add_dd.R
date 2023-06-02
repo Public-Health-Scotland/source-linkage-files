@@ -1,13 +1,15 @@
-#' Add Delay Discharge to working file
+#' Link  Delayed Discharge to WIP episode file
 #'
 #' @param data The input data frame
 #' @param year The year being processed
 #'
-#' @return A data frame linking delay discharge cohorts
+#' @return A data frame with the delayed discharge cohort added and linked
+#' using the `cij_marker`
+#'
 #' @export
 #'
 #' @family episode file
-add_dd <- function(data, year) {
+link_delayed_discharge_eps <- function(data, year) {
   year_param <- year
 
   data <- data %>%

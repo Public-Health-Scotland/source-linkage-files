@@ -19,7 +19,7 @@ was preventable or not.
 }
 \seealso{
 Other episode file: 
-\code{\link{add_dd}()},
-\code{\link{add_nsu_cohort}()}
+\code{\link{add_nsu_cohort}()},
+\code{\link{link_delayed_discharge_eps}()}
 }
 \concept{episode file}

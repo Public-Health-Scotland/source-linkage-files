@@ -74,7 +74,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     fill_missing_cij_markers() %>%
     create_cost_inc_dna() %>%
     add_ppa_flag() %>%
-    add_dd(year) %>%
+    link_delayed_discharge_eps(year) %>%
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
