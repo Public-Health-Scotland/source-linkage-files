@@ -1,6 +1,7 @@
 Accom
 admloc
 admtype
+ADPE
 adtf
 arrivalmode
 arth
@@ -35,6 +36,7 @@ createslf
 dataframe
 datamart
 datazone
+datediff
 dateformat
 dateop
 datetime
@@ -83,6 +85,7 @@ hbtreatname
 hci
 HCP
 HHG
+hhg
 hjust
 hms
 homecare
@@ -174,6 +177,7 @@ smr
 SMRA
 smrtype
 SPARRA
+sparra
 spd
 SPSS
 spss
@@ -202,6 +206,7 @@ vline
 xintercept
 xlsx
 yearstay
+YYYYQX
 zihao
 zsav
 zstd
