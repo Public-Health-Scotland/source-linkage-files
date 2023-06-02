@@ -18,15 +18,15 @@ add_dd <- function(data, year) {
       cij_end_month = last_date_month(.data$cij_end_date),
       is_dummy_cij_start = is.na(.data$cij_start_date) & !is.na(.data$cij_end_date),
       dummy_cij_start = dplyr::if_else(
-        is_dummy_cij_start,
+        .data$is_dummy_cij_start,
         lubridate::as_date("1900-01-01"),
         .data$cij_start_date_lower
       ),
       is_dummy_cij_end = !is.na(.data$cij_start_date) & is.na(.data$cij_end_date),
       dummy_cij_end = dplyr::if_else(
-        is_dummy_cij_end,
+        .data$is_dummy_cij_end,
         lubridate::today(),
-        cij_end_month
+        .data$cij_end_month
       )
     )
 
@@ -40,8 +40,8 @@ add_dd <- function(data, year) {
     ) %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
-      is_dummy_keydate2 = is.na(record_keydate2),
-      dummy_keydate2 = dplyr::if_else(is_dummy_keydate2,
+      is_dummy_keydate2 = is.na(.data$record_keydate2),
+      dummy_keydate2 = dplyr::if_else(.data$is_dummy_keydate2,
         lubridate::today(),
         record_keydate2
       ),
