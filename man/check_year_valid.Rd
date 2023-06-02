@@ -9,7 +9,7 @@ is only available from 2016/17 onwards.}
 check_year_valid(
   year,
   type = c("Acute", "AE", "AT", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH",
-    "HC", "Homelessness", "Maternity", "MH", "Outpatients", "PIS", "SDS")
+    "HC", "Homelessness", "Maternity", "MH", "NSU", "Outpatients", "PIS", "SDS")
 )
 }
 \arguments{

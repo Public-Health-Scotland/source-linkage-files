@@ -3,17 +3,15 @@
 #' @description This script takes the processed gpprac lookup and produces
 #' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_lookup_pc
 #'
 #' @export
-process_tests_lookup_gpprac <- function() {
+process_tests_lookup_gpprac <- function(data, update = previous_update()) {
   comparison <- produce_test_comparison(
     old_data = produce_slf_gpprac_tests(
-      read_file(get_slf_gpprac_path(update = previous_update()))
+      read_file(get_slf_gpprac_path(update = update))
     ),
-    new_data = produce_slf_gpprac_tests(
-      read_file(get_slf_gpprac_path())
-    )
+    new_data = produce_slf_gpprac_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "source_gpprac_lookup")
 

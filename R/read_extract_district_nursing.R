@@ -19,8 +19,6 @@ read_extract_district_nursing <- function(
       `Primary Intervention Category` = col_character(),
       `Other Intervention Category (1)` = col_character(),
       `Other Intervention Category (2)` = col_character(),
-      `Other Intervention Category (3)` = col_character(),
-      `Other Intervention Category (4)` = col_character(),
       `UPI Number [C]` = col_character(),
       `Patient DoB Date [C]` = col_date(format = "%Y/%m/%d %T"),
       `Patient Postcode [C] (Contact)` = col_character(),
