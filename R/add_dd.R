@@ -44,36 +44,41 @@ add_dd <- function(data, year) {
       is_dummy_keydate2 = is.na(.data$record_keydate2),
       dummy_keydate2 = dplyr::if_else(.data$is_dummy_keydate2,
         lubridate::today(),
-        record_keydate2
+        .data$record_keydate2
       ),
       dummy_id = dplyr::row_number()
     )
 
   by_dd <- dplyr::join_by(
-    chi,
-    record_keydate1 >= dummy_cij_start,
-    dummy_keydate2 <= dummy_cij_end
+    .data$chi,
+    .data$record_keydate1 >= .data$dummy_cij_start,
+    .data$dummy_keydate2 <= .data$dummy_cij_end
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
       by = by_dd,
       suffix = c("_dd", "")
     ) %>%
-    dplyr::arrange(cij_start_date, cij_end_date, cij_marker, postcode) %>%
-    # remove duplicate rows, but still got some duplicate mis-matches
+    dplyr::arrange(
+      .data$cij_start_date,
+      .data$cij_end_date,
+      .data$cij_marker,
+      .data$postcode
+    ) %>%
+    # remove duplicate rows, but still got some duplicate mismatches
     dplyr::distinct(
-      chi,
-      cij_start_date,
-      cij_end_date,
-      cij_marker,
-      record_keydate1_dd,
-      record_keydate2_dd,
+      .data$chi,
+      .data$cij_start_date,
+      .data$cij_end_date,
+      .data$cij_marker,
+      .data$record_keydate1_dd,
+      .data$record_keydate2_dd,
       .keep_all = TRUE
     ) %>%
     # determine DD quality
     dplyr::mutate(
       dd_type = dplyr::if_else(
-        is.na(cij_marker),
+        is.na(.data$cij_marker),
         "no-cij",
         dplyr::case_when(
           # "1"	"Accurate Match - (1)"
@@ -194,7 +199,7 @@ add_dd <- function(data, year) {
         )
       ),
       dd_type = factor(
-        dd_type,
+        .data$dd_type,
         levels = c(
           "1",
           "1P",
@@ -218,16 +223,16 @@ add_dd <- function(data, year) {
 
       # For "1APE", assign 1APE cij_end_date to record_keydate2_dd
       record_keydate2_dd = dplyr::if_else(
-        dd_type == "1APE" | dd_type == "3ADPE",
-        cij_end_date,
-        record_keydate2_dd,
+        .data$dd_type == "1APE" | .data$dd_type == "3ADPE",
+        .data$cij_end_date,
+        .data$record_keydate2_dd
       ),
-      datediff_end = abs(cij_end_date - record_keydate2_dd),
-      datediff_start = cij_start_date - record_keydate1_dd
+      datediff_end = abs(.data$cij_end_date - .data$record_keydate2_dd),
+      datediff_start = .data$cij_start_date - .data$record_keydate1_dd
     ) %>%
-    dplyr::filter(dd_type != "-") %>%
     dplyr::mutate(smrtype_dd = dplyr::case_when(
       dd_type %in% c(
+    dplyr::filter(.data$dd_type != "-") %>%
         "1",
         "1P",
         "1A",
@@ -250,17 +255,19 @@ add_dd <- function(data, year) {
     # remove duplicated rows when many to many inner join
     # keep the records that closest to the cij record
     dplyr::arrange(
-      chi,
-      original_admission_date,
-      record_keydate1_dd,
-      record_keydate2_dd,
-      dummy_id,
-      dd_type,
-      datediff_end, -datediff_start
+      .data$chi,
+      .data$original_admission_date,
+      .data$record_keydate1_dd,
+      .data$record_keydate2_dd,
+      .data$dummy_id,
+      .data$dd_type,
+      .data$datediff_end,
+      dplyr::desc(.data$datediff_start)
     ) %>%
-    dplyr::distinct(postcode,
-      record_keydate1_dd,
-      record_keydate2_dd,
+    dplyr::distinct(
+      .data$postcode,
+      .data$record_keydate1_dd,
+      .data$record_keydate2_dd,
       .keep_all = TRUE
     ) %>%
     # tidy up and rename columns to match the format of episode files
