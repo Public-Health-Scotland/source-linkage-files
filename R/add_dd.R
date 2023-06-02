@@ -230,9 +230,10 @@ add_dd <- function(data, year) {
       datediff_end = abs(.data$cij_end_date - .data$record_keydate2_dd),
       datediff_start = .data$cij_start_date - .data$record_keydate1_dd
     ) %>%
-    dplyr::mutate(smrtype_dd = dplyr::case_when(
-      dd_type %in% c(
     dplyr::filter(.data$dd_type != "-") %>%
+    dplyr::mutate(smrtype_dd = dplyr::case_match(
+      .data$dd_type,
+      c(
         "1",
         "1P",
         "1A",
@@ -250,7 +251,7 @@ add_dd <- function(data, year) {
         "4",
         "4P"
       ) ~ "DD-CIJ",
-      dd_type %in% c("no-cij") ~ "DD-No CIJ"
+      "no-cij" ~ "DD-No CIJ"
     )) %>%
     # remove duplicated rows when many to many inner join
     # keep the records that closest to the cij record
