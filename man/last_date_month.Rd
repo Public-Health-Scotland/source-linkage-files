@@ -4,19 +4,19 @@
 \alias{last_date_month}
 \title{Return the end date of the month of the given date}
 \usage{
-last_date_month(x)
+last_date_month(date)
 }
 \arguments{
-\item{x}{a date with a date format}
+\item{date}{a date with a date format.}
 }
 \value{
-a vector of dates of the end date of the FY year
+a vector of dates, giving the last day of the month.
 }
 \description{
 Return the end date of the month of the given date
 }
 \examples{
-last_date_month(lubridate::as_date("2020-02-05"))
+last_date_month(Sys.Date())
 
 }
 \seealso{
