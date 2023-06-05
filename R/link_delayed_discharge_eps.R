@@ -52,9 +52,9 @@ link_delayed_discharge_eps <- function(data, year) {
     )
 
   by_dd <- dplyr::join_by(
-    .data$chi,
-    .data$record_keydate1 >= .data$dummy_cij_start,
-    .data$dummy_keydate2 <= .data$dummy_cij_end
+    chi,
+    x$record_keydate1 >= y$dummy_cij_start,
+    x$dummy_keydate2 <= y$dummy_cij_end
   )
   data <- dd_data %>%
     dplyr::inner_join(data,
