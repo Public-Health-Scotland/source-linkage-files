@@ -496,6 +496,13 @@ list(
       ),
       year,
       write_to_disk
-    ))
+    )),
+    tar_target(
+      episode_file_tests,
+      process_tests_episode_file(
+        data = ep_file,
+        year = year
+      )
+    )
   )
 )
