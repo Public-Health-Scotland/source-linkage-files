@@ -233,8 +233,8 @@ link_delayed_discharge_eps <- function(data, year) {
       datediff_start = .data$cij_start_date - .data$record_keydate1_dd
     ) %>%
     dplyr::filter(.data$dd_type != "-") %>%
-    dplyr::mutate(smrtype_dd = dplyr::case_match(
-      .data$dd_type,
+    dplyr::mutate(smrtype = dplyr::case_match(
+      as.character(.data$dd_type),
       c(
         "1",
         "1P",
@@ -279,7 +279,7 @@ link_delayed_discharge_eps <- function(data, year) {
       "recid" = "recid_dd",
       "record_keydate1" = "record_keydate1_dd",
       "record_keydate2" = "record_keydate2_dd",
-      "smrtype" = "smrtype_dd",
+      "smrtype",
       "chi",
       "gender",
       "dob",
