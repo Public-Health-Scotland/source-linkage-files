@@ -161,5 +161,6 @@ aggregate_by_chi_zihao <- function(episode_file) {
     aggregated_data <- data.table::rbindlist(list(aggregated_data, chunk_agg))
   }
   aggregated_data <- dplyr::as_tibble(aggregated_data)
+  names(aggregated_data) = tolower(names(aggregated_data))
   return(aggregated_data)
 }
