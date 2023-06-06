@@ -17,15 +17,19 @@
 write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   # Set up the workbook -----------------------------------------------------
 
-  source_tests_path <- fs::path(
+  tests_workbook_path <- fs::path(
     get_slf_dir(),
     "Tests",
-    stringr::str_glue(latest_update(), "_tests.xlsx")
+    ifelse(
+      is.null(year),
+      stringr::str_glue(latest_update(), "_lookups_tests.xlsx"),
+      stringr::str_glue(latest_update(), "_{year}_tests.xlsx")
+    )
   )
 
-  if (fs::file_exists(source_tests_path)) {
+  if (fs::file_exists(tests_workbook_path)) {
     # Load the data from the existing workbook
-    wb <- openxlsx::loadWorkbook(source_tests_path)
+    wb <- openxlsx::loadWorkbook(tests_workbook_path)
   } else {
     # Create a blank workbook object
     wb <- openxlsx::createWorkbook()
@@ -118,16 +122,26 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
 
   # Write workbook to disk --------------------------------------------------
 
+  # Reorder the sheets alphabetically
+  sheet_names <- wb$sheet_names
+  names(sheet_names) <- wb$sheetOrder
+
+  openxlsx::worksheetOrder(wb) <- names(sort(sheet_names))
+
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
-    source_tests_path,
+    tests_workbook_path,
     overwrite = TRUE
   )
 
-  if (fs::file_info(source_tests_path)$user == Sys.getenv("USER")) {
+  if (fs::file_info(path = tests_workbook_path)$user == Sys.getenv("USER")) {
     # Set the correct permissions
-    fs::file_chmod(path = source_tests_path, mode = "660")
+    fs::file_chmod(path = tests_workbook_path, mode = "660")
   }
+
+  cli::cli_alert_success(
+    "The tests for {year}{ifelse(is.null(year), '', '-')}{sheet_name} were written to {.file {fs::path_file(tests_workbook_path)}}"
+  )
 
   return(comparison_data)
 }

@@ -56,6 +56,7 @@ list(
     sc_demog_lookup_tests,
     process_tests_sc_demographics(sc_demog_lookup)
   ),
+  # TODO add tests for the CHI deaths lookup
   tar_target(
     slf_chi_deaths_lookup,
     process_lookup_chi_deaths(
@@ -73,6 +74,10 @@ list(
     )
   ),
   tar_target(
+    source_gp_lookup_tests,
+    process_tests_lookup_gpprac(source_gp_lookup)
+  ),
+  tar_target(
     source_pc_lookup,
     process_lookup_postcode(
       spd_path = spd_path,
@@ -80,6 +85,10 @@ list(
       locality_path = locality_path,
       write_to_disk = write_to_disk
     )
+  ),
+  tar_target(
+    source_pc_lookup_tests,
+    process_tests_lookup_pc(source_pc_lookup)
   ),
   ## Cost Lookups ##
   tar_target(ch_cost_lookup, process_costs_ch_rmd()),
@@ -241,16 +250,38 @@ list(
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      acute_source_extract_tests,
+      process_tests_acute(
+        acute_source_extract,
+        year
+      )
+    ),
     tar_target(ae_source_extract, process_extract_ae(
       ae_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      ae_source_extract_tests,
+      process_tests_ae(
+        ae_source_extract,
+        year
+      )
+    ),
     tar_target(source_cmh_extract, process_extract_cmh(
       cmh_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      source_cmh_extract_tests,
+      process_tests_cmh(
+        source_cmh_extract,
+        year
+      )
+    ),
+    # TODO add tests for the Delayed Discharges extract
     tar_target(source_dd_extract, process_extract_delayed_discharges(
       dd_data,
       year,
@@ -262,51 +293,115 @@ list(
       costs = dn_cost_lookup,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      source_dn_extract_tests,
+      process_tests_district_nursing(
+        source_dn_extract,
+        year
+      )
+    ),
     tar_target(source_homelessness_extract, process_extract_homelessness(
       homelessness_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      source_homelessness_extract_tests,
+      process_tests_homelessness(
+        source_homelessness_extract,
+        year
+      )
+    ),
     tar_target(ltc_source_extract, process_lookup_ltc(
       ltc_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      ltc_tests,
+      process_tests_ltcs(
+        ltc_source_extract,
+        year
+      )
+    ),
     tar_target(maternity_source_extract, process_extract_maternity(
       maternity_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      maternity_source_extract_tests,
+      process_tests_maternity(
+        maternity_source_extract,
+        year
+      )
+    ),
     tar_target(mental_health_source_extract, process_extract_mental_health(
       mental_health_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      mental_health_source_extract_tests,
+      process_tests_mental_health(
+        mental_health_source_extract,
+        year
+      )
+    ),
     tar_target(nrs_deaths_source_extract, process_extract_nrs_deaths(
       nrs_deaths_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      nrs_deaths_source_extract_tests,
+      process_tests_nrs_deaths(
+        nrs_deaths_source_extract,
+        year
+      )
+    ),
     tar_target(ooh_source_extract, process_extract_gp_ooh(
       year,
       ooh_data,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      ooh_source_extract_tests,
+      process_tests_gp_ooh(
+        ooh_source_extract,
+        year
+      )
+    ),
     tar_target(outpatients_source_extract, process_extract_outpatients(
       outpatients_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      outpatients_source_extract_tests,
+      process_tests_outpatients(
+        outpatients_source_extract,
+        year
+      )
+    ),
     tar_target(pis_source_extract, process_extract_prescribing(
       prescribing_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      prescribing_tests,
+      process_tests_prescribing(
+        pis_source_extract,
+        year
+      )
+    ),
     ### Target process year specific social care ###
     tar_target(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
     ),
+    # TODO add tests for the SC client lookup
     tar_target(
       sc_client_lookup,
       process_lookup_sc_client(
