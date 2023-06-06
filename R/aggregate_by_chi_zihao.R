@@ -11,14 +11,28 @@ aggregate_by_chi_zihao <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   episode_file <- episode_file %>%
-    dplyr::select(-dplyr::ends_with("_gpprac") | "most_recent_gpprac") %>%
-    dplyr::select(-dplyr::ends_with("_postcode") | "most_recent_postcode") %>%
-    dplyr::select(-dplyr::ends_with("_DoB") | "dob")
+    dplyr::select(-c(postcode, gpprac)) %>%
+    dplyr::rename("gpprac" = "most_recent_gpprac",
+                  "postcode" = "most_recent_postcode") %>%
+    dplyr::select(-c(
+      dplyr::ends_with("_gpprac"),
+      dplyr::ends_with("_postcode"),
+      dplyr::ends_with("_DoB")
+    ))
 
   data.table::setDT(episode_file) # Convert to data.table
 
   # Sort the data within each chunk
-  data.table::setkeyv(episode_file, c("chi", "record_keydate1", "keytime1", "record_keydate2", "keytime2"))
+  data.table::setkeyv(
+    episode_file,
+    c(
+      "chi",
+      "record_keydate1",
+      "keytime1",
+      "record_keydate2",
+      "keytime2"
+    )
+  )
 
   data.table::setnames(
     episode_file,
@@ -36,7 +50,8 @@ aggregate_by_chi_zihao <- function(episode_file) {
   aggregated_data <- data.table::data.table()
 
   # Process the data in chunks
-  chunk_size <- min(nrow(episode_file), 5e7) # Adjust the chunk size as per your system's memory capacity
+  chunk_size <- min(nrow(episode_file), 5e7)
+  # Adjust the chunk size as per your system's memory capacity
   n_chunks <- nrow(episode_file) %/% chunk_size
 
 
