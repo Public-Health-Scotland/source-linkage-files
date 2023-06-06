@@ -12,8 +12,10 @@ aggregate_by_chi_zihao <- function(episode_file) {
 
   episode_file <- episode_file %>%
     dplyr::select(-c(postcode, gpprac)) %>%
-    dplyr::rename("gpprac" = "most_recent_gpprac",
-                  "postcode" = "most_recent_postcode") %>%
+    dplyr::rename(
+      "gpprac" = "most_recent_gpprac",
+      "postcode" = "most_recent_postcode"
+    ) %>%
     dplyr::select(-c(
       dplyr::ends_with("_gpprac"),
       dplyr::ends_with("_postcode"),
