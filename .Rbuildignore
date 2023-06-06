@@ -1,0 +1,24 @@
+^source-linkage-files\.Rproj$
+^\.Rproj\.user$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^copy_slf\.sh$
+^00-Sort_BI_Extracts\.py$
+^LICENSE\.md$
+^Reablement changes\.html$
+^hc_data_issues\.Rmd$
+^hc_data_issues\.html$
+^hc_methodology\.Rmd$
+^hc_methodology\.html$
+^hc_methodology_simple\.html$
+^hc_methodology_simple\.Rmd$
+^missing_derived_hours\.html$
+^R_development_SOP\.md$
+^codecov\.yml$
+^Rmarkdown$
+^\.lintr$
+^_targets\.R$
+^_targets\.yaml$
+^_SPSS_archived$

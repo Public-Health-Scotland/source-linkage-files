@@ -38,7 +38,7 @@ jobs:
         id: styler-location
         run: |
           cat(
-            "location=", 
+            "location=",
             styler::cache_info(format = "tabular")$location,
             "\n",
             file = Sys.getenv("GITHUB_OUTPUT"),
@@ -57,23 +57,15 @@ jobs:
             ${{ runner.os }}-
 
       - name: Style standard package functions and tests
-        run: styler::style_pkg(filetype = c(".R", ".Rmd", ".Rmarkdown", ".Rnw"))
+        run: styler::style_pkg()
         shell: Rscript {0}
 
-      - name: Style production scripts
-        run: styler::style_dir("Production_scripts/")
+      - name: Style the targets file
+        run: styler::style_file("_targets.R")
         shell: Rscript {0}
 
       - name: Style other scripts
-        run: styler::style_dir("Make_R_files/")
-        shell: Rscript {0}
-
-      - name: Style Rmarkdown files
-        run: styler::style_dir("Rmarkdown/")
-        shell: Rscript {0}
-
-      - name: Style older scripts
-        run: styler::style_dir("All_years/")
+        run: styler::style_dir(".")
         shell: Rscript {0}
 
       - name: Commit and push changes
