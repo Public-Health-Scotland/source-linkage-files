@@ -1,5 +1,13 @@
-library(data.table)
-
+#' Aggregate by CHI
+#'
+#' @description Aggregate episode file by CHI to convert into
+#' individual file.
+#'
+#' @importFrom data.table :=
+#' @importFrom data.table .N
+#' @importFrom data.table .SD
+#'
+#' @inheritParams create_individual_file
 aggregate_by_chi_zihao <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
@@ -24,7 +32,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
   aggregated_data <- data.table::data.table()
 
   # Process the data in chunks
-  chunk_size <- min(nrow(episode_file), 1e7) # Adjust the chunk size as per your system's memory capacity
+  chunk_size <- min(nrow(episode_file), 5e7) # Adjust the chunk size as per your system's memory capacity
   n_chunks <- nrow(episode_file) %/% chunk_size
 
 
