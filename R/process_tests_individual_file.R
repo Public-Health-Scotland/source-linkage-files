@@ -15,7 +15,7 @@ process_tests_individual_file <- function(data, year) {
     recid = TRUE
   ) %>%
     dplyr::arrange(.data[["recid"]]) %>%
-    write_tests_xlsx(sheet_name = "ep_file", year)
+    write_tests_xlsx(sheet_name = "individual_file", year)
 
   return(comparison)
 }
