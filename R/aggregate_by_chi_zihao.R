@@ -3,13 +3,17 @@
 #' @description Aggregate episode file by CHI to convert into
 #' individual file.
 #'
-#' @importFrom data.table :=
 #' @importFrom data.table .N
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
 aggregate_by_chi_zihao <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
+
+  episode_file <- episode_file %>%
+    dplyr::select(-dplyr::ends_with("_gpprac") | "most_recent_gpprac") %>%
+    dplyr::select(-dplyr::ends_with("_postcode") | "most_recent_postcode") %>%
+    dplyr::select(-dplyr::ends_with("_DoB") | "dob")
 
   data.table::setDT(episode_file) # Convert to data.table
 
