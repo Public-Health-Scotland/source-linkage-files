@@ -10,8 +10,8 @@ process_tests_individual_file <- function(data, year) {
   old_data <- get_existing_data_for_tests(data, file_version = "individual")
 
   comparison <- produce_test_comparison(
-    old_data = produce_episode_file_tests(old_data),
-    new_data = produce_episode_file_tests(data),
+    old_data = produce_individual_file_tests(old_data),
+    new_data = produce_individual_file_tests(data),
     recid = TRUE
   ) %>%
     dplyr::arrange(.data[["recid"]]) %>%
