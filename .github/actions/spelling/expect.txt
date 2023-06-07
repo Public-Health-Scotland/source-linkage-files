@@ -57,11 +57,8 @@ downup
 dplyr
 dsn
 dtplyr
-Dunbartonshire
 DVPROD
 dvprod
-Eilean
-Eileanan
 envir
 feb
 fileext
@@ -92,13 +89,11 @@ homecare
 hscp
 hscpnames
 infyyear
-Inverclyde
 ipdc
 itle
 iwalk
 jaccard
 jan
-jennifer
 jul
 keydate
 keyring
@@ -109,11 +104,8 @@ ltc
 ltcs
 lubridate
 magrittr
-Mcbride
-mcmahon
 MMMYY
 monthflag
-Moohan
 mpat
 multiday
 multisession
@@ -165,7 +157,6 @@ rspm
 RStudio
 rstudioapi
 Rtype
-Scougal
 seealso
 selfharm
 Siar
@@ -188,7 +179,6 @@ stringr
 submis
 tadm
 tarchetypes
-Tayside
 tbl
 telecare
 testthat
@@ -207,6 +197,5 @@ xintercept
 xlsx
 yearstay
 YYYYQX
-zihao
 zsav
 zstd
