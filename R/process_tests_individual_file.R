@@ -8,7 +8,7 @@
 #' @export
 process_tests_individual_file <- function(data, year) {
   old_data <- get_existing_data_for_tests(data, file_version = "individual") %>%
-      slfhelper::get_chi()
+    slfhelper::get_chi()
 
   comparison <- produce_test_comparison(
     old_data = produce_individual_file_tests(old_data),
