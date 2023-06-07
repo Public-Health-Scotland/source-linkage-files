@@ -166,3 +166,30 @@ aggregate_by_chi_zihao <- function(episode_file) {
   names(aggregated_data) <- tolower(names(aggregated_data))
   return(aggregated_data)
 }
+
+
+#' Aggregate CIS episodes
+#'
+#' @description Aggregate CH variables by CHI and CIS.
+#'
+#'
+#' @inheritParams create_individual_file
+aggregate_ch_episodes_zihao <- function(episode_file) {
+  cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
+
+  # Convert to data.table
+  data.table::setDT(episode_file)
+
+  # Perform grouping and aggregation
+  episode_file <- episode_file[, `:=`(
+    ch_no_cost = max(ch_no_cost),
+    ch_ep_start = min(record_keydate1),
+    ch_ep_end = max(ch_ep_end),
+    ch_cost_per_day = mean(ch_cost_per_day)
+  ), by = .(chi, ch_chi_cis)]
+
+  # Convert back to tibble if needed
+  episode_file <- tibble::as_tibble(episode_file)
+
+  return(episode_file)
+}

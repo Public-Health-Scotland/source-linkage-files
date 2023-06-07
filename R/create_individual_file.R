@@ -8,7 +8,7 @@ create_individual_file <- function(episode_file) {
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
-    aggregate_ch_episodes() %>%
+    aggregate_ch_episodes_zihao() %>%
     clean_up_ch() %>%
     recode_gender() %>%
     aggregate_by_chi_zihao() %>%
@@ -710,8 +710,8 @@ drop_cols <- function(individual_file) {
       -month_cols(),
       -"ch_no_cost",
       # -"dob",
-      -"postcode",
-      -"gpprac",
+      # -"postcode",
+      # -"gpprac",
       -"no_paid_items" # ,
       #-"total_no_dn_contacts"
     )
