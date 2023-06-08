@@ -1,6 +1,5 @@
 ^source-linkage-files\.Rproj$
 ^\.Rproj\.user$
-\.sps$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
@@ -16,11 +15,10 @@
 ^hc_methodology_simple\.html$
 ^hc_methodology_simple\.Rmd$
 ^missing_derived_hours\.html$
-^All_years$
-^Make_R_files$
 ^R_development_SOP\.md$
 ^codecov\.yml$
 ^Rmarkdown$
 ^\.lintr$
 ^_targets\.R$
 ^_targets\.yaml$
+^_SPSS_archived$

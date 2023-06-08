@@ -48,7 +48,7 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-get_spd_path <- function(file_name = NULL, ext = "rds") {
+get_spd_path <- function(file_name = NULL, ext = "parquet") {
   spd_dir <-
     fs::path(
       get_lookups_dir(),
@@ -78,7 +78,7 @@ get_spd_path <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-get_simd_path <- function(file_name = NULL, ext = "rds") {
+get_simd_path <- function(file_name = NULL, ext = "parquet") {
   simd_dir <-
     fs::path(get_lookups_dir(), "Deprivation")
 
@@ -130,9 +130,8 @@ get_datazone_pop_path <- function(file_name = NULL, ext = "rds") {
 #' @export
 #'
 #' @family lookup file paths
-get_gpprac_ref_path <- function(ext = "sav") {
-  gpprac_dir <-
-    fs::path(get_lookups_dir(), "National Reference Files")
+get_gpprac_ref_path <- function(ext = "csv") {
+  gpprac_dir <- fs::path(get_lookups_dir(), "National Reference Files")
 
   gpprac_path <- get_file_path(
     directory = gpprac_dir,

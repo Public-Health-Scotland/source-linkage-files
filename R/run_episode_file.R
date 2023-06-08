@@ -47,6 +47,8 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
       "op1a",
       "age",
       "cij_marker",
+      "cij_start_date",
+      "cij_end_date",
       "cij_pattype_code",
       "cij_ipdc",
       "cij_admtype",
@@ -87,10 +89,10 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE, ni
         .
       } else {
         add_ppa_flag(.) %>%
-          add_nsu_cohort(year)
+          add_nsu_cohort(year) %>%
+          link_delayed_discharge_eps(year)
       }
     } %>%
-    # TODO add Link Delayed Discharge here (From C02)
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
     {

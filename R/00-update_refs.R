@@ -7,7 +7,7 @@
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Mar_2023"
+  "Jun_2023"
 }
 
 #' Previous update
@@ -61,7 +61,7 @@ previous_update <- function(months_ago = 3L, override = NULL) {
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Dec22"
+  "Jul16_Mar23"
 }
 
 #' The latest financial year for Cost uplift setting

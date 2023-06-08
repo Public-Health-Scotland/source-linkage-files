@@ -21,12 +21,12 @@ test_that("SPD file path returns as expected", {
   suppressMessages({
     expect_s3_class(get_spd_path(), "fs_path")
 
-    expect_equal(fs::path_ext(get_spd_path()), "rds")
+    expect_equal(fs::path_ext(get_spd_path()), "parquet")
 
     expect_match(get_spd_path(), "Scottish_Postcode_Directory_.+?")
 
     expect_true(fs::file_exists(get_spd_path()))
-    expect_true(fs::file_exists(get_spd_path(ext = "parquet")))
+    expect_true(fs::file_exists(get_spd_path(ext = "rds")))
   })
 })
 
@@ -34,7 +34,7 @@ test_that("SIMD file path returns as expected", {
   suppressMessages({
     expect_s3_class(get_simd_path(), "fs_path")
 
-    expect_equal(fs::path_ext(get_simd_path()), "rds")
+    expect_equal(fs::path_ext(get_simd_path()), "parquet")
 
     expect_match(
       get_simd_path(),
@@ -42,6 +42,7 @@ test_that("SIMD file path returns as expected", {
     )
 
     expect_true(fs::file_exists(get_simd_path()))
+    expect_true(fs::file_exists(get_simd_path(ext = "rds")))
   })
 })
 
@@ -60,10 +61,10 @@ test_that("population estimates file path returns as expected", {
 test_that("gpprac reference file path returns as expected", {
   expect_s3_class(get_gpprac_ref_path(), "fs_path")
 
-  expect_equal(fs::path_ext(get_gpprac_ref_path()), "sav")
+  expect_equal(fs::path_ext(get_gpprac_ref_path()), "csv")
 
   expect_error(fs::path_ext(get_gpprac_ref_path(ext = "rds")))
   expect_error(fs::path_ext(get_gpprac_ref_path(ext = "parquet")))
 
-  expect_true(fs::file_exists(get_gpprac_ref_path()))
+  expect_snapshot(names(read_file(get_gpprac_ref_path())))
 })
