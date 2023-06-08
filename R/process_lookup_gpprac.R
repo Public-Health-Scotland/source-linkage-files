@@ -18,13 +18,13 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
                                   spd_path = get_spd_path(),
                                   write_to_disk = TRUE) {
   # Read Lookup files ---------------------------------------
-  # gp lookup
+  # GP reference lookup
   gpprac_ref_file <-
     read_file(gpprac_ref_path) %>%
-    # select only praccode and postcode
+    # select only `praccode` and `postcode`
     dplyr::select(
-      gpprac = .data$praccode,
-      .data$postcode
+      gpprac = .data$`Prac code`,
+      postcode = .data$Postcode
     )
 
   # postcode lookup

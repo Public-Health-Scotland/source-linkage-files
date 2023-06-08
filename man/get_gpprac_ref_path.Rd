@@ -4,7 +4,7 @@
 \alias{get_gpprac_ref_path}
 \title{GP Practice Reference File Path (gpprac)}
 \usage{
-get_gpprac_ref_path(ext = "sav")
+get_gpprac_ref_path(ext = "csv")
 }
 \arguments{
 \item{ext}{The extension (type of the file) - optional}

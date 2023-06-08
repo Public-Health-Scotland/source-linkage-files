@@ -2,9 +2,15 @@
 % Please edit documentation in R/process_tests_lookup_pc.R
 \name{process_tests_lookup_pc}
 \alias{process_tests_lookup_pc}
-\title{Process pc Lookup tests}
+\title{Process PC (postcode) Lookup tests}
 \usage{
-process_tests_lookup_pc()
+process_tests_lookup_pc(data, update = previous_update())
+}
+\arguments{
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+
+\item{update}{The update to compare the lookup to, defaults to
+\code{\link[=previous_update]{previous_update()}}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.

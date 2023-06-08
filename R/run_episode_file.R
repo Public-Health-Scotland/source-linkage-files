@@ -37,6 +37,8 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       "op1a",
       "age",
       "cij_marker",
+      "cij_start_date",
+      "cij_end_date",
       "cij_pattype_code",
       "cij_ipdc",
       "cij_admtype",
@@ -72,7 +74,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     fill_missing_cij_markers() %>%
     create_cost_inc_dna() %>%
     add_ppa_flag() %>%
-    # TODO add Link Delayed Discharge here (From C02)
+    link_delayed_discharge_eps(year) %>%
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%

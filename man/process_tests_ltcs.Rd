@@ -4,10 +4,12 @@
 \alias{process_tests_ltcs}
 \title{Process LTCs tests}
 \usage{
-process_tests_ltcs(year)
+process_tests_ltcs(data, year)
 }
 \arguments{
-\item{year}{The financial year to process}
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+
+\item{year}{the financial year of the extract in the format '1718'.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
