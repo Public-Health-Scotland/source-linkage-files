@@ -6,13 +6,18 @@
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
+#' @param costs The cost lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
+process_extract_district_nursing <- function(
+    data,
+    year,
+    costs = read_file(get_dn_costs_path()),
+    write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -40,20 +45,20 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
 
   # Costs  ---------------------------------------
 
-  # Recode HB codes to HB2019 so they match the cost lookup
   dn_costs <- dn_clean %>%
+    # Recode HB codes to HB2019 so they match the cost lookup
     dplyr::mutate(
       hbtreatcode = dplyr::case_match(
         .data$hbtreatcode,
-        "S08000018" ~ "S08000029",
-        "S08000027" ~ "S08000030",
-        "S08000021" ~ "S08000031",
-        "S08000023" ~ "S08000032",
+        "S08000018" ~ "S08000029", # Fife 2014
+        "S08000027" ~ "S08000030", # Tayside 2014
+        "S08000021" ~ "S08000031", # Glasgow 2018
+        "S08000023" ~ "S08000032", # Lanarkshire 2018
         .default = .data$hbtreatcode
       )
     ) %>%
     # match files with DN Cost Lookup
-    dplyr::left_join(read_file(get_dn_costs_path()),
+    dplyr::left_join(costs,
       by = c("hbtreatcode", "year")
     ) %>%
     # costs are rough estimates we round them to the nearest pound
@@ -61,16 +66,24 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
       cost_total_net = janitor::round_half_up(.data$cost_total_net)
     ) %>%
     # Create monthly cost vars
-    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
-
+    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
+    # Return HB values to HB2018
+    dplyr::mutate(
+      hbtreatcode = dplyr::case_match(
+        .data$hbtreatcode,
+        "S08000031" ~ "S08000021", # Glasgow
+        "S08000032" ~ "S08000023", # Lanarkshire
+        .default = .data$hbtreatcode
+      )
+    )
 
   ## Aggregate to episodes  ---------------------------------------
 
   care_marker <- dn_costs %>%
     dplyr::group_by(.data$chi) %>%
     dplyr::arrange(.data$record_keydate1, .by_group = TRUE) %>%
-    # Create ccm (Continuous Care Marker) which will group contacts which occur less
-    # than 7 days apart
+    # Create CCM (Continuous Care Marker) which will group contacts
+    # which occur less than 7 days apart
     dplyr::mutate(
       ccm = pmax(
         (.data$record_keydate1 - dplyr::lag(.data$record_keydate1)) > 7L,
@@ -83,20 +96,25 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
   dn_episodes <- care_marker %>%
     dplyr::group_by(.data$year, .data$chi, .data$ccm) %>%
     dplyr::summarise(
-      recid = dplyr::first(.data$recid),
-      smrtype = dplyr::first(.data$smrtype),
       record_keydate1 = min(.data$record_keydate1),
       record_keydate2 = max(.data$record_keydate1),
-      dob = dplyr::last(.data$dob),
-      gender = dplyr::last(.data$gender),
-      gpprac = dplyr::last(.data$gpprac),
-      age = dplyr::last(.data$age),
-      postcode = dplyr::last(.data$postcode),
-      datazone = dplyr::last(.data$datazone),
-      lca = dplyr::last(.data$lca),
-      hscp = dplyr::last(.data$hscp),
-      hbrescode = dplyr::last(.data$hbrescode),
-      hbtreatcode = dplyr::last(.data$hbtreatcode),
+      dplyr::across(
+        c(
+          "recid",
+          "smrtype",
+          "dob",
+          "age",
+          "gender",
+          "gpprac",
+          "postcode",
+          "datazone",
+          "lca",
+          "hscp",
+          "hbrescode",
+          "hbtreatcode"
+        ),
+        ~ dplyr::last(.x)
+      ),
       location = dplyr::first(.data$location_contact),
       diag1 = dplyr::first(.data$primary_intervention),
       diag2 = dplyr::first(.data$intervention_1),
@@ -105,24 +123,17 @@ process_extract_district_nursing <- function(data, year, write_to_disk = TRUE) {
       diag5 = dplyr::last(.data$intervention_1),
       diag6 = dplyr::last(.data$intervention_2),
       total_no_dn_contacts = dplyr::n(),
-      cost_total_net = sum(.data$cost_total_net),
-      apr_cost = sum(.data$apr_cost),
-      may_cost = sum(.data$may_cost),
-      jun_cost = sum(.data$jun_cost),
-      jul_cost = sum(.data$jul_cost),
-      aug_cost = sum(.data$aug_cost),
-      sep_cost = sum(.data$sep_cost),
-      oct_cost = sum(.data$oct_cost),
-      nov_cost = sum(.data$nov_cost),
-      dec_cost = sum(.data$dec_cost),
-      jan_cost = sum(.data$jan_cost),
-      feb_cost = sum(.data$feb_cost),
-      mar_cost = sum(.data$mar_cost)
+      dplyr::across(
+        c(
+          "cost_total_net",
+          dplyr::ends_with("_cost")
+        ),
+        ~ sum(.x)
+      )
     ) %>%
     dplyr::ungroup()
 
   if (write_to_disk) {
-    # Save as rds file
     dn_episodes %>%
       write_file(get_source_extract_path(year, "DN", check_mode = "write"))
   }
