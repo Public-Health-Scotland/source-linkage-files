@@ -53,9 +53,10 @@ calculate_measures <- function(data,
     data <- data %>%
       dplyr::summarise(
         dplyr::across(
-        tidyselect::everything(),
-        ~ sum(.x, na.rm = TRUE)
-      ))
+          tidyselect::everything(),
+          ~ sum(.x, na.rm = TRUE)
+        )
+      )
   } else if (measure == "min-max") {
     data <- data %>%
       dplyr::select(tidyselect::contains({{ vars }})) %>%
@@ -73,9 +74,10 @@ calculate_measures <- function(data,
       ) %>%
       dplyr::mutate(
         dplyr::across(
-        dplyr::where(lubridate::is.Date),
-        ~ convert_date_to_numeric(.)
-      ))
+          dplyr::where(lubridate::is.Date),
+          ~ convert_date_to_numeric(.)
+        )
+      )
   }
 
   if (!is.null(group_by)) {
