@@ -41,7 +41,7 @@ Imports:
     phsmethods (>= 0.2.2),
     phsopendata (>= 0.0.1.0),
     purrr (>= 1.0.1),
-    qs (>= 0.25.6),
+    qs (>= 0.25.5),
     R.utils (>= 2.12.2),
     readr (>= 2.1.0),
     rlang (>= 1.1.0),
