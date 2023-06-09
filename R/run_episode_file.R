@@ -314,14 +314,14 @@ join_cohort_lookups <- function(ep_file_data, year) {
         ),
       by = "chi"
     ) %>%
-      dplyr::left_join(
-        service_use_cohorts %>%
-          dplyr::select(
-            "chi",
-            "service_use_cohort"
-          ),
-        by = "chi"
-      )
+    dplyr::left_join(
+      service_use_cohorts %>%
+        dplyr::select(
+          "chi",
+          "service_use_cohort"
+        ),
+      by = "chi"
+    )
 
   return(join_cohort_lookups)
 }
