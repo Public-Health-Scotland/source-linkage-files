@@ -24,6 +24,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       "postcode",
       "hbrescode",
       "lca",
+      "location",
       "hbtreatcode",
       "ipdc",
       "spec",
