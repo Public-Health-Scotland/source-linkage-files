@@ -35,7 +35,7 @@ get_demographic_cohorts_path <- function(year, ...) {
 get_service_use_cohorts_path <- function(year, ...) {
   service_use_cohorts_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Cohorts"),
-    file_name = stringr::str_glue("Service_Use_Cohorts_{year}.parquet"),
+    file_name = stringr::str_glue("service_use_cohorts_{year}.parquet"),
     ...
   )
 
