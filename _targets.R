@@ -253,7 +253,7 @@ list(
     tar_target(
       source_acute_extract_tests,
       process_tests_acute(
-        source_actue_extract,
+        source_acute_extract,
         year
       )
     ),
