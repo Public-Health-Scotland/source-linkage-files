@@ -477,7 +477,7 @@ list(
     tar_qs(
       processed_data_list,
       list(
-        source_actue_extract,
+        source_acute_extract,
         source_ae_extract,
         source_cmh_extract,
         source_dn_extract,
