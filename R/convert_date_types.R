@@ -12,9 +12,7 @@
 #'
 #' @family date functions
 convert_date_to_numeric <- function(date) {
-  lubridate::year(date) * 10000L +
-    lubridate::month(date) * 100L +
-    lubridate::day(date)
+  as.integer(format(date, "%Y%m%d"))
 }
 
 #' Convert a date in 'SLF numeric format' to Date type
@@ -31,5 +29,5 @@ convert_date_to_numeric <- function(date) {
 #'
 #' @family date functions
 convert_numeric_to_date <- function(numeric_date) {
-  as.Date(strptime(as.character(numeric_date), "%Y%m%d", tz = "UTC"))
+  as.Date(lubridate::fast_strptime(as.character(numeric_date), "%Y%m%d", tz = "UTC"))
 }
