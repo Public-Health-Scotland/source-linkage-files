@@ -7,6 +7,21 @@
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
+  data <- data %>%
+    dplyr::select(
+      "year",
+      "chi",
+      "gender",
+      "postcode",
+      "hbtreatcode",
+      "dob",
+      "recid",
+      "yearstay",
+      "record_keydate1",
+      "record_keydate2",
+      dplyr::contains(c("beddays", "cost", "cij"))
+    )
+
   old_data <- get_existing_data_for_tests(data)
 
   comparison <- produce_test_comparison(

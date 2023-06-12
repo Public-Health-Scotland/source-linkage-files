@@ -27,6 +27,8 @@ calculate_measures <- function(
   measure <- match.arg(measure)
 
   if (!is.null(group_by)) {
+    group_by <- match.arg(group_by, c("recid"))
+
     if (group_by == "recid") {
       data <- data %>%
         dplyr::group_by(.data$recid)
@@ -36,7 +38,7 @@ calculate_measures <- function(
 
   if (measure == "all") {
     data <- data %>%
-      dplyr::select(dplyr::matches({{ vars }})) %>%
+      dplyr::select(tidyselect::contains({{ vars }})) %>%
       dplyr::summarise(
         dplyr::across(dplyr::everything(),
           ~ sum(.x, na.rm = TRUE),
@@ -50,15 +52,18 @@ calculate_measures <- function(
       )
   } else if (measure == "sum") {
     data <- data %>%
-      dplyr::summarise(dplyr::across(
-        dplyr::everything(),
-        ~ sum(.x, na.rm = TRUE)
-      ))
+      dplyr::summarise(
+        dplyr::across(
+          tidyselect::everything(),
+          ~ sum(.x, na.rm = TRUE)
+        )
+      )
   } else if (measure == "min-max") {
     data <- data %>%
-      dplyr::select(dplyr::matches({{ vars }})) %>%
+      dplyr::select(tidyselect::contains({{ vars }})) %>%
       dplyr::summarise(
-        dplyr::across(dplyr::everything(),
+        dplyr::across(
+          tidyselect::everything(),
           ~ min(.x, na.rm = TRUE),
           .names = "min_{col}"
         ),
@@ -70,6 +75,12 @@ calculate_measures <- function(
         dplyr::across(
           dplyr::where(lubridate::is.Date),
           ~ convert_date_to_numeric(.x)
+        )
+      ) %>%
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::where(lubridate::is.Date),
+          ~ convert_date_to_numeric(.)
         )
       )
   }
