@@ -10,6 +10,7 @@
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
+    apply_cost_uplift() %>%
     store_ep_file_vars(year, vars_to_keep = c(
       "year",
       "recid",
