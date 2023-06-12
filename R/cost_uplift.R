@@ -3,7 +3,7 @@
 #' @param data episode data
 #'
 #' @return episode data with uplifted costs
-cost_uplift <- function(data) {
+apply_cost_uplift <- function(data) {
   data <- data %>%
     # attach a uplift scale as the last column
     lookup_uplift() %>%
