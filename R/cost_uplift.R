@@ -9,7 +9,7 @@ apply_cost_uplift <- function(data) {
     lookup_uplift() %>%
     dplyr::mutate(
       cost_total_net = .data$cost_total_net * .data$uplift,
-      cost_total_net_incdnas = .data$cost_total_net_incdnas * .data$uplift,
+      cost_total_net_inc_dnas = .data$cost_total_net_inc_dnas * .data$uplift,
       apr_cost = .data$apr_cost * .data$uplift,
       may_cost = .data$may_cost * .data$uplift,
       jun_cost = .data$jun_cost * .data$uplift,
