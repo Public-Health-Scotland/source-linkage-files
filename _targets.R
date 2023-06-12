@@ -245,7 +245,7 @@ list(
       format = "rds"
     ),
     ### Target source processed extracts ###
-    tar_target(source_actue_extract, process_extract_acute(
+    tar_target(source_acute_extract, process_extract_acute(
       acute_data,
       year,
       write_to_disk = write_to_disk
