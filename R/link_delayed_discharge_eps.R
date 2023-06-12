@@ -289,7 +289,6 @@ link_delayed_discharge_eps <- function(data, year) {
       "lca" = "dd_responsible_lca",
       "hbtreatcode" = "hbtreatcode_dd",
       "original_admission_date",
-      "amended_dates",
       "delay_end_reason",
       "primary_delay_reason",
       "secondary_delay_reason",
