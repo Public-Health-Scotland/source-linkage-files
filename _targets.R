@@ -486,7 +486,6 @@ list(
         ooh_source_extract,
         source_sc_home_care,
         source_homelessness_extract,
-        ltc_source_extract,
         maternity_source_extract,
         mental_health_source_extract,
         nrs_deaths_source_extract,
