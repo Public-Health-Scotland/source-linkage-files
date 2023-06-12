@@ -7,6 +7,29 @@
 #'
 #' @export
 process_tests_individual_file <- function(data, year) {
+  data <- data %>%
+    dplyr::select(
+      "year",
+      "chi",
+      "gender",
+      "postcode",
+      "dob",
+      "hbrescode",
+      "health_net_cost",
+      "yearstay",
+      "record_keydate1",
+      "record_keydate2",
+      dplyr::contains(c(
+        "beddays",
+        "cost",
+        "episodes",
+        "attendances",
+        "admissions",
+        "cases",
+        "consultations"
+      ))
+    )
+
   old_data <- get_existing_data_for_tests(data, file_version = "individual") %>%
     slfhelper::get_chi()
 
