@@ -251,7 +251,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_actue_extract_tests,
+      source_acute_extract_tests,
       process_tests_acute(
         source_actue_extract,
         year
