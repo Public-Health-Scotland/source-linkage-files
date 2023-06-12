@@ -10,6 +10,8 @@
 #'
 run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
+    create_cost_inc_dna() %>%
+    apply_cost_uplift() %>%
     store_ep_file_vars(year, vars_to_keep = c(
       "year",
       "recid",
@@ -73,7 +75,6 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
-    create_cost_inc_dna() %>%
     add_ppa_flag() %>%
     link_delayed_discharge_eps(year) %>%
     add_nsu_cohort(year) %>%

@@ -13,8 +13,6 @@
 #' @return a [tibble][tibble::tibble-package] with additional variables `apr_beddays` to `mar_beddays`
 #' that count the beddays which occurred in the month.
 #'
-#' @export
-#'
 #' @seealso create_monthly_costs
 create_monthly_beddays <- function(data,
                                    year,
