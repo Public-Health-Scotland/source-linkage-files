@@ -482,7 +482,6 @@ list(
         ae_source_extract,
         source_sc_care_home,
         source_cmh_extract,
-        source_dd_extract,
         source_dn_extract,
         ooh_source_extract,
         source_sc_home_care,
