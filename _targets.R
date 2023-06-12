@@ -477,21 +477,21 @@ list(
     tar_qs(
       processed_data_list,
       list(
-        source_sc_alarms_tele,
-        acute_source_extract,
-        ae_source_extract,
-        source_sc_care_home,
+        source_actue_extract,
+        source_ae_extract,
         source_cmh_extract,
         source_dn_extract,
-        ooh_source_extract,
-        source_sc_home_care,
         source_homelessness_extract,
-        maternity_source_extract,
-        mental_health_source_extract,
-        nrs_deaths_source_extract,
-        outpatients_source_extract,
-        pis_source_extract,
-        source_sc_sds
+        source_maternity_extract,
+        source_mental_health_extract,
+        source_nrs_deaths_extract,
+        source_ooh_extract,
+        source_outpatients_extract,
+        source_prescribing_extract,
+        source_sc_care_home,
+        source_sc_home_care,
+        source_sc_sds,
+        source_sc_alarms_tele
       )
     ),
     tar_target(
