@@ -12,12 +12,12 @@ process_tests_individual_file <- function(data, year) {
       "year",
       "chi",
       "gender",
-      #"postcode", # Add back in once postcode is fixed
+      # "postcode", # Add back in once postcode is fixed
       "dob",
-      #"hbrescode", #add back in when available
-      #"health_net_cost",
-      #"record_keydate1",
-      #"record_keydate2",
+      # "hbrescode", #add back in when available
+      # "health_net_cost",
+      # "record_keydate1",
+      # "record_keydate2",
       dplyr::contains(c(
         "beddays",
         "cost",
@@ -63,8 +63,8 @@ produce_individual_file_tests <- function(data) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
-    #create_hb_test_flags(.data$hbrescode) %>%
-    #create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
+    # create_hb_test_flags(.data$hbrescode) %>%
+    # create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
     # keep variables for comparison
     dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
