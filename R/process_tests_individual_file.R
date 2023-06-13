@@ -16,6 +16,7 @@ process_tests_individual_file <- function(data, year) {
       "dob",
       # "hbrescode", #add back in when available
       # "health_net_cost",
+      slfhelper::ltc_vars,
       dplyr::contains(c(
         "beddays",
         "cost",
@@ -88,6 +89,7 @@ produce_individual_file_tests <- function(data) {
   #   )
 
   sum_measures <- data %>%
+    dplyr::select(slfhelper::ltc_vars) %>%
     calculate_measures(
       vars = c(
         slfhelper::ltc_vars
