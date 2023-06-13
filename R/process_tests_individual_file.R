@@ -56,7 +56,6 @@ process_tests_individual_file <- function(data, year) {
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
 produce_individual_file_tests <- function(data) {
-
   names(data) <- tolower(names(data))
 
   test_flags <- data %>%
