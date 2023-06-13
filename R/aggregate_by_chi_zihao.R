@@ -69,12 +69,13 @@ aggregate_by_chi_zihao <- function(episode_file) {
   cols3 <- c(
     "ch_cis_episodes",
     "cij_total",
-    "CIJ_el",
-    "CIJ_non_el",
-    "CIJ_mat",
+    "cij_el",
+    "cij_non_el",
+    "cij_mat",
     # "cij_delay",
     "ooh_cases",
-    "preventable_admissions"
+    "preventable_admissions",
+    "gpprac"
   )
   # columns to sum up
   cols4 <- c(
