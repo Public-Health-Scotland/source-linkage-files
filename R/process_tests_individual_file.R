@@ -101,7 +101,7 @@ produce_individual_file_tests <- function(data) {
     # min_max_measures,
     sum_measures
   ) %>%
-    purrr::reduce(dplyr::full_join, by = c("recid", "measure", "value"))
+    purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 
   return(join_output)
 }
