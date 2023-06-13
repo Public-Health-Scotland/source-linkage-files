@@ -79,15 +79,13 @@ produce_individual_file_tests <- function(data) {
       measure = "all"
     )
 
-  min_max_measures <- data %>%
-    calculate_measures(
-      vars = c(
-        "record_keydate1",
-        "record_keydate2",
-        "health_net_cost",
-      ),
-      measure = "min-max"
-    )
+  # min_max_measures <- data %>%
+  #   calculate_measures(
+  #     vars = c(
+  #       "health_net_cost",
+  #     ),
+  #     measure = "min-max"
+  #   )
 
   sum_measures <- data %>%
     calculate_measures(
@@ -100,7 +98,7 @@ produce_individual_file_tests <- function(data) {
   join_output <- list(
     test_flags,
     all_measures,
-    min_max_measures,
+    #min_max_measures,
     sum_measures
   ) %>%
     purrr::reduce(dplyr::full_join, by = c("recid", "measure", "value"))
