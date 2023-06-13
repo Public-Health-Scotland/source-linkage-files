@@ -31,10 +31,8 @@ process_tests_individual_file <- function(data, year) {
 
   comparison <- produce_test_comparison(
     old_data = produce_individual_file_tests(old_data),
-    new_data = produce_individual_file_tests(data),
-    recid = TRUE
+    new_data = produce_individual_file_tests(data)
   ) %>%
-    dplyr::arrange(.data[["recid"]]) %>%
     write_tests_xlsx(sheet_name = "individual_file", year)
 
   return(comparison)
