@@ -24,6 +24,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       "postcode",
       "hbrescode",
       "lca",
+      "location",
       "hbtreatcode",
       "ipdc",
       "spec",
@@ -37,6 +38,8 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       "op1a",
       "age",
       "cij_marker",
+      "cij_start_date",
+      "cij_end_date",
       "cij_pattype_code",
       "cij_ipdc",
       "cij_admtype",
@@ -72,7 +75,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     fill_missing_cij_markers() %>%
     create_cost_inc_dna() %>%
     add_ppa_flag() %>%
-    # TODO add Link Delayed Discharge here (From C02)
+    link_delayed_discharge_eps(year) %>%
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
@@ -303,8 +306,22 @@ join_cohort_lookups <- function(ep_file_data, year) {
   )
 
   join_cohort_lookups <- ep_file_data %>%
-    dplyr::left_join(demographic_cohorts, by = "chi") %>%
-    dplyr::left_join(service_use_cohorts, by = "chi")
+    dplyr::left_join(
+      demographic_cohorts %>%
+        dplyr::select(
+          "chi",
+          "demographic_cohort"
+        ),
+      by = "chi"
+    ) %>%
+    dplyr::left_join(
+      service_use_cohorts %>%
+        dplyr::select(
+          "chi",
+          "service_use_cohort"
+        ),
+      by = "chi"
+    )
 
   return(join_cohort_lookups)
 }

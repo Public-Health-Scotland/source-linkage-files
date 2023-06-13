@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Data import
 
-  1. Extract all data directly from the DVRPOD / social_care_2 database
+  1. Extract all data directly from the DVPROD / social_care_2 database
   1. Fix 2017 issues
     * Fix `period` = "2017" to `period` = "2017Q4"
     * Fix `financial_quarter` = 0 to `financial_quarter` = 4 (for 2017 only)
