@@ -16,8 +16,6 @@ process_tests_individual_file <- function(data, year) {
       "dob",
       # "hbrescode", #add back in when available
       # "health_net_cost",
-      # "record_keydate1",
-      # "record_keydate2",
       dplyr::contains(c(
         "beddays",
         "cost",
