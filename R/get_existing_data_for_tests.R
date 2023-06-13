@@ -27,14 +27,17 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
       unique()
   }
 
-  variable_names <- c(
-    "anon_chi",
-    ifelse(
-      file_version == "episode",
-      dplyr::intersect(slfhelper::ep_file_vars, names(new_data)),
-      dplyr::intersect(slfhelper::indiv_file_vars, names(new_data))
+  if (file_version == "episode") {
+    variable_names <- c(
+      "anon_chi",
+      dplyr::intersect(slfhelper::ep_file_vars, tolower(names(new_data)))
     )
-  )
+  } else if (file_version == "individual") {
+    variable_names <- c(
+      "anon_chi",
+      dplyr::intersect(slfhelper::indiv_file_vars, tolower(names(new_data)))
+    )
+  }
 
   if (file_version == "episode") {
     slf_data <- suppressMessages(slfhelper::read_slf_episode(
