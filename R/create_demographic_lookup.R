@@ -4,8 +4,6 @@
 #' @param year The year in standard SLF format
 #' @param write_to_disk Defaults to TRUE
 #'
-#' @export
-#'
 #' @family Demographic and Service Use Cohort functions
 create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
   check_variables_exist(
