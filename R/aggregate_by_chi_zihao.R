@@ -75,7 +75,31 @@ aggregate_by_chi_zihao <- function(episode_file) {
     # "cij_delay",
     "ooh_cases",
     "preventable_admissions",
-    "gpprac"
+    "gpprac",
+
+    "hbrescode",
+    "hscp",
+    "lca",
+    "ca2018",
+    "locality",
+    "datazone2011",
+    "hbpraccode",
+    "cluster",
+    "simd2020v2_rank",
+    "simd2020v2_sc_decile",
+    "simd2020v2_sc_quintile",
+    "simd2020v2_hb2019_decile",
+    "simd2020v2_hb2019_quintile",
+    "simd2020v2_hscp2019_decile",
+    "simd2020v2_hscp2019_quintile",
+    "ur8_2020",
+    "ur6_2020",
+    "ur3_2020",
+    "ur2_2020",
+    "hb2019",
+    "hscp2019",
+    "ca2019",
+    vars_start_with(episode_file, "sc_")
   )
   # columns to sum up
   cols4 <- c(
