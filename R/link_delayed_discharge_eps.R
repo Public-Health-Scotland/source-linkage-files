@@ -282,38 +282,38 @@ link_delayed_discharge_eps <- function(data, year) {
     dplyr::group_by(chi, cij_marker) %>%
     dplyr::mutate(cij_delay = max(has_delay)) %>%
     dplyr::ungroup()
-    # tidy up and rename columns to match the format of episode files
-    dplyr::select(
-      "year" = "year_dd",
-      "recid" = "recid_dd",
-      "record_keydate1" = "record_keydate1_dd",
-      "record_keydate2" = "record_keydate2_dd",
-      "smrtype",
-      "chi",
-      "gender",
-      "dob",
-      "age",
-      "gpprac",
-      "postcode" = "postcode_dd",
-      "lca" = "dd_responsible_lca",
-      "hbtreatcode" = "hbtreatcode_dd",
-      "original_admission_date",
-      "delay_end_reason",
-      "primary_delay_reason",
-      "secondary_delay_reason",
-      "cij_marker",
-      "cij_start_date",
-      "cij_end_date",
-      "cij_pattype_code",
-      "cij_ipdc",
-      "cij_admtype",
-      "cij_adm_spec",
-      "cij_dis_spec",
-      "cij_delay",
-      "location",
-      "spec" = "spec_dd",
-      "dd_type"
-    ) %>%
+  # tidy up and rename columns to match the format of episode files
+  dplyr::select(
+    "year" = "year_dd",
+    "recid" = "recid_dd",
+    "record_keydate1" = "record_keydate1_dd",
+    "record_keydate2" = "record_keydate2_dd",
+    "smrtype",
+    "chi",
+    "gender",
+    "dob",
+    "age",
+    "gpprac",
+    "postcode" = "postcode_dd",
+    "lca" = "dd_responsible_lca",
+    "hbtreatcode" = "hbtreatcode_dd",
+    "original_admission_date",
+    "delay_end_reason",
+    "primary_delay_reason",
+    "secondary_delay_reason",
+    "cij_marker",
+    "cij_start_date",
+    "cij_end_date",
+    "cij_pattype_code",
+    "cij_ipdc",
+    "cij_admtype",
+    "cij_adm_spec",
+    "cij_dis_spec",
+    "cij_delay",
+    "location",
+    "spec" = "spec_dd",
+    "dd_type"
+  ) %>%
     # combine DD with episode data
     dplyr::bind_rows( # restore cij_end_date
       data %>%
