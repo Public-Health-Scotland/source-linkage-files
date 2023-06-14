@@ -76,7 +76,6 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "ooh_cases",
     "preventable_admissions",
     "gpprac",
-
     "hbrescode",
     "hscp",
     "lca",
