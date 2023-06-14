@@ -85,15 +85,26 @@ add_all_columns <- function(episode_file) {
     add_pis_columns("PIS", .data$recid == "PIS") %>%
     add_ooh_columns("OoH", .data$recid == "OoH") %>%
     # add_dn_columns("DN", .data$recid == "DN") %>%
-    # add_cmh_columns("CMH", .data$recid == "CMH") %>%
-    # add_dd_columns("DD", .data$recid == "DD") %>%
+    add_cmh_columns("CMH", .data$recid == "CMH") %>%
+    add_dd_columns("DD", .data$recid == "DD") %>%
     add_nsu_columns("NSU", .data$recid == "NSU") %>%
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
     add_hl1_columns("HL1", .data$recid == "HL1") %>%
     add_ch_columns("CH", .data$recid == "CH") %>%
     add_hc_columns("HC", .data$recid == "HC") %>%
     add_at_columns("AT", .data$recid == "AT") %>%
-    add_sds_columns("SDS", .data$recid == "SDS")
+    add_sds_columns("SDS", .data$recid == "SDS") %>%
+    dplyr::mutate(
+      health_net_cost = Acute_cost +
+        Mat_cost +
+        MH_cost +
+        GLS_cost +
+        OP_cost_attend +
+        AE_cost +
+        PIS_cost +
+        OoH_cost,
+      health_net_costincdnas = health_net_cost + OP_cost_dnas
+    )
 }
 
 #' Add Acute columns
