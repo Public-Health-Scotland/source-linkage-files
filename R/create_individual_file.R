@@ -40,30 +40,37 @@ add_cij_columns <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
       CIJ_non_el = dplyr::if_else(.data$cij_pattype_code == 0,
-                                  .data$cij_marker,
-                                  NA_real_),
+        .data$cij_marker,
+        NA_real_
+      ),
       CIJ_el = dplyr::if_else(.data$cij_pattype_code == 1,
-                              .data$cij_marker,
-                              NA_real_),
+        .data$cij_marker,
+        NA_real_
+      ),
       CIJ_mat = dplyr::if_else(.data$cij_pattype_code == 2,
-                               .data$cij_marker,
-                               NA_real_),
+        .data$cij_marker,
+        NA_real_
+      ),
       # assume cij_delay is logic variable
       cij_delay = dplyr::if_else(
         (.data$cij_delay & .data$cij_marker == 1),
         1,
-        0),
+        0
+      ),
       preventable_admissions = dplyr::if_else((.data$cij_ppa == 1 &
-                                                 .data$cij_marker == 1),
-                                              1,
-                                              0),
+        .data$cij_marker == 1),
+      1,
+      0
+      ),
       preventable_beddays = dplyr::if_else((.data$cij_ppa == 1 &
-                                              .data$cij_marker == 1),
-                                           as.numeric(
-                                             min(.data$cij_end_date, end_fy(year)) -
-                                               min(.data$cij_start_date, start_fy(year))
-                                           ),
-                                           0))
+        .data$cij_marker == 1),
+      as.numeric(
+        min(.data$cij_end_date, end_fy(year)) -
+          min(.data$cij_start_date, start_fy(year))
+      ),
+      0
+      )
+    )
 }
 
 #' Add all columns
