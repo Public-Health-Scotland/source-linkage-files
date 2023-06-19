@@ -19,10 +19,11 @@
 #'
 #' @family extract test functions
 #' @seealso produce_source_extract_tests
-calculate_measures <- function(data,
-                               vars = NULL,
-                               measure = c("sum", "all", "min-max"),
-                               group_by = NULL) {
+calculate_measures <- function(
+    data,
+    vars = NULL,
+    measure = c("sum", "all", "min-max"),
+    group_by = NULL) {
   measure <- match.arg(measure)
 
   if (!is.null(group_by)) {
@@ -39,12 +40,12 @@ calculate_measures <- function(data,
     data <- data %>%
       dplyr::select(tidyselect::contains({{ vars }})) %>%
       dplyr::summarise(
-        dplyr::across(tidyselect::everything(),
+        dplyr::across(dplyr::everything(),
           ~ sum(.x, na.rm = TRUE),
           .names = "total_{col}"
         ),
         dplyr::across(
-          tidyselect::everything(!tidyselect::starts_with("total_")),
+          dplyr::everything(!dplyr::starts_with("total_")),
           ~ mean(.x, na.rm = TRUE),
           .names = "mean_{col}"
         )
@@ -67,9 +68,13 @@ calculate_measures <- function(data,
           .names = "min_{col}"
         ),
         dplyr::across(
-          tidyselect::everything(!tidyselect::starts_with("min_")),
+          dplyr::everything(!dplyr::starts_with("min_")),
           ~ max(.x, na.rm = TRUE),
           .names = "max_{col}"
+        ),
+        dplyr::across(
+          dplyr::where(lubridate::is.Date),
+          ~ convert_date_to_numeric(.x)
         )
       ) %>%
       dplyr::mutate(
@@ -92,7 +97,7 @@ calculate_measures <- function(data,
   } else {
     pivot_data <- data %>%
       tidyr::pivot_longer(
-        cols = tidyselect::everything(),
+        cols = dplyr::everything(),
         names_to = "measure",
         values_to = "value"
       )

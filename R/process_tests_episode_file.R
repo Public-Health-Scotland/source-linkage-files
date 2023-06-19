@@ -3,10 +3,7 @@
 #' @description Takes the processed episode file and produces
 #' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @param data a [tibble][tibble::tibble-package] of the episode file.
-#' @param year the financial year of the extract in the format '1718'.
-#'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_acute
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
