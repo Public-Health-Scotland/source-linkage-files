@@ -279,7 +279,7 @@ link_delayed_discharge_eps <- function(data, year) {
     )) %>%
     dplyr::group_by(chi, cij_marker) %>%
     dplyr::mutate(cij_delay = max(has_delay)) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
   # tidy up and rename columns to match the format of episode files
   dplyr::select(
     "year" = "year_dd",
