@@ -38,16 +38,16 @@ create_demog_test_flags <- function(data) {
         1L,
         0L
       ),
-      n_postcode = dplyr::if_else(
-        is.na(.data$postcode) | .data$postcode == "",
-        0L,
-        1L
-      ),
-      n_missing_postcode = dplyr::if_else(
-        is_missing(.data$postcode),
-        1L,
-        0L
-      ),
+      # n_postcode = dplyr::if_else(
+      #   is.na(.data$postcode) | .data$postcode == "",
+      #   0L,
+      #   1L
+      # ),
+      # n_missing_postcode = dplyr::if_else(
+      #   is_missing(.data$postcode),
+      #   1L,
+      #   0L
+      # ),
       missing_dob = dplyr::if_else(
         is.na(.data$dob),
         1L,
