@@ -1,7 +1,6 @@
 # _targets.R file
 library(targets)
 library(tarchetypes)
-library(future.callr)
 
 options(readr.read_lazy = TRUE)
 
@@ -12,7 +11,8 @@ tar_option_set(
   format = "parquet",
   resources = tar_resources(
     parquet = tar_resources_parquet(compression = "zstd"),
-    future = tar_resources_future(plan = callr)
+    future = tar_resources_future(plan = future::plan(future.callr::callr)),
+    qs = tar_resources_qs(preset = "high")
   ),
   error = "continue",
   storage = "worker",
@@ -245,27 +245,27 @@ list(
       format = "rds"
     ),
     ### Target source processed extracts ###
-    tar_target(acute_source_extract, process_extract_acute(
+    tar_target(source_acute_extract, process_extract_acute(
       acute_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      acute_source_extract_tests,
+      source_acute_extract_tests,
       process_tests_acute(
-        acute_source_extract,
+        source_acute_extract,
         year
       )
     ),
-    tar_target(ae_source_extract, process_extract_ae(
+    tar_target(source_ae_extract, process_extract_ae(
       ae_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      ae_source_extract_tests,
+      source_ae_extract_tests,
       process_tests_ae(
-        ae_source_extract,
+        source_ae_extract,
         year
       )
     ),
@@ -312,7 +312,7 @@ list(
         year
       )
     ),
-    tar_target(ltc_source_extract, process_lookup_ltc(
+    tar_target(source_ltc_lookup, process_lookup_ltc(
       ltc_data,
       year,
       write_to_disk = write_to_disk
@@ -320,71 +320,71 @@ list(
     tar_target(
       ltc_tests,
       process_tests_ltcs(
-        ltc_source_extract,
+        source_ltc_lookup,
         year
       )
     ),
-    tar_target(maternity_source_extract, process_extract_maternity(
+    tar_target(source_maternity_extract, process_extract_maternity(
       maternity_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      maternity_source_extract_tests,
+      source_maternity_extract_tests,
       process_tests_maternity(
-        maternity_source_extract,
+        source_maternity_extract,
         year
       )
     ),
-    tar_target(mental_health_source_extract, process_extract_mental_health(
+    tar_target(source_mental_health_extract, process_extract_mental_health(
       mental_health_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      mental_health_source_extract_tests,
+      source_mental_health_extract_tests,
       process_tests_mental_health(
-        mental_health_source_extract,
+        source_mental_health_extract,
         year
       )
     ),
-    tar_target(nrs_deaths_source_extract, process_extract_nrs_deaths(
+    tar_target(source_nrs_deaths_extract, process_extract_nrs_deaths(
       nrs_deaths_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      nrs_deaths_source_extract_tests,
+      source_nrs_deaths_extract_tests,
       process_tests_nrs_deaths(
-        nrs_deaths_source_extract,
+        source_nrs_deaths_extract,
         year
       )
     ),
-    tar_target(ooh_source_extract, process_extract_gp_ooh(
+    tar_target(source_ooh_extract, process_extract_gp_ooh(
       year,
       ooh_data,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      ooh_source_extract_tests,
+      source_ooh_extract_tests,
       process_tests_gp_ooh(
-        ooh_source_extract,
+        source_ooh_extract,
         year
       )
     ),
-    tar_target(outpatients_source_extract, process_extract_outpatients(
+    tar_target(source_outpatients_extract, process_extract_outpatients(
       outpatients_data,
       year,
       write_to_disk = write_to_disk
     )),
     tar_target(
-      outpatients_source_extract_tests,
+      source_outpatients_extract_tests,
       process_tests_outpatients(
-        outpatients_source_extract,
+        source_outpatients_extract,
         year
       )
     ),
-    tar_target(pis_source_extract, process_extract_prescribing(
+    tar_target(source_prescribing_extract, process_extract_prescribing(
       prescribing_data,
       year,
       write_to_disk = write_to_disk
@@ -392,7 +392,7 @@ list(
     tar_target(
       prescribing_tests,
       process_tests_prescribing(
-        pis_source_extract,
+        source_prescribing_extract,
         year
       )
     ),

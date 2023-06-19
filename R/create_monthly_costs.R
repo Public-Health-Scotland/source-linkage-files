@@ -12,7 +12,7 @@
 #'
 #' @return The data with additional variables `apr_cost` to `mar_cost`
 #' that assigns the cost to each month
-#' @export
+#'
 #' @seealso create_monthly_beddays
 create_monthly_costs <- function(data,
                                  yearstay = yearstay,

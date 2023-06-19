@@ -3,13 +3,25 @@
 #' @description Takes the processed episode file and produces
 #' a test comparison with the previous data. This is written to disk as a CSV.
 #'
-#' @param data a [tibble][tibble::tibble-package] of the episode file.
-#' @param year the financial year of the extract in the format '1718'.
-#'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_acute
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
+  data <- data %>%
+    dplyr::select(
+      "year",
+      "chi",
+      "gender",
+      "postcode",
+      "hbtreatcode",
+      "dob",
+      "recid",
+      "yearstay",
+      "record_keydate1",
+      "record_keydate2",
+      dplyr::contains(c("beddays", "cost", "cij"))
+    )
+
   old_data <- get_existing_data_for_tests(data)
 
   comparison <- produce_test_comparison(
