@@ -81,7 +81,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
     join_cohort_lookups(year) %>%
-    # TODO match on SPARRA and HHG here
+    join_sparra_hhg(year) %>%
     fill_geographies() %>%
     load_ep_file_vars(year)
 
@@ -325,4 +325,35 @@ join_cohort_lookups <- function(ep_file_data, year) {
     )
 
   return(join_cohort_lookups)
+}
+
+
+#' Join SPARRA and HHG
+#'
+#' @param ep_file_data Episode file data.
+#' @param year financial year, e.g. '1920'
+#'
+#' @return The data including the SPARRA and HHG variables matched
+#' on to the episode file.
+#'
+join_sparra_hhg <- function(ep_file_data, year) {
+  join_sparra_hhg_file <- ep_file_data %>%
+    dplyr::full_join(
+      read_file(get_sparra_path(year)) %>%
+        dplyr::rename(
+          chi = "upi_number",
+          sparra_end_fy = "sparra_risk_score"
+        ),
+      by = "chi"
+    ) %>%
+    dplyr::full_join(
+      read_file(get_hhg_path(year)) %>%
+        dplyr::rename(
+          chi = "upi_number",
+          hhg_start_fy = "hhg_score"
+        ),
+      by = "chi"
+    )
+
+  return(join_sparra_hhg_file)
 }
