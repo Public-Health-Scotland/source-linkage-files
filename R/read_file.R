@@ -10,11 +10,12 @@
 #'  * `.parquet` uses [arrow::read_parquet()].
 #'
 #' @param path The file path to be read
+#' @inheritParams arrow::read_parquet
 #' @param ... Addition arguments passed to the relevant function.
 #'
 #' @return the data a [tibble][tibble::tibble-package]
 #' @export
-read_file <- function(path, ...) {
+read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   valid_extensions <- c("rds", "fst", "sav", "zsav", "csv", "gz", "parquet")
 
   ext <- fs::path_ext(path)
@@ -25,6 +26,13 @@ read_file <- function(path, ...) {
       "i" = "{.fun read_file} supports
                      {.val {valid_extensions}}"
     ))
+  }
+
+  if ((!missing(col_select) || !missing(as_data_frame)) && ext != "parquet") {
+    cli::cli_abort(c(
+      "x" = "{.arg col_select} and/or {.arg as_data_frame} must only be used
+        when reading a {.field .parquet} file."
+      ))
   }
 
   data <- switch(ext,
