@@ -65,14 +65,14 @@ create_monthly_costs <- function(data,
   add_months <- setdiff(full_cost_col, available_months)
 
   add_months_df <- dplyr::as_tibble(
-    matrix(0, nrow = nrow(data), ncol = length(add_months))
+    matrix(0, nrow = nrow(data), ncol = length(add_months)),
+    .name_repair = ~add_months
   )
-  names(add_months_df) <- add_months
 
   daycase_cost_months <- daycase_cost_months %>%
     dplyr::bind_cols(add_months_df) %>%
     dplyr::select(c(
-      full_cost_col,
+      dplyr::all_of(full_cost_col),
       "daycase_check"
     ))
 
