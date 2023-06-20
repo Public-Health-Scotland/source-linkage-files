@@ -51,12 +51,12 @@ add_cij_columns <- function(episode_file) {
         .data$cij_marker,
         NA_real_
       ),
-      # # assume cij_delay is logic variable
-      # cij_delay = dplyr::if_else(
-      #   (.data$cij_delay & .data$cij_marker == 1),
-      #   1,
-      #   0
-      # ),
+      # assume cij_delay is logic variable
+      cij_delay = dplyr::if_else(
+        (.data$cij_delay & .data$cij_marker == 1),
+        1,
+        0
+      ),
       preventable_admissions = dplyr::if_else((.data$cij_ppa == 1 &
         .data$cij_marker == 1),
       1,
