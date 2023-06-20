@@ -72,7 +72,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "cij_el",
     "cij_non_el",
     "cij_mat",
-    # "cij_delay",
+    "cij_delay",
     "ooh_cases",
     "preventable_admissions",
     "gpprac",
@@ -120,7 +120,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
         "time",
         "assessment",
         "other",
-        # "dn",
+        "dn",
         "nhs24",
         "pcc",
         "_dnas"
