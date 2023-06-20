@@ -120,7 +120,7 @@ add_all_columns <- function(episode_file) {
       ),
       health_net_costincdnas =
         health_net_cost +
-        dplyr::if_else(is.na(OP_cost_dnas), 0, OP_cost_dnas)
+          dplyr::if_else(is.na(OP_cost_dnas), 0, OP_cost_dnas)
     )
 }
 
