@@ -51,12 +51,12 @@ add_cij_columns <- function(episode_file) {
         .data$cij_marker,
         NA_real_
       ),
-      # assume cij_delay is logic variable
-      cij_delay = dplyr::if_else(
-        (.data$cij_delay & .data$cij_marker == 1),
-        1,
-        0
-      ),
+      # # assume cij_delay is logic variable
+      # cij_delay = dplyr::if_else(
+      #   (.data$cij_delay & .data$cij_marker == 1),
+      #   1,
+      #   0
+      # ),
       preventable_admissions = dplyr::if_else((.data$cij_ppa == 1 &
         .data$cij_marker == 1),
       1,
@@ -102,15 +102,25 @@ add_all_columns <- function(episode_file) {
     add_at_columns("AT", .data$recid == "AT") %>%
     add_sds_columns("SDS", .data$recid == "SDS") %>%
     dplyr::mutate(
-      health_net_cost = Acute_cost +
-        Mat_cost +
-        MH_cost +
-        GLS_cost +
-        OP_cost_attend +
-        AE_cost +
-        PIS_cost +
-        OoH_cost,
-      health_net_costincdnas = health_net_cost + OP_cost_dnas
+      health_net_cost = rowSums(dplyr::select(
+        .,
+        c(
+          Acute_cost,
+          Mat_cost,
+          MH_cost,
+          GLS_cost,
+          OP_cost_attend,
+          AE_cost,
+          PIS_cost,
+          OoH_cost
+        )),
+        na.rm = TRUE),
+      health_net_costincdnas = rowSums(dplyr::select(.,
+                                                     c(
+                                                       health_net_cost,
+                                                       OP_cost_dnas
+                                                     )),
+                                       na.rm = TRUE)
     )
 }
 
