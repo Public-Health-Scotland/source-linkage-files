@@ -32,7 +32,7 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
     cli::cli_abort(c(
       "x" = "{.arg col_select} and/or {.arg as_data_frame} must only be used
         when reading a {.field .parquet} file."
-      ))
+    ))
   }
 
   data <- switch(ext,
