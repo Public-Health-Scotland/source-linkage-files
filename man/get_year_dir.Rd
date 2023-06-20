@@ -17,7 +17,8 @@ folder (\code{FALSE}).}
 The file path to the year directory (on sourcedev)
 }
 \description{
-Get the directory for Source Linkage File Updates for the given year
+Get the directory for Source Linkage File Updates for the given
+year.
 }
 \seealso{
 Other directories: 
