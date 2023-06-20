@@ -118,16 +118,9 @@ add_all_columns <- function(episode_file) {
         ),
         na.rm = TRUE
       ),
-      health_net_costincdnas = rowSums(
-        dplyr::select(
-          .,
-          c(
-            health_net_cost,
-            OP_cost_dnas
-          )
-        ),
-        na.rm = TRUE
-      )
+      health_net_costincdnas =
+        health_net_cost +
+        dplyr::if_else(is.na(OP_cost_dnas), 0, OP_cost_dnas)
     )
 }
 
