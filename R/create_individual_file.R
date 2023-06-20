@@ -102,25 +102,32 @@ add_all_columns <- function(episode_file) {
     add_at_columns("AT", .data$recid == "AT") %>%
     add_sds_columns("SDS", .data$recid == "SDS") %>%
     dplyr::mutate(
-      health_net_cost = rowSums(dplyr::select(
-        .,
-        c(
-          Acute_cost,
-          Mat_cost,
-          MH_cost,
-          GLS_cost,
-          OP_cost_attend,
-          AE_cost,
-          PIS_cost,
-          OoH_cost
-        )),
-        na.rm = TRUE),
-      health_net_costincdnas = rowSums(dplyr::select(.,
-                                                     c(
-                                                       health_net_cost,
-                                                       OP_cost_dnas
-                                                     )),
-                                       na.rm = TRUE)
+      health_net_cost = rowSums(
+        dplyr::select(
+          .,
+          c(
+            Acute_cost,
+            Mat_cost,
+            MH_cost,
+            GLS_cost,
+            OP_cost_attend,
+            AE_cost,
+            PIS_cost,
+            OoH_cost
+          )
+        ),
+        na.rm = TRUE
+      ),
+      health_net_costincdnas = rowSums(
+        dplyr::select(
+          .,
+          c(
+            health_net_cost,
+            OP_cost_dnas
+          )
+        ),
+        na.rm = TRUE
+      )
     )
 }
 
