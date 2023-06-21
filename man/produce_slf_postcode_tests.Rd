@@ -22,7 +22,7 @@ Produce the tests for the SLF Postcode Lookup
 \code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}} for creating test flags
 
 Other slf test functions: 
-\code{\link{produce_slf_deaths_tests}()},
+\code{\link{produce_it_chi_deaths_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_homelessness_tests}()}
 }
