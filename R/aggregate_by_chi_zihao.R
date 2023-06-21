@@ -52,9 +52,9 @@ aggregate_by_chi_zihao <- function(individual_file) {
 
   # colums specification
   # columns to select last
-  cols2 <- vars_end_with(
-    individual_file,
-    c("postcode", "dob", "ggprac"),
+  cols2 <- c(
+    vars_end_with(individual_file,
+                  c("postcode", "dob", "ggprac")),
     "ooh_cases",
     "gpprac",
     "hbrescode",
