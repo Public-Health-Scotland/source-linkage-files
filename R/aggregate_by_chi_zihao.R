@@ -164,9 +164,10 @@ aggregate_by_chi_zihao <- function(individual_file) {
     by = chi
   ]
   individual_file_cols5 <- individual_file[,
-                       lapply(.SD, function(x) max(x, na.rm = TRUE)),
-                       .SDcols = cols5,
-                       by = chi]
+    lapply(.SD, function(x) max(x, na.rm = TRUE)),
+    .SDcols = cols5,
+    by = chi
+  ]
   individual_file_cols6 <- individual_file[,
     lapply(.SD, function(x) {
       x[!is.na(x)][1]
