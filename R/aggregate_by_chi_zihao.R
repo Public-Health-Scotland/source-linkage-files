@@ -54,16 +54,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
   # columns to select last
   cols2 <- vars_end_with(
     individual_file,
-    c("postcode", "dob", "ggprac")
-  )
-  # columns to select last unique rows
-  cols3 <- c(
-    "ch_cis_episodes",
-    "cij_total",
-    "cij_el",
-    "cij_non_el",
-    "cij_mat",
-    # "cij_delay",
+    c("postcode", "dob", "ggprac"),
     "ooh_cases",
     "gpprac",
     "hbrescode",
@@ -89,6 +80,15 @@ aggregate_by_chi_zihao <- function(individual_file) {
     "hscp2019",
     "ca2019",
     vars_start_with(individual_file, "sc_")
+  )
+  # columns to select last unique rows
+  cols3 <- c(
+    "ch_cis_episodes",
+    "cij_total",
+    "cij_el",
+    "cij_non_el",
+    "cij_mat",
+    # "cij_delay"
   )
   # columns to sum up
   cols4 <- c(
