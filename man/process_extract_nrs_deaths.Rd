@@ -18,9 +18,8 @@ process_extract_nrs_deaths(data, year, write_to_disk = TRUE)
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-This will read and process the
-NRS deaths extract, it will return the final data
-but also write this out an rds.
+This will process the NRS deaths extract, it will return the
+final data and write this out.
 }
 \seealso{
 Other process extracts: 
