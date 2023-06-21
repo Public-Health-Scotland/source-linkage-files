@@ -7,10 +7,10 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi_zihao <- function(episode_file) {
+aggregate_by_chi_zihao <- function(individual_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
-  episode_file <- episode_file %>%
+  individual_file <- individual_file %>%
     dplyr::select(-c(postcode, gpprac)) %>%
     dplyr::rename(
       "gpprac" = "most_recent_gpprac",
@@ -22,13 +22,13 @@ aggregate_by_chi_zihao <- function(episode_file) {
       dplyr::ends_with("_DoB")
     ))
 
-  names(episode_file) <- tolower(names(episode_file))
+  names(individual_file) <- tolower(names(individual_file))
 
-  data.table::setDT(episode_file) # Convert to data.table
+  data.table::setDT(individual_file) # Convert to data.table
 
   # Sort the data within each chunk
   data.table::setkeyv(
-    episode_file,
+    individual_file,
     c(
       "chi",
       "record_keydate1",
@@ -39,7 +39,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
   )
 
   data.table::setnames(
-    episode_file,
+    individual_file,
     c(
       "ch_chi_cis", "cij_marker", "ooh_case_id"
       # ,"hh_in_fy"
@@ -50,19 +50,10 @@ aggregate_by_chi_zihao <- function(episode_file) {
     )
   )
 
-  # Initialize an empty data.table for the aggregated results
-  aggregated_data <- data.table::data.table()
-
-  # Process the data in chunks
-  chunk_size <- min(nrow(episode_file), 5e7)
-  # Adjust the chunk size as per your system's memory capacity
-  n_chunks <- nrow(episode_file) %/% chunk_size
-
-
   # colums specification
   # columns to select last
   cols2 <- vars_end_with(
-    episode_file,
+    individual_file,
     c("postcode", "dob", "ggprac")
   )
   # columns to select last unique rows
@@ -98,12 +89,12 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "hb2019",
     "hscp2019",
     "ca2019",
-    vars_start_with(episode_file, "sc_")
+    vars_start_with(individual_file, "sc_")
   )
   # columns to sum up
   cols4 <- c(
     vars_end_with(
-      episode_file,
+      individual_file,
       c(
         "episodes",
         "beddays",
@@ -120,20 +111,22 @@ aggregate_by_chi_zihao <- function(episode_file) {
         "time",
         "assessment",
         "other",
-        # "dn",
+        "dn",
         "nhs24",
         "pcc",
         "_dnas"
       )
     ),
     vars_start_with(
-      episode_file,
+      individual_file,
       "sds_option"
-    )
+    ),
+    "health_net_costincdnas"
   )
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
-  # # columns to select maximum
-  # cols5 <- vars_contain(episode_file, "nsu")
+  # columns to select maximum
+  cols5 <- vars_contain(individual_file, c("nsu", "hl1_in_fy"))
+  cols5 <- cols5[!(cols5 %in% c("ooh_consultation_time"))]
   # columns to select first row
   cols6 <- c(
     condition_cols(),
@@ -141,68 +134,59 @@ aggregate_by_chi_zihao <- function(episode_file) {
     # "deceased",
     "year",
     vars_end_with(
-      episode_file,
+      individual_file,
       c("_cohort", "end_fy", "start_fy")
     )
   )
 
-  for (i in 1:n_chunks) {
-    start <- (i - 1) * chunk_size + 1
-    end <- i * chunk_size
-    # Subset the data to the current chunk
-    chunk <- episode_file[start:end]
+  # compute
+  individual_file_cols1 <- individual_file[,
+    .(gender = mean(gender)),
+    by = chi
+  ]
+  individual_file_cols2 <- individual_file[,
+    .SD[.N],
+    .SDcols = cols2,
+    by = chi
+  ]
+  individual_file_cols3 <- individual_file[,
+    lapply(.SD, function(x) {
+      data.table::uniqueN(x, na.rm = TRUE)
+    }),
+    .SDcols = cols3,
+    by = chi
+  ]
+  individual_file_cols4 <- individual_file[,
+    lapply(.SD, function(x) {
+      sum(x, na.rm = TRUE)
+    }),
+    .SDcols = cols4,
+    by = chi
+  ]
+  individual_file_cols5 <- individual_file[,
+                       lapply(.SD, function(x) max(x, na.rm = TRUE)),
+                       .SDcols = cols5,
+                       by = chi]
+  individual_file_cols6 <- individual_file[,
+    lapply(.SD, function(x) {
+      x[!is.na(x)][1]
+    }),
+    .SDcols = cols6,
+    by = chi
+  ]
+  individual_file <- dplyr::bind_cols(
+    individual_file_cols1,
+    individual_file_cols2[, chi := NULL],
+    individual_file_cols3[, chi := NULL],
+    individual_file_cols4[, chi := NULL],
+    individual_file_cols5[, chi := NULL],
+    individual_file_cols6[, chi := NULL]
+  )
 
-    # compute
-    chunk_cols1 <- chunk[,
-      .(gender = mean(gender)),
-      by = chi
-    ]
-    chunk_cols2 <- chunk[,
-      .SD[.N],
-      .SDcols = cols2,
-      by = chi
-    ]
-    chunk_cols3 <- chunk[,
-      lapply(.SD, function(x) {
-        data.table::uniqueN(x, na.rm = TRUE)
-      }),
-      .SDcols = cols3,
-      by = chi
-    ]
-    chunk_cols4 <- chunk[,
-      lapply(.SD, function(x) {
-        sum(x, na.rm = TRUE)
-      }),
-      .SDcols = cols4,
-      by = chi
-    ]
-    # chunk_cols5 <- chunk[,
-    #                      lapply(.SD, function(x) max(x, na.rm = TRUE)),
-    #                      .SDcols = cols5,
-    #                      by = chi]
-    chunk_cols6 <- chunk[,
-      lapply(.SD, function(x) {
-        x[!is.na(x)][1]
-      }),
-      .SDcols = cols6,
-      by = chi
-    ]
-    chunk_agg <- dplyr::bind_cols(
-      chunk_cols1,
-      chunk_cols2[, chi := NULL],
-      chunk_cols3[, chi := NULL],
-      chunk_cols4[, chi := NULL],
-      # chunk_cols5[, chi := NULL],
-      chunk_cols6[, chi := NULL]
-    )
+  # convert back to tibble
+  individual_file <- dplyr::as_tibble(individual_file)
 
-    # Append the aggregated chunk to the overall result
-    aggregated_data <-
-      data.table::rbindlist(list(aggregated_data, chunk_agg))
-  }
-  aggregated_data <- dplyr::as_tibble(aggregated_data)
-
-  return(aggregated_data)
+  return(individual_file)
 }
 
 
