@@ -87,7 +87,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     "cij_total",
     "cij_el",
     "cij_non_el",
-    "cij_mat",
+    "cij_mat"
     # "cij_delay"
   )
   # columns to sum up
