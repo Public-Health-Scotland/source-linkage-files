@@ -85,7 +85,7 @@ produce_individual_file_tests <- function(data) {
   min_max_measures <- data %>%
     calculate_measures(
       vars = c(
-        "health_net_cost",
+        "health_net_cost"
       ),
       measure = "min-max"
     )
