@@ -195,7 +195,7 @@ add_ae_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_attendances" := dplyr::if_else(eval(condition), .data$cost_total_net, NA_real_))
+    dplyr::mutate("{prefix}_attendances" := dplyr::if_else(eval(condition), 1, NA_real_))
 }
 
 #' Add PIS columns
