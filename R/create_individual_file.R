@@ -65,8 +65,8 @@ add_cij_columns <- function(episode_file) {
       preventable_beddays = dplyr::if_else((.data$cij_ppa == 1 &
         .data$cij_marker == 1),
       as.numeric(
-        min(.data$cij_end_date, end_fy(year)) -
-          min(.data$cij_start_date, start_fy(year))
+        pmin(.data$cij_end_date, end_fy(year)) -
+          pmin(.data$cij_start_date, start_fy(year))
       ),
       0
       )
