@@ -65,7 +65,6 @@ aggregate_by_chi_zihao <- function(individual_file) {
     "cij_mat",
     # "cij_delay",
     "ooh_cases",
-    "preventable_admissions",
     "gpprac",
     "hbrescode",
     "hscp",
@@ -121,7 +120,8 @@ aggregate_by_chi_zihao <- function(individual_file) {
       individual_file,
       "sds_option"
     ),
-    "health_net_costincdnas"
+    "health_net_costincdnas",
+    "preventable_admissions"
   )
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
   # columns to select maximum
