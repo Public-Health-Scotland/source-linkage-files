@@ -12,10 +12,10 @@ process_tests_individual_file <- function(data, year) {
       "year",
       "chi",
       "gender",
-      # "postcode", # Add back in once postcode is fixed
+      "postcode",
       "dob",
-      # "hbrescode", #add back in when available
-      # "health_net_cost",
+      "hbrescode",
+      "health_net_cost",
       slfhelper::ltc_vars,
       dplyr::contains(c(
         "beddays",
@@ -61,8 +61,8 @@ produce_individual_file_tests <- function(data) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
-    # create_hb_test_flags(.data$hbrescode) %>%
-    # create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
+    create_hb_test_flags(.data$hbrescode) %>%
+    create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
     # keep variables for comparison
     dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
@@ -82,13 +82,13 @@ produce_individual_file_tests <- function(data) {
       measure = "all"
     )
 
-  # min_max_measures <- data %>%
-  #   calculate_measures(
-  #     vars = c(
-  #       "health_net_cost",
-  #     ),
-  #     measure = "min-max"
-  #   )
+  min_max_measures <- data %>%
+    calculate_measures(
+      vars = c(
+        "health_net_cost",
+      ),
+      measure = "min-max"
+    )
 
   sum_measures <- data %>%
     dplyr::select(slfhelper::ltc_vars) %>%
@@ -102,7 +102,7 @@ produce_individual_file_tests <- function(data) {
   join_output <- list(
     test_flags,
     all_measures,
-    # min_max_measures,
+    min_max_measures,
     sum_measures
   ) %>%
     purrr::reduce(dplyr::full_join, by = c("measure", "value"))
