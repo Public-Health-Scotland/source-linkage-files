@@ -42,6 +42,9 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 #'
 #' @description Get the full path to the SLF deaths lookup file
 #'
+#'
+#' @description Get the full path to the CHI deaths file
+#'
 #' @param update The update month to use,
 #' defaults to [latest_update()]
 #' @param ... additional arguments passed to [get_file_path()]
@@ -50,15 +53,15 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 #' @export
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_deaths_path <- function(update = latest_update(), ...) {
-  slf_deaths_file_path <- get_file_path(
+get_slf_chi_deaths_path <- function(update = latest_update(), ...) {
+  slf_chi_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("all_deaths_{update}"),
+    file_name = stringr::str_glue("chi_deaths_{update})
     ext = "parquet",
     ...
   )
 
-  return(slf_deaths_file_path)
+  return(slf_chi_deaths_path)
 }
 
 #' Get the full path to the SLF read code lookup
