@@ -56,7 +56,7 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 get_slf_chi_deaths_path <- function(update = latest_update(), ...) {
   slf_chi_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("chi_deaths_{update})
+    file_name = stringr::str_glue("chi_deaths_{update}"),
     ext = "parquet",
     ...
   )
