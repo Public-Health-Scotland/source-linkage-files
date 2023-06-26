@@ -24,9 +24,14 @@ check_year_valid <- function(year, type = c(
                                "NSU",
                                "Outpatients",
                                "PIS",
-                               "SDS"
+                               "SDS",
+                               "Sparra-HHG"
                              )) {
   if (year >= "2223" & type == "NSU") {
+    return(FALSE)
+  }
+
+  if (year >= "2223" & type == "Sparra-HHG"){
     return(FALSE)
   }
 
