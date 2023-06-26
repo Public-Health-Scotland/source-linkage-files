@@ -1,15 +1,31 @@
-#' SLF Deaths Lookup Tests
+#' Process CHI Deaths tests
 #'
-#' @description Produce the tests for SLF deaths lookup
+#' @inherit process_tests_lookup_pc
+#'
+#' @export
+process_tests_it_chi_deaths <- function(data, update = previous_update()) {
+  comparison <- produce_test_comparison(
+    old_data = produce_it_chi_deaths_tests(
+      read_file(get_slf_chi_deaths_path(update = update))
+    ),
+    new_data = produce_it_chi_deaths_tests(data)
+  ) %>%
+    write_tests_xlsx(sheet_name = "it_chi_deaths")
+
+  return(comparison)
+}
+
+#' CHI death tests
+#'
+#' @description Produce the tests for IT CHI deaths
 #'
 #' @param data new or old data for testing summary
-#' flags (data is from [get_slf_deaths_path()])
+#' flags (data is from [get_slf_chi_deaths_path()])
 #
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
-#' @export
 #' @family slf test functions
-produce_slf_deaths_tests <- function(data) {
+produce_it_chi_deaths_tests <- function(data) {
   data %>%
     # create test flags
     dplyr::mutate(

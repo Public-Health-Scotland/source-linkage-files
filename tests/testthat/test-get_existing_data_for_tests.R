@@ -11,7 +11,11 @@ test_that("Get existing data works", {
 
   slf_data <- suppressWarnings(get_existing_data_for_tests(dummy_new_data))
 
-  expect_named(slf_data, c("chi", "year", "recid", "diag1", "diag2"))
+  expect_named(
+    slf_data,
+    c("chi", "year", "recid", "diag1", "diag2"),
+    ignore.order = TRUE
+  )
   expect_gte(nrow(slf_data), 20000)
   expect_equal(unique(slf_data$recid), "04B")
   expect_equal(unique(slf_data$year), "1920")

@@ -271,6 +271,15 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$record_keydate2_dd,
       .keep_all = TRUE
     ) %>%
+    # add cij_delay
+    dplyr::mutate(has_delay = dplyr::if_else(
+      .data$chi != "" & !is.na(.data$cij_marker),
+      .data$smrtype == "DD-CIJ",
+      NA
+    )) %>%
+    dplyr::group_by(chi, cij_marker) %>%
+    dplyr::mutate(cij_delay = max(has_delay)) %>%
+    dplyr::ungroup() %>%
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       "year" = "year_dd",
@@ -298,6 +307,7 @@ link_delayed_discharge_eps <- function(data, year) {
       "cij_admtype",
       "cij_adm_spec",
       "cij_dis_spec",
+      "cij_delay",
       "location",
       "spec" = "spec_dd",
       "dd_type"

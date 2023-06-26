@@ -42,7 +42,7 @@ Other process extracts:
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
 \code{\link{process_extract_sds}()},
-\code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_it_chi_deaths}()},
 \code{\link{process_lookup_gpprac}()},
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
@@ -52,7 +52,7 @@ Other process extracts:
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},
-\code{\link{read_lookup_chi_deaths}()},
+\code{\link{read_it_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}
