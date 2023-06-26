@@ -4,12 +4,12 @@
 \alias{join_sparra_hhg}
 \title{Join SPARRA and HHG}
 \usage{
-join_sparra_hhg(ep_file_data, year)
+join_sparra_hhg(data, year)
 }
 \arguments{
-\item{ep_file_data}{Episode file data.}
+\item{data}{The full SLF input data}
 
-\item{year}{financial year, e.g. '1920'}
+\item{year}{The year to process, in FY format.}
 }
 \value{
 The data including the SPARRA and HHG variables matched
