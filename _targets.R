@@ -23,7 +23,8 @@ years_to_run <- c("1819", "1920", "2021", "2122", "2223")
 
 list(
   tar_rds(write_to_disk, TRUE),
-  tar_rds(make_lowercase_ext,
+  tar_rds(
+    make_lowercase_ext,
     make_lowercase_ext,
     priority = 1,
     cue = tar_cue(mode = "always")
