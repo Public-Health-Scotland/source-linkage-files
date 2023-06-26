@@ -6,8 +6,6 @@ test_that("Can return start FY date", {
   expect_equal(start_fy("2020", format = "alternate"), as.Date("2020-04-01"))
 })
 
-
-
 test_that("Can return end FY date", {
   expect_equal(end_fy("1718", format = "fyyear"), as.Date("2018-03-31"))
   expect_equal(end_fy("1920"), as.Date("2020-03-31"))
@@ -16,14 +14,22 @@ test_that("Can return end FY date", {
   expect_equal(end_fy("2021", format = "alternate"), as.Date("2022-03-31"))
 })
 
-
-
 test_that("Can return midpoint FY date", {
   expect_equal(midpoint_fy("1718"), as.Date("2017-09-30"))
   expect_equal(midpoint_fy("1920"), as.Date("2019-09-30"))
   expect_equal(midpoint_fy("2021"), as.Date("2020-09-30"))
 
   expect_equal(midpoint_fy("2021", format = "alternate"), as.Date("2021-09-30"))
+})
+
+test_that("Can return next FY", {
+  expect_equal(next_fy("1415"), "1516")
+  expect_equal(next_fy("1718"), "1819")
+  expect_equal(next_fy("1920"), "2021")
+  expect_equal(next_fy("2021"), "2122")
+
+  expect_equal(next_fy("2021", format = "alternate"), "2021")
+  expect_equal(next_fy("2122", format = "alternate"), "2022")
 })
 
 test_that("FY interval is correct", {
