@@ -20,6 +20,7 @@ gzip_files <- function(
     cli::cli_alert_info(
       "There are 0 uncompressed files for {extract_year}."
     )
+    return(invisible(NULL))
   }
 
   purrr::walk(
@@ -31,4 +32,6 @@ gzip_files <- function(
       )
     }
   )
+
+  return(invisible(NULL))
 }
