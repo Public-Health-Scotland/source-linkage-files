@@ -19,19 +19,24 @@ check_year_valid <- function(year, type = c(
                                "GPOoH",
                                "HC",
                                "Homelessness",
+                               "HHG",
                                "Maternity",
                                "MH",
                                "NSU",
                                "Outpatients",
                                "PIS",
                                "SDS",
-                               "Sparra-HHG"
+                               "Sparra"
                              )) {
   if (year >= "2223" & type == "NSU") {
     return(FALSE)
   }
 
-  if (year >= "2223" & type == "Sparra-HHG") {
+  if (year >= "2223" & type == "Sparra") {
+    return(FALSE)
+  }
+
+  if (year <= "1718" & type == "HHG"){
     return(FALSE)
   }
 
