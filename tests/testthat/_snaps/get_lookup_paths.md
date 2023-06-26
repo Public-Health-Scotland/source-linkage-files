@@ -3,11 +3,7 @@
     Code
       names(read_file(get_gpprac_ref_path()))
     Output
-       [1] "HB cypher"               "Prac code"              
-       [3] "Add 1"                   "Add 2"                  
-       [5] "Add 3"                   "Add 4"                  
-       [7] "Postcode"                "Tel No"                 
-       [9] "GMS PMS Indicator"       "CHP code"               
-      [11] "Start"                   "End"                    
-      [13] "Date CHP status"         "Health Centre Indicator"
+       [1] "cypher"    "praccode"  "add 1"     "add 2"     "add 3"     "add 4"    
+       [7] "postcode"  "telephone" "gms"       "chp"       "start"     "end"      
+      [13] "chpstart"  "hci"      
 
