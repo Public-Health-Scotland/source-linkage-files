@@ -337,7 +337,6 @@ join_cohort_lookups <- function(ep_file_data, year) {
 #' on to the episode file.
 #'
 join_sparra_hhg <- function(ep_file_data, year) {
-
   fy <- year
   next_fy <- as.character(glue::glue("{substr(as.numeric(fy), 3, 4)}{substr(as.numeric(fy)+1, 3, 4)}"))
 
@@ -354,7 +353,7 @@ join_sparra_hhg <- function(ep_file_data, year) {
       read_file(get_hhg_path(fy)) %>%
         dplyr::rename(
           chi = "upi_number",
-          hhg_start_fy= "hhg_score"
+          hhg_start_fy = "hhg_score"
         ),
       by = "chi"
     ) %>%
