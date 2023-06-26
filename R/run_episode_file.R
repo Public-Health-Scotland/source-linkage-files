@@ -364,14 +364,14 @@ join_sparra_hhg <- function(ep_file_data, year) {
 
   if (!check_year_valid(year, "HHG")) {
     join_sparra_hhg_file <- ep_file_data %>%
-        dplyr::full_join(
-      read_file(get_sparra_path(next_fy)) %>%
-        dplyr::rename(
-          chi = "upi_number",
-          sparra_end_fy = "sparra_risk_score"
-        ),
-      by = "chi"
-    ) %>%
+      dplyr::full_join(
+        read_file(get_sparra_path(next_fy)) %>%
+          dplyr::rename(
+            chi = "upi_number",
+            sparra_end_fy = "sparra_risk_score"
+          ),
+        by = "chi"
+      ) %>%
       dplyr::full_join(
         read_file(get_hhg_path(next_fy)) %>%
           dplyr::rename(

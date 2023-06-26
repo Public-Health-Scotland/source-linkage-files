@@ -36,7 +36,7 @@ check_year_valid <- function(year, type = c(
     return(FALSE)
   }
 
-  if (year <= "1718" & type == "HHG"){
+  if (year <= "1718" & type == "HHG") {
     return(FALSE)
   }
 
