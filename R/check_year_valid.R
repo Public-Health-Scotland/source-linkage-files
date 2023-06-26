@@ -31,7 +31,7 @@ check_year_valid <- function(year, type = c(
     return(FALSE)
   }
 
-  if (year >= "2223" & type == "Sparra-HHG"){
+  if (year >= "2223" & type == "Sparra-HHG") {
     return(FALSE)
   }
 
