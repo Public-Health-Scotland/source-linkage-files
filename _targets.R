@@ -53,7 +53,7 @@ list(
     )
   ),
   tar_target(
-    sc_demog_lookup_tests,
+    tests_sc_demog_lookup,
     process_tests_sc_demographics(sc_demog_lookup)
   ),
   tar_target(
@@ -64,7 +64,7 @@ list(
     )
   ),
   tar_target(
-    it_chi_deaths_tests,
+    tests_it_chi_deaths,
     process_tests_it_chi_deaths(it_chi_deaths_data)
   ),
   tar_target(
@@ -77,7 +77,7 @@ list(
     )
   ),
   tar_target(
-    source_gp_lookup_tests,
+    tests_source_gp_lookup,
     process_tests_lookup_gpprac(source_gp_lookup)
   ),
   tar_target(
@@ -90,7 +90,7 @@ list(
     )
   ),
   tar_target(
-    source_pc_lookup_tests,
+    tests_source_pc_lookup,
     process_tests_lookup_pc(source_pc_lookup)
   ),
   ## Cost Lookups ##
@@ -151,7 +151,7 @@ list(
     )
   ),
   tar_target(
-    all_care_home_tests,
+    tests_all_care_home,
     process_tests_sc_ch_episodes(all_care_home)
   ),
   tar_target(
@@ -254,7 +254,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_acute_extract_tests,
+      tests_source_acute_extract,
       process_tests_acute(
         source_acute_extract,
         year
@@ -266,7 +266,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_ae_extract_tests,
+      tests_source_ae_extract,
       process_tests_ae(
         source_ae_extract,
         year
@@ -278,7 +278,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_cmh_extract_tests,
+      tests_source_cmh_extract,
       process_tests_cmh(
         source_cmh_extract,
         year
@@ -297,7 +297,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_dn_extract_tests,
+      tests_source_dn_extract,
       process_tests_district_nursing(
         source_dn_extract,
         year
@@ -309,7 +309,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_homelessness_extract_tests,
+      tests_source_homelessness_extract,
       process_tests_homelessness(
         source_homelessness_extract,
         year
@@ -321,7 +321,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      ltc_tests,
+      tests_ltc,
       process_tests_ltcs(
         source_ltc_lookup,
         year
@@ -333,7 +333,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_maternity_extract_tests,
+      tests_source_maternity_extract,
       process_tests_maternity(
         source_maternity_extract,
         year
@@ -345,7 +345,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_mental_health_extract_tests,
+      tests_source_mental_health_extract,
       process_tests_mental_health(
         source_mental_health_extract,
         year
@@ -357,7 +357,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_nrs_deaths_extract_tests,
+      tests_source_nrs_deaths_extract,
       process_tests_nrs_deaths(
         source_nrs_deaths_extract,
         year
@@ -369,7 +369,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_ooh_extract_tests,
+      tests_source_ooh_extract,
       process_tests_gp_ooh(
         source_ooh_extract,
         year
@@ -381,7 +381,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      source_outpatients_extract_tests,
+      tests_source_outpatients_extract,
       process_tests_outpatients(
         source_outpatients_extract,
         year
@@ -393,7 +393,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
-      prescribing_tests,
+      tests_prescribing,
       process_tests_prescribing(
         source_prescribing_extract,
         year
