@@ -337,9 +337,29 @@ join_cohort_lookups <- function(ep_file_data, year) {
 #' on to the episode file.
 #'
 join_sparra_hhg <- function(ep_file_data, year) {
+
+  fy <- year
+  next_fy <- as.character(glue::glue("{substr(as.numeric(fy), 3, 4)}{substr(as.numeric(fy)+1, 3, 4)}"))
+
   join_sparra_hhg_file <- ep_file_data %>%
     dplyr::full_join(
-      read_file(get_sparra_path(year)) %>%
+      read_file(get_sparra_path(fy)) %>%
+        dplyr::rename(
+          chi = "upi_number",
+          sparra_start_fy = "sparra_risk_score"
+        ),
+      by = "chi"
+    ) %>%
+    dplyr::full_join(
+      read_file(get_hhg_path(fy)) %>%
+        dplyr::rename(
+          chi = "upi_number",
+          hhg_start_fy= "hhg_score"
+        ),
+      by = "chi"
+    ) %>%
+    dplyr::full_join(
+      read_file(get_sparra_path(next_fy)) %>%
         dplyr::rename(
           chi = "upi_number",
           sparra_end_fy = "sparra_risk_score"
@@ -347,13 +367,12 @@ join_sparra_hhg <- function(ep_file_data, year) {
       by = "chi"
     ) %>%
     dplyr::full_join(
-      read_file(get_hhg_path(year)) %>%
+      read_file(get_hhg_path(next_fy)) %>%
         dplyr::rename(
           chi = "upi_number",
-          hhg_start_fy = "hhg_score"
+          hhg_end_fy = "hhg_score"
         ),
       by = "chi"
     )
-
   return(join_sparra_hhg_file)
 }
