@@ -340,7 +340,7 @@ join_sparra_hhg <- function(ep_file_data, year) {
   fy <- year
   next_fy <- as.character(glue::glue("{substr(as.numeric(fy), 3, 4)}{substr(as.numeric(fy)+1, 3, 4)}"))
 
-  if (!check_year_valid(year, "Sparra")) {
+  if (!check_year_valid(year, "SPARRA")) {
     join_sparra_hhg_file <- ep_file_data %>%
       dplyr::full_join(
         read_file(get_sparra_path(fy)) %>%

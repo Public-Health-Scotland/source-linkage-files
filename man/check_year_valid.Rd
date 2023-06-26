@@ -2,15 +2,13 @@
 % Please edit documentation in R/check_year_valid.R
 \name{check_year_valid}
 \alias{check_year_valid}
-\title{Check there is data available for a given year
-as some extracts are year dependent. E.g Homelessness
-is only available from 2016/17 onwards.}
+\title{Check data exists for a year}
 \usage{
 check_year_valid(
   year,
   type = c("Acute", "AE", "AT", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH",
     "HC", "Homelessness", "HHG", "Maternity", "MH", "NSU", "Outpatients", "PIS", "SDS",
-    "Sparra")
+    "SPARRA")
 )
 }
 \arguments{
