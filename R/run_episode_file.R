@@ -337,7 +337,6 @@ join_cohort_lookups <- function(ep_file_data, year) {
 #' on to the episode file.
 #'
 join_sparra_hhg <- function(ep_file_data, year) {
-
   if (!check_year_valid(year, "SPARRA")) {
     join_sparra_hhg_file <- ep_file_data %>%
       dplyr::full_join(
