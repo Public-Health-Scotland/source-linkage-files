@@ -1,12 +1,13 @@
-make_extensions_lowercase <- function(path = get_slf_dir()) {
+make_lowercase_ext <- function(path = get_slf_dir()) {
   upper_ext_paths <- fs::dir_ls(
     path = path,
-    regexp = "\\.[A-Z]{3,4}$",
+    regexp = "\\.[A-Z]{2,7}$",
     type = "file",
     recurse = TRUE
   )
 
   if (length(upper_ext_paths) == 0L) {
+    cli::cli_alert_info("There are 0 paths with extensions to correct.")
     return(invisible(NULL))
   }
 
@@ -19,7 +20,7 @@ make_extensions_lowercase <- function(path = get_slf_dir()) {
     problem_files <- lower_ext_paths[which(fs::file_exists(lower_ext_paths))]
 
     cli::cli_warn(c(
-      "!" = "There {?is/are} {length(problem_files)} file path{?s}
+      "!" = "There {?is/are} {length(problem_files)} path{?s}
                     where there are lowercase and uppercase extentions.",
       ">" = "{problem_files}"
     ))
@@ -33,4 +34,6 @@ make_extensions_lowercase <- function(path = get_slf_dir()) {
     "v" = "{as.character(upper_ext_paths)} {?has/have}
     been renamed to {lower_ext_paths}"
   ))
+
+  return(invisible(NULL))
 }
