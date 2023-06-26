@@ -176,6 +176,12 @@ list(
   ),
   tar_map(
     list(year = years_to_run),
+    tar_rds(
+      gzip_files,
+      gzip_files(extract_year = year),
+      priority = 1,
+      cue = tar_cue(mode = "always")
+    ),
     ### target data extracts ###
     tar_file_read(
       acute_data,
