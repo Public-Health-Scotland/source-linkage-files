@@ -199,3 +199,4 @@ yearstay
 YYYYQX
 zsav
 zstd
+zstd

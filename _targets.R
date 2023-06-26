@@ -29,9 +29,9 @@ list(
   tar_target(locality_path, get_locality_path(), format = "file"),
   tar_target(simd_path, get_simd_path(), format = "file"),
   tar_target(spd_path, get_spd_path(), format = "file"),
-  tar_file_read(chi_deaths_data,
+  tar_file_read(it_chi_deaths_extract,
     command = get_it_deaths_path(),
-    read = read_lookup_chi_deaths(!!.x)
+    read = read_it_chi_deaths(!!.x)
   ),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
@@ -56,13 +56,16 @@ list(
     sc_demog_lookup_tests,
     process_tests_sc_demographics(sc_demog_lookup)
   ),
-  # TODO add tests for the CHI deaths lookup
   tar_target(
-    slf_chi_deaths_lookup,
-    process_lookup_chi_deaths(
-      data = chi_deaths_data,
+    it_chi_deaths_data,
+    process_it_chi_deaths(
+      data = it_chi_deaths_extract,
       write_to_disk = write_to_disk
     )
+  ),
+  tar_target(
+    it_chi_deaths_tests,
+    process_tests_it_chi_deaths(it_chi_deaths_data)
   ),
   tar_target(
     source_gp_lookup,
