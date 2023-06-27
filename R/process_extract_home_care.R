@@ -34,7 +34,10 @@ process_extract_home_care <- function(
     # remove any episodes where the latest submission was before the current year
     dplyr::filter(substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
     # Match to client data
-    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
+    dplyr::left_join(
+      client_lookup,
+      by = c("sending_location", "social_care_id")
+    ) %>%
     dplyr::mutate(year = year)
 
   # Home Care Hours ---------------------------------------
@@ -68,10 +71,7 @@ process_extract_home_care <- function(
     # create cost total net
     dplyr::mutate(cost_total_net = rowSums(dplyr::pick(tidyselect::contains("hc_cost_q"))))
 
-
-  # Outfile ---------------------------------------
-
-  outfile <- hc_costs %>%
+  hc_processed <- hc_costs %>%
     dplyr::select(
       "year",
       "recid",
@@ -93,10 +93,11 @@ process_extract_home_care <- function(
     )
 
   if (write_to_disk) {
-    # Save .rds file
-    outfile %>%
-      write_file(get_source_extract_path(year, type = "HC", check_mode = "write"))
+      write_file(
+        hc_processed,
+        get_source_extract_path(year, type = "HC", check_mode = "write")
+      )
   }
 
-  return(outfile)
+  return(hc_processed)
 }

@@ -27,7 +27,7 @@ process_extract_alarms_telecare <- function(
   }
 
   # Now select episodes for given FY
-  at_data <- data %>%
+  at_processed <- data %>%
     dplyr::filter(is_date_in_fyyear(
       year,
       .data[["record_keydate1"]],
@@ -52,21 +52,15 @@ process_extract_alarms_telecare <- function(
       "record_keydate1",
       "record_keydate2",
       "person_id",
-      "sc_latest_submission",
-      "sc_living_alone",
-      "sc_support_from_unpaid_carer",
-      "sc_social_worker",
-      "sc_type_of_housing",
-      "sc_meals",
-      "sc_day_care"
+      tidyselect::starts_with("sc_")
     )
 
   if (write_to_disk) {
-    at_data %>%
       write_file(
+        at_processed,
         get_source_extract_path(year, type = "AT", check_mode = "write")
       )
   }
 
-  return(at_data)
+  return(at_processed)
 }

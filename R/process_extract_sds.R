@@ -26,14 +26,17 @@ process_extract_sds <- function(
     return(tibble::tibble())
   }
 
-  outfile <- data %>%
+  sds_processed <- data %>%
     # Select episodes for given FY
     dplyr::filter(is_date_in_fyyear(
       year,
       .data[["record_keydate1"]],
       .data[["record_keydate2"]]
     )) %>%
-    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
+    dplyr::left_join(
+      client_lookup,
+      by = c("sending_location", "social_care_id")
+    ) %>%
     dplyr::mutate(
       year = year
     ) %>%
@@ -48,18 +51,15 @@ process_extract_sds <- function(
       "record_keydate1",
       "record_keydate2",
       "sc_send_lca",
-      "sc_living_alone",
-      "sc_support_from_unpaid_carer",
-      "sc_social_worker",
-      "sc_type_of_housing",
-      "sc_meals",
-      "sc_day_care"
+      tidyselect::starts_with("sc_")
     )
 
   if (write_to_disk) {
-    outfile %>%
-      write_file(get_source_extract_path(year, type = "SDS", check_mode = "write"))
+    write_file(
+      sds_processed,
+      get_source_extract_path(year, type = "SDS", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(sds_processed)
 }
