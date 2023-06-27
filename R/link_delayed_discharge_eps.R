@@ -280,6 +280,12 @@ link_delayed_discharge_eps <- function(data, year) {
     dplyr::group_by(chi, cij_marker) %>%
     dplyr::mutate(cij_delay = max(has_delay)) %>%
     dplyr::ungroup() %>%
+    # add yearstay and monthly beddays
+    create_monthly_beddays() %>%
+    dplyr::mutate(yearstay = dplyr::rowSums(
+      paste0(month.abb[c(4:12,1:3)] %>% tolower(), "_beddays")
+    ))
+
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       "year" = "year_dd",
@@ -310,7 +316,9 @@ link_delayed_discharge_eps <- function(data, year) {
       "cij_delay",
       "location",
       "spec" = "spec_dd",
-      "dd_type"
+      "dd_type",
+      paste0(month.abb[c(4:12,1:3)] %>% tolower(), "_beddays"),
+      "yearstay"
     ) %>%
     # combine DD with episode data
     dplyr::bind_rows( # restore cij_end_date
