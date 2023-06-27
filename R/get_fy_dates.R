@@ -82,6 +82,8 @@ midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
 
   format <- match.arg(format)
 
+  check_year_format(year, format = "fyyear")
+
   if (format == "fyyear") {
     midpoint_fy <- lubridate::make_date(convert_fyyear_to_year(year), 9, 30)
   } else if (format == "alternate") {
@@ -89,6 +91,37 @@ midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
   }
 
   return(midpoint_fy)
+}
+
+#' Return the next financial year
+#'
+#' @inheritParams start_fy
+#'
+#' @return A character of the date in the requested format
+#' @export
+#'
+#' @examples
+#' next_fy("1718")
+#'
+#' @family date functions
+next_fy <- function(year, format = c("fyyear", "alternate")) {
+  if (missing(format)) {
+    format <- "fyyear"
+  }
+
+  format <- match.arg(format)
+
+  check_year_format(year, format = "fyyear")
+
+  fy <- as.integer(substr(year, 1, 2))
+
+  next_fy <- paste0(fy + 1L, fy + 2L)
+
+  if (format == "fyyear") {
+    return(next_fy)
+  } else if (format == "alternate") {
+    return(convert_fyyear_to_year(next_fy))
+  }
 }
 
 
