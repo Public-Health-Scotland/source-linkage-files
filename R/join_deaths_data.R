@@ -7,13 +7,13 @@
 #' @return The data including the deaths lookup matched
 #'         on to the episode file.
 join_deaths_data <- function(
-    ep_file_data,
+    data,
     year,
     slf_deaths_lookup_path = get_slf_deaths_lookup_path(year)) {
   slf_deaths_lookup <- read_file(slf_deaths_lookup_path)
 
   return(
-    ep_file_data %>%
+    data %>%
       dplyr::left_join(
         slf_deaths_lookup,
         by = "chi",
