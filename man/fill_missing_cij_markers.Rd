@@ -4,10 +4,10 @@
 \alias{fill_missing_cij_markers}
 \title{Fill any missing CIJ markers for records that should have them}
 \usage{
-fill_missing_cij_markers(ep_file_data)
+fill_missing_cij_markers(data)
 }
 \arguments{
-\item{ep_file_data}{A data frame containing only \code{recid \%in\% c("01B", "04B", "GLS", "02B")} with a valid CHI number.}
+\item{data}{The in progress episode file data.}
 }
 \value{
 A data frame with CIJ markers filled in for those missing.

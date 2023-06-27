@@ -4,10 +4,10 @@
 \alias{create_cost_inc_dna}
 \title{Create cost total net inc DNA}
 \usage{
-create_cost_inc_dna(ep_file_data)
+create_cost_inc_dna(data)
 }
 \arguments{
-\item{ep_file_data}{The episode file data in progress.}
+\item{data}{The in progress episode file data.}
 }
 \value{
 The data with cost including dna.
