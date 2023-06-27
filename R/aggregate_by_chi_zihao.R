@@ -50,7 +50,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     )
   )
 
-  # colums specification
+  # colums specification, grouped by chi
   # columns to select last
   cols2 <- c(
     vars_end_with(
@@ -83,18 +83,15 @@ aggregate_by_chi_zihao <- function(individual_file) {
     "ca2019",
     vars_start_with(individual_file, "sc_")
   )
-  # columns to select last unique rows
+  # columns to count unique rows
   cols3 <- c(
     "ch_cis_episodes",
     "cij_total",
     "cij_el",
     "cij_non_el",
-    "cij_mat",
-    # "cij_delay",
-    "preventable_admissions"
+    "cij_mat"
+    # "cij_delay"
   )
-  # columns to select last unique rows group by chi and cij_marker
-  cols3.1 <- c("preventable_beddays")
   # columns to sum up
   cols4 <- c(
     vars_end_with(
@@ -142,6 +139,8 @@ aggregate_by_chi_zihao <- function(individual_file) {
       c("_cohort", "end_fy", "start_fy")
     )
   )
+  # columns to group by chi and cij_marker, mainly preventable
+  # cols7 <- c("preventable_admissions", "preventable_beddays")
 
   # compute
   individual_file_cols1 <- individual_file[,
@@ -159,16 +158,6 @@ aggregate_by_chi_zihao <- function(individual_file) {
     }),
     .SDcols = cols3,
     by = chi
-  ]
-  individual_file_cols3.1 <- individual_file[,
-    preventable_beddays :=
-      data.table::fifelse(
-        cij_ppa == 1,
-        max(cij_end_date) - min(cij_start_date),
-        NA_real_
-      ),
-    .SDcols = cols3.1,
-    by = c("chi", "cij_marker")
   ]
   individual_file_cols4 <- individual_file[,
     lapply(.SD, function(x) {
@@ -189,19 +178,36 @@ aggregate_by_chi_zihao <- function(individual_file) {
     .SDcols = cols6,
     by = chi
   ]
+  individual_file_cols7 <- individual_file[,
+     `:=`(
+       preventable_beddays =
+         data.table::fifelse(
+           cij_ppa == 1,
+           max(cij_end_date) - min(cij_start_date),
+           NA_integer_
+         )
+     ),
+    by = c("chi", "cij_marker")
+  ]
+  individual_file_cols7 <- individual_file_cols7[,
+     `:=`(
+       preventable_admissions =
+         (unique(preventable_admissions) %>% uniqueN(na.rm = TRUE)),
+       preventable_beddays =
+         sum(preventable_beddays, na.rm = TRUE)
+     ),
+     by = "chi"
+  ]
+
   individual_file <- dplyr::bind_cols(
     individual_file_cols1,
     individual_file_cols2[, chi := NULL],
     individual_file_cols3[, chi := NULL],
     individual_file_cols4[, chi := NULL],
     individual_file_cols5[, chi := NULL],
-    individual_file_cols6[, chi := NULL]
+    individual_file_cols6[, chi := NULL],
+    individual_file_cols7[, chi := NULL],
   )
-  # cannot simply combine individual_file_cols3.1 as different group_by factors.
-  individual_file <- individual_file[individual_file_cols3.1,
-    on = "chi"
-  ]
-
   # convert back to tibble
   individual_file <- dplyr::as_tibble(individual_file)
 
