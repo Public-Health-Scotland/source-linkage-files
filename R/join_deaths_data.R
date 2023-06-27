@@ -1,6 +1,6 @@
 #' Join Deaths data
 #'
-#' @param ep_file_data Episode file data
+#' @param data Episode file data
 #' @param year financial year, e.g. '1920'
 #' @param slf_deaths_lookup_path Path to slf deaths lookup.
 #'
