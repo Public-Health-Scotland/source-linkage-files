@@ -56,10 +56,10 @@ process_extract_alarms_telecare <- function(
     )
 
   if (write_to_disk) {
-      write_file(
-        at_processed,
-        get_source_extract_path(year, type = "AT", check_mode = "write")
-      )
+    write_file(
+      at_processed,
+      get_source_extract_path(year, type = "AT", check_mode = "write")
+    )
   }
 
   return(at_processed)
