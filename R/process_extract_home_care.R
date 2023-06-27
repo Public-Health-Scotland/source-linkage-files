@@ -66,8 +66,10 @@ process_extract_home_care <- function(
     # remove cost variables not from current year
     dplyr::select(-(tidyselect::contains("hc_cost_2"))) %>%
     # create cost total net
-    dplyr::mutate(cost_total_net = rowSums(
-      dplyr::pick(tidyselect::contains("hc_cost_q"))),
+    dplyr::mutate(
+      cost_total_net = rowSums(
+        dplyr::pick(tidyselect::contains("hc_cost_q"))
+      ),
       na.rm = TRUE
     )
 

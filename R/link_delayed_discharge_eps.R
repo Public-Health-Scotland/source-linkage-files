@@ -283,43 +283,43 @@ link_delayed_discharge_eps <- function(data, year) {
     # add yearstay and monthly beddays
     create_monthly_beddays() %>%
     dplyr::mutate(yearstay = dplyr::rowSums(
-      paste0(month.abb[c(4:12,1:3)] %>% tolower(), "_beddays")
+      paste0(month.abb[c(4:12, 1:3)] %>% tolower(), "_beddays")
     ))
 
-    # tidy up and rename columns to match the format of episode files
-    dplyr::select(
-      "year" = "year_dd",
-      "recid" = "recid_dd",
-      "record_keydate1" = "record_keydate1_dd",
-      "record_keydate2" = "record_keydate2_dd",
-      "smrtype",
-      "chi",
-      "gender",
-      "dob",
-      "age",
-      "gpprac",
-      "postcode" = "postcode_dd",
-      "lca" = "dd_responsible_lca",
-      "hbtreatcode" = "hbtreatcode_dd",
-      "original_admission_date",
-      "delay_end_reason",
-      "primary_delay_reason",
-      "secondary_delay_reason",
-      "cij_marker",
-      "cij_start_date",
-      "cij_end_date",
-      "cij_pattype_code",
-      "cij_ipdc",
-      "cij_admtype",
-      "cij_adm_spec",
-      "cij_dis_spec",
-      "cij_delay",
-      "location",
-      "spec" = "spec_dd",
-      "dd_type",
-      paste0(month.abb[c(4:12,1:3)] %>% tolower(), "_beddays"),
-      "yearstay"
-    ) %>%
+  # tidy up and rename columns to match the format of episode files
+  dplyr::select(
+    "year" = "year_dd",
+    "recid" = "recid_dd",
+    "record_keydate1" = "record_keydate1_dd",
+    "record_keydate2" = "record_keydate2_dd",
+    "smrtype",
+    "chi",
+    "gender",
+    "dob",
+    "age",
+    "gpprac",
+    "postcode" = "postcode_dd",
+    "lca" = "dd_responsible_lca",
+    "hbtreatcode" = "hbtreatcode_dd",
+    "original_admission_date",
+    "delay_end_reason",
+    "primary_delay_reason",
+    "secondary_delay_reason",
+    "cij_marker",
+    "cij_start_date",
+    "cij_end_date",
+    "cij_pattype_code",
+    "cij_ipdc",
+    "cij_admtype",
+    "cij_adm_spec",
+    "cij_dis_spec",
+    "cij_delay",
+    "location",
+    "spec" = "spec_dd",
+    "dd_type",
+    paste0(month.abb[c(4:12, 1:3)] %>% tolower(), "_beddays"),
+    "yearstay"
+  ) %>%
     # combine DD with episode data
     dplyr::bind_rows( # restore cij_end_date
       data %>%

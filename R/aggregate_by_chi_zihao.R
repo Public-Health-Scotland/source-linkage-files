@@ -162,9 +162,11 @@ aggregate_by_chi_zihao <- function(individual_file) {
   ]
   individual_file_cols3.1 <- individual_file[,
     preventable_beddays :=
-      data.table::fifelse(cij_ppa == 1,
-                          max(cij_end_date) - min(cij_start_date),
-                          NA_real_),
+      data.table::fifelse(
+        cij_ppa == 1,
+        max(cij_end_date) - min(cij_start_date),
+        NA_real_
+      ),
     .SDcols = cols3.1,
     by = c("chi", "cij_marker")
   ]
@@ -197,7 +199,8 @@ aggregate_by_chi_zihao <- function(individual_file) {
   )
   # cannot simply combine individual_file_cols3.1 as different group_by factors.
   individual_file <- individual_file[individual_file_cols3.1,
-                                     on = "chi"]
+    on = "chi"
+  ]
 
   # convert back to tibble
   individual_file <- dplyr::as_tibble(individual_file)
