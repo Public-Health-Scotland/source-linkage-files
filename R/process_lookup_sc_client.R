@@ -112,27 +112,10 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
       .fn = ~ paste0("sc_", .x)
     )
 
-
-  ## save outfile ---------------------------------------
-  outfile <-
-    client_clean %>%
-    # reorder
-    dplyr::select(
-      "sending_location",
-      "social_care_id",
-      "sc_living_alone",
-      "sc_support_from_unpaid_carer",
-      "sc_social_worker",
-      "sc_type_of_housing",
-      "sc_meals",
-      "sc_day_care"
-    )
-
   if (write_to_disk) {
-    # Save .rds file
-    outfile %>%
+    client_clean %>%
       write_file(get_source_extract_path(year, "Client", check_mode = "write"))
   }
 
-  return(outfile)
+  return(client_clean)
 }
