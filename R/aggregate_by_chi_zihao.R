@@ -87,9 +87,12 @@ aggregate_by_chi_zihao <- function(individual_file) {
     "cij_total",
     "cij_el",
     "cij_non_el",
-    "cij_mat"
-    # "cij_delay"
+    "cij_mat",
+    # "cij_delay",
+    "preventable_admissions"
   )
+  # columns to select last unique rows group by chi and cij_marker
+  cols3.1 <- c("preventable_beddays")
   # columns to sum up
   cols4 <- c(
     vars_end_with(
@@ -120,8 +123,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
       individual_file,
       "sds_option"
     ),
-    "health_net_costincdnas",
-    "preventable_admissions"
+    "health_net_costincdnas"
   )
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
   # columns to select maximum
@@ -156,6 +158,14 @@ aggregate_by_chi_zihao <- function(individual_file) {
     .SDcols = cols3,
     by = chi
   ]
+  individual_file_cols3.1 <- individual_file[,
+    preventable_beddays :=
+      data.table::fifelse(cij_ppa == 1,
+                          max(cij_end_date) - min(cij_start_date),
+                          NA_real_),
+    .SDcols = cols3.1,
+    by = c("chi", "cij_marker")
+  ]
   individual_file_cols4 <- individual_file[,
     lapply(.SD, function(x) {
       sum(x, na.rm = TRUE)
@@ -183,6 +193,9 @@ aggregate_by_chi_zihao <- function(individual_file) {
     individual_file_cols5[, chi := NULL],
     individual_file_cols6[, chi := NULL]
   )
+  # cannot simply combine individual_file_cols3.1 as different group_by factors.
+  individual_file <- individual_file[individual_file_cols3.1,
+                                     on = "chi"]
 
   # convert back to tibble
   individual_file <- dplyr::as_tibble(individual_file)
