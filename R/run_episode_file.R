@@ -326,20 +326,3 @@ join_cohort_lookups <- function(ep_file_data, year) {
 
   return(join_cohort_lookups)
 }
-
-join_deaths_data <- function(
-    ep_file_data,
-    year,
-    slf_deaths_lookup_path = get_slf_deaths_lookup_path(year)) {
-  slf_deaths_lookup <- read_file(slf_deaths_lookup_path)
-
-  return(
-    ep_file_data %>%
-      dplyr::left_join(
-        slf_deaths_lookup,
-        by = "chi",
-        na_matches = "never",
-        relationship = "many-to-one"
-      )
-  )
-}
