@@ -12,7 +12,17 @@ process_slf_deaths_lookup(
 )
 }
 \arguments{
-\item{write_to_disk}{}
+\item{year}{The year to process, in FY format.}
+
+\item{nrs_deaths_data_path}{Path to NRS deaths data.}
+
+\item{chi_deaths_data_path}{Path to IT CHI deaths data.}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+}
+\value{
+a \link[tibble:tibble-package]{tibble} containing the episode file
 }
 \description{
 Currently this just uses the NRS death dates 'as is', with no

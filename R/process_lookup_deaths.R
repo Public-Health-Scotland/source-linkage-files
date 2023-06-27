@@ -5,12 +5,13 @@
 #' use the CHI deaths extract from IT as well as taking into account data in
 #' the episode file to assess the validity of a death date.
 #'
-#' @param year
-#' @param nrs_deaths_data_path
-#' @param chi_deaths_data_path
-#' @param write_to_disk
+#' @param year The year to process, in FY format.
+#' @param nrs_deaths_data_path Path to NRS deaths data.
+#' @param chi_deaths_data_path Path to IT CHI deaths data.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #'
-#' @return
+#' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 process_slf_deaths_lookup <- function(
     year,
