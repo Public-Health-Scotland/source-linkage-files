@@ -11,8 +11,7 @@
 #' @family process extracts
 read_lookup_sc_client <- function(
     sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"),
-    fyyear
-) {
+    fyyear) {
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 

@@ -82,7 +82,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
           "autism",
           "other_vulnerable_groups"
         ),
-        ~factor(
+        ~ factor(
           .x,
           levels = c(0L, 1L),
           labels = c("No", "Yes")
