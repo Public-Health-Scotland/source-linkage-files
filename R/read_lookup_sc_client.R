@@ -9,12 +9,18 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"), fyyear) {
+read_lookup_sc_client <- function(
+    sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"),
+    fyyear
+) {
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
   # read in data - social care 2 client
-  client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
+  client_query <- dplyr::tbl(
+    sc_dvprod_connection,
+    dbplyr::in_schema("social_care_2", "client")
+  ) %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -67,14 +73,7 @@ read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn =
         ),
         as.integer
       )
-    ) %>%
-    dplyr::arrange(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$financial_year,
-      .data$financial_quarter
-    ) %>%
-    dplyr::collect()
+    )
 
-  return(client_data)
+  return(dplyr::collect(client_query))
 }

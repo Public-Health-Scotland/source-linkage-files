@@ -65,7 +65,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
       ),
       type_of_housing = tidyr::replace_na(.data$type_of_housing, 6L)
     ) %>%
-    # factor labels
+    # Create factors with labels
     dplyr::mutate(
       dplyr::across(
         c(
@@ -82,9 +82,11 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
           "autism",
           "other_vulnerable_groups"
         ),
-        factor,
-        levels = c(0L, 1L),
-        labels = c("No", "Yes")
+        ~factor(
+          .x,
+          levels = c(0L, 1L),
+          labels = c("No", "Yes")
+        )
       ),
       dplyr::across(
         c(
@@ -94,15 +96,17 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
           "meals",
           "day_care"
         ),
-        factor,
-        levels = c(0L, 1L, 9L),
-        labels = c("No", "Yes", "Not Known")
+        ~ factor(
+          .x,
+          levels = c(0L, 1L, 9L),
+          labels = c("No", "Yes", "Not Known")
+        )
       ),
-      type_of_housing = factor(.data$type_of_housing,
-        levels = 1L:6L
+      type_of_housing = factor(
+        .data$type_of_housing,
+        levels = c(1L:6L, 8L, 9L)
       )
     ) %>%
-    # rename variables
     dplyr::rename_with(
       .cols = -c("sending_location", "social_care_id"),
       .fn = ~ paste0("sc_", .x)
