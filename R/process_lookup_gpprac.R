@@ -1,12 +1,11 @@
 #' Process the SLF gpprac lookup
 #'
-#' @description This will read and process the
-#' gpprac lookup, it will return the final data
-#' but also write this out as an rds.
+#' @description This will read and process the gpprac lookup, it will return
+#' the final data and also write this out to disk.
 #'
-#' @param open_data PHS open dataset link to gp practice details
+#' @param open_data PHS open dataset link to GP practice details
 #' @param gpprac_ref_path Path to GP Practice reference file
-#' @param spd_path Path to Scottish Postcode Directory.#'
+#' @param spd_path Path to Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -17,56 +16,55 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
                                   gpprac_ref_path = get_gpprac_ref_path(),
                                   spd_path = get_spd_path(),
                                   write_to_disk = TRUE) {
-  # Read Lookup files ---------------------------------------
-  # GP reference lookup
-  gpprac_ref_file <-
-    read_file(gpprac_ref_path) %>%
-    # select only `praccode` and `postcode`
+  gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
     dplyr::select(
-      gpprac = .data$`Prac code`,
-      postcode = .data$Postcode
+      "gpprac" = "praccode",
+      "pc7" = "postcode"
+    ) %>%
+    # Ensure all postcodes are strictly pc7 format
+    dplyr::mutate(
+      pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
     )
 
-  # postcode lookup
-  spd_file <- read_file(spd_path) %>%
-    dplyr::select(
-      .data$pc7,
-      .data$pc8,
-      .data$hb2018,
-      .data$hscp2018,
-      .data$ca2018
-    ) %>%
-    # rename pc8
-    dplyr::rename(postcode = "pc8")
+  spd_file <- read_file(
+    path = spd_path,
+    col_select = c(
+      "pc7",
+      "pc8",
+      "hb2018",
+      "hscp2018",
+      "ca2018"
+    )
+  )
 
-
-  # Data Cleaning ---------------------------------------
-
-  gpprac_slf_lookup <-
-    ## match cluster information onto the practice reference list ##
+  # Match cluster information onto the practice reference list
+  gpprac_slf_lookup <- dplyr::left_join(
+    gpprac_ref_file,
+    open_data,
+    by = "gpprac",
+    na_matches = "never",
+    relationship = "one-to-one",
+    unmatched = "error"
+  ) %>%
+    # Match on geography info - postcode
     dplyr::left_join(
-      open_data,
-      gpprac_ref_file,
-      by = c("gpprac", "postcode")
+      spd_file,
+      by = "pc7",
+      na_matches = "never",
+      relationship = "many-to-one"
     ) %>%
-    # match on geography info - postcode
-    dplyr::left_join(spd_file, by = "postcode") %>%
-    # rename hb2018
     dplyr::rename(hbpraccode = "hb2018") %>%
-    # order variables
     dplyr::select(
-      .data$gpprac,
-      .data$pc7,
-      .data$postcode,
-      .data$cluster,
-      .data$hbpraccode,
-      .data$hscp2018,
-      .data$ca2018
+      "gpprac",
+      "pc7",
+      "pc8",
+      "cluster",
+      "hbpraccode",
+      "hscp2018",
+      "ca2018"
     ) %>%
-    # convert ca to lca code
-    dplyr::mutate(lca = convert_ca_to_lca(.data$ca2018)) %>%
-    # set some known dummy practice codes to consistent Board codes
     dplyr::mutate(
+      lca = convert_ca_to_lca(.data$ca2018),
       hbpraccode = dplyr::if_else(
         .data$gpprac %in% c(99942L, 99957L, 99961L, 99981L, 99999L),
         "S08200003",
@@ -77,17 +75,9 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
         "S08200001",
         .data$hbpraccode
       )
-    ) %>%
-    # sort by gpprac
-    dplyr::arrange(.data$gpprac) %>%
-    # rename pc8 back - saved in output as pc8
-    dplyr::rename(pc8 = "postcode")
-
-
-  ## save outfile ---------------------------------------
+    )
 
   if (write_to_disk) {
-    # Save .rds file
     gpprac_slf_lookup %>%
       write_file(get_slf_gpprac_path(check_mode = "write"))
   }
