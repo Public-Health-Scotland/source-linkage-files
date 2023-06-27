@@ -5,17 +5,17 @@
 \title{Join Deaths data}
 \usage{
 join_deaths_data(
-  ep_file_data,
+  data,
   year,
   slf_deaths_lookup_path = get_slf_deaths_lookup_path(year)
 )
 }
 \arguments{
-\item{ep_file_data}{Episode file data}
-
 \item{year}{financial year, e.g. '1920'}
 
 \item{slf_deaths_lookup_path}{Path to slf deaths lookup.}
+
+\item{ep_file_data}{Episode file data}
 }
 \value{
 The data including the deaths lookup matched
