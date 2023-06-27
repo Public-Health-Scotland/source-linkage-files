@@ -58,8 +58,9 @@ add_cij_columns <- function(episode_file) {
       #   0
       # ),
       preventable_admissions = dplyr::if_else((.data$cij_ppa == 1),
-                                              cij_marker,
-                                              NA_integer_)
+        cij_marker,
+        NA_integer_
+      )
       # preventable_beddays is now added in aggragate_by_chi
     )
 }
