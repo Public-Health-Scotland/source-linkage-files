@@ -18,9 +18,8 @@ process_extract_nrs_deaths(data, year, write_to_disk = TRUE)
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-This will read and process the
-NRS deaths extract, it will return the final data
-but also write this out an rds.
+This will process the NRS deaths extract, it will return the
+final data and write this out.
 }
 \seealso{
 Other process extracts: 
@@ -42,7 +41,7 @@ Other process extracts:
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
 \code{\link{process_extract_sds}()},
-\code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_it_chi_deaths}()},
 \code{\link{process_lookup_gpprac}()},
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
@@ -52,7 +51,7 @@ Other process extracts:
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},
-\code{\link{read_lookup_chi_deaths}()},
+\code{\link{read_it_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}

@@ -81,7 +81,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
     join_cohort_lookups(year) %>%
-    # TODO match on SPARRA and HHG here
+    join_sparra_hhg(year) %>%
     fill_geographies() %>%
     load_ep_file_vars(year)
 
@@ -102,7 +102,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
 
 #' Store the unneeded episode file variables
 #'
-#' @param data The full SLF input data
+#' @param data The in progress episode file data.
 #' @inheritParams run_episode_file
 #' @param vars_to_keep a character vector of variable to keep, all others will
 #' be stored.
@@ -141,8 +141,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 
 #' Load the unneeded episode file variables
 #'
-#' @param data The SLF data to which the stored vars will be added
 #' @inheritParams run_episode_file
+#' @inheritParams store_ep_file_vars
 #'
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
@@ -169,17 +169,16 @@ load_ep_file_vars <- function(data, year) {
 
 #' Fill any missing CIJ markers for records that should have them
 #'
-#' @param ep_file_data A data frame containing only `recid %in% c("01B", "04B",
-#' "GLS", "02B")` with a valid CHI number.
+#' @inheritParams store_ep_file_vars
 #'
 #' @return A data frame with CIJ markers filled in for those missing.
-fill_missing_cij_markers <- function(ep_file_data) {
-  fixable_data <- ep_file_data %>%
+fill_missing_cij_markers <- function(data) {
+  fixable_data <- data %>%
     dplyr::filter(
       .data[["recid"]] %in% c("01B", "04B", "GLS", "02B") & !is.na(.data[["chi"]])
     )
 
-  non_fixable_data <- ep_file_data %>%
+  non_fixable_data <- data %>%
     dplyr::filter(
       !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B")) | is.na(.data[["chi"]])
     )
@@ -224,16 +223,16 @@ fill_missing_cij_markers <- function(ep_file_data) {
 
 #' Correct the CIJ variables
 #'
-#' @param ep_file_data The episode file data in progress.
+#' @inheritParams store_ep_file_vars
 #'
 #' @return The data with CIJ variables corrected.
-correct_cij_vars <- function(ep_file_data) {
+correct_cij_vars <- function(data) {
   check_variables_exist(
-    ep_file_data,
+    data,
     c("chi", "recid", "cij_admtype", "cij_pattype_code")
   )
 
-  ep_file_data %>%
+  data %>%
     # Change some values of cij_pattype_code based on cij_admtype
     dplyr::mutate(
       cij_admtype = dplyr::if_else(
@@ -264,15 +263,15 @@ correct_cij_vars <- function(ep_file_data) {
 
 #' Create cost total net inc DNA
 #'
-#' @param ep_file_data The episode file data in progress.
+#' @inheritParams store_ep_file_vars
 #'
 #' @return The data with cost including dna.
-create_cost_inc_dna <- function(ep_file_data) {
-  check_variables_exist(ep_file_data, c("cost_total_net", "attendance_status"))
+create_cost_inc_dna <- function(data) {
+  check_variables_exist(data, c("cost_total_net", "attendance_status"))
 
   # Create cost including DNAs and modify costs
   # not including DNAs using cattend
-  ep_file_data %>%
+  data %>%
     dplyr::mutate(
       cost_total_net_inc_dnas = .data$cost_total_net,
       # In the Cost_Total_Net column set the cost for
@@ -285,28 +284,25 @@ create_cost_inc_dna <- function(ep_file_data) {
     )
 }
 
-
 #' Join cohort lookups
 #'
-#' @param ep_file_data Episode file data.
-#' @param year financial year, e.g. '1920'
+#' @inheritParams store_ep_file_vars
 #'
 #' @return The data including the demographic and service use lookups matched
 #' on to the episode file.
-#'
-join_cohort_lookups <- function(ep_file_data, year) {
+join_cohort_lookups <- function(data, year) {
   demographic_cohorts <- create_demographic_cohorts(
-    ep_file_data,
+    data,
     year,
     write_to_disk = TRUE
   )
   service_use_cohorts <- create_service_use_cohorts(
-    ep_file_data,
+    data,
     year,
     write_to_disk = TRUE
   )
 
-  join_cohort_lookups <- ep_file_data %>%
+  join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohorts %>%
         dplyr::select(

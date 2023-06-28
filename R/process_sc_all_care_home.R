@@ -8,7 +8,7 @@
 #' @param sc_demog_lookup The Social Care Demographics lookup produced by
 #' [process_lookup_sc_demographics()].
 #' @param slf_deaths_lookup The SLF CHI Deaths lookup, produced by
-#' [process_lookup_chi_deaths()].
+#' [process_it_chi_deaths()].
 #' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
 #' @param spd_path (Optional) Path the Scottish Postcode Directory, default is
 #' to use [get_spd_path()].
