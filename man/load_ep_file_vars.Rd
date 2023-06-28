@@ -7,7 +7,7 @@
 load_ep_file_vars(data, year)
 }
 \arguments{
-\item{data}{The SLF data to which the stored vars will be added}
+\item{data}{The in progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
 }

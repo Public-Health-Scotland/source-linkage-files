@@ -48,6 +48,7 @@ Other date functions:
 \code{\link{fy_interval}()},
 \code{\link{last_date_month}()},
 \code{\link{midpoint_fy}()},
+\code{\link{next_fy}()},
 \code{\link{start_fy_quarter}()},
 \code{\link{start_fy}()},
 \code{\link{start_next_fy_quarter}()}

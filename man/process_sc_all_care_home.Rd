@@ -20,7 +20,7 @@ process_sc_all_care_home(
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
 \item{slf_deaths_lookup}{The SLF CHI Deaths lookup, produced by
-\code{\link[=process_lookup_chi_deaths]{process_lookup_chi_deaths()}}.}
+\code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}}.}
 
 \item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
 

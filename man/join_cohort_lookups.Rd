@@ -4,12 +4,12 @@
 \alias{join_cohort_lookups}
 \title{Join cohort lookups}
 \usage{
-join_cohort_lookups(ep_file_data, year)
+join_cohort_lookups(data, year)
 }
 \arguments{
-\item{ep_file_data}{Episode file data.}
+\item{data}{The in progress episode file data.}
 
-\item{year}{financial year, e.g. '1920'}
+\item{year}{The year to process, in FY format.}
 }
 \value{
 The data including the demographic and service use lookups matched
