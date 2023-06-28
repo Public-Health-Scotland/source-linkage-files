@@ -36,9 +36,10 @@ link_delayed_discharge_eps <- function(data, year) {
   # no flag for last reported
   dd_data <-
     read_file(get_source_extract_path(year_param, "DD")) %>%
-    dplyr::rename(# TODO Change the name of the variables in the DD extract rather than here.
+    dplyr::rename( # TODO Change the name of the variables in the DD extract rather than here.
       record_keydate1 = "keydate1_dateformat",
-      record_keydate2 = "keydate2_dateformat") %>%
+      record_keydate2 = "keydate2_dateformat"
+    ) %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(.data$record_keydate2),
@@ -50,17 +51,22 @@ link_delayed_discharge_eps <- function(data, year) {
       dummy_id = dplyr::row_number()
     )
 
-  by_dd <- dplyr::join_by(chi,
-                          x$record_keydate1 >= y$dummy_cij_start,
-                          x$dummy_keydate2 <= y$dummy_cij_end)
+  by_dd <- dplyr::join_by(
+    chi,
+    x$record_keydate1 >= y$dummy_cij_start,
+    x$dummy_keydate2 <= y$dummy_cij_end
+  )
   data <- dd_data %>%
     dplyr::inner_join(data,
-                      by = by_dd,
-                      suffix = c("_dd", "")) %>%
-    dplyr::arrange(.data$cij_start_date,
-                   .data$cij_end_date,
-                   .data$cij_marker,
-                   .data$postcode) %>%
+      by = by_dd,
+      suffix = c("_dd", "")
+    ) %>%
+    dplyr::arrange(
+      .data$cij_start_date,
+      .data$cij_end_date,
+      .data$cij_marker,
+      .data$postcode
+    ) %>%
     # remove duplicate rows, but still got some duplicate mismatches
     dplyr::distinct(
       .data$chi,
@@ -262,9 +268,10 @@ link_delayed_discharge_eps <- function(data, year) {
       dplyr::desc(.data$datediff_start)
     ) %>%
     dplyr::distinct(.data$postcode,
-                    .data$record_keydate1_dd,
-                    .data$record_keydate2_dd,
-                    .keep_all = TRUE) %>%
+      .data$record_keydate1_dd,
+      .data$record_keydate2_dd,
+      .keep_all = TRUE
+    ) %>%
     # add cij_delay
     dplyr::mutate(has_delay = dplyr::if_else(
       .data$chi != "" & !is.na(.data$cij_marker),
@@ -275,14 +282,15 @@ link_delayed_discharge_eps <- function(data, year) {
     dplyr::mutate(cij_delay = max(has_delay)) %>%
     dplyr::ungroup() %>%
     # add yearstay and monthly beddays
-    create_monthly_beddays(year,
-                           .data$record_keydate1,
-                           .data$record_keydate2) %>%
+    create_monthly_beddays(
+      year,
+      .data$record_keydate1,
+      .data$record_keydate2
+    ) %>%
     dplyr::mutate(yearstay = rowSums(dplyr::select(
       .,
       paste0(month.abb[c(4:12, 1:3)] %>% tolower(), "_beddays")
     ))) %>%
-
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       "year" = "year_dd",
@@ -318,7 +326,7 @@ link_delayed_discharge_eps <- function(data, year) {
       "yearstay"
     ) %>%
     # combine DD with episode data
-    dplyr::bind_rows(# restore cij_end_date
+    dplyr::bind_rows( # restore cij_end_date
       data %>%
         dplyr::select(
           -c(
@@ -330,7 +338,8 @@ link_delayed_discharge_eps <- function(data, year) {
             "is_dummy_cij_end",
             "dummy_cij_end"
           )
-        ))
+        )
+    )
 
   return(data)
 }
