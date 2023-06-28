@@ -4,10 +4,18 @@
 \alias{read_file}
 \title{Read a file}
 \usage{
-read_file(path, ...)
+read_file(path, col_select = NULL, as_data_frame = TRUE, ...)
 }
 \arguments{
 \item{path}{The file path to be read}
+
+\item{col_select}{A character vector of column names to keep, as in the
+"select" argument to \code{data.table::fread()}, or a
+\link[tidyselect:eval_select]{tidy selection specification}
+of columns, as used in \code{dplyr::select()}.}
+
+\item{as_data_frame}{Should the function return a \code{data.frame} (default) or
+an Arrow \link[arrow]{Table}?}
 
 \item{...}{Addition arguments passed to the relevant function.}
 }

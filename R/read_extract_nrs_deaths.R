@@ -3,9 +3,9 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-#'
-read_extract_nrs_deaths <- function(year, file_path = get_boxi_extract_path(year = year, type = "Deaths")) {
-  # Read BOXI extract
+read_extract_nrs_deaths <- function(
+    year,
+    file_path = get_boxi_extract_path(year = year, type = "Deaths")) {
   extract_nrs_deaths <- read_file(file_path,
     col_types = cols_only(
       "Death Location Code" = col_character(),
@@ -36,7 +36,6 @@ read_extract_nrs_deaths <- function(year, file_path = get_boxi_extract_path(year
       "GP practice code(99)" = col_character()
     )
   ) %>%
-    # rename variables
     dplyr::rename(
       death_location_code = "Death Location Code",
       lca = "Geo Council Area Code",
