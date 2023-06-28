@@ -209,7 +209,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     individual_file_cols4[, chi := NULL],
     individual_file_cols5[, chi := NULL],
     individual_file_cols6[, chi := NULL],
-    individual_file_cols7[, chi := NULL],
+    individual_file_cols7[, chi := NULL]
   )
   # convert back to tibble
   individual_file <- dplyr::as_tibble(individual_file)
