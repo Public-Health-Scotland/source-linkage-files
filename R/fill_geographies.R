@@ -126,8 +126,10 @@ fill_postcode_geogs <- function(data) {
 }
 
 fill_gpprac_geographies <- function(data) {
-  gpprac_ref <- read_file(get_slf_gpprac_path()) %>%
-    dplyr::select("gpprac", "cluster", "hbpraccode")
+  gpprac_ref <- read_file(
+    get_slf_gpprac_path(),
+    col_select = c("gpprac", "cluster", "hbpraccode")
+  )
 
   filled_gpprac <- dplyr::left_join(
     data,
