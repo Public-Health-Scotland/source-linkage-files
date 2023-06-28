@@ -4,10 +4,18 @@
 \alias{create_individual_file}
 \title{Create individual file}
 \usage{
-create_individual_file(episode_file)
+create_individual_file(episode_file, year, write_to_disk = TRUE)
 }
 \arguments{
 \item{episode_file}{Tibble containing episodic data}
+
+\item{year}{The year to process, in FY format.}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+}
+\value{
+The processed individual file
 }
 \description{
 Creates individual file from episode file
