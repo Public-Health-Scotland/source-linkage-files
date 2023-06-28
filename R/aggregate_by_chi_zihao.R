@@ -181,18 +181,20 @@ aggregate_by_chi_zihao <- function(individual_file) {
   individual_file_cols7 <- individual_file[,
     `:=`(
       preventable_beddays =
-        data.table::fifelse(
+        # ifelse is faster than dplyr::if_else here
+        ifelse(
           cij_ppa == 1,
           max(cij_end_date) - min(cij_start_date),
-          NA_integer_
+          NA
         )
     ),
-    by = c("chi", "cij_marker")
+    # cij_marker has been renamed as cij_total
+    by = c("chi", "cij_total")
   ]
   individual_file_cols7 <- individual_file_cols7[,
     `:=`(
       preventable_admissions =
-        (unique(preventable_admissions) %>% uniqueN(na.rm = TRUE)),
+        (unique(preventable_admissions) %>% data.table::uniqueN(na.rm = TRUE)),
       preventable_beddays =
         sum(preventable_beddays, na.rm = TRUE)
     ),
