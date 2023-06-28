@@ -4,10 +4,10 @@
 \alias{correct_cij_vars}
 \title{Correct the CIJ variables}
 \usage{
-correct_cij_vars(ep_file_data)
+correct_cij_vars(data)
 }
 \arguments{
-\item{ep_file_data}{The episode file data in progress.}
+\item{data}{The in progress episode file data.}
 }
 \value{
 The data with CIJ variables corrected.

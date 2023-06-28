@@ -12,11 +12,11 @@ process_lookup_gpprac(
 )
 }
 \arguments{
-\item{open_data}{PHS open dataset link to gp practice details}
+\item{open_data}{PHS open dataset link to GP practice details}
 
 \item{gpprac_ref_path}{Path to GP Practice reference file}
 
-\item{spd_path}{Path to Scottish Postcode Directory.#'}
+\item{spd_path}{Path to Scottish Postcode Directory.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -25,9 +25,8 @@ process_lookup_gpprac(
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-This will read and process the
-gpprac lookup, it will return the final data
-but also write this out as an rds.
+This will read and process the gpprac lookup, it will return
+the final data and also write this out to disk.
 }
 \seealso{
 Other process extracts: 

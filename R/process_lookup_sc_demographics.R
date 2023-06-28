@@ -13,7 +13,7 @@
 #' @export
 #' @family process extracts
 process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), write_to_disk = TRUE) {
-  ## Deal with postcodes---------------------------------------
+  # Deal with postcodes ---------------------------------------
 
   # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
   uk_pc_regexp <- "^[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}$"
@@ -21,8 +21,7 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
   dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
-  ## postcode type ##
-  valid_spd_postcodes <- read_file(spd_path) %>%
+  valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
     dplyr::pull(.data$pc7)
 
 
