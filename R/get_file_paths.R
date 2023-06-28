@@ -19,8 +19,8 @@
 #' @param file_name_regexp A regular expression to search for the file name
 #' if this is used `file_name` should not be, it will return the most recently
 #' created file using [find_latest_file()]
-#' @param selection_method Passed only to [find_latest_file()], will select the file based
-#' on latest modification date (default) or file name
+#' @param selection_method Passed only to [find_latest_file()], will select the
+#'  file based on latest modification date (default) or file name
 #'
 #' @return The full file path, an error will be thrown
 #' if the path doesn't exist or it's not readable
@@ -77,14 +77,20 @@ find the latest file with {.arg file_name_regexp}",
         # The file doesn't exist but we do want to create it
         fs::file_create(file_path)
         cli::cli_alert_info(
-          "The file {.file {fs::path_file(file_path)}} did not exist in {.path {directory}}, it has now been created."
+          "The file {.file {fs::path_file(file_path)}} did not exist in
+          {.path {directory}}, it has now been created."
         )
       } else {
         possible_file_name <- fs::path_file(
-          fs::dir_ls(directory, regexp = file_path, ignore.case = TRUE)
+          fs::dir_ls(
+            directory,
+            regexp = fs::path_ext_remove(file_path),
+            ignore.case = TRUE
+          )
         )
 
-        error_text <- "The file {.file {fs::path_file(file_path)}} does not exist in {.path {directory}}"
+        error_text <- "The file {.file {fs::path_file(file_path)}} does not
+        exist in {.path {directory}}"
 
         if (length(possible_file_name) == 1L) {
           # There was a file matching the name, except for case differences.
@@ -101,7 +107,8 @@ find the latest file with {.arg file_name_regexp}",
 
     if (!fs::file_access(file_path, mode = check_mode)) {
       cli::cli_abort(
-        "{.file {fs::path_file(file_path)}} exists in {.path {directory}} but is not {check_mode}able."
+        "{.file {fs::path_file(file_path)}} exists in {.path {directory}} but is
+        not {check_mode}able."
       )
     }
 
@@ -137,7 +144,8 @@ get_dev_dir <- function() {
 
 #' Year Directory
 #'
-#' @description Get the directory for Source Linkage File Updates for the given year
+#' @description Get the directory for Source Linkage File Updates for the given
+#' year.
 #'
 #' @param year The Financial Year e.g. 1718
 #' @param extracts_dir (optional) Whether to

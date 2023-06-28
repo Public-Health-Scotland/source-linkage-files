@@ -24,7 +24,7 @@ Produce the tests for the SLF Homelessness Extract
 }
 \seealso{
 Other slf test functions: 
-\code{\link{produce_slf_deaths_tests}()},
+\code{\link{produce_it_chi_deaths_tests}()},
 \code{\link{produce_slf_gpprac_tests}()},
 \code{\link{produce_slf_postcode_tests}()}
 }
