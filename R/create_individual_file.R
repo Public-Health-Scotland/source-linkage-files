@@ -3,8 +3,15 @@
 #' @description Creates individual file from episode file
 #'
 #' @param episode_file Tibble containing episodic data
-create_individual_file <- function(episode_file) {
-  episode_file %>%
+#' @param year The year to process, in FY format.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#'
+#' @return The processed individual file
+#' @export
+#'
+create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
+  individual_file <- episode_file %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
@@ -13,6 +20,20 @@ create_individual_file <- function(episode_file) {
     recode_gender() %>%
     aggregate_by_chi_zihao() %>%
     clean_individual_file()
+
+  if (write_to_disk) {
+    slf_path <- get_file_path(
+      get_year_dir(year),
+      stringr::str_glue(
+        "source-individual-file-{year}.parquet"
+      ),
+      check_mode = "write"
+    )
+
+    write_file(episode_file, slf_path)
+  }
+
+  return(individual_file)
 }
 
 #' Remove blank CHI

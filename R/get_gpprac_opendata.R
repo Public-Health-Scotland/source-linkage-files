@@ -5,42 +5,33 @@
 #'
 get_gpprac_opendata <- function() {
   gpprac_data <- phsopendata::get_dataset(
-    "gp-practice-contact-details-and-list-sizes",
-    max_resources = 20L
+    "gp-practice-contact-details-and-list-sizes"
   ) %>%
-    janitor::clean_names() %>%
     dplyr::left_join(
       phsopendata::get_resource(
         "944765d7-d0d9-46a0-b377-abb3de51d08e",
         col_select = c("HSCP", "HSCPName", "HB", "HBName")
-      ) %>%
-        janitor::clean_names(),
-      by = c("hb", "hscp")
+      ),
+      by = c("HB", "HSCP")
     ) %>%
-    # select variables
+    janitor::clean_names() %>%
     dplyr::select(
-      gpprac = .data$practice_code,
-      practice_name = .data$gp_practice_name,
-      .data$postcode,
-      cluster = .data$gp_cluster,
-      partnership = .data$hscp_name,
-      health_board = .data$hb_name
+      gpprac = "practice_code",
+      practice_name = "gp_practice_name",
+      "postcode",
+      cluster = "gp_cluster",
+      partnership = "hscp_name",
+      health_board = "hb_name"
     ) %>%
     # drop NA cluster rows
-    tidyr::drop_na(.data$cluster) %>%
-    # format practice name text
+    tidyr::drop_na("cluster") %>%
     dplyr::mutate(
-      practice_name = stringr::str_to_title(.data$practice_name)
-    ) %>%
-    # format postcode
-    dplyr::mutate(
+      # format practice name text
+      practice_name = stringr::str_to_title(.data$practice_name),
+      # format postcode to strict PC7 format
       postcode = phsmethods::format_postcode(.data$postcode)
     ) %>%
-    # keep distinct gpprac
     dplyr::distinct(.data$gpprac, .keep_all = TRUE) %>%
-    # Sort for SPSS matching
-    dplyr::arrange(.data$gpprac) %>%
-    # Write rds file
     write_file(get_practice_details_path(check_mode = "write"))
 
   return(gpprac_data)

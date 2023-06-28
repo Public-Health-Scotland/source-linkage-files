@@ -25,7 +25,7 @@ fill_ch_names <- function(ch_data,
       # Get a list of confirmed valid Scottish postcodes from the SPD
       ch_postcode = dplyr::if_else(
         .data[["ch_postcode"]] %in% dplyr::pull(
-          read_file(spd_path),
+          read_file(spd_path, col_select = "pc7"),
           "pc7"
         ),
         .data[["ch_postcode"]],

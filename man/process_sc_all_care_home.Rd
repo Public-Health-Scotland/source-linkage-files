@@ -20,7 +20,7 @@ process_sc_all_care_home(
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
 \item{slf_deaths_lookup}{The SLF CHI Deaths lookup, produced by
-\code{\link[=process_lookup_chi_deaths]{process_lookup_chi_deaths()}}.}
+\code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}}.}
 
 \item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
 
@@ -59,7 +59,7 @@ Other process extracts:
 \code{\link{process_extract_outpatients}()},
 \code{\link{process_extract_prescribing}()},
 \code{\link{process_extract_sds}()},
-\code{\link{process_lookup_chi_deaths}()},
+\code{\link{process_it_chi_deaths}()},
 \code{\link{process_lookup_gpprac}()},
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
@@ -68,7 +68,7 @@ Other process extracts:
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
 \code{\link{read_extract_gp_ooh}()},
-\code{\link{read_lookup_chi_deaths}()},
+\code{\link{read_it_chi_deaths}()},
 \code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}

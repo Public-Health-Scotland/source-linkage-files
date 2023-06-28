@@ -52,7 +52,7 @@ link_delayed_discharge_eps <- function(data, year) {
     )
 
   by_dd <- dplyr::join_by(
-    chi,
+    "chi",
     x$record_keydate1 >= y$dummy_cij_start,
     x$dummy_keydate2 <= y$dummy_cij_end
   )
@@ -278,8 +278,8 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
-    dplyr::group_by(chi, cij_marker) %>%
-    dplyr::mutate(cij_delay = max(has_delay)) %>%
+    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::ungroup() %>%
     # add yearstay and monthly beddays
     create_monthly_beddays(
