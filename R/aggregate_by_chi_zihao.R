@@ -181,7 +181,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
   individual_file_cols7 <- individual_file[,
     `:=`(
       preventable_beddays =
-        # ifelse is faster than dplyr::if_else here
+      # ifelse is faster than dplyr::if_else here
         ifelse(
           cij_ppa == 1,
           max(cij_end_date) - min(cij_start_date),
