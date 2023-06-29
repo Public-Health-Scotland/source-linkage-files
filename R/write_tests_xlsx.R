@@ -17,15 +17,51 @@
 write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   # Set up the workbook -----------------------------------------------------
 
+  tests_workbook_name <- ifelse(
+    is.null(year),
+    stringr::str_glue(latest_update(), "_lookups_tests"),
+    stringr::str_glue(latest_update(), "_{year}_tests")
+  )
+
   tests_workbook_path <- fs::path(
     get_slf_dir(),
     "Tests",
-    ifelse(
-      is.null(year),
-      stringr::str_glue(latest_update(), "_lookups_tests.xlsx"),
-      stringr::str_glue(latest_update(), "_{year}_tests.xlsx")
-    )
+    tests_workbook_name,
+    ext = "xlsx"
   )
+
+  in_use_path <- fs::path(
+    fs::path_dir(tests_workbook_path),
+    stringr::str_glue("{tests_workbook_name}-IN-USE")
+  )
+
+  # Check if the tests are in use (by another process)
+  if (fs::file_exists(path = in_use_path)) {
+    seconds <- 0L
+    max_wait <- 300L
+
+    cli::cli_progress_bar(
+      type = "iterator",
+      format = "{cli::pb_spin} [{cli::pb_elapsed}] Waiting for {tests_workbook_name}..."
+    )
+    while (fs::file_exists(path = in_use_path) && seconds < max_wait) {
+      # While the tests are in use (wait a random number of seconds from 1 to 30)
+      cli::cli_progress_update()
+      wait <- round(runif(1, 1, 15))
+
+      Sys.sleep(wait)
+      seconds <- seconds + wait
+    }
+    cli::cli_progress_done()
+  }
+
+  # Final check to maybe avoid corrupting the workbook
+  Sys.sleep(round(runif(1, 1, 3)))
+  if (fs::file_exists(path = in_use_path)) {
+    fs::file_create(path = in_use_path)
+  } else {
+    cli::cli_abort("Could not write the {sheet_name} tests.")
+  }
 
   if (fs::file_exists(tests_workbook_path)) {
     # Load the data from the existing workbook
@@ -138,6 +174,8 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     # Set the correct permissions
     fs::file_chmod(path = tests_workbook_path, mode = "660")
   }
+
+  fs::file_delete(path = in_use_path)
 
   cli::cli_alert_success(
     "The tests for {year}{ifelse(is.null(year), '', '-')}{sheet_name} were written to {.file {fs::path_file(tests_workbook_path)}}"
