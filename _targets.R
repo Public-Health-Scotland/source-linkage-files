@@ -144,7 +144,7 @@ list(
     process_sc_all_care_home(
       all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup,
-      slf_deaths_lookup = slf_deaths_lookup,
+      it_chi_deaths_data = it_chi_deaths_data,
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk

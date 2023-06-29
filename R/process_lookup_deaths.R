@@ -18,7 +18,7 @@ process_slf_deaths_lookup <- function(
     nrs_deaths_data = read_file(
       get_source_extract_path(year, "Deaths"),
       col_select = c("chi", "record_keydate1")
-      ),
+    ),
     chi_deaths_data = read_file(get_slf_chi_deaths_path()),
     write_to_disk = TRUE) {
   slf_deaths_lookup <- nrs_deaths_data %>%
