@@ -15,7 +15,7 @@
 #' @family test functions
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
-  # Set up the workbook -----------------------------------------------------
+  # Set up the workbook ----
 
   tests_workbook_name <- ifelse(
     is.null(year),
@@ -57,7 +57,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
 
   # Final check to maybe avoid corrupting the workbook
   Sys.sleep(round(runif(1, 1, 3)))
-  if (fs::file_exists(path = in_use_path)) {
+  if (!fs::file_exists(path = in_use_path)) {
     fs::file_create(path = in_use_path)
   } else {
     cli::cli_abort("Could not write the {sheet_name} tests.")
@@ -97,7 +97,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   )
 
 
-  # Formatting --------------------------------------------------------------
+  # Formatting ----
 
   # Get the column numbers
   pct_change_col <- which(
@@ -156,7 +156,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   )
 
 
-  # Write workbook to disk --------------------------------------------------
+  # Write workbook to disk ----
 
   # Reorder the sheets alphabetically
   sheet_names <- wb$sheet_names
