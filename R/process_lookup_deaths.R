@@ -26,7 +26,7 @@ process_slf_deaths_lookup <- function(
     dplyr::mutate(
       death_date = .data$record_keydate1,
       deceased = TRUE,
-      .keep = "none"
+      .keep = "unused"
     )
 
   if (write_to_disk) {
