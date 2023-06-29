@@ -1,6 +1,7 @@
 # _targets.R file
 library(targets)
 library(tarchetypes)
+future::plan(future.callr::callr)
 
 options(readr.read_lazy = TRUE)
 
@@ -11,7 +12,6 @@ tar_option_set(
   format = "parquet",
   resources = tar_resources(
     parquet = tar_resources_parquet(compression = "zstd"),
-    future = tar_resources_future(plan = future::plan(future.callr::callr)),
     qs = tar_resources_qs(preset = "high")
   ),
   error = "continue",
