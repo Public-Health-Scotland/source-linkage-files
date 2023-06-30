@@ -60,7 +60,14 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   if (!fs::file_exists(path = in_use_path)) {
     fs::file_create(path = in_use_path)
   } else {
-    cli::cli_abort("Could not write the {sheet_name} tests.")
+    cli::cli_abort(
+      c("i" = paste(
+        "Did not write the ",
+        ifelse(is.null(year), "", year),
+        sheet_name,
+        "tests to avoid corrupting the workbook."
+      ))
+    )
   }
 
   if (fs::file_exists(tests_workbook_path)) {
