@@ -477,14 +477,15 @@ list(
         year = year
       )
     ),
-        tar_target(
+    tar_target(
       slf_deaths_lookup,
       process_slf_deaths_lookup(
         year = year,
         nrs_deaths_data = source_nrs_deaths_extract,
         chi_deaths_data = it_chi_deaths_data,
         write_to_disk = write_to_disk
-        ),
+      )
+    ),
     tar_qs(
       processed_data_list,
       list(
