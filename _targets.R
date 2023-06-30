@@ -1,6 +1,7 @@
 # _targets.R file
 library(targets)
 library(tarchetypes)
+future::plan(future.callr::callr)
 
 options(readr.read_lazy = TRUE)
 
@@ -11,7 +12,6 @@ tar_option_set(
   format = "parquet",
   resources = tar_resources(
     parquet = tar_resources_parquet(compression = "zstd"),
-    future = tar_resources_future(plan = future::plan(future.callr::callr)),
     qs = tar_resources_qs(preset = "high")
   ),
   error = "continue",
@@ -19,7 +19,7 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1819", "1920", "2021", "2122", "2223")
+years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223")
 
 list(
   tar_rds(write_to_disk, TRUE),
@@ -144,7 +144,7 @@ list(
     process_sc_all_care_home(
       all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup,
-      slf_deaths_lookup = slf_chi_deaths_lookup,
+      it_chi_deaths_data = it_chi_deaths_data,
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
