@@ -40,14 +40,14 @@ calculate_measures <- function(
     data <- data %>%
       dplyr::select(tidyselect::contains({{ vars }})) %>%
       dplyr::summarise(
-        dplyr::across(dplyr::everything(),
-          ~ sum(.x, na.rm = TRUE),
-          .names = "total_{col}"
-        ),
         dplyr::across(
-          dplyr::everything(!dplyr::starts_with("total_")),
-          ~ mean(.x, na.rm = TRUE),
-          .names = "mean_{col}"
+          dplyr::everything(),
+          list(
+            "total" = ~ sum(.x, na.rm = TRUE),
+            "mean" = ~ mean(.x, na.rm = TRUE),
+            "median" = ~ median(.x, na.rm = TRUE)
+          ),
+          .names = "{.fn}_{.col}"
         )
       )
   } else if (measure == "sum") {
