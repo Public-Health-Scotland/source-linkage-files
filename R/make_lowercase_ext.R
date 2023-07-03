@@ -1,3 +1,9 @@
+#' Make file path extensions lower-case
+#'
+#' @param path The path to recurse over
+#'
+#' @return NULL
+#' @export
 make_lowercase_ext <- function(path = get_slf_dir()) {
   upper_ext_paths <- fs::dir_ls(
     path = path,

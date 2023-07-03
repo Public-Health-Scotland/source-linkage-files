@@ -24,8 +24,8 @@ years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223")
 list(
   tar_rds(write_to_disk, TRUE),
   tar_rds(
-    make_lowercase_ext,
-    make_lowercase_ext,
+    file_path_ext_clean,
+    make_lowercase_ext(),
     priority = 1,
     cue = tar_cue(mode = "always")
   ),
@@ -179,7 +179,7 @@ list(
   tar_map(
     list(year = years_to_run),
     tar_rds(
-      gzip_files,
+      compress_extracts,
       gzip_files(extract_year = year),
       priority = 1,
       cue = tar_cue(mode = "always")
