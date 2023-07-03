@@ -327,8 +327,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
       ch_cost_per_day = dplyr::if_else(
-        eval(condition) &
-          .data$yearstay > 0,
+        eval(condition) & .data$yearstay > 0,
         .data$cost_total_net / .data$yearstay,
         .data$cost_total_net
       ),
@@ -340,8 +339,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ),
       # If end date is missing use the first day of next FY quarter
       ch_ep_end = dplyr::if_else(
-        eval(condition) &
-          is.na(.data$ch_ep_end),
+        eval(condition) & is.na(.data$ch_ep_end),
         start_next_fy_quarter(.data$sc_latest_submission),
         .data$ch_ep_end
       )
