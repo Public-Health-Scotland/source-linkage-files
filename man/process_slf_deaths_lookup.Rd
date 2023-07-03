@@ -6,17 +6,18 @@
 \usage{
 process_slf_deaths_lookup(
   year,
-  nrs_deaths_data_path = get_source_extract_path(year, "Deaths"),
-  chi_deaths_data_path = get_slf_chi_deaths_path(),
+  nrs_deaths_data = read_file(get_source_extract_path(year, "Deaths"), col_select =
+    c("chi", "record_keydate1")),
+  chi_deaths_data = read_file(get_slf_chi_deaths_path()),
   write_to_disk = TRUE
 )
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
 
-\item{nrs_deaths_data_path}{Path to NRS deaths data.}
+\item{nrs_deaths_data}{NRS deaths data.}
 
-\item{chi_deaths_data_path}{Path to IT CHI deaths data.}
+\item{chi_deaths_data}{IT CHI deaths data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

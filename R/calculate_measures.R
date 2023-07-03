@@ -40,14 +40,14 @@ calculate_measures <- function(
     data <- data %>%
       dplyr::select(tidyselect::contains({{ vars }})) %>%
       dplyr::summarise(
-        dplyr::across(dplyr::everything(),
-          ~ sum(.x, na.rm = TRUE),
-          .names = "total_{col}"
-        ),
         dplyr::across(
-          dplyr::everything(!dplyr::starts_with("total_")),
-          ~ mean(.x, na.rm = TRUE),
-          .names = "mean_{col}"
+          dplyr::everything(),
+          list(
+            "total" = ~ sum(.x, na.rm = TRUE),
+            "mean" = ~ mean(.x, na.rm = TRUE),
+            "median" = ~ median(.x, na.rm = TRUE)
+          ),
+          .names = "{.fn}_{.col}"
         )
       )
   } else if (measure == "sum") {
@@ -61,26 +61,20 @@ calculate_measures <- function(
   } else if (measure == "min-max") {
     data <- data %>%
       dplyr::select(tidyselect::contains({{ vars }})) %>%
-      dplyr::summarise(
-        dplyr::across(
-          tidyselect::everything(),
-          ~ min(.x, na.rm = TRUE),
-          .names = "min_{col}"
-        ),
-        dplyr::across(
-          dplyr::everything(!dplyr::starts_with("min_")),
-          ~ max(.x, na.rm = TRUE),
-          .names = "max_{col}"
-        ),
+      dplyr::mutate(
         dplyr::across(
           dplyr::where(lubridate::is.Date),
           ~ convert_date_to_numeric(.x)
         )
       ) %>%
-      dplyr::mutate(
+      dplyr::summarise(
         dplyr::across(
-          dplyr::where(lubridate::is.Date),
-          ~ convert_date_to_numeric(.)
+          tidyselect::everything(),
+          list(
+            "min" = ~ min(.x, na.rm = TRUE),
+            "max" = ~ max(.x, na.rm = TRUE)
+          ),
+          .names = "{.fn}_{.col}"
         )
       )
   }
