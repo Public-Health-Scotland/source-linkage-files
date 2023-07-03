@@ -55,7 +55,12 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
       discondition = factor(.data$discondition,
         levels = c(1L:5L, 8L)
       ),
-      smrtype = add_smr_type(.data$recid, .data$mpat)
+      smrtype = add_smr_type(.data$recid, .data$mpat),
+      ipdc = dplyr::case_match(
+        .data$smrtype,
+        "Matern-IP" ~ "I",
+        "Matern-DC" ~ "D"
+      )
     )
 
 
@@ -102,7 +107,8 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
-      "uri"
+      "uri",
+      "ipdc"
     ) %>%
     dplyr::arrange(.data$chi, .data$record_keydate1)
 
