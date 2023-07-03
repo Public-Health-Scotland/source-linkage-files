@@ -268,7 +268,8 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$datediff_end,
       dplyr::desc(.data$datediff_start)
     ) %>%
-    dplyr::distinct(.data$postcode,
+    dplyr::distinct(
+    .data$postcode,
       .data$record_keydate1_dd,
       .data$record_keydate2_dd,
       .keep_all = TRUE
