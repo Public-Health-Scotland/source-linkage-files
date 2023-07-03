@@ -16,13 +16,15 @@ link_delayed_discharge_eps <- function(data, year) {
       cij_start_date_lower = .data$cij_start_date - lubridate::days(1L),
       cij_end_date_upper = .data$cij_end_date + lubridate::days(1L),
       cij_end_month = last_date_month(.data$cij_end_date),
-      is_dummy_cij_start = is.na(.data$cij_start_date) & !is.na(.data$cij_end_date),
+      is_dummy_cij_start = is.na(.data$cij_start_date) &
+        !is.na(.data$cij_end_date),
       dummy_cij_start = dplyr::if_else(
         .data$is_dummy_cij_start,
         lubridate::as_date("1900-01-01"),
         .data$cij_start_date_lower
       ),
-      is_dummy_cij_end = !is.na(.data$cij_start_date) & is.na(.data$cij_end_date),
+      is_dummy_cij_end = !is.na(.data$cij_start_date) &
+        is.na(.data$cij_end_date),
       dummy_cij_end = dplyr::if_else(
         .data$is_dummy_cij_end,
         lubridate::today(),
@@ -34,15 +36,16 @@ link_delayed_discharge_eps <- function(data, year) {
   # no flag for last reported
   dd_data <-
     read_file(get_source_extract_path(year_param, "DD")) %>%
+    # TODO Change the name of the variables in the DD extract rather than here.
     dplyr::rename(
-      # TODO Change the name of the variables in the DD extract rather than here.
       record_keydate1 = "keydate1_dateformat",
       record_keydate2 = "keydate2_dateformat"
     ) %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(.data$record_keydate2),
-      dummy_keydate2 = dplyr::if_else(.data$is_dummy_keydate2,
+      dummy_keydate2 = dplyr::if_else(
+        .data$is_dummy_keydate2,
         lubridate::today(),
         .data$record_keydate2
       ),
@@ -273,13 +276,20 @@ link_delayed_discharge_eps <- function(data, year) {
     ) %>%
     # add cij_delay
     dplyr::mutate(has_delay = dplyr::if_else(
-      .data$chi != "" & !is.na(.data$cij_marker),
+      is_missing(.data$chi) & !is.na(.data$cij_marker),
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::ungroup() %>%
+    # add yearstay and monthly beddays
+    create_monthly_beddays(
+      year,
+      .data$record_keydate1,
+      .data$record_keydate2
+    ) %>%
+    dplyr::mutate(yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))) %>%
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       "year" = "year_dd",
@@ -310,10 +320,12 @@ link_delayed_discharge_eps <- function(data, year) {
       "cij_delay",
       "location",
       "spec" = "spec_dd",
-      "dd_type"
+      "dd_type",
+      dplyr::ends_with("_beddays"),
+      "yearstay"
     ) %>%
     # combine DD with episode data
-    dplyr::bind_rows( # restore cij_end_date
+    dplyr::bind_rows(
       data %>%
         dplyr::select(
           -c(
