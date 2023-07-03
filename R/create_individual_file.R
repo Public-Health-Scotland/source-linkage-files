@@ -82,7 +82,7 @@ add_cij_columns <- function(episode_file) {
         cij_marker,
         NA_integer_
       )
-      # preventable_beddays is now added in aggragate_by_chi
+      # preventable_beddays is now added in aggregate_by_chi
     )
 }
 

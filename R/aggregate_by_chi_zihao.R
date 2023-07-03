@@ -50,7 +50,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     )
   )
 
-  # colums specification, grouped by chi
+  # column specification, grouped by chi
   # columns to select last
   cols2 <- c(
     vars_end_with(
