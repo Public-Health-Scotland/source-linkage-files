@@ -18,7 +18,7 @@ process_slf_deaths_lookup(
 \item{nrs_deaths_data}{NRS deaths data.}
 
 \item{chi_deaths_data}{IT CHI deaths data.}
-  
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
