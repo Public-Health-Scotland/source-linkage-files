@@ -7,7 +7,7 @@
 process_sc_all_care_home(
   data,
   sc_demog_lookup,
-  slf_deaths_lookup,
+  it_chi_deaths_data,
   ch_name_lookup_path = get_slf_ch_name_lookup_path(),
   spd_path = get_spd_path(),
   write_to_disk = TRUE
@@ -19,8 +19,8 @@ process_sc_all_care_home(
 \item{sc_demog_lookup}{The Social Care Demographics lookup produced by
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
-\item{slf_deaths_lookup}{The SLF CHI Deaths lookup, produced by
-\code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}}.}
+\item{it_chi_deaths_data}{The processed lookup of deaths from IT produced
+with \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}}.}
 
 \item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
 

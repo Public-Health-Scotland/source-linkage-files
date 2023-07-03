@@ -275,7 +275,7 @@ link_delayed_discharge_eps <- function(data, year) {
     ) %>%
     # add cij_delay
     dplyr::mutate(has_delay = dplyr::if_else(
-      .data$chi != "" & !is.na(.data$cij_marker),
+      is_missing(.data$chi) & !is.na(.data$cij_marker),
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
@@ -324,7 +324,7 @@ link_delayed_discharge_eps <- function(data, year) {
       "yearstay"
     ) %>%
     # combine DD with episode data
-    dplyr::bind_rows( # restore cij_end_date
+    dplyr::bind_rows(
       data %>%
         dplyr::select(
           -c(
