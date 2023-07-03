@@ -288,10 +288,7 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$record_keydate1,
       .data$record_keydate2
     ) %>%
-    dplyr::mutate(yearstay = rowSums(dplyr::select(
-      .,
-      paste0(month.abb[c(4:12, 1:3)] %>% tolower(), "_beddays")
-    ))) %>%
+    dplyr::mutate(yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))) %>%
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       "year" = "year_dd",
@@ -323,7 +320,7 @@ link_delayed_discharge_eps <- function(data, year) {
       "location",
       "spec" = "spec_dd",
       "dd_type",
-      all_of(paste0(month.abb[c(4:12, 1:3)] %>% tolower(), "_beddays")),
+dplyr::ends_with("_beddays"),
       "yearstay"
     ) %>%
     # combine DD with episode data
