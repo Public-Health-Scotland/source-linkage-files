@@ -1,0 +1,49 @@
+#' Read Social Care Home Care data
+#'
+#' @param sc_dvprod_connection Connection to the SC platform
+#'
+#' @return an extract of the data as a [tibble][tibble::tibble-package].
+#'
+#' @export
+#'
+read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+  home_care_data <- dplyr::tbl(
+    sc_dvprod_connection,
+    dbplyr::in_schema("social_care_2", "homecare_snapshot")
+  ) %>%
+    dplyr::select(
+      "sending_location",
+      "sending_location_name",
+      "social_care_id",
+      "hc_service_start_date",
+      "hc_service_end_date",
+      "period",
+      "financial_year",
+      "hc_service",
+      "hc_service_provider",
+      "reablement",
+      "hc_hours_derived",
+      "total_staff_home_care_hours",
+      "multistaff_input",
+      "hc_start_date_after_end_date"
+    ) %>%
+    # fix 2017
+    dplyr::mutate(period = dplyr::if_else(
+      .data$period == "2017",
+      "2017Q4",
+      .data$period
+    )) %>%
+    # drop rows start date after end date
+    dplyr::filter(.data$hc_start_date_after_end_date == 0L) %>%
+    dplyr::select(!"hc_start_date_after_end_date") %>%
+    dplyr::collect() %>%
+    dplyr::mutate(dplyr::across(c(
+      "sending_location",
+      "financial_year",
+      "hc_service",
+      "hc_service_provider",
+      "reablement"
+    ), as.integer))
+
+  return(home_care_data)
+}

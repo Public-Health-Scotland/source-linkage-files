@@ -1,0 +1,5 @@
+main:
+  store: /conf/sourcedev/Source_Linkage_File_Updates/_targets
+  workers: '16'
+  reporter_make: timestamp_positives
+  seconds_interval: 30
