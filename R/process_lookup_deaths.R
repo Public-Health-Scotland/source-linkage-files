@@ -6,8 +6,8 @@
 #' the episode file to assess the validity of a death date.
 #'
 #' @param year The year to process, in FY format.
-#' @param nrs_deaths_data_path Path to NRS deaths data.
-#' @param chi_deaths_data_path Path to IT CHI deaths data.
+#' @param nrs_deaths_data NRS deaths data.
+#' @param chi_deaths_data IT CHI deaths data.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,18 +15,18 @@
 #' @export
 process_slf_deaths_lookup <- function(
     year,
-    nrs_deaths_data_path = get_source_extract_path(year, "Deaths"),
-    chi_deaths_data_path = get_slf_chi_deaths_path(),
+    nrs_deaths_data = read_file(
+      get_source_extract_path(year, "Deaths"),
+      col_select = c("chi", "record_keydate1")
+    ),
+    chi_deaths_data = read_file(get_slf_chi_deaths_path()),
     write_to_disk = TRUE) {
-  nrs_deaths_data <- read_file(nrs_deaths_data_path,
-    col_select = c("chi", "record_keydate1")
-  )
-
   slf_deaths_lookup <- nrs_deaths_data %>%
+    dplyr::select("chi", "record_keydate1") %>%
     dplyr::mutate(
       death_date = .data$record_keydate1,
       deceased = TRUE,
-      .keep = "none"
+      .keep = "unused"
     )
 
   if (write_to_disk) {
