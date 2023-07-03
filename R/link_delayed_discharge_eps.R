@@ -36,11 +36,6 @@ link_delayed_discharge_eps <- function(data, year) {
   # no flag for last reported
   dd_data <-
     read_file(get_source_extract_path(year_param, "DD")) %>%
-    # TODO Change the name of the variables in the DD extract rather than here.
-    dplyr::rename(
-      record_keydate1 = "keydate1_dateformat",
-      record_keydate2 = "keydate2_dateformat"
-    ) %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(.data$record_keydate2),
