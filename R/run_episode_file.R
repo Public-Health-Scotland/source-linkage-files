@@ -81,7 +81,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
     join_cohort_lookups(year) %>%
-    # TODO match on SPARRA and HHG here
+    join_sparra_hhg(year) %>%
     fill_geographies() %>%
     load_ep_file_vars(year)
 

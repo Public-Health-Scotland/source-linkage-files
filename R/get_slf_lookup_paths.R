@@ -12,7 +12,8 @@
 get_slf_postcode_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_postcode_lookup_{update}.rds"),
+    file_name = stringr::str_glue("source_postcode_lookup_{update}"),
+    ext = "parquet",
     ...
   )
 }
@@ -31,15 +32,34 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
 get_slf_gpprac_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_GPprac_lookup_{update}.rds"),
+    file_name = stringr::str_glue("source_GPprac_lookup_{update}"),
+    ext = "parquet",
     ...
   )
 }
 
-#' SLF Deaths Lookup File Path
+#' SLF Deaths lookup path
 #'
 #' @description Get the full path to the SLF deaths lookup file
 #'
+#' @inheritParams get_boxi_extract_path
+#' @param ... additional arguments passed to [get_file_path()]
+#'
+#' @return The path to the costs lookup as an [fs::path()]
+#' @export
+#' @family slf lookup file path
+#' @seealso [get_file_path()] for the generic function.
+get_slf_deaths_lookup_path <- function(year, ...) {
+  slf_deaths_lookup_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Deaths"),
+    file_name = stringr::str_glue("slf_deaths_lookup_{year}.parquet"),
+    ...
+  )
+
+  return(slf_deaths_lookup_path)
+}
+
+#' SLF CHI Deaths File Path
 #'
 #' @description Get the full path to the CHI deaths file
 #'
@@ -54,7 +74,8 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 get_slf_chi_deaths_path <- function(update = latest_update(), ...) {
   slf_chi_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("chi_deaths_{update}.parquet"),
+    file_name = stringr::str_glue("chi_deaths_{update}"),
+    ext = "parquet",
     ...
   )
 

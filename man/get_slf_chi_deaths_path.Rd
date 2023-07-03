@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_slf_chi_deaths_path}
 \alias{get_slf_chi_deaths_path}
-\title{SLF Deaths Lookup File Path}
+\title{SLF CHI Deaths File Path}
 \usage{
 get_slf_chi_deaths_path(update = latest_update(), ...)
 }
@@ -16,8 +16,6 @@ defaults to \code{\link[=latest_update]{latest_update()}}}
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full path to the SLF deaths lookup file
-
 Get the full path to the CHI deaths file
 }
 \seealso{
@@ -25,6 +23,7 @@ Get the full path to the CHI deaths file
 
 Other slf lookup file path: 
 \code{\link{get_slf_ch_name_lookup_path}()},
+\code{\link{get_slf_deaths_lookup_path}()},
 \code{\link{get_slf_gpprac_path}()},
 \code{\link{get_slf_postcode_path}()}
 }
