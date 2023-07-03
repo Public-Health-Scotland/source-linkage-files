@@ -10,11 +10,12 @@
 #'  * `.parquet` uses [arrow::read_parquet()].
 #'
 #' @param path The file path to be read
+#' @inheritParams arrow::read_parquet
 #' @param ... Addition arguments passed to the relevant function.
 #'
 #' @return the data a [tibble][tibble::tibble-package]
 #' @export
-read_file <- function(path, ...) {
+read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   valid_extensions <- c("rds", "fst", "sav", "zsav", "csv", "gz", "parquet")
 
   ext <- fs::path_ext(path)
@@ -27,6 +28,13 @@ read_file <- function(path, ...) {
     ))
   }
 
+  if ((!missing(col_select) || !missing(as_data_frame)) && ext != "parquet") {
+    cli::cli_abort(c(
+      "x" = "{.arg col_select} and/or {.arg as_data_frame} must only be used
+        when reading a {.field .parquet} file."
+    ))
+  }
+
   data <- switch(ext,
     "rds" = readr::read_rds(path),
     "fst" = fst::read_fst(path),
@@ -34,7 +42,11 @@ read_file <- function(path, ...) {
     "zsav" = haven::read_spss(path, ...),
     "csv" = readr::read_csv(path, ..., show_col_types = FALSE),
     "gz" = readr::read_csv(path, ..., show_col_types = FALSE),
-    "parquet" = arrow::read_parquet(path, ...)
+    "parquet" = if (is.null(col_select)) {
+      arrow::read_parquet(path, as_data_frame = as_data_frame, ...)
+    } else {
+      arrow::read_parquet(path, col_select = col_select, as_data_frame = as_data_frame, ...)
+    }
   )
 
   return(data)

@@ -7,8 +7,8 @@
 #' @param data The extract to process
 #' @param sc_demog_lookup The Social Care Demographics lookup produced by
 #' [process_lookup_sc_demographics()].
-#' @param slf_deaths_lookup The SLF CHI Deaths lookup, produced by
-#' [process_lookup_chi_deaths()].
+#' @param it_chi_deaths_data The processed lookup of deaths from IT produced
+#' with [process_it_chi_deaths()].
 #' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
 #' @param spd_path (Optional) Path the Scottish Postcode Directory, default is
 #' to use [get_spd_path()].
@@ -23,7 +23,7 @@
 process_sc_all_care_home <- function(
     data,
     sc_demog_lookup,
-    slf_deaths_lookup,
+    it_chi_deaths_data,
     ch_name_lookup_path = get_slf_ch_name_lookup_path(),
     spd_path = get_spd_path(),
     write_to_disk = TRUE) {
@@ -198,7 +198,7 @@ process_sc_all_care_home <- function(
   # Compare to Deaths Data
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
-    dplyr::left_join(slf_deaths_lookup,
+    dplyr::left_join(it_chi_deaths_data,
       by = "chi"
     ) %>%
     # compare discharge date with NRS and CHI death date

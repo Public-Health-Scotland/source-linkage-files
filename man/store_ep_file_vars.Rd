@@ -7,7 +7,7 @@
 store_ep_file_vars(data, year, vars_to_keep)
 }
 \arguments{
-\item{data}{The full SLF input data}
+\item{data}{The in progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
 
