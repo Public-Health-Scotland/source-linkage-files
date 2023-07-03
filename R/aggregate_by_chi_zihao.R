@@ -50,7 +50,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     )
   )
 
-  # colums specification
+  # column specification, grouped by chi
   # columns to select last
   cols2 <- c(
     vars_end_with(
@@ -83,7 +83,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     "ca2019",
     vars_start_with(individual_file, "sc_")
   )
-  # columns to select last unique rows
+  # columns to count unique rows
   cols3 <- c(
     "ch_cis_episodes",
     "cij_total",
@@ -122,8 +122,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
       individual_file,
       "sds_option"
     ),
-    "health_net_costincdnas",
-    "preventable_admissions"
+    "health_net_costincdnas"
   )
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
   # columns to select maximum
@@ -177,15 +176,39 @@ aggregate_by_chi_zihao <- function(individual_file) {
     .SDcols = cols6,
     by = chi
   ]
+  individual_file_cols7 <- individual_file[,
+    .(
+      preventable_admissions = preventable_admissions,
+      preventable_beddays =
+      # ifelse is faster than dplyr::if_else here
+        ifelse(
+          cij_ppa == 1,
+          max(cij_end_date) - min(cij_start_date),
+          NA
+        )
+    ),
+    # cij_marker has been renamed as cij_total
+    by = c("chi", "cij_total")
+  ]
+  individual_file_cols7 <- individual_file_cols7[,
+    .(
+      preventable_admissions =
+        data.table::uniqueN(unique(preventable_admissions), na.rm = TRUE),
+      preventable_beddays =
+        sum(preventable_beddays, na.rm = TRUE)
+    ),
+    by = "chi"
+  ]
+
   individual_file <- dplyr::bind_cols(
     individual_file_cols1,
     individual_file_cols2[, chi := NULL],
     individual_file_cols3[, chi := NULL],
     individual_file_cols4[, chi := NULL],
     individual_file_cols5[, chi := NULL],
-    individual_file_cols6[, chi := NULL]
+    individual_file_cols6[, chi := NULL],
+    individual_file_cols7[, chi := NULL]
   )
-
   # convert back to tibble
   individual_file <- dplyr::as_tibble(individual_file)
 

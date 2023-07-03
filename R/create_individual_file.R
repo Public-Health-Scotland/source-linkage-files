@@ -82,19 +82,11 @@ add_cij_columns <- function(episode_file) {
       #   1,
       #   0
       # ),
-      preventable_admissions = dplyr::if_else((.data$cij_ppa == 1 &
-        .data$cij_marker == 1),
-      1,
-      0
-      ),
-      preventable_beddays = dplyr::if_else((.data$cij_ppa == 1 &
-        .data$cij_marker == 1),
-      as.numeric(
-        pmin(.data$cij_end_date, end_fy(year)) -
-          pmin(.data$cij_start_date, start_fy(year))
-      ),
-      0
+      preventable_admissions = dplyr::if_else(.data$cij_ppa == 1,
+        cij_marker,
+        NA_integer_
       )
+      # preventable_beddays is now added in aggregate_by_chi
     )
 }
 
@@ -338,12 +330,23 @@ add_ch_columns <- function(episode_file, prefix, condition) {
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
-      ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay > 0, .data$cost_total_net / .data$yearstay, NA_real_),
-      ch_cost_per_day = dplyr::if_else(eval(condition) & .data$yearstay == 0, .data$cost_total_net / .data$yearstay, .data$ch_cost_per_day),
+      ch_cost_per_day = dplyr::if_else(
+        eval(condition) & .data$yearstay > 0,
+        .data$cost_total_net / .data$yearstay,
+        .data$cost_total_net
+      ),
       ch_no_cost = eval(condition) & is.na(.data$ch_cost_per_day),
-      ch_ep_end = dplyr::if_else(eval(condition), .data$record_keydate2, lubridate::NA_Date_),
+      ch_ep_end = dplyr::if_else(
+        eval(condition),
+        .data$record_keydate2,
+        lubridate::NA_Date_
+      ),
       # If end date is missing use the first day of next FY quarter
-      ch_ep_end = dplyr::if_else(eval(condition) & is.na(.data$ch_ep_end), start_next_fy_quarter(.data$sc_latest_submission), .data$ch_ep_end)
+      ch_ep_end = dplyr::if_else(
+        eval(condition) & is.na(.data$ch_ep_end),
+        start_next_fy_quarter(.data$sc_latest_submission),
+        .data$ch_ep_end
+      )
     )
 }
 
