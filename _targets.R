@@ -180,7 +180,7 @@ list(
     list(year = years_to_run),
     tar_rds(
       compress_extracts,
-      gzip_files(extract_year = year),
+      gzip_files(year),
       priority = 1,
       cue = tar_cue(mode = "always")
     ),

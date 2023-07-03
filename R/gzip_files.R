@@ -20,13 +20,13 @@ gzip_files <- function(
   if (n_unzipped_files > 0) {
     cli::cli_inform(c(
       "i" = "{cli::qty(n_unzipped_files)}There {?is/are} {n_unzipped_files}
-      uncompressed file{?s} for {extract_year}, which will be compressed with
+      uncompressed file{?s} for {year}, which will be compressed with
       gzip.",
       ">" = "{unzipped_files}"
     ))
   } else {
     cli::cli_alert_info(
-      "There are 0 uncompressed files for {extract_year}."
+      "There are 0 uncompressed files for {year}."
     )
     return(invisible(NULL))
   }
