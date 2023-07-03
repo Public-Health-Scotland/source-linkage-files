@@ -1,6 +1,14 @@
+#' Compress CSV with gzip
+#'
+#' @inheritParams get_year_dir
+#' @param path Specify a path to recurse over - Default is to use `year` to get
+#' extract directory.
+#'
+#' @return NULL
+#' @export
 gzip_files <- function(
-    extract_year = NULL,
-    path = get_year_dir(extract_year, extracts_dir = TRUE)) {
+    year = NULL,
+    path = get_year_dir(year, extracts_dir = TRUE)) {
   unzipped_files <- fs::dir_ls(
     path = path,
     regexp = "\\.csv$",
