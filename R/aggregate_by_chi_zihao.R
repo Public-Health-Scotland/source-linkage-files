@@ -139,8 +139,6 @@ aggregate_by_chi_zihao <- function(individual_file) {
       c("_cohort", "end_fy", "start_fy")
     )
   )
-  # columns to group by chi and cij_marker, mainly preventable
-  # cols7 <- c("preventable_admissions", "preventable_beddays")
 
   # compute
   individual_file_cols1 <- individual_file[,
