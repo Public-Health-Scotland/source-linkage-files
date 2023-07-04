@@ -60,29 +60,31 @@ add_cij_columns <- function(episode_file) {
 
   episode_file %>%
     dplyr::mutate(
-      cij_non_el = dplyr::if_else(.data$cij_pattype_code == 0,
+      cij_non_el = dplyr::if_else(
+        .data$cij_pattype_code == 0,
         .data$cij_marker,
         NA_real_
       ),
-      cij_el = dplyr::if_else(.data$cij_pattype_code == 1,
+      cij_el = dplyr::if_else(
+        .data$cij_pattype_code == 1,
         .data$cij_marker,
         NA_real_
       ),
-      cij_mat = dplyr::if_else(.data$cij_pattype_code == 2,
+      cij_mat = dplyr::if_else(
+        .data$cij_pattype_code == 2,
         .data$cij_marker,
         NA_real_
       ),
-      # # assume cij_delay is logic variable
-      # cij_delay = dplyr::if_else(
-      #   (.data$cij_delay & .data$cij_marker == 1),
-      #   1,
-      #   0
-      # ),
-      preventable_admissions = dplyr::if_else(.data$cij_ppa == 1,
+      cij_delay = dplyr::if_else(
+        .data$recid == "DD",
+        .data$cij_marker,
+        NA_real_
+      ),
+      preventable_admissions = dplyr::if_else(
+        .data$cij_ppa == 1,
         .data$cij_marker,
         NA_integer_
       )
-      # preventable_beddays is now added in aggregate_by_chi
     )
 }
 
