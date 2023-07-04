@@ -4,10 +4,12 @@
 \alias{clean_up_ch}
 \title{Clean up CH}
 \usage{
-clean_up_ch(episode_file)
+clean_up_ch(episode_file, year)
 }
 \arguments{
 \item{episode_file}{Tibble containing episodic data}
+
+\item{year}{The year to process, in FY format.}
 }
 \description{
 Clean up CH-related columns.

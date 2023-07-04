@@ -15,7 +15,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     add_cij_columns() %>%
     add_all_columns() %>%
     aggregate_ch_episodes_zihao() %>%
-    clean_up_ch() %>%
+    clean_up_ch(year) %>%
     recode_gender() %>%
     aggregate_by_chi_zihao() %>%
     clean_individual_file()
@@ -556,7 +556,7 @@ aggregate_ch_episodes <- function(episode_file) {
 #' @description Clean up CH-related columns.
 #'
 #' @inheritParams create_individual_file
-clean_up_ch <- function(episode_file) {
+clean_up_ch <- function(episode_file, year) {
   cli::cli_alert_info("Clean up CH function started at {Sys.time()}")
 
   episode_file %>%
@@ -565,34 +565,32 @@ clean_up_ch <- function(episode_file) {
       fy_start = start_fy(year)
     ) %>%
     dplyr::mutate(
-      term_1 = pmin(ch_ep_end, fy_end + 1),
-      term_2 = pmax(ch_ep_start, fy_start)
+      term_1 = pmin(.data$ch_ep_end, .data$fy_end + 1),
+      term_2 = pmax(.data$ch_ep_start, .data$fy_start)
     ) %>%
     dplyr::mutate(
       ch_beddays = dplyr::if_else(
-        recid == "CH",
-        as.numeric(term_1 - term_2),
+        .data$recid == "CH",
+        as.numeric(.data$term_1 - .data$term_2),
         NA_real_
       ),
       ch_cost = dplyr::if_else(
-        recid == "CH" & ch_no_cost == 0,
-        ch_beddays * ch_cost_per_day,
+        .data$recid == "CH" & .data$ch_no_cost == 0,
+        .data$ch_beddays * .data$ch_cost_per_day,
         NA_real_
       ),
       ch_beddays = dplyr::if_else(
-        recid == "CH" & ch_chi_cis == 0,
+        .data$recid == "CH" & .data$ch_chi_cis == 0,
         0,
-        ch_beddays
+        .data$ch_beddays
       ),
       ch_cost = dplyr::if_else(
-        recid == "CH" & ch_chi_cis == 0,
+        .data$recid == "CH" & .data$ch_chi_cis == 0,
         0,
-        ch_cost
+        .data$ch_cost
       )
     ) %>%
-    dplyr::select(
-      -fy_end, -fy_start, -term_1, -term_2
-    )
+    dplyr::select(-c("fy_end", "fy_start", "term_1", "term_2"))
 }
 
 #' Recode gender
