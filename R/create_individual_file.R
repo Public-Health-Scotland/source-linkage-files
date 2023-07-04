@@ -60,15 +60,15 @@ add_cij_columns <- function(episode_file) {
 
   episode_file %>%
     dplyr::mutate(
-      CIJ_non_el = dplyr::if_else(.data$cij_pattype_code == 0,
+      cij_non_el = dplyr::if_else(.data$cij_pattype_code == 0,
         .data$cij_marker,
         NA_real_
       ),
-      CIJ_el = dplyr::if_else(.data$cij_pattype_code == 1,
+      cij_el = dplyr::if_else(.data$cij_pattype_code == 1,
         .data$cij_marker,
         NA_real_
       ),
-      CIJ_mat = dplyr::if_else(.data$cij_pattype_code == 2,
+      cij_mat = dplyr::if_else(.data$cij_pattype_code == 2,
         .data$cij_marker,
         NA_real_
       ),
@@ -631,9 +631,9 @@ aggregate_by_chi <- function(episode_file) {
         c(
           "ch_cis_episodes" = "ch_chi_cis",
           "cij_total" = "cij_marker",
-          "CIJ_el",
-          "CIJ_non_el",
-          "CIJ_mat",
+          "cij_el",
+          "cij_non_el",
+          "cij_mat",
           # "cij_delay",
           "ooh_cases" = "ooh_case_id",
           "preventable_admissions"
