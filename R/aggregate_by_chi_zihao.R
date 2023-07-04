@@ -103,7 +103,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
         "cost",
         "attendances",
         "attend",
-        # "contacts",
+        "contacts",
         "hours",
         "alarms",
         "telecare",
