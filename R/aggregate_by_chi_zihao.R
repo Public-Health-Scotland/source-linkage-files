@@ -128,17 +128,6 @@ aggregate_by_chi_zihao <- function(individual_file) {
   # columns to select maximum
   cols5 <- vars_contain(individual_file, c("nsu", "hl1_in_fy"))
   cols5 <- cols5[!(cols5 %in% c("ooh_consultation_time"))]
-  # columns to select first row
-  cols6 <- c(
-    condition_cols(),
-    # "death_date",
-    # "deceased",
-    "year",
-    vars_end_with(
-      individual_file,
-      c("_cohort", "end_fy", "start_fy")
-    )
-  )
 
   # compute
   individual_file_cols1 <- individual_file[,
@@ -170,13 +159,6 @@ aggregate_by_chi_zihao <- function(individual_file) {
     by = chi
   ]
   individual_file_cols6 <- individual_file[,
-    lapply(.SD, function(x) {
-      x[!is.na(x)][1]
-    }),
-    .SDcols = cols6,
-    by = chi
-  ]
-  individual_file_cols7 <- individual_file[,
     .(
       preventable_admissions = preventable_admissions,
       preventable_beddays =
@@ -190,7 +172,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     # cij_marker has been renamed as cij_total
     by = c("chi", "cij_total")
   ]
-  individual_file_cols7 <- individual_file_cols7[,
+  individual_file_cols6 <- individual_file_cols6[,
     .(
       preventable_admissions =
         data.table::uniqueN(unique(preventable_admissions), na.rm = TRUE),
@@ -206,8 +188,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
     individual_file_cols3[, chi := NULL],
     individual_file_cols4[, chi := NULL],
     individual_file_cols5[, chi := NULL],
-    individual_file_cols6[, chi := NULL],
-    individual_file_cols7[, chi := NULL]
+    individual_file_cols6[, chi := NULL]
   )
   # convert back to tibble
   individual_file <- dplyr::as_tibble(individual_file)
