@@ -11,7 +11,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   individual_file <- individual_file %>%
-    dplyr::select(-c(postcode, gpprac)) %>%
+    dplyr::select(-c("postcode", "gpprac")) %>%
     dplyr::rename(
       "gpprac" = "most_recent_gpprac",
       "postcode" = "most_recent_postcode"
@@ -133,31 +133,31 @@ aggregate_by_chi_zihao <- function(individual_file) {
   # compute
   individual_file_cols1 <- individual_file[,
     .(gender = mean(gender)),
-    by = chi
+    by = "chi"
   ]
   individual_file_cols2 <- individual_file[,
     .SD[.N],
     .SDcols = cols2,
-    by = chi
+    by = "chi"
   ]
   individual_file_cols3 <- individual_file[,
     lapply(.SD, function(x) {
       data.table::uniqueN(x, na.rm = TRUE)
     }),
     .SDcols = cols3,
-    by = chi
+    by = "chi"
   ]
   individual_file_cols4 <- individual_file[,
     lapply(.SD, function(x) {
       sum(x, na.rm = TRUE)
     }),
     .SDcols = cols4,
-    by = chi
+    by = "chi"
   ]
   individual_file_cols5 <- individual_file[,
     lapply(.SD, function(x) max(x, na.rm = TRUE)),
     .SDcols = cols5,
-    by = chi
+    by = "chi"
   ]
   individual_file_cols6 <- individual_file[,
     .(
@@ -172,8 +172,7 @@ aggregate_by_chi_zihao <- function(individual_file) {
   ]
   individual_file_cols6 <- individual_file_cols6[,
     .(
-      preventable_beddays =
-        sum(preventable_beddays, na.rm = TRUE)
+      preventable_beddays = sum(preventable_beddays, na.rm = TRUE)
     ),
     by = "chi"
   ]
@@ -195,7 +194,6 @@ aggregate_by_chi_zihao <- function(individual_file) {
 
 #' select columns ending with some patterns
 #' @describeIn select columns based on patterns
-#'
 vars_end_with <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_ends(
     names(data),
@@ -207,7 +205,6 @@ vars_end_with <- function(data, vars, ignore_case = FALSE) {
 
 #' select columns starting with some patterns
 #' @describeIn select columns based on patterns
-#'
 vars_start_with <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_starts(
     names(data),
@@ -219,7 +216,6 @@ vars_start_with <- function(data, vars, ignore_case = FALSE) {
 
 #' select columns contains some characters
 #' @describeIn select columns based on patterns
-#'
 vars_contain <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_detect(
     names(data),
@@ -232,7 +228,6 @@ vars_contain <- function(data, vars, ignore_case = FALSE) {
 #' Aggregate CIS episodes
 #'
 #' @description Aggregate CH variables by CHI and CIS.
-#'
 #'
 #' @inheritParams create_individual_file
 aggregate_ch_episodes_zihao <- function(episode_file) {
@@ -247,7 +242,7 @@ aggregate_ch_episodes_zihao <- function(episode_file) {
     ch_ep_start = min(record_keydate1),
     ch_ep_end = max(ch_ep_end),
     ch_cost_per_day = mean(ch_cost_per_day)
-  ), by = .(chi, ch_chi_cis)]
+  ), by = .("chi", "ch_chi_cis")]
 
   # Convert back to tibble if needed
   episode_file <- tibble::as_tibble(episode_file)

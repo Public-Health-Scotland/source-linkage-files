@@ -9,7 +9,6 @@
 #'
 #' @return The processed individual file
 #' @export
-#'
 create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
   individual_file <- episode_file %>%
     remove_blank_chi() %>%
@@ -118,24 +117,23 @@ add_all_columns <- function(episode_file) {
     add_sds_columns("SDS", .data$recid == "SDS") %>%
     dplyr::mutate(
       health_net_cost = rowSums(
-        dplyr::select(
-          .,
-          c(
-            Acute_cost,
-            Mat_cost,
-            MH_cost,
-            GLS_cost,
-            OP_cost_attend,
-            AE_cost,
-            PIS_cost,
-            OoH_cost
-          )
+        dplyr::pick(
+          .data$Acute_cost,
+          .data$Mat_cost,
+          .data$MH_cost,
+          .data$GLS_cost,
+          .data$OP_cost_attend,
+          .data$AE_cost,
+          .data$PIS_cost,
+          .data$OoH_cost
         ),
         na.rm = TRUE
       ),
-      health_net_costincdnas =
-        health_net_cost +
-          dplyr::if_else(is.na(OP_cost_dnas), 0, OP_cost_dnas)
+      health_net_costincdnas = .data$health_net_cost + dplyr::if_else(
+        is.na(.data$OP_cost_dnas),
+        0,
+        .data$OP_cost_dnas
+      )
     )
 }
 
@@ -191,13 +189,13 @@ add_op_columns <- function(episode_file, prefix, condition) {
   condition_1 <- substitute(condition & attendance_status == 1)
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_newcons_attendances" := dplyr::if_else(eval(condition_1), 1, NA_real_),
+      "{prefix}_newcons_attendances" := dplyr::if_else(eval(condition_1), 1L, NA_integer_),
       "{prefix}_cost_attend" := dplyr::if_else(eval(condition_1), .data$cost_total_net, NA_real_)
     )
   condition_5_8 <- substitute(condition & attendance_status %in% c(5, 8))
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_newcons_dnas" := dplyr::if_else(eval(condition_5_8), 1, NA_real_),
+      "{prefix}_newcons_dnas" := dplyr::if_else(eval(condition_5_8), 1L, NA_integer_),
       "{prefix}_cost_dnas" := dplyr::if_else(eval(condition_5_8), .data$cost_total_net_inc_dnas, NA_real_)
     )
   return(episode_file)
@@ -210,7 +208,7 @@ add_ae_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_attendances" := dplyr::if_else(eval(condition), 1, NA_real_))
+    dplyr::mutate("{prefix}_attendances" := dplyr::if_else(eval(condition), 1L, NA_integer_))
 }
 
 #' Add PIS columns
@@ -220,7 +218,7 @@ add_pis_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_paid_items" := dplyr::if_else(eval(condition), .data$no_paid_items, NA_real_))
+    dplyr::mutate("{prefix}_paid_items" := dplyr::if_else(eval(condition), .data$no_paid_items, NA_integer_))
 }
 
 #' Add OoH columns
@@ -231,21 +229,27 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
     dplyr::mutate(
-      "{prefix}_homeV" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-HomeV", 1, NA_real_),
-      "{prefix}_advice" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-Advice", 1, NA_real_),
-      "{prefix}_DN" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-DN", 1, NA_real_),
-      "{prefix}_NHS24" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-NHS24", 1, NA_real_),
-      "{prefix}_other" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-Other", 1, NA_real_),
-      "{prefix}_PCC" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-PCC", 1, NA_real_),
-      ooh_covid_advice = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Adv", 1, NA_real_),
-      ooh_covid_assessment = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Ass", 1, NA_real_),
-      ooh_covid_other = dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C190th", 1, NA_real_)
+      "{prefix}_homeV" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-HomeV", 1L, NA_integer_),
+      "{prefix}_advice" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-Advice", 1L, NA_integer_),
+      "{prefix}_DN" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-DN", 1L, NA_integer_),
+      "{prefix}_NHS24" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-NHS24", 1L, NA_integer_),
+      "{prefix}_other" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-Other", 1L, NA_integer_),
+      "{prefix}_PCC" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-PCC", 1L, NA_integer_),
+      "{prefix}_covid_advice" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Adv", 1L, NA_integer_),
+      "{prefix}_covid_assessment" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C19Ass", 1L, NA_integer_),
+      "{prefix}_covid_other" := dplyr::if_else(eval(condition) & .data$smrtype == "OOH-C190th", 1L, NA_integer_)
     )
 
   episode_file <- episode_file %>%
     dplyr::mutate(
-      OoH_consultation_time = dplyr::if_else(eval(condition), as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$record_keydate2) - (lubridate::seconds_to_period(.data$keytime1) + .data$record_keydate1), units = "mins"), NA_real_),
-      OoH_consultation_time = dplyr::if_else(OoH_consultation_time < 0, 0, .data$OoH_consultation_time),
+      "{prefix}_consultation_time" := dplyr::if_else(
+        eval(condition),
+        pmax(
+          0,
+          as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$record_keydate2) - (lubridate::seconds_to_period(.data$keytime1) + .data$record_keydate1), units = "mins")
+        ),
+        NA_real_
+      ),
     )
 
   return(episode_file)
@@ -258,7 +262,7 @@ add_dn_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), .data$total_no_dn_contacts, NA_real_))
+    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), .data$total_no_dn_contacts, NA_integer_))
 }
 
 #' Add CMH columns
@@ -268,7 +272,7 @@ add_cmh_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
-    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), 1, NA_real_))
+    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), 1L, NA_integer_))
 }
 
 #' Add DD columns
@@ -279,13 +283,13 @@ add_dd_columns <- function(episode_file, prefix, condition) {
   condition_delay <- substitute(condition & primary_delay_reason != "9")
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_NonCode9_episodes" := dplyr::if_else(eval(condition_delay), 1, NA_real_),
+      "{prefix}_NonCode9_episodes" := dplyr::if_else(eval(condition_delay), 1L, NA_integer_),
       "{prefix}_NonCode9_beddays" := dplyr::if_else(eval(condition_delay), .data$yearstay, NA_real_)
     )
   condition_delay_9 <- substitute(condition & primary_delay_reason == "9")
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_Code9_episodes" := dplyr::if_else(eval(condition_delay_9), 1, NA_real_),
+      "{prefix}_Code9_episodes" := dplyr::if_else(eval(condition_delay_9), 1L, NA_integer_),
       "{prefix}_Code9_beddays" := dplyr::if_else(eval(condition_delay_9), .data$yearstay, NA_real_)
     )
   return(episode_file)
@@ -298,7 +302,7 @@ add_nsu_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
-    dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1, NA_real_))
+    dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1L, NA_integer_))
 }
 
 #' Add NRS columns
@@ -308,7 +312,7 @@ add_nrs_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
-    dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1, NA_real_))
+    dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1L, NA_integer_))
 }
 
 #' Add HL1 columns
@@ -362,21 +366,21 @@ add_hc_columns <- function(episode_file, prefix, condition) {
   condition_per <- substitute(condition & smrtype == "HC-Per")
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_personal_episodes" := dplyr::if_else(eval(condition_per), 1, NA_real_),
+      "{prefix}_personal_episodes" := dplyr::if_else(eval(condition_per), 1L, NA_integer_),
       "{prefix}_personal_hours" := dplyr::if_else(eval(condition_per), .data$HC_total_hours, NA_real_),
       "{prefix}_personal_hours_cost" := dplyr::if_else(eval(condition_per), .data$cost_total_net, NA_real_)
     )
   condition_non_per <- substitute(condition & smrtype == "HC-Non-Per")
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_non_personal_episodes" := dplyr::if_else(eval(condition_non_per), 1, NA_real_),
+      "{prefix}_non_personal_episodes" := dplyr::if_else(eval(condition_non_per), 1L, NA_integer_),
       "{prefix}_non_personal_hours" := dplyr::if_else(eval(condition_non_per), .data$hc_hours_annual, NA_real_),
       "{prefix}_non_personal_hours_cost" := dplyr::if_else(eval(condition_non_per), .data$cost_total_net, NA_real_)
     )
   condition_reabl <- substitute(condition & hc_reablement == 1)
   episode_file <- episode_file %>%
     dplyr::mutate(
-      "{prefix}_reablement_episodes" := dplyr::if_else(eval(condition_reabl), 1, NA_real_),
+      "{prefix}_reablement_episodes" := dplyr::if_else(eval(condition_reabl), 1L, NA_integer_),
       "{prefix}_reablement_hours" := dplyr::if_else(eval(condition_reabl), .data$hc_hours_annual, NA_real_),
       "{prefix}_reablement_hours_cost" := dplyr::if_else(eval(condition_reabl), .data$cost_total_net, NA_real_)
     )
@@ -390,8 +394,8 @@ add_at_columns <- function(episode_file, prefix, condition) {
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
-      "{prefix}_alarms" := dplyr::if_else(eval(condition) & .data$smrtype == "AT-Alarm", 1, NA_real_),
-      "{prefix}_telecare" := dplyr::if_else(eval(condition) & .data$smrtype == "AT-Tele", 1, NA_real_)
+      "{prefix}_alarms" := dplyr::if_else(eval(condition) & .data$smrtype == "AT-Alarm", 1L, NA_integer_),
+      "{prefix}_telecare" := dplyr::if_else(eval(condition) & .data$smrtype == "AT-Tele", 1L, NA_integer_)
     )
 }
 
@@ -403,10 +407,10 @@ add_sds_columns <- function(episode_file, prefix, condition) {
   episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
-      "{prefix}_option_1" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-1", 1, NA_real_),
-      "{prefix}_option_2" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-2", 1, NA_real_),
-      "{prefix}_option_3" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-3", 1, NA_real_),
-      "{prefix}_option_4" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-4", 1, NA_real_)
+      "{prefix}_option_1" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-1", 1L, NA_integer_),
+      "{prefix}_option_2" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-2", 1L, NA_integer_),
+      "{prefix}_option_3" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-3", 1L, NA_integer_),
+      "{prefix}_option_4" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-4", 1L, NA_integer_)
     )
 }
 
@@ -423,21 +427,21 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
   episode_file <- episode_file %>%
     dplyr::mutate(
       "{prefix}_inpatient_cost" := dplyr::if_else(eval(condition_i), .data$cost_total_net, NA_real_),
-      "{prefix}_inpatient_episodes" := dplyr::if_else(eval(condition_i), 1, NA_real_),
+      "{prefix}_inpatient_episodes" := dplyr::if_else(eval(condition_i), 1L, NA_integer_),
       "{prefix}_inpatient_beddays" := dplyr::if_else(eval(condition_i), .data$yearstay, NA_real_)
     )
   if (elective) {
     condition_el <- substitute(condition_i & cij_pattype == "Elective")
     episode_file <- episode_file %>%
       dplyr::mutate(
-        "{prefix}_el_inpatient_episodes" := dplyr::if_else(eval(condition_el), 1, NA_real_),
+        "{prefix}_el_inpatient_episodes" := dplyr::if_else(eval(condition_el), 1L, NA_integer_),
         "{prefix}_el_inpatient_beddays" := dplyr::if_else(eval(condition_el), .data$yearstay, NA_real_),
         "{prefix}_el_inpatient_cost" := dplyr::if_else(eval(condition_el), .data$cost_total_net, NA_real_)
       )
     condition_non_el <- substitute(condition_i & cij_pattype == "Non-Elective")
     episode_file <- episode_file %>%
       dplyr::mutate(
-        "{prefix}_non_el_inpatient_episodes" := dplyr::if_else(eval(condition_non_el), 1, NA_real_),
+        "{prefix}_non_el_inpatient_episodes" := dplyr::if_else(eval(condition_non_el), 1L, NA_integer_),
         "{prefix}_non_el_inpatient_beddays" := dplyr::if_else(eval(condition_non_el), .data$yearstay, NA_real_),
         "{prefix}_non_el_inpatient_cost" := dplyr::if_else(eval(condition_non_el), .data$cost_total_net, NA_real_)
       )
@@ -446,7 +450,7 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
     condition_d <- substitute(eval(condition) & ipdc == "D")
     episode_file <- episode_file %>%
       dplyr::mutate(
-        "{prefix}_daycase_episodes" := dplyr::if_else(eval(condition_d), 1, NA_real_),
+        "{prefix}_daycase_episodes" := dplyr::if_else(eval(condition_d), 1L, NA_integer_),
         "{prefix}_daycase_cost" := dplyr::if_else(eval(condition_d), .data$cost_total_net, NA_real_)
       )
   }
@@ -464,7 +468,7 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
 add_standard_cols <- function(episode_file, prefix, condition, drop = NULL, episode = FALSE, cost = FALSE) {
   episode_file <- dplyr::bind_cols(episode_file, create_cols(episode_file, prefix, condition, drop))
   if (episode) {
-    episode_file <- dplyr::mutate(episode_file, "{prefix}_episodes" := dplyr::if_else(eval(condition), 1, NA_real_))
+    episode_file <- dplyr::mutate(episode_file, "{prefix}_episodes" := dplyr::if_else(eval(condition), 1L, NA_integer_))
   }
   if (cost) {
     episode_file <- dplyr::mutate(episode_file, "{prefix}_cost" := dplyr::if_else(eval(condition), .data$cost_total_net, NA_real_))
@@ -495,7 +499,11 @@ create_cols <- function(episode_file, prefix, condition, drop) {
 #' @inheritParams na_type
 create_col <- function(episode_file, col, prefix, condition) {
   episode_file %>%
-    dplyr::mutate("{prefix}_{col}" := dplyr::if_else(eval(condition), .data[[tolower(col)]], na_type(col))) %>%
+    dplyr::mutate("{prefix}_{col}" := dplyr::if_else(
+      eval(condition),
+      .data[[tolower(col)]],
+      na_type(col)
+    )) %>%
     dplyr::select(dplyr::last_col())
 }
 
@@ -598,9 +606,9 @@ recode_gender <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
       gender = dplyr::if_else(
-        gender == 0 | gender == 9,
+        .data$gender %in% c(0, 9),
         1.5,
-        gender
+        .data$gender
       )
     )
 }
