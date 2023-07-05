@@ -36,11 +36,6 @@ link_delayed_discharge_eps <- function(data, year) {
   # no flag for last reported
   dd_data <-
     read_file(get_source_extract_path(year_param, "DD")) %>%
-    # TODO Change the name of the variables in the DD extract rather than here.
-    dplyr::rename(
-      record_keydate1 = "keydate1_dateformat",
-      record_keydate2 = "keydate2_dateformat"
-    ) %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(.data$record_keydate2),
@@ -268,14 +263,15 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$datediff_end,
       dplyr::desc(.data$datediff_start)
     ) %>%
-    dplyr::distinct(.data$postcode,
+    dplyr::distinct(
+      .data$postcode,
       .data$record_keydate1_dd,
       .data$record_keydate2_dd,
       .keep_all = TRUE
     ) %>%
     # add cij_delay
     dplyr::mutate(has_delay = dplyr::if_else(
-      .data$chi != "" & !is.na(.data$cij_marker),
+      is_missing(.data$chi) & !is.na(.data$cij_marker),
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
@@ -324,7 +320,7 @@ link_delayed_discharge_eps <- function(data, year) {
       "yearstay"
     ) %>%
     # combine DD with episode data
-    dplyr::bind_rows( # restore cij_end_date
+    dplyr::bind_rows(
       data %>%
         dplyr::select(
           -c(
