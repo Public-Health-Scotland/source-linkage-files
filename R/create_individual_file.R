@@ -11,6 +11,39 @@
 #' @export
 create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
   individual_file <- episode_file %>%
+    dplyr::select(
+      "year",
+      "chi",
+      "dob",
+      "gender",
+      "record_keydate1",
+      "record_keydate2",
+      "keytime1",
+      "keytime2",
+      "recid",
+      "smrtype",
+      "ipdc",
+      "postcode",
+      "gpprac",
+      "cij_marker",
+      "cij_start_date",
+      "cij_end_date",
+      "cij_pattype",
+      "cij_pattype_code",
+      "cij_ppa",
+      "ch_chi_cis",
+      "yearstay",
+      "cost_total_net",
+      "cost_total_net_inc_dnas",
+      "attendance_status",
+      "no_paid_items",
+      "total_no_dn_contacts",
+      "primary_delay_reason",
+      "sc_latest_submission",
+      "hc_hours_annual",
+      "hc_reablement",
+      "ooh_case_id"
+    ) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
