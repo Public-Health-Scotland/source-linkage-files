@@ -46,7 +46,6 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "postcode",
     "dob",
     "gpprac",
-    "ooh_cases",
     vars_start_with(episode_file, "sc_")
   )
   # columns to count unique rows
@@ -57,6 +56,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "cij_non_el",
     "cij_mat",
     "cij_delay",
+    "ooh_cases",
     "preventable_admissions"
   )
   # columns to sum up
