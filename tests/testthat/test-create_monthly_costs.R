@@ -6,10 +6,11 @@ test_that("can create monthly cost for maternity", {
   # * episodes which span financial years work
   # * episodes in a single month (multiday) work
 
-  dummy_data <- dplyr::bind_cols(
-    year = rep("1718", 5),
-    yearstay = c(0, 0.33, 0.33, 30, 365),
+  dummy_data <- tibble::tibble(
+    year = rep("1718", 6),
+    yearstay = c(0, 0, 0.33, 0.33, 30, 365),
     record_keydate1 = c(
+      "2017-06-01",
       "2017-09-01",
       "2017-04-01",
       "2017-05-01",
@@ -17,42 +18,43 @@ test_that("can create monthly cost for maternity", {
       "2017-04-01"
     ) %>% lubridate::ymd(),
     record_keydate2 = c(
+      "2017-06-01",
       "2017-09-01",
       "2017-04-01",
       "2017-05-01",
       "2017-05-20",
       "2018-03-31"
     ) %>% lubridate::ymd(),
-    cost_per_day = rep(100, 5),
-    cost_total_net = c(0, 100, 0, 3000, 36500),
-    apr_beddays = c(0, 0, 0, 10, 30),
-    may_beddays = c(0, 0, 0, 20, 31),
-    jun_beddays = c(0, 0, 0, 0, 30),
-    jul_beddays = c(0, 0, 0, 0, 31),
-    aug_beddays = c(0, 0, 0, 0, 31),
-    sep_beddays = c(0, 0, 0, 0, 30),
-    oct_beddays = c(0, 0, 0, 0, 31),
-    nov_beddays = c(0, 0, 0, 0, 30),
-    dec_beddays = c(0, 0, 0, 0, 31),
-    jan_beddays = c(0, 0, 0, 0, 31),
-    feb_beddays = c(0, 0, 0, 0, 28),
-    mar_beddays = c(0, 0, 0, 0, 30)
+    cost_per_day = rep(100, 6),
+    cost_total_net = c(50, 0, 100, 0, 3000, 36500),
+    apr_beddays = c(0, 0, 0, 0, 10, 30),
+    may_beddays = c(0, 0, 0, 0, 20, 31),
+    jun_beddays = c(0, 0, 0, 0, 0, 30),
+    jul_beddays = c(0, 0, 0, 0, 0, 31),
+    aug_beddays = c(0, 0, 0, 0, 0, 31),
+    sep_beddays = c(0, 0, 0, 0, 0, 30),
+    oct_beddays = c(0, 0, 0, 0, 0, 31),
+    nov_beddays = c(0, 0, 0, 0, 0, 30),
+    dec_beddays = c(0, 0, 0, 0, 0, 31),
+    jan_beddays = c(0, 0, 0, 0, 0, 31),
+    feb_beddays = c(0, 0, 0, 0, 0, 28),
+    mar_beddays = c(0, 0, 0, 0, 0, 30)
   )
 
   dummy_data_cost <- dummy_data %>%
     dplyr::mutate(
-      apr_cost = c(0, 100, 0, 1000, 3000),
-      may_cost = c(0, 0, 0, 2000, 3100),
-      jun_cost = c(0, 0, 0, 0, 3000),
-      jul_cost = c(0, 0, 0, 0, 3100),
-      aug_cost = c(0, 0, 0, 0, 3100),
-      sep_cost = c(0, 0, 0, 0, 3000),
-      oct_cost = c(0, 0, 0, 0, 3100),
-      nov_cost = c(0, 0, 0, 0, 3000),
-      dec_cost = c(0, 0, 0, 0, 3100),
-      jan_cost = c(0, 0, 0, 0, 3100),
-      feb_cost = c(0, 0, 0, 0, 2800),
-      mar_cost = c(0, 0, 0, 0, 3000)
+      apr_cost = c(0, 0, 100, 0, 1000, 3000),
+      may_cost = c(0, 0, 0, 0, 2000, 3100),
+      jun_cost = c(50, 0, 0, 0, 0, 3000),
+      jul_cost = c(0, 0, 0, 0, 0, 3100),
+      aug_cost = c(0, 0, 0, 0, 0, 3100),
+      sep_cost = c(0, 0, 0, 0, 0, 3000),
+      oct_cost = c(0, 0, 0, 0, 0, 3100),
+      nov_cost = c(0, 0, 0, 0, 0, 3000),
+      dec_cost = c(0, 0, 0, 0, 0, 3100),
+      jan_cost = c(0, 0, 0, 0, 0, 3100),
+      feb_cost = c(0, 0, 0, 0, 0, 2800),
+      mar_cost = c(0, 0, 0, 0, 0, 3000)
     )
 
   expect_equal(
