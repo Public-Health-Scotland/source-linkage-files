@@ -10,17 +10,6 @@
 aggregate_by_chi_zihao <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
-  individual_file <- episode_file %>%
-    dplyr::select(-c("postcode", "gpprac")) %>%
-    dplyr::rename(
-      "gpprac" = "most_recent_gpprac",
-      "postcode" = "most_recent_postcode"
-    ) %>%
-    dplyr::select(-c(
-      dplyr::ends_with("_gpprac"),
-      dplyr::ends_with("_postcode"),
-      dplyr::ends_with("_DoB")
-    ))
   # Convert to data.table
   data.table::setDT(episode_file)
 
@@ -54,35 +43,11 @@ aggregate_by_chi_zihao <- function(episode_file) {
   # column specification, grouped by chi
   # columns to select last
   cols2 <- c(
-    vars_end_with(
-      individual_file,
-      c("postcode", "dob", "ggprac")
-    ),
-    "ooh_cases",
+    "postcode",
+    "dob",
     "gpprac",
-    "hbrescode",
-    "hscp",
-    "lca",
-    "ca2018",
-    "locality",
-    "datazone2011",
-    "hbpraccode",
-    "cluster",
-    "simd2020v2_rank",
-    "simd2020v2_sc_decile",
-    "simd2020v2_sc_quintile",
-    "simd2020v2_hb2019_decile",
-    "simd2020v2_hb2019_quintile",
-    "simd2020v2_hscp2019_decile",
-    "simd2020v2_hscp2019_quintile",
-    "ur8_2020",
-    "ur6_2020",
-    "ur3_2020",
-    "ur2_2020",
-    "hb2019",
-    "hscp2019",
-    "ca2019",
-    vars_start_with(individual_file, "sc_")
+    "ooh_cases",
+    vars_start_with(episode_file, "sc_")
   )
   # columns to count unique rows
   cols3 <- c(

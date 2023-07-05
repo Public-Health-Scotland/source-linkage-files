@@ -354,7 +354,7 @@ add_nrs_columns <- function(episode_file, prefix, condition) {
 add_hl1_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
-    add_standard_cols(prefix, condition, drop = "gpprac")
+    add_standard_cols(prefix, condition)
 }
 
 #' Add CH columns
@@ -498,8 +498,7 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
 #' @param drop Any columns out of "DoB", "postcode", and "gpprac" that should be dropped
 #' @param episode Whether to create prefix_episodes col, e.g. "Acute_episodes"
 #' @param cost Whether to create prefix_cost col, e.g. "Acute_cost"
-add_standard_cols <- function(episode_file, prefix, condition, drop = NULL, episode = FALSE, cost = FALSE) {
-  episode_file <- dplyr::bind_cols(episode_file, create_cols(episode_file, prefix, condition, drop))
+add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, cost = FALSE) {
   if (episode) {
     episode_file <- dplyr::mutate(episode_file, "{prefix}_episodes" := dplyr::if_else(eval(condition), 1L, NA_integer_))
   }
@@ -509,52 +508,6 @@ add_standard_cols <- function(episode_file, prefix, condition, drop = NULL, epis
   return(episode_file)
 }
 
-#' Create standard cols
-#'
-#' @description Create standard cols (DoB, postcode, gpprac).
-#'
-#' @inheritParams add_acute_columns
-#' @param drop Any columns out of "DoB", "postcode", and "gpprac" that should be dropped
-create_cols <- function(episode_file, prefix, condition, drop) {
-  cols <- c("DoB", "postcode", "gpprac")
-  if (!is.null(drop)) {
-    cols <- cols[cols != drop]
-  }
-  episode_file <- purrr::map_dfc(cols, ~ create_col(episode_file, .x, prefix, condition))
-  return(episode_file)
-}
-
-#' Create standard col
-#'
-#' @description Create single standard column.
-#'
-#' @inheritParams add_acute_columns
-#' @inheritParams na_type
-create_col <- function(episode_file, col, prefix, condition) {
-  episode_file %>%
-    dplyr::mutate("{prefix}_{col}" := dplyr::if_else(
-      eval(condition),
-      .data[[tolower(col)]],
-      na_type(col)
-    )) %>%
-    dplyr::select(dplyr::last_col())
-}
-
-#' NA type
-#'
-#' @description Helper function to use correct NA type depending on
-#' which type of column is created.
-#'
-#' @param col Which column to create ("DoB", "postcode", or "gpprac")
-na_type <- function(col = c("DoB", "postcode", "gpprac")) {
-  match.arg(col)
-  na_type <- switch(col,
-    "DoB" = lubridate::NA_Date_,
-    "postcode" = NA_character_,
-    "gpprac" = NA_real_
-  )
-  return(na_type)
-}
 
 #' Aggregate CIS episodes
 #'
@@ -779,40 +732,13 @@ clean_individual_file <- function(individual_file, year) {
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
   individual_file %>%
-    drop_cols() %>%
-    clean_up_gender() %>%
-    dplyr::mutate(
-      age = compute_mid_year_age(year, .data$dob)
-    )
-}
-
-#' Drop redundant columns
-#'
-#' @description Drop redundant columns from individual file.
-#'
-#' @inheritParams clean_individual_file
-drop_cols <- function(individual_file) {
-  individual_file %>%
     dplyr::select(
-      -month_cols(),
       -"ch_no_cost",
-      # -"dob",
-      # -"postcode",
-      # -"gpprac",
-      -"no_paid_items" # ,
-      #-"total_no_dn_contacts"
-    )
-}
-
-#' Month columns
-#'
-#' @description Return chr of column names following pattern
-#' "month_beddays" and "month_cost" e.g. apr_beddays" and "apr_cost"
-month_cols <- function() {
-  suffix <- c("_beddays", "_cost")
-  months <- tolower(c(rep(month.abb, each = 2)))
-  month_cols <- paste0(months, suffix)
-  return(month_cols)
+      -"no_paid_items",
+      -"total_no_dn_contacts"
+    ) %>%
+    clean_up_gender() %>%
+    dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
 }
 
 #' Clean up gender column
@@ -826,80 +752,6 @@ clean_up_gender <- function(individual_file) {
       gender = dplyr::case_when(
         .data$gender != 1.5 ~ round(.data$gender),
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
-      )
-    )
-}
-
-
-#' Fill missing date of births
-#'
-#' @description Fill missing date of births with
-#' date of births from specific episode columns in hierarchy.
-#'
-#' @inheritParams clean_individual_file
-fill_dob <- function(individual_file) {
-  column_prefix <- c(
-    "PIS", "AE", "OoH", "OP", "Acute", "Mat", "DN", "CMH", "MH",
-    "GLS", "HL1", "CH", "HC", "AT", "SDS", "NSU", "NRS"
-  )
-  columns <- paste0(column_prefix, "_DoB")
-  for (i in length(columns)) {
-    individual_file <- replace_dob_with_col(individual_file, columns[i])
-  }
-  return(individual_file)
-}
-
-#' Fill missing date of births
-#'
-#' @description Fill missing date of births with
-#' date of births from an episode date of birth column.
-#'
-#' @inheritParams clean_individual_file
-#' @param col Column containing date of birth for episode
-replace_dob_with_col <- function(individual_file, col) {
-  individual_file %>%
-    dplyr::mutate(
-      DoB = dplyr::if_else(
-        is.na(.data$DoB) & !is.na(.data[[col]]),
-        .data[[col]],
-        .data$DoB
-      )
-    )
-}
-
-
-#' Fill missing postcodes
-#'
-#' @description Fill missing postcodes with
-#' postcodes from specific episode columns in hierarchy.
-#'
-#' @inheritParams clean_individual_file
-fill_dob <- function(individual_file) {
-  column_prefix <- c(
-    "PIS", "AE", "OoH", "OP", "Acute", "Mat", "HC", "DN", "CMH", "MH",
-    "GLS", "AT", "SDS", "CH", "NSU", "NRS", "HL1"
-  )
-  columns <- paste0(column_prefix, "_postcode")
-  for (i in length(columns)) {
-    individual_file <- replace_postcode_with_col(individual_file, columns[i])
-  }
-  return(individual_file)
-}
-
-#' Fill missing postcode
-#'
-#' @description Fill missing postcode with
-#' postcodes from an episode postcode column.
-#'
-#' @inheritParams clean_individual_file
-#' @param col Column containing postcode for episode
-replace_postcode_with_col <- function(individual_file, col) {
-  individual_file %>%
-    dplyr::mutate(
-      postcode = dplyr::if_else(
-        is.na(.data$postcode) & !is.na(.data[[col]]),
-        .data[[col]],
-        .data$postcode
       )
     )
 }
