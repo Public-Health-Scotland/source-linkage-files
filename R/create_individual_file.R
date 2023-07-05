@@ -54,7 +54,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     clean_individual_file(year)
 
   if (write_to_disk) {
-    slf_path <- get_file_path(
+    slf_indiv_path <- get_file_path(
       get_year_dir(year),
       stringr::str_glue(
         "source-individual-file-{year}.parquet"
@@ -62,7 +62,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
       check_mode = "write"
     )
 
-    write_file(episode_file, slf_path)
+    write_file(individual_file, slf_indiv_path)
   }
 
   return(individual_file)
