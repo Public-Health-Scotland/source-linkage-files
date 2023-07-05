@@ -16,9 +16,9 @@ aggregate_by_chi_zihao <- function(episode_file) {
   # Ensure all variable names are lowercase
   data.table::setnames(episode_file, stringr::str_to_lower)
 
-  # Sort the data within each chunk
+  # Sort the data
   data.table::setkeyv(
-    individual_file,
+    episode_file,
     c(
       "chi",
       "record_keydate1",
@@ -62,7 +62,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
   # columns to sum up
   cols4 <- c(
     vars_end_with(
-      individual_file,
+      episode_file,
       c(
         "episodes",
         "beddays",
@@ -86,49 +86,48 @@ aggregate_by_chi_zihao <- function(episode_file) {
       )
     ),
     vars_start_with(
-      individual_file,
+      episode_file,
       "sds_option"
     ),
     "health_net_costincdnas"
   )
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
   # columns to select maximum
-  cols5 <- vars_contain(individual_file, c("nsu", "hl1_in_fy"))
-  cols5 <- cols5[!(cols5 %in% c("ooh_consultation_time"))]
-
+  cols5 <- c("nsu", vars_contain(episode_file, c("hl1_in_fy")))
+  data.table::setnafill(episode_file, fill= 0L, cols = cols5)
   # compute
-  individual_file_cols1 <- individual_file[,
+  individual_file_cols1 <- episode_file[,
     .(gender = mean(gender)),
     by = "chi"
   ]
-  individual_file_cols2 <- individual_file[,
+  individual_file_cols2 <- episode_file[,
     .SD[.N],
     .SDcols = cols2,
     by = "chi"
   ]
-  individual_file_cols3 <- individual_file[,
+  individual_file_cols3 <- episode_file[,
     lapply(.SD, function(x) {
       data.table::uniqueN(x, na.rm = TRUE)
     }),
     .SDcols = cols3,
     by = "chi"
   ]
-  individual_file_cols4 <- individual_file[,
+  individual_file_cols4 <- episode_file[,
     lapply(.SD, function(x) {
       sum(x, na.rm = TRUE)
     }),
     .SDcols = cols4,
     by = "chi"
   ]
-  individual_file_cols5 <- individual_file[,
+  individual_file_cols5 <- episode_file[,
     lapply(.SD, function(x) max(x, na.rm = TRUE)),
     .SDcols = cols5,
     by = "chi"
   ]
-  individual_file_cols6 <- individual_file[,
+  individual_file_cols6 <- episode_file[,
     .(
       preventable_beddays = ifelse(
-        cij_ppa == 1,
+        max(cij_ppa, na.rm = TRUE),
         max(cij_end_date) - min(cij_start_date),
         NA_real_
       )
@@ -207,7 +206,7 @@ aggregate_ch_episodes_zihao <- function(episode_file) {
     ch_ep_start = min(record_keydate1),
     ch_ep_end = max(ch_ep_end),
     ch_cost_per_day = mean(ch_cost_per_day)
-  ), by = .("chi", "ch_chi_cis")]
+  ), by = c("chi", "ch_chi_cis")]
 
   # Convert back to tibble if needed
   episode_file <- tibble::as_tibble(episode_file)
