@@ -4,7 +4,7 @@
 \alias{clean_individual_file}
 \title{Clean individual file}
 \usage{
-clean_individual_file(individual_file)
+clean_individual_file(individual_file, year)
 }
 \arguments{
 \item{individual_file}{Individual file where each row represents a unique CHI}

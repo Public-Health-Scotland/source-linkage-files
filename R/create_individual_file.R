@@ -18,7 +18,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     clean_up_ch(year) %>%
     recode_gender() %>%
     aggregate_by_chi_zihao() %>%
-    clean_individual_file()
+    clean_individual_file(year)
 
   if (write_to_disk) {
     slf_path <- get_file_path(
@@ -742,7 +742,7 @@ min_no_inf <- function(x) {
 #' @description Clean up columns in individual file
 #'
 #' @param individual_file Individual file where each row represents a unique CHI
-clean_individual_file <- function(individual_file) {
+clean_individual_file <- function(individual_file, year) {
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
   individual_file %>%
