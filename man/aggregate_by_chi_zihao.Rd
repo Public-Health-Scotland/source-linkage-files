@@ -4,7 +4,10 @@
 \alias{aggregate_by_chi_zihao}
 \title{Aggregate by CHI}
 \usage{
-aggregate_by_chi_zihao(individual_file)
+aggregate_by_chi_zihao(episode_file)
+}
+\arguments{
+\item{episode_file}{Tibble containing episodic data}
 }
 \description{
 Aggregate episode file by CHI to convert into

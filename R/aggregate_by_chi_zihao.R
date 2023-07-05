@@ -7,10 +7,10 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi_zihao <- function(individual_file) {
+aggregate_by_chi_zihao <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
-  individual_file <- individual_file %>%
+  individual_file <- episode_file %>%
     dplyr::select(-c("postcode", "gpprac")) %>%
     dplyr::rename(
       "gpprac" = "most_recent_gpprac",
