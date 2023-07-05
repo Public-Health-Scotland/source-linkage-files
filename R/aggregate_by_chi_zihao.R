@@ -94,7 +94,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
   # columns to select maximum
   cols5 <- c("nsu", vars_contain(episode_file, c("hl1_in_fy")))
-  data.table::setnafill(episode_file, fill= 0L, cols = cols5)
+  data.table::setnafill(episode_file, fill = 0L, cols = cols5)
   # compute
   individual_file_cols1 <- episode_file[,
     .(gender = mean(gender)),

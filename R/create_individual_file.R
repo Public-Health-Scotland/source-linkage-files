@@ -52,7 +52,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     recode_gender() %>%
     aggregate_by_chi_zihao() %>%
     clean_individual_file(year)
-    join_cohort_lookups(year) %>%
+  join_cohort_lookups(year) %>%
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year)
