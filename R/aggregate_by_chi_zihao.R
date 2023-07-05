@@ -21,10 +21,11 @@ aggregate_by_chi_zihao <- function(episode_file) {
       dplyr::ends_with("_postcode"),
       dplyr::ends_with("_DoB")
     ))
+  # Convert to data.table
+  data.table::setDT(episode_file)
 
-  names(individual_file) <- tolower(names(individual_file))
-
-  data.table::setDT(individual_file) # Convert to data.table
+  # Ensure all variable names are lowercase
+  data.table::setnames(episode_file, stringr::str_to_lower)
 
   # Sort the data within each chunk
   data.table::setkeyv(
@@ -39,7 +40,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
   )
 
   data.table::setnames(
-    individual_file,
+    episode_file,
     c(
       "ch_chi_cis", "cij_marker", "ooh_case_id"
       # ,"hh_in_fy"
