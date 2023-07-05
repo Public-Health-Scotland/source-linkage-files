@@ -151,10 +151,9 @@ aggregate_by_chi_zihao <- function(episode_file) {
     individual_file_cols5[, chi := NULL],
     individual_file_cols6[, chi := NULL]
   )
-  # convert back to tibble
-  individual_file <- dplyr::as_tibble(individual_file)
 
-  return(individual_file)
+  # convert back to tibble
+  return(dplyr::as_tibble(individual_file))
 }
 
 
