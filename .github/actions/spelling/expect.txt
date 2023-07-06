@@ -89,6 +89,7 @@ hhg
 hjust
 hms
 homecare
+homev
 hscp
 hscpnames
 infyyear
@@ -165,8 +166,12 @@ rspm
 RStudio
 rstudioapi
 Rtype
+SDcols
 seealso
 selfharm
+setkeyv
+setnafill
+setnames
 Siar
 sigfac
 simd
