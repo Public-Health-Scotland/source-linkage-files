@@ -9,6 +9,7 @@
 #' @param year The year to process, in FY format.
 #' @param client_lookup The Social Care Client lookup, created by
 #' [process_lookup_sc_client()].
+#' @param ch_costs The Care Home costs lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -19,6 +20,7 @@ process_extract_care_home <- function(
     data,
     year,
     client_lookup,
+    ch_costs,
     write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -75,15 +77,11 @@ process_extract_care_home <- function(
 
 
   # Costs  ---------------------------------------
-  # read in CH Costs Lookup
-  ch_costs <- read_file(get_ch_costs_path()) %>%
-    dplyr::rename(
-      ch_nursing = "nursing_care_provision"
-    )
-
-  # match costs
   matched_costs <- source_ch_clean %>%
-    dplyr::left_join(ch_costs, by = c("year", "ch_nursing"))
+    dplyr::left_join(
+      ch_costs,
+      by = c("year", "ch_nursing" = "nursing_care_provision")
+    )
 
   monthly_costs <- matched_costs %>%
     # monthly costs
