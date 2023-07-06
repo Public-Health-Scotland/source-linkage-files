@@ -32,8 +32,7 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
 get_slf_gpprac_path <- function(update = latest_update(), ...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_GPprac_lookup_{update}"),
-    ext = "parquet",
+    file_name = stringr::str_glue("source_gpprac_lookup_{update}.parquet"),
     ...
   )
 }
@@ -74,8 +73,7 @@ get_slf_deaths_lookup_path <- function(year, ...) {
 get_slf_chi_deaths_path <- function(update = latest_update(), ...) {
   slf_chi_deaths_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("chi_deaths_{update}"),
-    ext = "parquet",
+    file_name = stringr::str_glue("chi_deaths_{update}.parquet"),
     ...
   )
 
