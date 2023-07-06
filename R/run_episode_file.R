@@ -191,12 +191,12 @@ load_ep_file_vars <- function(data, year) {
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
     dplyr::filter(
-      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B") & !is.na(.data[["chi"]])
+      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["chi"]])
     )
 
   non_fixable_data <- data %>%
     dplyr::filter(
-      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B")) | is.na(.data[["chi"]])
+      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD")) | is.na(.data[["chi"]])
     )
 
   fixed_data <- fixable_data %>%
