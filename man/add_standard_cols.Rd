@@ -8,7 +8,6 @@ add_standard_cols(
   episode_file,
   prefix,
   condition,
-  drop = NULL,
   episode = FALSE,
   cost = FALSE
 )
@@ -20,11 +19,11 @@ add_standard_cols(
 
 \item{condition}{Condition to create new columns based on}
 
-\item{drop}{Any columns out of "DoB", "postcode", and "gpprac" that should be dropped}
-
 \item{episode}{Whether to create prefix_episodes col, e.g. "Acute_episodes"}
 
 \item{cost}{Whether to create prefix_cost col, e.g. "Acute_cost"}
+
+\item{drop}{Any columns out of "DoB", "postcode", and "gpprac" that should be dropped}
 }
 \description{
 Add standard columns (DoB, postcode, gpprac, episodes, cost) to episode file.
