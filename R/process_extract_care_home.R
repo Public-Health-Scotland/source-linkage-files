@@ -38,11 +38,18 @@ process_extract_care_home <- function(
 
   ch_data <- data %>%
     # select episodes for FY
-    dplyr::filter(is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)) %>%
+    dplyr::filter(
+      is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)
+    ) %>%
     # remove any episodes where the latest submission was before the current year
-    dplyr::filter(substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
+    dplyr::filter(
+      substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)
+    ) %>%
     # Match to client data
-    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id"))
+    dplyr::left_join(
+      client_lookup,
+      by = c("sending_location", "social_care_id")
+    )
 
 
   # Data Cleaning ---------------------------------------
@@ -54,7 +61,9 @@ process_extract_care_home <- function(
       smrtype = add_smr_type(recid = "CH")
     ) %>%
     # compute lca variable from sending_location
-    dplyr::mutate(sc_send_lca = convert_sending_location_to_lca(.data$sending_location)) %>%
+    dplyr::mutate(
+      sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
+    ) %>%
     # bed days
     create_monthly_beddays(year,
       admission_date = .data$record_keydate1,
@@ -62,7 +71,7 @@ process_extract_care_home <- function(
     ) %>%
     # year stay
     dplyr::mutate(
-      yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
+      yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays"))),
       # total length of stay
       stay = calculate_stay(year,
         start_date = .data$record_keydate1,
@@ -90,9 +99,8 @@ process_extract_care_home <- function(
     dplyr::mutate(cost_total_net = rowSums(dplyr::across(tidyselect::ends_with("_cost"))))
 
 
-  # Outfile  ---------------------------------------
 
-  outfile <- monthly_costs %>%
+  ch_processed <- monthly_costs %>%
     dplyr::select(
       "year",
       "recid",
@@ -106,20 +114,21 @@ process_extract_care_home <- function(
       "record_keydate1",
       "record_keydate2",
       "sc_latest_submission",
-      tidyselect::starts_with("ch_"),
+      dplyr::starts_with("ch_"),
       "yearstay",
       "stay",
       "cost_total_net",
-      tidyselect::ends_with("_beddays"),
-      tidyselect::ends_with("_cost"),
-      tidyselect::starts_with("sc_")
+      dplyr::ends_with("_beddays"),
+      dplyr::ends_with("_cost"),
+      dplyr::starts_with("sc_")
     )
 
   if (write_to_disk) {
-    # Save .rds file
-    outfile %>%
-      write_file(get_source_extract_path(year, type = "CH", check_mode = "write"))
+    write_file(
+      ch_processed,
+      get_source_extract_path(year, type = "CH", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(ch_processed)
 }
