@@ -128,6 +128,7 @@ openxl
 openxlsx
 ORCID
 outfile
+pandoc
 patflow
 pattype
 phs
@@ -145,6 +146,7 @@ ptypes
 purrr
 quickstart
 Rbuildignore
+rcmdcheck
 rds
 reabl
 reablement
@@ -199,6 +201,7 @@ Unicode
 updown
 upi
 vline
+workflows
 xintercept
 xlsx
 yearstay
