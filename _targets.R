@@ -447,6 +447,7 @@ list(
         data = all_care_home,
         year = year,
         client_lookup = sc_client_lookup,
+        ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
       )
     ),
