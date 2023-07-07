@@ -52,11 +52,14 @@ link_delayed_discharge_eps <- function(data, year) {
     x$record_keydate1 >= y$dummy_cij_start,
     x$dummy_keydate2 <= y$dummy_cij_end
   )
+
   data <- dd_data %>%
     dplyr::inner_join(data,
       by = by_dd,
       suffix = c("_dd", "")
     ) %>%
+    # Remove existing beddays as we're re-calculating them for this cohort
+    dplyr::select(-dplyr::ends_with("beddays")) %>%
     dplyr::arrange(
       .data$cij_start_date,
       .data$cij_end_date,
@@ -222,7 +225,7 @@ link_delayed_discharge_eps <- function(data, year) {
       # For "1APE", assign 1APE cij_end_date to record_keydate2_dd
       record_keydate2_dd = dplyr::if_else(
         .data$dd_type == "1APE" | .data$dd_type == "3ADPE",
-        .data$cij_end_date,
+        max(.data$record_keydate1_dd, .data$cij_end_date),
         .data$record_keydate2_dd
       ),
       datediff_end = abs(.data$cij_end_date - .data$record_keydate2_dd),
@@ -271,7 +274,7 @@ link_delayed_discharge_eps <- function(data, year) {
     ) %>%
     # add cij_delay
     dplyr::mutate(has_delay = dplyr::if_else(
-      is_missing(.data$chi) & !is.na(.data$cij_marker),
+      !is_missing(.data$chi) & !is.na(.data$cij_marker),
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
@@ -279,10 +282,12 @@ link_delayed_discharge_eps <- function(data, year) {
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::ungroup() %>%
     # add yearstay and monthly beddays
+    # count_last = TRUE because DD counts last day and not the first
     create_monthly_beddays(
       year,
-      .data$record_keydate1,
-      .data$record_keydate2
+      .data$record_keydate1_dd,
+      .data$record_keydate2_dd,
+      count_last = TRUE
     ) %>%
     dplyr::mutate(yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))) %>%
     # tidy up and rename columns to match the format of episode files
