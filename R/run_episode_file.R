@@ -313,19 +313,19 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 
   future_demographic <- future::future({
     create_demographic_cohorts(
-    data,
-    year,
-    update,
-    write_to_disk = TRUE
-  )
-    })
+      data,
+      year,
+      update,
+      write_to_disk = TRUE
+    )
+  })
   future_service_use <- future::future({
-  create_service_use_cohorts(
-    data,
-    year,
-    update,
-    write_to_disk = TRUE
-  )
+    create_service_use_cohorts(
+      data,
+      year,
+      update,
+      write_to_disk = TRUE
+    )
   })
 
   # This 'blocks' the code until they have both finished executing
@@ -341,11 +341,11 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(data, year, update = latest_update()) {
-    join_cohort_lookups <- data %>%
+  join_cohort_lookups <- data %>%
     dplyr::left_join(
       read_file(
         get_demographic_cohorts_path(year, update),
-        col_select = c("chi","demographic_cohort")
+        col_select = c("chi", "demographic_cohort")
       ),
       by = "chi"
     ) %>%
