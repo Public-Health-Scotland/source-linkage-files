@@ -2,19 +2,30 @@
 % Please edit documentation in R/create_demographic_lookup.R
 \name{create_demographic_cohorts}
 \alias{create_demographic_cohorts}
-\title{Create the demographic cohorts lookup file}
+\title{Create the Demographic Cohort lookup}
 \usage{
-create_demographic_cohorts(data, year, write_to_disk = TRUE)
+create_demographic_cohorts(
+  data,
+  year,
+  update = latest_update(),
+  write_to_disk = TRUE
+)
 }
 \arguments{
-\item{data}{A data frame with the required variables}
+\item{data}{A data frame with the required variables.}
 
-\item{year}{The year in standard SLF format}
+\item{year}{The year in standard SLF format.}
 
-\item{write_to_disk}{Defaults to TRUE}
+\item{update}{The update to use.}
+
+\item{write_to_disk}{Default \code{TRUE}, will write the lookup to the
+Cohorts folder defined by \link{get_slf_dir}.}
+}
+\value{
+The Demographics Cohorts lookup
 }
 \description{
-Create the demographic cohorts lookup file
+Create the Demographic Cohort lookup
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

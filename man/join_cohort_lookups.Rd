@@ -4,7 +4,7 @@
 \alias{join_cohort_lookups}
 \title{Join cohort lookups}
 \usage{
-join_cohort_lookups(data, year)
+join_cohort_lookups(data, year, force_create = FALSE)
 }
 \arguments{
 \item{data}{The in progress episode file data.}

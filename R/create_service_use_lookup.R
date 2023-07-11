@@ -1,14 +1,17 @@
-#' Create the Service Use Cohorts lookup file
-#' @param data A data frame
-#' @param year The financial year
-#' @param write_to_disk Default `TRUE`, will write the lookup to the
-#' Cohorts folder defined by [get_slf_dir]
+#' Create the Service Use Cohort lookup
 #'
-#' @return The service-use cohorts file
+#' @inheritParams create_demographic_cohorts
+#'
+#' @return The Service Use Cohort lookup
 #' @export
 #'
 #' @family Demographic and Service Use Cohort functions
-create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
+create_service_use_cohorts <- function(
+    data,
+    year,
+    update = latest_update(),
+    write_to_disk = TRUE
+) {
   check_variables_exist(data, variables = c(
     "chi",
     "recid",
@@ -152,7 +155,7 @@ create_service_use_cohorts <- function(data, year, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     write_file(return_data,
-      path = get_service_use_cohorts_path(year, check_mode = "write")
+      path = get_service_use_cohorts_path(year, update, check_mode = "write")
     )
   }
 
