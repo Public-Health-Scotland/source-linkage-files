@@ -71,7 +71,7 @@ find the latest file with {.arg file_name_regexp}",
       file_path <- fs::path_ext_set(file_path, ext)
     }
 
-    if (!fs::file_exists(file_path)) {
+    if (!fs::file_exists(file_path) && check_mode != "exists") {
       if (is.null(create) && check_mode == "write" |
         !is.null(create) && create == TRUE) {
         # The file doesn't exist but we do want to create it
@@ -102,6 +102,10 @@ find the latest file with {.arg file_name_regexp}",
 
         # The file doesn't exist and we don't want to create it
         cli::cli_abort(error_text)
+      }
+    } else if (check_mode == "exists") {
+      if (!fs::file_exists(file_path)) {
+        return(FALSE)
       }
     }
 

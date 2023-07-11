@@ -1,11 +1,20 @@
-#' Create the demographic cohorts lookup file
+#' Create the Demographic Cohort lookup
 #'
-#' @param data A data frame with the required variables
-#' @param year The year in standard SLF format
-#' @param write_to_disk Defaults to TRUE
+#' @param data A data frame with the required variables.
+#' @param year The year in standard SLF format.
+#' @param update The update to use.
+#' @param write_to_disk Default `TRUE`, will write the lookup to the
+#' Cohorts folder defined by [get_slf_dir].
+#'
+#' @return The Demographics Cohorts lookup
 #'
 #' @family Demographic and Service Use Cohort functions
-create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
+create_demographic_cohorts <- function(
+    data,
+    year,
+    update = latest_update(),
+    write_to_disk = TRUE
+) {
   check_variables_exist(
     data,
     c(
@@ -165,7 +174,7 @@ create_demographic_cohorts <- function(data, year, write_to_disk = TRUE) {
   # Write to disk
   if (write_to_disk) {
     write_file(demo_lookup,
-      path = get_demographic_cohorts_path(year, check_mode = "write")
+      path = get_demographic_cohorts_path(year, update, check_mode = "write")
     )
   }
 

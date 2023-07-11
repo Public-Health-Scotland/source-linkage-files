@@ -4,10 +4,12 @@
 \alias{get_service_use_cohorts_path}
 \title{Service-use cohorts lookup Path}
 \usage{
-get_service_use_cohorts_path(year, ...)
+get_service_use_cohorts_path(year, update = latest_update(), ...)
 }
 \arguments{
 \item{year}{financial year in '1718' format}
+
+\item{update}{The update to use}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
