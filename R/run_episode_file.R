@@ -96,6 +96,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
+    create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
     fill_geographies() %>%
@@ -300,39 +301,59 @@ create_cost_inc_dna <- function(data) {
     )
 }
 
+#' Create the cohort lookups
+#'
+#' @inheritParams store_ep_file_vars
+#' @inheritParams create_demographic_cohorts
+#'
+#' @return The data unchanged (the cohorts are written to disk)
+create_cohort_lookups <- function(data, year, update = latest_update()) {
+  # Use future so the cohorts can be create simultaneously (in parallel)
+  future::plan(future.callr::callr)
+
+  future_demographic <- future::future({
+    create_demographic_cohorts(
+    data,
+    year,
+    update,
+    write_to_disk = TRUE
+  )
+    })
+  future_service_use <- future::future({
+  create_service_use_cohorts(
+    data,
+    year,
+    update,
+    write_to_disk = TRUE
+  )
+  })
+
+  # This 'blocks' the code until they have both finished executing
+  value_demographic <- future::value(future_demographic)
+  value_service_use <- future::value(future_service_use)
+
+  return(data)
+}
+
 #' Join cohort lookups
 #'
 #' @inheritParams store_ep_file_vars
 #'
-#' @return The data including the demographic and service use lookups matched
-#' on to the episode file.
-join_cohort_lookups <- function(data, year) {
-  demographic_cohorts <- create_demographic_cohorts(
-    data,
-    year,
-    write_to_disk = TRUE
-  )
-  service_use_cohorts <- create_service_use_cohorts(
-    data,
-    year,
-    write_to_disk = TRUE
-  )
-
-  join_cohort_lookups <- data %>%
+#' @return The data including the Demographic and Service Use lookups.
+join_cohort_lookups <- function(data, year, update = latest_update()) {
+    join_cohort_lookups <- data %>%
     dplyr::left_join(
-      demographic_cohorts %>%
-        dplyr::select(
-          "chi",
-          "demographic_cohort"
-        ),
+      read_file(
+        get_demographic_cohorts_path(year, update),
+        col_select = c("chi","demographic_cohort")
+      ),
       by = "chi"
     ) %>%
     dplyr::left_join(
-      service_use_cohorts %>%
-        dplyr::select(
-          "chi",
-          "service_use_cohort"
-        ),
+      read_file(
+        get_service_use_cohorts_path(year, update),
+        col_select = c("chi", "service_use_cohort")
+      ),
       by = "chi"
     )
 
