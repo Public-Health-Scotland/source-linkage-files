@@ -22,7 +22,9 @@ process_slf_deaths_lookup <- function(
     chi_deaths_data = read_file(get_slf_chi_deaths_path()),
     write_to_disk = TRUE) {
   slf_deaths_lookup <- nrs_deaths_data %>%
-    dplyr::select("chi", "record_keydate1") %>%
+    # Only modification over 'raw' NRS is to keep the earliest death date
+    dplyr::arrange(.data$record_keydate1) %>%
+    dplyr::distinct(.data$chi, .data$record_keydate1) %>%
     dplyr::mutate(
       death_date = .data$record_keydate1,
       deceased = TRUE,
