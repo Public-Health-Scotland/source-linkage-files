@@ -27,7 +27,10 @@ list(
     file_path_ext_clean,
     make_lowercase_ext(),
     priority = 1,
-    cue = tar_cue(mode = "always")
+    cue = tar_cue_age(
+      name = file_path_ext_clean,
+      age = as.difftime(7, units = "days")
+    )
   ),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
@@ -182,7 +185,10 @@ list(
       compress_extracts,
       gzip_files(year),
       priority = 1,
-      cue = tar_cue(mode = "always")
+      cue = tar_cue_age(
+        name = compress_extracts,
+        age = as.difftime(7, units = "days")
+      )
     ),
     ### target data extracts ###
     tar_file_read(
