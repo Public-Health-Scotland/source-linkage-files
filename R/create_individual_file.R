@@ -56,6 +56,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
+    join_slf_lookup_vars() %>%
     dplyr::mutate(year = year)
 
   if (write_to_disk) {
@@ -759,4 +760,29 @@ clean_up_gender <- function(individual_file) {
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
     )
+}
+
+#' Join slf lookup variables
+#'
+#' @description Join lookup variables from slf postcode lookup and slf gpprac
+#'              lookup.
+#'
+#' @param individual_file the processed individual file.
+join_slf_lookup_vars <- function(individual_file) {
+  individual_file <- individual_file %>%
+    dplyr::left_join(
+      read_file(
+        get_slf_postcode_path()
+      ),
+      by = "postcode"
+    ) %>%
+    dplyr::left_join(
+      read_file(
+        get_slf_gpprac_path()
+      ) %>%
+        dplyr::select(c("gpprac", "cluster", "hbpraccode")),
+      by = "gpprac"
+    )
+
+  return(individual_file)
 }
