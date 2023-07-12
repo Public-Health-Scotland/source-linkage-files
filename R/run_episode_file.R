@@ -309,7 +309,8 @@ create_cost_inc_dna <- function(data) {
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
   # Use future so the cohorts can be create simultaneously (in parallel)
-  future::plan(future.callr::callr)
+  future::plan(strategy = future.callr::callr, .skip = TRUE)
+  options(future.globals.maxSize = 21474836480)
 
   future_demographic <- future::future({
     create_demographic_cohorts(
