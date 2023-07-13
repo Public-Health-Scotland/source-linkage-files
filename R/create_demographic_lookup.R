@@ -13,8 +13,7 @@ create_demographic_cohorts <- function(
     data,
     year,
     update = latest_update(),
-    write_to_disk = TRUE
-) {
+    write_to_disk = TRUE) {
   check_variables_exist(
     data,
     c(
