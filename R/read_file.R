@@ -42,11 +42,12 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
     "zsav" = haven::read_spss(path, ...),
     "csv" = readr::read_csv(path, ..., show_col_types = FALSE),
     "gz" = readr::read_csv(path, ..., show_col_types = FALSE),
-    "parquet" = if (is.null(col_select)) {
-      arrow::read_parquet(path, as_data_frame = as_data_frame, ...)
-    } else {
-      arrow::read_parquet(path, col_select = col_select, as_data_frame = as_data_frame, ...)
-    }
+    "parquet" = arrow::read_parquet(
+      file = path,
+      col_select = !!col_select,
+      as_data_frame = as_data_frame,
+      ...
+    )
   )
 
   return(data)
