@@ -167,7 +167,7 @@ add_all_columns <- function(episode_file) {
         ),
         na.rm = TRUE
       ),
-      health_net_costincdnas = .data$health_net_cost + dplyr::if_else(
+      health_net_cost_inc_dnas = .data$health_net_cost + dplyr::if_else(
         is.na(.data$OP_cost_dnas),
         0,
         .data$OP_cost_dnas
