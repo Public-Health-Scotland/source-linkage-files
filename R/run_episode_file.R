@@ -103,7 +103,8 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     load_ep_file_vars(year)
 
   if (write_to_disk) {
-    slf_path <- get_file_path(
+    # TODO make the slf_path a function
+    slf_epsiode_path <- get_file_path(
       get_year_dir(year),
       stringr::str_glue(
         "source-episode-file-{year}.parquet"
@@ -111,7 +112,17 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       check_mode = "write"
     )
 
-    write_file(episode_file, slf_path)
+    write_file(episode_file, slf_epsiode_path)
+
+    arrow::write_dataset(
+      dataset = episode_file,
+      path = fs::path_ext_remove(slf_epsiode_path),
+      format = "parquet",
+      # Should correspond to the available slfhelper filters
+      partitioning = c("recid", "hscp2018"),
+      compression = "zstd",
+      version = "latest"
+    )
   }
 
   return(episode_file)
