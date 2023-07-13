@@ -738,9 +738,12 @@ clean_individual_file <- function(individual_file, year) {
 
   individual_file %>%
     dplyr::select(
-      -"ch_no_cost",
-      -"no_paid_items",
-      -"total_no_dn_contacts"
+      !c(
+        "ch_no_cost",
+        "no_paid_items",
+        "total_no_dn_contacts",
+        "cost_total_net_inc_dnas"
+      )
     ) %>%
     clean_up_gender() %>%
     dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
