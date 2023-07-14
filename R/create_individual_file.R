@@ -809,7 +809,7 @@ join_sc_client <- function(year,
                            individual_file,
                            sc_client = read_file(get_source_extract_path(year, "Client")),
                            sc_demographics = read_file(get_sc_demog_lookup_path(),
-                                                       col_select = c("sending_location", "social_care_id", "chi")
+                             col_select = c("sending_location", "social_care_id", "chi")
                            )) {
   # Match to demographics lookup to get chi
   join_client_demog <- sc_client %>%
@@ -821,7 +821,7 @@ join_sc_client <- function(year,
   # Match on client variables by chi
   individual_file <- individual_file %>%
     dplyr::left_join(join_client_demog,
-                     by = "chi"
+      by = "chi"
     )
 
   return(individual_file)
