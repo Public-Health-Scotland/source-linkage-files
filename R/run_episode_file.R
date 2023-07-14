@@ -100,6 +100,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
     fill_geographies() %>%
+    join_deaths_data(year) %>%
     load_ep_file_vars(year)
 
   if (write_to_disk) {

@@ -147,9 +147,6 @@ process_sc_all_home_care <- function(
         )
     )
 
-
-  # Outfile ---------------------------------------
-
   merge_data <- pivoted_hours %>%
     # group the data to be merged
     dplyr::group_by(
@@ -169,8 +166,11 @@ process_sc_all_home_care <- function(
       # Store the period for the latest submitted record
       sc_latest_submission = dplyr::last(.data$period),
       # Sum the (quarterly) hours
-      dplyr::across(tidyselect::starts_with("hc_hours_"), sum),
-      dplyr::across(tidyselect::starts_with("hc_cost_"), sum),
+      dplyr::across(
+        c(dplyr::starts_with("hc_hours_"), -"hc_hours_derived"),
+        sum
+      ),
+      dplyr::across(dplyr::starts_with("hc_cost_"), sum),
       # Shouldn't matter as these are all the same
       dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%
@@ -178,7 +178,7 @@ process_sc_all_home_care <- function(
 
 
   # Create Source variables---------------------------------------
-  final_data <- merge_data %>%
+  all_hc_processed <- merge_data %>%
     # rename
     dplyr::rename(
       record_keydate1 = "hc_service_start_date",
@@ -198,15 +198,16 @@ process_sc_all_home_care <- function(
     # person_id
     create_person_id(type = "SC") %>%
     # compute lca variable from sending_location
-    dplyr::mutate(sc_send_lca = convert_sending_location_to_lca(.data$sending_location))
-
-  # Save outfile---------------------------------------------------
+    dplyr::mutate(
+      sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
+    )
 
   if (write_to_disk) {
-    # Save .rds file
-    final_data %>%
-      write_file(get_sc_hc_episodes_path(check_mode = "write"))
+    write_file(
+      all_hc_processed,
+      get_sc_hc_episodes_path(check_mode = "write")
+    )
   }
 
-  return(final_data)
+  return(all_hc_processed)
 }

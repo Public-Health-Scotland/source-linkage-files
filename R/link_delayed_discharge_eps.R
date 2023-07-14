@@ -1,16 +1,18 @@
 #' Link  Delayed Discharge to WIP episode file
 #'
-#' @param data The input data frame
+#' @param episode_file The episode file
 #' @param year The year being processed
+#' @param dd_data The processed DD extract
 #'
 #' @return A data frame with the delayed discharge cohort added and linked
 #' using the `cij_marker`
 #'
 #' @family episode file
-link_delayed_discharge_eps <- function(data, year) {
-  year_param <- year
-
-  data <- data %>%
+link_delayed_discharge_eps <- function(
+    episode_file,
+    year,
+    dd_data = read_file(get_source_extract_path(year, "DD"))) {
+  episode_file <- episode_file %>%
     dplyr::mutate(
       # remember to revoke the cij_end_date with dummy_cij_end
       cij_start_date_lower = .data$cij_start_date - lubridate::days(1L),
@@ -34,8 +36,7 @@ link_delayed_discharge_eps <- function(data, year) {
 
   ## handling DD ----
   # no flag for last reported
-  dd_data <-
-    read_file(get_source_extract_path(year_param, "DD")) %>%
+  dd_data <- dd_data %>%
     dplyr::mutate(
       # remember to revoke the keydate2 and amended_dates with dummy_keydate2
       is_dummy_keydate2 = is.na(.data$record_keydate2),
@@ -53,11 +54,12 @@ link_delayed_discharge_eps <- function(data, year) {
     x$dummy_keydate2 <= y$dummy_cij_end
   )
 
-  data <- dd_data %>%
-    dplyr::inner_join(data,
-      by = by_dd,
-      suffix = c("_dd", "")
-    ) %>%
+  linked_data <- dplyr::inner_join(
+    x = dd_data,
+    y = episode_file,
+    by = by_dd,
+    suffix = c("_dd", "")
+  ) %>%
     # Remove existing beddays as we're re-calculating them for this cohort
     dplyr::select(-dplyr::ends_with("beddays")) %>%
     dplyr::arrange(
@@ -78,7 +80,7 @@ link_delayed_discharge_eps <- function(data, year) {
     ) %>%
     # determine DD quality
     dplyr::mutate(
-      dd_type = dplyr::if_else(
+      dd_quality = dplyr::if_else(
         is.na(.data$cij_marker),
         "no-cij",
         dplyr::case_when(
@@ -199,8 +201,8 @@ link_delayed_discharge_eps <- function(data, year) {
           .default = "-"
         )
       ),
-      dd_type = factor(
-        .data$dd_type,
+      dd_quality = factor(
+        .data$dd_quality,
         levels = c(
           "1",
           "1P",
@@ -224,16 +226,16 @@ link_delayed_discharge_eps <- function(data, year) {
 
       # For "1APE", assign 1APE cij_end_date to record_keydate2_dd
       record_keydate2_dd = dplyr::if_else(
-        .data$dd_type == "1APE" | .data$dd_type == "3ADPE",
+        .data$dd_quality == "1APE" | .data$dd_quality == "3ADPE",
         max(.data$record_keydate1_dd, .data$cij_end_date),
         .data$record_keydate2_dd
       ),
       datediff_end = abs(.data$cij_end_date - .data$record_keydate2_dd),
       datediff_start = .data$cij_start_date - .data$record_keydate1_dd
     ) %>%
-    dplyr::filter(.data$dd_type != "-") %>%
+    dplyr::filter(.data$dd_quality != "-") %>%
     dplyr::mutate(smrtype = dplyr::case_match(
-      as.character(.data$dd_type),
+      as.character(.data$dd_quality),
       c(
         "1",
         "1P",
@@ -262,7 +264,7 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$record_keydate1_dd,
       .data$record_keydate2_dd,
       .data$dummy_id,
-      .data$dd_type,
+      .data$dd_quality,
       .data$datediff_end,
       dplyr::desc(.data$datediff_start)
     ) %>%
@@ -289,7 +291,9 @@ link_delayed_discharge_eps <- function(data, year) {
       .data$record_keydate2_dd,
       count_last = TRUE
     ) %>%
-    dplyr::mutate(yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))) %>%
+    dplyr::mutate(
+      yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))
+    ) %>%
     # tidy up and rename columns to match the format of episode files
     dplyr::select(
       "year" = "year_dd",
@@ -303,9 +307,8 @@ link_delayed_discharge_eps <- function(data, year) {
       "age",
       "gpprac",
       "postcode" = "postcode_dd",
-      "lca" = "dd_responsible_lca",
+      "dd_responsible_lca",
       "hbtreatcode" = "hbtreatcode_dd",
-      "original_admission_date",
       "delay_end_reason",
       "primary_delay_reason",
       "secondary_delay_reason",
@@ -320,13 +323,13 @@ link_delayed_discharge_eps <- function(data, year) {
       "cij_delay",
       "location",
       "spec" = "spec_dd",
-      "dd_type",
+      "dd_quality",
       dplyr::ends_with("_beddays"),
       "yearstay"
     ) %>%
-    # combine DD with episode data
+    # Combine DD with episode data
     dplyr::bind_rows(
-      data %>%
+      episode_file %>%
         dplyr::select(
           -c(
             "cij_start_date_lower",
@@ -340,5 +343,5 @@ link_delayed_discharge_eps <- function(data, year) {
         )
     )
 
-  return(data)
+  return(linked_data)
 }
