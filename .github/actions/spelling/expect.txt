@@ -148,6 +148,7 @@ purrr
 quickstart
 Rbuildignore
 rcmdcheck
+rdd
 rds
 reabl
 reablement
