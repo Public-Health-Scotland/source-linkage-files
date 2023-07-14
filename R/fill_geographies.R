@@ -117,7 +117,7 @@ fill_postcode_geogs <- function(data) {
     cascade_geographies() %>%
     dplyr::mutate(
       hbrescode = dplyr::coalesce(.data$hb2018, .data$hbrescode),
-      hscp = dplyr::coalesce(.data$hscp2018, .data$hscp),
+      hscp2018 = dplyr::coalesce(.data$hscp2018, .data$hscp),
       lca = dplyr::coalesce(.data$lca, .data$lca_old)
     ) %>%
     dplyr::select(!c("hb2018", "hscp2018", "lca_old", "most_recent_postcode"))
