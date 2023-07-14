@@ -168,7 +168,7 @@ add_all_columns <- function(episode_file) {
         ),
         na.rm = TRUE
       ),
-      health_net_costincdnas = .data$health_net_cost + dplyr::if_else(
+      health_net_cost_inc_dnas = .data$health_net_cost + dplyr::if_else(
         is.na(.data$OP_cost_dnas),
         0,
         .data$OP_cost_dnas
@@ -739,9 +739,12 @@ clean_individual_file <- function(individual_file, year) {
 
   individual_file %>%
     dplyr::select(
-      -"ch_no_cost",
-      -"no_paid_items",
-      -"total_no_dn_contacts"
+      !c(
+        "ch_no_cost",
+        "no_paid_items",
+        "total_no_dn_contacts",
+        "cost_total_net_inc_dnas"
+      )
     ) %>%
     clean_up_gender() %>%
     dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
