@@ -769,21 +769,27 @@ clean_up_gender <- function(individual_file) {
 #'              lookup.
 #'
 #' @param individual_file the processed individual file.
-join_slf_lookup_vars <- function(individual_file) {
+#' @param slf_postcode_lookup SLF processed postcode lookup
+#' @param slf_gpprac_lookup SLF processed gpprac lookup
+#' @param hbrescode_var hbrescode variable
+#'
+join_slf_lookup_vars <- function(individual_file,
+                                 slf_postcode_lookup = read_file(get_slf_postcode_path()),
+                                 slf_gpprac_lookup = read_file(
+                                   get_slf_gpprac_path(),
+                                   col_select = c("gpprac", "cluster", "hbpraccode")
+                                 ),
+                                 hbrescode_var = "hb2018") {
   individual_file <- individual_file %>%
     dplyr::left_join(
-      read_file(
-        get_slf_postcode_path()
-      ),
+      slf_postcode_lookup,
       by = "postcode"
     ) %>%
     dplyr::left_join(
-      read_file(
-        get_slf_gpprac_path()
-      ) %>%
-        dplyr::select(c("gpprac", "cluster", "hbpraccode")),
+      slf_gpprac_lookup,
       by = "gpprac"
-    )
+    ) %>%
+    dplyr::rename(hbrescode = hbrescode_var)
 
   return(individual_file)
 }

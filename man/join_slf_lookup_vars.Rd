@@ -4,10 +4,22 @@
 \alias{join_slf_lookup_vars}
 \title{Join slf lookup variables}
 \usage{
-join_slf_lookup_vars(individual_file)
+join_slf_lookup_vars(
+  individual_file,
+  slf_postcode_lookup = read_file(get_slf_postcode_path()),
+  slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
+    "cluster", "hbpraccode")),
+  hbrescode_var = "hb2018"
+)
 }
 \arguments{
 \item{individual_file}{the processed individual file.}
+
+\item{slf_postcode_lookup}{SLF processed postcode lookup}
+
+\item{slf_gpprac_lookup}{SLF processed gpprac lookup}
+
+\item{hbrescode_var}{hbrescode variable}
 }
 \description{
 Join lookup variables from slf postcode lookup and slf gpprac
