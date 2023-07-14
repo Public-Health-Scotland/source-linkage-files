@@ -42,8 +42,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
       "sc_latest_submission",
       "hc_hours_annual",
       "hc_reablement",
-      "ooh_case_id",
-      "hbrescode"
+      "ooh_case_id"
     ) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
