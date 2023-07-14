@@ -89,7 +89,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
       episode_file,
       "sds_option"
     ),
-    "health_net_costincdnas"
+    "health_net_cost_inc_dnas"
   )
   cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
   # columns to select maximum
