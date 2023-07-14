@@ -4,12 +4,18 @@
 \alias{link_delayed_discharge_eps}
 \title{Link  Delayed Discharge to WIP episode file}
 \usage{
-link_delayed_discharge_eps(data, year)
+link_delayed_discharge_eps(
+  episode_file,
+  year,
+  dd_data = read_file(get_source_extract_path(year, "DD"))
+)
 }
 \arguments{
-\item{data}{The input data frame}
+\item{episode_file}{The episode file}
 
 \item{year}{The year being processed}
+
+\item{dd_data}{The processed DD extract}
 }
 \value{
 A data frame with the delayed discharge cohort added and linked

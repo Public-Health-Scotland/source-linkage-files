@@ -12,10 +12,10 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-
-process_extract_delayed_discharges <- function(data,
-                                               year,
-                                               write_to_disk = TRUE) {
+process_extract_delayed_discharges <- function(
+    data,
+    year,
+    write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -48,7 +48,8 @@ process_extract_delayed_discharges <- function(data,
       record_keydate1 = .data[["rdd"]],
       record_keydate2 = .data[["delay_end_date"]]
     ) %>%
-    # Use end of the month date for records with no end date (but we think have ended)
+    # Use end of the month date for records with no end date
+    # (but we think have ended)
     # Create a flag for these records
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data[["monthflag"]], "month") - 1L,
@@ -83,7 +84,8 @@ process_extract_delayed_discharges <- function(data,
       # Flag records with no end date
       not_mh_spec = is.na(.data$record_keydate2) & !(.data$spec %in% mh_spec)
     ) %>%
-    # Keep only records which have an end date (except Mental Health) and fall within our dates.
+    # Keep only records which have an end date (except Mental Health) and fall
+    # within our dates.
     dplyr::filter(.data$dates_in_fyyear, !.data$not_mh_spec)
 
   dd_final <- dd_clean %>%
@@ -106,9 +108,10 @@ process_extract_delayed_discharges <- function(data,
     )
 
   if (write_to_disk) {
-    dd_final %>%
-      # Save as rds file
-      write_file(get_source_extract_path(year, "DD", check_mode = "write"))
+    write_file(
+      dd_final,
+      get_source_extract_path(year, "DD", check_mode = "write")
+    )
   }
 
   return(dd_final)
