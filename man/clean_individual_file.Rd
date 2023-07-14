@@ -8,6 +8,8 @@ clean_individual_file(individual_file, year)
 }
 \arguments{
 \item{individual_file}{Individual file where each row represents a unique CHI}
+
+\item{year}{Financial year e.g 1718}
 }
 \description{
 Clean up columns in individual file

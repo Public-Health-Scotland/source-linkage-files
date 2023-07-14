@@ -56,6 +56,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
+    join_slf_lookup_vars() %>%
     dplyr::mutate(year = year)
 
   if (write_to_disk) {
@@ -500,7 +501,6 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
 #' @description Add standard columns (DoB, postcode, gpprac, episodes, cost) to episode file.
 #'
 #' @inheritParams add_acute_columns
-#' @param drop Any columns out of "DoB", "postcode", and "gpprac" that should be dropped
 #' @param episode Whether to create prefix_episodes col, e.g. "Acute_episodes"
 #' @param cost Whether to create prefix_cost col, e.g. "Acute_cost"
 add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, cost = FALSE) {
@@ -733,6 +733,7 @@ min_no_inf <- function(x) {
 #' @description Clean up columns in individual file
 #'
 #' @param individual_file Individual file where each row represents a unique CHI
+#' @param year Financial year e.g 1718
 clean_individual_file <- function(individual_file, year) {
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
@@ -762,4 +763,35 @@ clean_up_gender <- function(individual_file) {
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
     )
+}
+
+#' Join slf lookup variables
+#'
+#' @description Join lookup variables from slf postcode lookup and slf gpprac
+#'              lookup.
+#'
+#' @param individual_file the processed individual file.
+#' @param slf_postcode_lookup SLF processed postcode lookup
+#' @param slf_gpprac_lookup SLF processed gpprac lookup
+#' @param hbrescode_var hbrescode variable
+#'
+join_slf_lookup_vars <- function(individual_file,
+                                 slf_postcode_lookup = read_file(get_slf_postcode_path()),
+                                 slf_gpprac_lookup = read_file(
+                                   get_slf_gpprac_path(),
+                                   col_select = c("gpprac", "cluster", "hbpraccode")
+                                 ),
+                                 hbrescode_var = "hb2018") {
+  individual_file <- individual_file %>%
+    dplyr::left_join(
+      slf_postcode_lookup,
+      by = "postcode"
+    ) %>%
+    dplyr::left_join(
+      slf_gpprac_lookup,
+      by = "gpprac"
+    ) %>%
+    dplyr::rename(hbrescode = hbrescode_var)
+
+  return(individual_file)
 }

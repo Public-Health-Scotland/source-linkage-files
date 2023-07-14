@@ -22,8 +22,6 @@ add_standard_cols(
 \item{episode}{Whether to create prefix_episodes col, e.g. "Acute_episodes"}
 
 \item{cost}{Whether to create prefix_cost col, e.g. "Acute_cost"}
-
-\item{drop}{Any columns out of "DoB", "postcode", and "gpprac" that should be dropped}
 }
 \description{
 Add standard columns (DoB, postcode, gpprac, episodes, cost) to episode file.
