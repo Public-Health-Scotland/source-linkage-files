@@ -57,7 +57,7 @@ run_episode_file <- function(
         "cij_dis_spec",
         "cost_total_net",
         "hscp",
-        "datazone",
+        "datazone2011",
         "attendance_status",
         "deathdiag1",
         "deathdiag2",
@@ -354,7 +354,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #' Join cohort lookups
 #'
 #' @inheritParams store_ep_file_vars
-#' @param update The latest update e.g. "Jun_2023"
+#' @inheritParams get_demographic_cohorts_path
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(data, year, update = latest_update()) {

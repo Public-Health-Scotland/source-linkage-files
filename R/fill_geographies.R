@@ -14,7 +14,7 @@ fill_geographies <- function(data) {
     "hbrescode",
     "hscp",
     "lca",
-    "datazone",
+    "datazone2011",
     "hbpraccode",
     "hbtreatcode",
     "gpprac"
@@ -85,7 +85,7 @@ make_gpprac_lookup <- function(data) {
 }
 
 fill_postcode_geogs <- function(data) {
-  spd <- read_file(get_slf_postcode_path())
+  slf_pc_lookup <- read_file(get_slf_postcode_path())
 
   filled_postcodes <- dplyr::left_join(
     data,
@@ -102,7 +102,7 @@ fill_postcode_geogs <- function(data) {
     ) %>%
     # Fill geographies
     dplyr::left_join(
-      spd,
+      slf_pc_lookup,
       by = "postcode",
       suffix = c("_old", "")
     ) %>%
@@ -117,10 +117,11 @@ fill_postcode_geogs <- function(data) {
     cascade_geographies() %>%
     dplyr::mutate(
       hbrescode = dplyr::coalesce(.data$hb2018, .data$hbrescode),
-      hscp = dplyr::coalesce(.data$hscp2018, .data$hscp),
-      lca = dplyr::coalesce(.data$lca, .data$lca_old)
+      hscp2018 = dplyr::coalesce(.data$hscp2018, .data$hscp),
+      lca = dplyr::coalesce(.data$lca, .data$lca_old),
+      datazone2011 = dplyr::coalesce(.data$datazone2011, .data$datazone2011_old)
     ) %>%
-    dplyr::select(!c("hb2018", "hscp2018", "lca_old", "most_recent_postcode"))
+    dplyr::select(!c("hb2018", "hscp", "lca_old", "datazone2011_old", "most_recent_postcode"))
 
   return(filled_postcodes)
 }
