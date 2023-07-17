@@ -5,17 +5,17 @@
 \title{Join sc client variables onto individual file}
 \usage{
 join_sc_client(
-  year,
   individual_file,
+  year,
   sc_client = read_file(get_source_extract_path(year, "Client")),
   sc_demographics = read_file(get_sc_demog_lookup_path(), col_select =
     c("sending_location", "social_care_id", "chi"))
 )
 }
 \arguments{
-\item{year}{financial year.}
-
 \item{individual_file}{the processed individual file}
+
+\item{year}{financial year.}
 
 \item{sc_client}{SC client lookup}
 
