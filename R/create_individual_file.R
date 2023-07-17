@@ -57,6 +57,7 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
+    join_sc_client(year) %>%
     dplyr::mutate(year = year)
 
   if (write_to_disk) {
@@ -792,6 +793,44 @@ join_slf_lookup_vars <- function(individual_file,
       by = "gpprac"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
+
+  return(individual_file)
+}
+# TODO Remove the client data from the individual Social Care extracts
+# and instead, use this function in the episode file to match on the client
+# data to all episodes.
+#' Join sc client variables onto individual file
+#'
+#' @description Match on sc client variables.
+#'
+#' @param individual_file the processed individual file
+#' @param year financial year.
+#' @param sc_client SC client lookup
+#' @param sc_demographics SC Demographic lookup
+join_sc_client <- function(individual_file,
+                           year,
+                           sc_client = read_file(get_source_extract_path(year, "Client")),
+                           sc_demographics = read_file(get_sc_demog_lookup_path(),
+                             col_select = c("sending_location", "social_care_id", "chi")
+                           )) {
+  # TODO Update the client lookup processing script to match
+  # on demographics there so the client lookup already has CHI.
+
+  # Match to demographics lookup to get CHI
+  join_client_demog <- sc_client %>%
+    dplyr::left_join(
+      sc_demographics %>%
+        dplyr::select("sending_location", "social_care_id", "chi"),
+      by = c("sending_location", "social_care_id")
+    )
+
+  # Match on client variables by chi
+  individual_file <- individual_file %>%
+    dplyr::left_join(
+      join_client_demog,
+      by = "chi"
+    ) %>%
+    dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
 
   return(individual_file)
 }
