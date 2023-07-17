@@ -796,7 +796,7 @@ join_slf_lookup_vars <- function(individual_file,
 
   return(individual_file)
 }
-# TODO Remove the client data from the individual Social Care extracts 
+# TODO Remove the client data from the individual Social Care extracts
 # and instead, use this function in the episode file to match on the client
 # data to all episodes.
 #' Join sc client variables onto individual file
@@ -815,7 +815,7 @@ join_sc_client <- function(individual_file,
                            )) {
   # TODO Update the client lookup processing script to match
   # on demographics there so the client lookup already has CHI.
-  
+
   # Match to demographics lookup to get CHI
   join_client_demog <- sc_client %>%
     dplyr::left_join(
@@ -829,7 +829,7 @@ join_sc_client <- function(individual_file,
       join_client_demog,
       by = "chi"
     ) %>%
-     dplyr::select(!c("sending_location", "social_care_id"))
+    dplyr::select(!c("sending_location", "social_care_id"))
 
   return(individual_file)
 }
