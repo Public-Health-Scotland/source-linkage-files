@@ -264,14 +264,13 @@ list(
       get_boxi_extract_path(year = year, type = "GP_OoH-c"),
       format = "file"
     ),
-    tar_target(ooh_data,
+    tar_qs(ooh_data,
       read_extract_gp_ooh(
         year,
         diagnosis_data_path,
         outcomes_data_path,
         consultations_data_path
-      ),
-      format = "qs"
+      )
     ),
     ### Target source processed extracts ###
     tar_target(source_acute_extract, process_extract_acute(
