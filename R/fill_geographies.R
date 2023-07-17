@@ -121,7 +121,7 @@ fill_postcode_geogs <- function(data) {
       lca = dplyr::coalesce(.data$lca, .data$lca_old),
       datazone2011 = dplyr::coalesce(.data$datazone2011, .data$datazone2011_old)
     ) %>%
-    dplyr::select(!c("hb2018", "hscp2018", "lca_old", "datazone2011_old", "most_recent_postcode"))
+    dplyr::select(!c("hb2018", "hscp", "lca_old", "datazone2011_old", "most_recent_postcode"))
 
   return(filled_postcodes)
 }
