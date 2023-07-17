@@ -803,8 +803,8 @@ join_slf_lookup_vars <- function(individual_file,
 #'
 #' @description Match on sc client variables.
 #'
-#' @param year financial year.
 #' @param individual_file the processed individual file
+#' @param year financial year.
 #' @param sc_client SC client lookup
 #' @param sc_demographics SC Demographic lookup
 join_sc_client <- function(individual_file,
