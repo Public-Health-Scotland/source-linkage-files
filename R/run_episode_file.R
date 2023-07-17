@@ -4,11 +4,17 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
+#' (instead of chi)
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 #'
-run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
+run_episode_file <- function(
+    processed_data_list,
+    year,
+    write_to_disk = TRUE,
+    anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
@@ -102,6 +108,14 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     fill_geographies() %>%
     join_deaths_data(year) %>%
     load_ep_file_vars(year)
+
+  if (anon_chi_out) {
+    episode_file <- slfhelper::get_anon_chi(
+      episode_file,
+      chi_var = "chi",
+      drop = TRUE
+    )
+  }
 
   if (write_to_disk) {
     slf_path <- get_file_path(
