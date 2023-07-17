@@ -47,7 +47,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
     while (fs::file_exists(path = in_use_path) && seconds < max_wait) {
       # While the tests are in use (wait a random number of seconds from 1 to 30)
       cli::cli_progress_update()
-      wait <- round(runif(1, 1, 15))
+      wait <- sample(x = 3:15, size = 1)
 
       Sys.sleep(wait)
       seconds <- seconds + wait
@@ -56,7 +56,7 @@ write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
   }
 
   # Final check to maybe avoid corrupting the workbook
-  Sys.sleep(round(runif(1, 1, 3)))
+  Sys.sleep(sample(x = 1:3, size = 1))
   if (!fs::file_exists(path = in_use_path)) {
     fs::file_create(path = in_use_path)
   } else {
