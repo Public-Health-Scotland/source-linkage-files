@@ -264,7 +264,8 @@ list(
       get_boxi_extract_path(year = year, type = "GP_OoH-c"),
       format = "file"
     ),
-    tar_qs(ooh_data,
+    tar_qs(
+      ooh_data,
       read_extract_gp_ooh(
         year,
         diagnosis_data_path,
