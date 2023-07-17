@@ -813,7 +813,10 @@ join_sc_client <- function(year,
                            sc_demographics = read_file(get_sc_demog_lookup_path(),
                              col_select = c("sending_location", "social_care_id", "chi")
                            )) {
-  # Match to demographics lookup to get chi
+  # TODO Update the client lookup processing script to match
+  # on demographics there so the client lookup already has CHI.
+  
+  # Match to demographics lookup to get CHI
   join_client_demog <- sc_client %>%
     dplyr::left_join(
       sc_demographics,
