@@ -829,7 +829,7 @@ join_sc_client <- function(individual_file,
       join_client_demog,
       by = "chi"
     ) %>%
-    dplyr::select(!c("sending_location", "social_care_id"))
+    dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
 
   return(individual_file)
 }
