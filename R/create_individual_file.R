@@ -796,7 +796,9 @@ join_slf_lookup_vars <- function(individual_file,
 
   return(individual_file)
 }
-
+# TODO Remove the client data from the individual Social Care extracts 
+# and instead, use this function in the episode file to match on the client
+# data to all episodes.
 #' Join sc client variables onto individual file
 #'
 #' @description Match on sc client variables.
