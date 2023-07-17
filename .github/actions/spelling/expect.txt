@@ -94,6 +94,7 @@ itle
 iwalk
 jaccard
 jan
+jennifer
 jul
 keydate
 keyring
@@ -104,6 +105,8 @@ ltc
 ltcs
 lubridate
 magrittr
+Mcbride
+mcmahon
 MMMYY
 monthflag
 mpat
@@ -200,5 +203,6 @@ xintercept
 xlsx
 yearstay
 YYYYQX
+zihao
 zsav
 zstd

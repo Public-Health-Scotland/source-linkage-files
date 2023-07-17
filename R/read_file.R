@@ -16,9 +16,26 @@
 #' @return the data a [tibble][tibble::tibble-package]
 #' @export
 read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
-  valid_extensions <- c("rds", "fst", "sav", "zsav", "csv", "gz", "parquet")
+  valid_extensions <- c(
+    "rds",
+    "rds.gz",
+    "fst",
+    "sav",
+    "zsav",
+    "csv",
+    "csv.gz",
+    "parquet"
+  )
 
   ext <- fs::path_ext(path)
+
+  if (ext == "gz") {
+    ext <- paste(
+      fs::path_ext(fs::path_ext_remove(path)),
+      "gz",
+      sep = "."
+    )
+  }
 
   if (!(ext %in% valid_extensions)) {
     cli::cli_abort(c(
@@ -36,17 +53,19 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   }
 
   data <- switch(ext,
-    "rds" = readr::read_rds(path),
-    "fst" = fst::read_fst(path),
-    "sav" = haven::read_spss(path, ...),
-    "zsav" = haven::read_spss(path, ...),
-    "csv" = readr::read_csv(path, ..., show_col_types = FALSE),
-    "gz" = readr::read_csv(path, ..., show_col_types = FALSE),
-    "parquet" = if (is.null(col_select)) {
-      arrow::read_parquet(path, as_data_frame = as_data_frame, ...)
-    } else {
-      arrow::read_parquet(path, col_select = col_select, as_data_frame = as_data_frame, ...)
-    }
+    "rds" = readr::read_rds(file = path),
+    "rds.gz" = readr::read_rds(file = path),
+    "fst" = tibble::as_tibble(fst::read_fst(path = path)),
+    "sav" = haven::read_spss(file = path, ...),
+    "zsav" = haven::read_spss(file = path, ...),
+    "csv" = readr::read_csv(file = path, ..., show_col_types = FALSE),
+    "csv.gz" = readr::read_csv(file = path, ..., show_col_types = FALSE),
+    "parquet" = arrow::read_parquet(
+      file = path,
+      col_select = !!col_select,
+      as_data_frame = as_data_frame,
+      ...
+    )
   )
 
   return(data)
