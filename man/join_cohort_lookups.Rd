@@ -10,6 +10,8 @@ join_cohort_lookups(data, year, update = latest_update())
 \item{data}{The in progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{update}{The update to use}
 }
 \value{
 The data including the Demographic and Service Use lookups.
