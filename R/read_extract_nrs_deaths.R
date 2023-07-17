@@ -39,7 +39,7 @@ read_extract_nrs_deaths <- function(
     dplyr::rename(
       death_location_code = "Death Location Code",
       lca = "Geo Council Area Code",
-      datazone = "Geo Data Zone 2011",
+      datazone2011 = "Geo Data Zone 2011",
       postcode = "Geo Postcode [C]",
       hscp = "Geo HSCP of Residence Code - current",
       death_board_occurrence = "NHS Board of Occurrence Code - current",

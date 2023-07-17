@@ -51,7 +51,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         "cij_dis_spec",
         "cost_total_net",
         "hscp",
-        "datazone",
+        "datazone2011",
         "attendance_status",
         "deathdiag1",
         "deathdiag2",
