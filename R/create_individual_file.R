@@ -820,7 +820,8 @@ join_sc_client <- function(year,
 
   # Match on client variables by chi
   individual_file <- individual_file %>%
-    dplyr::left_join(join_client_demog,
+    dplyr::left_join(
+    join_client_demog,
       by = "chi"
     )
 
