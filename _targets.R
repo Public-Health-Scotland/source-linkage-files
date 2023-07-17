@@ -271,7 +271,7 @@ list(
         outcomes_data_path,
         consultations_data_path
       ),
-      format = "rds"
+      format = "qs"
     ),
     ### Target source processed extracts ###
     tar_target(source_acute_extract, process_extract_acute(
