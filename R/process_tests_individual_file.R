@@ -10,7 +10,7 @@ process_tests_individual_file <- function(data, year) {
   data <- data %>%
     dplyr::select(
       "year",
-      "chi",
+      "anon_chi",
       "gender",
       "postcode",
       "dob",
@@ -26,7 +26,8 @@ process_tests_individual_file <- function(data, year) {
         "cases",
         "consultations"
       ))
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   old_data <- get_existing_data_for_tests(data, file_version = "individual")
 
