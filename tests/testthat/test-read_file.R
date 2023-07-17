@@ -1,5 +1,6 @@
 test_that("read_file works", {
   rds_path <- tempfile(fileext = ".rds")
+  rds_gz_path <- tempfile(fileext = ".rds.gz")
   fst_path <- tempfile(fileext = ".fst")
   sav_path <- tempfile(fileext = ".sav")
   zsav_path <- tempfile(fileext = ".zsav")
@@ -10,6 +11,7 @@ test_that("read_file works", {
   aq_data <- tibble::as_tibble(datasets::airquality)
 
   readr::write_rds(aq_data, rds_path)
+  readr::write_rds(aq_data, rds_gz_path)
   fst::write_fst(aq_data, fst_path)
   haven::write_sav(aq_data, sav_path)
   haven::write_sav(aq_data, zsav_path, compress = "zsav")
@@ -18,7 +20,8 @@ test_that("read_file works", {
   arrow::write_parquet(aq_data, parquet_path)
 
   expect_equal(aq_data, read_file(rds_path))
-  expect_equal(aq_data, tibble::as_tibble(read_file(fst_path)))
+  expect_equal(aq_data, read_file(rds_gz_path))
+  expect_equal(aq_data, read_file(fst_path))
   expect_equal(aq_data, haven::zap_formats(read_file(sav_path)))
   expect_equal(aq_data, haven::zap_formats(read_file(zsav_path)))
   expect_equal(aq_data, read_file(csv_gz_path))

@@ -83,7 +83,7 @@ read_extract_mental_health <- function(
       hbrescode = "NHS Board of Residence Code - current",
       lca = "Geo Council Area Code",
       hscp = "Geo HSCP of Residence Code - current",
-      datazone = "Geo Data Zone 2011",
+      datazone2011 = "Geo Data Zone 2011",
       location = "Treatment Location Code",
       hbtreatcode = "Treatment NHS Board Code - current",
       yearstay = "Occupied Bed Days (04)",

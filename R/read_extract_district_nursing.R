@@ -43,7 +43,7 @@ read_extract_district_nursing <- function(
       lca = "Patient Council Area Code (Contact)",
       postcode = "Patient Postcode [C] (Contact)",
       gpprac = "Practice Code (Contact)",
-      datazone = "Patient Data Zone 2011 (Contact)",
+      datazone2011 = "Patient Data Zone 2011 (Contact)",
       hbpraccode = "Practice NHS Board Code 9 (Contact)",
       hbtreatcode = "Treatment NHS Board Code 9",
       chi = "UPI Number [C]",
