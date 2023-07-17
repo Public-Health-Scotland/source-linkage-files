@@ -807,8 +807,8 @@ join_slf_lookup_vars <- function(individual_file,
 #' @param individual_file the processed individual file
 #' @param sc_client SC client lookup
 #' @param sc_demographics SC Demographic lookup
-join_sc_client <- function(year,
-                           individual_file,
+join_sc_client <- function(individual_file,
+                           year,
                            sc_client = read_file(get_source_extract_path(year, "Client")),
                            sc_demographics = read_file(get_sc_demog_lookup_path(),
                              col_select = c("sending_location", "social_care_id", "chi")
