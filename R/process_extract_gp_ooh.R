@@ -111,7 +111,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       "gpprac",
       "postcode",
       "hbrescode",
-      "datazone",
+      "datazone2011",
       "hscp",
       "hbtreatcode",
       "location",
