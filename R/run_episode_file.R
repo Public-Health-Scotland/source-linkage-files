@@ -340,6 +340,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #' Join cohort lookups
 #'
 #' @inheritParams store_ep_file_vars
+#' @inheritParams get_demographic_cohorts_path
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(data, year, update = latest_update()) {

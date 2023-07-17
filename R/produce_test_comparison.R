@@ -23,7 +23,7 @@ produce_test_comparison <- function(old_data, new_data, recid = FALSE) {
       dplyr::mutate(
         difference = round(.data$value_new - .data$value_old, digits = 2L),
         pct_change = .data$difference / .data$value_old,
-        issue = !dplyr::between(pct_change, -0.05, 0.05)
+        issue = !dplyr::between(.data$pct_change, -0.05, 0.05)
       )
   } else {
     dplyr::full_join(old_data,
@@ -34,7 +34,7 @@ produce_test_comparison <- function(old_data, new_data, recid = FALSE) {
       dplyr::mutate(
         difference = round(.data$value_new - .data$value_old, digits = 2L),
         pct_change = .data$difference / .data$value_old,
-        issue = !dplyr::between(pct_change, -0.05, 0.05)
+        issue = !dplyr::between(.data$pct_change, -0.05, 0.05)
       )
   }
 }
