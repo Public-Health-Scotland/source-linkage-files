@@ -819,7 +819,8 @@ join_sc_client <- function(individual_file,
   # Match to demographics lookup to get CHI
   join_client_demog <- sc_client %>%
     dplyr::left_join(
-      sc_demographics,
+      sc_demographics %>% 
+    dplyr::select("sending_location", "social_care_id", "chi"),
       by = c("sending_location", "social_care_id")
     )
 
