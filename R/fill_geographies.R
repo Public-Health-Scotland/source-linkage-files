@@ -85,7 +85,7 @@ make_gpprac_lookup <- function(data) {
 }
 
 fill_postcode_geogs <- function(data) {
-  spd <- read_file(get_slf_postcode_path())
+  slf_pc_lookup <- read_file(get_slf_postcode_path())
 
   filled_postcodes <- dplyr::left_join(
     data,
@@ -102,7 +102,7 @@ fill_postcode_geogs <- function(data) {
     ) %>%
     # Fill geographies
     dplyr::left_join(
-      spd,
+      slf_pc_lookup,
       by = "postcode",
       suffix = c("_old", "")
     ) %>%
