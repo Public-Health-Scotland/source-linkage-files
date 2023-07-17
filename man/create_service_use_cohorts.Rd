@@ -2,23 +2,30 @@
 % Please edit documentation in R/create_service_use_lookup.R
 \name{create_service_use_cohorts}
 \alias{create_service_use_cohorts}
-\title{Create the Service Use Cohorts lookup file}
+\title{Create the Service Use Cohort lookup}
 \usage{
-create_service_use_cohorts(data, year, write_to_disk = TRUE)
+create_service_use_cohorts(
+  data,
+  year,
+  update = latest_update(),
+  write_to_disk = TRUE
+)
 }
 \arguments{
-\item{data}{A data frame}
+\item{data}{A data frame with the required variables.}
 
-\item{year}{The financial year}
+\item{year}{The year in standard SLF format.}
+
+\item{update}{The update to use.}
 
 \item{write_to_disk}{Default \code{TRUE}, will write the lookup to the
-Cohorts folder defined by \link{get_slf_dir}}
+Cohorts folder defined by \link{get_slf_dir}.}
 }
 \value{
-The service-use cohorts file
+The Service Use Cohort lookup
 }
 \description{
-Create the Service Use Cohorts lookup file
+Create the Service Use Cohort lookup
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

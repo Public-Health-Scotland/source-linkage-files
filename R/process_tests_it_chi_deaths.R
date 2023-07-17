@@ -26,21 +26,31 @@ process_tests_it_chi_deaths <- function(data, update = previous_update()) {
 #' from [calculate_measures()]
 #' @family slf test functions
 produce_it_chi_deaths_tests <- function(data) {
+  current_year_0 <- lubridate::year(Sys.Date())
+  current_year_1 <- lubridate::year(Sys.Date()) - 1L
+  current_year_2 <- lubridate::year(Sys.Date()) - 2L
+  current_year_3 <- lubridate::year(Sys.Date()) - 3L
+  current_year_4 <- lubridate::year(Sys.Date()) - 4L
+  current_year_5 <- lubridate::year(Sys.Date()) - 5L
+
   data %>%
     # create test flags
     dplyr::mutate(
       n_chi = 1L,
-      n_death_date_nrs = dplyr::if_else(is.na(.data$death_date_NRS), 0L, 1L),
-      n_death_date_chi = dplyr::if_else(is.na(.data$death_date_CHI), 0L, 1L),
-      n_death_date = dplyr::if_else(is.na(.data$death_date), 0L, 1L)
+      n_valid_chi = phsmethods::chi_check(.data$chi) == "Valid CHI",
+      n_death_date_nrs = is.na(.data$death_date_nrs),
+      n_death_date_chi = is.na(.data$death_date_chi),
+      n_death_date = is.na(.data$death_date),
+      death_year = lubridate::year(.data$death_date),
+      "n_deaths_{current_year_0}" := .data$death_year == current_year_0,
+      "n_deaths_{current_year_1}" := .data$death_year == current_year_1,
+      "n_deaths_{current_year_2}" := .data$death_year == current_year_2,
+      "n_deaths_{current_year_3}" := .data$death_year == current_year_3,
+      "n_deaths_{current_year_4}" := .data$death_year == current_year_4,
+      "n_deaths_{current_year_5}" := .data$death_year == current_year_5,
     ) %>%
     # remove variables that are not test flags
-    dplyr::select(-c(
-      "chi",
-      "death_date_NRS",
-      "death_date_CHI",
-      "death_date"
-    )) %>%
+    dplyr::select(dplyr::starts_with("n_")) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 }

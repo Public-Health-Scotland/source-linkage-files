@@ -53,7 +53,10 @@ process_extract_home_care <- function(
     # remove hours variables not from current year
     dplyr::select(-(tidyselect::contains("hc_hours_2"))) %>%
     # create annual hours variable
-    dplyr::mutate(hc_hours_annual = rowSums(dplyr::across(tidyselect::contains("hc_hours_q"))))
+    dplyr::mutate(hc_hours_annual = rowSums(
+      dplyr::pick(tidyselect::contains("hc_hours_q")),
+      na.rm = TRUE
+    ))
 
 
   # Home Care Costs ---------------------------------------
@@ -69,7 +72,12 @@ process_extract_home_care <- function(
     # remove cost variables not from current year
     dplyr::select(-(tidyselect::contains("hc_cost_2"))) %>%
     # create cost total net
-    dplyr::mutate(cost_total_net = rowSums(dplyr::pick(tidyselect::contains("hc_cost_q"))))
+    dplyr::mutate(
+      cost_total_net = rowSums(
+        dplyr::pick(tidyselect::contains("hc_cost_q")),
+        na.rm = TRUE
+      )
+    )
 
   hc_processed <- hc_costs %>%
     dplyr::select(

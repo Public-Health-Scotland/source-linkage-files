@@ -12,10 +12,10 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-
-process_extract_delayed_discharges <- function(data,
-                                               year,
-                                               write_to_disk = TRUE) {
+process_extract_delayed_discharges <- function(
+    data,
+    year,
+    write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -45,23 +45,24 @@ process_extract_delayed_discharges <- function(data,
 
   dd_clean <- data %>%
     dplyr::rename(
-      keydate1_dateformat = .data[["rdd"]],
-      keydate2_dateformat = .data[["delay_end_date"]]
+      record_keydate1 = .data[["rdd"]],
+      record_keydate2 = .data[["delay_end_date"]]
     ) %>%
-    # Use end of the month date for records with no end date (but we think have ended)
+    # Use end of the month date for records with no end date
+    # (but we think have ended)
     # Create a flag for these records
     dplyr::mutate(
       month_end = lubridate::ceiling_date(.data[["monthflag"]], "month") - 1L,
-      amended_dates = .data[["keydate2_dateformat"]] == as.Date("1900-01-01"),
-      keydate2_dateformat = dplyr::if_else(
-        .data$keydate2_dateformat == as.Date("1900-01-01"),
+      amended_dates = .data[["record_keydate2"]] == as.Date("1900-01-01"),
+      record_keydate2 = dplyr::if_else(
+        .data$record_keydate2 == as.Date("1900-01-01"),
         .data$month_end,
-        .data$keydate2_dateformat
+        .data$record_keydate2
       )
     ) %>%
     # Drop any records with obviously bad dates
     dplyr::filter(
-      (.data$keydate1_dateformat <= .data$keydate2_dateformat) | is.na(.data$keydate2_dateformat)
+      (.data$record_keydate1 <= .data$record_keydate2) | is.na(.data$record_keydate2)
     ) %>%
     # set up variables
     dplyr::mutate(
@@ -77,13 +78,14 @@ process_extract_delayed_discharges <- function(data,
       # Flag records with correct date
       dates_in_fyyear = is_date_in_fyyear(
         year,
-        .data$keydate1_dateformat,
-        .data$keydate2_dateformat
+        .data$record_keydate1,
+        .data$record_keydate2
       ),
       # Flag records with no end date
-      not_mh_spec = is.na(.data$keydate2_dateformat) & !(.data$spec %in% mh_spec)
+      not_mh_spec = is.na(.data$record_keydate2) & !(.data$spec %in% mh_spec)
     ) %>%
-    # Keep only records which have an end date (except Mental Health) and fall within our dates.
+    # Keep only records which have an end date (except Mental Health) and fall
+    # within our dates.
     dplyr::filter(.data$dates_in_fyyear, !.data$not_mh_spec)
 
   dd_final <- dd_clean %>%
@@ -94,8 +96,8 @@ process_extract_delayed_discharges <- function(data,
       "postcode",
       "dd_responsible_lca",
       "original_admission_date",
-      "keydate1_dateformat",
-      "keydate2_dateformat",
+      "record_keydate1",
+      "record_keydate2",
       "amended_dates",
       "delay_end_reason",
       "primary_delay_reason",
@@ -106,9 +108,10 @@ process_extract_delayed_discharges <- function(data,
     )
 
   if (write_to_disk) {
-    dd_final %>%
-      # Save as rds file
-      write_file(get_source_extract_path(year, "DD", check_mode = "write"))
+    write_file(
+      dd_final,
+      get_source_extract_path(year, "DD", check_mode = "write")
+    )
   }
 
   return(dd_final)

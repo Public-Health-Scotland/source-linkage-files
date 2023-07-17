@@ -12,57 +12,73 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
-    store_ep_file_vars(year, vars_to_keep = c(
-      "year",
-      "recid",
-      "record_keydate1",
-      "record_keydate2",
-      "smrtype",
-      "chi",
-      "gender",
-      "dob",
-      "gpprac",
-      "hbpraccode",
-      "postcode",
-      "hbrescode",
-      "lca",
-      "location",
-      "hbtreatcode",
-      "ipdc",
-      "spec",
-      "sigfac",
-      "diag1",
-      "diag2",
-      "diag3",
-      "diag4",
-      "diag5",
-      "diag6",
-      "op1a",
-      "age",
-      "cij_marker",
-      "cij_start_date",
-      "cij_end_date",
-      "cij_pattype_code",
-      "cij_ipdc",
-      "cij_admtype",
-      "cij_adm_spec",
-      "cij_dis_spec",
-      "cost_total_net",
-      "hscp",
-      "datazone",
-      "attendance_status",
-      "deathdiag1",
-      "deathdiag2",
-      "deathdiag3",
-      "deathdiag4",
-      "deathdiag5",
-      "deathdiag6",
-      "deathdiag7",
-      "deathdiag8",
-      "deathdiag9",
-      "deathdiag10",
-      "deathdiag11"
-    )) %>%
+    store_ep_file_vars(
+      year = year,
+      vars_to_keep = c(
+        "year",
+        "recid",
+        "record_keydate1",
+        "record_keydate2",
+        "smrtype",
+        "chi",
+        "gender",
+        "dob",
+        "gpprac",
+        "hbpraccode",
+        "postcode",
+        "hbrescode",
+        "lca",
+        "location",
+        "hbtreatcode",
+        "ipdc",
+        "spec",
+        "sigfac",
+        "diag1",
+        "diag2",
+        "diag3",
+        "diag4",
+        "diag5",
+        "diag6",
+        "op1a",
+        "age",
+        "cij_marker",
+        "cij_start_date",
+        "cij_end_date",
+        "cij_pattype_code",
+        "cij_ipdc",
+        "cij_admtype",
+        "cij_adm_spec",
+        "cij_dis_spec",
+        "cost_total_net",
+        "hscp",
+        "datazone",
+        "attendance_status",
+        "deathdiag1",
+        "deathdiag2",
+        "deathdiag3",
+        "deathdiag4",
+        "deathdiag5",
+        "deathdiag6",
+        "deathdiag7",
+        "deathdiag8",
+        "deathdiag9",
+        "deathdiag10",
+        "deathdiag11",
+        "yearstay",
+        "apr_beddays",
+        "may_beddays",
+        "jun_beddays",
+        "jul_beddays",
+        "aug_beddays",
+        "sep_beddays",
+        "oct_beddays",
+        "nov_beddays",
+        "dec_beddays",
+        "jan_beddays",
+        "feb_beddays",
+        "mar_beddays"
+      )
+    ) %>%
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to blank string
     dplyr::mutate(
@@ -80,9 +96,11 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     add_nsu_cohort(year) %>%
     match_on_ltcs(year) %>%
     correct_demographics(year) %>%
+    create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
     fill_geographies() %>%
+    join_deaths_data(year) %>%
     load_ep_file_vars(year)
 
   if (write_to_disk) {
@@ -175,12 +193,12 @@ load_ep_file_vars <- function(data, year) {
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
     dplyr::filter(
-      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B") & !is.na(.data[["chi"]])
+      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["chi"]])
     )
 
   non_fixable_data <- data %>%
     dplyr::filter(
-      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B")) | is.na(.data[["chi"]])
+      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD")) | is.na(.data[["chi"]])
     )
 
   fixed_data <- fixable_data %>%
@@ -284,39 +302,60 @@ create_cost_inc_dna <- function(data) {
     )
 }
 
+#' Create the cohort lookups
+#'
+#' @inheritParams store_ep_file_vars
+#' @inheritParams create_demographic_cohorts
+#'
+#' @return The data unchanged (the cohorts are written to disk)
+create_cohort_lookups <- function(data, year, update = latest_update()) {
+  # Use future so the cohorts can be create simultaneously (in parallel)
+  future::plan(strategy = future.callr::callr, .skip = TRUE)
+  options(future.globals.maxSize = 21474836480)
+
+  future_demographic <- future::future({
+    create_demographic_cohorts(
+      data,
+      year,
+      update,
+      write_to_disk = TRUE
+    )
+  })
+  future_service_use <- future::future({
+    create_service_use_cohorts(
+      data,
+      year,
+      update,
+      write_to_disk = TRUE
+    )
+  })
+
+  # This 'blocks' the code until they have both finished executing
+  value_demographic <- future::value(future_demographic)
+  value_service_use <- future::value(future_service_use)
+
+  return(data)
+}
+
 #' Join cohort lookups
 #'
 #' @inheritParams store_ep_file_vars
 #'
-#' @return The data including the demographic and service use lookups matched
-#' on to the episode file.
-join_cohort_lookups <- function(data, year) {
-  demographic_cohorts <- create_demographic_cohorts(
-    data,
-    year,
-    write_to_disk = TRUE
-  )
-  service_use_cohorts <- create_service_use_cohorts(
-    data,
-    year,
-    write_to_disk = TRUE
-  )
-
+#' @return The data including the Demographic and Service Use lookups.
+join_cohort_lookups <- function(data, year, update = latest_update()) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
-      demographic_cohorts %>%
-        dplyr::select(
-          "chi",
-          "demographic_cohort"
-        ),
+      read_file(
+        get_demographic_cohorts_path(year, update),
+        col_select = c("chi", "demographic_cohort")
+      ),
       by = "chi"
     ) %>%
     dplyr::left_join(
-      service_use_cohorts %>%
-        dplyr::select(
-          "chi",
-          "service_use_cohort"
-        ),
+      read_file(
+        get_service_use_cohorts_path(year, update),
+        col_select = c("chi", "service_use_cohort")
+      ),
       by = "chi"
     )
 

@@ -4,7 +4,7 @@
 \alias{join_cohort_lookups}
 \title{Join cohort lookups}
 \usage{
-join_cohort_lookups(data, year)
+join_cohort_lookups(data, year, update = latest_update())
 }
 \arguments{
 \item{data}{The in progress episode file data.}
@@ -12,8 +12,7 @@ join_cohort_lookups(data, year)
 \item{year}{The year to process, in FY format.}
 }
 \value{
-The data including the demographic and service use lookups matched
-on to the episode file.
+The data including the Demographic and Service Use lookups.
 }
 \description{
 Join cohort lookups

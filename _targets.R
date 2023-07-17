@@ -24,10 +24,13 @@ years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223")
 list(
   tar_rds(write_to_disk, TRUE),
   tar_rds(
-    make_lowercase_ext,
-    make_lowercase_ext,
+    file_path_ext_clean,
+    make_lowercase_ext(),
     priority = 1,
-    cue = tar_cue(mode = "always")
+    cue = tar_cue_age(
+      name = file_path_ext_clean,
+      age = as.difftime(7, units = "days")
+    )
   ),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
@@ -179,10 +182,13 @@ list(
   tar_map(
     list(year = years_to_run),
     tar_rds(
-      gzip_files,
-      gzip_files(extract_year = year),
+      compress_extracts,
+      gzip_files(year),
       priority = 1,
-      cue = tar_cue(mode = "always")
+      cue = tar_cue_age(
+        name = compress_extracts,
+        age = as.difftime(7, units = "days")
+      )
     ),
     ### target data extracts ###
     tar_file_read(
@@ -447,6 +453,7 @@ list(
         data = all_care_home,
         year = year,
         client_lookup = sc_client_lookup,
+        ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -496,6 +503,41 @@ list(
         nrs_deaths_data = source_nrs_deaths_extract,
         chi_deaths_data = it_chi_deaths_data,
         write_to_disk = write_to_disk
+      )
+    ),
+    tar_qs(
+      processed_data_list,
+      list(
+        source_acute_extract,
+        source_ae_extract,
+        source_cmh_extract,
+        source_dn_extract,
+        source_homelessness_extract,
+        source_maternity_extract,
+        source_mental_health_extract,
+        source_nrs_deaths_extract,
+        source_ooh_extract,
+        source_outpatients_extract,
+        source_prescribing_extract,
+        source_sc_care_home,
+        source_sc_home_care,
+        source_sc_sds,
+        source_sc_alarms_tele
+      )
+    ),
+    tar_target(
+      episode_file,
+      run_episode_file(
+        processed_data_list,
+        year,
+        write_to_disk
+      )
+    ),
+    tar_target(
+      episode_file_tests,
+      process_tests_episode_file(
+        data = episode_file,
+        year = year
       )
     )
   )

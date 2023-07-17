@@ -36,8 +36,10 @@ create_monthly_costs <- function(data,
   daycase_cost_months <- data %>%
     dplyr::select(!dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(
-      daycase_added = (yearstay == 0.33),
-      daycase_added = tidyr::replace_na(.data$daycase_added, FALSE)
+      daycase_added = tidyr::replace_na(
+        ({{ yearstay }} == 0.33) | ({{ yearstay }} == 0L & {{ cost_total_net }} > 0),
+        replace = FALSE
+      )
     ) %>%
     dplyr::mutate(daycase_check = .data$daycase_added) %>%
     dplyr::mutate(cost_month = dplyr::if_else(
@@ -87,7 +89,7 @@ create_monthly_costs <- function(data,
         .x != 0L ~ dplyr::if_else(
           daycase_check,
           {{ cost_total_net }},
-          .x / yearstay * {{ cost_total_net }}
+          .x / {{ yearstay }} * {{ cost_total_net }}
         ),
         .default = 0.0
       )

@@ -23,7 +23,7 @@ process_tests_ltcs <- function(data, year) {
       issue = NA
     ) %>%
     # Save test comparisons as an excel workbook
-    write_tests_xlsx(sheet_name = "ltc")
+    write_tests_xlsx(sheet_name = "ltc", year = year)
 
   return(duplicates)
 }

@@ -120,7 +120,7 @@ fill_postcode_geogs <- function(data) {
       hscp = dplyr::coalesce(.data$hscp2018, .data$hscp),
       lca = dplyr::coalesce(.data$lca, .data$lca_old)
     ) %>%
-    dplyr::select(-"hb2018", -"hscp2018", -"lca_old")
+    dplyr::select(!c("hb2018", "hscp2018", "lca_old", "most_recent_postcode"))
 
   return(filled_postcodes)
 }
@@ -148,7 +148,7 @@ fill_gpprac_geographies <- function(data) {
     dplyr::mutate(
       hbpraccode = dplyr::coalesce(.data$hbpraccode, .data$hbpraccode_old)
     ) %>%
-    dplyr::select(-"hbpraccode_old")
+    dplyr::select(!c("hbpraccode_old", "most_recent_gpprac"))
 
   return(filled_gpprac)
 }
