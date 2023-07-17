@@ -11,7 +11,7 @@ join_cohort_lookups(data, year, update = latest_update())
 
 \item{year}{The year to process, in FY format.}
 
-\item{update}{The latest update e.g. "Jun_2023"}
+\item{update}{The update to use}
 }
 \value{
 The data including the Demographic and Service Use lookups.
