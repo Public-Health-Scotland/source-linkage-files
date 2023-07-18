@@ -547,6 +547,18 @@ list(
         data = episode_file,
         year = year
       )
+    ),
+    tar_target(
+      episode_file_dataset,
+      arrow::write_dataset(
+        dataset = episode_file,
+        path = fs::path_ext_remove(slf_episode_path),
+        format = "parquet",
+        # Should correspond to the available slfhelper filters
+        partitioning = c("recid", "hscp2018"),
+        compression = "zstd",
+        version = "latest"
+      )
     )
   )
 )
