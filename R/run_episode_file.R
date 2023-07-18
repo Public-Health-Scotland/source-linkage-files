@@ -128,16 +128,6 @@ run_episode_file <- function(
     )
 
     write_file(episode_file, slf_episode_path)
-
-    arrow::write_dataset(
-      dataset = episode_file,
-      path = fs::path_ext_remove(slf_episode_path),
-      format = "parquet",
-      # Should correspond to the available slfhelper filters
-      partitioning = c("recid", "hscp2018"),
-      compression = "zstd",
-      version = "latest"
-    )
   }
 
   return(episode_file)
