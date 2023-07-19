@@ -5,13 +5,18 @@
 #'
 #' @param data episode files
 #' @param year financial year, e.g. '1920'
+#' @param ltc_data The LTC data for the year
 #'
 #' @return data matched with long term conditions
-match_on_ltcs <- function(data, year) {
+match_on_ltcs <- function(
+    data,
+    year,
+    ltc_data = read_file(get_ltcs_path(year))
+) {
   # Match on LTC lookup
   matched <- dplyr::left_join(
     data,
-    read_file(get_ltcs_path(year)),
+    ltc_data,
     by = "chi",
     suffix = c("", "_ltc")
   ) %>%

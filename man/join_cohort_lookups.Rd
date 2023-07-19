@@ -4,14 +4,24 @@
 \alias{join_cohort_lookups}
 \title{Join cohort lookups}
 \usage{
-join_cohort_lookups(data, year, update = latest_update())
+join_cohort_lookups(
+  data,
+  year,
+  update = latest_update(),
+  demographic_cohort = read_file(get_demographic_cohorts_path(year, update), col_select =
+    c("chi", "demographic_cohort")),
+  service_use_cohort = read_file(get_service_use_cohorts_path(year, update), col_select =
+    c("chi", "service_use_cohort"))
+)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
 
-\item{year}{The year to process, in FY format.}
+\item{year}{financial year in '1718' format}
 
 \item{update}{The update to use}
+
+\item{demographic_cohort, service_use_cohort}{The cohort data}
 }
 \value{
 The data including the Demographic and Service Use lookups.

@@ -2,13 +2,18 @@
 #'
 #' @param data The input data frame
 #' @param year The year being processed
+#' @param nsu_cohort The NSU data for the year
 #'
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
 #'
 #' @family episode file
 #' @seealso [get_nsu_path()]
-add_nsu_cohort <- function(data, year) {
+add_nsu_cohort <- function(
+    data,
+    year,
+    nsu_cohort = read_file(get_nsu_path(year))
+) {
   year_param <- year
 
   if (!check_year_valid(year, "NSU")) {
@@ -29,9 +34,9 @@ add_nsu_cohort <- function(data, year) {
     )
   )
 
-  matched <- dplyr::full_join(data,
-    # NSU cohort file
-    read_file(get_nsu_path(year)) %>%
+  matched <- dplyr::full_join(
+    data,
+    nsu_cohort %>%
       dplyr::mutate(
         dob = as.Date(.data[["dob"]]),
         gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
@@ -110,7 +115,6 @@ add_nsu_cohort <- function(data, year) {
         .data[["chi"]]
       )
     ) %>%
-    # Remove the additional columns
     dplyr::select(-dplyr::contains("_nsu"), -"has_chi")
 
   return(return_df)
