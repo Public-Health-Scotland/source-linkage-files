@@ -390,8 +390,7 @@ join_cohort_lookups <- function(
     service_use_cohort = read_file(
       get_service_use_cohorts_path(year, update),
       col_select = c("chi", "service_use_cohort")
-    )
-) {
+    )) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
