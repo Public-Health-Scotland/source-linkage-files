@@ -7,7 +7,7 @@
 correct_cij_vars(data)
 }
 \arguments{
-\item{data}{The in progress episode file data.}
+\item{data}{The in-progress episode file data.}
 }
 \value{
 The data with CIJ variables corrected.
