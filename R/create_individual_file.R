@@ -3,13 +3,27 @@
 #' @description Creates individual file from episode file
 #'
 #' @param episode_file Tibble containing episodic data
-#' @param year The year to process, in FY format.
-#' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' @param anon_chi_in (Default:TRUE) Is `anon_chi` used in the input
+#' (instead of chi)
+#' @inheritParams run_episode_file
 #'
 #' @return The processed individual file
 #' @export
-create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
+create_individual_file <- function(
+    episode_file,
+    year,
+    write_to_disk = TRUE,
+    anon_chi_in = TRUE,
+    anon_chi_out = TRUE) {
+  if (anon_chi_in) {
+    episode_file <- slfhelper::get_chi(
+      episode_file,
+      anon_chi_var = "anon_chi",
+      drop = TRUE
+    ) %>%
+      dplyr::mutate(chi = dplyr::na_if(.data$chi, ""))
+  }
+
   individual_file <- episode_file %>%
     dplyr::select(
       "year",
@@ -59,6 +73,13 @@ create_individual_file <- function(episode_file, year, write_to_disk = TRUE) {
     join_slf_lookup_vars() %>%
     join_sc_client(year) %>%
     dplyr::mutate(year = year)
+
+  if (anon_chi_out) {
+    individual_file <- individual_file %>%
+      tidyr::replace_na(list(chi = "")) %>%
+      slfhelper::get_anon_chi() %>%
+      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
+  }
 
   if (write_to_disk) {
     slf_indiv_path <- get_file_path(

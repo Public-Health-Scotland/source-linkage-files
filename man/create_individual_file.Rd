@@ -4,7 +4,13 @@
 \alias{create_individual_file}
 \title{Create individual file}
 \usage{
-create_individual_file(episode_file, year, write_to_disk = TRUE)
+create_individual_file(
+  episode_file,
+  year,
+  write_to_disk = TRUE,
+  anon_chi_in = TRUE,
+  anon_chi_out = TRUE
+)
 }
 \arguments{
 \item{episode_file}{Tibble containing episodic data}
@@ -13,6 +19,12 @@ create_individual_file(episode_file, year, write_to_disk = TRUE)
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
+(instead of chi)}
+
+\item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
+(instead of chi)}
 }
 \value{
 The processed individual file

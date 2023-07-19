@@ -10,7 +10,7 @@ process_tests_episode_file <- function(data, year) {
   data <- data %>%
     dplyr::select(
       "year",
-      "chi",
+      "anon_chi",
       "gender",
       "postcode",
       "hbtreatcode",
@@ -20,7 +20,8 @@ process_tests_episode_file <- function(data, year) {
       "record_keydate1",
       "record_keydate2",
       dplyr::contains(c("beddays", "cost", "cij"))
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   old_data <- get_existing_data_for_tests(data)
 
