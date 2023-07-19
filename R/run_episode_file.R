@@ -137,7 +137,7 @@ run_episode_file <- function(
 #'
 #' @param data The in-progress episode file data.
 #' @inheritParams run_episode_file
-#' @param vars_to_keep a character vector of the variables to keep, all others 
+#' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
 #' @return `data` with only the `vars_to_keep` kept
