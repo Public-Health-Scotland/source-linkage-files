@@ -561,8 +561,9 @@ list(
       process_tests_individual_file(
         data = individual_file,
         year = year
-),
-          tar_target(
+      )
+    ),
+    tar_target(
       episode_file_dataset,
       arrow::write_dataset(
         dataset = episode_file,
