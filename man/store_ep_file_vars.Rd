@@ -7,12 +7,12 @@
 store_ep_file_vars(data, year, vars_to_keep)
 }
 \arguments{
-\item{data}{The in progress episode file data.}
+\item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
 
-\item{vars_to_keep}{a character vector of variable to keep, all others will
-be stored.}
+\item{vars_to_keep}{a character vector of the variables to keep, all others
+will be stored.}
 }
 \value{
 \code{data} with only the \code{vars_to_keep} kept
