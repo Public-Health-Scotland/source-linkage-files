@@ -59,7 +59,8 @@ list(
     process_lookup_sc_demographics(
       sc_demog_data,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.9
   ),
   tar_target(
     tests_sc_demog_lookup,
@@ -70,7 +71,8 @@ list(
     process_it_chi_deaths(
       data = it_chi_deaths_extract,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.9
   ),
   tar_target(
     tests_it_chi_deaths,
@@ -83,7 +85,8 @@ list(
       gpprac_ref_path = gpprac_ref_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.9
   ),
   tar_target(
     tests_source_gp_lookup,
@@ -96,16 +99,17 @@ list(
       simd_path = simd_path,
       locality_path = locality_path,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.9
   ),
   tar_target(
     tests_source_pc_lookup,
     process_tests_lookup_pc(source_pc_lookup)
   ),
   ## Cost Lookups ##
-  tar_target(ch_cost_lookup, process_costs_ch_rmd()),
-  tar_target(dn_cost_lookup, process_costs_dn_rmd()),
-  tar_target(hc_cost_lookup, process_costs_hc_rmd()),
+  tar_target(ch_cost_lookup, process_costs_ch_rmd(), priority = 0.8),
+  tar_target(dn_cost_lookup, process_costs_dn_rmd(), priority = 0.8),
+  tar_target(hc_cost_lookup, process_costs_hc_rmd(), priority = 0.8),
   tar_target(gp_ooh_cost_lookup, process_costs_gp_ooh_rmd()),
   ## Social Care - 'All' data ##
   tar_target(
@@ -122,7 +126,8 @@ list(
       all_at_extract,
       sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.5
   ),
   tar_target(
     all_home_care_extract,
@@ -138,7 +143,8 @@ list(
       all_home_care_extract,
       sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.5
   ),
   tar_target(
     all_care_home_extract,
@@ -157,7 +163,8 @@ list(
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.5
   ),
   tar_target(
     tests_all_care_home,
@@ -177,7 +184,8 @@ list(
       all_sds_extract,
       sc_demog_lookup = sc_demog_lookup,
       write_to_disk = write_to_disk
-    )
+    ),
+    priority = 0.5
   ),
   tar_map(
     list(year = years_to_run),
@@ -256,14 +264,14 @@ list(
       get_boxi_extract_path(year = year, type = "GP_OoH-c"),
       format = "file"
     ),
-    tar_target(ooh_data,
+    tar_qs(
+      ooh_data,
       read_extract_gp_ooh(
         year,
         diagnosis_data_path,
         outcomes_data_path,
         consultations_data_path
-      ),
-      format = "rds"
+      )
     ),
     ### Target source processed extracts ###
     tar_target(source_acute_extract, process_extract_acute(
@@ -553,6 +561,17 @@ list(
       process_tests_individual_file(
         data = individual_file,
         year = year
+),
+          tar_target(
+      episode_file_dataset,
+      arrow::write_dataset(
+        dataset = episode_file,
+        path = fs::path_ext_remove(slf_episode_path),
+        format = "parquet",
+        # Should correspond to the available slfhelper filters
+        partitioning = c("recid", "hscp2018"),
+        compression = "zstd",
+        version = "latest"
       )
     )
   )

@@ -7,7 +7,7 @@
 create_cost_inc_dna(data)
 }
 \arguments{
-\item{data}{The in progress episode file data.}
+\item{data}{The in-progress episode file data.}
 }
 \value{
 The data with cost including dna.
