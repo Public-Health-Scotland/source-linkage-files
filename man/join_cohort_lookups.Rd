@@ -17,7 +17,7 @@ join_cohort_lookups(
 \arguments{
 \item{data}{The in-progress episode file data.}
 
-\item{year}{financial year in '1718' format}
+\item{year}{The year to process, in FY format.}
 
 \item{update}{The update to use}
 
