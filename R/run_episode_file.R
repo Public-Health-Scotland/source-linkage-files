@@ -86,7 +86,7 @@ run_episode_file <- function(
       )
     ) %>%
     # Check chi is valid using phsmethods function
-    # If the CHI is invalid for whatever reason, set the CHI to blank string
+    # If the CHI is invalid for whatever reason, set the CHI to NA
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
@@ -110,14 +110,10 @@ run_episode_file <- function(
     load_ep_file_vars(year)
 
   if (anon_chi_out) {
-    # TODO When slfhelper is update remove the unnecessary code
+    # TODO When slfhelper is updated remove the unnecessary code
     episode_file <- episode_file %>%
       tidyr::replace_na(list(chi = "")) %>%
-      slfhelper::get_anon_chi(
-        episode_file,
-        chi_var = "chi",
-        drop = TRUE
-      ) %>%
+      slfhelper::get_anon_chi() %>%
       dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
   }
 
@@ -139,10 +135,10 @@ run_episode_file <- function(
 
 #' Store the unneeded episode file variables
 #'
-#' @param data The in progress episode file data.
+#' @param data The in-progress episode file data.
 #' @inheritParams run_episode_file
-#' @param vars_to_keep a character vector of variable to keep, all others will
-#' be stored.
+#' @param vars_to_keep a character vector of the variables to keep, all others 
+#' will be stored.
 #'
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
@@ -328,7 +324,7 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
-  # Use future so the cohorts can be create simultaneously (in parallel)
+  # Use future so the cohorts can be created simultaneously (in parallel)
   future::plan(strategy = future.callr::callr, .skip = TRUE)
   options(future.globals.maxSize = 21474836480)
 
