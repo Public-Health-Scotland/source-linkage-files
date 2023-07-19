@@ -20,7 +20,8 @@ create_individual_file <- function(
       episode_file,
       anon_chi_var = "anon_chi",
       drop = TRUE
-    )
+    ) %>%
+      dplyr::mutate(chi = dplyr::na_if(.data$chi, ""))
   }
 
   individual_file <- episode_file %>%
@@ -74,11 +75,10 @@ create_individual_file <- function(
     dplyr::mutate(year = year)
 
   if (anon_chi_out) {
-    individual_file <- slfhelper::get_anon_chi(
-      individual_file,
-      chi_var = "chi",
-      drop = TRUE
-    )
+    individual_file <- individual_file %>%
+      tidyr::replace_na(list(chi = "")) %>%
+      slfhelper::get_anon_chi() %>%
+      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
   }
 
   if (write_to_disk) {
