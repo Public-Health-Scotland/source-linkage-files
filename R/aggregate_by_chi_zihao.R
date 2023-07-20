@@ -81,8 +81,7 @@ aggregate_by_chi_zihao <- function(episode_file) {
         "other",
         "dn",
         "nhs24",
-        "pcc",
-        "_dnas"
+        "pcc"
       )
     ),
     vars_start_with(
