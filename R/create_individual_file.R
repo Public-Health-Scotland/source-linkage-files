@@ -25,7 +25,7 @@ create_individual_file <- function(
   }
 
   individual_file <- episode_file %>%
-    dplyr::select(
+    dplyr::select(dplyr::any_of(c(
       "year",
       "chi",
       "dob",
@@ -57,7 +57,7 @@ create_individual_file <- function(
       "hc_hours_annual",
       "hc_reablement",
       "ooh_case_id"
-    ) %>%
+    ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
@@ -321,9 +321,21 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 add_dn_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
-  episode_file %>%
-    add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), .data$total_no_dn_contacts, NA_integer_))
+  if ("total_no_dn_contacts" %in% names(episode_file)) {
+    episode_file %>%
+      add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
+      dplyr::mutate(
+        "{prefix}_contacts" := dplyr::if_else(
+          eval(condition),
+          .data$total_no_dn_contacts,
+          NA_integer_
+        )
+      )
+  } else {
+    episode_file %>%
+      add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
+      dplyr::mutate("{prefix}_contacts" := NA_integer_)
+  }
 }
 
 #' Add CMH columns
@@ -760,14 +772,12 @@ clean_individual_file <- function(individual_file, year) {
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
   individual_file %>%
-    dplyr::select(
-      !c(
-        "ch_no_cost",
-        "no_paid_items",
-        "total_no_dn_contacts",
-        "cost_total_net_inc_dnas"
-      )
-    ) %>%
+    dplyr::select(dplyr::any_of(!c(
+      "ch_no_cost",
+      "no_paid_items",
+      "total_no_dn_contacts",
+      "cost_total_net_inc_dnas"
+    ))) %>%
     clean_up_gender() %>%
     dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
 }
