@@ -772,7 +772,7 @@ clean_individual_file <- function(individual_file, year) {
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
   individual_file %>%
-    dplyr::select(dplyr::any_of(!c(
+    dplyr::select(!dplyr::any_of(c(
       "ch_no_cost",
       "no_paid_items",
       "total_no_dn_contacts",
