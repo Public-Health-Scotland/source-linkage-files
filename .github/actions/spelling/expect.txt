@@ -107,7 +107,6 @@ keytime
 keytimex
 kis
 lgl
-kis
 los
 ltc
 ltcs

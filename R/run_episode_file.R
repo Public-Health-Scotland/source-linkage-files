@@ -110,11 +110,7 @@ run_episode_file <- function(
     load_ep_file_vars(year)
 
   if (anon_chi_out) {
-    # TODO When slfhelper is updated remove the unnecessary code
-    episode_file <- episode_file %>%
-      tidyr::replace_na(list(chi = "")) %>%
-      slfhelper::get_anon_chi() %>%
-      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
+    episode_file <- slfhelper::get_anon_chi(episode_file)
   }
 
   if (write_to_disk) {
