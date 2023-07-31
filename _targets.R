@@ -562,36 +562,36 @@ list(
         data = individual_file,
         year = year
       )
-    ),
-    tar_target(
-      episode_file_dataset,
-      arrow::write_dataset(
-        dataset = episode_file,
-        path = fs::path(
-          get_year_dir(year),
-          stringr::str_glue("source-episode-file-{year}")
-        ),
-        format = "parquet",
-        # Should correspond to the available slfhelper filters
-        partitioning = c("recid", "hscp2018"),
-        compression = "zstd",
-        version = "latest"
-      )
-    ),
-    tar_target(
-      individual_file_dataset,
-      arrow::write_dataset(
-        dataset = individual_file,
-        path = fs::path(
-          get_year_dir(year),
-          stringr::str_glue("source-individual-file-{year}")
-        ),
-        format = "parquet",
-        # Should correspond to the available slfhelper filters
-        partitioning = c("hscp2018"),
-        compression = "zstd",
-        version = "latest"
-      )
-    )
+    )#,
+    # tar_target(
+    #   episode_file_dataset,
+    #   arrow::write_dataset(
+    #     dataset = episode_file,
+    #     path = fs::path(
+    #       get_year_dir(year),
+    #       stringr::str_glue("source-episode-file-{year}")
+    #     ),
+    #     format = "parquet",
+    #     # Should correspond to the available slfhelper filters
+    #     partitioning = c("recid", "hscp2018"),
+    #     compression = "zstd",
+    #     version = "latest"
+    #   )
+    # ),
+    # tar_target(
+    #   individual_file_dataset,
+    #   arrow::write_dataset(
+    #     dataset = individual_file,
+    #     path = fs::path(
+    #       get_year_dir(year),
+    #       stringr::str_glue("source-individual-file-{year}")
+    #     ),
+    #     format = "parquet",
+    #     # Should correspond to the available slfhelper filters
+    #     partitioning = c("hscp2018"),
+    #     compression = "zstd",
+    #     version = "latest"
+    #   )
+    # )
   )
 )
