@@ -24,6 +24,10 @@ episode date variables.
 }
 \seealso{
 calculate_measures
+
+Other extract test functions
+for creating test flags: 
+\code{\link{produce_source_dd_tests}()}
 }
 \concept{extract test functions
 for creating test flags}
