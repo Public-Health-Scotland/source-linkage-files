@@ -17,7 +17,7 @@ gzip_files <- function(
   )
 
   n_unzipped_files <- length(unzipped_files)
-  if (n_unzipped_files > 0) {
+  if (n_unzipped_files > 0L) {
     cli::cli_inform(c(
       "i" = "{cli::qty(n_unzipped_files)}There {?is/are} {n_unzipped_files}
       uncompressed file{?s} for {year}, which will be compressed with

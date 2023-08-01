@@ -12,7 +12,7 @@ fix_sc_start_dates <- function(start_date, period) {
   # financial year
   start_date <- dplyr::if_else(
     is.na(start_date),
-    start_fy(year = substr(period, 1L, 4L), "alternate"),
+    start_fy(year = stringr::str_sub(period, 1L, 4L), "alternate"),
     start_date
   )
 
@@ -35,7 +35,7 @@ fix_sc_end_dates <- function(start_date, end_date, period) {
   # the end of financial year
   end_date <- dplyr::if_else(
     start_date > end_date,
-    end_fy(year = substr(period, 1L, 4L), "alternate"),
+    end_fy(year = stringr::str_sub(period, 1L, 4L), "alternate"),
     end_date
   )
 

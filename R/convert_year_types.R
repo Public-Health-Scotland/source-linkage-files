@@ -16,7 +16,7 @@
 convert_fyyear_to_year <- function(fyyear) {
   fyyear <- check_year_format(year = fyyear, format = "fyyear")
 
-  year <- paste0("20", substr(fyyear, 1L, 2L))
+  year <- paste0("20", stringr::str_sub(fyyear, 1L, 2L))
 
   return(year)
 }
@@ -39,8 +39,8 @@ convert_fyyear_to_year <- function(fyyear) {
 convert_year_to_fyyear <- function(year) {
   year <- check_year_format(year = year, format = "alternate")
 
-  first_part <- substr(year, 1L, 2L)
-  second_part <- substr(year, 3L, 4L)
+  first_part <- stringr::str_sub(year, 1L, 2L)
+  second_part <- stringr::str_sub(year, 3L, 4L)
 
   fyyear <-
     dplyr::if_else(
@@ -53,7 +53,8 @@ convert_year_to_fyyear <- function(year) {
     non_21c <- which(first_part != "20")
 
     cli::cli_warn(c(
-      "i" = "{cli::qty(length(non_21c))}{?A/Some} value{?s} w{?as/ere} not in the 21st century i.e. not {.val 20xx}",
+      "i" = "{cli::qty(length(non_21c))}{?A/Some} value{?s} w{?as/ere}
+      not in the 21st century i.e. not {.val 20xx}",
       "This may have produced unexpected results, specifically:",
       "*" = "{.val {year[non_21c]}} -> {.val {fyyear[non_21c]}}"
     ))

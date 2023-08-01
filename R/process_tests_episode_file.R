@@ -99,7 +99,7 @@ produce_episode_file_tests <- function(
       )
     ) %>%
     # keep variables for comparison
-    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
+    dplyr::select("valid_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum", group_by = "recid")
 

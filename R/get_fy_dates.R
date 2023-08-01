@@ -20,9 +20,9 @@ start_fy <- function(year, format = c("fyyear", "alternate")) {
   format <- match.arg(format)
 
   if (format == "fyyear") {
-    start_fy <- lubridate::make_date(convert_fyyear_to_year(year), 4, 1)
+    start_fy <- lubridate::make_date(convert_fyyear_to_year(year), 4L, 1L)
   } else if (format == "alternate") {
-    start_fy <- lubridate::make_date(year, 4, 1)
+    start_fy <- lubridate::make_date(year, 4L, 1L)
   }
 
   return(start_fy)
@@ -47,14 +47,14 @@ end_fy <- function(year, format = c("fyyear", "alternate")) {
     format <- "fyyear"
   }
 
-  year <- as.numeric(paste0("20", substr(year, 3, 4)))
+  year <- as.numeric(paste0("20", stringr::str_sub(year, 3L, 4L)))
 
   format <- match.arg(format)
 
   if (format == "fyyear") {
-    end_fy <- lubridate::make_date(year, 3, 31)
+    end_fy <- lubridate::make_date(year, 3L, 31L)
   } else if (format == "alternate") {
-    end_fy <- lubridate::make_date(year + 1L, 3, 31)
+    end_fy <- lubridate::make_date(year + 1L, 3L, 31L)
   }
 
   return(end_fy)
@@ -85,9 +85,9 @@ midpoint_fy <- function(year, format = c("fyyear", "alternate")) {
   check_year_format(year, format = "fyyear")
 
   if (format == "fyyear") {
-    midpoint_fy <- lubridate::make_date(convert_fyyear_to_year(year), 9, 30)
+    midpoint_fy <- lubridate::make_date(convert_fyyear_to_year(year), 9L, 30L)
   } else if (format == "alternate") {
-    midpoint_fy <- lubridate::make_date(year, 9, 30)
+    midpoint_fy <- lubridate::make_date(year, 9L, 30L)
   }
 
   return(midpoint_fy)
@@ -113,7 +113,7 @@ next_fy <- function(year, format = c("fyyear", "alternate")) {
 
   check_year_format(year, format = "fyyear")
 
-  fy <- as.integer(substr(year, 1, 2))
+  fy <- as.integer(stringr::str_sub(year, 1L, 2L))
 
   next_fy <- paste0(fy + 1L, fy + 2L)
 

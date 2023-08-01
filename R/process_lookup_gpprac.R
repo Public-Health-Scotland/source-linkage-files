@@ -13,9 +13,9 @@
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
-                                  gpprac_ref_path = get_gpprac_ref_path(),
-                                  spd_path = get_spd_path(),
-                                  write_to_disk = TRUE) {
+    gpprac_ref_path = get_gpprac_ref_path(),
+    spd_path = get_spd_path(),
+    write_to_disk = TRUE) {
   gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
     dplyr::select(
       "gpprac" = "praccode",
@@ -65,15 +65,11 @@ process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
     ) %>%
     dplyr::mutate(
       lca = convert_ca_to_lca(.data$ca2018),
-      hbpraccode = dplyr::if_else(
-        .data$gpprac %in% c(99942L, 99957L, 99961L, 99981L, 99999L),
-        "S08200003",
-        .data$hbpraccode
-      ),
-      hbpraccode = dplyr::if_else(
-        .data$gpprac == 99995L,
-        "S08200001",
-        .data$hbpraccode
+      hbpraccode = dplyr::case_match(
+        .data$gpprac,
+        c(99942L, 99957L, 99961L, 99981L, 99999L) ~ "S08200003",
+        99995L ~ "S08200001",
+        .default = .data$hbpraccode
       )
     )
 
