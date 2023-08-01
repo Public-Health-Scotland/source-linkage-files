@@ -9,9 +9,8 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-read_lookup_sc_client <- function(
-        fyyear,
-        sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_lookup_sc_client <- function(fyyear,
+                                  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
