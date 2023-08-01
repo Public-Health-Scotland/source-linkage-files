@@ -47,6 +47,7 @@ convert_ca_to_lca <- function(ca_var) {
     c("S12000029", "South Lanarkshire") ~ "29",
     c("S12000030", "Stirling") ~ "30",
     c("S12000040", "West Lothian") ~ "31",
-    c("S12000013", "Na h-Eileanan Siar", "Comhairle nan Eilean Siar") ~ "32")
+    c("S12000013", "Na h-Eileanan Siar", "Comhairle nan Eilean Siar") ~ "32"
+  )
   return(lca)
 }
