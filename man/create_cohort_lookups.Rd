@@ -7,7 +7,7 @@
 create_cohort_lookups(data, year, update = latest_update())
 }
 \arguments{
-\item{data}{The in progress episode file data.}
+\item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
 

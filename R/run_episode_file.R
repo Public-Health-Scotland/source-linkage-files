@@ -4,11 +4,17 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
+#' (instead of chi)
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 #'
-run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
+run_episode_file <- function(
+    processed_data_list,
+    year,
+    write_to_disk = TRUE,
+    anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
@@ -51,7 +57,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
         "cij_dis_spec",
         "cost_total_net",
         "hscp",
-        "datazone",
+        "datazone2011",
         "attendance_status",
         "deathdiag1",
         "deathdiag2",
@@ -80,7 +86,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       )
     ) %>%
     # Check chi is valid using phsmethods function
-    # If the CHI is invalid for whatever reason, set the CHI to blank string
+    # If the CHI is invalid for whatever reason, set the CHI to NA
     dplyr::mutate(
       chi = dplyr::if_else(
         phsmethods::chi_check(.data$chi) != "Valid CHI",
@@ -103,8 +109,17 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
     join_deaths_data(year) %>%
     load_ep_file_vars(year)
 
+  if (anon_chi_out) {
+    # TODO When slfhelper is updated remove the unnecessary code
+    episode_file <- episode_file %>%
+      tidyr::replace_na(list(chi = "")) %>%
+      slfhelper::get_anon_chi() %>%
+      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
+  }
+
   if (write_to_disk) {
-    slf_path <- get_file_path(
+    # TODO make the slf_path a function
+    slf_episode_path <- get_file_path(
       get_year_dir(year),
       stringr::str_glue(
         "source-episode-file-{year}.parquet"
@@ -112,7 +127,7 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
       check_mode = "write"
     )
 
-    write_file(episode_file, slf_path)
+    write_file(episode_file, slf_episode_path)
   }
 
   return(episode_file)
@@ -120,10 +135,10 @@ run_episode_file <- function(processed_data_list, year, write_to_disk = TRUE) {
 
 #' Store the unneeded episode file variables
 #'
-#' @param data The in progress episode file data.
+#' @param data The in-progress episode file data.
 #' @inheritParams run_episode_file
-#' @param vars_to_keep a character vector of variable to keep, all others will
-#' be stored.
+#' @param vars_to_keep a character vector of the variables to keep, all others
+#' will be stored.
 #'
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
@@ -309,7 +324,7 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
-  # Use future so the cohorts can be create simultaneously (in parallel)
+  # Use future so the cohorts can be created simultaneously (in parallel)
   future::plan(strategy = future.callr::callr, .skip = TRUE)
   options(future.globals.maxSize = 21474836480)
 
@@ -340,6 +355,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #' Join cohort lookups
 #'
 #' @inheritParams store_ep_file_vars
+#' @inheritParams get_demographic_cohorts_path
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(data, year, update = latest_update()) {

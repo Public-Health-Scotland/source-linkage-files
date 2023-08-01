@@ -4,7 +4,12 @@
 \alias{run_episode_file}
 \title{Produce the Source Episode file}
 \usage{
-run_episode_file(processed_data_list, year, write_to_disk = TRUE)
+run_episode_file(
+  processed_data_list,
+  year,
+  write_to_disk = TRUE,
+  anon_chi_out = TRUE
+)
 }
 \arguments{
 \item{processed_data_list}{containing data from processed extracts.}
@@ -13,6 +18,9 @@ run_episode_file(processed_data_list, year, write_to_disk = TRUE)
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
+(instead of chi)}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file

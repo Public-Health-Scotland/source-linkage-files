@@ -7,7 +7,7 @@
 join_sparra_hhg(data, year)
 }
 \arguments{
-\item{data}{The in progress episode file data.}
+\item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
 }
