@@ -20,7 +20,7 @@ create_monthly_costs <- function(data,
   check_variables_exist(data, c(
     "record_keydate1",
     "record_keydate2",
-    paste0(tolower(month.abb[c(4:12, 1:3)]), "_beddays")
+    paste0(tolower(month.abb[c(4L:12L, 1L:3L)]), "_beddays")
   ))
 
   beddays_months <- data %>%
@@ -29,7 +29,7 @@ create_monthly_costs <- function(data,
   # Fix the instances where the episode is a daycase (in maternity data);
   # these will sometimes have 0.33 for the yearstay,
   # this should be applied to the relevant month.
-  full_cost_col <- month.abb[c(4:12, 1:3)] %>%
+  full_cost_col <- month.abb[c(4L:12L, 1L:3L)] %>%
     tolower() %>%
     paste0("_cost")
 
@@ -37,7 +37,7 @@ create_monthly_costs <- function(data,
     dplyr::select(!dplyr::ends_with("_beddays")) %>%
     dplyr::mutate(
       daycase_added = tidyr::replace_na(
-        ({{ yearstay }} == 0.33) | ({{ yearstay }} == 0L & {{ cost_total_net }} > 0),
+        ({{ yearstay }} == 0.33) | ({{ yearstay }} == 0L & {{ cost_total_net }} > 0.0),
         replace = FALSE
       )
     ) %>%
@@ -51,12 +51,12 @@ create_monthly_costs <- function(data,
       cost_month = month.abb[.data$cost_month] %>%
         tolower() %>%
         paste0("_cost"),
-      daycase_added = dplyr::if_else(.data$daycase_added, 1, 0)
+      daycase_added = as.integer(.data$daycase_added)
     ) %>%
     tidyr::pivot_wider(
       names_from = "cost_month",
       values_from = "daycase_added",
-      values_fill = 0
+      values_fill = 0L
     ) %>%
     dplyr::select(
       tidyselect::any_of(full_cost_col),
@@ -67,7 +67,7 @@ create_monthly_costs <- function(data,
   add_months <- setdiff(full_cost_col, available_months)
 
   add_months_df <- dplyr::as_tibble(
-    matrix(0, nrow = nrow(data), ncol = length(add_months)),
+    matrix(0.0, nrow = nrow(data), ncol = length(add_months)),
     .name_repair = ~add_months
   )
 

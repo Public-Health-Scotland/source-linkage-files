@@ -17,7 +17,7 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
   ltc_flags <- data %>%
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("date"),
-      list(flag = ~ dplyr::if_else(is.na(.x) | .x > end_fy(year), 0L, 1L))
+      list(flag = ~ as.integer(!(is.na(.x) | .x > end_fy(year))))
     )) %>%
     dplyr::rename_with(
       .cols = tidyselect::ends_with("flag"),

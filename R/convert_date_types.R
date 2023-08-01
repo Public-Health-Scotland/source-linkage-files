@@ -29,5 +29,9 @@ convert_date_to_numeric <- function(date) {
 #'
 #' @family date functions
 convert_numeric_to_date <- function(numeric_date) {
-  as.Date(lubridate::fast_strptime(as.character(numeric_date), "%Y%m%d", tz = "UTC"))
+  as.Date(lubridate::fast_strptime(
+    x = as.character(numeric_date),
+    format = "%Y%m%d",
+    tz = "UTC"
+  ))
 }

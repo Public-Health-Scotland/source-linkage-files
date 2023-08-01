@@ -165,7 +165,29 @@ test_that("Costs are assigned correctly", {
   # Operation flag
   expect_equal(
     add_operation_flag(dummy_data[["op1a"]]),
-    c(F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, T)
+    c(
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      TRUE
+    )
   )
 
   dummy_data <- tibble::tribble(
@@ -181,7 +203,7 @@ test_that("Costs are assigned correctly", {
       dummy_data[["acute_elective_cost"]],
       dummy_data[["elective_inpatient_cost"]]
     ),
-    c(T, T, T, F)
+    c(TRUE, TRUE, TRUE, FALSE)
   )
 })
 
@@ -241,29 +263,42 @@ dummy_data <- tibble::tribble(
   ~psychiatry_cost, ~maternity_cost, ~geriatric_cost, ~elective_inpatient_flag, ~elective_instances,
   ~emergency_instances, ~prescribing_cost, ~outpatient_cost, ~care_home_cost, ~community_health_cost,
   ~ae2_cost,
-  10, 0, 0, F, 0, 0, 0, 0, 0, 0, 0,
-  0, 10, 0, F, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 10, F, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, T, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, F, 2, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, F, 15, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, F, 0, 1, 0, 0, 0, 0, 0,
-  0, 0, 0, F, 0, 4, 0, 0, 0, 0, 0,
-  0, 0, 0, F, 0, 0, 10, 0, 0, 0, 0,
-  0, 0, 0, F, 0, 0, 0, 10, 0, 0, 0,
-  0, 0, 0, F, 0, 0, 0, 0, 10, 0, 0,
-  0, 0, 0, F, 0, 0, 0, 0, 0, 10, 0,
-  0, 0, 0, F, 0, 0, 0, 0, 0, 0, 10,
-  0, 0, 0, F, 3.5, 0, 0, 0, 0, 0, 0,
-  10, 10, 10, T, 10, 10, 10, 10, 10, 10, 10
+  10, 0, 0, FALSE, 0, 0, 0, 0, 0, 0, 0,
+  0, 10, 0, FALSE, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 10, FALSE, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, TRUE, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, FALSE, 2, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, FALSE, 15, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, FALSE, 0, 1, 0, 0, 0, 0, 0,
+  0, 0, 0, FALSE, 0, 4, 0, 0, 0, 0, 0,
+  0, 0, 0, FALSE, 0, 0, 10, 0, 0, 0, 0,
+  0, 0, 0, FALSE, 0, 0, 0, 10, 0, 0, 0,
+  0, 0, 0, FALSE, 0, 0, 0, 0, 10, 0, 0,
+  0, 0, 0, FALSE, 0, 0, 0, 0, 0, 10, 0,
+  0, 0, 0, FALSE, 0, 0, 0, 0, 0, 0, 10,
+  0, 0, 0, FALSE, 3.5, 0, 0, 0, 0, 0, 0,
+  10, 10, 10, TRUE, 10, 10, 10, 10, 10, 10, 10
 )
 
 test_that("Psychiatry cohort is assigned correctly", {
   expect_equal(
     assign_s_cohort_psychiatry(dummy_data[["psychiatry_cost"]]),
     c(
-      TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-      FALSE, FALSE, FALSE, FALSE, FALSE, TRUE
+      TRUE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      FALSE,
+      TRUE
     )
   )
 })
@@ -388,13 +423,13 @@ test_that("Recalculated costs are calculated correctly", {
     ~elective_inpatient_cohort, ~limited_daycases_cohort, ~routine_daycase_cohort,
     ~single_emergency_cohort, ~multiple_emergency_cohort, ~community_care_cohort,
     ~acute_elective_cost, ~acute_emergency_cost, ~community_health_cost, ~cost_total_net,
-    T, F, F, F, F, F, 10, 0, 0, 10,
-    F, T, F, F, F, F, 10, 0, 0, 10,
-    F, F, T, F, F, F, 10, 0, 0, 10,
-    F, F, F, T, F, F, 0, 10, 0, 10,
-    F, F, F, F, T, F, 0, 10, 0, 10,
-    F, F, F, F, F, T, 0, 0, 10, 10,
-    T, T, T, T, T, T, 10, 20, 30, 10
+    TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, 10, 0, 0, 10,
+    FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, 10, 0, 0, 10,
+    FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 10, 0, 0, 10,
+    FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, 0, 10, 0, 10,
+    FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, 0, 10, 0, 10,
+    FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, 0, 0, 10, 10,
+    TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 10, 20, 30, 10
   )
 
   # Elective
@@ -448,7 +483,7 @@ test_that("Recalculated costs are calculated correctly", {
   # Residential care (not used)
   expect_equal(
     calculate_residential_care_cost(),
-    c(0)
+    0.0
   )
 })
 

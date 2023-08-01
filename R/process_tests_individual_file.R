@@ -65,7 +65,7 @@ produce_individual_file_tests <- function(data) {
     create_hb_test_flags(.data$hbrescode) %>%
     create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
     # keep variables for comparison
-    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
+    dplyr::select("valid_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
@@ -85,9 +85,7 @@ produce_individual_file_tests <- function(data) {
 
   min_max_measures <- data %>%
     calculate_measures(
-      vars = c(
-        "health_net_cost"
-      ),
+      vars = "health_net_cost",
       measure = "min-max"
     )
 

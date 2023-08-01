@@ -18,7 +18,7 @@ process_tests_district_nursing <- function(data, year) {
     # replace NA by 0 in monthly costs
     dplyr::mutate(dplyr::across(
       dplyr::ends_with("_cost"),
-      ~ tidyr::replace_na(.x, 0)
+      ~ tidyr::replace_na(.x, 0.0)
     ))
 
   comparison <- produce_test_comparison(

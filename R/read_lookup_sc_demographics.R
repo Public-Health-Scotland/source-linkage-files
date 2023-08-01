@@ -5,7 +5,8 @@
 #' @return a [tibble][tibble::tibble-package]
 #' @export
 #'
-read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = "DVPROD")) {
+read_lookup_sc_demographics <- function(
+        sc_connection = phs_db_connection(dsn = "DVPROD")) {
   sc_demog <- dplyr::tbl(
     sc_connection,
     dbplyr::in_schema("social_care_2", "demographic_snapshot")

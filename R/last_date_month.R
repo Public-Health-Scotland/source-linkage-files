@@ -11,5 +11,5 @@
 #'
 #' @family date functions
 last_date_month <- function(date) {
-  return(lubridate::ceiling_date(date, "month") - lubridate::days(1))
+  return(lubridate::ceiling_date(date, "month") - lubridate::days(1L))
 }
