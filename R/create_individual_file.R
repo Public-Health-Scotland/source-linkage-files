@@ -725,7 +725,8 @@ join_slf_lookup_vars <- function(individual_file,
 #' @param year financial year.
 #' @param sc_client SC client lookup
 #' @param sc_demographics SC Demographic lookup
-join_sc_client <- function(individual_file,
+join_sc_client <- function(
+    individual_file,
     year,
     sc_client = read_file(get_source_extract_path(year, "Client")),
     sc_demographics = read_file(get_sc_demog_lookup_path(),

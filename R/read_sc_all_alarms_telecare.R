@@ -6,8 +6,7 @@
 #'
 #' @export
 #'
-read_sc_all_alarms_telecare <- function(
-        sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   # Read in data---------------------------------------
 
   ## read in data - social care 2 demographic
