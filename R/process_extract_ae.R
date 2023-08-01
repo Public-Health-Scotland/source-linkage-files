@@ -35,7 +35,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       .data$postcode_chi,
       .data$postcode_epi
     )) %>%
-    # Use phs methods to format postcode in pc7
+    # A&E data has postcode in PC8 format but we need it in PC7 format
     dplyr::mutate(
       postcode = phsmethods::format_postcode(.data$postcode, "pc7")
     ) %>%
