@@ -15,8 +15,8 @@ assign_s_cohort_limited_daycases(elective_inpatient_flag, elective_instances)
 A boolean vector of limited daycases cohort flags
 }
 \description{
-If the record does not have an elective inpatient flag and they have
-3 or fewer elective instances, return \code{TRUE}
+If the record does not have an elective inpatient flag
+and they have 3 or fewer elective instances, return \code{TRUE}.
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 
