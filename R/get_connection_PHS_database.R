@@ -16,7 +16,7 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
   username <- Sys.getenv("USER")
 
   # Check the username is not empty and take input if not
-  if (is.na(username) | username == "") {
+  if (is.na(username) || username == "") {
     if (rlang::is_interactive()) {
       username <- rstudioapi::showPrompt(
         title = "Username",

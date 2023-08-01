@@ -53,8 +53,8 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     convert_monthly_rows_to_vars(.data$costmonthnum, .data$cost_total_net, .data$yearstay) %>%
     # add yearstay and cost_total_net variables
     dplyr::mutate(
-      yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
-      cost_total_net = rowSums(dplyr::across(tidyselect::ends_with("_cost")))
+      yearstay = rowSums(dplyr::pick(tidyselect::ends_with("_beddays"))),
+      cost_total_net = rowSums(dplyr::pick(tidyselect::ends_with("_cost")))
     ) %>%
     # Add oldtadm as a factor with labels
     dplyr::mutate(oldtadm = factor(.data$oldtadm,

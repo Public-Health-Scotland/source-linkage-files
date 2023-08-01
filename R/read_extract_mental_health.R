@@ -129,7 +129,9 @@ read_extract_mental_health <- function(
       uri = "Unique Record Identifier"
     ) %>%
     # replace NA in cost_total_net by 0
-    dplyr::mutate(cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0))
+    dplyr::mutate(
+      cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
+    )
 
   return(extract_mental_health)
 }

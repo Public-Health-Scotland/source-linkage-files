@@ -10,7 +10,8 @@ add_operation_flag(op1a)
 \item{op1a}{A vector of operation codes}
 }
 \value{
-A boolean vector showing whether a record contains an operation or not
+A boolean vector showing whether a record contains an operation or
+not.
 }
 \description{
 Add operation flag

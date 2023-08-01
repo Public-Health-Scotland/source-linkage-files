@@ -6,7 +6,8 @@
 #'
 #' @export
 #'
-read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_sc_all_alarms_telecare <- function(
+        sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   # Read in data---------------------------------------
 
   ## read in data - social care 2 demographic
@@ -24,16 +25,19 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     ) %>%
     # fix bad period (2017, 2020 & 2021)
     dplyr::mutate(
-      period = dplyr::if_else(.data$period == "2017", "2017Q4", .data$period),
-      period = dplyr::if_else(.data$period == "2020", "2020Q4", .data$period),
-      period = dplyr::if_else(.data$period == "2021", "2021Q4", .data$period)
+      period = dplyr::case_match(
+        .data$period,
+        "2017" ~ "2017Q4",
+        "2020" ~ "2020Q4",
+        "2021" ~ "2021Q4",
+        .default = .data$period
+      )
     ) %>%
-    # order
-    dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
-    dplyr::collect() %>%
     dplyr::mutate(
-      dplyr::across(c("sending_location", "service_type"), as.integer)
-    )
+      dplyr::across(c("sending_location", "service_type"), ~ as.integer(.x))
+    ) %>%
+    dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
+    dplyr::collect()
 
   return(at_full_data)
 }

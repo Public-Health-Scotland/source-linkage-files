@@ -25,7 +25,7 @@ create_individual_file <- function(
   }
 
   individual_file <- episode_file %>%
-    dplyr::select(
+    dplyr::select(dplyr::any_of(c(
       "year",
       "chi",
       "dob",
@@ -57,7 +57,7 @@ create_individual_file <- function(
       "hc_hours_annual",
       "hc_reablement",
       "ooh_case_id"
-    ) %>%
+    ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
@@ -72,7 +72,7 @@ create_individual_file <- function(
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
     join_sc_client(year) %>%
-    dplyr::mutate(year = year)
+    dplyr::mutate(year = year, .before = dplyr::everything())
 
   if (anon_chi_out) {
     individual_file <- individual_file %>%
@@ -121,17 +121,17 @@ add_cij_columns <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
       cij_non_el = dplyr::if_else(
-        .data$cij_pattype_code == 0,
+        .data$cij_pattype_code == 0L,
         .data$cij_marker,
         NA_real_
       ),
       cij_el = dplyr::if_else(
-        .data$cij_pattype_code == 1,
+        .data$cij_pattype_code == 1L,
         .data$cij_marker,
         NA_real_
       ),
       cij_mat = dplyr::if_else(
-        .data$cij_pattype_code == 2,
+        .data$cij_pattype_code == 2L,
         .data$cij_marker,
         NA_real_
       ),
@@ -141,7 +141,7 @@ add_cij_columns <- function(episode_file) {
         NA_real_
       ),
       preventable_admissions = dplyr::if_else(
-        .data$cij_ppa == 1,
+        .data$cij_ppa == 1L,
         .data$cij_marker,
         NA_integer_
       )
@@ -192,7 +192,7 @@ add_all_columns <- function(episode_file) {
       ),
       health_net_cost_inc_dnas = .data$health_net_cost + dplyr::if_else(
         is.na(.data$OP_cost_dnas),
-        0,
+        0.0,
         .data$OP_cost_dnas
       )
     )
@@ -247,13 +247,13 @@ add_op_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition)
-  condition_1 <- substitute(condition & attendance_status == 1)
+  condition_1 <- substitute(condition & attendance_status == 1L)
   episode_file <- episode_file %>%
     dplyr::mutate(
       "{prefix}_newcons_attendances" := dplyr::if_else(eval(condition_1), 1L, NA_integer_),
       "{prefix}_cost_attend" := dplyr::if_else(eval(condition_1), .data$cost_total_net, NA_real_)
     )
-  condition_5_8 <- substitute(condition & attendance_status %in% c(5, 8))
+  condition_5_8 <- substitute(condition & attendance_status %in% c(5L, 8L))
   episode_file <- episode_file %>%
     dplyr::mutate(
       "{prefix}_newcons_dnas" := dplyr::if_else(eval(condition_5_8), 1L, NA_integer_),
@@ -306,11 +306,11 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
       "{prefix}_consultation_time" := dplyr::if_else(
         eval(condition),
         pmax(
-          0,
+          0.0,
           as.numeric((lubridate::seconds_to_period(.data$keytime2) + .data$record_keydate2) - (lubridate::seconds_to_period(.data$keytime1) + .data$record_keydate1), units = "mins")
         ),
         NA_real_
-      ),
+      )
     )
 
   return(episode_file)
@@ -321,9 +321,21 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 add_dn_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
-  episode_file %>%
-    add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
-    dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), .data$total_no_dn_contacts, NA_integer_))
+  if ("total_no_dn_contacts" %in% names(episode_file)) {
+    episode_file %>%
+      add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
+      dplyr::mutate(
+        "{prefix}_contacts" := dplyr::if_else(
+          eval(condition),
+          .data$total_no_dn_contacts,
+          NA_integer_
+        )
+      )
+  } else {
+    episode_file %>%
+      add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
+      dplyr::mutate("{prefix}_contacts" := NA_integer_)
+  }
 }
 
 #' Add CMH columns
@@ -394,7 +406,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
       ch_cost_per_day = dplyr::if_else(
-        eval(condition) & .data$yearstay > 0,
+        eval(condition) & .data$yearstay > 0.0,
         .data$cost_total_net / .data$yearstay,
         .data$cost_total_net
       ),
@@ -421,8 +433,16 @@ add_hc_columns <- function(episode_file, prefix, condition) {
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE) %>%
     dplyr::mutate(
-      "{prefix}_total_hours" := dplyr::if_else(eval(condition), .data$hc_hours_annual, NA_real_),
-      "{prefix}_total_cost" := dplyr::if_else(eval(condition), .data$cost_total_net, NA_real_),
+      "{prefix}_total_hours" := dplyr::if_else(
+        eval(condition),
+        .data$hc_hours_annual,
+        NA_real_
+      ),
+      "{prefix}_total_cost" := dplyr::if_else(
+        eval(condition),
+        .data$cost_total_net,
+        NA_real_
+      )
     )
   condition_per <- substitute(condition & smrtype == "HC-Per")
   episode_file <- episode_file %>%
@@ -438,7 +458,7 @@ add_hc_columns <- function(episode_file, prefix, condition) {
       "{prefix}_non_personal_hours" := dplyr::if_else(eval(condition_non_per), .data$hc_hours_annual, NA_real_),
       "{prefix}_non_personal_hours_cost" := dplyr::if_else(eval(condition_non_per), .data$cost_total_net, NA_real_)
     )
-  condition_reabl <- substitute(condition & hc_reablement == 1)
+  condition_reabl <- substitute(condition & hc_reablement == 1L)
   episode_file <- episode_file %>%
     dplyr::mutate(
       "{prefix}_reablement_episodes" := dplyr::if_else(eval(condition_reabl), 1L, NA_integer_),
@@ -578,7 +598,7 @@ clean_up_ch <- function(episode_file, year) {
       fy_start = start_fy(year)
     ) %>%
     dplyr::mutate(
-      term_1 = pmin(.data$ch_ep_end, .data$fy_end + 1),
+      term_1 = pmin(.data$ch_ep_end, .data$fy_end + 1L),
       term_2 = pmax(.data$ch_ep_start, .data$fy_start)
     ) %>%
     dplyr::mutate(
@@ -588,18 +608,18 @@ clean_up_ch <- function(episode_file, year) {
         NA_real_
       ),
       ch_cost = dplyr::if_else(
-        .data$recid == "CH" & .data$ch_no_cost == 0,
+        .data$recid == "CH" & .data$ch_no_cost == 0L,
         .data$ch_beddays * .data$ch_cost_per_day,
         NA_real_
       ),
       ch_beddays = dplyr::if_else(
-        .data$recid == "CH" & .data$ch_chi_cis == 0,
-        0,
+        .data$recid == "CH" & .data$ch_chi_cis == 0L,
+        0L,
         .data$ch_beddays
       ),
       ch_cost = dplyr::if_else(
-        .data$recid == "CH" & .data$ch_chi_cis == 0,
-        0,
+        .data$recid == "CH" & .data$ch_chi_cis == 0L,
+        0.0,
         .data$ch_cost
       )
     ) %>%
@@ -617,7 +637,7 @@ recode_gender <- function(episode_file) {
   episode_file %>%
     dplyr::mutate(
       gender = dplyr::if_else(
-        .data$gender %in% c(0, 9),
+        .data$gender %in% c(0L, 9L),
         1.5,
         .data$gender
       )
@@ -708,7 +728,7 @@ aggregate_by_chi <- function(episode_file) {
           "year",
           dplyr::ends_with(c(
             "_Cohort", "end_fy", "start_fy"
-          )),
+          ))
         ),
         ~ dplyr::first(., na_rm = TRUE)
       )
@@ -760,14 +780,12 @@ clean_individual_file <- function(individual_file, year) {
   cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
 
   individual_file %>%
-    dplyr::select(
-      !c(
-        "ch_no_cost",
-        "no_paid_items",
-        "total_no_dn_contacts",
-        "cost_total_net_inc_dnas"
-      )
-    ) %>%
+    dplyr::select(!dplyr::any_of(c(
+      "ch_no_cost",
+      "no_paid_items",
+      "total_no_dn_contacts",
+      "cost_total_net_inc_dnas"
+    ))) %>%
     clean_up_gender() %>%
     dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
 }
@@ -829,11 +847,11 @@ join_slf_lookup_vars <- function(individual_file,
 #' @param sc_client SC client lookup
 #' @param sc_demographics SC Demographic lookup
 join_sc_client <- function(individual_file,
-                           year,
-                           sc_client = read_file(get_source_extract_path(year, "Client")),
-                           sc_demographics = read_file(get_sc_demog_lookup_path(),
-                             col_select = c("sending_location", "social_care_id", "chi")
-                           )) {
+    year,
+    sc_client = read_file(get_source_extract_path(year, "Client")),
+    sc_demographics = read_file(get_sc_demog_lookup_path(),
+      col_select = c("sending_location", "social_care_id", "chi")
+    )) {
   # TODO Update the client lookup processing script to match
   # on demographics there so the client lookup already has CHI.
 

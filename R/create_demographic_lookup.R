@@ -348,7 +348,7 @@ assign_d_cohort_high_cc <- function(dementia,
     # FOR FUTURE: PhysicalandSensoryDisabilityClientGroup or LearningDisabilityClientGroup = "Y",
     # then high_cc_cohort = TRUE
     # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
-    rowSums(dplyr::across(c(
+    rowSums(dplyr::pick(c(
       "dementia",
       "hefailure",
       "refailure",
@@ -374,7 +374,7 @@ assign_d_cohort_high_cc <- function(dementia,
 #' @family Demographic and Service Use Cohort functions
 assign_d_cohort_medium_cc <- function(cvd, copd, chd, parkinsons, ms) {
   medium_cc <-
-    rowSums(dplyr::across(c(
+    rowSums(dplyr::pick(c(
       "cvd",
       "copd",
       "chd",
@@ -403,7 +403,7 @@ assign_d_cohort_low_cc <- function(epilepsy,
                                    diabetes,
                                    atrialfib) {
   low_cc <-
-    rowSums(dplyr::across(c(
+    rowSums(dplyr::pick(c(
       "epilepsy",
       "asthma",
       "arth",
@@ -596,12 +596,12 @@ assign_d_cohort_substance <- function(data) {
       f11 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1L, 3L) %in% c("F11")
+          ~ stringr::str_sub(.x, 1L, 3L) %in% "F11"
         )) > 0L,
       f13 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1L, 3L) %in% c("F13")
+          ~ stringr::str_sub(.x, 1L, 3L) %in% "F13"
         )) > 0L,
       t402_t404 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
@@ -611,13 +611,13 @@ assign_d_cohort_substance <- function(data) {
       t424 = .data$recid %in% c("01B", "04B") &
         rowSums(dplyr::across(
           c("diag1", "diag2", "diag3", "diag4", "diag5", "diag6"),
-          ~ stringr::str_sub(.x, 1L, 4L) %in% c("T424")
+          ~ stringr::str_sub(.x, 1L, 4L) %in% "T424"
         )) > 0L
     ) %>%
     # Aggregate to CIJ level
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::summarise(
-      dplyr::across(c("mh":"t424"), any)
+      dplyr::across("mh":"t424", ~ any(.x))
     ) %>%
     dplyr::ungroup() %>%
     # Assign drug and alcohol misuse

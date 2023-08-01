@@ -27,7 +27,7 @@ calculate_measures <- function(
   measure <- match.arg(measure)
 
   if (!is.null(group_by)) {
-    group_by <- match.arg(group_by, c("recid"))
+    group_by <- match.arg(group_by, "recid")
 
     if (group_by == "recid") {
       data <- data %>%
