@@ -12,7 +12,8 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_gpprac <- function(open_data = get_gpprac_opendata(),
+process_lookup_gpprac <- function(
+    open_data = get_gpprac_opendata(),
     gpprac_ref_path = get_gpprac_ref_path(),
     spd_path = get_spd_path(),
     write_to_disk = TRUE) {
