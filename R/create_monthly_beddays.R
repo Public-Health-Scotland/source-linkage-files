@@ -39,7 +39,7 @@ create_monthly_beddays <- function(data,
   if (any(
     admission_dates_vector > discharge_dates_vector,
     na.rm = TRUE
-  ) & !all(is.na(discharge_dates_vector))) {
+  ) && !all(is.na(discharge_dates_vector))) {
     first_error <- which.max(admission_dates_vector > discharge_dates_vector)
 
     cli::cli_abort(
@@ -68,7 +68,7 @@ create_monthly_beddays <- function(data,
       # Shift it forward by a day (default)
       # so we will count the last day and not the first.
       lubridate::int_shift(
-        by = lubridate::days(dplyr::if_else(count_last, 1L, 0L))
+        by = lubridate::days(as.integer(count_last))
       ))
 
   # Create the start dates of the months for the financial year

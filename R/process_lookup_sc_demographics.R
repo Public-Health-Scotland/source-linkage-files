@@ -67,19 +67,28 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
       ~ dplyr::if_else(stringr::str_detect(.x, uk_pc_regexp), .x, NA)
     )) %>%
     dplyr::select(
-      "latest_record_flag", "extract_date", "sending_location", "social_care_id", "upi", "gender",
-      "dob", "submitted_postcode", "chi_postcode"
+      "latest_record_flag",
+      "extract_date",
+      "sending_location",
+      "social_care_id",
+      "upi",
+      "gender",
+      "dob",
+      "submitted_postcode",
+      "chi_postcode"
     ) %>%
     # check if submitted_postcode matches with postcode lookup
-    dplyr::mutate(valid_pc = dplyr::if_else(.data$submitted_postcode %in% valid_spd_postcodes, 1L, 0L)) %>%
+    dplyr::mutate(
+      valid_pc = .data$submitted_postcode %in% valid_spd_postcodes
+    ) %>%
     # use submitted_postcode if valid, otherwise use chi_postcode
     dplyr::mutate(postcode = dplyr::case_when(
-      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1L) ~ .data$submitted_postcode,
-      (is.na(.data$submitted_postcode) & .data$valid_pc == 0L) ~ .data$chi_postcode
+      (!is.na(.data$submitted_postcode) & .data$valid_pc) ~ .data$submitted_postcode,
+      (is.na(.data$submitted_postcode) & !.data$valid_pc) ~ .data$chi_postcode
     )) %>%
     dplyr::mutate(postcode_type = dplyr::case_when(
-      (!is.na(.data$submitted_postcode) & .data$valid_pc == 1L) ~ "submitted",
-      (is.na(.data$submitted_postcode) & .data$valid_pc == 0L) ~ "chi",
+      (!is.na(.data$submitted_postcode) & .data$valid_pc) ~ "submitted",
+      (is.na(.data$submitted_postcode) & !.data$valid_pc) ~ "chi",
       (is.na(.data$submitted_postcode) & is.na(.data$chi_postcode)) ~ "missing"
     ))
 

@@ -271,21 +271,22 @@ correct_cij_vars <- function(data) {
       ),
       cij_pattype_code = dplyr::if_else(
         !is.na(.data$chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
-        dplyr::case_match(.data$cij_admtype,
-          c("41", "42") ~ 2,
-          c("40", "48", "99") ~ 9,
-          "18" ~ 0,
-          .default = .data$cij_pattype_code
+        dplyr::case_match(
+          .data$cij_admtype,
+          c("41", "42") ~ 2L,
+          c("40", "48", "99") ~ 9L,
+          "18" ~ 0L,
+          .default = as.integer(.data$cij_pattype_code)
         ),
         .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
       cij_pattype = dplyr::case_match(
         .data$cij_pattype_code,
-        0 ~ "Non-Elective",
-        1 ~ "Elective",
-        2 ~ "Maternity",
-        9 ~ "Other"
+        0L ~ "Non-Elective",
+        1L ~ "Elective",
+        2L ~ "Maternity",
+        9L ~ "Other"
       )
     )
 }
@@ -306,7 +307,7 @@ create_cost_inc_dna <- function(data) {
       # In the Cost_Total_Net column set the cost for
       # those with attendance status 5 or 8 (CNWs and DNAs)
       cost_total_net = dplyr::if_else(
-        .data$attendance_status %in% c(5, 8),
+        .data$attendance_status %in% c(5L, 8L),
         0.0,
         .data$cost_total_net
       )

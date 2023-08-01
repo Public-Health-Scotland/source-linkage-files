@@ -59,13 +59,13 @@ correct_demographics <- function(data, year) {
           `min`
         ) ~ chi_dob_min,
         # If they have a GLS record and the age is broadly correct, assume older
-        dplyr::between(chi_age_max, 50, 130) &
+        dplyr::between(chi_age_max, 50L, 130L) &
           recid == "GLS" ~ chi_dob_min,
-        # If a congenital defect lines up with a dob, assume it is correct
+        # If a congenital defect lines up with a DoB, assume it is correct
         chi_dob_max == congen_date ~ chi_dob_max,
         chi_dob_min == congen_date ~ chi_dob_min,
         # If being older makes them over 113, assume they are younger
-        chi_age_max > 113 ~ chi_dob_max
+        chi_age_max > 113L ~ chi_dob_max
       )
     ) %>%
     # If we still don't have an age, try and fill it in from other records.
@@ -74,7 +74,7 @@ correct_demographics <- function(data, year) {
     dplyr::ungroup() %>%
     # Fill in the ages for any that are left.
     dplyr::mutate(
-      age = compute_mid_year_age(year, .data$dob),
+      age = compute_mid_year_age(year, .data$dob)
     ) %>%
     # Fill in gender from CHI if it's missing.
     dplyr::mutate(
