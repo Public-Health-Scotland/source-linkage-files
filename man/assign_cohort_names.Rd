@@ -10,7 +10,8 @@ assign_cohort_names(data)
 \item{data}{A data frame}
 }
 \value{
-A data frame with an additional variable containing the assigned cohort
+A data frame with an additional variable containing the assigned
+cohort
 }
 \description{
 Assign service use cohort into string format
