@@ -64,6 +64,7 @@ produce_individual_file_tests <- function(data) {
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbrescode) %>%
     create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
+    create_hscp_test_flags(.data$hscp2018) %>%
     # keep variables for comparison
     dplyr::select("valid_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
