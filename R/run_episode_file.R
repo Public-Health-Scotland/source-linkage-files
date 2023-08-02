@@ -93,7 +93,9 @@ run_episode_file <- function(
         NA_character_,
         .data$chi
       ),
-      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
+      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]]),
+      # PC8 format may still be used. Ensure here that all datasets are in PC7 format.
+      postcode = phsmethods::format_postcode(.data$postcode, "pc7")
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
