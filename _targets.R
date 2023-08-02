@@ -314,12 +314,18 @@ list(
         year
       )
     ),
-    # TODO add tests for the Delayed Discharges extract
     tar_target(source_dd_extract, process_extract_delayed_discharges(
       dd_data,
       year,
       write_to_disk = write_to_disk
     )),
+    tar_target(
+      tests_source_dd_extract,
+      process_tests_delayed_discharges(
+        source_dd_extract,
+        year
+      )
+    ),
     tar_target(source_dn_extract, process_extract_district_nursing(
       dn_data,
       year,
