@@ -127,7 +127,7 @@ aggregate_by_chi <- function(episode_file) {
     .(
       preventable_beddays = ifelse(
         max(cij_ppa, na.rm = TRUE),
-        max(cij_end_date) - min(cij_start_date),
+        min(cij_end_date, end_fy(year)) - max(cij_start_date, start_fy(year)),
         NA_real_
       )
     ),
