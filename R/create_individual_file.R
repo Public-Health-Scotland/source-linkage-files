@@ -61,7 +61,7 @@ create_individual_file <- function(
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
-    aggregate_ch_episodes_zihao() %>%
+    aggregate_ch_episodes() %>%
     clean_up_ch(year) %>%
     recode_gender() %>%
     aggregate_by_chi() %>%
