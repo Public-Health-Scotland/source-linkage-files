@@ -1,5 +1,4 @@
 test_that("Records are flagged correctly", {
-
   test_frame <- tibble::tribble(
     ~postcode, ~gpprac,
     # Scottish resident
@@ -20,7 +19,8 @@ test_that("Records are flagged correctly", {
 
   test_frame_flagged <- flag_non_scottish_residents(test_frame)
 
-  expect_equal(test_frame_flagged$keep_flag,
-               c(0, 2, 2, 2, 3, 4, 1))
-
+  expect_equal(
+    test_frame_flagged$keep_flag,
+    c(0, 2, 2, 2, 3, 4, 1)
+  )
 })
