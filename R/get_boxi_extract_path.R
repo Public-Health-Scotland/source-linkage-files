@@ -35,20 +35,20 @@ get_boxi_extract_path <- function(
     return(get_dummy_boxi_extract_path())
   }
 
-  file_name <- dplyr::case_when(
-    type == "AE" ~ "A&E-episode-level-extract",
-    type == "AE_CUP" ~ "A&E-UCD-CUP-extract",
-    type == "Acute" ~ "Acute-episode-level-extract",
-    type == "CMH" ~ "Community-MH-contact-level-extract",
-    type == "DN" ~ "District-Nursing-contact-level-extract",
-    type == "GP_OoH-c" ~ "GP-OoH-consultations-extract",
-    type == "GP_OoH-d" ~ "GP-OoH-diagnosis-extract",
-    type == "GP_OoH-o" ~ "GP-OoH-outcomes-extract",
-    type == "Homelessness" ~ "Homelessness-extract",
-    type == "Maternity" ~ "Maternity-episode-level-extract",
-    type == "MH" ~ "Mental-Health-episode-level-extract",
-    type == "Deaths" ~ "NRS-death-registrations-extract",
-    type == "Outpatients" ~ "Outpatients-episode-level-extract"
+  file_name <- dplyr::case_match(type,
+    "AE" ~ "A&E-episode-level-extract",
+    "AE_CUP" ~ "A&E-UCD-CUP-extract",
+    "Acute" ~ "Acute-episode-level-extract",
+    "CMH" ~ "Community-MH-contact-level-extract",
+    "DN" ~ "District-Nursing-contact-level-extract",
+    "GP_OoH-c" ~ "GP-OoH-consultations-extract",
+    "GP_OoH-d" ~ "GP-OoH-diagnosis-extract",
+    "GP_OoH-o" ~ "GP-OoH-outcomes-extract",
+    "Homelessness" ~ "Homelessness-extract",
+    "Maternity" ~ "Maternity-episode-level-extract",
+    "MH" ~ "Mental-Health-episode-level-extract",
+    "Deaths" ~ "NRS-death-registrations-extract",
+    "Outpatients" ~ "Outpatients-episode-level-extract"
   )
 
   boxi_extract_path_csv_gz <- fs::path(

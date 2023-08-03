@@ -159,28 +159,30 @@ add_smr_type <- function(recid,
       recid == "HL1" & main_applicant_flag == "N" ~ "HL1-Other"
     )
   } else if (all(recid == "OoH")) {
-    smrtype <- dplyr::case_when(
-      consultation_type == "DISTRICT NURSE" ~ "OOH-DN",
-      consultation_type == "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
-      consultation_type == "HOME VISIT" ~ "OOH-HomeV",
-      consultation_type == "NHS 24 NURSE ADVICE" ~ "OOH-NHS24",
-      consultation_type == "PCEC/PCC" ~ "OOH-PCC",
-      consultation_type == "COVID19 ASSESSMENT" ~ "OOH-C19Ass",
-      consultation_type == "COVID19 ADVICE" ~ "OOH-C19Adv",
-      consultation_type == "COVID19 OTHER" ~ "OOH-C19Oth",
+    smrtype <- dplyr::case_match(
+      consultation_type,
+      "DISTRICT NURSE" ~ "OOH-DN",
+      "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
+      "HOME VISIT" ~ "OOH-HomeV",
+      "NHS 24 NURSE ADVICE" ~ "OOH-NHS24",
+      "PCEC/PCC" ~ "OOH-PCC",
+      "COVID19 ASSESSMENT" ~ "OOH-C19Ass",
+      "COVID19 ADVICE" ~ "OOH-C19Adv",
+      "COVID19 OTHER" ~ "OOH-C19Oth",
       .default = "OOH-Other"
     )
   } else {
     # Recids that can be recoded with no identifier
-    smrtype <- dplyr::case_when(
-      recid == "00B" ~ "Outpatient",
-      recid == "04B" ~ "Psych-IP",
-      recid == "AE2" ~ "A & E",
-      recid == "CH" ~ "Care-Home",
-      recid == "CMH" ~ "Comm-MH",
-      recid == "DN" ~ "DN",
-      recid == "NRS" ~ "NRS Deaths",
-      recid == "PIS" ~ "PIS"
+    smrtype <- dplyr::case_match(
+      recid,
+      "00B" ~ "Outpatient",
+      "04B" ~ "Psych-IP",
+      "AE2" ~ "A & E",
+      "CH" ~ "Care-Home",
+      "CMH" ~ "Comm-MH",
+      "DN" ~ "DN",
+      "NRS" ~ "NRS Deaths",
+      "PIS" ~ "PIS"
     )
   }
 
