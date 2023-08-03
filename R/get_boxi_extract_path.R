@@ -35,7 +35,8 @@ get_boxi_extract_path <- function(
     return(get_dummy_boxi_extract_path())
   }
 
-  file_name <- dplyr::case_match(type,
+  file_name <- dplyr::case_match(
+    type,
     "AE" ~ "A&E-episode-level-extract",
     "AE_CUP" ~ "A&E-UCD-CUP-extract",
     "Acute" ~ "Acute-episode-level-extract",

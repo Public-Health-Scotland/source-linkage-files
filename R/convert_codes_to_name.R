@@ -46,7 +46,8 @@ convert_hscp_to_hscpnames <- function(hscp) {
     "S37000032" ~ "Fife",
     "S37000033" ~ "Perth and Kinross",
     "S37000034" ~ "Glasgow City",
-    "S37000035" ~ "North Lanarkshire")
+    "S37000035" ~ "North Lanarkshire"
+  )
   return(hscpnames)
 }
 
