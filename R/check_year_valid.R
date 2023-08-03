@@ -38,11 +38,11 @@ check_year_valid <- function(
     return(FALSE)
   } else if (year <= "1617" && type %in% c("CH", "HC", "SDS", "AT")) {
     return(FALSE)
-  } else if (year <= "1718" && type %in% c("HHG")) {
+  } else if (year <= "1718" && type %in% "HHG") {
     return(FALSE)
   } else if (year >= "2122" && type %in% c("CMH", "DN")) {
     return(FALSE)
-  } else if (year >= "2223" && type %in% c("NSU")) {
+  } else if (year >= "2223" && type %in% "NSU") {
     return(FALSE)
   } else if (year >= "2324" && type %in% c("SPARRA", "HHG")) {
     return(FALSE)

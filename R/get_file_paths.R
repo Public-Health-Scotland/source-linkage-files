@@ -72,7 +72,7 @@ find the latest file with {.arg file_name_regexp}",
     }
 
     if (!fs::file_exists(file_path) && check_mode != "exists") {
-      if (is.null(create) && check_mode == "write" |
+      if (is.null(create) && check_mode == "write" ||
         !is.null(create) && create == TRUE) {
         # The file doesn't exist but we do want to create it
         fs::file_create(file_path)

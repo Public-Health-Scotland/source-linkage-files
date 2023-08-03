@@ -37,7 +37,7 @@ write_file <- function(data, path, ...) {
       sink = path,
       compression = "zstd",
       version = "latest",
-      ...,
+      ...
     )
   )
 

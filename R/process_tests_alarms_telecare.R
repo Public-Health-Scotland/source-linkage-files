@@ -37,8 +37,8 @@ produce_source_at_tests <- function(data,
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
-      n_at_alarms = dplyr::if_else(.data$smrtype == "AT-Alarm", 1L, 0L),
-      n_at_telecare = dplyr::if_else(.data$smrtype == "AT-Tele", 1L, 0L)
+      n_at_alarms = .data$smrtype == "AT-Alarm",
+      n_at_telecare = .data$smrtype == "AT-Tele"
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed

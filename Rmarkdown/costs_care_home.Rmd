@@ -22,23 +22,28 @@ fs::file_copy(get_ch_costs_path(),
 )
 
 ## Read costs from the CHC Open data
-ch_costs_data <-
-  phsopendata::get_resource(
-    res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
-    col_select = c("Date", "KeyStatistic", "CA", "Value")
-  ) %>%
+ch_costs_data <- phsopendata::get_resource(
+  res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
+  col_select = c("Date", "KeyStatistic", "CA", "Value")
+) %>%
   janitor::clean_names() %>%
   # Dates are at end of the fin year
   # so cost are for the fin year to that date.
-  mutate(year = createslf::convert_year_to_fyyear((date %/% 10000) - 1)) %>%
+  mutate(year = createslf::convert_year_to_fyyear((date %/% 10000L) - 1L)) %>%
   filter(year >= "1617") %>%
-  mutate(funding_source = stringr::str_extract(key_statistic, "((:?All)|(:?Self)|(:?Publicly))")) %>%
-  mutate(nursing_care_provision = if_else(stringr::str_detect(key_statistic, "Without"), 1, 0)) %>%
-  select(year,
-    ca,
-    funding_source,
-    nursing_care_provision,
-    cost_per_week = value
+  mutate(funding_source = stringr::str_extract(
+    string = key_statistic,
+    pattern = "((:?All)|(:?Self)|(:?Publicly))"
+  )) %>%
+  mutate(
+    nursing_care_provision = as.integer(stringr::str_detect(key_statistic, "Without"))
+  ) %>%
+  select(
+    "year",
+    "ca",
+    "funding_source",
+    "nursing_care_provision",
+    cost_per_week = "value"
   )
 
 
@@ -105,7 +110,7 @@ matched_costs_data <-
   # match to new costs
   full_join(old_costs, by = c("year", "nursing_care_provision")) %>%
   # compute difference
-  mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100)
+  mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100.0)
 
 summary(matched_costs_data$pct_diff)
 

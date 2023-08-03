@@ -93,7 +93,9 @@ run_episode_file <- function(
         NA_character_,
         .data$chi
       ),
-      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
+      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]]),
+      # PC8 format may still be used. Ensure here that all datasets are in PC7 format.
+      postcode = phsmethods::format_postcode(.data$postcode, "pc7")
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
@@ -110,11 +112,7 @@ run_episode_file <- function(
     load_ep_file_vars(year)
 
   if (anon_chi_out) {
-    # TODO When slfhelper is updated remove the unnecessary code
-    episode_file <- episode_file %>%
-      tidyr::replace_na(list(chi = "")) %>%
-      slfhelper::get_anon_chi() %>%
-      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
+    episode_file <- slfhelper::get_anon_chi(episode_file)
   }
 
   if (write_to_disk) {
@@ -275,21 +273,22 @@ correct_cij_vars <- function(data) {
       ),
       cij_pattype_code = dplyr::if_else(
         !is.na(.data$chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
-        dplyr::case_match(.data$cij_admtype,
-          c("41", "42") ~ 2,
-          c("40", "48", "99") ~ 9,
-          "18" ~ 0,
-          .default = .data$cij_pattype_code
+        dplyr::case_match(
+          .data$cij_admtype,
+          c("41", "42") ~ 2L,
+          c("40", "48", "99") ~ 9L,
+          "18" ~ 0L,
+          .default = as.integer(.data$cij_pattype_code)
         ),
         .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
       cij_pattype = dplyr::case_match(
         .data$cij_pattype_code,
-        0 ~ "Non-Elective",
-        1 ~ "Elective",
-        2 ~ "Maternity",
-        9 ~ "Other"
+        0L ~ "Non-Elective",
+        1L ~ "Elective",
+        2L ~ "Maternity",
+        9L ~ "Other"
       )
     )
 }
@@ -310,7 +309,7 @@ create_cost_inc_dna <- function(data) {
       # In the Cost_Total_Net column set the cost for
       # those with attendance status 5 or 8 (CNWs and DNAs)
       cost_total_net = dplyr::if_else(
-        .data$attendance_status %in% c(5, 8),
+        .data$attendance_status %in% c(5L, 8L),
         0.0,
         .data$cost_total_net
       )
