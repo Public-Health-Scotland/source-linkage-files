@@ -43,7 +43,7 @@ process_extract_homelessness <- function(
     ) %>%
     dplyr::mutate(
       dplyr::across(
-        c("financial_difficulties_debt_unemployment":"refused"),
+        "financial_difficulties_debt_unemployment":"refused",
         ~ tidyr::replace_na(.x, 9L)
       ),
       hl1_reason_ftm = paste0(

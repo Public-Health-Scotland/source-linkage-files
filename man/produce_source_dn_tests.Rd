@@ -35,9 +35,8 @@ It will also produce various summary statistics for bedday, cost and
 episode date variables.
 }
 \seealso{
-\code{\link[=create_hb_test_flags]{create_hb_test_flags()}}
-#' \code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}} and \code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}}
-for creating test flags
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}}, \code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}}
+and \code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}} for creating test flags.
 
 calculate_measures
 

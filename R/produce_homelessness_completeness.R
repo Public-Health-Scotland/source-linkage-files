@@ -41,18 +41,18 @@ produce_homelessness_completeness <- function(
     openxlsx::read.xlsx(
       sg_pub_path,
       sheet = "Table 1",
-      rows = 8:39,
-      cols = 1:25,
+      rows = 8L:39L,
+      cols = 1L:25L,
       colNames = FALSE
     ) %>%
     dplyr::rename_with(~ c(
       "CAName",
-      paste0(paste0("q", 1:4), "_", rep(2016, 4)),
-      paste0(paste0("q", 1:4), "_", rep(2017, 4)),
-      paste0(paste0("q", 1:4), "_", rep(2018, 4)),
-      paste0(paste0("q", 1:4), "_", rep(2019, 4)),
-      paste0(paste0("q", 1:4), "_", rep(2020, 4)),
-      paste0(paste0("q", 1:4), "_", rep(2021, 4))
+      paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L))
     )) %>%
     tidyr::pivot_longer(
       !"CAName",

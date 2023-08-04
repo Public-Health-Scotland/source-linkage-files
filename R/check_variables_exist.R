@@ -24,10 +24,8 @@ check_variables_exist <- function(data, variables) {
   } else {
     missing_variables <- variables[which(!variables_present)]
 
-    n_missing <- length(missing_variables)
-
     cli::cli_abort(
-      "{cli::qty(n_missing)}Variable{?s} {.val {missing_variables}} {?is/are}
+      "{cli::qty(length(missing_variables))}Variable{?s} {.val {missing_variables}} {?is/are}
       required, but {?is/are} missing from {.arg data}."
     )
   }

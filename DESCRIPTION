@@ -50,7 +50,7 @@ Imports:
     rmarkdown (>= 2.17),
     rstudioapi (>= 0.14),
     scales (>= 1.2.0),
-    slfhelper (>= 0.9.0),
+    slfhelper (>= 0.10.0),
     stringdist (>= 0.9.10),
     stringr (>= 1.5.0),
     tibble (>= 3.2.1),

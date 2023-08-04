@@ -7,7 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi_zihao <- function(episode_file) {
+aggregate_by_chi <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   # Convert to data.table
@@ -90,9 +90,9 @@ aggregate_by_chi_zihao <- function(episode_file) {
     ),
     "health_net_cost_inc_dnas"
   )
-  cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
+  cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
   # columns to select maximum
-  cols5 <- c("nsu", vars_contain(episode_file, c("hl1_in_fy")))
+  cols5 <- c("nsu", vars_contain(episode_file, "hl1_in_fy"))
   data.table::setnafill(episode_file, fill = 0L, cols = cols5)
   # compute
   individual_file_cols1 <- episode_file[,
@@ -155,8 +155,13 @@ aggregate_by_chi_zihao <- function(episode_file) {
 }
 
 
-#' select columns ending with some patterns
-#' @describeIn select columns based on patterns
+#' Select columns according to a pattern
+#'
+#' @describeIn vars_select Choose variables ending in a given pattern.
+#'
+#' @param data The data from which to select columns/variables.
+#' @param vars The variables / pattern to find, as a character vector
+#' @param ignore_case Should case be ignored (Default: FALSE)
 vars_end_with <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_ends(
     names(data),
@@ -166,8 +171,7 @@ vars_end_with <- function(data, vars, ignore_case = FALSE) {
   )]
 }
 
-#' select columns starting with some patterns
-#' @describeIn select columns based on patterns
+#' @describeIn vars_select Choose variables starting with a given pattern.
 vars_start_with <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_starts(
     names(data),
@@ -177,23 +181,22 @@ vars_start_with <- function(data, vars, ignore_case = FALSE) {
   )]
 }
 
-#' select columns contains some characters
-#' @describeIn select columns based on patterns
+#' @describeIn vars_select Choose variables which contain a given pattern.
 vars_contain <- function(data, vars, ignore_case = FALSE) {
-  names(data)[stringr::str_detect(
+  stringr::str_subset(
     names(data),
     stringr::regex(paste(vars, collapse = "|"),
       ignore_case = ignore_case
     )
-  )]
+  )
 }
 
-#' Aggregate CIS episodes
+#' Aggregate Care Home episodes to ch_cis
 #'
 #' @description Aggregate CH variables by CHI and CIS.
 #'
 #' @inheritParams create_individual_file
-aggregate_ch_episodes_zihao <- function(episode_file) {
+aggregate_ch_episodes <- function(episode_file) {
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
   # Convert to data.table

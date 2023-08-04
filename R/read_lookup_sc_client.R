@@ -3,13 +3,14 @@
 #' @description This will read and process the
 #' social care client lookup
 #'
-#' @param sc_dvprod_connection The connection to the SC platform.
 #' @param fyyear The year to process, in the standard format '1718'
+#' @param sc_dvprod_connection The connection to the SC platform.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-read_lookup_sc_client <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"), fyyear) {
+read_lookup_sc_client <- function(fyyear,
+                                  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
