@@ -111,9 +111,9 @@ add_hri_variables <- function(data,
     dplyr::ungroup() %>%
     # Add HRI flags
     dplyr::mutate(
-      hri_scot = hri_scotp <= 50L,
-      hri_hb = hri_hbp <= 50L,
-      hri_lca = hri_lcap <= 50L,
+      hri_scot = hri_scotp <= 50.0,
+      hri_hb = hri_hbp <= 50.0,
+      hri_lca = hri_lcap <= 50.0,
       # Deal with potential missing variables
       hri_hb = dplyr::if_else(is_missing(hbrescode), FALSE, hri_hb),
       hri_hbp = dplyr::if_else(is_missing(hbrescode), NA, hri_hbp),
