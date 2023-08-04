@@ -1,0 +1,63 @@
+#' Social care client lookup tests
+#'
+#' @description This script takes the processed processd social care client lookup and
+#' produces a test comparison with the previous data. This is written to
+#' disk as a CSV.
+#'
+#' @inherit process_tests_acute
+#'
+#' @export
+process_tests_sc_client_lookup <- function(data, year) {
+  old_data <- get_existing_data_for_tests(data)
+
+  comparison <- produce_test_comparison(
+    old_data = produce_tests_sc_client_lookup(old_data),
+    new_data = produce_tests_sc_client_lookup(data)
+  )
+
+  comparison %>%
+    write_tests_xlsx(sheet_name = "sc_client_lookup", year)
+
+  return(comparison)
+}
+
+
+#' Social care Client lookup Tests
+#'
+#' @description Produce the test for the social care Client all episodes
+#'
+#' @param data new or old data for testing summary flags
+#' (data is from [get_source_extract_path()])
+#' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
+#' @return a dataframe with a count of each flag.
+#'
+#' @family social care test functions
+produce_tests_sc_client_lookup <- function(data) {
+
+  test_flags <- data %>%
+    # create test flags
+    dplyr::mutate(
+      n_sc_living_alone_yes = .data$sc_living_alone == "Yes",
+      n_sc_living_alone_no = .data$sc_living_alone == "No",
+      n_sc_living_alone_not_known = .data$sc_living_alone == "Not Known",
+      n_sc_support_from_unpaid_carer_yes = .data$sc_support_from_unpaid_carer == "Yes",
+      n_sc_support_from_unpaid_carer_no = .data$sc_support_from_unpaid_carer == "No",
+      n_sc_support_from_unpaid_carer_not_known = .data$sc_support_from_unpaid_carer == "Not Known",
+      n_sc_social_worker_yes = .data$sc_social_worker == "Yes",
+      n_sc_social_worker_no = .data$sc_social_worker == "No",
+      n_sc_social_worker_not_known = .data$sc_social_worker == "Not Known",
+      n_sc_meals_yes = .data$sc_meals == "Yes",
+      n_sc_meals_no = .data$sc_meals == "No",
+      n_sc_meals_not_known = .data$sc_meals == "Not Known",
+      n_sc_day_care_yes = .data$sc_day_care == "Yes",
+      n_sc_day_care_no = .data$sc_day_care == "No",
+      n_sc_day_care_not_known = .data$sc_day_care == "Not Known",
+    ) %>%
+    # remove variables that won't be summed
+    dplyr::select(.data$n_sc_living_alone_yes:.data$n_sc_day_care_not_known) %>%
+    # use function to sum new test flags
+    calculate_measures(measure = "sum")
+
+  return(test_flags)
+}
+
