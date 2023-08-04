@@ -42,7 +42,7 @@ flag_non_scottish_residents <- function(data,
         (is_missing(.data$postcode) | .data$dummy_postcode) & is.na(.data$gpprac) ~ 2L,
         !.data$eng_prac & is_missing(.data$postcode) ~ 3L,
         !.data$eng_prac & .data$dummy_postcode ~ 4L,
-        TRUE ~ 1L
+        .default = 1L
       )
     ) %>%
     dplyr::select(-"dummy_postcode", -"eng_prac")
