@@ -33,7 +33,6 @@ process_tests_sc_client_lookup <- function(data, year) {
 #'
 #' @family social care test functions
 produce_tests_sc_client_lookup <- function(data) {
-
   test_flags <- data %>%
     # create test flags
     create_sending_location_test_flags(.data$sending_location) %>%
@@ -62,4 +61,3 @@ produce_tests_sc_client_lookup <- function(data) {
 
   return(test_flags)
 }
-

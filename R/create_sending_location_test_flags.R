@@ -22,7 +22,7 @@ create_sending_location_test_flags <- function(data, sending_location_var) {
       East_Dunbartonshire = {{ sending_location_var }} == 200L,
       East_Lothian = {{ sending_location_var }} == 210L,
       East_Renfrewshire = {{ sending_location_var }} == 220L,
-      Falkirk = {{ sending_location_var }} ==240L,
+      Falkirk = {{ sending_location_var }} == 240L,
       Fife = {{ sending_location_var }} == 250L,
       Glasgow_City = {{ sending_location_var }} == 260L,
       Highland = {{ sending_location_var }} == 270L,
@@ -46,4 +46,3 @@ create_sending_location_test_flags <- function(data, sending_location_var) {
 
   return(data)
 }
-
