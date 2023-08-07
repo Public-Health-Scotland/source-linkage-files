@@ -56,7 +56,7 @@ produce_tests_sc_client_lookup <- function(data) {
       n_sc_day_care_not_known = .data$sc_day_care == "Not Known",
     ) %>%
     # remove variables that won't be summed
-    dplyr::select(.data$Aberdeen_City:.data$n_sc_day_care_not_known) %>%
+    dplyr::select("Aberdeen_City":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
