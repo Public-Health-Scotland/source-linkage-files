@@ -10,18 +10,17 @@
 #' }
 #' The intention is to only keep the records where keep_flag = 0
 #'
-#' @param data A data frame, usually an SLF Individual File
-#' @param slf_pc_lookup_path The path to the Source postcode lookup, defaults
-#' to [get_slf_postcode_path()]
+#' @inheritParams add_hri_variables
 #'
 #' @return A data frame with the variable 'keep_flag'
-flag_non_scottish_residents <- function(data,
-                                        slf_pc_lookup_path = get_slf_postcode_path()) {
+flag_non_scottish_residents <- function(
+    data,
+    slf_pc_lookup) {
   check_variables_exist(data, c("postcode", "gpprac"))
 
   # Make a lookup of postcode areas, which consist of the first characters
   # of the postcode
-  pc_areas <- arrow::read_parquet(slf_pc_lookup_path) %>%
+  pc_areas <- slf_pc_lookup %>%
     dplyr::mutate(
       pc_area = stringr::str_match(postcode, "^[A-Z]{1,3}"),
       scot_flag = 0L
@@ -56,13 +55,20 @@ flag_non_scottish_residents <- function(data,
 #' creates a lookup where HRIs are calculated at Scotland, Health Board, and
 #' LCA level. Then joins on this lookup by chi/anon_chi.
 #'
-#' @param data An SLF individual file
-#' @param chi_variable Defaults to "anon_chi"
+#' @param data An SLF individual file.
+#' @param chi_variable Defaults to "anon_chi".
+#' @param slf_pc_lookup The Source postcode lookup, defaults
+#' to [get_slf_postcode_path()] read using [read_file()].
 #'
 #' @return The individual file with HRI variables matched on
 #' @export
-add_hri_variables <- function(data,
-                              chi_variable = "anon_chi") {
+add_hri_variables <- function(
+    data,
+    chi_variable = "anon_chi",
+    slf_pc_lookup = read_file(
+      get_slf_postcode_path(),
+      col_select = "postcode"
+    )) {
   hri_lookup <- data %>%
     dplyr::select(
       "year",
@@ -82,7 +88,7 @@ add_hri_variables <- function(data,
       "pis_paid_items",
       "ooh_cases"
     ) %>%
-    flag_non_scottish_residents() %>%
+    flag_non_scottish_residents(slf_pc_lookup = slf_pc_lookup) %>%
     dplyr::filter(keep_flag == 0L) %>%
     # Scotland cost and proportion
     dplyr::mutate(

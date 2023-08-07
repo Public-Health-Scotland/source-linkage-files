@@ -4,12 +4,19 @@
 \alias{add_hri_variables}
 \title{Add HRI variables to an SLF Individual File}
 \usage{
-add_hri_variables(data, chi_variable = "anon_chi")
+add_hri_variables(
+  data,
+  chi_variable = "anon_chi",
+  slf_pc_lookup = read_file(get_slf_postcode_path(), col_select = "postcode")
+)
 }
 \arguments{
-\item{data}{An SLF individual file}
+\item{data}{An SLF individual file.}
 
-\item{chi_variable}{Defaults to "anon_chi"}
+\item{chi_variable}{Defaults to "anon_chi".}
+
+\item{slf_pc_lookup}{The Source postcode lookup, defaults
+to \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}} read using \code{\link[=read_file]{read_file()}}.}
 }
 \value{
 The individual file with HRI variables matched on

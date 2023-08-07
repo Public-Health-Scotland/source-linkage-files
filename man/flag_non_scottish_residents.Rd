@@ -4,13 +4,13 @@
 \alias{flag_non_scottish_residents}
 \title{Flag non-Scottish residents}
 \usage{
-flag_non_scottish_residents(data, slf_pc_lookup_path = get_slf_postcode_path())
+flag_non_scottish_residents(data, slf_pc_lookup)
 }
 \arguments{
-\item{data}{A data frame, usually an SLF Individual File}
+\item{data}{An SLF individual file.}
 
-\item{slf_pc_lookup_path}{The path to the Source postcode lookup, defaults
-to \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}}
+\item{slf_pc_lookup}{The Source postcode lookup, defaults
+to \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}} read using \code{\link[=read_file]{read_file()}}.}
 }
 \value{
 A data frame with the variable 'keep_flag'
