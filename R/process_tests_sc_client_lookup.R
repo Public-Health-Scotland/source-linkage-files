@@ -36,7 +36,9 @@ produce_tests_sc_client_lookup <- function(data) {
 
   test_flags <- data %>%
     # create test flags
+    create_sending_location_test_flags(.data$sending_location) %>%
     dplyr::mutate(
+      unique_sc_id = dplyr::lag(.data$social_care_id) != .data$social_care_id,
       n_sc_living_alone_yes = .data$sc_living_alone == "Yes",
       n_sc_living_alone_no = .data$sc_living_alone == "No",
       n_sc_living_alone_not_known = .data$sc_living_alone == "Not Known",
@@ -54,7 +56,7 @@ produce_tests_sc_client_lookup <- function(data) {
       n_sc_day_care_not_known = .data$sc_day_care == "Not Known",
     ) %>%
     # remove variables that won't be summed
-    dplyr::select(.data$n_sc_living_alone_yes:.data$n_sc_day_care_not_known) %>%
+    dplyr::select(.data$Aberdeen_City:.data$n_sc_day_care_not_known) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
