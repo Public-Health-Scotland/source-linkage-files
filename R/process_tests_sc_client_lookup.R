@@ -1,6 +1,6 @@
 #' Social care client lookup tests
 #'
-#' @description This script takes the processed processd social care client lookup and
+#' @description This script takes the processed social care client lookup and
 #' produces a test comparison with the previous data. This is written to
 #' disk as a CSV.
 #'
