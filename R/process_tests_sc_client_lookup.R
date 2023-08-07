@@ -36,6 +36,7 @@ produce_tests_sc_client_lookup <- function(data) {
   test_flags <- data %>%
     # create test flags
     create_sending_location_test_flags(.data$sending_location) %>%
+    dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
     dplyr::mutate(
       unique_sc_id = dplyr::lag(.data$social_care_id) != .data$social_care_id,
       n_sc_living_alone_yes = .data$sc_living_alone == "Yes",
