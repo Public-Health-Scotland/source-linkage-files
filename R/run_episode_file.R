@@ -116,14 +116,8 @@ run_episode_file <- function(
   }
 
   if (write_to_disk) {
-    # TODO make the slf_path a function
-    slf_episode_path <- get_file_path(
-      get_year_dir(year),
-      stringr::str_glue(
-        "source-episode-file-{year}.parquet"
-      ),
-      check_mode = "write"
-    )
+
+    slf_episode_path <- get_slf_episode_path(year)
 
     write_file(episode_file, slf_episode_path)
   }

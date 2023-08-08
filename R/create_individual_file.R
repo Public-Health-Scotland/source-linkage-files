@@ -82,13 +82,7 @@ create_individual_file <- function(
   }
 
   if (write_to_disk) {
-    slf_indiv_path <- get_file_path(
-      get_year_dir(year),
-      stringr::str_glue(
-        "source-individual-file-{year}.parquet"
-      ),
-      check_mode = "write"
-    )
+    slf_indiv_path <- get_slf_individual_path(year)
 
     write_file(individual_file, slf_indiv_path)
   }
