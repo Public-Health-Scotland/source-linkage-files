@@ -61,7 +61,7 @@ create_individual_file <- function(
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns() %>%
-    aggregate_ch_episodes_zihao() %>%
+    aggregate_ch_episodes() %>%
     clean_up_ch(year) %>%
     recode_gender() %>%
     aggregate_by_chi() %>%
@@ -704,11 +704,13 @@ join_slf_lookup_vars <- function(individual_file,
   individual_file <- individual_file %>%
     dplyr::left_join(
       slf_postcode_lookup,
-      by = "postcode"
+      by = "postcode",
+      relationship = "one-to-one"
     ) %>%
     dplyr::left_join(
       slf_gpprac_lookup,
-      by = "gpprac"
+      by = "gpprac",
+      relationship = "one-to-one"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
 
@@ -740,14 +742,20 @@ join_sc_client <- function(
     dplyr::left_join(
       sc_demographics %>%
         dplyr::select("sending_location", "social_care_id", "chi"),
-      by = c("sending_location", "social_care_id")
-    )
+      by = c("sending_location", "social_care_id"),
+      relationship = "one-to-one"
+    ) %>%
+    mutate(count_not_known = apply(join_client_demog, 1, function(row)
+      sum(row == "Not Known"))) %>%
+    dplyr::arrange(chi, count_not_known) %>%
+    distinct(chi, .keep_all = TRUE)
 
   # Match on client variables by chi
   individual_file <- individual_file %>%
     dplyr::left_join(
       join_client_demog,
-      by = "chi"
+      by = "chi",
+      relationship = "one-to-one"
     ) %>%
     dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
 
