@@ -745,8 +745,9 @@ join_sc_client <- function(
       by = c("sending_location", "social_care_id"),
       relationship = "one-to-one"
     ) %>%
-    mutate(count_not_known = apply(join_client_demog, 1, function(row)
-      sum(row == "Not Known"))) %>%
+    mutate(count_not_known = apply(join_client_demog, 1, function(row) {
+      sum(row == "Not Known")
+    })) %>%
     dplyr::arrange(chi, count_not_known) %>%
     distinct(chi, .keep_all = TRUE)
 
