@@ -116,7 +116,6 @@ run_episode_file <- function(
   }
 
   if (write_to_disk) {
-
     slf_episode_path <- get_slf_episode_path(year)
 
     write_file(episode_file, slf_episode_path)
