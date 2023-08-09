@@ -10,27 +10,34 @@
 #' @export
 #'
 #' @family extract file paths
-get_source_extract_path <- function(year,
-                                    type = c(
-                                      "Acute",
-                                      "AE",
-                                      "AT",
-                                      "CH",
-                                      "Client",
-                                      "CMH",
-                                      "DD",
-                                      "Deaths",
-                                      "DN",
-                                      "GPOoH",
-                                      "HC",
-                                      "Homelessness",
-                                      "Maternity",
-                                      "MH",
-                                      "Outpatients",
-                                      "PIS",
-                                      "SDS"
-                                    ),
-                                    ...) {
+get_source_extract_path <- function(
+    year,
+    type = c(
+      "Acute",
+      "AE",
+      "AT",
+      "CH",
+      "Client",
+      "CMH",
+      "DD",
+      "Deaths",
+      "DN",
+      "GPOoH",
+      "HC",
+      "Homelessness",
+      "Maternity",
+      "MH",
+      "Outpatients",
+      "PIS",
+      "SDS"
+    ),
+    ...) {
+  if (year %in% type) {
+    cli::cli_abort("{.val {year}} was supplied to the {.arg year} argument.")
+  }
+
+  year <- check_year_format(year)
+
   type <- match.arg(type)
 
   if (!check_year_valid(year, type)) {
