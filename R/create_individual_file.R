@@ -704,13 +704,11 @@ join_slf_lookup_vars <- function(individual_file,
   individual_file <- individual_file %>%
     dplyr::left_join(
       slf_postcode_lookup,
-      by = "postcode",
-      relationship = "one-to-one"
+      by = "postcode"
     ) %>%
     dplyr::left_join(
       slf_gpprac_lookup,
-      by = "gpprac",
-      relationship = "one-to-one"
+      by = "gpprac"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
 
@@ -742,12 +740,17 @@ join_sc_client <- function(
     dplyr::left_join(
       sc_demographics %>%
         dplyr::select("sending_location", "social_care_id", "chi"),
-      by = c("sending_location", "social_care_id"),
-      relationship = "one-to-one"
+      by = c("sending_location", "social_care_id")
     ) %>%
-    dplyr::mutate(count_not_known = apply(join_client_demog, 1, function(row) {
-      sum(row == "Not Known")
-    })) %>%
+    dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
+      c(
+        "sc_living_alone",
+        "sc_support_from_unpaid_carer",
+        "sc_social_worker",
+        "sc_meals",
+        "sc_day_care"
+      )
+    )) == "Not Known")) %>%
     dplyr::arrange(chi, count_not_known) %>%
     dplyr::distinct(chi, .keep_all = TRUE)
 
