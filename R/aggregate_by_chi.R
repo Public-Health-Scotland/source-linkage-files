@@ -203,11 +203,11 @@ aggregate_ch_episodes <- function(episode_file) {
   data.table::setDT(episode_file)
 
   # Perform grouping and aggregation
-  episode_file <- episode_file[, `:=`(
-    ch_no_cost = max(ch_no_cost),
-    ch_ep_start = min(record_keydate1),
-    ch_ep_end = max(ch_ep_end),
-    ch_cost_per_day = mean(ch_cost_per_day)
+  episode_file[, c(
+    ch_no_cost := max(ch_no_cost),
+    ch_ep_start := min(record_keydate1),
+    ch_ep_end := max(ch_ep_end),
+    ch_cost_per_day := mean(ch_cost_per_day)
   ), by = c("chi", "ch_chi_cis")]
 
   # Convert back to tibble if needed
