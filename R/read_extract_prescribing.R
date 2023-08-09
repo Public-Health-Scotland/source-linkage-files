@@ -5,14 +5,14 @@
 #' @export
 read_extract_prescribing <- function(year, file_path = get_it_prescribing_path(year)) {
   pis_file <- read_file(file_path,
-    col_type = cols_only(
-      "Pat UPI [C]" = col_character(),
-      "Pat DoB [C]" = col_date(format = "%d-%m-%Y"),
-      "Pat Gender" = col_double(),
-      "Pat Postcode [C]" = col_character(),
-      "Practice Code" = col_character(),
-      "Number of Paid Items" = col_double(),
-      "PD Paid GIC excl. BB" = col_double()
+    col_type = readr::cols_only(
+      "Pat UPI [C]" = readr::col_character(),
+      "Pat DoB [C]" = readr::col_date(format = "%d-%m-%Y"),
+      "Pat Gender" = readr::col_double(),
+      "Pat Postcode [C]" = readr::col_character(),
+      "Practice Code" = readr::col_character(),
+      "Number of Paid Items" = readr::col_double(),
+      "PD Paid GIC excl. BB" = readr::col_double()
     )
   ) %>%
     # Rename variables

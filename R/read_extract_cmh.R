@@ -13,24 +13,24 @@ read_extract_cmh <- function(
 
   # Read BOXI extract
   extract_cmh <- read_file(file_path,
-    col_types = cols_only(
-      "UPI Number [C]" = col_character(),
-      "Patient DoB Date [C]" = col_date(format = "%Y/%m/%d %T"),
-      "Gender" = col_double(),
-      "Patient Postcode [C]" = col_character(),
-      "NHS Board of Residence Code 9" = col_character(),
-      "Patient HSCP Code - current" = col_character(),
-      "Practice Code" = col_integer(),
-      "Treatment NHS Board Code 9" = col_character(),
-      "Contact Date" = col_date(format = "%Y/%m/%d %T"),
-      "Contact Start Time" = col_time(format = "%T"),
-      "Duration of Contact" = col_integer(),
-      "Location of Contact" = col_character(),
-      "Main Aim of Contact" = col_character(),
-      "Other Aim of Contact (1)" = col_character(),
-      "Other Aim of Contact (2)" = col_character(),
-      "Other Aim of Contact (3)" = col_character(),
-      "Other Aim of Contact (4)" = col_character()
+    col_types = readr::cols_only(
+      "UPI Number [C]" = readr::col_character(),
+      "Patient DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Gender" = readr::col_double(),
+      "Patient Postcode [C]" = readr::col_character(),
+      "NHS Board of Residence Code 9" = readr::col_character(),
+      "Patient HSCP Code - current" = readr::col_character(),
+      "Practice Code" = readr::col_integer(),
+      "Treatment NHS Board Code 9" = readr::col_character(),
+      "Contact Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Contact Start Time" = readr::col_time(format = "%T"),
+      "Duration of Contact" = readr::col_integer(),
+      "Location of Contact" = readr::col_character(),
+      "Main Aim of Contact" = readr::col_character(),
+      "Other Aim of Contact (1)" = readr::col_character(),
+      "Other Aim of Contact (2)" = readr::col_character(),
+      "Other Aim of Contact (3)" = readr::col_character(),
+      "Other Aim of Contact (4)" = readr::col_character()
     )
   ) %>%
     # rename
