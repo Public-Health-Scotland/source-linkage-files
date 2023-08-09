@@ -100,9 +100,11 @@ produce_individual_file_tests <- function(data) {
       measure = "sum"
     )
 
-  dup_chi <- data.frame(measure = "duplicated chi number",
-                        value = duplicated(data$chi) %>%
-                          sum() %>% as.integer())
+  dup_chi <- data.frame(
+    measure = "duplicated chi number",
+    value = duplicated(data$chi) %>%
+      sum() %>% as.integer()
+  )
 
   join_output <- list(
     test_flags,
