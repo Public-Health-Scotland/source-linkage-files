@@ -143,7 +143,7 @@ process_extract_care_home <- function(
   if (write_to_disk) {
     write_file(
       ch_processed,
-      get_source_extract_path(year, type = "CH", check_mode = "write")
+      get_source_extract_path(year, type = "ch", check_mode = "write")
     )
   }
 

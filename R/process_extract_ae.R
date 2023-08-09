@@ -192,7 +192,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   # Read in data---------------------------------------
 
   ae_cup_file <- read_file(
-    path = get_boxi_extract_path(year, "AE_CUP"),
+    path = get_boxi_extract_path(year, "ae_cup"),
     col_type = cols(
       "ED Arrival Date" = col_date(format = "%Y/%m/%d %T"),
       "ED Arrival Time" = col_time(""),
@@ -296,7 +296,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     # Save as rds file
     outfile %>%
-      write_file(get_source_extract_path(year, "AE", check_mode = "write"))
+      write_file(get_source_extract_path(year, "ae", check_mode = "write"))
   }
 
   return(outfile)

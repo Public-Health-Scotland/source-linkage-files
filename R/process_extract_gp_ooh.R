@@ -127,7 +127,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     final_data %>%
-      write_file(get_source_extract_path(year, "GPOoH", check_mode = "write"))
+      write_file(get_source_extract_path(year, "gp_ooh", check_mode = "write"))
   }
 
   return(final_data)

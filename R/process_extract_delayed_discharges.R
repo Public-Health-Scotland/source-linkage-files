@@ -110,7 +110,7 @@ process_extract_delayed_discharges <- function(
   if (write_to_disk) {
     write_file(
       dd_final,
-      get_source_extract_path(year, "DD", check_mode = "write")
+      get_source_extract_path(year, "dd", check_mode = "write")
     )
   }
 

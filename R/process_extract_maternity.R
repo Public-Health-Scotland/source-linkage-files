@@ -116,7 +116,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     # Save as rds file
     outfile %>%
       write_file(
-        get_source_extract_path(year, "Maternity", check_mode = "write")
+        get_source_extract_path(year, "maternity", check_mode = "write")
       )
   }
 

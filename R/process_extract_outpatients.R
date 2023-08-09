@@ -92,7 +92,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
     # Save as rds file
     outfile %>%
       write_file(
-        get_source_extract_path(year, "Outpatients", check_mode = "write")
+        get_source_extract_path(year, "outpatients", check_mode = "write")
       )
   }
 

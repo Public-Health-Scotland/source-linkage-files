@@ -728,7 +728,7 @@ join_slf_lookup_vars <- function(individual_file,
 join_sc_client <- function(
     individual_file,
     year,
-    sc_client = read_file(get_source_extract_path(year, "Client")),
+    sc_client = read_file(get_source_extract_path(year, "client")),
     sc_demographics = read_file(get_sc_demog_lookup_path(),
       col_select = c("sending_location", "social_care_id", "chi")
     )) {
