@@ -2,19 +2,13 @@
 % Please edit documentation in R/process_tests_individual_file.R
 \name{process_tests_individual_file}
 \alias{process_tests_individual_file}
-\title{Process Individual file tests}
+\title{process_tests_individual_file}
 \usage{
-process_tests_individual_file(data, year)
-}
-\arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
-
-\item{year}{the financial year of the extract in the format '1718'.}
+process_tests_individual_file(individual_file, anon_chi_in = FALSE)
 }
 \value{
-a \link[tibble:tibble-package]{tibble} containing a test comparison.
+NULL if no duplicated chi, OR rows with duplicated chi.
 }
 \description{
-Takes the processed individual file and produces
-a test comparison with the previous data. This is written to disk as a CSV.
+check whether individual files have duplicated rows for the same chi
 }
