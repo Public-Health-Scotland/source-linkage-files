@@ -6,7 +6,7 @@
 \usage{
 read_extract_mental_health(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "MH")
+  file_path = get_boxi_extract_path(year = year, type = "mh")
 )
 }
 \arguments{
