@@ -5,7 +5,7 @@
 #' @export
 read_extract_cmh <- function(
     year,
-    file_path = get_boxi_extract_path(year = year, type = "CMH")) {
+    file_path = get_boxi_extract_path(year = year, type = "cmh")) {
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())

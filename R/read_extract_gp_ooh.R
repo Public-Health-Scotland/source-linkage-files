@@ -13,9 +13,9 @@
 #' @export
 #' @family process extracts
 read_extract_gp_ooh <- function(year,
-                                diagnosis_path = get_boxi_extract_path(year = year, type = "GP_OoH-d"),
-                                outcomes_path = get_boxi_extract_path(year = year, type = "GP_OoH-o"),
-                                consultations_path = get_boxi_extract_path(year = year, type = "GP_OoH-c")) {
+                                diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d"),
+                                outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o"),
+                                consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c")) {
   ooh_extracts <- list(
     "diagnosis" = read_extract_ooh_diagnosis(year, diagnosis_path),
     "outcomes" = read_extract_ooh_outcomes(year, outcomes_path),
