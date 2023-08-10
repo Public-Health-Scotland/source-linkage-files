@@ -14,7 +14,8 @@ process_costs_rmd <- function(file_name) {
     stringr::fixed("Rmd", ignore_case = TRUE)
   )) {
     cli::cli_abort(
-      "{.arg file_name} must be an {.code .Rmd} not a {.code .{fs::path_ext(file_name)}}."
+      "{.arg file_name} must be an {.code .Rmd} not a
+      {.code .{fs::path_ext(file_name)}}."
     )
   }
 
@@ -34,7 +35,12 @@ process_costs_rmd <- function(file_name) {
 
   output_file <- get_file_path(
     directory = output_dir,
-    file_name = fs::path_ext_set(stringr::str_glue("{fs::path_ext_remove(file_name)}-{latest_update()}-{date_today}"), "html"),
+    file_name = fs::path_ext_set(
+      stringr::str_glue(
+        "{fs::path_ext_remove(file_name)}-{latest_update()}-{date_today}"
+      ),
+      "html"
+    ),
     check_mode = "write"
   )
 
@@ -55,7 +61,7 @@ process_costs_rmd <- function(file_name) {
 #'
 #' @description This will read and process the
 #' District Nursing cost lookup, it will return the final data
-#' but also write this out as a rds.
+#' and write it to disk.
 #'
 #' @param file_path Path to the cost lookup.
 #'
@@ -73,7 +79,7 @@ process_costs_dn_rmd <- function(file_path = get_dn_costs_path()) {
 #'
 #' @description This will read and process the
 #' care homes cost lookup, it will return the final data
-#' but also write this out as a rds.
+#' and write it to disk.
 #'
 #' @inheritParams process_costs_dn_rmd
 #'
@@ -91,7 +97,7 @@ process_costs_ch_rmd <- function(file_path = get_ch_costs_path()) {
 #'
 #' @description This will read and process the
 #' GP ooh cost lookup, it will return the final data
-#' but also write this out as a rds.
+#' and write it to disk.
 #'
 #' @inheritParams process_costs_dn_rmd
 #'
@@ -109,7 +115,7 @@ process_costs_gp_ooh_rmd <- function(file_path = get_gp_ooh_costs_path()) {
 #'
 #' @description This will read and process the
 #' Home Care cost lookup, it will return the final data
-#' but also write this out as a rds.
+#' and write it to disk.
 #'
 #' @inheritParams process_costs_dn_rmd
 #'
