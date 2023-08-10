@@ -166,6 +166,7 @@ readxl
 reasonwait
 recid
 refsource
+renviron
 rlang
 rmarkdown
 roxygen
