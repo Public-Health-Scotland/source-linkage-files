@@ -3,6 +3,7 @@
 #' @param data episode data
 #'
 #' @return episode data with uplifted costs
+#' @family episode_file
 apply_cost_uplift <- function(data) {
   data <- data %>%
     # attach a uplift scale as the last column
@@ -34,6 +35,7 @@ apply_cost_uplift <- function(data) {
 #' @param data episode data
 #'
 #' @return episode data with a uplift scale
+#' @family episode_file
 lookup_uplift <- function(data) {
   # We have set uplifts to use for 2020/21, 2021/22 and 2022/23,
   # provided by Paul Leak.

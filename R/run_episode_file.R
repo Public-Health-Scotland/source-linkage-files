@@ -9,6 +9,7 @@
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
+#' @family episode_file
 #'
 run_episode_file <- function(
     processed_data_list,
@@ -138,6 +139,7 @@ run_episode_file <- function(
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
+#' @family episode_file
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
@@ -175,6 +177,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @inheritParams run_episode_file
 #' @inheritParams store_ep_file_vars
 #'
+#' @family episode_file
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
@@ -202,6 +205,7 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+#' @family episode_file
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
@@ -256,6 +260,7 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+#' @family episode_file
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
   check_variables_exist(
@@ -297,6 +302,7 @@ correct_cij_vars <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+#' @family episode_file
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
@@ -321,6 +327,7 @@ create_cost_inc_dna <- function(data) {
 #' @inheritParams store_ep_file_vars
 #' @inheritParams create_demographic_cohorts
 #'
+#' @family episode_file
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
   # Use future so the cohorts can be created simultaneously (in parallel)

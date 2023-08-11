@@ -18,6 +18,7 @@ reference:
     - is_missing
     - check_variables_exist
     - check_year_valid
+    - check_it_reference
 
 
   - title: Years & Dates
@@ -45,6 +46,8 @@ reference:
   - contents:
     - starts_with("clean_up")
     - fill_ch_names
+    - cascade_geographies
+    - correct_demographics
 
 
   - title: Create
@@ -80,13 +83,7 @@ reference:
     - contains("_hscp_to")
     - contains("_chi")
     - contains("lca")
-
-
-  - title: Duplicates
-    desc: Functions to fix duplicates
-  - contents:
-    - contains("_duplicates")
-
+    - la_code_lookup
 
   - title: Writing data
     desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
@@ -101,6 +98,8 @@ reference:
     - ends_with("_period")
     - ends_with("_update")
     - starts_with("it_extract")
+    - gzip_files
+    - make_lowercase_ext
 
 
   - title: Files
@@ -141,10 +140,53 @@ reference:
   - title: Episode file
     desc: Building the episode file
   - contents:
-    - has_concept("episode file")
-  - subtitle: Cohorts
+    - has_concept("episode_file")
+    - fill_geographies
+  - subtitle: Lookups
   - contents:
     - has_concept("Demographic and Service Use Cohort functions")
+    - join_sparra_hhg
+    - join_deaths_data
+    - join_sc_client
+    - match_on_ltcs
+
+
+  - title: Individual file
+    desc: Building the episode file
+  - contents:
+    - has_concept("individual_file")
+  - subtitle: Lookups
+  - contents:
+    - has_concept("Demographic and Service Use Cohort functions")
+    - join_sparra_hhg
+    - join_cohort_lookups
+    - join_deaths_data
+    - join_slf_lookup_vars
+    - match_on_ltcs
+
+  - title: Demographics
+    desc: Things related to demographic lookups
+  - contents:
+    - fill_geographies
+    - get_gpprac_opendata
+    - make_gpprac_lookup
+    - make_postcode_lookup
+    - recode_health_boards
+    - recode_hscp
+    - la_code_lookup
+
+
+  - title: Miscellaneous functions
+    desc: Miscellaneous functions.
+  - subtitle: Homelessness
+  - contents:
+    - fix_east_ayrshire_duplicates
+    - fix_west_dun_duplicates
+    - produce_homelessness_completeness
+  - subtitle: Helper functions
+  - contents:
+    - vars_end_with
+    - has_concept("helper_funs")
 
 
   - title: Testing
