@@ -45,38 +45,58 @@ add_homelessness_flag_episode <- function(data, year) {
 }
 
 
-
-
-
-
 add_homelessness_date_flags_episode <- function(data, year) {
 
 
   lookup <- create_homelessness_lookup(year) %>%
     slfhelper::get_anon_chi() %>%
-    mutate(six_months_pre_app = record_keydate1 - lubridate::days(183),
-           six_months_post_app = record_keydate2 + lubridate::days(183))
+    rename(application_date = record_keydate1,
+         end_date = record_keydate2) %>%
+    mutate(six_months_pre_app = application_date - lubridate::days(180),
+           six_months_post_app = end_date + lubridate::days(180))
 
-  data1 <- data %>%
-    select()
+ data1 <- data %>%
    left_join(lookup %>%
-                distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app),
-              by = "anon_chi", relationship = "many-to-one") %>%
-    mutate(hl1_in_fy = tidyr::replace_na(hl1_in_fy, 0)) %>%
- #   mutate(hl1_6after_ep = )
+                distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
+              by = "anon_chi", relationship = "many-to-many") %>%
+    filter(hl1_in_fy == 1,
+           recid != "HL1") %>%
+   # If Range(AssessmentDecisionDate, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1)) HH_6before_ep = 1.
+    mutate(hl1_6before_ep = ifelse((end_date <= record_keydate2) &
+                                     (record_keydate1 <= six_months_post_app), 1 ,0)) %>%
+
+
+   # If Range(AssessmentDecisionDate, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1)) HH_6after_ep = 1.
+      mutate(hl1_6after_ep = ifelse((six_months_pre_app <= record_keydate2) &
+                                    (record_keydate1 <= application_date), 1 ,0))
+
+
+
+ # If Range(AssessmentDecisionDate, keydate1_dateformat, keydate2_dateformat) HH_ep = 1.
+  mutate(hl1_during_ep = ifelse((application_date <= record_keydate2) &
+                                  (record_keydate1 <= end_date), 1 ,0))
+
+
+  mutate(hl1_6before_ep = (application_date <= record_keydate1) & (application_date >= six_months_pre_ep) |
+           (end_date <= record_keydate2) & (record_keydate1 <= six_months_post_app))
+
+
+
+
+
  #
  #
  #
- # hl1_during_ep    filter((application_date <= keydate2_dateformat) & (keydate1_dateformat <= end_date))
+ # hl1_during_ep    filter((application_date <= record_keydate2) & (record_keydate1 <= end_date))
  #
  #
  #
- # Add hl1_6after_ep      filter((end_date <= keydate2_dateformat) &
- #                                 (keydate1_dateformat <= six_months_post_app))
+ # Add hl1_6after_ep      filter((end_date <= record_keydate2) &
+ #                                 (record_keydate1 <= six_months_post_app))
  #
  #
- # Add hl1_6before_ep   ((six_months_pre_app <= keydate2_dateformat) &
- #                         (keydate1_dateformat <= application_date))
+ # Add hl1_6before_ep   ((six_months_pre_app <= record_keydate2) &
+ #                         (record_keydate1 <= application_date))
  #
 
 
@@ -93,9 +113,7 @@ add_homelessness_date_flags_episode <- function(data, year) {
 #
 # * I'm ignoring PIS (as the dates are not really episode dates), and CH as I'm not sure Care Homes tells us much (and the data is bad).
 # Do if any(recid, "00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS", "HL1").
-# Compute HH_ep = 0.
-# Compute HH_6after_ep = 0.
-# Compute HH_6before_ep = 0.
+
 #
 # * May need to change the numbers here depending on the max number of episodes someone has.
 # Do repeat AssessmentDecisionDate = AssessmentDecisionDate.1 to !maxAssessment.
@@ -108,12 +126,3 @@ add_homelessness_date_flags_episode <- function(data, year) {
 #
 # * If the was an application decision made in the 6 months prior to admission.
 # If Range(AssessmentDecisionDate, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1)) HH_6before_ep = 1.
-# End Repeat.
-# End if.
-#
-# If recid = 'HL1' and chi = '' HH_in_FY = 1 .
-#
-# *Save Temp.
-# save outfile = !Year_dir + "temp-source-episode-file-3-" + !FY + ".zsav"
-# /keep year to cij_delay HH_in_FY to HH_6before_ep
-# /zcompressed.
