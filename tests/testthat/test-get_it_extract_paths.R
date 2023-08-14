@@ -1,3 +1,25 @@
+test_that("IT reference cleanup works", {
+  expect_equal(check_it_reference("SCTASK0439133"), "0439133")
+  expect_equal(check_it_reference("0439133"), "0439133")
+
+  expect_error(
+    check_it_reference("123456789"),
+    "`it_reference` must be exactly 7 numbers\\."
+  )
+  expect_error(
+    check_it_reference("1234567890"),
+    "`it_reference` must be exactly 7 numbers\\."
+  )
+  expect_error(
+    check_it_reference("SCTASK123456789"),
+    "`it_reference` must be exactly 7 numbers\\."
+  )
+  expect_error(
+    check_it_reference("ABCDEF123456789"),
+    "`it_reference` must be exactly 7 numbers\\."
+  )
+})
+
 skip_on_ci()
 
 test_that("IT extract file paths work", {
