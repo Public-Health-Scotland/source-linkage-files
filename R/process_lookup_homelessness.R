@@ -20,8 +20,8 @@ create_homelessness_lookup <- function(year) {
   )) %>%
     dplyr::distinct(chi, record_keydate1, record_keydate2) %>%
     tidyr::drop_na(chi) %>%
-    dplyr::mutate(hl1_in_fy = 1) #%>%
-    mutate(hl1_in_fy = 1) # %>%
+    dplyr::mutate(hl1_in_fy = 1) # %>%
+  mutate(hl1_in_fy = 1) # %>%
   # group_by(chi) %>%
   # mutate(count = n())
 
