@@ -19,7 +19,7 @@ create_homelessness_lookup <- function(year) {
                                                  check_mode = "write")) %>%
     dplyr::distinct(chi, record_keydate1, record_keydate2) %>%
     tidyr::drop_na(chi) %>%
-    mutate(hl1_in_fy = 1) #%>%
+    dplyr::mutate(hl1_in_fy = 1) #%>%
    # group_by(chi) %>%
     #mutate(count = n())
 
@@ -50,31 +50,34 @@ add_homelessness_date_flags_episode <- function(data, year) {
 
   lookup <- create_homelessness_lookup(year) %>%
     slfhelper::get_anon_chi() %>%
-    rename(application_date = record_keydate1,
-         end_date = record_keydate2) %>%
-    mutate(six_months_pre_app = application_date - lubridate::days(180),
+    dplyr::rename(application_date = record_keydate1,
+                  end_date = record_keydate2) %>%
+    dplyr::mutate(six_months_pre_app = application_date - lubridate::days(180),
            six_months_post_app = end_date + lubridate::days(180))
 
  data1 <- data %>%
-   left_join(lookup %>%
-                distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
+   dplyr::left_join(lookup %>%
+                dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
               by = "anon_chi", relationship = "many-to-many") %>%
-    filter(hl1_in_fy == 1,
-           recid != "HL1") %>%
+    dplyr::filter(hl1_in_fy == 1) %>%
+   dplyr::filter(!(recid %in% c("HL1", "AT", "PIS"))) %>%
    # If Range(AssessmentDecisionDate, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1)) HH_6before_ep = 1.
-    mutate(hl1_6before_ep = ifelse((end_date <= record_keydate2) &
+   dplyr::mutate(hl1_6before_ep = ifelse((end_date <= record_keydate2) &
                                      (record_keydate1 <= six_months_post_app), 1 ,0)) %>%
 
 
    # If Range(AssessmentDecisionDate, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1)) HH_6after_ep = 1.
-      mutate(hl1_6after_ep = ifelse((six_months_pre_app <= record_keydate2) &
-                                    (record_keydate1 <= application_date), 1 ,0))
+   dplyr::mutate(hl1_6after_ep = ifelse((six_months_pre_app <= record_keydate2) &
+                                    (record_keydate1 <= application_date), 1 ,0)) %>%
 
 
 
  # If Range(AssessmentDecisionDate, keydate1_dateformat, keydate2_dateformat) HH_ep = 1.
-  mutate(hl1_during_ep = ifelse((application_date <= record_keydate2) &
+   dplyr::mutate(hl1_during_ep = ifelse((application_date <= record_keydate2) &
                                   (record_keydate1 <= end_date), 1 ,0))
+
+
+
 
 
   mutate(hl1_6before_ep = (application_date <= record_keydate1) & (application_date >= six_months_pre_ep) |
