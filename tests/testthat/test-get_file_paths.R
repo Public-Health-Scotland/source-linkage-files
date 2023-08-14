@@ -5,12 +5,12 @@ test_that("Errors properly", {
   )
 
   expect_error(
-  get_file_path(
-    directory = ".",
-    file_name_regexp = "targets",
-    check_mode = "write"
-  ),
-  "`check_mode = \"write\"` can't be used"
+    get_file_path(
+      directory = ".",
+      file_name_regexp = "targets",
+      check_mode = "write"
+    ),
+    "`check_mode = \"write\"` can't be used"
   )
 })
 
@@ -95,4 +95,3 @@ test_that("Will correctly create new directories if needed", {
   # Clean up
   fs::dir_delete(test_year_dir)
 })
-
