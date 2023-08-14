@@ -43,7 +43,7 @@ process_extract_care_home <- function(
     ) %>%
     # remove any episodes where the latest submission was before the current year
     dplyr::filter(
-      substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)
+      substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     ) %>%
     # Match to client data
     dplyr::left_join(

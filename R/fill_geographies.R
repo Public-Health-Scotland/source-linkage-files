@@ -38,8 +38,10 @@ make_postcode_lookup <- function(data) {
     dplyr::distinct(.data$chi, .data$postcode, .data$record_keydate2) %>%
     # Format postcodes to 7-character format and replace dummy with NA
     dplyr::mutate(
-      postcode = phsmethods::format_postcode(.data$postcode, format = "pc7"),
-      postcode = dplyr::na_if(.data$postcode, "NK010AA")
+      postcode = dplyr::na_if(
+        phsmethods::format_postcode(.data$postcode, format = "pc7"),
+        "NK010AA"
+      )
     ) %>%
     # Drop any episodes with no postcode
     dplyr::filter(!is.na(.data$postcode)) %>%

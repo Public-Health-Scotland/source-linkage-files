@@ -47,7 +47,7 @@ produce_it_chi_deaths_tests <- function(data) {
       "n_deaths_{current_year_2}" := .data$death_year == current_year_2,
       "n_deaths_{current_year_3}" := .data$death_year == current_year_3,
       "n_deaths_{current_year_4}" := .data$death_year == current_year_4,
-      "n_deaths_{current_year_5}" := .data$death_year == current_year_5,
+      "n_deaths_{current_year_5}" := .data$death_year == current_year_5
     ) %>%
     # remove variables that are not test flags
     dplyr::select(dplyr::starts_with("n_")) %>%

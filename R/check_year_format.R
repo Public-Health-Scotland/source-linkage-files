@@ -28,8 +28,8 @@ check_year_format <- function(year, format = "fyyear") {
 
   format <- match.arg(arg = format, choices = c("fyyear", "alternate"))
 
-  first_part <- as.integer(substr(year, 1L, 2L))
-  second_part <- as.integer(substr(year, 3L, 4L))
+  first_part <- as.integer(stringr::str_sub(year, 1L, 2L))
+  second_part <- as.integer(stringr::str_sub(year, 3L, 4L))
 
   if (format == "fyyear") {
     if (any(first_part + 1L != second_part)) {
@@ -40,7 +40,7 @@ check_year_format <- function(year, format = "fyyear") {
       ))
     }
   } else if (format == "alternate") {
-    if (any(!(first_part %in% 18L:20L))) {
+    if (!all(first_part %in% 18L:20L)) {
       cli::cli_abort(c(
         "The {.var year} has been entered in the wrong format.",
         "Try again using the alternate form, e.g. {.val 2017}",
@@ -51,9 +51,11 @@ check_year_format <- function(year, format = "fyyear") {
       count_bad_values <- sum(possible_bad_values)
 
       cli::cli_warn(c(
-        "{cli::qty(count_bad_values)}{?A/Some} {.var year} value{?s} ha{?s/ve} likely been entered in the wrong format.",
+        "{cli::qty(count_bad_values)}{?A/Some} {.var year} value{?s} ha{?s/ve}
+        likely been entered in the wrong format.",
         "i" = "{.val {year[possible_bad_values]}}",
-        "You might want to check and try again using the alternate form, e.g. {.val 2017}",
+        "You might want to check and try again using the alternate form,
+        e.g. {.val 2017}",
         "Or use the function {.fun convert_fyyear_to_year}."
       ))
     }
