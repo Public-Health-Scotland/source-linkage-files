@@ -52,9 +52,8 @@ process_tests_district_nursing <- function(data, year) {
 #' from [calculate_measures()]
 #'
 #' @family extract test functions
-#' @seealso [create_hb_test_flags()]
-#' #' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
-#' for creating test flags
+#' @seealso [create_hb_test_flags()], [create_hscp_test_flags()]
+#' and [create_hb_cost_test_flags()] for creating test flags.
 #' @seealso calculate_measures
 produce_source_dn_tests <- function(data,
                                     sum_mean_vars = c("cost", "yearstay"),
@@ -68,7 +67,7 @@ produce_source_dn_tests <- function(data,
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     # keep variables for comparison
-    dplyr::select(c(.data$valid_chi:.data$NHS_Lanarkshire_cost)) %>%
+    dplyr::select(.data$valid_chi:.data$NHS_Lanarkshire_cost) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

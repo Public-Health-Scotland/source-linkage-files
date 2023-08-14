@@ -35,6 +35,10 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       .data$postcode_chi,
       .data$postcode_epi
     )) %>%
+    # A&E data has postcode in PC8 format but we need it in PC7 format
+    dplyr::mutate(
+      postcode = phsmethods::format_postcode(.data$postcode, "pc7")
+    ) %>%
     ## recode cypher HB codes ##
     dplyr::mutate(
       dplyr::across(c("hbtreatcode", "hbrescode"), ~ dplyr::case_when(

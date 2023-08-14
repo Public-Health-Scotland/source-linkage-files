@@ -26,6 +26,7 @@ Classificat
 cls
 cmh
 CNWs
+Comhairle
 commhosp
 congen
 costincdnas
@@ -112,6 +113,7 @@ ltc
 ltcs
 lubridate
 magrittr
+Matern
 Mcbride
 mcmahon
 MMMYY
@@ -137,6 +139,7 @@ outfile
 pandoc
 patflow
 pattype
+PCEC
 phs
 phsmethods
 phsopendata
@@ -199,6 +202,7 @@ submis
 tadm
 tarchetypes
 tbl
+Telecare
 telecare
 testthat
 thom

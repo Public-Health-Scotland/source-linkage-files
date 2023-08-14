@@ -34,6 +34,7 @@ produce_source_extract_tests <- function(data,
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
+    create_hscp_test_flags(.data$hscp) %>%
     # keep variables for comparison
     dplyr::select("valid_chi":dplyr::last_col()) %>%
     # use function to sum new test flags

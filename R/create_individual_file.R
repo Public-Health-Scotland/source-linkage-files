@@ -64,7 +64,7 @@ create_individual_file <- function(
     aggregate_ch_episodes_zihao() %>%
     clean_up_ch(year) %>%
     recode_gender() %>%
-    aggregate_by_chi_zihao() %>%
+    aggregate_by_chi() %>%
     clean_individual_file(year) %>%
     join_cohort_lookups(year) %>%
     match_on_ltcs(year) %>%
@@ -555,35 +555,6 @@ add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, 
   return(episode_file)
 }
 
-
-#' Aggregate CIS episodes
-#'
-#' @description Aggregate CH variables by CHI and CIS.
-#'
-#' @inheritParams create_individual_file
-aggregate_ch_episodes <- function(episode_file) {
-  cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
-
-  episode_file %>%
-    # dplyr::filter(!is.na(.data$ch_chi_cis)) %>%
-    # use as.data.table to change the data format to data.table to accelerate
-    data.table::as.data.table() %>%
-    dplyr::group_by(.data$chi, .data$ch_chi_cis) %>%
-    dplyr::mutate(
-      ch_no_cost = max(.data$ch_no_cost),
-      ch_ep_start = min(.data$record_keydate1),
-      ch_ep_end = max(.data$ch_ep_end),
-      ch_cost_per_day = mean(.data$ch_cost_per_day)
-    ) %>%
-    dplyr::ungroup() %>%
-    # change the data format from data.table to data.frame
-    tibble::as_tibble()
-
-  # dplyr::distinct(.data$chi, .data$ch_chi_cis) %>%
-  # dplyr::select(.data$chi, .data$ch_chi_cis, .data$ch_no_cost, .data$ch_ep_start, .data$ch_ep_end, .data$ch_cost_per_day) %>%
-  # dplyr::right_join(episode_file, by = c(.data$chi, .data$ch_chi_cis))
-}
-
 #' Clean up CH
 #'
 #' @description Clean up CH-related columns.
@@ -642,98 +613,6 @@ recode_gender <- function(episode_file) {
         .data$gender
       )
     )
-}
-
-#' Aggregate by CHI
-#'
-#' @description Aggregate episode file by CHI to convert into
-#' individual file.
-#'
-#' @inheritParams create_individual_file
-aggregate_by_chi <- function(episode_file) {
-  cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
-
-  episode_file %>%
-    dplyr::arrange(
-      chi,
-      record_keydate1,
-      keytime1,
-      record_keydate2,
-      keytime2
-    ) %>%
-    dplyr::group_by(.data$chi) %>%
-    dplyr::summarise(
-      gender = mean(gender),
-      dplyr::across(
-        dplyr::ends_with(c("postcode", "DoB", "gpprac")),
-        ~ dplyr::last(., na_rm = TRUE)
-      ),
-      dplyr::across(
-        c(
-          "ch_cis_episodes" = "ch_chi_cis",
-          "cij_total" = "cij_marker",
-          "cij_el",
-          "cij_non_el",
-          "cij_mat",
-          # "cij_delay",
-          "ooh_cases" = "ooh_case_id",
-          "preventable_admissions"
-        ),
-        ~ dplyr::n_distinct(.x, na.rm = TRUE)
-      ),
-      dplyr::across(
-        c(
-          dplyr::ends_with(
-            c(
-              "episodes",
-              "beddays",
-              "cost",
-              "attendances",
-              "attend",
-              "contacts",
-              "hours",
-              "alarms",
-              "telecare",
-              "paid_items",
-              "advice",
-              "homeV",
-              "time",
-              "assessment",
-              "other",
-              # "DN",
-              "NHS24",
-              "PCC",
-              "_dnas"
-            )
-          ),
-          dplyr::starts_with("SDS_option")
-        ),
-        ~ sum(., na.rm = TRUE)
-      ),
-      # dplyr::across(
-      #   c(
-      #     # dplyr::starts_with("sc_"),
-      #     #-"sc_send_lca",
-      #     #-"sc_latest_submission",
-      #     # "HL1_in_FY" = "hh_in_fy",
-      #     "NSU"
-      #   ),
-      #   ~ max_no_inf(.)
-      # ),
-      dplyr::across(
-        c(
-          condition_cols(),
-          # "death_date",
-          # "deceased",
-          "year",
-          dplyr::ends_with(c(
-            "_Cohort", "end_fy", "start_fy"
-          ))
-        ),
-        ~ dplyr::first(., na_rm = TRUE)
-      )
-    ) %>%
-    dplyr::ungroup()
 }
 
 #' Condition columns
