@@ -6,7 +6,7 @@ library(glue)
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU")
 
 # Change the year
-fin_year <- "2324"
+fin_year <- "2223"
 
 db_connection <- odbc::dbConnect(
   odbc::odbc(),
