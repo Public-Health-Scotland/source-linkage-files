@@ -6,7 +6,7 @@ library(glue)
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU")
 
 # Change the year
-fin_year <- "1516"
+fin_year <- "2223"
 
 db_connection <- odbc::dbConnect(
   odbc::odbc(),
@@ -16,7 +16,7 @@ db_connection <- odbc::dbConnect(
 )
 
 # Check the table name and change if required.
-table <- dbplyr::in_schema("ROBERM18", "FINAL_2")
+table <- dbplyr::in_schema("ROBERM18", "FINAL_1")
 
 # Read NSU data
 nsu_data <-
@@ -35,9 +35,11 @@ nsu_data <-
   collect()
 
 # Write out the data
-file_path <- path(nsu_dir, glue("All_CHIs_20{fin_year}.zsav"))
+file_path <- path(nsu_dir, glue("All_CHIs_20{fin_year}.parquet"))
 # This will archive the existing file for later comparison
 if (file_exists(file_path)) {
-  file_copy(file_path, path(nsu_dir, glue("All_CHIs_20{fin_year}_OLD.zsav")))
+  file_copy(file_path, path(nsu_dir, glue("All_CHIs_20{fin_year}_OLD.parquet")))
 }
-write_sav(nsu_data, file_path, compress = TRUE)
+
+nsu_data %>%
+arrow::write_parquet(file_path, compression = "zstd", compression_level = 10)
