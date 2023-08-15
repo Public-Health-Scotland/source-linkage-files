@@ -3,16 +3,16 @@
 * New 2023/24 files. 
 * New NSU cohort for 2022/23 file. 
 * Re addition of:
-  * HRI's in individual file.
+  * HRIs in individual file.
   * Homelessness Flags.
 * Bug fixes: 
   * Blank `datazone` in A&E. This has been fixed and was due to PC8 postcode format matching onto SLF pc lookup. 
-  * Large increase in preventable beddays. This was caused due to a SPSS vs R logic difference. Uses SPSS logic which 
+  * Large increase in preventable beddays. This was caused due to an SPSS vs R logic difference. Uses SPSS logic which 
     brings the difference down to `3.3%`. 
   * Issue with `locality` which showed `locality` in each row instead of its true `locality`. This has now been fixed. 
-  * Duplicated of CHI in the individual file. Issue was identified when trying to include HRI's. This has now been corrected. 
+  * Duplicated CHI in the individual file. The issue was identified when trying to include HRIs. This has now been corrected. 
 * Internal changes to SLF development: 
-  * `DN` and `CMH` data now archived in a HSCDIIP folder as the BOXI datamart is now closed down for these. Function          `get_boxi_extract_path` has been updated to reflect this. 
+  * `DN` and `CMH` data are now archived in an HSCDIIP folder as the BOXI datamart is now closed down for these. Function `get_boxi_extract_path` has been updated to reflect this. 
   * Tests updated to include `HSCP`count. 
   * Tests created for `Delayed Discharges` extract and `Social care Client lookup`.
 
@@ -26,7 +26,7 @@
 * Removal of `keydate1_dateformat` and `keydate2_dateformat`.
 * `dd_responsible_lca` – This variable now uses CA2019 codes instead of the 2-digit ‘old’ LCA code.
 * Preventable beddays - not able to calculate these correctly. * Death fixes not included.
-* Variables not ordered in R like it used to be in SPSS.
+* Variables not ordered in R like they used to be in SPSS.
 * End of HHG.
 * New variable `ch_postcode`.
 * rename of variables `cost_total_net_incdnas`, `ooh_outcome.1`, `ooh_outcome.2`, `ooh_outcome.3`, `ooh_outcome.4`, `totalnodncontacts`. 
@@ -37,9 +37,9 @@
 
 # March 2023 Update - Released 10-Mar-2023
 * 2021/22 episode and individual files refreshed with updated activity.
-* 2022/23 file updated and contains data up to end of Q3. 
+* 2022/23 file updated and contains data up to the end of Q3. 
 * Social care data is available for 2022/23. 
-* Typo in name `ooh_covid_assessment`
+* Typo in the variable name `ooh_covid_assessment`
 * Next update in May as a test run in R but won't be released. 
 * Next release in June. 
 
