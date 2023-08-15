@@ -22,6 +22,7 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
       "service_start_date",
       "service_end_date"
     ) %>%
+    dplyr::collect() %>%
     # fix bad period (2017, 2020, 2021, and so on)
     dplyr::mutate(
       period = dplyr::if_else(
@@ -32,8 +33,7 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     dplyr::mutate(
       dplyr::across(c("sending_location", "service_type"), ~ as.integer(.x))
     ) %>%
-    dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
-    dplyr::collect()
+    dplyr::arrange(.data$sending_location, .data$social_care_id)
 
   return(at_full_data)
 }
