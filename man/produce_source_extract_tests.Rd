@@ -7,7 +7,8 @@
 produce_source_extract_tests(
   data,
   sum_mean_vars = c("beddays", "cost", "yearstay"),
-  max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay")
+  max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"),
+  hscp_var = TRUE
 )
 }
 \arguments{
@@ -17,6 +18,8 @@ produce_source_extract_tests(
 \item{sum_mean_vars}{variables used when selecting 'all' measures from \code{\link[=calculate_measures]{calculate_measures()}}}
 
 \item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
+
+\item{hscp_var}{Default set to TRUE. For use where \verb{hscp variable} is not available, specify FALSE.}
 }
 \value{
 a dataframe with a count of each flag
