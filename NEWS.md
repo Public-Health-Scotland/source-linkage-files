@@ -1,4 +1,4 @@
-# June 2023 Update - Released 24-07-2023
+# June 2023 Update - Released 24-Jul-2023
 * 2011/12 -> 2013/14 – These files have not been altered, other than to make them available in a new file type (parquet).
 * 2017/18 – These files have been recreated using our new R pipeline, but the data has not changed. We did this so that we would have a good comparator file.
 * 2018/19 -> 2022/23 – These files have been recreated using the R pipeline and are also using updated data (as in a ‘normal’ update).
@@ -16,7 +16,7 @@
 * Keep_population flag not included. 
 
 
-# March 2023 Update - Released
+# March 2023 Update - Released 10-Mar-2023
 * 2021/22 episode and individual files refreshed with updated activity.
 * 2022/23 file updated and contains data up to end of Q3. 
 * Social care data is available for 2022/23. 
