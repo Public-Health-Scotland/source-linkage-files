@@ -50,4 +50,3 @@ test_that("Errors on unexpected input", {
     convert_sending_location_to_lca(c("100", 99L))
   )
 })
-
