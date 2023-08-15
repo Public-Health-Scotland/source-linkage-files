@@ -7,9 +7,9 @@
 #
 
 
-#data <- slfhelper::read_slf_episode("1718", c("anon_chi", "record_keydate1", "record_keydate2", "recid"))
+# data <- slfhelper::read_slf_episode("1718", c("anon_chi", "record_keydate1", "record_keydate2", "recid"))
 
-#year <- "1718"
+# year <- "1718"
 
 
 #' create homelessness lookup
@@ -45,15 +45,16 @@ create_homelessness_lookup <- function(year) {
 #'
 
 add_homelessness_flag_episode <- function(data, year) {
-
   lookup <- create_homelessness_lookup(year) %>%
     slfhelper::get_anon_chi()
 
   ## need to decide which recids this relates to
   data <- data %>%
-    dplyr::left_join(lookup %>%
-                       dplyr::distinct(anon_chi, hl1_in_fy),
-                     by = "anon_chi", relationship = "many-to-one") %>%
+    dplyr::left_join(
+      lookup %>%
+        dplyr::distinct(anon_chi, hl1_in_fy),
+      by = "anon_chi", relationship = "many-to-one"
+    ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(hl1_in_fy, 0))
 
   return(data)
@@ -72,27 +73,34 @@ add_homelessness_flag_episode <- function(data, year) {
 add_homelessness_date_flags_episode <- function(data, year) {
   lookup <- create_homelessness_lookup(year) %>%
     slfhelper::get_anon_chi() %>% # TO DO - change back to get_chi
-    dplyr::rename(application_date = record_keydate1,
-           end_date = record_keydate2) %>%
-    dplyr::mutate(six_months_pre_app = application_date - lubridate::days(180),
-           six_months_post_app = end_date + lubridate::days(180))
+    dplyr::rename(
+      application_date = record_keydate1,
+      end_date = record_keydate2
+    ) %>%
+    dplyr::mutate(
+      six_months_pre_app = application_date - lubridate::days(180),
+      six_months_post_app = end_date + lubridate::days(180)
+    )
 
   data <- data %>%
-    dplyr::left_join(lookup %>%
-                dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
-              by = "anon_chi", relationship = "many-to-many") %>%
-    dplyr::filter(hl1_in_fy == 1,
-           recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
+    dplyr::left_join(
+      lookup %>%
+        dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
+      by = "anon_chi", relationship = "many-to-many"
+    ) %>%
+    dplyr::filter(
+      hl1_in_fy == 1,
+      recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")
+    ) %>%
     # If Range(AssessmentDecisionDate, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1)) HH_6before_ep = 1.
     dplyr::mutate(hl1_6before_ep = ifelse((end_date <= record_keydate2) &
-                                            (record_keydate1 <= six_months_post_app), 1, 0)) %>%
+      (record_keydate1 <= six_months_post_app), 1, 0)) %>%
     # If Range(AssessmentDecisionDate, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1)) HH_6after_ep = 1.
     dplyr::mutate(hl1_6after_ep = ifelse((six_months_pre_app <= record_keydate2) &
-                                           (record_keydate1 <= application_date), 1, 0)) %>%
+      (record_keydate1 <= application_date), 1, 0)) %>%
     # If Range(AssessmentDecisionDate, keydate1_dateformat, keydate2_dateformat) HH_ep = 1.
     dplyr::mutate(hl1_during_ep = ifelse((application_date <= record_keydate2) &
-                                           (record_keydate1 <= end_date), 1, 0))
+      (record_keydate1 <= end_date), 1, 0))
 
-return(data)
-
+  return(data)
 }
