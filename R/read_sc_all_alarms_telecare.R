@@ -22,16 +22,13 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
       "service_start_date",
       "service_end_date"
     ) %>%
-    # fix bad period (2017, 2020 & 2021)
+    # fix bad period (2017, 2020, 2021, and so on)
     dplyr::mutate(
-      period = dplyr::case_match(
-        .data$period,
-        "2017" ~ "2017Q4",
-        "2020" ~ "2020Q4",
-        "2021" ~ "2021Q4",
-        .default = .data$period
-      )
-    ) %>%
+      period = dplyr::if_else(
+        grepl("\\d{4}$", .data$period),
+        paste0(.data$period, "Q4"),
+        .data$period
+      )) %>%
     dplyr::mutate(
       dplyr::across(c("sending_location", "service_type"), ~ as.integer(.x))
     ) %>%
