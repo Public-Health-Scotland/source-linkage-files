@@ -18,38 +18,40 @@
 convert_sending_location_to_lca <- function(sending_location) {
   lca <- dplyr::case_match(
     sending_location,
-    "100" ~ "01", # Aberdeen City
-    "110" ~ "02", # Aberdeenshire
-    "120" ~ "03", # Angus
-    "130" ~ "04", # Argyll and Bute
-    "355" ~ "05", # Scottish Borders
-    "150" ~ "06", # Clackmannanshire
-    "395" ~ "07", # West Dumbartonshire
-    "170" ~ "08", # Dumfries and Galloway
-    "180" ~ "09", # Dundee City
-    "190" ~ "10", # East Ayrshire
-    "200" ~ "11", # East Dunbartonshire
-    "210" ~ "12", # East Lothian
-    "220" ~ "13", # East Renfrewshire
-    "230" ~ "14", # City of Edinburgh
-    "240" ~ "15", # Falkirk
-    "250" ~ "16", # Fife
-    "260" ~ "17", # Glasgow City
-    "270" ~ "18", # Highland
-    "280" ~ "19", # Inverclyde
-    "290" ~ "20", # Midlothian
-    "300" ~ "21", # Moray
-    "310" ~ "22", # North Ayrshire
-    "320" ~ "23", # North Lanarkshire
-    "330" ~ "24", # Orkney Islands
-    "340" ~ "25", # Perth and Kinross
-    "350" ~ "26", # Renfrewshire
-    "360" ~ "27", # Shetland Islands
-    "370" ~ "28", # South Ayrshire
-    "380" ~ "29", # South Lanarkshire
-    "390" ~ "30", # Stirling
-    "400" ~ "31", # West Lothian
-    "235" ~ "32" # Na_h_Eileanan_Siar
+    100L ~ "01", # Aberdeen City
+    110L ~ "02", # Aberdeenshire
+    120L ~ "03", # Angus
+    130L ~ "04", # Argyll and Bute
+    355L ~ "05", # Scottish Borders
+    150L ~ "06", # Clackmannanshire
+    395L ~ "07", # West Dunbartonshire
+    170L ~ "08", # Dumfries and Galloway
+    180L ~ "09", # Dundee City
+    190L ~ "10", # East Ayrshire
+    200L ~ "11", # East Dunbartonshire
+    210L ~ "12", # East Lothian
+    220L ~ "13", # East Renfrewshire
+    230L ~ "14", # City of Edinburgh
+    240L ~ "15", # Falkirk
+    250L ~ "16", # Fife
+    260L ~ "17", # Glasgow City
+    270L ~ "18", # Highland
+    280L ~ "19", # Inverclyde
+    290L ~ "20", # Midlothian
+    300L ~ "21", # Moray
+    310L ~ "22", # North Ayrshire
+    320L ~ "23", # North Lanarkshire
+    330L ~ "24", # Orkney Islands
+    340L ~ "25", # Perth and Kinross
+    350L ~ "26", # Renfrewshire
+    360L ~ "27", # Shetland Islands
+    370L ~ "28", # South Ayrshire
+    380L ~ "29", # South Lanarkshire
+    390L ~ "30", # Stirling
+    400L ~ "31", # West Lothian
+    235L ~ "32", # Na_h_Eileanan_Siar
+    .default = NA_character_
   )
+
   return(lca)
 }
