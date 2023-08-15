@@ -1,5 +1,28 @@
-# March 2023 Update - Unreleased
+# June 2023 Update - Released 24-07-2023
+* 2011/12 -> 2013/14 – These files have not been altered, other than to make them available in a new file type (parquet).
+* 2017/18 – These files have been recreated using our new R pipeline, but the data has not changed. We did this so that we would have a good comparator file.
+* 2018/19 -> 2022/23 – These files have been recreated using the R pipeline and are also using updated data (as in a ‘normal’ update).
+* Files changed into parquet format. 
+* SLFhelper updated. 
+* Removal of `keydate1_dateformat` and `keydate2_dateformat`.
+* `dd_responsible_lca` – This variable now uses CA2019 codes instead of the 2-digit ‘old’ LCA code.
+* Preventable beddays - not able to calculate these correctly. * Death fixes not included.
+* Variables not ordered in R like it used to be in SPSS.
+* End of HHG.
+* New variable `ch_postcode`.
+* rename of variables `cost_total_net_incdnas`, `ooh_outcome.1`, `ooh_outcome.2`, `ooh_outcome.3`, `ooh_outcome.4`, `totalnodncontacts`. 
+* HRI's not included. 
+* Homelessness flags not included. 
+* Keep_population flag not included. 
 
+
+# March 2023 Update - Released
+* 2021/22 episode and individual files refreshed with updated activity.
+* 2022/23 file updated and contains data up to end of Q3. 
+* Social care data is available for 2022/23. 
+* Typo in name `ooh_covid_assessment`
+* Next update in May as a test run in R but won't be released. 
+* Next release in June. 
 
 # December 2022 Update - Released 07-Dec-2022
 * Now using the 2022v2 Scottish Postcode Directory.
