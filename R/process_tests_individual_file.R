@@ -64,9 +64,8 @@ produce_individual_file_tests <- function(data) {
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbrescode) %>%
     create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
-    create_hscp_test_flags(.data$hscp2018) %>%
     # keep variables for comparison
-    dplyr::select("valid_chi":dplyr::last_col()) %>%
+    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
@@ -86,7 +85,9 @@ produce_individual_file_tests <- function(data) {
 
   min_max_measures <- data %>%
     calculate_measures(
-      vars = "health_net_cost",
+      vars = c(
+        "health_net_cost"
+      ),
       measure = "min-max"
     )
 
@@ -99,11 +100,18 @@ produce_individual_file_tests <- function(data) {
       measure = "sum"
     )
 
+  dup_chi <- data.frame(
+    measure = "duplicated chi number",
+    value = duplicated(data$chi) %>%
+      sum() %>% as.integer()
+  )
+
   join_output <- list(
     test_flags,
     all_measures,
     min_max_measures,
-    sum_measures
+    sum_measures,
+    dup_chi
   ) %>%
     purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 
