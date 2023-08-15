@@ -29,7 +29,8 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
         grepl("\\d{4}$", .data$period),
         paste0(.data$period, "Q4"),
         .data$period
-      )) %>%
+      )
+    ) %>%
     dplyr::mutate(
       dplyr::across(c("sending_location", "service_type"), ~ as.integer(.x))
     ) %>%
