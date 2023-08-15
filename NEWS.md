@@ -1,3 +1,22 @@
+# September 2023 Update - Unreleased
+* Update of 2017/18 onwards to include bug fixes within the files. 
+* New 2023/24 files. 
+* New NSU cohort for 2022/23 file. 
+* Re addition of:
+  * HRI's in individual file.
+  * Homelessness Flags.
+* Bug fixes: 
+  * Blank `datazone` in A&E. This has been fixed and was due to PC8 postcode format matching onto SLF pc lookup. 
+  * Large increase in preventable beddays. This was caused due to a SPSS vs R logic difference. Uses SPSS logic which 
+    brings the difference down to `3.3%`. 
+  * Issue with `locality` which showed `locality` in each row instead of its true `locality`. This has now been fixed. 
+  * Duplicated of CHI in the individual file. Issue was identified when trying to include HRI's. This has now been corrected. 
+* Internal changes to SLF development: 
+  * `DN` and `CMH` data now archived in a HSCDIIP folder as the BOXI datamart is now closed down for these. Function          `get_boxi_extract_path` has been updated to reflect this. 
+  * Tests updated to include `HSCP`count. 
+  * Tests created for `Delayed Discharges` extract and `Social care Client lookup`.
+
+
 # June 2023 Update - Released 24-Jul-2023
 * 2011/12 -> 2013/14 – These files have not been altered, other than to make them available in a new file type (parquet).
 * 2017/18 – These files have been recreated using our new R pipeline, but the data has not changed. We did this so that we would have a good comparator file.
