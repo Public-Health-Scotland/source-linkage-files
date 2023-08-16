@@ -21,11 +21,7 @@
 #' @family process extracts
 #'
 create_homelessness_lookup <- function(year) {
-  homelessness_lookup <- read_file(get_file_path(get_year_dir(year),
-    stringr::str_glue("homelessness_for_source-20{year}"),
-    ext = "rds",
-    check_mode = "write"
-  )) %>%
+  homelessness_lookup <- read_file(get_source_extract_path(year, "Homelessness")) %>%
     dplyr::distinct(chi, record_keydate1, record_keydate2) %>%
     tidyr::drop_na(chi) %>%
     dplyr::mutate(hl1_in_fy = 1)
