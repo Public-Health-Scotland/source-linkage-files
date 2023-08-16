@@ -29,7 +29,11 @@ It can also be useful to create a label for a given project or deadline e.g. a q
 
 Generally speaking, we use the [GitHub Flow model](https://docs.github.com/en/get-started/quickstart/github-flow) for R development, with the [main-R branch](https://github.com/Public-Health-Scotland/source-linkage-files/tree/main-R) being the base branch. 
 
-The `master` branch is kept as the 'production' version of the code which is used to run the quarterly updates. The `main-R` branch, is the 'finalised' version of any R code, all code should be checked and reviewed before being added (merged) to the `main-R` branch.
+The `master` branch is kept as the 'production' version of the code which is the code used to run the last quarterly update.
+
+Any new changes should be first merged into the `development` branch, this way all changes made are kept separate until they have been properly tested in a full run of the files. 
+
+In the lead-up to an update, it may be useful to create an 'update' specific branch. This should be branched from `development` to include all the changes made between updates. The point of this update branch is to distinguish between changes that are important for the update, whilst allowing development to continue that will be included in a future update. The update branch name should include the word `update` so that [branch protections](https://github.com/Public-Health-Scotland/source-linkage-files/settings/branches) will be automatically applied. A recommended naming convention is: `update/MONTH-YEAR` e.g. `update/dec-2023`.
 
 ### Create a new branch
 
