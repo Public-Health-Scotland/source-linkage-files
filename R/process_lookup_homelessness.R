@@ -40,8 +40,7 @@ create_homelessness_lookup <- function(
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
-add_homelessness_flag <- function(data, year, lookup = create_homelessness_lookup(year)) { 
-
+add_homelessness_flag <- function(data, year, lookup = create_homelessness_lookup(year)) {
   ## need to decide which recids this relates to
   data <- data %>%
     dplyr::left_join(
@@ -104,7 +103,7 @@ add_homelessness_date_flags_episode <- function(data, year, lookup = create_home
 
   data <- data %>%
     dplyr::left_join(
-    homeless_flag,
+      homeless_flag,
       by = c("anon_chi", "record_keydate1", "record_keydate2", "recid"),
       relationship = "many-to-one"
     )
