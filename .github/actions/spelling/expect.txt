@@ -108,6 +108,7 @@ keyring
 keytime
 keytimex
 kis
+lazydt
 lgl
 los
 ltc
