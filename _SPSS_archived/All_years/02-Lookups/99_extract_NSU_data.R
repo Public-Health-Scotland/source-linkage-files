@@ -42,4 +42,4 @@ if (file_exists(file_path)) {
 }
 
 nsu_data %>%
-arrow::write_parquet(file_path, compression = "zstd", compression_level = 10)
+  arrow::write_parquet(file_path, compression = "zstd", compression_level = 10)
