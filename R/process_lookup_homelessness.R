@@ -35,7 +35,7 @@ create_homelessness_lookup <- function(year) {
 
 
 #' add homelessness flag episode
-#' @description add homelessness in FY flag to episode file
+#' @description add homelessness in FY flag to episode/individual file
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -44,7 +44,7 @@ create_homelessness_lookup <- function(year) {
 #' @export
 #'
 
-add_homelessness_flag_episode <- function(data, year) {
+add_homelessness_flag <- function(data, year) {
   lookup <- create_homelessness_lookup(year) %>%
     slfhelper::get_anon_chi()
 
@@ -73,6 +73,7 @@ add_homelessness_flag_episode <- function(data, year) {
 add_homelessness_date_flags_episode <- function(data, year) {
   lookup <- create_homelessness_lookup(year) %>%
     slfhelper::get_anon_chi() %>% # TO DO - change back to get_chi
+    dplyr::filter(!(is.na(record_keydate2))) %>%
     dplyr::rename(
       application_date = record_keydate1,
       end_date = record_keydate2
@@ -82,25 +83,36 @@ add_homelessness_date_flags_episode <- function(data, year) {
       six_months_post_app = end_date + lubridate::days(180)
     )
 
-  data <- data %>%
+
+  homeless_flag <- data %>%
+    dplyr::select(anon_chi, record_keydate1, record_keydate2, recid) %>%
+    dplyr::filter(recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
+    dplyr::distinct() %>%
     dplyr::left_join(
       lookup %>%
         dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
       by = "anon_chi", relationship = "many-to-many"
     ) %>%
-    dplyr::filter(
-      hl1_in_fy == 1,
-      recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")
-    ) %>%
-    # If Range(AssessmentDecisionDate, keydate1_dateformat - time.days(180), keydate1_dateformat - time.days(1)) HH_6before_ep = 1.
+    dplyr::filter(hl1_in_fy == 1) %>%
     dplyr::mutate(hl1_6before_ep = ifelse((end_date <= record_keydate2) &
       (record_keydate1 <= six_months_post_app), 1, 0)) %>%
-    # If Range(AssessmentDecisionDate, keydate2_dateformat + time.days(180), keydate2_dateformat + time.days(1)) HH_6after_ep = 1.
     dplyr::mutate(hl1_6after_ep = ifelse((six_months_pre_app <= record_keydate2) &
       (record_keydate1 <= application_date), 1, 0)) %>%
-    # If Range(AssessmentDecisionDate, keydate1_dateformat, keydate2_dateformat) HH_ep = 1.
     dplyr::mutate(hl1_during_ep = ifelse((application_date <= record_keydate2) &
-      (record_keydate1 <= end_date), 1, 0))
+      (record_keydate1 <= end_date), 1, 0)) %>%
+    dplyr::group_by(anon_chi, recid, record_keydate1, record_keydate2) %>%
+    dplyr::summarise(
+      hl1_6before_ep = max(hl1_6before_ep),
+      hl1_6after_ep = max(hl1_6after_ep),
+      hl1_during_ep = max(hl1_during_ep)
+    ) %>%
+    dplyr::ungroup()
+
+
+  data <- data %>%
+    dplyr::left_join(homeless_flag,
+      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid"), relationship = "many-to-one"
+    ) # add HL1inFY back in
 
   return(data)
 }
