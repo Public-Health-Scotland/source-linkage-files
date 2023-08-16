@@ -4,7 +4,7 @@
 \alias{add_homelessness_flag}
 \title{add homelessness flag episode}
 \usage{
-add_homelessness_flag(data, year)
+add_homelessness_flag(data, year, lookup = create_homelessness_lookup(year))
 }
 \arguments{
 \item{data}{The extract to process}
