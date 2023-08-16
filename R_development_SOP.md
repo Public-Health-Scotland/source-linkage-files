@@ -19,6 +19,12 @@ Any piece of work required should be logged as [an issue on GitHub](https://gith
 
 You should regularly check the issues page for any work that needs to be picked up, you should assign the issue to yourself so other people know that you are working on it. You can also create a branch for the issue from GitHub, this will be helpful later as GitHub will automatically link the issue when you open a PR.
 
+### Labels, milestones and projects
+
+It is useful to apply labels to your newly created issue, this categorises it and will allow easy searching later. Particularly useful is to apply a 'priority label'. When you or others are looking for an issue to work on, it is sensible to work on the highest priority issues first. 
+
+It can also be useful to create a label for a given project or deadline e.g. a quarterly update. A label is the simplest way to manage this but milestones and projects can also be used for this purpose.
+
 ## Branching
 
 Generally speaking, we use the [GitHub Flow model](https://docs.github.com/en/get-started/quickstart/github-flow) for R development, with the [main-R branch](https://github.com/Public-Health-Scotland/source-linkage-files/tree/main-R) being the base branch. 
