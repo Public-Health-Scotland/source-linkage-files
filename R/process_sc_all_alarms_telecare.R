@@ -55,7 +55,7 @@ process_sc_all_alarms_telecare <- function(
       # Create person id variable
       person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
-      sc_send_lca = convert_sending_location_to_lca(.data$sending_location %>% as.character())
+      sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
