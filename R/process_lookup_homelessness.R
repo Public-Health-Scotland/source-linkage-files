@@ -78,7 +78,8 @@ add_homelessness_date_flags_episode <- function(data, year, lookup = create_home
     dplyr::mutate(
       six_months_pre_app = application_date - lubridate::days(180),
       six_months_post_app = end_date + lubridate::days(180)
-    )
+    ) %>%
+        dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date)
 
 
   homeless_flag <- data %>%
@@ -86,8 +87,7 @@ add_homelessness_date_flags_episode <- function(data, year, lookup = create_home
     dplyr::filter(recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
     dplyr::distinct() %>%
     dplyr::left_join(
-      lookup %>%
-        dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date),
+      lookup,
       by = "anon_chi", relationship = "many-to-many"
     ) %>%
     dplyr::filter(hl1_in_fy == 1) %>%
