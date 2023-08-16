@@ -30,18 +30,15 @@ produce_source_extract_tests <- function(data,
                                            "record_keydate1", "record_keydate2",
                                            "cost_total_net", "yearstay"
                                          ),
-                                         hscp_var = TRUE) {
+                                         add_hscp_count = TRUE) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net)
 
-  if (!hscp_var) {
-    test_flags <- test_flags
-  } else {
-    test_flags %>%
-      create_hscp_test_flags(.data$hscp)
+  if (add_hscp_count) {
+    test_flags <- create_hscp_test_flags(test_flags, .data$hscp)
   }
 
   test_flags <- test_flags %>%
