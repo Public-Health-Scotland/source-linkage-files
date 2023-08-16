@@ -2,9 +2,9 @@
 
 ## Background
 
-This SOP (Standard Operating Procedure) aims to provide background to and a framework for contributing to the SLF (Source Linkage Files) R project. It aims to be the first port of call of new contributors / team members, as well as a reference for existing team members.
+This SOP (Standard Operating Procedure) aims to provide background to and a framework for contributing to the SLF (Source Linkage Files) R project. It aims to be the first port of call for new contributors / team members, as well as a reference for existing team members.
 
-Please feel free to edit this document with any additions or clarifications, either committing directly or by opening a Pull Request (PR) and asking for input on your changes from others.
+Please feel free to edit this document with any additions or clarifications, either by committing directly or by opening a Pull Request (PR) and asking for input on your changes from others.
 
 ### Acronyms reference
 
@@ -48,14 +48,14 @@ git push -u origin <new_branch_name>
 
 You can start to use your new branch.
 
-Your branch is a safe place to make (and commit) changes. If you make a mistake, you can revert your changes, push additional changes to fix the mistake or reset completely to an older version. Your changes will not end up on any other branch until you merge your branch. Merges into `main-R` need to be done through a PR (and GitHub will stop you if you try to do otherwise!) In the usual case there should be one person in charge/making changes in each branch.
+Your branch is a safe place to make (and commit) changes. If you make a mistake, you can revert your changes, push additional changes to fix the mistake or reset completely to an older version. Your changes will not end up on any other branch until you merge your branch. Merges into `main-R` need to be done through a PR (and GitHub will stop you if you try to do otherwise!) In the usual case, there should be one person in charge/making changes in each branch.
 
 
 ## Commits
 
 Commits contain the changes you have carried out in your script. You can do this as little or often as you want. Ideally, each commit should contain an isolated, complete change. This makes it easy to revert your changes if needed. Good practice would be to make a commit after every 'block' of code is changed. More is generally better than fewer.
 
-To commit your changes, use the commit button in the Git pane in RStudio, give each commit a descriptive message to help you and future contributors understand what changes the commit contains. See [writing meaningful commit messages](https://reflectoring.io/meaningful-commit-messages/) for some in-depth advice. You can stage individual 'chunks' for commit with the buttons, or use `Ctrl` and/or `Shift` to select individual lines to stage, this way you can break up changes into bite-sized commits easily. The equivalent for this in the terminal is to use `git add --patch` this will split your changes into 'chunks' then give you menu options to skip that chunk (for now), commit it, or split it into smaller chunks.
+To commit your changes, use the commit button in the Git pane in RStudio, give each commit a descriptive message to help you and future contributors understand what changes the commit contains. See [writing meaningful commit messages](https://reflectoring.io/meaningful-commit-messages/) for some in-depth advice. You can stage individual 'chunks' for commit with the buttons, or use `Ctrl` and/or `Shift` to select individual lines to stage, this way you can break up changes into bite-sized commits easily. The equivalent for this in the terminal is to use `git add --patch` this will split your changes into 'chunks' and then give you menu options to skip that chunk (for now), commit it, or split it into smaller chunks.
 
 To commit using the terminal use `git add` to stage and `git commit` to commit. You can add all with the `-a` flag, and add a message with the `-m` flag e.g. `git commit -a -m "<Commit message>"` if you don't add a message in this way, git will open the default text editor (unless you change it, this will be [Vim](https://devhints.io/vim)).
 
@@ -73,9 +73,9 @@ Once you are happy with your committed changes, push them to the remote version 
 
 ### Changing history with `--amend` and `rebase`
 
-***You should only change re-write the history when you haven't pushed the changes to GitHub, or at the very least before you have opened a PR. The risk here, is that if someone else has checked out your branch then you re-write the history it will create a lot of confusing conflicts!***
+***You should only change or rewrite the history when you haven't pushed the changes to GitHub, or at the very least before you have opened a PR. The risk here is that if someone else has checked out your branch then you re-write the history it will create a lot of confusing conflicts!***
 
-Keeping the above warning in mind, re-writing the history can be really useful and allows you to keep you history clean and linear, which then makes it easier to review and see what you've done.
+Keeping the above warning in mind, re-writing the history can be really useful and allows you to keep your history clean and linear, which then makes it easier to review and see what you've done.
 
 Use the 'Amend previous commit' tick box in RStudio or `git commit --amend` to change the previous commit. You might do this to fix a typo or add something to the commit message, or maybe you missed a very minor thing from the previous commit, so need to add an extra line or file.
 
@@ -97,15 +97,15 @@ This will start with the 'tip' of the remote branch then add your local commits 
 
 A pull request is GitHub's method for allowing checks and reviews before one branch is merged into another. This will usually be your feature branch being merged into `main-R`.
 
-You create a pull request in GitHub under the [Pull Request section](https://github.com/Public-Health-Scotland/source-linkage-files/pulls). On this tab, click 'new pull request', or if you've recently pushed changes GitHub will offer a pop-up to fast-track this process. You will then need to enter the base-branch to merge to (usually `main-R`) and the branch to merge from (your feature branch). **Note** `master` will be the default base-branch so this will always need changing. 
+You create a pull request in GitHub under the [Pull Request section](https://github.com/Public-Health-Scotland/source-linkage-files/pulls). On this tab, click 'new pull request', or if you've recently pushed changes GitHub will offer a pop-up to fast-track this process. You will then need to enter the base branch to merge to (usually `main-R`) and the branch to merge from (your feature branch). **Note** `master` will be the default base branch so this will always need changing. 
 
-Give the pull request a meaningful title and description including any information that may help your team understand the changes you've made. This should include a summary of what you've done / changed as well as some background as to why the change is needed. Include any link to the issue the pull request is closing by entering `Closes #<issuenumber>`. 
+Give the pull request a meaningful title and description including any information that may help your team understand the changes you've made. This should include a summary of what you've done/changed as well as some background as to why the change is needed. Include any link to the issue the pull request is closing by entering `Closes #<issuenumber>`. 
 
 More in-depth information on pull requests can be found [in the GitHub docs](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
 
 You should tag your PR with labels to help others quickly asses it. Particularly note the high and low priority labels, use `high-priority` when it's a serious bug or another PR is dependent on this change.
 
-Finally pick a reviewer(s),the simplest way is to select the source-linkage-files team, this will then randomly select a member of the team who has the fewest assigned reviews. You can also manually @mention or request a review from specific people if required for double-checking or assistance.
+Finally, pick a reviewer(s), the simplest way is to select the source-linkage-files team, this will then randomly select a member of the team who has the fewest assigned reviews. You can also manually @mention or request a review from specific people if required for double-checking or assistance.
 
 
 ## Review Process
@@ -131,7 +131,7 @@ To carry out a review:
 - Visually check the code using the 'files changed' tab. Check for any obvious issues, including broken code or style / good practice changes. Make comments and suggestions to fix these.
 - If there were no (or very few suggestions): If the PR is very simple you could approve at this point, or if it's more complicated move to checking it in `R`.
 - In RStudio, switch to the PR branch and do a pull to ensure you are looking at the latest version.
-- First do an `R CMD CHK` with `Ctrl + Shift + E`, the 'Check' button in the build pane, or running `devtools::check`. This will highlight any issues immediately and automatically.
+- First, do an `R CMD CHK` with `Ctrl + Shift + E`, the 'Check' button in the build pane, or run `devtools::check`. This will highlight any issues immediately and automatically.
 - Make sure to install the package as it is on the current branch with `Ctrl + Shift + B` or the 'Install and Restart' option in the build pane.
 - Check and run the code in any scripts which have had changes made, it should all run and produce output as expected.
 - It might be useful to call the person who made the changes on Teams and run through the code together.
