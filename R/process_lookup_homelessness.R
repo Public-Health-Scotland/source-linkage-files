@@ -15,7 +15,7 @@
 #' create homelessness lookup
 #' @description reads in homelessness extract and selects CHIs and flags them as homeless in FY
 #'
-#' @param year The year to process, in FY format.#'
+#' @param year The year to process, in FY format.
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
