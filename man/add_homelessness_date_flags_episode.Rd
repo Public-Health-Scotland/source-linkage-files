@@ -4,7 +4,11 @@
 \alias{add_homelessness_date_flags_episode}
 \title{add homelessness date flags episode}
 \usage{
-add_homelessness_date_flags_episode(data, year)
+add_homelessness_date_flags_episode(
+  data,
+  year,
+  lookup = create_homelessness_lookup(year)
+)
 }
 \arguments{
 \item{data}{The extract to process}
