@@ -27,7 +27,9 @@ It can also be useful to create a label for a given project or deadline e.g. a q
 
 ## Branching
 
-Generally speaking, we use the [GitHub Flow model](https://docs.github.com/en/get-started/quickstart/github-flow) for R development, with the [main-R branch](https://github.com/Public-Health-Scotland/source-linkage-files/tree/main-R) being the base branch. 
+Generally speaking, we use the [GitHub Flow model](https://docs.github.com/en/get-started/quickstart/github-flow) for R development, with the [master branch](https://github.com/Public-Health-Scotland/source-linkage-files/tree/master) being the base branch. 
+
+<img width="600" alt="image" src="https://wac-cdn.atlassian.com/dam/jcr:8f00f1a4-ef2d-498a-a2c6-8020bb97902f/03%20Release%20branches.svg">
 
 The `master` branch is kept as the 'production' version of the code which is the code used to run the last quarterly update.
 
