@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' sending_location <- c("100", "120")
+#' sending_location <- c(100, 120)
 #' convert_sending_location_to_lca(sending_location)
 #'
 #' @family code functions
