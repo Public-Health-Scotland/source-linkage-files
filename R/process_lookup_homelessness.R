@@ -51,7 +51,7 @@ add_homelessness_flag <- function(data, year) {
         dplyr::distinct(anon_chi, hl1_in_fy),
       by = "anon_chi", relationship = "many-to-one"
     ) %>%
-    dplyr::mutate(hl1_in_fy = tidyr::replace_na(hl1_in_fy, 0))
+    dplyr::mutate(hl1_in_fy = tidyr::replace_na(hl1_in_fy, 0L))
 
   return(data)
 }
