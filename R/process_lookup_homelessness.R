@@ -40,11 +40,7 @@ create_homelessness_lookup <- function(
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
-#'
-
-add_homelessness_flag <- function(data, year) {
-  lookup <- create_homelessness_lookup(year) %>%
-    slfhelper::get_anon_chi()
+add_homelessness_flag <- function(data, year, lookup = create_homelessness_lookup(year)) { 
 
   ## need to decide which recids this relates to
   data <- data %>%
