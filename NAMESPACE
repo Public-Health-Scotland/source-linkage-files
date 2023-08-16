@@ -2,7 +2,7 @@
 
 export("%>%")
 export(add_homelessness_date_flags_episode)
-export(add_homelessness_flag_episode)
+export(add_homelessness_flag)
 export(add_nsu_cohort)
 export(check_year_format)
 export(clean_up_free_text)
