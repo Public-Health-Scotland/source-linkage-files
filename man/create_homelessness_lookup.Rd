@@ -16,7 +16,7 @@ create_homelessness_lookup(
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-reads in homelessness extract and selects CHIs and flags them as homeless in FY
+reads in homelessness extract to create flags
 }
 \seealso{
 Other process extracts: 

@@ -12,7 +12,7 @@ add_homelessness_flag(data, year, lookup = create_homelessness_lookup(year))
 \item{year}{The year to process, in FY format.}
 }
 \value{
-the final data as a \link[tibble:tibble-package]{tibble}.
+the final data as a \link[tibble:tibble-package]{tibble}
 }
 \description{
 add homelessness in FY flag to episode/individual file
