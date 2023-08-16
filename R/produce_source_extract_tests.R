@@ -13,7 +13,7 @@
 #' (data is from [get_source_extract_path()])
 #' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
-#' @param hscp_var Default set to TRUE. For use where `hscp variable` is not available, specify FALSE.
+#' @param add_hscp_count  Default set to TRUE. For use where `hscp variable` is not available, specify FALSE.
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]

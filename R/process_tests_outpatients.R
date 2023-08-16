@@ -13,12 +13,12 @@ process_tests_outpatients <- function(data, year) {
     old_data = produce_source_extract_tests(old_data,
       sum_mean_vars = "cost",
       max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net"),
-      hscp_var = FALSE
+      add_hscp_count = FALSE
     ),
     new_data = produce_source_extract_tests(data,
       sum_mean_vars = "cost",
       max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net"),
-      hscp_var = FALSE
+      add_hscp_count = FALSE
     )
   ) %>%
     write_tests_xlsx(sheet_name = "00B", year)
