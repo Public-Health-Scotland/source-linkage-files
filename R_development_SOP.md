@@ -124,7 +124,7 @@ Another scenario where we might use `rebase` is when our local branch has diverg
 
 ```
 git checkout <branch>
-git fetch --all
+git fetch
 git rebase origin/<branch>
 ```
 
@@ -175,17 +175,46 @@ To carry out a review:
 - If you needed to do checks which could be written as {testthat} tests then comment and ask for them to be added.
 - Back on GitHub go to the 'files changed' tab which outlines changes made in this branch. This tab then allows you to add comments/suggestions through `+` by clicking on specific lines of code,  this can be dragged to include a large chunk of code. If you are just leaving a comment this can be entered in the box that pops up after the `+` is clicked. To make a suggestion on the code, click on the `±` 'add a suggestion' button, which allows you to write code to be used instead.
 
+<img width="740" alt="image" src="https://github.com/Public-Health-Scotland/source-linkage-files/assets/5982260/9df46506-3c1c-47fe-9bf5-f6ee9d9408d7">
+
+<details>
+  <summary>R code to produce the flow diagram</summary>
+```R
+DiagrammeR::grViz("digraph {
+# Graph options
+graph[layout = dot, rankdir = LR]
+
+# Nodes
+start [label = 'PR review requested', shape = square]
+gh_check [label = 'Check and review on GitHub']
+any_changes_1 [label = 'Are changes required?']
+any_changes_2 [label = 'Are changes required?']
+pr_owner_makes_changes [label = 'PR owner makes changes', shape = square]
+rstudio_check [label = 'Check in RStudio']
+approval [label = 'PR approved and merged']
+
+# Edges
+start -> gh_check
+gh_check -> any_changes_1
+any_changes_1 -> pr_owner_makes_changes [label = 'yes']
+pr_owner_makes_changes -> start [lable = 're-request a review']
+any_changes_1 -> rstudio_check [label = 'no']
+rstudio_check -> any_changes_2 
+any_changes_2 -> pr_owner_makes_changes [label = 'yes']
+any_changes_2 -> approval [label = 'no']
+}") |>
+  htmlwidgets::saveWidget("pr_flow.html")
+```
+</details>
 
 ### Merging
 
 Once your pull request is approved, with no outstanding comments/suggestions, GitHub will allow you to merge your pull request. We recommend doing a 'squash and merge' in most cases, this will combine all of the commits into a single commit, with the PR title as the commit title and all the individual commit messages as the squashed commit's message.
 
-
-After your pull request has been approved, delete your branch. This indicates that the work on the branch is complete and prevents you or others from accidentally using old branches. This may be done automatically by GitHub. 
-
+After your PR has been approved and merged, your branch will be deleted automatically. This indicates that the work on the branch is complete and prevents you or others from accidentally using old branches. 
 
 ### Git
 
-Most of the work carried out can be done solely on `R` and GitHub but underlying all this is Git. Git commands can be used in the Terminal or using the buttons to push and pull to your branch. 
+Most of the work carried out can be done using the RStudio GUI and GitHub but underlying all this is Git. Git commands can be used in the Terminal or using the buttons to push and pull to your branch. 
 
 A cheat sheet can be found [here](https://training.github.com/downloads/github-git-cheat-sheet.pdf) which can help you if you need to use any of these.
