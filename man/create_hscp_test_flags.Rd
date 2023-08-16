@@ -12,7 +12,7 @@ create_hscp_test_flags(data, hscp_var)
 \item{hscp_var}{HSCP variable e.g. HSCP2019 HSCP2018}
 }
 \value{
-a dataframe with flag (1 or 0) for each HSCP
+a dataframe with flag (TRUE or FALSE) for each HSCP
 }
 \description{
 Create flags for Health & Social Care Partnerships

@@ -13,6 +13,7 @@
 #' (data is from [get_source_extract_path()])
 #' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
+#' @param add_hscp_count  Default set to TRUE. For use where `hscp variable` is not available, specify FALSE.
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
@@ -28,14 +29,21 @@ produce_source_extract_tests <- function(data,
                                          max_min_vars = c(
                                            "record_keydate1", "record_keydate2",
                                            "cost_total_net", "yearstay"
-                                         )) {
+                                         ),
+                                         add_hscp_count = TRUE) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
-    create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
+    create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net)
+
+  if (add_hscp_count) {
+    test_flags <- create_hscp_test_flags(test_flags, .data$hscp)
+  }
+
+  test_flags <- test_flags %>%
     # keep variables for comparison
-    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
+    dplyr::select("valid_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

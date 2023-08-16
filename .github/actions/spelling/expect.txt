@@ -26,6 +26,7 @@ Classificat
 cls
 cmh
 CNWs
+Comhairle
 commhosp
 congen
 costincdnas
@@ -90,6 +91,7 @@ hjust
 hms
 homecare
 homev
+hscdiip
 hscp
 hscpnames
 IDPC
@@ -106,13 +108,14 @@ keyring
 keytime
 keytimex
 kis
+lazydt
 lgl
-kis
 los
 ltc
 ltcs
 lubridate
 magrittr
+Matern
 Mcbride
 mcmahon
 MMMYY
@@ -138,6 +141,7 @@ outfile
 pandoc
 patflow
 pattype
+PCEC
 phs
 phsmethods
 phsopendata
@@ -200,6 +204,7 @@ submis
 tadm
 tarchetypes
 tbl
+Telecare
 telecare
 testthat
 thom

@@ -100,11 +100,18 @@ produce_individual_file_tests <- function(data) {
       measure = "sum"
     )
 
+  dup_chi <- data.frame(
+    measure = "duplicated chi number",
+    value = duplicated(data$chi) %>%
+      sum() %>% as.integer()
+  )
+
   join_output <- list(
     test_flags,
     all_measures,
     min_max_measures,
-    sum_measures
+    sum_measures,
+    dup_chi
   ) %>%
     purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 

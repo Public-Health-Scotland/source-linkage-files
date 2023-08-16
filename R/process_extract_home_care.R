@@ -30,9 +30,13 @@ process_extract_home_care <- function(
 
   hc_data <- data %>%
     # select episodes for FY
-    dplyr::filter(is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)) %>%
+    dplyr::filter(
+      is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)
+    ) %>%
     # remove any episodes where the latest submission was before the current year
-    dplyr::filter(substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)) %>%
+    dplyr::filter(
+      substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
+    ) %>%
     # Match to client data
     dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(year = year)
