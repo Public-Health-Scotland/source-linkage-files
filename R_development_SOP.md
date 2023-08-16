@@ -37,28 +37,39 @@ In the lead-up to an update, it may be useful to create an 'update' specific bra
 
 ### Create a new branch
 
-To work on a new issue, you will need to create a new branch. This is best done for even small changes such as renaming scripts/functions. To do this, make sure your `main-R` is the most up-to-date version. 
+To work on a new issue, you will need to create a new branch. This is best done for even small changes such as renaming scripts/functions. To do this, make sure your `development` is the most up-to-date version. 
 
-This can be done using the RStudio buttons:
+### From an issue
+A nice way to create a new branch is to use GitHub to create one from the issue page.
 
-- switch branch (checkout) `main-R` and pull,
+<img width="259" alt="image" src="https://github.com/Public-Health-Scotland/source-linkage-files/assets/5982260/d05f27fa-ec0c-4136-aab2-2779f5189415">
 
+Click 'create a branch' - by default, the 'branch source' will be `master`, so you will usually want to click 'change branch source' and select `development` (or otherwise).
+
+<img width="367" alt="image" src="https://github.com/Public-Health-Scotland/source-linkage-files/assets/5982260/e519f326-cddd-4720-9469-3569bd6617ed">
+
+Clicking 'Create branch' will create it and then in RStudio we will need to do a pull `git pull` (`git fetch` will also be enough) to make our local repository aware of it, we can then switch to it using the buttons or `git checkout <branch name>`.
+
+### In RStudio
+
+We can use the terminal, or just use the buttons.
+
+- switch branches to `development` (or the quarterly update branch) - `git checkout`
+- pull to ensure you have the latest version - `git pull` or `git pull --rebase`
 - click the new branch button to the left of the current branch name to create your new branch,
+- create a new branch, this should have a meaningful name, a useful convention is to use `type/thing` e.g. `bug/<issue_number>-fixing-bug-with-x` or `documentation/update-documentation-y`
+  - `git checkout -b <branch name>` or `git branch <branch name>` + `git checkout <branch name>`
+  - Note that RStudio automatically links the new branch to the remote (GitHub) for us, if using the terminal we need to do this step ourselves - `git push -u origin <new_branch_name>`
 
-- name your new branch something meaningful and descriptive.
-
-Or, equally in the terminal:
-
-```
-git checkout main-R
-git pull
-git checkout -b <new_branch_name>
-git push -u origin <new_branch_name>
-```
+### Using a branch
 
 You can start to use your new branch.
 
-Your branch is a safe place to make (and commit) changes. If you make a mistake, you can revert your changes, push additional changes to fix the mistake or reset completely to an older version. Your changes will not end up on any other branch until you merge your branch. Merges into `main-R` need to be done through a PR (and GitHub will stop you if you try to do otherwise!) In the usual case, there should be one person in charge/making changes in each branch.
+Your branch is a safe place to make (and commit) changes. If you make a mistake, you can revert your changes, push additional changes to fix the mistake or reset completely to an older version. Your changes will not end up on any other branch until you merge your branch.
+
+If something goes completely wrong, don't be afraid to just start again with a new branch. First, copy any files you have changed (that you want to keep), follow the steps above to properly create a new branch then paste and re-commit the changes.
+
+Merges into `development` or `master` etc. need to be done through a PR (and GitHub will stop you if you try to do otherwise!) In the usual case, there should be one person in charge/making changes in each branch.
 
 
 ## Commits
