@@ -4,7 +4,10 @@
 \alias{create_homelessness_lookup}
 \title{create homelessness lookup}
 \usage{
-create_homelessness_lookup(year)
+create_homelessness_lookup(
+  year,
+  homelessness_data = read_file(get_source_extract_path(year, "Homelessness"))
+)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
