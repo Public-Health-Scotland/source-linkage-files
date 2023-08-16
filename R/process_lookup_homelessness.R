@@ -68,10 +68,8 @@ add_homelessness_flag <- function(data, year) {
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
-#'
-add_homelessness_date_flags_episode <- function(data, year) {
-  lookup <- create_homelessness_lookup(year) %>%
-    slfhelper::get_anon_chi() %>% # TO DO - change back to get_chi
+add_homelessness_date_flags_episode <- function(data, year, lookup = create_homelessness_lookup(year)) {
+  lookup <- lookup %>%
     dplyr::filter(!(is.na(record_keydate2))) %>%
     dplyr::rename(
       application_date = record_keydate1,
