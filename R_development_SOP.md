@@ -63,7 +63,7 @@ We can use the terminal, or just use the buttons.
 
 ### Using a branch
 
-You can start to use your new branch.
+You can now start to use your new branch by making changes to the code and [committing them](#committing).
 
 Your branch is a safe place to make (and commit) changes. If you make a mistake, you can revert your changes, push additional changes to fix the mistake or reset completely to an older version. Your changes will not end up on any other branch until you merge your branch.
 
@@ -76,10 +76,24 @@ Merges into `development` or `master` etc. need to be done through a PR (and Git
 
 Commits contain the changes you have carried out in your script. You can do this as little or often as you want. Ideally, each commit should contain an isolated, complete change. This makes it easy to revert your changes if needed. Good practice would be to make a commit after every 'block' of code is changed. More is generally better than fewer.
 
-To commit your changes, use the commit button in the Git pane in RStudio, give each commit a descriptive message to help you and future contributors understand what changes the commit contains. See [writing meaningful commit messages](https://reflectoring.io/meaningful-commit-messages/) for some in-depth advice. You can stage individual 'chunks' for commit with the buttons, or use `Ctrl` and/or `Shift` to select individual lines to stage, this way you can break up changes into bite-sized commits easily. The equivalent for this in the terminal is to use `git add --patch` this will split your changes into 'chunks' and then give you menu options to skip that chunk (for now), commit it, or split it into smaller chunks.
+### Staging
+
+Staging in Git is a process of collecting your changes before committing them to the repository. This allows you to review your changes and make sure you want to commit them all at once. It also allows you to group together related changes and commit them as a single unit, which can help to keep your commit history clean and organised.
+
+You can stage individual 'chunks' for commit with the buttons, or use `Ctrl` and/or `Shift` to select individual lines to stage, this way you can break up changes into bite-sized commits easily. The equivalent for this in the terminal is to use `git add --patch` this will split your changes into 'chunks' and then give you menu options to skip that chunk (for now), commit it, or split it into smaller chunks.
+
+### Committing
+
+To commit your changes, use the commit button in the Git pane in RStudio, give each commit a descriptive message to help you and future contributors understand what changes the commit contains.
 
 To commit using the terminal use `git add` to stage and `git commit` to commit. You can add all with the `-a` flag, and add a message with the `-m` flag e.g. `git commit -a -m "<Commit message>"` if you don't add a message in this way, git will open the default text editor (unless you change it, this will be [Vim](https://devhints.io/vim)).
 
+#### The commit message
+
+The 'title' of the commit should be imperitive e.g. 'Fix the bug with x' or 'Update documentation' i.e. what will the commit do to the codebase? The 'title' should be kept short (there is a limit of 72 characters before it 'overflows' into the description. You can add further details by leaving a new line and then writing some long-form comments. This is the place to provide context for what you've done (and why). 
+
+GitHub will parse the commit message (title and description) for [markdown](https://www.markdownguide.org/cheat-sheet/), this means you can easily include links, bullet-point lists, syntax-highlighted code etc. in your commit message.
+See [writing meaningful commit messages](https://reflectoring.io/meaningful-commit-messages/) for some in-depth advice. 
 
 ### Pushing commits back to GitHub
 
