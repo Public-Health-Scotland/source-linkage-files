@@ -7,7 +7,7 @@
 create_homelessness_lookup(year)
 }
 \arguments{
-\item{year}{The year to process, in FY format.#'}
+\item{year}{The year to process, in FY format.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
