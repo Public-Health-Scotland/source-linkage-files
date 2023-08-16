@@ -79,7 +79,7 @@ add_homelessness_date_flags_episode <- function(data, year, lookup = create_home
       six_months_pre_app = application_date - lubridate::days(180),
       six_months_post_app = end_date + lubridate::days(180)
     ) %>%
-        dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date)
+    dplyr::distinct(anon_chi, hl1_in_fy, six_months_pre_app, six_months_post_app, application_date, end_date)
 
 
   homeless_flag <- data %>%
