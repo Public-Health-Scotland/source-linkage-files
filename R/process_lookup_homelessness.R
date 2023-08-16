@@ -103,9 +103,11 @@ add_homelessness_date_flags_episode <- function(data, year, lookup = create_home
 
 
   data <- data %>%
-    dplyr::left_join(homeless_flag,
-      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid"), relationship = "many-to-one"
-    ) # add HL1inFY back in
+    dplyr::left_join(
+    homeless_flag,
+      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid"),
+      relationship = "many-to-one"
+    )
 
   return(data)
 }
