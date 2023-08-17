@@ -342,10 +342,11 @@ list(
     tar_target(
       source_homelessness_extract,
       process_extract_homelessness(
-      homelessness_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
+        homelessness_data,
+        year,
+        write_to_disk = write_to_disk
+      )
+    ),
     tar_target(
       tests_source_homelessness_extract,
       process_tests_homelessness(
