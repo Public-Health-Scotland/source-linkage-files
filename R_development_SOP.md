@@ -122,7 +122,24 @@ GitHub actions is a continuous integration platform. We have a number of 'workfl
 - [style](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/style.yaml) - This is based on [this example](https://github.com/r-lib/actions/blob/v2/examples/README.md#style-package) - It will run `styler::style_dir` whenever any relevant files are pushed, it will then commit any changes if required.
 - [test-coverage](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/test-coverage.yaml) - This is based on [this example](https://github.com/r-lib/actions/blob/v2/examples/README.md#test-coverage-workflow) - It uses the [covr](https://covr.r-lib.org/) package to query the test coverage of the package and uploads the result to [app.codecov.io/gh/Public-Health-Scotland/source-linkage-files](https://app.codecov.io/gh/Public-Health-Scotland/source-linkage-files)
 - [dependabot](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/dependabot.yml) - This is another GitHub maintained action that is slightly different. It runs on a schedule and checks that other workflows are all using the latest version of their relevent actions. If an action is outdated it will open a PR to update it and add change logs etc. for someone to review.
-  
+
+#### Out of sync issues when trying to push
+
+There are number of reasons you might have issues when trying to push to GitHub:
+ - A [GitHub action](#github-actions-continuous-integration) has made a commit which your local copy doesn't have. This is usually the cause.
+ - You (or a reviewer) has clicked 'update branch' on your PR, and your local copy doesn't have these changes.
+ - You started your branch from `master` but then opened a PR against `development` and clicked 'update branch'. Or some other combination of branch cross-contamination.
+
+To avoid issues like this:
+ - Make sure you have the latest version of the branch you want to create a branch from ('git pull')
+ - Make sure you create your branch from the correct branch.
+ - Pull before starting any work to make sure your local copy is in sync with the remote, this is particularly important when you have recently pushed (so a GitHub action might have made a commit), or you or the reviewer has updated the branch.
+
+If you have an issue, it is usually simple to fix. The preferred option is to do a Pull with rebase; RStudio now has a (tiny) arrow next to the pull button, this reveals an option to 'Pull with rebase' this essentially means 'do the pull then re-write the history so that your commits come after' i.e. pretend that I remembered to Pull (normally) earlier. In the terminal this is `pull --rebase`.
+
+Other potential solutions would be to reset your commits to a branch on the remote (we can keep the changes, they will just need to be committed again). `git fetch`, this ensures we have knowledge of the latest version of the branch(es). `git reset origin/<branch_name>` the `origin` means use the remote version, not the local version (in case they are different), `<branch_name>` should be the branch you are planning to merge into e.g. `origin/development`. A final solution would be to do a similar reset but by simply coppying the code to an external editor, and startign the branch process from the beginning.
+
+
 ### Changing history with `--amend` and `rebase`
 
 ***You should only change or rewrite the history when you haven't pushed the changes to GitHub, or at the very least before you have opened a PR. The risk here is that if someone else has checked out your branch then you re-write the history it will create a lot of confusing conflicts!***
