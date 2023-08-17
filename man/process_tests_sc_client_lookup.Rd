@@ -17,5 +17,5 @@ a \link[tibble:tibble-package]{tibble} containing a test comparison.
 \description{
 This script takes the processed social care client lookup and
 produces a test comparison with the previous data. This is written to
-disk as a CSV.
+disk in the tests workbook.
 }
