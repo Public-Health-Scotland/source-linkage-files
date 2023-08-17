@@ -49,11 +49,13 @@ add_homelessness_flag <- function(data, year,
 }
 
 
-#' add homelessness date flags episode
-#' @description flags episodes with homelessness applications in 6 months before, 6 months after, or during episode
+#' Add homelessness date flags episode
 #'
-#' @param data The extract to process
-#' @param year The year to process, in FY format.
+#' @description Add flags to episodes indicating if they 
+#' have had at least one active homelessness application in 
+#' 6 months before, 6 months after, or during an episode.
+#'
+#' @inheritParams add_homelessness_flag
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
