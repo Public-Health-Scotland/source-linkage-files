@@ -6,6 +6,7 @@
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
 #' (instead of chi)
+#' @param homelessness_lookup dataframe with CHI, start date, end date. Creates hl1_in_fy flag.
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
