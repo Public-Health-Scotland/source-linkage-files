@@ -1,11 +1,15 @@
-#' create homelessness lookup
-#' @description reads in homelessness extract to create flags
+#' Create a homelessness lookup
+#' @description Reads in the homelessness extract and creates
+#' a lookup at CHI level, with one row per application start 
+#' and end date for each CHI.
 #'
-#' @param year The year to process, in FY format.
+#' @param homelessness_data the processed homelessness data for 
+#' the financial year (created with [process_extract_homelessness()]).
+#' @inheritParams run_episode_file
+#'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-#'
 create_homelessness_lookup <- function(
     year,
     homelessness_data = read_file(get_source_extract_path(year, "Homelessness"))) {
