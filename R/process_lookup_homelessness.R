@@ -1,9 +1,9 @@
 #' Create a homelessness lookup
 #' @description Reads in the homelessness extract and creates
-#' a lookup at CHI level, with one row per application start 
+#' a lookup at CHI level, with one row per application start
 #' and end date for each CHI.
 #'
-#' @param homelessness_data the processed homelessness data for 
+#' @param homelessness_data the processed homelessness data for
 #' the financial year (created with [process_extract_homelessness()]).
 #' @inheritParams run_episode_file
 #'
@@ -26,7 +26,7 @@ create_homelessness_lookup <- function(
 #' @description Add a flag to the data indicating if the CHI
 #' had a homelessness episode within the financial year.
 #'
-#' @param data The data to add the flag to - the episode 
+#' @param data The data to add the flag to - the episode
 #' or individual file.
 #' @param lookup The homelessness lookup created by [create_homelessness_lookup()]
 #' @inheritParams run_episode_file
