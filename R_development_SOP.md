@@ -92,7 +92,7 @@ To commit using the terminal use `git add` to stage and `git commit` to commit. 
 
 #### The commit message
 
-The 'title' of the commit should be imperitive e.g. 'Fix the bug with x' or 'Update documentation' i.e. what will the commit do to the codebase? The 'title' should be kept short (there is a limit of 72 characters before it 'overflows' into the description. You can add further details by leaving a new line and then writing some long-form comments. This is the place to provide context for what you've done (and why). 
+The 'title' of the commit should be imperative e.g. 'Fix the bug with x' or 'Update documentation' i.e. what will the commit do to the codebase? The 'title' should be kept short (there is a limit of 72 characters before it 'overflows' into the description. You can add further details by leaving a new line and then writing some long-form comments. This is the place to provide context for what you've done (and why). 
 
 GitHub will parse the commit message (title and description) for [markdown](https://www.markdownguide.org/cheat-sheet/), this means you can easily include links, bullet-point lists, syntax-highlighted code etc. in your commit message.
 See [writing meaningful commit messages](https://reflectoring.io/meaningful-commit-messages/) for some in-depth advice. 
@@ -112,7 +112,7 @@ Once you are happy with your committed changes, push them to the remote version 
 
 GitHub actions is a continuous integration platform. We have several 'workflows' set up, which have mostly been based on the [r-lib/actions repository](https://github.com/r-lib/actions). Continuous integration (CI) is a software development practice where developers regularly merge their code changes into a central repository, where automated tests are run to validate the code. In our case we have workflows which trigger under certain conditions (usually a push), and either check or even make changes to the code automatically. These include:
 
-- [R-CMD-check](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/R-CMD-check.yaml) - based on [this example](https://github.com/r-lib/actions/tree/v2/examples#quickstart-ci-workflow) - This checks the code for any potential issues, essentially it installs the package on a number of different versions of R and runs `devtools::check`. It will report an error if any Errors or Warnings are found, but will pass on Notes (this can be changed).
+- [R-CMD-check](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/R-CMD-check.yaml) - based on [this example](https://github.com/r-lib/actions/tree/v2/examples#quickstart-ci-workflow) - This checks the code for any potential issues, essentially it installs the package on a number of different versions of R and runs `devtools::check`. It will report an error if any Errors or Warnings are found but will pass on Notes (this can be changed).
 - [ToDo-to-issue](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/ToDo-to-issue.yml) - This scans new commits for any comments starting with `#TODO` and if it finds them it will create an issue using the comment and surrounding code for context. It will also automatically close these issues if it detects a commit has deleted the TODO comment. 
 - [Document](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/document.yaml) - based on [this example](https://github.com/r-lib/actions/tree/v2/examples#document-package) - It runs `devtools::document` and will then commit the changes if needed.
 - [Lint Changed Files](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/lint-changed-files.yaml) - Further information is [available here](https://lintr.r-lib.org/articles/continuous-integration.html) - This runs `lintr::lint` against any files changed in the PR, it then adds any annotations to the code review page. At the moment it runs with default settings but there is the option to create a `.lintr` file as described in [*Using lintr*](https://lintr.r-lib.org/articles/lintr.html#configuring-linters), there is also a list of ['available lintrs'](https://lintr.r-lib.org/reference/linters.html) which would be a useful reference.
@@ -137,7 +137,7 @@ To avoid issues like this:
 
 If you have an issue, it is usually simple to fix. The preferred option is to do a Pull with rebase; RStudio now has a (tiny) arrow next to the pull button, this reveals an option to 'Pull with rebase' this essentially means 'do the pull then re-write the history so that your commits come after' i.e. pretend that I remembered to Pull (normally) earlier. In the terminal, this is `pull --rebase`.
 
-Another potential solutions would be to reset your commits to a branch on the remote (we can keep the changes, they will just need to be committed again). `git fetch`, this ensures we know the latest version of the branch(es). `git reset origin/<branch_name>` the `origin` means use the remote version, not the local version (in case they are different), `<branch_name>` should be the branch you are planning to merge into e.g. `origin/development`. A final solution would be to do a similar reset but by simply copying the code to an external editor, and starting the branch process from the beginning.
+Another potential solutions would be to reset your commits to a branch on the remote (we can keep the changes, they will just need to be committed again). `git fetch`, ensures we know the latest version of the branch(es). `git reset origin/<branch_name>` the `origin` means use the remote version, not the local version (in case they are different), `<branch_name>` should be the branch you are planning to merge into e.g. `origin/development`. A final solution would be to do a similar reset but by simply copying the code to an external editor, and starting the branch process from the beginning.
 
 
 ### Changing history with `--amend` and `rebase`
@@ -229,7 +229,7 @@ approval [label = 'PR approved and merged']
 start -> gh_check
 gh_check -> any_changes_1
 any_changes_1 -> pr_owner_makes_changes [label = 'yes']
-pr_owner_makes_changes -> start [lable = 're-request a review']
+pr_owner_makes_changes -> start [label = 're-request a review']
 any_changes_1 -> rstudio_check [label = 'no']
 rstudio_check -> any_changes_2 
 any_changes_2 -> pr_owner_makes_changes [label = 'yes']
