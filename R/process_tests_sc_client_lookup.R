@@ -2,7 +2,7 @@
 #'
 #' @description This script takes the processed social care client lookup and
 #' produces a test comparison with the previous data. This is written to
-#' disk as a CSV.
+#' disk in the tests workbook.
 #'
 #' @inherit process_tests_acute
 #'
