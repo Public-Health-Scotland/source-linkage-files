@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_lookup_homelessness.R
 \name{create_homelessness_lookup}
 \alias{create_homelessness_lookup}
-\title{create homelessness lookup}
+\title{Create a homelessness lookup}
 \usage{
 create_homelessness_lookup(
   year,
@@ -11,12 +11,17 @@ create_homelessness_lookup(
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
+
+\item{homelessness_data}{the processed homelessness data for
+the financial year (created with \code{\link[=process_extract_homelessness]{process_extract_homelessness()}}).}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-reads in homelessness extract to create flags
+Reads in the homelessness extract and creates
+a lookup at CHI level, with one row per application start
+and end date for each CHI.
 }
 \seealso{
 Other process extracts: 
