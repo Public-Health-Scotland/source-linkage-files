@@ -51,8 +51,8 @@ add_homelessness_flag <- function(data, year,
 
 #' Add homelessness date flags episode
 #'
-#' @description Add flags to episodes indicating if they 
-#' have had at least one active homelessness application in 
+#' @description Add flags to episodes indicating if they
+#' have had at least one active homelessness application in
 #' 6 months before, 6 months after, or during an episode.
 #'
 #' @inheritParams add_homelessness_flag
