@@ -2,18 +2,22 @@
 % Please edit documentation in R/process_lookup_homelessness.R
 \name{add_homelessness_flag}
 \alias{add_homelessness_flag}
-\title{add homelessness flag episode}
+\title{Add 'homelessness in FY' flag}
 \usage{
 add_homelessness_flag(data, year, lookup = create_homelessness_lookup(year))
 }
 \arguments{
-\item{data}{The extract to process}
+\item{data}{The data to add the flag to - the episode
+or individual file.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{lookup}{The homelessness lookup created by \code{\link[=create_homelessness_lookup]{create_homelessness_lookup()}}}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}
 }
 \description{
-add homelessness in FY flag to episode/individual file
+Add a flag to the data indicating if the CHI
+had a homelessness episode within the financial year.
 }

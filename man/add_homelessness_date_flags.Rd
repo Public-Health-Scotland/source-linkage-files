@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_lookup_homelessness.R
 \name{add_homelessness_date_flags}
 \alias{add_homelessness_date_flags}
-\title{add homelessness date flags episode}
+\title{Add homelessness date flags episode}
 \usage{
 add_homelessness_date_flags(
   data,
@@ -11,13 +11,18 @@ add_homelessness_date_flags(
 )
 }
 \arguments{
-\item{data}{The extract to process}
+\item{data}{The data to add the flag to - the episode
+or individual file.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{lookup}{The homelessness lookup created by \code{\link[=create_homelessness_lookup]{create_homelessness_lookup()}}}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-flags episodes with homelessness applications in 6 months before, 6 months after, or during episode
+Add flags to episodes indicating if they
+have had at least one active homelessness application in
+6 months before, 6 months after, or during an episode.
 }
