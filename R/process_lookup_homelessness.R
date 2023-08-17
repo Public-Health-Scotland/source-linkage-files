@@ -22,11 +22,14 @@ create_homelessness_lookup <- function(
 }
 
 
-#' add homelessness flag episode
-#' @description add homelessness in FY flag to episode/individual file
+#' Add 'homelessness in FY' flag
+#' @description Add a flag to the data indicating if the CHI
+#' had a homelessness episode within the financial year.
 #'
-#' @param data The extract to process
-#' @param year The year to process, in FY format.
+#' @param data The data to add the flag to - the episode 
+#' or individual file.
+#' @param lookup The homelessness lookup created by [create_homelessness_lookup()]
+#' @inheritParams run_episode_file
 #'
 #' @return the final data as a [tibble][tibble::tibble-package]
 #' @export
