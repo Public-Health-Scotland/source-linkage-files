@@ -7,6 +7,7 @@
 run_episode_file(
   processed_data_list,
   year,
+  homelessness_lookup = create_homelessness_lookup(year),
   write_to_disk = TRUE,
   anon_chi_out = TRUE
 )
@@ -15,6 +16,8 @@ run_episode_file(
 \item{processed_data_list}{containing data from processed extracts.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{homelessness_lookup}{dataframe with CHI, start date, end date. Creates hl1_in_fy flag.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
