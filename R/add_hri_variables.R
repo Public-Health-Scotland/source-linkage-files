@@ -56,7 +56,6 @@ flag_non_scottish_residents <- function(
 #' LCA level. Then joins on this lookup by chi/anon_chi.
 #'
 #' @param data An SLF individual file.
-#' @param chi_variable Defaults to "anon_chi".
 #' @param slf_pc_lookup The Source postcode lookup, defaults
 #' to [get_slf_postcode_path()] read using [read_file()].
 #'
@@ -64,7 +63,6 @@ flag_non_scottish_residents <- function(
 #' @export
 add_hri_variables <- function(
     data,
-    chi_variable = "anon_chi",
     slf_pc_lookup = read_file(
       get_slf_postcode_path(),
       col_select = "postcode"
@@ -72,7 +70,7 @@ add_hri_variables <- function(
   hri_lookup <- data %>%
     dplyr::select(
       "year",
-      chi_variable,
+      "chi",
       "postcode",
       "gpprac",
       "lca",
