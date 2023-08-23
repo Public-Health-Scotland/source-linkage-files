@@ -23,7 +23,7 @@ flag_non_scottish_residents <- function(
   pc_areas <- slf_pc_lookup %>%
     dplyr::mutate(
       pc_area = stringr::str_match(postcode, "^[A-Z]{1,3}"),
-      scot_flag = 0L
+      scot_flag = TRUE
     ) %>%
     dplyr::distinct(pc_area, scot_flag)
 
@@ -37,7 +37,7 @@ flag_non_scottish_residents <- function(
         stringr::str_sub(.data$postcode, 1, 4) %in% c("ZZ01", "ZZ61"),
       eng_prac = .data$gpprac %in% c(99942, 99957, 99961, 99976, 99981, 99995, 99999),
       keep_flag = dplyr::case_when(
-        .data$scot_flag == 0L ~ 0L,
+        .data$scot_flag ~ 0L,
         (is_missing(.data$postcode) | .data$dummy_postcode) & is.na(.data$gpprac) ~ 2L,
         !.data$eng_prac & is_missing(.data$postcode) ~ 3L,
         !.data$eng_prac & .data$dummy_postcode ~ 4L,
