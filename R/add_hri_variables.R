@@ -36,7 +36,7 @@ flag_non_scottish_residents <- function(
       dummy_postcode = .data$postcode %in% c("BF010AA", "NF1 1AB", "NK010AA") |
         stringr::str_sub(.data$postcode, 1, 4) %in% c("ZZ01", "ZZ61"),
       eng_prac = .data$gpprac %in% c(99942, 99957, 99961, 99976, 99981, 99995, 99999),
-      keep_flag = dplyr::case_when(
+      scottish_resident = dplyr::case_when(
         .data$scot_flag ~ 0L,
         (is_missing(.data$postcode) | .data$dummy_postcode) & is.na(.data$gpprac) ~ 2L,
         !.data$eng_prac & is_missing(.data$postcode) ~ 3L,
@@ -87,7 +87,7 @@ add_hri_variables <- function(
       "ooh_cases"
     ) %>%
     flag_non_scottish_residents(slf_pc_lookup = slf_pc_lookup) %>%
-    dplyr::filter(keep_flag == 0L) %>%
+    dplyr::filter(scottish_resident == 0L) %>%
     # Scotland cost and proportion
     dplyr::mutate(
       scotland_cost = sum(health_net_cost),
