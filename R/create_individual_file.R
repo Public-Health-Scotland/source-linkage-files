@@ -12,6 +12,7 @@
 create_individual_file <- function(
     episode_file,
     year,
+    homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
     anon_chi_out = TRUE) {
@@ -67,6 +68,7 @@ create_individual_file <- function(
     aggregate_by_chi() %>%
     clean_individual_file(year) %>%
     join_cohort_lookups(year) %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%

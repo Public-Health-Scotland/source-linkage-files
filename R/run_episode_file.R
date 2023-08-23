@@ -6,6 +6,7 @@
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
 #' (instead of chi)
+#' @param homelessness_lookup dataframe with CHI, start date, end date. Creates hl1_in_fy flag.
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
@@ -13,6 +14,7 @@
 run_episode_file <- function(
     processed_data_list,
     year,
+    homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
@@ -99,6 +101,8 @@ run_episode_file <- function(
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
     link_delayed_discharge_eps(year) %>%
     add_nsu_cohort(year) %>%
