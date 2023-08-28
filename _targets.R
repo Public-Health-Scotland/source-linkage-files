@@ -19,7 +19,7 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223")
+years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223", "2324")
 
 list(
   tar_rds(write_to_disk, TRUE),
@@ -339,11 +339,14 @@ list(
         year
       )
     ),
-    tar_target(source_homelessness_extract, process_extract_homelessness(
-      homelessness_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
+    tar_target(
+      source_homelessness_extract,
+      process_extract_homelessness(
+        homelessness_data,
+        year,
+        write_to_disk = write_to_disk
+      )
+    ),
     tar_target(
       tests_source_homelessness_extract,
       process_tests_homelessness(
@@ -544,10 +547,18 @@ list(
       )
     ),
     tar_target(
+      homelessness_lookup,
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
+    tar_target(
       episode_file,
       run_episode_file(
         processed_data_list,
         year,
+        homelessness_lookup = homelessness_lookup,
         write_to_disk
       )
     ),
@@ -563,6 +574,7 @@ list(
       create_individual_file(
         episode_file = episode_file,
         year = year,
+        homelessness_lookup = homelessness_lookup,
         write_to_disk = write_to_disk
       )
     ),

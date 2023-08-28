@@ -30,6 +30,7 @@ the final data and also write this out to disk.
 }
 \seealso{
 Other process extracts: 
+\code{\link{create_homelessness_lookup}()},
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_alarms_telecare}()},
