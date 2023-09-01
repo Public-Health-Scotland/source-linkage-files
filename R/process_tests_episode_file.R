@@ -104,9 +104,15 @@ produce_episode_file_tests <- function(
         1L,
         0L
       )
-    ) %>%
+    )
+
+  if (!recid == "00B") {
+    test_flags <- create_hscp_test_flags(test_flags, .data$hscp2018)
+  }
+
+  test_flags <- test_flags %>%
     # keep variables for comparison
-    dplyr::select("valid_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum", group_by = "recid")
 
