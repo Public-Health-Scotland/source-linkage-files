@@ -58,5 +58,5 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
     ))
   }
 
-  return(slfhelper::get_chi(slf_data))
+  return(slf_data)
 }
