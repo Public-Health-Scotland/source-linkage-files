@@ -57,7 +57,18 @@ create_individual_file <- function(
       "sc_latest_submission",
       "hc_hours_annual",
       "hc_reablement",
-      "ooh_case_id"
+      "ooh_case_id",
+      "lca",
+      "hbrescode",
+      "health_net_cost",
+      "acute_episodes",
+      "mat_episodes",
+      "mh_episodes",
+      "gls_episodes",
+      "op_newcons_attendances",
+      "ae_attendances",
+      "pis_paid_items",
+      "ooh_cases"
     ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
@@ -74,6 +85,7 @@ create_individual_file <- function(
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
     join_sc_client(year) %>%
+    add_hri_variables()
     dplyr::mutate(year = year, .before = dplyr::everything())
 
   if (anon_chi_out) {
