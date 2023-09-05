@@ -85,7 +85,7 @@ create_individual_file <- function(
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
     join_sc_client(year) %>%
-    add_hri_variables()
+    add_hri_variables() %>%
     dplyr::mutate(year = year, .before = dplyr::everything())
 
   if (anon_chi_out) {
