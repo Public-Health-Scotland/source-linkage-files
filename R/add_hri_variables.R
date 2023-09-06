@@ -67,8 +67,7 @@ add_hri_variables <- function(
       get_slf_postcode_path(),
       col_select = "postcode"
     ),
-    chi_variable = "chi"
-) {
+    chi_variable = "chi") {
   hri_lookup <- data %>%
     dplyr::select(
       "year",

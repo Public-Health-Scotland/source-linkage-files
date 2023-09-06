@@ -86,7 +86,7 @@ create_individual_file <- function(
     join_slf_lookup_vars() %>%
     join_sc_client(year) %>%
     dplyr::mutate(year = year, .before = dplyr::everything())
-    add_hri_variables(chi_variable = "chi")
+  add_hri_variables(chi_variable = "chi")
 
   if (anon_chi_out) {
     individual_file <- individual_file %>%
