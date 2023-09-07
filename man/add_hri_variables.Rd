@@ -6,8 +6,8 @@
 \usage{
 add_hri_variables(
   data,
-  slf_pc_lookup = read_file(get_slf_postcode_path(), col_select = "postcode"),
-  chi_variable = "chi"
+  chi_variable = "chi",
+  slf_pc_lookup = read_file(get_slf_postcode_path(), col_select = "postcode")
 )
 }
 \arguments{
