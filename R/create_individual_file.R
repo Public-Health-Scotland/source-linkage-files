@@ -88,7 +88,29 @@ create_individual_file <- function(
     dplyr::mutate(year = year, .before = dplyr::everything()) %>%
     add_hri_variables(chi_variable = "chi")
 
-
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    individual_file <- individual_file %>%
+      dplyr::mutate(
+        CH_cis_episodes = NA,
+        CH_beddays = NA,
+        CH_cost = NA,
+        hc_episodes = NA,
+        hc_personal_episodes = NA,
+        hc_non_personal_episodes = NA,
+        hc_reablement_episodes = NA,
+        hc_total_cost = NA,
+        hc_total_hours = NA,
+        hc_personal_hours = NA,
+        hc_non_personal_hours = NA,
+        hc_reablement_hours = NA,
+        AT_alarms = NA,
+        AT_telecare = NA,
+        SDS_option_1 = NA,
+        SDS_option_2 = NA,
+        SDS_option_3 = NA,
+        SDS_option_4 = NA
+      )
+  }
 
   if (anon_chi_out) {
     individual_file <- individual_file %>%
