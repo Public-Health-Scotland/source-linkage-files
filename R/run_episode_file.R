@@ -115,6 +115,38 @@ run_episode_file <- function(
     join_deaths_data(year) %>%
     load_ep_file_vars(year)
 
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        sc_send_lca = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA,
+        sc_latest_submission = NA,
+        ch_chi_cis = NA,
+        sc_id_cis = NA,
+        ch_name = NA,
+        ch_adm_reason = NA,
+        ch_provider = NA,
+        ch_nursing = NA,
+        hc_hours_annual = NA,
+        hc_hours_q1 = NA,
+        hc_hours_q2 = NA,
+        hc_hours_q3 = NA,
+        hc_hours_q4 = NA,
+        hc_cost_q1 = NA,
+        hc_cost_q2 = NA,
+        hc_cost_q3 = NA,
+        hc_cost_q4 = NA,
+        hc_provider = NA,
+        hc_reablement = NA,
+        sds_option_4 = NA,
+      )
+  }
+
   if (anon_chi_out) {
     episode_file <- slfhelper::get_anon_chi(episode_file)
   }
