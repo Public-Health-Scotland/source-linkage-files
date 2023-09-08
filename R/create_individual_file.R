@@ -72,8 +72,14 @@ create_individual_file <- function(
     ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
-    add_all_columns() %>%
-    aggregate_ch_episodes() %>%
+    add_all_columns()
+
+  if (check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    individual_file <- individual_file %>%
+      aggregate_ch_episodes()
+  }
+
+  individual_file <- individual_file %>%
     clean_up_ch(year) %>%
     recode_gender() %>%
     aggregate_by_chi() %>%
