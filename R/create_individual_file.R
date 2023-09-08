@@ -173,7 +173,7 @@ add_cij_columns <- function(episode_file) {
 add_all_columns <- function(episode_file) {
   cli::cli_alert_info("Add all columns function started at {Sys.time()}")
 
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_acute_columns("Acute", (.data$smrtype == "Acute-DC" | .data$smrtype == "Acute-IP") & .data$cij_pattype != "Maternity") %>%
     add_mat_columns("Mat", .data$recid == "02B" | .data$cij_pattype == "Maternity") %>%
     add_mh_columns("MH", .data$recid == "04B" & .data$cij_pattype != "Maternity") %>%
@@ -187,11 +187,17 @@ add_all_columns <- function(episode_file) {
     add_dd_columns("DD", .data$recid == "DD") %>%
     add_nsu_columns("NSU", .data$recid == "NSU") %>%
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
-    add_hl1_columns("HL1", .data$recid == "HL1") %>%
-    add_ch_columns("CH", .data$recid == "CH") %>%
-    add_hc_columns("HC", .data$recid == "HC") %>%
-    add_at_columns("AT", .data$recid == "AT") %>%
-    add_sds_columns("SDS", .data$recid == "SDS") %>%
+    add_hl1_columns("HL1", .data$recid == "HL1")
+
+  if (check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    episode_file <- episode_file %>%
+      add_ch_columns("CH", .data$recid == "CH") %>%
+      add_hc_columns("HC", .data$recid == "HC") %>%
+      add_at_columns("AT", .data$recid == "AT") %>%
+      add_sds_columns("SDS", .data$recid == "SDS")
+  }
+
+  episode_file <- episode_file %>%
     dplyr::mutate(
       health_net_cost = rowSums(
         dplyr::pick(
