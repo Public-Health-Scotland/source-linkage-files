@@ -74,15 +74,19 @@ create_individual_file <- function(
     add_cij_columns() %>%
     add_all_columns()
 
-  if (check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     individual_file <- individual_file %>%
-      aggregate_ch_episodes()
+      aggregate_by_chi_no_sc()
+  } else {
+    individual_file <- individual_file %>%
+      aggregate_ch_episodes() %>%
+      clean_up_ch(year) %>%
+      aggregate_by_chi() %>%
+      join_sc_client(year)
   }
 
   individual_file <- individual_file %>%
-    clean_up_ch(year) %>%
     recode_gender() %>%
-    aggregate_by_chi() %>%
     clean_individual_file(year) %>%
     join_cohort_lookups(year) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
@@ -90,7 +94,6 @@ create_individual_file <- function(
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
-    join_sc_client(year) %>%
     dplyr::mutate(year = year, .before = dplyr::everything()) %>%
     add_hri_variables(chi_variable = "chi")
 
