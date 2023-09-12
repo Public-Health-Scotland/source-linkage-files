@@ -31,12 +31,12 @@ aggregate_by_chi <- function(episode_file) {
   data.table::setnames(
     episode_file,
     c(
-      "ch_chi_cis", "cij_marker", "ooh_case_id"
-      # ,"hh_in_fy"
+      "ch_chi_cis", "cij_marker", "ooh_case_id",
+      "hh_in_fy"
     ),
     c(
-      "ch_cis_episodes", "cij_total", "ooh_cases"
-      # ,"hl1_in_fy"
+      "ch_cis_episodes", "cij_total", "ooh_cases",
+      "hl1_in_fy"
     )
   )
 
