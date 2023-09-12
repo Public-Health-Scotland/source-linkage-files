@@ -74,6 +74,8 @@ create_individual_file <- function(
     add_cij_columns() %>%
     add_all_columns()
 
+  adfasdfasdfasdfasdf
+
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     individual_file <- individual_file %>%
       aggregate_by_chi_no_sc()
