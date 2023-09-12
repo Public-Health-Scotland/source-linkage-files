@@ -71,7 +71,7 @@ add_hri_variables <- function(
   hri_lookup <- data %>%
     dplyr::select(
       "year",
-      "chi",
+      chi_variable,
       "postcode",
       "gpprac",
       "lca",
