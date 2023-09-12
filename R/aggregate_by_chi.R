@@ -258,13 +258,13 @@ aggregate_by_chi_no_sc <- function(episode_file) {
   data.table::setnames(
     episode_file,
     c(
-      #"ch_chi_cis",
+      # "ch_chi_cis",
       "cij_marker",
       "ooh_case_id",
       "hh_in_fy"
     ),
     c(
-      #"ch_cis_episodes",
+      # "ch_cis_episodes",
       "cij_total",
       "ooh_cases",
       "hl1_in_fy"
@@ -276,12 +276,12 @@ aggregate_by_chi_no_sc <- function(episode_file) {
   cols2 <- c(
     "postcode",
     "dob",
-    "gpprac"#,
-    #vars_start_with(episode_file, "sc_")
+    "gpprac" # ,
+    # vars_start_with(episode_file, "sc_")
   )
   # columns to count unique rows
   cols3 <- c(
-    #"ch_cis_episodes",
+    # "ch_cis_episodes",
     "cij_total",
     "cij_el",
     "cij_non_el",
@@ -302,8 +302,8 @@ aggregate_by_chi_no_sc <- function(episode_file) {
         "attend",
         "contacts",
         "hours",
-        #"alarms",
-        #"telecare",
+        # "alarms",
+        # "telecare",
         "paid_items",
         "advice",
         "homev",
@@ -313,63 +313,63 @@ aggregate_by_chi_no_sc <- function(episode_file) {
         "dn",
         "nhs24",
         "pcc"
-      #)
-    ),
-    #vars_start_with(
-      #episode_file,
-      #"sds_option"
+        # )
+      ),
+      # vars_start_with(
+      # episode_file,
+      # "sds_option"
     ),
     "health_net_cost_inc_dnas"
   )
-  #cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
+  # cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
   # columns to select maximum
   cols5 <- c("nsu", vars_contain(episode_file, "hl1_in_fy"))
   data.table::setnafill(episode_file, fill = 0L, cols = cols5)
   # compute
   individual_file_cols1 <- episode_file[,
-                                        .(gender = mean(gender)),
-                                        by = "chi"
+    .(gender = mean(gender)),
+    by = "chi"
   ]
   individual_file_cols2 <- episode_file[,
-                                        .SD[.N],
-                                        .SDcols = cols2,
-                                        by = "chi"
+    .SD[.N],
+    .SDcols = cols2,
+    by = "chi"
   ]
   individual_file_cols3 <- episode_file[,
-                                        lapply(.SD, function(x) {
-                                          data.table::uniqueN(x, na.rm = TRUE)
-                                        }),
-                                        .SDcols = cols3,
-                                        by = "chi"
+    lapply(.SD, function(x) {
+      data.table::uniqueN(x, na.rm = TRUE)
+    }),
+    .SDcols = cols3,
+    by = "chi"
   ]
   individual_file_cols4 <- episode_file[,
-                                        lapply(.SD, function(x) {
-                                          sum(x, na.rm = TRUE)
-                                        }),
-                                        .SDcols = cols4,
-                                        by = "chi"
+    lapply(.SD, function(x) {
+      sum(x, na.rm = TRUE)
+    }),
+    .SDcols = cols4,
+    by = "chi"
   ]
   individual_file_cols5 <- episode_file[,
-                                        lapply(.SD, function(x) max(x, na.rm = TRUE)),
-                                        .SDcols = cols5,
-                                        by = "chi"
+    lapply(.SD, function(x) max(x, na.rm = TRUE)),
+    .SDcols = cols5,
+    by = "chi"
   ]
   individual_file_cols6 <- episode_file[,
-                                        .(
-                                          preventable_beddays = ifelse(
-                                            any(cij_ppa, na.rm = TRUE),
-                                            as.integer(min(cij_end_date, end_fy(year)) - max(cij_start_date, start_fy(year))),
-                                            NA_integer_
-                                          )
-                                        ),
-                                        # cij_marker has been renamed as cij_total
-                                        by = c("chi", "cij_total")
+    .(
+      preventable_beddays = ifelse(
+        any(cij_ppa, na.rm = TRUE),
+        as.integer(min(cij_end_date, end_fy(year)) - max(cij_start_date, start_fy(year))),
+        NA_integer_
+      )
+    ),
+    # cij_marker has been renamed as cij_total
+    by = c("chi", "cij_total")
   ]
   individual_file_cols6 <- individual_file_cols6[,
-                                                 .(
-                                                   preventable_beddays = sum(preventable_beddays, na.rm = TRUE)
-                                                 ),
-                                                 by = "chi"
+    .(
+      preventable_beddays = sum(preventable_beddays, na.rm = TRUE)
+    ),
+    by = "chi"
   ]
 
   individual_file <- dplyr::bind_cols(
