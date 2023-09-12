@@ -100,9 +100,9 @@ create_individual_file <- function(
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     individual_file <- individual_file %>%
       dplyr::mutate(
-        CH_cis_episodes = NA,
-        CH_beddays = NA,
-        CH_cost = NA,
+        ch_cis_episodes = NA,
+        ch_beddays = NA,
+        ch_cost = NA,
         hc_episodes = NA,
         hc_personal_episodes = NA,
         hc_non_personal_episodes = NA,
@@ -112,12 +112,17 @@ create_individual_file <- function(
         hc_personal_hours = NA,
         hc_non_personal_hours = NA,
         hc_reablement_hours = NA,
-        AT_alarms = NA,
-        AT_telecare = NA,
-        SDS_option_1 = NA,
-        SDS_option_2 = NA,
-        SDS_option_3 = NA,
-        SDS_option_4 = NA
+        at_alarms = NA,
+        at_telecare = NA,
+        sds_option_1 = NA,
+        sds_option_2 = NA,
+        sds_option_3 = NA,
+        sds_option_4 = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_meals = NA,
+        sc_day_care = NA
       )
   }
 
