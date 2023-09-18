@@ -4,7 +4,7 @@
 \alias{aggregate_by_chi}
 \title{Aggregate by CHI}
 \usage{
-aggregate_by_chi(episode_file)
+aggregate_by_chi(episode_file, exclude_sc_var = FALSE)
 }
 \arguments{
 \item{episode_file}{Tibble containing episodic data}

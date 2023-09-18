@@ -76,12 +76,12 @@ create_individual_file <- function(
 
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     individual_file <- individual_file %>%
-      aggregate_by_chi_no_sc()
+      aggregate_by_chi(exclude_sc_var = TRUE)
   } else {
     individual_file <- individual_file %>%
       aggregate_ch_episodes() %>%
       clean_up_ch(year) %>%
-      aggregate_by_chi() %>%
+      aggregate_by_chi(exclude_sc_var = FALSE) %>%
       join_sc_client(year)
   }
 
