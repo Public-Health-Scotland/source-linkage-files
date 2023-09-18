@@ -2,7 +2,8 @@
 * Update of 2017/18 onwards to include bug fixes within the files. 
 * New 2023/24 files.
   *No social care data available for new 2023/24 file.
-* New NSU cohort for 2022/23 file. 
+* New NSU cohort for 2022/23 file.
+* SPD and SIMD updated.
 * Re addition of:
   * HRIs in individual file.
   * Homelessness Flags.
