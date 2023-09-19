@@ -107,10 +107,6 @@ produce_episode_file_tests <- function(
       )
     )
 
-  if (!recid == "00B") {
-    test_flags <- create_hscp_test_flags(test_flags, .data$hscp2018)
-  }
-
   test_flags <- test_flags %>%
     # keep variables for comparison
     dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
