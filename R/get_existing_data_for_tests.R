@@ -50,9 +50,6 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode", anon
       recids = recids,
       col_select = variable_names
     ))
-    if ("hscp2018" %in% variable_names) {
-      slf_data <- dplyr::rename(slf_data, "hscp" = "hscp2018")
-    }
   } else {
     slf_data <- suppressMessages(slfhelper::read_slf_individual(
       year = year,
@@ -60,5 +57,12 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode", anon
     ))
   }
 
-  return(slfhelper::get_chi(slf_data))
+  if (anon_chi == FALSE){
+    slf_data <- slf_data %>%
+      slfhelper::get_chi()
+  }else{
+    slf_data <- slf_data
+  }
+
+  return(slf_data)
 }
