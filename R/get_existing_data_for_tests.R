@@ -58,10 +58,10 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode", anon
     ))
   }
 
-  if (anon_chi == FALSE){
+  if (anon_chi == FALSE) {
     slf_data <- slf_data %>%
       slfhelper::get_chi()
-  }else{
+  } else {
     slf_data <- slf_data
   }
 
