@@ -16,6 +16,7 @@
 #'
 #' @family test functions
 #' @seealso produce_source_extract_tests
+#' @export
 get_existing_data_for_tests <- function(new_data, file_version = "episode", anon_chi = FALSE) {
   file_version <- match.arg(file_version, c("episode", "individual"))
 
