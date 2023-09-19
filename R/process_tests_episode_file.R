@@ -21,10 +21,9 @@ process_tests_episode_file <- function(data, year) {
       "record_keydate1",
       "record_keydate2",
       dplyr::contains(c("beddays", "cost", "cij"))
-    ) %>%
-    slfhelper::get_chi()
+    )
 
-  old_data <- get_existing_data_for_tests(data)
+  old_data <- get_existing_data_for_tests(data, anon_chi = TRUE)
 
   comparison <- produce_test_comparison(
     old_data = produce_episode_file_tests(old_data),
