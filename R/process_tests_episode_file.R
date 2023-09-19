@@ -76,7 +76,6 @@ produce_episode_file_tests <- function(
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
-    create_hscp_test_flags(.data$hscp2018) %>%
     # Flags to count stay types
     dplyr::mutate(
       cij_elective = dplyr::if_else(
@@ -99,7 +98,13 @@ produce_episode_file_tests <- function(
         1L,
         0L
       )
-    ) %>%
+    )
+
+  if (!recid == "00B") {
+    test_flags <- create_hscp_test_flags(test_flags, .data$hscp2018)
+  }
+
+  test_flags <- test_flags %>%
     # keep variables for comparison
     dplyr::select("valid_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
