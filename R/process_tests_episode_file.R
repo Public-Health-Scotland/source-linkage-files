@@ -62,6 +62,7 @@ process_tests_episode_file <- function(data, year) {
 #' [create_hscp_test_flags()] and [create_hb_cost_test_flags()]
 #' for creating test flags
 #' @seealso calculate_measures
+#' @export
 produce_episode_file_tests <- function(
     data,
     sum_mean_vars = c("beddays", "cost", "yearstay"),
