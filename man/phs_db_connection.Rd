@@ -4,19 +4,23 @@
 \alias{phs_db_connection}
 \title{Open a connection to a PHS database}
 \usage{
-phs_db_connection(dsn, username = Sys.getenv("USER"))
+phs_db_connection(dsn, username)
 }
 \arguments{
-\item{dsn}{The Data Source Name passed on to \code{odbc::dbconnect}
-the dsn must be setup first. e.g. SMRA or DVPROD}
+\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}}
+the DSN must be set up first. e.g. \code{SMRA} or \code{DVPROD}}
 
 \item{username}{The username to use for authentication,
-if not supplied it first will check the environment variable
-and finally ask the user for input.}
+if not supplied it will try to find it automatically and if possible ask the
+user for input.}
 }
 \value{
-a connection to the specified dsn
+a connection to the specified Data Source.
 }
 \description{
-Opens a connection to PHS database to allow data to be collected
+Opens a connection to PHS database given a Data Source Name
+(DSN) it will try to get the username, asking for input if in an interactive
+session. It will also use \link[keyring:keyring-package]{keyring} to find
+an existing keyring called 'createslf' which should contain a \code{db_password}
+key with the users database password.
 }
