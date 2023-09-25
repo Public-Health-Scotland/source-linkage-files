@@ -7,7 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi <- function(episode_file) {
+aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   # Convert to data.table
@@ -28,17 +28,33 @@ aggregate_by_chi <- function(episode_file) {
     )
   )
 
-  data.table::setnames(
-    episode_file,
-    c(
-      "ch_chi_cis", "cij_marker", "ooh_case_id"
-      # ,"hh_in_fy"
-    ),
-    c(
-      "ch_cis_episodes", "cij_total", "ooh_cases"
-      # ,"hl1_in_fy"
+  if (exclude_sc_var) {
+    data.table::setnames(
+      episode_file,
+      c(
+        "cij_marker",
+        "ooh_case_id"
+      ),
+      c(
+        "cij_total",
+        "ooh_cases"
+      )
     )
-  )
+  } else {
+    data.table::setnames(
+      episode_file,
+      c(
+        "ch_chi_cis",
+        "cij_marker",
+        "ooh_case_id"
+      ),
+      c(
+        "ch_cis_episodes",
+        "cij_total",
+        "ooh_cases"
+      )
+    )
+  }
 
   # column specification, grouped by chi
   # columns to select last
@@ -48,6 +64,9 @@ aggregate_by_chi <- function(episode_file) {
     "gpprac",
     vars_start_with(episode_file, "sc_")
   )
+  if (exclude_sc_var) {
+    cols2 <- cols2[!(cols2 %in% vars_start_with(episode_file, "sc_"))]
+  }
   # columns to count unique rows
   cols3 <- c(
     "ch_cis_episodes",
@@ -59,6 +78,9 @@ aggregate_by_chi <- function(episode_file) {
     "ooh_cases",
     "preventable_admissions"
   )
+  if (exclude_sc_var) {
+    cols3 <- cols3[!(cols3 %in% "ch_cis_episodes")]
+  }
   # columns to sum up
   cols4 <- c(
     vars_end_with(
@@ -91,6 +113,22 @@ aggregate_by_chi <- function(episode_file) {
     "health_net_cost_inc_dnas"
   )
   cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
+  if (exclude_sc_var) {
+    cols4 <-
+      cols4[!(cols4 %in% c(
+        vars_end_with(
+          episode_file,
+          c(
+            "alarms",
+            "telecare"
+          )
+        ),
+        vars_start_with(
+          episode_file,
+          "sds_option"
+        )
+      ))]
+  }
   # columns to select maximum
   cols5 <- c("nsu", vars_contain(episode_file, "hl1_in_fy"))
   data.table::setnafill(episode_file, fill = 0L, cols = cols5)

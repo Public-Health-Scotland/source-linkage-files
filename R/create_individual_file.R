@@ -12,6 +12,7 @@
 create_individual_file <- function(
     episode_file,
     year,
+    homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
     anon_chi_out = TRUE) {
@@ -56,23 +57,74 @@ create_individual_file <- function(
       "sc_latest_submission",
       "hc_hours_annual",
       "hc_reablement",
-      "ooh_case_id"
+      "ooh_case_id",
+      "lca",
+      "hbrescode",
+      "health_net_cost",
+      "acute_episodes",
+      "mat_episodes",
+      "mh_episodes",
+      "gls_episodes",
+      "op_newcons_attendances",
+      "ae_attendances",
+      "pis_paid_items",
+      "ooh_cases"
     ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
-    add_all_columns() %>%
-    aggregate_ch_episodes() %>%
-    clean_up_ch(year) %>%
+    add_all_columns()
+
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    individual_file <- individual_file %>%
+      aggregate_by_chi(exclude_sc_var = TRUE)
+  } else {
+    individual_file <- individual_file %>%
+      aggregate_ch_episodes() %>%
+      clean_up_ch(year) %>%
+      aggregate_by_chi(exclude_sc_var = FALSE) %>%
+      join_sc_client(year)
+  }
+
+  individual_file <- individual_file %>%
     recode_gender() %>%
-    aggregate_by_chi() %>%
     clean_individual_file(year) %>%
     join_cohort_lookups(year) %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
-    join_sc_client(year) %>%
-    dplyr::mutate(year = year, .before = dplyr::everything())
+    dplyr::mutate(year = year) %>%
+    add_hri_variables(chi_variable = "chi")
+
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    individual_file <- individual_file %>%
+      dplyr::mutate(
+        ch_cis_episodes = NA,
+        ch_beddays = NA,
+        ch_cost = NA,
+        hc_episodes = NA,
+        hc_personal_episodes = NA,
+        hc_non_personal_episodes = NA,
+        hc_reablement_episodes = NA,
+        hc_total_cost = NA,
+        hc_total_hours = NA,
+        hc_personal_hours = NA,
+        hc_non_personal_hours = NA,
+        hc_reablement_hours = NA,
+        at_alarms = NA,
+        at_telecare = NA,
+        sds_option_1 = NA,
+        sds_option_2 = NA,
+        sds_option_3 = NA,
+        sds_option_4 = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_meals = NA,
+        sc_day_care = NA
+      )
+  }
 
   if (anon_chi_out) {
     individual_file <- individual_file %>%
@@ -157,7 +209,7 @@ add_cij_columns <- function(episode_file) {
 add_all_columns <- function(episode_file) {
   cli::cli_alert_info("Add all columns function started at {Sys.time()}")
 
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_acute_columns("Acute", (.data$smrtype == "Acute-DC" | .data$smrtype == "Acute-IP") & .data$cij_pattype != "Maternity") %>%
     add_mat_columns("Mat", .data$recid == "02B" | .data$cij_pattype == "Maternity") %>%
     add_mh_columns("MH", .data$recid == "04B" & .data$cij_pattype != "Maternity") %>%
@@ -171,11 +223,17 @@ add_all_columns <- function(episode_file) {
     add_dd_columns("DD", .data$recid == "DD") %>%
     add_nsu_columns("NSU", .data$recid == "NSU") %>%
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
-    add_hl1_columns("HL1", .data$recid == "HL1") %>%
-    add_ch_columns("CH", .data$recid == "CH") %>%
-    add_hc_columns("HC", .data$recid == "HC") %>%
-    add_at_columns("AT", .data$recid == "AT") %>%
-    add_sds_columns("SDS", .data$recid == "SDS") %>%
+    add_hl1_columns("HL1", .data$recid == "HL1")
+
+  if (check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    episode_file <- episode_file %>%
+      add_ch_columns("CH", .data$recid == "CH") %>%
+      add_hc_columns("HC", .data$recid == "HC") %>%
+      add_at_columns("AT", .data$recid == "AT") %>%
+      add_sds_columns("SDS", .data$recid == "SDS")
+  }
+
+  episode_file <- episode_file %>%
     dplyr::mutate(
       health_net_cost = rowSums(
         dplyr::pick(

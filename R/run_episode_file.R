@@ -6,6 +6,7 @@
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
 #' (instead of chi)
+#' @param homelessness_lookup dataframe with CHI, start date, end date. Creates hl1_in_fy flag.
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
@@ -13,6 +14,7 @@
 run_episode_file <- function(
     processed_data_list,
     year,
+    homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
@@ -99,6 +101,8 @@ run_episode_file <- function(
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
     link_delayed_discharge_eps(year) %>%
     add_nsu_cohort(year) %>%
@@ -110,6 +114,38 @@ run_episode_file <- function(
     fill_geographies() %>%
     join_deaths_data(year) %>%
     load_ep_file_vars(year)
+
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        sc_send_lca = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA,
+        sc_latest_submission = NA,
+        ch_chi_cis = NA,
+        sc_id_cis = NA,
+        ch_name = NA,
+        ch_adm_reason = NA,
+        ch_provider = NA,
+        ch_nursing = NA,
+        hc_hours_annual = NA,
+        hc_hours_q1 = NA,
+        hc_hours_q2 = NA,
+        hc_hours_q3 = NA,
+        hc_hours_q4 = NA,
+        hc_cost_q1 = NA,
+        hc_cost_q2 = NA,
+        hc_cost_q3 = NA,
+        hc_cost_q4 = NA,
+        hc_provider = NA,
+        hc_reablement = NA,
+        sds_option_4 = NA,
+      )
+  }
 
   if (anon_chi_out) {
     episode_file <- slfhelper::get_anon_chi(episode_file)
@@ -323,30 +359,18 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
-  # Use future so the cohorts can be created simultaneously (in parallel)
-  future::plan(strategy = future.callr::callr, .skip = TRUE)
-  options(future.globals.maxSize = 21474836480)
-
-  future_demographic <- future::future({
-    create_demographic_cohorts(
-      data,
-      year,
-      update,
-      write_to_disk = TRUE
-    )
-  })
-  future_service_use <- future::future({
-    create_service_use_cohorts(
-      data,
-      year,
-      update,
-      write_to_disk = TRUE
-    )
-  })
-
-  # This 'blocks' the code until they have both finished executing
-  value_demographic <- future::value(future_demographic)
-  value_service_use <- future::value(future_service_use)
+  create_demographic_cohorts(
+    data,
+    year,
+    update,
+    write_to_disk = TRUE
+  )
+  create_service_use_cohorts(
+    data,
+    year,
+    update,
+    write_to_disk = TRUE
+  )
 
   return(data)
 }
