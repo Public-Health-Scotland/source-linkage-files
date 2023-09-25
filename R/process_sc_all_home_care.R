@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' all home care extract, it will return the final data
-#' but also write this out as a rds.
+#' and (optionally) write it to disk.
 #'
 #' @inheritParams process_sc_all_care_home
 #'

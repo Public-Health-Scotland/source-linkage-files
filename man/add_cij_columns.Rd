@@ -7,7 +7,7 @@
 add_cij_columns(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Add new columns related to CIJ
