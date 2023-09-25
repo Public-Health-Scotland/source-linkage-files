@@ -32,6 +32,9 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
       "anon_chi",
       dplyr::intersect(slfhelper::ep_file_vars, tolower(names(new_data)))
     )
+    if ("hscp" %in% names(new_data)) {
+      variable_names <- c("hscp2018", variable_names)
+    }
   } else if (file_version == "individual") {
     variable_names <- c(
       "anon_chi",
@@ -43,12 +46,15 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
     slf_data <- suppressMessages(slfhelper::read_slf_episode(
       year = year,
       recids = recids,
-      columns = variable_names
+      col_select = variable_names
     ))
+    if ("hscp2018" %in% variable_names) {
+      slf_data <- dplyr::rename(slf_data, "hscp" = "hscp2018")
+    }
   } else {
     slf_data <- suppressMessages(slfhelper::read_slf_individual(
       year = year,
-      columns = variable_names
+      col_select = variable_names
     ))
   }
 
