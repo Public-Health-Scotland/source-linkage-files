@@ -91,6 +91,7 @@ hjust
 hms
 homecare
 homev
+hscdiip
 hscp
 hscpnames
 IDPC
@@ -107,6 +108,7 @@ keyring
 keytime
 keytimex
 kis
+lazydt
 lgl
 los
 ltc
@@ -166,6 +168,7 @@ readxl
 reasonwait
 recid
 refsource
+renviron
 rlang
 rmarkdown
 roxygen

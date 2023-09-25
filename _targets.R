@@ -545,7 +545,7 @@ list(
     ),
     tar_target(
       episode_file,
-      run_episode_file(
+      create_episode_file(
         processed_data_list,
         year,
         write_to_disk

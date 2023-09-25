@@ -53,7 +53,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
       tidyselect::matches("datazone\\d{4}$")
     ) %>%
     dplyr::mutate(
-      locality = tidyr::replace_na("locality", "No Locality Information")
+      locality = tidyr::replace_na(.data$locality, "No Locality Information")
     )
 
 

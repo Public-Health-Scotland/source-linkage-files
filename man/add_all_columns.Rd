@@ -7,7 +7,7 @@
 add_all_columns(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Add new columns based on SMRType and recid which follow a pattern
