@@ -769,13 +769,25 @@ join_sc_client <- function(
       sc_demographics %>%
         dplyr::select("sending_location", "social_care_id", "chi"),
       by = c("sending_location", "social_care_id")
-    )
+    ) %>%
+    dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
+      c(
+        "sc_living_alone",
+        "sc_support_from_unpaid_carer",
+        "sc_social_worker",
+        "sc_meals",
+        "sc_day_care"
+      )
+    )) == "Not Known")) %>%
+    dplyr::arrange(chi, count_not_known) %>%
+    dplyr::distinct(chi, .keep_all = TRUE)
 
   # Match on client variables by chi
   individual_file <- individual_file %>%
     dplyr::left_join(
       join_client_demog,
-      by = "chi"
+      by = "chi",
+      relationship = "one-to-one"
     ) %>%
     dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
 
