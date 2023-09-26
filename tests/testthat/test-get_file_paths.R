@@ -1,3 +1,28 @@
+test_that("Errors properly", {
+  expect_error(
+    get_file_path(directory = "foo", file_name = "bar"),
+    "The directory .+? does not exist\\."
+  )
+
+  expect_error(
+    get_file_path(
+      directory = ".",
+      file_name_regexp = "targets",
+      check_mode = "write"
+    ),
+    "`check_mode = \"write\"` can't be used"
+  )
+})
+
+test_that("Can do check exists", {
+  expect_false(get_file_path(
+    directory = ".",
+    file_name = "foo.R",
+    check_mode = "exists"
+  ))
+})
+
+
 skip_on_ci()
 
 slf_updates_dir <- fs::path(

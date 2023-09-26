@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' all Alarms Telecare extract, it will return the final data
-#' but also write this out as a rds.
+#' and (optionally) write it to disk.
 #'
 #' @inheritParams process_sc_all_care_home
 #'
@@ -121,9 +121,10 @@ process_sc_all_alarms_telecare <- function(
     tibble::as_tibble()
 
   if (write_to_disk) {
-    # Save .rds file ----
-    qtr_merge %>%
-      write_file(get_sc_at_episodes_path(check_mode = "write"))
+    write_file(
+      qtr_merge,
+      get_sc_at_episodes_path(check_mode = "write")
+    )
   }
 
   return(qtr_merge)
