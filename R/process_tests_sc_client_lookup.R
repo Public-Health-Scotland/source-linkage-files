@@ -8,11 +8,10 @@
 #'
 #' @export
 process_tests_sc_client_lookup <- function(data, year) {
-
   comparison <- produce_test_comparison(
     old_data = produce_tests_sc_client_lookup(
       read_file(get_sc_client_lookup_path(year, update = previous_update()))
-      ),
+    ),
     new_data = produce_tests_sc_client_lookup(data)
   )
 
