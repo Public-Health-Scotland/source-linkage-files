@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' postcode lookup, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param simd_path Path to SIMD lookup.
 #' @param locality_path Path to locality lookup.
@@ -58,16 +58,14 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
 
 
   # Join data together  -----------------------------------------------------
-  data <-
-    dplyr::left_join(spd_file, simd_file, by = "pc7") %>%
+  data <- dplyr::left_join(spd_file, simd_file, by = "pc7") %>%
     dplyr::rename(postcode = "pc7") %>%
     dplyr::left_join(locality_file, by = "datazone2011")
 
 
   # Finalise output -----------------------------------------------------
 
-  outfile <-
-    data %>%
+  slf_pc_lookup <- data %>%
     dplyr::select(
       "postcode",
       "lca",
@@ -89,13 +87,12 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
       tidyselect::matches("ur2_\\d{4}$")
     )
 
-
-  # Save out ----------------------------------------------------------------
   if (write_to_disk) {
-    outfile %>%
-      # Save .rds file
-      write_file(get_slf_postcode_path(check_mode = "write"))
+    write_file(
+      slf_pc_lookup,
+      get_slf_postcode_path(check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(slf_pc_lookup)
 }

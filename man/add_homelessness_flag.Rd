@@ -10,8 +10,6 @@ add_homelessness_flag(data, year, lookup = create_homelessness_lookup(year))
 \item{data}{The data to add the flag to - the episode
 or individual file.}
 
-\item{year}{The year to process, in FY format.}
-
 \item{lookup}{The homelessness lookup created by \code{\link[=create_homelessness_lookup]{create_homelessness_lookup()}}}
 }
 \value{
