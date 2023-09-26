@@ -1,16 +1,15 @@
-#' Produce the Source Episode file
+#' Create the Source Episode file
 #'
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
-#' (instead of chi)
+#' (instead of chi).
 #'
-#' @return a [tibble][tibble::tibble-package] containing the episode file
+#' @return the Source Episode file as a [tibble][tibble::tibble-package].
 #' @export
-#'
-run_episode_file <- function(
+create_episode_file <- function(
     processed_data_list,
     year,
     write_to_disk = TRUE,
@@ -122,12 +121,13 @@ run_episode_file <- function(
   }
 
   return(episode_file)
+
 }
 
 #' Store the unneeded episode file variables
 #'
 #' @param data The in-progress episode file data.
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
@@ -165,7 +165,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 
 #' Load the unneeded episode file variables
 #'
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The full SLF data.
