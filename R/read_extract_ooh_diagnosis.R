@@ -6,7 +6,7 @@
 #'
 read_extract_ooh_diagnosis <- function(
     year,
-    file_path = get_boxi_extract_path(year = year, type = "GP_OoH-d")) {
+    file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d")) {
   # Load extract file
   diagnosis_extract <- read_file(file_path,
     # All columns are character type

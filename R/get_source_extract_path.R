@@ -10,28 +10,28 @@
 #' @export
 #'
 #' @family extract file paths
-get_source_extract_path <- function(
-    year,
-    type = c(
-      "Acute",
-      "AE",
-      "AT",
-      "CH",
-      "Client",
-      "CMH",
-      "DD",
-      "Deaths",
-      "DN",
-      "GPOoH",
-      "HC",
-      "Homelessness",
-      "Maternity",
-      "MH",
-      "Outpatients",
-      "PIS",
-      "SDS"
-    ),
-    ...) {
+get_source_extract_path <- function(year,
+                                    type = c(
+                                      "acute",
+                                      "ae",
+                                      "at",
+                                      "ch",
+                                      "client",
+                                      "cmh",
+                                      "dd",
+                                      "deaths",
+                                      "dn",
+                                      "gp_ooh",
+                                      "hc",
+                                      "homelessness",
+                                      "maternity",
+                                      "mh",
+                                      "outpatients",
+                                      "pis",
+                                      "sds"
+                                    ),
+                                    ...) {
+
   if (year %in% type) {
     cli::cli_abort("{.val {year}} was supplied to the {.arg year} argument.")
   }
@@ -46,24 +46,26 @@ get_source_extract_path <- function(
 
   file_name <- dplyr::case_match(
     type,
-    "Acute" ~ "acute_for_source",
-    "AE" ~ "a_and_e_for_source",
-    "AT" ~ "alarms-telecare-for-source",
-    "CH" ~ "care_home_for_source",
-    "CMH" ~ "cmh_for_source",
-    "Client" ~ "client_for_source",
-    "DD" ~ "delayed_discharge_for_source",
-    "Deaths" ~ "deaths_for_source",
-    "DN" ~ "district_nursing_for_source",
-    "GPOoH" ~ "gp_ooh_for_source",
-    "HC" ~ "home_care_for_source",
-    "Homelessness" ~ "homelessness_for_source",
-    "Maternity" ~ "maternity_for_source",
-    "MH" ~ "mental_health_for_source",
-    "Outpatients" ~ "outpatients_for_source",
-    "PIS" ~ "prescribing_for_source",
-    "SDS" ~ "sds_for_source"
-  ) %>%
+    "acute" ~ "acute_for_source",
+    "ae" ~ "a_and_e_for_source",
+    "at" ~ "alarms-telecare-for-source",
+    "ch" ~ "care_home_for_source",
+    "cmh" ~ "cmh_for_source",
+    "client" ~ "client_for_source",
+    "dd" ~ "delayed_discharge_for_source",
+    "deaths" ~ "deaths_for_source",
+    "dn" ~ "district_nursing_for_source",
+    "gp_ooh" ~ "gp_ooh_for_source",
+    "hc" ~ "home_care_for_source",
+    "homelessness" ~ "homelessness_for_source",
+    "maternity" ~ "maternity_for_source",
+    "mh" ~ "mental_health_for_source",
+    "dd" ~ "dd_for_source",
+    "outpatients" ~ "outpatients_for_source",
+    "pis" ~ "prescribing_file_for_source",
+    "sds" ~ "sds-for-source"
+  )
+ %>%
     stringr::str_glue("-{year}.parquet")
 
   source_extract_path <- get_file_path(

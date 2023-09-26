@@ -6,7 +6,7 @@
 \usage{
 read_extract_acute(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "Acute")
+  file_path = get_boxi_extract_path(year = year, type = "acute")
 )
 }
 \arguments{

@@ -6,7 +6,7 @@
 \usage{
 read_extract_cmh(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "CMH")
+  file_path = get_boxi_extract_path(year = year, type = "cmh")
 )
 }
 \arguments{

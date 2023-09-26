@@ -87,7 +87,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       outpatients_processed,
-      get_source_extract_path(year, "Outpatients", check_mode = "write")
+      get_source_extract_path(year, "outpatients", check_mode = "write")
     )
   }
 

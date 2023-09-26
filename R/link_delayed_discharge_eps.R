@@ -11,7 +11,7 @@
 link_delayed_discharge_eps <- function(
     episode_file,
     year,
-    dd_data = read_file(get_source_extract_path(year, "DD"))) {
+    dd_data = read_file(get_source_extract_path(year, "dd"))) {
   episode_file <- episode_file %>%
     dplyr::mutate(
       # remember to revoke the cij_end_date with dummy_cij_end

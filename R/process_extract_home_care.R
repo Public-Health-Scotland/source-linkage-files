@@ -104,7 +104,7 @@ process_extract_home_care <- function(
   if (write_to_disk) {
     write_file(
       hc_processed,
-      get_source_extract_path(year, type = "HC", check_mode = "write")
+      get_source_extract_path(year, type = "hc", check_mode = "write")
     )
   }
 

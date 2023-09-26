@@ -13,23 +13,23 @@
 get_boxi_extract_path <- function(
     year,
     type = c(
-      "AE",
-      "AE_CUP",
-      "Acute",
-      "CMH",
-      "Deaths",
-      "DN",
-      "GP_OoH-c",
-      "GP_OoH-d",
-      "GP_OoH-o",
-      "Homelessness",
-      "Maternity",
-      "MH",
-      "Outpatients"
+      "ae",
+      "ae_cup",
+      "acute",
+      "cmh",
+      "deaths",
+      "dn",
+      "gp_ooh-c",
+      "gp_ooh-d",
+      "gp_ooh-o",
+      "homelessness",
+      "maternity",
+      "mh",
+      "outpatients"
     )) {
   type <- match.arg(type)
 
-  if (type %in% c("DN", "CMH")) {
+  if (type %in% c("dn", "cmh")) {
     dir <- fs::path(get_slf_dir(), "Archived_data")
   } else {
     dir <- get_year_dir(year, extracts_dir = TRUE)
@@ -41,19 +41,19 @@ get_boxi_extract_path <- function(
 
   file_name <- dplyr::case_match(
     type,
-    "AE" ~ "A&E-episode-level-extract",
-    "AE_CUP" ~ "A&E-UCD-CUP-extract",
-    "Acute" ~ "Acute-episode-level-extract",
-    "CMH" ~ "Community-MH-contact-level-extract",
-    "DN" ~ "District-Nursing-contact-level-extract",
-    "GP_OoH-c" ~ "GP-OoH-consultations-extract",
-    "GP_OoH-d" ~ "GP-OoH-diagnosis-extract",
-    "GP_OoH-o" ~ "GP-OoH-outcomes-extract",
-    "Homelessness" ~ "Homelessness-extract",
-    "Maternity" ~ "Maternity-episode-level-extract",
-    "MH" ~ "Mental-Health-episode-level-extract",
-    "Deaths" ~ "NRS-death-registrations-extract",
-    "Outpatients" ~ "Outpatients-episode-level-extract"
+    "ae" ~ "a&e-episode-level-extract",
+    "ae_cup" ~ "a&e-ucd-cup-extract",
+    "acute" ~ "acute-episode-level-extract",
+    "cmh" ~ "community-mh-contact-level-extract",
+    "dn" ~ "district-nursing-contact-level-extract",
+    "gp_ooh-c" ~ "gp-ooh-consultations-extract",
+    "gp_ooh-d" ~ "gp-ooh-diagnosis-extract",
+    "gp_ooh-o" ~ "gp-ooh-outcomes-extract",
+    "homelessness" ~ "homelessness-extract",
+    "maternity" ~ "maternity-episode-level-extract",
+    "mh" ~ "mental-health-episode-level-extract",
+    "deaths" ~ "nrs-death-registrations-extract",
+    "outpatients" ~ "outpatients-episode-level-extract"
   )
 
   boxi_extract_path_csv_gz <- fs::path(
