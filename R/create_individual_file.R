@@ -1,11 +1,11 @@
-#' Create individual file
+#' Create the Source Individual file
 #'
-#' @description Creates individual file from episode file
+#' @description Creates the individual file from the episode file.
 #'
-#' @param episode_file Tibble containing episodic data
+#' @param episode_file Tibble containing episodic data.
 #' @param anon_chi_in (Default:TRUE) Is `anon_chi` used in the input
-#' (instead of chi)
-#' @inheritParams run_episode_file
+#' (instead of chi).
+#' @inheritParams create_episode_file
 #'
 #' @return The processed individual file
 #' @family individual_file

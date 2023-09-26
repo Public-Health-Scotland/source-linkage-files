@@ -13,7 +13,7 @@ add_standard_cols(
 )
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 
 \item{prefix}{Prefix to add to related columns, e.g. "Acute"}
 

@@ -7,7 +7,7 @@
 aggregate_ch_episodes(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Aggregate CH variables by CHI and CIS.

@@ -7,7 +7,7 @@
 aggregate_by_chi(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Aggregate episode file by CHI to convert into

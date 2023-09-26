@@ -9,6 +9,7 @@ process_extract_homelessness(
   year,
   write_to_disk = TRUE,
   update = latest_update(),
+  la_code_lookup = get_la_code_opendata_lookup(),
   sg_pub_path = get_sg_homelessness_pub_path()
 )
 }
@@ -31,7 +32,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 homelessness extract, it will return the final data
-and optionally write it out as rds.
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts: 

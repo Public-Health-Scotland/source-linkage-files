@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' A&E extract, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -193,12 +193,12 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
 
   ae_cup_file <- read_file(
     path = get_boxi_extract_path(year, "AE_CUP"),
-    col_type = cols(
-      "ED Arrival Date" = col_date(format = "%Y/%m/%d %T"),
-      "ED Arrival Time" = col_time(""),
-      "ED Case Reference Number [C]" = col_character(),
-      "CUP Marker" = col_double(),
-      "CUP Pathway Name" = col_character()
+    col_type = readr::cols(
+      "ED Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "ED Arrival Time" = readr::col_time(""),
+      "ED Case Reference Number [C]" = readr::col_character(),
+      "CUP Marker" = readr::col_double(),
+      "CUP Pathway Name" = readr::col_character()
     )
   ) %>%
     # rename variables
@@ -237,9 +237,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       .data$keytime2
     )
 
-
-  # Save outfile----------------------------------------
-  outfile <- matched_ae_data %>%
+  ae_processed <- matched_ae_data %>%
     dplyr::select(
       "year",
       "recid",
@@ -294,10 +292,11 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-    # Save as rds file
-    outfile %>%
-      write_file(get_source_extract_path(year, "AE", check_mode = "write"))
+    write_file(
+      ae_processed,
+      get_source_extract_path(year, "AE", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(ae_processed)
 }

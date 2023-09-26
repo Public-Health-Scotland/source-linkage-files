@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' maternity extract, it will return the final data
-#' but also write this out an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -63,10 +63,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
       )
     )
 
-
-  # Save outfile------------------------------------------------
-
-  outfile <- maternity_clean %>%
+  maternity_processed <- maternity_clean %>%
     dplyr::select(
       "year",
       "recid",
@@ -113,12 +110,11 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     dplyr::arrange(.data$chi, .data$record_keydate1)
 
   if (write_to_disk) {
-    # Save as rds file
-    outfile %>%
-      write_file(
-        get_source_extract_path(year, "Maternity", check_mode = "write")
-      )
+    write_file(
+      maternity_processed,
+      get_source_extract_path(year, "Maternity", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(maternity_processed)
 }

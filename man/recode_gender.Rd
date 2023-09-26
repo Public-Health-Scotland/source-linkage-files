@@ -7,7 +7,7 @@
 recode_gender(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Recode gender to 1.5 if 0 or 9.
