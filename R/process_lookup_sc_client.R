@@ -122,12 +122,10 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-
     write_file(
       sc_client_lookup,
       get_source_extract_path(year, "client", check_mode = "write")
     )
-
   }
 
   return(sc_client_lookup)

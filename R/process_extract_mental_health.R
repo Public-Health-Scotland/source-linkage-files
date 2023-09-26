@@ -115,12 +115,10 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-
     write_file(
       mh_processed,
       get_source_extract_path(year, "mh", check_mode = "write")
     )
-
   }
 
   return(mh_processed)
