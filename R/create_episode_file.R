@@ -1,4 +1,3 @@
-
 #' Produce the Source Episode file
 #'
 #' @param processed_data_list containing data from processed extracts.
@@ -116,7 +115,6 @@ create_episode_file <- function(
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     add_ppa_flag() %>%
-
     link_delayed_discharge_eps(year, dd_data) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
@@ -146,8 +144,6 @@ create_episode_file <- function(
   }
 
   return(episode_file)
-
-
 }
 
 #' Store the unneeded episode file variables
