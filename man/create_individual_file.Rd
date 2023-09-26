@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_individual_file.R
 \name{create_individual_file}
 \alias{create_individual_file}
-\title{Create individual file}
+\title{Create the Source Individual file}
 \usage{
 create_individual_file(
   episode_file,
@@ -13,7 +13,7 @@ create_individual_file(
 )
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 
 \item{year}{The year to process, in FY format.}
 
@@ -21,14 +21,14 @@ create_individual_file(
 \code{TRUE} i.e. write the data to disk.}
 
 \item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
-(instead of chi)}
+(instead of chi).}
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
-(instead of chi)}
+(instead of chi).}
 }
 \value{
 The processed individual file
 }
 \description{
-Creates individual file from episode file
+Creates the individual file from the episode file.
 }
