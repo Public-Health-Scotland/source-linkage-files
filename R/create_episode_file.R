@@ -137,14 +137,8 @@ create_episode_file <- function(
   }
 
   if (write_to_disk) {
-    # TODO make the slf_path a function
-    slf_episode_path <- get_file_path(
-      get_year_dir(year),
-      stringr::str_glue(
-        "source-episode-file-{year}.parquet"
-      ),
-      check_mode = "write"
-    )
+    slf_episode_path <- get_slf_episode_path(year, check_mode = "write")
+
 
     write_file(episode_file, slf_episode_path)
   }
@@ -159,6 +153,7 @@ create_episode_file <- function(
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
+
 #' @family episode_file
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
@@ -197,7 +192,9 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
+
 #' @family episode_file
+
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
@@ -225,7 +222,9 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+
 #' @family episode_file
+
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
@@ -280,7 +279,9 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+
 #' @family episode_file
+
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
   check_variables_exist(
@@ -322,7 +323,9 @@ correct_cij_vars <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+
 #' @family episode_file
+
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
@@ -347,6 +350,7 @@ create_cost_inc_dna <- function(data) {
 #' @inheritParams store_ep_file_vars
 #' @inheritParams create_demographic_cohorts
 #'
+
 #' @family episode_file
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
@@ -382,6 +386,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @inheritParams store_ep_file_vars
 #' @inheritParams get_demographic_cohorts_path
+
 #' @param demographic_cohort,service_use_cohort The cohort data
 #'
 #' @family episode_file
