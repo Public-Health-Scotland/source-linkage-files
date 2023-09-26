@@ -4,12 +4,14 @@
 \alias{add_nsu_cohort}
 \title{Add NSU cohort to working file}
 \usage{
-add_nsu_cohort(data, year)
+add_nsu_cohort(data, year, nsu_cohort = read_file(get_nsu_path(year)))
 }
 \arguments{
 \item{data}{The input data frame}
 
 \item{year}{The year being processed}
+
+\item{nsu_cohort}{The NSU data for the year}
 }
 \value{
 A data frame containing the Non-Service Users as additional rows

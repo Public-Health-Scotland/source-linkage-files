@@ -543,11 +543,18 @@ list(
         source_sc_alarms_tele
       )
     ),
+    tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
     tar_target(
       episode_file,
       create_episode_file(
         processed_data_list,
         year,
+        dd_data = source_dd_extract,
+        nsu_cohort = nsu_cohort,
+        ltc_data = source_ltc_lookup,
+        slf_pc_lookup = source_pc_lookup,
+        slf_gpprac_lookup = source_gp_lookup,
+        slf_deaths_lookup = slf_deaths_lookup,
         write_to_disk
       )
     ),

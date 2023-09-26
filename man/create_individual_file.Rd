@@ -24,7 +24,7 @@ create_individual_file(
 (instead of chi).}
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
-(instead of chi).}
+(instead of chi)}
 }
 \value{
 The processed individual file
