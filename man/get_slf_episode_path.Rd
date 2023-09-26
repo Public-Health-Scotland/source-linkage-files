@@ -4,10 +4,12 @@
 \alias{get_slf_episode_path}
 \title{Get the slf episode file path}
 \usage{
-get_slf_episode_path(year)
+get_slf_episode_path(year, ...)
 }
 \arguments{
 \item{year}{Financial year}
+
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 Path to the final episode file.
