@@ -1,7 +1,7 @@
 #' Process the all SDS extract
 #' @description This will read and process the
 #' all SDS extract, it will return the final data
-#' but also write this out as a rds.
+#' and (optionally) write it to disk.
 #'
 #' @inheritParams process_sc_all_care_home
 #'
@@ -119,12 +119,11 @@ process_sc_all_sds <- function(
     # change the data format from data.table to data.frame
     tibble::as_tibble()
 
-
-  # Save outfile------------------------------------------------
   if (write_to_disk) {
-    # Save .rds file
-    final_data %>%
-      write_file(get_sc_sds_episodes_path(check_mode = "write"))
+    write_file(
+      final_data,
+      get_sc_sds_episodes_path(check_mode = "write")
+    )
   }
 
   return(final_data)

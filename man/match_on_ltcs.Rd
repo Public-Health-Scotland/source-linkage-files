@@ -4,12 +4,14 @@
 \alias{match_on_ltcs}
 \title{Match on LTC DoB and dates of LTC incidence}
 \usage{
-match_on_ltcs(data, year)
+match_on_ltcs(data, year, ltc_data = read_file(get_ltcs_path(year)))
 }
 \arguments{
 \item{data}{episode files}
 
 \item{year}{financial year, e.g. '1920'}
+
+\item{ltc_data}{The LTC data for the year}
 }
 \value{
 data matched with long term conditions

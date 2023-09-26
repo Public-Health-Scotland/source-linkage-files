@@ -24,7 +24,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 (year specific) SDS extract, it will return the final data
-but also write this out as rds.
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts: 

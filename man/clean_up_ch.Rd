@@ -7,7 +7,7 @@
 clean_up_ch(episode_file, year)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 
 \item{year}{The year to process, in FY format.}
 }
