@@ -1,5 +1,5 @@
 # Define the source directory and financial year pattern
-compress_files = FALSE
+compress_files <- FALSE
 source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp"
 pattern <- "-20(\\d{4})\\.csv"
 
@@ -13,7 +13,7 @@ print(stringr::str_glue("Found {length(csv_files)} csv files to process."))
 extract_financial_year <- function(filename) {
   match <- regexpr(pattern, basename(filename))
   if (match[[1]][1] > 0) {
-    financial_year <- substr(basename(filename), match[[1]][1]+3, match[[1]][1] + 6)
+    financial_year <- substr(basename(filename), match[[1]][1] + 3, match[[1]][1] + 6)
     return(financial_year)
   } else {
     return(NULL)
@@ -32,8 +32,8 @@ for (csv_file in csv_files) {
     }
 
     # compress file
-    if(compress_files){
-      cat("Compressing:", basename(csv_file),"\n")
+    if (compress_files) {
+      cat("Compressing:", basename(csv_file), "\n")
       system2(
         command = "gzip",
         args = shQuote(csv_file)
