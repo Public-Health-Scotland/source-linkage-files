@@ -7,7 +7,7 @@
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
 #'
-#' @family episode file
+#' @family episode_file
 #' @seealso [get_nsu_path()]
 add_nsu_cohort <- function(
     data,

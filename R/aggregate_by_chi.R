@@ -7,6 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 aggregate_by_chi <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
@@ -196,6 +197,7 @@ vars_contain <- function(data, vars, ignore_case = FALSE) {
 #' @description Aggregate CH variables by CHI and CIS.
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 aggregate_ch_episodes <- function(episode_file) {
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
