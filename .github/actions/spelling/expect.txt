@@ -5,6 +5,7 @@ ADPE
 adtf
 arrivalmode
 arth
+atlassian
 attendcat
 aut
 bedday
@@ -16,8 +17,10 @@ callr
 Canx
 carehome
 careinspectorate
+categorises
 cattend
 CCYY
+cdn
 cennum
 chp
 chpstart
@@ -26,6 +29,7 @@ Classificat
 cls
 cmh
 CNWs
+codecov
 commhosp
 congen
 costincdnas
@@ -34,6 +38,7 @@ costsfy
 covr
 cph
 createslf
+customise
 dataframe
 datamart
 datazone
@@ -46,7 +51,9 @@ dbconnect
 dbplyr
 deathdiag
 demog
+devhints
 dfc
+Diagramme
 disch
 dischloc
 dischto
@@ -92,9 +99,11 @@ homecare
 homev
 hscp
 hscpnames
+htmlwidgets
 IDPC
 infyyear
 ipdc
+issuenumber
 itle
 iwalk
 jaccard
@@ -107,12 +116,13 @@ keytime
 keytimex
 kis
 lgl
-kis
+lintr
 los
 ltc
 ltcs
 lubridate
 magrittr
+markdownguide
 Mcbride
 mcmahon
 MMMYY
@@ -141,6 +151,7 @@ pattype
 phs
 phsmethods
 phsopendata
+pkgdown
 placeinc
 plics
 PMS
@@ -152,6 +163,7 @@ praccode
 ptypes
 purrr
 quickstart
+rankdir
 Rbuildignore
 rcmdcheck
 rdd
@@ -163,6 +175,7 @@ readr
 readxl
 reasonwait
 recid
+reflectoring
 refsource
 rlang
 rmarkdown
@@ -171,6 +184,7 @@ Rprofile
 Rscript
 rspm
 RStudio
+rstudio
 rstudioapi
 Rtype
 SDcols
@@ -182,6 +196,7 @@ setnames
 Siar
 sigfac
 simd
+SLF
 slf
 slfhelper
 smr
