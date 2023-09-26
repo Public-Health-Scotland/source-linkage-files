@@ -8,6 +8,7 @@ create_episode_file(
   processed_data_list,
   year,
   dd_data = read_file(get_source_extract_path(year, "DD")),
+  homelessness_lookup = create_homelessness_lookup(year),
   nsu_cohort = read_file(get_nsu_path(year)),
   ltc_data = read_file(get_ltcs_path(year)),
   slf_pc_lookup = read_file(get_slf_postcode_path()),

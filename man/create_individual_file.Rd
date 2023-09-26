@@ -18,8 +18,6 @@ create_individual_file(
 
 \item{year}{The year to process, in FY format.}
 
-\item{homelessness_lookup}{dataframe with CHI, start date, end date. Creates hl1_in_fy flag.}
-
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
