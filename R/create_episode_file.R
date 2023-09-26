@@ -19,6 +19,7 @@ create_episode_file <- function(
     processed_data_list,
     year,
     dd_data = read_file(get_source_extract_path(year, "DD")),
+    homelessness_lookup = create_homelessness_lookup(year),
     nsu_cohort = read_file(get_nsu_path(year)),
     ltc_data = read_file(get_ltcs_path(year)),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
@@ -113,6 +114,8 @@ create_episode_file <- function(
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
@@ -130,6 +133,38 @@ create_episode_file <- function(
       slf_deaths_lookup
     ) %>%
     load_ep_file_vars(year)
+
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        sc_send_lca = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA,
+        sc_latest_submission = NA,
+        ch_chi_cis = NA,
+        sc_id_cis = NA,
+        ch_name = NA,
+        ch_adm_reason = NA,
+        ch_provider = NA,
+        ch_nursing = NA,
+        hc_hours_annual = NA,
+        hc_hours_q1 = NA,
+        hc_hours_q2 = NA,
+        hc_hours_q3 = NA,
+        hc_hours_q4 = NA,
+        hc_cost_q1 = NA,
+        hc_cost_q2 = NA,
+        hc_cost_q3 = NA,
+        hc_cost_q4 = NA,
+        hc_provider = NA,
+        hc_reablement = NA,
+        sds_option_4 = NA,
+      )
+  }
 
   if (anon_chi_out) {
     episode_file <- slfhelper::get_anon_chi(episode_file)
