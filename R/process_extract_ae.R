@@ -193,12 +193,12 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
 
   ae_cup_file <- read_file(
     path = get_boxi_extract_path(year, "AE_CUP"),
-    col_type = cols(
-      "ED Arrival Date" = col_date(format = "%Y/%m/%d %T"),
-      "ED Arrival Time" = col_time(""),
-      "ED Case Reference Number [C]" = col_character(),
-      "CUP Marker" = col_double(),
-      "CUP Pathway Name" = col_character()
+    col_type = readr::cols(
+      "ED Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "ED Arrival Time" = readr::col_time(""),
+      "ED Case Reference Number [C]" = readr::col_character(),
+      "CUP Marker" = readr::col_double(),
+      "CUP Pathway Name" = readr::col_character()
     )
   ) %>%
     # rename variables
