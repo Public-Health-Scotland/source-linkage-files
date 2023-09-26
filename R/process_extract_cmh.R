@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' CMH extract, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -44,9 +44,7 @@ process_extract_cmh <- function(data,
     # create blank diag 6
     dplyr::mutate(diag6 = NA)
 
-  # Outfile --------------------------------------------
-
-  outfile <- cmh_clean %>%
+  cmh_processed <- cmh_clean %>%
     dplyr::select(
       "year",
       "recid",
@@ -73,10 +71,11 @@ process_extract_cmh <- function(data,
     )
 
   if (write_to_disk) {
-    # Save as rds file
-    outfile %>%
-      write_file(get_source_extract_path(year, "CMH", check_mode = "write"))
+    write_file(
+      cmh_processed,
+      get_source_extract_path(year, "CMH", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(cmh_processed)
 }

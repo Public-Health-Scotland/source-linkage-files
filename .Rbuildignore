@@ -22,3 +22,4 @@
 ^_targets\.R$
 ^_targets\.yaml$
 ^_SPSS_archived$
+^run_targets_

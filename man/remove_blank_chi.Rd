@@ -7,7 +7,7 @@
 remove_blank_chi(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Convert blank strings to NA and remove NAs from CHI column
