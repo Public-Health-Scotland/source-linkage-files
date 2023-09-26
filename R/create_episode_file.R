@@ -15,7 +15,7 @@
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
-run_episode_file <- function(
+create_episode_file <- function(
     processed_data_list,
     year,
     dd_data = read_file(get_source_extract_path(year, "DD")),
@@ -154,7 +154,7 @@ run_episode_file <- function(
 #' Store the unneeded episode file variables
 #'
 #' @param data The in-progress episode file data.
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
@@ -192,7 +192,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 
 #' Load the unneeded episode file variables
 #'
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The full SLF data.
