@@ -12,25 +12,25 @@ read_extract_district_nursing <- function(
 
   # Read BOXI extract
   extract_district_nursing <- read_file(file_path,
-    col_types = cols_only(
-      `Treatment NHS Board Code 9` = col_character(),
-      `Age at Contact Date` = col_integer(),
-      `Contact Date` = col_date(format = "%Y/%m/%d %T"),
-      `Primary Intervention Category` = col_character(),
-      `Other Intervention Category (1)` = col_character(),
-      `Other Intervention Category (2)` = col_character(),
-      `UPI Number [C]` = col_character(),
-      `Patient DoB Date [C]` = col_date(format = "%Y/%m/%d %T"),
-      `Patient Postcode [C] (Contact)` = col_character(),
-      `Duration of Contact (measure)` = col_double(),
-      Gender = col_double(),
-      `Location of Contact` = col_character(),
-      `Practice NHS Board Code 9 (Contact)` = col_character(),
-      `Patient Council Area Code (Contact)` = col_character(),
-      `Practice Code (Contact)` = col_character(),
-      `NHS Board of Residence Code 9 (Contact)` = col_character(),
-      `HSCP of Residence Code (Contact)` = col_character(),
-      `Patient Data Zone 2011 (Contact)` = col_character()
+    col_types = readr::cols_only(
+      `Treatment NHS Board Code 9` = readr::col_character(),
+      `Age at Contact Date` = readr::col_integer(),
+      `Contact Date` = readr::col_date(format = "%Y/%m/%d %T"),
+      `Primary Intervention Category` = readr::col_character(),
+      `Other Intervention Category (1)` = readr::col_character(),
+      `Other Intervention Category (2)` = readr::col_character(),
+      `UPI Number [C]` = readr::col_character(),
+      `Patient DoB Date [C]` = readr::col_date(format = "%Y/%m/%d %T"),
+      `Patient Postcode [C] (Contact)` = readr::col_character(),
+      `Duration of Contact (measure)` = readr::col_double(),
+      Gender = readr::col_double(),
+      `Location of Contact` = readr::col_character(),
+      `Practice NHS Board Code 9 (Contact)` = readr::col_character(),
+      `Patient Council Area Code (Contact)` = readr::col_character(),
+      `Practice Code (Contact)` = readr::col_character(),
+      `NHS Board of Residence Code 9 (Contact)` = readr::col_character(),
+      `HSCP of Residence Code (Contact)` = readr::col_character(),
+      `Patient Data Zone 2011 (Contact)` = readr::col_character()
     )
   ) %>%
     # rename

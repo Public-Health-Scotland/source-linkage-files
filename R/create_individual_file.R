@@ -1,13 +1,14 @@
-#' Create individual file
+#' Create the Source Individual file
 #'
-#' @description Creates individual file from episode file
+#' @description Creates the individual file from the episode file.
 #'
-#' @param episode_file Tibble containing episodic data
+#' @param episode_file Tibble containing episodic data.
 #' @param anon_chi_in (Default:TRUE) Is `anon_chi` used in the input
-#' (instead of chi)
-#' @inheritParams run_episode_file
+#' (instead of chi).
+#' @inheritParams create_episode_file
 #'
 #' @return The processed individual file
+#' @family individual_file
 #' @export
 create_individual_file <- function(
     episode_file,
@@ -93,7 +94,7 @@ create_individual_file <- function(
 #' Remove blank CHI
 #'
 #' @description Convert blank strings to NA and remove NAs from CHI column
-#'
+#' @family individual_file
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
   cli::cli_alert_info("Remove blank CHI function started at {Sys.time()}")
@@ -107,7 +108,7 @@ remove_blank_chi <- function(episode_file) {
 #' Add CIJ-related columns
 #'
 #' @description Add new columns related to CIJ
-#'
+#' @family individual_file
 #' @inheritParams create_individual_file
 add_cij_columns <- function(episode_file) {
   cli::cli_alert_info("Add cij columns function started at {Sys.time()}")
@@ -146,7 +147,7 @@ add_cij_columns <- function(episode_file) {
 #'
 #' @description Add new columns based on SMRType and recid which follow a pattern
 #' of prefixed column names created based on some condition.
-#'
+#' @family individual_file
 #' @inheritParams create_individual_file
 add_all_columns <- function(episode_file) {
   cli::cli_alert_info("Add all columns function started at {Sys.time()}")
@@ -197,6 +198,7 @@ add_all_columns <- function(episode_file) {
 #' @inheritParams create_individual_file
 #' @param prefix Prefix to add to related columns, e.g. "Acute"
 #' @param condition Condition to create new columns based on
+#' @family individual_file
 add_acute_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -207,6 +209,7 @@ add_acute_columns <- function(episode_file, prefix, condition) {
 #' Add Mat columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_mat_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -217,6 +220,7 @@ add_mat_columns <- function(episode_file, prefix, condition) {
 #' Add MH columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_mh_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -227,6 +231,7 @@ add_mh_columns <- function(episode_file, prefix, condition) {
 #' Add GLS columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_gls_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -237,6 +242,7 @@ add_gls_columns <- function(episode_file, prefix, condition) {
 #' Add OP columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_op_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file <- episode_file %>%
@@ -259,6 +265,7 @@ add_op_columns <- function(episode_file, prefix, condition) {
 #' Add AE columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_ae_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -269,6 +276,7 @@ add_ae_columns <- function(episode_file, prefix, condition) {
 #' Add PIS columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_pis_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -279,6 +287,7 @@ add_pis_columns <- function(episode_file, prefix, condition) {
 #' Add OoH columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_ooh_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file <- episode_file %>%
@@ -313,6 +322,7 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
 #' Add DN columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_dn_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   if ("total_no_dn_contacts" %in% names(episode_file)) {
@@ -335,6 +345,7 @@ add_dn_columns <- function(episode_file, prefix, condition) {
 #' Add CMH columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_cmh_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -345,6 +356,7 @@ add_cmh_columns <- function(episode_file, prefix, condition) {
 #' Add DD columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_dd_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   condition_delay <- substitute(condition & primary_delay_reason != "9")
@@ -365,6 +377,7 @@ add_dd_columns <- function(episode_file, prefix, condition) {
 #' Add NSU columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_nsu_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -375,6 +388,7 @@ add_nsu_columns <- function(episode_file, prefix, condition) {
 #' Add NRS columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_nrs_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -385,6 +399,7 @@ add_nrs_columns <- function(episode_file, prefix, condition) {
 #' Add HL1 columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_hl1_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -394,6 +409,7 @@ add_hl1_columns <- function(episode_file, prefix, condition) {
 #' Add CH columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_ch_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -422,6 +438,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
 #' Add HC columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_hc_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file <- episode_file %>%
@@ -464,6 +481,7 @@ add_hc_columns <- function(episode_file, prefix, condition) {
 #' Add AT columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_at_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -477,6 +495,7 @@ add_at_columns <- function(episode_file, prefix, condition) {
 #' Add SDS columns
 #'
 #' @inheritParams add_acute_columns
+#' @family individual_file
 add_sds_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
   episode_file %>%
@@ -496,7 +515,9 @@ add_sds_columns <- function(episode_file, prefix, condition) {
 #'
 #' @inheritParams add_acute_columns
 #' @param ipdc_d Whether to create columns based on IPDC = "D" (lgl)
-#' @param elective Whether to create columns based on Elective/Non-Elective cij_pattype (lgl)
+#' @param elective Whether to create columns based on Elective/Non-Elective
+#' cij_pattype (lgl)
+#' @family individual_file
 add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, elective = TRUE) {
   condition_i <- substitute(eval(condition) & ipdc == "I")
   episode_file <- episode_file %>%
@@ -534,11 +555,13 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
 
 #' Add standard columns
 #'
-#' @description Add standard columns (DoB, postcode, gpprac, episodes, cost) to episode file.
+#' @description Add standard columns (DoB, postcode, gpprac, episodes, cost)
+#' to episode file.
 #'
 #' @inheritParams add_acute_columns
 #' @param episode Whether to create prefix_episodes col, e.g. "Acute_episodes"
 #' @param cost Whether to create prefix_cost col, e.g. "Acute_cost"
+#' @family individual_file
 add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, cost = FALSE) {
   if (episode) {
     episode_file <- dplyr::mutate(episode_file, "{prefix}_episodes" := dplyr::if_else(eval(condition), 1L, NA_integer_))
@@ -554,6 +577,7 @@ add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, 
 #' @description Clean up CH-related columns.
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 clean_up_ch <- function(episode_file, year) {
   cli::cli_alert_info("Clean up CH function started at {Sys.time()}")
 
@@ -596,6 +620,7 @@ clean_up_ch <- function(episode_file, year) {
 #' @description Recode gender to 1.5 if 0 or 9.
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 recode_gender <- function(episode_file) {
   cli::cli_alert_info("Recode Gender function started at {Sys.time()}")
 
@@ -614,6 +639,7 @@ recode_gender <- function(episode_file) {
 #' @description Returns chr vector of column names
 #' which follow format "condition" and "condition_date" e.g.
 #' "dementia" and "dementia_date"
+#' @family individual_file
 condition_cols <- function() {
   conditions <- slfhelper::ltc_vars
   date_cols <- paste0(conditions, "_date")
@@ -628,6 +654,7 @@ condition_cols <- function() {
 #' are missing (instead returns NA)
 #'
 #' @param x Vector to return max of
+#' @family helper_funs
 max_no_inf <- function(x) {
   dplyr::if_else(all(is.na(x)), NA, max(x, na.rm = TRUE))
 }
@@ -639,6 +666,7 @@ max_no_inf <- function(x) {
 #' are missing (instead returns NA)
 #'
 #' @param x Vector to return min of
+#' @family helper_funs
 min_no_inf <- function(x) {
   dplyr::if_else(all(is.na(x)), NA, min(x, na.rm = TRUE))
 }

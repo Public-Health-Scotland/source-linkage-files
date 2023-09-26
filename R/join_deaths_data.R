@@ -2,16 +2,14 @@
 #'
 #' @param data Episode file data
 #' @param year financial year, e.g. '1920'
-#' @param slf_deaths_lookup_path Path to slf deaths lookup.
+#' @param slf_deaths_lookup The SLF deaths lookup.
 #'
 #' @return The data including the deaths lookup matched
 #'         on to the episode file.
 join_deaths_data <- function(
     data,
     year,
-    slf_deaths_lookup_path = get_slf_deaths_lookup_path(year)) {
-  slf_deaths_lookup <- read_file(slf_deaths_lookup_path)
-
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))) {
   return(
     data %>%
       dplyr::left_join(

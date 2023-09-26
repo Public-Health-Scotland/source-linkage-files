@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' social care demographic lookup, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process.
 #' @param spd_path Path to the Scottish Postcode Directory.
@@ -12,7 +12,10 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), write_to_disk = TRUE) {
+process_lookup_sc_demographics <- function(
+    data,
+    spd_path = get_spd_path(),
+    write_to_disk = TRUE) {
   # Deal with postcodes ---------------------------------------
 
   # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
@@ -51,8 +54,7 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
     ))
 
   # count number of na postcodes
-  na_postcodes <-
-    sc_demog %>%
+  na_postcodes <- sc_demog %>%
     dplyr::count(dplyr::across(tidyselect::contains("postcode"), ~ is.na(.x)))
 
   sc_demog <- sc_demog %>%
@@ -97,17 +99,11 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
     dplyr::count(.data$postcode_type)
 
   # count number of replaced postcode - compare with count above
-  na_replaced_postcodes <-
-    sc_demog %>%
+  na_replaced_postcodes <- sc_demog %>%
     dplyr::count(dplyr::across(tidyselect::ends_with("_postcode"), ~ is.na(.x)))
 
-  na_replaced_postcodes
-  na_postcodes
 
-
-  ## save outfile ---------------------------------------
-  outfile <-
-    sc_demog %>%
+  sc_demog_lookup <- sc_demog %>%
     # group by sending location and ID
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
     # arrange so latest submissions are last
@@ -126,14 +122,12 @@ process_lookup_sc_demographics <- function(data, spd_path = get_spd_path(), writ
     ) %>%
     dplyr::ungroup()
 
-
-  ## save file ##
-
   if (write_to_disk) {
-    # Save .rds file
-    outfile %>%
-      write_file(get_sc_demog_lookup_path(check_mode = "write"))
+    write_file(
+      sc_demog_lookup,
+      get_sc_demog_lookup_path(check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(sc_demog_lookup)
 }

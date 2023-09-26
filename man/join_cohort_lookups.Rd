@@ -4,7 +4,15 @@
 \alias{join_cohort_lookups}
 \title{Join cohort lookups}
 \usage{
-join_cohort_lookups(data, year, update = latest_update())
+join_cohort_lookups(
+  data,
+  year,
+  update = latest_update(),
+  demographic_cohort = read_file(get_demographic_cohorts_path(year, update), col_select =
+    c("chi", "demographic_cohort")),
+  service_use_cohort = read_file(get_service_use_cohorts_path(year, update), col_select =
+    c("chi", "service_use_cohort"))
+)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
@@ -12,6 +20,8 @@ join_cohort_lookups(data, year, update = latest_update())
 \item{year}{The year to process, in FY format.}
 
 \item{update}{The update to use}
+
+\item{demographic_cohort, service_use_cohort}{The cohort data}
 }
 \value{
 The data including the Demographic and Service Use lookups.
@@ -19,3 +29,19 @@ The data including the Demographic and Service Use lookups.
 \description{
 Join cohort lookups
 }
+\seealso{
+Other episode_file: 
+\code{\link{add_nsu_cohort}()},
+\code{\link{add_ppa_flag}()},
+\code{\link{apply_cost_uplift}()},
+\code{\link{correct_cij_vars}()},
+\code{\link{create_cohort_lookups}()},
+\code{\link{create_cost_inc_dna}()},
+\code{\link{create_episode_file}()},
+\code{\link{fill_missing_cij_markers}()},
+\code{\link{link_delayed_discharge_eps}()},
+\code{\link{load_ep_file_vars}()},
+\code{\link{lookup_uplift}()},
+\code{\link{store_ep_file_vars}()}
+}
+\concept{episode_file}

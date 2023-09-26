@@ -2,11 +2,20 @@
 % Please edit documentation in R/create_episode_file.R
 \name{create_episode_file}
 \alias{create_episode_file}
-\title{Create the Source Episode file}
+
+\title{Produce the Source Episode file}
 \usage{
 create_episode_file(
   processed_data_list,
   year,
+  dd_data = read_file(get_source_extract_path(year, "DD")),
+  nsu_cohort = read_file(get_nsu_path(year)),
+  ltc_data = read_file(get_ltcs_path(year)),
+  slf_pc_lookup = read_file(get_slf_postcode_path()),
+  slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
+    "cluster", "hbpraccode")),
+  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
+
   write_to_disk = TRUE,
   anon_chi_out = TRUE
 )
@@ -16,15 +25,45 @@ create_episode_file(
 
 \item{year}{The year to process, in FY format.}
 
+
+\item{dd_data}{The processed DD extract}
+
+\item{nsu_cohort}{The NSU data for the year}
+
+\item{ltc_data}{The LTC data for the year}
+
+\item{slf_pc_lookup}{The SLF Postcode lookup}
+
+\item{slf_gpprac_lookup}{The SLF GP Practice lookup}
+
+\item{slf_deaths_lookup}{The SLF deaths lookup.}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
-(instead of chi).}
+
+(instead of chi)}
 }
 \value{
-the Source Episode file as a \link[tibble:tibble-package]{tibble}.
+a \link[tibble:tibble-package]{tibble} containing the episode file
 }
 \description{
-Create the Source Episode file
+Produce the Source Episode file
 }
+\seealso{
+Other episode_file: 
+\code{\link{add_nsu_cohort}()},
+\code{\link{add_ppa_flag}()},
+\code{\link{apply_cost_uplift}()},
+\code{\link{correct_cij_vars}()},
+\code{\link{create_cohort_lookups}()},
+\code{\link{create_cost_inc_dna}()},
+\code{\link{fill_missing_cij_markers}()},
+\code{\link{join_cohort_lookups}()},
+\code{\link{link_delayed_discharge_eps}()},
+\code{\link{load_ep_file_vars}()},
+\code{\link{lookup_uplift}()},
+\code{\link{store_ep_file_vars}()}
+}
+\concept{episode_file}

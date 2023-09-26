@@ -14,3 +14,8 @@ Custom minimum function which removes
 missing values but doesn't return Inf if all values
 are missing (instead returns NA)
 }
+\seealso{
+Other helper_funs: 
+\code{\link{max_no_inf}()}
+}
+\concept{helper_funs}

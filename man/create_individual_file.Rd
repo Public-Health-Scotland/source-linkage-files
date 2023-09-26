@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_individual_file.R
 \name{create_individual_file}
 \alias{create_individual_file}
-\title{Create individual file}
+\title{Create the Source Individual file}
 \usage{
 create_individual_file(
   episode_file,
@@ -13,14 +13,50 @@ create_individual_file(
 )
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 
 \item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
+
+(instead of chi).}
+
+\item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
 (instead of chi)}
 }
 \value{
 The processed individual file
 }
 \description{
-Creates individual file from episode file
+Creates the individual file from the episode file.
 }
+\seealso{
+Other individual_file: 
+\code{\link{add_acute_columns}()},
+\code{\link{add_ae_columns}()},
+\code{\link{add_all_columns}()},
+\code{\link{add_at_columns}()},
+\code{\link{add_ch_columns}()},
+\code{\link{add_cij_columns}()},
+\code{\link{add_cmh_columns}()},
+\code{\link{add_dd_columns}()},
+\code{\link{add_dn_columns}()},
+\code{\link{add_gls_columns}()},
+\code{\link{add_hc_columns}()},
+\code{\link{add_hl1_columns}()},
+\code{\link{add_ipdc_cols}()},
+\code{\link{add_mat_columns}()},
+\code{\link{add_mh_columns}()},
+\code{\link{add_nrs_columns}()},
+\code{\link{add_nsu_columns}()},
+\code{\link{add_ooh_columns}()},
+\code{\link{add_op_columns}()},
+\code{\link{add_pis_columns}()},
+\code{\link{add_sds_columns}()},
+\code{\link{add_standard_cols}()},
+\code{\link{aggregate_by_chi}()},
+\code{\link{aggregate_ch_episodes}()},
+\code{\link{clean_up_ch}()},
+\code{\link{condition_cols}()},
+\code{\link{recode_gender}()},
+\code{\link{remove_blank_chi}()}
+}
+\concept{individual_file}
