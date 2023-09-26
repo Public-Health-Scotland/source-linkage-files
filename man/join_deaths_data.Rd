@@ -7,7 +7,7 @@
 join_deaths_data(
   data,
   year,
-  slf_deaths_lookup_path = get_slf_deaths_lookup_path(year)
+  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ join_deaths_data(
 
 \item{year}{financial year, e.g. '1920'}
 
-\item{slf_deaths_lookup_path}{Path to slf deaths lookup.}
+\item{slf_deaths_lookup}{The SLF deaths lookup.}
 }
 \value{
 The data including the deaths lookup matched

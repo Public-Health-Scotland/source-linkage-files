@@ -15,5 +15,5 @@ a \link[tibble:tibble-package]{tibble} containing the final cost data.
 \description{
 This will read and process the
 care homes cost lookup, it will return the final data
-but also write this out as a rds.
+and write it to disk.
 }
