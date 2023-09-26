@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' all Care Home extract, it will return the final data
-#' but also write this out as a rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param sc_demog_lookup The Social Care Demographics lookup produced by

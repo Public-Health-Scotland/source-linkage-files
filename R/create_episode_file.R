@@ -4,15 +4,30 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @inheritParams add_nsu_cohort
+#' @inheritParams fill_geographies
+#' @inheritParams join_cohort_lookups
+#' @inheritParams join_deaths_data
+#' @inheritParams match_on_ltcs
+#' @inheritParams link_delayed_discharge_eps
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
 #' (instead of chi)
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
-#'
-run_episode_file <- function(
+#' @family episode_file
+create_episode_file <- function(
     processed_data_list,
     year,
+    dd_data = read_file(get_source_extract_path(year, "DD")),
+    nsu_cohort = read_file(get_nsu_path(year)),
+    ltc_data = read_file(get_ltcs_path(year)),
+    slf_pc_lookup = read_file(get_slf_postcode_path()),
+    slf_gpprac_lookup = read_file(
+      get_slf_gpprac_path(),
+      col_select = c("gpprac", "cluster", "hbpraccode")
+    ),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
@@ -100,15 +115,21 @@ run_episode_file <- function(
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     add_ppa_flag() %>%
-    link_delayed_discharge_eps(year) %>%
-    add_nsu_cohort(year) %>%
-    match_on_ltcs(year) %>%
+    link_delayed_discharge_eps(year, dd_data) %>%
+    add_nsu_cohort(year, nsu_cohort) %>%
+    match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
-    fill_geographies() %>%
-    join_deaths_data(year) %>%
+    fill_geographies(
+      slf_pc_lookup,
+      slf_gpprac_lookup
+    ) %>%
+    join_deaths_data(
+      year,
+      slf_deaths_lookup
+    ) %>%
     load_ep_file_vars(year)
 
   if (anon_chi_out) {
@@ -116,14 +137,8 @@ run_episode_file <- function(
   }
 
   if (write_to_disk) {
-    # TODO make the slf_path a function
-    slf_episode_path <- get_file_path(
-      get_year_dir(year),
-      stringr::str_glue(
-        "source-episode-file-{year}.parquet"
-      ),
-      check_mode = "write"
-    )
+    slf_episode_path <- get_slf_episode_path(year, check_mode = "write")
+
 
     write_file(episode_file, slf_episode_path)
   }
@@ -134,10 +149,12 @@ run_episode_file <- function(
 #' Store the unneeded episode file variables
 #'
 #' @param data The in-progress episode file data.
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
+
+#' @family episode_file
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
@@ -172,9 +189,12 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 
 #' Load the unneeded episode file variables
 #'
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
+
+#' @family episode_file
+
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
@@ -202,6 +222,9 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+
+#' @family episode_file
+
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
@@ -256,6 +279,9 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+
+#' @family episode_file
+
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
   check_variables_exist(
@@ -297,6 +323,9 @@ correct_cij_vars <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
+
+#' @family episode_file
+
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
@@ -321,6 +350,8 @@ create_cost_inc_dna <- function(data) {
 #' @inheritParams store_ep_file_vars
 #' @inheritParams create_demographic_cohorts
 #'
+
+#' @family episode_file
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
   # Use future so the cohorts can be created simultaneously (in parallel)
@@ -355,22 +386,30 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @inheritParams store_ep_file_vars
 #' @inheritParams get_demographic_cohorts_path
+
+#' @param demographic_cohort,service_use_cohort The cohort data
 #'
+#' @family episode_file
 #' @return The data including the Demographic and Service Use lookups.
-join_cohort_lookups <- function(data, year, update = latest_update()) {
+join_cohort_lookups <- function(
+    data,
+    year,
+    update = latest_update(),
+    demographic_cohort = read_file(
+      get_demographic_cohorts_path(year, update),
+      col_select = c("chi", "demographic_cohort")
+    ),
+    service_use_cohort = read_file(
+      get_service_use_cohorts_path(year, update),
+      col_select = c("chi", "service_use_cohort")
+    )) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
-      read_file(
-        get_demographic_cohorts_path(year, update),
-        col_select = c("chi", "demographic_cohort")
-      ),
+      demographic_cohort,
       by = "chi"
     ) %>%
     dplyr::left_join(
-      read_file(
-        get_service_use_cohorts_path(year, update),
-        col_select = c("chi", "service_use_cohort")
-      ),
+      service_use_cohort,
       by = "chi"
     )
 

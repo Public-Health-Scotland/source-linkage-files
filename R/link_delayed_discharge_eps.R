@@ -7,7 +7,7 @@
 #' @return A data frame with the delayed discharge cohort added and linked
 #' using the `cij_marker`
 #'
-#' @family episode file
+#' @family episode_file
 link_delayed_discharge_eps <- function(
     episode_file,
     year,

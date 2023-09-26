@@ -7,6 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 aggregate_by_chi <- function(episode_file) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
@@ -126,9 +127,9 @@ aggregate_by_chi <- function(episode_file) {
   individual_file_cols6 <- episode_file[,
     .(
       preventable_beddays = ifelse(
-        max(cij_ppa, na.rm = TRUE),
-        max(cij_end_date) - min(cij_start_date),
-        NA_real_
+        any(cij_ppa, na.rm = TRUE),
+        as.integer(min(cij_end_date, end_fy(year)) - max(cij_start_date, start_fy(year))),
+        NA_integer_
       )
     ),
     # cij_marker has been renamed as cij_total
@@ -196,6 +197,7 @@ vars_contain <- function(data, vars, ignore_case = FALSE) {
 #' @description Aggregate CH variables by CHI and CIS.
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 aggregate_ch_episodes <- function(episode_file) {
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
@@ -203,12 +205,19 @@ aggregate_ch_episodes <- function(episode_file) {
   data.table::setDT(episode_file)
 
   # Perform grouping and aggregation
-  episode_file <- episode_file[, `:=`(
-    ch_no_cost = max(ch_no_cost),
-    ch_ep_start = min(record_keydate1),
-    ch_ep_end = max(ch_ep_end),
-    ch_cost_per_day = mean(ch_cost_per_day)
-  ), by = c("chi", "ch_chi_cis")]
+  episode_file[, c(
+    "ch_no_cost",
+    "ch_ep_start",
+    "ch_ep_end",
+    "ch_cost_per_day"
+  ) := list(
+    max(ch_no_cost),
+    min(record_keydate1),
+    max(ch_ep_end),
+    mean(ch_cost_per_day)
+  ),
+  by = c("chi", "ch_chi_cis")
+  ]
 
   # Convert back to tibble if needed
   episode_file <- tibble::as_tibble(episode_file)

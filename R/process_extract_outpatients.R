@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' outpatients extract, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -49,11 +49,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       )
     )
 
-
-  ## save outfile ---------------------------------------
-
-  outfile <-
-    outpatients_clean %>%
+  outpatients_processed <- outpatients_clean %>%
     dplyr::select(
       "year",
       "recid",
@@ -89,12 +85,12 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-    # Save as rds file
-    outfile %>%
-      write_file(
-        get_source_extract_path(year, "outpatients", check_mode = "write")
-      )
+
+    write_file(
+      outpatients_processed,
+      get_source_extract_path(year, "outpatients", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(outpatients_processed)
 }

@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' (year specific) Care Home extract, it will return the final data
-#' but also write this out as rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The full processed data which will be selected from to create
 #' the year specific data.

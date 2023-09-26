@@ -34,6 +34,7 @@ list(
   ),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
+  tar_target(la_code_opendata, get_la_code_opendata_lookup()),
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
   tar_target(locality_path, get_locality_path(), format = "file"),
   tar_target(simd_path, get_simd_path(), format = "file"),
@@ -339,11 +340,15 @@ list(
         year
       )
     ),
-    tar_target(source_homelessness_extract, process_extract_homelessness(
-      homelessness_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
+    tar_target(
+      source_homelessness_extract,
+      process_extract_homelessness(
+        data = homelessness_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        la_code_lookup = la_code_opendata
+      )
+    ),
     tar_target(
       tests_source_homelessness_extract,
       process_tests_homelessness(
@@ -543,11 +548,18 @@ list(
         source_sc_alarms_tele
       )
     ),
+    tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
     tar_target(
       episode_file,
-      run_episode_file(
+      create_episode_file(
         processed_data_list,
         year,
+        dd_data = source_dd_extract,
+        nsu_cohort = nsu_cohort,
+        ltc_data = source_ltc_lookup,
+        slf_pc_lookup = source_pc_lookup,
+        slf_gpprac_lookup = source_gp_lookup,
+        slf_deaths_lookup = slf_deaths_lookup,
         write_to_disk
       )
     ),

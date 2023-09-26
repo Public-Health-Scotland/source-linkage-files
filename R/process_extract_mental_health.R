@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' mental health extract, it will return the final data
-#' but also write this out an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -67,10 +67,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       smrtype = add_smr_type(.data$recid)
     )
 
-
-  # Outfile  ---------------------------------------
-
-  outfile <- mh_clean %>%
+  mh_processed <- mh_clean %>%
     dplyr::arrange(.data$chi, .data$record_keydate1) %>%
     dplyr::select(
       "year",
@@ -118,10 +115,13 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-    outfile %>%
-      # Save as rds file
-      write_file(get_source_extract_path(year, "mh", check_mode = "write"))
+
+    write_file(
+      mh_processed,
+      get_source_extract_path(year, "mh", check_mode = "write")
+    )
+
   }
 
-  return(outfile)
+  return(mh_processed)
 }

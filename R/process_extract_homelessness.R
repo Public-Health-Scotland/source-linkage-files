@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' homelessness extract, it will return the final data
-#' and optionally write it out as rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process from [read_extract_homelessness()].
 #' @param year The year to process, in FY format.
@@ -20,6 +20,7 @@ process_extract_homelessness <- function(
     year,
     write_to_disk = TRUE,
     update = latest_update(),
+    la_code_lookup = get_la_code_opendata_lookup(),
     sg_pub_path = get_sg_homelessness_pub_path()) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -100,7 +101,7 @@ process_extract_homelessness <- function(
       )
     ) %>%
     dplyr::left_join(
-      la_code_lookup(),
+      la_code_lookup,
       by = dplyr::join_by("sending_local_authority_code_9" == "CA")
     ) %>%
     # Filter out duplicates
@@ -146,13 +147,14 @@ process_extract_homelessness <- function(
     )
 
   if (write_to_disk) {
-    final_data %>%
-      write_file(get_file_path(
-        get_year_dir(year),
-        stringr::str_glue("homelessness_for_source-20{year}"),
-        ext = "rds",
+    write_file(
+      final_data,
+      get_source_extract_path(
+        year = year,
+        type = "Homelessness",
         check_mode = "write"
-      ))
+      )
+    )
   }
 
   return(final_data)

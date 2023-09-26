@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' social care client lookup, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process
@@ -108,10 +108,7 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
       .fn = ~ paste0("sc_", .x)
     )
 
-
-  ## save outfile ---------------------------------------
-  outfile <-
-    client_clean %>%
+  sc_client_lookup <- client_clean %>%
     # reorder
     dplyr::select(
       "sending_location",
@@ -125,10 +122,13 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-    # Save .rds file
-    outfile %>%
-      write_file(get_source_extract_path(year, "client", check_mode = "write"))
+
+    write_file(
+      sc_client_lookup,
+      get_source_extract_path(year, "client", check_mode = "write")
+    )
+
   }
 
-  return(outfile)
+  return(sc_client_lookup)
 }

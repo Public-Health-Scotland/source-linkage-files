@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' prescribing extract, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -50,9 +50,11 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
   }
 
   if (write_to_disk) {
-    # Save as rds file
-    pis_clean %>%
-      write_file(get_source_extract_path(year, "pis", check_mode = "write"))
+
+    write_file(
+      pis_clean,
+      get_source_extract_path(year, "pis", check_mode = "write")
+    )
   }
 
   return(pis_clean)

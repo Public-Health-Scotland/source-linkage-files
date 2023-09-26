@@ -7,9 +7,41 @@
 add_all_columns(episode_file)
 }
 \arguments{
-\item{episode_file}{Tibble containing episodic data}
+\item{episode_file}{Tibble containing episodic data.}
 }
 \description{
 Add new columns based on SMRType and recid which follow a pattern
 of prefixed column names created based on some condition.
 }
+\seealso{
+Other individual_file: 
+\code{\link{add_acute_columns}()},
+\code{\link{add_ae_columns}()},
+\code{\link{add_at_columns}()},
+\code{\link{add_ch_columns}()},
+\code{\link{add_cij_columns}()},
+\code{\link{add_cmh_columns}()},
+\code{\link{add_dd_columns}()},
+\code{\link{add_dn_columns}()},
+\code{\link{add_gls_columns}()},
+\code{\link{add_hc_columns}()},
+\code{\link{add_hl1_columns}()},
+\code{\link{add_ipdc_cols}()},
+\code{\link{add_mat_columns}()},
+\code{\link{add_mh_columns}()},
+\code{\link{add_nrs_columns}()},
+\code{\link{add_nsu_columns}()},
+\code{\link{add_ooh_columns}()},
+\code{\link{add_op_columns}()},
+\code{\link{add_pis_columns}()},
+\code{\link{add_sds_columns}()},
+\code{\link{add_standard_cols}()},
+\code{\link{aggregate_by_chi}()},
+\code{\link{aggregate_ch_episodes}()},
+\code{\link{clean_up_ch}()},
+\code{\link{condition_cols}()},
+\code{\link{create_individual_file}()},
+\code{\link{recode_gender}()},
+\code{\link{remove_blank_chi}()}
+}
+\concept{individual_file}

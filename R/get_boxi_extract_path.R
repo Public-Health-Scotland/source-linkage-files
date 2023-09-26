@@ -30,6 +30,7 @@ get_boxi_extract_path <- function(
   type <- match.arg(type)
 
   if (type %in% c("dn", "cmh")) {
+
     dir <- fs::path(get_slf_dir(), "Archived_data")
   } else {
     dir <- get_year_dir(year, extracts_dir = TRUE)
