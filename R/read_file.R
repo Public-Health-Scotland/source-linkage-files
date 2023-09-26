@@ -27,6 +27,11 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
     "parquet"
   )
 
+  # Return an empty tibble if trying to read the dummy path
+  if (path == get_dummy_boxi_extract_path()) {
+    return(tibble::tibble())
+  }
+
   ext <- fs::path_ext(path)
 
   if (ext == "gz") {

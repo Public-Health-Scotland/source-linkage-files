@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' homelessness extract, it will return the final data
-#' and optionally write it out as rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process from [read_extract_homelessness()].
 #' @param year The year to process, in FY format.
