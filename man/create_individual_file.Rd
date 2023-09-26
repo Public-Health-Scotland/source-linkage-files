@@ -15,8 +15,12 @@ create_individual_file(
 \arguments{
 \item{episode_file}{Tibble containing episodic data.}
 
-\item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
+\item{year}{The year to process, in FY format.}
 
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+
+\item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
 (instead of chi).}
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output

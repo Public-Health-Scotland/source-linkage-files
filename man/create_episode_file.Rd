@@ -2,7 +2,6 @@
 % Please edit documentation in R/create_episode_file.R
 \name{create_episode_file}
 \alias{create_episode_file}
-
 \title{Produce the Source Episode file}
 \usage{
 create_episode_file(
@@ -15,7 +14,6 @@ create_episode_file(
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
     "cluster", "hbpraccode")),
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-
   write_to_disk = TRUE,
   anon_chi_out = TRUE
 )
@@ -24,7 +22,6 @@ create_episode_file(
 \item{processed_data_list}{containing data from processed extracts.}
 
 \item{year}{The year to process, in FY format.}
-
 
 \item{dd_data}{The processed DD extract}
 
@@ -42,7 +39,6 @@ create_episode_file(
 \code{TRUE} i.e. write the data to disk.}
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
-
 (instead of chi)}
 }
 \value{
