@@ -5,7 +5,7 @@
 #'
 #' @param homelessness_data the processed homelessness data for
 #' the financial year (created with [process_extract_homelessness()]).
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -29,7 +29,7 @@ create_homelessness_lookup <- function(
 #' @param data The data to add the flag to - the episode
 #' or individual file.
 #' @param lookup The homelessness lookup created by [create_homelessness_lookup()]
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #'
 #' @return the final data as a [tibble][tibble::tibble-package]
 #' @export

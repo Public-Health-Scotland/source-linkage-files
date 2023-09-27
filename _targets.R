@@ -453,6 +453,10 @@ list(
       )
     ),
     tar_target(
+      tests_sc_client_lookup,
+      process_tests_sc_client_lookup(sc_client_lookup, year = year)
+    ),
+    tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
         data = all_at,

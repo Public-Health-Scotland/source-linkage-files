@@ -10,6 +10,8 @@ create_homelessness_lookup(
 )
 }
 \arguments{
+\item{year}{The year to process, in FY format.}
+
 \item{homelessness_data}{the processed homelessness data for
 the financial year (created with \code{\link[=process_extract_homelessness]{process_extract_homelessness()}}).}
 }
