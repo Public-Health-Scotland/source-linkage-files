@@ -43,7 +43,7 @@ for (csv_file in csv_files) {
 
     # move file
     new_file_path <- file.path(financial_year_dir, basename(csv_file))
-    file.copy(csv_file, new_file_path)
+    fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
     file.remove(csv_file)
     cat("Moved:", csv_file, "to", new_file_path, "\n")
   }
