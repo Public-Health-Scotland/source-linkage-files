@@ -79,7 +79,7 @@ population_lookup <- read_file(get_datazone_pop_path("HSCP2019_pop_est_1981_2021
   # Select only the HSCPs for NHS Highland & years since 2015
   filter(
     hscp2019 %in% c("S37000004", "S37000016"),
-    year >= 2015
+    year >= 2015L
   ) %>%
   # Create year as FY = YYYY from CCYY.
   rename(calendar_year = year) %>%
@@ -93,7 +93,7 @@ population_lookup <- read_file(get_datazone_pop_path("HSCP2019_pop_est_1981_2021
   ## compute proportion ##
   mutate(
     pop_proportion = pop / total_pop,
-    pop_pct = pop_proportion * 100
+    pop_pct = pop_proportion * 100.0
   ) %>%
   ## Argyll and Bute is the only HSCP in NHS Highland that submits data ##
   filter(hscp2019name == "Argyll and Bute")
@@ -110,7 +110,9 @@ matched_data <- full_join(dn_raw_costs_contacts,
   # recode NA pop_proportion with 1
   mutate(pop_proportion = replace_na(pop_proportion, 1)) %>%
   ## total net cost ##
-  mutate(cost_total_net = ((cost * 1000) / (number_of_contacts / pop_proportion))) %>%
+  mutate(
+    cost_total_net = ((cost * 1000) / (number_of_contacts / pop_proportion))
+  ) %>%
   # sort by HB2019 and year
   arrange(hb2019, year) %>%
   # keep only records with cost

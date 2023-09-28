@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' mental health extract, it will return the final data
-#' but also write this out an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -32,8 +32,10 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # cij_ipdc
     dplyr::mutate(
-      cij_ipdc = dplyr::if_else(.data$cij_inpatient == "MH", "I", "NA"),
-      cij_ipdc = dplyr::na_if(.data$cij_ipdc, "NA")
+      cij_ipdc = dplyr::na_if(
+        dplyr::if_else(.data$cij_inpatient == "MH", "I", "NA"),
+        "NA"
+      )
     ) %>%
     dplyr::select(-.data$cij_inpatient) %>%
     # cij_admtype recode unknown to 99
@@ -52,9 +54,9 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     dplyr::mutate(
       # yearstay
-      yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
+      yearstay = rowSums(dplyr::pick(tidyselect::ends_with("_beddays"))),
       # cost total net
-      cost_total_net = rowSums(dplyr::across(tidyselect::ends_with("_cost"))),
+      cost_total_net = rowSums(dplyr::pick(tidyselect::ends_with("_cost"))),
       # total length of stay
       stay = calculate_stay(
         .data$year,
@@ -65,10 +67,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       smrtype = add_smr_type(.data$recid)
     )
 
-
-  # Outfile  ---------------------------------------
-
-  outfile <- mh_clean %>%
+  mh_processed <- mh_clean %>%
     dplyr::arrange(.data$chi, .data$record_keydate1) %>%
     dplyr::select(
       "year",
@@ -116,10 +115,11 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-    outfile %>%
-      # Save as rds file
-      write_file(get_source_extract_path(year, "MH", check_mode = "write"))
+    write_file(
+      mh_processed,
+      get_source_extract_path(year, "MH", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(mh_processed)
 }

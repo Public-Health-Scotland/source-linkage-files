@@ -31,10 +31,11 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 homelessness extract, it will return the final data
-and optionally write it out as rds.
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts: 
+\code{\link{create_homelessness_lookup}()},
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_alarms_telecare}()},

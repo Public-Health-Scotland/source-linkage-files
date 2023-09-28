@@ -17,20 +17,18 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
   ltc_flags <- data %>%
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("date"),
-      list(flag = ~ dplyr::if_else(is.na(.x) | .x > end_fy(year), 0L, 1L))
+      list(flag = ~ as.integer(!(is.na(.x) | .x > end_fy(year))))
     )) %>%
     dplyr::rename_with(
       .cols = tidyselect::ends_with("flag"),
       .fn = ~ stringr::str_remove(.x, "_date_flag")
     )
 
-  # Save Outfile---------------------------------------------
-
   if (write_to_disk) {
-    # Save .rds file
-    ltc_flags %>%
-      dplyr::arrange(.data$chi) %>%
-      write_file(get_ltcs_path(year, check_mode = "write"))
+    write_file(
+      ltc_flags,
+      get_ltcs_path(year, check_mode = "write")
+    )
   }
 
   return(ltc_flags)

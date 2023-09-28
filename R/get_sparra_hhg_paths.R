@@ -10,6 +10,10 @@
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_hhg_path <- function(year, ...) {
+  if (!check_year_valid(year, "HHG")) {
+    return(get_dummy_boxi_extract_path())
+  }
+
   hhg_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "HHG"),
     file_name = stringr::str_glue("HHG-20{year}.parquet"),
@@ -31,6 +35,10 @@ get_hhg_path <- function(year, ...) {
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sparra_path <- function(year, ...) {
+  if (!check_year_valid(year, "SPARRA")) {
+    return(get_dummy_boxi_extract_path())
+  }
+
   sparra_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "SPARRA"),
     file_name = stringr::str_glue("SPARRA-20{year}.parquet"),

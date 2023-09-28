@@ -22,18 +22,19 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
       "service_start_date",
       "service_end_date"
     ) %>%
-    # fix bad period (2017, 2020 & 2021)
-    dplyr::mutate(
-      period = dplyr::if_else(.data$period == "2017", "2017Q4", .data$period),
-      period = dplyr::if_else(.data$period == "2020", "2020Q4", .data$period),
-      period = dplyr::if_else(.data$period == "2021", "2021Q4", .data$period)
-    ) %>%
-    # order
-    dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
     dplyr::collect() %>%
+    # fix bad period (2017, 2020, 2021, and so on)
     dplyr::mutate(
-      dplyr::across(c("sending_location", "service_type"), as.integer)
-    )
+      period = dplyr::if_else(
+        grepl("\\d{4}$", .data$period),
+        paste0(.data$period, "Q4"),
+        .data$period
+      )
+    ) %>%
+    dplyr::mutate(
+      dplyr::across(c("sending_location", "service_type"), ~ as.integer(.x))
+    ) %>%
+    dplyr::arrange(.data$sending_location, .data$social_care_id)
 
   return(at_full_data)
 }

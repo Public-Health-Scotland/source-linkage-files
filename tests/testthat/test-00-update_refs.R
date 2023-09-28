@@ -13,7 +13,7 @@ test_that("Previous Update string looks valid", {
 })
 
 test_that("Previous Update works for different month values", {
-  expect_equal(previous_update(0), latest_update())
+  expect_equal(previous_update(months_ago = 0L), latest_update())
 
   latest_update_month <- lubridate::month(
     lubridate::my(latest_update()),

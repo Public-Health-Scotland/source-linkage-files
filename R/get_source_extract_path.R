@@ -10,57 +10,63 @@
 #' @export
 #'
 #' @family extract file paths
-get_source_extract_path <- function(year,
-                                    type = c(
-                                      "Acute",
-                                      "AE",
-                                      "AT",
-                                      "CH",
-                                      "Client",
-                                      "CMH",
-                                      "DD",
-                                      "Deaths",
-                                      "DN",
-                                      "GPOoH",
-                                      "HC",
-                                      "Homelessness",
-                                      "Maternity",
-                                      "MH",
-                                      "Outpatients",
-                                      "PIS",
-                                      "SDS"
-                                    ),
-                                    ...) {
+get_source_extract_path <- function(
+    year,
+    type = c(
+      "Acute",
+      "AE",
+      "AT",
+      "CH",
+      "CMH",
+      "DD",
+      "Deaths",
+      "DN",
+      "GPOoH",
+      "HC",
+      "Homelessness",
+      "Maternity",
+      "MH",
+      "Outpatients",
+      "PIS",
+      "SDS"
+    ),
+    ...) {
+  if (year %in% type) {
+    cli::cli_abort("{.val {year}} was supplied to the {.arg year} argument.")
+  }
+
+  year <- check_year_format(year)
+
   type <- match.arg(type)
 
   if (!check_year_valid(year, type)) {
-    return(NA)
+    return(get_dummy_boxi_extract_path())
   }
 
-  file_name <- dplyr::case_when(
-    type == "Acute" ~ "acute_for_source",
-    type == "AE" ~ "a&e_for_source",
-    type == "AT" ~ "Alarms-Telecare-for-source",
-    type == "CH" ~ "care_home_for_source",
-    type == "CMH" ~ "CMH_for_source",
-    type == "Client" ~ "client_for_source",
-    type == "DD" ~ "DD_for_source",
-    type == "Deaths" ~ "deaths_for_source",
-    type == "DN" ~ "DN_for_source",
-    type == "GPOoH" ~ "GP_OOH_for_source",
-    type == "HC" ~ "Home_Care_for_source",
-    type == "Homelessness" ~ "homelessness_for_source",
-    type == "Maternity" ~ "maternity_for_source",
-    type == "MH" ~ "mental_health_for_source",
-    type == "DD" ~ "DD_for_source",
-    type == "Outpatients" ~ "outpatients_for_source",
-    type == "PIS" ~ "prescribing_file_for_source",
-    type == "SDS" ~ "SDS-for-source"
-  )
+  file_name <- dplyr::case_match(
+    type,
+    "Acute" ~ "acute_for_source",
+    "AE" ~ "a_and_e_for_source",
+    "AT" ~ "alarms-telecare-for-source",
+    "CH" ~ "care_home_for_source",
+    "CMH" ~ "cmh_for_source",
+    "DD" ~ "delayed_discharge_for_source",
+    "Deaths" ~ "deaths_for_source",
+    "DN" ~ "district_nursing_for_source",
+    "GPOoH" ~ "gp_ooh_for_source",
+    "HC" ~ "home_care_for_source",
+    "Homelessness" ~ "homelessness_for_source",
+    "Maternity" ~ "maternity_for_source",
+    "MH" ~ "mental_health_for_source",
+    "Outpatients" ~ "outpatients_for_source",
+    "PIS" ~ "prescribing_for_source",
+    "SDS" ~ "sds_for_source"
+  ) %>%
+    stringr::str_glue("-{year}.parquet")
 
   source_extract_path <- get_file_path(
     directory = get_year_dir(year),
-    file_name = stringr::str_glue("{file_name}-20{year}.parquet"),
+    file_name = file_name,
     ...
   )
 

@@ -104,10 +104,10 @@ get_it_prescribing_path <- function(year, it_reference = NULL, ...) {
 check_it_reference <- function(it_reference) {
   if (stringr::str_starts(it_reference, stringr::fixed("SCTASK"))) {
     # If the 'full' reference has been supplied trim to just the number
-    it_reference <- stringr::str_sub(it_reference, start = 7, end = 14)
+    it_reference <- stringr::str_sub(it_reference, start = 7L, end = 14L)
   }
 
-  if (stringr::str_detect(it_reference, "[0-9]{7}", negate = TRUE)) {
+  if (stringr::str_detect(it_reference, "^[0-9]{7}$", negate = TRUE)) {
     cli::cli_abort(
       c("x" = "{.arg it_reference} must be exactly 7 numbers."),
       call = rlang::caller_env()

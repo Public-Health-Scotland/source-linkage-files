@@ -1,7 +1,7 @@
 #' Process the all SDS extract
 #' @description This will read and process the
 #' all SDS extract, it will return the final data
-#' but also write this out as a rds.
+#' and (optionally) write it to disk.
 #'
 #' @inheritParams process_sc_all_care_home
 #'
@@ -36,10 +36,12 @@ process_sc_all_sds <- function(
     # SDS option 4 is derived when a person receives more than one option.
     # e.g. if a person has options 1 and 2 then option 4 will be derived
     dplyr::mutate(
-      sds_option_4 = rowSums(dplyr::across(tidyselect::starts_with("sds_option_"))) > 1L,
+      sds_option_4 = rowSums(
+        dplyr::pick(tidyselect::starts_with("sds_option_"))
+      ) > 1L,
       .after = .data$sds_option_3
     ) %>%
-    # If sds start date is missing, assign start of FY
+    # If SDS start date is missing, assign start of FY
     dplyr::mutate(sds_start_date = fix_sc_start_dates(
       .data$sds_start_date,
       .data$period
@@ -117,12 +119,11 @@ process_sc_all_sds <- function(
     # change the data format from data.table to data.frame
     tibble::as_tibble()
 
-
-  # Save outfile------------------------------------------------
   if (write_to_disk) {
-    # Save .rds file
-    final_data %>%
-      write_file(get_sc_sds_episodes_path(check_mode = "write"))
+    write_file(
+      final_data,
+      get_sc_sds_episodes_path(check_mode = "write")
+    )
   }
 
   return(final_data)

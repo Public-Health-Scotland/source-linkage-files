@@ -4,10 +4,18 @@
 #' then use the lookups to match on additional variables.
 #'
 #' @param data the SLF
+#' @param slf_pc_lookup The SLF Postcode lookup
+#' @param slf_gpprac_lookup The SLF GP Practice lookup
 #'
 #' @return a [tibble][tibble::tibble-package] of the SLF with improved
 #' Postcode and GP Practice details.
-fill_geographies <- function(data) {
+fill_geographies <- function(
+    data,
+    slf_pc_lookup = read_file(get_slf_postcode_path()),
+    slf_gpprac_lookup = read_file(
+      get_slf_gpprac_path(),
+      col_select = c("gpprac", "cluster", "hbpraccode")
+    )) {
   check_variables_exist(data, c(
     "chi",
     "postcode",
@@ -21,8 +29,15 @@ fill_geographies <- function(data) {
   ))
 
   data %>%
-    fill_postcode_geogs() %>%
-    fill_gpprac_geographies()
+    fill_postcode_geogs(
+      slf_pc_lookup = read_file(get_slf_postcode_path())
+    ) %>%
+    fill_gpprac_geographies(
+      slf_gpprac_lookup = read_file(
+        get_slf_gpprac_path(),
+        col_select = c("gpprac", "cluster", "hbpraccode")
+      )
+    )
 }
 
 #' Make a postcode lookup for filling to most recent postcodes based on CHI
@@ -38,8 +53,10 @@ make_postcode_lookup <- function(data) {
     dplyr::distinct(.data$chi, .data$postcode, .data$record_keydate2) %>%
     # Format postcodes to 7-character format and replace dummy with NA
     dplyr::mutate(
-      postcode = phsmethods::format_postcode(.data$postcode, format = "pc7"),
-      postcode = dplyr::na_if(.data$postcode, "NK010AA")
+      postcode = dplyr::na_if(
+        phsmethods::format_postcode(.data$postcode, format = "pc7"),
+        "NK010AA"
+      )
     ) %>%
     # Drop any episodes with no postcode
     dplyr::filter(!is.na(.data$postcode)) %>%
@@ -84,9 +101,9 @@ make_gpprac_lookup <- function(data) {
   return(gpprac_lookup)
 }
 
-fill_postcode_geogs <- function(data) {
-  slf_pc_lookup <- read_file(get_slf_postcode_path())
-
+fill_postcode_geogs <- function(
+    data,
+    slf_pc_lookup) {
   filled_postcodes <- dplyr::left_join(
     data,
     make_postcode_lookup(data),
@@ -121,17 +138,20 @@ fill_postcode_geogs <- function(data) {
       lca = dplyr::coalesce(.data$lca, .data$lca_old),
       datazone2011 = dplyr::coalesce(.data$datazone2011, .data$datazone2011_old)
     ) %>%
-    dplyr::select(!c("hb2018", "hscp", "lca_old", "datazone2011_old", "most_recent_postcode"))
+    dplyr::select(!c(
+      "hb2018",
+      "hscp",
+      "lca_old",
+      "datazone2011_old",
+      "most_recent_postcode"
+    ))
 
   return(filled_postcodes)
 }
 
-fill_gpprac_geographies <- function(data) {
-  gpprac_ref <- read_file(
-    get_slf_gpprac_path(),
-    col_select = c("gpprac", "cluster", "hbpraccode")
-  )
-
+fill_gpprac_geographies <- function(
+    data,
+    slf_gpprac_lookup) {
   filled_gpprac <- dplyr::left_join(
     data,
     make_gpprac_lookup(data),
@@ -145,7 +165,12 @@ fill_gpprac_geographies <- function(data) {
         .data$gpprac
       )
     ) %>%
-    dplyr::left_join(gpprac_ref, by = "gpprac", suffix = c("_old", "")) %>%
+    dplyr::left_join(
+      slf_gpprac_lookup %>%
+        dplyr::select("gpprac", "cluster", "hbpraccode"),
+      by = "gpprac",
+      suffix = c("_old", "")
+    ) %>%
     dplyr::mutate(
       hbpraccode = dplyr::coalesce(.data$hbpraccode, .data$hbpraccode_old)
     ) %>%

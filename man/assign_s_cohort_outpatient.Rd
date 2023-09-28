@@ -13,7 +13,8 @@ assign_s_cohort_outpatient(outpatient_cost)
 A boolean vector of outpatient cohort flags
 }
 \description{
-If the record has a outpatient cost greater than zero, assign \code{TRUE}
+If the record has a outpatient cost greater than zero,
+assign \code{TRUE}.
 }
 \seealso{
 Other Demographic and Service Use Cohort functions: 

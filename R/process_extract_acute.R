@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' acute extract, it will return the final data
-#' but also write this out as an rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -53,17 +53,15 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     convert_monthly_rows_to_vars(.data$costmonthnum, .data$cost_total_net, .data$yearstay) %>%
     # add yearstay and cost_total_net variables
     dplyr::mutate(
-      yearstay = rowSums(dplyr::across(tidyselect::ends_with("_beddays"))),
-      cost_total_net = rowSums(dplyr::across(tidyselect::ends_with("_cost")))
+      yearstay = rowSums(dplyr::pick(tidyselect::ends_with("_beddays"))),
+      cost_total_net = rowSums(dplyr::pick(tidyselect::ends_with("_cost")))
     ) %>%
     # Add oldtadm as a factor with labels
     dplyr::mutate(oldtadm = factor(.data$oldtadm,
       levels = 0L:8L
     ))
 
-
-  ## save outfile ---------------------------------------
-  outfile <- acute_clean %>%
+  acute_processed <- acute_clean %>%
     dplyr::select(
       "year",
       "recid",
@@ -113,10 +111,11 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     dplyr::arrange(.data$chi, .data$record_keydate1)
 
   if (write_to_disk) {
-    # Save as rds file
-    outfile %>%
-      write_file(get_source_extract_path(year, "Acute", check_mode = "write"))
+    write_file(
+      acute_processed,
+      get_source_extract_path(year, "Acute", check_mode = "write")
+    )
   }
 
-  return(outfile)
+  return(acute_processed)
 }

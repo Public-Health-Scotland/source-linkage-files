@@ -4,15 +4,30 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @inheritParams add_nsu_cohort
+#' @inheritParams fill_geographies
+#' @inheritParams join_cohort_lookups
+#' @inheritParams join_deaths_data
+#' @inheritParams match_on_ltcs
+#' @inheritParams link_delayed_discharge_eps
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
 #' (instead of chi)
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
-#'
-run_episode_file <- function(
+create_episode_file <- function(
     processed_data_list,
     year,
+    dd_data = read_file(get_source_extract_path(year, "DD")),
+    homelessness_lookup = create_homelessness_lookup(year),
+    nsu_cohort = read_file(get_nsu_path(year)),
+    ltc_data = read_file(get_ltcs_path(year)),
+    slf_pc_lookup = read_file(get_slf_postcode_path()),
+    slf_gpprac_lookup = read_file(
+      get_slf_gpprac_path(),
+      col_select = c("gpprac", "cluster", "hbpraccode")
+    ),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
@@ -93,28 +108,66 @@ run_episode_file <- function(
         NA_character_,
         .data$chi
       ),
-      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
+      gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]]),
+      # PC8 format may still be used. Ensure here that all datasets are in PC7 format.
+      postcode = phsmethods::format_postcode(.data$postcode, "pc7")
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
-    link_delayed_discharge_eps(year) %>%
-    add_nsu_cohort(year) %>%
-    match_on_ltcs(year) %>%
+    link_delayed_discharge_eps(year, dd_data) %>%
+    add_nsu_cohort(year, nsu_cohort) %>%
+    match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
-    fill_geographies() %>%
-    join_deaths_data(year) %>%
+    fill_geographies(
+      slf_pc_lookup,
+      slf_gpprac_lookup
+    ) %>%
+    join_deaths_data(
+      year,
+      slf_deaths_lookup
+    ) %>%
     load_ep_file_vars(year)
 
-  if (anon_chi_out) {
-    # TODO When slfhelper is updated remove the unnecessary code
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     episode_file <- episode_file %>%
-      tidyr::replace_na(list(chi = "")) %>%
-      slfhelper::get_anon_chi() %>%
-      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
+      dplyr::mutate(
+        sc_send_lca = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA,
+        sc_latest_submission = NA,
+        ch_chi_cis = NA,
+        sc_id_cis = NA,
+        ch_name = NA,
+        ch_adm_reason = NA,
+        ch_provider = NA,
+        ch_nursing = NA,
+        hc_hours_annual = NA,
+        hc_hours_q1 = NA,
+        hc_hours_q2 = NA,
+        hc_hours_q3 = NA,
+        hc_hours_q4 = NA,
+        hc_cost_q1 = NA,
+        hc_cost_q2 = NA,
+        hc_cost_q3 = NA,
+        hc_cost_q4 = NA,
+        hc_provider = NA,
+        hc_reablement = NA,
+        sds_option_4 = NA,
+      )
+  }
+
+  if (anon_chi_out) {
+    episode_file <- slfhelper::get_anon_chi(episode_file)
   }
 
   if (write_to_disk) {
@@ -136,7 +189,7 @@ run_episode_file <- function(
 #' Store the unneeded episode file variables
 #'
 #' @param data The in-progress episode file data.
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
@@ -174,7 +227,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 
 #' Load the unneeded episode file variables
 #'
-#' @inheritParams run_episode_file
+#' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The full SLF data.
@@ -275,21 +328,22 @@ correct_cij_vars <- function(data) {
       ),
       cij_pattype_code = dplyr::if_else(
         !is.na(.data$chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
-        dplyr::case_match(.data$cij_admtype,
-          c("41", "42") ~ 2,
-          c("40", "48", "99") ~ 9,
-          "18" ~ 0,
-          .default = .data$cij_pattype_code
+        dplyr::case_match(
+          .data$cij_admtype,
+          c("41", "42") ~ 2L,
+          c("40", "48", "99") ~ 9L,
+          "18" ~ 0L,
+          .default = as.integer(.data$cij_pattype_code)
         ),
         .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
       cij_pattype = dplyr::case_match(
         .data$cij_pattype_code,
-        0 ~ "Non-Elective",
-        1 ~ "Elective",
-        2 ~ "Maternity",
-        9 ~ "Other"
+        0L ~ "Non-Elective",
+        1L ~ "Elective",
+        2L ~ "Maternity",
+        9L ~ "Other"
       )
     )
 }
@@ -310,7 +364,7 @@ create_cost_inc_dna <- function(data) {
       # In the Cost_Total_Net column set the cost for
       # those with attendance status 5 or 8 (CNWs and DNAs)
       cost_total_net = dplyr::if_else(
-        .data$attendance_status %in% c(5, 8),
+        .data$attendance_status %in% c(5L, 8L),
         0.0,
         .data$cost_total_net
       )
@@ -356,22 +410,28 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @inheritParams store_ep_file_vars
 #' @inheritParams get_demographic_cohorts_path
+#' @param demographic_cohort,service_use_cohort The cohort data
 #'
 #' @return The data including the Demographic and Service Use lookups.
-join_cohort_lookups <- function(data, year, update = latest_update()) {
+join_cohort_lookups <- function(
+    data,
+    year,
+    update = latest_update(),
+    demographic_cohort = read_file(
+      get_demographic_cohorts_path(year, update),
+      col_select = c("chi", "demographic_cohort")
+    ),
+    service_use_cohort = read_file(
+      get_service_use_cohorts_path(year, update),
+      col_select = c("chi", "service_use_cohort")
+    )) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
-      read_file(
-        get_demographic_cohorts_path(year, update),
-        col_select = c("chi", "demographic_cohort")
-      ),
+      demographic_cohort,
       by = "chi"
     ) %>%
     dplyr::left_join(
-      read_file(
-        get_service_use_cohorts_path(year, update),
-        col_select = c("chi", "service_use_cohort")
-      ),
+      service_use_cohort,
       by = "chi"
     )
 

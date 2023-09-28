@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' homelessness extract, it will return the final data
-#' and optionally write it out as rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The extract to process from [read_extract_homelessness()].
 #' @param year The year to process, in FY format.
@@ -43,7 +43,7 @@ process_extract_homelessness <- function(
     ) %>%
     dplyr::mutate(
       dplyr::across(
-        c("financial_difficulties_debt_unemployment":"refused"),
+        "financial_difficulties_debt_unemployment":"refused",
         ~ tidyr::replace_na(.x, 9L)
       ),
       hl1_reason_ftm = paste0(
@@ -146,13 +146,14 @@ process_extract_homelessness <- function(
     )
 
   if (write_to_disk) {
-    final_data %>%
-      write_file(get_file_path(
-        get_year_dir(year),
-        stringr::str_glue("homelessness_for_source-20{year}"),
-        ext = "rds",
+    write_file(
+      final_data,
+      get_source_extract_path(
+        year = year,
+        type = "Homelessness",
         check_mode = "write"
-      ))
+      )
+    )
   }
 
   return(final_data)

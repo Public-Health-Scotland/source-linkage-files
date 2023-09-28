@@ -19,17 +19,17 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223")
+years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223", "2324")
 
 list(
   tar_rds(write_to_disk, TRUE),
   tar_rds(
     file_path_ext_clean,
     make_lowercase_ext(),
-    priority = 1,
+    priority = 1.0,
     cue = tar_cue_age(
       name = file_path_ext_clean,
-      age = as.difftime(7, units = "days")
+      age = as.difftime(7.0, units = "days")
     )
   ),
   ## Lookup data ##
@@ -44,14 +44,18 @@ list(
   ),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
-  tar_target(slf_ch_name_lookup_path, get_slf_ch_name_lookup_path(), format = "file"),
+  tar_target(
+    slf_ch_name_lookup_path,
+    get_slf_ch_name_lookup_path(),
+    format = "file"
+  ),
   ## Process Lookups ##
   tar_target(
     sc_demog_data,
     read_lookup_sc_demographics(),
     cue = tar_cue_age(
       name = sc_demog_data,
-      age = as.difftime(28, units = "days")
+      age = as.difftime(28.0, units = "days")
     )
   ),
   tar_target(
@@ -117,7 +121,7 @@ list(
     read_sc_all_alarms_telecare(),
     cue = tar_cue_age(
       name = all_at_extract,
-      age = as.difftime(28, units = "days")
+      age = as.difftime(28.0, units = "days")
     )
   ),
   tar_target(
@@ -134,7 +138,7 @@ list(
     read_sc_all_home_care(),
     cue = tar_cue_age(
       name = all_home_care_extract,
-      age = as.difftime(28, units = "days")
+      age = as.difftime(28.0, units = "days")
     )
   ),
   tar_target(
@@ -151,7 +155,7 @@ list(
     read_sc_all_care_home(),
     cue = tar_cue_age(
       name = all_care_home_extract,
-      age = as.difftime(28, units = "days")
+      age = as.difftime(28.0, units = "days")
     )
   ),
   tar_target(
@@ -175,7 +179,7 @@ list(
     read_sc_all_sds(),
     cue = tar_cue_age(
       name = all_sds_extract,
-      age = as.difftime(28, units = "days")
+      age = as.difftime(28.0, units = "days")
     )
   ),
   tar_target(
@@ -192,10 +196,10 @@ list(
     tar_rds(
       compress_extracts,
       gzip_files(year),
-      priority = 1,
+      priority = 1.0,
       cue = tar_cue_age(
         name = compress_extracts,
-        age = as.difftime(7, units = "days")
+        age = as.difftime(7.0, units = "days")
       )
     ),
     ### target data extracts ###
@@ -335,11 +339,14 @@ list(
         year
       )
     ),
-    tar_target(source_homelessness_extract, process_extract_homelessness(
-      homelessness_data,
-      year,
-      write_to_disk = write_to_disk
-    )),
+    tar_target(
+      source_homelessness_extract,
+      process_extract_homelessness(
+        homelessness_data,
+        year,
+        write_to_disk = write_to_disk
+      )
+    ),
     tar_target(
       tests_source_homelessness_extract,
       process_tests_homelessness(
@@ -446,6 +453,10 @@ list(
       )
     ),
     tar_target(
+      tests_sc_client_lookup,
+      process_tests_sc_client_lookup(sc_client_lookup, year = year)
+    ),
+    tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
         data = all_at,
@@ -539,11 +550,26 @@ list(
         source_sc_alarms_tele
       )
     ),
+    tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
+    tar_target(
+      homelessness_lookup,
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
     tar_target(
       episode_file,
-      run_episode_file(
+      create_episode_file(
         processed_data_list,
         year,
+        homelessness_lookup = homelessness_lookup,
+        dd_data = source_dd_extract,
+        nsu_cohort = nsu_cohort,
+        ltc_data = source_ltc_lookup,
+        slf_pc_lookup = source_pc_lookup,
+        slf_gpprac_lookup = source_gp_lookup,
+        slf_deaths_lookup = slf_deaths_lookup,
         write_to_disk
       )
     ),
@@ -559,6 +585,7 @@ list(
       create_individual_file(
         episode_file = episode_file,
         year = year,
+        homelessness_lookup = homelessness_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -568,36 +595,36 @@ list(
         data = individual_file,
         year = year
       )
-    ),
-    tar_target(
-      episode_file_dataset,
-      arrow::write_dataset(
-        dataset = episode_file,
-        path = fs::path(
-          get_year_dir(year),
-          stringr::str_glue("source-episode-file-{year}")
-        ),
-        format = "parquet",
-        # Should correspond to the available slfhelper filters
-        partitioning = c("recid", "hscp2018"),
-        compression = "zstd",
-        version = "latest"
-      )
-    ),
-    tar_target(
-      individual_file_dataset,
-      arrow::write_dataset(
-        dataset = individual_file,
-        path = fs::path(
-          get_year_dir(year),
-          stringr::str_glue("source-individual-file-{year}")
-        ),
-        format = "parquet",
-        # Should correspond to the available slfhelper filters
-        partitioning = c("hscp2018"),
-        compression = "zstd",
-        version = "latest"
-      )
-    )
+    ) # ,
+    # tar_target(
+    #   episode_file_dataset,
+    #   arrow::write_dataset(
+    #     dataset = episode_file,
+    #     path = fs::path(
+    #       get_year_dir(year),
+    #       stringr::str_glue("source-episode-file-{year}")
+    #     ),
+    #     format = "parquet",
+    #     # Should correspond to the available slfhelper filters
+    #     partitioning = c("recid", "hscp2018"),
+    #     compression = "zstd",
+    #     version = "latest"
+    #   )
+    # ),
+    # tar_target(
+    #   individual_file_dataset,
+    #   arrow::write_dataset(
+    #     dataset = individual_file,
+    #     path = fs::path(
+    #       get_year_dir(year),
+    #       stringr::str_glue("source-individual-file-{year}")
+    #     ),
+    #     format = "parquet",
+    #     # Should correspond to the available slfhelper filters
+    #     partitioning = c("hscp2018"),
+    #     compression = "zstd",
+    #     version = "latest"
+    #   )
+    # )
   )
 )

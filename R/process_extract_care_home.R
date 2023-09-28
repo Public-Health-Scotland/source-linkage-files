@@ -2,7 +2,7 @@
 #'
 #' @description This will read and process the
 #' (year specific) Care Home extract, it will return the final data
-#' but also write this out as rds.
+#' and (optionally) write it to disk.
 #'
 #' @param data The full processed data which will be selected from to create
 #' the year specific data.
@@ -43,7 +43,7 @@ process_extract_care_home <- function(
     ) %>%
     # remove any episodes where the latest submission was before the current year
     dplyr::filter(
-      substr(.data$sc_latest_submission, 1, 4) >= convert_fyyear_to_year(year)
+      substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     ) %>%
     # Match to client data
     dplyr::left_join(

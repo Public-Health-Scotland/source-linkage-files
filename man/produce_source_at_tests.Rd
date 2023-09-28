@@ -25,6 +25,7 @@ Produce the test for the Alarm Telecare all episodes
 Other social care test functions: 
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_source_sds_tests}()}
+\code{\link{produce_source_sds_tests}()},
+\code{\link{produce_tests_sc_client_lookup}()}
 }
 \concept{social care test functions}

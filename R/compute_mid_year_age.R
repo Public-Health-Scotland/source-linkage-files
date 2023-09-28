@@ -1,6 +1,7 @@
 #' Compute Age at Midpoint of Year
 #'
-#' @description Compute the age of a client at the midpoint of the year - 30-09-YYYY
+#' @description Compute the age of a client at the midpoint of the year -
+#' 30-09-YYYY
 #'
 #' @param fyyear current financial year
 #' @param dob date of birth of the clients
@@ -19,7 +20,7 @@
 compute_mid_year_age <- function(fyyear, dob) {
   age_intervals <- lubridate::interval(
     start = dob,
-    end = as.Date(midpoint_fy(fyyear))
+    end = midpoint_fy(fyyear)
   )
 
   ages <- lubridate::as.period(age_intervals)$year

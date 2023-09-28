@@ -21,10 +21,11 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 all home care extract, it will return the final data
-but also write this out as a rds.
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts: 
+\code{\link{create_homelessness_lookup}()},
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_alarms_telecare}()},

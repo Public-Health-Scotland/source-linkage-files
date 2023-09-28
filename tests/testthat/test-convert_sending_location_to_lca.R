@@ -1,0 +1,52 @@
+test_that("Can convert a SC sending location to lca code", {
+  expect_snapshot(
+    convert_sending_location_to_lca(
+      c(
+        100L,
+        110L,
+        120L,
+        130L,
+        355L,
+        150L,
+        395L,
+        170L,
+        180L,
+        190L,
+        200L,
+        210L,
+        220L,
+        230L,
+        240L,
+        250L,
+        260L,
+        270L,
+        280L,
+        290L,
+        300L,
+        310L,
+        320L,
+        330L,
+        340L,
+        350L,
+        360L,
+        370L,
+        380L,
+        390L,
+        400L,
+        235L,
+        999L,
+        0L,
+        NA_integer_
+      )
+    )
+  )
+})
+
+test_that("Errors on unexpected input", {
+  expect_error(
+    convert_sending_location_to_lca("100")
+  )
+  expect_error(
+    convert_sending_location_to_lca(c("100", 99L))
+  )
+})

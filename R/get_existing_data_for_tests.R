@@ -8,13 +8,16 @@
 #' new data which the SLF data will be compared to.
 #' @param file_version whether to test against the "episode" file (the default)
 #' or the "individual" file.
+#' @param anon_chi Default set as FALSE. For use in episode tests where
+#' we want anon_chi instead of chi.
 #'
 #' @return a [tibble][tibble::tibble-package] from the
 #' SLF with the relevant recids and variables.
 #'
 #' @family test functions
 #' @seealso produce_source_extract_tests
-get_existing_data_for_tests <- function(new_data, file_version = "episode") {
+#' @export
+get_existing_data_for_tests <- function(new_data, file_version = "episode", anon_chi = FALSE) {
   file_version <- match.arg(file_version, c("episode", "individual"))
 
   year <- new_data %>%
@@ -32,6 +35,9 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
       "anon_chi",
       dplyr::intersect(slfhelper::ep_file_vars, tolower(names(new_data)))
     )
+    if ("hscp" %in% names(new_data)) {
+      variable_names <- c("hscp2018", variable_names)
+    }
   } else if (file_version == "individual") {
     variable_names <- c(
       "anon_chi",
@@ -43,14 +49,21 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
     slf_data <- suppressMessages(slfhelper::read_slf_episode(
       year = year,
       recids = recids,
-      columns = variable_names
+      col_select = variable_names
     ))
   } else {
     slf_data <- suppressMessages(slfhelper::read_slf_individual(
       year = year,
-      columns = variable_names
+      col_select = variable_names
     ))
   }
 
-  return(slfhelper::get_chi(slf_data))
+  if (anon_chi == FALSE) {
+    slf_data <- slf_data %>%
+      slfhelper::get_chi()
+  } else {
+    slf_data <- slf_data
+  }
+
+  return(slf_data)
 }

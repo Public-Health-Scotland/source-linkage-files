@@ -7,7 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi_zihao <- function(episode_file) {
+aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   # Convert to data.table
@@ -28,17 +28,33 @@ aggregate_by_chi_zihao <- function(episode_file) {
     )
   )
 
-  data.table::setnames(
-    episode_file,
-    c(
-      "ch_chi_cis", "cij_marker", "ooh_case_id"
-      # ,"hh_in_fy"
-    ),
-    c(
-      "ch_cis_episodes", "cij_total", "ooh_cases"
-      # ,"hl1_in_fy"
+  if (exclude_sc_var) {
+    data.table::setnames(
+      episode_file,
+      c(
+        "cij_marker",
+        "ooh_case_id"
+      ),
+      c(
+        "cij_total",
+        "ooh_cases"
+      )
     )
-  )
+  } else {
+    data.table::setnames(
+      episode_file,
+      c(
+        "ch_chi_cis",
+        "cij_marker",
+        "ooh_case_id"
+      ),
+      c(
+        "ch_cis_episodes",
+        "cij_total",
+        "ooh_cases"
+      )
+    )
+  }
 
   # column specification, grouped by chi
   # columns to select last
@@ -48,6 +64,9 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "gpprac",
     vars_start_with(episode_file, "sc_")
   )
+  if (exclude_sc_var) {
+    cols2 <- cols2[!(cols2 %in% vars_start_with(episode_file, "sc_"))]
+  }
   # columns to count unique rows
   cols3 <- c(
     "ch_cis_episodes",
@@ -59,6 +78,9 @@ aggregate_by_chi_zihao <- function(episode_file) {
     "ooh_cases",
     "preventable_admissions"
   )
+  if (exclude_sc_var) {
+    cols3 <- cols3[!(cols3 %in% "ch_cis_episodes")]
+  }
   # columns to sum up
   cols4 <- c(
     vars_end_with(
@@ -90,9 +112,25 @@ aggregate_by_chi_zihao <- function(episode_file) {
     ),
     "health_net_cost_inc_dnas"
   )
-  cols4 <- cols4[!(cols4 %in% c("ch_cis_episodes"))]
+  cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
+  if (exclude_sc_var) {
+    cols4 <-
+      cols4[!(cols4 %in% c(
+        vars_end_with(
+          episode_file,
+          c(
+            "alarms",
+            "telecare"
+          )
+        ),
+        vars_start_with(
+          episode_file,
+          "sds_option"
+        )
+      ))]
+  }
   # columns to select maximum
-  cols5 <- c("nsu", vars_contain(episode_file, c("hl1_in_fy")))
+  cols5 <- c("nsu", vars_contain(episode_file, "hl1_in_fy"))
   data.table::setnafill(episode_file, fill = 0L, cols = cols5)
   # compute
   individual_file_cols1 <- episode_file[,
@@ -126,9 +164,9 @@ aggregate_by_chi_zihao <- function(episode_file) {
   individual_file_cols6 <- episode_file[,
     .(
       preventable_beddays = ifelse(
-        max(cij_ppa, na.rm = TRUE),
-        max(cij_end_date) - min(cij_start_date),
-        NA_real_
+        any(cij_ppa, na.rm = TRUE),
+        as.integer(min(cij_end_date, end_fy(year)) - max(cij_start_date, start_fy(year))),
+        NA_integer_
       )
     ),
     # cij_marker has been renamed as cij_total
@@ -155,8 +193,13 @@ aggregate_by_chi_zihao <- function(episode_file) {
 }
 
 
-#' select columns ending with some patterns
-#' @describeIn select columns based on patterns
+#' Select columns according to a pattern
+#'
+#' @describeIn vars_select Choose variables ending in a given pattern.
+#'
+#' @param data The data from which to select columns/variables.
+#' @param vars The variables / pattern to find, as a character vector
+#' @param ignore_case Should case be ignored (Default: FALSE)
 vars_end_with <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_ends(
     names(data),
@@ -166,8 +209,7 @@ vars_end_with <- function(data, vars, ignore_case = FALSE) {
   )]
 }
 
-#' select columns starting with some patterns
-#' @describeIn select columns based on patterns
+#' @describeIn vars_select Choose variables starting with a given pattern.
 vars_start_with <- function(data, vars, ignore_case = FALSE) {
   names(data)[stringr::str_starts(
     names(data),
@@ -177,35 +219,41 @@ vars_start_with <- function(data, vars, ignore_case = FALSE) {
   )]
 }
 
-#' select columns contains some characters
-#' @describeIn select columns based on patterns
+#' @describeIn vars_select Choose variables which contain a given pattern.
 vars_contain <- function(data, vars, ignore_case = FALSE) {
-  names(data)[stringr::str_detect(
+  stringr::str_subset(
     names(data),
     stringr::regex(paste(vars, collapse = "|"),
       ignore_case = ignore_case
     )
-  )]
+  )
 }
 
-#' Aggregate CIS episodes
+#' Aggregate Care Home episodes to ch_cis
 #'
 #' @description Aggregate CH variables by CHI and CIS.
 #'
 #' @inheritParams create_individual_file
-aggregate_ch_episodes_zihao <- function(episode_file) {
+aggregate_ch_episodes <- function(episode_file) {
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
   # Convert to data.table
   data.table::setDT(episode_file)
 
   # Perform grouping and aggregation
-  episode_file <- episode_file[, `:=`(
-    ch_no_cost = max(ch_no_cost),
-    ch_ep_start = min(record_keydate1),
-    ch_ep_end = max(ch_ep_end),
-    ch_cost_per_day = mean(ch_cost_per_day)
-  ), by = c("chi", "ch_chi_cis")]
+  episode_file[, c(
+    "ch_no_cost",
+    "ch_ep_start",
+    "ch_ep_end",
+    "ch_cost_per_day"
+  ) := list(
+    max(ch_no_cost),
+    min(record_keydate1),
+    max(ch_ep_end),
+    mean(ch_cost_per_day)
+  ),
+  by = c("chi", "ch_chi_cis")
+  ]
 
   # Convert back to tibble if needed
   episode_file <- tibble::as_tibble(episode_file)
