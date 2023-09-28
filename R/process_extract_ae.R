@@ -192,7 +192,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   # Read in data---------------------------------------
 
   ae_cup_file <- read_file(
-    path = get_boxi_extract_path(year, "ae_cup),
+    path = get_boxi_extract_path(year, "ae_cup"),
     col_type = readr::cols(
       "ED Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "ED Arrival Time" = readr::col_time(""),
@@ -292,12 +292,11 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     )
 
   if (write_to_disk) {
-
     write_file(
       ae_processed,
       get_source_extract_path(year, "ae", check_mode = "write")
     )
- }
+  }
 
   return(ae_processed)
 }
