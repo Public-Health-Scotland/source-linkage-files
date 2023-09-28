@@ -45,8 +45,6 @@ Other individual_file:
 \code{\link{add_pis_columns}()},
 \code{\link{add_sds_columns}()},
 \code{\link{add_standard_cols}()},
-\code{\link{aggregate_by_chi}()},
-\code{\link{aggregate_ch_episodes}()},
 \code{\link{clean_up_ch}()},
 \code{\link{condition_cols}()},
 \code{\link{create_individual_file}()},
