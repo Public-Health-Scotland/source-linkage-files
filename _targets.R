@@ -19,7 +19,7 @@ tar_option_set(
   memory = "persistent" # default option
 )
 
-years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223")
+years_to_run <- c("1718", "1819", "1920", "2021", "2122", "2223", "2324")
 
 list(
   tar_rds(write_to_disk, TRUE),
@@ -455,6 +455,10 @@ list(
       )
     ),
     tar_target(
+      tests_sc_client_lookup,
+      process_tests_sc_client_lookup(sc_client_lookup, year = year)
+    ),
+    tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
         data = all_at,
@@ -550,10 +554,18 @@ list(
     ),
     tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
     tar_target(
+      homelessness_lookup,
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
+    tar_target(
       episode_file,
       create_episode_file(
         processed_data_list,
         year,
+        homelessness_lookup = homelessness_lookup,
         dd_data = source_dd_extract,
         nsu_cohort = nsu_cohort,
         ltc_data = source_ltc_lookup,
@@ -575,6 +587,7 @@ list(
       create_individual_file(
         episode_file = episode_file,
         year = year,
+        homelessness_lookup = homelessness_lookup,
         write_to_disk = write_to_disk
       )
     ),

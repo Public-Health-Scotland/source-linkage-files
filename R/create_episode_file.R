@@ -15,11 +15,11 @@
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
-#' @family episode_file
 create_episode_file <- function(
     processed_data_list,
     year,
     dd_data = read_file(get_source_extract_path(year, "DD")),
+    homelessness_lookup = create_homelessness_lookup(year),
     nsu_cohort = read_file(get_nsu_path(year)),
     ltc_data = read_file(get_ltcs_path(year)),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
@@ -114,6 +114,8 @@ create_episode_file <- function(
     ) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
@@ -132,13 +134,43 @@ create_episode_file <- function(
     ) %>%
     load_ep_file_vars(year)
 
+  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        sc_send_lca = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA,
+        sc_latest_submission = NA,
+        ch_chi_cis = NA,
+        sc_id_cis = NA,
+        ch_name = NA,
+        ch_adm_reason = NA,
+        ch_provider = NA,
+        ch_nursing = NA,
+        hc_hours_annual = NA,
+        hc_hours_q1 = NA,
+        hc_hours_q2 = NA,
+        hc_hours_q3 = NA,
+        hc_hours_q4 = NA,
+        hc_cost_q1 = NA,
+        hc_cost_q2 = NA,
+        hc_cost_q3 = NA,
+        hc_cost_q4 = NA,
+        hc_provider = NA,
+        hc_reablement = NA,
+        sds_option_4 = NA,
+      )
+  }
+
   if (anon_chi_out) {
     episode_file <- slfhelper::get_anon_chi(episode_file)
   }
 
   if (write_to_disk) {
-    slf_episode_path <- get_slf_episode_path(year, check_mode = "write")
-
 
     write_file(episode_file, slf_episode_path)
   }
@@ -153,8 +185,6 @@ create_episode_file <- function(
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
 #'
-
-#' @family episode_file
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
@@ -192,9 +222,6 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
-
-#' @family episode_file
-
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
@@ -222,9 +249,6 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
-
-#' @family episode_file
-
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
@@ -279,9 +303,6 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
-
-#' @family episode_file
-
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
   check_variables_exist(
@@ -323,9 +344,6 @@ correct_cij_vars <- function(data) {
 #'
 #' @inheritParams store_ep_file_vars
 #'
-
-#' @family episode_file
-
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
@@ -350,8 +368,6 @@ create_cost_inc_dna <- function(data) {
 #' @inheritParams store_ep_file_vars
 #' @inheritParams create_demographic_cohorts
 #'
-
-#' @family episode_file
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
   # Use future so the cohorts can be created simultaneously (in parallel)
@@ -386,10 +402,8 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @inheritParams store_ep_file_vars
 #' @inheritParams get_demographic_cohorts_path
-
 #' @param demographic_cohort,service_use_cohort The cohort data
 #'
-#' @family episode_file
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(
     data,
@@ -415,3 +429,5 @@ join_cohort_lookups <- function(
 
   return(join_cohort_lookups)
 }
+
+    slf_episode_path <- get_slf_episode_path(year, check_mode = "write")
