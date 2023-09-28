@@ -20,6 +20,7 @@ Produce the tests for Social Care Demographic Lookup
 Other social care test functions: 
 \code{\link{produce_sc_ch_episodes_tests}()},
 \code{\link{produce_source_at_tests}()},
-\code{\link{produce_source_sds_tests}()}
+\code{\link{produce_source_sds_tests}()},
+\code{\link{produce_tests_sc_client_lookup}()}
 }
 \concept{social care test functions}
