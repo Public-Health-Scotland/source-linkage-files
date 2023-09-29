@@ -1,6 +1,6 @@
 test_that("Can convert a SC sending location to lca code", {
   expect_snapshot(
-    convert_sending_location_to_lca(
+    convert_sc_sending_location_to_lca(
       c(
         100L,
         110L,
@@ -44,9 +44,9 @@ test_that("Can convert a SC sending location to lca code", {
 
 test_that("Errors on unexpected input", {
   expect_error(
-    convert_sending_location_to_lca("100")
+    convert_sc_sending_location_to_lca("100")
   )
   expect_error(
-    convert_sending_location_to_lca(c("100", 99L))
+    convert_sc_sending_location_to_lca(c("100", 99L))
   )
 })
