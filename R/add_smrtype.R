@@ -16,8 +16,6 @@ add_smrtype <- function(recid,
                          hc_service = NULL,
                          main_applicant_flag = NULL,
                          consultation_type = NULL) {
-  # TODO rename this function to `add_smrtype()` to match the name of the
-  # variable. Need to make sure to change all places where it is used as well.
 
   # Situation where some recids are not in the accepted values
   if (!all(recid %in% c(
