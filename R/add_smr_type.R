@@ -10,7 +10,7 @@
 #' @return A vector of `smrtype`
 #'
 #' @family Codes
-add_smr_type <- function(recid,
+add_smrtype <- function(recid,
                          mpat = NULL,
                          ipdc = NULL,
                          hc_service = NULL,
@@ -188,7 +188,7 @@ add_smr_type <- function(recid,
 
   if (anyNA(smrtype)) {
     cli::cli_warn(
-      "Some {.var smrtype}s were not properly set by {.fun add_smr_type}."
+      "Some {.var smrtype}s were not properly set by {.fun add_smrtype}."
     )
   }
 

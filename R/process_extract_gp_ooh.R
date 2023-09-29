@@ -62,7 +62,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       # Replace location unknown with NA
       location = dplyr::na_if(.data$location, "UNKNOWN"),
       recid = "OoH",
-      smrtype = add_smr_type(.data$recid, consultation_type = .data$consultation_type),
+      smrtype = add_smrtype(.data$recid, consultation_type = .data$consultation_type),
       kis_accessed = factor(
         dplyr::case_when(
           kis_accessed == "Y" ~ 1L,

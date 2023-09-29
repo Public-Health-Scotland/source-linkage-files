@@ -28,7 +28,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       # Set recid variable
       recid = "00B",
       # Set smrtype variable
-      smrtype = add_smr_type(.data$recid)
+      smrtype = add_smrtype(.data$recid)
     ) %>%
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # compute record key date2

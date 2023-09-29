@@ -64,7 +64,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
         .data$record_keydate2
       ),
       # SMR type
-      smrtype = add_smr_type(.data$recid)
+      smrtype = add_smrtype(.data$recid)
     )
 
   mh_processed <- mh_clean %>%

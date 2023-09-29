@@ -58,7 +58,7 @@ process_extract_care_home <- function(
     dplyr::mutate(
       year = year,
       recid = "CH",
-      smrtype = add_smr_type(recid = "CH")
+      smrtype = add_smrtype(recid = "CH")
     ) %>%
     # compute lca variable from sending_location
     dplyr::mutate(
