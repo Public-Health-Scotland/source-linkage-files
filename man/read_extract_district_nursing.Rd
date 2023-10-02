@@ -6,7 +6,7 @@
 \usage{
 read_extract_district_nursing(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "DN")
+  file_path = get_boxi_extract_path(year = year, type = "dn")
 )
 }
 \arguments{

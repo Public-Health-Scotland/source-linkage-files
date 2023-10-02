@@ -15,3 +15,11 @@ episode data with a uplift scale
 \description{
 Set uplift scale
 }
+\seealso{
+Other episode_file: 
+\code{\link{add_nsu_cohort}()},
+\code{\link{add_ppa_flag}()},
+\code{\link{apply_cost_uplift}()},
+\code{\link{link_delayed_discharge_eps}()}
+}
+\concept{episode_file}

@@ -135,7 +135,7 @@ process_extract_district_nursing <- function(
 
   if (write_to_disk) {
     dn_episodes %>%
-      write_file(get_source_extract_path(year, "DN", check_mode = "write"))
+      write_file(get_source_extract_path(year, "dn", check_mode = "write"))
   }
 
   return(dn_episodes)

@@ -6,7 +6,7 @@
 \usage{
 read_extract_maternity(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "Maternity")
+  file_path = get_boxi_extract_path(year = year, type = "maternity")
 )
 }
 \arguments{

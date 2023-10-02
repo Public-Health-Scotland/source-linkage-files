@@ -5,7 +5,7 @@
 #' @export
 read_extract_homelessness <- function(
     year,
-    file_path = get_boxi_extract_path(year = year, type = "Homelessness")) {
+    file_path = get_boxi_extract_path(year = year, type = "homelessness")) {
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())
@@ -13,29 +13,29 @@ read_extract_homelessness <- function(
 
   extract_homelessness <- read_file(file_path,
     col_types = cols(
-      "Assessment Decision Date" = col_date(format = "%Y/%m/%d %T"),
-      "Case Closed Date" = col_date(format = "%Y/%m/%d %T"),
-      "Sending Local Authority Code 9" = col_character(),
-      "Client Unique Identifier" = col_character(),
-      "UPI Number [C]" = col_character(),
-      "Client DoB Date [C]" = col_date(format = "%Y/%m/%d %T"),
-      "Age at Assessment Decision Date" = col_integer(),
-      "Gender Code" = col_integer(),
-      "Client Postcode [C]" = col_character(),
-      "Main Applicant Flag" = col_character(),
-      "Application Reference Number" = col_character(),
-      "Property Type Code" = col_integer(),
-      "Financial Difficulties / Debt / Unemployment" = col_integer(),
-      "Physical Health Reasons" = col_integer(),
-      "Mental Health Reasons" = col_integer(),
-      "Unmet Need for Support from Housing / Social Work / Health Services" = col_integer(),
-      "Lack of Support from Friends / Family" = col_integer(),
-      "Difficulties Managing on Own" = col_integer(),
-      "Drug / Alcohol Dependency" = col_integer(),
-      "Criminal / Anti-Social Behaviour" = col_integer(),
-      "Not to do with Applicant Household" = col_integer(),
-      "Refused" = col_integer(),
-      "Person in Receipt of Universal Credit" = col_integer()
+      "Assessment Decision Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Case Closed Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Sending Local Authority Code 9" = readr::col_character(),
+      "Client Unique Identifier" = readr::col_character(),
+      "UPI Number [C]" = readr::col_character(),
+      "Client DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Age at Assessment Decision Date" = readr::col_integer(),
+      "Gender Code" = readr::col_integer(),
+      "Client Postcode [C]" = readr::col_character(),
+      "Main Applicant Flag" = readr::col_character(),
+      "Application Reference Number" = readr::col_character(),
+      "Property Type Code" = readr::col_integer(),
+      "Financial Difficulties / Debt / Unemployment" = readr::col_integer(),
+      "Physical Health Reasons" = readr::col_integer(),
+      "Mental Health Reasons" = readr::col_integer(),
+      "Unmet Need for Support from Housing / Social Work / Health Services" = readr::col_integer(),
+      "Lack of Support from Friends / Family" = readr::col_integer(),
+      "Difficulties Managing on Own" = readr::col_integer(),
+      "Drug / Alcohol Dependency" = readr::col_integer(),
+      "Criminal / Anti-Social Behaviour" = readr::col_integer(),
+      "Not to do with Applicant Household" = readr::col_integer(),
+      "Refused" = readr::col_integer(),
+      "Person in Receipt of Universal Credit" = readr::col_integer()
     )
   ) %>%
     dplyr::rename(

@@ -6,7 +6,7 @@
 \usage{
 read_extract_ae(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "AE")
+  file_path = get_boxi_extract_path(year = year, type = "ae")
 )
 }
 \arguments{

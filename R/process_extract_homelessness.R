@@ -20,6 +20,7 @@ process_extract_homelessness <- function(
     year,
     write_to_disk = TRUE,
     update = latest_update(),
+    la_code_lookup = get_la_code_opendata_lookup(),
     sg_pub_path = get_sg_homelessness_pub_path()) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -100,7 +101,7 @@ process_extract_homelessness <- function(
       )
     ) %>%
     dplyr::left_join(
-      la_code_lookup(),
+      la_code_lookup,
       by = dplyr::join_by("sending_local_authority_code_9" == "CA")
     ) %>%
     # Filter out duplicates
