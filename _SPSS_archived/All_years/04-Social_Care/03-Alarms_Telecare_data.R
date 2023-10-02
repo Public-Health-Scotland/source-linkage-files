@@ -46,8 +46,6 @@ at_full_data <- tbl(
     service_end_date
   ) %>%
   # fix bad period (2017, 2020 & 2021)
-  # TODO - ask SC team as last meeting they said to look at extract date - these dont relate.
-  # e.g. extract date later than period
   mutate(
     period = if_else(period == "2017", "2017Q4", period),
     period = if_else(period == "2020", "2020Q4", period),

@@ -31,7 +31,6 @@ get_source_extract_path <- function(year,
                                       "sds"
                                     ),
                                     ...) {
-
   if (year %in% type) {
     cli::cli_abort("{.val {year}} was supplied to the {.arg year} argument.")
   }
