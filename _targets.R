@@ -445,7 +445,6 @@ list(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
     ),
-
     tar_target(
       sc_client_lookup,
       process_lookup_sc_client(
