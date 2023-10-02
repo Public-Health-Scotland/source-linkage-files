@@ -13,6 +13,11 @@
 #' @export
 #' @family process extracts
 process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
+
+  sc_demographics = read_file(get_sc_demog_lookup_path(),
+                              col_select = c("sending_location", "social_care_id", "chi")
+  )
+
   client_clean <- data %>%
     # Replace 'unknown' responses with NA
     dplyr::mutate(
@@ -119,6 +124,11 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
       "sc_type_of_housing",
       "sc_meals",
       "sc_day_care"
+    ) %>%
+    dplyr::left_join(
+      sc_demographics %>%
+        dplyr::select("sending_location", "social_care_id", "chi"),
+      by = c("sending_location", "social_care_id")
     )
 
   if (write_to_disk) {

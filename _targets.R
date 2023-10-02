@@ -445,7 +445,7 @@ list(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
     ),
-    # TODO add tests for the SC client lookup
+
     tar_target(
       sc_client_lookup,
       process_lookup_sc_client(

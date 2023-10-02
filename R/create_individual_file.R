@@ -808,20 +808,10 @@ join_slf_lookup_vars <- function(individual_file,
 join_sc_client <- function(
     individual_file,
     year,
-    sc_client = read_file(get_sc_client_lookup_path(year)),
-    sc_demographics = read_file(get_sc_demog_lookup_path(),
-      col_select = c("sending_location", "social_care_id", "chi")
-    )) {
-  # TODO Update the client lookup processing script to match
-  # on demographics there so the client lookup already has CHI.
+    sc_client = read_file(get_sc_client_lookup_path(year)))
 
   # Match to demographics lookup to get CHI
-  join_client_demog <- sc_client %>%
-    dplyr::left_join(
-      sc_demographics %>%
-        dplyr::select("sending_location", "social_care_id", "chi"),
-      by = c("sending_location", "social_care_id")
-    ) %>%
+  client_count_not_known <- sc_client %>%
     dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
       c(
         "sc_living_alone",
@@ -837,7 +827,7 @@ join_sc_client <- function(
   # Match on client variables by chi
   individual_file <- individual_file %>%
     dplyr::left_join(
-      join_client_demog,
+      client_count_not_known,
       by = "chi",
       relationship = "one-to-one"
     ) %>%
