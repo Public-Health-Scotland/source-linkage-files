@@ -18,8 +18,10 @@ a combination of diagnostic codes and operation codes, whether an admission
 was preventable or not.
 }
 \seealso{
-Other episode file: 
+Other episode_file: 
 \code{\link{add_nsu_cohort}()},
-\code{\link{link_delayed_discharge_eps}()}
+\code{\link{apply_cost_uplift}()},
+\code{\link{link_delayed_discharge_eps}()},
+\code{\link{lookup_uplift}()}
 }
-\concept{episode file}
+\concept{episode_file}

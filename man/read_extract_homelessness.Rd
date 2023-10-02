@@ -6,7 +6,7 @@
 \usage{
 read_extract_homelessness(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "Homelessness")
+  file_path = get_boxi_extract_path(year = year, type = "homelessness")
 )
 }
 \arguments{

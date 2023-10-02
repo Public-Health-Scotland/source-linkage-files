@@ -6,7 +6,7 @@
 \usage{
 read_extract_nrs_deaths(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "Deaths")
+  file_path = get_boxi_extract_path(year = year, type = "deaths")
 )
 }
 \arguments{

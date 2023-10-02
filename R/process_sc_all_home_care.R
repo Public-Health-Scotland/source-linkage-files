@@ -199,7 +199,7 @@ process_sc_all_home_care <- function(
     create_person_id(type = "SC") %>%
     # compute lca variable from sending_location
     dplyr::mutate(
-      sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
+      sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     )
 
   if (write_to_disk) {

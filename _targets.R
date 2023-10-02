@@ -34,6 +34,7 @@ list(
   ),
   ## Lookup data ##
   tar_target(gpprac_opendata, get_gpprac_opendata()),
+  tar_target(la_code_opendata, get_la_code_opendata_lookup()),
   tar_target(gpprac_ref_path, get_gpprac_ref_path(), format = "file"),
   tar_target(locality_path, get_locality_path(), format = "file"),
   tar_target(simd_path, get_simd_path(), format = "file"),
@@ -205,47 +206,47 @@ list(
     ### target data extracts ###
     tar_file_read(
       acute_data,
-      get_boxi_extract_path(year, type = "Acute"),
+      get_boxi_extract_path(year, type = "acute"),
       read_extract_acute(year, !!.x)
     ),
     tar_file_read(
       ae_data,
-      get_boxi_extract_path(year, type = "AE"),
+      get_boxi_extract_path(year, type = "ae"),
       read_extract_ae(year, !!.x)
     ),
     tar_file_read(
       cmh_data,
-      get_boxi_extract_path(year, type = "CMH"),
+      get_boxi_extract_path(year, type = "cmh"),
       read_extract_cmh(year, !!.x)
     ),
     tar_file_read(
       dn_data,
-      get_boxi_extract_path(year, type = "DN"),
+      get_boxi_extract_path(year, type = "dn"),
       read_extract_district_nursing(year, !!.x)
     ),
     tar_file_read(
       homelessness_data,
-      get_boxi_extract_path(year, type = "Homelessness"),
+      get_boxi_extract_path(year, type = "homelessness"),
       read_extract_homelessness(year, !!.x)
     ),
     tar_file_read(
       maternity_data,
-      get_boxi_extract_path(year, type = "Maternity"),
+      get_boxi_extract_path(year, type = "maternity"),
       read_extract_maternity(year, !!.x)
     ),
     tar_file_read(
       mental_health_data,
-      get_boxi_extract_path(year, type = "MH"),
+      get_boxi_extract_path(year, type = "mh"),
       read_extract_mental_health(year, !!.x)
     ),
     tar_file_read(
       nrs_deaths_data,
-      get_boxi_extract_path(year, type = "Deaths"),
+      get_boxi_extract_path(year, type = "deaths"),
       read_extract_nrs_deaths(year, !!.x)
     ),
     tar_file_read(
       outpatients_data,
-      get_boxi_extract_path(year, type = "Outpatient"),
+      get_boxi_extract_path(year, type = "outpatient"),
       read_extract_outpatients(year, !!.x)
     ),
     tar_file_read(
@@ -255,17 +256,17 @@ list(
     ),
     tar_target(
       diagnosis_data_path,
-      get_boxi_extract_path(year = year, type = "GP_OoH-d"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-d"),
       format = "file"
     ),
     tar_target(
       outcomes_data_path,
-      get_boxi_extract_path(year = year, type = "GP_OoH-o"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-o"),
       format = "file"
     ),
     tar_target(
       consultations_data_path,
-      get_boxi_extract_path(year = year, type = "GP_OoH-c"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-c"),
       format = "file"
     ),
     tar_qs(
@@ -342,9 +343,10 @@ list(
     tar_target(
       source_homelessness_extract,
       process_extract_homelessness(
-        homelessness_data,
-        year,
-        write_to_disk = write_to_disk
+        data = homelessness_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        la_code_lookup = la_code_opendata
       )
     ),
     tar_target(

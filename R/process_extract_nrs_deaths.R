@@ -27,7 +27,7 @@ process_extract_nrs_deaths <- function(data, year, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     deaths_clean %>%
-      write_file(get_source_extract_path(year, "Deaths", check_mode = "write"))
+      write_file(get_source_extract_path(year, "deaths", check_mode = "write"))
   }
 
   return(deaths_clean)

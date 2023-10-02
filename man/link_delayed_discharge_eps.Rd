@@ -7,7 +7,7 @@
 link_delayed_discharge_eps(
   episode_file,
   year,
-  dd_data = read_file(get_source_extract_path(year, "DD"))
+  dd_data = read_file(get_source_extract_path(year, "dd"))
 )
 }
 \arguments{
@@ -25,8 +25,10 @@ using the \code{cij_marker}
 Link  Delayed Discharge to WIP episode file
 }
 \seealso{
-Other episode file: 
+Other episode_file: 
 \code{\link{add_nsu_cohort}()},
-\code{\link{add_ppa_flag}()}
+\code{\link{add_ppa_flag}()},
+\code{\link{apply_cost_uplift}()},
+\code{\link{lookup_uplift}()}
 }
-\concept{episode file}
+\concept{episode_file}

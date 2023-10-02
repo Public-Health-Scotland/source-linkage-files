@@ -84,6 +84,7 @@ produce_episode_file_tests <- function(
     ) %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
+    create_hscp_test_flags(.data$hscp2018) %>%
     # Flags to count stay types
     dplyr::mutate(
       cij_elective = dplyr::if_else(

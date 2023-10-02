@@ -6,7 +6,7 @@
 \usage{
 read_extract_outpatients(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "Outpatient")
+  file_path = get_boxi_extract_path(year = year, type = "outpatient")
 )
 }
 \arguments{

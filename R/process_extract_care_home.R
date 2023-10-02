@@ -62,7 +62,7 @@ process_extract_care_home <- function(
     ) %>%
     # compute lca variable from sending_location
     dplyr::mutate(
-      sc_send_lca = convert_sending_location_to_lca(.data$sending_location)
+      sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
     # bed days
     create_monthly_beddays(year,
@@ -143,7 +143,7 @@ process_extract_care_home <- function(
   if (write_to_disk) {
     write_file(
       ch_processed,
-      get_source_extract_path(year, type = "CH", check_mode = "write")
+      get_source_extract_path(year, type = "ch", check_mode = "write")
     )
   }
 

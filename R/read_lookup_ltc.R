@@ -9,28 +9,28 @@ read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
   # Read data------------------------------------------------
   ltc_file <- read_file(
     file_path,
-    col_type = cols(
-      "PATIENT_UPI [C]" = col_character(),
-      "PATIENT_POSTCODE [C]" = col_character(),
-      "ARTHRITIS_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "ASTHMA_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "ATRIAL_FIB_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "CANCER_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "CEREBROVASC_DIS_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "CHRON_LIVER_DIS_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "COPD_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "DEMENTIA_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "DIABETES_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "EPILEPSY_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "HEART_DISEASE_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "HEART_FAILURE_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "MULT_SCLEROSIS_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "PARKINSONS_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "RENAL_FAILURE_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "CONGENITAL_PROB_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "BLOOD_AND_BFO_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "OTH_DIS_END_MET_DIAG_DATE" = col_date(format = "%d-%m-%Y"),
-      "OTH_DIS_DIG_SYS_DIAG_DATE" = col_date(format = "%d-%m-%Y")
+    col_type = readr::cols(
+      "PATIENT_UPI [C]" = readr::col_character(),
+      "PATIENT_POSTCODE [C]" = readr::col_character(),
+      "ARTHRITIS_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "ASTHMA_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "ATRIAL_FIB_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "CANCER_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "CEREBROVASC_DIS_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "CHRON_LIVER_DIS_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "COPD_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "DEMENTIA_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "DIABETES_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "EPILEPSY_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "HEART_DISEASE_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "HEART_FAILURE_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "MULT_SCLEROSIS_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "PARKINSONS_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "RENAL_FAILURE_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "CONGENITAL_PROB_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "BLOOD_AND_BFO_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "OTH_DIS_END_MET_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y"),
+      "OTH_DIS_DIG_SYS_DIAG_DATE" = readr::col_date(format = "%d-%m-%Y")
     )
   ) %>%
     # Rename variables

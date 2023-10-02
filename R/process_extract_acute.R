@@ -113,7 +113,7 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       acute_processed,
-      get_source_extract_path(year, "Acute", check_mode = "write")
+      get_source_extract_path(year, "acute", check_mode = "write")
     )
   }
 

@@ -6,7 +6,7 @@
 \usage{
 read_extract_ooh_outcomes(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "GP_OoH-o")
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o")
 )
 }
 \arguments{
