@@ -171,7 +171,7 @@ create_episode_file <- function(
   }
 
   if (write_to_disk) {
-    write_file(episode_file, slf_episode_path)
+    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"))
   }
 
   return(episode_file)
@@ -428,5 +428,3 @@ join_cohort_lookups <- function(
 
   return(join_cohort_lookups)
 }
-
-slf_episode_path <- get_slf_episode_path(year, check_mode = "write")

@@ -15,19 +15,3 @@ A data frame with CIJ markers filled in for those missing.
 \description{
 Fill any missing CIJ markers for records that should have them
 }
-\seealso{
-Other episode_file: 
-\code{\link{add_nsu_cohort}()},
-\code{\link{add_ppa_flag}()},
-\code{\link{apply_cost_uplift}()},
-\code{\link{correct_cij_vars}()},
-\code{\link{create_cohort_lookups}()},
-\code{\link{create_cost_inc_dna}()},
-\code{\link{create_episode_file}()},
-\code{\link{join_cohort_lookups}()},
-\code{\link{link_delayed_discharge_eps}()},
-\code{\link{load_ep_file_vars}()},
-\code{\link{lookup_uplift}()},
-\code{\link{store_ep_file_vars}()}
-}
-\concept{episode_file}

@@ -31,7 +31,6 @@ get_source_extract_path <- function(year,
                                       "sds"
                                     ),
                                     ...) {
-
   if (year %in% type) {
     cli::cli_abort("{.val {year}} was supplied to the {.arg year} argument.")
   }
@@ -64,8 +63,7 @@ get_source_extract_path <- function(year,
     "outpatients" ~ "outpatients_for_source",
     "pis" ~ "prescribing_file_for_source",
     "sds" ~ "sds-for-source"
-  )
- %>%
+  ) %>%
     stringr::str_glue("-{year}.parquet")
 
   source_extract_path <- get_file_path(

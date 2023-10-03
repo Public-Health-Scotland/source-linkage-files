@@ -21,15 +21,7 @@ was preventable or not.
 Other episode_file: 
 \code{\link{add_nsu_cohort}()},
 \code{\link{apply_cost_uplift}()},
-\code{\link{correct_cij_vars}()},
-\code{\link{create_cohort_lookups}()},
-\code{\link{create_cost_inc_dna}()},
-\code{\link{create_episode_file}()},
-\code{\link{fill_missing_cij_markers}()},
-\code{\link{join_cohort_lookups}()},
 \code{\link{link_delayed_discharge_eps}()},
-\code{\link{load_ep_file_vars}()},
-\code{\link{lookup_uplift}()},
-\code{\link{store_ep_file_vars}()}
+\code{\link{lookup_uplift}()}
 }
 \concept{episode_file}
