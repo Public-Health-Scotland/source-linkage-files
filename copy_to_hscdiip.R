@@ -1,5 +1,8 @@
 dir_folder <- "/conf/sourcedev/Source_Linkage_File_Updates"
-target_folder <- "/conf/hscdiip/copy_test"
+target_folder <- "/conf/hscdiip/01-Source-linkage-files"
+if(!dir.exists(target_folder)){
+  dir.create(target_folder, mode = "770")
+}
 folders <- c("1718", "1819", "1920", "2021", "2122", "2223")
 year_n <- length(folders)
 resource_consumption <- data.frame(
