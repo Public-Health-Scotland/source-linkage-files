@@ -12,7 +12,7 @@
 process_extract_sds <- function(
     data,
     year,
-    client_lookup,
+   # client_lookup,
     write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -33,7 +33,7 @@ process_extract_sds <- function(
       .data[["record_keydate1"]],
       .data[["record_keydate2"]]
     )) %>%
-    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
+   # dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(
       year = year
     ) %>%
@@ -48,12 +48,12 @@ process_extract_sds <- function(
       "record_keydate1",
       "record_keydate2",
       "sc_send_lca",
-      "sc_living_alone",
-      "sc_support_from_unpaid_carer",
-      "sc_social_worker",
-      "sc_type_of_housing",
-      "sc_meals",
-      "sc_day_care"
+      # "sc_living_alone",
+      # "sc_support_from_unpaid_carer",
+      # "sc_social_worker",
+      # "sc_type_of_housing",
+      # "sc_meals",
+      # "sc_day_care"
     )
 
   if (write_to_disk) {

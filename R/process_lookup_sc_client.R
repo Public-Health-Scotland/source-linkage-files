@@ -139,3 +139,18 @@ process_lookup_sc_client <- function(data, year, write_to_disk = TRUE) {
 
   return(sc_client_lookup)
 }
+
+
+match_on_sc_client <- function(
+    data,
+    year,
+    sc_client_lookup = read_file(get_sc_client_lookup_path(year))) {
+  # Match on social care lookup
+  matched <- dplyr::left_join(
+    data,
+    sc_client_lookup,
+    by = c("sending_location", "social_care_id"),
+    relationship = "many-to-one")
+
+  return(matched)
+}

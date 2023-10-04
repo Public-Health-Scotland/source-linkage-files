@@ -808,7 +808,7 @@ join_slf_lookup_vars <- function(individual_file,
 join_sc_client <- function(
     individual_file,
     year,
-    sc_client = read_file(get_sc_client_lookup_path(year)))
+    sc_client = read_file(get_sc_client_lookup_path(year))) {
 
   # Match to demographics lookup to get CHI
   client_count_not_known <- sc_client %>%
