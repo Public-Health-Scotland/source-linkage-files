@@ -13,7 +13,7 @@ process_tests_lookup_gpprac <- function(data, update = previous_update()) {
     ),
     new_data = produce_slf_gpprac_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "source_gpprac_lookup")
+    write_tests_xlsx(sheet_name = "source_gpprac_lookup", workbook_name = "lookup")
 
   return(comparison)
 }

@@ -16,7 +16,7 @@ process_tests_alarms_telecare <- function(data, year) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "AT", year)
+    write_tests_xlsx(sheet_name = "AT", year, workbook_name = "extract")
 
   return(comparison)
 }

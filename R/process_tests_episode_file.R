@@ -31,7 +31,7 @@ process_tests_episode_file <- function(data, year) {
     recid = TRUE
   ) %>%
     dplyr::arrange(.data[["recid"]]) %>%
-    write_tests_xlsx(sheet_name = "ep_file", year)
+    write_tests_xlsx(sheet_name = "ep_file", year, workbook_name = "ep_file")
 
   return(comparison)
 }

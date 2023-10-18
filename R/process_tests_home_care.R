@@ -15,7 +15,7 @@ process_tests_home_care <- function(data, year) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "home_care", year)
+    write_tests_xlsx(sheet_name = "home_care", year, workbook_name = "extract")
 
   return(comparison)
 }

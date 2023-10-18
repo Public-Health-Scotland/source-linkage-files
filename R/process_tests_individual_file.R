@@ -35,7 +35,7 @@ process_tests_individual_file <- function(data, year) {
     old_data = produce_individual_file_tests(old_data),
     new_data = produce_individual_file_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "indiv_file", year)
+    write_tests_xlsx(sheet_name = "indiv_file", year, workbook_name = "indiv_file")
 
   return(comparison)
 }

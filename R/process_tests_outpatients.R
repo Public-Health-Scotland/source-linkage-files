@@ -21,7 +21,7 @@ process_tests_outpatients <- function(data, year) {
       add_hscp_count = FALSE
     )
   ) %>%
-    write_tests_xlsx(sheet_name = "00B", year)
+    write_tests_xlsx(sheet_name = "00B", year, workbook_name = "extract")
 
   return(comparison)
 }

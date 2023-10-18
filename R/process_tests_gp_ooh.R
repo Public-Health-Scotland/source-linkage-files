@@ -17,7 +17,7 @@ process_tests_gp_ooh <- function(data, year) {
       sum_mean_vars = "cost"
     )
   ) %>%
-    write_tests_xlsx(sheet_name = "GPOoH", year)
+    write_tests_xlsx(sheet_name = "GPOoH", year, workbook_name = "extract")
 
   return(comparison)
 }

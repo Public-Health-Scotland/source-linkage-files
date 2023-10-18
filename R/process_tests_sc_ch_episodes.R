@@ -20,7 +20,7 @@ process_tests_sc_ch_episodes <- function(data) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "all_ch_episodes")
+    write_tests_xlsx(sheet_name = "all_ch_episodes", workbook_name = "lookup")
 
   return(comparison)
 }

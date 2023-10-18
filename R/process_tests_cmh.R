@@ -18,7 +18,7 @@ process_tests_cmh <- function(data, year) {
     old_data = produce_source_cmh_tests(old_data),
     new_data = produce_source_cmh_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "CMH", year)
+    write_tests_xlsx(sheet_name = "CMH", year, workbook_name = "extract")
 
   return(comparison)
 }
