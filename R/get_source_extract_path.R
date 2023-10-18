@@ -64,7 +64,7 @@ get_source_extract_path <- function(year,
     "pis" ~ "prescribing_file_for_source",
     "sds" ~ "sds-for-source"
   ) %>%
-    stringr::str_glue("-{year}.parquet")
+    stringr::str_glue("-20{year}.parquet")
 
   source_extract_path <- get_file_path(
     directory = get_year_dir(year),
