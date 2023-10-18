@@ -96,7 +96,8 @@ create_individual_file <- function(
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
-    add_hri_variables(chi_variable = "chi")
+    add_hri_variables(chi_variable = "chi") %>%
+    add_keep_population_flag(year)
 
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     individual_file <- individual_file %>%
