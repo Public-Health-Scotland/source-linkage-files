@@ -7,12 +7,12 @@
 #' @family individual_file
 
 add_keep_population_flag <- function(individual_file, year) {
-  calendar_year = paste0("20", substr(year, 1, 2)) %>% as.integer()
+  calendar_year <- paste0("20", substr(year, 1, 2)) %>% as.integer()
 
   if (!check_year_valid(year, "NSU")) {
     individual_file <- individual_file %>%
       dplyr::mutate(keep_population = 1L)
-  } else{
+  } else {
     ## Obtain the population estimates for Locality AgeGroup and Gender.
     pop_estimates <-
       readRDS(get_datazone_pop_path("DataZone2011_pop_est_2011_2021.rds")) %>%
@@ -22,11 +22,13 @@ add_keep_population_flag <- function(individual_file, year) {
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
     # Select out the estimates for the year of interest.
     # if we don't have estimates for this year (and so have to use previous year).
-    year_available = pop_estimates %>% dplyr::pull(year) %>% unique()
+    year_available <- pop_estimates %>%
+      dplyr::pull(year) %>%
+      unique()
     if (calendar_year %in% year_available) {
       pop_estimates <- pop_estimates %>%
         dplyr::filter(year == calendar_year)
-    } else{
+    } else {
       previous_year <- sort(year_available, decreasing = TRUE)[1]
       pop_estimates <- pop_estimates %>%
         dplyr::filter(year = previous_year)
@@ -35,8 +37,10 @@ add_keep_population_flag <- function(individual_file, year) {
     pop_estimates <- pop_estimates %>%
       # Recode gender to make it match source.
       dplyr::mutate(sex = dplyr::if_else(sex == "M", 1, 2)) %>%
-      dplyr::rename("age90" = "age90plus",
-                    "gender" = "sex") %>%
+      dplyr::rename(
+        "age90" = "age90plus",
+        "gender" = "sex"
+      ) %>%
       tidyr::pivot_longer(
         names_to = "age",
         names_prefix = "age",
@@ -48,7 +52,7 @@ add_keep_population_flag <- function(individual_file, year) {
         age_group = dplyr::case_when(
           age >= 0 & age <= 4 ~ "0-4",
           age >= 5 & age <= 14 ~ "5-14",
-          age >= 15 & age <= 24  ~ "15-24",
+          age >= 15 & age <= 24 ~ "15-24",
           age >= 25 & age <= 34 ~ "25-34",
           age >= 35 & age <= 44 ~ "35-44",
           age >= 45 & age <= 54 ~ "45-54",
@@ -70,22 +74,25 @@ add_keep_population_flag <- function(individual_file, year) {
 
     # Step 2: Work out the current population sizes in the SLF for Locality, AgeGroup, and Gender
     # Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
-    individual_file = slfhelper::read_slf_individual(year,
-                                                     columns = c("chi",
-                                                                 "locality",
-                                                                 "age",
-                                                                 "gender",
-                                                                 # "nsu",
-                                                                 "death_date")) %>%
+    individual_file <- slfhelper::read_slf_individual(year,
+      columns = c(
+        "chi",
+        "locality",
+        "age",
+        "gender",
+        # "nsu",
+        "death_date"
+      )
+    ) %>%
       dplyr::mutate(nsu = 0L) # delete this before merge
 
-    individual_file_1 = individual_file %>%
+    individual_file_1 <- individual_file %>%
       dplyr::mutate(
         age = as.integer(age),
         age_group = dplyr::case_when(
           age >= 0 & age <= 4 ~ "0-4",
           age >= 5 & age <= 14 ~ "5-14",
-          age >= 15 & age <= 24  ~ "15-24",
+          age >= 15 & age <= 24 ~ "15-24",
           age >= 25 & age <= 34 ~ "25-34",
           age >= 35 & age <= 44 ~ "35-44",
           age >= 45 & age <= 54 ~ "45-54",
@@ -97,11 +104,11 @@ add_keep_population_flag <- function(individual_file, year) {
       )
 
     set.seed(100)
-    mid_year = lubridate::dmy(stringr::str_glue("30-06-{calendar_year}"))
+    mid_year <- lubridate::dmy(stringr::str_glue("30-06-{calendar_year}"))
     ## issues with age being negative
     # If they don't have a locality, they're no good as we won't have an estimate to match them against.
     # Same for age and gender.
-    nsu_keep_lookup = individual_file_1 %>%
+    nsu_keep_lookup <- individual_file_1 %>%
       dplyr::filter(!is.na(locality), !is.na(age)) %>%
       # Remove people who died before the mid-point of the calender year.
       # This will make our numbers line up better with the methodology used for the mid-year population estimates.
@@ -109,25 +116,30 @@ add_keep_population_flag <- function(individual_file, year) {
       dplyr::filter(death_date > mid_year | nsu != 0) %>%
       # Calculate the populations of the whole SLF and of the NSU.
       dplyr::group_by(locality, age_group, gender) %>%
-      dplyr::summarise(nsu_population = sum(nsu),
-                       total_source_population = dplyr::n()) %>%
+      dplyr::summarise(
+        nsu_population = sum(nsu),
+        total_source_population = dplyr::n()
+      ) %>%
       dplyr::left_join(pop_estimates,
-                       by = c("locality", "age_group", "gender")) %>%
+        by = c("locality", "age_group", "gender")
+      ) %>%
       dplyr::mutate(
         difference = total_source_population - population_estimate,
         new_nsu_figure = nsu_population - difference,
         scaling_factor = new_nsu_figure / nsu_population,
         scaling_factor = dplyr::case_when(scaling_factor < 0 ~ 0,
-                                          scaling_factor > 1 ~ 1,
-                                          .default = scaling_factor),
+          scaling_factor > 1 ~ 1,
+          .default = scaling_factor
+        ),
         keep_nsu = rbinom(1, 1, scaling_factor)
       ) %>%
       dplyr::filter(keep_nsu == 1L) %>%
       dplyr::ungroup()
 
-    individual_file = individual_file_1 %>%
+    individual_file <- individual_file_1 %>%
       dplyr::left_join(nsu_keep_lookup,
-                       by = c("locality", "age_group", "gender")) %>%
+        by = c("locality", "age_group", "gender")
+      ) %>%
       dplyr::rename("keep_population" = "keep_nsu") %>%
       dplyr::mutate(
         # Flag all non-NSUs as Keep.
