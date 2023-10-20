@@ -37,7 +37,7 @@ process_extract_district_nursing <- function(
     dplyr::mutate(
       year = year,
       recid = "DN",
-      smrtype = add_smr_type(recid = "DN")
+      smrtype = add_smrtype(recid = "DN")
     ) %>%
     # deal with gpprac
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac))

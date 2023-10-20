@@ -10,12 +10,12 @@
 #'
 #' @examples
 #' sending_location <- c(100, 120)
-#' convert_sending_location_to_lca(sending_location)
+#' convert_sc_sending_location_to_lca(sending_location)
 #'
 #' @family code functions
 #'
 #' @seealso convert_ca_to_lca
-convert_sending_location_to_lca <- function(sending_location) {
+convert_sc_sending_location_to_lca <- function(sending_location) {
   lca <- dplyr::case_match(
     sending_location,
     100L ~ "01", # Aberdeen City
