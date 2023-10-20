@@ -22,7 +22,7 @@ process_extract_nrs_deaths <- function(data, year, write_to_disk = TRUE) {
       recid = "NRS",
       year = year,
       gpprac = convert_eng_gpprac_to_dummy(.data$gpprac),
-      smrtype = add_smr_type(.data$recid)
+      smrtype = add_smrtype(.data$recid)
     )
 
   if (write_to_disk) {
