@@ -6,7 +6,7 @@
 #' @return A data frame with keep_population flags
 #' @family individual_file
 
-add_keep_population_flag <- function(individual_file, year) {
+add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi") {
   calendar_year <- paste0("20", substr(year, 1, 2)) %>% as.integer()
 
   if (!check_year_valid(year, "NSU")) {
@@ -33,37 +33,21 @@ add_keep_population_flag <- function(individual_file, year) {
         dplyr::filter(year == previous_year)
     }
 
-    pop_estimates_filtered <- pop_estimates %>%
+    pop_estimates <- pop_estimates %>%
       # Recode gender to make it match source.
       dplyr::mutate(sex = dplyr::if_else(sex == "M", 1, 2)) %>%
-      dplyr::rename(
-        "age90" = "age90plus",
-        "gender" = "sex"
-      ) %>%
+      dplyr::rename("age90" = "age90plus",
+                    "gender" = "sex") %>%
       tidyr::pivot_longer(
         names_to = "age",
         names_prefix = "age",
         values_to = "population_estimate",
         cols = "age0":"age90"
       ) %>%
-      dplyr::mutate(
-        age = as.integer(age),
-        age_group = dplyr::case_when(
-          age >= 0 & age <= 4 ~ "0-4",
-          age >= 5 & age <= 14 ~ "5-14",
-          age >= 15 & age <= 24 ~ "15-24",
-          age >= 25 & age <= 34 ~ "25-34",
-          age >= 35 & age <= 44 ~ "35-44",
-          age >= 45 & age <= 54 ~ "45-54",
-          age >= 55 & age <= 64 ~ "55-64",
-          age >= 65 & age <= 74 ~ "65-74",
-          age >= 75 & age <= 84 ~ "75-84",
-          age >= 85 ~ "85+"
-        )
-      ) %>%
+      dplyr::mutate(age = as.integer(age)) %>%
+      add_age_group("age") %>%
       dplyr::left_join(
-        get_locality_path() %>%
-          readRDS() %>%
+        readr::read_rds(get_locality_path()) %>%
           dplyr::select("locality" = "hscp_locality", datazone2011),
         by = "datazone2011"
       ) %>%
@@ -74,33 +58,19 @@ add_keep_population_flag <- function(individual_file, year) {
     # Step 2: Work out the current population sizes in the SLF for Locality, AgeGroup, and Gender
     # Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
     individual_file <- slfhelper::read_slf_individual(year,
-      columns = c(
-        "chi",
-        "locality",
-        "age",
-        "gender",
-        # "nsu",
-        "death_date"
-      )
-    ) %>%
-      dplyr::mutate(nsu = 0L) # delete this before merge
+                                                      columns = c(
+                                                        chi_var_name,
+                                                        "locality",
+                                                        "age",
+                                                        "gender",
+                                                        "nsu",
+                                                        "death_date"
+                                                      ))
 
     individual_file_1 <- individual_file %>%
-      dplyr::mutate(
-        age = as.integer(age),
-        age_group = dplyr::case_when(
-          age >= 0 & age <= 4 ~ "0-4",
-          age >= 5 & age <= 14 ~ "5-14",
-          age >= 15 & age <= 24 ~ "15-24",
-          age >= 25 & age <= 34 ~ "25-34",
-          age >= 35 & age <= 44 ~ "35-44",
-          age >= 45 & age <= 54 ~ "45-54",
-          age >= 55 & age <= 64 ~ "55-64",
-          age >= 65 & age <= 74 ~ "65-74",
-          age >= 75 & age <= 84 ~ "75-84",
-          age >= 85 ~ "85+"
-        )
-      )
+      dplyr::mutate(age = as.integer(age)) %>%
+      add_age_group("age")
+
 
     set.seed(100)
     mid_year <- lubridate::dmy(stringr::str_glue("30-06-{calendar_year}"))
@@ -108,37 +78,35 @@ add_keep_population_flag <- function(individual_file, year) {
     # If they don't have a locality, they're no good as we won't have an estimate to match them against.
     # Same for age and gender.
     nsu_keep_lookup <- individual_file_1 %>%
-      dplyr::filter(!is.na(locality), !is.na(age)) %>%
+      dplyr::filter(!is.na(locality),!is.na(age)) %>%
       # Remove people who died before the mid-point of the calender year.
       # This will make our numbers line up better with the methodology used for the mid-year population estimates.
       # anyone who died 5 years before the file shouldn't be in it anyway...
       dplyr::filter(death_date > mid_year | nsu != 0) %>%
       # Calculate the populations of the whole SLF and of the NSU.
       dplyr::group_by(locality, age_group, gender) %>%
-      dplyr::summarise(
-        nsu_population = sum(nsu),
-        total_source_population = dplyr::n()
-      ) %>%
+      dplyr::mutate(nsu_population = sum(nsu),
+                    total_source_population = dplyr::n()) %>%
       dplyr::left_join(pop_estimates,
-        by = c("locality", "age_group", "gender")
-      ) %>%
+                       by = c("locality", "age_group", "gender")) %>%
       dplyr::mutate(
         difference = total_source_population - population_estimate,
         new_nsu_figure = nsu_population - difference,
         scaling_factor = new_nsu_figure / nsu_population,
         scaling_factor = dplyr::case_when(scaling_factor < 0 ~ 0,
-          scaling_factor > 1 ~ 1,
-          .default = scaling_factor
-        ),
+                                          scaling_factor > 1 ~ 1,
+                                          .default = scaling_factor),
         keep_nsu = rbinom(1, 1, scaling_factor)
       ) %>%
       dplyr::filter(keep_nsu == 1L) %>%
       dplyr::ungroup()
 
+    # step 3: match the flag back onto the slf
     individual_file <- individual_file_1 %>%
       dplyr::left_join(nsu_keep_lookup,
-        by = c("locality", "age_group", "gender")
-      ) %>%
+                       by = chi_var_name,
+                       suffix = c("", ".y")) %>%
+      dplyr::select(-contains(".y")) %>%
       dplyr::rename("keep_population" = "keep_nsu") %>%
       dplyr::mutate(
         # Flag all non-NSUs as Keep.
@@ -158,5 +126,24 @@ add_keep_population_flag <- function(individual_file, year) {
         )
       )
   }
+}
+
+
+add_age_group = function(individual_file, age_var_name) {
+  individual_file <- individual_file %>%
+    dplyr::mutate(
+      age_group = dplyr::case_when(
+        {{ age_var_name }} >= 0 & {{ age_var_name }} <= 4 ~ "0-4",
+        {{ age_var_name }} >= 5 & {{ age_var_name }} <= 14 ~ "5-14",
+        {{ age_var_name }} >= 15 & {{ age_var_name }} <= 24 ~ "15-24",
+        {{ age_var_name }} >= 25 & {{ age_var_name }} <= 34 ~ "25-34",
+        {{ age_var_name }} >= 35 & {{ age_var_name }} <= 44 ~ "35-44",
+        {{ age_var_name }} >= 45 & {{ age_var_name }} <= 54 ~ "45-54",
+        {{ age_var_name }} >= 55 & {{ age_var_name }} <= 64 ~ "55-64",
+        {{ age_var_name }} >= 65 & {{ age_var_name }} <= 74 ~ "65-74",
+        {{ age_var_name }} >= 75 & {{ age_var_name }} <= 84 ~ "75-84",
+        {{ age_var_name }} >= 85 ~ "85+"
+      )
+    )
   return(individual_file)
 }
