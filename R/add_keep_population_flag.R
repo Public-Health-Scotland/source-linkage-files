@@ -36,8 +36,10 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
     pop_estimates <- pop_estimates %>%
       # Recode gender to make it match source.
       dplyr::mutate(sex = dplyr::if_else(sex == "M", 1, 2)) %>%
-      dplyr::rename("age90" = "age90plus",
-                    "gender" = "sex") %>%
+      dplyr::rename(
+        "age90" = "age90plus",
+        "gender" = "sex"
+      ) %>%
       tidyr::pivot_longer(
         names_to = "age",
         names_prefix = "age",
@@ -68,24 +70,28 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
     # If they don't have a locality, they're no good as we won't have an estimate to match them against.
     # Same for age and gender.
     nsu_keep_lookup <- individual_file_1 %>%
-      dplyr::filter(!is.na(locality),!is.na(age)) %>%
+      dplyr::filter(!is.na(locality), !is.na(age)) %>%
       # Remove people who died before the mid-point of the calender year.
       # This will make our numbers line up better with the methodology used for the mid-year population estimates.
       # anyone who died 5 years before the file shouldn't be in it anyway...
       dplyr::filter(death_date > mid_year | nsu != 0) %>%
       # Calculate the populations of the whole SLF and of the NSU.
       dplyr::group_by(locality, age_group, gender) %>%
-      dplyr::mutate(nsu_population = sum(nsu),
-                    total_source_population = dplyr::n()) %>%
+      dplyr::mutate(
+        nsu_population = sum(nsu),
+        total_source_population = dplyr::n()
+      ) %>%
       dplyr::left_join(pop_estimates,
-                       by = c("locality", "age_group", "gender")) %>%
+        by = c("locality", "age_group", "gender")
+      ) %>%
       dplyr::mutate(
         difference = total_source_population - population_estimate,
         new_nsu_figure = nsu_population - difference,
         scaling_factor = new_nsu_figure / nsu_population,
         scaling_factor = dplyr::case_when(scaling_factor < 0 ~ 0,
-                                          scaling_factor > 1 ~ 1,
-                                          .default = scaling_factor),
+          scaling_factor > 1 ~ 1,
+          .default = scaling_factor
+        ),
         keep_nsu = rbinom(1, 1, scaling_factor)
       ) %>%
       dplyr::filter(keep_nsu == 1L) %>%
@@ -94,8 +100,9 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
     # step 3: match the flag back onto the slf
     individual_file <- individual_file_1 %>%
       dplyr::left_join(nsu_keep_lookup,
-                       by = chi_var_name,
-                       suffix = c("", ".y")) %>%
+        by = chi_var_name,
+        suffix = c("", ".y")
+      ) %>%
       dplyr::select(-contains(".y")) %>%
       dplyr::rename("keep_population" = "keep_nsu") %>%
       dplyr::mutate(
@@ -119,7 +126,7 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
 }
 
 
-add_age_group = function(individual_file, age_var_name) {
+add_age_group <- function(individual_file, age_var_name) {
   individual_file <- individual_file %>%
     dplyr::mutate(
       age_group = dplyr::case_when(
