@@ -4,7 +4,7 @@
 \alias{add_keep_population_flag}
 \title{Add keep_popluation flag}
 \usage{
-add_keep_population_flag(individual_file, year)
+add_keep_population_flag(individual_file, year, chi_var_name = "chi")
 }
 \arguments{
 \item{data}{A data frame}
