@@ -15,8 +15,7 @@ add_keep_population_flag <- function(individual_file, year) {
   } else {
     ## Obtain the population estimates for Locality AgeGroup and Gender.
     pop_estimates <-
-      readRDS(get_datazone_pop_path("DataZone2011_pop_est_2011_2021.rds")) %>%
-      dplyr::as_tibble() %>%
+      readr::read_rds(get_datazone_pop_path("DataZone2011_pop_est_2011_2021.rds")) 
       dplyr::select(year, datazone2011, sex, age0:age90plus)
 
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
@@ -31,10 +30,10 @@ add_keep_population_flag <- function(individual_file, year) {
     } else {
       previous_year <- sort(year_available, decreasing = TRUE)[1]
       pop_estimates <- pop_estimates %>%
-        dplyr::filter(year = previous_year)
+        dplyr::filter(year == previous_year)
     }
 
-    pop_estimates <- pop_estimates %>%
+    pop_estimates_filtered <- pop_estimates %>%
       # Recode gender to make it match source.
       dplyr::mutate(sex = dplyr::if_else(sex == "M", 1, 2)) %>%
       dplyr::rename(
