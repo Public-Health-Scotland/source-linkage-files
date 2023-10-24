@@ -15,8 +15,8 @@ add_keep_population_flag <- function(individual_file, year) {
   } else {
     ## Obtain the population estimates for Locality AgeGroup and Gender.
     pop_estimates <-
-      readr::read_rds(get_datazone_pop_path("DataZone2011_pop_est_2011_2021.rds")) 
-      dplyr::select(year, datazone2011, sex, age0:age90plus)
+      readr::read_rds(get_datazone_pop_path("DataZone2011_pop_est_2011_2021.rds"))
+    dplyr::select(year, datazone2011, sex, age0:age90plus)
 
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
     # Select out the estimates for the year of interest.
