@@ -21,6 +21,13 @@ process_tests_district_nursing <- function(data, year) {
       ~ tidyr::replace_na(.x, 0.0)
     ))
 
+  if ("hscp" %in% names(data)) {
+    data <- data %>%
+      dplyr::rename('hscp2018' = 'hscp')
+  }else{
+    data <- data
+  }
+
   comparison <- produce_test_comparison(
     old_data = produce_source_dn_tests(old_data),
     new_data = produce_source_dn_tests(data)
