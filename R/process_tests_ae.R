@@ -19,7 +19,7 @@ process_tests_ae <- function(data, year) {
       max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
     )
   ) %>%
-    write_tests_xlsx(sheet_name = "AE2", year)
+    write_tests_xlsx(sheet_name = "AE2", year, workbook_name = "extract")
 
   return(comparison)
 }

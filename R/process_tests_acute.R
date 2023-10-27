@@ -16,7 +16,7 @@ process_tests_acute <- function(data, year) {
     old_data = produce_source_extract_tests(old_data),
     new_data = produce_source_extract_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "01B", year)
+    write_tests_xlsx(sheet_name = "01B", year, workbook_name = "extract")
 
   return(comparison)
 }
