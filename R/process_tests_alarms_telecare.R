@@ -12,8 +12,8 @@ process_tests_alarms_telecare <- function(data, year) {
 
   if ("hscp" %in% names(data)) {
     data <- data %>%
-      dplyr::rename('hscp2018' = 'hscp')
-  }else{
+      dplyr::rename("hscp2018" = "hscp")
+  } else {
     data <- data
   }
 
