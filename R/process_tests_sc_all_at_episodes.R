@@ -24,4 +24,3 @@ process_tests_sc_at_episodes <- function(data) {
 
   return(comparison)
 }
-
