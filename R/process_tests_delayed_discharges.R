@@ -12,11 +12,18 @@
 process_tests_delayed_discharges <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
+  if ("hscp" %in% names(data)) {
+    data <- data %>%
+      dplyr::rename("hscp2018" = "hscp")
+  } else {
+    data <- data
+  }
+
   comparison <- produce_test_comparison(
     old_data = produce_source_dd_tests(old_data),
     new_data = produce_source_dd_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "DD", year)
+    write_tests_xlsx(sheet_name = "DD", year, workbook_name = "extract")
 
   return(comparison)
 }
