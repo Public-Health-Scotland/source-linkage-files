@@ -25,17 +25,16 @@ process_tests_sc_ch_episodes <- function(data) {
   return(comparison)
 }
 
-#' Care Home All Episodes Tests
+#' Social care All Episodes Tests
 #'
-#' @description Produce the test for the Care Home all episodes
+#' @description Produce the test for the social care all episodes
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from [get_sc_ch_episodes_path()])
 #'
 #' @return a dataframe with a count of each flag.
 #'
 #' @family social care test functions
-produce_sc_ch_episodes_tests <- function(data) {
+produce_sc_all_episodes_tests <- function(data) {
   data %>%
     # create test flags
     create_demog_test_flags() %>%
