@@ -51,14 +51,8 @@ produce_sc_ch_episodes_tests <- function(data) {
         0L
       )
     ) %>%
-    # remove variables that won't be summed
-    dplyr::select(-c(
-      "chi", "person_id", "gender", "dob", "postcode",
-      "sending_location", "social_care_id", "ch_name",
-      "ch_postcode", "record_keydate1", "record_keydate2",
-      "ch_chi_cis", "ch_sc_id_cis", "ch_provider",
-      "ch_nursing", "ch_adm_reason", "sc_latest_submission"
-    )) %>%
+    # keep variables for comparison
+    dplyr::select(c("valid_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 }
