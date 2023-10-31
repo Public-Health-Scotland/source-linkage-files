@@ -1,12 +1,12 @@
 #' Add keep_popluation flag
 #'
 #' @description Add keep_population flag to individual files
-#' @param data A data frame
+#' @param individual_file individual files under processing
+#' @param year the year of individual files under processing
 #'
 #' @return A data frame with keep_population flags
 #' @family individual_file
-
-add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi") {
+add_keep_population_flag <- function(individual_file, year) {
   calendar_year <- paste0("20", substr(year, 1, 2)) %>% as.integer()
 
   if (!check_year_valid(year, "NSU")) {
@@ -59,7 +59,7 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
 
     # Step 2: Work out the current population sizes in the SLF for Locality, AgeGroup, and Gender
     # Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
-    individual_file_1 <- individual_file %>%
+    individual_file <- individual_file %>%
       dplyr::mutate(age = as.integer(age)) %>%
       add_age_group("age")
 
@@ -69,7 +69,7 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
     ## issues with age being negative
     # If they don't have a locality, they're no good as we won't have an estimate to match them against.
     # Same for age and gender.
-    nsu_keep_lookup <- individual_file_1 %>%
+    nsu_keep_lookup <- individual_file %>%
       dplyr::filter(!is.na(locality), !is.na(age)) %>%
       # Remove people who died before the mid-point of the calender year.
       # This will make our numbers line up better with the methodology used for the mid-year population estimates.
@@ -98,9 +98,9 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
       dplyr::ungroup()
 
     # step 3: match the flag back onto the slf
-    individual_file <- individual_file_1 %>%
+    individual_file <- individual_file %>%
       dplyr::left_join(nsu_keep_lookup,
-        by = chi_var_name,
+        by = "chi",
         suffix = c("", ".y")
       ) %>%
       dplyr::select(-contains(".y")) %>%
@@ -126,6 +126,13 @@ add_keep_population_flag <- function(individual_file, year, chi_var_name = "chi"
 }
 
 
+#' add_age_group
+#'
+#' @description Add age group columns based on age
+#' @param individual_file the individual files under processing
+#' @param age_var_name the column name of age variable, could be "age"
+#'
+#' @return A individual file with age groups added
 add_age_group <- function(individual_file, age_var_name) {
   individual_file <- individual_file %>%
     dplyr::mutate(
