@@ -16,16 +16,14 @@ process_sc_all_alarms_telecare <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
-
   replaced_dates <- data %>%
-    # period start and end dates
-    dplyr::mutate(
-      record_date = end_fy_quarter(.data$period),
-      qtr_start = start_fy_quarter(.data$period)
-    ) %>%
+    dplyr::mutate(service_end_date = fix_sc_missing_end_dates(
+      .data$service_end_date,
+      .data$period_end_date
+    )) %>%
     dplyr::mutate(service_start_date = fix_sc_start_dates(
       .data$service_start_date,
-      .data$period
+      .data$period_start_date
     )) %>%
     # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
     dplyr::mutate(service_end_date = fix_sc_end_dates(
@@ -35,11 +33,6 @@ process_sc_all_alarms_telecare <- function(
     ))
 
   at_full_clean <- replaced_dates %>%
-    # Match on demographics data (chi, gender, dob and postcode)
-    dplyr::left_join(
-      sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
-    ) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$service_start_date,
@@ -56,6 +49,11 @@ process_sc_all_alarms_telecare <- function(
       person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
+    ) %>%
+    # Match on demographics data (chi, gender, dob and postcode)
+    dplyr::left_join(
+      sc_demog_lookup,
+      by = c("sending_location", "social_care_id")
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
