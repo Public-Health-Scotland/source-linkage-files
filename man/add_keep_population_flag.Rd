@@ -4,10 +4,12 @@
 \alias{add_keep_population_flag}
 \title{Add keep_popluation flag}
 \usage{
-add_keep_population_flag(individual_file, year, chi_var_name = "chi")
+add_keep_population_flag(individual_file, year)
 }
 \arguments{
-\item{data}{A data frame}
+\item{individual_file}{individual files under processing}
+
+\item{year}{the year of individual files under processing}
 }
 \value{
 A data frame with keep_population flags
