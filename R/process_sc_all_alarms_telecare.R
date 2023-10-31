@@ -17,10 +17,9 @@ process_sc_all_alarms_telecare <- function(
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
   replaced_dates <- data %>%
-    dplyr::mutate(service_end_date = fix_sc_missing_end_dates(
-      .data$service_end_date,
-      .data$period_end_date
-    )) %>%
+    dplyr::mutate(service_end_date = fix_sc_missing_end_dates( .data$service_end_date, .data$period_end_date), 
+      service_start_date = fix_sc_start_dates(.data$service_start_date, .data$period_start_date)
+    ) %>%
     dplyr::mutate(service_start_date = fix_sc_start_dates(
       .data$service_start_date,
       .data$period_start_date
