@@ -35,8 +35,7 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
-
-    data <- data %>%
+  data <- data %>%
     dplyr::left_join(
       lookup %>%
         dplyr::distinct(.data$chi, .data$hl1_in_fy),

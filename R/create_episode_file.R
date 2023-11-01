@@ -440,12 +440,12 @@ join_cohort_lookups <- function(
 #' @param sc_client SC client lookup
 #' @param sc_demographics SC Demographic lookup
 join_sc_client_ep <- function(episode_file,
-                           year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)),
-                           sc_demographics = read_file(
-                             get_sc_demog_lookup_path(),
-                             col_select = c("sending_location", "social_care_id", "chi")
-                           )) {
+                              year,
+                              sc_client = read_file(get_sc_client_lookup_path(year)),
+                              sc_demographics = read_file(
+                                get_sc_demog_lookup_path(),
+                                col_select = c("sending_location", "social_care_id", "chi")
+                              )) {
   # Match to demographics lookup to get CHI
   client_count_not_known <-
     read_file(get_sc_client_lookup_path(year)) %>%
@@ -469,8 +469,9 @@ join_sc_client_ep <- function(episode_file,
   # Match on client variables by chi
   episode_file <- episode_file %>%
     dplyr::left_join(client_count_not_known,
-                     by = "chi",
-                     relationship = "many-to-one") #%>%
+      by = "chi",
+      relationship = "many-to-one"
+    ) # %>%
   # dplyr::select(!c(
   #   "sending_location",
   #   "social_care_id",

@@ -150,7 +150,8 @@ match_on_sc_client <- function(
     data,
     sc_client_lookup,
     by = c("sending_location", "social_care_id"),
-    relationship = "many-to-one")
+    relationship = "many-to-one"
+  )
 
   return(matched)
 }
