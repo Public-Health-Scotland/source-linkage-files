@@ -23,8 +23,8 @@ write_tests_xlsx <- function(comparison_data,
   # Set up the workbook ----
 
   if (missing(year) & workbook_name == "lookup") {
-    tests_workbook_name = stringr::str_glue(latest_update(), "_lookups_tests")
-  } else{
+    tests_workbook_name <- stringr::str_glue(latest_update(), "_lookups_tests")
+  } else {
     tests_workbook_name <- dplyr::case_when(
       workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
       workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
