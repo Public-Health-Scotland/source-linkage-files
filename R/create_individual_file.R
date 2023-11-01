@@ -82,8 +82,7 @@ create_individual_file <- function(
     individual_file <- individual_file %>%
       aggregate_ch_episodes() %>%
       clean_up_ch(year) %>%
-      aggregate_by_chi(exclude_sc_var = FALSE) %>%
-      join_sc_client(year)
+      aggregate_by_chi(exclude_sc_var = FALSE)
   }
 
   individual_file <- individual_file %>%
@@ -791,47 +790,6 @@ join_slf_lookup_vars <- function(individual_file,
       by = "gpprac"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
-
-  return(individual_file)
-}
-# TODO Remove the client data from the individual Social Care extracts
-# and instead, use this function in the episode file to match on the client
-# data to all episodes.
-#' Join sc client variables onto individual file
-#'
-#' @description Match on sc client variables.
-#'
-#' @param individual_file the processed individual file
-#' @param year financial year.
-#' @param sc_client SC client lookup
-#' @param sc_demographics SC Demographic lookup
-join_sc_client <- function(
-    individual_file,
-    year,
-    sc_client = read_file(get_sc_client_lookup_path(year))) {
-
-  # Match to demographics lookup to get CHI
-  client_count_not_known <- sc_client %>%
-    dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
-      c(
-        "sc_living_alone",
-        "sc_support_from_unpaid_carer",
-        "sc_social_worker",
-        "sc_meals",
-        "sc_day_care"
-      )
-    )) == "Not Known")) %>%
-    dplyr::arrange(chi, count_not_known) %>%
-    dplyr::distinct(chi, .keep_all = TRUE)
-
-  # Match on client variables by chi
-  individual_file <- individual_file %>%
-    dplyr::left_join(
-      client_count_not_known,
-      by = "chi",
-      relationship = "one-to-one"
-    ) %>%
-    dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
 
   return(individual_file)
 }

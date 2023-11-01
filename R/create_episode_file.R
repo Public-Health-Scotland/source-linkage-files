@@ -138,13 +138,13 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         sc_send_lca = NA,
-        sc_living_alone = NA,
-        sc_support_from_unpaid_carer = NA,
-        sc_social_worker = NA,
-        sc_type_of_housing = NA,
-        sc_meals = NA,
-        sc_day_care = NA,
-        sc_latest_submission = NA,
+        # sc_living_alone = NA,
+        # sc_support_from_unpaid_carer = NA,
+        # sc_social_worker = NA,
+        # sc_type_of_housing = NA,
+        # sc_meals = NA,
+        # sc_day_care = NA,
+        # sc_latest_submission = NA,
         ch_chi_cis = NA,
         sc_id_cis = NA,
         ch_name = NA,
@@ -163,7 +163,8 @@ create_episode_file <- function(
         hc_provider = NA,
         hc_reablement = NA,
         sds_option_4 = NA,
-      )
+      ) %>%
+      join_sc_client_ep(year)
   }
 
   if (anon_chi_out) {
@@ -429,4 +430,53 @@ join_cohort_lookups <- function(
     )
 
   return(join_cohort_lookups)
+}
+
+
+#' Join sc client variables onto episode file
+#'
+#' @description Match on sc client variables.
+#'
+#' @param individual_file the processed individual file
+#' @param year financial year.
+#' @param sc_client SC client lookup
+#' @param sc_demographics SC Demographic lookup
+join_sc_client_ep <- function(episode_file,
+                           year,
+                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           sc_demographics = read_file(
+                             get_sc_demog_lookup_path(),
+                             col_select = c("sending_location", "social_care_id", "chi")
+                           )) {
+  # Match to demographics lookup to get CHI
+  client_count_not_known <-
+    read_file(get_sc_client_lookup_path(year)) %>%
+    dplyr::left_join(
+      sc_demographics %>%
+        dplyr::select("sending_location", "social_care_id", "chi"),
+      by = c("sending_location", "social_care_id")
+    ) %>%
+    dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
+      c(
+        "sc_living_alone",
+        "sc_support_from_unpaid_carer",
+        "sc_social_worker",
+        "sc_meals",
+        "sc_day_care"
+      )
+    )) == "Not Known")) %>%
+    dplyr::arrange(chi, count_not_known) %>%
+    dplyr::distinct(chi, .keep_all = TRUE)
+
+  # Match on client variables by chi
+  episode_file <- episode_file %>%
+    dplyr::left_join(client_count_not_known,
+                     by = "chi",
+                     relationship = "many-to-one") #%>%
+  # dplyr::select(!c(
+  #   "sending_location",
+  #   "social_care_id",
+  #   "sc_latest_submission"
+  # ))
+  return(episode_file)
 }
