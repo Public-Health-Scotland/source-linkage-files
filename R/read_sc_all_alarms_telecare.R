@@ -22,8 +22,9 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
       "period_end_date",
       "service_type",
       "service_start_date",
-      "service_end_date"
-    ) %>%
+      "service_end_date",
+      "service_start_date_after_period_end_date"
+     ) %>%
     dplyr::collect() %>%
     dplyr::distinct() %>%
     dplyr::mutate(
