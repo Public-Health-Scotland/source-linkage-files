@@ -9,7 +9,7 @@
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @export
-process_tests_sc_at_episodes <- function(data) {
+process_tests_sc_all_at_episodes <- function(data) {
   comparison <- produce_test_comparison(
     old_data = produce_sc_all_episodes_tests(
       read_file(get_sc_at_episodes_path(update = previous_update()))
