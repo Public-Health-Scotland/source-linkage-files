@@ -14,7 +14,8 @@ replace_sc_id_with_latest <- function(data) {
   filter_data <- data %>%
     dplyr::select(
       "sending_location", "social_care_id", "chi", "period"
-    )
+    ) %>%
+    dplyr::filter(!(is.na(.data$chi)))
 
   change_sc_id <- filter_data %>%
     # Sort (by sending_location, chi and period) for unique chi/sending location
@@ -34,7 +35,7 @@ replace_sc_id_with_latest <- function(data) {
     # drop period for matching
     dplyr::select(-"period")
 
-  return_data <- change_sc_id %>%
+return_data <- change_sc_id %>%
     # Match back onto data
     dplyr::right_join(data,
       by = c("sending_location", "chi"),

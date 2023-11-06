@@ -19,7 +19,10 @@ process_sc_all_sds <- function(
     dplyr::left_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
-    )
+    ) %>%
+    # when multiple social_care_id from sending_location for single CHI
+    # replace social_care_id with latest
+    replace_sc_id_with_latest()
 
   # Data Cleaning ---------------------------------------
   sds_full_clean <- matched_sds_data %>%
@@ -42,16 +45,23 @@ process_sc_all_sds <- function(
       .after = .data$sds_option_3
     ) %>%
     # If SDS start date is missing, assign start of FY
-    dplyr::mutate(sds_start_date = fix_sc_start_dates(
-      .data$sds_start_date,
-      .data$period
-    )) %>%
-    # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
-    dplyr::mutate(sds_end_date = fix_sc_end_dates(
-      .data$sds_start_date,
-      .data$sds_end_date,
-      .data$period
-    )) %>%
+    dplyr::mutate(
+      sds_start_date = fix_sc_start_dates(
+        .data$sds_start_date,
+        .data$sds_period_start_date
+      ),
+      # If SDS end date is missing, assign end of FY
+      sds_end_date = fix_sc_missing_end_dates(
+        .data$sds_end_date,
+        .data$sds_period_end_date
+      ),
+      # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
+      sds_end_date = fix_sc_end_dates(
+        .data$sds_start_date,
+        .data$sds_end_date,
+        .data$period
+      )
+    ) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$sds_start_date,
@@ -81,10 +91,8 @@ process_sc_all_sds <- function(
       person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
-    ) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
-    replace_sc_id_with_latest()
+    )
+
 
   final_data <- sds_full_clean %>%
     # use as.data.table to change the data format to data.table to accelerate
