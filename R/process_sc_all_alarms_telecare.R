@@ -16,6 +16,7 @@ process_sc_all_alarms_telecare <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
+
   replaced_dates <- data %>%
     dplyr::mutate(service_end_date = fix_sc_missing_end_dates(
       .data$service_end_date,

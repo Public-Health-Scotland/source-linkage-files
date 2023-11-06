@@ -28,11 +28,13 @@ process_extract_home_care <- function(
 
   # Selections for financial year------------------------------------
 
-  hc_data <- data %>%
+  hc_data <- all_hc_processed %>%
     # select episodes for FY
-    dplyr::filter(
-      is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)
-    ) %>%
+    dplyr::filter(is_date_in_fyyear(
+      year,
+      .data[["record_keydate1"]],
+      .data[["record_keydate2"]]
+    )) %>%
     # remove any episodes where the latest submission was before the current year
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
