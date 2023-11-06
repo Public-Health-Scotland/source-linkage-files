@@ -15,7 +15,6 @@ process_sc_all_home_care <- function(
     data,
     sc_demog_lookup,
     write_to_disk = TRUE) {
-
   replaced_dates <- data %>%
     dplyr::mutate(hc_service_end_date = fix_sc_missing_end_dates(
       .data$hc_service_end_date,
@@ -89,8 +88,11 @@ process_sc_all_home_care <- function(
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs,
-                     by = c("sending_location_name" = "ca_name",
-                            "financial_year" = "year")) %>%
+      by = c(
+        "sending_location_name" = "ca_name",
+        "financial_year" = "year"
+      )
+    ) %>%
     dplyr::mutate(hc_cost = .data$hc_hours * .data$hourly_cost)
 
   pivoted_hours <- matched_costs %>%

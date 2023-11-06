@@ -35,7 +35,7 @@ replace_sc_id_with_latest <- function(data) {
     # drop period for matching
     dplyr::select(-"period")
 
-return_data <- change_sc_id %>%
+  return_data <- change_sc_id %>%
     # Match back onto data
     dplyr::right_join(data,
       by = c("sending_location", "chi"),
