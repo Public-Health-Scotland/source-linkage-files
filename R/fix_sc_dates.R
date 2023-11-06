@@ -13,7 +13,6 @@ fix_sc_start_dates <- function(start_date, period_start) {
   start_date <- dplyr::if_else(
     is.na(start_date),
     period_start,
-    # start_fy(year = stringr::str_sub(period, 1L, 4L), "alternate"),
     start_date
   )
 
