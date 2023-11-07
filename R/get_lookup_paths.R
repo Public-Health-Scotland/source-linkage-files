@@ -94,10 +94,10 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
   return(simd_path)
 }
 
-# TODO update this function to look for a specified type of pop estimate e.g. datazone, hscp etc.
-#' Datazone Populations File Path
+
+#' Populations File Path for different types
 #'
-#' @description Get the path to the Datazone populations estimates
+#' @description Get the path to the populations estimates
 #'
 #' @inheritParams get_file_path
 #'
@@ -105,18 +105,33 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 #' @export
 #'
 #' @family lookup file paths
-get_datazone_pop_path <- function(file_name = NULL, ext = "rds") {
-  datazone_pop_dir <-
+get_pop_path <- function(file_name = NULL,
+                         ext = "rds",
+                         type = c("datazone",
+                                  "hscp",
+                                  "ca",
+                                  "hb",
+                                  "intzone")) {
+  pop_dir <-
     fs::path(get_lookups_dir(), "Populations", "Estimates")
 
-  datazone_pop_path <- get_file_path(
-    directory = datazone_pop_dir,
-    file_name = file_name,
-    ext = ext,
-    file_name_regexp = stringr::str_glue("DataZone2011_pop_est_2001_\\d+?\\.{ext}")
+  file_name_re <- dplyr::case_match(
+    type,
+    "datazone" ~ stringr::str_glue("DataZone2011_pop_est_2011_\\d+?\\.{ext}"),
+    "hscp" ~ stringr::str_glue("HSCP2019_pop_est_1981_\\d+?\\.{ext}"),
+    "ca" ~ stringr::str_glue("CA2019_pop_est_1981_\\d+?\\.{ext}"),
+    "hb" ~ stringr::str_glue("HB2019_pop_est_1981_\\d+?\\.{ext}"),
+    "intzone" ~ stringr::str_glue("IntZone_pop_est_2011_\\d+?\\.{ext}")
   )
 
-  return(datazone_pop_path)
+  datazone_pop_path <- get_file_path(
+    directory = pop_dir,
+    file_name = file_name,
+    ext = ext,
+    file_name_regexp = file_name_re
+  )
+
+  return(pop_path)
 }
 
 
