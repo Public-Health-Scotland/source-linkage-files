@@ -107,11 +107,13 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 #' @family lookup file paths
 get_pop_path <- function(file_name = NULL,
                          ext = "rds",
-                         type = c("datazone",
-                                  "hscp",
-                                  "ca",
-                                  "hb",
-                                  "intzone")) {
+                         type = c(
+                           "datazone",
+                           "hscp",
+                           "ca",
+                           "hb",
+                           "intzone"
+                         )) {
   pop_dir <-
     fs::path(get_lookups_dir(), "Populations", "Estimates")
 
