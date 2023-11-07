@@ -137,14 +137,6 @@ create_episode_file <- function(
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     episode_file <- episode_file %>%
       dplyr::mutate(
-        sc_send_lca = NA,
-        # sc_living_alone = NA,
-        # sc_support_from_unpaid_carer = NA,
-        # sc_social_worker = NA,
-        # sc_type_of_housing = NA,
-        # sc_meals = NA,
-        # sc_day_care = NA,
-        # sc_latest_submission = NA,
         ch_chi_cis = NA,
         sc_id_cis = NA,
         ch_name = NA,
@@ -464,7 +456,11 @@ join_sc_client_ep <- function(episode_file,
       )
     )) == "Not Known")) %>%
     dplyr::arrange(chi, count_not_known) %>%
-    dplyr::distinct(chi, .keep_all = TRUE)
+    dplyr::distinct(chi, .keep_all = TRUE) %>%
+    dplyr::mutate(
+      sc_send_lca = convert_sending_location_to_lca(sending_location)
+    ) %>%
+    dplyr::select(-sending_location)
 
   # Match on client variables by chi
   episode_file <- episode_file %>%
