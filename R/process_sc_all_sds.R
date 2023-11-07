@@ -19,7 +19,10 @@ process_sc_all_sds <- function(
     dplyr::left_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
-    )
+    ) %>%
+    # when multiple social_care_id from sending_location for single CHI
+    # replace social_care_id with latest
+    replace_sc_id_with_latest()
 
   # Data Cleaning ---------------------------------------
   sds_full_clean <- matched_sds_data %>%
