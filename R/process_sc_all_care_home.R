@@ -27,28 +27,38 @@ process_sc_all_care_home <- function(
     ch_name_lookup_path = get_slf_ch_name_lookup_path(),
     spd_path = get_spd_path(),
     write_to_disk = TRUE) {
+
   ## Data Cleaning-----------------------------------------------------
   ch_clean <- data %>%
-    dplyr::mutate(
-      record_date = end_fy_quarter(.data[["period"]]),
-      qtr_start = start_fy_quarter(.data[["period"]]),
-      # Set missing admission date to start of the submitted quarter
-      ch_admission_date = dplyr::if_else(
-        is.na(.data[["ch_admission_date"]]),
-        .data[["qtr_start"]],
-        .data[["ch_admission_date"]]
-      ),
-      # TODO check if we should set the dis date to the end of the period?
-      # If the dis date is before admission, remove the dis date
-      ch_discharge_date = dplyr::if_else(
-        .data[["ch_admission_date"]] > .data[["ch_discharge_date"]],
-        lubridate::NA_Date_,
-        .data[["ch_discharge_date"]]
-      )
+    dplyr::mutate(ch_admission_date = fix_sc_start_dates(
+      .data$ch_admission_date,
+      .data$period_start_date
+    )) %>%
+    dplyr::group_by(social_care_id,
+                    sending_location,
+                    ch_admission_date) %>%
+    dplyr::mutate(episode_max_discharge_date = max(
+      pmin(period_end_date,
+           ch_discharge_date,
+           na.rm = TRUE))) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(test = ifelse(ch_admission_date > ch_discharge_date, 1, 0)) %>%
+
+#dplyr::mutate(ch_discharge_date = fix_sc_missing_end_dates(
+ #   .data$ch_discharge_date,
+  #  .data$period_end_date
+#  )) %>%
+    # Fix ch_discharge_date is earlier than ch_admission_date by setting end_date to the end of fy
+    dplyr::mutate(ch_discharge_date = fix_sc_end_dates(
+      .data$ch_admission_date,
+      .data$ch_discharge_date,
+      .data$period
+    ))%>%
+    dplyr::left_join(sc_demog_lookup_processed, # change back
+                     by = c("sending_location", "social_care_id")
     ) %>%
-    dplyr::left_join(sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
-    )
+    replace_sc_id_with_latest()
+
 
   name_postcode_clean <- fill_ch_names(
     ch_data = ch_clean,
@@ -57,13 +67,15 @@ process_sc_all_care_home <- function(
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
-    # sort data
-    dplyr::arrange(
-      "sending_location",
-      "social_care_id",
-      "ch_admission_date",
-      "period"
+    dplyr::mutate(
+      ch_provider = ifelse(is.na(ch_provider), 6L, ch_provider)
     ) %>%
+    # sort data
+    # TODO - Different from SPSS. SPSS has nursing provider and period in the group_by. Needs investigation - does it matter?
+    dplyr::group_by(
+      .data[["sending_location"]],
+      .data[["social_care_id"]]
+    )  %>%
     dplyr::mutate(
       min_ch_provider = min(.data[["ch_provider"]]),
       max_ch_provider = max(.data[["ch_provider"]]),
@@ -78,13 +90,18 @@ process_sc_all_care_home <- function(
       -"max_ch_provider"
     )
 
-  fixed_sc_id <- fixed_ch_provider %>%
-    replace_sc_id_with_latest()
 
-  fixed_nursing_provision <- fixed_sc_id %>%
+  fixed_nursing_provision <- fixed_ch_provider %>%
+    dplyr::arrange(
+      "sending_location",
+      "social_care_id",
+      "period_start_date",
+      "ch_admission_date"
+    ) %>%
     dplyr::group_by(
       .data[["sending_location"]],
       .data[["social_care_id"]],
+      .data[["chi"]],
       .data[["ch_admission_date"]]
     ) %>%
     # fill in nursing care provision when missing
@@ -92,18 +109,30 @@ process_sc_all_care_home <- function(
     dplyr::mutate(
       nursing_care_provision = dplyr::na_if(.data[["nursing_care_provision"]], 9L)
     ) %>%
-    tidyr::fill(.data[["nursing_care_provision"]], .direction = "downup") %>%
-    # tidy up ch_provider using 6 when disagreeing values
-    tidyr::fill(.data[["ch_provider"]], .direction = "downup")
+    tidyr::fill(all_of("nursing_care_provision"), .direction = "downup") %>%
+    dplyr::ungroup()
 
   ready_to_merge <- fixed_nursing_provision %>%
+    #  dplyr::filter(chi == "3005291146") %>%
     # remove any duplicate records before merging for speed and simplicity
     dplyr::distinct() %>%
+    dplyr::arrange(
+      sending_location,
+      social_care_id,
+      period_start_date,
+      ch_admission_date
+    ) %>%
+    dplyr::group_by(
+      sending_location,
+      social_care_id,
+      chi,
+      ch_admission_date
+    ) %>%
     # counter for split episodes
     dplyr::mutate(
       split_episode = tidyr::replace_na(
-        .data[["nursing_care_provision"]] != dplyr::lag(
-          .data[["nursing_care_provision"]]
+        "nursing_care_provision" != dplyr::lag(
+          "nursing_care_provision"
         ),
         TRUE
       ),
@@ -127,10 +156,11 @@ process_sc_all_care_home <- function(
     ) %>%
     dplyr::arrange(
       dplyr::desc(.data[["period"]]),
-      dplyr::desc(.data[["ch_discharge_date"]]),
+      dplyr::desc(.data[["episode_max_discharge_date"]]),
+      # dplyr::desc(.data[["ch_discharge_date"]]),
       dplyr::desc(.data[["ch_provider"]]),
-      dplyr::desc(.data[["record_date"]]),
-      dplyr::desc(.data[["qtr_start"]]),
+      dplyr::desc(.data[["period_end_date"]]),
+      dplyr::desc(.data[["period_start_date"]]),
       dplyr::desc(.data[["ch_name"]]),
       dplyr::desc(.data[["ch_postcode"]]),
       dplyr::desc(.data[["reason_for_admission"]]),
@@ -143,10 +173,11 @@ process_sc_all_care_home <- function(
       sc_latest_submission = dplyr::first(.data[["period"]]),
       dplyr::across(
         c(
-          "ch_discharge_date",
+          #"ch_discharge_date",
+          "episode_max_discharge_date",
           "ch_provider",
-          "record_date",
-          "qtr_start",
+          "period_end_date",
+          "period_start_date",
           "ch_name",
           "ch_postcode",
           "reason_for_admission",
@@ -168,6 +199,8 @@ process_sc_all_care_home <- function(
     ) %>%
     # counter for latest submission
     # TODO check if this is the same as split_episode_counter?
+    # Megan - it's not! split_episode counter is a running count of cases grouped by nursing provider,
+    # and latest_submission counter is a running count grouped by the admission date.
     dplyr::mutate(
       latest_submission_counter = tidyr::replace_na(
         .data[["sc_latest_submission"]] != dplyr::lag(
@@ -183,23 +216,28 @@ process_sc_all_care_home <- function(
       ch_admission_date = dplyr::if_else(
         .data[["sum_latest_submission"]] == min(.data[["sum_latest_submission"]]),
         .data[["ch_admission_date"]],
-        .data[["qtr_start"]]
+        .data[["period_start_date"]]
       ),
       # If it's the last episode(s) then keep the discharge date(s), otherwise
       # use the end of the quarter
       ch_discharge_date = dplyr::if_else(
         .data[["sum_latest_submission"]] == max(.data[["sum_latest_submission"]]),
-        .data[["ch_discharge_date"]],
-        .data[["record_date"]]
+        .data[["episode_max_discharge_date"]],
+       # .data[["ch_discharge_date"]],
+
+         .data[["period_end_date"]]
       )
     ) %>%
     dplyr::ungroup()
 
+
+  test <- ch_episode %>%
+    dplyr::mutate(test = ifelse(ch_discharge_date == episode_max_discharge_date, 1, 0))
   # Compare to Deaths Data
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(it_chi_deaths_data,
-      by = "chi"
+                     by = "chi"
     ) %>%
     # compare discharge date with NRS and CHI death date
     # if either of the dates are 5 or fewer days before discharge
@@ -212,8 +250,8 @@ process_sc_all_care_home <- function(
         FALSE
       ),
       ch_discharge_date = dplyr::if_else(.data[["dis_after_death"]],
-        .data[["death_date"]],
-        .data[["ch_discharge_date"]]
+                                         .data[["death_date"]],
+                                         .data[["ch_discharge_date"]]
       )
     ) %>%
     dplyr::ungroup() %>%
@@ -232,7 +270,9 @@ process_sc_all_care_home <- function(
 
   ch_markers <- matched_deaths_data %>%
     # ch_chi_cis
-    dplyr::group_by(.data[["chi"]]) %>%
+    dplyr::group_by(.data[["chi"]],
+                    .data[["sending_location"]],
+                    .data[["social_care_id"]]) %>%
     dplyr::mutate(
       continuous_stay_chi = tidyr::replace_na(
         .data[["ch_admission_date"]] <= dplyr::lag(
@@ -270,7 +310,7 @@ process_sc_all_care_home <- function(
       ch_ep_start = min(.data[["ch_admission_date"]]),
       ch_ep_end = max(
         pmin(
-          .data[["record_date"]],
+          .data[["period_end_date"]],
           .data[["ch_discharge_date"]],
           na.rm = TRUE
         )
