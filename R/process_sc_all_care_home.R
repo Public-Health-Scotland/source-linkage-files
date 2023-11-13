@@ -83,7 +83,8 @@ process_sc_all_care_home <- function(
     dplyr::select(
       -"min_ch_provider",
       -"max_ch_provider"
-    )
+    ) %>%
+    ungroup()
 
   fixed_sc_id <- fixed_ch_provider %>%
     replace_sc_id_with_latest()
