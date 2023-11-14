@@ -4,7 +4,13 @@
 \alias{process_lookup_sc_client}
 \title{Process the social care client lookup}
 \usage{
-process_lookup_sc_client(data, year, write_to_disk = TRUE)
+process_lookup_sc_client(
+  data,
+  year,
+  sc_demographics = read_file(get_sc_demog_lookup_path(), col_select =
+    c("sending_location", "social_care_id", "chi")),
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{data}{The extract to process}
