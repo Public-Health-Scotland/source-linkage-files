@@ -111,7 +111,8 @@ process_lookup_sc_client <-
           labels = c("No", "Yes", "Not Known")
         ),
         type_of_housing = factor(.data$type_of_housing,
-                                 levels = 1L:6L)
+          levels = 1L:6L
+        )
       ) %>%
       # rename variables
       dplyr::rename_with(
@@ -138,8 +139,10 @@ process_lookup_sc_client <-
       )
 
     if (write_to_disk) {
-      write_file(sc_client_lookup,
-                 get_sc_client_lookup_path(year, check_mode = "write"))
+      write_file(
+        sc_client_lookup,
+        get_sc_client_lookup_path(year, check_mode = "write")
+      )
     }
 
     return(sc_client_lookup)
