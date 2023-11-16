@@ -19,19 +19,22 @@ process_sc_all_alarms_telecare <- function(
 
   replaced_dates <- data %>%
     dplyr::mutate(
-      service_end_date = fix_sc_missing_end_dates(.data$service_end_date, .data$period_end_date),
-      service_start_date = fix_sc_start_dates(.data$service_start_date, .data$period_start_date)
-    ) %>%
-    dplyr::mutate(service_start_date = fix_sc_start_dates(
-      .data$service_start_date,
-      .data$period_start_date
-    )) %>%
-    # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
-    dplyr::mutate(service_end_date = fix_sc_end_dates(
-      .data$service_start_date,
-      .data$service_end_date,
-      .data$period
-    ))
+      service_end_date = fix_sc_missing_end_dates(
+        .data$service_end_date,
+        .data$period_end_date
+      ),
+      service_start_date = fix_sc_start_dates(
+        .data$service_start_date,
+        .data$period_start_date
+      ),
+      # Fix service_end_date if earlier than service_start_date by setting end_date to the end of fy
+      service_end_date = fix_sc_end_dates(
+        .data$service_start_date,
+        .data$service_end_date,
+        .data$period
+      )
+    )
+
 
   at_full_clean <- replaced_dates %>%
     # rename for matching source variables
@@ -46,8 +49,6 @@ process_sc_all_alarms_telecare <- function(
         .data$service_type == 1L ~ "AT-Alarm",
         .data$service_type == 2L ~ "AT-Tele"
       ),
-      # Create person id variable
-      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
@@ -58,14 +59,7 @@ process_sc_all_alarms_telecare <- function(
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
-    dplyr::group_by(.data$sending_location, .data$chi) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$social_care_id)) %>%
-    # count changed social_care_id
-    dplyr::mutate(
-      changed_sc_id = !is.na(.data$chi) & .data$social_care_id != .data$latest_sc_id,
-      social_care_id = dplyr::if_else(.data$changed_sc_id, .data$latest_sc_id, .data$social_care_id)
-    ) %>%
-    dplyr::ungroup()
+    replace_sc_id_with_latest()
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%
@@ -79,7 +73,11 @@ process_sc_all_alarms_telecare <- function(
       .data$period
     ) %>%
     # Create a count for the package number across episodes
-    dplyr::mutate(pkg_count = dplyr::row_number()) %>%
+    dplyr::mutate(
+      pkg_count = dplyr::row_number(),
+      # Create person id variable
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
+    ) %>%
     # Sort prior to merging
     dplyr::arrange(.by_group = TRUE) %>%
     # group for merging episodes
@@ -107,14 +105,6 @@ process_sc_all_alarms_telecare <- function(
       recid = dplyr::last(.data$recid),
       person_id = dplyr::last(.data$person_id),
       sc_send_lca = dplyr::last(.data$sc_send_lca)
-    ) %>%
-    # sort after merging
-    dplyr::arrange(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$record_keydate1,
-      .data$smrtype,
-      .data$sc_latest_submission
     ) %>%
     # change the data format from data.table to data.frame
     tibble::as_tibble()

@@ -97,8 +97,15 @@ process_sc_all_sds <- function(
   final_data <- sds_full_clean %>%
     # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
-    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$smrtype) %>%
-    dplyr::arrange(.data$period, .data$record_keydate1, .by_group = TRUE) %>%
+    dplyr::group_by(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$smrtype
+    ) %>%
+    dplyr::arrange(.data$period,
+      .data$record_keydate1,
+      .by_group = TRUE
+    ) %>%
     # Create a flag for episodes that are going to be merged
     # Create an episode counter
     dplyr::mutate(

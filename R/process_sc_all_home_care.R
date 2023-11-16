@@ -16,28 +16,34 @@ process_sc_all_home_care <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   replaced_dates <- data %>%
-    dplyr::mutate(hc_service_end_date = fix_sc_missing_end_dates(
-      .data$hc_service_end_date,
-      .data$hc_period_end_date
-    )) %>%
-    dplyr::mutate(hc_service_start_date = fix_sc_start_dates(
-      .data$hc_service_start_date,
-      .data$hc_period_start_date
-    )) %>%
-    # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
-    dplyr::mutate(hc_service_end_date = fix_sc_end_dates(
-      .data$hc_service_start_date,
-      .data$hc_service_end_date,
-      .data$period
-    ))
+    dplyr::mutate(
+      hc_service_end_date = fix_sc_missing_end_dates(
+        .data$hc_service_end_date,
+        .data$hc_period_end_date
+      ), hc_service_start_date = fix_sc_start_dates(
+        .data$hc_service_start_date,
+        .data$hc_period_start_date
+      ),
+      # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
+      hc_service_end_date = fix_sc_end_dates(
+        .data$hc_service_start_date,
+        .data$hc_service_end_date,
+        .data$period
+      )
+    )
+
 
   # Match on demographic data ---------------------------------------
 
   matched_hc_data <- replaced_dates %>%
     dplyr::left_join(
-      sc_demog_lookup, # change this back
+      sc_demog_lookup,
       by = c("sending_location", "social_care_id")
-    )
+    ) %>%
+    # when multiple social_care_id from sending_location for single CHI
+    # replace social_care_id with latest
+    replace_sc_id_with_latest()
+
 
   # Data Cleaning ---------------------------------------
 
@@ -45,12 +51,13 @@ process_sc_all_home_care <- function(
     # set reablement values == 9 to NA
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
-    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
-    replace_sc_id_with_latest() %>%
-    # fill reablement when missing but present in group
-    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$hc_service_start_date) %>%
+    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L))
+  # fill reablement when missing but present in group
+  dplyr::group_by(
+    .data$sending_location,
+    .data$social_care_id,
+    .data$hc_service_start_date
+  ) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
     dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
     dplyr::ungroup()
@@ -168,6 +175,7 @@ process_sc_all_home_care <- function(
 
 
   # Create Source variables---------------------------------------
+
   all_hc_processed <- merge_data %>%
     # rename
     dplyr::rename(
