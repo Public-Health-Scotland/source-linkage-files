@@ -5,13 +5,11 @@
 #' @return data with correct hscp naming.
 #' @export
 #'
-rename_hscp <- function (data) {
-
-if ("hscp" %in% names(data)) {
-  data <- data %>%
-    dplyr::rename("hscp2018" = "hscp")
-} else {
-  data <- data
-}
-
+rename_hscp <- function(data) {
+  if ("hscp" %in% names(data)) {
+    data <- data %>%
+      dplyr::rename("hscp2018" = "hscp")
+  } else {
+    data <- data
+  }
 }
