@@ -41,11 +41,11 @@ process_sc_all_alarms_telecare <- function(
       by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest()
-    # rename for matching source variables
-    dplyr::rename(
-      record_keydate1 = .data$service_start_date,
-      record_keydate2 = .data$service_end_date
-    ) %>%
+  # rename for matching source variables
+  dplyr::rename(
+    record_keydate1 = .data$service_start_date,
+    record_keydate2 = .data$service_end_date
+  ) %>%
     # Include source variables
     dplyr::mutate(
       recid = "AT",
