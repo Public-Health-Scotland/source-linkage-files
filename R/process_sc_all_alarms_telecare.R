@@ -40,6 +40,7 @@ process_sc_all_alarms_telecare <- function(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
+    replace_sc_id_with_latest()
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$service_start_date,
