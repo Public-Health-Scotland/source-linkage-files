@@ -14,12 +14,7 @@ process_tests_cmh <- function(data, year) {
 
   old_data <- get_existing_data_for_tests(data)
 
-  if ("hscp" %in% names(data)) {
-    data <- data %>%
-      dplyr::rename("hscp2018" = "hscp")
-  } else {
-    data <- data
-  }
+  data <- rename_hscp(data)
 
   comparison <- produce_test_comparison(
     old_data = produce_source_cmh_tests(old_data),
