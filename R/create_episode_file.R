@@ -132,6 +132,7 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
+    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     load_ep_file_vars(year)
 
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
