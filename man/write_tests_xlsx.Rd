@@ -4,7 +4,12 @@
 \alias{write_tests_xlsx}
 \title{Write out Tests}
 \usage{
-write_tests_xlsx(comparison_data, sheet_name, year = NULL)
+write_tests_xlsx(
+  comparison_data,
+  sheet_name,
+  year = NULL,
+  workbook_name = c("ep_file", "indiv_file", "lookup", "extract")
+)
 }
 \arguments{
 \item{comparison_data}{produced by \code{\link[=produce_test_comparison]{produce_test_comparison()}}}
@@ -14,6 +19,9 @@ the sheet name}
 
 \item{year}{If applicable, the financial year of the data in '1920' format
 this will be prepended to the sheet name. The default is \code{NULL}.}
+
+\item{workbook_name}{Split up tests into 4 different workbooks for ease of
+interpreting. Episode file, individual file, lookup and extract tests.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.

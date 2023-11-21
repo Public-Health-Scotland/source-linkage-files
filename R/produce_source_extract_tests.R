@@ -38,7 +38,7 @@ produce_source_extract_tests <- function(data,
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net)
 
   if (add_hscp_count) {
-    test_flags <- create_hscp_test_flags(test_flags, .data$hscp)
+    test_flags <- create_hscp_test_flags(test_flags, .data$hscp2018)
   }
 
   test_flags <- test_flags %>%
