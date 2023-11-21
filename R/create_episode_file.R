@@ -466,11 +466,7 @@ join_sc_client_ep <- function(episode_file,
     dplyr::left_join(client_count_not_known,
       by = "chi",
       relationship = "many-to-one"
-    ) # %>%
-  # dplyr::select(!c(
-  #   "sending_location",
-  #   "social_care_id",
-  #   "sc_latest_submission"
-  # ))
+    )
+
   return(episode_file)
 }
