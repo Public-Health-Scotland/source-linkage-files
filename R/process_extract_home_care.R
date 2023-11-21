@@ -12,7 +12,6 @@
 process_extract_home_care <- function(
     data,
     year,
-    client_lookup,
     write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -37,8 +36,6 @@ process_extract_home_care <- function(
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     ) %>%
-    # Match to client data
-    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(year = year)
 
   # Home Care Hours ---------------------------------------
@@ -97,8 +94,7 @@ process_extract_home_care <- function(
       "cost_total_net",
       "hc_provider",
       "hc_reablement",
-      "person_id",
-      tidyselect::starts_with("sc_")
+      "person_id"
     )
 
   if (write_to_disk) {
