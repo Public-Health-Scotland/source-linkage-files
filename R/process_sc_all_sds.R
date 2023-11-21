@@ -93,7 +93,6 @@ process_sc_all_sds <- function(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     )
 
-
   final_data <- sds_full_clean %>%
     # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%

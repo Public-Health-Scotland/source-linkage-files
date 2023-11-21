@@ -70,10 +70,14 @@ process_sc_all_care_home <- function(
 
   fixed_ch_provider <- name_postcode_clean %>%
     dplyr::mutate(
-      ch_provider = ifelse(is.na(ch_provider), 6L, ch_provider)
+      ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]])
     ) %>%
     # sort data
     # TODO - Different from SPSS. SPSS has nursing provider and period in the group_by. Needs investigation - does it matter?
+    dplyr::group_by(
+      .data[["sending_location"]],
+      .data[["social_care_id"]]
+    ) %>%
     dplyr::group_by(
       .data[["sending_location"]],
       .data[["social_care_id"]]
@@ -90,7 +94,8 @@ process_sc_all_care_home <- function(
     dplyr::select(
       -"min_ch_provider",
       -"max_ch_provider"
-    )
+    ) %>%
+    ungroup()
 
 
   fixed_nursing_provision <- fixed_ch_provider %>%
