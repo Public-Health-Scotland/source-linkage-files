@@ -430,43 +430,30 @@ join_cohort_lookups <- function(
 #' @param individual_file the processed individual file
 #' @param year financial year.
 #' @param sc_client SC client lookup
-#' @param sc_demographics SC Demographic lookup
-join_sc_client_ep <- function(episode_file,
-                              year,
-                              sc_client = read_file(get_sc_client_lookup_path(year)),
-                              sc_demographics = read_file(
-                                get_sc_demog_lookup_path(),
-                                col_select = c("sending_location", "social_care_id", "chi")
-                              )) {
-  # Match to demographics lookup to get CHI
-  client_count_not_known <-
-    sc_client %>%
-    dplyr::left_join(
-      sc_demographics,
-      by = c("sending_location", "social_care_id")
-    ) %>%
-    dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
-      c(
-        "sc_living_alone",
-        "sc_support_from_unpaid_carer",
-        "sc_social_worker",
-        "sc_meals",
-        "sc_day_care"
-      )
-    )) == "Not Known")) %>%
-    dplyr::arrange(chi, count_not_known) %>%
-    dplyr::distinct(chi, .keep_all = TRUE) %>%
-    dplyr::mutate(
-      sc_send_lca = convert_sending_location_to_lca(sending_location)
-    ) %>%
-    dplyr::select(-sending_location)
+#' @param file_type episode or individual file
+join_sc_client <- function(data,
+                           year,
+                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           file_type = c("episode", "individual")
+                              ) {
+
+  if (file_type == "episode") {
 
   # Match on client variables by chi
-  episode_file <- episode_file %>%
-    dplyr::left_join(client_count_not_known,
+  data_file <- data %>%
+    dplyr::left_join(sc_client,
       by = "chi",
       relationship = "many-to-one"
     )
+  }else{
+    data_file <- data %>%
+      dplyr::left_join(
+        sc_client,
+        by = "chi",
+        relationship = "one-to-one"
+      ) %>%
+      dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
+  }
 
-  return(episode_file)
+  return(data_file)
 }
