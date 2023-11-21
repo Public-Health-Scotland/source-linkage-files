@@ -155,8 +155,14 @@ create_episode_file <- function(
         hc_provider = NA,
         hc_reablement = NA,
         sds_option_4 = NA,
-      ) %>%
-      join_sc_client_ep(year)
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA
+      )
+
   }
 
   if (anon_chi_out) {
