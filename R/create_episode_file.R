@@ -440,10 +440,9 @@ join_sc_client_ep <- function(episode_file,
                               )) {
   # Match to demographics lookup to get CHI
   client_count_not_known <-
-    read_file(get_sc_client_lookup_path(year)) %>%
+    sc_client %>%
     dplyr::left_join(
-      sc_demographics %>%
-        dplyr::select("sending_location", "social_care_id", "chi"),
+      sc_demographics,
       by = c("sending_location", "social_care_id")
     ) %>%
     dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
