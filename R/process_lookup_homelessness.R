@@ -35,7 +35,6 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
-  ## need to decide which recids this relates to
   data <- data %>%
     dplyr::left_join(
       lookup %>%

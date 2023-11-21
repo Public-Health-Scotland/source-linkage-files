@@ -18,7 +18,7 @@ process_tests_sc_demographics <- function(data) {
       data
     )
   ) %>%
-    write_tests_xlsx(sheet_name = "sc_demographics")
+    write_tests_xlsx(sheet_name = "sc_demographics", workbook_name = "lookup")
 
   return(comparison)
 }
