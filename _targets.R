@@ -446,18 +446,11 @@ list(
       read_lookup_sc_client(fyyear = year)
     ),
     tar_target(
-      sc_demographics,
-      read_file(
-        get_sc_demog_lookup_path(),
-        col_select = c("sending_location", "social_care_id", "chi")
-      )
-    ),
-    tar_target(
       sc_client_lookup,
       process_lookup_sc_client(
         data = sc_client_data,
         year = year,
-        sc_demographics = sc_demographics,
+        sc_demographics = sc_demog_lookup,
         write_to_disk = write_to_disk
       )
     ),
