@@ -135,6 +135,10 @@ list(
     priority = 0.5
   ),
   tar_target(
+    tests_sc_all_at,
+    process_tests_sc_all_at_episodes(all_at)
+  ),
+  tar_target(
     all_home_care_extract,
     read_sc_all_home_care(),
     cue = tar_cue_age(
@@ -150,6 +154,10 @@ list(
       write_to_disk = write_to_disk
     ),
     priority = 0.5
+  ),
+  tar_target(
+    tests_sc_all_home_care,
+    process_tests_sc_all_hc_episodes(all_home_care)
   ),
   tar_target(
     all_care_home_extract,
@@ -173,7 +181,7 @@ list(
   ),
   tar_target(
     tests_all_care_home,
-    process_tests_sc_ch_episodes(all_care_home)
+    process_tests_sc_all_ch_episodes(all_care_home)
   ),
   tar_target(
     all_sds_extract,
@@ -191,6 +199,10 @@ list(
       write_to_disk = write_to_disk
     ),
     priority = 0.5
+  ),
+  tar_target(
+    tests_sc_all_sds,
+    process_tests_sc_all_sds_episodes(all_sds)
   ),
   tar_map(
     list(year = years_to_run),
