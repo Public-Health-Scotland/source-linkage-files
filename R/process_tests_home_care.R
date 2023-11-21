@@ -9,13 +9,15 @@
 process_tests_home_care <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
+  data <- rename_hscp(data)
+
   comparison <- produce_test_comparison(
     old_data = produce_source_hc_tests(old_data),
     new_data = produce_source_hc_tests(data)
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "home_care", year)
+    write_tests_xlsx(sheet_name = "home_care", year, workbook_name = "extract")
 
   return(comparison)
 }

@@ -17,7 +17,7 @@ process_tests_lookup_pc <- function(data, update = previous_update()) {
     ),
     new_data = produce_slf_postcode_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "source_pc_lookup")
+    write_tests_xlsx(sheet_name = "source_pc_lookup", workbook_name = "lookup")
 
   return(comparison)
 }
