@@ -164,7 +164,6 @@ create_episode_file <- function(
         sc_meals = NA,
         sc_day_care = NA
       )
-
   }
 
   if (anon_chi_out) {
@@ -442,18 +441,15 @@ join_cohort_lookups <- function(
 join_sc_client <- function(data,
                            year,
                            sc_client = read_file(get_sc_client_lookup_path(year)),
-                           file_type = c("episode", "individual")
-                              ) {
-
+                           file_type = c("episode", "individual")) {
   if (file_type == "episode") {
-
-  # Match on client variables by chi
-  data_file <- data %>%
-    dplyr::left_join(sc_client,
-      by = "chi",
-      relationship = "many-to-one"
-    )
-  }else{
+    # Match on client variables by chi
+    data_file <- data %>%
+      dplyr::left_join(sc_client,
+        by = "chi",
+        relationship = "many-to-one"
+      )
+  } else {
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
