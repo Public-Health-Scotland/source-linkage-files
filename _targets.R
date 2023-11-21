@@ -463,7 +463,6 @@ list(
       process_extract_alarms_telecare(
         data = all_at,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -479,7 +478,6 @@ list(
       process_extract_care_home(
         data = all_care_home,
         year = year,
-        client_lookup = sc_client_lookup,
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
       )
@@ -496,7 +494,6 @@ list(
       process_extract_home_care(
         data = all_home_care,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -512,7 +509,6 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
