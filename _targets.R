@@ -457,12 +457,12 @@ list(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
     ),
-    # TODO add tests for the SC client lookup
     tar_target(
       sc_client_lookup,
       process_lookup_sc_client(
         data = sc_client_data,
         year = year,
+        sc_demographics = sc_demog_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -475,7 +475,6 @@ list(
       process_extract_alarms_telecare(
         data = all_at,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -491,7 +490,6 @@ list(
       process_extract_care_home(
         data = all_care_home,
         year = year,
-        client_lookup = sc_client_lookup,
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
       )
@@ -508,7 +506,6 @@ list(
       process_extract_home_care(
         data = all_home_care,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -524,7 +521,6 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -584,6 +580,7 @@ list(
         slf_pc_lookup = source_pc_lookup,
         slf_gpprac_lookup = source_gp_lookup,
         slf_deaths_lookup = slf_deaths_lookup,
+        sc_client = sc_client_lookup,
         write_to_disk
       )
     ),
