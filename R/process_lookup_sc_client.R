@@ -131,12 +131,29 @@ process_lookup_sc_client <-
         "sc_type_of_housing",
         "sc_meals",
         "sc_day_care"
-      ) %>%
-      dplyr::left_join(
-        sc_demographics %>%
-          dplyr::select("sending_location", "social_care_id", "chi"),
-        by = c("sending_location", "social_care_id")
       )
+
+    # Match to demographics lookup to get CHI
+    sc_client_lookup <- sc_client_lookup %>%
+      dplyr::left_join(
+        sc_demographics,
+        by = c("sending_location", "social_care_id")
+      ) %>%
+      dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
+        c(
+          "sc_living_alone",
+          "sc_support_from_unpaid_carer",
+          "sc_social_worker",
+          "sc_meals",
+          "sc_day_care"
+        )
+      )) == "Not Known")) %>%
+      dplyr::arrange(chi, count_not_known) %>%
+      dplyr::distinct(chi, .keep_all = TRUE) %>%
+      dplyr::mutate(
+        sc_send_lca = convert_sending_location_to_lca(sending_location)
+      ) %>%
+      dplyr::select(-sending_location)
 
     if (write_to_disk) {
       write_file(
