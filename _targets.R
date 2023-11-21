@@ -579,6 +579,7 @@ list(
         slf_pc_lookup = source_pc_lookup,
         slf_gpprac_lookup = source_gp_lookup,
         slf_deaths_lookup = slf_deaths_lookup,
+        sc_client = sc_client_lookup,
         write_to_disk
       )
     ),
