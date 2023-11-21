@@ -96,6 +96,7 @@ create_individual_file <- function(
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
     add_hri_variables(chi_variable = "chi") %>%
+    add_keep_population_flag(year) %>%
     join_sc_client(year, file_type = "individual")
 
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {

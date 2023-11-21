@@ -12,7 +12,7 @@
 #' convert_ca_to_lca(ca)
 #'
 #' @family code functions
-#' @seealso convert_sending_location_to_lca
+#' @seealso convert_sc_sending_location_to_lca
 convert_ca_to_lca <- function(ca_var) {
   lca <- dplyr::case_match(
     ca_var,

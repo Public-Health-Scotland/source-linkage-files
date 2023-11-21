@@ -37,7 +37,7 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
       record_keydate1 = end_fy(year),
       record_keydate2 = .data$record_keydate1,
       # Add SMR type variable
-      smrtype = add_smr_type(.data$recid)
+      smrtype = add_smrtype(.data$recid)
     )
 
   # Issue a warning if rows were removed

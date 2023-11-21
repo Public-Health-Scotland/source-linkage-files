@@ -10,15 +10,12 @@
 #' @return A vector of `smrtype`
 #'
 #' @family Codes
-add_smr_type <- function(recid,
-                         mpat = NULL,
-                         ipdc = NULL,
-                         hc_service = NULL,
-                         main_applicant_flag = NULL,
-                         consultation_type = NULL) {
-  # TODO rename this function to `add_smrtype()` to match the name of the
-  # variable. Need to make sure to change all places where it is used as well.
-
+add_smrtype <- function(recid,
+                        mpat = NULL,
+                        ipdc = NULL,
+                        hc_service = NULL,
+                        main_applicant_flag = NULL,
+                        consultation_type = NULL) {
   # Situation where some recids are not in the accepted values
   if (!all(recid %in% c(
     "00B",
@@ -188,7 +185,7 @@ add_smr_type <- function(recid,
 
   if (anyNA(smrtype)) {
     cli::cli_warn(
-      "Some {.var smrtype}s were not properly set by {.fun add_smr_type}."
+      "Some {.var smrtype}s were not properly set by {.fun add_smrtype}."
     )
   }
 

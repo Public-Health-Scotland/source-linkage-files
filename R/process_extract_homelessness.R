@@ -37,7 +37,7 @@ process_extract_homelessness <- function(
     dplyr::mutate(
       year = as.character(year),
       recid = "HL1",
-      smrtype = add_smr_type(
+      smrtype = add_smrtype(
         recid = .data$recid,
         main_applicant_flag = .data$main_applicant_flag
       )

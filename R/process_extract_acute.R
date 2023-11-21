@@ -45,7 +45,7 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     dplyr::mutate(
       stay = calculate_stay(year, .data$record_keydate1, .data$record_keydate2),
       # create and populate SMRType
-      smrtype = add_smr_type(recid = .data$recid, ipdc = .data$ipdc)
+      smrtype = add_smrtype(recid = .data$recid, ipdc = .data$ipdc)
     ) %>%
     # Apply new costs for C3 specialty, these are taken from the 2017/18 file
     fix_c3_costs(year) %>%
