@@ -27,7 +27,6 @@ read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = 
     dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(c(
-        "latest_record_flag",
         "sending_location",
         "submitted_gender",
         "chi_gender_code"
