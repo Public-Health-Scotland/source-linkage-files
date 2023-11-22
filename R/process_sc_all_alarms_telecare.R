@@ -37,11 +37,11 @@ process_sc_all_alarms_telecare <- function(
 
 
   at_full_clean <- replaced_dates %>%
-  # rename for matching source variables
-  dplyr::rename(
-    record_keydate1 = .data$service_start_date,
-    record_keydate2 = .data$service_end_date
-  ) %>%
+    # rename for matching source variables
+    dplyr::rename(
+      record_keydate1 = .data$service_start_date,
+      record_keydate2 = .data$service_end_date
+    ) %>%
     # Include source variables
     dplyr::mutate(
       recid = "AT",
