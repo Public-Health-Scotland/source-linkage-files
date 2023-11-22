@@ -27,7 +27,7 @@ process_extract_home_care <- function(
 
   # Selections for financial year------------------------------------
 
-  hc_data <- all_hc_processed %>%
+  hc_data <- data %>%
     # select episodes for FY
     dplyr::filter(is_date_in_fyyear(
       year,
