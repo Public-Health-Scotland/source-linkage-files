@@ -29,7 +29,7 @@ process_lookup_sc_demographics <- function(
 
 
   # Data Cleaning ---------------------------------------
-# TODO social care demographics - tidy up  code and make more efficient.
+  # TODO social care demographics - tidy up  code and make more efficient.
   sc_demog <- data %>%
     dplyr::mutate(
       # if one chi is missing then use the other
@@ -43,7 +43,7 @@ process_lookup_sc_demographics <- function(
       # check gender code - replace code 99 with 9=
 
       # use CHI sex if available
-       # TODO social care demographics - check gender matches chi for extra validation check
+      # TODO social care demographics - check gender matches chi for extra validation check
       submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L),
       gender = dplyr::if_else(
         is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
@@ -54,16 +54,18 @@ process_lookup_sc_demographics <- function(
     # format postcodes using `phsmethods`
     dplyr::mutate(dplyr::across(
       tidyselect::contains("postcode"),
-      ~ phsmethods::format_postcode(.x, format = "pc7"))) %>%
+      ~ phsmethods::format_postcode(.x, format = "pc7")
+    )) %>%
     dplyr::distinct() %>%
     # if only one option is available for chi then choose that
     dplyr::mutate(chi = ifelse(chi_upi == upi | is.na(upi), chi_upi,
-                               ifelse(is.na(chi_upi), upi, NA)
-                               )) %>%
+      ifelse(is.na(chi_upi), upi, NA)
+    )) %>%
     dplyr::mutate(
       # if only one option is available for DOB then choose that
       dob = ifelse(chi_date_of_birth == submitted_date_of_birth | is.na(submitted_date_of_birth), chi_date_of_birth,
-        ifelse(is.na(chi_date_of_birth), submitted_date_of_birth, NA)),
+        ifelse(is.na(chi_date_of_birth), submitted_date_of_birth, NA)
+      ),
       dob = lubridate::as_date(dob)
     ) %>%
     dplyr::arrange(chi, dob) %>%
@@ -71,8 +73,8 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(chi, .direction = c("down")) %>%
     tidyr::fill(dob, .direction = c("down")) %>%
     dplyr::ungroup() %>%
-  # create string for DOB from CHI and the DOB to see if they match.
-  dplyr::mutate(dob_from_chiupi = paste0(stringr::str_sub(chi, 1, 6))) %>%
+    # create string for DOB from CHI and the DOB to see if they match.
+    dplyr::mutate(dob_from_chiupi = paste0(stringr::str_sub(chi, 1, 6))) %>%
     dplyr::mutate(dob_from_dob = paste0(
       stringr::str_sub(as.character(dob), 9, 10),
       stringr::str_sub(as.character(dob), 6, 7),
@@ -81,7 +83,7 @@ process_lookup_sc_demographics <- function(
     # validation flag. if dob goes with chi then flag as 1
     dplyr::mutate(chi_validation = ifelse(dob_from_chiupi == dob_from_dob, 1, 0))
 
-# cases where all chi and dob are missing, nothing we can do about these and no validation
+  # cases where all chi and dob are missing, nothing we can do about these and no validation
   missing <- sc_demog %>%
     dplyr::filter(is.na(chi_upi) & is.na(upi) & is.na(submitted_date_of_birth) & is.na(chi_date_of_birth) & is.na(chi) & is.na(dob)) %>%
     dplyr::select(-dob_from_chiupi, -dob_from_dob, -chi_upi, -upi, -chi_date_of_birth, -submitted_date_of_birth)
@@ -121,7 +123,7 @@ process_lookup_sc_demographics <- function(
     dplyr::mutate(chi_validation = ifelse(dob_from_chiupi == dob_from_dob, 1, 0)) %>%
     dplyr::select(-dob_from_chidob, -dob_from_submitteddob)
 
-# add the validated cases to validated df
+  # add the validated cases to validated df
   validated <- validated %>%
     rbind(sc_demog %>%
       dplyr::filter(chi_validation == 1) %>%
@@ -151,7 +153,7 @@ process_lookup_sc_demographics <- function(
   # Need to decide what to do with social care cases where the chi and the dob do not match.
   # this is why I have kept the validated/non-validated df seperate. Hoping we can get back and sort this out.
   sc_demog <- sc_demog %>%
-    dplyr::filter(chi_validation != 1) %>%   # all unvalidated cases. most of these are due to missing chi or dob so there is no way to validate.
+    dplyr::filter(chi_validation != 1) %>% # all unvalidated cases. most of these are due to missing chi or dob so there is no way to validate.
     dplyr::select(-dob_from_chiupi, -dob_from_upi, -dob_from_chi_upi, -dob_from_dob, -chi_upi, -upi, -chi_date_of_birth, -submitted_date_of_birth, -dob_from_chi) %>%
     rbind(validated) %>%
     rbind(missing)
