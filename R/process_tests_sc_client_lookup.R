@@ -16,7 +16,7 @@ process_tests_sc_client_lookup <- function(data, year) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "sc_client", year)
+    write_tests_xlsx(sheet_name = "sc_client", year, workbook_name = "lookup")
 
   return(comparison)
 }

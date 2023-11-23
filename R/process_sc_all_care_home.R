@@ -57,12 +57,19 @@ process_sc_all_care_home <- function(
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
+    dplyr::mutate(
+      ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]])
+    ) %>%
     # sort data
     dplyr::arrange(
       "sending_location",
       "social_care_id",
       "ch_admission_date",
       "period"
+    ) %>%
+    dplyr::group_by(
+      .data[["sending_location"]],
+      .data[["social_care_id"]]
     ) %>%
     dplyr::mutate(
       min_ch_provider = min(.data[["ch_provider"]]),
@@ -76,7 +83,8 @@ process_sc_all_care_home <- function(
     dplyr::select(
       -"min_ch_provider",
       -"max_ch_provider"
-    )
+    ) %>%
+    dplyr::ungroup()
 
   fixed_sc_id <- fixed_ch_provider %>%
     replace_sc_id_with_latest()

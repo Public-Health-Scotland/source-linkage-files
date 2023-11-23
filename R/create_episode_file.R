@@ -28,6 +28,7 @@ create_episode_file <- function(
       col_select = c("gpprac", "cluster", "hbpraccode")
     ),
     slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
+    sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
@@ -132,19 +133,12 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
+    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     load_ep_file_vars(year)
 
   if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
     episode_file <- episode_file %>%
       dplyr::mutate(
-        sc_send_lca = NA,
-        sc_living_alone = NA,
-        sc_support_from_unpaid_carer = NA,
-        sc_social_worker = NA,
-        sc_type_of_housing = NA,
-        sc_meals = NA,
-        sc_day_care = NA,
-        sc_latest_submission = NA,
         ch_chi_cis = NA,
         sc_id_cis = NA,
         ch_name = NA,
@@ -163,6 +157,12 @@ create_episode_file <- function(
         hc_provider = NA,
         hc_reablement = NA,
         sds_option_4 = NA,
+        sc_living_alone = NA,
+        sc_support_from_unpaid_carer = NA,
+        sc_social_worker = NA,
+        sc_type_of_housing = NA,
+        sc_meals = NA,
+        sc_day_care = NA
       )
   }
 
@@ -171,9 +171,7 @@ create_episode_file <- function(
   }
 
   if (write_to_disk) {
-    slf_episode_path <- get_slf_episode_path(year, check_mode = "write")
-
-    write_file(episode_file, slf_episode_path)
+    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"))
   }
 
   return(episode_file)
@@ -429,4 +427,37 @@ join_cohort_lookups <- function(
     )
 
   return(join_cohort_lookups)
+}
+
+
+#' Join sc client variables onto episode file
+#'
+#' @description Match on sc client variables.
+#'
+#' @param individual_file the processed individual file
+#' @param year financial year.
+#' @param sc_client SC client lookup
+#' @param file_type episode or individual file
+join_sc_client <- function(data,
+                           year,
+                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           file_type = c("episode", "individual")) {
+  if (file_type == "episode") {
+    # Match on client variables by chi
+    data_file <- data %>%
+      dplyr::left_join(sc_client,
+        by = "chi",
+        relationship = "many-to-one"
+      )
+  } else {
+    data_file <- data %>%
+      dplyr::left_join(
+        sc_client,
+        by = "chi",
+        relationship = "one-to-one"
+      ) %>%
+      dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
+  }
+
+  return(data_file)
 }

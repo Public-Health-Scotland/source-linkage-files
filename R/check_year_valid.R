@@ -40,7 +40,7 @@ check_year_valid <- function(
     return(FALSE)
   } else if (year <= "1718" && type %in% "HHG") {
     return(FALSE)
-  } else if (year >= "2122" && type %in% c("CMH", "DN")) {
+  } else if (year >= "2021" && type %in% c("CMH", "DN")) {
     return(FALSE)
   } else if (year >= "2324" && type %in% "NSU") {
     return(FALSE)

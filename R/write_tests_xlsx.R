@@ -9,19 +9,28 @@
 #' the sheet name
 #' @param year If applicable, the financial year of the data in '1920' format
 #' this will be prepended to the sheet name. The default is `NULL`.
+#' @param workbook_name Split up tests into 4 different workbooks for ease of
+#' interpreting. Episode file, individual file, lookup and extract tests.
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
-write_tests_xlsx <- function(comparison_data, sheet_name, year = NULL) {
+write_tests_xlsx <- function(comparison_data,
+                             sheet_name,
+                             year = NULL,
+                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract")) {
   # Set up the workbook ----
 
-  tests_workbook_name <- ifelse(
-    is.null(year),
-    stringr::str_glue(latest_update(), "_lookups_tests"),
-    stringr::str_glue(latest_update(), "_{year}_tests")
-  )
+  if (missing(year) & workbook_name == "lookup") {
+    tests_workbook_name <- stringr::str_glue(latest_update(), "_lookups_tests")
+  } else {
+    tests_workbook_name <- dplyr::case_when(
+      workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
+      workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
+      workbook_name == "extract" ~ stringr::str_glue(latest_update(), "_{year}_extract_tests")
+    )
+  }
 
   tests_workbook_path <- fs::path(
     get_slf_dir(),
