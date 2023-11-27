@@ -26,9 +26,9 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     # fix bad period (2017, 2020, 2021, and so on)
     dplyr::mutate(
       period = dplyr::if_else(
-        grepl("\\d{4}$", .data$period),
-        paste0(.data$period, "Q4"),
-        .data$period
+        grepl("\\d{4}$", .data[["period"]]),
+        paste0(.data[["period"]], "Q4"),
+        .data[["period"]]
       )
     ) %>%
     dplyr::mutate(
