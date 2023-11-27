@@ -151,7 +151,7 @@ process_extract_homelessness <- function(
       final_data,
       get_source_extract_path(
         year = year,
-        type = "Homelessness",
+        type = "homelessness",
         check_mode = "write"
       )
     )
