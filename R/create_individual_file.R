@@ -75,7 +75,7 @@ create_individual_file <- function(
     add_cij_columns() %>%
     add_all_columns()
 
-  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
       aggregate_by_chi(exclude_sc_var = TRUE)
   } else {
@@ -99,7 +99,7 @@ create_individual_file <- function(
     add_keep_population_flag(year) %>%
     join_sc_client(year, file_type = "individual")
 
-  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
       dplyr::mutate(
         ch_cis_episodes = NA,
@@ -221,7 +221,7 @@ add_all_columns <- function(episode_file) {
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
     add_hl1_columns("HL1", .data$recid == "HL1")
 
-  if (check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
       add_ch_columns("CH", .data$recid == "CH") %>%
       add_hc_columns("HC", .data$recid == "HC") %>%

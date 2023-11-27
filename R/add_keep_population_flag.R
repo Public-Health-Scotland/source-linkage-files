@@ -9,7 +9,7 @@
 add_keep_population_flag <- function(individual_file, year) {
   calendar_year <- paste0("20", substr(year, 1, 2)) %>% as.integer()
 
-  if (!check_year_valid(year, "NSU")) {
+  if (!check_year_valid(year, "nsu")) {
     individual_file <- individual_file %>%
       dplyr::mutate(keep_population = 1L)
   } else {
