@@ -136,7 +136,7 @@ create_episode_file <- function(
     join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     load_ep_file_vars(year)
 
-  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
       dplyr::mutate(
         ch_chi_cis = NA,

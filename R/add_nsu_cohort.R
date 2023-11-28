@@ -15,7 +15,7 @@ add_nsu_cohort <- function(
     nsu_cohort = read_file(get_nsu_path(year))) {
   year_param <- year
 
-  if (!check_year_valid(year, "NSU")) {
+  if (!check_year_valid(year, "nsu")) {
     return(data)
   }
 

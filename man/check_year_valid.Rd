@@ -6,9 +6,9 @@
 \usage{
 check_year_valid(
   year,
-  type = c("Acute", "AE", "AT", "CH", "Client", "CMH", "DD", "Deaths", "DN", "GPOoH",
-    "HC", "Homelessness", "HHG", "Maternity", "MH", "NSU", "Outpatients", "PIS", "SDS",
-    "SPARRA")
+  type = c("acute", "ae", "at", "ch", "client", "cmh", "dd", "deaths", "dn", "gpooh",
+    "hc", "homelessness", "hhg", "maternity", "mh", "nsu", "outpatients", "pis", "sds",
+    "sparra")
 )
 }
 \arguments{
