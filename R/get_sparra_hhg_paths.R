@@ -10,7 +10,7 @@
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_hhg_path <- function(year, ...) {
-  if (!check_year_valid(year, "HHG")) {
+  if (!check_year_valid(year, "hhg")) {
     return(get_dummy_boxi_extract_path())
   }
 
@@ -35,7 +35,7 @@ get_hhg_path <- function(year, ...) {
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sparra_path <- function(year, ...) {
-  if (!check_year_valid(year, "SPARRA")) {
+  if (!check_year_valid(year, "sparra")) {
     return(get_dummy_boxi_extract_path())
   }
 
