@@ -20,7 +20,7 @@ process_extract_alarms_telecare <- function(
   year <- check_year_format(year)
 
   # Check that we have data for this year
-  if (!check_year_valid(year, "AT")) {
+  if (!check_year_valid(year, "at")) {
     # If not return an empty tibble
     return(tibble::tibble())
   }
