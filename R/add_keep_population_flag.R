@@ -102,7 +102,7 @@ add_keep_population_flag <- function(individual_file, year) {
     # step 3: match the flag back onto the slf
     individual_file <- individual_file %>%
       dplyr::left_join(nsu_keep_lookup,
-        by = "anon_chi",
+        by = "chi",
         suffix = c("", ".y")
       ) %>%
       dplyr::select(-contains(".y")) %>%
