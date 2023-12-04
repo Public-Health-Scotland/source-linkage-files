@@ -11,42 +11,42 @@
 check_year_valid <- function(
     year,
     type = c(
-      "Acute",
-      "AE",
-      "AT",
-      "CH",
-      "Client",
-      "CMH",
-      "DD",
-      "Deaths",
-      "DN",
-      "GPOoH",
-      "HC",
-      "Homelessness",
-      "HHG",
-      "Maternity",
-      "MH",
-      "NSU",
-      "Outpatients",
-      "PIS",
-      "SDS",
-      "SPARRA"
+      "acute",
+      "ae",
+      "at",
+      "ch",
+      "client",
+      "cmh",
+      "dd",
+      "deaths",
+      "dn",
+      "gpooh",
+      "hc",
+      "homelessness",
+      "hhg",
+      "maternity",
+      "mh",
+      "nsu",
+      "outpatients",
+      "pis",
+      "sds",
+      "sparra"
     )) {
-  if (year <= "1415" && type %in% c("DN", "SPARRA")) {
+  if (year <= "1415" && type %in% c("dn", "sparra")) {
     return(FALSE)
-  } else if (year <= "1516" && type %in% c("CMH", "Homelessness")) {
+  } else if (year <= "1516" && type %in% c("cmh", "homelessness")) {
     return(FALSE)
-  } else if (year <= "1617" && type %in% c("CH", "HC", "SDS", "AT")) {
+  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at")) {
     return(FALSE)
-  } else if (year <= "1718" && type %in% "HHG") {
+  } else if (year <= "1718" && type %in% "hhg") {
     return(FALSE)
-  } else if (year >= "2021" && type %in% c("CMH", "DN")) {
+  } else if (year >= "2021" && type %in% c("cmh", "dn")) {
     return(FALSE)
-  } else if (year >= "2324" && type %in% "NSU") {
+  } else if (year >= "2324" && type %in% "nsu") {
     return(FALSE)
-  } else if (year >= "2425" && type %in% c("SPARRA", "HHG")) {
+  } else if (year >= "2324" && type %in% c("sparra", "hhg")) {
     return(FALSE)
-  } else if (year >= "2324" && type %in% c("CH", "HC", "SDS", "AT")) {
+  } else if (year >= "2324" && type %in% c("ch", "hc", "sds", "at")) {
     return(FALSE)
   }
 

@@ -4,12 +4,12 @@
 \alias{add_age_group}
 \title{add_age_group}
 \usage{
-add_age_group(individual_file, age_var_name)
+add_age_group(data, age_var_name)
 }
 \arguments{
-\item{individual_file}{the individual files under processing}
+\item{data}{the individual files under processing}
 
-\item{age_var_name}{the column name of age variable, could be "age"}
+\item{age_var_name}{the column name of age variable, could be age}
 }
 \value{
 A individual file with age groups added
