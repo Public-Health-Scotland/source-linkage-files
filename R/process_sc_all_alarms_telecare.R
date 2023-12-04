@@ -60,11 +60,8 @@ process_sc_all_alarms_telecare <- function(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
-
-
-
-  # Deal with episodes which have a package across quarters.
-  qtr_merge <- at_full_clean %>%
+    # Deal with episodes which have a package across quarters.
+    qtr_merge() <- at_full_clean %>%
     # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
     dplyr::group_by(
