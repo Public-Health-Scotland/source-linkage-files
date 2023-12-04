@@ -47,7 +47,7 @@ add_keep_population_flag <- function(individual_file, year) {
         cols = "age0":"age90"
       ) %>%
       dplyr::mutate(age = as.integer(age)) %>%
-      add_age_group("age") %>%
+      add_age_group(age) %>%
       dplyr::left_join(
         readr::read_rds(get_locality_path()) %>%
           dplyr::select("locality" = "hscp_locality", datazone2011),
@@ -61,7 +61,7 @@ add_keep_population_flag <- function(individual_file, year) {
     # Work out the current population sizes in the SLF for Locality AgeGroup and Gender.
     individual_file <- individual_file %>%
       dplyr::mutate(age = as.integer(age)) %>%
-      add_age_group("age")
+      add_age_group(age)
 
 
     set.seed(100)
@@ -129,12 +129,12 @@ add_keep_population_flag <- function(individual_file, year) {
 #' add_age_group
 #'
 #' @description Add age group columns based on age
-#' @param individual_file the individual files under processing
-#' @param age_var_name the column name of age variable, could be "age"
+#' @param data the individual files under processing
+#' @param age_var_name the column name of age variable, could be age
 #'
 #' @return A individual file with age groups added
-add_age_group <- function(individual_file, age_var_name) {
-  individual_file <- individual_file %>%
+add_age_group <- function(data, age_var_name) {
+  data <- data %>%
     dplyr::mutate(
       age_group = dplyr::case_when(
         {{ age_var_name }} >= 0 & {{ age_var_name }} <= 4 ~ "0-4",
@@ -149,5 +149,5 @@ add_age_group <- function(individual_file, age_var_name) {
         {{ age_var_name }} >= 85 ~ "85+"
       )
     )
-  return(individual_file)
+  return(data)
 }
