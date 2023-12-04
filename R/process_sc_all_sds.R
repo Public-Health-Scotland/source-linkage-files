@@ -45,16 +45,23 @@ process_sc_all_sds <- function(
       .after = .data$sds_option_3
     ) %>%
     # If SDS start date is missing, assign start of FY
-    dplyr::mutate(sds_start_date = fix_sc_start_dates(
-      .data$sds_start_date,
-      .data$period
-    )) %>%
-    # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
-    dplyr::mutate(sds_end_date = fix_sc_end_dates(
-      .data$sds_start_date,
-      .data$sds_end_date,
-      .data$period
-    )) %>%
+    dplyr::mutate(
+      sds_start_date = fix_sc_start_dates(
+        .data$sds_start_date,
+        .data$sds_period_start_date
+      ),
+      # If SDS end date is missing, assign end of FY
+      sds_end_date = fix_sc_missing_end_dates(
+        .data$sds_end_date,
+        .data$sds_period_end_date
+      ),
+      # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
+      sds_end_date = fix_sc_end_dates(
+        .data$sds_start_date,
+        .data$sds_end_date,
+        .data$period
+      )
+    ) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$sds_start_date,
@@ -86,12 +93,18 @@ process_sc_all_sds <- function(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     )
 
-
   final_data <- sds_full_clean %>%
     # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
-    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$smrtype) %>%
-    dplyr::arrange(.data$period, .data$record_keydate1, .by_group = TRUE) %>%
+    dplyr::group_by(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$smrtype
+    ) %>%
+    dplyr::arrange(.data$period,
+      .data$record_keydate1,
+      .by_group = TRUE
+    ) %>%
     # Create a flag for episodes that are going to be merged
     # Create an episode counter
     dplyr::mutate(
