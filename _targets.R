@@ -463,7 +463,7 @@ list(
         data = sc_client_data,
         year = year,
         sc_demographics = sc_demog_lookup %>%
-        dplyr::select(c("sending_location", "social_care_id", "chi")),
+          dplyr::select(c("sending_location", "social_care_id", "chi")),
         write_to_disk = write_to_disk
       )
     ),
