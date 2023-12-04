@@ -18,11 +18,13 @@ process_sc_all_alarms_telecare <- function(
   # Data Cleaning-----------------------------------------------------
 
   replaced_dates <- data %>%
+    # If the end date is missing, set this to the end of the period
     dplyr::mutate(
       service_end_date = fix_sc_missing_end_dates(
         .data$service_end_date,
         .data$period_end_date
       ),
+      # If the start_date is missing, set this to the start of the period
       service_start_date = fix_sc_start_dates(
         .data$service_start_date,
         .data$period_start_date
