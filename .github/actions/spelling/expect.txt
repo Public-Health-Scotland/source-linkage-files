@@ -29,8 +29,8 @@ Classificat
 cls
 cmh
 CNWs
-Comhairle
 codecov
+Comhairle
 commhosp
 congen
 costincdnas
@@ -79,6 +79,7 @@ fyear
 fyyear
 geogs
 ggplot
+github
 GLS
 gls
 gms
@@ -125,8 +126,8 @@ ltc
 ltcs
 lubridate
 magrittr
-Matern
 markdownguide
+Matern
 Mcbride
 mcmahon
 MMMYY
@@ -214,6 +215,7 @@ spd
 SPSS
 spss
 stadm
+starwars
 stefanzweifel
 stringdist
 stringr
@@ -239,6 +241,7 @@ workflows
 xintercept
 xlsx
 yearstay
+yml
 YYYYQX
 zihao
 zsav
