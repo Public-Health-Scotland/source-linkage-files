@@ -54,6 +54,8 @@ process_sc_all_alarms_telecare <- function(
         .data$service_type == 1L ~ "AT-Alarm",
         .data$service_type == 2L ~ "AT-Tele"
       ),
+      # Create person id variable
+      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
@@ -61,9 +63,11 @@ process_sc_all_alarms_telecare <- function(
     dplyr::left_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
-    ) %>%
+    )
+
+
     # Deal with episodes which have a package across quarters.
-    qtr_merge() <- at_full_clean %>%
+    qtr_merge <- at_full_clean %>%
     # use as.data.table to change the data format to data.table to accelerate
     data.table::as.data.table() %>%
     dplyr::group_by(
@@ -74,11 +78,7 @@ process_sc_all_alarms_telecare <- function(
       .data$period
     ) %>%
     # Create a count for the package number across episodes
-    dplyr::mutate(
-      pkg_count = dplyr::row_number(),
-      # Create person id variable
-      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
-    ) %>%
+    dplyr::mutate(pkg_count = dplyr::row_number()) %>%
     # Sort prior to merging
     dplyr::arrange(.by_group = TRUE) %>%
     # group for merging episodes
