@@ -95,7 +95,7 @@ process_sc_all_care_home <- function(
       -"min_ch_provider",
       -"max_ch_provider"
     ) %>%
-    ungroup()
+    dplyr::ungroup()
 
 
   fixed_nursing_provision <- fixed_ch_provider %>%

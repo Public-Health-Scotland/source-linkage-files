@@ -37,10 +37,13 @@ process_sc_all_alarms_telecare <- function(
 
 
   at_full_clean <- replaced_dates %>%
+    # when multiple social_care_id from sending_location for single CHI
+    # replace social_care_id with latest
+    replace_sc_id_with_latest() %>%
     # rename for matching source variables
     dplyr::rename(
-      record_keydate1 = .data$service_start_date,
-      record_keydate2 = .data$service_end_date
+      record_keydate1 = "service_start_date",
+      record_keydate2 = "service_end_date"
     ) %>%
     # Include source variables
     dplyr::mutate(
@@ -57,9 +60,8 @@ process_sc_all_alarms_telecare <- function(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
-    replace_sc_id_with_latest()
+
+
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%

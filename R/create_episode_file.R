@@ -18,7 +18,7 @@
 create_episode_file <- function(
     processed_data_list,
     year,
-    dd_data = read_file(get_source_extract_path(year, "DD")),
+    dd_data = read_file(get_source_extract_path(year, "dd")),
     homelessness_lookup = create_homelessness_lookup(year),
     nsu_cohort = read_file(get_nsu_path(year)),
     ltc_data = read_file(get_ltcs_path(year)),
@@ -136,7 +136,7 @@ create_episode_file <- function(
     join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     load_ep_file_vars(year)
 
-  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
       dplyr::mutate(
         ch_chi_cis = NA,
@@ -369,30 +369,20 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
-  # Use future so the cohorts can be created simultaneously (in parallel)
-  future::plan(strategy = future.callr::callr, .skip = TRUE)
-  options(future.globals.maxSize = 21474836480)
+  create_demographic_cohorts(
+    data,
+    year,
+    update,
+    write_to_disk = TRUE
+  )
 
-  future_demographic <- future::future({
-    create_demographic_cohorts(
-      data,
-      year,
-      update,
-      write_to_disk = TRUE
-    )
-  })
-  future_service_use <- future::future({
-    create_service_use_cohorts(
-      data,
-      year,
-      update,
-      write_to_disk = TRUE
-    )
-  })
+  create_service_use_cohorts(
+    data,
+    year,
+    update,
+    write_to_disk = TRUE
+  )
 
-  # This 'blocks' the code until they have both finished executing
-  value_demographic <- future::value(future_demographic)
-  value_service_use <- future::value(future_service_use)
 
   return(data)
 }
