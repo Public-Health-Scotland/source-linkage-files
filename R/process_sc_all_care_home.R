@@ -56,7 +56,7 @@ process_sc_all_care_home <- function(
       .data$ch_discharge_date,
       .data$period
     )) %>%
-    dplyr::left_join(sc_demog_lookup_processed, # change back
+    dplyr::left_join(sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest()

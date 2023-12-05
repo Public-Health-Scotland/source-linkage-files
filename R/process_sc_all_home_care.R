@@ -51,7 +51,7 @@ process_sc_all_home_care <- function(
     # set reablement values == 9 to NA
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
-    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L))
+    dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
   # fill reablement when missing but present in group
   dplyr::group_by(
     .data$sending_location,
