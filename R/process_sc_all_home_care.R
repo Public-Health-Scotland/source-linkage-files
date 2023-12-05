@@ -52,12 +52,12 @@ process_sc_all_home_care <- function(
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
     dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
-  # fill reablement when missing but present in group
-  dplyr::group_by(
-    .data$sending_location,
-    .data$social_care_id,
-    .data$hc_service_start_date
-  ) %>%
+    # fill reablement when missing but present in group
+    dplyr::group_by(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$hc_service_start_date
+    ) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
     dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
     dplyr::ungroup()
