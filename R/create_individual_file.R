@@ -486,7 +486,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
         lubridate::NA_Date_
       )
     )
- }
+}
 
 #' Add HC columns
 #'
