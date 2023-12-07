@@ -445,8 +445,8 @@ join_sc_client <- function(data,
         sc_client,
         by = "chi",
         relationship = "one-to-one"
-      ) %>%
-      dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
+      ) #%>%
+     # dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
   }
 
   return(data_file)
