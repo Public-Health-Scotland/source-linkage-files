@@ -73,9 +73,16 @@ add_keep_population_flag <- function(individual_file, year) {
     nsu_keep_lookup <- individual_file %>%
       dplyr::filter(gender == 1 | gender == 2) %>%
       dplyr::filter(!is.na(locality), !is.na(age)) %>%
-      # Remove people who died before the mid-point of the calender year.
-      # This will make our numbers line up better with the methodology used for the mid-year population estimates.
-      dplyr::filter(death_date > mid_year | is.na(death_date) | nsu != 0) %>%
+      dplyr::mutate(
+        # Flag service users who were dead at the mid year date.
+        flag_to_remove = dplyr::if_else(death_date <= mid_year & nsu == 0, 1, 0),
+        # If the death date is missing, keep those people.
+        flag_to_remove = dplyr::if_else(is.na(death_date), 0, flag_to_remove),
+        # If they are a non-service-user we want to keep them
+        flag_to_remove = dplyr::if_else(nsu == 1, 0, flag_to_remove)
+      ) %>%
+    # Remove anyone who was flagged as 1 from above.
+    dplyr::filter(flag_to_remove == 0) %>%
       # Calculate the populations of the whole SLF and of the NSU.
       dplyr::group_by(locality, age_group, gender) %>%
       dplyr::mutate(
