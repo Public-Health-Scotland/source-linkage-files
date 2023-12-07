@@ -81,8 +81,8 @@ add_keep_population_flag <- function(individual_file, year) {
         # If they are a non-service-user we want to keep them
         flag_to_remove = dplyr::if_else(nsu == 1, 0, flag_to_remove)
       ) %>%
-    # Remove anyone who was flagged as 1 from above.
-    dplyr::filter(flag_to_remove == 0) %>%
+      # Remove anyone who was flagged as 1 from above.
+      dplyr::filter(flag_to_remove == 0) %>%
       # Calculate the populations of the whole SLF and of the NSU.
       dplyr::group_by(locality, age_group, gender) %>%
       dplyr::mutate(
