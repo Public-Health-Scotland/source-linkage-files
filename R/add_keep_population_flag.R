@@ -101,10 +101,11 @@ add_keep_population_flag <- function(individual_file, year) {
           scaling_factor > 1 ~ 1,
           .default = scaling_factor
         ),
-        keep_nsu = rbinom(1, 1, scaling_factor)
+        keep_nsu = rbinom(nsu_population, 1, scaling_factor)
       ) %>%
       dplyr::filter(keep_nsu == 1L) %>%
-      dplyr::ungroup()
+      dplyr::ungroup() %>%
+      dplyr::select(-flag_to_remove)
 
     # step 3: match the flag back onto the slf
     individual_file <- individual_file %>%
