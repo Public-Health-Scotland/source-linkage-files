@@ -45,8 +45,7 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     dplyr::mutate(
       dplyr::across(c("sending_location", "service_type"), ~ as.integer(.x))
     ) %>%
-    dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
-    dplyr::filter(.data$service_start_date_after_period_end_date != 1)
+    dplyr::arrange(.data$sending_location, .data$social_care_id)
 
   return(at_full_data)
 }
