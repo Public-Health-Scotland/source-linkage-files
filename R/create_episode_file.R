@@ -31,6 +31,8 @@ create_episode_file <- function(
     sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
+  processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
+
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
