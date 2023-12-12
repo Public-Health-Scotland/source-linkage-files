@@ -24,6 +24,7 @@ add_keep_population_flag <- function(individual_file, year) {
     year_available <- pop_estimates %>%
       dplyr::pull(year) %>%
       unique()
+
     if (calendar_year %in% year_available) {
       pop_estimates <- pop_estimates %>%
         dplyr::filter(year == calendar_year)
@@ -70,17 +71,25 @@ add_keep_population_flag <- function(individual_file, year) {
     # If they don't have a locality, they're no good as we won't have an estimate to match them against.
     # Same for age and gender.
     nsu_keep_lookup <- individual_file %>%
+      dplyr::filter(gender == 1 | gender == 2) %>%
       dplyr::filter(!is.na(locality), !is.na(age)) %>%
-      # Remove people who died before the mid-point of the calender year.
-      # This will make our numbers line up better with the methodology used for the mid-year population estimates.
-      # anyone who died 5 years before the file shouldn't be in it anyway...
-      dplyr::filter(death_date > mid_year | nsu != 0) %>%
+      dplyr::mutate(
+        # Flag service users who were dead at the mid year date.
+        flag_to_remove = dplyr::if_else(death_date <= mid_year & nsu == 0, 1, 0),
+        # If the death date is missing, keep those people.
+        flag_to_remove = dplyr::if_else(is.na(death_date), 0, flag_to_remove),
+        # If they are a non-service-user we want to keep them
+        flag_to_remove = dplyr::if_else(nsu == 1, 0, flag_to_remove)
+      ) %>%
+      # Remove anyone who was flagged as 1 from above.
+      dplyr::filter(flag_to_remove == 0) %>%
       # Calculate the populations of the whole SLF and of the NSU.
       dplyr::group_by(locality, age_group, gender) %>%
       dplyr::mutate(
         nsu_population = sum(nsu),
         total_source_population = dplyr::n()
       ) %>%
+      dplyr::filter(nsu == 1) %>%
       dplyr::left_join(pop_estimates,
         by = c("locality", "age_group", "gender")
       ) %>%
@@ -92,10 +101,11 @@ add_keep_population_flag <- function(individual_file, year) {
           scaling_factor > 1 ~ 1,
           .default = scaling_factor
         ),
-        keep_nsu = rbinom(1, 1, scaling_factor)
+        keep_nsu = rbinom(nsu_population, 1, scaling_factor)
       ) %>%
       dplyr::filter(keep_nsu == 1L) %>%
-      dplyr::ungroup()
+      dplyr::ungroup() %>%
+      dplyr::select(-flag_to_remove)
 
     # step 3: match the flag back onto the slf
     individual_file <- individual_file %>%
@@ -137,7 +147,7 @@ add_age_group <- function(data, age_var_name) {
   data <- data %>%
     dplyr::mutate(
       age_group = dplyr::case_when(
-        {{ age_var_name }} >= 0 & {{ age_var_name }} <= 4 ~ "0-4",
+        {{ age_var_name }} >= -1 & {{ age_var_name }} <= 4 ~ "0-4",
         {{ age_var_name }} >= 5 & {{ age_var_name }} <= 14 ~ "5-14",
         {{ age_var_name }} >= 15 & {{ age_var_name }} <= 24 ~ "15-24",
         {{ age_var_name }} >= 25 & {{ age_var_name }} <= 34 ~ "25-34",

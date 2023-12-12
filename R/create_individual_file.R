@@ -484,12 +484,6 @@ add_ch_columns <- function(episode_file, prefix, condition) {
         eval(condition),
         .data$record_keydate2,
         lubridate::NA_Date_
-      ),
-      # If end date is missing use the first day of next FY quarter
-      ch_ep_end = dplyr::if_else(
-        eval(condition) & is.na(.data$ch_ep_end),
-        start_next_fy_quarter(.data$sc_latest_submission),
-        .data$ch_ep_end
       )
     )
 }
@@ -500,6 +494,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
 #' @family individual_file
 add_hc_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
+
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE) %>%
     dplyr::mutate(
