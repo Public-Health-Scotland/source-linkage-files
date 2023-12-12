@@ -435,7 +435,8 @@ join_sc_client <- function(data,
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%
-      dplyr::left_join(sc_client,
+      dplyr::left_join(
+        sc_client %>% dplyr::select(-sc_send_lca),
         by = "chi",
         relationship = "many-to-one"
       )
