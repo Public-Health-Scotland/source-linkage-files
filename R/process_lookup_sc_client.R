@@ -150,9 +150,6 @@ process_lookup_sc_client <-
       )) == "Not Known")) %>%
       dplyr::arrange(chi, count_not_known) %>%
       dplyr::distinct(chi, .keep_all = TRUE) %>%
-      dplyr::mutate(
-        sc_send_lca = convert_sc_sending_location_to_lca(sending_location)
-      ) %>%
       dplyr::select(-sending_location)
 
     if (write_to_disk) {
