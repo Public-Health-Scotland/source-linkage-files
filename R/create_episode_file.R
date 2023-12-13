@@ -438,7 +438,7 @@ join_sc_client <- function(data,
     # Match on client variables by chi
     data_file <- data %>%
       dplyr::left_join(
-        sc_client %>% dplyr::select(-sc_send_lca),
+        sc_client,
         by = "chi",
         relationship = "many-to-one"
       )
