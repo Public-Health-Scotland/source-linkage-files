@@ -1,0 +1,12 @@
+library(targets)
+library(createslf)
+
+year <- "1718"
+
+processed_data_list <- targets::tar_read("processed_data_list_1718")
+
+# Run episode file
+create_episode_file(processed_data_list, year = year) %>%
+process_tests_episode_file(year = year)
+
+
