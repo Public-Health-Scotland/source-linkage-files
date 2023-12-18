@@ -47,7 +47,7 @@ process_sc_all_care_home <- function(
       )
     ) %>%
     dplyr::left_join(sc_demog_lookup,
-                     by = c("sending_location", "social_care_id")
+      by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest()
 
@@ -84,8 +84,8 @@ process_sc_all_care_home <- function(
     dplyr::select(
       -"min_ch_provider",
       -"max_ch_provider"
-    )  %>%
-  ungroup()
+    ) %>%
+    ungroup()
 
 
   fixed_nursing_provision <- fixed_ch_provider %>%
@@ -129,7 +129,7 @@ process_sc_all_care_home <- function(
       -"min_ch_provider",
       -"max_ch_provider"
     ) %>%
-    dplyr::ungroup()%>%
+    dplyr::ungroup() %>%
     # tidy up ch_provider using 6 when disagreeing values
     tidyr::fill(.data[["ch_provider"]], .direction = "downup")
 
@@ -236,7 +236,7 @@ process_sc_all_care_home <- function(
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(it_chi_deaths_data,
-                     by = "chi"
+      by = "chi"
     ) %>%
     # compare discharge date with NRS and CHI death date
     # if either of the dates are 5 or fewer days before discharge
@@ -249,8 +249,8 @@ process_sc_all_care_home <- function(
         FALSE
       ),
       ch_discharge_date = dplyr::if_else(.data[["dis_after_death"]],
-                                         .data[["death_date"]],
-                                         .data[["ch_discharge_date"]]
+        .data[["death_date"]],
+        .data[["ch_discharge_date"]]
       )
     ) %>%
     dplyr::ungroup() %>%
