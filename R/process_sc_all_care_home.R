@@ -85,7 +85,7 @@ process_sc_all_care_home <- function(
       -"min_ch_provider",
       -"max_ch_provider"
     )  %>%
-  ungroup()
+  dplyr::ungroup()
 
 
   fixed_nursing_provision <- fixed_ch_provider %>%
@@ -129,9 +129,9 @@ process_sc_all_care_home <- function(
       -"min_ch_provider",
       -"max_ch_provider"
     ) %>%
-    dplyr::ungroup()%>%
     # tidy up ch_provider using 6 when disagreeing values
-    tidyr::fill(.data[["ch_provider"]], .direction = "downup")
+    tidyr::fill(.data[["ch_provider"]], .direction = "downup") %>%
+ dplyr::ungroup()
 
   ready_to_merge <- fixed_ch_provider %>%
     # remove any duplicate records before merging for speed and simplicity
