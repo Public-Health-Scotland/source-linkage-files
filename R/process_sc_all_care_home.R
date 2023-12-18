@@ -133,7 +133,7 @@ process_sc_all_care_home <- function(
     # tidy up ch_provider using 6 when disagreeing values
     tidyr::fill(.data[["ch_provider"]], .direction = "downup")
 
-  ready_to_merge <-  %>%
+  ready_to_merge <- fixed_ch_provider %>%
     # remove any duplicate records before merging for speed and simplicity
     dplyr::distinct() %>%
     # counter for split episodes
