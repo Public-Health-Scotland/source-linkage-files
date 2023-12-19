@@ -58,10 +58,10 @@ process_sc_all_care_home <- function(
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
-    # sort data
     dplyr::mutate(
       ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]])
     ) %>%
+    # sort data
     dplyr::arrange(
       "sending_location",
       "social_care_id",
@@ -85,7 +85,10 @@ process_sc_all_care_home <- function(
       -"min_ch_provider",
       -"max_ch_provider"
     ) %>%
+    # tidy up ch_provider using 6 when disagreeing values
+    tidyr::fill(.data[["ch_provider"]], .direction = "downup") %>%
     dplyr::ungroup()
+
 
 
   fixed_nursing_provision <- fixed_ch_provider %>%
@@ -102,38 +105,7 @@ process_sc_all_care_home <- function(
     tidyr::fill(.data[["nursing_care_provision"]], .direction = "downup")
 
 
-  fixed_ch_provider <- fixed_nursing_provision %>%
-    dplyr::mutate(
-      ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]])
-    ) %>%
-    # sort data
-    # TODO - Different from SPSS. SPSS has nursing provider and period in the group_by. Needs investigation - does it matter?
-    dplyr::group_by(
-      .data[["sending_location"]],
-      .data[["social_care_id"]]
-    ) %>%
-    dplyr::group_by(
-      .data[["sending_location"]],
-      .data[["social_care_id"]]
-    ) %>%
-    dplyr::mutate(
-      min_ch_provider = min(.data[["ch_provider"]]),
-      max_ch_provider = max(.data[["ch_provider"]]),
-      ch_provider = dplyr::if_else(
-        .data[["min_ch_provider"]] != .data[["max_ch_provider"]],
-        6L,
-        .data[["ch_provider"]]
-      )
-    ) %>%
-    dplyr::select(
-      -"min_ch_provider",
-      -"max_ch_provider"
-    ) %>%
-    # tidy up ch_provider using 6 when disagreeing values
-    tidyr::fill(.data[["ch_provider"]], .direction = "downup") %>%
-    dplyr::ungroup()
-
-  ready_to_merge <- fixed_ch_provider %>%
+  ready_to_merge <- fixed_nursing_provision %>%
     # remove any duplicate records before merging for speed and simplicity
     dplyr::distinct() %>%
     # counter for split episodes
