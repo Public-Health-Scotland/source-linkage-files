@@ -80,7 +80,7 @@ end_fy_quarter <- function(quarter) {
 start_next_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
 
-  check_quarter_format(quarter)
+ # check_quarter_format(quarter)
 
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
