@@ -3,7 +3,7 @@ target_folder <- "/conf/hscdiip/01-Source-linkage-files"
 if (!dir.exists(target_folder)) {
   dir.create(target_folder, mode = "770")
 }
-folders <- c("1718", "1819", "1920", "2021", "2122", "2223")
+folders <- c("1718", "1819", "1920", "2021", "2122", "2223", "2324")
 year_n <- length(folders)
 resource_consumption <- data.frame(
   year = rep("0", year_n),
