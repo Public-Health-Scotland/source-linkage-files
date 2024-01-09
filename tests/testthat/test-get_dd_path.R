@@ -4,7 +4,7 @@ test_that("Delayed discharges file exists", {
   latest_dd_path <- get_dd_path()
 
   expect_s3_class(latest_dd_path, "fs_path")
-  expect_equal(fs::path_ext(latest_dd_path), "rds")
+  expect_equal(fs::path_ext(latest_dd_path), "parquet")
 })
 
 test_that("Delayed discharges file is as expected", {
