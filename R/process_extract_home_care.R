@@ -12,7 +12,6 @@
 process_extract_home_care <- function(
     data,
     year,
-    client_lookup,
     write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -21,7 +20,7 @@ process_extract_home_care <- function(
   year <- check_year_format(year)
 
   # Check that we have data for this year
-  if (!check_year_valid(year, "HC")) {
+  if (!check_year_valid(year, "hc")) {
     # If not return an empty tibble
     return(tibble::tibble())
   }
@@ -30,15 +29,15 @@ process_extract_home_care <- function(
 
   hc_data <- data %>%
     # select episodes for FY
-    dplyr::filter(
-      is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)
-    ) %>%
+    dplyr::filter(is_date_in_fyyear(
+      year,
+      .data[["record_keydate1"]],
+      .data[["record_keydate2"]]
+    )) %>%
     # remove any episodes where the latest submission was before the current year
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     ) %>%
-    # Match to client data
-    dplyr::left_join(client_lookup, by = c("sending_location", "social_care_id")) %>%
     dplyr::mutate(year = year)
 
   # Home Care Hours ---------------------------------------
@@ -97,8 +96,7 @@ process_extract_home_care <- function(
       "cost_total_net",
       "hc_provider",
       "hc_reablement",
-      "person_id",
-      tidyselect::starts_with("sc_")
+      "person_id"
     )
 
   if (write_to_disk) {

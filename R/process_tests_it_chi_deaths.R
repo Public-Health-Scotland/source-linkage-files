@@ -10,7 +10,7 @@ process_tests_it_chi_deaths <- function(data, update = previous_update()) {
     ),
     new_data = produce_it_chi_deaths_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "it_chi_deaths")
+    write_tests_xlsx(sheet_name = "it_chi_deaths", workbook_name = "lookup")
 
   return(comparison)
 }

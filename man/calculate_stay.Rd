@@ -31,7 +31,6 @@ If the \code{end_date} is missing then use the dummy discharge date.
 }
 \seealso{
 Other date functions: 
-\code{\link{check_quarter_format}()},
 \code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{convert_numeric_to_date}()},

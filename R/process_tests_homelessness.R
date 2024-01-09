@@ -10,11 +10,13 @@
 process_tests_homelessness <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
+  data <- rename_hscp(data)
+
   comparison <- produce_test_comparison(
     old_data = produce_slf_homelessness_tests(old_data),
     new_data = produce_slf_homelessness_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "HL1", year)
+    write_tests_xlsx(sheet_name = "HL1", year, workbook_name = "extract")
 
   return(comparison)
 }

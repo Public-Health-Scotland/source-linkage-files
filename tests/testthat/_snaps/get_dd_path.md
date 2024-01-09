@@ -3,7 +3,7 @@
     Code
       dplyr::glimpse(latest_dd_file, width = 0)
     Output
-      Rows: 178,635
+      Rows: 191,700
       Columns: 14
       $ cennum                 <dbl> ~
       $ MONTHFLAG              <chr> ~
@@ -12,8 +12,8 @@
       $ RDD                    <date> ~
       $ Delay_End_Date         <date> ~
       $ Delay_End_Reason       <chr> ~
-      $ primary_delay_reason   <chr> ~
-      $ secondary_delay_reason <chr> ~
+      $ Primary_Delay_Reason   <chr> ~
+      $ Secondary_Delay_Reason <chr> ~
       $ hbtreatcode            <chr> ~
       $ location               <chr> ~
       $ dd_responsible_lca     <chr> ~
