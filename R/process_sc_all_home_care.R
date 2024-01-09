@@ -15,13 +15,35 @@ process_sc_all_home_care <- function(
     data,
     sc_demog_lookup,
     write_to_disk = TRUE) {
+  replaced_dates <- data %>%
+    dplyr::mutate(
+      hc_service_end_date = fix_sc_missing_end_dates(
+        .data$hc_service_end_date,
+        .data$hc_period_end_date
+      ), hc_service_start_date = fix_sc_start_dates(
+        .data$hc_service_start_date,
+        .data$hc_period_start_date
+      ),
+      # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
+      hc_service_end_date = fix_sc_end_dates(
+        .data$hc_service_start_date,
+        .data$hc_service_end_date,
+        .data$period
+      )
+    )
+
+
   # Match on demographic data ---------------------------------------
 
-  matched_hc_data <- data %>%
+  matched_hc_data <- replaced_dates %>%
     dplyr::left_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
-    )
+    ) %>%
+    # when multiple social_care_id from sending_location for single CHI
+    # replace social_care_id with latest
+    replace_sc_id_with_latest()
+
 
   # Data Cleaning ---------------------------------------
 
@@ -30,45 +52,15 @@ process_sc_all_home_care <- function(
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
     dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
-    # period start and end dates
-    dplyr::mutate(
-      record_date = end_fy_quarter(.data$period),
-      qtr_start = start_fy_quarter(.data$period)
-    ) %>%
-    # Replace missing start dates with the start of the quarter
-    dplyr::mutate(hc_service_start_date = dplyr::if_else(
-      is.na(.data$hc_service_start_date),
-      .data$qtr_start,
-      .data$hc_service_start_date
-    )) %>%
-    # Replace really early start dates with start of the quarter
-    dplyr::mutate(hc_service_start_date = dplyr::if_else(
-      .data$hc_service_start_date < as.Date("1989-01-01"),
-      .data$qtr_start,
-      .data$hc_service_start_date
-    )) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
-    replace_sc_id_with_latest() %>%
     # fill reablement when missing but present in group
-    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$hc_service_start_date) %>%
+    dplyr::group_by(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$hc_service_start_date
+    ) %>%
     tidyr::fill(.data$reablement, .direction = "updown") %>%
     dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
-    dplyr::ungroup() %>%
-    # Only keep records which have some time in the quarter in which they were submitted
-    dplyr::mutate(
-      end_before_qtr = .data$qtr_start > .data$hc_service_end_date &
-        !is.na(.data$hc_service_end_date),
-      start_after_quarter = .data$record_date < .data$hc_service_start_date,
-      # Need to check - as we are potentially introducing bad start dates above
-      start_after_end = .data$hc_service_start_date > .data$hc_service_end_date &
-        !is.na(.data$hc_service_end_date)
-    ) %>%
-    dplyr::filter(
-      !.data$end_before_qtr,
-      !.data$start_after_quarter,
-      !.data$start_after_end
-    )
+    dplyr::ungroup()
 
 
   # Home Care Hours ---------------------------------------
@@ -77,8 +69,8 @@ process_sc_all_home_care <- function(
     dplyr::mutate(
       days_in_quarter = lubridate::time_length(
         lubridate::interval(
-          pmax(.data$qtr_start, .data$hc_service_start_date),
-          pmin(.data$record_date, .data$hc_service_end_date, na.rm = TRUE)
+          pmax(.data$hc_period_start_date, .data$hc_service_start_date),
+          pmin(.data$hc_period_end_date, .data$hc_service_end_date, na.rm = TRUE)
         ),
         "days"
       ) + 1L,
@@ -102,7 +94,12 @@ process_sc_all_home_care <- function(
   home_care_costs <- read_file(get_hc_costs_path())
 
   matched_costs <- home_care_hours %>%
-    dplyr::left_join(home_care_costs, by = c("sending_location_name" = "ca_name", "financial_year" = "year")) %>%
+    dplyr::left_join(home_care_costs,
+      by = c(
+        "sending_location_name" = "ca_name",
+        "financial_year" = "year"
+      )
+    ) %>%
     dplyr::mutate(hc_cost = .data$hc_hours * .data$hourly_cost)
 
   pivoted_hours <- matched_costs %>%
@@ -162,7 +159,7 @@ process_sc_all_home_care <- function(
     dplyr::arrange(.data$period) %>%
     dplyr::summarise(
       # Take the latest submitted value
-      dplyr::across(c("hc_service_end_date", "record_date"), dplyr::last),
+      dplyr::across(c("hc_service_end_date", "hc_period_end_date"), dplyr::last),
       # Store the period for the latest submitted record
       sc_latest_submission = dplyr::last(.data$period),
       # Sum the (quarterly) hours
@@ -178,6 +175,7 @@ process_sc_all_home_care <- function(
 
 
   # Create Source variables---------------------------------------
+
   all_hc_processed <- merge_data %>%
     # rename
     dplyr::rename(

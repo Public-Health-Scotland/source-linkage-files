@@ -17,6 +17,8 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "sending_location",
       "social_care_id",
       "period",
+      "period_start_date",
+      "period_end_date",
       "ch_provider",
       "reason_for_admission",
       "type_of_admission",
@@ -25,13 +27,21 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "ch_discharge_date",
       "age"
     ) %>%
+    dplyr::collect() %>%
+    dplyr::distinct() %>%
     # Correct FY 2017
     dplyr::mutate(period = dplyr::if_else(
       .data$period == "2017",
       "2017Q4",
       .data$period
     )) %>%
-    dplyr::collect() %>%
+    dplyr::mutate(
+      period_start_date = dplyr::if_else(
+        .data$period == "2017",
+        lubridate::as_date("2018-01-01"),
+        .data$period_start_date
+      )
+    ) %>%
     dplyr::mutate(
       dplyr::across(c(
         "sending_location",

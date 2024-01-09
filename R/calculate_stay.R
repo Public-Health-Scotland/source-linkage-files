@@ -36,9 +36,10 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     # Check the quarters
     if (anyNA(sc_qtr)) {
       cli::cli_abort("Some of the submitted quarters are missing")
-    } else {
-      sc_qtr <- check_quarter_format(sc_qtr)
     }
+    # else {
+    #   sc_qtr <- check_quarter_format(sc_qtr)
+    # }
 
     # Set Quarters
     qtr_end <- lubridate::add_with_rollback(

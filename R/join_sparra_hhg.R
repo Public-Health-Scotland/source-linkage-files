@@ -5,7 +5,7 @@
 #' @return The data including the SPARRA and HHG variables matched
 #' on to the episode file.
 join_sparra_hhg <- function(data, year) {
-  if (check_year_valid(year, "SPARRA")) {
+  if (check_year_valid(year, "sparra")) {
     data <- dplyr::left_join(
       data,
       read_file(get_sparra_path(year)) %>%
@@ -18,7 +18,7 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, sparra_start_fy = NA_integer_)
   }
 
-  if (check_year_valid(next_fy(year), "SPARRA")) {
+  if (check_year_valid(next_fy(year), "sparra")) {
     data <- dplyr::left_join(
       data,
       read_file(get_sparra_path(next_fy(year))) %>%
@@ -31,7 +31,7 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, sparra_end_fy = NA_integer_)
   }
 
-  if (check_year_valid(year, "HHG")) {
+  if (check_year_valid(year, "hhg")) {
     data <- dplyr::left_join(
       data,
       read_file(get_hhg_path(year)) %>%
@@ -44,7 +44,7 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, hhg_start_fy = NA_integer_)
   }
 
-  if (check_year_valid(next_fy(year), "HHG")) {
+  if (check_year_valid(next_fy(year), "hhg")) {
     data <- dplyr::left_join(
       data,
       read_file(get_hhg_path(next_fy(year))) %>%

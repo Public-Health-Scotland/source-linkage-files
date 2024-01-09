@@ -10,13 +10,15 @@
 process_tests_alarms_telecare <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
+  data <- rename_hscp(data)
+
   comparison <- produce_test_comparison(
     old_data = produce_source_at_tests(old_data),
     new_data = produce_source_at_tests(data)
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "AT", year)
+    write_tests_xlsx(sheet_name = "AT", year, workbook_name = "extract")
 
   return(comparison)
 }
