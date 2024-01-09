@@ -20,10 +20,10 @@ Get the path to the centrally held Scottish Postcode Directory
 }
 \seealso{
 Other lookup file paths: 
-\code{\link{get_datazone_pop_path}()},
 \code{\link{get_gpprac_ref_path}()},
 \code{\link{get_locality_path}()},
 \code{\link{get_lookups_dir}()},
+\code{\link{get_pop_path}()},
 \code{\link{get_simd_path}()}
 }
 \concept{lookup file paths}
