@@ -23,7 +23,6 @@ end_fy_quarter("2019Q1")
 \seealso{
 Other date functions: 
 \code{\link{calculate_stay}()},
-\code{\link{check_quarter_format}()},
 \code{\link{compute_mid_year_age}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{convert_numeric_to_date}()},

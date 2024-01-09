@@ -29,7 +29,6 @@ midpoint_fy
 
 Other date functions: 
 \code{\link{calculate_stay}()},
-\code{\link{check_quarter_format}()},
 \code{\link{convert_date_to_numeric}()},
 \code{\link{convert_numeric_to_date}()},
 \code{\link{end_fy_quarter}()},
