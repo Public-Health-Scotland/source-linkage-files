@@ -4,7 +4,8 @@ library(createslf)
 year <- "2324"
 
 processed_data_list <- targets::tar_read("processed_data_list_2324",
-                                         store = fs::path("/conf/sourcedev/Source_Linkage_File_Updates/", "_targets"))
+  store = fs::path("/conf/sourcedev/Source_Linkage_File_Updates/", "_targets")
+)
 
 # Run episode file
 create_episode_file(processed_data_list, year = year) %>%
