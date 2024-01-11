@@ -12,27 +12,27 @@ read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = 
   ) %>%
     dplyr::select(
       "latest_record_flag",
-      "extract_date",
+      "period",
       "sending_location",
+      "sending_location_name",
       "social_care_id",
-      "upi",
       "chi_upi",
-      "submitted_postcode",
-      "chi_postcode",
-      "submitted_date_of_birth",
       "chi_date_of_birth",
-      "submitted_gender",
+      "date_of_death",
+      "chi_postcode",
+      "submitted_postcode",
       "chi_gender_code"
-    ) %>%
-    dplyr::collect() %>%
+    ) %>% dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(c(
         "latest_record_flag",
         "sending_location",
-        "submitted_gender",
         "chi_gender_code"
       ), as.integer)
-    )
+    )%>%
+    dplyr::distinct()
 
   return(sc_demog)
 }
+
+
