@@ -22,17 +22,16 @@ read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = 
       "chi_postcode",
       "submitted_postcode",
       "chi_gender_code"
-    ) %>% dplyr::collect() %>%
+    ) %>%
+    dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(c(
         "latest_record_flag",
         "sending_location",
         "chi_gender_code"
       ), as.integer)
-    )%>%
+    ) %>%
     dplyr::distinct()
 
   return(sc_demog)
 }
-
-
