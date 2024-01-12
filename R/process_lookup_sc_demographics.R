@@ -28,36 +28,63 @@ process_lookup_sc_demographics <- function(
     dplyr::pull(.data$pc7)
 
 
-  # Data Cleaning ---------------------------------------
-
-  sc_demog <- data %>%
-    dplyr::mutate(
-      # use chi if upi is NA
-      upi = dplyr::coalesce(.data$upi, .data$chi_upi),
-      # check gender code - replace code 99 with 9
-      submitted_gender = replace(.data$submitted_gender, .data$submitted_gender == 99L, 9L)
-    ) %>%
-    dplyr::mutate(
-      # use CHI sex if available
-      gender = dplyr::if_else(
-        is.na(.data$chi_gender_code) | .data$chi_gender_code == 9L,
-        .data$submitted_gender,
-        .data$chi_gender_code
-      ),
-      # Use CHI DoB if available
-      dob = dplyr::coalesce(.data$chi_date_of_birth, .data$submitted_date_of_birth)
-    ) %>%
+  #  Fill in missing data and flag latest cases to keep ---------------------------------------
+  sc_demog1 <- sc_demog %>%
+  # sc_demog <- data %>%
+      dplyr::rename(upi = chi_upi,
+                  gender = chi_gender_code,
+                  dob = chi_date_of_birth) %>%
+    # fill in missing demographic details
+    dplyr::arrange(period, social_care_id) %>%
+    dplyr::group_by(social_care_id, sending_location) %>%
+    tidyr::fill(upi, .direction = ("updown")) %>%
+    tidyr::fill(dob, .direction = ("updown")) %>%
+    tidyr::fill(date_of_death, .direction = ("updown")) %>%
+    tidyr::fill(gender , .direction = ("updown")) %>%
+    tidyr::fill(chi_postcode, .direction = ("updown")) %>%
+    tidyr::fill(submitted_postcode, .direction = ("updown")) %>%
     # format postcodes using `phsmethods`
-    dplyr::mutate(dplyr::across(
-      tidyselect::contains("postcode"),
-      ~ phsmethods::format_postcode(.x, format = "pc7")
-    ))
+    dplyr::mutate(dplyr::across(tidyselect::contains("postcode"), ~ phsmethods::format_postcode(.x, format = "pc7")))# are sc postcodes even used anywhere?
+
+    # 4924132
+    # 4946071
+  # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
+  sc_demog2 <- sc_demog1 %>%
+    dplyr::group_by(upi) %>%
+    dplyr::mutate(latest = dplyr::last(period)) %>%  # flag latest period for chi
+    dplyr::group_by(upi, social_care_id) %>%
+    dplyr::mutate(latest_sc_id = dplyr::last(period)) %>% # flag latest period for social care
+    dplyr::group_by(upi) %>%
+    dplyr::mutate(latest_flag = ifelse(latest == period | is.na(upi), 1, 0),
+                  keep = ifelse(latest_sc_id == period, 1, 0))#
+
+ # dplyr::n_distinct(sc_demog2$upi) # 524810
+  #dplyr::n_distinct(sc_demog2$social_care_id) # 636404
+
+  sc_demog3 <- sc_demog2 %>%
+    dplyr::filter(keep == 1) %>% # filter to only keep latest record for sc id and chi
+    dplyr::group_by(upi, social_care_id) %>%
+    dplyr::select(-period, -latest_record_flag, -latest, -latest_sc_id, -keep) %>%
+    dplyr::distinct() %>%
+    dplyr::ungroup()
+
+  test <- sc_demog3 %>%
+    dplyr::group_by(social_care_id, sending_location) %>%
+    dplyr::mutate(count_scid = dplyr::n()) %>%
+    dplyr::group_by(upi)
+
+  # check to make sure all cases of chi are still there
+ # dplyr::n_distinct(sc_demog3$upi) # 524810
+  #dplyr::n_distinct(sc_demog3$social_care_id) # 636404
+
+
+# postcodes ---------------------------------------------------------------
 
   # count number of na postcodes
-  na_postcodes <- sc_demog %>%
+  na_postcodes1 <- sc_demog3 %>%
     dplyr::count(dplyr::across(tidyselect::contains("postcode"), ~ is.na(.x)))
 
-  sc_demog <- sc_demog %>%
+  sc_demog4 <- sc_demog3 %>%
     # remove dummy postcodes invalid postcodes missed by regex check
     dplyr::mutate(dplyr::across(
       tidyselect::ends_with("_postcode"),
@@ -69,15 +96,16 @@ process_lookup_sc_demographics <- function(
       ~ dplyr::if_else(stringr::str_detect(.x, uk_pc_regexp), .x, NA)
     )) %>%
     dplyr::select(
-      "latest_record_flag",
-      "extract_date",
       "sending_location",
       "social_care_id",
       "upi",
       "gender",
       "dob",
+      "date_of_death",
       "submitted_postcode",
-      "chi_postcode"
+      "chi_postcode",
+      "period", "latest_record_flag", "latest", "latest_sc_id", "keep",
+      "latest_flag"
     ) %>%
     # check if submitted_postcode matches with postcode lookup
     dplyr::mutate(
@@ -95,23 +123,27 @@ process_lookup_sc_demographics <- function(
     ))
 
   # Check where the postcodes are coming from
-  sc_demog %>%
+  sc_demog4 %>%
     dplyr::count(.data$postcode_type)
 
   # count number of replaced postcode - compare with count above
-  na_replaced_postcodes <- sc_demog %>%
+  na_replaced_postcodes <- sc_demog4 %>%
     dplyr::count(dplyr::across(tidyselect::ends_with("_postcode"), ~ is.na(.x)))
 
 
-  sc_demog_lookup <- sc_demog %>%
+  sc_demog_lookup <- sc_demog4 %>%
+    dplyr::filter(keep == 1) %>% # filter to only keep latest record for sc id and chi
+      dplyr::select(-period, -latest_record_flag, -latest, -latest_sc_id, -keep) %>%
+    dplyr::group_by(upi, social_care_id) %>%
+    dplyr::distinct() %>%
+   # dplyr::ungroup()
     # group by sending location and ID
     dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
     # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
-      .data$latest_record_flag,
-      .data$extract_date
+      .data$latest_flag
     ) %>%
     # summarise to select the last (non NA) submission
     dplyr::summarise(
