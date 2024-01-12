@@ -187,6 +187,7 @@ aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
     individual_file_cols5[, chi := NULL],
     individual_file_cols6[, chi := NULL]
   )
+  individual_file <- individual_file[, year := year]
 
   # convert back to tibble
   return(dplyr::as_tibble(individual_file))
