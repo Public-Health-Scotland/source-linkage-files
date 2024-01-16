@@ -56,24 +56,14 @@ process_lookup_sc_demographics <- function(
     dplyr::mutate(last_sc_id = dplyr::last(social_care_id)) %>%
     dplyr::mutate(latest_flag = ifelse((latest == period & last_sc_id == social_care_id) | is.na(chi), 1, 0),
                   keep = ifelse(latest_sc_id == period, 1, 0)) %>%
-    dplyr::ungroup()
-
-  dplyr::n_distinct(sc_demog2$chi) # 524810
-  dplyr::n_distinct(sc_demog2$social_care_id) # 636404
-
-  sc_demog <- sc_demog %>%
+    dplyr::ungroup() %>%
     dplyr::select(-period, -latest_record_flag, -latest, -last_sc_id, -latest_sc_id) %>%
     dplyr::distinct()
-
-  # check to make sure all cases of chi are still there
-  dplyr::n_distinct(sc_demog3$chi) # 524810
-  dplyr::n_distinct(sc_demog3$social_care_id) # 636404
-
 
   # postcodes ---------------------------------------------------------------
 
   # count number of na postcodes
-  na_postcodes <- sc_demog3 %>%
+  na_postcodes <- sc_demog %>%
     dplyr::count(dplyr::across(tidyselect::contains("postcode"), ~ is.na(.x)))
 
   sc_demog <- sc_demog %>%

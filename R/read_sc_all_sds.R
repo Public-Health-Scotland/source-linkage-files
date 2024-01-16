@@ -22,9 +22,8 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       "sds_option_1",
       "sds_option_2",
       "sds_option_3",
-      "sds_start_date_after_end_date",
-      "sds_start_date_after_period_end_date",
-      "sds_end_date_not_within_period"
+      "sds_start_date_after_end_date",# get fixed
+      "sds_start_date_after_period_end_date" # get removed
     ) %>%
     dplyr::collect() %>%
     dplyr::distinct() %>%
@@ -33,8 +32,7 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       "sds_option_1",
       "sds_option_2",
       "sds_option_3"
-    ), as.integer)) %>%
-    dplyr::filter(.data$sds_start_date_after_period_end_date != 1)
+    ), as.integer))
 
   return(sds_full_data)
 }
