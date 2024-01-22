@@ -44,21 +44,29 @@ process_sc_all_sds <- function(
   )
   sds_full_clean[, (cols_sds_option) := lapply(.SD, function(x) {
     data.table::fifelse(x == 1L, TRUE, FALSE)
-  })
-  , .SDcols = cols_sds_option]
+  }),
+  .SDcols = cols_sds_option
+  ]
 
   # Derived SDS option 4 when a person receives more than one option
   sds_full_clean[,
-                 sds_option_4 := rowSums(.SD) > 1L,
-                 .SDcols = cols_sds_option]
+    sds_option_4 := rowSums(.SD) > 1L,
+    .SDcols = cols_sds_option
+  ]
 
   # If SDS start date or end date is missing, assign start/end of FY
-  sds_full_clean[,
-                 sds_start_date := fix_sc_start_dates(sds_start_date, sds_period_start_date)]
-  sds_full_clean[,
-                 sds_end_date := fix_sc_missing_end_dates(sds_end_date, sds_period_end_date)]
-  sds_full_clean[,
-                 sds_end_date := fix_sc_end_dates(sds_start_date, sds_end_date, period)]
+  sds_full_clean[
+    ,
+    sds_start_date := fix_sc_start_dates(sds_start_date, sds_period_start_date)
+  ]
+  sds_full_clean[
+    ,
+    sds_end_date := fix_sc_missing_end_dates(sds_end_date, sds_period_end_date)
+  ]
+  sds_full_clean[
+    ,
+    sds_end_date := fix_sc_end_dates(sds_start_date, sds_end_date, period)
+  ]
 
 
 
@@ -84,41 +92,56 @@ process_sc_all_sds <- function(
   )
   rm(sds_full_clean)
   sds_full_clean_long <- sds_full_clean_long[received == TRUE, ]
-  sds_full_clean_long[,
-                      sds_option := paste0("SDS-", sub("sds_option_", "", sds_option))]
+  sds_full_clean_long[
+    ,
+    sds_option := paste0("SDS-", sub("sds_option_", "", sds_option))
+  ]
 
   # Filter rows where they received a package and remove duplicates
   sds_full_clean_long <- unique(sds_full_clean_long)
 
   # Include source variables
-  sds_full_clean_long[, c("smrtype",
-                          "recid",
-                          "sc_send_lca") :=
-                        list(sds_option,
-                             "SDS",
-                             convert_sc_sending_location_to_lca(sending_location))]
-  sds_full_clean_long$person_id = paste0(sds_full_clean_long$sending_location,
-                                         "-",
-                                         sds_full_clean_long$social_care_id)
+  sds_full_clean_long[, c(
+    "smrtype",
+    "recid",
+    "sc_send_lca"
+  ) :=
+    list(
+      sds_option,
+      "SDS",
+      convert_sc_sending_location_to_lca(sending_location)
+    )]
+  sds_full_clean_long$person_id <- paste0(
+    sds_full_clean_long$sending_location,
+    "-",
+    sds_full_clean_long$social_care_id
+  )
 
   # Group, arrange and create flags for episodes
   sds_full_clean_long[,
-                      c("period_rank",
-                        "record_keydate1_rank") := list(rank(period),
-                                                        rank(record_keydate1)),
-                      by = .(sending_location, social_care_id, smrtype)]
+    c(
+      "period_rank",
+      "record_keydate1_rank"
+    ) := list(
+      rank(period),
+      rank(record_keydate1)
+    ),
+    by = .(sending_location, social_care_id, smrtype)
+  ]
   data.table::setorder(sds_full_clean_long, period_rank, record_keydate1_rank)
 
   sds_full_clean_long[,
-                      distinct_episode :=
-                        (data.table::shift(record_keydate2, type = "lag") < record_keydate1) %>%
-                        tidyr::replace_na(TRUE),
-                      by = .(sending_location, social_care_id, smrtype)]
+    distinct_episode :=
+      (data.table::shift(record_keydate2, type = "lag") < record_keydate1) %>%
+      tidyr::replace_na(TRUE),
+    by = .(sending_location, social_care_id, smrtype)
+  ]
 
   sds_full_clean_long[,
-                      episode_counter :=
-                        cumsum(distinct_episode),
-                      by = .(sending_location, social_care_id, smrtype)]
+    episode_counter :=
+      cumsum(distinct_episode),
+    by = .(sending_location, social_care_id, smrtype)
+  ]
 
   # Merge episodes by episode counter
   final_data <- sds_full_clean_long[, .(
