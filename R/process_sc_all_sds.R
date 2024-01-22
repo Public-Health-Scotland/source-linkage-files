@@ -15,123 +15,129 @@ process_sc_all_sds <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
-  matched_sds_data <- data %>%
+  matched_sds_data <- all_sds_extract %>%
     dplyr::left_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
-    replace_sc_id_with_latest()
-
-  # Data Cleaning ---------------------------------------
-  sds_full_clean <- matched_sds_data %>%
-    # Deal with SDS option 4
-    # First turn the option flags into a logical T/F
-    dplyr::mutate(dplyr::across(
-      tidyselect::starts_with("sds_option_"),
-      ~ dplyr::case_when(
-        .x == 1L ~ TRUE,
-        .x == 0L ~ FALSE,
-        is.na(.x) ~ FALSE
-      )
-    )) %>%
-    # SDS option 4 is derived when a person receives more than one option.
-    # e.g. if a person has options 1 and 2 then option 4 will be derived
+    replace_sc_id_with_latest() %>%
+    # sds_options may contain only a few NA, replace NA by 0
     dplyr::mutate(
-      sds_option_4 = rowSums(
-        dplyr::pick(tidyselect::starts_with("sds_option_"))
-      ) > 1L,
-      .after = .data$sds_option_3
-    ) %>%
-    # If SDS start date is missing, assign start of FY
-    dplyr::mutate(
-      sds_start_date = fix_sc_start_dates(
-        .data$sds_start_date,
-        .data$sds_period_start_date
-      ),
-      # If SDS end date is missing, assign end of FY
-      sds_end_date = fix_sc_missing_end_dates(
-        .data$sds_end_date,
-        .data$sds_period_end_date
-      ),
-      # Fix sds_end_date is earlier than sds_start_date by setting end_date to be the end of fyear
-      sds_end_date = fix_sc_end_dates(
-        .data$sds_start_date,
-        .data$sds_end_date,
-        .data$period
-      )
-    ) %>%
-    # rename for matching source variables
-    dplyr::rename(
-      record_keydate1 = .data$sds_start_date,
-      record_keydate2 = .data$sds_end_date
-    ) %>%
-    # Pivot longer on sds option variables
-    tidyr::pivot_longer(
-      cols = tidyselect::contains("sds_option_"),
-      names_to = "sds_option",
-      names_prefix = "sds_option_",
-      names_transform = list(sds_option = ~ paste0("SDS-", .x)),
-      values_to = "received"
-    ) %>%
-    # Only keep rows where they received a package and remove duplicates
-    dplyr::filter(.data$received) %>%
-    dplyr::distinct() %>%
-    # Include source variables
-    dplyr::mutate(
-      smrtype = dplyr::case_when(
-        sds_option == "SDS-1" ~ "SDS-1",
-        sds_option == "SDS-2" ~ "SDS-2",
-        sds_option == "SDS-3" ~ "SDS-3",
-        sds_option == "SDS-4" ~ "SDS-4"
-      ),
-      recid = "SDS",
-      # Create person id variable
-      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
-      # Use function for creating sc send lca variables
-      sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
+      sds_option_1 = tidyr::replace_na(sds_option_1, 0),
+      sds_option_2 = tidyr::replace_na(sds_option_2, 0),
+      sds_option_3 = tidyr::replace_na(sds_option_3, 0)
     )
 
-  final_data <- sds_full_clean %>%
-    # use as.data.table to change the data format to data.table to accelerate
-    data.table::as.data.table() %>%
-    dplyr::group_by(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$smrtype
-    ) %>%
-    dplyr::arrange(.data$period,
-      .data$record_keydate1,
-      .by_group = TRUE
-    ) %>%
-    # Create a flag for episodes that are going to be merged
-    # Create an episode counter
-    dplyr::mutate(
-      distinct_episode = (.data$record_keydate1 > dplyr::lag(.data$record_keydate2)) %>%
-        tidyr::replace_na(TRUE),
-      episode_counter = cumsum(.data$distinct_episode)
-    ) %>%
-    # Group by episode counter and merge episodes
-    dplyr::group_by(.data$episode_counter, .add = TRUE) %>%
-    dplyr::summarise(
-      sc_latest_submission = dplyr::last(.data$period),
-      record_keydate1 = min(.data$record_keydate1),
-      record_keydate2 = max(.data$record_keydate2),
-      sending_location = dplyr::last(.data$sending_location),
-      social_care_id = dplyr::last(.data$social_care_id),
-      chi = dplyr::last(.data$chi),
-      gender = dplyr::last(.data$gender),
-      dob = dplyr::last(.data$dob),
-      postcode = dplyr::last(.data$postcode),
-      recid = dplyr::last(.data$recid),
-      person_id = dplyr::last(.data$person_id),
-      sc_send_lca = dplyr::last(.data$sc_send_lca)
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-.data$episode_counter) %>%
-    # change the data format from data.table to data.frame
-    tibble::as_tibble()
+  # Data Cleaning ---------------------------------------
+  # Convert matched_sds_data to data.table
+  sds_full_clean <- data.table::as.data.table(matched_sds_data)
+  rm(matched_sds_data)
+
+  # Deal with SDS option 4
+  # Convert option flags into logical T/F
+  cols_sds_option <- grep(
+    "^sds_option_",
+    names(sds_full_clean),
+    value = TRUE
+  )
+  sds_full_clean[, (cols_sds_option) := lapply(.SD, function(x) {
+    data.table::fifelse(x == 1L, TRUE, FALSE)
+  })
+  , .SDcols = cols_sds_option]
+
+  # Derived SDS option 4 when a person receives more than one option
+  sds_full_clean[,
+                 sds_option_4 := rowSums(.SD) > 1L,
+                 .SDcols = cols_sds_option]
+
+  # If SDS start date or end date is missing, assign start/end of FY
+  sds_full_clean[,
+                 sds_start_date := fix_sc_start_dates(sds_start_date, sds_period_start_date)]
+  sds_full_clean[,
+                 sds_end_date := fix_sc_missing_end_dates(sds_end_date, sds_period_end_date)]
+  sds_full_clean[,
+                 sds_end_date := fix_sc_end_dates(sds_start_date, sds_end_date, period)]
+
+
+
+  # Rename for matching source variables
+  data.table::setnames(
+    sds_full_clean,
+    c("sds_start_date", "sds_end_date"),
+    c("record_keydate1", "record_keydate2")
+  )
+
+  cols_sds_option <- grep(
+    "^sds_option_",
+    names(sds_full_clean),
+    value = TRUE
+  )
+  # Pivot longer on sds option variables
+  sds_full_clean_long <- data.table::melt(
+    sds_full_clean,
+    id.vars = setdiff(names(sds_full_clean), cols_sds_option),
+    measure.vars = cols_sds_option,
+    variable.name = "sds_option",
+    value.name = "received"
+  )
+  rm(sds_full_clean)
+  sds_full_clean_long <- sds_full_clean_long[received == TRUE, ]
+  sds_full_clean_long[,
+                      sds_option := paste0("SDS-", sub("sds_option_", "", sds_option))]
+
+  # Filter rows where they received a package and remove duplicates
+  sds_full_clean_long <- unique(sds_full_clean_long)
+
+  # Include source variables
+  sds_full_clean_long[, c("smrtype",
+                          "recid",
+                          "sc_send_lca") :=
+                        list(sds_option,
+                             "SDS",
+                             convert_sc_sending_location_to_lca(sending_location))]
+  sds_full_clean_long$person_id = paste0(sds_full_clean_long$sending_location,
+                                         "-",
+                                         sds_full_clean_long$social_care_id)
+
+  # Group, arrange and create flags for episodes
+  sds_full_clean_long[,
+                      c("period_rank",
+                        "record_keydate1_rank") := list(rank(period),
+                                                        rank(record_keydate1)),
+                      by = .(sending_location, social_care_id, smrtype)]
+  data.table::setorder(sds_full_clean_long, period_rank, record_keydate1_rank)
+
+  sds_full_clean_long[,
+                      distinct_episode :=
+                        (data.table::shift(record_keydate2, type = "lag") < record_keydate1) %>%
+                        tidyr::replace_na(TRUE),
+                      by = .(sending_location, social_care_id, smrtype)]
+
+  sds_full_clean_long[,
+                      episode_counter :=
+                        cumsum(distinct_episode),
+                      by = .(sending_location, social_care_id, smrtype)]
+
+  # Merge episodes by episode counter
+  final_data <- sds_full_clean_long[, .(
+    sc_latest_submission = data.table::last(period),
+    record_keydate1 = min(record_keydate1),
+    record_keydate2 = max(record_keydate2),
+    chi = data.table::last(chi),
+    gender = data.table::last(gender),
+    dob = data.table::last(dob),
+    postcode = data.table::last(postcode),
+    recid = data.table::last(recid),
+    person_id = data.table::last(person_id),
+    sc_send_lca = data.table::last(sc_send_lca)
+  ), by = .(sending_location, social_care_id, smrtype, episode_counter)]
+  rm(sds_full_clean_long)
+
+  # Drop episode_counter and convert back to data.frame if needed
+  final_data <- as.data.frame(final_data[, -"episode_counter"])
+  # final_data now holds the processed data in the format of a data.frame
 
   if (write_to_disk) {
     write_file(
