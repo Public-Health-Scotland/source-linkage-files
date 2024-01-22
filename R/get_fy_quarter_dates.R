@@ -15,8 +15,6 @@
 start_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
 
-  # check_quarter_format(quarter)
-
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
@@ -46,8 +44,6 @@ start_fy_quarter <- function(quarter) {
 #' @family date functions
 end_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
-
-  # check_quarter_format(quarter)
 
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
@@ -80,8 +76,6 @@ end_fy_quarter <- function(quarter) {
 start_next_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
 
-  # check_quarter_format(quarter)
-
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
@@ -111,8 +105,6 @@ start_next_fy_quarter <- function(quarter) {
 #' @family date functions
 end_next_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
-
-  # check_quarter_format(quarter)
 
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
