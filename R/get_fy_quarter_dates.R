@@ -128,28 +128,3 @@ end_next_fy_quarter <- function(quarter) {
 
   return(end_next_fy_quarter)
 }
-
-#' Check quarter format
-#'
-#' @inheritParams start_fy_quarter
-#'
-#' @return `quarter` invisibly if no issues were found
-#'
-#' @family date functions
-# check_quarter_format <- function(quarter) {
-#   stopifnot(typeof(quarter) == "character")
-#
-#   if (any(
-#     stringr::str_detect(quarter, "^\\d{4}Q[1-4]$", negate = TRUE),
-#     na.rm = TRUE
-#   )) {
-#     cli::cli_abort(
-#       c("{.var quarter} must be in the format {.val YYYYQx}
-#                    where {.val x} is the quarter number.",
-#         "v" = "For example {.val 2019Q1}."
-#       )
-#     )
-#   }
-#
-#   return(invisible(quarter))
-# }
