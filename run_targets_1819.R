@@ -2,7 +2,7 @@ library(targets)
 
 Sys.setenv("CREATESLF_KEYRING_PASS" = "createslf")
 
-year = "1819"
+year <- "1819"
 
 # use targets for the process until testing episode files
 tar_make_future(
