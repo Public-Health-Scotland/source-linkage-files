@@ -11,7 +11,7 @@ replace_sc_id_with_latest <- function(data) {
   )
 
   # select variables we need
-  filter_data <- data %>%
+  filter_data <- data %>% # matched_sds_data %>% #
     dplyr::select(
       "sending_location", "social_care_id", "chi", "latest_flag"
     ) %>%
@@ -27,7 +27,7 @@ replace_sc_id_with_latest <- function(data) {
 
   return_data <- change_sc_id %>%
     # Match back onto data
-    dplyr::right_join(data,
+    dplyr::right_join(data, # matched_sds_data,#
       by = c("sending_location", "chi"),
       multiple = "all"
     ) %>%

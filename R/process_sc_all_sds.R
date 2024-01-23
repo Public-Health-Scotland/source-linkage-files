@@ -14,12 +14,11 @@ process_sc_all_sds <- function(
     data,
     sc_demog_lookup,
     write_to_disk = TRUE) {
-
   # Match on demographics data (chi, gender, dob and postcode)
-  matched_sds_data <- sc_sds %>% # data %>%
+  matched_sds_data <- data %>% #
     dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
-    dplyr::full_join(
-      sc_demographics_lookup, # sc_demog_lookup,
+    dplyr::right_join(
+      sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
@@ -66,14 +65,16 @@ process_sc_all_sds <- function(
         .data$sds_period_end_date
       )
     ) %>%
-    dplyr::select(-sds_period_start_date, -sds_period_end_date,
-                  -sds_start_date_after_end_date) %>%
+    dplyr::select(
+      -sds_period_start_date, -sds_period_end_date,
+      -sds_start_date_after_end_date
+    ) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$sds_start_date,
       record_keydate2 = .data$sds_end_date
     ) %>%
-      dplyr::distinct() %>%
+    dplyr::distinct() %>%
     # Pivot longer on sds option variables
     tidyr::pivot_longer(
       cols = tidyselect::contains("sds_option_"),
@@ -119,7 +120,7 @@ process_sc_all_sds <- function(
       distinct_episode = (.data$record_keydate1 > dplyr::lag(.data$record_keydate2)) %>%
         tidyr::replace_na(TRUE),
       episode_counter = cumsum(.data$distinct_episode)
-    ) #%>%
+    ) %>%
     # Group by episode counter and merge episodes
     dplyr::group_by(.data$episode_counter, .add = TRUE) %>%
     dplyr::summarise(

@@ -50,11 +50,11 @@ process_lookup_sc_demographics <- function(
 
   # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
   sc_demog <- sc_demog %>%
-    dplyr::group_by(chi) %>%
+    dplyr::group_by(chi, sending_location) %>%
     dplyr::mutate(latest = dplyr::last(period)) %>% # flag latest period for chi
-    dplyr::group_by(chi, social_care_id) %>%
+    dplyr::group_by(chi, social_care_id, sending_location) %>%
     dplyr::mutate(latest_sc_id = dplyr::last(period)) %>% # flag latest period for social care
-    dplyr::group_by(chi) %>%
+    dplyr::group_by(chi, sending_location) %>%
     dplyr::mutate(last_sc_id = dplyr::last(social_care_id)) %>%
     dplyr::mutate(
       latest_flag = ifelse((latest == period & last_sc_id == social_care_id) | is.na(chi), 1, 0),
@@ -63,7 +63,7 @@ process_lookup_sc_demographics <- function(
     dplyr::ungroup()
 
   sc_demog <- sc_demog %>%
-  dplyr::select(-period, -latest_record_flag, -latest, -last_sc_id, -latest_sc_id) %>%
+    dplyr::select(-period, -latest_record_flag, -latest, -last_sc_id, -latest_sc_id) %>%
     dplyr::distinct()
 
   # postcodes ---------------------------------------------------------------
