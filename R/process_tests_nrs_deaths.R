@@ -15,7 +15,7 @@ process_tests_nrs_deaths <- function(data, year) {
     old_data = produce_source_nrs_tests(old_data),
     new_data = produce_source_nrs_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "NRS", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "nrs", year, workbook_name = "extract")
 
   return(comparison)
 }

@@ -15,7 +15,7 @@ process_tests_care_home <- function(data, year) {
     old_data = produce_source_ch_tests(old_data),
     new_data = produce_source_ch_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "CH", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "ch", year, workbook_name = "extract")
 
   return(comparison)
 }
