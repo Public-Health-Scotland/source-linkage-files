@@ -591,23 +591,23 @@ list(
         data = episode_file,
         year = year
       )
-    ),
-    tar_target(
-      individual_file,
-      create_individual_file(
-        episode_file = episode_file,
-        year = year,
-        homelessness_lookup = homelessness_lookup,
-        write_to_disk = write_to_disk
-      )
-    ),
-    tar_target(
-      individual_file_tests,
-      process_tests_individual_file(
-        data = individual_file,
-        year = year
-      )
-    ) # ,
+    )#,
+    # tar_target(
+    #   individual_file,
+    #   create_individual_file(
+    #     episode_file = episode_file,
+    #     year = year,
+    #     homelessness_lookup = homelessness_lookup,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+    # tar_target(
+    #   individual_file_tests,
+    #   process_tests_individual_file(
+    #     data = individual_file,
+    #     year = year
+    #   )
+    # ) # ,
     # tar_target(
     #   episode_file_dataset,
     #   arrow::write_dataset(
