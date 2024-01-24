@@ -60,19 +60,11 @@ produce_individual_file_tests <- function(data) {
 
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    dplyr::mutate(
-      unique_anon_chi = dplyr::lag(.data$anon_chi) != .data$anon_chi,
-      n_missing_anon_chi = is_missing(.data$anon_chi),
-      n_males = .data$gender == 1L,
-      n_females = .data$gender == 2L,
-      n_postcode = !is.na(.data$postcode) | !.data$postcode == "",
-      n_missing_postcode = is_missing(.data$postcode),
-      missing_dob = is.na(.data$dob)
-    ) %>%
+    create_demog_test_flags(chi = anon_chi) %>%
     create_hb_test_flags(.data$hbrescode) %>%
     create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
     # keep variables for comparison
-    dplyr::select(c("unique_anon_chi":dplyr::last_col())) %>%
+    dplyr::select(c("unique_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
