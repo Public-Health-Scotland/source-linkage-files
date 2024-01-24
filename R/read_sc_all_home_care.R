@@ -18,6 +18,8 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "hc_service_start_date",
       "hc_service_end_date",
       "period",
+      "hc_period_start_date",
+      "hc_period_end_date",
       "financial_year",
       "hc_service",
       "hc_service_provider",
@@ -25,7 +27,15 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "hc_hours_derived",
       "total_staff_home_care_hours",
       "multistaff_input",
-      "hc_start_date_after_end_date"
+      "hc_start_date_after_end_date",
+      "hc_start_date_after_period_end_date"
+    ) %>%
+    dplyr::mutate(
+      hc_period_start_date = dplyr::if_else(
+        .data$period == "2017",
+        lubridate::as_date("2018-01-01"),
+        .data$hc_period_start_date
+      )
     ) %>%
     # fix 2017
     dplyr::mutate(period = dplyr::if_else(
@@ -34,9 +44,8 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       .data$period
     )) %>%
     # drop rows start date after end date
-    dplyr::filter(.data$hc_start_date_after_end_date == 0L) %>%
-    dplyr::select(!"hc_start_date_after_end_date") %>%
     dplyr::collect() %>%
+    dplyr::distinct() %>%
     dplyr::mutate(dplyr::across(c(
       "sending_location",
       "financial_year",

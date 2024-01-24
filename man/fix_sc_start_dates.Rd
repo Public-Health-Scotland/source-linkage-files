@@ -4,7 +4,7 @@
 \alias{fix_sc_start_dates}
 \title{Fix sc start dates}
 \usage{
-fix_sc_start_dates(start_date, period)
+fix_sc_start_dates(start_date, period_start)
 }
 \arguments{
 \item{start_date}{A vector containing dates.}

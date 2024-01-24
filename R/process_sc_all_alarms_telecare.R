@@ -18,32 +18,31 @@ process_sc_all_alarms_telecare <- function(
   # Data Cleaning-----------------------------------------------------
 
   replaced_dates <- data %>%
-    # period start and end dates
+    # If the end date is missing, set this to the end of the period
     dplyr::mutate(
-      record_date = end_fy_quarter(.data$period),
-      qtr_start = start_fy_quarter(.data$period)
-    ) %>%
-    dplyr::mutate(service_start_date = fix_sc_start_dates(
-      .data$service_start_date,
-      .data$period
-    )) %>%
-    # Fix service_end_date is earlier than service_start_date by setting end_date to the end of fy
-    dplyr::mutate(service_end_date = fix_sc_end_dates(
-      .data$service_start_date,
-      .data$service_end_date,
-      .data$period
-    ))
+      service_end_date = fix_sc_missing_end_dates(
+        .data$service_end_date,
+        .data$period_end_date
+      ),
+      # If the start_date is missing, set this to the start of the period
+      service_start_date = fix_sc_start_dates(
+        .data$service_start_date,
+        .data$period_start_date
+      ),
+      # Fix service_end_date if earlier than service_start_date by setting end_date to the end of fy
+      service_end_date = fix_sc_end_dates(
+        .data$service_start_date,
+        .data$service_end_date,
+        .data$period
+      )
+    )
+
 
   at_full_clean <- replaced_dates %>%
-    # Match on demographics data (chi, gender, dob and postcode)
-    dplyr::left_join(
-      sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
-    ) %>%
     # rename for matching source variables
     dplyr::rename(
-      record_keydate1 = .data$service_start_date,
-      record_keydate2 = .data$service_end_date
+      record_keydate1 = "service_start_date",
+      record_keydate2 = "service_end_date"
     ) %>%
     # Include source variables
     dplyr::mutate(
@@ -57,16 +56,14 @@ process_sc_all_alarms_telecare <- function(
       # Use function for creating sc send lca variables
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
+    # Match on demographics data (chi, gender, dob and postcode)
+    dplyr::left_join(
+      sc_demog_lookup,
+      by = c("sending_location", "social_care_id")
+    ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
-    dplyr::group_by(.data$sending_location, .data$chi) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$social_care_id)) %>%
-    # count changed social_care_id
-    dplyr::mutate(
-      changed_sc_id = !is.na(.data$chi) & .data$social_care_id != .data$latest_sc_id,
-      social_care_id = dplyr::if_else(.data$changed_sc_id, .data$latest_sc_id, .data$social_care_id)
-    ) %>%
-    dplyr::ungroup()
+    replace_sc_id_with_latest()
 
   # Deal with episodes which have a package across quarters.
   qtr_merge <- at_full_clean %>%
@@ -108,14 +105,6 @@ process_sc_all_alarms_telecare <- function(
       recid = dplyr::last(.data$recid),
       person_id = dplyr::last(.data$person_id),
       sc_send_lca = dplyr::last(.data$sc_send_lca)
-    ) %>%
-    # sort after merging
-    dplyr::arrange(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$record_keydate1,
-      .data$smrtype,
-      .data$sc_latest_submission
     ) %>%
     # change the data format from data.table to data.frame
     tibble::as_tibble()

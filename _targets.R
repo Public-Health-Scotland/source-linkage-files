@@ -135,6 +135,10 @@ list(
     priority = 0.5
   ),
   tar_target(
+    tests_sc_all_at,
+    process_tests_sc_all_at_episodes(all_at)
+  ),
+  tar_target(
     all_home_care_extract,
     read_sc_all_home_care(),
     cue = tar_cue_age(
@@ -150,6 +154,10 @@ list(
       write_to_disk = write_to_disk
     ),
     priority = 0.5
+  ),
+  tar_target(
+    tests_sc_all_home_care,
+    process_tests_sc_all_hc_episodes(all_home_care)
   ),
   tar_target(
     all_care_home_extract,
@@ -173,7 +181,7 @@ list(
   ),
   tar_target(
     tests_all_care_home,
-    process_tests_sc_ch_episodes(all_care_home)
+    process_tests_sc_all_ch_episodes(all_care_home)
   ),
   tar_target(
     all_sds_extract,
@@ -191,6 +199,10 @@ list(
       write_to_disk = write_to_disk
     ),
     priority = 0.5
+  ),
+  tar_target(
+    tests_sc_all_sds,
+    process_tests_sc_all_sds_episodes(all_sds)
   ),
   tar_map(
     list(year = years_to_run),
@@ -445,12 +457,13 @@ list(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
     ),
-    # TODO add tests for the SC client lookup
     tar_target(
       sc_client_lookup,
       process_lookup_sc_client(
         data = sc_client_data,
         year = year,
+        sc_demographics = sc_demog_lookup %>%
+          dplyr::select(c("sending_location", "social_care_id", "chi")),
         write_to_disk = write_to_disk
       )
     ),
@@ -463,7 +476,6 @@ list(
       process_extract_alarms_telecare(
         data = all_at,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -479,7 +491,6 @@ list(
       process_extract_care_home(
         data = all_care_home,
         year = year,
-        client_lookup = sc_client_lookup,
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
       )
@@ -496,7 +507,6 @@ list(
       process_extract_home_care(
         data = all_home_care,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -512,7 +522,6 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
-        client_lookup = sc_client_lookup,
         write_to_disk = write_to_disk
       )
     ),
@@ -572,6 +581,7 @@ list(
         slf_pc_lookup = source_pc_lookup,
         slf_gpprac_lookup = source_gp_lookup,
         slf_deaths_lookup = slf_deaths_lookup,
+        sc_client = sc_client_lookup,
         write_to_disk
       )
     ),

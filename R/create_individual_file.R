@@ -75,15 +75,14 @@ create_individual_file <- function(
     add_cij_columns() %>%
     add_all_columns()
 
-  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
       aggregate_by_chi(exclude_sc_var = TRUE)
   } else {
     individual_file <- individual_file %>%
       aggregate_ch_episodes() %>%
       clean_up_ch(year) %>%
-      aggregate_by_chi(exclude_sc_var = FALSE) %>%
-      join_sc_client(year)
+      aggregate_by_chi(exclude_sc_var = FALSE)
   }
 
   individual_file <- individual_file %>%
@@ -96,9 +95,11 @@ create_individual_file <- function(
     join_sparra_hhg(year) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
-    add_hri_variables(chi_variable = "chi")
+    add_hri_variables(chi_variable = "chi") %>%
+    add_keep_population_flag(year) %>%
+    join_sc_client(year, file_type = "individual")
 
-  if (!check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
       dplyr::mutate(
         ch_cis_episodes = NA,
@@ -220,7 +221,7 @@ add_all_columns <- function(episode_file) {
     add_nrs_columns("NRS", .data$recid == "NRS") %>%
     add_hl1_columns("HL1", .data$recid == "HL1")
 
-  if (check_year_valid(year, type = c("CH", "HC", "AT", "SDS"))) {
+  if (check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
       add_ch_columns("CH", .data$recid == "CH") %>%
       add_hc_columns("HC", .data$recid == "HC") %>%
@@ -482,8 +483,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ch_ep_end = dplyr::if_else(
         eval(condition),
         .data$record_keydate2,
-        lubridate::NA_Date_
-      ),
+        lubridate::NA_Date_  ),
       # If end date is missing use the first day of next FY quarter
       ch_ep_end = dplyr::if_else(
         eval(condition) & is.na(.data$ch_ep_end),
@@ -499,6 +499,7 @@ add_ch_columns <- function(episode_file, prefix, condition) {
 #' @family individual_file
 add_hc_columns <- function(episode_file, prefix, condition) {
   condition <- substitute(condition)
+
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE) %>%
     dplyr::mutate(
@@ -791,57 +792,6 @@ join_slf_lookup_vars <- function(individual_file,
       by = "gpprac"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
-
-  return(individual_file)
-}
-# TODO Remove the client data from the individual Social Care extracts
-# and instead, use this function in the episode file to match on the client
-# data to all episodes.
-#' Join sc client variables onto individual file
-#'
-#' @description Match on sc client variables.
-#'
-#' @param individual_file the processed individual file
-#' @param year financial year.
-#' @param sc_client SC client lookup
-#' @param sc_demographics SC Demographic lookup
-join_sc_client <- function(
-    individual_file,
-    year,
-    sc_client = read_file(get_sc_client_lookup_path(year)),
-    sc_demographics = read_file(get_sc_demog_lookup_path(),
-      col_select = c("sending_location", "social_care_id", "chi")
-    )) {
-  # TODO Update the client lookup processing script to match
-  # on demographics there so the client lookup already has CHI.
-
-  # Match to demographics lookup to get CHI
-  join_client_demog <- sc_client %>%
-    dplyr::left_join(
-      sc_demographics %>%
-        dplyr::select("sending_location", "social_care_id", "chi"),
-      by = c("sending_location", "social_care_id")
-    ) %>%
-    dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
-      c(
-        "sc_living_alone",
-        "sc_support_from_unpaid_carer",
-        "sc_social_worker",
-        "sc_meals",
-        "sc_day_care"
-      )
-    )) == "Not Known")) %>%
-    dplyr::arrange(chi, count_not_known) %>%
-    dplyr::distinct(chi, .keep_all = TRUE)
-
-  # Match on client variables by chi
-  individual_file <- individual_file %>%
-    dplyr::left_join(
-      join_client_demog,
-      by = "chi",
-      relationship = "one-to-one"
-    ) %>%
-    dplyr::select(!c("sending_location", "social_care_id", "sc_latest_submission"))
 
   return(individual_file)
 }

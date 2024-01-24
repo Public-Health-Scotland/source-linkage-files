@@ -12,7 +12,7 @@
 #' @family process extracts
 create_homelessness_lookup <- function(
     year,
-    homelessness_data = read_file(get_source_extract_path(year, "Homelessness"))) {
+    homelessness_data = read_file(get_source_extract_path(year, "homelessness"))) {
   homelessness_lookup <- homelessness_data %>%
     dplyr::distinct(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na(.data$chi) %>%
@@ -35,7 +35,6 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
-  ## need to decide which recids this relates to
   data <- data %>%
     dplyr::left_join(
       lookup %>%

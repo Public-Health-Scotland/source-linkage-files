@@ -31,6 +31,7 @@ Other individual_file:
 \code{\link{add_hc_columns}()},
 \code{\link{add_hl1_columns}()},
 \code{\link{add_ipdc_cols}()},
+\code{\link{add_keep_population_flag}()},
 \code{\link{add_mh_columns}()},
 \code{\link{add_nrs_columns}()},
 \code{\link{add_nsu_columns}()},

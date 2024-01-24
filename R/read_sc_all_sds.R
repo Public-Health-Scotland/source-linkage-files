@@ -15,19 +15,26 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       "sending_location",
       "social_care_id",
       "period",
+      "sds_period_start_date",
+      "sds_period_end_date",
       "sds_start_date",
       "sds_end_date",
       "sds_option_1",
       "sds_option_2",
-      "sds_option_3"
+      "sds_option_3",
+      "sds_start_date_after_end_date",
+      "sds_start_date_after_period_end_date",
+      "sds_end_date_not_within_period"
     ) %>%
     dplyr::collect() %>%
+    dplyr::distinct() %>%
     dplyr::mutate(dplyr::across(c(
       "sending_location",
       "sds_option_1",
       "sds_option_2",
       "sds_option_3"
-    ), as.integer))
+    ), as.integer)) %>%
+    dplyr::filter(.data$sds_start_date_after_period_end_date != 1)
 
   return(sds_full_data)
 }

@@ -12,7 +12,7 @@ read_extract_homelessness <- function(
   }
 
   extract_homelessness <- read_file(file_path,
-    col_types = cols(
+    col_types = readr::cols(
       "Assessment Decision Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "Case Closed Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "Sending Local Authority Code 9" = readr::col_character(),

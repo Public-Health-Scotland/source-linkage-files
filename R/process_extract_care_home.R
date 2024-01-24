@@ -19,7 +19,6 @@
 process_extract_care_home <- function(
     data,
     year,
-    client_lookup,
     ch_costs,
     write_to_disk = TRUE) {
   # Only run for a single year
@@ -29,7 +28,7 @@ process_extract_care_home <- function(
   year <- check_year_format(year)
 
   # Check that we have data for this year
-  if (!check_year_valid(year, "CH")) {
+  if (!check_year_valid(year, "ch")) {
     # If not return an empty tibble
     return(tibble::tibble())
   }
@@ -44,11 +43,6 @@ process_extract_care_home <- function(
     # remove any episodes where the latest submission was before the current year
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
-    ) %>%
-    # Match to client data
-    dplyr::left_join(
-      client_lookup,
-      by = c("sending_location", "social_care_id")
     )
 
 
@@ -136,8 +130,7 @@ process_extract_care_home <- function(
       "stay",
       "cost_total_net",
       dplyr::ends_with("_beddays"),
-      dplyr::ends_with("_cost"),
-      dplyr::starts_with("sc_")
+      dplyr::ends_with("_cost")
     )
 
   if (write_to_disk) {
