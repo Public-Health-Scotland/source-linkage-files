@@ -38,10 +38,10 @@ process_tests_nrs_deaths <- function(data, year) {
 produce_source_nrs_tests <- function(data) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     dplyr::mutate(n_deaths = 1L) %>%
     # keep variables for comparison
-    dplyr::select("valid_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
