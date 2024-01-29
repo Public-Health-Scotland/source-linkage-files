@@ -47,7 +47,7 @@ produce_source_ch_tests <- function(data,
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     dplyr::mutate(
       n_episodes = 1L,
       ch_name_missing = is.na(.data$ch_name),
@@ -60,7 +60,7 @@ produce_source_ch_tests <- function(data,
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison
-    dplyr::select("valid_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
