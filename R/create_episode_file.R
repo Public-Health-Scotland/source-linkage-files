@@ -31,6 +31,9 @@ create_episode_file <- function(
     sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
+  sc_client <- sc_client %>%
+    dplyr::select(-sc_send_lca)
+
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
