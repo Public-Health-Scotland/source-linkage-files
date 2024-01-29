@@ -483,7 +483,8 @@ add_ch_columns <- function(episode_file, prefix, condition) {
       ch_ep_end = dplyr::if_else(
         eval(condition),
         .data$record_keydate2,
-        lubridate::NA_Date_  ),
+        lubridate::NA_Date_
+      ),
       # If end date is missing use the first day of next FY quarter
       ch_ep_end = dplyr::if_else(
         eval(condition) & is.na(.data$ch_ep_end),
