@@ -44,6 +44,7 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(gender, .direction = ("updown")) %>%
     tidyr::fill(chi_postcode, .direction = ("updown")) %>%
     tidyr::fill(submitted_postcode, .direction = ("updown")) %>%
+    dplyr::ungroup() %>%
     # format postcodes using `phsmethods`
     dplyr::mutate(dplyr::across(tidyselect::contains("postcode"), ~ phsmethods::format_postcode(.x, format = "pc7"))) # are sc postcodes even used anywhere?
 
