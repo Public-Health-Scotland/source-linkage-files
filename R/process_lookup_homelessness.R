@@ -13,6 +13,12 @@
 create_homelessness_lookup <- function(
     year,
     homelessness_data = read_file(get_source_extract_path(year, "homelessness"))) {
+
+  # Specify years available for running
+  if (year < "1617") {
+    return(NULL)
+  }
+
   homelessness_lookup <- homelessness_data %>%
     dplyr::distinct(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na(.data$chi) %>%

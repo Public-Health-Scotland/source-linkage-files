@@ -20,6 +20,12 @@ process_lookup_sc_client <-
              col_select = c("sending_location", "social_care_id", "chi")
            ),
            write_to_disk = TRUE) {
+
+    # Specify years available for running
+    if (year < "1718") {
+      return(NULL)
+    }
+
     client_clean <- data %>%
       # Replace 'unknown' responses with NA
       dplyr::mutate(
