@@ -12,7 +12,6 @@ link_delayed_discharge_eps <- function(
     episode_file,
     year,
     dd_data = read_file(get_source_extract_path(year, "dd"))) {
-
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
     return(episode_file)
