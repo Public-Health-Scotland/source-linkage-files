@@ -40,6 +40,12 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
+
+  if (!check_year_valid(year, type = "homelessness")) {
+    data <- data
+    return(data)
+  }
+
   data <- data %>%
     dplyr::left_join(
       lookup %>%
@@ -64,6 +70,12 @@ add_homelessness_flag <- function(data, year,
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
+
+  if (!check_year_valid(year, type = "homelessness")) {
+    data <- data
+    return(data)
+  }
+
   lookup <- lookup %>%
     dplyr::filter(!(is.na(.data$record_keydate2))) %>%
     dplyr::rename(

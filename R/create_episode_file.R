@@ -435,6 +435,12 @@ join_sc_client <- function(data,
                            year,
                            sc_client = read_file(get_sc_client_lookup_path(year)),
                            file_type = c("episode", "individual")) {
+
+  if (!check_year_valid(year, type = "client")) {
+    data_file <- data
+    return(data_file)
+  }
+
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%
