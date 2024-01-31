@@ -34,9 +34,9 @@ check_year_valid <- function(
     )) {
   if (year <= "1415" && type %in% c("dn", "sparra")) {
     return(FALSE)
-  } else if (year <= "1516" && type %in% c("cmh", "homelessness")) {
+  } else if (year <= "1516" && type %in% c("cmh", "homelessness", "dd")) {
     return(FALSE)
-  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at")) {
+  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at", "client")) {
     return(FALSE)
   } else if (year <= "1718" && type %in% "hhg") {
     return(FALSE)
