@@ -4,10 +4,12 @@
 \alias{create_demog_test_flags}
 \title{Create demographic test flags}
 \usage{
-create_demog_test_flags(data)
+create_demog_test_flags(data, chi = c(chi, anon_chi))
 }
 \arguments{
 \item{data}{a dataframe containing demographic variables e.g. chi}
+
+\item{chi}{Specify chi or anon_chi.}
 }
 \value{
 a dataframe with flag (1 or 0) for each demographic variable.
