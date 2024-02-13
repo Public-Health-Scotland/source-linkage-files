@@ -147,7 +147,7 @@ process_extract_homelessness <- function(
   if (!is.null(completeness_data)) {
     filtered_data <- data %>%
       dplyr::left_join(completeness_data,
-                       by = c("year", "sending_local_authority_name")
+        by = c("year", "sending_local_authority_name")
       ) %>%
       dplyr::filter(
         dplyr::between(.data[["pct_complete_all"]], 0.90, 1.05) |
