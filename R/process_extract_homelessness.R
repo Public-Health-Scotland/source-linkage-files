@@ -100,6 +100,36 @@ process_extract_homelessness <- function(
         )
       )
     ) %>%
+    dplyr::mutate(property_type_code = as.character(property_type_code)) %>%
+    dplyr::mutate(
+      property_type_code = dplyr::case_when(
+        property_type_code == "1" ~ "1 - Own Property - LA Tenancy",
+        property_type_code == "2" ~ "2 - Own Property - RSL Tenancy",
+        property_type_code == "3" ~ "3 - Own Property - private rented tenancy",
+        property_type_code == "4" ~ "4 - Own Property - tenancy secured through employment/tied house",
+        property_type_code == "5" ~ "5 - Own Property - owning/buying",
+        property_type_code == "6" ~ "6 - Parental / family home / relatives",
+        property_type_code == "7" ~ " 7 - Friends / partners",
+        property_type_code == "8" ~ "8 - Armed Services Accommodation",
+        property_type_code == "9" ~ "9 - Prison",
+        property_type_code == "10" ~ "10 - Hospital",
+        property_type_code == "11" ~ "11 - Children's residential accommodation (looked after by the local authority)",
+        property_type_code == "12" ~ "12 - Supported accommodation",
+        property_type_code == "13" ~ "13 - Hostel (unsupported)",
+        property_type_code == "14" ~ "14 - Bed & Breakfast",
+        property_type_code == "15" ~ "15 - Caravan / mobile home",
+        property_type_code == "16" ~ "16 - Long-term roofless",
+        property_type_code == "17" ~ "17 - Long-term sofa surfing",
+        property_type_code == "18" ~ "18 - Other",
+        property_type_code == "19" ~ "19 - Not known / refused",
+        property_type_code == "20" ~ "20 - Own property - Shared ownership/Shared equity/ LCHO",
+        property_type_code == "21" ~ "21 - Lodger",
+        property_type_code == "22" ~ "22 - Shared Property - Private Rented Sector",
+        property_type_code == "23" ~ "23 - Shared Property - Local Authority",
+        property_type_code == "24" ~ "24 - Shared Property - RSL",
+        TRUE ~ property_type_code
+      )
+    ) %>%
     dplyr::left_join(
       la_code_lookup,
       by = dplyr::join_by("sending_local_authority_code_9" == "CA")
@@ -117,7 +147,7 @@ process_extract_homelessness <- function(
   if (!is.null(completeness_data)) {
     filtered_data <- data %>%
       dplyr::left_join(completeness_data,
-        by = c("year", "sending_local_authority_name")
+                       by = c("year", "sending_local_authority_name")
       ) %>%
       dplyr::filter(
         dplyr::between(.data[["pct_complete_all"]], 0.90, 1.05) |
