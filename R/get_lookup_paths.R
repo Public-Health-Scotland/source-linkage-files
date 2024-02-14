@@ -126,7 +126,7 @@ get_pop_path <- function(file_name = NULL,
     "intzone" ~ stringr::str_glue("IntZone_pop_est_2011_\\d+?\\.{ext}")
   )
 
-  datazone_pop_path <- get_file_path(
+  pop_path <- get_file_path(
     directory = pop_dir,
     file_name = file_name,
     ext = ext,
