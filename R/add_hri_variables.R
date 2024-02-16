@@ -82,7 +82,7 @@ add_hri_variables <- function(
       "mh_episodes",
       "gls_episodes",
       "op_newcons_attendances",
-      # op_newcons_dnas,
+      "op_newcons_dnas",
       "ae_attendances",
       "pis_paid_items",
       "ooh_cases"
