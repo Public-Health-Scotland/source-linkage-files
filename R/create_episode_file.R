@@ -170,7 +170,31 @@ create_episode_file <- function(
         sc_meals = NA,
         sc_day_care = NA
       )
+  } else if (!check_year_valid(year, type = "homelessness")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        hl1_application_ref = NA,
+        hl1_sending_lca = NA,
+        hl1_property_type = NA,
+        hl1_reason_ftm = NA
+      )
+  } else if (!check_year_valid(year, type = "dd")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        delay_end_reason = NA,
+        primary_delay_reason = NA,
+        secondary_delay_reason = NA,
+        dd_responsible_lca = NA,
+        dd_quality = NA
+      )
+  } else if (!check_year_valid(year, type = "dn")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        ccm = NA,
+        totalnodncontacts = NA
+      )
   }
+
 
   if (anon_chi_out) {
     episode_file <- slfhelper::get_anon_chi(episode_file)
