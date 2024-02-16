@@ -143,8 +143,9 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         ch_chi_cis = NA,
-        sc_id_cis = NA,
+        ch_sc_id_cis = NA,
         ch_name = NA,
+        ch_postcode = NA,
         ch_adm_reason = NA,
         ch_provider = NA,
         ch_nursing = NA,
@@ -159,7 +160,9 @@ create_episode_file <- function(
         hc_cost_q4 = NA,
         hc_provider = NA,
         hc_reablement = NA,
-        sds_option_4 = NA,
+        person_id = NA,
+        sc_latest_submission = NA,
+        sc_send_lca = NA,
         sc_living_alone = NA,
         sc_support_from_unpaid_carer = NA,
         sc_social_worker = NA,

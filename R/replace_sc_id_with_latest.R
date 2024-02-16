@@ -7,33 +7,23 @@ replace_sc_id_with_latest <- function(data) {
   # Check for required variables
   check_variables_exist(
     data,
-    c("sending_location", "social_care_id", "chi", "period")
+    c("sending_location", "social_care_id", "chi", "latest_flag")
   )
 
   # select variables we need
   filter_data <- data %>%
     dplyr::select(
-      "sending_location", "social_care_id", "chi", "period"
+      "sending_location", "social_care_id", "chi", "latest_flag"
     ) %>%
-    dplyr::filter(!(is.na(.data$chi)))
+    dplyr::filter(!(is.na(.data$chi))) %>%
+    dplyr::distinct()
 
   change_sc_id <- filter_data %>%
-    # Sort (by sending_location, chi and period) for unique chi/sending location
-    dplyr::arrange(
-      .data$sending_location,
-      .data$chi,
-      dplyr::desc(.data$period)
-    ) %>%
-    # Find the latest sc_id for each chi/sending location by keeping latest period
-    dplyr::distinct(
-      .data$sending_location,
-      .data$chi,
-      .keep_all = TRUE
-    ) %>%
+    dplyr::filter(latest_flag == 1) %>%
     # Rename for latest sc id
     dplyr::rename(latest_sc_id = "social_care_id") %>%
-    # drop period for matching
-    dplyr::select(-"period")
+    # drop latest_flag for matching
+    dplyr::select(-"latest_flag")
 
   return_data <- change_sc_id %>%
     # Match back onto data
@@ -41,6 +31,7 @@ replace_sc_id_with_latest <- function(data) {
       by = c("sending_location", "chi"),
       multiple = "all"
     ) %>%
+    dplyr::filter(!(is.na(period))) %>%
     # Overwrite sc id with the latest
     dplyr::mutate(
       social_care_id = dplyr::if_else(
