@@ -36,7 +36,7 @@ process_tests_sc_demographics <- function(data) {
 produce_sc_demog_lookup_tests <- function(data) {
   data %>%
     # create test flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     dplyr::mutate(
       n_missing_sending_loc = is.na(.data$sending_location),
       n_missing_sc_id = is.na(.data$social_care_id)

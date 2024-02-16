@@ -103,6 +103,8 @@ create_episode_file <- function(
         "mar_beddays"
       )
     ) %>%
+    # match on sc client variables
+    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to NA
     dplyr::mutate(
@@ -135,15 +137,15 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
-    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     load_ep_file_vars(year)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
       dplyr::mutate(
         ch_chi_cis = NA,
-        sc_id_cis = NA,
+        ch_sc_id_cis = NA,
         ch_name = NA,
+        ch_postcode = NA,
         ch_adm_reason = NA,
         ch_provider = NA,
         ch_nursing = NA,
@@ -158,7 +160,9 @@ create_episode_file <- function(
         hc_cost_q4 = NA,
         hc_provider = NA,
         hc_reablement = NA,
-        sds_option_4 = NA,
+        person_id = NA,
+        sc_latest_submission = NA,
+        sc_send_lca = NA,
         sc_living_alone = NA,
         sc_support_from_unpaid_carer = NA,
         sc_social_worker = NA,

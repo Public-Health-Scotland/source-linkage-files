@@ -18,7 +18,7 @@ process_tests_alarms_telecare <- function(data, year) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "AT", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "at", year, workbook_name = "extract")
 
   return(comparison)
 }
@@ -37,14 +37,14 @@ produce_source_at_tests <- function(data,
                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     dplyr::mutate(
       n_at_alarms = .data$smrtype == "AT-Alarm",
       n_at_telecare = .data$smrtype == "AT-Tele"
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
-    dplyr::select(.data$valid_chi:.data$West_Lothian) %>%
+    dplyr::select(.data$unique_chi:.data$West_Lothian) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
