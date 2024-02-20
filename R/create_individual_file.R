@@ -485,7 +485,8 @@ add_ch_columns <- function(episode_file, prefix, condition) {
         .data$record_keydate2,
         lubridate::NA_Date_
       ),
-      # If end date is missing use the first day of next FY quarter
+      # check logic here for care home methodology
+      # If end date is missing use the end of the FY quarter
       ch_ep_end = dplyr::if_else(
         eval(condition) & is.na(.data$ch_ep_end),
         start_next_fy_quarter(.data$sc_latest_submission),

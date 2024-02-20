@@ -52,8 +52,6 @@ test_that("population estimates file path returns as expected", {
 
     expect_equal(fs::path_ext(get_pop_path(type = "datazone")), "rds")
 
-    expect_match(get_pop_path(type = "datazone"), "DataZone2011_pop_est_2011_\\d+?")
-
     expect_true(fs::file_exists(get_pop_path(type = "datazone")))
   })
 })

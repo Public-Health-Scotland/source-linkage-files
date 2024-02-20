@@ -344,18 +344,21 @@ assign_d_cohort_high_cc <- function(dementia,
                                     liver,
                                     cancer,
                                     spec) {
-  high_cc <-
+  high_cc <- dplyr::case_when(
+    spec == "G5" ~ TRUE,
     # FOR FUTURE: PhysicalandSensoryDisabilityClientGroup or LearningDisabilityClientGroup = "Y",
     # then high_cc_cohort = TRUE
     # FOR FUTURE: Care home removed, here's the code: .data$recid = "CH" & age < 65
-    rowSums(dplyr::pick(c(
+    (rowSums(dplyr::pick(c(
       "dementia",
       "hefailure",
       "refailure",
       "liver",
       "cancer"
-    )), na.rm = TRUE) >= 1L |
-      spec == "G5"
+    )), na.rm = TRUE) >= 1L) ~ TRUE,
+    .default = FALSE
+  )
+
   return(high_cc)
 }
 

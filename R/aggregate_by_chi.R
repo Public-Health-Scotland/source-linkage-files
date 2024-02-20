@@ -89,6 +89,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
         "episodes",
         "beddays",
         "cost",
+        "_dnas",
         "attendances",
         "attend",
         "contacts",
@@ -109,8 +110,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
     vars_start_with(
       episode_file,
       "sds_option"
-    ),
-    "health_net_cost_inc_dnas"
+    )
   )
   cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
   if (exclude_sc_var) {
