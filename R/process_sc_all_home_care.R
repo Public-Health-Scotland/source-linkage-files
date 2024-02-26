@@ -28,7 +28,7 @@ process_sc_all_home_care <- function(
       hc_service_end_date = fix_sc_end_dates(
         .data$hc_service_start_date,
         .data$hc_service_end_date,
-        .data$period
+        .data$hc_period_end_date
       )
     )
 
