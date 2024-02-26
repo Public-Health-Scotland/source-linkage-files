@@ -41,7 +41,7 @@ process_sc_all_alarms_telecare <- function(
     service_end_date := fix_sc_end_dates(
       service_start_date,
       service_end_date,
-      period
+      period_end_date
     )
   ]
 
