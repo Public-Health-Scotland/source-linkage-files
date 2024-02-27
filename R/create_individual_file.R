@@ -73,7 +73,7 @@ create_individual_file <- function(
     ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
-    add_all_columns()
+    add_all_columns(year = year)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
@@ -82,7 +82,7 @@ create_individual_file <- function(
     individual_file <- individual_file %>%
       aggregate_ch_episodes() %>%
       clean_up_ch(year) %>%
-      aggregate_by_chi(exclude_sc_var = FALSE)
+      aggregate_by_chi(year = year, exclude_sc_var = FALSE)
   }
 
   individual_file <- individual_file %>%
@@ -202,7 +202,7 @@ add_cij_columns <- function(episode_file) {
 #' of prefixed column names created based on some condition.
 #' @family individual_file
 #' @inheritParams create_individual_file
-add_all_columns <- function(episode_file) {
+add_all_columns <- function(episode_file, year) {
   cli::cli_alert_info("Add all columns function started at {Sys.time()}")
 
   episode_file <- episode_file %>%
