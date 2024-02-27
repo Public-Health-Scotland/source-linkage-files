@@ -7,7 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
+aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   # Convert to data.table
@@ -187,6 +187,7 @@ aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
     individual_file_cols5[, chi := NULL],
     individual_file_cols6[, chi := NULL]
   )
+  individual_file <- individual_file[, year := year]
 
   # convert back to tibble
   return(dplyr::as_tibble(individual_file))
