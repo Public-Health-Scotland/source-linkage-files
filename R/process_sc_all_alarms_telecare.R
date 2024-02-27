@@ -41,7 +41,7 @@ process_sc_all_alarms_telecare <- function(
     service_end_date := fix_sc_end_dates(
       service_start_date,
       service_end_date,
-      period
+      period_end_date
     )
   ]
 
@@ -113,7 +113,6 @@ process_sc_all_alarms_telecare <- function(
     sending_location = data.table::last(sending_location),
     social_care_id = data.table::last(social_care_id),
     sc_latest_submission = data.table::last(period),
-    record_keydate1 = data.table::last(record_keydate1),
     record_keydate2 = data.table::last(record_keydate2),
     smrtype = data.table::last(smrtype),
     pkg_count = data.table::last(pkg_count),
