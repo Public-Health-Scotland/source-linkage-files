@@ -7,7 +7,7 @@
 #' @importFrom data.table .SD
 #'
 #' @inheritParams create_individual_file
-aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
+aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
 
   # Convert to data.table
@@ -89,6 +89,7 @@ aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
         "episodes",
         "beddays",
         "cost",
+        "_dnas",
         "attendances",
         "attend",
         "contacts",
@@ -109,8 +110,7 @@ aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
     vars_start_with(
       episode_file,
       "sds_option"
-    ),
-    "health_net_cost_inc_dnas"
+    )
   )
   cols4 <- cols4[!(cols4 %in% "ch_cis_episodes")]
   if (exclude_sc_var) {
@@ -187,6 +187,7 @@ aggregate_by_chi <- function(episode_file, exclude_sc_var = FALSE) {
     individual_file_cols5[, chi := NULL],
     individual_file_cols6[, chi := NULL]
   )
+  individual_file <- individual_file[, year := year]
 
   # convert back to tibble
   return(dplyr::as_tibble(individual_file))

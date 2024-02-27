@@ -17,58 +17,85 @@ process_sc_all_alarms_telecare <- function(
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
 
-  replaced_dates <- data %>%
-    # If the end date is missing, set this to the end of the period
-    dplyr::mutate(
-      service_end_date = fix_sc_missing_end_dates(
-        .data$service_end_date,
-        .data$period_end_date
-      ),
-      # If the start_date is missing, set this to the start of the period
-      service_start_date = fix_sc_start_dates(
-        .data$service_start_date,
-        .data$period_start_date
-      ),
-      # Fix service_end_date if earlier than service_start_date by setting end_date to the end of fy
-      service_end_date = fix_sc_end_dates(
-        .data$service_start_date,
-        .data$service_end_date,
-        .data$period
-      )
+  # Convert to data.table
+  data.table::setDT(data)
+  data.table::setDT(sc_demog_lookup)
+
+  # Fix dates and create new variables
+  data[
+    ,
+    service_end_date := fix_sc_missing_end_dates(
+      service_end_date,
+      period_end_date
     )
+  ]
+  data[
+    ,
+    service_start_date := fix_sc_start_dates(
+      service_start_date,
+      period_start_date
+    )
+  ]
+  data[
+    ,
+    service_end_date := fix_sc_end_dates(
+      service_start_date,
+      service_end_date,
+      period_end_date
+    )
+  ]
 
 
-  at_full_clean <- replaced_dates %>%
-    # rename for matching source variables
-    dplyr::rename(
-      record_keydate1 = "service_start_date",
-      record_keydate2 = "service_end_date"
-    ) %>%
-    # Include source variables
-    dplyr::mutate(
-      recid = "AT",
-      smrtype = dplyr::case_when(
-        .data$service_type == 1L ~ "AT-Alarm",
-        .data$service_type == 2L ~ "AT-Tele"
+  # Rename columns
+  data.table::setnames(
+    data,
+    old = c("service_start_date", "service_end_date"),
+    new = c("record_keydate1", "record_keydate2")
+  )
+
+  # Additional mutations
+  data[
+    ,
+    c(
+      "recid",
+      "smrtype",
+      "sc_send_lca"
+    ) := list(
+      "AT",
+      data.table::fcase(
+        service_type == 1L,
+        "AT-Alarm",
+        service_type == 2L,
+        "AT-Tele",
+        default,
+        NA_character_
       ),
-      # Create person id variable
-      person_id = stringr::str_glue("{sending_location}-{social_care_id}"),
-      # Use function for creating sc send lca variables
-      sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
-    ) %>%
-    # Match on demographics data (chi, gender, dob and postcode)
-    dplyr::left_join(
-      sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
-    ) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
-    replace_sc_id_with_latest()
+      convert_sc_sending_location_to_lca(sending_location)
+    )
+  ]
+  data$person_id <- paste0(
+    data$sending_location,
+    "-",
+    data$social_care_id
+  )
 
-  # Deal with episodes which have a package across quarters.
-  qtr_merge <- at_full_clean %>%
-    # use as.data.table to change the data format to data.table to accelerate
-    data.table::as.data.table() %>%
+  # Join with sc_demog_lookup
+  data <- sc_demog_lookup[data, on = .(sending_location, social_care_id)]
+
+  # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
+  data <- replace_sc_id_with_latest(data)
+
+  # Deal with episodes that have a package across quarters
+  data[, pkg_count := seq_len(.N), by = .(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    period
+  )]
+
+  # Order data before summarizing
+  data <- data %>%
     dplyr::group_by(
       .data$sending_location,
       .data$social_care_id,
@@ -76,38 +103,37 @@ process_sc_all_alarms_telecare <- function(
       .data$smrtype,
       .data$period
     ) %>%
-    # Create a count for the package number across episodes
-    dplyr::mutate(pkg_count = dplyr::row_number()) %>%
     # Sort prior to merging
     dplyr::arrange(.by_group = TRUE) %>%
-    # group for merging episodes
-    dplyr::group_by(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$record_keydate1,
-      .data$smrtype,
-      .data$pkg_count
-    ) %>%
-    # merge episodes with packages across quarters
-    # drop variables not needed
-    dplyr::summarise(
-      sending_location = dplyr::last(.data$sending_location),
-      social_care_id = dplyr::last(.data$social_care_id),
-      sc_latest_submission = dplyr::last(.data$period),
-      record_keydate1 = dplyr::last(.data$record_keydate1),
-      record_keydate2 = dplyr::last(.data$record_keydate2),
-      smrtype = dplyr::last(.data$smrtype),
-      pkg_count = dplyr::last(.data$pkg_count),
-      chi = dplyr::last(.data$chi),
-      gender = dplyr::last(.data$gender),
-      dob = dplyr::last(.data$dob),
-      postcode = dplyr::last(.data$postcode),
-      recid = dplyr::last(.data$recid),
-      person_id = dplyr::last(.data$person_id),
-      sc_send_lca = dplyr::last(.data$sc_send_lca)
-    ) %>%
-    # change the data format from data.table to data.frame
-    tibble::as_tibble()
+    dplyr::ungroup() %>%
+    data.table::as.data.table()
+
+  # Summarize to merge episodes
+  qtr_merge <- data[, .(
+    sending_location = data.table::last(sending_location),
+    social_care_id = data.table::last(social_care_id),
+    sc_latest_submission = data.table::last(period),
+    record_keydate2 = data.table::last(record_keydate2),
+    smrtype = data.table::last(smrtype),
+    pkg_count = data.table::last(pkg_count),
+    chi = data.table::last(chi),
+    gender = data.table::last(gender),
+    dob = data.table::last(dob),
+    postcode = data.table::last(postcode),
+    recid = data.table::last(recid),
+    person_id = data.table::last(person_id),
+    sc_send_lca = data.table::last(sc_send_lca)
+  ), by = .(
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    pkg_count
+  )]
+
+  # Convert back to data.frame if necessary
+  qtr_merge <- as.data.frame(qtr_merge)
+
 
   if (write_to_disk) {
     write_file(

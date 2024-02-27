@@ -15,14 +15,17 @@ process_sc_all_sds <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
-  matched_sds_data <- data %>%
-    dplyr::left_join(
+  matched_sds_data <- data %>% #
+    dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
+    dplyr::right_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
-    replace_sc_id_with_latest()
+    replace_sc_id_with_latest() %>%
+    dplyr::select(-latest_sc_id, -latest_flag, -sds_start_date_after_period_end_date) %>%
+    dplyr::distinct()
 
   # Data Cleaning ---------------------------------------
   sds_full_clean <- matched_sds_data %>%
@@ -50,7 +53,7 @@ process_sc_all_sds <- function(
         .data$sds_start_date,
         .data$sds_period_start_date
       ),
-      # If SDS end date is missing, assign end of FY
+      # If SDS end date is missing, assign end of financial period
       sds_end_date = fix_sc_missing_end_dates(
         .data$sds_end_date,
         .data$sds_period_end_date
@@ -59,14 +62,19 @@ process_sc_all_sds <- function(
       sds_end_date = fix_sc_end_dates(
         .data$sds_start_date,
         .data$sds_end_date,
-        .data$period
+        .data$sds_period_end_date
       )
+    ) %>%
+    dplyr::select(
+      -sds_period_start_date, -sds_period_end_date,
+      -sds_start_date_after_end_date
     ) %>%
     # rename for matching source variables
     dplyr::rename(
       record_keydate1 = .data$sds_start_date,
       record_keydate2 = .data$sds_end_date
     ) %>%
+    dplyr::distinct() %>%
     # Pivot longer on sds option variables
     tidyr::pivot_longer(
       cols = tidyselect::contains("sds_option_"),
@@ -103,6 +111,7 @@ process_sc_all_sds <- function(
     ) %>%
     dplyr::arrange(.data$period,
       .data$record_keydate1,
+      .data$record_keydate2,
       .by_group = TRUE
     ) %>%
     # Create a flag for episodes that are going to be merged

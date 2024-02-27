@@ -13,14 +13,7 @@ process_tests_district_nursing <- function(data, year) {
     return(data)
   }
 
-  old_data <- get_existing_data_for_tests(data) %>%
-    # TODO: remove this bit after SPSS stopped
-    # replace NA by 0 in monthly costs
-    dplyr::mutate(dplyr::across(
-      dplyr::ends_with("_cost"),
-      ~ tidyr::replace_na(.x, 0.0)
-    ))
-
+  old_data <- get_existing_data_for_tests(data)
   data <- rename_hscp(data)
 
   comparison <- produce_test_comparison(
@@ -65,11 +58,11 @@ produce_source_dn_tests <- function(data,
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     # keep variables for comparison
-    dplyr::select(.data$valid_chi:.data$NHS_Lanarkshire_cost) %>%
+    dplyr::select(.data$unique_chi:.data$NHS_Lanarkshire_cost) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
