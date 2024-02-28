@@ -15,14 +15,17 @@ process_sc_all_sds <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
-  matched_sds_data <- all_sds_extract %>%
-    dplyr::left_join(
+  matched_sds_data <- data %>%
+    dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
+    dplyr::right_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
     replace_sc_id_with_latest() %>%
+    dplyr::select(-sds_start_date_after_period_end_date) %>%
+    dplyr::distinct() %>%
     # sds_options may contain only a few NA, replace NA by 0
     dplyr::mutate(
       sds_option_1 = tidyr::replace_na(sds_option_1, 0),
@@ -65,10 +68,12 @@ process_sc_all_sds <- function(
   ]
   sds_full_clean[
     ,
-    sds_end_date := fix_sc_end_dates(sds_start_date, sds_end_date, period)
+    sds_end_date := fix_sc_end_dates(sds_start_date, sds_end_date, sds_period_end_date)
   ]
 
-
+  sds_full_clean[, c("sds_period_start_date",
+                     "sds_period_end_date",
+                     "sds_start_date_after_end_date") := NULL]
 
   # Rename for matching source variables
   data.table::setnames(
@@ -76,6 +81,8 @@ process_sc_all_sds <- function(
     c("sds_start_date", "sds_end_date"),
     c("record_keydate1", "record_keydate2")
   )
+
+  sds_full_clean = unique(sds_full_clean)
 
   cols_sds_option <- grep(
     "^sds_option_",
@@ -121,14 +128,19 @@ process_sc_all_sds <- function(
   sds_full_clean_long[,
     c(
       "period_rank",
-      "record_keydate1_rank"
+      "record_keydate1_rank",
+      "record_keydate2_rank"
     ) := list(
       rank(period),
-      rank(record_keydate1)
+      rank(record_keydate1),
+      rank(record_keydate2)
     ),
     by = .(sending_location, social_care_id, smrtype)
   ]
-  data.table::setorder(sds_full_clean_long, period_rank, record_keydate1_rank)
+  data.table::setorder(sds_full_clean_long,
+                       period_rank,
+                       record_keydate1_rank,
+                       record_keydate2_rank)
 
   sds_full_clean_long[,
     distinct_episode :=
@@ -138,8 +150,7 @@ process_sc_all_sds <- function(
   ]
 
   sds_full_clean_long[,
-    episode_counter :=
-      cumsum(distinct_episode),
+    episode_counter := cumsum(distinct_episode),
     by = .(sending_location, social_care_id, smrtype)
   ]
 
