@@ -16,6 +16,7 @@ process_sc_all_home_care <- function(
     sc_demog_lookup,
     write_to_disk = TRUE) {
   replaced_dates <- data %>%
+    dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
     dplyr::mutate(
       hc_service_end_date = fix_sc_missing_end_dates(
         .data$hc_service_end_date,
@@ -28,7 +29,7 @@ process_sc_all_home_care <- function(
       hc_service_end_date = fix_sc_end_dates(
         .data$hc_service_start_date,
         .data$hc_service_end_date,
-        .data$period
+        .data$hc_period_end_date
       )
     )
 

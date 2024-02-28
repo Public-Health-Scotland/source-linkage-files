@@ -908,7 +908,13 @@ assign_cohort_names <- function(data) {
         # Situation where no cost is greater than another,
         # so the maximum is the same  as the mean
         .data$cost_max == rowSums(
-          dplyr::pick("psychiatry_cost":"residential_care_cost")
+          dplyr::pick(c(
+            "psychiatry_cost", "maternity_cost", "geriatric_cost",
+            "elective_inpatient_cost", "limited_daycases_cost",
+            "routine_daycase_cost", "single_emergency_cost",
+            "multiple_emergency_cost", "prescribing_cost",
+            "outpatient_cost", "ae2_cost", "residential_care_cost"
+          ))
         ) / 12.0 ~ "Unassigned",
         .data$cost_max == .data$psychiatry_cost ~ "Psychiatry",
         .data$cost_max == .data$maternity_cost ~ "Maternity",
