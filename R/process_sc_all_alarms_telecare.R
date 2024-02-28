@@ -110,12 +110,8 @@ process_sc_all_alarms_telecare <- function(
 
   # Summarize to merge episodes
   qtr_merge <- data[, .(
-    sending_location = data.table::last(sending_location),
-    social_care_id = data.table::last(social_care_id),
     sc_latest_submission = data.table::last(period),
     record_keydate2 = data.table::last(record_keydate2),
-    smrtype = data.table::last(smrtype),
-    pkg_count = data.table::last(pkg_count),
     chi = data.table::last(chi),
     gender = data.table::last(gender),
     dob = data.table::last(dob),
