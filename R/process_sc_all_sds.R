@@ -71,9 +71,11 @@ process_sc_all_sds <- function(
     sds_end_date := fix_sc_end_dates(sds_start_date, sds_end_date, sds_period_end_date)
   ]
 
-  sds_full_clean[, c("sds_period_start_date",
-                     "sds_period_end_date",
-                     "sds_start_date_after_end_date") := NULL]
+  sds_full_clean[, c(
+    "sds_period_start_date",
+    "sds_period_end_date",
+    "sds_start_date_after_end_date"
+  ) := NULL]
 
   # Rename for matching source variables
   data.table::setnames(
@@ -82,7 +84,7 @@ process_sc_all_sds <- function(
     c("record_keydate1", "record_keydate2")
   )
 
-  sds_full_clean = unique(sds_full_clean)
+  sds_full_clean <- unique(sds_full_clean)
 
   cols_sds_option <- grep(
     "^sds_option_",
@@ -137,10 +139,12 @@ process_sc_all_sds <- function(
     ),
     by = .(sending_location, social_care_id, smrtype)
   ]
-  data.table::setorder(sds_full_clean_long,
-                       period_rank,
-                       record_keydate1_rank,
-                       record_keydate2_rank)
+  data.table::setorder(
+    sds_full_clean_long,
+    period_rank,
+    record_keydate1_rank,
+    record_keydate2_rank
+  )
 
   sds_full_clean_long[,
     distinct_episode :=
