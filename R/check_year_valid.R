@@ -46,7 +46,7 @@ check_year_valid <- function(
     return(FALSE)
   } else if (year >= "2425" && type %in% "sparra") {
     return(FALSE)
-  } else if (year >= "2324" && type %in% c("ch", "hc", "sds", "at")) {
+  } else if (year >= "2425" && type %in% c("ch", "hc", "sds", "at")) {
     return(FALSE)
   }
 
