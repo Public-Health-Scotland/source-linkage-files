@@ -1,7 +1,7 @@
 #' Process A&E tests
 #'
 #' @description This script takes the processed A&E extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
