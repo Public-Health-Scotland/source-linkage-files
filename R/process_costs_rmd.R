@@ -52,6 +52,11 @@ process_costs_rmd <- function(file_name) {
     quiet = TRUE
   )
 
+  if (fs::file_info(output_file)$user == Sys.getenv("USER")) {
+    # Set the correct permissions
+    fs::file_chmod(path = output_file, mode = "660")
+  }
+
   utils::browseURL(output_file)
 
   return(NULL)

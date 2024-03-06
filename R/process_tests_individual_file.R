@@ -1,7 +1,7 @@
 #' Process Individual file tests
 #'
 #' @description Takes the processed individual file and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
