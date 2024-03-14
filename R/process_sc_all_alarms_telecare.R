@@ -73,17 +73,18 @@ process_sc_all_alarms_telecare <- function(
       convert_sc_sending_location_to_lca(sending_location)
     )
   ]
+
+  # RIGHT_JOIN with sc_demog_lookup
+  data <- data[sc_demog_lookup, on = .(sending_location, social_care_id)]
+
+  # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
+  data <- replace_sc_id_with_latest(data)
+
   data$person_id <- paste0(
     data$sending_location,
     "-",
     data$social_care_id
   )
-
-  # Join with sc_demog_lookup
-  data <- sc_demog_lookup[data, on = .(sending_location, social_care_id)]
-
-  # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
-  data <- replace_sc_id_with_latest(data)
 
   # Deal with episodes that have a package across quarters
   data[, pkg_count := seq_len(.N), by = .(
