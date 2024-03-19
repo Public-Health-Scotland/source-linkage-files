@@ -26,7 +26,16 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       "sds_start_date_after_period_end_date" # get removed
     ) %>%
     dplyr::collect() %>%
-    dplyr::distinct() %>%
+    dplyr::distinct()
+
+  if (!fs::file_exists(get_sandpit_extract_path(type = "sds"))) {
+    sds_full_data %>%
+      write_file(get_sandpit_extract_path(type = "sds"))
+  } else {
+    sds_full_data <- sds_full_data
+  }
+
+  sds_full_data <- sds_full_data %>%
     dplyr::mutate(dplyr::across(c(
       "sending_location",
       "sds_option_1",

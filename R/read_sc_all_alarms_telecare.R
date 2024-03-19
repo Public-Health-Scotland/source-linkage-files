@@ -26,7 +26,16 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
       "service_start_date_after_period_end_date"
     ) %>%
     dplyr::collect() %>%
-    dplyr::distinct() %>%
+    dplyr::distinct()
+
+  if (!fs::file_exists(get_sandpit_extract_path(type = "at"))) {
+    at_full_data %>%
+      write_file(get_sandpit_extract_path(type = "at"))
+  } else {
+    at_full_data <- at_full_data
+  }
+
+  at_full_data <- at_full_data %>%
     dplyr::mutate(
       period_start_date = dplyr::if_else(
         .data$period == "2017",
