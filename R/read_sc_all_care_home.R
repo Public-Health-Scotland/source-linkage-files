@@ -28,7 +28,16 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "age"
     ) %>%
     dplyr::collect() %>%
-    dplyr::distinct() %>%
+    dplyr::distinct()
+
+  if (!fs::file_exists(get_sandpit_extract_path(type = "ch"))) {
+    ch_data %>%
+      write_file(get_sandpit_extract_path(type = "ch"))
+  } else {
+    ch_data <- ch_data
+  }
+
+  ch_data <- ch_data %>%
     # Correct FY 2017
     dplyr::mutate(period = dplyr::if_else(
       .data$period == "2017",

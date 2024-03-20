@@ -77,5 +77,12 @@ read_lookup_sc_client <- function(fyyear,
     ) %>%
     dplyr::collect()
 
+  if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
+    client_data %>%
+      write_file(get_sandpit_extract_path(type = "client", year = fyyear))
+  } else {
+    client_data <- client_data
+  }
+
   return(client_data)
 }

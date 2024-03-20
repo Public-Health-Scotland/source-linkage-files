@@ -23,7 +23,16 @@ read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = 
       "submitted_postcode",
       "chi_gender_code"
     ) %>%
-    dplyr::collect() %>%
+    dplyr::collect()
+
+  if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
+    sc_demog %>%
+      write_file(get_sandpit_extract_path(type = "demographics"))
+  } else {
+    sc_demog <- sc_demog
+  }
+
+  sc_demog <- sc_demog %>%
     dplyr::mutate(
       dplyr::across(c(
         "latest_record_flag",
