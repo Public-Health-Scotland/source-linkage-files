@@ -40,9 +40,9 @@ produce_homelessness_completeness <- function(
   sg_all_assessments_annual <-
     openxlsx::read.xlsx(
       sg_pub_path,
-      sheet = "Table 1",
+      sheet = "Table 2",
       rows = 8L:39L,
-      cols = 1L:25L,
+      cols = 1L:29L,
       colNames = FALSE
     ) %>%
     dplyr::rename_with(~ c(
@@ -52,7 +52,8 @@ produce_homelessness_completeness <- function(
       paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
       paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
       paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L))
+      paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L))
     )) %>%
     tidyr::pivot_longer(
       !"CAName",
