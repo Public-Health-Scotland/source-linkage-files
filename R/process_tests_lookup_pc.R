@@ -5,7 +5,7 @@
 #' [previous_update()].
 #'
 #' @description This script takes the processed acute extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'

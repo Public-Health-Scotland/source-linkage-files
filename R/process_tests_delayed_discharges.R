@@ -1,7 +1,7 @@
 #' Process Delayed Discharges tests
 #'
 #' @description Takes the processed Delayed Discharges extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @param data a [tibble][tibble::tibble-package] of the processed data extract.
 #' @param year the financial year of the extract in the format '1718'.

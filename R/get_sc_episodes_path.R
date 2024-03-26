@@ -13,7 +13,7 @@
 #' @seealso [get_file_path()] for the generic function.
 get_sc_ch_episodes_path <- function(update = latest_update(), ...) {
   sc_ch_episodes_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Social_care"),
+    directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_care_home"),
     file_name = stringr::str_glue("all_ch_episodes_{update}.parquet"),
     ...
   )
@@ -33,7 +33,7 @@ get_sc_ch_episodes_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_sc_at_episodes_path <- function(update = latest_update(), ...) {
   sc_at_episodes_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Social_care"),
+    directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_alarms_telecare"),
     file_name = stringr::str_glue("all_at_episodes_{update}.parquet"),
     ...
   )
@@ -53,7 +53,7 @@ get_sc_at_episodes_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_sc_hc_episodes_path <- function(update = latest_update(), ...) {
   sc_hc_episodes_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Social_care"),
+    directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_home_care"),
     file_name = stringr::str_glue("all_hc_episodes_{update}.parquet"),
     ...
   )
@@ -73,7 +73,7 @@ get_sc_hc_episodes_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_sc_sds_episodes_path <- function(update = latest_update(), ...) {
   sc_sds_episodes_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Social_care"),
+    directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_sds"),
     file_name = stringr::str_glue("all_sds_episodes_{update}.parquet"),
     ...
   )
