@@ -89,6 +89,9 @@ write_tests_xlsx <- function(comparison_data,
 
   # add a new sheet for tests
   date_today <- format(Sys.Date(), "%d_%b")
+
+  date_today <- stringr::str_to_lower(date_today)
+
   sheet_name_dated <- ifelse(
     is.null(year),
     stringr::str_glue("{sheet_name}_{date_today}"),

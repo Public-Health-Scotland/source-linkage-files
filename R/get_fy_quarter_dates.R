@@ -15,8 +15,6 @@
 start_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
 
-  #check_quarter_format(quarter)
-
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
@@ -46,8 +44,6 @@ start_fy_quarter <- function(quarter) {
 #' @family date functions
 end_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
-
-  #check_quarter_format(quarter)
 
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
@@ -80,8 +76,6 @@ end_fy_quarter <- function(quarter) {
 start_next_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
 
-  #check_quarter_format(quarter)
-
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
@@ -112,8 +106,6 @@ start_next_fy_quarter <- function(quarter) {
 end_next_fy_quarter <- function(quarter) {
   quarter_unique <- unique(quarter)
 
-  #check_quarter_format(quarter)
-
   cal_quarter_date_unique <- lubridate::yq(quarter_unique)
 
   fy_quarter_date_unique <- lubridate::add_with_rollback(
@@ -128,28 +120,3 @@ end_next_fy_quarter <- function(quarter) {
 
   return(end_next_fy_quarter)
 }
-
-#' Check quarter format
-#'
-#' @inheritParams start_fy_quarter
-#'
-#' @return `quarter` invisibly if no issues were found
-#'
-#' @family date functions
-# check_quarter_format <- function(quarter) {
-#   stopifnot(typeof(quarter) == "character")
-#
-#   if (any(
-#     stringr::str_detect(quarter, "^\\d{4}Q[1-4]$", negate = TRUE),
-#     na.rm = TRUE
-#   )) {
-#     cli::cli_abort(
-#       c("{.var quarter} must be in the format {.val YYYYQx}
-#                    where {.val x} is the quarter number.",
-#         "v" = "For example {.val 2019Q1}."
-#       )
-#     )
-#   }
-#
-#   return(invisible(quarter))
-# }

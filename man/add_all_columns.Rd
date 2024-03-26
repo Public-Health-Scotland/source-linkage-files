@@ -4,10 +4,12 @@
 \alias{add_all_columns}
 \title{Add all columns}
 \usage{
-add_all_columns(episode_file)
+add_all_columns(episode_file, year)
 }
 \arguments{
 \item{episode_file}{Tibble containing episodic data.}
+
+\item{year}{The year to process, in FY format.}
 }
 \description{
 Add new columns based on SMRType and recid which follow a pattern

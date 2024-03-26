@@ -1,7 +1,7 @@
 #' Process Home Care tests
 #'
 #' @description This script takes the processed Home Care extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
@@ -17,7 +17,7 @@ process_tests_home_care <- function(data, year) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "home_care", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "hc", year, workbook_name = "extract")
 
   return(comparison)
 }
@@ -49,7 +49,7 @@ produce_source_hc_tests <- function(data,
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     dplyr::mutate(
       n_episodes = 1L,
       hc_per = dplyr::if_else(.data$smrtype == "HC-Per", 1L, 0L),
@@ -61,7 +61,7 @@ produce_source_hc_tests <- function(data,
     ) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison
-    dplyr::select("valid_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

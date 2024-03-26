@@ -1,7 +1,7 @@
 #' Process Episode file tests
 #'
 #' @description Takes the processed episode file and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
@@ -73,15 +73,7 @@ produce_episode_file_tests <- function(
   test_flags <- data %>%
     dplyr::group_by(.data$recid) %>%
     # use functions to create HB and partnership flags
-    dplyr::mutate(
-      unique_anon_chi = dplyr::lag(.data$anon_chi) != .data$anon_chi,
-      n_missing_anon_chi = is_missing(.data$anon_chi),
-      n_males = .data$gender == 1L,
-      n_females = .data$gender == 2L,
-      n_postcode = !is.na(.data$postcode) | !.data$postcode == "",
-      n_missing_postcode = is_missing(.data$postcode),
-      missing_dob = is.na(.data$dob)
-    ) %>%
+    create_demog_test_flags(chi = anon_chi) %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     create_hscp_test_flags(.data$hscp2018) %>%
@@ -111,7 +103,7 @@ produce_episode_file_tests <- function(
 
   test_flags <- test_flags %>%
     # keep variables for comparison
-    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum", group_by = "recid")
 

@@ -1,7 +1,7 @@
 #' Process A&E tests
 #'
 #' @description This script takes the processed A&E extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
@@ -21,7 +21,7 @@ process_tests_ae <- function(data, year) {
       max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
     )
   ) %>%
-    write_tests_xlsx(sheet_name = "AE2", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "ae2", year, workbook_name = "extract")
 
   return(comparison)
 }

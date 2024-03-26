@@ -1,7 +1,7 @@
 #' Process Outpatients tests
 #'
 #' @description This script takes the processed outpatients extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
@@ -23,7 +23,7 @@ process_tests_outpatients <- function(data, year) {
       add_hscp_count = FALSE
     )
   ) %>%
-    write_tests_xlsx(sheet_name = "00B", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "00b", year, workbook_name = "extract")
 
   return(comparison)
 }

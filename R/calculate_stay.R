@@ -37,9 +37,6 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
     if (anyNA(sc_qtr)) {
       cli::cli_abort("Some of the submitted quarters are missing")
     }
-    # else {
-    #   sc_qtr <- check_quarter_format(sc_qtr)
-    # }
 
     # Set Quarters
     qtr_end <- lubridate::add_with_rollback(
@@ -51,6 +48,7 @@ calculate_stay <- function(year, start_date, end_date, sc_qtr = NULL) {
       lubridate::period(1L, "days")
     )
 
+    # check logic here for care home methodology
     dummy_end_date <- dplyr::case_when(
       # If end_date is not missing use the end date
       !is.na(end_date) ~ end_date,

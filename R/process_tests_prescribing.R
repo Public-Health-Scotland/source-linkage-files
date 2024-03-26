@@ -1,7 +1,7 @@
 #' Process prescribing tests
 #'
 #' @description This script takes the processed prescribing extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
@@ -15,7 +15,7 @@ process_tests_prescribing <- function(data, year) {
     old_data = produce_source_pis_tests(old_data),
     new_data = produce_source_pis_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "PIS", year, workbook_name = "extract")
+    write_tests_xlsx(sheet_name = "pis", year, workbook_name = "extract")
 
   return(comparison)
 }
@@ -41,10 +41,10 @@ process_tests_prescribing <- function(data, year) {
 produce_source_pis_tests <- function(data) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags() %>%
+    create_demog_test_flags(chi = chi) %>%
     dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison
-    dplyr::select("valid_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

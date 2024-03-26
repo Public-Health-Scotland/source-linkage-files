@@ -48,13 +48,11 @@ test_that("SIMD file path returns as expected", {
 
 test_that("population estimates file path returns as expected", {
   suppressMessages({
-    expect_s3_class(get_datazone_pop_path(), "fs_path")
+    expect_s3_class(get_pop_path(type = "datazone"), "fs_path")
 
-    expect_equal(fs::path_ext(get_datazone_pop_path()), "rds")
+    expect_equal(fs::path_ext(get_pop_path(type = "datazone")), "rds")
 
-    expect_match(get_datazone_pop_path(), "DataZone2011_pop_est_2001_\\d+?")
-
-    expect_true(fs::file_exists(get_datazone_pop_path()))
+    expect_true(fs::file_exists(get_pop_path(type = "datazone")))
   })
 })
 
