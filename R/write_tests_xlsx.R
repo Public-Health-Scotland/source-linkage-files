@@ -19,7 +19,7 @@
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
-                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract")) {
+                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit")) {
   # Set up the workbook ----
 
   if (workbook_name == "lookup" | missing(year) & workbook_name == "lookup") {
@@ -28,7 +28,8 @@ write_tests_xlsx <- function(comparison_data,
     tests_workbook_name <- dplyr::case_when(
       workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
       workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
-      workbook_name == "extract" ~ stringr::str_glue(latest_update(), "_{year}_extract_tests")
+      workbook_name == "extract" ~ stringr::str_glue(latest_update(), "_{year}_extract_tests"),
+      workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests")
     )
   }
 
