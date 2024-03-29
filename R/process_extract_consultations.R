@@ -83,40 +83,56 @@ process_extract_ooh_consultations <- function(data, year) {
   # In which case take the earliest start and latest end.
   consultations_clean <- consultations_covid %>%
     # Sort in reverse order so we can use coalesce which takes the first non-missing value
-    dplyr::arrange(chi,
-                   ooh_case_id,
-                   record_keydate1,
-                   record_keydate2) %>%
+    dplyr::arrange(
+      chi,
+      ooh_case_id,
+      record_keydate1,
+      record_keydate2
+    ) %>%
     data.table::as.data.table()
 
   consultations_clean[, distinct_check := (
     record_keydate1 > data.table::shift(record_keydate2, fill = NA, type = "lag")
   ),
-  by = .(chi, ooh_case_id, consultation_type, location)]
+  by = .(chi, ooh_case_id, consultation_type, location)
+  ]
   consultations_clean[, distinct_check := tidyr::replace_na(distinct_check, TRUE)]
   consultations_clean[, episode_counter := cumsum(distinct_check),
-                      by = .(chi, ooh_case_id, consultation_type, location)]
+    by = .(chi, ooh_case_id, consultation_type, location)
+  ]
   consultations_clean[,
-                      c("record_keydate1",
-                        "record_keydate2") := list(min(record_keydate1),
-                                                   max(record_keydate2)),
-                      by = .(chi,
-                             ooh_case_id,
-                             consultation_type,
-                             location,
-                             episode_counter)]
+    c(
+      "record_keydate1",
+      "record_keydate2"
+    ) := list(
+      min(record_keydate1),
+      max(record_keydate2)
+    ),
+    by = .(
+      chi,
+      ooh_case_id,
+      consultation_type,
+      location,
+      episode_counter
+    )
+  ]
 
   # replace NA with previous non-NA value in each column
-  col_sel = names(consultations_clean)
-  col_sel = col_sel[!(col_sel %in% c("record_keydate1", "record_keydate2"))]
+  col_sel <- names(consultations_clean)
+  col_sel <- col_sel[!(col_sel %in% c("record_keydate1", "record_keydate2"))]
   consultations_clean[,
-                      (col_sel) := lapply(.SD, zoo::na.locf, na.rm = FALSE),
-                      .SDcols = col_sel]
+    (col_sel) := lapply(.SD, zoo::na.locf, na.rm = FALSE),
+    .SDcols = col_sel
+  ]
 
-  consultations_clean[,
-                      c("distinct_check",
-                        "episode_counter") := list(NULL, NULL)]
-  consultations_clean = unique(consultations_clean) %>%
+  consultations_clean[
+    ,
+    c(
+      "distinct_check",
+      "episode_counter"
+    ) := list(NULL, NULL)
+  ]
+  consultations_clean <- unique(consultations_clean) %>%
     dplyr::as_tibble()
   # cleaning up overlapping episodes done
 
