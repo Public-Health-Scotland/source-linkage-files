@@ -131,6 +131,7 @@ Matern
 Mcbride
 mcmahon
 MMMYY
+MONTHFLAG
 monthflag
 mpat
 multiday
@@ -172,6 +173,7 @@ quickstart
 rankdir
 Rbuildignore
 rcmdcheck
+RDD
 rdd
 rds
 reabl
