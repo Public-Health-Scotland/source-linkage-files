@@ -16,10 +16,12 @@ add_keep_population_flag <- function(individual_file, year) {
     ## Obtain the population estimates for Locality AgeGroup and Gender.
     pop_estimates <-
       readr::read_rds(get_pop_path(type = "datazone")) %>%
-      dplyr::select(.data$year,
-                    .data$datazone2011,
-                    .data$sex,
-                    .data$age0:.data$age90plus)
+      dplyr::select(
+        .data$year,
+        .data$datazone2011,
+        .data$sex,
+        .data$age0:.data$age90plus
+      )
 
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
     # Select out the estimates for the year of interest.
@@ -101,8 +103,9 @@ add_keep_population_flag <- function(individual_file, year) {
         new_nsu_figure = .data$nsu_population - .data$difference,
         scaling_factor = .data$new_nsu_figure / .data$nsu_population,
         scaling_factor = dplyr::case_when(.data$scaling_factor < 0 ~ 0,
-                                          .data$scaling_factor > 1 ~ 1,
-                                          .default = .data$scaling_factor),
+          .data$scaling_factor > 1 ~ 1,
+          .default = .data$scaling_factor
+        ),
         keep_nsu = stats::rbinom(.data$nsu_population, 1, .data$scaling_factor)
       ) %>%
       dplyr::filter(.data$keep_nsu == 1L) %>%

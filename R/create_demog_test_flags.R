@@ -25,6 +25,6 @@ create_demog_test_flags <- function(data, chi = c(chi, anon_chi)) {
       missing_dob = is.na(.data$dob)
     )
   # fix first value always NA, and it should always be TRUE
-  data[1, "unique_chi"] = TRUE
+  data[1, "unique_chi"] <- TRUE
   return(data)
 }

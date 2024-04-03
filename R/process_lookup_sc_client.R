@@ -142,18 +142,19 @@ process_lookup_sc_client <-
       )
     sc_client_lookup <-
       dplyr::mutate(sc_client_lookup,
-                    count_not_known = rowSums(
-                      dplyr::select(sc_client_lookup, tidyr::all_of(
-                        c(
-                          "sc_living_alone",
-                          "sc_support_from_unpaid_carer",
-                          "sc_social_worker",
-                          "sc_meals",
-                          "sc_day_care"
-                        )
-                      )) == "Not Known",
-                      na.rm = TRUE
-                    )) %>%
+        count_not_known = rowSums(
+          dplyr::select(sc_client_lookup, tidyr::all_of(
+            c(
+              "sc_living_alone",
+              "sc_support_from_unpaid_carer",
+              "sc_social_worker",
+              "sc_meals",
+              "sc_day_care"
+            )
+          )) == "Not Known",
+          na.rm = TRUE
+        )
+      ) %>%
       dplyr::arrange(.data$chi, .data$count_not_known) %>%
       dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
       dplyr::select(-.data$sending_location)
