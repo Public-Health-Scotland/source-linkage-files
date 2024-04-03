@@ -27,6 +27,8 @@ create_episode_file(
 
 \item{dd_data}{The processed DD extract}
 
+\item{homelessness_lookup}{the lookup file for homelessness}
+
 \item{nsu_cohort}{The NSU data for the year}
 
 \item{ltc_data}{The LTC data for the year}
@@ -36,6 +38,8 @@ create_episode_file(
 \item{slf_gpprac_lookup}{The SLF GP Practice lookup}
 
 \item{slf_deaths_lookup}{The SLF deaths lookup.}
+
+\item{sc_client}{scoial care lookup file}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

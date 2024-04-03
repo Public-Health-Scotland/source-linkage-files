@@ -35,7 +35,7 @@ produce_source_sds_tests <- function(data,
                                      max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
     dplyr::select("unique_chi":"West_Lothian") %>%

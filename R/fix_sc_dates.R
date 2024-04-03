@@ -4,7 +4,7 @@
 #' Set this to the start of the fyear
 #'
 #' @param start_date A vector containing dates.
-#' @param period Social care latest submission period.
+#' @param period_start the beginning date of Social care latest submission period.
 #'
 #' @return A date vector with replaced end dates
 fix_sc_start_dates <- function(start_date, period_start) {
@@ -27,7 +27,7 @@ fix_sc_start_dates <- function(start_date, period_start) {
 #'
 #' @param start_date A vector containing dates.
 #' @param end_date A vector containing dates.
-#' @param period Social care latest submission period.
+#' @param period_end_date the last date of Social care latest submission period.
 #'
 #' @return A date vector with replaced end dates
 fix_sc_end_dates <- function(start_date, end_date, period_end_date) {
@@ -45,14 +45,13 @@ fix_sc_end_dates <- function(start_date, end_date, period_end_date) {
 
 
 
-#' Fix sc end dates
+#' Fix sc missing end dates
 #'
 #' @description Fix social care end dates when the end date is earlier than the
 #' start date. Set this to the end of the fyear
 #'
-#' @param start_date A vector containing dates.
 #' @param end_date A vector containing dates.
-#' @param period Social care latest submission period.
+#' @param period_end the last date of Social care latest submission period.
 #'
 #' @return A date vector with replaced end dates
 fix_sc_missing_end_dates <- function(end_date, period_end) {

@@ -22,15 +22,15 @@ flag_non_scottish_residents <- function(
   # of the postcode
   pc_areas <- slf_pc_lookup %>%
     dplyr::mutate(
-      pc_area = stringr::str_match(postcode, "^[A-Z]{1,3}"),
+      pc_area = stringr::str_match(.data$postcode, "^[A-Z]{1,3}"),
       scot_flag = TRUE
     ) %>%
-    dplyr::distinct(pc_area, scot_flag)
+    dplyr::distinct(.data$pc_area, .data$scot_flag)
 
   # Create a flag, 'keep_flag', to determine whether individuals are Scottish
   # residents or not
   return_data <- data %>%
-    dplyr::mutate(pc_area = stringr::str_match(postcode, "^[A-Z]{1,3}")) %>%
+    dplyr::mutate(pc_area = stringr::str_match(.data$postcode, "^[A-Z]{1,3}")) %>%
     dplyr::left_join(pc_areas, by = "pc_area") %>%
     dplyr::mutate(
       dummy_postcode = .data$postcode %in% c("BF010AA", "NF1 1AB", "NK010AA") |
@@ -58,6 +58,7 @@ flag_non_scottish_residents <- function(
 #' @param data An SLF individual file.
 #' @param slf_pc_lookup The Source postcode lookup, defaults
 #' to [get_slf_postcode_path()] read using [read_file()].
+#' @param chi_variable string, claiming chi or anon_chi.
 #'
 #' @return The individual file with HRI variables matched on
 #' @export
@@ -88,42 +89,42 @@ add_hri_variables <- function(
       "ooh_cases"
     ) %>%
     flag_non_scottish_residents(slf_pc_lookup = slf_pc_lookup) %>%
-    dplyr::filter(scottish_resident == 0L) %>%
+    dplyr::filter(.data$scottish_resident == 0L) %>%
     # Scotland cost and proportion
     dplyr::mutate(
-      scotland_cost = sum(health_net_cost),
-      scotland_pct = (health_net_cost / scotland_cost) * 100
+      scotland_cost = sum(.data$health_net_cost),
+      scotland_pct = (.data$health_net_cost / .data$scotland_cost) * 100
     ) %>%
-    dplyr::arrange(dplyr::desc(health_net_cost)) %>%
-    dplyr::mutate(hri_scotp = cumsum(scotland_pct)) %>%
+    dplyr::arrange(dplyr::desc(.data$health_net_cost)) %>%
+    dplyr::mutate(hri_scotp = cumsum(.data$scotland_pct)) %>%
     # Health Board
-    dplyr::group_by(hbrescode) %>%
+    dplyr::group_by(.data$hbrescode) %>%
     dplyr::mutate(
-      hb_cost = sum(health_net_cost),
-      hb_pct = (health_net_cost / hb_cost) * 100
+      hb_cost = sum(.data$health_net_cost),
+      hb_pct = (.data$health_net_cost / .data$hb_cost) * 100
     ) %>%
-    dplyr::arrange(dplyr::desc(health_net_cost), .by_group = TRUE) %>%
-    dplyr::mutate(hri_hbp = cumsum(hb_pct)) %>%
+    dplyr::arrange(dplyr::desc(.data$health_net_cost), .by_group = TRUE) %>%
+    dplyr::mutate(hri_hbp = cumsum(.data$hb_pct)) %>%
     dplyr::ungroup() %>%
     # LCA
-    dplyr::group_by(lca) %>%
+    dplyr::group_by(.data$lca) %>%
     dplyr::mutate(
-      lca_cost = sum(health_net_cost),
-      lca_pct = (health_net_cost / lca_cost) * 100
+      lca_cost = sum(.data$health_net_cost),
+      lca_pct = (.data$health_net_cost / .data$lca_cost) * 100
     ) %>%
-    dplyr::arrange(dplyr::desc(health_net_cost), .by_group = TRUE) %>%
-    dplyr::mutate(hri_lcap = cumsum(lca_pct)) %>%
+    dplyr::arrange(dplyr::desc(.data$health_net_cost), .by_group = TRUE) %>%
+    dplyr::mutate(hri_lcap = cumsum(.data$lca_pct)) %>%
     dplyr::ungroup() %>%
     # Add HRI flags
     dplyr::mutate(
-      hri_scot = hri_scotp <= 50.0,
-      hri_hb = hri_hbp <= 50.0,
-      hri_lca = hri_lcap <= 50.0,
+      hri_scot = .data$hri_scotp <= 50.0,
+      hri_hb = .data$hri_hbp <= 50.0,
+      hri_lca = .data$hri_lcap <= 50.0,
       # Deal with potential missing variables
-      hri_hb = dplyr::if_else(is_missing(hbrescode), FALSE, hri_hb),
-      hri_hbp = dplyr::if_else(is_missing(hbrescode), NA, hri_hbp),
-      hri_lca = dplyr::if_else(is_missing(lca), FALSE, hri_lca),
-      hri_lcap = dplyr::if_else(is_missing(lca), NA, hri_lcap)
+      hri_hb = dplyr::if_else(is_missing(.data$hbrescode), FALSE, .data$hri_hb),
+      hri_hbp = dplyr::if_else(is_missing(.data$hbrescode), NA, .data$hri_hbp),
+      hri_lca = dplyr::if_else(is_missing(.data$lca), FALSE, .data$hri_lca),
+      hri_lcap = dplyr::if_else(is_missing(.data$lca), NA, .data$hri_lcap)
     ) %>%
     # Select only required variables for the lookup
     dplyr::select(
