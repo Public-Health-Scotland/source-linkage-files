@@ -77,7 +77,7 @@ produce_individual_file_tests <- function(data) {
         "attendances",
         "admissions",
         "cases",
-        "consulations"
+        "consultations"
       ),
       measure = "all"
     )
