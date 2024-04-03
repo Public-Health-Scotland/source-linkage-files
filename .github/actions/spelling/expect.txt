@@ -139,7 +139,6 @@ Mcbride
 mcmahon
 MMMYY
 MONTHFLAG
-monthflag
 mpat
 multiday
 multisession
@@ -182,7 +181,6 @@ rankdir
 Rbuildignore
 rcmdcheck
 RDD
-rdd
 rds
 reabl
 reablement
