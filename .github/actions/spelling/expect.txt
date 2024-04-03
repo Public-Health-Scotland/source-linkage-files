@@ -70,7 +70,9 @@ dtplyr
 DVPROD
 dvprod
 envir
+fcase
 feb
+fifelse
 fileext
 Finalise
 fst
@@ -87,6 +89,7 @@ GPOo
 gpprac
 gss
 hbnames
+hbp
 hbpraccode
 hbrescode
 hbtreatcode
@@ -99,12 +102,14 @@ hjust
 hms
 homecare
 homev
+hri
 hscdiip
 hscp
 hscpnames
 htmlwidgets
 IDPC
 infyyear
+intzone
 ipdc
 issuenumber
 itle
@@ -119,6 +124,8 @@ keytime
 keytimex
 kis
 lazydt
+lcap
+LCHO
 lgl
 lintr
 los
@@ -162,6 +169,7 @@ pkgdown
 placeinc
 plics
 PMS
+popluation
 postcodes
 PPAs
 Prac
@@ -196,12 +204,15 @@ RStudio
 rstudio
 rstudioapi
 Rtype
+scoial
+scotp
 SDcols
 seealso
 selfharm
 setkeyv
 setnafill
 setnames
+setorder
 Siar
 sigfac
 simd
