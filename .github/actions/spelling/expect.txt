@@ -9,6 +9,7 @@ atlassian
 attendcat
 aut
 bedday
+beddays
 birthtime
 bodyloc
 boxi
@@ -60,11 +61,13 @@ dischto
 disdest
 dminutes
 dna
+dnas
 dontrun
 downup
 dplyr
 dsn
 dtplyr
+DVPROD
 dvprod
 envir
 fcase
@@ -79,6 +82,7 @@ fyyear
 geogs
 ggplot
 github
+GLS
 gls
 gms
 GPOo
@@ -92,6 +96,7 @@ hbtreatcode
 hbtreatname
 hci
 HCP
+HHG
 hhg
 hjust
 hms
@@ -125,6 +130,7 @@ lgl
 lintr
 los
 ltc
+ltcs
 lubridate
 magrittr
 markdownguide
@@ -192,6 +198,7 @@ roxygen
 Rprofile
 Rscript
 rspm
+RStudio
 rstudio
 rstudioapi
 Rtype
@@ -207,6 +214,7 @@ setorder
 Siar
 sigfac
 simd
+SLF
 slf
 slfhelper
 smr
@@ -215,6 +223,7 @@ smrtype
 SPARRA
 sparra
 spd
+SPSS
 spss
 stadm
 starwars
