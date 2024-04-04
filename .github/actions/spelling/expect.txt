@@ -9,7 +9,6 @@ atlassian
 attendcat
 aut
 bedday
-beddays
 birthtime
 bodyloc
 boxi
@@ -61,13 +60,11 @@ dischto
 disdest
 dminutes
 dna
-dnas
 dontrun
 downup
 dplyr
 dsn
 dtplyr
-DVPROD
 dvprod
 envir
 fcase
@@ -82,7 +79,6 @@ fyyear
 geogs
 ggplot
 github
-GLS
 gls
 gms
 GPOo
@@ -96,7 +92,6 @@ hbtreatcode
 hbtreatname
 hci
 HCP
-HHG
 hhg
 hjust
 hms
@@ -130,7 +125,6 @@ lgl
 lintr
 los
 ltc
-ltcs
 lubridate
 magrittr
 markdownguide
@@ -147,7 +141,6 @@ NAs
 newcons
 nhs
 nhshosp
-NRS
 nrs
 nsu
 odbc
@@ -171,7 +164,6 @@ PMS
 popluation
 postcodes
 PPAs
-Prac
 prac
 praccode
 ptypes
@@ -214,7 +206,6 @@ setorder
 Siar
 sigfac
 simd
-SLF
 slf
 slfhelper
 smr
