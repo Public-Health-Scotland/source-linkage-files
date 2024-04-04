@@ -190,7 +190,6 @@ roxygen
 Rprofile
 Rscript
 rspm
-RStudio
 rstudio
 rstudioapi
 Rtype
@@ -211,10 +210,8 @@ slfhelper
 smr
 SMRA
 smrtype
-SPARRA
 sparra
 spd
-SPSS
 spss
 stadm
 starwars
@@ -225,7 +222,6 @@ submis
 tadm
 tarchetypes
 tbl
-Telecare
 telecare
 testthat
 thom
