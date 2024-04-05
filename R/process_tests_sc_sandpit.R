@@ -5,7 +5,7 @@
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #' @export
 #'
-process_tests_sandpit <- function(type = c("at", "hc", "ch", "sds", "demographics", "client")) {
+process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demographics", "client")) {
   comparison <- produce_test_comparison(
     old_data = produce_sc_sandpit_tests(
       read_file(get_sandpit_extract_path(type = {{ type }}, update = previous_update())),
