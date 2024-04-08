@@ -4,7 +4,10 @@
 \alias{produce_sc_sandpit_tests}
 \title{Produce tests for social care sandpit extracts.}
 \usage{
-produce_sc_sandpit_tests(data, type = c("demographics", "client", "extract"))
+produce_sc_sandpit_tests(
+  data,
+  type = c("demographics", "client", "at", "ch", "hc", "sds")
+)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
