@@ -7,6 +7,7 @@
 write_tests_xlsx(
   comparison_data,
   sheet_name,
+  year = NULL,
   workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit"),
   ...
 )
@@ -17,11 +18,11 @@ write_tests_xlsx(
 \item{sheet_name}{the name of the dataset, which will be used to create
 the sheet name}
 
-\item{workbook_name}{Split up tests into 4 different workbooks for ease of
-interpreting. Episode file, individual file, lookup and extract tests.}
-
 \item{year}{If applicable, the financial year of the data in '1920' format
 this will be prepended to the sheet name. The default is \code{NULL}.}
+
+\item{workbook_name}{Split up tests into 4 different workbooks for ease of
+interpreting. Episode file, individual file, lookup and extract tests.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
