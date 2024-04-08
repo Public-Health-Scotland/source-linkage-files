@@ -18,7 +18,7 @@ process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demograp
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = {{ type }}, workbook_name = "sandpit")
+    write_tests_xlsx(sheet_name = {{ type }}, year = year, workbook_name = "sandpit")
 
   return(comparison)
 }
@@ -34,7 +34,7 @@ process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demograp
 #' from [calculate_measures()]
 #' @export
 #'
-produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "extract")) {
+produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "at", "ch", "hc", "sds")) {
   if (type == "demographics") {
     missing_tests <- data %>%
       dplyr::mutate(
@@ -126,7 +126,8 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "e
 
     return(output)
 
-  } else if (type == "extract" | type == "client") {
+  } else if (type == "client" | type == "at" | type == "ch" |
+             type == "hc" | type == "sds") {
     output <- data %>%
       # create test flags
       dplyr::mutate(
@@ -137,10 +138,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "e
       # remove variables that won't be summed
       dplyr::select(c("unique_scid":"West_Lothian")) %>%
       # use function to sum new test flags
-      calculate_measures(measure = "sum") %>%
-      dplyr::mutate(
-        recid = {{ type }}
-      )
+     calculate_measures(measure = "sum")
 
     return(output)
   }
