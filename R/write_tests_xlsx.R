@@ -18,12 +18,13 @@
 #' @seealso produce_test_comparison
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
+                             year = NULL,
                              workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit"),
                              ...
                              ) {
   # Set up the workbook ----
 
-  if (missing(year)) {
+  if (is.null(year)) {
     tests_workbook_name <- dplyr::case_when(
       workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
       workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
