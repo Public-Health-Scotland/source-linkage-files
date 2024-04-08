@@ -5,7 +5,8 @@
 \title{Process tests for the social care sandpit extracts}
 \usage{
 process_tests_sc_sandpit(
-  type = c("at", "hc", "ch", "sds", "demographics", "client")
+  type = c("at", "hc", "ch", "sds", "demographics", "client"),
+  year = NULL
 )
 }
 \arguments{
