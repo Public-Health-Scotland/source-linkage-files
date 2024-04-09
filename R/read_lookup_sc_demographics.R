@@ -31,7 +31,6 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
 
     sc_demog %>%
       process_tests_sc_sandpit(type = "demographics")
-
   } else {
     sc_demog <- sc_demog
   }
