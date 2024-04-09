@@ -125,9 +125,8 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
       purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 
     return(output)
-
   } else if (type == "client" | type == "at" | type == "ch" |
-             type == "hc" | type == "sds") {
+    type == "hc" | type == "sds") {
     output <- data %>%
       # create test flags
       dplyr::mutate(
@@ -138,7 +137,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
       # remove variables that won't be summed
       dplyr::select(c("unique_scid":"West_Lothian")) %>%
       # use function to sum new test flags
-     calculate_measures(measure = "sum")
+      calculate_measures(measure = "sum")
 
     return(output)
   }
