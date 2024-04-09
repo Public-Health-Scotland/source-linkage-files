@@ -28,6 +28,10 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
   if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
     sc_demog %>%
       write_file(get_sandpit_extract_path(type = "demographics"))
+
+    sc_demog %>%
+      process_tests_sc_sandpit(type = "demographics")
+
   } else {
     sc_demog <- sc_demog
   }
