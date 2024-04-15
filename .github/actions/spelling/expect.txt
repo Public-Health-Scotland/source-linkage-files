@@ -12,7 +12,6 @@ aut
 bedday
 birthtime
 bodyloc
-BOXI
 boxi
 callr
 canx
