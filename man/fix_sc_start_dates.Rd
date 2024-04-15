@@ -9,7 +9,7 @@ fix_sc_start_dates(start_date, period_start)
 \arguments{
 \item{start_date}{A vector containing dates.}
 
-\item{period}{Social care latest submission period.}
+\item{period_start}{the beginning date of Social care latest submission period.}
 }
 \value{
 A date vector with replaced end dates

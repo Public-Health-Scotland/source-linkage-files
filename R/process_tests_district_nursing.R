@@ -58,7 +58,7 @@ produce_source_dn_tests <- function(data,
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     # keep variables for comparison

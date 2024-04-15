@@ -7,8 +7,6 @@
 #' @param data The full processed data which will be selected from to create
 #' the year specific data.
 #' @param year The year to process, in FY format.
-#' @param client_lookup The Social Care Client lookup, created by
-#' [process_lookup_sc_client()].
 #' @param ch_costs The Care Home costs lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.

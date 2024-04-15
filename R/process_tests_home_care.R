@@ -49,7 +49,7 @@ produce_source_hc_tests <- function(data,
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     dplyr::mutate(
       n_episodes = 1L,
       hc_per = dplyr::if_else(.data$smrtype == "HC-Per", 1L, 0L),
