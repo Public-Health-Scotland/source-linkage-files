@@ -30,7 +30,7 @@ process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demograp
 #' (data is from [get_sandpit_extract_path()])
 #' @param type Name of sandpit extract.
 #'
-#' @returna a dataframe with a count of each flag
+#' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
 #' @export
 #'
