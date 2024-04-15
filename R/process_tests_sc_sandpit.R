@@ -135,7 +135,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
       ) %>%
       create_sending_location_test_flags(.data$sending_location) %>%
       # remove variables that won't be summed
-      dplyr::select(c("unique_scid":"West_Lothian")) %>%
+      dplyr::select(c("unique_sc_id":"West_Lothian")) %>%
       # use function to sum new test flags
       calculate_measures(measure = "sum")
 
