@@ -13,6 +13,7 @@ bedday
 birthtime
 bodyloc
 BOXI
+boxi
 callr
 canx
 carehome
@@ -169,8 +170,6 @@ postcodes
 ppas
 prac
 praccode
-prac
-praccode
 ptypes
 purrr
 quickstart
@@ -207,6 +206,7 @@ setkeyv
 setnafill
 setnames
 setorder
+Siar
 siar
 sigfac
 simd
