@@ -131,7 +131,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
       # create test flags
       dplyr::mutate(
         unique_sc_id = dplyr::lag(.data$social_care_id) != .data$social_care_id,
-        n_missing_scid = is_missing(.data$social_care_id)
+        n_missing_sc_id = is_missing(.data$social_care_id)
       ) %>%
       create_sending_location_test_flags(.data$sending_location) %>%
       # remove variables that won't be summed
