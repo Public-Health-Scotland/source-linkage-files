@@ -12,6 +12,10 @@ get_sandpit_extract_path(
 )
 }
 \arguments{
+\item{type}{sandpit extract type at, ch, hc, sds, client, or demographics}
+
+\item{year}{financial year in string class}
+
 \item{update}{The update month to use,
 defaults to \code{\link[=latest_update]{latest_update()}}}
 

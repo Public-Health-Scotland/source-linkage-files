@@ -19,7 +19,7 @@ replace_sc_id_with_latest <- function(data) {
     dplyr::distinct()
 
   change_sc_id <- filter_data %>%
-    dplyr::filter(latest_flag == 1) %>%
+    dplyr::filter(.data$latest_flag == 1) %>%
     # Rename for latest sc id
     dplyr::rename(latest_sc_id = "social_care_id") %>%
     # drop latest_flag for matching
@@ -31,7 +31,7 @@ replace_sc_id_with_latest <- function(data) {
       by = c("sending_location", "chi"),
       multiple = "all"
     ) %>%
-    dplyr::filter(!(is.na(period))) %>%
+    dplyr::filter(!(is.na(.data$period))) %>%
     # Overwrite sc id with the latest
     dplyr::mutate(
       social_care_id = dplyr::if_else(

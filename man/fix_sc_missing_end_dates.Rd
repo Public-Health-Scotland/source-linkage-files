@@ -2,16 +2,14 @@
 % Please edit documentation in R/fix_sc_dates.R
 \name{fix_sc_missing_end_dates}
 \alias{fix_sc_missing_end_dates}
-\title{Fix sc end dates}
+\title{Fix sc missing end dates}
 \usage{
 fix_sc_missing_end_dates(end_date, period_end)
 }
 \arguments{
 \item{end_date}{A vector containing dates.}
 
-\item{start_date}{A vector containing dates.}
-
-\item{period}{Social care latest submission period.}
+\item{period_end}{the last date of Social care latest submission period.}
 }
 \value{
 A date vector with replaced end dates

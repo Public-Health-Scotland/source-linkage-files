@@ -11,7 +11,7 @@ fix_sc_end_dates(start_date, end_date, period_end_date)
 
 \item{end_date}{A vector containing dates.}
 
-\item{period}{Social care latest submission period.}
+\item{period_end_date}{the last date of Social care latest submission period.}
 }
 \value{
 A date vector with replaced end dates

@@ -17,6 +17,13 @@ process_sc_all_alarms_telecare <- function(
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
 
+  # fix "no visible binding for global variable"
+  service_end_date <- period_end_date <- service_start_date <- service_type <-
+    default <- sending_location <- social_care_id <- pkg_count <-
+    record_keydate1 <- smrtype <- period <- record_keydate2 <- chi <-
+    gender <- dob <- postcode <- recid <- person_id <- sc_send_lca <-
+    period_start_date <- NULL
+
   # Convert to data.table
   data.table::setDT(data)
   data.table::setDT(sc_demog_lookup)
@@ -75,7 +82,7 @@ process_sc_all_alarms_telecare <- function(
   ]
 
   # RIGHT_JOIN with sc_demog_lookup
-  data <- data[sc_demog_lookup, on = .(sending_location, social_care_id)]
+  data <- data[sc_demog_lookup, on = list(sending_location, social_care_id)]
 
   # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
   data <- replace_sc_id_with_latest(data)
@@ -87,7 +94,7 @@ process_sc_all_alarms_telecare <- function(
   )
 
   # Deal with episodes that have a package across quarters
-  data[, pkg_count := seq_len(.N), by = .(
+  data[, pkg_count := seq_len(.N), by = list(
     sending_location,
     social_care_id,
     record_keydate1,
@@ -110,7 +117,7 @@ process_sc_all_alarms_telecare <- function(
     data.table::as.data.table()
 
   # Summarize to merge episodes
-  qtr_merge <- data[, .(
+  qtr_merge <- data[, list(
     sc_latest_submission = data.table::last(period),
     record_keydate2 = data.table::last(record_keydate2),
     chi = data.table::last(chi),
@@ -120,7 +127,7 @@ process_sc_all_alarms_telecare <- function(
     recid = data.table::last(recid),
     person_id = data.table::last(person_id),
     sc_send_lca = data.table::last(sc_send_lca)
-  ), by = .(
+  ), by = list(
     sending_location,
     social_care_id,
     record_keydate1,
