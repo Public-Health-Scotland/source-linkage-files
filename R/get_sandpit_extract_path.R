@@ -2,8 +2,10 @@
 #'
 #' @description Get the file path for sandpit extracts
 #'
+#' @param year financial year in string class
 #' @param update The update month to use,
 #' defaults to [latest_update()]
+#' @param type sandpit extract type at, ch, hc, sds, client, or demographics
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #'

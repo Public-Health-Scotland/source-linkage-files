@@ -4,10 +4,12 @@
 \alias{read_lookup_sc_demographics}
 \title{Read SC demographics}
 \usage{
-read_lookup_sc_demographics(sc_connection = phs_db_connection(dsn = "DVPROD"))
+read_lookup_sc_demographics(
+  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")
+)
 }
 \arguments{
-\item{sc_connection}{Connection to the sc platform}
+\item{sc_dvprod_connection}{Connection to the sc platform}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

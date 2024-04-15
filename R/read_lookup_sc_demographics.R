@@ -1,13 +1,13 @@
 #' Read SC demographics
 #'
-#' @param sc_connection Connection to the sc platform
+#' @param sc_dvprod_connection Connection to the sc platform
 #'
 #' @return a [tibble][tibble::tibble-package]
 #' @export
 #'
-read_lookup_sc_demographics <- function(sc_connection = phs_db_connection(dsn = "DVPROD")) {
+read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   sc_demog <- dplyr::tbl(
-    sc_connection,
+    sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "demographic_snapshot")
   ) %>%
     dplyr::select(

@@ -24,19 +24,27 @@ process_sc_all_sds <- function(
     # when multiple social_care_id from sending_location for single CHI
     # replace social_care_id with latest
     replace_sc_id_with_latest() %>%
-    dplyr::select(-sds_start_date_after_period_end_date) %>%
+    dplyr::select(-.data$sds_start_date_after_period_end_date) %>%
     dplyr::distinct() %>%
     # sds_options may contain only a few NA, replace NA by 0
     dplyr::mutate(
-      sds_option_1 = tidyr::replace_na(sds_option_1, 0),
-      sds_option_2 = tidyr::replace_na(sds_option_2, 0),
-      sds_option_3 = tidyr::replace_na(sds_option_3, 0)
+      sds_option_1 = tidyr::replace_na(.data$sds_option_1, 0),
+      sds_option_2 = tidyr::replace_na(.data$sds_option_2, 0),
+      sds_option_3 = tidyr::replace_na(.data$sds_option_3, 0)
     )
 
   # Data Cleaning ---------------------------------------
   # Convert matched_sds_data to data.table
   sds_full_clean <- data.table::as.data.table(matched_sds_data)
   rm(matched_sds_data)
+
+  # fix "no visible binding for global variable"
+  sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
+    sds_period_end_date <- received <- sds_option <- sending_location <-
+    period <- record_keydate1 <- record_keydate2 <- social_care_id <-
+    smrtype <- period_rank <- record_keydate1_rank <- record_keydate2_rank <-
+    distinct_episode <- episode_counter <- chi <- gender <- dob <- postcode <-
+    recid <- person_id <- sc_send_lca <- NULL
 
   # Deal with SDS option 4
   # Convert option flags into logical T/F
@@ -137,7 +145,7 @@ process_sc_all_sds <- function(
       rank(record_keydate1),
       rank(record_keydate2)
     ),
-    by = .(sending_location, social_care_id, smrtype)
+    by = list(sending_location, social_care_id, smrtype)
   ]
   data.table::setorder(
     sds_full_clean_long,
@@ -150,16 +158,16 @@ process_sc_all_sds <- function(
     distinct_episode :=
       (data.table::shift(record_keydate2, type = "lag") < record_keydate1) %>%
       tidyr::replace_na(TRUE),
-    by = .(sending_location, social_care_id, smrtype)
+    by = list(sending_location, social_care_id, smrtype)
   ]
 
   sds_full_clean_long[,
     episode_counter := cumsum(distinct_episode),
-    by = .(sending_location, social_care_id, smrtype)
+    by = list(sending_location, social_care_id, smrtype)
   ]
 
   # Merge episodes by episode counter
-  final_data <- sds_full_clean_long[, .(
+  final_data <- sds_full_clean_long[, list(
     sc_latest_submission = data.table::last(period),
     record_keydate1 = min(record_keydate1),
     record_keydate2 = max(record_keydate2),
@@ -170,7 +178,7 @@ process_sc_all_sds <- function(
     recid = data.table::last(recid),
     person_id = data.table::last(person_id),
     sc_send_lca = data.table::last(sc_send_lca)
-  ), by = .(sending_location, social_care_id, smrtype, episode_counter)]
+  ), by = list(sending_location, social_care_id, smrtype, episode_counter)]
   rm(sds_full_clean_long)
 
   # Drop episode_counter and convert back to data.frame if needed

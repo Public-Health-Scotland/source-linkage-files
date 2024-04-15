@@ -2,16 +2,18 @@
 #'
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
+#' @param homelessness_lookup the lookup file for homelessness
+#' @param sc_client scoial care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
+#' (instead of chi)
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
 #' @inheritParams join_deaths_data
 #' @inheritParams match_on_ltcs
 #' @inheritParams link_delayed_discharge_eps
-#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
-#' (instead of chi)
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
@@ -430,7 +432,7 @@ join_cohort_lookups <- function(
 #'
 #' @description Match on sc client variables.
 #'
-#' @param individual_file the processed individual file
+#' @param data the processed individual file
 #' @param year financial year.
 #' @param sc_client SC client lookup
 #' @param file_type episode or individual file
