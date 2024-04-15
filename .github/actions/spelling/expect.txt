@@ -12,7 +12,7 @@ aut
 bedday
 birthtime
 bodyloc
-boxi
+BOXI
 callr
 canx
 carehome
@@ -109,7 +109,7 @@ infyyear
 intzone
 ipdc
 issuenumber
-istle
+itle
 iwalk
 jaccard
 jan
@@ -133,7 +133,7 @@ markdownguide
 matern
 mcbride
 mcmahon
-miu
+MIU
 mmmyy
 monthflag
 mpat
@@ -200,7 +200,7 @@ rstudioapi
 rtype
 scoial
 scotp
-sdcols
+SDcols
 seealso
 selfharm
 setkeyv
