@@ -48,6 +48,8 @@ link_delayed_discharge_eps <- function(
       dummy_id = dplyr::row_number()
     )
 
+  # fix the issue "no visible binding for global variable x, y"
+  x <- y <- NULL
   by_dd <- dplyr::join_by(
     "chi",
     x$record_keydate1 >= y$dummy_cij_start,

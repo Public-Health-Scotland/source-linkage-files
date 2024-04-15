@@ -3,6 +3,7 @@
 #' @description Creates the individual file from the episode file.
 #'
 #' @param episode_file Tibble containing episodic data.
+#' @param homelessness_lookup the lookup file for homelessness
 #' @param anon_chi_in (Default:TRUE) Is `anon_chi` used in the input
 #' (instead of chi).
 #' @inheritParams create_episode_file

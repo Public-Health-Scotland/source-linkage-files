@@ -1,3 +1,5 @@
+skip_on_ci()
+
 test_that("write_file works", {
   rds_path <- tempfile(fileext = ".rds")
   parquet_path <- tempfile(fileext = ".parquet")

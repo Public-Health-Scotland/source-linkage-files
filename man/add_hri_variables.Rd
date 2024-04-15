@@ -13,6 +13,8 @@ add_hri_variables(
 \arguments{
 \item{data}{An SLF individual file.}
 
+\item{chi_variable}{string, claiming chi or anon_chi.}
+
 \item{slf_pc_lookup}{The Source postcode lookup, defaults
 to \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}} read using \code{\link[=read_file]{read_file()}}.}
 }
