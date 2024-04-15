@@ -15,6 +15,10 @@ produce_sc_sandpit_tests(
 
 \item{type}{Name of sandpit extract.}
 }
+\value{
+a dataframe with a count of each flag
+from \code{\link[=calculate_measures]{calculate_measures()}}
+}
 \description{
 Produce tests for social care sandpit extracts.
 }
