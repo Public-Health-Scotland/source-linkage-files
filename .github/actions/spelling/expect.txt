@@ -207,7 +207,6 @@ setnafill
 setnames
 setorder
 Siar
-siar
 sigfac
 simd
 slf
@@ -246,6 +245,6 @@ xlsx
 yearstay
 yml
 yyyyqx
-zihao
+Zihao
 zsav
 zstd
