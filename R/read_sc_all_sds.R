@@ -31,6 +31,9 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
   if (!fs::file_exists(get_sandpit_extract_path(type = "sds"))) {
     sds_full_data %>%
       write_file(get_sandpit_extract_path(type = "sds"))
+
+    sds_full_data %>%
+      process_tests_sandpit(type = "sds")
   } else {
     sds_full_data <- sds_full_data
   }

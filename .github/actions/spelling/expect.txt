@@ -12,7 +12,7 @@ aut
 bedday
 birthtime
 bodyloc
-BOXI
+boxi
 callr
 canx
 carehome
@@ -169,8 +169,6 @@ postcodes
 ppas
 prac
 praccode
-prac
-praccode
 ptypes
 purrr
 quickstart
@@ -207,7 +205,7 @@ setkeyv
 setnafill
 setnames
 setorder
-siar
+Siar
 sigfac
 simd
 slf
@@ -246,6 +244,6 @@ xlsx
 yearstay
 yml
 yyyyqx
-zihao
+Zihao
 zsav
 zstd
