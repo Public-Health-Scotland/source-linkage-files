@@ -145,19 +145,6 @@ process_extract_homelessness <- function(
     sg_pub_path = sg_pub_path
   )
 
-  if (!is.null(completeness_data)) {
-    filtered_data <- data %>%
-      dplyr::left_join(completeness_data,
-        by = c("year", "sending_local_authority_name")
-      ) %>%
-      dplyr::filter(
-        dplyr::between(.data[["pct_complete_all"]], 0.90, 1.05) |
-          .data[["sending_local_authority_name"]] == "East Ayrshire"
-      )
-  } else {
-    filtered_data <- data
-  }
-
   # TODO - Include person_id (from client_id)
   final_data <- filtered_data %>%
     dplyr::select(
