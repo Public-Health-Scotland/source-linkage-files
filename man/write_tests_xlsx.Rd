@@ -8,7 +8,7 @@ write_tests_xlsx(
   comparison_data,
   sheet_name,
   year = NULL,
-  workbook_name = c("ep_file", "indiv_file", "lookup", "extract")
+  workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit")
 )
 }
 \arguments{

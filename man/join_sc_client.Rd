@@ -12,13 +12,13 @@ join_sc_client(
 )
 }
 \arguments{
+\item{data}{the processed individual file}
+
 \item{year}{financial year.}
 
 \item{sc_client}{SC client lookup}
 
 \item{file_type}{episode or individual file}
-
-\item{individual_file}{the processed individual file}
 }
 \description{
 Match on sc client variables.
