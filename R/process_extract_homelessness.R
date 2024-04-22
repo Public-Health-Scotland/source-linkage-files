@@ -145,8 +145,16 @@ process_extract_homelessness <- function(
     sg_pub_path = sg_pub_path
   )
 
+  data <- data %>%
+    dplyr::left_join(
+      completeness_data %>%
+        dplyr::select(sending_local_authority_name, pct_complete_all),
+      by = dplyr::join_by("sending_local_authority_name")
+    ) %>%
+    dplyr::rename(hl1_completeness = pct_complete_all)
+
   # TODO - Include person_id (from client_id)
-  final_data <- filtered_data %>%
+  final_data <- data %>%
     dplyr::select(
       "year",
       "recid",
@@ -161,7 +169,8 @@ process_extract_homelessness <- function(
       hl1_application_ref = "application_reference_number",
       hl1_sending_lca = "sending_local_authority_code_9",
       hl1_property_type = "property_type_code",
-      "hl1_reason_ftm"
+      "hl1_reason_ftm",
+      hl1_completeness
     )
 
   if (write_to_disk) {
