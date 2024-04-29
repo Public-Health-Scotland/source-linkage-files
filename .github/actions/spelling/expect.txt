@@ -1,5 +1,6 @@
 acc
 accom
+Accom
 admloc
 admtype
 adpe
@@ -15,6 +16,7 @@ bodyloc
 boxi
 callr
 canx
+Canx
 carehome
 careinspectorate
 categorises
