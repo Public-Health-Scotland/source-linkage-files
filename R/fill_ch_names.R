@@ -34,8 +34,8 @@ fill_ch_names <- function(ch_data,
     )
 
   # Care Home name lookup from the Care Inspectorate
-  # Previous contact 'Al Scougal' <Al.Scougal@careinspectorate.gov.scot>
-  ch_name_lookup <- openxlsx::read.xlsx(ch_name_lookup_path,
+  # Contact: IntelligenceTeam@careinspectorate.gov.scot
+  ch_name_lookup <- openxlsx::read.xlsx(ch_name_lookup_path, # (n = 3256)
     detectDates = TRUE
   ) %>%
     # Drop any Care Homes that were closed before 2017/18
@@ -47,7 +47,7 @@ fill_ch_names <- function(ch_data,
     ) %>%
     dplyr::filter(
       is.na(.data[["ch_date_cancelled"]]) |
-        (.data[["ch_date_cancelled"]] >= start_fy("1718"))
+        (.data[["ch_date_cancelled"]] >= start_fy("1718")) #(n = 1375)
     ) %>%
     # Standardise the postcode and CH name
     dplyr::mutate(
@@ -61,7 +61,7 @@ fill_ch_names <- function(ch_data,
     dplyr::summarise(
       # Find the latest date for each CH name / postcode
       latest_close_date = dplyr::if_else(
-        is.na(max(.data[["ch_date_cancelled"]])),
+        is.na(max(.data[["ch_date_cancelled"]])), # if is na set to todays date as still open
         Sys.Date(),
         max(.data[["ch_date_cancelled"]])
       ),
@@ -131,6 +131,7 @@ fill_ch_names <- function(ch_data,
       "open_interval"
     )
 
+  # name is not a match. replaces name with better match if possible
   no_match_pc_name_bad <- ch_data %>%
     dplyr::anti_join(ch_name_lookup,
       by = dplyr::join_by("ch_postcode"),
@@ -155,13 +156,16 @@ fill_ch_names <- function(ch_data,
       )
     )
 
-  no_match_pc_name_missing <- ch_data %>%
+  # cases where care home anme and postcode are missing
+  no_match_pc_name_missing <- ch_data %>% # (n = 135)
     dplyr::anti_join(ch_name_lookup,
       by = dplyr::join_by("ch_postcode"),
       na_matches = "never"
     ) %>%
     dplyr::filter(is.na(.data[["ch_name"]]) & is.na(.data[["ch_postcode"]]))
 
+  # cases where care home name is present but postcode is missing.
+  # assigns new postcode if possible
   no_match_pc_missing <- ch_data %>%
     dplyr::anti_join(ch_name_lookup,
       by = dplyr::join_by("ch_postcode"),
@@ -186,12 +190,14 @@ fill_ch_names <- function(ch_data,
       )
     )
 
-  no_match_name_missing <- ch_data %>%
+  # cases where care home name is missing but postcode is present
+  no_match_name_missing <- ch_data %>% # (n = 3589)
     dplyr::anti_join(ch_name_lookup,
       by = dplyr::join_by("ch_postcode"),
       na_matches = "never"
     ) %>%
     dplyr::filter(is.na(.data[["ch_name"]]) & !is.na(.data[["ch_postcode"]]))
+
 
   ch_name_pc_clean <- ch_data %>%
     # Remove records with no matching postcode, we'll add them back later
