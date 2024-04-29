@@ -11,22 +11,22 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "carehome_snapshot")
   ) %>%
-  dplyr::select(
-    "ch_name",
-    "ch_postcode",
-    "sending_location",
-    "social_care_id",
-    "period",
-    "period_start_date",
-    "period_end_date",
-    "ch_provider",
-    "reason_for_admission",
-    "type_of_admission",
-    "nursing_care_provision",
-    "ch_admission_date",
-    "ch_discharge_date",
-    "age"
-   ) %>%
+    dplyr::select(
+      "ch_name",
+      "ch_postcode",
+      "sending_location",
+      "social_care_id",
+      "period",
+      "period_start_date",
+      "period_end_date",
+      "ch_provider",
+      "reason_for_admission",
+      "type_of_admission",
+      "nursing_care_provision",
+      "ch_admission_date",
+      "ch_discharge_date",
+      "age"
+    ) %>%
     dplyr::collect() %>%
     dplyr::distinct()
 

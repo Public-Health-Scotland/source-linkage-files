@@ -47,7 +47,7 @@ fill_ch_names <- function(ch_data,
     ) %>%
     dplyr::filter(
       is.na(.data[["ch_date_cancelled"]]) |
-        (.data[["ch_date_cancelled"]] >= start_fy("1718")) #(n = 1375)
+        (.data[["ch_date_cancelled"]] >= start_fy("1718")) # (n = 1375)
     ) %>%
     # Standardise the postcode and CH name
     dplyr::mutate(
