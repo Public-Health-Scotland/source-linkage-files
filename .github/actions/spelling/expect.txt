@@ -1,4 +1,5 @@
 acc
+Accom
 accom
 admloc
 admtype
@@ -14,6 +15,7 @@ birthtime
 bodyloc
 boxi
 callr
+Canx
 canx
 carehome
 careinspectorate
@@ -61,6 +63,7 @@ dischto
 disdest
 dminutes
 dna
+docx
 dontrun
 downup
 dplyr
@@ -108,6 +111,7 @@ idpc
 infyyear
 intzone
 ipdc
+Isdsf
 issuenumber
 itle
 iwalk
@@ -127,6 +131,7 @@ lgl
 lintr
 los
 ltc
+ltd
 lubridate
 magrittr
 markdownguide
@@ -213,12 +218,14 @@ slfhelper
 smr
 smra
 smrtype
+sourcedev
 sparra
 spd
 spss
 stadm
 starwars
 stefanzweifel
+stopwords
 stringdist
 stringr
 submis
