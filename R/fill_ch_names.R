@@ -72,7 +72,7 @@ fill_ch_names <- function(ch_data,
         ch_active,
         "Active" ~ TRUE,
         c("Cancelled", "Inactive") ~ FALSE
-      ) # new chagnes
+      )
     ) %>%
     # Merge any duplicates, and get the interval each CH name was active
     dplyr::group_by(.data[["ch_postcode"]], .data[["ch_name_validated"]]) %>%
@@ -88,12 +88,12 @@ fill_ch_names <- function(ch_data,
         min(.data[["ch_date_registered"]]),
         .data[["latest_close_date"]]
       ),
-      ch_active = any(ch_active) # new changes
+      ch_active = any(ch_active)
     ) %>%
     dplyr::ungroup() %>%
     dplyr::rename(ch_postcode_lookup = ch_postcode) %>%
     dplyr::mutate(
-      ch_pc_partial = stringr::str_sub(ch_postcode_lookup, 1, -2), # new chagnes
+      ch_pc_partial = stringr::str_sub(ch_postcode_lookup, 1, -2),
       ch_pc_partial2 = stringr::str_sub(ch_postcode_lookup, 1, -3),
       ch_pc_partial3 = stringr::str_sub(ch_postcode_lookup, 1, -5),
       ch_pc_partial4 = gsub("\\d.*", "", stringr::str_sub(ch_postcode_lookup, 1, 2)),
@@ -151,14 +151,13 @@ fill_ch_names <- function(ch_data,
       postcode_matching = (ch_postcode == ch_postcode_lookup),
       ### quality 1L-12L ----
       matching_quality_indicator_overall = dplyr::case_when(
-        # 1 to 9, perfect to ok.
-        # 20 is unacceptable
+        # 1 to 12, from perfect to ok.
+        # 100L, terrible.
 
         # if care home postcode perfectly match, then
         # even if care home name is NA,
         # we still overwrite the ch_name from ch_name_lookup
 
-        # we probably do not overwrite ch_name and ch_postcode if 10?
         match_mean < 0.001 & postcode_matching ~ 1L,
         match_mean2 < 0.001 & postcode_matching ~ 2L,
         match_mean < 0.001 & !postcode_matching ~ 3L,
@@ -334,7 +333,7 @@ fill_ch_names <- function(ch_data,
         ch_name == ch_name_validated,
         ch_admission_date <= latest_close_date,
         ch_admission_date >= ch_date_registered,
-        # some care homes have same name, so use ch_pc_parital2 to filter
+        # some care homes have same name, so use ch_pc_partial2 to filter
         ch_pc_partial3
       )
     ) %>%
