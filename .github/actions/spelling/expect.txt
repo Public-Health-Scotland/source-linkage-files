@@ -1,5 +1,4 @@
 acc
-Accom
 accom
 admloc
 admtype
@@ -15,7 +14,6 @@ birthtime
 bodyloc
 boxi
 callr
-Canx
 canx
 carehome
 careinspectorate
