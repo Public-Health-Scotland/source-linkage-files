@@ -1,6 +1,6 @@
 acc
-accom
 Accom
+accom
 admloc
 admtype
 adpe
@@ -15,8 +15,8 @@ birthtime
 bodyloc
 boxi
 callr
-canx
 Canx
+canx
 carehome
 careinspectorate
 categorises
@@ -245,6 +245,7 @@ unicode
 updown
 upi
 vline
+WORDLIST
 workflows
 xintercept
 xlsx
