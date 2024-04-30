@@ -61,6 +61,15 @@ fill_ch_names <- function(ch_data,
       ch_date_cancelled = "DateCanx",
       ch_active = tidyselect::contains("ServiceStatusAt")
     ) %>%
+    # some care home cancelled dates incorrectly are "1900-01-01"
+    # assume the cancelled dates to be the "current date", or equivalently NA
+    dplyr::mutate(
+      ch_date_cancelled = dplyr::if_else(
+        .data[["ch_date_cancelled"]] == as.Date("1900-01-01"),
+        NA %>% as.Date(),
+        .data[["ch_date_cancelled"]]
+      )
+    ) %>%
     dplyr::filter(is.na(.data[["ch_date_cancelled"]]) |
       (.data[["ch_date_cancelled"]] >= start_fy("1718"))) %>%
     # Standardise the postcode and CH name
