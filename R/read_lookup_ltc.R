@@ -34,7 +34,7 @@ read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
     )
   ) %>%
     # Rename variables
-    dplyr::rename(
+    dplyr::select(
       chi = "PATIENT_UPI [C]",
       postcode = "PATIENT_POSTCODE [C]",
       arth_date = "ARTHRITIS_DIAG_DATE",
