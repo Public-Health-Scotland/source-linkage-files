@@ -16,8 +16,10 @@ fill_ch_names <- function(ch_data,
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
-  spd_list <- dplyr::pull(read_file(spd_path, col_select = "pc7"),
-                          "pc7")
+  spd_list <- dplyr::pull(
+    read_file(spd_path, col_select = "pc7"),
+    "pc7"
+  )
   uk_pc_list <- dplyr::pull(read_file(uk_pc_list))
 
   ch_data <- ch_data %>%
@@ -25,14 +27,17 @@ fill_ch_names <- function(ch_data,
     dplyr::mutate(ch_name = clean_up_free_text(.data[["ch_name"]])) %>%
     # correct postcode formatting
     dplyr::mutate(
-      dplyr::across(dplyr::contains("postcode"),
-                    phsmethods::format_postcode),
+      dplyr::across(
+        dplyr::contains("postcode"),
+        phsmethods::format_postcode
+      ),
       # Replace invalid postcode with NA
       # check nations where ch is located
       ch_pc_nation = dplyr::case_when(
         .data[["ch_postcode"]] %in% spd_list ~ "sco",
         .data[["ch_postcode"]] %in% uk_pc_list ~ "uk", # presumably most in England
-        .default = NA),
+        .default = NA
+      ),
       ch_name_keyword = ch_name_extract_keyword(.data[["ch_name"]])
     ) %>%
     # add unique identifier
@@ -381,8 +386,11 @@ fill_ch_names <- function(ch_data,
   # but not the main part of the postcode, say "EH12"
 
   ch_name_match_quality16 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(ch_pc_match_quality1to14,
-                                      ch_eng_match_quality15),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::inner_join(
@@ -408,9 +416,12 @@ fill_ch_names <- function(ch_data,
   ### quality 17L ----
   # fizzy matching by ch_name, and matching main part of postcode
   ch_name_match_quality17 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(ch_pc_match_quality1to14,
-                                      ch_eng_match_quality15,
-                                      ch_name_match_quality16),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::inner_join(
@@ -444,10 +455,13 @@ fill_ch_names <- function(ch_data,
   ### quality 18L ----
   ### fizzy matching by ch_name, and same city
   ch_name_match_quality18 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(ch_pc_match_quality1to14,
-                                      ch_eng_match_quality15,
-                                      ch_name_match_quality16,
-                                      ch_name_match_quality17),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16,
+        ch_name_match_quality17
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::inner_join(
@@ -481,13 +495,14 @@ fill_ch_names <- function(ch_data,
   ### quality 19L----
   # ch_postcode and postcode exchange, then matching
   ch_pc_ex_match_quality19 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(
-      ch_pc_match_quality1to14,
-      ch_eng_match_quality15,
-      ch_name_match_quality16,
-      ch_name_match_quality17,
-      ch_name_match_quality18
-    ),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16,
+        ch_name_match_quality17,
+        ch_name_match_quality18
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::mutate(
@@ -532,14 +547,15 @@ fill_ch_names <- function(ch_data,
   # ch_postcode and postcode exchange,
   # then fizzy match ch_name, and matching main part of postcode
   ch_pc_ex_match_quality20 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(
-      ch_pc_match_quality1to14,
-      ch_eng_match_quality15,
-      ch_name_match_quality16,
-      ch_name_match_quality17,
-      ch_name_match_quality18,
-      ch_pc_ex_match_quality19
-    ),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16,
+        ch_name_match_quality17,
+        ch_name_match_quality18,
+        ch_pc_ex_match_quality19
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::mutate(
@@ -585,15 +601,16 @@ fill_ch_names <- function(ch_data,
   unique_ch_name <- unique(ch_name_lookup$ch_name_validated)
 
   ch_name_match_quality21 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(
-      ch_pc_match_quality1to14,
-      ch_eng_match_quality15,
-      ch_name_match_quality16,
-      ch_name_match_quality17,
-      ch_name_match_quality18,
-      ch_pc_ex_match_quality19,
-      ch_pc_ex_match_quality20
-    ),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16,
+        ch_name_match_quality17,
+        ch_name_match_quality18,
+        ch_pc_ex_match_quality19,
+        ch_pc_ex_match_quality20
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::inner_join(
@@ -620,16 +637,17 @@ fill_ch_names <- function(ch_data,
   # fizzy match care home name, regardless of postcode,
   # excluding those duplicated care home names.
   ch_name_match_quality22 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(
-      ch_pc_match_quality1to14,
-      ch_eng_match_quality15,
-      ch_name_match_quality16,
-      ch_name_match_quality17,
-      ch_name_match_quality18,
-      ch_pc_ex_match_quality19,
-      ch_pc_ex_match_quality20,
-      ch_name_match_quality21
-    ),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16,
+        ch_name_match_quality17,
+        ch_name_match_quality18,
+        ch_pc_ex_match_quality19,
+        ch_pc_ex_match_quality20,
+        ch_name_match_quality21
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     dplyr::inner_join(
@@ -662,17 +680,18 @@ fill_ch_names <- function(ch_data,
 
   # add 100L for non-matching episodes
   ch_no_match_quality100 <- ch_data %>%
-    dplyr::anti_join(dplyr::bind_rows(
-      ch_pc_match_quality1to14,
-      ch_eng_match_quality15,
-      ch_name_match_quality16,
-      ch_name_match_quality17,
-      ch_name_match_quality18,
-      ch_pc_ex_match_quality19,
-      ch_pc_ex_match_quality20,
-      ch_name_match_quality21,
-      ch_name_match_quality22
-    ),
+    dplyr::anti_join(
+      dplyr::bind_rows(
+        ch_pc_match_quality1to14,
+        ch_eng_match_quality15,
+        ch_name_match_quality16,
+        ch_name_match_quality17,
+        ch_name_match_quality18,
+        ch_pc_ex_match_quality19,
+        ch_pc_ex_match_quality20,
+        ch_name_match_quality21,
+        ch_name_match_quality22
+      ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
     # dplyr::distinct(ch_name, .keep_all = TRUE) %>%
@@ -702,8 +721,10 @@ fill_ch_names <- function(ch_data,
     ch_name_match_quality22,
     ch_no_match_quality100
   ) %>%
-    dplyr::arrange(.data[["chi"]], .data[["ch_name_keyword"]],
-                   .data[["matching_quality_indicator"]]) %>%
+    dplyr::arrange(
+      .data[["chi"]], .data[["ch_name_keyword"]],
+      .data[["matching_quality_indicator"]]
+    ) %>%
     dplyr::group_by(
       .data[["chi"]],
       .data[["ch_name_keyword"]]
