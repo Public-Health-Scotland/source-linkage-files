@@ -268,7 +268,6 @@ xlsx
 yearstay
 yml
 yyyyqx
-Zihao
 zihao
 zsav
 zstd
