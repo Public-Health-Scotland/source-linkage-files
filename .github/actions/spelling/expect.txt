@@ -7,10 +7,14 @@ adtf
 arrivalmode
 arth
 atlassian
+atrialfib
 attendcat
 aut
+bba
 bedday
+BFO
 birthtime
+bloodbfo
 bodyloc
 boxi
 callr
@@ -22,6 +26,8 @@ cattend
 ccyy
 cdn
 cennum
+CEREBROVASC
+chd
 chp
 chpstart
 cij
@@ -33,13 +39,16 @@ codecov
 comhairle
 commhosp
 congen
+copd
 costincdnas
 costmonthnum
 costsfy
 covr
 cph
 createslf
+csf
 customise
+cvd
 dataframe
 datamart
 datazone
@@ -68,6 +77,9 @@ dplyr
 dsn
 dtplyr
 dvprod
+eee
+efa
+endomet
 envir
 fcase
 feb
@@ -95,6 +107,7 @@ hbtreatcode
 hbtreatname
 hci
 hcp
+hefailure
 hhg
 hjust
 hms
@@ -157,6 +170,7 @@ openxlsx
 orcid
 outfile
 pandoc
+parkinsons
 patflow
 pattype
 pcec
@@ -187,6 +201,7 @@ readr
 readxl
 reasonwait
 recid
+refailure
 reflectoring
 refsource
 renviron
@@ -199,6 +214,7 @@ rspm
 rstudio
 rstudioapi
 rtype
+sco
 scoial
 scotp
 SDcols
@@ -236,6 +252,7 @@ thom
 tibble
 tidyr
 tidyselect
+TJDX
 todo
 uid
 ungroup
@@ -243,6 +260,7 @@ unicode
 updown
 upi
 vline
+wdbf
 WORDLIST
 workflows
 xintercept
@@ -251,5 +269,6 @@ yearstay
 yml
 yyyyqx
 Zihao
+zihao
 zsav
 zstd
