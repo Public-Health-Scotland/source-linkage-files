@@ -31,6 +31,9 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
   if (!fs::file_exists(get_sandpit_extract_path(type = "at"))) {
     at_full_data %>%
       write_file(get_sandpit_extract_path(type = "at"))
+
+    at_full_data %>%
+      process_tests_sandpit(type = "at")
   } else {
     at_full_data <- at_full_data
   }

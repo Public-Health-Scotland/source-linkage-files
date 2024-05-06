@@ -80,6 +80,9 @@ read_lookup_sc_client <- function(fyyear,
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
     client_data %>%
       write_file(get_sandpit_extract_path(type = "client", year = fyyear))
+
+    client_data %>%
+      process_tests_sc_sandpit(type = "client", year = fyyear)
   } else {
     client_data <- client_data
   }

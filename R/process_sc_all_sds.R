@@ -12,7 +12,7 @@
 #'
 process_sc_all_sds <- function(
     data,
-    sc_demog_lookup,
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
     write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
   matched_sds_data <- data %>%

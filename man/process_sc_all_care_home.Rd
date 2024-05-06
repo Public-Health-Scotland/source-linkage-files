@@ -6,10 +6,10 @@
 \usage{
 process_sc_all_care_home(
   data,
-  sc_demog_lookup,
-  it_chi_deaths_data,
-  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  it_chi_deaths_data = read_file(get_slf_chi_deaths_path()),
+  ch_name_lookup_path = read_file(get_slf_ch_name_lookup_path()),
+  spd_path = read_file(get_spd_path()),
   write_to_disk = TRUE
 )
 }
