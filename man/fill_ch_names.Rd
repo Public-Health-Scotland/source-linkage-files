@@ -7,7 +7,8 @@
 fill_ch_names(
   ch_data,
   ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path()
+  spd_path = get_spd_path(),
+  uk_pc_list = get_uk_postcode_path()
 )
 }
 \arguments{
