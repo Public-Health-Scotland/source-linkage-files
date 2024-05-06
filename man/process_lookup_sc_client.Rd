@@ -17,6 +17,8 @@ process_lookup_sc_client(
 
 \item{year}{The year to process}
 
+\item{sc_demographics}{social care demographics file}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }

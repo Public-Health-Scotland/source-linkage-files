@@ -14,6 +14,8 @@ get_pop_path(
 \item{file_name}{The file name (with extension if not supplied to \code{ext})}
 
 \item{ext}{The extension (type of the file) - optional}
+
+\item{type}{population type datazone, or hscp, or ca, or hb, or interzone}
 }
 \value{
 An \code{\link[fs:path]{fs::path()}} to the populations estimates file

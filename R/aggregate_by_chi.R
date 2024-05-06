@@ -5,10 +5,20 @@
 #'
 #' @importFrom data.table .N
 #' @importFrom data.table .SD
+#' @param year financial year, string, eg "1920"
+#' @param exclude_sc_var Boolean, whether exclude social care variables
 #'
 #' @inheritParams create_individual_file
 aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
+
+  # recommended by `data.table` team to tackle the issue
+  # "no visible binding for global variable"
+  gender <-
+    chi <-
+    cij_ppa <-
+    cij_end_date <- cij_start_date <- preventable_beddays <- NULL
+
 
   # Convert to data.table
   data.table::setDT(episode_file)
@@ -134,7 +144,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   data.table::setnafill(episode_file, fill = 0L, cols = cols5)
   # compute
   individual_file_cols1 <- episode_file[,
-    .(gender = mean(gender)),
+    list(gender = mean(gender)),
     by = "chi"
   ]
   individual_file_cols2 <- episode_file[,
@@ -162,7 +172,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
     by = "chi"
   ]
   individual_file_cols6 <- episode_file[,
-    .(
+    list(
       preventable_beddays = ifelse(
         any(cij_ppa, na.rm = TRUE),
         as.integer(min(cij_end_date, end_fy(year)) - max(cij_start_date, start_fy(year))),
@@ -173,7 +183,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
     by = c("chi", "cij_total")
   ]
   individual_file_cols6 <- individual_file_cols6[,
-    .(
+    list(
       preventable_beddays = sum(preventable_beddays, na.rm = TRUE)
     ),
     by = "chi"
@@ -237,6 +247,11 @@ vars_contain <- function(data, vars, ignore_case = FALSE) {
 #' @inheritParams create_individual_file
 aggregate_ch_episodes <- function(episode_file) {
   cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
+
+  # recommended by `data.table` team to tackle the issue
+  # "no visible binding for global variable"
+  ch_no_cost <-
+    record_keydate1 <- ch_ep_end <- ch_cost_per_day <- anon_chi <- NULL
 
   # Convert to data.table
   data.table::setDT(episode_file)

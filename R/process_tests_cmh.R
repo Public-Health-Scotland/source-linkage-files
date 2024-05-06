@@ -43,7 +43,7 @@ process_tests_cmh <- function(data, year) {
 produce_source_cmh_tests <- function(data) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     create_hb_test_flags(hb_var = .data$hbrescode) %>%
     dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison
