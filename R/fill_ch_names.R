@@ -6,13 +6,15 @@
 #' Workbook, this defaults to [get_slf_ch_name_lookup_path()]
 #' @param spd_path Path to the Scottish Postcode Directory (rds) version, this
 #' defaults to [get_spd_path()]
+#' @param uk_pc_path Path to the UK postcode list. This is defaults to
+#' [get_uk_postcode_path()]
 #'
 #' @return the same data with improved accuracy and completeness of the Care
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
 fill_ch_names <- function(ch_data,
                           ch_name_lookup_path = get_slf_ch_name_lookup_path(),
                           spd_path = get_spd_path(),
-                          uk_pc_list = get_uk_postcode_path()) {
+                          uk_pc_path = get_uk_postcode_path()) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
@@ -20,7 +22,7 @@ fill_ch_names <- function(ch_data,
     read_file(spd_path, col_select = "pc7"),
     "pc7"
   )
-  uk_pc_list <- dplyr::pull(read_file(uk_pc_list))
+  uk_pc_list <- dplyr::pull(read_file(uk_pc_path))
 
   ch_data <- ch_data %>%
     # Make the care home name more uniform
@@ -363,7 +365,7 @@ fill_ch_names <- function(ch_data,
       ch_pc_match_quality1to14,
       by = dplyr::join_by("unique_identifier")
     ) %>%
-    dplyr::filter(ch_pc_nation == "uk") %>%
+    dplyr::filter(.data[["ch_pc_nation"]] == "uk") %>%
     # add columns for English care homes
     dplyr::mutate(
       matching_quality_indicator = 15L,
