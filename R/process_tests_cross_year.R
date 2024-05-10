@@ -51,7 +51,8 @@ process_tests_cross_year <- function(year) {
       names_glue = "{year}_qtr_{fy_qtr}",
       values_from = "n"
     ) %>%
-    dplyr::select(-tidyselect::ends_with("NA"))
+    dplyr::select(-tidyselect::ends_with("NA")) %>%
+    write_tests_xlsx(sheet_name = "cross_year", workbook_name = "cross_year")
 
   return(pivot_tests)
 }
