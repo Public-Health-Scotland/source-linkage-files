@@ -19,8 +19,10 @@
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
-                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit",
-                                               "cross_year")) {
+                             workbook_name = c(
+                               "ep_file", "indiv_file", "lookup", "extract", "sandpit",
+                               "cross_year"
+                             )) {
   # Set up the workbook ----
 
   if (is.null(year)) {
