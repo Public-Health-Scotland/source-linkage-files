@@ -145,16 +145,17 @@ process_extract_homelessness <- function(
     sg_pub_path = sg_pub_path
   )
 
-  data <- data %>%
+  hl1_data <- data %>%
     dplyr::left_join(
       completeness_data %>%
         dplyr::select(sending_local_authority_name, pct_complete_all),
       by = dplyr::join_by("sending_local_authority_name")
     ) %>%
-    dplyr::rename(hl1_completeness = pct_complete_all)
+    dplyr::rename(hl1_completeness = pct_complete_all) %>%
+    dplyr::mutate(hl1_completeness = round(hl1_completeness, 1))
 
   # TODO - Include person_id (from client_id)
-  final_data <- data %>%
+  final_data <- hl1_data %>%
     dplyr::select(
       "year",
       "recid",
