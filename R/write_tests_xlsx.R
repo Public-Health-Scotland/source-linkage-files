@@ -19,7 +19,8 @@
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
-                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit")) {
+                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit",
+                                               "cross_year")) {
   # Set up the workbook ----
 
   if (is.null(year)) {
@@ -27,7 +28,8 @@ write_tests_xlsx <- function(comparison_data,
       workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
       workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
       workbook_name == "lookup" ~ stringr::str_glue(latest_update(), "_lookups_tests"),
-      workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests")
+      workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests"),
+      workbook_name == "cross_year" ~ stringr::str_glue(latest_update(), "_cross_year_tests")
     )
   } else if (workbook_name == "sandpit" & !is.null(year)) {
     tests_workbook_name <- dplyr::case_when(
