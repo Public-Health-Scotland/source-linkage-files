@@ -131,7 +131,8 @@ process_extract_district_nursing <- function(
         ~ sum(.x)
       )
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     dn_episodes %>%
