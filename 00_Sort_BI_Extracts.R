@@ -41,8 +41,8 @@ for (csv_file in csv_files) {
       csv_file <- paste0(csv_file, ".gz")
     }
 
-    # move file
-    new_file_path <- file.path(financial_year_dir, paste0("anon-",basename(csv_file)))
+    # set up new file path location to move each file to their destination.
+    new_file_path <- file.path(financial_year_dir, paste0("anon-", basename(csv_file)))
 
     # Read in each file and replace chi with anon_chi
     for (csv_file in csv_files) {
