@@ -41,6 +41,7 @@ read_lookup_sc_client <- function(fyyear,
       "day_care"
     ) %>%
     dplyr::filter(.data$financial_year == year) %>%
+    dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(
         c(
@@ -74,12 +75,14 @@ read_lookup_sc_client <- function(fyyear,
       .data$social_care_id,
       .data$financial_year,
       .data$financial_quarter
-    ) %>%
-    dplyr::collect()
+    )
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
     client_data %>%
       write_file(get_sandpit_extract_path(type = "client", year = fyyear))
+
+    client_data %>%
+      process_tests_sc_sandpit(type = "client", year = fyyear)
   } else {
     client_data <- client_data
   }

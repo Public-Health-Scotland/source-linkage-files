@@ -16,9 +16,6 @@ the year specific data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
-
-\item{client_lookup}{The Social Care Client lookup, created by
-\code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}}.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

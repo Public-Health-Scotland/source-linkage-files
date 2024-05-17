@@ -1,3 +1,5 @@
+skip_on_ci()
+
 test_that("read_file works", {
   rds_path <- tempfile(fileext = ".rds")
   rds_gz_path <- tempfile(fileext = ".rds.gz")

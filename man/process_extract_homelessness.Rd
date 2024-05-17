@@ -23,6 +23,8 @@ process_extract_homelessness(
 
 \item{update}{The update to use (default is \code{\link[=latest_update]{latest_update()}}).}
 
+\item{la_code_lookup}{get local authority using opendata.}
+
 \item{sg_pub_path}{The path to the SG pub figures (default is
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}).}
 }

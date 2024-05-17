@@ -9,7 +9,9 @@ aggregate_by_chi(episode_file, year, exclude_sc_var = FALSE)
 \arguments{
 \item{episode_file}{Tibble containing episodic data.}
 
-\item{year}{The year to process, in FY format.}
+\item{year}{financial year, string, eg "1920"}
+
+\item{exclude_sc_var}{Boolean, whether exclude social care variables}
 }
 \description{
 Aggregate episode file by CHI to convert into
