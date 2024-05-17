@@ -49,6 +49,7 @@ get_boxi_extract_path <- function(
     "gp_ooh-c" ~ "GP-OoH-consultations-extract",
     "gp_ooh-d" ~ "GP-OoH-diagnosis-extract",
     "gp_ooh-o" ~ "GP-OoH-outcomes-extract",
+    "gp_ooh_cup" ~ "GP-OoH-cup-extract",
     "homelessness" ~ "Homelessness-extract",
     "maternity" ~ "Maternity-episode-level-extract",
     "mh" ~ "Mental-Health-episode-level-extract",
