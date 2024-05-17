@@ -49,6 +49,7 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
 get_slf_deaths_lookup_path <- function(year, ...) {
+  # Review the naming convention of this path and file
   slf_deaths_lookup_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths"),
     file_name = stringr::str_glue("slf_deaths_lookup_{year}.parquet"),
@@ -56,6 +57,31 @@ get_slf_deaths_lookup_path <- function(year, ...) {
   )
 
   return(slf_deaths_lookup_path)
+}
+
+#' SLF death dates File Path
+#'
+#' @description Get the full path to the BOXI NRS Deaths lookup file for all financial years
+#'
+#' @inheritParams get_boxi_extract_path
+#' @param ... additional arguments passed to [get_file_path()]
+#' @param year financial year e.g. "1920"
+#'
+#' @export
+#' @family slf lookup file path
+#' @seealso [get_file_path()] for the generic function.
+
+get_all_slf_deaths_lookup_path <- function(update = latest_update()) {
+  # Note this name is very similar to the existing slf_deaths_lookup_path which returnsthe path for
+  # the processed BOXI extract for each financial year. This function will return the combined financial
+  # years lookup i.e. all years put together.
+  all_slf_deaths_lookup_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Deaths",
+                         file_name = stringr::str_glue("all_slf_deaths_lookup_{update}.parquet"))
+  )
+
+  return(all_slf_deaths_lookup_path)
+
 }
 
 #' SLF CHI Deaths File Path
