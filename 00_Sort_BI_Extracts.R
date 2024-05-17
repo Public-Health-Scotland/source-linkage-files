@@ -52,7 +52,6 @@ for (csv_file in csv_files) {
         readr::write_csv(file = new_file_path)
     }
 
-    #fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
     file.remove(csv_file)
     cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
   }
