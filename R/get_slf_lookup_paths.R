@@ -77,11 +77,11 @@ get_all_slf_deaths_lookup_path <- function(update = latest_update()) {
   # years lookup i.e. all years put together.
   all_slf_deaths_lookup_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Deaths",
-                         file_name = stringr::str_glue("all_slf_deaths_lookup_{update}.parquet"))
+      file_name = stringr::str_glue("all_slf_deaths_lookup_{update}.parquet")
+    )
   )
 
   return(all_slf_deaths_lookup_path)
-
 }
 
 #' SLF CHI Deaths File Path
