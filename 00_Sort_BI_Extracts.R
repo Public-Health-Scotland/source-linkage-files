@@ -46,17 +46,13 @@ for (csv_file in csv_files) {
 
     # Read in each file and replace chi with anon_chi
     for (csv_file in csv_files) {
-      if (any(grepl("UPI", names(csv_file)))) {
-        read_file(csv_file) %>%
-          dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI")) %>%
-          slfhelper::get_anon_chi(chi = chi) %>%
-          readr::write_csv(file = new_file_path)
-      } else {
-        fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
-      }
-
-      file.remove(csv_file)
-      cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
+      hl1 <- read_file(csv_file) %>%
+        dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI")) %>%
+        slfhelper::get_anon_chi(chi = chi) %>%
+        readr::write_csv(file = new_file_path)
     }
+
+    file.remove(csv_file)
+    cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
   }
 }
