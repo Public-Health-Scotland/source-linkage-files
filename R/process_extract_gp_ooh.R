@@ -119,11 +119,14 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       .keep_all = TRUE
     )
 
-  ooh_clean2 = ooh_clean %>%
+  ooh_clean2 <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup_file,
-                     by = dplyr::join_by("ooh_case_id",
-                                         "record_keydate1",
-                                         "keytime1"))
+      by = dplyr::join_by(
+        "ooh_case_id",
+        "record_keydate1",
+        "keytime1"
+      )
+    )
 
   ## Save Outfile -------------------------------------
 
