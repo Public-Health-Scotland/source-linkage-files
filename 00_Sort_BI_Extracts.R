@@ -42,9 +42,18 @@ for (csv_file in csv_files) {
     }
 
     # move file
-    new_file_path <- file.path(financial_year_dir, basename(csv_file))
-    fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
+    new_file_path <- file.path(financial_year_dir, paste0("anon-",basename(csv_file)))
+
+    # Read in each file and replace chi with anon_chi
+    for (csv_file in csv_files) {
+      hl1<- read_file(csv_file) %>%
+        dplyr::rename(chi = 'UPI Number [C]') %>%
+        slfhelper::get_anon_chi() %>%
+        readr::write_csv(file = new_file_path)
+    }
+
+    #fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
     file.remove(csv_file)
-    cat("Moved:", csv_file, "to", new_file_path, "\n")
+    cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
   }
 }
