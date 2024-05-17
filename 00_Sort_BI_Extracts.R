@@ -46,8 +46,8 @@ for (csv_file in csv_files) {
 
     # Read in each file and replace chi with anon_chi
     for (csv_file in csv_files) {
-      hl1<- read_file(csv_file) %>%
-        dplyr::rename(chi = 'UPI Number [C]') %>%
+      hl1 <- read_file(csv_file) %>%
+        dplyr::rename(chi = "UPI Number [C]") %>%
         slfhelper::get_anon_chi() %>%
         readr::write_csv(file = new_file_path)
     }
