@@ -182,7 +182,8 @@ process_sc_all_sds <- function(
   rm(sds_full_clean_long)
 
   # Drop episode_counter and convert back to data.frame if needed
-  final_data <- as.data.frame(final_data[, -"episode_counter"])
+  final_data <- as.data.frame(final_data[, -"episode_counter"]) %>%
+    slfhelper::get_anon_chi()
   # final_data now holds the processed data in the format of a data.frame
 
   if (write_to_disk) {

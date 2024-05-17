@@ -46,7 +46,8 @@ process_extract_sds <- function(
       "record_keydate1",
       "record_keydate2",
       "sc_send_lca"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     outfile %>%

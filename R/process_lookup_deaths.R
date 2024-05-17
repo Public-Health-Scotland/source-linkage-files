@@ -30,7 +30,8 @@ process_slf_deaths_lookup <- function(
       death_date = .data$record_keydate1,
       deceased = TRUE,
       .keep = "unused"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

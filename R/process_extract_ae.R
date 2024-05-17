@@ -289,7 +289,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "mar_cost",
       "cup_marker",
       "cup_pathway"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(
