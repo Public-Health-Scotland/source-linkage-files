@@ -330,7 +330,8 @@ process_sc_all_care_home <- function(
       "ch_nursing",
       "ch_adm_reason",
       "sc_latest_submission"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     ch_data_final %>%

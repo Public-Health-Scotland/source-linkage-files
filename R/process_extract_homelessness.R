@@ -172,7 +172,8 @@ process_extract_homelessness <- function(
       hl1_property_type = "property_type_code",
       "hl1_reason_ftm",
       hl1_completeness
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

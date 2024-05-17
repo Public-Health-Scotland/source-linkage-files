@@ -105,7 +105,8 @@ process_extract_delayed_discharges <- function(
       "hbtreatcode",
       "location",
       "spec"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(
