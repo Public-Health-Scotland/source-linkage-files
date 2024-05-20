@@ -21,13 +21,13 @@ extract_financial_year <- function(filename) {
 }
 
 # Create a function to read variable names
-is_chi_in_file <- function(filename){
+is_chi_in_file <- function(filename) {
   data <- read.csv(filename, nrow = 1)
   return(grepl("UPI", names(data)) %>% any())
 }
 
 # function to move files
-move_temps_to_year_extract <- function(csv_file, compress_files = TRUE){
+move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
   financial_year <- extract_financial_year(csv_file)
   # check if year directory exists
   if (!is.null(financial_year)) {
@@ -39,9 +39,11 @@ move_temps_to_year_extract <- function(csv_file, compress_files = TRUE){
 
     # set up new file path location to move each file to their destination.
     chi_in_file <- is_chi_in_file(csv_file)
-    if(chi_in_file){
-      new_file_path <- file.path(financial_year_dir,
-                                 paste0("anon-", basename(csv_file)))
+    if (chi_in_file) {
+      new_file_path <- file.path(
+        financial_year_dir,
+        paste0("anon-", basename(csv_file))
+      )
       read_file(csv_file) %>%
         dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI")) %>%
         slfhelper::get_anon_chi() %>%
@@ -57,7 +59,7 @@ move_temps_to_year_extract <- function(csv_file, compress_files = TRUE){
         )
       }
       file.remove(csv_file)
-    }else{
+    } else {
       new_file_path <- file.path(financial_year_dir, basename(csv_file))
       fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
       cat("Moved", csv_file, "to", new_file_path, "\n")
