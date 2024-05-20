@@ -16,9 +16,9 @@ add_activity_after_death_flag <- function(
   data <- data %>%
     dplyr::filter(!is.na(chi) | chi != "") %>%
     dplyr::left_join(
-    deaths_data,
-    by = "chi",
-    suffix = c("", "_boxi")
+      deaths_data,
+      by = "chi",
+      suffix = c("", "_boxi")
     )
 
 
@@ -26,7 +26,7 @@ add_activity_after_death_flag <- function(
   check_death_date_match <- data %>%
     dplyr::filter(death_date != death_date_boxi)
 
-  if (nrow(check_death_date_match) != 0)  {
+  if (nrow(check_death_date_match) != 0) {
     warning("There were records in the episode file which already have a death_date, but does not match the BOXI NRS death date.")
   }
 
@@ -35,7 +35,7 @@ add_activity_after_death_flag <- function(
   check_keydate1_death_date <- data %>%
     dplyr::filter(record_keydate1 > death_date_boxi)
 
-  if (nrow(check_death_date_match) != 0)  {
+  if (nrow(check_death_date_match) != 0) {
     warning("There were records in the episode file which have a record_keydate1 after the BOXI NRS death date.")
   }
 
@@ -50,14 +50,18 @@ add_activity_after_death_flag <- function(
       flag_keydate2_missing = if_else(((is.na(record_keydate2) | record_keydate2 == "") & (death_date_boxi <= paste0("20", substr(year, 3, 4), "-03-31"))), 1, 0),
 
       # Also flag records without a death_date in the episode file, but the BOXI death date occurs in the current or a previous financial year.
-      flag_deathdate_missing = if_else(((is.na(death_date) | death_date == "") & (death_date_boxi <= paste0("20", substr(year, 3, 4), "-03-31"))), 1, 0)) %>%
-      # These should be flagged by one of the two lines of code above, but in these cases, we will also fill in the blank death date if appropriate
+      flag_deathdate_missing = if_else(((is.na(death_date) | death_date == "") & (death_date_boxi <= paste0("20", substr(year, 3, 4), "-03-31"))), 1, 0)
+    ) %>%
+    # These should be flagged by one of the two lines of code above, but in these cases, we will also fill in the blank death date if appropriate
 
     # Search all variables beginning with "flag_" for value "1" and create new variable to flag cases where 1 is present
     # Multiplying by 1 changes flag from true/false to 1/0
-    dplyr::mutate(activity_after_death = purrr::pmap_dbl(select(., contains("flag_")),
-                                                    ~any(grepl("^1$", c(...)),
-                                                         na.rm = TRUE) *1))
+    dplyr::mutate(activity_after_death = purrr::pmap_dbl(
+      select(., contains("flag_")),
+      ~ any(grepl("^1$", c(...)),
+        na.rm = TRUE
+      ) * 1
+    ))
 
 
   # Check and print error message for records which already are TRUE for the deceased variable in the episode file, but this doesn't match the
@@ -65,7 +69,7 @@ add_activity_after_death_flag <- function(
   check_deceased_match <- flag_data %>%
     dplyr::filter(deceased != deceased_boxi)
 
-  if (nrow(check_deceased_match) != 0)  {
+  if (nrow(check_deceased_match) != 0) {
     warning("There were records in the episode file which have a deceased variable which does not match the BOXI NRS deceased variable")
   }
 
@@ -75,8 +79,7 @@ add_activity_after_death_flag <- function(
   flag_data <- flag_data %>%
     dplyr::mutate(death_date = if_else(((is.na(death_date) | death_date == "") & (death_date_boxi <= paste0("20", substr(year, 1, 2), "-03-31"))), death_date_boxi, death_date)) %>%
     dplyr::mutate(deceased = if_else(((is.na(deceased) | deceased == "") & (deceased_boxi == TRUE)), deceased_boxi, deceased)) %>%
-
-   # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
+    # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
     dplyr::select(-c(death_date_boxi, deceased_boxi, flag_keydate1, flag_keydate2, flag_keydate2_missing, flag_deathdate_missing))
 
   # Match activity after death flag back to episode file
@@ -90,7 +93,6 @@ add_activity_after_death_flag <- function(
 
 
   return(final_data)
-
 }
 
 
@@ -125,7 +127,7 @@ process_deaths_lookup <- function(update = latest_update(), ...) {
     # Can this be automated to pick up files starting with name "get_slf_deaths_lookup_path"?
 
     # Remove rows with missing or blank CHI number - could also use na.omit?
-    #na.omit(all_boxi_deaths)
+    # na.omit(all_boxi_deaths)
     dplyr::filter(!is.na(chi) | chi != "")
 
   # Check all CHI numbers are valid
@@ -159,7 +161,8 @@ process_deaths_lookup <- function(update = latest_update(), ...) {
     write_file(
       duplicates,
       fs::path(get_slf_dir(), "Deaths",
-               file_name = stringr::str_glue("slf_deaths_duplicates_{update}.parquet"))
+        file_name = stringr::str_glue("slf_deaths_duplicates_{update}.parquet")
+      )
     )
   }
 
@@ -171,5 +174,4 @@ process_deaths_lookup <- function(update = latest_update(), ...) {
   }
 
   return(all_boxi_deaths)
-
 }
