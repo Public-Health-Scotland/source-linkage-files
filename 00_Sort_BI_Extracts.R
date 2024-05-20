@@ -49,31 +49,22 @@ move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
         slfhelper::get_anon_chi() %>%
         readr::write_csv(file = new_file_path)
       cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
-
-      # compress file
-      if (compress_files) {
-        cat("Compressing:", basename(new_file_path), "\n")
-        system2(
-          command = "gzip",
-          args = shQuote(new_file_path)
-        )
-      }
-      file.remove(csv_file)
     } else {
       new_file_path <- file.path(financial_year_dir, basename(csv_file))
       fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
       cat("Moved", csv_file, "to", new_file_path, "\n")
-
-      # compress file
-      if (compress_files) {
-        cat("Compressing:", basename(new_file_path), "\n")
-        system2(
-          command = "gzip",
-          args = shQuote(new_file_path)
-        )
-      }
-      file.remove(csv_file)
     }
+
+    # compress file
+    if (compress_files) {
+      cat("Compressing:", basename(new_file_path), "\n")
+      system2(
+        command = "gzip",
+        args = shQuote(new_file_path)
+      )
+    }
+    # remove old files
+    file.remove(csv_file)
   }
 }
 
