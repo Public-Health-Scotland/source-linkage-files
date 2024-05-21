@@ -412,12 +412,14 @@ join_cohort_lookups <- function(
     update = latest_update(),
     demographic_cohort = read_file(
       get_demographic_cohorts_path(year, update),
-      col_select = c("chi", "demographic_cohort")
-    ),
+      col_select = c("anon_chi", "demographic_cohort")
+    ) %>%
+      slfhelper::get_chi(),
     service_use_cohort = read_file(
       get_service_use_cohorts_path(year, update),
-      col_select = c("chi", "service_use_cohort")
-    )) {
+      col_select = c("anon_chi", "service_use_cohort")
+    ) %>%
+      slfhelper::get_chi()) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
@@ -442,7 +444,7 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           sc_client = read_file(get_sc_client_lookup_path(year) %>% slfhelper::get_chi()),
                            file_type = c("episode", "individual")) {
   if (file_type == "episode") {
     # Match on client variables by chi
