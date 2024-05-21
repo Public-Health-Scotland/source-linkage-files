@@ -12,7 +12,7 @@
 add_nsu_cohort <- function(
     data,
     year,
-    nsu_cohort = read_file(get_nsu_path(year))) {
+    nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi()) {
   year_param <- year
 
   if (!check_year_valid(year, "nsu")) {
