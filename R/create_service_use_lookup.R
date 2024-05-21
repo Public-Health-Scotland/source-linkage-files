@@ -254,7 +254,8 @@ create_service_use_cohorts <- function(
       "outpatient_cost",
       "prescribing_cost",
       "ae2_cost"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(return_data,
