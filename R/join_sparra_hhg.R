@@ -9,7 +9,8 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::left_join(
       data,
       read_file(get_sparra_path(year)) %>%
-        dplyr::rename(sparra_start_fy = "sparra_risk_score"),
+        dplyr::rename(sparra_start_fy = "sparra_risk_score") %>%
+        slfhelper::get_chi(),
       by = c("chi" = "upi_number"),
       na_matches = "never",
       relationship = "many-to-one"
@@ -22,7 +23,8 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::left_join(
       data,
       read_file(get_sparra_path(next_fy(year))) %>%
-        dplyr::rename(sparra_end_fy = "sparra_risk_score"),
+        dplyr::rename(sparra_end_fy = "sparra_risk_score") %>%
+        slfhelper::get_chi(),
       by = c("chi" = "upi_number"),
       na_matches = "never",
       relationship = "many-to-one"
@@ -35,7 +37,8 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::left_join(
       data,
       read_file(get_hhg_path(year)) %>%
-        dplyr::rename(hhg_start_fy = "hhg_score"),
+        dplyr::rename(hhg_start_fy = "hhg_score") %>%
+        slfhelper::get_chi(),
       by = c("chi" = "upi_number"),
       na_matches = "never",
       relationship = "many-to-one"
@@ -48,7 +51,8 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::left_join(
       data,
       read_file(get_hhg_path(next_fy(year))) %>%
-        dplyr::rename(hhg_end_fy = "hhg_score"),
+        dplyr::rename(hhg_end_fy = "hhg_score") %>%
+        slfhelper::get_chi(),
       by = c("chi" = "upi_number"),
       na_matches = "never",
       relationship = "many-to-one"
