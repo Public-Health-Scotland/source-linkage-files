@@ -4,7 +4,11 @@
 \alias{add_nsu_cohort}
 \title{Add NSU cohort to working file}
 \usage{
-add_nsu_cohort(data, year, nsu_cohort = read_file(get_nsu_path(year)))
+add_nsu_cohort(
+  data,
+  year,
+  nsu_cohort = read_file(get_nsu_path(year)) \%>\% slfhelper::get_chi()
+)
 }
 \arguments{
 \item{data}{The input data frame}

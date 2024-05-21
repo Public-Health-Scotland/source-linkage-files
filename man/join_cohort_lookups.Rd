@@ -9,9 +9,9 @@ join_cohort_lookups(
   year,
   update = latest_update(),
   demographic_cohort = read_file(get_demographic_cohorts_path(year, update), col_select =
-    c("chi", "demographic_cohort")),
+    c("anon_chi", "demographic_cohort")) \%>\% slfhelper::get_chi(),
   service_use_cohort = read_file(get_service_use_cohorts_path(year, update), col_select =
-    c("chi", "service_use_cohort"))
+    c("anon_chi", "service_use_cohort")) \%>\% slfhelper::get_chi()
 )
 }
 \arguments{
