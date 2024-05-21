@@ -20,10 +20,10 @@
 create_episode_file <- function(
     processed_data_list,
     year,
-    dd_data = read_file(get_source_extract_path(year, "dd")),
+    dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi(),
     homelessness_lookup = create_homelessness_lookup(year),
-    nsu_cohort = read_file(get_nsu_path(year)),
-    ltc_data = read_file(get_ltcs_path(year)),
+    nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi(),
+    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi() ,
     slf_pc_lookup = read_file(get_slf_postcode_path()),
     slf_gpprac_lookup = read_file(
       get_slf_gpprac_path(),
@@ -36,6 +36,7 @@ create_episode_file <- function(
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
+    slfhelper::get_chi() %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
