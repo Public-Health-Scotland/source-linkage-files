@@ -48,10 +48,11 @@ read_extract_ooh_consultations <- function(
       consultation_type = "Consultation Type",
       consultation_type_unmapped = "Consultation Type Unmapped"
     ) %>%
-    # Restore CHI leading zero
-    dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
-    dplyr::distinct() %>%
-    slfhelper::get_chi()
+    slfhelper::get_chi() %>%
+  # Restore CHI leading zero
+  dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
+    dplyr::distinct()
+
 
   return(consultations_extract)
 }
