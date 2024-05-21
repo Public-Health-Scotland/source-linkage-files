@@ -37,20 +37,17 @@ move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
       dir.create(financial_year_dir)
     }
 
+    new_file_path <- file.path(financial_year_dir, paste0("anon-", basename(csv_file)))
+
     # set up new file path location to move each file to their destination.
     chi_in_file <- is_chi_in_file(csv_file)
     if (chi_in_file) {
-      new_file_path <- file.path(
-        financial_year_dir,
-        paste0("anon-", basename(csv_file))
-      )
       read_file(csv_file) %>%
         dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI")) %>%
         slfhelper::get_anon_chi() %>%
         readr::write_csv(file = new_file_path)
       cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
     } else {
-      new_file_path <- file.path(financial_year_dir, basename(csv_file))
       fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
       cat("Moved", csv_file, "to", new_file_path, "\n")
     }
