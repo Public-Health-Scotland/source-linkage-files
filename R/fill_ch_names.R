@@ -600,7 +600,8 @@ fill_ch_names <- function(ch_data,
   ### quality 21L----
   # perfect match care home name, regardless of postcode,
   # excluding those duplicated care home names.
-  unique_ch_name <- unique(ch_name_lookup$ch_name_validated)
+  duplicated_ch_name <-
+    ch_name_lookup$ch_name_validated[duplicated(ch_name_lookup$ch_name_validated)]
 
   ch_name_match_quality21 <- ch_data %>%
     dplyr::anti_join(
@@ -624,7 +625,7 @@ fill_ch_names <- function(ch_data,
       ),
       na_matches = "never"
     ) %>%
-    dplyr::filter(.data[["ch_name"]] %in% unique_ch_name) %>%
+    dplyr::filter(!(.data[["ch_name"]] %in% duplicated_ch_name)) %>%
     dplyr::mutate(
       ch_name_old = .data[["ch_name"]],
       ch_postcode_old = .data[["ch_postcode"]],
