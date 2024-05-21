@@ -1,6 +1,7 @@
 # June 2024 Update - Unreleased
 * Update of 2017/18 onwards to include bug fixes within the files.
 * Removal of extra variable caused by the LTCs not matching properly.
+* New NRS mid-2022 population estimates.
 * Homelessness improvements:
    * Removal of filtering the data in SLFs according to completeness levels.
    * New variables:
