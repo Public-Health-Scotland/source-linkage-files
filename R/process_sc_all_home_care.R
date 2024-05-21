@@ -13,7 +13,7 @@
 #'
 process_sc_all_home_care <- function(
     data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     write_to_disk = TRUE) {
   replaced_dates <- data %>%
     dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
