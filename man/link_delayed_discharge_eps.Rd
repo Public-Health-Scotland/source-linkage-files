@@ -7,7 +7,7 @@
 link_delayed_discharge_eps(
   episode_file,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd"))
+  dd_data = read_file(get_source_extract_path(year, "dd")) \%>\% slfhelper::get_chi()
 )
 }
 \arguments{
