@@ -27,6 +27,7 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
     sc_demog %>%
+      slfhelper::get_anon_chi(chi = "chi_upi") %>%
       write_file(get_sandpit_extract_path(type = "demographics"))
 
     sc_demog %>%

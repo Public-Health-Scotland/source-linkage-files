@@ -13,7 +13,7 @@
 #'
 process_sc_all_alarms_telecare <- function(
     data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
 
