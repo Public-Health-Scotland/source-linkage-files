@@ -16,7 +16,7 @@ get_nsu_path <- function(year, ...) {
 
   nsu_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "NSU"),
-    file_name = stringr::str_glue("All_CHIs_20{year}.parquet"),
+    file_name = stringr::str_glue("anon-All_CHIs_20{year}.parquet"),
     ...
   )
 
