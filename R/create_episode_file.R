@@ -23,7 +23,7 @@ create_episode_file <- function(
     dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi(),
     homelessness_lookup = create_homelessness_lookup(year),
     nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi(),
-    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi() ,
+    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi(),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
     slf_gpprac_lookup = read_file(
       get_slf_gpprac_path(),
