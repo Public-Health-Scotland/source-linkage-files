@@ -6,6 +6,10 @@
 #' @export
 #'
 process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demographics", "client"), year = NULL) {
+
+  data <- data %>%
+    slfhelper::get_chi()
+
   comparison <- produce_test_comparison(
     old_data = produce_sc_sandpit_tests(
       read_file(get_sandpit_extract_path(type = {{ type }}, year = year, update = previous_update())),

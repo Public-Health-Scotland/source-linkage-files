@@ -10,6 +10,10 @@
 #'
 #' @export
 process_tests_sc_demographics <- function(data) {
+
+  data <- data %>%
+    slfhelper::get_chi()
+
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
       read_file(get_sc_demog_lookup_path(update = previous_update()))
