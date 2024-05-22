@@ -10,7 +10,6 @@
 #'
 #' @export
 process_tests_delayed_discharges <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 

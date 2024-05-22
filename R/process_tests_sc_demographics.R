@@ -10,7 +10,6 @@
 #'
 #' @export
 process_tests_sc_demographics <- function(data) {
-
   data <- data %>%
     slfhelper::get_chi()
 

@@ -7,7 +7,6 @@
 #'
 #' @export
 process_tests_nrs_deaths <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 

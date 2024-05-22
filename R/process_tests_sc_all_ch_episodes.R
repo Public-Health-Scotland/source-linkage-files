@@ -10,7 +10,6 @@
 #'
 #' @export
 process_tests_sc_all_ch_episodes <- function(data) {
-
   data <- data %>%
     slfhelper::get_chi()
 

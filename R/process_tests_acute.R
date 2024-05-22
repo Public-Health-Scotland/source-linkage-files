@@ -10,7 +10,6 @@
 #'
 #' @export
 process_tests_acute <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 

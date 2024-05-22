@@ -8,7 +8,6 @@
 #'
 #' @export
 process_tests_homelessness <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 

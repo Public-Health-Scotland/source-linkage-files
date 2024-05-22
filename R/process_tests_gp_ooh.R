@@ -7,7 +7,6 @@
 #'
 #' @export
 process_tests_gp_ooh <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 

@@ -8,7 +8,6 @@
 #'
 #' @export
 process_tests_alarms_telecare <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 
