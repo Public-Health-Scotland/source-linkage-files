@@ -23,12 +23,12 @@ get_sandpit_extract_path <- function(type = c(
 
   file_name <- dplyr::case_match(
     type,
-    "at" ~ "sandpit_at_extract",
-    "ch" ~ "sandpit_ch_extract",
-    "hc" ~ "sandpit_hc_extract",
-    "sds" ~ "sandpit_sds_extract",
-    "client" ~ "sandpit_sc_client_extract",
-    "demographics" ~ "sandpit_sc_demographics_extract"
+    "at" ~ "anon-sandpit_at_extract",
+    "ch" ~ "anon-sandpit_ch_extract",
+    "hc" ~ "anon-sandpit_hc_extract",
+    "sds" ~ "anon-sandpit_sds_extract",
+    "client" ~ "anon-sandpit_sc_client_extract",
+    "demographics" ~ "anon-sandpit_sc_demographics_extract"
   )
 
   if (type == "client") {
