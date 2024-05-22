@@ -1,5 +1,5 @@
 # Define the source directory and financial year pattern
-compress_files <- FALSE
+compress_files <- TRUE
 source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp"
 pattern <- "-20(\\d{4})\\.csv"
 
@@ -20,31 +20,49 @@ extract_financial_year <- function(filename) {
   }
 }
 
-# Create directories for each financial year and move files
-for (csv_file in csv_files) {
+# Create a function to read variable names
+is_chi_in_file <- function(filename) {
+  data <- read.csv(filename, nrow = 1)
+  return(grepl("UPI", names(data)) %>% any())
+}
+
+# function to move files
+move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
   financial_year <- extract_financial_year(csv_file)
   # check if year directory exists
   if (!is.null(financial_year)) {
     financial_year_dir <- file.path("/conf/sourcedev/Source_Linkage_File_Updates", financial_year, "Extracts")
-    # if not, create the year directory
+    # if financial_year_dir does not exist, create the year directory
     if (!dir.exists(financial_year_dir)) {
       dir.create(financial_year_dir)
     }
 
-    # compress file
-    if (compress_files) {
-      cat("Compressing:", basename(csv_file), "\n")
-      system2(
-        command = "gzip",
-        args = shQuote(csv_file)
-      )
-      csv_file <- paste0(csv_file, ".gz")
+    new_file_path <- file.path(financial_year_dir, paste0("anon-", basename(csv_file)))
+
+    # set up new file path location to move each file to their destination.
+    chi_in_file <- is_chi_in_file(csv_file)
+    if (chi_in_file) {
+      read_file(csv_file) %>%
+        dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI")) %>%
+        slfhelper::get_anon_chi() %>%
+        readr::write_csv(file = new_file_path)
+      cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
+    } else {
+      fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
+      cat("Moved", csv_file, "to", new_file_path, "\n")
     }
 
-    # move file
-    new_file_path <- file.path(financial_year_dir, basename(csv_file))
-    fs::file_copy(csv_file, new_file_path, overwrite = TRUE)
+    # compress file
+    if (compress_files) {
+      cat("Compressing:", basename(new_file_path), "\n")
+      system2(
+        command = "gzip",
+        args = shQuote(new_file_path)
+      )
+    }
+    # remove old files
     file.remove(csv_file)
-    cat("Moved:", csv_file, "to", new_file_path, "\n")
   }
 }
+
+lapply(csv_files, move_temps_to_year_extract, compress_files = compress_files)
