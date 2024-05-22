@@ -1,5 +1,5 @@
 acc
-accom
+Accom
 admloc
 admtype
 adpe
@@ -10,6 +10,7 @@ atlassian
 atrialfib
 attendcat
 aut
+bba
 bedday
 BFO
 birthtime
@@ -17,7 +18,7 @@ bloodbfo
 bodyloc
 boxi
 callr
-canx
+Canx
 carehome
 careinspectorate
 categorises
@@ -45,6 +46,7 @@ costsfy
 covr
 cph
 createslf
+csf
 customise
 cvd
 dataframe
@@ -68,12 +70,15 @@ dischto
 disdest
 dminutes
 dna
+docx
 dontrun
 downup
 dplyr
 dsn
 dtplyr
 dvprod
+eee
+efa
 endomet
 envir
 fcase
@@ -117,6 +122,7 @@ idpc
 infyyear
 intzone
 ipdc
+Isdsf
 issuenumber
 itle
 iwalk
@@ -136,6 +142,7 @@ lgl
 lintr
 los
 ltc
+ltd
 lubridate
 magrittr
 markdownguide
@@ -207,6 +214,7 @@ rspm
 rstudio
 rstudioapi
 rtype
+sco
 scoial
 scotp
 SDcols
@@ -224,12 +232,14 @@ slfhelper
 smr
 smra
 smrtype
+sourcedev
 sparra
 spd
 spss
 stadm
 starwars
 stefanzweifel
+stopwords
 stringdist
 stringr
 submis
@@ -242,6 +252,7 @@ thom
 tibble
 tidyr
 tidyselect
+TJDX
 todo
 uid
 ungroup
@@ -249,12 +260,14 @@ unicode
 updown
 upi
 vline
+wdbf
+WORDLIST
 workflows
 xintercept
 xlsx
 yearstay
 yml
 yyyyqx
-Zihao
+zihao
 zsav
 zstd

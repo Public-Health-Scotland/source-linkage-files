@@ -57,4 +57,5 @@
 ^\Q.github/workflows/spelling.yml\E$
 ^\Q/tmp/check-spelling/Public-Health-Scotland/source-linkage-files/commits/f13483ca341940e8549dc23c930da2f23dd0ac43.message\E$
 ^\Q/tmp/check-spelling/Public-Health-Scotland/source-linkage-files/pull-request/613/summary.txt\E$
+^\Qinst/WORDLIST\E$
 ignore$
