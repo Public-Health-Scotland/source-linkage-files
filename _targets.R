@@ -591,7 +591,11 @@ list(
         data = episode_file,
         year = year
       )
-    ) # ,
+    ),
+    tar_target(
+      cross_year_tests,
+      process_tests_cross_year(year = year)
+    ), # ,
     # tar_target(
     #   individual_file,
     #   create_individual_file(
