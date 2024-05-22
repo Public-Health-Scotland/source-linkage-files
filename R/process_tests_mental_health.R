@@ -7,7 +7,6 @@
 #'
 #' @export
 process_tests_mental_health <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 

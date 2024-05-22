@@ -4,7 +4,6 @@
 #'
 #' @export
 process_tests_it_chi_deaths <- function(data, update = previous_update()) {
-
   data <- data %>%
     slfhelper::get_chi()
 

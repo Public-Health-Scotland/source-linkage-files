@@ -8,7 +8,6 @@
 #'
 #' @family social care test functions
 produce_sc_all_episodes_tests <- function(data) {
-
   data <- data %>%
     slfhelper::get_chi()
 

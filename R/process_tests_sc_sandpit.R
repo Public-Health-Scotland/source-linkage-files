@@ -6,7 +6,6 @@
 #' @export
 #'
 process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demographics", "client"), year = NULL) {
-
   data <- data %>%
     slfhelper::get_chi()
 

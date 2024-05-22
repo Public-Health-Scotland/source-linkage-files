@@ -7,7 +7,6 @@
 #'
 #' @export
 process_tests_care_home <- function(data, year) {
-
   data <- data %>%
     slfhelper::get_chi()
 
