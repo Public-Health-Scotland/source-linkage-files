@@ -12,7 +12,11 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
+process_extract_gp_ooh <- function(year,
+                                   data_list,
+                                   gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
+                                   write_to_disk = TRUE) {
+
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
   outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
   consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
@@ -95,8 +99,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
 
   ## Link CUP Marker -----
   gp_ooh_cup_file <- read_file(
-    # path = get_boxi_extract_path(year, "gp_ooh_cup"),
-    path = file_name,
+    path = gp_ooh_cup_path,
     col_type = readr::cols(
       "GP OOH Consultation Start Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "GP OOH Consultation Start Time" = readr::col_time(""),
@@ -119,7 +122,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       .keep_all = TRUE
     )
 
-  ooh_clean2 <- ooh_clean %>%
+  ooh_clean <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup_file,
       by = dplyr::join_by(
         "ooh_case_id",
@@ -130,7 +133,7 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
 
   ## Save Outfile -------------------------------------
 
-  final_data <- ooh_clean2 %>%
+  final_data <- ooh_clean %>%
     dplyr::select(
       "year",
       "recid",
