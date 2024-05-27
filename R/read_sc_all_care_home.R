@@ -35,7 +35,7 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       write_file(get_sandpit_extract_path(type = "ch"))
 
     ch_data %>%
-      process_tests_sandpit(type = "ch")
+      process_tests_sc_sandpit(type = "ch")
   } else {
     ch_data <- ch_data
   }
