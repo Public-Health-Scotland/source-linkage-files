@@ -1,5 +1,5 @@
 # Define the source directory and financial year pattern
-compress_files <- TRUE
+compress_files <- FALSE
 source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp"
 pattern <- "-20(\\d{4})\\.csv"
 
@@ -43,7 +43,7 @@ move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
     chi_in_file <- is_chi_in_file(csv_file)
     if (chi_in_file) {
       read_file(csv_file) %>%
-        dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI")) %>%
+        dplyr::rename_with(~ paste0("chi"), tidyselect::contains("UPI", ignore.case = FALSE)) %>%
         slfhelper::get_anon_chi() %>%
         readr::write_csv(file = new_file_path)
       cat("Replaced chi with anon chi:", csv_file, "to", new_file_path, "\n")
