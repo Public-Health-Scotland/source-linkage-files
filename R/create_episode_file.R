@@ -444,7 +444,7 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year) %>% slfhelper::get_chi()),
+                           sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
                            file_type = c("episode", "individual")) {
   if (file_type == "episode") {
     # Match on client variables by chi
