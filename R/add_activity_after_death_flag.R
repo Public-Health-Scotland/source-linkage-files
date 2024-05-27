@@ -12,10 +12,7 @@ add_activity_after_death_flag <- function(
     data,
     year,
     deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
-      slfhelper::get_chi()
-
-    ) {
-
+      slfhelper::get_chi()) {
   death_joined <- data %>%
     dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$death_date, .data$deceased) %>%
     dplyr::filter(!is.na(.data$chi) | .data$chi != "") %>%
