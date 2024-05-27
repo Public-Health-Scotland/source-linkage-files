@@ -4,7 +4,7 @@
 \alias{get_all_slf_deaths_lookup_path}
 \title{SLF death dates File Path}
 \usage{
-get_all_slf_deaths_lookup_path(update = latest_update())
+get_all_slf_deaths_lookup_path(update = latest_update(), ...)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}

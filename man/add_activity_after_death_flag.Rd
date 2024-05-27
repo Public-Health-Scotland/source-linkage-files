@@ -7,7 +7,7 @@
 add_activity_after_death_flag(
   data,
   year,
-  deaths_data = read_file(all_slf_deaths_lookup_path())
+  deaths_data = read_file(get_all_slf_deaths_lookup_path())
 )
 }
 \arguments{
