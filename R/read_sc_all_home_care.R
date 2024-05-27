@@ -10,7 +10,9 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
   home_care_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "homecare_snapshot")
-  ) %>%
+  ) %>% dplyr::collect()
+
+  home_care_data <- home_care_data %>%
     dplyr::select(
       "sending_location",
       "sending_location_name",
@@ -44,7 +46,6 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       .data$period
     )) %>%
     # drop rows start date after end date
-    dplyr::collect() %>%
     dplyr::distinct()
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "hc"))) {
