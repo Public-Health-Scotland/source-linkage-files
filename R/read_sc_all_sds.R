@@ -33,7 +33,7 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       write_file(get_sandpit_extract_path(type = "sds"))
 
     sds_full_data %>%
-      process_tests_sandpit(type = "sds")
+      process_tests_sc_sandpit(type = "sds")
   } else {
     sds_full_data <- sds_full_data
   }

@@ -52,7 +52,7 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
       write_file(get_sandpit_extract_path(type = "hc"))
 
     home_care_date %>%
-      process_tests_sandpit(type = "hc")
+      process_tests_sc_sandpit(type = "hc")
   } else {
     home_care_data <- home_care_data
   }
