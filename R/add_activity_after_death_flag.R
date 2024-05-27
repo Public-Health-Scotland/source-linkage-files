@@ -60,7 +60,7 @@ add_activity_after_death_flag <- function(
     # Search all variables beginning with "flag_" for value "1" and create new variable to flag cases where 1 is present
     # Multiplying by 1 changes flag from true/false to 1/0
     dplyr::mutate(activity_after_death = purrr::pmap_dbl(
-      dplyr::select(., contains("flag_")),
+      dplyr::select(., tidyselect::contains("flag_")),
       ~ any(grepl("^1$", c(...)),
         na.rm = TRUE
       ) * 1
