@@ -10,6 +10,9 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "demographic_snapshot")
   ) %>%
+    dplyr::collect()
+
+  sc_demog <- sc_demog %>%
     dplyr::select(
       "latest_record_flag",
       "period",
@@ -22,8 +25,8 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
       "chi_postcode",
       "submitted_postcode",
       "chi_gender_code"
-    ) %>%
-    dplyr::collect()
+    )
+
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
     sc_demog %>%

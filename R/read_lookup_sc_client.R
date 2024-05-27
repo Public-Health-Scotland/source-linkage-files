@@ -16,6 +16,9 @@ read_lookup_sc_client <- function(fyyear,
 
   # read in data - social care 2 client
   client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
+    dplyr::collect()
+
+  client_data <- client_data %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -41,7 +44,6 @@ read_lookup_sc_client <- function(fyyear,
       "day_care"
     ) %>%
     dplyr::filter(.data$financial_year == year) %>%
-    dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(
         c(

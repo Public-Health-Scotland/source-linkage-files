@@ -160,7 +160,7 @@ process_extract_homelessness <- function(
       "year",
       "recid",
       "smrtype",
-      chi = "upi_number",
+      "chi",
       dob = "client_dob_date",
       age = "age_at_assessment_decision_date",
       gender = "gender_code",

@@ -13,7 +13,9 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
   at_full_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "equipment_snapshot")
-  ) %>%
+  ) %>% dplyr::collect()
+
+  at_full_data <- at_full_data %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -25,7 +27,6 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
       "service_end_date",
       "service_start_date_after_period_end_date"
     ) %>%
-    dplyr::collect() %>%
     dplyr::distinct()
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "at"))) {
