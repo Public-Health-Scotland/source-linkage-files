@@ -475,7 +475,7 @@ list(
     tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
-        data = all_at,
+        data = all_at %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -490,7 +490,7 @@ list(
     tar_target(
       source_sc_care_home,
       process_extract_care_home(
-        data = all_care_home,
+        data = all_care_home %>% slfhelper::get_chi(),
         year = year,
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
@@ -506,7 +506,7 @@ list(
     tar_target(
       source_sc_home_care,
       process_extract_home_care(
-        data = all_home_care,
+        data = all_home_care %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -521,7 +521,7 @@ list(
     tar_target(
       source_sc_sds,
       process_extract_sds(
-        data = all_sds,
+        data = all_sds %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
