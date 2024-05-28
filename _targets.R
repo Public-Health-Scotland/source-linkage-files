@@ -537,8 +537,8 @@ list(
       slf_deaths_lookup,
       process_slf_deaths_lookup(
         year = year,
-        nrs_deaths_data = source_nrs_deaths_extract,
-        chi_deaths_data = it_chi_deaths_data,
+        nrs_deaths_data = source_nrs_deaths_extract %>% slfhelper::get_chi(),
+        chi_deaths_data = it_chi_deaths_data %>% slfhelper::get_chi(),
         write_to_disk = write_to_disk
       )
     ),
