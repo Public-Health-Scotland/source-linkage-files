@@ -29,7 +29,7 @@ create_episode_file <- function(
       get_slf_gpprac_path(),
       col_select = c("gpprac", "cluster", "hbpraccode")
     ),
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))%>% slfhelper::get_chi(),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi(),
     sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
