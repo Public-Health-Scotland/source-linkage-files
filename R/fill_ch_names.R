@@ -662,7 +662,7 @@ fill_ch_names <- function(ch_data,
       ),
       na_matches = "never"
     ) %>%
-    dplyr::filter(.data[["ch_name"]] %in% unique_ch_name) %>%
+    dplyr::filter(!(.data[["ch_name"]] %in% duplicated_ch_name)) %>%
     dplyr::mutate(
       ch_name_old = .data[["ch_name"]],
       ch_postcode_old = .data[["ch_postcode"]],
