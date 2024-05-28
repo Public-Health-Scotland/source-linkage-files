@@ -40,8 +40,8 @@ list(
   tar_target(simd_path, get_simd_path(), format = "file"),
   tar_target(spd_path, get_spd_path(), format = "file"),
   tar_file_read(it_chi_deaths_extract,
-                command = get_it_deaths_path(),
-                read = read_it_chi_deaths(!!.x)
+    command = get_it_deaths_path(),
+    read = read_it_chi_deaths(!!.x)
   ),
   tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
   tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
