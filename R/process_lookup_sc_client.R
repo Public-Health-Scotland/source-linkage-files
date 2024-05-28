@@ -16,10 +16,9 @@
 process_lookup_sc_client <-
   function(data,
            year,
-           sc_demographics = read_file(
-             get_sc_demog_lookup_path(),
-             col_select = c("sending_location", "social_care_id", "anon_chi")
-           ) %>% slfhelper::get_chi(),
+           sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
+             slfhelper::get_chi() %>%
+             dplyr::select(c("sending_location", "social_care_id", "chi")),
            write_to_disk = TRUE) {
     client_clean <- data %>%
       # Replace 'unknown' responses with NA
