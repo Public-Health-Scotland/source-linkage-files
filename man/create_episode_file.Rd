@@ -16,7 +16,7 @@ create_episode_file(
     "cluster", "hbpraccode")),
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) \%>\%
     slfhelper::get_chi(),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_anon_chi(),
   write_to_disk = TRUE,
   anon_chi_out = TRUE
 )
