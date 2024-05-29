@@ -80,8 +80,6 @@ create_episode_file <- function(
         "hscp",
         "datazone2011",
         "attendance_status",
-        "death_date",
-        "deceased",
         "deathdiag1",
         "deathdiag2",
         "deathdiag3",
@@ -142,7 +140,9 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
-    add_activity_after_death_flag(year, deaths_data = read_file(all_slf_deaths_lookup_path())) %>%
+    add_activity_after_death_flag(year,
+                                  deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
+                                    slfhelper::get_chi()) %>%
     load_ep_file_vars(year)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
