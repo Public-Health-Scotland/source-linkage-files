@@ -26,7 +26,9 @@ write_tests_xlsx <- function(comparison_data,
   # Set up the workbook ----
   tests_workbook_name <- dplyr::case_when(
     is.null(year) & workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
+    !is.null(year) & workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "{year}_ep_file_tests"),
     is.null(year) & workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
+    !is.null(year) & workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "{year}_indiv_file_tests"),
     is.null(year) & workbook_name == "lookup" ~ stringr::str_glue(latest_update(), "_lookups_tests"),
     is.null(year) & workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests"),
     is.null(year) & workbook_name == "cross_year" ~ stringr::str_glue(latest_update(), "_cross_year_tests"),
