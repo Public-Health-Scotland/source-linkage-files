@@ -74,9 +74,8 @@ get_slf_deaths_lookup_path <- function(year, ...) {
 #'
 #' @description Get the full path to the BOXI NRS Deaths lookup file for all financial years
 #'
-#' @inheritParams get_boxi_extract_path
 #' @param ... additional arguments passed to [get_file_path()]
-#' @param year financial year e.g. "1920"
+#' @param update the update month (defaults to use [latest_update()])
 #'
 #' @export
 #' @family slf lookup file path

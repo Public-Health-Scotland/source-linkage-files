@@ -15,10 +15,10 @@ test_that("Delayed discharges file is as expected", {
   expect_gt(n_rows, 150000)
 
   # Expect at least 98% of CHIs to be valid
-  expect_gt(
-    table(phsmethods::chi_check(latest_dd_file$chi))["Valid CHI"],
-    0.98 * n_rows
-  )
+  expect_gt(table(
+    phsmethods::chi_check(latest_dd_file %>% slfhelper::get_chi() %>% dplyr::pull(chi))
+  )["Valid CHI"],
+  0.98 * n_rows)
 
   expect_snapshot(dplyr::glimpse(latest_dd_file, width = 0))
 })

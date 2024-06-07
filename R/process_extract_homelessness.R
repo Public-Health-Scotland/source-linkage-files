@@ -148,11 +148,11 @@ process_extract_homelessness <- function(
   hl1_data <- data %>%
     dplyr::left_join(
       completeness_data %>%
-        dplyr::select(sending_local_authority_name, pct_complete_all),
+        dplyr::select(.data$sending_local_authority_name, .data$pct_complete_all),
       by = dplyr::join_by("sending_local_authority_name")
     ) %>%
-    dplyr::rename(hl1_completeness = pct_complete_all) %>%
-    dplyr::mutate(hl1_completeness = round(hl1_completeness, 1))
+    dplyr::rename(hl1_completeness = "pct_complete_all") %>%
+    dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 1))
 
   # TODO - Include person_id (from client_id)
   final_data <- hl1_data %>%
@@ -171,7 +171,7 @@ process_extract_homelessness <- function(
       hl1_sending_lca = "sending_local_authority_code_9",
       hl1_property_type = "property_type_code",
       "hl1_reason_ftm",
-      hl1_completeness
+      "hl1_completeness"
     ) %>%
     slfhelper::get_anon_chi()
 

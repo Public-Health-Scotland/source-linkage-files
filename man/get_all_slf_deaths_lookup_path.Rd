@@ -7,9 +7,9 @@
 get_all_slf_deaths_lookup_path(update = latest_update(), ...)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{year}{financial year e.g. "1920"}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \description{
 Get the full path to the BOXI NRS Deaths lookup file for all financial years

@@ -1,6 +1,7 @@
 #' Process tests for the social care sandpit extracts
 #'
 #' @param type Name of sandpit extract.
+#' @param year Year of extract
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #' @export
@@ -47,7 +48,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
         n_missing_postcode = is_missing(.data$chi_postcode),
         n_missing_gender = is_missing(.data$chi_gender_code)
       ) %>%
-      dplyr::select(n_missing_chi:n_missing_gender) %>%
+      dplyr::select(.data$n_missing_chi:.data$n_missing_gender) %>%
       calculate_measures(measure = "sum")
 
     latest_flag_tests <- data %>%
@@ -78,44 +79,44 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
       dplyr::group_by(.data$social_care_id, .data$sending_location) %>%
       dplyr::distinct(.data$chi_upi, .keep_all = TRUE) %>%
       dplyr::mutate(distinct_chi_count = dplyr::n_distinct(.data$chi_upi)) %>%
-      dplyr::filter(distinct_chi_count > 1) %>%
+      dplyr::filter(.data$distinct_chi_count > 1) %>%
       dplyr::distinct(.data$social_care_id, .data$sending_location, .keep_all = TRUE) %>%
       dplyr::mutate(sc_id_multi_chi = 1) %>%
       create_sending_location_test_flags(.data$sending_location) %>%
       dplyr::ungroup() %>%
       dplyr::rename(
-        sc_id_multi_chi_Aberdeen_City = Aberdeen_City,
-        sc_id_multi_chi_Aberdeenshire = Aberdeenshire,
-        sc_id_multi_chi_Angus = Angus,
-        sc_id_multi_chi_Argyll_and_Bute = Argyll_and_Bute,
-        sc_id_multi_chi_City_of_Edinburgh = City_of_Edinburgh,
-        sc_id_multi_chi_Clackmannanshire = Clackmannanshire,
-        sc_id_multi_chi_Dumfries_and_Galloway = Dumfries_and_Galloway,
-        sc_id_multi_chi_Dundee_City = Dundee_City,
-        sc_id_multi_chi_East_Ayrshire = East_Ayrshire,
-        sc_id_multi_chi_East_Dunbartonshire = East_Dunbartonshire,
-        sc_id_multi_chi_East_Lothian = East_Lothian,
-        sc_id_multi_chi_East_Renfrewshire = East_Renfrewshire,
-        sc_id_multi_chi_Falkirk = Falkirk,
-        sc_id_multi_chi_Fife = Fife,
-        sc_id_multi_chi_Glasgow_City = Glasgow_City,
-        sc_id_multi_chi_Highland = Highland,
-        sc_id_multi_chi_Inverclyde = Inverclyde,
-        sc_id_multi_chi_Midlothian = Midlothian,
-        sc_id_multi_chi_Moray = Moray,
-        sc_id_multi_chi_Na_h_Eileanan_Siar = Na_h_Eileanan_Siar,
-        sc_id_multi_chi_North_Ayrshire = North_Ayrshire,
-        sc_id_multi_chi_North_Lanarkshire = North_Lanarkshire,
-        sc_id_multi_chi_Orkney_Islands = Orkney_Islands,
-        sc_id_multi_chi_Perth_and_Kinross = Perth_and_Kinross,
-        sc_id_multi_chi_Renfrewshire = Renfrewshire,
-        sc_id_multi_chi_Scottish_Borders = Scottish_Borders,
-        sc_id_multi_chi_Shetland_Islands = Shetland_Islands,
-        sc_id_multi_chi_South_Ayrshire = South_Ayrshire,
-        sc_id_multi_chi_South_Lanarkshire = South_Lanarkshire,
-        sc_id_multi_chi_Stirling = Stirling,
-        sc_id_multi_chi_West_Dunbartonshire = West_Dunbartonshire,
-        sc_id_multi_chi_West_Lothian = West_Lothian
+        sc_id_multi_chi_Aberdeen_City = "Aberdeen_City",
+        sc_id_multi_chi_Aberdeenshire = "Aberdeenshire",
+        sc_id_multi_chi_Angus = "Angus",
+        sc_id_multi_chi_Argyll_and_Bute = "Argyll_and_Bute",
+        sc_id_multi_chi_City_of_Edinburgh = "City_of_Edinburgh",
+        sc_id_multi_chi_Clackmannanshire = "Clackmannanshire",
+        sc_id_multi_chi_Dumfries_and_Galloway = "Dumfries_and_Galloway",
+        sc_id_multi_chi_Dundee_City = "Dundee_City",
+        sc_id_multi_chi_East_Ayrshire = "East_Ayrshire",
+        sc_id_multi_chi_East_Dunbartonshire = "East_Dunbartonshire",
+        sc_id_multi_chi_East_Lothian = "East_Lothian",
+        sc_id_multi_chi_East_Renfrewshire = "East_Renfrewshire",
+        sc_id_multi_chi_Falkirk = "Falkirk",
+        sc_id_multi_chi_Fife = "Fife",
+        sc_id_multi_chi_Glasgow_City = "Glasgow_City",
+        sc_id_multi_chi_Highland = "Highland",
+        sc_id_multi_chi_Inverclyde = "Inverclyde",
+        sc_id_multi_chi_Midlothian = "Midlothian",
+        sc_id_multi_chi_Moray = "Moray",
+        sc_id_multi_chi_Na_h_Eileanan_Siar = "Na_h_Eileanan_Siar",
+        sc_id_multi_chi_North_Ayrshire = "North_Ayrshire",
+        sc_id_multi_chi_North_Lanarkshire = "North_Lanarkshire",
+        sc_id_multi_chi_Orkney_Islands = "Orkney_Islands",
+        sc_id_multi_chi_Perth_and_Kinross = "Perth_and_Kinross",
+        sc_id_multi_chi_Renfrewshire = "Renfrewshire",
+        sc_id_multi_chi_Scottish_Borders = "Scottish_Borders",
+        sc_id_multi_chi_Shetland_Islands = "Shetland_Islands",
+        sc_id_multi_chi_South_Ayrshire = "South_Ayrshire",
+        sc_id_multi_chi_South_Lanarkshire = "South_Lanarkshire",
+        sc_id_multi_chi_Stirling = "Stirling",
+        sc_id_multi_chi_West_Dunbartonshire = "West_Dunbartonshire",
+        sc_id_multi_chi_West_Lothian = "West_Lothian"
       ) %>%
       dplyr::select(.data$sc_id_multi_chi, .data$sc_id_multi_chi_Aberdeen_City:.data$sc_id_multi_chi_West_Lothian) %>%
       calculate_measures(measure = "sum")

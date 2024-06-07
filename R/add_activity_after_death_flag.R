@@ -13,6 +13,10 @@ add_activity_after_death_flag <- function(
     year,
     deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
       slfhelper::get_chi()) {
+
+  # to skip warnings no visible binding for global variable ‘.’
+  . <- NULL
+
   death_joined <- data %>%
     dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$death_date, .data$deceased) %>%
     dplyr::filter(!is.na(.data$chi) | .data$chi != "") %>%
@@ -100,11 +104,11 @@ add_activity_after_death_flag <- function(
 
 #' Create and read SLF Deaths lookup from processed BOXI NRS deaths extracts
 #'
-#' #' @description The BOXI NRS deaths extract lookup should be created after the extract files for all years have been processed,
+#' @description The BOXI NRS deaths extract lookup should be created after the extract files for all years have been processed,
 # but before an episode file has been produced. Therefore, all BOXI NRS years should be run before running episode files.
 #'
-#' @param file_path Path to the BOXI NRS file for each financial year - may not use this
-#' @param year The year to process, in FY format - may not use this
+#' @param ... additional arguments passed to [get_slf_deaths_lookup_path()]
+#' @param update the update month (defaults to use [latest_update()])
 #'
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
@@ -127,11 +131,11 @@ process_deaths_lookup <- function(update = latest_update(),
     rbind(read_file(get_slf_deaths_lookup_path("2122"))) %>%
     rbind(read_file(get_slf_deaths_lookup_path("2223"))) %>%
     rbind(read_file(get_slf_deaths_lookup_path("2324"))) %>%
-    # Can this be automated to pick up files starting with name "get_slf_deaths_lookup_path"?
+    # TODO: make this automated to pick up files starting with name "get_slf_deaths_lookup_path"
     slfhelper::get_chi() %>%
     # Remove rows with missing or blank CHI number - could also use na.omit?
     # na.omit(all_boxi_deaths)
-    dplyr::filter(!is.na(.data$chi) | chi != "")
+    dplyr::filter(!is.na(.data$chi) | .data$chi != "")
 
   # Check all CHI numbers are valid
   chi_check <- all_boxi_deaths %>%

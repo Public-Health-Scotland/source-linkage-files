@@ -7,16 +7,16 @@
 process_deaths_lookup(update = latest_update(), write_to_disk = TRUE, ...)
 }
 \arguments{
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
-\item{file_path}{Path to the BOXI NRS file for each financial year - may not use this}
-
-\item{year}{The year to process, in FY format - may not use this}
+\item{...}{additional arguments passed to \code{\link[=get_slf_deaths_lookup_path]{get_slf_deaths_lookup_path()}}}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-#' @description The BOXI NRS deaths extract lookup should be created after the extract files for all years have been processed,
+The BOXI NRS deaths extract lookup should be created after the extract files for all years have been processed,
 }

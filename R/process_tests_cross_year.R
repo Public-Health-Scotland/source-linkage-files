@@ -21,7 +21,7 @@ process_tests_cross_year <- function(year) {
       n_records = 1L
     ) %>%
     dplyr::summarise(
-      n = sum(n_records)
+      n = sum(.data$n_records)
     ) %>%
     dplyr::mutate(
       fy_qtr = "total"
@@ -29,21 +29,21 @@ process_tests_cross_year <- function(year) {
 
   qtr_test <- ep_file %>%
     dplyr::mutate(
-      fy_qtr = dplyr::if_else(recid != "PIS", lubridate::quarter(record_keydate1, fiscal_start = 4), NA)
+      fy_qtr = dplyr::if_else(.data$recid != "PIS", lubridate::quarter(.data$record_keydate1, fiscal_start = 4), NA)
     ) %>%
     dplyr::group_by(.data$year, .data$recid, .data$fy_qtr) %>%
     dplyr::mutate(
       n_records = 1L
     ) %>%
     dplyr::summarise(
-      n = sum(n_records)
+      n = sum(.data$n_records)
     ) %>%
     dplyr::mutate(
-      fy_qtr = as.character(fy_qtr)
+      fy_qtr = as.character(.data$fy_qtr)
     )
 
   join_tests <- dplyr::bind_rows(total_test, qtr_test) %>%
-    dplyr::arrange(year, recid, fy_qtr)
+    dplyr::arrange(.data$year, .data$recid, .data$fy_qtr)
 
   pivot_tests <- join_tests %>%
     tidyr::pivot_wider(
