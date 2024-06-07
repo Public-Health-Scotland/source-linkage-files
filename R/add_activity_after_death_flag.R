@@ -13,7 +13,6 @@ add_activity_after_death_flag <- function(
     year,
     deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
       slfhelper::get_chi()) {
-
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
