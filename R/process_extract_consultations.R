@@ -10,7 +10,7 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 process_extract_ooh_consultations <- function(data, year) {
-  # to skip warning no visible bingding for global variable when using data.table
+  # to skip warning no visible binding for global variable when using data.table
   distinct_check <- consultation_type <- location <-
     record_keydate1 <- record_keydate2 <- chi <-
     ooh_case_id <- episode_counter <- NULL
