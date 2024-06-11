@@ -107,7 +107,8 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
       "uri",
       "ipdc"
     ) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1)
+    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

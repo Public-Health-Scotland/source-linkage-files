@@ -11,7 +11,7 @@ read_extract_ae <- function(
     col_type = readr::cols(
       "Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "DAT Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Pat UPI [C]" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Pat Gender Code" = readr::col_double(),
       "NHS Board of Residence Code - current" = readr::col_character(),
@@ -71,7 +71,7 @@ read_extract_ae <- function(
       hscp = "HSCP of Residence Code - current",
       hbrescode = "NHS Board of Residence Code - current",
       hbtreatcode = "Treatment NHS Board Code - current",
-      chi = "Pat UPI [C]",
+      anon_chi = "anon_chi",
       gender = "Pat Gender Code",
       ae_patflow = "Patient Flow Code",
       ae_placeinc = "Place of Incident Code",
@@ -83,7 +83,8 @@ read_extract_ae <- function(
       cost_total_net = "Total Net Costs",
       location = "Treatment Location Code",
       case_ref_number = "Case Reference Number"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_ae)
 }

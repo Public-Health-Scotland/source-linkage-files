@@ -16,10 +16,9 @@
 process_lookup_sc_client <-
   function(data,
            year,
-           sc_demographics = read_file(
-             get_sc_demog_lookup_path(),
-             col_select = c("sending_location", "social_care_id", "chi")
-           ),
+           sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
+             slfhelper::get_chi() %>%
+             dplyr::select(c("sending_location", "social_care_id", "chi")),
            write_to_disk = TRUE) {
     client_clean <- data %>%
       # Replace 'unknown' responses with NA
@@ -157,7 +156,8 @@ process_lookup_sc_client <-
       ) %>%
       dplyr::arrange(.data$chi, .data$count_not_known) %>%
       dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
-      dplyr::select(-.data$sending_location)
+      dplyr::select(-.data$sending_location) %>%
+      slfhelper::get_anon_chi()
 
     if (write_to_disk) {
       write_file(

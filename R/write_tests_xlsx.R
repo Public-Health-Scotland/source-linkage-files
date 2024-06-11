@@ -19,18 +19,22 @@
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
-                             workbook_name = c("ep_file", "indiv_file", "lookup", "extract")) {
+                             workbook_name = c(
+                               "ep_file", "indiv_file", "lookup", "extract", "sandpit",
+                               "cross_year"
+                             )) {
   # Set up the workbook ----
-
-  if (workbook_name == "lookup" | missing(year) & workbook_name == "lookup") {
-    tests_workbook_name <- stringr::str_glue(latest_update(), "_lookups_tests")
-  } else {
-    tests_workbook_name <- dplyr::case_when(
-      workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
-      workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
-      workbook_name == "extract" ~ stringr::str_glue(latest_update(), "_{year}_extract_tests")
-    )
-  }
+  tests_workbook_name <- dplyr::case_when(
+    is.null(year) & workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
+    !is.null(year) & workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_{year}_ep_file_tests"),
+    is.null(year) & workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
+    !is.null(year) & workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_{year}_indiv_file_tests"),
+    is.null(year) & workbook_name == "lookup" ~ stringr::str_glue(latest_update(), "_lookups_tests"),
+    is.null(year) & workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests"),
+    is.null(year) & workbook_name == "cross_year" ~ stringr::str_glue(latest_update(), "_cross_year_tests"),
+    !is.null(year) & workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests"),
+    !is.null(year) & workbook_name == "extract" ~ stringr::str_glue(latest_update(), "_{year}_extract_tests")
+  )
 
   tests_workbook_path <- fs::path(
     get_slf_dir(),
@@ -92,11 +96,11 @@ write_tests_xlsx <- function(comparison_data,
 
   date_today <- stringr::str_to_lower(date_today)
 
-  sheet_name_dated <- ifelse(
-    is.null(year),
-    stringr::str_glue("{sheet_name}_{date_today}"),
-    stringr::str_glue("{year}_{sheet_name}_{date_today}")
-  )
+  if (is.null(year)) {
+    sheet_name_dated <- stringr::str_glue("{sheet_name}_{date_today}")
+  } else {
+    sheet_name_dated <- stringr::str_glue("{year}_{sheet_name}_{date_today}")
+  }
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {

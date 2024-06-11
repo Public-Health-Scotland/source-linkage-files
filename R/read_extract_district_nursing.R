@@ -19,7 +19,7 @@ read_extract_district_nursing <- function(
       `Primary Intervention Category` = readr::col_character(),
       `Other Intervention Category (1)` = readr::col_character(),
       `Other Intervention Category (2)` = readr::col_character(),
-      `UPI Number [C]` = readr::col_character(),
+      `anon_chi` = readr::col_character(),
       `Patient DoB Date [C]` = readr::col_date(format = "%Y/%m/%d %T"),
       `Patient Postcode [C] (Contact)` = readr::col_character(),
       `Duration of Contact (measure)` = readr::col_double(),
@@ -46,14 +46,15 @@ read_extract_district_nursing <- function(
       datazone2011 = "Patient Data Zone 2011 (Contact)",
       hbpraccode = "Practice NHS Board Code 9 (Contact)",
       hbtreatcode = "Treatment NHS Board Code 9",
-      chi = "UPI Number [C]",
+      anon_chi = "anon_chi",
       record_keydate1 = "Contact Date",
       primary_intervention = "Primary Intervention Category",
       intervention_1 = "Other Intervention Category (1)",
       intervention_2 = "Other Intervention Category (2)",
       duration_contact = "Duration of Contact (measure)",
       location_contact = "Location of Contact"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_district_nursing)
 }

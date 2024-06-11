@@ -15,7 +15,7 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
       "GLS Record" = readr::col_character(),
       "Date of Admission(01)" = readr::col_date(format = "%Y/%m/%d %T"),
       "Date of Discharge(01)" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Pat UPI" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Pat Gender Code" = readr::col_double(),
       "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Practice Location Code" = readr::col_character(),
@@ -127,7 +127,7 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
       op4a = "Operation 4A Code (4 char)",
       op4b = "Operation 4B Code (4 char)",
       gender = "Pat Gender Code",
-      chi = "Pat UPI",
+      anon_chi = "anon_chi",
       cat = "Patient Category Code",
       gpprac = "Practice Location Code",
       hbpraccode = "Practice NHS Board Code - current",
@@ -154,7 +154,8 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
     # replace NA in cost_total_net by 0
     dplyr::mutate(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_acute)
 }

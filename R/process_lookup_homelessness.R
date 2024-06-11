@@ -12,7 +12,7 @@
 #' @family process extracts
 create_homelessness_lookup <- function(
     year,
-    homelessness_data = read_file(get_source_extract_path(year, "homelessness"))) {
+    homelessness_data = read_file(get_source_extract_path(year, "homelessness")) %>% slfhelper::get_chi()) {
   homelessness_lookup <- homelessness_data %>%
     dplyr::distinct(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na(.data$chi) %>%
@@ -101,6 +101,16 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
       homeless_flag,
       by = c("chi", "record_keydate1", "record_keydate2", "recid"),
       relationship = "many-to-one"
+    ) %>%
+    dplyr::mutate(
+      hl1_12_months_pre_app = lubridate::rollback(.data$record_keydate1,
+        months(-12),
+        roll_to_first = TRUE
+      ),
+      hl1_12_months_post_app = lubridate::add_with_rollback(.data$record_keydate2,
+        months(12),
+        roll_to_first = TRUE
+      )
     )
 
   return(data)

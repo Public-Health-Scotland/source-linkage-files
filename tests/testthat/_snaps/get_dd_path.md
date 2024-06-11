@@ -3,11 +3,11 @@
     Code
       dplyr::glimpse(latest_dd_file, width = 0)
     Output
-      Rows: 198,751
+      Rows: 206,029
       Columns: 14
       $ cennum                 <dbl> ~
       $ MONTHFLAG              <chr> ~
-      $ chi                    <chr> ~
+      $ anon_chi               <chr> ~
       $ OriginalAdmissionDate  <date> ~
       $ RDD                    <date> ~
       $ Delay_End_Date         <date> ~

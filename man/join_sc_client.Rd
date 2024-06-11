@@ -7,7 +7,7 @@
 join_sc_client(
   data,
   year,
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_chi(),
   file_type = c("episode", "individual")
 )
 }

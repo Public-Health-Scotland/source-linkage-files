@@ -15,7 +15,7 @@
 get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
   sc_demog_lookup_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_demographic_lookup"),
-    file_name = stringr::str_glue("sc_demographics_lookup_{update}.parquet"),
+    file_name = stringr::str_glue("anon-sc_demographics_lookup_{update}.parquet"),
     ...
   )
 
@@ -40,7 +40,7 @@ get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
 get_sc_client_lookup_path <- function(year, update = latest_update(), ...) {
   sc_client_lookup_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_client_lookup"),
-    file_name = stringr::str_glue("sc_client_lookup_{year}_{update}.parquet"),
+    file_name = stringr::str_glue("anon-sc_client_lookup_{year}_{update}.parquet"),
     ...
   )
 

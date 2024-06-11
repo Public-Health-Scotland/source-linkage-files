@@ -17,7 +17,7 @@ read_extract_homelessness <- function(
       "Case Closed Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "Sending Local Authority Code 9" = readr::col_character(),
       "Client Unique Identifier" = readr::col_character(),
-      "UPI Number [C]" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Client DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Age at Assessment Decision Date" = readr::col_integer(),
       "Gender Code" = readr::col_integer(),
@@ -43,7 +43,7 @@ read_extract_homelessness <- function(
       case_closed_date = "Case Closed Date",
       sending_local_authority_code_9 = "Sending Local Authority Code 9",
       client_unique_identifier = "Client Unique Identifier",
-      upi_number = "UPI Number [C]",
+      anon_chi = "anon_chi",
       client_dob_date = "Client DoB Date [C]",
       age_at_assessment_decision_date = "Age at Assessment Decision Date",
       gender_code = "Gender Code",
@@ -62,7 +62,8 @@ read_extract_homelessness <- function(
       not_to_do_with_applicant_household = "Not to do with Applicant Household",
       refused = "Refused",
       person_in_receipt_of_universal_credit = "Person in Receipt of Universal Credit"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_homelessness)
 }

@@ -16,6 +16,9 @@ read_lookup_sc_client <- function(fyyear,
 
   # read in data - social care 2 client
   client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
+    dplyr::collect()
+
+  client_data <- client_data %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -74,12 +77,14 @@ read_lookup_sc_client <- function(fyyear,
       .data$social_care_id,
       .data$financial_year,
       .data$financial_quarter
-    ) %>%
-    dplyr::collect()
+    )
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
     client_data %>%
       write_file(get_sandpit_extract_path(type = "client", year = fyyear))
+
+    client_data %>%
+      process_tests_sc_sandpit(type = "client", year = fyyear)
   } else {
     client_data <- client_data
   }

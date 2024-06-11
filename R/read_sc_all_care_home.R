@@ -10,7 +10,9 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
   ch_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "carehome_snapshot")
-  ) %>%
+  ) %>% dplyr::collect()
+
+  ch_data <- ch_data %>%
     dplyr::select(
       "ch_name",
       "ch_postcode",
@@ -27,12 +29,14 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "ch_discharge_date",
       "age"
     ) %>%
-    dplyr::collect() %>%
     dplyr::distinct()
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "ch"))) {
     ch_data %>%
       write_file(get_sandpit_extract_path(type = "ch"))
+
+    ch_data %>%
+      process_tests_sc_sandpit(type = "ch")
   } else {
     ch_data <- ch_data
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_sc_all_ch_episodes.R
 \name{process_tests_sc_all_ch_episodes}
 \alias{process_tests_sc_all_ch_episodes}
-\title{Process Social Care Care Home all episodes tests}
+\title{Process Social Care, Care Home all episodes tests}
 \usage{
 process_tests_sc_all_ch_episodes(data)
 }

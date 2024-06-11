@@ -97,7 +97,8 @@ process_extract_home_care <- function(
       "hc_provider",
       "hc_reablement",
       "person_id"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

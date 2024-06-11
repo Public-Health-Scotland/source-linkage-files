@@ -13,7 +13,7 @@
 #'
 process_sc_all_alarms_telecare <- function(
     data,
-    sc_demog_lookup,
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
 
@@ -136,7 +136,8 @@ process_sc_all_alarms_telecare <- function(
   )]
 
   # Convert back to data.frame if necessary
-  qtr_merge <- as.data.frame(qtr_merge)
+  qtr_merge <- as.data.frame(qtr_merge) %>%
+    slfhelper::get_anon_chi()
 
 
   if (write_to_disk) {
