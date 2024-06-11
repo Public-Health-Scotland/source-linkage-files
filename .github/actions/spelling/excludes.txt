@@ -43,6 +43,7 @@
 \.psd$
 \.pyc$
 \.s$
+\.sps$
 \.svgz?$
 \.tar$
 \.tiff?$
