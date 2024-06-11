@@ -104,6 +104,7 @@ geogs
 ggplot
 GIC
 github
+GLS
 gls
 glsrecord
 gms
@@ -128,6 +129,7 @@ hms
 homecare
 homev
 hri
+HSCDIIP
 hscdiip
 hscp
 hscpnames
@@ -271,6 +273,7 @@ smrtype
 sourcedev
 sparra
 spd
+SPSS
 spss
 stadm
 starwars
