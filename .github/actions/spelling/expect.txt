@@ -271,7 +271,6 @@ smrtype
 sourcedev
 sparra
 spd
-SPSS
 spss
 stadm
 starwars

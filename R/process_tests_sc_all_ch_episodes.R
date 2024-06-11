@@ -1,4 +1,4 @@
-#' Process Social Care Care Home all episodes tests
+#' Process Social Care, Care Home all episodes tests
 #'
 #' @param data The processed Care Home all episode data produced by
 #' [process_extract_care_home()].
