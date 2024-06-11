@@ -4,7 +4,6 @@ Accom
 Admissio
 admloc
 admtype
-ADPE
 adpe
 adtf
 alstr
@@ -31,7 +30,6 @@ casewhen
 categorises
 cattend
 ccyy
-CCYY
 cdn
 cennum
 CEREBROVASC
@@ -75,7 +73,6 @@ deathdiag
 demog
 dependant
 devhints
-Diagramme
 diagramme
 disch
 dischloc
@@ -102,7 +99,6 @@ envir
 eol
 fcase
 feb
-Finalise
 finalise
 Fhelper
 fifelse
@@ -118,12 +114,10 @@ geogs
 ggplot
 GIC
 github
-GLS
 gls
 glsrecord
 gms
 gpoo
-GPOoH
 gpooh
 gpprac
 gss
@@ -135,7 +129,6 @@ hbrescode
 hbtreatcode
 hbtreatname
 hci
-HCP
 hcp
 hefailure
 hhg
@@ -145,14 +138,12 @@ hms
 homecare
 homev
 hri
-HSCDIIP
 hscdiip
 hscp
 hscpnames
 htmltools
 htmlwidgets
 httr
-IDPC
 idpc
 img
 improvementservice
@@ -181,7 +172,6 @@ kis
 knitr
 lazydt
 lcap
-LCHO
 lcho
 lgl
 linetype
