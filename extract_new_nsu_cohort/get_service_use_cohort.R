@@ -34,7 +34,7 @@
 # The year of the new NSU extract we want
 year <- "2324"
 
-nsu_dir <- path('/conf/hscdiip/SLF_Extracts/NSU/')
+nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU/")
 
 # Read data---------------------------------------------------------------------
 episode_file <- slfhelper::read_slf_episode(year, col_select = "anon_chi") %>%
@@ -48,6 +48,7 @@ episode_file <- slfhelper::read_slf_episode(year, col_select = "anon_chi") %>%
 # Save a parquet file
 episode_file %>%
   arrow::write_parquet(path(nsu_dir, glue::glue("service_user_extract_{year}.parquet")),
-                       compress = TRUE)
+    compress = TRUE
+  )
 
 ## End of Script ##

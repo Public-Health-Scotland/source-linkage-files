@@ -170,14 +170,18 @@ final_data <- nsu_data %>%
 
 # Save data out to be used
 final_data %>%
-  select(chi = upi_number,
-         dob = date_of_birth,
-         postcode,
-         gpprac = gp_prac_no,
-         gender = sex) %>%
-  mutate(year = year, .before = everything(),
-         dob = as.Date(dob),
-         across(c(gender, gpprac), as.integer)) %>%
+  select(
+    chi = upi_number,
+    dob = date_of_birth,
+    postcode,
+    gpprac = gp_prac_no,
+    gender = sex
+  ) %>%
+  mutate(
+    year = year, .before = everything(),
+    dob = as.Date(dob),
+    across(c(gender, gpprac), as.integer)
+  ) %>%
   arrange(chi) %>%
   # Save as anon chi on disk
   slhelper::get_anon_chi() %>%
