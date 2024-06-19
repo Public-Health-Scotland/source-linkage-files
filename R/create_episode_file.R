@@ -20,22 +20,23 @@
 create_episode_file <- function(
     processed_data_list,
     year,
-    dd_data = read_file(get_source_extract_path(year, "dd")),
+    dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi(),
     homelessness_lookup = create_homelessness_lookup(year),
-    nsu_cohort = read_file(get_nsu_path(year)),
-    ltc_data = read_file(get_ltcs_path(year)),
+    nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi(),
+    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi(),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
     slf_gpprac_lookup = read_file(
       get_slf_gpprac_path(),
       col_select = c("gpprac", "cluster", "hbpraccode")
     ),
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-    sc_client = read_file(get_sc_client_lookup_path(year)),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi(),
+    sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
+    slfhelper::get_chi() %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
@@ -138,6 +139,10 @@ create_episode_file <- function(
     join_deaths_data(
       year,
       slf_deaths_lookup
+    ) %>%
+    add_activity_after_death_flag(year,
+      deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
+        slfhelper::get_chi()
     ) %>%
     load_ep_file_vars(year)
 
@@ -408,12 +413,14 @@ join_cohort_lookups <- function(
     update = latest_update(),
     demographic_cohort = read_file(
       get_demographic_cohorts_path(year, update),
-      col_select = c("chi", "demographic_cohort")
-    ),
+      col_select = c("anon_chi", "demographic_cohort")
+    ) %>%
+      slfhelper::get_chi(),
     service_use_cohort = read_file(
       get_service_use_cohorts_path(year, update),
-      col_select = c("chi", "service_use_cohort")
-    )) {
+      col_select = c("anon_chi", "service_use_cohort")
+    ) %>%
+      slfhelper::get_chi()) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
@@ -438,7 +445,7 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
                            file_type = c("episode", "individual")) {
   if (file_type == "episode") {
     # Match on client variables by chi

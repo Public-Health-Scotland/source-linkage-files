@@ -13,7 +13,7 @@ read_extract_mental_health <- function(
       "Costs Financial Month Number (04)" = readr::col_double(),
       "Date of Admission(04)" = readr::col_date(format = "%Y/%m/%d %T"),
       "Date of Discharge(04)" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Pat UPI" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Pat Gender Code" = readr::col_integer(),
       "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Practice Location Code" = readr::col_character(),
@@ -74,7 +74,7 @@ read_extract_mental_health <- function(
       costmonthnum = "Costs Financial Month Number (04)",
       record_keydate1 = "Date of Admission(04)",
       record_keydate2 = "Date of Discharge(04)",
-      chi = "Pat UPI",
+      anon_chi = "anon_chi",
       gender = "Pat Gender Code",
       dob = "Pat Date Of Birth [C]",
       gpprac = "Practice Location Code",
@@ -131,7 +131,8 @@ read_extract_mental_health <- function(
     # replace NA in cost_total_net by 0
     dplyr::mutate(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_mental_health)
 }

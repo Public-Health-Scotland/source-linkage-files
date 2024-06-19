@@ -12,7 +12,7 @@ read_extract_outpatients <- function(
       "Clinic Date Fin Year" = readr::col_double(),
       "Clinic Date (00)" = readr::col_date(format = "%Y/%m/%d %T"),
       "Episode Record Key (SMR00) [C]" = readr::col_character(),
-      "Pat UPI" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Pat Gender Code" = readr::col_double(),
       "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Practice Location Code" = readr::col_character(),
@@ -70,7 +70,7 @@ read_extract_outpatients <- function(
       op2b = "Operation 2B Code (4 char)",
       dateop2 = "Date of Operation 2 (00)",
       gender = "Pat Gender Code",
-      chi = "Pat UPI",
+      anon_chi = "anon_chi",
       cat = "Patient Category Code",
       gpprac = "Practice Location Code",
       hbpraccode = "Practice NHS Board Code - current",
@@ -83,7 +83,8 @@ read_extract_outpatients <- function(
       cost_total_net = "Total Net Costs",
       location = "Treatment Location Code",
       hbtreatcode = "Treatment NHS Board Code - current"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_outpatients)
 }

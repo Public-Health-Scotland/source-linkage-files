@@ -123,7 +123,8 @@ process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "ooh_case_id"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     final_data %>%

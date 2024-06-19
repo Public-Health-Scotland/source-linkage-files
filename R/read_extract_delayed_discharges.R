@@ -12,7 +12,8 @@ read_extract_delayed_discharges <- function(file_path = get_dd_path()) {
       monthflag = lubridate::my(.data[["monthflag"]]),
       delay_end_reason = as.integer(.data[["delay_end_reason"]])
     ) %>%
-    dplyr::select(-.data[["cennum"]])
+    dplyr::select(-.data[["cennum"]]) %>%
+    slfhelper::get_chi()
 
   return(extract_delayed_discharges)
 }

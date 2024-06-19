@@ -38,7 +38,8 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
       record_keydate2 = .data$record_keydate1,
       # Add SMR type variable
       smrtype = add_smrtype(.data$recid)
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   # Issue a warning if rows were removed
   if (nrow(pis_clean) != nrow(data)) {

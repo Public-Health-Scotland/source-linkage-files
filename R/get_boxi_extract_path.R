@@ -41,19 +41,19 @@ get_boxi_extract_path <- function(
 
   file_name <- dplyr::case_match(
     type,
-    "ae" ~ "A&E-episode-level-extract",
-    "ae_cup" ~ "A&E-UCD-CUP-extract",
-    "acute" ~ "Acute-episode-level-extract",
-    "cmh" ~ "Community-MH-contact-level-extract",
-    "dn" ~ "District-Nursing-contact-level-extract",
-    "gp_ooh-c" ~ "GP-OoH-consultations-extract",
-    "gp_ooh-d" ~ "GP-OoH-diagnosis-extract",
-    "gp_ooh-o" ~ "GP-OoH-outcomes-extract",
-    "homelessness" ~ "Homelessness-extract",
-    "maternity" ~ "Maternity-episode-level-extract",
-    "mh" ~ "Mental-Health-episode-level-extract",
-    "deaths" ~ "NRS-death-registrations-extract",
-    "outpatients" ~ "Outpatients-episode-level-extract"
+    "ae" ~ "anon-A&E-episode-level-extract",
+    "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
+    "acute" ~ "anon-Acute-episode-level-extract",
+    "cmh" ~ "anon-Community-MH-contact-level-extract",
+    "dn" ~ "anon-District-Nursing-contact-level-extract",
+    "gp_ooh-c" ~ "anon-GP-OoH-consultations-extract",
+    "gp_ooh-d" ~ "anon-GP-OoH-diagnosis-extract",
+    "gp_ooh-o" ~ "anon-GP-OoH-outcomes-extract",
+    "homelessness" ~ "anon-Homelessness-extract",
+    "maternity" ~ "anon-Maternity-episode-level-extract",
+    "mh" ~ "anon-Mental-Health-episode-level-extract",
+    "deaths" ~ "anon-NRS-death-registrations-extract",
+    "outpatients" ~ "anon-Outpatients-episode-level-extract"
   )
 
   boxi_extract_path_csv_gz <- fs::path(

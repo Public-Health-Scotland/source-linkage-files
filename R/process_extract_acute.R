@@ -108,7 +108,8 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
       tidyselect::ends_with("_cost"),
       "uri"
     ) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1)
+    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

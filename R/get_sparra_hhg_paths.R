@@ -16,7 +16,7 @@ get_hhg_path <- function(year, ...) {
 
   hhg_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "HHG"),
-    file_name = stringr::str_glue("HHG-20{year}.parquet"),
+    file_name = stringr::str_glue("anon-HHG-20{year}.parquet"),
     ...
   )
 
@@ -41,7 +41,7 @@ get_sparra_path <- function(year, ...) {
 
   sparra_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "SPARRA"),
-    file_name = stringr::str_glue("SPARRA-20{year}.parquet"),
+    file_name = stringr::str_glue("anon-SPARRA-20{year}.parquet"),
     ...
   )
 

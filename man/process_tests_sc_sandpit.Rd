@@ -11,6 +11,7 @@ process_tests_sc_sandpit(
 }
 \arguments{
 \item{type}{Name of sandpit extract.}
+\item{year}{Year of extract}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.

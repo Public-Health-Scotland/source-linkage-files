@@ -15,7 +15,7 @@ get_demographic_cohorts_path <- function(year, update = latest_update(), ...) {
   demographic_cohorts_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Cohorts"),
     file_name = stringr::str_glue(
-      "demographic_cohorts_{update}_{year}.parquet"
+      "anon-demographic_cohorts_{update}_{year}.parquet"
     ),
     ...
   )
@@ -38,7 +38,7 @@ get_service_use_cohorts_path <- function(year, update = latest_update(), ...) {
   service_use_cohorts_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Cohorts"),
     file_name = stringr::str_glue(
-      "service_use_cohorts_{update}_{year}.parquet"
+      "anon-service_use_cohorts_{update}_{year}.parquet"
     ),
     ...
   )

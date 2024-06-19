@@ -8,6 +8,9 @@
 #'
 #' @family social care test functions
 produce_sc_all_episodes_tests <- function(data) {
+  data <- data %>%
+    slfhelper::get_chi()
+
   data %>%
     # create test flags
     create_demog_test_flags(chi = .data$chi) %>%

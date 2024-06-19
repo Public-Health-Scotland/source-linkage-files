@@ -146,6 +146,8 @@ process_lookup_sc_demographics <- function(
   dplyr::n_distinct(sc_demog_lookup$chi) # 525,834
   dplyr::n_distinct(sc_demog_lookup$social_care_id) # 637,422
 
+  sc_demog_lookup <- sc_demog_lookup %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

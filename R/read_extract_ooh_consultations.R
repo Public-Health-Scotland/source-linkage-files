@@ -28,7 +28,7 @@ read_extract_ooh_consultations <- function(
     dplyr::select(!"Practice NHS Board Code 9 - current") %>%
     # rename variables
     dplyr::rename(
-      chi = "UPI Number [C]",
+      anon_chi = "anon_chi",
       dob = "Patient DoB Date [C]",
       gender = "Gender",
       postcode = "Patient Postcode [C]",
@@ -48,9 +48,11 @@ read_extract_ooh_consultations <- function(
       consultation_type = "Consultation Type",
       consultation_type_unmapped = "Consultation Type Unmapped"
     ) %>%
+    slfhelper::get_chi() %>%
     # Restore CHI leading zero
     dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
     dplyr::distinct()
+
 
   return(consultations_extract)
 }

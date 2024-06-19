@@ -23,7 +23,7 @@
 
 process_sc_all_care_home <- function(
     data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     it_chi_deaths_data = read_file(get_slf_chi_deaths_path()),
     ch_name_lookup_path = read_file(get_slf_ch_name_lookup_path()),
     spd_path = read_file(get_spd_path()),
@@ -368,9 +368,8 @@ process_sc_all_care_home <- function(
       "ch_nursing",
       "ch_adm_reason",
       "sc_latest_submission"
-    ) # 235411 cases
-
-
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     ch_data_final %>%
