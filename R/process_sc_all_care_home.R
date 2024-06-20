@@ -96,7 +96,6 @@ process_sc_all_care_home <- function(
       -"min_ch_provider",
       -"max_ch_provider"
     ) %>%
-    tidyr::fill(.data[["ch_provider"]], .direction = "downup") %>%
     dplyr::ungroup()
 
 
