@@ -244,7 +244,7 @@ process_sc_all_care_home <- function(
   # earlier than the previous discharge date.
   # creates a CIS  flag for CHI across all of scotland
   # and a CIS for social care ID and sending location for just that LA
-  ch_markers <- matched_deaths_data %>%
+  ch_chi_markers <- matched_deaths_data %>%
     # uses the chi to flag continuous stays. Will flag cases even if in another LA
     dplyr::group_by(.data[["chi"]]) %>%
     # create variable for previous discharge date + 1 day
