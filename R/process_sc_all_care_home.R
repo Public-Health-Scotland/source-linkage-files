@@ -56,7 +56,7 @@ process_sc_all_care_home <- function(
     dplyr::select(-latest_flag, -latest_sc_id)
 
 
-  # cleaning and matching care home names -  Zihao looking into care home names
+  # cleaning and matching care home names
   name_postcode_clean <- fill_ch_names(
     ch_data = ch_clean,
     ch_name_lookup_path = ch_name_lookup_path,
