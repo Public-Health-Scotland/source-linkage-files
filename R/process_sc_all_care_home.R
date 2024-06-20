@@ -244,7 +244,7 @@ process_sc_all_care_home <- function(
   # earlier than the previous discharge date.
   # creates a CIS  flag for CHI across all of scotland
   # and a CIS for social care ID and sending location for just that LA
-  ch_markers <- matched_deaths_data %>%
+  ch_chi_markers <- matched_deaths_data %>%
     # uses the chi to flag continuous stays. Will flag cases even if in another LA
     dplyr::group_by(.data[["chi"]]) %>%
     # create variable for previous discharge date + 1 day
@@ -272,6 +272,7 @@ process_sc_all_care_home <- function(
     # This is the same but uses the social care id and sending location so can be used for
     # episodes that are not attached to a CHI number
     # This will restrict continuous stays to each Local Authority
+    sc_ch_id_markers() <- chi_chi_markers %>%
     dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]]) %>%
     # create variable for previous discharge date + 1 day
     dplyr::mutate(previous_discharge_date_sc = dplyr::lag(.data[["ch_discharge_date"]]) + lubridate::days(1L)) %>%
@@ -296,7 +297,7 @@ process_sc_all_care_home <- function(
 
 
   # Do a recode on the old reason for admission for respite stays.
-  adm_reason_recoded <- ch_markers %>%
+  adm_reason_recoded <- sc_ch_id_markers %>%
     dplyr::group_by(
       .data[["social_care_id"]],
       .data[["sending_location"]],
