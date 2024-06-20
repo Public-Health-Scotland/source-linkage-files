@@ -297,7 +297,7 @@ process_sc_all_care_home <- function(
 
 
   # Do a recode on the old reason for admission for respite stays.
-  adm_reason_recoded <- ch_markers %>%
+  adm_reason_recoded <- sc_ch_id_markers %>%
     dplyr::group_by(
       .data[["social_care_id"]],
       .data[["sending_location"]],
