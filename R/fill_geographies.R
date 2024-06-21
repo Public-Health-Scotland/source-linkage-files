@@ -16,7 +16,6 @@ fill_geographies <- function(
       get_slf_gpprac_path(),
       col_select = c("gpprac", "cluster", "hbpraccode")
     )) {
-
   cli::cli_alert_info("Fill geographies function started at {Sys.time()}")
 
   check_variables_exist(data, c(

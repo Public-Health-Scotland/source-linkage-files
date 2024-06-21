@@ -13,7 +13,6 @@
 create_homelessness_lookup <- function(
     year,
     homelessness_data = read_file(get_source_extract_path(year, "homelessness")) %>% slfhelper::get_chi()) {
-
   cli::cli_alert_info("Create homelessness lookup function started at {Sys.time()}")
 
   homelessness_lookup <- homelessness_data %>%
@@ -38,7 +37,6 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
-
   cli::cli_alert_info("Add homelessness flag function started at {Sys.time()}")
 
   data <- data %>%
@@ -65,7 +63,6 @@ add_homelessness_flag <- function(data, year,
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
-
   cli::cli_alert_info("Add homelessness date flags function started at {Sys.time()}")
 
   lookup <- lookup %>%

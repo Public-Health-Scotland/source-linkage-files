@@ -13,7 +13,6 @@ add_nsu_cohort <- function(
     data,
     year,
     nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi()) {
-
   cli::cli_alert_info("Add NSU cohort function started at {Sys.time()}")
 
   year_param <- year
