@@ -13,6 +13,9 @@
 create_homelessness_lookup <- function(
     year,
     homelessness_data = read_file(get_source_extract_path(year, "homelessness")) %>% slfhelper::get_chi()) {
+
+  cli::cli_alert_info("Create homelessness lookup function started at {Sys.time()}")
+
   homelessness_lookup <- homelessness_data %>%
     dplyr::distinct(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na(.data$chi) %>%
@@ -35,6 +38,9 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
+
+  cli::cli_alert_info("Add homelessness flag function started at {Sys.time()}")
+
   data <- data %>%
     dplyr::left_join(
       lookup %>%
@@ -59,6 +65,9 @@ add_homelessness_flag <- function(data, year,
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
+
+  cli::cli_alert_info("Add homelessness date flags function started at {Sys.time()}")
+
   lookup <- lookup %>%
     dplyr::filter(!(is.na(.data$record_keydate2))) %>%
     dplyr::rename(
