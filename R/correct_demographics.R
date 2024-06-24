@@ -7,6 +7,8 @@
 #'
 #' @return episode files with updated date of birth and ages
 correct_demographics <- function(data, year) {
+  cli::cli_alert_info("Correct demographics function started at {Sys.time()}")
+
   # keep episodes with missing chi
   data_no_chi <- data %>%
     dplyr::filter(is_missing(.data$chi))
