@@ -87,7 +87,7 @@ add_activity_after_death_flag <- function(
   flag_data <- flag_data %>%
     dplyr::filter(.data$activity_after_death == 1) %>%
     # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
-    dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$activity_after_death) %>%
+    dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$activity_after_death, .data$death_date_boxi) %>%
     dplyr::distinct()
 
   # Match activity after death flag back to episode file
@@ -96,7 +96,12 @@ add_activity_after_death_flag <- function(
       flag_data,
       by = c("year", "chi", "record_keydate1", "record_keydate2"),
       na_matches = "never"
-    )
+    ) %>%
+    dplyr::mutate(death_date = lubridate::as_date(ifelse(is.na(death_date) & !(is.na(death_date_boxi)),
+      death_date_boxi, death_date
+    ))) %>%
+    dplyr::select(-death_date_boxi)
+
 
 
   return(final_data)
