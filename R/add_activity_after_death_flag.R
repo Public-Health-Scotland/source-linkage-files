@@ -127,17 +127,16 @@ add_activity_after_death_flag <- function(
 # Read data------------------------------------------------
 process_deaths_lookup <- function(update = latest_update(),
                                   write_to_disk = TRUE, ...) {
-  all_boxi_deaths <- read_file(get_slf_deaths_lookup_path("1415")) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1516"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1617"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1718"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1819"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1920"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2021"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2122"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2223"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2324"))) %>%
-    # TODO: make this automated to pick up files starting with name "get_slf_deaths_lookup_path"
+  dir_folder <- "/conf/hscdiip/SLF_Extracts/Deaths"
+  file_names <- list.files(dir_folder,
+    pattern = "^anon-slf_deaths_lookup_.*parquet",
+    full.names = TRUE
+  )
+
+  # read all year specific deaths lookups and bind them together
+  all_boxi_deaths <- lapply(file_names, arrow::read_parquet) %>%
+    data.table::rbindlist() %>%
+    # convert to chi for processing
     slfhelper::get_chi() %>%
     # Remove rows with missing or blank CHI number - could also use na.omit?
     # na.omit(all_boxi_deaths)
@@ -185,7 +184,7 @@ process_deaths_lookup <- function(update = latest_update(),
     write_file(
       all_boxi_deaths,
       fs::path(get_slf_dir(), "Deaths",
-        file_name = stringr::str_glue("anon-all_slf_deaths_lookup_{update}.parquet")
+        file_name = stringr::str_glue("anon-combined_slf_deaths_lookup_{update}.parquet")
       )
     )
   }
