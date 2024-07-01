@@ -42,7 +42,7 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
   }
 
   ch_data <- ch_data %>%
-    # Correct FY 2017
+    # Correct FY 2017 as data collection only started in 2017 Q4
     dplyr::mutate(period = dplyr::if_else(
       .data$period == "2017",
       "2017Q4",

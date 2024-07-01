@@ -39,10 +39,10 @@ process_extract_care_home <- function(
       is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)
     ) %>%
     # remove any episodes where the latest submission was before the current year
+    # this is what stops cases being in future files
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     )
-
 
   # Data Cleaning ---------------------------------------
   source_ch_clean <- ch_data %>%

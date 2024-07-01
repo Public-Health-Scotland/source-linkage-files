@@ -3,7 +3,7 @@ Accom
 Admissio
 admloc
 admtype
-ADPE
+adpe
 adtf
 alstr
 arrivalmode
@@ -20,12 +20,12 @@ bodyloc
 boxi
 CAK
 callr
-Canx
+canx
 carehome
 careinspectorate
 categorises
 cattend
-CCYY
+ccyy
 cdn
 cennum
 CEREBROVASC
@@ -36,9 +36,9 @@ chpstart
 cij
 Classificat
 cmh
-CNWs
+cnws
 codecov
-Comhairle
+comhairle
 commhosp
 congen
 copd
@@ -158,7 +158,7 @@ keytime
 kis
 knitr
 lcap
-LCHO
+lcho
 lgl
 linetype
 lintr
@@ -168,8 +168,8 @@ ltd
 lubridate
 magrittr
 markdownguide
-Matern
-Mcbride
+matern
+mcbride
 mcmahon
 microsoft
 MIU
@@ -215,7 +215,7 @@ PLICS
 popluation
 Posix
 postcodes
-PPAs
+ppas
 prac
 praccode
 ptypes
@@ -268,7 +268,7 @@ simd
 slf
 slfhelper
 smr
-SMRA
+smra
 smrtype
 sourcedev
 sparra
