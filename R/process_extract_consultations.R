@@ -10,6 +10,12 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 process_extract_ooh_consultations <- function(data, year) {
+  # to skip warning no visible binding for global variable when using data.table
+  distinct_check <- consultation_type <- location <-
+    record_keydate1 <- record_keydate2 <- chi <-
+    ooh_case_id <- episode_counter <- NULL
+
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -84,21 +90,21 @@ process_extract_ooh_consultations <- function(data, year) {
   consultations_clean <- consultations_covid %>%
     # Sort in reverse order so we can use coalesce which takes the first non-missing value
     dplyr::arrange(
-      chi,
-      ooh_case_id,
-      record_keydate1,
-      record_keydate2
+      .data$chi,
+      .data$ooh_case_id,
+      .data$record_keydate1,
+      .data$record_keydate2
     ) %>%
     data.table::as.data.table()
 
   consultations_clean[, distinct_check := (
     record_keydate1 > data.table::shift(record_keydate2, fill = NA, type = "lag")
   ),
-  by = .(chi, ooh_case_id, consultation_type, location)
+  by = list(chi, ooh_case_id, consultation_type, location)
   ]
   consultations_clean[, distinct_check := tidyr::replace_na(distinct_check, TRUE)]
   consultations_clean[, episode_counter := cumsum(distinct_check),
-    by = .(chi, ooh_case_id, consultation_type, location)
+    by = list(chi, ooh_case_id, consultation_type, location)
   ]
   consultations_clean[,
     c(
@@ -108,7 +114,7 @@ process_extract_ooh_consultations <- function(data, year) {
       min(record_keydate1),
       max(record_keydate2)
     ),
-    by = .(
+    by = list(
       chi,
       ooh_case_id,
       consultation_type,

@@ -129,7 +129,7 @@ list(
     all_at,
     process_sc_all_alarms_telecare(
       all_at_extract,
-      sc_demog_lookup = sc_demog_lookup,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -150,7 +150,7 @@ list(
     all_home_care,
     process_sc_all_home_care(
       all_home_care_extract,
-      sc_demog_lookup = sc_demog_lookup,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -171,8 +171,8 @@ list(
     all_care_home,
     process_sc_all_care_home(
       all_care_home_extract,
-      sc_demog_lookup = sc_demog_lookup,
-      it_chi_deaths_data = it_chi_deaths_data,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
+      it_chi_deaths_data = it_chi_deaths_data %>% slfhelper::get_chi(),
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
@@ -195,7 +195,7 @@ list(
     all_sds,
     process_sc_all_sds(
       all_sds_extract,
-      sc_demog_lookup = sc_demog_lookup,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -475,6 +475,7 @@ list(
         data = sc_client_data,
         year = year,
         sc_demographics = sc_demog_lookup %>%
+          slfhelper::get_chi() %>%
           dplyr::select(c("sending_location", "social_care_id", "chi")),
         write_to_disk = write_to_disk
       )
@@ -486,7 +487,7 @@ list(
     tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
-        data = all_at,
+        data = all_at %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -501,7 +502,7 @@ list(
     tar_target(
       source_sc_care_home,
       process_extract_care_home(
-        data = all_care_home,
+        data = all_care_home %>% slfhelper::get_chi(),
         year = year,
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
@@ -517,7 +518,7 @@ list(
     tar_target(
       source_sc_home_care,
       process_extract_home_care(
-        data = all_home_care,
+        data = all_home_care %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -532,7 +533,7 @@ list(
     tar_target(
       source_sc_sds,
       process_extract_sds(
-        data = all_sds,
+        data = all_sds %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -548,8 +549,8 @@ list(
       slf_deaths_lookup,
       process_slf_deaths_lookup(
         year = year,
-        nrs_deaths_data = source_nrs_deaths_extract,
-        chi_deaths_data = it_chi_deaths_data,
+        nrs_deaths_data = source_nrs_deaths_extract %>% slfhelper::get_chi(),
+        chi_deaths_data = it_chi_deaths_data %>% slfhelper::get_chi(),
         write_to_disk = write_to_disk
       )
     ),
@@ -578,7 +579,7 @@ list(
       homelessness_lookup,
       create_homelessness_lookup(
         year,
-        homelessness_data = source_homelessness_extract
+        homelessness_data = source_homelessness_extract %>% slfhelper::get_chi()
       )
     ),
     tar_target(
@@ -587,13 +588,13 @@ list(
         processed_data_list,
         year,
         homelessness_lookup = homelessness_lookup,
-        dd_data = source_dd_extract,
-        nsu_cohort = nsu_cohort,
-        ltc_data = source_ltc_lookup,
+        dd_data = source_dd_extract %>% slfhelper::get_chi(),
+        nsu_cohort = nsu_cohort %>% slfhelper::get_chi(),
+        ltc_data = source_ltc_lookup %>% slfhelper::get_chi(),
         slf_pc_lookup = source_pc_lookup,
         slf_gpprac_lookup = source_gp_lookup,
-        slf_deaths_lookup = slf_deaths_lookup,
-        sc_client = sc_client_lookup,
+        slf_deaths_lookup = slf_deaths_lookup %>% slfhelper::get_chi(),
+        sc_client = sc_client_lookup %>% slfhelper::get_chi(),
         write_to_disk
       )
     ),
@@ -604,6 +605,10 @@ list(
         year = year
       )
     ) # ,
+    # tar_target(
+    #   cross_year_tests,
+    #   process_tests_cross_year(year = year)
+    # ), # ,
     # tar_target(
     #   individual_file,
     #   create_individual_file(

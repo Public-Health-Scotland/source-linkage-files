@@ -82,7 +82,8 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "uri"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

@@ -7,7 +7,8 @@
 fill_ch_names(
   ch_data,
   ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path()
+  spd_path = get_spd_path(),
+  uk_pc_path = get_uk_postcode_path()
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ Workbook, this defaults to \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_
 
 \item{spd_path}{Path to the Scottish Postcode Directory (rds) version, this
 defaults to \code{\link[=get_spd_path]{get_spd_path()}}}
+
+\item{uk_pc_path}{Path to the UK postcode list. This is defaults to
+\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}}
 }
 \value{
 the same data with improved accuracy and completeness of the Care

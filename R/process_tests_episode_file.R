@@ -72,6 +72,9 @@ produce_episode_file_tests <- function(
     )) {
   test_flags <- data %>%
     dplyr::group_by(.data$recid) %>%
+    dplyr::mutate(
+      n_records = 1L
+    ) %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags(chi = .data$anon_chi) %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
@@ -103,7 +106,7 @@ produce_episode_file_tests <- function(
 
   test_flags <- test_flags %>%
     # keep variables for comparison
-    dplyr::select("unique_chi":dplyr::last_col()) %>%
+    dplyr::select("n_records":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum", group_by = "recid")
 

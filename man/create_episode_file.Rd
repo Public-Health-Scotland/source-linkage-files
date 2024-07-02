@@ -7,15 +7,16 @@
 create_episode_file(
   processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
+  dd_data = read_file(get_source_extract_path(year, "dd")) \%>\% slfhelper::get_chi(),
   homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
-  ltc_data = read_file(get_ltcs_path(year)),
+  nsu_cohort = read_file(get_nsu_path(year)) \%>\% slfhelper::get_chi(),
+  ltc_data = read_file(get_ltcs_path(year)) \%>\% slfhelper::get_chi(),
   slf_pc_lookup = read_file(get_slf_postcode_path()),
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
     "cluster", "hbpraccode")),
-  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) \%>\%
+    slfhelper::get_chi(),
+  sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_chi(),
   write_to_disk = TRUE,
   anon_chi_out = TRUE
 )

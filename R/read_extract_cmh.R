@@ -14,7 +14,7 @@ read_extract_cmh <- function(
   # Read BOXI extract
   extract_cmh <- read_file(file_path,
     col_types = readr::cols_only(
-      "UPI Number [C]" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Patient DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Gender" = readr::col_double(),
       "Patient Postcode [C]" = readr::col_character(),
@@ -35,7 +35,7 @@ read_extract_cmh <- function(
   ) %>%
     # rename
     dplyr::rename(
-      chi = "UPI Number [C]",
+      anon_chi = "anon_chi",
       dob = "Patient DoB Date [C]",
       gender = "Gender",
       postcode = "Patient Postcode [C]",
@@ -52,7 +52,8 @@ read_extract_cmh <- function(
       diag3 = "Other Aim of Contact (2)",
       diag4 = "Other Aim of Contact (3)",
       diag5 = "Other Aim of Contact (4)"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_cmh)
 }

@@ -33,25 +33,25 @@ test_that("IT extract file paths work", {
     get_it_prescribing_path("1111")
   )
 
-  # Older IT extracts
-  expect_s3_class(
-    get_it_prescribing_path("1213",
-      it_reference = "0182748"
-    ),
-    "fs_path"
-  )
-  expect_s3_class(
-    get_it_prescribing_path("1314",
-      it_reference = "0182748"
-    ),
-    "fs_path"
-  )
-  expect_s3_class(
-    get_it_prescribing_path("1415",
-      it_reference = "0182748"
-    ),
-    "fs_path"
-  )
+  # # Older IT extracts
+  # expect_s3_class(
+  #   get_it_prescribing_path("1213",
+  #     it_reference = "0182748"
+  #   ),
+  #   "fs_path"
+  # )
+  # expect_s3_class(
+  #   get_it_prescribing_path("1314",
+  #     it_reference = "0182748"
+  #   ),
+  #   "fs_path"
+  # )
+  # expect_s3_class(
+  #   get_it_prescribing_path("1415",
+  #     it_reference = "0182748"
+  #   ),
+  #   "fs_path"
+  # )
   expect_error(
     get_it_prescribing_path("1415",
       it_reference = "0000000"

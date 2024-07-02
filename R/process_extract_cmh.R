@@ -68,7 +68,8 @@ process_extract_cmh <- function(data,
       "diag4",
       "diag5",
       "diag6"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

@@ -112,7 +112,8 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
       "uri"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

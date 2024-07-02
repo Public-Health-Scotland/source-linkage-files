@@ -5,6 +5,8 @@
 #' @return episode data with uplifted costs
 #' @family episode_file
 apply_cost_uplift <- function(data) {
+  cli::cli_alert_info("Apply cost uplift function started at {Sys.time()}")
+
   data <- data %>%
     # attach a uplift scale as the last column
     lookup_uplift() %>%

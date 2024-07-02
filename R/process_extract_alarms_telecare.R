@@ -48,7 +48,8 @@ process_extract_alarms_telecare <- function(
       "record_keydate2",
       "person_id",
       "sc_latest_submission"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     at_data %>%

@@ -10,6 +10,9 @@
 #'
 #' @export
 process_tests_sc_all_hc_episodes <- function(data) {
+  data <- data %>%
+    slfhelper::get_chi()
+
   comparison <- produce_test_comparison(
     old_data = produce_sc_all_episodes_tests(
       read_file(get_sc_hc_episodes_path(update = previous_update()))

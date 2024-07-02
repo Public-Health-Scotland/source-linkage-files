@@ -9,7 +9,9 @@
 join_deaths_data <- function(
     data,
     year,
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))) {
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi()) {
+  cli::cli_alert_info("Join deaths data function started at {Sys.time()}")
+
   return(
     data %>%
       dplyr::left_join(
