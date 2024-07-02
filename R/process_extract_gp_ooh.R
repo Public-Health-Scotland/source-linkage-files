@@ -16,7 +16,6 @@ process_extract_gp_ooh <- function(year,
                                    data_list,
                                    gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
                                    write_to_disk = TRUE) {
-
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
   outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
   consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
