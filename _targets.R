@@ -281,16 +281,6 @@ list(
       get_boxi_extract_path(year = year, type = "gp_ooh-c"),
       format = "file"
     ),
-    tar_target(
-      acute_cup_path,
-      get_boxi_extract_path(year, type = "acute_cup"),
-      format = "file"
-    ),
-    tar_target(
-      gp_ooh_cup_path,
-      get_boxi_extract_path(year, type = "gp_ooh_cup"),
-      format = "file"
-    ),
     tar_qs(
       ooh_data,
       read_extract_gp_ooh(
@@ -304,7 +294,6 @@ list(
     tar_target(source_acute_extract, process_extract_acute(
       acute_data,
       year,
-      acute_cup_path,
       write_to_disk = write_to_disk
     )),
     tar_target(
@@ -430,7 +419,6 @@ list(
     tar_target(source_ooh_extract, process_extract_gp_ooh(
       year,
       ooh_data,
-      gp_ooh_cup_path,
       write_to_disk = write_to_disk
     )),
     tar_target(

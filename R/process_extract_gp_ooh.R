@@ -12,11 +12,7 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_gp_ooh <- function(year,
-                                   data_list,
-                                   gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
-                                   write_to_disk = TRUE) {
-
+process_extract_gp_ooh <- function(year, data_list, write_to_disk = TRUE) {
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
   outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
   consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
@@ -97,39 +93,6 @@ process_extract_gp_ooh <- function(year,
     ) %>%
     dplyr::ungroup()
 
-  ## Link CUP Marker -----
-  gp_ooh_cup_file <- read_file(
-    path = gp_ooh_cup_path,
-    col_type = readr::cols(
-      "GP OOH Consultation Start Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "GP OOH Consultation Start Time" = readr::col_time(""),
-      "GUID" = readr::col_character(),
-      "CUP Marker" = readr::col_integer(),
-      "CUP Pathway Name" = readr::col_character()
-    )
-  ) %>%
-    dplyr::select(
-      record_keydate1 = "GP OOH Consultation Start Date",
-      keytime1 = "GP OOH Consultation Start Time",
-      ooh_case_id = "GUID",
-      cup_marker = "CUP Marker",
-      cup_pathway = "CUP Pathway Name"
-    ) %>%
-    dplyr::distinct(
-      .data$record_keydate1,
-      .data$keytime1,
-      .data$ooh_case_id,
-      .keep_all = TRUE
-    )
-
-  ooh_clean <- ooh_clean %>%
-    dplyr::left_join(gp_ooh_cup_file,
-      by = dplyr::join_by(
-        "ooh_case_id",
-        "record_keydate1",
-        "keytime1"
-      )
-    )
 
   ## Save Outfile -------------------------------------
 
@@ -159,9 +122,7 @@ process_extract_gp_ooh <- function(year,
       tidyselect::starts_with("ooh_outcome"),
       "cost_total_net",
       tidyselect::ends_with("_cost"),
-      "ooh_case_id",
-      cup_marker,
-      cup_pathway
+      "ooh_case_id"
     ) %>%
     slfhelper::get_anon_chi()
 

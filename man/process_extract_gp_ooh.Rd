@@ -4,12 +4,7 @@
 \alias{process_extract_gp_ooh}
 \title{Process the GP OoH extract}
 \usage{
-process_extract_gp_ooh(
-  year,
-  data_list,
-  gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
-  write_to_disk = TRUE
-)
+process_extract_gp_ooh(year, data_list, write_to_disk = TRUE)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
