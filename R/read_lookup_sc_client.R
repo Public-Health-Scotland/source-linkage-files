@@ -78,7 +78,7 @@ read_lookup_sc_client <- function(fyyear,
       .data$financial_year,
       .data$financial_quarter
     ) %>%
-  dplyr::rename("mental_health_disorders" = "mental_health_problems")
+    dplyr::rename("mental_health_disorders" = "mental_health_problems")
 
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
