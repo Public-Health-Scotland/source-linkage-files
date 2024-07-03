@@ -25,8 +25,8 @@ process_sc_all_care_home <- function(
     data,
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     it_chi_deaths_data = read_file(get_slf_chi_deaths_path()),
-    ch_name_lookup_path = readxl::read_excel(get_slf_ch_name_lookup_path()),
-    spd_path = read_file(get_spd_path()),
+    ch_name_lookup_path = get_slf_ch_name_lookup_path(),
+    spd_path = get_spd_path(),
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
 
@@ -63,8 +63,7 @@ process_sc_all_care_home <- function(
     spd_path = spd_path
   )
 
-
-  fixed_ch_provider <- name_postcode_clean %>%
+ fixed_ch_provider <- name_postcode_clean %>%
     dplyr::select(-ch_name_validated, -open_interval, -latest_close_date, -ch_name_old, -ch_postcode_old) %>%
     dplyr::mutate(
       ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]]) # (n = 2)
