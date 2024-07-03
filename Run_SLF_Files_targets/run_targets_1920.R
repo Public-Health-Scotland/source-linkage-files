@@ -8,11 +8,3 @@ tar_make_future(
   names = (targets::contains("1920"))
 )
 
-# use targets to create individual files due to RAM limit
-library(createslf)
-
-episode_file <- arrow::read_parquet(get_slf_episode_path(year))
-
-# Run individual file
-create_individual_file(episode_file, year = year) %>%
-  process_tests_individual_file(year = year)
