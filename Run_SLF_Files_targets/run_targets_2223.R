@@ -7,4 +7,3 @@ tar_make_future(
   # it does not recognise `contains(year)`
   names = (targets::contains("2223"))
 )
-
