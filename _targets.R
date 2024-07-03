@@ -554,7 +554,8 @@ list(
       combined_deaths_lookup,
       process_combined_deaths_lookup()
     )
-
+  )
+)
     ## End of Targets pipeline ##
 
     ################################################################################
@@ -652,5 +653,4 @@ list(
     #     version = "latest"
     #   )
     # )
-  )
-)
+
