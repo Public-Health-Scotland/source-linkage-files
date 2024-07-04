@@ -161,7 +161,8 @@ process_lookup_sc_client <-
         "sc_neurological_condition",
         "sc_autism",
         "sc_other_vulnerable_groups"
-      )
+      ) %>%
+      create_person_id()
 
 
     sc_client_lookup <-
