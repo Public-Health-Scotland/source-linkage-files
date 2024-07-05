@@ -12,6 +12,8 @@ match_on_ltcs <- function(
     data,
     year,
     ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi()) {
+  cli::cli_alert_info("Match on LTCs function started at {Sys.time()}")
+
   # Match on LTC lookup
   matched <- dplyr::left_join(
     data,
