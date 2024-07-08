@@ -6,4 +6,4 @@ tar_make_future()
 
 # Combine deaths lookup here rather than in targets to make sure that
 # it is run after the death file for each year is produced.
-combined_deaths_lookup = process_combined_deaths_lookup()
+combined_deaths_lookup <- process_combined_deaths_lookup()
