@@ -67,30 +67,31 @@ process_extract_acute <- function(data,
       unique_row_num = dplyr::row_number()
     )
 
-  acute_cup <- read_file(
-    path = acute_cup_path,
+  acute_cup = read_file(
+    # path = get_boxi_extract_path(year, "acute_cup"),
+    path = cup_file_name,
     col_type = readr::cols(
+      "anon_chi" = readr::col_character(),
       "Acute Admission Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "Acute Discharge Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "Acute Admission Type Code" = readr::col_character(),
       "Acute Discharge Type Code" = readr::col_character(),
       "Case Reference Number [C]" = readr::col_character(),
-      "UPI Number [C]" = readr::col_character(),
       "CUP Marker" = readr::col_integer(),
       "CUP Pathway Name" = readr::col_character()
     )
+  ) %>% dplyr::select(
+    anon_chi = "anon_chi",
+    case_reference_number = "Case Reference Number [C]",
+    record_keydate1 = "Acute Admission Date",
+    record_keydate2 = "Acute Discharge Date",
+    tadm = "Acute Admission Type Code",
+    disch = "Acute Discharge Type Code",
+    cup_marker = "CUP Marker",
+    cup_pathway = "CUP Pathway Name"
   ) %>%
-    dplyr::select(
-      chi = "UPI Number [C]",
-      case_reference_number = "Case Reference Number [C]",
-      record_keydate1 = "Acute Admission Date",
-      record_keydate2 = "Acute Discharge Date",
-      tadm = "Acute Admission Type Code",
-      disch = "Acute Discharge Type Code",
-      cup_marker = "CUP Marker",
-      cup_pathway = "CUP Pathway Name"
-    ) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    slfhelper::get_chi()
 
   acute_clean <- acute_clean %>%
     dplyr::left_join(acute_cup,
