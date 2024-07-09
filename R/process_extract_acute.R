@@ -67,7 +67,7 @@ process_extract_acute <- function(data,
       unique_row_num = dplyr::row_number()
     )
 
-  acute_cup = read_file(
+  acute_cup <- read_file(
     # path = get_boxi_extract_path(year, "acute_cup"),
     path = cup_file_name,
     col_type = readr::cols(
@@ -80,16 +80,17 @@ process_extract_acute <- function(data,
       "CUP Marker" = readr::col_integer(),
       "CUP Pathway Name" = readr::col_character()
     )
-  ) %>% dplyr::select(
-    anon_chi = "anon_chi",
-    case_reference_number = "Case Reference Number [C]",
-    record_keydate1 = "Acute Admission Date",
-    record_keydate2 = "Acute Discharge Date",
-    tadm = "Acute Admission Type Code",
-    disch = "Acute Discharge Type Code",
-    cup_marker = "CUP Marker",
-    cup_pathway = "CUP Pathway Name"
   ) %>%
+    dplyr::select(
+      anon_chi = "anon_chi",
+      case_reference_number = "Case Reference Number [C]",
+      record_keydate1 = "Acute Admission Date",
+      record_keydate2 = "Acute Discharge Date",
+      tadm = "Acute Admission Type Code",
+      disch = "Acute Discharge Type Code",
+      cup_marker = "CUP Marker",
+      cup_pathway = "CUP Pathway Name"
+    ) %>%
     dplyr::distinct() %>%
     slfhelper::get_chi()
 
