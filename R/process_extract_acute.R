@@ -68,8 +68,7 @@ process_extract_acute <- function(data,
     )
 
   acute_cup <- read_file(
-    # path = get_boxi_extract_path(year, "acute_cup"),
-    path = cup_file_name,
+    path = acute_cup_path,
     col_type = readr::cols(
       "anon_chi" = readr::col_character(),
       "Acute Admission Date" = readr::col_date(format = "%Y/%m/%d %T"),
