@@ -44,6 +44,7 @@ read_lookup_sc_client <- function(fyyear,
       "day_care"
     ) %>%
     dplyr::filter(.data$financial_year == year) %>%
+    dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(
         c(
