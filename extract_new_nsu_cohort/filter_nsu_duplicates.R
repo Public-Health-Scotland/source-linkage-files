@@ -50,13 +50,15 @@ schema <- "FINAL_2"
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU")
 
 # latest geography file
-  spd_path <- get_file_path(
-    directory = fs::path(fs::path("/", "conf", "linkage", "output", "lookups", "Unicode"),
-                         "Geography",
-                         "Scottish Postcode Directory"),
-    file_name = NULL,
-    file_name_regexp = stringr::str_glue("Scottish_Postcode_Directory_.+?\\.parquet")
-  )
+spd_path <- get_file_path(
+  directory = fs::path(
+    fs::path("/", "conf", "linkage", "output", "lookups", "Unicode"),
+    "Geography",
+    "Scottish Postcode Directory"
+  ),
+  file_name = NULL,
+  file_name_regexp = stringr::str_glue("Scottish_Postcode_Directory_.+?\\.parquet")
+)
 
 # Set up connection to SMRA-----------------------------------------------------
 db_connection <- odbc::dbConnect(
@@ -86,7 +88,7 @@ nsu_pc_duplicates <- nsu_data %>%
   filter(postcode_count > 1)
 
 # Get the latest SPD
-spd <-  read_file(spd_path) %>%
+spd <- read_file(spd_path) %>%
   select(pc7, date_of_introduction, date_of_deletion)
 
 # Load some regex to check if a postcode is valid
@@ -169,7 +171,7 @@ final_data <- nsu_data %>%
   # Filter the main dataset to remove
   # the duplicate postcodes we decided not to keep
   anti_join(nsu_pc_duplicates_checked %>%
-  filter(keep_priority > 1)) %>%
+    filter(keep_priority > 1)) %>%
   # Filter any remaining duplicates (none on this test)
   distinct(upi_number, .keep_all = TRUE) %>%
   select(
@@ -191,7 +193,8 @@ final_data <- nsu_data %>%
 # Save data out to be used
 final_data %>%
   arrow::write_parquet(path(nsu_dir, glue::glue("anon-All_CHIs_20{year}.parquet")),
-                       compression =  "zstd")
+    compression = "zstd"
+  )
 
 
 ## End of Script ##
