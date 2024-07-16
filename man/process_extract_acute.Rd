@@ -4,7 +4,12 @@
 \alias{process_extract_acute}
 \title{Process the Acute extract}
 \usage{
-process_extract_acute(data, year, write_to_disk = TRUE)
+process_extract_acute(
+  data,
+  year,
+  acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{data}{The extract to process}

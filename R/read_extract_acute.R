@@ -149,6 +149,7 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
       ipdc = "Inpatient Day Case Identifier Code",
       cij_ipdc = "CIJ Inpatient Day Case Identifier Code (01)",
       lineno = "Line Number (01)",
+      case_reference_number = "Case Reference Number [C]",
       GLS_record = "GLS Record"
     ) %>%
     # replace NA in cost_total_net by 0
