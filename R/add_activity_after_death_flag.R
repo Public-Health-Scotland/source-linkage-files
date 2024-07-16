@@ -128,7 +128,6 @@ add_activity_after_death_flag <- function(
 
 process_combined_deaths_lookup <- function(update = latest_update(),
                                            write_to_disk = TRUE, ...) {
-
   dir_folder <- "/conf/hscdiip/SLF_Extracts/Deaths"
   file_names <- list.files(dir_folder,
     pattern = "^anon-slf_deaths_lookup_.*parquet",

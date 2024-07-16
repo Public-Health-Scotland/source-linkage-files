@@ -561,14 +561,12 @@ list(
         year,
         homelessness_data = source_homelessness_extract %>% slfhelper::get_chi()
       )
-
     )
   ) # ,
   # tar_target(
   #   combined_deaths_lookup,
   #   process_combined_deaths_lookup()
   # )
-
 )
 ## End of Targets pipeline ##
 
