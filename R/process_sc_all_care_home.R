@@ -19,8 +19,6 @@
 #' @family process extracts
 #'
 #' @export
-
-
 process_sc_all_care_home <- function(
     data,
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
@@ -29,10 +27,6 @@ process_sc_all_care_home <- function(
     spd_path = get_spd_path(),
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
-
-  # to do:
-  # compare old to new
-  # PR
 
   ch_clean <- data %>%
     dplyr::mutate(
@@ -330,7 +324,6 @@ process_sc_all_care_home <- function(
       )
     ) %>%
     dplyr::select(-ch_ep_start, -ch_ep_end, -stay_los, -stay_respite)
-
 
 
   ch_data_final <- adm_reason_recoded %>%
