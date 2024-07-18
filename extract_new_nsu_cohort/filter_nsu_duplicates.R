@@ -50,15 +50,7 @@ schema <- "FINAL_2"
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU")
 
 # latest geography file
-spd_path <- get_file_path(
-  directory = fs::path(
-    fs::path("/", "conf", "linkage", "output", "lookups", "Unicode"),
-    "Geography",
-    "Scottish Postcode Directory"
-  ),
-  file_name = NULL,
-  file_name_regexp = stringr::str_glue("Scottish_Postcode_Directory_.+?\\.parquet")
-)
+spd_path <- get_spd_path()
 
 # Set up connection to SMRA-----------------------------------------------------
 db_connection <- odbc::dbConnect(
