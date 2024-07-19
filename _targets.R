@@ -476,7 +476,7 @@ list(
         year = year,
         sc_demographics = sc_demog_lookup %>%
           slfhelper::get_chi() %>%
-          dplyr::select(c("sending_location", "social_care_id", "chi")),
+          dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
         write_to_disk = write_to_disk
       )
     ),
