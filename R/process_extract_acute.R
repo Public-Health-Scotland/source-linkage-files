@@ -12,7 +12,10 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_acute <- function(data, year, write_to_disk = TRUE) {
+process_extract_acute <- function(data,
+                                  year,
+                                  acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
+                                  write_to_disk = TRUE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -59,7 +62,48 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
     # Add oldtadm as a factor with labels
     dplyr::mutate(oldtadm = factor(.data$oldtadm,
       levels = 0L:8L
-    ))
+    )) %>%
+    dplyr::mutate(
+      unique_row_num = dplyr::row_number()
+    )
+
+  acute_cup <- read_file(
+    path = acute_cup_path,
+    col_type = readr::cols(
+      "anon_chi" = readr::col_character(),
+      "Acute Admission Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Acute Discharge Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "Acute Admission Type Code" = readr::col_character(),
+      "Acute Discharge Type Code" = readr::col_character(),
+      "Case Reference Number [C]" = readr::col_character(),
+      "CUP Marker" = readr::col_integer(),
+      "CUP Pathway Name" = readr::col_character()
+    )
+  ) %>%
+    dplyr::select(
+      anon_chi = "anon_chi",
+      case_reference_number = "Case Reference Number [C]",
+      record_keydate1 = "Acute Admission Date",
+      record_keydate2 = "Acute Discharge Date",
+      tadm = "Acute Admission Type Code",
+      disch = "Acute Discharge Type Code",
+      cup_marker = "CUP Marker",
+      cup_pathway = "CUP Pathway Name"
+    ) %>%
+    dplyr::distinct() %>%
+    slfhelper::get_chi()
+
+  acute_clean <- acute_clean %>%
+    dplyr::left_join(acute_cup,
+      by = c(
+        "record_keydate1",
+        "record_keydate2",
+        "case_reference_number",
+        "chi",
+        "tadm",
+        "disch"
+      )
+    )
 
   acute_processed <- acute_clean %>%
     dplyr::select(
@@ -106,9 +150,12 @@ process_extract_acute <- function(data, year, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
-      "uri"
+      "uri",
+      "cup_marker",
+      "cup_pathway"
     ) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1)
+    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

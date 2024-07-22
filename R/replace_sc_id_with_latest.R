@@ -40,6 +40,5 @@ replace_sc_id_with_latest <- function(data) {
         .data$social_care_id
       )
     )
-
   return(return_data)
 }

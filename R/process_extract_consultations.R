@@ -10,6 +10,12 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 process_extract_ooh_consultations <- function(data, year) {
+  # to skip warning no visible binding for global variable when using data.table
+  distinct_check <- consultation_type <- location <-
+    record_keydate1 <- record_keydate2 <- chi <-
+    ooh_case_id <- episode_counter <- NULL
+
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -81,25 +87,60 @@ process_extract_ooh_consultations <- function(data, year) {
   # Clean up some overlapping episodes
   # Only merge if they look like duplicates other than the time,
   # In which case take the earliest start and latest end.
-  consultations_clean <- consultations_covid
+  consultations_clean <- consultations_covid %>%
+    # Sort in reverse order so we can use coalesce which takes the first non-missing value
+    dplyr::arrange(
+      .data$chi,
+      .data$ooh_case_id,
+      .data$record_keydate1,
+      .data$record_keydate2
+    ) %>%
+    data.table::as.data.table()
 
-  # TODO Remove / merge overlapping records in GP OoHs
-  # dtplyr::lazy_dt() %>%
-  # # Sort in reverse order so we can use coalesce which takes the first non-missing value
-  # dplyr::arrange(chi, ooh_case_id, dplyr::desc(record_keydate1), dplyr::desc(record_keydate2)) %>%
-  # # This seems to be enough to identify a unique episode
-  # dplyr::group_by(chi, ooh_case_id, consultation_type, location) %>%
-  # # Records will be merged if they don't look unique and there is overlap or no time between them
-  # dplyr::mutate(episode_counter = replace_na(record_keydate1 > lag(record_keydate2), TRUE) %>%
-  #   cumsum()) %>%
-  # dplyr::group_by(chi, ooh_case_id, consultation_type, location, episode_counter) %>%
-  # dplyr::summarise(
-  #   record_keydate1 = min(record_keydate1),
-  #   record_keydate2 = max(record_keydate2),
-  #   dplyr::across(c(dplyr::everything(), -"record_keydate1", -"record_keydate2"), dplyr::coalesce)
-  # ) %>%
-  # dplyr::ungroup() %>%
-  # dplyr::as_tibble()
+  consultations_clean[, distinct_check := (
+    record_keydate1 > data.table::shift(record_keydate2, fill = NA, type = "lag")
+  ),
+  by = list(chi, ooh_case_id, consultation_type, location)
+  ]
+  consultations_clean[, distinct_check := tidyr::replace_na(distinct_check, TRUE)]
+  consultations_clean[, episode_counter := cumsum(distinct_check),
+    by = list(chi, ooh_case_id, consultation_type, location)
+  ]
+  consultations_clean[,
+    c(
+      "record_keydate1",
+      "record_keydate2"
+    ) := list(
+      min(record_keydate1),
+      max(record_keydate2)
+    ),
+    by = list(
+      chi,
+      ooh_case_id,
+      consultation_type,
+      location,
+      episode_counter
+    )
+  ]
+
+  # replace NA with previous non-NA value in each column
+  col_sel <- names(consultations_clean)
+  col_sel <- col_sel[!(col_sel %in% c("record_keydate1", "record_keydate2"))]
+  consultations_clean[,
+    (col_sel) := lapply(.SD, zoo::na.locf, na.rm = FALSE),
+    .SDcols = col_sel
+  ]
+
+  consultations_clean[
+    ,
+    c(
+      "distinct_check",
+      "episode_counter"
+    ) := list(NULL, NULL)
+  ]
+  consultations_clean <- unique(consultations_clean) %>%
+    dplyr::as_tibble()
+  # cleaning up overlapping episodes done
 
   return(consultations_clean)
 }

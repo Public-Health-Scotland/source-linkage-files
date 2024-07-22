@@ -7,15 +7,16 @@
 create_episode_file(
   processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
+  dd_data = read_file(get_source_extract_path(year, "dd")) \%>\% slfhelper::get_chi(),
   homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
-  ltc_data = read_file(get_ltcs_path(year)),
+  nsu_cohort = read_file(get_nsu_path(year)) \%>\% slfhelper::get_chi(),
+  ltc_data = read_file(get_ltcs_path(year)) \%>\% slfhelper::get_chi(),
   slf_pc_lookup = read_file(get_slf_postcode_path()),
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
     "cluster", "hbpraccode")),
-  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) \%>\%
+    slfhelper::get_chi(),
+  sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_chi(),
   write_to_disk = TRUE,
   anon_chi_out = TRUE
 )
@@ -27,6 +28,8 @@ create_episode_file(
 
 \item{dd_data}{The processed DD extract}
 
+\item{homelessness_lookup}{the lookup file for homelessness}
+
 \item{nsu_cohort}{The NSU data for the year}
 
 \item{ltc_data}{The LTC data for the year}
@@ -36,6 +39,8 @@ create_episode_file(
 \item{slf_gpprac_lookup}{The SLF GP Practice lookup}
 
 \item{slf_deaths_lookup}{The SLF deaths lookup.}
+
+\item{sc_client}{scoial care lookup file}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

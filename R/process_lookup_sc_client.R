@@ -6,6 +6,7 @@
 #'
 #' @param data The extract to process
 #' @param year The year to process
+#' @param sc_demographics social care demographics file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,10 +16,9 @@
 process_lookup_sc_client <-
   function(data,
            year,
-           sc_demographics = read_file(
-             get_sc_demog_lookup_path(),
-             col_select = c("sending_location", "social_care_id", "chi")
-           ),
+           sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
+             slfhelper::get_chi() %>%
+             dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
            write_to_disk = TRUE) {
     # Specify years available for running
     if (year < "1718") {
@@ -143,19 +143,26 @@ process_lookup_sc_client <-
       dplyr::left_join(
         sc_demographics,
         by = c("sending_location", "social_care_id")
-      ) %>%
-      dplyr::mutate(count_not_known = rowSums(dplyr::select(., all_of(
-        c(
-          "sc_living_alone",
-          "sc_support_from_unpaid_carer",
-          "sc_social_worker",
-          "sc_meals",
-          "sc_day_care"
+      )
+    sc_client_lookup <-
+      dplyr::mutate(sc_client_lookup,
+        count_not_known = rowSums(
+          dplyr::select(sc_client_lookup, tidyr::all_of(
+            c(
+              "sc_living_alone",
+              "sc_support_from_unpaid_carer",
+              "sc_social_worker",
+              "sc_meals",
+              "sc_day_care"
+            )
+          )) == "Not Known",
+          na.rm = TRUE
         )
-      )) == "Not Known")) %>%
-      dplyr::arrange(chi, count_not_known) %>%
-      dplyr::distinct(chi, .keep_all = TRUE) %>%
-      dplyr::select(-sending_location)
+      ) %>%
+      dplyr::arrange(.data$chi, .data$count_not_known) %>%
+      dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
+      dplyr::select(-.data$sending_location) %>%
+      slfhelper::get_anon_chi()
 
     if (write_to_disk) {
       write_file(

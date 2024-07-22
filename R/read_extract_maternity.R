@@ -12,7 +12,7 @@ read_extract_maternity <- function(
       "Costs Financial Year" = readr::col_double(),
       "Date of Admission Full Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "Date of Discharge Full Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Pat UPI [C]" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Practice Location Code" = readr::col_character(),
       "Practice NHS Board Code - current" = readr::col_character(),
@@ -107,7 +107,7 @@ read_extract_maternity <- function(
       op2a = "Operation 2A Code",
       op3a = "Operation 3A Code",
       op4a = "Operation 4A Code",
-      chi = "Pat UPI [C]",
+      anon_chi = "anon_chi",
       gpprac = "Practice Location Code",
       hbpraccode = "Practice NHS Board Code - current",
       selfharm_adm = "Self Harm Related Admission",
@@ -118,7 +118,8 @@ read_extract_maternity <- function(
       location = "Treatment Location Code",
       hbtreatcode = "Treatment NHS Board Code - current",
       uri = "Maternity Unique Record Identifier [C]"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_maternity)
 }

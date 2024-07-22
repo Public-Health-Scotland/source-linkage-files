@@ -2,38 +2,41 @@
 #'
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
+#' @param homelessness_lookup the lookup file for homelessness
+#' @param sc_client scoial care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
+#' (instead of chi)
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
 #' @inheritParams join_deaths_data
 #' @inheritParams match_on_ltcs
 #' @inheritParams link_delayed_discharge_eps
-#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
-#' (instead of chi)
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 create_episode_file <- function(
     processed_data_list,
     year,
-    dd_data = read_file(get_source_extract_path(year, "dd")),
+    dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi(),
     homelessness_lookup = create_homelessness_lookup(year),
-    nsu_cohort = read_file(get_nsu_path(year)),
-    ltc_data = read_file(get_ltcs_path(year)),
+    nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi(),
+    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi(),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
     slf_gpprac_lookup = read_file(
       get_slf_gpprac_path(),
       col_select = c("gpprac", "cluster", "hbpraccode")
     ),
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-    sc_client = read_file(get_sc_client_lookup_path(year)),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi(),
+    sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
+    slfhelper::get_chi() %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
@@ -137,6 +140,10 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
+    add_activity_after_death_flag(year,
+      deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
+        slfhelper::get_chi()
+    ) %>%
     load_ep_file_vars(year)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
@@ -216,6 +223,8 @@ create_episode_file <- function(
 #'
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
+  cli::cli_alert_info("Store episode file variables function started at {Sys.time()}")
+
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
@@ -253,6 +262,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #'
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
+  cli::cli_alert_info("Load episode file variable function started at {Sys.time()}")
+
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
@@ -280,6 +291,8 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
+  cli::cli_alert_info("Fill missing cij markers function started at {Sys.time()}")
+
   fixable_data <- data %>%
     dplyr::filter(
       .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["chi"]])
@@ -334,6 +347,8 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
+  cli::cli_alert_info("Correct cij variables function started at {Sys.time()}")
+
   check_variables_exist(
     data,
     c("chi", "recid", "cij_admtype", "cij_pattype_code")
@@ -375,6 +390,8 @@ correct_cij_vars <- function(data) {
 #'
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
+  cli::cli_alert_info("Create cost inc dna function started at {Sys.time()}")
+
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
 
   # Create cost including DNAs and modify costs
@@ -399,6 +416,8 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
+  cli::cli_alert_info("Create cohort lookups function started at {Sys.time()}")
+
   create_demographic_cohorts(
     data,
     year,
@@ -430,12 +449,16 @@ join_cohort_lookups <- function(
     update = latest_update(),
     demographic_cohort = read_file(
       get_demographic_cohorts_path(year, update),
-      col_select = c("chi", "demographic_cohort")
-    ),
+      col_select = c("anon_chi", "demographic_cohort")
+    ) %>%
+      slfhelper::get_chi(),
     service_use_cohort = read_file(
       get_service_use_cohorts_path(year, update),
-      col_select = c("chi", "service_use_cohort")
-    )) {
+      col_select = c("anon_chi", "service_use_cohort")
+    ) %>%
+      slfhelper::get_chi()) {
+  cli::cli_alert_info("Join cohort lookups function started at {Sys.time()}")
+
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
@@ -454,18 +477,15 @@ join_cohort_lookups <- function(
 #'
 #' @description Match on sc client variables.
 #'
-#' @param individual_file the processed individual file
+#' @param data the processed individual file
 #' @param year financial year.
 #' @param sc_client SC client lookup
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
                            file_type = c("episode", "individual")) {
-  if (!check_year_valid(year, type = "client")) {
-    data_file <- data
-    return(data_file)
-  }
+  cli::cli_alert_info("Join social care client function started at {Sys.time()}")
 
   if (file_type == "episode") {
     # Match on client variables by chi

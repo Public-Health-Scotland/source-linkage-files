@@ -16,7 +16,7 @@ process_tests_sc_client_lookup <- function(data, year) {
   )
 
   comparison %>%
-    write_tests_xlsx(sheet_name = "sc_client", year, workbook_name = "lookup")
+    write_tests_xlsx(sheet_name = "sc_client", year, workbook_name = "extract")
 
   return(comparison)
 }
@@ -28,15 +28,15 @@ process_tests_sc_client_lookup <- function(data, year) {
 #'
 #' @param data new or old data for testing summary flags
 #' (data is from [get_source_extract_path()])
-#' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #' @return a dataframe with a count of each flag.
 #'
 #' @family social care test functions
 produce_tests_sc_client_lookup <- function(data) {
   test_flags <- data %>%
     # create test flags
-    create_sending_location_test_flags(.data$sc_send_lca) %>%
-    dplyr::arrange(.data$sc_send_lca, .data$social_care_id) %>%
+    # create_sending_location_test_flags(.data$sc_send_lca) %>%
+    # dplyr::arrange(.data$sc_send_lca, .data$social_care_id) %>%
+    dplyr::arrange(.data$social_care_id) %>%
     dplyr::mutate(
       unique_sc_id = dplyr::lag(.data$social_care_id) != .data$social_care_id,
       n_sc_living_alone_yes = .data$sc_living_alone == "Yes",
@@ -56,7 +56,8 @@ produce_tests_sc_client_lookup <- function(data) {
       n_sc_day_care_not_known = .data$sc_day_care == "Not Known",
     ) %>%
     # remove variables that won't be summed
-    dplyr::select("Aberdeen_City":dplyr::last_col()) %>%
+    # dplyr::select("Aberdeen_City":dplyr::last_col()) %>%
+    dplyr::select("unique_sc_id":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

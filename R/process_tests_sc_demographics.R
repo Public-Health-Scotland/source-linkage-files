@@ -10,6 +10,9 @@
 #'
 #' @export
 process_tests_sc_demographics <- function(data) {
+  data <- data %>%
+    slfhelper::get_chi()
+
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
       read_file(get_sc_demog_lookup_path(update = previous_update()))
@@ -36,7 +39,7 @@ process_tests_sc_demographics <- function(data) {
 produce_sc_demog_lookup_tests <- function(data) {
   data %>%
     # create test flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     dplyr::mutate(
       n_missing_sending_loc = is.na(.data$sending_location),
       n_missing_sc_id = is.na(.data$social_care_id)

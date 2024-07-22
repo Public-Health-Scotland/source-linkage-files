@@ -4,7 +4,11 @@
 \alias{process_sc_all_home_care}
 \title{Process the all home care extract}
 \usage{
-process_sc_all_home_care(data, sc_demog_lookup, write_to_disk = TRUE)
+process_sc_all_home_care(
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()) \%>\% slfhelper::get_chi(),
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{data}{The extract to process}

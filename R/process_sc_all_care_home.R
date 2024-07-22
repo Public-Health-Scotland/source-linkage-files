@@ -22,10 +22,10 @@
 #'
 process_sc_all_care_home <- function(
     data,
-    sc_demog_lookup,
-    it_chi_deaths_data,
-    ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-    spd_path = get_spd_path(),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
+    it_chi_deaths_data = read_file(get_slf_chi_deaths_path()),
+    ch_name_lookup_path = read_file(get_slf_ch_name_lookup_path()),
+    spd_path = read_file(get_spd_path()),
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
   ch_clean <- data %>%
@@ -330,7 +330,8 @@ process_sc_all_care_home <- function(
       "ch_nursing",
       "ch_adm_reason",
       "sc_latest_submission"
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     ch_data_final %>%

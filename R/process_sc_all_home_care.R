@@ -13,9 +13,10 @@
 #'
 process_sc_all_home_care <- function(
     data,
-    sc_demog_lookup,
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     write_to_disk = TRUE) {
   replaced_dates <- data %>%
+    dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
     dplyr::mutate(
       hc_service_end_date = fix_sc_missing_end_dates(
         .data$hc_service_end_date,
@@ -28,7 +29,7 @@ process_sc_all_home_care <- function(
       hc_service_end_date = fix_sc_end_dates(
         .data$hc_service_start_date,
         .data$hc_service_end_date,
-        .data$period
+        .data$hc_period_end_date
       )
     )
 
@@ -198,7 +199,8 @@ process_sc_all_home_care <- function(
     # compute lca variable from sending_location
     dplyr::mutate(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

@@ -22,7 +22,8 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
     dplyr::rename_with(
       .cols = tidyselect::ends_with("flag"),
       .fn = ~ stringr::str_remove(.x, "_date_flag")
-    )
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

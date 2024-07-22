@@ -8,9 +8,12 @@
 #'
 #' @family social care test functions
 produce_sc_all_episodes_tests <- function(data) {
+  data <- data %>%
+    slfhelper::get_chi()
+
   data %>%
     # create test flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     dplyr::mutate(
       n_missing_sending_loc = dplyr::if_else(
         is.na(.data$sending_location),

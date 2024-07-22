@@ -1,12 +1,15 @@
 #' Process LTCs tests
 #'
 #' @description This script takes the processed LTCs extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
 #' @export
 process_tests_ltcs <- function(data, year) {
+  data <- data %>%
+    slfhelper::get_chi()
+
   # Find and flag any duplicate chis and chi/postcode combinations
   duplicates <- data %>%
     dplyr::summarise(

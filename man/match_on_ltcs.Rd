@@ -4,7 +4,11 @@
 \alias{match_on_ltcs}
 \title{Match on LTC DoB and dates of LTC incidence}
 \usage{
-match_on_ltcs(data, year, ltc_data = read_file(get_ltcs_path(year)))
+match_on_ltcs(
+  data,
+  year,
+  ltc_data = read_file(get_ltcs_path(year)) \%>\% slfhelper::get_chi()
+)
 }
 \arguments{
 \item{data}{episode files}

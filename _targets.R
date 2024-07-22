@@ -132,7 +132,7 @@ list(
     all_at,
     process_sc_all_alarms_telecare(
       all_at_extract,
-      sc_demog_lookup = sc_demog_lookup,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -153,7 +153,7 @@ list(
     all_home_care,
     process_sc_all_home_care(
       all_home_care_extract,
-      sc_demog_lookup = sc_demog_lookup,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -174,8 +174,8 @@ list(
     all_care_home,
     process_sc_all_care_home(
       all_care_home_extract,
-      sc_demog_lookup = sc_demog_lookup,
-      it_chi_deaths_data = it_chi_deaths_data,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
+      it_chi_deaths_data = it_chi_deaths_data %>% slfhelper::get_chi(),
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
@@ -198,7 +198,7 @@ list(
     all_sds,
     process_sc_all_sds(
       all_sds_extract,
-      sc_demog_lookup = sc_demog_lookup,
+      sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -284,6 +284,16 @@ list(
       get_boxi_extract_path(year = year, type = "gp_ooh-c"),
       format = "file"
     ),
+    tar_target(
+      acute_cup_path,
+      get_boxi_extract_path(year, type = "acute_cup"),
+      format = "file"
+    ),
+    tar_target(
+      gp_ooh_cup_path,
+      get_boxi_extract_path(year, type = "gp_ooh_cup"),
+      format = "file"
+    ),
     tar_qs(
       ooh_data,
       read_extract_gp_ooh(
@@ -297,6 +307,7 @@ list(
     tar_target(source_acute_extract, process_extract_acute(
       acute_data,
       year,
+      acute_cup_path,
       write_to_disk = write_to_disk
     )),
     tar_target(
@@ -422,6 +433,7 @@ list(
     tar_target(source_ooh_extract, process_extract_gp_ooh(
       year,
       ooh_data,
+      gp_ooh_cup_path,
       write_to_disk = write_to_disk
     )),
     tar_target(
@@ -466,7 +478,8 @@ list(
         data = sc_client_data,
         year = year,
         sc_demographics = sc_demog_lookup %>%
-          dplyr::select(c("sending_location", "social_care_id", "chi")),
+          slfhelper::get_chi() %>%
+          dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
         write_to_disk = write_to_disk
       )
     ),
@@ -477,7 +490,7 @@ list(
     tar_target(
       source_sc_alarms_tele,
       process_extract_alarms_telecare(
-        data = all_at,
+        data = all_at %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -492,7 +505,7 @@ list(
     tar_target(
       source_sc_care_home,
       process_extract_care_home(
-        data = all_care_home,
+        data = all_care_home %>% slfhelper::get_chi(),
         year = year,
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk
@@ -508,7 +521,7 @@ list(
     tar_target(
       source_sc_home_care,
       process_extract_home_care(
-        data = all_home_care,
+        data = all_home_care %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -523,7 +536,7 @@ list(
     tar_target(
       source_sc_sds,
       process_extract_sds(
-        data = all_sds,
+        data = all_sds %>% slfhelper::get_chi(),
         year = year,
         write_to_disk = write_to_disk
       )
@@ -539,29 +552,9 @@ list(
       slf_deaths_lookup,
       process_slf_deaths_lookup(
         year = year,
-        nrs_deaths_data = source_nrs_deaths_extract,
-        chi_deaths_data = it_chi_deaths_data,
+        nrs_deaths_data = source_nrs_deaths_extract %>% slfhelper::get_chi(),
+        chi_deaths_data = it_chi_deaths_data %>% slfhelper::get_chi(),
         write_to_disk = write_to_disk
-      )
-    ),
-    tar_qs(
-      processed_data_list,
-      list(
-        source_acute_extract,
-        source_ae_extract,
-        source_cmh_extract,
-        source_dn_extract,
-        source_homelessness_extract,
-        source_maternity_extract,
-        source_mental_health_extract,
-        source_nrs_deaths_extract,
-        source_ooh_extract,
-        source_outpatients_extract,
-        source_prescribing_extract,
-        source_sc_care_home,
-        source_sc_home_care,
-        source_sc_sds,
-        source_sc_alarms_tele
       )
     ),
     tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
@@ -569,77 +562,109 @@ list(
       homelessness_lookup,
       create_homelessness_lookup(
         year,
-        homelessness_data = source_homelessness_extract
+        homelessness_data = source_homelessness_extract %>% slfhelper::get_chi()
       )
-    ),
-    tar_target(
-      episode_file,
-      create_episode_file(
-        processed_data_list,
-        year,
-        homelessness_lookup = homelessness_lookup,
-        dd_data = source_dd_extract,
-        nsu_cohort = nsu_cohort,
-        ltc_data = source_ltc_lookup,
-        slf_pc_lookup = source_pc_lookup,
-        slf_gpprac_lookup = source_gp_lookup,
-        slf_deaths_lookup = slf_deaths_lookup,
-        sc_client = sc_client_lookup,
-        write_to_disk
-      )
-    ),
-    tar_target(
-      episode_file_tests,
-      process_tests_episode_file(
-        data = episode_file,
-        year = year
-      )
-    ) # ,
-    # tar_target(
-    #   individual_file,
-    #   create_individual_file(
-    #     episode_file = episode_file,
-    #     year = year,
-    #     homelessness_lookup = homelessness_lookup,
-    #     write_to_disk = write_to_disk
-    #   )
-    # ),
-    # tar_target(
-    #   individual_file_tests,
-    #   process_tests_individual_file(
-    #     data = individual_file,
-    #     year = year
-    #   )
-    # ) # ,
-    # tar_target(
-    #   episode_file_dataset,
-    #   arrow::write_dataset(
-    #     dataset = episode_file,
-    #     path = fs::path(
-    #       get_year_dir(year),
-    #       stringr::str_glue("source-episode-file-{year}")
-    #     ),
-    #     format = "parquet",
-    #     # Should correspond to the available slfhelper filters
-    #     partitioning = c("recid", "hscp2018"),
-    #     compression = "zstd",
-    #     version = "latest"
-    #   )
-    # ),
-    # tar_target(
-    #   individual_file_dataset,
-    #   arrow::write_dataset(
-    #     dataset = individual_file,
-    #     path = fs::path(
-    #       get_year_dir(year),
-    #       stringr::str_glue("source-individual-file-{year}")
-    #     ),
-    #     format = "parquet",
-    #     # Should correspond to the available slfhelper filters
-    #     partitioning = c("hscp2018"),
-    #     compression = "zstd",
-    #     version = "latest"
-    #   )
-    # )
-  )
+    )
+  ) # ,
+  # tar_target(
+  #   combined_deaths_lookup,
+  #   process_combined_deaths_lookup()
+  # )
 )
+## End of Targets pipeline ##
+
+################################################################################
+## Redundant code which may still be useful for including ep/indiv files.
+# tar_qs(
+#   processed_data_list,
+#   list(
+#     source_acute_extract,
+#     source_ae_extract,
+#     source_cmh_extract,
+#     source_dn_extract,
+#     source_homelessness_extract,
+#     source_maternity_extract,
+#     source_mental_health_extract,
+#     source_nrs_deaths_extract,
+#     source_ooh_extract,
+#     source_outpatients_extract,
+#     source_prescribing_extract,
+#     source_sc_care_home,
+#     source_sc_home_care,
+#     source_sc_sds,
+#     source_sc_alarms_tele
+#   )
+# ),
+# tar_target(
+#   episode_file,
+#   create_episode_file(
+#     processed_data_list,
+#     year,
+#     homelessness_lookup = homelessness_lookup,
+#     dd_data = source_dd_extract %>% slfhelper::get_chi(),
+#     nsu_cohort = nsu_cohort %>% slfhelper::get_chi(),
+#     ltc_data = source_ltc_lookup %>% slfhelper::get_chi(),
+#     slf_pc_lookup = source_pc_lookup,
+#     slf_gpprac_lookup = source_gp_lookup,
+#     slf_deaths_lookup = slf_deaths_lookup %>% slfhelper::get_chi(),
+#     sc_client = sc_client_lookup %>% slfhelper::get_chi(),
+#     write_to_disk
+#   )
+# ),
+# tar_target(
+#   episode_file_tests,
+#   process_tests_episode_file(
+#     data = episode_file,
+#     year = year
+#   )
+# ) # ,
+# tar_target(
+#   cross_year_tests,
+#   process_tests_cross_year(year = year)
+# ), # ,
+# tar_target(
+#   individual_file,
+#   create_individual_file(
+#     episode_file = episode_file,
+#     year = year,
+#     homelessness_lookup = homelessness_lookup,
+#     write_to_disk = write_to_disk
+#   )
+# ),
+# tar_target(
+#   individual_file_tests,
+#   process_tests_individual_file(
+#     data = individual_file,
+#     year = year
+#   )
+# ) # ,
+# tar_target(
+#   episode_file_dataset,
+#   arrow::write_dataset(
+#     dataset = episode_file,
+#     path = fs::path(
+#       get_year_dir(year),
+#       stringr::str_glue("source-episode-file-{year}")
+#     ),
+#     format = "parquet",
+#     # Should correspond to the available slfhelper filters
+#     partitioning = c("recid", "hscp2018"),
+#     compression = "zstd",
+#     version = "latest"
+#   )
+# ),
+# tar_target(
+#   individual_file_dataset,
+#   arrow::write_dataset(
+#     dataset = individual_file,
+#     path = fs::path(
+#       get_year_dir(year),
+#       stringr::str_glue("source-individual-file-{year}")
+#     ),
+#     format = "parquet",
+#     # Should correspond to the available slfhelper filters
+#     partitioning = c("hscp2018"),
+#     compression = "zstd",
+#     version = "latest"
+#   )
+# )

@@ -1,7 +1,7 @@
 #' Process CMH tests
 #'
 #' @description This script takes the processed CMH extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
@@ -11,6 +11,9 @@ process_tests_cmh <- function(data, year) {
     # Deal with years where we have no data
     return(data)
   }
+
+  data <- data %>%
+    slfhelper::get_chi()
 
   old_data <- get_existing_data_for_tests(data)
 
@@ -43,7 +46,7 @@ process_tests_cmh <- function(data, year) {
 produce_source_cmh_tests <- function(data) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     create_hb_test_flags(hb_var = .data$hbrescode) %>%
     dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison

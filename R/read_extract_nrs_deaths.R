@@ -18,7 +18,7 @@ read_extract_nrs_deaths <- function(
       "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
       "Date of Death(99)" = readr::col_date(format = "%Y/%m/%d %T"),
       "Pat Gender Code" = readr::col_double(),
-      "Pat UPI" = readr::col_character(),
+      "anon_chi" = readr::col_character(),
       "Place Death Occurred Code" = readr::col_character(),
       "Post Mortem Code" = readr::col_character(),
       "Prim Cause of Death Code (6 char)" = readr::col_character(),
@@ -47,7 +47,7 @@ read_extract_nrs_deaths <- function(
       dob = "Pat Date Of Birth [C]",
       record_keydate1 = "Date of Death(99)",
       gender = "Pat Gender Code",
-      chi = "Pat UPI",
+      anon_chi = "anon_chi",
       place_death_occurred = "Place Death Occurred Code",
       post_mortem = "Post Mortem Code",
       deathdiag1 = "Prim Cause of Death Code (6 char)",
@@ -63,7 +63,8 @@ read_extract_nrs_deaths <- function(
       deathdiag11 = "Sec Cause of Death 9 Code (6 char)",
       uri = "Unique Record Identifier",
       gpprac = "GP practice code(99)"
-    )
+    ) %>%
+    slfhelper::get_chi()
 
   return(extract_nrs_deaths)
 }

@@ -1,12 +1,15 @@
 #' Process SDS tests
 #'
 #' @description This script takes the processed SDS extract and produces
-#' a test comparison with the previous data. This is written to disk as a CSV.
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'
 #' @export
 process_tests_sds <- function(data, year) {
+  data <- data %>%
+    slfhelper::get_chi()
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -35,7 +38,7 @@ produce_source_sds_tests <- function(data,
                                      max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = chi) %>%
+    create_demog_test_flags(chi = .data$chi) %>%
     create_lca_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
     dplyr::select("unique_chi":"West_Lothian") %>%

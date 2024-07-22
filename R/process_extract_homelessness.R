@@ -9,6 +9,7 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param update The update to use (default is [latest_update()]).
+#' @param la_code_lookup get local authority using opendata.
 #' @param sg_pub_path The path to the SG pub figures (default is
 #' [get_sg_homelessness_pub_path()]).
 #'
@@ -100,34 +101,34 @@ process_extract_homelessness <- function(
         )
       )
     ) %>%
-    dplyr::mutate(property_type_code = as.character(property_type_code)) %>%
+    dplyr::mutate(property_type_code = as.character(.data$property_type_code)) %>%
     dplyr::mutate(
       property_type_code = dplyr::case_when(
-        property_type_code == "1" ~ "1 - Own Property - LA Tenancy",
-        property_type_code == "2" ~ "2 - Own Property - RSL Tenancy",
-        property_type_code == "3" ~ "3 - Own Property - private rented tenancy",
-        property_type_code == "4" ~ "4 - Own Property - tenancy secured through employment/tied house",
-        property_type_code == "5" ~ "5 - Own Property - owning/buying",
-        property_type_code == "6" ~ "6 - Parental / family home / relatives",
-        property_type_code == "7" ~ " 7 - Friends / partners",
-        property_type_code == "8" ~ "8 - Armed Services Accommodation",
-        property_type_code == "9" ~ "9 - Prison",
-        property_type_code == "10" ~ "10 - Hospital",
-        property_type_code == "11" ~ "11 - Children's residential accommodation (looked after by the local authority)",
-        property_type_code == "12" ~ "12 - Supported accommodation",
-        property_type_code == "13" ~ "13 - Hostel (unsupported)",
-        property_type_code == "14" ~ "14 - Bed & Breakfast",
-        property_type_code == "15" ~ "15 - Caravan / mobile home",
-        property_type_code == "16" ~ "16 - Long-term roofless",
-        property_type_code == "17" ~ "17 - Long-term sofa surfing",
-        property_type_code == "18" ~ "18 - Other",
-        property_type_code == "19" ~ "19 - Not known / refused",
-        property_type_code == "20" ~ "20 - Own property - Shared ownership/Shared equity/ LCHO",
-        property_type_code == "21" ~ "21 - Lodger",
-        property_type_code == "22" ~ "22 - Shared Property - Private Rented Sector",
-        property_type_code == "23" ~ "23 - Shared Property - Local Authority",
-        property_type_code == "24" ~ "24 - Shared Property - RSL",
-        TRUE ~ property_type_code
+        .data$property_type_code == "1" ~ "1 - Own Property - LA Tenancy",
+        .data$property_type_code == "2" ~ "2 - Own Property - RSL Tenancy",
+        .data$property_type_code == "3" ~ "3 - Own Property - private rented tenancy",
+        .data$property_type_code == "4" ~ "4 - Own Property - tenancy secured through employment/tied house",
+        .data$property_type_code == "5" ~ "5 - Own Property - owning/buying",
+        .data$property_type_code == "6" ~ "6 - Parental / family home / relatives",
+        .data$property_type_code == "7" ~ " 7 - Friends / partners",
+        .data$property_type_code == "8" ~ "8 - Armed Services Accommodation",
+        .data$property_type_code == "9" ~ "9 - Prison",
+        .data$property_type_code == "10" ~ "10 - Hospital",
+        .data$property_type_code == "11" ~ "11 - Children's residential accommodation (looked after by the local authority)",
+        .data$property_type_code == "12" ~ "12 - Supported accommodation",
+        .data$property_type_code == "13" ~ "13 - Hostel (unsupported)",
+        .data$property_type_code == "14" ~ "14 - Bed & Breakfast",
+        .data$property_type_code == "15" ~ "15 - Caravan / mobile home",
+        .data$property_type_code == "16" ~ "16 - Long-term roofless",
+        .data$property_type_code == "17" ~ "17 - Long-term sofa surfing",
+        .data$property_type_code == "18" ~ "18 - Other",
+        .data$property_type_code == "19" ~ "19 - Not known / refused",
+        .data$property_type_code == "20" ~ "20 - Own property - Shared ownership/Shared equity/ LCHO",
+        .data$property_type_code == "21" ~ "21 - Lodger",
+        .data$property_type_code == "22" ~ "22 - Shared Property - Private Rented Sector",
+        .data$property_type_code == "23" ~ "23 - Shared Property - Local Authority",
+        .data$property_type_code == "24" ~ "24 - Shared Property - RSL",
+        TRUE ~ .data$property_type_code
       )
     ) %>%
     dplyr::left_join(
@@ -144,26 +145,22 @@ process_extract_homelessness <- function(
     sg_pub_path = sg_pub_path
   )
 
-  if (!is.null(completeness_data)) {
-    filtered_data <- data %>%
-      dplyr::left_join(completeness_data,
-        by = c("year", "sending_local_authority_name")
-      ) %>%
-      dplyr::filter(
-        dplyr::between(.data[["pct_complete_all"]], 0.90, 1.05) |
-          .data[["sending_local_authority_name"]] == "East Ayrshire"
-      )
-  } else {
-    filtered_data <- data
-  }
+  hl1_data <- data %>%
+    dplyr::left_join(
+      completeness_data %>%
+        dplyr::select(.data$sending_local_authority_name, .data$pct_complete_all),
+      by = dplyr::join_by("sending_local_authority_name")
+    ) %>%
+    dplyr::rename(hl1_completeness = "pct_complete_all") %>%
+    dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 1))
 
   # TODO - Include person_id (from client_id)
-  final_data <- filtered_data %>%
+  final_data <- hl1_data %>%
     dplyr::select(
       "year",
       "recid",
       "smrtype",
-      chi = "upi_number",
+      "chi",
       dob = "client_dob_date",
       age = "age_at_assessment_decision_date",
       gender = "gender_code",
@@ -173,8 +170,10 @@ process_extract_homelessness <- function(
       hl1_application_ref = "application_reference_number",
       hl1_sending_lca = "sending_local_authority_code_9",
       hl1_property_type = "property_type_code",
-      "hl1_reason_ftm"
-    )
+      "hl1_reason_ftm",
+      "hl1_completeness"
+    ) %>%
+    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

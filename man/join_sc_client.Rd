@@ -7,18 +7,18 @@
 join_sc_client(
   data,
   year,
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_chi(),
   file_type = c("episode", "individual")
 )
 }
 \arguments{
+\item{data}{the processed individual file}
+
 \item{year}{financial year.}
 
 \item{sc_client}{SC client lookup}
 
 \item{file_type}{episode or individual file}
-
-\item{individual_file}{the processed individual file}
 }
 \description{
 Match on sc client variables.

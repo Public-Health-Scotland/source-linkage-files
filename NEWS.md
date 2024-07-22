@@ -1,4 +1,66 @@
-# September 2023 Update - Unreleased
+# September 2024 Update - Unreleased 
+* New 24/25 files created
+* New NSU cohort for 23/24 available
+* New SPARRA scores calculated from April 24/25
+* Death dates attached to activity after death flag 
+* Care home methodology updated
+* New cup marker for Acute and GP OOH
+* Bug fix:
+    * person id for SDS and client
+
+# June 2024 Update - released 06-Jun-24
+* Update of 2017/18 onwards to include bug fixes within the files.
+* Removal of extra variable caused by the LTCs not matching properly.
+* New NRS mid-2022 population estimates.
+* Homelessness improvements:
+   * Removal of filtering the data in SLFs according to completeness levels.
+   * New variables:
+      * `hl1_completeness` - a data quality indicator by percentage compared to SG annual publication. 
+      * `hl1_12_months_pre_app`- date variable
+      * `hl1_12_momths_post_app` - date variable 
+* Potential inclusions
+* Activity after death flag?
+* New care home methodology? - potentially this is on hold until September update.
+* Additional Documentation?
+
+# March 2024 Update - Released 20-Mar-2024
+* Update of 2017/18 onwards to include bug fixes within the files.
+* 2023/24 file now includes social care data.
+* Geography files updated - SPD and SIMD
+* Variable `property_type` in homelessness has been updated to include further description
+* Bug fixes:
+  * Service use cohort wrongly assigning Non-Service Users (NSU) as `psychiatry`
+  * Not Applicable (NA) introduced for variable `high_cc` in Demographic cohort
+  * Issue with delayed discharges data not linking to admissions
+  * Person ID available in self-directed support (SDS) data
+  * Issue with Social Care ID - missing sc id were all being set to one sc id.
+ * Improvements to social care methodology
+   * Demographics 
+    * person_id will now be consistent across social care cases for an individual. The social care ID for a CHI will also be consistent across all areas, not just the latest ID used in AT/SDS/CH/HC.
+ * Self-directed Support (SDS) and Alarms Telecare (AT) data
+    * Our tests show this is now in line with the social care team’s publications and therefore, the data may have changed slightly. 
+ * New Social Care methodology 
+    * The new methodology impacts how we match the demographics file and how we select the latest social care ID.
+    * Previously we used the `latest_flag` but this isn’t accurate as some IDs have none flagged, and some have more than one flagged. We now have one social care ID flagged for each CHI. This issue mostly affects Edinburgh, Falkirk, Western Isles, and Renfrewshire.
+    * Previously, in cases where a social care ID had multiple CHIs associated only one of the CHIs was chosen.
+    * The new methodology keeps all CHIs in as there is no way to tell which CHI the activity is for. The new methodology will show duplicate activity but for the different CHIs. The main areas this affects are Midlothian, Western Isles, and Renfrewshire.
+      
+
+# December 2023 Update - Released 20-Dec-2023
+* Update of 2017/18 onwards to include bug fixes within the files.
+* 2023/24 file contain data from 1st April 2023 up to the end of September 2023.
+  * No social care data available.
+* Re-addition of keep population flag.
+* SPARRA update
+* NA's introduced for variable `ch_provider` - now fixed.
+* Future improvements
+  * Activity after death flag
+  * Review of social care methodology.
+* SLFhelper updated to version 10.1.1.
+  * Includes a fix for speeding up function `get_chi()`
+
+
+# September 2023 Update - Released 22-Sep-2023
 * Update of 2017/18 onwards to include bug fixes within the files. 
 * New 2023/24 files.
   *No social care data available for new 2023/24 file.

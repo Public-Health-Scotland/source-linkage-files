@@ -7,8 +7,8 @@
 process_lookup_sc_client(
   data,
   year,
-  sc_demographics = read_file(get_sc_demog_lookup_path(), col_select =
-    c("sending_location", "social_care_id", "chi")),
+  sc_demographics = read_file(get_sc_demog_lookup_path()) \%>\% slfhelper::get_chi()
+    \%>\% dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
   write_to_disk = TRUE
 )
 }
@@ -16,6 +16,8 @@ process_lookup_sc_client(
 \item{data}{The extract to process}
 
 \item{year}{The year to process}
+
+\item{sc_demographics}{social care demographics file}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
