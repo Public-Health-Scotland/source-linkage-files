@@ -32,8 +32,8 @@ library(stringr)
 library(PostcodesioR)
 library(janitor)
 library(fs)
-library(haven)
 library(glue)
+
 
 ## Setup------------------------------------------------------------------------
 
@@ -43,12 +43,14 @@ year <- "2324"
 
 # Update lines 45-46 ##
 # Analysts username and schema to collect the data.
-analyst <- "ALEXRE01"
-schema <- "FINAL_1"
+analyst <- "ROBERM18"
+schema <- "FINAL_2"
 
 #  setup directory
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU")
 
+# latest geography file
+spd_path <- get_spd_path()
 
 # Set up connection to SMRA-----------------------------------------------------
 db_connection <- odbc::dbConnect(
@@ -78,10 +80,7 @@ nsu_pc_duplicates <- nsu_data %>%
   filter(postcode_count > 1)
 
 # Get the latest SPD
-spd <-
-  readr::read_rds(
-    "/conf/linkage/output/lookups/Unicode/Geography/Scottish Postcode Directory/Scottish_Postcode_Directory_2021_2.rds"
-  ) %>%
+spd <- read_file(spd_path) %>%
   select(pc7, date_of_introduction, date_of_deletion)
 
 # Load some regex to check if a postcode is valid
@@ -166,10 +165,7 @@ final_data <- nsu_data %>%
   anti_join(nsu_pc_duplicates_checked %>%
     filter(keep_priority > 1)) %>%
   # Filter any remaining duplicates (none on this test)
-  distinct(upi_number, .keep_all = TRUE)
-
-# Save data out to be used
-final_data %>%
+  distinct(upi_number, .keep_all = TRUE) %>%
   select(
     chi = upi_number,
     dob = date_of_birth,
@@ -184,7 +180,13 @@ final_data %>%
   ) %>%
   arrange(chi) %>%
   # Save as anon chi on disk
-  slhelper::get_anon_chi() %>%
-  arrow::write_parquet(path(nsu_dir, glue("anon-All_CHIs_20{year}.parquet")), compress = TRUE)
+  slfhelper::get_anon_chi()
+
+# Save data out to be used
+final_data %>%
+  arrow::write_parquet(path(nsu_dir, glue::glue("anon-All_CHIs_20{year}.parquet")),
+    compression = "zstd"
+  )
+
 
 ## End of Script ##
