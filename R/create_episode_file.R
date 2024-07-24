@@ -487,6 +487,11 @@ join_sc_client <- function(data,
                            file_type = c("episode", "individual")) {
   cli::cli_alert_info("Join social care client function started at {Sys.time()}")
 
+  if (!check_year_valid(year, type = "client")) {
+    data_file <- data
+    return(data_file)
+  }
+
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%
