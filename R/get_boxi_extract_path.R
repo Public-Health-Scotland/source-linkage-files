@@ -86,9 +86,36 @@ get_boxi_extract_path <- function(
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 get_dummy_boxi_extract_path <- function() {
-  get_file_path(
+
+  dummy_data <- data.frame(anon_chi = "DUMMY") %>%
+    write_file(get_file_path(
     directory = get_dev_dir(),
-    file_name = ".dummy",
-    create = TRUE
+    file_name = "dummy_data.parquet"
+  ))
+
+  dummy_path <- get_file_path(
+    directory = get_dev_dir(),
+    file_name = "dummy_data.parquet"
   )
+
+  return(dummy_path)
 }
+
+#' #' Get a path to a dummy file
+#' #'
+#' #' @return an [fs::path()] to a dummy file which can be used with targets.
+#' get_dummy_chi_path <- function() {
+#'   data_path <- get_file_path(
+#'     directory = get_dev_dir(),
+#'     file_name = ".dummy",
+#'     create = TRUE
+#'   )
+#'
+#'   data <- read_file(data_path) %>%
+#'     as.data.frame() %>%
+#'     dplyr::mutate(anon_chi = NA_character_) %>%
+#'     slfhelper::get_chi()
+#'
+#'   return(data_path)
+#'
+#' }
