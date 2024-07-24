@@ -86,12 +86,11 @@ get_boxi_extract_path <- function(
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 get_dummy_boxi_extract_path <- function() {
-
   dummy_data <- data.frame(anon_chi = "DUMMY") %>%
     write_file(get_file_path(
-    directory = get_dev_dir(),
-    file_name = "dummy_data.parquet"
-  ))
+      directory = get_dev_dir(),
+      file_name = "dummy_data.parquet"
+    ))
 
   dummy_path <- get_file_path(
     directory = get_dev_dir(),
