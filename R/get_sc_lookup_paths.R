@@ -44,5 +44,9 @@ get_sc_client_lookup_path <- function(year, update = latest_update(), ...) {
     ...
   )
 
+  if (!check_year_valid(year, type = "client")) {
+    return(get_dummy_boxi_extract_path())
+  }
+
   return(sc_client_lookup_path)
 }
