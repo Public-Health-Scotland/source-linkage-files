@@ -17,6 +17,7 @@ check_year_valid <- function(
       "ch",
       "client",
       "cmh",
+      "cost_dna",
       "dd",
       "deaths",
       "dn",
@@ -36,7 +37,7 @@ check_year_valid <- function(
     return(FALSE)
   } else if (year <= "1516" && type %in% c("cmh", "homelessness", "dd")) {
     return(FALSE)
-  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at", "client")) {
+  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at", "client", "cost_dna")) {
     return(FALSE)
   } else if (year <= "1718" && type %in% "hhg") {
     return(FALSE)
