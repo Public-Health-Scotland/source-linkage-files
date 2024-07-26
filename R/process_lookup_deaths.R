@@ -17,11 +17,12 @@ process_slf_deaths_lookup <- function(
     year,
     nrs_deaths_data = read_file(
       get_source_extract_path(year, "deaths"),
-      col_select = c("chi", "record_keydate1")
+      col_select = c("anon_chi", "record_keydate1")
     ),
     chi_deaths_data = read_file(get_slf_chi_deaths_path()),
     write_to_disk = TRUE) {
   slf_deaths_lookup <- nrs_deaths_data %>%
+    slfhelper::get_chi() %>%
     # Only modification over 'raw' NRS is to keep the earliest death date
     dplyr::select("chi", "record_keydate1") %>%
     dplyr::arrange(.data$record_keydate1) %>%
