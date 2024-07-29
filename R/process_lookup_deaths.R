@@ -38,6 +38,7 @@ process_slf_deaths_lookup <- function(
       death_date = dplyr::if_else(.data$record_keydate1 != .data$death_date_chi,
         .data$death_date_chi, .data$record_keydate1
       ),
+      death_date = dplyr::if_else(is.na(.data$death_date_chi), .data$record_keydate1, .data$death_date),
       deceased = TRUE,
       .keep = "unused"
     ) %>%
