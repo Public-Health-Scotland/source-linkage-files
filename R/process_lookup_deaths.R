@@ -21,17 +21,27 @@ process_slf_deaths_lookup <- function(
     ),
     chi_deaths_data = read_file(get_slf_chi_deaths_path()),
     write_to_disk = TRUE) {
-  slf_deaths_lookup <- nrs_deaths_data %>%
+  boxi_nrs_data <- nrs_deaths_data %>%
     slfhelper::get_chi() %>%
     # Only modification over 'raw' NRS is to keep the earliest death date
     dplyr::select("chi", "record_keydate1") %>%
     dplyr::arrange(.data$record_keydate1) %>%
-    dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
+    dplyr::distinct(.data$chi, .keep_all = TRUE)
+
+  # create slf deaths lookup
+  slf_deaths_lookup <- chi_deaths %>%
+    # join boxi nrs data to chi deaths
+    dplyr::right_join(boxi_nrs_data, by = "chi") %>%
+    # If the BOXI NRS date does not match the chi death date, use the chi death date
+    # should now have one row per chi with deaths within the FY
     dplyr::mutate(
-      death_date = .data$record_keydate1,
+      death_date = dplyr::if_else(.data$record_keydate1 != .data$death_date_chi,
+        .data$death_date_chi, .data$record_keydate1
+      ),
       deceased = TRUE,
       .keep = "unused"
     ) %>%
+    # save anon chi on disk
     slfhelper::get_anon_chi()
 
   if (write_to_disk) {
