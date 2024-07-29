@@ -183,9 +183,7 @@ process_combined_deaths_lookup <- function(update = latest_update(),
   if (write_to_disk) {
     write_file(
       all_boxi_deaths,
-      fs::path(get_slf_dir(), "Deaths",
-        file_name = stringr::str_glue("anon-combined_slf_deaths_lookup_{update}.parquet")
-      )
+      get_combined_slf_deaths_lookup_path()
     )
   }
 
