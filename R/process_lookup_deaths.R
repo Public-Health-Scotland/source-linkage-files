@@ -31,9 +31,10 @@ process_slf_deaths_lookup <- function(
   # create slf deaths lookup
   slf_deaths_lookup <- chi_deaths_data %>%
     slfhelper::get_chi() %>%
-    dplyr::mutate(fy = phsmethods::extract_fin_year(death_date_chi),
-                  fy = as.character(paste0(substr(fy, 3, 4), substr(fy,6,7)))
-                  ) %>%
+    dplyr::mutate(
+      fy = phsmethods::extract_fin_year(death_date_chi),
+      fy = as.character(paste0(substr(fy, 3, 4), substr(fy, 6, 7)))
+    ) %>%
     # Filter the chi death dates to the FY as the lookup is by FY
     dplyr::filter(fy == year) %>%
     # join boxi nrs data to chi deaths
