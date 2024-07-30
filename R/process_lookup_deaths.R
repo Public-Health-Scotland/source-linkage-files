@@ -29,7 +29,7 @@ process_slf_deaths_lookup <- function(
     dplyr::distinct(.data$chi, .keep_all = TRUE)
 
   # create slf deaths lookup
-  slf_deaths_lookup <- chi_deaths %>%
+  slf_deaths_lookup <- chi_deaths_data %>%
     # join boxi nrs data to chi deaths
     dplyr::right_join(boxi_nrs_data, by = "chi") %>%
     # If the BOXI NRS date does not match the chi death date, use the chi death date
