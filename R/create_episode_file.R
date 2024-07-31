@@ -176,7 +176,8 @@ create_episode_file <- function(
         sc_type_of_housing = NA,
         sc_meals = NA,
         sc_day_care = NA,
-        social_care_id = NA
+        social_care_id = NA,
+        count_not_known = NA
       )
   }
 
