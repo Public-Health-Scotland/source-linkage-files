@@ -1,7 +1,9 @@
 #' Create the SLF Deaths lookup
 #'
-#' @description Use all-year refined death data to produce year-specific
-#' slf_deaths_lookup with deceased flag added.
+#' @description Currently this just uses the NRS death dates 'as is', with no
+#' corrections or modifications, it is expected that this will be expanded to
+#' use the CHI deaths extract from IT as well as taking into account data in
+#' the episode file to assess the validity of a death date.
 #'
 #' @param year The year to process, in FY format.
 #' @param nrs_deaths_data NRS deaths data.
@@ -11,19 +13,19 @@
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
-process_slf_deaths_lookup <- function(
+add_deceased_flag <- function(
     year,
-    refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+    refined_death = read_file(get_combined_slf_deaths_lookup_path()) %>% slfhelper::get_chi(),
     write_to_disk = TRUE) {
 
   # create slf deaths lookup
-  slf_deaths_lookup <- refined_death %>%
-    slfhelper::get_chi() %>%
-    # Filter the chi death dates to the FY as the lookup is by FY
-    dplyr::filter(fy == year) %>%
-    # use the BOXI NRS death date by default, but if it's missing, use the chi death date.
+
     dplyr::mutate(
-      deceased = TRUE
+      death_date = dplyr::if_else(is.na(.data$record_keydate1),
+        .data$death_date_chi, .data$record_keydate1
+      ),
+      deceased = TRUE,
+      .keep = "unused"
     ) %>%
     # save anon chi on disk
     slfhelper::get_anon_chi()
