@@ -4,8 +4,7 @@
 #' slf_deaths_lookup with deceased flag added.
 #'
 #' @param year The year to process, in FY format.
-#' @param nrs_deaths_data NRS deaths data.
-#' @param chi_deaths_data IT CHI deaths data.
+#' @param refined_death refined death date combining nrs and it_chi.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'

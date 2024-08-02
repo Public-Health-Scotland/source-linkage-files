@@ -168,11 +168,18 @@ list(
     )
   ),
   tar_target(
+    refined_death_data,
+    process_refined_death(
+      it_chi_deaths = it_chi_deaths_data,
+      write_to_disk = write_to_disk
+    )
+  ),
+  tar_target(
     all_care_home,
     process_sc_all_care_home(
       all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup %>% slfhelper::get_chi(),
-      refined_death = refined_death %>% slfhelper::get_chi(),
+      refined_death = refined_death_data %>% slfhelper::get_chi(),
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_path = spd_path,
       write_to_disk = write_to_disk
@@ -203,13 +210,6 @@ list(
   tar_target(
     tests_sc_all_sds,
     process_tests_sc_all_sds_episodes(all_sds)
-  ),
-  tar_target(
-    refined_death,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
-    )
   ),
 
   # Phase II
@@ -436,10 +436,10 @@ list(
       source_nrs_deaths_extract,
       # use this anomymous function with redundant but necessary refined_death
       # to make sure reading year-specific nrs deaths extracts after it is produced
-      (\(year, refined_death) {
+      (\(year, refined_death_datas) {
         read_file(get_source_extract_path(year, "deaths")) %>%
           as.data.frame()
-      })(year, refined_death)
+      })(year, refined_death_data)
     ),
     tar_target(
       tests_source_nrs_deaths_extract,
@@ -570,7 +570,7 @@ list(
       slf_deaths_lookup,
       process_slf_deaths_lookup(
         year = year,
-        refined_data = refined_data,
+        refined_death = refined_death_data,
         write_to_disk = write_to_disk
       )
     ),

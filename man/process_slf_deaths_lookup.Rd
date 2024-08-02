@@ -30,6 +30,8 @@ process_slf_deaths_lookup(
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{refined_death}{refined death date combining nrs and it_chi.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file
