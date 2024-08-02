@@ -7,7 +7,8 @@
 process_sc_all_care_home(
   data,
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()) \%>\% slfhelper::get_chi(),
-  it_chi_deaths_data = read_file(get_slf_chi_deaths_path()),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path()) \%>\%
+    slfhelper::get_chi(),
   ch_name_lookup_path = read_file(get_slf_ch_name_lookup_path()),
   spd_path = read_file(get_spd_path()),
   write_to_disk = TRUE
@@ -19,8 +20,8 @@ process_sc_all_care_home(
 \item{sc_demog_lookup}{The Social Care Demographics lookup produced by
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
-\item{it_chi_deaths_data}{The processed lookup of deaths from IT produced
-with \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}}.}
+\item{refined_death}{The processed lookup of deaths from IT produced
+with \code{\link[=process_refined_death]{process_refined_death()}}.}
 
 \item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
 
@@ -65,6 +66,7 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_refined_death}()},
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_home_care}()},
 \code{\link{process_sc_all_sds}()},
