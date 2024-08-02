@@ -16,6 +16,7 @@ Get the date of the latest update, e.g 'Jun_2022'
 Other initialisation: 
 \code{\link{get_dd_period}()},
 \code{\link{latest_cost_year}()},
-\code{\link{previous_update}()}
+\code{\link{previous_update}()},
+\code{\link{years_to_run}()}
 }
 \concept{initialisation}
