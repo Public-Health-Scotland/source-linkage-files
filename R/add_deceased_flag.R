@@ -17,16 +17,15 @@ add_deceased_flag <- function(
     year,
     refined_death = read_file(get_combined_slf_deaths_lookup_path()) %>% slfhelper::get_chi(),
     write_to_disk = TRUE) {
-
   # create slf deaths lookup
 
-    dplyr::mutate(
-      death_date = dplyr::if_else(is.na(.data$record_keydate1),
-        .data$death_date_chi, .data$record_keydate1
-      ),
-      deceased = TRUE,
-      .keep = "unused"
-    ) %>%
+  dplyr::mutate(
+    death_date = dplyr::if_else(is.na(.data$record_keydate1),
+      .data$death_date_chi, .data$record_keydate1
+    ),
+    deceased = TRUE,
+    .keep = "unused"
+  ) %>%
     # save anon chi on disk
     slfhelper::get_anon_chi()
 

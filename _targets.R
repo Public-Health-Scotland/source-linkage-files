@@ -206,8 +206,10 @@ list(
   ),
   tar_target(
     refined_death,
-    process_refined_death(it_chi_deaths = it_chi_deaths_data,
-                          write_to_disk = write_to_disk)
+    process_refined_death(
+      it_chi_deaths = it_chi_deaths_data,
+      write_to_disk = write_to_disk
+    )
   ),
 
   # Phase II
@@ -415,7 +417,8 @@ list(
       process_extract_mental_health(
         mental_health_data,
         year,
-      write_to_disk = write_to_disk)
+        write_to_disk = write_to_disk
+      )
     ),
     tar_target(
       tests_source_mental_health_extract,
