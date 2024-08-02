@@ -89,7 +89,9 @@ latest_cost_year <- function() {
 years_to_run <- function() {
   fy_start_2digit <- 17
   fy_end_2digit <- 23
-  years_to_run = paste0(fy_start_2digit:fy_end_2digit,
-                        (fy_start_2digit + 1):(fy_end_2digit + 1))
+  years_to_run <- paste0(
+    fy_start_2digit:fy_end_2digit,
+    (fy_start_2digit + 1):(fy_end_2digit + 1)
+  )
   return(years_to_run)
 }

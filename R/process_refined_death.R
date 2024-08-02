@@ -15,19 +15,24 @@
 process_refined_death <- function(
     it_chi_deaths = read_file(get_slf_chi_deaths_path()),
     write_to_disk = TRUE) {
-  years_list = years_to_run()
+  years_list <- years_to_run()
 
   nrs_all_years <- lapply(years_list, (\(year) {
-    read_extract_nrs_deaths(year,
-                            get_boxi_extract_path(year, type = "deaths")) %>%
+    read_extract_nrs_deaths(
+      year,
+      get_boxi_extract_path(year, type = "deaths")
+    ) %>%
       process_extract_nrs_deaths(year,
-                                 write_to_disk = write_to_disk)
+        write_to_disk = write_to_disk
+      )
   })) %>%
     data.table::rbindlist()
 
   it_chi_deaths <- it_chi_deaths %>%
-    dplyr::select(c("anon_chi",
-                    "death_date_chi")) %>%
+    dplyr::select(c(
+      "anon_chi",
+      "death_date_chi"
+    )) %>%
     dplyr::arrange(.data$anon_chi, .keep_all = TRUE)
 
   refined_death <- nrs_all_years %>%
@@ -47,8 +52,10 @@ process_refined_death <- function(
     )
 
   if (write_to_disk) {
-    write_file(refined_death,
-               get_combined_slf_deaths_lookup_path())
+    write_file(
+      refined_death,
+      get_combined_slf_deaths_lookup_path()
+    )
   }
 
   return(refined_death)
