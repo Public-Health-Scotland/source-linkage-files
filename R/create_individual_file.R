@@ -129,7 +129,7 @@ create_individual_file <- function(
         sc_social_worker = NA,
         sc_meals = NA,
         sc_day_care = NA,
-        sc_type_of_housing= NA,
+        sc_type_of_housing = NA,
         count_not_known = NA,
         sc_latest_submission = NA,
         social_care_id = NA
