@@ -115,6 +115,9 @@ create_individual_file <- function(
         hc_personal_hours = NA,
         hc_non_personal_hours = NA,
         hc_reablement_hours = NA,
+        hc_non_personal_hours_cost = NA,
+        hc_personal_hours_cost = NA,
+        hc_reablement_hours_cost = NA,
         at_alarms = NA,
         at_telecare = NA,
         sds_option_1 = NA,
@@ -125,9 +128,19 @@ create_individual_file <- function(
         sc_support_from_unpaid_carer = NA,
         sc_social_worker = NA,
         sc_meals = NA,
-        sc_day_care = NA
+        sc_day_care = NA,
+        sc_type_of_housing= NA,
+        count_not_known = NA,
+        sc_latest_submission = NA,
+        social_care_id = NA
       )
   }
+
+  if (!check_year_valid(year, type = "homelessness")) {
+    individual_file <- individual_file %>%
+      dplyr::mutate(hl1_in_fy = NA)
+  }
+
 
   if (anon_chi_out) {
     individual_file <- individual_file %>%
