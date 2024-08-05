@@ -8,7 +8,7 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
-#' @return a [tibble][tibble::tibble-package] containing the episode file
+#' @return a [tibble][tibble::tibble-package] add deceased flag to deaths
 #' @export
 process_slf_deaths_lookup <- function(
     year,
