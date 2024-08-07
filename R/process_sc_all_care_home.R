@@ -286,7 +286,7 @@ process_sc_all_care_home <- function(
     dplyr::select(
       -previous_discharge_date_chi, -continuous_stay_flag_chi, -previous_continuous_stay_flag_chi, -continuous_stay_chi,
       -previous_discharge_date_sc, -continuous_stay_flag_sc, -previous_continuous_stay_flag_sc, -continuous_stay_sc,
-      -dis_after_death, -death_date_nrs, -death_date_chi
+      -dis_after_death
     )
 
 
