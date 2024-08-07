@@ -266,7 +266,7 @@ process_sc_all_care_home <- function(
   # This is the same but uses the social care id and sending location so can be used for
   # episodes that are not attached to a CHI number
   # This will restrict continuous stays to each Local Authority
-  sc_ch_id_markers <- chi_chi_markers %>%
+  sc_ch_id_markers <- ch_chi_markers %>%
     dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]]) %>%
     # create variable for previous discharge date + 1 day
     dplyr::mutate(previous_discharge_date_sc = dplyr::lag(.data[["ch_discharge_date"]]) + lubridate::days(1L)) %>%
