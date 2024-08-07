@@ -73,7 +73,7 @@ processed_data_list <- list(
 )
 
 # Run episode file
-create_episode_file(processed_data_list, year = year)## %>%
-  #process_tests_episode_file(year = year)
+create_episode_file(processed_data_list, year = year) ## %>%
+# process_tests_episode_file(year = year)
 
 ## End of Script ##
