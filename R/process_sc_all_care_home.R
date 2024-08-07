@@ -206,6 +206,7 @@ process_sc_all_care_home <- function(
     dplyr::left_join(refined_death,
       by = "chi"
     ) %>%
+    dplyr::rename(death_date = "death_date_chi") %>%
     # compare discharge date with NRS and CHI death date
     # if either of the dates are 5 or fewer days before discharge
     # adjust the discharge date to the date of death
