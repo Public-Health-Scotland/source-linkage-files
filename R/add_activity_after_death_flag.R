@@ -125,6 +125,7 @@ add_activity_after_death_flag <- function(
 #'
 #'
 # Read data------------------------------------------------
+
 process_combined_deaths_lookup <- function(update = latest_update(),
                                            write_to_disk = TRUE, ...) {
   dir_folder <- "/conf/hscdiip/SLF_Extracts/Deaths"
