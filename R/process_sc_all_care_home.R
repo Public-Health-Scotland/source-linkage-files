@@ -23,7 +23,7 @@ process_sc_all_care_home <- function(
     data,
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
     refined_death = read_file(get_combined_slf_deaths_lookup_path()) %>% slfhelper::get_chi(),
-    ch_name_lookup_path = read_file(get_slf_ch_name_lookup_path()),
+    ch_name_lookup_path = readxl::read_excel(get_slf_ch_name_lookup_path()),
     spd_path = read_file(get_spd_path()),
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
