@@ -7,8 +7,8 @@
 #' @param data The extract to process
 #' @param sc_demog_lookup The Social Care Demographics lookup produced by
 #' [process_lookup_sc_demographics()].
-#' @param it_chi_deaths_data The processed lookup of deaths from IT produced
-#' with [process_it_chi_deaths()].
+#' @param refined_death The processed lookup of deaths from IT produced
+#' with [process_refined_death()].
 #' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
 #' @param spd_path (Optional) Path the Scottish Postcode Directory, default is
 #' to use [get_spd_path()].
@@ -22,9 +22,9 @@
 process_sc_all_care_home <- function(
     data,
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
-    it_chi_deaths_data = read_file(get_slf_chi_deaths_path()) %>% slfhelper::get_chi(),
-    ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-    spd_path = get_spd_path(),
+    refined_death = read_file(get_combined_slf_deaths_lookup_path()) %>% slfhelper::get_chi(),
+    ch_name_lookup_path = read_file(get_slf_ch_name_lookup_path()),
+    spd_path = read_file(get_spd_path()),
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
 
@@ -203,7 +203,7 @@ process_sc_all_care_home <- function(
   # match ch_episode data with deaths data
   # TO DO should this be boxi nrs death dates instead of IT extract deaths?
   matched_deaths_data <- ch_episode %>%
-    dplyr::left_join(it_chi_deaths_data,
+    dplyr::left_join(refined_death,
       by = "chi"
     ) %>%
     # compare discharge date with NRS and CHI death date

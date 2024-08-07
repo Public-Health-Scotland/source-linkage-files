@@ -6,28 +6,22 @@
 \usage{
 process_slf_deaths_lookup(
   year,
-  nrs_deaths_data = read_file(get_source_extract_path(year, "deaths"), col_select =
-    c("chi", "record_keydate1")),
-  chi_deaths_data = read_file(get_slf_chi_deaths_path()),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
   write_to_disk = TRUE
 )
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
 
-\item{nrs_deaths_data}{NRS deaths data.}
-
-\item{chi_deaths_data}{IT CHI deaths data.}
+\item{refined_death}{refined death date combining nrs and it_chi.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble} containing the episode file
+a \link[tibble:tibble-package]{tibble} add deceased flag to deaths
 }
 \description{
-Currently this just uses the NRS death dates 'as is', with no
-corrections or modifications, it is expected that this will be expanded to
-use the CHI deaths extract from IT as well as taking into account data in
-the episode file to assess the validity of a death date.
+Use all-year refined death data to produce year-specific
+slf_deaths_lookup with deceased flag added.
 }
