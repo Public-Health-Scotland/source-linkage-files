@@ -201,7 +201,6 @@ process_sc_all_care_home <- function(
 
   # Compare to Deaths Data
   # match ch_episode data with deaths data
-  # TO DO should this be boxi nrs death dates instead of IT extract deaths?
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(refined_death,
       by = "chi"
@@ -239,10 +238,12 @@ process_sc_all_care_home <- function(
   ch_chi_markers <- matched_deaths_data %>%
     # Group the data by chi
     dplyr::group_by(.data[["chi"]]) %>%
-    # create variable for previous discharge date + 1 day
-    # The lag function will set the first row to NA. We want to flag the first row
+    # Set up previous_discharge_date
+    # The lag function will set the first row to NA.
     dplyr::mutate(
+      # We want to flag the first episode per chi with row_number
       row_number = dplyr::row_number(),
+      # create variable for previous discharge date + 1 day
       previous_discharge_date_chi = dplyr::lag(.data[["ch_discharge_date"]]) +
         lubridate::days(1L),
       # if the first row is NA, set this to the ch_discharge_date
@@ -284,10 +285,12 @@ process_sc_all_care_home <- function(
     # uses social_care_id and sending_location to flag continuous stays.
     # Will flag cases even if in another LA
     dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]]) %>%
-    # create variable for previous discharge date + 1 day
-    # The lag function will set the first row to NA. We want to flag the first row
+    # Set up previous_discharge_date
+    # The lag function will set the first row to NA.
     dplyr::mutate(
+      # We want to flag the first episode per sc id and sending_location with row_number
       row_number = dplyr::row_number(),
+      # create variable for previous discharge date + 1 day
       previous_discharge_date_sc = dplyr::lag(.data[["ch_discharge_date"]]) +
         lubridate::days(1L),
       # if the first row is NA, set this to the ch_discharge_date
