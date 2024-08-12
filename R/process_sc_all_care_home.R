@@ -43,7 +43,7 @@ process_sc_all_care_home <- function(
         .data[["ch_discharge_date"]]
       )
     ) %>%
-    dplyr::full_join(sc_demog_lookup, # this is the correct join.
+    dplyr::right_join(sc_demog_lookup, # this is the correct join.
       by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest() %>%
@@ -201,7 +201,6 @@ process_sc_all_care_home <- function(
 
   # Compare to Deaths Data
   # match ch_episode data with deaths data
-  # TO DO should this be boxi nrs death dates instead of IT extract deaths?
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(refined_death,
       by = "chi"
@@ -237,56 +236,97 @@ process_sc_all_care_home <- function(
   # creates a CIS  flag for CHI across all of scotland
   # and a CIS for social care ID and sending location for just that LA
   ch_chi_markers <- matched_deaths_data %>%
-    # uses the chi to flag continuous stays. Will flag cases even if in another LA
+    # Group the data by chi
     dplyr::group_by(.data[["chi"]]) %>%
-    # create variable for previous discharge date + 1 day
-    dplyr::mutate(previous_discharge_date_chi = dplyr::lag(.data[["ch_discharge_date"]]) + lubridate::days(1L)) %>%
-    # TRUE/FALSE flag for if admission date is before or equal to previous discharge date + 1 day
-    dplyr::mutate(continuous_stay_flag_chi = tidyr::replace_na(.data[["ch_admission_date"]] <= previous_discharge_date_chi, FALSE)) %>%
-    # different to code in above sections.
-    # we want to uniquely identify all cases where the flag is FALSE. and only the first case where the flag is TRUE
-    # to do this create a variable of the flag in the previous row
-    dplyr::mutate(previous_continuous_stay_flag_chi = tidyr::replace_na(dplyr::lag(.data[["continuous_stay_flag_chi"]]), FALSE)) %>%
-    dplyr::mutate(continuous_stay_chi = ifelse(continuous_stay_flag_chi == FALSE |
-      (continuous_stay_flag_chi == TRUE & previous_continuous_stay_flag_chi == FALSE), FALSE, TRUE)) %>%
-    dplyr::group_by(
-      .data[["chi"]],
-      .data[["continuous_stay_chi"]]
+    # Set up previous_discharge_date
+    # The lag function will set the first row to NA.
+    dplyr::mutate(
+      # We want to flag the first episode per chi with row_number
+      row_number = dplyr::row_number(),
+      # create variable for previous discharge date + 1 day
+      previous_discharge_date_chi = dplyr::lag(.data[["ch_discharge_date"]]) +
+        lubridate::days(1L),
+      # if the first row is NA, set this to the ch_discharge_date
+      previous_discharge_date_chi = dplyr::if_else(row_number == 1, .data[["ch_discharge_date"]],
+        .data[["previous_discharge_date_chi"]]
+      )
     ) %>%
-    # gives cases their unique CIS identifier
-    dplyr::mutate(ch_chi_cis = ifelse(continuous_stay_chi == FALSE, dplyr::row_number(), NA)) %>%
-    dplyr::group_by(
-      .data[["social_care_id"]],
-      .data[["sending_location"]]
+    # flag continuous stays and create marker
+    # calculate number of days between start_date and end_date on the previous episode
+    dplyr::mutate(
+      days_to_next_rec = floor(
+        lubridate::time_length(lubridate::interval(
+          .data[["previous_discharge_date_chi"]],
+          .data[["ch_admission_date"]]
+        ), "days")
+      ),
+      # if there is more than 1 day between (or the last ep for the individual) flag as new ep (Y)
+      # if there is < 1 day (i.e. a pause of up to 1 day or stays overlap flag as same ep (N))
+      new_episode = dplyr::if_else(is.na(days_to_next_rec) | days_to_next_rec > 1, "Y", "N")
     ) %>%
-    # fills in CIS identifier for all cases
-    tidyr::fill(ch_chi_cis, .direction = c("down"))
+    # create continuous marker using flag for new stay
+    dplyr::mutate(
+      ch_chi_cis = purrr::accumulate(new_episode[-1],
+        .init = 1,
+        ~ if (.y == "Y") {
+          .x + 1
+        } else {
+          .x
+        }
+      )
+    ) %>%
+    dplyr::ungroup()
 
 
   # This is the same but uses the social care id and sending location so can be used for
   # episodes that are not attached to a CHI number
   # This will restrict continuous stays to each Local Authority
   sc_ch_id_markers <- ch_chi_markers %>%
+    # uses social_care_id and sending_location to flag continuous stays.
+    # Will flag cases even if in another LA
     dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]]) %>%
-    # create variable for previous discharge date + 1 day
-    dplyr::mutate(previous_discharge_date_sc = dplyr::lag(.data[["ch_discharge_date"]]) + lubridate::days(1L)) %>%
-    # TRUE/FALSE flag for if admission date is before or equal to previous discharge date + 1 day
-    dplyr::mutate(continuous_stay_flag_sc = tidyr::replace_na(.data[["ch_admission_date"]] <= previous_discharge_date_sc, FALSE)) %>%
-    # we want to uniquely identify all cases where the flag is FALSE. and only the first case where the flag is TRUE
-    # to do this create a variable of the flag in the previous row
-    dplyr::mutate(previous_continuous_stay_flag_sc = tidyr::replace_na(dplyr::lag(.data[["continuous_stay_flag_sc"]]), FALSE)) %>%
-    dplyr::mutate(continuous_stay_sc = ifelse(continuous_stay_flag_sc == FALSE |
-      (continuous_stay_flag_sc == TRUE & previous_continuous_stay_flag_sc == FALSE), FALSE, TRUE)) %>%
-    dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]], .data[["continuous_stay_sc"]]) %>%
-    # gives cases their unique CIS identifier
-    dplyr::mutate(ch_sc_id_cis = ifelse(continuous_stay_sc == FALSE, dplyr::row_number(), NA)) %>%
-    dplyr::group_by(.data[["social_care_id"]], .data[["sending_location"]]) %>%
-    # fills in CIS identifier for all cases
-    tidyr::fill(ch_sc_id_cis, .direction = c("down")) %>%
+    # Set up previous_discharge_date
+    # The lag function will set the first row to NA.
+    dplyr::mutate(
+      # We want to flag the first episode per sc id and sending_location with row_number
+      row_number = dplyr::row_number(),
+      # create variable for previous discharge date + 1 day
+      previous_discharge_date_sc = dplyr::lag(.data[["ch_discharge_date"]]) +
+        lubridate::days(1L),
+      # if the first row is NA, set this to the ch_discharge_date
+      previous_discharge_date_sc = dplyr::if_else(row_number == 1, .data[["ch_discharge_date"]],
+        .data[["previous_discharge_date_sc"]]
+      )
+    ) %>%
+    # flag continuous stays and create marker
+    # calculate number of days between start_date and end_date on the previous episode
+    dplyr::mutate(
+      days_to_next_rec = floor(
+        lubridate::time_length(lubridate::interval(
+          .data[["previous_discharge_date_sc"]],
+          .data[["ch_admission_date"]]
+        ), "days")
+      ),
+      # if there is more than 1 day between (or the last ep for the individual) flag as new ep (Y)
+      # if there is < 1 day (i.e. a pause of up to 1 day or stays overlap flag as same ep (N))
+      new_episode = dplyr::if_else(is.na(days_to_next_rec) | days_to_next_rec > 1, "Y", "N")
+    ) %>%
+    # create continuous marker using flag for new stay
+    dplyr::mutate(
+      ch_sc_id_cis = purrr::accumulate(new_episode[-1],
+        .init = 1,
+        ~ if (.y == "Y") {
+          .x + 1
+        } else {
+          .x
+        }
+      )
+    ) %>%
+    dplyr::ungroup() %>%
+    # remove variables no longer needed
     dplyr::select(
-      -previous_discharge_date_chi, -continuous_stay_flag_chi, -previous_continuous_stay_flag_chi, -continuous_stay_chi,
-      -previous_discharge_date_sc, -continuous_stay_flag_sc, -previous_continuous_stay_flag_sc, -continuous_stay_sc,
-      -dis_after_death
+      -previous_discharge_date_chi, -previous_discharge_date_sc, -row_number,
+      -days_to_next_rec, -new_episode
     )
 
 
@@ -361,6 +401,7 @@ process_sc_all_care_home <- function(
       "ch_provider_description",
       "ch_nursing",
       "ch_adm_reason",
+      "type_of_admission",
       "sc_latest_submission"
     ) %>%
     slfhelper::get_anon_chi()
