@@ -43,7 +43,7 @@ process_sc_all_care_home <- function(
         .data[["ch_discharge_date"]]
       )
     ) %>%
-    dplyr::full_join(sc_demog_lookup, # this is the correct join.
+    dplyr::right_join(sc_demog_lookup, # this is the correct join.
       by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest() %>%
