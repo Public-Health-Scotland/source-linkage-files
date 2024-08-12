@@ -41,12 +41,12 @@ process_extract_alarms_telecare <- function(
       "smrtype",
       "chi",
       "dob",
+      "person_id",
       "gender",
       "postcode",
       "sc_send_lca",
       "record_keydate1",
       "record_keydate2",
-      "person_id",
       "sc_latest_submission"
     ) %>%
     slfhelper::get_anon_chi()
