@@ -21,7 +21,7 @@ Get the full path to the SLF deaths lookup file
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other slf lookup file path: 
-\code{\link{get_all_slf_deaths_lookup_path}()},
+\code{\link{get_combined_slf_deaths_lookup_path}()},
 \code{\link{get_slf_ch_name_lookup_path}()},
 \code{\link{get_slf_chi_deaths_path}()},
 \code{\link{get_slf_gpprac_path}()},

@@ -28,6 +28,7 @@ previous_update(override = "May_2023") # Specific Month
 Other initialisation: 
 \code{\link{get_dd_period}()},
 \code{\link{latest_cost_year}()},
-\code{\link{latest_update}()}
+\code{\link{latest_update}()},
+\code{\link{years_to_run}()}
 }
 \concept{initialisation}

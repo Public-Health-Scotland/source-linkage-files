@@ -8,7 +8,7 @@ process_lookup_sc_client(
   data,
   year,
   sc_demographics = read_file(get_sc_demog_lookup_path()) \%>\% slfhelper::get_chi()
-    \%>\% dplyr::select(c("sending_location", "social_care_id", "chi")),
+    \%>\% dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
   write_to_disk = TRUE
 )
 }
@@ -56,6 +56,7 @@ Other process extracts:
 \code{\link{process_lookup_gpprac}()},
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_refined_death}()},
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},

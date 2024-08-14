@@ -143,8 +143,8 @@ process_lookup_sc_demographics <- function(
     dplyr::ungroup()
 
   # check to make sure all cases of chi are still there
-  dplyr::n_distinct(sc_demog_lookup$chi) # 524810
-  dplyr::n_distinct(sc_demog_lookup$social_care_id) # 636404
+  dplyr::n_distinct(sc_demog_lookup$chi) # 525,834
+  dplyr::n_distinct(sc_demog_lookup$social_care_id) # 637,422
 
   sc_demog_lookup <- sc_demog_lookup %>%
     slfhelper::get_anon_chi()

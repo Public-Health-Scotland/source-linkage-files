@@ -11,8 +11,10 @@
 add_activity_after_death_flag <- function(
     data,
     year,
-    deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
+    deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
       slfhelper::get_chi()) {
+  cli::cli_alert_info("Add activity after death flag function started at {Sys.time()}")
+
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
@@ -85,7 +87,7 @@ add_activity_after_death_flag <- function(
   flag_data <- flag_data %>%
     dplyr::filter(.data$activity_after_death == 1) %>%
     # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
-    dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$activity_after_death) %>%
+    dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$activity_after_death, .data$death_date_boxi) %>%
     dplyr::distinct()
 
   # Match activity after death flag back to episode file
@@ -94,7 +96,12 @@ add_activity_after_death_flag <- function(
       flag_data,
       by = c("year", "chi", "record_keydate1", "record_keydate2"),
       na_matches = "never"
-    )
+    ) %>%
+    dplyr::mutate(death_date = lubridate::as_date(ifelse(is.na(death_date) & !(is.na(death_date_boxi)),
+      death_date_boxi, death_date
+    ))) %>%
+    dplyr::select(-death_date_boxi)
+
 
 
   return(final_data)
@@ -118,19 +125,19 @@ add_activity_after_death_flag <- function(
 #'
 #'
 # Read data------------------------------------------------
-process_deaths_lookup <- function(update = latest_update(),
-                                  write_to_disk = TRUE, ...) {
-  all_boxi_deaths <- read_file(get_slf_deaths_lookup_path("1415")) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1516"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1617"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1718"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1819"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("1920"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2021"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2122"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2223"))) %>%
-    rbind(read_file(get_slf_deaths_lookup_path("2324"))) %>%
-    # TODO: make this automated to pick up files starting with name "get_slf_deaths_lookup_path"
+
+process_combined_deaths_lookup <- function(update = latest_update(),
+                                           write_to_disk = TRUE, ...) {
+  dir_folder <- "/conf/hscdiip/SLF_Extracts/Deaths"
+  file_names <- list.files(dir_folder,
+    pattern = "^anon-slf_deaths_lookup_.*parquet",
+    full.names = TRUE
+  )
+
+  # read all year specific deaths lookups and bind them together
+  all_boxi_deaths <- lapply(file_names, arrow::read_parquet) %>%
+    data.table::rbindlist() %>%
+    # convert to chi for processing
     slfhelper::get_chi() %>%
     # Remove rows with missing or blank CHI number - could also use na.omit?
     # na.omit(all_boxi_deaths)
@@ -177,9 +184,7 @@ process_deaths_lookup <- function(update = latest_update(),
   if (write_to_disk) {
     write_file(
       all_boxi_deaths,
-      fs::path(get_slf_dir(), "Deaths",
-        file_name = stringr::str_glue("anon-all_slf_deaths_lookup_{update}.parquet")
-      )
+      get_combined_slf_deaths_lookup_path()
     )
   }
 
