@@ -13,8 +13,8 @@ process_tests_episode_file <- function(data, year) {
       "anon_chi",
       "gender",
       "postcode",
-      "hbtreatcode",
-      "hscp2018",
+      "hbrescode",
+      "lca",
       "dob",
       "recid",
       "yearstay",
@@ -41,8 +41,8 @@ process_tests_episode_file <- function(data, year) {
 #' @description Produce a set of tests which can be used by most
 #' of the extracts.
 #' This will produce counts of various demographics
-#' using [create_demog_test_flags()] counts of episodes for every `hbtreatcode`
-#' using [create_hb_test_flags()], a total cost for each `hbtreatcode` using
+#' using [create_demog_test_flags()] counts of episodes for every `hbrescode`
+#' using [create_hb_test_flags()], a total cost for each `hbrescode` using
 #' [create_hb_cost_test_flags()].
 #' It will also produce various summary statistics for bedday, cost and
 #' episode date variables.
@@ -77,9 +77,9 @@ produce_episode_file_tests <- function(
     ) %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags(chi = .data$anon_chi) %>%
-    create_hb_test_flags(.data$hbtreatcode) %>%
-    create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
-    create_hscp_test_flags(.data$hscp2018) %>%
+    create_hb_test_flags(.data$hbrescode) %>%
+    create_hb_cost_test_flags(.data$hbrescode, .data$cost_total_net) %>%
+    create_lca_test_flags(.data$lca) %>%
     # Flags to count stay types
     dplyr::mutate(
       cij_elective = dplyr::if_else(
