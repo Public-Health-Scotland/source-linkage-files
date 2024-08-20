@@ -7,7 +7,7 @@
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Jun_2024"
+  "Sep_2024"
 }
 
 #' Previous update
@@ -61,7 +61,7 @@ previous_update <- function(months_ago = 3L, override = NULL) {
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Mar24"
+  "Jul16_Jun24"
 }
 
 #' The latest financial year for Cost uplift setting
@@ -74,5 +74,24 @@ get_dd_period <- function() {
 #'
 #' @family initialisation
 latest_cost_year <- function() {
-  "2223"
+  "2324"
+}
+
+#' The year list for slf to update
+#'
+#' @description Get the vector of years to update slf
+#'
+#' @return The vector of financial years
+#'
+#' @export
+#'
+#' @family initialisation
+years_to_run <- function() {
+  fy_start_2digit <- 17
+  fy_end_2digit <- 24
+  years_to_run <- paste0(
+    fy_start_2digit:fy_end_2digit,
+    (fy_start_2digit + 1):(fy_end_2digit + 1)
+  )
+  return(years_to_run)
 }

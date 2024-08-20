@@ -13,6 +13,10 @@ get_combined_slf_deaths_lookup_path(update = latest_update(), ...)
 }
 \description{
 Get the full path to the BOXI NRS Deaths lookup file for all financial years
+Note this name is very similar to the existing slf_deaths_lookup_path
+which returns the path for the refined_death with deceased flag for each financial year.
+This function will return the combined financial years lookup
+i.e. all years put together.
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
