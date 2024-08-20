@@ -206,6 +206,7 @@ parkinsons
 patflow
 pattype
 PCEC
+pcs
 PERTH
 PHIBCS
 phs
@@ -218,6 +219,7 @@ PLICS
 popluation
 Posix
 postcodes
+Postcodesio
 PPAs
 prac
 praccode
@@ -236,6 +238,7 @@ readr
 readxl
 reasonwait
 recid
+recordlinkage
 refailure
 reflectoring
 refsource
