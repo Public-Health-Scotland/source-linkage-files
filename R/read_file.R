@@ -3,8 +3,6 @@
 #' @description Read a file, the function chosen to read the file is dependant
 #' on the file path.
 #'  * `.rds` uses [readr::read_rds()].
-#'  * `.fst` uses [fst::read_fst()].
-#'  * `.sav` and `.zsav` use [haven::read_spss()].
 #'  * `.csv` and `.gz` use [readr::read_csv()]. Note that this assumes any file
 #'  ending with `.gz` is a zipped CSV which isn't necessarily true!
 #'  * `.parquet` uses [arrow::read_parquet()].
@@ -19,9 +17,6 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   valid_extensions <- c(
     "rds",
     "rds.gz",
-    "fst",
-    "sav",
-    "zsav",
     "csv",
     "csv.gz",
     "parquet"
@@ -60,9 +55,6 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   data <- switch(ext,
     "rds" = readr::read_rds(file = path),
     "rds.gz" = readr::read_rds(file = path),
-    "fst" = tibble::as_tibble(fst::read_fst(path = path)),
-    "sav" = haven::read_spss(file = path, ...),
-    "zsav" = haven::read_spss(file = path, ...),
     "csv" = readr::read_csv(file = path, ..., show_col_types = FALSE),
     "csv.gz" = readr::read_csv(file = path, ..., show_col_types = FALSE),
     "parquet" = arrow::read_parquet(
