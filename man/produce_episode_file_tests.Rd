@@ -28,8 +28,8 @@ from \code{\link[=calculate_measures]{calculate_measures()}}
 Produce a set of tests which can be used by most
 of the extracts.
 This will produce counts of various demographics
-using \code{\link[=create_demog_test_flags]{create_demog_test_flags()}} counts of episodes for every \code{hbtreatcode}
-using \code{\link[=create_hb_test_flags]{create_hb_test_flags()}}, a total cost for each \code{hbtreatcode} using
+using \code{\link[=create_demog_test_flags]{create_demog_test_flags()}} counts of episodes for every \code{hbrescode}
+using \code{\link[=create_hb_test_flags]{create_hb_test_flags()}}, a total cost for each \code{hbrescode} using
 \code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}}.
 It will also produce various summary statistics for bedday, cost and
 episode date variables.
