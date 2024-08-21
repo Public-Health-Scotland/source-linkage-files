@@ -401,7 +401,6 @@ process_sc_all_care_home <- function(
       "ch_provider_description",
       "ch_nursing",
       "ch_adm_reason",
-      #  "type_of_admission",
       "sc_latest_submission"
     ) %>%
     slfhelper::get_anon_chi()
