@@ -54,7 +54,7 @@ process_refined_death <- function(
   if (write_to_disk) {
     write_file(
       refined_death,
-      get_combined_slf_deaths_lookup_path()
+      get_combined_slf_deaths_lookup_path(create = TRUE)
     )
   }
 
