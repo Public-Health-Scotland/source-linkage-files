@@ -54,7 +54,7 @@ write_tests_xlsx <- function(comparison_data,
   }
   if (workbook_name == "extract") {
     if (is.null(year)) {
-    } else{
+    } else {
       tests_workbook_name <-
         stringr::str_glue(latest_update(), "_{year}_extract_tests")
     }

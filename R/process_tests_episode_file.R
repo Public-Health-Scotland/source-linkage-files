@@ -31,7 +31,9 @@ process_tests_episode_file <- function(data, year) {
     recid = TRUE
   ) %>%
     dplyr::arrange(.data[["recid"]]) %>%
-    write_tests_xlsx(sheet_name = stringr::str_glue({"ep_file_{year}"}), workbook_name = "ep_file")
+    write_tests_xlsx(sheet_name = stringr::str_glue({
+      "ep_file_{year}"
+    }), workbook_name = "ep_file")
 
   return(comparison)
 }
