@@ -203,7 +203,8 @@ process_sc_all_care_home <- function(
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(refined_death,
-      by = "chi"
+      by = "chi",
+      na_matches = "never"
     ) %>%
     # compare discharge date with NRS and CHI death date
     # if either of the dates are 5 or fewer days before discharge
