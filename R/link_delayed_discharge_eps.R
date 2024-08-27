@@ -14,7 +14,7 @@ link_delayed_discharge_eps <- function(
     dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()) {
   cli::cli_alert_info("Link delayed discharge to episode file function started at {Sys.time()}")
 
-  names_ep = names(episode_file)
+  names_ep <- names(episode_file)
 
   episode_file <- episode_file %>%
     dplyr::mutate(
