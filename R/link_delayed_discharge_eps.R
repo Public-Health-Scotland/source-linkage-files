@@ -286,6 +286,10 @@ link_delayed_discharge_eps <- function(
     )) %>%
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
+    dplyr::mutate(cij_delay = dplyr::if_else(cij_delay == "0",
+                                             FALSE,
+                                             TRUE,
+                                             missing = NA)) %>%
     dplyr::ungroup() %>%
     # add yearstay and monthly beddays
     # count_last = TRUE because DD counts last day and not the first
@@ -299,6 +303,7 @@ link_delayed_discharge_eps <- function(
       yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))
     ) %>%
     # tidy up and rename columns to match the format of episode files
+    # add variables that you want to keep
     dplyr::select(
       "year" = "year_dd",
       "recid" = "recid_dd",
@@ -317,6 +322,7 @@ link_delayed_discharge_eps <- function(
       "primary_delay_reason",
       "secondary_delay_reason",
       "cij_marker",
+      "cij_ppa",
       "cij_start_date",
       "cij_end_date",
       "cij_pattype_code",
@@ -345,7 +351,16 @@ link_delayed_discharge_eps <- function(
             "dummy_cij_end"
           )
         )
-    )
+    ) %>%
+    # populate cij_delay dd details back to ep
+    dplyr::group_by(chi, cij_marker) %>%
+    dplyr::mutate(has_dd = any(recid == "DD"),
+                  delay_dd = any(cij_delay)) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(cij_delay = dplyr::if_else(has_dd,
+                                             delay_dd,
+                                             cij_delay)) %>%
+    dplyr::select(-c("has_dd", "delay_dd"))
 
   return(linked_data)
 }
