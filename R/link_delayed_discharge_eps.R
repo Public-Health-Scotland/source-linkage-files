@@ -14,6 +14,8 @@ link_delayed_discharge_eps <- function(
     dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()) {
   cli::cli_alert_info("Link delayed discharge to episode file function started at {Sys.time()}")
 
+  names_ep = names(episode_file)
+
   episode_file <- episode_file %>%
     dplyr::mutate(
       # remember to revoke the cij_end_date with dummy_cij_end
@@ -304,16 +306,32 @@ link_delayed_discharge_eps <- function(
       yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))
     ) %>%
     # tidy up and rename columns to match the format of episode files
-    # keep all variables
+    # keep variables from ep files
     dplyr::select(
       -c(
+        "ep_file_row_id",
         "year",
         "recid",
         "record_keydate1",
         "record_keydate2",
         "postcode",
         "hbtreatcode",
-        "spec"
+        "location",
+        "spec",
+        ## following are dummy variables
+        "cij_start_date_lower",
+        "cij_end_date_upper",
+        "cij_end_month",
+        "is_dummy_cij_start",
+        "dummy_cij_start",
+        "is_dummy_cij_end",
+        "dummy_cij_end",
+        "datediff_start",
+        "datediff_end",
+        "has_delay",
+        "is_dummy_keydate2",
+        "dummy_keydate2",
+        "dummy_id"
       )
     ) %>%
     dplyr::rename(
@@ -323,7 +341,8 @@ link_delayed_discharge_eps <- function(
       "record_keydate2" = "record_keydate2_dd",
       "postcode" = "postcode_dd",
       "hbtreatcode" = "hbtreatcode_dd",
-      "spec" = "spec_dd"
+      "spec" = "spec_dd",
+      "location" = "location_dd"
     ) %>%
     # Combine DD with episode data
     dplyr::bind_rows(
