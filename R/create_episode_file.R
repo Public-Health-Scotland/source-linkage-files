@@ -124,8 +124,8 @@ create_episode_file <- function(
     fill_missing_cij_markers() %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
-    add_ppa_flag() %>%
     link_delayed_discharge_eps(year, dd_data) %>%
+    add_ppa_flag() %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
