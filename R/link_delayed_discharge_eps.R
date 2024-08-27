@@ -304,39 +304,26 @@ link_delayed_discharge_eps <- function(
       yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))
     ) %>%
     # tidy up and rename columns to match the format of episode files
-    # add variables that you want to keep
+    # keep all variables
     dplyr::select(
+      -c(
+        "year",
+        "recid",
+        "record_keydate1",
+        "record_keydate2",
+        "postcode",
+        "hbtreatcode",
+        "spec"
+      )
+    ) %>%
+    dplyr::rename(
       "year" = "year_dd",
       "recid" = "recid_dd",
       "record_keydate1" = "record_keydate1_dd",
       "record_keydate2" = "record_keydate2_dd",
-      "smrtype",
-      "chi",
-      "gender",
-      "dob",
-      "age",
-      "gpprac",
       "postcode" = "postcode_dd",
-      "dd_responsible_lca",
       "hbtreatcode" = "hbtreatcode_dd",
-      "delay_end_reason",
-      "primary_delay_reason",
-      "secondary_delay_reason",
-      "cij_marker",
-      "cij_ppa",
-      "cij_start_date",
-      "cij_end_date",
-      "cij_pattype_code",
-      "cij_ipdc",
-      "cij_admtype",
-      "cij_adm_spec",
-      "cij_dis_spec",
-      "cij_delay",
-      "location",
-      "spec" = "spec_dd",
-      "dd_quality",
-      dplyr::ends_with("_beddays"),
-      "yearstay"
+      "spec" = "spec_dd"
     ) %>%
     # Combine DD with episode data
     dplyr::bind_rows(
