@@ -18,10 +18,6 @@ processed_data_list <- list(
     "source_cmh_extract_1819",
     store = targets_store
   ),
-  cmh = targets::tar_read(
-    "source_cmh_extract_1819",
-    store = targets_store
-  ),
   dn = targets::tar_read(
     "source_dn_extract_1819",
     store = targets_store
