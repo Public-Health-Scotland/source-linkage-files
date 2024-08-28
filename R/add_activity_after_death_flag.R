@@ -26,7 +26,7 @@ add_activity_after_death_flag <- function(
       by = "chi",
       suffix = c("", "_boxi")
     ) %>%
-    dplyr::filter(.data$deceased == TRUE | .data$deceased_boxi == TRUE) %>%
+    dplyr::filter(.data$deceased == TRUE) %>%
     dplyr::distinct()
 
 
@@ -70,16 +70,6 @@ add_activity_after_death_flag <- function(
         na.rm = TRUE
       ) * 1
     ))
-
-
-  # Check and print error message for records which already are TRUE for the deceased variable in the episode file, but this doesn't match the
-  # BOXI deceased variable
-  check_deceased_match <- flag_data %>%
-    dplyr::filter(.data$deceased != .data$deceased_boxi)
-
-  if (nrow(check_deceased_match) != 0) {
-    warning("There were records in the episode file which have a deceased variable which does not match the BOXI NRS deceased variable")
-  }
 
 
   # Fill in date of death if missing in the episode file but available in BOXI lookup, due to historic dates of death not being carried
