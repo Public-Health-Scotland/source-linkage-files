@@ -368,7 +368,6 @@ process_sc_all_care_home <- function(
 
 
   ch_data_final <- adm_reason_recoded %>%
-    create_person_id() %>%
     dplyr::rename(
       record_keydate1 = "ch_admission_date",
       record_keydate2 = "ch_discharge_date",
