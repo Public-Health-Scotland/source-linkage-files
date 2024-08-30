@@ -84,13 +84,15 @@ add_activity_after_death_flag <- function(
   final_data <- data %>%
     dplyr::left_join(
       flag_data,
+      # TODO: this join_by is not 100% accurate. Consider use ep_file_row_id to join
       by = c("year", "chi", "record_keydate1", "record_keydate2"),
       na_matches = "never"
     ) %>%
     dplyr::mutate(death_date = lubridate::as_date(ifelse(is.na(death_date) & !(is.na(death_date_boxi)),
       death_date_boxi, death_date
     ))) %>%
-    dplyr::select(-death_date_boxi)
+    dplyr::select(-death_date_boxi) %>%
+    dplyr::distinct(ep_file_row_id, .keep_all = TRUE)
 
 
 
