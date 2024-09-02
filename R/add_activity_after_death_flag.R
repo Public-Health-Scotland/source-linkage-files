@@ -92,7 +92,7 @@ add_activity_after_death_flag <- function(
       death_date_boxi, death_date
     ))) %>%
     dplyr::select(-death_date_boxi) %>%
-    dplyr::distinct(ep_file_row_id, .keep_all = TRUE)
+    dplyr::distinct()
 
 
 
