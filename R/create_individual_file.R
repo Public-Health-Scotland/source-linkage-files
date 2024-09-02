@@ -78,7 +78,7 @@ create_individual_file <- function(
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
-      aggregate_by_chi(exclude_sc_var = TRUE)
+      aggregate_by_chi(year = year, exclude_sc_var = TRUE)
   } else {
     individual_file <- individual_file %>%
       aggregate_ch_episodes() %>%
