@@ -37,7 +37,7 @@ process_sc_all_home_care <- function(
   # Match on demographic data ---------------------------------------
 
   matched_hc_data <- replaced_dates %>%
-    dplyr::left_join(
+    dplyr::right_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%

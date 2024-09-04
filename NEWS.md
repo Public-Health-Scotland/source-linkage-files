@@ -7,6 +7,10 @@
 * New cup marker for Acute and GP OOH
 * Bug fix:
     * person id for SDS and client
+    * DD data: 
+      * The variable `cij_delay` is only attached to the `recid = DD` rows, not all the rows in the CIJ as we'd expect.
+      * The `cij_delay` variable is showing as 1 against the Delay records (NA otherwise) - We expect this to be `TRUE/FALSE` to match the other flags.
+      * The `cij_ppa` variable isn't attaching to the `recid = DD` rows.
 
 # June 2024 Update - released 06-Jun-24
 * Update of 2017/18 onwards to include bug fixes within the files.
