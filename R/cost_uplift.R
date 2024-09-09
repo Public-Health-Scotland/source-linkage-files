@@ -86,3 +86,21 @@ lookup_uplift <- function(data) {
 
   return(data)
 }
+
+#' The latest financial year for Cost uplift setting
+#'
+#' @description Get the latest year for cost uplift
+#' latest_cost_year() is hard coded in cost_uplift().
+#' 2223 is not changed automatically with time passes.
+#' It is changed only when we get a new instruction from somewhere about cost uplift.
+#' Do not change unless specific instructions.
+#' Changing this means that we need to change cost_uplift().
+#'
+#' @return The financial year format
+#'
+#' @export
+#'
+#' @family initialisation
+latest_cost_year <- function() {
+  "2223"
+}

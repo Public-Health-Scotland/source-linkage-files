@@ -96,7 +96,7 @@ process_extract_home_care <- function(
       "cost_total_net",
       "hc_provider",
       "hc_reablement",
-      "person_id"
+      # "person_id"
     ) %>%
     slfhelper::get_anon_chi()
 

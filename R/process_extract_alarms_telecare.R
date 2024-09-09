@@ -41,7 +41,7 @@ process_extract_alarms_telecare <- function(
       "smrtype",
       "chi",
       "dob",
-      "person_id",
+      # "person_id",
       "gender",
       "postcode",
       "sc_send_lca",
