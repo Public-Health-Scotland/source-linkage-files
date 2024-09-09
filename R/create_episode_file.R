@@ -183,7 +183,8 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         ccm = NA,
-        total_no_dn_contacts = NA)
+        total_no_dn_contacts = NA
+      )
   }
 
   if (anon_chi_out) {
