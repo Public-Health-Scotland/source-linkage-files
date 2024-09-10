@@ -177,7 +177,20 @@ create_episode_file <- function(
         sc_meals = NA,
         sc_day_care = NA,
         social_care_id = NA,
-        count_not_known = NA
+        count_not_known = NA,
+        sc_dementia = NA,
+        sc_learning_disability = NA,
+        sc_mental_health_disorders = NA,
+        sc_physical_and_sensory_disability = NA,
+        sc_drugs = NA,
+        sc_alcohol = NA,
+        sc_palliative_care = NA,
+        sc_carer = NA,
+        sc_elderly_frail = NA,
+        sc_neurological_condition = NA,
+        sc_autism = NA,
+        sc_other_vulnerable_groups = NA,
+        ch_provider_description = NA
       )
   }
 
@@ -214,7 +227,7 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         ccm = NA,
-        totalnodncontacts = NA
+        total_no_dn_contacts = NA
       )
   }
 
