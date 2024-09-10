@@ -374,7 +374,7 @@ link_delayed_discharge_eps <- function(
       delay_dd,
       cij_delay
     )) %>%
-    dplyr::select(-c("has_dd", "delay_dd"))
+    dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
 
   return(linked_data)
 }
