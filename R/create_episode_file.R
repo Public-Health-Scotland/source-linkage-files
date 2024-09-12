@@ -177,7 +177,6 @@ create_episode_file <- function(
         sc_meals = NA,
         sc_day_care = NA,
         social_care_id = NA,
-        count_not_known = NA,
         sc_dementia = NA,
         sc_learning_disability = NA,
         sc_mental_health_disorders = NA,
