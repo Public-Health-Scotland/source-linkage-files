@@ -91,7 +91,7 @@ add_activity_after_death_flag <- function(
     dplyr::mutate(death_date = lubridate::as_date(ifelse(is.na(death_date) & !(is.na(death_date_boxi)),
       death_date_boxi, death_date
     ))) %>%
-    dplyr::select(-death_date_boxi) %>%
+    dplyr::select(-death_date_boxi, -fy) %>%
     dplyr::distinct()
 
 
