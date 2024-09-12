@@ -195,7 +195,7 @@ process_lookup_sc_client <-
       ) %>%
       dplyr::arrange(.data$chi, .data$count_not_known) %>%
       dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
-      dplyr::select(-.data$sending_location) %>%
+      dplyr::select(-.data$sending_location, -.data$count_not_known) %>%
       slfhelper::get_anon_chi()
 
     if (write_to_disk) {
