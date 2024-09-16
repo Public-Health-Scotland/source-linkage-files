@@ -64,19 +64,6 @@ get_dd_period <- function() {
   "Jul16_Jun24"
 }
 
-#' The latest financial year for Cost uplift setting
-#'
-#' @description Get the latest year for cost uplift
-#'
-#' @return The financial year format
-#'
-#' @export
-#'
-#' @family initialisation
-latest_cost_year <- function() {
-  "2324"
-}
-
 #' The year list for slf to update
 #'
 #' @description Get the vector of years to update slf

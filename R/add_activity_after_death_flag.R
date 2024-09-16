@@ -26,7 +26,7 @@ add_activity_after_death_flag <- function(
       by = "chi",
       suffix = c("", "_boxi")
     ) %>%
-    dplyr::filter(.data$deceased == TRUE | .data$deceased_boxi == TRUE) %>%
+    dplyr::filter(.data$deceased == TRUE) %>%
     dplyr::distinct()
 
 
@@ -72,16 +72,6 @@ add_activity_after_death_flag <- function(
     ))
 
 
-  # Check and print error message for records which already are TRUE for the deceased variable in the episode file, but this doesn't match the
-  # BOXI deceased variable
-  check_deceased_match <- flag_data %>%
-    dplyr::filter(.data$deceased != .data$deceased_boxi)
-
-  if (nrow(check_deceased_match) != 0) {
-    warning("There were records in the episode file which have a deceased variable which does not match the BOXI NRS deceased variable")
-  }
-
-
   # Fill in date of death if missing in the episode file but available in BOXI lookup, due to historic dates of death not being carried
   # over from previous financial years
   flag_data <- flag_data %>%
@@ -94,13 +84,15 @@ add_activity_after_death_flag <- function(
   final_data <- data %>%
     dplyr::left_join(
       flag_data,
+      # TODO: this join_by is not 100% accurate. Consider use ep_file_row_id to join
       by = c("year", "chi", "record_keydate1", "record_keydate2"),
       na_matches = "never"
     ) %>%
     dplyr::mutate(death_date = lubridate::as_date(ifelse(is.na(death_date) & !(is.na(death_date_boxi)),
       death_date_boxi, death_date
     ))) %>%
-    dplyr::select(-death_date_boxi)
+    dplyr::select(-death_date_boxi) %>%
+    dplyr::distinct()
 
 
 

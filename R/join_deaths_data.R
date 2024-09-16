@@ -15,7 +15,8 @@ join_deaths_data <- function(
   return(
     data %>%
       dplyr::left_join(
-        slf_deaths_lookup,
+        slf_deaths_lookup %>%
+          dplyr::distinct(chi, .keep_all = TRUE),
         by = "chi",
         na_matches = "never",
         relationship = "many-to-one"

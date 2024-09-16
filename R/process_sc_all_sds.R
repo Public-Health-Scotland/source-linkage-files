@@ -128,11 +128,11 @@ process_sc_all_sds <- function(
       "SDS",
       convert_sc_sending_location_to_lca(sending_location)
     )]
-  sds_full_clean_long$person_id <- paste0(
-    sds_full_clean_long$sending_location,
-    "-",
-    sds_full_clean_long$social_care_id
-  )
+  # sds_full_clean_long$person_id <- paste0(
+  #   sds_full_clean_long$sending_location,
+  #   "-",
+  #   sds_full_clean_long$social_care_id
+  # )
 
   # Group, arrange and create flags for episodes
   sds_full_clean_long[,
@@ -176,7 +176,7 @@ process_sc_all_sds <- function(
     dob = data.table::last(dob),
     postcode = data.table::last(postcode),
     recid = data.table::last(recid),
-    person_id = data.table::last(person_id),
+    # person_id = data.table::last(person_id),
     sc_send_lca = data.table::last(sc_send_lca)
   ), by = list(sending_location, social_care_id, smrtype, episode_counter)]
   rm(sds_full_clean_long)

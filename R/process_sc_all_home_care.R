@@ -194,8 +194,6 @@ process_sc_all_home_care <- function(
         TRUE ~ "HC-Unknown"
       )
     ) %>%
-    # person_id
-    create_person_id(type = "SC") %>%
     # compute lca variable from sending_location
     dplyr::mutate(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)

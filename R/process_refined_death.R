@@ -50,11 +50,12 @@ process_refined_death <- function(
       fy = phsmethods::extract_fin_year(death_date),
       fy = as.character(paste0(substr(fy, 3, 4), substr(fy, 6, 7)))
     )
+  # TODO: check distinct death data by chi while keeping chi==NA records
 
   if (write_to_disk) {
     write_file(
       refined_death,
-      get_combined_slf_deaths_lookup_path()
+      get_combined_slf_deaths_lookup_path(create = TRUE)
     )
   }
 
