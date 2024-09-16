@@ -132,7 +132,20 @@ create_individual_file <- function(
         sc_type_of_housing = NA,
         count_not_known = NA,
         sc_latest_submission = NA,
-        social_care_id = NA
+        social_care_id = NA,
+        person_id = NA,
+        sc_alcohol = NA,
+        sc_autism = NA,
+        sc_carer = NA,
+        sc_dementia = NA,
+        sc_drugs = NA,
+        sc_elderly_frail = NA,
+        sc_learning_disability = NA,
+        sc_mental_health_disorders = NA,
+        sc_neurological_condition = NA,
+        sc_other_vulnerable_groups = NA,
+        sc_palliative_care = NA,
+        sc_physical_and_sensory_disability = NA
       )
   }
 
