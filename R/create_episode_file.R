@@ -237,6 +237,14 @@ create_episode_file <- function(
       )
   }
 
+  if (!check_year_valid(year, type = "dn")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        ccm = NA,
+        total_no_dn_contacts = NA
+      )
+  }
+
   if (anon_chi_out) {
     episode_file <- slfhelper::get_anon_chi(episode_file)
   }
