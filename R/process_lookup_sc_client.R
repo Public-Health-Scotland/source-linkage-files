@@ -20,6 +20,11 @@ process_lookup_sc_client <-
              slfhelper::get_chi() %>%
              dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
            write_to_disk = TRUE) {
+    # Specify years available for running
+    if (year < "1718") {
+      return(NULL)
+    }
+
     # Match to demographics lookup to get CHI
     sc_client_demographics <- data %>%
       dplyr::right_join(

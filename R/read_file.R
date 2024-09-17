@@ -24,7 +24,7 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
 
   # Return an empty tibble if trying to read the dummy path
   if (path == get_dummy_boxi_extract_path()) {
-    return(tibble::tibble())
+    return(tibble::tibble(anon_chi = NA_character_))
   }
 
   ext <- fs::path_ext(path)

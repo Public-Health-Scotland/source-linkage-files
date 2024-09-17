@@ -175,7 +175,65 @@ create_episode_file <- function(
         sc_social_worker = NA,
         sc_type_of_housing = NA,
         sc_meals = NA,
-        sc_day_care = NA
+        sc_day_care = NA,
+        social_care_id = NA,
+        sc_dementia = NA,
+        sc_learning_disability = NA,
+        sc_mental_health_disorders = NA,
+        sc_physical_and_sensory_disability = NA,
+        sc_drugs = NA,
+        sc_alcohol = NA,
+        sc_palliative_care = NA,
+        sc_carer = NA,
+        sc_elderly_frail = NA,
+        sc_neurological_condition = NA,
+        sc_autism = NA,
+        sc_other_vulnerable_groups = NA,
+        ch_provider_description = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "homelessness")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        hl1_12_months_post_app = NA,
+        hl1_12_months_pre_app = NA,
+        hl1_6after_ep = NA,
+        hl1_6before_ep = NA,
+        hl1_application_ref = NA,
+        hl1_completeness = NA,
+        hl1_during_ep = NA,
+        hl1_in_fy = NA,
+        hl1_property_type = NA,
+        hl1_reason_ftm = NA,
+        hl1_sending_lca = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "dd")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        cij_delay = NA,
+        dd_quality = NA,
+        dd_responsible_lca = NA,
+        delay_end_reason = NA,
+        primary_delay_reason = NA,
+        secondary_delay_reason = NA,
+      )
+  }
+
+  if (!check_year_valid(year, type = "dn")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        ccm = NA,
+        total_no_dn_contacts = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "cost_dna")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        cost_total_net_inc_dnas = NA
       )
   }
 
@@ -470,6 +528,11 @@ join_sc_client <- function(data,
                            sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
                            file_type = c("episode", "individual")) {
   cli::cli_alert_info("Join social care client function started at {Sys.time()}")
+
+  if (!check_year_valid(year, type = "client")) {
+    data_file <- data
+    return(data_file)
+  }
 
   if (file_type == "episode") {
     # Match on client variables by chi

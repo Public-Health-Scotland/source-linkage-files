@@ -121,6 +121,14 @@ write_tests_xlsx <- function(comparison_data,
 
   date_today <- stringr::str_to_lower(date_today)
 
+  sheet_name_dated <- ifelse(
+    is.null(year),
+    stringr::str_glue("{sheet_name}_{date_today}"),
+    stringr::str_glue("{year}_{sheet_name}_{date_today}")
+  )
+
+  date_today <- stringr::str_to_lower(date_today)
+
   if (is.null(year)) {
     sheet_name_dated <- stringr::str_glue("{sheet_name}_{date_today}")
   } else {
