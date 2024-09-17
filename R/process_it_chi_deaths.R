@@ -17,10 +17,9 @@ process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
       dplyr::desc(.data$death_date_chi)
     ) %>%
     dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
-    # Use the NRS death_date unless it isn't there
-    dplyr::mutate(
-      death_date = dplyr::coalesce(.data$death_date_nrs, .data$death_date_chi)
-    ) %>%
+    # remove death_date_nrs as this is the nrs weekly unvalidated data and we should not use this.
+    # the boxi nrs death date is more reliable as this is provided monthly and is validated.
+    dplyr::select(.data$chi, .data$death_date_chi) %>%
     slfhelper::get_anon_chi()
 
   if (write_to_disk) {

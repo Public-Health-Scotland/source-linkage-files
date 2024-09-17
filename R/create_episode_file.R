@@ -141,7 +141,7 @@ create_episode_file <- function(
       slf_deaths_lookup
     ) %>%
     add_activity_after_death_flag(year,
-      deaths_data = read_file(get_all_slf_deaths_lookup_path()) %>%
+      deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
         slfhelper::get_chi()
     ) %>%
     load_ep_file_vars(year)
@@ -175,7 +175,73 @@ create_episode_file <- function(
         sc_social_worker = NA,
         sc_type_of_housing = NA,
         sc_meals = NA,
-        sc_day_care = NA
+        sc_day_care = NA,
+        social_care_id = NA,
+        sc_dementia = NA,
+        sc_learning_disability = NA,
+        sc_mental_health_disorders = NA,
+        sc_physical_and_sensory_disability = NA,
+        sc_drugs = NA,
+        sc_alcohol = NA,
+        sc_palliative_care = NA,
+        sc_carer = NA,
+        sc_elderly_frail = NA,
+        sc_neurological_condition = NA,
+        sc_autism = NA,
+        sc_other_vulnerable_groups = NA,
+        ch_provider_description = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "homelessness")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        hl1_12_months_post_app = NA,
+        hl1_12_months_pre_app = NA,
+        hl1_6after_ep = NA,
+        hl1_6before_ep = NA,
+        hl1_application_ref = NA,
+        hl1_completeness = NA,
+        hl1_during_ep = NA,
+        hl1_in_fy = NA,
+        hl1_property_type = NA,
+        hl1_reason_ftm = NA,
+        hl1_sending_lca = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "dd")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        cij_delay = NA,
+        dd_quality = NA,
+        dd_responsible_lca = NA,
+        delay_end_reason = NA,
+        primary_delay_reason = NA,
+        secondary_delay_reason = NA,
+      )
+  }
+
+  if (!check_year_valid(year, type = "dn")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        ccm = NA,
+        total_no_dn_contacts = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "cost_dna")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        cost_total_net_inc_dnas = NA
+      )
+  }
+
+  if (!check_year_valid(year, type = "dn")) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        ccm = NA,
+        total_no_dn_contacts = NA
       )
   }
 
@@ -199,6 +265,8 @@ create_episode_file <- function(
 #'
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
+  cli::cli_alert_info("Store episode file variables function started at {Sys.time()}")
+
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
@@ -236,6 +304,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #'
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
+  cli::cli_alert_info("Load episode file variable function started at {Sys.time()}")
+
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
@@ -263,6 +333,8 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
+  cli::cli_alert_info("Fill missing cij markers function started at {Sys.time()}")
+
   fixable_data <- data %>%
     dplyr::filter(
       .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["chi"]])
@@ -317,6 +389,8 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
+  cli::cli_alert_info("Correct cij variables function started at {Sys.time()}")
+
   check_variables_exist(
     data,
     c("chi", "recid", "cij_admtype", "cij_pattype_code")
@@ -358,6 +432,8 @@ correct_cij_vars <- function(data) {
 #'
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
+  cli::cli_alert_info("Create cost inc dna function started at {Sys.time()}")
+
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
 
   # Create cost including DNAs and modify costs
@@ -382,6 +458,8 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
+  cli::cli_alert_info("Create cohort lookups function started at {Sys.time()}")
+
   create_demographic_cohorts(
     data,
     year,
@@ -421,6 +499,8 @@ join_cohort_lookups <- function(
       col_select = c("anon_chi", "service_use_cohort")
     ) %>%
       slfhelper::get_chi()) {
+  cli::cli_alert_info("Join cohort lookups function started at {Sys.time()}")
+
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
@@ -447,6 +527,13 @@ join_sc_client <- function(data,
                            year,
                            sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
                            file_type = c("episode", "individual")) {
+  cli::cli_alert_info("Join social care client function started at {Sys.time()}")
+
+  if (!check_year_valid(year, type = "client")) {
+    data_file <- data
+    return(data_file)
+  }
+
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%

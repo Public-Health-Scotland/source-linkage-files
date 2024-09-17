@@ -12,6 +12,14 @@ link_delayed_discharge_eps <- function(
     episode_file,
     year,
     dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()) {
+  cli::cli_alert_info("Link delayed discharge to episode file function started at {Sys.time()}")
+
+  if (!check_year_valid(year, type = "dd")) {
+    episode_file <- episode_file
+    return(episode_file)
+  }
+
+  names_ep <- names(episode_file)
   episode_file <- episode_file %>%
     dplyr::mutate(
       # remember to revoke the cij_end_date with dummy_cij_end
@@ -284,6 +292,11 @@ link_delayed_discharge_eps <- function(
     )) %>%
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
+    dplyr::mutate(cij_delay = dplyr::if_else(cij_delay == "0",
+      FALSE,
+      TRUE,
+      missing = NA
+    )) %>%
     dplyr::ungroup() %>%
     # add yearstay and monthly beddays
     # count_last = TRUE because DD counts last day and not the first
@@ -297,37 +310,43 @@ link_delayed_discharge_eps <- function(
       yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays")))
     ) %>%
     # tidy up and rename columns to match the format of episode files
+    # keep variables from ep files
     dplyr::select(
+      -c(
+        "ep_file_row_id",
+        "year",
+        "recid",
+        "record_keydate1",
+        "record_keydate2",
+        "postcode",
+        "hbtreatcode",
+        "location",
+        "spec",
+        ## following are dummy variables
+        "cij_start_date_lower",
+        "cij_end_date_upper",
+        "cij_end_month",
+        "is_dummy_cij_start",
+        "dummy_cij_start",
+        "is_dummy_cij_end",
+        "dummy_cij_end",
+        "datediff_start",
+        "datediff_end",
+        "has_delay",
+        "is_dummy_keydate2",
+        "dummy_keydate2",
+        "dummy_id"
+      )
+    ) %>%
+    dplyr::rename(
       "year" = "year_dd",
       "recid" = "recid_dd",
       "record_keydate1" = "record_keydate1_dd",
       "record_keydate2" = "record_keydate2_dd",
-      "smrtype",
-      "chi",
-      "gender",
-      "dob",
-      "age",
-      "gpprac",
       "postcode" = "postcode_dd",
-      "dd_responsible_lca",
       "hbtreatcode" = "hbtreatcode_dd",
-      "delay_end_reason",
-      "primary_delay_reason",
-      "secondary_delay_reason",
-      "cij_marker",
-      "cij_start_date",
-      "cij_end_date",
-      "cij_pattype_code",
-      "cij_ipdc",
-      "cij_admtype",
-      "cij_adm_spec",
-      "cij_dis_spec",
-      "cij_delay",
-      "location",
       "spec" = "spec_dd",
-      "dd_quality",
-      dplyr::ends_with("_beddays"),
-      "yearstay"
+      "location" = "location_dd"
     ) %>%
     # Combine DD with episode data
     dplyr::bind_rows(
@@ -343,7 +362,19 @@ link_delayed_discharge_eps <- function(
             "dummy_cij_end"
           )
         )
-    )
+    ) %>%
+    # populate cij_delay dd details back to ep
+    dplyr::group_by(chi, cij_marker) %>%
+    dplyr::mutate(
+      has_dd = any(recid == "DD"),
+      delay_dd = any(cij_delay)
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(cij_delay = dplyr::if_else(has_dd,
+      delay_dd,
+      cij_delay
+    )) %>%
+    dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
 
   return(linked_data)
 }

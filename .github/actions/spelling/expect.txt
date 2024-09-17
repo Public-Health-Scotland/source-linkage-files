@@ -6,6 +6,7 @@ admtype
 ADPE
 adtf
 alstr
+anomymous
 arrivalmode
 arth
 atlassian
@@ -40,6 +41,7 @@ CNWs
 codecov
 Comhairle
 commhosp
+communicty
 congen
 copd
 costinc
@@ -53,6 +55,7 @@ customise
 cvd
 dataframe
 datamart
+datas
 datazone
 datediff
 dateformat
@@ -169,8 +172,8 @@ lubridate
 magrittr
 markdownguide
 Matern
-Mcbride
-mcmahon
+mcnicol
+megan
 microsoft
 MIU
 MMMYY
@@ -203,6 +206,7 @@ parkinsons
 patflow
 pattype
 PCEC
+pcs
 PERTH
 PHIBCS
 phs
@@ -215,6 +219,7 @@ PLICS
 popluation
 Posix
 postcodes
+Postcodesio
 PPAs
 prac
 praccode
@@ -222,6 +227,7 @@ ptypes
 purrr
 quickstart
 rankdir
+rbindlist
 rcmdcheck
 rdd
 rdname
@@ -232,13 +238,13 @@ readr
 readxl
 reasonwait
 recid
+recordlinkage
 refailure
 reflectoring
 refsource
 reftype
 relaint
 renviron
-returnsthe
 rlang
 rmarkdown
 Rnw

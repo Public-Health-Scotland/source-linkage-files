@@ -1,36 +1,29 @@
 #' Create the SLF Deaths lookup
 #'
-#' @description Currently this just uses the NRS death dates 'as is', with no
-#' corrections or modifications, it is expected that this will be expanded to
-#' use the CHI deaths extract from IT as well as taking into account data in
-#' the episode file to assess the validity of a death date.
+#' @description Use all-year refined death data to produce year-specific
+#' slf_deaths_lookup with deceased flag added.
 #'
 #' @param year The year to process, in FY format.
-#' @param nrs_deaths_data NRS deaths data.
-#' @param chi_deaths_data IT CHI deaths data.
+#' @param refined_death refined death date combining nrs and it_chi.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
-#' @return a [tibble][tibble::tibble-package] containing the episode file
+#' @return a [tibble][tibble::tibble-package] add deceased flag to deaths
 #' @export
 process_slf_deaths_lookup <- function(
     year,
-    nrs_deaths_data = read_file(
-      get_source_extract_path(year, "deaths"),
-      col_select = c("chi", "record_keydate1")
-    ),
-    chi_deaths_data = read_file(get_slf_chi_deaths_path()),
+    refined_death = read_file(get_combined_slf_deaths_lookup_path()),
     write_to_disk = TRUE) {
-  slf_deaths_lookup <- nrs_deaths_data %>%
-    # Only modification over 'raw' NRS is to keep the earliest death date
-    dplyr::select("chi", "record_keydate1") %>%
-    dplyr::arrange(.data$record_keydate1) %>%
-    dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
+  # create slf deaths lookup
+  slf_deaths_lookup <- refined_death %>%
+    slfhelper::get_chi() %>%
+    # Filter the chi death dates to the FY as the lookup is by FY
+    dplyr::filter(fy == year) %>%
+    # use the BOXI NRS death date by default, but if it's missing, use the chi death date.
     dplyr::mutate(
-      death_date = .data$record_keydate1,
-      deceased = TRUE,
-      .keep = "unused"
+      deceased = TRUE
     ) %>%
+    # save anon chi on disk
     slfhelper::get_anon_chi()
 
   if (write_to_disk) {

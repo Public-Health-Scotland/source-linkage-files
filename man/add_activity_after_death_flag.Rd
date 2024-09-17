@@ -7,7 +7,8 @@
 add_activity_after_death_flag(
   data,
   year,
-  deaths_data = read_file(get_all_slf_deaths_lookup_path()) \%>\% slfhelper::get_chi()
+  deaths_data = read_file(get_combined_slf_deaths_lookup_path()) \%>\%
+    slfhelper::get_chi()
 )
 }
 \arguments{

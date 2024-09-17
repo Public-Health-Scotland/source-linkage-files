@@ -24,17 +24,42 @@ write_tests_xlsx <- function(comparison_data,
                                "cross_year"
                              )) {
   # Set up the workbook ----
-  tests_workbook_name <- dplyr::case_when(
-    is.null(year) & workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_ep_file_tests"),
-    !is.null(year) & workbook_name == "ep_file" ~ stringr::str_glue(latest_update(), "_{year}_ep_file_tests"),
-    is.null(year) & workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_indiv_file_tests"),
-    !is.null(year) & workbook_name == "indiv_file" ~ stringr::str_glue(latest_update(), "_{year}_indiv_file_tests"),
-    is.null(year) & workbook_name == "lookup" ~ stringr::str_glue(latest_update(), "_lookups_tests"),
-    is.null(year) & workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests"),
-    is.null(year) & workbook_name == "cross_year" ~ stringr::str_glue(latest_update(), "_cross_year_tests"),
-    !is.null(year) & workbook_name == "sandpit" ~ stringr::str_glue(latest_update(), "_sandpit_extract_tests"),
-    !is.null(year) & workbook_name == "extract" ~ stringr::str_glue(latest_update(), "_{year}_extract_tests")
-  )
+  if (workbook_name == "ep_file") {
+    if (is.null(year)) {
+      tests_workbook_name <-
+        stringr::str_glue(latest_update(), "_ep_file_tests")
+    }
+  }
+  if (workbook_name == "indiv_file") {
+    if (is.null(year)) {
+      tests_workbook_name <-
+        stringr::str_glue(latest_update(), "_indiv_file_tests")
+    }
+  }
+  if (workbook_name == "lookup") {
+    if (is.null(year)) {
+      tests_workbook_name <-
+        stringr::str_glue(latest_update(), "_lookups_tests")
+    }
+  }
+  if (workbook_name == "sandpit") {
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_sandpit_extract_tests")
+  }
+  if (workbook_name == "cross_year") {
+    if (is.null(year)) {
+      tests_workbook_name <-
+        stringr::str_glue(latest_update(), "_cross_year_tests")
+    }
+  }
+  if (workbook_name == "extract") {
+    if (is.null(year)) {
+    } else {
+      tests_workbook_name <-
+        stringr::str_glue(latest_update(), "_{year}_extract_tests")
+    }
+  }
+
 
   tests_workbook_path <- fs::path(
     get_slf_dir(),
@@ -93,6 +118,14 @@ write_tests_xlsx <- function(comparison_data,
 
   # add a new sheet for tests
   date_today <- format(Sys.Date(), "%d_%b")
+
+  date_today <- stringr::str_to_lower(date_today)
+
+  sheet_name_dated <- ifelse(
+    is.null(year),
+    stringr::str_glue("{sheet_name}_{date_today}"),
+    stringr::str_glue("{year}_{sheet_name}_{date_today}")
+  )
 
   date_today <- stringr::str_to_lower(date_today)
 

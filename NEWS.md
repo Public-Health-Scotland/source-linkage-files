@@ -1,4 +1,18 @@
-# June 2024 Update - Unreleased
+# September 2024 Update - Unreleased 
+* New 24/25 files created
+* New NSU cohort for 23/24 available
+* New SPARRA scores calculated from April 24/25
+* Death dates attached to activity after death flag 
+* Care home methodology updated
+* New cup marker for Acute and GP OOH
+* Bug fix:
+    * person id for SDS and client
+    * DD data: 
+      * The variable `cij_delay` is only attached to the `recid = DD` rows, not all the rows in the CIJ as we'd expect.
+      * The `cij_delay` variable is showing as 1 against the Delay records (NA otherwise) - We expect this to be `TRUE/FALSE` to match the other flags.
+      * The `cij_ppa` variable isn't attaching to the `recid = DD` rows.
+
+# June 2024 Update - released 06-Jun-24
 * Update of 2017/18 onwards to include bug fixes within the files.
 * Removal of extra variable caused by the LTCs not matching properly.
 * New NRS mid-2022 population estimates.

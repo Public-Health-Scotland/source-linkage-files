@@ -4,7 +4,12 @@
 \alias{process_extract_gp_ooh}
 \title{Process the GP OoH extract}
 \usage{
-process_extract_gp_ooh(year, data_list, write_to_disk = TRUE)
+process_extract_gp_ooh(
+  year,
+  data_list,
+  gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
@@ -48,6 +53,7 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_refined_death}()},
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},

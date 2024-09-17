@@ -16,12 +16,14 @@ get_boxi_extract_path <- function(
       "ae",
       "ae_cup",
       "acute",
+      "acute_cup",
       "cmh",
       "deaths",
       "dn",
       "gp_ooh-c",
       "gp_ooh-d",
       "gp_ooh-o",
+      "gp_ooh_cup",
       "homelessness",
       "maternity",
       "mh",
@@ -44,11 +46,13 @@ get_boxi_extract_path <- function(
     "ae" ~ "anon-A&E-episode-level-extract",
     "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
     "acute" ~ "anon-Acute-episode-level-extract",
+    "acute_cup" ~ "anon-Acute-CUP-extract",
     "cmh" ~ "anon-Community-MH-contact-level-extract",
     "dn" ~ "anon-District-Nursing-contact-level-extract",
     "gp_ooh-c" ~ "anon-GP-OoH-consultations-extract",
     "gp_ooh-d" ~ "anon-GP-OoH-diagnosis-extract",
     "gp_ooh-o" ~ "anon-GP-OoH-outcomes-extract",
+    "gp_ooh_cup" ~ "anon-GP-OoH-CUP-extract",
     "homelessness" ~ "anon-Homelessness-extract",
     "maternity" ~ "anon-Maternity-episode-level-extract",
     "mh" ~ "anon-Mental-Health-episode-level-extract",
@@ -82,9 +86,11 @@ get_boxi_extract_path <- function(
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 get_dummy_boxi_extract_path <- function() {
-  get_file_path(
+  dummy_path <- get_file_path(
     directory = get_dev_dir(),
     file_name = ".dummy",
     create = TRUE
   )
+
+  return(dummy_path)
 }

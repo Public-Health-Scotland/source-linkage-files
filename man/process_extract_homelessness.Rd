@@ -62,6 +62,7 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_refined_death}()},
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},

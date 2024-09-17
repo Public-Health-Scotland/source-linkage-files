@@ -4,7 +4,12 @@
 \alias{process_extract_acute}
 \title{Process the Acute extract}
 \usage{
-process_extract_acute(data, year, write_to_disk = TRUE)
+process_extract_acute(
+  data,
+  year,
+  acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{data}{The extract to process}
@@ -48,6 +53,7 @@ Other process extracts:
 \code{\link{process_lookup_postcode}()},
 \code{\link{process_lookup_sc_client}()},
 \code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_refined_death}()},
 \code{\link{process_sc_all_alarms_telecare}()},
 \code{\link{process_sc_all_care_home}()},
 \code{\link{process_sc_all_home_care}()},
