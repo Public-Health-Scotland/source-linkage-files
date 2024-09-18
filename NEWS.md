@@ -1,4 +1,4 @@
-# September 2024 Update - Unreleased 
+# September 2024 Update - released 13-Sep-24
 * New 24/25 files created
 * New NSU cohort for 23/24 available
 * New SPARRA scores calculated from April 24/25
