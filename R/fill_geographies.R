@@ -189,7 +189,6 @@ fill_gpprac_geographies <- function(
 #'
 #' @return data with matched HSCP and LCA codes
 cascade_geographies <- function(data) {
-  # TODO rework this function into a series of smaller functions which operate on vectors
   # e.g. cascade_hscp_lca <- function(hscp, lca) {...}
   # Would take HSCP and populate any missing LCA using it
   data <- data %>%
