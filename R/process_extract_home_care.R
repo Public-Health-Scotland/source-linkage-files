@@ -95,8 +95,7 @@ process_extract_home_care <- function(
       tidyselect::starts_with("hc_cost_"),
       "cost_total_net",
       "hc_provider",
-      "hc_reablement",
-      # "person_id"
+      "hc_reablement"
     ) %>%
     slfhelper::get_anon_chi()
 

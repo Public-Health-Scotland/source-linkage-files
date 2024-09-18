@@ -87,11 +87,6 @@ process_sc_all_alarms_telecare <- function(
   # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
   data <- replace_sc_id_with_latest(data)
 
-  # data$person_id <- paste0(
-  #   data$sending_location,
-  #   "-",
-  #   data$social_care_id
-  # )
 
   # Deal with episodes that have a package across quarters
   data[, pkg_count := seq_len(.N), by = list(
@@ -125,7 +120,6 @@ process_sc_all_alarms_telecare <- function(
     dob = data.table::last(dob),
     postcode = data.table::last(postcode),
     recid = data.table::last(recid),
-    # person_id = data.table::last(person_id),
     sc_send_lca = data.table::last(sc_send_lca)
   ), by = list(
     sending_location,
