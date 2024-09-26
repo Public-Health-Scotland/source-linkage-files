@@ -22,6 +22,7 @@ tar_option_set(
 years_to_run <- createslf::years_to_run()
 
 list(
+  tar_rds(test_mode, TRUE),
   tar_rds(write_to_disk, TRUE),
   tar_rds(
     file_path_ext_clean,

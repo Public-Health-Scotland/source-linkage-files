@@ -17,7 +17,8 @@ create_individual_file <- function(
     homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
-    anon_chi_out = TRUE) {
+    anon_chi_out = TRUE,
+    test_mode = TRUE) {
   if (anon_chi_in) {
     episode_file <- slfhelper::get_chi(
       episode_file,
@@ -74,7 +75,8 @@ create_individual_file <- function(
     ))) %>%
     remove_blank_chi() %>%
     add_cij_columns() %>%
-    add_all_columns(year = year)
+    add_all_columns(year = year) %>%
+    write_temp_data(data, year, file_name = "indiv_temp1", test_mode)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
@@ -90,14 +92,17 @@ create_individual_file <- function(
     recode_gender() %>%
     clean_individual_file(year) %>%
     join_cohort_lookups(year) %>%
+    write_temp_data(data, year, file_name = "indiv_temp2", test_mode) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
+    write_temp_data(data, year, file_name = "indiv_temp3", test_mode) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
     add_hri_variables(chi_variable = "chi") %>%
     add_keep_population_flag(year) %>%
+    write_temp_data(data, year, file_name = "indiv_temp4", test_mode) %>%
     join_sc_client(year, file_type = "individual")
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
