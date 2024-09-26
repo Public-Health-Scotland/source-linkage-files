@@ -4,7 +4,7 @@
 \alias{write_temp_data}
 \title{Write a temp data to disk in parquet format for debugging purpose}
 \usage{
-write_temp_data(data, year, file_name, test_mode = TRUE)
+write_temp_data(data, year, file_name, test_mode)
 }
 \arguments{
 \item{data}{The data to be written}

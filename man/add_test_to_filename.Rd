@@ -2,9 +2,9 @@
 % Please edit documentation in R/write_temp_data.R
 \name{add_test_to_filename}
 \alias{add_test_to_filename}
-\title{Add "TEST-" to the Filename of a File Path}
+\title{Add "TEST-" to the file name of a file Path}
 \usage{
-add_test_to_filename(file_path, test_mode = TRUE)
+add_test_to_filename(file_path, test_mode)
 }
 \arguments{
 \item{file_path}{A character string representing the full path to a file (e.g., "/path/to/folder/data.csv").}
