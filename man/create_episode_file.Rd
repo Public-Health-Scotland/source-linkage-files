@@ -18,7 +18,8 @@ create_episode_file(
     slfhelper::get_chi(),
   sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_chi(),
   write_to_disk = TRUE,
-  anon_chi_out = TRUE
+  anon_chi_out = TRUE,
+  test_mode = TRUE
 )
 }
 \arguments{

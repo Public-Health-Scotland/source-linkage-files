@@ -10,7 +10,8 @@ create_individual_file(
   homelessness_lookup = create_homelessness_lookup(year),
   write_to_disk = TRUE,
   anon_chi_in = TRUE,
-  anon_chi_out = TRUE
+  anon_chi_out = TRUE,
+  test_mode = TRUE
 )
 }
 \arguments{
