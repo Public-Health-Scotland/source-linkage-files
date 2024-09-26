@@ -9,7 +9,7 @@
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
 write_temp_data <-
-  function(data, year, file_name, test_mode = TRUE) {
+  function(data, year, file_name, test_mode) {
     full_file_name <- stringr::str_glue("{file_name}.parquet")
     file_path <- file.path(get_year_dir(year),
                            full_file_name) %>%
@@ -24,7 +24,7 @@ write_temp_data <-
   }
 
 
-#' Add "TEST-" to the Filename of a File Path
+#' Add "TEST-" to the file name of a file Path
 #'
 #' @description This function takes a full file path and adds "TEST-" as a prefix to the file name, while preserving the directory structure.
 #'
@@ -36,7 +36,7 @@ write_temp_data <-
 #' file_path <- "/conf/folder1/folder2/data.csv"
 #' new_file_path <- add_test_to_filename(file_path)
 #' print(new_file_path)  # Outputs: "/conf/folder1/folder2/TEST-data.csv"
-add_test_to_filename <- function(file_path, test_mode = TRUE) {
+add_test_to_filename <- function(file_path, test_mode) {
   if (test_mode) {
     # Extract the directory and the file name separately
     dir_path <- dirname(file_path)

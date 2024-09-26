@@ -18,7 +18,7 @@ create_individual_file <- function(
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
     anon_chi_out = TRUE,
-    test_mode = TRUE) {
+    test_mode) {
   if (anon_chi_in) {
     episode_file <- slfhelper::get_chi(
       episode_file,
