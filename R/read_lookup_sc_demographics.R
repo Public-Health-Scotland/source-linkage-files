@@ -25,7 +25,7 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
     ) %>%
     dplyr::collect()
 
-  latest_quarter = sc_demog %>%
+  latest_quarter <- sc_demog %>%
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)

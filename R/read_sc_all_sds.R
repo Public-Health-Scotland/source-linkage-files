@@ -28,7 +28,7 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
     dplyr::distinct() %>%
     dplyr::collect()
 
-  latest_quarter = sds_full_data %>%
+  latest_quarter <- sds_full_data %>%
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)

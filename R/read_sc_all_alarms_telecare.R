@@ -28,7 +28,7 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     dplyr::distinct() %>%
     dplyr::collect()
 
-  latest_quarter = at_full_data %>%
+  latest_quarter <- at_full_data %>%
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)

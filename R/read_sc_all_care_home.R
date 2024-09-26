@@ -30,7 +30,7 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
     dplyr::distinct() %>%
     dplyr::collect()
 
-  latest_quarter = ch_data %>%
+  latest_quarter <- ch_data %>%
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)
