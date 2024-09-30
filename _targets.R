@@ -22,6 +22,7 @@ tar_option_set(
 years_to_run <- createslf::years_to_run()
 
 list(
+  ## Phase I, all years ----
   tar_rds(write_to_disk, TRUE),
   tar_rds(
     file_path_ext_clean,
@@ -68,6 +69,7 @@ list(
     priority = 0.9
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_sc_demog_lookup,
     process_tests_sc_demographics(sc_demog_lookup)
   ),
@@ -80,8 +82,13 @@ list(
     priority = 0.9
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_it_chi_deaths,
-    process_tests_it_chi_deaths(it_chi_deaths_data)
+    # use anonymous function to sequence writing tests to excel
+    # to avoid conflicts of writing to the same file at the same time
+    (\(it_chi_deaths_data, tests_sc_demog_lookup) {
+      process_tests_it_chi_deaths(it_chi_deaths_data)
+    }(it_chi_deaths_data, tests_sc_demog_lookup))
   ),
   tar_target(
     source_gp_lookup,
@@ -94,8 +101,11 @@ list(
     priority = 0.9
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_source_gp_lookup,
-    process_tests_lookup_gpprac(source_gp_lookup)
+    (\(source_gp_lookup, tests_it_chi_deaths) {
+      process_tests_lookup_gpprac(source_gp_lookup)
+    }(source_gp_lookup, tests_it_chi_deaths))
   ),
   tar_target(
     source_pc_lookup,
@@ -108,15 +118,19 @@ list(
     priority = 0.9
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_source_pc_lookup,
-    process_tests_lookup_pc(source_pc_lookup)
+    (\(source_pc_lookup, tests_source_gp_lookup) {
+      process_tests_lookup_pc(source_pc_lookup)
+    }(source_pc_lookup, tests_source_gp_lookup))
+
   ),
-  ## Cost Lookups ##
+  ### Cost Lookups ----
   tar_target(ch_cost_lookup, process_costs_ch_rmd(), priority = 0.8),
   tar_target(dn_cost_lookup, process_costs_dn_rmd(), priority = 0.8),
   tar_target(hc_cost_lookup, process_costs_hc_rmd(), priority = 0.8),
   tar_target(gp_ooh_cost_lookup, process_costs_gp_ooh_rmd()),
-  ## Social Care - 'All' data ##
+  ### Social Care - 'All' data ----
   tar_target(
     all_at_extract,
     read_sc_all_alarms_telecare(),
@@ -135,8 +149,11 @@ list(
     priority = 0.5
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_sc_all_at,
-    process_tests_sc_all_at_episodes(all_at)
+    (\(all_at, tests_source_pc_lookup) {
+      process_tests_sc_all_at_episodes(all_at)
+    }(all_at, tests_source_pc_lookup))
   ),
   tar_target(
     all_home_care_extract,
@@ -156,8 +173,11 @@ list(
     priority = 0.5
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_sc_all_home_care,
-    process_tests_sc_all_hc_episodes(all_home_care)
+    (\(all_home_care, tests_sc_all_at) {
+      process_tests_sc_all_hc_episodes(all_home_care)
+    }(all_home_care, tests_sc_all_at))
   ),
   tar_target(
     all_care_home_extract,
@@ -175,6 +195,7 @@ list(
     )
   ),
   tar_target(
+    # Tests, LOOKUP series
     all_care_home,
     process_sc_all_care_home(
       all_care_home_extract,
@@ -187,8 +208,11 @@ list(
     priority = 0.5
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_all_care_home,
-    process_tests_sc_all_ch_episodes(all_care_home)
+    (\(all_care_home, tests_sc_all_home_care) {
+      process_tests_sc_all_ch_episodes(all_care_home)
+    }(all_care_home, tests_sc_all_home_care))
   ),
   tar_target(
     all_sds_extract,
@@ -208,11 +232,14 @@ list(
     priority = 0.5
   ),
   tar_target(
+    # Tests, LOOKUP series
     tests_sc_all_sds,
-    process_tests_sc_all_sds_episodes(all_sds)
+    (\(all_sds, tests_all_care_home) {
+      process_tests_sc_all_sds_episodes(all_sds)
+    }(all_sds, tests_all_care_home))
   ),
 
-  # Phase II
+  ## Phase II, year specific ----
   tar_map(
     list(year = years_to_run),
     tar_rds(
@@ -309,7 +336,7 @@ list(
         consultations_data_path
       )
     ),
-    ### Target source processed extracts ###
+    ### Target source processed extracts ----
     tar_target(source_acute_extract, process_extract_acute(
       acute_data,
       year,
@@ -317,6 +344,7 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_acute_extract,
       process_tests_acute(
         source_acute_extract,
@@ -329,11 +357,12 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_ae_extract,
-      process_tests_ae(
-        source_ae_extract,
-        year
-      )
+      (\(source_ae_extract, year, tests_source_acute_extract) {
+        process_tests_ae(source_ae_extract,
+                         year)
+      }(source_ae_extract, year, tests_source_acute_extract))
     ),
     tar_target(source_cmh_extract, process_extract_cmh(
       cmh_data,
@@ -341,11 +370,13 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_cmh_extract,
-      process_tests_cmh(
+      (\(source_cmh_extract, year, tests_source_ae_extract){
+        process_tests_cmh(
         source_cmh_extract,
         year
-      )
+      )}(source_cmh_extract, year, tests_source_ae_extract))
     ),
     tar_target(source_dd_extract, process_extract_delayed_discharges(
       dd_data,
@@ -353,11 +384,12 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_dd_extract,
-      process_tests_delayed_discharges(
-        source_dd_extract,
-        year
-      )
+      (\(source_dd_extract, year, tests_source_cmh_extract) {
+        process_tests_delayed_discharges(source_dd_extract,
+                                         year)
+      }(source_dd_extract, year, tests_source_cmh_extract))
     ),
     tar_target(source_dn_extract, process_extract_district_nursing(
       dn_data,
@@ -366,11 +398,13 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_dn_extract,
-      process_tests_district_nursing(
-        source_dn_extract,
-        year
-      )
+      (\(source_dn_extract, year, tests_source_dd_extract){
+        process_tests_district_nursing(
+          source_dn_extract,
+          year
+      )}(source_dn_extract, year, tests_source_dd_extract))
     ),
     tar_target(
       source_homelessness_extract,
@@ -382,11 +416,13 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_homelessness_extract,
-      process_tests_homelessness(
-        source_homelessness_extract,
-        year
-      )
+      (\(source_homelessness_extract, year, tests_source_dn_extract){
+        process_tests_homelessness(
+          source_homelessness_extract,
+          year
+      )}(source_homelessness_extract, year, tests_source_dn_extract))
     ),
     tar_target(source_ltc_lookup, process_lookup_ltc(
       ltc_data,
@@ -394,11 +430,14 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_ltc,
-      process_tests_ltcs(
-        source_ltc_lookup,
-        year
-      )
+      (\(source_ltc_lookup, year, tests_source_homelessness_extract){
+        process_tests_ltcs(
+          source_ltc_lookup,
+          year
+      )}(source_ltc_lookup, year, tests_source_homelessness_extract))
+
     ),
     tar_target(source_maternity_extract, process_extract_maternity(
       maternity_data,
@@ -406,11 +445,13 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_maternity_extract,
-      process_tests_maternity(
-        source_maternity_extract,
-        year
-      )
+      (\(source_maternity_extract, year, tests_ltc){
+        process_tests_maternity(
+          source_maternity_extract,
+          year
+      )}(source_maternity_extract, year, tests_ltc))
     ),
     tar_target(
       source_mental_health_extract,
@@ -421,11 +462,13 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_mental_health_extract,
-      process_tests_mental_health(
-        source_mental_health_extract,
-        year
-      )
+      (\(source_mental_health_extract, year, tests_source_maternity_extract){
+        process_tests_mental_health(
+          source_mental_health_extract,
+          year
+      )}(source_mental_health_extract, year, tests_source_maternity_extract))
     ),
     # tar_target(source_nrs_deaths_extract, process_extract_nrs_deaths(
     #   nrs_deaths_data,
@@ -434,19 +477,21 @@ list(
     # )),
     tar_target(
       source_nrs_deaths_extract,
-      # use this anomymous function with redundant but necessary refined_death
+      # use this anonymous function with redundant but necessary refined_death
       # to make sure reading year-specific nrs deaths extracts after it is produced
-      (\(year, refined_death_datas) {
+      (\(year, refined_death_data) {
         read_file(get_source_extract_path(year, "deaths")) %>%
           as.data.frame()
       })(year, refined_death_data)
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_nrs_deaths_extract,
-      process_tests_nrs_deaths(
-        source_nrs_deaths_extract,
-        year
-      )
+      (\(source_nrs_deaths_extract, year, tests_source_mental_health_extract){
+        process_tests_nrs_deaths(
+          source_nrs_deaths_extract,
+          year
+      )}(source_nrs_deaths_extract, year, tests_source_mental_health_extract))
     ),
     tar_target(source_ooh_extract, process_extract_gp_ooh(
       year,
@@ -455,11 +500,13 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_ooh_extract,
-      process_tests_gp_ooh(
-        source_ooh_extract,
-        year
-      )
+      (\(source_ooh_extract, year, tests_source_nrs_deaths_extract){
+        process_tests_gp_ooh(
+          source_ooh_extract,
+          year
+      )}(source_ooh_extract, year, tests_source_nrs_deaths_extract))
     ),
     tar_target(source_outpatients_extract, process_extract_outpatients(
       outpatients_data,
@@ -467,11 +514,13 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_source_outpatients_extract,
-      process_tests_outpatients(
-        source_outpatients_extract,
-        year
-      )
+      (\(source_outpatients_extract, year, tests_source_ooh_extract){
+        process_tests_outpatients(
+          source_outpatients_extract,
+          year
+      )}(source_outpatients_extract, year, tests_source_ooh_extract))
     ),
     tar_target(source_prescribing_extract, process_extract_prescribing(
       prescribing_data,
@@ -479,13 +528,15 @@ list(
       write_to_disk = write_to_disk
     )),
     tar_target(
+      # Tests, EXTRACT series
       tests_prescribing,
-      process_tests_prescribing(
-        source_prescribing_extract,
-        year
-      )
+      (\(source_prescribing_extract, year, tests_source_outpatients_extract){
+        process_tests_prescribing(
+          source_prescribing_extract,
+          year
+      )}(source_prescribing_extract, year, tests_source_outpatients_extract))
     ),
-    ### Target process year specific social care ###
+    ### Target process year specific social care ----
     tar_target(
       sc_client_data,
       read_lookup_sc_client(fyyear = year)
@@ -502,8 +553,11 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_sc_client_lookup,
-      process_tests_sc_client_lookup(sc_client_lookup, year = year)
+      (\(sc_client_lookup, year, tests_prescribing){
+        process_tests_sc_client_lookup(sc_client_lookup, year = year)
+        }(sc_client_lookup, year, tests_prescribing))
     ),
     tar_target(
       source_sc_alarms_tele,
@@ -514,11 +568,12 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_alarms_telecare,
-      process_tests_alarms_telecare(
+      (\(source_sc_alarms_tele, year, tests_sc_client_lookup){      process_tests_alarms_telecare(
         data = source_sc_alarms_tele,
         year = year
-      )
+      )}(source_sc_alarms_tele, year, tests_sc_client_lookup))
     ),
     tar_target(
       source_sc_care_home,
@@ -530,11 +585,13 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_care_home,
-      process_tests_care_home(
-        data = source_sc_care_home,
-        year = year
-      )
+      (\(source_sc_care_home, year, tests_alarms_telecare){
+        process_tests_care_home(
+          data = source_sc_care_home,
+          year = year
+      )}(source_sc_care_home, year, tests_alarms_telecare))
     ),
     tar_target(
       source_sc_home_care,
@@ -545,11 +602,12 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_home_care,
-      process_tests_home_care(
+      (\(source_sc_home_care, year, tests_care_home){      process_tests_home_care(
         data = source_sc_home_care,
         year = year
-      )
+      )}(source_sc_home_care, year, tests_care_home))
     ),
     tar_target(
       source_sc_sds,
@@ -560,11 +618,12 @@ list(
       )
     ),
     tar_target(
+      # Tests, EXTRACT series
       tests_sds,
-      process_tests_sds(
+      (\(source_sc_sds, year, tests_home_care){      process_tests_sds(
         data = source_sc_sds,
         year = year
-      )
+      )}(source_sc_sds, year, tests_home_care))
     ),
     tar_target(
       slf_deaths_lookup,
@@ -582,7 +641,7 @@ list(
         homelessness_data = source_homelessness_extract %>% slfhelper::get_chi()
       )
     )
-  ) # ,
+  )#,
   # tar_target(
   #   combined_deaths_lookup,
   #   process_combined_deaths_lookup()
@@ -590,7 +649,7 @@ list(
 )
 ## End of Targets pipeline ##
 
-################################################################################
+## Phase III, create ep file and ind file----
 ## Redundant code which may still be useful for including ep/indiv files.
 # tar_qs(
 #   processed_data_list,
