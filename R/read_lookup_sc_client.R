@@ -79,7 +79,7 @@ read_lookup_sc_client <- function(fyyear,
     dplyr::rename("mental_health_disorders" = "mental_health_problems") %>%
     dplyr::collect()
 
-  latest_quarter = client_data %>%
+  latest_quarter <- client_data %>%
     dplyr::arrange(desc(financial_quarter)) %>%
     dplyr::pull(financial_quarter) %>%
     head(1)
