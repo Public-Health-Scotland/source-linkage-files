@@ -194,7 +194,6 @@ list(
     )
   ),
   tar_target(
-    # Tests, LOOKUP series
     all_care_home,
     process_sc_all_care_home(
       all_care_home_extract,
