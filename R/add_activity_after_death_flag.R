@@ -18,47 +18,44 @@ add_activity_after_death_flag <- function(
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
+  data = data %>%
+    dplyr::mutate(ep_row_id_death = dplyr::row_number())
+
   death_joined <- data %>%
-    dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$death_date, .data$deceased) %>%
-    dplyr::filter(!is.na(.data$chi) | .data$chi != "") %>%
-    dplyr::left_join(
-      deaths_data,
-      by = "chi",
-      suffix = c("", "_boxi")
+    dplyr::select(
+      "year",
+      "chi",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "death_date",
+      "deceased",
+      "ep_row_id_death"
     ) %>%
+    dplyr::filter(!is.na(.data$chi) & .data$chi != "") %>%
+    dplyr::left_join(deaths_data,
+                     by = "chi",
+                     suffix = c("", "_refined")) %>%
     dplyr::filter(.data$deceased == TRUE) %>%
     dplyr::distinct()
 
-
-  # Check and print error message for records which already have a death_date in the episode file, but this doesn't match the BOXI death date
-  check_death_date_match <- death_joined %>%
-    dplyr::filter(.data$death_date != .data$death_date_boxi)
-
-  if (nrow(check_death_date_match) != 0) {
-    warning("There were records in the episode file which already have a death_date, but does not match the BOXI NRS death date.")
-  }
-
-
-  # Check and print error message for records which have a record_keydate1 after their BOXI death date
-  check_keydate1_death_date <- death_joined %>%
-    dplyr::filter(.data$record_keydate1 > .data$death_date_boxi)
-
-  if (nrow(check_death_date_match) != 0) {
-    warning("There were records in the episode file which have a record_keydate1 after the BOXI NRS death date.")
-  }
-
-
   flag_data <- death_joined %>%
     dplyr::mutate(
-      flag_keydate1 = dplyr::if_else(.data$record_keydate1 > .data$death_date_boxi, 1, 0),
-      flag_keydate2 = dplyr::if_else(.data$record_keydate2 > .data$death_date_boxi, 1, 0),
+      flag_keydate1 = dplyr::if_else(.data$record_keydate1 > .data$death_date_refined, 1, 0),
+      flag_keydate2 = dplyr::if_else(.data$record_keydate2 > .data$death_date_refined, 1, 0),
 
       # Next flag records with 'ongoing' activity after date of death (available from BOXI) if keydate2 is missing and the death date occurs in
       # in the current or a previous financial year.
-      flag_keydate2_missing = dplyr::if_else(((is.na(.data$record_keydate2) | .data$record_keydate2 == "") & (.data$death_date_boxi <= paste0("20", substr(.data$year, 3, 4), "-03-31"))), 1, 0),
+      flag_keydate2_missing = dplyr::if_else(((is.na(.data$record_keydate2) |
+                                                 .data$record_keydate2 == "") &
+                                                (.data$death_date_refined <= paste0("20", substr(.data$year, 3, 4), "-03-31"))
+      ), 1, 0),
 
       # Also flag records without a death_date in the episode file, but the BOXI death date occurs in the current or a previous financial year.
-      flag_deathdate_missing = dplyr::if_else(((is.na(.data$death_date) | .data$death_date == "") & (.data$death_date_boxi <= paste0("20", substr(.data$year, 3, 4), "-03-31"))), 1, 0)
+      flag_deathdate_missing = dplyr::if_else(((is.na(.data$death_date) |
+                                                  .data$death_date == "") &
+                                                 (.data$death_date_refined <= paste0("20", substr(.data$year, 3, 4), "-03-31"))
+      ), 1, 0)
     ) %>%
     # These should be flagged by one of the two lines of code above, but in these cases, we will also fill in the blank death date if appropriate
 
@@ -67,34 +64,45 @@ add_activity_after_death_flag <- function(
     dplyr::mutate(activity_after_death = purrr::pmap_dbl(
       dplyr::select(., tidyselect::contains("flag_")),
       ~ any(grepl("^1$", c(...)),
-        na.rm = TRUE
-      ) * 1
-    ))
-
-
-  # Fill in date of death if missing in the episode file but available in BOXI lookup, due to historic dates of death not being carried
-  # over from previous financial years
-  flag_data <- flag_data %>%
+            na.rm = TRUE) * 1
+    )) %>%
+    # Fill in date of death if missing in the episode file but available in BOXI lookup, due to historic dates of death not being carried
+    # over from previous financial years
     dplyr::filter(.data$activity_after_death == 1) %>%
     # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
-    dplyr::select(.data$year, .data$chi, .data$record_keydate1, .data$record_keydate2, .data$activity_after_death, .data$death_date_boxi) %>%
+    dplyr::select(
+      year,
+      chi,
+      recid,
+      record_keydate1,
+      record_keydate2,
+      activity_after_death,
+      death_date_refined,
+      ep_row_id_death
+    ) %>%
     dplyr::distinct()
 
   # Match activity after death flag back to episode file
   final_data <- data %>%
     dplyr::left_join(
       flag_data,
-      # TODO: this join_by is not 100% accurate. Consider use ep_file_row_id to join
-      by = c("year", "chi", "record_keydate1", "record_keydate2"),
+      # this join_by is now 100% accurate.
+      by = c(
+        "year",
+        "chi",
+        "recid",
+        "record_keydate1",
+        "record_keydate2",
+        "ep_row_id_death"
+      ),
       na_matches = "never"
     ) %>%
-    dplyr::mutate(death_date = lubridate::as_date(ifelse(is.na(death_date) & !(is.na(death_date_boxi)),
-      death_date_boxi, death_date
+    dplyr::mutate(death_date = lubridate::as_date(ifelse(
+      is.na(death_date) & !(is.na(death_date_refined)),
+      death_date_refined, death_date
     ))) %>%
-    dplyr::select(-death_date_boxi) %>%
+    dplyr::select(-death_date_refined, -ep_row_id_death) %>%
     dplyr::distinct()
-
-
 
   return(final_data)
 }
