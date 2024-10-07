@@ -11,22 +11,27 @@
 write_temp_data <-
   function(data, year, file_name, test_mode) {
     full_file_name <- stringr::str_glue("{file_name}.parquet")
-    file_path <- file.path(get_year_dir(year),
-                           full_file_name) %>%
+    file_path <- file.path(
+      get_year_dir(year),
+      full_file_name
+    ) %>%
       add_test_to_filename(test_mode)
 
     cli::cli_alert_info(stringr::str_glue("Writing {full_file_name} to disk started at {Sys.time()}"))
 
     write_file(data,
-               path = file_path)
+      path = file_path
+    )
 
     return(data)
   }
 
-read_temp_data <- function(year, file_name, test_mode){
+read_temp_data <- function(year, file_name, test_mode) {
   full_file_name <- stringr::str_glue("{file_name}.parquet")
-  file_path <- file.path(get_year_dir(year),
-                         full_file_name) %>%
+  file_path <- file.path(
+    get_year_dir(year),
+    full_file_name
+  ) %>%
     add_test_to_filename(test_mode)
 
   return(read_file(file_path))
@@ -44,7 +49,7 @@ read_temp_data <- function(year, file_name, test_mode){
 #' # Example usage
 #' file_path <- "/conf/folder1/folder2/data.csv"
 #' new_file_path <- add_test_to_filename(file_path)
-#' print(new_file_path)  # Outputs: "/conf/folder1/folder2/TEST-data.csv"
+#' print(new_file_path) # Outputs: "/conf/folder1/folder2/TEST-data.csv"
 add_test_to_filename <- function(file_path, test_mode) {
   if (test_mode) {
     # Extract the directory and the file name separately
@@ -58,7 +63,7 @@ add_test_to_filename <- function(file_path, test_mode) {
     new_file_path <- file.path(dir_path, new_file_name)
 
     return(new_file_path)
-  } else{
+  } else {
     return(file_path)
   }
 }

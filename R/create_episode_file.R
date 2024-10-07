@@ -38,9 +38,7 @@ create_episode_file <- function(
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     slfhelper::get_chi() %>%
-
     write_temp_data(year, file_name = "ep_temp1", test_mode) %>%
-
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
