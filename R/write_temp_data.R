@@ -23,6 +23,15 @@ write_temp_data <-
     return(data)
   }
 
+read_temp_data <- function(year, file_name, test_mode){
+  full_file_name <- stringr::str_glue("{file_name}.parquet")
+  file_path <- file.path(get_year_dir(year),
+                         full_file_name) %>%
+    add_test_to_filename(test_mode)
+
+  return(read_file(file_path))
+}
+
 
 #' Add "TEST-" to the file name of a file Path
 #'
