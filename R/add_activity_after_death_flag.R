@@ -18,7 +18,7 @@ add_activity_after_death_flag <- function(
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
-  data = data %>%
+  data <- data %>%
     dplyr::mutate(ep_row_id_death = dplyr::row_number())
 
   death_joined <- data %>%
@@ -34,8 +34,9 @@ add_activity_after_death_flag <- function(
     ) %>%
     dplyr::filter(!is.na(.data$chi) & .data$chi != "") %>%
     dplyr::left_join(deaths_data,
-                     by = "chi",
-                     suffix = c("", "_refined")) %>%
+      by = "chi",
+      suffix = c("", "_refined")
+    ) %>%
     dplyr::filter(.data$deceased == TRUE) %>%
     dplyr::distinct()
 
@@ -47,14 +48,14 @@ add_activity_after_death_flag <- function(
       # Next flag records with 'ongoing' activity after date of death (available from BOXI) if keydate2 is missing and the death date occurs in
       # in the current or a previous financial year.
       flag_keydate2_missing = dplyr::if_else(((is.na(.data$record_keydate2) |
-                                                 .data$record_keydate2 == "") &
-                                                (.data$death_date_refined <= paste0("20", substr(.data$year, 3, 4), "-03-31"))
+        .data$record_keydate2 == "") &
+        (.data$death_date_refined <= paste0("20", substr(.data$year, 3, 4), "-03-31"))
       ), 1, 0),
 
       # Also flag records without a death_date in the episode file, but the BOXI death date occurs in the current or a previous financial year.
       flag_deathdate_missing = dplyr::if_else(((is.na(.data$death_date) |
-                                                  .data$death_date == "") &
-                                                 (.data$death_date_refined <= paste0("20", substr(.data$year, 3, 4), "-03-31"))
+        .data$death_date == "") &
+        (.data$death_date_refined <= paste0("20", substr(.data$year, 3, 4), "-03-31"))
       ), 1, 0)
     ) %>%
     # These should be flagged by one of the two lines of code above, but in these cases, we will also fill in the blank death date if appropriate
@@ -64,7 +65,8 @@ add_activity_after_death_flag <- function(
     dplyr::mutate(activity_after_death = purrr::pmap_dbl(
       dplyr::select(., tidyselect::contains("flag_")),
       ~ any(grepl("^1$", c(...)),
-            na.rm = TRUE) * 1
+        na.rm = TRUE
+      ) * 1
     )) %>%
     # Fill in date of death if missing in the episode file but available in BOXI lookup, due to historic dates of death not being carried
     # over from previous financial years
