@@ -5,8 +5,6 @@
 #' @return The data including the SPARRA and HHG variables matched
 #' on to the episode file.
 join_sparra_hhg <- function(data, year) {
-  cli::cli_alert_info("Join SPARRA and HHG function started at {Sys.time()}")
-
   if (check_year_valid(year, "sparra")) {
     data <- dplyr::left_join(
       data,
@@ -62,6 +60,8 @@ join_sparra_hhg <- function(data, year) {
   } else {
     data <- dplyr::mutate(data, hhg_end_fy = NA_integer_)
   }
+
+  cli::cli_alert_info("Join SPARRA and HHG function finished at {Sys.time()}")
 
   return(data)
 }

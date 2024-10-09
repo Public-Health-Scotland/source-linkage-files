@@ -12,8 +12,6 @@ link_delayed_discharge_eps <- function(
     episode_file,
     year,
     dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()) {
-  cli::cli_alert_info("Link delayed discharge to episode file function started at {Sys.time()}")
-
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
     return(episode_file)
@@ -375,6 +373,8 @@ link_delayed_discharge_eps <- function(
       cij_delay
     )) %>%
     dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
+
+  cli::cli_alert_info("Link delayed discharge to episode file function finished at {Sys.time()}")
 
   return(linked_data)
 }

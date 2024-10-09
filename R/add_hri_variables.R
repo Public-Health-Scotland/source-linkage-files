@@ -46,6 +46,8 @@ flag_non_scottish_residents <- function(
     ) %>%
     dplyr::select(-"dummy_postcode", -"eng_prac")
 
+  cli::cli_alert_info("Add HRI variables function finished at {Sys.time()}")
+
   return(return_data)
 }
 
