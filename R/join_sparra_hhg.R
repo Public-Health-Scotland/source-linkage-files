@@ -61,7 +61,7 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, hhg_end_fy = NA_integer_)
   }
 
-  cli::cli_alert_info("Join SPARRA and HHG function started at {Sys.time()}")
+  cli::cli_alert_info("Join SPARRA and HHG function finished at {Sys.time()}")
 
   return(data)
 }

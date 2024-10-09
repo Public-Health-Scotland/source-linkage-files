@@ -92,7 +92,7 @@ add_activity_after_death_flag <- function(
     dplyr::select(-death_date_boxi) %>%
     dplyr::distinct()
 
-  cli::cli_alert_info("Add activity after death flag function started at {Sys.time()}")
+  cli::cli_alert_info("Add activity after death flag function finished at {Sys.time()}")
 
   return(final_data)
 }

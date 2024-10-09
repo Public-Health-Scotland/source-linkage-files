@@ -374,7 +374,7 @@ link_delayed_discharge_eps <- function(
     )) %>%
     dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
 
-  cli::cli_alert_info("Link delayed discharge to episode file function started at {Sys.time()}")
+  cli::cli_alert_info("Link delayed discharge to episode file function finished at {Sys.time()}")
 
   return(linked_data)
 }

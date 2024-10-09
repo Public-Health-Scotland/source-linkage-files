@@ -27,7 +27,7 @@ apply_cost_uplift <- function(data) {
     # remove the last uplift column
     dplyr::select(-"uplift")
 
-  cli::cli_alert_info("Apply cost uplift function started at {Sys.time()}")
+  cli::cli_alert_info("Apply cost uplift function finished at {Sys.time()}")
 
   return(data)
 }

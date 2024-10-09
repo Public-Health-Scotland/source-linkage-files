@@ -197,7 +197,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   )
   individual_file <- individual_file[, year := year]
 
-  cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
+  cli::cli_alert_info("Aggregate by CHI function finished at {Sys.time()}")
 
   # convert back to tibble
   return(dplyr::as_tibble(individual_file))
@@ -272,7 +272,7 @@ aggregate_ch_episodes <- function(episode_file) {
   # Convert back to tibble if needed
   episode_file <- tibble::as_tibble(episode_file)
 
-  cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
+  cli::cli_alert_info("Aggregate ch episodes function finished at {Sys.time()}")
 
   return(episode_file)
 }

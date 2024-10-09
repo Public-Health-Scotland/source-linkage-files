@@ -289,7 +289,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
       path = tempfile_path
     )
 
-  cli::cli_alert_info("Store episode file variables function started at {Sys.time()}")
+  cli::cli_alert_info("Store episode file variables function finished at {Sys.time()}")
 
   return(
     dplyr::select(
@@ -324,7 +324,7 @@ load_ep_file_vars <- function(data, year) {
 
   fs::file_delete(tempfile_path)
 
-  cli::cli_alert_info("Load episode file variable function started at {Sys.time()}")
+  cli::cli_alert_info("Load episode file variable function finished at {Sys.time()}")
 
   return(full_data)
 }
@@ -380,7 +380,7 @@ fill_missing_cij_markers <- function(data) {
 
   return_data <- dplyr::bind_rows(non_fixable_data, fixed_data)
 
-  cli::cli_alert_info("Fill missing cij markers function started at {Sys.time()}")
+  cli::cli_alert_info("Fill missing cij markers function finished at {Sys.time()}")
 
   return(return_data)
 }
@@ -425,7 +425,7 @@ correct_cij_vars <- function(data) {
       )
     )
 
-  cli::cli_alert_info("Correct cij variables function started at {Sys.time()}")
+  cli::cli_alert_info("Correct cij variables function finished at {Sys.time()}")
 
   return(data)
 }
@@ -452,7 +452,7 @@ create_cost_inc_dna <- function(data) {
       )
     )
 
-  cli::cli_alert_info("Create cost inc dna function started at {Sys.time()}")
+  cli::cli_alert_info("Create cost inc dna function finished at {Sys.time()}")
 
   return(data)
 }
@@ -478,7 +478,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
     write_to_disk = TRUE
   )
 
-  cli::cli_alert_info("Create cohort lookups function started at {Sys.time()}")
+  cli::cli_alert_info("Create cohort lookups function finished at {Sys.time()}")
 
   return(data)
 }
@@ -514,7 +514,7 @@ join_cohort_lookups <- function(
       by = "chi"
     )
 
-  cli::cli_alert_info("Join cohort lookups function started at {Sys.time()}")
+  cli::cli_alert_info("Join cohort lookups function finished at {Sys.time()}")
 
   return(join_cohort_lookups)
 }
@@ -554,7 +554,7 @@ join_sc_client <- function(data,
       )
   }
 
-  cli::cli_alert_info("Join social care client function started at {Sys.time()}")
+  cli::cli_alert_info("Join social care client function finished at {Sys.time()}")
 
   return(data_file)
 }

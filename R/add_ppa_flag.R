@@ -225,7 +225,7 @@ add_ppa_flag <- function(data) {
       .data$cij_ppa
     ))
 
-  cli::cli_alert_info("Add PPA flag function started at {Sys.time()}")
+  cli::cli_alert_info("Add PPA flag function finished at {Sys.time()}")
 
   return(ppa_cij_data)
 }

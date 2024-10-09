@@ -100,7 +100,7 @@ correct_demographics <- function(data, year) {
     data_chi
   )
 
-  cli::cli_alert_info("Correct demographics function started at {Sys.time()}")
+  cli::cli_alert_info("Correct demographics function finished at {Sys.time()}")
 
   return(data)
 }

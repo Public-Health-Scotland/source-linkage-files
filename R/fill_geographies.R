@@ -39,7 +39,7 @@ fill_geographies <- function(
       )
     )
 
-  cli::cli_alert_info("Fill geographies function started at {Sys.time()}")
+  cli::cli_alert_info("Fill geographies function finished at {Sys.time()}")
 
   return(data)
 }

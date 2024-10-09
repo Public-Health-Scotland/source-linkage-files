@@ -19,7 +19,7 @@ join_deaths_data <- function(
       relationship = "many-to-one"
     )
 
-  cli::cli_alert_info("Join deaths data function started at {Sys.time()}")
+  cli::cli_alert_info("Join deaths data function finished at {Sys.time()}")
 
   return(data)
 }

@@ -22,7 +22,7 @@ create_homelessness_lookup <- function(
     tidyr::drop_na(.data$chi) %>%
     dplyr::mutate(hl1_in_fy = 1L)
 
-  cli::cli_alert_info("Create homelessness lookup function started at {Sys.time()}")
+  cli::cli_alert_info("Create homelessness lookup function finished at {Sys.time()}")
 
   return(homelessness_lookup)
 }
@@ -55,7 +55,7 @@ add_homelessness_flag <- function(data, year,
     ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(.data$hl1_in_fy, 0L))
 
-  cli::cli_alert_info("Add homelessness flag function started at {Sys.time()}")
+  cli::cli_alert_info("Add homelessness flag function finished at {Sys.time()}")
 
   return(data)
 }
@@ -131,7 +131,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
       )
     )
 
-  cli::cli_alert_info("Add homelessness date flags function started at {Sys.time()}")
+  cli::cli_alert_info("Add homelessness date flags function finished at {Sys.time()}")
 
   return(data)
 }

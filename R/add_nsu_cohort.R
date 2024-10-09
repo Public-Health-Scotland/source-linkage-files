@@ -116,7 +116,7 @@ add_nsu_cohort <- function(
     ) %>%
     dplyr::select(-dplyr::contains("_nsu"), -"has_chi")
 
-  cli::cli_alert_info("Add NSU cohort function started at {Sys.time()}")
+  cli::cli_alert_info("Add NSU cohort function finished at {Sys.time()}")
 
   return(return_df)
 }

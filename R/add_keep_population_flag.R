@@ -139,7 +139,7 @@ add_keep_population_flag <- function(individual_file, year) {
       )
   }
 
-  cli::cli_alert_info("Add keep population function started at {Sys.time()}")
+  cli::cli_alert_info("Add keep population function finished at {Sys.time()}")
 
   return(individual_file)
 }

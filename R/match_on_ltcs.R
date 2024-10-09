@@ -30,7 +30,7 @@ match_on_ltcs <- function(
     ) %>%
     dplyr::select(-tidyselect::ends_with("_ltc"))
 
-  cli::cli_alert_info("Match on LTCs function started at {Sys.time()}")
+  cli::cli_alert_info("Match on LTCs function finished at {Sys.time()}")
 
   return(matched)
 }
