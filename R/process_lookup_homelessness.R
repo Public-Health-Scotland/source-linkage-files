@@ -41,8 +41,6 @@ create_homelessness_lookup <- function(
 #' @export
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
-  cli::cli_alert_info("Add homelessness flag function started at {Sys.time()}")
-
   if (!check_year_valid(year, type = "homelessness")) {
     data <- data
     return(data)
@@ -56,6 +54,8 @@ add_homelessness_flag <- function(data, year,
       relationship = "many-to-one"
     ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(.data$hl1_in_fy, 0L))
+
+  cli::cli_alert_info("Add homelessness flag function started at {Sys.time()}")
 
   return(data)
 }
@@ -72,8 +72,6 @@ add_homelessness_flag <- function(data, year,
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
-  cli::cli_alert_info("Add homelessness date flags function started at {Sys.time()}")
-
   if (!check_year_valid(year, type = "homelessness")) {
     data <- data
     return(data)
@@ -132,6 +130,8 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
         roll_to_first = TRUE
       )
     )
+
+  cli::cli_alert_info("Add homelessness date flags function started at {Sys.time()}")
 
   return(data)
 }

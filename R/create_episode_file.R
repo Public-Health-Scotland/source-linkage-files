@@ -33,6 +33,8 @@ create_episode_file <- function(
     sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
     write_to_disk = TRUE,
     anon_chi_out = TRUE) {
+  cli::cli_alert_info("Create episode file function started at {Sys.time()}")
+
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
@@ -265,8 +267,6 @@ create_episode_file <- function(
 #'
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
-  cli::cli_alert_info("Store episode file variables function started at {Sys.time()}")
-
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
@@ -289,6 +289,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
       path = tempfile_path
     )
 
+  cli::cli_alert_info("Store episode file variables function started at {Sys.time()}")
+
   return(
     dplyr::select(
       data,
@@ -304,8 +306,6 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #'
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
-  cli::cli_alert_info("Load episode file variable function started at {Sys.time()}")
-
   tempfile_path <- get_file_path(
     directory = get_year_dir(year),
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
@@ -324,6 +324,8 @@ load_ep_file_vars <- function(data, year) {
 
   fs::file_delete(tempfile_path)
 
+  cli::cli_alert_info("Load episode file variable function started at {Sys.time()}")
+
   return(full_data)
 }
 
@@ -333,8 +335,6 @@ load_ep_file_vars <- function(data, year) {
 #'
 #' @return A data frame with CIJ markers filled in for those missing.
 fill_missing_cij_markers <- function(data) {
-  cli::cli_alert_info("Fill missing cij markers function started at {Sys.time()}")
-
   fixable_data <- data %>%
     dplyr::filter(
       .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["chi"]])
@@ -380,6 +380,8 @@ fill_missing_cij_markers <- function(data) {
 
   return_data <- dplyr::bind_rows(non_fixable_data, fixed_data)
 
+  cli::cli_alert_info("Fill missing cij markers function started at {Sys.time()}")
+
   return(return_data)
 }
 
@@ -389,14 +391,12 @@ fill_missing_cij_markers <- function(data) {
 #'
 #' @return The data with CIJ variables corrected.
 correct_cij_vars <- function(data) {
-  cli::cli_alert_info("Correct cij variables function started at {Sys.time()}")
-
   check_variables_exist(
     data,
     c("chi", "recid", "cij_admtype", "cij_pattype_code")
   )
 
-  data %>%
+  data <- data %>%
     # Change some values of cij_pattype_code based on cij_admtype
     dplyr::mutate(
       cij_admtype = dplyr::if_else(
@@ -424,6 +424,10 @@ correct_cij_vars <- function(data) {
         9L ~ "Other"
       )
     )
+
+  cli::cli_alert_info("Correct cij variables function started at {Sys.time()}")
+
+  return(data)
 }
 
 #' Create cost total net inc DNA
@@ -432,13 +436,11 @@ correct_cij_vars <- function(data) {
 #'
 #' @return The data with cost including dna.
 create_cost_inc_dna <- function(data) {
-  cli::cli_alert_info("Create cost inc dna function started at {Sys.time()}")
-
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
 
   # Create cost including DNAs and modify costs
   # not including DNAs using cattend
-  data %>%
+  data <- data %>%
     dplyr::mutate(
       cost_total_net_inc_dnas = .data$cost_total_net,
       # In the Cost_Total_Net column set the cost for
@@ -449,6 +451,10 @@ create_cost_inc_dna <- function(data) {
         .data$cost_total_net
       )
     )
+
+  cli::cli_alert_info("Create cost inc dna function started at {Sys.time()}")
+
+  return(data)
 }
 
 #' Create the cohort lookups
@@ -458,8 +464,6 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 create_cohort_lookups <- function(data, year, update = latest_update()) {
-  cli::cli_alert_info("Create cohort lookups function started at {Sys.time()}")
-
   create_demographic_cohorts(
     data,
     year,
@@ -474,6 +478,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
     write_to_disk = TRUE
   )
 
+  cli::cli_alert_info("Create cohort lookups function started at {Sys.time()}")
 
   return(data)
 }
@@ -499,8 +504,6 @@ join_cohort_lookups <- function(
       col_select = c("anon_chi", "service_use_cohort")
     ) %>%
       slfhelper::get_chi()) {
-  cli::cli_alert_info("Join cohort lookups function started at {Sys.time()}")
-
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
@@ -510,6 +513,8 @@ join_cohort_lookups <- function(
       service_use_cohort,
       by = "chi"
     )
+
+  cli::cli_alert_info("Join cohort lookups function started at {Sys.time()}")
 
   return(join_cohort_lookups)
 }
@@ -527,8 +532,6 @@ join_sc_client <- function(data,
                            year,
                            sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
                            file_type = c("episode", "individual")) {
-  cli::cli_alert_info("Join social care client function started at {Sys.time()}")
-
   if (!check_year_valid(year, type = "client")) {
     data_file <- data
     return(data_file)
@@ -550,6 +553,8 @@ join_sc_client <- function(data,
         relationship = "one-to-one"
       )
   }
+
+  cli::cli_alert_info("Join social care client function started at {Sys.time()}")
 
   return(data_file)
 }
