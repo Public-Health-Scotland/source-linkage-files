@@ -10,8 +10,6 @@
 #'
 #' @inheritParams create_individual_file
 aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
-  cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
-
   # recommended by `data.table` team to tackle the issue
   # "no visible binding for global variable"
   gender <-
@@ -199,6 +197,8 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   )
   individual_file <- individual_file[, year := year]
 
+  cli::cli_alert_info("Aggregate by CHI function started at {Sys.time()}")
+
   # convert back to tibble
   return(dplyr::as_tibble(individual_file))
 }
@@ -246,8 +246,6 @@ vars_contain <- function(data, vars, ignore_case = FALSE) {
 #'
 #' @inheritParams create_individual_file
 aggregate_ch_episodes <- function(episode_file) {
-  cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
-
   # recommended by `data.table` team to tackle the issue
   # "no visible binding for global variable"
   ch_no_cost <-
@@ -273,6 +271,8 @@ aggregate_ch_episodes <- function(episode_file) {
 
   # Convert back to tibble if needed
   episode_file <- tibble::as_tibble(episode_file)
+
+  cli::cli_alert_info("Aggregate ch episodes function started at {Sys.time()}")
 
   return(episode_file)
 }

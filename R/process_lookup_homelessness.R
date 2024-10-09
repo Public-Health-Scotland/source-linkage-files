@@ -13,8 +13,6 @@
 create_homelessness_lookup <- function(
     year,
     homelessness_data = read_file(get_source_extract_path(year, "homelessness")) %>% slfhelper::get_chi()) {
-  cli::cli_alert_info("Create homelessness lookup function started at {Sys.time()}")
-
   # Specify years available for running
   if (year < "1617") {
     return(NULL)
@@ -23,6 +21,8 @@ create_homelessness_lookup <- function(
     dplyr::distinct(.data$chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na(.data$chi) %>%
     dplyr::mutate(hl1_in_fy = 1L)
+
+  cli::cli_alert_info("Create homelessness lookup function started at {Sys.time()}")
 
   return(homelessness_lookup)
 }

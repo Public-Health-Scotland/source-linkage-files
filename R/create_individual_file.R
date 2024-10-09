@@ -18,6 +18,8 @@ create_individual_file <- function(
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
     anon_chi_out = TRUE) {
+  cli::cli_alert_info("Create individual file function started at {Sys.time()}")
+
   if (anon_chi_in) {
     episode_file <- slfhelper::get_chi(
       episode_file,
@@ -177,11 +179,13 @@ create_individual_file <- function(
 #' @family individual_file
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
-  cli::cli_alert_info("Remove blank CHI function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(chi = dplyr::na_if(.data$chi, "")) %>%
     dplyr::filter(!is.na(.data$chi))
+
+  cli::cli_alert_info("Remove blank CHI function started at {Sys.time()}")
+
+  return(episode_file)
 }
 
 
@@ -191,9 +195,7 @@ remove_blank_chi <- function(episode_file) {
 #' @family individual_file
 #' @inheritParams create_individual_file
 add_cij_columns <- function(episode_file) {
-  cli::cli_alert_info("Add cij columns function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(
       cij_non_el = dplyr::if_else(
         .data$cij_pattype_code == 0L,
@@ -221,6 +223,10 @@ add_cij_columns <- function(episode_file) {
         NA_integer_
       )
     )
+
+  cli::cli_alert_info("Add cij columns function started at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add all columns
@@ -230,8 +236,6 @@ add_cij_columns <- function(episode_file) {
 #' @family individual_file
 #' @inheritParams create_individual_file
 add_all_columns <- function(episode_file, year) {
-  cli::cli_alert_info("Add all columns function started at {Sys.time()}")
-
   episode_file <- episode_file %>%
     add_acute_columns("Acute", (.data$smrtype == "Acute-DC" | .data$smrtype == "Acute-IP") & .data$cij_pattype != "Maternity") %>%
     add_mat_columns("Mat", .data$recid == "02B" | .data$cij_pattype == "Maternity") %>%
@@ -277,6 +281,10 @@ add_all_columns <- function(episode_file, year) {
         .data$OP_cost_dnas
       )
     )
+
+  cli::cli_alert_info("Add all columns function started at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add Acute columns
@@ -707,9 +715,7 @@ add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, 
 #' @inheritParams create_individual_file
 #' @family individual_file
 clean_up_ch <- function(episode_file, year) {
-  cli::cli_alert_info("Clean up CH function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(
       fy_end = end_fy(year),
       fy_start = start_fy(year)
@@ -741,6 +747,10 @@ clean_up_ch <- function(episode_file, year) {
       )
     ) %>%
     dplyr::select(-c("fy_end", "fy_start", "term_1", "term_2"))
+
+  cli::cli_alert_info("Clean up CH function started at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Recode gender
@@ -750,9 +760,7 @@ clean_up_ch <- function(episode_file, year) {
 #' @inheritParams create_individual_file
 #' @family individual_file
 recode_gender <- function(episode_file) {
-  cli::cli_alert_info("Recode Gender function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(
       gender = dplyr::if_else(
         .data$gender %in% c(0L, 9L),
@@ -760,6 +768,10 @@ recode_gender <- function(episode_file) {
         .data$gender
       )
     )
+
+  cli::cli_alert_info("Recode Gender function started at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Condition columns
@@ -769,11 +781,12 @@ recode_gender <- function(episode_file) {
 #' "dementia" and "dementia_date"
 #' @family individual_file
 condition_cols <- function() {
-  cli::cli_alert_info("Return condition columns function started at {Sys.time()}")
-
   conditions <- slfhelper::ltc_vars
   date_cols <- paste0(conditions, "_date")
   all_cols <- c(conditions, date_cols)
+
+  cli::cli_alert_info("Return condition columns function started at {Sys.time()}")
+
   return(all_cols)
 }
 
@@ -808,9 +821,7 @@ min_no_inf <- function(x) {
 #' @param individual_file Individual file where each row represents a unique CHI
 #' @param year Financial year e.g 1718
 clean_individual_file <- function(individual_file, year) {
-  cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
-
-  individual_file %>%
+  individual_file <- individual_file %>%
     dplyr::select(!dplyr::any_of(c(
       "ch_no_cost",
       "no_paid_items",
@@ -819,6 +830,10 @@ clean_individual_file <- function(individual_file, year) {
     ))) %>%
     clean_up_gender() %>%
     dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
+
+  cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
+
+  return(individual_file)
 }
 
 #' Clean up gender column
@@ -827,15 +842,16 @@ clean_individual_file <- function(individual_file, year) {
 #'
 #' @inheritParams clean_individual_file
 clean_up_gender <- function(individual_file) {
-  cli::cli_alert_info("Clean up gender column function started at {Sys.time()}")
-
-  individual_file %>%
+  individual_file <- individual_file %>%
     dplyr::mutate(
       gender = dplyr::case_when(
         .data$gender != 1.5 ~ round(.data$gender),
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
     )
+
+  cli::cli_alert_info("Clean up gender column function started at {Sys.time()}")
+  return(individual_file)
 }
 
 #' Join slf lookup variables
@@ -855,8 +871,6 @@ join_slf_lookup_vars <- function(individual_file,
                                    col_select = c("gpprac", "cluster", "hbpraccode")
                                  ),
                                  hbrescode_var = "hb2018") {
-  cli::cli_alert_info("Join slf lookup variables function started at {Sys.time()}")
-
   individual_file <- individual_file %>%
     dplyr::left_join(
       slf_postcode_lookup,
@@ -867,6 +881,8 @@ join_slf_lookup_vars <- function(individual_file,
       by = "gpprac"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
+
+  cli::cli_alert_info("Join slf lookup variables function started at {Sys.time()}")
 
   return(individual_file)
 }
