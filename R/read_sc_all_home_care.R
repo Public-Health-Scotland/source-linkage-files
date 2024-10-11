@@ -51,7 +51,7 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)
-  cli::cli_alert_info(stringr::str_glue("Home Care data is up to {latest_quarter}."))
+  cli::cli_alert_info(stringr::str_glue("Home Care data is available up to {latest_quarter}."))
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "hc"))) {
     home_care_data %>%
