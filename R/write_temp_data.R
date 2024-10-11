@@ -12,13 +12,16 @@ write_temp_data <-
   function(data, year, file_name, write_temp_to_disk) {
     if (write_temp_to_disk) {
       full_file_name <- stringr::str_glue("{file_name}.parquet")
-      file_path <- file.path(get_year_dir(year),
-                             full_file_name)
+      file_path <- file.path(
+        get_year_dir(year),
+        full_file_name
+      )
 
       cli::cli_alert_info(stringr::str_glue("Writing {full_file_name} to disk started at {Sys.time()}"))
 
       write_file(data,
-                 path = file_path)
+        path = file_path
+      )
     }
     return(data)
   }
@@ -34,8 +37,10 @@ write_temp_data <-
 #' @export
 read_temp_data <- function(year, file_name) {
   full_file_name <- stringr::str_glue("{file_name}.parquet")
-  file_path <- file.path(get_year_dir(year),
-                         full_file_name)
+  file_path <- file.path(
+    get_year_dir(year),
+    full_file_name
+  )
 
   return(read_file(file_path))
 }
@@ -49,7 +54,9 @@ read_temp_data <- function(year, file_name) {
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
 clean_temp_data <- function(year, file_type = c("ep", "ind")) {
-  list.files(path = get_year_dir(year),
-             pattern = stringr::str_glue("^{file_type}_temp")) %>%
+  list.files(
+    path = get_year_dir(year),
+    pattern = stringr::str_glue("^{file_type}_temp")
+  ) %>%
     file.remove()
 }
