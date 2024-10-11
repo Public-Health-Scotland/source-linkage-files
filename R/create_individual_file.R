@@ -18,7 +18,7 @@ create_individual_file <- function(
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
     anon_chi_out = TRUE,
-    test_mode) {
+    write_temp_to_disk) {
   if (anon_chi_in) {
     episode_file <- slfhelper::get_chi(
       episode_file,
@@ -76,7 +76,7 @@ create_individual_file <- function(
     remove_blank_chi() %>%
     add_cij_columns() %>%
     add_all_columns(year = year) %>%
-    write_temp_data(data, year, file_name = "indiv_temp1", test_mode)
+    write_temp_data(year, file_name = "indiv_temp1", write_temp_to_disk)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
@@ -85,24 +85,25 @@ create_individual_file <- function(
     individual_file <- individual_file %>%
       aggregate_ch_episodes() %>%
       clean_up_ch(year) %>%
-      aggregate_by_chi(year = year, exclude_sc_var = FALSE)
+      aggregate_by_chi(year = year, exclude_sc_var = FALSE) %>%
+      write_temp_data(year, file_name = "indiv_temp2", write_temp_to_disk)
   }
 
   individual_file <- individual_file %>%
     recode_gender() %>%
     clean_individual_file(year) %>%
     join_cohort_lookups(year) %>%
-    write_temp_data(data, year, file_name = "indiv_temp2", test_mode) %>%
+    write_temp_data(year, file_name = "indiv_temp3", write_temp_to_disk) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
     join_sparra_hhg(year) %>%
-    write_temp_data(data, year, file_name = "indiv_temp3", test_mode) %>%
+    write_temp_data(year, file_name = "indiv_temp4", write_temp_to_disk) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
     add_hri_variables(chi_variable = "chi") %>%
     add_keep_population_flag(year) %>%
-    write_temp_data(data, year, file_name = "indiv_temp4", test_mode) %>%
+    write_temp_data(year, file_name = "indiv_temp5", write_temp_to_disk) %>%
     join_sc_client(year, file_type = "individual")
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
