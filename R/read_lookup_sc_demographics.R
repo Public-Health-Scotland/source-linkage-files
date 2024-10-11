@@ -29,7 +29,7 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)
-  cli::cli_alert_info(stringr::str_glue("Demographics data is up to {latest_quarter}."))
+  cli::cli_alert_info(stringr::str_glue("Demographics data is available up to {latest_quarter}."))
 
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
