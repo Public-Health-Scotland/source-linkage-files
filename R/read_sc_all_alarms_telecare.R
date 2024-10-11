@@ -32,7 +32,7 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     dplyr::arrange(desc(period)) %>%
     dplyr::pull(period) %>%
     head(1)
-  cli::cli_alert_info(stringr::str_glue("Alarm Telecare data is up to {latest_quarter}."))
+  cli::cli_alert_info(stringr::str_glue("Alarm Telecare data is available up to {latest_quarter}."))
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "at"))) {
     at_full_data %>%
