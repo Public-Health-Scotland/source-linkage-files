@@ -19,7 +19,7 @@ create_episode_file(
   sc_client = read_file(get_sc_client_lookup_path(year)) \%>\% slfhelper::get_chi(),
   write_to_disk = TRUE,
   anon_chi_out = TRUE,
-  test_mode
+  write_temp_to_disk = FALSE
 )
 }
 \arguments{

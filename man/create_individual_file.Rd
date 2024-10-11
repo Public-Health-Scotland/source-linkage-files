@@ -11,7 +11,7 @@ create_individual_file(
   write_to_disk = TRUE,
   anon_chi_in = TRUE,
   anon_chi_out = TRUE,
-  test_mode
+  write_temp_to_disk
 )
 }
 \arguments{

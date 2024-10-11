@@ -4,7 +4,7 @@
 \alias{write_temp_data}
 \title{Write a temp data to disk in parquet format for debugging purpose}
 \usage{
-write_temp_data(data, year, file_name, test_mode)
+write_temp_data(data, year, file_name, write_temp_to_disk)
 }
 \arguments{
 \item{data}{The data to be written}
@@ -13,7 +13,7 @@ write_temp_data(data, year, file_name, test_mode)
 
 \item{file_name}{The file name to be written}
 
-\item{test_mode}{Boolean type to determine whether it is in a test mode}
+\item{write_temp_to_disk}{Boolean type, write temp data to disk or not}
 }
 \value{
 the data for next step as a \link[tibble:tibble-package]{tibble}.
