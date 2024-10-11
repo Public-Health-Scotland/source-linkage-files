@@ -83,7 +83,7 @@ read_lookup_sc_client <- function(fyyear,
     dplyr::arrange(desc(financial_quarter)) %>%
     dplyr::pull(financial_quarter) %>%
     head(1)
-  cli::cli_alert_info(stringr::str_glue("Social care client lookup for Year {fyyear} is up to {latest_quarter}."))
+  cli::cli_alert_info(stringr::str_glue("Social care client data for Year {fyyear} is available up to Q{latest_quarter}."))
 
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
