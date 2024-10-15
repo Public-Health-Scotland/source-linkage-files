@@ -16,8 +16,6 @@ fill_geographies <- function(
       get_slf_gpprac_path(),
       col_select = c("gpprac", "cluster", "hbpraccode")
     )) {
-  cli::cli_alert_info("Fill geographies function started at {Sys.time()}")
-
   check_variables_exist(data, c(
     "chi",
     "postcode",
@@ -30,7 +28,7 @@ fill_geographies <- function(
     "gpprac"
   ))
 
-  data %>%
+  data <- data %>%
     fill_postcode_geogs(
       slf_pc_lookup = read_file(get_slf_postcode_path())
     ) %>%
@@ -40,6 +38,10 @@ fill_geographies <- function(
         col_select = c("gpprac", "cluster", "hbpraccode")
       )
     )
+
+  cli::cli_alert_info("Fill geographies function finished at {Sys.time()}")
+
+  return(data)
 }
 
 #' Make a postcode lookup for filling to most recent postcodes based on CHI

@@ -13,8 +13,6 @@ add_nsu_cohort <- function(
     data,
     year,
     nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi()) {
-  cli::cli_alert_info("Add NSU cohort function started at {Sys.time()}")
-
   year_param <- year
 
   if (!check_year_valid(year, "nsu")) {
@@ -117,6 +115,8 @@ add_nsu_cohort <- function(
       )
     ) %>%
     dplyr::select(-dplyr::contains("_nsu"), -"has_chi")
+
+  cli::cli_alert_info("Add NSU cohort function finished at {Sys.time()}")
 
   return(return_df)
 }
