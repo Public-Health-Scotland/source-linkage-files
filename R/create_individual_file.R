@@ -18,6 +18,8 @@ create_individual_file <- function(
     write_to_disk = TRUE,
     anon_chi_in = TRUE,
     anon_chi_out = TRUE) {
+  cli::cli_alert_info("Create individual file function finished at {Sys.time()}")
+
   if (anon_chi_in) {
     episode_file <- slfhelper::get_chi(
       episode_file,
@@ -177,11 +179,13 @@ create_individual_file <- function(
 #' @family individual_file
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
-  cli::cli_alert_info("Remove blank CHI function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(chi = dplyr::na_if(.data$chi, "")) %>%
     dplyr::filter(!is.na(.data$chi))
+
+  cli::cli_alert_info("Remove blank CHI function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 
@@ -191,9 +195,7 @@ remove_blank_chi <- function(episode_file) {
 #' @family individual_file
 #' @inheritParams create_individual_file
 add_cij_columns <- function(episode_file) {
-  cli::cli_alert_info("Add cij columns function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(
       cij_non_el = dplyr::if_else(
         .data$cij_pattype_code == 0L,
@@ -221,6 +223,10 @@ add_cij_columns <- function(episode_file) {
         NA_integer_
       )
     )
+
+  cli::cli_alert_info("Add cij columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add all columns
@@ -230,8 +236,6 @@ add_cij_columns <- function(episode_file) {
 #' @family individual_file
 #' @inheritParams create_individual_file
 add_all_columns <- function(episode_file, year) {
-  cli::cli_alert_info("Add all columns function started at {Sys.time()}")
-
   episode_file <- episode_file %>%
     add_acute_columns("Acute", (.data$smrtype == "Acute-DC" | .data$smrtype == "Acute-IP") & .data$cij_pattype != "Maternity") %>%
     add_mat_columns("Mat", .data$recid == "02B" | .data$cij_pattype == "Maternity") %>%
@@ -277,6 +281,10 @@ add_all_columns <- function(episode_file, year) {
         .data$OP_cost_dnas
       )
     )
+
+  cli::cli_alert_info("Add all columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add Acute columns
@@ -286,12 +294,14 @@ add_all_columns <- function(episode_file, year) {
 #' @param condition Condition to create new columns based on
 #' @family individual_file
 add_acute_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add acute columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
     add_ipdc_cols(prefix, condition)
+
+  cli::cli_alert_info("Add acute columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add Mat columns
@@ -299,12 +309,14 @@ add_acute_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_mat_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add maternity columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
     add_ipdc_cols(prefix, condition, elective = FALSE)
+
+  cli::cli_alert_info("Add maternity columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add MH columns
@@ -312,12 +324,14 @@ add_mat_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_mh_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add mental health columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
     add_ipdc_cols(prefix, condition, ipdc_d = FALSE)
+
+  cli::cli_alert_info("Add mental health columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add GLS columns
@@ -325,12 +339,14 @@ add_mh_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_gls_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add geriatric long stay columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
     add_ipdc_cols(prefix, condition, ipdc_d = FALSE)
+
+  cli::cli_alert_info("Add geriatric long stay columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add OP columns
@@ -338,8 +354,6 @@ add_gls_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_op_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add outpatient columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition)
@@ -355,6 +369,9 @@ add_op_columns <- function(episode_file, prefix, condition) {
       "{prefix}_newcons_dnas" := dplyr::if_else(eval(condition_5_8), 1L, NA_integer_),
       "{prefix}_cost_dnas" := dplyr::if_else(eval(condition_5_8), .data$cost_total_net_inc_dnas, NA_real_)
     )
+
+  cli::cli_alert_info("Add outpatient columns function finished at {Sys.time()}")
+
   return(episode_file)
 }
 
@@ -363,12 +380,14 @@ add_op_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_ae_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add A&E columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
     dplyr::mutate("{prefix}_attendances" := dplyr::if_else(eval(condition), 1L, NA_integer_))
+
+  cli::cli_alert_info("Add A&E columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add PIS columns
@@ -376,12 +395,13 @@ add_ae_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_pis_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add prescribing columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
     dplyr::mutate("{prefix}_paid_items" := dplyr::if_else(eval(condition), .data$no_paid_items, NA_integer_))
+  cli::cli_alert_info("Add prescribing columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add OoH columns
@@ -389,8 +409,6 @@ add_pis_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_ooh_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add out of hours columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
   episode_file <- episode_file %>%
     add_standard_cols(prefix, condition, cost = TRUE) %>%
@@ -418,6 +436,8 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
       )
     )
 
+  cli::cli_alert_info("Add out of hours columns function finished at {Sys.time()}")
+
   return(episode_file)
 }
 
@@ -426,11 +446,9 @@ add_ooh_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_dn_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add district nursing columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
   if ("total_no_dn_contacts" %in% names(episode_file)) {
-    episode_file %>%
+    episode_file <- episode_file %>%
       add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
       dplyr::mutate(
         "{prefix}_contacts" := dplyr::if_else(
@@ -440,10 +458,14 @@ add_dn_columns <- function(episode_file, prefix, condition) {
         )
       )
   } else {
-    episode_file %>%
+    episode_file <- episode_file %>%
       add_standard_cols(prefix, condition, episode = TRUE, cost = TRUE) %>%
       dplyr::mutate("{prefix}_contacts" := NA_integer_)
   }
+
+  cli::cli_alert_info("Add district nursing columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add CMH columns
@@ -451,12 +473,14 @@ add_dn_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_cmh_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add communicty mental health columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate("{prefix}_contacts" := dplyr::if_else(eval(condition), 1L, NA_integer_))
+
+  cli::cli_alert_info("Add communicty mental health columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add DD columns
@@ -464,8 +488,6 @@ add_cmh_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_dd_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add delayed discharges columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
   condition_delay <- substitute(condition & primary_delay_reason != "9")
   episode_file <- episode_file %>%
@@ -479,6 +501,9 @@ add_dd_columns <- function(episode_file, prefix, condition) {
       "{prefix}_Code9_episodes" := dplyr::if_else(eval(condition_delay_9), 1L, NA_integer_),
       "{prefix}_Code9_beddays" := dplyr::if_else(eval(condition_delay_9), .data$yearstay, NA_real_)
     )
+
+  cli::cli_alert_info("Add delayed discharges columns function finished at {Sys.time()}")
+
   return(episode_file)
 }
 
@@ -487,12 +512,14 @@ add_dd_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_nsu_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add non service users columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1L, NA_integer_))
+
+  cli::cli_alert_info("Add non service users columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add NRS columns
@@ -500,12 +527,14 @@ add_nsu_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_nrs_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add nrs columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate("{prefix}" := dplyr::if_else(eval(condition), 1L, NA_integer_))
+
+  cli::cli_alert_info("Add nrs columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add HL1 columns
@@ -513,11 +542,13 @@ add_nrs_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_hl1_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add homelessness columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition)
+
+  cli::cli_alert_info("Add homelessness columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add CH columns
@@ -525,10 +556,8 @@ add_hl1_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_ch_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add care home columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
       ch_cost_per_day = dplyr::if_else(
@@ -550,6 +579,10 @@ add_ch_columns <- function(episode_file, prefix, condition) {
         .data$ch_ep_end
       )
     )
+
+  cli::cli_alert_info("Add care home columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add HC columns
@@ -557,8 +590,6 @@ add_ch_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_hc_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add home care columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
 
   episode_file <- episode_file %>%
@@ -596,6 +627,10 @@ add_hc_columns <- function(episode_file, prefix, condition) {
       "{prefix}_reablement_hours" := dplyr::if_else(eval(condition_reabl), .data$hc_hours_annual, NA_real_),
       "{prefix}_reablement_hours_cost" := dplyr::if_else(eval(condition_reabl), .data$cost_total_net, NA_real_)
     )
+
+  cli::cli_alert_info("Add home care columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add AT columns
@@ -603,15 +638,17 @@ add_hc_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_at_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add alarms telecare columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
       "{prefix}_alarms" := dplyr::if_else(eval(condition) & .data$smrtype == "AT-Alarm", 1L, NA_integer_),
       "{prefix}_telecare" := dplyr::if_else(eval(condition) & .data$smrtype == "AT-Tele", 1L, NA_integer_)
     )
+
+  cli::cli_alert_info("Add alarms telecare columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add SDS columns
@@ -619,10 +656,8 @@ add_at_columns <- function(episode_file, prefix, condition) {
 #' @inheritParams add_acute_columns
 #' @family individual_file
 add_sds_columns <- function(episode_file, prefix, condition) {
-  cli::cli_alert_info("Add SDS columns function started at {Sys.time()}")
-
   condition <- substitute(condition)
-  episode_file %>%
+  episode_file <- episode_file %>%
     add_standard_cols(prefix, condition) %>%
     dplyr::mutate(
       "{prefix}_option_1" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-1", 1L, NA_integer_),
@@ -630,6 +665,10 @@ add_sds_columns <- function(episode_file, prefix, condition) {
       "{prefix}_option_3" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-3", 1L, NA_integer_),
       "{prefix}_option_4" := dplyr::if_else(eval(condition) & .data$smrtype == "SDS-4", 1L, NA_integer_)
     )
+
+  cli::cli_alert_info("Add SDS columns function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Add columns based on IPDC
@@ -643,8 +682,6 @@ add_sds_columns <- function(episode_file, prefix, condition) {
 #' cij_pattype (lgl)
 #' @family individual_file
 add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, elective = TRUE) {
-  cli::cli_alert_info("Add ipdc columns function started at {Sys.time()}")
-
   condition_i <- substitute(eval(condition) & ipdc == "I")
   episode_file <- episode_file %>%
     dplyr::mutate(
@@ -676,6 +713,9 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
         "{prefix}_daycase_cost" := dplyr::if_else(eval(condition_d), .data$cost_total_net, NA_real_)
       )
   }
+
+  cli::cli_alert_info("Add ipdc columns function finished at {Sys.time()}")
+
   return(episode_file)
 }
 
@@ -689,14 +729,15 @@ add_ipdc_cols <- function(episode_file, prefix, condition, ipdc_d = TRUE, electi
 #' @param cost Whether to create prefix_cost col, e.g. "Acute_cost"
 #' @family individual_file
 add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, cost = FALSE) {
-  cli::cli_alert_info("Add standard columns function started at {Sys.time()}")
-
   if (episode) {
     episode_file <- dplyr::mutate(episode_file, "{prefix}_episodes" := dplyr::if_else(eval(condition), 1L, NA_integer_))
   }
   if (cost) {
     episode_file <- dplyr::mutate(episode_file, "{prefix}_cost" := dplyr::if_else(eval(condition), .data$cost_total_net, NA_real_))
   }
+
+  cli::cli_alert_info("Add standard columns function finished at {Sys.time()}")
+
   return(episode_file)
 }
 
@@ -707,9 +748,7 @@ add_standard_cols <- function(episode_file, prefix, condition, episode = FALSE, 
 #' @inheritParams create_individual_file
 #' @family individual_file
 clean_up_ch <- function(episode_file, year) {
-  cli::cli_alert_info("Clean up CH function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(
       fy_end = end_fy(year),
       fy_start = start_fy(year)
@@ -741,6 +780,10 @@ clean_up_ch <- function(episode_file, year) {
       )
     ) %>%
     dplyr::select(-c("fy_end", "fy_start", "term_1", "term_2"))
+
+  cli::cli_alert_info("Clean up CH function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Recode gender
@@ -750,9 +793,7 @@ clean_up_ch <- function(episode_file, year) {
 #' @inheritParams create_individual_file
 #' @family individual_file
 recode_gender <- function(episode_file) {
-  cli::cli_alert_info("Recode Gender function started at {Sys.time()}")
-
-  episode_file %>%
+  episode_file <- episode_file %>%
     dplyr::mutate(
       gender = dplyr::if_else(
         .data$gender %in% c(0L, 9L),
@@ -760,6 +801,10 @@ recode_gender <- function(episode_file) {
         .data$gender
       )
     )
+
+  cli::cli_alert_info("Recode Gender function finished at {Sys.time()}")
+
+  return(episode_file)
 }
 
 #' Condition columns
@@ -769,11 +814,12 @@ recode_gender <- function(episode_file) {
 #' "dementia" and "dementia_date"
 #' @family individual_file
 condition_cols <- function() {
-  cli::cli_alert_info("Return condition columns function started at {Sys.time()}")
-
   conditions <- slfhelper::ltc_vars
   date_cols <- paste0(conditions, "_date")
   all_cols <- c(conditions, date_cols)
+
+  cli::cli_alert_info("Return condition columns function finished at {Sys.time()}")
+
   return(all_cols)
 }
 
@@ -808,9 +854,7 @@ min_no_inf <- function(x) {
 #' @param individual_file Individual file where each row represents a unique CHI
 #' @param year Financial year e.g 1718
 clean_individual_file <- function(individual_file, year) {
-  cli::cli_alert_info("Clean individual file function started at {Sys.time()}")
-
-  individual_file %>%
+  individual_file <- individual_file %>%
     dplyr::select(!dplyr::any_of(c(
       "ch_no_cost",
       "no_paid_items",
@@ -819,6 +863,10 @@ clean_individual_file <- function(individual_file, year) {
     ))) %>%
     clean_up_gender() %>%
     dplyr::mutate(age = compute_mid_year_age(year, .data$dob))
+
+  cli::cli_alert_info("Clean individual file function finished at {Sys.time()}")
+
+  return(individual_file)
 }
 
 #' Clean up gender column
@@ -827,15 +875,16 @@ clean_individual_file <- function(individual_file, year) {
 #'
 #' @inheritParams clean_individual_file
 clean_up_gender <- function(individual_file) {
-  cli::cli_alert_info("Clean up gender column function started at {Sys.time()}")
-
-  individual_file %>%
+  individual_file <- individual_file %>%
     dplyr::mutate(
       gender = dplyr::case_when(
         .data$gender != 1.5 ~ round(.data$gender),
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
     )
+
+  cli::cli_alert_info("Clean up gender column function finished at {Sys.time()}")
+  return(individual_file)
 }
 
 #' Join slf lookup variables
@@ -855,8 +904,6 @@ join_slf_lookup_vars <- function(individual_file,
                                    col_select = c("gpprac", "cluster", "hbpraccode")
                                  ),
                                  hbrescode_var = "hb2018") {
-  cli::cli_alert_info("Join slf lookup variables function started at {Sys.time()}")
-
   individual_file <- individual_file %>%
     dplyr::left_join(
       slf_postcode_lookup,
@@ -867,6 +914,8 @@ join_slf_lookup_vars <- function(individual_file,
       by = "gpprac"
     ) %>%
     dplyr::rename(hbrescode = hbrescode_var)
+
+  cli::cli_alert_info("Join slf lookup variables function finished at {Sys.time()}")
 
   return(individual_file)
 }
