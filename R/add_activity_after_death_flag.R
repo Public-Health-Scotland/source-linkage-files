@@ -13,8 +13,6 @@ add_activity_after_death_flag <- function(
     year,
     deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
       slfhelper::get_chi()) {
-  cli::cli_alert_info("Add activity after death flag function started at {Sys.time()}")
-
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
@@ -105,6 +103,8 @@ add_activity_after_death_flag <- function(
     ))) %>%
     dplyr::select(-death_date_refined, -ep_row_id_death) %>%
     dplyr::distinct()
+
+  cli::cli_alert_info("Add activity after death flag function finished at {Sys.time()}")
 
   return(final_data)
 }
