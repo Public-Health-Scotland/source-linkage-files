@@ -41,7 +41,6 @@ process_extract_sds <- function(
       "smrtype",
       "chi",
       "dob",
-      # "person_id",
       "gender",
       "postcode",
       "sc_send_lca",

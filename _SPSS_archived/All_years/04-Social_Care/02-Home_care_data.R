@@ -14,7 +14,6 @@ source("All_years/04-Social_Care/00-Social_Care_functions.R")
 sc_con <- phs_db_connection(dsn = "DVPROD")
 
 # Read demographic file
-# TODO replace the demographic file with R code
 demog_file <- read_demog_file(
   social_care_dir = social_care_dir,
   latest_update = latest_update()
