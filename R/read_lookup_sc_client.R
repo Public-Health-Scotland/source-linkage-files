@@ -16,9 +16,6 @@ read_lookup_sc_client <- function(fyyear,
 
   # read in data - social care 2 client
   client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
-    dplyr::collect()
-
-  client_data <- client_data %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -79,7 +76,14 @@ read_lookup_sc_client <- function(fyyear,
       .data$financial_year,
       .data$financial_quarter
     ) %>%
-    dplyr::rename("mental_health_disorders" = "mental_health_problems")
+    dplyr::rename("mental_health_disorders" = "mental_health_problems") %>%
+    dplyr::collect()
+
+  latest_quarter <- client_data %>%
+    dplyr::arrange(desc(financial_quarter)) %>%
+    dplyr::pull(financial_quarter) %>%
+    head(1)
+  cli::cli_alert_info(stringr::str_glue("Social care client data for Year {fyyear} is available up to Q{latest_quarter}."))
 
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
