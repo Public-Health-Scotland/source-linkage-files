@@ -104,8 +104,9 @@ add_activity_after_death_flag <- function(
     dplyr::select(-death_date_refined, -ep_row_id_death) %>%
     dplyr::distinct() %>%
     dplyr::mutate(dplyr::if_else(is.na(activity_after_death),
-                                 0,
-                                 activity_after_death))
+      0,
+      activity_after_death
+    ))
 
   cli::cli_alert_info("Add activity after death flag function finished at {Sys.time()}")
 
