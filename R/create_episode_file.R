@@ -34,7 +34,6 @@ create_episode_file <- function(
     write_to_disk = TRUE,
     anon_chi_out = TRUE,
     write_temp_to_disk = FALSE) {
-
   cli::cli_alert_info("Create episode file function started at {Sys.time()}")
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
