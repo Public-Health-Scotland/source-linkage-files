@@ -32,13 +32,15 @@ create_episode_file <- function(
     slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi(),
     sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
     write_to_disk = TRUE,
-    anon_chi_out = TRUE) {
+    anon_chi_out = TRUE,
+    write_temp_to_disk = FALSE) {
   cli::cli_alert_info("Create episode file function started at {Sys.time()}")
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     slfhelper::get_chi() %>%
+    write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
@@ -122,15 +124,18 @@ create_episode_file <- function(
       # PC8 format may still be used. Ensure here that all datasets are in PC7 format.
       postcode = phsmethods::format_postcode(.data$postcode, "pc7")
     ) %>%
+    write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
+    write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
+    write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
@@ -142,11 +147,13 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
+    write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
       deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
         slfhelper::get_chi()
     ) %>%
-    load_ep_file_vars(year)
+    load_ep_file_vars(year) %>%
+    write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
