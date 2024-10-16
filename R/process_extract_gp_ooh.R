@@ -88,7 +88,6 @@ process_extract_gp_ooh <- function(year,
     )
 
   # Keep the location descriptions as a lookup.
-  # TODO write the GP OoH lookup out using some functions
   location_lookup <- ooh_clean %>%
     dplyr::group_by(.data$location) %>%
     dplyr::summarise(

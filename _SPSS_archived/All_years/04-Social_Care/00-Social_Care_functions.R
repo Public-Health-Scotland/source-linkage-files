@@ -50,7 +50,6 @@ phs_db_connection <- function(dsn, username = Sys.getenv("USER")) {
 }
 
 
-# TODO- check R conversion for SC demog lookup. This may differ
 #' Social Care Demographic Lookup File Path
 #'
 #' @description Get the file path for the Social Care Demographic lookup file
