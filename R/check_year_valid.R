@@ -45,9 +45,9 @@ check_year_valid <- function(
     return(FALSE)
   } else if (year >= "2324" && type %in% c("nsu", "hhg")) {
     return(FALSE)
-  } else if (year >= "2425" && type %in% "sparra") {
+  } else if (year >= "2425" && type %in% "nsu") {
     return(FALSE)
-  } else if (year >= "2526" && type %in% c("ch", "hc", "sds", "at")) {
+  } else if (year >= "2526" && type %in% c("ch", "hc", "sds", "at", "sparra")) {
     return(FALSE)
   }
 

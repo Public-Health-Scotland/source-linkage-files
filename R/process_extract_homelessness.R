@@ -154,7 +154,6 @@ process_extract_homelessness <- function(
     dplyr::rename(hl1_completeness = "pct_complete_all") %>%
     dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 1))
 
-  # TODO - Include person_id (from client_id)
   final_data <- hl1_data %>%
     dplyr::select(
       "year",

@@ -385,7 +385,6 @@ process_sc_all_care_home <- function(
     )) %>%
     dplyr::select(
       "chi",
-      # "person_id",
       "gender",
       "dob",
       "postcode",
