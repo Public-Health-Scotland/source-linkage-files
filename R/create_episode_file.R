@@ -41,6 +41,10 @@ create_episode_file <- function(
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     slfhelper::get_chi() %>%
     write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
+    link_delayed_discharge_eps(year, dd_data) %>%
+    write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
@@ -127,11 +131,8 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
-    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
-    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
     write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
-    link_delayed_discharge_eps(year, dd_data) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
@@ -139,19 +140,14 @@ create_episode_file <- function(
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
-    fill_geographies(
-      slf_pc_lookup,
-      slf_gpprac_lookup
-    ) %>%
-    join_deaths_data(
-      year,
-      slf_deaths_lookup
-    ) %>%
+    fill_geographies(slf_pc_lookup,
+                     slf_gpprac_lookup) %>%
+    join_deaths_data(year,
+                     slf_deaths_lookup) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
-      deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
-        slfhelper::get_chi()
-    ) %>%
+                                  deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
+                                    slfhelper::get_chi()) %>%
     load_ep_file_vars(year) %>%
     write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
 
