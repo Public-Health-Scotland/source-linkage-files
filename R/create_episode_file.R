@@ -3,7 +3,7 @@
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
 #' @param homelessness_lookup the lookup file for homelessness
-#' @param sc_client scoial care lookup file
+#' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
