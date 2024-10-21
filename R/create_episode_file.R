@@ -140,14 +140,19 @@ create_episode_file <- function(
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
-    fill_geographies(slf_pc_lookup,
-                     slf_gpprac_lookup) %>%
-    join_deaths_data(year,
-                     slf_deaths_lookup) %>%
+    fill_geographies(
+      slf_pc_lookup,
+      slf_gpprac_lookup
+    ) %>%
+    join_deaths_data(
+      year,
+      slf_deaths_lookup
+    ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
-                                  deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
-                                    slfhelper::get_chi()) %>%
+      deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
+        slfhelper::get_chi()
+    ) %>%
     load_ep_file_vars(year) %>%
     write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
 
