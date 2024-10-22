@@ -311,7 +311,6 @@ link_delayed_discharge_eps <- function(
     # keep variables from ep files
     dplyr::select(
       -c(
-        "ep_file_row_id",
         "year",
         "recid",
         "record_keydate1",

@@ -41,7 +41,7 @@ create_episode_file(
 
 \item{slf_deaths_lookup}{The SLF deaths lookup.}
 
-\item{sc_client}{scoial care lookup file}
+\item{sc_client}{social care lookup file}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
