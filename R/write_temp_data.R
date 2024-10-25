@@ -17,11 +17,10 @@ write_temp_data <-
         full_file_name
       )
 
-      cli::cli_alert_info(stringr::str_glue("Writing {full_file_name} to disk started at {Sys.time()}"))
-
       write_file(data,
         path = file_path
       )
+      cli::cli_alert_info(stringr::str_glue("Writing {full_file_name} to disk finished at {Sys.time()}"))
     }
     return(data)
   }

@@ -3,7 +3,7 @@
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
 #' @param homelessness_lookup the lookup file for homelessness
-#' @param sc_client scoial care lookup file
+#' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
@@ -41,6 +41,10 @@ create_episode_file <- function(
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     slfhelper::get_chi() %>%
     write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
+    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
+    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
+    link_delayed_discharge_eps(year, dd_data) %>%
+    write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
@@ -127,11 +131,8 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
-    add_homelessness_flag(year, lookup = homelessness_lookup) %>%
-    add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     add_ppa_flag() %>%
     write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
-    link_delayed_discharge_eps(year, dd_data) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
