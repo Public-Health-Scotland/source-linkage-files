@@ -220,20 +220,24 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   ae_cup_clean <- ae_cup_file %>%
     # Remove any duplicates
     dplyr::distinct(.data$record_keydate1,
-                    .data$keytime1,
-                    .data$record_keydate2,
-                    .data$keytime2,
-                    .data$case_ref_number,
-                    .keep_all = TRUE)
+      .data$keytime1,
+      .data$record_keydate2,
+      .data$keytime2,
+      .data$case_ref_number,
+      .keep_all = TRUE
+    )
 
 
   # Join data--------------------------------------------
 
   matched_ae_data <- outfile %>%
     dplyr::left_join(ae_cup_clean,
-                     by = c("record_keydate1", "keytime1",
-                            "record_keydate2", "keytime2",
-                            "case_ref_number")) %>%
+      by = c(
+        "record_keydate1", "keytime1",
+        "record_keydate2", "keytime2",
+        "case_ref_number"
+      )
+    ) %>%
     dplyr::arrange(
       .data$chi,
       .data$record_keydate1,
