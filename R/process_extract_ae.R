@@ -196,6 +196,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     col_type = readr::cols(
       "ED Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),
       "ED Arrival Time" = readr::col_time(""),
+      "ED Discharge Date" = readr::col_date(format = "%Y/%m/%d %T"),
+      "ED Discharge Time" = readr::col_time(""),
       "ED Case Reference Number [C]" = readr::col_character(),
       "CUP Marker" = readr::col_double(),
       "CUP Pathway Name" = readr::col_character()
@@ -205,6 +207,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     dplyr::rename(
       record_keydate1 = "ED Arrival Date",
       keytime1 = "ED Arrival Time",
+      record_keydate2 = "ED Discharge Date",
+      keytime2 = "ED Discharge Time",
       case_ref_number = "ED Case Reference Number [C]",
       cup_marker = "CUP Marker",
       cup_pathway = "CUP Pathway Name"
@@ -217,6 +221,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     # Remove any duplicates
     dplyr::distinct(.data$record_keydate1,
       .data$keytime1,
+      .data$record_keydate2,
+      .data$keytime2,
       .data$case_ref_number,
       .keep_all = TRUE
     )
@@ -225,9 +231,12 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   # Join data--------------------------------------------
 
   matched_ae_data <- outfile %>%
-    dplyr::left_join(
-      ae_cup_clean,
-      by = c("record_keydate1", "keytime1", "case_ref_number")
+    dplyr::left_join(ae_cup_clean,
+      by = c(
+        "record_keydate1", "keytime1",
+        "record_keydate2", "keytime2",
+        "case_ref_number"
+      )
     ) %>%
     dplyr::arrange(
       .data$chi,
