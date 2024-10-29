@@ -1,3 +1,33 @@
+#' End date
+#'
+#' @return Get the end date of the latest update period
+#' @export End date as dmy
+#'
+end_date <- function() {
+  ## UPDATE ##
+  # Last date in reporting period
+  # Q1 June = 30062024
+  # Q2 September = 30092024
+  # Q3 December = 31122024
+  # Q4 March = 31032024
+  lubridate::dmy(30062024)
+}
+
+
+#' Delayed Discharge period
+#'
+#' @description Get the period for Delayed Discharge
+#'
+#' @return The period for the Delayed Discharge file
+#' as MMMYY_MMMYY
+#' @export
+#'
+#' @family initialisation
+get_dd_period <- function() {
+  "Jul16_Jun24"
+}
+
+
 #' Latest update
 #'
 #' @description Get the date of the latest update, e.g 'Jun_2022'
@@ -9,6 +39,7 @@
 latest_update <- function() {
   "Sep_2024"
 }
+
 
 #' Previous update
 #'
@@ -51,18 +82,33 @@ previous_update <- function(months_ago = 3L, override = NULL) {
   return(previous_update)
 }
 
-#' Delayed Discharge period
+
+#' Extract latest FY from end_date
 #'
-#' @description Get the period for Delayed Discharge
-#'
-#' @return The period for the Delayed Discharge file
-#' as MMMYY_MMMYY
+#' @return fy in format "2024"
 #' @export
 #'
-#' @family initialisation
-get_dd_period <- function() {
-  "Jul16_Jun24"
+fy <- function(){
+  # Latest FY
+  fy <- phsmethods::extract_fin_year(end_date()) %>% substr(1, 4)
 }
+
+
+#' Extract latest quarter from end_date
+#'
+#' @return qtr in format "Q1"
+#' @export
+#'
+#' @examples
+qtr <- function(){
+  # Latest Quarter
+  qtr <- lubridate::quarter(end_date(), fiscal_start = 4)
+
+  qtr <- stringr::str_glue("Q{qtr}")
+
+  return(qtr)
+}
+
 
 #' The year list for slf to update
 #'
