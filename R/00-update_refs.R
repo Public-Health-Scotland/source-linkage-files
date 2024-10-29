@@ -1,3 +1,22 @@
+################################################################################
+# # Name of file -  00-update_refs.R
+# Original Authors - Jennifer Thom, Zihao Li
+# Original Date - August 2021
+# Update - Oct 2024
+#
+# Written/run on - RStudio Server
+# Version of R - 4.1.2
+#
+# Description - Use this script to update references needed for the SLF update.
+#
+# Manual changes needed to the following Essential Functions:
+#       # End_date
+#       # Check_year_valid
+#       # Delayed_discharges_period
+#       # Latest_update
+#
+################################################################################
+
 #' End date
 #'
 #' @return Get the end date of the latest update period
