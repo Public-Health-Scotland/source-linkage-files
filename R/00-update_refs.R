@@ -164,7 +164,7 @@ previous_update <- function(months_ago = 3L, override = NULL) {
 #' @return fy in format "2024"
 #' @export
 #'
-fy <- function(){
+fy <- function() {
   # Latest FY
   fy <- phsmethods::extract_fin_year(end_date()) %>% substr(1, 4)
 }
@@ -176,7 +176,7 @@ fy <- function(){
 #' @export
 #'
 #' @examples
-qtr <- function(){
+qtr <- function() {
   # Latest Quarter
   qtr <- lubridate::quarter(end_date(), fiscal_start = 4)
 

@@ -25,12 +25,12 @@ write_tests_xlsx <- function(comparison_data,
                              )) {
   # Set up the workbook ----
   if (workbook_name == "ep_file") {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_{year}_ep_file_tests")
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_{year}_ep_file_tests")
   }
   if (workbook_name == "indiv_file") {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_{year}_indiv_file_tests")
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_{year}_indiv_file_tests")
   }
   if (workbook_name == "lookup") {
     if (is.null(year)) {
@@ -49,8 +49,8 @@ write_tests_xlsx <- function(comparison_data,
     }
   }
   if (workbook_name == "extract") {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_{year}_extract_tests")
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_{year}_extract_tests")
   }
 
 
