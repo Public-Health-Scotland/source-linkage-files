@@ -41,6 +41,7 @@ create_episode_file <- function(
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
     slfhelper::get_chi() %>%
     write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
+    link_ch2ae(year) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
@@ -565,4 +566,60 @@ join_sc_client <- function(data,
   cli::cli_alert_info("Join social care client function finished at {Sys.time()}")
 
   return(data_file)
+}
+
+
+#' Add a variable for CH episode to indicate discharge to AE2
+#'
+#' @description Add a variable for CH episode to indicate discharge to AE2.
+#'
+#' @param data episode file
+#' @param year financial year.
+link_ch2ae <- function(data,
+                       year) {
+  data = data %>%
+    dplyr::mutate(ep_row_id_CE = dplyr::row_number())
+
+  ep_ch_dis2_ae = data %>%
+    dplyr::select(ep_row_id_CE,
+                  chi,
+                  recid,
+                  record_keydate1,
+                  record_keydate2,
+                  keytime1,
+                  keytime2) %>%
+    dplyr::arrange(
+      .data$chi,
+      .data$record_keydate1,
+      .data$keytime1,
+      .data$record_keydate2,
+      .data$keytime2
+    ) %>%
+    dplyr::filter(recid %in% c("CH", "AE2")) %>%
+    dplyr::group_by(chi) %>%
+    dplyr::filter(all(c("CH", "AE2") %in% recid)) %>%
+    # add ch_dis2_ae variable
+    # criteria: allow 1 day difference between discharge from CH and admission to AE2
+    dplyr::mutate(
+      ch_dis2_ae = (
+        recid == "CH" &
+          dplyr::lead(recid) == "AE2" &
+          record_keydate2 <= (dplyr::lead(record_keydate1) + 1) &
+          record_keydate2 >= (dplyr::lead(record_keydate1) - 1)
+      )
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::filter(recid == "CH") %>%
+    dplyr::select(ep_row_id_CE,
+                  ch_dis2_ae)
+
+  data = data %>%
+    dplyr::left_join(ep_ch_dis2_ae,
+                     by = "ep_row_id_CE") %>%
+    dplyr::select(-c("ep_row_id_CE"))
+
+
+  cli::cli_alert_info("Link CH to AE2 function finished at {Sys.time()}")
+
+  return(data)
 }
