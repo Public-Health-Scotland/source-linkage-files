@@ -577,17 +577,19 @@ join_sc_client <- function(data,
 #' @param year financial year.
 link_ch2ae <- function(data,
                        year) {
-  data = data %>%
+  data <- data %>%
     dplyr::mutate(ep_row_id_CE = dplyr::row_number())
 
-  ep_ch_dis2_ae = data %>%
-    dplyr::select(ep_row_id_CE,
-                  chi,
-                  recid,
-                  record_keydate1,
-                  record_keydate2,
-                  keytime1,
-                  keytime2) %>%
+  ep_ch_dis2_ae <- data %>%
+    dplyr::select(
+      ep_row_id_CE,
+      chi,
+      recid,
+      record_keydate1,
+      record_keydate2,
+      keytime1,
+      keytime2
+    ) %>%
     dplyr::arrange(
       .data$chi,
       .data$record_keydate1,
@@ -610,12 +612,15 @@ link_ch2ae <- function(data,
     ) %>%
     dplyr::ungroup() %>%
     dplyr::filter(recid == "CH") %>%
-    dplyr::select(ep_row_id_CE,
-                  ch_dis2_ae)
+    dplyr::select(
+      ep_row_id_CE,
+      ch_dis2_ae
+    )
 
-  data = data %>%
+  data <- data %>%
     dplyr::left_join(ep_ch_dis2_ae,
-                     by = "ep_row_id_CE") %>%
+      by = "ep_row_id_CE"
+    ) %>%
     dplyr::select(-c("ep_row_id_CE"))
 
 
