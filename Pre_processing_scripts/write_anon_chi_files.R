@@ -37,34 +37,34 @@ is_chi_in_file <- function(filename) {
 # Stage 2 - In each file, convert chi to anon_chi and save to disk
 #-------------------------------------------------------------------------------
 
-  # create a loop for converting to anon chi in all listed files
-  for (data_file in parquet_files) {
-    # specify new name and new file path
-    save_file_path <- file.path(source_dir, paste0("anon-", basename(data_file)))
-    chi_in_file <- is_chi_in_file(data_file)
+# create a loop for converting to anon chi in all listed files
+for (data_file in parquet_files) {
+  # specify new name and new file path
+  save_file_path <- file.path(source_dir, paste0("anon-", basename(data_file)))
+  chi_in_file <- is_chi_in_file(data_file)
 
-    # If chi is in the file, convert to anon_chi
-    if (chi_in_file) {
-      read_file(data_file) %>%
-        slfhelper::get_anon_chi() %>%
-        write_file(save_file_path)
+  # If chi is in the file, convert to anon_chi
+  if (chi_in_file) {
+    read_file(data_file) %>%
+      slfhelper::get_anon_chi() %>%
+      write_file(save_file_path)
 
-      cat("Replaced chi with anon chi:", data_file, "to", save_file_path, "\n")
-    } else {
-      read_file(data_file) %>%
-        write_file(save_file_path)
-      cat("renamed file with anon chi:", data_file, "to", save_file_path, "\n")
-    }
+    cat("Replaced chi with anon chi:", data_file, "to", save_file_path, "\n")
+  } else {
+    read_file(data_file) %>%
+      write_file(save_file_path)
+    cat("renamed file with anon chi:", data_file, "to", save_file_path, "\n")
   }
+}
 
 
 # Stage 3 - Remove files with CHI
 #-------------------------------------------------------------------------------
 
-  # Create a loop for removing the old files with CHI
-  for (data_file in parquet_files) {
-    file.remove(data_file)
-    cat("Removed chi files:", data_file, "in", source_dir, "\n")
-  }
+# Create a loop for removing the old files with CHI
+for (data_file in parquet_files) {
+  file.remove(data_file)
+  cat("Removed chi files:", data_file, "in", source_dir, "\n")
+}
 
 # End of Script #
