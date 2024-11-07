@@ -14,7 +14,7 @@
 ################################################################################
 
 ## Stage 1 - Setup environment
---------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 # Set up directory
 source_dir <- "/conf/hscdiip/SLF_Extracts/Delayed_Discharges"
@@ -35,7 +35,7 @@ is_chi_in_file <- function(filename) {
 
 
 # Stage 2 - In each file, convert chi to anon_chi and save to disk
---------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
   # create a loop for converting to anon chi in all listed files
   for (data_file in parquet_files) {
@@ -59,7 +59,7 @@ is_chi_in_file <- function(filename) {
 
 
 # Stage 3 - Remove files with CHI
---------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
   # Create a loop for removing the old files with CHI
   for (data_file in parquet_files) {
