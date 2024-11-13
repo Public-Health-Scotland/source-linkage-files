@@ -50,7 +50,7 @@ process_costs_rmd <- function(file_name) {
     output <- NULL
   } else {
     # If file does not exist, create it
-    output <- rmarkdown::render(
+    rmarkdown::render(
       input = input_file,
       output_file = output_file,
       output_format = "html_document",
