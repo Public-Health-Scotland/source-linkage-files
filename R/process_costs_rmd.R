@@ -45,13 +45,19 @@ process_costs_rmd <- function(file_name) {
     check_mode = "write"
   )
 
-  rmarkdown::render(
-    input = input_file,
-    output_file = output_file,
-    output_format = "html_document",
-    envir = new.env(),
-    quiet = TRUE
-  )
+  if (fs::file_exists(output_file)) {
+    # Do not write file if it already exists
+    output <- NULL
+  } else {
+    # If file does not exist, create it
+    output <- rmarkdown::render(
+      input = input_file,
+      output_file = output_file,
+      output_format = "html_document",
+      envir = new.env(),
+      quiet = TRUE
+    )
+  }
 
   if (fs::file_info(output_file)$user == Sys.getenv("USER")) {
     # Set the correct permissions
