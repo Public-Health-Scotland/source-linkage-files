@@ -23,7 +23,8 @@ process_costs_rmd <- function(file_name) {
 
   output_dir <- fs::path(
     get_slf_dir(),
-    "Tests"
+    "Tests",
+    "cost_tests"
   )
 
   input_file <- get_file_path(
