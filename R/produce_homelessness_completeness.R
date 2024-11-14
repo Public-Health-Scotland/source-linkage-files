@@ -40,7 +40,7 @@ produce_homelessness_completeness <- function(
   sg_all_assessments_annual <-
     openxlsx::read.xlsx(
       sg_pub_path,
-      sheet = "Table 1",# Manual change - check sheet name
+      sheet = "Table 1", # Manual change - check sheet name
       rows = 8L:39L,
       cols = 1L:33L, # Manual change - check workbook for col number for latest year
       colNames = FALSE
