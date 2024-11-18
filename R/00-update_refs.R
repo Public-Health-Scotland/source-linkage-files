@@ -29,7 +29,7 @@ end_date <- function() {
   # Q2 September = 30092024
   # Q3 December = 31122024
   # Q4 March = 31032024
-  lubridate::dmy(30062024)
+  lubridate::dmy(30092024)
 }
 
 
