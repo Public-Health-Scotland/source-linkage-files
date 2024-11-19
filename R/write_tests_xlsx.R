@@ -25,16 +25,12 @@ write_tests_xlsx <- function(comparison_data,
                              )) {
   # Set up the workbook ----
   if (workbook_name == "ep_file") {
-    if (is.null(year)) {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_ep_file_tests")
-    }
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_{year}_ep_file_tests")
   }
   if (workbook_name == "indiv_file") {
-    if (is.null(year)) {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_indiv_file_tests")
-    }
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_{year}_indiv_file_tests")
   }
   if (workbook_name == "lookup") {
     if (is.null(year)) {
@@ -53,17 +49,16 @@ write_tests_xlsx <- function(comparison_data,
     }
   }
   if (workbook_name == "extract") {
-    if (is.null(year)) {
-    } else {
-      tests_workbook_name <-
-        stringr::str_glue(latest_update(), "_{year}_extract_tests")
-    }
+    tests_workbook_name <-
+      stringr::str_glue(latest_update(), "_{year}_extract_tests")
   }
 
 
   tests_workbook_path <- fs::path(
     get_slf_dir(),
     "Tests",
+    fy(),
+    qtr(),
     tests_workbook_name,
     ext = "xlsx"
   )
