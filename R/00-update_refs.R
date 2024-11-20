@@ -20,7 +20,7 @@
 #' End date
 #'
 #' @return Get the end date of the latest update period
-#' @export End date as dmy
+#' @export
 #'
 end_date <- function() {
   ## UPDATE ##
@@ -175,7 +175,6 @@ fy <- function() {
 #' @return qtr in format "Q1"
 #' @export
 #'
-#' @examples
 qtr <- function() {
   # Latest Quarter
   qtr <- lubridate::quarter(end_date(), fiscal_start = 4)
