@@ -100,7 +100,7 @@ check_year_valid <- function(
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Jun24"
+  "Jul16_Sep24"
 }
 
 
@@ -113,7 +113,7 @@ get_dd_period <- function() {
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Sep_2024"
+  "Dec_2024"
 }
 
 
