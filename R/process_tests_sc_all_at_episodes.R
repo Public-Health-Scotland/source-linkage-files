@@ -12,11 +12,10 @@
 process_tests_sc_all_at_episodes <- function(data) {
   comparison <- produce_test_comparison(
     old_data = produce_sc_all_episodes_tests(
-      read_file(get_sc_at_episodes_path(update = previous_update())) %>%
-        slfhelper::get_chi()
+      read_file(get_sc_at_episodes_path(update = previous_update()))
     ),
     new_data = produce_sc_all_episodes_tests(
-      data %>% slfhelper::get_chi()
+      data
     )
   )
 
