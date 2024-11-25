@@ -4,8 +4,6 @@
 #'
 #' @export
 process_tests_it_chi_deaths <- function(data, update = previous_update()) {
-  data <- data %>%
-    slfhelper::get_chi()
 
   comparison <- produce_test_comparison(
     old_data = produce_it_chi_deaths_tests(
@@ -42,10 +40,8 @@ produce_it_chi_deaths_tests <- function(data) {
     dplyr::mutate(
       n_chi = 1L,
       n_valid_chi = phsmethods::chi_check(.data$chi) == "Valid CHI",
-      n_death_date_nrs = is.na(.data$death_date_nrs),
       n_death_date_chi = is.na(.data$death_date_chi),
-      n_death_date = is.na(.data$death_date),
-      death_year = lubridate::year(.data$death_date),
+      death_year = lubridate::year(.data$death_date_chi),
       "n_deaths_{current_year_0}" := .data$death_year == current_year_0,
       "n_deaths_{current_year_1}" := .data$death_year == current_year_1,
       "n_deaths_{current_year_2}" := .data$death_year == current_year_2,
