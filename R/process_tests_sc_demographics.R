@@ -15,12 +15,15 @@ process_tests_sc_demographics <- function(data) {
 
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
-      read_file(get_sc_demog_lookup_path(update = previous_update()))
+      read_file(get_sc_demog_lookup_path(update = previous_update())) %>%
+        slfhelper::get_chi()
     ),
     new_data = produce_sc_demog_lookup_tests(
       data
     )
-  ) %>%
+  )
+
+  comparison %>%
     write_tests_xlsx(sheet_name = "sc_demographics", workbook_name = "lookup")
 
   return(comparison)
@@ -53,7 +56,8 @@ produce_sc_demog_lookup_tests <- function(data) {
         "chi",
         "gender",
         "dob",
-        "postcode"
+        "postcode",
+        "date_of_death"
       )
     ) %>%
     # use function to sum new test flags
