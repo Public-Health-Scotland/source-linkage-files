@@ -34,9 +34,13 @@ process_tests_individual_file <- function(data, year) {
     old_data = produce_individual_file_tests(old_data),
     new_data = produce_individual_file_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = stringr::str_glue({
-      "indiv_file_{year}"
-    }), workbook_name = "indiv_file")
+    write_tests_xlsx(
+      sheet_name = stringr::str_glue({
+        "indiv_file_{year}"
+      }),
+      year = year,
+      workbook_name = "indiv_file"
+    )
 
   return(comparison)
 }
