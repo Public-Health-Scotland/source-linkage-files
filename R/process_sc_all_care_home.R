@@ -59,8 +59,9 @@ process_sc_all_care_home <- function(
 
   fixed_ch_provider <- name_postcode_clean %>%
     dplyr::select(-ch_name_validated, -open_interval, -latest_close_date, -ch_name_old, -ch_postcode_old) %>%
+    # Changes in data definitions, 6 is no longer coded as 'other', this is now '5 = other'
     dplyr::mutate(
-      ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]]) # (n = 2)
+      ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 5L, .data[["ch_provider"]]) # (n = 2)
     ) %>%
     # sort data
     dplyr::arrange(
