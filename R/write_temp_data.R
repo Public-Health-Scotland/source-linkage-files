@@ -55,7 +55,8 @@ read_temp_data <- function(year, file_name) {
 clean_temp_data <- function(year, file_type = c("ep", "ind")) {
   list.files(
     path = get_year_dir(year),
-    pattern = stringr::str_glue("^{file_type}_temp")
+    pattern = stringr::str_glue("^{file_type}_temp"),
+    full.names = TRUE
   ) %>%
     file.remove()
 }
