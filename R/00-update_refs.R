@@ -80,7 +80,7 @@ check_year_valid <- function(
     return(FALSE)
   } else if (year >= "2324" && type %in% "hhg") {
     return(FALSE)
-  } else if (year >= "2425" && type %in% "nsu") {
+  } else if (year >= "2425" && type %in% c("nsu", "sds")) {
     return(FALSE)
   } else if (year >= "2526" && type %in% c("ch", "hc", "sds", "at", "sparra")) {
     return(FALSE)
