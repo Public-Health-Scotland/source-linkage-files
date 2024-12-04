@@ -24,12 +24,12 @@
 #'
 end_date <- function() {
   ## UPDATE ##
-  # Last date in reporting period
+  # Specify update by indicating end of quarter date
   # Q1 June = 30062024
   # Q2 September = 30092024
   # Q3 December = 31122024
   # Q4 March = 31032024
-  lubridate::dmy(30092024)
+  lubridate::dmy(31122024)
 }
 
 
