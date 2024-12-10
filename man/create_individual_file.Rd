@@ -10,7 +10,8 @@ create_individual_file(
   homelessness_lookup = create_homelessness_lookup(year),
   write_to_disk = TRUE,
   anon_chi_in = TRUE,
-  anon_chi_out = TRUE
+  anon_chi_out = TRUE,
+  write_temp_to_disk
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ create_individual_file(
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
 (instead of chi)}
+
+\item{write_temp_to_disk}{write intermediate data for investigation or debug}
 }
 \value{
 The processed individual file

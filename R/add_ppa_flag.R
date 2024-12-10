@@ -8,8 +8,6 @@
 #' @return A data frame to use as a lookup of PPAs
 #' @family episode_file
 add_ppa_flag <- function(data) {
-  cli::cli_alert_info("Add PPA flag function started at {Sys.time()}")
-
   check_variables_exist(
     data,
     variables = c(
@@ -226,6 +224,8 @@ add_ppa_flag <- function(data) {
       FALSE,
       .data$cij_ppa
     ))
+
+  cli::cli_alert_info("Add PPA flag function finished at {Sys.time()}")
 
   return(ppa_cij_data)
 }

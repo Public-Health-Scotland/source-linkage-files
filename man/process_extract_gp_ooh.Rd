@@ -16,6 +16,8 @@ process_extract_gp_ooh(
 
 \item{data_list}{A list containing the extracts.}
 
+\item{gp_ooh_cup_path}{path to gp ooh cup data}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }

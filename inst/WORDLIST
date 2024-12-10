@@ -86,6 +86,7 @@ funs
 fy
 fyear
 fyyear
+gp
 gpprac
 hb
 hbpraccode
@@ -94,10 +95,12 @@ hc
 hscdiip
 hscp
 inc
+ind
 interzone
 lca
 lgl
 normal’
+nrs
 old’
 opendata
 overcounting
@@ -109,7 +112,6 @@ reablement
 recid
 recids
 sc
-scoial
 sds
 slf
 slfhelper

@@ -12,8 +12,6 @@ link_delayed_discharge_eps <- function(
     episode_file,
     year,
     dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()) {
-  cli::cli_alert_info("Link delayed discharge to episode file function started at {Sys.time()}")
-
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
     return(episode_file)
@@ -292,7 +290,7 @@ link_delayed_discharge_eps <- function(
     )) %>%
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
-    dplyr::mutate(cij_delay = dplyr::if_else(cij_delay == "0",
+    dplyr::mutate(cij_delay = dplyr::if_else(.data$cij_delay == "0",
       FALSE,
       TRUE,
       missing = NA
@@ -313,7 +311,6 @@ link_delayed_discharge_eps <- function(
     # keep variables from ep files
     dplyr::select(
       -c(
-        "ep_file_row_id",
         "year",
         "recid",
         "record_keydate1",
@@ -364,17 +361,19 @@ link_delayed_discharge_eps <- function(
         )
     ) %>%
     # populate cij_delay dd details back to ep
-    dplyr::group_by(chi, cij_marker) %>%
+    dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(
-      has_dd = any(recid == "DD"),
-      delay_dd = any(cij_delay)
+      has_dd = any(.data$recid == "DD"),
+      delay_dd = any(.data$cij_delay)
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(cij_delay = dplyr::if_else(has_dd,
-      delay_dd,
-      cij_delay
+    dplyr::mutate(cij_delay = dplyr::if_else(.data$has_dd,
+      .data$delay_dd,
+      .data$cij_delay
     )) %>%
     dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
+
+  cli::cli_alert_info("Link delayed discharge to episode file function finished at {Sys.time()}")
 
   return(linked_data)
 }

@@ -11,9 +11,6 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "sds_snapshot")
   ) %>%
-    dplyr::collect()
-
-  sds_full_data <- sds_full_data %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -28,7 +25,14 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       "sds_start_date_after_end_date", # get fixed
       "sds_start_date_after_period_end_date" # get removed
     ) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    dplyr::collect()
+
+  latest_quarter <- sds_full_data %>%
+    dplyr::arrange(dplyr::desc(.data$period)) %>%
+    dplyr::pull(.data$period) %>%
+    utils::head(1)
+  cli::cli_alert_info(stringr::str_glue("SDS data is available up to {latest_quarter}."))
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "sds"))) {
     sds_full_data %>%

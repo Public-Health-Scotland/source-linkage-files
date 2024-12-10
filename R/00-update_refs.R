@@ -1,3 +1,109 @@
+################################################################################
+# # Name of file -  00-update_refs.R
+# Original Authors - Jennifer Thom, Zihao Li
+# Original Date - August 2021
+# Update - Oct 2024
+#
+# Written/run on - RStudio Server
+# Version of R - 4.1.2
+#
+# Description - Use this script to update references needed for the SLF update.
+#
+# Manual changes needed to the following Essential Functions:
+#       # End_date
+#       # Check_year_valid
+#       # Delayed_discharges_period
+#       # Latest_update
+#
+################################################################################
+
+#' End date
+#'
+#' @return Get the end date of the latest update period
+#' @export
+#'
+end_date <- function() {
+  ## UPDATE ##
+  # Specify update by indicating end of quarter date
+  # Q1 June = 30062024
+  # Q2 September = 30092024
+  # Q3 December = 31122024
+  # Q4 March = 31032024
+  lubridate::dmy(31122024)
+}
+
+
+#' Check data exists for a year
+#'
+#' @description  Check there is data available for a given year
+#' as some extracts are year dependent. E.g Homelessness
+#' is only available from 2016/17 onwards.
+#'
+#' @param year Financial year
+#' @param type name of extract
+#'
+#' @return A logical TRUE/FALSE
+check_year_valid <- function(
+    year,
+    type = c(
+      "acute",
+      "ae",
+      "at",
+      "ch",
+      "client",
+      "cmh",
+      "cost_dna",
+      "dd",
+      "deaths",
+      "dn",
+      "gpooh",
+      "hc",
+      "homelessness",
+      "hhg",
+      "maternity",
+      "mh",
+      "nsu",
+      "outpatients",
+      "pis",
+      "sds",
+      "sparra"
+    )) {
+  if (year <= "1415" && type %in% c("dn", "sparra")) {
+    return(FALSE)
+  } else if (year <= "1516" && type %in% c("cmh", "homelessness", "dd")) {
+    return(FALSE)
+  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at", "client", "cost_dna")) {
+    return(FALSE)
+  } else if (year <= "1718" && type %in% "hhg") {
+    return(FALSE)
+  } else if (year >= "2122" && type %in% c("cmh", "dn")) {
+    return(FALSE)
+  } else if (year >= "2324" && type %in% "hhg") {
+    return(FALSE)
+  } else if (year >= "2425" && type %in% c("nsu", "sds")) {
+    return(FALSE)
+  } else if (year >= "2526" && type %in% c("ch", "hc", "sds", "at", "sparra")) {
+    return(FALSE)
+  }
+
+  return(TRUE)
+}
+
+
+#' Delayed Discharge period
+#'
+#' @description Get the period for Delayed Discharge
+#'
+#' @return The period for the Delayed Discharge file
+#' as MMMYY_MMMYY
+#' @export
+#'
+#' @family initialisation
+get_dd_period <- function() {
+  "Jul16_Sep24"
+}
+
+
 #' Latest update
 #'
 #' @description Get the date of the latest update, e.g 'Jun_2022'
@@ -7,8 +113,9 @@
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Sep_2024"
+  "Dec_2024"
 }
+
 
 #' Previous update
 #'
@@ -51,18 +158,32 @@ previous_update <- function(months_ago = 3L, override = NULL) {
   return(previous_update)
 }
 
-#' Delayed Discharge period
+
+#' Extract latest FY from end_date
 #'
-#' @description Get the period for Delayed Discharge
-#'
-#' @return The period for the Delayed Discharge file
-#' as MMMYY_MMMYY
+#' @return fy in format "2024"
 #' @export
 #'
-#' @family initialisation
-get_dd_period <- function() {
-  "Jul16_Jun24"
+fy <- function() {
+  # Latest FY
+  fy <- phsmethods::extract_fin_year(end_date()) %>% substr(1, 4)
 }
+
+
+#' Extract latest quarter from end_date
+#'
+#' @return qtr in format "Q1"
+#' @export
+#'
+qtr <- function() {
+  # Latest Quarter
+  qtr <- lubridate::quarter(end_date(), fiscal_start = 4)
+
+  qtr <- stringr::str_glue("Q{qtr}")
+
+  return(qtr)
+}
+
 
 #' The year list for slf to update
 #'

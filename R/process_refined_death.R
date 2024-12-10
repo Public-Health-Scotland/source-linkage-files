@@ -44,13 +44,18 @@ process_refined_death <- function(
       .data$death_date_chi,
       .data$record_keydate1
     )) %>%
-    dplyr::select(anon_chi, death_date) %>%
+    dplyr::select("anon_chi", "death_date") %>%
     # add fy when death happened
     dplyr::mutate(
-      fy = phsmethods::extract_fin_year(death_date),
+      fy = phsmethods::extract_fin_year(.data$death_date),
       fy = as.character(paste0(substr(fy, 3, 4), substr(fy, 6, 7)))
-    )
-  # TODO: check distinct death data by chi while keeping chi==NA records
+    ) %>%
+    # no need to keep NA
+    dplyr::filter(!is.na(.data$anon_chi)) %>%
+    dplyr::group_by(.data$anon_chi) %>%
+    dplyr::arrange(.data$death_date) %>%
+    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
+    dplyr::ungroup()
 
   if (write_to_disk) {
     write_file(

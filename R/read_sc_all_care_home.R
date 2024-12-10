@@ -10,9 +10,7 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
   ch_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "carehome_snapshot")
-  ) %>% dplyr::collect()
-
-  ch_data <- ch_data %>%
+  ) %>%
     dplyr::select(
       "ch_name",
       "ch_postcode",
@@ -29,7 +27,14 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "ch_discharge_date",
       "age"
     ) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    dplyr::collect()
+
+  latest_quarter <- ch_data %>%
+    dplyr::arrange(dplyr::desc(.data$period)) %>%
+    dplyr::pull(.data$period) %>%
+    utils::head(1)
+  cli::cli_alert_info(stringr::str_glue("Care Home data is available up to {latest_quarter}."))
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "ch"))) {
     ch_data %>%
