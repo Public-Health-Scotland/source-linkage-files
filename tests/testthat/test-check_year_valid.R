@@ -50,7 +50,8 @@ test_that("Check year valid works for specific datasets ", {
   expect_true(check_year_valid("2021", "nsu"))
   expect_true(check_year_valid("2122", "nsu"))
   expect_true(check_year_valid("2223", "nsu"))
-  expect_false(check_year_valid("2324", "nsu"))
+  expect_true(check_year_valid("2324", "nsu"))
+  expect_false(check_year_valid("2425", "nsu"))
 
   # SPARRA
   expect_false(check_year_valid("1415", "sparra"))
@@ -64,6 +65,7 @@ test_that("Check year valid works for specific datasets ", {
   expect_true(check_year_valid("2122", "sparra"))
   expect_true(check_year_valid("2223", "sparra"))
   expect_true(check_year_valid("2324", "sparra"))
+  expect_true(check_year_valid("2425", "sparra"))
 
   # HHG
   expect_false(check_year_valid("1415", "hhg"))
