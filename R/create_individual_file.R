@@ -19,7 +19,7 @@ create_individual_file <- function(
     anon_chi_in = TRUE,
     anon_chi_out = TRUE,
     write_temp_to_disk) {
-  cli::cli_alert_info("Create individual file function finished at {Sys.time()}")
+  cli::cli_alert_info("Create individual file function started at {Sys.time()}")
 
   if (anon_chi_in) {
     episode_file <- slfhelper::get_chi(
