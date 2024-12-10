@@ -368,8 +368,8 @@ link_delayed_discharge_eps <- function(
     ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(cij_delay = dplyr::if_else(.data$has_dd,
-                                             .data$delay_dd,
-                                             .data$cij_delay
+      .data$delay_dd,
+      .data$cij_delay
     )) %>%
     dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
 
