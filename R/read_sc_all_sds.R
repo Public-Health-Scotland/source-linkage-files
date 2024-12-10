@@ -29,9 +29,9 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
     dplyr::collect()
 
   latest_quarter <- sds_full_data %>%
-    dplyr::arrange(desc(period)) %>%
-    dplyr::pull(period) %>%
-    head(1)
+    dplyr::arrange(dplyr::desc(.data$period)) %>%
+    dplyr::pull(.data$period) %>%
+    utils::head(1)
   cli::cli_alert_info(stringr::str_glue("SDS data is available up to {latest_quarter}."))
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "sds"))) {

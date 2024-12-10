@@ -16,6 +16,8 @@ process_extract_acute(
 
 \item{year}{The year to process, in FY format.}
 
+\item{acute_cup_path}{path to acute_cup data}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }

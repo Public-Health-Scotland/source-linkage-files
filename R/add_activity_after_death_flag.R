@@ -71,14 +71,14 @@ add_activity_after_death_flag <- function(
     dplyr::filter(.data$activity_after_death == 1) %>%
     # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
     dplyr::select(
-      year,
-      chi,
-      recid,
-      record_keydate1,
-      record_keydate2,
-      activity_after_death,
-      death_date_refined,
-      ep_row_id_death
+      "year",
+      "chi",
+      "recid",
+      "record_keydate1",
+      "record_keydate2",
+      "activity_after_death",
+      "death_date_refined",
+      "ep_row_id_death"
     ) %>%
     dplyr::distinct()
 
@@ -98,14 +98,14 @@ add_activity_after_death_flag <- function(
       na_matches = "never"
     ) %>%
     dplyr::mutate(death_date = lubridate::as_date(ifelse(
-      is.na(death_date) & !(is.na(death_date_refined)),
-      death_date_refined, death_date
+      is.na(.data$death_date) & !(is.na(.data$death_date_refined)),
+      .data$death_date_refined, .data$death_date
     ))) %>%
-    dplyr::select(-death_date_refined, -ep_row_id_death) %>%
+    dplyr::select(-"death_date_refined", -"ep_row_id_death") %>%
     dplyr::distinct() %>%
-    dplyr::mutate(dplyr::if_else(is.na(activity_after_death),
+    dplyr::mutate(dplyr::if_else(is.na(.data$activity_after_death),
       0,
-      activity_after_death
+      .data$activity_after_death
     ))
 
   cli::cli_alert_info("Add activity after death flag function finished at {Sys.time()}")

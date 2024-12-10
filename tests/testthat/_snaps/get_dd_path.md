@@ -3,7 +3,7 @@
     Code
       dplyr::glimpse(latest_dd_file, width = 0)
     Output
-      Rows: 206,029
+      Rows: 219,954
       Columns: 14
       $ cennum                 <dbl> ~
       $ MONTHFLAG              <chr> ~

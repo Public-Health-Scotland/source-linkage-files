@@ -49,7 +49,7 @@ replace_sc_id_with_latest <- function(data) {
         .data$social_care_id
       )
     ) %>%
-    dplyr::filter(!is.na(period))
+    dplyr::filter(!is.na(.data$period))
 
   return(return_data)
 }

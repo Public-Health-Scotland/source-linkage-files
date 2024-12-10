@@ -6,6 +6,7 @@
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
+#' @param acute_cup_path path to acute_cup data
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'

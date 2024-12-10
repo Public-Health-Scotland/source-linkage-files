@@ -6,6 +6,7 @@
 #'
 #' @param year The year to process, in FY format.
 #' @param data_list A list containing the extracts.
+#' @param gp_ooh_cup_path path to gp ooh cup data
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -158,8 +159,8 @@ process_extract_gp_ooh <- function(year,
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "ooh_case_id",
-      cup_marker,
-      cup_pathway
+      "cup_marker",
+      "cup_pathway"
     ) %>%
     slfhelper::get_anon_chi()
 

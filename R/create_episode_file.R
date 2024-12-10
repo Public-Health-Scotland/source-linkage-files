@@ -8,6 +8,7 @@
 #' `TRUE` i.e. write the data to disk.
 #' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
 #' (instead of chi)
+#' @param write_temp_to_disk write intermediate data for investigation or debug
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups

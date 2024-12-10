@@ -48,6 +48,8 @@ create_episode_file(
 
 \item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
 (instead of chi)}
+
+\item{write_temp_to_disk}{write intermediate data for investigation or debug}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file

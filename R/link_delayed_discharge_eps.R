@@ -290,7 +290,7 @@ link_delayed_discharge_eps <- function(
     )) %>%
     dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
-    dplyr::mutate(cij_delay = dplyr::if_else(cij_delay == "0",
+    dplyr::mutate(cij_delay = dplyr::if_else(.data$cij_delay == "0",
       FALSE,
       TRUE,
       missing = NA
@@ -361,15 +361,15 @@ link_delayed_discharge_eps <- function(
         )
     ) %>%
     # populate cij_delay dd details back to ep
-    dplyr::group_by(chi, cij_marker) %>%
+    dplyr::group_by(.data$chi, .data$cij_marker) %>%
     dplyr::mutate(
-      has_dd = any(recid == "DD"),
-      delay_dd = any(cij_delay)
+      has_dd = any(.data$recid == "DD"),
+      delay_dd = any(.data$cij_delay)
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(cij_delay = dplyr::if_else(has_dd,
-      delay_dd,
-      cij_delay
+    dplyr::mutate(cij_delay = dplyr::if_else(.data$has_dd,
+                                             .data$delay_dd,
+                                             .data$cij_delay
     )) %>%
     dplyr::select(-c("has_dd", "delay_dd", "original_admission_date", "amended_dates"))
 
