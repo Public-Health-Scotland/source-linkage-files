@@ -1,3 +1,11 @@
+# December 2024 Update - released 10-Dec-24
+* 24/25 files have been updated, containing data up to September 2024.
+* 17/18 - 23/24 files have been updated.
+* Homelessness completeness flag is now available in 23/24 files.
+* Substance misuse flag updated.
+* Mid-2023 & Mid-2022 population estimates for Scotland have been updated.
+* Mid-2022 Small Area Population Estimates for 2011 Data Zones have been updated.
+
 # September 2024 Update - released 13-Sep-24
 * New 24/25 files created
 * New NSU cohort for 23/24 available
