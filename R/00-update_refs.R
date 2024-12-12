@@ -29,7 +29,9 @@ end_date <- function() {
   # Q2 September = 30092024
   # Q3 December = 31122024
   # Q4 March = 31032024
-  lubridate::dmy(31122024)
+  end_date <- lubridate::dmy(31122024)
+
+  return(end_date)
 }
 
 
@@ -113,7 +115,14 @@ get_dd_period <- function() {
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Dec_2024"
+
+  end_date <- end_date()
+  month <- as.character(lubridate::month(end_date, label = TRUE))
+  year <- as.character(lubridate::year(end_date))
+  latest_update <- as.character(stringr::str_glue('{month}_{year}'))
+
+  return(latest_update)
+
 }
 
 
