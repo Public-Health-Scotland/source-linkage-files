@@ -102,11 +102,10 @@ check_year_valid <- function(
 #'
 #' @family initialisation
 get_dd_period <- function() {
-
   first_part <- substr(previous_update(), 1, 3)
   end_part <- substr(previous_update(), 7, 8)
 
-  dd_period <- as.character(stringr::str_glue('Jul16_{first_part}{end_part}'))
+  dd_period <- as.character(stringr::str_glue("Jul16_{first_part}{end_part}"))
 
   return(dd_period)
 }
