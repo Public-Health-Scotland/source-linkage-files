@@ -120,9 +120,9 @@ get_dd_period <- function() {
 #'
 #' @family initialisation
 latest_update <- function() {
-  end_date <- end_date()
-  month <- as.character(lubridate::month(end_date, label = TRUE))
-  year <- as.character(lubridate::year(end_date))
+
+  month <- as.character(lubridate::month(end_date(), label = TRUE))
+  year <- as.character(lubridate::year(end_date()))
   latest_update <- as.character(stringr::str_glue("{month}_{year}"))
 
   return(latest_update)
