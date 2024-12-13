@@ -28,7 +28,7 @@ end_date <- function() {
   # Q1 June = 30062024
   # Q2 September = 30092024
   # Q3 December = 31122024
-  # Q4 March = 31032024
+  # Q4 March = 31032025
   end_date <- lubridate::dmy(31122024)
 
   return(end_date)
