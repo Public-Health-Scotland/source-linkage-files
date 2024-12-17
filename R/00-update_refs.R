@@ -17,19 +17,23 @@
 #
 ################################################################################
 
+## MANUALLY UPDATE ##-----------------------------------------------------------
+
 #' End date
 #'
 #' @return Get the end date of the latest update period
 #' @export
 #'
 end_date <- function() {
-  ## UPDATE ##
+  ## MANUALLY UPDATE ##
   # Specify update by indicating end of quarter date
   # Q1 June = 30062024
   # Q2 September = 30092024
   # Q3 December = 31122024
-  # Q4 March = 31032024
-  lubridate::dmy(31122024)
+  # Q4 March = 31032025
+  end_date <- lubridate::dmy(31122024)
+
+  return(end_date)
 }
 
 
@@ -68,20 +72,39 @@ check_year_valid <- function(
       "sds",
       "sparra"
     )) {
+  ## MANUALLY UPDATE ##
+  # Check extracts which we do not have data for and ensure this is picked up
+  # by the following code:
+  # DN starts in 2015/16
+  # SPARRA starts in 2015/16
   if (year <= "1415" && type %in% c("dn", "sparra")) {
     return(FALSE)
+    # CMH starts in 2016/17
+    # Homelessness starts in 2016/17
+    # DD starts in 2016/17
   } else if (year <= "1516" && type %in% c("cmh", "homelessness", "dd")) {
     return(FALSE)
+    # Social Care data sets start in 2017/18 Q4
+    # Cost_DNAs start in 2017/18
   } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at", "client", "cost_dna")) {
     return(FALSE)
+    # HHG starts in 2018/19
   } else if (year <= "1718" && type %in% "hhg") {
     return(FALSE)
+    # CMH stops in 2020/21
+    # DN stops in 2020/21
   } else if (year >= "2122" && type %in% c("cmh", "dn")) {
     return(FALSE)
+    # HHG stops in 2022/23
   } else if (year >= "2324" && type %in% "hhg") {
     return(FALSE)
+    ## CHECK - what is the latest NSU cohort available?
+    # NSU is currently available for 2023/24
+    ## CHECK - What period does SDS data get submitted?
+    # SDS is only available up to March 2024 currently.
   } else if (year >= "2425" && type %in% c("nsu", "sds")) {
     return(FALSE)
+    ## CHECK - what data do we have available for Social Care and SPARRA?
   } else if (year >= "2526" && type %in% c("ch", "hc", "sds", "at", "sparra")) {
     return(FALSE)
   }
@@ -89,6 +112,9 @@ check_year_valid <- function(
   return(TRUE)
 }
 
+#-------------------------------------------------------------------------------
+
+## AUTOMATED REFS - please check to ensure these are used correctly ##
 
 #' Delayed Discharge period
 #'
@@ -100,7 +126,12 @@ check_year_valid <- function(
 #'
 #' @family initialisation
 get_dd_period <- function() {
-  "Jul16_Sep24"
+  first_part <- substr(previous_update(), 1, 3)
+  end_part <- substr(previous_update(), 7, 8)
+
+  dd_period <- as.character(stringr::str_glue("Jul16_{first_part}{end_part}"))
+
+  return(dd_period)
 }
 
 
@@ -113,7 +144,11 @@ get_dd_period <- function() {
 #'
 #' @family initialisation
 latest_update <- function() {
-  "Dec_2024"
+  month <- as.character(lubridate::month(end_date(), label = TRUE))
+  year <- as.character(lubridate::year(end_date()))
+  latest_update <- as.character(stringr::str_glue("{month}_{year}"))
+
+  return(latest_update)
 }
 
 
