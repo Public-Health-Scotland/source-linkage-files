@@ -6,6 +6,9 @@
 \usage{
 combine_extracts_tests_year(year)
 }
+\arguments{
+\item{year}{specify which fyear to combine. Only allow one fyear.}
+}
 \description{
 Combine year specific extract tests into one xlsx file by financial year
 }
