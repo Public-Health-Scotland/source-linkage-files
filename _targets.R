@@ -329,8 +329,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_acute_extract,
-      process_tests_acute(source_acute_extract,
-                          year)
+      process_tests_acute(
+        source_acute_extract,
+        year
+      )
     ),
     tar_target(source_ae_extract, process_extract_ae(
       ae_data,
@@ -340,8 +342,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_ae_extract,
-      process_tests_ae(source_ae_extract,
-                       year)
+      process_tests_ae(
+        source_ae_extract,
+        year
+      )
     ),
     tar_target(source_cmh_extract, process_extract_cmh(
       cmh_data,
@@ -351,8 +355,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_cmh_extract,
-      process_tests_cmh(source_cmh_extract,
-                        year)
+      process_tests_cmh(
+        source_cmh_extract,
+        year
+      )
     ),
     tar_target(source_dd_extract, process_extract_delayed_discharges(
       dd_data,
@@ -362,8 +368,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_dd_extract,
-      process_tests_delayed_discharges(source_dd_extract,
-                                       year)
+      process_tests_delayed_discharges(
+        source_dd_extract,
+        year
+      )
     ),
     tar_target(source_dn_extract, process_extract_district_nursing(
       dn_data,
@@ -374,8 +382,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_dn_extract,
-      process_tests_district_nursing(source_dn_extract,
-                                     year)
+      process_tests_district_nursing(
+        source_dn_extract,
+        year
+      )
     ),
     tar_target(
       source_homelessness_extract,
@@ -389,8 +399,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_homelessness_extract,
-      process_tests_homelessness(source_homelessness_extract,
-                                 year)
+      process_tests_homelessness(
+        source_homelessness_extract,
+        year
+      )
     ),
     tar_target(source_ltc_lookup, process_lookup_ltc(
       ltc_data,
@@ -400,8 +412,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_ltc,
-      process_tests_ltcs(source_ltc_lookup,
-                         year)
+      process_tests_ltcs(
+        source_ltc_lookup,
+        year
+      )
     ),
     tar_target(source_maternity_extract, process_extract_maternity(
       maternity_data,
@@ -411,8 +425,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_maternity_extract,
-      process_tests_maternity(source_maternity_extract,
-                              year)
+      process_tests_maternity(
+        source_maternity_extract,
+        year
+      )
     ),
     tar_target(
       source_mental_health_extract,
@@ -425,8 +441,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_mental_health_extract,
-      process_tests_mental_health(source_mental_health_extract,
-                                  year)
+      process_tests_mental_health(
+        source_mental_health_extract,
+        year
+      )
     ),
     # tar_target(source_nrs_deaths_extract, process_extract_nrs_deaths(
     #   nrs_deaths_data,
@@ -445,8 +463,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_nrs_deaths_extract,
-      process_tests_nrs_deaths(source_nrs_deaths_extract,
-                               year)
+      process_tests_nrs_deaths(
+        source_nrs_deaths_extract,
+        year
+      )
     ),
     tar_target(source_ooh_extract, process_extract_gp_ooh(
       year,
@@ -457,8 +477,11 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_ooh_extract,
-      process_tests_gp_ooh(source_ooh_extract,
-                           year)),
+      process_tests_gp_ooh(
+        source_ooh_extract,
+        year
+      )
+    ),
     tar_target(source_outpatients_extract, process_extract_outpatients(
       outpatients_data,
       year,
@@ -467,8 +490,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_source_outpatients_extract,
-      process_tests_outpatients(source_outpatients_extract,
-                                year)
+      process_tests_outpatients(
+        source_outpatients_extract,
+        year
+      )
     ),
     tar_target(source_prescribing_extract, process_extract_prescribing(
       prescribing_data,
@@ -478,8 +503,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_prescribing,
-      process_tests_prescribing(source_prescribing_extract,
-                                year)
+      process_tests_prescribing(
+        source_prescribing_extract,
+        year
+      )
     ),
     ### Target process year specific social care ----
     tar_target(
@@ -513,8 +540,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_alarms_telecare,
-      process_tests_alarms_telecare(data = source_sc_alarms_tele,
-                                    year = year)
+      process_tests_alarms_telecare(
+        data = source_sc_alarms_tele,
+        year = year
+      )
     ),
     tar_target(
       source_sc_care_home,
@@ -528,8 +557,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_care_home,
-      process_tests_care_home(data = source_sc_care_home,
-                              year = year)
+      process_tests_care_home(
+        data = source_sc_care_home,
+        year = year
+      )
     ),
     tar_target(
       source_sc_home_care,
@@ -542,8 +573,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_home_care,
-      process_tests_home_care(data = source_sc_home_care,
-                              year = year)
+      process_tests_home_care(
+        data = source_sc_home_care,
+        year = year
+      )
     ),
     tar_target(
       source_sc_sds,
@@ -556,8 +589,10 @@ list(
     tar_target(
       # Tests, EXTRACT series
       tests_sds,
-      process_tests_sds(data = source_sc_sds,
-                        year = year)
+      process_tests_sds(
+        data = source_sc_sds,
+        year = year
+      )
     ),
     tar_target(
       slf_deaths_lookup,

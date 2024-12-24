@@ -1,14 +1,16 @@
-#'set up file names for tests
+#' set up file names for tests
 #' @param to_combine boolean type, whether to produce to-combine file path
 #' @inheritParams write_tests_xlsx
 setup_tests_file_name <- function(sheet_name,
                                   year = NULL,
-                                  workbook_name = c("ep_file",
-                                                    "indiv_file",
-                                                    "lookup",
-                                                    "extract",
-                                                    "sandpit",
-                                                    "cross_year"),
+                                  workbook_name = c(
+                                    "ep_file",
+                                    "indiv_file",
+                                    "lookup",
+                                    "extract",
+                                    "sandpit",
+                                    "cross_year"
+                                  ),
                                   to_combine = TRUE) {
   # Set up the workbook ----
   if (workbook_name == "ep_file") {
@@ -53,22 +55,26 @@ setup_tests_file_name <- function(sheet_name,
     )
   }
 
-  tests_to_combine = dplyr::if_else((workbook_name %in% c("extract", "lookup")) &
-                                     to_combine,
-                                   "to_combine",
-                                   "")
-  folder_path = fs::path(get_slf_dir(),
-                         "Tests",
-                         fy(),
-                         qtr(),
-                         tests_to_combine)
+  tests_to_combine <- dplyr::if_else((workbook_name %in% c("extract", "lookup")) &
+    to_combine,
+  "to_combine",
+  ""
+  )
+  folder_path <- fs::path(
+    get_slf_dir(),
+    "Tests",
+    fy(),
+    qtr(),
+    tests_to_combine
+  )
   if (!exists(folder_path)) {
     fs::dir_create(folder_path)
   }
 
   tests_workbook_path <- fs::path(folder_path,
-                                  tests_workbook_name,
-                                  ext = "xlsx")
+    tests_workbook_name,
+    ext = "xlsx"
+  )
 
   in_use_path <- fs::path(
     fs::path_dir(tests_workbook_path),
@@ -105,31 +111,36 @@ setup_tests_file_name <- function(sheet_name,
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
-                             workbook_name = c("ep_file",
-                                               "indiv_file",
-                                               "lookup",
-                                               "extract",
-                                               "sandpit",
-                                               "cross_year")) {
+                             workbook_name = c(
+                               "ep_file",
+                               "indiv_file",
+                               "lookup",
+                               "extract",
+                               "sandpit",
+                               "cross_year"
+                             )) {
   # Set up the workbook ----
-  tests_file_name = setup_tests_file_name(sheet_name,
-                                         year,
-                                         workbook_name,
-                                         to_combine = TRUE)
+  tests_file_name <- setup_tests_file_name(sheet_name,
+    year,
+    workbook_name,
+    to_combine = TRUE
+  )
 
-  tests_workbook_name = tests_file_name$tests_workbook_name
-  tests_workbook_path = tests_file_name$tests_workbook_path
-  in_use_path = tests_file_name$in_use_path
+  tests_workbook_name <- tests_file_name$tests_workbook_name
+  tests_workbook_path <- tests_file_name$tests_workbook_path
+  in_use_path <- tests_file_name$in_use_path
 
   # Check if the tests are in use (by another process)
   if (fs::file_exists(path = in_use_path)) {
     seconds <- 0L
     max_wait <- 300L
 
-    cli::cli_progress_bar(type = "iterator",
-                          format = "{cli::pb_spin} [{cli::pb_elapsed}] Waiting for {tests_workbook_name}...")
+    cli::cli_progress_bar(
+      type = "iterator",
+      format = "{cli::pb_spin} [{cli::pb_elapsed}] Waiting for {tests_workbook_name}..."
+    )
     while (fs::file_exists(path = in_use_path) &&
-           seconds < max_wait) {
+      seconds < max_wait) {
       # While the tests are in use (wait a random number of seconds from 1 to 30)
       cli::cli_progress_update()
       wait <- sample(x = 3L:15L, size = 1L)
@@ -265,8 +276,9 @@ write_tests_xlsx <- function(comparison_data,
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
-                         tests_workbook_path,
-                         overwrite = TRUE)
+    tests_workbook_path,
+    overwrite = TRUE
+  )
 
   if (fs::file_info(path = tests_workbook_path)$user == Sys.getenv("USER")) {
     # Set the correct permissions
@@ -298,20 +310,24 @@ combine_lookup_tests <- function() {
     to_combine = FALSE
   )$tests_workbook_path
 
-  folder_path = setup_tests_file_name(
+  folder_path <- setup_tests_file_name(
     sheet_name = "",
     workbook_name = "lookup",
     to_combine = TRUE
   )$tests_workbook_path %>%
     dirname()
 
-  files <- list.files(path = folder_path,
-                      pattern = "_to_combine.xlsx$",
-                      full.names = TRUE)
+  files <- list.files(
+    path = folder_path,
+    pattern = "_to_combine.xlsx$",
+    full.names = TRUE
+  )
   lookup_files <- files[grepl("lookup", files)]
 
-  combine_multi_xlsx(file_list = lookup_files,
-                     output_file = lookup_combined_path)
+  combine_multi_xlsx(
+    file_list = lookup_files,
+    output_file = lookup_combined_path
+  )
   cli::cli_alert_success(
     stringr::str_glue("Combined lookup tests successfully at {Sys.time()}")
   )
@@ -319,15 +335,15 @@ combine_lookup_tests <- function() {
 
 #' Combine year specific extract tests into one xlsx file by financial year
 #' @param year specify which fyear to combine. Only allow one fyear.
-combine_extracts_tests_year <- function(year){
-  extract_combined_path = setup_tests_file_name(
+combine_extracts_tests_year <- function(year) {
+  extract_combined_path <- setup_tests_file_name(
     sheet_name = "",
     year = year,
     workbook_name = "extract",
     to_combine = FALSE
   )$tests_workbook_path
 
-  folder_path = setup_tests_file_name(
+  folder_path <- setup_tests_file_name(
     sheet_name = "",
     year = year,
     workbook_name = "extract",
@@ -336,17 +352,20 @@ combine_extracts_tests_year <- function(year){
     dirname()
 
 
-  files <- list.files(path = folder_path,
-                      pattern = "_to_combine.xlsx$",
-                      full.names = TRUE)
+  files <- list.files(
+    path = folder_path,
+    pattern = "_to_combine.xlsx$",
+    full.names = TRUE
+  )
   extract_files <- files[grepl("extract", files) &
-                           grepl(year, files)]
-  combine_multi_xlsx(file_list = extract_files,
-                     output_file = extract_combined_path)
+    grepl(year, files)]
+  combine_multi_xlsx(
+    file_list = extract_files,
+    output_file = extract_combined_path
+  )
   cli::cli_alert_success(
     stringr::str_glue("Combined {year} extract tests successfully at {Sys.time()}")
   )
-
 }
 
 #' Combine xlsx files into one xlsx file
