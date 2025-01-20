@@ -65,7 +65,9 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       smrtype = add_smrtype(.data$recid)
     ) %>%
     # Allocate the costs to the correct month
-    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
+    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
+    # clean up commhosp values
+    dplyr::mutate(commhosp = dplyr::if_else(.data$commhosp == 1L, "Y", "N"))
 
 
   # Factors ---------------------------------------------------
