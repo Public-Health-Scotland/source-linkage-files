@@ -13,7 +13,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   # recommended by `data.table` team to tackle the issue
   # "no visible binding for global variable"
   gender <-
-    chi <-
+    anon_chi <-
     cij_ppa <-
     cij_end_date <- cij_start_date <- preventable_beddays <- NULL
 
@@ -28,7 +28,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   data.table::setkeyv(
     episode_file,
     c(
-      "chi",
+      "anon_chi",
       "record_keydate1",
       "keytime1",
       "record_keydate2",
@@ -189,11 +189,11 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
 
   individual_file <- dplyr::bind_cols(
     individual_file_cols1,
-    individual_file_cols2[, chi := NULL],
-    individual_file_cols3[, chi := NULL],
-    individual_file_cols4[, chi := NULL],
-    individual_file_cols5[, chi := NULL],
-    individual_file_cols6[, chi := NULL]
+    individual_file_cols2[, anon_chi := NULL],
+    individual_file_cols3[, anon_chi := NULL],
+    individual_file_cols4[, anon_chi := NULL],
+    individual_file_cols5[, anon_chi := NULL],
+    individual_file_cols6[, anon_chi := NULL]
   )
   individual_file <- individual_file[, year := year]
 
