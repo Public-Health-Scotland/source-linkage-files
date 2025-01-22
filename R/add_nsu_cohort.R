@@ -108,9 +108,9 @@ add_nsu_cohort <- function(
         .data[["gender_nsu"]],
         .data[["gender"]]
       ),
-      chi = dplyr::if_else(
+      anon_chi = dplyr::if_else(
         is_missing(.data[["anon_chi"]]) & .data[["has_chi"]],
-        .data[["chi_nsu"]],
+        .data[["anon_chi_nsu"]],
         .data[["anon_chi"]]
       )
     ) %>%
