@@ -16,15 +16,12 @@ process_slf_deaths_lookup <- function(
     write_to_disk = TRUE) {
   # create slf deaths lookup
   slf_deaths_lookup <- refined_death %>%
-    slfhelper::get_chi() %>%
     # Filter the chi death dates to the FY as the lookup is by FY
     dplyr::filter(fy == year) %>%
     # use the BOXI NRS death date by default, but if it's missing, use the chi death date.
     dplyr::mutate(
       deceased = TRUE
-    ) %>%
-    # save anon chi on disk
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

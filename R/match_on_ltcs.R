@@ -16,7 +16,7 @@ match_on_ltcs <- function(
   matched <- dplyr::left_join(
     data,
     ltc_data,
-    by = "chi",
+    by = "anon_chi",
     suffix = c("", "_ltc")
   ) %>%
     dplyr::mutate(

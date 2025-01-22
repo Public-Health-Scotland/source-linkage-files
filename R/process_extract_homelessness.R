@@ -159,7 +159,7 @@ process_extract_homelessness <- function(
       "year",
       "recid",
       "smrtype",
-      "chi",
+      "anon_chi",
       dob = "client_dob_date",
       age = "age_at_assessment_decision_date",
       gender = "gender_code",
@@ -171,8 +171,7 @@ process_extract_homelessness <- function(
       hl1_property_type = "property_type_code",
       "hl1_reason_ftm",
       "hl1_completeness"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

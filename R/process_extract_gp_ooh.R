@@ -141,7 +141,7 @@ process_extract_gp_ooh <- function(year,
       "record_keydate2",
       "keytime1",
       "keytime2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -161,8 +161,7 @@ process_extract_gp_ooh <- function(year,
       "ooh_case_id",
       "cup_marker",
       "cup_pathway"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     final_data %>%

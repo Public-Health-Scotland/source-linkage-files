@@ -13,8 +13,8 @@ join_deaths_data <- function(
   data <- data %>%
     dplyr::left_join(
       slf_deaths_lookup %>%
-        dplyr::distinct(.data$chi, .keep_all = TRUE),
-      by = "chi",
+        dplyr::distinct(.data$anon_chi, .keep_all = TRUE),
+      by = "anon_chi",
       na_matches = "never",
       relationship = "many-to-one"
     )

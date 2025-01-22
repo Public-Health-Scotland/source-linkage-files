@@ -92,7 +92,7 @@ process_extract_delayed_discharges <- function(
     dplyr::select(
       "year",
       "recid",
-      "chi",
+      "anon_chi",
       "postcode",
       "dd_responsible_lca",
       "original_admission_date",
@@ -105,8 +105,7 @@ process_extract_delayed_discharges <- function(
       "hbtreatcode",
       "location",
       "spec"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

@@ -36,7 +36,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
     # Allocate the costs to the correct month
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
     # sort by chi record_keydate1
-    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
+    dplyr::arrange(.data$anon_chi, .data$record_keydate1)
     # clean up commhosp values
     # dplyr::mutate(commhosp = dplyr::if_else(.data$commhosp == 1L, "Y", "N"))
     # Reset community hospital flag as an integer
@@ -63,7 +63,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       "record_keydate1",
       "record_keydate2",
       "smrtype",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -89,8 +89,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "uri"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(
