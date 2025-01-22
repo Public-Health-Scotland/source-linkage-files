@@ -7,13 +7,11 @@
 #'
 #' @export
 process_tests_ltcs <- function(data, year) {
-  data <- data %>%
-    slfhelper::get_chi()
 
   # Find and flag any duplicate chis and chi/postcode combinations
   duplicates <- data %>%
     dplyr::summarise(
-      duplicate_chi = nrow(data) - dplyr::n_distinct(.data$chi)
+      duplicate_anon_chi = nrow(data) - dplyr::n_distinct(.data$anon_chi)
     ) %>%
     tidyr::pivot_longer(
       cols = tidyselect::everything(),
