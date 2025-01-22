@@ -23,7 +23,7 @@ process_tests_episode_file <- function(data, year) {
       dplyr::contains(c("beddays", "cost", "cij"))
     )
 
-  old_data <- get_existing_data_for_tests(data, anon_chi = TRUE)
+  old_data <- get_existing_data_for_tests(data)
 
   comparison <- produce_test_comparison(
     old_data = produce_episode_file_tests(old_data),

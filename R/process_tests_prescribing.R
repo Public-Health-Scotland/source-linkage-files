@@ -7,9 +7,6 @@
 #'
 #' @export
 process_tests_prescribing <- function(data, year) {
-  data <- data %>%
-    slfhelper::get_chi()
-
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -47,7 +44,7 @@ produce_source_pis_tests <- function(data) {
     create_demog_test_flags() %>%
     dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison
-    dplyr::select("unique_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
