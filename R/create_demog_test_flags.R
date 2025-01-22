@@ -15,7 +15,7 @@ create_demog_test_flags <- function(data) {
     dplyr::arrange(.data$anon_chi) %>%
     # create test flags
     dplyr::mutate(
-      unique_chi = dplyr::lag(.data$anon_chi) != .data$anon_chi,
+      unique_anon_chi = dplyr::lag(.data$anon_chi) != .data$anon_chi,
       # first value of unique_chi is always NA because of lag()
       n_missing_chi = is_missing(.data$anon_chi),
       n_males = .data$gender == 1L,
@@ -25,6 +25,6 @@ create_demog_test_flags <- function(data) {
       missing_dob = is.na(.data$dob)
     )
   # fix first value always NA, and it should always be TRUE
-  data[1, "unique_chi"] <- TRUE
+  data[1, "unique_anon_chi"] <- TRUE
   return(data)
 }
