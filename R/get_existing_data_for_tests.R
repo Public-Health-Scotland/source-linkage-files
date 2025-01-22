@@ -17,7 +17,7 @@
 #' @family test functions
 #' @seealso produce_source_extract_tests
 #' @export
-get_existing_data_for_tests <- function(new_data, file_version = "episode", anon_chi = TRUE) {
+get_existing_data_for_tests <- function(new_data, file_version = "episode") {
   file_version <- match.arg(file_version, c("episode", "individual"))
 
   year <- new_data %>%
@@ -56,13 +56,6 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode", anon
       year = year,
       col_select = variable_names
     ))
-  }
-
-  if (anon_chi == FALSE) {
-    slf_data <- slf_data %>%
-      slfhelper::get_chi()
-  } else {
-    slf_data <- slf_data
   }
 
   return(slf_data)
