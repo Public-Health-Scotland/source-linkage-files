@@ -40,7 +40,7 @@ produce_source_at_tests <- function(data,
                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     dplyr::mutate(
       n_at_alarms = .data$smrtype == "AT-Alarm",
       n_at_telecare = .data$smrtype == "AT-Tele"

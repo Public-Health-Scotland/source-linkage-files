@@ -66,7 +66,7 @@ produce_individual_file_tests <- function(data) {
 
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = .data$anon_chi) %>%
+    create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbrescode) %>%
     create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
     # keep variables for comparison
