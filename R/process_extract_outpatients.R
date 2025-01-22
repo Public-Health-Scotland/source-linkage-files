@@ -36,7 +36,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
     # Allocate the costs to the correct month
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
     # sort by chi record_keydate1
-    dplyr::arrange(.data$chi, .data$record_keydate1)
+    dplyr::arrange(.data$anon_chi, .data$record_keydate1)
 
   # Factors ---------------------------------------
   outpatients_clean <- outpatients_clean %>%
@@ -56,7 +56,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       "record_keydate1",
       "record_keydate2",
       "smrtype",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -82,8 +82,7 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "uri"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

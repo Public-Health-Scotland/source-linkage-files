@@ -166,7 +166,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "record_keydate2",
       "keytime1",
       "keytime2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -239,7 +239,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       )
     ) %>%
     dplyr::arrange(
-      .data$chi,
+      .data$anon_chi,
       .data$record_keydate1,
       .data$keytime1,
       .data$record_keydate2,
@@ -255,7 +255,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "record_keydate2",
       "keytime1",
       "keytime2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -298,8 +298,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "mar_cost",
       "cup_marker",
       "cup_pathway"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

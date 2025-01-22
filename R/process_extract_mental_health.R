@@ -68,14 +68,14 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     )
 
   mh_processed <- mh_clean %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
+    dplyr::arrange(.data$anon_chi, .data$record_keydate1) %>%
     dplyr::select(
       "year",
       "recid",
       "smrtype",
       "record_keydate1",
       "record_keydate2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -112,8 +112,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
       "uri"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

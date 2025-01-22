@@ -17,24 +17,13 @@ create_individual_file <- function(
     year,
     homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
-    anon_chi_in = TRUE,
-    anon_chi_out = TRUE,
     write_temp_to_disk) {
   cli::cli_alert_info("Create individual file function started at {Sys.time()}")
-
-  if (anon_chi_in) {
-    episode_file <- slfhelper::get_chi(
-      episode_file,
-      anon_chi_var = "anon_chi",
-      drop = TRUE
-    ) %>%
-      dplyr::mutate(chi = dplyr::na_if(.data$chi, ""))
-  }
 
   individual_file <- episode_file %>%
     dplyr::select(dplyr::any_of(c(
       "year",
-      "chi",
+      "anon_chi",
       "dob",
       "gender",
       "record_keydate1",
@@ -105,7 +94,7 @@ create_individual_file <- function(
     write_temp_data(year, file_name = "indiv_temp4", write_temp_to_disk) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
-    add_hri_variables(chi_variable = "chi") %>%
+    add_hri_variables(chi_variable = "anon_chi") %>%
     add_keep_population_flag(year) %>%
     write_temp_data(year, file_name = "indiv_temp5", write_temp_to_disk) %>%
     join_sc_client(year, file_type = "individual")
@@ -164,13 +153,6 @@ create_individual_file <- function(
       dplyr::mutate(hl1_in_fy = NA)
   }
 
-
-  if (anon_chi_out) {
-    individual_file <- individual_file %>%
-      tidyr::replace_na(list(chi = "")) %>%
-      slfhelper::get_anon_chi() %>%
-      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
-  }
 
   if (write_to_disk) {
     slf_indiv_path <- get_slf_individual_path(year, check_mode = "write")

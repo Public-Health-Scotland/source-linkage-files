@@ -83,8 +83,7 @@ read_extract_ae <- function(
       cost_total_net = "Total Net Costs",
       location = "Treatment Location Code",
       case_ref_number = "Case Reference Number"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_ae)
 }

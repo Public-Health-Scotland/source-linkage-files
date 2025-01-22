@@ -23,6 +23,8 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
   pis_clean <- data %>%
     # filter for chi NA
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
+    # change back to anon_chi
+    slfhelper::get_anon_chi() %>%
     # create variables recid and year
     dplyr::mutate(
       recid = "PIS",
@@ -38,8 +40,7 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
       record_keydate2 = .data$record_keydate1,
       # Add SMR type variable
       smrtype = add_smrtype(.data$recid)
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   # Issue a warning if rows were removed
   if (nrow(pis_clean) != nrow(data)) {

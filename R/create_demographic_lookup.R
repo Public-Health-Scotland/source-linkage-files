@@ -17,7 +17,7 @@ create_demographic_cohorts <- function(
   check_variables_exist(
     data,
     c(
-      "chi",
+      "anon_chi",
       "cij_marker",
       "recid",
       "diag1",
@@ -61,7 +61,7 @@ create_demographic_cohorts <- function(
 
   demo_lookup <- data %>%
     # Remove missing chi
-    dplyr::filter(!is_missing(.data$chi)) %>%
+    dplyr::filter(!is_missing(.data$anon_chi)) %>%
     # Add the various cohorts
     dplyr::mutate(
       mh = assign_d_cohort_mh(
@@ -137,7 +137,7 @@ create_demographic_cohorts <- function(
     ) %>%
     assign_d_cohort_substance() %>%
     # Aggregate to CHI level
-    dplyr::group_by(.data$chi) %>%
+    dplyr::group_by(.data$anon_chi) %>%
     dplyr::summarise(dplyr::across(c(
       "mh",
       "frail",
@@ -168,8 +168,7 @@ create_demographic_cohorts <- function(
       TRUE ~ "Healthy and Low User"
     )) %>%
     # Reorder variables
-    dplyr::relocate(.data$demographic_cohort, .after = .data$chi) %>%
-    slfhelper::get_anon_chi()
+    dplyr::relocate(.data$demographic_cohort, .after = .data$anon_chi)
 
   # Write to disk
   if (write_to_disk) {

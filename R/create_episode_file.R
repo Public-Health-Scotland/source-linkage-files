@@ -21,17 +21,17 @@
 create_episode_file <- function(
     processed_data_list,
     year,
-    dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi(),
+    dd_data = read_file(get_source_extract_path(year, "dd")),
     homelessness_lookup = create_homelessness_lookup(year),
-    nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi(),
-    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi(),
+    nsu_cohort = read_file(get_nsu_path(year)),
+    ltc_data = read_file(get_ltcs_path(year)),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
     slf_gpprac_lookup = read_file(
       get_slf_gpprac_path(),
       col_select = c("gpprac", "cluster", "hbpraccode")
     ),
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi(),
-    sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
+    sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     anon_chi_out = TRUE,
     write_temp_to_disk = FALSE) {
@@ -40,7 +40,6 @@ create_episode_file <- function(
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
-    slfhelper::get_chi() %>%
     write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
@@ -56,7 +55,7 @@ create_episode_file <- function(
         "record_keydate1",
         "record_keydate2",
         "smrtype",
-        "chi",
+        "anon_chi",
         "gender",
         "dob",
         "gpprac",
@@ -117,6 +116,8 @@ create_episode_file <- function(
     ) %>%
     # match on sc client variables
     join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
+    # change to chi for phsmethods
+    slfhelper::get_chi() %>%
     # Check chi is valid using phsmethods function
     # If the CHI is invalid for whatever reason, set the CHI to NA
     dplyr::mutate(
@@ -129,6 +130,8 @@ create_episode_file <- function(
       # PC8 format may still be used. Ensure here that all datasets are in PC7 format.
       postcode = phsmethods::format_postcode(.data$postcode, "pc7")
     ) %>%
+    # change back to anon_chi
+    slfhelper::get_anon_chi() %>%
     write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
@@ -151,8 +154,7 @@ create_episode_file <- function(
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
-      deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
-        slfhelper::get_chi()
+      deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
     load_ep_file_vars(year) %>%
     write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
@@ -346,16 +348,16 @@ load_ep_file_vars <- function(data, year) {
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
     dplyr::filter(
-      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["chi"]])
+      .data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD") & !is.na(.data[["anon_chi"]])
     )
 
   non_fixable_data <- data %>%
     dplyr::filter(
-      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD")) | is.na(.data[["chi"]])
+      !(.data[["recid"]] %in% c("01B", "04B", "GLS", "02B", "DD")) | is.na(.data[["anon_chi"]])
     )
 
   fixed_data <- fixable_data %>%
-    dplyr::group_by(.data$chi) %>%
+    dplyr::group_by(.data$anon_chi) %>%
     # We want any NA cij_markers to be filled in, if they are the first in the
     # group and are NA. This is why we use this arrange() before the mutate()
     dplyr::arrange(dplyr::desc(is.na(.data$cij_marker)), .by_group = TRUE) %>%
@@ -376,7 +378,7 @@ fill_missing_cij_markers <- function(data) {
       .data$cij_ipdc
     )) %>%
     # Ensure every record with a CHI has a valid CIJ marker
-    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(
       cij_ipdc = max(.data$cij_ipdc),
       cij_admtype = dplyr::first(.data$cij_admtype),
@@ -402,7 +404,7 @@ fill_missing_cij_markers <- function(data) {
 correct_cij_vars <- function(data) {
   check_variables_exist(
     data,
-    c("chi", "recid", "cij_admtype", "cij_pattype_code")
+    c("anon_chi", "recid", "cij_admtype", "cij_pattype_code")
   )
 
   data <- data %>%
@@ -414,7 +416,7 @@ correct_cij_vars <- function(data) {
         .data[["cij_admtype"]]
       ),
       cij_pattype_code = dplyr::if_else(
-        !is.na(.data$chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
+        !is.na(.data$anon_chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
         dplyr::case_match(
           .data$cij_admtype,
           c("41", "42") ~ 2L,
@@ -506,21 +508,19 @@ join_cohort_lookups <- function(
     demographic_cohort = read_file(
       get_demographic_cohorts_path(year, update),
       col_select = c("anon_chi", "demographic_cohort")
-    ) %>%
-      slfhelper::get_chi(),
+    ),
     service_use_cohort = read_file(
       get_service_use_cohorts_path(year, update),
       col_select = c("anon_chi", "service_use_cohort")
-    ) %>%
-      slfhelper::get_chi()) {
+    )) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
-      by = "chi"
+      by = "anon_chi"
     ) %>%
     dplyr::left_join(
       service_use_cohort,
-      by = "chi"
+      by = "anon_chi"
     )
 
   cli::cli_alert_info("Join cohort lookups function finished at {Sys.time()}")
@@ -539,7 +539,7 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)) %>% slfhelper::get_chi(),
+                           sc_client = read_file(get_sc_client_lookup_path(year)),
                            file_type = c("episode", "individual")) {
   if (!check_year_valid(year, type = "client")) {
     data_file <- data
@@ -551,14 +551,14 @@ join_sc_client <- function(data,
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
-        by = "chi",
+        by = "anon_chi",
         relationship = "many-to-one"
       )
   } else {
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
-        by = "chi",
+        by = "anon_chi",
         relationship = "one-to-one"
       )
   }
