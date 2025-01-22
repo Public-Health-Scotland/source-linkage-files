@@ -41,7 +41,7 @@ produce_slf_homelessness_tests <- function(data,
   test_flags <- data %>%
     dplyr::arrange(.data$chi) %>%
     # create test flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     create_lca_test_flags(.data$hl1_sending_lca) %>%
     # keep variables for comparison
     dplyr::select("unique_chi":dplyr::last_col()) %>%

@@ -50,7 +50,7 @@ produce_source_ch_tests <- function(data,
                                     )) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     dplyr::mutate(
       n_episodes = 1L,
       ch_name_missing = is.na(.data$ch_name),

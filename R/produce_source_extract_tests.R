@@ -33,7 +33,7 @@ produce_source_extract_tests <- function(data,
                                          add_hscp_count = TRUE) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net)
 
