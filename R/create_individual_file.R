@@ -170,8 +170,8 @@ create_individual_file <- function(
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
   episode_file <- episode_file %>%
-    dplyr::mutate(chi = dplyr::na_if(.data$chi, "")) %>%
-    dplyr::filter(!is.na(.data$chi))
+    dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, "")) %>%
+    dplyr::filter(!is.na(.data$anon_chi))
 
   cli::cli_alert_info("Remove blank CHI function finished at {Sys.time()}")
 
@@ -866,12 +866,16 @@ clean_individual_file <- function(individual_file, year) {
 #' @inheritParams clean_individual_file
 clean_up_gender <- function(individual_file) {
   individual_file <- individual_file %>%
+    # change to chi for phsmethods
+    slfhelper::get_chi() %>%
     dplyr::mutate(
       gender = dplyr::case_when(
         .data$gender != 1.5 ~ round(.data$gender),
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
-    )
+    ) %>%
+    # change back to anon_chi
+    slfhelper::get_anon_chi()
 
   cli::cli_alert_info("Clean up gender column function finished at {Sys.time()}")
   return(individual_file)
