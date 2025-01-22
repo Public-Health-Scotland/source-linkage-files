@@ -8,9 +8,6 @@
 #'
 #' @export
 process_tests_homelessness <- function(data, year) {
-  data <- data %>%
-    slfhelper::get_chi()
-
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -39,12 +36,12 @@ process_tests_homelessness <- function(data, year) {
 produce_slf_homelessness_tests <- function(data,
                                            max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
-    dplyr::arrange(.data$chi) %>%
+    dplyr::arrange(.data$anon_chi) %>%
     # create test flags
     create_demog_test_flags() %>%
     create_lca_test_flags(.data$hl1_sending_lca) %>%
     # keep variables for comparison
-    dplyr::select("unique_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

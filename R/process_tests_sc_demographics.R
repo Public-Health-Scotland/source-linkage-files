@@ -10,14 +10,10 @@
 #'
 #' @export
 process_tests_sc_demographics <- function(data) {
-  data <- data %>%
-    slfhelper::get_chi()
 
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
-      read_file(get_sc_demog_lookup_path(update = previous_update())) %>%
-        slfhelper::get_chi()
-    ),
+      read_file(get_sc_demog_lookup_path(update = previous_update()))),
     new_data = produce_sc_demog_lookup_tests(
       data
     )
@@ -53,7 +49,7 @@ produce_sc_demog_lookup_tests <- function(data) {
       -c(
         "sending_location",
         "social_care_id",
-        "chi",
+        "anon_chi",
         "gender",
         "dob",
         "postcode",
