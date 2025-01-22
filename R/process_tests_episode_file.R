@@ -82,7 +82,7 @@ produce_episode_file_tests <- function(
       n_records = 1L
     ) %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = .data$anon_chi) %>%
+    create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     create_hscp_test_flags(.data$hscp2018) %>%

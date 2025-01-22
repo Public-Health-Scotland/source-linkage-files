@@ -44,7 +44,7 @@ process_tests_prescribing <- function(data, year) {
 produce_source_pis_tests <- function(data) {
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison
     dplyr::select("unique_chi":dplyr::last_col()) %>%

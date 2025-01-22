@@ -9,15 +9,15 @@
 #' Missing value flag from [is_missing()]
 #'
 #' @family flag functions
-create_demog_test_flags <- function(data, chi = c(chi, anon_chi)) {
+create_demog_test_flags <- function(data) {
   anon_chi <- NULL
   data <- data %>%
-    dplyr::arrange({{ chi }}) %>%
+    dplyr::arrange(.data$anon_chi) %>%
     # create test flags
     dplyr::mutate(
-      unique_chi = dplyr::lag({{ chi }}) != {{ chi }},
+      unique_chi = dplyr::lag(.data$anon_chi) != .data$anon_chi,
       # first value of unique_chi is always NA because of lag()
-      n_missing_chi = is_missing({{ chi }}),
+      n_missing_chi = is_missing(.data$anon_chi),
       n_males = .data$gender == 1L,
       n_females = .data$gender == 2L,
       n_postcode = !is.na(.data$postcode) | !.data$postcode == "",
