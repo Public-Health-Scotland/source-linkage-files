@@ -21,8 +21,8 @@
 #' @export
 process_sc_all_care_home <- function(
     data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
-    refined_death = read_file(get_combined_slf_deaths_lookup_path()) %>% slfhelper::get_chi(),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+    refined_death = read_file(get_combined_slf_deaths_lookup_path()),
     ch_name_lookup_path = get_slf_ch_name_lookup_path(),
     spd_path = get_spd_path(),
     write_to_disk = TRUE) {
@@ -152,7 +152,7 @@ process_sc_all_care_home <- function(
   # Merge records to a single row per episode where admission is the same
   ch_episode <- ready_to_merge %>%
     dplyr::group_by(
-      .data[["chi"]],
+      .data[["anon_chi"]],
       .data[["sending_location"]],
       .data[["social_care_id"]],
       .data[["ch_admission_date"]],
@@ -209,7 +209,7 @@ process_sc_all_care_home <- function(
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(refined_death,
-      by = "chi",
+      by = "anon_chi",
       na_matches = "never"
     ) %>%
     # compare discharge date with NRS and CHI death date
@@ -244,7 +244,7 @@ process_sc_all_care_home <- function(
   # and a CIS for social care ID and sending location for just that LA
   ch_chi_markers <- matched_deaths_data %>%
     # Group the data by chi
-    dplyr::group_by(.data[["chi"]]) %>%
+    dplyr::group_by(.data[["anon_chi"]]) %>%
     # Set up previous_discharge_date
     # The lag function will set the first row to NA.
     dplyr::mutate(
@@ -393,7 +393,7 @@ process_sc_all_care_home <- function(
       ch_provider == 6 ~ "OTHER"
     )) %>%
     dplyr::select(
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "postcode",
@@ -410,8 +410,7 @@ process_sc_all_care_home <- function(
       "ch_nursing",
       "ch_adm_reason",
       "sc_latest_submission"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     ch_data_final %>%

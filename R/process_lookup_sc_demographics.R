@@ -31,14 +31,14 @@ process_lookup_sc_demographics <- function(
   #  Fill in missing data and flag latest cases to keep ---------------------------------------
   sc_demog <- data %>%
     dplyr::rename(
-      chi = .data$chi_upi,
+      anon_chi = .data$chi_upi,
       gender = .data$chi_gender_code,
       dob = .data$chi_date_of_birth
     ) %>%
     # fill in missing demographic details
     dplyr::arrange(.data$period, .data$social_care_id) %>%
     dplyr::group_by(.data$social_care_id, .data$sending_location) %>%
-    tidyr::fill(.data$chi, .direction = ("updown")) %>%
+    tidyr::fill(.data$anon_chi, .direction = ("updown")) %>%
     tidyr::fill(.data$dob, .direction = ("updown")) %>%
     tidyr::fill(.data$date_of_death, .direction = ("updown")) %>%
     tidyr::fill(.data$gender, .direction = ("updown")) %>%
@@ -51,14 +51,14 @@ process_lookup_sc_demographics <- function(
 
   # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
   sc_demog <- sc_demog %>%
-    dplyr::group_by(.data$chi, .data$sending_location) %>%
+    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
     dplyr::mutate(latest = dplyr::last(.data$period)) %>% # flag latest period for chi
-    dplyr::group_by(.data$chi, .data$social_care_id, .data$sending_location) %>%
+    dplyr::group_by(.data$anon_chi, .data$social_care_id, .data$sending_location) %>%
     dplyr::mutate(latest_sc_id = dplyr::last(.data$period)) %>% # flag latest period for social care
-    dplyr::group_by(.data$chi, .data$sending_location) %>%
+    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
     dplyr::mutate(last_sc_id = dplyr::last(.data$social_care_id)) %>%
     dplyr::mutate(
-      latest_flag = ifelse((.data$latest == .data$period & .data$last_sc_id == .data$social_care_id) | is.na(.data$chi), 1, 0),
+      latest_flag = ifelse((.data$latest == .data$period & .data$last_sc_id == .data$social_care_id) | is.na(.data$anon_chi), 1, 0),
       keep = ifelse(.data$latest_sc_id == .data$period, 1, 0)
     ) %>%
     dplyr::ungroup()
@@ -87,7 +87,7 @@ process_lookup_sc_demographics <- function(
     dplyr::select(
       "sending_location",
       "social_care_id",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "date_of_death",
@@ -126,7 +126,7 @@ process_lookup_sc_demographics <- function(
     dplyr::select(-.data$postcode_type, -.data$valid_pc_submitted, -.data$valid_pc_chi, -.data$submitted_postcode, -.data$chi_postcode) %>%
     dplyr::distinct() %>%
     # group by sending location and ID
-    dplyr::group_by(.data$sending_location, .data$chi, .data$social_care_id, .data$latest_flag) %>%
+    dplyr::group_by(.data$sending_location, .data$anon_chi, .data$social_care_id, .data$latest_flag) %>%
     # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
@@ -143,11 +143,8 @@ process_lookup_sc_demographics <- function(
     dplyr::ungroup()
 
   # check to make sure all cases of chi are still there
-  dplyr::n_distinct(sc_demog_lookup$chi) # 525,834
+  dplyr::n_distinct(sc_demog_lookup$anon_chi) # 525,834
   dplyr::n_distinct(sc_demog_lookup$social_care_id) # 637,422
-
-  sc_demog_lookup <- sc_demog_lookup %>%
-    slfhelper::get_anon_chi()
 
   if (write_to_disk) {
     write_file(

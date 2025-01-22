@@ -96,8 +96,7 @@ process_extract_acute <- function(data,
       cup_marker = "CUP Marker",
       cup_pathway = "CUP Pathway Name"
     ) %>%
-    dplyr::distinct() %>%
-    slfhelper::get_chi()
+    dplyr::distinct()
 
   acute_clean <- acute_clean %>%
     dplyr::left_join(acute_cup,
@@ -105,7 +104,7 @@ process_extract_acute <- function(data,
         "record_keydate1",
         "record_keydate2",
         "case_reference_number",
-        "chi",
+        "anon_chi",
         "tadm",
         "disch"
       )
@@ -118,7 +117,7 @@ process_extract_acute <- function(data,
       "record_keydate1",
       "record_keydate2",
       "smrtype",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -160,8 +159,7 @@ process_extract_acute <- function(data,
       "cup_marker",
       "cup_pathway"
     ) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
-    slfhelper::get_anon_chi()
+    dplyr::arrange(.data$anon_chi, .data$record_keydate1)
 
   if (write_to_disk) {
     write_file(

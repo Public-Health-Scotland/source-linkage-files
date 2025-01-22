@@ -12,7 +12,7 @@
 add_nsu_cohort <- function(
     data,
     year,
-    nsu_cohort = read_file(get_nsu_path(year)) %>% slfhelper::get_chi()) {
+    nsu_cohort = read_file(get_nsu_path(year))) {
   year_param <- year
 
   if (!check_year_valid(year, "nsu")) {
@@ -23,7 +23,7 @@ add_nsu_cohort <- function(
   check_variables_exist(data,
     variables = c(
       "year",
-      "chi",
+      "anon_chi",
       "recid",
       "smrtype",
       "postcode",
@@ -40,15 +40,15 @@ add_nsu_cohort <- function(
         dob = as.Date(.data[["dob"]]),
         gpprac = convert_eng_gpprac_to_dummy(.data[["gpprac"]])
       ),
-    # Match on by chi
-    by = "chi",
+    # Match on by anon_chi
+    by = "anon_chi",
     # Name the incoming variables with "_nsu"
     suffix = c("", "_nsu"),
-    # Keep the chi from both sources
+    # Keep the anon_chi from both sources
     keep = TRUE
   ) %>%
-    # Change the chi from the NSU cohort to a boolean
-    dplyr::mutate(has_chi = !is_missing(.data[["chi_nsu"]]))
+    # Change the anon_chi from the NSU cohort to a boolean
+    dplyr::mutate(has_chi = !is_missing(.data[["anon_chi_nsu"]]))
 
   return_df <- matched %>%
     # Get data from non service user lookup if the recid is empty
@@ -109,9 +109,9 @@ add_nsu_cohort <- function(
         .data[["gender"]]
       ),
       chi = dplyr::if_else(
-        is_missing(.data[["chi"]]) & .data[["has_chi"]],
+        is_missing(.data[["anon_chi"]]) & .data[["has_chi"]],
         .data[["chi_nsu"]],
-        .data[["chi"]]
+        .data[["anon_chi"]]
       )
     ) %>%
     dplyr::select(-dplyr::contains("_nsu"), -"has_chi")

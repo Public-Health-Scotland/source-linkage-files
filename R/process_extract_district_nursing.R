@@ -31,8 +31,12 @@ process_extract_district_nursing <- function(
 
   # Data Cleaning  ---------------------------------------
   dn_clean <- data %>%
+    # change to chi for phsmethods
+    slfhelper::get_chi() %>%
     # filter for valid chi only
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
+    # change back to anon_chi %>%
+    slfhelper::get_anon_chi() %>%
     # add variables
     dplyr::mutate(
       year = year,
@@ -80,7 +84,7 @@ process_extract_district_nursing <- function(
   ## Aggregate to episodes  ---------------------------------------
 
   care_marker <- dn_costs %>%
-    dplyr::group_by(.data$chi) %>%
+    dplyr::group_by(.data$anon_chi) %>%
     dplyr::arrange(.data$record_keydate1, .by_group = TRUE) %>%
     # Create CCM (Continuous Care Marker) which will group contacts
     # which occur less than 7 days apart
@@ -94,7 +98,7 @@ process_extract_district_nursing <- function(
     )
 
   dn_episodes <- care_marker %>%
-    dplyr::group_by(.data$year, .data$chi, .data$ccm) %>%
+    dplyr::group_by(.data$year, .data$anon_chi, .data$ccm) %>%
     dplyr::summarise(
       record_keydate1 = min(.data$record_keydate1),
       record_keydate2 = max(.data$record_keydate1),
@@ -131,8 +135,7 @@ process_extract_district_nursing <- function(
         ~ sum(.x)
       )
     ) %>%
-    dplyr::ungroup() %>%
-    slfhelper::get_anon_chi()
+    dplyr::ungroup()
 
   if (write_to_disk) {
     dn_episodes %>%
