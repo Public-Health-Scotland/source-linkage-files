@@ -7,7 +7,7 @@
 get_existing_data_for_tests(
   new_data,
   file_version = "episode",
-  anon_chi = FALSE
+  anon_chi = TRUE
 )
 }
 \arguments{
