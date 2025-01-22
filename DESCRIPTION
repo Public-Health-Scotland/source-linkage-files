@@ -1,6 +1,6 @@
 Package: createslf
 Title: Create the Source Linkage Files
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person("Public Health Scotland", , , "phs.source@phs.scot", role = c("cre", "cph")),
     person("Megan", "McNicol", , "megan.mcnicol2@phs.scot", role = "aut"),

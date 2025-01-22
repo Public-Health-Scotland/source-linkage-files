@@ -26,9 +26,9 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
     dplyr::collect()
 
   latest_quarter <- sc_demog %>%
-    dplyr::arrange(desc(period)) %>%
-    dplyr::pull(period) %>%
-    head(1)
+    dplyr::arrange(dplyr::desc(.data$period)) %>%
+    dplyr::pull(.data$period) %>%
+    utils::head(1)
   cli::cli_alert_info(stringr::str_glue("Demographics data is available up to {latest_quarter}."))
 
 

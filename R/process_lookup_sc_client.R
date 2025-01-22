@@ -32,8 +32,9 @@ process_lookup_sc_client <-
         by = c("sending_location", "social_care_id")
       ) %>%
       # need period for the replace sc id with latest function
-      dplyr::mutate(period = ifelse(!(is.na(.data$financial_quarter)), paste0(.data$financial_year, "Q", financial_quarter),
-        financial_year
+      dplyr::mutate(period = ifelse(!(is.na(.data$financial_quarter)),
+        paste0(.data$financial_year, "Q", .data$financial_quarter),
+        .data$financial_year
       )) %>%
       replace_sc_id_with_latest() %>%
       # remove cases with no data in client

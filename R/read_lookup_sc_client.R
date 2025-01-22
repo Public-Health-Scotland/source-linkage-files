@@ -80,9 +80,9 @@ read_lookup_sc_client <- function(fyyear,
     dplyr::collect()
 
   latest_quarter <- client_data %>%
-    dplyr::arrange(desc(financial_quarter)) %>%
-    dplyr::pull(financial_quarter) %>%
-    head(1)
+    dplyr::arrange(dplyr::desc(.data$financial_quarter)) %>%
+    dplyr::pull(.data$financial_quarter) %>%
+    utils::head(1)
   cli::cli_alert_info(stringr::str_glue("Social care client data for Year {fyyear} is available up to Q{latest_quarter}."))
 
 

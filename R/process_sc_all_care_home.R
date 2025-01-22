@@ -47,7 +47,7 @@ process_sc_all_care_home <- function(
       by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest() %>%
-    dplyr::select(-latest_flag, -latest_sc_id)
+    dplyr::select(-"latest_flag", -"latest_sc_id")
 
 
   # cleaning and matching care home names
@@ -58,7 +58,13 @@ process_sc_all_care_home <- function(
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
-    dplyr::select(-ch_name_validated, -open_interval, -latest_close_date, -ch_name_old, -ch_postcode_old) %>%
+    dplyr::select(
+      -"ch_name_validated",
+      -"open_interval",
+      -"latest_close_date",
+      -"ch_name_old",
+      -"ch_postcode_old"
+    ) %>%
     dplyr::mutate(
       ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]]) # (n = 2)
     ) %>%
@@ -126,21 +132,21 @@ process_sc_all_care_home <- function(
     # We want to keep the nursing provision changes when we merge cases that have the same admission date
     dplyr::mutate(previous_nursing_care_provision = dplyr::lag(.data[["nursing_care_provision"]])) %>%
     # create a T/F flag for if nursing provision was the same as previous record with same admission date
-    dplyr::mutate(split_episode = tidyr::replace_na(.data[["previous_nursing_care_provision"]] != nursing_care_provision, TRUE)) %>%
+    dplyr::mutate(split_episode = tidyr::replace_na(.data[["previous_nursing_care_provision"]] != .data$nursing_care_provision, TRUE)) %>%
     dplyr::group_by(
       .data[["social_care_id"]],
       .data[["sending_location"]],
       .data[["split_episode"]]
     ) %>%
     # create a count of each time the nursing provision changes between records with the same admission date
-    dplyr::mutate(split_episode_counter = ifelse(split_episode == TRUE, dplyr::row_number(), NA)) %>%
+    dplyr::mutate(split_episode_counter = ifelse(.data$split_episode == TRUE, dplyr::row_number(), NA)) %>%
     dplyr::group_by(
       .data[["social_care_id"]],
       .data[["sending_location"]]
     ) %>%
     # fill split episode counter. This will create a new id number for each different nursing provision within an episode
-    tidyr::fill(split_episode_counter, .direction = c("down")) %>%
-    dplyr::select(-previous_nursing_care_provision, -split_episode)
+    tidyr::fill(.data$split_episode_counter, .direction = c("down")) %>%
+    dplyr::select(-"previous_nursing_care_provision", -"split_episode")
 
 
   # Merge records to a single row per episode where admission is the same
@@ -196,7 +202,7 @@ process_sc_all_care_home <- function(
       )
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-period_start_date, -split_episode_counter)
+    dplyr::select(-"period_start_date", -"split_episode_counter")
 
 
   # Compare to Deaths Data
@@ -248,7 +254,7 @@ process_sc_all_care_home <- function(
       previous_discharge_date_chi = dplyr::lag(.data[["ch_discharge_date"]]) +
         lubridate::days(1L),
       # if the first row is NA, set this to the ch_discharge_date
-      previous_discharge_date_chi = dplyr::if_else(row_number == 1, .data[["ch_discharge_date"]],
+      previous_discharge_date_chi = dplyr::if_else(.data$row_number == 1, .data[["ch_discharge_date"]],
         .data[["previous_discharge_date_chi"]]
       )
     ) %>%
@@ -263,11 +269,11 @@ process_sc_all_care_home <- function(
       ),
       # if there is more than 1 day between (or the last ep for the individual) flag as new ep (Y)
       # if there is < 1 day (i.e. a pause of up to 1 day or stays overlap flag as same ep (N))
-      new_episode = dplyr::if_else(is.na(days_to_next_rec) | days_to_next_rec > 1, "Y", "N")
+      new_episode = dplyr::if_else(is.na(.data$days_to_next_rec) | .data$days_to_next_rec > 1, "Y", "N")
     ) %>%
     # create continuous marker using flag for new stay
     dplyr::mutate(
-      ch_chi_cis = purrr::accumulate(new_episode[-1],
+      ch_chi_cis = purrr::accumulate(.data$new_episode[-1],
         .init = 1,
         ~ if (.y == "Y") {
           .x + 1
@@ -295,7 +301,7 @@ process_sc_all_care_home <- function(
       previous_discharge_date_sc = dplyr::lag(.data[["ch_discharge_date"]]) +
         lubridate::days(1L),
       # if the first row is NA, set this to the ch_discharge_date
-      previous_discharge_date_sc = dplyr::if_else(row_number == 1, .data[["ch_discharge_date"]],
+      previous_discharge_date_sc = dplyr::if_else(.data$row_number == 1, .data[["ch_discharge_date"]],
         .data[["previous_discharge_date_sc"]]
       )
     ) %>%
@@ -310,11 +316,11 @@ process_sc_all_care_home <- function(
       ),
       # if there is more than 1 day between (or the last ep for the individual) flag as new ep (Y)
       # if there is < 1 day (i.e. a pause of up to 1 day or stays overlap flag as same ep (N))
-      new_episode = dplyr::if_else(is.na(days_to_next_rec) | days_to_next_rec > 1, "Y", "N")
+      new_episode = dplyr::if_else(is.na(.data$days_to_next_rec) | .data$days_to_next_rec > 1, "Y", "N")
     ) %>%
     # create continuous marker using flag for new stay
     dplyr::mutate(
-      ch_sc_id_cis = purrr::accumulate(new_episode[-1],
+      ch_sc_id_cis = purrr::accumulate(.data$new_episode[-1],
         .init = 1,
         ~ if (.y == "Y") {
           .x + 1
@@ -326,8 +332,11 @@ process_sc_all_care_home <- function(
     dplyr::ungroup() %>%
     # remove variables no longer needed
     dplyr::select(
-      -previous_discharge_date_chi, -previous_discharge_date_sc, -row_number,
-      -days_to_next_rec, -new_episode
+      -"previous_discharge_date_chi",
+      -"previous_discharge_date_sc",
+      -"row_number",
+      -"days_to_next_rec",
+      -"new_episode"
     )
 
 
@@ -364,7 +373,7 @@ process_sc_all_care_home <- function(
         .data[["type_of_admission"]]
       )
     ) %>%
-    dplyr::select(-ch_ep_start, -ch_ep_end, -stay_los, -stay_respite)
+    dplyr::select(-"ch_ep_start", -"ch_ep_end", -"stay_los", -"stay_respite")
 
 
   ch_data_final <- adm_reason_recoded %>%
