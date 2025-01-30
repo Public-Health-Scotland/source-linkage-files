@@ -33,6 +33,7 @@ use, the year, recid and variable names from the
 produce_source_extract_tests
 
 Other test functions: 
+\code{\link{format_test_excel}()},
 \code{\link{produce_test_comparison}()},
 \code{\link{write_tests_xlsx}()}
 }
