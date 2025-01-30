@@ -90,6 +90,77 @@ setup_tests_file_name <- function(sheet_name,
   )
 }
 
+#' Format Excel Worksheets of test results
+#'
+#' @description Format structured comparison data
+#'
+#' @param comparison_data produced by [produce_test_comparison()]
+#' @param wb the excel file which is an openxlsx object
+#' @param sheet_name_dated the name of the dataset
+#'
+#' @family test functions
+format_test_excel <- function(comparison_data, wb, sheet_name_dated) {
+  # Formatting ----
+
+  # Get the column numbers
+  pct_change_col <- which(names(comparison_data) == "pct_change")
+  issue_col <- which(names(comparison_data) == "issue")
+  numeric_cols <- which(names(comparison_data) %in% c("value_old", "value_new", "diff"))
+
+  # Format the pct_change column as a percentage
+  openxlsx::addStyle(
+    wb = wb,
+    sheet = sheet_name_dated,
+    style = openxlsx::createStyle(numFmt = "0.0%"),
+    cols = pct_change_col,
+    rows = 2L:(nrow(comparison_data) + 1L),
+    gridExpand = TRUE
+  )
+
+  # Format the numeric columns with commas
+  openxlsx::addStyle(
+    wb = wb,
+    sheet = sheet_name_dated,
+    style = openxlsx::createStyle(numFmt = "#,##0"),
+    cols = numeric_cols,
+    rows = 2L:(nrow(comparison_data) + 1L),
+    gridExpand = TRUE
+  )
+
+  # Set the column widths - wider for the first (measure)
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = 1L,
+    widths = 40L
+  )
+
+  openxlsx::setColWidths(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = 2L:ncol(comparison_data),
+    widths = 15L
+  )
+
+  # Apply conditional formatting to highlight issues
+  openxlsx::conditionalFormatting(
+    wb = wb,
+    sheet = sheet_name_dated,
+    cols = issue_col,
+    rows = 2L:(nrow(comparison_data) + 1L),
+    rule = "TRUE",
+    type = "contains"
+  )
+
+  # Write workbook to disk ----
+
+  # Reorder the sheets alphabetically
+  sheet_names <- wb$sheet_names
+  names(sheet_names) <- wb$sheetOrder
+
+  openxlsx::worksheetOrder(wb) <- names(sort(sheet_names))
+}
+
 #' Write out Tests
 #'
 #' @description Write test output as an xlsx workbook, with a specific sheet
@@ -202,6 +273,9 @@ write_tests_xlsx <- function(comparison_data,
 
   openxlsx::addWorksheet(wb, sheet_name_dated)
 
+  # Formatting and Writing data ----
+  format_test_excel(comparison_data, wb, sheet_name_dated)
+
   # write test comparison output to the new sheet
   # Style it as a Data table for nice formatting
   openxlsx::writeDataTable(
@@ -211,68 +285,6 @@ write_tests_xlsx <- function(comparison_data,
     tableStyle = "TableStyleLight1",
     withFilter = FALSE
   )
-
-
-  # Formatting ----
-
-  # Get the column numbers
-  pct_change_col <- which(names(comparison_data) == "pct_change")
-  issue_col <- which(names(comparison_data) == "issue")
-  numeric_cols <- which(names(comparison_data) %in% c("value_old", "value_new", "diff"))
-
-  # Format the pct_change column as a percentage
-  openxlsx::addStyle(
-    wb = wb,
-    sheet = sheet_name_dated,
-    style = openxlsx::createStyle(numFmt = "0.0%"),
-    cols = pct_change_col,
-    rows = 2L:(nrow(comparison_data) + 1L),
-    gridExpand = TRUE
-  )
-
-  # Format the numeric columns with commas
-  openxlsx::addStyle(
-    wb = wb,
-    sheet = sheet_name_dated,
-    style = openxlsx::createStyle(numFmt = "#,##0"),
-    cols = numeric_cols,
-    rows = 2L:(nrow(comparison_data) + 1L),
-    gridExpand = TRUE
-  )
-
-  # Set the column widths - wider for the first (measure)
-  openxlsx::setColWidths(
-    wb = wb,
-    sheet = sheet_name_dated,
-    cols = 1L,
-    widths = 40L
-  )
-
-  openxlsx::setColWidths(
-    wb = wb,
-    sheet = sheet_name_dated,
-    cols = 2L:ncol(comparison_data),
-    widths = 15L
-  )
-
-  # Apply conditional formatting to highlight issues
-  openxlsx::conditionalFormatting(
-    wb = wb,
-    sheet = sheet_name_dated,
-    cols = issue_col,
-    rows = 2L:(nrow(comparison_data) + 1L),
-    rule = "TRUE",
-    type = "contains"
-  )
-
-
-  # Write workbook to disk ----
-
-  # Reorder the sheets alphabetically
-  sheet_names <- wb$sheet_names
-  names(sheet_names) <- wb$sheetOrder
-
-  openxlsx::worksheetOrder(wb) <- names(sort(sheet_names))
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
@@ -377,10 +389,17 @@ combine_multi_xlsx <- function(file_list, output_file) {
   for (file in file_list) {
     sheet_names <- openxlsx::getSheetNames(file)
     for (sheet_name in sheet_names) {
-      data <- openxlsx::read.xlsx(file, sheet = sheet_name)
+      comparison_data <- openxlsx::readWorkbook(file)
       openxlsx::addWorksheet(wb, sheet_name)
-      openxlsx::writeData(wb, sheet_name, data)
+      format_test_excel(comparison_data, wb, sheet_name)
+      openxlsx::writeDataTable(
+        wb = wb,
+        sheet = sheet_name,
+        x = comparison_data,
+        tableStyle = "TableStyleLight1",
+        withFilter = FALSE
+      )
     }
-    openxlsx::saveWorkbook(wb, output_file, overwrite = TRUE)
   }
+  openxlsx::saveWorkbook(wb, output_file, overwrite = TRUE)
 }
