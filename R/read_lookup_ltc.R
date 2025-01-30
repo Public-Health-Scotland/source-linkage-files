@@ -60,8 +60,7 @@ read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
 
   chi_check <- ltc_file %>%
     dplyr::pull(.data$chi) %>%
-    phsmethods::chi_check() %>%
-    slfhelper::get_anon_chi()
+    phsmethods::chi_check()
 
   if (!all(chi_check %in% c("Valid CHI", "Missing (Blank)", "Missing (NA)"))) {
     stop("There were bad CHI numbers in the LTC file")
