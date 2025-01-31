@@ -3,13 +3,14 @@
 on:
   push:
     branches: [master]
-  issue_comment:
-    types: [created]
+  pull_request:
   release:
     types: [published]
   workflow_dispatch:
 
-name: pkgdown
+name: pkgdown.yaml
+
+permissions: read-all
 
 jobs:
   pkgdown:
@@ -19,63 +20,30 @@ jobs:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      isPush: ${{ github.event_name == 'push' }}
-      isPR: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/pkgdown') }}
-
+    permissions:
+      contents: write
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Checkout Pull Request
-        if: contains(env.isPR, 'true')
-        run: hub pr checkout ${{ github.event.issue.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
 
-      - name: Install dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
 
-      - name: Install package
-        run: R CMD INSTALL .
-
-      - name: Build and deploy pkgdown site to GitHub pages 🚀
-        if: contains(env.isPush, 'true')
-        run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-
-      - name: Create website
-        if: contains(env.isPR, 'true')
-        run: |
-          pkgdown::build_site()
+      - name: Build site
+        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
-      - name: Create index file
-        if: contains(env.isPR, 'true')
-        run: |
-          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;URL=/dev/index.html" />  <script language="javascript"> window.location.replace('/dev/index.html')</script></head></html>' > ./docs/index.html
-
-      - name: Deploy to Netlify
-        if: contains(env.isPR, 'true')
-        id: netlify-deploy
-        uses: nwtgck/actions-netlify@v3
+      - name: Deploy to GitHub pages 🚀
+        if: github.event_name != 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
-          publish-dir: './docs'
-          production-branch: main-R
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message:
-            'Deploy from GHA: ${{ github.event.pull_request.title || github.event.head_commit.message }} (${{ github.sha }})'
-          timeout-minutes: 12
+          clean: false
+          branch: gh-pages
+          folder: docs
