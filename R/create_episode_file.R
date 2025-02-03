@@ -6,8 +6,6 @@
 #' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#' @param anon_chi_out (Default:TRUE) Should `anon_chi` be used in the output
-#' (instead of chi)
 #' @param write_temp_to_disk write intermediate data for investigation or debug
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
@@ -33,7 +31,6 @@ create_episode_file <- function(
     slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
     sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
-    anon_chi_out = TRUE,
     write_temp_to_disk = FALSE) {
   cli::cli_alert_info("Create episode file function started at {Sys.time()}")
 
@@ -256,10 +253,6 @@ create_episode_file <- function(
         ccm = NA,
         total_no_dn_contacts = NA
       )
-  }
-
-  if (anon_chi_out) {
-    episode_file <- slfhelper::get_anon_chi(episode_file)
   }
 
   if (write_to_disk) {
