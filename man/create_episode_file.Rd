@@ -17,7 +17,6 @@ create_episode_file(
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
-  anon_chi_out = TRUE,
   write_temp_to_disk = FALSE
 )
 }
@@ -44,9 +43,6 @@ create_episode_file(
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
-
-\item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
-(instead of chi)}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 }
