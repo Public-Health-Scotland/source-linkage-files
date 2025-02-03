@@ -67,7 +67,12 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     # Allocate the costs to the correct month
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
     # clean up commhosp values
-    dplyr::mutate(commhosp = dplyr::if_else(.data$commhosp == 1L, "Y", "N"))
+    # dplyr::mutate(commhosp = dplyr::if_else(.data$commhosp == 1L, "Y", "N"))
+    # Reset community hospital flag as an integer
+    dplyr::mutate(
+      commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
+      commhosp = as.integer(commhosp)
+    )
 
 
   # Factors ---------------------------------------------------
