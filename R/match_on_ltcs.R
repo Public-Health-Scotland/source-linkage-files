@@ -11,7 +11,7 @@
 match_on_ltcs <- function(
     data,
     year,
-    ltc_data = read_file(get_ltcs_path(year)) %>% slfhelper::get_chi()) {
+    ltc_data = read_file(get_ltcs_path(year))) {
   # Match on LTC lookup
   matched <- dplyr::left_join(
     data,
