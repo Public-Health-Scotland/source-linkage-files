@@ -19,10 +19,6 @@ not already.
 \description{
 Test to check that the year vector is in the correct format
 }
-\examples{
-year <- check_year_format("1920")
-
-}
 \seealso{
 Other year functions: 
 \code{\link{convert_fyyear_to_year}()},
