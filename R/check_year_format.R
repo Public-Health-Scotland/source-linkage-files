@@ -10,9 +10,6 @@
 #' not already.
 #' @export
 #'
-#' @examples
-#' year <- check_year_format("1920")
-#'
 #' @family year functions
 check_year_format <- function(year, format = "fyyear") {
   if (anyNA(year)) {
