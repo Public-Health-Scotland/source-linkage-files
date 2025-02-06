@@ -7,17 +7,25 @@
 #'
 #' @export
 process_tests_sds <- function(data, year) {
-  old_data <- get_existing_data_for_tests(data)
 
-  data <- rename_hscp(data)
+  if (check_year_valid(year, "sds")) {
+    data <- data %>%
+      slfhelper::get_chi()
 
-  comparison <- produce_test_comparison(
-    old_data = produce_source_sds_tests(old_data),
-    new_data = produce_source_sds_tests(data)
-  ) %>%
-    write_tests_xlsx(sheet_name = "sds", year, workbook_name = "extract")
+    old_data <- get_existing_data_for_tests(data)
 
-  return(comparison)
+    data <- rename_hscp(data)
+
+    comparison <- produce_test_comparison(
+      old_data = produce_source_sds_tests(old_data),
+      new_data = produce_source_sds_tests(data)
+    ) %>%
+      write_tests_xlsx(sheet_name = "sds", year, workbook_name = "extract")
+
+    return(comparison)
+  } else {
+    return(NULL)
+  }
 }
 
 #' SDS Episodes Tests
