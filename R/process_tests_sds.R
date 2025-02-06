@@ -7,7 +7,6 @@
 #'
 #' @export
 process_tests_sds <- function(data, year) {
-
   if (check_year_valid(year, "sds")) {
     data <- data %>%
       slfhelper::get_chi()
