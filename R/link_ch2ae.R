@@ -6,10 +6,10 @@
 #'
 #' @param ep episode file
 link_ch2ae <- function(ep) {
-  ep = ep %>%
+  ep <- ep %>%
     dplyr::mutate(ep_row_id_CE = dplyr::row_number())
 
-  data = ep %>%
+  data <- ep %>%
     dplyr::select(
       ep_row_id_CE,
       anon_chi,
@@ -27,23 +27,23 @@ link_ch2ae <- function(ep) {
     )
 
   # pull care home data
-  care_home_data = data %>%
+  care_home_data <- data %>%
     dplyr::filter(recid == "CH") %>%
     dplyr::arrange(anon_chi, record_keydate1)
 
   # populate ch_name and ch_postcode from care home to ae episodes ...
   # ... if someone goes to ae from ch
-  adms1 = data %>%
+  adms1 <- data %>%
     # remove A&E records that don't lead to an admission,
     # remove elective admissions,
     # and remove day cases
     dplyr::filter(recid == "AE2" &
-                    grepl("A", cup_pathway) == TRUE |
-                    recid != "AE2") %>%
+      grepl("A", cup_pathway) == TRUE |
+      recid != "AE2") %>%
     dplyr::filter(!(recid != "AE2" &
-                      cij_pattype == "Elective")) %>%
+      cij_pattype == "Elective")) %>%
     dplyr::filter(!(recid != "AE2" &
-                      cij_ipdc == "D")) %>%
+      cij_ipdc == "D")) %>%
     dplyr::arrange(
       .data$anon_chi,
       .data$record_keydate1,
@@ -72,18 +72,22 @@ link_ch2ae <- function(ep) {
       ch_name = dplyr::coalesce(ch_name, ch_name.y),
       ch_postcode = dplyr::coalesce(ch_postcode, ch_postcode.y)
     ) %>%
-    dplyr::select(-c(dplyr::ends_with(".y"),
-                     "test_date")) %>%
+    dplyr::select(-c(
+      dplyr::ends_with(".y"),
+      "test_date"
+    )) %>%
     dplyr::mutate(ch2ae_flag = 1L)
 
   # Now update ch_name and ch_postcode values in ep from adms1
   ep <- ep %>%
     dplyr::left_join(
       adms1 %>%
-        dplyr::select(ep_row_id_CE,
-                      ch_name,
-                      ch_postcode,
-                      ch2ae_flag),
+        dplyr::select(
+          ep_row_id_CE,
+          ch_name,
+          ch_postcode,
+          ch2ae_flag
+        ),
       by = "ep_row_id_CE",
       suffix = c("", "_adms")
     ) %>%
@@ -91,16 +95,19 @@ link_ch2ae <- function(ep) {
       ch_name = dplyr::coalesce(ch_name, ch_name_adms),
       ch_postcode = dplyr::coalesce(ch_postcode, ch_postcode_adms)
     ) %>%
-    dplyr::select(-"ep_row_id_CE",
-                  -tidyselect::ends_with("_adms")) %>%
+    dplyr::select(
+      -"ep_row_id_CE",
+      -tidyselect::ends_with("_adms")
+    ) %>%
     # Standardise ch2ae_flag.
     # `ch2ae_flag` should be:
     #   1L if someone goes to ae from ch, (recid == AE)
     #   0L if someone goes to ae but not from ch, (recid == AE)
     #   NA if recid != AE, meaning this variable does not apply
     dplyr::mutate(ch2ae_flag = dplyr::if_else((is.na(ch2ae_flag) &
-                                                 recid == "AE2"),
-                                              0L, ch2ae_flag))
+      recid == "AE2"),
+    0L, ch2ae_flag
+    ))
 
   cli::cli_alert_info("Link CH to AE2 function finished at {Sys.time()}")
 
