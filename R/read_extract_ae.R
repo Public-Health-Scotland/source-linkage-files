@@ -43,7 +43,8 @@ read_extract_ae <- function(
       "Total Net Costs" = readr::col_double(),
       "Age at Midpoint of Financial Year" = readr::col_double(),
       "Case Reference Number" = readr::col_character(),
-      "Significant Facility Code" = readr::col_character()
+      "Significant Facility Code" = readr::col_character(),
+      "Community Hospital Flag" = readr::col_character(),
     )
   ) %>%
     # rename variables
