@@ -42,9 +42,14 @@ process_extract_acute <- function(data,
         .data$cij_ipdc == "DC" ~ "D"
       )
     ) %>%
-    # Recode GP practice into 5 digit number
-    # We assume that if it starts with a letter it's an English practice and so recode to 99995.
-    dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
+    # Reset community hospital flag as an integer
+    dplyr::mutate(
+      commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
+      commhosp = as.integer(commhosp)
+    )
+  # Recode GP practice into 5 digit number
+  # We assume that if it starts with a letter it's an English practice and so recode to 99995.
+  dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
     # Calculate the total length of stay (for the entire episode, not just within the financial year).
     dplyr::mutate(
       stay = calculate_stay(year, .data$record_keydate1, .data$record_keydate2),
