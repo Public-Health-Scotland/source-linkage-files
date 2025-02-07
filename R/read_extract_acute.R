@@ -155,8 +155,7 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
     # replace NA in cost_total_net by 0
     dplyr::mutate(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_acute)
 }

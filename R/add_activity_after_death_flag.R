@@ -11,8 +11,7 @@
 add_activity_after_death_flag <- function(
     data,
     year,
-    deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
-      slfhelper::get_chi()) {
+    deaths_data = read_file(get_combined_slf_deaths_lookup_path())) {
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
@@ -22,7 +21,7 @@ add_activity_after_death_flag <- function(
   death_joined <- data %>%
     dplyr::select(
       "year",
-      "chi",
+      "anon_chi",
       "recid",
       "record_keydate1",
       "record_keydate2",
@@ -30,9 +29,9 @@ add_activity_after_death_flag <- function(
       "deceased",
       "ep_row_id_death"
     ) %>%
-    dplyr::filter(!is.na(.data$chi) & .data$chi != "") %>%
+    dplyr::filter(!is.na(.data$anon_chi) & .data$anon_chi != "") %>%
     dplyr::left_join(deaths_data,
-      by = "chi",
+      by = "anon_chi",
       suffix = c("", "_refined")
     ) %>%
     dplyr::filter(.data$deceased == TRUE) %>%
@@ -72,7 +71,7 @@ add_activity_after_death_flag <- function(
     # Remove temporary flag variables used to create activity after death flag and fill in missing death_date
     dplyr::select(
       "year",
-      "chi",
+      "anon_chi",
       "recid",
       "record_keydate1",
       "record_keydate2",
@@ -89,7 +88,7 @@ add_activity_after_death_flag <- function(
       # this join_by is now 100% accurate.
       by = c(
         "year",
-        "chi",
+        "anon_chi",
         "recid",
         "record_keydate1",
         "record_keydate2",

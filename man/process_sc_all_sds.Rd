@@ -6,7 +6,7 @@
 \usage{
 process_sc_all_sds(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()) \%>\% slfhelper::get_chi(),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   write_to_disk = TRUE
 )
 }

@@ -7,9 +7,6 @@
 #'
 #' @export
 process_tests_nrs_deaths <- function(data, year) {
-  data <- data %>%
-    slfhelper::get_chi()
-
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -41,10 +38,10 @@ process_tests_nrs_deaths <- function(data, year) {
 produce_source_nrs_tests <- function(data) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     dplyr::mutate(n_deaths = 1L) %>%
     # keep variables for comparison
-    dplyr::select("unique_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

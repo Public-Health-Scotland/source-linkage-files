@@ -12,7 +12,7 @@ create_service_use_cohorts <- function(
     update = latest_update(),
     write_to_disk = TRUE) {
   check_variables_exist(data, variables = c(
-    "chi",
+    "anon_chi",
     "recid",
     "cij_marker",
     "cij_pattype",
@@ -24,7 +24,7 @@ create_service_use_cohorts <- function(
 
   return_data <- data %>%
     # Only select rows with chi
-    dplyr::filter(!is_missing(.data$chi)) %>%
+    dplyr::filter(!is_missing(.data$anon_chi)) %>%
     # Create cij_attendance = TRUE when there is a cij_marker,
     # and use recid for cij_marker if there is not a cij_marker
     dplyr::mutate(
@@ -98,7 +98,7 @@ create_service_use_cohorts <- function(
     ) %>%
     # Aggregate to CIJ level
     dplyr::group_by(
-      .data$chi,
+      .data$anon_chi,
       .data$cij_marker,
       .data$cij_ipdc,
       .data$cij_pattype
@@ -145,7 +145,7 @@ create_service_use_cohorts <- function(
       .after = dplyr::last_col()
     ) %>%
     # Aggregate to chi-level
-    dplyr::group_by(.data$chi) %>%
+    dplyr::group_by(.data$anon_chi) %>%
     dplyr::summarise(
       dplyr::across(
         c(.data$cost_total_net:.data$elective_inpatient_cost),
@@ -241,7 +241,7 @@ create_service_use_cohorts <- function(
     assign_cohort_names() %>%
     # Select out the required variables
     dplyr::select(
-      "chi",
+      "anon_chi",
       "service_use_cohort",
       "psychiatry_cost",
       "maternity_cost",
@@ -254,8 +254,7 @@ create_service_use_cohorts <- function(
       "outpatient_cost",
       "prescribing_cost",
       "ae2_cost"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(return_data,

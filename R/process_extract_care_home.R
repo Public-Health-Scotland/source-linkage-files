@@ -114,7 +114,7 @@ process_extract_care_home <- function(
       "year",
       "recid",
       "smrtype",
-      "chi",
+      "anon_chi",
       "dob",
       "gender",
       "postcode",
@@ -128,8 +128,7 @@ process_extract_care_home <- function(
       "cost_total_net",
       dplyr::ends_with("_beddays"),
       dplyr::ends_with("_cost")
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

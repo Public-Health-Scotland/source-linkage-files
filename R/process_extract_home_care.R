@@ -84,7 +84,7 @@ process_extract_home_care <- function(
       "year",
       "recid",
       "smrtype",
-      "chi",
+      "anon_chi",
       "dob",
       "gender",
       "postcode",
@@ -96,8 +96,7 @@ process_extract_home_care <- function(
       "cost_total_net",
       "hc_provider",
       "hc_reablement"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

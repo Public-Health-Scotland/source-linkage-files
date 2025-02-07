@@ -12,9 +12,6 @@ process_tests_cmh <- function(data, year) {
     return(data)
   }
 
-  data <- data %>%
-    slfhelper::get_chi()
-
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -46,11 +43,11 @@ process_tests_cmh <- function(data, year) {
 produce_source_cmh_tests <- function(data) {
   test_flags <- data %>%
     # create test flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     create_hb_test_flags(hb_var = .data$hbrescode) %>%
     dplyr::mutate(n_episodes = 1L) %>%
     # keep variables for comparison
-    dplyr::select("unique_chi":dplyr::last_col()) %>%
+    dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 

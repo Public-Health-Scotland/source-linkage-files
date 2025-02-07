@@ -12,7 +12,7 @@
 #'
 process_sc_all_sds <- function(
     data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
     write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
   matched_sds_data <- data %>%
@@ -43,7 +43,7 @@ process_sc_all_sds <- function(
     sds_period_end_date <- received <- sds_option <- sending_location <-
     period <- record_keydate1 <- record_keydate2 <- social_care_id <-
     smrtype <- period_rank <- record_keydate1_rank <- record_keydate2_rank <-
-    distinct_episode <- episode_counter <- chi <- gender <- dob <- postcode <-
+    distinct_episode <- episode_counter <- anon_chi <- gender <- dob <- postcode <-
     recid <- person_id <- sc_send_lca <- NULL
 
   # Deal with SDS option 4
@@ -166,7 +166,7 @@ process_sc_all_sds <- function(
     sc_latest_submission = data.table::last(period),
     record_keydate1 = min(record_keydate1),
     record_keydate2 = max(record_keydate2),
-    chi = data.table::last(chi),
+    anon_chi = data.table::last(anon_chi),
     gender = data.table::last(gender),
     dob = data.table::last(dob),
     postcode = data.table::last(postcode),
@@ -176,8 +176,7 @@ process_sc_all_sds <- function(
   rm(sds_full_clean_long)
 
   # Drop episode_counter and convert back to data.frame if needed
-  final_data <- as.data.frame(final_data[, -"episode_counter"]) %>%
-    slfhelper::get_anon_chi()
+  final_data <- as.data.frame(final_data[, -"episode_counter"])
   # final_data now holds the processed data in the format of a data.frame
 
   if (write_to_disk) {

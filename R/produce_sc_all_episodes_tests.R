@@ -8,12 +8,9 @@
 #'
 #' @family social care test functions
 produce_sc_all_episodes_tests <- function(data) {
-  data <- data %>%
-    slfhelper::get_chi()
-
   data %>%
     # create test flags
-    create_demog_test_flags(chi = .data$chi) %>%
+    create_demog_test_flags() %>%
     dplyr::mutate(
       n_missing_sending_loc = dplyr::if_else(
         is.na(.data$sending_location),
@@ -27,7 +24,7 @@ produce_sc_all_episodes_tests <- function(data) {
       )
     ) %>%
     # keep variables for comparison
-    dplyr::select(c("unique_chi":dplyr::last_col())) %>%
+    dplyr::select(c("unique_anon_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 }

@@ -4,7 +4,7 @@
 \alias{create_demog_test_flags}
 \title{Create demographic test flags}
 \usage{
-create_demog_test_flags(data, chi = c(chi, anon_chi))
+create_demog_test_flags(data)
 }
 \arguments{
 \item{data}{a dataframe containing demographic variables e.g. chi}

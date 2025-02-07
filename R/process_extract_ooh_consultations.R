@@ -12,7 +12,7 @@
 process_extract_ooh_consultations <- function(data, year) {
   # to skip warning no visible binding for global variable when using data.table
   distinct_check <- consultation_type <- location <-
-    record_keydate1 <- record_keydate2 <- chi <-
+    record_keydate1 <- record_keydate2 <- anon_chi <-
     ooh_case_id <- episode_counter <- NULL
 
 
@@ -40,8 +40,12 @@ process_extract_ooh_consultations <- function(data, year) {
 
   consultations_filtered <- data %>%
     data.table::as.data.table() %>%
+    # change to chi for phs methods
+    slfhelper::get_chi() %>%
     # Filter missing / bad CHI numbers
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
+    # change back to anon_chi
+    slfhelper::get_anon_chi() %>%
     dplyr::mutate(
       attendance_status = dplyr::case_match(
         .data$attendance_status,
@@ -90,7 +94,7 @@ process_extract_ooh_consultations <- function(data, year) {
   consultations_clean <- consultations_covid %>%
     # Sort in reverse order so we can use coalesce which takes the first non-missing value
     dplyr::arrange(
-      .data$chi,
+      .data$anon_chi,
       .data$ooh_case_id,
       .data$record_keydate1,
       .data$record_keydate2
@@ -100,11 +104,11 @@ process_extract_ooh_consultations <- function(data, year) {
   consultations_clean[, distinct_check := (
     record_keydate1 > data.table::shift(record_keydate2, fill = NA, type = "lag")
   ),
-  by = list(chi, ooh_case_id, consultation_type, location)
+  by = list(anon_chi, ooh_case_id, consultation_type, location)
   ]
   consultations_clean[, distinct_check := tidyr::replace_na(distinct_check, TRUE)]
   consultations_clean[, episode_counter := cumsum(distinct_check),
-    by = list(chi, ooh_case_id, consultation_type, location)
+    by = list(anon_chi, ooh_case_id, consultation_type, location)
   ]
   consultations_clean[,
     c(
@@ -115,7 +119,7 @@ process_extract_ooh_consultations <- function(data, year) {
       max(record_keydate2)
     ),
     by = list(
-      chi,
+      anon_chi,
       ooh_case_id,
       consultation_type,
       location,

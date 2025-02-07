@@ -62,8 +62,7 @@ read_extract_homelessness <- function(
       not_to_do_with_applicant_household = "Not to do with Applicant Household",
       refused = "Refused",
       person_in_receipt_of_universal_credit = "Person in Receipt of Universal Credit"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_homelessness)
 }

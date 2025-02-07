@@ -13,14 +13,14 @@
 #'
 process_sc_all_alarms_telecare <- function(
     data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()) %>% slfhelper::get_chi(),
+    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
     write_to_disk = TRUE) {
   # Data Cleaning-----------------------------------------------------
 
   # fix "no visible binding for global variable"
   service_end_date <- period_end_date <- service_start_date <- service_type <-
     default <- sending_location <- social_care_id <- pkg_count <-
-    record_keydate1 <- smrtype <- period <- record_keydate2 <- chi <-
+    record_keydate1 <- smrtype <- period <- record_keydate2 <- anon_chi <-
     gender <- dob <- postcode <- recid <- person_id <- sc_send_lca <-
     period_start_date <- NULL
 
@@ -115,7 +115,7 @@ process_sc_all_alarms_telecare <- function(
   qtr_merge <- data[, list(
     sc_latest_submission = data.table::last(period),
     record_keydate2 = data.table::last(record_keydate2),
-    chi = data.table::last(chi),
+    anon_chi = data.table::last(anon_chi),
     gender = data.table::last(gender),
     dob = data.table::last(dob),
     postcode = data.table::last(postcode),
@@ -130,9 +130,7 @@ process_sc_all_alarms_telecare <- function(
   )]
 
   # Convert back to data.frame if necessary
-  qtr_merge <- as.data.frame(qtr_merge) %>%
-    slfhelper::get_anon_chi()
-
+  qtr_merge <- as.data.frame(qtr_merge)
 
   if (write_to_disk) {
     write_file(

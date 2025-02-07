@@ -17,8 +17,7 @@ process_lookup_sc_client <-
   function(data,
            year,
            sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
-             slfhelper::get_chi() %>%
-             dplyr::select(c("sending_location", "social_care_id", "chi", "latest_flag")),
+             dplyr::select(c("sending_location", "social_care_id", "anon_chi", "latest_flag")),
            write_to_disk = TRUE) {
     # Specify years available for running
     if (year < "1718") {
@@ -43,7 +42,7 @@ process_lookup_sc_client <-
 
 
     client_clean <- sc_client_demographics %>%
-      dplyr::group_by(.data$sending_location, .data$social_care_id, .data$chi) %>%
+      dplyr::group_by(.data$sending_location, .data$social_care_id, .data$anon_chi) %>%
       # summarise to take last submission
       dplyr::summarise(dplyr::across(
         c(
@@ -138,7 +137,7 @@ process_lookup_sc_client <-
       ) %>%
       # rename variables
       dplyr::rename_with(
-        .cols = -c("sending_location", "social_care_id", "chi"),
+        .cols = -c("sending_location", "social_care_id", "anon_chi"),
         .fn = ~ paste0("sc_", .x)
       )
 
@@ -146,7 +145,7 @@ process_lookup_sc_client <-
     sc_client_lookup <- client_clean %>%
       # reorder
       dplyr::select(
-        "chi",
+        "anon_chi",
         "sending_location",
         "social_care_id",
         "sc_living_alone",
@@ -199,10 +198,9 @@ process_lookup_sc_client <-
           na.rm = TRUE
         )
       ) %>%
-      dplyr::arrange(.data$chi, .data$count_not_known) %>%
-      dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
-      dplyr::select(-.data$sending_location, -.data$count_not_known) %>%
-      slfhelper::get_anon_chi()
+      dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
+      dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
+      dplyr::select(-.data$sending_location, -.data$count_not_known)
 
     if (write_to_disk) {
       write_file(

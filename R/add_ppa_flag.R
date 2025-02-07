@@ -11,7 +11,7 @@ add_ppa_flag <- function(data) {
   check_variables_exist(
     data,
     variables = c(
-      "chi",
+      "anon_chi",
       "cij_marker",
       "cij_pattype",
       "recid",
@@ -36,7 +36,7 @@ add_ppa_flag <- function(data) {
   matching_data <- data %>%
     # Select out only the columns we need
     dplyr::select(
-      "chi",
+      "anon_chi",
       "cij_marker",
       "cij_pattype",
       "recid",
@@ -55,9 +55,9 @@ add_ppa_flag <- function(data) {
     ) %>%
     # We only want the first record in each CIJ,
     # and we want to exclude empty CIJ and empty CHI
-    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$anon_chi, .data$cij_marker) %>%
     dplyr::filter(
-      dplyr::row_number() == 1L & !is.na(.data$cij_marker) & !is.na(.data$chi)
+      dplyr::row_number() == 1L & !is.na(.data$cij_marker) & !is.na(.data$anon_chi)
     ) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
@@ -211,13 +211,13 @@ add_ppa_flag <- function(data) {
         TRUE ~ FALSE
       )
     ) %>%
-    dplyr::select("chi", "cij_marker", cij_ppa = "ppa")
+    dplyr::select("anon_chi", "cij_marker", cij_ppa = "ppa")
 
   # Match on the ppa lookup to original data
   ppa_cij_data <- dplyr::left_join(
     data,
     matching_data,
-    by = c("chi", "cij_marker")
+    by = c("anon_chi", "cij_marker")
   ) %>%
     dplyr::mutate(cij_ppa = dplyr::if_else(
       is.na(.data$cij_ppa),

@@ -23,8 +23,7 @@ process_extract_nrs_deaths <- function(data, year, write_to_disk = TRUE) {
       year = year,
       gpprac = convert_eng_gpprac_to_dummy(.data$gpprac),
       smrtype = add_smrtype(.data$recid)
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     deaths_clean %>%

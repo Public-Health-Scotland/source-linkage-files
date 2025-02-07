@@ -63,8 +63,7 @@ read_extract_nrs_deaths <- function(
       deathdiag11 = "Sec Cause of Death 9 Code (6 char)",
       uri = "Unique Record Identifier",
       gpprac = "GP practice code(99)"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_nrs_deaths)
 }

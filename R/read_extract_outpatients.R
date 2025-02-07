@@ -83,8 +83,7 @@ read_extract_outpatients <- function(
       cost_total_net = "Total Net Costs",
       location = "Treatment Location Code",
       hbtreatcode = "Treatment NHS Board Code - current"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_outpatients)
 }

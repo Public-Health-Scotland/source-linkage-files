@@ -9,12 +9,12 @@
 join_deaths_data <- function(
     data,
     year,
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)) %>% slfhelper::get_chi()) {
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))) {
   data <- data %>%
     dplyr::left_join(
       slf_deaths_lookup %>%
-        dplyr::distinct(.data$chi, .keep_all = TRUE),
-      by = "chi",
+        dplyr::distinct(.data$anon_chi, .keep_all = TRUE),
+      by = "anon_chi",
       na_matches = "never",
       relationship = "many-to-one"
     )

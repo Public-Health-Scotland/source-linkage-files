@@ -118,8 +118,7 @@ read_extract_maternity <- function(
       location = "Treatment Location Code",
       hbtreatcode = "Treatment NHS Board Code - current",
       uri = "Maternity Unique Record Identifier [C]"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_maternity)
 }
