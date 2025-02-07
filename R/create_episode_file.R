@@ -154,6 +154,7 @@ create_episode_file <- function(
       deaths_data = read_file(get_combined_slf_deaths_lookup_path()) %>%
         slfhelper::get_chi()
     ) %>%
+    link_ch2ae() %>%
     load_ep_file_vars(year) %>%
     write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
 
