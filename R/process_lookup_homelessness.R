@@ -14,7 +14,7 @@ create_homelessness_lookup <- function(
     year,
     homelessness_data = read_file(get_source_extract_path(year, "homelessness")) %>% slfhelper::get_chi()) {
   # Specify years available for running
-  if (year < "1617") {
+  if (year <= "1516") {
     return(NULL)
   }
   homelessness_lookup <- homelessness_data %>%
