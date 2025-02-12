@@ -13,16 +13,16 @@
 get_it_ltc_path <- function(it_reference = NULL, ...) {
   if (is.null(it_reference)) {
     it_ltc_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name_regexp = "SCTASK[0-9]{7}_LTCs\\.csv(?:\\.gz)?",
+      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+      file_name_regexp = "anon-SCTASK[0-9]{7}_LTCs\\.parquet",
       ...
     )
   } else {
     it_reference <- check_it_reference(it_reference)
 
     it_ltc_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name = stringr::str_glue("SCTASK{it_reference}_LTCs.csv.gz")
+      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+      file_name = stringr::str_glue("anon-SCTASK{it_reference}_LTCs.parquet")
     )
   }
 
@@ -44,16 +44,16 @@ get_it_ltc_path <- function(it_reference = NULL, ...) {
 get_it_deaths_path <- function(it_reference = NULL, ...) {
   if (is.null(it_reference)) {
     it_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name_regexp = "SCTASK[0-9]{7}_Deaths\\.csv(?:\\.gz)?",
+      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+      file_name_regexp = "anon-SCTASK[0-9]{7}_Deaths\\.parquet",
       ...
     )
   } else {
     it_reference <- check_it_reference(it_reference)
 
     it_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
-      file_name = stringr::str_glue("SCTASK{it_reference}_Deaths.csv.gz")
+      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+      file_name = stringr::str_glue("anon-SCTASK{it_reference}_Deaths.parquet")
     )
   }
 
@@ -76,18 +76,18 @@ get_it_deaths_path <- function(it_reference = NULL, ...) {
 get_it_prescribing_path <- function(year, it_reference = NULL, ...) {
   if (is.null(it_reference)) {
     it_pis_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
+      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
       file_name_regexp = stringr::str_glue(
-        "SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.csv(?:\\.gz)?"
+        "anon-SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.parquet"
       )
     )
   } else {
     it_reference <- check_it_reference(it_reference)
 
     it_pis_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts"),
+      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
       file_name = stringr::str_glue(
-        "SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.csv.gz"
+        "anon-SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.parquet"
       )
     )
   }
