@@ -30,20 +30,22 @@ get_previous_it_task_num <- function() {
   }
 }
 
-get_current_it_task_num <- function() {
+get_new_it_task_num <- function() {
   new_csv_files <- list.files(it_extract_path)
-  ltcs_file <-
+  new_ltcs_file <-
     new_csv_files[stringr::str_detect(new_csv_files, "LTCs\\.csv$")]
-  task_num <- stringr::str_extract(ltcs_file, "SCTASK\\d+")
-  if (length(task_num) == 1L) {
-    return(task_num)
-  } else {
-    cli::cli_abort("Detected 0 or more than 1 task numbers! Please check!")
+  new_task_num <- stringr::str_extract(new_ltcs_file, "SCTASK\\d+")
+  if (length(new_task_num) == 1L) {
+    return(new_task_num)
+  } else if(length(new_task_num) < 1L){
+    cli::cli_abort("No new IT Extracts detected! Please check!")
+  } else{
+    cli::cli_abort("Detected more than 1 task numbers! Please check!")
   }
 }
 
 previous_task_num <- get_previous_it_task_num()
-current_task_num <- get_current_it_task_num()
+new_task_num <- get_new_it_task_num()
 
 existing_parquet_files <- list.files(it_extract_anon_path, full.names = TRUE)
 if (is.null(previous_task_num)) {
@@ -60,11 +62,11 @@ csv_files <- list.files(it_extract_path,
 )
 
 convert_it_csv_to_parquet <- function(csv_file) {
-  parequet_file <- gsub("\\.csv(\\.gz)?$", ".parquet", csv_file)
+  parquet_file <- gsub("\\.csv(\\.gz)?$", ".parquet", csv_file)
   data <- read_file(csv_file)
   new_file <- file.path(
     it_extract_anon_path,
-    paste0("anon-", basename(parequet_file))
+    paste0("anon-", basename(parquet_file))
   )
   if (is_chi_in_file(csv_file)) {
     data <- data %>%
@@ -76,7 +78,6 @@ convert_it_csv_to_parquet <- function(csv_file) {
   }
   write_file(data, new_file)
   cli::cli_alert_info("\n {basename(csv_file)} finished at {Sys.time()}")
-  # return(NULL)
 }
 
 # check disk available size before moving files
@@ -108,15 +109,15 @@ lapply(csv_files, convert_it_csv_to_parquet)
 
 
 # zip and archive current new parquet files ----------------------------
-parquet_new_list <- list.files(it_extract_anon_path, full.names = TRUE)
-parquet_new_list <- parquet_new_list[grepl(current_task_num, parquet_new_list)]
+new_parquet_list <- list.files(it_extract_anon_path, full.names = TRUE)
+new_parquet_list <- new_parquet_list[grepl(new_task_num, new_parquet_list)]
 
 zip_file_path <- zip::zip(
   zipfile = file.path(
     it_extract_path,
-    stringr::str_glue("archive/{current_task_num}_{latest_update()}.zip")
+    stringr::str_glue("archive/{new_task_num}_{latest_update()}.zip")
   ),
-  files = parquet_new_list,
+  files = new_parquet_list,
   compression_level = 9,
   mode = "cherry-pick"
 )
