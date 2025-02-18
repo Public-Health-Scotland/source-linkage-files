@@ -37,9 +37,9 @@ get_new_it_task_num <- function() {
   new_task_num <- stringr::str_extract(new_ltcs_file, "SCTASK\\d+")
   if (length(new_task_num) == 1L) {
     return(new_task_num)
-  } else if(length(new_task_num) < 1L){
+  } else if (length(new_task_num) < 1L) {
     cli::cli_abort("No new IT Extracts detected! Please check!")
-  } else{
+  } else {
     cli::cli_abort("Detected more than 1 task numbers! Please check!")
   }
 }
