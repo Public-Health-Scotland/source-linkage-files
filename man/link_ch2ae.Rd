@@ -11,7 +11,7 @@ link_ch2ae(ep)
 }
 \description{
 \enumerate{
-\item Add a variable, ch2ae_flag,
+\item Add a variable, sc_ch_link_ae,
 for CH episode to indicate discharge to AE2.
 \item Populate ch_name and ch_postcode to relavent AE episodes from CH episodes
 }
