@@ -5,7 +5,7 @@
 #' 2. Populate ch_name and ch_postcode to relavent AE episodes from CH episodes
 #'
 #' @param ep episode file
-link_ch2ae <- function(ep) {
+link_ch_with_ae <- function(episode) {
   ep <- ep %>%
     dplyr::mutate(ep_row_id_CE = dplyr::row_number())
 
