@@ -1,6 +1,6 @@
 #' Link AE episodes released from CH
 #'
-#' @description 1. Add a variable, ch2ae_flag,
+#' @description 1. Add a variable, sc_ch_link_ae,
 #' for CH episode to indicate discharge to AE2.
 #' 2. Populate ch_name and ch_postcode to relavent AE episodes from CH episodes
 #'
@@ -80,7 +80,7 @@ link_ch2ae <- function(ep) {
       dplyr::ends_with(".y"),
       "test_date"
     )) %>%
-    dplyr::mutate(ch2ae_flag = 1L)
+    dplyr::mutate(sc_ch_link_ae = 1L)
 
   # Now update ch_name and ch_postcode values in ep from adms1
   ep <- ep %>%
@@ -90,7 +90,7 @@ link_ch2ae <- function(ep) {
           ep_row_id_CE,
           ch_name,
           ch_postcode,
-          ch2ae_flag
+          sc_ch_link_ae
         ),
       by = "ep_row_id_CE",
       suffix = c("", "_adms")
@@ -103,14 +103,14 @@ link_ch2ae <- function(ep) {
       -"ep_row_id_CE",
       -tidyselect::ends_with("_adms")
     ) %>%
-    # Standardise ch2ae_flag.
-    # `ch2ae_flag` should be:
+    # Standardise sc_ch_link_ae.
+    # `sc_ch_link_ae` should be:
     #   1L if someone goes to ae from ch, (recid == AE)
     #   0L if someone goes to ae but not from ch, (recid == AE)
     #   NA if recid != AE, meaning this variable does not apply
-    dplyr::mutate(ch2ae_flag = dplyr::if_else((is.na(ch2ae_flag) &
+    dplyr::mutate(sc_ch_link_ae = dplyr::if_else((is.na(sc_ch_link_ae) &
       recid == "AE2"),
-    0L, ch2ae_flag
+    0L, sc_ch_link_ae
     ))
 
   cli::cli_alert_info("Link CH to AE2 function finished at {Sys.time()}")
