@@ -202,6 +202,8 @@ previous_update <- function(months_ago = 3L, override = NULL) {
 fy <- function() {
   # Latest FY
   fy <- phsmethods::extract_fin_year(end_date()) %>% substr(1, 4)
+
+  return(fy)
 }
 
 
