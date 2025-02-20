@@ -4,11 +4,7 @@
 \alias{get_existing_data_for_tests}
 \title{SLF Data for Testing}
 \usage{
-get_existing_data_for_tests(
-  new_data,
-  file_version = "episode",
-  anon_chi = FALSE
-)
+get_existing_data_for_tests(new_data, file_version = "episode")
 }
 \arguments{
 \item{new_data}{a \link[tibble:tibble-package]{tibble} of the

@@ -57,7 +57,7 @@ link_delayed_discharge_eps <- function(
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
   by_dd <- dplyr::join_by(
-    "chi",
+    "anon_chi",
     x$record_keydate1 >= y$dummy_cij_start,
     x$dummy_keydate2 <= y$dummy_cij_end
   )
@@ -78,7 +78,7 @@ link_delayed_discharge_eps <- function(
     ) %>%
     # remove duplicate rows, but still got some duplicate mismatches
     dplyr::distinct(
-      .data$chi,
+      .data$anon_chi,
       .data$cij_start_date,
       .data$cij_end_date,
       .data$cij_marker,
@@ -267,7 +267,7 @@ link_delayed_discharge_eps <- function(
     # remove duplicated rows when many to many inner join
     # keep the records that closest to the cij record
     dplyr::arrange(
-      .data$chi,
+      .data$anon_chi,
       .data$original_admission_date,
       .data$record_keydate1_dd,
       .data$record_keydate2_dd,
@@ -284,11 +284,11 @@ link_delayed_discharge_eps <- function(
     ) %>%
     # add cij_delay
     dplyr::mutate(has_delay = dplyr::if_else(
-      !is_missing(.data$chi) & !is.na(.data$cij_marker),
+      !is_missing(.data$anon_chi) & !is.na(.data$cij_marker),
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
-    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::mutate(cij_delay = dplyr::if_else(.data$cij_delay == "0",
       FALSE,
@@ -361,7 +361,7 @@ link_delayed_discharge_eps <- function(
         )
     ) %>%
     # populate cij_delay dd details back to ep
-    dplyr::group_by(.data$chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(
       has_dd = any(.data$recid == "DD"),
       delay_dd = any(.data$cij_delay)

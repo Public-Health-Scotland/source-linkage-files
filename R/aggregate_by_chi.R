@@ -13,7 +13,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   # recommended by `data.table` team to tackle the issue
   # "no visible binding for global variable"
   gender <-
-    chi <-
+    anon_chi <-
     cij_ppa <-
     cij_end_date <- cij_start_date <- preventable_beddays <- NULL
 
@@ -28,7 +28,7 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   data.table::setkeyv(
     episode_file,
     c(
-      "chi",
+      "anon_chi",
       "record_keydate1",
       "keytime1",
       "record_keydate2",
@@ -143,31 +143,31 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
   # compute
   individual_file_cols1 <- episode_file[,
     list(gender = mean(gender)),
-    by = "chi"
+    by = "anon_chi"
   ]
   individual_file_cols2 <- episode_file[,
     .SD[.N],
     .SDcols = cols2,
-    by = "chi"
+    by = "anon_chi"
   ]
   individual_file_cols3 <- episode_file[,
     lapply(.SD, function(x) {
       data.table::uniqueN(x, na.rm = TRUE)
     }),
     .SDcols = cols3,
-    by = "chi"
+    by = "anon_chi"
   ]
   individual_file_cols4 <- episode_file[,
     lapply(.SD, function(x) {
       sum(x, na.rm = TRUE)
     }),
     .SDcols = cols4,
-    by = "chi"
+    by = "anon_chi"
   ]
   individual_file_cols5 <- episode_file[,
     lapply(.SD, function(x) max(x, na.rm = TRUE)),
     .SDcols = cols5,
-    by = "chi"
+    by = "anon_chi"
   ]
   individual_file_cols6 <- episode_file[,
     list(
@@ -178,22 +178,22 @@ aggregate_by_chi <- function(episode_file, year, exclude_sc_var = FALSE) {
       )
     ),
     # cij_marker has been renamed as cij_total
-    by = c("chi", "cij_total")
+    by = c("anon_chi", "cij_total")
   ]
   individual_file_cols6 <- individual_file_cols6[,
     list(
       preventable_beddays = sum(preventable_beddays, na.rm = TRUE)
     ),
-    by = "chi"
+    by = "anon_chi"
   ]
 
   individual_file <- dplyr::bind_cols(
     individual_file_cols1,
-    individual_file_cols2[, chi := NULL],
-    individual_file_cols3[, chi := NULL],
-    individual_file_cols4[, chi := NULL],
-    individual_file_cols5[, chi := NULL],
-    individual_file_cols6[, chi := NULL]
+    individual_file_cols2[, anon_chi := NULL],
+    individual_file_cols3[, anon_chi := NULL],
+    individual_file_cols4[, anon_chi := NULL],
+    individual_file_cols5[, anon_chi := NULL],
+    individual_file_cols6[, anon_chi := NULL]
   )
   individual_file <- individual_file[, year := year]
 
@@ -266,7 +266,7 @@ aggregate_ch_episodes <- function(episode_file) {
     max(ch_ep_end),
     mean(ch_cost_per_day)
   ),
-  by = c("chi", "ch_chi_cis")
+  by = c("anon_chi", "ch_chi_cis")
   ]
 
   # Convert back to tibble if needed

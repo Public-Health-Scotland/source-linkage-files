@@ -201,7 +201,7 @@ fill_ch_names <- function(ch_data,
     ) %>%
     dplyr::select(
       "unique_identifier",
-      "chi",
+      "anon_chi",
       "ch_postcode",
       "ch_postcode_lookup",
       "postcode",
@@ -251,11 +251,11 @@ fill_ch_names <- function(ch_data,
   # Then, overwrite the minority of records with matching quality being 100.
   ch_pc_match_quality1to13 <- ch_pc_match_quality1to12 %>%
     dplyr::arrange(
-      .data[["chi"]],
+      .data[["anon_chi"]],
       .data[["ch_name"]],
       .data[["matching_quality_indicator"]]
     ) %>%
-    dplyr::group_by(.data[["chi"]], .data[["ch_name"]]) %>%
+    dplyr::group_by(.data[["anon_chi"]], .data[["ch_name"]]) %>%
     dplyr::mutate(
       # Best_quality_within_group_chi_name is supposed to be minimum within a group.
       # Since we sort matching_quality_indicator, first is ok.
@@ -305,7 +305,7 @@ fill_ch_names <- function(ch_data,
     "unique_identifier",
     "matching_quality_indicator",
     "sending_location",
-    "chi",
+    "anon_chi",
     "ch_name",
     "ch_postcode",
     "social_care_id",
@@ -721,11 +721,11 @@ fill_ch_names <- function(ch_data,
     ch_no_match_quality100
   ) %>%
     dplyr::arrange(
-      .data[["chi"]], .data[["ch_name_keyword"]],
+      .data[["anon_chi"]], .data[["ch_name_keyword"]],
       .data[["matching_quality_indicator"]]
     ) %>%
     dplyr::group_by(
-      .data[["chi"]],
+      .data[["anon_chi"]],
       .data[["ch_name_keyword"]]
     ) %>%
     dplyr::mutate(
@@ -759,7 +759,7 @@ fill_ch_names <- function(ch_data,
   ## produce output ----
   col_output <- c(
     "sending_location",
-    "chi",
+    "anon_chi",
     "ch_name",
     "ch_postcode",
     "social_care_id",
