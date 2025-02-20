@@ -31,7 +31,7 @@ end_date <- function() {
   # Q2 September = 30092024
   # Q3 December = 31122024
   # Q4 March = 31032025
-  end_date <- lubridate::dmy(31122024)
+  end_date <- lubridate::dmy(31032025)
 
   return(end_date)
 }
@@ -202,6 +202,8 @@ previous_update <- function(months_ago = 3L, override = NULL) {
 fy <- function() {
   # Latest FY
   fy <- phsmethods::extract_fin_year(end_date()) %>% substr(1, 4)
+
+  return(fy)
 }
 
 
