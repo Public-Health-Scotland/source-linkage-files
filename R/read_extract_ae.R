@@ -83,7 +83,8 @@ read_extract_ae <- function(
       sigfac = "Significant Facility Code",
       cost_total_net = "Total Net Costs",
       location = "Treatment Location Code",
-      case_ref_number = "Case Reference Number"
+      case_ref_number = "Case Reference Number",
+      commhosp = "Community Hospital Flag"
     )
 
   return(extract_ae)
