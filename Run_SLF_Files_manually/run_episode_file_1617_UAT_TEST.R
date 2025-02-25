@@ -19,15 +19,17 @@ processed_data_list <- list(
 )
 
 
-dd_data = read_file(get_source_extract_path(year, "dd"))
-homelessness_lookup = create_homelessness_lookup(year)
-nsu_cohort = read_file(get_nsu_path(year))
-ltc_data = read_file(get_ltcs_path(year))
-slf_pc_lookup = read_file(get_slf_postcode_path())
-slf_gpprac_lookup = read_file(
-  get_slf_gpprac_path(),col_select = c("gpprac", "cluster", "hbpraccode"))
-slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))
-sc_client = read_file(get_sc_client_lookup_path(year))
+dd_data <- read_file(get_source_extract_path(year, "dd"))
+homelessness_lookup <- create_homelessness_lookup(year)
+nsu_cohort <- read_file(get_nsu_path(year))
+ltc_data <- read_file(get_ltcs_path(year))
+slf_pc_lookup <- read_file(get_slf_postcode_path())
+slf_gpprac_lookup <- read_file(
+  get_slf_gpprac_path(),
+  col_select = c("gpprac", "cluster", "hbpraccode")
+)
+slf_deaths_lookup <- read_file(get_slf_deaths_lookup_path(year))
+sc_client <- read_file(get_sc_client_lookup_path(year))
 
 cli::cli_alert_info("Create episode file function started at {Sys.time()}")
 
@@ -141,7 +143,7 @@ episode_file <- dplyr::bind_rows(processed_data_list) %>%
     slf_deaths_lookup
   ) %>%
   add_activity_after_death_flag(year,
-                                deaths_data = read_file(get_combined_slf_deaths_lookup_path())
+    deaths_data = read_file(get_combined_slf_deaths_lookup_path())
   ) %>%
   load_ep_file_vars(year)
 
