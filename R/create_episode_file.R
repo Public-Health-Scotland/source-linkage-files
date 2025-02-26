@@ -311,7 +311,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
-    directory = get_year_dir(year),
+    directory = '/conf/RSIP/jennit07',
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
     check_mode = "write",
     create = TRUE
