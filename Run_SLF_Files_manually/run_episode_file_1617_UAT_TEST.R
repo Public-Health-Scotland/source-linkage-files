@@ -10,6 +10,7 @@ processed_data_list <- list(
   ae = arrow::read_parquet(paste0(path, "/anon-a_and_e_for_source-201617.parquet")),
   cmh = arrow::read_parquet(paste0(path, "/anon-cmh_for_source-201617.parquet")),
   deaths = arrow::read_parquet(paste0(path, "/anon-deaths_for_source-201617.parquet")),
+  dn = arrow::read_parquet(paste0(path, "/anon-district_nursing_for_source-201617.parquet")),
   homelessness = arrow::read_parquet(paste0(path, "/anon-homelessness_for_source-201617.parquet")),
   maternity = arrow::read_parquet(paste0(path, "/anon-maternity_for_source-201617.parquet")),
   mental_health = arrow::read_parquet(paste0(path, "/anon-mental_health_for_source-201617.parquet")),
