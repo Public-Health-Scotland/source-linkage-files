@@ -69,7 +69,7 @@ processed_data_list <- list(
 )
 
 # Run episode file
-episode_file <- create_episode_file(processed_data_list, year = year, write_temp_to_disk = FALSE)
+episode_file <- create_episode_file(processed_data_list, year = year,write_to_disk = FALSE, write_temp_to_disk = FALSE)
 
 ep_tests <- episode_file %>%
   process_tests_episode_file(year = year)
