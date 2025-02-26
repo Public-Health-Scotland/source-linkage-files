@@ -37,11 +37,11 @@ create_episode_file <- function(
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
-    #write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
+    # write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
-    #write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
+    # write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift() %>%
     store_ep_file_vars(
@@ -129,16 +129,16 @@ create_episode_file <- function(
     ) %>%
     # change back to anon_chi
     slfhelper::get_anon_chi() %>%
-    #write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
+    # write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     add_ppa_flag() %>%
-    #write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
+    # write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
-    #write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
-    #create_cohort_lookups(year) %>%
+    # write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
+    # create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
     fill_geographies(
@@ -149,12 +149,12 @@ create_episode_file <- function(
       year,
       slf_deaths_lookup
     ) %>%
-    #write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
+    # write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
       deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
-    load_ep_file_vars(year) #%>%
-    #write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
+    load_ep_file_vars(year) # %>%
+  # write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
@@ -272,7 +272,7 @@ create_episode_file <- function(
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep) {
   tempfile_path <- get_file_path(
-    directory = '/conf/RSIP/jennit07',
+    directory = "/conf/RSIP/jennit07",
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
     check_mode = "write",
     create = TRUE
@@ -311,7 +311,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @return The full SLF data.
 load_ep_file_vars <- function(data, year) {
   tempfile_path <- get_file_path(
-    directory = '/conf/RSIP/jennit07',
+    directory = "/conf/RSIP/jennit07",
     file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
     check_mode = "write",
     create = TRUE
