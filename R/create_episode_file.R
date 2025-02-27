@@ -154,6 +154,8 @@ create_episode_file <- function(
       deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
     load_ep_file_vars(year) %>%
+    # temporary fix of extra column `fy`
+    dplyr::select(-fy) %>%
     write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {

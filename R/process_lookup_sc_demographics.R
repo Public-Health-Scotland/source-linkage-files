@@ -31,7 +31,7 @@ process_lookup_sc_demographics <- function(
   #  Fill in missing data and flag latest cases to keep ---------------------------------------
   sc_demog <- data %>%
     dplyr::rename(
-      anon_chi = .data$chi_upi,
+      anon_chi = .data$anon_chi,
       gender = .data$chi_gender_code,
       dob = .data$chi_date_of_birth
     ) %>%
