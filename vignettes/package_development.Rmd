@@ -1,0 +1,42 @@
+---
+title: "Package Development"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{package_development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### Background
+
+The Source Linkage Files (SLFs) project was created using SPSS syntax until March 2022 when this was transformed into R programming language. The project has evolved into it's own R package called `createslf` which contains functions for maintaining the Reproducible Analytical Pipeline (RAP) to create the SLFs on a quarterly basis.
+
+The package bundles together code, data, documentation, and tests, and is easy to share with others. To create the package `createslf` we refer to the [R Packages](https://r-pkgs.org/introduction.html) guide by Hadley Wickham. 
+
+### Developing createslf - setup 
+
+The `createslf` structure follows: 
+
+R/ directory
+DESCRIPTION file
+NAMESPACE file
+
+
+
+
+
+### Development Best Practice: 
+* All function names should be in lower case, with words separated by an underscore
+* Put a space after a comma, never before
+* Put a space before and after infix operators such as <-, == and +
+* Limit code to 80 characters per line
+* Function documentation should be generated using roxygen2
+* Functions should be tested using testthat where possible
+* The package should always pass devtools::check()
