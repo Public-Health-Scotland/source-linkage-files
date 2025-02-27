@@ -32,6 +32,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/R%20Project%20Structure.html">R Project Structure</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -50,31 +56,32 @@
 <div class="section level1">
 <div class="page-header"><h1 id="source-linkage-files">source-linkage-files<a class="anchor" aria-label="anchor" href="#source-linkage-files"></a>
 </h1></div>
-<p>This repo is for the SPSS syntax used for the PHS Source Linkage File (SLF) project.</p>
+<p>The Source Linkage Files (SLF) project is a linked dataset maintained by the Health and Social Care (H&amp;SC) team at Public Health Scotland (PHS). This repo contains the R code to develop the package called <code>createslf</code> which is used for the production and maintenance of the SLFs. The entire process is contained within this git repository.</p>
+<p>The SLFs are updated on a quarterly basis. If you are using the files and spot a problem, please let us know and we will work closely with you to fix this. Alternatively, if you would like to see a new feature on the SLFs, please get in touch and we can look into your request.</p>
 <div class="section level2">
 <h2 id="access">Access<a class="anchor" aria-label="anchor" href="#access"></a>
 </h2>
-<p>Access to the linkage files is usually only granted to members of the LIST or H&amp;SC teams within PHS.</p>
+<p>Access to the Source Linkage Files is usually only granted to members of the Local Intelligence Support Team (LIST), Health and Social Care (H&amp;SC) and Whole System Modelling (WSM) teams within PHS. Please contact the source mailbox for approval.</p>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>Most documentation for the SLFs can be found on the internal PHS network: <code>\\Freddy\DEPT\PHIBCS\PHI\Health &amp; Social Care\Topics\Linkage\Reference Documents\</code></p>
+<p>Most documentation for the SLFs can be found on the internal PHS <a href="https://scottish.sharepoint.com/sites/PHS-HealthSocialCare/Linkage/Forms/AllItems.aspx" class="external-link">SharePoint</a> site. You must have access to the H&amp;SC Linkages area to access this. Please contact the source mailbox for approval.</p>
 </div>
 <div class="section level2">
 <h2 id="questions">Questions<a class="anchor" aria-label="anchor" href="#questions"></a>
 </h2>
-<p>There is an FAQ document which you can find in the location mentioned in the <a href="#Documentation">documentation section</a>. If that doesn’t answer your question please get in touch, either by email or through Microsoft Teams on the <a href="https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&amp;tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a" class="external-link">Source Linkage File Team</a></p>
+<p>If you have a SLF question, please get in touch either by email or through Microsoft Teams on the <a href="https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&amp;tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a" class="external-link">Source Linkage File Team</a></p>
 </div>
 <div class="section level2">
-<h2 id="see-also">See Also<a class="anchor" aria-label="anchor" href="#see-also"></a>
+<h2 id="slfhelper">Slfhelper<a class="anchor" aria-label="anchor" href="#slfhelper"></a>
 </h2>
-<ul>
-<li>
-<a href="https://github.com/Public-Health-Scotland/slfhelper" class="external-link">slfhelper</a> - An R package for efficiently reading the SLFs.</li>
-<li><a href="https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&amp;tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a" class="external-link">Source Linkage Files Team</a></li>
-<li><a href="https://www.isdscotland.org/Health-Topics/Health-and-Social-Community-Care/" class="external-link">Health and Social Care Team</a></li>
-</ul>
+<p>We recommend using the package <a href="https://github.com/Public-Health-Scotland/slfhelper" class="external-link">slfhelper</a> to access the files. This is an R package created for reading the SLFs efficiently. Please note that slfhelper will only work for those with access to the PHS confi stats drive.</p>
+</div>
+<div class="section level2">
+<h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
+</h2>
+<p>For any queries, please contact the source mailbox: <a href="mailto:phs.source@phs.scot" class="email">phs.source@phs.scot</a></p>
 </div>
 </div>
 
