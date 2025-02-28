@@ -14,25 +14,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-### Background
+## Background
 
 The Source Linkage Files (SLFs) project was created using SPSS syntax until March 2022 when this was transformed into R programming language. The project has evolved into it's own R package called `createslf` which contains functions for maintaining the Reproducible Analytical Pipeline (RAP) to create the SLFs on a quarterly basis.
 
 The package bundles together code, data, documentation, and tests, and is easy to share with others. To create the package `createslf` we refer to the [R Packages](https://r-pkgs.org/introduction.html) guide by Hadley Wickham. 
 
-### Developing createslf - setup 
+This package is intended to be in continuous development to support the quarterly update process of the SLFs. 
 
-The `createslf` structure follows: 
+## Developing createslf - setup 
 
-R/ directory
-DESCRIPTION file
-NAMESPACE file
+The `createslf` package has a clear structure for development. There are a few important features which are essential for the setup of the package: 
 
+* **README.md** - Readme file contains important information about the package. 
+* **R/ directory** - Main development folder where all functions are stored. See the [article](https://public-health-scotland.github.io/source-linkage-files/articles/R%20Project%20Structure.html) for more information on function setup. 
+* **DESCRIPTION file** - The **DESCRIPTION** file provides overall metadata about the package, such as the package name and which other packages it depends on.
+* **NAMESPACE file** - The **NAMESPACE** file specifies which functions the package makes available for others to use and, optionally, imports functions from other packages. This file is generated automatically when the package is build and should not be edited by hand. Changes should be made on individual functions by editing the roxygen2 documentation. 
+* **man/** - Documentation is stored in the **man/** directory. The documentation files are generated automatically when the package is build and should not be edited by hand. Changes should be made on individual functions by editing the roxygen2 documentaiton. 
+* **tests/** - Package tests are stored in the **tests/** directory. Testing is a vital part of package development as it ensures that our code is working. Testing, however, adds an additional step to the workflow. See chapter [testing basics](https://r-pkgs.org/testing-basics.html) for more info on package tests. Please note, this **tests/** directory is completely separate to SLF quarterly tests and is intented to test the functions within the `createslf` package. 
 
-
-
-
-### Development Best Practice: 
+### Developing a new function -  Best Practice: 
 * All function names should be in lower case, with words separated by an underscore
 * Put a space after a comma, never before
 * Put a space before and after infix operators such as <-, == and +
@@ -40,3 +41,22 @@ NAMESPACE file
 * Function documentation should be generated using roxygen2
 * Functions should be tested using testthat where possible
 * The package should always pass devtools::check()
+
+
+## Workflows
+
+
+
+We’ll also remind you of the fundamental workflows for test-driving and formally checking an in-development package: 
+
+`load_all()`
+`test()`
+`check()`
+
+
+
+
+
+## Documentation 
+
+https://r-pkgs.org/man.html
