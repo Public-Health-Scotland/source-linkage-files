@@ -33,6 +33,7 @@ The `createslf` package has a clear structure for development. There are a few i
 * **man/** - Documentation is stored in the **man/** directory. The documentation files are generated automatically when the package is build and should not be edited by hand. Changes should be made on individual functions by editing the roxygen2 documentaiton. 
 * **tests/** - Package tests are stored in the **tests/** directory. Testing is a vital part of package development as it ensures that our code is working. Testing, however, adds an additional step to the workflow. See chapter [testing basics](https://r-pkgs.org/testing-basics.html) for more info on package tests. Please note, this **tests/** directory is completely separate to SLF quarterly tests and is intented to test the functions within the `createslf` package. 
 
+
 ### Developing a new function -  Best Practice: 
 * All function names should be in lower case, with words separated by an underscore
 * Put a space after a comma, never before
@@ -43,20 +44,64 @@ The `createslf` package has a clear structure for development. There are a few i
 * The package should always pass devtools::check()
 
 
+## Documentation 
+
+Function documentation is important for maintaining the package `createslf`. For Hadley Wickham's guide see this [chapter](https://r-pkgs.org/man.html) on documentation. 
+
+In summary, documentation is important for each function as this is where users will use the help page to search with `?XXXfunction`. 
+
+The package `createslf` uses roxygen2 format for documenting functions. Here are some of the advantages: 
+
+* Code and documentation are co-located. When you modify your code, it’s easy to remember to also update your documentation.
+
+* You can use markdown, rather than having to learn a one-off markup language that only applies to `.Rd` files. In addition to formatting, the automatic hyperlinking functionality makes it much, much easier to create richly linked documentation.
+
+* There’s a lot of `.Rd` boilerplate that’s automated away.
+
+* roxygen2 provides a number of tools for sharing content across documentation topics and even between topics and vignettes.
+
+*Documentation example:* 
+
+The function below comes from **00-update_refs** and simply returns the delayed discharges period for the update as a `STRING`. This is used in the set up of functions, allowing the correct path to the latest delayed discharges extract. The *roxygen2* documentation is well documented with:
+
+* **Title** - Title of function
+
+* **Description** - Brief description of the functions purpose. 
+
+* **Return** - What should the function return?
+
+* **export** - Include to export this during the package load.
+
+* **family** - Groups similar functions together. 
+
+As this function is already documented, a `.Rd` file will exist in the **man/** folder. However, if there were any changes to this function or if the documentation was updated, the `.Rd` file would also need to be updated. To do this, you can run `devtools::document()` to generate (or update) the package’s .Rd files. The `.Rd` files should not be edited by hand and should be done by running `devtools::document()`. 
+
+```{r, include = TRUE}
+#' Delayed Discharge period
+#'
+#' @description Get the period for Delayed Discharge
+#'
+#' @return The period for the Delayed Discharge file
+#' as MMMYY_MMMYY
+#' @export
+#'
+#' @family initialisation
+get_dd_period <- function() {
+  first_part <- substr(previous_update(), 1, 3)
+  end_part <- substr(previous_update(), 7, 8)
+
+  dd_period <- as.character(stringr::str_glue("Jul16_{first_part}{end_part}"))
+
+  return(dd_period)
+}
+
+```
+
+
 ## Workflows
-
-
 
 We’ll also remind you of the fundamental workflows for test-driving and formally checking an in-development package: 
 
 `load_all()`
 `test()`
 `check()`
-
-
-
-
-
-## Documentation 
-
-https://r-pkgs.org/man.html
