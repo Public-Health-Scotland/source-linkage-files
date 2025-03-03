@@ -94,7 +94,6 @@ get_dd_period <- function() {
 
   return(dd_period)
 }
-
 ```
 
 
