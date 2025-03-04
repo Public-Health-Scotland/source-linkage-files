@@ -51,6 +51,7 @@ Imports:
     zoo (>= 1.8.0)
 Suggests:
     covr (>= 3.6.1),
+    knitr,
     roxygen2 (>= 7.2.3),
     spelling (>= 2.2),
     testthat (>= 3.1.7)
@@ -64,3 +65,4 @@ Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+VignetteBuilder: knitr
