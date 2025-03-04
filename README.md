@@ -13,7 +13,7 @@ The SLFs are updated on a quarterly basis. If you are using the files and spot a
 Access to the Source Linkage Files is usually only granted to members of the Local Intelligence Support Team (LIST), Health and Social Care (H&SC) and Whole System Modelling (WSM) teams within PHS. Please contact the source mailbox for approval.
 
 ## Documentation
-Most documentation for the SLFs can be found on the internal PHS [SharePoint](https://scottish.sharepoint.com/sites/PHS-HealthSocialCare/Linkage/Forms/AllItems.aspx) site. You must have access to the H&SC Linkages area to access this. Please contact the source mailbox for approval.
+Documentation for the SLFs is available upon request. We have further information available relating to our standard operating procedures(SOP), reference document, episode file layout, individual file layout and FAQs. If you are interested in accessing our documentation, please contact the source mailbox for more information. 
 
 ## Questions
 If you have a SLF question, please get in touch either by email or through Microsoft Teams on the [Source Linkage File Team](https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a)
