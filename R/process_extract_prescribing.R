@@ -21,6 +21,7 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
 
   # Data Cleaning--------------------------------------------
   pis_clean <- data %>%
+    slfhelper::get_chi() %>%
     # filter for chi NA
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
     # change back to anon_chi
