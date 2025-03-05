@@ -100,55 +100,54 @@ create_individual_file <- function(
     join_sc_client(year, file_type = "individual") %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%
-
-  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
-    individual_file <- individual_file %>%
-      dplyr::mutate(
-        ch_cis_episodes = NA,
-        ch_beddays = NA,
-        ch_cost = NA,
-        hc_episodes = NA,
-        hc_personal_episodes = NA,
-        hc_non_personal_episodes = NA,
-        hc_reablement_episodes = NA,
-        hc_total_cost = NA,
-        hc_total_hours = NA,
-        hc_personal_hours = NA,
-        hc_non_personal_hours = NA,
-        hc_reablement_hours = NA,
-        hc_non_personal_hours_cost = NA,
-        hc_personal_hours_cost = NA,
-        hc_reablement_hours_cost = NA,
-        at_alarms = NA,
-        at_telecare = NA,
-        sds_option_1 = NA,
-        sds_option_2 = NA,
-        sds_option_3 = NA,
-        sds_option_4 = NA,
-        sc_living_alone = NA,
-        sc_support_from_unpaid_carer = NA,
-        sc_social_worker = NA,
-        sc_meals = NA,
-        sc_day_care = NA,
-        sc_type_of_housing = NA,
-        count_not_known = NA,
-        sc_latest_submission = NA,
-        social_care_id = NA,
-        person_id = NA,
-        sc_alcohol = NA,
-        sc_autism = NA,
-        sc_carer = NA,
-        sc_dementia = NA,
-        sc_drugs = NA,
-        sc_elderly_frail = NA,
-        sc_learning_disability = NA,
-        sc_mental_health_disorders = NA,
-        sc_neurological_condition = NA,
-        sc_other_vulnerable_groups = NA,
-        sc_palliative_care = NA,
-        sc_physical_and_sensory_disability = NA
-      )
-  }
+    if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
+      individual_file <- individual_file %>%
+        dplyr::mutate(
+          ch_cis_episodes = NA,
+          ch_beddays = NA,
+          ch_cost = NA,
+          hc_episodes = NA,
+          hc_personal_episodes = NA,
+          hc_non_personal_episodes = NA,
+          hc_reablement_episodes = NA,
+          hc_total_cost = NA,
+          hc_total_hours = NA,
+          hc_personal_hours = NA,
+          hc_non_personal_hours = NA,
+          hc_reablement_hours = NA,
+          hc_non_personal_hours_cost = NA,
+          hc_personal_hours_cost = NA,
+          hc_reablement_hours_cost = NA,
+          at_alarms = NA,
+          at_telecare = NA,
+          sds_option_1 = NA,
+          sds_option_2 = NA,
+          sds_option_3 = NA,
+          sds_option_4 = NA,
+          sc_living_alone = NA,
+          sc_support_from_unpaid_carer = NA,
+          sc_social_worker = NA,
+          sc_meals = NA,
+          sc_day_care = NA,
+          sc_type_of_housing = NA,
+          count_not_known = NA,
+          sc_latest_submission = NA,
+          social_care_id = NA,
+          person_id = NA,
+          sc_alcohol = NA,
+          sc_autism = NA,
+          sc_carer = NA,
+          sc_dementia = NA,
+          sc_drugs = NA,
+          sc_elderly_frail = NA,
+          sc_learning_disability = NA,
+          sc_mental_health_disorders = NA,
+          sc_neurological_condition = NA,
+          sc_other_vulnerable_groups = NA,
+          sc_palliative_care = NA,
+          sc_physical_and_sensory_disability = NA
+        )
+    }
 
   if (!check_year_valid(year, type = "homelessness")) {
     individual_file <- individual_file %>%
