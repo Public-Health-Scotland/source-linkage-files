@@ -8,8 +8,6 @@ create_demog_test_flags(data)
 }
 \arguments{
 \item{data}{a dataframe containing demographic variables e.g. chi}
-
-\item{chi}{Specify chi or anon_chi.}
 }
 \value{
 a dataframe with flag (1 or 0) for each demographic variable.

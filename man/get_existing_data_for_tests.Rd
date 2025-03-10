@@ -12,9 +12,6 @@ new data which the SLF data will be compared to.}
 
 \item{file_version}{whether to test against the "episode" file (the default)
 or the "individual" file.}
-
-\item{anon_chi}{Default set as FALSE. For use in episode tests where
-we want anon_chi instead of chi.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} from the

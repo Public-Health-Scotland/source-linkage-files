@@ -23,9 +23,6 @@ create_individual_file(
 \code{TRUE} i.e. write the data to disk.}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
-
-\item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
-(instead of chi).}
 }
 \value{
 The processed individual file
