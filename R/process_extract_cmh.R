@@ -53,7 +53,7 @@ process_extract_cmh <- function(data,
       "keytime1",
       "keytime2",
       "smrtype",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -68,8 +68,7 @@ process_extract_cmh <- function(data,
       "diag4",
       "diag5",
       "diag6"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

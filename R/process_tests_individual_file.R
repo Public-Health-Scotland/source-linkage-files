@@ -28,7 +28,7 @@ process_tests_individual_file <- function(data, year) {
       ))
     )
 
-  old_data <- get_existing_data_for_tests(data, file_version = "individual", anon_chi = TRUE)
+  old_data <- get_existing_data_for_tests(data, file_version = "individual")
 
   comparison <- produce_test_comparison(
     old_data = produce_individual_file_tests(old_data),
@@ -66,11 +66,11 @@ produce_individual_file_tests <- function(data) {
 
   test_flags <- data %>%
     # use functions to create HB and partnership flags
-    create_demog_test_flags(chi = .data$anon_chi) %>%
+    create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbrescode) %>%
     create_hb_cost_test_flags(.data$hbrescode, .data$health_net_cost) %>%
     # keep variables for comparison
-    dplyr::select(c("unique_chi":dplyr::last_col())) %>%
+    dplyr::select(c("unique_anon_chi":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
@@ -105,9 +105,9 @@ produce_individual_file_tests <- function(data) {
       measure = "sum"
     )
 
-  dup_chi <- data.frame(
-    measure = "duplicated chi number",
-    value = duplicated(data$chi) %>%
+  dup_anon_chi <- data.frame(
+    measure = "duplicated anon_chi number",
+    value = duplicated(data$anon_chi) %>%
       sum() %>% as.integer()
   )
 
@@ -116,7 +116,7 @@ produce_individual_file_tests <- function(data) {
     all_measures,
     min_max_measures,
     sum_measures,
-    dup_chi
+    dup_anon_chi
   ) %>%
     purrr::reduce(dplyr::full_join, by = c("measure", "value"))
 

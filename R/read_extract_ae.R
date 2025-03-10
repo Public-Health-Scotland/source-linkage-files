@@ -43,7 +43,8 @@ read_extract_ae <- function(
       "Total Net Costs" = readr::col_double(),
       "Age at Midpoint of Financial Year" = readr::col_double(),
       "Case Reference Number" = readr::col_character(),
-      "Significant Facility Code" = readr::col_character()
+      "Significant Facility Code" = readr::col_character(),
+      "Community Hospital Flag" = readr::col_character(),
     )
   ) %>%
     # rename variables
@@ -82,9 +83,9 @@ read_extract_ae <- function(
       sigfac = "Significant Facility Code",
       cost_total_net = "Total Net Costs",
       location = "Treatment Location Code",
-      case_ref_number = "Case Reference Number"
-    ) %>%
-    slfhelper::get_chi()
+      case_ref_number = "Case Reference Number",
+      commhosp = "Community Hospital Flag"
+    )
 
   return(extract_ae)
 }
