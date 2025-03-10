@@ -1,7 +1,9 @@
-# March 2025 Update - Unreleased
+# March 2025 Update - released 05-Mar-25
 * 24/25 files have been updated, containing data up to December 2024.
 * 17/18 - 23/24 files have been updated.
-* The variable `commhosp` has been tidied up - now shows 1/0 (integer) for all available datasets
+* The variable `commhosp` has been tidied up - now shows 1/0 (integer) for all available datasets.
+* 2016/17 episode file now include homelessness data.
+* Extra variables appearing in episode file are removed.
 
 # December 2024 Update - released 10-Dec-24
 * 24/25 files have been updated, containing data up to September 2024.
