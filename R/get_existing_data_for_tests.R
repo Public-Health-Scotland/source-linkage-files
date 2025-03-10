@@ -8,8 +8,6 @@
 #' new data which the SLF data will be compared to.
 #' @param file_version whether to test against the "episode" file (the default)
 #' or the "individual" file.
-#' @param anon_chi Default set as FALSE. For use in episode tests where
-#' we want anon_chi instead of chi.
 #'
 #' @return a [tibble][tibble::tibble-package] from the
 #' SLF with the relevant recids and variables.
