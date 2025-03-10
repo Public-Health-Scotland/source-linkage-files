@@ -99,7 +99,8 @@ create_individual_file <- function(
     write_temp_data(year, file_name = "indiv_temp5", write_temp_to_disk) %>%
     join_sc_client(year, file_type = "individual") %>%
     # temporary fix of extra column `fy`
-    dplyr::select(-fy) %>%
+    dplyr::select(-fy)
+
     if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
       individual_file <- individual_file %>%
         dplyr::mutate(
