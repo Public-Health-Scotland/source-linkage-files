@@ -65,7 +65,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     # Reset community hospital flag as an integer
     dplyr::mutate(
       commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
-      commhosp = as.integer(commhosp)
+      commhosp = as.integer(.data$commhosp)
     )
 
   maternity_processed <- maternity_clean %>%

@@ -45,7 +45,7 @@ process_extract_acute <- function(data,
     # Reset community hospital flag as an integer
     dplyr::mutate(
       commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
-      commhosp = as.integer(commhosp)
+      commhosp = as.integer(.data$commhosp)
     ) %>%
     # Recode GP practice into 5 digit number
     # We assume that if it starts with a letter it's an English practice and so recode to 99995.
