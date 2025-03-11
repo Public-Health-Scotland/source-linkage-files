@@ -39,7 +39,7 @@ process_extract_sds <- function(
       "year",
       "recid",
       "smrtype",
-      "chi",
+      "anon_chi",
       "dob",
       "gender",
       "postcode",
@@ -47,8 +47,7 @@ process_extract_sds <- function(
       "record_keydate1",
       "record_keydate2",
       "sc_latest_submission"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     outfile %>%

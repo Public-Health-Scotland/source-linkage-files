@@ -4,8 +4,6 @@
 #'
 #' @param episode_file Tibble containing episodic data.
 #' @param homelessness_lookup the lookup file for homelessness
-#' @param anon_chi_in (Default:TRUE) Is `anon_chi` used in the input
-#' (instead of chi).
 #' @param write_temp_to_disk write intermediate data for investigation or debug
 #' @inheritParams create_episode_file
 #'
@@ -17,24 +15,13 @@ create_individual_file <- function(
     year,
     homelessness_lookup = create_homelessness_lookup(year),
     write_to_disk = TRUE,
-    anon_chi_in = TRUE,
-    anon_chi_out = TRUE,
     write_temp_to_disk) {
   cli::cli_alert_info("Create individual file function started at {Sys.time()}")
-
-  if (anon_chi_in) {
-    episode_file <- slfhelper::get_chi(
-      episode_file,
-      anon_chi_var = "anon_chi",
-      drop = TRUE
-    ) %>%
-      dplyr::mutate(chi = dplyr::na_if(.data$chi, ""))
-  }
 
   individual_file <- episode_file %>%
     dplyr::select(dplyr::any_of(c(
       "year",
-      "chi",
+      "anon_chi",
       "dob",
       "gender",
       "record_keydate1",
@@ -105,10 +92,12 @@ create_individual_file <- function(
     write_temp_data(year, file_name = "indiv_temp4", write_temp_to_disk) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%
-    add_hri_variables(chi_variable = "chi") %>%
+    add_hri_variables(chi_variable = "anon_chi") %>%
     add_keep_population_flag(year) %>%
     write_temp_data(year, file_name = "indiv_temp5", write_temp_to_disk) %>%
-    join_sc_client(year, file_type = "individual")
+    join_sc_client(year, file_type = "individual") %>%
+    # temporary fix of extra column `fy`
+    dplyr::select(-fy)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%
@@ -165,13 +154,6 @@ create_individual_file <- function(
   }
 
 
-  if (anon_chi_out) {
-    individual_file <- individual_file %>%
-      tidyr::replace_na(list(chi = "")) %>%
-      slfhelper::get_anon_chi() %>%
-      dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, ""))
-  }
-
   if (write_to_disk) {
     slf_indiv_path <- get_slf_individual_path(year, check_mode = "write")
 
@@ -188,8 +170,8 @@ create_individual_file <- function(
 #' @inheritParams create_individual_file
 remove_blank_chi <- function(episode_file) {
   episode_file <- episode_file %>%
-    dplyr::mutate(chi = dplyr::na_if(.data$chi, "")) %>%
-    dplyr::filter(!is.na(.data$chi))
+    dplyr::mutate(anon_chi = dplyr::na_if(.data$anon_chi, "")) %>%
+    dplyr::filter(!is.na(.data$anon_chi))
 
   cli::cli_alert_info("Remove blank CHI function finished at {Sys.time()}")
 
@@ -884,12 +866,16 @@ clean_individual_file <- function(individual_file, year) {
 #' @inheritParams clean_individual_file
 clean_up_gender <- function(individual_file) {
   individual_file <- individual_file %>%
+    # change to chi for phsmethods
+    slfhelper::get_chi() %>%
     dplyr::mutate(
       gender = dplyr::case_when(
         .data$gender != 1.5 ~ round(.data$gender),
         .default = phsmethods::sex_from_chi(.data$chi, chi_check = FALSE)
       )
-    )
+    ) %>%
+    # change back to anon_chi
+    slfhelper::get_anon_chi()
 
   cli::cli_alert_info("Clean up gender column function finished at {Sys.time()}")
   return(individual_file)

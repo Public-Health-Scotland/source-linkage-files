@@ -10,9 +10,6 @@
 #'
 #' @export
 process_tests_acute <- function(data, year) {
-  data <- data %>%
-    slfhelper::get_chi()
-
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)

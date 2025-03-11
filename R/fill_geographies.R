@@ -17,7 +17,7 @@ fill_geographies <- function(
       col_select = c("gpprac", "cluster", "hbpraccode")
     )) {
   check_variables_exist(data, c(
-    "chi",
+    "anon_chi",
     "postcode",
     "hbrescode",
     "hscp",
@@ -52,9 +52,9 @@ fill_geographies <- function(
 make_postcode_lookup <- function(data) {
   postcode_lookup <- data %>%
     # Get rid of records with missing CHIs
-    dplyr::filter(!is_missing(.data$chi)) %>%
+    dplyr::filter(!is_missing(.data$anon_chi)) %>%
     # Keep one row for each CHI, postcode, and date combination.
-    dplyr::distinct(.data$chi, .data$postcode, .data$record_keydate2) %>%
+    dplyr::distinct(.data$anon_chi, .data$postcode, .data$record_keydate2) %>%
     # Format postcodes to 7-character format and replace dummy with NA
     dplyr::mutate(
       postcode = dplyr::na_if(
@@ -65,12 +65,12 @@ make_postcode_lookup <- function(data) {
     # Drop any episodes with no postcode
     dplyr::filter(!is.na(.data$postcode)) %>%
     # Arrange with the most recent date at the top for each CHI
-    dplyr::arrange(.data$chi, dplyr::desc(.data$record_keydate2)) %>%
+    dplyr::arrange(.data$anon_chi, dplyr::desc(.data$record_keydate2)) %>%
     # Take only the first of each chi
-    dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
+    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # We don't need to keep discharge date after this point
     dplyr::select(
-      "chi",
+      "anon_chi",
       most_recent_postcode = "postcode"
     )
 
@@ -85,20 +85,20 @@ make_postcode_lookup <- function(data) {
 make_gpprac_lookup <- function(data) {
   gpprac_lookup <- data %>%
     # Get rid of records with missing CHIs
-    dplyr::filter(!is_missing(.data$chi)) %>%
+    dplyr::filter(!is_missing(.data$anon_chi)) %>%
     # Keep one row for each CHI, gpprac, and date combination.
-    dplyr::distinct(.data$chi, .data$gpprac, .data$record_keydate2) %>%
+    dplyr::distinct(.data$anon_chi, .data$gpprac, .data$record_keydate2) %>%
     # Replace dummy with NA
     dplyr::mutate(gpprac = dplyr::na_if(.data$gpprac, 99999L)) %>%
     # Drop any CHIs with no gpprac code
     dplyr::filter(!is.na(.data$gpprac)) %>%
     # Arrange with most recent date at the top for each CHI
-    dplyr::arrange(.data$chi, dplyr::desc(.data$record_keydate2)) %>%
+    dplyr::arrange(.data$anon_chi, dplyr::desc(.data$record_keydate2)) %>%
     # Take only the first of each chi
-    dplyr::distinct(.data$chi, .keep_all = TRUE) %>%
+    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # We don't need to keep discharge date after this point
     dplyr::select(
-      "chi",
+      "anon_chi",
       most_recent_gpprac = "gpprac"
     )
 
@@ -111,7 +111,7 @@ fill_postcode_geogs <- function(
   filled_postcodes <- dplyr::left_join(
     data,
     make_postcode_lookup(data),
-    by = "chi"
+    by = "anon_chi"
   ) %>%
     # If the existing postcode is missing or not known (NK010AA) replace it.
     dplyr::mutate(
@@ -159,7 +159,7 @@ fill_gpprac_geographies <- function(
   filled_gpprac <- dplyr::left_join(
     data,
     make_gpprac_lookup(data),
-    by = "chi"
+    by = "anon_chi"
   ) %>%
     # If the existing gpprac is missing or not known (99999) replace it.
     dplyr::mutate(

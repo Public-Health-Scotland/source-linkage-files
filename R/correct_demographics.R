@@ -9,9 +9,11 @@
 correct_demographics <- function(data, year) {
   # keep episodes with missing chi
   data_no_chi <- data %>%
-    dplyr::filter(is_missing(.data$chi))
+    dplyr::filter(is_missing(.data$anon_chi))
   # Checking and changing DOB and age
   data_chi <- data %>%
+    # change to chi
+    slfhelper::get_chi() %>%
     dplyr::filter(!is_missing(.data$chi)) %>%
     dplyr::mutate(
       # Create a dob in the previous century from the chi number
@@ -93,7 +95,9 @@ correct_demographics <- function(data, year) {
       "chi_age_max",
       "chi_age_min",
       "chi_gender"
-    ))
+    )) %>%
+    # change back to anon_chi
+    slfhelper::get_anon_chi()
 
   data <- dplyr::bind_rows(
     data_no_chi,
