@@ -4,8 +4,6 @@
 #'
 #' @param episode_file Tibble containing episodic data.
 #' @param homelessness_lookup the lookup file for homelessness
-#' @param anon_chi_in (Default:TRUE) Is `anon_chi` used in the input
-#' (instead of chi).
 #' @param write_temp_to_disk write intermediate data for investigation or debug
 #' @inheritParams create_episode_file
 #'
@@ -97,7 +95,9 @@ create_individual_file <- function(
     add_hri_variables(chi_variable = "anon_chi") %>%
     add_keep_population_flag(year) %>%
     write_temp_data(year, file_name = "indiv_temp5", write_temp_to_disk) %>%
-    join_sc_client(year, file_type = "individual")
+    join_sc_client(year, file_type = "individual") %>%
+    # temporary fix of extra column `fy`
+    dplyr::select(-fy)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     individual_file <- individual_file %>%

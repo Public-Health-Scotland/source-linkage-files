@@ -31,16 +31,15 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
     utils::head(1)
   cli::cli_alert_info(stringr::str_glue("Demographics data is available up to {latest_quarter}."))
 
+  sc_demog <- sc_demog %>%
+    slfhelper::get_anon_chi(chi_var = "chi_upi")
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
     sc_demog %>%
-      slfhelper::get_anon_chi(chi_var = "chi_upi") %>%
       write_file(get_sandpit_extract_path(type = "demographics"))
 
     sc_demog %>%
       process_tests_sc_sandpit(type = "demographics")
-  } else {
-    sc_demog <- sc_demog
   }
 
   sc_demog <- sc_demog %>%

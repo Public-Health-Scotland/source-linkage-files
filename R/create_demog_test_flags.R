@@ -3,7 +3,6 @@
 #' @description Create the demographic flags for testing
 #'
 #' @param data a dataframe containing demographic variables e.g. chi
-#' @param chi Specify chi or anon_chi.
 #'
 #' @return a dataframe with flag (1 or 0) for each demographic variable.
 #' Missing value flag from [is_missing()]

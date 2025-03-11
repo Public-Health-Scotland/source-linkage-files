@@ -18,10 +18,6 @@ processed_data_list <- list(
     "source_cmh_extract_1617",
     store = targets_store
   ),
-  cmh = targets::tar_read(
-    "source_cmh_extract_1617",
-    store = targets_store
-  ),
   dn = targets::tar_read(
     "source_dn_extract_1617",
     store = targets_store
@@ -73,7 +69,7 @@ processed_data_list <- list(
 )
 
 # Run episode file
-create_episode_file(processed_data_list, year = year, write_temp_to_disk = FALSE) ## %>%
-# process_tests_episode_file(year = year)
+create_episode_file(processed_data_list, year = year, write_temp_to_disk = FALSE) %>%
+  process_tests_episode_file(year = year)
 
 ## End of Script ##
