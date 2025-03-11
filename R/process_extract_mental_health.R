@@ -65,17 +65,22 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       ),
       # SMR type
       smrtype = add_smrtype(.data$recid)
+    ) %>%
+    # Reset community hospital flag as an integer
+    dplyr::mutate(
+      commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
+      commhosp = as.integer(.data$commhosp)
     )
 
   mh_processed <- mh_clean %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
+    dplyr::arrange(.data$anon_chi, .data$record_keydate1) %>%
     dplyr::select(
       "year",
       "recid",
       "smrtype",
       "record_keydate1",
       "record_keydate2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -112,8 +117,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       tidyselect::ends_with("_beddays"),
       tidyselect::ends_with("_cost"),
       "uri"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

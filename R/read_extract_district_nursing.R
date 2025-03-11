@@ -53,8 +53,7 @@ read_extract_district_nursing <- function(
       intervention_2 = "Other Intervention Category (2)",
       duration_contact = "Duration of Contact (measure)",
       location_contact = "Location of Contact"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_district_nursing)
 }

@@ -65,7 +65,14 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       smrtype = add_smrtype(.data$recid)
     ) %>%
     # Allocate the costs to the correct month
-    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net)
+    create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
+    # clean up commhosp values
+    # dplyr::mutate(commhosp = dplyr::if_else(.data$commhosp == 1L, "Y", "N"))
+    # Reset community hospital flag as an integer
+    dplyr::mutate(
+      commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
+      commhosp = as.integer(.data$commhosp)
+    )
 
 
   # Factors ---------------------------------------------------
@@ -166,7 +173,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "record_keydate2",
       "keytime1",
       "keytime2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -239,7 +246,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       )
     ) %>%
     dplyr::arrange(
-      .data$chi,
+      .data$anon_chi,
       .data$record_keydate1,
       .data$keytime1,
       .data$record_keydate2,
@@ -255,7 +262,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "record_keydate2",
       "keytime1",
       "keytime2",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -298,8 +305,7 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       "mar_cost",
       "cup_marker",
       "cup_pathway"
-    ) %>%
-    slfhelper::get_anon_chi()
+    )
 
   if (write_to_disk) {
     write_file(

@@ -52,8 +52,7 @@ read_extract_cmh <- function(
       diag3 = "Other Aim of Contact (2)",
       diag4 = "Other Aim of Contact (3)",
       diag5 = "Other Aim of Contact (4)"
-    ) %>%
-    slfhelper::get_chi()
+    )
 
   return(extract_cmh)
 }

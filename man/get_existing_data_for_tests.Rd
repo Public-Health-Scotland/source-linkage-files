@@ -4,11 +4,7 @@
 \alias{get_existing_data_for_tests}
 \title{SLF Data for Testing}
 \usage{
-get_existing_data_for_tests(
-  new_data,
-  file_version = "episode",
-  anon_chi = FALSE
-)
+get_existing_data_for_tests(new_data, file_version = "episode")
 }
 \arguments{
 \item{new_data}{a \link[tibble:tibble-package]{tibble} of the
@@ -16,9 +12,6 @@ new data which the SLF data will be compared to.}
 
 \item{file_version}{whether to test against the "episode" file (the default)
 or the "individual" file.}
-
-\item{anon_chi}{Default set as FALSE. For use in episode tests where
-we want anon_chi instead of chi.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} from the
@@ -33,6 +26,7 @@ use, the year, recid and variable names from the
 produce_source_extract_tests
 
 Other test functions: 
+\code{\link{format_test_excel}()},
 \code{\link{produce_test_comparison}()},
 \code{\link{write_tests_xlsx}()}
 }

@@ -24,6 +24,7 @@ and the existing data
 write_tests_xlsx
 
 Other test functions: 
+\code{\link{format_test_excel}()},
 \code{\link{get_existing_data_for_tests}()},
 \code{\link{write_tests_xlsx}()}
 }

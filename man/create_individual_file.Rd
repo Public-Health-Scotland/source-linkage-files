@@ -9,8 +9,6 @@ create_individual_file(
   year,
   homelessness_lookup = create_homelessness_lookup(year),
   write_to_disk = TRUE,
-  anon_chi_in = TRUE,
-  anon_chi_out = TRUE,
   write_temp_to_disk
 )
 }
@@ -23,12 +21,6 @@ create_individual_file(
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
-
-\item{anon_chi_in}{(Default:TRUE) Is \code{anon_chi} used in the input
-(instead of chi).}
-
-\item{anon_chi_out}{(Default:TRUE) Should \code{anon_chi} be used in the output
-(instead of chi)}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 }

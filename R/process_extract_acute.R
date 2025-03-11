@@ -42,6 +42,11 @@ process_extract_acute <- function(data,
         .data$cij_ipdc == "DC" ~ "D"
       )
     ) %>%
+    # Reset community hospital flag as an integer
+    dplyr::mutate(
+      commhosp = dplyr::if_else(.data$commhosp == "Y", 1L, 0L),
+      commhosp = as.integer(.data$commhosp)
+    ) %>%
     # Recode GP practice into 5 digit number
     # We assume that if it starts with a letter it's an English practice and so recode to 99995.
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac)) %>%
@@ -91,8 +96,7 @@ process_extract_acute <- function(data,
       cup_marker = "CUP Marker",
       cup_pathway = "CUP Pathway Name"
     ) %>%
-    dplyr::distinct() %>%
-    slfhelper::get_chi()
+    dplyr::distinct()
 
   acute_clean <- acute_clean %>%
     dplyr::left_join(acute_cup,
@@ -100,7 +104,7 @@ process_extract_acute <- function(data,
         "record_keydate1",
         "record_keydate2",
         "case_reference_number",
-        "chi",
+        "anon_chi",
         "tadm",
         "disch"
       )
@@ -113,7 +117,7 @@ process_extract_acute <- function(data,
       "record_keydate1",
       "record_keydate2",
       "smrtype",
-      "chi",
+      "anon_chi",
       "gender",
       "dob",
       "gpprac",
@@ -155,8 +159,7 @@ process_extract_acute <- function(data,
       "cup_marker",
       "cup_pathway"
     ) %>%
-    dplyr::arrange(.data$chi, .data$record_keydate1) %>%
-    slfhelper::get_anon_chi()
+    dplyr::arrange(.data$anon_chi, .data$record_keydate1)
 
   if (write_to_disk) {
     write_file(
