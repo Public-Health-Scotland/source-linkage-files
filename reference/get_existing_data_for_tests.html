@@ -51,11 +51,7 @@ use, the year, recid and variable names from the
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_existing_data_for_tests</span><span class="op">(</span></span>
-<span>  <span class="va">new_data</span>,</span>
-<span>  file_version <span class="op">=</span> <span class="st">"episode"</span>,</span>
-<span>  anon_chi <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_existing_data_for_tests</span><span class="op">(</span><span class="va">new_data</span>, file_version <span class="op">=</span> <span class="st">"episode"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -71,11 +67,6 @@ new data which the SLF data will be compared to.</p></dd>
 <dd><p>whether to test against the "episode" file (the default)
 or the "individual" file.</p></dd>
 
-
-<dt id="arg-anon-chi">anon_chi<a class="anchor" aria-label="anchor" href="#arg-anon-chi"></a></dt>
-<dd><p>Default set as FALSE. For use in episode tests where
-we want anon_chi instead of chi.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -86,6 +77,7 @@ SLF with the relevant recids and variables.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>produce_source_extract_tests</p>
 <p>Other test functions:
+<code><a href="format_test_excel.html">format_test_excel</a>()</code>,
 <code><a href="produce_test_comparison.html">produce_test_comparison</a>()</code>,
 <code><a href="write_tests_xlsx.html">write_tests_xlsx</a>()</code></p></div>
     </div>

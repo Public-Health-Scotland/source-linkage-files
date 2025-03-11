@@ -98,6 +98,10 @@
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_ch.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_free_text.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_gender.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/combine_extracts_tests_year.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/combine_lookup_tests.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/combine_multi_xlsx.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/combine_tests.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/compute_mid_year_age.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/condition_cols.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/convert_ca_to_lca.html</loc></url>
@@ -144,6 +148,7 @@
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/fix_sc_start_dates.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/fix_west_dun_duplicates.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/flag_non_scottish_residents.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/format_test_excel.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/fy.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/fy_interval.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/get_boxi_extract_path.html</loc></url>
@@ -349,6 +354,7 @@
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/rename_hscp.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/replace_sc_id_with_latest.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/setup_keyring.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/setup_tests_file_name.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/start_fy.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/start_fy_quarter.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/start_next_fy_quarter.html</loc></url>
