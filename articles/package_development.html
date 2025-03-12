@@ -206,11 +206,53 @@ hand and should be done by running
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="checking-an-r-package---r-cmd-check">Checking an R package - R CMD check<a class="anchor" aria-label="anchor" href="#checking-an-r-package---r-cmd-check"></a>
+</h2>
+<p>Base R provides various command line tools and R CMD check is the
+official method for checking that an R package is valid. It is essential
+to pass R CMD check if you plan to submit your package to CRAN, but we
+highly recommend holding yourself to this standard even if you don’t
+intend to release your package on CRAN. R CMD check detects many common
+problems that you’d otherwise discover the hard way.</p>
+<p>Our recommended way to run R CMD check is in the R console via
+devtools:</p>
+<p><code>devtools::check()</code></p>
+<p>We recommend this because it allows you to run R CMD check from
+within R, which dramatically reduces friction and increases the
+likelihood that you will <code>check()</code> early and often! This
+emphasis on fluidity and fast feedback is exactly the same motivation as
+given for <code>load_all()</code>. In the case of check(), it really is
+executing R CMD check for you. It’s not just a high fidelity simulation,
+which is the case for <code>load_all()</code>.</p>
+</div>
+<div class="section level2">
 <h2 id="workflows">Workflows<a class="anchor" aria-label="anchor" href="#workflows"></a>
 </h2>
-<p>We’ll also remind you of the fundamental workflows for test-driving
-and formally checking an in-development package:</p>
-<p><code>load_all()</code> <code>test()</code> <code>check()</code></p>
+<p>The workflow for checking a package is simple, but tedious:</p>
+<ul>
+<li><p>Run <code>devtools::check()</code>, or press
+<code>Ctrl/Cmd + Shift + E</code>.</p></li>
+<li><p>Fix the first problem.</p></li>
+<li><p>Repeat until there are no more problems.</p></li>
+<li><p>R CMD check returns three types of messages:</p></li>
+<li><p><strong>ERRORs:</strong> Severe problems that you should fix
+regardless of whether or not you’re submitting to CRAN.</p></li>
+<li><p><strong>WARNINGs:</strong> Likely problems that you must fix if
+you’re planning to submit to CRAN (and a good idea to look into even if
+you’re not).</p></li>
+<li><p><strong>NOTEs:</strong> Mild problems or, in a few cases, just an
+observation. If you are submitting to CRAN, you should strive to
+eliminate all NOTEs, even if they are false positives. If you have no
+NOTEs, human intervention is not required, and the package submission
+process will be easier. If it’s not possible to eliminate a NOTE, you’ll
+need describe why it’s OK in your submission comments, as described in
+Section 22.7. If you’re not submitting to CRAN, carefully read each
+NOTE. If it’s easy to eliminate the NOTEs, it’s worth it, so that you
+can continue to strive for a totally clean result. But if eliminating a
+NOTE will have a net negative impact on your package, it is reasonable
+to just tolerate it. Make sure that doesn’t lead to you ignoring other
+issues that really should be addressed.</p></li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
