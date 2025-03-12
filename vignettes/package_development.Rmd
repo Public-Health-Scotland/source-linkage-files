@@ -97,10 +97,33 @@ get_dd_period <- function() {
 ```
 
 
+## Checking an R package - R CMD check
+
+Base R provides various command line tools and R CMD check is the official method for checking that an R package is valid. It is essential to pass R CMD check if you plan to submit your package to CRAN, but we highly recommend holding yourself to this standard even if you don’t intend to release your package on CRAN. R CMD check detects many common problems that you’d otherwise discover the hard way.
+
+Our recommended way to run R CMD check is in the R console via devtools:
+
+`devtools::check()`
+
+We recommend this because it allows you to run R CMD check from within R, which dramatically reduces friction and increases the likelihood that you will `check()` early and often! This emphasis on fluidity and fast feedback is exactly the same motivation as given for `load_all()`. In the case of check(), it really is executing R CMD check for you. It’s not just a high fidelity simulation, which is the case for `load_all()`.
+
+
 ## Workflows
 
-We’ll also remind you of the fundamental workflows for test-driving and formally checking an in-development package: 
+The workflow for checking a package is simple, but tedious:
 
-`load_all()`
-`test()`
-`check()`
+* Run `devtools::check()`, or press `Ctrl/Cmd + Shift + E`.
+
+* Fix the first problem.
+
+* Repeat until there are no more problems.
+
+* R CMD check returns three types of messages:
+
+* **ERRORs:** Severe problems that you should fix regardless of whether or not you’re submitting to CRAN.
+
+* **WARNINGs:** Likely problems that you must fix if you’re planning to submit to CRAN (and a good idea to look into even if you’re not).
+
+* **NOTEs:** Mild problems or, in a few cases, just an observation. If you are submitting to CRAN, you should strive to eliminate all NOTEs, even if they are false positives. If you have no NOTEs, human intervention is not required, and the package submission process will be easier. If it’s not possible to eliminate a NOTE, you’ll need describe why it’s OK in your submission comments, as described in Section 22.7. If you’re not submitting to CRAN, carefully read each NOTE. If it’s easy to eliminate the NOTEs, it’s worth it, so that you can continue to strive for a totally clean result. But if eliminating a NOTE will have a net negative impact on your package, it is reasonable to just tolerate it. Make sure that doesn’t lead to you ignoring other issues that really should be addressed.
+
+
