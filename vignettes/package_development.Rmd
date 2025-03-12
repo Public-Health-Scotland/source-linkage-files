@@ -76,7 +76,7 @@ The function below comes from **00-update_refs** and simply returns the delayed 
 
 As this function is already documented, a `.Rd` file will exist in the **man/** folder. However, if there were any changes to this function or if the documentation was updated, the `.Rd` file would also need to be updated. To do this, you can run `devtools::document()` to generate (or update) the package’s .Rd files. The `.Rd` files should not be edited by hand and should be done by running `devtools::document()`. 
 
-```{r, include = TRUE}
+```{r documentation, include = TRUE}
 #' Delayed Discharge period
 #'
 #' @description Get the period for Delayed Discharge
@@ -127,3 +127,52 @@ The workflow for checking a package is simple, but tedious:
 * **NOTEs:** Mild problems or, in a few cases, just an observation. If you are submitting to CRAN, you should strive to eliminate all NOTEs, even if they are false positives. If you have no NOTEs, human intervention is not required, and the package submission process will be easier. If it’s not possible to eliminate a NOTE, you’ll need describe why it’s OK in your submission comments, as described in Section 22.7. If you’re not submitting to CRAN, carefully read each NOTE. If it’s easy to eliminate the NOTEs, it’s worth it, so that you can continue to strive for a totally clean result. But if eliminating a NOTE will have a net negative impact on your package, it is reasonable to just tolerate it. Make sure that doesn’t lead to you ignoring other issues that really should be addressed.
 
 
+## Testing the package
+
+Testing is a vital part of developing the `createslf` as it ensures that the code does what we want. Testing, however, adds an additional step to the workflow. Please see this [chapter](https://r-pkgs.org/testing-basics.html) for more information on setting up tests. 
+
+`createslf` tests sit on the `tests/testthat/` directory. To set up a new test you can run `usethis::use_test()` to create a new test file.
+
+To test the file run: 
+`testthat::test_file("tests/testthat/test-XXX.R")`
+
+### Expectations 
+
+An expectation is the finest level of testing. It makes a binary assertion about whether or not an object has the properties you expect. This object is usually the return value from a function in your package.
+
+All expectations have a similar structure:
+
+* They start with `expect_`.
+
+* They have two main arguments: the first is the actual result, the second is what you expect.
+
+* If the actual and expected results don’t agree, testthat throws an error.
+
+* Some expectations have additional arguments that control the finer points of comparing an actual and expected result.
+
+An example of one of our tests is to check that the `convert_ca_to_lca` function is working correctly and returns the correct lca code.
+```{r tests, include = TRUE}
+library(testthat)
+library(createslf)
+
+test_that("Can convert ca code to lca code", {
+  ca <- c(
+    "S12000033",
+    "S12000049",
+    "S12000048",
+    NA,
+    "S12345678"
+  )
+
+  expect_equal(
+    convert_ca_to_lca(ca),
+    c(
+      "01",
+      "17",
+      "25",
+      NA,
+      NA
+    )
+  )
+})
+```
