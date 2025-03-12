@@ -254,6 +254,70 @@ to just tolerate it. Make sure that doesn’t lead to you ignoring other
 issues that really should be addressed.</p></li>
 </ul>
 </div>
+<div class="section level2">
+<h2 id="testing-the-package">Testing the package<a class="anchor" aria-label="anchor" href="#testing-the-package"></a>
+</h2>
+<p>Testing is a vital part of developing the <code>createslf</code> as
+it ensures that the code does what we want. Testing, however, adds an
+additional step to the workflow. Please see this <a href="https://r-pkgs.org/testing-basics.html" class="external-link">chapter</a> for more
+information on setting up tests.</p>
+<p><code>createslf</code> tests sit on the <code>tests/testthat/</code>
+directory. To set up a new test you can run
+<code>usethis::use_test()</code> to create a new test file.</p>
+<p>To test the file run:
+<code>testthat::test_file("tests/testthat/test-XXX.R")</code></p>
+<div class="section level3">
+<h3 id="expectations">Expectations<a class="anchor" aria-label="anchor" href="#expectations"></a>
+</h3>
+<p>An expectation is the finest level of testing. It makes a binary
+assertion about whether or not an object has the properties you expect.
+This object is usually the return value from a function in your
+package.</p>
+<p>All expectations have a similar structure:</p>
+<ul>
+<li><p>They start with <code>expect_</code>.</p></li>
+<li><p>They have two main arguments: the first is the actual result, the
+second is what you expect.</p></li>
+<li><p>If the actual and expected results don’t agree, testthat throws
+an error.</p></li>
+<li><p>Some expectations have additional arguments that control the
+finer points of comparing an actual and expected result.</p></li>
+</ul>
+<p>An example of one of our tests is to check that the
+<code>convert_ca_to_lca</code> function is working correctly and returns
+the correct lca code.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://testthat.r-lib.org" class="external-link">testthat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://public-health-scotland.github.io/source-linkage-files">createslf</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'createslf'</span></span>
+<span><span class="co">#&gt; The following object is masked _by_ '.GlobalEnv':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     get_dd_period</span></span>
+<span></span>
+<span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_that.html" class="external-link">test_that</a></span><span class="op">(</span><span class="st">"Can convert ca code to lca code"</span>, <span class="op">{</span></span>
+<span>  <span class="va">ca</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"S12000033"</span>,</span>
+<span>    <span class="st">"S12000049"</span>,</span>
+<span>    <span class="st">"S12000048"</span>,</span>
+<span>    <span class="cn">NA</span>,</span>
+<span>    <span class="st">"S12345678"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://testthat.r-lib.org/reference/equality-expectations.html" class="external-link">expect_equal</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/convert_ca_to_lca.html">convert_ca_to_lca</a></span><span class="op">(</span><span class="va">ca</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"01"</span>,</span>
+<span>      <span class="st">"17"</span>,</span>
+<span>      <span class="st">"25"</span>,</span>
+<span>      <span class="cn">NA</span>,</span>
+<span>      <span class="cn">NA</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">Test passed</span> 🥇</span></span></code></pre></div>
+</div>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
