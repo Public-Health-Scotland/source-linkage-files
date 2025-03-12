@@ -159,18 +159,19 @@ height <- data.frame(
   height = c(180, 165, 175, 160, 185, 170)
 )
 # dplyr
-max_height_df = height %>%
-  group_by(gender) %>% 
+max_height_df <- height %>%
+  group_by(gender) %>%
   dplyr::summarise(max_height = max(height))
 
 # first transform data to data.table class
 data.table::setDT(height)
-max_height_dt = height[,
-                       .(max_height = max(height)),
-                       by = gender]
+max_height_dt <- height[,
+  .(max_height = max(height)),
+  by = gender
+]
 # max_height_dt is now data.table format
 # and change it back to data.frame format if needed
-max_height_dt = as.data.frame(max_height_dt)
+max_height_dt <- as.data.frame(max_height_dt)
 ```
 
 Both `dplyr` and `data.table` codes achieve the same result but the latter is more efficient. In addition, always remember setting the data to `data.table` format before applying `data.table` package and formatting the data back to `data.frame` for any further analysis with `dplyr` package. In the example above, converting the `height` data frame to a `data.table` allows us to utilize `data.table`'s efficient operations for grouped summaries.
@@ -209,8 +210,8 @@ joined_df <- left_join(df1, df2, by = "customer_id") %>%
   arrange(customer_id)
 
 # Converting to data.table
-dt1 = data.table::as.data.table(df1)
-dt2 = data.table::as.data.table(df2)
+dt1 <- data.table::as.data.table(df1)
+dt2 <- data.table::as.data.table(df2)
 
 # Joining with data.table
 joined_dt <- dt2[dt1, on = "customer_id"] %>%
@@ -240,10 +241,11 @@ joined_dt_rigth2 <-
 joined_df_inner <- inner_join(df1, df2, by = "customer_id")
 joined_dt_inner1 <- dt1[dt2, on = "customer_id", nomatch = NULL]
 joined_dt_inner2 <- merge(dt1,
-                          dt2,
-                          by = "customer_id",
-                          all.x = FALSE,
-                          all.y = FALSE)
+  dt2,
+  by = "customer_id",
+  all.x = FALSE,
+  all.y = FALSE
+)
 
 # full join
 joined_df_full <- full_join(df1, df2, by = "customer_id")
@@ -256,9 +258,10 @@ joined_dt_anti1 <- dt1[!dt2, on = "customer_id"]
 # semi join
 joined_df_semi <- semi_join(df1, df2, by = "customer_id")
 joined_dt_semi1 <- dt1[dt2,
-                       on = "customer_id",
-                       nomatch = 0,
-                       .(customer_id, transaction_amount)]
+  on = "customer_id",
+  nomatch = 0,
+  .(customer_id, transaction_amount)
+]
 ```
 
 
@@ -295,13 +298,16 @@ long_df <- data.frame(
 
 # Convert to wide format using dplyr
 wide_df <- long_df %>%
-  pivot_wider(names_from = variable,
-              values_from = value)
+  pivot_wider(
+    names_from = variable,
+    values_from = value
+  )
 
 long_dt <- data.table::as.data.table(long_df)
 wide_dt <- dcast(long_dt,
-                 ID + key1 + key2 ~ variable,
-                 value.var = "value")
+  ID + key1 + key2 ~ variable,
+  value.var = "value"
+)
 ```
 
 #### Long to wide format {.unnumbered}
@@ -323,11 +329,13 @@ wide_df <- data.frame(
 
 # Convert to long format using dplyr
 long_df <- wide_df %>%
-  pivot_longer(cols = starts_with("value"),
-               names_to = "variable",
-               values_to = "value")
+  pivot_longer(
+    cols = starts_with("value"),
+    names_to = "variable",
+    values_to = "value"
+  )
 
-wide_dt = data.table::as.data.table(wide_df)
+wide_dt <- data.table::as.data.table(wide_df)
 long_dt <- melt(
   wide_dt,
   id.vars = c("ID", "key1", "key2"),
