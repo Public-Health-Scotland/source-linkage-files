@@ -2,10 +2,11 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
+  data_table: data_table.html
   package_development: package_development.html
   R Project Structure: R Project Structure.html
   using_github: using_github.html
-last_built: 2025-03-12T10:52Z
+last_built: 2025-03-13T13:33Z
 urls:
   reference: https://public-health-scotland.github.io/source-linkage-files/reference
   article: https://public-health-scotland.github.io/source-linkage-files/articles
