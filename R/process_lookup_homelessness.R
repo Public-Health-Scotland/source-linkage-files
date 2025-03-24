@@ -39,6 +39,7 @@ create_homelessness_lookup <- function(
 #'
 #' @return the final data as a [tibble][tibble::tibble-package]
 #' @export
+#' @family episode_file
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
   if (!check_year_valid(year, type = "homelessness")) {

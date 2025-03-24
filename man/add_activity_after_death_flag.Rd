@@ -24,3 +24,17 @@ data flagged if activity after death
 Match on CHI number where available in the episode file, and add date of death from the BOXI NRS lookup.
 Create new activity after death flag
 }
+\seealso{
+Other episode_file: 
+\code{\link{add_homelessness_flag}()},
+\code{\link{add_nsu_cohort}()},
+\code{\link{add_ppa_flag}()},
+\code{\link{apply_cost_uplift}()},
+\code{\link{correct_cij_vars}()},
+\code{\link{create_cohort_lookups}()},
+\code{\link{create_cost_inc_dna}()},
+\code{\link{fill_missing_cij_markers}()},
+\code{\link{link_delayed_discharge_eps}()},
+\code{\link{lookup_uplift}()}
+}
+\concept{episode_file}

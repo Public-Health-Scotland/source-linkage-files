@@ -245,6 +245,7 @@ vars_contain <- function(data, vars, ignore_case = FALSE) {
 #' @description Aggregate CH variables by CHI and CIS.
 #'
 #' @inheritParams create_individual_file
+#' @family individual_file
 aggregate_ch_episodes <- function(episode_file) {
   # recommended by `data.table` team to tackle the issue
   # "no visible binding for global variable"

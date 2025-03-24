@@ -13,6 +13,7 @@
 #' @inheritParams add_hri_variables
 #'
 #' @return A data frame with the variable 'keep_flag'
+#' @family individual_file
 flag_non_scottish_residents <- function(
     data,
     slf_pc_lookup) {
@@ -64,6 +65,7 @@ flag_non_scottish_residents <- function(
 #'
 #' @return The individual file with HRI variables matched on
 #' @export
+#' @family individual_file
 add_hri_variables <- function(
     data,
     chi_variable = "anon_chi",

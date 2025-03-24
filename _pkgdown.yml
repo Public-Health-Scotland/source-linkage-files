@@ -2,201 +2,210 @@ url: https://public-health-scotland.github.io/source-linkage-files
 template:
   bootstrap: 5
 
-# reference:
-#
-#   - title: Connection to PHS database
-#     desc: Connection to PHS database
-#   - contents:
-#     - phs_db_connection
-#
-#
-#   - title: Check
-#     desc: Checks within vectors
-#   - contents:
-#     - is_missing
-#     - check_variables_exist
-#     - check_year_valid
-#     - check_it_reference
-#
-#
-#   - title: Years & Dates
-#   - subtitle: Dates within Financial Year
-#     desc: Functions to compute the start, end and midpoint dates of a financial year, and convert date types
-#   - contents:
-#     - has_concept("date functions")
-#     - ends_with("_fy")
-#     - fy_interval
-#     - contains("_date")
-#   - subtitle: Year Format
-#     desc: Functions to convert between financial year and calendar year, and check that the year variable is in the correct format
-#   - contents:
-#     - has_concept("year functions")
-#     - ends_with("year")
-#     - contains("year_format")
-#   - subtitle: Ages
-#     desc: Functions to deal with ages of clients
-#   - contents:
-#     - contains("_age")
-#
-#
-#   - title: Clean-Up
-#     desc: Clean up the data
-#   - contents:
-#     - starts_with("clean_up")
-#     - fill_ch_names
-#     - cascade_geographies
-#     - correct_demographics
-#
-#
-#   - title: Create
-#   - subtitle: ID
-#     desc: Functions to create ID variables
-#   - contents:
-#     - has_concept("id functions")
-#     - contains("_id")
-#   - subtitle: Costs
-#     desc: Functions to create costs variables and fix costs
-#   - contents:
-#     - ends_with("_costs")
-#   - subtitle: Flags
-#     desc: Functions to create flag variables
-#   - contents:
-#     - has_concept("flag functions")
-#     - ends_with("_flags")
-#   - subtitle: Monthly
-#     desc: Functions to convert monthly variables, beddays
-#   - contents:
-#     - contains("_monthly_rows")
-#     - contains("_beddays")
-#
-#
-#   - title: Codes
-#     desc: Convert various codes to alternate forms
-#   - contents:
-#     - has_concept("code functions")
-#     - has_concept("Codes")
-#     - contains("_to_lca")
-#     - contains("to_dummy")
-#     - contains("_hb_to")
-#     - contains("_hscp_to")
-#     - contains("_chi")
-#     - contains("lca")
-#     - la_code_lookup
-#
-#
-#   - title: Writing data
-#     desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
-#   - contents:
-#     - write_file
-#
-#
-#   - title: Initialisation
-#     desc: Get the date of update, period, and extract number
-#   - contents:
-#     - has_concept("initialisation")
-#     - ends_with("_period")
-#     - ends_with("_update")
-#     - starts_with("it_extract")
-#     - gzip_files
-#     - make_lowercase_ext
-#
-#
-#   - title: Files
-#   - subtitle: Directories
-#     desc: File Directories for SLF's
-#   - contents:
-#     - has_concept("directories")
-#     - ends_with("_dir")
-#   - subtitle: Paths
-#     desc: File Paths for SLF's
-#   - contents:
-#     - has_concept("file path functions")
-#     - has_concept("lookup file paths")
-#     - has_concept("slf lookup file paths")
-#     - has_concept("costs lookup file paths")
-#     - has_concept("extract file paths")
-#     - has_concept("social care lookup file paths")
-#     - has_concept("social care episodes file paths")
-#     - has_concept("cohort lookup file paths")
-#     - ends_with("_file")
-#     - ends_with("_path")
-#
-#
-#   - title: Read extracts
-#     desc: Process SLF Extracts
-#   - contents:
-#     - has_concept("read extracts")
-#     - starts_with("read_")
-#     - get_gpprac_opendata
-#
-#
-#   - title: Process extracts
-#     desc: Process SLF Extracts
-#   - contents:
-#     - has_concept("process extracts")
-#     - starts_with("process_")
-#
-#
-#   - title: Episode file
-#     desc: Building the episode file
-#   - contents:
-#     - has_concept("episode_file")
-#     - fill_geographies
-#   - subtitle: Lookups
-#   - contents:
-#     - has_concept("Demographic and Service Use Cohort functions")
-#     - join_sparra_hhg
-#     - join_deaths_data
-#     - join_sc_client
-#     - match_on_ltcs
-#
-#
-#   - title: Individual file
-#     desc: Building the episode file
-#   - contents:
-#     - has_concept("individual_file")
-#   - subtitle: Lookups
-#   - contents:
-#     - has_concept("Demographic and Service Use Cohort functions")
-#     - join_sparra_hhg
-#     - join_cohort_lookups
-#     - join_deaths_data
-#     - join_slf_lookup_vars
-#     - match_on_ltcs
-#
-#
-#   - title: Demographics
-#     desc: Things related to demographic lookups
-#   - contents:
-#     - fill_geographies
-#     - get_gpprac_opendata
-#     - make_gpprac_lookup
-#     - make_postcode_lookup
-#     - recode_health_boards
-#     - recode_hscp
-#     - la_code_lookup
-#
-#
-#   - title: Miscellaneous functions
-#     desc: Miscellaneous functions.
-#   - subtitle: Homelessness
-#   - contents:
-#     - fix_east_ayrshire_duplicates
-#     - fix_west_dun_duplicates
-#     - produce_homelessness_completeness
-#   - subtitle: Helper functions
-#   - contents:
-#     - vars_end_with
-#     - has_concept("helper_funs")
-#
-#
-#   - title: Testing
-#     desc: Tests for the SLF Extracts
-#   - contents:
-#     - has_concept("test functions")
-#     - has_concept("extract test functions")
-#     - has_concept("slf test functions")
-#     - has_concept("social care test functions")
-#     - contains("_tests")
-#     - contains("_measures")
-#     - starts_with("produce_test")
+reference:
+
+  - title: Connection to PHS database
+    desc: Connection to PHS database
+  - contents:
+    - phs_db_connection
+
+
+  - title: Check
+    desc: Checks within vectors
+  - contents:
+    - is_missing
+    - check_variables_exist
+    - check_year_valid
+    - check_it_reference
+
+
+  - title: Years & Dates
+  - subtitle: Dates within Financial Year
+    desc: Functions to compute the start, end and midpoint dates of a financial year, and convert date types
+  - contents:
+    - has_concept("date functions")
+    - ends_with("_fy")
+    - fy_interval
+    - contains("_date")
+    - fy
+    - qtr
+  - subtitle: Year Format
+    desc: Functions to convert between financial year and calendar year, and check that the year variable is in the correct format
+  - contents:
+    - has_concept("year functions")
+    - ends_with("year")
+    - contains("year_format")
+  - subtitle: Ages
+    desc: Functions to deal with ages of clients
+  - contents:
+    - contains("_age")
+
+
+  - title: Clean-Up
+    desc: Clean up the data
+  - contents:
+    - starts_with("clean_up")
+    - fill_ch_names
+    - ch_name_extract_keyword
+    - cascade_geographies
+    - correct_demographics
+
+
+  - title: Create
+  - subtitle: ID
+    desc: Functions to create ID variables
+  - contents:
+    - has_concept("id functions")
+    - contains("_id")
+  - subtitle: Costs
+    desc: Functions to create costs variables and fix costs
+  - contents:
+    - ends_with("_costs")
+  - subtitle: Flags
+    desc: Functions to create flag variables
+  - contents:
+    - has_concept("flag functions")
+    - ends_with("_flags")
+  - subtitle: Monthly
+    desc: Functions to convert monthly variables, beddays
+  - contents:
+    - contains("_monthly_rows")
+    - contains("_beddays")
+
+
+  - title: Codes
+    desc: Convert various codes to alternate forms
+  - contents:
+    - has_concept("code functions")
+    - has_concept("Codes")
+    - contains("_to_lca")
+    - contains("to_dummy")
+    - contains("_hb_to")
+    - contains("_hscp_to")
+    - contains("_chi")
+    - contains("lca")
+
+
+  - title: Writing data
+    desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
+  - contents:
+    - write_file
+    - clean_temp_data
+    - combine_multi_xlsx
+    - store_ep_file_vars
+    - load_ep_file_vars
+    - write_temp_data
+
+
+  - title: Initialisation
+    desc: Get the date of update, period, and extract number
+  - contents:
+    - has_concept("initialisation")
+    - ends_with("_period")
+    - ends_with("_update")
+    - starts_with("it_extract")
+    - gzip_files
+    - make_lowercase_ext
+
+
+  - title: Files
+  - subtitle: Directories
+    desc: File Directories for SLF's
+  - contents:
+    - has_concept("directories")
+    - ends_with("_dir")
+  - subtitle: Paths
+    desc: File Paths for SLF's
+  - contents:
+    - has_concept("file path functions")
+    - has_concept("lookup file paths")
+    - has_concept("slf lookup file paths")
+    - has_concept("costs lookup file paths")
+    - has_concept("extract file paths")
+    - has_concept("social care lookup file paths")
+    - has_concept("social care episodes file paths")
+    - has_concept("cohort lookup file paths")
+    - ends_with("_file")
+    - ends_with("_path")
+
+
+  - title: Read extracts
+    desc: Process SLF Extracts
+  - contents:
+    - has_concept("read extracts")
+    - starts_with("read_")
+    - get_gpprac_opendata
+
+
+  - title: Process extracts
+    desc: Process SLF Extracts
+  - contents:
+    - has_concept("process extracts")
+    - starts_with("process_")
+
+
+  - title: Episode file
+    desc: Building the episode file
+  - contents:
+    - has_concept("episode_file")
+    - fill_geographies
+  - subtitle: Lookups
+  - contents:
+    - has_concept("Demographic and Service Use Cohort functions")
+    - join_sparra_hhg
+    - join_deaths_data
+    - join_sc_client
+    - match_on_ltcs
+
+
+  - title: Individual file
+    desc: Building the episode file
+  - contents:
+    - has_concept("individual_file")
+  - subtitle: Lookups
+  - contents:
+    - has_concept("Demographic and Service Use Cohort functions")
+    - join_sparra_hhg
+    - join_cohort_lookups
+    - join_deaths_data
+    - join_slf_lookup_vars
+    - match_on_ltcs
+
+
+  - title: Demographics
+    desc: Things related to demographic lookups
+  - contents:
+    - fill_geographies
+    - get_gpprac_opendata
+    - make_gpprac_lookup
+    - make_postcode_lookup
+    - recode_health_boards
+    - recode_hscp
+    - get_la_code_opendata_lookup
+    - rename_hscp
+
+
+  - title: Miscellaneous functions
+    desc: Miscellaneous functions.
+  - subtitle: Homelessness
+  - contents:
+    - fix_east_ayrshire_duplicates
+    - fix_west_dun_duplicates
+    - produce_homelessness_completeness
+  - subtitle: Helper functions
+  - contents:
+    - vars_end_with
+    - has_concept("helper_funs")
+    - setup_keyring
+
+
+  - title: Testing
+    desc: Tests for the SLF Extracts
+  - contents:
+    - has_concept("test functions")
+    - has_concept("extract test functions")
+    - has_concept("slf test functions")
+    - has_concept("social care test functions")
+    - contains("_tests")
+    - contains("_measures")
+    - starts_with("produce_test")
