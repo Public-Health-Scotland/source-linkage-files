@@ -2,7 +2,7 @@
 title: "Using Github to Develop createslf"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{using_github}
+  %\VignetteIndexEntry{Using Github to Develop createslf}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

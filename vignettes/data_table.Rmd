@@ -2,10 +2,12 @@
 title: "Improve efficiency with `data.table`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{data_table}
+  %\VignetteIndexEntry{Improve efficiency with `data.table`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(

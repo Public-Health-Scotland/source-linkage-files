@@ -1,8 +1,8 @@
 ---
-title: "R Project Structure"
+title: "Project_structure"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Structure}
+  %\VignetteIndexEntry{Project_structure}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,7 +30,6 @@ The repo contains the code to develop the package `createslf`which is used for t
 * **tests** - This folder contains tests for each function which ensures the package is working efficiently. 
 * **vignettes** - This folder contains vignettes used to populate Articles on the `createslf` website. 
 
--------------------------------------------------------------
 
 ## Functions 
 
@@ -42,7 +41,6 @@ The repo contains the code to develop the package `createslf`which is used for t
 
 * **process_tests_XXX** - Function for processing tests for each extract. This produces high level counts for comparison to the files produced last quarter. We check this to ensure we are happy with our outputs. 
 
--------------------------------------------------------------
 
 **Social Care Extracts** - Extracts taken from the Social Care Platform include: Alarms Telecare(AT), Care Homes(CH), Home Care(HC) and Self-directed Support(SDS). We also extract Client information and Demographic information from the platform. We extract all years from the platform during the processing stage and then filter this to financial year for inclusion. 
 
@@ -54,7 +52,6 @@ The repo contains the code to develop the package `createslf`which is used for t
 
 * **process_tests_XXX** - Function for processing tests for each extract. This produces high level counts for comparison to the files produced last quarter. We check this to ensure we are happy with our outputs. 
 
--------------------------------------------------------------
 
 **Episode File**
 
@@ -62,7 +59,6 @@ The repo contains the code to develop the package `createslf`which is used for t
 
 * **process_tests_episode_file** - Function for processing tests for each extract. This produces high level counts for comparison to the files produced last quarter. We check this to ensure we are happy with our outputs. 
 
--------------------------------------------------------------
 
 **Individual File**
 
@@ -70,4 +66,3 @@ The repo contains the code to develop the package `createslf`which is used for t
 
 * **process_tests_individual_file** - Function for processing tests for each extract. This produces high level counts for comparison to the files produced last quarter. We check this to ensure we are happy with our outputs.
  
--------------------------------------------------------------
