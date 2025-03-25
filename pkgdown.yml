@@ -4,9 +4,9 @@ pkgdown_sha: ~
 articles:
   data_table: data_table.html
   package_development: package_development.html
-  R Project Structure: R Project Structure.html
+  Project_structure: Project_structure.html
   using_github: using_github.html
-last_built: 2025-03-24T16:26Z
+last_built: 2025-03-25T16:35Z
 urls:
   reference: https://public-health-scotland.github.io/source-linkage-files/reference
   article: https://public-health-scotland.github.io/source-linkage-files/articles
