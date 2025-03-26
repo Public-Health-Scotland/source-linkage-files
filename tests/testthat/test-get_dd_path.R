@@ -21,5 +21,4 @@ test_that("Delayed discharges file is as expected", {
     )["Valid CHI"],
     0.98 * n_rows
   )
-
 })
