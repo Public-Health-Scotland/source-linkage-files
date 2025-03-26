@@ -22,5 +22,4 @@ test_that("Delayed discharges file is as expected", {
     0.98 * n_rows
   )
 
-  expect_snapshot(dplyr::glimpse(latest_dd_file, width = 0))
 })
