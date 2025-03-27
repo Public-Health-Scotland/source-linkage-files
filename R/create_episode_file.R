@@ -554,7 +554,8 @@ join_sc_client <- function(data,
       dplyr::left_join(
         sc_client,
         by = "anon_chi",
-        relationship = "many-to-one"
+        relationship = "many-to-one",
+        na_matches = c("never")
       )
   } else {
     data_file <- data %>%
