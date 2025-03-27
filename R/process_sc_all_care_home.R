@@ -28,7 +28,7 @@ process_sc_all_care_home <- function(
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
 
-  ch_clean <- data %>%
+  ch_clean <- ch_data %>%
     dplyr::mutate(
       # Set missing admission date to start of the submitted quarter (n = 2)
       ch_admission_date = dplyr::if_else(
@@ -65,8 +65,49 @@ process_sc_all_care_home <- function(
       -"ch_name_old",
       -"ch_postcode_old"
     ) %>%
+    # recode ch_provider/description in line with the change in recording guidance
+    # New guidance states:
+    # 1 = Local authority/ health and social care partnership/ NHS boards
+    # 2 = Private
+    # 3 = Other Local Authority
+    # 4 = Third Sector
+    # 5 = Other
+    # No longer using 6 = other
     dplyr::mutate(
-      ch_provider = dplyr::if_else(is.na(.data[["ch_provider"]]), 6L, .data[["ch_provider"]]) # (n = 2)
+      ch_provider = as.character(ch_provider),
+      ch_provider_description = dplyr::if_else(
+        ch_provider_description == "LOCAL AUTHORITY/HSCP",
+        "LOCAL AUTHORITY/HSCP/NHS BOARD", ch_provider_description
+      ),
+      ch_provider = dplyr::if_else(
+        ch_provider_description == "NHS BOARD",
+        "1", ch_provider
+      ),
+      ch_provider_description = dplyr::if_else(
+        ch_provider_description == "NHS BOARD",
+        "LOCAL AUTHORITY/HSCP/NHS BOARD", ch_provider_description
+      ),
+      # Setting some records receiving other care to OTHER
+      ch_provider_description = dplyr::if_else(
+        is.na(ch_provider_description) & ch_provider == 6,
+        "OTHER", ch_provider_description
+      ),
+      ch_provider = dplyr::if_else(
+        ch_provider == 6,
+        "5", ch_provider
+      ),
+      # Moray had 4 records where ch_provider == ???. These were supposed to be 2/Private.
+      ch_provider_description = dplyr::if_else(
+        sending_location == "Moray" & ch_provider == "???",
+        true = "PRIVATE", false = ch_provider_description,
+        missing = ch_provider_description
+      ),
+      ch_provider = dplyr::if_else(
+        sending_location == "Moray" & ch_provider == "???",
+        true = "2", false = ch_provider,
+        missing = ch_provider
+      ),
+      ch_provider = as.integer(ch_provider)
     ) %>%
     # sort data
     dplyr::arrange(
@@ -83,11 +124,11 @@ process_sc_all_care_home <- function(
     dplyr::mutate(
       min_ch_provider = min(.data[["ch_provider"]]),
       max_ch_provider = max(.data[["ch_provider"]]),
-      # if care home provider is different across cases, set to "6".
-      # tidy up ch_provider using 6 when disagreeing values
+      # if care home provider is different across cases, set to "5".
+      # tidy up ch_provider using 5 when disagreeing values
       ch_provider = dplyr::if_else(
         .data[["min_ch_provider"]] != .data[["max_ch_provider"]],
-        6L,
+        5L,
         .data[["ch_provider"]]
       )
     ) %>%
@@ -389,8 +430,7 @@ process_sc_all_care_home <- function(
       ch_provider == 2 ~ "PRIVATE",
       ch_provider == 3 ~ "OTHER LOCAL AUTHORITY",
       ch_provider == 4 ~ "THIRD SECTOR",
-      ch_provider == 5 ~ "NHS BOARD",
-      ch_provider == 6 ~ "OTHER"
+      ch_provider == 5 ~ "OTHER"
     )) %>%
     dplyr::select(
       "anon_chi",
