@@ -28,7 +28,7 @@ process_sc_all_care_home <- function(
     write_to_disk = TRUE) {
   ## Data Cleaning-----------------------------------------------------
 
-  ch_clean <- ch_data %>%
+  ch_clean <- data %>%
     dplyr::mutate(
       # Set missing admission date to start of the submitted quarter (n = 2)
       ch_admission_date = dplyr::if_else(
