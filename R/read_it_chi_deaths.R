@@ -14,8 +14,8 @@ read_it_chi_deaths <- function(file_path = get_it_deaths_path()) {
       death_date_chi = "PATIENT DoD DATE (CHI)"
     ) %>%
     dplyr::mutate(
-      death_date_nrs = lubridate::ymd(as.Date(.data$death_date_nrs)),
-      death_date_chi = lubridate::ymd(as.Date(.data$death_date_chi))
+      death_date_nrs = lubridate::dmy(.data$death_date_nrs) %>% format("%Y-%m-%d"),
+      death_date_chi = lubridate::dmy(.data$death_date_chi) %>% format("%Y-%m-%d")
     )
 
   return(it_chi_deaths)
