@@ -17,7 +17,7 @@ read_extract_prescribing <- function(year, file_path = get_it_prescribing_path(y
     ) %>%
     # format prescribing
     dplyr::mutate(
-      dob = lubridate::ymd(as.Date(.data$dob))
+      dob = lubridate::dmy(.data$dob) %>% format("%Y-%m-%d")
     )
 
   return(pis_file)
