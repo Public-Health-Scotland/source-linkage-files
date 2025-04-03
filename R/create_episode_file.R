@@ -159,7 +159,7 @@ create_episode_file <- function(
     add_activity_after_death_flag(year,
       deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
-    link_ch_with_ae() %>%
+    link_ch_with_adms() %>%
     load_ep_file_vars(year) %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%
