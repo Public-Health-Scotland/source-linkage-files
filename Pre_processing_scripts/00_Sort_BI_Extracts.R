@@ -21,10 +21,8 @@ extract_financial_year <- function(filename) {
 }
 
 # Create a function to read variable names
-is_chi_in_file <- function(filename) {
-  data <- read.csv(filename, nrow = 1)
-  return(grepl("UPI", names(data)) %>% any())
-}
+# load is_chi_in_file() function
+devtools::load_all()
 
 # function to move files
 move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
