@@ -27,11 +27,8 @@ cat(stringr::str_glue("Looking in '{source_dir}' for parquet files."))
 parquet_files <- list.files(source_dir, pattern = ".parquet", full.names = TRUE)
 print(stringr::str_glue("Found {length(parquet_files)} parquet files to process."))
 
-# Create a function to read variable names and check if CHI is in the file
-is_chi_in_file <- function(filename) {
-  data <- arrow::read_parquet(filename, nrow = 5)
-  return(grepl("chi", names(data)) %>% any())
-}
+# load is_chi_in_file() function
+devtools::load_all()
 
 
 # Stage 2 - In each file, convert chi to anon_chi and save to disk

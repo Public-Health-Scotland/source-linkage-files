@@ -10,10 +10,8 @@ it_extract_anon_path <- file.path(
   "anon-chi-IT"
 )
 
-is_chi_in_file <- function(filename) {
-  data <- read.csv(filename, nrow = 1)
-  return(grepl("UPI", names(data)) %>% any())
-}
+# load is_chi_in_file function
+devtools::load_all()
 
 # detect task number and tidy up parquet files from last request ---------
 # One can manually delete files and comment this part out.
