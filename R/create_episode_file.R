@@ -81,7 +81,6 @@ create_episode_file <- function(
         "cij_marker",
         "cij_start_date",
         "cij_end_date",
-        "cij_pattype",
         "cij_pattype_code",
         "cij_ipdc",
         "cij_admtype",
