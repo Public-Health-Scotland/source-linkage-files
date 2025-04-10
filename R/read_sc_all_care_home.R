@@ -20,6 +20,7 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "period_start_date",
       "period_end_date",
       "ch_provider",
+      "ch_provider_description",
       "reason_for_admission",
       "type_of_admission",
       "nursing_care_provision",

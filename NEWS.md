@@ -1,3 +1,7 @@
+# June 2025 update - Unreleased 
+* HL1 completeness flag adjusted to 2 decimal places. 
+* Scottish postcode directory updated
+
 # March 2025 Update - released 05-Mar-25
 * 24/25 files have been updated, containing data up to December 2024.
 * 17/18 - 23/24 files have been updated.
