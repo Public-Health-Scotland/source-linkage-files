@@ -60,8 +60,11 @@ process_costs_rmd <- function(file_name) {
   }
 
   if (fs::file_info(output_file)$user == Sys.getenv("USER")) {
-    # Set the correct permissions
-    fs::file_chmod(path = output_file, mode = "660")
+    # Set the correct permissions (read, write, execute)
+    fs::file_chmod(path = output_file, mode = "770")
+    # change the owner so that hscdiip is the group owner.
+    # use fs::group_ids() for checking
+    fs::file_chown(path = output_file, group_id = 3206)
   }
 
   utils::browseURL(output_file)
