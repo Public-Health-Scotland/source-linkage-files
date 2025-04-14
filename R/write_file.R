@@ -47,7 +47,6 @@ write_file <- function(data, path, ...) {
     # change the owner so that sourcedev is the group owner.
     # use fs::group_ids() for checking
     fs::file_chown(path = path, group_id = 3356)
-
   }
 
   return(invisible(data))
