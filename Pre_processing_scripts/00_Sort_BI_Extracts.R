@@ -1,3 +1,7 @@
+# Create a function to read variable names
+# load is_chi_in_file() function
+devtools::load_all()
+
 # Define the source directory and financial year pattern
 compress_files <- FALSE
 source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp"
@@ -19,10 +23,6 @@ extract_financial_year <- function(filename) {
     return(NULL)
   }
 }
-
-# Create a function to read variable names
-# load is_chi_in_file() function
-devtools::load_all()
 
 # function to move files
 move_temps_to_year_extract <- function(csv_file, compress_files = TRUE) {
