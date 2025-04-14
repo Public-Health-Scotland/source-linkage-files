@@ -12,6 +12,8 @@
 #              ensuring we do not save chi anywhere on disk.
 #
 ################################################################################
+# load is_chi_in_file function
+devtools::load_all()
 
 ## Stage 1 - Setup environment
 #-------------------------------------------------------------------------------
@@ -26,10 +28,6 @@ cat(stringr::str_glue("Looking in '{source_dir}' for parquet files."))
 # List all files in the directory
 parquet_files <- list.files(source_dir, pattern = ".parquet", full.names = TRUE)
 print(stringr::str_glue("Found {length(parquet_files)} parquet files to process."))
-
-# load is_chi_in_file() function
-devtools::load_all()
-
 
 # Stage 2 - In each file, convert chi to anon_chi and save to disk
 #-------------------------------------------------------------------------------

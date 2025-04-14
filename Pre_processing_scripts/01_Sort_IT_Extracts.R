@@ -1,4 +1,5 @@
 rm(list = ls())
+# load is_chi_in_file function
 devtools::load_all()
 
 it_extract_path <- file.path(
@@ -9,9 +10,6 @@ it_extract_anon_path <- file.path(
   it_extract_path,
   "anon-chi-IT"
 )
-
-# load is_chi_in_file function
-devtools::load_all()
 
 # detect task number and tidy up parquet files from last request ---------
 # One can manually delete files and comment this part out.
