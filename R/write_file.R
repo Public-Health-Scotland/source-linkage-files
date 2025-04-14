@@ -42,8 +42,12 @@ write_file <- function(data, path, ...) {
   )
 
   if (fs::file_info(path)$user == Sys.getenv("USER")) {
-    # Set the correct permissions
-    fs::file_chmod(path = path, mode = "660")
+    # Set the correct permissions (read, write, execute)
+    fs::file_chmod(path = path, mode = "770")
+    # change the owner so that sourcedev is the group owner.
+    # use fs::group_ids() for checking
+    fs::file_chown(path = path, group_id = 3356)
+
   }
 
   return(invisible(data))
