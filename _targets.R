@@ -2,7 +2,7 @@
 library(targets)
 library(tarchetypes)
 library(crew)
-#future::plan(future.callr::callr)
+# future::plan(future.callr::callr)
 
 options(readr.read_lazy = TRUE)
 
