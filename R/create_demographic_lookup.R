@@ -173,7 +173,8 @@ create_demographic_cohorts <- function(
   # Write to disk
   if (write_to_disk) {
     write_file(demo_lookup,
-      path = get_demographic_cohorts_path(year, update, check_mode = "write")
+      path = get_demographic_cohorts_path(year, update, check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

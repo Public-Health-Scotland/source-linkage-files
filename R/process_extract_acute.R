@@ -164,7 +164,8 @@ process_extract_acute <- function(data,
   if (write_to_disk) {
     write_file(
       acute_processed,
-      get_source_extract_path(year, "acute", check_mode = "write")
+      get_source_extract_path(year, "acute", check_mode = "write"),
+      group_id = 3356 # sourcedev owner
     )
   }
 

@@ -60,7 +60,8 @@ process_refined_death <- function(
   if (write_to_disk) {
     write_file(
       refined_death,
-      get_combined_slf_deaths_lookup_path(create = TRUE)
+      get_combined_slf_deaths_lookup_path(create = TRUE),
+      group_id = 3206 # hscdiip owner
     )
   }
 

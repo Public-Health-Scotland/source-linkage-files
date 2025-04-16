@@ -180,7 +180,8 @@ process_extract_homelessness <- function(
         year = year,
         type = "homelessness",
         check_mode = "write"
-      )
+      ),
+      group_id = 3356 # sourcedev owner
     )
   }
 

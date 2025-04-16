@@ -26,7 +26,9 @@ process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     it_chi_deaths_clean %>%
-      write_file(get_slf_chi_deaths_path(check_mode = "write"))
+      write_file(get_slf_chi_deaths_path(check_mode = "write"),
+        group_id = 3206 # hscdiip owner
+      )
   }
 
   return(it_chi_deaths_clean)

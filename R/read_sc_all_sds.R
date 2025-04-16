@@ -36,7 +36,9 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "sds"))) {
     sds_full_data %>%
-      write_file(get_sandpit_extract_path(type = "sds"))
+      write_file(get_sandpit_extract_path(type = "sds"),
+        group_id = 3206 # hscdiip owner
+      )
 
     sds_full_data %>%
       process_tests_sc_sandpit(type = "sds")
