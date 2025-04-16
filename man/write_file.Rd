@@ -4,12 +4,15 @@
 \alias{write_file}
 \title{Write a data to a file}
 \usage{
-write_file(data, path, ...)
+write_file(data, path, group_id = 3356, ...)
 }
 \arguments{
 \item{data}{The data to be written}
 
 \item{path}{The file path to be write}
+
+\item{group_id}{The group id for setting permissions. The default is 3356 for
+sourcedev. To set this to hscdiip, use 3206.}
 
 \item{...}{Additional arguments passed to the relevant function.}
 }
