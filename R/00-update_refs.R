@@ -96,7 +96,7 @@ check_year_valid <- function(
   } else if (year >= "2122" && all(type %in% c("cmh", "dn"))) {
     return(FALSE)
     # HHG stops in 2022/23
-  } else if (year >= "2324" && all( type %in% "hhg")) {
+  } else if (year >= "2324" && all(type %in% "hhg")) {
     return(FALSE)
     ## CHECK - what is the latest NSU cohort available?
     # NSU is currently available for 2023/24
