@@ -22,7 +22,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   spd_file <- read_file(spd_path) %>%
     dplyr::select(
       "pc7",
-      #tidyselect::matches("datazone\\d{4}$"),
+      # tidyselect::matches("datazone\\d{4}$"),
       # Include datazone2011 - phase out proposed end of 25/26
       "datazone2011",
       # New datazone - included start of25/26
