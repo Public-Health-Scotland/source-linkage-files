@@ -22,7 +22,11 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   spd_file <- read_file(spd_path) %>%
     dplyr::select(
       "pc7",
-      tidyselect::matches("datazone\\d{4}$"),
+      # tidyselect::matches("datazone\\d{4}$"),
+      # Include datazone2011 - phase out proposed end of 25/26
+      "datazone2011",
+      # New datazone - included start of25/26
+      "datazone2022",
       tidyselect::matches("hb\\d{4}$"),
       tidyselect::matches("hscp\\d{4}$"),
       tidyselect::matches("ca\\d{4}$"),
@@ -72,6 +76,8 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
       "locality",
       # tidyselect::matches("datazone\\d{4}$")[1L],
       "datazone2011",
+      # New datazone - included start of25/26
+      "datazone2022",
       tidyselect::matches("hb\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
       tidyselect::matches("hscp\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),
       tidyselect::matches("ca\\d{4}$(?:20[2-9]\\d)|(?:201[89])$"),

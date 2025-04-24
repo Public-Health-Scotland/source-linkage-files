@@ -34,7 +34,6 @@ read_extract_ooh_consultations <- function(
       postcode = "Patient Postcode [C]",
       hbrescode = "Patient NHS Board Code 9 - current",
       hscp = "HSCP of Residence Code Current",
-      datazone2011 = "Patient Data Zone 2011",
       gpprac = "Practice Code",
       ooh_case_id = "GUID",
       attendance_status = "Consultation Recorded",
