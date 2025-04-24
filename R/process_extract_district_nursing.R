@@ -139,7 +139,9 @@ process_extract_district_nursing <- function(
 
   if (write_to_disk) {
     dn_episodes %>%
-      write_file(get_source_extract_path(year, "dn", check_mode = "write"))
+      write_file(get_source_extract_path(year, "dn", check_mode = "write"),
+        group_id = 3356
+      ) # sourcedev owner
   }
 
   return(dn_episodes)

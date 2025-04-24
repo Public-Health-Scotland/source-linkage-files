@@ -51,7 +51,9 @@ process_extract_sds <- function(
 
   if (write_to_disk) {
     outfile %>%
-      write_file(get_source_extract_path(year, type = "sds", check_mode = "write"))
+      write_file(get_source_extract_path(year, type = "sds", check_mode = "write"),
+        group_id = 3356 # sourcedev owner
+      )
   }
 
   return(outfile)

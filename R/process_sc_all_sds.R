@@ -182,7 +182,8 @@ process_sc_all_sds <- function(
   if (write_to_disk) {
     write_file(
       final_data,
-      get_sc_sds_episodes_path(check_mode = "write")
+      get_sc_sds_episodes_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

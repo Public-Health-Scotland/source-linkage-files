@@ -123,7 +123,9 @@ matched_costs_data %>%
 
 # Save .rds file
 ch_costs_uplifted %>%
-  write_file(get_ch_costs_path(check_mode = "write"))
+  write_file(get_ch_costs_path(check_mode = "write"),
+    group_id = 3206 # hscdiip owner
+  )
 ```
 
 # Graph showing the cost difference between new and old costs 
@@ -145,4 +147,3 @@ ggplot(
   scale_colour_discrete() +
   labs(y = "Cost per day", color = "Nursing Care provision")
 ```
-

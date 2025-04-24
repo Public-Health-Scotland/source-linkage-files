@@ -18,7 +18,8 @@ write_temp_data <-
       )
 
       write_file(data,
-        path = file_path
+        path = file_path,
+        group_id = 3356 # sourcedev owner
       )
       cli::cli_alert_info(stringr::str_glue("Writing {full_file_name} to disk finished at {Sys.time()}"))
     }

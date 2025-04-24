@@ -33,7 +33,7 @@ for (i in 1:year_n) {
     overwrite = TRUE
   )
   fs::file_move(new_path_im, new_path)
-  fs::file_chmod(new_path, mode = "640")
+  fs::file_chmod(new_path, mode = "770")
 
   resource_consumption$time_consumption[i] <- (Sys.time() - timer)
   file_size <- sum(file.size(old_path)) / 2^20

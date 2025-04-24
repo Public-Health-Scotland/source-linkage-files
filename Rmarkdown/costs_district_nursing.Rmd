@@ -206,7 +206,9 @@ outfile <-
 
 outfile %>%
   # Save .rds file
-  write_file(get_dn_costs_path(check_mode = "write"))
+  write_file(get_dn_costs_path(check_mode = "write"),
+    group_id = 3206 # hscdiip owner
+  )
 ```
 
 # Graph showing the number of contacts

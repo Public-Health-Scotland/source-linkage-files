@@ -97,7 +97,8 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
   if (write_to_disk) {
     write_file(
       slf_pc_lookup,
-      get_slf_postcode_path(check_mode = "write")
+      get_slf_postcode_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 
