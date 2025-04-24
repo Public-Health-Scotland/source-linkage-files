@@ -42,12 +42,12 @@ for (data_file in parquet_files) {
   if (chi_in_file) {
     read_file(data_file) %>%
       slfhelper::get_anon_chi() %>%
-      write_file(save_file_path)
+      write_file(save_file_path, group_id = 3206) # hscdiip owner
 
     cat("Replaced chi with anon chi:", data_file, "to", save_file_path, "\n")
   } else {
     read_file(data_file) %>%
-      write_file(save_file_path)
+      write_file(save_file_path, group_id = 3206) # hscdiip owner
     cat("renamed file with anon chi:", data_file, "to", save_file_path, "\n")
   }
 }

@@ -157,7 +157,7 @@ create_individual_file <- function(
   if (write_to_disk) {
     slf_indiv_path <- get_slf_individual_path(year, check_mode = "write")
 
-    write_file(individual_file, slf_indiv_path)
+    write_file(individual_file, slf_indiv_path, group_id = 3356) # sourcedev owner
   }
 
   return(individual_file)

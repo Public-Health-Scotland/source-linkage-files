@@ -72,7 +72,7 @@ convert_it_csv_to_parquet <- function(csv_file) {
       ) %>%
       slfhelper::get_anon_chi()
   }
-  write_file(data, new_file)
+  write_file(data, new_file, group_id = 3206) # hscdiip owner
   cli::cli_alert_info("\n {basename(csv_file)} finished at {Sys.time()}")
 }
 

@@ -7,11 +7,13 @@
 #'
 #' @param data The data to be written
 #' @param path The file path to be write
+#' @param group_id The group id for setting permissions. The default is 3356 for
+#'            sourcedev. To set this to hscdiip, use 3206.
 #' @param ... Additional arguments passed to the relevant function.
 #'
 #' @return the data (invisibly) as a [tibble][tibble::tibble-package].
 #' @export
-write_file <- function(data, path, ...) {
+write_file <- function(data, path, group_id = 3356, ...) {
   valid_extensions <- c("rds", "parquet")
 
   ext <- fs::path_ext(path)
@@ -42,8 +44,11 @@ write_file <- function(data, path, ...) {
   )
 
   if (fs::file_info(path)$user == Sys.getenv("USER")) {
-    # Set the correct permissions
-    fs::file_chmod(path = path, mode = "660")
+    # Set the correct permissions (read, write, execute)
+    fs::file_chmod(path = path, mode = "770")
+    # change the owner so that sourcedev is the group owner.
+    # use fs::group_ids() for checking
+    fs::file_chown(path = path, group_id = group_id)
   }
 
   return(invisible(data))
