@@ -264,7 +264,9 @@ create_episode_file <- function(
   }
 
   if (write_to_disk) {
-    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"))
+    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"),
+      group_id = 3356
+    ) # sourcedev owner
   }
 
   return(episode_file)
@@ -298,7 +300,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
     dplyr::all_of(vars_to_store)
   ) %>%
     write_file(
-      path = tempfile_path
+      path = tempfile_path,
+      group_id = 3356 # sourcedev owner
     )
 
   cli::cli_alert_info("Store episode file variables function finished at {Sys.time()}")

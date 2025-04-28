@@ -55,7 +55,9 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "hc"))) {
     home_care_data %>%
-      write_file(get_sandpit_extract_path(type = "hc"))
+      write_file(get_sandpit_extract_path(type = "hc"),
+        group_id = 3206 # hscdiip owner
+      )
 
     home_care_data %>%
       process_tests_sc_sandpit(type = "hc")

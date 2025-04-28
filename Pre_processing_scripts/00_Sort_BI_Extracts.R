@@ -1,3 +1,7 @@
+# Create a function to read variable names
+# load is_chi_in_file() function
+devtools::load_all()
+
 # Define the source directory and financial year pattern
 compress_files <- FALSE
 source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp"
@@ -18,12 +22,6 @@ extract_financial_year <- function(filename) {
   } else {
     return(NULL)
   }
-}
-
-# Create a function to read variable names
-is_chi_in_file <- function(filename) {
-  data <- read.csv(filename, nrow = 1)
-  return(grepl("UPI", names(data)) %>% any())
 }
 
 # function to move files

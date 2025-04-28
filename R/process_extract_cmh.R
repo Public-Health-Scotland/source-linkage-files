@@ -73,7 +73,8 @@ process_extract_cmh <- function(data,
   if (write_to_disk) {
     write_file(
       cmh_processed,
-      get_source_extract_path(year, "cmh", check_mode = "write")
+      get_source_extract_path(year, "cmh", check_mode = "write"),
+      group_id = 3356 # sourcedev owner
     )
   }
 

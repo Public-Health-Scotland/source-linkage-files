@@ -165,7 +165,9 @@ process_extract_gp_ooh <- function(year,
 
   if (write_to_disk) {
     final_data %>%
-      write_file(get_source_extract_path(year, "gp_ooh", check_mode = "write"))
+      write_file(get_source_extract_path(year, "gp_ooh", check_mode = "write"),
+        group_id = 3356
+      ) # sourcedev owner
   }
 
   return(final_data)

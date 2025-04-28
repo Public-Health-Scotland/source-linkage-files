@@ -1,4 +1,5 @@
 rm(list = ls())
+# load is_chi_in_file function
 devtools::load_all()
 
 it_extract_path <- file.path(
@@ -9,11 +10,6 @@ it_extract_anon_path <- file.path(
   it_extract_path,
   "anon-chi-IT"
 )
-
-is_chi_in_file <- function(filename) {
-  data <- read.csv(filename, nrow = 1)
-  return(grepl("UPI", names(data)) %>% any())
-}
 
 # detect task number and tidy up parquet files from last request ---------
 # One can manually delete files and comment this part out.
@@ -76,7 +72,7 @@ convert_it_csv_to_parquet <- function(csv_file) {
       ) %>%
       slfhelper::get_anon_chi()
   }
-  write_file(data, new_file)
+  write_file(data, new_file, group_id = 3206) # hscdiip owner
   cli::cli_alert_info("\n {basename(csv_file)} finished at {Sys.time()}")
 }
 
