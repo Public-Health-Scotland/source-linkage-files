@@ -51,6 +51,8 @@ create_episode_file <- function(
         "recid",
         "record_keydate1",
         "record_keydate2",
+        "keytime1",
+        "keytime2",
         "smrtype",
         "anon_chi",
         "gender",
@@ -73,6 +75,9 @@ create_episode_file <- function(
         "diag6",
         "op1a",
         "age",
+        "ch_name",
+        "ch_postcode",
+        "cup_pathway",
         "cij_marker",
         "cij_start_date",
         "cij_end_date",
@@ -153,6 +158,7 @@ create_episode_file <- function(
     add_activity_after_death_flag(year,
       deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
+    link_ch_with_adms() %>%
     load_ep_file_vars(year) %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%
