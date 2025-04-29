@@ -85,6 +85,7 @@ process_extract_home_care <- function(
       "recid",
       "smrtype",
       "anon_chi",
+      "person_id",
       "dob",
       "gender",
       "postcode",
