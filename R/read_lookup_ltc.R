@@ -35,7 +35,7 @@ read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
     # format varaibles to ymd
     dplyr::mutate(dplyr::across(
       .cols = dplyr::ends_with("_date"),
-      .fns = ~ lubridate::dmy(.) %>% format("%Y-%m-%d")
+      .fns = ~ lubridate::dmy(.)
     ))
 
   chi_check <- ltc_file %>%
