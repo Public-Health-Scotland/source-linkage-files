@@ -3,7 +3,7 @@
 #' @return the path of the folder where a target console output is
 #'
 #' @examples targets_console_path()
-targets_console_path = function(){
+targets_console_path <- function() {
   return("Run_SLF_Files_targets/console_outputs")
 }
 
@@ -12,7 +12,7 @@ targets_console_path = function(){
 #' @return the path of the folder where a ep or ind file console output is
 #'
 #' @examples ep_ind_console_path("ep_1415_console_2025-04-30_15-06-54.txt")
-ep_ind_console_path = function(){
+ep_ind_console_path <- function() {
   return("Run_SLF_Files_manually/console_outputs")
 }
 
@@ -23,12 +23,12 @@ ep_ind_console_path = function(){
 #' @return write a csv of time consumption to disk
 #'
 #' @examples
-extract_ep_ind_time = function(file_name) {
-  file_path = get_file_path(
+extract_ep_ind_time <- function(file_name) {
+  file_path <- get_file_path(
     ep_ind_console_path(),
     file_name
   )
-  log_data = readLines(file_path)
+  log_data <- readLines(file_path)
   # Extract relevant details
   log_df <- data.frame(log_data) %>%
     tidyr::extract(
@@ -48,7 +48,8 @@ extract_ep_ind_time = function(file_name) {
     )
 
   readr::write_csv(function_times,
-                   path = sub(".txt", ".csv", file_path))
+    path = sub(".txt", ".csv", file_path)
+  )
 }
 
 #' Extract time stamp and time consumption of targets console output
@@ -58,8 +59,8 @@ extract_ep_ind_time = function(file_name) {
 #' @return write a csv of time consumption to disk
 #'
 #' @examples extract_targets_time("targets_console_2025-04-30_11-28-57.txt")
-extract_targets_time = function(file_name){
-  file_path = get_file_path(
+extract_targets_time <- function(file_name) {
+  file_path <- get_file_path(
     targets_console_path(),
     file_name
   )
@@ -74,21 +75,27 @@ extract_targets_time = function(file_name){
 
   # Create a data frame to store the extracted data
   extracted_data <- data.frame(
-    target = sapply(matches, function(x)
-      if (length(x) > 0)
+    target = sapply(matches, function(x) {
+      if (length(x) > 0) {
         x[2]
-      else
-        NA),
-    value = as.numeric(sapply(matches, function(x)
-      if (length(x) > 0)
+      } else {
+        NA
+      }
+    }),
+    value = as.numeric(sapply(matches, function(x) {
+      if (length(x) > 0) {
         x[3]
-      else
-        NA)),
-    measure = sapply(matches, function(x)
-      if (length(x) > 0)
+      } else {
+        NA
+      }
+    })),
+    measure = sapply(matches, function(x) {
+      if (length(x) > 0) {
         x[4]
-      else
-        NA)
+      } else {
+        NA
+      }
+    })
   ) %>%
     dplyr::filter(!is.na(target)) %>%
     dplyr::mutate(
@@ -108,6 +115,6 @@ extract_targets_time = function(file_name){
     dplyr::arrange(target, unit_min)
 
   readr::write_csv(extracted_data,
-                      path = sub(".txt", ".csv", file_path))
-
+    path = sub(".txt", ".csv", file_path)
+  )
 }

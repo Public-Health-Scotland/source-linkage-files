@@ -3,7 +3,7 @@ library(createslf)
 file_name <- stringr::str_glue(
   "ind_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
 )
-file_path = get_file_path(
+file_path <- get_file_path(
   ep_ind_console_path(),
   file_name,
   create = TRUE

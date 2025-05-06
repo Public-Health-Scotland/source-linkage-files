@@ -6,7 +6,7 @@ year <- "2324"
 file_name <- stringr::str_glue(
   "ep_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
 )
-file_path = get_file_path(
+file_path <- get_file_path(
   ep_ind_console_path(),
   file_name,
   create = TRUE
@@ -40,8 +40,9 @@ processed_data_list <- list(
 
 # Run episode file
 create_episode_file(processed_data_list,
-                    year = year,
-                    write_temp_to_disk = FALSE) %>%
+  year = year,
+  write_temp_to_disk = FALSE
+) %>%
   process_tests_episode_file(year = year)
 
 ## End of Script ##
