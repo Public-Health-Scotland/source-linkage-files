@@ -51,6 +51,8 @@ create_episode_file <- function(
         "recid",
         "record_keydate1",
         "record_keydate2",
+        "keytime1",
+        "keytime2",
         "smrtype",
         "anon_chi",
         "gender",
@@ -73,6 +75,9 @@ create_episode_file <- function(
         "diag6",
         "op1a",
         "age",
+        "ch_name",
+        "ch_postcode",
+        "cup_pathway",
         "cij_marker",
         "cij_start_date",
         "cij_end_date",
@@ -153,6 +158,7 @@ create_episode_file <- function(
     add_activity_after_death_flag(year,
       deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
+    link_ch_with_adms() %>%
     load_ep_file_vars(year) %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%
@@ -258,7 +264,9 @@ create_episode_file <- function(
   }
 
   if (write_to_disk) {
-    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"))
+    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"),
+      group_id = 3356
+    ) # sourcedev owner
   }
 
   return(episode_file)
@@ -292,7 +300,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
     dplyr::all_of(vars_to_store)
   ) %>%
     write_file(
-      path = tempfile_path
+      path = tempfile_path,
+      group_id = 3356 # sourcedev owner
     )
 
   cli::cli_alert_info("Store episode file variables function finished at {Sys.time()}")

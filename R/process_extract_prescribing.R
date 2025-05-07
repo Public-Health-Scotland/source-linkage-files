@@ -55,7 +55,8 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       pis_clean,
-      get_source_extract_path(year, "pis", check_mode = "write")
+      get_source_extract_path(year, "pis", check_mode = "write"),
+      group_id = 3356 # sourcedev owner
     )
   }
 

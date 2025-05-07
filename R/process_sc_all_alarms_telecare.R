@@ -135,7 +135,8 @@ process_sc_all_alarms_telecare <- function(
   if (write_to_disk) {
     write_file(
       qtr_merge,
-      get_sc_at_episodes_path(check_mode = "write")
+      get_sc_at_episodes_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

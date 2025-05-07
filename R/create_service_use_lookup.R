@@ -258,7 +258,8 @@ create_service_use_cohorts <- function(
 
   if (write_to_disk) {
     write_file(return_data,
-      path = get_service_use_cohorts_path(year, update, check_mode = "write")
+      path = get_service_use_cohorts_path(year, update, check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

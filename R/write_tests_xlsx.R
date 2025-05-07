@@ -293,8 +293,11 @@ write_tests_xlsx <- function(comparison_data,
   )
 
   if (fs::file_info(path = tests_workbook_path)$user == Sys.getenv("USER")) {
-    # Set the correct permissions
-    fs::file_chmod(path = tests_workbook_path, mode = "660")
+    # Set the correct permissions (read, write, execute)
+    fs::file_chmod(path = tests_workbook_path, mode = "770")
+    # change the owner so that hscdiip is the group owner.
+    # use fs::group_ids() for checking
+    fs::file_chown(path = tests_workbook_path, group_id = 3206)
   }
 
   fs::file_delete(path = in_use_path)

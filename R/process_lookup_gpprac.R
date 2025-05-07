@@ -76,7 +76,9 @@ process_lookup_gpprac <- function(
 
   if (write_to_disk) {
     gpprac_slf_lookup %>%
-      write_file(get_slf_gpprac_path(check_mode = "write"))
+      write_file(get_slf_gpprac_path(check_mode = "write"),
+        group_id = 3206 # hscdiip owner
+      )
   }
 
   return(gpprac_slf_lookup)

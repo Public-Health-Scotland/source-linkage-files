@@ -88,7 +88,9 @@ read_lookup_sc_client <- function(fyyear,
 
   if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
     client_data %>%
-      write_file(get_sandpit_extract_path(type = "client", year = fyyear))
+      write_file(get_sandpit_extract_path(type = "client", year = fyyear),
+        group_id = 3206 # hscdiip owner
+      )
 
     client_data %>%
       process_tests_sc_sandpit(type = "client", year = fyyear)

@@ -202,7 +202,8 @@ process_sc_all_home_care <- function(
   if (write_to_disk) {
     write_file(
       all_hc_processed,
-      get_sc_hc_episodes_path(check_mode = "write")
+      get_sc_hc_episodes_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 
