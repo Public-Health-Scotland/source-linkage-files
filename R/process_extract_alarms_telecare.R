@@ -40,6 +40,7 @@ process_extract_alarms_telecare <- function(
       "recid",
       "smrtype",
       "anon_chi",
+      "person_id",
       "dob",
       "gender",
       "postcode",
