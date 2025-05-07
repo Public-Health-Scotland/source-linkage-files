@@ -572,8 +572,10 @@ join_sc_client <- function(data,
         suffix = c("", "_to_remove"),
         na_matches = c("never")
       ) %>%
-      dplyr::select(-chi_person_id,
-                    -contains("_to_remove"))
+      dplyr::select(
+        -chi_person_id,
+        -contains("_to_remove")
+      )
   } else {
     data_file <- data %>%
       dplyr::left_join(
