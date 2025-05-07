@@ -6,13 +6,13 @@
 #' @return TRUE or FALSE
 is_chi_in_file <- function(filename) {
   file_type <- tools::file_ext(filename)
-  if(file_type == "csv"){
+  if (file_type == "csv") {
     data <- read.csv(filename, nrow = 1)
     return(grepl("UPI", names(data)) %>% any())
-  }else if(file_type == "parquet"){
+  } else if (file_type == "parquet") {
     ds <- arrow::open_dataset(filename)
     return(grepl("UPI", names(ds$schema$names)) %>% any())
-  }else{
+  } else {
     cli::cli_abort(stringr::str_glue("Unknown type: .{file_type}"))
   }
 }
