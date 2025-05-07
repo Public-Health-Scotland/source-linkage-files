@@ -11,13 +11,13 @@ processed_data_list <- list(
   "cmh" = read_file(get_source_extract_path(year, "cmh")),
   "nrs_deaths" = read_file(get_source_extract_path(year, "deaths")),
   "district_nursing" = read_file(get_source_extract_path(year, "dn")),
-  "gp_ooh" =read_file(get_source_extract_path(year, "gp_ooh")),
+  "gp_ooh" = read_file(get_source_extract_path(year, "gp_ooh")),
   "hc" = read_file(get_source_extract_path(year, "hc")),
   "homelessness" = read_file(get_source_extract_path(year, "homelessness")),
-  "maternity" =read_file(get_source_extract_path(year, "maternity")),
-  "mental_health" =read_file(get_source_extract_path(year, "mh")),
-  "outpatients" =read_file(get_source_extract_path(year, "outpatients")),
-  "pis" =read_file(get_source_extract_path(year, "pis")),
+  "maternity" = read_file(get_source_extract_path(year, "maternity")),
+  "mental_health" = read_file(get_source_extract_path(year, "mh")),
+  "outpatients" = read_file(get_source_extract_path(year, "outpatients")),
+  "pis" = read_file(get_source_extract_path(year, "pis")),
   "sds" = read_file(get_source_extract_path(year, "sds"))
 )
 
