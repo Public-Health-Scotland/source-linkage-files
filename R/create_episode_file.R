@@ -550,15 +550,30 @@ join_sc_client <- function(data,
     return(data_file)
   }
 
+  sc_client <- sc_client %>%
+    dplyr::mutate(chi_person_id = dplyr::if_else(
+      is.na(anon_chi) & is.na(person_id),
+      NA,
+      paste0(anon_chi, "-", person_id)
+    ))
+
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%
-      dplyr::left_join(
+      dplyr::mutate(chi_person_id = dplyr::if_else(
+        is.na(anon_chi) & is.na(person_id),
+        NA,
+        paste0(anon_chi, "-", person_id)
+      )) %>%
+      dplyr::full_join(
         sc_client,
-        by = c("anon_chi", "person_id"),
+        by = c("chi_person_id"),
         relationship = "many-to-one",
+        suffix = c("", "_to_remove"),
         na_matches = c("never")
-      )
+      ) %>%
+      dplyr::select(-chi_person_id,
+                    -contains("_to_remove"))
   } else {
     data_file <- data %>%
       dplyr::left_join(
