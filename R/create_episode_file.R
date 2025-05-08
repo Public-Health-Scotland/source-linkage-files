@@ -43,7 +43,17 @@ create_episode_file <- function(
     link_delayed_discharge_eps(year, dd_data) %>%
     write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
     create_cost_inc_dna() %>%
-    apply_cost_uplift() %>%
+    apply_cost_uplift()
+
+  if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
+    episode_file <- episode_file %>%
+      dplyr::mutate(
+        ch_name = NA,
+        ch_postcode = NA
+      )
+  }
+
+  episode_file <- episode_file %>%
     store_ep_file_vars(
       year = year,
       vars_to_keep = c(
