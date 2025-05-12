@@ -4,7 +4,7 @@ library(createslf)
 file_name <- stringr::str_glue(
   "targets_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
 )
-file_path = get_file_path(
+file_path <- get_file_path(
   console_output_path(),
   file_name,
   create = TRUE

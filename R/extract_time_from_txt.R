@@ -4,7 +4,7 @@
 #'
 #' @examples targets_console_path()
 console_output_path <- function() {
-  path = stringr::str_glue(
+  path <- stringr::str_glue(
     "/conf/sourcedev/Source_Linkage_File_Updates/_console_output/{fy()}/{qtr()}/"
   )
   return(path)
