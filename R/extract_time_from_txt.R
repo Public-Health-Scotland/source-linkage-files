@@ -4,7 +4,10 @@
 #'
 #' @examples targets_console_path()
 console_output_path <- function() {
-  return("/conf/sourcedev/Source_Linkage_File_Updates/_console_output/")
+  path = stringr::str_glue(
+    "/conf/sourcedev/Source_Linkage_File_Updates/_console_output/{fy()}/{qtr()}/"
+  )
+  return(path)
 }
 
 #' Extract time stamp and time consumption of ep or ind files
