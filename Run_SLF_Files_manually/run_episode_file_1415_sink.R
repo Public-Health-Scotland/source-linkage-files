@@ -1,4 +1,3 @@
-library(targets)
 library(createslf)
 
 year <- "1415"
@@ -7,7 +6,7 @@ file_name <- stringr::str_glue(
   "ep_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
 )
 file_path <- get_file_path(
-  ep_ind_console_path(),
+  console_output_path(),
   file_name,
   create = TRUE
 )
@@ -18,24 +17,23 @@ sink(con, type = "output", split = TRUE)
 sink(con, type = "message", append = TRUE)
 
 
-targets_store <- fs::path("/conf/sourcedev/Source_Linkage_File_Updates/", "_targets")
-
+## Read data from sourcedev
 processed_data_list <- list(
-  acute = targets::tar_read("source_acute_extract_1415", store = targets_store),
-  ae = targets::tar_read("source_ae_extract_1415", store = targets_store),
-  cmh = targets::tar_read("source_cmh_extract_1415", store = targets_store),
-  dn = targets::tar_read("source_dn_extract_1415", store = targets_store),
-  deaths = targets::tar_read("source_nrs_deaths_extract_1415", store = targets_store),
-  homelessness = targets::tar_read("source_homelessness_extract_1415", store = targets_store),
-  maternity = targets::tar_read("source_maternity_extract_1415", store = targets_store),
-  mental_health = targets::tar_read("source_mental_health_extract_1415", store = targets_store),
-  outpatients = targets::tar_read("source_outpatients_extract_1415", store = targets_store),
-  gp_ooh = targets::tar_read("source_ooh_extract_1415", store = targets_store),
-  prescribing = targets::tar_read("source_prescribing_extract_1415", store = targets_store),
-  care_home = targets::tar_read("source_sc_care_home_1415", store = targets_store),
-  home_care = targets::tar_read("source_sc_home_care_1415", store = targets_store),
-  at = targets::tar_read("source_sc_alarms_tele_1415", store = targets_store),
-  sds = targets::tar_read("source_sc_sds_1415", store = targets_store)
+  "ae" = read_file(get_source_extract_path(year, "ae")),
+  "acute" = read_file(get_source_extract_path(year, "acute")),
+  "at" = read_file(get_source_extract_path(year, "at")),
+  "ch" = read_file(get_source_extract_path(year, "ch")),
+  "cmh" = read_file(get_source_extract_path(year, "cmh")),
+  "nrs_deaths" = read_file(get_source_extract_path(year, "deaths")),
+  "district_nursing" = read_file(get_source_extract_path(year, "dn")),
+  "gp_ooh" = read_file(get_source_extract_path(year, "gp_ooh")),
+  "hc" = read_file(get_source_extract_path(year, "hc")),
+  "homelessness" = read_file(get_source_extract_path(year, "homelessness")),
+  "maternity" = read_file(get_source_extract_path(year, "maternity")),
+  "mental_health" = read_file(get_source_extract_path(year, "mh")),
+  "outpatients" = read_file(get_source_extract_path(year, "outpatients")),
+  "pis" = read_file(get_source_extract_path(year, "pis")),
+  "sds" = read_file(get_source_extract_path(year, "sds"))
 )
 
 # Run episode file
@@ -45,8 +43,6 @@ create_episode_file(processed_data_list,
 ) %>%
   process_tests_episode_file(year = year)
 
-## End of Script ##
-
 
 # Restore messages to the console and close the connection
 sink(type = "message")
@@ -55,3 +51,4 @@ sink()
 close(con)
 
 extract_targets_time(file_name)
+## End of Script ##

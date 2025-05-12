@@ -1,5 +1,7 @@
 library(createslf)
 
+year <- "2324"
+
 file_name <- stringr::str_glue(
   "ind_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
 )
@@ -13,8 +15,6 @@ con <- file(file_name, open = "wt")
 # Redirect messages (including warnings and errors) to the file
 sink(con, type = "output", split = TRUE)
 sink(con, type = "message", append = TRUE)
-
-year <- "2324"
 
 clean_temp_data(year, "ep")
 
