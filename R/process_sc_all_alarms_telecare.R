@@ -130,7 +130,8 @@ process_sc_all_alarms_telecare <- function(
   )]
 
   # Convert back to data.frame if necessary
-  qtr_merge <- as.data.frame(qtr_merge)
+  qtr_merge <- as.data.frame(qtr_merge) %>%
+    create_person_id()
 
   if (write_to_disk) {
     write_file(

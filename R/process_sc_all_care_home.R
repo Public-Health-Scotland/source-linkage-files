@@ -432,6 +432,7 @@ process_sc_all_care_home <- function(
       ch_provider == 4 ~ "THIRD SECTOR",
       ch_provider == 5 ~ "OTHER"
     )) %>%
+    create_person_id() %>%
     dplyr::select(
       "anon_chi",
       "gender",
@@ -449,7 +450,8 @@ process_sc_all_care_home <- function(
       "ch_provider_description",
       "ch_nursing",
       "ch_adm_reason",
-      "sc_latest_submission"
+      "sc_latest_submission",
+      "person_id"
     )
 
   if (write_to_disk) {
