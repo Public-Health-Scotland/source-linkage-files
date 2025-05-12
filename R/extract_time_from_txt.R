@@ -1,19 +1,10 @@
-#' targets_console_path
+#' console_output_path
 #'
-#' @return the path of the folder where a target console output is
+#' @return the path of the folder where a console output is
 #'
 #' @examples targets_console_path()
-targets_console_path <- function() {
-  return("Run_SLF_Files_targets/console_outputs")
-}
-
-#' ep_ind_console_path
-#'
-#' @return the path of the folder where a ep or ind file console output is
-#'
-#' @examples ep_ind_console_path("ep_1415_console_2025-04-30_15-06-54.txt")
-ep_ind_console_path <- function() {
-  return("Run_SLF_Files_manually/console_outputs")
+console_output_path <- function() {
+  return("/conf/sourcedev/Source_Linkage_File_Updates/_console_output/")
 }
 
 #' Extract time stamp and time consumption of ep or ind files
@@ -25,7 +16,7 @@ ep_ind_console_path <- function() {
 #' @examples
 extract_ep_ind_time <- function(file_name) {
   file_path <- get_file_path(
-    ep_ind_console_path(),
+    console_output_path(),
     file_name
   )
   log_data <- readLines(file_path)
@@ -61,7 +52,7 @@ extract_ep_ind_time <- function(file_name) {
 #' @examples extract_targets_time("targets_console_2025-04-30_11-28-57.txt")
 extract_targets_time <- function(file_name) {
   file_path <- get_file_path(
-    targets_console_path(),
+    console_output_path(),
     file_name
   )
   log_lines <- readLines(file_path)
