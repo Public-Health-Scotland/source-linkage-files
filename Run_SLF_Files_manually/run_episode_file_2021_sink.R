@@ -38,8 +38,8 @@ processed_data_list <- list(
 
 # Run episode file
 create_episode_file(processed_data_list,
-                    year = year,
-                    write_temp_to_disk = FALSE
+  year = year,
+  write_temp_to_disk = FALSE
 ) %>%
   process_tests_episode_file(year = year)
 
