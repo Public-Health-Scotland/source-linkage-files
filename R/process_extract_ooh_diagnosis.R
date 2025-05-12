@@ -104,7 +104,8 @@ process_extract_ooh_diagnosis <- function(data, year) {
     "@65PW",
     "@8CA.",
     "@8CAK",
-    "@A795"
+    "@A795",
+    "S349"
   )
 
   new_bad_codes <- readcodes_not_matched %>%

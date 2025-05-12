@@ -1,9 +1,17 @@
 # _targets.R file
 library(targets)
 library(tarchetypes)
-future::plan(future.callr::callr)
+library(crew)
+# future::plan(future.callr::callr)
 
 options(readr.read_lazy = TRUE)
+
+controller <- crew::crew_controller_local(
+  name = "my_controller",
+  workers = 6,
+  seconds_idle = 3
+)
+
 
 tar_option_set(
   imports = "createslf",
@@ -16,8 +24,12 @@ tar_option_set(
   ),
   error = "continue",
   storage = "worker",
-  memory = "persistent" # default option
+  retrieval = "worker",
+  memory = "persistent", # default option
+  controller = controller
 )
+
+tar_source()
 
 years_to_run <- createslf::years_to_run()
 

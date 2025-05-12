@@ -89,7 +89,6 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       "hbrescode",
       "lca",
       "hscp",
-      "datazone2011",
       "location",
       "hbtreatcode",
       "stay",
