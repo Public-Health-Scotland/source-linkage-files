@@ -42,7 +42,7 @@ extract_ep_ind_time <- function(file_name) {
     )
 
   readr::write_csv(function_times,
-    path = sub(".txt", ".csv", file_path)
+    file = sub(".txt", ".csv", file_path)
   )
 }
 
@@ -109,6 +109,6 @@ extract_targets_time <- function(file_name) {
     dplyr::arrange(target, unit_min)
 
   readr::write_csv(extracted_data,
-    path = sub(".txt", ".csv", file_path)
+    file = sub(".txt", ".csv", file_path)
   )
 }
