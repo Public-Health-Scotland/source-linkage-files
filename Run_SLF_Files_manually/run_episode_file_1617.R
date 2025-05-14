@@ -10,7 +10,8 @@
 # Set up this script as a workbench job to create the SLF episode file:
 #     * Source > Source as a workbench job
 #     * Select Workbench job options, please specify 8CPU, 128GB
-#     * Select the environment tab, please set the working directory as:
+#     * Select the environment tab, please set the working directory where the
+#       project is saved. Eg:
 #             /conf/sourcedev/Jen/source-linkage-files
 #     * Press start. This will now run the script as a workbench job
 #
