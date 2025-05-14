@@ -7,7 +7,7 @@
 # Version of R - 4.4.2
 #
 # Description:
-# Set up this script as a workbench job to create the SLF episode file:
+# Set up this script as a workbench job to create the SLF Individual file:
 #     * Source > Source as a workbench job
 #     * Select Workbench job options, please specify 8CPU, 128GB
 #     * Select the environment tab, please set the working directory where the
