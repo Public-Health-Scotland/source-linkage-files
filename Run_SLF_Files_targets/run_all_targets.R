@@ -1,8 +1,74 @@
+################################################################################
+# Name of file -  Run_all_targets.R
+#
+# Original Authors - Jennifer Thom, Zihao Li
+# Original Date - March 2023
+# Written/run on - R Posit
+# Version of R - 4.4.2
+#
+# Description:
+#     This script can run in the console or as a workbench job. Please specify a
+#     Posit workbench session of 8CPU and 128GB.
+#
+#     This script works together to run with the "_Targets.R" script. It is
+#     designed to run the targets pipeline to process each extract and get this
+#     ready for combining together in the episode file. The pipeline takes
+#     approximately 1hr 30mins to run but this will depend on the number of years
+#     running.
+#
+#     Targets objects will be stored in:
+#         "/conf/sourcedev/Source_Linkage_File_Updates/_targets/objects"
+#     and each processed extract will be written to disk in each year specific
+#     folder ready for creating the episode file e.g:
+#         "/conf/sourcedev/Source_Linkage_File_Updates/1920"
+#
+#     To run specific objects, please manually remove this from the objects
+#     folder and re-run this script.
+#
+################################################################################
+
+# Setup-------------------------------------------------------------------------
 library(targets)
 library(createslf)
 
-# use tar_make() to run targets for all years
-# This will run everything needed for creating the episode file.
+# Specify TRUE/FALSE for saving the console output to disk
+# Default set as TRUE
+console_outputs <- TRUE
+
+# save console outputs if `console_outputs == TRUE`
+#-------------------------------------------------------------------------------
+if (console_outputs) {
+  file_name <- stringr::str_glue(
+    "targets_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
+  )
+
+  file_path <- get_file_path(
+    console_output_path(),
+    file_name,
+    create = TRUE
+  )
+
+  con <- file(file_name, open = "wt")
+
+  # Redirect messages (including warnings and errors) to the file
+  sink(con, type = "output", split = TRUE)
+  sink(con, type = "message", append = TRUE)
+}
+
+# Run the targets pipeline "_Targets.R"
+#-------------------------------------------------------------------------------
+
+# tar_make() will run the pipeline and use crew() for parallel processing.
 tar_make()
 
+# Run combine_tests() for outputting the test workbooks.
 createslf::combine_tests()
+
+
+# save console outputs if `console_outputs == TRUE`
+#-------------------------------------------------------------------------------
+if (console_outputs) {
+  sink()
+
+  extract_targets_time(file_name)
+}
