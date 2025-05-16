@@ -6,10 +6,10 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - 01 Project Structure
-  - 02 Using Github to Develop createslf
-  - 03 Package Development
-  - 04 Improve efficiency with `data.table`
+  - Project Structure
+  - Using Github to Develop createslf
+  - Package Development
+  - Improve efficiency with `data.table`
 
 reference:
 
