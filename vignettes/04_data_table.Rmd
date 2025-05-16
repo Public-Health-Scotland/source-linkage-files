@@ -1,8 +1,8 @@
 ---
-title: "Improve efficiency with `data.table`"
+title: "04 Improve efficiency with `data.table`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Improve efficiency with `data.table`}
+  %\VignetteIndexEntry{04 Improve efficiency with `data.table`}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

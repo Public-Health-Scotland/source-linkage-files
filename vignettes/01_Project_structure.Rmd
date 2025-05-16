@@ -1,8 +1,8 @@
 ---
-title: "Project Structure"
+title: "01 Project Structure"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Project Structure}
+  %\VignetteIndexEntry{01 Project Structure}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
