@@ -73,7 +73,7 @@
 </h2>
 <p>This vignette shares techniques of working with big data within the
 <a href="https://github.com/Public-Health-Scotland/source-linkage-files" class="external-link">Source
-Linkage File (SLF) project</a>. I will introduce an R package,
+Linkage Files (SLFs)</a>. It will introduce an R package,
 <code>data.table</code>, on the basic syntax and some common data
 operations. This package can speed up processes by reducing the time
 consumption and memory usage. The objective of this vignette is to
@@ -81,23 +81,23 @@ explicate the application of <code>data.table</code> through
 illustrative examples. Readers should be able to write
 <code>data.table</code> syntax after reading this vignette. This
 document aspires to promote optimization skills and techniques to a
-broader audience within the Data and Digital Innovation (DDI) team and
-across Public Health Scotland (PHS), thereby enhancing operational
-efficiency.</p>
+broader audience within the Data and Digital Innovation (DDI)
+directorate and across Public Health Scotland (PHS), thereby enhancing
+operational efficiency.</p>
 </div>
 <div class="section level2">
 <h2 id="showcases-of-efficiency-enhancement-in-the-source-linkage-file-project">Showcases of Efficiency Enhancement in the Source Linkage File
 Project<a class="anchor" aria-label="anchor" href="#showcases-of-efficiency-enhancement-in-the-source-linkage-file-project"></a>
 </h2>
 <p>Efficiency improvement is paramount in data-intensive projects,
-especially within public health. The SLF project at PHS has undertaken
+especially within public health. The SLF dataset at PHS has undertaken
 optimization efforts to streamline processing workflows and reduce
 computational overhead. This section showcases tangible efficiency
 improvements achieved through these techniques.</p>
-<p>With the help of <code>data.table</code>, the SLF team further has
+<p>With the help of <code>data.table</code>, the SLF team has further
 achieved great improvement in enhancing code efficiency, notably in
 terms of script execution time and memory utilization. Two illustrative
-examples highlight the extent of improvement attained by the team.</p>
+examples the improvements attained by the team.</p>
 <div class="section level4">
 <h4 class="unnumbered" id="example-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1"></a>
 </h4>
@@ -218,7 +218,7 @@ pinpoint instances where operations utilising <code>dplyr</code>
 functions may exhibit resource-intensive behaviour and illustrate how
 integration with <code>data.table</code> techniques can ameliorate such
 issues. It is essential to emphasize that our aim is not to entirely
-supplant <code>dplyr</code> code with <code>data.table</code>
+supplement <code>dplyr</code> code with <code>data.table</code>
 equivalents. Instead, we seek to identify scenarios where leveraging
 <code>data.table</code> can substantially mitigate execution time and
 memory usage of R scripts, thereby justifying the conversion of select
@@ -686,15 +686,16 @@ Similarly, <code><a href="https://rdatatable.gitlab.io/data.table/reference/fcas
 <h2 id="concluding-remarks">Concluding Remarks<a class="anchor" aria-label="anchor" href="#concluding-remarks"></a>
 </h2>
 <p><code>data.table</code> can provide a great improvement in efficiency
-using its native syntax. I also noticed that there are R packages that
-can allow one to write dplyr code that is automatically translated to
-the equivalent <code>data.table</code> code, e.g. <code>dtplyr</code>
-and <code>tidytable</code>. However, after testing, those packages does
-not produce much improvement in grouped operations, which is the main
-scenario in the SLF. In addition, I also notice an emerging package <a href="https://github.com/pola-rs/r-polars" class="external-link"><code>polars</code></a> and
+using its native syntax. There are R packages that can allow one to
+write dplyr code that is automatically translated to the equivalent
+<code>data.table</code> code, e.g. <code>dtplyr</code> and
+<code>tidytable</code>. However, after testing, those packages does not
+produce much improvement in grouped operations, which is the main
+scenario in the SLF. In addition, the SLF team are exploring options on
+the emerging packages <a href="https://github.com/pola-rs/r-polars" class="external-link"><code>polars</code></a> and
 its friend <a href="https://github.com/etiennebacher/tidypolars/" class="external-link"><code>tidypolars</code></a>
-which are developed with Rust. I aim to apply those packages when R v4.4
-is available to PHS.</p>
+which are developed with Rust. We aim to apply those packages when R
+v4.4 is available to PHS.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
