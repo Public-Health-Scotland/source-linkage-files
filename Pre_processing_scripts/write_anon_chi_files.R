@@ -12,7 +12,7 @@
 #              ensuring we do not save chi anywhere on disk.
 #
 ################################################################################
-# load is_chi_in_file function
+# load package
 devtools::load_all()
 
 ## Stage 1 - Setup environment
