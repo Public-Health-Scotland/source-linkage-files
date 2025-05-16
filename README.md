@@ -4,9 +4,9 @@
   <!-- badges: end -->
 
 # source-linkage-files
-The Source Linkage Files (SLF) project is a linked dataset maintained by the Health and Social Care (H&SC) team at Public Health Scotland (PHS). This repo contains the R code to develop the package called `createslf` which is used for the production and maintenance of the SLFs. The entire process is contained within this git repository. 
+The Source Linkage Files (SLF) are a linked dataset maintained by the Health and Social Care (H&SC) team at Public Health Scotland (PHS). This repo contains the R code to develop the package called `createslf` which is used for the production and maintenance of the SLFs. The entire process is contained within this git repository. 
 
-The SLFs are updated on a quarterly basis. If you are using the files and spot a problem, please let us know and we will work closely with you to fix this. Alternatively, if you would like to see a new feature on the SLFs, please get in touch and we can look into your request. 
+The SLFs are updated on a quarterly basis with updates taking place in March, June, September and December. If you are using the files and spot a problem, please let us know and we will work closely with you to fix this. Alternatively, if you would like to see a new feature on the SLFs, please get in touch and we can look into your request. 
 
 
 ## Access
