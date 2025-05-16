@@ -20,7 +20,7 @@ The Source Linkage Files (SLFs) project was created using SPSS syntax until Marc
 
 The package bundles together code, data, documentation, and tests, and is easy to share with others. To create the package `createslf` we refer to the [R Packages](https://r-pkgs.org/introduction.html) guide by Hadley Wickham. 
 
-This package is intended to be in continuous development to support the quarterly update process of the SLFs. 
+This package is intended to be in continuous development to support the quarterly update process of the SLFs which takes place each March, June, September and December. 
 
 ## Developing createslf - setup 
 
