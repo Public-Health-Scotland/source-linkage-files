@@ -77,35 +77,35 @@ check_year_valid <- function(
   # by the following code:
   # DN starts in 2015/16
   # SPARRA starts in 2015/16
-  if (year <= "1415" && type %in% c("dn", "sparra")) {
+  if (year <= "1415" && all(type %in% c("dn", "sparra"))) {
     return(FALSE)
     # CMH starts in 2016/17
     # Homelessness starts in 2016/17
     # DD starts in 2016/17
-  } else if (year <= "1516" && type %in% c("cmh", "homelessness", "dd")) {
+  } else if (year <= "1516" && all(type %in% c("cmh", "homelessness", "dd"))) {
     return(FALSE)
     # Social Care data sets start in 2017/18 Q4
     # Cost_DNAs start in 2017/18
-  } else if (year <= "1617" && type %in% c("ch", "hc", "sds", "at", "client", "cost_dna")) {
+  } else if (year <= "1617" && all(type %in% c("ch", "hc", "sds", "at", "client", "cost_dna"))) {
     return(FALSE)
     # HHG starts in 2018/19
-  } else if (year <= "1718" && type %in% "hhg") {
+  } else if (year <= "1718" && all(type %in% "hhg")) {
     return(FALSE)
     # CMH stops in 2020/21
     # DN stops in 2020/21
-  } else if (year >= "2122" && type %in% c("cmh", "dn")) {
+  } else if (year >= "2122" && all(type %in% c("cmh", "dn"))) {
     return(FALSE)
     # HHG stops in 2022/23
-  } else if (year >= "2324" && type %in% "hhg") {
+  } else if (year >= "2324" && all(type %in% "hhg")) {
     return(FALSE)
     ## CHECK - what is the latest NSU cohort available?
     # NSU is currently available for 2023/24
     ## CHECK - What period does SDS data get submitted?
     # SDS is only available up to March 2024 currently.
-  } else if (year >= "2425" && type %in% c("nsu", "sds")) {
+  } else if (year >= "2425" && all(type %in% c("nsu", "sds"))) {
     return(FALSE)
     ## CHECK - what data do we have available for Social Care and SPARRA?
-  } else if (year >= "2526" && type %in% c("ch", "hc", "sds", "at", "sparra")) {
+  } else if (year >= "2526" && all(type %in% c("ch", "hc", "sds", "at", "sparra"))) {
     return(FALSE)
   }
 
