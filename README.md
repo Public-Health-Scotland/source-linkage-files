@@ -10,7 +10,7 @@ The SLFs are updated on a quarterly basis with updates taking place in March, Ju
 
 
 ## Access
-Access to the Source Linkage Files is usually only granted to members of the Local Intelligence Support Team (LIST), Health and Social Care (H&SC) and Whole System Modelling (WSM) teams within PHS. Please contact the source mailbox for approval.
+Access to the Source Linkage Files is only available to approved users in the Local Intelligence Support Team (LIST), Health and Social Care (H&SC) and Whole System Modelling (WSM) teams within PHS. For anyone interested in using the SLFs outside of these teams, please contact the source mailbox to discuss this. 
 
 ## Documentation
 Documentation for the SLFs is available upon request. We have further information available relating to our standard operating procedures(SOP), reference document, episode file layout, individual file layout and FAQs. If you are interested in accessing our documentation, please contact the source mailbox for more information. 
