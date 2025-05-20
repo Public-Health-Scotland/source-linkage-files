@@ -232,7 +232,7 @@ qtr <- function() {
 #'
 #' @family initialisation
 years_to_run <- function() {
-  fy_start_2digit <- 17
+  fy_start_2digit <- 14
   fy_end_2digit <- 24
   years_to_run <- paste0(
     fy_start_2digit:fy_end_2digit,
