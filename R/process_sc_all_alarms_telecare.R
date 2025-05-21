@@ -74,8 +74,7 @@ process_sc_all_alarms_telecare <- function(
         "AT-Alarm",
         service_type == 2L,
         "AT-Tele",
-        default,
-        NA_character_
+        default = NA_character_
       ),
       convert_sc_sending_location_to_lca(sending_location)
     )
