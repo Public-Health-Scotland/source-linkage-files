@@ -65,6 +65,7 @@ create_episode_file <- function(
         "keytime2",
         "smrtype",
         "anon_chi",
+        "person_id",
         "gender",
         "dob",
         "gpprac",
