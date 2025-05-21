@@ -131,7 +131,7 @@ process_sc_all_home_care <- function(
     ) %>%
     dplyr::full_join(
       # Create the columns we don't have as NA
-      tibble(
+      tibble::tibble(
         # Create columns for the latest year
         hours_submission_quarter = paste0(max(data$financial_year), "Q", 1L:4L),
         hc_hours = NA,
