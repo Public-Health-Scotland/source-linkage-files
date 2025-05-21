@@ -98,7 +98,6 @@ create_episode_file <- function(
         "cij_dis_spec",
         "cost_total_net",
         "hscp",
-        "datazone2011",
         "attendance_status",
         "deathdiag1",
         "deathdiag2",
