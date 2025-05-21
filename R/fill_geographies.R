@@ -22,7 +22,6 @@ fill_geographies <- function(
     "hbrescode",
     "hscp",
     "lca",
-    "datazone2011",
     "hbpraccode",
     "hbtreatcode",
     "gpprac"
