@@ -49,7 +49,8 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         ch_name = NA,
-        ch_postcode = NA
+        ch_postcode = NA,
+        person_id = NA
       )
   }
 
