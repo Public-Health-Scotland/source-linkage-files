@@ -562,19 +562,20 @@ join_sc_client <- function(data,
   }
 
   sc_client <- sc_client %>%
-    dplyr::mutate(chi_person_id = dplyr::if_else(
-      is.na(anon_chi) & is.na(person_id),
-      NA,
-      paste0(anon_chi, "-", person_id)
-    ))
+    dplyr::mutate(year = year,
+                  chi_person_id = dplyr::if_else(
+                    is.na(.data$anon_chi) & is.na(.data$person_id),
+                    NA,
+                    paste0(.data$anon_chi, "-", .data$person_id)
+                  ))
 
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%
       dplyr::mutate(chi_person_id = dplyr::if_else(
-        is.na(anon_chi) & is.na(person_id),
+        is.na(.data$anon_chi) & is.na(.data$person_id),
         NA,
-        paste0(anon_chi, "-", person_id)
+        paste0(.data$anon_chi, "-", .data$person_id)
       )) %>%
       dplyr::full_join(
         sc_client,
@@ -582,6 +583,18 @@ join_sc_client <- function(data,
         relationship = "many-to-one",
         suffix = c("", "_to_remove"),
         na_matches = c("never")
+      ) %>%
+      dplyr::mutate(
+        anon_chi = dplyr::if_else(
+          is_missing(.data$anon_chi),
+          .data$anon_chi_to_remove,
+          .data$anon_chi
+        ),
+        person_id = dplyr::if_else(
+          is_missing(.data$person_id),
+          .data$person_id_to_remove,
+          .data$person_id
+        )
       ) %>%
       dplyr::select(
         -chi_person_id,
