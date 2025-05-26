@@ -31,6 +31,8 @@
 library(targets)
 library(createslf)
 
+devtools::load_all()
+
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
 console_outputs <- TRUE
