@@ -111,7 +111,6 @@ process_extract_district_nursing <- function(
           "gender",
           "gpprac",
           "postcode",
-          "datazone2011",
           "lca",
           "hscp",
           "hbrescode",
