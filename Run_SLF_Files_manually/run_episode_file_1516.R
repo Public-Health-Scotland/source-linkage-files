@@ -28,29 +28,29 @@ library(createslf)
 year <- "1516"
 
 # Specify TRUE/FALSE for writing temporary files
-write_temp_to_disk <- FALSE
+write_temp_to_disk <- TRUE
 
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
-console_outputs <- TRUE
-
-#-------------------------------------------------------------------------------
-# save console outputs if `console_outputs == TRUE`
-if (console_outputs) {
-  file_name <- stringr::str_glue(
-    "ep_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
-  )
-  file_path <- get_file_path(
-    console_output_path(),
-    file_name,
-    create = TRUE
-  )
-  con <- file(file_path, open = "wt")
-
-  # Redirect messages (including warnings and errors) to the file
-  sink(con, type = "output", split = TRUE)
-  sink(con, type = "message", append = TRUE)
-}
+# console_outputs <- TRUE
+#
+# #-------------------------------------------------------------------------------
+# # save console outputs if `console_outputs == TRUE`
+# if (console_outputs) {
+#   file_name <- stringr::str_glue(
+#     "ep_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
+#   )
+#   file_path <- get_file_path(
+#     console_output_path(),
+#     file_name,
+#     create = TRUE
+#   )
+#   con <- file(file_path, open = "wt")
+#
+#   # Redirect messages (including warnings and errors) to the file
+#   sink(con, type = "output", split = TRUE)
+#   sink(con, type = "message", append = TRUE)
+# }
 
 #-------------------------------------------------------------------------------
 ## Read processed data from sourcedev
@@ -80,16 +80,16 @@ create_episode_file(processed_data_list,
   process_tests_episode_file(year = year)
 
 #-------------------------------------------------------------------------------
-# save console outputs if `console_outputs == TRUE`
-if (console_outputs) {
-  # Restore messages to the console and close the connection
-  sink(type = "message")
-  sink()
-
-  close(con)
-
-  extract_targets_time(file_name)
-}
+# # save console outputs if `console_outputs == TRUE`
+# if (console_outputs) {
+#   # Restore messages to the console and close the connection
+#   sink(type = "message")
+#   sink()
+#
+#   close(con)
+#
+#   extract_targets_time(file_name)
+# }
 
 #-------------------------------------------------------------------------------
 
