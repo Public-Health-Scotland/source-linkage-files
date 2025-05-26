@@ -32,7 +32,7 @@ write_temp_to_disk <- FALSE
 
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
-#console_outputs <- TRUE
+# console_outputs <- TRUE
 
 #-------------------------------------------------------------------------------
 # save console outputs if `console_outputs == TRUE`
