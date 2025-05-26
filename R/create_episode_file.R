@@ -562,12 +562,14 @@ join_sc_client <- function(data,
   }
 
   sc_client <- sc_client %>%
-    dplyr::mutate(year = year,
-                  chi_person_id = dplyr::if_else(
-                    is.na(.data$anon_chi) & is.na(.data$person_id),
-                    NA,
-                    paste0(.data$anon_chi, "-", .data$person_id)
-                  ))
+    dplyr::mutate(
+      year = year,
+      chi_person_id = dplyr::if_else(
+        is.na(.data$anon_chi) & is.na(.data$person_id),
+        NA,
+        paste0(.data$anon_chi, "-", .data$person_id)
+      )
+    )
 
   if (file_type == "episode") {
     # Match on client variables by chi
