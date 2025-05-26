@@ -42,6 +42,7 @@ create_episode_file <- function(
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
+    add_nsu_cohort(year, nsu_cohort) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift()
 
@@ -150,7 +151,6 @@ create_episode_file <- function(
     fill_missing_cij_markers() %>%
     add_ppa_flag() %>%
     write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
-    add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
