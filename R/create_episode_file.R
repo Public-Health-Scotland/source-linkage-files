@@ -563,7 +563,6 @@ join_sc_client <- function(data,
 
   sc_client <- sc_client %>%
     dplyr::mutate(
-      year = year,
       chi_person_id = dplyr::if_else(
         is.na(.data$anon_chi) & is.na(.data$person_id),
         NA,
@@ -587,6 +586,7 @@ join_sc_client <- function(data,
         na_matches = c("never")
       ) %>%
       dplyr::mutate(
+        year = year,
         anon_chi = dplyr::if_else(
           is_missing(.data$anon_chi),
           .data$anon_chi_to_remove,
