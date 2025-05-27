@@ -609,7 +609,7 @@ join_sc_client <- function(data,
         by = c("anon_chi", "year"),
         relationship = "one-to-one"
       ) %>%
-    dplyr::select(-chi_person_id)
+      dplyr::select(-chi_person_id)
   }
 
   cli::cli_alert_info("Join social care client function finished at {Sys.time()}")
