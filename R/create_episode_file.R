@@ -42,6 +42,7 @@ create_episode_file <- function(
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
+    add_nsu_cohort(year, nsu_cohort) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift()
 
@@ -150,7 +151,6 @@ create_episode_file <- function(
     fill_missing_cij_markers() %>%
     add_ppa_flag() %>%
     write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
-    add_nsu_cohort(year, nsu_cohort) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
@@ -562,26 +562,41 @@ join_sc_client <- function(data,
   }
 
   sc_client <- sc_client %>%
-    dplyr::mutate(chi_person_id = dplyr::if_else(
-      is.na(anon_chi) & is.na(person_id),
-      NA,
-      paste0(anon_chi, "-", person_id)
-    ))
+    dplyr::mutate(
+      year = year,
+      chi_person_id = dplyr::if_else(
+        is.na(.data$anon_chi) & is.na(.data$person_id),
+        NA,
+        paste0(.data$anon_chi, "-", .data$person_id)
+      )
+    )
 
   if (file_type == "episode") {
     # Match on client variables by chi
     data_file <- data %>%
       dplyr::mutate(chi_person_id = dplyr::if_else(
-        is.na(anon_chi) & is.na(person_id),
+        is.na(.data$anon_chi) & is.na(.data$person_id),
         NA,
-        paste0(anon_chi, "-", person_id)
+        paste0(.data$anon_chi, "-", .data$person_id)
       )) %>%
       dplyr::full_join(
         sc_client,
-        by = c("chi_person_id"),
+        by = c("chi_person_id", "year"),
         relationship = "many-to-one",
         suffix = c("", "_to_remove"),
         na_matches = c("never")
+      ) %>%
+      dplyr::mutate(
+        anon_chi = dplyr::if_else(
+          is_missing(.data$anon_chi),
+          .data$anon_chi_to_remove,
+          .data$anon_chi
+        ),
+        person_id = dplyr::if_else(
+          is_missing(.data$person_id),
+          .data$person_id_to_remove,
+          .data$person_id
+        )
       ) %>%
       dplyr::select(
         -chi_person_id,
