@@ -32,7 +32,7 @@ write_temp_to_disk <- FALSE
 
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
-#console_outputs <- TRUE
+# console_outputs <- TRUE
 
 #-------------------------------------------------------------------------------
 # save console outputs if `console_outputs == TRUE`
@@ -54,15 +54,15 @@ write_temp_to_disk <- FALSE
 
 #-------------------------------------------------------------------------------
 # Clean temporary files
-#clean_temp_data(year, "ep")
+# clean_temp_data(year, "ep")
 
 # Read the episode file
 episode_file <- arrow::read_parquet(get_slf_episode_path(year))
 
 # Run the individual file and tests
 create_individual_file(episode_file, year = year, write_temp_to_disk = write_temp_to_disk)
-#%>%
-  #process_tests_individual_file(year = year)
+# %>%
+# process_tests_individual_file(year = year)
 
 #-------------------------------------------------------------------------------
 # save console outputs if `console_outputs == TRUE`
