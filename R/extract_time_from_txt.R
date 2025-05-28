@@ -16,7 +16,6 @@ console_output_path <- function() {
 #'
 #' @return write a csv of time consumption to disk
 #'
-#' @examples
 extract_ep_ind_time <- function(file_name) {
   file_path <- get_file_path(
     console_output_path(),
