@@ -166,29 +166,23 @@ create_episode_file_stage_1 <- function(
 
 #' Produce the Source Episode file stage 2
 #'
-#' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
-#' @param homelessness_lookup the lookup file for homelessness
+#' @param episode_file data passed from get_slf_episode_stage_1_path
 #' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param write_temp_to_disk write intermediate data for investigation or debug
-#' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
 #' @inheritParams join_deaths_data
 #' @inheritParams match_on_ltcs
-#' @inheritParams link_delayed_discharge_eps
 #'
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 #'
 create_episode_file_stage_2 <- function(
-    processed_data_list,
     year,
-    dd_data = read_file(get_source_extract_path(year, "dd")),
-    homelessness_lookup = create_homelessness_lookup(year),
-    nsu_cohort = read_file(get_nsu_path(year)),
+    episode_file = read_file(get_slf_episode_stage_1_path(year)),
     ltc_data = read_file(get_ltcs_path(year)),
     slf_pc_lookup = read_file(get_slf_postcode_path()),
     slf_gpprac_lookup = read_file(
@@ -199,12 +193,13 @@ create_episode_file_stage_2 <- function(
     sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     write_temp_to_disk = FALSE) {
-      cli::cli_alert_info("Create episode file function started at {Sys.time()}")
+      cli::cli_alert_info("Create episode file stage 2 function started at {Sys.time()}")
 
-  episode_file <- read_file(get_slf_episode_stage_1_path(year)) %>%
+  episode_file <- episode_file %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
     join_sparra_hhg(year) %>%
+    write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
     fill_geographies(
       slf_pc_lookup,
       slf_gpprac_lookup

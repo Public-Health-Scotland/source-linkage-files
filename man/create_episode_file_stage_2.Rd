@@ -5,11 +5,8 @@
 \title{Produce the Source Episode file stage 2}
 \usage{
 create_episode_file_stage_2(
-  processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
-  homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
+  episode_file = read_file(get_slf_episode_stage_1_path(year)),
   ltc_data = read_file(get_ltcs_path(year)),
   slf_pc_lookup = read_file(get_slf_postcode_path()),
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
@@ -21,15 +18,9 @@ create_episode_file_stage_2(
 )
 }
 \arguments{
-\item{processed_data_list}{containing data from processed extracts.}
-
 \item{year}{The year to process, in FY format.}
 
-\item{dd_data}{The processed DD extract}
-
-\item{homelessness_lookup}{the lookup file for homelessness}
-
-\item{nsu_cohort}{The NSU data for the year}
+\item{episode_file}{data passed from get_slf_episode_stage_1_path}
 
 \item{ltc_data}{The LTC data for the year}
 
