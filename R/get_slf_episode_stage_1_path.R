@@ -15,5 +15,3 @@ get_slf_episode_stage_1_path <- function(year, ...) {
 
   return(slf_episode_path)
 }
-
-

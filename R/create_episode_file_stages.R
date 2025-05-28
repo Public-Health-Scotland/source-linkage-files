@@ -156,11 +156,9 @@ create_episode_file_stage_1 <- function(
 
   if (write_to_disk) {
     write_file(episode_file, get_slf_episode_stage_1_path(year, check_mode = "write"),
-               group_id = 3356
+      group_id = 3356
     ) # sourcedev owner
   }
-
-
 }
 
 
@@ -193,7 +191,7 @@ create_episode_file_stage_2 <- function(
     sc_client = read_file(get_sc_client_lookup_path(year)),
     write_to_disk = TRUE,
     write_temp_to_disk = FALSE) {
-      cli::cli_alert_info("Create episode file stage 2 function started at {Sys.time()}")
+  cli::cli_alert_info("Create episode file stage 2 function started at {Sys.time()}")
 
   episode_file <- episode_file %>%
     create_cohort_lookups(year) %>%
@@ -210,7 +208,7 @@ create_episode_file_stage_2 <- function(
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
-                                  deaths_data = read_file(get_combined_slf_deaths_lookup_path())
+      deaths_data = read_file(get_combined_slf_deaths_lookup_path())
     ) %>%
     link_ch_with_adms() %>%
     load_ep_file_vars(year) %>%
@@ -319,11 +317,9 @@ create_episode_file_stage_2 <- function(
 
   if (write_to_disk) {
     write_file(episode_file, get_slf_episode_path(year, check_mode = "write"),
-               group_id = 3356
+      group_id = 3356
     ) # sourcedev owner
   }
 
   return(episode_file)
 }
-
-
