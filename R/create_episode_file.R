@@ -178,64 +178,64 @@ create_episode_file <- function(
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
       dplyr::mutate(
-        ch_chi_cis = NA,
-        ch_sc_id_cis = NA,
-        ch_name = NA,
-        ch_postcode = NA,
-        ch_adm_reason = NA,
-        ch_provider = NA,
-        ch_nursing = NA,
-        hc_hours_annual = NA,
-        hc_hours_q1 = NA,
-        hc_hours_q2 = NA,
-        hc_hours_q3 = NA,
-        hc_hours_q4 = NA,
-        hc_cost_q1 = NA,
-        hc_cost_q2 = NA,
-        hc_cost_q3 = NA,
-        hc_cost_q4 = NA,
-        hc_provider = NA,
-        hc_reablement = NA,
-        person_id = NA,
-        sc_latest_submission = NA,
-        sc_send_lca = NA,
-        sc_living_alone = NA,
-        sc_support_from_unpaid_carer = NA,
-        sc_social_worker = NA,
-        sc_type_of_housing = NA,
-        sc_meals = NA,
-        sc_day_care = NA,
-        social_care_id = NA,
-        sc_dementia = NA,
-        sc_learning_disability = NA,
-        sc_mental_health_disorders = NA,
-        sc_physical_and_sensory_disability = NA,
-        sc_drugs = NA,
-        sc_alcohol = NA,
-        sc_palliative_care = NA,
-        sc_carer = NA,
-        sc_elderly_frail = NA,
-        sc_neurological_condition = NA,
-        sc_autism = NA,
-        sc_other_vulnerable_groups = NA,
-        ch_provider_description = NA
+        ch_chi_cis = as.numeric(NA),
+        ch_sc_id_cis = as.numeric(NA),
+        ch_name = as.character(NA),
+        ch_postcode = as.character(NA),
+        ch_adm_reason = as.integer(NA),
+        ch_provider = as.numeric(NA),
+        ch_provider_description = as.character(NA),
+        ch_nursing = as.numeric(NA),
+        hc_hours_annual = as.numeric(NA),
+        hc_hours_q1 = as.integer(NA),
+        hc_hours_q2 = as.integer(NA),
+        hc_hours_q3 = as.integer(NA),
+        hc_hours_q4 = as.numeric(NA),
+        hc_cost_q1 = as.integer(NA),
+        hc_cost_q2 = as.integer(NA),
+        hc_cost_q3 = as.integer(NA),
+        hc_cost_q4 = as.numeric(NA),
+        hc_provider = as.integer(NA),
+        hc_reablement = as.integer(NA),
+        person_id = as.character(NA),
+        social_care_id = as.character(NA),
+        sc_alcohol = as.factor(NA),
+        sc_autism = as.factor(NA),
+        sc_carer = as.factor(NA),
+        sc_day_care = as.factor(NA),
+        sc_dementia = as.factor(NA),
+        sc_drugs = as.factor(NA),
+        sc_elderly_frail = as.factor(NA),
+        sc_latest_submission = as.character(NA),
+        sc_learning_disability = as.factor(NA),
+        sc_living_alone = as.factor(NA),
+        sc_meals = as.factor(NA),
+        sc_mental_health_disorders = as.factor(NA),
+        sc_neurological_condition = as.factor(NA),
+        sc_other_vulnerable_groups = as.factor(NA),
+        sc_palliative_care = as.factor(NA),
+        sc_physical_and_sensory_disability = as.factor(NA),
+        sc_send_lca = as.character(NA),
+        sc_social_worker = as.factor(NA),
+        sc_support_from_unpaid_carer = as.factor(NA),
+        sc_type_of_housing = as.factor(NA)
       )
   }
 
   if (!check_year_valid(year, type = "homelessness")) {
     episode_file <- episode_file %>%
       dplyr::mutate(
-        hl1_12_months_post_app = NA,
-        hl1_12_months_pre_app = NA,
-        hl1_6after_ep = NA,
-        hl1_6before_ep = NA,
-        hl1_application_ref = NA,
-        hl1_completeness = NA,
-        hl1_during_ep = NA,
-        hl1_in_fy = NA,
-        hl1_property_type = NA,
-        hl1_reason_ftm = NA,
-        hl1_sending_lca = NA
+        hl1_12_months_post_app = as.Date(NA),
+        hl1_12_months_pre_app = as.POSIXct(NA),
+        hl1_6after_ep = as.numeric(NA),
+        hl1_6before_ep = as.numeric(NA),
+        hl1_application_ref = as.character(NA),
+        hl1_completeness = as.numeric(NA),
+        hl1_during_ep = as.numeric(NA),
+        hl1_in_fy = as.integer(NA),
+        hl1_property_type = as.character(NA),
+        hl1_reason_ftm = as.character(NA),
+        hl1_sending_lca = as.character(NA)
       )
   }
 
@@ -243,11 +243,11 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         cij_delay = NA,
-        dd_quality = NA,
-        dd_responsible_lca = NA,
-        delay_end_reason = NA,
-        primary_delay_reason = NA,
-        secondary_delay_reason = NA,
+        dd_quality = as.factor(NA),
+        dd_responsible_lca = as.character(NA),
+        delay_end_reason = as.integer(NA),
+        primary_delay_reason = as.character(NA),
+        secondary_delay_reason = as.character(NA),
       )
   }
 
@@ -255,21 +255,21 @@ create_episode_file <- function(
     episode_file <- episode_file %>%
       dplyr::mutate(
         ccm = NA,
-        total_no_dn_contacts = NA
+        total_no_dn_contacts = as.integer(NA)
       )
   }
 
   if (!check_year_valid(year, type = "cost_dna")) {
     episode_file <- episode_file %>%
       dplyr::mutate(
-        cost_total_net_inc_dnas = NA
+        cost_total_net_inc_dnas = as.numeric(NA)
       )
   }
 
   if (!check_year_valid(year, type = "dn")) {
     episode_file <- episode_file %>%
       dplyr::mutate(
-        ccm = NA,
+        ccm = as.integer(NA),
         total_no_dn_contacts = NA
       )
   }
