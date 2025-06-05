@@ -8,6 +8,7 @@
 #' @param deaths_data The death data for the year
 #'
 #' @return data flagged if activity after death
+#' @family episode_file
 add_activity_after_death_flag <- function(
     data,
     year,
