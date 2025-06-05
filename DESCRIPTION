@@ -34,6 +34,7 @@ Imports:
     phsmethods (>= 0.2.2),
     phsopendata (>= 0.0.1.0),
     purrr (>= 1.0.1),
+    qpdf (>= 1.3.5),
     R.utils (>= 2.12.2),
     readr (>= 2.1.0),
     rlang (>= 1.1.0),
@@ -51,6 +52,7 @@ Imports:
     zoo (>= 1.8.0)
 Suggests:
     covr (>= 3.6.1),
+    knitr,
     roxygen2 (>= 7.2.3),
     spelling (>= 2.2),
     testthat (>= 3.1.7)
@@ -64,3 +66,4 @@ Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+VignetteBuilder: knitr

@@ -4,18 +4,23 @@
   <!-- badges: end -->
 
 # source-linkage-files
-This repo is for the SPSS syntax used for the PHS Source Linkage File (SLF) project. 
+The Source Linkage Files (SLF) are a linked dataset maintained by the Health and Social Care (H&SC) team at Public Health Scotland (PHS). This repo contains the R code to develop the package called `createslf` which is used for the production and maintenance of the SLFs. The entire process is contained within this git repository. 
+
+The SLFs are updated on a quarterly basis with updates taking place in March, June, September and December. If you are using the files and spot a problem, please let us know and we will work closely with you to fix this. Alternatively, if you would like to see a new feature on the SLFs, please get in touch and we can look into your request. 
+
 
 ## Access
-Access to the linkage files is usually only granted to members of the LIST or H&SC teams within PHS.
+Access to the Source Linkage Files is only available to approved users in the Local Intelligence Support Team (LIST), Health and Social Care (H&SC) and Whole System Modelling (WSM) teams within PHS. For anyone interested in using the SLFs outside of these teams, please contact the source mailbox to discuss this. 
 
 ## Documentation
-Most documentation for the SLFs can be found on the internal PHS network: `\\Freddy\DEPT\PHIBCS\PHI\Health & Social Care\Topics\Linkage\Reference Documents\`
+Documentation for the SLFs is available upon request. We have further information available relating to our standard operating procedures(SOP), reference document, episode file layout, individual file layout and FAQs. If you are interested in accessing our documentation, please contact the source mailbox for more information. 
 
 ## Questions
-There is an FAQ document which you can find in the location mentioned in the [documentation section](#Documentation). If that doesn't answer your question please get in touch, either by email or through Microsoft Teams on the [Source Linkage File Team](https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a)
+If you have a SLF question, please get in touch either by email or through Microsoft Teams on the [Source Linkage File Team](https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a)
 
-## See Also
-* [slfhelper](https://github.com/Public-Health-Scotland/slfhelper) - An R package for efficiently reading the SLFs.
-* [Source Linkage Files Team](https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a)
-* [Health and Social Care Team](https://www.isdscotland.org/Health-Topics/Health-and-Social-Community-Care/)
+## Slfhelper
+We recommend using the package [slfhelper](https://github.com/Public-Health-Scotland/slfhelper) to access the files. This is an R package created for reading the SLFs efficiently. Please note that slfhelper will only work for those with access to the PHS confi stats drive. 
+
+## Contact
+For any queries, please contact the source mailbox: phs.source@phs.scot 
+

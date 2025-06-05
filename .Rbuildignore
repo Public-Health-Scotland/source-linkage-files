@@ -23,3 +23,7 @@
 ^_targets\.yaml$
 ^_SPSS_archived$
 ^run_targets_
+^investigations$
+^Pre_processing_scripts$
+^Run_SLF_Files_manually$
+^Run_SLF_Files_targets$

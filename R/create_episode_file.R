@@ -352,6 +352,7 @@ load_ep_file_vars <- function(data, year) {
 #' @inheritParams store_ep_file_vars
 #'
 #' @return A data frame with CIJ markers filled in for those missing.
+#' @family episode_file
 fill_missing_cij_markers <- function(data) {
   fixable_data <- data %>%
     dplyr::filter(
@@ -408,6 +409,7 @@ fill_missing_cij_markers <- function(data) {
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The data with CIJ variables corrected.
+#' @family episode_file
 correct_cij_vars <- function(data) {
   check_variables_exist(
     data,
@@ -453,6 +455,7 @@ correct_cij_vars <- function(data) {
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The data with cost including dna.
+#' @family episode_file
 create_cost_inc_dna <- function(data) {
   check_variables_exist(data, c("cost_total_net", "attendance_status"))
 
@@ -481,6 +484,7 @@ create_cost_inc_dna <- function(data) {
 #' @inheritParams create_demographic_cohorts
 #'
 #' @return The data unchanged (the cohorts are written to disk)
+#' @family episode_file
 create_cohort_lookups <- function(data, year, update = latest_update()) {
   create_demographic_cohorts(
     data,

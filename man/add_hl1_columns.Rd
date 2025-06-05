@@ -29,6 +29,7 @@ Other individual_file:
 \code{\link{add_dn_columns}()},
 \code{\link{add_gls_columns}()},
 \code{\link{add_hc_columns}()},
+\code{\link{add_hri_variables}()},
 \code{\link{add_ipdc_cols}()},
 \code{\link{add_keep_population_flag}()},
 \code{\link{add_mat_columns}()},
@@ -40,9 +41,11 @@ Other individual_file:
 \code{\link{add_pis_columns}()},
 \code{\link{add_sds_columns}()},
 \code{\link{add_standard_cols}()},
+\code{\link{aggregate_ch_episodes}()},
 \code{\link{clean_up_ch}()},
 \code{\link{condition_cols}()},
 \code{\link{create_individual_file}()},
+\code{\link{flag_non_scottish_residents}()},
 \code{\link{recode_gender}()},
 \code{\link{remove_blank_chi}()}
 }

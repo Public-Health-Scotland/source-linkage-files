@@ -1,4 +1,19 @@
-# R SLF Development SOP
+---
+title: "02 Using Github to Develop createslf"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{02 Using Github to Develop createslf}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 
 ## Background
 
@@ -31,22 +46,21 @@ Generally speaking, we use the [GitHub Flow model](https://docs.github.com/en/ge
 
 <img width="600" alt="image" src="https://wac-cdn.atlassian.com/dam/jcr:8f00f1a4-ef2d-498a-a2c6-8020bb97902f/03%20Release%20branches.svg">
 
-The `master` branch is kept as the 'production' version of the code which is the code used to run the last quarterly update.
+The `master` branch is kept as the 'production' version of the code which is the code used to run the last quarterly update. This should only be merged into after an update has been released. For example, release of `march25-update` complete, then this should merge into `master` during the tidy up of github.
 
-Any new changes should be first merged into the `development` branch, this way all changes made are kept separate until they have been properly tested in a full run of the files. 
+During a quarterly update, we will create a development branch related to the update. For example, a recommended naming convention is:`march25-update`. Any new changes should be first merged into the `XXX-update` branch, this way all changes made are kept separate until they have been properly tested in a full run of the files. 
 
-In the lead-up to an update, it may be useful to create an 'update' specific branch. This should be branched from `development` to include all the changes made between updates. The point of this update branch is to distinguish between changes that are important for the update, whilst allowing development to continue that will be included in a future update. The update branch name should include the word `update` so that [branch protections](https://github.com/Public-Health-Scotland/source-linkage-files/settings/branches) will be automatically applied. A recommended naming convention is: `update/MONTH-YEAR` e.g. `update/dec-2023`.
 
 ### Create a new branch
 
-To work on a new issue, you will need to create a new branch. This is best done for even small changes such as renaming scripts/functions. To do this, make sure your `development` is the most up-to-date version. 
+To work on a new issue, you will need to create a new branch. This is best done for even small changes such as renaming scripts/functions. Typically, issues will relate to the update we are working on. Therefore, you should first pull the `XXX-update` branch to get the most up-to-date version and create a new branch off of this. 
 
 ### From an issue
 A nice way to create a new branch is to use GitHub to create one from the issue page.
 
 <img width="259" alt="image" src="https://github.com/Public-Health-Scotland/source-linkage-files/assets/5982260/d05f27fa-ec0c-4136-aab2-2779f5189415">
 
-Click 'create a branch' - by default, the 'branch source' will be `master`, so you will usually want to click 'change branch source' and select `development` (or otherwise).
+Click 'create a branch' - by default, the 'branch source' will be `master`, so you will usually want to click 'change branch source' and select `XXX-update` (or otherwise).
 
 <img width="367" alt="image" src="https://github.com/Public-Health-Scotland/source-linkage-files/assets/5982260/e519f326-cddd-4720-9469-3569bd6617ed">
 
@@ -56,7 +70,7 @@ Clicking 'Create branch' will create it and then in RStudio we will need to do a
 
 We can use the terminal, or just use the buttons.
 
-- switch branches to `development` (or the quarterly update branch) - `git checkout`
+- switch branches to `XXX-update` - `git checkout`
 - pull to ensure you have the latest version - `git pull` or `git pull --rebase`
 - click the new branch button to the left of the current branch name to create your new branch,
 - create a new branch, this should have a meaningful name, a useful convention is to use `type/thing` e.g. `bug/<issue_number>-fixing-bug-with-x` or `documentation/update-documentation-y`
@@ -71,7 +85,7 @@ Your branch is a safe place to make (and commit) changes. If you make a mistake,
 
 If something goes completely wrong, don't be afraid to just start again with a new branch. First, copy any files you have changed (that you want to keep), follow the steps above to properly create a new branch then paste and re-commit the changes.
 
-Merges into `development` or `master` etc. need to be done through a PR (and GitHub will stop you if you try to do otherwise!) In the usual case, there should be one person in charge/making changes in each branch.
+Merges into `XXX-update` need to be done through a PR (and GitHub will stop you if you try to do otherwise!) In the usual case, there should be one person in charge/making changes in each branch. A PR should only be submitted to `master` once the quarterly update has been released. This ensures that `master` is the most up to date version and we are confident the code is working. 
 
 
 ## Commits
@@ -128,7 +142,7 @@ GitHub actions is a continuous integration platform. We have several 'workflows'
 There are a number of reasons you might have issues when trying to push to GitHub:
  - A [GitHub action](#github-actions-continuous-integration) has made a commit which your local copy doesn't have. This is usually the cause.
  - You (or a reviewer) have clicked 'update branch' on your PR, and your local copy doesn't have these changes.
- - You started your branch from `master` but then opened a PR against `development` and clicked 'update branch'. Or some other combination of branch cross-contamination.
+ - You started your branch from `master` but then opened a PR against `XXX-update` and clicked 'update branch'. Or some other combination of branch cross-contamination.
 
 To avoid issues like this:
  - Make sure you have the latest version of the branch you want to create a branch from ('git pull')

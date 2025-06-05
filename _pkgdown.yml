@@ -2,6 +2,15 @@ url: https://public-health-scotland.github.io/source-linkage-files
 template:
   bootstrap: 5
 
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - Project Structure
+  - Using Github to Develop createslf
+  - Package Development
+  - Improve efficiency with `data.table`
+
 reference:
 
   - title: Connection to PHS database
@@ -27,6 +36,8 @@ reference:
     - ends_with("_fy")
     - fy_interval
     - contains("_date")
+    - fy
+    - qtr
   - subtitle: Year Format
     desc: Functions to convert between financial year and calendar year, and check that the year variable is in the correct format
   - contents:
@@ -44,6 +55,7 @@ reference:
   - contents:
     - starts_with("clean_up")
     - fill_ch_names
+    - ch_name_extract_keyword
     - cascade_geographies
     - correct_demographics
 
@@ -81,13 +93,17 @@ reference:
     - contains("_hscp_to")
     - contains("_chi")
     - contains("lca")
-    - la_code_lookup
 
 
   - title: Writing data
     desc: Functions which mask the typical data write functions to add some nice defaults and importantly fix file permissions.
   - contents:
     - write_file
+    - clean_temp_data
+    - combine_multi_xlsx
+    - store_ep_file_vars
+    - load_ep_file_vars
+    - write_temp_data
 
 
   - title: Initialisation
@@ -174,7 +190,8 @@ reference:
     - make_postcode_lookup
     - recode_health_boards
     - recode_hscp
-    - la_code_lookup
+    - get_la_code_opendata_lookup
+    - rename_hscp
 
 
   - title: Miscellaneous functions
@@ -188,6 +205,7 @@ reference:
   - contents:
     - vars_end_with
     - has_concept("helper_funs")
+    - setup_keyring
 
 
   - title: Testing

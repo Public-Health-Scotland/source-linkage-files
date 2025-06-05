@@ -17,9 +17,15 @@ Set uplift scale
 }
 \seealso{
 Other episode_file: 
+\code{\link{add_activity_after_death_flag}()},
+\code{\link{add_homelessness_flag}()},
 \code{\link{add_nsu_cohort}()},
 \code{\link{add_ppa_flag}()},
 \code{\link{apply_cost_uplift}()},
+\code{\link{correct_cij_vars}()},
+\code{\link{create_cohort_lookups}()},
+\code{\link{create_cost_inc_dna}()},
+\code{\link{fill_missing_cij_markers}()},
 \code{\link{link_delayed_discharge_eps}()}
 }
 \concept{episode_file}
