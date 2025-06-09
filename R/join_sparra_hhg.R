@@ -15,7 +15,7 @@ join_sparra_hhg <- function(data, year) {
       relationship = "many-to-one"
     )
   } else {
-    data <- dplyr::mutate(data, sparra_start_fy = as.numeric(sparra_start_fy))
+    data <- dplyr::mutate(data, sparra_start_fy = NA_integer_)
   }
 
   if (check_year_valid(next_fy(year), "sparra")) {
@@ -54,7 +54,7 @@ join_sparra_hhg <- function(data, year) {
       relationship = "many-to-one"
     )
   } else {
-    data <- dplyr::mutate(data, hhg_end_fy = as.numeric(hhg_end_fy))
+    data <- dplyr::mutate(data, hhg_end_fy = NA_integer_)
   }
 
   cli::cli_alert_info("Join SPARRA and HHG function finished at {Sys.time()}")
