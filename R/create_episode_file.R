@@ -595,8 +595,8 @@ join_sc_client <- function(data,
         )
       ) %>%
       dplyr::select(
-        -chi_person_id,
-        -contains("_to_remove")
+        -"chi_person_id",
+        -tidyr::contains("_to_remove")
       )
   } else {
     data_file <- data %>%
@@ -605,7 +605,7 @@ join_sc_client <- function(data,
         by = c("anon_chi", "year"),
         relationship = "one-to-one"
       ) %>%
-      dplyr::select(-chi_person_id)
+      dplyr::select(-"chi_person_id")
   }
 
   cli::cli_alert_info("Join social care client function finished at {Sys.time()}")

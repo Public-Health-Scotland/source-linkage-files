@@ -2,7 +2,7 @@
 % Please edit documentation in R/extract_time_from_txt.R
 \name{console_output_path}
 \alias{console_output_path}
-\title{console_output_path}
+\title{console output path}
 \usage{
 console_output_path()
 }
@@ -10,8 +10,8 @@ console_output_path()
 the path of the folder where a console output is
 }
 \description{
-console_output_path
+console output path
 }
 \examples{
-targets_console_path()
+console_output_path()
 }

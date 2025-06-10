@@ -74,40 +74,40 @@ process_sc_all_care_home <- function(
     # 5 = Other
     # No longer using 6 = other
     dplyr::mutate(
-      ch_provider = as.character(ch_provider),
+      ch_provider = as.character(.data$ch_provider),
       ch_provider_description = dplyr::if_else(
-        ch_provider_description == "LOCAL AUTHORITY/HSCP",
-        "LOCAL AUTHORITY/HSCP/NHS BOARD", ch_provider_description
+        .data$ch_provider_description == "LOCAL AUTHORITY/HSCP",
+        "LOCAL AUTHORITY/HSCP/NHS BOARD", .data$ch_provider_description
       ),
       ch_provider = dplyr::if_else(
-        ch_provider_description == "NHS BOARD",
-        "1", ch_provider
+        .data$ch_provider_description == "NHS BOARD",
+        "1", .data$ch_provider
       ),
       ch_provider_description = dplyr::if_else(
-        ch_provider_description == "NHS BOARD",
-        "LOCAL AUTHORITY/HSCP/NHS BOARD", ch_provider_description
+        .data$ch_provider_description == "NHS BOARD",
+        "LOCAL AUTHORITY/HSCP/NHS BOARD", .data$ch_provider_description
       ),
       # Setting some records receiving other care to OTHER
       ch_provider_description = dplyr::if_else(
-        is.na(ch_provider_description) & ch_provider == 6,
-        "OTHER", ch_provider_description
+        is.na(.data$ch_provider_description) & .data$ch_provider == 6,
+        "OTHER", .data$ch_provider_description
       ),
       ch_provider = dplyr::if_else(
-        ch_provider == 6,
-        "5", ch_provider
+        .data$ch_provider == 6,
+        "5", .data$ch_provider
       ),
       # Moray had 4 records where ch_provider == ???. These were supposed to be 2/Private.
       ch_provider_description = dplyr::if_else(
-        sending_location == "Moray" & ch_provider == "???",
-        true = "PRIVATE", false = ch_provider_description,
-        missing = ch_provider_description
+        .data$sending_location == "Moray" & .data$ch_provider == "???",
+        true = "PRIVATE", false = .data$ch_provider_description,
+        missing = .data$ch_provider_description
       ),
       ch_provider = dplyr::if_else(
-        sending_location == "Moray" & ch_provider == "???",
-        true = "2", false = ch_provider,
-        missing = ch_provider
+        .data$sending_location == "Moray" & .data$ch_provider == "???",
+        true = "2", false = .data$ch_provider,
+        missing = .data$ch_provider
       ),
-      ch_provider = as.integer(ch_provider)
+      ch_provider = as.integer(.data$ch_provider)
     ) %>%
     # sort data
     dplyr::arrange(

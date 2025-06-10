@@ -15,6 +15,3 @@ write a csv of time consumption to disk
 \description{
 Extract time stamp and time consumption of targets console output
 }
-\examples{
-extract_targets_time("targets_console_2025-04-30_11-28-57.txt")
-}

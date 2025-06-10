@@ -7,7 +7,7 @@
 is_chi_in_file <- function(filename) {
   file_type <- tools::file_ext(filename)
   if (file_type == "csv") {
-    data <- read.csv(filename, nrow = 1)
+    data <- utils::read.csv(filename, nrow = 1)
     return(grepl("upi|chi", names(data), ignore.case = TRUE) %>% any())
   } else if (file_type == "parquet") {
     ds <- arrow::open_dataset(filename)
