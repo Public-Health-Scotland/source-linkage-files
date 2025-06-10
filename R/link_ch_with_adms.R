@@ -45,12 +45,12 @@ link_ch_with_adms <- function(ep) {
     # remove elective admissions,
     # and remove day cases
     dplyr::filter(.data$recid == "AE2" &
-                    grepl("A", .data$cup_pathway) == TRUE |
-                    .data$recid != "AE2") %>%
+      grepl("A", .data$cup_pathway) == TRUE |
+      .data$recid != "AE2") %>%
     dplyr::filter(!(.data$recid != "AE2" &
-                      .data$cij_pattype == "Elective")) %>%
+      .data$cij_pattype == "Elective")) %>%
     dplyr::filter(!(.data$recid != "AE2" &
-                      .data$cij_ipdc == "D")) %>%
+      .data$cij_ipdc == "D")) %>%
     dplyr::arrange(
       .data$anon_chi,
       .data$record_keydate1,
