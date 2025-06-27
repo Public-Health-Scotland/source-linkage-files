@@ -103,7 +103,8 @@ produce_homelessness_completeness <- function(
       year = year,
       update = update,
       check_mode = "write"
-    )
+    ),
+    group_id = 3206 # hscdiip owner
   )
 
   return(annual_comparison)

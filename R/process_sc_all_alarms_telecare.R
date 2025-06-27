@@ -74,8 +74,7 @@ process_sc_all_alarms_telecare <- function(
         "AT-Alarm",
         service_type == 2L,
         "AT-Tele",
-        default,
-        NA_character_
+        default = NA_character_
       ),
       convert_sc_sending_location_to_lca(sending_location)
     )
@@ -130,12 +129,14 @@ process_sc_all_alarms_telecare <- function(
   )]
 
   # Convert back to data.frame if necessary
-  qtr_merge <- as.data.frame(qtr_merge)
+  qtr_merge <- as.data.frame(qtr_merge) %>%
+    create_person_id()
 
   if (write_to_disk) {
     write_file(
       qtr_merge,
-      get_sc_at_episodes_path(check_mode = "write")
+      get_sc_at_episodes_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

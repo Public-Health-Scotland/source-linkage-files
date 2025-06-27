@@ -176,13 +176,15 @@ process_sc_all_sds <- function(
   rm(sds_full_clean_long)
 
   # Drop episode_counter and convert back to data.frame if needed
-  final_data <- as.data.frame(final_data[, -"episode_counter"])
+  final_data <- as.data.frame(final_data[, -"episode_counter"]) %>%
+    create_person_id()
   # final_data now holds the processed data in the format of a data.frame
 
   if (write_to_disk) {
     write_file(
       final_data,
-      get_sc_sds_episodes_path(check_mode = "write")
+      get_sc_sds_episodes_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

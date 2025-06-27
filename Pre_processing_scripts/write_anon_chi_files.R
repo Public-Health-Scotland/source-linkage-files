@@ -12,6 +12,8 @@
 #              ensuring we do not save chi anywhere on disk.
 #
 ################################################################################
+# load package
+devtools::load_all()
 
 ## Stage 1 - Setup environment
 #-------------------------------------------------------------------------------
@@ -27,13 +29,6 @@ cat(stringr::str_glue("Looking in '{source_dir}' for parquet files."))
 parquet_files <- list.files(source_dir, pattern = ".parquet", full.names = TRUE)
 print(stringr::str_glue("Found {length(parquet_files)} parquet files to process."))
 
-# Create a function to read variable names and check if CHI is in the file
-is_chi_in_file <- function(filename) {
-  data <- arrow::read_parquet(filename, nrow = 5)
-  return(grepl("chi", names(data)) %>% any())
-}
-
-
 # Stage 2 - In each file, convert chi to anon_chi and save to disk
 #-------------------------------------------------------------------------------
 
@@ -47,12 +42,12 @@ for (data_file in parquet_files) {
   if (chi_in_file) {
     read_file(data_file) %>%
       slfhelper::get_anon_chi() %>%
-      write_file(save_file_path)
+      write_file(save_file_path, group_id = 3206) # hscdiip owner
 
     cat("Replaced chi with anon chi:", data_file, "to", save_file_path, "\n")
   } else {
     read_file(data_file) %>%
-      write_file(save_file_path)
+      write_file(save_file_path, group_id = 3206) # hscdiip owner
     cat("renamed file with anon chi:", data_file, "to", save_file_path, "\n")
   }
 }

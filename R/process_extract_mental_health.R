@@ -89,7 +89,6 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
       "hbrescode",
       "lca",
       "hscp",
-      "datazone2011",
       "location",
       "hbtreatcode",
       "stay",
@@ -122,7 +121,8 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       mh_processed,
-      get_source_extract_path(year, "mh", check_mode = "write")
+      get_source_extract_path(year, "mh", check_mode = "write"),
+      group_id = 3356 # sourcedev owner
     )
   }
 

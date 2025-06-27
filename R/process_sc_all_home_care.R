@@ -131,7 +131,7 @@ process_sc_all_home_care <- function(
     ) %>%
     dplyr::full_join(
       # Create the columns we don't have as NA
-      tibble(
+      tibble::tibble(
         # Create columns for the latest year
         hours_submission_quarter = paste0(max(data$financial_year), "Q", 1L:4L),
         hc_hours = NA,
@@ -197,12 +197,14 @@ process_sc_all_home_care <- function(
     # compute lca variable from sending_location
     dplyr::mutate(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
-    )
+    ) %>%
+    create_person_id()
 
   if (write_to_disk) {
     write_file(
       all_hc_processed,
-      get_sc_hc_episodes_path(check_mode = "write")
+      get_sc_hc_episodes_path(check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

@@ -205,7 +205,8 @@ process_lookup_sc_client <-
     if (write_to_disk) {
       write_file(
         sc_client_lookup,
-        get_sc_client_lookup_path(year, check_mode = "write")
+        get_sc_client_lookup_path(year, check_mode = "write"),
+        group_id = 3206 # hscdiip owner
       )
     }
 
