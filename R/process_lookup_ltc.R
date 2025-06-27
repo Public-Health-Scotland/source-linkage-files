@@ -27,7 +27,8 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       ltc_flags,
-      get_ltcs_path(year, check_mode = "write")
+      get_ltcs_path(year, check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

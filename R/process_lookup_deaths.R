@@ -26,7 +26,8 @@ process_slf_deaths_lookup <- function(
   if (write_to_disk) {
     write_file(
       slf_deaths_lookup,
-      get_slf_deaths_lookup_path(year, check_mode = "write")
+      get_slf_deaths_lookup_path(year, check_mode = "write"),
+      group_id = 3206 # hscdiip owner
     )
   }
 

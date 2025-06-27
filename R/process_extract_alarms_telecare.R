@@ -40,6 +40,7 @@ process_extract_alarms_telecare <- function(
       "recid",
       "smrtype",
       "anon_chi",
+      "person_id",
       "dob",
       "gender",
       "postcode",
@@ -52,7 +53,8 @@ process_extract_alarms_telecare <- function(
   if (write_to_disk) {
     at_data %>%
       write_file(
-        get_source_extract_path(year, type = "at", check_mode = "write")
+        get_source_extract_path(year, type = "at", check_mode = "write"),
+        group_id = 3356 # sourcedev owner
       )
   }
 

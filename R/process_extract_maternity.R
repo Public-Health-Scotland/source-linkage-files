@@ -117,7 +117,8 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       maternity_processed,
-      get_source_extract_path(year, "maternity", check_mode = "write")
+      get_source_extract_path(year, "maternity", check_mode = "write"),
+      group_id = 3356 # sourcedev owner
     )
   }
 

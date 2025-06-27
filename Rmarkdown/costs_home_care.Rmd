@@ -89,7 +89,9 @@ matched_costs_data <- hc_costs_uplifted %>%
 outfile <- hc_costs_uplifted %>%
   select(-health_board) %>%
   # Save .rds file
-  write_file(get_hc_costs_path(check_mode = "write"))
+  write_file(get_hc_costs_path(check_mode = "write"),
+    group_id = 3206 # hscdiip owner
+  )
 ```
 
 

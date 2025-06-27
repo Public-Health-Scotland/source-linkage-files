@@ -310,7 +310,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       ae_processed,
-      get_source_extract_path(year, "ae", check_mode = "write")
+      get_source_extract_path(year, "ae", check_mode = "write"),
+      group_id = 3356 # sourcedev owner
     )
   }
 
