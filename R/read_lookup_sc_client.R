@@ -42,7 +42,7 @@ read_lookup_sc_client <- function(fyyear,
       "alcohol",
       "palliative_care",
       "carer",
-      "elderly_frail",
+      "elder_frail",
       "neurological_condition",
       "autism",
       "other_vulnerable_groups",
@@ -67,7 +67,7 @@ read_lookup_sc_client <- function(fyyear,
           "alcohol",
           "palliative_care",
           "carer",
-          "elderly_frail",
+          "elder_frail",
           "neurological_condition",
           "autism",
           "other_vulnerable_groups",
@@ -87,8 +87,10 @@ read_lookup_sc_client <- function(fyyear,
       .data$financial_year,
       .data$financial_quarter
     ) %>%
-    dplyr::rename("mental_health_disorders" = "mental_health_problems") %>%
-    dplyr::collect()
+    dplyr::rename(
+      "mental_health_disorders" = "mental_health_problems",
+      "elderly_frail" = "elder_frail"
+    )
 
   latest_quarter <- client_data %>%
     dplyr::arrange(dplyr::desc(.data$financial_quarter)) %>%
