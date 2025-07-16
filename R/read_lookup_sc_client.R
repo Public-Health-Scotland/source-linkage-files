@@ -14,8 +14,21 @@ read_lookup_sc_client <- function(fyyear,
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
-  # read in data - social care 2 client
-  client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
+
+  # extract fy client data
+  client_fy_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_fy_snapshot")) %>%
+    dplyr::filter(.data$financial_year == year) %>%
+    dplyr::collect()
+
+  # extract qtr client data
+  client_qtr_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_qtr_snapshot")) %>%
+    dplyr::filter(.data$financial_year == year) %>%
+    dplyr::collect()
+
+  # Bind client FY and QTR extracts together
+  client_extract <- rbind(client_fy_extract, client_qtr_extract)
+
+  client_data <- client_extract %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
