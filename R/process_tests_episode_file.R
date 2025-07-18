@@ -7,6 +7,28 @@
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
+  ltc_cols <- c(
+    "arth",
+    "asthma",
+    "atrialfib",
+    "cancer",
+    "cvd",
+    "liver",
+    "copd",
+    "dementia",
+    "diabetes",
+    "epilepsy",
+    "chd",
+    "hefailure",
+    "ms",
+    "parkinsons",
+    "refailure",
+    "congen",
+    "bloodbfo",
+    "endomet",
+    "digestive"
+  )
+
   data <- data %>%
     dplyr::select(
       "year",
@@ -20,17 +42,21 @@ process_tests_episode_file <- function(data, year) {
       "yearstay",
       "record_keydate1",
       "record_keydate2",
-      dplyr::contains(c("beddays", "cost", "cij"))
+      dplyr::contains(c("beddays", "cost", "cij")),
+      dplyr::all_of(ltc_cols)
     )
 
-  old_data <- get_existing_data_for_tests(data)
+  old_data <- slfhelper::read_slf_episode(year, col_select = dplyr::all_of(names(data)))
 
-  comparison <- produce_test_comparison(
-    old_data = produce_episode_file_tests(old_data),
-    new_data = produce_episode_file_tests(data),
-    recid = TRUE
+  comparison <- dplyr::bind_rows(
+    produce_test_comparison(
+      old_data = produce_episode_file_tests(old_data),
+      new_data = produce_episode_file_tests(data),
+      recid = TRUE
+    ) %>%
+      dplyr::arrange(.data[["recid"]]),
+    produce_episode_file_ltc_tests(data, year, ltc_cols)
   ) %>%
-    dplyr::arrange(.data[["recid"]]) %>%
     write_tests_xlsx(
       sheet_name = stringr::str_glue({
         "ep_file_{year}"
@@ -69,18 +95,15 @@ process_tests_episode_file <- function(data, year) {
 #' for creating test flags
 #' @seealso calculate_measures
 #' @export
-produce_episode_file_tests <- function(
-    data,
-    sum_mean_vars = c("beddays", "cost", "yearstay"),
-    max_min_vars = c(
-      "record_keydate1", "record_keydate2",
-      "cost_total_net", "yearstay"
-    )) {
+produce_episode_file_tests <- function(data,
+                                       sum_mean_vars = c("beddays", "cost", "yearstay"),
+                                       max_min_vars = c("record_keydate1",
+                                                        "record_keydate2",
+                                                        "cost_total_net",
+                                                        "yearstay")) {
   test_flags <- data %>%
     dplyr::group_by(.data$recid) %>%
-    dplyr::mutate(
-      n_records = 1L
-    ) %>%
+    dplyr::mutate(n_records = 1L) %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     create_hb_test_flags(.data$hbtreatcode) %>%
@@ -88,26 +111,10 @@ produce_episode_file_tests <- function(
     create_hscp_test_flags(.data$hscp2018) %>%
     # Flags to count stay types
     dplyr::mutate(
-      cij_elective = dplyr::if_else(
-        .data[["cij_pattype"]] == "Elective",
-        1L,
-        0L
-      ),
-      cij_non_elective = dplyr::if_else(
-        .data[["cij_pattype"]] == "Non-Elective",
-        1L,
-        0L
-      ),
-      cij_maternity = dplyr::if_else(
-        .data[["cij_pattype"]] == "Maternity",
-        1L,
-        0L
-      ),
-      cij_other = dplyr::if_else(
-        .data[["cij_pattype"]] == "Other",
-        1L,
-        0L
-      )
+      cij_elective = dplyr::if_else(.data[["cij_pattype"]] == "Elective", 1L, 0L),
+      cij_non_elective = dplyr::if_else(.data[["cij_pattype"]] == "Non-Elective", 1L, 0L),
+      cij_maternity = dplyr::if_else(.data[["cij_pattype"]] == "Maternity", 1L, 0L),
+      cij_other = dplyr::if_else(.data[["cij_pattype"]] == "Other", 1L, 0L)
     )
 
   test_flags <- test_flags %>%
@@ -118,26 +125,68 @@ produce_episode_file_tests <- function(
 
   all_measures <- data %>%
     dplyr::group_by(.data$recid) %>%
-    calculate_measures(
-      vars = {{ sum_mean_vars }},
-      measure = "all",
-      group_by = "recid"
-    )
+    calculate_measures(vars = {{ sum_mean_vars }},
+                       measure = "all",
+                       group_by = "recid")
 
   min_max <- data %>%
     dplyr::group_by(.data$recid) %>%
-    calculate_measures(
-      vars = {{ max_min_vars }},
-      measure = "min-max",
-      group_by = "recid"
-    )
+    calculate_measures(vars = {{ max_min_vars }},
+                       measure = "min-max",
+                       group_by = "recid")
 
-  join_output <- list(
-    test_flags,
-    all_measures,
-    min_max
-  ) %>%
+  join_output <- list(test_flags, all_measures, min_max) %>%
     purrr::reduce(dplyr::full_join, by = c("recid", "measure", "value"))
 
   return(join_output)
+}
+
+
+#' Source Extract Tests
+#'
+#' @description Produce a LTCs test counting total number of each LTC flag
+#' with distinct anon_chi.
+#'
+#' @param data new or old data for testing summary flags
+#' (data is from [get_source_extract_path()])
+#' @return a dataframe with a count of total numbers of
+#' LTCs flag.
+#'
+#' @family extract test functions
+produce_episode_file_ltc_tests <- function(data, year, ltc_cols) {
+  ltc_cols2 = c("anon_chi", ltc_cols)
+
+  old_data = slfhelper::read_slf_episode(year, col_select = dplyr::all_of(ltc_cols2)) %>%
+    dplyr::distinct()
+
+  new_data = data %>%
+    dplyr::select(dplyr::all_of(ltc_cols2)) %>%
+    dplyr::distinct()
+
+  comparison <- produce_test_comparison(
+    old_data = old_data %>%
+      dplyr::summarise(
+        unique_chi = dplyr::n_distinct(.data$anon_chi),
+        dplyr::across(dplyr::all_of(ltc_cols), ~ sum(.x, na.rm = TRUE))
+      ) %>%
+      tidyr::pivot_longer(
+        cols = dplyr::everything(),
+        names_to = "measure",
+        values_to = "value"
+      ),
+    new_data = new_data %>%
+      dplyr::summarise(
+        unique_chi = dplyr::n_distinct(.data$anon_chi),
+        dplyr::across(dplyr::all_of(ltc_cols), ~ sum(.x, na.rm = TRUE))
+      ) %>%
+      tidyr::pivot_longer(
+        cols = dplyr::everything(),
+        names_to = "measure",
+        values_to = "value"
+      )
+  ) %>%
+    dplyr::mutate(recid = "LTCs") %>%
+    dplyr::relocate(recid, 1)
+
+  return(comparison)
 }
