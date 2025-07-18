@@ -97,10 +97,12 @@ process_tests_episode_file <- function(data, year) {
 #' @export
 produce_episode_file_tests <- function(data,
                                        sum_mean_vars = c("beddays", "cost", "yearstay"),
-                                       max_min_vars = c("record_keydate1",
-                                                        "record_keydate2",
-                                                        "cost_total_net",
-                                                        "yearstay")) {
+                                       max_min_vars = c(
+                                         "record_keydate1",
+                                         "record_keydate2",
+                                         "cost_total_net",
+                                         "yearstay"
+                                       )) {
   test_flags <- data %>%
     dplyr::group_by(.data$recid) %>%
     dplyr::mutate(n_records = 1L) %>%
@@ -125,15 +127,19 @@ produce_episode_file_tests <- function(data,
 
   all_measures <- data %>%
     dplyr::group_by(.data$recid) %>%
-    calculate_measures(vars = {{ sum_mean_vars }},
-                       measure = "all",
-                       group_by = "recid")
+    calculate_measures(
+      vars = {{ sum_mean_vars }},
+      measure = "all",
+      group_by = "recid"
+    )
 
   min_max <- data %>%
     dplyr::group_by(.data$recid) %>%
-    calculate_measures(vars = {{ max_min_vars }},
-                       measure = "min-max",
-                       group_by = "recid")
+    calculate_measures(
+      vars = {{ max_min_vars }},
+      measure = "min-max",
+      group_by = "recid"
+    )
 
   join_output <- list(test_flags, all_measures, min_max) %>%
     purrr::reduce(dplyr::full_join, by = c("recid", "measure", "value"))
@@ -154,12 +160,12 @@ produce_episode_file_tests <- function(data,
 #'
 #' @family extract test functions
 produce_episode_file_ltc_tests <- function(data, year, ltc_cols) {
-  ltc_cols2 = c("anon_chi", ltc_cols)
+  ltc_cols2 <- c("anon_chi", ltc_cols)
 
-  old_data = slfhelper::read_slf_episode(year, col_select = dplyr::all_of(ltc_cols2)) %>%
+  old_data <- slfhelper::read_slf_episode(year, col_select = dplyr::all_of(ltc_cols2)) %>%
     dplyr::distinct()
 
-  new_data = data %>%
+  new_data <- data %>%
     dplyr::select(dplyr::all_of(ltc_cols2)) %>%
     dplyr::distinct()
 
