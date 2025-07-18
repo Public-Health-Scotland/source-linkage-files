@@ -14,6 +14,8 @@
 #' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #' @param add_hscp_count  Default set to TRUE. For use where `hscp variable` is not available, specify FALSE.
+#' @param smr00_ep Only for Outpatients extract test.
+#' TRUE only when using old_data for outpatients
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]

@@ -22,7 +22,7 @@ process_tests_outpatients <- function(data, year) {
       sum_mean_vars = "cost",
       max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net"),
       add_hscp_count = FALSE,
-      smr00_ep = TRUE
+      smr00_ep = FALSE
     )
   ) %>%
     write_tests_xlsx(sheet_name = "00b", year, workbook_name = "extract")
