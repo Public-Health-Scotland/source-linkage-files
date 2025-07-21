@@ -8,7 +8,8 @@ produce_source_extract_tests(
   data,
   sum_mean_vars = c("beddays", "cost", "yearstay"),
   max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay"),
-  add_hscp_count = TRUE
+  add_hscp_count = TRUE,
+  smr00_ep = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,9 @@ produce_source_extract_tests(
 \item{max_min_vars}{variables used when selecting 'min-max' from \code{\link[=calculate_measures]{calculate_measures()}}}
 
 \item{add_hscp_count}{Default set to TRUE. For use where \verb{hscp variable} is not available, specify FALSE.}
+
+\item{smr00_ep}{Only for Outpatients extract test.
+TRUE only when using old_data for outpatients}
 }
 \value{
 a dataframe with a count of each flag
