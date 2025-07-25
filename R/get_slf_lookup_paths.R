@@ -21,7 +21,7 @@ get_slf_postcode_path <- function(update = latest_update(), ...) {
 #' get uk postcode list file path
 #' @description get uk postcode list file
 #' @family lookup file paths
-get_uk_postcode_path <- function() {
+get_uk_postcode_path <- function(...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
     file_name = "uk_postcode_list",
