@@ -7,27 +7,6 @@
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
-  ltc_cols <- c(
-    "arth",
-    "asthma",
-    "atrialfib",
-    "cancer",
-    "cvd",
-    "liver",
-    "copd",
-    "dementia",
-    "diabetes",
-    "epilepsy",
-    "chd",
-    "hefailure",
-    "ms",
-    "parkinsons",
-    "refailure",
-    "congen",
-    "bloodbfo",
-    "endomet",
-    "digestive"
-  )
 
   data <- data %>%
     dplyr::select(
@@ -43,7 +22,8 @@ process_tests_episode_file <- function(data, year) {
       "record_keydate1",
       "record_keydate2",
       dplyr::contains(c("beddays", "cost", "cij")),
-      dplyr::all_of(ltc_cols)
+      slfhelper::ltc_vars,
+      paste0(slfhelper::ltc_vars, "_date")
     )
 
   old_data <- slfhelper::read_slf_episode(year, col_select = dplyr::all_of(names(data)))
@@ -55,7 +35,7 @@ process_tests_episode_file <- function(data, year) {
       recid = TRUE
     ) %>%
       dplyr::arrange(.data[["recid"]]),
-    produce_episode_file_ltc_tests(data, year, ltc_cols)
+    produce_episode_file_ltc_tests(data, old_data, year)
   ) %>%
     write_tests_xlsx(
       sheet_name = stringr::str_glue({
@@ -147,52 +127,34 @@ produce_episode_file_tests <- function(data,
   return(join_output)
 }
 
-
 #' Source Extract Tests
 #'
 #' @description Produce a LTCs test counting total number of each LTC flag
 #' with distinct anon_chi.
-#'
-#' @param data new or old data for testing summary flags
-#' (data is from [get_source_extract_path()])
+#' @param old_data old episode file data
+#' @inherit process_tests_episode_file
 #' @return a dataframe with a count of total numbers of
 #' LTCs flag.
 #'
 #' @family extract test functions
-produce_episode_file_ltc_tests <- function(data, year, ltc_cols) {
-  ltc_cols2 <- c("anon_chi", ltc_cols)
+produce_episode_file_ltc_tests <- function(data,
+                                           old_data = slfhelper::read_slf_episode(year, col_select = dplyr::all_of(ltc_col2)),
+                                           year) {
+  ltc_col <- c(slfhelper::ltc_vars, paste0(slfhelper::ltc_vars, "_date"))
+  ltc_col2 <- c("anon_chi", ltc_col)
 
-  old_data <- slfhelper::read_slf_episode(year, col_select = dplyr::all_of(ltc_cols2)) %>%
+  old_data <- old_data %>%
+    dplyr::select(dplyr::all_of(ltc_col2)) %>%
     dplyr::distinct()
 
   new_data <- data %>%
-    dplyr::select(dplyr::all_of(ltc_cols2)) %>%
+    dplyr::select(dplyr::all_of(ltc_col2)) %>%
     dplyr::distinct()
 
   comparison <- produce_test_comparison(
-    old_data = old_data %>%
-      dplyr::summarise(
-        unique_chi = dplyr::n_distinct(.data$anon_chi),
-        dplyr::across(dplyr::all_of(ltc_cols), ~ sum(.x, na.rm = TRUE))
-      ) %>%
-      tidyr::pivot_longer(
-        cols = dplyr::everything(),
-        names_to = "measure",
-        values_to = "value"
-      ),
-    new_data = new_data %>%
-      dplyr::summarise(
-        unique_chi = dplyr::n_distinct(.data$anon_chi),
-        dplyr::across(dplyr::all_of(ltc_cols), ~ sum(.x, na.rm = TRUE))
-      ) %>%
-      tidyr::pivot_longer(
-        cols = dplyr::everything(),
-        names_to = "measure",
-        values_to = "value"
-      )
-  ) %>%
-    dplyr::mutate(recid = "LTCs") %>%
-    dplyr::relocate(recid, 1)
+    old_data = produce_source_ltc_tests(old_data),
+    new_data = produce_source_ltc_tests(new_data)
+  )
 
   return(comparison)
 }
