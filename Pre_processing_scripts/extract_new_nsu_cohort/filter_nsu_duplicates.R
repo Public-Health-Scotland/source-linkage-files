@@ -80,7 +80,7 @@ nsu_pc_duplicates <- nsu_data %>%
   filter(postcode_count > 1)
 
 # If there is no duplicated pc
-if(nrow(nsu_pc_duplicates) > 0L){
+if (nrow(nsu_pc_duplicates) > 0L) {
   # Get the latest SPD
   spd <- read_file(spd_path) %>%
     select(pc7, date_of_introduction, date_of_deletion)
