@@ -4,11 +4,18 @@
 \alias{produce_episode_file_ltc_tests}
 \title{Source Extract Tests}
 \usage{
-produce_episode_file_ltc_tests(data, year, ltc_cols)
+produce_episode_file_ltc_tests(
+  data,
+  old_data = slfhelper::read_slf_episode(year, col_select = dplyr::all_of(ltc_col2)),
+  year
+)
 }
 \arguments{
-\item{data}{new or old data for testing summary flags
-(data is from \code{\link[=get_source_extract_path]{get_source_extract_path()}})}
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+
+\item{old_data}{old episode file data}
+
+\item{year}{the financial year of the extract in the format '1718'.}
 }
 \value{
 a dataframe with a count of total numbers of
