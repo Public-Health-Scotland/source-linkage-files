@@ -35,6 +35,7 @@ Computes various measures for the variables specified.
 produce_source_extract_tests
 
 Other extract test functions: 
+\code{\link{produce_episode_file_ltc_tests}()},
 \code{\link{produce_episode_file_tests}()},
 \code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_cmh_tests}()},
