@@ -25,7 +25,8 @@ get_uk_postcode_path <- function(...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Lookups"),
     file_name = "uk_postcode_list",
-    ext = "parquet"
+    ext = "parquet",
+    ...
   )
 }
 
