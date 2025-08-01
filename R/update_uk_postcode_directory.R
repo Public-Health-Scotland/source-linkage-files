@@ -28,7 +28,10 @@ update_uk_postcode_directory <- function() {
     col_select = 2,
     show_col_types = FALSE
   ) %>%
-    dplyr::rename(pcd = X2)
+    dplyr::rename(pcd = X2) %>%
+    dplyr::mutate(pcd = phsmethods::format_postcode(.data$pcd,
+                                                    format = "pc7",
+                                                    quiet = TRUE))
 
   write_file(pcd,
     get_uk_postcode_path(check_mode = "write"),
