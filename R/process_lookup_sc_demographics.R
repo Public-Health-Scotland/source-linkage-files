@@ -28,7 +28,7 @@ process_lookup_sc_demographics <- function(
     dplyr::pull(.data$pc7)
 
   # remove per in social_care_id in Renfrewshire
-  data = data %>%
+  data <- data %>%
     mutate(
       social_care_id = if_else(
         sending_location == "350" & !grepl("PER", social_care_id),
@@ -52,11 +52,13 @@ process_lookup_sc_demographics <- function(
       )
     ) %>%
     # arrange - makes sure extract date is last
-    dplyr::arrange(sending_location,
-                   social_care_id,
-                   financial_year,
-                   financial_quarter,
-                   extract_date) %>%
+    dplyr::arrange(
+      sending_location,
+      social_care_id,
+      financial_year,
+      financial_quarter,
+      extract_date
+    ) %>%
     dplyr::relocate(c(financial_year, financial_quarter), .after = period)
 
   #  Fill in missing data and flag latest cases to keep ---------------------------------------
@@ -77,7 +79,7 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(.data$submitted_postcode, .direction = ("updown")) %>%
     dplyr::ungroup()
 
-  ch_pc = readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
+  ch_pc <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
     dplyr::select(AccomPostCodeNo) %>%
     dplyr::rename(ch_pc = AccomPostCodeNo) %>%
     dplyr::mutate(ch_pc = phsmethods::format_postcode(ch_pc, quiet = TRUE)) %>%
@@ -179,7 +181,7 @@ process_lookup_sc_demographics <- function(
     dplyr::mutate(
       postcode = dplyr::case_when(
         (!is.na(.data$chi_postcode) &
-           .data$valid_pc_chi) ~ .data$chi_postcode,
+          .data$valid_pc_chi) ~ .data$chi_postcode,
         ((
           is.na(.data$chi_postcode) |
             !(.data$valid_pc_chi)
@@ -188,18 +190,19 @@ process_lookup_sc_demographics <- function(
             .data$submitted_postcode
           )) & .data$valid_pc_submitted) ~ .data$submitted_postcode,
         (is.na(.data$submitted_postcode) &
-           !.data$valid_pc_submitted) ~ .data$chi_postcode
+          !.data$valid_pc_submitted) ~ .data$chi_postcode
       ),
       postcode_ch_as_home = dplyr::case_when(
         !is.na(.data$submitted_postcode_ch) ~ .data$submitted_postcode_ch,
         (is.na(.data$submitted_postcode_ch) &
-           !is.na(.data$chi_postcode_ch)) ~ .data$chi_postcode_ch,
+          !is.na(.data$chi_postcode_ch)) ~ .data$chi_postcode_ch,
         (is.na(.data$submitted_postcode_ch) &
-           !is.na(.data$chi_postcode_ch)) ~ NA
+          !is.na(.data$chi_postcode_ch)) ~ NA
       ),
       postcode_ch_as_home = dplyr::if_else(is.na(postcode),
-                                           postcode_ch_as_home,
-                                           NA)
+        postcode_ch_as_home,
+        NA
+      )
     ) %>%
     dplyr::mutate(postcode_type = dplyr::case_when(
       (.data$postcode == .data$chi_postcode) ~ "chi",
@@ -210,7 +213,7 @@ process_lookup_sc_demographics <- function(
       ) ~ "missing"
     ))
 
-  sc_demog = sc_demog %>%
+  sc_demog <- sc_demog %>%
     dplyr::mutate(postcode = dplyr::if_else(
       is.na(postcode) & !is.na(postcode_ch_as_home),
       postcode_ch_as_home,
@@ -237,10 +240,12 @@ process_lookup_sc_demographics <- function(
     ) %>%
     dplyr::distinct() %>%
     # group by sending location and ID
-    dplyr::group_by(.data$sending_location,
-                    .data$anon_chi,
-                    .data$social_care_id,
-                    .data$latest_flag) %>%
+    dplyr::group_by(
+      .data$sending_location,
+      .data$anon_chi,
+      .data$social_care_id,
+      .data$latest_flag
+    ) %>%
     # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
@@ -265,8 +270,9 @@ process_lookup_sc_demographics <- function(
 
   if (write_to_disk) {
     write_file(sc_demog_lookup,
-               get_sc_demog_lookup_path(check_mode = "write"),
-               group_id = 3206) # hscdiip owner
+      get_sc_demog_lookup_path(check_mode = "write"),
+      group_id = 3206
+    ) # hscdiip owner
   }
 
   return(sc_demog_lookup)
