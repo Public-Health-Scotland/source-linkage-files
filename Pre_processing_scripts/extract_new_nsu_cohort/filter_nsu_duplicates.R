@@ -39,7 +39,7 @@ library(glue)
 
 ## Update line 41##
 # The year of new NSU extract
-year <- "2324"
+year <- "2425"
 
 # Update lines 45-46 ##
 # Analysts username and schema to collect the data.
@@ -79,91 +79,97 @@ nsu_pc_duplicates <- nsu_data %>%
   ungroup() %>%
   filter(postcode_count > 1)
 
-# Get the latest SPD
-spd <- read_file(spd_path) %>%
-  select(pc7, date_of_introduction, date_of_deletion)
+# If there is no duplicated pc
+if (nrow(nsu_pc_duplicates) > 0L) {
+  # Get the latest SPD
+  spd <- read_file(spd_path) %>%
+    select(pc7, date_of_introduction, date_of_deletion)
 
-# Load some regex to check if a postcode is valid
-pc_regex <-
-  "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\\s?[0-9][A-Za-z]{2})"
+  # Load some regex to check if a postcode is valid
+  pc_regex <-
+    "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\\s?[0-9][A-Za-z]{2})"
 
-# Main code to check postcodes in various ways
-nsu_pc_duplicates_checked <- nsu_pc_duplicates %>%
-  select(
-    upi_number,
-    start_date,
-    postcode,
-    date_address_changed,
-    gp_prac_no,
-    date_gp_acceptance
-  ) %>%
-  # First check against the regex
-  mutate(invalid_pc = str_detect(postcode, pc_regex, negate = TRUE)) %>%
-  # Now check against the SPD
-  left_join(spd, by = c("postcode" = "pc7")) %>%
-  # Now check against postcodes.io
-  left_join(
-    # Filter to only postcodes that need checking
-    group_by(., upi_number) %>%
-      # UPI has no postcode which matched the SPD
-      filter(
-        all(is.na(
-          date_of_introduction
+  # Main code to check postcodes in various ways
+  nsu_pc_duplicates_checked <- nsu_pc_duplicates %>%
+    select(
+      upi_number,
+      start_date,
+      postcode,
+      date_address_changed,
+      gp_prac_no,
+      date_gp_acceptance
+    ) %>%
+    # First check against the regex
+    mutate(invalid_pc = str_detect(postcode, pc_regex, negate = TRUE)) %>%
+    # Now check against the SPD
+    left_join(spd, by = c("postcode" = "pc7")) %>%
+    # Now check against postcodes.io
+    left_join(
+      # Filter to only postcodes that need checking
+      group_by(., upi_number) %>%
+        # UPI has no postcode which matched the SPD
+        filter(
+          all(is.na(
+            date_of_introduction
+          ))
+        ) %>%
+        ungroup() %>%
+        # No need to check invalid postcodes
+        filter(!invalid_pc) %>%
+        # Pass the unique list of postcodes to
+        # postcodes.io
+        pull(postcode) %>%
+        unique() %>%
+        list(postcodes = .) %>%
+        # This function will fail if more than 100 pcs
+        PostcodesioR::bulk_postcode_lookup() %>%
+        # Parse the result, we only want the country
+        map_dfr(~ tibble(
+          postcode = .x$query,
+          # Create an order to make sorting nice later
+          country = ordered(.x$result$country, c("Scotland", "Wales", "England"))
         ))
-      ) %>%
-      ungroup() %>%
-      # No need to check invalid postcodes
-      filter(!invalid_pc) %>%
-      # Pass the unique list of postcodes to
-      # postcodes.io
-      pull(postcode) %>%
-      unique() %>%
-      list(postcodes = .) %>%
-      # This function will fail if more than 100 pcs
-      PostcodesioR::bulk_postcode_lookup() %>%
-      # Parse the result, we only want the country
-      map_dfr(~ tibble(
-        postcode = .x$query,
-        # Create an order to make sorting nice later
-        country = ordered(.x$result$country, c("Scotland", "Wales", "England"))
-      ))
-  ) %>%
-  # Sort so that the 'best' postcode is top of the list
-  mutate(priority = case_when(
-    # If they matched SPD,
-    !is.na(date_of_introduction) & is.na(date_of_deletion) ~ 0,
-    # If the matched SPD (and had a d_o_d)
-    !is.na(date_of_introduction) ~ 1,
-    # If they matched the postcodes.io API request
-    !is.na(country) ~ 2,
-    # Invalid postcodes come last
-    invalid_pc ~ Inf,
-    TRUE ~ 99
-  )) %>%
-  arrange(
-    upi_number,
-    priority,
-    # newest introduced come first
-    desc(date_of_introduction),
-    # latest deleted will be first
-    desc(date_of_deletion),
-    # Scotland will be preferred etc.
-    country
-  ) %>%
-  # Flag each row with the assigned priority
-  group_by(upi_number) %>%
-  mutate(keep_priority = row_number()) %>%
-  ungroup()
+    ) %>%
+    # Sort so that the 'best' postcode is top of the list
+    mutate(priority = case_when(
+      # If they matched SPD,
+      !is.na(date_of_introduction) & is.na(date_of_deletion) ~ 0,
+      # If the matched SPD (and had a d_o_d)
+      !is.na(date_of_introduction) ~ 1,
+      # If they matched the postcodes.io API request
+      !is.na(country) ~ 2,
+      # Invalid postcodes come last
+      invalid_pc ~ Inf,
+      TRUE ~ 99
+    )) %>%
+    arrange(
+      upi_number,
+      priority,
+      # newest introduced come first
+      desc(date_of_introduction),
+      # latest deleted will be first
+      desc(date_of_deletion),
+      # Scotland will be preferred etc.
+      country
+    ) %>%
+    # Flag each row with the assigned priority
+    group_by(upi_number) %>%
+    mutate(keep_priority = row_number()) %>%
+    ungroup()
 
-# Check
-nsu_pc_duplicates_checked %>%
-  count(priority, keep_priority)
+  # Check
+  nsu_pc_duplicates_checked %>%
+    count(priority, keep_priority)
+
+  nsu_data <- nsu_data %>%
+    # Filter the main dataset to remove
+    # the duplicate postcodes we decided not to keep
+    anti_join(nsu_pc_duplicates_checked %>%
+      filter(keep_priority > 1))
+}
+
 
 final_data <- nsu_data %>%
-  # Filter the main dataset to remove
-  # the duplicate postcodes we decided not to keep
-  anti_join(nsu_pc_duplicates_checked %>%
-    filter(keep_priority > 1)) %>%
   # Filter any remaining duplicates (none on this test)
   distinct(upi_number, .keep_all = TRUE) %>%
   select(
