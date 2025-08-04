@@ -9,32 +9,11 @@
 #' @export
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
-get_ltcs_path <- function(year, ...) {
+#' @example get_ltcs_path("1920", update = previous_update())
+get_ltcs_path <- function(year, update = latest_update(), ...) {
   ltcs_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "LTCs"),
-    file_name = stringr::str_glue("anon-LTCs_patient_reference_file-20{year}_{latest_update()}.parquet"),
-    ...
-  )
-
-  return(ltcs_file_path)
-}
-
-#' Long Term Conditions File Path
-#'
-#' @description Get the full path to the LTC Reference File in the previous quarterly update
-#'
-#' @param ... additional arguments passed to [get_file_path()]
-#' @param year financial year e.g. "1920"
-#' @param older_update which quarter. Default previous_update()
-#'
-#' @return The path to the costs lookup as an [fs::path()]
-#' @export
-#' @family file path functions
-#' @seealso [get_ltcs_path()] for the generic function.
-get_ltcs_path_older_update <- function(year, older_update = previous_update(), ...) {
-  ltcs_file_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "LTCs"),
-    file_name = stringr::str_glue("anon-LTCs_patient_reference_file-20{year}_{older_update}.parquet"),
+    file_name = stringr::str_glue("anon-LTCs_patient_reference_file-20{year}_{update}.parquet"),
     ...
   )
 
