@@ -7,7 +7,6 @@
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
-
   data <- data %>%
     dplyr::select(
       "year",

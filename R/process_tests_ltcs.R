@@ -56,13 +56,15 @@ produce_source_ltc_tests <- function(data) {
       dplyr::across(
         dplyr::all_of(ltc_dates),
         ~ convert_date_to_numeric(as.Date(mean(
-          as.numeric(.x), na.rm = TRUE
+          as.numeric(.x),
+          na.rm = TRUE
         ), origin = "1970-01-01")),
         .names = "{.col}_mean"
       ),
       # Standard deviation in days for each date column
       dplyr::across(dplyr::all_of(ltc_dates), ~ as.integer(sd(
-        as.numeric(.x), na.rm = TRUE
+        as.numeric(.x),
+        na.rm = TRUE
       )), .names = "{.col}_sd")
     ) %>%
     tidyr::pivot_longer(
