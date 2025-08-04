@@ -19,6 +19,7 @@ Produce the test for the social care all episodes
 Other social care test functions: 
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_source_at_tests}()},
+\code{\link{produce_source_ltc_tests}()},
 \code{\link{produce_source_sds_tests}()},
 \code{\link{produce_tests_sc_client_lookup}()}
 }

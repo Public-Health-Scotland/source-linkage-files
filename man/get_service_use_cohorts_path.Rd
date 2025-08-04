@@ -29,6 +29,7 @@ Other file path functions:
 \code{\link{get_file_path}()},
 \code{\link{get_homelessness_completeness_path}()},
 \code{\link{get_ltcs_path}()},
+\code{\link{get_ltcs_path_older_update}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
 \code{\link{get_readcode_lookup_path}()},
