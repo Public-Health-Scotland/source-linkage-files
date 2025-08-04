@@ -7,7 +7,7 @@
 #'
 #' @export
 process_tests_ltcs <- function(data, year) {
-  old_data <- read_file(get_ltcs_path_older_update(year))
+  old_data <- read_file(get_ltcs_path(year, update = previous_update()))
 
   comparison <- produce_test_comparison(
     old_data = produce_source_ltc_tests(old_data),
@@ -40,33 +40,6 @@ produce_source_ltc_tests <- function(data) {
       unique_chi = dplyr::n_distinct(.data$anon_chi),
       # Sum each LTC variable
       dplyr::across(dplyr::all_of(ltc_vars), ~ sum(.x, na.rm = TRUE)),
-      # Min of each ltc_date column
-      dplyr::across(
-        dplyr::all_of(ltc_dates),
-        ~ convert_date_to_numeric(min(.x, na.rm = TRUE)),
-        .names = "{.col}_min"
-      ),
-      # Max of each ltc_date column
-      dplyr::across(
-        dplyr::all_of(ltc_dates),
-        ~ convert_date_to_numeric(max(.x, na.rm = TRUE)),
-        .names = "{.col}_max"
-      ),
-      # Mean of each ltc_date column
-      dplyr::across(
-        dplyr::all_of(ltc_dates),
-        ~ convert_date_to_numeric(as.Date(mean(
-          as.numeric(.x),
-          na.rm = TRUE
-        ), origin = "1970-01-01")),
-        .names = "{.col}_mean"
-      ),
-      # Standard deviation in days for each date column
-      dplyr::across(dplyr::all_of(ltc_dates), ~ as.integer(sd(
-        as.numeric(.x),
-        na.rm = TRUE
-      )), .names = "{.col}_sd")
-    ) %>%
     tidyr::pivot_longer(
       cols = dplyr::everything(),
       names_to = "measure",
