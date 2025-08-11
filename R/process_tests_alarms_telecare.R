@@ -35,6 +35,7 @@ process_tests_alarms_telecare <- function(data, year) {
 #' @family social care test functions
 produce_source_at_tests <- function(data,
                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
+  data <- rename_hscp(data)
 
   test_flags <- data %>%
     dplyr::arrange(.data$anon_chi) %>%
@@ -47,7 +48,7 @@ produce_source_at_tests <- function(data,
     ) %>%
     create_lca_client_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
-    dplyr::select(.data$unique_anon_chi:.data$West_Lothian) %>%
+    dplyr::select(.data$unique_anon_chi:.data$West_Lothian_clients) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
