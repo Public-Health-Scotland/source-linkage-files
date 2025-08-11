@@ -35,7 +35,10 @@ process_tests_alarms_telecare <- function(data, year) {
 #' @family social care test functions
 produce_source_at_tests <- function(data,
                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
+
   test_flags <- data %>%
+    dplyr::arrange(.data$anon_chi) %>%
+    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
