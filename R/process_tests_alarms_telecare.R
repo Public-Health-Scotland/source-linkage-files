@@ -45,7 +45,7 @@ produce_source_at_tests <- function(data,
       n_at_alarms = .data$smrtype == "AT-Alarm",
       n_at_telecare = .data$smrtype == "AT-Tele"
     ) %>%
-    create_lca_test_flags(.data$sc_send_lca) %>%
+    create_lca_client_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
     dplyr::select(.data$unique_anon_chi:.data$West_Lothian) %>%
     # use function to sum new test flags
