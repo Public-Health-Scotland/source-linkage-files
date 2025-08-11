@@ -8,7 +8,7 @@
 #' @return a dataframe with flag (1 or 0) for each LCA
 #'
 #' @family flag functions
-create_lca_test_client_flags <- function(data, lca_var) {
+create_lca_client_test_flags <- function(data, lca_var) {
   data %>%
     dplyr::mutate(
       Aberdeen_City_clients = {{ lca_var }} %in% c("S12000033", "01"),
