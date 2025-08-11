@@ -22,6 +22,7 @@ Other flag functions:
 \code{\link{create_demog_test_flags}()},
 \code{\link{create_hb_cost_test_flags}()},
 \code{\link{create_hscp_test_flags}()},
+\code{\link{create_lca_test_client_flags}()},
 \code{\link{create_lca_test_flags}()},
 \code{\link{create_sending_location_test_flags}()}
 }
