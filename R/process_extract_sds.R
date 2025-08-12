@@ -40,6 +40,7 @@ process_extract_sds <- function(
       "recid",
       "smrtype",
       "anon_chi",
+      "social_care_id",
       "person_id",
       "dob",
       "gender",
