@@ -29,8 +29,8 @@ process_lookup_sc_demographics <- function(
 
   # remove per in social_care_id in Renfrewshire
   data <- data %>%
-    mutate(
-      social_care_id = if_else(
+    dplyr::mutate(
+      social_care_id = dplyr::if_else(
         sending_location == "350" & !grepl("PER", social_care_id),
         stringr::str_c("PER", social_care_id),
         social_care_id
@@ -111,7 +111,7 @@ process_lookup_sc_demographics <- function(
       chi_postcode = dplyr::if_else(!is_cp_ch, chi_postcode, NA)
     ) %>%
     # fill old home postcode down, from older records for the person
-    arrange(
+    dplyr::arrange(
       "anon_chi",
       "sending_location",
       "social_care_id",
