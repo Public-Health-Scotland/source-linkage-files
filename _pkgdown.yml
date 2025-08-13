@@ -6,7 +6,7 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - 01 Project Structure
+  - 01_Project_structure.Rmd
   - 02 Using Github to Develop createslf
   - 03 Package Development
   - 04 Improve efficiency with `data.table`
