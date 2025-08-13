@@ -619,6 +619,16 @@ list(
         year
       )
     ),
+    # Homelessness lookup-------------------------------------------------------
+    tar_target(
+      # Target name
+      homelessness_lookup,
+      # Function
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
     # Long-Term Conditions (LTCs) Activity--------------------------------------
     # READ - LTCs
     tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
@@ -728,6 +738,17 @@ list(
       process_tests_nrs_deaths(
         source_nrs_deaths_extract,
         year
+      )
+    ),
+    # Deaths - Year specific SLF lookup-----------------------------------------
+    tar_target(
+      # Target name
+      slf_deaths_lookup,
+      # Function
+      process_slf_deaths_lookup(
+        year = year,
+        refined_death = refined_death_data,
+        write_to_disk = write_to_disk
       )
     ),
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
@@ -881,6 +902,10 @@ list(
       process_tests_sc_client_lookup(sc_client_lookup, year = year)
     ),
     # Alarms Telecare (AT) Activity---------------------------------------------
+    # READ - AT
+    #
+    # Target: all_at passed to PROCESS AT
+    #
     # PROCESS - AT
     tar_target(
       # Target name
@@ -903,6 +928,10 @@ list(
       )
     ),
     # Care Homes (CH) Activity--------------------------------------------------
+    # READ - CH
+    #
+    # Target: all_care_home passed to PROCESS CH
+    #
     # PROCESS - CH
     tar_target(
       # Target name
@@ -926,6 +955,10 @@ list(
       )
     ),
     # Home Care (HC) Activity---------------------------------------------------
+    # READ - HC
+    #
+    # Target: all_home_care passed to PROCESS HC
+    #
     # PROCESS - HC
     tar_target(
       # Target name
@@ -948,6 +981,10 @@ list(
       )
     ),
     # Self-Directed Support (SDS) Activity--------------------------------------
+    # READ - SDS
+    #
+    # Target: all_sds passed to PROCESS SDS
+    #
     # PROCESS - SDS
     tar_target(
       # Target name
@@ -970,31 +1007,8 @@ list(
       )
     ),
     ## TODO - RESTRUCTURE
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
-    ## TODO - RESTRUCTURE
     # Non-Service Users (NSU)---------------------------------------------------
     tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
-    ## TODO - RESTRUCTURE
-    # Homelessness lookup-------------------------------------------------------
-    tar_target(
-      # Target name
-      homelessness_lookup,
-      # Function
-      create_homelessness_lookup(
-        year,
-        homelessness_data = source_homelessness_extract
-      )
-    )
   )
 )
 
