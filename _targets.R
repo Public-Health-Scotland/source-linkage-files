@@ -181,30 +181,6 @@ list(
     # Function
     process_tests_sc_demographics(sc_demog_lookup)
   ),
-  # IT deaths-----------------------------------------------------------------
-  # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
-  ),
-  # PROCESS - IT CHI deaths------
-  tar_target(
-    # Target name
-    it_chi_deaths_data,
-    # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk
-    ),
-    priority = 0.9
-  ),
-  # TESTS - IT CHI deaths------
-  tar_target(
-    # target name
-    tests_it_chi_deaths,
-    # Function
-    process_tests_it_chi_deaths(it_chi_deaths_data)
-  ),
   # GP Lookup-----------------------------------------------------------------
   # PROCESS - GP lookup------
   tar_target(
@@ -279,6 +255,39 @@ list(
     # Function
     process_costs_gp_ooh_rmd()
   ),
+  # IT deaths-----------------------------------------------------------------
+  # READ - IT CHI deaths------
+  tar_file_read(it_chi_deaths_extract,
+                command = get_it_deaths_path(),
+                read = read_it_chi_deaths(!!.x)
+  ),
+  # PROCESS - IT CHI deaths------
+  tar_target(
+    # Target name
+    it_chi_deaths_data,
+    # Function
+    process_it_chi_deaths(
+      data = it_chi_deaths_extract,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.9
+  ),
+  # TESTS - IT CHI deaths------
+  tar_target(
+    # target name
+    tests_it_chi_deaths,
+    # Function
+    process_tests_it_chi_deaths(it_chi_deaths_data)
+  ),
+  # NRS BOXI Deaths------------------------------------------------------------
+  # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  tar_target(
+    refined_death_data,
+    process_refined_death(
+      it_chi_deaths = it_chi_deaths_data,
+      write_to_disk = write_to_disk
+    )
+  ),
   ### Social Care - 'All' data -----------------------------------------------
   # Alarms Telecare
   # READ - Alarms Telecare
@@ -349,15 +358,6 @@ list(
     cue = tar_cue_age(
       name = all_care_home_extract,
       age = as.difftime(28.0, units = "days")
-    )
-  ),
-  # TODO - restructure section
-  # Refined deaths
-  tar_target(
-    refined_death_data,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
     )
   ),
   # PROCESS - Care Homes
