@@ -429,23 +429,11 @@ list(
       )
     ),
     #---------------------------------------------------------------------------
-    # TODO - restructure section
-    # READ EXTRACTS
-    #---------------------------------------------------------------------------
-
-
-    ### TODO - Remove section - now done in refined deaths
-    # tar_file_read(
-    #   nrs_deaths_data,
-    #   get_boxi_extract_path(year, type = "deaths"),
-    #   read_extract_nrs_deaths(year, !!.x)
-    # ),
-
-
-
-    #---------------------------------------------------------------------------
-    # TODO - RESTRUCTURE
-    # PROCESS EXTRACTS
+    # PROCESS YEAR SPECIFIC EXTRACTS
+    #
+    # READ data
+    # PROCESS data
+    # TESTS - output tests
     #---------------------------------------------------------------------------
     # Acute (SMR01) Activity
     # READ - Acute
@@ -1008,115 +996,10 @@ list(
       )
     )
   )
-
-  #-------------------------------------------------------------------------------
-
-  ## End of Targets pipeline ##
-
-  #-------------------------------------------------------------------------------
-
-  ## TODO - REMOVE REDUNDANT CODE
-
-  # ,
-  # tar_target(
-  #   combined_deaths_lookup,
-  #   process_combined_deaths_lookup()
-  # )
 )
 
+#-------------------------------------------------------------------------------
 
-## Phase III, create ep file and ind file----
-## Redundant code which may still be useful for including ep/indiv files.
-# tar_qs(
-#   processed_data_list,
-#   list(
-#     source_acute_extract,
-#     source_ae_extract,
-#     source_cmh_extract,
-#     source_dn_extract,
-#     source_homelessness_extract,
-#     source_maternity_extract,
-#     source_mental_health_extract,
-#     source_nrs_deaths_extract,
-#     source_ooh_extract,
-#     source_outpatients_extract,
-#     source_prescribing_extract,
-#     source_sc_care_home,
-#     source_sc_home_care,
-#     source_sc_sds,
-#     source_sc_alarms_tele
-#   )
-# ),
-# tar_target(
-#   episode_file,
-#   create_episode_file(
-#     processed_data_list,
-#     year,
-#     homelessness_lookup = homelessness_lookup,
-#     dd_data = source_dd_extract,
-#     nsu_cohort = nsu_cohort,
-#     ltc_data = source_ltc_lookup,
-#     slf_pc_lookup = source_pc_lookup,
-#     slf_gpprac_lookup = source_gp_lookup,
-#     slf_deaths_lookup = slf_deaths_lookup,
-#     sc_client = sc_client_lookup,
-#     write_to_disk
-#   )
-# ),
-# tar_target(
-#   episode_file_tests,
-#   process_tests_episode_file(
-#     data = episode_file,
-#     year = year
-#   )
-# ) # ,
-# tar_target(
-#   cross_year_tests,
-#   process_tests_cross_year(year = year)
-# ), # ,
-# tar_target(
-#   individual_file,
-#   create_individual_file(
-#     episode_file = episode_file,
-#     year = year,
-#     homelessness_lookup = homelessness_lookup,
-#     write_to_disk = write_to_disk
-#   )
-# ),
-# tar_target(
-#   individual_file_tests,
-#   process_tests_individual_file(
-#     data = individual_file,
-#     year = year
-#   )
-# ) # ,
-# tar_target(
-#   episode_file_dataset,
-#   arrow::write_dataset(
-#     dataset = episode_file,
-#     path = fs::path(
-#       get_year_dir(year),
-#       stringr::str_glue("source-episode-file-{year}")
-#     ),
-#     format = "parquet",
-#     # Should correspond to the available slfhelper filters
-#     partitioning = c("recid", "hscp2018"),
-#     compression = "zstd",
-#     version = "latest"
-#   )
-# ),
-# tar_target(
-#   individual_file_dataset,
-#   arrow::write_dataset(
-#     dataset = individual_file,
-#     path = fs::path(
-#       get_year_dir(year),
-#       stringr::str_glue("source-individual-file-{year}")
-#     ),
-#     format = "parquet",
-#     # Should correspond to the available slfhelper filters
-#     partitioning = c("hscp2018"),
-#     compression = "zstd",
-#     version = "latest"
-#   )
-# )
+## End of Targets pipeline ##
+
+#-------------------------------------------------------------------------------
