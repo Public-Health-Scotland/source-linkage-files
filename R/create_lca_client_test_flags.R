@@ -45,5 +45,3 @@ create_lca_client_test_flags <- function(data, lca_var) {
       West_Lothian_clients = {{ lca_var }} %in% c("S12000040", "31")
     )
 }
-
-
