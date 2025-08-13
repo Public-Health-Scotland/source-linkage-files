@@ -432,7 +432,22 @@ list(
     # TODO - restructure section
     # READ EXTRACTS
     #---------------------------------------------------------------------------
-    # Acute Extract
+
+
+    ### TODO - Remove section - now done in refined deaths
+    # tar_file_read(
+    #   nrs_deaths_data,
+    #   get_boxi_extract_path(year, type = "deaths"),
+    #   read_extract_nrs_deaths(year, !!.x)
+    # ),
+
+
+
+    #---------------------------------------------------------------------------
+    # TODO - RESTRUCTURE
+    # PROCESS EXTRACTS
+    #---------------------------------------------------------------------------
+    # Acute (SMR01) Activity
     # READ - Acute
     tar_file_read(
       # Target name
@@ -441,106 +456,6 @@ list(
       # Function
       read_extract_acute(year, !!.x)
     ),
-    # A&E Extract---------------------------------------------------------------
-    # READ - A&E
-    tar_file_read(
-      # Target name
-      ae_data,
-      get_boxi_extract_path(year, type = "ae"),
-      # Function
-      read_extract_ae(year, !!.x)
-    ),
-    # Community Mental Health (CMH) Extract-------------------------------------
-    # READ - Community Mental Health (CMH)
-    tar_file_read(
-      # Target name
-      cmh_data,
-      get_boxi_extract_path(year, type = "cmh"),
-      # Function
-      read_extract_cmh(year, !!.x)
-    ),
-    # District Nursing Extract--------------------------------------------------
-    # READ - District Nursing
-    tar_file_read(
-      # Target name
-      dn_data,
-      get_boxi_extract_path(year, type = "dn"),
-      # Function
-      read_extract_district_nursing(year, !!.x)
-    ),
-    # Homelessness Extract------------------------------------------------------
-    # READ - Homelessness
-    tar_file_read(
-      # Target name
-      homelessness_data,
-      get_boxi_extract_path(year, type = "homelessness"),
-      # Function
-      read_extract_homelessness(year, !!.x)
-    ),
-    # Maternity Extract---------------------------------------------------------
-    # READ - Maternity
-    tar_file_read(
-      # Target name
-      maternity_data,
-      get_boxi_extract_path(year, type = "maternity"),
-      # Function
-      read_extract_maternity(year, !!.x)
-    ),
-    # Mental Health Extract-----------------------------------------------------
-    # READ - Mental Health
-    tar_file_read(
-      # Target name
-      mental_health_data,
-      get_boxi_extract_path(year, type = "mh"),
-      # Function
-      read_extract_mental_health(year, !!.x)
-    ),
-    ### TODO - Remove section - now done in refined deaths
-    # tar_file_read(
-    #   nrs_deaths_data,
-    #   get_boxi_extract_path(year, type = "deaths"),
-    #   read_extract_nrs_deaths(year, !!.x)
-    # ),
-    # Outpatients Extract-------------------------------------------------------
-    # READ -Outpatients
-    tar_file_read(
-      # Target name
-      outpatients_data,
-      get_boxi_extract_path(year, type = "outpatient"),
-      # Function
-      read_extract_outpatients(year, !!.x)
-    ),
-    # Prescribing Extract-------------------------------------------------------
-    # READ - Prescribing (PIS)
-    tar_file_read(
-      # Target name
-      prescribing_data,
-      get_it_prescribing_path(year),
-      # Function
-      read_extract_prescribing(year, !!.x)
-    ),
-    # GP Out of Hours Extract---------------------------------------------------
-    # READ - GP Out of Hours diagnoses
-    tar_target(
-      # Target name
-      diagnosis_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-d"),
-      format = "file"
-    ),
-    # READ - GP Out of Hours outcomes
-    tar_target(
-      # Target name
-      outcomes_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-o"),
-      format = "file"
-    ),
-    # READ - GP Out of Hours consultations
-    tar_target(
-      consultations_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-c"),
-      format = "file"
-    ),
-    ## TODO - Restructure
     # READ - Acute CUP
     tar_target(
       # Target name
@@ -548,31 +463,6 @@ list(
       get_boxi_extract_path(year, type = "acute_cup"),
       format = "file"
     ),
-    ## TODO - Restructure
-    # GP Out of Hours CUP
-    tar_target(
-      gp_ooh_cup_path,
-      get_boxi_extract_path(year, type = "gp_ooh_cup"),
-      format = "file"
-    ),
-    ## TODO - Restructure
-    # GP Out of Hours ALL-------------------------------------------------------
-    tar_qs(
-      # Target name
-      ooh_data,
-      # Function
-      read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
-      )
-    ),
-    #---------------------------------------------------------------------------
-    # TODO - RESTRUCTURE
-    # PROCESS EXTRACTS
-    #---------------------------------------------------------------------------
-    # Acute (SMR01) Activity
     # PROCESS - Acute
     tar_target(
       # Target name
@@ -596,6 +486,14 @@ list(
       )
     ),
     # Accident & Emergency (AE2) activity --------------------------------------
+    # READ - A&E
+    tar_file_read(
+      # Target name
+      ae_data,
+      get_boxi_extract_path(year, type = "ae"),
+      # Function
+      read_extract_ae(year, !!.x)
+    ),
     # PROCESS - A&E
     tar_target(
       # Target name
@@ -618,6 +516,14 @@ list(
       )
     ),
     # Community Mental Health (CMH) Activity------------------------------------
+    # READ - CMH
+    tar_file_read(
+      # Target name
+      cmh_data,
+      get_boxi_extract_path(year, type = "cmh"),
+      # Function
+      read_extract_cmh(year, !!.x)
+    ),
     # PROCESS - CMH
     tar_target(
       # Target name
@@ -664,6 +570,14 @@ list(
       )
     ),
     # District Nursing Activity-------------------------------------------------
+    # READ - District Nursing
+    tar_file_read(
+      # Target name
+      dn_data,
+      get_boxi_extract_path(year, type = "dn"),
+      # Function
+      read_extract_district_nursing(year, !!.x)
+    ),
     # PROCESS - District Nursing
     tar_target(
       # Target name
@@ -687,6 +601,14 @@ list(
       )
     ),
     # Homelessness (HL1) Activity-----------------------------------------------
+    # READ - Homelessness
+    tar_file_read(
+      # Target name
+      homelessness_data,
+      get_boxi_extract_path(year, type = "homelessness"),
+      # Function
+      read_extract_homelessness(year, !!.x)
+    ),
     # PROCESS - Homelessness
     tar_target(
       # Target name
@@ -734,6 +656,14 @@ list(
       )
     ),
     # Maternity (SMR02) Acitivity-----------------------------------------------
+    # READ - Maternity
+    tar_file_read(
+      # Target name
+      maternity_data,
+      get_boxi_extract_path(year, type = "maternity"),
+      # Function
+      read_extract_maternity(year, !!.x)
+    ),
     # PROCESS - Maternity
     tar_target(
       # Target name
@@ -756,6 +686,14 @@ list(
       )
     ),
     # Mental Health (SMR02) Activity--------------------------------------------
+    # READ - Mental Health
+    tar_file_read(
+      # Target name
+      mental_health_data,
+      get_boxi_extract_path(year, type = "mh"),
+      # Function
+      read_extract_mental_health(year, !!.x)
+    ),
     # PROCESS - Mental Health
     tar_target(
       # Target name
@@ -805,8 +743,44 @@ list(
       )
     ),
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
-
-    ## TODO - RESTRUCTURE
+    # READ - GP Out of Hours diagnoses
+    tar_target(
+      # Target name
+      diagnosis_data_path,
+      get_boxi_extract_path(year = year, type = "gp_ooh-d"),
+      format = "file"
+    ),
+    # READ - GP Out of Hours outcomes
+    tar_target(
+      # Target name
+      outcomes_data_path,
+      get_boxi_extract_path(year = year, type = "gp_ooh-o"),
+      format = "file"
+    ),
+    # READ - GP Out of Hours consultations
+    tar_target(
+      consultations_data_path,
+      get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+      format = "file"
+    ),
+    # GP Out of Hours ALL
+    tar_qs(
+      # Target name
+      ooh_data,
+      # Function
+      read_extract_gp_ooh(
+        year,
+        diagnosis_data_path,
+        outcomes_data_path,
+        consultations_data_path
+      )
+    ),
+    # GP Out of Hours CUP
+    tar_target(
+      gp_ooh_cup_path,
+      get_boxi_extract_path(year, type = "gp_ooh_cup"),
+      format = "file"
+    ),
     # PROCESS - GP OOH CUP
     tar_target(
       # Target name
@@ -830,6 +804,14 @@ list(
       )
     ),
     # Outpatients (SMR00) Activity----------------------------------------------
+    # READ - Outpatients
+    tar_file_read(
+      # Target name
+      outpatients_data,
+      get_boxi_extract_path(year, type = "outpatient"),
+      # Function
+      read_extract_outpatients(year, !!.x)
+    ),
     # PROCESS - Outpatients
     tar_target(
       # Target name
@@ -851,6 +833,14 @@ list(
       )
     ),
     # Prescribing (PIS) Activity------------------------------------------------
+    # READ - Prescribing (PIS)
+    tar_file_read(
+      # Target name
+      prescribing_data,
+      get_it_prescribing_path(year),
+      # Function
+      read_extract_prescribing(year, !!.x)
+    ),
     # PROCESS - Prescribing
     tar_target(
       # Target name
