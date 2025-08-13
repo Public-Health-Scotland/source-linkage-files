@@ -14,8 +14,21 @@ read_lookup_sc_client <- function(fyyear,
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
-  # read in data - social care 2 client
-  client_data <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client")) %>%
+
+  # extract fy client data
+  client_fy_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_fy_snapshot")) %>%
+    dplyr::filter(.data$financial_year == year) %>%
+    dplyr::collect()
+
+  # extract qtr client data
+  client_qtr_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_qtr_snapshot")) %>%
+    dplyr::filter(.data$financial_year == year) %>%
+    dplyr::collect()
+
+  # Bind client FY and QTR extracts together
+  client_extract <- rbind(client_fy_extract, client_qtr_extract)
+
+  client_data <- client_extract %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -29,7 +42,7 @@ read_lookup_sc_client <- function(fyyear,
       "alcohol",
       "palliative_care",
       "carer",
-      "elderly_frail",
+      "elder_frail",
       "neurological_condition",
       "autism",
       "other_vulnerable_groups",
@@ -40,8 +53,6 @@ read_lookup_sc_client <- function(fyyear,
       "meals",
       "day_care"
     ) %>%
-    dplyr::filter(.data$financial_year == year) %>%
-    dplyr::collect() %>%
     dplyr::mutate(
       dplyr::across(
         c(
@@ -56,7 +67,7 @@ read_lookup_sc_client <- function(fyyear,
           "alcohol",
           "palliative_care",
           "carer",
-          "elderly_frail",
+          "elder_frail",
           "neurological_condition",
           "autism",
           "other_vulnerable_groups",
@@ -76,8 +87,10 @@ read_lookup_sc_client <- function(fyyear,
       .data$financial_year,
       .data$financial_quarter
     ) %>%
-    dplyr::rename("mental_health_disorders" = "mental_health_problems") %>%
-    dplyr::collect()
+    dplyr::rename(
+      "mental_health_disorders" = "mental_health_problems",
+      "elderly_frail" = "elder_frail"
+    )
 
   latest_quarter <- client_data %>%
     dplyr::arrange(dplyr::desc(.data$financial_quarter)) %>%

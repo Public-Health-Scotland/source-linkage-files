@@ -4,7 +4,7 @@
 \alias{get_uk_postcode_path}
 \title{get uk postcode list file path}
 \usage{
-get_uk_postcode_path()
+get_uk_postcode_path(...)
 }
 \description{
 get uk postcode list file
