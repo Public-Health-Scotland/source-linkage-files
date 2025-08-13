@@ -712,12 +712,6 @@ list(
         year
       )
     ),
-    ## TODO - Remove as this is in refined deaths now
-    # tar_target(source_nrs_deaths_extract, process_extract_nrs_deaths(
-    #   nrs_deaths_data,
-    #   year,
-    #   write_to_disk = write_to_disk
-    # )),
     # Death Activity------------------------------------------------------------
     # PROCESS - Deaths
     tar_target(
@@ -1005,10 +999,7 @@ list(
         data = source_sc_sds,
         year = year
       )
-    ),
-    ## TODO - RESTRUCTURE
-    # Non-Service Users (NSU)---------------------------------------------------
-    tar_file_read(nsu_cohort, get_nsu_path(year), read_file(!!.x)),
+    )
   )
 )
 
