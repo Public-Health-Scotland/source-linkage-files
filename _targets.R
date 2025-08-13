@@ -258,8 +258,8 @@ list(
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
   tar_file_read(it_chi_deaths_extract,
-                command = get_it_deaths_path(),
-                read = read_it_chi_deaths(!!.x)
+    command = get_it_deaths_path(),
+    read = read_it_chi_deaths(!!.x)
   ),
   # PROCESS - IT CHI deaths------
   tar_target(
