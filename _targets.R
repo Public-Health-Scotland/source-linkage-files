@@ -144,18 +144,6 @@ list(
       age = as.difftime(90, units = "days")
     )
   ),
-  # TODO - restructure section
-  # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
-  ),
-  # TODO - restructure section
-  # READ - Delayed discharges------
-  tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
-  # TODO - restructure section
-  # READ - LTCs
-  tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
   # Care home name look up------
   tar_target(
     slf_ch_name_lookup_path,
@@ -194,6 +182,11 @@ list(
     process_tests_sc_demographics(sc_demog_lookup)
   ),
   # IT deaths-----------------------------------------------------------------
+  # READ - IT CHI deaths------
+  tar_file_read(it_chi_deaths_extract,
+                command = get_it_deaths_path(),
+                read = read_it_chi_deaths(!!.x)
+  ),
   # PROCESS - IT CHI deaths------
   tar_target(
     # Target name
@@ -647,6 +640,8 @@ list(
       )
     ),
     # Delayed Discharges Activity-----------------------------------------------
+    # READ - Delayed Discharges
+    tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
     # PROCESS - Delayed Discharges
     tar_target(
       # Target name
@@ -715,6 +710,8 @@ list(
       )
     ),
     # Long-Term Conditions (LTCs) Activity--------------------------------------
+    # READ - LTCs
+    tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
     # PROCESS - LTCs
     tar_target(
       # Target name
