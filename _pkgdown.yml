@@ -7,9 +7,9 @@ articles:
   navbar: ~
   contents:
   - 01_Project_structure
-  - 02 Using Github to Develop createslf
-  - 03 Package Development
-  - 04 Improve efficiency with `data.table`
+  - 02_using_github
+  - 03_package_development
+  - 04_data_table
 
 reference:
 
