@@ -218,3 +218,13 @@ reference:
     - contains("_tests")
     - contains("_measures")
     - starts_with("produce_test")
+
+
+  - title: Linkage utilities
+    desc: Functions to extract and link data
+  - contents:
+    - extract_ep_ind_time
+    - extract_targets_time
+    - link_ch_with_adms
+    - update_uk_postcode_directory
+
