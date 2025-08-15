@@ -36,15 +36,17 @@ process_tests_alarms_telecare <- function(data, year) {
 produce_source_at_tests <- function(data,
                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
   test_flags <- data %>%
+    dplyr::arrange(.data$anon_chi) %>%
+    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
       n_at_alarms = .data$smrtype == "AT-Alarm",
       n_at_telecare = .data$smrtype == "AT-Tele"
     ) %>%
-    create_lca_test_flags(.data$sc_send_lca) %>%
+    create_lca_client_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
-    dplyr::select(.data$unique_anon_chi:.data$West_Lothian) %>%
+    dplyr::select(.data$unique_anon_chi:.data$West_Lothian_clients) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
