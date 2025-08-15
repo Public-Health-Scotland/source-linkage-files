@@ -133,6 +133,17 @@ list(
     get_spd_path(),
     format = "file"
   ),
+  # Update NHS UK postcode directory -----
+  tar_target(
+    # Target name
+    uk_pc_list,
+    update_uk_postcode_directory(),
+    format = "file",
+    cue = tar_cue_age(
+      name = uk_pc_list,
+      age = as.difftime(90, units = "days")
+    )
+  ),
   # TODO - restructure section
   # READ - IT CHI deaths------
   tar_file_read(it_chi_deaths_extract,
