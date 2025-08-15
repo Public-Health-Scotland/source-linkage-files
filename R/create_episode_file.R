@@ -68,6 +68,7 @@ create_episode_file <- function(
         "smrtype",
         "anon_chi",
         "person_id",
+        "social_care_id",
         "gender",
         "dob",
         "gpprac",
@@ -557,52 +558,75 @@ join_sc_client <- function(data,
     return(data_file)
   }
 
-  sc_client <- sc_client %>%
-    dplyr::mutate(
-      year = year,
-      chi_person_id = dplyr::if_else(
-        is.na(.data$anon_chi) & is.na(.data$person_id),
-        NA,
-        paste0(.data$anon_chi, "-", .data$person_id)
-      )
-    )
-
   if (file_type == "episode") {
     # Match on client variables by chi
-    data_file <- data %>%
-      dplyr::mutate(chi_person_id = dplyr::if_else(
-        is.na(.data$anon_chi) & is.na(.data$person_id),
-        NA,
-        paste0(.data$anon_chi, "-", .data$person_id)
-      )) %>%
-      dplyr::full_join(
+    # Step 1. join by anon_chi,
+    # Step 2. then the rest join by person_id,
+    # Step 3. then include non-joined ep,
+    # Step 4. then include non-joined sc_client
+
+    # join by anon_chi
+    data_sc = data %>%
+      filter(recid %in% c("AT", "HC", "CH", "SDS"))
+    data_non_sc = data %>%
+      filter(!(recid %in% c("AT", "HC", "CH", "SDS")))
+
+    data_file_chi_join = data_sc %>%
+      inner_join(
         sc_client,
-        by = c("chi_person_id", "year"),
+        by = "anon_chi",
         relationship = "many-to-one",
-        suffix = c("", "_to_remove"),
-        na_matches = c("never")
+        suffix = c("", "_sc"),
+        na_matches = "never"
       ) %>%
-      dplyr::mutate(
-        anon_chi = dplyr::if_else(
-          is_missing(.data$anon_chi),
-          .data$anon_chi_to_remove,
-          .data$anon_chi
-        ),
-        person_id = dplyr::if_else(
-          is_missing(.data$person_id),
-          .data$person_id_to_remove,
-          .data$person_id
-        )
-      ) %>%
-      dplyr::select(
-        -"chi_person_id",
-        -tidyr::contains("_to_remove")
+      select(
+        -dplyr::ends_with("_sc")
       )
+
+    # the rest join by person_id
+    data_file_pi_join = data_sc %>%
+      filter(!(ep_file_row_id %in% pull(data_file_chi_join, ep_file_row_id))) %>%
+      inner_join(
+        sc_client,
+        by = "person_id",
+        relationship = "many-to-one",
+        suffix = c("", "_sc"),
+        na_matches = "never"
+      ) %>%
+      select(
+        -dplyr::ends_with("_sc")
+      )
+
+    # the rest unjoined
+    data_file_unjoined = data_sc %>%
+      filter(!(ep_file_row_id %in% c(
+        pull(data_file_chi_join, ep_file_row_id),
+        pull(data_file_pi_join, ep_file_row_id)
+      )))
+
+    # include the rest of sc_client to ep_file
+    sc_client_matched_list = c(
+      pull(data_file_pi_join, sc_client_row_id),
+      pull(data_file_chi_join, sc_client_row_id)
+    ) %>% unique()
+
+    sc_client_unmatched = sc_client %>%
+      filter(!(sc_client_row_id %in% sc_client_matched_list)) %>%
+      mutate(recid = "SCC")
+
+    data_file = dplyr::bind_rows(
+      data_file_chi_join,
+      data_file_pi_join,
+      data_file_unjoined,
+      sc_client_unmatched,
+      data_non_sc
+    ) %>%
+      select(-"sc_client_row_id")
   } else {
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
-        by = c("anon_chi", "year"),
+        by = c("anon_chi"),
         relationship = "one-to-one"
       ) %>%
       dplyr::select(-"chi_person_id")
