@@ -566,12 +566,12 @@ join_sc_client <- function(data,
     # Step 4. then include non-joined sc_client
 
     # join by anon_chi
-    data_sc = data %>%
+    data_sc <- data %>%
       filter(recid %in% c("AT", "HC", "CH", "SDS"))
-    data_non_sc = data %>%
+    data_non_sc <- data %>%
       filter(!(recid %in% c("AT", "HC", "CH", "SDS")))
 
-    data_file_chi_join = data_sc %>%
+    data_file_chi_join <- data_sc %>%
       inner_join(
         sc_client,
         by = "anon_chi",
@@ -584,7 +584,7 @@ join_sc_client <- function(data,
       )
 
     # the rest join by person_id
-    data_file_pi_join = data_sc %>%
+    data_file_pi_join <- data_sc %>%
       filter(!(ep_file_row_id %in% pull(data_file_chi_join, ep_file_row_id))) %>%
       inner_join(
         sc_client,
@@ -598,23 +598,23 @@ join_sc_client <- function(data,
       )
 
     # the rest unjoined
-    data_file_unjoined = data_sc %>%
+    data_file_unjoined <- data_sc %>%
       filter(!(ep_file_row_id %in% c(
         pull(data_file_chi_join, ep_file_row_id),
         pull(data_file_pi_join, ep_file_row_id)
       )))
 
     # include the rest of sc_client to ep_file
-    sc_client_matched_list = c(
+    sc_client_matched_list <- c(
       pull(data_file_pi_join, sc_client_row_id),
       pull(data_file_chi_join, sc_client_row_id)
     ) %>% unique()
 
-    sc_client_unmatched = sc_client %>%
+    sc_client_unmatched <- sc_client %>%
       filter(!(sc_client_row_id %in% sc_client_matched_list)) %>%
       mutate(recid = "SCC")
 
-    data_file = dplyr::bind_rows(
+    data_file <- dplyr::bind_rows(
       data_file_chi_join,
       data_file_pi_join,
       data_file_unjoined,
