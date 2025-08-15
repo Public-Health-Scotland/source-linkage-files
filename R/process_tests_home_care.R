@@ -48,6 +48,8 @@ produce_source_hc_tests <- function(data,
                                       "cost_total_net", "yearstay", "hours"
                                     )) {
   test_flags <- data %>%
+    dplyr::arrange(.data$anon_chi) %>%
+    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%
     dplyr::mutate(
@@ -59,7 +61,7 @@ produce_source_hc_tests <- function(data,
       hc_reablement_yes = dplyr::if_else(.data$hc_reablement == 1L, 1L, 0L),
       hc_reablement_unknown = dplyr::if_else(.data$hc_reablement == 9L, 1L, 0L)
     ) %>%
-    create_lca_test_flags(.data$sc_send_lca) %>%
+    create_lca_client_test_flags(.data$sc_send_lca) %>%
     # keep variables for comparison
     dplyr::select("unique_anon_chi":dplyr::last_col()) %>%
     # use function to sum new test flags
