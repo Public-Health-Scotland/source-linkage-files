@@ -560,68 +560,61 @@ join_sc_client <- function(data,
 
   if (file_type == "episode") {
     # Match on client variables by chi
-    # Step 1. join by anon_chi,
-    # Step 2. then the rest join by person_id,
-    # Step 3. then include non-joined ep,
-    # Step 4. then include non-joined sc_client
+    # Step 1. Link/join ep with sc_client by anon_chi,
+    #         excluding episodes are not joined. We get `data_file_chi_join`
+    # Step 2. For the episodes are not joined in Step 1,
+    #         join them with sc_client again by person_id,
+    #         excluding those are not joined. We get `data_file_pi_join`
+    # Step 3. Episodes that are non-joined, is `data_file_unjoined`
+    # Step 4. bind rows together
 
-    # join by anon_chi
+    # Step 1
     data_sc <- data %>%
-      filter(recid %in% c("AT", "HC", "CH", "SDS"))
+      dplyr::filter(recid %in% c("AT", "HC", "CH", "SDS"))
     data_non_sc <- data %>%
-      filter(!(recid %in% c("AT", "HC", "CH", "SDS")))
+      dplyr::filter(!(recid %in% c("AT", "HC", "CH", "SDS")))
 
-    data_file_chi_join <- data_sc %>%
-      inner_join(
+    data_file_chi_join = data_sc %>%
+      dplyr::inner_join(
         sc_client,
         by = "anon_chi",
         relationship = "many-to-one",
         suffix = c("", "_sc"),
         na_matches = "never"
       ) %>%
-      select(
+      dplyr::select(
         -dplyr::ends_with("_sc")
       )
 
-    # the rest join by person_id
+    # Step 2
     data_file_pi_join <- data_sc %>%
-      filter(!(ep_file_row_id %in% pull(data_file_chi_join, ep_file_row_id))) %>%
-      inner_join(
+      dplyr::filter(!(
+        ep_file_row_id %in% dplyr::pull(data_file_chi_join, ep_file_row_id)
+      )) %>%
+      dplyr::inner_join(
         sc_client,
         by = "person_id",
         relationship = "many-to-one",
         suffix = c("", "_sc"),
         na_matches = "never"
       ) %>%
-      select(
-        -dplyr::ends_with("_sc")
-      )
+      dplyr::select(-dplyr::ends_with("_sc"))
 
-    # the rest unjoined
+    # Step 3
     data_file_unjoined <- data_sc %>%
-      filter(!(ep_file_row_id %in% c(
-        pull(data_file_chi_join, ep_file_row_id),
-        pull(data_file_pi_join, ep_file_row_id)
+      dplyr::filter(!(ep_file_row_id %in% c(
+        dplyr::pull(data_file_chi_join, ep_file_row_id),
+        dplyr::pull(data_file_pi_join, ep_file_row_id)
       )))
 
-    # include the rest of sc_client to ep_file
-    sc_client_matched_list <- c(
-      pull(data_file_pi_join, sc_client_row_id),
-      pull(data_file_chi_join, sc_client_row_id)
-    ) %>% unique()
-
-    sc_client_unmatched <- sc_client %>%
-      filter(!(sc_client_row_id %in% sc_client_matched_list)) %>%
-      mutate(recid = "SCC")
-
+    # Step 4
     data_file <- dplyr::bind_rows(
       data_file_chi_join,
       data_file_pi_join,
       data_file_unjoined,
-      sc_client_unmatched,
       data_non_sc
     ) %>%
-      select(-"sc_client_row_id")
+      dplyr::select(-"sc_client_row_id")
   } else {
     data_file <- data %>%
       dplyr::left_join(
