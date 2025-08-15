@@ -574,7 +574,7 @@ join_sc_client <- function(data,
     data_non_sc <- data %>%
       dplyr::filter(!(recid %in% c("AT", "HC", "CH", "SDS")))
 
-    data_file_chi_join = data_sc %>%
+    data_file_chi_join <- data_sc %>%
       dplyr::inner_join(
         sc_client,
         by = "anon_chi",
