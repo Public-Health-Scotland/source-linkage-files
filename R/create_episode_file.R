@@ -266,6 +266,11 @@ create_episode_file <- function(
       )
   }
 
+#' Ordering the episode file columns. If a new variable is added to the episode file or the
+#' variable name changed, then the "order_ep_cols" function should be updated to reflect this.
+  episode_file <- episode_file %>%
+    order_ep_cols()
+
   if (write_to_disk) {
     write_file(episode_file, get_slf_episode_path(year, check_mode = "write"),
       group_id = 3356
