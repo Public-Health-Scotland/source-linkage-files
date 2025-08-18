@@ -19,8 +19,8 @@
 #'
 #' @examples
 #' \dontrun{
-#'   df <- read.csv("my_episode_file.csv")
-#'   df_ordered <- order_ep_cols(df)
+#' df <- read.csv("my_episode_file.csv")
+#' df_ordered <- order_ep_cols(df)
 #' }
 #'
 #' @export
