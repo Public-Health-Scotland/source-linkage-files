@@ -1,16 +1,27 @@
-#' Source Linkage File (SLF) Episode File Variables
+#' Order SLF Episode File Columns
 #'
-#' @description
-#' This script contains the variable structure for the SLF episode file variables.
+#' Reorders an SLF episode file dataframe so that its columns appear
+#' in the standard schema order used by the `createslf` package.
 #'
-#' This schema is used by the `createslf` package to ensure a consistent
-#' column structure across all years of data.
+#' This ensures a consistent column structure across all years of data.
+#'
+#' @param episode_file A dataframe representing the SLF episode file.
+#'   Must contain the expected variables; any extra columns will be dropped.
+#'
+#' @return The input dataframe with its columns reordered into the
+#'   standard SLF episode file order.
 #'
 #' @details
-#' The contains a comprehensive list of variables and any new variables added to
-#' the SLFs must be added to these lists to maintain consistency.
+#' New variables added to SLFs should also be added here to maintain
+#' consistency across years.
 #'
-#' @family createslf schema objects
+#' @family createslf schema functions
+#'
+#' @examples
+#' \dontrun{
+#'   df <- read.csv("my_episode_file.csv")
+#'   df_ordered <- order_ep_cols(df)
+#' }
 #'
 #' @export
 order_ep_cols <- function(episode_file) {
