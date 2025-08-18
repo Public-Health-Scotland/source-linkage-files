@@ -2,22 +2,37 @@
 % Please edit documentation in R/order_indiv_cols.R
 \name{order_indiv_cols}
 \alias{order_indiv_cols}
-\title{Source Linkage File (SLF) Individual File Variables}
+\title{Order SLF Individual File Columns}
 \usage{
 order_indiv_cols(individual_file)
 }
+\arguments{
+\item{episode_file}{A dataframe representing the SLF individual file.
+Must contain the expected variables; any extra columns will be dropped.}
+}
+\value{
+The input dataframe with its columns reordered into the
+standard SLF individual file order.
+}
 \description{
-This script contains the variable structure for the SLF individual file variables.
-
-This schema is used by the \code{createslf} package to ensure a consistent
-column structure across all years of data.
+Reorders an SLF individual file dataframe so that its columns appear
+in the standard schema order used by the \code{createslf} package.
 }
 \details{
-The contains a comprehensive list of variables and any new variables added to
-the SLFs must be added to these lists to maintain consistency.
+This ensures a consistent column structure across all years of data.
+
+New variables added to SLFs should also be added here to maintain
+consistency across years.
+}
+\examples{
+\dontrun{
+df <- read.csv("my_episode_file.csv")
+df_ordered <- order_ep_cols(df)
+}
+
 }
 \seealso{
-Other createslf schema objects: 
+Other createslf schema functions: 
 \code{\link{order_ep_cols}()}
 }
-\concept{createslf schema objects}
+\concept{createslf schema functions}
