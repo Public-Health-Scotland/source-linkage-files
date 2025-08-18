@@ -115,6 +115,7 @@ process_extract_care_home <- function(
       "recid",
       "smrtype",
       "anon_chi",
+      "social_care_id",
       "person_id",
       "dob",
       "gender",
