@@ -613,16 +613,14 @@ join_sc_client <- function(data,
       data_file_pi_join,
       data_file_unjoined,
       data_non_sc
-    ) %>%
-      dplyr::select(-"sc_client_row_id")
+    )
   } else {
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
         by = c("anon_chi"),
         relationship = "one-to-one"
-      ) %>%
-      dplyr::select(-"chi_person_id")
+      )
   }
 
   cli::cli_alert_info("Join social care client function finished at {Sys.time()}")
