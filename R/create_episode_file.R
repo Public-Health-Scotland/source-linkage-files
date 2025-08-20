@@ -68,6 +68,7 @@ create_episode_file <- function(
         "smrtype",
         "anon_chi",
         "person_id",
+        "social_care_id",
         "gender",
         "dob",
         "gpprac",
@@ -562,55 +563,69 @@ join_sc_client <- function(data,
     return(data_file)
   }
 
-  sc_client <- sc_client %>%
-    dplyr::mutate(
-      year = year,
-      chi_person_id = dplyr::if_else(
-        is.na(.data$anon_chi) & is.na(.data$person_id),
-        NA,
-        paste0(.data$anon_chi, "-", .data$person_id)
-      )
-    )
-
   if (file_type == "episode") {
     # Match on client variables by chi
-    data_file <- data %>%
-      dplyr::mutate(chi_person_id = dplyr::if_else(
-        is.na(.data$anon_chi) & is.na(.data$person_id),
-        NA,
-        paste0(.data$anon_chi, "-", .data$person_id)
-      )) %>%
-      dplyr::full_join(
+    # Step 1. Link/join ep with sc_client by anon_chi,
+    #         excluding episodes are not joined. We get `data_file_chi_join`
+    # Step 2. For the episodes are not joined in Step 1,
+    #         join them with sc_client again by person_id,
+    #         excluding those are not joined. We get `data_file_pi_join`
+    # Step 3. Episodes that are non-joined, is `data_file_unjoined`
+    # Step 4. bind rows together
+
+    # Step 1
+    data_sc <- data %>%
+      dplyr::filter(recid %in% c("AT", "HC", "CH", "SDS"))
+    data_non_sc <- data %>%
+      dplyr::filter(!(recid %in% c("AT", "HC", "CH", "SDS")))
+
+    data_file_chi_join <- data_sc %>%
+      dplyr::inner_join(
         sc_client,
-        by = c("chi_person_id", "year"),
+        by = "anon_chi",
         relationship = "many-to-one",
-        suffix = c("", "_to_remove"),
-        na_matches = c("never")
-      ) %>%
-      dplyr::mutate(
-        anon_chi = dplyr::if_else(
-          is_missing(.data$anon_chi),
-          .data$anon_chi_to_remove,
-          .data$anon_chi
-        ),
-        person_id = dplyr::if_else(
-          is_missing(.data$person_id),
-          .data$person_id_to_remove,
-          .data$person_id
-        )
+        suffix = c("", "_sc"),
+        na_matches = "never"
       ) %>%
       dplyr::select(
-        -"chi_person_id",
-        -tidyr::contains("_to_remove")
+        -dplyr::ends_with("_sc")
       )
+
+    # Step 2
+    data_file_pi_join <- data_sc %>%
+      dplyr::filter(!(
+        ep_file_row_id %in% dplyr::pull(data_file_chi_join, ep_file_row_id)
+      )) %>%
+      dplyr::inner_join(
+        sc_client,
+        by = "person_id",
+        relationship = "many-to-one",
+        suffix = c("", "_sc"),
+        na_matches = "never"
+      ) %>%
+      dplyr::select(-dplyr::ends_with("_sc"))
+
+    # Step 3
+    data_file_unjoined <- data_sc %>%
+      dplyr::filter(!(ep_file_row_id %in% c(
+        dplyr::pull(data_file_chi_join, ep_file_row_id),
+        dplyr::pull(data_file_pi_join, ep_file_row_id)
+      )))
+
+    # Step 4
+    data_file <- dplyr::bind_rows(
+      data_file_chi_join,
+      data_file_pi_join,
+      data_file_unjoined,
+      data_non_sc
+    )
   } else {
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
-        by = c("anon_chi", "year"),
+        by = c("anon_chi"),
         relationship = "one-to-one"
-      ) %>%
-      dplyr::select(-"chi_person_id")
+      )
   }
 
   cli::cli_alert_info("Join social care client function finished at {Sys.time()}")
