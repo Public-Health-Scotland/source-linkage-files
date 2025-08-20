@@ -21,7 +21,8 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
       "date_of_death",
       "chi_postcode",
       "submitted_postcode",
-      "chi_gender_code"
+      "chi_gender_code",
+      "extract_date"
     ) %>%
     dplyr::collect()
 
