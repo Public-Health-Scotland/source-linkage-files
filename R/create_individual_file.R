@@ -152,6 +152,10 @@ create_individual_file <- function(
       dplyr::mutate(hl1_in_fy = as.integer(NA))
   }
 
+  #' Ordering the individual file columns. If a new variable is added to the individual file or the
+  #' variable name changed, then the "order_indiv_cols" function should be updated to reflect this.
+  individual_file <- individual_file %>%
+    order_indiv_cols()
 
   if (write_to_disk) {
     slf_indiv_path <- get_slf_individual_path(year, check_mode = "write")
