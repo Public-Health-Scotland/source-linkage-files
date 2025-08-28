@@ -9,6 +9,9 @@ fix_scid_renfrewshire(data)
 \arguments{
 \item{data}{social care extracts, ch, hc, sds, at, demog}
 }
+\value{
+social care data with scid in renfrewshire fixed.
+}
 \description{
 Fix social care id in renfrewshire
 }
