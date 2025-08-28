@@ -31,31 +31,31 @@
 library(targets)
 library(createslf)
 
-devtools::load_all()
+# devtools::load_all()
 
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
 console_outputs <- TRUE
 
-# save console outputs if `console_outputs == TRUE`
-#-------------------------------------------------------------------------------
-if (console_outputs) {
-  file_name <- stringr::str_glue(
-    "targets_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
-  )
-
-  file_path <- get_file_path(
-    console_output_path(),
-    file_name,
-    create = TRUE
-  )
-
-  con <- file(file_name, open = "wt")
-
-  # Redirect messages (including warnings and errors) to the file
-  sink(con, type = "output", split = TRUE)
-  sink(con, type = "message", append = TRUE)
-}
+# # save console outputs if `console_outputs == TRUE`
+# #-------------------------------------------------------------------------------
+# if (console_outputs) {
+#   file_name <- stringr::str_glue(
+#     "targets_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
+#   )
+#
+#   file_path <- get_file_path(
+#     console_output_path(),
+#     file_name,
+#     create = TRUE
+#   )
+#
+#   con <- file(file_name, open = "wt")
+#
+#   # Redirect messages (including warnings and errors) to the file
+#   sink(con, type = "output", split = TRUE)
+#   sink(con, type = "message", append = TRUE)
+# }
 
 # Run the targets pipeline "_Targets.R"
 #-------------------------------------------------------------------------------
@@ -67,10 +67,11 @@ tar_make()
 createslf::combine_tests()
 
 
-# save console outputs if `console_outputs == TRUE`
-#-------------------------------------------------------------------------------
-if (console_outputs) {
-  sink()
-
-  extract_targets_time(file_name)
-}
+# # save console outputs if `console_outputs == TRUE`
+# #-------------------------------------------------------------------------------
+# if (console_outputs) {
+#   sink(type = "output")
+#   sink(type = "message")
+#   close(con)
+#   extract_targets_time(file_name)
+# }

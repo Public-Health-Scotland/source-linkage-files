@@ -29,6 +29,8 @@ process_sc_all_care_home <- function(
   ## Data Cleaning-----------------------------------------------------
 
   ch_clean <- data %>%
+    # add per in social_care_id in Renfrewshire
+    fix_scid_renfrewshire() %>%
     dplyr::mutate(
       # Set missing admission date to start of the submitted quarter (n = 2)
       ch_admission_date = dplyr::if_else(

@@ -27,15 +27,9 @@ process_lookup_sc_demographics <- function(
   valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
     dplyr::pull(.data$pc7)
 
-  # remove per in social_care_id in Renfrewshire
   data <- data %>%
-    dplyr::mutate(
-      social_care_id = dplyr::if_else(
-        sending_location == "350" & !grepl("PER", social_care_id),
-        stringr::str_c("PER", social_care_id),
-        social_care_id
-      )
-    ) %>%
+    # add per in social_care_id in Renfrewshire
+    fix_scid_renfrewshire() %>%
     # create financial_year and financial_quarter variables for sorting
     dplyr::mutate(
       financial_year = as.numeric(stringr::str_sub(period, 1, 4)),
@@ -262,7 +256,9 @@ process_lookup_sc_demographics <- function(
       date_of_death = dplyr::last(.data$date_of_death),
       extract_date = dplyr::last(.data$extract_date)
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::select(-"postcode_ch_as_home",
+                  -"extract_date")
 
   # check to make sure all cases of chi are still there
   dplyr::n_distinct(sc_demog_lookup$anon_chi) # 525,834 # 573,427

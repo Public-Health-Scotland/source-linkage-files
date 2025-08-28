@@ -16,6 +16,8 @@ process_sc_all_sds <- function(
     write_to_disk = TRUE) {
   # Match on demographics data (chi, gender, dob and postcode)
   matched_sds_data <- data %>%
+    # add per in social_care_id in Renfrewshire
+    fix_scid_renfrewshire() %>%
     dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
     dplyr::right_join(
       sc_demog_lookup,
