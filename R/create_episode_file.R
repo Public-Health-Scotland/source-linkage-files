@@ -51,6 +51,7 @@ create_episode_file <- function(
       dplyr::mutate(
         ch_name = NA,
         ch_postcode = NA,
+        social_care_id = NA,
         person_id = NA
       )
   }
