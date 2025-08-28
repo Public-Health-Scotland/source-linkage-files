@@ -138,10 +138,10 @@ list(
     # Target name
     uk_pc_list,
     update_uk_postcode_directory(),
-    format = "file",
+    format = "qs",
     cue = tar_cue_age(
       name = uk_pc_list,
-      age = as.difftime(90, units = "days")
+      age = as.difftime(180, units = "days")
     )
   ),
   # Care home name look up------

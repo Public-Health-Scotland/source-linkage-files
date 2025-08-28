@@ -24,6 +24,10 @@ process_sc_all_alarms_telecare <- function(
     gender <- dob <- postcode <- recid <- person_id <- sc_send_lca <-
     period_start_date <- NULL
 
+  # add per in social_care_id in Renfrewshire
+  data <- data %>%
+    fix_scid_renfrewshire()
+
   # Convert to data.table
   data.table::setDT(data)
   data.table::setDT(sc_demog_lookup)
