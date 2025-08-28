@@ -257,8 +257,10 @@ process_lookup_sc_demographics <- function(
       extract_date = dplyr::last(.data$extract_date)
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-"postcode_ch_as_home",
-                  -"extract_date")
+    dplyr::select(
+      -"postcode_ch_as_home",
+      -"extract_date"
+    )
 
   # check to make sure all cases of chi are still there
   dplyr::n_distinct(sc_demog_lookup$anon_chi) # 525,834 # 573,427
