@@ -16,6 +16,8 @@ process_sc_all_home_care <- function(
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
     write_to_disk = TRUE) {
   replaced_dates <- data %>%
+    # add per in social_care_id in Renfrewshire
+    fix_scid_renfrewshire() %>%
     dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
     dplyr::mutate(
       hc_service_end_date = fix_sc_missing_end_dates(

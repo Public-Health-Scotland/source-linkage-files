@@ -101,11 +101,9 @@ check_year_valid <- function(
     ## CHECK - what is the latest NSU cohort available?
     # NSU is currently available for 2023/24
     ## CHECK - What period does SDS data get submitted?
-    # SDS is only available up to March 2024 currently.
-  } else if (year >= "2425" && all(type %in% c("sds"))) {
-    return(FALSE)
     ## CHECK - what data do we have available for Social Care and SPARRA?
-  } else if (year >= "2526" && all(type %in% c("nsu", "ch", "hc", "sds", "at"))) {
+  } else if (year >= "2526" &&
+             all(type %in% c("nsu", "ch", "hc", "sds", "at", "sds"))) {
     return(FALSE)
   } else if (year >= "2627" && all(type %in% c("sparra"))) {
     return(FALSE)

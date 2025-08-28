@@ -152,6 +152,11 @@ setup_keyring <- function(
     keyring_exists = FALSE,
     key_exists = FALSE,
     env_var_pass_exists = FALSE) {
+
+  # setup keyring_backend to avoid error
+  # Error in default_backend()$keyring_list() : attempt to apply non-function
+  options(keyring_backend = "file")
+
   # First we need the password as an environment variable
   if (!env_var_pass_exists) {
     if (Sys.getenv("CREATESLF_KEYRING_PASS") != "") {

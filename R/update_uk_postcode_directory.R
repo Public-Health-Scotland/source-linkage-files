@@ -41,5 +41,5 @@ update_uk_postcode_directory <- function() {
 
   unlink(target_dir, recursive = TRUE)
 
-  return(pcd)
+  return(pcd %>% dplyr::pull())
 }
