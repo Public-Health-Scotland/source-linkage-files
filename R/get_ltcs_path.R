@@ -9,7 +9,6 @@
 #' @export
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
-#' @example get_ltcs_path("1920", update = previous_update())
 get_ltcs_path <- function(year, update = latest_update(), ...) {
   ltcs_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "LTCs"),
