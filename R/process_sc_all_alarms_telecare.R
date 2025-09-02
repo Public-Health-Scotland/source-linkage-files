@@ -84,8 +84,15 @@ process_sc_all_alarms_telecare <- function(
     )
   ]
 
-  # RIGHT_JOIN with sc_demog_lookup
-  data <- data[sc_demog_lookup, on = list(sending_location, social_care_id)]
+  # FULL_JOIN with sc_demog_lookup
+  # full_join to include those patients in extracts but not in demog_lookup
+  # used to be right_join
+  data_full_dt <- merge(
+    data,
+    sc_demog_lookup,
+    by = c("sending_location", "social_care_id"),
+    all = TRUE
+  )
 
   # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
   data <- replace_sc_id_with_latest(data)
