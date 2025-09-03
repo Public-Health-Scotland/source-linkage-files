@@ -87,7 +87,7 @@ process_sc_all_alarms_telecare <- function(
   # FULL_JOIN with sc_demog_lookup
   # full_join to include those patients in extracts but not in demog_lookup
   # used to be right_join
-  data_full_dt <- merge(
+  data <- merge(
     data,
     sc_demog_lookup,
     by = c("sending_location", "social_care_id"),
