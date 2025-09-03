@@ -63,7 +63,6 @@ process_lookup_sc_demographics <- function(
       dob = .data$chi_date_of_birth
     ) %>%
     # fill in missing demographic details
-    dplyr::arrange(.data$period, .data$social_care_id) %>%
     dplyr::group_by(.data$social_care_id, .data$sending_location) %>%
     tidyr::fill(.data$anon_chi, .direction = ("updown")) %>%
     tidyr::fill(.data$dob, .direction = ("updown")) %>%
@@ -89,11 +88,6 @@ process_lookup_sc_demographics <- function(
       tidyselect::contains("postcode"),
       ~ phsmethods::format_postcode(.x, format = "pc7", quiet = TRUE)
     )) %>%
-    # remove care home pc where are supplied as home address
-    # dplyr::mutate(dplyr::across(
-    #   tidyselect::contains("postcode"),
-    #   ~ dplyr::if_else(.x %in% ch_pc, NA, .x)
-    # )) %>%
     dplyr::mutate(
       # check if pc is ch_pc
       is_sp_ch = (submitted_postcode %in% ch_pc),

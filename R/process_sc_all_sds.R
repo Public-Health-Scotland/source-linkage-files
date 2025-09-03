@@ -19,7 +19,10 @@ process_sc_all_sds <- function(
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
     dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
-    dplyr::right_join(
+    # FULL_JOIN with sc_demog_lookup
+    # full_join to include those patients in extracts but not in demog_lookup
+    # used to be right_join
+    dplyr::full_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%

@@ -39,7 +39,10 @@ process_sc_all_home_care <- function(
   # Match on demographic data ---------------------------------------
 
   matched_hc_data <- replaced_dates %>%
-    dplyr::right_join(
+    # FULL_JOIN with sc_demog_lookup
+    # full_join to include those patients in extracts but not in demog_lookup
+    # used to be right_join
+    dplyr::full_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%

@@ -45,7 +45,10 @@ process_sc_all_care_home <- function(
         .data[["ch_discharge_date"]]
       )
     ) %>%
-    dplyr::right_join(sc_demog_lookup, # this is the correct join.
+    # FULL_JOIN with sc_demog_lookup
+    # full_join to include those patients in extracts but not in demog_lookup
+    # used to be right_join
+    dplyr::full_join(sc_demog_lookup, # this is the correct join.
       by = c("sending_location", "social_care_id")
     ) %>%
     replace_sc_id_with_latest() %>%
