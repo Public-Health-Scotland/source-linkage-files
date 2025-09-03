@@ -44,7 +44,11 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     create_cost_inc_dna() %>%
-    apply_cost_uplift()
+    apply_cost_uplift() %>%
+    dplyr::mutate(
+      keytime1 = hms::as_hms(as.character(keytime1)),
+      keytime2 = hms::as_hms(as.character(keytime2))
+    )
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
