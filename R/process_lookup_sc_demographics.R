@@ -63,7 +63,6 @@ process_lookup_sc_demographics <- function(
       dob = .data$chi_date_of_birth
     ) %>%
     # fill in missing demographic details
-    dplyr::arrange(.data$period, .data$social_care_id) %>%
     dplyr::group_by(.data$social_care_id, .data$sending_location) %>%
     tidyr::fill(.data$anon_chi, .direction = ("updown")) %>%
     tidyr::fill(.data$dob, .direction = ("updown")) %>%
