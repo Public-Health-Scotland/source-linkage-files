@@ -203,6 +203,7 @@ reference:
     - fix_east_ayrshire_duplicates
     - fix_west_dun_duplicates
     - produce_homelessness_completeness
+    - fix_scid_renfrewshire
   - subtitle: Helper functions
   - contents:
     - vars_end_with
