@@ -6,6 +6,7 @@
 #'
 #' @param data The extract to process.
 #' @param spd_path Path to the Scottish Postcode Directory.
+#' @param uk_pc_path UK Postcode directory
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,6 +16,7 @@
 process_lookup_sc_demographics <- function(
     data,
     spd_path = get_spd_path(),
+    uk_pc_path = get_uk_postcode_path(),
     write_to_disk = TRUE) {
   # Deal with postcodes ---------------------------------------
 
@@ -26,6 +28,11 @@ process_lookup_sc_demographics <- function(
 
   valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
     dplyr::pull(.data$pc7)
+  valid_uk_postcodes <- read_file(uk_pc_path) %>%
+    dplyr::pull()
+  # combine them as some deleted scottish pc are not in the uk pc list
+  valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
+    sort()
 
   data <- data %>%
     # add per in social_care_id in Renfrewshire
@@ -140,11 +147,6 @@ process_lookup_sc_demographics <- function(
       tidyselect::ends_with("_postcode"),
       ~ dplyr::if_else(.x %in% c(dummy_postcodes, non_existant_postcodes), NA, .x)
     )) %>%
-    # comparing with regex UK postcode
-    dplyr::mutate(dplyr::across(
-      tidyselect::ends_with("_postcode"),
-      ~ dplyr::if_else(stringr::str_detect(.x, uk_pc_regexp), .x, NA)
-    )) %>%
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -162,8 +164,8 @@ process_lookup_sc_demographics <- function(
     ) %>%
     # check if submitted_postcode matches with postcode lookup
     dplyr::mutate(
-      valid_pc_submitted = .data$submitted_postcode %in% valid_spd_postcodes,
-      valid_pc_chi = .data$chi_postcode %in% valid_spd_postcodes
+      valid_pc_submitted = .data$submitted_postcode %in% valid_uk_postcodes,
+      valid_pc_chi = .data$chi_postcode %in% valid_uk_postcodes
     ) %>%
     # use submitted_postcode if valid, otherwise use chi_postcode
     dplyr::mutate(
