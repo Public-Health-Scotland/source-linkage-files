@@ -400,7 +400,7 @@ combine_multi_xlsx <- function(file_list, output_file) {
   for (file in file_list) {
     sheet_names <- openxlsx::getSheetNames(file)
     for (sheet_name in sheet_names) {
-      comparison_data <- openxlsx::readWorkbook(file)
+      comparison_data <- openxlsx::readWorkbook(file, sheet = sheet_name)
       openxlsx::addWorksheet(wb, sheet_name)
       format_test_excel(comparison_data, wb, sheet_name)
       openxlsx::writeDataTable(
