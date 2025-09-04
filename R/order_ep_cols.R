@@ -28,8 +28,8 @@ order_ep_cols <- function(episode_file) {
   episode_file <- episode_file %>%
     # Format the keytime1 and keytime2 as hms
     dplyr::mutate(
-      keytime1 = hms::as_hms(as.character(keytime1)),
-      keytime2 = hms::as_hms(as.character(keytime2))
+      keytime1 = hms::as_hms(keytime1),
+      keytime2 = hms::as_hms(keytime2)
     ) %>%
     # Ordering the columns
     dplyr::select(c(
