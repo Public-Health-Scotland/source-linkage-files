@@ -11,6 +11,3 @@ update_uk_postcode_directory()
 Update UK postcode directory from ONS API
 The ONS NHSPD directory is update quarterly.
 }
-\examples{
-update_uk_postcode_directory()
-}
