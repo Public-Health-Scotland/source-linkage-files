@@ -1,7 +1,6 @@
 #' Update UK postcode directory from ONS API
 #' The ONS NHSPD directory is update quarterly.
 #'
-#' @examples update_uk_postcode_directory()
 update_uk_postcode_directory <- function() {
   # Define URL for the latest "complete" NHSPD directory
   # This always points to the newest quarterly release.
