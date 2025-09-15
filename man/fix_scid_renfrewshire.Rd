@@ -15,6 +15,3 @@ social care data with scid in renfrewshire fixed.
 \description{
 Fix social care id in renfrewshire
 }
-\examples{
-fix_scid_renfrewshire(data)
-}
