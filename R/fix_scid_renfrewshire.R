@@ -3,8 +3,6 @@
 #' @param data social care extracts, ch, hc, sds, at, demog
 #'
 #' @return social care data with scid in renfrewshire fixed.
-#'
-#' @examples fix_scid_renfrewshire(data)
 fix_scid_renfrewshire <- function(data) {
   data <- data %>%
     dplyr::mutate(
