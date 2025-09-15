@@ -4,7 +4,7 @@
 \alias{get_ltcs_path}
 \title{Long Term Conditions File Path}
 \usage{
-get_ltcs_path(year, ...)
+get_ltcs_path(year, update = latest_update(), ...)
 }
 \arguments{
 \item{year}{financial year e.g. "1920"}
@@ -15,7 +15,7 @@ get_ltcs_path(year, ...)
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full path to the LTC Reference File
+Get the full path to the LTC Reference File in this quarterly update
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.

@@ -21,6 +21,7 @@ Other social care test functions:
 \code{\link{produce_sc_all_episodes_tests}()},
 \code{\link{produce_sc_demog_lookup_tests}()},
 \code{\link{produce_source_at_tests}()},
+\code{\link{produce_source_ltc_tests}()},
 \code{\link{produce_source_sds_tests}()}
 }
 \concept{social care test functions}

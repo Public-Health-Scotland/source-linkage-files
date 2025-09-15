@@ -7,6 +7,7 @@
 process_lookup_sc_demographics(
   data,
   spd_path = get_spd_path(),
+  uk_pc_path = get_uk_postcode_path(),
   write_to_disk = TRUE
 )
 }
@@ -14,6 +15,8 @@ process_lookup_sc_demographics(
 \item{data}{The extract to process.}
 
 \item{spd_path}{Path to the Scottish Postcode Directory.}
+
+\item{uk_pc_path}{UK Postcode directory}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

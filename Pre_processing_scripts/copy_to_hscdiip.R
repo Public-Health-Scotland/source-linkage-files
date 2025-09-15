@@ -74,6 +74,7 @@ for (i in 1:year_n) {
 
   resource_consumption$time_consumption[i] <- (Sys.time() - timer)
   file_size <- sum(file.size(old_path)) / 2^20
+  resource_comsumption$year[i] <- year_n[i]
   resource_consumption$file_size_MB[i] <- file_size
   print(stringr::str_glue("file size is {file_size}."))
   print(resource_consumption$time_consumption[i])

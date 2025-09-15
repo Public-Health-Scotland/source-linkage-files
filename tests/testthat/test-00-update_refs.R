@@ -30,9 +30,9 @@ test_that("Previous Update works for different month values", {
 
   expected_previous_update_month <- dplyr::case_match(
     latest_update_month,
-    "Apr" ~ "Dec",
-    "Jul" ~ "Apr",
-    "Sep" ~ "Jul",
+    "Mar" ~ "Dec",
+    "Jun" ~ "Mar",
+    "Sep" ~ "Jun",
     "Dec" ~ "Sep",
     # Don't fail on non-standard update months
     .default = previous_update_month

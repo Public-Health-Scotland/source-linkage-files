@@ -164,7 +164,7 @@ get_year_dir <- function(year, extracts_dir = FALSE) {
   year_dir <- fs::path(get_dev_dir(), year)
 
   if (!fs::dir_exists(year_dir)) {
-    fs::dir_create(year_dir)
+    fs::dir_create(year_dir, mode = "u=rwx,go=rwx")
     cli::cli_alert_info(
       "{.path {year_dir}} did not exist, it has now been created."
     )
@@ -174,7 +174,7 @@ get_year_dir <- function(year, extracts_dir = FALSE) {
     year_extracts_dir <- fs::path(year_dir, "Extracts")
 
     if (!fs::dir_exists(year_extracts_dir)) {
-      fs::dir_create(year_extracts_dir)
+      fs::dir_create(year_extracts_dir, mode = "u=rwx,go=rwx")
       cli::cli_alert_info(
         "{.path {year_extracts_dir}} did not exist, it has now been created."
       )

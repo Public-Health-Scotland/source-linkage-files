@@ -51,7 +51,8 @@ test_that("Check year valid works for specific datasets ", {
   expect_true(check_year_valid("2122", "nsu"))
   expect_true(check_year_valid("2223", "nsu"))
   expect_true(check_year_valid("2324", "nsu"))
-  expect_false(check_year_valid("2425", "nsu"))
+  expect_true(check_year_valid("2425", "nsu"))
+  expect_false(check_year_valid("2526", "nsu"))
 
   # SPARRA
   expect_false(check_year_valid("1415", "sparra"))

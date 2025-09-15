@@ -16,6 +16,8 @@ process_sc_all_home_care <- function(
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
     write_to_disk = TRUE) {
   replaced_dates <- data %>%
+    # add per in social_care_id in Renfrewshire
+    fix_scid_renfrewshire() %>%
     dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
     dplyr::mutate(
       hc_service_end_date = fix_sc_missing_end_dates(
@@ -37,7 +39,10 @@ process_sc_all_home_care <- function(
   # Match on demographic data ---------------------------------------
 
   matched_hc_data <- replaced_dates %>%
-    dplyr::right_join(
+    # FULL_JOIN with sc_demog_lookup
+    # full_join to include those patients in extracts but not in demog_lookup
+    # used to be right_join
+    dplyr::full_join(
       sc_demog_lookup,
       by = c("sending_location", "social_care_id")
     ) %>%
