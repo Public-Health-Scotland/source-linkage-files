@@ -7,9 +7,9 @@ fix_scid_renfrewshire <- function(data) {
   data <- data %>%
     dplyr::mutate(
       social_care_id = dplyr::if_else(
-        sending_location == "350" & !grepl("PER", social_care_id),
-        stringr::str_c("PER", social_care_id),
-        social_care_id
+        .data$sending_location == "350" & !grepl("PER", .data$social_care_id),
+        stringr::str_c("PER", .data$social_care_id),
+        .data$social_care_id
       )
     )
   return(data)

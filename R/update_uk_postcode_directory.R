@@ -8,7 +8,7 @@ update_uk_postcode_directory <- function() {
 
   # Download to a temporary file
   temp_zip <- tempfile(fileext = ".zip")
-  download.file(nhspd_url, destfile = temp_zip, mode = "wb")
+  utils::download.file(nhspd_url, destfile = temp_zip, mode = "wb")
   # copy it to the SLFExtract Temp folder, which will be deleted in the end
   target_dir <- fs::path(get_slf_dir(), "/Temp/")
   if (!dir.exists(target_dir)) {
@@ -27,7 +27,7 @@ update_uk_postcode_directory <- function() {
     col_select = 2,
     show_col_types = FALSE
   ) %>%
-    dplyr::rename(pcd = X2) %>%
+    dplyr::rename("pcd" = "X2") %>%
     dplyr::mutate(pcd = phsmethods::format_postcode(.data$pcd,
       format = "pc7",
       quiet = TRUE

@@ -37,7 +37,7 @@ produce_source_extract_tests <- function(data,
   if (smr00_ep) {
     data <- data %>%
       dplyr::select(-"cost_total_net") %>%
-      dplyr::rename(cost_total_net = cost_total_net_inc_dnas)
+      dplyr::rename("cost_total_net" = "cost_total_net_inc_dnas")
   }
 
   test_flags <- data %>%

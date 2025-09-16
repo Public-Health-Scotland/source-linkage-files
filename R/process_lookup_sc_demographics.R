@@ -39,28 +39,28 @@ process_lookup_sc_demographics <- function(
     fix_scid_renfrewshire() %>%
     # create financial_year and financial_quarter variables for sorting
     dplyr::mutate(
-      financial_year = as.numeric(stringr::str_sub(period, 1, 4)),
-      financial_quarter = stringr::str_sub(period, 6, 6)
+      financial_year = as.numeric(stringr::str_sub(.data$period, 1, 4)),
+      financial_quarter = stringr::str_sub(.data$period, 6, 6)
     ) %>%
     # set financial quarter to 5 when there is only an annual submission -
     # for ordering periods with annual submission last
     dplyr::mutate(
       financial_quarter = dplyr::if_else(
-        is.na(financial_quarter) |
-          financial_quarter == "",
+        is.na(.data$financial_quarter) |
+          .data$financial_quarter == "",
         "5",
-        financial_quarter
+        .data$financial_quarter
       )
     ) %>%
     # arrange - makes sure extract date is last
     dplyr::arrange(
-      sending_location,
-      social_care_id,
-      financial_year,
-      financial_quarter,
-      extract_date
+      "sending_location",
+      "social_care_id",
+      "financial_year",
+      "financial_quarter",
+      "extract_date"
     ) %>%
-    dplyr::relocate(c(financial_year, financial_quarter), .after = period)
+    dplyr::relocate(c("financial_year", "financial_quarter"), .after = period)
 
   #  Fill in missing data and flag latest cases to keep ---------------------------------------
   sc_demog <- data %>%
@@ -80,10 +80,10 @@ process_lookup_sc_demographics <- function(
     dplyr::ungroup()
 
   ch_pc <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
-    dplyr::select(AccomPostCodeNo) %>%
-    dplyr::rename(ch_pc = AccomPostCodeNo) %>%
-    dplyr::mutate(ch_pc = phsmethods::format_postcode(ch_pc, quiet = TRUE)) %>%
-    dplyr::filter(!is.na(ch_pc)) %>%
+    dplyr::select(.data$AccomPostCodeNo) %>%
+    dplyr::rename("ch_pc" = "AccomPostCodeNo") %>%
+    dplyr::mutate(ch_pc = phsmethods::format_postcode(.data$ch_pc, quiet = TRUE)) %>%
+    dplyr::filter(!is.na(.data$ch_pc)) %>%
     dplyr::pull()
 
   # pre-clean postcode:
@@ -97,13 +97,13 @@ process_lookup_sc_demographics <- function(
     )) %>%
     dplyr::mutate(
       # check if pc is ch_pc
-      is_sp_ch = (submitted_postcode %in% ch_pc),
-      is_cp_ch = (chi_postcode %in% ch_pc),
+      is_sp_ch = (.data$submitted_postcode %in% .data$ch_pc),
+      is_cp_ch = (.data$chi_postcode %in% .data$ch_pc),
       # store those ch_pc away and remove ch_pc
-      submitted_postcode_ch = dplyr::if_else(is_sp_ch, submitted_postcode, NA),
-      chi_postcode_ch = dplyr::if_else(is_cp_ch, chi_postcode, NA),
-      submitted_postcode = dplyr::if_else(!is_sp_ch, submitted_postcode, NA),
-      chi_postcode = dplyr::if_else(!is_cp_ch, chi_postcode, NA)
+      submitted_postcode_ch = dplyr::if_else(.data$is_sp_ch, .data$submitted_postcode, NA),
+      chi_postcode_ch = dplyr::if_else(.data$is_cp_ch, .data$chi_postcode, NA),
+      submitted_postcode = dplyr::if_else(!.data$is_sp_ch, .data$submitted_postcode, NA),
+      chi_postcode = dplyr::if_else(!.data$is_cp_ch, .data$chi_postcode, NA)
     ) %>%
     # fill old home postcode down, from older records for the person
     dplyr::arrange(
@@ -205,10 +205,10 @@ process_lookup_sc_demographics <- function(
 
   sc_demog <- sc_demog %>%
     dplyr::mutate(postcode = dplyr::if_else(
-      is.na(postcode) & !is.na(postcode_ch_as_home),
-      postcode_ch_as_home,
-      postcode,
-      postcode
+      is.na(.data$postcode) & !is.na(.data$postcode_ch_as_home),
+      .data$postcode_ch_as_home,
+      .data$postcode,
+      .data$postcode
     ))
 
   # Check where the postcodes are coming from
