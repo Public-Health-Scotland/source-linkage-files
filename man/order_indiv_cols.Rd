@@ -7,7 +7,7 @@
 order_indiv_cols(individual_file)
 }
 \arguments{
-\item{episode_file}{A dataframe representing the SLF individual file.
+\item{individual_file}{A dataframe representing the SLF individual file.
 Must contain the expected variables; any extra columns will be dropped.}
 }
 \value{

@@ -595,7 +595,7 @@ join_sc_client <- function(data,
     # Step 2
     data_file_pi_join <- data_sc %>%
       dplyr::filter(!(
-        .data$ep_file_row_id %in% dplyr::pull(data_file_chi_join, ep_file_row_id)
+        .data$ep_file_row_id %in% dplyr::pull(data_file_chi_join, .data$ep_file_row_id)
       )) %>%
       dplyr::inner_join(
         sc_client,
@@ -609,8 +609,8 @@ join_sc_client <- function(data,
     # Step 3
     data_file_unjoined <- data_sc %>%
       dplyr::filter(!(.data$ep_file_row_id %in% c(
-        dplyr::pull(data_file_chi_join, ep_file_row_id),
-        dplyr::pull(data_file_pi_join, ep_file_row_id)
+        dplyr::pull(data_file_chi_join, .data$ep_file_row_id),
+        dplyr::pull(data_file_pi_join, .data$ep_file_row_id)
       )))
 
     # Step 4

@@ -9,6 +9,8 @@ get_ltcs_path(year, update = latest_update(), ...)
 \arguments{
 \item{year}{financial year e.g. "1920"}
 
+\item{update}{which update. Can use \code{\link[=latest_update]{latest_update()}} or \code{\link[=previous_update]{previous_update()}}}
+
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{

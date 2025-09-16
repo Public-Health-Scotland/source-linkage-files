@@ -60,7 +60,7 @@ process_lookup_sc_demographics <- function(
       "financial_quarter",
       "extract_date"
     ) %>%
-    dplyr::relocate(c("financial_year", "financial_quarter"), .after = period)
+    dplyr::relocate(c("financial_year", "financial_quarter"), .after = "period")
 
   #  Fill in missing data and flag latest cases to keep ---------------------------------------
   sc_demog <- data %>%
@@ -189,8 +189,8 @@ process_lookup_sc_demographics <- function(
         (is.na(.data$submitted_postcode_ch) &
           !is.na(.data$chi_postcode_ch)) ~ NA
       ),
-      postcode_ch_as_home = dplyr::if_else(is.na(postcode),
-        postcode_ch_as_home,
+      postcode_ch_as_home = dplyr::if_else(is.na(.data$postcode),
+        .data$postcode_ch_as_home,
         NA
       )
     ) %>%

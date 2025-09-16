@@ -5,7 +5,7 @@
 #'
 #' This ensures a consistent column structure across all years of data.
 #'
-#' @param episode_file A dataframe representing the SLF individual file.
+#' @param individual_file A dataframe representing the SLF individual file.
 #'   Must contain the expected variables; any extra columns will be dropped.
 #'
 #' @return The input dataframe with its columns reordered into the
