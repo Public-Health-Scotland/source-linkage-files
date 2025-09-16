@@ -25,7 +25,7 @@ process_tests_ltcs <- function(data, year) {
 #' @description Produce the test for the Long Term Conditions (LTCs) all episodes
 #'
 #' @param data new or old data for testing summary flags
-#' (data is from [get_ltc_path()] or [get_ltc_path_older_update()])
+#' (data is from [get_ltcs_path()]
 #' @return a dataframe with a count of each flag.
 #'
 #' @family social care test functions

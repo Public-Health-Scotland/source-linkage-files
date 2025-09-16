@@ -8,7 +8,7 @@ produce_source_ltc_tests(data)
 }
 \arguments{
 \item{data}{new or old data for testing summary flags
-(data is from \code{\link[=get_ltc_path]{get_ltc_path()}} or \code{\link[=get_ltc_path_older_update]{get_ltc_path_older_update()}})}
+(data is from \code{\link[=get_ltcs_path]{get_ltcs_path()}}}
 }
 \value{
 a dataframe with a count of each flag.
