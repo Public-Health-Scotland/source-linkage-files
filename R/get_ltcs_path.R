@@ -4,6 +4,7 @@
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param year financial year e.g. "1920"
+#' @param update which update. Can use [latest_update()] or [previous_update()]
 #'
 #' @return The path to the costs lookup as an [fs::path()]
 #' @export
