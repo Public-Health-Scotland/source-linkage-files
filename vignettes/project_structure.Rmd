@@ -24,7 +24,7 @@ The repo contains the code to develop the package `createslf`which is used for t
 * **man** - Documentation folder for all functions. When the package goes through checks, this will be populated automatically and should not be edited by hand. To make changes to function documentation, you should do this in the roxygen documentation found above every function.  
 * **Pre_processing_scripts** - This folder contains scripts which should be ran prior to processing. 
 * **R** - The main folder of functions which make up the `createslf` package. 
-* **Rmarkdown** - Rmarkdown files mainly used for processing costs.
+* **RMarkdown** - RMarkdown files mainly used for processing costs.
 * **Run_SLF_Files_manually** - This folder contains the top level scripts for running the whole process. 
 * **Run_SLF_Files_targets** - This folder contains the top level scripts for running the targets pipeline. 
 * **tests** - This folder contains tests for each function which ensures the package is working efficiently. 

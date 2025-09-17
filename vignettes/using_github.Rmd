@@ -1,8 +1,8 @@
 ---
-title: "02 Using Github to Develop createslf"
+title: "02 Using GitHub to Develop createslf"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{02 Using Github to Develop createslf}
+  %\VignetteIndexEntry{02 Using GitHub to Develop createslf}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -58,7 +58,7 @@ To work on a new issue, you will need to create a new branch. This is best done 
 ### From an issue
 A nice way to create a new branch is to use GitHub to create one from the issue page.
 
-<img width="259" alt="image" src="https://github.com/Public-Health-Scotland/source-linkage-files/assets/5982260/d05f27fa-ec0c-4136-aab2-2779f5189415">
+<img width="259" alt="image" src="https://GitHub.com/Public-Health-Scotland/source-linkage-files/assets/5982260/d05f27fa-ec0c-4136-aab2-2779f5189415">
 
 Click 'create a branch' - by default, the 'branch source' will be `master`, so you will usually want to click 'change branch source' and select `XXX-update` (or otherwise).
 
