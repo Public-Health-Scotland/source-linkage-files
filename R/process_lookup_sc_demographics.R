@@ -47,7 +47,29 @@ process_lookup_sc_demographics <- function(
     ) %>%
     dplyr::relocate(c("financial_year", "financial_quarter"), .after = "period")
 
-  #  Fill in missing data and flag latest cases to keep ---------------------------------------
+  # Latest record flag methodology ---------------------------------------------
+
+  # The latest_record_flag data variable in the demographic snapshot should NOT be
+  # used.  It is currently flagging the latest submitted demographic record for a
+  # client and not the latest submitted period.  This means that re-submissions of
+  # historic demographic data can be flagged as the latest demographic record. We
+  # therefore need to use all demographic records of a client to determine the
+  # latest client record.
+  #
+  # This section:
+  #     (1) fills in missing demo records from previous client submissions to
+  #     create an updated latest record for each client (combination of SCID and
+  #     sending_location).
+  #     (2) If there is more than one SCID associated with a chi, then the latest
+  #     record for a SCID is updated to the latest submitted record for that chi.
+  #
+  # All SCID are kept in the file.  If chi is missing then step (2) above does not
+  # take place. Make sure demo file is arranged correctly before processing:
+  #     dplyr::arrange("sending_location",
+  #                    "social_care_id",
+  #                    "financial_year",
+  #                    "financial_quarter",
+  #                     "extract_date")
   sc_demog <- data %>%
     dplyr::rename(
       anon_chi = .data$anon_chi,
