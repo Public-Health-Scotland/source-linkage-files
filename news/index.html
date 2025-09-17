@@ -18,10 +18,10 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/01_Project_structure.html">01 Project Structure</a></li>
-    <li><a class="dropdown-item" href="../articles/02_using_github.html">02 Using Github to Develop createslf</a></li>
-    <li><a class="dropdown-item" href="../articles/03_package_development.html">03 Package Development</a></li>
-    <li><a class="dropdown-item" href="../articles/04_data_table.html">04 Improve efficiency with `data.table`</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/project_structure.html">01 Project Structure</a></li>
+    <li><a class="dropdown-item" href="../articles/using_github.html">02 Using GitHub to Develop createslf</a></li>
+    <li><a class="dropdown-item" href="../articles/package_development.html">03 Package Development</a></li>
+    <li><a class="dropdown-item" href="../articles/data_table.html">04 Improve efficiency with `data.table`</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -36,10 +36,296 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/Public-Health-Scotland/source-linkage-files/blob/update_pkgdown/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="createslf-100">createslf 1.0.0<a class="anchor" aria-label="anchor" href="#createslf-100"></a></h2>
+<div class="section level3">
+<h3 id="september-update---release-on-sep-1-0-0">September 2025 update - release on 12-Sep-25<a class="anchor" aria-label="anchor" href="#september-update---release-on-sep-1-0-0"></a></h3>
+<ul><li>Alignment of methodology with social care team</li>
+<li>Correct social_care_id</li>
+</ul></div>
+<div class="section level3">
+<h3 id="june-update---released-1-0-0">June 2025 update - released<a class="anchor" aria-label="anchor" href="#june-update---released-1-0-0"></a></h3>
+<ul><li>HL1 completeness flag adjusted to 2 decimal places.</li>
+<li>Scottish postcode directory updated</li>
+</ul></div>
+<div class="section level3">
+<h3 id="march-update---released-mar-1-0-0">March 2025 Update - released 05-Mar-25<a class="anchor" aria-label="anchor" href="#march-update---released-mar-1-0-0"></a></h3>
+<ul><li>24/25 files have been updated, containing data up to December 2024.</li>
+<li>17/18 - 23/24 files have been updated.</li>
+<li>The variable <code>commhosp</code> has been tidied up - now shows 1/0 (integer) for all available datasets.</li>
+<li>2016/17 episode file now include homelessness data.</li>
+<li>Extra variables appearing in episode file are removed.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="december-update---released-dec-1-0-0">December 2024 Update - released 10-Dec-24<a class="anchor" aria-label="anchor" href="#december-update---released-dec-1-0-0"></a></h3>
+<ul><li>24/25 files have been updated, containing data up to September 2024.</li>
+<li>17/18 - 23/24 files have been updated.</li>
+<li>Homelessness completeness flag is now available in 23/24 files.</li>
+<li>Substance misuse flag updated.</li>
+<li>Mid-2023 &amp; Mid-2022 population estimates for Scotland have been updated.</li>
+<li>Mid-2022 Small Area Population Estimates for 2011 Data Zones have been updated.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="september-update---released-sep-1-0-0">September 2024 Update - released 13-Sep-24<a class="anchor" aria-label="anchor" href="#september-update---released-sep-1-0-0"></a></h3>
+<ul><li>New 24/25 files created</li>
+<li>New NSU cohort for 23/24 available</li>
+<li>New SPARRA scores calculated from April 24/25</li>
+<li>Death dates attached to activity after death flag</li>
+<li>Care home methodology updated</li>
+<li>New cup marker for Acute and GP OOH</li>
+<li>Bug fix:
+<ul><li>person id for SDS and client</li>
+<li>DD data:
+<ul><li>The variable <code>cij_delay</code> is only attached to the <code>recid = DD</code> rows, not all the rows in the CIJ as we’d expect.</li>
+<li>The <code>cij_delay</code> variable is showing as 1 against the Delay records (NA otherwise) - We expect this to be <code>TRUE/FALSE</code> to match the other flags.</li>
+<li>The <code>cij_ppa</code> variable isn’t attaching to the <code>recid = DD</code> rows.</li>
+</ul></li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="june-update---released-jun-1-0-0">June 2024 Update - released 06-Jun-24<a class="anchor" aria-label="anchor" href="#june-update---released-jun-1-0-0"></a></h3>
+<ul><li>Update of 2017/18 onwards to include bug fixes within the files.</li>
+<li>Removal of extra variable caused by the LTCs not matching properly.</li>
+<li>New NRS mid-2022 population estimates.</li>
+<li>Homelessness improvements:
+<ul><li>Removal of filtering the data in SLFs according to completeness levels.</li>
+<li>New variables:
+<ul><li>
+<code>hl1_completeness</code> - a data quality indicator by percentage compared to SG annual publication.</li>
+<li>
+<code>hl1_12_months_pre_app</code>- date variable</li>
+<li>
+<code>hl1_12_momths_post_app</code> - date variable</li>
+</ul></li>
+</ul></li>
+<li>Potential inclusions</li>
+<li>Activity after death flag?</li>
+<li>New care home methodology? - potentially this is on hold until September update.</li>
+<li>Additional Documentation?</li>
+</ul></div>
+<div class="section level3">
+<h3 id="march-update---released-mar-1-0-0-1">March 2024 Update - Released 20-Mar-2024<a class="anchor" aria-label="anchor" href="#march-update---released-mar-1-0-0-1"></a></h3>
+<ul><li>Update of 2017/18 onwards to include bug fixes within the files.</li>
+<li>2023/24 file now includes social care data.</li>
+<li>Geography files updated - SPD and SIMD</li>
+<li>Variable <code>property_type</code> in homelessness has been updated to include further description</li>
+<li>Bug fixes:
+<ul><li>Service use cohort wrongly assigning Non-Service Users (NSU) as <code>psychiatry</code>
+</li>
+<li>Not Applicable (NA) introduced for variable <code>high_cc</code> in Demographic cohort</li>
+<li>Issue with delayed discharges data not linking to admissions</li>
+<li>Person ID available in self-directed support (SDS) data</li>
+<li>Issue with Social Care ID - missing sc id were all being set to one sc id.</li>
+</ul></li>
+<li>Improvements to social care methodology
+<ul><li>Demographics</li>
+<li>person_id will now be consistent across social care cases for an individual. The social care ID for a CHI will also be consistent across all areas, not just the latest ID used in AT/SDS/CH/HC.</li>
+</ul></li>
+<li>Self-directed Support (SDS) and Alarms Telecare (AT) data
+<ul><li>Our tests show this is now in line with the social care team’s publications and therefore, the data may have changed slightly.</li>
+</ul></li>
+<li>New Social Care methodology
+<ul><li>The new methodology impacts how we match the demographics file and how we select the latest social care ID.</li>
+<li>Previously we used the <code>latest_flag</code> but this isn’t accurate as some IDs have none flagged, and some have more than one flagged. We now have one social care ID flagged for each CHI. This issue mostly affects Edinburgh, Falkirk, Western Isles, and Renfrewshire.</li>
+<li>Previously, in cases where a social care ID had multiple CHIs associated only one of the CHIs was chosen.</li>
+<li>The new methodology keeps all CHIs in as there is no way to tell which CHI the activity is for. The new methodology will show duplicate activity but for the different CHIs. The main areas this affects are Midlothian, Western Isles, and Renfrewshire.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="december-update---released-dec-1-0-0-1">December 2023 Update - Released 20-Dec-2023<a class="anchor" aria-label="anchor" href="#december-update---released-dec-1-0-0-1"></a></h3>
+<ul><li>Update of 2017/18 onwards to include bug fixes within the files.</li>
+<li>2023/24 file contain data from 1st April 2023 up to the end of September 2023.
+<ul><li>No social care data available.</li>
+</ul></li>
+<li>Re-addition of keep population flag.</li>
+<li>SPARRA update</li>
+<li>NA’s introduced for variable <code>ch_provider</code> - now fixed.</li>
+<li>Future improvements
+<ul><li>Activity after death flag</li>
+<li>Review of social care methodology.</li>
+</ul></li>
+<li>SLFhelper updated to version 10.1.1.
+<ul><li>Includes a fix for speeding up function <code>get_chi()</code>
+</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="september-update---released-sep-1-0-0-1">September 2023 Update - Released 22-Sep-2023<a class="anchor" aria-label="anchor" href="#september-update---released-sep-1-0-0-1"></a></h3>
+<ul><li>Update of 2017/18 onwards to include bug fixes within the files.</li>
+<li>New 2023/24 files. *No social care data available for new 2023/24 file.</li>
+<li>New NSU cohort for 2022/23 file.</li>
+<li>SPD and SIMD updated.</li>
+<li>Re addition of:
+<ul><li>HRIs in individual file.</li>
+<li>Homelessness Flags.</li>
+</ul></li>
+<li>Bug fixes:
+<ul><li>Blank <code>datazone</code> in A&amp;E. This has been fixed and was due to PC8 postcode format matching onto SLF pc lookup.</li>
+<li>Large increase in preventable beddays. This was caused due to an SPSS vs R logic difference. Uses SPSS logic which brings the difference down to <code>3.3%</code>.</li>
+<li>Issue with <code>locality</code> which showed <code>locality</code> in each row instead of its true <code>locality</code>. This has now been fixed.</li>
+<li>Duplicated CHI in the individual file. The issue was identified when trying to include HRIs. This has now been corrected.</li>
+</ul></li>
+<li>Internal changes to SLF development:
+<ul><li>
+<code>DN</code> and <code>CMH</code> data are now archived in an HSCDIIP folder as the BOXI datamart is now closed down for these. Function <code>get_boxi_extract_path</code> has been updated to reflect this.</li>
+<li>Tests updated to include <code>HSCP</code>count.</li>
+<li>Tests created for <code>Delayed Discharges</code> extract and <code>Social care Client lookup</code>.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="june-update---released-jul-1-0-0">June 2023 Update - Released 24-Jul-2023<a class="anchor" aria-label="anchor" href="#june-update---released-jul-1-0-0"></a></h3>
+<ul><li>2011/12 -&gt; 2013/14 – These files have not been altered, other than to make them available in a new file type (parquet).</li>
+<li>2017/18 – These files have been recreated using our new R pipeline, but the data has not changed. We did this so that we would have a good comparator file.</li>
+<li>2018/19 -&gt; 2022/23 – These files have been recreated using the R pipeline and are also using updated data (as in a ‘normal’ update).</li>
+<li>Files changed into parquet format.</li>
+<li>SLFhelper updated.</li>
+<li>Removal of <code>keydate1_dateformat</code> and <code>keydate2_dateformat</code>.</li>
+<li>
+<code>dd_responsible_lca</code> – This variable now uses CA2019 codes instead of the 2-digit ‘old’ LCA code.</li>
+<li>Preventable beddays - not able to calculate these correctly. * Death fixes not included.</li>
+<li>Variables not ordered in R like they used to be in SPSS.</li>
+<li>End of HHG.</li>
+<li>New variable <code>ch_postcode</code>.</li>
+<li>rename of variables <code>cost_total_net_incdnas</code>, <code>ooh_outcome.1</code>, <code>ooh_outcome.2</code>, <code>ooh_outcome.3</code>, <code>ooh_outcome.4</code>, <code>totalnodncontacts</code>.</li>
+<li>HRI’s not included.</li>
+<li>Homelessness flags not included.</li>
+<li>Keep_population flag not included.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="march-update---released-mar-1-0-0-2">March 2023 Update - Released 10-Mar-2023<a class="anchor" aria-label="anchor" href="#march-update---released-mar-1-0-0-2"></a></h3>
+<ul><li>2021/22 episode and individual files refreshed with updated activity.</li>
+<li>2022/23 file updated and contains data up to the end of Q3.</li>
+<li>Social care data is available for 2022/23.</li>
+<li>Typo in the variable name <code>ooh_covid_assessment</code>
+</li>
+<li>Next update in May as a test run in R but won’t be released.</li>
+<li>Next release in June.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="december-update---released-dec-1-0-0-2">December 2022 Update - Released 07-Dec-2022<a class="anchor" aria-label="anchor" href="#december-update---released-dec-1-0-0-2"></a></h3>
+<ul><li>Now using the 2022v2 Scottish Postcode Directory.</li>
+<li>Now using the 2020 Urban Rural classifications (instead of the older 2016 ones), this means variables such as <code>URx_2016</code> will now be called <code>URx_2020</code>.</li>
+<li>Now using the 2021 Datazone population estimates to derive the <code>keep_population</code> flag.</li>
+<li>Fixed a typo in the Service Use Cohort <code>substance</code> where the ICD-10 code <code>F11</code> (Opioids) was used instead of the correct <code>F13</code> (sedatives or hypnotics).</li>
+<li>Prescribing (PIS) changes
+<ul><li>Changed from using ‘dispensed items’ (count and cost) to ‘paid items’.</li>
+<li>Changed from using the Net cost (in <code>cost_total_net</code>) to using the Gross cost.</li>
+<li>
+<code>no_dispensed_items</code> has been replaced with <code>no_paid_items</code> in the episode file.</li>
+<li>
+<code>pis_dispensed_items</code> has been replaced with <code>pis_paid_items</code> in the individual file.</li>
+</ul></li>
+<li>
+<code>health_net_costincIncomplete</code> has been removed from the individual file. This was only relevant to District Nursing, so was deemed to be not worth keeping as a separate variable.</li>
+<li>HRI changes and fixes
+<ul><li>The variables <code>hri_lca_incDN</code> and <code>hri_lcap_incdn</code> have been removed. They were dependent on <code>health_net_costincIncomplete</code> which has now been removed.</li>
+<li>Only people with health activity, not Social (Care Home, Home Care, SDS or Alarms and Telecare), or Community care (District Nursing or Community Mental Health) will be included in the HRI calculation.</li>
+</ul></li>
+<li>GP Out of Hours fixes and changes.
+<ul><li>GP OoH costs updated - Now using real contact numbers (from unscheduled care team publication) for 2020/21, and 2021/22. Costs are uplifted from 2019/20 using the same methodology as with PLICS. 2022/23 now has costs (previously missing).</li>
+<li>New COVID-19 related consultation types have now been included in <code>smrtype</code>. This was an oversight as it should have been included at the last update.</li>
+<li>
+<code>ooh_case_id</code> has replaced <code>ooh_CC</code> in the older files. This was implemented for years 2017/18 -&gt; 2022/23 at the last update, so this completes that change.</li>
+<li>Added new variables to the individual file to count the recently added consultation types for GP OoHs - <code>ooh_covid_advice</code>, <code>ooh_covid_assessment</code> and <code>ooh_covid_other</code>.</li>
+<li>Fixed <code>ooh_cases</code> - this was overcounting, such that everyone had at least one case and the majority of people had one more case than they should have had.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="september-update---released-sep-1-0-0-2">September 2022 Update - Released 05-Sep-2022<a class="anchor" aria-label="anchor" href="#september-update---released-sep-1-0-0-2"></a></h3>
+<ul><li>Costs uplifted for 2021 onwards.
+<ul><li>1.5% for 2020/21</li>
+<li>4.1% for 2021/22</li>
+<li>6.2% for 2022/23</li>
+</ul></li>
+<li>Alarms - Telecare and SDS data added.</li>
+<li>SPARRA and HHG - new 22/23 scores added.<br></li>
+<li>Created new files for 2022/23.</li>
+<li>The NSU cohort has been added for 2021/22.</li>
+<li>Home Care - If the start date is after the end date we will now discard the end date (<code>sysmis</code>/<code>NA</code>), previously we would have dropped these records entirely.</li>
+<li>Changes to GP Out of Hours data
+<ul><li>Include some new categories to <code>smrtype</code> for COVID type consultations. This is consistent with the Unscheduled Care publication.</li>
+<li>Exclude some records which were previously included. These were data from ‘Flow navigation centres’ and are incorrectly being added to the data mart. This is also consistent with what the Unscheduled Care team do.</li>
+<li>The <code>ooh_cc</code> variable has been replaced with <code>ooh_case_id</code>. Each row for GP OoH is a ‘consultation’ but many consultations can be grouped into a ‘case’ previously <code>ooh_cc</code> simply numbered unique cases for a person in the year e.g. 1,2,3… This could be confusing as cases could reasonably span multiple years. <code>ooh_case_id</code> is the unique ID for the case as found in the datamart (called <code>GUID</code>), you can count unique <code>ooh_case_id</code>s to get a count of cases in the year, or aggregate on it to merge the consultations into a case. Unlike <code>ooh_cc</code> this will now work properly across years too</li>
+</ul></li>
+<li>Care Home admission reason - <code>ch_adm_reason</code> now uses the variable <code>type_of_admission</code> from the V1.4 definitions, instead of the older <code>reason_for_admission</code>. Records submitted before 2020/21 which do not have this variable have been re-coded but should be used with some scepticism.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="june-update---released-jun-1-0-0-1">June 2022 Update - Released 10-Jun-2022<a class="anchor" aria-label="anchor" href="#june-update---released-jun-1-0-0-1"></a></h3>
+<ul><li>Fixed a bug where CH costs was not referring to end of year.
+<ul><li>e.g. 2018 costs relates to 2017/18</li>
+</ul></li>
+<li>The changes to Homelessness described in the March update have been properly implemented.</li>
+<li>We now use <a href="https://haven.tidyverse.org/news/index.html" class="external-link"><code>{haven}</code></a> to compress the SPSS files which compresses them better than SPSS does 🤷 ♂️</li>
+<li>
+<code>cij_marker</code> is now a numeric instead of a string which changes empty strings to missing instead of blank using sysmis.
+<ul><li>Check code of the form <code>cij_marker = "x"</code>. <code>x</code> now needs to be a numeric.</li>
+<li>Check code of the form <code>cij_maker = lag(cij_marker)</code>. If the previous <code>cij_marker</code> is missing, the expression will fail, previously it would have compared to an empty string.</li>
+</ul></li>
+<li>We now match on clusters from the past 5 years, rather than just the latest (quarterly) release. This means that more GP practices will be assigned to a cluster (even if the code has been retired at the time of the SLF refresh).</li>
+<li>The ACaDMe variable <code>glsrecord</code> is now the only thing we use to determine if an episode should have recid <code>01B</code> (Acute) or <code>GLS</code>. Previously <code>lineno</code> was also used.</li>
+<li>Fixed a bug where we were over-counting preventable beddays in the individual file.
+<ul><li>e.g. if a CIJ had 2 episodes then it would have 2X the correct number of beddays. This is now corrected.</li>
+</ul></li>
+<li>We were correcting some costs for FV and A&amp;A (see previous update). <code>cost_total_net</code> was being correctly updated, however the monthly cost variables for Forth Valley were not being changed, this is now fixed.</li>
+<li>Fixed a bug where people with no Care Home episodes would have 1 <code>ch_cis_episodes</code> in the individual file.</li>
+<li>Added the <code>keep_population</code> variable to 2014/15 individual file, this was missed when we added the NSU cohort.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="march-update---released-mar-1-0-0-3">March 2022 Update - Released 17-Mar-2022<a class="anchor" aria-label="anchor" href="#march-update---released-mar-1-0-0-3"></a></h3>
+<ul><li>NSU extract now available for 2014/15.</li>
+<li>New variable <code>gender</code> included in NSU extract.</li>
+<li>Now using Social Care data up to 2021/22 Q2.
+<ul><li>Issues with client data - should be resolved by next update, client data will be reviewed to include it more completely.</li>
+</ul></li>
+<li>Big changes to Homelessness data
+<ul><li>Some LAs have more data thanks to work with Data Management</li>
+<li>Some LAs have had data removed as it’s incomplete and possibly misleading - all LAs with data now have at least 90% completeness (at the application level).</li>
+<li>Homelessness Flags now only look at the application decision date (<code>keydate1</code>).</li>
+<li>Some duplicates removed from West Dunbartonshire and East Ayrshire.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="december-update---released-dec-1-0-0-3">December 2021 Update - Released 16-Dec-2021<a class="anchor" aria-label="anchor" href="#december-update---released-dec-1-0-0-3"></a></h3>
+<ul><li>Include Care Home data up to 2021/22 Q1</li>
+<li>Include Home Care data using the new methodology, from 2017/18 Q4 - 2021/22 Q1.
+<ul><li>New variables <code>hc_hours_q1</code>, <code>hc_hours_q2</code>, <code>hc_hours_q3</code> and <code>hc_hours_q4</code>
+</li>
+</ul></li>
+<li>All costs are now uplifted by 1% per year from the latest available year.</li>
+<li>Home Care in the individual file now has new variables.
+<ul><li>episode counts: <code>HC_reablement_episodes</code>.</li>
+<li>sums of hours: <code>HC_reablement_hours</code>, <code>HC_total_hours</code>, <code>HC_personal_hours</code>, <code>HC_non_personal_hours</code> and <code>HC_reablement_hours</code>.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="september-update---released-sep-1-0-0-3">September 2021 Update - Released 22-Sep-2021<a class="anchor" aria-label="anchor" href="#september-update---released-sep-1-0-0-3"></a></h3>
+<ul><li>Removed Social Care data from 2015/16 and 2016/17.</li>
+<li>Add <code>sigfac</code> data for A&amp;E records - previously this would be missing.</li>
+<li>New <code>cij_delay</code> variable added to the episode file.</li>
+<li>Count of delays added to the individual file.</li>
+<li>Add new variables to the individual file <code>preventable_admissions</code> and <code>preventable_beddays</code> which count the number of <code>cij_ppa</code>s and the beddays associated with the stay respectively.</li>
+<li>Added a <code>NEWS.md</code> file to easily keep track of major changes.</li>
+<li>Add SPARRA and HHG scores, calculated at April 2021 for end-year 2020/21 and start year 2021/22.</li>
+<li>Update costs for DN, GP OOH and CH’s - costs for 1920 now available.
+<ul><li>Revised update to CH costs now included and CH costs prior to 1718 are now removed.</li>
+</ul></li>
+<li>Update Home Care, Alarms and Telecare and SDS to use new extracts
+<ul><li>Numbers may be slightly different.</li>
+<li>Now include <code>person_id</code> and <code>sc_latest_submission</code> variables.</li>
+<li>In Home Care missing reablement has been re-coded to unknown (9).</li>
+</ul></li>
+<li>Data now available in 2021 for DN and CMH - code now amended to include these.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="june-update---released-jul-1-0-0-1">June 2021 Update - Released 29-Jul-2021<a class="anchor" aria-label="anchor" href="#june-update---released-jul-1-0-0-1"></a></h3>
+<ul><li>Included new Care Home data for 2018/19 onward.</li>
+</ul></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -47,7 +333,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
