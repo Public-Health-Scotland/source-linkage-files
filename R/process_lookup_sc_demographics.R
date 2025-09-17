@@ -35,16 +35,7 @@ process_lookup_sc_demographics <- function(
         "5",
         .data$financial_quarter
       )
-    ) %>%
-    # arrange - makes sure extract date is last
-    dplyr::arrange(
-      "sending_location",
-      "social_care_id",
-      "financial_year",
-      "financial_quarter",
-      "extract_date"
-    ) %>%
-    dplyr::relocate(c("financial_year", "financial_quarter"), .after = "period")
+    )
 
   # Latest record flag methodology ---------------------------------------------
 
@@ -70,6 +61,15 @@ process_lookup_sc_demographics <- function(
   #                    "financial_quarter",
   #                     "extract_date")
   sc_demog <- data %>%
+    # arrange - makes sure extract date is last
+    dplyr::arrange(
+      "sending_location",
+      "social_care_id",
+      "financial_year",
+      "financial_quarter",
+      "extract_date"
+    ) %>%
+    dplyr::relocate(c("financial_year", "financial_quarter"), .after = "period") %>%
     dplyr::rename(
       anon_chi = .data$anon_chi,
       gender = .data$chi_gender_code,
