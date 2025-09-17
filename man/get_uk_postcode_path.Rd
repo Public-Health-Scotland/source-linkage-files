@@ -4,7 +4,10 @@
 \alias{get_uk_postcode_path}
 \title{get uk postcode list file path}
 \usage{
-get_uk_postcode_path()
+get_uk_postcode_path(...)
+}
+\arguments{
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \description{
 get uk postcode list file

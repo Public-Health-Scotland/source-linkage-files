@@ -115,7 +115,7 @@ We will brief some basic `data.table` syntax that could be used in the scenarios
 
     -   `dt` A data.table.
     -   `id.vars` ID columns with IDs for multiple entries.
-    -   `measure.vars` Columns containng values to fill into cells (often in pattern form).
+    -   `measure.vars` Columns containing values to fill into cells (often in pattern form).
     -   `variable.name`, `value.name` Names of new columns for variables and values derived from old headers.
 
         ```         

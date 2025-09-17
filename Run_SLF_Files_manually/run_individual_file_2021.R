@@ -60,10 +60,8 @@ write_temp_to_disk <- TRUE
 episode_file <- arrow::read_parquet(get_slf_episode_path(year))
 
 # Run the individual file and tests
-create_individual_file(episode_file, year = year, write_temp_to_disk = write_temp_to_disk)
-
-# %>%
-# process_tests_individual_file(year = year)
+create_individual_file(episode_file, year = year, write_temp_to_disk = write_temp_to_disk) %>%
+  process_tests_individual_file(year = year)
 
 #-------------------------------------------------------------------------------
 # save console outputs if `console_outputs == TRUE`

@@ -33,6 +33,12 @@ get_existing_data_for_tests <- function(new_data, file_version = "episode") {
       "anon_chi",
       dplyr::intersect(slfhelper::ep_file_vars, tolower(names(new_data)))
     )
+    if ("cost_total_net" %in% names(new_data)) {
+      variable_names <- c(
+        variable_names,
+        "cost_total_net_inc_dnas"
+      )
+    }
     if ("hscp" %in% names(new_data)) {
       variable_names <- c("hscp2018", variable_names)
     }

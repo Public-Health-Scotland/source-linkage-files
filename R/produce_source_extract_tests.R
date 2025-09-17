@@ -14,6 +14,8 @@
 #' @param sum_mean_vars variables used when selecting 'all' measures from [calculate_measures()]
 #' @param max_min_vars variables used when selecting 'min-max' from [calculate_measures()]
 #' @param add_hscp_count  Default set to TRUE. For use where `hscp variable` is not available, specify FALSE.
+#' @param smr00_ep Only for Outpatients extract test.
+#' TRUE only when using old_data for outpatients
 #'
 #' @return a dataframe with a count of each flag
 #' from [calculate_measures()]
@@ -30,7 +32,14 @@ produce_source_extract_tests <- function(data,
                                            "record_keydate1", "record_keydate2",
                                            "cost_total_net", "yearstay"
                                          ),
-                                         add_hscp_count = TRUE) {
+                                         add_hscp_count = TRUE,
+                                         smr00_ep = FALSE) {
+  if (smr00_ep) {
+    data <- data %>%
+      dplyr::select(-"cost_total_net") %>%
+      dplyr::rename("cost_total_net" = "cost_total_net_inc_dnas")
+  }
+
   test_flags <- data %>%
     # use functions to create HB and partnership flags
     create_demog_test_flags() %>%

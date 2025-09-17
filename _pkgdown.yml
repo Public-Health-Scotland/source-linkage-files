@@ -6,10 +6,10 @@ articles:
 - title: Articles
   navbar: ~
   contents:
-  - Project Structure
-  - Using Github to Develop createslf
-  - Package Development
-  - Improve efficiency with `data.table`
+  - project_structure
+  - using_github
+  - package_development
+  - data_table
 
 reference:
 
@@ -165,6 +165,7 @@ reference:
     - join_deaths_data
     - join_sc_client
     - match_on_ltcs
+    - order_ep_cols
 
 
   - title: Individual file
@@ -179,6 +180,7 @@ reference:
     - join_deaths_data
     - join_slf_lookup_vars
     - match_on_ltcs
+    - order_indiv_cols
 
 
   - title: Demographics
@@ -201,6 +203,7 @@ reference:
     - fix_east_ayrshire_duplicates
     - fix_west_dun_duplicates
     - produce_homelessness_completeness
+    - fix_scid_renfrewshire
   - subtitle: Helper functions
   - contents:
     - vars_end_with
@@ -218,3 +221,13 @@ reference:
     - contains("_tests")
     - contains("_measures")
     - starts_with("produce_test")
+
+
+  - title: Linkage utilities
+    desc: Functions to extract and link data
+  - contents:
+    - extract_ep_ind_time
+    - extract_targets_time
+    - link_ch_with_adms
+    - update_uk_postcode_directory
+

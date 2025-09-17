@@ -27,3 +27,5 @@
 ^Pre_processing_scripts$
 ^Run_SLF_Files_manually$
 ^Run_SLF_Files_targets$
+^doc$
+^Meta$

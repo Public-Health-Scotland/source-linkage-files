@@ -68,7 +68,15 @@ setup_tests_file_name <- function(sheet_name,
     tests_to_combine
   )
   if (!exists(folder_path)) {
-    fs::dir_create(folder_path)
+    fs::dir_create(folder_path, mode = "u=rwx,go=rwx")
+  }
+
+  if (fs::file_info(path = folder_path)$user == Sys.getenv("USER")) {
+    # Set the correct permissions (read, write, execute)
+    fs::file_chmod(path = folder_path, mode = "770")
+    # change the owner so that hscdiip is the group owner.
+    # use fs::group_ids() for checking
+    fs::file_chown(path = folder_path, group_id = 3206)
   }
 
   tests_workbook_path <- fs::path(folder_path,
@@ -392,7 +400,7 @@ combine_multi_xlsx <- function(file_list, output_file) {
   for (file in file_list) {
     sheet_names <- openxlsx::getSheetNames(file)
     for (sheet_name in sheet_names) {
-      comparison_data <- openxlsx::readWorkbook(file)
+      comparison_data <- openxlsx::readWorkbook(file, sheet = sheet_name)
       openxlsx::addWorksheet(wb, sheet_name)
       format_test_excel(comparison_data, wb, sheet_name)
       openxlsx::writeDataTable(
