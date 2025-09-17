@@ -1,15 +1,21 @@
-# June 2025 update - Unreleased 
+# createslf 1.0.0
+
+## September 2025 update - release on 12-Sep-25
+* Alignment of methodology with social care team
+* Correct social_care_id
+
+## June 2025 update - released  
 * HL1 completeness flag adjusted to 2 decimal places. 
 * Scottish postcode directory updated
 
-# March 2025 Update - released 05-Mar-25
+## March 2025 Update - released 05-Mar-25
 * 24/25 files have been updated, containing data up to December 2024.
 * 17/18 - 23/24 files have been updated.
 * The variable `commhosp` has been tidied up - now shows 1/0 (integer) for all available datasets.
 * 2016/17 episode file now include homelessness data.
 * Extra variables appearing in episode file are removed.
 
-# December 2024 Update - released 10-Dec-24
+## December 2024 Update - released 10-Dec-24
 * 24/25 files have been updated, containing data up to September 2024.
 * 17/18 - 23/24 files have been updated.
 * Homelessness completeness flag is now available in 23/24 files.
@@ -17,7 +23,7 @@
 * Mid-2023 & Mid-2022 population estimates for Scotland have been updated.
 * Mid-2022 Small Area Population Estimates for 2011 Data Zones have been updated.
 
-# September 2024 Update - released 13-Sep-24
+## September 2024 Update - released 13-Sep-24
 * New 24/25 files created
 * New NSU cohort for 23/24 available
 * New SPARRA scores calculated from April 24/25
@@ -31,7 +37,7 @@
       * The `cij_delay` variable is showing as 1 against the Delay records (NA otherwise) - We expect this to be `TRUE/FALSE` to match the other flags.
       * The `cij_ppa` variable isn't attaching to the `recid = DD` rows.
 
-# June 2024 Update - released 06-Jun-24
+## June 2024 Update - released 06-Jun-24
 * Update of 2017/18 onwards to include bug fixes within the files.
 * Removal of extra variable caused by the LTCs not matching properly.
 * New NRS mid-2022 population estimates.
@@ -46,7 +52,7 @@
 * New care home methodology? - potentially this is on hold until September update.
 * Additional Documentation?
 
-# March 2024 Update - Released 20-Mar-2024
+## March 2024 Update - Released 20-Mar-2024
 * Update of 2017/18 onwards to include bug fixes within the files.
 * 2023/24 file now includes social care data.
 * Geography files updated - SPD and SIMD
@@ -69,7 +75,7 @@
     * The new methodology keeps all CHIs in as there is no way to tell which CHI the activity is for. The new methodology will show duplicate activity but for the different CHIs. The main areas this affects are Midlothian, Western Isles, and Renfrewshire.
       
 
-# December 2023 Update - Released 20-Dec-2023
+## December 2023 Update - Released 20-Dec-2023
 * Update of 2017/18 onwards to include bug fixes within the files.
 * 2023/24 file contain data from 1st April 2023 up to the end of September 2023.
   * No social care data available.
@@ -83,7 +89,7 @@
   * Includes a fix for speeding up function `get_chi()`
 
 
-# September 2023 Update - Released 22-Sep-2023
+## September 2023 Update - Released 22-Sep-2023
 * Update of 2017/18 onwards to include bug fixes within the files. 
 * New 2023/24 files.
   *No social care data available for new 2023/24 file.
@@ -104,7 +110,7 @@
   * Tests created for `Delayed Discharges` extract and `Social care Client lookup`.
 
 
-# June 2023 Update - Released 24-Jul-2023
+## June 2023 Update - Released 24-Jul-2023
 * 2011/12 -> 2013/14 – These files have not been altered, other than to make them available in a new file type (parquet).
 * 2017/18 – These files have been recreated using our new R pipeline, but the data has not changed. We did this so that we would have a good comparator file.
 * 2018/19 -> 2022/23 – These files have been recreated using the R pipeline and are also using updated data (as in a ‘normal’ update).
@@ -122,7 +128,7 @@
 * Keep_population flag not included. 
 
 
-# March 2023 Update - Released 10-Mar-2023
+## March 2023 Update - Released 10-Mar-2023
 * 2021/22 episode and individual files refreshed with updated activity.
 * 2022/23 file updated and contains data up to the end of Q3. 
 * Social care data is available for 2022/23. 
@@ -130,7 +136,7 @@
 * Next update in May as a test run in R but won't be released. 
 * Next release in June. 
 
-# December 2022 Update - Released 07-Dec-2022
+## December 2022 Update - Released 07-Dec-2022
 * Now using the 2022v2 Scottish Postcode Directory.
 * Now using the 2020 Urban Rural classifications (instead of the older 2016 ones), this means variables such as `URx_2016` will now be called `URx_2020`.
 * Now using the 2021 Datazone population estimates to derive the `keep_population` flag.
@@ -152,7 +158,7 @@
   * Fixed `ooh_cases` - this was overcounting, such that everyone had at least one case and the majority of people had one more case than they should have had.
 
 
-# September 2022 Update - Released 05-Sep-2022
+## September 2022 Update - Released 05-Sep-2022
 * Costs uplifted for 2021 onwards.
   * 1.5% for 2020/21
   * 4.1% for 2021/22
@@ -169,7 +175,7 @@
 * Care Home admission reason - `ch_adm_reason` now uses the variable `type_of_admission` from the V1.4 definitions, instead of the older `reason_for_admission`. Records submitted before 2020/21 which do not have this variable have been re-coded but should be used with some scepticism.
 
 
-# June 2022 Update - Released 10-Jun-2022
+## June 2022 Update - Released 10-Jun-2022
 
 * Fixed a bug where CH costs was not referring to end of year. 
   * e.g. 2018 costs relates to 2017/18
@@ -187,7 +193,7 @@
 * Fixed a bug where people with no Care Home episodes would have 1 `ch_cis_episodes` in the individual file.
 * Added the `keep_population` variable to 2014/15 individual file, this was missed when we added the NSU cohort.
 
-# March 2022 Update - Released 17-Mar-2022
+## March 2022 Update - Released 17-Mar-2022
 * NSU extract now available for 2014/15.
 * New variable `gender` included in NSU extract.
 * Now using Social Care data up to 2021/22 Q2.
@@ -198,7 +204,7 @@
   * Homelessness Flags now only look at the application decision date (`keydate1`).
   * Some duplicates removed from West Dunbartonshire and East Ayrshire.
  
-# December 2021 Update - Released 16-Dec-2021
+## December 2021 Update - Released 16-Dec-2021
 
 * Include Care Home data up to 2021/22 Q1
 * Include Home Care data using the new methodology, from 2017/18 Q4 - 2021/22 Q1.
@@ -208,7 +214,7 @@
   * episode counts: `HC_reablement_episodes`.
   * sums of hours: `HC_reablement_hours`, `HC_total_hours`, `HC_personal_hours`, `HC_non_personal_hours` and `HC_reablement_hours`.
 
-# September 2021 Update - Released 22-Sep-2021
+## September 2021 Update - Released 22-Sep-2021
 
 * Removed Social Care data from 2015/16 and 2016/17.
 * Add `sigfac` data for A&E records - previously this would be missing.
@@ -225,6 +231,6 @@
     * In Home Care missing reablement has been re-coded to unknown (9).
 * Data now available in 2021 for DN and CMH - code now amended to include these.
 
-# June 2021 Update - Released 29-Jul-2021
+## June 2021 Update - Released 29-Jul-2021
 
 * Included new Care Home data for 2018/19 onward.

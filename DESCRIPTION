@@ -47,7 +47,6 @@ Imports:
 Suggests:
     covr (>= 3.6.1),
     knitr (>= 1.5.0),
-    qpdf (>= 1.3.5),
     roxygen2 (>= 7.2.3),
     scales (>= 1.2.0),
     spelling (>= 2.2),

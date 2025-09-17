@@ -12,7 +12,7 @@ link_ch_with_adms(ep)
 \description{
 \enumerate{
 \item Add two variable, sc_ch_link_ae and sc_ch_link_adms,
-for CH episode to indicate discharge to AE2 and (01B, 04B, GLS) seperatively.
-\item Populate ch_name and ch_postcode to relavent AE episodes from CH episodes
+for CH episode to indicate discharge to AE2 and (01B, 04B, GLS) separately.
+\item Populate ch_name and ch_postcode to relevant AE episodes from CH episodes
 }
 }
