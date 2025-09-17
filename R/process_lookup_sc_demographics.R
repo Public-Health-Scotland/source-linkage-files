@@ -18,21 +18,6 @@ process_lookup_sc_demographics <- function(
     spd_path = get_spd_path(),
     uk_pc_path = get_uk_postcode_path(),
     write_to_disk = TRUE) {
-  # Deal with postcodes ---------------------------------------
-
-  # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
-  uk_pc_regexp <- "^[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}$"
-
-  dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
-  non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
-
-  valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
-    dplyr::pull(.data$pc7)
-  valid_uk_postcodes <- read_file(uk_pc_path) %>%
-    dplyr::pull()
-  # combine them as some deleted scottish pc are not in the uk pc list
-  valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
-    sort()
 
   data <- data %>%
     # add per in social_care_id in Renfrewshire
@@ -79,6 +64,38 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(.data$submitted_postcode, .direction = ("updown")) %>%
     dplyr::ungroup()
 
+  # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
+  sc_demog <- sc_demog %>%
+    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
+    dplyr::mutate(latest = dplyr::last(.data$period)) %>% # flag latest period for chi
+    dplyr::group_by(.data$anon_chi, .data$social_care_id, .data$sending_location) %>%
+    dplyr::mutate(latest_sc_id = dplyr::last(.data$period)) %>% # flag latest period for social care
+    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
+    dplyr::mutate(last_sc_id = dplyr::last(.data$social_care_id)) %>%
+    dplyr::mutate(
+      latest_flag = ifelse((.data$latest == .data$period & .data$last_sc_id == .data$social_care_id) | is.na(.data$anon_chi), 1, 0),
+      keep = ifelse(.data$latest_sc_id == .data$period, 1, 0)
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(-.data$period, -.data$latest_record_flag, -.data$latest, -.data$last_sc_id, -.data$latest_sc_id) %>%
+    dplyr::distinct()
+
+  # postcodes ---------------------------------------------------------------
+
+  # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
+  uk_pc_regexp <- "^[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}$"
+
+  dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
+  non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
+
+  valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
+    dplyr::pull(.data$pc7)
+  valid_uk_postcodes <- read_file(uk_pc_path) %>%
+    dplyr::pull()
+  # combine them as some deleted scottish pc are not in the uk pc list
+  valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
+    sort()
+
   ch_pc <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
     dplyr::select(.data$AccomPostCodeNo) %>%
     dplyr::rename("ch_pc" = "AccomPostCodeNo") %>%
@@ -119,23 +136,6 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(.data$chi_postcode, .direction = "down") %>%
     dplyr::ungroup()
 
-  # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
-  sc_demog <- sc_demog %>%
-    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
-    dplyr::mutate(latest = dplyr::last(.data$period)) %>% # flag latest period for chi
-    dplyr::group_by(.data$anon_chi, .data$social_care_id, .data$sending_location) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$period)) %>% # flag latest period for social care
-    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
-    dplyr::mutate(last_sc_id = dplyr::last(.data$social_care_id)) %>%
-    dplyr::mutate(
-      latest_flag = ifelse((.data$latest == .data$period & .data$last_sc_id == .data$social_care_id) | is.na(.data$anon_chi), 1, 0),
-      keep = ifelse(.data$latest_sc_id == .data$period, 1, 0)
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-.data$period, -.data$latest_record_flag, -.data$latest, -.data$last_sc_id, -.data$latest_sc_id) %>%
-    dplyr::distinct()
-
-  # postcodes ---------------------------------------------------------------
 
   # count number of na postcodes
   na_postcodes <- sc_demog %>%
