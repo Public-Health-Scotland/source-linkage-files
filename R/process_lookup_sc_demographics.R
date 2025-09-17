@@ -18,7 +18,6 @@ process_lookup_sc_demographics <- function(
     spd_path = get_spd_path(),
     uk_pc_path = get_uk_postcode_path(),
     write_to_disk = TRUE) {
-
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
