@@ -246,7 +246,6 @@ process_lookup_sc_demographics <- function(
     dplyr::count(dplyr::across(tidyselect::ends_with("_postcode"), ~ is.na(.x)))
 
   sc_demog_lookup <- sc_demog %>%
-    dplyr::filter(.data$keep == 1) %>% # filter to only keep latest record for sc id and chi
     dplyr::select(
       -.data$postcode_type,
       -.data$valid_pc_submitted,
@@ -259,14 +258,12 @@ process_lookup_sc_demographics <- function(
     dplyr::group_by(
       .data$sending_location,
       .data$anon_chi,
-      .data$social_care_id,
-      .data$latest_flag
+      .data$social_care_id
     ) %>%
     # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
-      .data$latest_flag,
       .data$extract_date
     ) %>%
     # summarize to select the last (non NA) submission
