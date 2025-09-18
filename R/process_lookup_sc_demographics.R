@@ -85,21 +85,26 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(.data$submitted_postcode, .direction = ("updown")) %>%
     dplyr::ungroup()
 
-  # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
   sc_demog <- sc_demog %>%
-    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
-    dplyr::mutate(latest = dplyr::last(.data$period)) %>% # flag latest period for chi
-    dplyr::group_by(.data$anon_chi, .data$social_care_id, .data$sending_location) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$period)) %>% # flag latest period for social care
-    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
-    dplyr::mutate(last_sc_id = dplyr::last(.data$social_care_id)) %>%
-    dplyr::mutate(
-      latest_flag = ifelse((.data$latest == .data$period & .data$last_sc_id == .data$social_care_id) | is.na(.data$anon_chi), 1, 0),
-      keep = ifelse(.data$latest_sc_id == .data$period, 1, 0)
+    # arrange before missing data is filled in
+    dplyr::arrange(
+      sending_location, social_care_id, financial_year,
+      financial_quarter, extract_date
     ) %>%
+    # fill in missing values
+    dplyr::group_by(sending_location, social_care_id) %>%
+    # flag which period is last for each client
+    dplyr::mutate(latest_sc_id = dplyr::last(period)) %>%
+    # flag which extract date is last for each client
+    dplyr::mutate(latest_extract_date = dplyr::last(extract_date)) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-.data$period, -.data$latest_record_flag, -.data$latest, -.data$last_sc_id, -.data$latest_sc_id) %>%
-    dplyr::distinct()
+    # only want records with last period AND last extract date
+    # (some periods are submitted more than once)
+    filter(latest_sc_id == period & latest_extract_date == extract_date) %>%
+    # update these records are now the latest record for each SCID
+    mutate(latest_record_flag = 1)
+  dplyr::select(-.data$period, -.data$latest_record_flag, -.data$latest_sc_id, -.data$latest_extract_date)
+
 
   # postcodes ---------------------------------------------------------------
 
