@@ -18,22 +18,6 @@ process_lookup_sc_demographics <- function(
     spd_path = get_spd_path(),
     uk_pc_path = get_uk_postcode_path(),
     write_to_disk = TRUE) {
-  # Deal with postcodes ---------------------------------------
-
-  # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
-  uk_pc_regexp <- "^[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}$"
-
-  dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
-  non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
-
-  valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
-    dplyr::pull(.data$pc7)
-  valid_uk_postcodes <- read_file(uk_pc_path) %>%
-    dplyr::pull()
-  # combine them as some deleted scottish pc are not in the uk pc list
-  valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
-    sort()
-
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -51,7 +35,32 @@ process_lookup_sc_demographics <- function(
         "5",
         .data$financial_quarter
       )
-    ) %>%
+    )
+
+  # Latest record flag methodology ---------------------------------------------
+
+  # The latest_record_flag data variable in the demographic snapshot should NOT be
+  # used.  It is currently flagging the latest submitted demographic record for a
+  # client and not the latest submitted period.  This means that re-submissions of
+  # historic demographic data can be flagged as the latest demographic record. We
+  # therefore need to use all demographic records of a client to determine the
+  # latest client record.
+  #
+  # This section:
+  #     (1) fills in missing demo records from previous client submissions to
+  #     create an updated latest record for each client (combination of SCID and
+  #     sending_location).
+  #     (2) If there is more than one SCID associated with a chi, then the latest
+  #     record for a SCID is updated to the latest submitted record for that chi.
+  #
+  # All SCID are kept in the file.  If chi is missing then step (2) above does not
+  # take place. Make sure demo file is arranged correctly before processing:
+  #     dplyr::arrange("sending_location",
+  #                    "social_care_id",
+  #                    "financial_year",
+  #                    "financial_quarter",
+  #                     "extract_date")
+  sc_demog <- data %>%
     # arrange - makes sure extract date is last
     dplyr::arrange(
       "sending_location",
@@ -60,17 +69,14 @@ process_lookup_sc_demographics <- function(
       "financial_quarter",
       "extract_date"
     ) %>%
-    dplyr::relocate(c("financial_year", "financial_quarter"), .after = "period")
-
-  #  Fill in missing data and flag latest cases to keep ---------------------------------------
-  sc_demog <- data %>%
+    dplyr::relocate(c("financial_year", "financial_quarter"), .after = "period") %>%
     dplyr::rename(
       anon_chi = .data$anon_chi,
       gender = .data$chi_gender_code,
       dob = .data$chi_date_of_birth
     ) %>%
     # fill in missing demographic details
-    dplyr::group_by(.data$social_care_id, .data$sending_location) %>%
+    dplyr::group_by(.data$sending_location, .data$social_care_id) %>%
     tidyr::fill(.data$anon_chi, .direction = ("updown")) %>%
     tidyr::fill(.data$dob, .direction = ("updown")) %>%
     tidyr::fill(.data$date_of_death, .direction = ("updown")) %>%
@@ -78,6 +84,43 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(.data$chi_postcode, .direction = ("updown")) %>%
     tidyr::fill(.data$submitted_postcode, .direction = ("updown")) %>%
     dplyr::ungroup()
+
+  sc_demog <- sc_demog %>%
+    # arrange before missing data is filled in
+    dplyr::arrange(
+      sending_location, social_care_id, financial_year,
+      financial_quarter, extract_date
+    ) %>%
+    # fill in missing values
+    dplyr::group_by(sending_location, social_care_id) %>%
+    # flag which period is last for each client
+    dplyr::mutate(latest_sc_id = dplyr::last(period)) %>%
+    # flag which extract date is last for each client
+    dplyr::mutate(latest_extract_date = dplyr::last(extract_date)) %>%
+    dplyr::ungroup() %>%
+    # only want records with last period AND last extract date
+    # (some periods are submitted more than once)
+    filter(latest_sc_id == period & latest_extract_date == extract_date) %>%
+    # update these records are now the latest record for each SCID
+    mutate(latest_record_flag = 1)
+  dplyr::select(-.data$period, -.data$latest_record_flag, -.data$latest_sc_id, -.data$latest_extract_date)
+
+
+  # postcodes ---------------------------------------------------------------
+
+  # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation
+  uk_pc_regexp <- "^[A-Z]{1,2}[0-9][A-Z0-9]?\\s*[0-9][A-Z]{2}$"
+
+  dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
+  non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
+
+  valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
+    dplyr::pull(.data$pc7)
+  valid_uk_postcodes <- read_file(uk_pc_path) %>%
+    dplyr::pull()
+  # combine them as some deleted scottish pc are not in the uk pc list
+  valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
+    sort()
 
   ch_pc <- readxl::read_xlsx(get_slf_ch_name_lookup_path()) %>%
     dplyr::select(.data$AccomPostCodeNo) %>%
@@ -119,23 +162,6 @@ process_lookup_sc_demographics <- function(
     tidyr::fill(.data$chi_postcode, .direction = "down") %>%
     dplyr::ungroup()
 
-  # flag unique cases of chi and sc_id, and flag the latest record (sc_demographics latest flag is not accurate)
-  sc_demog <- sc_demog %>%
-    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
-    dplyr::mutate(latest = dplyr::last(.data$period)) %>% # flag latest period for chi
-    dplyr::group_by(.data$anon_chi, .data$social_care_id, .data$sending_location) %>%
-    dplyr::mutate(latest_sc_id = dplyr::last(.data$period)) %>% # flag latest period for social care
-    dplyr::group_by(.data$anon_chi, .data$sending_location) %>%
-    dplyr::mutate(last_sc_id = dplyr::last(.data$social_care_id)) %>%
-    dplyr::mutate(
-      latest_flag = ifelse((.data$latest == .data$period & .data$last_sc_id == .data$social_care_id) | is.na(.data$anon_chi), 1, 0),
-      keep = ifelse(.data$latest_sc_id == .data$period, 1, 0)
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-.data$period, -.data$latest_record_flag, -.data$latest, -.data$last_sc_id, -.data$latest_sc_id) %>%
-    dplyr::distinct()
-
-  # postcodes ---------------------------------------------------------------
 
   # count number of na postcodes
   na_postcodes <- sc_demog %>%
@@ -220,7 +246,6 @@ process_lookup_sc_demographics <- function(
     dplyr::count(dplyr::across(tidyselect::ends_with("_postcode"), ~ is.na(.x)))
 
   sc_demog_lookup <- sc_demog %>%
-    dplyr::filter(.data$keep == 1) %>% # filter to only keep latest record for sc id and chi
     dplyr::select(
       -.data$postcode_type,
       -.data$valid_pc_submitted,
@@ -233,14 +258,12 @@ process_lookup_sc_demographics <- function(
     dplyr::group_by(
       .data$sending_location,
       .data$anon_chi,
-      .data$social_care_id,
-      .data$latest_flag
+      .data$social_care_id
     ) %>%
     # arrange so latest submissions are last
     dplyr::arrange(
       .data$sending_location,
       .data$social_care_id,
-      .data$latest_flag,
       .data$extract_date
     ) %>%
     # summarize to select the last (non NA) submission
