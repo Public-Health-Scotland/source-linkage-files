@@ -23,7 +23,9 @@ social care client lookup
 }
 \seealso{
 Other process extracts: 
+\code{\link{apply_cost_uplift_extract}()},
 \code{\link{create_homelessness_lookup}()},
+\code{\link{lookup_uplift_extract}()},
 \code{\link{process_extract_acute}()},
 \code{\link{process_extract_ae}()},
 \code{\link{process_extract_alarms_telecare}()},
