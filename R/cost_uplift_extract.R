@@ -52,7 +52,7 @@ lookup_uplift_extract <- function(data) {
     (start_year + 1L):(end_year + 1L)
   ))
   uplift_df <- tibble::tibble(year,
-                              uplift = 1.0
+    uplift = 1.0
   ) %>%
     dplyr::mutate(row_no = dplyr::row_number())
   latest_cost_year_row <- uplift_df[year == as.integer(latest_cost_year()), ][["row_no"]]
