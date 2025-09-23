@@ -9,7 +9,7 @@
 process_tests_ae <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
-  data <- apply_cost_uplift_extract(data)
+  data <- apply_cost_uplift(data)
 
   data <- rename_hscp(data)
 
