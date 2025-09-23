@@ -166,6 +166,8 @@ reference:
     - join_sc_client
     - match_on_ltcs
     - order_ep_cols
+    - apply_cost_uplift
+    - lookup_uplift
 
 
   - title: Individual file
