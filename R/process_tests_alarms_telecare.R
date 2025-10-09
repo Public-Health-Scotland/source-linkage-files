@@ -35,9 +35,12 @@ process_tests_alarms_telecare <- function(data, year) {
 #' @family social care test functions
 produce_source_at_tests <- function(data,
                                     max_min_vars = c("record_keydate1", "record_keydate2")) {
+  # count of NA before applying distinct count which makes NA == 1
+  n_missing_chi_total <- sum(is.na(data$anon_chi))
+
   test_flags <- data %>%
     dplyr::arrange(.data$anon_chi) %>%
-    dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
+    dplyr::distinct(.data$anon_chi, .data$social_care_id, .keep_all = TRUE) %>%
     # create test flags
     create_demog_test_flags() %>%
     dplyr::mutate(
@@ -48,7 +51,9 @@ produce_source_at_tests <- function(data,
     # remove variables that won't be summed
     dplyr::select(.data$unique_anon_chi:.data$West_Lothian_clients) %>%
     # use function to sum new test flags
-    calculate_measures(measure = "sum")
+    calculate_measures(measure = "sum") %>%
+    # replace distinct n_missing_chi with the correct sum of NAs
+    dplyr::mutate(value = dplyr::if_else(measure == "n_missing_chi", as.numeric(n_missing_chi_total), value))
 
   min_max_measures <- data %>%
     calculate_measures(vars = max_min_vars, measure = "min-max")
