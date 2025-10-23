@@ -4,8 +4,9 @@
 #'
 #' @export
 read_extract_maternity <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "maternity")) {
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "maternity")
+) {
   # Read BOXI extract
   extract_maternity <- read_file(file_path,
     col_type = readr::cols(

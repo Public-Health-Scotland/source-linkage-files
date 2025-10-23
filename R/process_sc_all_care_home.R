@@ -20,12 +20,13 @@
 #'
 #' @export
 process_sc_all_care_home <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    refined_death = read_file(get_combined_slf_deaths_lookup_path()),
-    ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-    spd_path = get_spd_path(),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
+  spd_path = get_spd_path(),
+  write_to_disk = TRUE
+) {
   ## Data Cleaning-----------------------------------------------------
 
   ch_clean <- data %>%

@@ -9,9 +9,10 @@
 #'
 #' @family episode_file
 link_delayed_discharge_eps <- function(
-    episode_file,
-    year,
-    dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()) {
+  episode_file,
+  year,
+  dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()
+) {
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
     return(episode_file)

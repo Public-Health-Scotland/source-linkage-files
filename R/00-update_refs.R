@@ -48,30 +48,31 @@ end_date <- function() {
 #'
 #' @return A logical TRUE/FALSE
 check_year_valid <- function(
-    year,
-    type = c(
-      "acute",
-      "ae",
-      "at",
-      "ch",
-      "client",
-      "cmh",
-      "cost_dna",
-      "dd",
-      "deaths",
-      "dn",
-      "gpooh",
-      "hc",
-      "homelessness",
-      "hhg",
-      "maternity",
-      "mh",
-      "nsu",
-      "outpatients",
-      "pis",
-      "sds",
-      "sparra"
-    )) {
+  year,
+  type = c(
+    "acute",
+    "ae",
+    "at",
+    "ch",
+    "client",
+    "cmh",
+    "cost_dna",
+    "dd",
+    "deaths",
+    "dn",
+    "gpooh",
+    "hc",
+    "homelessness",
+    "hhg",
+    "maternity",
+    "mh",
+    "nsu",
+    "outpatients",
+    "pis",
+    "sds",
+    "sparra"
+  )
+) {
   ## MANUALLY UPDATE ##
   # Check extracts which we do not have data for and ensure this is picked up
   # by the following code:

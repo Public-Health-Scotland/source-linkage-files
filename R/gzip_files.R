@@ -7,8 +7,9 @@
 #' @return NULL
 #' @export
 gzip_files <- function(
-    year = NULL,
-    path = get_year_dir(year, extracts_dir = TRUE)) {
+  year = NULL,
+  path = get_year_dir(year, extracts_dir = TRUE)
+) {
   unzipped_files <- fs::dir_ls(
     path = path,
     regexp = "\\.csv$",

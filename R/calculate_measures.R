@@ -20,10 +20,11 @@
 #' @family extract test functions
 #' @seealso produce_source_extract_tests
 calculate_measures <- function(
-    data,
-    vars = NULL,
-    measure = c("sum", "all", "min-max"),
-    group_by = NULL) {
+  data,
+  vars = NULL,
+  measure = c("sum", "all", "min-max"),
+  group_by = NULL
+) {
   measure <- match.arg(measure)
 
   if (!is.null(group_by)) {

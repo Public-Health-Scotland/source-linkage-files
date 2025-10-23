@@ -13,8 +13,9 @@
 #' @export
 #' @family process extracts
 process_refined_death <- function(
-    it_chi_deaths = read_file(get_slf_chi_deaths_path()),
-    write_to_disk = TRUE) {
+  it_chi_deaths = read_file(get_slf_chi_deaths_path()),
+  write_to_disk = TRUE
+) {
   years_list <- years_to_run()
 
   nrs_all_years <- lapply(years_list, (\(year) {
