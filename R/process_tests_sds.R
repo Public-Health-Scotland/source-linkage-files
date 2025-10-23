@@ -37,8 +37,10 @@ process_tests_sds <- function(data, year) {
 #' @family social care test functions
 produce_source_sds_tests <- function(data,
                                      max_min_vars = c("record_keydate1", "record_keydate2")) {
-  # count of NA before applying distinct count which makes NA == 1
+  # pre-calculate values before applying distinct count which makes NA == 1
   n_missing_chi_total <- sum(is.na(data$anon_chi))
+  n_missing_dob_total <- sum(is.na(data$dob))
+  n_missing_postcode_total <- sum(is.na(data$postcode))
 
   test_flags <- data %>%
     dplyr::arrange(.data$anon_chi) %>%
@@ -50,8 +52,15 @@ produce_source_sds_tests <- function(data,
     dplyr::select(.data$unique_anon_chi:.data$West_Lothian_clients) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum") %>%
-    # replace distinct n_missing_chi with the correct sum of NAs
-    dplyr::mutate(value = dplyr::if_else(measure == "n_missing_chi", as.numeric(n_missing_chi_total), value))
+    # replace distinct measures with the correct sum of NAs
+    dplyr::mutate(
+      value = dplyr::case_when(
+        measure == "n_missing_chi" ~ as.numeric(n_missing_chi_total),
+        measure == "missing_dob" ~ as.numeric(n_missing_dob_total),
+        measure == "n_missing_postcode" ~ as.numeric(n_missing_postcode_total),
+        TRUE ~ value
+      )
+    )
 
   min_max_measures <- data %>%
     calculate_measures(vars = max_min_vars, measure = "min-max")
