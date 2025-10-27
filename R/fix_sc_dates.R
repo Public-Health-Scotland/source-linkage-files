@@ -43,8 +43,6 @@ fix_sc_end_dates <- function(start_date, end_date, period_end_date) {
 }
 
 
-
-
 #' Fix sc missing end dates
 #'
 #' @description Fix social care end dates when the end date is earlier than the

@@ -11,8 +11,9 @@
 #' @export
 #' @family process extracts
 create_homelessness_lookup <- function(
-    year,
-    homelessness_data = read_file(get_source_extract_path(year, "homelessness"))) {
+  year,
+  homelessness_data = read_file(get_source_extract_path(year, "homelessness"))
+) {
   # Specify years available for running
   if (year <= "1516") {
     return(NULL)

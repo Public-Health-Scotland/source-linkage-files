@@ -5,8 +5,9 @@
 #' @export
 #'
 read_extract_ae <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "ae")) {
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "ae")
+) {
   extract_ae <- read_file(file_path,
     col_type = readr::cols(
       "Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),

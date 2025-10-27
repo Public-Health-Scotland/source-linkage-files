@@ -13,10 +13,11 @@
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(
-    open_data = get_gpprac_opendata(),
-    gpprac_ref_path = get_gpprac_ref_path(),
-    spd_path = get_spd_path(),
-    write_to_disk = TRUE) {
+  open_data = get_gpprac_opendata(),
+  gpprac_ref_path = get_gpprac_ref_path(),
+  spd_path = get_spd_path(),
+  write_to_disk = TRUE
+) {
   gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
     dplyr::select(
       "gpprac" = "praccode",
