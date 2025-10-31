@@ -70,6 +70,7 @@ create_episode_file <- function(
         "anon_chi",
         "person_id",
         "social_care_id",
+        "linking_id",
         "gender",
         "dob",
         "gpprac",
@@ -565,61 +566,40 @@ join_sc_client <- function(data,
   }
 
   if (file_type == "episode") {
-    # Match on client variables by chi
-    # Step 1. Link/join ep with sc_client by anon_chi,
-    #         excluding episodes are not joined. We get `data_file_chi_join`
-    # Step 2. For the episodes are not joined in Step 1,
-    #         join them with sc_client again by person_id,
-    #         excluding those are not joined. We get `data_file_pi_join`
-    # Step 3. Episodes that are non-joined, is `data_file_unjoined`
-    # Step 4. bind rows together
-
+    # Match on client variables by linking_id
     # Step 1
     data_sc <- data %>%
       dplyr::filter(.data$recid %in% c("AT", "HC", "CH", "SDS"))
     data_non_sc <- data %>%
       dplyr::filter(!(.data$recid %in% c("AT", "HC", "CH", "SDS")))
 
-    data_file_chi_join <- data_sc %>%
+    data_file_join <- data_sc %>%
       dplyr::inner_join(
         sc_client,
-        by = "anon_chi",
-        relationship = "many-to-one",
+        by = "linking_id",
+        relationship = "one-to-one",
         suffix = c("", "_sc"),
+        # should never have NA in linking_id
         na_matches = "never"
       ) %>%
       dplyr::select(
         -dplyr::ends_with("_sc")
       )
 
-    # Step 2
-    data_file_pi_join <- data_sc %>%
-      dplyr::filter(!(
-        .data$ep_file_row_id %in% dplyr::pull(data_file_chi_join, .data$ep_file_row_id)
-      )) %>%
-      dplyr::inner_join(
-        sc_client,
-        by = "person_id",
-        relationship = "many-to-one",
-        suffix = c("", "_sc"),
-        na_matches = "never"
-      ) %>%
-      dplyr::select(-dplyr::ends_with("_sc"))
-
     # Step 3
     data_file_unjoined <- data_sc %>%
-      dplyr::filter(!(.data$ep_file_row_id %in% c(
-        dplyr::pull(data_file_chi_join, .data$ep_file_row_id),
-        dplyr::pull(data_file_pi_join, .data$ep_file_row_id)
-      )))
+      dplyr::filter(!(
+        .data$ep_file_row_id %in%
+          dplyr::pull(data_file_join, .data$ep_file_row_id)
+      ))
 
     # Step 4
     data_file <- dplyr::bind_rows(
-      data_file_chi_join,
-      data_file_pi_join,
+      data_file_join,
       data_file_unjoined,
       data_non_sc
-    )
+    ) %>%
+      select(-"linking_id")
   } else {
     data_file <- data %>%
       dplyr::left_join(
