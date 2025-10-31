@@ -4,8 +4,9 @@
 #'
 #' @export
 read_extract_nrs_deaths <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "deaths")) {
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "deaths")
+) {
   extract_nrs_deaths <- read_file(file_path,
     col_types = readr::cols_only(
       "Death Location Code" = readr::col_character(),

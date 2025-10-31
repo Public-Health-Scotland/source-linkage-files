@@ -12,9 +12,10 @@
 #' @export
 #'
 process_sc_all_home_care <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  write_to_disk = TRUE
+) {
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -103,10 +104,10 @@ process_sc_all_home_care <- function(
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs,
-                     by = c(
-                       "sending_location_name" = "ca_name",
-                       "financial_year" = "year"
-                     )
+      by = c(
+        "sending_location_name" = "ca_name",
+        "financial_year" = "year"
+      )
     ) %>%
     dplyr::mutate(hc_cost = .data$hc_hours * .data$hourly_cost)
 

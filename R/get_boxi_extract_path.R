@@ -11,24 +11,25 @@
 #'
 #' @family extract file paths
 get_boxi_extract_path <- function(
-    year,
-    type = c(
-      "ae",
-      "ae_cup",
-      "acute",
-      "acute_cup",
-      "cmh",
-      "deaths",
-      "dn",
-      "gp_ooh-c",
-      "gp_ooh-d",
-      "gp_ooh-o",
-      "gp_ooh_cup",
-      "homelessness",
-      "maternity",
-      "mh",
-      "outpatients"
-    )) {
+  year,
+  type = c(
+    "ae",
+    "ae_cup",
+    "acute",
+    "acute_cup",
+    "cmh",
+    "deaths",
+    "dn",
+    "gp_ooh-c",
+    "gp_ooh-d",
+    "gp_ooh-o",
+    "gp_ooh_cup",
+    "homelessness",
+    "maternity",
+    "mh",
+    "outpatients"
+  )
+) {
   type <- match.arg(type)
 
   if (type %in% c("dn", "cmh")) {

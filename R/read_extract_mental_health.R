@@ -4,8 +4,9 @@
 #'
 #' @export
 read_extract_mental_health <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "mh")) {
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "mh")
+) {
   # Read BOXI extract
   extract_mental_health <- read_file(file_path,
     col_types = readr::cols_only(

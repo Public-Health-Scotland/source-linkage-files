@@ -11,9 +11,10 @@
 #' @export
 #'
 process_sc_all_sds <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  write_to_disk = TRUE
+) {
   # Match on demographics data (chi, gender, dob and postcode)
   data <- data %>%
     # add per in social_care_id in Renfrewshire
@@ -26,7 +27,7 @@ process_sc_all_sds <- function(
   data <- sc_demog_lookup[
     data,
     on = .(sending_location, social_care_id, financial_year),
-    roll = "nearest"          # exact match on first 2 cols; nearest on financial_year
+    roll = "nearest" # exact match on first 2 cols; nearest on financial_year
   ]
   # To do nearest join is because some sc episode happen in say 2018,
   # but demographics data submitted in the following year, say 2019.
@@ -70,8 +71,8 @@ process_sc_all_sds <- function(
 
   # Derived SDS option 4 when a person receives more than one option
   sds_full_clean[,
-                 sds_option_4 := rowSums(.SD) > 1L,
-                 .SDcols = cols_sds_option
+    sds_option_4 := rowSums(.SD) > 1L,
+    .SDcols = cols_sds_option
   ]
 
   # If SDS start date or end date is missing, assign start/end of FY
@@ -140,16 +141,16 @@ process_sc_all_sds <- function(
 
   # Group, arrange and create flags for episodes
   sds_full_clean_long[,
-                      c(
-                        "period_rank",
-                        "record_keydate1_rank",
-                        "record_keydate2_rank"
-                      ) := list(
-                        rank(period),
-                        rank(record_keydate1),
-                        rank(record_keydate2)
-                      ),
-                      by = list(sending_location, social_care_id, smrtype)
+    c(
+      "period_rank",
+      "record_keydate1_rank",
+      "record_keydate2_rank"
+    ) := list(
+      rank(period),
+      rank(record_keydate1),
+      rank(record_keydate2)
+    ),
+    by = list(sending_location, social_care_id, smrtype)
   ]
   data.table::setorder(
     sds_full_clean_long,
@@ -159,15 +160,15 @@ process_sc_all_sds <- function(
   )
 
   sds_full_clean_long[,
-                      distinct_episode :=
-                        (data.table::shift(record_keydate2, type = "lag") < record_keydate1) %>%
-                        tidyr::replace_na(TRUE),
-                      by = list(sending_location, social_care_id, smrtype)
+    distinct_episode :=
+      (data.table::shift(record_keydate2, type = "lag") < record_keydate1) %>%
+      tidyr::replace_na(TRUE),
+    by = list(sending_location, social_care_id, smrtype)
   ]
 
   sds_full_clean_long[,
-                      episode_counter := cumsum(distinct_episode),
-                      by = list(sending_location, social_care_id, smrtype)
+    episode_counter := cumsum(distinct_episode),
+    by = list(sending_location, social_care_id, smrtype)
   ]
 
   # Merge episodes by episode counter

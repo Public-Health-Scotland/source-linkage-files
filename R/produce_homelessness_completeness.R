@@ -7,9 +7,10 @@
 #' `sending_local_authority_name` and the proportion completeness
 #' `pct_complete_all`.
 produce_homelessness_completeness <- function(
-    homelessness_data,
-    update,
-    sg_pub_path) {
+  homelessness_data,
+  update,
+  sg_pub_path
+) {
   year <- unique(homelessness_data[["year"]])
 
   application_counts <- homelessness_data %>%
@@ -167,9 +168,10 @@ get_sg_homelessness_pub_path <- function(...) {
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_homelessness_completeness_path <- function(
-    year,
-    update = latest_update(),
-    ...) {
+  year,
+  update = latest_update(),
+  ...
+) {
   completeness_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Homelessness"),
     file_name = stringr::str_glue(

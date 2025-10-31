@@ -4,8 +4,9 @@
 #'
 #' @export
 read_extract_homelessness <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "homelessness")) {
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "homelessness")
+) {
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())

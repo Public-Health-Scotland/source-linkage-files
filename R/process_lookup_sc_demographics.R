@@ -14,11 +14,12 @@
 #' @export
 #' @family process extracts
 process_lookup_sc_demographics <- function(
-    data,
-    all_care_home_extract,
-    spd_path = get_spd_path(),
-    uk_pc_path = get_uk_postcode_path(),
-    write_to_disk = TRUE) {
+  data,
+  all_care_home_extract,
+  spd_path = get_spd_path(),
+  uk_pc_path = get_uk_postcode_path(),
+  write_to_disk = TRUE
+) {
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -76,21 +77,25 @@ process_lookup_sc_demographics <- function(
     dplyr::pull()
 
 
-  sc_demog = sc_demog %>%
+  sc_demog <- sc_demog %>%
     dplyr::mutate(
       financial_year_extract = which_fy(.data$extract_date, format = "year")
     )
 
-  all_care_home_extract = targets::tar_read("all_care_home_extract")
-  client_in_ch = all_care_home_extract %>%
-    dplyr::select("sending_location", "social_care_id","period") %>%
+  all_care_home_extract <- targets::tar_read("all_care_home_extract")
+  client_in_ch <- all_care_home_extract %>%
+    dplyr::select("sending_location", "social_care_id", "period") %>%
     add_fy_qtr_from_period() %>%
-    dplyr::arrange(.data$sending_location,
-                   .data$social_care_id,
-                   .data$financial_year) %>%
-    dplyr::distinct(.data$sending_location,
-                    .data$social_care_id,
-                    .data$financial_year) %>%
+    dplyr::arrange(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$financial_year
+    ) %>%
+    dplyr::distinct(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$financial_year
+    ) %>%
     mutate(living_in_ch = TRUE)
 
   # pre-clean postcode:
@@ -120,7 +125,8 @@ process_lookup_sc_demographics <- function(
       )
     ) %>%
     dplyr::left_join(client_in_ch,
-                     by = c("sending_location", "social_care_id", "financial_year")) %>%
+      by = c("sending_location", "social_care_id", "financial_year")
+    ) %>%
     # Scenario handled here:
     # someone began to live in care home from fy2022.
     # Postcode in the demog file submitted in fy 2022
@@ -181,7 +187,6 @@ process_lookup_sc_demographics <- function(
     dplyr::group_by(.data$anon_chi, .data$sending_location, .data$social_care_id) %>%
     tidyr::fill("submitted_postcode", "chi_postcode", .direction = "down") %>%
     dplyr::ungroup() %>%
-
     dplyr::select(
       "financial_year",
       "financial_quarter",
@@ -222,7 +227,6 @@ process_lookup_sc_demographics <- function(
         .data$postcode
       )
     ) %>%
-
     # arrange before missing data is filled in
     dplyr::arrange(
       .data$sending_location,
@@ -235,14 +239,17 @@ process_lookup_sc_demographics <- function(
     # quality: The higher, the better.
     # This is to tackle the situation where
     # for one CHI, two different social_care_id submitted at the same latest date.
-    dplyr::group_by(.data$sending_location,
-                    .data$social_care_id,
-                    .data$anon_chi) %>%
+    dplyr::group_by(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$anon_chi
+    ) %>%
     dplyr::mutate(consistent_quality = dplyr::n_distinct(.data$period)) %>%
     dplyr::ungroup() %>%
-
-    dplyr::group_by(.data$sending_location,
-                    .data$social_care_id) %>%
+    dplyr::group_by(
+      .data$sending_location,
+      .data$social_care_id
+    ) %>%
     # flag which period is last for each client
     dplyr::mutate(latest_sc_id = dplyr::last(.data$period)) %>%
     # flag which extract date is last for each client
@@ -256,10 +263,12 @@ process_lookup_sc_demographics <- function(
     ) %>%
     # update these records are now the latest record for each SCID
     # dplyr::mutate(latest_record_flag = 1) %>%
-    dplyr::select(-"period",
-                  # -"latest_record_flag",
-                  -"latest_sc_id",
-                  -"latest_extract_date") %>%
+    dplyr::select(
+      -"period",
+      # -"latest_record_flag",
+      -"latest_sc_id",
+      -"latest_extract_date"
+    ) %>%
     dplyr::arrange(
       .data$sending_location,
       .data$anon_chi,
@@ -287,11 +296,13 @@ process_lookup_sc_demographics <- function(
       .data$financial_year
     ) %>%
     # arrange so latest submissions are last
-    dplyr::arrange(.data$sending_location,
-                   .data$social_care_id,
-                   .data$anon_chi,
-                   .data$financial_quarter,
-                   .data$extract_date) %>%
+    dplyr::arrange(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$anon_chi,
+      .data$financial_quarter,
+      .data$extract_date
+    ) %>%
     # summarize to select the last (non NA) submission
     dplyr::summarise(
       gender = dplyr::last(.data$gender),

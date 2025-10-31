@@ -11,11 +11,12 @@
 #' @family individual_file
 #' @export
 create_individual_file <- function(
-    episode_file,
-    year,
-    homelessness_lookup = create_homelessness_lookup(year),
-    write_to_disk = TRUE,
-    write_temp_to_disk) {
+  episode_file,
+  year,
+  homelessness_lookup = create_homelessness_lookup(year),
+  write_to_disk = TRUE,
+  write_temp_to_disk
+) {
   cli::cli_alert_info("Create individual file function started at {Sys.time()}")
 
   individual_file <- episode_file %>%

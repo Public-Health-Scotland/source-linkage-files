@@ -12,9 +12,10 @@
 #' @export
 #'
 process_sc_all_alarms_telecare <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  write_to_disk = TRUE
+) {
   # Data Cleaning-----------------------------------------------------
 
   # fix "no visible binding for global variable"
@@ -83,7 +84,7 @@ process_sc_all_alarms_telecare <- function(
     )
   ]
 
-  data = data %>%
+  data <- data %>%
     add_fy_qtr_from_period()
   data[, financial_quarter := NULL]
 
@@ -92,7 +93,7 @@ process_sc_all_alarms_telecare <- function(
   data <- sc_demog_lookup[
     data,
     on = .(sending_location, social_care_id, financial_year),
-    roll = "nearest"          # exact match on first 2 cols; nearest on financial_year
+    roll = "nearest" # exact match on first 2 cols; nearest on financial_year
   ]
   # To do nearest join is because some sc episode happen in say 2018,
   # but demographics data submitted in the following year, say 2019.
@@ -111,14 +112,16 @@ process_sc_all_alarms_telecare <- function(
   )]
 
   # Order data before summarizing
-  data.table::setorder(data,
-                       sending_location,
-                       social_care_id,
-                       record_keydate1,
-                       smrtype,
-                       period,
-                       extract_date,
-                       consistent_quality)
+  data.table::setorder(
+    data,
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    period,
+    extract_date,
+    consistent_quality
+  )
 
   # Summarize to merge episodes
   qtr_merge <- data[, list(

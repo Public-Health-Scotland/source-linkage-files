@@ -17,12 +17,13 @@
 #' @export
 #' @family process extracts
 process_extract_homelessness <- function(
-    data,
-    year,
-    write_to_disk = TRUE,
-    update = latest_update(),
-    la_code_lookup = get_la_code_opendata_lookup(),
-    sg_pub_path = get_sg_homelessness_pub_path()) {
+  data,
+  year,
+  write_to_disk = TRUE,
+  update = latest_update(),
+  la_code_lookup = get_la_code_opendata_lookup(),
+  sg_pub_path = get_sg_homelessness_pub_path()
+) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 

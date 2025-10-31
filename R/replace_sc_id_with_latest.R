@@ -58,9 +58,10 @@ replace_sc_id_with_latest <- function(data) {
   return_data <- change_sc_id %>%
     # Match back onto data
     dplyr::right_join(data,
-                      by = c("anon_chi"),
-                      suffix = c("", "_old"),
-                      multiple = "all") %>%
+      by = c("anon_chi"),
+      suffix = c("", "_old"),
+      multiple = "all"
+    ) %>%
     # Overwrite sc id with the latest
     dplyr::mutate(
       social_care_id = dplyr::if_else(
@@ -76,16 +77,15 @@ replace_sc_id_with_latest <- function(data) {
 }
 
 
-
 select_linking_id <- function(data) {
   data %>% dplyr::mutate(linking_id = dplyr::if_else(
     is.na(.data$anon_chi),
-    paste0("SCID", .data$sending_location, "-",.data$social_care_id),
+    paste0("SCID", .data$sending_location, "-", .data$social_care_id),
     .data$anon_chi
   ))
 }
 
-add_fy_qtr_from_period = function(data){
+add_fy_qtr_from_period <- function(data) {
   data %>%
     # create financial_year and financial_quarter variables for sorting
     dplyr::mutate(
@@ -108,11 +108,11 @@ which_fy <- function(date, format = c("year", "fyear")) {
   year <- as.numeric(format(date, "%Y"))
   month <- as.numeric(format(date, "%m"))
 
-  start_year <- ifelse(month<4, year - 1, year)
+  start_year <- ifelse(month < 4, year - 1, year)
   end_year <- start_year + 1
   if (format == "year") {
     return(start_year)
-  } else{
+  } else {
     return(paste0(substr(start_year, 3, 4), substr(end_year, 3, 4)))
   }
 }

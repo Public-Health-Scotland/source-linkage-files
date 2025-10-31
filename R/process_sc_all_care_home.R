@@ -20,12 +20,13 @@
 #'
 #' @export
 process_sc_all_care_home <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    refined_death = read_file(get_combined_slf_deaths_lookup_path()),
-    ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-    spd_path = get_spd_path(),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
+  spd_path = get_spd_path(),
+  write_to_disk = TRUE
+) {
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -257,14 +258,14 @@ process_sc_all_care_home <- function(
     # otherwise use the start of the quarter
     dplyr::mutate(
       ch_admission_date = dplyr::if_else(is.na(.data[["ch_admission_date"]]),
-                                         .data[["period_start_date"]],
-                                         .data[["ch_admission_date"]]
+        .data[["period_start_date"]],
+        .data[["ch_admission_date"]]
       ),
       # If it's the last episode(s) then keep the discharge date(s), otherwise
       # use the end of the quarter
       ch_discharge_date = dplyr::if_else(is.na(.data[["ch_discharge_date"]]),
-                                         .data[["period_end_date"]],
-                                         .data[["ch_discharge_date"]]
+        .data[["period_end_date"]],
+        .data[["ch_discharge_date"]]
       )
     ) %>%
     dplyr::ungroup() %>%
@@ -275,8 +276,8 @@ process_sc_all_care_home <- function(
   # match ch_episode data with deaths data
   matched_deaths_data <- ch_episode %>%
     dplyr::left_join(refined_death,
-                     by = "anon_chi",
-                     na_matches = "never"
+      by = "anon_chi",
+      na_matches = "never"
     ) %>%
     # compare discharge date with NRS and CHI death date
     # if either of the dates are 5 or fewer days before discharge
@@ -289,8 +290,8 @@ process_sc_all_care_home <- function(
         FALSE
       ),
       ch_discharge_date = dplyr::if_else(.data[["dis_after_death"]],
-                                         .data[["death_date"]],
-                                         .data[["ch_discharge_date"]]
+        .data[["death_date"]],
+        .data[["ch_discharge_date"]]
       )
     ) %>%
     dplyr::ungroup() %>%
@@ -321,7 +322,7 @@ process_sc_all_care_home <- function(
         lubridate::days(1L),
       # if the first row is NA, set this to the ch_discharge_date
       previous_discharge_date_chi = dplyr::if_else(.data$row_number == 1, .data[["ch_discharge_date"]],
-                                                   .data[["previous_discharge_date_chi"]]
+        .data[["previous_discharge_date_chi"]]
       )
     ) %>%
     # flag continuous stays and create marker
@@ -340,12 +341,12 @@ process_sc_all_care_home <- function(
     # create continuous marker using flag for new stay
     dplyr::mutate(
       ch_chi_cis = purrr::accumulate(.data$new_episode[-1],
-                                     .init = 1,
-                                     ~ if (.y == "Y") {
-                                       .x + 1
-                                     } else {
-                                       .x
-                                     }
+        .init = 1,
+        ~ if (.y == "Y") {
+          .x + 1
+        } else {
+          .x
+        }
       )
     ) %>%
     dplyr::ungroup()
@@ -368,7 +369,7 @@ process_sc_all_care_home <- function(
         lubridate::days(1L),
       # if the first row is NA, set this to the ch_discharge_date
       previous_discharge_date_sc = dplyr::if_else(.data$row_number == 1, .data[["ch_discharge_date"]],
-                                                  .data[["previous_discharge_date_sc"]]
+        .data[["previous_discharge_date_sc"]]
       )
     ) %>%
     # flag continuous stays and create marker
@@ -387,12 +388,12 @@ process_sc_all_care_home <- function(
     # create continuous marker using flag for new stay
     dplyr::mutate(
       ch_sc_id_cis = purrr::accumulate(.data$new_episode[-1],
-                                       .init = 1,
-                                       ~ if (.y == "Y") {
-                                         .x + 1
-                                       } else {
-                                         .x
-                                       }
+        .init = 1,
+        ~ if (.y == "Y") {
+          .x + 1
+        } else {
+          .x
+        }
       )
     ) %>%
     dplyr::ungroup() %>%
@@ -431,12 +432,12 @@ process_sc_all_care_home <- function(
       stay_los = lubridate::time_length(lubridate::interval(.data[["ch_ep_start"]], .data[["ch_ep_end"]]), "weeks"),
       stay_respite = .data[["stay_los"]] < 6.0,
       type_of_admission = dplyr::if_else(is.na(.data[["type_of_admission"]]),
-                                         dplyr::case_when(.data[["reason_for_admission"]] == 1L ~ 1L,
-                                                          .data[["reason_for_admission"]] == 2L ~ 2L,
-                                                          stay_respite ~ 1L, # (n = 40573)
-                                                          .default = 3L
-                                         ),
-                                         .data[["type_of_admission"]]
+        dplyr::case_when(.data[["reason_for_admission"]] == 1L ~ 1L,
+          .data[["reason_for_admission"]] == 2L ~ 2L,
+          stay_respite ~ 1L, # (n = 40573)
+          .default = 3L
+        ),
+        .data[["type_of_admission"]]
       )
     ) %>%
     dplyr::select(-"ch_ep_start", -"ch_ep_end", -"stay_los", -"stay_respite")

@@ -147,11 +147,12 @@ phs_db_connection <- function(dsn, username) {
 #' @return NULL (invisibly)
 #' @export
 setup_keyring <- function(
-    keyring = "createslf",
-    key = "db_password",
-    keyring_exists = FALSE,
-    key_exists = FALSE,
-    env_var_pass_exists = FALSE) {
+  keyring = "createslf",
+  key = "db_password",
+  keyring_exists = FALSE,
+  key_exists = FALSE,
+  env_var_pass_exists = FALSE
+) {
   # setup keyring_backend to avoid error
   # Error in default_backend()$keyring_list() : attempt to apply non-function
   options(keyring_backend = "file")
@@ -169,7 +170,6 @@ setup_keyring <- function(
         readr::read_lines(".Renviron"),
         "^CREATESLF_KEYRING_PASS\\s*?=\\s*?['\"].+?['\"]$"
       ))
-
     ) {
       cli::cli_abort(
         "Your {.file .Renviron} file looks ok, try restarting your session."
