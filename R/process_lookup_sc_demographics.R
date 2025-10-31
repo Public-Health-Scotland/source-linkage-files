@@ -82,7 +82,6 @@ process_lookup_sc_demographics <- function(
       financial_year_extract = which_fy(.data$extract_date, format = "year")
     )
 
-  all_care_home_extract <- targets::tar_read("all_care_home_extract")
   client_in_ch <- all_care_home_extract %>%
     dplyr::select("sending_location", "social_care_id", "period") %>%
     add_fy_qtr_from_period() %>%
