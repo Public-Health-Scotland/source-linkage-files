@@ -15,7 +15,7 @@ process_sc_all_home_care <- function(
     data,
     sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
     write_to_disk = TRUE) {
-  replaced_dates <- data %>%
+  data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
     dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
@@ -33,27 +33,29 @@ process_sc_all_home_care <- function(
         .data$hc_service_end_date,
         .data$hc_period_end_date
       )
-    )
-
+    ) %>%
+    add_fy_qtr_from_period()
 
   # Match on demographic data ---------------------------------------
 
-  matched_hc_data <- replaced_dates %>%
-    # FULL_JOIN with sc_demog_lookup
-    # full_join to include those patients in extracts but not in demog_lookup
-    # used to be right_join
-    dplyr::full_join(
-      sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
-    ) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
+  data.table::setDT(data)
+  data.table::setDT(sc_demog_lookup)
+  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  # exact match on first 2 cols; nearest on financial_year
+  data <- sc_demog_lookup[
+    data,
+    on = .(sending_location, social_care_id, financial_year),
+    roll = "nearest"
+  ]
+  # To do nearest join is because some sc episode happen in say 2018,
+  # but demographics data submitted in the following year, say 2019.
+  data <- data %>%
+    as.data.frame() %>%
     replace_sc_id_with_latest()
-
 
   # Data Cleaning ---------------------------------------
 
-  home_care_clean <- matched_hc_data %>%
+  home_care_clean <- data %>%
     # set reablement values == 9 to NA
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
     # fix NA hc_service
@@ -64,7 +66,7 @@ process_sc_all_home_care <- function(
       .data$social_care_id,
       .data$hc_service_start_date
     ) %>%
-    tidyr::fill(.data$reablement, .direction = "updown") %>%
+    tidyr::fill("reablement", .direction = "updown") %>%
     dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
     dplyr::ungroup()
 
@@ -101,21 +103,19 @@ process_sc_all_home_care <- function(
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs,
-      by = c(
-        "sending_location_name" = "ca_name",
-        "financial_year" = "year"
-      )
+                     by = c(
+                       "sending_location_name" = "ca_name",
+                       "financial_year" = "year"
+                     )
     ) %>%
     dplyr::mutate(hc_cost = .data$hc_hours * .data$hourly_cost)
 
   pivoted_hours <- matched_costs %>%
     # Create a copy of the period then pivot the hours on it
-    # This creates a new variable per quarter
-    # with the hours for that quarter for every record
-    dplyr::mutate(hours_submission_quarter = .data$period) %>%
+    dplyr::mutate(hours_submission_quarter = period) %>%
     tidyr::pivot_wider(
-      names_from = .data$hours_submission_quarter,
-      values_from = c(.data$hc_hours, .data$hc_cost),
+      names_from = "hours_submission_quarter",
+      values_from = c("hc_hours", "hc_cost"),
       values_fn = sum,
       values_fill = 0L,
       names_sort = TRUE,
@@ -126,26 +126,23 @@ process_sc_all_home_care <- function(
       hc_hours_2017Q1 = NA,
       hc_hours_2017Q2 = NA,
       hc_hours_2017Q3 = NA,
-      .before = .data$hc_hours_2017Q4
+      .before = "hc_hours_2017Q4"
     ) %>%
     dplyr::mutate(
       hc_cost_2017Q1 = NA,
       hc_cost_2017Q2 = NA,
       hc_cost_2017Q3 = NA,
-      .before = .data$hc_cost_2017Q4
+      .before = "hc_cost_2017Q4"
     ) %>%
     dplyr::full_join(
-      # Create the columns we don't have as NA
       tibble::tibble(
-        # Create columns for the latest year
-        hours_submission_quarter = paste0(max(data$financial_year), "Q", 1L:4L),
+        hours_submission_quarter = paste0(max(matched_costs$financial_year), "Q", 1L:4L),
         hc_hours = NA,
         hc_cost = NA
       ) %>%
-        # Pivot them to the same format as the rest of the data
         tidyr::pivot_wider(
-          names_from = .data$hours_submission_quarter,
-          values_from = c(.data$hc_hours, .data$hc_cost),
+          names_from = "hours_submission_quarter",
+          values_from = c("hc_hours", "hc_cost"),
           names_glue = "{.value}_{hours_submission_quarter}"
         )
     )
@@ -203,7 +200,8 @@ process_sc_all_home_care <- function(
     dplyr::mutate(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
-    create_person_id()
+    create_person_id() %>%
+    select_linking_id()
 
   if (write_to_disk) {
     write_file(
