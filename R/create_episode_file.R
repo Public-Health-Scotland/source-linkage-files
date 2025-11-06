@@ -579,7 +579,7 @@ join_sc_client <- function(data,
       dplyr::inner_join(
         sc_client,
         by = "linking_id",
-        relationship = "one-to-one",
+        relationship = "many-to-one",
         suffix = c("", "_sc"),
         # should never have NA in linking_id
         na_matches = "never"
@@ -588,14 +588,14 @@ join_sc_client <- function(data,
         -dplyr::ends_with("_sc")
       )
 
-    # Step 3
+    # Step 2
     data_file_unjoined <- data_sc %>%
       dplyr::filter(!(
         .data$ep_file_row_id %in%
           dplyr::pull(data_file_join, .data$ep_file_row_id)
       ))
 
-    # Step 4
+    # Step 3
     data_file <- dplyr::bind_rows(
       data_file_join,
       data_file_unjoined,
