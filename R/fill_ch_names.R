@@ -159,6 +159,8 @@ fill_ch_names <- function(ch_data,
     # ch_admission_date might be inaccurate.
     dplyr::filter(.data[["ch_admission_date"]] <= .data[["latest_close_date"]]) %>%
     dplyr::mutate(
+      # It is joined by ch_pc_partial.
+      # So `!postcode_matching` means postcode not the same but almost.
       postcode_matching = (.data[["ch_postcode"]] == .data[["ch_postcode_lookup"]]),
       ### quality 1L-12L ----
       matching_quality_indicator = dplyr::case_when(
@@ -334,10 +336,11 @@ fill_ch_names <- function(ch_data,
   )
 
   ch_pc_match_quality1to14 <- ch_pc_match_quality1to13 %>%
-    dplyr::mutate(matching_quality_indicator = dplyr::if_else(.data[["matching_quality_indicator"]] == 100L &
-      .data[["postcode_matching"]],
-    14L,
-    .data[["matching_quality_indicator"]]
+    dplyr::mutate(matching_quality_indicator = dplyr::if_else(
+      .data[["matching_quality_indicator"]] == 100L &
+        .data[["postcode_matching"]],
+      14L,
+      .data[["matching_quality_indicator"]]
     )) %>%
     # now remove cases of quality being 100L for the next sections:
     # ch_name matching, english ch, others
@@ -491,108 +494,7 @@ fill_ch_names <- function(ch_data,
     dplyr::distinct(.data[["unique_identifier"]], .keep_all = TRUE) %>%
     dplyr::select(dplyr::all_of(col_to_select))
 
-  ### quality 19L----
-  # ch_postcode and postcode exchange, then matching
-  ch_pc_ex_match_quality19 <- ch_data %>%
-    dplyr::anti_join(
-      dplyr::bind_rows(
-        ch_pc_match_quality1to14,
-        ch_eng_match_quality15,
-        ch_name_match_quality16,
-        ch_name_match_quality17,
-        ch_name_match_quality18
-      ),
-      by = dplyr::join_by("unique_identifier")
-    ) %>%
-    dplyr::mutate(
-      intermediate_pc = .data[["ch_postcode"]],
-      ch_postcode = .data[["postcode"]],
-      postcode = .data[["ch_postcode"]],
-      ch_pc_partial = stringr::str_sub(.data[["ch_postcode"]], 1, -2),
-      ch_pc_partial2 = stringr::str_sub(.data[["ch_postcode"]], 1, -3),
-      ch_pc_partial3 = stringr::str_sub(.data[["ch_postcode"]], 1, -5)
-    ) %>%
-    dplyr::select(-.data[["intermediate_pc"]]) %>%
-    dplyr::inner_join(
-      ch_name_lookup,
-      by = dplyr::join_by(
-        x$ch_name_keyword == y$ch_name_validated_keyword,
-        x$ch_admission_date <= y$latest_close_date,
-        x$ch_admission_date >= y$ch_date_registered,
-        "ch_pc_partial"
-      ),
-      na_matches = "never"
-    ) %>%
-    dplyr::mutate(
-      ch_name_old = .data[["ch_name"]],
-      ch_postcode_old = .data[["ch_postcode"]],
-      ch_name = .data[["ch_name_validated"]],
-      ch_postcode = .data[["ch_postcode_lookup"]],
-      matching_quality_indicator = 19L,
-      match_distance_jaccard = stringdist::stringdist(.data[["ch_name"]],
-        .data[["ch_name_validated"]],
-        method = "jaccard"
-      )
-    ) %>%
-    dplyr::arrange(
-      .data[["unique_identifier"]],
-      .data[["match_distance_jaccard"]]
-    ) %>%
-    dplyr::distinct(.data[["unique_identifier"]], .keep_all = TRUE) %>%
-    dplyr::select(dplyr::all_of(col_to_select))
-
   ## Other matching processes ----
-  ### quality 20L ----
-  # ch_postcode and postcode exchange,
-  # then fizzy match ch_name, and matching main part of postcode
-  ch_pc_ex_match_quality20 <- ch_data %>%
-    dplyr::anti_join(
-      dplyr::bind_rows(
-        ch_pc_match_quality1to14,
-        ch_eng_match_quality15,
-        ch_name_match_quality16,
-        ch_name_match_quality17,
-        ch_name_match_quality18,
-        ch_pc_ex_match_quality19
-      ),
-      by = dplyr::join_by("unique_identifier")
-    ) %>%
-    dplyr::mutate(
-      intermediate_pc = .data[["ch_postcode"]],
-      ch_postcode = .data[["postcode"]],
-      postcode = .data[["ch_postcode"]],
-      ch_pc_partial = stringr::str_sub(.data[["ch_postcode"]], 1, -2),
-      ch_pc_partial2 = stringr::str_sub(.data[["ch_postcode"]], 1, -3),
-      ch_pc_partial3 = stringr::str_sub(.data[["ch_postcode"]], 1, -5)
-    ) %>%
-    dplyr::select(-.data[["intermediate_pc"]]) %>%
-    dplyr::inner_join(
-      ch_name_lookup,
-      by = dplyr::join_by(
-        x$ch_name_keyword == y$ch_name_validated_keyword,
-        x$ch_admission_date <= y$latest_close_date,
-        x$ch_admission_date >= y$ch_date_registered,
-        "ch_pc_partial3"
-      ),
-      na_matches = "never"
-    ) %>%
-    dplyr::mutate(
-      ch_name_old = .data[["ch_name"]],
-      ch_postcode_old = .data[["ch_postcode"]],
-      ch_name = .data[["ch_name_validated"]],
-      ch_postcode = .data[["ch_postcode_lookup"]],
-      matching_quality_indicator = 20L,
-      match_distance_jaccard = stringdist::stringdist(.data[["ch_name"]],
-        .data[["ch_name_validated"]],
-        method = "jaccard"
-      )
-    ) %>%
-    dplyr::arrange(
-      .data[["unique_identifier"]],
-      .data[["match_distance_jaccard"]]
-    ) %>%
-    dplyr::distinct(.data[["unique_identifier"]], .keep_all = TRUE) %>%
-    dplyr::select(dplyr::all_of(col_to_select))
 
   ### quality 21L----
   # perfect match care home name, regardless of postcode,
@@ -607,9 +509,7 @@ fill_ch_names <- function(ch_data,
         ch_eng_match_quality15,
         ch_name_match_quality16,
         ch_name_match_quality17,
-        ch_name_match_quality18,
-        ch_pc_ex_match_quality19,
-        ch_pc_ex_match_quality20
+        ch_name_match_quality18
       ),
       by = dplyr::join_by("unique_identifier")
     ) %>%
@@ -644,8 +544,6 @@ fill_ch_names <- function(ch_data,
         ch_name_match_quality16,
         ch_name_match_quality17,
         ch_name_match_quality18,
-        ch_pc_ex_match_quality19,
-        ch_pc_ex_match_quality20,
         ch_name_match_quality21
       ),
       by = dplyr::join_by("unique_identifier")
@@ -687,8 +585,6 @@ fill_ch_names <- function(ch_data,
         ch_name_match_quality16,
         ch_name_match_quality17,
         ch_name_match_quality18,
-        ch_pc_ex_match_quality19,
-        ch_pc_ex_match_quality20,
         ch_name_match_quality21,
         ch_name_match_quality22
       ),
@@ -715,8 +611,6 @@ fill_ch_names <- function(ch_data,
     ch_name_match_quality16,
     ch_name_match_quality17,
     ch_name_match_quality18,
-    ch_pc_ex_match_quality19,
-    ch_pc_ex_match_quality20,
     ch_name_match_quality21,
     ch_name_match_quality22,
     ch_no_match_quality100
