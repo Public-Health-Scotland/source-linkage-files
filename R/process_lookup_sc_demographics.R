@@ -298,7 +298,6 @@ process_lookup_sc_demographics <- function(
     # update these records are now the latest record for each SCID
     dplyr::select(
       -"period",
-      # -"latest_record_flag",
       -"latest_sc_id",
       -"latest_extract_date"
     ) %>%
