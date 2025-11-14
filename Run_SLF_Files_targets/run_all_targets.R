@@ -37,25 +37,30 @@ library(createslf)
 # Default set as TRUE
 console_outputs <- TRUE
 
-# # save console outputs if `console_outputs == TRUE`
 # #-------------------------------------------------------------------------------
-# if (console_outputs) {
-#   file_name <- stringr::str_glue(
-#     "targets_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
-#   )
-#
-#   file_path <- get_file_path(
-#     console_output_path(),
-#     file_name,
-#     create = TRUE
-#   )
-#
-#   con <- file(file_name, open = "wt")
-#
-#   # Redirect messages (including warnings and errors) to the file
-#   sink(con, type = "output", split = TRUE)
-#   sink(con, type = "message", append = TRUE)
-# }
+# # save console outputs if `console_outputs == TRUE`
+if (console_outputs) {
+  update <- latest_update()
+
+  con_output_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/_console_output/"
+
+  file_name <- stringr::str_glue(
+    "targets_console_{update}_update.txt"
+  )
+  file_path <- file.path(con_output_dir, file_name)
+
+  con <- file(file_path, open = "wt")
+
+  sink(con, type = "output", split = TRUE)
+  sink(con, type = "message", append = TRUE)
+
+  on.exit({
+    sink(type = "message")
+    sink(type = "output")
+    close(con)
+    cat("\n✓ Console output saved to:", file_path, "\n")
+  }, add = TRUE)
+}
 
 # Run the targets pipeline "_Targets.R"
 #-------------------------------------------------------------------------------
@@ -66,12 +71,8 @@ tar_make()
 # Run combine_tests() for outputting the test workbooks.
 createslf::combine_tests()
 
+#-------------------------------------------------------------------------------
 
-# # save console outputs if `console_outputs == TRUE`
-# #-------------------------------------------------------------------------------
-# if (console_outputs) {
-#   sink(type = "output")
-#   sink(type = "message")
-#   close(con)
-#   extract_targets_time(file_name)
-# }
+# END OF SCRIPT #
+
+#-------------------------------------------------------------------------------

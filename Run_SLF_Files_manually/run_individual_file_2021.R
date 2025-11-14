@@ -32,25 +32,32 @@ write_temp_to_disk <- TRUE
 
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
-# console_outputs <- TRUE
+console_outputs <- TRUE
 
-#-------------------------------------------------------------------------------
-# save console outputs if `console_outputs == TRUE`
-# if (console_outputs) {
-#   file_name <- stringr::str_glue(
-#     "ind_{year}_console_{format(Sys.time(), '%Y-%m-%d_%H-%M-%S')}.txt"
-#   )
-#   file_path <- get_file_path(
-#     ep_ind_console_path(),
-#     file_name,
-#     create = TRUE
-#   )
-#   con <- file(file_name, open = "wt")
-#
-#   # Redirect messages (including warnings and errors) to the file
-#   sink(con, type = "output", split = TRUE)
-#   sink(con, type = "message", append = TRUE)
-# }
+# #-------------------------------------------------------------------------------
+# # save console outputs if `console_outputs == TRUE`
+if (console_outputs) {
+  update <- latest_update()
+
+  con_output_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/_console_output/"
+
+  file_name <- stringr::str_glue(
+    "ind_{year}_{update}_update.txt"
+  )
+  file_path <- file.path(con_output_dir, file_name)
+
+  con <- file(file_path, open = "wt")
+
+  sink(con, type = "output", split = TRUE)
+  sink(con, type = "message", append = TRUE)
+
+  on.exit({
+    sink(type = "message")
+    sink(type = "output")
+    close(con)
+    cat("\n✓ Console output saved to:", file_path, "\n")
+  }, add = TRUE)
+}
 
 #-------------------------------------------------------------------------------
 # Clean temporary files
@@ -62,18 +69,6 @@ episode_file <- arrow::read_parquet(get_slf_episode_path(year))
 # Run the individual file and tests
 create_individual_file(episode_file, year = year, write_temp_to_disk = write_temp_to_disk) %>%
   process_tests_individual_file(year = year)
-
-#-------------------------------------------------------------------------------
-# save console outputs if `console_outputs == TRUE`
-# if (console_outputs) {
-#   # Restore messages to the console and close the connection
-#   sink(type = "message")
-#   sink()
-#
-#   close(con)
-#
-#   extract_targets_time(file_name)
-# }
 
 #-------------------------------------------------------------------------------
 
