@@ -6,6 +6,7 @@
 \usage{
 process_lookup_sc_demographics(
   data,
+  all_care_home_extract,
   spd_path = get_spd_path(),
   uk_pc_path = get_uk_postcode_path(),
   write_to_disk = TRUE
