@@ -54,12 +54,15 @@ if (console_outputs) {
   sink(con, type = "output", split = TRUE)
   sink(con, type = "message", append = TRUE)
 
-  on.exit({
-    sink(type = "message")
-    sink(type = "output")
-    close(con)
-    cat("\n✓ Console output saved to:", file_path, "\n")
-  }, add = TRUE)
+  on.exit(
+    {
+      sink(type = "message")
+      sink(type = "output")
+      close(con)
+      cat("\n✓ Console output saved to:", file_path, "\n")
+    },
+    add = TRUE
+  )
 }
 
 # Run the targets pipeline "_Targets.R"
