@@ -95,7 +95,7 @@ process_lookup_sc_demographics <- function(
       .data$social_care_id,
       .data$financial_year
     ) %>%
-    mutate(living_in_ch = TRUE)
+    dplyr::mutate(living_in_ch = TRUE)
 
   # pre-clean postcode:
   # mainly remove care home postcode being supplied as home postcode
@@ -132,7 +132,7 @@ process_lookup_sc_demographics <- function(
     # for fy 2021 may be care home postcode, which is not correct.
     dplyr::left_join(
       client_in_ch %>%
-        select(
+        dplyr::select(
           "sending_location",
           "social_care_id",
           "financial_year_extract" = "financial_year",
@@ -144,7 +144,7 @@ process_lookup_sc_demographics <- function(
         "financial_year_extract"
       )
     ) %>%
-    relocate("submitted_postcode", .before = "chi_postcode") %>%
+    dplyr::relocate("submitted_postcode", .before = "chi_postcode") %>%
     dplyr::mutate(
       living_in_ch = tidyr::replace_na(.data$living_in_ch, FALSE),
       living_in_ch_extract = tidyr::replace_na(.data$living_in_ch_extract, FALSE),
@@ -244,7 +244,42 @@ process_lookup_sc_demographics <- function(
       .data$anon_chi
     ) %>%
     dplyr::mutate(consistent_quality = dplyr::n_distinct(.data$period)) %>%
-    dplyr::ungroup() %>%
+    dplyr::ungroup()
+
+  rm(sc_demog)
+
+
+  # Latest record flag methodology ---------------------------------------------
+  # The latest_record_flag data variable in the demographic snapshot should NOT be
+  # used.  It is currently flagging the latest submitted demographic record for a
+  # client and not the latest submitted period.  This means that re-submissions of
+  # historic demographic data can be flagged as the latest demographic record. We
+  # therefore need to use all demographic records of a client to determine the
+  # latest client record.
+  #
+  # This section:
+  #     (1) fills in missing demo records from previous client submissions to
+  #     create an updated latest record for each client (combination of SCID and
+  #     sending_location).
+  #     (2) If there is more than one SCID associated with a chi,
+  #         for each combination of chi and SCID, we keep its latest record.
+  #
+  # All SCID are kept in the file.  If chi is missing then step (2) above does not
+  # take place. Make sure demo file is arranged correctly before processing:
+  #     dplyr::arrange("sending_location",
+  #                    "social_care_id",
+  #                    "financial_year",
+  #                    "financial_quarter",
+  #                     "extract_date")
+  sc_demog_latest_record_flag <- sc_demog_ch %>%
+    # arrange before missing data is filled in
+    dplyr::arrange(
+      .data$sending_location,
+      .data$social_care_id,
+      .data$financial_year,
+      .data$financial_quarter,
+      .data$extract_date
+    ) %>%
     dplyr::group_by(
       .data$sending_location,
       .data$social_care_id
@@ -261,7 +296,6 @@ process_lookup_sc_demographics <- function(
         .data$latest_extract_date == .data$extract_date
     ) %>%
     # update these records are now the latest record for each SCID
-    # dplyr::mutate(latest_record_flag = 1) %>%
     dplyr::select(
       -"period",
       # -"latest_record_flag",
@@ -277,7 +311,9 @@ process_lookup_sc_demographics <- function(
       .data$consistent_quality
     )
 
-  sc_demog_lookup <- sc_demog_ch %>%
+  rm(sc_demog_ch)
+
+  sc_demog_lookup <- sc_demog_latest_record_flag %>%
     dplyr::select(
       -"postcode_type",
       -"submitted_postcode",
@@ -307,7 +343,6 @@ process_lookup_sc_demographics <- function(
       gender = dplyr::last(.data$gender),
       dob = dplyr::last(.data$dob),
       postcode = dplyr::last(.data$postcode),
-      # postcode_ch_as_home = dplyr::last(.data$postcode_ch_as_home),
       date_of_death = dplyr::last(.data$date_of_death),
       extract_date = dplyr::last(.data$extract_date),
       consistent_quality = dplyr::last(.data$consistent_quality)
@@ -323,9 +358,14 @@ process_lookup_sc_demographics <- function(
     ) %>%
     dplyr::ungroup()
 
+  rm(sc_demog_latest_record_flag)
+
   # check to make sure all cases of chi are still there
-  dplyr::n_distinct(sc_demog_lookup$anon_chi) # 525,834 # 573,427
-  dplyr::n_distinct(sc_demog_lookup$social_care_id) # 637,422
+  dplyr::n_distinct(sc_demog_lookup$anon_chi)
+  dplyr::n_distinct(sc_demog_lookup$social_care_id)
+
+  dplyr::n_distinct(data$anon_chi)
+  dplyr::n_distinct(data$social_care_id)
 
   if (write_to_disk) {
     write_file(sc_demog_lookup,
