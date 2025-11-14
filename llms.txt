@@ -1,0 +1,1185 @@
+# source-linkage-files
+
+[![R-CMD-check](https://github.com/Public-Health-Scotland/source-linkage-files/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Public-Health-Scotland/source-linkage-files/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/Public-Health-Scotland/source-linkage-files/branch/master/graph/badge.svg)](https://app.codecov.io/gh/Public-Health-Scotland/source-linkage-files?branch=master)
+
+The Source Linkage Files (SLF) are a linked dataset maintained by the
+Health and Social Care (H&SC) team at Public Health Scotland (PHS). This
+repo contains the R code to develop the package called `createslf` which
+is used for the production and maintenance of the SLFs. The entire
+process is contained within this git repository.
+
+The SLFs are updated on a quarterly basis with updates taking place in
+March, June, September and December. If you are using the files and spot
+a problem, please let us know and we will work closely with you to fix
+this. Alternatively, if you would like to see a new feature on the SLFs,
+please get in touch and we can look into your request.
+
+## Access
+
+Access to the Source Linkage Files is only available to approved users
+in the Local Intelligence Support Team (LIST), Health and Social Care
+(H&SC) and Whole System Modelling (WSM) teams within PHS. For anyone
+interested in using the SLFs outside of these teams, please contact the
+source mailbox to discuss this.
+
+## Documentation
+
+Documentation for the SLFs is available upon request. We have further
+information available relating to our standard operating
+procedures(SOP), reference document, episode file layout, individual
+file layout and FAQs. If you are interested in accessing our
+documentation, please contact the source mailbox for more information.
+
+## Questions
+
+If you have a SLF question, please get in touch either by email or
+through Microsoft Teams on the [Source Linkage File
+Team](https://teams.microsoft.com/l/team/19%3a94a97159a3c44358b2244ee450d4fc27%40thread.tacv2/conversations?groupId=c7901246-d78a-48a7-b8bb-2300aae094f3&tenantId=10efe0bd-a030-4bca-809c-b5e6745e499a)
+
+## Slfhelper
+
+We recommend using the package
+[slfhelper](https://github.com/Public-Health-Scotland/slfhelper) to
+access the files. This is an R package created for reading the SLFs
+efficiently. Please note that slfhelper will only work for those with
+access to the PHS confi stats drive.
+
+## Contact
+
+For any queries, please contact the source mailbox:
+<phs.source@phs.scot>
+
+# Package index
+
+## Connection to PHS database
+
+Connection to PHS database
+
+- [`phs_db_connection()`](https://public-health-scotland.github.io/source-linkage-files/reference/phs_db_connection.md)
+  : Open a connection to a PHS database
+
+## Check
+
+Checks within vectors
+
+- [`is_missing()`](https://public-health-scotland.github.io/source-linkage-files/reference/is_missing.md)
+  : Check for NA or blank values in a character vector
+- [`check_variables_exist()`](https://public-health-scotland.github.io/source-linkage-files/reference/check_variables_exist.md)
+  : Check variables exist in data
+- [`check_year_valid()`](https://public-health-scotland.github.io/source-linkage-files/reference/check_year_valid.md)
+  : Check data exists for a year
+- [`check_it_reference()`](https://public-health-scotland.github.io/source-linkage-files/reference/check_it_reference.md)
+  : Check that an IT reference looks valid
+
+## Years & Dates
+
+### Dates within Financial Year
+
+Functions to compute the start, end and midpoint dates of a financial
+year, and convert date types
+
+- [`calculate_stay()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_stay.md)
+  : Calculate total length of stay
+- [`compute_mid_year_age()`](https://public-health-scotland.github.io/source-linkage-files/reference/compute_mid_year_age.md)
+  : Compute Age at Midpoint of Year
+- [`convert_date_to_numeric()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_date_to_numeric.md)
+  : Convert a date type to the 'SLF numeric format'
+- [`convert_numeric_to_date()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_numeric_to_date.md)
+  : Convert a date in 'SLF numeric format' to Date type
+- [`end_fy()`](https://public-health-scotland.github.io/source-linkage-files/reference/end_fy.md)
+  : Return the end date of FY years
+- [`end_fy_quarter()`](https://public-health-scotland.github.io/source-linkage-files/reference/end_fy_quarter.md)
+  : Return the end of a quarter
+- [`end_next_fy_quarter()`](https://public-health-scotland.github.io/source-linkage-files/reference/end_next_fy_quarter.md)
+  : Return the end of the next quarter
+- [`fy_interval()`](https://public-health-scotland.github.io/source-linkage-files/reference/fy_interval.md)
+  : Financial Year interval
+- [`is_date_in_fyyear()`](https://public-health-scotland.github.io/source-linkage-files/reference/is_date_in_fyyear.md)
+  : Check if a date, or interval is in the financial year
+- [`last_date_month()`](https://public-health-scotland.github.io/source-linkage-files/reference/last_date_month.md)
+  : Return the end date of the month of the given date
+- [`midpoint_fy()`](https://public-health-scotland.github.io/source-linkage-files/reference/midpoint_fy.md)
+  : Return the date of the midpoint of the FY year
+- [`next_fy()`](https://public-health-scotland.github.io/source-linkage-files/reference/next_fy.md)
+  : Return the next financial year
+- [`start_fy()`](https://public-health-scotland.github.io/source-linkage-files/reference/start_fy.md)
+  : Return the start date of FY year
+- [`start_fy_quarter()`](https://public-health-scotland.github.io/source-linkage-files/reference/start_fy_quarter.md)
+  : Return the start of a quarter
+- [`start_next_fy_quarter()`](https://public-health-scotland.github.io/source-linkage-files/reference/start_next_fy_quarter.md)
+  : Return the start of the next quarter
+- [`add_homelessness_date_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_homelessness_date_flags.md)
+  : Add homelessness date flags episode
+- [`end_date()`](https://public-health-scotland.github.io/source-linkage-files/reference/end_date.md)
+  : End date
+- [`fix_sc_end_dates()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_sc_end_dates.md)
+  : Fix sc end dates
+- [`fix_sc_missing_end_dates()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_sc_missing_end_dates.md)
+  : Fix sc missing end dates
+- [`fix_sc_start_dates()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_sc_start_dates.md)
+  : Fix sc start dates
+- [`fy()`](https://public-health-scotland.github.io/source-linkage-files/reference/fy.md)
+  : Extract latest FY from end_date
+- [`qtr()`](https://public-health-scotland.github.io/source-linkage-files/reference/qtr.md)
+  : Extract latest quarter from end_date
+
+### Year Format
+
+Functions to convert between financial year and calendar year, and check
+that the year variable is in the correct format
+
+- [`check_year_format()`](https://public-health-scotland.github.io/source-linkage-files/reference/check_year_format.md)
+  : Check that the year is in the correct format
+- [`convert_fyyear_to_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_fyyear_to_year.md)
+  : Convert year types - Financial year form to the alternate form
+- [`convert_year_to_fyyear()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_year_to_fyyear.md)
+  : Convert year types - Alternate year form to financial year form
+- [`combine_extracts_tests_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/combine_extracts_tests_year.md)
+  : Combine year specific extract tests into one xlsx file by financial
+  year
+- [`is_date_in_fyyear()`](https://public-health-scotland.github.io/source-linkage-files/reference/is_date_in_fyyear.md)
+  : Check if a date, or interval is in the financial year
+- [`latest_cost_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/latest_cost_year.md)
+  : The latest financial year for Cost uplift setting
+- [`process_tests_cross_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_cross_year.md)
+  : Process cross year tests
+
+### Ages
+
+Functions to deal with ages of clients
+
+- [`add_age_group()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_age_group.md)
+  : add_age_group
+- [`compute_mid_year_age()`](https://public-health-scotland.github.io/source-linkage-files/reference/compute_mid_year_age.md)
+  : Compute Age at Midpoint of Year
+
+## Clean-Up
+
+Clean up the data
+
+- [`clean_up_ch()`](https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_ch.md)
+  : Clean up CH
+- [`clean_up_free_text()`](https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_free_text.md)
+  : Clean up a free text string
+- [`clean_up_gender()`](https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_gender.md)
+  : Clean up gender column
+- [`fill_ch_names()`](https://public-health-scotland.github.io/source-linkage-files/reference/fill_ch_names.md)
+  : Fix and fill care home name and postcodes
+- [`ch_name_extract_keyword()`](https://public-health-scotland.github.io/source-linkage-files/reference/ch_name_extract_keyword.md)
+  : extract keyword in a care home name
+- [`cascade_geographies()`](https://public-health-scotland.github.io/source-linkage-files/reference/cascade_geographies.md)
+  : Match dummy HSCP and LCA codes
+- [`correct_demographics()`](https://public-health-scotland.github.io/source-linkage-files/reference/correct_demographics.md)
+  : Correct date of birth and ages of records
+
+## Create
+
+### ID
+
+Functions to create ID variables
+
+- [`create_person_id()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_person_id.md)
+  : Create the Person ID variable
+- [`replace_sc_id_with_latest()`](https://public-health-scotland.github.io/source-linkage-files/reference/replace_sc_id_with_latest.md)
+  : Replace sc id with the latest sc id
+
+### Costs
+
+Functions to create costs variables and fix costs
+
+- [`calculate_outpatient_costs()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_outpatient_costs.md)
+  : Calculate cost for Outpatient records
+- [`create_day_episode_costs()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_day_episode_costs.md)
+  : Assign costs for single day episodes
+- [`create_monthly_costs()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_monthly_costs.md)
+  : Create Monthly Costs
+- [`fix_c3_costs()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_c3_costs.md)
+  : Fix C3 Costs - Acute Extract
+
+### Flags
+
+Functions to create flag variables
+
+- [`create_demog_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_demog_test_flags.md)
+  : Create demographic test flags
+- [`create_hb_cost_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_hb_cost_test_flags.md)
+  : Create Health Board cost test flags
+- [`create_hb_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_hb_test_flags.md)
+  : Create Health Board test flags
+- [`create_hscp_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_hscp_test_flags.md)
+  : Create HSCP test flags
+- [`create_lca_client_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_lca_client_test_flags.md)
+  : Create LCA test flags
+- [`create_lca_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_lca_test_flags.md)
+  : Create LCA test flags
+- [`create_sending_location_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_sending_location_test_flags.md)
+  : Create sending location test flags
+- [`add_homelessness_date_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_homelessness_date_flags.md)
+  : Add homelessness date flags episode
+
+### Monthly
+
+Functions to convert monthly variables, beddays
+
+- [`convert_monthly_rows_to_vars()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_monthly_rows_to_vars.md)
+  : Convert Monthly Rows to Variables
+- [`create_monthly_beddays()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_monthly_beddays.md)
+  : Create Monthly Beddays
+
+## Codes
+
+Convert various codes to alternate forms
+
+- [`convert_ca_to_lca()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_ca_to_lca.md)
+  : Convert Council Areas into Local Council Authority Codes
+- [`convert_hb_to_hbnames()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_hb_to_hbnames.md)
+  : Convert NHS Health Board Codes to Names
+- [`convert_hscp_to_hscpnames()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_hscp_to_hscpnames.md)
+  : Convert HSCP Codes to Names
+- [`convert_sc_sending_location_to_lca()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_sc_sending_location_to_lca.md)
+  : Convert Social Care Sending Location Codes into LCA Codes
+- [`add_smrtype()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_smrtype.md)
+  : Add smrtype variable based on record ID
+- [`convert_eng_gpprac_to_dummy()`](https://public-health-scotland.github.io/source-linkage-files/reference/convert_eng_gpprac_to_dummy.md)
+  : Convert GP Practice Codes to a Dummy Code
+- [`aggregate_by_chi()`](https://public-health-scotland.github.io/source-linkage-files/reference/aggregate_by_chi.md)
+  : Aggregate by CHI
+- [`assign_d_cohort_mh()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_frailty()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_high_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_medium_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_low_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_comm_living()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_adult_major()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_child_major()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_eol()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_substance()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  : Assign Mental Health cohort
+- [`get_slf_chi_deaths_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_chi_deaths_path.md)
+  : SLF CHI Deaths File Path
+- [`is_chi_in_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/is_chi_in_file.md)
+  : Check if chi is in a file
+- [`process_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_it_chi_deaths.md)
+  : Process the CHI deaths extract
+- [`process_tests_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_it_chi_deaths.md)
+  : Process CHI Deaths tests
+- [`produce_it_chi_deaths_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_it_chi_deaths_tests.md)
+  : CHI death tests
+- [`read_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_it_chi_deaths.md)
+  : Read the CHI deaths extract
+- [`remove_blank_chi()`](https://public-health-scotland.github.io/source-linkage-files/reference/remove_blank_chi.md)
+  : Remove blank CHI
+- [`create_lca_client_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_lca_client_test_flags.md)
+  : Create LCA test flags
+- [`create_lca_test_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_lca_test_flags.md)
+  : Create LCA test flags
+
+## Writing data
+
+Functions which mask the typical data write functions to add some nice
+defaults and importantly fix file permissions.
+
+- [`write_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/write_file.md)
+  : Write a data to a file
+- [`clean_temp_data()`](https://public-health-scotland.github.io/source-linkage-files/reference/clean_temp_data.md)
+  : Clean temp data from disk
+- [`combine_multi_xlsx()`](https://public-health-scotland.github.io/source-linkage-files/reference/combine_multi_xlsx.md)
+  : Combine xlsx files into one xlsx file
+- [`store_ep_file_vars()`](https://public-health-scotland.github.io/source-linkage-files/reference/store_ep_file_vars.md)
+  : Store the unneeded episode file variables
+- [`load_ep_file_vars()`](https://public-health-scotland.github.io/source-linkage-files/reference/load_ep_file_vars.md)
+  : Load the unneeded episode file variables
+- [`write_temp_data()`](https://public-health-scotland.github.io/source-linkage-files/reference/write_temp_data.md)
+  : Write a temp data to disk in parquet format for debugging purpose
+
+## Initialisation
+
+Get the date of update, period, and extract number
+
+- [`get_dd_period()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_dd_period.md)
+  : Delayed Discharge period
+- [`latest_cost_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/latest_cost_year.md)
+  : The latest financial year for Cost uplift setting
+- [`latest_update()`](https://public-health-scotland.github.io/source-linkage-files/reference/latest_update.md)
+  : Latest update
+- [`previous_update()`](https://public-health-scotland.github.io/source-linkage-files/reference/previous_update.md)
+  : Previous update
+- [`years_to_run()`](https://public-health-scotland.github.io/source-linkage-files/reference/years_to_run.md)
+  : The year list for slf to update
+- [`gzip_files()`](https://public-health-scotland.github.io/source-linkage-files/reference/gzip_files.md)
+  : Compress CSV with gzip
+- [`make_lowercase_ext()`](https://public-health-scotland.github.io/source-linkage-files/reference/make_lowercase_ext.md)
+  : Make file path extensions lower-case
+
+## Files
+
+### Directories
+
+File Directories for SLF’s
+
+- [`get_dev_dir()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_dev_dir.md)
+  : SLF directory - sourcedev / Source_Linkage_File_Updates
+- [`get_lookups_dir()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_lookups_dir.md)
+  : Lookups Directory Path
+- [`get_slf_dir()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_dir.md)
+  : SLF directory - hscdiip
+- [`get_year_dir()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_year_dir.md)
+  : Year Directory
+
+### Paths
+
+File Paths for SLF’s
+
+- [`get_dd_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_dd_path.md)
+  : Get the Delayed Discharges file path
+- [`get_demographic_cohorts_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_demographic_cohorts_path.md)
+  : Demographic cohorts lookup Path
+- [`get_file_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_file_path.md)
+  : Get and check and full file path
+- [`get_homelessness_completeness_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_homelessness_completeness_path.md)
+  : Homelessness Completeness lookup path
+- [`get_ltcs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_ltcs_path.md)
+  : Long Term Conditions File Path
+- [`get_nsu_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_nsu_path.md)
+  : NSU File Path
+- [`get_practice_details_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_practice_details_path.md)
+  : Practice Details File Path
+- [`get_readcode_lookup_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_readcode_lookup_path.md)
+  : Get the full path to the SLF read code lookup
+- [`get_service_use_cohorts_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_service_use_cohorts_path.md)
+  : Service-use cohorts lookup Path
+- [`get_sg_homelessness_pub_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sg_homelessness_pub_path.md)
+  : Homelessness Completeness SG publication figures
+- [`get_gpprac_ref_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_gpprac_ref_path.md)
+  : GP Practice Reference File Path (gpprac)
+- [`get_locality_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_locality_path.md)
+  : Locality File Path
+- [`get_lookups_dir()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_lookups_dir.md)
+  : Lookups Directory Path
+- [`get_pop_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_pop_path.md)
+  : Populations File Path for different types
+- [`get_simd_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_simd_path.md)
+  : SIMD File Path
+- [`get_spd_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_spd_path.md)
+  : Scottish Postcode Directory File Path
+- [`get_uk_postcode_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_uk_postcode_path.md)
+  : get uk postcode list file path
+- [`get_ch_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_ch_costs_path.md)
+  : Care Home Costs File Path
+- [`get_dn_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_dn_costs_path.md)
+  : District Nursing Costs File Path
+- [`get_dn_raw_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_dn_raw_costs_path.md)
+  : Raw District Nursing Costs File Path
+- [`get_gp_ooh_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_gp_ooh_costs_path.md)
+  : GP Out of Hours Costs File Path
+- [`get_gp_ooh_raw_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_gp_ooh_raw_costs_path.md)
+  : Raw GP OoH Costs File Path
+- [`get_hc_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_hc_costs_path.md)
+  : Full Home Care Costs File Path
+- [`get_hc_raw_costs_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_hc_raw_costs_path.md)
+  : Raw Home Care Costs File Path
+- [`get_boxi_extract_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_boxi_extract_path.md)
+  : Get BOXI extract
+- [`get_hhg_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_hhg_path.md)
+  : HHG Extract File Path
+- [`get_it_deaths_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_it_deaths_path.md)
+  : IT Deaths File Path
+- [`get_it_ltc_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_it_ltc_path.md)
+  : IT Long Term Conditions File Path
+- [`get_it_prescribing_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_it_prescribing_path.md)
+  : IT Prescribing File Path
+- [`get_source_extract_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_source_extract_path.md)
+  : Source Extract File Path
+- [`get_sparra_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sparra_path.md)
+  : SPARRA Extract File Path
+- [`get_sc_client_lookup_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_client_lookup_path.md)
+  : Social Care Client Lookup File Path
+- [`get_sc_demog_lookup_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_demog_lookup_path.md)
+  : Social Care Demographic Lookup File Path
+- [`get_sc_at_episodes_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_at_episodes_path.md)
+  : Alarms and Telecare Episodes File Path
+- [`get_sc_ch_episodes_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_ch_episodes_path.md)
+  : Care Home Episodes File Path
+- [`get_sc_hc_episodes_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_hc_episodes_path.md)
+  : Home Care Episodes File Path
+- [`clean_individual_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/clean_individual_file.md)
+  : Clean individual file
+- [`create_episode_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_episode_file.md)
+  : Produce the Source Episode file
+- [`create_individual_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_individual_file.md)
+  : Create the Source Individual file
+- [`find_latest_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/find_latest_file.md)
+  : Find the latest version of a file
+- [`is_chi_in_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/is_chi_in_file.md)
+  : Check if chi is in a file
+- [`process_tests_episode_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_episode_file.md)
+  : Process Episode file tests
+- [`process_tests_individual_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_individual_file.md)
+  : Process Individual file tests
+- [`read_dev_slf_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_dev_slf_file.md)
+  : Read development SLF files (using SLFhelper)
+- [`read_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_file.md)
+  : Read a file
+- [`write_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/write_file.md)
+  : Write a data to a file
+- [`console_output_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/console_output_path.md)
+  : console output path
+- [`get_combined_slf_deaths_lookup_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_combined_slf_deaths_lookup_path.md)
+  : SLF death dates File Path
+- [`get_dummy_boxi_extract_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_dummy_boxi_extract_path.md)
+  : Get a path to a dummy file
+- [`get_sandpit_extract_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sandpit_extract_path.md)
+  : Sandpit Extract File Path
+- [`get_sc_sds_episodes_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_sc_sds_episodes_path.md)
+  : SDS Episodes File Path
+- [`get_slf_ch_name_lookup_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_ch_name_lookup_path.md)
+  : SLF Care Home Lookup File Path
+- [`get_slf_chi_deaths_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_chi_deaths_path.md)
+  : SLF CHI Deaths File Path
+- [`get_slf_deaths_lookup_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_deaths_lookup_path.md)
+  : SLF Deaths lookup path
+- [`get_slf_episode_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_episode_path.md)
+  : Get the slf episode file path
+- [`get_slf_gpprac_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_gpprac_path.md)
+  : SLF GP Lookup File Path
+- [`get_slf_individual_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_individual_path.md)
+  : Get the SLF individual file path
+- [`get_slf_postcode_path()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_slf_postcode_path.md)
+  : SLF Postcode Lookup File Path
+
+## Read extracts
+
+Process SLF Extracts
+
+- [`read_dev_slf_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_dev_slf_file.md)
+  : Read development SLF files (using SLFhelper)
+- [`read_extract_acute()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_acute.md)
+  : Read Acute extract
+- [`read_extract_ae()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_ae.md)
+  : Read A&E extract
+- [`read_extract_cmh()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_cmh.md)
+  : Read CMH extract
+- [`read_extract_delayed_discharges()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_delayed_discharges.md)
+  : Read Delayed Discharges extract
+- [`read_extract_district_nursing()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_district_nursing.md)
+  : Read district nursing extract
+- [`read_extract_gp_ooh()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_gp_ooh.md)
+  : Process the GP OoH extract
+- [`read_extract_homelessness()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_homelessness.md)
+  : Read Homelessness extract
+- [`read_extract_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_maternity.md)
+  : Read Maternity extract
+- [`read_extract_mental_health()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_mental_health.md)
+  : Read Mental Health extract
+- [`read_extract_nrs_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_nrs_deaths.md)
+  : Read NRS Deaths extract
+- [`read_extract_ooh_consultations()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_ooh_consultations.md)
+  : Read GP OOH Consultations extract
+- [`read_extract_ooh_diagnosis()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_ooh_diagnosis.md)
+  : Read GP OOH Diagnosis extract
+- [`read_extract_ooh_outcomes()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_ooh_outcomes.md)
+  : Read GP OOH Outcomes extract
+- [`read_extract_outpatients()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_outpatients.md)
+  : Read Outpatients extract
+- [`read_extract_prescribing()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_prescribing.md)
+  : Read Prescribing extract
+- [`read_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_file.md)
+  : Read a file
+- [`read_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_it_chi_deaths.md)
+  : Read the CHI deaths extract
+- [`read_lookup_ltc()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_lookup_ltc.md)
+  : Read LTC IT extract
+- [`read_lookup_sc_client()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_lookup_sc_client.md)
+  : Process the social care client lookup
+- [`read_lookup_sc_demographics()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_lookup_sc_demographics.md)
+  : Read SC demographics
+- [`read_sc_all_alarms_telecare()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_sc_all_alarms_telecare.md)
+  : Read Social Care Alarms Telecare data
+- [`read_sc_all_care_home()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_sc_all_care_home.md)
+  : Read Social Care - Care Home data
+- [`read_sc_all_home_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_sc_all_home_care.md)
+  : Read Social Care Home Care data
+- [`read_sc_all_sds()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_sc_all_sds.md)
+  : Read Social Care SDS data
+- [`read_temp_data()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_temp_data.md)
+  : Read a temp data from disk for debugging purpose
+- [`get_gpprac_opendata()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_gpprac_opendata.md)
+  : GP Practice details from PHS open data
+
+## Process extracts
+
+Process SLF Extracts
+
+- [`create_homelessness_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_homelessness_lookup.md)
+  : Create a homelessness lookup
+- [`process_extract_acute()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_acute.md)
+  : Process the Acute extract
+- [`process_extract_ae()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_ae.md)
+  : Process the A&E extract
+- [`process_extract_alarms_telecare()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_alarms_telecare.md)
+  : Process the (year specific) Alarms Telecare extract
+- [`process_extract_care_home()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_care_home.md)
+  : Process the (year specific) Care Home extract
+- [`process_extract_cmh()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_cmh.md)
+  : Process the Community Mental Health (CMH) extract
+- [`process_extract_delayed_discharges()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_delayed_discharges.md)
+  : Process the delayed discharges extract
+- [`process_extract_district_nursing()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_district_nursing.md)
+  : Process the District Nursing extract
+- [`process_extract_gp_ooh()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_gp_ooh.md)
+  : Process the GP OoH extract
+- [`process_extract_home_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_home_care.md)
+  : Process the (year specific) Home Care extract
+- [`process_extract_homelessness()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_homelessness.md)
+  : Process the Homelessness Extract
+- [`process_extract_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_maternity.md)
+  : Process the maternity extract
+- [`process_extract_mental_health()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_mental_health.md)
+  : Process the mental health extract
+- [`process_extract_nrs_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_nrs_deaths.md)
+  : Process the Nation Records of Scotland (NRS) Deaths extract
+- [`process_extract_ooh_consultations()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_ooh_consultations.md)
+  : Process the GP OOH Consultations extract
+- [`process_extract_ooh_diagnosis()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_ooh_diagnosis.md)
+  : Process the GP OOH Diagnosis extract
+- [`process_extract_ooh_outcomes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_ooh_outcomes.md)
+  : Process the GP OOH Outcomes extract
+- [`process_extract_outpatients()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_outpatients.md)
+  : Process the Outpatients extract
+- [`process_extract_prescribing()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_prescribing.md)
+  : Process the prescribing extract
+- [`process_extract_sds()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_extract_sds.md)
+  : Process the (year specific) SDS extract
+- [`process_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_it_chi_deaths.md)
+  : Process the CHI deaths extract
+- [`process_lookup_gpprac()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_lookup_gpprac.md)
+  : Process the SLF gpprac lookup
+- [`process_lookup_postcode()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_lookup_postcode.md)
+  : Process the SLF postcode lookup
+- [`process_lookup_sc_client()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_lookup_sc_client.md)
+  : Process the social care client lookup
+- [`process_lookup_sc_demographics()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_lookup_sc_demographics.md)
+  : Process the social care demographic lookup
+- [`process_refined_death()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_refined_death.md)
+  : Process the refined death data
+- [`process_sc_all_alarms_telecare()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_sc_all_alarms_telecare.md)
+  : Process the all Alarms Telecare extract
+- [`process_sc_all_care_home()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_sc_all_care_home.md)
+  : Process the all Care Home extract
+- [`process_sc_all_home_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_sc_all_home_care.md)
+  : Process the all home care extract
+- [`process_sc_all_sds()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_sc_all_sds.md)
+  : Process the all SDS extract
+- [`read_extract_gp_ooh()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_extract_gp_ooh.md)
+  : Process the GP OoH extract
+- [`read_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_it_chi_deaths.md)
+  : Read the CHI deaths extract
+- [`read_lookup_sc_client()`](https://public-health-scotland.github.io/source-linkage-files/reference/read_lookup_sc_client.md)
+  : Process the social care client lookup
+- [`process_costs_ch_rmd()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_costs_ch_rmd.md)
+  : Process care homes cost lookup Rmd file
+- [`process_costs_dn_rmd()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_costs_dn_rmd.md)
+  : Process District Nursing cost lookup Rmd file
+- [`process_costs_gp_ooh_rmd()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_costs_gp_ooh_rmd.md)
+  : Process GP ooh cost lookup Rmd file
+- [`process_costs_hc_rmd()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_costs_hc_rmd.md)
+  : Process Home Care cost lookup Rmd file
+- [`process_costs_rmd()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_costs_rmd.md)
+  : Process the cost lookup files
+- [`process_lookup_ltc()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_lookup_ltc.md)
+  : Process LTC IT extract
+- [`process_slf_deaths_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_slf_deaths_lookup.md)
+  : Create the SLF Deaths lookup
+- [`process_tests_acute()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_acute.md)
+  : Process Acute tests
+- [`process_tests_ae()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_ae.md)
+  : Process A&E tests
+- [`process_tests_alarms_telecare()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_alarms_telecare.md)
+  : Process Alarms Telecare tests
+- [`process_tests_care_home()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_care_home.md)
+  : Process Care Home tests
+- [`process_tests_cmh()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_cmh.md)
+  : Process CMH tests
+- [`process_tests_cross_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_cross_year.md)
+  : Process cross year tests
+- [`process_tests_delayed_discharges()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_delayed_discharges.md)
+  : Process Delayed Discharges tests
+- [`process_tests_district_nursing()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_district_nursing.md)
+  : Process District Nursing tests
+- [`process_tests_episode_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_episode_file.md)
+  : Process Episode file tests
+- [`process_tests_gp_ooh()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_gp_ooh.md)
+  : Process GP OOH tests
+- [`process_tests_home_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_home_care.md)
+  : Process Home Care tests
+- [`process_tests_homelessness()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_homelessness.md)
+  : Process Homelessness tests
+- [`process_tests_individual_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_individual_file.md)
+  : Process Individual file tests
+- [`process_tests_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_it_chi_deaths.md)
+  : Process CHI Deaths tests
+- [`process_tests_lookup_gpprac()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_lookup_gpprac.md)
+  : Process GP (gpprac) Lookup tests
+- [`process_tests_lookup_pc()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_lookup_pc.md)
+  : Process PC (postcode) Lookup tests
+- [`process_tests_ltcs()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_ltcs.md)
+  : Process LTCs tests
+- [`process_tests_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_maternity.md)
+  : Process Maternity tests
+- [`process_tests_mental_health()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_mental_health.md)
+  : Process Mental Health tests
+- [`process_tests_nrs_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_nrs_deaths.md)
+  : Process National Records of Scotland (NRS) deaths tests
+- [`process_tests_outpatients()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_outpatients.md)
+  : Process Outpatients tests
+- [`process_tests_prescribing()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_prescribing.md)
+  : Process prescribing tests
+- [`process_tests_sc_all_at_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_at_episodes.md)
+  : Process Social Care Alarms Telecare all episodes tests
+- [`process_tests_sc_all_ch_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_ch_episodes.md)
+  : Process Social Care, Care Home all episodes tests
+- [`process_tests_sc_all_hc_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_hc_episodes.md)
+  : Process Social Care Home Care all episodes tests
+- [`process_tests_sc_all_sds_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_sds_episodes.md)
+  : Process Social Care SDS all episodes tests
+- [`process_tests_sc_client_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_client_lookup.md)
+  : Social care client lookup tests
+- [`process_tests_sc_demographics()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_demographics.md)
+  : Process Social Care Demographics tests
+- [`process_tests_sc_sandpit()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_sandpit.md)
+  : Process tests for the social care sandpit extracts
+- [`process_tests_sds()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sds.md)
+  : Process SDS tests
+
+## Episode file
+
+Building the episode file
+
+- [`add_activity_after_death_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_activity_after_death_flag.md)
+  : Match on BOXI NRS death dates to process activity after death flag
+- [`add_homelessness_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_homelessness_flag.md)
+  : Add 'homelessness in FY' flag
+- [`add_nsu_cohort()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_nsu_cohort.md)
+  : Add NSU cohort to working file
+- [`add_ppa_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_ppa_flag.md)
+  : Add Potentially Preventable Admission (PPA) Marker
+- [`apply_cost_uplift()`](https://public-health-scotland.github.io/source-linkage-files/reference/apply_cost_uplift.md)
+  : Uplift costs
+- [`correct_cij_vars()`](https://public-health-scotland.github.io/source-linkage-files/reference/correct_cij_vars.md)
+  : Correct the CIJ variables
+- [`create_cohort_lookups()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_cohort_lookups.md)
+  : Create the cohort lookups
+- [`create_cost_inc_dna()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_cost_inc_dna.md)
+  : Create cost total net inc DNA
+- [`fill_missing_cij_markers()`](https://public-health-scotland.github.io/source-linkage-files/reference/fill_missing_cij_markers.md)
+  : Fill any missing CIJ markers for records that should have them
+- [`link_delayed_discharge_eps()`](https://public-health-scotland.github.io/source-linkage-files/reference/link_delayed_discharge_eps.md)
+  : Link Delayed Discharge to WIP episode file
+- [`lookup_uplift()`](https://public-health-scotland.github.io/source-linkage-files/reference/lookup_uplift.md)
+  : Set uplift scale
+- [`fill_geographies()`](https://public-health-scotland.github.io/source-linkage-files/reference/fill_geographies.md)
+  : Fill postcode and GP practice geographies
+
+### Lookups
+
+- [`add_operation_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_operation_flag.md)
+  : Add operation flag
+- [`assign_cohort_names()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_cohort_names.md)
+  : Assign service use cohort into string format
+- [`assign_death_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_death_flag.md)
+  : Assign a flag for deaths
+- [`assign_d_cohort_mh()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_frailty()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_high_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_medium_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_low_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_comm_living()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_adult_major()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_child_major()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_eol()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_substance()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  : Assign Mental Health cohort
+- [`assign_elective_daycase_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_daycase_instances.md)
+  : Assign a flag for elective daycase instances
+- [`assign_elective_inpatient_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_inpatient_flag.md)
+  : Assign a flag for elective inpatients
+- [`assign_elective_inpatient_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_inpatient_instances.md)
+  : Assign a flag for elective inpatient instances
+- [`assign_elective_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_instances.md)
+  : Assign a flag for elective instances
+- [`assign_emergency_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_emergency_instances.md)
+  : Assign a flag for emergency instances
+- [`assign_s_cohort_ae2()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_ae2.md)
+  : Assign A&E cohort flag
+- [`assign_s_cohort_community_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_community_care.md)
+  : Assign Community Care cohort flag
+- [`assign_s_cohort_elective_inpatient()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_elective_inpatient.md)
+  : Assign elective inpatient cohort flag
+- [`assign_s_cohort_geriatric()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_geriatric.md)
+  : Assign geriatric cohort flag
+- [`assign_s_cohort_limited_daycases()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_limited_daycases.md)
+  : Assign limited daycases cohort flag
+- [`assign_s_cohort_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_maternity.md)
+  : Assign maternity cohort flag
+- [`assign_s_cohort_multiple_emergency()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_multiple_emergency.md)
+  : Assign multiple emergency cohort flag
+- [`assign_s_cohort_outpatient()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_outpatient.md)
+  : Assign outpatient cohort flag
+- [`assign_s_cohort_prescribing()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_prescribing.md)
+  : Assign prescribing cohort flag
+- [`assign_s_cohort_psychiatry()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_psychiatry.md)
+  : Assign psychiatry cohort flag
+- [`assign_s_cohort_residential_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_residential_care.md)
+  : Assign residential care cohort flag
+- [`assign_s_cohort_routine_daycase()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_routine_daycase.md)
+  : Assign routine daycase cohort flag
+- [`assign_s_cohort_single_emergency()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_single_emergency.md)
+  : Assign single emergency cohort flag
+- [`calculate_acute_elective_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_acute_elective_cost.md)
+  : Calculate cost for Acute Elective records
+- [`calculate_acute_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_acute_emergency_cost.md)
+  : Calculate cost for Acute Emergency records
+- [`calculate_ae2_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_ae2_cost.md)
+  : Calculate cost for Accident & Emergency records
+- [`calculate_care_home_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_care_home_cost.md)
+  : Calculate cost for Care Home records
+- [`calculate_community_care_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_community_care_cost.md)
+  : Calculate community care cost
+- [`calculate_community_health_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_community_health_cost.md)
+  : Calculate cost for Community Health records
+- [`calculate_elective_inpatient_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_elective_inpatient_cost.md)
+  : Calculate cost for Elective Inpatient records
+- [`calculate_geriatric_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_geriatric_cost.md)
+  : Calculate cost for Geriatric Care records
+- [`calculate_home_care_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_home_care_cost.md)
+  : Calculate cost for Home Care records
+- [`calculate_hospital_elective_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_hospital_elective_cost.md)
+  : Calculate cost for Hospital Elective records
+- [`calculate_hospital_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_hospital_emergency_cost.md)
+  : Calculate cost for Hospital Emergency records
+- [`calculate_limited_daycases_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_limited_daycases_cost.md)
+  : Calculate limited daycases cost
+- [`calculate_maternity_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_maternity_cost.md)
+  : Calculate cost for Maternity records
+- [`calculate_multiple_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_multiple_emergency_cost.md)
+  : Calculate multiple emergency cost
+- [`calculate_outpatient_costs()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_outpatient_costs.md)
+  : Calculate cost for Outpatient records
+- [`calculate_prescribing_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_prescribing_cost.md)
+  : Calculate cost for Prescribing records
+- [`calculate_psychiatry_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_psychiatry_cost.md)
+  : Calculate cost for Psychiatry records
+- [`calculate_residential_care_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_residential_care_cost.md)
+  : Calculate residential care cost
+- [`calculate_routine_daycase_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_routine_daycase_cost.md)
+  : Calculate routine daycase cost
+- [`calculate_single_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_single_emergency_cost.md)
+  : Calculate single emergency cost
+- [`create_demographic_cohorts()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_demographic_cohorts.md)
+  : Create the Demographic Cohort lookup
+- [`create_service_use_cohorts()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_service_use_cohorts.md)
+  : Create the Service Use Cohort lookup
+- [`recalculate_elective_inpatient_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/recalculate_elective_inpatient_cost.md)
+  : Recalculate elective inpatient costs
+- [`join_sparra_hhg()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_sparra_hhg.md)
+  : Join SPARRA and HHG
+- [`join_deaths_data()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_deaths_data.md)
+  : Join Deaths data
+- [`join_sc_client()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_sc_client.md)
+  : Join sc client variables onto episode file
+- [`match_on_ltcs()`](https://public-health-scotland.github.io/source-linkage-files/reference/match_on_ltcs.md)
+  : Match on LTC DoB and dates of LTC incidence
+- [`order_ep_cols()`](https://public-health-scotland.github.io/source-linkage-files/reference/order_ep_cols.md)
+  : Order SLF Episode File Columns
+
+## Individual file
+
+Building the episode file
+
+- [`add_acute_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_acute_columns.md)
+  : Add Acute columns
+- [`add_ae_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_ae_columns.md)
+  : Add AE columns
+- [`add_all_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_all_columns.md)
+  : Add all columns
+- [`add_at_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_at_columns.md)
+  : Add AT columns
+- [`add_ch_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_ch_columns.md)
+  : Add CH columns
+- [`add_cij_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_cij_columns.md)
+  : Add CIJ-related columns
+- [`add_cmh_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_cmh_columns.md)
+  : Add CMH columns
+- [`add_dd_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_dd_columns.md)
+  : Add DD columns
+- [`add_dn_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_dn_columns.md)
+  : Add DN columns
+- [`add_gls_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_gls_columns.md)
+  : Add GLS columns
+- [`add_hc_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_hc_columns.md)
+  : Add HC columns
+- [`add_hl1_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_hl1_columns.md)
+  : Add HL1 columns
+- [`add_hri_variables()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_hri_variables.md)
+  : Add HRI variables to an SLF Individual File
+- [`add_ipdc_cols()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_ipdc_cols.md)
+  : Add columns based on IPDC
+- [`add_keep_population_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_keep_population_flag.md)
+  : Add keep_popluation flag
+- [`add_mat_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_mat_columns.md)
+  : Add Mat columns
+- [`add_mh_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_mh_columns.md)
+  : Add MH columns
+- [`add_nrs_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_nrs_columns.md)
+  : Add NRS columns
+- [`add_nsu_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_nsu_columns.md)
+  : Add NSU columns
+- [`add_ooh_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_ooh_columns.md)
+  : Add OoH columns
+- [`add_op_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_op_columns.md)
+  : Add OP columns
+- [`add_pis_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_pis_columns.md)
+  : Add PIS columns
+- [`add_sds_columns()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_sds_columns.md)
+  : Add SDS columns
+- [`add_standard_cols()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_standard_cols.md)
+  : Add standard columns
+- [`aggregate_ch_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/aggregate_ch_episodes.md)
+  : Aggregate Care Home episodes to ch_cis
+- [`clean_up_ch()`](https://public-health-scotland.github.io/source-linkage-files/reference/clean_up_ch.md)
+  : Clean up CH
+- [`condition_cols()`](https://public-health-scotland.github.io/source-linkage-files/reference/condition_cols.md)
+  : Condition columns
+- [`create_individual_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_individual_file.md)
+  : Create the Source Individual file
+- [`flag_non_scottish_residents()`](https://public-health-scotland.github.io/source-linkage-files/reference/flag_non_scottish_residents.md)
+  : Flag non-Scottish residents
+- [`recode_gender()`](https://public-health-scotland.github.io/source-linkage-files/reference/recode_gender.md)
+  : Recode gender
+- [`remove_blank_chi()`](https://public-health-scotland.github.io/source-linkage-files/reference/remove_blank_chi.md)
+  : Remove blank CHI
+
+### Lookups
+
+- [`add_operation_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_operation_flag.md)
+  : Add operation flag
+- [`assign_cohort_names()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_cohort_names.md)
+  : Assign service use cohort into string format
+- [`assign_death_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_death_flag.md)
+  : Assign a flag for deaths
+- [`assign_d_cohort_mh()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_frailty()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_high_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_medium_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_low_cc()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_comm_living()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_adult_major()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_child_major()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_eol()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  [`assign_d_cohort_substance()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_demographic_cohorts.md)
+  : Assign Mental Health cohort
+- [`assign_elective_daycase_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_daycase_instances.md)
+  : Assign a flag for elective daycase instances
+- [`assign_elective_inpatient_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_inpatient_flag.md)
+  : Assign a flag for elective inpatients
+- [`assign_elective_inpatient_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_inpatient_instances.md)
+  : Assign a flag for elective inpatient instances
+- [`assign_elective_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_elective_instances.md)
+  : Assign a flag for elective instances
+- [`assign_emergency_instances()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_emergency_instances.md)
+  : Assign a flag for emergency instances
+- [`assign_s_cohort_ae2()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_ae2.md)
+  : Assign A&E cohort flag
+- [`assign_s_cohort_community_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_community_care.md)
+  : Assign Community Care cohort flag
+- [`assign_s_cohort_elective_inpatient()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_elective_inpatient.md)
+  : Assign elective inpatient cohort flag
+- [`assign_s_cohort_geriatric()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_geriatric.md)
+  : Assign geriatric cohort flag
+- [`assign_s_cohort_limited_daycases()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_limited_daycases.md)
+  : Assign limited daycases cohort flag
+- [`assign_s_cohort_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_maternity.md)
+  : Assign maternity cohort flag
+- [`assign_s_cohort_multiple_emergency()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_multiple_emergency.md)
+  : Assign multiple emergency cohort flag
+- [`assign_s_cohort_outpatient()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_outpatient.md)
+  : Assign outpatient cohort flag
+- [`assign_s_cohort_prescribing()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_prescribing.md)
+  : Assign prescribing cohort flag
+- [`assign_s_cohort_psychiatry()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_psychiatry.md)
+  : Assign psychiatry cohort flag
+- [`assign_s_cohort_residential_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_residential_care.md)
+  : Assign residential care cohort flag
+- [`assign_s_cohort_routine_daycase()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_routine_daycase.md)
+  : Assign routine daycase cohort flag
+- [`assign_s_cohort_single_emergency()`](https://public-health-scotland.github.io/source-linkage-files/reference/assign_s_cohort_single_emergency.md)
+  : Assign single emergency cohort flag
+- [`calculate_acute_elective_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_acute_elective_cost.md)
+  : Calculate cost for Acute Elective records
+- [`calculate_acute_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_acute_emergency_cost.md)
+  : Calculate cost for Acute Emergency records
+- [`calculate_ae2_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_ae2_cost.md)
+  : Calculate cost for Accident & Emergency records
+- [`calculate_care_home_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_care_home_cost.md)
+  : Calculate cost for Care Home records
+- [`calculate_community_care_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_community_care_cost.md)
+  : Calculate community care cost
+- [`calculate_community_health_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_community_health_cost.md)
+  : Calculate cost for Community Health records
+- [`calculate_elective_inpatient_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_elective_inpatient_cost.md)
+  : Calculate cost for Elective Inpatient records
+- [`calculate_geriatric_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_geriatric_cost.md)
+  : Calculate cost for Geriatric Care records
+- [`calculate_home_care_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_home_care_cost.md)
+  : Calculate cost for Home Care records
+- [`calculate_hospital_elective_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_hospital_elective_cost.md)
+  : Calculate cost for Hospital Elective records
+- [`calculate_hospital_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_hospital_emergency_cost.md)
+  : Calculate cost for Hospital Emergency records
+- [`calculate_limited_daycases_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_limited_daycases_cost.md)
+  : Calculate limited daycases cost
+- [`calculate_maternity_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_maternity_cost.md)
+  : Calculate cost for Maternity records
+- [`calculate_multiple_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_multiple_emergency_cost.md)
+  : Calculate multiple emergency cost
+- [`calculate_outpatient_costs()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_outpatient_costs.md)
+  : Calculate cost for Outpatient records
+- [`calculate_prescribing_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_prescribing_cost.md)
+  : Calculate cost for Prescribing records
+- [`calculate_psychiatry_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_psychiatry_cost.md)
+  : Calculate cost for Psychiatry records
+- [`calculate_residential_care_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_residential_care_cost.md)
+  : Calculate residential care cost
+- [`calculate_routine_daycase_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_routine_daycase_cost.md)
+  : Calculate routine daycase cost
+- [`calculate_single_emergency_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_single_emergency_cost.md)
+  : Calculate single emergency cost
+- [`create_demographic_cohorts()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_demographic_cohorts.md)
+  : Create the Demographic Cohort lookup
+- [`create_service_use_cohorts()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_service_use_cohorts.md)
+  : Create the Service Use Cohort lookup
+- [`recalculate_elective_inpatient_cost()`](https://public-health-scotland.github.io/source-linkage-files/reference/recalculate_elective_inpatient_cost.md)
+  : Recalculate elective inpatient costs
+- [`join_sparra_hhg()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_sparra_hhg.md)
+  : Join SPARRA and HHG
+- [`join_cohort_lookups()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_cohort_lookups.md)
+  : Join cohort lookups
+- [`join_deaths_data()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_deaths_data.md)
+  : Join Deaths data
+- [`join_slf_lookup_vars()`](https://public-health-scotland.github.io/source-linkage-files/reference/join_slf_lookup_vars.md)
+  : Join slf lookup variables
+- [`match_on_ltcs()`](https://public-health-scotland.github.io/source-linkage-files/reference/match_on_ltcs.md)
+  : Match on LTC DoB and dates of LTC incidence
+- [`order_indiv_cols()`](https://public-health-scotland.github.io/source-linkage-files/reference/order_indiv_cols.md)
+  : Order SLF Individual File Columns
+
+## Demographics
+
+Things related to demographic lookups
+
+- [`fill_geographies()`](https://public-health-scotland.github.io/source-linkage-files/reference/fill_geographies.md)
+  : Fill postcode and GP practice geographies
+- [`get_gpprac_opendata()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_gpprac_opendata.md)
+  : GP Practice details from PHS open data
+- [`make_gpprac_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/make_gpprac_lookup.md)
+  : Make a GP practice lookup for filling to most recent postcodes based
+  on CHI
+- [`make_postcode_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/make_postcode_lookup.md)
+  : Make a postcode lookup for filling to most recent postcodes based on
+  CHI
+- [`recode_health_boards()`](https://public-health-scotland.github.io/source-linkage-files/reference/recode_health_boards.md)
+  : Recode Health Board code to 2018 standard
+- [`recode_hscp()`](https://public-health-scotland.github.io/source-linkage-files/reference/recode_hscp.md)
+  : Recode HSCP code to 2018 standard
+- [`get_la_code_opendata_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_la_code_opendata_lookup.md)
+  : Download the LA code lookup
+- [`rename_hscp()`](https://public-health-scotland.github.io/source-linkage-files/reference/rename_hscp.md)
+  : Rename hscp where applicable for testing
+
+## Miscellaneous functions
+
+Miscellaneous functions.
+
+### Homelessness
+
+- [`fix_east_ayrshire_duplicates()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_east_ayrshire_duplicates.md)
+  : Fix the East Ayrshire duplicates - Homelessness
+- [`fix_west_dun_duplicates()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_west_dun_duplicates.md)
+  : Fix the West Dunbartonshire duplicates - Homelessness
+- [`produce_homelessness_completeness()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_homelessness_completeness.md)
+  : Produce the Homelessness Completeness lookup
+- [`fix_scid_renfrewshire()`](https://public-health-scotland.github.io/source-linkage-files/reference/fix_scid_renfrewshire.md)
+  : Fix social care id in renfrewshire
+
+### Helper functions
+
+- [`vars_end_with()`](https://public-health-scotland.github.io/source-linkage-files/reference/vars_select.md)
+  [`vars_start_with()`](https://public-health-scotland.github.io/source-linkage-files/reference/vars_select.md)
+  [`vars_contain()`](https://public-health-scotland.github.io/source-linkage-files/reference/vars_select.md)
+  : Select columns according to a pattern
+- [`max_no_inf()`](https://public-health-scotland.github.io/source-linkage-files/reference/max_no_inf.md)
+  : Custom maximum
+- [`min_no_inf()`](https://public-health-scotland.github.io/source-linkage-files/reference/min_no_inf.md)
+  : Custom minimum
+- [`setup_keyring()`](https://public-health-scotland.github.io/source-linkage-files/reference/setup_keyring.md)
+  : Interactively set up the keyring
+
+## Testing
+
+Tests for the SLF Extracts
+
+- [`format_test_excel()`](https://public-health-scotland.github.io/source-linkage-files/reference/format_test_excel.md)
+  : Format Excel Worksheets of test results
+- [`get_existing_data_for_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/get_existing_data_for_tests.md)
+  : SLF Data for Testing
+- [`produce_test_comparison()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_test_comparison.md)
+  : Test Comparison
+- [`write_tests_xlsx()`](https://public-health-scotland.github.io/source-linkage-files/reference/write_tests_xlsx.md)
+  : Write out Tests
+- [`calculate_measures()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_measures.md)
+  : Calculate Measures for Testing
+- [`produce_episode_file_ltc_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_episode_file_ltc_tests.md)
+  : Source Extract Tests
+- [`produce_episode_file_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_episode_file_tests.md)
+  : Source Extract Tests
+- [`produce_source_ch_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_ch_tests.md)
+  : Source Care Home Tests
+- [`produce_source_cmh_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_cmh_tests.md)
+  : Source Extract Tests
+- [`produce_source_dd_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_dd_tests.md)
+  : Delayed Discharges extract tests
+- [`produce_source_dn_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_dn_tests.md)
+  : Source District Nursing Tests
+- [`produce_source_extract_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_extract_tests.md)
+  : Source Extract Tests
+- [`produce_source_hc_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_hc_tests.md)
+  : Source Care Home Tests
+- [`produce_source_nrs_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_nrs_tests.md)
+  : Source Extract Tests
+- [`produce_source_pis_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_pis_tests.md)
+  : Source PIS Tests
+- [`produce_it_chi_deaths_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_it_chi_deaths_tests.md)
+  : CHI death tests
+- [`produce_slf_gpprac_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_gpprac_tests.md)
+  : SLF GP Practice Lookup Tests
+- [`produce_slf_homelessness_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_homelessness_tests.md)
+  : SLF Homelessness Extract Tests
+- [`produce_slf_postcode_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_slf_postcode_tests.md)
+  : SLF Postcode Lookup Tests
+- [`produce_sc_all_episodes_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_all_episodes_tests.md)
+  : Social care All Episodes Tests
+- [`produce_sc_demog_lookup_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_demog_lookup_tests.md)
+  : Social Care Demographic Lookup Tests
+- [`produce_source_at_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_at_tests.md)
+  : Alarm Telecare Episodes Tests
+- [`produce_source_ltc_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_ltc_tests.md)
+  : LTC Episodes Tests
+- [`produce_source_sds_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_sds_tests.md)
+  : SDS Episodes Tests
+- [`produce_tests_sc_client_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_tests_sc_client_lookup.md)
+  : Social care Client lookup Tests
+- [`combine_extracts_tests_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/combine_extracts_tests_year.md)
+  : Combine year specific extract tests into one xlsx file by financial
+  year
+- [`combine_lookup_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/combine_lookup_tests.md)
+  : Combine lookup tests to one xlsx file
+- [`combine_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/combine_tests.md)
+  : Combine split tests
+- [`process_tests_acute()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_acute.md)
+  : Process Acute tests
+- [`process_tests_ae()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_ae.md)
+  : Process A&E tests
+- [`process_tests_alarms_telecare()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_alarms_telecare.md)
+  : Process Alarms Telecare tests
+- [`process_tests_care_home()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_care_home.md)
+  : Process Care Home tests
+- [`process_tests_cmh()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_cmh.md)
+  : Process CMH tests
+- [`process_tests_cross_year()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_cross_year.md)
+  : Process cross year tests
+- [`process_tests_delayed_discharges()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_delayed_discharges.md)
+  : Process Delayed Discharges tests
+- [`process_tests_district_nursing()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_district_nursing.md)
+  : Process District Nursing tests
+- [`process_tests_episode_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_episode_file.md)
+  : Process Episode file tests
+- [`process_tests_gp_ooh()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_gp_ooh.md)
+  : Process GP OOH tests
+- [`process_tests_home_care()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_home_care.md)
+  : Process Home Care tests
+- [`process_tests_homelessness()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_homelessness.md)
+  : Process Homelessness tests
+- [`process_tests_individual_file()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_individual_file.md)
+  : Process Individual file tests
+- [`process_tests_it_chi_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_it_chi_deaths.md)
+  : Process CHI Deaths tests
+- [`process_tests_lookup_gpprac()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_lookup_gpprac.md)
+  : Process GP (gpprac) Lookup tests
+- [`process_tests_lookup_pc()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_lookup_pc.md)
+  : Process PC (postcode) Lookup tests
+- [`process_tests_ltcs()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_ltcs.md)
+  : Process LTCs tests
+- [`process_tests_maternity()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_maternity.md)
+  : Process Maternity tests
+- [`process_tests_mental_health()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_mental_health.md)
+  : Process Mental Health tests
+- [`process_tests_nrs_deaths()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_nrs_deaths.md)
+  : Process National Records of Scotland (NRS) deaths tests
+- [`process_tests_outpatients()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_outpatients.md)
+  : Process Outpatients tests
+- [`process_tests_prescribing()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_prescribing.md)
+  : Process prescribing tests
+- [`process_tests_sc_all_at_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_at_episodes.md)
+  : Process Social Care Alarms Telecare all episodes tests
+- [`process_tests_sc_all_ch_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_ch_episodes.md)
+  : Process Social Care, Care Home all episodes tests
+- [`process_tests_sc_all_hc_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_hc_episodes.md)
+  : Process Social Care Home Care all episodes tests
+- [`process_tests_sc_all_sds_episodes()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_all_sds_episodes.md)
+  : Process Social Care SDS all episodes tests
+- [`process_tests_sc_client_lookup()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_client_lookup.md)
+  : Social care client lookup tests
+- [`process_tests_sc_demographics()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_demographics.md)
+  : Process Social Care Demographics tests
+- [`process_tests_sc_sandpit()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sc_sandpit.md)
+  : Process tests for the social care sandpit extracts
+- [`process_tests_sds()`](https://public-health-scotland.github.io/source-linkage-files/reference/process_tests_sds.md)
+  : Process SDS tests
+- [`produce_individual_file_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_individual_file_tests.md)
+  : Source Extract Tests
+- [`produce_sc_sandpit_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_sandpit_tests.md)
+  : Produce tests for social care sandpit extracts.
+- [`setup_tests_file_name()`](https://public-health-scotland.github.io/source-linkage-files/reference/setup_tests_file_name.md)
+  : set up file names for tests
+
+## Linkage utilities
+
+Functions to extract and link data
+
+- [`extract_ep_ind_time()`](https://public-health-scotland.github.io/source-linkage-files/reference/extract_ep_ind_time.md)
+  : Extract time stamp and time consumption of ep or ind files
+- [`extract_targets_time()`](https://public-health-scotland.github.io/source-linkage-files/reference/extract_targets_time.md)
+  : Extract time stamp and time consumption of targets console output
+- [`link_ch_with_adms()`](https://public-health-scotland.github.io/source-linkage-files/reference/link_ch_with_adms.md)
+  : Link AE episodes released from CH
+- [`update_uk_postcode_directory()`](https://public-health-scotland.github.io/source-linkage-files/reference/update_uk_postcode_directory.md)
+  : Update UK postcode directory from ONS API The ONS NHSPD directory is
+  update quarterly.
+
+# Articles
+
+### Articles
+
+- [01 Project
+  Structure](https://public-health-scotland.github.io/source-linkage-files/articles/project_structure.md):
+- [02 Using GitHub to Develop
+  createslf](https://public-health-scotland.github.io/source-linkage-files/articles/using_github.md):
+- [03 Package
+  Development](https://public-health-scotland.github.io/source-linkage-files/articles/package_development.md):
+- [04 Improve efficiency with
+  \`data.table\`](https://public-health-scotland.github.io/source-linkage-files/articles/data_table.md):
