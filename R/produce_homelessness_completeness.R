@@ -42,7 +42,7 @@ produce_homelessness_completeness <- function(
       sg_pub_path,
       sheet = "Table 1", # Manual change - check sheet name
       rows = 8L:39L,
-      cols = 1L:33L, # Manual change - check workbook for col number for latest year
+      cols = 1L:37L, # Manual change - check workbook for col number for latest year
       colNames = FALSE
     ) %>%
     dplyr::rename_with(~ c(
@@ -54,7 +54,8 @@ produce_homelessness_completeness <- function(
       paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
       paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
       paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L))
+      paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L)),
+      paste0(paste0("q", 1L:4L), "_", rep(2024L, 4L))
       ## Manual change - Add new row here when new year is available in publication
     )) %>%
     tidyr::pivot_longer(
