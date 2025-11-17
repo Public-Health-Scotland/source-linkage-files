@@ -15,10 +15,11 @@
 #' @export
 #' @family process extracts
 process_extract_care_home <- function(
-    data,
-    year,
-    ch_costs,
-    write_to_disk = TRUE) {
+  data,
+  year,
+  ch_costs,
+  write_to_disk = TRUE
+) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 

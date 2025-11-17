@@ -14,10 +14,11 @@
 #' @export
 #' @family process extracts
 process_lookup_sc_demographics <- function(
-    data,
-    spd_path = get_spd_path(),
-    uk_pc_path = get_uk_postcode_path(),
-    write_to_disk = TRUE) {
+  data,
+  spd_path = get_spd_path(),
+  uk_pc_path = get_uk_postcode_path(),
+  write_to_disk = TRUE
+) {
   # Deal with postcodes ---------------------------------------
 
   # UK postcode regex - see https://ideal-postcodes.co.uk/guides/postcode-validation

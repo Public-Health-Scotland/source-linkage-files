@@ -100,7 +100,6 @@ get_combined_slf_deaths_lookup_path <- function(update = latest_update(), ...) {
 }
 
 
-
 #' SLF CHI Deaths File Path
 #'
 #' @description Get the full path to the CHI deaths file

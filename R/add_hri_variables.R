@@ -15,8 +15,9 @@
 #' @return A data frame with the variable 'keep_flag'
 #' @family individual_file
 flag_non_scottish_residents <- function(
-    data,
-    slf_pc_lookup) {
+  data,
+  slf_pc_lookup
+) {
   check_variables_exist(data, c("postcode", "gpprac"))
 
   # Make a lookup of postcode areas, which consist of the first characters
@@ -67,12 +68,13 @@ flag_non_scottish_residents <- function(
 #' @export
 #' @family individual_file
 add_hri_variables <- function(
-    data,
-    chi_variable = "anon_chi",
-    slf_pc_lookup = read_file(
-      get_slf_postcode_path(),
-      col_select = "postcode"
-    )) {
+  data,
+  chi_variable = "anon_chi",
+  slf_pc_lookup = read_file(
+    get_slf_postcode_path(),
+    col_select = "postcode"
+  )
+) {
   hri_lookup <- data %>%
     dplyr::select(
       "year",

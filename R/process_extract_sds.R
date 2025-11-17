@@ -10,9 +10,10 @@
 #' @export
 #' @family process extracts
 process_extract_sds <- function(
-    data,
-    year,
-    write_to_disk = TRUE) {
+  data,
+  year,
+  write_to_disk = TRUE
+) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
