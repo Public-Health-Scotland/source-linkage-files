@@ -27,9 +27,7 @@ process_sc_all_care_home <- function(
   spd_path = get_spd_path(),
   write_to_disk = TRUE
 ) {
-  ## Data Cleaning-----------------------------------------------------
-
-  ch_clean <- data %>%
+  data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
     dplyr::mutate(
@@ -46,19 +44,41 @@ process_sc_all_care_home <- function(
         .data[["ch_discharge_date"]]
       )
     ) %>%
-    # FULL_JOIN with sc_demog_lookup
-    # full_join to include those patients in extracts but not in demog_lookup
-    # used to be right_join
-    dplyr::full_join(sc_demog_lookup, # this is the correct join.
-      by = c("sending_location", "social_care_id")
-    ) %>%
+    add_fy_qtr_from_period()
+
+  # Match on demographic data
+
+  data.table::setDT(data)
+  data.table::setDT(sc_demog_lookup)
+  data.table::setkey(data, sending_location, social_care_id, financial_year)
+  data.table::setkey(sc_demog_lookup, sending_location, social_care_id, financial_year)
+  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  # exact match on first 2 cols; nearest on financial_year
+  # To do nearest join is because some sc episode happen in say 2018,
+  # but demographics data submitted in the following year, say 2019.
+  data <- sc_demog_lookup[
+    data,
+    on = .(sending_location, social_care_id, financial_year),
+    roll = "nearest"
+  ]
+
+  data <- data %>%
+    as.data.frame() %>%
     replace_sc_id_with_latest() %>%
-    dplyr::select(-"latest_flag", -"latest_sc_id")
+    # remove postcode from demographics
+    # as we use ch_postcode from care home snapshot as their home postcode.
+    # For temporary CH residents, ch_postcode should be their home postcode.
+    # For permanant CH residents, ch_postcode should be their CH postcode.
+    # Either case makes sense to use ch_postcode as postcode.
+    dplyr::mutate(
+      ch_postcode = phsmethods::format_postcode(.data$ch_postcode),
+      postcode = dplyr::if_else(.data$ch_postcode %in% uk_pc_directory, .data$ch_postcode, NA)
+    )
 
 
   # cleaning and matching care home names
   name_postcode_clean <- fill_ch_names(
-    ch_data = ch_clean,
+    ch_data = data,
     ch_name_lookup_path = ch_name_lookup_path,
     spd_path = spd_path
   )
@@ -147,16 +167,16 @@ process_sc_all_care_home <- function(
 
   fixed_nursing_provision <- fixed_ch_provider %>%
     dplyr::group_by(
-      .data[["sending_location"]],
-      .data[["social_care_id"]],
-      .data[["ch_admission_date"]]
+      .data$sending_location,
+      .data$social_care_id,
+      .data$ch_admission_date
     ) %>%
     # fill in nursing care provision when missing
     # but present in the following entry (n = 0)
     dplyr::mutate(
-      nursing_care_provision = dplyr::na_if(.data[["nursing_care_provision"]], 9L)
+      nursing_care_provision = dplyr::na_if(.data$nursing_care_provision, 9L)
     ) %>%
-    tidyr::fill(.data[["nursing_care_provision"]], .direction = "downup")
+    tidyr::fill("nursing_care_provision", .direction = "downup")
 
 
   ready_to_merge <- fixed_nursing_provision %>%
@@ -192,7 +212,7 @@ process_sc_all_care_home <- function(
       .data[["sending_location"]]
     ) %>%
     # fill split episode counter. This will create a new id number for each different nursing provision within an episode
-    tidyr::fill(.data$split_episode_counter, .direction = c("down")) %>%
+    tidyr::fill("split_episode_counter", .direction = c("down")) %>%
     dplyr::select(-"previous_nursing_care_provision", -"split_episode")
 
 
@@ -439,6 +459,7 @@ process_sc_all_care_home <- function(
       ch_provider == 5 ~ "OTHER"
     )) %>%
     create_person_id() %>%
+    select_linking_id() %>%
     dplyr::select(
       "anon_chi",
       "gender",
@@ -457,6 +478,7 @@ process_sc_all_care_home <- function(
       "ch_nursing",
       "ch_adm_reason",
       "sc_latest_submission",
+      "linking_id",
       "person_id"
     )
 
