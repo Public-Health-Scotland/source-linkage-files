@@ -37,16 +37,37 @@ library(createslf)
 # Default set as TRUE
 console_outputs <- TRUE
 
-# #-------------------------------------------------------------------------------
-# # save console outputs if `console_outputs == TRUE`
+# -------------------------------------------------------------------------------
+# save console outputs if `console_outputs == TRUE`
 if (console_outputs) {
   update <- latest_update()
+  update_year <- as.integer(substr(phsmethods::extract_fin_year(end_date()), 1, 4))
+  update_quarter <- qtr()
 
-  con_output_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/_console_output/"
-
-  file_name <- stringr::str_glue(
-    "targets_console_{update}_update.txt"
+  con_output_dir <- file.path(
+    "/conf/sourcedev/Source_Linkage_File_Updates/_console_output",
+    update_year,
+    update_quarter
   )
+  if (!dir.exists(con_output_dir)) {
+    dir.create(con_output_dir, recursive = TRUE)
+  }
+
+  base_filename <- stringr::str_glue("targets_console_{update}_update")
+  existing_files <- list.files(
+    path = con_output_dir,
+    pattern = stringr::str_glue("^{base_filename}_[0-9]+\\.txt$"),
+    full.names = FALSE
+  )
+  if (length(existing_files) == 0) {
+    increment <- 1
+  } else {
+    numbers <- stringr::str_extract(existing_files, "[0-9]+(?=\\.txt$)") %>%
+      as.integer()
+    increment <- max(numbers, na.rm = TRUE) + 1
+  }
+
+  file_name <- stringr::str_glue("{base_filename}_{increment}.txt")
   file_path <- file.path(con_output_dir, file_name)
 
   con <- file(file_path, open = "wt")
