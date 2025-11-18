@@ -170,6 +170,7 @@ list(
     # Function
     process_lookup_sc_demographics(
       sc_demog_data,
+      all_care_home_extract,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
