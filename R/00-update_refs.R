@@ -107,7 +107,7 @@ check_year_valid <- function(
     all(type %in% c("nsu", "sds", "at"))) {
     return(FALSE)
   } else if (year >= "2627" &&
-             all(type %in% c("ch", "hc", "client", "sparra"))) {
+    all(type %in% c("ch", "hc", "client", "sparra"))) {
     return(FALSE)
   }
 
