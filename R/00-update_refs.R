@@ -104,7 +104,7 @@ check_year_valid <- function(
     ## CHECK - What period does SDS data get submitted?
     ## CHECK - what data do we have available for Social Care and SPARRA?
   } else if (year >= "2526" &&
-    all(type %in% c("nsu", "sds", "at", "ch", "hc", "client",))) {
+    all(type %in% c("nsu", "sds", "at", "ch", "hc", "client", ))) {
     return(FALSE)
   } else if (year >= "2627" &&
     all(type %in% c("sparra"))) {
