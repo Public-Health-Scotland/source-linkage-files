@@ -23,6 +23,7 @@ process_sc_all_sds <- function(
     add_fy_qtr_from_period()
 
   data.table::setDT(data)
+  data.table::setDT(sc_demog_lookup)
   # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
   data <- sc_demog_lookup[
     data,
