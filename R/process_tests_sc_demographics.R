@@ -54,7 +54,10 @@ produce_sc_demog_lookup_tests <- function(data) {
         "dob",
         "postcode",
         "date_of_death",
-        "extract_date"
+        "extract_date",
+        "linking_id",
+        "financial_year",
+        "consistent_quality"
       )
     ) %>%
     # use function to sum new test flags
