@@ -62,7 +62,7 @@ process_sc_all_care_home <- function(
     roll = "nearest"
   ]
 
-  uk_pc_directory = read_file(get_uk_postcode_path())
+  uk_pc_directory <- read_file(get_uk_postcode_path())
 
   data <- data %>%
     as.data.frame() %>%
