@@ -8,7 +8,7 @@ process_lookup_sc_client(
   data,
   year,
   sc_demographics = read_file(get_sc_demog_lookup_path()) \%>\%
-    dplyr::select(c("sending_location", "social_care_id", "anon_chi", "latest_flag")),
+    dplyr::select(c("sending_location", "social_care_id", "anon_chi")),
   write_to_disk = TRUE
 )
 }
