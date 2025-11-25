@@ -9,9 +9,11 @@ apply_cost_uplift <- function(data) {
     # attach a uplift scale as the last column
     lookup_uplift()
 
-  expected_cols <- c("cost_total_net",
-                     "cost_total_net_inc_dnas",
-                     paste0(tolower(month.abb[c(4L:12L, 1L:3L)]), "_cost"))
+  expected_cols <- c(
+    "cost_total_net",
+    "cost_total_net_inc_dnas",
+    paste0(tolower(month.abb[c(4L:12L, 1L:3L)]), "_cost")
+  )
 
   cols_present <- intersect(expected_cols, names(data))
 
@@ -19,7 +21,7 @@ apply_cost_uplift <- function(data) {
     dplyr::mutate(
       dplyr::across(
         dplyr::any_of(cols_present),
-        ~.x * .data$uplift
+        ~ .x * .data$uplift
       )
     ) %>%
     dplyr::select(-"uplift")
