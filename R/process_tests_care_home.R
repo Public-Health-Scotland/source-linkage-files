@@ -7,17 +7,21 @@
 #'
 #' @export
 process_tests_care_home <- function(data, year) {
-  old_data <- get_existing_data_for_tests(data)
+  if (check_year_valid(year, "ch")) {
+    old_data <- get_existing_data_for_tests(data)
 
-  data <- rename_hscp(data)
+    data <- rename_hscp(data)
 
-  comparison <- produce_test_comparison(
-    old_data = produce_source_ch_tests(old_data),
-    new_data = produce_source_ch_tests(data)
-  ) %>%
-    write_tests_xlsx(sheet_name = "ch", year, workbook_name = "extract")
+    comparison <- produce_test_comparison(
+      old_data = produce_source_ch_tests(old_data),
+      new_data = produce_source_ch_tests(data)
+    ) %>%
+      write_tests_xlsx(sheet_name = "ch", year, workbook_name = "extract")
 
-  return(comparison)
+    return(comparison)
+  } else {
+    return(NULL)
+  }
 }
 
 #' Source Care Home Tests

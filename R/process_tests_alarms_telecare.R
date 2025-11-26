@@ -8,19 +8,21 @@
 #'
 #' @export
 process_tests_alarms_telecare <- function(data, year) {
-  old_data <- get_existing_data_for_tests(data)
+  if (check_year_valid(year, "at")) {
+    old_data <- get_existing_data_for_tests(data)
 
-  data <- rename_hscp(data)
+    data <- rename_hscp(data)
 
-  comparison <- produce_test_comparison(
-    old_data = produce_source_at_tests(old_data),
-    new_data = produce_source_at_tests(data)
-  )
+    comparison <- produce_test_comparison(
+      old_data = produce_source_at_tests(old_data),
+      new_data = produce_source_at_tests(data)
+    ) %>%
+      write_tests_xlsx(sheet_name = "at", year, workbook_name = "extract")
 
-  comparison %>%
-    write_tests_xlsx(sheet_name = "at", year, workbook_name = "extract")
-
-  return(comparison)
+    return(comparison)
+  } else {
+    return(NULL)
+  }
 }
 
 #' Alarm Telecare Episodes Tests

@@ -19,8 +19,8 @@ process_lookup_sc_client <-
            sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
              dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
            write_to_disk = TRUE) {
-    # Specify years available for running
-    if (year < "1718") {
+    # Check if year is valid for sc_client
+    if (!check_year_valid(year, "client")) {
       return(NULL)
     }
 
