@@ -25,7 +25,6 @@ process_tests_sc_client_lookup <- function(data, year) {
   }
 }
 
-
 #' Social care Client lookup Tests
 #'
 #' @description Produce the test for the social care Client all episodes
