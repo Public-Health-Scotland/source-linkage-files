@@ -53,7 +53,8 @@ create_episode_file <- function(
         ch_name = NA,
         ch_postcode = NA,
         social_care_id = NA,
-        person_id = NA
+        person_id = NA,
+        linking_id = NA
       )
   }
 
