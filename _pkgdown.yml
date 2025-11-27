@@ -104,6 +104,7 @@ reference:
     - store_ep_file_vars
     - load_ep_file_vars
     - write_temp_data
+    - write_console_output
 
 
   - title: Initialisation
