@@ -166,7 +166,8 @@ process_lookup_sc_client <-
         "sc_autism",
         "sc_other_vulnerable_groups"
       ) %>%
-      create_person_id()
+      create_person_id() %>%
+      select_linking_id()
 
 
     sc_client_lookup <-
