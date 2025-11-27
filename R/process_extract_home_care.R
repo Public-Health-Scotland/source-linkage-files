@@ -88,6 +88,7 @@ process_extract_home_care <- function(
       "anon_chi",
       "social_care_id",
       "person_id",
+      "linking_id",
       "dob",
       "gender",
       "postcode",
