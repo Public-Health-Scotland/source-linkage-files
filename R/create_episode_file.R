@@ -601,7 +601,7 @@ join_sc_client <- function(data,
       data_file_unjoined,
       data_non_sc
     ) %>%
-      select(-"linking_id")
+      dplyr::select(-"linking_id")
   } else {
     data_file <- data %>%
       dplyr::left_join(
