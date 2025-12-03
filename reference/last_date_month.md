@@ -40,5 +40,5 @@ Other date functions:
 
 ``` r
 last_date_month(Sys.Date())
-#> [1] "2025-11-30"
+#> [1] "2025-12-31"
 ```

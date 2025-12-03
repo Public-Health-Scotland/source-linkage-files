@@ -247,5 +247,5 @@ test_that("Can convert ca code to lca code", {
     )
   )
 })
-#> Test passed 🥇
+#> Test passed with 1 success 🥇.
 ```
