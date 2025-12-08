@@ -15,6 +15,8 @@ process_lookup_sc_demographics(
 \arguments{
 \item{data}{The extract to process.}
 
+\item{all_care_home_extract}{The raw extracts produced by read_sc_all_care_home().}
+
 \item{spd_path}{Path to the Scottish Postcode Directory.}
 
 \item{uk_pc_path}{UK Postcode directory}

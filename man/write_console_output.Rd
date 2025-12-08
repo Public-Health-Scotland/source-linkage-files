@@ -20,9 +20,3 @@ write_console_output(
 \description{
 Sets up sink to capture console output and messages to .txt file.
 }
-\examples{
-write_console_output(console_outputs = TRUE, file_type = "episode", year = "2324")
-write_console_output(console_outputs = TRUE, file_type = "individual", year = "2324")
-write_console_output(console_outputs = TRUE, file_type = "targets")
-
-}
