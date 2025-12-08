@@ -61,7 +61,7 @@ write_console_output <- function(console_outputs = TRUE,
       sink(type = "message")
       sink(type = "output")
       close(con)
-      cat("\n✓ Console output saved to:", file_path, "\n")
+      cat("\n Console output saved to:", file_path, "\n")
     },
     add = TRUE
   )
