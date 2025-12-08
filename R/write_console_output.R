@@ -5,13 +5,6 @@
 #' @param console_outputs If TRUE, capture console output and messages to .txt file.
 #' @param file_type Type of file being processed: "episode", "individual", or "targets".
 #' @param year Financial year.
-#'
-#' @examples
-#' write_console_output(console_outputs = TRUE, file_type = "episode", year = "2324")
-#' write_console_output(console_outputs = TRUE, file_type = "individual", year = "2324")
-#' write_console_output(console_outputs = TRUE, file_type = "targets")
-#'
-#' @export
 write_console_output <- function(console_outputs = TRUE,
                                  file_type = c("episode", "individual", "targets"),
                                  year = NULL) {
