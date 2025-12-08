@@ -23,7 +23,8 @@ process_sc_all_alarms_telecare <- function(
     default <- sending_location <- social_care_id <- pkg_count <-
     record_keydate1 <- smrtype <- period <- record_keydate2 <- anon_chi <-
     gender <- dob <- postcode <- recid <- person_id <- sc_send_lca <-
-    period_start_date <- NULL
+    period_start_date <- financial_quarter <- financial_year <-
+    extract_date <- consistent_quality <- NULL
 
   # add per in social_care_id in Renfrewshire
   data <- data %>%
@@ -92,7 +93,7 @@ process_sc_all_alarms_telecare <- function(
   # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
   data <- sc_demog_lookup[
     data,
-    on = .(sending_location, social_care_id, financial_year),
+    on = list(sending_location, social_care_id, financial_year),
     roll = "nearest" # exact match on first 2 cols; nearest on financial_year
   ]
   # To do nearest join is because some sc episode happen in say 2018,

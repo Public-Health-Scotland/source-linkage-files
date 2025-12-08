@@ -5,6 +5,7 @@
 #' and (optionally) write it to disk.
 #'
 #' @param data The extract to process.
+#' @param all_care_home_extract The raw extracts produced by read_sc_all_care_home().
 #' @param spd_path Path to the Scottish Postcode Directory.
 #' @param uk_pc_path UK Postcode directory
 #' @param write_to_disk (optional) Should the data be written to disk default is
@@ -148,7 +149,7 @@ process_lookup_sc_demographics <- function(
     dplyr::mutate(
       living_in_ch = tidyr::replace_na(.data$living_in_ch, FALSE),
       living_in_ch_extract = tidyr::replace_na(.data$living_in_ch_extract, FALSE),
-      living_in_ch_combined = (living_in_ch | living_in_ch_extract),
+      living_in_ch_combined = (.data$living_in_ch | .data$living_in_ch_extract),
       # check if pc is ch_pc
       is_sp_ch = (.data$submitted_postcode %in% ch_pc),
       is_cp_ch = (.data$chi_postcode %in% ch_pc),

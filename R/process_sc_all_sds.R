@@ -15,6 +15,14 @@ process_sc_all_sds <- function(
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   write_to_disk = TRUE
 ) {
+  # fix "no visible binding for global variable"
+  sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
+    sds_period_end_date <- received <- sds_option <- sending_location <-
+    period <- record_keydate1 <- record_keydate2 <- social_care_id <-
+    smrtype <- period_rank <- record_keydate1_rank <- record_keydate2_rank <-
+    distinct_episode <- episode_counter <- anon_chi <- gender <- dob <- postcode <-
+    recid <- person_id <- sc_send_lca <- financial_year <- NULL
+
   # Match on demographics data (chi, gender, dob and postcode)
   data <- data %>%
     # add per in social_care_id in Renfrewshire
@@ -27,7 +35,7 @@ process_sc_all_sds <- function(
   # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
   data <- sc_demog_lookup[
     data,
-    on = .(sending_location, social_care_id, financial_year),
+    on = list(sending_location, social_care_id, financial_year),
     roll = "nearest" # exact match on first 2 cols; nearest on financial_year
   ]
   # To do nearest join is because some sc episode happen in say 2018,
@@ -48,14 +56,6 @@ process_sc_all_sds <- function(
   # Convert matched_sds_data to data.table
   sds_full_clean <- data.table::as.data.table(data)
   rm(data)
-
-  # fix "no visible binding for global variable"
-  sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
-    sds_period_end_date <- received <- sds_option <- sending_location <-
-    period <- record_keydate1 <- record_keydate2 <- social_care_id <-
-    smrtype <- period_rank <- record_keydate1_rank <- record_keydate2_rank <-
-    distinct_episode <- episode_counter <- anon_chi <- gender <- dob <- postcode <-
-    recid <- person_id <- sc_send_lca <- NULL
 
   # Deal with SDS option 4
   # Convert option flags into logical T/F

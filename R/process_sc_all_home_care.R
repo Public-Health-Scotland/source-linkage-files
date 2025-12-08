@@ -16,6 +16,8 @@ process_sc_all_home_care <- function(
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   write_to_disk = TRUE
 ) {
+  sending_location <- social_care_id <- financial_year <- NULL
+
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -45,7 +47,7 @@ process_sc_all_home_care <- function(
   # exact match on first 2 cols; nearest on financial_year
   data <- sc_demog_lookup[
     data,
-    on = .(sending_location, social_care_id, financial_year),
+    on = list(sending_location, social_care_id, financial_year),
     roll = "nearest"
   ]
   # To do nearest join is because some sc episode happen in say 2018,
@@ -113,7 +115,7 @@ process_sc_all_home_care <- function(
 
   pivoted_hours <- matched_costs %>%
     # Create a copy of the period then pivot the hours on it
-    dplyr::mutate(hours_submission_quarter = period) %>%
+    dplyr::mutate(hours_submission_quarter = .data$period) %>%
     tidyr::pivot_wider(
       names_from = "hours_submission_quarter",
       values_from = c("hc_hours", "hc_cost"),

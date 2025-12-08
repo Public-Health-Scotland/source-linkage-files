@@ -27,6 +27,8 @@ process_sc_all_care_home <- function(
   spd_path = get_spd_path(),
   write_to_disk = TRUE
 ) {
+  sending_location <- social_care_id <- financial_year <- NULL
+
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -58,7 +60,7 @@ process_sc_all_care_home <- function(
   # but demographics data submitted in the following year, say 2019.
   data <- sc_demog_lookup[
     data,
-    on = .(sending_location, social_care_id, financial_year),
+    on = list(sending_location, social_care_id, financial_year),
     roll = "nearest"
   ]
 
