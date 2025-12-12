@@ -35,9 +35,9 @@ Other initialisation:
 
 ``` r
 previous_update() # Default 3 months
-#> Jun_2025
+#> Sep_2025
 previous_update(1) # 1 month ago
-#> Aug_2025
+#> Nov_2025
 previous_update(override = "May_2023") # Specific Month
 #> [1] "May_2023"
 ```

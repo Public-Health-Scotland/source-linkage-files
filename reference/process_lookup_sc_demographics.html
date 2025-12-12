@@ -54,6 +54,7 @@ and (optionally) write it to disk.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">process_lookup_sc_demographics</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
+<span>  <span class="va">all_care_home_extract</span>,</span>
 <span>  spd_path <span class="op">=</span> <span class="fu"><a href="get_spd_path.html">get_spd_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  uk_pc_path <span class="op">=</span> <span class="fu"><a href="get_uk_postcode_path.html">get_uk_postcode_path</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  write_to_disk <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -66,6 +67,10 @@ and (optionally) write it to disk.</p>
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>The extract to process.</p></dd>
+
+
+<dt id="arg-all-care-home-extract">all_care_home_extract<a class="anchor" aria-label="anchor" href="#arg-all-care-home-extract"></a></dt>
+<dd><p>The raw extracts produced by read_sc_all_care_home().</p></dd>
 
 
 <dt id="arg-spd-path">spd_path<a class="anchor" aria-label="anchor" href="#arg-spd-path"></a></dt>

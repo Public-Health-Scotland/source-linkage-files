@@ -8,6 +8,7 @@ return the final data and (optionally) write it to disk.
 ``` r
 process_lookup_sc_demographics(
   data,
+  all_care_home_extract,
   spd_path = get_spd_path(),
   uk_pc_path = get_uk_postcode_path(),
   write_to_disk = TRUE
@@ -19,6 +20,10 @@ process_lookup_sc_demographics(
 - data:
 
   The extract to process.
+
+- all_care_home_extract:
+
+  The raw extracts produced by read_sc_all_care_home().
 
 - spd_path:
 

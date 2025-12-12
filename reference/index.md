@@ -57,6 +57,8 @@ year, and convert date types
   : Return the start of a quarter
 - [`start_next_fy_quarter()`](https://public-health-scotland.github.io/source-linkage-files/reference/start_next_fy_quarter.md)
   : Return the start of the next quarter
+- [`which_fy()`](https://public-health-scotland.github.io/source-linkage-files/reference/which_fy.md)
+  : which_fy Extract financial year from a date
 - [`add_homelessness_date_flags()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_homelessness_date_flags.md)
   : Add homelessness date flags episode
 - [`end_date()`](https://public-health-scotland.github.io/source-linkage-files/reference/end_date.md)
@@ -131,6 +133,9 @@ Functions to create ID variables
   : Create the Person ID variable
 - [`replace_sc_id_with_latest()`](https://public-health-scotland.github.io/source-linkage-files/reference/replace_sc_id_with_latest.md)
   : Replace sc id with the latest sc id
+- [`select_linking_id()`](https://public-health-scotland.github.io/source-linkage-files/reference/select_linking_id.md)
+  : Select linking ID Set linking_id as anon_chi if available otherwise
+  social_care_id with sending location.
 
 ### Costs
 
@@ -241,6 +246,8 @@ defaults and importantly fix file permissions.
   : Load the unneeded episode file variables
 - [`write_temp_data()`](https://public-health-scotland.github.io/source-linkage-files/reference/write_temp_data.md)
   : Write a temp data to disk in parquet format for debugging purpose
+- [`write_console_output()`](https://public-health-scotland.github.io/source-linkage-files/reference/write_console_output.md)
+  : Write Console Output to File
 
 ## Initialisation
 
@@ -256,6 +263,9 @@ Get the date of update, period, and extract number
   : Previous update
 - [`years_to_run()`](https://public-health-scotland.github.io/source-linkage-files/reference/years_to_run.md)
   : The year list for slf to update
+- [`add_fy_qtr_from_period()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_fy_qtr_from_period.md)
+  : Add financial year from Social Care period Financial year format, eg
+  2024
 - [`gzip_files()`](https://public-health-scotland.github.io/source-linkage-files/reference/gzip_files.md)
   : Compress CSV with gzip
 - [`make_lowercase_ext()`](https://public-health-scotland.github.io/source-linkage-files/reference/make_lowercase_ext.md)
@@ -613,8 +623,6 @@ Building the episode file
   : Add NSU cohort to working file
 - [`add_ppa_flag()`](https://public-health-scotland.github.io/source-linkage-files/reference/add_ppa_flag.md)
   : Add Potentially Preventable Admission (PPA) Marker
-- [`apply_cost_uplift()`](https://public-health-scotland.github.io/source-linkage-files/reference/apply_cost_uplift.md)
-  : Uplift costs
 - [`correct_cij_vars()`](https://public-health-scotland.github.io/source-linkage-files/reference/correct_cij_vars.md)
   : Correct the CIJ variables
 - [`create_cohort_lookups()`](https://public-health-scotland.github.io/source-linkage-files/reference/create_cohort_lookups.md)
@@ -625,8 +633,6 @@ Building the episode file
   : Fill any missing CIJ markers for records that should have them
 - [`link_delayed_discharge_eps()`](https://public-health-scotland.github.io/source-linkage-files/reference/link_delayed_discharge_eps.md)
   : Link Delayed Discharge to WIP episode file
-- [`lookup_uplift()`](https://public-health-scotland.github.io/source-linkage-files/reference/lookup_uplift.md)
-  : Set uplift scale
 - [`fill_geographies()`](https://public-health-scotland.github.io/source-linkage-files/reference/fill_geographies.md)
   : Fill postcode and GP practice geographies
 
@@ -742,6 +748,10 @@ Building the episode file
   : Match on LTC DoB and dates of LTC incidence
 - [`order_ep_cols()`](https://public-health-scotland.github.io/source-linkage-files/reference/order_ep_cols.md)
   : Order SLF Episode File Columns
+- [`apply_cost_uplift()`](https://public-health-scotland.github.io/source-linkage-files/reference/apply_cost_uplift.md)
+  : Uplift costs
+- [`lookup_uplift()`](https://public-health-scotland.github.io/source-linkage-files/reference/lookup_uplift.md)
+  : Set uplift scale
 
 ## Individual file
 

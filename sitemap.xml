@@ -21,6 +21,7 @@
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_cmh_columns.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_dd_columns.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_dn_columns.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_fy_qtr_from_period.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_gls_columns.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_hc_columns.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/add_hl1_columns.html</loc></url>
@@ -365,6 +366,7 @@
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/remove_blank_chi.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/rename_hscp.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/replace_sc_id_with_latest.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/select_linking_id.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/setup_keyring.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/setup_tests_file_name.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/start_fy.html</loc></url>
@@ -373,6 +375,8 @@
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/store_ep_file_vars.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/update_uk_postcode_directory.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/vars_select.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/which_fy.html</loc></url>
+<url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_console_output.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_file.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_temp_data.html</loc></url>
 <url><loc>https://public-health-scotland.github.io/source-linkage-files/reference/write_tests_xlsx.html</loc></url>
