@@ -1,30 +1,29 @@
 #' Uplift costs
 #'
-#' @param data episode data
+#' @param data episode or extract data
 #'
-#' @return episode data with uplifted costs
-#' @family episode_file
+#' @return data with uplifted costs
+#' @family uplift_costs
 apply_cost_uplift <- function(data) {
   data <- data %>%
     # attach a uplift scale as the last column
-    lookup_uplift() %>%
+    lookup_uplift()
+
+  expected_cols <- c(
+    "cost_total_net",
+    "cost_total_net_inc_dnas",
+    paste0(tolower(month.abb[c(4L:12L, 1L:3L)]), "_cost")
+  )
+
+  cols_present <- intersect(expected_cols, names(data))
+
+  data <- data %>%
     dplyr::mutate(
-      cost_total_net = .data$cost_total_net * .data$uplift,
-      cost_total_net_inc_dnas = .data$cost_total_net_inc_dnas * .data$uplift,
-      apr_cost = .data$apr_cost * .data$uplift,
-      may_cost = .data$may_cost * .data$uplift,
-      jun_cost = .data$jun_cost * .data$uplift,
-      jul_cost = .data$jul_cost * .data$uplift,
-      aug_cost = .data$aug_cost * .data$uplift,
-      sep_cost = .data$sep_cost * .data$uplift,
-      oct_cost = .data$oct_cost * .data$uplift,
-      nov_cost = .data$nov_cost * .data$uplift,
-      dec_cost = .data$dec_cost * .data$uplift,
-      jan_cost = .data$jan_cost * .data$uplift,
-      feb_cost = .data$feb_cost * .data$uplift,
-      mar_cost = .data$mar_cost * .data$uplift
+      dplyr::across(
+        dplyr::any_of(cols_present),
+        ~ .x * .data$uplift
+      )
     ) %>%
-    # remove the last uplift column
     dplyr::select(-"uplift")
 
   cli::cli_alert_info("Apply cost uplift function finished at {Sys.time()}")
@@ -34,10 +33,10 @@ apply_cost_uplift <- function(data) {
 
 #' Set uplift scale
 #'
-#' @param data episode data
+#' @param data episode or extract data
 #'
-#' @return episode data with a uplift scale
-#' @family episode_file
+#' @return data with uplifted costs
+#' @family uplift_costs
 lookup_uplift <- function(data) {
   # We have set uplifts to use for 2020/21, 2021/22 and 2022/23,
   # provided by Paul Leak.
@@ -46,7 +45,7 @@ lookup_uplift <- function(data) {
   # cost year (2022/23)
   # For non PLICS recids use uplift of 1 so we won't change anything.
 
-  # to accelerate, create a data frame of year and uplift for match-joining
+  # To accelerate, create a data frame of year and uplift for match-joining
   start_year <- 10L
   end_year <- as.integer(format(Sys.Date(), "%y"))
   year <- as.integer(paste0(

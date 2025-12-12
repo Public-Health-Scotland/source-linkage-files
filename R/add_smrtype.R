@@ -47,7 +47,7 @@ add_smrtype <- function(recid,
 
   # Situation where maternity records are present without a corresponding mpat
   if (all(recid == "02B") && anyNA(mpat)) {
-    cli::cli_abort(
+    cli::cli_warn(
       "In Maternity records, {.var mpat} is required to assign an smrtype,
                     and there are some {.val NA} values. Please check the data."
     )
@@ -131,7 +131,8 @@ add_smrtype <- function(recid,
     smrtype <- dplyr::case_when(
       recid == "02B" & mpat %in% c("1", "3", "5", "7", "A") ~ "Matern-IP",
       recid == "02B" & mpat %in% c("2", "4", "6") ~ "Matern-DC",
-      recid == "02B" & mpat == "0" ~ "Matern-HB"
+      recid == "02B" & mpat == "0" ~ "Matern-HB",
+      recid == "02B" & is.na(mpat) ~ "Matern-Unknown"
     )
   } else if (all(recid %in% c("01B", "GLS"))) {
     # Acute recids, identifier is `ipdc`

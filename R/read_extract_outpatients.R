@@ -4,8 +4,9 @@
 #'
 #' @export
 read_extract_outpatients <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "outpatient")) {
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "outpatient")
+) {
   # Read BOXI extract
   extract_outpatients <- read_file(file_path,
     col_type = readr::cols(

@@ -17,21 +17,22 @@
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 create_episode_file <- function(
-    processed_data_list,
-    year,
-    dd_data = read_file(get_source_extract_path(year, "dd")),
-    homelessness_lookup = create_homelessness_lookup(year),
-    nsu_cohort = read_file(get_nsu_path(year)),
-    ltc_data = read_file(get_ltcs_path(year)),
-    slf_pc_lookup = read_file(get_slf_postcode_path()),
-    slf_gpprac_lookup = read_file(
-      get_slf_gpprac_path(),
-      col_select = c("gpprac", "cluster", "hbpraccode")
-    ),
-    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-    sc_client = read_file(get_sc_client_lookup_path(year)),
-    write_to_disk = TRUE,
-    write_temp_to_disk = FALSE) {
+  processed_data_list,
+  year,
+  dd_data = read_file(get_source_extract_path(year, "dd")),
+  homelessness_lookup = create_homelessness_lookup(year),
+  nsu_cohort = read_file(get_nsu_path(year)),
+  ltc_data = read_file(get_ltcs_path(year)),
+  slf_pc_lookup = read_file(get_slf_postcode_path()),
+  slf_gpprac_lookup = read_file(
+    get_slf_gpprac_path(),
+    col_select = c("gpprac", "cluster", "hbpraccode")
+  ),
+  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
+  sc_client = read_file(get_sc_client_lookup_path(year)),
+  write_to_disk = TRUE,
+  write_temp_to_disk = FALSE
+) {
   cli::cli_alert_info("Create episode file function started at {Sys.time()}")
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
@@ -52,7 +53,8 @@ create_episode_file <- function(
         ch_name = NA,
         ch_postcode = NA,
         social_care_id = NA,
-        person_id = NA
+        person_id = NA,
+        linking_id = NA
       )
   }
 
@@ -70,6 +72,7 @@ create_episode_file <- function(
         "anon_chi",
         "person_id",
         "social_care_id",
+        "linking_id",
         "gender",
         "dob",
         "gpprac",
@@ -520,17 +523,18 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(
-    data,
-    year,
-    update = latest_update(),
-    demographic_cohort = read_file(
-      get_demographic_cohorts_path(year, update),
-      col_select = c("anon_chi", "demographic_cohort")
-    ),
-    service_use_cohort = read_file(
-      get_service_use_cohorts_path(year, update),
-      col_select = c("anon_chi", "service_use_cohort")
-    )) {
+  data,
+  year,
+  update = latest_update(),
+  demographic_cohort = read_file(
+    get_demographic_cohorts_path(year, update),
+    col_select = c("anon_chi", "demographic_cohort")
+  ),
+  service_use_cohort = read_file(
+    get_service_use_cohorts_path(year, update),
+    col_select = c("anon_chi", "service_use_cohort")
+  )
+) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
@@ -565,27 +569,20 @@ join_sc_client <- function(data,
   }
 
   if (file_type == "episode") {
-    # Match on client variables by chi
-    # Step 1. Link/join ep with sc_client by anon_chi,
-    #         excluding episodes are not joined. We get `data_file_chi_join`
-    # Step 2. For the episodes are not joined in Step 1,
-    #         join them with sc_client again by person_id,
-    #         excluding those are not joined. We get `data_file_pi_join`
-    # Step 3. Episodes that are non-joined, is `data_file_unjoined`
-    # Step 4. bind rows together
-
+    # Match on client variables by linking_id
     # Step 1
     data_sc <- data %>%
       dplyr::filter(.data$recid %in% c("AT", "HC", "CH", "SDS"))
     data_non_sc <- data %>%
       dplyr::filter(!(.data$recid %in% c("AT", "HC", "CH", "SDS")))
 
-    data_file_chi_join <- data_sc %>%
+    data_file_join <- data_sc %>%
       dplyr::inner_join(
         sc_client,
-        by = "anon_chi",
+        by = "linking_id",
         relationship = "many-to-one",
         suffix = c("", "_sc"),
+        # should never have NA in linking_id
         na_matches = "never"
       ) %>%
       dplyr::select(
@@ -593,33 +590,19 @@ join_sc_client <- function(data,
       )
 
     # Step 2
-    data_file_pi_join <- data_sc %>%
+    data_file_unjoined <- data_sc %>%
       dplyr::filter(!(
-        .data$ep_file_row_id %in% dplyr::pull(data_file_chi_join, .data$ep_file_row_id)
-      )) %>%
-      dplyr::inner_join(
-        sc_client,
-        by = "person_id",
-        relationship = "many-to-one",
-        suffix = c("", "_sc"),
-        na_matches = "never"
-      ) %>%
-      dplyr::select(-dplyr::ends_with("_sc"))
+        .data$ep_file_row_id %in%
+          dplyr::pull(data_file_join, .data$ep_file_row_id)
+      ))
 
     # Step 3
-    data_file_unjoined <- data_sc %>%
-      dplyr::filter(!(.data$ep_file_row_id %in% c(
-        dplyr::pull(data_file_chi_join, .data$ep_file_row_id),
-        dplyr::pull(data_file_pi_join, .data$ep_file_row_id)
-      )))
-
-    # Step 4
     data_file <- dplyr::bind_rows(
-      data_file_chi_join,
-      data_file_pi_join,
+      data_file_join,
       data_file_unjoined,
       data_non_sc
-    )
+    ) %>%
+      dplyr::select(-"linking_id")
   } else {
     data_file <- data %>%
       dplyr::left_join(
