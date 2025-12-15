@@ -281,8 +281,10 @@ changes to the code automatically. These include:
 - [style](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/style.yaml) -
   This is based on [this
   example](https://github.com/r-lib/actions/blob/v2/examples/README.md#style-package) -
-  It will run `styler::style_dir` whenever any relevant files are
-  pushed, it will then commit any changes if required.
+  It will run
+  [`styler::style_dir`](https://styler.r-lib.org/reference/style_dir.html)
+  whenever any relevant files are pushed, it will then commit any
+  changes if required.
 - [test-coverage](https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/.github/workflows/test-coverage.yaml) -
   This is based on [this
   example](https://github.com/r-lib/actions/blob/v2/examples/README.md#test-coverage-workflow) -
