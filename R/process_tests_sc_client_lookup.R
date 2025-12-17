@@ -8,19 +8,22 @@
 #'
 #' @export
 process_tests_sc_client_lookup <- function(data, year) {
-  comparison <- produce_test_comparison(
-    old_data = produce_tests_sc_client_lookup(
-      read_file(get_sc_client_lookup_path(year, update = previous_update()))
-    ),
-    new_data = produce_tests_sc_client_lookup(data)
-  )
+  if (check_year_valid(year, "client")) {
+    comparison <- produce_test_comparison(
+      old_data = produce_tests_sc_client_lookup(
+        read_file(get_sc_client_lookup_path(year, update = previous_update()))
+      ),
+      new_data = produce_tests_sc_client_lookup(data)
+    )
 
-  comparison %>%
-    write_tests_xlsx(sheet_name = "sc_client", year, workbook_name = "extract")
+    comparison %>%
+      write_tests_xlsx(sheet_name = "sc_client", year, workbook_name = "extract")
 
-  return(comparison)
+    return(comparison)
+  } else {
+    return(NULL)
+  }
 }
-
 
 #' Social care Client lookup Tests
 #'

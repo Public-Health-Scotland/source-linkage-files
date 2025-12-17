@@ -11,25 +11,39 @@
 #' @export
 #'
 process_sc_all_sds <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  write_to_disk = TRUE
+) {
+  # fix "no visible binding for global variable"
+  sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
+    sds_period_end_date <- received <- sds_option <- sending_location <-
+    period <- record_keydate1 <- record_keydate2 <- social_care_id <-
+    smrtype <- period_rank <- record_keydate1_rank <- record_keydate2_rank <-
+    distinct_episode <- episode_counter <- anon_chi <- gender <- dob <- postcode <-
+    recid <- person_id <- sc_send_lca <- financial_year <- NULL
+
   # Match on demographics data (chi, gender, dob and postcode)
-  matched_sds_data <- data %>%
+  data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
     dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
-    # FULL_JOIN with sc_demog_lookup
-    # full_join to include those patients in extracts but not in demog_lookup
-    # used to be right_join
-    dplyr::full_join(
-      sc_demog_lookup,
-      by = c("sending_location", "social_care_id")
-    ) %>%
-    # when multiple social_care_id from sending_location for single CHI
-    # replace social_care_id with latest
+    add_fy_qtr_from_period()
+
+  data.table::setDT(data)
+  data.table::setDT(sc_demog_lookup)
+  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  data <- sc_demog_lookup[
+    data,
+    on = list(sending_location, social_care_id, financial_year),
+    roll = "nearest" # exact match on first 2 cols; nearest on financial_year
+  ]
+  # To do nearest join is because some sc episode happen in say 2018,
+  # but demographics data submitted in the following year, say 2019.
+
+  data <- data %>%
     replace_sc_id_with_latest() %>%
-    dplyr::select(-.data$sds_start_date_after_period_end_date) %>%
+    dplyr::select(-"sds_start_date_after_period_end_date") %>%
     dplyr::distinct() %>%
     # sds_options may contain only a few NA, replace NA by 0
     dplyr::mutate(
@@ -40,16 +54,8 @@ process_sc_all_sds <- function(
 
   # Data Cleaning ---------------------------------------
   # Convert matched_sds_data to data.table
-  sds_full_clean <- data.table::as.data.table(matched_sds_data)
-  rm(matched_sds_data)
-
-  # fix "no visible binding for global variable"
-  sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
-    sds_period_end_date <- received <- sds_option <- sending_location <-
-    period <- record_keydate1 <- record_keydate2 <- social_care_id <-
-    smrtype <- period_rank <- record_keydate1_rank <- record_keydate2_rank <-
-    distinct_episode <- episode_counter <- anon_chi <- gender <- dob <- postcode <-
-    recid <- person_id <- sc_send_lca <- NULL
+  sds_full_clean <- data.table::as.data.table(data)
+  rm(data)
 
   # Deal with SDS option 4
   # Convert option flags into logical T/F
@@ -182,7 +188,8 @@ process_sc_all_sds <- function(
 
   # Drop episode_counter and convert back to data.frame if needed
   final_data <- as.data.frame(final_data[, -"episode_counter"]) %>%
-    create_person_id()
+    create_person_id() %>%
+    select_linking_id()
   # final_data now holds the processed data in the format of a data.frame
 
   if (write_to_disk) {

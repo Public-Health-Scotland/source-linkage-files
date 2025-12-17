@@ -9,6 +9,8 @@
 process_tests_mental_health <- function(data, year) {
   old_data <- get_existing_data_for_tests(data)
 
+  data <- apply_cost_uplift(data)
+
   data <- rename_hscp(data)
 
   comparison <- produce_test_comparison(

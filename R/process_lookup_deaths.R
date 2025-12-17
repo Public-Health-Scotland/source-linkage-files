@@ -11,9 +11,10 @@
 #' @return a [tibble][tibble::tibble-package] add deceased flag to deaths
 #' @export
 process_slf_deaths_lookup <- function(
-    year,
-    refined_death = read_file(get_combined_slf_deaths_lookup_path()),
-    write_to_disk = TRUE) {
+  year,
+  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+  write_to_disk = TRUE
+) {
   # create slf deaths lookup
   slf_deaths_lookup <- refined_death %>%
     # Filter the chi death dates to the FY as the lookup is by FY

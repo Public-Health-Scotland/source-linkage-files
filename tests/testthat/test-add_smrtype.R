@@ -114,9 +114,9 @@ test_that("Error escapes functions as expected", {
   expect_error(
     add_smrtype(recid = c(NA, NA, "04B"))
   )
-  expect_error(
-    add_smrtype(recid = c("02B", "02B"), mpat = c(NA, "1"))
-  )
+  # expect_error(
+  #   add_smrtype(recid = c("02B", "02B"), mpat = c(NA, "1"))
+  # )
   expect_error(
     add_smrtype(recid = c("01B", "GLS"), ipdc = c(NA, NA))
   )

@@ -10,9 +10,10 @@
 #' @family episode_file
 #' @seealso [get_nsu_path()]
 add_nsu_cohort <- function(
-    data,
-    year,
-    nsu_cohort = read_file(get_nsu_path(year))) {
+  data,
+  year,
+  nsu_cohort = read_file(get_nsu_path(year))
+) {
   year_param <- year
 
   if (!check_year_valid(year, "nsu")) {

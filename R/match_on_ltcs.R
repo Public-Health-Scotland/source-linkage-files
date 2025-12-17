@@ -9,9 +9,10 @@
 #'
 #' @return data matched with long term conditions
 match_on_ltcs <- function(
-    data,
-    year,
-    ltc_data = read_file(get_ltcs_path(year))) {
+  data,
+  year,
+  ltc_data = read_file(get_ltcs_path(year))
+) {
   # Match on LTC lookup
   matched <- dplyr::left_join(
     data,

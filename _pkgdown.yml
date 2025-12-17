@@ -104,6 +104,7 @@ reference:
     - store_ep_file_vars
     - load_ep_file_vars
     - write_temp_data
+    - write_console_output
 
 
   - title: Initialisation
@@ -166,6 +167,8 @@ reference:
     - join_sc_client
     - match_on_ltcs
     - order_ep_cols
+    - apply_cost_uplift
+    - lookup_uplift
 
 
   - title: Individual file

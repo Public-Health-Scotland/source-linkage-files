@@ -170,6 +170,7 @@ list(
     # Function
     process_lookup_sc_demographics(
       sc_demog_data,
+      all_care_home_extract,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
@@ -884,7 +885,7 @@ list(
         data = sc_client_data,
         year = year,
         sc_demographics = sc_demog_lookup %>%
-          dplyr::select(c("sending_location", "social_care_id", "anon_chi", "latest_flag")),
+          dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
         write_to_disk = write_to_disk
       )
     ),

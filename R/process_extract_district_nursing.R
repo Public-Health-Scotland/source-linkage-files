@@ -14,10 +14,11 @@
 #' @export
 #' @family process extracts
 process_extract_district_nursing <- function(
-    data,
-    year,
-    costs = read_file(get_dn_costs_path()),
-    write_to_disk = TRUE) {
+  data,
+  year,
+  costs = read_file(get_dn_costs_path()),
+  write_to_disk = TRUE
+) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
