@@ -10,9 +10,10 @@
 #' @return data flagged if activity after death
 #' @family episode_file
 add_activity_after_death_flag <- function(
-    data,
-    year,
-    deaths_data = read_file(get_combined_slf_deaths_lookup_path())) {
+  data,
+  year,
+  deaths_data = read_file(get_combined_slf_deaths_lookup_path())
+) {
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL
 
