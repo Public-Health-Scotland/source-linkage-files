@@ -12,9 +12,10 @@
 #' @export
 #'
 process_sc_all_alarms_telecare <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  write_to_disk = TRUE
+) {
   # Data Cleaning-----------------------------------------------------
 
   # fix "no visible binding for global variable"
@@ -22,7 +23,8 @@ process_sc_all_alarms_telecare <- function(
     default <- sending_location <- social_care_id <- pkg_count <-
     record_keydate1 <- smrtype <- period <- record_keydate2 <- anon_chi <-
     gender <- dob <- postcode <- recid <- person_id <- sc_send_lca <-
-    period_start_date <- NULL
+    period_start_date <- financial_quarter <- financial_year <-
+    extract_date <- consistent_quality <- NULL
 
   # add per in social_care_id in Renfrewshire
   data <- data %>%
@@ -56,7 +58,6 @@ process_sc_all_alarms_telecare <- function(
     )
   ]
 
-
   # Rename columns
   data.table::setnames(
     data,
@@ -84,19 +85,23 @@ process_sc_all_alarms_telecare <- function(
     )
   ]
 
-  # FULL_JOIN with sc_demog_lookup
-  # full_join to include those patients in extracts but not in demog_lookup
-  # used to be right_join
-  data <- merge(
+  data <- data %>%
+    add_fy_qtr_from_period()
+  data[, financial_quarter := NULL]
+
+  data.table::setkey(sc_demog_lookup, sending_location, social_care_id, financial_year)
+  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  data <- sc_demog_lookup[
     data,
-    sc_demog_lookup,
-    by = c("sending_location", "social_care_id"),
-    all = TRUE
-  )
+    on = list(sending_location, social_care_id, financial_year),
+    roll = "nearest" # exact match on first 2 cols; nearest on financial_year
+  ]
+  # To do nearest join is because some sc episode happen in say 2018,
+  # but demographics data submitted in the following year, say 2019.
+
 
   # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
-  data <- replace_sc_id_with_latest(data)
-
+  data <- data.table::as.data.table(replace_sc_id_with_latest(data))
 
   # Deal with episodes that have a package across quarters
   data[, pkg_count := seq_len(.N), by = list(
@@ -108,18 +113,16 @@ process_sc_all_alarms_telecare <- function(
   )]
 
   # Order data before summarizing
-  data <- data %>%
-    dplyr::group_by(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$record_keydate1,
-      .data$smrtype,
-      .data$period
-    ) %>%
-    # Sort prior to merging
-    dplyr::arrange(.by_group = TRUE) %>%
-    dplyr::ungroup() %>%
-    data.table::as.data.table()
+  data.table::setorder(
+    data,
+    sending_location,
+    social_care_id,
+    record_keydate1,
+    smrtype,
+    period,
+    extract_date,
+    consistent_quality
+  )
 
   # Summarize to merge episodes
   qtr_merge <- data[, list(
@@ -141,7 +144,8 @@ process_sc_all_alarms_telecare <- function(
 
   # Convert back to data.frame if necessary
   qtr_merge <- as.data.frame(qtr_merge) %>%
-    create_person_id()
+    create_person_id() %>%
+    select_linking_id()
 
   if (write_to_disk) {
     write_file(

@@ -20,7 +20,6 @@ test_that("Can convert HSCP code to HSCP Name", {
 })
 
 
-
 test_that("Can convert Health Board code to HB Name", {
   hb <- c(
     "S08000015",

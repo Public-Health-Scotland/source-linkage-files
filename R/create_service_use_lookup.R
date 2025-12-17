@@ -7,10 +7,11 @@
 #'
 #' @family Demographic and Service Use Cohort functions
 create_service_use_cohorts <- function(
-    data,
-    year,
-    update = latest_update(),
-    write_to_disk = TRUE) {
+  data,
+  year,
+  update = latest_update(),
+  write_to_disk = TRUE
+) {
   check_variables_exist(data, variables = c(
     "anon_chi",
     "recid",

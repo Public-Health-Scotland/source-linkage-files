@@ -10,12 +10,13 @@
 #' @return a [tibble][tibble::tibble-package] of the SLF with improved
 #' Postcode and GP Practice details.
 fill_geographies <- function(
-    data,
-    slf_pc_lookup = read_file(get_slf_postcode_path()),
-    slf_gpprac_lookup = read_file(
-      get_slf_gpprac_path(),
-      col_select = c("gpprac", "cluster", "hbpraccode")
-    )) {
+  data,
+  slf_pc_lookup = read_file(get_slf_postcode_path()),
+  slf_gpprac_lookup = read_file(
+    get_slf_gpprac_path(),
+    col_select = c("gpprac", "cluster", "hbpraccode")
+  )
+) {
   check_variables_exist(data, c(
     "anon_chi",
     "postcode",
@@ -105,8 +106,9 @@ make_gpprac_lookup <- function(data) {
 }
 
 fill_postcode_geogs <- function(
-    data,
-    slf_pc_lookup) {
+  data,
+  slf_pc_lookup
+) {
   filled_postcodes <- dplyr::left_join(
     data,
     make_postcode_lookup(data),
@@ -151,8 +153,9 @@ fill_postcode_geogs <- function(
 }
 
 fill_gpprac_geographies <- function(
-    data,
-    slf_gpprac_lookup) {
+  data,
+  slf_gpprac_lookup
+) {
   filled_gpprac <- dplyr::left_join(
     data,
     make_gpprac_lookup(data),

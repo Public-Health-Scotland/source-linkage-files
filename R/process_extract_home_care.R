@@ -10,9 +10,10 @@
 #' @export
 #' @family process extracts
 process_extract_home_care <- function(
-    data,
-    year,
-    write_to_disk = TRUE) {
+  data,
+  year,
+  write_to_disk = TRUE
+) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -87,6 +88,7 @@ process_extract_home_care <- function(
       "anon_chi",
       "social_care_id",
       "person_id",
+      "linking_id",
       "dob",
       "gender",
       "postcode",

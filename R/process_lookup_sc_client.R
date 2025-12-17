@@ -17,10 +17,10 @@ process_lookup_sc_client <-
   function(data,
            year,
            sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
-             dplyr::select(c("sending_location", "social_care_id", "anon_chi", "latest_flag")),
+             dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
            write_to_disk = TRUE) {
-    # Specify years available for running
-    if (year < "1718") {
+    # Check if year is valid for sc_client
+    if (!check_year_valid(year, "client")) {
       return(NULL)
     }
 
@@ -38,8 +38,7 @@ process_lookup_sc_client <-
       replace_sc_id_with_latest() %>%
       # remove cases with no data in client
       dplyr::filter(!(is.na(.data$financial_year))) %>%
-      dplyr::select(-.data$latest_sc_id, -.data$latest_flag, -.data$period)
-
+      dplyr::select(-.data$latest_sc_id, -.data$period)
 
     client_clean <- sc_client_demographics %>%
       dplyr::group_by(.data$sending_location, .data$social_care_id, .data$anon_chi) %>%
@@ -167,7 +166,8 @@ process_lookup_sc_client <-
         "sc_autism",
         "sc_other_vulnerable_groups"
       ) %>%
-      create_person_id()
+      create_person_id() %>%
+      select_linking_id()
 
 
     sc_client_lookup <-
