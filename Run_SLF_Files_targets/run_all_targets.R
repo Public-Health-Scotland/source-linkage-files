@@ -46,15 +46,18 @@ write_console_output(
 
 # Run the targets pipeline "_Targets.R"
 #-------------------------------------------------------------------------------
+logger::log_info("Starting targets pipeline")
 
 # tar_make() will run the pipeline and use crew() for parallel processing.
 tar_make()
 
+logger::log_info("Targets pipeline complete")
+
 # Run combine_tests() for outputting the test workbooks.
+logger::log_info("Combining test results")
 createslf::combine_tests()
 
-#-------------------------------------------------------------------------------
+logger::log_info("All processing complete")
 
+#-------------------------------------------------------------------------------
 # END OF SCRIPT #
-
-#-------------------------------------------------------------------------------
