@@ -43,7 +43,11 @@ write_console_output(
 )
 
 #-------------------------------------------------------------------------------
+logger::log_info("Starting episode file creation for year {year}")
+
 ## Read processed data from sourcedev
+logger::log_debug("Reading processed data from source extracts")
+
 processed_data_list <- list(
   "ae" = read_file(get_source_extract_path(year, "ae")),
   "acute" = read_file(get_source_extract_path(year, "acute")),
@@ -62,13 +66,18 @@ processed_data_list <- list(
   "sds" = read_file(get_source_extract_path(year, "sds"))
 )
 
+logger::log_info("Data reading complete")
+
 # Run the episode file and tests
+logger::log_info("Creating episode file and running tests")
+
 create_episode_file(processed_data_list,
-  year = year,
-  write_temp_to_disk = write_temp_to_disk
+                    year = year,
+                    write_temp_to_disk = write_temp_to_disk
 ) %>%
   process_tests_episode_file(year = year)
 
-#-------------------------------------------------------------------------------
+logger::log_info("Episode file creation complete")
 
+#-------------------------------------------------------------------------------
 ## End of Script ##

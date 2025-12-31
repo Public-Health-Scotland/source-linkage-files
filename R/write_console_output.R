@@ -1,8 +1,8 @@
 #' Write Console Output to File
 #'
-#' @description Sets up sink to capture console output and messages to .txt file.
+#' @description Sets up logger to capture output and log messages to file.
 #'
-#' @param console_outputs If TRUE, capture console output and messages to .txt file.
+#' @param console_outputs If TRUE, capture console output and messages to file.
 #' @param file_type Type of file being processed: "episode", "individual", or "targets".
 #' @param year Financial year.
 write_console_output <- function(console_outputs = TRUE,
@@ -13,6 +13,22 @@ write_console_output <- function(console_outputs = TRUE,
   }
 
   file_type <- match.arg(file_type)
+
+  # Determine if this is a BYOC run or local run. Default to FALSE (local run)
+  is_byoc <- exists("BYOC_MODE") && isTRUE(BYOC_MODE)
+
+  # Configure logger based on environment
+  if (is_byoc) {
+    # BYOC run = INFO level
+    logger::log_threshold(logger::INFO)
+  } else {
+    # Local run = DEBUG level
+    logger::log_threshold(logger::DEBUG)
+  }
+
+  # Set logger format
+  logger::log_formatter(logger::formatter_glue_or_sprintf)
+  logger::log_layout(logger::layout_glue_colors)
 
   # update information
   update <- latest_update()
@@ -30,15 +46,17 @@ write_console_output <- function(console_outputs = TRUE,
   }
 
   base_filename <- switch(file_type,
-    "episode" = stringr::str_glue("ep_{year}_{update}_update"),
-    "individual" = stringr::str_glue("ind_{year}_{update}_update"),
-    "targets" = stringr::str_glue("targets_console_{update}_update")
+                          "episode" = stringr::str_glue("ep_{year}_{update}_update"),
+                          "individual" = stringr::str_glue("ind_{year}_{update}_update"),
+                          "targets" = stringr::str_glue("targets_console_{update}_update")
   )
+
   existing_files <- list.files(
     path = con_output_dir,
     pattern = stringr::str_glue("^{base_filename}_[0-9]+\\.txt$"),
     full.names = FALSE
   )
+
   if (length(existing_files) == 0) {
     increment <- 1
   } else {
@@ -50,19 +68,12 @@ write_console_output <- function(console_outputs = TRUE,
   file_name <- stringr::str_glue("{base_filename}_{increment}.txt")
   file_path <- file.path(con_output_dir, file_name)
 
-  # sink connection
-  con <- file(file_path, open = "wt")
+  # Add logger appender to write to file
+  logger::log_appender(logger::appender_tee(file_path), index = 2)
 
-  sink(con, type = "output", split = TRUE)
-  sink(con, type = "message", append = TRUE)
+  # Log the start
+  logger::log_info("Running in {ifelse(is_byoc, 'BYOC', 'LOCAL')} mode")
+  logger::log_info("Console output will be saved to: {file_path}")
 
-  on.exit(
-    {
-      sink(type = "message")
-      sink(type = "output")
-      close(con)
-      cat("\n Console output saved to:", file_path, "\n")
-    },
-    add = TRUE
-  )
+  invisible(file_path)
 }
