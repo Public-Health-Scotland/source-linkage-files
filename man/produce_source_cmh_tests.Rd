@@ -27,6 +27,8 @@ Other extract test functions:
 \code{\link{calculate_measures}()},
 \code{\link{produce_episode_file_ltc_tests}()},
 \code{\link{produce_episode_file_tests}()},
+\code{\link{produce_non_sc_episode_tests}()},
+\code{\link{produce_sc_episode_tests}()},
 \code{\link{produce_source_ch_tests}()},
 \code{\link{produce_source_dn_tests}()},
 \code{\link{produce_source_extract_tests}()},
