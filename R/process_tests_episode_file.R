@@ -120,7 +120,6 @@ produce_sc_episode_tests <- function(data,
                                        "cost_total_net",
                                        "yearstay"
                                      )) {
-
   if (nrow(data) == 0) {
     return(tibble::tibble())
   }
@@ -208,7 +207,6 @@ produce_non_sc_episode_tests <- function(data,
                                            "cost_total_net",
                                            "yearstay"
                                          )) {
-
   if (nrow(data) == 0) {
     return(tibble::tibble())
   }
