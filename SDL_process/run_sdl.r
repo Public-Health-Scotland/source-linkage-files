@@ -127,7 +127,7 @@ write.csv.gz(slipbd_result_df, output_filepath, na = "", row.names = FALSE)
 logger::log_info("Dummy acute data is saved.")
 
 # 01 check connection with Denodo ####
-denodo_connect <- suppressWarnings(
+denodo_connection <- suppressWarnings(
   dbConnect(
     odbc(),
     dsn = "DVPREPROD", # or DVPROD
@@ -141,3 +141,8 @@ query_result <- dbGetQuery(denodo_connection, test_query)
 
 logger::log_info("Print test query result:")
 print(query_result)
+
+
+# close connection
+logger::log_info("Closing Denodo connection")
+DBI::dbDisconnect(denodo_connection)
