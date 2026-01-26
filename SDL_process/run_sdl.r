@@ -142,7 +142,6 @@ query_result <- dbGetQuery(denodo_connection, test_query)
 logger::log_info("Print test query result:")
 print(query_result)
 
-
 # close connection
 logger::log_info("Closing Denodo connection")
 DBI::dbDisconnect(denodo_connection)
