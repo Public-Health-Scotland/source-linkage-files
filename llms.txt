@@ -1057,6 +1057,10 @@ Tests for the SLF Extracts
   : Source Extract Tests
 - [`produce_episode_file_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_episode_file_tests.md)
   : Source Extract Tests
+- [`produce_non_sc_episode_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_non_sc_episode_tests.md)
+  : Produce Non-Social Care Episode Tests
+- [`produce_sc_episode_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_episode_tests.md)
+  : Produce Social Care Episode Tests
 - [`produce_source_ch_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_ch_tests.md)
   : Source Care Home Tests
 - [`produce_source_cmh_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_cmh_tests.md)

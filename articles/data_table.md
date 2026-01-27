@@ -416,10 +416,9 @@ provides functions
 and
 [`pivot_wider()`](https://tidyr.tidyverse.org/reference/pivot_wider.html)
 in `dplyr`,
-[`melt()`](https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html)
-and
-[`dcast()`](https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html)
-in `data.table`) that streamline the conversion process, allowing for
+[`melt()`](https://rdrr.io/pkg/data.table/man/melt.data.table.html) and
+[`dcast()`](https://rdrr.io/pkg/data.table/man/dcast.data.table.html) in
+`data.table`) that streamline the conversion process, allowing for
 flexible and efficient manipulation of data structures.
 
 ##### Wide to long format
@@ -494,7 +493,7 @@ In these examples, the long-format data is converted into wide format
 using the
 [`pivot_wider()`](https://tidyr.tidyverse.org/reference/pivot_wider.html)
 function from `dplyr` and the
-[`dcast()`](https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html)
+[`dcast()`](https://rdrr.io/pkg/data.table/man/dcast.data.table.html)
 function from `data.table`. This reshaping operation allows for easier
 analysis and visualization of the data in a wider format.
 
@@ -539,7 +538,7 @@ values for those rows. Both approaches achieve the same result: updating
 exam scores for students who scored below 70. However, they differ in
 syntax and implementation, showcasing the flexibility of both `dplyr`
 and `data.table` for performing conditional updates. Similarly,
-[`data.table::fcase()`](https://rdatatable.gitlab.io/data.table/reference/fcase.html)
+[`data.table::fcase()`](https://rdrr.io/pkg/data.table/man/fcase.html)
 is the equivalent version to
 [`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case_when.html).
 

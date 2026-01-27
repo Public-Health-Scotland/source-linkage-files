@@ -379,7 +379,7 @@ gender. The <code>dplyr</code> style and the equivalent
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>max_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">height</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># first transform data to data.table class</span></span>
-<span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">height</span><span class="op">)</span></span>
+<span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">height</span><span class="op">)</span></span>
 <span><span class="va">max_height_dt</span> <span class="op">&lt;-</span> <span class="va">height</span><span class="op">[</span>,</span>
 <span>  <span class="fu">.</span><span class="op">(</span>max_height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">height</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  by <span class="op">=</span> <span class="va">gender</span></span>
@@ -444,8 +444,8 @@ using dplyr and its equivalent in <code>data.table</code>:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">customer_id</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Converting to data.table</span></span>
-<span><span class="va">dt1</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">df1</span><span class="op">)</span></span>
-<span><span class="va">dt2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">df2</span><span class="op">)</span></span>
+<span><span class="va">dt1</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">df1</span><span class="op">)</span></span>
+<span><span class="va">dt2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">df2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Joining with data.table</span></span>
 <span><span class="va">joined_dt</span> <span class="op">&lt;-</span> <span class="va">dt2</span><span class="op">[</span><span class="va">dt1</span>, on <span class="op">=</span> <span class="st">"customer_id"</span><span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -541,7 +541,7 @@ programmatically.</p>
 long-format representations using both <code>dplyr</code> and
 <code>data.table</code>. Each package provides functions
 (<code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer()</a></code> and <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider()</a></code> in
-<code>dplyr</code>, <code><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt()</a></code> and <code><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code> in
+<code>dplyr</code>, <code><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt()</a></code> and <code><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast()</a></code> in
 <code>data.table</code>) that streamline the conversion process,
 allowing for flexible and efficient manipulation of data structures.</p>
 <div class="section level5">
@@ -570,8 +570,8 @@ of <code>dplyr</code> and <code>data.table</code> are
 <span>    values_from <span class="op">=</span> <span class="va">value</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">long_dt</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">long_df</span><span class="op">)</span></span>
-<span><span class="va">wide_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">long_dt</span>,</span>
+<span><span class="va">long_dt</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">long_df</span><span class="op">)</span></span>
+<span><span class="va">wide_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast</a></span><span class="op">(</span><span class="va">long_dt</span>,</span>
 <span>  <span class="va">ID</span> <span class="op">+</span> <span class="va">key1</span> <span class="op">+</span> <span class="va">key2</span> <span class="op">~</span> <span class="va">variable</span>,</span>
 <span>  value.var <span class="op">=</span> <span class="st">"value"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -603,17 +603,17 @@ of <code>dplyr</code> and <code>data.table</code> are
 <span>    values_to <span class="op">=</span> <span class="st">"value"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">wide_dt</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">wide_df</span><span class="op">)</span></span>
-<span><span class="va">long_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span></span>
+<span><span class="va">wide_dt</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">wide_df</span><span class="op">)</span></span>
+<span><span class="va">long_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html" class="external-link">melt</a></span><span class="op">(</span></span>
 <span>  <span class="va">wide_dt</span>,</span>
 <span>  id.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ID"</span>, <span class="st">"key1"</span>, <span class="st">"key2"</span><span class="op">)</span>,</span>
-<span>  measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/patterns.html" class="external-link">patterns</a></span><span class="op">(</span><span class="st">"^value"</span><span class="op">)</span>,</span>
+<span>  measure.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/patterns.html" class="external-link">patterns</a></span><span class="op">(</span><span class="st">"^value"</span><span class="op">)</span>,</span>
 <span>  variable.name <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>  value.name <span class="op">=</span> <span class="st">"value"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>In these examples, the long-format data is converted into wide format
 using the <code><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider()</a></code> function from <code>dplyr</code>
-and the <code><a href="https://rdatatable.gitlab.io/data.table/reference/dcast.data.table.html" class="external-link">dcast()</a></code> function from <code>data.table</code>. This
+and the <code><a href="https://rdrr.io/pkg/data.table/man/dcast.data.table.html" class="external-link">dcast()</a></code> function from <code>data.table</code>. This
 reshaping operation allows for easier analysis and visualization of the
 data in a wider format.</p>
 </div>
@@ -659,7 +659,7 @@ rows. Both approaches achieve the same result: updating exam scores for
 students who scored below 70. However, they differ in syntax and
 implementation, showcasing the flexibility of both <code>dplyr</code>
 and <code>data.table</code> for performing conditional updates.
-Similarly, <code><a href="https://rdatatable.gitlab.io/data.table/reference/fcase.html" class="external-link">data.table::fcase()</a></code> is the equivalent version to
+Similarly, <code><a href="https://rdrr.io/pkg/data.table/man/fcase.html" class="external-link">data.table::fcase()</a></code> is the equivalent version to
 <code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -674,11 +674,11 @@ Similarly, <code><a href="https://rdatatable.gitlab.io/data.table/reference/fcas
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>exam_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">exam_score</span> <span class="op">&lt;</span> <span class="fl">70</span>, <span class="va">exam_score</span> <span class="op">+</span> <span class="fl">5</span>, <span class="va">exam_score</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert to data.table</span></span>
-<span><span class="va">scores_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">scores_df</span><span class="op">)</span></span>
+<span><span class="va">scores_dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">scores_df</span><span class="op">)</span></span>
 <span><span class="co"># Increase scores for students with scores below 70</span></span>
 <span><span class="va">scores_dt</span><span class="op">[</span><span class="va">exam_score</span> <span class="op">&lt;</span> <span class="fl">70</span>, <span class="va">exam_score</span> <span class="op">:=</span> <span class="va">exam_score</span> <span class="op">+</span> <span class="fl">5</span><span class="op">]</span></span>
-<span><span class="va">scores_dt</span><span class="op">[</span>, <span class="va">exam_score</span> <span class="op">:=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fifelse.html" class="external-link">fifelse</a></span><span class="op">(</span><span class="va">exam_score</span> <span class="op">&lt;</span> <span class="fl">70</span>, <span class="va">exam_score</span> <span class="op">+</span> <span class="fl">5</span>, <span class="va">exam_score</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">scores_dt</span><span class="op">[</span>, <span class="va">exam_score</span> <span class="op">:=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/fcase.html" class="external-link">fcase</a></span><span class="op">(</span><span class="va">exam_score</span> <span class="op">&lt;</span> <span class="fl">70</span>, <span class="va">exam_score</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<span><span class="va">scores_dt</span><span class="op">[</span>, <span class="va">exam_score</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/fifelse.html" class="external-link">fifelse</a></span><span class="op">(</span><span class="va">exam_score</span> <span class="op">&lt;</span> <span class="fl">70</span>, <span class="va">exam_score</span> <span class="op">+</span> <span class="fl">5</span>, <span class="va">exam_score</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">scores_dt</span><span class="op">[</span>, <span class="va">exam_score</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/fcase.html" class="external-link">fcase</a></span><span class="op">(</span><span class="va">exam_score</span> <span class="op">&lt;</span> <span class="fl">70</span>, <span class="va">exam_score</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 </div>
 </div>
 </div>

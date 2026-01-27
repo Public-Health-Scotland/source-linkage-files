@@ -30,7 +30,7 @@ read_file(path, col_select = NULL, as_data_frame = TRUE, ...)
 
   A character vector of column names to keep, as in the "select"
   argument to
-  [`data.table::fread()`](https://rdatatable.gitlab.io/data.table/reference/fread.html),
+  [`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html),
   or a [tidy selection
   specification](https://tidyselect.r-lib.org/reference/eval_select.html)
   of columns, as used in

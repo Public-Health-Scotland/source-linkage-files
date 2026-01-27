@@ -37,6 +37,8 @@ a dataframe with a count of total numbers of LTCs flag.
 Other extract test functions:
 [`calculate_measures()`](https://public-health-scotland.github.io/source-linkage-files/reference/calculate_measures.md),
 [`produce_episode_file_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_episode_file_tests.md),
+[`produce_non_sc_episode_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_non_sc_episode_tests.md),
+[`produce_sc_episode_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_sc_episode_tests.md),
 [`produce_source_ch_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_ch_tests.md),
 [`produce_source_cmh_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_cmh_tests.md),
 [`produce_source_dn_tests()`](https://public-health-scotland.github.io/source-linkage-files/reference/produce_source_dn_tests.md),
