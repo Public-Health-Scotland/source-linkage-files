@@ -11,12 +11,12 @@ write_console_output(
 )
 }
 \arguments{
-\item{console_outputs}{If TRUE, capture console output and messages to .txt file.}
+\item{console_outputs}{If TRUE, capture console output and messages to file.}
 
 \item{file_type}{Type of file being processed: "episode", "individual", or "targets".}
 
 \item{year}{Financial year.}
 }
 \description{
-Sets up sink to capture console output and messages to .txt file.
+Sets up logger to capture output and log messages to file.
 }
