@@ -183,5 +183,5 @@ hl1 = read_extract_homelessness(
 ## disconnect from denodo if run locally ----
 if (!BYOC_MODE) {
   logger::log_info("Disconnect from Denodo")
-  odbc::dbDisconnect(denodo_connect)
+  DBI::dbDisconnect(denodo_connect)
 }
