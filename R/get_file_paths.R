@@ -142,8 +142,12 @@ get_slf_dir <- function() {
 #' @export
 #'
 #' @family directories
-get_dev_dir <- function() {
-  fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates")
+get_dev_dir <- function(BOYC_MODE) {
+  if (!BOYC_MODE) {
+    fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates")
+  } else{
+    denodo_output_path()
+  }
 }
 
 #' Year Directory
@@ -160,8 +164,8 @@ get_dev_dir <- function() {
 #' @export
 #'
 #' @family directories
-get_year_dir <- function(year, extracts_dir = FALSE) {
-  year_dir <- fs::path(get_dev_dir(), year)
+get_year_dir <- function(year, extracts_dir = FALSE, BYOC_MODE) {
+  year_dir <- fs::path(get_dev_dir(BYOC_MODE), year)
 
   if (!fs::dir_exists(year_dir)) {
     fs::dir_create(year_dir, mode = "u=rwx,go=rwx")
