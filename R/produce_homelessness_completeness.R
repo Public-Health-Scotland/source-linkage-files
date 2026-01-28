@@ -9,7 +9,8 @@
 produce_homelessness_completeness <- function(
   homelessness_data,
   update,
-  sg_pub_path
+  sg_pub_data,
+  BYOC_MODE
 ) {
   year <- unique(homelessness_data[["year"]])
 
@@ -38,41 +39,34 @@ produce_homelessness_completeness <- function(
       .groups = "drop"
     )
 
-  sg_all_assessments_annual <-
-    openxlsx::read.xlsx(
-      sg_pub_path,
-      sheet = "Table 1", # Manual change - check sheet name
-      rows = 8L:39L,
-      cols = 1L:37L, # Manual change - check workbook for col number for latest year
-      colNames = FALSE
-    ) %>%
-    dplyr::rename_with(~ c(
-      "CAName",
-      paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L)),
-      paste0(paste0("q", 1L:4L), "_", rep(2024L, 4L))
-      ## Manual change - Add new row here when new year is available in publication
-    )) %>%
-    tidyr::pivot_longer(
-      !"CAName",
-      names_to = c("fin_quarter", "fin_year"),
-      names_pattern = "q(\\d)_(\\d{4})",
-      names_transform = list(
-        fin_year = as.integer,
-        fin_quarter = as.integer
-      ),
-      values_to = "sg_all_assessments",
-      values_ptypes = list(sg_all_assessments = integer())
-    ) %>%
-    dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
-    dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
-    dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
+  sg_all_assessments_annual <- sg_pub_data #%>%
+    # dplyr::rename_with(~ c(
+    #   "CAName",
+    #   paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L)),
+    #   paste0(paste0("q", 1L:4L), "_", rep(2024L, 4L))
+    #   ## Manual change - Add new row here when new year is available in publication
+    # )) %>%
+    # tidyr::pivot_longer(
+    #   !"CAName",
+    #   names_to = c("fin_quarter", "fin_year"),
+    #   names_pattern = "q(\\d)_(\\d{4})",
+    #   names_transform = list(
+    #     fin_year = as.integer,
+    #     fin_quarter = as.integer
+    #   ),
+    #   values_to = "sg_all_assessments",
+    #   values_ptypes = list(sg_all_assessments = integer())
+    # ) %>%
+    # dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
+    # dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
+    # dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
 
 
   annual_comparison <- dplyr::left_join(
@@ -104,9 +98,10 @@ produce_homelessness_completeness <- function(
     get_homelessness_completeness_path(
       year = year,
       update = update,
-      check_mode = "write"
+      check_mode = "write",
+      BYOC_MODE = BYOC_MODE
     ),
-    group_id = 3206 # hscdiip owner
+    BYOC_MODE = BYOC_MODE
   )
 
   return(annual_comparison)
@@ -163,6 +158,7 @@ get_sg_homelessness_pub_path <- function(...) {
 #' @param year the financial year of the update.
 #' @param update the update month (defaults to use [latest_update()]).
 #' @param ... additional arguments passed to [get_file_path()].
+#' @param BYOC_MODE check BYOC mode.
 #'
 #' @return The path to the Homelessness Completeness lookup as an [fs::path()].
 #' @export
@@ -171,15 +167,25 @@ get_sg_homelessness_pub_path <- function(...) {
 get_homelessness_completeness_path <- function(
   year,
   update = latest_update(),
+  BYOC_MODE,
   ...
 ) {
-  completeness_file_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Homelessness"),
-    file_name = stringr::str_glue(
-      "homelessness_completeness_{year}_{update}.parquet"
-    ),
-    ...
-  )
+  if(BYOC_MODE){
+    completeness_file_path <- fs::path(
+      directory = denodo_output_path(), # todo: waiting to be finalised
+      file_name = stringr::str_glue(
+        "homelessness_completeness_{year}_{update}.parquet"
+      )
+    )
+  }else{
+    completeness_file_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Homelessness"),
+      file_name = stringr::str_glue(
+        "homelessness_completeness_{year}_{update}.parquet"
+      ),
+      ...
+    )
+  }
 
   return(completeness_file_path)
 }
