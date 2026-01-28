@@ -10,7 +10,8 @@ process_extract_homelessness(
   write_to_disk = TRUE,
   update = latest_update(),
   la_code_lookup = get_la_code_opendata_lookup(),
-  sg_pub_path = get_sg_homelessness_pub_path()
+  sg_pub_data,
+  BYOC_MODE
 )
 }
 \arguments{
@@ -25,8 +26,7 @@ process_extract_homelessness(
 
 \item{la_code_lookup}{get local authority using opendata.}
 
-\item{sg_pub_path}{The path to the SG pub figures (default is
-\code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}).}
+\item{sg_pub_data}{The path to the SG pub figures.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

@@ -1,6 +1,4 @@
 # run_sdl.R for testing
-rm(list = ls())
-gc()
 
 # First step rename current dataset so it is not overwritten.####
 # will need to change/remove renaming step once switched to seer
@@ -8,140 +6,181 @@ gc()
 # 00 setup logger ----
 logger::log_info("Run SDL starts.")
 
-## create dummy acute data ----
-logger::log_info("Create dummy acute data now.")
-set.seed(123)
-n <- 100
-slipbd_result_df <- data.frame(
-  year = rep("2425", n),
-  recid = "01B",
-  record_keydate1 = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  record_keydate2 = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  smrtype = sample(c("SMR01", "SMR00"), n, TRUE),
-  anon_chi = sprintf(
-    "%010s",
-    paste0(
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE),
-      sample(0:9, n, replace = TRUE)
-    )
-  ),
-  gender = sample(c("M", "F", "U"), n, TRUE),
-  dob = as.Date("1930-01-01") + sample(0:30000, n, TRUE),
-  gpprac = sample(sprintf("G%04d", 1:9999), n, TRUE),
-  hbpraccode = sample(sprintf("HB%02d", 1:20), n, TRUE),
-  postcode = sample(c("EH1 1AA", "G1 2FF", "AB10 1AB", "DD1 4HN", "FK8 2ET"), n, TRUE),
-  hbrescode = sample(sprintf("HB%02d", 1:20), n, TRUE),
-  lca = sample(sprintf("LCA%02d", 1:32), n, TRUE),
-  hscp = sample(sprintf("HSCP%02d", 1:31), n, TRUE),
-  location = sample(c("HOME", "HOSP", "CAREHOME"), n, TRUE),
-  hbtreatcode = sample(sprintf("HB%02d", 1:20), n, TRUE),
-  yearstay = sample(2015:2025, n, TRUE),
-  stay = sample(1:10, n, TRUE),
-  ipdc = sample(c("I", "D", "C"), n, TRUE),
-  spec = sample(100:999, n, TRUE),
-  sigfac = sample(0:1, n, TRUE),
-  conc = sample(0:1, n, TRUE),
-  mpat = sample(c("NHS", "Private"), n, TRUE),
-  cat = rep(NA, n),
-  tadm = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  adtf = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  admloc = sample(c("A&E", "GP", "Clinic", "Transfer"), n, TRUE),
-  oldtadm = as.Date("2010-01-01") + sample(0:5500, n, TRUE),
-  disch = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  dischto = sample(c("Home", "Care home", "Other hospital", "Died"), n, TRUE),
-  dischloc = sample(c("Ward", "ICU", "Community"), n, TRUE),
-  diag1 = sample(sprintf("I%02d", 1:99), n, TRUE),
-  diag2 = sample(c(sprintf("J%02d", 1:99), NA), n, TRUE),
-  diag3 = sample(c(sprintf("E%02d", 1:99), NA), n, TRUE),
-  diag4 = sample(c(sprintf("K%02d", 1:99), NA), n, TRUE),
-  diag5 = sample(c(sprintf("C%02d", 1:99), NA), n, TRUE),
-  diag6 = sample(c(sprintf("F%02d", 1:99), NA), n, TRUE),
-  op1a = sample(c(sprintf("A%03d", 1:999), NA), n, TRUE),
-  op1b = sample(c(sprintf("B%03d", 1:999), NA), n, TRUE),
-  dateop1 = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  op2a = sample(c(sprintf("A%03d", 1:999), NA), n, TRUE),
-  op2b = sample(c(sprintf("B%03d", 1:999), NA), n, TRUE),
-  dateop2 = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  op3a = sample(c(sprintf("A%03d", 1:999), NA), n, TRUE),
-  op3b = sample(c(sprintf("B%03d", 1:999), NA), n, TRUE),
-  dateop3 = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  op4a = sample(c(sprintf("A%03d", 1:999), NA), n, TRUE),
-  op4b = sample(c(sprintf("B%03d", 1:999), NA), n, TRUE),
-  dateop4 = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  smr01_cis_marker = sample(0:1, n, TRUE),
-  age = sample(0:100, n, TRUE),
-  cij_marker = sample(0:1, n, TRUE),
-  cij_pattype_code = sample(1:5, n, TRUE),
-  cij_ipdc = sample(c("I", "D", "C"), n, TRUE),
-  cij_admtype = sample(c("Elective", "Emergency"), n, TRUE),
-  cij_adm_spec = sample(100:999, n, TRUE),
-  cij_dis_spec = sample(100:999, n, TRUE),
-  cij_start_date = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  cij_end_date = as.Date("2015-01-01") + sample(0:4000, n, TRUE),
-  alcohol_adm = sample(0:1, n, TRUE),
-  submis_adm = sample(0:1, n, TRUE),
-  falls_adm = sample(0:1, n, TRUE),
-  selfharm_adm = sample(0:1, n, TRUE),
-  commhosp = sample(0:1, n, TRUE),
-  cost_total_net = round(runif(n, 500, 25000), 2),
-  apr_beddays = sample(0:30, n, TRUE),
-  may_beddays = sample(0:31, n, TRUE),
-  jun_beddays = sample(0:30, n, TRUE),
-  jul_beddays = sample(0:31, n, TRUE),
-  aug_beddays = sample(0:31, n, TRUE),
-  sep_beddays = sample(0:30, n, TRUE),
-  oct_beddays = sample(0:31, n, TRUE),
-  nov_beddays = sample(0:30, n, TRUE),
-  dec_beddays = sample(0:31, n, TRUE),
-  jan_beddays = sample(0:31, n, TRUE),
-  feb_beddays = sample(0:29, n, TRUE),
-  mar_beddays = sample(0:31, n, TRUE),
-  apr_cost = round(runif(n, 0, 5000), 2),
-  may_cost = round(runif(n, 0, 5000), 2),
-  jun_cost = round(runif(n, 0, 5000), 2),
-  jul_cost = round(runif(n, 0, 5000), 2),
-  aug_cost = round(runif(n, 0, 5000), 2),
-  sep_cost = round(runif(n, 0, 5000), 2),
-  oct_cost = round(runif(n, 0, 5000), 2),
-  nov_cost = round(runif(n, 0, 5000), 2),
-  dec_cost = round(runif(n, 0, 5000), 2),
-  jan_cost = round(runif(n, 0, 5000), 2),
-  feb_cost = round(runif(n, 0, 5000), 2),
-  mar_cost = round(runif(n, 0, 5000), 2),
-  uri = paste0("urn:uuid:", replicate(n, paste(sample(c(0:9, letters), 32, TRUE), collapse = ""))),
-  cup_marker = sample(0:1, n, TRUE),
-  cup_pathway = sample(c("Elective", "Emergency", "Day case", "Outpatient"), n, TRUE)
-)
+# library(createslf)
+devtools::load_all()
 
-# save dummy acute data
-output_filepath <- "sdl_byoc/byoc/output/sdl_acute.csv.gz"
-write.csv.gz(slipbd_result_df, output_filepath, na = "", row.names = FALSE)
-logger::log_info("Dummy acute data is saved.")
+library(DBI)
+library(arrow)
+library(data.table)
+library(dbplyr)
+library(dplyr)
+library(fs)
+library(hms)
+library(janitor)
+library(keyring)
+library(lubridate)
+library(magrittr)
+library(odbc)
+library(openxlsx)
+library(phsmethods)
+library(phsopendata)
+library(purrr)
+library(readr)
+library(rlang)
+library(rmarkdown)
+library(readxl)
+library(rstudioapi)
+library(slfhelper)
+library(stringdist)
+library(stringr)
+library(tibble)
+library(tidyr)
+library(tidyselect)
+library(zoo)
+library(knitr)
+library(roxygen2)
+library(scales)
+library(spelling)
+library(tarchetypes)
+library(targets)
+library(testthat)
+library(crew)
 
-# 01 check connection with Denodo ####
-denodo_connection <- suppressWarnings(
-  dbConnect(
+# prepare necessary data
+# notes fy format
+year <- "2017"
+
+# set up logger and system environment variable BYOC_MODE
+if (exists("BYOC_MODE") && isTRUE(BYOC_MODE)) {
+  logger::log_info("Detect run_sdl.r run on Denodo")
+  Sys.setenv(BYOC_MODE = "TRUE")
+} else {
+  logger::log_info("Detect run_sdl.r run locally")
+  BYOC_MODE <- FALSE
+  Sys.setenv(BYOC_MODE = "FALSE")
+}
+
+
+# setup connection to Denodo if run locally
+if (!BYOC_MODE) {
+  # Open a connection to DVPREPROD (test environment) or DVPROD (production environment)
+  denodo_connect <- suppressWarnings(dbConnect(
     odbc(),
-    dsn = "DVPREPROD", # or DVPROD
-    uid = "tudv_sdluat_02",
+    dsn = "DVPREPROD",
+    # or DVPROD
+    uid = .rs.askForPassword("Enter your username"),
     pwd = .rs.askForPassword("Enter your LDAP password")
-  )
+  ))
+}
+
+
+write_to_disk <- TRUE
+
+## create dummy data for testing -----
+# hard coded dummy data
+# TODO: remove this
+la_code_lookup <- data.frame(
+  CA = c(
+    "S12000005", "S12000006", "S12000008", "S12000010", "S12000011",
+    "S12000013", "S12000014", "S12000015", "S12000017", "S12000018",
+    "S12000019", "S12000020", "S12000021", "S12000023", "S12000024",
+    "S12000026", "S12000027", "S12000028", "S12000029", "S12000030",
+    "S12000033", "S12000034", "S12000035", "S12000036", "S12000038",
+    "S12000039", "S12000040", "S12000041", "S12000042", "S12000044",
+    "S12000045", "S12000046", "S12000047", "S12000048", "S12000049",
+    "S12000050"
+  ),
+  CAName = c(
+    "Clackmannanshire", "Dumfries and Galloway", "East Ayrshire",
+    "East Lothian", "East Renfrewshire", "Na h-Eileanan Siar",
+    "Falkirk", "Fife", "Highland", "Inverclyde", "Midlothian", "Moray",
+    "North Ayrshire", "Orkney Islands", "Perth and Kinross",
+    "Scottish Borders", "Shetland Islands", "South Ayrshire",
+    "South Lanarkshire", "Stirling", "Aberdeen City", "Aberdeenshire",
+    "Argyll and Bute", "City of Edinburgh", "Renfrewshire",
+    "West Dunbartonshire", "West Lothian", "Angus", "Dundee City",
+    "North Lanarkshire", "East Dunbartonshire", "Glasgow City",
+    "Fife", "Perth and Kinross", "Glasgow City", "North Lanarkshire"
+  ),
+  sending_local_authority_name = c(
+    "Clackmannanshire", "Dumfries & Galloway", "East Ayrshire",
+    "East Lothian", "East Renfrewshire", "Eilean Siar", "Falkirk",
+    "Fife", "Highland", "Inverclyde", "Midlothian", "Moray",
+    "North Ayrshire", "Orkney Islands", "Perth & Kinross",
+    "Scottish Borders", "Shetland Islands", "South Ayrshire",
+    "South Lanarkshire", "Stirling", "Aberdeen City", "Aberdeenshire",
+    "Argyll & Bute", "Edinburgh", "Renfrewshire", "West Dunbartonshire",
+    "West Lothian", "Angus", "Dundee City", "North Lanarkshire",
+    "East Dunbartonshire", "Glasgow City", "Fife", "Perth & Kinross",
+    "Glasgow City", "North Lanarkshire"
+  ),
+  stringsAsFactors = FALSE
 )
 
-test_query <- "SELECT COUNT(*) FROM sdl.sdl_byoc_data_year_matrix"
-query_result <- dbGetQuery(denodo_connection, test_query)
+set.seed(1)
+sg_pub_data <- data.frame(
+  CAName = c(
+    "Aberdeen City", "Aberdeen City", "Aberdeen City", "Aberdeen City", "Aberdeen City", "Aberdeen City", "Aberdeen City", "Aberdeen City", "Aberdeen City",
+    "Aberdeenshire", "Aberdeenshire", "Aberdeenshire", "Aberdeenshire", "Aberdeenshire", "Aberdeenshire", "Aberdeenshire", "Aberdeenshire", "Aberdeenshire",
+    "Angus", "Angus", "Angus", "Angus", "Angus", "Angus", "Angus", "Angus", "Angus",
+    "Argyll & Bute", "Argyll & Bute", "Argyll & Bute", "Argyll & Bute", "Argyll & Bute", "Argyll & Bute", "Argyll & Bute", "Argyll & Bute", "Argyll & Bute",
+    "Clackmannanshire", "Clackmannanshire", "Clackmannanshire", "Clackmannanshire", "Clackmannanshire", "Clackmannanshire", "Clackmannanshire", "Clackmannanshire", "Clackmannanshire",
+    "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway", "Dumfries & Galloway",
+    "Dundee City", "Dundee City", "Dundee City", "Dundee City", "Dundee City", "Dundee City", "Dundee City", "Dundee City", "Dundee City",
+    "East Ayrshire", "East Ayrshire", "East Ayrshire", "East Ayrshire", "East Ayrshire", "East Ayrshire", "East Ayrshire", "East Ayrshire", "East Ayrshire",
+    "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire", "East Dunbartonshire",
+    "East Lothian", "East Lothian", "East Lothian", "East Lothian", "East Lothian", "East Lothian", "East Lothian", "East Lothian", "East Lothian",
+    "East Renfrewshire", "East Renfrewshire", "East Renfrewshire", "East Renfrewshire", "East Renfrewshire", "East Renfrewshire", "East Renfrewshire", "East Renfrewshire", "East Renfrewshire",
+    "Edinburgh", "Edinburgh", "Edinburgh", "Edinburgh", "Edinburgh", "Edinburgh", "Edinburgh", "Edinburgh", "Edinburgh",
+    "Eilean Siar", "Eilean Siar", "Eilean Siar", "Eilean Siar", "Eilean Siar", "Eilean Siar", "Eilean Siar", "Eilean Siar", "Eilean Siar",
+    "Falkirk", "Falkirk", "Falkirk", "Falkirk", "Falkirk", "Falkirk", "Falkirk", "Falkirk", "Falkirk",
+    "Fife", "Fife", "Fife", "Fife", "Fife", "Fife", "Fife", "Fife", "Fife",
+    "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow City", "Glasgow City",
+    "Highland", "Highland", "Highland", "Highland", "Highland", "Highland", "Highland", "Highland", "Highland",
+    "Inverclyde", "Inverclyde", "Inverclyde", "Inverclyde", "Inverclyde", "Inverclyde", "Inverclyde", "Inverclyde", "Inverclyde",
+    "Midlothian", "Midlothian", "Midlothian", "Midlothian", "Midlothian", "Midlothian", "Midlothian", "Midlothian", "Midlothian",
+    "Moray", "Moray", "Moray", "Moray", "Moray", "Moray", "Moray", "Moray", "Moray",
+    "North Ayrshire", "North Ayrshire", "North Ayrshire", "North Ayrshire", "North Ayrshire", "North Ayrshire", "North Ayrshire", "North Ayrshire", "North Ayrshire",
+    "North Lanarkshire", "North Lanarkshire", "North Lanarkshire", "North Lanarkshire", "North Lanarkshire", "North Lanarkshire", "North Lanarkshire", "North Lanarkshire", "North Lanarkshire",
+    "Orkney", "Orkney", "Orkney", "Orkney", "Orkney", "Orkney", "Orkney", "Orkney", "Orkney",
+    "Perth & Kinross", "Perth & Kinross", "Perth & Kinross", "Perth & Kinross", "Perth & Kinross", "Perth & Kinross", "Perth & Kinross", "Perth & Kinross", "Perth & Kinross",
+    "Renfrewshire", "Renfrewshire", "Renfrewshire", "Renfrewshire", "Renfrewshire", "Renfrewshire", "Renfrewshire", "Renfrewshire", "Renfrewshire",
+    "Scottish Borders", "Scottish Borders", "Scottish Borders", "Scottish Borders", "Scottish Borders", "Scottish Borders", "Scottish Borders", "Scottish Borders", "Scottish Borders",
+    "Shetland", "Shetland", "Shetland", "Shetland", "Shetland", "Shetland", "Shetland", "Shetland", "Shetland",
+    "South Ayrshire", "South Ayrshire", "South Ayrshire", "South Ayrshire", "South Ayrshire", "South Ayrshire", "South Ayrshire", "South Ayrshire", "South Ayrshire",
+    "South Lanarkshire", "South Lanarkshire", "South Lanarkshire", "South Lanarkshire", "South Lanarkshire", "South Lanarkshire", "South Lanarkshire", "South Lanarkshire", "South Lanarkshire",
+    "Stirling", "Stirling", "Stirling", "Stirling", "Stirling", "Stirling", "Stirling", "Stirling", "Stirling",
+    "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire", "West Dunbartonshire",
+    "West Lothian", "West Lothian", "West Lothian", "West Lothian", "West Lothian", "West Lothian", "West Lothian", "West Lothian", "West Lothian"
+  ),
+  sg_year = rep(c("1617", "1718", "1819", "1920", "2021", "2122", "2223", "2324", "2425"), times = 32),
+  sg_all_assessments = sample(120:9000, size = 32 * 9, replace = TRUE),
+  stringsAsFactors = FALSE
+)
 
-logger::log_info("Print test query result:")
-print(query_result)
 
-# close connection
-logger::log_info("Closing Denodo connection")
-DBI::dbDisconnect(denodo_connection)
+# just test one year
+year <- "2019"
+
+# targets::tar_make()
+
+# test homelessness data only
+## create homelessness data ----
+logger::log_info("Read and process homelessness data")
+hl1 <- read_extract_homelessness(
+  year,
+  file_path = get_boxi_extract_path(year = convert_year_to_fyyear(year), type = "homelessness"),
+  BYOC_MODE = BYOC_MODE
+) %>% process_extract_homelessness(
+  year = year,
+  write_to_disk = write_to_disk,
+  la_code_lookup = la_code_lookup,
+  sg_pub_data = sg_pub_data,
+  BYOC_MODE = BYOC_MODE
+)
+
+## disconnect from denodo if run locally ----
+if (!BYOC_MODE) {
+  logger::log_info("Disconnect from Denodo")
+  DBI::dbDisconnect(denodo_connect)
+}

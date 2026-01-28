@@ -8,6 +8,7 @@ get_source_extract_path(
   year,
   type = c("acute", "ae", "at", "ch", "client", "cmh", "dd", "deaths", "dn", "gp_ooh",
     "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds"),
+  BYOC_MODE,
   ...
 )
 }

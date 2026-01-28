@@ -4,7 +4,7 @@
 \alias{get_dev_dir}
 \title{SLF directory - sourcedev / Source_Linkage_File_Updates}
 \usage{
-get_dev_dir()
+get_dev_dir(BOYC_MODE)
 }
 \value{
 The path to the main SLF dev folder

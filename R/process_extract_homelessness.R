@@ -10,8 +10,7 @@
 #' `TRUE` i.e. write the data to disk.
 #' @param update The update to use (default is [latest_update()]).
 #' @param la_code_lookup get local authority using opendata.
-#' @param sg_pub_path The path to the SG pub figures (default is
-#' [get_sg_homelessness_pub_path()]).
+#' @param sg_pub_data The path to the SG pub figures.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -22,13 +21,15 @@ process_extract_homelessness <- function(
   write_to_disk = TRUE,
   update = latest_update(),
   la_code_lookup = get_la_code_opendata_lookup(),
-  sg_pub_path = get_sg_homelessness_pub_path()
+  sg_pub_data,
+  BYOC_MODE
 ) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- convert_year_to_fyyear(year) %>%
+    check_year_format()
 
   # If data is available in the FY then run processing.
   if (identical(data, tibble::tibble())) {
@@ -143,7 +144,8 @@ process_extract_homelessness <- function(
   completeness_data <- produce_homelessness_completeness(
     homelessness_data = data,
     update = update,
-    sg_pub_path = sg_pub_path
+    sg_pub_data = sg_pub_data,
+    BYOC_MODE = BYOC_MODE
   )
 
   hl1_data <- data %>%
@@ -180,9 +182,10 @@ process_extract_homelessness <- function(
       get_source_extract_path(
         year = year,
         type = "homelessness",
+        BYOC_MODE,
         check_mode = "write"
       ),
-      group_id = 3356 # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

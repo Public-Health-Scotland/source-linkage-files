@@ -28,14 +28,17 @@ get_boxi_extract_path <- function(
     "maternity",
     "mh",
     "outpatients"
-  )
+  ),
+  BYOC_MODE
 ) {
   type <- match.arg(type)
 
+  # Since BOXI extracts will be only in sourcedev and not needed in Denodo,
+  # BYOC_MODE here will be always FALSE.
   if (type %in% c("dn", "cmh")) {
     dir <- fs::path(get_slf_dir(), "Archived_data")
   } else {
-    dir <- get_year_dir(year, extracts_dir = TRUE)
+    dir <- get_year_dir(year, extracts_dir = TRUE, BYOC_MODE = FALSE)
   }
 
   if (!check_year_valid(year, type)) {
@@ -86,9 +89,9 @@ get_boxi_extract_path <- function(
 #' Get a path to a dummy file
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
-get_dummy_boxi_extract_path <- function() {
+get_dummy_boxi_extract_path <- function(BYOC_MODE) {
   dummy_path <- get_file_path(
-    directory = get_dev_dir(),
+    directory = get_dev_dir(BYOC_MODE),
     file_name = ".dummy",
     create = TRUE
   )

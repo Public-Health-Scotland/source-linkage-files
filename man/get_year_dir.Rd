@@ -4,7 +4,7 @@
 \alias{get_year_dir}
 \title{Year Directory}
 \usage{
-get_year_dir(year, extracts_dir = FALSE)
+get_year_dir(year, extracts_dir = FALSE, BYOC_MODE)
 }
 \arguments{
 \item{year}{The Financial Year e.g. 1718}
