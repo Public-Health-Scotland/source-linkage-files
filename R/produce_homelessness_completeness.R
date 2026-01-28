@@ -39,34 +39,34 @@ produce_homelessness_completeness <- function(
       .groups = "drop"
     )
 
-  sg_all_assessments_annual <- sg_pub_data #%>%
-    # dplyr::rename_with(~ c(
-    #   "CAName",
-    #   paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L)),
-    #   paste0(paste0("q", 1L:4L), "_", rep(2024L, 4L))
-    #   ## Manual change - Add new row here when new year is available in publication
-    # )) %>%
-    # tidyr::pivot_longer(
-    #   !"CAName",
-    #   names_to = c("fin_quarter", "fin_year"),
-    #   names_pattern = "q(\\d)_(\\d{4})",
-    #   names_transform = list(
-    #     fin_year = as.integer,
-    #     fin_quarter = as.integer
-    #   ),
-    #   values_to = "sg_all_assessments",
-    #   values_ptypes = list(sg_all_assessments = integer())
-    # ) %>%
-    # dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
-    # dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
-    # dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
+  sg_all_assessments_annual <- sg_pub_data # %>%
+  # dplyr::rename_with(~ c(
+  #   "CAName",
+  #   paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L)),
+  #   paste0(paste0("q", 1L:4L), "_", rep(2024L, 4L))
+  #   ## Manual change - Add new row here when new year is available in publication
+  # )) %>%
+  # tidyr::pivot_longer(
+  #   !"CAName",
+  #   names_to = c("fin_quarter", "fin_year"),
+  #   names_pattern = "q(\\d)_(\\d{4})",
+  #   names_transform = list(
+  #     fin_year = as.integer,
+  #     fin_quarter = as.integer
+  #   ),
+  #   values_to = "sg_all_assessments",
+  #   values_ptypes = list(sg_all_assessments = integer())
+  # ) %>%
+  # dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
+  # dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
+  # dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
 
 
   annual_comparison <- dplyr::left_join(
@@ -170,14 +170,14 @@ get_homelessness_completeness_path <- function(
   BYOC_MODE,
   ...
 ) {
-  if(BYOC_MODE){
+  if (BYOC_MODE) {
     completeness_file_path <- fs::path(
       directory = denodo_output_path(), # todo: waiting to be finalised
       file_name = stringr::str_glue(
         "homelessness_completeness_{year}_{update}.parquet"
       )
     )
-  }else{
+  } else {
     completeness_file_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Homelessness"),
       file_name = stringr::str_glue(

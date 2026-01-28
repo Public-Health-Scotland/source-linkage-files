@@ -44,7 +44,7 @@ write_file <- function(data, path, group_id = 3356, BYOC_MODE, ...) {
     )
   )
 
-  if(!BYOC_MODE){
+  if (!BYOC_MODE) {
     if (fs::file_info(path)$user == Sys.getenv("USER")) {
       # Set the correct permissions (read, write, execute)
       fs::file_chmod(path = path, mode = "770")

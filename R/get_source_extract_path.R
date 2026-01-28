@@ -1,6 +1,6 @@
 #' Denodo file output path
 #' @export
-denodo_output_path <- function(){
+denodo_output_path <- function() {
   "sdl_byoc/byoc/output"
 }
 
@@ -73,13 +73,13 @@ get_source_extract_path <- function(year,
   ) %>%
     stringr::str_glue("-20{year}.parquet")
 
-  if(BYOC_MODE){
+  if (BYOC_MODE) {
     source_extract_path <- file.path(
       directory = denodo_output_path(),
       # todo: waiting to be finalised
       file_name = file_name
     )
-  }else{
+  } else {
     source_extract_path <- get_file_path(
       directory = get_year_dir(year, BYOC_MODE = BYOC_MODE),
       file_name = file_name,

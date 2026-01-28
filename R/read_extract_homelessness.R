@@ -4,9 +4,9 @@
 #'
 #' @export
 read_extract_homelessness <- function(
-    year,
-    file_path = get_boxi_extract_path(year = year, type = "homelessness"),
-    BYOC_MODE
+  year,
+  file_path = get_boxi_extract_path(year = year, type = "homelessness"),
+  BYOC_MODE
 ) {
   year <- check_year_format(year, format = "alternate")
 
@@ -30,7 +30,7 @@ read_extract_homelessness <- function(
       assessment_decision_date = "assessment_decision_date",
       case_closed_date = "case_closed_date",
       sending_local_authority_code_9 = "sending_local_authority_code_9",
-      client_unique_identifier = "client_unique_identifier" ,
+      client_unique_identifier = "client_unique_identifier",
       chi = "client_chi",
       client_dob_date = "client_dob",
       age_at_assessment_decision_date = "age_at_assessment_decision_date",
@@ -45,7 +45,7 @@ read_extract_homelessness <- function(
       unmet_need_for_support_from_housing_social_work_health_services = "unmet_need_for_suppport_from_housing",
       lack_of_support_from_friends_family = "lack_of_support_from_friends",
       difficulties_managing_on_own = "difficulties_managing_on_own",
-      drug_alcohol_dependency = "drug_alcohol_dependency" ,
+      drug_alcohol_dependency = "drug_alcohol_dependency",
       criminal_anti_social_behaviour = "criminal_anti_social_behaviour",
       not_to_do_with_applicant_household = "not_to_do_with_applicant_household",
       refused = "refused",

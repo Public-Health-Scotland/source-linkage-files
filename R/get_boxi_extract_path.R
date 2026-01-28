@@ -38,7 +38,7 @@ get_boxi_extract_path <- function(
   if (type %in% c("dn", "cmh")) {
     dir <- fs::path(get_slf_dir(), "Archived_data")
   } else {
-    dir <- get_year_dir(year, extracts_dir = TRUE, BYOC_MODE=FALSE)
+    dir <- get_year_dir(year, extracts_dir = TRUE, BYOC_MODE = FALSE)
   }
 
   if (!check_year_valid(year, type)) {
@@ -98,4 +98,3 @@ get_dummy_boxi_extract_path <- function(BYOC_MODE) {
 
   return(dummy_path)
 }
-
