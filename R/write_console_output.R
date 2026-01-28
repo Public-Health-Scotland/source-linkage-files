@@ -46,9 +46,9 @@ write_console_output <- function(console_outputs = TRUE,
   }
 
   base_filename <- switch(file_type,
-                          "episode" = stringr::str_glue("ep_{year}_{update}_update"),
-                          "individual" = stringr::str_glue("ind_{year}_{update}_update"),
-                          "targets" = stringr::str_glue("targets_console_{update}_update")
+    "episode" = stringr::str_glue("ep_{year}_{update}_update"),
+    "individual" = stringr::str_glue("ind_{year}_{update}_update"),
+    "targets" = stringr::str_glue("targets_console_{update}_update")
   )
 
   existing_files <- list.files(
