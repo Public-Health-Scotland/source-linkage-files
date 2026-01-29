@@ -18,5 +18,5 @@ write_console_output(
 \item{year}{Financial year.}
 }
 \description{
-Sets up logger to capture output and log messages to file.
+Initialises logger to log texts and console output to file
 }
