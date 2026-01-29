@@ -4,15 +4,19 @@
 \alias{produce_homelessness_completeness}
 \title{Produce the Homelessness Completeness lookup}
 \usage{
-produce_homelessness_completeness(homelessness_data, update, sg_pub_path)
+produce_homelessness_completeness(
+  homelessness_data,
+  update,
+  sg_pub_data,
+  BYOC_MODE
+)
 }
 \arguments{
 \item{homelessness_data}{The Homelessness data to produce}
 
 \item{update}{The update to use (default is \code{\link[=latest_update]{latest_update()}}).}
 
-\item{sg_pub_path}{The path to the SG pub figures (default is
-\code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}).}
+\item{sg_pub_data}{The path to the SG pub figures.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} as a lookup with \code{year},
