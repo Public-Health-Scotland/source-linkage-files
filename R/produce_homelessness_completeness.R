@@ -93,23 +93,14 @@ produce_homelessness_completeness <- function(
     return(NULL)
   }
 
-  write_file(
-    annual_comparison,
-    get_homelessness_completeness_path(
-      year = year,
-      update = update,
-      check_mode = "write",
-      BYOC_MODE = BYOC_MODE
-    ),
-    BYOC_MODE = BYOC_MODE
-# write_file(
-# annual_comparison,
-# get_homelessness_completeness_path(
-# year = year,
-# update = update,
+#   write_file(
+#     annual_comparison,
+#     get_homelessness_completeness_path(
+#       year = year,
+#       update = update,
 #       check_mode = "write",
 #       BYOC_MODE = BYOC_MODE
-# ),
+#     ),
 #     BYOC_MODE = BYOC_MODE
 # )
 
