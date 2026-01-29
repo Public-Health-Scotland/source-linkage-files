@@ -69,8 +69,8 @@ processed_data_list <- list(
 log_ep_message("creating", year)
 
 create_episode_file(processed_data_list,
-                    year = year,
-                    write_temp_to_disk = write_temp_to_disk
+  year = year,
+  write_temp_to_disk = write_temp_to_disk
 ) %>%
   process_tests_episode_file(year = year)
 

@@ -86,7 +86,7 @@ tar_messages <- list(
 
 # Logger helper functions
 log_ep_message <- function(stage = c("start", "read_data", "creating", "complete"),
-                                year) {
+                           year) {
   stage <- match.arg(stage)
   message <- ep_messages[[stage]]
 
@@ -94,7 +94,7 @@ log_ep_message <- function(stage = c("start", "read_data", "creating", "complete
 }
 
 log_ind_message <- function(stage = c("start", "read_data", "creating", "complete"),
-                                   year) {
+                            year) {
   stage <- match.arg(stage)
   message <- ind_messages[[stage]]
 
