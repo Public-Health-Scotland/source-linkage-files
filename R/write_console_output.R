@@ -1,10 +1,11 @@
 #' Write Console Output to File
 #'
-#' @description Sets up logger to capture output and log messages to file.
+#' @description Initialises logger to log texts and console output to file
 #'
 #' @param console_outputs If TRUE, capture console output and messages to file.
 #' @param file_type Type of file being processed: "episode", "individual", or "targets".
 #' @param year Financial year.
+
 write_console_output <- function(console_outputs = TRUE,
                                  file_type = c("episode", "individual", "targets"),
                                  year = NULL) {
@@ -13,22 +14,6 @@ write_console_output <- function(console_outputs = TRUE,
   }
 
   file_type <- match.arg(file_type)
-
-  # Determine if this is a BYOC run or local run. Default to FALSE (local run)
-  is_byoc <- exists("BYOC_MODE") && isTRUE(BYOC_MODE)
-
-  # Configure logger based on environment
-  if (is_byoc) {
-    # BYOC run = INFO level
-    logger::log_threshold(logger::INFO)
-  } else {
-    # Local run = DEBUG level
-    logger::log_threshold(logger::DEBUG)
-  }
-
-  # Set logger format
-  logger::log_formatter(logger::formatter_glue_or_sprintf)
-  logger::log_layout(logger::layout_glue_colors)
 
   # update information
   update <- latest_update()
@@ -70,10 +55,55 @@ write_console_output <- function(console_outputs = TRUE,
 
   # Add logger appender to write to file
   logger::log_appender(logger::appender_tee(file_path), index = 2)
-
-  # Log the start
-  logger::log_info("Running in {ifelse(is_byoc, 'BYOC', 'LOCAL')} mode")
   logger::log_info("Console output will be saved to: {file_path}")
 
   invisible(file_path)
+}
+
+# Log strings - this makes it easier to maintain and update logger messages
+# Episode file messages
+ep_messages <- list(
+  start = "Starting episode file creation for ep_{year}",
+  read_data = "Reading processed data from source extracts for year {year}",
+  creating = "Creating episode file and running tests for year {year}",
+  complete = "Episode file creation complete for year {year}"
+)
+
+# Individual file messages
+ind_messages <- list(
+  start = "Starting individual file creation for ind_{year}",
+  read_data = "Reading episode file for year {year}",
+  creating = "Creating individual file and running tests for year {year}",
+  complete = "Individual file creation complete for year {year}"
+)
+
+# Targets messages
+tar_messages <- list(
+  start = "Starting targets pipeline",
+  combining_tests = "Combining test results",
+  all_complete = "All processing complete"
+)
+
+# Logger helper functions
+log_ep_message <- function(stage = c("start", "read_data", "creating", "complete"),
+                                year) {
+  stage <- match.arg(stage)
+  message <- ep_messages[[stage]]
+
+  logger::log_info(stringr::str_glue(message))
+}
+
+log_ind_message <- function(stage = c("start", "read_data", "creating", "complete"),
+                                   year) {
+  stage <- match.arg(stage)
+  message <- ind_messages[[stage]]
+
+  logger::log_info(stringr::str_glue(message))
+}
+
+log_tar_message <- function(stage = c("start", "combining_tests", "all_complete")) {
+  stage <- match.arg(stage)
+  message <- tar_messages[[stage]]
+
+  logger::log_info(message)
 }

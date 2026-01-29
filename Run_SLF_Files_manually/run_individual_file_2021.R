@@ -43,24 +43,20 @@ write_console_output(
 )
 
 #-------------------------------------------------------------------------------
-logger::log_info("Starting individual file creation for year {year}")
+log_ind_message("start", year)
 
-# Clean temporary files
-# clean_temp_data(year, "ep")
+## Read the episode file and create the individual file
+log_ind_message("read_data", year)
 
-# Read the episode file
-logger::log_debug("Reading episode file")
 episode_file <- arrow::read_parquet(get_slf_episode_path(year))
 
-logger::log_info("Episode file read in")
-
 # Run the individual file and tests
-logger::log_info("Creating individual file and running tests")
+log_ind_message("creating", year)
 
 create_individual_file(episode_file, year = year, write_temp_to_disk = write_temp_to_disk) %>%
   process_tests_individual_file(year = year)
 
-logger::log_info("Individual file creation complete")
+log_ind_message("complete", year)
 
 #-------------------------------------------------------------------------------
 ## End of Script ##
