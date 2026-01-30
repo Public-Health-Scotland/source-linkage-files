@@ -1,10 +1,11 @@
 #' Write Console Output to File
 #'
-#' @description Sets up sink to capture console output and messages to .txt file.
+#' @description Initialises logger to log texts and console output to file
 #'
-#' @param console_outputs If TRUE, capture console output and messages to .txt file.
+#' @param console_outputs If TRUE, capture console output and messages to file.
 #' @param file_type Type of file being processed: "episode", "individual", or "targets".
 #' @param year Financial year.
+
 write_console_output <- function(console_outputs = TRUE,
                                  file_type = c("episode", "individual", "targets"),
                                  year = NULL) {
@@ -34,11 +35,13 @@ write_console_output <- function(console_outputs = TRUE,
     "individual" = stringr::str_glue("ind_{year}_{update}_update"),
     "targets" = stringr::str_glue("targets_console_{update}_update")
   )
+
   existing_files <- list.files(
     path = con_output_dir,
     pattern = stringr::str_glue("^{base_filename}_[0-9]+\\.txt$"),
     full.names = FALSE
   )
+
   if (length(existing_files) == 0) {
     increment <- 1
   } else {
@@ -50,19 +53,57 @@ write_console_output <- function(console_outputs = TRUE,
   file_name <- stringr::str_glue("{base_filename}_{increment}.txt")
   file_path <- file.path(con_output_dir, file_name)
 
-  # sink connection
-  con <- file(file_path, open = "wt")
+  # Add logger appender to write to file
+  logger::log_appender(logger::appender_tee(file_path), index = 2)
+  logger::log_info("Console output will be saved to: {file_path}")
 
-  sink(con, type = "output", split = TRUE)
-  sink(con, type = "message", append = TRUE)
+  invisible(file_path)
+}
 
-  on.exit(
-    {
-      sink(type = "message")
-      sink(type = "output")
-      close(con)
-      cat("\n Console output saved to:", file_path, "\n")
-    },
-    add = TRUE
-  )
+# Log strings - this makes it easier to maintain and update logger messages
+# Episode file messages
+ep_messages <- list(
+  start = "Starting episode file creation for ep_{year}",
+  read_data = "Reading processed data from source extracts for year {year}",
+  creating = "Creating episode file and running tests for year {year}",
+  complete = "Episode file creation complete for year {year}"
+)
+
+# Individual file messages
+ind_messages <- list(
+  start = "Starting individual file creation for ind_{year}",
+  read_data = "Reading episode file for year {year}",
+  creating = "Creating individual file and running tests for year {year}",
+  complete = "Individual file creation complete for year {year}"
+)
+
+# Targets messages
+tar_messages <- list(
+  start = "Starting targets pipeline",
+  combining_tests = "Combining test results",
+  all_complete = "All processing complete"
+)
+
+# Logger helper functions
+log_ep_message <- function(stage = c("start", "read_data", "creating", "complete"),
+                           year) {
+  stage <- match.arg(stage)
+  message <- ep_messages[[stage]]
+
+  logger::log_info(stringr::str_glue(message))
+}
+
+log_ind_message <- function(stage = c("start", "read_data", "creating", "complete"),
+                            year) {
+  stage <- match.arg(stage)
+  message <- ind_messages[[stage]]
+
+  logger::log_info(stringr::str_glue(message))
+}
+
+log_tar_message <- function(stage = c("start", "combining_tests", "all_complete")) {
+  stage <- match.arg(stage)
+  message <- tar_messages[[stage]]
+
+  logger::log_info(message)
 }
