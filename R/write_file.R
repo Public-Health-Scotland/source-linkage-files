@@ -10,10 +10,11 @@
 #' @param group_id The group id for setting permissions. The default is 3356 for
 #'            sourcedev. To set this to hscdiip, use 3206.
 #' @param ... Additional arguments passed to the relevant function.
+#' @param BYOC_MODE check BYOC mode.
 #'
 #' @return the data (invisibly) as a [tibble][tibble::tibble-package].
 #' @export
-write_file <- function(data, path, group_id = 3356, ...) {
+write_file <- function(data, path, group_id = 3356, BYOC_MODE, ...) {
   valid_extensions <- c("rds", "parquet")
 
   ext <- fs::path_ext(path)
@@ -43,12 +44,14 @@ write_file <- function(data, path, group_id = 3356, ...) {
     )
   )
 
-  if (fs::file_info(path)$user == Sys.getenv("USER")) {
-    # Set the correct permissions (read, write, execute)
-    fs::file_chmod(path = path, mode = "770")
-    # change the owner so that sourcedev is the group owner.
-    # use fs::group_ids() for checking
-    fs::file_chown(path = path, group_id = group_id)
+  if (!BYOC_MODE) {
+    if (fs::file_info(path)$user == Sys.getenv("USER")) {
+      # Set the correct permissions (read, write, execute)
+      fs::file_chmod(path = path, mode = "770")
+      # change the owner so that sourcedev is the group owner.
+      # use fs::group_ids() for checking
+      fs::file_chown(path = path, group_id = group_id)
+    }
   }
 
   return(invisible(data))

@@ -1,3 +1,9 @@
+#' Denodo file output path
+#' @export
+denodo_output_path <- function() {
+  "sdl_byoc/byoc/output"
+}
+
 #' Source Extract File Path
 #'
 #' @description Get the file path for Source Extract for given extract and year
@@ -30,6 +36,7 @@ get_source_extract_path <- function(year,
                                       "pis",
                                       "sds"
                                     ),
+                                    BYOC_MODE,
                                     ...) {
   if (year %in% type) {
     cli::cli_abort("{.val {year}} was supplied to the {.arg year} argument.")
@@ -66,11 +73,19 @@ get_source_extract_path <- function(year,
   ) %>%
     stringr::str_glue("-20{year}.parquet")
 
-  source_extract_path <- get_file_path(
-    directory = get_year_dir(year),
-    file_name = file_name,
-    ...
-  )
+  if (BYOC_MODE) {
+    source_extract_path <- file.path(
+      directory = denodo_output_path(),
+      # todo: waiting to be finalised
+      file_name = file_name
+    )
+  } else {
+    source_extract_path <- get_file_path(
+      directory = get_year_dir(year, BYOC_MODE = BYOC_MODE),
+      file_name = file_name,
+      ...
+    )
+  }
 
   return(source_extract_path)
 }
