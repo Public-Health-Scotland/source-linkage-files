@@ -24,17 +24,17 @@ library(odbc)
 library(dplyr)
 library(tibble)
 library(purrr)
-library('writexl')
-library('openxlsx')
-library('readxl')
+library("writexl")
+library("openxlsx")
+library("readxl")
 
 # Open a connection to DVPREPROD (test environment)
 # or DVPROD (production environment)
 denodo_connect <- suppressWarnings(
   dbConnect(odbc(),
-            dsn = "DVPREPROD", # or DVPROD
-            uid = .rs.askForPassword("Username:"),
-            pwd = .rs.askForPassword("Enter your test environment password")
+    dsn = "DVPREPROD", # or DVPROD
+    uid = .rs.askForPassword("Username:"),
+    pwd = .rs.askForPassword("Enter your test environment password")
   )
 )
 
@@ -57,17 +57,20 @@ sdl_view <- as_tibble(dbGetQuery(
 boxi_view <- read_extract_ooh_diagnosis(year = "1920")
 
 # Read denodo variables for renaming SLF variables
-denodo_vars <- readxl::read_excel('/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/SLF_variable_lookup.xlsx',
-                                  sheet = 'gp_ooh_diagnosis')
+denodo_vars <- readxl::read_excel("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/SLF_variable_lookup.xlsx",
+  sheet = "gp_ooh_diagnosis"
+)
 
 
 #-------------------------------------------------------------------------------
 
 ## Create Output --------
-gp_ooh_diagnosis_output <- create_uat_output(dataset_name = dataset_name,
-                               boxi_data = boxi_view,
-                               sdl_data = sdl_view,
-                               denodo_vars = denodo_vars)
+gp_ooh_diagnosis_output <- create_uat_output(
+  dataset_name = dataset_name,
+  boxi_data = boxi_view,
+  sdl_data = sdl_view,
+  denodo_vars = denodo_vars
+)
 
 ## Write to Excel workbook
 gp_ooh_diagnosis_output %>%

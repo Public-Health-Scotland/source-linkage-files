@@ -12,8 +12,7 @@
 
 
 ## Main function to create test output.
-create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars){
-
+create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
   # Create a tibble containing info on boxi cols
   boxi_cols <- tibble(
     date = Sys.Date(),
@@ -26,9 +25,11 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars){
 
   check_vars <- full_join(boxi_cols, denodo_vars, by = "cols") %>%
     # create a flag to drop those not matched
-    mutate(keep = if_else(!is.na(denodo_name), 1, 0),
-           # drop those that are not in the boxi dataset
-           keep = if_else(is.na(origin_boxi), 0, keep)) %>%
+    mutate(
+      keep = if_else(!is.na(denodo_name), 1, 0),
+      # drop those that are not in the boxi dataset
+      keep = if_else(is.na(origin_boxi), 0, keep)
+    ) %>%
     filter(keep == 1) %>%
     mutate(total_cols_boxi = sum(keep)) %>%
     select(c("date", "dataset_name", "denodo_name", "origin_boxi", "boxi_type", "total_cols_boxi")) %>%
@@ -61,31 +62,32 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars){
         origin_boxi != origin_sdl ~ "Yes",
         (origin_boxi == "boxi" & is.na(origin_sdl)) ~ "No - boxi not in sdl",
         (is.na(origin_boxi) & origin_sdl == "sdl") ~ "No - sdl not in boxi",
-        TRUE ~ "No"),
+        TRUE ~ "No"
+      ),
       # Check if names match boxi/sdl
       names_expected_in_sdl = if_else((origin_boxi == "boxi" & origin_sdl == "sdl"), "Yes", "No"),
       # Flag mismatching variables
       mismatched_col = if_else((is_boxi_in_sdl == "No - boxi not in sdl" |
-                                  is_boxi_in_sdl == "No - sdl not in boxi"),
-                               1L, 0L),
+        is_boxi_in_sdl == "No - sdl not in boxi"),
+      1L, 0L
+      ),
       # Check status
       test_status = case_when(
-        (is_boxi_in_sdl == "No - boxi not in sdl" & is.na(origin_sdl) & origin_boxi == "boxi")  ~ "FAIL: Missing in sdl view",
-        (is_boxi_in_sdl == "No - sdl not in boxi" & is.na(origin_boxi) & origin_sdl == "sdl")   ~ "FAIL: Missing in boxi view",
+        (is_boxi_in_sdl == "No - boxi not in sdl" & is.na(origin_sdl) & origin_boxi == "boxi") ~ "FAIL: Missing in sdl view",
+        (is_boxi_in_sdl == "No - sdl not in boxi" & is.na(origin_boxi) & origin_sdl == "sdl") ~ "FAIL: Missing in boxi view",
         names_expected_in_sdl == "No" ~ "FAIL: SDL names not as expected",
         !type_match ~ "FAIL: Data Type does not match",
-        TRUE ~ "PASS")
+        TRUE ~ "PASS"
+      )
     )
 
   return(test_output)
-
 }
 
 
 #### Function for writing uat tests to disk
-write_uat_tests <- function(uat_data, sheet_name){
-
-  tests_workbook_path <- '/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/uat_tests.xlsx'
+write_uat_tests <- function(uat_data, sheet_name) {
+  tests_workbook_path <- "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/uat_tests.xlsx"
 
   if (fs::file_exists(tests_workbook_path)) {
     # Load the data from the existing workbook
@@ -139,8 +141,8 @@ write_uat_tests <- function(uat_data, sheet_name){
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
-                         tests_workbook_path,
-                         overwrite = TRUE
+    tests_workbook_path,
+    overwrite = TRUE
   )
 
   if (fs::file_info(path = tests_workbook_path)$user == Sys.getenv("USER")) {
@@ -150,5 +152,4 @@ write_uat_tests <- function(uat_data, sheet_name){
     # use fs::group_ids() for checking
     fs::file_chown(path = tests_workbook_path, group_id = 3206)
   }
-
 }
