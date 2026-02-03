@@ -5,7 +5,8 @@
 #' @export
 read_extract_homelessness <- function(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "homelessness"),
+  denodo_connect,
+  file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
   year <- check_year_format(year, format = "alternate")
@@ -15,7 +16,7 @@ read_extract_homelessness <- function(
     return(tibble::tibble())
   } # todo: waiting to be finalised
 
-  extract_homelessness <- as_tibble(dbGetQuery(
+  extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
     denodo_connect,
     stringr::str_glue(
       "select * from sdl.sdl_homelessness_source

@@ -6,8 +6,7 @@
 # 00 setup logger ----
 logger::log_info("Run SDL starts.")
 
-# library(createslf)
-devtools::load_all()
+library(createslf)
 
 library(DBI)
 library(arrow)
@@ -45,10 +44,6 @@ library(tarchetypes)
 library(targets)
 library(testthat)
 library(crew)
-
-# prepare necessary data
-# notes fy format
-year <- "2017"
 
 # set up logger and system environment variable BYOC_MODE
 if (exists("BYOC_MODE") && isTRUE(BYOC_MODE)) {
@@ -161,6 +156,7 @@ sg_pub_data <- data.frame(
 
 # just test one year
 year <- "2019"
+fyear <- convert_year_to_fyyear(year)
 
 # targets::tar_make()
 
@@ -169,7 +165,8 @@ year <- "2019"
 logger::log_info("Read and process homelessness data")
 hl1 <- read_extract_homelessness(
   year,
-  file_path = get_boxi_extract_path(year = convert_year_to_fyyear(year), type = "homelessness"),
+  denodo_connect = denodo_connect,
+  file_path = get_boxi_extract_path(year = fyear, type = "homelessness", BYOC_MODE = BYOC_MODE),
   BYOC_MODE = BYOC_MODE
 ) %>% process_extract_homelessness(
   year = year,
