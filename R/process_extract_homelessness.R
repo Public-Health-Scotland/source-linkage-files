@@ -185,7 +185,8 @@ process_extract_homelessness <- function(
         BYOC_MODE,
         check_mode = "write"
       ),
-      BYOC_MODE = BYOC_MODE
+      BYOC_MODE = BYOC_MODE,
+      group_id = 3356 # sourcedev owner
     )
   }
 
