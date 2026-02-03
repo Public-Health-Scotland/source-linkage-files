@@ -6,8 +6,7 @@
 # 00 setup logger ----
 logger::log_info("Run SDL starts.")
 
-# library(createslf)
-devtools::load_all()
+library(createslf)
 
 library(DBI)
 library(arrow)
@@ -169,7 +168,7 @@ year <- "2019"
 logger::log_info("Read and process homelessness data")
 hl1 <- read_extract_homelessness(
   year,
-  file_path = get_boxi_extract_path(year = convert_year_to_fyyear(year), type = "homelessness"),
+  denodo_connect = denodo_connect,
   BYOC_MODE = BYOC_MODE
 ) %>% process_extract_homelessness(
   year = year,
