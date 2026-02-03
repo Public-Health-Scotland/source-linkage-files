@@ -45,6 +45,10 @@ source(here::here("UAT_test_scripts/01_uat_functions.R"))
 
 ## Setup data --------------
 
+# Analyst name for folder structure
+analyst <- "Jen"
+
+# Dataset name for ID
 dataset_name <- "ae"
 
 # Read in Test data
@@ -57,9 +61,8 @@ sdl_view <- as_tibble(dbGetQuery(
 boxi_view <- read_extract_ae(year = "1920")
 
 # Read denodo variables for renaming SLF variables
-denodo_vars <- readxl::read_excel("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/SLF_variable_lookup.xlsx",
-  sheet = "ae"
-)
+denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
+                                  sheet = dataset_name)
 
 
 #-------------------------------------------------------------------------------
@@ -74,9 +77,8 @@ ae_output <- create_uat_output(
 
 ## Write to Excel workbook
 homelessness_output %>%
-  write_uat_tests(sheet_name = "ae")
+  write_uat_tests(sheet_name = dataset_name,
+                  analyst = analyst)
 
 # End of Script #
 
-boxi_data <- boxi_view
-sdl_data <- sdl_view

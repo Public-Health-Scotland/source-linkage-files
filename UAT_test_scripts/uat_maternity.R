@@ -45,6 +45,10 @@ source(here::here("UAT_test_scripts/01_uat_functions.R"))
 
 ## Setup data --------------
 
+# Analyst name for folder structure
+analyst <- "Jen"
+
+# Dataset name for ID
 dataset_name <- "maternity"
 
 # Read in Test data
@@ -57,9 +61,8 @@ sdl_view <- as_tibble(dbGetQuery(
 boxi_view <- read_extract_maternity(year = "1920")
 
 # Read denodo variables for renaming SLF variables
-denodo_vars <- readxl::read_excel("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/SLF_variable_lookup.xlsx",
-  sheet = "maternity"
-)
+denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
+                                  sheet = dataset_name)
 
 #-------------------------------------------------------------------------------
 
@@ -73,6 +76,7 @@ maternity_output <- create_uat_output(
 
 ## Write to Excel workbook
 maternity_output %>%
-  write_uat_tests(sheet_name = "maternity")
+  write_uat_tests(sheet_name = dataset_name,
+                  analyst = analyst)
 
 # End of Script #
