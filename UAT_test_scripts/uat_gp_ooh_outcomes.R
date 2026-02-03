@@ -32,9 +32,9 @@ library("readxl")
 # or DVPROD (production environment)
 denodo_connect <- suppressWarnings(
   dbConnect(odbc(),
-            dsn = "DVPREPROD", # or DVPROD
-            uid = .rs.askForPassword("Username:"),
-            pwd = .rs.askForPassword("Enter your test environment password")
+    dsn = "DVPREPROD", # or DVPROD
+    uid = .rs.askForPassword("Username:"),
+    pwd = .rs.askForPassword("Enter your test environment password")
   )
 )
 
@@ -62,7 +62,8 @@ boxi_data <- read_extract_ooh_outcomes(year = "1920")
 
 # Read denodo variables for renaming SLF variables
 denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
-                                  sheet = dataset_name)
+  sheet = dataset_name
+)
 
 #-------------------------------------------------------------------------------
 
@@ -76,8 +77,9 @@ gp_ooh_outcomes_output <- create_uat_output(
 
 ## Write to Excel workbook
 gp_ooh_outcomes_output %>%
-  write_uat_tests(sheet_name = dataset_name,
-                  analyst = analyst)
+  write_uat_tests(
+    sheet_name = dataset_name,
+    analyst = analyst
+  )
 
 # End of Script #
-

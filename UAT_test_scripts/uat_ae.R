@@ -78,7 +78,9 @@ ae_output <- create_uat_output(
 
 ## Write to Excel workbook
 ae_output %>%
-  write_uat_tests(sheet_name = dataset_name,
-                  analyst = analyst)
+  write_uat_tests(
+    sheet_name = dataset_name,
+    analyst = analyst
+  )
 
 # End of Script #
