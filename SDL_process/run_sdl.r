@@ -45,10 +45,6 @@ library(targets)
 library(testthat)
 library(crew)
 
-# prepare necessary data
-# notes fy format
-year <- "2017"
-
 # set up logger and system environment variable BYOC_MODE
 if (exists("BYOC_MODE") && isTRUE(BYOC_MODE)) {
   logger::log_info("Detect run_sdl.r run on Denodo")
@@ -160,6 +156,7 @@ sg_pub_data <- data.frame(
 
 # just test one year
 year <- "2019"
+fyear <- convert_year_to_fyyear(year)
 
 # targets::tar_make()
 
@@ -169,6 +166,7 @@ logger::log_info("Read and process homelessness data")
 hl1 <- read_extract_homelessness(
   year,
   denodo_connect = denodo_connect,
+  file_path = get_boxi_extract_path(year = fyear, type = "homelessness", BYOC_MODE = BYOC_MODE),
   BYOC_MODE = BYOC_MODE
 ) %>% process_extract_homelessness(
   year = year,

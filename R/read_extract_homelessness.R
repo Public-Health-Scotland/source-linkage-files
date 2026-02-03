@@ -6,6 +6,7 @@
 read_extract_homelessness <- function(
   year,
   denodo_connect,
+  file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
   year <- check_year_format(year, format = "alternate")

@@ -89,6 +89,7 @@ get_boxi_extract_path <- function(
 #' Get a path to a dummy file
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
+#' @export
 get_dummy_boxi_extract_path <- function(BYOC_MODE) {
   dummy_path <- get_file_path(
     directory = get_dev_dir(BYOC_MODE),
