@@ -52,13 +52,13 @@ analyst <- "Jen"
 dataset_name <- "homelessness"
 
 # Read in Test data
-sdl_view <- as_tibble(dbGetQuery(
+sdl_data <- as_tibble(dbGetQuery(
   denodo_connect,
   "select * from sdl.sdl_homelessness_source LIMIT 100"
 ))
 
 # Read boxi data
-boxi_view <- read_extract_homelessness(year = "1920")
+boxi_data <- read_extract_homelessness(year = "1920")
 
 # Read denodo variables for renaming SLF variables
 denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
@@ -71,8 +71,8 @@ denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
 ## Create Output --------
 homelessness_output <- create_uat_output(
   dataset_name = dataset_name,
-  boxi_data = boxi_view,
-  sdl_data = sdl_view,
+  boxi_data = boxi_data,
+  sdl_data = sdl_data,
   denodo_vars = denodo_vars
 )
 
