@@ -77,10 +77,8 @@ ae_output <- create_uat_output(
 )
 
 ## Write to Excel workbook
-homelessness_output %>%
-  write_uat_tests(
-    sheet_name = dataset_name,
-    analyst = analyst
-  )
+ae_output %>%
+  write_uat_tests(sheet_name = dataset_name,
+                  analyst = analyst)
 
 # End of Script #
