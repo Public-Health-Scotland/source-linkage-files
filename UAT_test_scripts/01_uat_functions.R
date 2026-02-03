@@ -11,14 +11,12 @@
 ################################################################################
 
 # function for file path
-get_slf_variable_lookup <- function(){
-
+get_slf_variable_lookup <- function() {
   uat_dir <- fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates", "uat_testing", "1_source_data_views", "Lookups")
   file_name <- "SLF_variable_lookup.xlsx"
-  path <- stringr::str_glue('{uat_dir}/{file_name}')
+  path <- stringr::str_glue("{uat_dir}/{file_name}")
 
   return(path)
-
 }
 
 
@@ -99,7 +97,7 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
 #### Function for writing uat tests to disk
 write_uat_tests <- function(uat_data, sheet_name, analyst) {
   tests_workbook_path <-
-    stringr::str_glue('/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/1_source_data_views/{analyst}/uat_tests.xlsx')
+    stringr::str_glue("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/1_source_data_views/{analyst}/uat_tests.xlsx")
 
   if (fs::file_exists(tests_workbook_path)) {
     # Load the data from the existing workbook
@@ -165,5 +163,3 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
     fs::file_chown(path = tests_workbook_path, group_id = 3206)
   }
 }
-
-

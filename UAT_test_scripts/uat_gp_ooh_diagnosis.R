@@ -62,7 +62,8 @@ boxi_view <- read_extract_ooh_diagnosis(year = "1920")
 
 # Read denodo variables for renaming SLF variables
 denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
-                                  sheet = dataset_name)
+  sheet = dataset_name
+)
 
 
 #-------------------------------------------------------------------------------
@@ -77,7 +78,9 @@ gp_ooh_diagnosis_output <- create_uat_output(
 
 ## Write to Excel workbook
 gp_ooh_diagnosis_output %>%
-  write_uat_tests(sheet_name = dataset_name,
-                  analyst = analyst)
+  write_uat_tests(
+    sheet_name = dataset_name,
+    analyst = analyst
+  )
 
 # End of Script #
