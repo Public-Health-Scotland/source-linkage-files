@@ -4,16 +4,10 @@
 \alias{read_extract_homelessness}
 \title{Read Homelessness extract}
 \usage{
-read_extract_homelessness(
-  year,
-  file_path = get_boxi_extract_path(year = year, type = "homelessness"),
-  BYOC_MODE
-)
+read_extract_homelessness(year, denodo_connect, BYOC_MODE)
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
-
-\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
