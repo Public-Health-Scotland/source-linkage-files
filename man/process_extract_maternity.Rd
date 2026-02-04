@@ -4,7 +4,7 @@
 \alias{process_extract_maternity}
 \title{Process the maternity extract}
 \usage{
-process_extract_maternity(data, year, write_to_disk = TRUE)
+process_extract_maternity(data, year, write_to_disk = TRUE, BYOC_MODE)
 }
 \arguments{
 \item{data}{The extract to process}
