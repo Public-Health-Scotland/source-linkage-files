@@ -33,15 +33,19 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
   )
 
   check_vars <- full_join(boxi_cols, denodo_vars, by = "cols") %>%
-    # create a flag to drop those not matched
+    # Create a flag to check if there are unused variables in the boxi extract
     mutate(
-      keep = if_else(!is.na(denodo_name), 1, 0),
-      # drop those that are not in the boxi dataset
-      keep = if_else(is.na(origin_boxi), 0, keep)
+      not_used_boxi_extract = if_else((!is.na(cols) & is.na(denodo_name)), 1, 0),
+      # if no denodo name available, use boxi name - dont want to drop variables here
+      # should be the unused variables flagged above
+      denodo_name = if_else(is.na(denodo_name), cols, denodo_name),
+      # count number of boxi cols
+      count = 1L,
+      total_cols_boxi = sum(count),
+      # count number of boxi cols not used
+      total_unused_cols_boxi = sum(not_used_boxi_extract)
     ) %>%
-    filter(keep == 1) %>%
-    mutate(total_cols_boxi = sum(keep)) %>%
-    select(c("date", "dataset_name", "denodo_name", "origin_boxi", "boxi_type", "total_cols_boxi")) %>%
+    select(c("date", "dataset_name", "denodo_name", "origin_boxi", "boxi_type", "total_cols_boxi", "not_used_boxi_extract")) %>%
     rename(cols = "denodo_name")
 
   boxi_cols <- check_vars
@@ -55,11 +59,6 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
     sdl_type = sapply(sdl_data, class),
     total_cols_sdl = ncol(sdl_data)
   )
-  # ) %>%
-  #   # Denodo is calling an integer 'integer64' - correct this
-  #   mutate(
-  #     sdl_type = if_else(sdl_type == "integer64", "integer", sdl_type)
-  #   )
 
   # Do a full join of both dataframes
   test_output <- full_join(boxi_cols, sdl_cols, by = c("date", "dataset_name", "cols")) %>%
@@ -77,8 +76,8 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
       names_expected_in_sdl = if_else((origin_boxi == "boxi" & origin_sdl == "sdl"), "Yes", "No"),
       # Flag mismatching variables
       mismatched_col = if_else((is_boxi_in_sdl == "No - boxi not in sdl" |
-        is_boxi_in_sdl == "No - sdl not in boxi"),
-      1L, 0L
+                                  is_boxi_in_sdl == "No - sdl not in boxi"),
+                               1L, 0L
       ),
       # Check status
       test_status = case_when(
