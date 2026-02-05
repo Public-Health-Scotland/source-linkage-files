@@ -31,9 +31,9 @@ get_boxi_extract_path <- function(
   ),
   BYOC_MODE
 ) {
-  if(BYOC_MODE){
+  if (BYOC_MODE) {
     return("dummy_byoc_boxi_extract_path")
-  }else{
+  } else {
     type <- match.arg(type)
 
     # Since BOXI extracts will be only in sourcedev and not needed in Denodo,
@@ -77,9 +77,9 @@ get_boxi_extract_path <- function(
       stringr::str_glue("{file_name}-20{year}.csv")
     )
 
-    if(BYOC_MODE){
+    if (BYOC_MODE) {
       boxi_extract_path <- "dummy_byoc_boxi_extract_path"
-    }else{
+    } else {
       # If the csv.gz file doesn't exist look for the unzipped csv.
       if (fs::file_exists(boxi_extract_path_csv_gz)) {
         boxi_extract_path <- boxi_extract_path_csv_gz
@@ -99,9 +99,9 @@ get_boxi_extract_path <- function(
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 #' @export
 get_dummy_boxi_extract_path <- function(BYOC_MODE) {
-  if(BYOC_MODE){
+  if (BYOC_MODE) {
     dummy_path <- file.path(get_dev_dir(BYOC_MODE), ".dummy")
-  }else{
+  } else {
     dummy_path <- get_file_path(
       directory = get_dev_dir(BYOC_MODE),
       file_name = ".dummy",
