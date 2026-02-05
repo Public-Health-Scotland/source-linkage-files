@@ -16,6 +16,7 @@ read_extract_homelessness <- function(
     return(tibble::tibble())
   } # todo: waiting to be finalised
 
+  logger::log_info("Read homelessness data from Denodo")
   extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
     denodo_connect,
     stringr::str_glue(
