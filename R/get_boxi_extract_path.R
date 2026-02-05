@@ -1,7 +1,7 @@
 #' Get BOXI extract
 #'
 #' @description Get the BOXI extract path for a given extract and year,
-#' returns an error message if the extract does not exist
+#' returns an error message if the extract does not exist if local
 #'
 #' @param year Year of extract
 #' @param type Name of BOXI extract
@@ -31,59 +31,67 @@ get_boxi_extract_path <- function(
   ),
   BYOC_MODE
 ) {
-  type <- match.arg(type)
+  if(BYOC_MODE){
+    return("dummy_byoc_boxi_extract_path")
+  }else{
+    type <- match.arg(type)
 
-  # Since BOXI extracts will be only in sourcedev and not needed in Denodo,
-  # BYOC_MODE here will be always FALSE.
-  if (type %in% c("dn", "cmh")) {
-    dir <- fs::path(get_slf_dir(), "Archived_data")
-  } else {
-    dir <- get_year_dir(year, extracts_dir = TRUE, BYOC_MODE = FALSE)
+    # Since BOXI extracts will be only in sourcedev and not needed in Denodo,
+    # BYOC_MODE here will be always FALSE.
+    if (type %in% c("dn", "cmh")) {
+      dir <- fs::path(get_slf_dir(), "Archived_data")
+    } else {
+      dir <- get_year_dir(year, extracts_dir = TRUE, BYOC_MODE = FALSE)
+    }
+
+    if (!check_year_valid(year, type)) {
+      return(get_dummy_boxi_extract_path())
+    }
+
+    file_name <- dplyr::case_match(
+      type,
+      "ae" ~ "anon-A&E-episode-level-extract",
+      "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
+      "acute" ~ "anon-Acute-episode-level-extract",
+      "acute_cup" ~ "anon-Acute-CUP-extract",
+      "cmh" ~ "anon-Community-MH-contact-level-extract",
+      "dn" ~ "anon-District-Nursing-contact-level-extract",
+      "gp_ooh-c" ~ "anon-GP-OoH-consultations-extract",
+      "gp_ooh-d" ~ "anon-GP-OoH-diagnosis-extract",
+      "gp_ooh-o" ~ "anon-GP-OoH-outcomes-extract",
+      "gp_ooh_cup" ~ "anon-GP-OoH-CUP-extract",
+      "homelessness" ~ "anon-Homelessness-extract",
+      "maternity" ~ "anon-Maternity-episode-level-extract",
+      "mh" ~ "anon-Mental-Health-episode-level-extract",
+      "deaths" ~ "anon-NRS-death-registrations-extract",
+      "outpatients" ~ "anon-Outpatients-episode-level-extract"
+    )
+
+    boxi_extract_path_csv_gz <- fs::path(
+      dir,
+      stringr::str_glue("{file_name}-20{year}.csv.gz")
+    )
+
+    boxi_extract_path_csv <- fs::path(
+      dir,
+      stringr::str_glue("{file_name}-20{year}.csv")
+    )
+
+    if(BYOC_MODE){
+      boxi_extract_path <- "dummy_byoc_boxi_extract_path"
+    }else{
+      # If the csv.gz file doesn't exist look for the unzipped csv.
+      if (fs::file_exists(boxi_extract_path_csv_gz)) {
+        boxi_extract_path <- boxi_extract_path_csv_gz
+      } else if (fs::file_exists(boxi_extract_path_csv)) {
+        boxi_extract_path <- boxi_extract_path_csv
+      } else {
+        rlang::abort(stringr::str_glue("{type} Extract not found"))
+      }
+    }
+
+    return(boxi_extract_path)
   }
-
-  if (!check_year_valid(year, type)) {
-    return(get_dummy_boxi_extract_path())
-  }
-
-  file_name <- dplyr::case_match(
-    type,
-    "ae" ~ "anon-A&E-episode-level-extract",
-    "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
-    "acute" ~ "anon-Acute-episode-level-extract",
-    "acute_cup" ~ "anon-Acute-CUP-extract",
-    "cmh" ~ "anon-Community-MH-contact-level-extract",
-    "dn" ~ "anon-District-Nursing-contact-level-extract",
-    "gp_ooh-c" ~ "anon-GP-OoH-consultations-extract",
-    "gp_ooh-d" ~ "anon-GP-OoH-diagnosis-extract",
-    "gp_ooh-o" ~ "anon-GP-OoH-outcomes-extract",
-    "gp_ooh_cup" ~ "anon-GP-OoH-CUP-extract",
-    "homelessness" ~ "anon-Homelessness-extract",
-    "maternity" ~ "anon-Maternity-episode-level-extract",
-    "mh" ~ "anon-Mental-Health-episode-level-extract",
-    "deaths" ~ "anon-NRS-death-registrations-extract",
-    "outpatients" ~ "anon-Outpatients-episode-level-extract"
-  )
-
-  boxi_extract_path_csv_gz <- fs::path(
-    dir,
-    stringr::str_glue("{file_name}-20{year}.csv.gz")
-  )
-
-  boxi_extract_path_csv <- fs::path(
-    dir,
-    stringr::str_glue("{file_name}-20{year}.csv")
-  )
-
-  # If the csv.gz file doesn't exist look for the unzipped csv.
-  if (fs::file_exists(boxi_extract_path_csv_gz)) {
-    boxi_extract_path <- boxi_extract_path_csv_gz
-  } else if (fs::file_exists(boxi_extract_path_csv)) {
-    boxi_extract_path <- boxi_extract_path_csv
-  } else {
-    rlang::abort(stringr::str_glue("{type} Extract not found"))
-  }
-
-  return(boxi_extract_path)
 }
 
 #' Get a path to a dummy file
@@ -91,11 +99,15 @@ get_boxi_extract_path <- function(
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 #' @export
 get_dummy_boxi_extract_path <- function(BYOC_MODE) {
-  dummy_path <- get_file_path(
-    directory = get_dev_dir(BYOC_MODE),
-    file_name = ".dummy",
-    create = TRUE
-  )
+  if(BYOC_MODE){
+    dummy_path <- file.path(get_dev_dir(BYOC_MODE), ".dummy")
+  }else{
+    dummy_path <- get_file_path(
+      directory = get_dev_dir(BYOC_MODE),
+      file_name = ".dummy",
+      create = TRUE
+    )
+  }
 
   return(dummy_path)
 }
