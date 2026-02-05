@@ -22,7 +22,7 @@ BOXI extracts containing data for each dataset
 }
 \description{
 Get the BOXI extract path for a given extract and year,
-returns an error message if the extract does not exist
+returns an error message if the extract does not exist if local
 }
 \seealso{
 Other extract file paths: 
