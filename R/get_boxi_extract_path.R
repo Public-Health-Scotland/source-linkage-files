@@ -45,7 +45,7 @@ get_boxi_extract_path <- function(
     }
 
     if (!check_year_valid(year, type)) {
-      return(get_dummy_boxi_extract_path())
+      return(get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE))
     }
 
     file_name <- dplyr::case_match(
@@ -77,17 +77,13 @@ get_boxi_extract_path <- function(
       stringr::str_glue("{file_name}-20{year}.csv")
     )
 
-    if(BYOC_MODE){
-      boxi_extract_path <- "dummy_byoc_boxi_extract_path"
-    }else{
-      # If the csv.gz file doesn't exist look for the unzipped csv.
-      if (fs::file_exists(boxi_extract_path_csv_gz)) {
-        boxi_extract_path <- boxi_extract_path_csv_gz
-      } else if (fs::file_exists(boxi_extract_path_csv)) {
-        boxi_extract_path <- boxi_extract_path_csv
-      } else {
-        rlang::abort(stringr::str_glue("{type} Extract not found"))
-      }
+    # If the csv.gz file doesn't exist look for the unzipped csv.
+    if (fs::file_exists(boxi_extract_path_csv_gz)) {
+      boxi_extract_path <- boxi_extract_path_csv_gz
+    } else if (fs::file_exists(boxi_extract_path_csv)) {
+      boxi_extract_path <- boxi_extract_path_csv
+    } else {
+      rlang::abort(stringr::str_glue("{type} Extract not found"))
     }
 
     return(boxi_extract_path)
