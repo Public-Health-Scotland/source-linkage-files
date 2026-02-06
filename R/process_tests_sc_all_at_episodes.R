@@ -10,6 +10,8 @@
 #'
 #' @export
 process_tests_sc_all_at_episodes <- function(data) {
+  log_slf_event(stage = "test", status = "start", type = "sc_at_ep", year = "all")
+
   comparison <- produce_test_comparison(
     old_data = produce_sc_all_episodes_tests(
       read_file(get_sc_at_episodes_path(update = previous_update()))
@@ -21,6 +23,8 @@ process_tests_sc_all_at_episodes <- function(data) {
 
   comparison %>%
     write_tests_xlsx(sheet_name = "all_at_episodes", workbook_name = "lookup")
+
+  log_slf_event(stage = "test", status = "complete", type = "sc_at_ep", year = "all")
 
   return(comparison)
 }

@@ -11,6 +11,8 @@
 #'
 #' @export
 process_tests_lookup_pc <- function(data, update = previous_update()) {
+  log_slf_event(stage = "test", status = "start", type = "pc_lookup", year = "all")
+
   comparison <- produce_test_comparison(
     old_data = produce_slf_postcode_tests(
       read_file(get_slf_postcode_path(update = update))
@@ -18,6 +20,8 @@ process_tests_lookup_pc <- function(data, update = previous_update()) {
     new_data = produce_slf_postcode_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "source_pc_lookup", workbook_name = "lookup")
+
+  log_slf_event(stage = "test", status = "complete", type = "pc_lookup", year = "all")
 
   return(comparison)
 }
