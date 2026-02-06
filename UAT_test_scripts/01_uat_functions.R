@@ -148,6 +148,12 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
     withFilter = FALSE
   )
 
+  # Reorder the sheets alphabetically
+  sheet_names <- wb$sheet_names
+  names(sheet_names) <- wb$sheetOrder
+
+  openxlsx::worksheetOrder(wb) <- names(sort(sheet_names))
+
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
     tests_workbook_path,
