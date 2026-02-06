@@ -15,6 +15,8 @@ read_extract_homelessness <- function(
     return(tibble::tibble())
   } # todo: waiting to be finalised
 
+  log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
+
   extract_homelessness <- as_tibble(dbGetQuery(
     denodo_connect,
     stringr::str_glue(
@@ -52,6 +54,8 @@ read_extract_homelessness <- function(
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
     slfhelper::get_anon_chi("chi")
+
+  log_slf_event(stage = "read", status = "complete", type = "homelessness", year = year)
 
   return(extract_homelessness)
 }

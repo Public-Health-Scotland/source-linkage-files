@@ -7,6 +7,8 @@ read_extract_district_nursing <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "dn")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "dn", year = year)
+
   if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())
   }
@@ -54,6 +56,8 @@ read_extract_district_nursing <- function(
       duration_contact = "Duration of Contact (measure)",
       location_contact = "Location of Contact"
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "dn", year = year)
 
   return(extract_district_nursing)
 }

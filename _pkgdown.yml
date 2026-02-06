@@ -105,6 +105,10 @@ reference:
     - load_ep_file_vars
     - write_temp_data
     - write_console_output
+    - log_ep_message
+    - log_ind_message
+    - log_tar_message
+    - log_slf_event
 
 
   - title: Initialisation

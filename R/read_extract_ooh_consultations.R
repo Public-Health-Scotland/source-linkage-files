@@ -7,6 +7,8 @@ read_extract_ooh_consultations <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh-c", year = year)
+
   # Read consultations data
   consultations_extract <- read_file(file_path,
     col_types = readr::cols(
@@ -55,6 +57,8 @@ read_extract_ooh_consultations <- function(
     dplyr::distinct() %>%
     # change back to anon_chi
     slfhelper::get_anon_chi()
+
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh-c", year = year)
 
   return(consultations_extract)
 }

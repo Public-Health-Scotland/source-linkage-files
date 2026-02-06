@@ -7,6 +7,8 @@ read_extract_maternity <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "maternity")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "maternity", year = year)
+
   # Read BOXI extract
   extract_maternity <- read_file(file_path,
     col_type = readr::cols(
@@ -120,6 +122,8 @@ read_extract_maternity <- function(
       hbtreatcode = "Treatment NHS Board Code - current",
       uri = "Maternity Unique Record Identifier [C]"
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "maternity", year = year)
 
   return(extract_maternity)
 }

@@ -9,6 +9,8 @@
 #' @export
 #'
 process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
+  log_slf_event(stage = "process", status = "start", type = "ltc", year = year)
+
   # Create LTC flags 1/0------------------------------------
 
   # Set flags to 1 or 0 based on FY
@@ -31,6 +33,8 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "ltc", year = year)
 
   return(ltc_flags)
 }
