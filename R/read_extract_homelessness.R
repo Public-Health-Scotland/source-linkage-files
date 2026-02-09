@@ -8,14 +8,14 @@ read_extract_homelessness <- function(
   file_path = get_boxi_extract_path(year = year, type = "homelessness"),
   BYOC_MODE
 ) {
+  log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
+
   year <- check_year_format(year, format = "alternate")
 
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
   } # todo: waiting to be finalised
-
-  log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
 
   extract_homelessness <- as_tibble(dbGetQuery(
     denodo_connect,
