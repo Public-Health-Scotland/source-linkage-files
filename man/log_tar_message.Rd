@@ -7,7 +7,7 @@
 log_tar_message(stage = c("start", "combining_tests", "all_complete"))
 }
 \arguments{
-\item{stage}{Stage of pipeline: "start", "combining_tests", or "all_complete".}
+\item{stage}{Stage of targets (run_targets_fy.R) creation.}
 }
 \description{
 Log Targets Messages

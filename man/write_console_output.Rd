@@ -18,5 +18,5 @@ write_console_output(
 \item{year}{Financial year.}
 }
 \description{
-Initialises logger to log messages for ep and ind file creation.
+Initialises logger for run_episode_file_fy.R and run_individual_file_fy.R.
 }

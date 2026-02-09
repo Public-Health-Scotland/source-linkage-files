@@ -104,11 +104,6 @@ reference:
     - store_ep_file_vars
     - load_ep_file_vars
     - write_temp_data
-    - write_console_output
-    - log_ep_message
-    - log_ind_message
-    - log_tar_message
-    - log_slf_event
 
 
   - title: Initialisation
@@ -238,3 +233,14 @@ reference:
     - link_ch_with_adms
     - update_uk_postcode_directory
 
+
+  - title: Logger
+    desc: Functions that initialise logger for logging messages during SLF processing.
+  - contents:
+    - write_console_output
+    - log_ep_message
+    - log_ind_message
+    - log_tar_message
+    - log_slf_event
+    - log_ep_substage
+    - log_ind_substage

@@ -7,7 +7,7 @@
 log_ep_message(stage = c("start", "read_data", "creating", "complete"), year)
 }
 \arguments{
-\item{stage}{Stage of creation: "start", "read_data", "creating", or "complete".}
+\item{stage}{Stage of episode file (run_episode_file_fy.R) creation.}
 
 \item{year}{Financial year.}
 }

@@ -7,7 +7,7 @@
 log_slf_event(
   stage = c("read", "process", "test"),
   status = c("start", "complete"),
-  dataset,
+  type,
   year,
   ...
 )
@@ -17,7 +17,7 @@ log_slf_event(
 
 \item{status}{Character: "start" or "complete".}
 
-\item{dataset}{Character: The name of the data (e.g., "Acute", "A&E").}
+\item{type}{Character: The name of the data (e.g., "Acute", "A&E").}
 
 \item{year}{Character: The financial year.}
 

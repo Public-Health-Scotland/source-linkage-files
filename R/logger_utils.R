@@ -1,6 +1,6 @@
 #' Write Console Output to File
 #'
-#' @description Initialises logger to log messages for ep and ind file creation.
+#' @description Initialises logger for run_episode_file_fy.R and run_individual_file_fy.R.
 #'
 #' @param console_outputs If TRUE, capture console output and messages to file.
 #' @param file_type Type of file being processed: "episode", "individual", or "targets".
@@ -64,7 +64,7 @@ write_console_output <- function(console_outputs = TRUE,
 
 #' Log Episode File Messages
 #'
-#' @param stage Stage of creation: "start", "read_data", "creating", or "complete".
+#' @param stage Stage of episode file (run_episode_file_fy.R) creation.
 #' @param year Financial year.
 #'
 #' @export
@@ -84,7 +84,7 @@ log_ep_message <- function(stage = c("start", "read_data", "creating", "complete
 
 #' Log Individual File Messages
 #'
-#' @param stage Stage of creation: "start", "read_data", "creating", or "complete".
+#' @param stage Stage of individual file (run_individual_file_fy.R) creation.
 #' @param year Financial year.
 #'
 #' @export
@@ -104,7 +104,7 @@ log_ind_message <- function(stage = c("start", "read_data", "creating", "complet
 
 #' Log Targets Messages
 #'
-#' @param stage Stage of pipeline: "start", "combining_tests", or "all_complete".
+#' @param stage Stage of targets (run_targets_fy.R) creation.
 #'
 #' @export
 log_tar_message <- function(stage = c("start", "combining_tests", "all_complete")) {
@@ -155,6 +155,32 @@ log_slf_event <- function(stage = c("read", "process", "test"),
   )
 
   msg <- stringr::str_glue(messages[[stage]][[status]])
+
+  logger::log_info(msg)
+}
+
+#' Log Create Episode File (create_episode_file.R) Stages
+#'
+#' @param sub_stage Character: The name of the specific process (e.g., "Join cohort lookups").
+#' @param status Character: "started" or "finished".
+#' @param year Character: The financial year.
+#'
+#' @export
+log_ep_substage <- function(sub_stage, status, year) {
+  msg <- stringr::str_glue("Episode File: {sub_stage} {status} for {year}")
+
+  logger::log_info(msg)
+}
+
+#' Log Create Individual File (create_individual_file.R) Stages
+#'
+#' @param sub_stage Character: The name of the specific process (e.g., "Add cij columns").
+#' @param status Character: "started" or "finished".
+#' @param year Character: The financial year.
+#'
+#' @export
+log_ind_substage <- function(sub_stage, status, year) {
+  msg <- stringr::str_glue("Individual File: {sub_stage} {status} for {year}")
 
   logger::log_info(msg)
 }
