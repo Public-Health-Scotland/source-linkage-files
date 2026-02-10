@@ -1,7 +1,7 @@
 #' Denodo file output path
 #' @export
 denodo_output_path <- function() {
-  "sdl_byoc/byoc/output"
+   "/sdl_byoc/byoc/output"
 }
 
 #' Source Extract File Path
