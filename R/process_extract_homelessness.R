@@ -36,6 +36,8 @@ process_extract_homelessness <- function(
     return(data)
   }
 
+  logger::log_info("Process homelessness data")
+
   data <- data %>%
     dplyr::mutate(
       year = as.character(year),
@@ -176,6 +178,7 @@ process_extract_homelessness <- function(
       "hl1_completeness"
     )
 
+  logger::log_info("Write processed homelessness data to Denodo intermediate drive")
   if (write_to_disk) {
     write_file(
       final_data,

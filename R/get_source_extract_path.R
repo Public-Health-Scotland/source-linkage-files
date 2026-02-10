@@ -47,7 +47,7 @@ get_source_extract_path <- function(year,
   type <- match.arg(type)
 
   if (!check_year_valid(year, type)) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE))
   }
 
   file_name <- dplyr::case_match(
