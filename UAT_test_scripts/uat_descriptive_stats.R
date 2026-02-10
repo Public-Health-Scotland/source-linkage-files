@@ -17,7 +17,8 @@ devtools::load_all()
 
 # 1. Define the lists to loop through
 years <- c("1415", "1516", "1617", "1718", "1819", "1920", "2021", "2122", "2223", "2324", "2425", "2526")
-types <- c("acute", "ae", "at", "ch", "client", "cmh", "dd", "deaths", "dn", "gp_ooh", "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds")
+types <- c("acute", "ae", "at", "ch", "cmh", "dd", "deaths", "dn", "gp_ooh", "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds")
+# removed "client" from types as "anon-client_for_source_" is not present in sourcedev.
 
 # 2. Create an empty list to hold the results
 results_list <- list()
@@ -25,6 +26,14 @@ results_list <- list()
 # 3. Start the loop
 for (t in types) {
   for (y in years) {
+
+    # Check if data type is available for the financial year
+    is_valid <- check_year_valid(year = y, type = t)
+
+    if (is_valid == FALSE) {
+      message("Skipping: ", t, " for fy ", y, " (No data available)")
+      next
+    }
 
     message("Currently processing: ", t, " for fy ", y)
 
@@ -58,3 +67,5 @@ final_table <- do.call(rbind, results_list)
 
 # 5. Save to Excel
 write.xlsx(final_table, "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx", sheetName = "UAT support")
+
+message("Descriptive statistics complete. File saved to: /conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx")
