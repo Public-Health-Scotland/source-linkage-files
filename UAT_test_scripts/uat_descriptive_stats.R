@@ -26,7 +26,6 @@ results_list <- list()
 # 3. Start the loop
 for (t in types) {
   for (y in years) {
-
     # Check if data type is available for the financial year
     is_valid <- check_year_valid(year = y, type = t)
 
@@ -44,7 +43,7 @@ for (t in types) {
     # Descriptive Statistics Calculations
     rows <- nrow(data)
     cols <- ncol(data)
-    nas  <- sum(is.na(data))
+    nas <- sum(is.na(data))
     prop <- nas / (rows * cols)
 
     # Store the results
