@@ -18,9 +18,9 @@ library("readxl")
 # or DVPROD (production environment)
 denodo_connect <- suppressWarnings(
   dbConnect(odbc(),
-            dsn = "DVPREPROD", # or DVPROD
-            uid = .rs.askForPassword("Username:"),
-            pwd = .rs.askForPassword("Enter your test environment password")
+    dsn = "DVPREPROD", # or DVPROD
+    uid = .rs.askForPassword("Username:"),
+    pwd = .rs.askForPassword("Enter your test environment password")
   )
 )
 
@@ -44,15 +44,15 @@ name_list <- openxlsx::read.xlsx(
   )
 )
 
-datasets = c("maternity", "ae")
+datasets <- c("maternity", "ae")
 name_list <- name_list %>%
   dplyr::filter(dataset_list %in% datasets)
 
 
-for(ii in 1:nrow(name_list)){
-  dataset_name = name_list$dataset_list[ii]
-  fn_name = name_list$fn_list[ii]
-  sdl_name = name_list$sdl_list[ii]
+for (ii in 1:nrow(name_list)) {
+  dataset_name <- name_list$dataset_list[ii]
+  fn_name <- name_list$fn_list[ii]
+  sdl_name <- name_list$sdl_list[ii]
 
   source(here::here("UAT_test_scripts/02_uat_fn_script.R"))
 }
