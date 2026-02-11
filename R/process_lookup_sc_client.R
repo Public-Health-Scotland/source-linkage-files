@@ -19,7 +19,7 @@ process_lookup_sc_client <-
            sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
              dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
            write_to_disk = TRUE) {
-    log_slf_event(stage = "process", status = "start", type = "client", year = year)
+    log_slf_event(stage = "process", status = "start", type = "sc_client", year = year)
 
     # Check if year is valid for sc_client
     if (!check_year_valid(year, "client")) {
@@ -212,7 +212,7 @@ process_lookup_sc_client <-
       )
     }
 
-    log_slf_event(stage = "process", status = "complete", type = "client", year = year)
+    log_slf_event(stage = "process", status = "complete", type = "sc_client", year = year)
 
     return(sc_client_lookup)
   }

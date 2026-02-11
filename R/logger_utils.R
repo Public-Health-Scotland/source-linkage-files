@@ -142,14 +142,14 @@ log_slf_event <- function(stage = c("read", "process", "test"),
   messages <- list(
     read = list(
       start    = "Reading {year} {type} data from denodo",
-      complete = "Finished reading {year} {type} data"
+      complete = "Finished reading and renaming {year} {type} data"
     ),
     process = list(
       start    = "Processing {year} {type} data",
       complete = "Finished processing {year} {type} data"
     ),
     test = list(
-      start    = "Running process test on {year} {type} data",
+      start    = "Processing test on {year} {type} data",
       complete = "Completed tests on {year} {type} data"
     )
   )
