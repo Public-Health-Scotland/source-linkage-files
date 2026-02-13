@@ -135,22 +135,51 @@ log_slf_event <- function(stage = c("read", "process", "test"),
                           type,
                           year,
                           ...) {
+  file_name <- dplyr::case_match(
+    type,
+    "acute" ~ "Acute",
+    "ae" ~ "A&E",
+    "at" ~ "Alarms Telecare",
+    "ch" ~ "Care Home",
+    "client" ~ "Social Care Client",
+    "cmh" ~ "Community Mental Health",
+    "dd" ~ "Delayed Discharges",
+    "deaths" ~ "NRS Deaths",
+    "dn" ~ "District Nursing",
+    "gpooh" ~ "GP Out of Hours",
+    "gp_ooh-c" ~ "GP Out of Hours Consultations",
+    "gp_ooh-d" ~ "GP Out of Hours Diagnosis",
+    "gp_ooh-o" ~ "GP Out of Hours Outcomes",
+    "hc" ~ "Home Care",
+    "homelessness" ~ "Homelessness",
+    "it_chi_deaths" ~ "IT_Chi_Deaths",
+    "ltc" ~ "Long Term Conditions",
+    "maternity" ~ "Maternity",
+    "mh" ~ "Mental Health",
+    "outpatient" ~ "Outpatient",
+    "pis" ~ "Prescribing",
+    "sc_demog" ~ "Social Care Demographics",
+    "sds" ~ "Self Directed Support",
+    "pis" ~ "Prescribing",
+    .default = type #use type if file_name not available
+  )
+
   stage <- match.arg(stage)
   status <- match.arg(status)
 
   # List of message templates
   messages <- list(
     read = list(
-      start    = "Reading {year} {type} data from denodo",
-      complete = "Finished reading and renaming {year} {type} data"
+      start    = "Reading {year} {file_name} data from denodo",
+      complete = "Finished reading and renaming {year} {file_name} data"
     ),
     process = list(
-      start    = "Processing {year} {type} data",
-      complete = "Finished processing {year} {type} data"
+      start    = "Processing {year} {file_name} data",
+      complete = "Finished processing {year} {file_name} data"
     ),
     test = list(
-      start    = "Processing test on {year} {type} data",
-      complete = "Completed tests on {year} {type} data"
+      start    = "Processing test on {year} {file_name} data",
+      complete = "Completed tests on {year} {file_name} data"
     )
   )
 
