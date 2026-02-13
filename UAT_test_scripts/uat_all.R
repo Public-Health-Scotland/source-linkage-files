@@ -32,7 +32,7 @@ source(here::here("UAT_test_scripts/01_uat_functions.R"))
 ## Setup data --------------
 
 # Analyst name for folder structure
-analyst <- "Zihao"
+analyst <- "Jen"
 
 name_list <- openxlsx::read.xlsx(
   file.path(
@@ -44,9 +44,10 @@ name_list <- openxlsx::read.xlsx(
   )
 )
 
-datasets <- c("maternity", "ae")
+datasets <- c("acute", "nrs_deaths", "gp_ooh_consultations")
 name_list <- name_list %>%
-  dplyr::filter(dataset_list %in% datasets)
+  dplyr::filter(dataset_list %in% datasets) %>%
+  dplyr::arrange(dataset_list)
 
 
 for (ii in 1:nrow(name_list)) {
@@ -56,5 +57,28 @@ for (ii in 1:nrow(name_list)) {
 
   source(here::here("UAT_test_scripts/02_uat_fn_script.R"))
 }
+
+
+################################################################################
+## DEBUGGING
+
+# If you need to run one dataset within this loop, assign ii to the row number
+# and run the following code. This will put everything you need into the
+# environment then you can run through 02_uat_fn_script and 01_uat_functions
+# to see where the problem is
+
+# Assign row number (returns the dataset you want to look at in names_list)
+# ii <- 3
+
+# After Assigning ii as the row number you want to investigate, run the
+# following code:
+# dataset_name <- name_list$dataset_list[ii]
+# fn_name <- name_list$fn_list[ii]
+# sdl_name <- name_list$sdl_list[ii]
+
+# Now run lines 1-13 in 02_uat_fn_script.r and line by line in
+# 01_uat_functions.r to debug
+
+#################################################################################
 
 DBI::dbDisconnect(denodo_connect)
