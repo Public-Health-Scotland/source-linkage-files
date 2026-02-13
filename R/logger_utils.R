@@ -161,7 +161,7 @@ log_slf_event <- function(stage = c("read", "process", "test"),
     "sc_demog" ~ "Social Care Demographics",
     "sds" ~ "Self Directed Support",
     "pis" ~ "Prescribing",
-    .default = type #use type if file_name not available
+    .default = type # use type if file_name not available
   )
 
   stage <- match.arg(stage)
