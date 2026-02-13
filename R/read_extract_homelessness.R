@@ -5,7 +5,8 @@
 #' @export
 read_extract_homelessness <- function(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "homelessness"),
+  denodo_connect,
+  file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
@@ -17,7 +18,8 @@ read_extract_homelessness <- function(
     return(tibble::tibble())
   } # todo: waiting to be finalised
 
-  extract_homelessness <- as_tibble(dbGetQuery(
+  logger::log_info("Read homelessness data from Denodo")
+  extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
     denodo_connect,
     stringr::str_glue(
       "select * from sdl.sdl_homelessness_source

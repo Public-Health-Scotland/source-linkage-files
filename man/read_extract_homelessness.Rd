@@ -6,7 +6,8 @@
 \usage{
 read_extract_homelessness(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "homelessness"),
+  denodo_connect,
+  file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 )
 }
