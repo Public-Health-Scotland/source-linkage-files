@@ -20,6 +20,15 @@ get_slf_variable_lookup <- function() {
 }
 
 
+get_name_list_lookup <- function(){
+  uat_dir <- fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates", "uat_testing", "1_source_data_views", "Lookups")
+  file_name <- "uat_names.xlsx"
+  path <- stringr::str_glue("{uat_dir}/{file_name}")
+
+  return(path)
+}
+
+
 ## Main function to create test output.
 create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
   # Create a tibble containing info on boxi cols

@@ -34,16 +34,6 @@ source(here::here("UAT_test_scripts/01_uat_functions.R"))
 # Analyst name for folder structure
 analyst <- "Jen"
 
-name_list <- openxlsx::read.xlsx(
-  file.path(
-    get_dev_dir(),
-    "uat_testing",
-    "1_source_data_views",
-    "Lookups",
-    "uat_names.xlsx"
-  )
-)
-
 datasets <- c("acute", "nrs_deaths", "gp_ooh_consultations")
 name_list <- name_list %>%
   dplyr::filter(dataset_list %in% datasets) %>%
