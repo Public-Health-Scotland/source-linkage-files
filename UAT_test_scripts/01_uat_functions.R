@@ -37,7 +37,7 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
     dataset_name,
     cols = colnames(boxi_data),
     origin_boxi = "boxi",
-    boxi_type = sapply(boxi_data, class),
+    boxi_type = sapply(boxi_data, function(z) class(z)[1]),
     total_cols_boxi = ncol(boxi_data)
   )
 
@@ -65,7 +65,7 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
     dataset_name,
     cols = colnames(sdl_data),
     origin_sdl = "sdl",
-    sdl_type = sapply(sdl_data, class),
+    sdl_type = sapply(sdl_data, function(z) class(z)[1]),
     total_cols_sdl = ncol(sdl_data)
   )
 
