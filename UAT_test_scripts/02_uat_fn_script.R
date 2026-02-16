@@ -12,9 +12,6 @@ denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
   sheet = dataset_name
 )
 
-# Read name list for matching each dataset function/sdl name
-name_list <- readxl::read_excel(get_name_list_lookup())
-
 
 #-------------------------------------------------------------------------------
 

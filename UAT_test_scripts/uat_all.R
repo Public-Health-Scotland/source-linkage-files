@@ -13,6 +13,7 @@ library(purrr)
 library("writexl")
 library("openxlsx")
 library("readxl")
+library(logger)
 
 # Open a connection to DVPREPROD (test environment)
 # or DVPROD (production environment)
@@ -35,7 +36,9 @@ source(here::here("UAT_test_scripts/01_uat_functions.R"))
 analyst <- "Jen"
 
 datasets <- c("acute", "nrs_deaths", "gp_ooh_consultations")
-name_list <- name_list %>%
+
+# Read name list for matching each dataset function/sdl name
+name_list <- readxl::read_excel(get_name_list_lookup()) %>%
   dplyr::filter(dataset_list %in% datasets) %>%
   dplyr::arrange(dataset_list)
 
@@ -44,6 +47,10 @@ for (ii in 1:nrow(name_list)) {
   dataset_name <- name_list$dataset_list[ii]
   fn_name <- name_list$fn_list[ii]
   sdl_name <- name_list$sdl_list[ii]
+
+  log_info(
+    "UAT run {ii}/{nrow(name_list)} | dataset = {dataset_name}, function = {fn_name}, sdl_name = {sdl_name}"
+  )
 
   source(here::here("UAT_test_scripts/02_uat_fn_script.R"))
 }
