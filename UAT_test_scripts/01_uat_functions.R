@@ -169,6 +169,10 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
     overwrite = TRUE
   )
 
+  log_info(
+    "UAT {dataset_name} written to {tests_workbook_path}"
+  )
+
   if (fs::file_info(path = tests_workbook_path)$user == Sys.getenv("USER")) {
     # Set the correct permissions (read, write, execute)
     fs::file_chmod(path = tests_workbook_path, mode = "770")
