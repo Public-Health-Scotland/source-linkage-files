@@ -29,7 +29,7 @@ get_boxi_extract_path <- function(
     "mh",
     "outpatients"
   ),
-  BYOC_MODE
+  BYOC_MODE = FALSE
 ) {
   if (BYOC_MODE) {
     return("dummy_byoc_boxi_extract_path")
@@ -94,7 +94,7 @@ get_boxi_extract_path <- function(
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 #' @export
-get_dummy_boxi_extract_path <- function(BYOC_MODE) {
+get_dummy_boxi_extract_path <- function(BYOC_MODE = FALSE) {
   if (BYOC_MODE) {
     dummy_path <- file.path(get_dev_dir(BYOC_MODE), ".dummy")
   } else {
