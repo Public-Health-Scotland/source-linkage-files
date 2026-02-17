@@ -38,6 +38,10 @@ get_boxi_extract_path <- function(
 
     # Since BOXI extracts will be only in sourcedev and not needed in Denodo,
     # BYOC_MODE here will be always FALSE.
+
+    # TODO: JT - Check here to see if this comment is still relevant. My understanding
+    #       is that any static files will be converted into Denodo VDBs. This code
+    #       may be redundant during refactoring.
     if (type %in% c("dn", "cmh")) {
       dir <- fs::path(get_slf_dir(), "Archived_data")
     } else {
