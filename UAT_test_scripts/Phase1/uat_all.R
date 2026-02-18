@@ -1,4 +1,16 @@
-## Setup environment ---
+################################################################################
+# Name of file - uat_all.R
+#
+# Original Authors - Jennifer Thom
+# Original Date - January 2026
+# Written/run on - R Posit
+# Version of R - 4.4.2
+#
+# Description: Functions used to support the UAT test scrips.
+#
+#################################################################################
+
+# Setup environment ---
 rm(list = ls())
 
 # Load createslf package
