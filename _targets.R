@@ -19,7 +19,7 @@
 # Stage 0 - Setup BYOC_MODE in targets -----------------------------------------
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
 BYOC_MODE <- dplyr::case_when(
-  BYOC_MODE %in% c("TRUE", "T", "true", "True")  ~ TRUE,
+  BYOC_MODE %in% c("TRUE", "T", "true", "True") ~ TRUE,
   BYOC_MODE %in% c("FALSE", "F", "false", "False") ~ FALSE,
   TRUE ~ NA
 )
@@ -30,7 +30,7 @@ BYOC_MODE <- dplyr::case_when(
 if (BYOC_MODE) {
   targets::tar_config_set(store = createslf::denodo_output_path())
   logger::log_info("targets file location on Denodo")
-} else{
+} else {
   targets::tar_config_set(store = "/conf/sourcedev/Source_Linkage_File_Updates/_targets")
   logger::log_info("targets file location is local")
 }
