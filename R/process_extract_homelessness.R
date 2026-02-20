@@ -28,8 +28,7 @@ process_extract_homelessness <- function(
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- convert_year_to_fyyear(year) %>%
-    check_year_format()
+  year <- check_year_format(year)
 
   # If data is available in the FY then run processing.
   if (identical(data, tibble::tibble())) {
