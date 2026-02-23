@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_ltcs <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "ltc", year = year)
+
   old_data <- read_file(get_ltcs_path(year, update = previous_update()))
 
   comparison <- produce_test_comparison(
@@ -15,6 +17,8 @@ process_tests_ltcs <- function(data, year) {
   ) %>%
     dplyr::mutate(recid = "LTCs") %>%
     write_tests_xlsx(sheet_name = "ltc", year = year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "ltc", year = year)
 
   return(comparison)
 }

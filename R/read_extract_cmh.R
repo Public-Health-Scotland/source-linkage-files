@@ -7,6 +7,8 @@ read_extract_cmh <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "cmh")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "cmh", year = year)
+
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())
@@ -54,6 +56,8 @@ read_extract_cmh <- function(
       diag4 = "Other Aim of Contact (3)",
       diag5 = "Other Aim of Contact (4)"
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "cmh", year = year)
 
   return(extract_cmh)
 }

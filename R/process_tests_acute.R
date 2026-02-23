@@ -10,6 +10,8 @@
 #'
 #' @export
 process_tests_acute <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "acute", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- apply_cost_uplift(data)
@@ -21,6 +23,8 @@ process_tests_acute <- function(data, year) {
     new_data = produce_source_extract_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "01b", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "acute", year = year)
 
   return(comparison)
 }

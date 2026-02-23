@@ -16,6 +16,8 @@ process_sc_all_home_care <- function(
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "hc", year = "all")
+
   sending_location <- social_care_id <- financial_year <- NULL
 
   data <- data %>%
@@ -213,6 +215,8 @@ process_sc_all_home_care <- function(
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "hc", year = "all")
 
   return(all_hc_processed)
 }
