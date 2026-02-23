@@ -31,9 +31,9 @@ library(logger)
 # or DVPROD (production environment)
 denodo_connect <- suppressWarnings(
   dbConnect(odbc(),
-            dsn = "DVPREPROD", # or DVPROD
-            uid = .rs.askForPassword("Username:"),
-            pwd = .rs.askForPassword("Enter your test environment password")
+    dsn = "DVPREPROD", # or DVPROD
+    uid = .rs.askForPassword("Username:"),
+    pwd = .rs.askForPassword("Enter your test environment password")
   )
 )
 
@@ -91,4 +91,3 @@ for (ii in 1:nrow(name_list)) {
 #################################################################################
 
 DBI::dbDisconnect(denodo_connect)
-

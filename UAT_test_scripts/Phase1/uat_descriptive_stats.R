@@ -68,4 +68,3 @@ final_table <- do.call(rbind, results_list)
 write.xlsx(final_table, "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx", sheetName = "UAT support")
 
 message("Descriptive statistics complete. File saved to: /conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx")
-

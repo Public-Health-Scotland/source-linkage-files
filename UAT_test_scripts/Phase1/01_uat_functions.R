@@ -85,8 +85,8 @@ create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
       names_expected_in_sdl = if_else((origin_boxi == "boxi" & origin_sdl == "sdl"), "Yes", "No"),
       # Flag mismatching variables
       mismatched_col = if_else((is_boxi_in_sdl == "No - boxi not in sdl" |
-                                  is_boxi_in_sdl == "No - sdl not in boxi"),
-                               1L, 0L
+        is_boxi_in_sdl == "No - sdl not in boxi"),
+      1L, 0L
       ),
       # Check status
       test_status = case_when(
@@ -165,8 +165,8 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
-                         tests_workbook_path,
-                         overwrite = TRUE
+    tests_workbook_path,
+    overwrite = TRUE
   )
 
   log_info(
@@ -181,4 +181,3 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
     fs::file_chown(path = tests_workbook_path, group_id = 3206)
   }
 }
-
