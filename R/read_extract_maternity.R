@@ -7,13 +7,20 @@ read_extract_maternity <- function(year,
                                    denodo_connect,
                                    file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
                                    BYOC_MODE) {
-  year <- check_year_format(year, format = "alternate")
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  # Specify years available for running
+  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+    return(tibble::tibble())
+  }
+
   # Read BOXI extract
   extract_maternity <- tibble::as_tibble(odbc::dbGetQuery(
     denodo_connect,
     stringr::str_glue(
       "select * from sdl.sdl_maternity_episode_source
-        where costs_financial_year = {year}"
+        where costs_financial_year = {c_year}"
     )
   )) %>%
     # Rename variables in line with SLF variable names
