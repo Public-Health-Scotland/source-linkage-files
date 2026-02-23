@@ -155,7 +155,7 @@ sg_pub_data <- data.frame(
 
 
 # just test one year
-year = "1920"
+year <- "1920"
 
 # targets::tar_make()
 
@@ -186,9 +186,11 @@ maternity <- read_extract_maternity(
   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
   BYOC_MODE = BYOC_MODE
 ) %>%
-  process_extract_maternity(year = year,
-                            write_to_disk = TRUE,
-                            BYOC_MODE = BYOC_MODE)
+  process_extract_maternity(
+    year = year,
+    write_to_disk = TRUE,
+    BYOC_MODE = BYOC_MODE
+  )
 
 ## disconnect from denodo if run locally ----
 if (!BYOC_MODE) {
