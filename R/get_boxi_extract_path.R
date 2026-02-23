@@ -29,7 +29,7 @@ get_boxi_extract_path <- function(
     "mh",
     "outpatients"
   ),
-  BYOC_MODE
+  BYOC_MODE = FALSE
 ) {
   if (BYOC_MODE) {
     return("dummy_byoc_boxi_extract_path")
@@ -38,6 +38,9 @@ get_boxi_extract_path <- function(
 
     # Since BOXI extracts will be only in sourcedev and not needed in Denodo,
     # BYOC_MODE here will be always FALSE.
+
+    # Hence, this function or the if-else part of BYOC_MODE being FALSE will
+    # be completely removed after refactoring is completed.
     if (type %in% c("dn", "cmh")) {
       dir <- fs::path(get_slf_dir(), "Archived_data")
     } else {
@@ -45,7 +48,7 @@ get_boxi_extract_path <- function(
     }
 
     if (!check_year_valid(year, type)) {
-      return(get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE))
+      return(get_dummy_boxi_extract_path(BYOC_MODE = FALSE))
     }
 
     file_name <- dplyr::case_match(
@@ -94,7 +97,7 @@ get_boxi_extract_path <- function(
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 #' @export
-get_dummy_boxi_extract_path <- function(BYOC_MODE) {
+get_dummy_boxi_extract_path <- function(BYOC_MODE = FALSE) {
   if (BYOC_MODE) {
     dummy_path <- file.path(get_dev_dir(BYOC_MODE), ".dummy")
   } else {

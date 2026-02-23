@@ -4,7 +4,7 @@
 \alias{get_dummy_boxi_extract_path}
 \title{Get a path to a dummy file}
 \usage{
-get_dummy_boxi_extract_path(BYOC_MODE)
+get_dummy_boxi_extract_path(BYOC_MODE = FALSE)
 }
 \value{
 an \code{\link[fs:path]{fs::path()}} to a dummy file which can be used with targets.
