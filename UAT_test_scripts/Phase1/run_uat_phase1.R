@@ -64,7 +64,7 @@ for (ii in 1:nrow(name_list)) {
     "UAT run {ii}/{nrow(name_list)} | dataset = {dataset_name}, function = {fn_name}, sdl_name = {sdl_name}"
   )
 
-  source(here::here("UAT_test_scripts/02_uat_fn_script.R"))
+  source(here::here("UAT_test_scripts/Phase1/02_uat_fn_script.R"))
 }
 
 
