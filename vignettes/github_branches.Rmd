@@ -29,12 +29,6 @@ The project uses a three‑tier protected branching model:
 
 `master` → `main-byoc` → `UAT` → `development`
 
-### Visual Workflow:
-
-```{r, echo=FALSE, out.width="85%"}
-knitr::include_graphics("images/git_flow.png")
-```
-
 ### Branching Workflow:
 **master (production)** – Represents the code currently deployed in production
 * Must be protected: No direct pushes and PRs must be approved by 1 SLF team member + 1 NSS BI member.
@@ -56,6 +50,12 @@ knitr::include_graphics("images/git_flow.png")
 **Feature branches (working branches)** – Created when working on issues
 * Always created from development
 * After testing locally, raise a PR → merge into development
+
+### Merge Visual Workflow:
+
+```{r, echo=FALSE, out.width="85%"}
+knitr::include_graphics("images/git_flow.png")
+```
 
 ### Workflow Summary
 | Branch               | Purpose                  | Approval Required     |
