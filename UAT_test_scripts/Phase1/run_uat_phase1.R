@@ -38,7 +38,7 @@ denodo_connect <- suppressWarnings(
 )
 
 # Source functions
-source(here::here("UAT_test_scripts/01_uat_functions.R"))
+source(here::here("UAT_test_scripts/Phase1/01_uat_functions.R"))
 
 #-------------------------------------------------------------------------------
 
