@@ -9,21 +9,22 @@ read_extract_homelessness <- function(
   file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
-  year <- check_year_format(year, format = "alternate")
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
-  } # todo: waiting to be finalised
+  }
 
   logger::log_info("Read homelessness data from Denodo")
   extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
     denodo_connect,
     stringr::str_glue(
       "select * from sdl.sdl_homelessness_source
-        where financial_year_of_assessment <= {year}
+        where financial_year_of_assessment <= {c_year}
         and  (financial_year_of_case_closed is null
-              or financial_year_of_case_closed >= {year})"
+              or financial_year_of_case_closed >= {c_year})"
     )
   )) %>%
     dplyr::select(

@@ -12,7 +12,7 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
+process_extract_maternity <- function(data, year, write_to_disk = TRUE, BYOC_MODE) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -117,7 +117,8 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       maternity_processed,
-      get_source_extract_path(year, "maternity", check_mode = "write"),
+      get_source_extract_path(year, "maternity", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }

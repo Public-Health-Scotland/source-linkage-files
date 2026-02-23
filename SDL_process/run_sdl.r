@@ -155,8 +155,7 @@ sg_pub_data <- data.frame(
 
 
 # just test one year
-year <- "2019"
-fyear <- convert_year_to_fyyear(year)
+year <- "1920"
 
 # targets::tar_make()
 
@@ -166,7 +165,11 @@ logger::log_info("Read and process homelessness data")
 hl1 <- read_extract_homelessness(
   year,
   denodo_connect = denodo_connect,
-  file_path = get_boxi_extract_path(year = fyear, type = "homelessness", BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(
+    year = year,
+    type = "homelessness",
+    BYOC_MODE = BYOC_MODE
+  ),
   BYOC_MODE = BYOC_MODE
 ) %>% process_extract_homelessness(
   year = year,
@@ -175,6 +178,19 @@ hl1 <- read_extract_homelessness(
   sg_pub_data = sg_pub_data,
   BYOC_MODE = BYOC_MODE
 )
+
+logger::log_info("Read and process maternity data")
+maternity <- read_extract_maternity(
+  year,
+  denodo_connect = denodo_connect,
+  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+  BYOC_MODE = BYOC_MODE
+) %>%
+  process_extract_maternity(
+    year = year,
+    write_to_disk = TRUE,
+    BYOC_MODE = BYOC_MODE
+  )
 
 ## disconnect from denodo if run locally ----
 if (!BYOC_MODE) {
