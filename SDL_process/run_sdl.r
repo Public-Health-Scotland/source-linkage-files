@@ -76,7 +76,7 @@ year <- "2019"
 fyear <- convert_year_to_fyyear(year)
 
 # dummy targets testing
-targets::tar_make(script = 'dummy_targets.R')
+targets::tar_make(script = "dummy_targets.R")
 
 ## disconnect from denodo if run locally ----
 if (!BYOC_MODE) {
