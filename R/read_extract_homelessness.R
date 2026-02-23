@@ -15,7 +15,7 @@ read_extract_homelessness <- function(
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
-  } # todo: waiting to be finalised
+  }
 
   logger::log_info("Read homelessness data from Denodo")
   extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
