@@ -96,4 +96,52 @@ get_denodo_connection <- function(dsn = "DVPREPROD", username) {
   return(db_connection)
 }
 
+#' Interactively set up the keyring for denodo connection
+#'
+#' @description This is meant to be used with [get_denodo_connection()].
+#' It will go through the steps to set up a keyring which can be used to
+#' supply passwords to [odbc::dbConnect()] in a secure and seamless way.
+#'
+#' @param keyring Name of the keyring
+#' @param key Name of the key
+#' @param keyring_exists Does the keyring already exist
+#' @param key_exists Does the key already exist
+#' @param env_var_pass_exists Does the password for the keyring already exist
+#' in the environment.
+#'
+#' @return NULL (invisibly)
+#' @export
+setup_denodo_keyring <- function(keyring = "denodo_keyring",
+                                 key = "denodo_password",
+                                 keyring_exists = FALSE,
+                                 key_exists = FALSE,
+                                 env_var_pass_exists = FALSE) {
 
+  # setup keyring_backend to avoid error
+  options(keyring_backend = "file")
+
+  # Handle .Renviron entry. Set the keyring vault password.
+  if (!env_var_pass_exists) {
+    keyring_password <- rstudioapi::askForPassword("Enter a password for the Keyring vault (NOT LDAP)")
+
+    renviron_line <- stringr::str_glue('DENODO_KEYRING_PASS = "{keyring_password}"')
+    readr::write_lines(renviron_line, ".Renviron", append = TRUE)
+
+    cli::cli_alert_success("Added password to .Renviron. Please restart your R session.")
+    return(invisible(NULL))
+  }
+
+  # Create Keyring
+  if (!keyring_exists) {
+    keyring::keyring_create(keyring = keyring, password = Sys.getenv("DENODO_KEYRING_PASS"))
+  }
+
+  # Set the denodo Password
+  keyring::keyring_unlock(keyring = keyring, password = Sys.getenv("DENODO_KEYRING_PASS"))
+  if (!key_exists) {
+    keyring::key_set(keyring = keyring, service = key, prompt = "Enter your Denodo password")
+  }
+
+  keyring::keyring_lock(keyring = keyring)
+  cli::cli_alert_success("Denodo Keyring is ready!")
+}
