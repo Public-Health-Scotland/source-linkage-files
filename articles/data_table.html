@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>04 Improve efficiency with `data.table` • createslf</title>
+<title>05 Improve efficiency with `data.table` • createslf</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="04 Improve efficiency with `data.table`">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="05 Improve efficiency with `data.table`">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -35,8 +35,9 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/project_structure.html">01 Project Structure</a></li>
     <li><a class="dropdown-item" href="../articles/using_github.html">02 Using GitHub to Develop createslf</a></li>
-    <li><a class="dropdown-item" href="../articles/package_development.html">03 Package Development</a></li>
-    <li><a class="dropdown-item" href="../articles/data_table.html">04 Improve efficiency with `data.table`</a></li>
+    <li><a class="dropdown-item" href="../articles/github_branches.html">03 Github Branches</a></li>
+    <li><a class="dropdown-item" href="../articles/package_development.html">04 Package Development</a></li>
+    <li><a class="dropdown-item" href="../articles/data_table.html">05 Improve efficiency with `data.table`</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -59,7 +60,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>04 Improve efficiency with `data.table`</h1>
+      <h1>05 Improve efficiency with `data.table`</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/Public-Health-Scotland/source-linkage-files/blob/master/vignettes/data_table.Rmd" class="external-link"><code>vignettes/data_table.Rmd</code></a></small>
@@ -660,7 +661,7 @@ students who scored below 70. However, they differ in syntax and
 implementation, showcasing the flexibility of both <code>dplyr</code>
 and <code>data.table</code> for performing conditional updates.
 Similarly, <code><a href="https://rdrr.io/pkg/data.table/man/fcase.html" class="external-link">data.table::fcase()</a></code> is the equivalent version to
-<code><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">dplyr::case_when()</a></code>.</p>
+<code><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">dplyr::case_when()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>

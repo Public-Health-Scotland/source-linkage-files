@@ -1,4 +1,4 @@
-# 04 Improve efficiency with \`data.table\`
+# 05 Improve efficiency with \`data.table\`
 
 ## Introduction
 
@@ -540,7 +540,7 @@ syntax and implementation, showcasing the flexibility of both `dplyr`
 and `data.table` for performing conditional updates. Similarly,
 [`data.table::fcase()`](https://rdrr.io/pkg/data.table/man/fcase.html)
 is the equivalent version to
-[`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case_when.html).
+[`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html).
 
 ``` r
 library(dplyr)
