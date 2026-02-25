@@ -37,11 +37,14 @@ get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL) {
   }
 
   # Unlock the keyring vault to retrieve username and password
-  tryCatch({
-    keyring::keyring_unlock(keyring = keyring_name, password = env_var_pass)
-  }, error = function(e) {
-    cli::cli_abort("Failed to unlock keyring. Check if DENODO_KEYRING_PASS is correct.")
-  })
+  tryCatch(
+    {
+      keyring::keyring_unlock(keyring = keyring_name, password = env_var_pass)
+    },
+    error = function(e) {
+      cli::cli_abort("Failed to unlock keyring. Check if DENODO_KEYRING_PASS is correct.")
+    }
+  )
 
   # Retrieve Username (From: 1. Function argument, 2. Keyring, 3. System)
   if (is.null(username)) {
@@ -90,7 +93,6 @@ get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL) {
 #' @return NULL (invisibly)
 #' @export
 setup_denodo_keyring <- function(keyring = "denodo_keyring") {
-
   options(keyring_backend = "file")
   service_pass <- "denodo_password"
   service_user <- "denodo_user"
