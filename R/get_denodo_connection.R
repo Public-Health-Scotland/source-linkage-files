@@ -1,4 +1,4 @@
-#' Open a connection to the Denodo database
+#' Open a connection to the Denodo
 #'
 #' @description Opens a connection to the Denodo database given a Data Source
 #' Name (DSN). It will attempt to retrieve the username automatically, prompting
@@ -14,93 +14,71 @@
 #'
 #' @return a connection to the Denodo database.
 #' @export
-get_denodo_connection <- function(dsn = "DVPREPROD", username) {
-  if (missing(username)) {
-    # Collect username if possible
-    username <- dplyr::case_when(
-      Sys.info()["USER"] != "unknown" ~ Sys.info()["USER"],
-      Sys.getenv("USER") != "" ~ Sys.getenv("USER"),
-      system2("whoami", stdout = TRUE) != "" ~ system2("whoami", stdout = TRUE),
-      .default = NA
-    )
-  }
-
-  # If the username is missing try to get input from the user
-  if (is.na(username)) {
-    if (rlang::is_interactive()) {
-      username <- rstudioapi::showPrompt(
-        title = "Denodo Username",
-        message = "Please enter your Denodo username:",
-        default = ""
-      )
-    } else {
-      cli::cli_abort(
-        c("x" = "No username found. Please provide the {.arg username} argument or
-               add {.code USER = 'your_id'} to your {.file .Renviron} file.")
-      )
-    }
-  }
-
-  # Keyring Configuration
+get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL) {
   keyring_name <- "denodo_keyring"
-  service_name <- "denodo_password"
+  service_pass <- "denodo_password"
+  service_user <- "denodo_user"
 
-  keyring_exists <- keyring_name %in% keyring::keyring_list()[["keyring"]]
+  # Check if keyring and environment variable exist
+  keyring_list <- keyring::keyring_list()
+  keyring_exists <- keyring_name %in% keyring_list[["keyring"]]
+  env_var_pass <- Sys.getenv("DENODO_KEYRING_PASS")
+  env_var_exists <- env_var_pass != ""
 
-  if (keyring_exists) {
-    key_exists <- service_name %in% keyring::key_list(keyring = keyring_name)[["service"]]
-  } else {
-    key_exists <- FALSE
-  }
-
-  # Does the 'DENODO_KEYRING_PASS' environment variable exist
-  env_var_pass_exists <- Sys.getenv("DENODO_KEYRING_PASS") != ""
-
-  # Validation and Setup Trigger
-  if (!all(keyring_exists, key_exists, env_var_pass_exists)) {
+  # If not setup, trigger setup (Interactive only)
+  if (!keyring_exists || !env_var_exists) {
     if (rlang::is_interactive()) {
-      setup_denodo_keyring(
-        keyring = keyring_name,
-        key = service_name,
-        keyring_exists = keyring_exists,
-        key_exists = key_exists,
-        env_var_pass_exists = env_var_pass_exists
-      )
+      cli::cli_alert_info("Denodo credentials not configured. Starting setup...")
+      setup_denodo_keyring(keyring = keyring_name)
+      return(invisible(NULL))
     } else {
-      cli::cli_abort("Denodo Keyring is not configured. Please run {.fn setup_denodo_keyring} interactively.")
+      cli::cli_abort("Denodo Keyring is not configured. Run this first.")
     }
   }
 
-  # Create the connection
-  keyring_pass <- if (env_var_pass_exists) {
-    Sys.getenv("DENODO_KEYRING_PASS")
-  } else {
-    rstudioapi::askForPassword("Enter the password for your Denodo Keyring:")
+  # Unlock the keyring vault to retrieve username and password
+  tryCatch({
+    keyring::keyring_unlock(keyring = keyring_name, password = env_var_pass)
+  }, error = function(e) {
+    cli::cli_abort("Failed to unlock keyring. Check if DENODO_KEYRING_PASS is correct.")
+  })
+
+  # Retrieve Username (From: 1. Function argument, 2. Keyring, 3. System)
+  if (is.null(username)) {
+    stored_keys <- keyring::key_list(keyring = keyring_name)[["service"]]
+    if (service_user %in% stored_keys) {
+      username <- keyring::key_get(service_user, keyring = keyring_name)
+    } else {
+      # Fallback to system user if not in keyring
+      username <- Sys.info()["user"]
+    }
   }
 
-  keyring::keyring_unlock(keyring = keyring_name, password = keyring_pass)
+  # Retrieve Password
+  db_pwd <- keyring::key_get(service_pass, keyring = keyring_name)
+
+  # Create Connection
+  cli::cli_alert_info("Connecting to {dsn} as {username}...")
 
   db_connection <- odbc::dbConnect(
     odbc::odbc(),
     dsn = dsn,
     uid = username,
-    pwd = keyring::key_get(
-      keyring = keyring_name,
-      service = service_name
-      )
+    pwd = db_pwd
   )
 
-  # Relock for security
+  # Re-lock the keyring vault for security
   keyring::keyring_lock(keyring = keyring_name)
 
+  cli::cli_alert_success("Connected to denodo successfully!")
   return(db_connection)
 }
 
 #' Interactively set up the keyring for denodo connection
 #'
-#' @description This is meant to be used with [get_denodo_connection()].
-#' It will go through the steps to set up a keyring which can be used to
-#' supply passwords to [odbc::dbConnect()] in a secure and seamless way.
+#' @description Helper function meant to be used with [get_denodo_connection()].
+#' It will go through the steps to set up a keyring which can be used to supply
+#' username and passwords to [odbc::dbConnect()] in a secure and seamless way.
 #'
 #' @param keyring Name of the keyring
 #' @param key Name of the key
@@ -111,37 +89,51 @@ get_denodo_connection <- function(dsn = "DVPREPROD", username) {
 #'
 #' @return NULL (invisibly)
 #' @export
-setup_denodo_keyring <- function(keyring = "denodo_keyring",
-                                 key = "denodo_password",
-                                 keyring_exists = FALSE,
-                                 key_exists = FALSE,
-                                 env_var_pass_exists = FALSE) {
+setup_denodo_keyring <- function(keyring = "denodo_keyring") {
 
-  # setup keyring_backend to avoid error
   options(keyring_backend = "file")
+  service_pass <- "denodo_password"
+  service_user <- "denodo_user"
 
-  # Handle .Renviron entry. Set the keyring vault password.
-  if (!env_var_pass_exists) {
-    keyring_password <- rstudioapi::askForPassword("Enter a password for the Keyring vault (NOT LDAP)")
+  # Setup the keyring vault password (Saved to .Renviron)
+  if (Sys.getenv("DENODO_KEYRING_PASS") == "") {
+    cli::cli_rule("Create Keyring Vault Password")
+    keyring_password <- rstudioapi::askForPassword(
+      "Create a new keyring vault password (Store this in a safe place!):"
+    )
 
-    renviron_line <- stringr::str_glue('DENODO_KEYRING_PASS = "{keyring_password}"')
-    readr::write_lines(renviron_line, ".Renviron", append = TRUE)
+    if (!file.exists(".Renviron")) file.create(".Renviron")
 
-    cli::cli_alert_success("Added password to .Renviron. Please restart your R session.")
+    renviron_line <- sprintf('\nDENODO_KEYRING_PASS="%s"\n', keyring_password)
+    cat(renviron_line, file = ".Renviron", append = TRUE)
+
+    cli::cli_alert_warning("Vault key added to .Renviron.")
+    cli::cli_alert_danger("Restart R session and run setup_denodo_keyring() again to finish setup.")
     return(invisible(NULL))
   }
 
-  # Create Keyring
-  if (!keyring_exists) {
-    keyring::keyring_create(keyring = keyring, password = Sys.getenv("DENODO_KEYRING_PASS"))
+  # Setup Denodo Credentials
+  cli::cli_rule("Setup Denodo Credentials")
+  master_pass <- Sys.getenv("DENODO_KEYRING_PASS")
+
+  # Create keyring if it doesn't exist
+  if (!(keyring %in% keyring::keyring_list()[["keyring"]])) {
+    keyring::keyring_create(keyring = keyring, password = master_pass)
   }
 
-  # Set the denodo Password
-  keyring::keyring_unlock(keyring = keyring, password = Sys.getenv("DENODO_KEYRING_PASS"))
-  if (!key_exists) {
-    keyring::key_set(keyring = keyring, service = key, prompt = "Enter your Denodo password")
-  }
+  keyring::keyring_unlock(keyring = keyring, password = master_pass)
+
+  # Store the Denodo Username
+  uid_input <- rstudioapi::showPrompt("Username", "Enter your Denodo Username:")
+  keyring::key_set_with_value(keyring = keyring, service = service_user, password = uid_input)
+
+  # Store the Denodo Password
+  keyring::key_set(
+    keyring = keyring,
+    service = service_pass,
+    prompt = "Enter your Denodo Password:"
+  )
 
   keyring::keyring_lock(keyring = keyring)
-  cli::cli_alert_success("Denodo Keyring is ready!")
+  cli::cli_alert_success("Setup Complete! You can now use get_denodo_connection().")
 }

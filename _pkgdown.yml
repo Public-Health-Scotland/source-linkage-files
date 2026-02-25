@@ -17,6 +17,7 @@ reference:
     desc: Connection to PHS database
   - contents:
     - phs_db_connection
+    - get_denodo_connection
 
 
   - title: Check
@@ -212,6 +213,7 @@ reference:
     - vars_end_with
     - has_concept("helper_funs")
     - setup_keyring
+    - setup_denodo_keyring
 
 
   - title: Testing
