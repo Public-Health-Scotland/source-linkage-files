@@ -22,7 +22,9 @@ process_extract_homelessness <- function(
   update = latest_update(),
   la_code_lookup = get_la_code_opendata_lookup(),
   sg_pub_data,
-  BYOC_MODE
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -159,7 +161,13 @@ process_extract_homelessness <- function(
     dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 2))
 
   final_data <- hl1_data %>%
+    mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",

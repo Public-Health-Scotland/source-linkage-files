@@ -12,7 +12,13 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_maternity <- function(data, year, write_to_disk = TRUE, BYOC_MODE) {
+process_extract_maternity <- function(data,
+                                      year,
+                                      write_to_disk = TRUE,
+                                      BYOC_MODE = FALSE,
+                                      run_id = NA,
+                                      run_date_time = NA) {
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -69,7 +75,13 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE, BYOC_MOD
     )
 
   maternity_processed <- maternity_clean %>%
+    mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
