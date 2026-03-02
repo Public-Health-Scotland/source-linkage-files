@@ -38,9 +38,11 @@ log_threshold(INFO)
 get_data <- function(year) {
   log_info("Starting the test: Data Generation")
 
-  df <- data.frame(x = 1:10,
-                   y = runif(10),
-                   year = year)
+  df <- data.frame(
+    x = 1:10,
+    y = runif(10),
+    year = year
+  )
 
   log_info("Data Generation complete")
   return(df)
