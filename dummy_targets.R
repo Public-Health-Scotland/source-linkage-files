@@ -11,7 +11,10 @@
 
 
 library(logger)
-library(targets)
+library(targets) # main package required
+library(tarchetypes) # support for targets
+library(crew) # support for parallel processing
+library(dplyr)
 # Stage 1 - Setup BYOC_MODE in targets -----------------------------------------
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
 BYOC_MODE <- dplyr::case_when(
@@ -32,10 +35,12 @@ if (BYOC_MODE) {
 log_threshold(INFO)
 
 # Phase II - Define functions to be used in the test
-get_data <- function() {
+get_data <- function(year) {
   log_info("Starting the test: Data Generation")
 
-  df <- data.frame(x = 1:10, y = runif(10))
+  df <- data.frame(x = 1:10,
+                   y = runif(10),
+                   year = year)
 
   log_info("Data Generation complete")
   return(df)
@@ -50,11 +55,17 @@ analyze_data <- function(data) {
   return(res)
 }
 
+years_to_run <- paste0(20, 17:25)
+
+
 # Stage 2 - Set up targets
 #-------------------------------------------------------------------------------
 list(
-  tar_target(aaraw_data, get_data()),
-  tar_target(aaverage_value, analyze_data(aaraw_data)),
+  tar_map(
+    list(year = years_to_run),
+    tar_target(aaraw_data, get_data(year = year)),
+    tar_target(aaverage_value, analyze_data(aaraw_data))
+  ),
   tar_target(aapipeline_status, {
     log_info("All targets completed successfully.")
     return("SUCCESS")
