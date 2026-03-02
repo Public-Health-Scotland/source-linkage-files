@@ -39,9 +39,13 @@ safe_read_text <- function(path) {
 }
 
 line_starts <- function(text) {
-  if (is.na(text) || !nzchar(text)) return(1L)
+  if (is.na(text) || !nzchar(text)) {
+    return(1L)
+  }
   nl <- gregexpr("\n", text, fixed = TRUE)[[1]]
-  if (length(nl) == 1L && nl[1] == -1L) return(1L)
+  if (length(nl) == 1L && nl[1] == -1L) {
+    return(1L)
+  }
   c(1L, nl + 1L)
 }
 
@@ -338,7 +342,9 @@ build_rule_catalogue <- function() {
 
 scan_text_with_rule <- function(text, file, rule) {
   m <- gregexpr(rule$regex, text, perl = TRUE, ignore.case = FALSE)[[1]]
-  if (length(m) == 1L && m[1] == -1L) return(NULL)
+  if (length(m) == 1L && m[1] == -1L) {
+    return(NULL)
+  }
 
   lens <- attr(m, "match.length")
   out <- vector("list", length(m))
@@ -371,7 +377,6 @@ scan_text_with_rule <- function(text, file, rule) {
 # Preferred:
 #   select(all_of(cols)) / select(-any_of(cols))
 scan_tidyselect_external_vector_indirection <- function(text, file) {
-
   assign_pat <- paste0(
     "(?m)^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:<-|=)\\s*",
     "(?:",
@@ -381,7 +386,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
   )
 
   am <- gregexpr(assign_pat, text, perl = TRUE)[[1]]
-  if (length(am) == 1L && am[1] == -1L) return(NULL)
+  if (length(am) == 1L && am[1] == -1L) {
+    return(NULL)
+  }
 
   al <- attr(am, "match.length")
   syms <- character(0)
@@ -392,11 +399,15 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
     syms <- c(syms, nm)
   }
   syms <- unique(syms)
-  if (!length(syms)) return(NULL)
+  if (!length(syms)) {
+    return(NULL)
+  }
 
   call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
-  if (length(cm) == 1L && cm[1] == -1L) return(NULL)
+  if (length(cm) == 1L && cm[1] == -1L) {
+    return(NULL)
+  }
   cl <- attr(cm, "match.length")
 
   rule <- data.frame(
@@ -421,7 +432,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
 
     # Skip common literal-name selects like select("a", "b", "c") / dplyr::select(...)
     if (grepl("^\\s*(?:dplyr::)?select\\s*\\(\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
-              ctxt_trim, perl = TRUE)) {
+      ctxt_trim,
+      perl = TRUE
+    )) {
       next
     }
 
@@ -445,7 +458,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
     }
   }
 
-  if (!length(out)) return(NULL)
+  if (!length(out)) {
+    return(NULL)
+  }
 
   res <- do.call(rbind, out)
   key <- paste(res$file, res$line, res$col, res$id, res$match, sep = "||")
@@ -468,7 +483,9 @@ scan_tidyselect_bare_predicates <- function(text, file) {
 
   call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
-  if (length(cm) == 1L && cm[1] == -1L) return(NULL)
+  if (length(cm) == 1L && cm[1] == -1L) {
+    return(NULL)
+  }
   cl <- attr(cm, "match.length")
 
   out <- list()
@@ -480,7 +497,9 @@ scan_tidyselect_bare_predicates <- function(text, file) {
 
     # Skip simple string-only select(...) calls (common and valid)
     if (grepl("^\\s*(?:dplyr::)?select\\s*\\(\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
-              ctxt_trim, perl = TRUE)) {
+      ctxt_trim,
+      perl = TRUE
+    )) {
       next
     }
 
@@ -509,7 +528,9 @@ scan_tidyselect_bare_predicates <- function(text, file) {
     }
   }
 
-  if (!length(out)) return(NULL)
+  if (!length(out)) {
+    return(NULL)
+  }
 
   res <- do.call(rbind, out)
   key <- paste(res$file, res$line, res$col, res$id, res$match, sep = "||")
@@ -532,7 +553,9 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
 
   call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
-  if (length(cm) == 1L && cm[1] == -1L) return(NULL)
+  if (length(cm) == 1L && cm[1] == -1L) {
+    return(NULL)
+  }
   cl <- attr(cm, "match.length")
 
   out <- list()
@@ -544,7 +567,9 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
 
     # Skip simple string-only select(...) calls (common and valid)
     if (grepl("^\\s*(?:dplyr::)?select\\s*\\(\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
-              ctxt_trim, perl = TRUE)) {
+      ctxt_trim,
+      perl = TRUE
+    )) {
       next
     }
 
@@ -563,7 +588,9 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
     }
   }
 
-  if (!length(out)) return(NULL)
+  if (!length(out)) {
+    return(NULL)
+  }
 
   res <- do.call(rbind, out)
   key <- paste(res$file, res$line, res$col, res$id, res$match, sep = "||")
@@ -724,6 +751,8 @@ audit_tidyverse_deprecations <- function(root = ".",
 # ============================================================
 
 subset_high_confidence <- function(res) {
-  if (is.null(res$matches) || !nrow(res$matches)) return(res$matches)
+  if (is.null(res$matches) || !nrow(res$matches)) {
+    return(res$matches)
+  }
   res$matches[res$matches$confidence == "high", , drop = FALSE]
 }
