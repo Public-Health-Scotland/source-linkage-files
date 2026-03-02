@@ -18,7 +18,6 @@ process_extract_maternity <- function(data,
                                       BYOC_MODE = FALSE,
                                       run_id = NA,
                                       run_date_time = NA) {
-
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
