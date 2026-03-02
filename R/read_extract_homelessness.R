@@ -18,15 +18,13 @@ read_extract_homelessness <- function(
   }
 
   logger::log_info("Read homelessness data from Denodo")
-  extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
-    denodo_connect,
-    stringr::str_glue(
-      "select * from sdl.sdl_homelessness_source
-        where financial_year_of_assessment <= {c_year}
-        and  (financial_year_of_case_closed is null
-              or financial_year_of_case_closed >= {c_year})"
-    )
-  )) %>%
+  extract_homelessness <- dplyr::tbl(denodo_connect,
+               dbplyr::in_schema("sdl", "sdl_homelessness_source")) %>%
+    dplyr::filter(
+      financial_year_of_assessment <= c_year,
+      is.null(financial_year_of_case_closed) |
+        financial_year_of_case_closed >= c_year
+    ) %>%
     dplyr::select(
       # financial_year_of_assessment,
       # financial_year_of_case_closed,
@@ -54,6 +52,7 @@ read_extract_homelessness <- function(
       refused = "refused",
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
+    dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
   return(extract_homelessness)

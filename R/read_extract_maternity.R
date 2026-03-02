@@ -16,13 +16,11 @@ read_extract_maternity <- function(year,
   }
 
   # Read BOXI extract
-  extract_maternity <- tibble::as_tibble(odbc::dbGetQuery(
+  extract_maternity <- dplyr::tbl(
     denodo_connect,
-    stringr::str_glue(
-      "select * from sdl.sdl_maternity_episode_source
-        where costs_financial_year = {c_year}"
-    )
-  )) %>%
+    dbplyr::in_schema("sdl", "sdl_maternity_episode_source")
+  ) %>%
+    dplyr::filter(costs_financial_year == c_year) %>%
     # Rename variables in line with SLF variable names
     dplyr::select(
       admloc = "admitted_transfer_location_code",
@@ -59,7 +57,7 @@ read_extract_maternity <- function(year,
       hbpraccode = "practice_nhs_health_board_curr",
       hbrescode = "nhs_board_of_residence_code_curr",
       hbtreatcode = "treatment_nhs_board_code_curr",
-      hscp = "hscp_of_residence_code_curr",
+      hscp = "hspc_of_residence_code_curr",
       lca = "geo_council_area_code",
       location = "treatment_location_code",
       mpat = "management_of_patient_code",
@@ -78,8 +76,8 @@ read_extract_maternity <- function(year,
       uri = "maternity_unique_record_identifier",
       yearstay = "occupied_bed_days"
     ) %>%
+    dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
-
 
   return(extract_maternity)
 }
