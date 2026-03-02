@@ -9,23 +9,24 @@ read_extract_homelessness <- function(
   file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
-  year <- check_year_format(year, format = "alternate")
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
-  } # todo: waiting to be finalised
+  }
 
   logger::log_info("Read homelessness data from Denodo")
-  extract_homelessness <- tibble::as_tibble(odbc::dbGetQuery(
+  extract_homelessness <- dplyr::tbl(
     denodo_connect,
-    stringr::str_glue(
-      "select * from sdl.sdl_homelessness_source
-        where financial_year_of_assessment <= {year}
-        and  (financial_year_of_case_closed is null
-              or financial_year_of_case_closed >= {year})"
-    )
-  )) %>%
+    dbplyr::in_schema("sdl", "sdl_homelessness_source")
+  ) %>%
+    dplyr::filter(
+      financial_year_of_assessment <= c_year,
+      is.null(financial_year_of_case_closed) |
+        financial_year_of_case_closed >= c_year
+    ) %>%
     dplyr::select(
       # financial_year_of_assessment,
       # financial_year_of_case_closed,
@@ -53,6 +54,7 @@ read_extract_homelessness <- function(
       refused = "refused",
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
+    dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
   return(extract_homelessness)
