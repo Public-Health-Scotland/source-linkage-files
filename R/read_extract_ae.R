@@ -4,89 +4,61 @@
 #'
 #' @export
 #'
-read_extract_ae <- function(
-  year,
-  file_path = get_boxi_extract_path(year = year, type = "ae")
-) {
-  extract_ae <- read_file(file_path,
-    col_type = readr::cols(
-      "Arrival Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "DAT Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "anon_chi" = readr::col_character(),
-      "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Pat Gender Code" = readr::col_double(),
-      "NHS Board of Residence Code - current" = readr::col_character(),
-      "Treatment NHS Board Code - current" = readr::col_character(),
-      "Treatment Location Code" = readr::col_character(),
-      "GP Practice Code" = readr::col_character(),
-      "Council Area Code" = readr::col_character(),
-      "Postcode (epi) [C]" = readr::col_character(),
-      "Postcode (CHI) [C]" = readr::col_character(),
-      "HSCP of Residence Code - current" = readr::col_character(),
-      "Arrival Time" = readr::col_time(""),
-      "DAT Time" = readr::col_time(""),
-      "Arrival Mode Code" = readr::col_character(),
-      "Referral Source Code" = readr::col_character(),
-      "Attendance Category Code" = readr::col_character(),
-      "Discharge Destination Code" = readr::col_character(),
-      "Patient Flow Code" = readr::col_double(),
-      "Place of Incident Code" = readr::col_character(),
-      "Reason for Wait Code" = readr::col_character(),
-      "Disease 1 Code" = readr::col_character(),
-      "Disease 2 Code" = readr::col_character(),
-      "Disease 3 Code" = readr::col_character(),
-      "Bodily Location Of Injury Code" = readr::col_character(),
-      "Alcohol Involved Code" = readr::col_character(),
-      "Alcohol Related Admission" = readr::col_character(),
-      "Substance Misuse Related Admission" = readr::col_character(),
-      "Falls Related Admission" = readr::col_character(),
-      "Self Harm Related Admission" = readr::col_character(),
-      "Total Net Costs" = readr::col_double(),
-      "Age at Midpoint of Financial Year" = readr::col_double(),
-      "Case Reference Number" = readr::col_character(),
-      "Significant Facility Code" = readr::col_character(),
-      "Community Hospital Flag" = readr::col_character(),
-    )
+read_extract_ae <- function(year,
+                            denodo_connect,
+                            BYOC_MODE = FALSE) {
+
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  extract_ae <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
   ) %>%
-    # rename variables
-    dplyr::rename(
-      record_keydate1 = "Arrival Date",
-      record_keydate2 = "DAT Date",
-      dob = "Pat Date Of Birth [C]",
-      postcode_epi = "Postcode (epi) [C]",
-      postcode_chi = "Postcode (CHI) [C]",
-      age = "Age at Midpoint of Financial Year",
-      ae_alcohol = "Alcohol Involved Code",
-      alcohol_adm = "Alcohol Related Admission",
-      ae_arrivalmode = "Arrival Mode Code",
-      keytime1 = "Arrival Time",
-      ae_attendcat = "Attendance Category Code",
-      ae_bodyloc = "Bodily Location Of Injury Code",
-      lca = "Council Area Code",
-      ae_disdest = "Discharge Destination Code",
-      keytime2 = "DAT Time",
-      diag1 = "Disease 1 Code",
-      diag2 = "Disease 2 Code",
-      diag3 = "Disease 3 Code",
-      falls_adm = "Falls Related Admission",
-      gpprac = "GP Practice Code",
-      hscp = "HSCP of Residence Code - current",
-      hbrescode = "NHS Board of Residence Code - current",
-      hbtreatcode = "Treatment NHS Board Code - current",
-      anon_chi = "anon_chi",
-      gender = "Pat Gender Code",
-      ae_patflow = "Patient Flow Code",
-      ae_placeinc = "Place of Incident Code",
-      ae_reasonwait = "Reason for Wait Code",
-      refsource = "Referral Source Code",
-      selfharm_adm = "Self Harm Related Admission",
-      submis_adm = "Substance Misuse Related Admission",
-      sigfac = "Significant Facility Code",
-      cost_total_net = "Total Net Costs",
-      location = "Treatment Location Code",
-      case_ref_number = "Case Reference Number",
-      commhosp = "Community Hospital Flag"
-    )
+    dplyr::filter(costs_financial_year == !!c_year) %>% # (Assuming the column name in Denodo is 'costs_financial_year')
+
+    dplyr::select(
+      record_keydate1 = "arrival_date",
+      record_keydate2 = "dat_date",
+      keytime1 = "arrival_time",
+      keytime2 = "dat_time",
+      chi = "patient_chi", # following the logic from Zihao's refactor-mat
+      gender = "patient_sex",
+      dob = "patient_dob",
+      gpprac = "gp_practice_code",
+      lca = "council_area_code",
+      hscp = "hscp_of_residence_code_curr",
+      location = "treatment_location_code",
+      hbrescode = "nhs_board_of_residence_code_curr",
+      hbtreatcode = "treatment_nhs_board_code_curr",
+      diag1 = "disease_1_code",
+      diag2 = "disease_2_code",
+      diag3 = "disease_3_code",
+      ae_arrivalmode = "arrival_mode_code",
+      refsource = "referral_source_code",
+      sigfac = "significant_facility_code",
+      ae_attendcat = "attendance_category_code",
+      ae_disdest = "discharge_destination_code",
+      ae_patflow = "patient_flow_code",
+      ae_placeinc = "place_of_incident_code",
+      ae_reasonwait = "reason_for_wait_code",
+      ae_bodyloc = "bodily_location_of_injury_code",
+      ae_alcohol = "alcohol_involved_code",
+      alcohol_adm = "alcohol_related_admission",
+      submis_adm = "substance_misuse_related_admission",
+      falls_adm = "falls_related_admission",
+      selfharm_adm = "self_harm_related_admission",
+      cost_total_net = "total_net_cost",
+      age = "age_at_midpoint_of_financial_year"
+      # case_ref_number = "case_reference_number",
+      # postcode_epi = "postcode_epi",
+      # postcode_chi = "postcode_chi",
+      # commhosp = "community_hospital_flag"
+    ) %>%
+    dplyr::collect() %>%
+    slfhelper::get_anon_chi("chi")
 
   return(extract_ae)
 }
+
+# Note arrival financial year
