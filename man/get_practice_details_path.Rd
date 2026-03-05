@@ -21,6 +21,7 @@ Get the path to the Practice Details file
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
+\code{\link{get_byoc_intermediate_path}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demographic_cohorts_path}()},
 \code{\link{get_file_path}()},
