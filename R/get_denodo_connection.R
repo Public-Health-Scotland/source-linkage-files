@@ -125,11 +125,15 @@ setup_denodo_keyring <- function(keyring = "denodo_keyring") {
 
   keyring::keyring_unlock(keyring = keyring, password = master_pass)
 
-  # Store the Denodo Username
+  # Store the Denodo Username and Password
+  # We're currently connecting to the Denodo TEST environment. Users will use the shared Test Account
+  # credentials to set up the keyring. Do NOT use your personal LDAP username/password at this stage.
+  # This section will be refactored for LDAP integration once moved to Production.
+
   uid_input <- rstudioapi::showPrompt("Username", "Enter your Denodo Username:")
+
   keyring::key_set_with_value(keyring = keyring, service = service_user, password = uid_input)
 
-  # Store the Denodo Password
   keyring::key_set(
     keyring = keyring,
     service = service_pass,
