@@ -5,24 +5,32 @@
 #' @export
 #'
 read_extract_ae <- function(year,
-                            denodo_connect,
-                            BYOC_MODE = FALSE) {
-
+                            denodo_connect, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
+                            file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
+                            BYOC_MODE) {
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
+  # Specify years available for running
+  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+    return(tibble::tibble())
+  }
+
+  # Read Extract
   extract_ae <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
   ) %>%
-    dplyr::filter(costs_financial_year == !!c_year) %>% # (Assuming the column name in Denodo is 'costs_financial_year')
-
+    dplyr::filter(
+      financial_year == !!c_year & # TO-DO: check assumption that arrival_financial_year == financial_year
+        (significant_facility_code == "32" | is.na(significant_facility_code))
+    ) %>%
     dplyr::select(
       record_keydate1 = "arrival_date",
       record_keydate2 = "dat_date",
       keytime1 = "arrival_time",
       keytime2 = "dat_time",
-      chi = "patient_chi", # following the logic from Zihao's refactor-mat
+      chi = "patient_chi",
       gender = "patient_sex",
       dob = "patient_dob",
       gpprac = "gp_practice_code",
@@ -49,16 +57,14 @@ read_extract_ae <- function(year,
       falls_adm = "falls_related_admission",
       selfharm_adm = "self_harm_related_admission",
       cost_total_net = "total_net_cost",
-      age = "age_at_midpoint_of_financial_year"
-      # case_ref_number = "case_reference_number",
-      # postcode_epi = "postcode_epi",
-      # postcode_chi = "postcode_chi",
-      # commhosp = "community_hospital_flag"
+      age = "age_at_midpoint_of_financial_year",
+      case_ref_number = "care_reference_number", # TO-DO: needs to be renamed by NSS from care to case?
+      postcode_epi = "postcode_epi",
+      postcode_chi = "postcode_chi",
+      commhosp = "community_hospital_flag"
     ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
   return(extract_ae)
 }
-
-# Note arrival financial year
