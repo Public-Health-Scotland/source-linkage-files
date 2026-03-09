@@ -11,12 +11,14 @@
 #   output_csv = "tools/tidyverse_deprecation_audit.csv"
 # )
 
-# ============================================================
-# Utilities
-# ============================================================
+# ============================================================.
+# Utilities ----
+# ============================================================.
 
+# Define a custom infix operator to allow a default value to be used if a variable is not specified
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
+# Convert backslash (Windows) to forward slash in file paths
 norm_path <- function(x) gsub("\\\\", "/", x)
 
 # Use PCRE here to avoid TRE/POSIX regex errors with {} in char classes
@@ -24,11 +26,14 @@ escape_regex_literal <- function(x) {
   gsub("([][{}()+*^$|\\\\?.-])", "\\\\\\1", x, perl = TRUE)
 }
 
+# Read file and return contents as a single string
 safe_read_text <- function(path) {
+  # Read as UTF-8
   txt <- tryCatch(
     readLines(path, warn = FALSE, encoding = "UTF-8"),
     error = function(e) NULL
   )
+  # Read as default encoding
   if (is.null(txt)) {
     txt <- tryCatch(
       readLines(path, warn = FALSE),
@@ -38,6 +43,7 @@ safe_read_text <- function(path) {
   paste(txt, collapse = "\n")
 }
 
+# Find the character index where each new line begins
 line_starts <- function(text) {
   if (is.na(text) || !nzchar(text)) {
     return(1L)
@@ -49,6 +55,7 @@ line_starts <- function(text) {
   c(1L, nl + 1L)
 }
 
+# Convert character index to line number and column number
 pos_to_line_col <- function(text, pos) {
   starts <- line_starts(text)
   line <- findInterval(pos, starts)
@@ -57,9 +64,13 @@ pos_to_line_col <- function(text, pos) {
   list(line = line, col = col)
 }
 
+# Remove white spaces from the beginning and end of a string
 trim_ws <- function(x) gsub("^\\s+|\\s+$", "", x)
+
+# Remove extra white spaces from a string
 collapse_ws <- function(x) gsub("\\s+", " ", x)
 
+# Extract a chunk of text (up to 180 chars) surrounding a match
 extract_context <- function(text, pos, len = 180L) {
   end <- min(nchar(text), pos + len - 1L)
   start <- max(1L, pos - 40L)
@@ -69,6 +80,9 @@ extract_context <- function(text, pos, len = 180L) {
   trim_ws(x)
 }
 
+# Build a single row for results:
+# (1) file path, (2) line/column, (3) rule ID / package / stage, (4) confidence,
+# (5) full or partial matched text, (6) context snippet, (7) suggestion for fix
 make_match_row <- function(file, text, pos, match_text, rule, heuristic = FALSE) {
   lc <- pos_to_line_col(text, pos)
   data.frame(
@@ -87,11 +101,13 @@ make_match_row <- function(file, text, pos, match_text, rule, heuristic = FALSE)
   )
 }
 
+# Ensure the parent directory exists before writing a file. If not, create it
 ensure_dir_for_file <- function(path) {
   d <- dirname(path)
   if (!dir.exists(d)) dir.create(d, recursive = TRUE, showWarnings = FALSE)
 }
 
+# List all relevant R files in the project directory
 list_source_files <- function(root = ".",
                               include_ext = c("r", "R", "Rmd", "rmd", "qmd", "Qmd", "Rnw", "rnw"),
                               include_special = c(".Rprofile"),
@@ -116,13 +132,14 @@ list_source_files <- function(root = ".",
   all_paths[is_ext | is_special]
 }
 
-# ============================================================
-# Rule catalogue (row-by-row; avoids length mismatch bugs)
-# ============================================================
+# ============================================================.
+# Rule catalogue (row-by-row; avoids length mismatch bugs) ----
+# ============================================================.
 
 build_rule_catalogue <- function() {
   rows <- list()
 
+  # Function to add each rule
   add_rule <- function(id, package, stage, confidence, regex, suggestion) {
     rows[[length(rows) + 1L]] <<- data.frame(
       id = id,
@@ -135,211 +152,318 @@ build_rule_catalogue <- function() {
     )
   }
 
-  # -----------------------------
-  # dplyr
-  # -----------------------------
+  # -----------------------------.
+  # dplyr ----
+  # -----------------------------.
+
+  # Rule 1 (dplyr)
+  # Old: mutate_at(), mutate_if(), mutate_all(), summarise_at(), summarise_if(), summarise_all(), summarize_at(), summarize_if(), summarize_all(), filter_at(), filter_if(), filter_all(), select_at(), select_if(), select_all(), rename_at(), rename_if(), rename_all()
+  # New: cross(), if_any(), if_all()
   add_rule(
     "dplyr_colwise_scoped_verbs", "dplyr", "superseded/deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:mutate|summari[sz]e|filter|select|rename)_(?:at|if|all)\\s*\\(",
     "Replace scoped verbs (`*_at/_if/_all`) with `across()` / `if_any()` / `if_all()` depending on intent."
   )
+  # Rule 2 (dplyr)
+  # Old: add_count_(), add_tally_(), arrange_(), count_(), distinct_(), do_(), filter_(), funs_(), group_by_(), group_indices_(), mutate_(), tally_(), transmute_(), rename_(), select_(), slice_(), summarize_(), summarise_()
+  # New: add_count(), add_tally(), arrange(), count(), distinct(), do(), filter(), funs(), group_by(), group_indices(), mutate(), tally(), transmute(), rename(), select(), slice(), summarize(), summarise()
   add_rule(
     "dplyr_underscore_verbs", "dplyr", "deprecated/defunct in modern dplyr", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:add_count_|add_tally_|arrange_|count_|distinct_|do_|filter_|funs_|group_by_|group_indices_|mutate_|tally_|transmute_|rename_|select_|slice_|summari[sz]e_)\\s*\\(",
     "Replace underscore NSE verbs with modern tidy-eval (non-underscore verbs + tidy evaluation)."
   )
+  # Rule 3 (dplyr)
+  # Old: cur_data(), cur_data_all()
+  # New: pick()
   add_rule(
     "dplyr_cur_data", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?cur_data(?:_all)?\\s*\\(",
     "Replace `cur_data()` / `cur_data_all()` with `pick()` where appropriate."
   )
+  # Rule 4 (dplyr)
+  # Old: funs()
+  # New: list()
   add_rule(
     "dplyr_funs", "dplyr", "superseded/deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?funs\\s*\\(",
     "Replace `funs()` with anonymous functions or `list(...)` inside `across()`."
   )
+  # Rule 5 (dplyr)
+  # Old: all_equal()
+  # New: all.equal()
   add_rule(
     "dplyr_all_equal", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?all_equal\\s*\\(",
     "Replace `all_equal()` with base `all.equal()` (check semantics)."
   )
+  # Rule 6 (dplyr)
+  # Old: progress_estimated()
+  # New: library(progress)
   add_rule(
     "dplyr_progress_estimated", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?progress_estimated\\s*\\(",
     "Avoid `progress_estimated()`; use alternatives such as cli/progress."
   )
+  # Rule 7 (dplyr)
+  # Old: left_join(multiple = NULL), right_join(multiple = NULL), inner_join(multiple = NULL), full_join(multiple = NULL), semi_join(multiple = NULL), anti_join(multiple = NULL), nest_join(multiple = NULL)
+  # New: left_join(multiple = all), right_join(multiple = all), inner_join(multiple = all), full_join(multiple = all), semi_join(multiple = all), anti_join(multiple = all), nest_join(multiple = all)
   add_rule(
     "dplyr_join_multiple_null", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:left_join|right_join|inner_join|full_join|semi_join|anti_join|nest_join)\\s*\\([\\s\\S]{0,500}?\\bmultiple\\s*=\\s*NULL\\b",
     "Use `multiple = \"all\"` (or explicit join strategy) instead of `multiple = NULL`."
   )
+  # Rule 8 (dplyr)
+  # Old: left_join(multiple = "error" / "warning"), right_join(multiple = "error" / "warning"), inner_join(multiple = "error" / "warning"), full_join(multiple = "error" / "warning"), semi_join(multiple = "error" / "warning"), anti_join(multiple = "error" / "warning"), nest_join(multiple = "error" / "warning")
+  # New: left_join(relationship = "many-to-one"), right_join(relationship = "many-to-one"), inner_join(relationship = "many-to-one"), full_join(relationship = "many-to-one"), semi_join(relationship = "many-to-one"), anti_join(relationship = "many-to-one"), nest_join(relationship = "many-to-one")
   add_rule(
     "dplyr_join_multiple_warning_error", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:left_join|right_join|inner_join|full_join|semi_join|anti_join|nest_join)\\s*\\([\\s\\S]{0,500}?\\bmultiple\\s*=\\s*\"(?:warning|error)\"",
     "Use `relationship = \"many-to-one\"` (or suitable relationship) instead of `multiple = \"warning\"/\"error\"`."
   )
+  # Rule 9 (dplyr)
+  # Old: left_join(by = character()), right_join(by = character()), inner_join(by = character()), full_join(by = character())
+  # New: cross_join()
   add_rule(
     "dplyr_cross_join_by_character", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:left_join|right_join|inner_join|full_join)\\s*\\([\\s\\S]{0,500}?\\bby\\s*=\\s*character\\s*\\(\\s*\\)",
     "Use `cross_join()` instead of `by = character()` for cross joins."
   )
+  # Rule 10 (dplyr)
+  # Old: group_by(add)
+  # New: group_by(.add)
   add_rule(
     "dplyr_group_by_add_arg", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?group_by\\s*\\([\\s\\S]{0,500}?\\badd\\s*=",
     "Use `.add =` instead of `add =` in `group_by()`."
   )
+  # Rule 11 (dplyr)
+  # Old: group_map(keep), group_modify(keep), and group_split(keep)
+  # New: group_map(.keep), group_modify(.keep), and group_split(.keep)
   add_rule(
     "dplyr_group_map_keep_arg", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?group_(?:map|modify|split)\\s*\\([\\s\\S]{0,500}?\\bkeep\\s*=",
     "Use `.keep =` instead of `keep =` in `group_map()` / `group_modify()` / `group_split()`."
   )
+  # Rule 12 (dplyr)
+  # Old: filter(across())
+  # New: filter(if_any()), filter(if_all())
   add_rule(
     "dplyr_filter_across", "dplyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?filter\\s*\\([\\s\\S]{0,400}?\\bacross\\s*\\(",
     "In `filter()`, replace `across()` conditions with `if_any()` / `if_all()`."
   )
+  # Rule 13 (dplyr)
+  # Old: across()
+  # New: across(.cols)
   add_rule(
     "dplyr_across_missing_cols_heuristic", "dplyr", "deprecated (heuristic)", "medium",
     "\\b(?:[[:alnum:]_.]+::)?across\\s*\\(\\s*(?:~|function\\s*\\()",
     "Heuristic: `across()` may be missing `.cols` (deprecated). Review and make `.cols` explicit."
   )
+  # Rule 14 (dplyr)
+  # Old: across(...)
+  # New: across(anonymous function)
   add_rule(
     "dplyr_across_extra_positional_args_heuristic", "dplyr", "deprecated (heuristic)", "medium",
     "\\b(?:[[:alnum:]_.]+::)?across\\s*\\(\\s*[^,\\)]+\\s*,\\s*[^,\\)]+\\s*,\\s*(?!\\s*\\.(?:names|unpack)\\s*=)",
     "Heuristic: extra positional args in `across()` may rely on deprecated `...`; prefer anonymous function."
   )
+  # Rule 15 (dplyr)
+  # Old: top_n(), top_frac()
+  # New: slice_max(), slice_min()
   add_rule(
     "dplyr_top_n", "dplyr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:top_n|top_frac)\\s*\\(",
     "Replace `top_n()`/`top_frac()` with `slice_max()` or `slice_min()`."
   )
+  # Rule 16 (dplyr)
+  # Old: sample_n(), sample_frac()
+  # New: slice_sample()
   add_rule(
     "dplyr_sample_n", "dplyr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:sample_n|sample_frac)\\s*\\(",
     "Replace `sample_n()`/`sample_frac()` with `slice_sample()`."
   )
+  # Rule 17 (dplyr)
+  # Old: combine()
+  # New: c(), vctrs::vec_c()
   add_rule(
     "dplyr_combine", "dplyr", "deprecated/defunct", "high",
     "\\b(?:[[:alnum:]_.]+::)?combine\\s*\\(",
     "Replace `dplyr::combine()` with `vctrs::vec_c()` or `c()`."
   )
 
-  # -----------------------------
-  # tidyr
-  # -----------------------------
+  # -----------------------------.
+  # tidyr ----
+  # -----------------------------.
+  # Rule 1 (tidyr)
+  # Old: gather()
+  # New: pivot_longer()
   add_rule(
     "tidyr_gather", "tidyr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?gather\\s*\\(",
     "Prefer `pivot_longer()` for new code."
   )
+  # Rule 2 (tidyr)
+  # Old: spread()
+  # New: pivot_wider()
   add_rule(
     "tidyr_spread", "tidyr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?spread\\s*\\(",
     "Prefer `pivot_wider()` for new code."
   )
+  # Rule 3 (tidyr)
+  # Old: gather_(), spread_(), nest_(), unnest_(), separate_(), unite_(), extract_(), complete_(), drop_na_(), replace_na_(), fill_(), expand_(), crossing_
+  # New: gather(), spread(), nest(), unnest(), separate(), unite(), extract(), complete(), drop_na(), replace_na(), fill(), expand(), crossing_
   add_rule(
     "tidyr_underscore_variants", "tidyr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:gather_|spread_|nest_|unnest_|separate_|unite_|extract_|complete_|drop_na_|replace_na_|fill_|expand_|crossing_)\\s*\\(",
     "Old tidyr underscore/lazyeval variants are deprecated; migrate to modern tidyr + tidy-eval."
   )
+  # Rule 4 (tidyr)
+  # Old: separate()
+  # New: separate_wider_delim(), separate_wider_regex(), separate_wider_position()
   add_rule(
     "tidyr_separate", "tidyr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?separate\\s*\\(",
     "Superseded: replace `separate()` with `separate_wider_delim()`, `separate_wider_regex()`, or `separate_wider_position()`."
   )
+  # Rule 5 (tidyr)
+  # Old: extract()
+  # New: separate_wider_regex()
   add_rule(
     "tidyr_extract", "tidyr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?extract\\s*\\(",
     "Superseded: replace `extract()` with `separate_wider_regex()`."
   )
+  # Rule 6 (tidyr)
+  # Old: nest(col1, col2), unnest(col1, col2)
+  # New: nest(data = c(col1, col2)), unnest(cols = c(col1, col2))
   add_rule(
     "tidyr_nest_unnest_heuristic", "tidyr", "review (API changes over time)", "medium",
     "\\b(?:[[:alnum:]_.]+::)?(?:nest|unnest)\\s*\\(",
     "Heuristic review: check modern signatures (`nest(data = c(...))`, `unnest(cols = ...)`) and current tidyr usage."
   )
 
-  # -----------------------------
-  # tibble
-  # -----------------------------
+  # -----------------------------.
+  # tibble ----
+  # -----------------------------.
+  # Rule 1 (tibble)
+  # Old: as_data_frame()
+  # New: as_tibble()
   add_rule(
     "tibble_as_data_frame", "tibble", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?as_data_frame\\s*\\(",
     "Use `tibble::as_tibble()` instead of `as_data_frame()`."
   )
+  # Rule 2 (tibble)
+  # Old: data_frame()
+  # New: tibble()
   add_rule(
     "tibble_data_frame", "tibble", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?data_frame\\s*\\(",
     "Use `tibble::tibble()` (or `as_tibble()`) instead of `data_frame()`."
   )
+  # Rule 3 (tibble)
+  # Old: tbl_df()
+  # New: as_tibble(), tibble()
   add_rule(
     "tibble_tbl_df", "tibble", "deprecated/legacy", "high",
     "\\b(?:[[:alnum:]_.]+::)?tbl_df\\s*\\(",
     "Avoid `tbl_df()`; use tibbles (`tibble::as_tibble()` / `tibble::tibble()`)."
   )
 
-  # -----------------------------
-  # tidyselect (ONLY safe regex rules here)
+  # -----------------------------.
+  # tidyselect ----
+  # (ONLY safe regex rules here)
   # NOTE: .data and bare predicates are handled by bounded scanners below
   # to avoid cross-pipeline false positives.
-  # -----------------------------
+  # -----------------------------.
+
+  # Rule 1 (tidyselect)
+  # Old: select(helper_function() - helper_function())
+  # New: select(helper_function() & !helper_function())
   add_rule(
     "tidyselect_setops_style_recommendation", "tidyselect", "style recommendation", "medium",
     "\\b(?:starts_with|ends_with|contains|matches|where|last_col)\\s*\\([^\\)]*\\)\\s*-\\s*(?:starts_with|ends_with|contains|matches|where|last_col)\\s*\\(",
     "Set-op style (`x - y`) is still supported, but Boolean style (`x & !y`) is now recommended for readability."
   )
 
-  # -----------------------------
-  # purrr
-  # -----------------------------
+  # -----------------------------.
+  # purrr ----
+  # -----------------------------.
+
+  # Rule 1 (purrr)
+  # Old: map_dfr(), map2_dfr(), pmap_dfr(), map_dfc(), map2_dfc(), pmap_dfc()
+  # New: map() %>% list_rbind(), map2() %>% list_rbind(), pmap() %>% list_rbind(), map() %>% list_rbind(), map2() %>% list_rbind(), pmap() %>% list_rbind()
   add_rule(
     "purrr_map_df", "purrr", "superseded", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:i?map|map2|pmap)_(?:dfr|dfc)\\s*\\(",
     "Replace `*_dfr()`/`*_dfc()` with `map()` + `list_rbind()` / `list_cbind()`."
   )
+  # Rule 2 (purrr)
+  # Old: cross(), cross2(), cross3(), cross_df()
+  # New: tidyr::expand_grid()
   add_rule(
     "purrr_cross", "purrr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:cross|cross2|cross3|cross_df)\\s*\\(",
     "Replace `cross*()` with `tidyr::expand_grid()`."
   )
+  # Rule 3 (purrr)
+  # Old: invoke(), invoke_map()
+  # New: rlang::exec()
   add_rule(
     "purrr_invoke", "purrr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:invoke|invoke_map)\\s*\\(",
     "Replace `invoke()` / `invoke_map()` with `rlang::exec()` (often with `map()`/`map2()`)."
   )
+  # Rule 4 (purrr)
+  # Old: lift_dl, lift_vd, lift_dv, lift_vl, lift_ld, lift_lv
+  # New: rlang::exec(), rlang::inject()
   add_rule(
     "purrr_lift", "purrr", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?lift(?:_dl|_vd|_dv|_vl|_ld|_lv)?\\s*\\(",
     "Deprecated purrr `lift*()` family: replace with explicit wrappers / `rlang::exec()` / `rlang::inject()` patterns."
   )
 
-  # -----------------------------
-  # ggplot2
-  # -----------------------------
+  # -----------------------------.
+  # ggplot2 ----
+  # -----------------------------.
+  # Rule 1 (ggplot2)
+  # Old: aes_string(), aes_(), aes_q()
+  # New: aes()
   add_rule(
     "ggplot2_aes_string", "ggplot2", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?(?:aes_string|aes_|aes_q)\\s*\\(",
     "Replace `aes_string()` / `aes_()` / `aes_q()` with `aes()` + tidy evaluation."
   )
+  # Rule 2 (ggplot2)
+  # Old: qplot()
+  # New: ggplot() + geoms
   add_rule(
     "ggplot2_qplot", "ggplot2", "deprecated", "high",
     "\\b(?:[[:alnum:]_.]+::)?qplot\\s*\\(",
     "Replace `qplot()` with `ggplot()` + geoms."
   )
+  # Rule 3 (ggplot2)
+  # Old: geom_line(size = ...), geom_hline(size = ...), geom_vline(size = ...), geom_abline(size = ...), geom_path(size = ...), geom_step(size = ...), geom_segment(size = ...), geom_curve(size = ...), geom_smooth(size = ...), geom_density(size = ...)
+  # New: geom_line(linewidth = ...), geom_hline(linewidth = ...), geom_vline(linewidth = ...), geom_abline(linewidth = ...), geom_path(linewidth = ...), geom_step(linewidth = ...), geom_segment(linewidth = ...), geom_curve(linewidth = ...), geom_smooth(linewidth = ...), geom_density(linewidth = ...)
   add_rule(
     "ggplot2_linewidth", "ggplot2", "deprecated (heuristic)", "high",
     "\\b(?:[[:alnum:]_.]+::)?geom_(?:line|hline|vline|abline|path|step|segment|curve|smooth|density)\\s*\\([\\s\\S]{0,400}?\\bsize\\s*=",
     "For line geoms, use `linewidth =` instead of `size =` (review exceptions in mixed geoms)."
   )
 
+  # Join rules
   out <- do.call(rbind, rows)
   rownames(out) <- NULL
   out
 }
 
-# ============================================================
-# Generic regex scanning
-# ============================================================
-
+# ============================================================.
+# Generic regex scanning ----
+# ============================================================.
+# Function to search for rule matches in files
 scan_text_with_rule <- function(text, file, rule) {
   m <- gregexpr(rule$regex, text, perl = TRUE, ignore.case = FALSE)[[1]]
   if (length(m) == 1L && m[1] == -1L) {
@@ -365,9 +489,9 @@ scan_text_with_rule <- function(text, file, rule) {
   do.call(rbind, out)
 }
 
-# ============================================================
-# Heuristic / bounded scanners (tidyselect)
-# ============================================================
+# ============================================================.
+# Heuristic / bounded scanners (tidyselect) ----
+# ============================================================.
 
 # Real deprecation target: external vectors in tidyselect contexts without all_of()/any_of()
 # Example deprecated pattern:
@@ -376,6 +500,10 @@ scan_text_with_rule <- function(text, file, rule) {
 #   df %>% select(-cols)
 # Preferred:
 #   select(all_of(cols)) / select(-any_of(cols))
+
+# Rule 2 (tidyselect)
+# Old: select(cols), select(-cols)
+# New: select(all_of(cols)), select(any_of(-cols))
 scan_tidyselect_external_vector_indirection <- function(text, file) {
   assign_pat <- paste0(
     "(?m)^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:<-|=)\\s*",
@@ -470,6 +598,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
 }
 
 # Bare predicates in tidyselect contexts (e.g. select(is.numeric)) -> where(is.numeric)
+# Rule 3 (tidyselect)
+# Old: select(is.numeric), select(is.character), select(is.logical) etc.
+# New: select(where(is.numeric)), select(where(is.character)), select(where(is.logical)) etc.
 scan_tidyselect_bare_predicates <- function(text, file) {
   rule <- data.frame(
     id = "tidyselect_bare_predicates_scanner",
@@ -540,6 +671,9 @@ scan_tidyselect_bare_predicates <- function(text, file) {
 }
 
 # .data in tidyselect expressions (bounded scanner to avoid cross-pipeline false positives)
+# Rule 4 (tidyselect)
+# Old: data$x, .data[[var]]
+# New: x, all_of(var) / any_of(var)
 scan_tidyselect_dotdata_in_selection <- function(text, file) {
   rule <- data.frame(
     id = "tidyselect_dotdata_in_selection_scanner",
@@ -599,9 +733,9 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
   res
 }
 
-# ============================================================
-# Main audit
-# ============================================================
+# ============================================================.
+# Main audit ----
+# ============================================================.
 
 audit_tidyverse_deprecations <- function(root = ".",
                                          output_csv = NULL,
@@ -746,9 +880,9 @@ audit_tidyverse_deprecations <- function(root = ".",
   )
 }
 
-# ============================================================
-# Optional helper
-# ============================================================
+# ============================================================.
+# Optional helper ----
+# ============================================================.
 
 subset_high_confidence <- function(res) {
   if (is.null(res$matches) || !nrow(res$matches)) {
