@@ -258,14 +258,14 @@ add_all_columns <- function(episode_file, year) {
     dplyr::mutate(
       health_net_cost = rowSums(
         dplyr::pick(
-          .data$Acute_cost,
-          .data$Mat_cost,
-          .data$MH_cost,
-          .data$GLS_cost,
-          .data$OP_cost_attend,
-          .data$AE_cost,
-          .data$PIS_cost,
-          .data$OoH_cost
+          Acute_cost,
+          Mat_cost,
+          MH_cost,
+          GLS_cost,
+          OP_cost_attend,
+          AE_cost,
+          PIS_cost,
+          OoH_cost
         ),
         na.rm = TRUE
       ),
