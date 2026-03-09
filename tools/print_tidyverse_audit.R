@@ -1,4 +1,4 @@
-################################################################################.
+################################################################################ .
 # Script to print the results of the tidyverse deprecation audit for GitHub Issue
 ################################################################################
 
@@ -13,14 +13,13 @@ ep_ind <- audit %>% filter(file %in% c("R/create_episode_file.R", "R/create_indi
 other_scripts <- audit %>% anti_join(bind_rows(read_scripts, process_scripts, test_scripts, ep_ind))
 
 # Function to pring the audit results (file name + number and type of deprecation messages)
-print_audit <- function(df, type){
+print_audit <- function(df, type) {
   message(paste("**Depreciation detected in", length(unique(df$file)), type, "scripts**\n\n"))
-  for (script in unique(df$file)){
+  for (script in unique(df$file)) {
     tbl <- data.frame(table((df %>% filter(file == script))$suggestion))
     message(paste0("**File Name:** ", str_extract(script, "(?<=/)[^.]+")))
     message(paste0("**Deprecation message(s):**"))
     message(paste0("- ", tbl$Var1, " (x", tbl$Freq, ")\n"))
-
   }
 }
 
