@@ -17,8 +17,7 @@ process_extract_ae <- function(data,
                                write_to_disk = TRUE,
                                BYOC_MODE = FALSE,
                                run_id = NA,
-                               run_date_time = NA
-                               ) {
+                               run_date_time = NA) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
