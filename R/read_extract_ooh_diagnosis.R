@@ -6,21 +6,35 @@
 #'
 read_extract_ooh_diagnosis <- function(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d")
+  denodo_connect, ## TO-DO: will be hardcoded to denodo_connect = get_denodo_connection() ##
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE),
+  BYOC_MODE
 ) {
+
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  # Specify years available for running
+  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+    return(tibble::tibble())
+  }
+
   # Load extract file
-  diagnosis_extract <- read_file(file_path,
-    # All columns are character type
-    col_types = readr::cols(.default = readr::col_character())
+  diagnosis_extract <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_gp_ooh_diagnosis_source")
   ) %>%
+    dplyr::filter(financial_year == c_year) %>%
     # rename variables
-    dplyr::rename(
-      ooh_case_id = "GUID",
-      readcode = "Diagnosis Code",
-      description = "Diagnosis Description"
+    dplyr::select(
+      ooh_case_id = "GUID", ## TO-DO: needs to be renamed by NSS to match file spec - guid ##
+      readcode = "diagnosis_code",
+      description = "Diagnosis_Description" ## TO-DO: needs to be renamed by NSS to match ##
+                                            ## file spec - diagnosis_desc ##
     ) %>%
-    tidyr::drop_na(.data$readcode) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    dplyr::collect() %>%
+    tidyr::drop_na(.data$readcode)
 
   return(diagnosis_extract)
 }
