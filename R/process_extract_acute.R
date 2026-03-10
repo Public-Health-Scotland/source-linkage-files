@@ -59,7 +59,7 @@ process_extract_acute <- function(data,
     # Apply new costs for C3 specialty, these are taken from the 2017/18 file
     fix_c3_costs(year) %>%
     # initialise monthly cost/beddays variables in a separate data frame for matching
-    convert_monthly_rows_to_vars(.data$costmonthnum, .data$cost_total_net, .data$yearstay) %>%
+    convert_monthly_rows_to_vars(costmonthnum, cost_total_net, yearstay) %>%
     # add yearstay and cost_total_net variables
     dplyr::mutate(
       yearstay = rowSums(dplyr::pick(tidyselect::ends_with("_beddays"))),
