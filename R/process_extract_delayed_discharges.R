@@ -46,8 +46,8 @@ process_extract_delayed_discharges <- function(
 
   dd_clean <- data %>%
     dplyr::rename(
-      record_keydate1 = .data[["rdd"]],
-      record_keydate2 = .data[["delay_end_date"]]
+      record_keydate1 = all_of("rdd"),
+      record_keydate2 = all_of("delay_end_date")
     ) %>%
     # Use end of the month date for records with no end date
     # (but we think have ended)
@@ -72,7 +72,7 @@ process_extract_delayed_discharges <- function(
     ) %>%
     # recode blanks to NA
     dplyr::mutate(
-      dplyr::across(tidyselect::ends_with("_delay_reason"), dplyr::na_if, "")
+      dplyr::across(tidyselect::ends_with("_delay_reason"), \(x) dplyr::na_if(x, ""))
     ) %>%
     # create flags for no_end_date and correct_dates
     dplyr::mutate(
