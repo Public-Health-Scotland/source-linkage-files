@@ -140,8 +140,8 @@ process_extract_ooh_diagnosis <- function(data, year) {
     dplyr::rename(diag = "readcode") %>%
     # restructure data
     tidyr::pivot_wider(
-      names_from = .data$diag_n,
-      values_from = c(.data$diag, .data$description),
+      names_from = diag_n,
+      values_from = c(diag, description),
       names_glue = "{.value}{diag_n}"
     ) %>%
     dplyr::select(
