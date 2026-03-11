@@ -37,7 +37,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
         "NA"
       )
     ) %>%
-    dplyr::select(-.data$cij_inpatient) %>%
+    dplyr::select(-cij_inpatient) %>%
     # cij_admtype recode unknown to 99
     dplyr::mutate(
       cij_admtype = dplyr::if_else(
@@ -48,9 +48,9 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # monthly beddays and costs
     convert_monthly_rows_to_vars(
-      .data$costmonthnum,
-      .data$cost_total_net,
-      .data$yearstay
+      costmonthnum,
+      cost_total_net,
+      yearstay
     ) %>%
     dplyr::mutate(
       # yearstay
