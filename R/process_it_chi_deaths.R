@@ -19,7 +19,7 @@ process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # remove death_date_nrs as this is the nrs weekly unvalidated data and we should not use this.
     # the boxi nrs death date is more reliable as this is provided monthly and is validated.
-    dplyr::select(.data$anon_chi, .data$death_date_chi) %>%
+    dplyr::select(anon_chi, death_date_chi) %>%
     dplyr::mutate(
       death_date_chi = lubridate::ymd(.data$death_date_chi)
     )
