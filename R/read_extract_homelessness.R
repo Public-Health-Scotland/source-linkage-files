@@ -5,7 +5,7 @@
 #' @export
 read_extract_homelessness <- function(
   year,
-  denodo_connect,
+  denodo_connect = get_denodo_connection(),
   file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
@@ -56,6 +56,8 @@ read_extract_homelessness <- function(
     ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
+
+  DBI::dbDisconnect(denodo_connect)
 
   return(extract_homelessness)
 }

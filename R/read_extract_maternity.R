@@ -3,10 +3,12 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-read_extract_maternity <- function(year,
-                                   denodo_connect,
-                                   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
-                                   BYOC_MODE) {
+read_extract_maternity <- function(
+  year,
+  denodo_connect = get_denodo_connection(),
+  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+  BYOC_MODE
+) {
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -78,6 +80,8 @@ read_extract_maternity <- function(year,
     ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
+
+  DBI::dbDisconnect(denodo_connect)
 
   return(extract_maternity)
 }
