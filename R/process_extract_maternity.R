@@ -74,7 +74,7 @@ process_extract_maternity <- function(data,
     )
 
   maternity_processed <- maternity_clean %>%
-    mutate(
+    dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
     ) %>%
