@@ -607,7 +607,10 @@ list(
         data = homelessness_data,
         year = year,
         write_to_disk = write_to_disk,
-        la_code_lookup = la_code_opendata
+        la_code_lookup = la_code_opendata,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Homelessness
@@ -671,7 +674,10 @@ list(
       process_extract_maternity(
         maternity_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Maternity
