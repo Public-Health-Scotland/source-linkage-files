@@ -53,13 +53,13 @@ process_extract_district_nursing <- function(
   dn_costs <- dn_clean %>%
     # Recode HB codes to HB2019 so they match the cost lookup
     dplyr::mutate(
-      hbtreatcode = dplyr::case_match(
+      hbtreatcode = dplyr::recode_values(
         .data$hbtreatcode,
         "S08000018" ~ "S08000029", # Fife 2014
         "S08000027" ~ "S08000030", # Tayside 2014
         "S08000021" ~ "S08000031", # Glasgow 2018
         "S08000023" ~ "S08000032", # Lanarkshire 2018
-        .default = .data$hbtreatcode
+        default = .data$hbtreatcode
       )
     ) %>%
     # match files with DN Cost Lookup
@@ -74,11 +74,11 @@ process_extract_district_nursing <- function(
     create_day_episode_costs(.data$record_keydate1, .data$cost_total_net) %>%
     # Return HB values to HB2018
     dplyr::mutate(
-      hbtreatcode = dplyr::case_match(
+      hbtreatcode = dplyr::recode_values(
         .data$hbtreatcode,
         "S08000031" ~ "S08000021", # Glasgow
         "S08000032" ~ "S08000023", # Lanarkshire
-        .default = .data$hbtreatcode
+        default = .data$hbtreatcode
       )
     )
 
