@@ -82,8 +82,8 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
   lookup <- lookup %>%
     dplyr::filter(!(is.na(.data$record_keydate2))) %>%
     dplyr::rename(
-      application_date = .data$record_keydate1,
-      end_date = .data$record_keydate2
+      application_date = record_keydate1,
+      end_date = record_keydate2
     ) %>%
     dplyr::mutate(
       six_months_pre_app = .data$application_date - lubridate::days(180),
@@ -93,7 +93,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
 
 
   homeless_flag <- data %>%
-    dplyr::select(.data$anon_chi, .data$record_keydate1, .data$record_keydate2, .data$recid) %>%
+    dplyr::select(anon_chi, record_keydate1, record_keydate2, recid) %>%
     dplyr::filter(.data$recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
     dplyr::distinct() %>%
     dplyr::left_join(
