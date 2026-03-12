@@ -62,7 +62,7 @@ produce_source_dn_tests <- function(data,
     create_hb_test_flags(.data$hbtreatcode) %>%
     create_hb_cost_test_flags(.data$hbtreatcode, .data$cost_total_net) %>%
     # keep variables for comparison
-    dplyr::select(.data$unique_anon_chi:.data$NHS_Lanarkshire_cost) %>%
+    dplyr::select(unique_anon_chi:NHS_Lanarkshire_cost) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
 
