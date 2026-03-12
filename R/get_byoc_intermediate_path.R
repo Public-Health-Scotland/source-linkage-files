@@ -56,10 +56,9 @@ get_byoc_intermediate_path <- function(type,
 #' @export
 #' @family file path functions
 get_byoc_output_files <- function(
-    year,
-    types = NULL
+  year,
+  types = NULL
 ) {
-
   byoc_input_files <- c(
     "acute",
     "ae",
@@ -92,5 +91,4 @@ get_byoc_output_files <- function(
   names(paths) <- types
 
   as.list(paths)
-
 }
