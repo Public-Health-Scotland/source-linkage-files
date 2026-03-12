@@ -38,7 +38,7 @@ process_lookup_sc_client <-
       replace_sc_id_with_latest() %>%
       # remove cases with no data in client
       dplyr::filter(!(is.na(.data$financial_year))) %>%
-      dplyr::select(-.data$latest_sc_id, -.data$period)
+      dplyr::select(-latest_sc_id, -period)
 
     client_clean <- sc_client_demographics %>%
       dplyr::group_by(.data$sending_location, .data$social_care_id, .data$anon_chi) %>%
@@ -90,7 +90,7 @@ process_lookup_sc_client <-
             "other_vulnerable_groups",
             "type_of_housing"
           ),
-          tidyr::replace_na, 9L
+          \(x) tidyr::replace_na(x, 9L)
         )
       ) %>%
       # factor labels
@@ -115,9 +115,11 @@ process_lookup_sc_client <-
             "autism",
             "other_vulnerable_groups"
           ),
-          factor,
-          levels = c(0L, 1L, 9L),
-          labels = c("No", "Yes", "Not Known")
+          \(x) factor(
+            x,
+            levels = c(0L, 1L, 9L),
+            labels = c("No", "Yes", "Not Known")
+          )
         ),
         type_of_housing = factor(.data$type_of_housing,
           levels = 1L:9L,
@@ -200,7 +202,7 @@ process_lookup_sc_client <-
       ) %>%
       dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
       dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-      dplyr::select(-.data$sending_location, -.data$count_not_known)
+      dplyr::select(-sending_location, -count_not_known)
 
     if (write_to_disk) {
       write_file(
