@@ -293,6 +293,15 @@ build_rule_catalogue <- function() {
     "Replace `dplyr::combine()` with `vctrs::vec_c()` or `c()`."
   )
 
+  # Rule 18 (dplyr)
+  # Old: case_match()
+  # New: recode_values(), replace_values()
+  add_rule(
+    "dplyr_case_match", "dplyr", "soft-deprecated", "high",
+    "\\b(?:[[:alnum:]_.]+::)?case_match\\s*\\(",
+    "`case_match()` is soft-deprecated, and is fully replaced by `recode_values()` and `replace_values()`."
+  )
+
   # -----------------------------.
   # tidyr ----
   # -----------------------------.
