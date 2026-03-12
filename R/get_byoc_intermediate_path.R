@@ -1,10 +1,11 @@
-#' BYOC intermediate Denodo output paths
+#' BYOC-to-Denodo S3 Path
 #'
-#' @description Build BYOC intermediate Denodo output paths
+#' @description Generates the file paths required to map BYOC outputs to S3,
+#' enabling data integration for Denodo views
 #'
-#' @param type name of dataset e.g. "acute", "mh", "pis".
+#' @param type name of dataset e.g. "acute", "mh", "pis"
 #' @param year Financial year
-#' @param base_path Root directory for outputs. Defaults to "/sdl_byoc/byoc/output".
+#' @param base_path Root directory for outputs. Defaults to "/sdl_byoc/byoc/output"
 #'
 #' @return byoc_intermediate_path
 #'
@@ -13,7 +14,6 @@
 #' "/sdl_byoc/byoc/output/anon-homelessness_for_source-201920.parquet"
 #' @export
 #' @family file path functions
-
 get_byoc_intermediate_path <- function(type,
                                        year,
                                        base_path = "/sdl_byoc/byoc/output") {
@@ -44,4 +44,53 @@ get_byoc_intermediate_path <- function(type,
   byoc_intermediate_path <- file.path(base_path, file_name)
 
   return(byoc_intermediate_path)
+}
+
+#' BYOC-to-Denodo S3 Path helper function
+#'
+#' @description Helper function for the get_byoc_intermediate_path() function
+#'
+#' @param types named list of the dataset types
+#' @param year Financial year
+#'
+#' @export
+#' @family file path functions
+get_byoc_output_files <- function(
+    year,
+    types = NULL
+) {
+
+  byoc_input_files <- c(
+    "acute",
+    "ae",
+    "at",
+    "ch",
+    "cmh",
+    "client",
+    "dd",
+    "deaths",
+    "dn",
+    "gp_ooh",
+    "hc",
+    "homelessness",
+    "maternity",
+    "mh",
+    "outpatients",
+    "pis",
+    "sds"
+  )
+
+  if (is.null(types)) {
+    types <- byoc_input_files
+  }
+
+  paths <- purrr::map_chr(
+    types,
+    ~ get_byoc_intermediate_path(.x, year)
+  )
+
+  names(paths) <- types
+
+  as.list(paths)
+
 }
