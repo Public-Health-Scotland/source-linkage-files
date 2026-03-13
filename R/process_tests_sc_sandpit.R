@@ -48,7 +48,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
         n_missing_postcode = is_missing(.data$chi_postcode),
         n_missing_gender = is_missing(.data$chi_gender_code)
       ) %>%
-      dplyr::select(.data$n_missing_chi:.data$n_missing_gender) %>%
+      dplyr::select(n_missing_chi:n_missing_gender) %>%
       calculate_measures(measure = "sum")
 
     latest_flag_tests <- data %>%
@@ -69,7 +69,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
         chi_latest_flag_9 = dplyr::if_else(.data$latest_count == 9, 1, 0),
         chi_latest_flag_10 = dplyr::if_else(.data$latest_count == 10, 1, 0)
       ) %>%
-      dplyr::select(.data$chi_latest_flag_0:.data$chi_latest_flag_10) %>%
+      dplyr::select(chi_latest_flag_0:chi_latest_flag_10) %>%
       calculate_measures(measure = "sum")
 
     # add a flag for sc ids where there is multiple chi associated
@@ -118,7 +118,7 @@ produce_sc_sandpit_tests <- function(data, type = c("demographics", "client", "a
         sc_id_multi_chi_West_Dunbartonshire = "West_Dunbartonshire",
         sc_id_multi_chi_West_Lothian = "West_Lothian"
       ) %>%
-      dplyr::select(.data$sc_id_multi_chi, .data$sc_id_multi_chi_Aberdeen_City:.data$sc_id_multi_chi_West_Lothian) %>%
+      dplyr::select(sc_id_multi_chi, sc_id_multi_chi_Aberdeen_City:sc_id_multi_chi_West_Lothian) %>%
       calculate_measures(measure = "sum")
 
     output <- list(
