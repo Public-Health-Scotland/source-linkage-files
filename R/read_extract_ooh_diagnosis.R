@@ -10,7 +10,6 @@ read_extract_ooh_diagnosis <- function(
   file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE),
   BYOC_MODE
 ) {
-
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -25,14 +24,16 @@ read_extract_ooh_diagnosis <- function(
     dbplyr::in_schema("sdl", "sdl_gp_ooh_diagnosis_source")
   ) %>%
     # Filter to match BOXI extraction
-    dplyr::filter(sc_start_financial_year == c_year,      # TO-DO: filtered variables are not currently in the denodo view.
-                  out_of_hours_services_flag == "Y") %>%  # Feedback given to NSS via UAT.
+    dplyr::filter(
+      sc_start_financial_year == c_year, # TO-DO: filtered variables are not currently in the denodo view.
+      out_of_hours_services_flag == "Y"
+    ) %>% # Feedback given to NSS via UAT.
     # rename variables
     dplyr::select(
       ooh_case_id = "GUID", ## TO-DO: needs to be renamed by NSS to match file spec - guid ##
       readcode = "diagnosis_code",
       description = "Diagnosis_Description" ## TO-DO: needs to be renamed by NSS to match ##
-                                            ## file spec - diagnosis_desc ##
+      ## file spec - diagnosis_desc ##
     ) %>%
     dplyr::distinct() %>%
     dplyr::collect() %>%

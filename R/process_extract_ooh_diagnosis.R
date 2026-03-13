@@ -12,7 +12,7 @@
 process_extract_ooh_diagnosis <- function(data,
                                           year,
                                           denodo_connect, ## TO-DO: will be hardcoded to denodo_connect = get_denodo_connection() ##
-                                                          ## NOTE: BYOC_MODE = FALSE is not required here ##
+                                          ## NOTE: BYOC_MODE = FALSE is not required here ##
                                           run_id = NA,
                                           run_date_time = NA) {
   # Only run for a single year
