@@ -4,7 +4,15 @@
 \alias{process_extract_ae}
 \title{Process the A&E extract}
 \usage{
-process_extract_ae(data, year, write_to_disk = TRUE)
+process_extract_ae(
+  data,
+  year,
+  denodo_connect = NULL,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The extract to process}
