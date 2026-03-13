@@ -15,7 +15,6 @@
 #' @return a connection to the Denodo database.
 #' @export
 get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL, BYOC_MODE = FALSE) {
-
   if (BYOC_MODE) {
     cli::cli_alert_info("Running in BYOC mode")
 
