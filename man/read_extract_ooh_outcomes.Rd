@@ -6,7 +6,9 @@
 \usage{
 read_extract_ooh_outcomes(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o")
+  denodo_connect,
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
