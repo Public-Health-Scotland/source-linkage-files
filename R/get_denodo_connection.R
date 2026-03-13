@@ -14,7 +14,25 @@
 #'
 #' @return a connection to the Denodo database.
 #' @export
-get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL) {
+get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL, BYOC_MODE = FALSE) {
+
+  if (BYOC_MODE) {
+    cli::cli_alert_info("Running in BYOC mode")
+
+    cloud_user <- Sys.getenv("denodo_user")
+    cloud_pass <- Sys.getenv("denodo_password")
+
+    db_connection <- odbc::dbConnect(
+      odbc::odbc(),
+      dsn = dsn,
+      uid = cloud_user,
+      pwd = cloud_pass
+    )
+
+    cli::cli_alert_success("Connected to Denodo in BYOC_MODE")
+    return(db_connection)
+  }
+
   keyring_name <- "denodo_keyring"
   service_pass <- "denodo_password"
   service_user <- "denodo_user"
