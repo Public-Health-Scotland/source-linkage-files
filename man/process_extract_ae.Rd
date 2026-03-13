@@ -7,6 +7,7 @@
 process_extract_ae(
   data,
   year,
+  denodo_connect = NULL,
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
