@@ -9,7 +9,6 @@
 #
 ################################################################################
 
-
 library(logger)
 library(targets) # main package required
 library(tarchetypes) # support for targets
@@ -24,7 +23,7 @@ BYOC_MODE <- dplyr::case_when(
 )
 
 if (BYOC_MODE) {
-  targets::tar_config_set(store = "/sdl_byoc/byoc/output/_targets")
+  targets::tar_config_set(store = "/sdl_byoc/_targets")
   logger::log_info("targets file location on Denodo")
 } else {
   targets::tar_config_set(store = "/conf/sourcedev/Source_Linkage_File_Updates/_targets")
