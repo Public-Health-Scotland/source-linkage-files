@@ -14,6 +14,7 @@
 #' @family process extracts
 process_extract_ae <- function(data,
                                year,
+                               denodo_connect = NULL, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
                                write_to_disk = TRUE,
                                BYOC_MODE = FALSE,
                                run_id = NA,
@@ -227,13 +228,11 @@ process_extract_ae <- function(data,
     )
 
   # ----------------------------------------------------------------------------
-
-  # denodo_connect_cup <- get_denodo_connection()
   #
   # c_year_cup <- convert_fyyear_to_year(check_year_format(year))
   #
   # ae_cup_file <- dplyr::tbl(
-  #   denodo_connect_cup,
+  #   denodo_connect,
   #   dbplyr::in_schema("sdl", "sdl_ae_cup_source_placeholder") # TO-DO: Placeholder for data path in denodo
   # ) %>%
   #   dplyr::filter(year == !!c_year_cup) %>% # TO-DO: Placeholder for the variable to filter by year
@@ -349,6 +348,8 @@ process_extract_ae <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  DBI::dbDisconnect(denodo_connect)
 
   return(ae_processed)
 }

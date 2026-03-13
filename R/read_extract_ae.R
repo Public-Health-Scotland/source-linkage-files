@@ -66,5 +66,7 @@ read_extract_ae <- function(year,
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
+  DBI::dbDisconnect(denodo_connect)
+
   return(extract_ae)
 }
