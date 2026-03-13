@@ -4,7 +4,7 @@
 \alias{get_denodo_connection}
 \title{Open a connection to the Denodo}
 \usage{
-get_denodo_connection(dsn = "DVPREPROD", username = NULL)
+get_denodo_connection(dsn = "DVPREPROD", username = NULL, BYOC_MODE = FALSE)
 }
 \arguments{
 \item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}}.
