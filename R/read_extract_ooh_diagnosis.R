@@ -24,7 +24,9 @@ read_extract_ooh_diagnosis <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_gp_ooh_diagnosis_source")
   ) %>%
-    dplyr::filter(financial_year == c_year) %>%
+    # Filter to match BOXI extraction
+    dplyr::filter(sc_start_financial_year == c_year,      # TO-DO: filtered variables are not currently in the denodo view.
+                  out_of_hours_services_flag == "Y") %>%  # Feedback given to NSS via UAT.
     # rename variables
     dplyr::select(
       ooh_case_id = "GUID", ## TO-DO: needs to be renamed by NSS to match file spec - guid ##
@@ -35,6 +37,9 @@ read_extract_ooh_diagnosis <- function(
     dplyr::distinct() %>%
     dplyr::collect() %>%
     tidyr::drop_na(.data$readcode)
+
+  # Disconnect from Denodo
+  DBI::dbDisconnect(denodo_connect)
 
   return(diagnosis_extract)
 }
