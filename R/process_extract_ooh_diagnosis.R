@@ -9,13 +9,17 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_diagnosis <- function(data, year) {
+process_extract_ooh_diagnosis <- function(data,
+                                          year,
+                                          denodo_connect, ## TO-DO: will be hardcoded to denodo_connect = get_denodo_connection() ##
+                                          ## NOTE: BYOC_MODE = FALSE is not required here ##
+                                          run_id = NA,
+                                          run_date_time = NA) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
-
 
   # Diagnosis Data ---------------------------------
 
@@ -25,6 +29,23 @@ process_extract_ooh_diagnosis <- function(data, year) {
       readcode = "ReadCode",
       description = "Description"
     )
+
+  # ----------------------------------------------------------------------------
+  ## TO-DO: replace readcode lookup with new denodo connection
+
+  # readcode_lookup <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_readcode_lookup_source_placeholder") # TO-DO: Placeholder for data path in denodo
+  # ) %>%
+  #   dplyr::select( # TO-DO: Placeholder variables
+  #     readcode = "ReadCode",
+  #     description = "Description"
+  #   ) %>%
+  #   dplyr::collect()
+  #
+  # DBI::dbDisconnect(denodo_connect)
+
+  # ----------------------------------------------------------------------------
 
   ## Deal with Read Codes
 
