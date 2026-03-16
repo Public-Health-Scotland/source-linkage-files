@@ -6,7 +6,9 @@
 \usage{
 read_extract_mental_health(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "mh")
+  denodo_connect,
+  file_path = get_boxi_extract_path(year = year, type = "mh", BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
