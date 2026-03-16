@@ -84,7 +84,7 @@ fill_ch_names <- function(ch_data,
       ch_name_validated = clean_up_free_text(.data[["ch_name_validated"]]),
       ch_date_registered = lubridate::as_date(.data[["ch_date_registered"]]),
       ch_date_cancelled = lubridate::as_date(.data[["ch_date_cancelled"]]),
-      ch_active = dplyr::case_match(
+      ch_active = dplyr::recode_values(
         .data[["ch_active"]],
         "Active" ~ TRUE,
         c("Cancelled", "Inactive") ~ FALSE
@@ -106,7 +106,7 @@ fill_ch_names <- function(ch_data,
       ch_active = any(.data[["ch_active"]])
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::rename(ch_postcode_lookup = .data[["ch_postcode"]]) %>%
+    dplyr::rename(ch_postcode_lookup = ch_postcode) %>%
     dplyr::mutate(
       ch_pc_partial = stringr::str_sub(.data[["ch_postcode_lookup"]], 1, -2),
       ch_pc_partial2 = stringr::str_sub(.data[["ch_postcode_lookup"]], 1, -3),
