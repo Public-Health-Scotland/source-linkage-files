@@ -6,8 +6,8 @@
 \usage{
 read_extract_maternity(
   year,
-  denodo_connect = get_denodo_connection(),
-  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 )
 }
