@@ -169,7 +169,7 @@ create_demographic_cohorts <- function(
       TRUE ~ "Healthy and Low User"
     )) %>%
     # Reorder variables
-    dplyr::relocate(.data$demographic_cohort, .after = .data$anon_chi)
+    dplyr::relocate(demographic_cohort, .after = anon_chi)
 
   # Write to disk
   if (write_to_disk) {
