@@ -78,7 +78,7 @@ add_hri_variables <- function(
   hri_lookup <- data %>%
     dplyr::select(
       "year",
-      chi_variable,
+      all_of(chi_variable),
       "postcode",
       "gpprac",
       "lca",
@@ -134,7 +134,7 @@ add_hri_variables <- function(
     ) %>%
     # Select only required variables for the lookup
     dplyr::select(
-      chi_variable,
+      all_of(chi_variable),
       "hri_scot",
       "hri_scotp",
       "hri_hb",
