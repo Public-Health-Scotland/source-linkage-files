@@ -5,8 +5,8 @@
 #' @export
 read_extract_maternity <- function(
   year,
-  denodo_connect = get_denodo_connection(),
-  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   year <- check_year_format(year, format = "fyyear")
@@ -16,6 +16,8 @@ read_extract_maternity <- function(
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
   }
+
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Read BOXI extract
   extract_maternity <- dplyr::tbl(
@@ -80,8 +82,6 @@ read_extract_maternity <- function(
     ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
-
-  DBI::dbDisconnect(denodo_connect)
 
   return(extract_maternity)
 }
