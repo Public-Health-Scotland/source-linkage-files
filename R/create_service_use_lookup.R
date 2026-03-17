@@ -149,11 +149,11 @@ create_service_use_cohorts <- function(
     dplyr::group_by(.data$anon_chi) %>%
     dplyr::summarise(
       dplyr::across(
-        c(.data$cost_total_net:.data$elective_inpatient_cost),
+        c(cost_total_net:elective_inpatient_cost),
         ~ sum(.x)
       ),
       dplyr::across(
-        c(.data$operation_flag, .data$death_flag),
+        c(operation_flag, death_flag),
         ~ any(.x)
       )
     ) %>%
