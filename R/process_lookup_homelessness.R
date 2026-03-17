@@ -14,6 +14,8 @@ create_homelessness_lookup <- function(
   year,
   homelessness_data = read_file(get_source_extract_path(year, "homelessness"))
 ) {
+  log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
+
   # Specify years available for running
   if (year <= "1516") {
     return(NULL)
@@ -23,7 +25,7 @@ create_homelessness_lookup <- function(
     tidyr::drop_na(.data$anon_chi) %>%
     dplyr::mutate(hl1_in_fy = 1L)
 
-  cli::cli_alert_info("Create homelessness lookup function finished at {Sys.time()}")
+  log_slf_event(stage = "process", status = "complete", type = "homelessness_lookup", year = year)
 
   return(homelessness_lookup)
 }
@@ -43,6 +45,8 @@ create_homelessness_lookup <- function(
 #' @family episode_file
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
+  log_slf_event(stage = "process", status = "start", type = "homelessness_flag", year = year)
+
   if (!check_year_valid(year, type = "homelessness")) {
     data <- data
     return(data)
@@ -57,7 +61,7 @@ add_homelessness_flag <- function(data, year,
     ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(.data$hl1_in_fy, 0L))
 
-  cli::cli_alert_info("Add homelessness flag function finished at {Sys.time()}")
+  log_slf_event(stage = "process", status = "complete", type = "homelessness_flag", year = year)
 
   return(data)
 }
@@ -74,6 +78,8 @@ add_homelessness_flag <- function(data, year,
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
+  log_slf_event(stage = "process", status = "start", type = "homelessness_date_flags", year = year)
+
   if (!check_year_valid(year, type = "homelessness")) {
     data <- data
     return(data)
@@ -133,7 +139,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
       )
     )
 
-  cli::cli_alert_info("Add homelessness date flags function finished at {Sys.time()}")
+  log_slf_event(stage = "process", status = "complete", type = "homelessness_date_flags", year = year)
 
   return(data)
 }

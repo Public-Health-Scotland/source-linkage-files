@@ -7,6 +7,8 @@ read_extract_ooh_outcomes <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh-o", year = year)
+
   ## Load extract file
   outcomes_extract <- read_file(file_path,
     # All columns are character type
@@ -20,6 +22,8 @@ read_extract_ooh_outcomes <- function(
     # Remove blank outcomes
     dplyr::filter(.data$outcome != "") %>%
     dplyr::distinct()
+
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh-o", year = year)
 
   return(outcomes_extract)
 }

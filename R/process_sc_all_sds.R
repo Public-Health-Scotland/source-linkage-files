@@ -15,6 +15,8 @@ process_sc_all_sds <- function(
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "sds", year = "all")
+
   # fix "no visible binding for global variable"
   sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
     sds_period_end_date <- received <- sds_option <- sending_location <-
@@ -199,6 +201,8 @@ process_sc_all_sds <- function(
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "sds", year = "all")
 
   return(final_data)
 }

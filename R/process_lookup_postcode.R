@@ -17,6 +17,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
                                     locality_path = get_locality_path(),
                                     write_to_disk = TRUE) {
   # Read lookup files -------------------------------------------------------
+  log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 
   # postcode data
   spd_file <- read_file(spd_path) %>%
@@ -101,6 +102,8 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "slf_pc_lookup", year = "all")
 
   return(slf_pc_lookup)
 }

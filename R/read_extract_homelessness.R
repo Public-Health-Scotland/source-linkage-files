@@ -9,6 +9,8 @@ read_extract_homelessness <- function(
   file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
+  log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
+
   year <- check_year_format(year, format = "alternate")
 
   # Specify years available for running
@@ -54,6 +56,8 @@ read_extract_homelessness <- function(
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
     slfhelper::get_anon_chi("chi")
+
+  log_slf_event(stage = "read", status = "complete", type = "homelessness", year = year)
 
   return(extract_homelessness)
 }

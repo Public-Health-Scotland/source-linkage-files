@@ -17,6 +17,8 @@ process_extract_acute <- function(data,
                                   year,
                                   acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
                                   write_to_disk = TRUE) {
+  log_slf_event(stage = "process", status = "start", type = "acute", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -167,6 +169,8 @@ process_extract_acute <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "acute", year = year)
 
   return(acute_processed)
 }
