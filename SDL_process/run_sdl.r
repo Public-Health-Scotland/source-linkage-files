@@ -45,7 +45,7 @@ library(targets)
 library(testthat)
 library(crew)
 
-BYOC_MODE = Sys.getenv("BYOC_MODE")
+BYOC_MODE <- Sys.getenv("BYOC_MODE")
 # set up logger and system environment variable BYOC_MODE
 if (tolower(BYOC_MODE) %in% c("true", "t")) {
   logger::log_info("Detect run_sdl.r run on Denodo")
@@ -55,8 +55,8 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
   BYOC_MODE <- FALSE
 }
 
-run_id = Sys.getenv("run_id")
-run_date_time = Sys.getenv("run_date_time")
+run_id <- Sys.getenv("run_id")
+run_date_time <- Sys.getenv("run_date_time")
 
 
 write_to_disk <- TRUE
