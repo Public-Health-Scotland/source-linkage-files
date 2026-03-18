@@ -18,7 +18,7 @@ get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL, BYOC_MODE 
   if (BYOC_MODE) {
     cli::cli_alert_info("Running in BYOC mode")
 
-    cloud_user <- Sys.getenv("denodo_user")
+    cloud_user <- Sys.getenv("denodo_username")
     cloud_pass <- Sys.getenv("denodo_password")
 
     db_connection <- odbc::dbConnect(
