@@ -6,7 +6,7 @@
 #' @param type name of dataset e.g. "acute", "mh", "pis"
 #' @param year Financial year
 #' @param base_path Root directory for outputs. Defaults to "/sdl_byoc/byoc/output"
-#'
+#' ie denodo_output_path()
 #' @return byoc_intermediate_path
 #'
 #' @examples
@@ -16,7 +16,7 @@
 #' @family file path functions
 get_byoc_intermediate_path <- function(type,
                                        year,
-                                       base_path = "/sdl_byoc/byoc/output") {
+                                       base_path = denodo_output_path()) {
   file_name <- dplyr::case_match(
     type,
     "acute" ~ "anon-acute_for_source",

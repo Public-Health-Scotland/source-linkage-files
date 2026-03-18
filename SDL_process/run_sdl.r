@@ -151,7 +151,7 @@ year <- "1920"
 # Build BYOC Output File Paths
 byoc_output_files <- get_byoc_output_files(
   year = year,
-  types = "homelessness" # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
+  types = c("homelessness", "maternity") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
 ) # can always use any other type for testing also
 
 # targets::tar_make()
