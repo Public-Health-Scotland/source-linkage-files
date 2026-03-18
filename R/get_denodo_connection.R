@@ -14,7 +14,13 @@
 #'
 #' @return a connection to the Denodo database.
 #' @export
-get_denodo_connection <- function(dsn = "DVPREPROD", username = NULL, BYOC_MODE = FALSE) {
+get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
+  if(BYOC_MODE){
+    dsn = "DVPREPROD"
+  }else{
+    dsn = Sys.getenv("denodo_dsn")
+  }
+
   if (BYOC_MODE) {
     cli::cli_alert_info("Running in BYOC mode")
 
