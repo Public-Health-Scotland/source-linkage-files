@@ -61,7 +61,7 @@ read_extract_maternity <- function(
       hbpraccode = "practice_nhs_health_board_curr",
       hbrescode = "nhs_board_of_residence_code_curr",
       hbtreatcode = "treatment_nhs_board_code_curr",
-      hscp = "hspc_of_residence_code_curr",
+      hscp = "hscp_of_residence_code_curr",
       lca = "geo_council_area_code",
       location = "treatment_location_code",
       mpat = "management_of_patient_code",
