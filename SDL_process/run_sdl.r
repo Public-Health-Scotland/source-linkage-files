@@ -45,28 +45,18 @@ library(targets)
 library(testthat)
 library(crew)
 
+BYOC_MODE = Sys.getenv("BYOC_MODE")
 # set up logger and system environment variable BYOC_MODE
-if (exists("BYOC_MODE") && isTRUE(BYOC_MODE)) {
+if (tolower(BYOC_MODE) %in% c("true", "t")) {
   logger::log_info("Detect run_sdl.r run on Denodo")
-  Sys.setenv(BYOC_MODE = "TRUE")
+  BYOC_MODE <- TRUE
 } else {
   logger::log_info("Detect run_sdl.r run locally")
   BYOC_MODE <- FALSE
-  Sys.setenv(BYOC_MODE = "FALSE")
 }
 
-
-# setup connection to Denodo if run locally
-if (!BYOC_MODE) {
-  # Open a connection to DVPREPROD (test environment) or DVPROD (production environment)
-  denodo_connect <- suppressWarnings(dbConnect(
-    odbc(),
-    dsn = "DVPREPROD",
-    # or DVPROD
-    uid = .rs.askForPassword("Enter your username"),
-    pwd = .rs.askForPassword("Enter your LDAP password")
-  ))
-}
+run_id = Sys.getenv("run_id")
+run_date_time = Sys.getenv("run_date_time")
 
 
 write_to_disk <- TRUE
@@ -164,7 +154,7 @@ year <- "1920"
 logger::log_info("Read and process homelessness data")
 hl1 <- read_extract_homelessness(
   year,
-  denodo_connect = denodo_connect,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   file_path = get_boxi_extract_path(
     year = year,
     type = "homelessness",
@@ -176,24 +166,24 @@ hl1 <- read_extract_homelessness(
   write_to_disk = write_to_disk,
   la_code_lookup = la_code_lookup,
   sg_pub_data = sg_pub_data,
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id,
+  run_date_time = run_date_time
 )
 
 logger::log_info("Read and process maternity data")
 maternity <- read_extract_maternity(
   year,
-  denodo_connect = denodo_connect,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
   BYOC_MODE = BYOC_MODE
 ) %>%
   process_extract_maternity(
     year = year,
     write_to_disk = TRUE,
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
   )
 
-## disconnect from denodo if run locally ----
-if (!BYOC_MODE) {
-  logger::log_info("Disconnect from Denodo")
-  DBI::dbDisconnect(denodo_connect)
-}
+logger::log_info("Run SDL ended.")
