@@ -4,14 +4,15 @@
 \alias{get_byoc_intermediate_path}
 \title{BYOC-to-Denodo S3 Path}
 \usage{
-get_byoc_intermediate_path(type, year, base_path = "/sdl_byoc/byoc/output")
+get_byoc_intermediate_path(type, year, base_path = denodo_output_path())
 }
 \arguments{
 \item{type}{name of dataset e.g. "acute", "mh", "pis"}
 
 \item{year}{Financial year}
 
-\item{base_path}{Root directory for outputs. Defaults to "/sdl_byoc/byoc/output"}
+\item{base_path}{Root directory for outputs. Defaults to "/sdl_byoc/byoc/output"
+ie denodo_output_path()}
 }
 \value{
 byoc_intermediate_path
