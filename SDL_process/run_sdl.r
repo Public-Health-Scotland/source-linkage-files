@@ -55,8 +55,10 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
   BYOC_MODE <- FALSE
 }
 
-run_id <- Sys.getenv("run_id")
-run_date_time <- Sys.getenv("run_date_time")
+# run_id <- Sys.getenv("run_id")
+# run_date_time <- Sys.getenv("run_date_time")
+run_id <- NA
+run_date_time <- NA
 
 
 write_to_disk <- TRUE
