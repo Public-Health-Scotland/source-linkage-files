@@ -4,15 +4,15 @@
 \alias{get_denodo_connection}
 \title{Open a connection to the Denodo}
 \usage{
-get_denodo_connection(dsn = "DVPREPROD", username = NULL, BYOC_MODE = FALSE)
+get_denodo_connection(username = NULL, BYOC_MODE = FALSE)
 }
 \arguments{
-\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}}.
-The DSN must be configured on the system first (e.g., \code{DVPREPROD} or \code{DVPROD}).}
-
 \item{username}{The username to use for authentication. If not supplied,
 the function tries to detect it from system environment variables or
 system info.}
+
+\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}}.
+The DSN must be configured on the system first (e.g., \code{DVPREPROD} or \code{DVPROD}).}
 }
 \value{
 a connection to the Denodo database.
