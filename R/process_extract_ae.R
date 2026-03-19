@@ -12,7 +12,13 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_ae <- function(data, year, write_to_disk = TRUE) {
+process_extract_ae <- function(data,
+                               year,
+                               denodo_connect = NULL, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
+                               write_to_disk = TRUE,
+                               BYOC_MODE = FALSE,
+                               run_id = NA,
+                               run_date_time = NA) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -221,6 +227,27 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       cup_pathway = "CUP Pathway Name"
     )
 
+  # ----------------------------------------------------------------------------
+  #
+  # c_year_cup <- convert_fyyear_to_year(check_year_format(year))
+  #
+  # ae_cup_file <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_ae_cup_source_placeholder") # TO-DO: Placeholder for data path in denodo
+  # ) %>%
+  #   dplyr::filter(year == !!c_year_cup) %>% # TO-DO: Placeholder for the variable to filter by year
+  #   dplyr::select( # TO-DO: Placeholder variables
+  #     record_keydate1 = "ED Arrival Date",
+  #     keytime1 = "ED Arrival Time",
+  #     record_keydate2 = "ED Discharge Date",
+  #     keytime2 = "ED Discharge Time",
+  #     case_ref_number = "ED Case Reference Number [C]",
+  #     cup_marker = "CUP Marker",
+  #     cup_pathway = "CUP Pathway Name"
+  #   ) %>%
+  #   dplyr::collect()
+  # ----------------------------------------------------------------------------
+
 
   # Data Cleaning---------------------------------------
 
@@ -254,7 +281,13 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     )
 
   ae_processed <- matched_ae_data %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -310,10 +343,13 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       ae_processed,
-      get_source_extract_path(year, "ae", check_mode = "write"),
+      get_source_extract_path(year, "ae", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  DBI::dbDisconnect(denodo_connect)
 
   return(ae_processed)
 }

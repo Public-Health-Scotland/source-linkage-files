@@ -6,7 +6,9 @@
 \usage{
 read_extract_ae(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "ae")
+  denodo_connect,
+  file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
