@@ -463,8 +463,31 @@ build_rule_catalogue <- function() {
     "For line geoms, use `linewidth =` instead of `size =` (review exceptions in mixed geoms)."
   )
 
+  # -----------------------------.
+  # Automatic ----
+  library(tidyverse)
+  library(lifecycle)
+  # -----------------------------.
+
+  # Detect any other functions marked as "superseded", "deprecated", "defunct" or "soft-deprecated" automatically
+  tidyverse_status <- data.frame()
+  for (package in tidyverse_packages()){
+    package_status <- data.frame(pkg_lifecycle_statuses(package))
+    tidyverse_status <- rbind(tidyverse_status, package_status)
+  }
+  tidyverse_status %>% filter(!lifecycle %in% c("experimental", "questioning"))
+
+  for (i in 1:nrow(tidyverse_status)){
+    add_rule(id = tidyverse_status$fun[i],
+             package = tidyverse_status$package[i],
+             stage = tidyverse_status$lifecycle[i],
+             confidence = "",
+             regex = paste0("\\b(?:[[:alnum:]_.]+::)?", tidyverse_status$fun[i], "\\s*\\("),
+             suggestion = "Replace function")
+  }
+
   # Join rules
-  out <- do.call(rbind, rows)
+  out <- do.call(rbind, rows) %>% distinct(regex, .keep_all = TRUE)
   rownames(out) <- NULL
   out
 }
