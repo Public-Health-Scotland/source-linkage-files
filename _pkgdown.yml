@@ -17,6 +17,7 @@ reference:
     desc: Connection to PHS database
   - contents:
     - phs_db_connection
+    - get_denodo_connection
 
 
   - title: Check
@@ -145,6 +146,7 @@ reference:
     - has_concept("read extracts")
     - starts_with("read_")
     - get_gpprac_opendata
+    - get_byoc_output_files
 
 
   - title: Process extracts
@@ -212,6 +214,7 @@ reference:
     - vars_end_with
     - has_concept("helper_funs")
     - setup_keyring
+    - setup_denodo_keyring
 
 
   - title: Testing
