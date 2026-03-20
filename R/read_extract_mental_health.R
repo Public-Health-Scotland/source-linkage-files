@@ -5,12 +5,14 @@
 #' @export
 read_extract_mental_health <- function(
   year,
-  denodo_connect,
-  file_path = get_boxi_extract_path(year = year, type = "mh", BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "mh", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
+
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Read BOXI extract
   extract_mental_health <- dplyr::tbl(
@@ -83,11 +85,15 @@ read_extract_mental_health <- function(
     dplyr::collect() %>%
     # replace NA in cost_total_net by 0
     dplyr::mutate(
-      cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0),
-      anon_chi = slfhelper::get_anon_chi(chi)
+      cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
+    ) %>%
+    slfhelper::get_anon_chi("chi") %>%
+    # TODO: remove data type modification after UAT passed
+    dplyr::mutate(
+      costsfy = as.double(.data$costsfy),
+      costmonthnum = as.double(.data$costmonthnum),
+      uri = as.character(.data$uri)
     )
-
-  DBI::dbDisconnect(denodo_connect)
 
   return(extract_mental_health)
 }
