@@ -4,7 +4,14 @@
 \alias{process_extract_mental_health}
 \title{Process the mental health extract}
 \usage{
-process_extract_mental_health(data, year, write_to_disk = TRUE)
+process_extract_mental_health(
+  data,
+  year,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The extract to process}

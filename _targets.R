@@ -700,22 +700,30 @@ list(
     ),
     # Mental Health (SMR02) Activity--------------------------------------------
     # READ - Mental Health
-    tar_file_read(
-      # Target name
+    tar_target(
       mental_health_data,
-      get_boxi_extract_path(year, type = "mh"),
-      # Function
-      read_extract_mental_health(year, !!.x)
+      read_extract_mental_health(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(
+          year = year,
+          type = "mh",
+          BYOC_MODE = BYOC_MODE
+        ),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Mental Health
     tar_target(
       # Target name
       source_mental_health_extract,
-      # Function
       process_extract_mental_health(
         mental_health_data,
-        year,
-        write_to_disk = write_to_disk
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Mental Health

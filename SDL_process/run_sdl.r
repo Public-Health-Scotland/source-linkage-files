@@ -55,10 +55,8 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
   BYOC_MODE <- FALSE
 }
 
-# run_id <- Sys.getenv("run_id")
-# run_date_time <- Sys.getenv("run_date_time")
-run_id <- NA
-run_date_time <- NA
+run_id <- Sys.getenv("run_id")
+run_date_time <- Sys.getenv("run_date_time")
 
 
 write_to_disk <- TRUE
@@ -151,7 +149,7 @@ year <- "1920"
 # Build BYOC Output File Paths
 byoc_output_files <- get_byoc_output_files(
   year = year,
-  types = c("homelessness", "maternity") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
+  types = c("homelessness", "maternity", "mh") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
 ) # can always use any other type for testing also
 
 # targets::tar_make()
@@ -182,12 +180,34 @@ logger::log_info("Read and process maternity data")
 maternity <- read_extract_maternity(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+  file_path = get_boxi_extract_path(
+    year = year,
+    type = "maternity",
+    BYOC_MODE = BYOC_MODE
+  ),
   BYOC_MODE = BYOC_MODE
 ) %>%
   process_extract_maternity(
     year = year,
     write_to_disk = TRUE,
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
+  )
+
+logger::log_info("Read and process mental health data")
+mental_health <- read_extract_mental_health(
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(
+    year = year,
+    type = "mh",
+    BYOC_MODE = BYOC_MODE
+  ),
+  BYOC_MODE = BYOC_MODE
+) %>%
+  process_extract_mental_health(
+    year = year,
     BYOC_MODE = BYOC_MODE,
     run_id = run_id,
     run_date_time = run_date_time
