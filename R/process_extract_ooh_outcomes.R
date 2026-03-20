@@ -9,7 +9,11 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_outcomes <- function(data, year) {
+process_extract_ooh_outcomes <- function(data,
+                                         year,
+                                         denodo_connect, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
+                                         run_id = NA,
+                                         run_date_time = NA) {
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -50,6 +54,10 @@ process_extract_ooh_outcomes <- function(data, year) {
       names_prefix = "ooh_outcome",
       values_from = .data$outcome
     ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
       "ooh_case_id",
       tidyselect::any_of(c(
@@ -60,6 +68,8 @@ process_extract_ooh_outcomes <- function(data, year) {
       ))
     ) %>%
     dplyr::as_tibble()
+
+  DBI::dbDisconnect(denodo_connect)
 
   return(outcomes_clean)
 }
