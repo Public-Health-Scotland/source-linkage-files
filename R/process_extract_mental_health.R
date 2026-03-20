@@ -24,6 +24,7 @@ process_extract_mental_health <- function(data,
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
+  logger::log_info("Process mental health data")
   # Data Cleaning  ---------------------------------------
 
   mh_clean <- data %>%

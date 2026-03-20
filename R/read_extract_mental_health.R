@@ -15,6 +15,7 @@ read_extract_mental_health <- function(
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Read BOXI extract
+  logger::log_info("Read mental health data from Denodo")
   extract_mental_health <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_mental_health_episode_source")
