@@ -7,10 +7,10 @@
 process_extract_mental_health(
   data,
   year,
+  write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
+  run_date_time = NA
 )
 }
 \arguments{
