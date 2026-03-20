@@ -5,7 +5,7 @@
 #' @export
 #'
 read_extract_ae <- function(year,
-                            denodo_connect, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
+                            denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                             file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
                             BYOC_MODE) {
   year <- check_year_format(year, format = "fyyear")
@@ -16,13 +16,17 @@ read_extract_ae <- function(year,
     return(tibble::tibble())
   }
 
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  logger::log_info("Read A&E data from Denodo")
+
   # Read Extract
   extract_ae <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
   ) %>%
     dplyr::filter(
-      financial_year == !!c_year & # TO-DO: check assumption that arrival_financial_year == financial_year
+      financial_year == c_year & # TO-DO: check assumption that arrival_financial_year == financial_year
         (significant_facility_code == "32" | is.na(significant_facility_code))
     ) %>%
     dplyr::select(
@@ -65,8 +69,6 @@ read_extract_ae <- function(year,
     ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
-
-  DBI::dbDisconnect(denodo_connect)
 
   return(extract_ae)
 }
