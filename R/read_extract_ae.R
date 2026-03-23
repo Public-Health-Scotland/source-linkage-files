@@ -70,5 +70,17 @@ read_extract_ae <- function(year,
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
+  # ----------------------------------------------------------------------------
+  # TO-DO: Remove this when data types are fixed
+  extract_ae <- extract_ae %>%
+    mutate(keytime1 = hms::parse_hms(keytime1),
+           keytime2 = hms::parse_hms(keytime2),
+           gender = as.numeric(gender),
+           ae_patflow = as.numeric(ae_patflow),
+           age = as.numeric(age),
+           commhosp = as.character(commhosp)
+    )
+  # ----------------------------------------------------------------------------
+
   return(extract_ae)
 }
