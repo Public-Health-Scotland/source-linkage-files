@@ -14,7 +14,7 @@
 #' @family process extracts
 process_extract_ae <- function(data,
                                year,
-                               denodo_connect = NULL, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
+                               denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                write_to_disk = TRUE,
                                BYOC_MODE = FALSE,
                                run_id = NA,
@@ -24,6 +24,8 @@ process_extract_ae <- function(data,
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
+
+  logger::log_info("Process A&E data")
 
   # Data Cleaning  ---------------------------------------
 
@@ -228,26 +230,28 @@ process_extract_ae <- function(data,
     )
 
   # ----------------------------------------------------------------------------
-  #
   # c_year_cup <- convert_fyyear_to_year(check_year_format(year))
+  #
+  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  #
+  # logger::log_info("Read A&E CUP data from Denodo")
   #
   # ae_cup_file <- dplyr::tbl(
   #   denodo_connect,
   #   dbplyr::in_schema("sdl", "sdl_ae_cup_source_placeholder") # TO-DO: Placeholder for data path in denodo
   # ) %>%
-  #   dplyr::filter(year == !!c_year_cup) %>% # TO-DO: Placeholder for the variable to filter by year
-  #   dplyr::select( # TO-DO: Placeholder variables
-  #     record_keydate1 = "ED Arrival Date",
-  #     keytime1 = "ED Arrival Time",
-  #     record_keydate2 = "ED Discharge Date",
-  #     keytime2 = "ED Discharge Time",
-  #     case_ref_number = "ED Case Reference Number [C]",
-  #     cup_marker = "CUP Marker",
-  #     cup_pathway = "CUP Pathway Name"
+  #   dplyr::filter(year == c_year_cup) %>% # TO-DO: Placeholder for the variable to filter by year
+  #   dplyr::select(
+  #     record_keydate1 = "ed_arrival_date",
+  #     keytime1 = "ed_arrival_time",
+  #     record_keydate2 = "ed_discharge_date",
+  #     keytime2 = "ed_discharge_time",
+  #     case_ref_number = "ed_case_reference_number",
+  #     cup_marker = "cup_marker",
+  #     cup_pathway = "cup_pathway_name"
   #   ) %>%
   #   dplyr::collect()
   # ----------------------------------------------------------------------------
-
 
   # Data Cleaning---------------------------------------
 
@@ -340,6 +344,8 @@ process_extract_ae <- function(data,
       "cup_pathway"
     )
 
+  logger::log_info("Write processed A&E data to Denodo intermediate drive")
+
   if (write_to_disk) {
     write_file(
       ae_processed,
@@ -348,8 +354,6 @@ process_extract_ae <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
-
-  DBI::dbDisconnect(denodo_connect)
 
   return(ae_processed)
 }
