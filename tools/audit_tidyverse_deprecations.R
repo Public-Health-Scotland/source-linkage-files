@@ -593,14 +593,18 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
     # Skip common literal-name selects like select("a", "b", "c") / dplyr::select(...)
     if (grepl(
       "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\(\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
-      ctxt_trim, perl = TRUE)) {
+      ctxt_trim,
+      perl = TRUE
+    )) {
       next
     }
 
     # Skip literal named-string selects, e.g. select(a = "a", b = "b")
     if (grepl(
       "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\(\\s*[A-Za-z.][A-Za-z0-9._]*\\s*=\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*[A-Za-z.][A-Za-z0-9._]*\\s*=\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
-      ctxt_trim, perl = TRUE)) {
+      ctxt_trim,
+      perl = TRUE
+    )) {
       next
     }
 
