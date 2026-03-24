@@ -37,7 +37,7 @@ read_extract_ooh_diagnosis <- function(
     ) %>%
     dplyr::distinct() %>%
     dplyr::collect() %>%
-    tidyr::drop_na(.data$readcode)
+    tidyr::drop_na(readcode)
 
   # Disconnect from Denodo
   DBI::dbDisconnect(denodo_connect)
