@@ -151,7 +151,7 @@ year <- "1920"
 # Build BYOC Output File Paths
 byoc_output_files <- get_byoc_output_files(
   year = year,
-  types = c("homelessness", "maternity") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
+  types = c("homelessness", "maternity", "it_chi_deaths") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
 ) # can always use any other type for testing also
 
 # targets::tar_make()
@@ -187,6 +187,19 @@ maternity <- read_extract_maternity(
 ) %>%
   process_extract_maternity(
     year = year,
+    write_to_disk = TRUE,
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
+  )
+
+# Logger is included within each function so is excluded here?
+it_chi_deaths <- read_it_chi_deaths(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = BYOC_MODE
+) %>%
+  process_it_chi_deaths(
     write_to_disk = TRUE,
     BYOC_MODE = BYOC_MODE,
     run_id = run_id,
