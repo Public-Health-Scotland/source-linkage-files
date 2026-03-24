@@ -19,7 +19,6 @@ process_extract_ae <- function(data,
                                BYOC_MODE = FALSE,
                                run_id = NA,
                                run_date_time = NA) {
-
   log_slf_event(stage = "process", status = "start", type = "ae", year = year)
 
   # Only run for a single year
