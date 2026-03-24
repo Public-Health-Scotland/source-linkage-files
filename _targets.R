@@ -258,9 +258,15 @@ list(
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    # Function
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(),
+      BYOC_MODE = BYOC_MODE
+      )
   ),
   # PROCESS - IT CHI deaths------
   tar_target(
@@ -269,7 +275,10 @@ list(
     # Function
     process_it_chi_deaths(
       data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
