@@ -6,7 +6,7 @@
 #'
 read_extract_ooh_diagnosis <- function(
   year,
-  denodo_connect, ## TO-DO: will be hardcoded to denodo_connect = get_denodo_connection() ##
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE),
   BYOC_MODE
 ) {
