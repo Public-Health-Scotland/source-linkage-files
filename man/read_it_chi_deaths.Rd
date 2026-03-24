@@ -4,7 +4,11 @@
 \alias{read_it_chi_deaths}
 \title{Read the CHI deaths extract}
 \usage{
-read_it_chi_deaths(file_path = get_it_deaths_path())
+read_it_chi_deaths(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_it_deaths_path(),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{file_path}{Path to CHI Deaths file}
