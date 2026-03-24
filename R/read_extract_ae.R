@@ -8,6 +8,9 @@ read_extract_ae <- function(year,
                             denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                             file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
                             BYOC_MODE) {
+
+  log_slf_event(stage = "read", status = "start", type = "ae", year = year)
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -17,8 +20,6 @@ read_extract_ae <- function(year,
   }
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  logger::log_info("Read A&E data from Denodo")
 
   # Read Extract
   extract_ae <- dplyr::tbl(
@@ -81,6 +82,7 @@ read_extract_ae <- function(year,
            commhosp = as.character(commhosp)
     )
   # ----------------------------------------------------------------------------
+  log_slf_event(stage = "read", status = "complete", type = "ae", year = year)
 
   return(extract_ae)
 }

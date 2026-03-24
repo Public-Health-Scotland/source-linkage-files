@@ -19,13 +19,14 @@ process_extract_ae <- function(data,
                                BYOC_MODE = FALSE,
                                run_id = NA,
                                run_date_time = NA) {
+
+  log_slf_event(stage = "process", status = "start", type = "ae", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
-
-  logger::log_info("Process A&E data")
 
   # Data Cleaning  ---------------------------------------
 
@@ -234,8 +235,6 @@ process_extract_ae <- function(data,
   #
   # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
   #
-  # logger::log_info("Read A&E CUP data from Denodo")
-  #
   # ae_cup_file <- dplyr::tbl(
   #   denodo_connect,
   #   dbplyr::in_schema("sdl", "sdl_ae_cup_source_placeholder") # TO-DO: Placeholder for data path in denodo
@@ -344,8 +343,6 @@ process_extract_ae <- function(data,
       "cup_pathway"
     )
 
-  logger::log_info("Write processed A&E data to Denodo intermediate drive")
-
   if (write_to_disk) {
     write_file(
       ae_processed,
@@ -354,6 +351,8 @@ process_extract_ae <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "ae", year = year)
 
   return(ae_processed)
 }
