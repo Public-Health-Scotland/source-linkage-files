@@ -196,7 +196,7 @@ maternity <- read_extract_maternity(
 # Logger is included within each function so is excluded here?
 it_chi_deaths <- read_it_chi_deaths(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  file_path = get_it_deaths_path(),
   BYOC_MODE = BYOC_MODE
 ) %>%
   process_it_chi_deaths(

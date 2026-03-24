@@ -7,7 +7,7 @@
 #' @export
 #' @family process extracts
 read_it_chi_deaths <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                               file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE), ## CHECK + Is this needed?
+                               file_path = get_it_deaths_path(), ## CHECK + Is this needed?
                                BYOC_MODE ## Is this needed?
                                ) {
 
