@@ -201,7 +201,7 @@ ae <- read_extract_ae(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   file_path = get_boxi_extract_path(year, type = "ae", BYOC_MODE),
   BYOC_MODE = BYOC_MODE
-  ) %>%
+) %>%
   process_extract_ae(
     year = year,
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
@@ -209,6 +209,6 @@ ae <- read_extract_ae(
     BYOC_MODE = BYOC_MODE,
     run_id = run_id,
     run_date_time = run_date_time
-    )
+  )
 
 logger::log_info("Run SDL ended.")
