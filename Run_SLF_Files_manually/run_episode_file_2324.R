@@ -28,7 +28,7 @@ library(createslf)
 year <- "2324"
 
 # Specify TRUE/FALSE for writing temporary files
-write_temp_to_disk <- TRUE
+write_temp_to_disk <- FALSE
 
 # Specify TRUE/FALSE for saving the console output to disk
 # Default set as TRUE
