@@ -33,7 +33,7 @@ controller <- crew::crew_controller_local(
   name = "my_controller",
   # Specify 6 workers for parallel processing - works with 8CPU, 128GB posit session
   workers = 6,
-  seconds_idle = 3
+  seconds_idle = 60
 )
 
 # Targets options
@@ -58,9 +58,14 @@ tar_option_set(
   # retrieval - the worker loads the target's dependencies.
   retrieval = "worker",
   # memory - default option: the target stays in memory until the end of the pipeline
-  memory = "persistent",
+  memory = "transient",
   # controller - A controller or controller group object produced by the crew R package
-  controller = controller
+  controller = controller,
+
+  # If a resource error happens, wait 30 seconds and try again (up to 3 times)
+  backoff = tar_backoff(initial = 30, exponential = 2, max = 60),
+  # This tells targets how to handle the "Resource" error specifically
+  error = "null"
 )
 
 # Run all the R scripts in a directory in the environment specified.
