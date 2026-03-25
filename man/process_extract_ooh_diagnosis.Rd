@@ -7,7 +7,7 @@
 process_extract_ooh_diagnosis(
   data,
   year,
-  denodo_connect,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   run_id = NA,
   run_date_time = NA
 )
