@@ -33,6 +33,9 @@ process_extract_ooh_diagnosis <- function(data,
   # ----------------------------------------------------------------------------
   ## TO-DO: replace readcode lookup with new denodo connection
 
+  # Disconnect from Denodo
+  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   # readcode_lookup <- dplyr::tbl(
   #   denodo_connect,
   #   dbplyr::in_schema("sdl", "sdl_readcode_lookup_source_placeholder") # TO-DO: Placeholder for data path in denodo
@@ -43,7 +46,6 @@ process_extract_ooh_diagnosis <- function(data,
   #   ) %>%
   #   dplyr::collect()
   #
-  # DBI::dbDisconnect(denodo_connect)
 
   # ----------------------------------------------------------------------------
 
