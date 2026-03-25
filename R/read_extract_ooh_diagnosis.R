@@ -18,6 +18,9 @@ read_extract_ooh_diagnosis <- function(
     return(tibble::tibble())
   }
 
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   # Load extract file
   diagnosis_extract <- dplyr::tbl(
     denodo_connect,
@@ -38,9 +41,6 @@ read_extract_ooh_diagnosis <- function(
     dplyr::distinct() %>%
     dplyr::collect() %>%
     tidyr::drop_na(readcode)
-
-  # Disconnect from Denodo
-  DBI::dbDisconnect(denodo_connect)
 
   return(diagnosis_extract)
 }
