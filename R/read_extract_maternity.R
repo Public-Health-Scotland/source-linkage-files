@@ -10,7 +10,7 @@ read_extract_maternity <- function(
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "maternity", year = year)
-  
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 

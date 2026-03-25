@@ -9,9 +9,8 @@ read_extract_homelessness <- function(
   file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
-  
   log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
-  
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
