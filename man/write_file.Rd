@@ -4,7 +4,7 @@
 \alias{write_file}
 \title{Write a data to a file}
 \usage{
-write_file(data, path, group_id = 3356, BYOC_MODE, ...)
+write_file(data, path, group_id = 3356, BYOC_MODE = TRUE, ...)
 }
 \arguments{
 \item{data}{The data to be written}

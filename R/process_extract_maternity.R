@@ -12,9 +12,15 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
+process_extract_maternity <- function(data,
+                                      year,
+                                      write_to_disk = TRUE,
+                                      BYOC_MODE = FALSE,
+                                      run_id = NA,
+                                      run_date_time = NA) {
+  
   log_slf_event(stage = "process", status = "start", type = "maternity", year = year)
-
+  
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -71,7 +77,13 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
     )
 
   maternity_processed <- maternity_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -119,7 +131,8 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       maternity_processed,
-      get_source_extract_path(year, "maternity", check_mode = "write"),
+      get_source_extract_path(year, "maternity", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }

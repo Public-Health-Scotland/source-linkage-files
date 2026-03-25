@@ -14,7 +14,7 @@
 #'
 #' @return the data (invisibly) as a [tibble][tibble::tibble-package].
 #' @export
-write_file <- function(data, path, group_id = 3356, BYOC_MODE, ...) {
+write_file <- function(data, path, group_id = 3356, BYOC_MODE = TRUE, ...) {
   valid_extensions <- c("rds", "parquet")
 
   ext <- fs::path_ext(path)

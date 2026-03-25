@@ -11,7 +11,9 @@ process_extract_homelessness(
   update = latest_update(),
   la_code_lookup = get_la_code_opendata_lookup(),
   sg_pub_data,
-  BYOC_MODE
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
