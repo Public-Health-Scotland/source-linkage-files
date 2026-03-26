@@ -6,6 +6,13 @@
 # 00 setup logger ----
 logger::log_info("Run SDL starts.")
 
+
+logger::log_info(
+  stringr::str_glue(
+    "The run date time of ACADME is {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}"
+  )
+)
+
 library(createslf)
 
 library(DBI)
@@ -57,8 +64,8 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
 
 # run_id <- Sys.getenv("run_id")
 # run_date_time <- Sys.getenv("run_date_time")
-run_id <- NA
-run_date_time <- NA
+# run_id <- NA
+run_date_time <- script_run_time
 
 
 write_to_disk <- TRUE
