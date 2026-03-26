@@ -9,11 +9,12 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_outcomes <- function(data,
-                                         year,
-                                         denodo_connect, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
-                                         run_id = NA,
-                                         run_date_time = NA) {
+process_extract_ooh_outcomes <- function(
+  data,
+  year,
+  run_id = NA,
+  run_date_time = NA
+) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-o", year = year)
 
   # Only run for a single year
@@ -69,8 +70,6 @@ process_extract_ooh_outcomes <- function(data,
       ))
     ) %>%
     dplyr::as_tibble()
-
-  DBI::dbDisconnect(denodo_connect)
 
   log_slf_event(stage = "process", status = "complete", type = "gp_ooh-o", year = year)
 
