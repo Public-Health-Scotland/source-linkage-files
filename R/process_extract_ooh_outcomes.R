@@ -71,7 +71,7 @@ process_extract_ooh_outcomes <- function(data,
     dplyr::as_tibble()
 
   DBI::dbDisconnect(denodo_connect)
-  
+
   log_slf_event(stage = "process", status = "complete", type = "gp_ooh-o", year = year)
 
   return(outcomes_clean)
