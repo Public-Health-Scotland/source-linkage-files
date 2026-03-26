@@ -6,9 +6,11 @@
 read_extract_ooh_outcomes <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year,
-                                    type = "gp_ooh-o",
-                                    BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(
+    year = year,
+    type = "gp_ooh-o",
+    BYOC_MODE = BYOC_MODE
+  ),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh-o", year = year)
