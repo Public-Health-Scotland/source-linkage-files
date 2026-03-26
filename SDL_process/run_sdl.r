@@ -6,12 +6,17 @@
 # 00 setup logger ----
 logger::log_info("Run SDL starts.")
 
-
-logger::log_info(
-  stringr::str_glue(
-    "The run date time of ACADME is {format(Sys.time(), '%Y-%m-%d %H:%M:%S')}"
-  )
-)
+# Include reporting of last run date of ACADME
+dplyr::tbl(
+  denodo_connect,
+  dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
+) %>%
+  collect() %>%
+  # Optional: Format the date to look clean first
+  mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
+  pwalk(function(data_mart, load_str, ...) {
+    logger::log_info("{data_mart} loaded at {load_str}")
+  })
 
 library(createslf)
 
