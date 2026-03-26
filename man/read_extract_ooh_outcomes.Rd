@@ -6,8 +6,9 @@
 \usage{
 read_extract_ooh_outcomes(
   year,
-  denodo_connect,
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE =
+    BYOC_MODE),
   BYOC_MODE
 )
 }

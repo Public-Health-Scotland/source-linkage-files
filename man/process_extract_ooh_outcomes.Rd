@@ -4,13 +4,7 @@
 \alias{process_extract_ooh_outcomes}
 \title{Process the GP OOH Outcomes extract}
 \usage{
-process_extract_ooh_outcomes(
-  data,
-  year,
-  denodo_connect,
-  run_id = NA,
-  run_date_time = NA
-)
+process_extract_ooh_outcomes(data, year, run_id = NA, run_date_time = NA)
 }
 \arguments{
 \item{data}{The extract to process}
