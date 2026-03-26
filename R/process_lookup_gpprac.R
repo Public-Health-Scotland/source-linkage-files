@@ -18,6 +18,8 @@ process_lookup_gpprac <- function(
   spd_path = get_spd_path(),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "gpprac_slf_lookup", year = "all")
+
   gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
     dplyr::select(
       "gpprac" = "praccode",
@@ -81,6 +83,8 @@ process_lookup_gpprac <- function(
         group_id = 3206 # hscdiip owner
       )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "gpprac_slf_lookup", year = "all")
 
   return(gpprac_slf_lookup)
 }

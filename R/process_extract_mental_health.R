@@ -18,13 +18,15 @@ process_extract_mental_health <- function(data,
                                           BYOC_MODE = FALSE,
                                           run_id = NA,
                                           run_date_time = NA) {
+
+  log_slf_event(stage = "process", status = "start", type = "mh", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-  logger::log_info("Process mental health data")
   # Data Cleaning  ---------------------------------------
 
   mh_clean <- data %>%
@@ -138,6 +140,8 @@ process_extract_mental_health <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "mh", year = year)
 
   return(mh_processed)
 }

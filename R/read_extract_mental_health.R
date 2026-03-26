@@ -9,13 +9,15 @@ read_extract_mental_health <- function(
   file_path = get_boxi_extract_path(year = year, type = "mh", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
+  
+  log_slf_event(stage = "read", status = "start", type = "mh", year = year)
+  
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Read BOXI extract
-  logger::log_info("Read mental health data from Denodo")
   extract_mental_health <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_mental_health_episode_source")
@@ -95,6 +97,8 @@ read_extract_mental_health <- function(
       costmonthnum = as.double(.data$costmonthnum),
       uri = as.character(.data$uri)
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "mh", year = year)
 
   return(extract_mental_health)
 }

@@ -8,6 +8,8 @@
 #'
 #' @export
 process_tests_sc_client_lookup <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "client", year = year)
+
   if (check_year_valid(year, "client")) {
     comparison <- produce_test_comparison(
       old_data = produce_tests_sc_client_lookup(
@@ -18,6 +20,8 @@ process_tests_sc_client_lookup <- function(data, year) {
 
     comparison %>%
       write_tests_xlsx(sheet_name = "sc_client", year, workbook_name = "extract")
+
+    log_slf_event(stage = "test", status = "complete", type = "client", year = year)
 
     return(comparison)
   } else {
