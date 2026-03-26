@@ -21,6 +21,8 @@ process_lookup_sc_demographics <- function(
   uk_pc_path = get_uk_postcode_path(),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "sc_demog", year = "all")
+
   data <- data %>%
     # add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
@@ -373,6 +375,8 @@ process_lookup_sc_demographics <- function(
       group_id = 3206
     ) # hscdiip owner
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "sc_demog", year = "all")
 
   return(sc_demog_lookup)
 }

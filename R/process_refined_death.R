@@ -16,6 +16,8 @@ process_refined_death <- function(
   it_chi_deaths = read_file(get_slf_chi_deaths_path()),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "refined_death", year = "all")
+
   years_list <- years_to_run()
 
   nrs_all_years <- lapply(years_list, (\(year) {
@@ -65,6 +67,8 @@ process_refined_death <- function(
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "refined_death", year = "all")
 
   return(refined_death)
 }

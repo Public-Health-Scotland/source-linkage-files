@@ -10,6 +10,8 @@
 #'
 #' @export
 process_tests_sc_demographics <- function(data) {
+  log_slf_event(stage = "test", status = "start", type = "sc_demog", year = "all")
+
   comparison <- produce_test_comparison(
     old_data = produce_sc_demog_lookup_tests(
       read_file(get_sc_demog_lookup_path(update = previous_update()))
@@ -21,6 +23,8 @@ process_tests_sc_demographics <- function(data) {
 
   comparison %>%
     write_tests_xlsx(sheet_name = "sc_demographics", workbook_name = "lookup")
+
+  log_slf_event(stage = "test", status = "complete", type = "sc_demog", year = "all")
 
   return(comparison)
 }

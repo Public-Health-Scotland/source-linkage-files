@@ -6,6 +6,8 @@
 #' @export
 #'
 read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
+  log_slf_event(stage = "read", status = "start", type = "ltc", year = "all")
+
   # Read data------------------------------------------------
   ltc_file <- read_file(file_path) %>%
     # Rename variables
@@ -47,6 +49,7 @@ read_lookup_ltc <- function(file_path = get_it_ltc_path()) {
     stop("There were bad CHI numbers in the LTC file")
   }
 
+  log_slf_event(stage = "read", status = "complete", type = "ltc", year = "all")
 
   return(ltc_file)
 }

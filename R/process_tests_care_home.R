@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_care_home <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "ch", year = year)
+
   if (check_year_valid(year, "ch")) {
     old_data <- get_existing_data_for_tests(data)
 
@@ -17,6 +19,8 @@ process_tests_care_home <- function(data, year) {
       new_data = produce_source_ch_tests(data)
     ) %>%
       write_tests_xlsx(sheet_name = "ch", year, workbook_name = "extract")
+
+    log_slf_event(stage = "test", status = "complete", type = "ch", year = year)
 
     return(comparison)
   } else {
