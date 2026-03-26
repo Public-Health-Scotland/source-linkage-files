@@ -10,6 +10,8 @@
 #'
 #' @export
 process_tests_delayed_discharges <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "dd", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -47,6 +49,8 @@ produce_source_dd_tests <- function(data) {
     dplyr::select(c("n_delay_episodes":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
+
+  log_slf_event(stage = "test", status = "complete", type = "dd", year = year)
 
   return(test_flags)
 }

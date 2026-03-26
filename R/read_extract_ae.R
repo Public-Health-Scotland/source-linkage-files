@@ -84,5 +84,7 @@ read_extract_ae <- function(year,
   # ----------------------------------------------------------------------------
   log_slf_event(stage = "read", status = "complete", type = "ae", year = year)
 
+  log_slf_event(stage = "read", status = "complete", type = "ae", year = year)
+
   return(extract_ae)
 }

@@ -7,6 +7,8 @@
 #' @export
 #'
 process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demographics", "client"), year = NULL) {
+  log_slf_event(stage = "test", status = "start", type = "sc_sandpit", year = "all")
+
   data <- data %>%
     slfhelper::get_chi()
 
@@ -23,6 +25,8 @@ process_tests_sc_sandpit <- function(type = c("at", "hc", "ch", "sds", "demograp
 
   comparison %>%
     write_tests_xlsx(sheet_name = {{ type }}, year = year, workbook_name = "sandpit")
+
+  log_slf_event(stage = "test", status = "complete", type = "sc_sandpit", year = "all")
 
   return(comparison)
 }

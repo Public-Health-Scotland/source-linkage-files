@@ -9,6 +9,8 @@ read_extract_maternity <- function(
   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
+  log_slf_event(stage = "read", status = "start", type = "maternity", year = year)
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -19,7 +21,7 @@ read_extract_maternity <- function(
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Read BOXI extract
+  logger::log_info("Read maternity data from Denodo")
   extract_maternity <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_maternity_episode_source")
@@ -82,6 +84,8 @@ read_extract_maternity <- function(
     ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
+
+  log_slf_event(stage = "read", status = "complete", type = "maternity", year = year)
 
   return(extract_maternity)
 }

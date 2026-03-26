@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_episode_file <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "ep", year = year)
+
   data <- data %>%
     dplyr::select(
       "year",
@@ -43,6 +45,8 @@ process_tests_episode_file <- function(data, year) {
       year = year,
       workbook_name = "ep_file"
     )
+
+  log_slf_event(stage = "test", status = "complete", type = "ep", year = year)
 
   return(comparison)
 }
