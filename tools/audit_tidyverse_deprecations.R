@@ -204,7 +204,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?progress_estimated\\s*\\(",
     "Avoid `progress_estimated()`; use alternatives such as cli/progress."
   )
-  # Rule 7 (dplyr)
+  # Rule 7 (dplyr)*
   # Old: left_join(multiple = NULL), right_join(multiple = NULL), inner_join(multiple = NULL), full_join(multiple = NULL), semi_join(multiple = NULL), anti_join(multiple = NULL), nest_join(multiple = NULL)
   # New: left_join(multiple = all), right_join(multiple = all), inner_join(multiple = all), full_join(multiple = all), semi_join(multiple = all), anti_join(multiple = all), nest_join(multiple = all)
   add_rule(
@@ -212,7 +212,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?(?:left_join|right_join|inner_join|full_join|semi_join|anti_join|nest_join)\\s*\\([\\s\\S]{0,500}?\\bmultiple\\s*=\\s*NULL\\b",
     "Use `multiple = \"all\"` (or explicit join strategy) instead of `multiple = NULL`."
   )
-  # Rule 8 (dplyr)
+  # Rule 8 (dplyr)*
   # Old: left_join(multiple = "error" / "warning"), right_join(multiple = "error" / "warning"), inner_join(multiple = "error" / "warning"), full_join(multiple = "error" / "warning"), semi_join(multiple = "error" / "warning"), anti_join(multiple = "error" / "warning"), nest_join(multiple = "error" / "warning")
   # New: left_join(relationship = "many-to-one"), right_join(relationship = "many-to-one"), inner_join(relationship = "many-to-one"), full_join(relationship = "many-to-one"), semi_join(relationship = "many-to-one"), anti_join(relationship = "many-to-one"), nest_join(relationship = "many-to-one")
   add_rule(
@@ -220,7 +220,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?(?:left_join|right_join|inner_join|full_join|semi_join|anti_join|nest_join)\\s*\\([\\s\\S]{0,500}?\\bmultiple\\s*=\\s*\"(?:warning|error)\"",
     "Use `relationship = \"many-to-one\"` (or suitable relationship) instead of `multiple = \"warning\"/\"error\"`."
   )
-  # Rule 9 (dplyr)
+  # Rule 9 (dplyr)*
   # Old: left_join(by = character()), right_join(by = character()), inner_join(by = character()), full_join(by = character())
   # New: cross_join()
   add_rule(
@@ -228,7 +228,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?(?:left_join|right_join|inner_join|full_join)\\s*\\([\\s\\S]{0,500}?\\bby\\s*=\\s*character\\s*\\(\\s*\\)",
     "Use `cross_join()` instead of `by = character()` for cross joins."
   )
-  # Rule 10 (dplyr)
+  # Rule 10 (dplyr)*
   # Old: group_by(add)
   # New: group_by(.add)
   add_rule(
@@ -236,7 +236,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?group_by\\s*\\([\\s\\S]{0,500}?\\badd\\s*=",
     "Use `.add =` instead of `add =` in `group_by()`."
   )
-  # Rule 11 (dplyr)
+  # Rule 11 (dplyr)*
   # Old: group_map(keep), group_modify(keep), and group_split(keep)
   # New: group_map(.keep), group_modify(.keep), and group_split(.keep)
   add_rule(
@@ -244,7 +244,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?group_(?:map|modify|split)\\s*\\([\\s\\S]{0,500}?\\bkeep\\s*=",
     "Use `.keep =` instead of `keep =` in `group_map()` / `group_modify()` / `group_split()`."
   )
-  # Rule 12 (dplyr)
+  # Rule 12 (dplyr)*
   # Old: filter(across())
   # New: filter(if_any()), filter(if_all())
   add_rule(
@@ -252,7 +252,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?filter\\s*\\([\\s\\S]{0,400}?\\bacross\\s*\\(",
     "In `filter()`, replace `across()` conditions with `if_any()` / `if_all()`."
   )
-  # Rule 13 (dplyr)
+  # Rule 13 (dplyr)*
   # Old: across()
   # New: across(.cols)
   add_rule(
@@ -263,11 +263,11 @@ build_rule_catalogue <- function() {
   # Rule 14 (dplyr)
   # Old: across(...)
   # New: across(anonymous function)
-  add_rule(
-    "dplyr_across_extra_positional_args_heuristic", "dplyr", "deprecated (heuristic)", "medium",
-    "\\b(?:[[:alnum:]_.]+::)?across\\s*\\(\\s*[^,\\)]+\\s*,\\s*[^,\\)]+\\s*,\\s*(?!\\s*\\.(?:names|unpack)\\s*=)",
-    "Heuristic: extra positional args in `across()` may rely on deprecated `...`; prefer anonymous function."
-  )
+  # add_rule(
+  #   "dplyr_across_extra_positional_args_heuristic", "dplyr", "deprecated (heuristic)", "medium",
+  #   "\\b(?:[[:alnum:]_.]+::)?across\\s*\\(\\s*[^,\\)]+\\s*,\\s*[^,\\)]+\\s*,\\s*(?!\\s*\\.(?:names|unpack)\\s*=)",
+  #   "Heuristic: extra positional args in `across()` may rely on deprecated `...`; prefer anonymous function."
+  # )
   # Rule 15 (dplyr)
   # Old: top_n(), top_frac()
   # New: slice_max(), slice_min()
@@ -345,7 +345,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?extract\\s*\\(",
     "Superseded: replace `extract()` with `separate_wider_regex()`."
   )
-  # Rule 6 (tidyr)
+  # Rule 6 (tidyr)*
   # Old: nest(col1, col2), unnest(col1, col2)
   # New: nest(data = c(col1, col2)), unnest(cols = c(col1, col2))
   add_rule(
@@ -389,7 +389,7 @@ build_rule_catalogue <- function() {
   # to avoid cross-pipeline false positives.
   # -----------------------------.
 
-  # Rule 1 (tidyselect)
+  # Rule 1 (tidyselect)*
   # Old: select(helper_function() - helper_function())
   # New: select(helper_function() & !helper_function())
   add_rule(
@@ -427,7 +427,7 @@ build_rule_catalogue <- function() {
     "Replace `invoke()` / `invoke_map()` with `rlang::exec()` (often with `map()`/`map2()`)."
   )
   # Rule 4 (purrr)
-  # Old: lift_dl, lift_vd, lift_dv, lift_vl, lift_ld, lift_lv
+  # Old: lift_dl(), lift_vd(), lift_dv(), lift_vl(), lift_ld(), lift_lv()
   # New: rlang::exec(), rlang::inject()
   add_rule(
     "purrr_lift", "purrr", "deprecated", "high",
@@ -454,7 +454,7 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?qplot\\s*\\(",
     "Replace `qplot()` with `ggplot()` + geoms."
   )
-  # Rule 3 (ggplot2)
+  # Rule 3 (ggplot2)*
   # Old: geom_line(size = ...), geom_hline(size = ...), geom_vline(size = ...), geom_abline(size = ...), geom_path(size = ...), geom_step(size = ...), geom_segment(size = ...), geom_curve(size = ...), geom_smooth(size = ...), geom_density(size = ...)
   # New: geom_line(linewidth = ...), geom_hline(linewidth = ...), geom_vline(linewidth = ...), geom_abline(linewidth = ...), geom_path(linewidth = ...), geom_step(linewidth = ...), geom_segment(linewidth = ...), geom_curve(linewidth = ...), geom_smooth(linewidth = ...), geom_density(linewidth = ...)
   add_rule(
@@ -539,32 +539,96 @@ scan_text_with_rule <- function(text, file, rule) {
 # Old: select(cols), select(-cols)
 # New: select(all_of(cols)), select(any_of(-cols))
 scan_tidyselect_external_vector_indirection <- function(text, file) {
-  assign_pat <- paste0(
-    "(?m)^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:<-|=)\\s*",
+
+  # Helper to extract function arguments (since defaults are set with "=")
+  extract_function_args <- function(text) {
+    starts <- gregexpr("function\\s*\\(", text, perl = TRUE)[[1]]
+    if (length(starts) == 1L && starts[1] == -1L) return(list(args = character(0), start = integer(0)))
+    args_out <- character(0)
+    start_out <- integer(0)
+    for (st in starts) {
+      open_pos <- regexpr("\\(", substr(text, st, nchar(text)), perl = TRUE)[1] + st - 1
+      depth <- 0
+      end_pos <- NA
+      for (i in open_pos:nchar(text)) {
+        ch <- substr(text, i, i)
+        if (ch == "(") depth <- depth + 1
+        else if (ch == ")") depth <- depth - 1
+        if (depth == 0) {
+          end_pos <- i
+          break
+        }
+      }
+      if (!is.na(end_pos)) {
+        args_out <- c(args_out, substr(text, open_pos + 1, end_pos - 1))
+        start_out <- c(start_out, open_pos + 1)
+      }
+    }
+    list(args = args_out, start = start_out)
+  }
+
+  # Pattern for function body (using "<-" only to avoid false positives)
+  assign_pat_body <- paste0(
+    "(?m)^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:<-)\\s*",
     "(?:",
     "\"[^\"]+\"|'[^']+'",
     "|c\\s*\\((?:\\s*(?:\"[^\"]+\"|'[^']+')\\s*,?)+\\s*\\)",
     ")"
   )
 
-  am <- gregexpr(assign_pat, text, perl = TRUE)[[1]]
-  if (length(am) == 1L && am[1] == -1L) {
+  # Pattern for function arguments (using "=")
+  assign_pat_arg <- paste0(
+    "(?m)^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:=)\\s*",
+    "(?:",
+    "\"[^\"]+\"|'[^']+'",
+    "|c\\s*\\((?:\\s*(?:\"[^\"]+\"|'[^']+')\\s*,?)+\\s*\\)",
+    ")"
+  )
+
+  # Extract function arguments and relative positions
+  fa <- extract_function_args(text)
+  func_args <- fa$args
+  func_starts <- fa$start
+
+  # Extract matches within function body and their absolute positions
+  am_body <- gregexpr(assign_pat_body, text, perl = TRUE)[[1]]
+  al_body <- if (am_body[1] == -1L) integer(0) else attr(am_body, "match.length")
+
+  # Extract matches within function arguments and their absolute positions (converted from relative position)
+  am_arg <- integer(0)
+  al_arg <- integer(0)
+  for (k in seq_along(func_args)) {
+    am_k <- gregexpr(assign_pat_arg, func_args[k], perl = TRUE)[[1]]
+    if (am_k[1] == -1L) next
+    ml_k <- attr(am_k, "match.length")
+    # Convert to absolute offsets
+    am_abs <- func_starts[k] + am_k - 1
+    am_arg <- c(am_arg, am_abs)
+    al_arg <- c(al_arg, ml_k)
+  }
+
+  # Return NULL if no matches
+  if (!length(am_body) && !length(am_arg)) {
     return(NULL)
   }
 
-  al <- attr(am, "match.length")
-  syms <- character(0)
+  # Combine matches
+  am <- c(if (am_body[1] != -1L) am_body else integer(0), am_arg)
+  al <- c(al_body, al_arg)
 
+  # Extract symbol names
+  syms <- character(0)
   for (i in seq_along(am)) {
     s <- substr(text, am[i], am[i] + al[i] - 1L)
-    nm <- sub("(?m)^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:<-|=).*", "\\1", s, perl = TRUE)
+    nm <- sub("^\\s*([A-Za-z.][A-Za-z0-9._]*)\\s*(?:<-|=).*", "\\1", s, perl = TRUE)
     syms <- c(syms, nm)
   }
-  syms <- unique(syms)
-  if (!length(syms)) {
-    return(NULL)
-  }
 
+  # Remove duplicates and return NULL if there are no matches
+  syms <- unique(syms)
+  if (!length(syms)) return(NULL)
+
+  # Extract calls to various tidyselect functions
   call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
   if (length(cm) == 1L && cm[1] == -1L) {
@@ -572,6 +636,7 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
   }
   cl <- attr(cm, "match.length")
 
+  # Define rule dataframe
   rule <- data.frame(
     id = "tidyselect_external_vector_indirection_heuristic",
     package = "tidyselect",
@@ -582,6 +647,7 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
     stringsAsFactors = FALSE
   )
 
+  # Initialise empty list for outputs
   out <- list()
 
   for (j in seq_along(cm)) {
@@ -601,9 +667,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
       next
     }
 
-    # Skip literal named-string selects, e.g. select(a = "a", b = "b")
+    # Skip any named literal character arguments: a = "x", col = 'y', etc.
     if (grepl(
-      "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\(\\s*[A-Za-z.][A-Za-z0-9._]*\\s*=\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*[A-Za-z.][A-Za-z0-9._]*\\s*=\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
+      "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\([^=]+=[^)]*(\"[^\"]+\"|'[^']+')",
       ctxt_trim,
       perl = TRUE
     )) {
@@ -777,6 +843,76 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
   res
 }
 
+# Rule 14 (dplyr)
+# Old: across(...)
+# New: across(anonymous function)
+
+scan_across_additional_args <- function(text, file) {
+
+  # Create rule df
+  rule <- data.frame(
+    id = "additional_args_to_across",
+    package = "dplyr",
+    stage = "deprecated (heuristic)",
+    confidence = "medium",
+    regex = NA_character_,
+    suggestion = "Heuristic: extra positional args in `across()` may rely on deprecated `...`; prefer anonymous function.",
+    stringsAsFactors = FALSE
+  )
+
+  # Scan for any calls to across()
+  call_pat <- "across\\s*\\((?:[^()]*|\\([^()]*\\))*\\)"
+  cm <- gregexpr(call_pat, text, perl = TRUE, ignore.case = FALSE)[[1]]
+
+  # Return NULL if there are no calls to across()
+  if (length(cm) == 1L && cm[1] == -1L) {
+    return(NULL)
+  }
+
+  # Get the lengths of each match
+  lens <- attr(cm, "match.length")
+
+  # Initialise empty list for storing output
+  out <- list()
+
+  for (i in seq_along(cm)) {
+    # Character position of match i
+    pos <- cm[i]
+    # Length of match i
+    len <- lens[i]
+    # Extract inside call to across()
+    inner <- substr(text, pos + 8L, pos + len - 2L)
+    # Remove nested parentheses
+    clean <- gsub("\\([^)]*\\)", "", inner)
+    # Split into parts based on comma
+    parts <- trimws(strsplit(clean, ",")[[1]])
+    # Remove parts containing .names or .unpack
+    parts_filtered <- parts[!grepl("\\.(names|unpack)\\b", parts)]
+    # Check if number of parts is greater than 2
+    if (length(parts_filtered) > 2){
+      # Create output row
+      out[[length(out) + 1L]] <- make_match_row(
+        file = file,
+        text = text,
+        pos = pos,
+        match_text = substr(text, pos, pos + len - 1L),
+        rule = rule,
+        heuristic = TRUE)
+    }
+  }
+  # Return null if no output rows
+  if (!length(out)) {
+    return(NULL)
+  }
+
+  # Bind output rows and remove duplicates + rownames
+  res <- do.call(rbind, out)
+  key <- paste(res$file, res$line, res$col, res$id, res$match, sep = "||")
+  res <- res[!duplicated(key), , drop = FALSE]
+  rownames(res) <- NULL
+  res
+}
+
 # ============================================================.
 # Main audit ----
 # ============================================================.
@@ -835,6 +971,10 @@ audit_tidyverse_deprecations <- function(root = ".",
 
     h3 <- scan_tidyselect_dotdata_in_selection(txt, f)
     if (!is.null(h3) && nrow(h3)) all_matches[[length(all_matches) + 1L]] <- h3
+
+    h4 <- scan_across_additional_args(txt, f)
+    if (!is.null(h4) && nrow(h4)) all_matches[[length(all_matches) + 1L]] <- h4
+
   }
 
   if (!length(all_matches)) {
