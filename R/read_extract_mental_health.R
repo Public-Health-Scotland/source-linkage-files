@@ -9,9 +9,8 @@ read_extract_mental_health <- function(
   file_path = get_boxi_extract_path(year = year, type = "mh", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-  
   log_slf_event(stage = "read", status = "start", type = "mh", year = year)
-  
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 

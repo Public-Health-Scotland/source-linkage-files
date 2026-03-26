@@ -18,7 +18,6 @@ process_extract_mental_health <- function(data,
                                           BYOC_MODE = FALSE,
                                           run_id = NA,
                                           run_date_time = NA) {
-
   log_slf_event(stage = "process", status = "start", type = "mh", year = year)
 
   # Only run for a single year
