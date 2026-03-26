@@ -795,7 +795,7 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
     stringsAsFactors = FALSE
   )
 
-  call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|drop_na|convert_monthly_rows_to_vars)\\s*\\([\\s\\S]{0,500}?\\)"
+  call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|pivot_longer|drop_na|convert_monthly_rows_to_vars)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
   if (length(cm) == 1L && cm[1] == -1L) {
     return(NULL)
