@@ -7,6 +7,8 @@ read_extract_mental_health <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "mh")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "mh", year = year)
+
   # Read BOXI extract
   extract_mental_health <- read_file(file_path,
     col_types = readr::cols_only(
@@ -131,6 +133,8 @@ read_extract_mental_health <- function(
     dplyr::mutate(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "mh", year = year)
 
   return(extract_mental_health)
 }

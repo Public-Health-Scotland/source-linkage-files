@@ -14,12 +14,13 @@ process_extract_ooh_outcomes <- function(data,
                                          denodo_connect, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
                                          run_id = NA,
                                          run_date_time = NA) {
+  log_slf_event(stage = "process", status = "start", type = "gp_ooh-o", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
-
 
   # Outcomes Data ---------------------------------
   ## Data Cleaning
@@ -70,6 +71,8 @@ process_extract_ooh_outcomes <- function(data,
     dplyr::as_tibble()
 
   DBI::dbDisconnect(denodo_connect)
+  
+  log_slf_event(stage = "process", status = "complete", type = "gp_ooh-o", year = year)
 
   return(outcomes_clean)
 }

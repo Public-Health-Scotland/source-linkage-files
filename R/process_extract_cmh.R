@@ -15,6 +15,8 @@
 process_extract_cmh <- function(data,
                                 year,
                                 write_to_disk = TRUE) {
+  log_slf_event(stage = "process", status = "start", type = "cmh", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -77,6 +79,8 @@ process_extract_cmh <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "cmh", year = year)
 
   return(cmh_processed)
 }

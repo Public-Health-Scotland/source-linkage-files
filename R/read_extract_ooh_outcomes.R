@@ -7,6 +7,8 @@ read_extract_ooh_outcomes <- function(year,
                                       denodo_connect, # TO-DO: will be hardcoded to denodo_connect = get_denodo_connection()
                                       file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE),
                                       BYOC_MODE) {
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh-o", year = year)
+  
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -14,7 +16,7 @@ read_extract_ooh_outcomes <- function(year,
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
   }
-
+  
   ## Load extract file
   outcomes_extract <- dplyr::tbl(
     denodo_connect,
@@ -34,6 +36,8 @@ read_extract_ooh_outcomes <- function(year,
     dplyr::distinct()
 
   DBI::dbDisconnect(denodo_connect)
+  
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh-o", year = year)
 
   return(outcomes_extract)
 }
