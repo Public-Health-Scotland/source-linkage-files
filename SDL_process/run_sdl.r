@@ -6,6 +6,18 @@
 # 00 setup logger ----
 logger::log_info("Run SDL starts.")
 
+# Include reporting of last run date of ACADME
+dplyr::tbl(
+  denodo_connect,
+  dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
+) %>%
+  collect() %>%
+  # Optional: Format the date to look clean first
+  mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
+  pwalk(function(data_mart, load_str, ...) {
+    logger::log_info("{data_mart} loaded at {load_str}")
+  })
+
 library(createslf)
 
 library(DBI)
@@ -57,8 +69,8 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
 
 # run_id <- Sys.getenv("run_id")
 # run_date_time <- Sys.getenv("run_date_time")
-run_id <- NA
-run_date_time <- NA
+# run_id <- NA
+run_date_time <- script_run_time
 
 
 write_to_disk <- TRUE
