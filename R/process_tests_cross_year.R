@@ -10,6 +10,8 @@
 #' @export
 #'
 process_tests_cross_year <- function(year) {
+  log_slf_event(stage = "test", status = "start", type = "ep_cross_year", year = year)
+
   ep_file <- read_dev_slf_file(year,
     type = "episode",
     col_select = c("year", "recid", "anon_chi", "record_keydate1", "record_keydate2")
@@ -53,6 +55,8 @@ process_tests_cross_year <- function(year) {
     ) %>%
     dplyr::select(-tidyselect::ends_with("NA")) %>%
     write_tests_xlsx(sheet_name = "cross_year", workbook_name = "cross_year")
+
+  log_slf_event(stage = "test", status = "complete", type = "ep_cross_year", year = year)
 
   return(pivot_tests)
 }

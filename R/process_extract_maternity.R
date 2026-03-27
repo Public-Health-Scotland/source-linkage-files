@@ -18,6 +18,8 @@ process_extract_maternity <- function(data,
                                       BYOC_MODE = FALSE,
                                       run_id = NA,
                                       run_date_time = NA) {
+  log_slf_event(stage = "process", status = "start", type = "maternity", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -133,6 +135,8 @@ process_extract_maternity <- function(data,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "maternity", year = year)
 
   return(maternity_processed)
 }

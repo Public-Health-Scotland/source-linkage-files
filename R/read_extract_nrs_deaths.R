@@ -7,6 +7,8 @@ read_extract_nrs_deaths <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "deaths")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "deaths", year = year)
+
   extract_nrs_deaths <- read_file(file_path,
     col_types = readr::cols_only(
       "Death Location Code" = readr::col_character(),
@@ -63,6 +65,8 @@ read_extract_nrs_deaths <- function(
       uri = "Unique Record Identifier",
       gpprac = "GP practice code(99)"
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "deaths", year = year)
 
   return(extract_nrs_deaths)
 }

@@ -10,6 +10,9 @@ read_extract_ooh_diagnosis <- function(
   file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE),
   BYOC_MODE
 ) {
+
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh-d", year = year)
+  
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -41,6 +44,8 @@ read_extract_ooh_diagnosis <- function(
     dplyr::distinct() %>%
     dplyr::collect() %>%
     tidyr::drop_na(readcode)
+
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh-d", year = year)
 
   return(diagnosis_extract)
 }
