@@ -45,6 +45,18 @@ library(targets)
 library(testthat)
 library(crew)
 
+# Include reporting of last run date of ACADME
+dplyr::tbl(
+  denodo_connect,
+  dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
+) %>%
+  collect() %>%
+  # Optional: Format the date to look clean first
+  mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
+  pwalk(function(data_mart, load_str, ...) {
+    logger::log_info("{data_mart} loaded at {load_str}")
+  })
+
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
 # set up logger and system environment variable BYOC_MODE
 if (tolower(BYOC_MODE) %in% c("true", "t")) {
@@ -55,8 +67,9 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
   BYOC_MODE <- FALSE
 }
 
-run_id <- Sys.getenv("run_id")
-run_date_time <- Sys.getenv("run_date_time")
+# run_id <- Sys.getenv("run_id")
+# run_date_time <- Sys.getenv("run_date_time")
+run_date_time <- script_run_time
 
 
 write_to_disk <- TRUE
