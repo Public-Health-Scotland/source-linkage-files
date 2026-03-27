@@ -255,7 +255,8 @@ process_extract_ae <- function(data,
 
   ae_cup_clean <- ae_cup_file %>%
     # Remove any duplicates
-    dplyr::distinct(.data$record_keydate1,
+    dplyr::distinct(
+      .data$record_keydate1,
       .data$keytime1,
       .data$record_keydate2,
       .data$keytime2,

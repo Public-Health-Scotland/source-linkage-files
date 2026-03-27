@@ -4,10 +4,12 @@
 #'
 #' @export
 #'
-read_extract_ae <- function(year,
-                            denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                            file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
-                            BYOC_MODE) {
+read_extract_ae <- function(
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "ae", year = year)
 
   year <- check_year_format(year, format = "fyyear")
@@ -26,8 +28,8 @@ read_extract_ae <- function(year,
     dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
   ) %>%
     dplyr::filter(
-      financial_year == c_year & # TO-DO: check assumption that arrival_financial_year == financial_year
-        (significant_facility_code == "32" | is.na(significant_facility_code))
+      financial_year == c_year, # TO-DO: check assumption that arrival_financial_year == financial_year
+      significant_facility_code == "32" | is.na(significant_facility_code)
     ) %>%
     dplyr::select(
       record_keydate1 = "arrival_date",
@@ -82,8 +84,6 @@ read_extract_ae <- function(year,
       commhosp = as.character(commhosp)
     )
   # ----------------------------------------------------------------------------
-  log_slf_event(stage = "read", status = "complete", type = "ae", year = year)
-
   log_slf_event(stage = "read", status = "complete", type = "ae", year = year)
 
   return(extract_ae)
