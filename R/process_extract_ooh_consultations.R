@@ -10,6 +10,8 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 process_extract_ooh_consultations <- function(data, year) {
+  log_slf_event(stage = "process", status = "start", type = "gp_ooh-c", year = year)
+
   # to skip warning no visible binding for global variable when using data.table
   distinct_check <- consultation_type <- location <-
     record_keydate1 <- record_keydate2 <- anon_chi <-
@@ -145,6 +147,8 @@ process_extract_ooh_consultations <- function(data, year) {
   consultations_clean <- unique(consultations_clean) %>%
     dplyr::as_tibble()
   # cleaning up overlapping episodes done
+
+  log_slf_event(stage = "process", status = "complete", type = "gp_ooh-c", year = year)
 
   return(consultations_clean)
 }

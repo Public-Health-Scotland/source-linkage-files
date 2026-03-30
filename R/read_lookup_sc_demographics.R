@@ -6,6 +6,8 @@
 #' @export
 #'
 read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+  log_slf_event(stage = "read", status = "start", type = "sc_demog", year = "all")
+
   sc_demog <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "demographic_snapshot")
@@ -54,6 +56,8 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
       ), as.integer)
     ) %>%
     dplyr::distinct()
+
+  log_slf_event(stage = "read", status = "complete", type = "sc_demog", year = "all")
 
   return(sc_demog)
 }
