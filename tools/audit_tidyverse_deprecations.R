@@ -539,11 +539,12 @@ scan_text_with_rule <- function(text, file, rule) {
 # Old: select(cols), select(-cols)
 # New: select(all_of(cols)), select(any_of(-cols))
 scan_tidyselect_external_vector_indirection <- function(text, file) {
-
   # Helper to extract function arguments (since defaults are set with "=")
   extract_function_args <- function(text) {
     starts <- gregexpr("function\\s*\\(", text, perl = TRUE)[[1]]
-    if (length(starts) == 1L && starts[1] == -1L) return(list(args = character(0), start = integer(0)))
+    if (length(starts) == 1L && starts[1] == -1L) {
+      return(list(args = character(0), start = integer(0)))
+    }
     args_out <- character(0)
     start_out <- integer(0)
     for (st in starts) {
@@ -552,8 +553,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
       end_pos <- NA
       for (i in open_pos:nchar(text)) {
         ch <- substr(text, i, i)
-        if (ch == "(") depth <- depth + 1
-        else if (ch == ")") depth <- depth - 1
+        if (ch == "(") {
+          depth <- depth + 1
+        } else if (ch == ")") depth <- depth - 1
         if (depth == 0) {
           end_pos <- i
           break
@@ -626,7 +628,9 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
 
   # Remove duplicates and return NULL if there are no matches
   syms <- unique(syms)
-  if (!length(syms)) return(NULL)
+  if (!length(syms)) {
+    return(NULL)
+  }
 
   # Extract calls to various tidyselect functions
   call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|pivot_longer|drop_na|convert_monthly_rows_to_vars|if_any|if_all)\\s*\\([\\s\\S]{0,500}?\\)"
@@ -914,7 +918,6 @@ scan_filter_across <- function(text, file) {
 # New: across(anonymous function)
 
 scan_across_additional_args <- function(text, file) {
-
   # Create rule df
   rule <- data.frame(
     id = "additional_args_to_across",
@@ -968,7 +971,7 @@ scan_across_additional_args <- function(text, file) {
     # Remove parts containing .names or .unpack
     parts_filtered <- parts[!grepl("\\.(names|unpack)\\b", parts)]
     # Check if number of parts is greater than 2
-    if (length(parts_filtered) > 2){
+    if (length(parts_filtered) > 2) {
       # Create output row
       out[[length(out) + 1L]] <- make_match_row(
         file = file,
@@ -976,7 +979,8 @@ scan_across_additional_args <- function(text, file) {
         pos = pos,
         match_text = substr(text, pos, pos + len - 1L),
         rule = rule,
-        heuristic = TRUE)
+        heuristic = TRUE
+      )
     }
   }
   # Return null if no output rows
@@ -1055,7 +1059,6 @@ audit_tidyverse_deprecations <- function(root = ".",
 
     h4 <- scan_across_additional_args(txt, f)
     if (!is.null(h4) && nrow(h4)) all_matches[[length(all_matches) + 1L]] <- h4
-
   }
 
   if (!length(all_matches)) {
