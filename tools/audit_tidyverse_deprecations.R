@@ -852,7 +852,6 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
 # New: filter(if_any()), filter(if_all())
 
 scan_filter_across <- function(text, file) {
-
   # Create rule df
   rule <- data.frame(
     id = "filter_across",
@@ -889,7 +888,7 @@ scan_filter_across <- function(text, file) {
     # Length of match i
     len <- lens[i]
     # Check whether the call to filter() contains across()
-    if (grepl("across\\s*\\(", substr(text, pos, pos + len))){
+    if (grepl("across\\s*\\(", substr(text, pos, pos + len))) {
       # Create output row
       out[[length(out) + 1L]] <- make_match_row(
         file = file,
@@ -897,7 +896,8 @@ scan_filter_across <- function(text, file) {
         pos = pos,
         match_text = substr(text, pos, pos + len - 1L),
         rule = rule,
-        heuristic = TRUE)
+        heuristic = TRUE
+      )
     }
   }
   # Return null if no output rows
@@ -995,7 +995,6 @@ scan_across_additional_args <- function(text, file) {
   rownames(res) <- NULL
   res
 }
-
 
 
 # ============================================================.
