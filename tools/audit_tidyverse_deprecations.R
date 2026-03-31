@@ -247,11 +247,11 @@ build_rule_catalogue <- function() {
   # Rule 12 (dplyr)*
   # Old: filter(across())
   # New: filter(if_any()), filter(if_all())
-  add_rule(
-    "dplyr_filter_across", "dplyr", "deprecated", "high",
-    "\\b(?:[[:alnum:]_.]+::)?filter\\s*\\([\\s\\S]{0,400}?\\bacross\\s*\\(",
-    "In `filter()`, replace `across()` conditions with `if_any()` / `if_all()`."
-  )
+  # add_rule(
+  #   "dplyr_filter_across", "dplyr", "deprecated", "high",
+  #   "\\b(?:[[:alnum:]_.]+::)?filter\\s*\\([\\s\\S]{0,400}?\\bacross\\s*\\(",
+  #   "In `filter()`, replace `across()` conditions with `if_any()` / `if_all()`."
+  # )
   # Rule 13 (dplyr)*
   # Old: across()
   # New: across(.cols)
@@ -342,7 +342,7 @@ build_rule_catalogue <- function() {
   # New: separate_wider_regex()
   add_rule(
     "tidyr_extract", "tidyr", "superseded", "high",
-    "\\b(?:[[:alnum:]_.]+::)?extract\\s*\\(",
+    "\\b(?:tidyr::)?extract\\s*\\(",
     "Superseded: replace `extract()` with `separate_wider_regex()`."
   )
   # Rule 6 (tidyr)*
@@ -629,7 +629,7 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
   if (!length(syms)) return(NULL)
 
   # Extract calls to various tidyselect functions
-  call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\([\\s\\S]{0,500}?\\)"
+  call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|pivot_longer|drop_na|convert_monthly_rows_to_vars|if_any|if_all)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
   if (length(cm) == 1L && cm[1] == -1L) {
     return(NULL)
@@ -660,7 +660,7 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
 
     # Skip common literal-name selects like select("a", "b", "c") / dplyr::select(...)
     if (grepl(
-      "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\(\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
+      "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|pivot_longer|drop_na|convert_monthly_rows_to_vars|if_any|if_all)\\s*\\(\\s*(?:\"[^\"]+\"|'[^']+')\\s*(?:,\\s*(?:\"[^\"]+\"|'[^']+'))*\\s*\\)\\s*$",
       ctxt_trim,
       perl = TRUE
     )) {
@@ -669,7 +669,7 @@ scan_tidyselect_external_vector_indirection <- function(text, file) {
 
     # Skip any named literal character arguments: a = "x", col = 'y', etc.
     if (grepl(
-      "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|if_any|if_all)\\s*\\([^=]+=[^)]*(\"[^\"]+\"|'[^']+')",
+      "^\\s*(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|pivot_longer|drop_na|convert_monthly_rows_to_vars|if_any|if_all)\\s*\\([^=]+=[^)]*(\"[^\"]+\"|'[^']+')",
       ctxt_trim,
       perl = TRUE
     )) {
@@ -722,7 +722,7 @@ scan_tidyselect_bare_predicates <- function(text, file) {
     stringsAsFactors = FALSE
   )
 
-  call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across)\\s*\\([\\s\\S]{0,500}?\\)"
+  call_pat <- "\\b(?:dplyr::|tidyr::)?(?:select|rename|relocate|pick|c_across|across|pivot_wider|pivot_longer|drop_na|convert_monthly_rows_to_vars)\\s*\\([\\s\\S]{0,500}?\\)"
   cm <- gregexpr(call_pat, text, perl = TRUE)[[1]]
   if (length(cm) == 1L && cm[1] == -1L) {
     return(NULL)
@@ -756,7 +756,7 @@ scan_tidyselect_bare_predicates <- function(text, file) {
       left_window_start <- max(1L, ppos - 50L)
       left_text <- substr(ctxt, left_window_start, ppos - 1L)
       if (grepl("where\\s*\\(\\s*$", left_text, perl = TRUE)) next
-      if (grepl(paste0("where\\s*\\(\\s*", escape_regex_literal(pred), "\\s*\\)"), ctxt, perl = TRUE)) next
+      if (grepl(paste0("where\\s*\\(\\s*(?:[[:alnum:]_.]+::)?", escape_regex_literal(pred), "\\s*\\)"), ctxt, perl = TRUE)) next
 
       # Skip common non-selector predicate usage in formulas/lambdas
       if (grepl(paste0("~\\s*", escape_regex_literal(pred), "\\s*\\("), ctxt, perl = TRUE)) next
@@ -843,6 +843,72 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
   res
 }
 
+# Rule 12 (dplyr)
+# Old: filter(across())
+# New: filter(if_any()), filter(if_all())
+
+scan_filter_across <- function(text, file) {
+
+  # Create rule df
+  rule <- data.frame(
+    id = "filter_across",
+    package = "dplyr",
+    stage = "deprecated",
+    confidence = "medium",
+    regex = NA_character_,
+    suggestion = "In `filter()`, replace `across()` conditions with `if_any()` / `if_all()`.",
+    stringsAsFactors = FALSE
+  )
+
+  # Scan for any calls to filter()
+  call_pat <- paste0(
+    "filter\\s*\\(",
+    paste0("(?>[^()]|\\((?>[^()]|\\((?>[^()]|\\((?>[^()]|\\((?>[^()]|\\((?>[^()])*\\))*\\))*\\))*\\))*\\))*"),
+    "\\)"
+  )
+  cm <- gregexpr(call_pat, text, perl = TRUE, ignore.case = FALSE)[[1]]
+
+  # Return NULL if there are no calls to filter()
+  if (length(cm) == 1L && cm[1] == -1L) {
+    return(NULL)
+  }
+
+  # Get the lengths of each match
+  lens <- attr(cm, "match.length")
+
+  # Initialise empty list for storing output
+  out <- list()
+
+  for (i in seq_along(cm)) {
+    # Character position of match i
+    pos <- cm[i]
+    # Length of match i
+    len <- lens[i]
+    # Check whether the call to filter() contains across()
+    if (grepl("across\\s*\\(", substr(text, pos, pos + len))){
+      # Create output row
+      out[[length(out) + 1L]] <- make_match_row(
+        file = file,
+        text = text,
+        pos = pos,
+        match_text = substr(text, pos, pos + len - 1L),
+        rule = rule,
+        heuristic = TRUE)
+    }
+  }
+  # Return null if no output rows
+  if (!length(out)) {
+    return(NULL)
+  }
+
+  # Bind output rows and remove duplicates + rownames
+  res <- do.call(rbind, out)
+  key <- paste(res$file, res$line, res$col, res$id, res$match, sep = "||")
+  res <- res[!duplicated(key), , drop = FALSE]
+  rownames(res) <- NULL
+  res
+}
+
 # Rule 14 (dplyr)
 # Old: across(...)
 # New: across(anonymous function)
@@ -861,7 +927,11 @@ scan_across_additional_args <- function(text, file) {
   )
 
   # Scan for any calls to across()
-  call_pat <- "across\\s*\\((?:[^()]*|\\([^()]*\\))*\\)"
+  call_pat <- paste0(
+    "across\\s*\\(",
+    paste0("(?>[^()]|\\((?>[^()]|\\((?>[^()]|\\((?>[^()]|\\((?>[^()]|\\((?>[^()])*\\))*\\))*\\))*\\))*\\))*"),
+    "\\)"
+  )
   cm <- gregexpr(call_pat, text, perl = TRUE, ignore.case = FALSE)[[1]]
 
   # Return NULL if there are no calls to across()
@@ -883,7 +953,16 @@ scan_across_additional_args <- function(text, file) {
     # Extract inside call to across()
     inner <- substr(text, pos + 8L, pos + len - 2L)
     # Remove nested parentheses
-    clean <- gsub("\\([^)]*\\)", "", inner)
+    strip_all_parens <- function(x) {
+      old <- NULL
+      while (!identical(old, x)) {
+        old <- x
+        x <- gsub("\\([^()]*\\)", "", x, perl = TRUE)
+      }
+      x
+    }
+    # clean <- gsub("\\([^)]*\\)", "", inner)
+    clean <- strip_all_parens(inner)
     # Split into parts based on comma
     parts <- trimws(strsplit(clean, ",")[[1]])
     # Remove parts containing .names or .unpack
@@ -912,6 +991,8 @@ scan_across_additional_args <- function(text, file) {
   rownames(res) <- NULL
   res
 }
+
+
 
 # ============================================================.
 # Main audit ----
