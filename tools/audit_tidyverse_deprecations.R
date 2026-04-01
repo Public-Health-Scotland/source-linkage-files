@@ -864,7 +864,7 @@ scan_tidyselect_dotdata_in_selection <- function(text, file) {
 scan_filter_across <- function(text, file) {
   # Create rule df
   rule <- data.frame(
-    id = "filter_across",
+    id = "dplyr_filter_across",
     package = "dplyr",
     stage = "deprecated",
     confidence = "medium",
@@ -930,7 +930,7 @@ scan_filter_across <- function(text, file) {
 scan_across_additional_args <- function(text, file) {
   # Create rule df
   rule <- data.frame(
-    id = "additional_args_to_across",
+    id = "dplyr_additional_args_to_across",
     package = "dplyr",
     stage = "deprecated (heuristic)",
     confidence = "medium",
