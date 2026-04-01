@@ -24,9 +24,9 @@ convert_monthly_rows_to_vars <- function(data,
       beddays = {{ beddays_var }}
     ) %>%
     tidyr::pivot_wider(
-      names_from = .data$month_name,
+      names_from = month_name,
       names_glue = "{month_name}_{.value}",
-      values_from = c(.data$cost, .data$beddays),
+      values_from = c(cost, beddays),
       values_fill = 0.00
     ) %>%
     dplyr::select(
