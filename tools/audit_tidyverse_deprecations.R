@@ -292,7 +292,6 @@ build_rule_catalogue <- function() {
     "\\b(?:[[:alnum:]_.]+::)?combine\\s*\\(",
     "Replace `dplyr::combine()` with `vctrs::vec_c()` or `c()`."
   )
-
   # Rule 18 (dplyr)
   # Old: case_match()
   # New: recode_values(), replace_values()
@@ -305,6 +304,7 @@ build_rule_catalogue <- function() {
   # -----------------------------.
   # tidyr ----
   # -----------------------------.
+
   # Rule 1 (tidyr)
   # Old: gather()
   # New: pivot_longer()
@@ -342,7 +342,7 @@ build_rule_catalogue <- function() {
   # New: separate_wider_regex()
   add_rule(
     "tidyr_extract", "tidyr", "superseded", "high",
-    "\\b(?:tidyr::)?extract\\s*\\(",
+    "\\b(?:[[:alnum:]_.]+::)?extract\\s*\\(",
     "Superseded: replace `extract()` with `separate_wider_regex()`."
   )
   # Rule 6 (tidyr)*
@@ -357,6 +357,7 @@ build_rule_catalogue <- function() {
   # -----------------------------.
   # tibble ----
   # -----------------------------.
+
   # Rule 1 (tibble)
   # Old: as_data_frame()
   # New: as_tibble()
@@ -474,22 +475,31 @@ build_rule_catalogue <- function() {
   for (package in tidyverse_packages()) {
     package_status <- data.frame(pkg_lifecycle_statuses(package))
     tidyverse_status <- rbind(tidyverse_status, package_status)
+    if (paste0("package:", package) %in% search()) {
+      suppressWarnings(detach(paste0("package:", package), unload = TRUE, character.only = TRUE))
+    }
   }
-  tidyverse_status %>% filter(!lifecycle %in% c("experimental", "questioning"))
+  suppressWarnings(detach(paste0("package:lifecycle"), unload = TRUE, character.only = TRUE))
+
+  tidyverse_status <- tidyverse_status[
+    !tidyverse_status$lifecycle %in% c("experimental", "questioning"),
+  ]
 
   for (i in 1:nrow(tidyverse_status)) {
     add_rule(
-      id = tidyverse_status$fun[i],
+      id = paste0(tidyverse_status$package[i], "_", tidyverse_status$fun[i]),
       package = tidyverse_status$package[i],
       stage = tidyverse_status$lifecycle[i],
       confidence = "",
-      regex = paste0("\\b(?:[[:alnum:]_.]+::)?", tidyverse_status$fun[i], "\\s*\\("),
+      regex = paste0("\\b(?:", tidyverse_status$package[i], "::)?", tidyverse_status$fun[i], "\\s*\\("),
       suggestion = "Replace function"
     )
   }
 
   # Join rules
-  out <- do.call(rbind, rows) %>% distinct(regex, .keep_all = TRUE)
+  out <- do.call(rbind, rows)
+  out <- out[!duplicated(out$id), ]
+  out <- out[!duplicated(out$regex), ]
   rownames(out) <- NULL
   out
 }
@@ -1057,8 +1067,11 @@ audit_tidyverse_deprecations <- function(root = ".",
     h3 <- scan_tidyselect_dotdata_in_selection(txt, f)
     if (!is.null(h3) && nrow(h3)) all_matches[[length(all_matches) + 1L]] <- h3
 
-    h4 <- scan_across_additional_args(txt, f)
+    h4 <- scan_filter_across(txt, f)
     if (!is.null(h4) && nrow(h4)) all_matches[[length(all_matches) + 1L]] <- h4
+
+    h5 <- scan_across_additional_args(txt, f)
+    if (!is.null(h5) && nrow(h5)) all_matches[[length(all_matches) + 1L]] <- h5
   }
 
   if (!length(all_matches)) {
@@ -1078,6 +1091,10 @@ audit_tidyverse_deprecations <- function(root = ".",
     ord <- order(matches$file, matches$line, matches$col, matches$package, matches$id)
     matches <- matches[ord, , drop = FALSE]
     rownames(matches) <- NULL
+
+    # Remove any known false positives (add more if necessary)
+    matches <- matches[matches$match != "magrittr::extract(", ]
+
   }
 
   # Summary
@@ -1158,3 +1175,4 @@ subset_high_confidence <- function(res) {
   }
   res$matches[res$matches$confidence == "high", , drop = FALSE]
 }
+
