@@ -1093,7 +1093,6 @@ audit_tidyverse_deprecations <- function(root = ".",
 
     # Remove any known false positives (add more if necessary)
     matches <- matches[matches$match != "magrittr::extract(", ]
-
   }
 
   # Summary
@@ -1174,4 +1173,3 @@ subset_high_confidence <- function(res) {
   }
   res$matches[res$matches$confidence == "high", , drop = FALSE]
 }
-
