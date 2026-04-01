@@ -486,12 +486,13 @@ build_rule_catalogue <- function() {
   ]
 
   for (i in 1:nrow(tidyverse_status)) {
+    escaped_fun <- gsub("\\.", "\\\\.", tidyverse_status$fun[i])
     add_rule(
       id = paste0(tidyverse_status$package[i], "_", tidyverse_status$fun[i]),
       package = tidyverse_status$package[i],
       stage = tidyverse_status$lifecycle[i],
       confidence = "",
-      regex = paste0("\\b(?:", tidyverse_status$package[i], "::)?", tidyverse_status$fun[i], "\\s*\\("),
+      regex = paste0("\\b(?:", tidyverse_status$package[i], "::)?", escaped_fun, "\\s*\\("),
       suggestion = "Replace function"
     )
   }
