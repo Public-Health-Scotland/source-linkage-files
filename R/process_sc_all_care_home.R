@@ -27,6 +27,8 @@ process_sc_all_care_home <- function(
   spd_path = get_spd_path(),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "ch", year = "all")
+
   sending_location <- social_care_id <- financial_year <- NULL
 
   data <- data %>%
@@ -493,6 +495,8 @@ process_sc_all_care_home <- function(
         group_id = 3206 # hscdiip owner
       )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "ch", year = "all")
 
   return(ch_data_final)
 }

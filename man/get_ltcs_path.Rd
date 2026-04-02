@@ -23,6 +23,8 @@ Get the full path to the LTC Reference File in this quarterly update
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions: 
+\code{\link{get_byoc_intermediate_path}()},
+\code{\link{get_byoc_output_files}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demographic_cohorts_path}()},
 \code{\link{get_file_path}()},

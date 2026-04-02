@@ -43,7 +43,11 @@ write_console_output(
 )
 
 #-------------------------------------------------------------------------------
-## Read processed data from sourcedev
+log_ep_message("start", year)
+
+## Read processed data and create episode file
+log_ep_message("read_data", year)
+
 processed_data_list <- list(
   "ae" = read_file(get_source_extract_path(year, "ae")),
   "acute" = read_file(get_source_extract_path(year, "acute")),
@@ -62,13 +66,15 @@ processed_data_list <- list(
   "sds" = read_file(get_source_extract_path(year, "sds"))
 )
 
-# Run the episode file and tests
+log_ep_message("creating", year)
+
 create_episode_file(processed_data_list,
   year = year,
   write_temp_to_disk = write_temp_to_disk
 ) %>%
   process_tests_episode_file(year = year)
 
-#-------------------------------------------------------------------------------
+log_ep_message("complete", year)
 
+#-------------------------------------------------------------------------------
 ## End of Script ##

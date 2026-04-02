@@ -11,6 +11,8 @@
 #' @export
 #' @family process extracts
 process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
+  log_slf_event(stage = "process", status = "start", type = "it_chi_deaths", year = "all")
+
   it_chi_deaths_clean <- data %>%
     dplyr::arrange(
       dplyr::desc(.data$death_date_nrs),
@@ -30,6 +32,8 @@ process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
         group_id = 3206 # hscdiip owner
       )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "it_chi_deaths", year = "all")
 
   return(it_chi_deaths_clean)
 }

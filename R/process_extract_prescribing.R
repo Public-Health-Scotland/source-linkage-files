@@ -13,6 +13,8 @@
 #' @export
 #' @family process extracts
 process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
+  log_slf_event(stage = "process", status = "start", type = "pis", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -59,6 +61,8 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "pis", year = year)
 
   return(pis_clean)
 }
