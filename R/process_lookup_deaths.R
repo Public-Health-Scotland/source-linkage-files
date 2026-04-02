@@ -15,6 +15,8 @@ process_slf_deaths_lookup <- function(
   refined_death = read_file(get_combined_slf_deaths_lookup_path()),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "slf_deaths_lookup", year = year)
+
   # create slf deaths lookup
   slf_deaths_lookup <- refined_death %>%
     # Filter the chi death dates to the FY as the lookup is by FY
@@ -31,6 +33,8 @@ process_slf_deaths_lookup <- function(
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "slf_deaths_lookup", year = year)
 
   return(slf_deaths_lookup)
 }

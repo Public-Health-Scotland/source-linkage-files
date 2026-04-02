@@ -4,6 +4,8 @@
 #'
 #' @export
 process_tests_it_chi_deaths <- function(data, update = previous_update()) {
+  log_slf_event(stage = "test", status = "start", type = "it_chi_deaths", year = "all")
+
   comparison <- produce_test_comparison(
     old_data = produce_it_chi_deaths_tests(
       read_file(get_slf_chi_deaths_path(update = update))
@@ -11,6 +13,8 @@ process_tests_it_chi_deaths <- function(data, update = previous_update()) {
     new_data = produce_it_chi_deaths_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "it_chi_deaths", workbook_name = "lookup")
+
+  log_slf_event(stage = "test", status = "complete", type = "it_chi_deaths", year = "all")
 
   return(comparison)
 }

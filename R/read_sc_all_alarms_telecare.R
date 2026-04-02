@@ -8,6 +8,7 @@
 #'
 read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
   # Read in data---------------------------------------
+  log_slf_event(stage = "read", status = "start", type = "at", year = "all")
 
   ## read in data - social care 2 demographic
   at_full_data <- dplyr::tbl(
@@ -67,6 +68,8 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     ) %>%
     dplyr::arrange(.data$sending_location, .data$social_care_id) %>%
     dplyr::filter(.data$service_start_date_after_period_end_date != 1)
+
+  log_slf_event(stage = "read", status = "complete", type = "at", year = "all")
 
   return(at_full_data)
 }
