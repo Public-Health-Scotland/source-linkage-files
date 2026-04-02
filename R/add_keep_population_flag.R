@@ -17,10 +17,10 @@ add_keep_population_flag <- function(individual_file, year) {
     pop_estimates <-
       readr::read_rds(get_pop_path(type = "datazone")) %>%
       dplyr::select(
-        .data$year,
-        .data$datazone2011,
-        .data$sex,
-        .data$age0:.data$age90plus
+        year,
+        datazone2011,
+        sex,
+        age0:age90plus
       )
 
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
@@ -56,7 +56,7 @@ add_keep_population_flag <- function(individual_file, year) {
       add_age_group(.data$age) %>%
       dplyr::left_join(
         readr::read_rds(get_locality_path()) %>%
-          dplyr::select("locality" = "hscp_locality", .data$datazone2011),
+          dplyr::select("locality" = "hscp_locality", datazone2011),
         by = "datazone2011"
       ) %>%
       dplyr::group_by(.data$locality, .data$age_group, .data$gender) %>%
@@ -110,7 +110,7 @@ add_keep_population_flag <- function(individual_file, year) {
       ) %>%
       dplyr::filter(.data$keep_nsu == 1L) %>%
       dplyr::ungroup() %>%
-      dplyr::select(-.data$flag_to_remove)
+      dplyr::select(-flag_to_remove)
 
     # step 3: match the flag back onto the slf
     individual_file <- individual_file %>%
