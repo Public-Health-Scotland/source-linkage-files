@@ -7,6 +7,8 @@ read_extract_outpatients <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "outpatient")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "outpatient", year = year)
+
   # Read BOXI extract
   extract_outpatients <- read_file(file_path,
     col_type = readr::cols(
@@ -85,6 +87,8 @@ read_extract_outpatients <- function(
       location = "Treatment Location Code",
       hbtreatcode = "Treatment NHS Board Code - current"
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "outpatient", year = year)
 
   return(extract_outpatients)
 }

@@ -591,12 +591,16 @@ list(
     ),
     # Homelessness (HL1) Activity-----------------------------------------------
     # READ - Homelessness
-    tar_file_read(
+    tar_target(
       # Target name
       homelessness_data,
-      get_boxi_extract_path(year, type = "homelessness"),
       # Function
-      read_extract_homelessness(year, !!.x)
+      read_extract_homelessness(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Homelessness
     tar_target(
@@ -607,7 +611,11 @@ list(
         data = homelessness_data,
         year = year,
         write_to_disk = write_to_disk,
-        la_code_lookup = la_code_opendata
+        la_code_lookup = la_code_opendata,
+        # TODO: change sg_pub_data or sg_pub_path here
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Homelessness
@@ -656,12 +664,15 @@ list(
     ),
     # Maternity (SMR02) Acitivity-----------------------------------------------
     # READ - Maternity
-    tar_file_read(
+    tar_target(
       # Target name
       maternity_data,
-      get_boxi_extract_path(year, type = "maternity"),
-      # Function
-      read_extract_maternity(year, !!.x)
+      read_extract_maternity(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Maternity
     tar_target(
@@ -671,7 +682,10 @@ list(
       process_extract_maternity(
         maternity_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Maternity

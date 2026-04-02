@@ -8,6 +8,8 @@
 #'
 #' @export
 process_tests_homelessness <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "homelessness", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -17,6 +19,8 @@ process_tests_homelessness <- function(data, year) {
     new_data = produce_slf_homelessness_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "hl1", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "homelessness", year = year)
 
   return(comparison)
 }
