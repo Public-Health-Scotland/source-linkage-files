@@ -14,7 +14,7 @@
 #' @family code functions
 #' @seealso convert_sc_sending_location_to_lca
 convert_ca_to_lca <- function(ca_var) {
-  lca <- dplyr::case_match(
+  lca <- dplyr::recode_values(
     ca_var,
     c("S12000033", "Aberdeen City") ~ "01",
     c("S12000034", "Aberdeenshire") ~ "02",

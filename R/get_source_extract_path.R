@@ -50,7 +50,7 @@ get_source_extract_path <- function(year,
     return(get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE))
   }
 
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "acute" ~ "anon-acute_for_source",
     "ae" ~ "anon-a_and_e_for_source",
