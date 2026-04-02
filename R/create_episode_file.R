@@ -436,17 +436,17 @@ correct_cij_vars <- function(data) {
       ),
       cij_pattype_code = dplyr::if_else(
         !is.na(.data$anon_chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
-        dplyr::case_match(
+        dplyr::recode_values(
           .data$cij_admtype,
           c("41", "42") ~ 2L,
           c("40", "48", "99") ~ 9L,
           "18" ~ 0L,
-          .default = as.integer(.data$cij_pattype_code)
+          default = as.integer(.data$cij_pattype_code)
         ),
         .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
-      cij_pattype = dplyr::case_match(
+      cij_pattype = dplyr::recode_values(
         .data$cij_pattype_code,
         0L ~ "Non-Elective",
         1L ~ "Elective",
