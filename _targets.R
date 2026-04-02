@@ -640,7 +640,13 @@ list(
     ),
     # Long-Term Conditions (LTCs) Activity--------------------------------------
     # READ - LTCs
-    tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
+    tar_target(
+      ltc_data,
+      read_lookup_ltc(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
     # PROCESS - LTCs
     tar_target(
       # Target name
@@ -649,7 +655,10 @@ list(
       process_lookup_ltc(
         ltc_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - LTCs
