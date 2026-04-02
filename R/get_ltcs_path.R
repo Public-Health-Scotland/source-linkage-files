@@ -10,12 +10,22 @@
 #' @export
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
-get_ltcs_path <- function(year, update = latest_update(), ...) {
-  ltcs_file_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "LTCs"),
-    file_name = stringr::str_glue("anon-LTCs_patient_reference_file-20{year}_{update}.parquet"),
-    ...
-  )
+get_ltcs_path <- function(year,
+                          update = latest_update(),
+                          BYOC_MODE,
+                          ...) {
+  if (isTRUE(BYOC_MODE)) {
+    ltcs_file_path <- file.path(denodo_output_path(),
+                                "anon-LTCs_patient_reference_file-20{year}.parquet")
+  } else{
+    ltcs_file_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "LTCs"),
+      file_name = stringr::str_glue(
+        "anon-LTCs_patient_reference_file-20{year}_{update}.parquet"
+      ),
+      ...
+    )
+  }
 
   return(ltcs_file_path)
 }
