@@ -67,11 +67,11 @@ process_lookup_gpprac <- function(
     ) %>%
     dplyr::mutate(
       lca = convert_ca_to_lca(.data$ca2018),
-      hbpraccode = dplyr::case_match(
+      hbpraccode = dplyr::recode_values(
         .data$gpprac,
         c(99942L, 99957L, 99961L, 99981L, 99999L) ~ "S08200003",
         99995L ~ "S08200001",
-        .default = .data$hbpraccode
+        default = .data$hbpraccode
       )
     )
 
