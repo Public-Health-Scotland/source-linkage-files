@@ -7,6 +7,8 @@
 #' @export
 #' @family process extracts
 read_it_chi_deaths <- function(file_path = get_it_deaths_path()) {
+  log_slf_event(stage = "read", status = "start", type = "it_chi_deaths", year = "all")
+
   it_chi_deaths <- read_file(file_path) %>%
     dplyr::select(
       anon_chi = "anon_chi",
@@ -17,6 +19,8 @@ read_it_chi_deaths <- function(file_path = get_it_deaths_path()) {
       death_date_nrs = lubridate::dmy(.data$death_date_nrs),
       death_date_chi = lubridate::dmy(.data$death_date_chi)
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "it_chi_deaths", year = "all")
 
   return(it_chi_deaths)
 }

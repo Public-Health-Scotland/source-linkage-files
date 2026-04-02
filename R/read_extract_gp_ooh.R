@@ -16,11 +16,15 @@ read_extract_gp_ooh <- function(year,
                                 diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d"),
                                 outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o"),
                                 consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c")) {
+  log_slf_event(stage = "read", status = "start", type = "gpooh", year = year)
+
   ooh_extracts <- list(
     "diagnosis" = read_extract_ooh_diagnosis(year, diagnosis_path),
     "outcomes" = read_extract_ooh_outcomes(year, outcomes_path),
     "consultations" = read_extract_ooh_consultations(year, consultations_path)
   )
+
+  log_slf_event(stage = "read", status = "complete", type = "gpooh", year = year)
 
   return(ooh_extracts)
 }

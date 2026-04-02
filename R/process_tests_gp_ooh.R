@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_gp_ooh <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "gpooh", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -20,6 +22,8 @@ process_tests_gp_ooh <- function(data, year) {
     )
   ) %>%
     write_tests_xlsx(sheet_name = "gpooh", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "gpooh", year = year)
 
   return(comparison)
 }

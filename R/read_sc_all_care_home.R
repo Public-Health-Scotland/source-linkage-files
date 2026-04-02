@@ -7,6 +7,8 @@
 #' @export
 #'
 read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+  log_slf_event(stage = "read", status = "start", type = "ch", year = "all")
+
   ch_data <- dplyr::tbl(
     sc_dvprod_connection,
     dbplyr::in_schema("social_care_2", "carehome_snapshot")
@@ -72,6 +74,8 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
         "nursing_care_provision"
       ), as.integer)
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "ch", year = "all")
 
   return(ch_data)
 }

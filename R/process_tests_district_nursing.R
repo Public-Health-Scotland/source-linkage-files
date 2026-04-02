@@ -8,6 +8,8 @@
 #'
 #' @export
 process_tests_district_nursing <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "dn", year = year)
+
   if (identical(data, tibble::tibble())) {
     # Deal with years where we have no data
     return(data)
@@ -78,6 +80,8 @@ produce_source_dn_tests <- function(data,
     min_max
   ) %>%
     purrr::reduce(dplyr::full_join, by = c("measure", "value"))
+
+  log_slf_event(stage = "test", status = "complete", type = "dn", year = year)
 
   return(join_output)
 }
