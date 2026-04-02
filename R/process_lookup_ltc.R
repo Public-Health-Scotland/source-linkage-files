@@ -8,7 +8,12 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #'
-process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
+process_lookup_ltc <- function(data,
+                               year,
+                               write_to_disk = TRUE,
+                               BYOC_MODE = FALSE,
+                               run_id = NA,
+                               run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "ltc", year = year)
 
   # Create LTC flags 1/0------------------------------------
@@ -24,12 +29,17 @@ process_lookup_ltc <- function(data, year, write_to_disk = TRUE) {
     dplyr::rename_with(
       .cols = tidyselect::ends_with("flag"),
       .fn = ~ stringr::str_remove(.x, "_date_flag")
+    ) %>%
+    mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
     write_file(
       ltc_flags,
-      get_ltcs_path(year, check_mode = "write"),
+      get_ltcs_path(year, check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3206 # hscdiip owner
     )
   }
