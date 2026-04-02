@@ -56,7 +56,7 @@ process_extract_maternity <- function(data, year, write_to_disk = TRUE) {
         levels = c(1L:5L, 8L)
       ),
       smrtype = add_smrtype(.data$recid, .data$mpat),
-      ipdc = dplyr::case_match(
+      ipdc = dplyr::recode_values(
         .data$smrtype,
         "Matern-IP" ~ "I",
         "Matern-DC" ~ "D"
