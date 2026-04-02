@@ -14,7 +14,6 @@ process_lookup_ltc <- function(data,
                                BYOC_MODE = FALSE,
                                run_id = NA,
                                run_date_time = NA) {
-
   log_slf_event(stage = "process", status = "start", type = "ltc", year = year)
 
   # Create LTC flags 1/0------------------------------------
