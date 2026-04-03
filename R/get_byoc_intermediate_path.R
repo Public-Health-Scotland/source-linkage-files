@@ -17,7 +17,7 @@
 get_byoc_intermediate_path <- function(type,
                                        year,
                                        base_path = denodo_output_path()) {
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "acute" ~ "anon-acute_for_source",
     "ae" ~ "anon-a_and_e_for_source",
