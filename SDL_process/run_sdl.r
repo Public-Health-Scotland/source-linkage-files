@@ -45,29 +45,32 @@ library(targets)
 library(testthat)
 library(crew)
 
+BYOC_MODE <- Sys.getenv("BYOC_MODE")
 # set up logger and system environment variable BYOC_MODE
-if (exists("BYOC_MODE") && isTRUE(BYOC_MODE)) {
+if (tolower(BYOC_MODE) %in% c("true", "t")) {
   logger::log_info("Detect run_sdl.r run on Denodo")
-  Sys.setenv(BYOC_MODE = "TRUE")
+  BYOC_MODE <- TRUE
 } else {
   logger::log_info("Detect run_sdl.r run locally")
   BYOC_MODE <- FALSE
-  Sys.setenv(BYOC_MODE = "FALSE")
 }
 
+# run_id <- Sys.getenv("run_id")
+# run_date_time <- Sys.getenv("run_date_time")
+# run_id <- NA
+run_date_time <- script_run_time
 
-# setup connection to Denodo if run locally
-if (!BYOC_MODE) {
-  # Open a connection to DVPREPROD (test environment) or DVPROD (production environment)
-  denodo_connect <- suppressWarnings(dbConnect(
-    odbc(),
-    dsn = "DVPREPROD",
-    # or DVPROD
-    uid = .rs.askForPassword("Enter your username"),
-    pwd = .rs.askForPassword("Enter your LDAP password")
-  ))
-}
-
+# Include reporting of last run date of ACADME
+dplyr::tbl(
+  denodo_connect,
+  dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
+) %>%
+  dplyr::collect() %>%
+  # Optional: Format the date to look clean first
+  dplyr::mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
+  purrr::pwalk(function(data_mart, load_str, ...) {
+    logger::log_info("{data_mart} loaded at {load_str}")
+  })
 
 write_to_disk <- TRUE
 
@@ -153,11 +156,18 @@ sg_pub_data <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
 # just test one year
-year <- "2019"
-fyear <- convert_year_to_fyyear(year)
+year <- "1920"
 
+# Build BYOC Output File Paths
+byoc_output_files <- get_byoc_output_files(
+  year = year,
+  types = c("homelessness", "maternity") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
+) # can always use any other type for testing also
+
+## targets ----
+targets::tar_make(script = "dummy_targets.R")
+logger::log_info("Targets finished.")
 # targets::tar_make()
 
 # test homelessness data only
@@ -165,19 +175,36 @@ fyear <- convert_year_to_fyyear(year)
 logger::log_info("Read and process homelessness data")
 hl1 <- read_extract_homelessness(
   year,
-  denodo_connect = denodo_connect,
-  file_path = get_boxi_extract_path(year = fyear, type = "homelessness", BYOC_MODE = BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(
+    year = year,
+    type = "homelessness",
+    BYOC_MODE = BYOC_MODE
+  ),
   BYOC_MODE = BYOC_MODE
 ) %>% process_extract_homelessness(
   year = year,
   write_to_disk = write_to_disk,
   la_code_lookup = la_code_lookup,
   sg_pub_data = sg_pub_data,
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id,
+  run_date_time = run_date_time
 )
 
-## disconnect from denodo if run locally ----
-if (!BYOC_MODE) {
-  logger::log_info("Disconnect from Denodo")
-  DBI::dbDisconnect(denodo_connect)
-}
+logger::log_info("Read and process maternity data")
+maternity <- read_extract_maternity(
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+  BYOC_MODE = BYOC_MODE
+) %>%
+  process_extract_maternity(
+    year = year,
+    write_to_disk = TRUE,
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
+  )
+
+logger::log_info("Run SDL ended.")

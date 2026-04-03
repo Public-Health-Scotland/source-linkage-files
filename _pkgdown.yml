@@ -17,6 +17,7 @@ reference:
     desc: Connection to PHS database
   - contents:
     - phs_db_connection
+    - get_denodo_connection
 
 
   - title: Check
@@ -104,7 +105,6 @@ reference:
     - store_ep_file_vars
     - load_ep_file_vars
     - write_temp_data
-    - write_console_output
 
 
   - title: Initialisation
@@ -145,6 +145,7 @@ reference:
     - has_concept("read extracts")
     - starts_with("read_")
     - get_gpprac_opendata
+    - get_byoc_output_files
 
 
   - title: Process extracts
@@ -212,6 +213,7 @@ reference:
     - vars_end_with
     - has_concept("helper_funs")
     - setup_keyring
+    - setup_denodo_keyring
 
 
   - title: Testing
@@ -234,3 +236,14 @@ reference:
     - link_ch_with_adms
     - update_uk_postcode_directory
 
+
+  - title: Logger
+    desc: Functions that initialise logger for logging messages during SLF processing.
+  - contents:
+    - write_console_output
+    - log_ep_message
+    - log_ind_message
+    - log_tar_message
+    - log_slf_event
+    - log_ep_substage
+    - log_ind_substage
