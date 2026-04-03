@@ -14,7 +14,7 @@
 #'
 #' @family code functions
 convert_hscp_to_hscpnames <- function(hscp) {
-  hscpnames <- dplyr::case_match(
+  hscpnames <- dplyr::recode_values(
     hscp,
     "S37000001" ~ "Aberdeen City",
     "S37000002" ~ "Aberdeenshire",
@@ -67,7 +67,7 @@ convert_hscp_to_hscpnames <- function(hscp) {
 #'
 #' @family code functions
 convert_hb_to_hbnames <- function(hb) {
-  hbnames <- dplyr::case_match(
+  hbnames <- dplyr::recode_values(
     hb,
     "S08000015" ~ "Ayrshire and Arran",
     "S08000016" ~ "Borders",
