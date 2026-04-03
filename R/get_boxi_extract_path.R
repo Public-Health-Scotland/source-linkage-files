@@ -46,24 +46,24 @@ get_boxi_extract_path <- function(year,
     return(get_dummy_boxi_extract_path(BYOC_MODE))
   }
 
-    file_name <- dplyr::recode_values(
-      type,
-      "ae" ~ "anon-A&E-episode-level-extract",
-      "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
-      "acute" ~ "anon-Acute-episode-level-extract",
-      "acute_cup" ~ "anon-Acute-CUP-extract",
-      "cmh" ~ "anon-Community-MH-contact-level-extract",
-      "dn" ~ "anon-District-Nursing-contact-level-extract",
-      "gp_ooh-c" ~ "anon-GP-OoH-consultations-extract",
-      "gp_ooh-d" ~ "anon-GP-OoH-diagnosis-extract",
-      "gp_ooh-o" ~ "anon-GP-OoH-outcomes-extract",
-      "gp_ooh_cup" ~ "anon-GP-OoH-CUP-extract",
-      "homelessness" ~ "anon-Homelessness-extract",
-      "maternity" ~ "anon-Maternity-episode-level-extract",
-      "mh" ~ "anon-Mental-Health-episode-level-extract",
-      "deaths" ~ "anon-NRS-death-registrations-extract",
-      "outpatients" ~ "anon-Outpatients-episode-level-extract"
-    )
+  file_name <- dplyr::recode_values(
+    type,
+    "ae" ~ "anon-A&E-episode-level-extract",
+    "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
+    "acute" ~ "anon-Acute-episode-level-extract",
+    "acute_cup" ~ "anon-Acute-CUP-extract",
+    "cmh" ~ "anon-Community-MH-contact-level-extract",
+    "dn" ~ "anon-District-Nursing-contact-level-extract",
+    "gp_ooh-c" ~ "anon-GP-OoH-consultations-extract",
+    "gp_ooh-d" ~ "anon-GP-OoH-diagnosis-extract",
+    "gp_ooh-o" ~ "anon-GP-OoH-outcomes-extract",
+    "gp_ooh_cup" ~ "anon-GP-OoH-CUP-extract",
+    "homelessness" ~ "anon-Homelessness-extract",
+    "maternity" ~ "anon-Maternity-episode-level-extract",
+    "mh" ~ "anon-Mental-Health-episode-level-extract",
+    "deaths" ~ "anon-NRS-death-registrations-extract",
+    "outpatients" ~ "anon-Outpatients-episode-level-extract"
+  )
 
   if (BYOC_MODE) {
     return(stringr::str_glue("valid_denodo_extract_{file_name}-20{year}"))
