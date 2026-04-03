@@ -266,7 +266,7 @@ list(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       file_path = get_it_deaths_path(),
       BYOC_MODE = BYOC_MODE
-      )
+    )
   ),
   # PROCESS - IT CHI deaths------
   tar_target(

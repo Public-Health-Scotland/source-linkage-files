@@ -14,9 +14,7 @@ process_it_chi_deaths <- function(data,
                                   write_to_disk = TRUE,
                                   BYOC_MODE = FALSE,
                                   run_id = NA,
-                                  run_date_time = NA
-                                  ) {
-
+                                  run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "it_chi_deaths", year = "all")
 
   it_chi_deaths_clean <- data %>%
@@ -37,7 +35,7 @@ process_it_chi_deaths <- function(data,
       "run_date_time",
       "anon_chi",
       "death_date_chi"
-      )
+    )
 
   if (write_to_disk) {
     write_file(
