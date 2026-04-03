@@ -4,59 +4,62 @@
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Consultations extract data
 read_extract_ooh_consultations <- function(
-  year,
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c")
-) {
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+    BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh-c", year = year)
 
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  # Specify years available for running
+  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+    return(tibble::tibble())
+  }
+
   # Read consultations data
-  consultations_extract <- read_file(file_path,
-    col_types = readr::cols(
-      "Patient DoB Date [C]" = readr::col_date(
-        format = "%Y/%m/%d %T"
-      ),
-      "Gender" = readr::col_integer(),
-      "Consultation Recorded" = readr::col_character(),
-      "Consultation Start Date Time" = readr::col_datetime(
-        format = "%Y/%m/%d %T"
-      ),
-      "Consultation End Date Time" = readr::col_datetime(
-        format = "%Y/%m/%d %T"
-      ),
-      "KIS Accessed" = readr::col_factor(levels = c("Y", "N")),
-      # All other columns are character type
-      .default = readr::col_character()
-    )
+  consultations_extract <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_gp_ooh_consultation_source")
   ) %>%
-    dplyr::select(!"Practice NHS Board Code 9 - current") %>%
-    # rename variables
-    dplyr::rename(
-      anon_chi = "anon_chi",
-      dob = "Patient DoB Date [C]",
-      gender = "Gender",
-      postcode = "Patient Postcode [C]",
-      hbrescode = "Patient NHS Board Code 9 - current",
-      hscp = "HSCP of Residence Code Current",
-      gpprac = "Practice Code",
-      ooh_case_id = "GUID",
-      attendance_status = "Consultation Recorded",
-      record_keydate1 = "Consultation Start Date Time",
-      record_keydate2 = "Consultation End Date Time",
-      location = "Treatment Location Code",
-      location_description = "Treatment Location Description",
-      hbtreatcode = "Treatment NHS Board Code 9",
-      kis_accessed = "KIS Accessed",
-      refsource = "Referral Source",
-      consultation_type = "Consultation Type",
-      consultation_type_unmapped = "Consultation Type Unmapped"
+    # Filter to match BOXI extraction
+    dplyr::filter(
+      sc_start_financial_year == c_year,
+      out_of_hours_services_flag == "Y"
     ) %>%
+    # rename variables
+    dplyr::select(
+      anon_chi = "patient_chi",
+      dob = "patient_dob",
+      gender = "gender",
+      postcode = "patient_postcode",
+      hbrescode = "patient_nhs_board_code_9_curr",
+      hscp = "hscp_of_residence_code_curr",
+      gpprac = "practice_code",
+      ooh_case_id = "guid",
+      attendance_status = "consultation_recorded",
+      record_keydate1 = "consultation_start_date_time",
+      record_keydate2 = "consultation_end_date_time",
+      location = "treatement_location_code",
+      location_description = "treatment_location_description",
+      hbtreatcode = "treatment_nhs_board_code_9",
+      kis_accessed = "kis_accessed",
+      refsource = "referral_source",
+      consultation_type = "consultation_type",
+      consultation_type_unmapped = "consultation_type_unmapped"
+    ) %>%
+    dplyr::distinct() %>%
+    dplyr::collect() %>%
     # change to chi for phsmethods
     slfhelper::get_chi() %>%
     # Restore CHI leading zero
     dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
-    dplyr::distinct() %>%
     # change back to anon_chi
     slfhelper::get_anon_chi()
+
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-c", year = year)
 
