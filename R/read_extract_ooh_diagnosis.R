@@ -8,6 +8,8 @@ read_extract_ooh_diagnosis <- function(
   year,
   file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d")
 ) {
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh-d", year = year)
+
   # Load extract file
   diagnosis_extract <- read_file(file_path,
     # All columns are character type
@@ -21,6 +23,8 @@ read_extract_ooh_diagnosis <- function(
     ) %>%
     tidyr::drop_na(.data$readcode) %>%
     dplyr::distinct()
+
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh-d", year = year)
 
   return(diagnosis_extract)
 }

@@ -57,9 +57,20 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
 
 # run_id <- Sys.getenv("run_id")
 # run_date_time <- Sys.getenv("run_date_time")
-run_id <- NA
-run_date_time <- NA
+# run_id <- NA
+run_date_time <- script_run_time
 
+# Include reporting of last run date of ACADME
+dplyr::tbl(
+  denodo_connect,
+  dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
+) %>%
+  dplyr::collect() %>%
+  # Optional: Format the date to look clean first
+  dplyr::mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
+  purrr::pwalk(function(data_mart, load_str, ...) {
+    logger::log_info("{data_mart} loaded at {load_str}")
+  })
 
 write_to_disk <- TRUE
 
@@ -154,6 +165,9 @@ byoc_output_files <- get_byoc_output_files(
   types = c("homelessness", "maternity", "it_chi_deaths") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
 ) # can always use any other type for testing also
 
+## targets ----
+targets::tar_make(script = "dummy_targets.R")
+logger::log_info("Targets finished.")
 # targets::tar_make()
 
 # test homelessness data only

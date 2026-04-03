@@ -8,6 +8,8 @@
 #' @export
 read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = year, type = "acute")) {
   # Read BOXI extract
+  log_slf_event(stage = "read", status = "start", type = "acute", year = year)
+
   extract_acute <- read_file(file_path,
     col_type = readr::cols(
       "Costs Financial Year (01)" = readr::col_integer(),
@@ -154,6 +156,8 @@ read_extract_acute <- function(year, file_path = get_boxi_extract_path(year = ye
     dplyr::mutate(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "acute", year = year)
 
   return(extract_acute)
 }

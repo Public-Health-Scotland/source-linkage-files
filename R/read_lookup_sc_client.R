@@ -11,6 +11,8 @@
 #' @family process extracts
 read_lookup_sc_client <- function(fyyear,
                                   sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+  log_slf_event(stage = "read", status = "start", type = "client", year = fyyear)
+
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
@@ -110,6 +112,8 @@ read_lookup_sc_client <- function(fyyear,
   } else {
     client_data <- client_data
   }
+
+  log_slf_event(stage = "read", status = "complete", type = "client", year = fyyear)
 
   return(client_data)
 }

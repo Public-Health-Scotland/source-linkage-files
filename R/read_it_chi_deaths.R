@@ -32,5 +32,7 @@ read_it_chi_deaths <- function(denodo_connect = get_denodo_connection(BYOC_MODE 
 
   log_slf_event(stage = "read", status = "complete", type = "it_chi_deaths", year = "all")
 
+  log_slf_event(stage = "read", status = "complete", type = "it_chi_deaths", year = "all")
+
   return(it_chi_deaths)
 }
