@@ -4,10 +4,11 @@
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Consultations extract data
 read_extract_ooh_consultations <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c"),
-    BYOC_MODE) {
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh-c", year = year)
 
   year <- check_year_format(year, format = "fyyear")
