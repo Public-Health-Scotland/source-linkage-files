@@ -32,10 +32,8 @@ read_extract_ooh_outcomes <- function(
   ) %>%
     dplyr::filter(
       .data$sc_start_financial_year == !!c_year,
-      # TO-DO: sc_start_financial_year is missing in denodo view!is.na(.data$case_outcome),
       .data$case_outcome != "",
-      # TO-DO: Might be redundant since it is same as filter above done in BOXI but this filtering is also done in the R code.
-      .data$out_of_hours_services_flag == "Y" # TO-DO: out_of_hours_services_flag is missing in denodo view
+      .data$out_of_hours_services_flag == "Y"
     ) %>%
     dplyr::select(
       ooh_case_id = "guid",
