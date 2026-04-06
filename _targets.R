@@ -476,12 +476,16 @@ list(
     ),
     # Accident & Emergency (AE2) activity --------------------------------------
     # READ - A&E
-    tar_file_read(
+    tar_target(
       # Target name
       ae_data,
-      get_boxi_extract_path(year, type = "ae"),
       # Function
-      read_extract_ae(year, !!.x)
+      read_extract_ae(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - A&E
     tar_target(
@@ -489,9 +493,13 @@ list(
       source_ae_extract,
       # Function
       process_extract_ae(
-        ae_data,
-        year,
-        write_to_disk = write_to_disk
+        data = ae_data,
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - A&E

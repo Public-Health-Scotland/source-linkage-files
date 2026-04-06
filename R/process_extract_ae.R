@@ -12,7 +12,13 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_ae <- function(data, year, write_to_disk = TRUE) {
+process_extract_ae <- function(data,
+                               year,
+                               denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                               write_to_disk = TRUE,
+                               BYOC_MODE = FALSE,
+                               run_id = NA,
+                               run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "ae", year = year)
 
   # Only run for a single year
@@ -223,12 +229,34 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
       cup_pathway = "CUP Pathway Name"
     )
 
+  # ----------------------------------------------------------------------------
+  # c_year_cup <- convert_fyyear_to_year(check_year_format(year))
+  #
+  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  #
+  # ae_cup_file <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_ae_cup_source_placeholder") # TO-DO: Placeholder for data path in denodo
+  # ) %>%
+  #   dplyr::filter(year == c_year_cup) %>% # TO-DO: Placeholder for the variable to filter by year
+  #   dplyr::select(
+  #     record_keydate1 = "ed_arrival_date",
+  #     keytime1 = "ed_arrival_time",
+  #     record_keydate2 = "ed_discharge_date",
+  #     keytime2 = "ed_discharge_time",
+  #     case_ref_number = "ed_case_reference_number",
+  #     cup_marker = "cup_marker",
+  #     cup_pathway = "cup_pathway_name"
+  #   ) %>%
+  #   dplyr::collect()
+  # ----------------------------------------------------------------------------
 
   # Data Cleaning---------------------------------------
 
   ae_cup_clean <- ae_cup_file %>%
     # Remove any duplicates
-    dplyr::distinct(.data$record_keydate1,
+    dplyr::distinct(
+      .data$record_keydate1,
       .data$keytime1,
       .data$record_keydate2,
       .data$keytime2,
@@ -256,7 +284,13 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
     )
 
   ae_processed <- matched_ae_data %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -312,7 +346,8 @@ process_extract_ae <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       ae_processed,
-      get_source_extract_path(year, "ae", check_mode = "write"),
+      get_source_extract_path(year, "ae", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
