@@ -94,12 +94,12 @@ get_combined_slf_deaths_lookup_path <- function(update = latest_update(),
   # the refined_death with deceased flag for each financial year.
   # This function will return the combined financial
   # years lookup i.e. all years put together.
-  if(isTRUE(BYOC_MODE)){
+  if (isTRUE(BYOC_MODE)) {
     combined_slf_deaths_lookup_path <- file.path(
       denodo_output_path(),
       "anon-combined_slf_deaths_lookup.parquet"
     )
-  }else{
+  } else {
     combined_slf_deaths_lookup_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Deaths"),
       file_name = stringr::str_glue("anon-combined_slf_deaths_lookup_{update}.parquet"),

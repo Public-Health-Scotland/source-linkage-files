@@ -4,13 +4,13 @@
 #'
 #' @export
 read_extract_nrs_deaths <- function(
-    year,
-    denodo_connect = get_denodo_connect(BYOC_MODE = BYOC_MODE),
-    file_path = get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  year,
+  denodo_connect = get_denodo_connect(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
-  year = check_year_format(year, "fyyear")
-  c_year = convert_fyyear_to_year(year)
+  year <- check_year_format(year, "fyyear")
+  c_year <- convert_fyyear_to_year(year)
 
   log_slf_event(
     stage = "read",

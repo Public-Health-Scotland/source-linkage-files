@@ -19,7 +19,6 @@ process_refined_death <- function(
   run_id = NA,
   run_date_time = NA
 ) {
-
   log_slf_event(
     stage = "process",
     status = "start",
