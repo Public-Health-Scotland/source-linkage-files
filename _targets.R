@@ -286,7 +286,10 @@ list(
     refined_death_data,
     process_refined_death(
       it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   ### Social Care - 'All' data -----------------------------------------------
