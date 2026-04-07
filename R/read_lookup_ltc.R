@@ -9,6 +9,8 @@ read_lookup_ltc <- function(denodo_connect = get_denodo_connection(BYOC_MODE = B
                             BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "ltc", year = "all")
 
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   # Read data from SQL ------------------------------------------------
 
   ltc_file <- dplyr::tbl(
