@@ -11,7 +11,7 @@ join_deaths_data <- function(
   year,
   BYOC_MODE = FALSE
 ) {
-  slf_deaths_lookup = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)) %>%
+  slf_deaths_lookup <- read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)) %>%
     # Filter the chi death dates to the FY as the lookup is by FY
     dplyr::filter(fy == year) %>%
     # use the BOXI NRS death date by default, but if it's missing, use the chi death date.
