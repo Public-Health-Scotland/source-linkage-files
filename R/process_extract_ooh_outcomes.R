@@ -48,9 +48,9 @@ process_extract_ooh_outcomes <- function(data, year) {
     dplyr::ungroup() %>%
     # use row order to pivot outcomes
     tidyr::pivot_wider(
-      names_from = outcome_n,
+      names_from = "outcome_n",
       names_prefix = "ooh_outcome",
-      values_from = outcome
+      values_from = "outcome"
     ) %>%
     dplyr::select(
       "ooh_case_id",

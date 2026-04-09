@@ -39,7 +39,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
         "NA"
       )
     ) %>%
-    dplyr::select(-cij_inpatient) %>%
+    dplyr::select(-"cij_inpatient") %>%
     # cij_admtype recode unknown to 99
     dplyr::mutate(
       cij_admtype = dplyr::if_else(

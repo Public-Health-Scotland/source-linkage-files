@@ -40,7 +40,7 @@ process_lookup_sc_client <-
       replace_sc_id_with_latest() %>%
       # remove cases with no data in client
       dplyr::filter(!(is.na(.data$financial_year))) %>%
-      dplyr::select(-latest_sc_id, -period)
+      dplyr::select(-"latest_sc_id", -"period")
 
     client_clean <- sc_client_demographics %>%
       dplyr::group_by(.data$sending_location, .data$social_care_id, .data$anon_chi) %>%
@@ -204,7 +204,7 @@ process_lookup_sc_client <-
       ) %>%
       dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
       dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-      dplyr::select(-sending_location, -count_not_known)
+      dplyr::select(-"sending_location", -"count_not_known")
 
     if (write_to_disk) {
       write_file(
