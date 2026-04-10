@@ -50,9 +50,9 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # monthly beddays and costs
     convert_monthly_rows_to_vars(
-      costmonthnum,
-      cost_total_net,
-      yearstay
+      "costmonthnum",
+      "cost_total_net",
+      "yearstay"
     ) %>%
     dplyr::mutate(
       # yearstay

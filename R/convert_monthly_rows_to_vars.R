@@ -17,21 +17,21 @@ convert_monthly_rows_to_vars <- function(data,
   month_order <- tolower(month.abb[c(4L:12L, 1L:3L)])
 
   data %>%
-    dplyr::mutate(month_name = month_order[{{ month_num_var }}]) %>%
-    dplyr::select(-{{ month_num_var }}) %>%
+    dplyr::mutate(month_name = month_order[.data[[month_num_var]]]) %>%
+    dplyr::select(-all_of(month_num_var)) %>%
     dplyr::rename(
-      cost = {{ cost_var }},
-      beddays = {{ beddays_var }}
-    ) %>%
+      cost = all_of(cost_var),
+      beddays = all_of(beddays_var)
+      ) %>%
     tidyr::pivot_wider(
       names_from = "month_name",
       names_glue = "{month_name}_{.value}",
       values_from = c("cost", "beddays"),
       values_fill = 0.00
-    ) %>%
+      ) %>%
     dplyr::select(
       !dplyr::ends_with(c("_beddays", "_cost")),
       dplyr::any_of(paste0(month_order, "_beddays")),
       dplyr::any_of(paste0(month_order, "_cost"))
-    )
+      )
 }
