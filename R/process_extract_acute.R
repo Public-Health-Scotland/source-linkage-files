@@ -15,8 +15,12 @@
 #' @family process extracts
 process_extract_acute <- function(data,
                                   year,
-                                  acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
-                                  write_to_disk = TRUE) {
+                                  acute_cup_path = get_boxi_extract_path(year, "acute_cup", BYOC_MODE),
+                                  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                  write_to_disk = TRUE,
+                                  BYOC_MODE = FALSE,
+                                  run_id = NA,
+                                  run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "acute", year = year)
 
   # Only run for a single year
@@ -100,6 +104,31 @@ process_extract_acute <- function(data,
     ) %>%
     dplyr::distinct()
 
+  # ----------------------------------------------------------------------------
+  # c_year_cup <- convert_fyyear_to_year(check_year_format(year))
+  #
+  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  #
+  # acute_cup <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_acute_cup_source_placeholder") #TO-DO: Placeholder for data path in denodo
+  # ) %>%
+  #   dplyr::filter(financial_year == c_year_cup) %>% #TO-DO: Placeholder for the variable to filter by year
+  #   dplyr::select(
+  #     anon_chi = "patient_chi",
+  #     case_reference_number = "case_reference_number",
+  #     record_keydate1 = "admission_date",
+  #     record_keydate2 = "discharge_date",
+  #     tadm = "admission_type_code",
+  #     disch = "discharge_type_code",
+  #     cup_marker = "cup_marker",
+  #     cup_pathway = "cup_pathway_name"
+  #   ) %>%
+  #   dplyr::distinct() %>%
+  #   dplyr::collect() %>%
+  #   slfhelper::get_anon_chi("anon_chi")
+  # ----------------------------------------------------------------------------
+
   acute_clean <- acute_clean %>%
     dplyr::left_join(acute_cup,
       by = c(
@@ -113,7 +142,13 @@ process_extract_acute <- function(data,
     )
 
   acute_processed <- acute_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "record_keydate1",
@@ -165,7 +200,8 @@ process_extract_acute <- function(data,
   if (write_to_disk) {
     write_file(
       acute_processed,
-      get_source_extract_path(year, "acute", check_mode = "write"),
+      get_source_extract_path(year, "acute", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
