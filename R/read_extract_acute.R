@@ -7,10 +7,10 @@
 #'
 #' @export
 read_extract_acute <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE),
-    BYOC_MODE
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE),
+  BYOC_MODE
 ) {
   # Read BOXI extract
   log_slf_event(stage = "read", status = "start", type = "acute", year = year)
@@ -40,7 +40,7 @@ read_extract_acute <- function(
       costsfy = "costs_financial_year",
       case_reference_number = "case_reference_number",
       costmonthnum = "costmonthnum",
-      GLS_record = "gls_record",  #TO-DO: come back
+      GLS_record = "gls_record", # TO-DO: come back
       record_keydate1 = "date_of_admission",
       record_keydate2 = "date_of_discharge",
       chi = "patient_chi",
@@ -49,7 +49,7 @@ read_extract_acute <- function(
       gpprac = "practice_location_code",
       hbpraccode = "practice_nhs_board_code_curr",
       postcode = "geo_postcode",
-      hbrescode = "nhs_board_of_residence_code_curr", #TO-DO: come back
+      hbrescode = "nhs_board_of_residence_code_curr", # TO-DO: come back
       lca = "geo_council_area_code",
       hscp = "geo_hscp_of_residence_code_curr",
       geo_data_zone_2011 = "geo_data_zone_2011",
