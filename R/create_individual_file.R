@@ -911,7 +911,7 @@ join_slf_lookup_vars <- function(individual_file,
       slf_gpprac_lookup,
       by = "gpprac"
     ) %>%
-    dplyr::rename(hbrescode = all_of(hbrescode_var))
+    dplyr::rename(hbrescode = dplyr::all_of(hbrescode_var))
 
   log_ind_substage("Join slf lookup variables function", "finished", year)
 
