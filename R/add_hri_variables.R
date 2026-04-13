@@ -134,7 +134,7 @@ add_hri_variables <- function(
     ) %>%
     # Select only required variables for the lookup
     dplyr::select(
-      all_of(chi_variable),
+      dplyr::all_of(chi_variable),
       "hri_scot",
       "hri_scotp",
       "hri_hb",
