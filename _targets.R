@@ -60,12 +60,7 @@ tar_option_set(
   # memory - default option: the target stays in memory until the end of the pipeline
   memory = "transient",
   # controller - A controller or controller group object produced by the crew R package
-  controller = controller,
-
-  # If a resource error happens, wait 30 seconds and try again (up to 3 times)
-  backoff = tar_backoff(initial = 30, exponential = 2, max = 60),
-  # This tells targets how to handle the "Resource" error specifically
-  error = "null"
+  controller = controller
 )
 
 # Run all the R scripts in a directory in the environment specified.
