@@ -57,7 +57,7 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
 
 store_path <- dplyr::if_else(
   BYOC_MODE,
-  "sdl_byoc/_targets",
+  "/sdl_byoc/_targets",
   "/conf/sourcedev/Source_Linkage_File_Updates/_targets"
 )
 
