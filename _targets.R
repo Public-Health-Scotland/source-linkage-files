@@ -33,7 +33,7 @@ controller <- crew::crew_controller_local(
   name = "my_controller",
   # Specify 6 workers for parallel processing - works with 8CPU, 128GB posit session
   workers = 6,
-  seconds_idle = 3
+  seconds_idle = 30
 )
 
 # Targets options
@@ -48,17 +48,16 @@ tar_option_set(
   # format - default is parquet format
   format = "parquet",
   resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd"),
-    qs = tar_resources_qs(preset = "high")
+    parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
   error = "continue",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
-  retrieval = "worker",
+  retrieval = "auto",
   # memory - default option: the target stays in memory until the end of the pipeline
-  memory = "persistent",
+  memory = "auto",
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
