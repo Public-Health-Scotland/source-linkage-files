@@ -48,8 +48,8 @@ process_extract_delayed_discharges <- function(
 
   dd_clean <- data %>%
     dplyr::rename(
-      record_keydate1 = all_of("rdd"),
-      record_keydate2 = all_of("delay_end_date")
+      record_keydate1 = dplyr::all_of("rdd"),
+      record_keydate2 = dplyr::all_of("delay_end_date")
     ) %>%
     # Use end of the month date for records with no end date
     # (but we think have ended)

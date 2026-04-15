@@ -18,10 +18,10 @@ convert_monthly_rows_to_vars <- function(data,
 
   data %>%
     dplyr::mutate(month_name = month_order[.data[[month_num_var]]]) %>%
-    dplyr::select(-all_of(month_num_var)) %>%
+    dplyr::select(-dplyr::all_of(month_num_var)) %>%
     dplyr::rename(
-      cost = all_of(cost_var),
-      beddays = all_of(beddays_var)
+      cost = dplyr::all_of(cost_var),
+      beddays = dplyr::all_of(beddays_var)
     ) %>%
     tidyr::pivot_wider(
       names_from = "month_name",

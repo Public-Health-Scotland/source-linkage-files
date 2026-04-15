@@ -106,7 +106,7 @@ fill_ch_names <- function(ch_data,
       ch_active = any(.data[["ch_active"]])
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::rename(ch_postcode_lookup = all_of("ch_postcode")) %>%
+    dplyr::rename(ch_postcode_lookup = dplyr::all_of("ch_postcode")) %>%
     dplyr::mutate(
       ch_pc_partial = stringr::str_sub(.data[["ch_postcode_lookup"]], 1, -2),
       ch_pc_partial2 = stringr::str_sub(.data[["ch_postcode_lookup"]], 1, -3),
