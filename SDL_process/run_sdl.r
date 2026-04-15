@@ -55,12 +55,22 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
   BYOC_MODE <- FALSE
 }
 
+store_path <- dplyr::if_else(
+  BYOC_MODE,
+  "sdl_byoc/_targets",
+  "/conf/sourcedev/Source_Linkage_File_Updates/_targets"
+)
+
 # run_id <- Sys.getenv("run_id")
 # run_date_time <- Sys.getenv("run_date_time")
 # run_id <- NA
 run_date_time <- script_run_time
 
 # Include reporting of last run date of ACADME
+
+if(isFALSE(BYOC_MODE)){
+  denodo_connect <- createslf::get_denodo_connection(BYOC_MODE = BYOC_MODE)
+}
 dplyr::tbl(
   denodo_connect,
   dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
@@ -71,6 +81,9 @@ dplyr::tbl(
   purrr::pwalk(function(data_mart, load_str, ...) {
     logger::log_info("{data_mart} loaded at {load_str}")
   })
+if(isFALSE(BYOC_MODE)){
+  odbc::dbDisconnect(denodo_connect)
+}
 
 write_to_disk <- TRUE
 
@@ -159,52 +172,53 @@ sg_pub_data <- data.frame(
 # just test one year
 year <- "1920"
 
-# Build BYOC Output File Paths
-byoc_output_files <- get_byoc_output_files(
-  year = year,
-  types = c("homelessness", "maternity") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
-) # can always use any other type for testing also
+# # Build BYOC Output File Paths
+# byoc_output_files <- get_byoc_output_files(
+#   year = year,
+#   types = c("homelessness", "maternity") # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
+# ) # can always use any other type for testing also
 
 ## targets ----
-targets::tar_make(script = "dummy_targets.R")
+targets::tar_make(script = "SDL_process/dummy_targets.R",
+                  store = "sdl_byoc/_targets")
 logger::log_info("Targets finished.")
 # targets::tar_make()
 
 # test homelessness data only
 ## create homelessness data ----
-logger::log_info("Read and process homelessness data")
-hl1 <- read_extract_homelessness(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(
-    year = year,
-    type = "homelessness",
-    BYOC_MODE = BYOC_MODE
-  ),
-  BYOC_MODE = BYOC_MODE
-) %>% process_extract_homelessness(
-  year = year,
-  write_to_disk = write_to_disk,
-  la_code_lookup = la_code_lookup,
-  sg_pub_data = sg_pub_data,
-  BYOC_MODE = BYOC_MODE,
-  run_id = run_id,
-  run_date_time = run_date_time
-)
-
-logger::log_info("Read and process maternity data")
-maternity <- read_extract_maternity(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
-  BYOC_MODE = BYOC_MODE
-) %>%
-  process_extract_maternity(
-    year = year,
-    write_to_disk = TRUE,
-    BYOC_MODE = BYOC_MODE,
-    run_id = run_id,
-    run_date_time = run_date_time
-  )
+# logger::log_info("Read and process homelessness data")
+# hl1 <- read_extract_homelessness(
+#   year,
+#   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+#   file_path = get_boxi_extract_path(
+#     year = year,
+#     type = "homelessness",
+#     BYOC_MODE = BYOC_MODE
+#   ),
+#   BYOC_MODE = BYOC_MODE
+# ) %>% process_extract_homelessness(
+#   year = year,
+#   write_to_disk = write_to_disk,
+#   la_code_lookup = la_code_lookup,
+#   sg_pub_data = sg_pub_data,
+#   BYOC_MODE = BYOC_MODE,
+#   run_id = run_id,
+#   run_date_time = run_date_time
+# )
+#
+# logger::log_info("Read and process maternity data")
+# maternity <- read_extract_maternity(
+#   year,
+#   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+#   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+#   BYOC_MODE = BYOC_MODE
+# ) %>%
+#   process_extract_maternity(
+#     year = year,
+#     write_to_disk = TRUE,
+#     BYOC_MODE = BYOC_MODE,
+#     run_id = run_id,
+#     run_date_time = run_date_time
+#   )
 
 logger::log_info("Run SDL ended.")
