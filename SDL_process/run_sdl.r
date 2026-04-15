@@ -68,7 +68,7 @@ run_date_time <- script_run_time
 
 # Include reporting of last run date of ACADME
 
-if(isFALSE(BYOC_MODE)){
+if (isFALSE(BYOC_MODE)) {
   denodo_connect <- createslf::get_denodo_connection(BYOC_MODE = BYOC_MODE)
 }
 dplyr::tbl(
@@ -81,7 +81,7 @@ dplyr::tbl(
   purrr::pwalk(function(data_mart, load_str, ...) {
     logger::log_info("{data_mart} loaded at {load_str}")
   })
-if(isFALSE(BYOC_MODE)){
+if (isFALSE(BYOC_MODE)) {
   odbc::dbDisconnect(denodo_connect)
 }
 
@@ -179,8 +179,10 @@ year <- "1920"
 # ) # can always use any other type for testing also
 
 ## targets ----
-targets::tar_make(script = "SDL_process/dummy_targets.R",
-                  store = "sdl_byoc/_targets")
+targets::tar_make(
+  script = "SDL_process/dummy_targets.R",
+  store = "sdl_byoc/_targets"
+)
 logger::log_info("Targets finished.")
 # targets::tar_make()
 
