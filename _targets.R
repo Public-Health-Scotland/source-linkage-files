@@ -535,7 +535,16 @@ list(
     ),
     # Delayed Discharges Activity-----------------------------------------------
     # READ - Delayed Discharges
-    tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_dd_path(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
     # PROCESS - Delayed Discharges
     tar_target(
       # Target name
@@ -544,7 +553,11 @@ list(
       process_extract_delayed_discharges(
         dd_data,
         year,
-        write_to_disk = write_to_disk
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Delayed Discharges
