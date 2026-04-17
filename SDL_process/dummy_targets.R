@@ -26,9 +26,9 @@ BYOC_MODE <- dplyr::case_when(
   TRUE ~ NA
 )
 
-run_id = Sys.getenv("run_id")
-run_date_time = Sys.getenv("run_date_time")
-denodo_dsn = Sys.getenv("denodo_dsn")
+run_id <- Sys.getenv("run_id")
+run_date_time <- Sys.getenv("run_date_time")
+denodo_dsn <- Sys.getenv("denodo_dsn")
 
 
 if (isTRUE(BYOC_MODE)) {
@@ -74,13 +74,11 @@ tar_option_set(
   controller = controller
 )
 
-years_to_run = "1920"
+years_to_run <- "1920"
 
 # Stage 2 - Set up targets ----
 list(
-
   tar_rds(write_to_disk, TRUE),
-
   tar_map(
     list(year = years_to_run),
 
@@ -143,4 +141,3 @@ list(
 )
 
 ## End of Targets pipeline ##
-
