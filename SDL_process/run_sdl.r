@@ -86,7 +86,7 @@ if (isFALSE(BYOC_MODE)) {
 
 ## Set up years to run ----
 # years <- createslf::years_to_run()
-year = "1920"
+year <- "1920"
 
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
