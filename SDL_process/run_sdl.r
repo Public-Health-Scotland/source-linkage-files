@@ -85,11 +85,12 @@ if (isFALSE(BYOC_MODE)) {
 }
 
 ## Set up years to run ----
-years <- createslf::years_to_run()
+# years <- createslf::years_to_run()
+year = "1920"
 
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
-  year = "1920",
+  year,
   types = c("maternity", "mh")
 )
 # using homelessness for test purpose. When development is complete,
