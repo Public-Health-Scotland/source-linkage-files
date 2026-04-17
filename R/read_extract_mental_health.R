@@ -32,7 +32,7 @@ read_extract_mental_health <- function(
       record_keydate1 = "date_of_admission",
       record_keydate2 = "date_of_discharge",
       chi = "patient_chi",
-      gender = "patient_sex",
+      gender = "gender",
       dob = "patient_dob",
       gpprac = "practice_location_code",
       hbpraccode = "practice_nhs_board_code_curr",
@@ -90,7 +90,7 @@ read_extract_mental_health <- function(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
     ) %>%
     slfhelper::get_anon_chi("chi") %>%
-    # TODO: remove data type modification after UAT passed
+    # data type modification
     dplyr::mutate(
       costsfy = as.double(.data$costsfy),
       costmonthnum = as.double(.data$costmonthnum),
