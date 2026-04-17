@@ -6,10 +6,10 @@
 #' @export
 #'
 read_extract_delayed_discharges <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_dd_path(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE) {
-
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_dd_path(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "dd", year = NA) # TO-DO: confirm if year is used in DD
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
