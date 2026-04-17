@@ -58,7 +58,7 @@ tar_option_set(
   # retrieval - the worker loads the target's dependencies.
   retrieval = "worker",
   # memory - default option: the target stays in memory until the end of the pipeline
-  memory = "persisent",
+  memory = "persistent",
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
