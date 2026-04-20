@@ -50,13 +50,11 @@ analyst <- "Jen"
 # Populate names from this workbook:
 # /conf/sourcedev/Source_Linkage_File_Updates/1_source_data_views/Lookups/uat_names.xlsx
 #
-datasets <- c(
-  "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
-  "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health"
-)
-
-# , "nrs_deaths")
-
+#   c(
+#   "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
+#   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths"
+# )
+datasets <- c("chi_deaths", "ltcs")
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%
@@ -68,6 +66,7 @@ for (ii in 1:nrow(name_list)) {
   dataset_name <- name_list$dataset_list[ii]
   fn_name <- name_list$fn_list[ii]
   sdl_name <- name_list$sdl_list[ii]
+  year_specific <- name_list$year_specific[ii]
 
   log_info(
     "UAT run {ii}/{nrow(name_list)} | dataset = {dataset_name}, function = {fn_name}, sdl_name = {sdl_name}"
@@ -86,7 +85,7 @@ for (ii in 1:nrow(name_list)) {
 # to see where the problem is
 
 # Assign row number (returns the dataset you want to look at in names_list)
-# ii <- 3
+# ii <- 2
 
 # After Assigning ii as the row number you want to investigate, run the
 # following code:

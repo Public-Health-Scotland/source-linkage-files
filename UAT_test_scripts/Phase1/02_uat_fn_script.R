@@ -4,10 +4,16 @@ sdl_data <- as_tibble(dbGetQuery(
   glue::glue("select * from sdl.{sdl_name} LIMIT 100")
 ))
 
-
+ if(year_specific){
 # Read boxi data
 boxi_data <- get(fn_name)(year = "1920") %>%
   janitor::clean_names()
+} else {
+
+boxi_data <- get(fn_name)() %>%
+  janitor::clean_names()
+}
+
 
 # Read denodo variables for renaming SLF variables
 denodo_vars <- readxl::read_excel(get_slf_variable_lookup(),
