@@ -4,14 +4,13 @@ sdl_data <- as_tibble(dbGetQuery(
   glue::glue("select * from sdl.{sdl_name} LIMIT 100")
 ))
 
- if(year_specific){
-# Read boxi data
-boxi_data <- get(fn_name)(year = "1920") %>%
-  janitor::clean_names()
+if (year_specific) {
+  # Read boxi data
+  boxi_data <- get(fn_name)(year = "1920") %>%
+    janitor::clean_names()
 } else {
-
-boxi_data <- get(fn_name)() %>%
-  janitor::clean_names()
+  boxi_data <- get(fn_name)() %>%
+    janitor::clean_names()
 }
 
 
