@@ -26,12 +26,13 @@ process_refined_death <- function(
     year = "all"
   )
 
+  # TODO: change it to years to run control on Denodo
   years_list <- years_to_run()
 
   nrs_all_years <- lapply(years_list, (\(year) {
     read_extract_nrs_deaths(
       year,
-      denodo_connect = get_denodo_connect(BYOC_MODE = BYOC_MODE),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     ) %>%
