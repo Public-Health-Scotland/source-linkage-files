@@ -35,7 +35,6 @@ Imports:
     readr (>= 2.1.0),
     rlang (>= 1.1.0),
     rmarkdown (>= 2.17),
-    readxl (>= 1.4.4),
     rstudioapi (>= 0.14),
     slfhelper (>= 0.10.0),
     stringdist (>= 0.9.10),
