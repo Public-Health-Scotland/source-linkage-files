@@ -8,9 +8,7 @@
 #' @family process extracts
 read_it_chi_deaths <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                file_path = get_it_deaths_path(),
-                               BYOC_MODE
-) {
-
+                               BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "it_chi_deaths", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
@@ -18,7 +16,7 @@ read_it_chi_deaths <- function(denodo_connect = get_denodo_connection(BYOC_MODE 
   it_chi_deaths <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_chi_deaths_source")
-    ) %>%
+  ) %>%
     dplyr::select(
       chi = "patient_upi",
       death_date_nrs = "patient_dod_nrs",
