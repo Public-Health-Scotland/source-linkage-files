@@ -759,17 +759,22 @@ list(
         year
       )
     ),
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
+
+    # Remove process_slf_deaths_lookup function, and
+    # moved the funtionality to join_deaths_data()
+    # where the slf_deaths_lookup is only used once.
+    # # Deaths - Year specific SLF lookup-----------------------------------------
+    # tar_target(
+    #   # Target name
+    #   slf_deaths_lookup,
+    #   # Function
+    #   process_slf_deaths_lookup(
+    #     year = year,
+    #     refined_death = refined_death_data,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
     # READ - GP Out of Hours diagnoses
     tar_target(

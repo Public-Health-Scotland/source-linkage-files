@@ -169,7 +169,7 @@ list(
         read_file(get_source_extract_path(year, "deaths", BYOC_MODE = BYOC_MODE)) %>%
           as.data.frame()
       })(year, refined_death_data)
-    ),
+    )
 
     # # TESTS - Deaths
     # tar_target(
@@ -181,18 +181,6 @@ list(
     #     year
     #   )
     # ),
-
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    )
   )
 )
 
