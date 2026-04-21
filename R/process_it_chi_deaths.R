@@ -15,6 +15,7 @@ process_it_chi_deaths <- function(data,
                                   BYOC_MODE = FALSE,
                                   run_id = NA,
                                   run_date_time = NA) {
+
   log_slf_event(stage = "process", status = "start", type = "it_chi_deaths", year = "all")
 
   it_chi_deaths_clean <- data %>%
