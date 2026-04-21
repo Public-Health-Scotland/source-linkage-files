@@ -13,7 +13,7 @@
 #' @export
 #' @family process extracts
 process_refined_death <- function(
-  it_chi_deaths = read_file(get_slf_chi_deaths_path()),
+  it_chi_deaths = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
