@@ -2,6 +2,13 @@
 
     Code
       get_la_code_opendata_lookup()
+    Condition
+      Warning:
+      There was 1 warning in `dplyr::mutate()`.
+      i In argument: `sending_local_authority_name = `%>%`(...)`.
+      Caused by warning:
+      ! `case_match()` was deprecated in dplyr 1.2.0.
+      i Please use `recode_values()` instead.
     Output
       # A tibble: 36 x 3
          CA        CAName                sending_local_authority_name
