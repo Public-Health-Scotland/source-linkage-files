@@ -30,7 +30,7 @@ process_lookup_ltc <- function(data,
       .cols = tidyselect::ends_with("flag"),
       .fn = ~ stringr::str_remove(.x, "_date_flag")
     ) %>%
-    mutate(
+    dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
     )
