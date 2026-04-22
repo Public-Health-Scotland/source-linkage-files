@@ -41,7 +41,7 @@ process_it_chi_deaths <- function(data,
     write_file(
       it_chi_deaths_clean,
       get_slf_chi_deaths_path(
-        BYOC_MODE,
+        BYOC_MODE = BYOC_MODE,
         check_mode = "write"
       ),
       BYOC_MODE = BYOC_MODE,
