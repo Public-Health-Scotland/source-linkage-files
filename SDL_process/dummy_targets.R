@@ -108,7 +108,7 @@ list(
         run_date_time = run_date_time
       )
     ),
-    
+
     ### Mental Health (SMR02) Activity--------------------------------------------
     # READ - Mental Health
     tar_target(
@@ -137,7 +137,7 @@ list(
         run_date_time = run_date_time
       )
     ),
-    
+
     ### IT CHI deaths Activity--------------------------------------------
     # READ - IT CHI deaths------
     tar_target(
