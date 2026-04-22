@@ -108,7 +108,7 @@ list(
         run_date_time = run_date_time
       )
     ),
-
+    
     ### Mental Health (SMR02) Activity--------------------------------------------
     # READ - Mental Health
     tar_target(
@@ -136,6 +136,31 @@ list(
         run_id = run_id,
         run_date_time = run_date_time
       )
+    ),
+    
+    ### IT CHI deaths Activity--------------------------------------------
+    # READ - IT CHI deaths------
+    tar_target(
+      # Target name
+      it_chi_deaths_extract,
+      read_it_chi_deaths(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_it_deaths_path(),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - IT CHI deaths------
+    tar_target(
+      # Target name
+      it_chi_deaths_data,
+      # Function
+      process_it_chi_deaths(
+        data = it_chi_deaths_extract,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      ),
     )
   )
 )
