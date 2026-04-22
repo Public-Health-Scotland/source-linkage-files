@@ -60,7 +60,7 @@ get_byoc_output_files <- function(
 
   if (length(selected_year_specific_types) > 0) {
     file_year_list <- expand.grid(
-      file =  dplyr::recode_values(
+      file = dplyr::recode_values(
         selected_year_specific_types,
         "acute" ~ "anon-acute_for_source",
         "ae" ~ "anon-a_and_e_for_source",
