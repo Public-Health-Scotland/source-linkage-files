@@ -13,20 +13,35 @@
 #' @export
 #' @family process extracts
 process_refined_death <- function(
-  it_chi_deaths = read_file(get_slf_chi_deaths_path()),
-  write_to_disk = TRUE
+  it_chi_deaths = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "refined_death", year = "all")
+  log_slf_event(
+    stage = "process",
+    status = "start",
+    type = "refined_death",
+    year = "all"
+  )
 
+  # TODO: change it to years to run control on Denodo
   years_list <- years_to_run()
 
   nrs_all_years <- lapply(years_list, (\(year) {
     read_extract_nrs_deaths(
       year,
-      get_boxi_extract_path(year, type = "deaths")
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
     ) %>%
-      process_extract_nrs_deaths(year,
-        write_to_disk = write_to_disk
+      process_extract_nrs_deaths(
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
   })) %>%
     data.table::rbindlist()
@@ -59,16 +74,23 @@ process_refined_death <- function(
     dplyr::arrange(.data$death_date) %>%
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     dplyr::ungroup()
+  # run_id and run_date_time should have been added in process_extract_nrs_deaths()
 
   if (write_to_disk) {
     write_file(
       refined_death,
-      get_combined_slf_deaths_lookup_path(create = TRUE),
+      get_combined_slf_deaths_lookup_path(create = TRUE, BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3206 # hscdiip owner
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "refined_death", year = "all")
+  log_slf_event(
+    stage = "process",
+    status = "complete",
+    type = "refined_death",
+    year = "all"
+  )
 
   return(refined_death)
 }

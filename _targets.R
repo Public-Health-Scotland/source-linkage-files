@@ -55,9 +55,9 @@ tar_option_set(
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
-  retrieval = "auto",
+  retrieval = "work",
   # memory - default option: the target stays in memory until the end of the pipeline
-  memory = "auto",
+  memory = "persistent",
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
@@ -294,7 +294,10 @@ list(
     refined_death_data,
     process_refined_death(
       it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   ### Social Care - 'All' data -----------------------------------------------
@@ -765,17 +768,22 @@ list(
         year
       )
     ),
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
+
+    # Remove process_slf_deaths_lookup function, and
+    # moved the funtionality to join_deaths_data()
+    # where the slf_deaths_lookup is only used once.
+    # # Deaths - Year specific SLF lookup-----------------------------------------
+    # tar_target(
+    #   # Target name
+    #   slf_deaths_lookup,
+    #   # Function
+    #   process_slf_deaths_lookup(
+    #     year = year,
+    #     refined_death = refined_death_data,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
     # READ - GP Out of Hours diagnoses
     tar_target(

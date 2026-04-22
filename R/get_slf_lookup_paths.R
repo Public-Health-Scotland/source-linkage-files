@@ -82,20 +82,31 @@ get_slf_deaths_lookup_path <- function(year, ...) {
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param update the update month (defaults to use [latest_update()])
+#' @param BYOC_MODE BYOC_MODE, Boolean type
 #'
 #' @export
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_combined_slf_deaths_lookup_path <- function(update = latest_update(), ...) {
+get_combined_slf_deaths_lookup_path <- function(update = latest_update(),
+                                                BYOC_MODE = FALSE,
+                                                ...) {
   # Note this name is very similar to the existing slf_deaths_lookup_path which returns the path for
   # the refined_death with deceased flag for each financial year.
   # This function will return the combined financial
   # years lookup i.e. all years put together.
-  combined_slf_deaths_lookup_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("anon-combined_slf_deaths_lookup_{update}.parquet"),
-    ...
-  )
+  if (isTRUE(BYOC_MODE)) {
+    combined_slf_deaths_lookup_path <- file.path(
+      denodo_output_path(),
+      "anon-combined_slf_deaths_lookup.parquet"
+    )
+  } else {
+    combined_slf_deaths_lookup_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Deaths"),
+      file_name = stringr::str_glue("anon-combined_slf_deaths_lookup_{update}.parquet"),
+      ...
+    )
+  }
+
   return(combined_slf_deaths_lookup_path)
 }
 
@@ -117,7 +128,7 @@ get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE = FALSE,
 
   if (BYOC_MODE) {
     slf_chi_deaths_path <- file.path(
-      directory = denodo_output_path(), ## TO-DO: waiting to be finalised
+      directory = denodo_output_path(),
       file_name = file_name
     )
   } else {

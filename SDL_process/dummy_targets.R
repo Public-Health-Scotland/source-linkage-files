@@ -79,89 +79,132 @@ years_to_run <- "1920"
 # Stage 2 - Set up targets ----
 list(
   tar_rds(write_to_disk, TRUE),
+
+
+  ## Stage 2.1 non-specific targets ----
+  
+  ### IT CHI deaths Activity ----
+  # READ - IT CHI deaths
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - IT CHI deaths
+  tar_target(
+    # Target name
+    it_chi_deaths_data,
+    # Function
+    process_it_chi_deaths(
+      data = it_chi_deaths_extract,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+
+  ### NRS BOXI Deaths ----
+  # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  tar_target(
+    refined_death_data,
+    process_refined_death(
+      it_chi_deaths = it_chi_deaths_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
+
+
+  ## Stage 2.2 year specific targets ----
   tar_map(
     list(year = years_to_run),
 
-    ### Maternity (SMR02) Acitivity-----------------------------------------------
-    # READ - Maternity
-    tar_target(
-      # Target name
-      maternity_data,
-      read_extract_maternity(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Maternity
-    tar_target(
-      # Target name
-      source_maternity_extract,
-      # Function
-      process_extract_maternity(
-        maternity_data,
-        year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
+    ### Maternity (SMR02) Acitivity----
+    # # READ - Maternity
+    # tar_target(
+    #   # Target name
+    #   maternity_data,
+    #   read_extract_maternity(
+    #     year = year,
+    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    #     file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
+    #     BYOC_MODE = BYOC_MODE
+    #   )
+    # ),
+    # # PROCESS - Maternity
+    # tar_target(
+    #   # Target name
+    #   source_maternity_extract,
+    #   # Function
+    #   process_extract_maternity(
+    #     maternity_data,
+    #     year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # ),
 
-    ### Mental Health (SMR02) Activity--------------------------------------------
-    # READ - Mental Health
-    tar_target(
-      mental_health_data,
-      read_extract_mental_health(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(
-          year = year,
-          type = "mh",
-          BYOC_MODE = BYOC_MODE
-        ),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Mental Health
-    tar_target(
-      # Target name
-      source_mental_health_extract,
-      process_extract_mental_health(
-        mental_health_data,
-        year = year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
+    ### Mental Health (SMR02) Activity ----
+    # # READ - Mental Health
+    # tar_target(
+    #   mental_health_data,
+    #   read_extract_mental_health(
+    #     year = year,
+    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    #     file_path = get_boxi_extract_path(
+    #       year = year,
+    #       type = "mh",
+    #       BYOC_MODE = BYOC_MODE
+    #     ),
+    #     BYOC_MODE = BYOC_MODE
+    #   )
+    # ),
+    # # PROCESS - Mental Health
+    # tar_target(
+    #   # Target name
+    #   source_mental_health_extract,
+    #   process_extract_mental_health(
+    #     mental_health_data,
+    #     year = year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # ),
 
-    ### IT CHI deaths Activity--------------------------------------------
-    # READ - IT CHI deaths------
+
+    ### Death Activity ----
+    # PROCESS - Deaths
     tar_target(
       # Target name
-      it_chi_deaths_extract,
-      read_it_chi_deaths(
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_it_deaths_path(),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - IT CHI deaths------
-    tar_target(
-      # Target name
-      it_chi_deaths_data,
-      # Function
-      process_it_chi_deaths(
-        data = it_chi_deaths_extract,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      ),
+      source_nrs_deaths_extract,
+      # use this anonymous function with redundant but necessary refined_death
+      # to make sure reading year-specific NRS deaths extracts after it is produced
+      (\(year, refined_death_data) {
+        read_file(get_source_extract_path(year, "deaths", BYOC_MODE = BYOC_MODE)) %>%
+          as.data.frame()
+      })(year, refined_death_data)
     )
+
+    # # TESTS - Deaths
+    # tar_target(
+    #   # Target name
+    #   tests_source_nrs_deaths_extract,
+    #   # Function
+    #   process_tests_nrs_deaths(
+    #     source_nrs_deaths_extract,
+    #     year
+    #   )
+    # ),
   )
 )
 
