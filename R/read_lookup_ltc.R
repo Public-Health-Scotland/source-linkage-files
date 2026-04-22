@@ -15,7 +15,6 @@ read_lookup_ltc <- function(denodo_connect = get_denodo_connection(BYOC_MODE = B
 
   ltc_file <- dplyr::tbl(
     denodo_connect,
-    # TODO: check table name after it is finalised
     dbplyr::in_schema("sdl", "sdl_long_term_condition_source")
   ) %>%
     dplyr::select(
@@ -45,14 +44,16 @@ read_lookup_ltc <- function(denodo_connect = get_denodo_connection(BYOC_MODE = B
     dplyr::mutate(
       dplyr::across(
         .cols = dplyr::ends_with("_date"),
-        .fns = ~ lubridate::dmy(.)
+        .fns = ~ lubridate::as_date(.)
       )
     )
 
   chi_check <- ltc_file %>%
-    slfhelper::get_chi() %>%
-    dplyr::pull(.data$chi) %>%
+    dplyr::pull("chi") %>%
     phsmethods::chi_check()
+
+  ltc_file <- ltc_file %>%
+    slfhelper::get_anon_chi()
 
   if (!all(chi_check %in% c("Valid CHI", "Missing (Blank)", "Missing (NA)"))) {
     stop("There were bad CHI numbers in the LTC file")
