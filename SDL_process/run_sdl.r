@@ -110,17 +110,4 @@ logger::log_info("Targets finished.")
 
 # Individual file ----
 
-# Logger is included within each function so is excluded here?
-it_chi_deaths <- read_it_chi_deaths(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_it_deaths_path(),
-  BYOC_MODE = BYOC_MODE
-) %>%
-  process_it_chi_deaths(
-    write_to_disk = TRUE,
-    BYOC_MODE = BYOC_MODE,
-    run_id = run_id,
-    run_date_time = run_date_time
-  )
-
 logger::log_info("Run SDL ended.")
