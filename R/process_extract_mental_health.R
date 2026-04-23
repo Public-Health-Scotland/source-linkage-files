@@ -12,7 +12,12 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
+process_extract_mental_health <- function(data,
+                                          year,
+                                          write_to_disk = TRUE,
+                                          BYOC_MODE = FALSE,
+                                          run_id = NA,
+                                          run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "mh", year = year)
 
   # Only run for a single year
@@ -76,7 +81,13 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
 
   mh_processed <- mh_clean %>%
     dplyr::arrange(.data$anon_chi, .data$record_keydate1) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -123,7 +134,8 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       mh_processed,
-      get_source_extract_path(year, "mh", check_mode = "write"),
+      get_source_extract_path(year, "mh", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
