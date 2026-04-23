@@ -4,7 +4,7 @@
 \alias{get_ltcs_path}
 \title{Long Term Conditions File Path}
 \usage{
-get_ltcs_path(year, update = latest_update(), ...)
+get_ltcs_path(year, update = latest_update(), BYOC_MODE, ...)
 }
 \arguments{
 \item{year}{financial year e.g. "1920"}

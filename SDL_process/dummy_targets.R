@@ -79,64 +79,104 @@ years_to_run <- "1920"
 # Stage 2 - Set up targets ----
 list(
   tar_rds(write_to_disk, TRUE),
+
+  ## Stage 2.1 - non year specific ----
+
+  ### Long-Term Conditions (LTCs) Activity ----
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  ## Stage 2.2 - year specific ----
   tar_map(
     list(year = years_to_run),
 
-    ### Maternity (SMR02) Acitivity-----------------------------------------------
-    # READ - Maternity
+    ### Long-Term Conditions (LTCs) Activity ----
+    # PROCESS - LTCs
     tar_target(
       # Target name
-      maternity_data,
-      read_extract_maternity(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Maternity
-    tar_target(
-      # Target name
-      source_maternity_extract,
+      source_ltc_lookup,
       # Function
-      process_extract_maternity(
-        maternity_data,
+      process_lookup_ltc(
+        ltc_data,
         year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
       )
-    ),
-
-    ### Mental Health (SMR02) Activity--------------------------------------------
-    # READ - Mental Health
-    tar_target(
-      mental_health_data,
-      read_extract_mental_health(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(
-          year = year,
-          type = "mh",
-          BYOC_MODE = BYOC_MODE
-        ),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Mental Health
-    tar_target(
-      # Target name
-      source_mental_health_extract,
-      process_extract_mental_health(
-        mental_health_data,
-        year = year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
     )
+    # # TESTS - LTCs
+    # tar_target(
+    #   # Target name
+    #   tests_ltc,
+    #   # Function
+    #   process_tests_ltcs(
+    #     source_ltc_lookup,
+    #     year
+    #   )
+    # ),
+
+    # ### Maternity (SMR02) Acitivity-----------------------------------------------
+    # # READ - Maternity
+    # tar_target(
+    #   # Target name
+    #   maternity_data,
+    #   read_extract_maternity(
+    #     year = year,
+    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    #     file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
+    #     BYOC_MODE = BYOC_MODE
+    #   )
+    # ),
+    # # PROCESS - Maternity
+    # tar_target(
+    #   # Target name
+    #   source_maternity_extract,
+    #   # Function
+    #   process_extract_maternity(
+    #     maternity_data,
+    #     year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # ),
+    #
+    # ### Mental Health (SMR02) Activity--------------------------------------------
+    # # READ - Mental Health
+    # tar_target(
+    #   mental_health_data,
+    #   read_extract_mental_health(
+    #     year = year,
+    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    #     file_path = get_boxi_extract_path(
+    #       year = year,
+    #       type = "mh",
+    #       BYOC_MODE = BYOC_MODE
+    #     ),
+    #     BYOC_MODE = BYOC_MODE
+    #   )
+    # ),
+    # # PROCESS - Mental Health
+    # tar_target(
+    #   # Target name
+    #   source_mental_health_extract,
+    #   process_extract_mental_health(
+    #     mental_health_data,
+    #     year = year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # )
   )
 )
 
