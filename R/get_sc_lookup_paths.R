@@ -13,7 +13,6 @@
 #' @family social care lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
-
   ## TODO: update for BYOC MODE
 
   sc_demog_lookup_path <- get_file_path(
