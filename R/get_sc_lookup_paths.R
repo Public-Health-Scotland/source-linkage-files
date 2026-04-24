@@ -13,6 +13,9 @@
 #' @family social care lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
+
+  ## TODO: update for BYOC MODE
+
   sc_demog_lookup_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_demographic_lookup"),
     file_name = stringr::str_glue("anon-sc_demographics_lookup_{update}.parquet"),

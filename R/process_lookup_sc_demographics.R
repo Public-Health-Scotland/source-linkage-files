@@ -10,6 +10,9 @@
 #' @param uk_pc_path UK Postcode directory
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -19,6 +22,9 @@ process_lookup_sc_demographics <- function(
   all_care_home_extract,
   spd_path = get_spd_path(),
   uk_pc_path = get_uk_postcode_path(),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "sc_demog", year = "all")
@@ -358,7 +364,11 @@ process_lookup_sc_demographics <- function(
       "date_of_death",
       .direction = "downup"
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup()%>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   rm(sc_demog_latest_record_flag)
 
@@ -371,7 +381,8 @@ process_lookup_sc_demographics <- function(
 
   if (write_to_disk) {
     write_file(sc_demog_lookup,
-      get_sc_demog_lookup_path(check_mode = "write"),
+      get_sc_demog_lookup_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
       group_id = 3206
     ) # hscdiip owner
   }
