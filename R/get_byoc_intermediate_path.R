@@ -17,26 +17,28 @@
 get_byoc_intermediate_path <- function(type,
                                        year,
                                        base_path = denodo_output_path()) {
+
+
   file_name <- dplyr::case_match(
     type,
     "acute" ~ "anon-acute_for_source",
     "ae" ~ "anon-a_and_e_for_source",
-    "at" ~ "anon-alarms-telecare-for-source",
-    "ch" ~ "anon-care_home_for_source",
     "cmh" ~ "anon-cmh_for_source",
-    "client" ~ "anon-client_for_source",
     "dd" ~ "anon-dd_for_source",
     "nrs_deaths" ~ "anon-nrs_deaths_for_source",
     "dn" ~ "anon-district_nursing_for_source",
     "gp_ooh" ~ "anon-gp_ooh_for_source",
-    "hc" ~ "anon-home_care_for_source",
     "homelessness" ~ "anon-homelessness_for_source",
     "ltcs" ~ "anon-LTCs_patient_reference_file",
     "maternity" ~ "anon-maternity_for_source",
     "mh" ~ "anon-mental_health_for_source",
     "outpatients" ~ "anon-outpatients_for_source",
     "pis" ~ "anon-prescribing_file_for_source",
-    "sds" ~ "anon-sds-for-source"
+    "sc_client" ~ "anon-client_for_source",
+    "sc_at" ~ "anon-sc-alarms-telecare-for-source",
+    "sc_ch" ~ "anon-sc-care_home_for_source",
+    "sc_hc" ~ "anon-sc-home_care_for_source",
+    "sds" ~ "anon-sc-sds-for-source"
   )
 
   file_name <- stringr::str_glue("{file_name}-20{year}.parquet")
