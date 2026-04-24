@@ -18,6 +18,9 @@ get_byoc_intermediate_path <- function(type,
                                        year,
                                        base_path = denodo_output_path()) {
 
+  if (!check_year_valid(year, type)) {
+    return(NULL)
+  }
 
   file_name <- dplyr::case_match(
     type,
