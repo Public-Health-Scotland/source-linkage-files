@@ -41,6 +41,25 @@ process_extract_homelessness <- function(
 
   logger::log_info("Process homelessness data")
 
+
+  #####################################################
+  # Placeholder code #
+  #
+  #
+  # sg_pub_data <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
+  #   )
+  #
+  #
+  # la_code_lookup <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_la_code_lookup_source")
+  # )
+  #
+  #
+  ####################################################
+
   data <- data %>%
     dplyr::mutate(
       year = as.character(year),
