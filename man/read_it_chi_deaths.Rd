@@ -6,7 +6,7 @@
 \usage{
 read_it_chi_deaths(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_it_deaths_path(),
+  file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 )
 }
