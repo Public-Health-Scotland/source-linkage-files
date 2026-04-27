@@ -109,22 +109,22 @@ list(
   ),
 
   # ### NRS BOXI Deaths ----
-  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  # tar_target(
-  #   refined_death_data,
-  #   process_refined_death(
-  #     it_chi_deaths = it_chi_deaths_data,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
+  # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  tar_target(
+    refined_death_data,
+    process_refined_death(
+      it_chi_deaths = it_chi_deaths_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
 
 
   ## Stage 2.2 year specific targets ----
   tar_map(
-    list(year = years_to_run)
+    list(year = years_to_run),
 
     ### Maternity (SMR02) Acitivity----
     # # READ - Maternity
@@ -185,16 +185,16 @@ list(
 
     ### Death Activity ----
     # PROCESS - Deaths
-    # tar_target(
-    #   # Target name
-    #   source_nrs_deaths_extract,
-    #   # use this anonymous function with redundant but necessary refined_death
-    #   # to make sure reading year-specific NRS deaths extracts after it is produced
-    #   (\(year, refined_death_data) {
-    #     read_file(get_source_extract_path(year, "deaths", BYOC_MODE = BYOC_MODE)) %>%
-    #       as.data.frame()
-    #   })(year, refined_death_data)
-    # )
+    tar_target(
+      # Target name
+      source_nrs_deaths_extract,
+      # use this anonymous function with redundant but necessary refined_death
+      # to make sure reading year-specific NRS deaths extracts after it is produced
+      (\(year, refined_death_data) {
+        read_file(get_source_extract_path(year, "deaths", BYOC_MODE = BYOC_MODE)) %>%
+          as.data.frame()
+      })(year, refined_death_data)
+    )
 
     # # TESTS - Deaths
     # tar_target(
