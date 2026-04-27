@@ -123,12 +123,19 @@ get_combined_slf_deaths_lookup_path <- function(update = latest_update(),
 #' @export
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE, ...) {
-  slf_chi_deaths_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("anon-chi_deaths_{update}.parquet"),
-    ...
-  )
+get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE = FALSE, ...) {
+  if (BYOC_MODE) {
+    slf_chi_deaths_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = "anon-chi_deaths.parquet"
+    )
+  } else {
+    slf_chi_deaths_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Deaths"),
+      file_name = stringr::str_glue("anon-chi_deaths_{update}.parquet"),
+      ...
+    )
+  }
 
   return(slf_chi_deaths_path)
 }

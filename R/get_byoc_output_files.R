@@ -7,11 +7,9 @@
 #'
 #' @export
 #' @family file path functions
-get_byoc_output_files <- function(
-  year,
-  types = NULL,
-  base_path = denodo_output_path()
-) {
+get_byoc_output_files <- function(year,
+                                  types = NULL,
+                                  base_path = denodo_output_path()) {
   years <- years_to_run()
   year_specific_types <- c(
     "acute",
@@ -32,7 +30,7 @@ get_byoc_output_files <- function(
     "pis",
     "sds"
   )
-  non_year_specific_types <- c("combined_deaths_lookup")
+  non_year_specific_types <- c("chi_deaths", "combined_deaths")
   all_types <- c(year_specific_types, non_year_specific_types)
 
   # if types not supplied, use all types
@@ -43,10 +41,7 @@ get_byoc_output_files <- function(
   # check invalid types
   invalid_types <- setdiff(types, all_types)
   if (length(invalid_types) > 0) {
-    stop(
-      "Unknown type(s): ",
-      paste(invalid_types, collapse = ", ")
-    )
+    stop("Unknown type(s): ", paste(invalid_types, collapse = ", "))
   }
 
   # if year not supplied, use all years for year-specific types
@@ -90,7 +85,8 @@ get_byoc_output_files <- function(
   non_year_specific_types <- intersect(types, non_year_specific_types)
   non_year_specific_files <- dplyr::recode_values(
     non_year_specific_types,
-    "combined_deaths_lookup" ~ "anon-combined_slf_deaths_lookup.parquet"
+    "chi_deaths" ~ "anon-chi_deaths.parquet",
+    "combined_deaths" ~ "anon-combined_slf_deaths_lookup.parquet"
   )
   non_year_specific_files <- file.path(base_path, non_year_specific_files)
 
