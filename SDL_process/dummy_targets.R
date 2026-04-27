@@ -80,7 +80,6 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-
   ## Stage 2.1 non-specific targets ----
 
   ### IT CHI deaths Activity ----
@@ -105,6 +104,16 @@ list(
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
+    )
+  ),
+
+  ### Long-Term Conditions (LTCs) Activity ----
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
     )
   ),
 

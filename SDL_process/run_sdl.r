@@ -93,6 +93,7 @@ byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
     "deaths",
+    "ltcs",
     "maternity",
     "mh",
     "combined_deaths",
