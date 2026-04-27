@@ -7,7 +7,7 @@
 #' @export
 #' @family process extracts
 read_it_chi_deaths <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                               file_path = get_it_deaths_path(),
+                               file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
                                BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "it_chi_deaths", year = "all")
 
@@ -25,8 +25,8 @@ read_it_chi_deaths <- function(denodo_connect = get_denodo_connection(BYOC_MODE 
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi") %>%
     dplyr::mutate(
-      death_date_nrs = lubridate::as_date(.data$death_date_nrs), # TO-DO: Change back to lubridate::dmy if data type is changes following UAT feedback
-      death_date_chi = lubridate::as_date(.data$death_date_chi) # TO-DO: Change back to lubridate::dmy if data type is changes following UAT feedback
+      death_date_nrs = lubridate::as_date(.data$death_date_nrs),
+      death_date_chi = lubridate::as_date(.data$death_date_chi)
     )
 
   log_slf_event(stage = "read", status = "complete", type = "it_chi_deaths", year = "all")
