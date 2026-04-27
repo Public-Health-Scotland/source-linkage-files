@@ -108,14 +108,14 @@ list(
   ),
 
   ### Long-Term Conditions (LTCs) Activity ----
-  # READ - LTCs
-  tar_target(
-    ltc_data,
-    read_lookup_ltc(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
+  # # READ - LTCs
+  # tar_target(
+  #   ltc_data,
+  #   read_lookup_ltc(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
 
   # ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
