@@ -38,8 +38,8 @@ dn_raw_costs <- openxlsx::read.xlsx(
   get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = stringr::str_glue("DN_Costs_Pivoted.xlsx")
-    )
   )
+)
 
 
 # Read DN file extracted from BOXI -----------------------------
