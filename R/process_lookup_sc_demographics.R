@@ -364,7 +364,7 @@ process_lookup_sc_demographics <- function(
       "date_of_death",
       .direction = "downup"
     ) %>%
-    dplyr::ungroup()%>%
+    dplyr::ungroup() %>%
     dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
