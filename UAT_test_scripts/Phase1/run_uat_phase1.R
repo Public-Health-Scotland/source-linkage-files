@@ -45,7 +45,7 @@ source(here::here("UAT_test_scripts/Phase1/01_uat_functions.R"))
 ## Setup data --------------
 
 # Analyst name for folder structure
-analyst <- "Jen"
+analyst <- "Lucy"
 
 # Populate names from this workbook:
 # /conf/sourcedev/Source_Linkage_File_Updates/1_source_data_views/Lookups/uat_names.xlsx
@@ -54,7 +54,7 @@ analyst <- "Jen"
 #   "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
 #   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths"
 # )
-datasets <- c("chi_deaths", "ltcs")
+datasets <- c("chi_deaths", "ltcs", "sparra", "outpatients")
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%
