@@ -382,7 +382,7 @@ process_lookup_sc_demographics <- function(
   if (write_to_disk) {
     write_file(sc_demog_lookup,
       get_sc_demog_lookup_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
+      BYOC_MODE = BYOC_MODE,
       group_id = 3206
     ) # hscdiip owner
   }
