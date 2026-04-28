@@ -11,7 +11,7 @@ if (year_specific) {
   boxi_data <- get(fn_name)()
 }
 
-if (is(boxi_data, "fs_path")){
+if (is(boxi_data, "fs_path")) {
   boxi_data <- read_file(boxi_data) %>% janitor::clean_names()
 } else {
   boxi_data <- boxi_data %>% janitor::clean_names()
