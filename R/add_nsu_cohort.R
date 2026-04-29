@@ -139,26 +139,29 @@ get_nsu_data <- function(year, BYOC_MODE) {
   c_year <- convert_fyyear_to_year(year)
 
   if (isTRUE(BYOC_MODE)) {
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+    denodo_connect <- get_denodo_connection(BYOC_MODE = BYOC_MODE)
 
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE)
-            , add = TRUE)
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE),
+      add = TRUE
+    )
 
     nsu_data <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_nsu_source") # TODO: finalise this sdl view
     ) %>%
       dplyr::filter(costs_financial_year == c_year) %>%
-      dplyr::select("year",
-                    "anon_chi",
-                    "recid",
-                    "smrtype",
-                    "postcode",
-                    "gpprac",
-                    "dob",
-                    "gender") %>%
+      dplyr::select(
+        "year",
+        "anon_chi",
+        "recid",
+        "smrtype",
+        "postcode",
+        "gpprac",
+        "dob",
+        "gender"
+      ) %>%
       dplyr::collect()
-  } else{
+  } else {
     nsu_data <- read_file(get_nsu_path(year))
   }
 
