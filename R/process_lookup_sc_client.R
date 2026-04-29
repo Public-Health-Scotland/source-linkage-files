@@ -18,7 +18,11 @@ process_lookup_sc_client <-
            year,
            sc_demographics = read_file(get_sc_demog_lookup_path()) %>%
              dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
-           write_to_disk = TRUE) {
+           write_to_disk = TRUE,
+           BYOC_MODE = FALSE,
+           run_id = NA,
+           run_date_time = NA) {
+
     log_slf_event(stage = "process", status = "start", type = "sc_client", year = year)
 
     # Check if year is valid for sc_client
@@ -202,12 +206,16 @@ process_lookup_sc_client <-
       ) %>%
       dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
       dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-      dplyr::select(-.data$sending_location, -.data$count_not_known)
+      dplyr::select(-.data$sending_location, -.data$count_not_known) %>%
+      dplyr::mutate(
+        run_id = run_id,
+        run_date_time = run_date_time)
 
     if (write_to_disk) {
       write_file(
         sc_client_lookup,
-        get_sc_client_lookup_path(year, check_mode = "write"),
+        get_sc_client_lookup_path(year, check_mode = "write", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE,
         group_id = 3206 # hscdiip owner
       )
     }
