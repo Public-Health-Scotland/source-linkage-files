@@ -908,7 +908,8 @@ list(
       read_lookup_sc_client(
         fyyear = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE)
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Client data
     tar_target(

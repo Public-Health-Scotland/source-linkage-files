@@ -12,7 +12,6 @@
 read_lookup_sc_client <- function(fyyear,
                                   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                   BYOC_MODE) {
-
   log_slf_event(stage = "read", status = "start", type = "client", year = fyyear)
 
   check_year_format(fyyear)
@@ -24,7 +23,7 @@ read_lookup_sc_client <- function(fyyear,
   client_fy_extract <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_client_fy_snapshot") # TO-DO: Update table name
-    ) %>%
+  ) %>%
     dplyr::filter(.data$financial_year == year) %>%
     dplyr::collect()
 
@@ -32,7 +31,7 @@ read_lookup_sc_client <- function(fyyear,
   client_qtr_extract <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_client_qtr_snapshot") # TO-DO: Update table name
-    ) %>%
+  ) %>%
     dplyr::filter(.data$financial_year == year) %>%
     dplyr::collect()
 

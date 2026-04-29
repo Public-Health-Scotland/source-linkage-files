@@ -22,7 +22,6 @@ process_lookup_sc_client <-
            BYOC_MODE = FALSE,
            run_id = NA,
            run_date_time = NA) {
-
     log_slf_event(stage = "process", status = "start", type = "sc_client", year = year)
 
     # Check if year is valid for sc_client
@@ -209,7 +208,8 @@ process_lookup_sc_client <-
       dplyr::select(-.data$sending_location, -.data$count_not_known) %>%
       dplyr::mutate(
         run_id = run_id,
-        run_date_time = run_date_time)
+        run_date_time = run_date_time
+      )
 
     if (write_to_disk) {
       write_file(
