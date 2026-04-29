@@ -80,21 +80,18 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 #'
 #' @family lookup file paths
 get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                         BYOC_MODE
-                         ){
-
+                         BYOC_MODE) {
   if (isTRUE(BYOC_MODE)) {
     extract_spd <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_spd_source") ### TODO check SDL name ###
     ) %>%
       collect()
-  }else{
+  } else {
     spd_data <- read_file(get_spd_path())
   }
   return(spd_data)
 }
-
 
 
 #' SIMD File Path
