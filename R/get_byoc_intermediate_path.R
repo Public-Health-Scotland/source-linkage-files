@@ -15,35 +15,39 @@
 #' @export
 #' @family file path functions
 get_byoc_intermediate_path <- function(type,
-                                       year,
+                                       year = NULL,
                                        base_path = denodo_output_path()) {
-  if (!check_year_valid(year, type)) {
-    return(NULL)
-  }
 
-  file_name <- dplyr::case_match(
-    type,
-    "acute" ~ "anon-acute_for_source",
-    "ae" ~ "anon-a_and_e_for_source",
-    "cmh" ~ "anon-cmh_for_source",
-    "dd" ~ "anon-dd_for_source",
-    "nrs_deaths" ~ "anon-nrs_deaths_for_source",
-    "dn" ~ "anon-district_nursing_for_source",
-    "gp_ooh" ~ "anon-gp_ooh_for_source",
-    "homelessness" ~ "anon-homelessness_for_source",
-    "ltcs" ~ "anon-LTCs_patient_reference_file",
-    "maternity" ~ "anon-maternity_for_source",
-    "mh" ~ "anon-mental_health_for_source",
-    "outpatients" ~ "anon-outpatients_for_source",
-    "pis" ~ "anon-prescribing_file_for_source",
-    "sc_client" ~ "anon-client_for_source",
-    "sc_at" ~ "anon-sc-alarms-telecare-for-source",
-    "sc_ch" ~ "anon-sc-care_home_for_source",
-    "sc_hc" ~ "anon-sc-home_care_for_source",
-    "sds" ~ "anon-sc-sds-for-source"
+  if (is.null(year)){
+  file_name <- dplyr::recode_values(
+      type,
+      "chi_deaths" ~ "anon-chi_deaths.parquet",
+      "combined_deaths" ~ "anon-combined_slf_deaths_lookup.parquet"
+      "deaths" ~ "anon-deaths_for_source"
   )
-
-  file_name <- stringr::str_glue("{file_name}-20{year}.parquet")
+  }else{
+  file_name <- dplyr::recode_values(
+    type,
+    "acute" ~ stringr::str_glue("anon-acute_for_source-20{year}.parquet"),
+    "ae" ~ stringr::str_glue("anon-a_and_e_for_source-20{year}.parquet"),
+    "cmh" ~ stringr::str_glue("anon-cmh_for_source-20{year}.parquet"),
+    "dd" ~ stringr::str_glue("anon-dd_for_source-20{year}.parquet"),
+    "nrs_deaths" ~ stringr::str_glue("anon-nrs_deaths_for_source-20{year}.parquet"),
+    "dn" ~ stringr::str_glue("anon-district_nursing_for_source-20{year}.parquet"),
+    "gp_ooh" ~ stringr::str_glue("anon-gp_ooh_for_source-20{year}.parquet"),
+    "homelessness" ~ stringr::str_glue("anon-homelessness_for_source-20{year}.parquet"),
+    "ltcs" ~ stringr::str_glue("anon-LTCs_patient_reference_file-20{year}.parquet"),
+    "maternity" ~ stringr::str_glue("anon-maternity_for_source-20{year}.parquet"),
+    "mh" ~ stringr::str_glue("anon-mental_health_for_source-20{year}.parquet"),
+    "outpatients" ~ stringr::str_glue("anon-outpatients_for_source-20{year}.parquet"),
+    "pis" ~ stringr::str_glue("anon-prescribing_file_for_source-20{year}.parquet"),
+    "sc_client" ~ stringr::str_glue("anon-client_for_source-20{year}.parquet"),
+    "sc_at" ~ stringr::str_glue("anon-sc-alarms-telecare-for-source-20{year}.parquet"),
+    "sc_ch" ~ stringr::str_glue("anon-sc-care_home_for_source-20{year}.parquet"),
+    "sc_hc" ~ stringr::str_glue("anon-sc-home_care_for_source-20{year}.parquet"),
+    "sds" ~ stringr::str_glue("anon-sc-sds-for-source-20{year}.parquet")
+  )
+  }
 
   # Add the base path
   byoc_intermediate_path <- file.path(base_path, file_name)
