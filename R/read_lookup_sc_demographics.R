@@ -1,18 +1,18 @@
 #' Read SC demographics
 #'
-#' @param sc_dvprod_connection Connection to the sc platform
+#' @param denodo_connect Connection to the sc platform
 #' @param BYOC_MODE BYOC_MODE
 #'
 #' @return a [tibble][tibble::tibble-package]
 #' @export
 #'
-read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"), BYOC_MODE) {
+read_lookup_sc_demographics <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "sc_demog", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   sc_demog <- dplyr::tbl(
-    sc_dvprod_connection,
+    denodo_connect,
     dbplyr::in_schema("social_care_2", "demographic_snapshot") # TODO: update SDL table
   ) %>%
     dplyr::select(
