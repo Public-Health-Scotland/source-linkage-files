@@ -13,7 +13,7 @@ read_lookup_sc_demographics <- function(denodo_connect = get_denodo_connection(B
 
   sc_demog <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("social_care_2", "demographic_snapshot") # TODO: update SDL table
+    dbplyr::in_schema("social_care_2", get_sdl_raw_names(type = "sc_demographics")) # TODO: update SDL table
   ) %>%
     dplyr::select(
       "latest_record_flag",
