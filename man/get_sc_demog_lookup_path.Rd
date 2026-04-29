@@ -4,7 +4,7 @@
 \alias{get_sc_demog_lookup_path}
 \title{Social Care Demographic Lookup File Path}
 \usage{
-get_sc_demog_lookup_path(update = latest_update(), ...)
+get_sc_demog_lookup_path(update = latest_update(), BYOC_MODE)
 }
 \arguments{
 \item{update}{The update month to use,
