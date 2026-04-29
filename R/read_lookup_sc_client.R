@@ -4,26 +4,35 @@
 #' social care client lookup
 #'
 #' @param fyyear The year to process, in the standard format '1718'
-#' @param sc_dvprod_connection The connection to the SC platform.
+#' @param denodo_connect The connection to the SC platform.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 read_lookup_sc_client <- function(fyyear,
-                                  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+                                  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                  BYOC_MODE) {
+
   log_slf_event(stage = "read", status = "start", type = "client", year = fyyear)
 
   check_year_format(fyyear)
   year <- convert_fyyear_to_year(fyyear)
 
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # extract fy client data
-  client_fy_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_fy_snapshot")) %>%
+  client_fy_extract <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_client_fy_snapshot") # TO-DO: Update table name
+    ) %>%
     dplyr::filter(.data$financial_year == year) %>%
     dplyr::collect()
 
   # extract qtr client data
-  client_qtr_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_qtr_snapshot")) %>%
+  client_qtr_extract <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_client_qtr_snapshot") # TO-DO: Update table name
+    ) %>%
     dplyr::filter(.data$financial_year == year) %>%
     dplyr::collect()
 
@@ -99,19 +108,6 @@ read_lookup_sc_client <- function(fyyear,
     dplyr::pull(.data$financial_quarter) %>%
     utils::head(1)
   cli::cli_alert_info(stringr::str_glue("Social care client data for Year {fyyear} is available up to Q{latest_quarter}."))
-
-
-  if (!fs::file_exists(get_sandpit_extract_path(type = "client", year = fyyear))) {
-    client_data %>%
-      write_file(get_sandpit_extract_path(type = "client", year = fyyear),
-        group_id = 3206 # hscdiip owner
-      )
-
-    client_data %>%
-      process_tests_sc_sandpit(type = "client", year = fyyear)
-  } else {
-    client_data <- client_data
-  }
 
   log_slf_event(stage = "read", status = "complete", type = "client", year = fyyear)
 
