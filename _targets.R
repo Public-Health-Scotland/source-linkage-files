@@ -156,7 +156,10 @@ list(
     # Target name
     sc_demog_data,
     # Function
-    read_lookup_sc_demographics(),
+    read_lookup_sc_demographics(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = sc_demog_data,
       age = as.difftime(28.0, units = "days")
@@ -170,7 +173,10 @@ list(
     process_lookup_sc_demographics(
       sc_demog_data,
       all_care_home_extract,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
