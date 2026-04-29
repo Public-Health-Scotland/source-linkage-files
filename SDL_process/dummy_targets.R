@@ -82,35 +82,35 @@ list(
 
   ## Stage 2.1 - non year specific ----
 
-  ### Long-Term Conditions (LTCs) Activity ----
-  # READ - LTCs
-  tar_target(
-    ltc_data,
-    read_lookup_ltc(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
+  # ### Long-Term Conditions (LTCs) Activity ----
+  # # READ - LTCs
+  # tar_target(
+  #   ltc_data,
+  #   read_lookup_ltc(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
 
   ## Stage 2.2 - year specific ----
   tar_map(
     list(year = years_to_run),
 
-    ### Long-Term Conditions (LTCs) Activity ----
-    # PROCESS - LTCs
-    tar_target(
-      # Target name
-      source_ltc_lookup,
-      # Function
-      process_lookup_ltc(
-        ltc_data,
-        year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    )
+    # ### Long-Term Conditions (LTCs) Activity ----
+    # # PROCESS - LTCs
+    # tar_target(
+    #   # Target name
+    #   source_ltc_lookup,
+    #   # Function
+    #   process_lookup_ltc(
+    #     ltc_data,
+    #     year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # )
     # # TESTS - LTCs
     # tar_target(
     #   # Target name
@@ -177,6 +177,34 @@ list(
     #     run_date_time = run_date_time
     #   )
     # )
+    #
+    ### Social Care Client Activity-----
+    # READ - Client data
+    tar_target(
+      # Target name
+      sc_client_data,
+      # Function
+      read_lookup_sc_client(
+        fyyear = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE)
+    ),
+    # PROCESS - Client data
+    tar_target(
+      # Target name
+      sc_client_lookup,
+      # Function
+      process_lookup_sc_client(
+        data = sc_client_data,
+        year = year,
+        sc_demographics = sc_demog_lookup %>%
+          dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
   )
 )
 
