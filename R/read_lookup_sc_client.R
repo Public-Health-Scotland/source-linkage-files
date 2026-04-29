@@ -4,7 +4,7 @@
 #' social care client lookup
 #'
 #' @param fyyear The year to process, in the standard format '1718'
-#' @param denodo_connect The connection to the SC platform.
+#' @param denodo_connect The connection to the SDL platform.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
