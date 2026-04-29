@@ -4,6 +4,7 @@
 #'
 #' @param update The update month to use,
 #' defaults to [latest_update()]
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #'
@@ -12,7 +13,7 @@
 #' @export
 #' @family social care lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_sc_demog_lookup_path <- function(update = latest_update(), BYOC_MODE) {
+get_sc_demog_lookup_path <- function(update = latest_update(), BYOC_MODE, ...) {
   if (isTRUE(BYOC_MODE)) {
     sc_demog_lookup_path <- file.path(
       denodo_output_path(),
