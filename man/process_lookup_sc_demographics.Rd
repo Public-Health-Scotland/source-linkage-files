@@ -7,7 +7,6 @@
 process_lookup_sc_demographics(
   data,
   all_care_home_extract,
-  spd_path = get_spd_path(),
   uk_pc_path = get_uk_postcode_path(),
   BYOC_MODE = FALSE,
   run_id = NA,
@@ -19,8 +18,6 @@ process_lookup_sc_demographics(
 \item{data}{The extract to process.}
 
 \item{all_care_home_extract}{The raw extracts produced by read_sc_all_care_home().}
-
-\item{spd_path}{Path to the Scottish Postcode Directory.}
 
 \item{uk_pc_path}{UK Postcode directory}
 
