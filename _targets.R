@@ -905,7 +905,11 @@ list(
       # Target name
       sc_client_data,
       # Function
-      read_lookup_sc_client(fyyear = year)
+      read_lookup_sc_client(
+        fyyear = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Client data
     tar_target(
@@ -917,7 +921,10 @@ list(
         year = year,
         sc_demographics = sc_demog_lookup %>%
           dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Client data
