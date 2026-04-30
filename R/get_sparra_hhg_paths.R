@@ -64,8 +64,6 @@ get_sparra_path <- function(year, ...) {
 get_sparra_data <- function(year,
                             denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                             BYOC_MODE) {
-
-
   if (isTRUE(BYOC_MODE)) {
     extract_sparra <- dplyr::tbl(
       denodo_connect,
@@ -78,4 +76,3 @@ get_sparra_data <- function(year,
   }
   return(extract_sparra)
 }
-
