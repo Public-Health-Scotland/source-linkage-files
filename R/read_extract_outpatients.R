@@ -19,11 +19,12 @@ read_extract_outpatients <- function(
   # Read BOXI extract
   extract_outpatients <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_outpatients_source")) %>%
+    dbplyr::in_schema("sdl", "sdl_outpatients_source")
+  ) %>%
     # Filter by year
     dplyr::filter(
       .data$clinic_date_fin_year == c_year
-      ) %>%
+    ) %>%
     # Rename variables
     dplyr::select(
       clinic_date_fy = "clinic_date_fin_year",
@@ -61,7 +62,7 @@ read_extract_outpatients <- function(
       nhshosp = "nhs_hospital_flag",
       commhosp = "community_hospital_flag",
       cost_total_net = "total_net_cost"
-    )  %>%
+    ) %>%
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
