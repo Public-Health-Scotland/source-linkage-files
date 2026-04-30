@@ -14,7 +14,6 @@
 #' @family social care episodes file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_ch_episodes_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     sc_ch_episodes_path <- file.path(
       denodo_output_path(),
