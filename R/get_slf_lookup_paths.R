@@ -39,7 +39,6 @@ get_uk_postcode_path <- function(...) {
 #' @family lookup file paths
 get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                  BYOC_MODE) {
-
   if (isTRUE(BYOC_MODE)) {
     extract_uk_pc <- dplyr::tbl(
       denodo_connect,
@@ -50,7 +49,6 @@ get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MOD
     uk_pc_data <- read_file(get_uk_postcode_path())
   }
   return(uk_pc_data)
-
 }
 
 
