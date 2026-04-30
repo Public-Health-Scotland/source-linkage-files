@@ -75,7 +75,7 @@ process_lookup_sc_demographics <- function(
   valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
     sort()
 
-  ch_pc <- openxlsx::read.xlsx(get_slf_ch_name_lookup_path()) %>%
+  ch_pc <- get_slf_ch_name_lookup_data() %>%
     dplyr::select("AccomPostCodeNo") %>%
     dplyr::rename("ch_pc" = "AccomPostCodeNo") %>%
     dplyr::mutate(ch_pc = phsmethods::format_postcode(.data$ch_pc, quiet = TRUE)) %>%
