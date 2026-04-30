@@ -16,13 +16,14 @@
 #' @export
 #' @family process extracts
 process_extract_care_home <- function(
-    data,
-    year,
-    ch_costs,
-    BYOC_MODE = FALSE,
-    run_id = NA,
-    run_date_time = NA,
-    write_to_disk = TRUE) {
+  data,
+  year,
+  ch_costs,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
+  write_to_disk = TRUE
+) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = year)
 
   # Only run for a single year
