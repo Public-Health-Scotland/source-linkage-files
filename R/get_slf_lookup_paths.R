@@ -196,7 +196,6 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                         BYOC_MODE) {
-
   if (isTRUE(BYOC_MODE)) {
     extract_ch_name_lookup <- dplyr::tbl(
       denodo_connect,
@@ -208,4 +207,3 @@ get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(B
   }
   return(ch_name_lookup_data)
 }
-
