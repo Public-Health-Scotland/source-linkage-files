@@ -8,8 +8,6 @@ process_sc_all_care_home(
   data,
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   refined_death = read_file(get_combined_slf_deaths_lookup_path()),
-  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
   write_to_disk = TRUE
 )
 }
@@ -21,11 +19,6 @@ process_sc_all_care_home(
 
 \item{refined_death}{The processed lookup of deaths from IT produced
 with \code{\link[=process_refined_death]{process_refined_death()}}.}
-
-\item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
-
-\item{spd_path}{(Optional) Path the Scottish Postcode Directory, default is
-to use \code{\link[=get_spd_path]{get_spd_path()}}.}
 
 \item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
