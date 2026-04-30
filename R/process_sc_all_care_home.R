@@ -17,13 +17,14 @@
 #'
 #' @export
 process_sc_all_care_home <- function(
-    data,
-    sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
-    refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
-    BYOC_MODE = FALSE,
-    run_id = NA,
-    run_date_time = NA,
-    write_to_disk = TRUE) {
+  data,
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
+  write_to_disk = TRUE
+) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = "all")
 
   sending_location <- social_care_id <- financial_year <- NULL
