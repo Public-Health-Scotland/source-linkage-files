@@ -6,7 +6,7 @@
 \usage{
 process_lookup_sc_demographics(
   data,
-  all_care_home_extract,
+  all_care_home_extract = read_sc_all_care_home(),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,

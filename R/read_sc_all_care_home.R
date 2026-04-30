@@ -1,17 +1,18 @@
 #' Read Social Care - Care Home data
 #'
-#' @param sc_dvprod_connection Connection to the SC platform
+#' @param denodo_connect Connection to denodo
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return an extract of the data as a [tibble][tibble::tibble-package].
 #'
 #' @export
 #'
-read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_sc_all_care_home <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "ch", year = "all")
 
   ch_data <- dplyr::tbl(
-    sc_dvprod_connection,
-    dbplyr::in_schema("social_care_2", "carehome_snapshot")
+    denodo_connect,
+    dbplyr::in_schema("social_care_2", "carehome_snapshot") # TODO: update SDL table
   ) %>%
     dplyr::select(
       "ch_name",
@@ -38,18 +39,6 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
     dplyr::pull(.data$period) %>%
     utils::head(1)
   cli::cli_alert_info(stringr::str_glue("Care Home data is available up to {latest_quarter}."))
-
-  if (!fs::file_exists(get_sandpit_extract_path(type = "ch"))) {
-    ch_data %>%
-      write_file(get_sandpit_extract_path(type = "ch"),
-        group_id = 3206 # hscdiip owner
-      )
-
-    ch_data %>%
-      process_tests_sc_sandpit(type = "ch")
-  } else {
-    ch_data <- ch_data
-  }
 
   ch_data <- ch_data %>%
     # Correct FY 2017 as data collection only started in 2017 Q4
