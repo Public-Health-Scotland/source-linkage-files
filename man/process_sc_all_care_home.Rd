@@ -7,7 +7,7 @@
 process_sc_all_care_home(
   data,
   sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
-  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
   write_to_disk = TRUE
 )
 }
