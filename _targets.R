@@ -172,8 +172,10 @@ list(
     # Function
     process_lookup_sc_demographics(
       sc_demog_data,
-      all_care_home_extract = read_sc_all_care_home(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                                    BYOC_MODE = BYOC_MODE),
+      all_care_home_extract = read_sc_all_care_home(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      ),
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
