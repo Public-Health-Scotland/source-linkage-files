@@ -13,9 +13,10 @@
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(
-    open_data = get_gpprac_opendata(),
-    gpprac_ref_path = get_gpprac_ref_path(),
-    write_to_disk = TRUE) {
+  open_data = get_gpprac_opendata(),
+  gpprac_ref_path = get_gpprac_ref_path(),
+  write_to_disk = TRUE
+) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_slf_lookup", year = "all")
 
   gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
