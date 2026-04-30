@@ -5,88 +5,66 @@
 #' @export
 read_extract_outpatients <- function(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "outpatient")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "outpatient", BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "outpatient", year = year)
 
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   # Read BOXI extract
-  extract_outpatients <- read_file(file_path,
-    col_type = readr::cols(
-      "Clinic Date Fin Year" = readr::col_double(),
-      "Clinic Date (00)" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Episode Record Key (SMR00) [C]" = readr::col_character(),
-      "anon_chi" = readr::col_character(),
-      "Pat Gender Code" = readr::col_double(),
-      "Pat Date Of Birth [C]" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Practice Location Code" = readr::col_character(),
-      "Practice NHS Board Code - current" = readr::col_character(),
-      "Geo Postcode [C]" = readr::col_character(),
-      "NHS Board of Residence Code - current" = readr::col_character(),
-      "Geo Council Area Code" = readr::col_character(),
-      "Treatment Location Code" = readr::col_character(),
-      "Treatment NHS Board Code - current" = readr::col_character(),
-      "Operation 1A Code (4 char)" = readr::col_character(),
-      "Operation 1B Code (4 char)" = readr::col_character(),
-      "Date of Main Operation(00)" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Operation 2A Code (4 char)" = readr::col_character(),
-      "Operation 2B Code (4 char)" = readr::col_character(),
-      "Date of Operation 2 (00)" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Specialty Classificat. 1/4/97 Code" = readr::col_character(),
-      "Significant Facility Code" = readr::col_character(),
-      "Consultant/HCP Code" = readr::col_character(),
-      "Patient Category Code" = readr::col_character(),
-      "Referral Source Code" = readr::col_character(),
-      "Referral Type Code" = readr::col_double(),
-      "Clinic Type Code" = readr::col_double(),
-      "Clinic Attendance (Status) Code" = readr::col_double(),
-      "Age at Midpoint of Financial Year" = readr::col_double(),
-      "Alcohol Related Admission" = readr::col_character(),
-      "Substance Misuse Related Admission" = readr::col_character(),
-      "Falls Related Admission" = readr::col_character(),
-      "Self Harm Related Admission" = readr::col_character(),
-      "NHS Hospital Flag" = readr::col_character(),
-      "Community Hospital Flag" = readr::col_character(),
-      "Total Net Costs" = readr::col_double()
-    )
+  extract_outpatients <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_outpatients_source")
   ) %>%
+    # Filter by year
+    dplyr::filter(
+      .data$clinic_date_fin_year == c_year
+    ) %>%
     # Rename variables
-    dplyr::rename(
-      clinic_date_fy = "Clinic Date Fin Year",
-      record_keydate1 = "Clinic Date (00)",
-      dob = "Pat Date Of Birth [C]",
-      age = "Age at Midpoint of Financial Year",
-      alcohol_adm = "Alcohol Related Admission",
-      attendance_status = "Clinic Attendance (Status) Code",
-      clinic_type = "Clinic Type Code",
-      commhosp = "Community Hospital Flag",
-      conc = "Consultant/HCP Code",
-      uri = "Episode Record Key (SMR00) [C]",
-      falls_adm = "Falls Related Admission",
-      lca = "Geo Council Area Code",
-      postcode = "Geo Postcode [C]",
-      hbrescode = "NHS Board of Residence Code - current",
-      nhshosp = "NHS Hospital Flag",
-      op1a = "Operation 1A Code (4 char)",
-      op1b = "Operation 1B Code (4 char)",
-      dateop1 = "Date of Main Operation(00)",
-      op2a = "Operation 2A Code (4 char)",
-      op2b = "Operation 2B Code (4 char)",
-      dateop2 = "Date of Operation 2 (00)",
-      gender = "Pat Gender Code",
-      anon_chi = "anon_chi",
-      cat = "Patient Category Code",
-      gpprac = "Practice Location Code",
-      hbpraccode = "Practice NHS Board Code - current",
-      refsource = "Referral Source Code",
-      reftype = "Referral Type Code",
-      selfharm_adm = "Self Harm Related Admission",
-      sigfac = "Significant Facility Code",
-      spec = "Specialty Classificat. 1/4/97 Code",
-      submis_adm = "Substance Misuse Related Admission",
-      cost_total_net = "Total Net Costs",
-      location = "Treatment Location Code",
-      hbtreatcode = "Treatment NHS Board Code - current"
-    )
+    dplyr::select(
+      clinic_date_fy = "clinic_date_fin_year",
+      record_keydate1 = "clinic_date",
+      uri = "episode_record_key",
+      chi = "patient_chi",
+      gender = "patient_sex",
+      dob = "patient_dob",
+      gpprac = "practice_location_code",
+      hbpraccode = "practice_nhs_board_code_curr",
+      postcode = "geo_postcode",
+      hbrescode = "nhs_board_of_residence_code_curr",
+      lca = "geo_council_area_code",
+      location = "treatment_location_code",
+      hbtreatcode = "treatment_nhs_board_code_curr",
+      op1a = "operation_1a_code",
+      op1b = "operation_1b_code",
+      dateop1 = "date_of_main_operation",
+      op2a = "operation_2a_code",
+      op2b = "operation_2b_code",
+      dateop2 = "date_of_operation_2",
+      spec = "specialty_classification_1_4_97_code",
+      sigfac = "significant_facility_code",
+      conc = "consultant_hcp_code",
+      cat = "patient_category_code",
+      refsource = "referral_source_code",
+      reftype = "referral_type_code",
+      clinic_type = "clinic_type_code",
+      attendance_status = "clinic_attendance_code",
+      age = "age_at_midpoint_of_financial_year",
+      alcohol_adm = "alcohol_related_admission",
+      submis_adm = "substance_misuse_related_admission",
+      falls_adm = "falls_related_admission",
+      selfharm_adm = "self_harm_related_admission",
+      nhshosp = "nhs_hospital_flag",
+      commhosp = "community_hospital_flag",
+      cost_total_net = "total_net_cost"
+    ) %>%
+    dplyr::collect() %>%
+    slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "outpatient", year = year)
 

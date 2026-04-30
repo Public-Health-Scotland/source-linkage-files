@@ -84,13 +84,13 @@ list(
 
   ### Long-Term Conditions (LTCs) Activity ----
   # READ - LTCs
-  tar_target(
-    ltc_data,
-    read_lookup_ltc(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
+  # tar_target(
+  #   ltc_data,
+  #   read_lookup_ltc(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
 
   ## Stage 2.2 - year specific ----
   tar_map(
@@ -98,19 +98,19 @@ list(
 
     ### Long-Term Conditions (LTCs) Activity ----
     # PROCESS - LTCs
-    tar_target(
-      # Target name
-      source_ltc_lookup,
-      # Function
-      process_lookup_ltc(
-        ltc_data,
-        year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    )
+    # tar_target(
+    #   # Target name
+    #   source_ltc_lookup,
+    #   # Function
+    #   process_lookup_ltc(
+    #     ltc_data,
+    #     year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # )
     # # TESTS - LTCs
     # tar_target(
     #   # Target name
@@ -177,6 +177,33 @@ list(
     #     run_date_time = run_date_time
     #   )
     # )
+    # Outpatients (SMR00) Activity----------------------------------------------
+    # READ - Outpatients
+    tar_target(
+      # Target name
+      outpatients_data,
+      # Function
+      read_extract_outpatients(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "outpatient", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Outpatients
+    tar_target(
+      # Target name
+      source_outpatients_extract,
+      # Function
+      process_extract_outpatients(
+        data = outpatients_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
   )
 )
 
