@@ -31,6 +31,29 @@ get_uk_postcode_path <- function(...) {
   )
 }
 
+
+#' get uk postcode list file data
+#' @description get uk postcode list file
+#' @param denodo_connect connection to denodo
+#' @param BYOC_MODE BYOC_MODE
+#' @family lookup file paths
+get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                 BYOC_MODE) {
+
+  if (isTRUE(BYOC_MODE)) {
+    extract_uk_pc <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_uk_postcode_source") ### TODO check SDL name ###
+    ) %>%
+      collect()
+  } else {
+    uk_pc_data <- read_file(get_uk_postcode_path())
+  }
+  return(uk_pc_data)
+
+}
+
+
 #' SLF GP Lookup File Path
 #'
 #' @description Get the full path to the SLF GP practice lookup

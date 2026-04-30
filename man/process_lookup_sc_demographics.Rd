@@ -7,7 +7,6 @@
 process_lookup_sc_demographics(
   data,
   all_care_home_extract,
-  uk_pc_path = get_uk_postcode_path(),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
@@ -18,8 +17,6 @@ process_lookup_sc_demographics(
 \item{data}{The extract to process.}
 
 \item{all_care_home_extract}{The raw extracts produced by read_sc_all_care_home().}
-
-\item{uk_pc_path}{UK Postcode directory}
 
 \item{BYOC_MODE}{BYOC_MODE}
 

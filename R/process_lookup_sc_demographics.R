@@ -6,7 +6,6 @@
 #'
 #' @param data The extract to process.
 #' @param all_care_home_extract The raw extracts produced by read_sc_all_care_home().
-#' @param uk_pc_path UK Postcode directory
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
@@ -19,7 +18,6 @@
 process_lookup_sc_demographics <- function(
   data,
   all_care_home_extract,
-  uk_pc_path = get_uk_postcode_path(),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
@@ -71,7 +69,7 @@ process_lookup_sc_demographics <- function(
   valid_spd_postcodes <- get_spd_data() %>%
     dplyr::pull(.data$pc7)
 
-  valid_uk_postcodes <- read_file(uk_pc_path) %>%
+  valid_uk_postcodes <- get_uk_postcode_data() %>%
     dplyr::pull()
   # combine them as some deleted scottish pc are not in the uk pc list
   valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
