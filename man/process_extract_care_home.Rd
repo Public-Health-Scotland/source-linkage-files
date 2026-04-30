@@ -4,7 +4,15 @@
 \alias{process_extract_care_home}
 \title{Process the (year specific) Care Home extract}
 \usage{
-process_extract_care_home(data, year, ch_costs, write_to_disk = TRUE)
+process_extract_care_home(
+  data,
+  year,
+  ch_costs,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
+  write_to_disk = TRUE
+)
 }
 \arguments{
 \item{data}{The full processed data which will be selected from to create
@@ -13,6 +21,8 @@ the year specific data.}
 \item{year}{The year to process, in FY format.}
 
 \item{ch_costs}{The Care Home costs lookup}
+
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
