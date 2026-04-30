@@ -27,6 +27,7 @@ Other extract file paths:
 \code{\link{get_it_ltc_path}()},
 \code{\link{get_it_prescribing_path}()},
 \code{\link{get_source_extract_path}()},
+\code{\link{get_sparra_data}()},
 \code{\link{get_sparra_path}()}
 }
 \concept{extract file paths}
