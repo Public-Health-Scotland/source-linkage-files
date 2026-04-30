@@ -18,8 +18,8 @@
 #' @export
 process_sc_all_care_home <- function(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = "all")
