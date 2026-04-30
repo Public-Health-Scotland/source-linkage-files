@@ -26,7 +26,7 @@ get_sdl_raw_names <- function(type) {
 get_sdl_processed_data <- function(type,
                                    year,
                                    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                   BYOC_MODE) {
+                                   BYOC_MODE){
 
 
   if (BYOC_MODE) {
@@ -53,10 +53,7 @@ get_sdl_processed_data <- function(type,
   }else{
     sdl_name <- dplyr::case_match( ### TODO: change to recode_values ###
       type,
-      "acute_processed" ~ get_source_extract_path(type = "acute", year = year,BYOC_MODE = BYOC_MODE)
-      "sc_ch_all" ~ get_sc_ch_episodes_path()
-
+      "acute_processed" ~ get_source_extract_path(type = "acute", year = year,BYOC_MODE = BYOC_MODE),
+      "sc_ch_all" ~ get_sc_ch_episodes_path())
   }
-
-
 }
