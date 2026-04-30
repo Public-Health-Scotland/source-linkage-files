@@ -10,6 +10,7 @@
 #' @param ch_costs The Care Home costs lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -18,6 +19,9 @@ process_extract_care_home <- function(
   data,
   year,
   ch_costs,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = year)
@@ -134,12 +138,17 @@ process_extract_care_home <- function(
       "cost_total_net",
       dplyr::ends_with("_beddays"),
       dplyr::ends_with("_cost")
+    ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
     write_file(
       ch_processed,
-      get_source_extract_path(year, type = "ch", check_mode = "write"),
+      get_source_extract_path(year, type = "ch", check_mode = "write", BYOC_MODE),
+      BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
