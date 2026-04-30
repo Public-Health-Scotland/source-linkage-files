@@ -366,8 +366,10 @@ list(
     # Target name
     all_care_home_extract,
     # Function
-    read_sc_all_care_home(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                          BYOC_MODE),
+    read_sc_all_care_home(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = all_care_home_extract,
       age = as.difftime(28.0, units = "days")
