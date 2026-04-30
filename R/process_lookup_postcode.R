@@ -12,15 +12,14 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_postcode <- function(spd_path = get_spd_path(),
-                                    simd_path = get_simd_path(),
+process_lookup_postcode <- function(simd_path = get_simd_path(),
                                     locality_path = get_locality_path(),
                                     write_to_disk = TRUE) {
   # Read lookup files -------------------------------------------------------
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 
   # postcode data
-  spd_file <- read_file(spd_path) %>%
+  spd_file <- get_spd_data() %>%
     dplyr::select(
       "pc7",
       # tidyselect::matches("datazone\\d{4}$"),
