@@ -19,7 +19,6 @@ process_extract_sds <- function(data,
                                 BYOC_MODE = FALSE,
                                 run_id = NULL,
                                 run_date_time = NULL) {
-
   log_slf_event(stage = "process", status = "start", type = "sds", year = year)
 
   # Only run for a single year

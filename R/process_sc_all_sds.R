@@ -20,7 +20,6 @@ process_sc_all_sds <- function(data,
                                BYOC_MODE = FALSE,
                                run_id = NULL,
                                run_date_time = NULL) {
-
   log_slf_event(stage = "process", status = "start", type = "sds", year = "all")
 
   # fix "no visible binding for global variable"
