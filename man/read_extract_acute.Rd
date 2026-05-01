@@ -6,7 +6,9 @@
 \usage{
 read_extract_acute(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "acute")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
