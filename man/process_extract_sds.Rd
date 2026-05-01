@@ -4,7 +4,14 @@
 \alias{process_extract_sds}
 \title{Process the (year specific) SDS extract}
 \usage{
-process_extract_sds(data, year, write_to_disk = TRUE)
+process_extract_sds(
+  data,
+  year,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NULL,
+  run_date_time = NULL
+)
 }
 \arguments{
 \item{data}{The full processed data which will be selected from to create
@@ -14,6 +21,12 @@ the year specific data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -21,7 +34,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 (year specific) SDS extract, it will return the final data
-and (optionally) write it to disk.
+and (optionally) write it to disk when it is 'TRUE'.
 }
 \seealso{
 Other process extracts: 
