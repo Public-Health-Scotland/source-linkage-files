@@ -388,7 +388,10 @@ list(
     # Target name
     all_sds_extract,
     # Function
-    read_sc_all_sds(),
+    read_sc_all_sds(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = all_sds_extract,
       age = as.difftime(28.0, units = "days")
@@ -402,6 +405,9 @@ list(
     process_sc_all_sds(
       all_sds_extract,
       sc_demog_lookup = sc_demog_lookup,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -1009,6 +1015,9 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time,
         write_to_disk = write_to_disk
       )
     ),
