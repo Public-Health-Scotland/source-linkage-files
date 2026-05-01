@@ -1,19 +1,19 @@
 #' Read Social Care Alarms Telecare data
 #'
-#' @param sc_dvprod_connection Connection to the SC platform
+#' @param sc_dvprod_connection Connection to the BI denodo platform
 #'
 #' @return an extract of the data as a [tibble][tibble::tibble-package].
 #'
 #' @export
 #'
-read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_sc_all_alarms_telecare <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
   # Read in data---------------------------------------
   log_slf_event(stage = "read", status = "start", type = "at", year = "all")
 
   ## read in data - social care 2 demographic
   at_full_data <- dplyr::tbl(
-    sc_dvprod_connection,
-    dbplyr::in_schema("social_care_2", "equipment_snapshot")
+    denodo_connect,
+    dbplyr::in_schema("social_care_2", "equipment_snapshot") # TODO: update SDL table
   ) %>%
     dplyr::select(
       "sending_location",
@@ -34,18 +34,6 @@ read_sc_all_alarms_telecare <- function(sc_dvprod_connection = phs_db_connection
     dplyr::pull(.data$period) %>%
     utils::head(1)
   cli::cli_alert_info(stringr::str_glue("Alarm Telecare data is available up to {latest_quarter}."))
-
-  if (!fs::file_exists(get_sandpit_extract_path(type = "at"))) {
-    at_full_data %>%
-      write_file(get_sandpit_extract_path(type = "at"),
-        group_id = 3206 # hscdiip owner
-      )
-
-    at_full_data %>%
-      process_tests_sc_sandpit(type = "at")
-  } else {
-    at_full_data <- at_full_data
-  }
 
   at_full_data <- at_full_data %>%
     dplyr::mutate(
