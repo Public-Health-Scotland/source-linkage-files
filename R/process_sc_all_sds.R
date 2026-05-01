@@ -1,20 +1,26 @@
 #' Process the all SDS extract
 #' @description This will read and process the
 #' all SDS extract, it will return the final data
-#' and (optionally) write it to disk.
+#' and (optionally) write it to disk when it is 'TRUE'.
 #'
 #' @inheritParams process_sc_all_care_home
+#'
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 #'
 #' @export
 #'
-process_sc_all_sds <- function(
-  data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-  write_to_disk = TRUE
-) {
+process_sc_all_sds <- function(data,
+                               sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+                               write_to_disk = TRUE,
+                               BYOC_MODE = FALSE,
+                               run_id = NULL,
+                               run_date_time = NULL) {
+
   log_slf_event(stage = "process", status = "start", type = "sds", year = "all")
 
   # fix "no visible binding for global variable"
@@ -191,14 +197,21 @@ process_sc_all_sds <- function(
   # Drop episode_counter and convert back to data.frame if needed
   final_data <- as.data.frame(final_data[, -"episode_counter"]) %>%
     create_person_id() %>%
-    select_linking_id()
+    select_linking_id() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   # final_data now holds the processed data in the format of a data.frame
 
   if (write_to_disk) {
     write_file(
       final_data,
-      get_sc_sds_episodes_path(check_mode = "write"),
-      group_id = 3206 # hscdiip owner
+      get_sc_sds_episodes_path(BYOC_MODE = BYOC_MODE, check_mode = "write"),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   }
 
