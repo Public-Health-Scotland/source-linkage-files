@@ -18,7 +18,9 @@ Other lookup file paths:
 \code{\link{get_locality_path}()},
 \code{\link{get_pop_path}()},
 \code{\link{get_simd_path}()},
+\code{\link{get_spd_data}()},
 \code{\link{get_spd_path}()},
+\code{\link{get_uk_postcode_data}()},
 \code{\link{get_uk_postcode_path}()}
 
 Other directories: 

@@ -9,9 +9,6 @@
 #' [process_lookup_sc_demographics()].
 #' @param refined_death The processed lookup of deaths from IT produced
 #' with [process_refined_death()].
-#' @param ch_name_lookup_path Path to the Care Home name Lookup Excel workbook.
-#' @param spd_path (Optional) Path the Scottish Postcode Directory, default is
-#' to use [get_spd_path()].
 #' @param write_to_disk (Optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -23,8 +20,6 @@ process_sc_all_care_home <- function(
   data,
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   refined_death = read_file(get_combined_slf_deaths_lookup_path()),
-  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = "all")
@@ -86,8 +81,8 @@ process_sc_all_care_home <- function(
   # cleaning and matching care home names
   name_postcode_clean <- fill_ch_names(
     ch_data = data,
-    ch_name_lookup_path = ch_name_lookup_path,
-    spd_path = spd_path
+    ch_name_lookup_path = get_slf_ch_name_lookup_data(),
+    spd_path = get_spd_data()
   )
 
   fixed_ch_provider <- name_postcode_clean %>%

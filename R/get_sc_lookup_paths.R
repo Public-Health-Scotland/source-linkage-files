@@ -4,6 +4,7 @@
 #'
 #' @param update The update month to use,
 #' defaults to [latest_update()]
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #'
@@ -12,12 +13,19 @@
 #' @export
 #' @family social care lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
-  sc_demog_lookup_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_demographic_lookup"),
-    file_name = stringr::str_glue("anon-sc_demographics_lookup_{update}.parquet"),
-    ...
-  )
+get_sc_demog_lookup_path <- function(update = latest_update(), BYOC_MODE, ...) {
+  if (isTRUE(BYOC_MODE)) {
+    sc_demog_lookup_path <- file.path(
+      denodo_output_path(),
+      stringr::str_glue("anon-sc_demographics_lookup.parquet")
+    )
+  } else {
+    sc_demog_lookup_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_demographic_lookup"),
+      file_name = stringr::str_glue("anon-sc_demographics_lookup_{update}.parquet"),
+      ...
+    )
+  }
 
   return(sc_demog_lookup_path)
 }

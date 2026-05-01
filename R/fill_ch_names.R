@@ -2,27 +2,19 @@
 #'
 #' @param ch_data partially cleaned up care home data as a
 #' [tibble][tibble::tibble-package]
-#' @param ch_name_lookup_path Path to the 'official' Care Home name Excel
-#' Workbook, this defaults to [get_slf_ch_name_lookup_path()]
-#' @param spd_path Path to the Scottish Postcode Directory (rds) version, this
-#' defaults to [get_spd_path()]
-#' @param uk_pc_path Path to the UK postcode list. This is defaults to
-#' [get_uk_postcode_path()]
 #'
 #' @return the same data with improved accuracy and completeness of the Care
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
-fill_ch_names <- function(ch_data,
-                          ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-                          spd_path = get_spd_path(),
-                          uk_pc_path = get_uk_postcode_path()) {
+fill_ch_names <- function(ch_data) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
-  spd_list <- dplyr::pull(
-    read_file(spd_path, col_select = "pc7"),
-    "pc7"
-  )
-  uk_pc_list <- dplyr::pull(read_file(uk_pc_path))
+  spd_list <- get_spd_data() %>%
+    dplyr::pull(.data$pc7)
+
+  uk_pc_list <- get_uk_postcode_data() %>%
+    dplyr::pull()
+
 
   ch_data <- ch_data %>%
     # Make the care home name more uniform
@@ -56,9 +48,7 @@ fill_ch_names <- function(ch_data,
 
   # Contact: IntelligenceTeam@careinspectorate.gov.scot
   # for an updated lookup list
-  ch_name_lookup <- openxlsx::read.xlsx(ch_name_lookup_path,
-    detectDates = TRUE
-  ) %>%
+  ch_name_lookup <- get_slf_ch_name_lookup_data() %>%
     # Drop any Care Homes that were closed before 2017/18
     dplyr::select(
       ch_postcode = "AccomPostCodeNo",

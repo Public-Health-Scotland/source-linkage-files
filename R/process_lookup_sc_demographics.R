@@ -6,19 +6,21 @@
 #'
 #' @param data The extract to process.
 #' @param all_care_home_extract The raw extracts produced by read_sc_all_care_home().
-#' @param spd_path Path to the Scottish Postcode Directory.
-#' @param uk_pc_path UK Postcode directory
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_lookup_sc_demographics <- function(
   data,
-  all_care_home_extract,
-  spd_path = get_spd_path(),
-  uk_pc_path = get_uk_postcode_path(),
+  all_care_home_extract = read_sc_all_care_home(BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "sc_demog", year = "all")
@@ -64,15 +66,16 @@ process_lookup_sc_demographics <- function(
   dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
-  valid_spd_postcodes <- read_file(spd_path, col_select = "pc7") %>%
+  valid_spd_postcodes <- get_spd_data() %>%
     dplyr::pull(.data$pc7)
-  valid_uk_postcodes <- read_file(uk_pc_path) %>%
+
+  valid_uk_postcodes <- get_uk_postcode_data() %>%
     dplyr::pull()
   # combine them as some deleted scottish pc are not in the uk pc list
   valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
     sort()
 
-  ch_pc <- openxlsx::read.xlsx(get_slf_ch_name_lookup_path()) %>%
+  ch_pc <- get_slf_ch_name_lookup_data() %>%
     dplyr::select("AccomPostCodeNo") %>%
     dplyr::rename("ch_pc" = "AccomPostCodeNo") %>%
     dplyr::mutate(ch_pc = phsmethods::format_postcode(.data$ch_pc, quiet = TRUE)) %>%
@@ -358,7 +361,11 @@ process_lookup_sc_demographics <- function(
       "date_of_death",
       .direction = "downup"
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   rm(sc_demog_latest_record_flag)
 
@@ -371,7 +378,8 @@ process_lookup_sc_demographics <- function(
 
   if (write_to_disk) {
     write_file(sc_demog_lookup,
-      get_sc_demog_lookup_path(check_mode = "write"),
+      get_sc_demog_lookup_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3206
     ) # hscdiip owner
   }

@@ -31,6 +31,27 @@ get_uk_postcode_path <- function(...) {
   )
 }
 
+
+#' get uk postcode list file data
+#' @description get uk postcode list file
+#' @param denodo_connect connection to denodo
+#' @param BYOC_MODE BYOC_MODE
+#' @family lookup file paths
+get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                 BYOC_MODE) {
+  if (isTRUE(BYOC_MODE)) {
+    extract_uk_pc <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_uk_postcode_source") ### TODO check SDL name ###
+    ) %>%
+      collect()
+  } else {
+    uk_pc_data <- read_file(get_uk_postcode_path())
+  }
+  return(uk_pc_data)
+}
+
+
 #' SLF GP Lookup File Path
 #'
 #' @description Get the full path to the SLF GP practice lookup
@@ -176,4 +197,31 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
     check_mode = "read",
     ...
   )
+}
+
+
+#' SLF Care Home Lookup data
+#'
+#' @description Return data from the Care Home name lookup, which
+#' has official Care Home names and addresses provided by the Care Inspectorate.
+#'
+#' @param denodo_connect connection to denodo
+#' @param BYOC_MODE BYOC_MODE
+#'
+#' @return The path to the Care Home lookup as a dataframe
+#' @export
+#' @family slf lookup file path
+#' @seealso [get_file_path()] for the generic function.
+get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                        BYOC_MODE) {
+  if (isTRUE(BYOC_MODE)) {
+    extract_ch_name_lookup <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source") ### TODO check SDL name ###
+    ) %>%
+      collect()
+  } else {
+    ch_name_lookup_data <- openxlsx::read.xlsx(get_slf_ch_name_lookup_path())
+  }
+  return(ch_name_lookup_data)
 }

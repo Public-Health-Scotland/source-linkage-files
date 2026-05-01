@@ -15,7 +15,6 @@
 process_lookup_gpprac <- function(
   open_data = get_gpprac_opendata(),
   gpprac_ref_path = get_gpprac_ref_path(),
-  spd_path = get_spd_path(),
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_slf_lookup", year = "all")
@@ -30,16 +29,14 @@ process_lookup_gpprac <- function(
       pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
     )
 
-  spd_file <- read_file(
-    path = spd_path,
-    col_select = c(
+  spd_file <- get_spd_data() %>%
+    dplyr::select(c(
       "pc7",
       "pc8",
       "hb2018",
       "hscp2018",
       "ca2018"
-    )
-  )
+    ))
 
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(

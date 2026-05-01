@@ -23,7 +23,9 @@ Other lookup file paths:
 \code{\link{get_lookups_dir}()},
 \code{\link{get_pop_path}()},
 \code{\link{get_simd_path}()},
+\code{\link{get_spd_data}()},
 \code{\link{get_spd_path}()},
+\code{\link{get_uk_postcode_data}()},
 \code{\link{get_uk_postcode_path}()}
 }
 \concept{lookup file paths}

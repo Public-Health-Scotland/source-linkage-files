@@ -6,9 +6,10 @@
 \usage{
 process_lookup_sc_demographics(
   data,
-  all_care_home_extract,
-  spd_path = get_spd_path(),
-  uk_pc_path = get_uk_postcode_path(),
+  all_care_home_extract = read_sc_all_care_home(BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 )
 }
@@ -17,9 +18,11 @@ process_lookup_sc_demographics(
 
 \item{all_care_home_extract}{The raw extracts produced by read_sc_all_care_home().}
 
-\item{spd_path}{Path to the Scottish Postcode Directory.}
+\item{BYOC_MODE}{BYOC_MODE}
 
-\item{uk_pc_path}{UK Postcode directory}
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
