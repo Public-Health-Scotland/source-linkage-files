@@ -7,6 +7,7 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param write_temp_to_disk write intermediate data for investigation or debug
+#' @param BYOC_MODE BYOC mode
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
@@ -31,7 +32,8 @@ create_episode_file <- function(
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
+  write_temp_to_disk = FALSE,
+  BYOC_MODE
 ) {
   log_ep_substage("Create episode file", "started", year)
 
@@ -161,7 +163,7 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
-    join_sparra_hhg(year) %>%
+    join_sparra_hhg(year, BYOC_MODE = BYOC_MODE) %>%
     fill_geographies(
       slf_pc_lookup,
       slf_gpprac_lookup
