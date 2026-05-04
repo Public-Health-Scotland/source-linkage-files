@@ -14,10 +14,10 @@ as MMMYY_MMMYY
 Get the period for Delayed Discharge
 }
 \seealso{
-Other initialisation: 
-\code{\link{latest_cost_year}()},
-\code{\link{latest_update}()},
-\code{\link{previous_update}()},
-\code{\link{years_to_run}()}
+Other initialisation:
+\code{\link[=latest_cost_year]{latest_cost_year()}},
+\code{\link[=latest_update]{latest_update()}},
+\code{\link[=previous_update]{previous_update()}},
+\code{\link[=years_to_run]{years_to_run()}}
 }
 \concept{initialisation}

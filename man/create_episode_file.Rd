@@ -17,7 +17,8 @@ create_episode_file(
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
+  write_temp_to_disk = FALSE,
+  BYOC_MODE
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ create_episode_file(
 \code{TRUE} i.e. write the data to disk.}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
+
+\item{BYOC_MODE}{BYOC mode}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file

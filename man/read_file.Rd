@@ -27,7 +27,7 @@ Read a file, the function chosen to read the file is dependant
 on the file path.
 \itemize{
 \item \code{.rds} uses \code{\link[readr:read_rds]{readr::read_rds()}}.
-\item \code{.csv} and \code{.gz} use \code{\link[readr:read_delim]{readr::read_csv()}}. Note that this assumes any file
+\item \code{.csv} and \code{.gz} use \code{\link[readr:read_csv]{readr::read_csv()}}. Note that this assumes any file
 ending with \code{.gz} is a zipped CSV which isn't necessarily true!
 \item \code{.parquet} uses \code{\link[arrow:read_parquet]{arrow::read_parquet()}}.
 }

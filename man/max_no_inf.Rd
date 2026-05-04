@@ -15,7 +15,7 @@ missing values but doesn't return Inf if all values
 are missing (instead returns NA)
 }
 \seealso{
-Other helper_funs: 
-\code{\link{min_no_inf}()}
+Other helper_funs:
+\code{\link[=min_no_inf]{min_no_inf()}}
 }
 \concept{helper_funs}
