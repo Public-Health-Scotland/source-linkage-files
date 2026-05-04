@@ -17,11 +17,11 @@ a dataframe with a count of each flag.
 Produce the tests for Social Care Demographic Lookup
 }
 \seealso{
-Other social care test functions: 
-\code{\link{produce_sc_all_episodes_tests}()},
-\code{\link{produce_source_at_tests}()},
-\code{\link{produce_source_ltc_tests}()},
-\code{\link{produce_source_sds_tests}()},
-\code{\link{produce_tests_sc_client_lookup}()}
+Other social care test functions:
+\code{\link[=produce_sc_all_episodes_tests]{produce_sc_all_episodes_tests()}},
+\code{\link[=produce_source_at_tests]{produce_source_at_tests()}},
+\code{\link[=produce_source_ltc_tests]{produce_source_ltc_tests()}},
+\code{\link[=produce_source_sds_tests]{produce_source_sds_tests()}},
+\code{\link[=produce_tests_sc_client_lookup]{produce_tests_sc_client_lookup()}}
 }
 \concept{social care test functions}

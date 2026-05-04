@@ -18,12 +18,12 @@ An \code{\link[fs:path]{fs::path()}} to the Scottish Postcode Directory
 Get the path to the centrally held HSCP Localities file.
 }
 \seealso{
-Other lookup file paths: 
-\code{\link{get_gpprac_ref_path}()},
-\code{\link{get_lookups_dir}()},
-\code{\link{get_pop_path}()},
-\code{\link{get_simd_path}()},
-\code{\link{get_spd_path}()},
-\code{\link{get_uk_postcode_path}()}
+Other lookup file paths:
+\code{\link[=get_gpprac_ref_path]{get_gpprac_ref_path()}},
+\code{\link[=get_lookups_dir]{get_lookups_dir()}},
+\code{\link[=get_pop_path]{get_pop_path()}},
+\code{\link[=get_simd_path]{get_simd_path()}},
+\code{\link[=get_spd_path]{get_spd_path()}},
+\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
 }
 \concept{lookup file paths}

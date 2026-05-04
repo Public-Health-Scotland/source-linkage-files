@@ -16,7 +16,7 @@ data with uplifted costs
 Uplift costs
 }
 \seealso{
-Other uplift_costs: 
-\code{\link{lookup_uplift}()}
+Other uplift_costs:
+\code{\link[=lookup_uplift]{lookup_uplift()}}
 }
 \concept{uplift_costs}

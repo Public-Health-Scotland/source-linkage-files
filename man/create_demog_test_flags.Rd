@@ -17,12 +17,12 @@ Missing value flag from \code{\link[=is_missing]{is_missing()}}
 Create the demographic flags for testing
 }
 \seealso{
-Other flag functions: 
-\code{\link{create_hb_cost_test_flags}()},
-\code{\link{create_hb_test_flags}()},
-\code{\link{create_hscp_test_flags}()},
-\code{\link{create_lca_client_test_flags}()},
-\code{\link{create_lca_test_flags}()},
-\code{\link{create_sending_location_test_flags}()}
+Other flag functions:
+\code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}},
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}},
+\code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}},
+\code{\link[=create_lca_client_test_flags]{create_lca_client_test_flags()}},
+\code{\link[=create_lca_test_flags]{create_lca_test_flags()}},
+\code{\link[=create_sending_location_test_flags]{create_sending_location_test_flags()}}
 }
 \concept{flag functions}

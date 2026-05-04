@@ -22,11 +22,11 @@ a dataframe with a count of each flag.
 Produce the test for the Alarm Telecare all episodes
 }
 \seealso{
-Other social care test functions: 
-\code{\link{produce_sc_all_episodes_tests}()},
-\code{\link{produce_sc_demog_lookup_tests}()},
-\code{\link{produce_source_ltc_tests}()},
-\code{\link{produce_source_sds_tests}()},
-\code{\link{produce_tests_sc_client_lookup}()}
+Other social care test functions:
+\code{\link[=produce_sc_all_episodes_tests]{produce_sc_all_episodes_tests()}},
+\code{\link[=produce_sc_demog_lookup_tests]{produce_sc_demog_lookup_tests()}},
+\code{\link[=produce_source_ltc_tests]{produce_source_ltc_tests()}},
+\code{\link[=produce_source_sds_tests]{produce_source_sds_tests()}},
+\code{\link[=produce_tests_sc_client_lookup]{produce_tests_sc_client_lookup()}}
 }
 \concept{social care test functions}
