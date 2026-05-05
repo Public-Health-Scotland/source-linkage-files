@@ -11,7 +11,7 @@ get_denodo_connection(username = NULL, BYOC_MODE = FALSE)
 the function tries to detect it from system environment variables or
 system info.}
 
-\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}}.
+\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect]{odbc::dbConnect()}}.
 The DSN must be configured on the system first (e.g., \code{DVPREPROD} or \code{DVPROD}).}
 }
 \value{
