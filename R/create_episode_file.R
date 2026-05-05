@@ -6,8 +6,8 @@
 #' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE
 #' @param write_temp_to_disk write intermediate data for investigation or debug
-#' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
 #' @inheritParams join_deaths_data
@@ -21,7 +21,6 @@ create_episode_file <- function(
   year,
   dd_data = read_file(get_source_extract_path(year, "dd")),
   homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
   ltc_data = read_file(get_ltcs_path(year)),
   slf_pc_lookup = read_file(get_slf_postcode_path()),
   slf_gpprac_lookup = read_file(
@@ -31,7 +30,8 @@ create_episode_file <- function(
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
+  write_temp_to_disk = FALSE,
+  BYOC_MODE
 ) {
   log_ep_substage("Create episode file", "started", year)
 
@@ -43,7 +43,7 @@ create_episode_file <- function(
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
-    add_nsu_cohort(year, nsu_cohort) %>%
+    add_nsu_cohort(year, BYOC_MODE = BYOC_MODE) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift()
 

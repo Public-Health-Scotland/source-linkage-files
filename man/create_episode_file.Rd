@@ -9,7 +9,6 @@ create_episode_file(
   year,
   dd_data = read_file(get_source_extract_path(year, "dd")),
   homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
   ltc_data = read_file(get_ltcs_path(year)),
   slf_pc_lookup = read_file(get_slf_postcode_path()),
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
@@ -17,7 +16,8 @@ create_episode_file(
   slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
+  write_temp_to_disk = FALSE,
+  BYOC_MODE
 )
 }
 \arguments{
@@ -28,8 +28,6 @@ create_episode_file(
 \item{dd_data}{The processed DD extract}
 
 \item{homelessness_lookup}{the lookup file for homelessness}
-
-\item{nsu_cohort}{The NSU data for the year}
 
 \item{ltc_data}{The LTC data for the year}
 
