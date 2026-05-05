@@ -2,13 +2,18 @@
 % Please edit documentation in R/read_extract_gp_ooh.R
 \name{read_extract_gp_ooh}
 \alias{read_extract_gp_ooh}
-\title{Process the GP OoH extract}
+\title{Read the GP OoH extract}
 \usage{
 read_extract_gp_ooh(
   year,
-  diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d"),
-  outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o"),
-  consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE =
+    BYOC_MODE),
+  outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE =
+    BYOC_MODE),
+  consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE =
+    BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
