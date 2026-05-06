@@ -63,7 +63,7 @@ tar_option_set(
     parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
-  error = "continue",
+  error = "stop",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
