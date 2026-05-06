@@ -20,6 +20,7 @@ Get the full path to the SLF GP practice lookup
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
+<<<<<<< refactor-sc-demog
 Other slf lookup file path: 
 \code{\link{get_combined_slf_deaths_lookup_path}()},
 \code{\link{get_slf_ch_name_lookup_data}()},
@@ -27,5 +28,13 @@ Other slf lookup file path:
 \code{\link{get_slf_chi_deaths_path}()},
 \code{\link{get_slf_deaths_lookup_path}()},
 \code{\link{get_slf_postcode_path}()}
+=======
+Other slf lookup file path:
+\code{\link[=get_combined_slf_deaths_lookup_path]{get_combined_slf_deaths_lookup_path()}},
+\code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
+\code{\link[=get_slf_chi_deaths_path]{get_slf_chi_deaths_path()}},
+\code{\link[=get_slf_deaths_lookup_path]{get_slf_deaths_lookup_path()}},
+\code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
+>>>>>>> development
 }
 \concept{slf lookup file path}
