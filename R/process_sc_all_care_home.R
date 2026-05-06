@@ -64,7 +64,7 @@ process_sc_all_care_home <- function(
     roll = "nearest"
   ]
 
-  uk_pc_directory <- get_uk_postcode_data() %>%
+  uk_pc_directory <- get_uk_postcode_data(BYOC_MODE) %>%
     dplyr::pull()
 
   data <- data %>%
@@ -84,8 +84,8 @@ process_sc_all_care_home <- function(
   # cleaning and matching care home names
   name_postcode_clean <- fill_ch_names(
     ch_data = data,
-    ch_name_lookup_path = get_slf_ch_name_lookup_data(),
-    spd_path = get_spd_data()
+    ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE),
+    spd_path = get_spd_data(BYOC_MODE)
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
