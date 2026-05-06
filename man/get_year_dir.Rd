@@ -21,9 +21,9 @@ Get the directory for Source Linkage File Updates for the given
 year.
 }
 \seealso{
-Other directories: 
-\code{\link{get_dev_dir}()},
-\code{\link{get_lookups_dir}()},
-\code{\link{get_slf_dir}()}
+Other directories:
+\code{\link[=get_dev_dir]{get_dev_dir()}},
+\code{\link[=get_lookups_dir]{get_lookups_dir()}},
+\code{\link[=get_slf_dir]{get_slf_dir()}}
 }
 \concept{directories}
