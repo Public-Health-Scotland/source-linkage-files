@@ -14,91 +14,122 @@
 #' "/sdl_byoc/byoc/output/anon-homelessness_for_source-201920.parquet"
 #' @export
 #' @family file path functions
-get_byoc_intermediate_path <- function(type,
-                                       year = NULL,
-                                       base_path = denodo_output_path()) {
+# Dataset registry - This is where the names will be updated--------------------
+.byoc_dataset_registry <- tibble::tribble(
+  ~type, ~file_stub, ~year_specific,
 
-  if (is.null(year)){
-  file_name <- dplyr::recode_values(
-      type,
-      "chi_deaths" ~ "anon-chi_deaths.parquet",
-      "combined_deaths" ~ "anon-combined_slf_deaths_lookup.parquet"
-      "deaths" ~ "anon-deaths_for_source"
-  )
-  }else{
-  file_name <- dplyr::recode_values(
-    type,
-    "acute" ~ stringr::str_glue("anon-acute_for_source-20{year}.parquet"),
-    "ae" ~ stringr::str_glue("anon-a_and_e_for_source-20{year}.parquet"),
-    "cmh" ~ stringr::str_glue("anon-cmh_for_source-20{year}.parquet"),
-    "dd" ~ stringr::str_glue("anon-dd_for_source-20{year}.parquet"),
-    "nrs_deaths" ~ stringr::str_glue("anon-nrs_deaths_for_source-20{year}.parquet"),
-    "dn" ~ stringr::str_glue("anon-district_nursing_for_source-20{year}.parquet"),
-    "gp_ooh" ~ stringr::str_glue("anon-gp_ooh_for_source-20{year}.parquet"),
-    "homelessness" ~ stringr::str_glue("anon-homelessness_for_source-20{year}.parquet"),
-    "ltcs" ~ stringr::str_glue("anon-LTCs_patient_reference_file-20{year}.parquet"),
-    "maternity" ~ stringr::str_glue("anon-maternity_for_source-20{year}.parquet"),
-    "mh" ~ stringr::str_glue("anon-mental_health_for_source-20{year}.parquet"),
-    "outpatients" ~ stringr::str_glue("anon-outpatients_for_source-20{year}.parquet"),
-    "pis" ~ stringr::str_glue("anon-prescribing_file_for_source-20{year}.parquet"),
-    "sc_client" ~ stringr::str_glue("anon-client_for_source-20{year}.parquet"),
-    "sc_at" ~ stringr::str_glue("anon-sc-alarms-telecare-for-source-20{year}.parquet"),
-    "sc_ch" ~ stringr::str_glue("anon-sc-care_home_for_source-20{year}.parquet"),
-    "sc_hc" ~ stringr::str_glue("anon-sc-home_care_for_source-20{year}.parquet"),
-    "sds" ~ stringr::str_glue("anon-sc-sds-for-source-20{year}.parquet")
-  )
-  }
+  # Year‑specific datasets -----------------------------------------------------
+  "acute",        "anon-acute_for_source", TRUE,
+  "ae",           "anon-a_and_e_for_source", TRUE,
+  "at",           "anon-alarms-telecare-for-source", TRUE,
+  "ch",           "anon-care_home_for_source", TRUE,
+  "cmh",          "anon-cmh_for_source", TRUE,
+  "client",       "anon-client_for_source", TRUE,
+  "dd",           "anon-dd_for_source", TRUE,
+  "deaths",       "anon-deaths_for_source", TRUE,
+  "nrs_deaths",   "anon-nrs_deaths_for_source", TRUE,
+  "dn",           "anon-district_nursing_for_source", TRUE,
+  "gp_ooh",       "anon-gp_ooh_for_source", TRUE,
+  "hc",           "anon-home_care_for_source", TRUE,
+  "homelessness", "anon-homelessness_for_source", TRUE,
+  "ltcs",         "anon-LTCs_patient_reference_file", TRUE,
+  "maternity",    "anon-maternity_for_source", TRUE,
+  "mh",           "anon-mental_health_for_source", TRUE,
+  "outpatients",  "anon-outpatients_for_source", TRUE,
+  "pis",          "anon-prescribing_file_for_source", TRUE,
+  "sds",          "anon-sc-sds-for-source", TRUE,
 
-  # Add the base path
-  byoc_intermediate_path <- file.path(base_path, file_name)
+  # Non‑year‑specific / static datasets ----------------------------------------
+  "chi_deaths",             "anon-chi_deaths.parquet", FALSE,
+  "combined_deaths",        "anon-combined_slf_deaths_lookup.parquet", FALSE,
+  "sc_all_at",              "anon-all_at_episodes.parquet", FALSE,
+  "sc_all_ch",              "anon-all_ch_episodes.parquet", FALSE,
+  "sc_all_hc",              "anon-all_hc_episodes.parquet", FALSE,
+  "sc_all_sds",             "anon-all_sds_episodes.parquet", FALSE,
+  "sparra",                 "anon-sparra.parquet", FALSE,
+  "care_home_name_lookup",  "care_home_name_lookup_all.xlsx", FALSE,
+  "homelessness_completeness","homelessness_completeness.parquet", FALSE,
+  "hhg",                    "anon-hhg.parquet", FALSE,
+  "care_home_costs",        "care_home_costs.xlsx", FALSE,
+  "ch_costs",               "ch_costs.xlsx", FALSE,
+  "dn_costs",               "dn_costs.xlsx", FALSE,
+  "home_care_costs",        "hc_costs.xlsx", FALSE,
+  "ooh_costs",              "ooh_costs.xlsx", FALSE,
+  "nsu",                    "anon-All_CHIs.parquet", FALSE,
+  "sdl_demographics_cohort","anon-demographic_cohorts.parquet", FALSE,
+  "gp_details",             "practice_details.parquet", FALSE,
+  "ukpc",                   "uk_postcode_list.csv", FALSE,
+  "hscp_localities",        "HSCP Localities_DZ11_Lookup_20240513.csv", FALSE,
+  "simd",                   "simd.parquet", FALSE,
+  "spd",                    "spd.parquet", FALSE
+)
 
-  return(byoc_intermediate_path)
+get_byoc_intermediate_path <- function(
+    file_name,
+    base_path = denodo_output_path()
+) {
+  file.path(base_path, file_name)
 }
 
-#' BYOC-to-Denodo S3 Path helper function
+#' Helper function to build the BYOC output file paths as a named list
 #'
 #' @description Helper function for the get_byoc_intermediate_path() function
 #'
 #' @param types named list of the dataset types
 #' @param year Financial year
+#' @param base_path Root output directory
+#'
+#' @return Named list of file paths
 #'
 #' @export
 #' @family file path functions
 get_byoc_output_files <- function(
-  year,
-  types = NULL
+    years,
+    types = NULL,
+    base_path = denodo_output_path()
 ) {
-  byoc_input_files <- c(
-    "acute",
-    "ae",
-    "at",
-    "ch",
-    "cmh",
-    "client",
-    "dd",
-    "deaths",
-    "dn",
-    "gp_ooh",
-    "hc",
-    "homelessness",
-    "ltcs",
-    "maternity",
-    "mh",
-    "outpatients",
-    "pis",
-    "sds"
-  )
 
-  if (is.null(types)) {
-    types <- byoc_input_files
+  registry <- .byoc_dataset_registry
+
+  # validate types
+  if (!is.null(types)) {
+    invalid <- setdiff(types, registry$type)
+    if (length(invalid) > 0) {
+      stop(
+        "Unknown dataset type(s): ",
+        paste(invalid, collapse = ", ")
+      )
+    }
+    registry <- dplyr::filter(registry, type %in% types)
   }
 
-  paths <- purrr::map_chr(
-    types,
-    ~ get_byoc_intermediate_path(.x, year)
+  # year‑specific datasets (expanded for all years)
+  year_specific_paths <- registry |>
+    dplyr::filter(year_specific) |>
+    tidyr::expand_grid(year = years) |>
+    dplyr::mutate(
+      name = paste0(type, "_", year),
+      file = paste0(file_stub, "-20", year, ".parquet"),
+      path = get_byoc_intermediate_path(file, base_path)
+    )
+
+  # non‑year‑specific datasets (once only)
+  static_paths <- registry |>
+    dplyr::filter(!year_specific) |>
+    dplyr::mutate(
+      name = type,
+      file = file_stub,
+      path = get_byoc_intermediate_path(file, base_path)
+    )
+
+  # combine and return named list
+  all_paths <- dplyr::bind_rows(
+    year_specific_paths,
+    static_paths
   )
 
-  names(paths) <- types
+  paths <- all_paths$path
+  names(paths) <- all_paths$name
 
   as.list(paths)
 }
