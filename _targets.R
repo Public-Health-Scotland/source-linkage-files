@@ -232,8 +232,10 @@ list(
     # Target name
     ch_cost_lookup,
     # Function
-    process_costs_ch_rmd(),
-    priority = 0.8
+    process_costs_care_homes(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                             BYOC_MODE = BYOC_MODE,
+                             run_id = run_id,
+                             run_date_time = run_date_time)
   ),
   # District nursing costs------
   tar_target(
@@ -974,6 +976,9 @@ list(
         data = all_care_home,
         year = year,
         ch_costs = ch_cost_lookup,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time,
         write_to_disk = write_to_disk
       )
     ),
