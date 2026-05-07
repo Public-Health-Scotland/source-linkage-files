@@ -2,6 +2,7 @@
 #'
 #' @description Get the full Care Home costs lookup path
 #'
+#' @param BYOC_MODE BYOC_MODE
 #' @param ... additional arguments passed to [get_file_path()]
 #' @param update passed through [latest_update()]
 #'
@@ -9,15 +10,21 @@
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_ch_costs_path <- function(..., update = NULL) {
-  ch_costs_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = stringr::str_glue(
-      "Cost_CH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.parquet"
-    ),
-    ...
-  )
-
+get_ch_costs_path <- function(BYOC_MODE..., update = NULL) {
+  if (isTRUE(BYOC_MODE)) {
+    ch_costs_path <- file.path(
+      denodo_output_path(),
+      stringr::str_glue("ch_costs_path.parquet")
+    )
+  } else {
+    ch_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = stringr::str_glue(
+        "ch_costs_path.parquet"
+      ),
+      ...
+    )
+  }
   return(ch_costs_path)
 }
 
