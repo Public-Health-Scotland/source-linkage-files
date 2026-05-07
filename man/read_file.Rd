@@ -4,7 +4,7 @@
 \alias{read_file}
 \title{Read a file}
 \usage{
-read_file(path, col_select = NULL, as_data_frame = TRUE, ...)
+read_file(path, col_select = NULL, as_data_frame = TRUE, BYOC_MODE, ...)
 }
 \arguments{
 \item{path}{The file path to be read}
@@ -16,6 +16,8 @@ of columns, as used in \code{dplyr::select()}.}
 
 \item{as_data_frame}{Should the function return a \code{tibble} (default) or
 an Arrow \link[arrow]{Table}?}
+
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{Addition arguments passed to the relevant function.}
 }
