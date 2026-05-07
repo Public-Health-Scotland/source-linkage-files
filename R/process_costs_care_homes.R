@@ -116,7 +116,8 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
 
   # Save .rds file
   ch_costs_uplifted %>%
-    write_file(get_ch_costs_path(check_mode = "write"),
+    write_file(get_ch_costs_path(check_mode = "write", BYOC_MODE),
+      BYOC_MODE,
       group_id = 3206 # hscdiip owner
     )
 }
