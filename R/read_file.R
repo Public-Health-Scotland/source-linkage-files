@@ -8,12 +8,13 @@
 #'  * `.parquet` uses [arrow::read_parquet()].
 #'
 #' @param path The file path to be read
+#' @param BYOC_MODE BYOC_MODE
 #' @inheritParams arrow::read_parquet
 #' @param ... Addition arguments passed to the relevant function.
 #'
 #' @return the data a [tibble][tibble::tibble-package]
 #' @export
-read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
+read_file <- function(path, col_select = NULL, as_data_frame = TRUE, BYOC_MODE, ...) {
   valid_extensions <- c(
     "rds",
     "rds.gz",
@@ -23,7 +24,7 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   )
 
   # Return an empty tibble if trying to read the dummy path
-  if (path == get_dummy_boxi_extract_path()) {
+  if (path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
     return(tibble::tibble())
   }
 
