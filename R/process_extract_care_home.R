@@ -11,19 +11,20 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
+#' @param run_id Denodo identifier
+#' @param run_date_time Denodo identifier
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_extract_care_home <- function(
-  data,
-  year,
-  ch_costs = read_file(get_ch_costs_path(BYOC_MODE)),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
-) {
+    data,
+    year,
+    ch_costs = read_file(get_ch_costs_path(BYOC_MODE)),
+    BYOC_MODE = FALSE,
+    run_id = NA,
+    run_date_time = NA,
+    write_to_disk = TRUE) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = year)
 
   # Only run for a single year

@@ -9,6 +9,9 @@
 #' [process_lookup_sc_demographics()].
 #' @param refined_death The processed lookup of deaths from IT produced
 #' with [process_refined_death()].
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id Denodo identifier
+#' @param run_date_time Denodo identifier
 #' @param write_to_disk (Optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
