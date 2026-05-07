@@ -2,15 +2,23 @@
 #'
 #' @param denodo_connect connection to denodo
 #' @param BYOC_MODE BYOC_MODE
+#' @param run_id Denodo identifier
+#' @param run_date_time Denodo identifier
 #'
 #' @export
 #'
-process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
+process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                     BYOC_MODE = FALSE,
+                                     run_id = NA,
+                                     run_date_time = NA) {
   ## TODO: Remove old code/check API resource in denodo
   # ch_costs_data <- phsopendata::get_resource(
   #   res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
   #   col_select = c("Date", "KeyStatistic", "CA", "Value")
   # ) %>%
+
+  # Disconnect from denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   ## Read costs from the CHC Open data
   ch_costs_data <- dplyr::tbl(
@@ -84,7 +92,11 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
           dplyr::mutate(year = (as.numeric(convert_fyyear_to_year(year)) + .x) %>%
             convert_year_to_fyyear()))
     ) %>%
-    dplyr::arrange(year, nursing_care_provision)
+    dplyr::arrange(year, nursing_care_provision) %>%
+    mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
 
   # Join data together  -----------------------------------------------------
