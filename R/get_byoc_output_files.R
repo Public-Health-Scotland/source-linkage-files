@@ -13,16 +13,14 @@
 #' @export
 #' @family file path functions
 get_sdl_processed_data <- function(
-    type,
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  type,
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
-
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   if (BYOC_MODE) {
-
     sdl_name <- dplyr::recode_values(
       type,
       "acute"                        = "sdl_acute_processed",
@@ -74,47 +72,44 @@ get_sdl_processed_data <- function(
       ) %>%
         collect()
     )
-
   } else {
-
     sdl_name <- dplyr::recode_values(
-
       type,
       "acute" = read_file(get_source_extract_path("acute", year = year, BYOC_MODE = BYOC_MODE)),
-      "ae"    = read_file(get_source_extract_path("ae",   year = year, BYOC_MODE = BYOC_MODE)),
-      "at"  = read_file(get_source_extract_path("at",  year = year, BYOC_MODE = BYOC_MODE)),
-      "ch"  = read_file(get_source_extract_path("ch",  year = year, BYOC_MODE = BYOC_MODE)),
-      "hc"  = read_file(get_source_extract_path("hc",  year = year, BYOC_MODE = BYOC_MODE)),
+      "ae" = read_file(get_source_extract_path("ae", year = year, BYOC_MODE = BYOC_MODE)),
+      "at" = read_file(get_source_extract_path("at", year = year, BYOC_MODE = BYOC_MODE)),
+      "ch" = read_file(get_source_extract_path("ch", year = year, BYOC_MODE = BYOC_MODE)),
+      "hc" = read_file(get_source_extract_path("hc", year = year, BYOC_MODE = BYOC_MODE)),
       "sds" = read_file(get_source_extract_path("sds", year = year, BYOC_MODE = BYOC_MODE)),
-      "client"       = read_file(get_source_extract_path("client", year = year, BYOC_MODE = BYOC_MODE)),
-      "cmh"          = read_file(get_source_extract_path("cmh",    year = year, BYOC_MODE = BYOC_MODE)),
-      "dd"           = read_file(get_source_extract_path("dd",     year = year, BYOC_MODE = BYOC_MODE)),
-      "dn"           = read_file(get_source_extract_path("dn",     year = year, BYOC_MODE = BYOC_MODE)),
-      "gp_ooh"       = read_file(get_source_extract_path("gp_ooh", year = year, BYOC_MODE = BYOC_MODE)),
+      "client" = read_file(get_source_extract_path("client", year = year, BYOC_MODE = BYOC_MODE)),
+      "cmh" = read_file(get_source_extract_path("cmh", year = year, BYOC_MODE = BYOC_MODE)),
+      "dd" = read_file(get_source_extract_path("dd", year = year, BYOC_MODE = BYOC_MODE)),
+      "dn" = read_file(get_source_extract_path("dn", year = year, BYOC_MODE = BYOC_MODE)),
+      "gp_ooh" = read_file(get_source_extract_path("gp_ooh", year = year, BYOC_MODE = BYOC_MODE)),
       "homelessness" = read_file(get_source_extract_path("homelessness", year = year, BYOC_MODE = BYOC_MODE)),
-      "maternity"    = read_file(get_source_extract_path("maternity",    year = year, BYOC_MODE = BYOC_MODE)),
-      "mh"           = read_file(get_source_extract_path("mh", year = year, BYOC_MODE = BYOC_MODE)),
-      "outpatients"  = read_file(get_source_extract_path("outpatients", year = year, BYOC_MODE = BYOC_MODE)),
-      "pis"          = read_file(get_source_extract_path("pis", year = year, BYOC_MODE = BYOC_MODE)),
-      "homelessness_lookup"       = create_homelessness_lookup(year = year),
+      "maternity" = read_file(get_source_extract_path("maternity", year = year, BYOC_MODE = BYOC_MODE)),
+      "mh" = read_file(get_source_extract_path("mh", year = year, BYOC_MODE = BYOC_MODE)),
+      "outpatients" = read_file(get_source_extract_path("outpatients", year = year, BYOC_MODE = BYOC_MODE)),
+      "pis" = read_file(get_source_extract_path("pis", year = year, BYOC_MODE = BYOC_MODE)),
+      "homelessness_lookup" = create_homelessness_lookup(year = year),
       "homelessness_completeness" = read_file(get_homelessness_completeness_path(year = year, BYOC_MODE = BYOC_MODE)),
-      "chi_deaths"    = read_file(get_slf_chi_deaths_path()),
-      "nrs_deaths"    = read_file(get_combined_slf_deaths_lookup_path()),
+      "chi_deaths" = read_file(get_slf_chi_deaths_path()),
+      "nrs_deaths" = read_file(get_combined_slf_deaths_lookup_path()),
       "refined_death" = read_file(get_slf_deaths_lookup_path(year = year)),
       "ltc" = read_file(get_ltcs_path(year = year, BYOC_MODE = BYOC_MODE)),
       "sparra" = read_file(get_sparra_path(year = year)),
-      "hhg"    = read_file(get_hhg_path(year = year)),
+      "hhg" = read_file(get_hhg_path(year = year)),
       "care_home_lookup" = read_file(get_slf_ch_name_lookup_path()),
-      "postcode_lookup"  = read_file(get_slf_postcode_path()),
-      "gpprac_lookup"    = read_file(get_slf_gpprac_path()),
+      "postcode_lookup" = read_file(get_slf_postcode_path()),
+      "gpprac_lookup" = read_file(get_slf_gpprac_path()),
       "sc_demog_lookup" = read_file(get_sc_demog_lookup_path()),
-      "sc_all_alarms_telecare"       = read_file(get_sc_at_episodes_path()),
-      "sc_all_care_homes"            = read_file(get_sc_ch_episodes_path()),
-      "sc_all_home_care"             = read_file(get_sc_hc_episodes_path()),
+      "sc_all_alarms_telecare" = read_file(get_sc_at_episodes_path()),
+      "sc_all_care_homes" = read_file(get_sc_ch_episodes_path()),
+      "sc_all_home_care" = read_file(get_sc_hc_episodes_path()),
       "sc_all_self_directed_support" = read_file(get_sc_sds_episodes_path()),
-      "ch_cost_lookup"  = read_file(get_ch_costs_path()),
-      "dn_cost_lookup"  = read_file(get_dn_costs_path()),
-      "hc_cost_lookup"  = read_file(get_hc_costs_path()),
+      "ch_cost_lookup" = read_file(get_ch_costs_path()),
+      "dn_cost_lookup" = read_file(get_dn_costs_path()),
+      "hc_cost_lookup" = read_file(get_hc_costs_path()),
       "ooh_cost_lookup" = read_file(get_gp_ooh_costs_path())
     )
 
