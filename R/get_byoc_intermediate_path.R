@@ -104,9 +104,9 @@ get_byoc_output_files <- function(
   }
 
   # year‑specific datasets (expanded for all years)
-  year_specific_paths <- registry |>
-    dplyr::filter(year_specific) |>
-    tidyr::expand_grid(year = years) |>
+  year_specific_paths <- registry %>%
+    dplyr::filter(year_specific) %>%
+    tidyr::expand_grid(year = years) %>%
     dplyr::mutate(
       name = paste0(type, "_", year),
       file = paste0(file_stub, "-20", year, ".parquet"),
@@ -114,8 +114,8 @@ get_byoc_output_files <- function(
     )
 
   # non‑year‑specific datasets (once only)
-  static_paths <- registry |>
-    dplyr::filter(!year_specific) |>
+  static_paths <- registry %>%
+    dplyr::filter(!year_specific) %>%
     dplyr::mutate(
       name = type,
       file = file_stub,
@@ -128,8 +128,12 @@ get_byoc_output_files <- function(
     static_paths
   )
 
-  paths <- all_paths$path
-  names(paths) <- all_paths$name
+  result <- all_paths %>%
+    dplyr::group_by(type) %>%
+    dplyr::summarise(path = list(path), .groups = "drop")
 
-  as.list(paths)
+  paths <- result$path
+  names(paths) <- result$type
+
+  paths
 }

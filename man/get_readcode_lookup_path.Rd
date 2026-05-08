@@ -21,7 +21,7 @@ Get the full path to the SLF read code lookup
 \code{\link{get_file_path}} for the generic function.
 
 Other file path functions: 
-\code{\link{get_byoc_intermediate_path}()},
+\code{\link{.byoc_dataset_registry}},
 \code{\link{get_byoc_output_files}()},
 \code{\link{get_dd_path}()},
 \code{\link{get_demographic_cohorts_path}()},
@@ -30,6 +30,7 @@ Other file path functions:
 \code{\link{get_ltcs_path}()},
 \code{\link{get_nsu_path}()},
 \code{\link{get_practice_details_path}()},
+\code{\link{get_sdl_processed_data}()},
 \code{\link{get_service_use_cohorts_path}()},
 \code{\link{get_sg_homelessness_pub_path}()}
 }
