@@ -45,7 +45,7 @@ get_sc_client_lookup_path <- function(year, update = latest_update(), BYOC_MODE,
     if (isTRUE(BYOC_MODE)) {
       sc_client_lookup_path <- file.path(
         denodo_output_path(),
-        stringr::str_glue("anon-sc_client_lookup.parquet")
+        stringr::str_glue("anon-sc_client_lookup_{year}.parquet")
       )
     } else {
       sc_client_lookup_path <- get_file_path(
