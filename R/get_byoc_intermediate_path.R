@@ -19,43 +19,43 @@
   ~type, ~file_stub, ~year_specific,
 
   # Year‑specific datasets -----------------------------------------------------
-  "acute",        "anon-acute_for_source", TRUE,
-  "ae",           "anon-a_and_e_for_source", TRUE,
-  "at",           "anon-alarms-telecare-for-source", TRUE,
-  "ch",           "anon-care_home_for_source", TRUE,
-  "cmh",          "anon-cmh_for_source", TRUE,
-  "client",       "anon-client_for_source", TRUE,
-  "dd",           "anon-dd_for_source", TRUE,
-  "deaths",       "anon-deaths_for_source", TRUE,
-  "nrs_deaths",   "anon-nrs_deaths_for_source", TRUE,
-  "dn",           "anon-district_nursing_for_source", TRUE,
-  "gp_ooh",       "anon-gp_ooh_for_source", TRUE,
-  "hc",           "anon-home_care_for_source", TRUE,
+  "acute", "anon-acute_for_source", TRUE,
+  "ae", "anon-a_and_e_for_source", TRUE,
+  "at", "anon-alarms-telecare-for-source", TRUE,
+  "ch", "anon-care_home_for_source", TRUE,
+  "cmh", "anon-cmh_for_source", TRUE,
+  "client", "anon-client_for_source", TRUE,
+  "dd", "anon-dd_for_source", TRUE,
+  "deaths", "anon-deaths_for_source", TRUE,
+  "nrs_deaths", "anon-nrs_deaths_for_source", TRUE,
+  "dn", "anon-district_nursing_for_source", TRUE,
+  "gp_ooh", "anon-gp_ooh_for_source", TRUE,
+  "hc", "anon-home_care_for_source", TRUE,
   "homelessness", "anon-homelessness_for_source", TRUE,
-  "ltcs",         "anon-LTCs_patient_reference_file", TRUE,
-  "maternity",    "anon-maternity_for_source", TRUE,
-  "mh",           "anon-mental_health_for_source", TRUE,
-  "outpatients",  "anon-outpatients_for_source", TRUE,
-  "pis",          "anon-prescribing_file_for_source", TRUE,
-  "sds",          "anon-sc-sds-for-source", TRUE,
+  "ltcs", "anon-LTCs_patient_reference_file", TRUE,
+  "maternity", "anon-maternity_for_source", TRUE,
+  "mh", "anon-mental_health_for_source", TRUE,
+  "outpatients", "anon-outpatients_for_source", TRUE,
+  "pis", "anon-prescribing_file_for_source", TRUE,
+  "sds", "anon-sc-sds-for-source", TRUE,
 
   # Non‑year‑specific / static datasets ----------------------------------------
-  "chi_deaths",               "anon-chi_deaths.parquet", FALSE,
-  "combined_deaths",          "anon-combined_slf_deaths_lookup.parquet", FALSE,
-  "sc_all_at",                "anon-all_at_episodes.parquet", FALSE,
-  "sc_all_ch",                "anon-all_ch_episodes.parquet", FALSE,
-  "sc_all_hc",                "anon-all_hc_episodes.parquet", FALSE,
-  "sc_all_sds",               "anon-all_sds_episodes.parquet", FALSE,
-  "homelessness_completeness","homelessness_completeness.parquet", FALSE,
-  "ch_cost_lookup",           "Cost_CH_Lookup.parquet", FALSE,
-  "dn_cost_lookup",           "Cost_DN_Lookup.parquet", FALSE,
-  "hc_cost_lookup",           "cost_hc_lookup.parquet", FALSE,
-  "ooh_cost_lookup",          "Cost_GPOoH_Lookup.parquet", FALSE
+  "chi_deaths", "anon-chi_deaths.parquet", FALSE,
+  "combined_deaths", "anon-combined_slf_deaths_lookup.parquet", FALSE,
+  "sc_all_at", "anon-all_at_episodes.parquet", FALSE,
+  "sc_all_ch", "anon-all_ch_episodes.parquet", FALSE,
+  "sc_all_hc", "anon-all_hc_episodes.parquet", FALSE,
+  "sc_all_sds", "anon-all_sds_episodes.parquet", FALSE,
+  "homelessness_completeness", "homelessness_completeness.parquet", FALSE,
+  "ch_cost_lookup", "Cost_CH_Lookup.parquet", FALSE,
+  "dn_cost_lookup", "Cost_DN_Lookup.parquet", FALSE,
+  "hc_cost_lookup", "cost_hc_lookup.parquet", FALSE,
+  "ooh_cost_lookup", "Cost_GPOoH_Lookup.parquet", FALSE
 )
 
 get_byoc_intermediate_path <- function(
-    file_name,
-    base_path = denodo_output_path()
+  file_name,
+  base_path = denodo_output_path()
 ) {
   file.path(base_path, file_name)
 }
@@ -73,11 +73,10 @@ get_byoc_intermediate_path <- function(
 #' @export
 #' @family file path functions
 get_byoc_output_files <- function(
-    years,
-    types = NULL,
-    base_path = denodo_output_path()
+  years,
+  types = NULL,
+  base_path = denodo_output_path()
 ) {
-
   registry <- .byoc_dataset_registry
 
   # validate types
