@@ -7,7 +7,7 @@
 process_lookup_sc_client(
   data,
   year,
-  sc_demographics = read_file(get_sc_demog_lookup_path()) \%>\%
+  sc_demographics = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)) \%>\%
     dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date",
     "consistent_quality")),
   write_to_disk = TRUE,
