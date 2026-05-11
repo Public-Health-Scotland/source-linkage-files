@@ -222,13 +222,13 @@ log_ind_substage <- function(sub_stage, status, year) {
 #'
 #' @export
 log_tar_make <- function(
-    script,
-    store,
-    reporter = "terse",
-    ...
+  script,
+  store,
+  reporter = "terse",
+  ...
 ) {
-  out_lines  <- character()
-  err_lines  <- character()
+  out_lines <- character()
+  err_lines <- character()
   warn_lines <- character()
 
   out_con <- textConnection("out_lines", open = "w", local = TRUE)
@@ -241,7 +241,7 @@ log_tar_make <- function(
   close_sinks <- function() {
     if (!sinks_closed) {
       try(sink(type = "message"), silent = TRUE)
-      try(sink(type = "output"),  silent = TRUE)
+      try(sink(type = "output"), silent = TRUE)
       try(close(out_con), silent = TRUE)
       try(close(err_con), silent = TRUE)
       sinks_closed <<- TRUE
