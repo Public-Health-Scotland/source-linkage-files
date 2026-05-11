@@ -40,28 +40,17 @@
   "sds",          "anon-sc-sds-for-source", TRUE,
 
   # Non‑year‑specific / static datasets ----------------------------------------
-  "chi_deaths",             "anon-chi_deaths.parquet", FALSE,
-  "combined_deaths",        "anon-combined_slf_deaths_lookup.parquet", FALSE,
-  "sc_all_at",              "anon-all_at_episodes.parquet", FALSE,
-  "sc_all_ch",              "anon-all_ch_episodes.parquet", FALSE,
-  "sc_all_hc",              "anon-all_hc_episodes.parquet", FALSE,
-  "sc_all_sds",             "anon-all_sds_episodes.parquet", FALSE,
-  "sparra",                 "anon-sparra.parquet", FALSE,
-  "care_home_name_lookup",  "care_home_name_lookup_all.xlsx", FALSE,
+  "chi_deaths",               "anon-chi_deaths.parquet", FALSE,
+  "combined_deaths",          "anon-combined_slf_deaths_lookup.parquet", FALSE,
+  "sc_all_at",                "anon-all_at_episodes.parquet", FALSE,
+  "sc_all_ch",                "anon-all_ch_episodes.parquet", FALSE,
+  "sc_all_hc",                "anon-all_hc_episodes.parquet", FALSE,
+  "sc_all_sds",               "anon-all_sds_episodes.parquet", FALSE,
   "homelessness_completeness","homelessness_completeness.parquet", FALSE,
-  "hhg",                    "anon-hhg.parquet", FALSE,
-  "care_home_costs",        "care_home_costs.xlsx", FALSE,
-  "ch_costs",               "ch_costs.xlsx", FALSE,
-  "dn_costs",               "dn_costs.xlsx", FALSE,
-  "home_care_costs",        "hc_costs.xlsx", FALSE,
-  "ooh_costs",              "ooh_costs.xlsx", FALSE,
-  "nsu",                    "anon-All_CHIs.parquet", FALSE,
-  "sdl_demographics_cohort","anon-demographic_cohorts.parquet", FALSE,
-  "gp_details",             "practice_details.parquet", FALSE,
-  "ukpc",                   "uk_postcode_list.csv", FALSE,
-  "hscp_localities",        "HSCP Localities_DZ11_Lookup_20240513.csv", FALSE,
-  "simd",                   "simd.parquet", FALSE,
-  "spd",                    "spd.parquet", FALSE
+  "ch_cost_lookup",           "Cost_CH_Lookup.parquet", FALSE,
+  "dn_cost_lookup",           "Cost_DN_Lookup.parquet", FALSE,
+  "hc_cost_lookup",           "cost_hc_lookup.parquet", FALSE,
+  "ooh_cost_lookup",          "Cost_GPOoH_Lookup.parquet", FALSE
 )
 
 get_byoc_intermediate_path <- function(
