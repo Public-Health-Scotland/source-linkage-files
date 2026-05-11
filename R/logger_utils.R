@@ -213,3 +213,94 @@ log_ind_substage <- function(sub_stage, status, year) {
 
   logger::log_info(msg)
 }
+
+#' Directing Targets Output to Logger
+#'
+#' @param script Path to targets script
+#' @param store store path
+#' @param reporter targets reporter type
+#'
+#' @export
+log_tar_make <- function(
+    script,
+    store,
+    reporter = "terse",
+    ...
+) {
+  out_lines  <- character()
+  err_lines  <- character()
+  warn_lines <- character()
+
+  out_con <- textConnection("out_lines", open = "w", local = TRUE)
+  err_con <- textConnection("err_lines", open = "w", local = TRUE)
+
+  sink(out_con, type = "output")
+  sink(err_con, type = "message")
+
+  sinks_closed <- FALSE
+  close_sinks <- function() {
+    if (!sinks_closed) {
+      try(sink(type = "message"), silent = TRUE)
+      try(sink(type = "output"),  silent = TRUE)
+      try(close(out_con), silent = TRUE)
+      try(close(err_con), silent = TRUE)
+      sinks_closed <<- TRUE
+    }
+  }
+  on.exit(close_sinks(), add = TRUE)
+
+  ok <- TRUE
+  err_obj <- NULL
+
+  withCallingHandlers(
+    {
+      tryCatch(
+        {
+          targets::tar_make(
+            script   = script,
+            store    = store,
+            reporter = reporter,
+            ...
+          )
+        },
+        error = function(e) {
+          ok <<- FALSE
+          err_obj <<- e
+          NULL
+        }
+      )
+    },
+    warning = function(w) {
+      warn_lines <<- c(warn_lines, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  close_sinks()
+
+  if (length(out_lines)) {
+    for (ln in out_lines) {
+      if (nzchar(trimws(ln))) logger::log_info("[targets] {ln}")
+    }
+  }
+
+  if (length(warn_lines)) {
+    for (ln in warn_lines) {
+      if (nzchar(trimws(ln))) logger::log_warn("[targets] {ln}")
+    }
+  }
+
+  if (length(err_lines)) {
+    for (ln in err_lines) {
+      if (nzchar(trimws(ln))) logger::log_error("[targets] {ln}")
+    }
+  }
+
+  if (!ok) {
+    msg <- conditionMessage(err_obj)
+    logger::log_error("[targets] tar_make failed: {msg}")
+    stop(err_obj)
+  }
+
+  invisible(TRUE)
+}
