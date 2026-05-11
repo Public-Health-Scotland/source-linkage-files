@@ -29,6 +29,7 @@ get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
 #' @param year Financial year.
 #' @param update The update month to use,
 #' defaults to [latest_update()]
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @param ... additional arguments passed to [get_file_path()]
 #'
@@ -37,19 +38,22 @@ get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
 #' @export
 #' @family social care lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_sc_client_lookup_path <- function(year, update = latest_update(), ...) {
+get_sc_client_lookup_path <- function(year, update = latest_update(), BYOC_MODE, ...) {
   if (!check_year_valid(year, type = "client")) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_boxi_extract_path(BYOC_MODE))
   } else {
-    sc_client_lookup_path <- get_file_path(
-      directory = fs::path(
-        get_slf_dir(),
-        "Social_care",
-        "processed_sc_client_lookup"
-      ),
-      file_name = stringr::str_glue("anon-sc_client_lookup_{year}_{update}.parquet"),
-      ...
-    )
+    if (isTRUE(BYOC_MODE)) {
+      sc_client_lookup_path <- file.path(
+        denodo_output_path(),
+        stringr::str_glue("anon-sc_client_lookup.parquet")
+      )
+    } else {
+      sc_client_lookup_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_client_lookup"),
+        file_name = stringr::str_glue("anon-sc_client_lookup_{year}_{update}.parquet"),
+        ...
+      )
+    }
     return(sc_client_lookup_path)
   }
 }
