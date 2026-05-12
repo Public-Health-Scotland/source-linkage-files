@@ -40,6 +40,9 @@ get_uk_postcode_path <- function(...) {
 get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                  BYOC_MODE) {
   if (isTRUE(BYOC_MODE)) {
+    # Disconnect from Denodo
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
     extract_uk_pc <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_uk_postcode_source") ### TODO check SDL name ###
@@ -215,6 +218,9 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
 get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                         BYOC_MODE) {
   if (isTRUE(BYOC_MODE)) {
+    # Disconnect from Denodo
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
     extract_ch_name_lookup <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source") ### TODO check SDL name ###
