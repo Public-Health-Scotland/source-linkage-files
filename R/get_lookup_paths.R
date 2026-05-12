@@ -88,7 +88,30 @@ get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
     ) %>%
       collect()
   } else {
-    spd_data <- read_file(get_spd_path())
+    spd_data <- read_file(get_spd_path()) %>%
+      dplyr::select(
+        c(
+          "pc7",
+          "pc8",
+          "datazone2011",
+          "datazone2022",
+          "hb2019",
+          "hb2018",
+          "hb2014",
+          "hb2006",
+          "hscp2019",
+          "hscp2018",
+          "hscp2016",
+          "ca2019",
+          "ca2018",
+          "ca2011",
+          "hb1995",
+          "ur8_2022",
+          "ur6_2022",
+          "ur3_2022",
+          "ur2_2022"
+        )
+      )
   }
   return(spd_data)
 }
