@@ -10,6 +10,9 @@
 read_sc_all_care_home <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "ch", year = "all")
 
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   ch_data <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("social_care_2", "carehome_snapshot") # TODO: update SDL table
