@@ -13,7 +13,8 @@ read_extract_prescribing <- function(year,
 
   pis_file <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_prescribing_source")) %>% # TODO: Placeholder. Replace with table name.
+    dbplyr::in_schema("sdl", "sdl_prescribing_source")
+  ) %>% # TODO: Placeholder. Replace with table name.
     filter(year_column == year) %>% # TODO: Check whether this should be filtered by year and if so what the year column name is.
     # Rename variables
     dplyr::select(
