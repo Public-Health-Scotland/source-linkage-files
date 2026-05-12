@@ -9,10 +9,10 @@ fill_ch_names <- function(ch_data) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
-  spd_list <- get_spd_data() %>%
+  spd_list <- get_spd_data(BYOC_MODE) %>%
     dplyr::pull(.data$pc7)
 
-  uk_pc_list <- get_uk_postcode_data() %>%
+  uk_pc_list <- get_uk_postcode_data(BYOC_MODE) %>%
     dplyr::pull()
 
 
@@ -48,7 +48,7 @@ fill_ch_names <- function(ch_data) {
 
   # Contact: IntelligenceTeam@careinspectorate.gov.scot
   # for an updated lookup list
-  ch_name_lookup <- get_slf_ch_name_lookup_data() %>%
+  ch_name_lookup <- get_slf_ch_name_lookup_data(BYOC_MODE) %>%
     # Drop any Care Homes that were closed before 2017/18
     dplyr::select(
       ch_postcode = "AccomPostCodeNo",

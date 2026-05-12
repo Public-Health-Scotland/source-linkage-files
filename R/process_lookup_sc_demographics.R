@@ -66,16 +66,16 @@ process_lookup_sc_demographics <- function(
   dummy_postcodes <- c("NK1 0AA", "NF1 1AB")
   non_existant_postcodes <- c("PR2 5AL", "M16 0GS", "DY103DJ")
 
-  valid_spd_postcodes <- get_spd_data() %>%
+  valid_spd_postcodes <- get_spd_data(BYOC_MODE) %>%
     dplyr::pull(.data$pc7)
 
-  valid_uk_postcodes <- get_uk_postcode_data() %>%
+  valid_uk_postcodes <- get_uk_postcode_data(BYOC_MODE) %>%
     dplyr::pull()
   # combine them as some deleted scottish pc are not in the uk pc list
   valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
     sort()
 
-  ch_pc <- get_slf_ch_name_lookup_data() %>%
+  ch_pc <- get_slf_ch_name_lookup_data(BYOC_MODE) %>%
     dplyr::select("AccomPostCodeNo") %>%
     dplyr::rename("ch_pc" = "AccomPostCodeNo") %>%
     dplyr::mutate(ch_pc = phsmethods::format_postcode(.data$ch_pc, quiet = TRUE)) %>%

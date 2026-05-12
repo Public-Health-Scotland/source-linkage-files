@@ -19,7 +19,7 @@ process_lookup_postcode <- function(simd_path = get_simd_path(),
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 
   # postcode data
-  spd_file <- get_spd_data() %>%
+  spd_file <- get_spd_data(BYOC_MODE) %>%
     dplyr::select(
       "pc7",
       # tidyselect::matches("datazone\\d{4}$"),
