@@ -7,6 +7,9 @@
 process_lookup_sc_demographics(
   data,
   all_care_home_extract = read_sc_all_care_home(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE),
+  uk_postcode_data = get_uk_postcode_data(BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
