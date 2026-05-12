@@ -31,15 +31,21 @@ get_ch_costs_path <- function(..., update = NULL) {
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_dn_costs_path <- function(..., update = NULL) {
-  dn_costs_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = stringr::str_glue(
-      "Cost_DN_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.parquet"
-    ),
-    ...
-  )
-
+get_dn_costs_path <- function(BYOC_MODE, ..., update = NULL) {
+  if (isTRUE(BYOC_MODE)) {
+    dn_costs_path <- file.path(
+      denodo_output_path(),
+      stringr::str_glue("Cost_DN_Lookup.parquet")
+    )
+  } else {
+    dn_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = stringr::str_glue(
+        "Cost_DN_Lookup.parquet"
+      ),
+      ...
+    )
+  }
   return(dn_costs_path)
 }
 
