@@ -4,25 +4,11 @@
 \alias{fill_ch_names}
 \title{Fix and fill care home name and postcodes}
 \usage{
-fill_ch_names(
-  ch_data,
-  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
-  uk_pc_path = get_uk_postcode_path()
-)
+fill_ch_names(ch_data)
 }
 \arguments{
 \item{ch_data}{partially cleaned up care home data as a
 \link[tibble:tibble-package]{tibble}}
-
-\item{ch_name_lookup_path}{Path to the 'official' Care Home name Excel
-Workbook, this defaults to \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}}}
-
-\item{spd_path}{Path to the Scottish Postcode Directory (rds) version, this
-defaults to \code{\link[=get_spd_path]{get_spd_path()}}}
-
-\item{uk_pc_path}{Path to the UK postcode list. This is defaults to
-\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}}
 }
 \value{
 the same data with improved accuracy and completeness of the Care

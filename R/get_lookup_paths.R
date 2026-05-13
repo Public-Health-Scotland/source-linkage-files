@@ -67,6 +67,59 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
+#' Scottish Postcode Directory data
+#'
+#' @description Return the data to the centrally held Scottish Postcode Directory
+#' (SPD) file.
+#'
+#' @param denodo_connect Connection to denodo
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return An [fs::path()] to the Scottish Postcode Directory
+#' @export
+#'
+#' @family lookup file paths
+get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                         BYOC_MODE) {
+  if (isTRUE(BYOC_MODE)) {
+    # Disconnect from Denodo
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+    extract_spd <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_spd_source") ### TODO check SDL name ###
+    ) %>%
+      collect()
+  } else {
+    spd_data <- read_file(get_spd_path()) %>%
+      dplyr::select(
+        c(
+          "pc7",
+          "pc8",
+          "datazone2011",
+          "datazone2022",
+          "hb2019",
+          "hb2018",
+          "hb2014",
+          "hb2006",
+          "hscp2019",
+          "hscp2018",
+          "hscp2016",
+          "ca2019",
+          "ca2018",
+          "ca2011",
+          "hb1995",
+          "ur8_2022",
+          "ur6_2022",
+          "ur3_2022",
+          "ur2_2022"
+        )
+      )
+  }
+  return(spd_data)
+}
+
+
 #' SIMD File Path
 #'
 #' @description Get the path to the centrally held Scottish Index of Multiple
