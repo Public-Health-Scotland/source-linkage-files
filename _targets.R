@@ -526,12 +526,16 @@ list(
     ),
     # Community Mental Health (CMH) Activity------------------------------------
     # READ - CMH
-    tar_file_read(
+    tar_target(
       # Target name
       cmh_data,
-      get_boxi_extract_path(year, type = "cmh"),
       # Function
-      read_extract_cmh(year, !!.x)
+      read_extract_cmh(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "cmh", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - CMH
     tar_target(
@@ -539,9 +543,12 @@ list(
       source_cmh_extract,
       # Function
       process_extract_cmh(
-        cmh_data,
-        year,
-        write_to_disk = write_to_disk
+        data = cmh_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - CMH
