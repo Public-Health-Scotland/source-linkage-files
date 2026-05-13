@@ -135,18 +135,13 @@ list(
   # Update NHS UK postcode directory -----
   tar_target(
     # Target name
-    uk_pc_list,
-    update_uk_postcode_directory(),
-    format = "qs",
-    cue = tar_cue_age(
-      name = uk_pc_list,
-      age = as.difftime(180, units = "days")
-    )
+    uk_postcode_data,
+    get_uk_postcode_data(BYOC_MODE)
   ),
   # Care home name look up------
   tar_target(
-    slf_ch_name_lookup_path,
-    get_slf_ch_name_lookup_path(),
+    slf_ch_name_lookup_data,
+    get_slf_ch_name_lookup_data(BYOC_MODE),
     format = "file"
   ),
   ## Process Lookups ##-------------------------------------------------------
@@ -172,13 +167,10 @@ list(
     # Function
     process_lookup_sc_demographics(
       sc_demog_data,
-      all_care_home_extract = read_sc_all_care_home(
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      ),
+      all_care_home_extract = all_care_home_extract,
       spd_data = spd_data,
-      uk_postcode_data = get_uk_postcode_data(BYOC_MODE),
-      ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE),
+      uk_postcode_data = uk_postcode_data,
+      ch_name_lookup = slf_ch_name_lookup_data,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
@@ -387,7 +379,10 @@ list(
     # Target name
     all_care_home_extract,
     # Function
-    read_sc_all_care_home(),
+    read_sc_all_care_home(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = all_care_home_extract,
       age = as.difftime(28.0, units = "days")
@@ -399,10 +394,10 @@ list(
     all_care_home,
     # Function
     process_sc_all_care_home(
-      all_care_home_extract,
+      all_care_home_extract = all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
-      ch_name_lookup_path = slf_ch_name_lookup_path,
+      ch_name_lookup_path = slf_ch_name_lookup_data,
       spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
