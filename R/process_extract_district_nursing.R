@@ -147,9 +147,10 @@ process_extract_district_nursing <- function(data,
   if (write_to_disk) {
     dn_episodes %>%
       write_file(get_source_extract_path(year, "dn", check_mode = "write", BYOC_MODE = BYOC_MODE),
-                 BYOC_MODE = BYOC_MODE,
-                 group_id = 3356) # sourcedev owner
-    }
+        BYOC_MODE = BYOC_MODE,
+        group_id = 3356
+      ) # sourcedev owner
+  }
 
   log_slf_event(stage = "process", status = "complete", type = "dn", year = year)
 

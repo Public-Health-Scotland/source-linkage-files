@@ -242,7 +242,7 @@ list(
       BYOC_MODE = FALSE,
       run_id = NA,
       run_date_time = NA
-      ),
+    ),
     priority = 0.8
   ),
   # Home care costs------

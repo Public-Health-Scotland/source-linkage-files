@@ -15,8 +15,7 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
                              BYOC_MODE = FALSE,
                              run_id = NA,
                              run_date_time = NA) {
-
-  log_slf_event(stage = "process", status = "start", type = "dn_costs", year = year) #TODO: Check this is necessary.
+  log_slf_event(stage = "process", status = "start", type = "dn_costs", year = year) # TODO: Check this is necessary.
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
@@ -28,7 +27,8 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
   ## data ##
   dn_raw_costs <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_costs_source")) %>% # TODO: Placeholder. Check table name.
+    dbplyr::in_schema("sdl", "sdl_dn_costs_source")
+  ) %>% # TODO: Placeholder. Check table name.
     dplyr::collect() %>%
     janitor::clean_names() %>%
     # change 1718 type to numeric - reads in as a character
@@ -46,7 +46,8 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
   # contacts
   dn_raw_contacts <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_contacts_source")) %>% # TODO: Placeholder. Check table name and whether dataset exists.
+    dbplyr::in_schema("sdl", "sdl_dn_contacts_source")
+  ) %>% # TODO: Placeholder. Check table name and whether dataset exists.
     dplyr::collect() %>%
     janitor::clean_names() %>%
     # create year variable as fy
@@ -61,8 +62,8 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
 
   # match raw costs to contacts file
   dn_raw_costs_contacts <- left_join(dn_raw_contacts,
-                                     dn_raw_costs,
-                                     by = c("hb2019", "year")
+    dn_raw_costs,
+    by = c("hb2019", "year")
   )
 
 
@@ -73,7 +74,8 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
   # District Nursing data which is 27% of the population.
   population_lookup <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_pop_source")) %>% # TODO: Placeholder.Check table name and whether dataset exists.
+    dbplyr::in_schema("sdl", "sdl_pop_source")
+  ) %>% # TODO: Placeholder.Check table name and whether dataset exists.
     # Select only the HSCPs for NHS Highland & years since 2015
     filter(
       hscp2019 %in% c("S37000004", "S37000016"), # TODO: Check column exists in Denodo view.
@@ -103,8 +105,8 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
   ## match files ##
 
   matched_data <- full_join(dn_raw_costs_contacts,
-                            population_lookup,
-                            by = c("hb2019", "year")
+    population_lookup,
+    by = c("hb2019", "year")
   ) %>%
     # recode NA pop_proportion with 1
     mutate(pop_proportion = replace_na(pop_proportion, 1)) %>%
@@ -145,8 +147,8 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
   while (anyNA(uplift_data$cost_total_net)) {
     uplift_data <- uplift_data %>%
       mutate(cost_total_net = if_else(is.na(cost_total_net),
-                                      lag(cost_total_net) * 1.01,
-                                      cost_total_net
+        lag(cost_total_net) * 1.01,
+        cost_total_net
       ))
   }
 
@@ -158,12 +160,12 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
     bind_rows(
       uplift_data,
       map_df(1:5, ~
-               uplift_data %>%
-               filter(year == latest_year) %>%
-               mutate(
-                 cost_total_net = cost_total_net * (1.01)^.x,
-                 year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
-               ))
+        uplift_data %>%
+          filter(year == latest_year) %>%
+          mutate(
+            cost_total_net = cost_total_net * (1.01)^.x,
+            year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
+          ))
     )
 
   new_years_data <-
@@ -192,11 +194,11 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
   outfile %>%
     # Save .rds file
     write_file(get_dn_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
-               group_id = 3206, # hscdiip owner
-               BYOC_MODE = BYOC_MODE
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
 
-  log_slf_event(stage = "process", status = "complete", type = "dn_costs", year = "all") #TODO: Check this is necessary.
+  log_slf_event(stage = "process", status = "complete", type = "dn_costs", year = "all") # TODO: Check this is necessary.
 
   return(outfile)
 }

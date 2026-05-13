@@ -18,7 +18,8 @@ read_extract_district_nursing <- function(year,
   # Read BOXI extract
   extract_district_nursing <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_district_nursing_source")) %>% # TODO: Check table name.
+    dbplyr::in_schema("sdl", "sdl_district_nursing_source")
+  ) %>% # TODO: Check table name.
     # TODO: Check whether to filter by year.
     dplyr::select(
       age = "age_at_contact_date",
