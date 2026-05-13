@@ -130,6 +130,82 @@ list(
     )
   ),
 
+  # Scottish postcode directory------
+  tar_target(
+    # Target name
+    spd_data,
+    # Function
+    get_spd_data(BYOC_MODE),
+    format = "file"
+  ),
+  # Update NHS UK postcode directory -----
+  tar_target(
+    # Target name
+    uk_postcode_data,
+    get_uk_postcode_data(BYOC_MODE)
+  ),
+  # Care home name look up------
+  tar_target(
+    slf_ch_name_lookup_data,
+    get_slf_ch_name_lookup_data(BYOC_MODE),
+    format = "file"
+  ),
+
+  # READ - Care Homes
+  tar_target(
+    # Target name
+    all_care_home_extract,
+    # Function
+    read_sc_all_care_home(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(
+      name = all_care_home_extract,
+      age = as.difftime(28.0, units = "days")
+    )
+  ),
+
+  # Social care demographics
+  # READ - SC Demographics
+  tar_target(
+    # Target name
+    sc_demog_data,
+    # Function
+    read_lookup_sc_demographics(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(
+      name = sc_demog_data,
+      age = as.difftime(28.0, units = "days")
+    )
+  ),
+  # PROCESS - SC Demographics
+  tar_target(
+    # Target name
+    sc_demog_lookup,
+    # Function
+    process_lookup_sc_demographics(
+      sc_demog_data,
+      all_care_home_extract = all_care_home_extract,
+      spd_data = spd_data,
+      uk_postcode_data = uk_postcode_data,
+      ch_name_lookup = slf_ch_name_lookup_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    priority = 0.9
+  ),
+  # TEST - SC Demographics
+  tar_target(
+    # Target name
+    tests_sc_demog_lookup,
+    # Function
+    process_tests_sc_demographics(sc_demog_lookup)
+  ),
 
   ## Stage 2.2 year specific targets ----
   tar_map(
