@@ -6,13 +6,19 @@
 \usage{
 process_costs_care_homes(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
 \item{denodo_connect}{connection to denodo}
 
 \item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{Denodo identifier}
+
+\item{run_date_time}{Denodo identifier}
 }
 \description{
 Process costs - Care Homes

@@ -24,6 +24,10 @@ the year specific data.}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
+\item{run_id}{Denodo identifier}
+
+\item{run_date_time}{Denodo identifier}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }

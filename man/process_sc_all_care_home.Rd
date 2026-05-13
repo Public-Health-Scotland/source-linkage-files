@@ -23,6 +23,12 @@ process_sc_all_care_home(
 \item{refined_death}{The processed lookup of deaths from IT produced
 with \code{\link[=process_refined_death]{process_refined_death()}}.}
 
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{Denodo identifier}
+
+\item{run_date_time}{Denodo identifier}
+
 \item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }
