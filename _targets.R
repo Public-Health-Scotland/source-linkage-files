@@ -55,9 +55,9 @@ tar_option_set(
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
-  retrieval = "auto",
+  retrieval = "work",
   # memory - default option: the target stays in memory until the end of the pipeline
-  memory = "auto",
+  memory = "persistent",
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
@@ -127,9 +127,9 @@ list(
   # Scottish postcode directory------
   tar_target(
     # Target name
-    spd_path,
+    spd_data,
     # Function
-    get_spd_path(),
+    get_spd_data(BYOC_MODE),
     format = "file"
   ),
   # Update NHS UK postcode directory -----
@@ -170,6 +170,9 @@ list(
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       ),
+      spd_data = spd_data,
+      uk_postcode_data = get_uk_postcode_data(BYOC_MODE),
+      ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE),
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
@@ -193,7 +196,7 @@ list(
     process_lookup_gpprac(
       open_data = gpprac_opendata,
       gpprac_ref_path = gpprac_ref_path,
-      spd_path = spd_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
@@ -212,7 +215,7 @@ list(
     source_pc_lookup,
     # Function
     process_lookup_postcode(
-      spd_path = spd_path,
+      spd_data = spd_data,
       simd_path = simd_path,
       locality_path = locality_path,
       write_to_disk = write_to_disk
@@ -264,9 +267,15 @@ list(
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    # Function
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # PROCESS - IT CHI deaths------
   tar_target(
@@ -275,7 +284,10 @@ list(
     # Function
     process_it_chi_deaths(
       data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
@@ -301,7 +313,10 @@ list(
     refined_death_data,
     process_refined_death(
       it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   ### Social Care - 'All' data -----------------------------------------------
@@ -391,6 +406,8 @@ list(
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time,
+      ch_name_lookup_path = slf_ch_name_lookup_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -777,17 +794,22 @@ list(
         year
       )
     ),
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
+
+    # Remove process_slf_deaths_lookup function, and
+    # moved the funtionality to join_deaths_data()
+    # where the slf_deaths_lookup is only used once.
+    # # Deaths - Year specific SLF lookup-----------------------------------------
+    # tar_target(
+    #   # Target name
+    #   slf_deaths_lookup,
+    #   # Function
+    #   process_slf_deaths_lookup(
+    #     year = year,
+    #     refined_death = refined_death_data,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
     # READ - GP Out of Hours diagnoses
     tar_target(

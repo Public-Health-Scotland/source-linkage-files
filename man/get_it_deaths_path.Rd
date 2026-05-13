@@ -4,7 +4,7 @@
 \alias{get_it_deaths_path}
 \title{IT Deaths File Path}
 \usage{
-get_it_deaths_path(it_reference = NULL, ...)
+get_it_deaths_path(it_reference = NULL, BYOC_MODE, ...)
 }
 \arguments{
 \item{it_reference}{Optional argument for the seven-digit code in the

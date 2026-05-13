@@ -29,7 +29,7 @@ process_lookup_gpprac <- function(
       pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
     )
 
-  spd_file <- get_spd_data() %>%
+  spd_file <- get_spd_data(BYOC_MODE) %>%
     dplyr::select(c(
       "pc7",
       "pc8",

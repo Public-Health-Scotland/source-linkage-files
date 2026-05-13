@@ -40,6 +40,9 @@ get_uk_postcode_path <- function(...) {
 get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                  BYOC_MODE) {
   if (isTRUE(BYOC_MODE)) {
+    # Disconnect from Denodo
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
     extract_uk_pc <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_uk_postcode_source") ### TODO check SDL name ###
@@ -145,12 +148,19 @@ get_combined_slf_deaths_lookup_path <- function(update = latest_update(),
 #' @export
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_chi_deaths_path <- function(update = latest_update(), ...) {
-  slf_chi_deaths_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("anon-chi_deaths_{update}.parquet"),
-    ...
-  )
+get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE = FALSE, ...) {
+  if (BYOC_MODE) {
+    slf_chi_deaths_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = "anon-chi_deaths.parquet"
+    )
+  } else {
+    slf_chi_deaths_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Deaths"),
+      file_name = stringr::str_glue("anon-chi_deaths_{update}.parquet"),
+      ...
+    )
+  }
 
   return(slf_chi_deaths_path)
 }
@@ -209,6 +219,9 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
 get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                         BYOC_MODE) {
   if (isTRUE(BYOC_MODE)) {
+    # Disconnect from Denodo
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
     extract_ch_name_lookup <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source") ### TODO check SDL name ###
