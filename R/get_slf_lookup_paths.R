@@ -96,6 +96,7 @@ get_slf_deaths_lookup_path <- function(year, ...) {
   return(slf_deaths_lookup_path)
 }
 
+
 #' SLF death dates File Path
 #'
 #' @description Get the full path to the BOXI NRS Deaths lookup file for all financial years
