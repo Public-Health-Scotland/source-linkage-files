@@ -176,7 +176,7 @@ list(
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       ),
-      spd_data = get_spd_data(BYOC_MODE),
+      spd_data = spd_data,
       uk_postcode_data = get_uk_postcode_data(BYOC_MODE),
       ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE),
       write_to_disk = write_to_disk,
