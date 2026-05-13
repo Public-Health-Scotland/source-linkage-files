@@ -79,7 +79,7 @@ get_byoc_output_files <- function(year,
       ),
       year = paste0("-20", year)
     )
-    year_specific_files <- paste0(file_year_list$file, file_year_list$year)
+    year_specific_files <- paste0(file_year_list$file, file_year_list$year, ".parquet")
     year_specific_files <- file.path(base_path, year_specific_files)
   }
 
