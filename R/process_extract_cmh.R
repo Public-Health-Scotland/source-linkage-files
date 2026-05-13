@@ -73,11 +73,11 @@ process_extract_cmh <- function(data,
       "diag4",
       "diag5",
       "diag6"
-      ) %>%
+    ) %>%
     dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
-      )
+    )
 
   if (write_to_disk) {
     write_file(
