@@ -2,17 +2,30 @@
 % Please edit documentation in R/logger_utils.R
 \name{log_tar_make}
 \alias{log_tar_make}
-\title{Directing Targets Output to Logger}
+\title{Direct targets output to logger in near real time}
 \usage{
-log_tar_make(script, store, reporter = "terse", ...)
+log_tar_make(
+  script,
+  store,
+  reporter = "verbose",
+  poll_interval = 0.2,
+  wd = getwd(),
+  ...
+)
 }
 \arguments{
 \item{script}{Path to targets script}
 
-\item{store}{store path}
+\item{store}{Targets store path}
 
-\item{reporter}{targets reporter type}
+\item{reporter}{Targets reporter type}
+
+\item{poll_interval}{Seconds between output checks}
+
+\item{wd}{Working directory for the background R process}
+
+\item{...}{Extra arguments passed to targets::tar_make()}
 }
 \description{
-Directing Targets Output to Logger
+Direct targets output to logger in near real time
 }
