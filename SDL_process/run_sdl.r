@@ -103,10 +103,10 @@ byoc_output_files <- get_byoc_output_files(
 
 # targets ----
 logger::log_info("Targets started.")
-targets::tar_make(
+log_tar_make(
   script = "SDL_process/dummy_targets.R",
   store = store_path,
-  reporter = "timestamp"
+  reporter = "verbose"
 )
 logger::log_info("Targets finished.")
 

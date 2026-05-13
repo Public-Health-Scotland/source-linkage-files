@@ -214,92 +214,124 @@ log_ind_substage <- function(sub_stage, status, year) {
   logger::log_info(msg)
 }
 
-#' Directing Targets Output to Logger
+#' Direct targets output to logger in near real time
 #'
 #' @param script Path to targets script
-#' @param store store path
-#' @param reporter targets reporter type
+#' @param store Targets store path
+#' @param reporter Targets reporter type
+#' @param poll_interval Seconds between output checks
+#' @param wd Working directory for the background R process
+#' @param ... Extra arguments passed to targets::tar_make()
 #'
 #' @export
 log_tar_make <- function(
-  script,
-  store,
-  reporter = "terse",
-  ...
+    script,
+    store,
+    reporter = "verbose",
+    poll_interval = 0.2,
+    wd = getwd(),
+    ...
 ) {
-  out_lines <- character()
-  err_lines <- character()
-  warn_lines <- character()
+  extra_args <- list(...)
 
-  out_con <- textConnection("out_lines", open = "w", local = TRUE)
-  err_con <- textConnection("err_lines", open = "w", local = TRUE)
+  log_targets_line <- function(line, stream = c("output", "message")) {
+    stream <- match.arg(stream)
 
-  sink(out_con, type = "output")
-  sink(err_con, type = "message")
+    line <- trimws(line, which = "right")
 
-  sinks_closed <- FALSE
-  close_sinks <- function() {
-    if (!sinks_closed) {
-      try(sink(type = "message"), silent = TRUE)
-      try(sink(type = "output"), silent = TRUE)
-      try(close(out_con), silent = TRUE)
-      try(close(err_con), silent = TRUE)
-      sinks_closed <<- TRUE
+    if (!nzchar(trimws(line))) {
+      return(invisible(NULL))
     }
+
+    is_warning_line <- grepl(
+      pattern = "^(Warning messages?:|[0-9]+: |.*targets produced warnings)",
+      x = line
+    )
+
+    if (is_warning_line) {
+      logger::log_warn("[targets] {line}")
+    } else {
+      logger::log_info("[targets] {line}")
+    }
+
+    invisible(NULL)
   }
-  on.exit(close_sinks(), add = TRUE)
 
-  ok <- TRUE
-  err_obj <- NULL
-
-  withCallingHandlers(
-    {
-      tryCatch(
-        {
-          targets::tar_make(
-            script   = script,
-            store    = store,
-            reporter = reporter,
-            ...
-          )
-        },
-        error = function(e) {
-          ok <<- FALSE
-          err_obj <<- e
-          NULL
-        }
+  process <- callr::r_bg(
+    func = function(script, store, reporter, extra_args) {
+      do.call(
+        targets::tar_make,
+        c(
+          list(
+            script = script,
+            store = store,
+            reporter = reporter
+          ),
+          extra_args
+        )
       )
     },
-    warning = function(w) {
-      warn_lines <<- c(warn_lines, conditionMessage(w))
-      invokeRestart("muffleWarning")
-    }
+    args = list(
+      script = script,
+      store = store,
+      reporter = reporter,
+      extra_args = extra_args
+    ),
+    stdout = "|",
+    stderr = "|",
+    wd = wd,
+    supervise = TRUE
   )
 
-  close_sinks()
+  on.exit(
+    {
+      if (process$is_alive()) {
+        process$kill()
+      }
+    },
+    add = TRUE
+  )
 
-  if (length(out_lines)) {
-    for (ln in out_lines) {
-      if (nzchar(trimws(ln))) logger::log_info("[targets] {ln}")
+  while (process$is_alive()) {
+    out_lines <- process$read_output_lines()
+    err_lines <- process$read_error_lines()
+
+    if (length(out_lines)) {
+      for (line in out_lines) {
+        log_targets_line(line, stream = "output")
+      }
     }
+
+    if (length(err_lines)) {
+      for (line in err_lines) {
+        log_targets_line(line, stream = "message")
+      }
+    }
+
+    Sys.sleep(poll_interval)
   }
 
-  if (length(warn_lines)) {
-    for (ln in warn_lines) {
-      if (nzchar(trimws(ln))) logger::log_warn("[targets] {ln}")
+  # Flush remaining output after the process ends.
+  out_lines <- process$read_all_output_lines()
+  err_lines <- process$read_all_error_lines()
+
+  if (length(out_lines)) {
+    for (line in out_lines) {
+      log_targets_line(line, stream = "output")
     }
   }
 
   if (length(err_lines)) {
-    for (ln in err_lines) {
-      if (nzchar(trimws(ln))) logger::log_error("[targets] {ln}")
+    for (line in err_lines) {
+      log_targets_line(line, stream = "message")
     }
   }
 
-  if (!ok) {
-    msg <- conditionMessage(err_obj)
-    logger::log_error("[targets] tar_make failed: {msg}")
-    stop(err_obj)
+  exit_status <- process$get_exit_status()
+
+  if (!identical(exit_status, 0L)) {
+    logger::log_error("[targets] tar_make failed with exit status {exit_status}")
+    stop("targets::tar_make() failed. See log output above.", call. = FALSE)
   }
 
   invisible(TRUE)
