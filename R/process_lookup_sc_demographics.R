@@ -6,6 +6,9 @@
 #'
 #' @param data The extract to process.
 #' @param all_care_home_extract The raw extracts produced by read_sc_all_care_home().
+#' @param spd_data  The SPD extract
+#' @param uk_postcode_data The UK postcode data
+#' @param ch_name_lookup The care home name lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
