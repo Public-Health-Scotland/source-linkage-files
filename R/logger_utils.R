@@ -225,12 +225,12 @@ log_ind_substage <- function(sub_stage, status, year) {
 #'
 #' @export
 log_tar_make <- function(
-    script,
-    store,
-    reporter = "verbose",
-    poll_interval = 0.2,
-    wd = getwd(),
-    ...
+  script,
+  store,
+  reporter = "verbose",
+  poll_interval = 0.2,
+  wd = getwd(),
+  ...
 ) {
   extra_args <- list(...)
 
