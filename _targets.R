@@ -127,9 +127,9 @@ list(
   # Scottish postcode directory------
   tar_target(
     # Target name
-    spd_path,
+    spd_data,
     # Function
-    get_spd_path(),
+    get_spd_data(BYOC_MODE),
     format = "file"
   ),
   # Update NHS UK postcode directory -----
@@ -202,7 +202,7 @@ list(
     process_lookup_gpprac(
       open_data = gpprac_opendata,
       gpprac_ref_path = gpprac_ref_path,
-      spd_path = spd_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
@@ -221,7 +221,7 @@ list(
     source_pc_lookup,
     # Function
     process_lookup_postcode(
-      spd_path = spd_path,
+      spd_data = spd_data,
       simd_path = simd_path,
       locality_path = locality_path,
       write_to_disk = write_to_disk
@@ -403,7 +403,7 @@ list(
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
       ch_name_lookup_path = slf_ch_name_lookup_path,
-      spd_path = spd_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.5
