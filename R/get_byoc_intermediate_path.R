@@ -62,8 +62,9 @@
 )
 
 get_byoc_intermediate_path <- function(
-    file_name,
-    base_path = denodo_output_path()) {
+  file_name,
+  base_path = denodo_output_path()
+) {
   file.path(base_path, file_name)
 }
 
@@ -80,9 +81,10 @@ get_byoc_intermediate_path <- function(
 #' @export
 #' @family file path functions
 get_byoc_output_files <- function(
-    years,
-    types = NULL,
-    base_path = denodo_output_path()) {
+  years,
+  types = NULL,
+  base_path = denodo_output_path()
+) {
   registry <- .byoc_dataset_registry
 
   # validate types
