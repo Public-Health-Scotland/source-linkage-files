@@ -16,7 +16,7 @@ data with uplifted costs
 Set uplift scale
 }
 \seealso{
-Other uplift_costs: 
-\code{\link{apply_cost_uplift}()}
+Other uplift_costs:
+\code{\link[=apply_cost_uplift]{apply_cost_uplift()}}
 }
 \concept{uplift_costs}
