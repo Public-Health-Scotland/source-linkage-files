@@ -53,10 +53,10 @@
   "sc_all_hc", "anon-all_hc_episodes.parquet", FALSE,
   "sc_all_sds", "anon-all_sds_episodes.parquet", FALSE,
   "sc_demog_lookup", "anon-sc_demographics_lookup.parquet", FALSE,
-  "ch_cost_lookup", "Cost_CH_Lookup.parquet", FALSE,
-  "dn_cost_lookup", "Cost_DN_Lookup.parquet", FALSE,
+  "ch_cost_lookup", "cost_ch_lookup.parquet", FALSE,
+  "dn_cost_lookup", "cost_dn_lookup.parquet", FALSE,
   "hc_cost_lookup", "cost_hc_lookup.parquet", FALSE,
-  "ooh_cost_lookup", "Cost_GPOoH_Lookup.parquet", FALSE,
+  "ooh_cost_lookup", "cost_gpooh_lookup.parquet", FALSE,
   "postcode_lookup", "source_postcode_lookup.parquet", FALSE,
   "gpprac_lookup", "source_gpprac_lookup.parquet", FALSE
 )
