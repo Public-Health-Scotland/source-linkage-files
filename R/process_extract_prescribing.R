@@ -12,7 +12,12 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
+process_extract_prescribing <- function(data,
+                                        year,
+                                        write_to_disk = TRUE,
+                                        BYOC_MODE = FALSE,
+                                        run_id = NA,
+                                        run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "pis", year = year)
 
   # Only run for a single year
@@ -42,7 +47,9 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
       record_keydate1 = end_fy(year),
       record_keydate2 = .data$record_keydate1,
       # Add SMR type variable
-      smrtype = add_smrtype(.data$recid)
+      smrtype = add_smrtype(.data$recid),
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   # Issue a warning if rows were removed
@@ -57,7 +64,8 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
   if (write_to_disk) {
     write_file(
       pis_clean,
-      get_source_extract_path(year, "pis", check_mode = "write"),
+      get_source_extract_path(year, "pis", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }

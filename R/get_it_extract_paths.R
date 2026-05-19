@@ -76,26 +76,29 @@ get_it_deaths_path <- function(it_reference = NULL, BYOC_MODE, ...) {
 #' @export
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
-get_it_prescribing_path <- function(year, it_reference = NULL, ...) {
-  if (is.null(it_reference)) {
-    it_pis_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
-      file_name_regexp = stringr::str_glue(
-        "anon-SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.parquet"
-      )
-    )
+get_it_prescribing_path <- function(year, it_reference = NULL, BYOC_MODE, ...) {
+  if (isTRUE(BYOC_MODE)) {
+    return("dummy_BYOC_it_prescribing_path")
   } else {
-    it_reference <- check_it_reference(it_reference)
-
-    it_pis_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
-      file_name = stringr::str_glue(
-        "anon-SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.parquet"
+    if (is.null(it_reference)) {
+      it_pis_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+        file_name_regexp = stringr::str_glue(
+          "anon-SCTASK[0-9]{{7}}_PIS_{convert_fyyear_to_year(year)}.parquet"
+        )
       )
-    )
-  }
+    } else {
+      it_reference <- check_it_reference(it_reference)
 
-  return(it_pis_path)
+      it_pis_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+        file_name = stringr::str_glue(
+          "anon-SCTASK{it_reference}_PIS_{convert_fyyear_to_year(year)}.parquet"
+        )
+      )
+    }
+    return(it_pis_path)
+  }
 }
 
 #' Check that an IT reference looks valid

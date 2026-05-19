@@ -886,12 +886,16 @@ list(
     ),
     # Prescribing (PIS) Activity------------------------------------------------
     # READ - Prescribing (PIS)
-    tar_file_read(
+    tar_target(
       # Target name
       prescribing_data,
-      get_it_prescribing_path(year),
       # Function
-      read_extract_prescribing(year, !!.x)
+      read_extract_prescribing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_it_prescribing_path(year = year, BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Prescribing
     tar_target(
@@ -900,8 +904,11 @@ list(
       # Function
       process_extract_prescribing(
         prescribing_data,
-        year,
-        write_to_disk = write_to_disk
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Prescribing
