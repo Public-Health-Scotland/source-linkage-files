@@ -237,7 +237,12 @@ list(
     # Target name
     dn_cost_lookup,
     # Function
-    process_costs_dn_rmd(),
+    process_costs_dn(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = FALSE,
+      run_id = NA,
+      run_date_time = NA
+    ),
     priority = 0.8
   ),
   # Home care costs------
@@ -580,12 +585,16 @@ list(
     ),
     # District Nursing Activity-------------------------------------------------
     # READ - District Nursing
-    tar_file_read(
+    tar_target(
       # Target name
       dn_data,
-      get_boxi_extract_path(year, type = "dn"),
       # Function
-      read_extract_district_nursing(year, !!.x)
+      read_extract_district_nursing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "dn", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - District Nursing
     tar_target(
@@ -594,9 +603,12 @@ list(
       # Function
       process_extract_district_nursing(
         dn_data,
-        year,
+        year = year,
         costs = dn_cost_lookup,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - District Nursing

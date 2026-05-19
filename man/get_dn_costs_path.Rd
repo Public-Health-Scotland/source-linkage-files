@@ -4,7 +4,7 @@
 \alias{get_dn_costs_path}
 \title{District Nursing Costs File Path}
 \usage{
-get_dn_costs_path(..., update = NULL)
+get_dn_costs_path(BYOC_MODE, ..., update = NULL)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}

@@ -13,12 +13,13 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_district_nursing <- function(
-  data,
-  year,
-  costs = read_file(get_dn_costs_path()),
-  write_to_disk = TRUE
-) {
+process_extract_district_nursing <- function(data,
+                                             year,
+                                             costs = read_file(get_dn_costs_path(BYOC_MODE = BYOC_MODE)),
+                                             write_to_disk = TRUE,
+                                             BYOC_MODE = FALSE,
+                                             run_id = NA,
+                                             run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "dn", year = year)
 
   # Only run for a single year
@@ -137,11 +138,16 @@ process_extract_district_nursing <- function(
         ~ sum(.x)
       )
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   if (write_to_disk) {
     dn_episodes %>%
-      write_file(get_source_extract_path(year, "dn", check_mode = "write"),
+      write_file(get_source_extract_path(year, "dn", check_mode = "write", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE,
         group_id = 3356
       ) # sourcedev owner
   }

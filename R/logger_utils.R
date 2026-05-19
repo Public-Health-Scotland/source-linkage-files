@@ -146,6 +146,7 @@ log_slf_event <- function(stage = c("read", "process", "test"),
     "dd" ~ "Delayed Discharges",
     "deaths" ~ "NRS Deaths",
     "dn" ~ "District Nursing",
+    "dn_costs" ~ "District Nursing Costs", # TODO: Check if this is necessary ----
     "gpooh" ~ "GP Out of Hours",
     "gp_ooh-c" ~ "GP Out of Hours Consultations",
     "gp_ooh-d" ~ "GP Out of Hours Diagnosis",
