@@ -33,7 +33,7 @@
   "hhg", "anon-hhg", TRUE,
   "homelessness", "anon-homelessness_for_source", TRUE,
   "homelessness_completeness", "homelessness_completeness", TRUE,
-  "ltc", "anon-LTCs_patient_reference_file", TRUE,
+  "ltc", "anon-ltcs_patient_reference_file", TRUE,
   "maternity", "anon-maternity_for_source", TRUE,
   "mh", "anon-mental_health_for_source", TRUE,
   "outpatients", "anon-outpatients_for_source", TRUE,
