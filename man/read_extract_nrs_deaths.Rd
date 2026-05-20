@@ -7,7 +7,7 @@
 read_extract_nrs_deaths(
   year,
   denodo_connect = get_denodo_connect(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "nrs_deaths", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 )
 }
