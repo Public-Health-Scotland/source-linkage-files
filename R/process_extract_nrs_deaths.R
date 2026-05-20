@@ -23,7 +23,7 @@ process_extract_nrs_deaths <- function(data,
   log_slf_event(
     stage = "process",
     status = "start",
-    type = "deaths",
+    type = "nrs_deaths",
     year = year
   )
 
@@ -49,7 +49,7 @@ process_extract_nrs_deaths <- function(data,
       write_file(
         get_source_extract_path(
           year,
-          "deaths",
+          "nrs_deaths",
           check_mode = "write",
           BYOC_MODE = BYOC_MODE
         ),
@@ -61,7 +61,7 @@ process_extract_nrs_deaths <- function(data,
   log_slf_event(
     stage = "process",
     status = "complete",
-    type = "deaths",
+    type = "nrs_deaths",
     year = year
   )
 

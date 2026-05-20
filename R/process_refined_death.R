@@ -33,7 +33,7 @@ process_refined_death <- function(
     read_extract_nrs_deaths(
       year,
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
+      get_boxi_extract_path(year, type = "nrs_deaths", BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     ) %>%
       process_extract_nrs_deaths(
