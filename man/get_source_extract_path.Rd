@@ -6,8 +6,8 @@
 \usage{
 get_source_extract_path(
   year,
-  type = c("acute", "ae", "at", "ch", "client", "cmh", "dd", "deaths", "dn", "gp_ooh",
-    "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds"),
+  type = c("acute", "ae", "at", "ch", "client", "cmh", "dd", "nrs_deaths", "dn",
+    "gp_ooh", "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds"),
   BYOC_MODE,
   ...
 )
