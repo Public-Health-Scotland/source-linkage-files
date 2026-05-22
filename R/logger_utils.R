@@ -334,5 +334,15 @@ log_tar_make <- function(
     stop("targets::tar_make() failed. See log output above.", call. = FALSE)
   }
 
-  invisible(TRUE)
+  result <- tryCatch(
+    {
+      process$get_result()
+    },
+    error = function(e) {
+      logger::log_error("[targets] tar_make failed: {conditionMessage(e)}")
+      stop(e)
+    }
+  )
+
+  invisible(result)
 }
