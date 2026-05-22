@@ -11,7 +11,6 @@ process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MOD
                                  BYOC_MODE = FALSE,
                                  run_id = NA,
                                  run_date_time = NA) {
-
   log_slf_event(stage = "process", status = "start", type = "ooh_cost_lookup", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
@@ -53,18 +52,17 @@ process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MOD
     dplyr::bind_rows(
       gp_ooh_costs,
       purrr::map(1:5, ~
-                   gp_ooh_costs %>%
-                   dplyr::filter(year == latest_cost_year) %>%
-                   dplyr::group_by(year, HB2019, Board_Name) %>%
-                   dplyr::summarise(
-                     cost_per_consultation = cost_per_consultation * (1.01)^.x,
-                     .groups = "drop"
-                   ) %>%
-                   dplyr::mutate(
-                     year = (as.numeric(convert_fyyear_to_year(year)) + .x) %>%
-                       convert_year_to_fyyear()
-                   )
-      )
+        gp_ooh_costs %>%
+          dplyr::filter(year == latest_cost_year) %>%
+          dplyr::group_by(year, HB2019, Board_Name) %>%
+          dplyr::summarise(
+            cost_per_consultation = cost_per_consultation * (1.01)^.x,
+            .groups = "drop"
+          ) %>%
+          dplyr::mutate(
+            year = (as.numeric(convert_fyyear_to_year(year)) + .x) %>%
+              convert_year_to_fyyear()
+          ))
     ) %>%
     dplyr::arrange(year, HB2019, Board_Name)
 
