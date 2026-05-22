@@ -200,7 +200,7 @@ list(
       # use this anonymous function with redundant but necessary refined_death
       # to make sure reading year-specific NRS deaths extracts after it is produced
       (\(year, refined_death_data) {
-        read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
           as.data.frame()
       })(year, refined_death_data)
     )
