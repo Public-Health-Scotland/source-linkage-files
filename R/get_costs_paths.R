@@ -73,14 +73,21 @@ get_dn_raw_costs_path <- function(...) {
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_gp_ooh_costs_path <- function(..., update = NULL) {
-  gp_ooh_costs_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = stringr::str_glue(
-      "Cost_GPOoH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.parquet"
-    ),
-    ...
-  )
+get_gp_ooh_costs_path <- function(BYOC_MODE, ..., update = NULL) {
+  if (isTRUE(BYOC_MODE)) {
+    gp_ooh_costs_path <- file.path(
+      denodo_output_path(),
+      stringr::str_glue("cost_gpooh_lookup.parquet")
+    )
+  } else {
+    gp_ooh_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = stringr::str_glue(
+        "cost_gpooh_lookup.parquet"
+      ),
+      ...
+    )
+  }
 
   return(gp_ooh_costs_path)
 }
