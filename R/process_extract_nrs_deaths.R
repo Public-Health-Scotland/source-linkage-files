@@ -42,7 +42,6 @@ process_extract_nrs_deaths <- function(data,
     dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time,
-
       dob = lubridate::as_date(dob),
       record_keydate1 = lubridate::as_date(record_keydate1),
       record_keydate2 = lubridate::as_date(record_keydate2)
