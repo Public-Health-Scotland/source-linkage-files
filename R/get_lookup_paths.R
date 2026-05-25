@@ -118,7 +118,7 @@ get_pop_path <- function(file_name = NULL,
   pop_dir <-
     fs::path(get_lookups_dir(), "Populations", "Estimates")
 
-  file_name_re <- dplyr::case_match(
+  file_name_re <- dplyr::recode_values(
     type,
     "datazone" ~ stringr::str_glue("DataZone2011_pop_est_2011_\\d+?\\.{ext}"),
     "hscp" ~ stringr::str_glue("HSCP2019_pop_est_1981_\\d+?\\.{ext}"),

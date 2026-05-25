@@ -14,7 +14,7 @@ read_extract_delayed_discharges <- function(file_path = get_dd_path()) {
       monthflag = lubridate::my(.data[["monthflag"]]),
       delay_end_reason = as.integer(.data[["delay_end_reason"]])
     ) %>%
-    dplyr::select(-.data[["cennum"]])
+    dplyr::select(-dplyr::all_of("cennum"))
 
   log_slf_event(stage = "read", status = "complete", type = "dd", year = year)
 
