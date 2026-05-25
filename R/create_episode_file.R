@@ -28,7 +28,6 @@ create_episode_file <- function(
     get_slf_gpprac_path(),
     col_select = c("gpprac", "cluster", "hbpraccode")
   ),
-  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE
@@ -168,7 +167,7 @@ create_episode_file <- function(
     ) %>%
     join_deaths_data(
       year,
-      slf_deaths_lookup
+      BYOC_MODE = BYOC_MODE
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
