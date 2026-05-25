@@ -20,16 +20,23 @@ console_output_path <- function() {
 extract_ep_ind_time <- function(file_name) {
   file_path <- get_file_path(console_output_path(), file_name)
   log_data <- readLines(file_path)
+
   # Extract relevant details
   log_df <- data.frame(log_data) %>%
-    tidyr::extract(
+    dplyr::filter(str_detect(log_data, "started at|finished at")) %>%
+    tidyr::separate_wider_regex(
       log_data,
-      into = c("function_name", "status", "timestamp"),
-      regex = "(.*?) (started|finished) at (.*)",
-      remove = FALSE
+      patterns = c(
+        function_name = ".*?",
+        " ",
+        status = "started|finished",
+        " at ",
+        timestamp = ".*"
+      ),
+      cols_remove = FALSE
     ) %>%
-    dplyr::mutate(timestamp = as.POSIXct(.data$timestamp, format = "%Y-%m-%d %H:%M:%S")) %>%
-    dplyr::filter(!is.na(.data$function_name))
+    relocate(log_data, .before = 1) %>%
+    dplyr::mutate(timestamp = as.POSIXct(.data$timestamp, format = "%Y-%m-%d %H:%M:%S"))
 
   # Join and calculate duration
   function_times <- log_df %>%
