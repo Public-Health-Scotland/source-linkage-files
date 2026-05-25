@@ -58,7 +58,7 @@ check_year_valid <- function(
     "cmh",
     "cost_dna",
     "dd",
-    "deaths",
+    "nrs_deaths",
     "dn",
     "gpooh",
     "hc",
@@ -234,8 +234,8 @@ qtr <- function() {
 #'
 #' @family initialisation
 years_to_run <- function() {
-  fy_start_2digit <- 17
-  fy_end_2digit <- 25
+  fy_start_2digit <- 19
+  fy_end_2digit <- 19
   years_to_run <- paste0(
     fy_start_2digit:fy_end_2digit,
     (fy_start_2digit + 1):(fy_end_2digit + 1)
