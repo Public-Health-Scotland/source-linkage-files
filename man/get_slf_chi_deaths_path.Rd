@@ -4,7 +4,7 @@
 \alias{get_slf_chi_deaths_path}
 \title{SLF CHI Deaths File Path}
 \usage{
-get_slf_chi_deaths_path(update = latest_update(), ...)
+get_slf_chi_deaths_path(update = latest_update(), BYOC_MODE = FALSE, ...)
 }
 \arguments{
 \item{update}{The update month to use,
@@ -21,11 +21,10 @@ Get the full path to the CHI deaths file
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other slf lookup file path: 
-\code{\link{get_combined_slf_deaths_lookup_path}()},
-\code{\link{get_slf_ch_name_lookup_path}()},
-\code{\link{get_slf_deaths_lookup_path}()},
-\code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()}
+Other slf lookup file path:
+\code{\link[=get_combined_slf_deaths_lookup_path]{get_combined_slf_deaths_lookup_path()}},
+\code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
+\code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}},
+\code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
 }
 \concept{slf lookup file path}

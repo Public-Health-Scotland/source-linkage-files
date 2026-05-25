@@ -21,8 +21,8 @@ Get the file path for Alarms and Telecare all episodes file
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other social care episodes file paths: 
-\code{\link{get_sc_ch_episodes_path}()},
-\code{\link{get_sc_hc_episodes_path}()}
+Other social care episodes file paths:
+\code{\link[=get_sc_ch_episodes_path]{get_sc_ch_episodes_path()}},
+\code{\link[=get_sc_hc_episodes_path]{get_sc_hc_episodes_path()}}
 }
 \concept{social care episodes file paths}

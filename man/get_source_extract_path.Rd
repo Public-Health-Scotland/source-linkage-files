@@ -6,8 +6,8 @@
 \usage{
 get_source_extract_path(
   year,
-  type = c("acute", "ae", "at", "ch", "client", "cmh", "dd", "deaths", "dn", "gp_ooh",
-    "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds"),
+  type = c("acute", "ae", "at", "ch", "client", "cmh", "dd", "nrs_deaths", "dn",
+    "gp_ooh", "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds"),
   BYOC_MODE,
   ...
 )
@@ -26,12 +26,12 @@ Path to clean source extract containing data for each dataset
 Get the file path for Source Extract for given extract and year
 }
 \seealso{
-Other extract file paths: 
-\code{\link{get_boxi_extract_path}()},
-\code{\link{get_hhg_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
-\code{\link{get_sparra_path}()}
+Other extract file paths:
+\code{\link[=get_boxi_extract_path]{get_boxi_extract_path()}},
+\code{\link[=get_hhg_path]{get_hhg_path()}},
+\code{\link[=get_it_deaths_path]{get_it_deaths_path()}},
+\code{\link[=get_it_ltc_path]{get_it_ltc_path()}},
+\code{\link[=get_it_prescribing_path]{get_it_prescribing_path()}},
+\code{\link[=get_sparra_path]{get_sparra_path()}}
 }
 \concept{extract file paths}
