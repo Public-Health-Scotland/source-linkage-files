@@ -4,7 +4,7 @@
 \alias{get_gp_ooh_costs_path}
 \title{GP Out of Hours Costs File Path}
 \usage{
-get_gp_ooh_costs_path(..., update = NULL)
+get_gp_ooh_costs_path(BYOC_MODE, ..., update = NULL)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
