@@ -15,7 +15,10 @@
 process_extract_delayed_discharges <- function(
   data,
   year,
-  write_to_disk = TRUE
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
   log_slf_event(stage = "process", status = "start", type = "dd", year = year)
 
@@ -70,7 +73,9 @@ process_extract_delayed_discharges <- function(
     # set up variables
     dplyr::mutate(
       recid = "DD",
-      year = year
+      year = year,
+      run_id = run_id,
+      run_date_time = run_date_time
     ) %>%
     # recode blanks to NA
     dplyr::mutate(
@@ -93,6 +98,8 @@ process_extract_delayed_discharges <- function(
 
   dd_final <- dd_clean %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "anon_chi",
@@ -113,7 +120,8 @@ process_extract_delayed_discharges <- function(
   if (write_to_disk) {
     write_file(
       dd_final,
-      get_source_extract_path(year, "dd", check_mode = "write"),
+      get_source_extract_path(year, "dd", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
