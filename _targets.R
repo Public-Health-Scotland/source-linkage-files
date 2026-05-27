@@ -33,7 +33,7 @@ controller <- crew::crew_controller_local(
   name = "my_controller",
   # Specify 6 workers for parallel processing - works with 8CPU, 128GB posit session
   workers = 6,
-  seconds_idle = 3
+  seconds_idle = 30
 )
 
 # Targets options
@@ -48,15 +48,14 @@ tar_option_set(
   # format - default is parquet format
   format = "parquet",
   resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd"),
-    qs = tar_resources_qs(preset = "high")
+    parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
   error = "continue",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
-  retrieval = "worker",
+  retrieval = "work",
   # memory - default option: the target stays in memory until the end of the pipeline
   memory = "persistent",
   # controller - A controller or controller group object produced by the crew R package
@@ -258,9 +257,15 @@ list(
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    # Function
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # PROCESS - IT CHI deaths------
   tar_target(
@@ -269,7 +274,10 @@ list(
     # Function
     process_it_chi_deaths(
       data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
@@ -280,13 +288,25 @@ list(
     # Function
     process_tests_it_chi_deaths(it_chi_deaths_data)
   ),
+  # Long-Term Conditions (LTCs) Activity--------------------------------------
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
   # NRS BOXI Deaths------------------------------------------------------------
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
     refined_death_data,
     process_refined_death(
       it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   ### Social Care - 'All' data -----------------------------------------------
@@ -639,8 +659,6 @@ list(
       )
     ),
     # Long-Term Conditions (LTCs) Activity--------------------------------------
-    # READ - LTCs
-    tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
     # PROCESS - LTCs
     tar_target(
       # Target name
@@ -649,7 +667,10 @@ list(
       process_lookup_ltc(
         ltc_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - LTCs
@@ -700,22 +721,30 @@ list(
     ),
     # Mental Health (SMR02) Activity--------------------------------------------
     # READ - Mental Health
-    tar_file_read(
-      # Target name
+    tar_target(
       mental_health_data,
-      get_boxi_extract_path(year, type = "mh"),
-      # Function
-      read_extract_mental_health(year, !!.x)
+      read_extract_mental_health(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(
+          year = year,
+          type = "mh",
+          BYOC_MODE = BYOC_MODE
+        ),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Mental Health
     tar_target(
       # Target name
       source_mental_health_extract,
-      # Function
       process_extract_mental_health(
         mental_health_data,
-        year,
-        write_to_disk = write_to_disk
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Mental Health
@@ -749,17 +778,22 @@ list(
         year
       )
     ),
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
+
+    # Remove process_slf_deaths_lookup function, and
+    # moved the funtionality to join_deaths_data()
+    # where the slf_deaths_lookup is only used once.
+    # # Deaths - Year specific SLF lookup-----------------------------------------
+    # tar_target(
+    #   # Target name
+    #   slf_deaths_lookup,
+    #   # Function
+    #   process_slf_deaths_lookup(
+    #     year = year,
+    #     refined_death = refined_death_data,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
     # READ - GP Out of Hours diagnoses
     tar_target(
