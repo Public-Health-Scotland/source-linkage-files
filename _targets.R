@@ -316,7 +316,10 @@ list(
     # Target name
     all_at_extract,
     # Function
-    read_sc_all_alarms_telecare(),
+    read_sc_all_alarms_telecare(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = all_at_extract,
       age = as.difftime(28.0, units = "days")
@@ -330,6 +333,9 @@ list(
     process_sc_all_alarms_telecare(
       all_at_extract,
       sc_demog_lookup = sc_demog_lookup,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -957,6 +963,9 @@ list(
       process_extract_alarms_telecare(
         data = all_at,
         year = year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time,
         write_to_disk = write_to_disk
       )
     ),
