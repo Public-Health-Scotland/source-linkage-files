@@ -104,10 +104,17 @@ byoc_output_files <- get_byoc_output_files(
 
 # targets ----
 logger::log_info("Targets started.")
-log_tar_make(
-  script = "SDL_process/dummy_targets.R",
-  store = store_path,
-  reporter = "verbose"
+
+tryCatch(
+  log_tar_make(
+    script = "SDL_process/dummy_targets.R",
+    store = store_path,
+    reporter = "verbose"
+  ),
+  error = function(e) {
+    logger::log_error("Targets failed: {conditionMessage(e)}")
+    stop(e)
+  }
 )
 logger::log_info("Targets finished.")
 

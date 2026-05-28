@@ -62,9 +62,10 @@ process_refined_death <- function(
       .data$death_date_chi,
       .data$record_keydate1
     )) %>%
-    dplyr::select("anon_chi", "death_date") %>%
+    dplyr::select("run_id", "run_date_time", "anon_chi", "death_date") %>%
     # add fy when death happened
     dplyr::mutate(
+      death_date = lubridate::as_date(death_date),
       fy = phsmethods::extract_fin_year(.data$death_date),
       fy = as.character(paste0(substr(fy, 3, 4), substr(fy, 6, 7)))
     ) %>%
