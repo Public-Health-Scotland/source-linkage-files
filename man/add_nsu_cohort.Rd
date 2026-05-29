@@ -4,14 +4,14 @@
 \alias{add_nsu_cohort}
 \title{Add NSU cohort to working file}
 \usage{
-add_nsu_cohort(data, year, nsu_cohort = read_file(get_nsu_path(year)))
+add_nsu_cohort(data, year, BYOC_MODE)
 }
 \arguments{
 \item{data}{The input data frame}
 
 \item{year}{The year being processed}
 
-\item{nsu_cohort}{The NSU data for the year}
+\item{BYOC_MODE}{Whether run in a docker on Denodo}
 }
 \value{
 A data frame containing the Non-Service Users as additional rows
