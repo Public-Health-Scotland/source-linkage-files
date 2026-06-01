@@ -4,7 +4,15 @@
 \alias{add_keep_population_flag}
 \title{Add keep_popluation flag}
 \usage{
-add_keep_population_flag(individual_file, year)
+add_keep_population_flag(
+  individual_file,
+  year,
+  pop_estimates = get_datazone_pop_data(denodo_connect = get_denodo_connection(BYOC_MODE
+    = BYOC_MODE), file_path = get_pop_path(type = "datazone"), BYOC_MODE),
+  locality_data = get_locality_data(denodo_connect = get_denodo_connection(BYOC_MODE =
+    BYOC_MODE), file_path = get_locality_path(), BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{individual_file}{individual files under processing}

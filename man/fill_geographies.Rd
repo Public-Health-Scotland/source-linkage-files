@@ -6,9 +6,10 @@
 \usage{
 fill_geographies(
   data,
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
-    "cluster", "hbpraccode"))
+  slf_pc_lookup = read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE)),
+  slf_gpprac_lookup = read_file(get_slf_gpprac_path(BYOC_MODE = BYOC_MODE), col_select =
+    c("gpprac", "cluster", "hbpraccode")),
+  BYOC_MODE = BYOC_MODE
 )
 }
 \arguments{

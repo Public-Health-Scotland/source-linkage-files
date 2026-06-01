@@ -12,7 +12,7 @@ get_locality_path(file_name = NULL, ext = "rds")
 \item{ext}{The extension (type of the file) - optional}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the Scottish Postcode Directory
+An \code{\link[fs:path]{fs::path()}} to the HSCP Localities file
 }
 \description{
 Get the path to the centrally held HSCP Localities file.
