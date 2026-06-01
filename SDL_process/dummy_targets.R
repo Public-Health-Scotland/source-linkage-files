@@ -59,9 +59,7 @@ tar_option_set(
   garbage_collection = TRUE,
   # format - default is parquet format
   format = "parquet",
-  resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd")
-  ),
+  resources = tar_resources(parquet = tar_resources_parquet(compression = "zstd")),
   # error - if an error occurs, the pipeline will continue
   error = "stop",
   # storage - the worker saves/uploads the value.
@@ -82,30 +80,80 @@ list(
 
   ## Stage 2.1 non-specific targets ----
 
-  ### IT CHI deaths Activity ----
-  # READ - IT CHI deaths
+  ## Lookup data ##-----------------------------------------------------------
+
+  # Locality data------
   tar_target(
     # Target name
-    it_chi_deaths_extract,
-    read_it_chi_deaths(
+    locality_data,
+    # Function
+    get_locality_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
+      file_path = get_locality_path(),
+      BYOC_MODE
     )
   ),
-  # PROCESS - IT CHI deaths
+  # SIMD data------
   tar_target(
     # Target name
-    it_chi_deaths_data,
+    simd_data,
     # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk,
+    get_simd_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_simd_path(),
+      BYOC_MODE
+    )
+  ),
+
+  # Postcode lookup-----------------------------------------------------------
+  # PROCESS - postcode lookup------
+  tar_target(
+    # Target name
+    source_pc_lookup,
+    # Function
+    process_lookup_postcode(
+      spd_data = spd_data,
+      simd_data = simd_data,
+      locality_data = locality_data,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
-      run_date_time = run_date_time
-    )
+      run_date_time = run_date_time,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.9
   ),
+  # # TESTS - postcode lookup------
+  # tar_target(
+  #   # Target name
+  #   tests_source_pc_lookup,
+  #   # Function
+  #   process_tests_lookup_pc(source_pc_lookup)
+  # ),
+
+  ### IT CHI deaths Activity ----
+  # # READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   ### Long-Term Conditions (LTCs) Activity ----
   # # READ - LTCs
@@ -117,18 +165,18 @@ list(
   #   )
   # ),
 
-  # ### NRS BOXI Deaths ----
-  # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  tar_target(
-    refined_death_data,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  # # ### NRS BOXI Deaths ----
+  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  # tar_target(
+  #   refined_death_data,
+  #   process_refined_death(
+  #     it_chi_deaths = it_chi_deaths_data,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
 
   ## Stage 2.2 year specific targets ----
@@ -193,17 +241,17 @@ list(
 
 
     ### Death Activity ----
-    # PROCESS - Deaths
-    tar_target(
-      # Target name
-      source_nrs_deaths_extract,
-      # use this anonymous function with redundant but necessary refined_death
-      # to make sure reading year-specific NRS deaths extracts after it is produced
-      (\(year, refined_death_data) {
-        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
-          as.data.frame()
-      })(year, refined_death_data)
-    )
+    # # PROCESS - Deaths
+    # tar_target(
+    #   # Target name
+    #   source_nrs_deaths_extract,
+    #   # use this anonymous function with redundant but necessary refined_death
+    #   # to make sure reading year-specific NRS deaths extracts after it is produced
+    #   (\(year, refined_death_data) {
+    #     createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+    #       as.data.frame()
+    #   })(year, refined_death_data)
+    # )
 
     # # TESTS - Deaths
     # tar_target(
