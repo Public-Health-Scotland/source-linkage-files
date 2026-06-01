@@ -214,65 +214,65 @@ list(
     #     source_nrs_deaths_extract,
     #     year
     #   )
-    ),
+  ),
 
-# GP Out of Hours (GP OOH) Activity-----------------------------------------
-# READ - GP Out of Hours diagnoses
-tar_target(
-  # Target name
-  diagnosis_data_path,
-  get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
-  format = "file"
-),
-# READ - GP Out of Hours outcomes
-tar_target(
-  # Target name
-  outcomes_data_path,
-  get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
-  format = "file"
-),
-# READ - GP Out of Hours consultations
-tar_target(
-  consultations_data_path,
-  get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
-  format = "file"
-),
-# GP Out of Hours ALL
-tar_qs(
-  # Target name
-  ooh_data,
-  # Function
-  read_extract_gp_ooh(
-    year = year,
-    BYOC_MODE = BYOC_MODE,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    diagnosis_path = diagnosis_data_path,
-    outcomes_path = outcomes_data_path,
-    consultations_path = consultations_data_path
-  )
-),
-# GP Out of Hours CUP
-tar_target(
-  gp_ooh_cup_path,
-  get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
-  format = "file"
-),
-# PROCESS - GP OOH CUP
-tar_target(
-  # Target name
-  source_ooh_extract,
-  # Function
-  process_extract_gp_ooh(
-    year = year,
+  # GP Out of Hours (GP OOH) Activity-----------------------------------------
+  # READ - GP Out of Hours diagnoses
+  tar_target(
+    # Target name
+    diagnosis_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # READ - GP Out of Hours outcomes
+  tar_target(
+    # Target name
+    outcomes_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # READ - GP Out of Hours consultations
+  tar_target(
+    consultations_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # GP Out of Hours ALL
+  tar_qs(
+    # Target name
     ooh_data,
-    gp_ooh_cup_path = gp_ooh_cup_path,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    write_to_disk = write_to_disk,
-    BYOC_MODE = BYOC_MODE,
-    run_id = run_id,
-    run_date_time = run_date_time
+    # Function
+    read_extract_gp_ooh(
+      year = year,
+      BYOC_MODE = BYOC_MODE,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      diagnosis_path = diagnosis_data_path,
+      outcomes_path = outcomes_data_path,
+      consultations_path = consultations_data_path
+    )
+  ),
+  # GP Out of Hours CUP
+  tar_target(
+    gp_ooh_cup_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # PROCESS - GP OOH CUP
+  tar_target(
+    # Target name
+    source_ooh_extract,
+    # Function
+    process_extract_gp_ooh(
+      year = year,
+      ooh_data,
+      gp_ooh_cup_path = gp_ooh_cup_path,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   )
-)
 )
 # ,
 # # TESTS - GP OOH
