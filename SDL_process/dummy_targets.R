@@ -83,29 +83,29 @@ list(
   ## Stage 2.1 non-specific targets ----
 
   ### IT CHI deaths Activity ----
-  # READ - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_extract,
-    read_it_chi_deaths(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-  # PROCESS - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_data,
-    # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  ## READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   ### Long-Term Conditions (LTCs) Activity ----
   # # READ - LTCs
@@ -119,16 +119,16 @@ list(
 
   # ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  tar_target(
-    refined_death_data,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  # tar_target(
+  #   refined_death_data,
+  #   process_refined_death(
+  #     it_chi_deaths = it_chi_deaths_data,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
 
   ## Stage 2.2 year specific targets ----
@@ -193,17 +193,17 @@ list(
 
 
     ### Death Activity ----
-    # PROCESS - Deaths
-    tar_target(
-      # Target name
-      source_nrs_deaths_extract,
-      # use this anonymous function with redundant but necessary refined_death
-      # to make sure reading year-specific NRS deaths extracts after it is produced
-      (\(year, refined_death_data) {
-        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
-          as.data.frame()
-      })(year, refined_death_data)
-    )
+    # # PROCESS - Deaths
+    # tar_target(
+    #   # Target name
+    #   source_nrs_deaths_extract,
+    #   # use this anonymous function with redundant but necessary refined_death
+    #   # to make sure reading year-specific NRS deaths extracts after it is produced
+    #   (\(year, refined_death_data) {
+    #     createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+    #       as.data.frame()
+    #   })(year, refined_death_data)
+    # )
 
     # # TESTS - Deaths
     # tar_target(
@@ -214,8 +214,76 @@ list(
     #     source_nrs_deaths_extract,
     #     year
     #   )
-    # ),
+    ),
+
+# GP Out of Hours (GP OOH) Activity-----------------------------------------
+# READ - GP Out of Hours diagnoses
+tar_target(
+  # Target name
+  diagnosis_data_path,
+  get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
+  format = "file"
+),
+# READ - GP Out of Hours outcomes
+tar_target(
+  # Target name
+  outcomes_data_path,
+  get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
+  format = "file"
+),
+# READ - GP Out of Hours consultations
+tar_target(
+  consultations_data_path,
+  get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
+  format = "file"
+),
+# GP Out of Hours ALL
+tar_qs(
+  # Target name
+  ooh_data,
+  # Function
+  read_extract_gp_ooh(
+    year = year,
+    BYOC_MODE = BYOC_MODE,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    diagnosis_path = diagnosis_data_path,
+    outcomes_path = outcomes_data_path,
+    consultations_path = consultations_data_path
+  )
+),
+# GP Out of Hours CUP
+tar_target(
+  gp_ooh_cup_path,
+  get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+  format = "file"
+),
+# PROCESS - GP OOH CUP
+tar_target(
+  # Target name
+  source_ooh_extract,
+  # Function
+  process_extract_gp_ooh(
+    year = year,
+    ooh_data,
+    gp_ooh_cup_path = gp_ooh_cup_path,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    write_to_disk = write_to_disk,
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
   )
 )
+)
+# ,
+# # TESTS - GP OOH
+# tar_target(
+#   # Target name
+#   tests_source_ooh_extract,
+#   # Function
+#   process_tests_gp_ooh(
+#     source_ooh_extract,
+#     year
+#   )
+# )
 
 ## End of Targets pipeline ##
