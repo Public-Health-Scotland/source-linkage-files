@@ -6,22 +6,28 @@
 #'
 #' @return A data frame with keep_population flags
 #' @family individual_file
-add_keep_population_flag <- function(individual_file, year) {
-  calendar_year <- paste0("20", substr(year, 1, 2)) %>% as.integer()
+add_keep_population_flag <- function(individual_file,
+                                     year,
+                                     pop_estimates = get_datazone_pop_data(
+                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                       file_path = get_pop_path(type = "datazone"),
+                                       BYOC_MODE),
+                                     locality_data = get_locality_data(
+                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                       file_path = get_locality_path(),
+                                       BYOC_MODE),
+                                     BYOC_MODE) {
+  # TODO: Check arguments - do get_datazone_pop_data and get_locality_data just need BYOC_MODE?
+
+  calendar_year <- paste0("20", substr(year, 1, 2)) %>%
+    as.integer()
 
   if (!check_year_valid(year, "nsu")) {
+
     individual_file <- individual_file %>%
       dplyr::mutate(keep_population = 1L)
+
   } else {
-    ## Obtain the population estimates for Locality AgeGroup and Gender.
-    pop_estimates <-
-      readr::read_rds(get_pop_path(type = "datazone")) %>%
-      dplyr::select(
-        .data$year,
-        .data$datazone2011,
-        .data$sex,
-        .data$age0:.data$age90plus
-      )
 
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
     # Select out the estimates for the year of interest.
@@ -55,8 +61,7 @@ add_keep_population_flag <- function(individual_file, year) {
       dplyr::mutate(age = as.integer(.data$age)) %>%
       add_age_group(.data$age) %>%
       dplyr::left_join(
-        readr::read_rds(get_locality_path()) %>%
-          dplyr::select("locality" = "hscp_locality", .data$datazone2011),
+        locality_data,
         by = "datazone2011"
       ) %>%
       dplyr::group_by(.data$locality, .data$age_group, .data$gender) %>%
@@ -139,7 +144,7 @@ add_keep_population_flag <- function(individual_file, year) {
       )
   }
 
-  cli::cli_alert_info("Add keep population function finished at {Sys.time()}")
+  cli::cli_alert_info("Add keep population function finished at {Sys.time()}") # TODO: Is this being kept or changed with a logger_utils function?
 
   return(individual_file)
 }
