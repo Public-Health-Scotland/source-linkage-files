@@ -12,15 +12,30 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_postcode <- function(spd_path = get_spd_path(),
-                                    simd_path = get_simd_path(),
-                                    locality_path = get_locality_path(),
+process_lookup_postcode <- function(spd_data = get_spd_data(
+                                      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                      file_path = get_spd_path(), # TODO: Add this argument to the function in refactor-sc-demographics branch?
+                                      BYOC_MODE),
+                                    simd_data = get_simd_data(
+                                      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                      file_path = get_simd_path(),
+                                      BYOC_MODE),
+                                    locality_data = get_locality_data(
+                                      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                      file_path = get_locality_path(),
+                                      BYOC_MODE),
+                                    BYOC_MODE = FALSE,
+                                    run_id = NA,
+                                    run_date_time = NA,
                                     write_to_disk = TRUE) {
+  # TODO: Check arguments - do get_spd_data, simd_data and get_locality_data just need BYOC_MODE?
+  #       Alternatively we could have no default and just call data in targets (i.e. same as process_extract_XXX).
+
   # Read lookup files -------------------------------------------------------
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 
   # postcode data
-  spd_file <- read_file(spd_path) %>%
+  spd_file <- spd_data %>%
     dplyr::select(
       "pc7",
       # tidyselect::matches("datazone\\d{4}$"),
@@ -39,7 +54,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
     dplyr::mutate(lca = convert_ca_to_lca(.data$ca2019))
 
   # simd data
-  simd_file <- read_file(simd_path) %>%
+  simd_file <- simd_data %>%
     dplyr::select(
       "pc7",
       tidyselect::matches("simd\\d{4}.?.?_rank"),
@@ -52,7 +67,7 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
     )
 
   # locality
-  locality_file <- read_file(locality_path) %>%
+  locality_file <- locality_data %>%
     dplyr::select(
       locality = "hscp_locality",
       tidyselect::matches("datazone\\d{4}$")
@@ -93,12 +108,20 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
       tidyselect::matches("ur6_\\d{4}$"),
       tidyselect::matches("ur3_\\d{4}$"),
       tidyselect::matches("ur2_\\d{4}$")
+    ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
     write_file(
       slf_pc_lookup,
-      get_slf_postcode_path(check_mode = "write"),
+      get_slf_postcode_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+        ),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3206 # hscdiip owner
     )
   }
