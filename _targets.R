@@ -108,22 +108,26 @@ list(
     get_gpprac_ref_path(),
     format = "file"
   ),
-  # Locality path------
+  # Locality data------
   tar_target(
     # Target name
-    locality_path,
+    locality_data,
     # Function
-    get_locality_path(),
-    format = "file"
-  ),
-  # SIMD path------
+    get_locality_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_locality_path(),
+      BYOC_MODE)
+    ),
+  # SIMD data------
   tar_target(
     # Target name
-    simd_path,
+    simd_data,
     # Function
-    get_simd_path(),
-    format = "file"
-  ),
+    get_simd_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_simd_path(),
+      BYOC_MODE)
+    ),
   # Scottish postcode directory------
   tar_target(
     # Target name
@@ -209,9 +213,12 @@ list(
     source_pc_lookup,
     # Function
     process_lookup_postcode(
-      spd_path = spd_path,
-      simd_path = simd_path,
-      locality_path = locality_path,
+      spd_data = spd_data,
+      simd_data = simd_data,
+      locality_data = locality_data,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
