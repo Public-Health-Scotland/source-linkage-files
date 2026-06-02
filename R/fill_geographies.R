@@ -11,11 +11,14 @@
 #' Postcode and GP Practice details.
 fill_geographies <- function(
   data,
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
+  slf_pc_lookup = read_file(
+    get_slf_postcode_path(BYOC_MODE = BYOC_MODE)
+  ),
   slf_gpprac_lookup = read_file(
-    get_slf_gpprac_path(),
+    get_slf_gpprac_path(BYOC_MODE = BYOC_MODE),
     col_select = c("gpprac", "cluster", "hbpraccode")
-  )
+  ),
+  BYOC_MODE = BYOC_MODE
 ) {
   check_variables_exist(data, c(
     "anon_chi",
@@ -29,17 +32,10 @@ fill_geographies <- function(
   ))
 
   data <- data %>%
-    fill_postcode_geogs(
-      slf_pc_lookup = read_file(get_slf_postcode_path())
-    ) %>%
-    fill_gpprac_geographies(
-      slf_gpprac_lookup = read_file(
-        get_slf_gpprac_path(),
-        col_select = c("gpprac", "cluster", "hbpraccode")
-      )
-    )
+    fill_postcode_geogs(slf_pc_lookup) %>%
+    fill_gpprac_geographies(slf_gpprac_lookup)
 
-  cli::cli_alert_info("Fill geographies function finished at {Sys.time()}")
+  cli::cli_alert_info("Fill geographies function finished at {Sys.time()}") # TODO: Is this being kept or changed with a logger_utils function?
 
   return(data)
 }
