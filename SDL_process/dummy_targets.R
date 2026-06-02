@@ -63,7 +63,7 @@ tar_option_set(
     parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
-  error = "continue",
+  error = "stop",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
@@ -80,7 +80,7 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1 - non year specific ----
+  ## Stage 2.1 non-specific targets ----
 
   ### Long-Term Conditions (LTCs) Activity ----
   # READ - LTCs
@@ -92,7 +92,8 @@ list(
   #   )
   # ),
 
-  ## Stage 2.2 - year specific ----
+
+  ## Stage 2.2 year specific targets ----
   tar_map(
     list(year = years_to_run),
 
@@ -148,8 +149,8 @@ list(
     #     run_date_time = run_date_time
     #   )
     # ),
-    #
-    # ### Mental Health (SMR02) Activity--------------------------------------------
+
+    ### Mental Health (SMR02) Activity ----
     # # READ - Mental Health
     # tar_target(
     #   mental_health_data,

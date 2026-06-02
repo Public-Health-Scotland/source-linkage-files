@@ -244,6 +244,7 @@ reference:
     - log_ep_message
     - log_ind_message
     - log_tar_message
+    - log_tar_make
     - log_slf_event
     - log_ep_substage
     - log_ind_substage

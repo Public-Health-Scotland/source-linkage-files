@@ -17,7 +17,7 @@ get_boxi_extract_path <- function(year,
                                     "acute",
                                     "acute_cup",
                                     "cmh",
-                                    "deaths",
+                                    "nrs_deaths",
                                     "dn",
                                     "gp_ooh-c",
                                     "gp_ooh-d",
@@ -61,7 +61,7 @@ get_boxi_extract_path <- function(year,
     "homelessness" ~ "anon-Homelessness-extract",
     "maternity" ~ "anon-Maternity-episode-level-extract",
     "mh" ~ "anon-Mental-Health-episode-level-extract",
-    "deaths" ~ "anon-NRS-death-registrations-extract",
+    "nrs_deaths" ~ "anon-NRS-death-registrations-extract",
     "outpatients" ~ "anon-Outpatients-episode-level-extract"
   )
 
