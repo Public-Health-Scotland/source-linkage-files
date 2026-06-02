@@ -15,15 +15,18 @@
 process_lookup_postcode <- function(spd_data = get_spd_data(
                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                       file_path = get_spd_path(), # TODO: Add this argument to the function in refactor-sc-demographics branch?
-                                      BYOC_MODE),
+                                      BYOC_MODE
+                                    ),
                                     simd_data = get_simd_data(
                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                       file_path = get_simd_path(),
-                                      BYOC_MODE),
+                                      BYOC_MODE
+                                    ),
                                     locality_data = get_locality_data(
                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                       file_path = get_locality_path(),
-                                      BYOC_MODE),
+                                      BYOC_MODE
+                                    ),
                                     BYOC_MODE = FALSE,
                                     run_id = NA,
                                     run_date_time = NA,
@@ -120,7 +123,7 @@ process_lookup_postcode <- function(spd_data = get_spd_data(
       get_slf_postcode_path(
         BYOC_MODE = BYOC_MODE,
         check_mode = "write"
-        ),
+      ),
       BYOC_MODE = BYOC_MODE,
       group_id = 3206 # hscdiip owner
     )

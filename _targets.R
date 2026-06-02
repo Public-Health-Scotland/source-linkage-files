@@ -116,8 +116,9 @@ list(
     get_locality_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       file_path = get_locality_path(),
-      BYOC_MODE)
-    ),
+      BYOC_MODE
+    )
+  ),
   # SIMD data------
   tar_target(
     # Target name
@@ -126,8 +127,9 @@ list(
     get_simd_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       file_path = get_simd_path(),
-      BYOC_MODE)
-    ),
+      BYOC_MODE
+    )
+  ),
   # Scottish postcode directory------
   tar_target(
     # Target name

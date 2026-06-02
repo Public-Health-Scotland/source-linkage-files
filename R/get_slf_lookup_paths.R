@@ -14,20 +14,16 @@ get_slf_postcode_path <- function(update = latest_update(), BYOC_MODE, ...) { # 
   file_name <- stringr::str_glue("source_postcode_lookup_{update}.parquet")
 
   if (BYOC_MODE) {
-
     slf_postcode_path <- file.path(
       directory = denodo_output_path(),
       file_name = file_name
     )
-
   } else {
-
     slf_postcode_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Lookups"),
       file_name = file_name,
       ...
     )
-
   }
   return(slf_postcode_path)
 }

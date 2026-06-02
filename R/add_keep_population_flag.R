@@ -11,11 +11,13 @@ add_keep_population_flag <- function(individual_file,
                                      pop_estimates = get_datazone_pop_data(
                                        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                        file_path = get_pop_path(type = "datazone"),
-                                       BYOC_MODE),
+                                       BYOC_MODE
+                                     ),
                                      locality_data = get_locality_data(
                                        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                        file_path = get_locality_path(),
-                                       BYOC_MODE),
+                                       BYOC_MODE
+                                     ),
                                      BYOC_MODE) {
   # TODO: Check arguments - do get_datazone_pop_data and get_locality_data just need BYOC_MODE?
 
@@ -23,12 +25,9 @@ add_keep_population_flag <- function(individual_file,
     as.integer()
 
   if (!check_year_valid(year, "nsu")) {
-
     individual_file <- individual_file %>%
       dplyr::mutate(keep_population = 1L)
-
   } else {
-
     # Step 1: Obtain the population estimates for Locality, AgeGroup, and Gender
     # Select out the estimates for the year of interest.
     # if we don't have estimates for this year (and so have to use previous year).
