@@ -4,7 +4,11 @@
 \alias{get_gpprac_opendata}
 \title{GP Practice details from PHS open data}
 \usage{
-get_gpprac_opendata()
+get_gpprac_opendata(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE,
+  write_to_disk = TRUE
+)
 }
 \value{
 The final data as a \link[tibble:tibble-package]{tibble}.
