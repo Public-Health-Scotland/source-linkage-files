@@ -5,10 +5,10 @@
 \title{Process the SLF gpprac lookup}
 \usage{
 process_lookup_gpprac(
-  open_data = get_gpprac_opendata(),
-  gpprac_ref_path = get_gpprac_ref_path(),
-  spd_path = get_spd_path(),
-  write_to_disk = TRUE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
