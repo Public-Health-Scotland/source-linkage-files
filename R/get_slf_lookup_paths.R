@@ -42,12 +42,23 @@ get_uk_postcode_path <- function(...) {
 #' @export
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_gpprac_path <- function(update = latest_update(), ...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_gpprac_lookup_{update}.parquet"),
-    ...
-  )
+get_slf_gpprac_path <- function(update = latest_update(),
+                                BYOC_MODE = FALSE,
+                                ...) {
+  if (isTRUE(BYOC_MODE)) {
+    slf_gpprac_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = "source_gpprac_lookup.parquet"
+    )
+  } else {
+    slf_gpprac_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Lookups"),
+      file_name = stringr::str_glue("source_gpprac_lookup_{update}.parquet"),
+      ...
+    )
+  }
+
+  return(slf_gpprac_path)
 }
 
 #' SLF death dates File Path

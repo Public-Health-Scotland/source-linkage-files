@@ -159,3 +159,38 @@ get_gpprac_ref_path <- function(ext = "csv") {
 
   return(gpprac_path)
 }
+
+#' GP Practice Reference File data
+#'
+#' @description Return the GP Practice Reference File data
+#'
+#' @param denodo_connect Connection to denodo
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return An [fs::path()] to the file
+#' @export
+#'
+#' @family lookup file paths
+get_gpprac_ref_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                BYOC_MODE) {
+  if (isTRUE(BYOC_MODE)) {
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+    gpprac_ref_data <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_gpprac_ref_source") # TODO: update table
+    ) %>%
+      dplyr::collect()
+  } else {
+    gpprac_ref_data <- read_file(get_gpprac_ref_path()) %>%
+      dplyr::select(
+        gpprac = "praccode",
+        pc7 = "postcode"
+      ) %>%
+      dplyr::mutate(
+        pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
+      )
+  }
+
+  return(gpprac_ref_data)
+}

@@ -3,7 +3,18 @@
 #' @return The final data as a [tibble][tibble::tibble-package].
 #' @export
 #'
-get_gpprac_opendata <- function() {
+get_gpprac_opendata <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                BYOC_MODE,
+                                write_to_disk = TRUE) {
+  if (isTRUE(BYOC_MODE)) {
+      on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+      gpprac_data <- dplyr::tbl(
+        denodo_connect,
+        dbplyr::in_schema("sdl", "sdl_gpprac_open_data") # TODO: update table
+      ) %>%
+        dplyr::collect()
+    } else {
   gpprac_data <- phsopendata::get_dataset(
     "gp-practice-contact-details-and-list-sizes"
   ) %>%
@@ -32,9 +43,15 @@ get_gpprac_opendata <- function() {
       postcode = phsmethods::format_postcode(.data$postcode)
     ) %>%
     dplyr::distinct(.data$gpprac, .keep_all = TRUE) %>%
-    write_file(get_practice_details_path(check_mode = "write"),
-      group_id = 3206
-    ) # hscdiip owner
+
+    if (write_to_disk) {
+      write_file(gpprac_data, get_practice_details_path(
+          check_mode = "write", BYOC_MODE = BYOC_MODE),
+          BYOC_MODE = BYOC_MODE,
+          group_id = 3206 # hscdiip owner
+      )
+    }
+  }
 
   return(gpprac_data)
 }
