@@ -27,7 +27,7 @@ BYOC_MODE <- dplyr::case_when(
 )
 
 run_id <- Sys.getenv("run_id")
-run_date_time <- Sys.getenv("run_date_time")
+run_date_time <- Sys.getenv("run_date_time") %>% lubridate::as_datetime()
 denodo_dsn <- Sys.getenv("denodo_dsn")
 
 
