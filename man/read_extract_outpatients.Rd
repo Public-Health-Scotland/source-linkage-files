@@ -6,7 +6,9 @@
 \usage{
 read_extract_outpatients(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "outpatient")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "outpatient", BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{

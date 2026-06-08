@@ -12,7 +12,12 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
+process_extract_outpatients <- function(data,
+                                        year,
+                                        write_to_disk = TRUE,
+                                        BYOC_MODE = FALSE,
+                                        run_id = NA,
+                                        run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "outpatients", year = year)
 
   # Only run for a single year
@@ -90,12 +95,17 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "uri"
+    ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
     write_file(
       outpatients_processed,
-      get_source_extract_path(year, "outpatients", check_mode = "write"),
+      get_source_extract_path(year, "outpatients", check_mode = "write", BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
