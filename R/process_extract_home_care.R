@@ -12,6 +12,7 @@
 process_extract_home_care <- function(
   data,
   year,
+  BYOC_MODE = FALSE,
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "hc", year = year)
@@ -20,7 +21,7 @@ process_extract_home_care <- function(
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
 
   # Check that we have data for this year
   if (!check_year_valid(year, "hc")) {
@@ -84,6 +85,8 @@ process_extract_home_care <- function(
 
   hc_processed <- hc_costs %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -107,7 +110,12 @@ process_extract_home_care <- function(
   if (write_to_disk) {
     write_file(
       hc_processed,
-      get_source_extract_path(year, type = "hc", check_mode = "write"),
+      get_source_extract_path(
+        year,
+        type = "hc",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
       group_id = 3356 # sourcedev owner
     )
   }
