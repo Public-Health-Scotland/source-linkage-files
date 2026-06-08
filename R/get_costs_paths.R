@@ -116,12 +116,12 @@ get_gp_ooh_raw_costs_path <- function(...) {
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_hc_costs_path <- function(..., BYOC_MODE = FALSE) {
-  if(isTRUE(BYOC_MODE)){
+  if (isTRUE(BYOC_MODE)) {
     hc_costs_path <- file.path(
       denodo_output_path(),
       "costs_hc_lookup.parquet"
     )
-  }else{
+  } else {
     hc_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),
       file_name = stringr::str_glue(
