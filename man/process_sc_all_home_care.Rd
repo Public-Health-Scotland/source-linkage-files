@@ -6,7 +6,11 @@
 \usage{
 process_sc_all_home_care(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  home_care_costs = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 )
 }
