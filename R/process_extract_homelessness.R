@@ -163,7 +163,7 @@ process_extract_homelessness <- function(
     dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 2))
 
   final_data <- hl1_data %>%
-    mutate(
+    dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
     ) %>%

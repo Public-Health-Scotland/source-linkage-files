@@ -6,7 +6,7 @@
 \usage{
 get_boxi_extract_path(
   year,
-  type = c("ae", "ae_cup", "acute", "acute_cup", "cmh", "deaths", "dn", "gp_ooh-c",
+  type = c("ae", "ae_cup", "acute", "acute_cup", "cmh", "nrs_deaths", "dn", "gp_ooh-c",
     "gp_ooh-d", "gp_ooh-o", "gp_ooh_cup", "homelessness", "maternity", "mh",
     "outpatients"),
   BYOC_MODE = FALSE
@@ -25,12 +25,12 @@ Get the BOXI extract path for a given extract and year,
 returns an error message if the extract does not exist if local
 }
 \seealso{
-Other extract file paths: 
-\code{\link{get_hhg_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
-\code{\link{get_source_extract_path}()},
-\code{\link{get_sparra_path}()}
+Other extract file paths:
+\code{\link[=get_hhg_path]{get_hhg_path()}},
+\code{\link[=get_it_deaths_path]{get_it_deaths_path()}},
+\code{\link[=get_it_ltc_path]{get_it_ltc_path()}},
+\code{\link[=get_it_prescribing_path]{get_it_prescribing_path()}},
+\code{\link[=get_source_extract_path]{get_source_extract_path()}},
+\code{\link[=get_sparra_path]{get_sparra_path()}}
 }
 \concept{extract file paths}
