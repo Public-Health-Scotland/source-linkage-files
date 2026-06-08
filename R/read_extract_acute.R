@@ -40,7 +40,7 @@ read_extract_acute <- function(
       costsfy = "costs_financial_year",
       case_reference_number = "case_reference_number",
       costmonthnum = "costmonthnum",
-      GLS_record = "gls_record", # TO-DO: come back
+      GLS_record = "gls_record",
       record_keydate1 = "date_of_admission",
       record_keydate2 = "date_of_discharge",
       chi = "patient_chi",
