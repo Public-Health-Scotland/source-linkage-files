@@ -92,7 +92,7 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    "deaths",
+    "nrs_deaths",
     "combined_deaths",
     "chi_deaths"
   )
@@ -103,10 +103,17 @@ byoc_output_files <- get_byoc_output_files(
 
 # targets ----
 logger::log_info("Targets started.")
-targets::tar_make(
-  script = "SDL_process/dummy_targets.R",
-  store = store_path,
-  reporter = "timestamp"
+
+tryCatch(
+  log_tar_make(
+    script = "SDL_process/dummy_targets.R",
+    store = store_path,
+    reporter = "verbose"
+  ),
+  error = function(e) {
+    logger::log_error("Targets failed: {conditionMessage(e)}")
+    stop(e)
+  }
 )
 logger::log_info("Targets finished.")
 

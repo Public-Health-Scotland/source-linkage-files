@@ -6,7 +6,7 @@
 \usage{
 get_boxi_extract_path(
   year,
-  type = c("ae", "ae_cup", "acute", "acute_cup", "cmh", "deaths", "dn", "gp_ooh-c",
+  type = c("ae", "ae_cup", "acute", "acute_cup", "cmh", "nrs_deaths", "dn", "gp_ooh-c",
     "gp_ooh-d", "gp_ooh-o", "gp_ooh_cup", "homelessness", "maternity", "mh",
     "outpatients"),
   BYOC_MODE = FALSE
