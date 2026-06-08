@@ -51,12 +51,19 @@ get_sc_at_episodes_path <- function(update = latest_update(), ...) {
 #' @export
 #' @family social care episodes file paths
 #' @seealso [get_file_path()] for the generic function.
-get_sc_hc_episodes_path <- function(update = latest_update(), ...) {
-  sc_hc_episodes_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_home_care"),
-    file_name = stringr::str_glue("anon-all_hc_episodes_{update}.parquet"),
-    ...
-  )
+get_sc_hc_episodes_path <- function(BYOC_MODE = FALSE, ...) {
+  if(isTRUE(BYOC_MODE)){
+    sc_hc_episodes_path <- file.path(
+      denodo_output_path(),
+      "anon-all_hc_episodes.parquet"
+    )
+  }else{
+    sc_hc_episodes_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_home_care"),
+      file_name = "anon-all_hc_episodes.parquet",
+      ...
+    )
+  }
 
   return(sc_hc_episodes_path)
 }
