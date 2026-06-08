@@ -117,7 +117,7 @@ list(
   #   )
   # ),
 
-  # ### NRS BOXI Deaths ----
+  ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
     refined_death_data,
@@ -130,7 +130,7 @@ list(
     )
   ),
 
-  # Scottish postcode directory------
+  ### Scottish postcode directory------
   tar_target(
     # Target name
     spd_data,
@@ -138,20 +138,22 @@ list(
     get_spd_data(BYOC_MODE),
     format = "file"
   ),
-  # Update NHS UK postcode directory -----
+
+  ### Update NHS UK postcode directory -----
   tar_target(
     # Target name
     uk_postcode_data,
     get_uk_postcode_data(BYOC_MODE)
   ),
-  # Care home name look up------
+
+  ### Care home name look up------
   tar_target(
     slf_ch_name_lookup_data,
     get_slf_ch_name_lookup_data(BYOC_MODE),
     format = "file"
   ),
 
-  # READ - Care Homes
+  ### READ - Care Homes ----
   tar_target(
     # Target name
     all_care_home_extract,
@@ -166,7 +168,7 @@ list(
     )
   ),
 
-  # Social care demographics
+  ### Social care demographics ----
   # READ - SC Demographics
   tar_target(
     # Target name
@@ -207,6 +209,65 @@ list(
     process_tests_sc_demographics(sc_demog_lookup)
   ),
 
+  ### Cost lookups ----
+  #### Care home costs------
+
+  #### District nursing costs------
+
+  #### Home care costs------
+  tar_target(
+    # Target name
+    hc_cost_lookup,
+    # Function
+    process_costs_home_care(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    priority = 0.8
+  ),
+  #### GP Out of Hours costs-----
+
+
+  ### Home Care, all year ----
+  # READ - Home Care
+  tar_target(
+    all_home_care_extract,
+    read_sc_all_home_care(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    cue = tar_cue_age(
+      name = all_home_care_extract,
+      age = as.difftime(28.0, units = "days")
+    )
+  ),
+  # PROCESS - Home Care
+  tar_target(
+    # Target name
+    all_home_care,
+    # Function
+    process_sc_all_home_care(
+      all_home_care_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      home_care_costs = hc_cost_lookup,
+      BYOC_MODE = BYOC_MODE,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.5
+  ),
+  # # TESTS - Home Care
+  # tar_target(
+  #   # Target name
+  #   tests_sc_all_home_care,
+  #   # Function
+  #   process_tests_sc_all_hc_episodes(all_home_care)
+  # ),
+
+
   ## Stage 2.2 year specific targets ----
   tar_map(
     list(year = years_to_run),
@@ -238,7 +299,7 @@ list(
     #   )
     # ),
 
-    ### Mental Health (SMR02) Activity ----
+    ### Mental Health (SMR04) Activity ----
     # # READ - Mental Health
     # tar_target(
     #   mental_health_data,
@@ -291,7 +352,37 @@ list(
     #     year
     #   )
     # ),
-  )
+  ),
+
+  ### Social Care ----
+  #### Home Care (HC) Activity---------------------------------------------------
+  # READ - HC
+  # Target: all_home_care passed to PROCESS HC
+
+  # PROCESS - HC
+  tar_target(
+    # Target name
+    source_sc_home_care,
+    # Function
+    process_extract_home_care(
+      data = all_home_care,
+      year = year,
+      BYOC_MODE = BYOC_MODE,
+      write_to_disk = write_to_disk
+    )
+  ),
+  # # TESTS - HC
+  # tar_target(
+  #   # Target name
+  #   tests_home_care,
+  #   # Function
+  #   process_tests_home_care(
+  #     data = source_sc_home_care,
+  #     year = year
+  #   )
+  # )
+
+
 )
 
 ## End of Targets pipeline ##
