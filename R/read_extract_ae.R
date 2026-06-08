@@ -28,7 +28,7 @@ read_extract_ae <- function(
     dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
   ) %>%
     dplyr::filter(
-      financial_year == c_year, # TO-DO: check assumption that arrival_financial_year == financial_year
+      arrival_financial_year == c_year,
       significant_facility_code == "32" | is.na(significant_facility_code)
     ) %>%
     dplyr::select(
@@ -64,7 +64,7 @@ read_extract_ae <- function(
       selfharm_adm = "self_harm_related_admission",
       cost_total_net = "total_net_cost",
       age = "age_at_midpoint_of_financial_year",
-      case_ref_number = "care_reference_number", # TO-DO: needs to be renamed by NSS from care to case?
+      case_ref_number = "case_reference_number",
       postcode_epi = "postcode_epi",
       postcode_chi = "postcode_chi",
       commhosp = "community_hospital_flag"
@@ -72,18 +72,6 @@ read_extract_ae <- function(
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
-  # ----------------------------------------------------------------------------
-  # TO-DO: Remove this when data types are fixed
-  extract_ae <- extract_ae %>%
-    mutate(
-      keytime1 = hms::parse_hms(keytime1),
-      keytime2 = hms::parse_hms(keytime2),
-      gender = as.numeric(gender),
-      ae_patflow = as.numeric(ae_patflow),
-      age = as.numeric(age),
-      commhosp = as.character(commhosp)
-    )
-  # ----------------------------------------------------------------------------
   log_slf_event(stage = "read", status = "complete", type = "ae", year = year)
 
   return(extract_ae)
