@@ -15,7 +15,7 @@ read_extract_homelessness <- function(
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+  if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())
   }
 
