@@ -9,14 +9,15 @@ if (year_specific) {
   boxi_data <- get(fn_name)(year = "1920")
   if (type_specific) {
     boxi_data <- get(fn_name)(year = "1920", type = type_name)
-  }}else {
+  }
+} else {
   boxi_data <- get(fn_name)()
 }
 
 if (is(boxi_data, "fs_path")) {
-  boxi_data <- read_file(boxi_data) #%>% janitor::clean_names()
+  boxi_data <- read_file(boxi_data) # %>% janitor::clean_names()
 } else {
-  boxi_data <- boxi_data #%>% janitor::clean_names()
+  boxi_data <- boxi_data # %>% janitor::clean_names()
 }
 
 # Read denodo variables for renaming SLF variables

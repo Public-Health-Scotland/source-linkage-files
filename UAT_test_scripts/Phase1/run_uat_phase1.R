@@ -54,8 +54,10 @@ analyst <- "Jen"
 #   "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
 #   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths"
 # )
-datasets <- c("acute", "ae", "gp_ooh_consultations", "maternity",
-              "mental_health", "nrs_deaths","ae_cup", "acute_cup", "gp_ooh_cup")
+datasets <- c(
+  "acute", "ae", "gp_ooh_consultations", "maternity",
+  "mental_health", "nrs_deaths", "ae_cup", "acute_cup", "gp_ooh_cup"
+)
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%
