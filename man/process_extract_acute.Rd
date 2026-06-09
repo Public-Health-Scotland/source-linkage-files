@@ -7,8 +7,12 @@
 process_extract_acute(
   data,
   year,
-  acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
-  write_to_disk = TRUE
+  acute_cup_path = get_boxi_extract_path(year, "acute_cup", BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
