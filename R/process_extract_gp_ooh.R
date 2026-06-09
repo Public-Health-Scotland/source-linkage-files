@@ -115,48 +115,22 @@ process_extract_gp_ooh <- function(year,
 
   ## Link CUP Marker -----
 
-  # --- DUMMY DENODO CUP LOOKUP ---
-  # c_year_cup <- convert_fyyear_to_year(check_year_format(year))
-  #
-  # gp_ooh_cup_file <- dplyr::tbl(
-  #   denodo_connect,
-  #   dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_placeholder") # TO-DO: update denodo table name later
-  # ) %>%
-  #   dplyr::filter(year == c_year_cup) %>% # TO-DO: if filter required to select cup-marker for financial year
-  #   dplyr::select(
-  #     record_keydate1 = "consultation_start_date",
-  #     keytime1 = "consultation_start_time",
-  #     ooh_case_id = "guid",
-  #     cup_marker = "cup_marker",
-  #     cup_pathway = "cup_pathway_name"
-  #   ) %>%
-  #   dplyr::collect() %>%
-  #   dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE)
-  # -------------------------------
+  c_year_cup <- convert_fyyear_to_year(check_year_format(year))
 
-  gp_ooh_cup_file <- read_file(
-    path = gp_ooh_cup_path,
-    col_type = readr::cols(
-      "GP OOH Consultation Start Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "GP OOH Consultation Start Time" = readr::col_time(""),
-      "GUID" = readr::col_character(),
-      "CUP Marker" = readr::col_integer(),
-      "CUP Pathway Name" = readr::col_character()
-    )
+  gp_ooh_cup_file <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_source")
   ) %>%
+    dplyr::filter(gp_ooh_sc_start_financial_year == c_year_cup) %>%
     dplyr::select(
-      record_keydate1 = "GP OOH Consultation Start Date",
-      keytime1 = "GP OOH Consultation Start Time",
-      ooh_case_id = "GUID",
-      cup_marker = "CUP Marker",
-      cup_pathway = "CUP Pathway Name"
+      record_keydate1 = "gp_ooh_consultation_start_date ",
+      keytime1 = "gp_ooh_consultation_start_time",
+      ooh_case_id = "guid",
+      cup_marker = "cup_marker",
+      cup_pathway = "cup_pathway_name"
     ) %>%
-    dplyr::distinct(
-      .data$record_keydate1,
-      .data$keytime1,
-      .data$ooh_case_id,
-      .keep_all = TRUE
-    )
+    dplyr::collect() %>%
+    dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE)
 
   ooh_clean <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup_file,
