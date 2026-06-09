@@ -113,6 +113,7 @@ update) the package’s .Rd files. The `.Rd` files should not be edited by
 hand and should be done by running `devtools::document()`.
 
 ``` r
+
 #' Delayed Discharge period
 #'
 #' @description Get the period for Delayed Discharge
@@ -219,6 +220,7 @@ An example of one of our tests is to check that the `convert_ca_to_lca`
 function is working correctly and returns the correct lca code.
 
 ``` r
+
 library(testthat)
 library(createslf)
 #> 

@@ -471,6 +471,7 @@ To carry out a review:
 R code to produce the flow diagram
 
 ``` r
+
 DiagrammeR::grViz("digraph {
 # Graph options
 graph[layout = dot, rankdir = LR]

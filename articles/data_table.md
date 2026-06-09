@@ -38,10 +38,10 @@ A comparison between the old and new methods, focusing on the functions
 `process_sc_all_sds` and `process_sc_all_alarms_telecare`, is presented
 below:
 
-| Function Name                    | Old Method `dplyr` | New Method `data.table` | Time Reduction |
-|----------------------------------|--------------------|-------------------------|----------------|
-| `process_sc_all_sds`             | 24.94 mins         | 1.69 mins               | 94% reduction  |
-| `process_sc_all_alarms_telecare` | 31.81 mins         | 0.81 mins               | 98% reduction  |
+| Function Name | Old Method `dplyr` | New Method `data.table` | Time Reduction |
+|----|----|----|----|
+| `process_sc_all_sds` | 24.94 mins | 1.69 mins | 94% reduction |
+| `process_sc_all_alarms_telecare` | 31.81 mins | 0.81 mins | 98% reduction |
 
 Both functions yield identical results to their predecessors but exhibit
 remarkable reductions in execution time. Notably, `process_sc_all_sds`
@@ -241,6 +241,7 @@ is to find the maximum of “height” by gender. The `dplyr` style and the
 equivalent `data.table` style are as follows:
 
 ``` r
+
 height <- data.frame(
   gender = c("Male", "Female", "Male", "Female", "Male", "Female"),
   height = c(180, 165, 175, 160, 185, 170)
@@ -289,6 +290,7 @@ example comparison of the join operation using dplyr and its equivalent
 in `data.table`:
 
 ``` r
+
 library(dplyr)
 library(data.table)
 
@@ -342,6 +344,7 @@ scenarios, allowing users to choose the approach that best fits their
 specific requirements.
 
 ``` r
+
 # left join
 joined_df_left <- left_join(df1, df2, by = "customer_id")
 joined_dt_left1 <- dt2[dt1, on = "customer_id"]
@@ -427,6 +430,7 @@ The equivalent functions for formatting data from wide to long format of
 `dplyr` and `data.table` are `pivot_wider` and `dcast` respectively.
 
 ``` r
+
 library(dplyr)
 library(tidyr)
 library(data.table)
@@ -459,6 +463,7 @@ The equivalent functions for formatting data from long to wide format of
 `dplyr` and `data.table` are `pivot_longer` and `melt` respectively.
 
 ``` r
+
 library(dplyr)
 library(tidyr)
 library(data.table)
@@ -543,6 +548,7 @@ is the equivalent version to
 [`dplyr::case_when()`](https://dplyr.tidyverse.org/reference/case-and-replace-when.html).
 
 ``` r
+
 library(dplyr)
 library(data.table)
 # Dummy dataset
