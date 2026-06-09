@@ -83,29 +83,29 @@ list(
   ## Stage 2.1 non-specific targets ----
 
   ### IT CHI deaths Activity ----
-  # READ - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_extract,
-    read_it_chi_deaths(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-  # PROCESS - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_data,
-    # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  # # READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   ### Long-Term Conditions (LTCs) Activity ----
   # # READ - LTCs
@@ -119,21 +119,58 @@ list(
 
   # ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  tar_target(
-    refined_death_data,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  # tar_target(
+  #   refined_death_data,
+  #   process_refined_death(
+  #     it_chi_deaths = it_chi_deaths_data,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
 
   ## Stage 2.2 year specific targets ----
   tar_map(
     list(year = years_to_run),
+
+    # Acute (SMR01) Activity
+    # READ - Acute
+    tar_file_read(
+      # Target name
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute CUP
+    tar_target(
+      # Target name
+      acute_cup_path,
+      get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE = BYOC_MODE),
+      format = "file"
+    ),
+    # PROCESS - Acute
+    tar_target(
+      # Target name
+      source_acute_extract,
+      # Function
+      process_extract_acute(
+        acute_data,
+        year = year,
+        acute_cup_path = acute_cup_path,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
 
     ### Maternity (SMR02) Acitivity----
     # # READ - Maternity
@@ -194,16 +231,16 @@ list(
 
     ### Death Activity ----
     # PROCESS - Deaths
-    tar_target(
-      # Target name
-      source_nrs_deaths_extract,
-      # use this anonymous function with redundant but necessary refined_death
-      # to make sure reading year-specific NRS deaths extracts after it is produced
-      (\(year, refined_death_data) {
-        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
-          as.data.frame()
-      })(year, refined_death_data)
-    )
+    # tar_target(
+    #   # Target name
+    #   source_nrs_deaths_extract,
+    #   # use this anonymous function with redundant but necessary refined_death
+    #   # to make sure reading year-specific NRS deaths extracts after it is produced
+    #   (\(year, refined_death_data) {
+    #     createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+    #       as.data.frame()
+    #   })(year, refined_death_data)
+    # )
 
     # # TESTS - Deaths
     # tar_target(
