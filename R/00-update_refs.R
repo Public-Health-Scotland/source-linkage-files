@@ -31,7 +31,7 @@ end_date <- function() {
   # Q2 September = 30092024
   # Q3 December = 31122024
   # Q4 March = 31032025
-  end_date <- lubridate::dmy(31032026)
+  end_date <- lubridate::dmy(30062026)
 
   return(end_date)
 }
@@ -104,10 +104,10 @@ check_year_valid <- function(
     ## CHECK - What period does SDS data get submitted?
     ## CHECK - what data do we have available for Social Care and SPARRA?
   } else if (year >= "2526" &&
-    all(type %in% c("nsu", "sds", "at", "ch", "hc", "client"))) {
+    all(type %in% c("nsu", "sds"))) {
     return(FALSE)
   } else if (year >= "2627" &&
-    all(type %in% c("sparra"))) {
+    all(type %in% c("sparra", "at", "ch", "hc", "client"))) {
     return(FALSE)
   }
 
@@ -234,7 +234,7 @@ qtr <- function() {
 #'
 #' @family initialisation
 years_to_run <- function() {
-  fy_start_2digit <- 21
+  fy_start_2digit <- 17
   fy_end_2digit <- 25
   years_to_run <- paste0(
     fy_start_2digit:fy_end_2digit,
