@@ -54,10 +54,8 @@ analyst <- "Jen"
 #   "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
 #   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths"
 # )
-datasets <- c(
-  "acute", "ae", "gp_ooh_consultations", "maternity",
-  "mental_health", "nrs_deaths"
-)
+datasets <- c("acute", "ae", "gp_ooh_consultations", "maternity",
+              "mental_health", "nrs_deaths","ae_cup", "acute_cup", "gp_ooh_cup")
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%
@@ -70,6 +68,8 @@ for (ii in 1:nrow(name_list)) {
   fn_name <- name_list$fn_list[ii]
   sdl_name <- name_list$sdl_list[ii]
   year_specific <- name_list$year_specific[ii]
+  type_specific <- name_list$type_specific[ii]
+  type_name <- name_list$type_name[ii]
 
   log_info(
     "UAT run {ii}/{nrow(name_list)} | dataset = {dataset_name}, function = {fn_name}, sdl_name = {sdl_name}"
@@ -88,7 +88,7 @@ for (ii in 1:nrow(name_list)) {
 # to see where the problem is
 
 # Assign row number (returns the dataset you want to look at in names_list)
-# ii <- 2
+# ii <- 1
 
 # After Assigning ii as the row number you want to investigate, run the
 # following code:
