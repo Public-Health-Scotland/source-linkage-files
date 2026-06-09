@@ -11,7 +11,6 @@ process_costs_home_care <- function(denodo_connect = get_denodo_connection(BYOC_
                                     BYOC_MODE = FALSE,
                                     run_id = NA,
                                     run_date_time = NA) {
-
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   ## Read costs
@@ -36,9 +35,10 @@ process_costs_home_care <- function(denodo_connect = get_denodo_connection(BYOC_
       by = c("gss_code" = "CA")
     ) %>%
     dplyr::select(year,
-                  ca_name = CAName,
-                  health_board = HBName,
-                  hourly_cost) %>%
+      ca_name = CAName,
+      health_board = HBName,
+      hourly_cost
+    ) %>%
     dplyr::mutate(ca_name = factor(ca_name)) %>%
     dplyr::mutate(year = as.integer(year))
 
@@ -50,10 +50,10 @@ process_costs_home_care <- function(denodo_connect = get_denodo_connection(BYOC_
         1:5,
         ~
           hc_costs %>%
-          dplyr::filter(year == latest_cost_year) %>%
-          dplyr::group_by(year, ca_name, health_board) %>%
-          dplyr::summarise(hourly_cost = hourly_cost * (1.01)^.x, .groups = "drop") %>%
-          dplyr::mutate(year = year + .x)
+            dplyr::filter(year == latest_cost_year) %>%
+            dplyr::group_by(year, ca_name, health_board) %>%
+            dplyr::summarise(hourly_cost = hourly_cost * (1.01)^.x, .groups = "drop") %>%
+            dplyr::mutate(year = year + .x)
       )
     ) %>%
     dplyr::arrange(year, ca_name)
