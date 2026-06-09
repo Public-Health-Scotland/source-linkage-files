@@ -6,12 +6,20 @@
 #'
 #' @export
 #'
-read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_sc_all_home_care <- function(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+) {
   log_slf_event(stage = "read", status = "start", type = "hc", year = "all")
 
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   home_care_data <- dplyr::tbl(
-    sc_dvprod_connection,
-    dbplyr::in_schema("social_care_2", "homecare_snapshot")
+    denodo_connect,
+    # TODO: check sdl view name
+    dbplyr::in_schema("sdl", "sdl_home_care_episode_source")
   ) %>%
     dplyr::select(
       "sending_location",
@@ -53,19 +61,8 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
     dplyr::arrange(dplyr::desc(.data$period)) %>%
     dplyr::pull(.data$period) %>%
     utils::head(1)
-  cli::cli_alert_info(stringr::str_glue("Home Care data is available up to {latest_quarter}."))
+  logger::log_info(stringr::str_glue("Home Care data is available up to {latest_quarter}."))
 
-  if (!fs::file_exists(get_sandpit_extract_path(type = "hc"))) {
-    home_care_data %>%
-      write_file(get_sandpit_extract_path(type = "hc"),
-        group_id = 3206 # hscdiip owner
-      )
-
-    home_care_data %>%
-      process_tests_sc_sandpit(type = "hc")
-  } else {
-    home_care_data <- home_care_data
-  }
 
   home_care_data <- home_care_data %>%
     dplyr::mutate(dplyr::across(c(
