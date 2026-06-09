@@ -90,13 +90,27 @@ year <- "1920"
 
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
-  year,
-  types = c(
-    "nrs_deaths",
-    "combined_deaths",
-    "chi_deaths"
-  )
-)
+  year = year,
+  types = c("ae")
+  # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
+) # can always use any other type for testing also
+
+# ## targets ----
+# targets::tar_make(script = "dummy_targets.R")
+# logger::log_info("Targets finished.")
+# # targets::tar_make()
+#
+# # Test homelessness data
+# ## create homelessness data ----
+# logger::log_info("Read and process homelessness data")
+# hl1 <- read_extract_homelessness(
+#   year,
+#   types = c(
+#     "nrs_deaths",
+#     "combined_deaths",
+#     "chi_deaths"
+#   )
+# )
 # using homelessness for test purpose. When development is complete,
 # we change to "types = "byoc_input_files""
 # can always use any other type for testing also
@@ -117,8 +131,37 @@ tryCatch(
 )
 logger::log_info("Targets finished.")
 
-# Episode file ----
+# # Test maternity data
+# logger::log_info("Read and process maternity data")
+# maternity <- read_extract_maternity(
+#   year,
+#   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+#   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
+#   BYOC_MODE = BYOC_MODE
+# ) %>%
+#   process_extract_maternity(
+#     year = year,
+#     write_to_disk = TRUE,
+#     BYOC_MODE = BYOC_MODE,
+#     run_id = run_id,
+#     run_date_time = run_date_time
+#   )
 
-# Individual file ----
+# Test ae data
+logger::log_info("Read and process A&E data")
+ae <- read_extract_ae(
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "ae", BYOC_MODE),
+  BYOC_MODE = BYOC_MODE
+) %>%
+  process_extract_ae(
+    year = year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    write_to_disk = TRUE,
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
+  )
 
 logger::log_info("Run SDL ended.")
