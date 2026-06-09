@@ -15,8 +15,12 @@
 #' @family process extracts
 process_extract_gp_ooh <- function(year,
                                    data_list,
-                                   gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
-                                   write_to_disk = TRUE) {
+                                   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                   gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+                                   write_to_disk = TRUE,
+                                   BYOC_MODE = FALSE,
+                                   run_id = NA,
+                                   run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
 
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
@@ -38,6 +42,17 @@ process_extract_gp_ooh <- function(year,
     dplyr::rename(
       hbtreatcode = "TreatmentNHSBoardCode"
     )
+
+  # --- DUMMY DENODO COST LOOKUP ---
+  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  # ooh_cost_lookup <- dplyr::tbl(
+  #   denodo_connect,
+  #   dbplyr::in_schema("sdl", "sdl_gp_ooh_costs_placeholder") # TO-DO: Update denodo table name later
+  # ) %>%
+  #   dplyr::rename(hbtreatcode = "treatment_nhs_board_code") %>% # TO-DO: or TreatmentNHSBoardCode to match Denodo snake_case given
+  #   dplyr::collect()
+  # --------------------------------
 
   ooh_costs <- matched_data %>%
     dplyr::mutate(
@@ -99,29 +114,23 @@ process_extract_gp_ooh <- function(year,
     dplyr::ungroup()
 
   ## Link CUP Marker -----
-  gp_ooh_cup_file <- read_file(
-    path = gp_ooh_cup_path,
-    col_type = readr::cols(
-      "GP OOH Consultation Start Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "GP OOH Consultation Start Time" = readr::col_time(""),
-      "GUID" = readr::col_character(),
-      "CUP Marker" = readr::col_integer(),
-      "CUP Pathway Name" = readr::col_character()
-    )
+
+  c_year_cup <- convert_fyyear_to_year(check_year_format(year))
+
+  gp_ooh_cup_file <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_source")
   ) %>%
+    dplyr::filter(gp_ooh_sc_start_financial_year == c_year_cup) %>%
     dplyr::select(
-      record_keydate1 = "GP OOH Consultation Start Date",
-      keytime1 = "GP OOH Consultation Start Time",
-      ooh_case_id = "GUID",
-      cup_marker = "CUP Marker",
-      cup_pathway = "CUP Pathway Name"
+      record_keydate1 = "gp_ooh_consultation_start_date ",
+      keytime1 = "gp_ooh_consultation_start_time",
+      ooh_case_id = "guid",
+      cup_marker = "cup_marker",
+      cup_pathway = "cup_pathway_name"
     ) %>%
-    dplyr::distinct(
-      .data$record_keydate1,
-      .data$keytime1,
-      .data$ooh_case_id,
-      .keep_all = TRUE
-    )
+    dplyr::collect() %>%
+    dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE)
 
   ooh_clean <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup_file,
@@ -132,10 +141,18 @@ process_extract_gp_ooh <- function(year,
       )
     )
 
+  ooh_clean <- ooh_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+
   ## Save Outfile -------------------------------------
 
   final_data <- ooh_clean %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -166,7 +183,9 @@ process_extract_gp_ooh <- function(year,
 
   if (write_to_disk) {
     final_data %>%
-      write_file(get_source_extract_path(year, "gp_ooh", check_mode = "write"),
+      write_file(
+        get_source_extract_path(year, "gp_ooh", check_mode = "write", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE,
         group_id = 3356
       ) # sourcedev owner
   }
