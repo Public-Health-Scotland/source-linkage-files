@@ -214,7 +214,10 @@ process_extract_ae <- function(data,
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_ae_ucd_cup_source")
   ) %>%
-    dplyr::filter(ed_arrival_financial_year == c_year_cup) %>%
+    dplyr::filter(
+      ed_arrival_financial_year == c_year_cup,
+      (significant_facility_code == "32" | is.na(significant_facility_code))
+    ) %>%
     dplyr::select(
       record_keydate1 = "ed_arrival_date",
       keytime1 = "ed_arrival_time",
