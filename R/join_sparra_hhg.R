@@ -49,7 +49,7 @@ join_sparra_hhg <- function(data,
   if (check_year_valid(next_fy(year), "hhg")) {
     data <- dplyr::left_join(
       data,
-      get_hhg_data(year, BYOC_MODE = BYOC_MODE) %>%
+      get_hhg_data(next_fy(year), BYOC_MODE = BYOC_MODE) %>%
         dplyr::rename(hhg_end_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
