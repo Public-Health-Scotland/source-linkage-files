@@ -6,8 +6,7 @@
 #' on to the episode file.
 join_sparra_hhg <- function(data,
                             year,
-                            denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                            BYOC_MODE) {
+                            BYOC_MODE = BYOC_MODE) {
   if (check_year_valid(year, "sparra")) {
     data <- dplyr::left_join(
       data,
@@ -34,13 +33,10 @@ join_sparra_hhg <- function(data,
   }
 
   if (check_year_valid(year, "hhg")) {
-    data_hhg <- dplyr::tbl(denodo_connect, dbplyr::in_schema("sdl", "sdl_hhg")) %>%
-      dplyr::filter(costs_financial_year == c_year) %>%
-      dplyr::rename(hhg_start_fy = "hhg_score") %>%
-      dplyr::collect()
     data <- dplyr::left_join(
       data,
-      data_hhg,
+      get_hhg_data(year, BYOC_MODE = BYOC_MODE) %>%
+        dplyr::rename(hhg_start_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
       relationship = "many-to-one"
@@ -50,13 +46,10 @@ join_sparra_hhg <- function(data,
   }
 
   if (check_year_valid(next_fy(year), "hhg")) {
-    data_hhg <- dplyr::tbl(denodo_connect, dbplyr::in_schema("sdl", "sdl_hhg")) %>%
-      dplyr::filter(costs_financial_year == next_c_year) %>%
-      dplyr::rename(hhg_end_fy = "hhg_score") %>%
-      dplyr::collect()
     data <- dplyr::left_join(
       data,
-      data_hhg,
+      get_hhg_data(year, BYOC_MODE = BYOC_MODE) %>%
+        dplyr::rename(hhg_end_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
       relationship = "many-to-one"
