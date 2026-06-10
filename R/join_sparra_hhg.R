@@ -23,7 +23,8 @@ join_sparra_hhg <- function(data,
   if (check_year_valid(next_fy(year), "sparra")) {
     data <- dplyr::left_join(
       data,
-      read_file(get_sparra_path(next_fy(year))),
+      read_file(get_sparra_path(next_fy(year))) %>%
+        dplyr::rename(sparra_end_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
       relationship = "many-to-one"
