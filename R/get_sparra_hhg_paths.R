@@ -3,30 +3,22 @@
 #' @description Get the path to the HHG extract
 #'
 #' @param year Year of extract
-#' @param BYOC_MODE
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the HHG extract as an [fs::path()]
 #' @export
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
-get_hhg_path <- function(year, BYOC_MODE, ...) {
+get_hhg_path <- function(year, ...) {
   if (!check_year_valid(year, "hhg")) {
     return(get_dummy_boxi_extract_path())
   }
 
-  if (isTRUE(BYOC_MODE)) {
-    hhg_file_path <- file.path(
-      denodo_output_path(),
-      stringr::str_glue("anon-HHG-20{year}.parquet")
-    )
-  } else {
-    hhg_file_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "HHG"),
-      file_name = stringr::str_glue("anon-HHG-20{year}.parquet"),
-      ...
-    )
-  }
+  hhg_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "HHG"),
+    file_name = stringr::str_glue("anon-HHG-20{year}.parquet"),
+    ...
+  )
 
   return(hhg_file_path)
 }
