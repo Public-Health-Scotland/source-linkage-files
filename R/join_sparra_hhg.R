@@ -4,11 +4,11 @@
 #'
 #' @return The data including the SPARRA and HHG variables matched
 #' on to the episode file.
-join_sparra_hhg <- function(data, year) {
+join_sparra_hhg <- function(data, year, BYOC_MODE = BYOC_MODE) {
   if (check_year_valid(year, "sparra")) {
     data <- dplyr::left_join(
       data,
-      get_sparra_data(year) %>%
+      get_sparra_data(year, BYOC_MODE = BYOC_MODE) %>%
         dplyr::rename(sparra_start_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
@@ -21,7 +21,7 @@ join_sparra_hhg <- function(data, year) {
   if (check_year_valid(next_fy(year), "sparra")) {
     data <- dplyr::left_join(
       data,
-      get_sparra_data(next_fy(year)) %>%
+      get_sparra_data(next_fy(year), BYOC_MODE = BYOC_MODE) %>%
         dplyr::rename(sparra_end_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
