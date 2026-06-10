@@ -4,7 +4,7 @@
 \alias{get_hhg_path}
 \title{HHG Extract File Path}
 \usage{
-get_hhg_path(year, BYOC_MODE, ...)
+get_hhg_path(year, ...)
 }
 \arguments{
 \item{year}{Year of extract}
