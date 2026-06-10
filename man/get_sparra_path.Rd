@@ -4,7 +4,7 @@
 \alias{get_sparra_path}
 \title{SPARRA Extract File Path}
 \usage{
-get_sparra_path(year, BYOC_MODE, ...)
+get_sparra_path(year, ...)
 }
 \arguments{
 \item{year}{Year of extract}
