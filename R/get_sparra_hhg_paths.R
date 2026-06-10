@@ -64,13 +64,20 @@ get_sparra_path <- function(year, ...) {
 get_sparra_data <- function(year,
                             denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                             BYOC_MODE) {
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   if (isTRUE(BYOC_MODE)) {
     extract_sparra <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_sparra_source")
     ) %>%
-      ## TODO: Check filters/sparra risk year ##
-      collect()
+      # Filter on projection variable: `risk_financial_year` e.g.
+      # 01-04-2025 relates to financial year 2025/26.
+      dplyr::filter(risk_financial_year == c_year) %>%
+      dplyr::collect()
   } else {
     extract_sparra <- read_file(get_sparra_path(year))
   }
