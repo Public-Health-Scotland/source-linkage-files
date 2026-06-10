@@ -7,6 +7,7 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param write_temp_to_disk write intermediate data for investigation or debug
+#' @param BYOC_MODE BYOC mode
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
@@ -17,22 +18,22 @@
 #' @return a [tibble][tibble::tibble-package] containing the episode file
 #' @export
 create_episode_file <- function(
-  processed_data_list,
-  year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
-  homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
-  ltc_data = read_file(get_ltcs_path(year)),
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(
-    get_slf_gpprac_path(),
-    col_select = c("gpprac", "cluster", "hbpraccode")
-  ),
-  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
-  write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
-) {
+    processed_data_list,
+    year,
+    dd_data = read_file(get_source_extract_path(year, "dd")),
+    homelessness_lookup = create_homelessness_lookup(year),
+    nsu_cohort = read_file(get_nsu_path(year)),
+    ltc_data = read_file(get_ltcs_path(year)),
+    slf_pc_lookup = read_file(get_slf_postcode_path()),
+    slf_gpprac_lookup = read_file(
+      get_slf_gpprac_path(),
+      col_select = c("gpprac", "cluster", "hbpraccode")
+    ),
+    slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
+    sc_client = read_file(get_sc_client_lookup_path(year)),
+    write_to_disk = TRUE,
+    write_temp_to_disk = FALSE,
+    BYOC_MODE) {
   log_ep_substage("Create episode file", "started", year)
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
@@ -161,7 +162,7 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
-    join_sparra_hhg(year) %>%
+    join_sparra_hhg(year, BYOC_MODE = BYOC_MODE) %>%
     fill_geographies(
       slf_pc_lookup,
       slf_gpprac_lookup
@@ -523,18 +524,17 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(
-  data,
-  year,
-  update = latest_update(),
-  demographic_cohort = read_file(
-    get_demographic_cohorts_path(year, update),
-    col_select = c("anon_chi", "demographic_cohort")
-  ),
-  service_use_cohort = read_file(
-    get_service_use_cohorts_path(year, update),
-    col_select = c("anon_chi", "service_use_cohort")
-  )
-) {
+    data,
+    year,
+    update = latest_update(),
+    demographic_cohort = read_file(
+      get_demographic_cohorts_path(year, update),
+      col_select = c("anon_chi", "demographic_cohort")
+    ),
+    service_use_cohort = read_file(
+      get_service_use_cohorts_path(year, update),
+      col_select = c("anon_chi", "service_use_cohort")
+    )) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
       demographic_cohort,
