@@ -12,12 +12,13 @@
 #' @family individual_file
 #' @export
 create_individual_file <- function(
-    episode_file,
-    year,
-    homelessness_lookup = create_homelessness_lookup(year),
-    write_to_disk = TRUE,
-    write_temp_to_disk,
-    BYOC_MODE) {
+  episode_file,
+  year,
+  homelessness_lookup = create_homelessness_lookup(year),
+  write_to_disk = TRUE,
+  write_temp_to_disk,
+  BYOC_MODE
+) {
   log_ind_substage("Create individual file", "started", year)
 
   individual_file <- episode_file %>%
