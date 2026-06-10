@@ -31,35 +31,28 @@ get_hhg_path <- function(year, BYOC_MODE, ...) {
   return(hhg_file_path)
 }
 
+
 #' SPARRA Extract File Path
 #'
 #' @description Get the path to the SPARRA extract
 #'
 #' @param year Year of extract
-#' @param BYOC_MODE
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the SPARRA extract as an [fs::path()]
 #' @export
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
-get_sparra_path <- function(year, BYOC_MODE, ...) {
+get_sparra_path <- function(year, ...) {
   if (!check_year_valid(year, "sparra")) {
     return(get_dummy_boxi_extract_path())
   }
 
-  if (isTRUE(BYOC_MODE)) {
-    hhg_file_path <- file.path(
-      denodo_output_path(),
-      stringr::str_glue("anon-SPARRA-20{year}.parquet")
-    )
-  } else {
-    sparra_file_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "SPARRA"),
-      file_name = stringr::str_glue("anon-SPARRA-20{year}.parquet"),
-      ...
-    )
-  }
+  sparra_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "SPARRA"),
+    file_name = stringr::str_glue("anon-SPARRA-20{year}.parquet"),
+    ...
+  )
 
   return(sparra_file_path)
 }
