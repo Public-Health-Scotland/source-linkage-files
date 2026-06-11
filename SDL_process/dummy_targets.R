@@ -163,33 +163,33 @@ list(
     # ),
 
     ### Mental Health (SMR02) Activity ----
-    # # READ - Mental Health
-    # tar_target(
-    #   mental_health_data,
-    #   read_extract_mental_health(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     file_path = get_boxi_extract_path(
-    #       year = year,
-    #       type = "mh",
-    #       BYOC_MODE = BYOC_MODE
-    #     ),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # PROCESS - Mental Health
-    # tar_target(
-    #   # Target name
-    #   source_mental_health_extract,
-    #   process_extract_mental_health(
-    #     mental_health_data,
-    #     year = year,
-    #     write_to_disk = write_to_disk,
-    #     BYOC_MODE = BYOC_MODE,
-    #     run_id = run_id,
-    #     run_date_time = run_date_time
-    #   )
-    # ),
+    # READ - Mental Health
+    tar_target(
+      mental_health_data,
+      read_extract_mental_health(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(
+          year = year,
+          type = "mh",
+          BYOC_MODE = BYOC_MODE
+        ),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Mental Health
+    tar_target(
+      # Target name
+      source_mental_health_extract,
+      process_extract_mental_health(
+        mental_health_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
 
     ### Death Activity ----
@@ -200,7 +200,7 @@ list(
       # use this anonymous function with redundant but necessary refined_death
       # to make sure reading year-specific NRS deaths extracts after it is produced
       (\(year, refined_death_data) {
-        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+        arrow::read_parquet(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
           as.data.frame()
       })(year, refined_death_data)
     )
