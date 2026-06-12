@@ -34,7 +34,7 @@ library(tidyverse)
 
 ## Update ##
 # The year of the new NSU extract we want
-year <- "2324"
+year <- "2526"
 
 nsu_dir <- path("/conf/hscdiip/SLF_Extracts/NSU/")
 
@@ -45,7 +45,9 @@ episode_file <- slfhelper::read_slf_episode(year, col_select = "anon_chi") %>%
   # Get CHI version for sending to the CHILI team.
   # For saving this on disk we want the anon-chi version, save this after sending
   # to the CHILI team.
-  slfhelper::get_chi()
+  slfhelper::get_chi() %>%
+  # Remove any duplicate CHIs
+  distinct()
 
 # Save a parquet file
 episode_file %>%
