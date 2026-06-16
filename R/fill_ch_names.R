@@ -14,7 +14,7 @@ fill_ch_names <- function(ch_data,
   spd_list <- spd_data %>%
     dplyr::pull(.data$pc7)
 
-  uk_pc_list <- get_uk_postcode_data(BYOC_MODE) %>%
+  uk_pc_list <- uk_pc_list %>%
     dplyr::pull()
 
 
