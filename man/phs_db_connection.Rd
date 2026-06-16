@@ -7,7 +7,7 @@
 phs_db_connection(dsn, username)
 }
 \arguments{
-\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}}
+\item{dsn}{The Data Source Name (DSN) passed on to \code{\link[odbc:dbConnect]{odbc::dbConnect()}}
 the DSN must be set up first. e.g. \code{SMRA} or \code{DVPROD}}
 
 \item{username}{The username to use for authentication,

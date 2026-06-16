@@ -4,18 +4,14 @@
 \alias{join_deaths_data}
 \title{Join Deaths data}
 \usage{
-join_deaths_data(
-  data,
-  year,
-  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year))
-)
+join_deaths_data(data, year, BYOC_MODE = FALSE)
 }
 \arguments{
 \item{data}{Episode file data}
 
 \item{year}{financial year, e.g. '1920'}
 
-\item{slf_deaths_lookup}{The SLF deaths lookup.}
+\item{BYOC_MODE}{BYOC mode}
 }
 \value{
 The data including the deaths lookup matched

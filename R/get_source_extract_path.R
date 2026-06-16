@@ -25,7 +25,7 @@ get_source_extract_path <- function(year,
                                       "client",
                                       "cmh",
                                       "dd",
-                                      "deaths",
+                                      "nrs_deaths",
                                       "dn",
                                       "gp_ooh",
                                       "hc",
@@ -50,7 +50,7 @@ get_source_extract_path <- function(year,
     return(get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE))
   }
 
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "acute" ~ "anon-acute_for_source",
     "ae" ~ "anon-a_and_e_for_source",
@@ -59,7 +59,7 @@ get_source_extract_path <- function(year,
     "cmh" ~ "anon-cmh_for_source",
     "client" ~ "anon-client_for_source",
     "dd" ~ "anon-delayed_discharge_for_source",
-    "deaths" ~ "anon-deaths_for_source",
+    "nrs_deaths" ~ "anon-nrs_deaths_for_source",
     "dn" ~ "anon-district_nursing_for_source",
     "gp_ooh" ~ "anon-gp_ooh_for_source",
     "hc" ~ "anon-home_care_for_source",
