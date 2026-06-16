@@ -7,7 +7,7 @@
 fill_ch_names(
   ch_data,
   ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
+  spd_data = get_spd_data(BYOC_MODE),
   uk_pc_path = get_uk_postcode_path()
 )
 }
@@ -18,8 +18,7 @@ fill_ch_names(
 \item{ch_name_lookup_path}{Path to the 'official' Care Home name Excel
 Workbook, this defaults to \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}}}
 
-\item{spd_path}{Path to the Scottish Postcode Directory (rds) version, this
-defaults to \code{\link[=get_spd_path]{get_spd_path()}}}
+\item{spd_data}{Path to the Scottish Postcode Directory (parquet) version}
 
 \item{uk_pc_path}{Path to the UK postcode list. This is defaults to
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}}
