@@ -5,7 +5,9 @@
 #'
 #' @return the same data with improved accuracy and completeness of the Care
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
-fill_ch_names <- function(ch_data) {
+fill_ch_names <- function(ch_data, 
+                                          spd_data = get_spd_data(BYOC_MODE)),
+                                          uk_pc_list = get_uk_postcode_data(BYOC_MODE) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
