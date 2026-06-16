@@ -31,14 +31,13 @@ process_lookup_gpprac <- function(
     )
 
   spd_file <- spd_data
-    dplyr::select(c(
-      "pc7",
-      "pc8",
-      "hb2018",
-      "hscp2018",
-      "ca2018"
-    )
-  )
+  dplyr::select(c(
+    "pc7",
+    "pc8",
+    "hb2018",
+    "hscp2018",
+    "ca2018"
+  ))
 
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(
