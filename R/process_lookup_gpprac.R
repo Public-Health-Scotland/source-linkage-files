@@ -5,7 +5,7 @@
 #'
 #' @param open_data PHS open dataset link to GP practice details
 #' @param gpprac_ref_path Path to GP Practice reference file
-#' @param spd_path Path to Scottish Postcode Directory.
+#' @param spd_data Path to Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -15,7 +15,7 @@
 process_lookup_gpprac <- function(
   open_data = get_gpprac_opendata(),
   gpprac_ref_path = get_gpprac_ref_path(),
-  spd_path = get_spd_path(),
+  spd_data = get_spd_data(BYOC_MODE),
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_slf_lookup", year = "all")
@@ -30,9 +30,8 @@ process_lookup_gpprac <- function(
       pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
     )
 
-  spd_file <- read_file(
-    path = spd_path,
-    col_select = c(
+  spd_file <- spd_data
+    dplyr::select(c(
       "pc7",
       "pc8",
       "hb2018",
