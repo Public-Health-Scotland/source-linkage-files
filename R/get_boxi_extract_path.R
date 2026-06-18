@@ -43,7 +43,7 @@ get_boxi_extract_path <- function(year,
   }
 
   if (!check_year_valid(year, type)) {
-    return(get_dummy_boxi_extract_path(BYOC_MODE))
+    return(get_dummy_boxi_extract_path())
   }
 
   file_name <- dplyr::recode_values(
@@ -89,16 +89,7 @@ get_boxi_extract_path <- function(year,
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 #' @export
-get_dummy_boxi_extract_path <- function(BYOC_MODE = FALSE) {
-  if (BYOC_MODE) {
-    dummy_path <- "invalid_denodo_extract_path"
-  } else {
-    dummy_path <- get_file_path(
-      directory = get_dev_dir(BYOC_MODE),
-      file_name = ".dummy",
-      create = TRUE
-    )
-  }
-
+get_dummy_boxi_extract_path <- function() {
+  dummy_path <- "dummy_boxi_extract_path"
   return(dummy_path)
 }
