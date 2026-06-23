@@ -9,13 +9,16 @@ read_extract_prescribing <- function(year,
                                      BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "pis", year = year)
 
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year) # TODO: Check whether this is required
+
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   pis_file <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_prescribing_source")
   ) %>% # TODO: Placeholder. Replace with table name.
-    filter(year_column == year) %>% # TODO: Check whether this should be filtered by year and if so what the year column name is.
+    filter(financial_year == c_year) %>% # TODO: Check whether this is required and year column name.
     # Rename variables
     dplyr::select(
       chi = "patient_chi",
