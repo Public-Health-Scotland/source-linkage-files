@@ -8,9 +8,7 @@
 #'
 read_sc_all_home_care <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA
+  BYOC_MODE = FALSE
 ) {
   log_slf_event(stage = "read", status = "start", type = "hc", year = "all")
 
