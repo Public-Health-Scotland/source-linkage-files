@@ -26,30 +26,17 @@ process_extract_ooh_diagnosis <- function(data,
   # Diagnosis Data ---------------------------------
 
   # Read code lookup
-  readcode_lookup <- read_file(get_readcode_lookup_path()) %>%
-    dplyr::rename(
-      readcode = "ReadCode",
-      description = "Description"
-    )
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # ----------------------------------------------------------------------------
-  ## TO-DO: replace readcode lookup with new denodo connection
-
-  # Disconnect from Denodo
-  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # readcode_lookup <- dplyr::tbl(
-  #   denodo_connect,
-  #   dbplyr::in_schema("sdl", "sdl_readcode_lookup_source_placeholder") # TO-DO: Placeholder for data path in denodo
-  # ) %>%
-  #   dplyr::select( # TO-DO: Placeholder variables
-  #     readcode = "ReadCode",
-  #     description = "Description"
-  #   ) %>%
-  #   dplyr::collect()
-  #
-
-  # ----------------------------------------------------------------------------
+  readcode_lookup <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_read_code_lookup_source")
+  ) %>%
+    dplyr::select(
+      readcode = "readcode",
+      description = "description"
+    ) %>%
+    dplyr::collect()
 
   ## Deal with Read Codes
 
@@ -146,7 +133,6 @@ process_extract_ooh_diagnosis <- function(data,
       )
     )
   }
-
 
   ## Data Cleaning------------------------------------------------------------
 
