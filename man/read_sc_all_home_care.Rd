@@ -6,9 +6,7 @@
 \usage{
 read_sc_all_home_care(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA
+  BYOC_MODE = FALSE
 )
 }
 \arguments{
