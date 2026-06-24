@@ -29,7 +29,7 @@ process_extract_ooh_outcomes <- function(
     data.table::as.data.table() %>%
     # Recode outcome
     dplyr::mutate(
-      outcome = dplyr::case_match(
+      outcome = dplyr::recode_values(
         .data$outcome,
         "DEATH" ~ "00",
         "999/AMBULANCE" ~ "01",
@@ -42,7 +42,7 @@ process_extract_ooh_outcomes <- function(
         "REFERRED TO SOCIAL SERVICES" ~ "24",
         "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" ~ "29",
         "OTHER" ~ "99",
-        .default = .data$outcome
+        default = .data$outcome
       )
     ) %>%
     # Sort so we prefer 'lower' outcomes e.g. Death, over things like 'Other'
@@ -52,9 +52,9 @@ process_extract_ooh_outcomes <- function(
     dplyr::ungroup() %>%
     # use row order to pivot outcomes
     tidyr::pivot_wider(
-      names_from = .data$outcome_n,
+      names_from = "outcome_n",
       names_prefix = "ooh_outcome",
-      values_from = .data$outcome
+      values_from = "outcome"
     ) %>%
     dplyr::mutate(
       run_id = run_id,

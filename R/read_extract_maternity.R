@@ -15,7 +15,7 @@ read_extract_maternity <- function(
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+  if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())
   }
 
@@ -63,7 +63,7 @@ read_extract_maternity <- function(
       hbpraccode = "practice_nhs_health_board_curr",
       hbrescode = "nhs_board_of_residence_code_curr",
       hbtreatcode = "treatment_nhs_board_code_curr",
-      hscp = "hspc_of_residence_code_curr",
+      hscp = "hscp_of_residence_code_curr",
       lca = "geo_council_area_code",
       location = "treatment_location_code",
       mpat = "management_of_patient_code",
