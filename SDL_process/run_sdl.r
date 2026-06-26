@@ -115,37 +115,4 @@ tryCatch(
 )
 logger::log_info("Targets finished.")
 
-# # Test maternity data
-# logger::log_info("Read and process maternity data")
-# maternity <- read_extract_maternity(
-#   year,
-#   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-#   file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE),
-#   BYOC_MODE = BYOC_MODE
-# ) %>%
-#   process_extract_maternity(
-#     year = year,
-#     write_to_disk = TRUE,
-#     BYOC_MODE = BYOC_MODE,
-#     run_id = run_id,
-#     run_date_time = run_date_time
-#   )
-
-# Test ae data
-logger::log_info("Read and process A&E data")
-ae <- read_extract_ae(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "ae", BYOC_MODE),
-  BYOC_MODE = BYOC_MODE
-) %>%
-  process_extract_ae(
-    year = year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    write_to_disk = TRUE,
-    BYOC_MODE = BYOC_MODE,
-    run_id = run_id,
-    run_date_time = run_date_time
-  )
-
 logger::log_info("Run SDL ended.")
