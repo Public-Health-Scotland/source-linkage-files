@@ -4,7 +4,7 @@
 \alias{process_extract_ooh_consultations}
 \title{Process the GP OOH Consultations extract}
 \usage{
-process_extract_ooh_consultations(data, year)
+process_extract_ooh_consultations(data, year, run_id = NA, run_date_time = NA)
 }
 \arguments{
 \item{data}{The extract to process}
