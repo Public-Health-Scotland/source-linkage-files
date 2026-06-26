@@ -55,9 +55,9 @@ tar_option_set(
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
-  retrieval = "auto",
+  retrieval = "work",
   # memory - default option: the target stays in memory until the end of the pipeline
-  memory = "auto",
+  memory = "persistent",
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
@@ -253,13 +253,19 @@ list(
     # Target name
     gp_ooh_cost_lookup,
     # Function
-    process_costs_gp_ooh_rmd()
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    # Function
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # PROCESS - IT CHI deaths------
   tar_target(
@@ -268,7 +274,10 @@ list(
     # Function
     process_it_chi_deaths(
       data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
@@ -279,13 +288,25 @@ list(
     # Function
     process_tests_it_chi_deaths(it_chi_deaths_data)
   ),
+  # Long-Term Conditions (LTCs) Activity--------------------------------------
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
   # NRS BOXI Deaths------------------------------------------------------------
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
     refined_death_data,
     process_refined_death(
       it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   ### Social Care - 'All' data -----------------------------------------------
@@ -638,8 +659,6 @@ list(
       )
     ),
     # Long-Term Conditions (LTCs) Activity--------------------------------------
-    # READ - LTCs
-    tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
     # PROCESS - LTCs
     tar_target(
       # Target name
@@ -648,7 +667,10 @@ list(
       process_lookup_ltc(
         ltc_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - LTCs
@@ -756,36 +778,41 @@ list(
         year
       )
     ),
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
+
+    # Remove process_slf_deaths_lookup function, and
+    # moved the funtionality to join_deaths_data()
+    # where the slf_deaths_lookup is only used once.
+    # # Deaths - Year specific SLF lookup-----------------------------------------
+    # tar_target(
+    #   # Target name
+    #   slf_deaths_lookup,
+    #   # Function
+    #   process_slf_deaths_lookup(
+    #     year = year,
+    #     refined_death = refined_death_data,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
     # READ - GP Out of Hours diagnoses
     tar_target(
       # Target name
       diagnosis_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-d"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # READ - GP Out of Hours outcomes
     tar_target(
       # Target name
       outcomes_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-o"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # READ - GP Out of Hours consultations
     tar_target(
       consultations_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # GP Out of Hours ALL
@@ -794,16 +821,18 @@ list(
       ooh_data,
       # Function
       read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        diagnosis_path = diagnosis_data_path,
+        outcomes_path = outcomes_data_path,
+        consultations_path = consultations_data_path
       )
     ),
     # GP Out of Hours CUP
     tar_target(
       gp_ooh_cup_path,
-      get_boxi_extract_path(year, type = "gp_ooh_cup"),
+      get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # PROCESS - GP OOH CUP
@@ -812,10 +841,14 @@ list(
       source_ooh_extract,
       # Function
       process_extract_gp_ooh(
-        year,
+        year = year,
         ooh_data,
-        gp_ooh_cup_path,
-        write_to_disk = write_to_disk
+        gp_ooh_cup_path = gp_ooh_cup_path,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - GP OOH

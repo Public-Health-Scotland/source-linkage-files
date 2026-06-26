@@ -41,23 +41,26 @@ get_it_ltc_path <- function(it_reference = NULL, ...) {
 #' @export
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
-get_it_deaths_path <- function(it_reference = NULL, ...) {
-  if (is.null(it_reference)) {
-    it_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
-      file_name_regexp = "anon-SCTASK[0-9]{7}_Deaths\\.parquet",
-      ...
-    )
+get_it_deaths_path <- function(it_reference = NULL, BYOC_MODE, ...) {
+  if (isTRUE(BYOC_MODE)) {
+    return("dummy_BYOC_it_deaths_path")
   } else {
-    it_reference <- check_it_reference(it_reference)
+    if (is.null(it_reference)) {
+      it_deaths_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+        file_name_regexp = "anon-SCTASK[0-9]{7}_Deaths\\.parquet",
+        ...
+      )
+    } else {
+      it_reference <- check_it_reference(it_reference)
 
-    it_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
-      file_name = stringr::str_glue("anon-SCTASK{it_reference}_Deaths.parquet")
-    )
+      it_deaths_path <- get_file_path(
+        directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
+        file_name = stringr::str_glue("anon-SCTASK{it_reference}_Deaths.parquet")
+      )
+    }
+    return(it_deaths_path)
   }
-
-  return(it_deaths_path)
 }
 
 #' IT Prescribing File Path

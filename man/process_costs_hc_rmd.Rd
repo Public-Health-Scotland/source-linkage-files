@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_costs_rmd.R
 \name{process_costs_hc_rmd}
 \alias{process_costs_hc_rmd}
-\title{Process Home Care cost lookup Rmd file}
+\title{Process GP ooh cost lookup Rmd file}
 \usage{
 process_costs_hc_rmd(file_path = get_hc_costs_path())
 }
@@ -11,8 +11,14 @@ process_costs_hc_rmd(file_path = get_hc_costs_path())
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the final cost data.
+
+a \link[tibble:tibble-package]{tibble} containing the final cost data.
 }
 \description{
+This will read and process the
+GP ooh cost lookup, it will return the final data
+and write it to disk.
+
 This will read and process the
 Home Care cost lookup, it will return the final data
 and write it to disk.

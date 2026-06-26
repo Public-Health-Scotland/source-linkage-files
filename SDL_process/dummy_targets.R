@@ -63,7 +63,7 @@ tar_option_set(
     parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
-  error = "continue",
+  error = "stop",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
@@ -79,65 +79,90 @@ years_to_run <- "1920"
 # Stage 2 - Set up targets ----
 list(
   tar_rds(write_to_disk, TRUE),
+
+  ## Stage 2.1 non-specific targets ----
+
+  # GP Out of Hours costs------
+  tar_target(
+    # Target name
+    gp_ooh_cost_lookup,
+    # Function
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
+  ),
+
+  ## Stage 2.2 year specific targets ----
   tar_map(
     list(year = years_to_run),
+  ),
 
-    ### Maternity (SMR02) Acitivity-----------------------------------------------
-    # READ - Maternity
-    tar_target(
-      # Target name
-      maternity_data,
-      read_extract_maternity(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Maternity
-    tar_target(
-      # Target name
-      source_maternity_extract,
-      # Function
-      process_extract_maternity(
-        maternity_data,
-        year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
-
-    ### Mental Health (SMR02) Activity--------------------------------------------
-    # READ - Mental Health
-    tar_target(
-      mental_health_data,
-      read_extract_mental_health(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(
-          year = year,
-          type = "mh",
-          BYOC_MODE = BYOC_MODE
-        ),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Mental Health
-    tar_target(
-      # Target name
-      source_mental_health_extract,
-      process_extract_mental_health(
-        mental_health_data,
-        year = year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
+  # GP Out of Hours (GP OOH) Activity-----------------------------------------
+  # READ - GP Out of Hours diagnoses
+  tar_target(
+    # Target name
+    diagnosis_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # READ - GP Out of Hours outcomes
+  tar_target(
+    # Target name
+    outcomes_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # READ - GP Out of Hours consultations
+  tar_target(
+    consultations_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # GP Out of Hours ALL
+  tar_qs(
+    # Target name
+    ooh_data,
+    # Function
+    read_extract_gp_ooh(
+      year = year,
+      BYOC_MODE = BYOC_MODE,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      diagnosis_path = diagnosis_data_path,
+      outcomes_path = outcomes_data_path,
+      consultations_path = consultations_data_path
+    )
+  ),
+  # GP Out of Hours CUP
+  tar_target(
+    gp_ooh_cup_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # PROCESS - GP OOH CUP
+  tar_target(
+    # Target name
+    source_ooh_extract,
+    # Function
+    process_extract_gp_ooh(
+      year = year,
+      ooh_data,
+      gp_ooh_cup_path = gp_ooh_cup_path,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   )
 )
+# ,
+# # TESTS - GP OOH
+# tar_target(
+#   # Target name
+#   tests_source_ooh_extract,
+#   # Function
+#   process_tests_gp_ooh(
+#     source_ooh_extract,
+#     year
+#   )
+# )
 
 ## End of Targets pipeline ##

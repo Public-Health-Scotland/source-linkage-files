@@ -49,7 +49,7 @@ process_extract_ooh_consultations <- function(data, year) {
     # change back to anon_chi
     slfhelper::get_anon_chi() %>%
     dplyr::mutate(
-      attendance_status = dplyr::case_match(
+      attendance_status = dplyr::recode_values(
         .data$attendance_status,
         "Y" ~ 1L,
         "N" ~ 8L

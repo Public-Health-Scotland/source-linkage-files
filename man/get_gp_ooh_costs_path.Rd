@@ -4,7 +4,7 @@
 \alias{get_gp_ooh_costs_path}
 \title{GP Out of Hours Costs File Path}
 \usage{
-get_gp_ooh_costs_path(..., update = NULL)
+get_gp_ooh_costs_path(BYOC_MODE, ..., update = NULL)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
@@ -20,12 +20,12 @@ Get the full GP Out of Hours costs lookup path
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other costs lookup file paths: 
-\code{\link{get_ch_costs_path}()},
-\code{\link{get_dn_costs_path}()},
-\code{\link{get_dn_raw_costs_path}()},
-\code{\link{get_gp_ooh_raw_costs_path}()},
-\code{\link{get_hc_costs_path}()},
-\code{\link{get_hc_raw_costs_path}()}
+Other costs lookup file paths:
+\code{\link[=get_ch_costs_path]{get_ch_costs_path()}},
+\code{\link[=get_dn_costs_path]{get_dn_costs_path()}},
+\code{\link[=get_dn_raw_costs_path]{get_dn_raw_costs_path()}},
+\code{\link[=get_gp_ooh_raw_costs_path]{get_gp_ooh_raw_costs_path()}},
+\code{\link[=get_hc_costs_path]{get_hc_costs_path()}},
+\code{\link[=get_hc_raw_costs_path]{get_hc_raw_costs_path()}}
 }
 \concept{costs lookup file paths}
