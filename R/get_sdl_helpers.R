@@ -1,4 +1,4 @@
-#' Get SDL Raw Table Name
+#' Get sdl view name for raw data
 #'
 #' @description Returns the Denodo SDL table name for the extract
 #' corresponding to a given dataset type.
@@ -83,6 +83,187 @@ get_sdl_raw_names <- function(type) {
   return(sdl_name)
 }
 
+#' Get SDL view name for processed datasets
+#'
+#' @param type Character. Dataset id (e.g. "acute", "ae", etc.)
+#'
+#' @return Character string of SDL processed view name
+#'
+#' @export
+#' @family file path functions
+get_sdl_processed_name <- function(type) {
+  sdl_name <- dplyr::recode_values(
+    type,
+
+    # acute
+    "acute" ~ "sdl_acute_processed",
+
+    # ae
+    "ae" ~ "sdl_ae2_processed",
+
+    # costs
+    "ch_cost_lookup" ~ "sdl_ch_cost_lookup_processed",
+    "dn_cost_lookup" ~ "sdl_dn_cost_lookup_processed",
+    "hc_cost_lookup" ~ "sdl_hc_cost_lookup_processed",
+    "ooh_cost_lookup" ~ "sdl_gp_ooh_cost_lookup_processed",
+
+    # deaths
+    "chi_deaths" ~ "sdl_chi_deaths_processed",
+    "nrs_deaths" ~ "sdl_nrs_deaths_processed",
+    "refined_death" ~ "sdl_slf_deaths_lookup_processed",
+
+    # delayed discharge - dd
+    "dd" ~ "sdl_delayed_discharge_processed",
+
+    # district nursing - dn
+    "dn" ~ "sdl_district_nursing_processed",
+
+    # gp ooh
+    "gp_ooh" ~ "sdl_gp_ooh_processed",
+
+    # hhg
+    "hhg" ~ "sdl_hhg_processed",
+
+    # homelessness
+    "homelessness" ~ "sdl_homelessness_processed",
+    "homelessness_completeness" ~ "sdl_homelessness_completeness_processed",
+    "homelessness_lookup" ~ "sdl_homelessness_lookup_processed",
+
+    # long term conditions - ltc
+    "ltc" ~ "sdl_long_term_condition_processed",
+
+    # lookups
+    "care_home_lookup" ~ "sdl_care_home_name_lookup_processed",
+    "gpprac_lookup" ~ "sdl_gp_practice_lookup_processed",
+    "postcode_lookup" ~ "sdl_postcode_lookup_processed",
+
+    # maternity
+    "maternity" ~ "sdl_maternity_processed",
+
+    # mental health - mh
+    "cmh" ~ "sdl_cmh_processed",
+    "mh" ~ "sdl_mental_health_processed",
+
+    # outpatients
+    "outpatients" ~ "sdl_outpatients_processed",
+
+    # prescribing
+    "pis" ~ "sdl_prescribing_processed",
+
+    # social care datasets
+    "at" ~ "sdl_alarms_telecare_processed",
+    "ch" ~ "sdl_care_homes_processed",
+    "client" ~ "sdl_client_information_processed",
+    "hc" ~ "sdl_home_care_processed",
+    "sds" ~ "sdl_self_directed_support_processed",
+    "sc_all_alarms_telecare" ~ "sdl_sc_all_alarms_telecare_processed",
+    "sc_all_care_homes" ~ "sdl_sc_all_care_homes_processed",
+    "sc_all_home_care" ~ "sdl_sc_all_home_care_processed",
+    "sc_all_self_directed_support" ~ "sdl_sc_all_self_directed_support_processed",
+    "sc_demog_lookup" ~ "sdl_demographics_processed",
+
+    # sparra
+    "sparra" ~ "sdl_sparra_processed"
+  )
+
+  if (any(is.na(sdl_name))) {
+    unknown_type <- type[is.na(sdl_name)]
+    stop("Unknown dataset type: ", paste(unknown_type, collapse = ", "))
+  }
+
+  return(sdl_name)
+}
+
+#' Get SDL view name for processed datasets
+#'
+#' @param type Character. Dataset id (e.g. "acute", "ae", etc.)
+#'
+#' @return Character string of SDL processed view name
+#'
+#' @export
+#' @family file path functions
+get_sdl_processed_name <- function(type) {
+  sdl_name <- dplyr::recode_values(
+    type,
+
+    # acute
+    "acute" ~ "sdl_acute_processed",
+
+    # ae
+    "ae" ~ "sdl_ae2_processed",
+
+    # costs
+    "ch_cost_lookup" ~ "sdl_ch_cost_lookup_processed",
+    "dn_cost_lookup" ~ "sdl_dn_cost_lookup_processed",
+    "hc_cost_lookup" ~ "sdl_hc_cost_lookup_processed",
+    "ooh_cost_lookup" ~ "sdl_gp_ooh_cost_lookup_processed",
+
+    # deaths
+    "chi_deaths" ~ "sdl_chi_deaths_processed",
+    "nrs_deaths" ~ "sdl_nrs_deaths_processed",
+    "refined_death" ~ "sdl_slf_deaths_lookup_processed",
+
+    # delayed discharge - dd
+    "dd" ~ "sdl_delayed_discharge_processed",
+
+    # district nursing - dn
+    "dn" ~ "sdl_district_nursing_processed",
+
+    # gp ooh
+    "gp_ooh" ~ "sdl_gp_ooh_processed",
+
+    # hhg
+    "hhg" ~ "sdl_hhg_processed",
+
+    # homelessness
+    "homelessness" ~ "sdl_homelessness_processed",
+    "homelessness_completeness" ~ "sdl_homelessness_completeness_processed",
+    "homelessness_lookup" ~ "sdl_homelessness_lookup_processed",
+
+    # long term conditions - ltc
+    "ltc" ~ "sdl_long_term_condition_processed",
+
+    # lookups
+    "care_home_lookup" ~ "sdl_care_home_name_lookup_processed",
+    "gpprac_lookup" ~ "sdl_gp_practice_lookup_processed",
+    "postcode_lookup" ~ "sdl_postcode_lookup_processed",
+
+    # maternity
+    "maternity" ~ "sdl_maternity_processed",
+
+    # mental health - mh
+    "cmh" ~ "sdl_cmh_processed",
+    "mh" ~ "sdl_mental_health_processed",
+
+    # outpatients
+    "outpatients" ~ "sdl_outpatients_processed",
+
+    # prescribing
+    "pis" ~ "sdl_prescribing_processed",
+
+    # social care datasets
+    "at" ~ "sdl_alarms_telecare_processed",
+    "ch" ~ "sdl_care_homes_processed",
+    "client" ~ "sdl_client_information_processed",
+    "hc" ~ "sdl_home_care_processed",
+    "sds" ~ "sdl_self_directed_support_processed",
+    "sc_all_alarms_telecare" ~ "sdl_sc_all_alarms_telecare_processed",
+    "sc_all_care_homes" ~ "sdl_sc_all_care_homes_processed",
+    "sc_all_home_care" ~ "sdl_sc_all_home_care_processed",
+    "sc_all_self_directed_support" ~ "sdl_sc_all_self_directed_support_processed",
+    "sc_demog_lookup" ~ "sdl_demographics_processed",
+
+    # sparra
+    "sparra" ~ "sdl_sparra_processed"
+  )
+
+  if (any(is.na(sdl_name))) {
+    unknown_type <- type[is.na(sdl_name)]
+    stop("Unknown dataset type: ", paste(unknown_type, collapse = ", "))
+  }
+
+  return(sdl_name)
+}
 
 #' Get SDL Processed Data
 #'
@@ -101,11 +282,9 @@ get_sdl_raw_names <- function(type) {
 get_sdl_processed_data <- function(
     type,
     year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    denodo_connect = NULL,
     BYOC_MODE
 ) {
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
   non_year_specific_types <- c(
     "care_home_lookup",
     "postcode_lookup",
@@ -118,61 +297,17 @@ get_sdl_processed_data <- function(
     "nrs_deaths"
   )
 
-  if (BYOC_MODE) {
-    sdl_name <- dplyr::recode_values(
-      type,
-      "acute" ~ "sdl_acute_processed",
-      "ae" ~ "sdl_ae2_processed",
-      "at" ~ "sdl_alarms_telecare_processed",
-      "ch" ~ "sdl_care_homes_processed",
-      "hc" ~ "sdl_home_care_processed",
-      "sds" ~ "sdl_self_directed_support_processed",
-      "chi_deaths" ~ "sdl_chi_deaths_processed",
-      "client" ~ "sdl_client_information_processed",
-      "cmh" ~ "sdl_cmh_processed",
-      "dd" ~ "sdl_delayed_discharge_processed",
-      "dn" ~ "sdl_district_nursing_processed",
-      "gp_ooh" ~ "sdl_gp_ooh_processed",
-      "hhg" ~ "sdl_hhg_processed",
-      "homelessness" ~ "sdl_homelessness_processed",
-      "care_home_lookup" ~ "sdl_care_home_name_lookup_processed",
-      "gpprac_lookup" ~ "sdl_gp_practice_lookup_processed",
-      "homelessness_lookup" ~ "sdl_homelessness_lookup_processed",
-      "homelessness_completeness" ~ "sdl_homelessness_completeness_processed",
-      "ltc" ~ "sdl_long_term_condition_processed",
-      "maternity" ~ "sdl_maternity_processed",
-      "mh" ~ "sdl_mental_health_processed",
-      "nrs_deaths" ~ "sdl_nrs_deaths_processed",
-      "outpatients" ~ "sdl_outpatients_processed",
-      "pis" ~ "sdl_prescribing_processed",
-      "postcode_lookup" ~ "sdl_postcode_lookup_processed",
-      "refined_death" ~ "sdl_slf_deaths_lookup_processed",
-      "sc_demog_lookup" ~ "sdl_demographics_processed",
-      "sc_all_alarms_telecare" ~ "sdl_sc_all_alarms_telecare_processed",
-      "sc_all_care_homes" ~ "sdl_sc_all_care_homes_processed",
-      "sc_all_home_care" ~ "sdl_sc_all_home_care_processed",
-      "sc_all_self_directed_support" ~ "sdl_sc_all_self_directed_support_processed",
-      "sparra" ~ "sdl_sparra_processed",
-      "ch_cost_lookup" ~ "sdl_ch_cost_lookup_processed",
-      "dn_cost_lookup" ~ "sdl_dn_cost_lookup_processed",
-      "hc_cost_lookup" ~ "sdl_hc_cost_lookup_processed",
-      "ooh_cost_lookup" ~ "sdl_gp_ooh_cost_lookup_processed"
-    )
+  sdl_name = get_sdl_processed_name(type)
 
-    if (is.na(sdl_name)) {
-      stop("Unknown dataset type: ", type)
-    }
+  if (isTRUE(BYOC_MODE)) {
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-    sdl_tbl <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", sdl_name)
-    )
+    sdl_tbl <- dplyr::tbl(denodo_connect, dbplyr::in_schema("sdl", sdl_name))
 
     if (!(type %in% non_year_specific_types)) {
-      sdl_tbl <- dplyr::filter(
-        sdl_tbl,
-        as.character(rlang::.data$year) == as.character(year)
-      )
+      sdl_tbl <- sdl_tbl %>%
+        dplyr::filter(as.character(rlang::.data$year) == as.character(year))
     }
 
     return(dplyr::collect(sdl_tbl))
