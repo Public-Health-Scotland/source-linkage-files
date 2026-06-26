@@ -12,7 +12,7 @@ get_sdl_processed_data(
 )
 }
 \arguments{
-\item{type}{name of dataset (e.g. "acute_processed").}
+\item{type}{Name of dataset (e.g. "acute").}
 
 \item{year}{Financial year.}
 
