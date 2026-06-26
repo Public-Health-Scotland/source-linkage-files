@@ -90,27 +90,11 @@ year <- "1920"
 
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
-  year = year,
-  types = c("ae")
-  # using homelessness for test purpose. When development is complete, we change to "types = "byoc_input_files""
-) # can always use any other type for testing also
-
-# ## targets ----
-# targets::tar_make(script = "dummy_targets.R")
-# logger::log_info("Targets finished.")
-# # targets::tar_make()
-#
-# # Test homelessness data
-# ## create homelessness data ----
-# logger::log_info("Read and process homelessness data")
-# hl1 <- read_extract_homelessness(
-#   year,
-#   types = c(
-#     "nrs_deaths",
-#     "combined_deaths",
-#     "chi_deaths"
-#   )
-# )
+  year,
+  types = c(
+    "ae"
+  )
+)
 # using homelessness for test purpose. When development is complete,
 # we change to "types = "byoc_input_files""
 # can always use any other type for testing also
