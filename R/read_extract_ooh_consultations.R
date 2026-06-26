@@ -6,13 +6,16 @@
 read_extract_ooh_consultations <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh-c", year = year)
 
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
+
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Specify years available for running
   if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
@@ -58,9 +61,6 @@ read_extract_ooh_consultations <- function(
     dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
     # change back to anon_chi
     slfhelper::get_anon_chi()
-
-  # Disconnect from Denodo
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-c", year = year)
 
