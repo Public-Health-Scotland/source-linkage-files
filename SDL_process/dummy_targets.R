@@ -137,7 +137,7 @@ list(
 
     # Acute (SMR01) Activity
     # READ - Acute
-    tar_file_read(
+    tar_target(
       # Target name
       acute_data,
       # Function
@@ -148,13 +148,6 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # READ - Acute CUP
-    tar_target(
-      # Target name
-      acute_cup_path,
-      get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE = BYOC_MODE),
-      format = "file"
-    ),
     # PROCESS - Acute
     tar_target(
       # Target name
@@ -163,7 +156,7 @@ list(
       process_extract_acute(
         acute_data,
         year = year,
-        acute_cup_path = acute_cup_path,
+        acute_cup_path = get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE = BYOC_MODE),
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
@@ -200,33 +193,33 @@ list(
     # ),
 
     ### Mental Health (SMR02) Activity ----
-    # READ - Mental Health
-    tar_target(
-      mental_health_data,
-      read_extract_mental_health(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(
-          year = year,
-          type = "mh",
-          BYOC_MODE = BYOC_MODE
-        ),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Mental Health
-    tar_target(
-      # Target name
-      source_mental_health_extract,
-      process_extract_mental_health(
-        mental_health_data,
-        year = year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
+    # # READ - Mental Health
+    # tar_target(
+    #   mental_health_data,
+    #   read_extract_mental_health(
+    #     year = year,
+    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    #     file_path = get_boxi_extract_path(
+    #       year = year,
+    #       type = "mh",
+    #       BYOC_MODE = BYOC_MODE
+    #     ),
+    #     BYOC_MODE = BYOC_MODE
+    #   )
+    # ),
+    # # PROCESS - Mental Health
+    # tar_target(
+    #   # Target name
+    #   source_mental_health_extract,
+    #   process_extract_mental_health(
+    #     mental_health_data,
+    #     year = year,
+    #     write_to_disk = write_to_disk,
+    #     BYOC_MODE = BYOC_MODE,
+    #     run_id = run_id,
+    #     run_date_time = run_date_time
+    #   )
+    # ),
 
 
     ### Death Activity ----
