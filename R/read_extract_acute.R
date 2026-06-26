@@ -19,7 +19,7 @@ read_extract_acute <- function(
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
+  if (file_path == get_dummy_boxi_extract_path()) {
     return(tibble::tibble())
   }
 
@@ -49,7 +49,7 @@ read_extract_acute <- function(
       gpprac = "practice_location_code",
       hbpraccode = "practice_nhs_board_code_curr",
       postcode = "geo_postcode",
-      hbrescode = "nhs_board_of_residence_code_curr", # TO-DO: will be changed to nhs_hb_of_residence_code_curr by NSS
+      hbrescode = "nhs_hb_residence_code_curr",
       lca = "geo_council_area_code",
       hscp = "geo_hscp_of_residence_code_curr",
       geo_data_zone_2011 = "geo_data_zone_2011",
