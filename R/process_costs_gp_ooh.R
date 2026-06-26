@@ -19,8 +19,16 @@ process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MOD
 
   gp_ooh_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "gp_ooh_costs_source") # TODO: Placeholder table name
+    dbplyr::in_schema("sdl", "sdl_ooh_cost_lookup_source")
   ) %>%
+    dplyr::select(
+      HB2019 = "hb2019",
+      Board_Name = "board_name",
+      Board_Cypher = "board_cypher",
+      year = "year",
+      Consultations = "consultations",
+      Cost = "cost"
+    ) %>%
     dplyr::collect()
 
   # Data Cleaning ---------------------------------------------------------
@@ -28,13 +36,9 @@ process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MOD
   ## data - wide to long ##
   gp_ooh_costs <-
     gp_ooh_data %>%
-    tidyr::pivot_longer(
-      c(ends_with("_Consultations"), ends_with("_Cost")),
-      names_to = c("year", ".value"),
-      names_pattern = "(\\d{4})_(.+)"
-    ) %>%
     ## create cost per consultation ##
     dplyr::mutate(
+      year = as.character(year),
       cost_per_consultation = Cost * 1000 / Consultations
     ) %>%
     dplyr::select(

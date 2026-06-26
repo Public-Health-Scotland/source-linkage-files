@@ -253,7 +253,7 @@ list(
     # Target name
     gp_ooh_cost_lookup,
     # Function
-    process_costs_gp_ooh_rmd()
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------

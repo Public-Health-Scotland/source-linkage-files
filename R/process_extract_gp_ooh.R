@@ -38,21 +38,10 @@ process_extract_gp_ooh <- function(year,
   # Costs ---------------------------------
 
   # OOH cost lookup
-  ooh_cost_lookup <- read_file(get_gp_ooh_costs_path()) %>%
+  ooh_cost_lookup <- read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)) %>%
     dplyr::rename(
       hbtreatcode = "TreatmentNHSBoardCode"
     )
-
-  # --- DUMMY DENODO COST LOOKUP ---
-  # on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # ooh_cost_lookup <- dplyr::tbl(
-  #   denodo_connect,
-  #   dbplyr::in_schema("sdl", "sdl_gp_ooh_costs_placeholder") # TO-DO: Update denodo table name later
-  # ) %>%
-  #   dplyr::rename(hbtreatcode = "treatment_nhs_board_code") %>% # TO-DO: or TreatmentNHSBoardCode to match Denodo snake_case given
-  #   dplyr::collect()
-  # --------------------------------
 
   ooh_costs <- matched_data %>%
     dplyr::mutate(
