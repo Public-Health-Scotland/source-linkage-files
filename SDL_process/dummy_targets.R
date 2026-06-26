@@ -83,29 +83,29 @@ list(
   ## Stage 2.1 non-specific targets ----
 
   ### IT CHI deaths Activity ----
-  # READ - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_extract,
-    read_it_chi_deaths(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-  # PROCESS - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_data,
-    # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  # # READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   ### Long-Term Conditions (LTCs) Activity ----
   # # READ - LTCs
@@ -118,17 +118,17 @@ list(
   # ),
 
   ### NRS BOXI Deaths ----
-  # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  tar_target(
-    refined_death_data,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  # tar_target(
+  #   refined_death_data,
+  #   process_refined_death(
+  #     it_chi_deaths = it_chi_deaths_data,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   ### Scottish postcode directory------
   tar_target(
@@ -147,26 +147,26 @@ list(
   ),
 
   ### Care home name look up------
-  tar_target(
-    slf_ch_name_lookup_data,
-    get_slf_ch_name_lookup_data(BYOC_MODE),
-    format = "file"
-  ),
+  # tar_target(
+  #   slf_ch_name_lookup_data,
+  #   get_slf_ch_name_lookup_data(BYOC_MODE),
+  #   format = "file"
+  # ),
 
   ### READ - Care Homes ----
-  tar_target(
-    # Target name
-    all_care_home_extract,
-    # Function
-    read_sc_all_care_home(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    ),
-    cue = tar_cue_age(
-      name = all_care_home_extract,
-      age = as.difftime(28.0, units = "days")
-    )
-  ),
+  # tar_target(
+  #   # Target name
+  #   all_care_home_extract,
+  #   # Function
+  #   read_sc_all_care_home(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   ),
+  #   cue = tar_cue_age(
+  #     name = all_care_home_extract,
+  #     age = as.difftime(28.0, units = "days")
+  #   )
+  # ),
 
   ### Social care demographics ----
   # READ - SC Demographics
@@ -202,12 +202,12 @@ list(
     priority = 0.9
   ),
   # TEST - SC Demographics
-  tar_target(
-    # Target name
-    tests_sc_demog_lookup,
-    # Function
-    process_tests_sc_demographics(sc_demog_lookup)
-  ),
+  # tar_target(
+  #   # Target name
+  #   tests_sc_demog_lookup,
+  #   # Function
+  #   process_tests_sc_demographics(sc_demog_lookup)
+  # ),
 
   ### Cost lookups ----
   #### Care home costs------

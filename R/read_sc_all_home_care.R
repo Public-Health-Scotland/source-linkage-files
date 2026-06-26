@@ -16,8 +16,7 @@ read_sc_all_home_care <- function(
 
   home_care_data <- dplyr::tbl(
     denodo_connect,
-    # TODO: check sdl view name
-    dbplyr::in_schema("sdl", "sdl_home_care_episode_source")
+    dbplyr::in_schema("sdl", "sdl_sc_homecare_source")
   ) %>%
     dplyr::select(
       "sending_location",
