@@ -156,14 +156,14 @@ process_extract_homelessness <- function(
   hl1_data <- data %>%
     dplyr::left_join(
       completeness_data %>%
-        dplyr::select(.data$sending_local_authority_name, .data$pct_complete_all),
+        dplyr::select("sending_local_authority_name", "pct_complete_all"),
       by = dplyr::join_by("sending_local_authority_name")
     ) %>%
     dplyr::rename(hl1_completeness = "pct_complete_all") %>%
     dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 2))
 
   final_data <- hl1_data %>%
-    mutate(
+    dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
     ) %>%

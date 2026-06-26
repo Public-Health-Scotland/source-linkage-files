@@ -16,7 +16,7 @@
 #'
 #' @seealso convert_ca_to_lca
 convert_sc_sending_location_to_lca <- function(sending_location) {
-  lca <- dplyr::case_match(
+  lca <- dplyr::recode_values(
     sending_location,
     100L ~ "01", # Aberdeen City
     110L ~ "02", # Aberdeenshire
@@ -50,7 +50,7 @@ convert_sc_sending_location_to_lca <- function(sending_location) {
     390L ~ "30", # Stirling
     400L ~ "31", # West Lothian
     235L ~ "32", # Na_h_Eileanan_Siar
-    .default = NA_character_
+    default = NA_character_
   )
 
   return(lca)

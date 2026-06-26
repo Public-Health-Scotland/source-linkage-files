@@ -1,0 +1,168 @@
+# Name of file -  "dummy_targets.R"
+#
+# Description:
+#       A small target example to run as test for BYOC.
+#
+#       To run the targets pipeline, please use:
+#       targets::tar_make(script = 'dummy_targets.R',
+#                         store = store_path)
+#
+
+
+library(logger)
+library(targets) # main package required
+library(tarchetypes) # support for targets
+library(crew) # support for parallel processing
+library(dplyr)
+library(createslf)
+
+# Stage 1 - Setup targets -----------------------------------------
+
+## Set up BYOC_MODE ----
+BYOC_MODE <- Sys.getenv("BYOC_MODE")
+BYOC_MODE <- dplyr::case_when(
+  BYOC_MODE %in% c("TRUE", "T", "true", "True") ~ TRUE,
+  BYOC_MODE %in% c("FALSE", "F", "false", "False") ~ FALSE,
+  TRUE ~ NA
+)
+
+run_id <- Sys.getenv("run_id")
+run_date_time <- Sys.getenv("run_date_time")
+denodo_dsn <- Sys.getenv("denodo_dsn")
+
+
+if (isTRUE(BYOC_MODE)) {
+  logger::log_info("targets file location on Denodo")
+} else {
+  logger::log_info("targets file location is local")
+}
+
+log_threshold(INFO)
+
+## Set up targets ----
+# Set crew controller for parallel processing
+controller <- crew::crew_controller_local(
+  name = "my_controller",
+  # Specify 6 workers for parallel processing - works with 8CPU, 128GB posit session
+  workers = 6,
+  seconds_idle = 30
+)
+
+# Targets options
+# For more info, please see: https://docs.ropensci.org/targets/reference/tar_option_set.html
+tar_option_set(
+  # imports - for tracking everything in the createslf package
+  imports = "createslf",
+  # packages - for tracking everything in the createslf package
+  packages = "createslf",
+  # garbage collection - for maintaining each r process independently
+  garbage_collection = TRUE,
+  # format - default is parquet format
+  format = "parquet",
+  resources = tar_resources(
+    parquet = tar_resources_parquet(compression = "zstd")
+  ),
+  # error - if an error occurs, the pipeline will continue
+  error = "stop",
+  # storage - the worker saves/uploads the value.
+  storage = "worker",
+  # retrieval - the worker loads the target's dependencies.
+  retrieval = "worker",
+  # memory - default option: the target stays in memory until the end of the pipeline
+  memory = "persistent",
+  # controller - A controller or controller group object produced by the crew R package
+  controller = controller
+)
+
+years_to_run <- "1920"
+
+# Stage 2 - Set up targets ----
+list(
+  tar_rds(write_to_disk, TRUE),
+
+  ## Stage 2.1 non-specific targets ----
+
+  # GP Out of Hours costs------
+  tar_target(
+    # Target name
+    gp_ooh_cost_lookup,
+    # Function
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
+  ),
+
+  ## Stage 2.2 year specific targets ----
+  tar_map(
+    list(year = years_to_run),
+  ),
+
+  # GP Out of Hours (GP OOH) Activity-----------------------------------------
+  # READ - GP Out of Hours diagnoses
+  tar_target(
+    # Target name
+    diagnosis_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # READ - GP Out of Hours outcomes
+  tar_target(
+    # Target name
+    outcomes_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # READ - GP Out of Hours consultations
+  tar_target(
+    consultations_data_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # GP Out of Hours ALL
+  tar_qs(
+    # Target name
+    ooh_data,
+    # Function
+    read_extract_gp_ooh(
+      year = year,
+      BYOC_MODE = BYOC_MODE,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      diagnosis_path = diagnosis_data_path,
+      outcomes_path = outcomes_data_path,
+      consultations_path = consultations_data_path
+    )
+  ),
+  # GP Out of Hours CUP
+  tar_target(
+    gp_ooh_cup_path,
+    get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+  # PROCESS - GP OOH CUP
+  tar_target(
+    # Target name
+    source_ooh_extract,
+    # Function
+    process_extract_gp_ooh(
+      year = year,
+      ooh_data,
+      gp_ooh_cup_path = gp_ooh_cup_path,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  )
+)
+# ,
+# # TESTS - GP OOH
+# tar_target(
+#   # Target name
+#   tests_source_ooh_extract,
+#   # Function
+#   process_tests_gp_ooh(
+#     source_ooh_extract,
+#     year
+#   )
+# )
+
+## End of Targets pipeline ##

@@ -49,7 +49,7 @@ write_console_output(
 log_tar_message("start")
 
 # tar_make() will run the pipeline and use crew() for parallel processing.
-tar_make()
+tar_make(store = "/conf/sourcedev/Source_Linkage_File_Updates/_targets")
 
 # Run combine_tests() for outputting the test workbooks.
 log_tar_message("combining_tests")
