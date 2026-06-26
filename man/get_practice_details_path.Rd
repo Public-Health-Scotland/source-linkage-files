@@ -29,6 +29,7 @@ Other file path functions:
 \code{\link[=get_nsu_path]{get_nsu_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
 \code{\link[=get_sdl_processed_data]{get_sdl_processed_data()}},
+\code{\link[=get_sdl_processed_name]{get_sdl_processed_name()}},
 \code{\link[=get_sdl_raw_names]{get_sdl_raw_names()}},
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}
