@@ -17,8 +17,8 @@ process_extract_alarms_telecare <- function(data,
                                             year,
                                             write_to_disk = TRUE,
                                             BYOC_MODE = FALSE,
-                                            run_id = NULL,
-                                            run_date_time = NULL) {
+                                            run_id = NA,
+                                            run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "at", year = year)
 
   # Only run for a single year

@@ -16,11 +16,11 @@
 #' @export
 #'
 process_sc_all_alarms_telecare <- function(data,
-                                           sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+                                           sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
                                            write_to_disk = TRUE,
                                            BYOC_MODE = FALSE,
-                                           run_id = NULL,
-                                           run_date_time = NULL) {
+                                           run_id = NA,
+                                           run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "at", year = "all")
 
   # Data Cleaning-----------------------------------------------------

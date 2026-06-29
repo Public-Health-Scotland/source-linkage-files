@@ -10,10 +10,12 @@ read_sc_all_alarms_telecare <- function(denodo_connect = get_denodo_connection(B
   # Read in data---------------------------------------
   log_slf_event(stage = "read", status = "start", type = "at", year = "all")
 
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   ## read in data - social care 2 demographic
   at_full_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("social_care_2", "equipment_snapshot") # TODO: update SDL table
+    dbplyr::in_schema("sdl", "sdl_sc_alarmtelecare_source")
   ) %>%
     dplyr::select(
       "sending_location",
