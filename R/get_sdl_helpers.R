@@ -189,10 +189,10 @@ get_sdl_processed_name <- function(type) {
 #' @export
 #' @family file path functions
 get_sdl_processed_data <- function(
-    type,
-    year,
-    denodo_connect = NULL,
-    BYOC_MODE
+  type,
+  year,
+  denodo_connect = NULL,
+  BYOC_MODE
 ) {
   non_year_specific_types <- c(
     "care_home_lookup",
@@ -206,10 +206,10 @@ get_sdl_processed_data <- function(
     "nrs_deaths"
   )
 
-  sdl_name = get_sdl_processed_name(type)
+  sdl_name <- get_sdl_processed_name(type)
 
   if (isTRUE(BYOC_MODE)) {
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+    denodo_connect <- get_denodo_connection(BYOC_MODE = BYOC_MODE)
     on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
     sdl_tbl <- dplyr::tbl(denodo_connect, dbplyr::in_schema("sdl", sdl_name))
@@ -222,8 +222,7 @@ get_sdl_processed_data <- function(
     return(dplyr::collect(sdl_tbl))
   }
 
-  sdl_data <- switch(
-    type,
+  sdl_data <- switch(type,
     "acute" = read_file(get_source_extract_path("acute", year = year, BYOC_MODE = BYOC_MODE)),
     "ae" = read_file(get_source_extract_path("ae", year = year, BYOC_MODE = BYOC_MODE)),
     "at" = read_file(get_source_extract_path("at", year = year, BYOC_MODE = BYOC_MODE)),
