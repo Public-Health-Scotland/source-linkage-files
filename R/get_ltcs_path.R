@@ -17,13 +17,13 @@ get_ltcs_path <- function(year,
   if (isTRUE(BYOC_MODE)) {
     ltcs_file_path <- file.path(
       denodo_output_path(),
-      stringr::str_glue("anon-LTCs_patient_reference_file-20{year}.parquet")
+      stringr::str_glue("anon-ltcs_patient_reference_file-20{year}.parquet")
     )
   } else {
     ltcs_file_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "LTCs"),
       file_name = stringr::str_glue(
-        "anon-LTCs_patient_reference_file-20{year}_{update}.parquet"
+        "anon-ltcs_patient_reference_file-20{year}.parquet"
       ),
       ...
     )

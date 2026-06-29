@@ -54,7 +54,7 @@ processed_data_list <- list(
   "at" = read_file(get_source_extract_path(year, "at")),
   "ch" = read_file(get_source_extract_path(year, "ch")),
   "cmh" = read_file(get_source_extract_path(year, "cmh")),
-  "nrs_deaths" = read_file(get_source_extract_path(year, "deaths")),
+  "nrs_deaths" = read_file(get_source_extract_path(year, "nrs_deaths")),
   "district_nursing" = read_file(get_source_extract_path(year, "dn")),
   "gp_ooh" = read_file(get_source_extract_path(year, "gp_ooh")),
   "hc" = read_file(get_source_extract_path(year, "hc")),
