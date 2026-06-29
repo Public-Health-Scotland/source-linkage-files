@@ -5,20 +5,14 @@
 \title{Get SDL view name for processed datasets}
 \usage{
 get_sdl_processed_name(type)
-
-get_sdl_processed_name(type)
 }
 \arguments{
 \item{type}{Character. Dataset id (e.g. "acute", "ae", etc.)}
 }
 \value{
 Character string of SDL processed view name
-
-Character string of SDL processed view name
 }
 \description{
-Get SDL view name for processed datasets
-
 Get SDL view name for processed datasets
 }
 \seealso{
