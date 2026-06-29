@@ -13,7 +13,7 @@ read_sc_all_sds <- function(denodo_connect = get_denodo_connection(BYOC_MODE = B
 
   sds_full_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("social_care_2", "sds_snapshot") # TODO: update SDL table
+    dbplyr::in_schema("sdl", "sdl_sc_sds_source")
   ) %>%
     dplyr::select(
       "sending_location",
