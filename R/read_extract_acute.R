@@ -52,7 +52,6 @@ read_extract_acute <- function(
       hbrescode = "nhs_hb_residence_code_curr",
       lca = "geo_council_area_code",
       hscp = "geo_hscp_of_residence_code_curr",
-      geo_data_zone_2011 = "geo_data_zone_2011",
       location = "treatment_location_code",
       hbtreatcode = "treatment_nhs_board_code_curr",
       yearstay = "occupied_bed_days",
