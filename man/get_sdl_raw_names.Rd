@@ -18,6 +18,8 @@ corresponding to a given dataset type.
 }
 \seealso{
 Other file path functions:
+\code{\link{.byoc_dataset_registry}},
+\code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
 \code{\link[=get_dd_path]{get_dd_path()}},
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
 \code{\link[=get_file_path]{get_file_path()}},
