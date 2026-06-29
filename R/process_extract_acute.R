@@ -92,7 +92,7 @@ process_extract_acute <- function(data,
       acute_discharge_financial_year <= c_year_cup
     ) %>%
     dplyr::select(
-      anon_chi = "patient_chi",
+      chi = "patient_chi",
       case_reference_number = "case_reference_number",
       record_keydate1 = "acute_admission_date",
       record_keydate2 = "acute_discharge_date",
@@ -103,7 +103,7 @@ process_extract_acute <- function(data,
     ) %>%
     dplyr::distinct() %>%
     dplyr::collect() %>%
-    slfhelper::get_anon_chi("anon_chi")
+    slfhelper::get_anon_chi("chi")
 
   acute_clean <- acute_clean %>%
     dplyr::left_join(acute_cup,
