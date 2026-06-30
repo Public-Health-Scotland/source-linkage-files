@@ -32,7 +32,6 @@ get_hhg_path <- function(year, ...) {
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_combined_hhg_path <- function() {
-
   hhg_combined_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "HHG"),
     file_name = stringr::str_glue("SDL_HHG_combined.parquet")

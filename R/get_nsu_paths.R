@@ -33,7 +33,6 @@ get_nsu_path <- function(year, ...) {
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_combined_nsu_path <- function() {
-
   nsu_combined_file_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "NSU"),
     file_name = stringr::str_glue("SDL_All_CHIs_combined.parquet")
