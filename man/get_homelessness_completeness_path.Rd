@@ -33,6 +33,7 @@ is specific to year and update.
 Other file path functions:
 \code{\link{.byoc_dataset_registry}},
 \code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
+\code{\link[=get_combined_nsu_path]{get_combined_nsu_path()}},
 \code{\link[=get_dd_path]{get_dd_path()}},
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
 \code{\link[=get_file_path]{get_file_path()}},
