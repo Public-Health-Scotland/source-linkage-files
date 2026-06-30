@@ -23,6 +23,25 @@ get_hhg_path <- function(year, ...) {
   return(hhg_file_path)
 }
 
+#' HHG Extract File Path
+#'
+#' @description Get the path to the HHG combined extract
+#'
+#' @return The path to the HHG extract as an [fs::path()]
+#' @export
+#' @family extract file paths
+#' @seealso [get_file_path()] for the generic function.
+get_combined_hhg_path <- function() {
+
+  hhg_combined_file_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "HHG"),
+    file_name = stringr::str_glue("SDL_HHG_combined.parquet")
+  )
+
+  return(hhg_combined_file_path)
+}
+
+
 #' SPARRA Extract File Path
 #'
 #' @description Get the path to the SPARRA extract
