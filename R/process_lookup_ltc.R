@@ -16,6 +16,12 @@ process_lookup_ltc <- function(data,
                                run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "ltc", year = year)
 
+  # Only run for a single year
+  stopifnot(length(year) == 1L)
+
+  # Check that the supplied year is in the correct format
+  year <- check_year_format(year)
+
   # Create LTC flags 1/0------------------------------------
 
   # Set flags to 1 or 0 based on FY
@@ -32,7 +38,8 @@ process_lookup_ltc <- function(data,
     ) %>%
     dplyr::mutate(
       run_id = run_id,
-      run_date_time = run_date_time
+      run_date_time = run_date_time,
+      year = year
     )
 
   if (write_to_disk) {
