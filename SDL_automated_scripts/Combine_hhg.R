@@ -26,16 +26,16 @@ print(stringr::str_glue("Found {length(parquet_files)} parquet files to process.
 
 ## Stage 2 - Read and clean columns before binding
 #-------------------------------------------------------------------------------
-hhg_files <- purrr::map(parquet_files,
-                        function(hhg_files){
-
-                          year <- stringr::str_extract(basename(hhg_files), "(\\d{6})")
-                          year <- stringr::str_sub(year, 3, 6)
-                          df <- read_file(hhg_files) %>%
-                            dplyr::mutate(year = year)
-                          current_names <- names(df)
-                          return(df)
-                        }
+hhg_files <- purrr::map(
+  parquet_files,
+  function(hhg_files) {
+    year <- stringr::str_extract(basename(hhg_files), "(\\d{6})")
+    year <- stringr::str_sub(year, 3, 6)
+    df <- read_file(hhg_files) %>%
+      dplyr::mutate(year = year)
+    current_names <- names(df)
+    return(df)
+  }
 )
 
 ## Stage 3 - Bind files together and save to disk

@@ -26,20 +26,21 @@ print(stringr::str_glue("Found {length(parquet_files)} parquet files to process.
 
 ## Stage 2 - Read and clean columns before binding
 #-------------------------------------------------------------------------------
-nsu_files <- purrr::map(parquet_files,
-                 function(nsu_files){
-                   df <- read_file(nsu_files) %>%
-                     dplyr::mutate(gpprac = as.character(gpprac))
-                   current_names <- names(df)
-                    return(df)
-                 }
+nsu_files <- purrr::map(
+  parquet_files,
+  function(nsu_files) {
+    df <- read_file(nsu_files) %>%
+      dplyr::mutate(gpprac = as.character(gpprac))
+    current_names <- names(df)
+    return(df)
+  }
 )
 
 ## Stage 3 - Bind files together and save to disk
 #-------------------------------------------------------------------------------
 nsu_combined_output <- dplyr::bind_rows(nsu_files)
 
-  nsu_combined_output %>%
+nsu_combined_output %>%
   write_file(glue::glue("{output_dir}/SDL_NSU_20260617_1.parquet"))
 
 
