@@ -16,7 +16,6 @@ devtools::load_all()
 # Define the source directory and financial year pattern
 nsu_dir <- "/conf/hscdiip/SLF_Extracts/NSU"
 pattern <- "anon-All_CHIs_20(\\d{4})\\.parquet"
-output_dir <- "/conf/hscdiip/SDL_submission/nsu"
 
 # List all the CSV files in the source directory
 cat(stringr::str_glue("Looking in '{nsu_dir}' for parquet files."))
@@ -41,7 +40,7 @@ nsu_files <- purrr::map(
 nsu_combined_output <- dplyr::bind_rows(nsu_files)
 
 nsu_combined_output %>%
-  write_file(glue::glue("{output_dir}/SDL_NSU_20260617_1.parquet"))
+  write_file(get_combined_nsu_path())
 
 
 ## END OF SCRIPT ##
