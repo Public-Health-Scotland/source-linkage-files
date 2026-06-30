@@ -39,8 +39,8 @@ get_sdl_raw_names <- function(type) {
     "homelessness" ~ "sdl_homelessness_source",
     "homelessness_completeness" ~ "sdl_homelessness_completeness_source",
 
-    # long term conditions - ltcs
-    "ltcs" ~ "sdl_long_term_condition_source",
+    # long term conditions - ltc
+    "ltc" ~ "sdl_long_term_condition_source",
 
     # maternity
     "maternity" ~ "sdl_maternity_episode_source",
