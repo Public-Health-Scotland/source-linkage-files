@@ -16,10 +16,6 @@ read_extract_ooh_consultations <- function(
   # Disconnect from Denodo
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
-    return(tibble::tibble())
-  }
 
   # Read consultations data
   consultations_extract <- dplyr::tbl(
