@@ -20,10 +20,6 @@ read_extract_ooh_outcomes <- function(
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path(BYOC_MODE = BYOC_MODE)) {
-    return(tibble::tibble())
-  }
 
   ## Load extract file
   outcomes_extract <- dplyr::tbl(
