@@ -9,7 +9,12 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_diagnosis <- function(data, year) {
+
+process_extract_ooh_diagnosis <- function(data,
+                                          year,
+                                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                          run_id = NA,
+                                          run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-d", year = year)
 
   # Only run for a single year
@@ -18,15 +23,20 @@ process_extract_ooh_diagnosis <- function(data, year) {
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-
   # Diagnosis Data ---------------------------------
 
   # Read code lookup
-  readcode_lookup <- read_file(get_readcode_lookup_path()) %>%
-    dplyr::rename(
-      readcode = "ReadCode",
-      description = "Description"
-    )
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  readcode_lookup <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_read_code_lookup_source")
+  ) %>%
+    dplyr::select(
+      readcode = "readcode",
+      description = "description"
+    ) %>%
+    dplyr::collect()
 
   ## Deal with Read Codes
 
@@ -123,7 +133,6 @@ process_extract_ooh_diagnosis <- function(data, year) {
       )
     )
   }
-
 
   ## Data Cleaning------------------------------------------------------------
 
