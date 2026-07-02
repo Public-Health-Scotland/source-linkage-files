@@ -35,7 +35,7 @@ get_dn_costs_path <- function(BYOC_MODE, ..., update = NULL) {
   if (isTRUE(BYOC_MODE)) {
     dn_costs_path <- file.path(
       denodo_output_path(),
-      stringr::str_glue("Cost_DN_Lookup.parquet")
+      stringr::str_glue("cost_dn_lookup.parquet")
     )
   } else {
     dn_costs_path <- get_file_path(
