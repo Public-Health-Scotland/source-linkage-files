@@ -15,12 +15,15 @@ read_extract_district_nursing <- function(year,
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
   # Read BOXI extract
   extract_district_nursing <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_district_nursing_source")
   ) %>% # TODO: Check table name.
-    # TODO: Check whether to filter by year.
+    dplyr::filter(year == c_year) %>% # TODO: Check year column name.
     dplyr::select(
       age = "age_at_contact_date",
       dob = "patient_dob_date",
