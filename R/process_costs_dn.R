@@ -8,80 +8,32 @@
 #' @export
 #'
 
-process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                             # dn_raw_costs_path = get_dn_raw_costs_path(), # TODO: Check if needed. If it is function will need to be refactored to include the BYOC_MODE argument.
-                             # dn_raw_contacts_path = fs::path(get_slf_dir(), "Costs", "DN-Contacts-Numbers-for-Costs.csv"), # TODO: Check if needed. If it is function will need to be refactored to include the BYOC_MODE argument.
-                             # pop_path = get_pop_path(type = "hscp"), # TODO: Check if needed. If it is function will need to be refactored to include the BYOC_MODE argument.
+process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
+                             dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
+                             hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
+                             write_to_disk = TRUE,
                              BYOC_MODE = FALSE,
                              run_id = NA,
                              run_date_time = NA) {
-  log_slf_event(stage = "process", status = "start", type = "dn_costs", year = year) # TODO: Check this is necessary.
+  log_slf_event(stage = "process", status = "start", type = "dn_cost_lookup", year = year)
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # Read in cost workbook ---------------------------------------
 
   # latest year #
   latest_year <- check_year_format("1920")
 
-  ## data ##
-  dn_raw_costs <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_costs_source")
-  ) %>% # TODO: Placeholder. Check table name.
-    dplyr::collect() %>%
-    janitor::clean_names() %>%
-    # change 1718 type to numeric - reads in as a character
-    mutate(across(ends_with("_cost"), as.numeric)) %>% # TODO: Remove this if the issue is resolved in Denodo view.
-    # pivot longer
-    pivot_longer(
-      ends_with("_cost"),
-      names_to = "year",
-      names_pattern = "(\\d{4})_cost",
-      values_to = "cost"
-    )
-
-  # Read DN file extracted from BOXI -----------------------------
-
-  # contacts
-  dn_raw_contacts <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_contacts_source")
-  ) %>% # TODO: Placeholder. Check table name and whether dataset exists.
-    dplyr::collect() %>%
-    janitor::clean_names() %>%
-    # create year variable as fy
-    mutate(year = convert_year_to_fyyear(contact_financial_year)) %>%
-    # rename TreatmentNHSBoardCode
-    rename(
-      hb2019 = treatment_nhs_board_code_9, # TODO: Check Denodo column names.
-      number_of_contacts = number_of_contacts # TODO: Check Denodo column names.
-    )
-
-  # Join files together ------------------------------------------
-
-  # match raw costs to contacts file
+  # Join costs and contacts -------------------------------------
   dn_raw_costs_contacts <- left_join(dn_raw_contacts,
     dn_raw_costs,
     by = c("hb2019", "year")
   )
 
-
-  # Deal with population cost-------------------------------------
+  # Deal with population cost -------------------------------------
 
   ## Calculate population cost for NHS Highland with HSCP population ratio. ##
   # Of the two HSCPs, Argyll and Bute provides the
   # District Nursing data which is 27% of the population.
-  population_lookup <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_pop_source")
-  ) %>% # TODO: Placeholder.Check table name and whether dataset exists.
-    # Select only the HSCPs for NHS Highland & years since 2015
-    filter(
-      hscp2019 %in% c("S37000004", "S37000016"), # TODO: Check column exists in Denodo view.
-      year >= 2015L # TODO: Check column exists in Denodo view.
-    ) %>%
-    dplyr::collect() %>%
+  population_lookup <- hscp_population %>%
     # Create year as FY = YYYY from CCYY.
     rename(calendar_year = year) %>%
     mutate(year = convert_year_to_fyyear(calendar_year)) %>%
@@ -98,7 +50,6 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
     ) %>%
     ## Argyll and Bute is the only HSCP in NHS Highland that submits data ##
     filter(hscp2019name == "Argyll and Bute")
-
 
   # Join files -------------------------------------------
 
@@ -118,7 +69,6 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
     arrange(hb2019, year) %>%
     # keep only records with cost
     filter(!is.na(cost_total_net))
-
 
   # Fix incomplete submissions ------------------------------------------
 
@@ -142,7 +92,6 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
     matched_data %>%
     mutate(cost_total_net = replace(cost_total_net, pct_of_max < 75, NA)) %>%
     group_by(board_name)
-
 
   while (anyNA(uplift_data$cost_total_net)) {
     uplift_data <- uplift_data %>%
@@ -191,14 +140,16 @@ process_costs_dn <- function(denodo_connect = get_denodo_connection(BYOC_MODE = 
       run_date_time = run_date_time
     )
 
-  outfile %>%
-    # Save .rds file
-    write_file(get_dn_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
+  if (write_to_disk) {
+    write_file(
+      outfile,
+      get_dn_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
       group_id = 3206, # hscdiip owner
       BYOC_MODE = BYOC_MODE
     )
+  }
 
-  log_slf_event(stage = "process", status = "complete", type = "dn_costs", year = "all") # TODO: Check this is necessary.
+  log_slf_event(stage = "process", status = "complete", type = "dn_cost_lookup", year = "all")
 
   return(outfile)
 }
