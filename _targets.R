@@ -238,10 +238,13 @@ list(
     dn_cost_lookup,
     # Function
     process_costs_dn(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = FALSE,
-      run_id = NA,
-      run_date_time = NA
+      dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
+      dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
+      hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.8
   ),
