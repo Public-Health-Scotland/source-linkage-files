@@ -138,6 +138,52 @@ get_pop_path <- function(file_name = NULL,
 }
 
 
+#' HSCP population data
+#'
+#' @description Return the data for HSCP population estimates.
+#'
+#' @param denodo_connect Connection to denodo
+#' @param file_path Path to local HSCP population file
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return a [tibble][tibble::tibble-package].
+#' @export
+#'
+#' @family lookup files
+get_hscp_pop_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              file_path = get_pop_path(type = "hscp"),
+                              BYOC_MODE) {
+  if (isTRUE(BYOC_MODE)) {
+    log_slf_event(stage = "read", status = "start", type = "hscp_pop_lookup", year = "all")
+
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+    hscp_pop_data <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_hscp_population_source") # TODO: Check table name, column names/data types and whether we need to select columns.
+      ) %>%
+      # Select only the HSCPs for NHS Highland & years since 2015
+      dplyr::filter(
+        hscp2019 %in% c("S37000004", "S37000016"),
+        year >= 2015L
+      ) %>%
+      dplyr::collect()
+
+    log_slf_event(stage = "read", status = "complete", type = "hscp_pop_lookup", year = "all")
+  } else {
+
+    hscp_pop_data <- createslf::read_file(file_path) %>%
+      dplyr::filter(
+        hscp2019 %in% c("S37000004", "S37000016"),
+        year >= 2015L
+      )
+
+  }
+
+  return(hscp_pop_data) # TODO: Check output is the same when BYOC_MODE is TRUE and FALSE
+}
+
+
 #' GP Practice Reference File Path (gpprac)
 #'
 #' @description Get the path for the centrally held reference file `gpprac`
