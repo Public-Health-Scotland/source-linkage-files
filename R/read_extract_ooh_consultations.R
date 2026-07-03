@@ -34,7 +34,7 @@ read_extract_ooh_consultations <- function(
     ) %>%
     # rename variables
     dplyr::select(
-      anon_chi = "patient_chi",
+      chi = "patient_chi",
       dob = "patient_dob",
       gender = "gender",
       postcode = "patient_postcode",
@@ -55,8 +55,6 @@ read_extract_ooh_consultations <- function(
     ) %>%
     dplyr::distinct() %>%
     dplyr::collect() %>%
-    # change to chi for phsmethods
-    slfhelper::get_chi() %>%
     # Restore CHI leading zero
     dplyr::mutate(chi = phsmethods::chi_pad(.data$chi)) %>%
     # change back to anon_chi
