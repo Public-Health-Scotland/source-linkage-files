@@ -66,7 +66,7 @@ get_boxi_extract_path <- function(year,
   )
 
   if (BYOC_MODE) {
-    return(stringr::str_glue("valid_denodo_extract_{file_name}-20{year}"))
+    return(stringr::str_glue("{file_name}-20{year}"))
   } else {
     boxi_extract_path_csv_gz <- fs::path(dir, stringr::str_glue("{file_name}-20{year}.csv.gz"))
 
