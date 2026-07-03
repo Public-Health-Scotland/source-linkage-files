@@ -7,11 +7,15 @@
 read_extract_ooh_outcomes(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE =
+    BYOC_MODE),
   BYOC_MODE
 )
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with OOH Outcomes extract data
