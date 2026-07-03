@@ -118,13 +118,13 @@ process_costs_ch_rmd <- function(file_path = get_ch_costs_path()) {
 #'
 #' @return a [tibble][tibble::tibble-package] containing the final cost data.
 #' @export
-# process_costs_gp_ooh_rmd <- function(file_path = get_gp_ooh_costs_path()) {
-#   process_costs_rmd(file_name = "costs_gp_ooh.Rmd")
-#
-#   ooh_cost_lookup <- read_file(file_path)
-#
-#   return(ooh_cost_lookup)
-# }
+process_costs_gp_ooh_rmd <- function(file_path = get_gp_ooh_costs_path()) {
+  process_costs_rmd(file_name = "costs_gp_ooh.Rmd")
+
+  ooh_cost_lookup <- read_file(file_path)
+
+  return(ooh_cost_lookup)
+}
 
 #' Process Home Care cost lookup Rmd file
 #'
