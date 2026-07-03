@@ -6,7 +6,6 @@
 #' @param run_date_time Denodo identifier
 #'
 #' @export
-#'
 process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                  BYOC_MODE = FALSE,
                                  run_id = NA,

@@ -82,7 +82,7 @@ list(
 
   ## Stage 2.1 non-specific targets ----
 
-  # GP Out of Hours costs------
+  ### GP Out of Hours costs------
   tar_target(
     # Target name
     gp_ooh_cost_lookup,
@@ -95,7 +95,7 @@ list(
     list(year = years_to_run),
   ),
 
-  # GP Out of Hours (GP OOH) Activity-----------------------------------------
+  ### GP Out of Hours (GP OOH) Activity-----------------------------------------
   # READ - GP Out of Hours diagnoses
   tar_target(
     # Target name
@@ -124,7 +124,7 @@ list(
     read_extract_gp_ooh(
       year = year,
       BYOC_MODE = BYOC_MODE,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      denodo_connect = NULL,
       diagnosis_path = diagnosis_data_path,
       outcomes_path = outcomes_data_path,
       consultations_path = consultations_data_path
@@ -145,7 +145,7 @@ list(
       year = year,
       ooh_data,
       gp_ooh_cup_path = gp_ooh_cup_path,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      denodo_connect = NULL,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
