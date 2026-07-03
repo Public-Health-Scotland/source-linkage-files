@@ -5,6 +5,7 @@
 #' and (optionally) write it to disk.
 #'
 #' @param year The year to process, in FY format.
+#' @param decodo_connect denodo_connection
 #' @param diagnosis_path Path to diagnosis BOXI extract location.
 #' @param outcomes_path Path to outcomes BOXI extract location.
 #' @param consultations_path Path to consultations BOXI extract location.
@@ -14,7 +15,10 @@
 #' @family process extracts
 read_extract_gp_ooh <- function(
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  # A central denodo_connect could be disconnected by read_extract_ooh_diagnosis
+  # So read_extract_ooh_outcomes cannot use that denodo_connect which is disconnected
+  # Hence, create denodo_connect in each sub-function.
+  denodo_connect = NULL,
   diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
   outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
   consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
@@ -22,24 +26,22 @@ read_extract_gp_ooh <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "gpooh", year = year)
 
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
   ooh_extracts <- list(
     "diagnosis" = read_extract_ooh_diagnosis(
       year = year,
-      denodo_connect = denodo_connect,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       file_path = diagnosis_path,
       BYOC_MODE = BYOC_MODE
     ),
     "outcomes" = read_extract_ooh_outcomes(
       year = year,
-      denodo_connect = denodo_connect,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       file_path = outcomes_path,
       BYOC_MODE = BYOC_MODE
     ),
     "consultations" = read_extract_ooh_consultations(
       year = year,
-      denodo_connect = denodo_connect,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       file_path = consultations_path,
       BYOC_MODE = BYOC_MODE
     )
