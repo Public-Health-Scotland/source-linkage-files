@@ -123,6 +123,9 @@ process_extract_gp_ooh <- function(year,
     # TODO: remove modifying time format after UAT
     dplyr::mutate(keytime1 = hms::as_hms(as.difftime(keytime1, format = "%M:%S")))
 
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   ooh_clean <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup_file,
       by = dplyr::join_by(
