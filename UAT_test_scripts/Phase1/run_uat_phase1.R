@@ -51,13 +51,10 @@ analyst <- "Jen"
 # /conf/sourcedev/Source_Linkage_File_Updates/1_source_data_views/Lookups/uat_names.xlsx
 #
 #   c(
-#   "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
-#   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths"
+#   "acute", "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
+#   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths","ae_cup", "acute_cup", "gp_ooh_cup"
 # )
-datasets <- c(
-  "acute", "ae", "gp_ooh_consultations", "maternity",
-  "mental_health", "nrs_deaths", "ae_cup", "acute_cup", "gp_ooh_cup"
-)
+datasets <- c("sc_demographics", "sc_alarms_tele", "sc_home_care", "sc_sds")
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%
