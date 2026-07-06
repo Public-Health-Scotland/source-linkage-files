@@ -469,6 +469,18 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
     # PROCESS - Acute
     tar_target(
       # Target name
@@ -476,8 +488,8 @@ list(
       # Function
       process_extract_acute(
         acute_data,
+        acute_cup_data,
         year = year,
-        acute_cup_path = get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE = BYOC_MODE),
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
