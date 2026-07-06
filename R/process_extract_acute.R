@@ -14,8 +14,8 @@
 #' @export
 #' @family process extracts
 process_extract_acute <- function(data,
+                                  acute_cup_data,
                                   year,
-                                  acute_cup_path = get_boxi_extract_path(year, "acute_cup", BYOC_MODE),
                                   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                   write_to_disk = TRUE,
                                   BYOC_MODE = FALSE,
@@ -77,35 +77,8 @@ process_extract_acute <- function(data,
     )) %>%
     dplyr::mutate(
       unique_row_num = dplyr::row_number()
-    )
-
-  c_year_cup <- convert_fyyear_to_year(check_year_format(year))
-
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  acute_cup <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_acute_cup_source")
-  ) %>%
-    dplyr::filter(
-      acute_admission_financial_year >= c_year_cup,
-      acute_discharge_financial_year <= c_year_cup
     ) %>%
-    dplyr::select(
-      chi = "patient_chi",
-      case_reference_number = "case_reference_number",
-      record_keydate1 = "acute_admission_date",
-      record_keydate2 = "acute_discharge_date",
-      tadm = "acute_admission_type_code",
-      disch = "acute_discharge_type_code",
-      cup_marker = "cup_marker",
-      cup_pathway = "cup_pathway_name"
-    ) %>%
-    dplyr::distinct() %>%
-    dplyr::collect() %>%
-    slfhelper::get_anon_chi("chi")
-
-  acute_clean <- acute_clean %>%
+    # Join CUP file
     dplyr::left_join(acute_cup,
       by = c(
         "record_keydate1",
