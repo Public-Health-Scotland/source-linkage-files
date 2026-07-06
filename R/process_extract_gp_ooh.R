@@ -14,16 +14,17 @@
 #' @export
 #' @family process extracts
 process_extract_gp_ooh <- function(
-    year,
-    data_list,
-    gp_ooh_cup = read_extract_gp_ooh_cup(
-      year = year,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
-    ),
-    write_to_disk = TRUE,
-    BYOC_MODE = FALSE,
-    run_id = NA,
-    run_date_time = NA) {
+  year,
+  data_list,
+  gp_ooh_cup = read_extract_gp_ooh_cup(
+    year = year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+  ),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+) {
   log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
 
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
