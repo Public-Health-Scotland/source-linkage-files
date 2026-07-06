@@ -143,13 +143,11 @@ list(
     ),
     # GP Out of Hours CUP
     tar_target(
-      gp_ooh_cup_path,
-      get_boxi_extract_path(
+      gp_ooh_cup,
+      read_extract_gp_ooh_cup(
         year = year,
-        type = "gp_ooh_cup",
-        BYOC_MODE = BYOC_MODE
-      ),
-      format = "rds"
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      )
     ),
     # PROCESS - GP OOH CUP
     tar_target(
@@ -158,9 +156,8 @@ list(
       # Function
       process_extract_gp_ooh(
         year = year,
-        ooh_data,
-        gp_ooh_cup_path = gp_ooh_cup_path,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        data_list = ooh_data,
+        gp_ooh_cup = gp_ooh_cup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,

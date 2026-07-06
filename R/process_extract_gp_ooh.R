@@ -6,21 +6,24 @@
 #'
 #' @param year The year to process, in FY format.
 #' @param data_list A list containing the extracts.
-#' @param gp_ooh_cup_path path to gp ooh cup data
+#' @param gp_ooh_cup gp ooh cup data
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_gp_ooh <- function(year,
-                                   data_list,
-                                   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                   gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
-                                   write_to_disk = TRUE,
-                                   BYOC_MODE = FALSE,
-                                   run_id = NA,
-                                   run_date_time = NA) {
+process_extract_gp_ooh <- function(
+    year,
+    data_list,
+    gp_ooh_cup = read_extract_gp_ooh_cup(
+      year = year,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+    ),
+    write_to_disk = TRUE,
+    BYOC_MODE = FALSE,
+    run_id = NA,
+    run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
 
   diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
@@ -103,31 +106,8 @@ process_extract_gp_ooh <- function(year,
     dplyr::ungroup()
 
   ## Link CUP Marker -----
-
-  c_year_cup <- convert_fyyear_to_year(check_year_format(year))
-
-  gp_ooh_cup_file <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_source")
-  ) %>%
-    dplyr::filter(gp_ooh_sc_start_financial_year == c_year_cup) %>%
-    dplyr::select(
-      record_keydate1 = "gp_ooh_consultation_start_date",
-      keytime1 = "gp_ooh_consultation_start_time",
-      ooh_case_id = "guid",
-      cup_marker = "cup_marker",
-      cup_pathway = "cup_pathway_name"
-    ) %>%
-    dplyr::collect() %>%
-    dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE) %>%
-    # TODO: remove modifying time format after UAT
-    dplyr::mutate(keytime1 = hms::as_hms(as.difftime(keytime1, format = "%M:%S")))
-
-  # Disconnect from Denodo
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
   ooh_clean <- ooh_clean %>%
-    dplyr::left_join(gp_ooh_cup_file,
+    dplyr::left_join(gp_ooh_cup,
       by = dplyr::join_by(
         "ooh_case_id",
         "record_keydate1",

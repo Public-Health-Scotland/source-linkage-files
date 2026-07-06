@@ -7,8 +7,8 @@
 process_extract_gp_ooh(
   year,
   data_list,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+  gp_ooh_cup = read_extract_gp_ooh_cup(year = year, denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE)),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
@@ -20,7 +20,7 @@ process_extract_gp_ooh(
 
 \item{data_list}{A list containing the extracts.}
 
-\item{gp_ooh_cup_path}{path to gp ooh cup data}
+\item{gp_ooh_cup}{gp ooh cup data}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
