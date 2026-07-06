@@ -138,6 +138,7 @@ log_slf_event <- function(stage = c("read", "process", "test"),
   file_name <- dplyr::recode_values(
     type,
     "acute" ~ "Acute",
+    "acute_cup" ~ "Acute Cup",
     "ae" ~ "A&E",
     "at" ~ "Alarms Telecare",
     "ch" ~ "Care Home",
