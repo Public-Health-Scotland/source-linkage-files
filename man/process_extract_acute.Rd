@@ -6,8 +6,8 @@
 \usage{
 process_extract_acute(
   data,
+  acute_cup_data,
   year,
-  acute_cup_path = get_boxi_extract_path(year, "acute_cup", BYOC_MODE),
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
@@ -20,10 +20,10 @@ process_extract_acute(
 
 \item{year}{The year to process, in FY format.}
 
-\item{acute_cup_path}{path to acute_cup data}
-
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{acute_cup_path}{path to acute_cup data}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
