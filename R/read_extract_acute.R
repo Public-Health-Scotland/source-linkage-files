@@ -64,7 +64,7 @@ read_extract_acute <- function(
       tadm = "admission_type_code",
       adtf = "admitted_trans_from_code",
       admloc = "location_admitted_trans_from_code",
-      oldtadm = "old_smrw_typeof_admission_code",
+      oldtadm = "old_smr1_typeof_admission_code",
       disch = "discharge_type_code",
       dischto = "discharge_trans_to_code",
       dischloc = "location_discharge_trans_to_code",
