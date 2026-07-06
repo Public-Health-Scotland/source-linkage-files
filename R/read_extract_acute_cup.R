@@ -5,10 +5,10 @@
 #' @export
 #'
 read_extract_acute_cup <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE),
-    BYOC_MODE
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE),
+  BYOC_MODE
 ) {
   # Read BOXI extract
   log_slf_event(stage = "read", status = "start", type = "acute_cup", year = year)
