@@ -11,9 +11,7 @@
 #' @family process extracts
 process_extract_ooh_outcomes <- function(
   data,
-  year,
-  run_id = NA,
-  run_date_time = NA
+  year
 ) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-o", year = year)
 
