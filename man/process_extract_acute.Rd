@@ -18,12 +18,18 @@ process_extract_acute(
 \arguments{
 \item{data}{The extract to process}
 
+\item{acute_cup_data}{The acute cup extract}
+
 \item{year}{The year to process, in FY format.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
-\item{acute_cup_path}{path to acute_cup data}
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
