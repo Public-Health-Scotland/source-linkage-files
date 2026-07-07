@@ -28,6 +28,9 @@ get_sdl_raw_names <- function(type) {
     "chi_deaths" ~ "sdl_chi_deaths_source",
     "nrs_deaths" ~ "sdl_nrs_deaths_source",
 
+    # delayed discharges
+    "dd" ~ "sdl_dd_source",
+
     # gp ooh
     "gp_ooh_consultation" ~ "sdl_gp_ooh_consultation_source",
     "gp_ooh_cup" ~ "sdl_gp_ooh_cup_source",
@@ -41,6 +44,10 @@ get_sdl_raw_names <- function(type) {
 
     # long term conditions - ltc
     "ltc" ~ "sdl_long_term_condition_source",
+
+    # lookup
+    "simd" ~ "sdl_simd_source",
+    "spd" ~ "sdl_spd_source",
 
     # maternity
     "maternity" ~ "sdl_maternity_episode_source",
@@ -66,14 +73,12 @@ get_sdl_raw_names <- function(type) {
     "ch_cost_lookup" ~ "sdl_ch_cost_source",
     "client" ~ "sdl_client_information_source",
     "cmh" ~ "sdl_cmh_source",
-    "dd" ~ "sdl_delayed_discharge_source",
     "dn" ~ "sdl_district_nursing_source",
     "dn_cost_lookup" ~ "sdl_dn_cost_source",
     "gpprac_lookup" ~ "sdl_gp_practice_lookup_source",
     "hc_cost_lookup" ~ "sdl_hc_cost_source",
     "hhg" ~ "sdl_hhg_source",
-    "pis" ~ "sdl_prescribing_source",
-    "postcode_lookup" ~ "sdl_postcode_lookup_source"
+    "pis" ~ "sdl_prescribing_source"
   )
 
   if (is.na(sdl_name)) {
