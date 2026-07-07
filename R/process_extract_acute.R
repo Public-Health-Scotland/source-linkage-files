@@ -5,10 +5,13 @@
 #' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
+#' @param acute_cup_data The acute cup extract
 #' @param year The year to process, in FY format.
-#' @param acute_cup_path path to acute_cup data
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -79,7 +82,7 @@ process_extract_acute <- function(data,
       unique_row_num = dplyr::row_number()
     ) %>%
     # Join CUP file
-    dplyr::left_join(acute_cup,
+    dplyr::left_join(acute_cup_data,
       by = c(
         "record_keydate1",
         "record_keydate2",

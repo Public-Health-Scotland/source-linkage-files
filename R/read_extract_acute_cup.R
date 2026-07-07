@@ -24,7 +24,7 @@ read_extract_acute_cup <- function(
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Read Extract
-  acute_cup <- dplyr::tbl(
+  extract_acute_cup <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_acute_cup_source")
   ) %>%
@@ -50,5 +50,5 @@ read_extract_acute_cup <- function(
 
   log_slf_event(stage = "read", status = "complete", type = "acute_cup", year = year)
 
-  return(extract_acute)
+  return(extract_acute_cup)
 }
