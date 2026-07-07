@@ -12,13 +12,21 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_ae <- function(data,
-                               year,
-                               denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                               write_to_disk = TRUE,
-                               BYOC_MODE = FALSE,
-                               run_id = NA,
-                               run_date_time = NA) {
+process_extract_ae <- function(
+    data,
+    year,
+    ae_cup_file = read_extract_ae_cup(
+      year = year,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_boxi_extract_path(year = year, type = "ae_cup", BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    write_to_disk = TRUE,
+    BYOC_MODE = FALSE,
+    run_id = NA,
+    run_date_time = NA
+) {
+
   log_slf_event(stage = "process", status = "start", type = "ae", year = year)
 
   # Only run for a single year
@@ -203,31 +211,6 @@ process_extract_ae <- function(data,
     )
 
   ## CUP Marker ##
-
-  # Read in data---------------------------------------
-
-  c_year_cup <- convert_fyyear_to_year(check_year_format(year))
-
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  ae_cup_file <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_ae_ucd_cup_source")
-  ) %>%
-    dplyr::filter(
-      ed_arrival_financial_year == c_year_cup,
-      (significant_facility_code == "32" | is.na(significant_facility_code))
-    ) %>%
-    dplyr::select(
-      record_keydate1 = "ed_arrival_date",
-      keytime1 = "ed_arrival_time",
-      record_keydate2 = "ed_discharge_date",
-      keytime2 = "ed_discharge_time",
-      case_ref_number = "ed_case_reference_number",
-      cup_marker = "cup_marker",
-      cup_pathway = "cup_pathway_name"
-    ) %>%
-    dplyr::collect()
 
   # Data Cleaning---------------------------------------
 

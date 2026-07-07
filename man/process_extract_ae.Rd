@@ -7,7 +7,9 @@
 process_extract_ae(
   data,
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  ae_cup_file = read_extract_ae_cup(year = year, denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), file_path = get_boxi_extract_path(year
+    = year, type = "ae_cup", BYOC_MODE), BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,

@@ -148,6 +148,18 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
+    # READ - A&E CUP
+    tar_target(
+      # Target name
+      ae_cup_file,
+      # Function
+      read_extract_ae_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "ae_cup", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
     # PROCESS - A&E
     tar_target(
       # Target name
@@ -156,7 +168,7 @@ list(
       process_extract_ae(
         data = ae_data,
         year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        ae_cup_file = ae_cup_file,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
