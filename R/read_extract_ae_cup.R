@@ -4,11 +4,11 @@
 #'
 #' @export
 read_extract_ae_cup <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_boxi_extract_path(year = year, type = "ae_cup", BYOC_MODE),
-    BYOC_MODE = FALSE
-){
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year = year, type = "ae_cup", BYOC_MODE),
+  BYOC_MODE = FALSE
+) {
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
