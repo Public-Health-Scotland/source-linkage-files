@@ -19,7 +19,7 @@ read_extract_mental_health <- function(
   # Read BOXI extract
   extract_mental_health <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_mental_health_episode_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("mh"))
   ) %>%
     dplyr::filter(
       .data$costs_financial_year == c_year,

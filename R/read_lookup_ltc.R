@@ -15,7 +15,7 @@ read_lookup_ltc <- function(denodo_connect = get_denodo_connection(BYOC_MODE = B
 
   ltc_file <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_long_term_condition_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("ltc"))
   ) %>%
     dplyr::select(
       chi              = "patient_chi",

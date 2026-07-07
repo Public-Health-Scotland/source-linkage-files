@@ -23,7 +23,7 @@ read_extract_nrs_deaths <- function(
 
   extract_nrs_deaths <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_nrs_deaths_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("nrs_deaths"))
   ) %>%
     dplyr::select(
       death_location_code = "death_location_code",

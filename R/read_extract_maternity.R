@@ -24,7 +24,7 @@ read_extract_maternity <- function(
   logger::log_info("Read maternity data from Denodo")
   extract_maternity <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_maternity_episode_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("maternity"))
   ) %>%
     dplyr::filter(costs_financial_year == c_year) %>%
     # Rename variables in line with SLF variable names

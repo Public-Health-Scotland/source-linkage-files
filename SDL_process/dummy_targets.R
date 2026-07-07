@@ -108,14 +108,14 @@ list(
   ),
 
   ### Long-Term Conditions (LTCs) Activity ----
-  # # READ - LTCs
-  # tar_target(
-  #   ltc_data,
-  #   read_lookup_ltc(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
 
   # ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
@@ -136,31 +136,31 @@ list(
     list(year = years_to_run),
 
     ### Maternity (SMR02) Acitivity----
-    # # READ - Maternity
-    # tar_target(
-    #   # Target name
-    #   maternity_data,
-    #   read_extract_maternity(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # PROCESS - Maternity
-    # tar_target(
-    #   # Target name
-    #   source_maternity_extract,
-    #   # Function
-    #   process_extract_maternity(
-    #     maternity_data,
-    #     year,
-    #     write_to_disk = write_to_disk,
-    #     BYOC_MODE = BYOC_MODE,
-    #     run_id = run_id,
-    #     run_date_time = run_date_time
-    #   )
-    # ),
+    # READ - Maternity
+    tar_target(
+      # Target name
+      maternity_data,
+      read_extract_maternity(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Maternity
+    tar_target(
+      # Target name
+      source_maternity_extract,
+      # Function
+      process_extract_maternity(
+        maternity_data,
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
     ### Mental Health (SMR02) Activity ----
     # READ - Mental Health

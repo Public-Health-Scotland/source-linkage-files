@@ -24,7 +24,7 @@ read_extract_homelessness <- function(
   logger::log_info("Read homelessness data from Denodo")
   extract_homelessness <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_homelessness_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("homelessness"))
   ) %>%
     dplyr::filter(
       financial_year_of_assessment <= c_year,
