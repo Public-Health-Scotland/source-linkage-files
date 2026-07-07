@@ -4,10 +4,10 @@
 #'
 #' @export
 read_extract_gp_ooh_cup <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_boxi_extract_path(year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
-    BYOC_MODE = FALSE
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE
 ) {
   c_year <- convert_fyyear_to_year(check_year_format(year))
 
