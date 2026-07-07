@@ -6,13 +6,18 @@
 \usage{
 read_extract_gp_ooh_cup(
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE
 )
 }
 \arguments{
-\item{year}{financial year}
+\item{year}{Financial year for the BOXI extract.}
 
-\item{denodo_connect}{denodo connection}
+\item{file_path}{BOXI extract location}
+}
+\value{
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read BOXI extract GP OoH CUP from Denodo

@@ -145,8 +145,10 @@ list(
     tar_target(
       gp_ooh_cup,
       read_extract_gp_ooh_cup(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+        year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # PROCESS - GP OOH CUP

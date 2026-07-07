@@ -1,12 +1,20 @@
 #' Read BOXI extract GP OoH CUP from Denodo
 #'
-#' @param denodo_connect denodo connection
-#' @param year financial year
+#' @inherit read_extract_acute
 #'
 #' @export
-read_extract_gp_ooh_cup <- function(year,
-                                    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)) {
-  c_year_cup <- convert_fyyear_to_year(check_year_format(year))
+read_extract_gp_ooh_cup <- function(
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    file_path = get_boxi_extract_path(year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = FALSE
+) {
+  c_year <- convert_fyyear_to_year(check_year_format(year))
+
+  # Specify years available for running
+  if (file_path == get_dummy_boxi_extract_path()) {
+    return(tibble::tibble())
+  }
 
   # Disconnect from Denodo
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE),
@@ -17,7 +25,7 @@ read_extract_gp_ooh_cup <- function(year,
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_source")
   ) %>%
-    dplyr::filter(gp_ooh_sc_start_financial_year == c_year_cup) %>%
+    dplyr::filter(gp_ooh_sc_start_financial_year == c_year) %>%
     dplyr::select(
       record_keydate1 = "gp_ooh_consultation_start_date",
       keytime1 = "gp_ooh_consultation_start_time",
