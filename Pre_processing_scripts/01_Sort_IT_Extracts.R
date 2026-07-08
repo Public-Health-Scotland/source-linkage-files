@@ -102,7 +102,7 @@ if (is.null(previous_task_num)) {
 # List latest csv IT extracts
 # Note: IT provide this in csv format but the preferred format is parquet
 csv_files <- list.files(it_extract_path,
-  pattern = "SCTASK[0-9]{7}_(PIS_20[0-9]{2}|Deaths|LTCs)\\.csv(\\.gz)?",
+  pattern = "SCTASK[0-9]{7}_(PIS_20[0-9]{2}|Deaths|LTCs)\\.csv$",
   full.names = TRUE
 )
 

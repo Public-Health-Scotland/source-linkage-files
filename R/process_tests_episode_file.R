@@ -136,9 +136,9 @@ produce_sc_episode_tests <- function(data,
   missing_totals <- data_with_totals %>%
     dplyr::group_by(.data$recid) %>%
     dplyr::summarise(
-      n_missing_chi_total = dplyr::first(n_missing_chi_total),
-      n_missing_dob_total = dplyr::first(n_missing_dob_total),
-      n_missing_postcode_total = dplyr::first(n_missing_postcode_total),
+      n_missing_chi_total = dplyr::first(.data$n_missing_chi_total),
+      n_missing_dob_total = dplyr::first(.data$n_missing_dob_total),
+      n_missing_postcode_total = dplyr::first(.data$n_missing_postcode_total),
       .groups = "drop"
     )
 
@@ -158,9 +158,9 @@ produce_sc_episode_tests <- function(data,
     dplyr::left_join(missing_totals, by = "recid") %>%
     dplyr::mutate(
       value = dplyr::case_when(
-        measure == "n_missing_chi" ~ as.numeric(n_missing_chi_total),
-        measure == "missing_dob" ~ as.numeric(n_missing_dob_total),
-        measure == "n_missing_postcode" ~ as.numeric(n_missing_postcode_total),
+        measure == "n_missing_chi" ~ as.numeric(.data$n_missing_chi_total),
+        measure == "missing_dob" ~ as.numeric(.data$n_missing_dob_total),
+        measure == "n_missing_postcode" ~ as.numeric(.data$n_missing_postcode_total),
         TRUE ~ value
       )
     ) %>%

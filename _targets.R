@@ -33,7 +33,7 @@ controller <- crew::crew_controller_local(
   name = "my_controller",
   # Specify 6 workers for parallel processing - works with 8CPU, 128GB posit session
   workers = 6,
-  seconds_idle = 3
+  seconds_idle = 60
 )
 
 # Targets options

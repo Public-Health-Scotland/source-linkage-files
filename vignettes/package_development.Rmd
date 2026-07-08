@@ -1,8 +1,8 @@
 ---
-title: "03 Package Development"
+title: "04 Package Development"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{03 Package Development}
+  %\VignetteIndexEntry{04 Package Development}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

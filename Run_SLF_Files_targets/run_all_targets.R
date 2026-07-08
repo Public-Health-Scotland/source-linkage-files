@@ -39,10 +39,10 @@ console_outputs <- TRUE
 
 #-------------------------------------------------------------------------------
 # save console outputs if `console_outputs == TRUE`
-write_console_output(
-  console_outputs = console_outputs,
-  file_type = "targets",
-)
+# write_console_output(
+#   console_outputs = console_outputs,
+#   file_type = "targets",
+# )
 
 # Run the targets pipeline "_Targets.R"
 #-------------------------------------------------------------------------------

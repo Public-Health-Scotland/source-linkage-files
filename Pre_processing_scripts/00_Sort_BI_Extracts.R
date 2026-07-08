@@ -26,7 +26,7 @@
 devtools::load_all()
 
 # Define the source directory and financial year pattern
-compress_files <- FALSE
+compress_files <- TRUE
 source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp"
 pattern <- "-20(\\d{4})\\.csv"
 
