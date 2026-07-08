@@ -17,15 +17,15 @@ read_extract_delayed_discharges <- function(
   # Read Extract
   extract_delayed_discharges <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_delayed_discharges_source") # TO-DO: change to correct bucket name after migration
+    dbplyr::in_schema("sdl", "sdl_dd_source") 
   ) %>%
     dplyr::select(
       # TO-DO: verify variable names after migration
       patient_chi = "patient_chi",
       postcode = "postcode",
-      dd_responsible_lca = "local_authority_responsibile",
+      dd_responsible_lca = "local_authority_responsible",
       original_admission_date = "original_admission_date",
-      rdd = "ready_dischage_date",
+      rdd = "ready_discharge_date",
       delay_end_date = "delayed_discharge_end_date",
       delayed_discharge_reason = "delayed_discharge_reason",
       delay_end_reason = "delay_end_reason",
@@ -33,7 +33,7 @@ read_extract_delayed_discharges <- function(
       secondary_delay_reason = "secondary_delay_reason",
       hbtreatcode = "health_board_of_treatment",
       location = "location_code",
-      spec = "speciality",
+      spec = "specialty",
       monthflag = "month_flag"
     ) %>%
     dplyr::collect() %>%
