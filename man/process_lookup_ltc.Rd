@@ -4,7 +4,14 @@
 \alias{process_lookup_ltc}
 \title{Process LTC IT extract}
 \usage{
-process_lookup_ltc(data, year, write_to_disk = TRUE)
+process_lookup_ltc(
+  data,
+  year,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The extract to process}
