@@ -25,9 +25,9 @@ use, the year, recid and variable names from the
 \seealso{
 produce_source_extract_tests
 
-Other test functions: 
-\code{\link{format_test_excel}()},
-\code{\link{produce_test_comparison}()},
-\code{\link{write_tests_xlsx}()}
+Other test functions:
+\code{\link[=format_test_excel]{format_test_excel()}},
+\code{\link[=produce_test_comparison]{produce_test_comparison()}},
+\code{\link[=write_tests_xlsx]{write_tests_xlsx()}}
 }
 \concept{test functions}
