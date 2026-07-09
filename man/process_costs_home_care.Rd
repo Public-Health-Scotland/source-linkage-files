@@ -6,6 +6,7 @@
 \usage{
 process_costs_home_care(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  lca_data = get_lca_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
