@@ -27,5 +27,6 @@ dependant on the file path extension.
 \itemize{
 \item \code{.rds} uses \code{\link[readr:write_rds]{readr::write_rds()}}.
 \item \code{.parquet} uses \code{\link[arrow:write_parquet]{arrow::write_parquet()}}.
+\item \code{.csv} use \code{\link[readr:write_csv]{readr::write_csv()}}.
 }
 }

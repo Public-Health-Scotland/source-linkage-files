@@ -4,7 +4,7 @@
 \alias{get_combined_hhg_path}
 \title{HHG Extract File Path}
 \usage{
-get_combined_hhg_path()
+get_combined_hhg_path(...)
 }
 \value{
 The path to the HHG extract as an \code{\link[fs:path]{fs::path()}}
