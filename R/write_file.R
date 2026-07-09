@@ -4,6 +4,7 @@
 #' dependant on the file path extension.
 #'  * `.rds` uses [readr::write_rds()].
 #'  * `.parquet` uses [arrow::write_parquet()].
+#'  * `.csv` use [readr::write_csv()].
 #'
 #' @param data The data to be written
 #' @param path The file path to be write
@@ -15,7 +16,7 @@
 #' @return the data (invisibly) as a [tibble][tibble::tibble-package].
 #' @export
 write_file <- function(data, path, group_id = 3356, BYOC_MODE = TRUE, ...) {
-  valid_extensions <- c("rds", "parquet")
+  valid_extensions <- c("rds", "parquet", "csv")
 
   ext <- fs::path_ext(path)
 
@@ -40,6 +41,11 @@ write_file <- function(data, path, group_id = 3356, BYOC_MODE = TRUE, ...) {
       sink = path,
       compression = "zstd",
       version = "latest",
+      ...
+    ),
+    "csv" = readr::write_csv(
+      x = data,
+      file = path,
       ...
     )
   )
