@@ -215,12 +215,21 @@ list(
   #### District nursing costs------
 
   #### Home care costs------
+  # lca data - phsopendata
+  tar_target(
+    # Target name
+    lca_data,
+    # Function
+    get_lca_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE))
+  ),
+  # home care costs lookup
   tar_target(
     # Target name
     hc_cost_lookup,
     # Function
     process_costs_home_care(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      lca_data = lca_data,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time

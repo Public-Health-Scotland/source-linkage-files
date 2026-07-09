@@ -7,11 +7,16 @@
 #'
 #' @export
 #'
-process_costs_home_care <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                    BYOC_MODE = FALSE,
-                                    run_id = NA,
-                                    run_date_time = NA,
-                                    write_to_disk = TRUE) {
+process_costs_home_care <- function(
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    lca_data = get_lca_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+    ),
+    BYOC_MODE = FALSE,
+    run_id = NA,
+    run_date_time = NA,
+    write_to_disk = TRUE
+) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   ## Read costs
@@ -19,20 +24,14 @@ process_costs_home_care <- function(denodo_connect = get_denodo_connection(BYOC_
     denodo_connect,
     dbplyr::in_schema("sdl", "home_care_costs") # TODO: update SDL table
   )
-
-  hc_costs_raw <- readxl::read_excel("/conf/hscdiip/SLF_Extracts/Costs/HC_costs_pivoted.xlsx")
+  # hc_costs_raw <- readxl::read_excel("/conf/hscdiip/SLF_Extracts/Costs/HC_costs_pivoted.xlsx")
 
   ## add in years by copying the most recent year ##
   latest_cost_year <- max(hc_costs_raw$year)
 
   hc_costs <- hc_costs_raw %>%
     dplyr::left_join(
-      # TODO: read from Denodo
-      phsopendata::get_resource(
-        "967937c4-8d67-4f39-974f-fd58c4acfda5",
-        col_select = c("CA", "CAName", "HBName")
-      ) %>%
-        dplyr::distinct(),
+      lca_data,
       by = c("gss_code" = "CA")
     ) %>%
     dplyr::select(year,
@@ -67,4 +66,27 @@ process_costs_home_care <- function(denodo_connect = get_denodo_connection(BYOC_
       get_hc_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
       group_id = 3206 # hscdiip owner
     )
+}
+
+
+#' get lca data from Denodo
+#'
+#' @param denodo_connect denodo connection
+#'
+#' @returns
+#' @export
+get_lca_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)) {
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "lca_opendata") # TODO: update SDL table
+  ) %>%
+    col_select = c("CA", "CAName", "HBName") %>%
+    dplyr::distinct()
+
+  # TODO: remove this when finalise this PR
+  # phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
+  #                           col_select = c("CA", "CAName", "HBName")) %>%
+  #   dplyr::distinct()
 }
