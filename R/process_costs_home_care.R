@@ -8,14 +8,14 @@
 #' @export
 #'
 process_costs_home_care <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    lca_data = get_lca_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
-    ),
-    BYOC_MODE = FALSE,
-    run_id = NA,
-    run_date_time = NA,
-    write_to_disk = TRUE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  lca_data = get_lca_data(
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+  ),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
+  write_to_disk = TRUE
 ) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
@@ -82,7 +82,7 @@ get_lca_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
     denodo_connect,
     dbplyr::in_schema("sdl", "lca_opendata") # TODO: update SDL table
   ) %>%
-    col_select = c("CA", "CAName", "HBName") %>%
+    col_select() <- c("CA", "CAName", "HBName") %>%
     dplyr::distinct()
 
   # TODO: remove this when finalise this PR
