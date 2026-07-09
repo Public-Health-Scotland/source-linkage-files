@@ -93,3 +93,30 @@ get_dummy_boxi_extract_path <- function() {
   dummy_path <- "dummy_boxi_extract_path"
   return(dummy_path)
 }
+
+
+#' Get combined community mental health path
+#'
+#' @inherit get_combined_nsu_path
+#
+#' @export
+get_combined_cmh_path <- function(...) {
+  get_file_path(
+    directory = fs::path(get_slf_dir(), "Archived_data"),
+    file_name = stringr::str_glue("SDL_CMH_combined.parquet"),
+    ...
+  )
+}
+
+#' Get combined district nursing path
+#'
+#' @inherit get_combined_nsu_path
+#
+#' @export
+get_combined_dn_path <- function(...) {
+  get_file_path(
+    directory = fs::path(get_slf_dir(), "Archived_data"),
+    file_name = stringr::str_glue("SDL_DN_combined.parquet"),
+    ...
+  )
+}

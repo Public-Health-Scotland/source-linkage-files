@@ -40,7 +40,7 @@ nsu_files <- purrr::map(
 nsu_combined_output <- dplyr::bind_rows(nsu_files)
 
 nsu_combined_output %>%
-  write_file(get_combined_nsu_path())
+  write_file(get_combined_nsu_path(check_mode = "write"))
 
 
 ## END OF SCRIPT ##

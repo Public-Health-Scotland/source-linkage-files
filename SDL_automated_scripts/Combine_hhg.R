@@ -42,4 +42,4 @@ hhg_files <- purrr::map(
 hhg_combined_output <- dplyr::bind_rows(hhg_files)
 
 hhg_combined_output %>%
-  write_file(get_combined_hhg_path())
+  write_file(get_combined_hhg_path(check_mode = "write"))

@@ -159,3 +159,14 @@ get_gpprac_ref_path <- function(ext = "csv") {
 
   return(gpprac_path)
 }
+
+#' SDL GP Practice Lookup File Path
+#' @inherit get_combined_nsu_path
+#' @export
+get_sdl_gpprac_lookup_path <- function(...){
+  get_file_path(
+    directory = fs::path(get_slf_dir(), "Lookups"),
+    file_name = stringr::str_glue("SDL_gpprac_lookup.parquet"),
+    ...
+  )
+}
