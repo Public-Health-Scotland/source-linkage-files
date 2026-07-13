@@ -15,7 +15,6 @@ if (year_specific) {
 }
 
 if (is(boxi_data, "fs_path")) {
-
   ext <- fs::path_ext(boxi_data)
 
   if (ext == "xlsx") {
