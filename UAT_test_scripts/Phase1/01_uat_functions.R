@@ -19,7 +19,6 @@ get_slf_variable_lookup <- function() {
   return(path)
 }
 
-
 get_name_list_lookup <- function() {
   uat_dir <- fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates", "uat_testing", "1_source_data_views", "Lookups")
   file_name <- "uat_names.xlsx"
@@ -28,6 +27,45 @@ get_name_list_lookup <- function() {
   return(path)
 }
 
+# Path to the pivoted data for homelessness_completeness_cached file
+get_sg_homelessness_pub_pivoted_path <- function(...) {
+  path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Homelessness"),
+    file_name = "2025.11.05 - PHS - Total assessment decisions by LA by Qtr_pivoted.xlsx",
+    ...
+  )
+  return(path)
+}
+
+# Path to the pivoted data for ooh_costs_cached file
+get_gp_ooh_raw_costs_pivoted_path <- function(...) {
+  gp_ooh_raw_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = stringr::str_glue("ooh_costs_pivoted.xlsx"),
+    ...
+  )
+  return(gp_ooh_raw_costs_path)
+}
+
+# Path to the pivoted data for hc_costs_cached file
+get_hc_raw_costs_pivoted_path <- function(...) {
+  hc_raw_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = stringr::str_glue("hc_costs_pivoted.xlsx"),
+    ...
+  )
+  return(hc_raw_costs_path)
+}
+
+# Path to the pivoted data for dn_costs_cached file
+get_dn_raw_costs_pivoted_path <- function(...) {
+  dn_raw_costs_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = stringr::str_glue("dn_costs_pivoted.xlsx"),
+    ...
+  )
+  return(dn_raw_costs_path)
+}
 
 ## Main function to create test output.
 create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
@@ -119,6 +157,7 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
   date_today <- format(Sys.Date(), "%d_%b")
   date_today <- stringr::str_to_lower(date_today)
   sheet_name_dated <- stringr::str_glue("{sheet_name}_{date_today}")
+  sheet_name_dated <- substr(sheet_name_dated, 1, 31)
 
   # If there has already been a sheet created today, append the time
   if (sheet_name_dated %in% names(wb)) {

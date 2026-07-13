@@ -15,9 +15,14 @@ if (year_specific) {
 }
 
 if (is(boxi_data, "fs_path")) {
-  boxi_data <- read_file(boxi_data) # %>% janitor::clean_names()
-} else {
-  boxi_data <- boxi_data # %>% janitor::clean_names()
+
+  ext <- fs::path_ext(boxi_data)
+
+  if (ext == "xlsx") {
+    boxi_data <- readxl::read_excel(boxi_data)
+  } else {
+    boxi_data <- read_file(boxi_data) # %>% janitor::clean_names()
+  }
 }
 
 # Read denodo variables for renaming SLF variables

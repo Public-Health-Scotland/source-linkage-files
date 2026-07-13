@@ -27,16 +27,16 @@ a dataframe with test measures for non-social care datasets
 Process non-social care datasets with standard counting
 }
 \seealso{
-Other extract test functions:
-\code{\link[=calculate_measures]{calculate_measures()}},
-\code{\link[=produce_episode_file_ltc_tests]{produce_episode_file_ltc_tests()}},
-\code{\link[=produce_episode_file_tests]{produce_episode_file_tests()}},
-\code{\link[=produce_sc_episode_tests]{produce_sc_episode_tests()}},
-\code{\link[=produce_source_ch_tests]{produce_source_ch_tests()}},
-\code{\link[=produce_source_cmh_tests]{produce_source_cmh_tests()}},
-\code{\link[=produce_source_dn_tests]{produce_source_dn_tests()}},
-\code{\link[=produce_source_extract_tests]{produce_source_extract_tests()}},
-\code{\link[=produce_source_hc_tests]{produce_source_hc_tests()}},
-\code{\link[=produce_source_nrs_tests]{produce_source_nrs_tests()}}
+Other extract test functions: 
+\code{\link{calculate_measures}()},
+\code{\link{produce_episode_file_ltc_tests}()},
+\code{\link{produce_episode_file_tests}()},
+\code{\link{produce_sc_episode_tests}()},
+\code{\link{produce_source_ch_tests}()},
+\code{\link{produce_source_cmh_tests}()},
+\code{\link{produce_source_dn_tests}()},
+\code{\link{produce_source_extract_tests}()},
+\code{\link{produce_source_hc_tests}()},
+\code{\link{produce_source_nrs_tests}()}
 }
 \concept{extract test functions}
