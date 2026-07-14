@@ -6,6 +6,9 @@
 #' @param data The extract to process
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -16,6 +19,8 @@ process_it_chi_deaths <- function(data,
                                   run_id = NA,
                                   run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "it_chi_deaths", year = "all")
+
+  # Data Cleaning  ---------------------------------------
 
   it_chi_deaths_clean <- data %>%
     dplyr::arrange(
@@ -39,13 +44,13 @@ process_it_chi_deaths <- function(data,
 
   if (write_to_disk) {
     write_file(
-      it_chi_deaths_clean,
-      get_slf_chi_deaths_path(
+      data = it_chi_deaths_clean,
+      path = get_slf_chi_deaths_path(
         BYOC_MODE = BYOC_MODE,
         check_mode = "write"
       ),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3206 # hscdiip owner
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

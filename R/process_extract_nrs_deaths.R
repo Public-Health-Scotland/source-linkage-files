@@ -6,10 +6,10 @@
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id run_id for BYOC
 #' @param run_date_time run_date_time for BYOC
-#' `TRUE` i.e. write the data to disk.
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -20,16 +20,15 @@ process_extract_nrs_deaths <- function(data,
                                        BYOC_MODE = FALSE,
                                        run_id = NA,
                                        run_date_time = NA) {
-  log_slf_event(
-    stage = "process",
-    status = "start",
-    type = "nrs_deaths",
-    year = year
-  )
+  log_slf_event(stage = "process", status = "start", type = "nrs_deaths", year = year)
 
+  # Only run for a single year
   stopifnot(length(year) == 1L)
 
+  # Check that the supplied year is in the correct format
   year <- check_year_format(year)
+
+  # Data Cleaning  ---------------------------------------
 
   deaths_clean <- data %>%
     dplyr::mutate(
@@ -48,25 +47,20 @@ process_extract_nrs_deaths <- function(data,
     )
 
   if (write_to_disk) {
-    deaths_clean %>%
-      write_file(
-        get_source_extract_path(
-          year,
-          "nrs_deaths",
-          check_mode = "write",
-          BYOC_MODE = BYOC_MODE
-        ),
+    write_file(
+      data = deaths_clean,
+      path = get_source_extract_path(
+        year = year,
+        type = "nrs_deaths",
         BYOC_MODE = BYOC_MODE,
-        group_id = 3356 # sourcedev owner
-      )
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
 
-  log_slf_event(
-    stage = "process",
-    status = "complete",
-    type = "nrs_deaths",
-    year = year
-  )
+  log_slf_event(stage = "process", status = "complete", type = "nrs_deaths", year = year)
 
   return(deaths_clean)
 }
