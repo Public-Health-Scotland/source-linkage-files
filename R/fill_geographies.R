@@ -14,6 +14,8 @@ fill_geographies <- function(
   slf_pc_lookup = read_file(
     get_slf_postcode_path(BYOC_MODE = BYOC_MODE)
   ),
+  log_ep_substage(sub_stage = "Fill geographies", status = "start", year = "All years") # TODO: Check usage.
+
   slf_gpprac_lookup = read_file(
     get_slf_gpprac_path(BYOC_MODE = BYOC_MODE),
     col_select = c("gpprac", "cluster", "hbpraccode")
@@ -35,7 +37,7 @@ fill_geographies <- function(
     fill_postcode_geogs(slf_pc_lookup) %>%
     fill_gpprac_geographies(slf_gpprac_lookup)
 
-  cli::cli_alert_info("Fill geographies function finished at {Sys.time()}") # TODO: Is this being kept or changed with a logger_utils function?
+  log_ep_substage(sub_stage = "Fill geographies", status = "complete", year = "All years") # TODO: Check usage.
 
   return(data)
 }
