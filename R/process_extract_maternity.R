@@ -8,6 +8,9 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -129,10 +132,15 @@ process_extract_maternity <- function(data,
 
   if (write_to_disk) {
     write_file(
-      maternity_processed,
-      get_source_extract_path(year, "maternity", check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      data = maternity_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "maternity",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
