@@ -22,7 +22,7 @@ process_lookup_postcode <- function(
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
-  
+
   # Process lookups -------------------------------------------------------
 
   # Scottish Postcode Directory Lookup
@@ -68,7 +68,7 @@ process_lookup_postcode <- function(
     )
 
   # Join data together  -----------------------------------------------------
-  
+
   data <- dplyr::left_join(spd_file, simd_file, by = "pc7") %>%
     dplyr::rename(postcode = "pc7") %>%
     dplyr::left_join(locality_file, by = "datazone2011")
