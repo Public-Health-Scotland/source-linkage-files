@@ -9,23 +9,24 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param update The update to use (default is [latest_update()]).
-#' @param la_code_lookup get local authority using opendata.
-#' @param sg_pub_data The path to the SG pub figures.
+#' @param la_code_lookup local authority data.
+#' @param sg_pub_data SG pub figures.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_homelessness <- function(
-  data,
-  year,
-  write_to_disk = TRUE,
-  update = latest_update(),
-  la_code_lookup = get_la_code_opendata_lookup(),
-  sg_pub_data,
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA
-) {
+process_extract_homelessness <- function(data,
+                                         year,
+                                         write_to_disk = TRUE,
+                                         update = latest_update(),
+                                         la_code_lookup = get_la_code_opendata_lookup(BYOC_MODE = BYOC_MODE),
+                                         sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
+                                         BYOC_MODE = FALSE,
+                                         run_id = NA,
+                                         run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "homelessness", year = year)
 
   # Only run for a single year
@@ -39,7 +40,7 @@ process_extract_homelessness <- function(
     return(data)
   }
 
-  logger::log_info("Process homelessness data")
+  # Data Cleaning  ---------------------------------------
 
   data <- data %>%
     dplyr::mutate(
@@ -187,18 +188,17 @@ process_extract_homelessness <- function(
       "hl1_completeness"
     )
 
-  logger::log_info("Write processed homelessness data to Denodo intermediate drive")
   if (write_to_disk) {
     write_file(
-      final_data,
-      get_source_extract_path(
+      data = final_data,
+      path = get_source_extract_path(
         year = year,
         type = "homelessness",
-        BYOC_MODE,
+        BYOC_MODE = BYOC_MODE,
         check_mode = "write"
       ),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
