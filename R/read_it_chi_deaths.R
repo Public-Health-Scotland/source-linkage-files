@@ -8,8 +8,8 @@
 #' @export
 #' @family process extracts
 read_it_chi_deaths <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "it_chi_deaths", year = "all")
 
