@@ -6,20 +6,14 @@
 #'
 #' @return A data frame with keep_population flags
 #' @family individual_file
-add_keep_population_flag <- function(individual_file,
-                                     year,
-                                     pop_estimates = get_datazone_pop_data(
-                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                       file_path = get_pop_path(type = "datazone"),
-                                       BYOC_MODE
-                                     ),
-                                     locality_data = get_locality_data(
-                                       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                       file_path = get_locality_path(),
-                                       BYOC_MODE
-                                     ),
-                                     BYOC_MODE) {
-  # TODO: Check arguments - do get_datazone_pop_data and get_locality_data just need BYOC_MODE?
+add_keep_population_flag <- function(
+  individual_file,
+  year,
+  pop_estimates = get_datazone_pop_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
+  log_ep_substage(sub_stage = "Add keep population flag", status = "start", year = year) 
 
   calendar_year <- paste0("20", substr(year, 1, 2)) %>%
     as.integer()
@@ -143,8 +137,8 @@ add_keep_population_flag <- function(individual_file,
       )
   }
 
-  cli::cli_alert_info("Add keep population function finished at {Sys.time()}") # TODO: Is this being kept or changed with a logger_utils function?
-
+  log_ep_substage(sub_stage = "Add keep population flag", status = "complete", year = year) 
+  
   return(individual_file)
 }
 
