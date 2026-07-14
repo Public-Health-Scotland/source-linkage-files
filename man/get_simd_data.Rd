@@ -6,14 +6,11 @@
 \usage{
 get_simd_data(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_simd_path(),
   BYOC_MODE
 )
 }
 \arguments{
 \item{denodo_connect}{Connection to denodo}
-
-\item{file_path}{Path to local SIMD file}
 
 \item{BYOC_MODE}{BYOC MODE}
 }
