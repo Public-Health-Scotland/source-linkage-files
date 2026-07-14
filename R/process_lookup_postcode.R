@@ -4,40 +4,28 @@
 #' postcode lookup, it will return the final data
 #' and (optionally) write it to disk.
 #'
-#' @param simd_path Path to SIMD lookup.
-#' @param locality_path Path to locality lookup.
+#' @param simd_data SIMD lookup.
+#' @param locality_data HSCP locality lookup.
 #'
 #' @inheritParams process_lookup_gpprac
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_postcode <- function(spd_data = get_spd_data(
-                                      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                      file_path = get_spd_path(), # TODO: Add this argument to the function in refactor-sc-demographics branch?
-                                      BYOC_MODE
-                                    ),
-                                    simd_data = get_simd_data(
-                                      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                      file_path = get_simd_path(),
-                                      BYOC_MODE
-                                    ),
-                                    locality_data = get_locality_data(
-                                      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                      file_path = get_locality_path(),
-                                      BYOC_MODE
-                                    ),
-                                    BYOC_MODE = FALSE,
-                                    run_id = NA,
-                                    run_date_time = NA,
-                                    write_to_disk = TRUE) {
-  # TODO: Check arguments - do get_spd_data, simd_data and get_locality_data just need BYOC_MODE?
-  #       Alternatively we could have no default and just call data in targets (i.e. same as process_extract_XXX).
-
-  # Read lookup files -------------------------------------------------------
+process_lookup_postcode <- function(
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
+  write_to_disk = TRUE
+) {
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
+  
+  # Process lookups -------------------------------------------------------
 
-  # postcode data
+  # Scottish Postcode Directory Lookup
   spd_file <- spd_data %>%
     dplyr::select(
       "pc7",
@@ -56,7 +44,7 @@ process_lookup_postcode <- function(spd_data = get_spd_data(
     ) %>%
     dplyr::mutate(lca = convert_ca_to_lca(.data$ca2019))
 
-  # simd data
+  # SIMD Lookup
   simd_file <- simd_data %>%
     dplyr::select(
       "pc7",
@@ -69,7 +57,7 @@ process_lookup_postcode <- function(spd_data = get_spd_data(
       tidyselect::matches("simd\\d{4}.?.?_hscp\\d{4}_quintile")
     )
 
-  # locality
+  # HSCP Locality Lookup
   locality_file <- locality_data %>%
     dplyr::select(
       locality = "hscp_locality",
@@ -79,12 +67,11 @@ process_lookup_postcode <- function(spd_data = get_spd_data(
       locality = tidyr::replace_na(.data$locality, "No Locality Information")
     )
 
-
   # Join data together  -----------------------------------------------------
+  
   data <- dplyr::left_join(spd_file, simd_file, by = "pc7") %>%
     dplyr::rename(postcode = "pc7") %>%
     dplyr::left_join(locality_file, by = "datazone2011")
-
 
   # Finalise output -----------------------------------------------------
 
