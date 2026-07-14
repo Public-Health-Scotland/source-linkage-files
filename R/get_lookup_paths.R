@@ -42,41 +42,37 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 #' @description Return the data for centrally held HSCP Localities file.
 #'
 #' @param denodo_connect Connection to denodo
-#' @param file_path Path to local HSCP Localities file
 #' @param BYOC_MODE BYOC MODE
 #'
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 #'
 #' @family lookup files
-get_locality_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                              file_path = get_locality_path(),
-                              BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    log_slf_event(stage = "read", status = "start", type = "HSCP Localities Lookup", year = "all") # TODO: Check whether to add hscp_locality to log_slf_event mapping list
+get_locality_data <- function(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
+  
+  log_slf_event(stage = "read", status = "start", type = "hscp_locality", year = "all")
 
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-    locality_data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_hscp_locality_source") # TODO: Check table name
-    ) %>%
-      dplyr::select(
-        locality = "hscp_locality",
-        tidyselect::matches("datazone\\d{4}$")
-      ) %>% # TODO: Check whether we need to select columns
-      collect()
-
-    log_slf_event(stage = "read", status = "complete", type = "HSCP Localities Lookup", year = "all") # TODO: Check whether to add hscp_locality to log_slf_event mapping list
-  } else { # TODO: Check logic - are we reading the local file when BYOC_MODE = FALSE or are we still reading from Denodo?
-
-    locality_data <- read_file(file_path) %>%
-      dplyr::select(
-        locality = "hscp_locality",
-        tidyselect::matches("datazone\\d{4}$")
-      ) # TODO: Check whether we need to select columns
-  }
-
+  # Read data
+  locality_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_hscp_locality_source") # TODO: Check table name
+  ) %>%
+  # Rename variables
+  dplyr::select(
+    locality = "hscp_locality",
+    tidyselect::matches("datazone\\d{4}$")
+  ) %>% # TODO: Check column names
+  # Collect
+  dplyr::collect()
+  
+  log_slf_event(stage = "read", status = "complete", type = "hscp_locality", year = "all")
+    
   return(locality_data)
 }
 
@@ -145,53 +141,43 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 #' Deprivation (SIMD) file.
 #'
 #' @param denodo_connect Connection to denodo
-#' @param file_path Path to local SIMD file
 #' @param BYOC_MODE BYOC MODE
 #'
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 #'
 #' @family lookup files
-get_simd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                          file_path = get_simd_path(),
-                          BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    log_slf_event(stage = "read", status = "start", type = "SIMD Lookup", year = "all") # TODO: Check whether to add simd to log_slf_event mapping list
+get_simd_data <- function(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
+  log_slf_event(stage = "read", status = "start", type = "simd", year = "all")
 
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-    simd_data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_simd_source") # TODO: Check table name
-    ) %>%
-      dplyr::select(
-        "pc7",
-        "simd2020v2_rank",
-        "simd2020v2_sc_decile",
-        "simd2020v2_sc_quintile",
-        "simd2020v2_hb2019_decile",
-        "simd2020v2_hb2019_quintile",
-        "simd2020v2_hscp2019_decile",
-        "simd2020v2_hscp2019_quintile"
-      ) %>% # TODO: Check whether we need to select columns. When a new version of the SIMD is released, the column names within the file will change.
-      collect()
-
-    log_slf_event(stage = "read", status = "complete", type = "SIMD Lookup", year = "all") # TODO: Check whether to add simd to log_slf_event mapping list
-  } else { # TODO: Check logic - are we reading the local file when BYOC_MODE = FALSE or are we still reading from Denodo?
-
-    simd_data <- read_file(file_path) %>%
-      dplyr::select(
-        "pc7",
-        "simd2020v2_rank",
-        "simd2020v2_sc_decile",
-        "simd2020v2_sc_quintile",
-        "simd2020v2_hb2019_decile",
-        "simd2020v2_hb2019_quintile",
-        "simd2020v2_hscp2019_decile",
-        "simd2020v2_hscp2019_quintile"
-      ) # TODO: Check whether we need to select columns. When a new version of the SIMD is released, the column names within the file will change.
-  }
-
+  # Read data
+  simd_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_simd_source") # TODO: Check table name
+  ) %>%
+  # Rename variables
+  # When a new version of the SIMD is released, the column names within the file will change.
+  dplyr::select(
+    "pc7",
+    "simd2020v2_rank",
+    "simd2020v2_sc_decile",
+    "simd2020v2_sc_quintile",
+    "simd2020v2_hb2019_decile",
+    "simd2020v2_hb2019_quintile",
+    "simd2020v2_hscp2019_decile",
+    "simd2020v2_hscp2019_quintile"
+  ) %>% # TODO: Check column names.
+  # Collect
+  dplyr::collect()
+  
+  log_slf_event(stage = "read", status = "complete", type = "simd", year = "all")
+ 
   return(simd_data)
 }
 
@@ -244,45 +230,38 @@ get_pop_path <- function(file_name = NULL,
 #' @description Return the data for DataZone population estimates.
 #'
 #' @param denodo_connect Connection to denodo
-#' @param file_path Path to local DataZone population file
 #' @param BYOC_MODE BYOC MODE
 #'
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 #'
 #' @family lookup files
-get_datazone_pop_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                  file_path = get_pop_path(type = "datazone"),
-                                  BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    log_slf_event(stage = "read", status = "start", type = "DataZone Population Lookup", year = "all") # TODO: Check whether to add datazone_pop to log_slf_event mapping list
+get_datazone_pop_data <- function(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
+  log_slf_event(stage = "read", status = "start", type = "datazone_pop", year = "all")
 
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-    datazone_pop_data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_datazone_population_source") # TODO: Check table name
-    ) %>%
-      dplyr::select(
-        "year",
-        "datazone2011",
-        "sex",
-        dplyr::starts_with("age")
-      ) %>% # TODO: Check whether we need to select columns
-      collect()
-
-    log_slf_event(stage = "read", status = "complete", type = "DataZone Population Lookup", year = "all") # TODO: Check whether to add datazone_pop to log_slf_event mapping list
-  } else { # TODO: Check logic - are we reading the local file when BYOC_MODE = FALSE or are we still reading from Denodo?
-
-    datazone_pop_data <- read_file(file_path) %>%
-      dplyr::select(
-        "year",
-        "datazone2011",
-        "sex",
-        dplyr::starts_with("age")
-      ) # TODO: Check whether we need to select columns
-  }
-
+  # Read data
+  datazone_pop_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_datazone_population_source") # TODO: Check table name
+  ) %>%
+  # Rename variables
+  dplyr::select(
+    "year",
+    "datazone2011",
+    "sex",
+    dplyr::starts_with("age")
+  ) %>% # TODO: Check column names.
+  # Collect
+  dplyr::collect()
+  
+  log_slf_event(stage = "read", status = "complete", type = "datazone_pop", year = "all")
+  
   return(datazone_pop_data)
 }
 
