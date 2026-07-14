@@ -52,7 +52,6 @@ get_locality_data <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-  
   log_slf_event(stage = "read", status = "start", type = "hscp_locality", year = "all")
 
   # Denodo disconnect
@@ -63,16 +62,16 @@ get_locality_data <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_hscp_locality_source") # TODO: Check table name
   ) %>%
-  # Rename variables
-  dplyr::select(
-    locality = "hscp_locality",
-    tidyselect::matches("datazone\\d{4}$")
-  ) %>% # TODO: Check column names
-  # Collect
-  dplyr::collect()
-  
+    # Rename variables
+    dplyr::select(
+      locality = "hscp_locality",
+      tidyselect::matches("datazone\\d{4}$")
+    ) %>% # TODO: Check column names
+    # Collect
+    dplyr::collect()
+
   log_slf_event(stage = "read", status = "complete", type = "hscp_locality", year = "all")
-    
+
   return(locality_data)
 }
 
@@ -161,23 +160,23 @@ get_simd_data <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_simd_source") # TODO: Check table name
   ) %>%
-  # Rename variables
-  # When a new version of the SIMD is released, the column names within the file will change.
-  dplyr::select(
-    "pc7",
-    "simd2020v2_rank",
-    "simd2020v2_sc_decile",
-    "simd2020v2_sc_quintile",
-    "simd2020v2_hb2019_decile",
-    "simd2020v2_hb2019_quintile",
-    "simd2020v2_hscp2019_decile",
-    "simd2020v2_hscp2019_quintile"
-  ) %>% # TODO: Check column names.
-  # Collect
-  dplyr::collect()
-  
+    # Rename variables
+    # When a new version of the SIMD is released, the column names within the file will change.
+    dplyr::select(
+      "pc7",
+      "simd2020v2_rank",
+      "simd2020v2_sc_decile",
+      "simd2020v2_sc_quintile",
+      "simd2020v2_hb2019_decile",
+      "simd2020v2_hb2019_quintile",
+      "simd2020v2_hscp2019_decile",
+      "simd2020v2_hscp2019_quintile"
+    ) %>% # TODO: Check column names.
+    # Collect
+    dplyr::collect()
+
   log_slf_event(stage = "read", status = "complete", type = "simd", year = "all")
- 
+
   return(simd_data)
 }
 
@@ -250,18 +249,18 @@ get_datazone_pop_data <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_datazone_population_source") # TODO: Check table name
   ) %>%
-  # Rename variables
-  dplyr::select(
-    "year",
-    "datazone2011",
-    "sex",
-    dplyr::starts_with("age")
-  ) %>% # TODO: Check column names.
-  # Collect
-  dplyr::collect()
-  
+    # Rename variables
+    dplyr::select(
+      "year",
+      "datazone2011",
+      "sex",
+      dplyr::starts_with("age")
+    ) %>% # TODO: Check column names.
+    # Collect
+    dplyr::collect()
+
   log_slf_event(stage = "read", status = "complete", type = "datazone_pop", year = "all")
-  
+
   return(datazone_pop_data)
 }
 
