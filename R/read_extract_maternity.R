@@ -4,30 +4,34 @@
 #'
 #' @export
 read_extract_maternity <- function(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "maternity", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "maternity")) {
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  logger::log_info("Read maternity data from Denodo")
+  # Read extract
   extract_maternity <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_maternity_episode_source")
   ) %>%
-    dplyr::filter(costs_financial_year == c_year) %>%
-    # Rename variables in line with SLF variable names
+    # Filter by calendar year
+    dplyr::filter(
+      costs_financial_year == c_year
+    ) %>%
+    # Rename variables
     dplyr::select(
       admloc = "admitted_transfer_location_code",
       adtf = "admitted_transfer_from_code",
@@ -82,6 +86,7 @@ read_extract_maternity <- function(
       uri = "maternity_unique_record_identifier",
       yearstay = "occupied_bed_days"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 

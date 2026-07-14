@@ -4,27 +4,34 @@
 #'
 #' @export
 read_extract_nrs_deaths <- function(
-  year,
-  denodo_connect = get_denodo_connect(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "nrs_deaths", BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
 ) {
-  year <- check_year_format(year, "fyyear")
+  log_slf_event(stage = "read", status = "start", type = "nrs_deaths", year = year)
+
+  # Check and convert to calendar year
+  year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
-  log_slf_event(
-    stage = "read",
-    status = "start",
-    type = "nrs_deaths",
-    year = year
-  )
+  # Specify years available for running
+  if (!check_year_valid(year, type = "nrs_deaths")) {
+    return(tibble::tibble())
+  }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+  # Read extract
   extract_nrs_deaths <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_nrs_deaths_source")
   ) %>%
+    # Filter by calendar year
+    dplyr::filter(
+      date_of_death_financial_year == c_year
+    ) %>%
+    # Rename variables
     dplyr::select(
       death_location_code = "death_location_code",
       lca = "geo_council_area_code",
@@ -50,22 +57,13 @@ read_extract_nrs_deaths <- function(
       deathdiag10 = "secondary_cause_of_death_8_code",
       deathdiag11 = "secondary_cause_of_death_9_code",
       uri = "unique_record_identifier",
-      gpprac = "gp_practice_code",
-      date_of_death_financial_year = "date_of_death_financial_year"
+      gpprac = "gp_practice_code"
     ) %>%
-    dplyr::filter(
-      date_of_death_financial_year == c_year
-    ) %>%
-    dplyr::select(-"date_of_death_financial_year") %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
-    slfhelper::get_anon_chi()
+    slfhelper::get_anon_chi("chi")
 
-  log_slf_event(
-    stage = "read",
-    status = "complete",
-    type = "nrs_deaths",
-    year = year
-  )
+  log_slf_event(stage = "read", status = "complete", type = "nrs_deaths", year = year)
 
   return(extract_nrs_deaths)
 }

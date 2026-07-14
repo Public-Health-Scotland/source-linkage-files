@@ -4,33 +4,36 @@
 #'
 #' @export
 read_extract_homelessness <- function(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
-  BYOC_MODE
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "homelessness")) {
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  logger::log_info("Read homelessness data from Denodo")
+  # Read extract
   extract_homelessness <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_homelessness_source")
   ) %>%
+    # Filter variables
     dplyr::filter(
       financial_year_of_assessment <= c_year,
       is.null(financial_year_of_case_closed) |
         financial_year_of_case_closed >= c_year
     ) %>%
+    # Rename variables
     dplyr::select(
       # financial_year_of_assessment,
       # financial_year_of_case_closed,
@@ -58,6 +61,7 @@ read_extract_homelessness <- function(
       refused = "refused",
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 

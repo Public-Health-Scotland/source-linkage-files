@@ -4,28 +4,35 @@
 #'
 #' @export
 read_extract_mental_health <- function(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "mh", BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "mh", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
+  # Specify years available for running
+  if (!check_year_valid(year, type = "mh")) {
+    return(tibble::tibble())
+  }
+
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Read BOXI extract
+  # Read extract
   extract_mental_health <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_mental_health_episode_source")
   ) %>%
+    # Filter by calendar year
     dplyr::filter(
       .data$costs_financial_year == c_year,
       .data$duplicate_record_flag != "Y"
     ) %>%
-    # rename variables
+    # Rename variables
     dplyr::select(
       costsfy = "costs_financial_year",
       costmonthnum = "costs_financial_month_number",
@@ -84,13 +91,14 @@ read_extract_mental_health <- function(
       commhosp = "community_hospital_flag",
       uri = "unique_record_id"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
-    # replace NA in cost_total_net by 0
+    slfhelper::get_anon_chi("chi") %>%
+    # Replace NA in cost_total_net with 0
     dplyr::mutate(
       cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
     ) %>%
-    slfhelper::get_anon_chi("chi") %>%
-    # data type modification
+    # Data type modification
     dplyr::mutate(
       costsfy = as.double(.data$costsfy),
       costmonthnum = as.double(.data$costmonthnum),
