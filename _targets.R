@@ -533,7 +533,6 @@ list(
       read_extract_cmh(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year = year, type = "cmh", BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
