@@ -19,7 +19,6 @@
 process_extract_acute <- function(data,
                                   acute_cup_data,
                                   year,
-                                  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                   write_to_disk = TRUE,
                                   BYOC_MODE = FALSE,
                                   run_id = NA,
@@ -151,10 +150,15 @@ process_extract_acute <- function(data,
 
   if (write_to_disk) {
     write_file(
-      acute_processed,
-      get_source_extract_path(year, "acute", check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      data = acute_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "acute",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
