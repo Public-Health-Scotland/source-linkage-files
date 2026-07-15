@@ -26,11 +26,11 @@ read_extract_cmh <- function(
   extract_cmh <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_cmh_source") # TODO: Check table name.
-  ) %>% 
+  ) %>%
     # Filter by calendar year
     dplyr::filter(
       financial_year == c_year # TODO: Check year column name.
-    ) %>% 
+    ) %>%
     # Rename variables
     dplyr::select(
       chi = "patient_chi",
