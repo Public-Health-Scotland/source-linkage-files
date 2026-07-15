@@ -7,8 +7,8 @@
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 read_lookup_ltc <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "ltc", year = "all")
 
