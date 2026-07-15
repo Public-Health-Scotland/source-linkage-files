@@ -6,22 +6,28 @@
 read_extract_outpatients <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "outpatient", BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "outpatient", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
+  # Specify years available for running
+  if (!check_year_valid(year, type = "outpatients")) {
+    return(tibble::tibble())
+  }
+
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Read BOXI extract
+  # Read extract
   extract_outpatients <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_outpatients_source")
   ) %>%
-    # Filter by year
+    # Filter by calendar year
     dplyr::filter(
       .data$clinic_date_fin_year == c_year
     ) %>%
@@ -63,6 +69,7 @@ read_extract_outpatients <- function(
       commhosp = "community_hospital_flag",
       cost_total_net = "total_net_cost"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
