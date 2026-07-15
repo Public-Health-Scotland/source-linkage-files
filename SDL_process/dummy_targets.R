@@ -133,16 +133,16 @@ list(
   ),
 
   ### Long-Term Conditions (LTCs) Activity -------------------------------------
-  # # READ - LTCs
-  # tar_target(
-  #   # Target name
-  #   ltc_data,
-  #   # Function
-  #   read_lookup_ltc(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
+  # READ - LTCs
+  tar_target(
+    # Target name
+    ltc_data,
+    # Function
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
 
   ### NRS BOXI Deaths ----------------------------------------------------------
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
@@ -258,7 +258,7 @@ list(
         arrow::read_parquet(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
           as.data.frame()
       })(year, refined_death_data)
-    )
+    ),
     # # TESTS - Deaths
     # tar_target(
     #   # Target name
@@ -269,6 +269,22 @@ list(
     #     year
     #   )
     # ),
+
+    ### Long-Term Conditions (LTCs) Activity -----------------------------------
+    # PROCESS - LTCs
+    tar_target(
+      # Target name
+      source_ltc_lookup,
+      # Function
+      process_lookup_ltc(
+        data = ltc_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
   )
 )
 
