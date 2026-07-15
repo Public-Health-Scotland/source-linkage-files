@@ -13,7 +13,7 @@
 devtools::load_all()
 
 # Define Submission date - ### UPDATE ###
-submission_date <- "20260708"
+submission_date <- "20260715"
 
 # Define version of file - ### UPDATE ###
 n <- "1"
@@ -30,9 +30,15 @@ n <- "1"
 #   "cmh",
 #   "hc_cost_lookup",
 #   "dn_cost_lookup",
-#   "gpprac_lookup"
+#   "gpprac_lookup",
+#   "ooh_cost_lookup",
+#   "readcode",
+#   "homelessness_completeness",
+#   "hscp_localities",
+#   "hscp_population",
+#   "datazone_population"
 # )
-file_list <- c("hc_cost_lookup", "dn_cost_lookup", "gpprac_lookup")
+file_list <- c("hscp_population")
 
 #-------------------------------------------------------------------------------
 # Stage 2 - Set up functions
@@ -50,12 +56,18 @@ get_sdl_file_paths <- function(file_list) {
     "dn" ~ get_combined_dn_path(),
     "dn_contacts" ~ get_sdl_dn_contacts_path(),
     "dn_cost_lookup" ~ get_sdl_dn_costs_path(),
+    "ooh_cost_lookup" ~ get_sdl_gp_ooh_costs_path(),
     "gpprac_lookup" ~ get_sdl_gpprac_lookup_path(),
     "hc_cost_lookup" ~ get_sdl_hc_costs_path(),
     "hhg" ~ get_combined_hhg_path(),
     "nsu" ~ get_combined_nsu_path(),
     "spd" ~ get_spd_path(),
-    "simd" ~ get_simd_path()
+    "simd" ~ get_simd_path(),
+    "read_code_lookup" ~ get_readcode_lookup_path(),
+    "homelessness_completeness" ~ get_sdl_homelessness_completeness_path(),
+    "hscp_localities" ~ get_locality_path(),
+    "hscp_population" ~ get_pop_path(type = "hscp"),
+    "datazone_population" ~ get_pop_path(type = "datazone")
   )
 
   return(file_path)
@@ -73,17 +85,23 @@ get_sdl_output_path <- function(file_list) {
   output_name <- dplyr::recode_values(
     file_list,
     # for csv files, no need for `{n}`.
-    "cmh" ~ stringr::str_glue("SDL_cmh_{submission_date}.csv"),
-    "dd" ~ stringr::str_glue("SDL_dd_{submission_date}_{n}.parquet"),
-    "dn" ~ stringr::str_glue("SDL_dn_{submission_date}.csv"),
-    "dn_contacts" ~ stringr::str_glue("SDL_dn_contacts_{submission_date}.csv"),
-    "dn_cost_lookup" ~ stringr::str_glue("SDL_dn_cost_lookup_{submission_date}.csv"),
-    "gpprac_lookup" ~ stringr::str_glue("SDL_gpprac_lookup_{submission_date}.csv"),
-    "hc_cost_lookup" ~ stringr::str_glue("SDL_hc_cost_lookup_{submission_date}.csv"),
-    "hhg" ~ stringr::str_glue("SDL_hhg_{submission_date}_{n}.parquet"),
-    "nsu" ~ stringr::str_glue("SDL_nsu_{submission_date}_{n}.parquet"),
-    "spd" ~ stringr::str_glue("SDL_spd_{submission_date}_{n}.parquet"),
-    "simd" ~ stringr::str_glue("SDL_simd_{submission_date}_{n}.parquet")
+    "cmh" ~ stringr::str_glue("SDL_CMH_{submission_date}.csv"),
+    "dd" ~ stringr::str_glue("SDL_DD_{submission_date}_{n}.parquet"),
+    "dn" ~ stringr::str_glue("SDL_DN_{submission_date}.csv"),
+    "dn_contacts" ~ stringr::str_glue("SDL_DN_CONTACTS_{submission_date}.csv"),
+    "dn_cost_lookup" ~ stringr::str_glue("SDL_DN_COST_LOOKUP_{submission_date}.csv"),
+    "ooh_cost_lookup" ~ stringr::str_glue("SDL_OOH_COST_LOOKUP_{submission_date}.csv"),
+    "gpprac_lookup" ~ stringr::str_glue("SDL_GPPRAC_LOOKUP_{submission_date}.csv"),
+    "hc_cost_lookup" ~ stringr::str_glue("SDL_HC_COST_LOOKUP_{submission_date}.csv"),
+    "hhg" ~ stringr::str_glue("SDL_HHG_{submission_date}_{n}.parquet"),
+    "nsu" ~ stringr::str_glue("SDL_NSU_{submission_date}_{n}.parquet"),
+    "spd" ~ stringr::str_glue("SDL_SPD_{submission_date}_{n}.parquet"),
+    "simd" ~ stringr::str_glue("SDL_SIMD_{submission_date}_{n}.parquet"),
+    "read_code_lookup" ~ stringr::str_glue("SDL_READ_CODE_LOOKUP_{submission_date}.csv"),
+    "homelessness_completeness" ~ stringr::str_glue("SDL_HOMELESSNESS_COMPLETENESS_{submission_date}.csv"),
+    "hscp_localities" ~ stringr::str_glue("SDL_HSCP_LOCALITIES_{submission_date}.csv"),
+    "hscp_population" ~ stringr::str_glue("SDL_HSCP_POPULATION_{submission_date}.csv"),
+    "datazone_population" ~ stringr::str_glue("SDL_DATAZONE_POPULATION_{submission_date}.csv")
   )
 
   output_path <- stringr::str_glue("{output_dir}{output_name}")
