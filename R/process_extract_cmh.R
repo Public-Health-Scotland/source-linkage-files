@@ -86,9 +86,9 @@ process_extract_cmh <- function(data,
     write_file(
       data = cmh_processed,
       path = get_source_extract_path(
-        year = year, 
-        type = "cmh", 
-        check_mode = "write", 
+        year = year,
+        type = "cmh",
+        check_mode = "write",
         BYOC_MODE = BYOC_MODE
       ),
       group_id = 3356, # sourcedev owner
