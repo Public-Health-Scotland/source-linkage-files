@@ -12,15 +12,13 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_postcode <- function(
-  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
-  simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
-  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
-) {
+process_lookup_postcode <- function(spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+                                    simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
+                                    locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+                                    write_to_disk = TRUE,
+                                    BYOC_MODE = FALSE,
+                                    run_id = NA,
+                                    run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 
   # Process lookups -------------------------------------------------------
@@ -106,13 +104,13 @@ process_lookup_postcode <- function(
 
   if (write_to_disk) {
     write_file(
-      slf_pc_lookup,
-      get_slf_postcode_path(
+      data = slf_pc_lookup,
+      path = get_slf_postcode_path(
         BYOC_MODE = BYOC_MODE,
         check_mode = "write"
       ),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3206 # hscdiip owner
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

@@ -6,22 +6,18 @@
 #' @param data the SLF
 #' @param slf_pc_lookup The SLF Postcode lookup
 #' @param slf_gpprac_lookup The SLF GP Practice lookup
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return a [tibble][tibble::tibble-package] of the SLF with improved
 #' Postcode and GP Practice details.
 fill_geographies <- function(
   data,
-  slf_pc_lookup = read_file(
-    get_slf_postcode_path(BYOC_MODE = BYOC_MODE)
-  ),
+  slf_pc_lookup = read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE)),
+  slf_gpprac_lookup = read_file(get_slf_gpprac_path(BYOC_MODE = BYOC_MODE), col_select = c("gpprac", "cluster", "hbpraccode")),
+  BYOC_MODE
+) {
   log_ep_substage(sub_stage = "Fill geographies", status = "start", year = "All years") # TODO: Check usage.
 
-  slf_gpprac_lookup = read_file(
-    get_slf_gpprac_path(BYOC_MODE = BYOC_MODE),
-    col_select = c("gpprac", "cluster", "hbpraccode")
-  ),
-  BYOC_MODE = BYOC_MODE
-) {
   check_variables_exist(data, c(
     "anon_chi",
     "postcode",

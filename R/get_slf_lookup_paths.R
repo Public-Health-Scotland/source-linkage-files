@@ -3,6 +3,7 @@
 #' @description Get the full path to the SLF Postcode lookup
 #'
 #' @param update the update month (defaults to use [latest_update()])
+#' @param BYOC_MODE BYOC_MODE
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the SLF Postcode lookup as an [fs::path()]

@@ -3,6 +3,9 @@
 #' @description Add keep_population flag to individual files
 #' @param individual_file individual files under processing
 #' @param year the year of individual files under processing
+#' @param pop_estimates Datazone population lookup
+#' @param locality_data HSCP locality lookup
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return A data frame with keep_population flags
 #' @family individual_file
@@ -13,7 +16,7 @@ add_keep_population_flag <- function(
   locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-  log_ep_substage(sub_stage = "Add keep population flag", status = "start", year = year)
+  log_ep_substage(sub_stage = "Add keep_population flag", status = "start", year = year) # TODO: Check usage
 
   calendar_year <- paste0("20", substr(year, 1, 2)) %>%
     as.integer()
@@ -137,7 +140,7 @@ add_keep_population_flag <- function(
       )
   }
 
-  log_ep_substage(sub_stage = "Add keep population flag", status = "complete", year = year)
+  log_ep_substage(sub_stage = "Add keep_population flag", status = "complete", year = year)  # TODO: Check usage
 
   return(individual_file)
 }
