@@ -11,7 +11,7 @@
 devtools::load_all()
 
 # Define the source directory and financial year pattern
-gpprac_ref_path = get_gpprac_ref_path()
+gpprac_ref_path <- get_gpprac_ref_path()
 print(stringr::str_glue("Use {gpprac_ref_path}"))
 
 ## Stage 2 - Read and clean columns before binding ---------------

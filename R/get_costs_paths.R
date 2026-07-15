@@ -150,7 +150,7 @@ get_hc_raw_costs_path <- function(...) {
 #' SDL Home Care Costs File Path
 #' @inherit get_combined_nsu_path
 #' @export
-get_sdl_hc_costs_path <- function(...){
+get_sdl_hc_costs_path <- function(...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = stringr::str_glue("SDL_hc_costs_lookup.parquet"),
@@ -161,7 +161,7 @@ get_sdl_hc_costs_path <- function(...){
 #' SDL GP OoH Costs File Path
 #' @inherit get_combined_nsu_path
 #' @export
-get_sdl_gp_ooh_costs_path <- function(...){
+get_sdl_gp_ooh_costs_path <- function(...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = stringr::str_glue("SDL_gp_ooh_costs_lookup.parquet"),
@@ -172,7 +172,7 @@ get_sdl_gp_ooh_costs_path <- function(...){
 #' SDL DN Costs File Path
 #' @inherit get_combined_nsu_path
 #' @export
-get_sdl_dn_costs_path <- function(...){
+get_sdl_dn_costs_path <- function(...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = stringr::str_glue("SDL_dn_costs_lookup.parquet"),
@@ -183,7 +183,7 @@ get_sdl_dn_costs_path <- function(...){
 #' SDL DN Contacts File Path
 #' @inherit get_combined_nsu_path
 #' @export
-get_sdl_dn_contacts_path <- function(...){
+get_sdl_dn_contacts_path <- function(...) {
   get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
     file_name = stringr::str_glue("SDL_dn_contacts.parquet"),

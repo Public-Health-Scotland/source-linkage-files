@@ -18,8 +18,10 @@ dn_raw_contacts <- readr::read_csv(
   # create year variable as fy
   dplyr::mutate(year = convert_year_to_fyyear(contact_financial_year)) %>%
   # rename TreatmentNHSBoardCode
-  dplyr::rename(hb2019 = treatment_nhs_board_code_9,
-                number_of_contacts = number_of_contacts)
+  dplyr::rename(
+    hb2019 = treatment_nhs_board_code_9,
+    number_of_contacts = number_of_contacts
+  )
 
 
 ## Stage 3 - save to disk -----------
