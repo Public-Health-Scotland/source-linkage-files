@@ -6,11 +6,11 @@
 read_extract_cmh <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "cmh", BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "cmh", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -19,14 +19,19 @@ read_extract_cmh <- function(
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Read BOXI extract
+  # Read extract
   extract_cmh <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_cmh_source")
-  ) %>% # TODO: Check table name.
-    dplyr::filter(financial_year == c_year) %>% # TODO: Check year column.
+    dbplyr::in_schema("sdl", "sdl_cmh_source") # TODO: Check table name.
+  ) %>% 
+    # Filter by calendar year
+    dplyr::filter(
+      financial_year == c_year # TODO: Check year column name.
+    ) %>% 
+    # Rename variables
     dplyr::select(
       chi = "patient_chi",
       dob = "patient_dob",
@@ -46,6 +51,7 @@ read_extract_cmh <- function(
       diag4 = "other_aim_of_contact_3",
       diag5 = "other_aim_of_contact_4"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
