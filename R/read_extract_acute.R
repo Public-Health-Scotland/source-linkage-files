@@ -1,7 +1,8 @@
 #' Read Acute extract
 #'
 #' @param year Financial year for the BOXI extract.
-#' @param file_path BOXI extract location
+#' @param denodo_connect Connection to Denodo
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return a [tibble][tibble::tibble-package].
 #'
@@ -9,33 +10,33 @@
 read_extract_acute <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE),
-  BYOC_MODE
+  BYOC_MODE = BYOC_MODE
 ) {
-  # Read BOXI extract
   log_slf_event(stage = "read", status = "start", type = "acute", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "acute")) {
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  # Read Extract
+  # Read extract
   extract_acute <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_acute_source")
   ) %>%
-    # Filter to match BOXI extraction
+    # Filter by calendar year
     dplyr::filter(
       costs_financial_year == c_year,
       gls_record %in% c("Y", "N")
     ) %>%
-    # Select and rename variables
+    # Rename variables
     dplyr::select(
       costsfy = "costs_financial_year",
       case_reference_number = "case_reference_number",
@@ -106,6 +107,7 @@ read_extract_acute <- function(
       uri = "unique_record_id",
       lineno = "lineno"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
