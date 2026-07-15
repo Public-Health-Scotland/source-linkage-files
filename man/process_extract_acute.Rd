@@ -8,7 +8,6 @@ process_extract_acute(
   data,
   acute_cup_data,
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,

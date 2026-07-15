@@ -7,14 +7,15 @@
 read_extract_acute(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE),
-  BYOC_MODE
+  BYOC_MODE = BYOC_MODE
 )
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
 
-\item{file_path}{BOXI extract location}
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.

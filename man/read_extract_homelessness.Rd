@@ -14,7 +14,9 @@ read_extract_homelessness(
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
 
-\item{file_path}{BOXI extract location}
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
