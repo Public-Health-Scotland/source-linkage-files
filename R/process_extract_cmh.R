@@ -8,7 +8,10 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#'
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
+
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
@@ -81,10 +84,15 @@ process_extract_cmh <- function(data,
 
   if (write_to_disk) {
     write_file(
-      cmh_processed,
-      get_source_extract_path(year, "cmh", check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      data = cmh_processed,
+      path = get_source_extract_path(
+        year = year, 
+        type = "cmh", 
+        check_mode = "write", 
+        BYOC_MODE = BYOC_MODE
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
