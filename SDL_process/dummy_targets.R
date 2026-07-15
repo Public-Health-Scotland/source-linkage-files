@@ -131,7 +131,7 @@ list(
   # ),
 
 
-  ## Stage 2.2 year specific targets ----
+  ## Stage 2.2 year specific targets -------------------------------------------
   tar_map(
     list(year = years_to_run),
 
@@ -144,7 +144,6 @@ list(
       read_extract_acute(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year = year, type = "acute", BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
@@ -156,7 +155,6 @@ list(
       read_extract_acute_cup(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year = year, type = "acute_cup", BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
@@ -166,10 +164,9 @@ list(
       source_acute_extract,
       # Function
       process_extract_acute(
-        acute_data,
-        acute_cup_data,
+        data = acute_data,
+        acute_cup_data = acute_cup_data,
         year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
