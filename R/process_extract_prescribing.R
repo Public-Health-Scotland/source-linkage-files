@@ -8,6 +8,9 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -27,6 +30,7 @@ process_extract_prescribing <- function(data,
   year <- check_year_format(year)
 
   # Data Cleaning--------------------------------------------
+
   pis_clean <- data %>%
     slfhelper::get_chi() %>%
     # filter for chi NA
@@ -57,16 +61,21 @@ process_extract_prescribing <- function(data,
     cli::cli_warn(message = c(
       "{nrow(data) - nrow(pis_clean)} row{?s} were removed from the PIS
     extract because the CHI number was invalid",
-      "Check the raw PIS extract: {.path {get_it_prescribing_path(year)}}"
+      "Check the raw PIS extract."
     ))
   }
 
   if (write_to_disk) {
     write_file(
-      pis_clean,
-      get_source_extract_path(year, "pis", check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      data = pis_clean,
+      path = get_source_extract_path(
+        year = year,
+        type = "pis",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

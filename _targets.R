@@ -893,7 +893,6 @@ list(
       read_extract_prescribing(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_it_prescribing_path(year = year, BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
@@ -903,7 +902,7 @@ list(
       source_prescribing_extract,
       # Function
       process_extract_prescribing(
-        prescribing_data,
+        data = prescribing_data,
         year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
