@@ -5,25 +5,22 @@
 \title{Process the SLF postcode lookup}
 \usage{
 process_lookup_postcode(
-  spd_data = get_spd_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    file_path = get_spd_path(), BYOC_MODE),
-  simd_data = get_simd_data(denodo_connect = get_denodo_connection(BYOC_MODE =
-    BYOC_MODE), file_path = get_simd_path(), BYOC_MODE),
-  locality_data = get_locality_data(denodo_connect = get_denodo_connection(BYOC_MODE =
-    BYOC_MODE), file_path = get_locality_path(), BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
+  run_date_time = NA
 )
 }
 \arguments{
+\item{simd_data}{SIMD lookup.}
+
+\item{locality_data}{HSCP locality lookup.}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
-
-\item{simd_path}{Path to SIMD lookup.}
-
-\item{locality_path}{Path to locality lookup.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

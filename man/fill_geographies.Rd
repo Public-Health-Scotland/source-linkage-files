@@ -9,7 +9,7 @@ fill_geographies(
   slf_pc_lookup = read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE)),
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(BYOC_MODE = BYOC_MODE), col_select =
     c("gpprac", "cluster", "hbpraccode")),
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE
 )
 }
 \arguments{
@@ -18,6 +18,8 @@ fill_geographies(
 \item{slf_pc_lookup}{The SLF Postcode lookup}
 
 \item{slf_gpprac_lookup}{The SLF GP Practice lookup}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} of the SLF with improved

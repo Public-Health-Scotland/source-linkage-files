@@ -16,6 +16,12 @@ add_keep_population_flag(
 \item{individual_file}{individual files under processing}
 
 \item{year}{the year of individual files under processing}
+
+\item{pop_estimates}{Datazone population lookup}
+
+\item{locality_data}{HSCP locality lookup}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 A data frame with keep_population flags
