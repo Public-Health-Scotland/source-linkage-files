@@ -27,7 +27,7 @@ read_extract_homelessness <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_homelessness_source")
   ) %>%
-    # Filter variables
+    # Filter by calendar year
     dplyr::filter(
       financial_year_of_assessment <= c_year,
       is.null(financial_year_of_case_closed) |
