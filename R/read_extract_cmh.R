@@ -15,7 +15,7 @@ read_extract_cmh <- function(
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "cmh")) {
     return(tibble::tibble())
   }
 
@@ -26,11 +26,11 @@ read_extract_cmh <- function(
   extract_cmh <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_cmh_source") # TODO: Check table name.
-  ) %>% 
+  ) %>%
     # Filter by calendar year
     dplyr::filter(
       financial_year == c_year # TODO: Check year column name.
-    ) %>% 
+    ) %>%
     # Rename variables
     dplyr::select(
       chi = "patient_chi",
