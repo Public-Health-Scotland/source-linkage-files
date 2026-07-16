@@ -96,7 +96,7 @@ read_extract_mental_health <- function(
     slfhelper::get_anon_chi("chi") %>%
     # Replace NA in cost_total_net with 0
     dplyr::mutate(
-      cost_total_net = tidyr::replace_na(.data[["cost_total_net"]], 0.0)
+      cost_total_net = tidyr::replace_na(.data$cost_total_net, 0.0)
     ) %>%
     # Data type modification
     dplyr::mutate(

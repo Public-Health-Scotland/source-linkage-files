@@ -29,7 +29,7 @@ read_extract_maternity <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      costs_financial_year == c_year
+      .data$costs_financial_year == c_year
     ) %>%
     # Rename variables
     dplyr::select(

@@ -65,7 +65,7 @@ read_lookup_ltc <- function(
 
   # Get anonymous CHI
   ltc_file <- ltc_file %>%
-    slfhelper::get_anon_chi()
+    slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "ltc", year = "all")
 

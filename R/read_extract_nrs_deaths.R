@@ -29,7 +29,7 @@ read_extract_nrs_deaths <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      date_of_death_financial_year == c_year
+      .data$date_of_death_financial_year == c_year
     ) %>%
     # Rename variables
     dplyr::select(
