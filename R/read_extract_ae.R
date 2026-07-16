@@ -7,7 +7,6 @@
 read_extract_ae <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "ae", BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "ae", year = year)
@@ -16,7 +15,7 @@ read_extract_ae <- function(
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "ae")) {
     return(tibble::tibble())
   }
 

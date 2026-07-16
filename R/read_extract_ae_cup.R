@@ -6,14 +6,15 @@
 read_extract_ae_cup <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year = year, type = "ae_cup", BYOC_MODE),
-  BYOC_MODE = FALSE
+  BYOC_MODE
 ) {
+  log_slf_event(stage = "read", status = "start", type = "ae_cup", year = year)
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "ae")) {
     return(tibble::tibble())
   }
 
@@ -42,6 +43,8 @@ read_extract_ae_cup <- function(
       keytime1 = hms::as_hms(paste0(.data$keytime1, ":00")),
       keytime2 = hms::as_hms(paste0(.data$keytime2, ":00"))
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "ae_cup", year = year)
 
   return(ae_cup_file)
 }
