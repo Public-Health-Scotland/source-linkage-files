@@ -29,7 +29,7 @@ read_extract_cmh <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      financial_year == c_year # TODO: Check year column name.
+      .data$financial_year == c_year # TODO: Check year column name.
     ) %>%
     # Rename variables
     dplyr::select(
