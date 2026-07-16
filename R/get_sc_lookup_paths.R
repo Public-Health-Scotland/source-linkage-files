@@ -40,7 +40,7 @@ get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_sc_client_lookup_path <- function(year, update = latest_update(), BYOC_MODE, ...) {
   if (!check_year_valid(year, type = "client")) {
-    return(get_dummy_boxi_extract_path(BYOC_MODE))
+    return(get_dummy_boxi_extract_path())
   } else {
     if (isTRUE(BYOC_MODE)) {
       sc_client_lookup_path <- file.path(

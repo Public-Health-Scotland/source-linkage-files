@@ -178,14 +178,14 @@ list(
     #   )
     # )
     #
-    ### Social Care Client Activity-----
+    ### Social Care Client Activity --------------------------------------------
     # READ - Client data
     tar_target(
       # Target name
       sc_client_data,
       # Function
       read_lookup_sc_client(
-        fyyear = year,
+        year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )

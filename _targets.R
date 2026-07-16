@@ -906,7 +906,7 @@ list(
       sc_client_data,
       # Function
       read_lookup_sc_client(
-        fyyear = year,
+        year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
