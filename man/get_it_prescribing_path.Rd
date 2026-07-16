@@ -4,7 +4,7 @@
 \alias{get_it_prescribing_path}
 \title{IT Prescribing File Path}
 \usage{
-get_it_prescribing_path(year, it_reference = NULL, BYOC_MODE, ...)
+get_it_prescribing_path(year, it_reference = NULL, ...)
 }
 \arguments{
 \item{year}{the year for the required extract}
