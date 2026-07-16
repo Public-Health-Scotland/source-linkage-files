@@ -10,7 +10,7 @@
 read_extract_acute <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "acute", year = year)
 
@@ -33,8 +33,8 @@ read_extract_acute <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      costs_financial_year == c_year,
-      gls_record %in% c("Y", "N")
+      .data$costs_financial_year == c_year,
+      .data$gls_record %in% c("Y", "N")
     ) %>%
     # Rename variables
     dplyr::select(

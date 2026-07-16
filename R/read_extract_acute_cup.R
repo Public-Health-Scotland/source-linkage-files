@@ -3,11 +3,10 @@
 #' @inherit read_extract_acute
 #'
 #' @export
-#'
 read_extract_acute_cup <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "acute_cup", year = year)
 
@@ -30,8 +29,8 @@ read_extract_acute_cup <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      acute_admission_financial_year >= c_year,
-      acute_discharge_financial_year <= c_year
+      .data$acute_admission_financial_year >= c_year,
+      .data$acute_discharge_financial_year <= c_year
     ) %>%
     # Rename variables
     dplyr::select(
