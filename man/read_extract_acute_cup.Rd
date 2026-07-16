@@ -7,7 +7,7 @@
 read_extract_acute_cup(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE
 )
 }
 \arguments{
