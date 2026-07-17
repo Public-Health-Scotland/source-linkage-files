@@ -125,7 +125,7 @@ add_nsu_cohort <- function(
 }
 
 
-#' get nsu data from Denodo or sourcedev/nsu
+#' get nsu data from Denodo
 #'
 #' @param year financial year
 #' @param BYOC_MODE
@@ -134,36 +134,39 @@ add_nsu_cohort <- function(
 #' @export
 #'
 #' @examples
-get_nsu_data <- function(year, BYOC_MODE) {
+get_nsu_data <- function(year,
+                         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                         BYOC_MODE) {
+  log_slf_event(stage = "read", status = "start", type = "nsu", year = year)
+
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
-  if (isTRUE(BYOC_MODE)) {
-    denodo_connect <- get_denodo_connection(BYOC_MODE = BYOC_MODE)
-
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE),
-      add = TRUE
-    )
-
-    nsu_data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_nsu_source") # TODO: finalise this sdl view
-    ) %>%
-      dplyr::filter(costs_financial_year == c_year) %>%
-      dplyr::select(
-        "year",
-        "anon_chi",
-        "recid",
-        "smrtype",
-        "postcode",
-        "gpprac",
-        "dob",
-        "gender"
-      ) %>%
-      dplyr::collect()
-  } else {
-    nsu_data <- read_file(get_nsu_path(year))
+  # Specify years available for running
+  if (!check_year_valid(year, type = "nsu")) {
+    return(tibble::tibble())
   }
+
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  nsu_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_nsu_source") #TO-DO: come back to fix variable names and selection
+    ) %>%
+    dplyr::filter(financial_year == c_year) %>%
+    dplyr::select(
+      year = "financial_year",
+      anon_chi = "patient_chi",
+      "recid", #TO-DO: come back to fix variable names and selection
+      "smrtype", #TO-DO: come back to fix variable names and selection
+      postcode = "patient_postcode",
+      gpprac = "gpprac",
+      dob = "patient_dob",
+      gender = "patient_sex"
+    ) %>%
+    dplyr::collect()
+
+  log_slf_event(stage = "read", status = "complete", type = "nsu", year = year)
 
   return(nsu_data)
 }
