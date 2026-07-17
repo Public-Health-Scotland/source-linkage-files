@@ -31,7 +31,7 @@ get_byoc_output_files <- function(year,
     "pis",
     "sds"
   )
-  non_year_specific_types <- c("chi_deaths", "combined_deaths")
+  non_year_specific_types <- c("chi_deaths", "combined_deaths", "dn_costs")
   all_types <- c(year_specific_types, non_year_specific_types)
 
   # if types not supplied, use all types
@@ -88,7 +88,8 @@ get_byoc_output_files <- function(year,
   non_year_specific_files <- dplyr::recode_values(
     non_year_specific_types,
     "chi_deaths" ~ "anon-chi_deaths.parquet",
-    "combined_deaths" ~ "anon-combined_slf_deaths_lookup.parquet"
+    "combined_deaths" ~ "anon-combined_slf_deaths_lookup.parquet",
+    "dn_costs" ~ "district_nursing_costs_lookup.parquet"
   )
   non_year_specific_files <- file.path(base_path, non_year_specific_files)
 
