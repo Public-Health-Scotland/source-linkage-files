@@ -2,15 +2,17 @@
 % Please edit documentation in R/add_nsu_cohort.R
 \name{get_nsu_data}
 \alias{get_nsu_data}
-\title{get nsu data from Denodo or sourcedev/nsu}
+\title{get nsu data from Denodo}
 \usage{
-get_nsu_data(year, BYOC_MODE)
+get_nsu_data(
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{year}{financial year}
-
-\item{BYOC_MODE}{}
 }
 \description{
-get nsu data from Denodo or sourcedev/nsu
+get nsu data from Denodo
 }

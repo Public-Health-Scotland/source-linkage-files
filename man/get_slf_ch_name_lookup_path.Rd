@@ -21,11 +21,11 @@ has official Care Home names and addresses provided by the Care Inspectorate.
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other slf lookup file path: 
-\code{\link{get_combined_slf_deaths_lookup_path}()},
-\code{\link{get_slf_chi_deaths_path}()},
-\code{\link{get_slf_deaths_lookup_path}()},
-\code{\link{get_slf_gpprac_path}()},
-\code{\link{get_slf_postcode_path}()}
+Other slf lookup file path:
+\code{\link[=get_combined_slf_deaths_lookup_path]{get_combined_slf_deaths_lookup_path()}},
+\code{\link[=get_slf_chi_deaths_path]{get_slf_chi_deaths_path()}},
+\code{\link[=get_slf_deaths_lookup_path]{get_slf_deaths_lookup_path()}},
+\code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}},
+\code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
 }
 \concept{slf lookup file path}
