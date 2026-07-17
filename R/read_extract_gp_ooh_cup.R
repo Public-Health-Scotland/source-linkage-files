@@ -6,13 +6,15 @@
 read_extract_gp_ooh_cup <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE
+  BYOC_MODE
 ) {
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh_cup", year = year)
+
+  year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(check_year_format(year))
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "gpooh")) {
     return(tibble::tibble())
   }
 
@@ -38,6 +40,7 @@ read_extract_gp_ooh_cup <- function(
     # TODO: remove modifying time format after UAT
     dplyr::mutate(keytime1 = hms::as_hms(as.difftime(keytime1, format = "%M:%S")))
 
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh_cup", year = year)
 
   return(gp_ooh_cup)
 }
