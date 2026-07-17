@@ -10,7 +10,7 @@ read_extract_delayed_discharges(
 )
 }
 \arguments{
-\item{file_path}{Path to DD extract}
+\item{denodo_connect}{Connection to denodo database}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
