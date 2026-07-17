@@ -95,14 +95,14 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' Populations File Path for different types
+#' Populations File Path for different types - LOCAL ONLY
 #'
-#' @description Get the path to the populations estimates
+#' @description Get the path to the populations estimates - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #' @param type population type datazone, or hscp, or ca, or hb, or interzone
 #'
-#' @return An [fs::path()] to the populations estimates file
+#' @return An [fs::path()] to the populations estimates local file
 #' @export
 #'
 #' @family lookup file paths
@@ -143,44 +143,49 @@ get_pop_path <- function(file_name = NULL,
 #' @description Return the data for HSCP population estimates.
 #'
 #' @param denodo_connect Connection to denodo
-#' @param file_path Path to local HSCP population file
 #' @param BYOC_MODE BYOC MODE
 #'
 #' @return a [tibble][tibble::tibble-package].
 #' @export
 #'
 #' @family lookup files
-get_hscp_pop_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                              file_path = get_pop_path(type = "hscp"),
-                              BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    log_slf_event(stage = "read", status = "start", type = "hscp_pop_lookup", year = "all")
+get_hscp_pop_data <- function(
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
+) {
+  log_slf_event(stage = "read", status = "start", type = "hscp_pop_lookup", year = "all")
 
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-    hscp_pop_data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_hscp_population_source") # TODO: Check table name, column names/data types and whether we need to select columns.
-      ) %>%
-      # Select only the HSCPs for NHS Highland & years since 2015
-      dplyr::filter(
-        hscp2019 %in% c("S37000004", "S37000016"),
-        year >= 2015L
-      ) %>%
-      dplyr::collect()
+  # Read data
+  hscp_pop_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_hscp_population_source")
+  ) %>%
+    # Select only the HSCPs for NHS Highland & years since 2015
+    dplyr::filter(
+      hscp2019 %in% c("S37000004", "S37000016"),
+      year >= 2015L
+    ) %>%
+    # Rename variables
+    dplyr::select(
+      year = "year",
+      hscp2019 = "hscp2019",
+      hscp2019_name = "hscp2019_name",
+      hscp2018 = "hscp2018",
+      hscp2016 = "hscp2016",
+      age = "age",
+      sex = "sex",
+      sex_name = "sex_name",
+      pop = "pop"
+    ) %>%
+    # Collect
+    dplyr::collect()
 
-    log_slf_event(stage = "read", status = "complete", type = "hscp_pop_lookup", year = "all")
-  } else {
+  log_slf_event(stage = "read", status = "complete", type = "hscp_pop_lookup", year = "all")
 
-    hscp_pop_data <- createslf::read_file(file_path) %>%
-      dplyr::filter(
-        hscp2019 %in% c("S37000004", "S37000016"),
-        year >= 2015L
-      )
-
-  }
-
-  return(hscp_pop_data) # TODO: Check output is the same when BYOC_MODE is TRUE and FALSE
+  return(hscp_pop_data)
 }
 
 
