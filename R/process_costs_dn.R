@@ -1,15 +1,23 @@
 #' Process costs - District Nursing
 #'
-#' @param denodo_connect connection to denodo
+#' @description This will read and process the
+#' District Nursing costs look up, it will return the final costs look up
+#' and (optionally) write it to disk.
+#'
+#' @param dn_raw_costs Raw district nursing costs data
+#' @param dn_contacts District nursing contacts data
+#' @param hscp_population HSCP population look up data
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
 #'
+#' @return the final look up as a [tibble][tibble::tibble-package].
 #' @export
-#'
-
+#' @family process cost look ups
 process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
-                             dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
+                             dn_contacts = get_dn_contacts_data(BYOC_MODE = BYOC_MODE),
                              hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
                              write_to_disk = TRUE,
                              BYOC_MODE = FALSE,
@@ -17,57 +25,57 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
                              run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "dn_cost_lookup", year = year)
 
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # latest year #
+  # Define latest year
   latest_year <- check_year_format("1920")
 
   # Join costs and contacts -------------------------------------
-  dn_raw_costs_contacts <- left_join(dn_raw_contacts,
+
+  dn_raw_costs_contacts <- dplyr::left_join(
+    dn_contacts %>%
+      dplyr::mutate(year = convert_year_to_fyyear(contact_financial_year)),
     dn_raw_costs,
     by = c("hb2019", "year")
   )
 
-  # Deal with population cost -------------------------------------
+  # Process population data -------------------------------------
 
-  ## Calculate population cost for NHS Highland with HSCP population ratio. ##
+  # Calculate population cost for NHS Highland with HSCP population ratio.
   # Of the two HSCPs, Argyll and Bute provides the
   # District Nursing data which is 27% of the population.
   population_lookup <- hscp_population %>%
-    # Create year as FY = YYYY from CCYY.
+    # Create year as FY = YYYY from CCYY
     rename(calendar_year = year) %>%
     mutate(year = convert_year_to_fyyear(calendar_year)) %>%
     group_by(year, hscp2019name) %>%
     summarise(pop = sum(pop)) %>%
     mutate(total_pop = sum(pop)) %>%
     ungroup() %>%
-    # add Health Board code
+    # Add Health Board code
     mutate(hb2019 = "S08000022") %>%
-    ## compute proportion ##
+    # Compute proportion
     mutate(
       pop_proportion = pop / total_pop,
       pop_pct = pop_proportion * 100.0
     ) %>%
-    ## Argyll and Bute is the only HSCP in NHS Highland that submits data ##
+    # Argyll and Bute is the only HSCP in NHS Highland that submits data
     filter(hscp2019name == "Argyll and Bute")
 
-  # Join files -------------------------------------------
+  # Join population data -------------------------------------------
 
-  ## match files ##
-
+  # Match files
   matched_data <- full_join(dn_raw_costs_contacts,
     population_lookup,
     by = c("hb2019", "year")
   ) %>%
-    # recode NA pop_proportion with 1
+    # Recode NA pop_proportion with 1
     mutate(pop_proportion = replace_na(pop_proportion, 1)) %>%
-    ## total net cost ##
+    # Total net cost
     mutate(
       cost_total_net = ((cost * 1000) / (number_of_contacts / pop_proportion))
     ) %>%
-    # sort by HB2019 and year
+    # Sort by HB2019 and year
     arrange(hb2019, year) %>%
-    # keep only records with cost
+    # Keep only records with cost
     filter(!is.na(cost_total_net))
 
   # Fix incomplete submissions ------------------------------------------
@@ -76,8 +84,7 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
   # affect the cost so use the previous year
   # until we have a complete submission
 
-  ## explore the trends
-
+  # Explore the trends
   matched_data <-
     matched_data %>%
     group_by(board_name) %>%
@@ -87,7 +94,7 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
 
   # Deal with costs ------------------------------------------
 
-  ## costs with pct_of_max < 75 - uplift ##
+  # Costs with pct_of_max < 75 - uplift
   uplift_data <-
     matched_data %>%
     mutate(cost_total_net = replace(cost_total_net, pct_of_max < 75, NA)) %>%
@@ -103,8 +110,7 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
 
   uplift_data <- ungroup(uplift_data)
 
-  ## Add in years by copying the most recent year we have ##
-
+  # Add in years by copying the most recent year we have
   new_years_data <-
     bind_rows(
       uplift_data,
@@ -126,7 +132,8 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
     select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
     arrange(hbtreatcode, year)
 
-  ## save outfile ---------------------------------------
+  # Save outfile ---------------------------------------
+
   outfile <-
     new_years_data %>%
     select(
@@ -142,8 +149,11 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
 
   if (write_to_disk) {
     write_file(
-      outfile,
-      get_dn_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
+      data = outfile,
+      path = get_dn_costs_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
       group_id = 3206, # hscdiip owner
       BYOC_MODE = BYOC_MODE
     )
