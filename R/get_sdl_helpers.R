@@ -22,7 +22,13 @@ get_sdl_raw_names <- function(type) {
     "ae_cup" ~ "sdl_ae_ucd_cup_source",
 
     # costs
-    "ooh_cost" ~ "sdl_ooh_cost_lookup_source",
+    "ch_cost" ~ "sdl_carehomecostopendata_source",
+    "dn_cost" ~ "sdl_dn_cost_lookup_source",
+    "hc_cost" ~ "sdl_hc_cost_lookup_source",
+    "ooh_costs" ~ "sdl_ooh_cost_lookup_source",
+
+    # cmh
+    "cmh" ~ "sdl_cmh_source",
 
     # deaths
     "chi_deaths" ~ "sdl_chi_deaths_source",
@@ -31,54 +37,56 @@ get_sdl_raw_names <- function(type) {
     # delayed discharges
     "dd" ~ "sdl_dd_source",
 
-    # gp ooh
+    # district nursing
+    "dn" ~ "sdl_dn_source",
+    "dn_contacts" ~ "sdl_dn_contacts_source",
+
+    # gp out of hours
     "gp_ooh_consultation" ~ "sdl_gp_ooh_consultation_source",
     "gp_ooh_cup" ~ "sdl_gp_ooh_cup_source",
     "gp_ooh_diagnosis" ~ "sdl_gp_ooh_diagnosis_source",
     "gp_ooh_outcome" ~ "sdl_gp_ooh_outcome_source",
+
+    # lookups
+    "dz_pop" ~ "sdl_datazone_population_source",
     "readcode" ~ "sdl_read_code_lookup_source",
+    "gpprac" ~ "sdl_gpprac_lookup_source",
+    "hscp_localities" ~ "sdl_hscp_localities_source",
+    "hscp_pop" ~ "sdl_hscp_population_source",
+    "ia_lookup" ~ "sdl_iaopendatalookup_source",
+    "simd" ~ "sdl_simd_source",
+    "spd" ~ "sdl_spd_source",
 
     # homelessness
     "homelessness" ~ "sdl_homelessness_source",
     "homelessness_completeness" ~ "sdl_homelessness_completeness_source",
 
+    # hhg
+    "hhg" ~ "sdl_hhg_source",
+
     # long term conditions - ltc
     "ltc" ~ "sdl_long_term_condition_source",
-
-    # lookup
-    "simd" ~ "sdl_simd_source",
-    "spd" ~ "sdl_spd_source",
 
     # maternity
     "maternity" ~ "sdl_maternity_episode_source",
 
-    # mental health - mh
+    # mental health
     "mh" ~ "sdl_mental_health_episode_source",
+
+    # nsu
+    "nsu" ~ "sdl_nsu_source",
 
     # outpatients
     "outpatients" ~ "sdl_outpatients_source",
 
-    # social care datasets
+    # social care
     "at" ~ "sdl_sc_alarmtelecare_source",
     "hc" ~ "sdl_sc_homecare_source",
     "sc_demog" ~ "sdl_sc_demographic_source",
     "sds" ~ "sdl_sc_sds_source",
 
     # sparra
-    "sparra" ~ "sdl_sparra_source",
-
-    # ---- DUMMY TABLES (to be updated later) ----
-    "care_home_lookup" ~ "sdl_care_home_lookup_source",
-    "ch" ~ "",
-    "ch_cost_lookup" ~ "sdl_ch_cost_source",
-    "client" ~ "sdl_client_information_source",
-    "cmh" ~ "sdl_cmh_source",
-    "dn" ~ "sdl_district_nursing_source",
-    "dn_cost_lookup" ~ "sdl_dn_cost_source",
-    "gpprac_lookup" ~ "sdl_gp_practice_lookup_source",
-    "hc_cost_lookup" ~ "sdl_hc_cost_source",
-    "hhg" ~ "sdl_hhg_source",
-    "pis" ~ "sdl_prescribing_source"
+    "sparra" ~ "sdl_sparra_source"
   )
 
   if (is.na(sdl_name)) {
