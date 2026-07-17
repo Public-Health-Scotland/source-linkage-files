@@ -69,7 +69,6 @@ get_sparra_data <- function(year,
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  if (isTRUE(BYOC_MODE)) {
     extract_sparra <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_sparra_source")
@@ -78,8 +77,6 @@ get_sparra_data <- function(year,
       # 01-04-2025 relates to financial year 2025/26.
       dplyr::filter(risk_financial_year == c_year) %>%
       dplyr::collect()
-  } else {
-    extract_sparra <- read_file(get_sparra_path(year))
-  }
+
   return(extract_sparra)
 }
