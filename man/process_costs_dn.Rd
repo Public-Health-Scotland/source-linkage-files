@@ -5,20 +5,23 @@
 \title{Process costs - District Nursing}
 \usage{
 process_costs_dn(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
+  dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
+  hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA
 )
 }
 \arguments{
-\item{denodo_connect}{connection to denodo}
-
 \item{BYOC_MODE}{BYOC_MODE}
 
 \item{run_id}{Denodo identifier}
 
 \item{run_date_time}{Denodo identifier}
+
+\item{denodo_connect}{connection to denodo}
 }
 \description{
 Process costs - District Nursing
