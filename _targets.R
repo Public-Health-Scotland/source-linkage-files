@@ -232,21 +232,51 @@ list(
     process_costs_ch_rmd(),
     priority = 0.8
   ),
-  # District nursing costs------
+  ### District Nursing Costs ---------------------------------------------------
+  # READ - DN RAW COSTS
+  tar_target(
+    # Target name
+    dn_raw_costs,
+    # Function
+    get_dn_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - DN CONTACTS
+  tar_target(
+    # Target name
+    dn_contacts,
+    # Function
+    get_dn_contacts_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - HSCP POPULATION
+  tar_target(
+    # Target name
+    hscp_population,
+    # Function
+    get_hscp_pop_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - DN COSTS
   tar_target(
     # Target name
     dn_cost_lookup,
     # Function
     process_costs_dn(
-      dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
-      dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
-      hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
+      dn_raw_costs = dn_raw_costs,
+      dn_contacts = dn_contacts,
+      hscp_population = hscp_population,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
-    ),
-    priority = 0.8
+    )
   ),
   # Home care costs------
   tar_target(

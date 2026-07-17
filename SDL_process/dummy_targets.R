@@ -80,6 +80,55 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
+  ## Stage 2.1: Lookups ----
+
+  ### District Nursing Costs ---------------------------------------------------
+  # READ - DN RAW COSTS
+  tar_target(
+    # Target name
+    dn_raw_costs,
+    # Function
+    get_dn_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - DN CONTACTS
+  tar_target(
+    # Target name
+    dn_contacts,
+    # Function
+    get_dn_contacts_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - HSCP POPULATION
+  tar_target(
+    # Target name
+    hscp_population,
+    # Function
+    get_hscp_pop_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - DN COSTS
+  tar_target(
+    # Target name
+    dn_cost_lookup,
+    # Function
+    process_costs_dn(
+      dn_raw_costs = dn_raw_costs,
+      dn_contacts = dn_contacts,
+      hscp_population = hscp_population,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
+
   ## Stage 2.1 non-specific targets ----
 
   ### IT CHI deaths Activity ----
@@ -130,22 +179,6 @@ list(
   #   )
   # ),
 
-  ### District nursing costs------
-  tar_target(
-    # Target name
-    dn_cost_lookup,
-    # Function
-    process_costs_dn(
-      dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
-      dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
-      hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    ),
-    priority = 0.8
-  ),
 
   ## Stage 2.2 year specific targets ----
   tar_map(
@@ -231,7 +264,7 @@ list(
     #   )
     # ),
 
-    ### District Nursing Activity----
+    ### District Nursing Activity ----------------------------------------------
     # READ - District Nursing
     tar_target(
       # Target name
@@ -240,7 +273,6 @@ list(
       read_extract_district_nursing(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year = year, type = "dn", BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
@@ -250,7 +282,7 @@ list(
       source_dn_extract,
       # Function
       process_extract_district_nursing(
-        dn_data,
+        data = dn_data,
         year = year,
         costs = dn_cost_lookup,
         write_to_disk = write_to_disk,
