@@ -8,7 +8,7 @@ process_extract_gp_ooh(
   year,
   data_list,
   gp_ooh_cup = read_extract_gp_ooh_cup(year = year, denodo_connect =
-    get_denodo_connection(BYOC_MODE = BYOC_MODE)),
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
