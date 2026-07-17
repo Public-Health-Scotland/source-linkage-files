@@ -6,14 +6,11 @@
 \usage{
 get_dn_raw_costs_data(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_dn_raw_costs_path(),
   BYOC_MODE
 )
 }
 \arguments{
 \item{denodo_connect}{Connection to denodo}
-
-\item{file_path}{Path to local District Nursing raw costs file}
 
 \item{BYOC_MODE}{BYOC MODE}
 }

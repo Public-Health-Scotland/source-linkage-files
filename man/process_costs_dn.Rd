@@ -6,7 +6,7 @@
 \usage{
 process_costs_dn(
   dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BYOC_MODE),
-  dn_raw_contacts = get_dn_raw_contacts_data(BYOC_MODE = BYOC_MODE),
+  dn_contacts = get_dn_contacts_data(BYOC_MODE = BYOC_MODE),
   hscp_population = get_hscp_pop_data(BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
@@ -15,14 +15,27 @@ process_costs_dn(
 )
 }
 \arguments{
+\item{dn_raw_costs}{Raw district nursing costs data}
+
+\item{dn_contacts}{District nursing contacts data}
+
+\item{hscp_population}{HSCP population look up data}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+
 \item{BYOC_MODE}{BYOC_MODE}
 
 \item{run_id}{Denodo identifier}
 
 \item{run_date_time}{Denodo identifier}
-
-\item{denodo_connect}{connection to denodo}
+}
+\value{
+the final look up as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-Process costs - District Nursing
+This will read and process the
+District Nursing costs look up, it will return the final costs look up
+and (optionally) write it to disk.
 }
+\concept{process cost look ups}

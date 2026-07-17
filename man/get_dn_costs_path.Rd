@@ -2,20 +2,18 @@
 % Please edit documentation in R/get_costs_paths.R
 \name{get_dn_costs_path}
 \alias{get_dn_costs_path}
-\title{District Nursing Costs File Path}
+\title{Processed District Nursing Costs File Path}
 \usage{
-get_dn_costs_path(BYOC_MODE, ..., update = NULL)
+get_dn_costs_path(BYOC_MODE, ...)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
-
-\item{update}{passed through \code{\link[=latest_update]{latest_update()}}}
 }
 \value{
-The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
+The path to the processed costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full District Nursing costs lookup path
+Get the processed District Nursing costs path
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_costs_paths.R
 \name{get_dn_raw_costs_path}
 \alias{get_dn_raw_costs_path}
-\title{Raw District Nursing Costs File Path}
+\title{Raw District Nursing Costs File Path - LOCAL ONLY}
 \usage{
 get_dn_raw_costs_path(...)
 }
@@ -10,10 +10,10 @@ get_dn_raw_costs_path(...)
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
+The path to the local raw costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the District Nursing raw costs path
+Get the raw District Nursing costs path - LOCAL ONLY
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.

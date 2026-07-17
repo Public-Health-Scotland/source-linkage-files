@@ -6,14 +6,11 @@
 \usage{
 get_hscp_pop_data(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_pop_path(type = "hscp"),
   BYOC_MODE
 )
 }
 \arguments{
 \item{denodo_connect}{Connection to denodo}
-
-\item{file_path}{Path to local HSCP population file}
 
 \item{BYOC_MODE}{BYOC MODE}
 }

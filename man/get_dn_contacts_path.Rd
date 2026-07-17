@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_costs_paths.R
 \name{get_dn_contacts_path}
 \alias{get_dn_contacts_path}
-\title{District Nursing Contacts File Path}
+\title{District Nursing Contacts File Path - LOCAL ONLY}
 \usage{
 get_dn_contacts_path(...)
 }
@@ -10,10 +10,10 @@ get_dn_contacts_path(...)
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the contacts lookup as an \code{\link[fs:path]{fs::path()}}
+The path to the local contacts lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the District Nursing contacts path
+Get the District Nursing contacts path - LOCAL ONLY
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
