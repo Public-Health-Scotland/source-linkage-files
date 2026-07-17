@@ -12,13 +12,13 @@ get_lookups_dir <- function() {
 }
 
 
-#' Locality File Path
+#' Locality File Path - LOCAL ONLY
 #'
-#' @description Get the path to the centrally held HSCP Localities file.
+#' @description Get the path to the centrally held HSCP Localities file - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the HSCP Localities file
+#' @return An [fs::path()] to the local HSCP Localities file
 #' @export
 #'
 #' @family lookup file paths
@@ -60,13 +60,13 @@ get_locality_data <- function(
   # Read data
   locality_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_hscp_locality_source") # TODO: Check table name
+    dbplyr::in_schema("sdl", "sdl_hscp_localities_source")
   ) %>%
     # Rename variables
     dplyr::select(
       locality = "hscp_locality",
-      tidyselect::matches("datazone\\d{4}$")
-    ) %>% # TODO: Check column names
+      datazone2011 = "datazone2011",
+    ) %>%
     # Collect
     dplyr::collect()
 
@@ -106,14 +106,14 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' SIMD File Path
+#' SIMD File Path - LOCAL ONLY
 #'
-#' @description Get the path to the centrally held Scottish Index of Multiple
+#' @description Get the path to the centrally held Scottish Index of Multiple - LOCAL ONLY
 #' Deprivation (SIMD) file.
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the SIMD file
+#' @return An [fs::path()] to the local SIMD file
 #' @export
 #'
 #' @family lookup file paths
@@ -158,20 +158,20 @@ get_simd_data <- function(
   # Read data
   simd_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_simd_source") # TODO: Check table name
+    dbplyr::in_schema("sdl", "sdl_simd_source")
   ) %>%
     # Rename variables
     # When a new version of the SIMD is released, the column names within the file will change.
     dplyr::select(
-      "pc7",
-      "simd2020v2_rank",
-      "simd2020v2_sc_decile",
-      "simd2020v2_sc_quintile",
-      "simd2020v2_hb2019_decile",
-      "simd2020v2_hb2019_quintile",
-      "simd2020v2_hscp2019_decile",
-      "simd2020v2_hscp2019_quintile"
-    ) %>% # TODO: Check column names.
+      pc7 = "pc7",
+      simd2020v2_rank = "simd2020v2_rank",
+      simd2020v2_sc_decile = "simd2020v2_sc_decile",
+      simd2020v2_sc_quintile = "simd2020v2_sc_quintile",
+      simd2020v2_hb2019_decile = "simd2020v2_hb2019_decile",
+      simd2020v2_hb2019_quintile = "simd2020v2_hb2019_quintile",
+      simd2020v2_hscp2019_decile = "simd2020v2_hscp2019_decile",
+      simd2020v2_hscp2019_quintile = "simd2020v2_hscp2019_quintile"
+    ) %>%
     # Collect
     dplyr::collect()
 
@@ -181,14 +181,14 @@ get_simd_data <- function(
 }
 
 
-#' Populations File Path for different types
+#' Populations File Path for different types - LOCAL ONLY
 #'
-#' @description Get the path to the populations estimates
+#' @description Get the path to the populations estimates - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #' @param type population type datazone, or hscp, or ca, or hb, or interzone
 #'
-#' @return An [fs::path()] to the populations estimates file
+#' @return An [fs::path()] to the local populations estimates file
 #' @export
 #'
 #' @family lookup file paths
@@ -247,15 +247,15 @@ get_datazone_pop_data <- function(
   # Read data
   datazone_pop_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_datazone_population_source") # TODO: Check table name
+    dbplyr::in_schema("sdl", "sdl_datazone_population_source")
   ) %>%
     # Rename variables
     dplyr::select(
-      "year",
-      "datazone2011",
-      "sex",
+      year = "year",
+      datazone2011 = "datazone2011",
+      sex = "sex",
       dplyr::starts_with("age")
-    ) %>% # TODO: Check column names.
+    ) %>%
     # Collect
     dplyr::collect()
 
