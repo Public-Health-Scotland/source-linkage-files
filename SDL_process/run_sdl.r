@@ -92,7 +92,7 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    "dn"
+    "dn", "dn_costs"
   )
 )
 # using homelessness for test purpose. When development is complete,
