@@ -562,7 +562,6 @@ list(
       # Function
       read_extract_delayed_discharges(
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_dd_path(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),

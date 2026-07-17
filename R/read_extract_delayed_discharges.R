@@ -1,6 +1,6 @@
 #' Read Delayed Discharges extract
 #'
-#' @param file_path Path to DD extract
+#' @param denodo_connect Connection to denodo database
 #'
 #' @return a [tibble][tibble::tibble-package].
 #' @export
