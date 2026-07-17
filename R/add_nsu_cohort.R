@@ -151,14 +151,14 @@ get_nsu_data <- function(year,
 
   nsu_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_nsu_source") #TO-DO: come back to fix variable names and selection
-    ) %>%
+    dbplyr::in_schema("sdl", "sdl_nsu_source") # TO-DO: come back to fix variable names and selection
+  ) %>%
     dplyr::filter(financial_year == c_year) %>%
     dplyr::select(
       year = "financial_year",
       anon_chi = "patient_chi",
-      "recid", #TO-DO: come back to fix variable names and selection
-      "smrtype", #TO-DO: come back to fix variable names and selection
+      "recid", # TO-DO: come back to fix variable names and selection
+      "smrtype", # TO-DO: come back to fix variable names and selection
       postcode = "patient_postcode",
       gpprac = "gpprac",
       dob = "patient_dob",
