@@ -22,7 +22,6 @@ Get the full District Nursing costs lookup path
 
 Other costs lookup file paths:
 \code{\link[=get_ch_costs_path]{get_ch_costs_path()}},
-\code{\link[=get_dn_contacts_path]{get_dn_contacts_path()}},
 \code{\link[=get_dn_raw_costs_path]{get_dn_raw_costs_path()}},
 \code{\link[=get_gp_ooh_costs_path]{get_gp_ooh_costs_path()}},
 \code{\link[=get_gp_ooh_raw_costs_path]{get_gp_ooh_raw_costs_path()}},
