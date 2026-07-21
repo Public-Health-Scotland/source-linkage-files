@@ -67,6 +67,16 @@ get_dn_raw_costs_pivoted_path <- function(...) {
   return(dn_raw_costs_path)
 }
 
+# Path to the dn_contacts file
+get_dn_contacts_path <- function(...) {
+  dn_contacts_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = stringr::str_glue("DN-Contacts-Numbers-for-Costs.csv"),
+    ...
+  )
+  return(dn_contacts_path)
+}
+
 ## Main function to create test output.
 create_uat_output <- function(dataset_name, boxi_data, sdl_data, denodo_vars) {
   # Create a tibble containing info on boxi cols
