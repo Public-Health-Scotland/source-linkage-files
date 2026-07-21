@@ -17,4 +17,3 @@ get_dn_contacts_path <- function(...) {
 
   return(dn_contacts_path)
 }
-
