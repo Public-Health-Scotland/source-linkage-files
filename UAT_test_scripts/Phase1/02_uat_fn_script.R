@@ -7,7 +7,7 @@ sdl_data <- as_tibble(dbGetQuery(
 # Read boxi data
 if (isTRUE(year_specific) && isFALSE(type_specific)) {
   boxi_data <- get(fn_name)(year = "1920")
-} else if (isFALSE(year_specific) && isTRUE(type_specific)){
+} else if (isFALSE(year_specific) && isTRUE(type_specific)) {
   boxi_data <- get(fn_name)(type = type_name)
 } else if (isTRUE(year_specific) && isTRUE(type_specific)) {
   boxi_data <- get(fn_name)(year = "1920", type = type_name)
