@@ -40,6 +40,8 @@ create_episode_file(
 \code{TRUE} i.e. write the data to disk.}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
+
+\item{BYOC_MODE}{BYOC mode}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file

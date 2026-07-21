@@ -50,7 +50,7 @@ appropriate permissions.
 }
 \seealso{
 Other file path functions:
-\code{\link[=get_byoc_intermediate_path]{get_byoc_intermediate_path()}},
+\code{\link{.byoc_dataset_registry}},
 \code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
 \code{\link[=get_dd_path]{get_dd_path()}},
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
