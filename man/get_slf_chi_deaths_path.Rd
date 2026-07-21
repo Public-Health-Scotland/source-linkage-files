@@ -4,7 +4,7 @@
 \alias{get_slf_chi_deaths_path}
 \title{SLF CHI Deaths File Path}
 \usage{
-get_slf_chi_deaths_path(update = latest_update(), ...)
+get_slf_chi_deaths_path(update = latest_update(), BYOC_MODE = FALSE, ...)
 }
 \arguments{
 \item{update}{The update month to use,

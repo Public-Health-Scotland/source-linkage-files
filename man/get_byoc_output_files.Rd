@@ -2,14 +2,19 @@
 % Please edit documentation in R/get_byoc_intermediate_path.R
 \name{get_byoc_output_files}
 \alias{get_byoc_output_files}
-\title{BYOC-to-Denodo S3 Path helper function}
+\title{Helper function to build the BYOC output file paths as a named list}
 \usage{
-get_byoc_output_files(year, types = NULL)
+get_byoc_output_files(years, types = NULL, base_path = denodo_output_path())
 }
 \arguments{
-\item{year}{Financial year}
-
 \item{types}{named list of the dataset types}
+
+\item{base_path}{Root output directory}
+
+\item{year}{Financial year}
+}
+\value{
+Named list of file paths
 }
 \description{
 Helper function for the get_byoc_intermediate_path() function
