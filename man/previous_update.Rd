@@ -25,10 +25,10 @@ previous_update(1) # 1 month ago
 previous_update(override = "May_2023") # Specific Month
 }
 \seealso{
-Other initialisation: 
-\code{\link{get_dd_period}()},
-\code{\link{latest_cost_year}()},
-\code{\link{latest_update}()},
-\code{\link{years_to_run}()}
+Other initialisation:
+\code{\link[=get_dd_period]{get_dd_period()}},
+\code{\link[=latest_cost_year]{latest_cost_year()}},
+\code{\link[=latest_update]{latest_update()}},
+\code{\link[=years_to_run]{years_to_run()}}
 }
 \concept{initialisation}
