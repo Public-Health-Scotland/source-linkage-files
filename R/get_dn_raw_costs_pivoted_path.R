@@ -11,12 +11,9 @@
 get_dn_raw_costs_pivoted_path <- function(...) {
   dn_raw_costs_pivoted_path <- get_file_path(
     directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = stringr::str_glue("dn_costs_pivoted.csv"),
+    file_name = stringr::str_glue("dn_costs_pivoted.xlsx"),
     ...
   )
 
   return(dn_raw_costs_pivoted_path)
 }
-
-
-
