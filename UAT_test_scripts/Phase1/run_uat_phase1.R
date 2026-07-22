@@ -53,7 +53,9 @@ source(here::here("UAT_test_scripts/Phase1/01_uat_functions.R"))
 #   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths","ae_cup",
 #   "acute_cup", "gp_ooh_cup", "delayed_discharges", "spd", "simd", "readcode",
 #   "ooh_cost_lookup", "homelessness_completeness", "cmh", "datazone_pop", "dn",
-#   "dn_cost_lookup", "dn_contact_lookup", "hscp_localities", "hscp_pop")
+#   "dn_cost_lookup", "dn_contact_lookup", "hscp_localities", "hscp_pop", "hhg",
+#   "nsu", "la_lookup")
+datasets <- c("hhg", "nsu", "la_lookup")
 
 
 # Read name list for matching each dataset function/sdl name
