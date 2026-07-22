@@ -9,4 +9,8 @@ get_sdl_ch_name_lookup_path(...)
 \description{
 sdl ch name lookup path
 }
+\seealso{
+Other get_sdl_path:
+\code{\link[=get_sdl_homelessness_completeness_path]{get_sdl_homelessness_completeness_path()}}
+}
 \concept{get_sdl_path}
