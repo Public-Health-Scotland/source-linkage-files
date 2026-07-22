@@ -1,14 +1,11 @@
-##########################
 # SDL_transfer_files
 #
 # Original Author - Jennifer Thom
 # Original Date - June 2026
 # Written/run on - R Posit
 # Version of R - 4.2.2
-##########################
 
-## Stage 1 - Setup environment
-#-------------------------------------------------------------------------------
+## Stage 1 - Setup environment ----
 # load package - createslf
 devtools::load_all()
 
@@ -42,9 +39,23 @@ n <- "1"
 # )
 file_list <- c("ch_name_lookup", "uk_postcode")
 
-#-------------------------------------------------------------------------------
-# Stage 2 - Set up functions
-#-------------------------------------------------------------------------------
+## Stage 2 - run combining those files -----
+files <- list.files(
+  path = "SDL_automated_scripts",
+  pattern = "^Combine_.*\\.R$",
+  full.names = TRUE
+)
+
+target_files <- files[
+  tools::file_path_sans_ext(
+    sub("^Combine_", "", basename(files))
+  ) %in% file_list
+]
+
+lapply(target_files, source)
+
+
+## Stage 3 - Set up functions ----
 
 # Function for extracting current SDL file paths for transfer
 get_sdl_file_paths <- function(file_list) {
@@ -129,9 +140,7 @@ move_sdl_files <- function(sdl_files, file_list) {
 }
 
 
-#-------------------------------------------------------------------------------
-# Stage 3 - Use lapply to move the list of files to the correct folders.
-#-------------------------------------------------------------------------------
+## Stage 4 - Use lapply to move the list of files to the correct folders. ----
 
 # return a list of all sdl files for transferring to output folder
 # Directory - "/conf/hscdiip/SLF_Extracts/"
