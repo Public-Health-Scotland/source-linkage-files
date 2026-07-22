@@ -15,7 +15,8 @@ devtools::load_all()
 
 # Stage 2 - read files ---------------
 ch_name_lookup <- openxlsx::read.xlsx(get_slf_ch_name_lookup_path(),
-                                      detectDates = TRUE) %>%
+  detectDates = TRUE
+) %>%
   dplyr::select(
     case_number = "CaseNumber",
     case_service = "CareService",
