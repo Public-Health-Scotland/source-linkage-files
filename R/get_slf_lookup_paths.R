@@ -155,3 +155,19 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
     ...
   )
 }
+
+#' sdl ch name lookup path
+#'
+#' @param ...
+#'
+#' @returns
+#' @export
+#'
+#' @family get_sdl_path
+get_sdl_ch_name_lookup_path <- function(...){
+  get_file_path(
+    directory = fs::path(get_slf_dir(), "Lookups"),
+    file_name = stringr::str_glue("sdl_ch_name_lookup.parquet"),
+    ...
+  )
+}

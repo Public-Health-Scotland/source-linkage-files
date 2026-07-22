@@ -13,13 +13,14 @@
 devtools::load_all()
 
 # Define Submission date - ### UPDATE ###
-submission_date <- "20260715"
+submission_date <- "20260722"
 
 # Define version of file - ### UPDATE ###
 n <- "1"
 
 # Define list of files - ### UPDATE ###
 # file_list <- c(
+#   "ch_lookup",
 #   "dd",
 #   "dn",
 #   "dn_contacts",
@@ -36,9 +37,10 @@ n <- "1"
 #   "homelessness_completeness",
 #   "hscp_localities",
 #   "hscp_population",
-#   "datazone_population"
+#   "datazone_population",
+#   "uk_postcode"
 # )
-file_list <- c("hscp_population")
+file_list <- c("ch_name_lookup", "uk_postcode")
 
 #-------------------------------------------------------------------------------
 # Stage 2 - Set up functions
@@ -51,6 +53,7 @@ get_sdl_file_paths <- function(file_list) {
   # e.g no year specific files
   file_path <- dplyr::recode_values(
     file_list,
+    "ch_name_lookup" ~ get_sdl_ch_name_lookup_path(),
     "cmh" ~ get_combined_cmh_path(),
     "dd" ~ get_dd_path(),
     "dn" ~ get_combined_dn_path(),
@@ -67,7 +70,8 @@ get_sdl_file_paths <- function(file_list) {
     "homelessness_completeness" ~ get_sdl_homelessness_completeness_path(),
     "hscp_localities" ~ get_locality_path(),
     "hscp_population" ~ get_pop_path(type = "hscp"),
-    "datazone_population" ~ get_pop_path(type = "datazone")
+    "datazone_population" ~ get_pop_path(type = "datazone"),
+    "uk_postcode" ~ get_uk_postcode_path()
   )
 
   return(file_path)
@@ -85,6 +89,7 @@ get_sdl_output_path <- function(file_list) {
   output_name <- dplyr::recode_values(
     file_list,
     # for csv files, no need for `{n}`.
+    "ch_name_lookup" ~ stringr::str_glue("SDL_CH_NAME_LOOKUP_{submission_date}_{n}.parquet"),
     "cmh" ~ stringr::str_glue("SDL_CMH_{submission_date}.csv"),
     "dd" ~ stringr::str_glue("SDL_DD_{submission_date}_{n}.parquet"),
     "dn" ~ stringr::str_glue("SDL_DN_{submission_date}.csv"),
@@ -101,7 +106,8 @@ get_sdl_output_path <- function(file_list) {
     "homelessness_completeness" ~ stringr::str_glue("SDL_HOMELESSNESS_COMPLETENESS_{submission_date}.csv"),
     "hscp_localities" ~ stringr::str_glue("SDL_HSCP_LOCALITIES_{submission_date}.csv"),
     "hscp_population" ~ stringr::str_glue("SDL_HSCP_POPULATION_{submission_date}.csv"),
-    "datazone_population" ~ stringr::str_glue("SDL_DATAZONE_POPULATION_{submission_date}.csv")
+    "datazone_population" ~ stringr::str_glue("SDL_DATAZONE_POPULATION_{submission_date}.csv"),
+    "uk_postcode" ~ stringr::str_glue("SDL_UK_POSTCODE_{submission_date}_{n}.parquet")
   )
 
   output_path <- stringr::str_glue("{output_dir}{output_name}")
