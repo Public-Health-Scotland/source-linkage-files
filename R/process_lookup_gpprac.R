@@ -3,7 +3,7 @@
 #' @description This will read and process the gpprac lookup, it will return
 #' the final data and also write this out to disk.
 #'
-#' @param open_data PHS open dataset link to GP practice details
+#' @param gpprac_open_data PHS open dataset link to GP practice details
 #' @param gpprac_ref_path Path to GP Practice reference file
 #' @param spd_path Path to Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
@@ -16,27 +16,28 @@ process_lookup_gpprac <- function(
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
     BYOC_MODE = FALSE,
     run_id = NA,
-    run_date_time = NA
-) {
+    run_date_time = NA,
+    gpprac_ref_file = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
+    gpprac_open_data = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+    spd_file = get_spd_data(BYOC_MODE = BYOC_MODE)
+    ) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_lookup", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  gpprac_ref_file <- get_gpprac_ref_data(BYOC_MODE = BYOC_MODE)
-  open_data <- get_gpprac_opendata(BYOC_MODE = BYOC_MODE)
-  spd_file <- get_spd_data(BYOC_MODE = BYOC_MODE) %>%
+  # Select required variables from the SPD reference file
+  spd_file <- spd_file %>%
     dplyr::select(
       "pc7",
       "pc8",
       "hb2018",
       "hscp2018",
       "ca2018"
-      )
-
+    )
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(
     gpprac_ref_file,
-    open_data,
+    gpprac_open_data,
     by = "gpprac",
     na_matches = "never",
     relationship = "one-to-one",

@@ -173,24 +173,24 @@ get_gpprac_ref_path <- function(ext = "csv") {
 #' @family lookup file paths
 get_gpprac_ref_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                 BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  log_slf_event(stage = "read", status = "start", type = "gpprac_ref_data", year = "all")
 
-    gpprac_ref_data <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_gpprac_ref_source") # TODO: update table
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  gpprac_ref_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_gpprac_lookup_source") # TODO: rename sdl table
+  ) %>%
+    dplyr::select(
+      gpprac = "praccode",
+      pc7 = "postcode"
     ) %>%
-      dplyr::collect()
-  } else {
-    gpprac_ref_data <- read_file(get_gpprac_ref_path()) %>%
-      dplyr::select(
-        gpprac = "praccode",
-        pc7 = "postcode"
-      ) %>%
-      dplyr::mutate(
-        pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
-      )
-  }
+    dplyr::collect() %>%
+    dplyr::mutate(
+      pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
+    )
+
+  log_slf_event(stage = "read", status = "complete", type = "gpprac_ref_data", year = "all")
 
   return(gpprac_ref_data)
 }
