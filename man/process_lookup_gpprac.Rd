@@ -8,11 +8,14 @@ process_lookup_gpprac(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
-  run_date_time = NA
+  run_date_time = NA,
+  gpprac_ref_file = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
+  gpprac_open_data = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+  spd_file = get_spd_data(BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{
-\item{open_data}{PHS open dataset link to GP practice details}
+\item{gpprac_open_data}{PHS open dataset link to GP practice details}
 
 \item{gpprac_ref_path}{Path to GP Practice reference file}
 
