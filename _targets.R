@@ -93,7 +93,8 @@ list(
     # Function
     get_gpprac_opendata(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE)
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # Local Authority open data------
   tar_target(
@@ -134,8 +135,10 @@ list(
     # Target name
     spd_data,
     # Function
-    get_spd_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                 BYOC_MODE = BYOC_MODE),
+    get_spd_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     format = "file"
   ),
   # Update NHS UK postcode directory -----
