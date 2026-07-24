@@ -5,7 +5,7 @@
 \title{Process the SLF postcode lookup}
 \usage{
 process_lookup_postcode(
-  spd_data = get_spd_data(BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
   simd_path = get_simd_path(),
   locality_path = get_locality_path(),
   write_to_disk = TRUE
