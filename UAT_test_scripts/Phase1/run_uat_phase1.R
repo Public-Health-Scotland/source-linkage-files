@@ -45,6 +45,7 @@ source(here::here("UAT_test_scripts/Phase1/01_uat_functions.R"))
 ## Setup data --------------
 
 # Analyst name for folder structure
+analyst <- "Tobi"
 
 # Populate names from this workbook:
 # /conf/sourcedev/Source_Linkage_File_Updates/1_source_data_views/Lookups/uat_names.xlsx
@@ -54,8 +55,9 @@ source(here::here("UAT_test_scripts/Phase1/01_uat_functions.R"))
 #   "acute_cup", "gp_ooh_cup", "delayed_discharges", "spd", "simd", "readcode",
 #   "ooh_cost_lookup", "homelessness_completeness", "cmh", "datazone_pop", "dn",
 #   "dn_cost_lookup", "dn_contact_lookup", "hscp_localities", "hscp_pop", "hhg",
-#   "nsu", "la_lookup")
-datasets <- c("hhg", "nsu", "la_lookup")
+#   "nsu", "la_lookup", "gpprac_ref_file")
+
+datasets <- c("gpprac_ref_file")
 
 
 # Read name list for matching each dataset function/sdl name
