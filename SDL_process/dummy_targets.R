@@ -135,7 +135,7 @@ list(
     # Target name
     spd_data,
     # Function
-    get_spd_data(BYOC_MODE)
+    get_spd_data(BYOC_MODE = BYOC_MODE)
   ),
 
   ## Stage 2.2 year specific targets ----

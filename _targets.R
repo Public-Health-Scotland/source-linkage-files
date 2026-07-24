@@ -129,7 +129,7 @@ list(
     # Target name
     spd_data,
     # Function
-    get_spd_data(BYOC_MODE)
+    get_spd_data(BYOC_MODE = BYOC_MODE)
   ),
   # Update NHS UK postcode directory -----
   tar_target(

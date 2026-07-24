@@ -12,7 +12,7 @@
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
 fill_ch_names <- function(ch_data,
                           ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-                          spd_data = get_spd_data(BYOC_MODE),
+                          spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
                           uk_pc_path = get_uk_postcode_path()) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL

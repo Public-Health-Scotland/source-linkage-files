@@ -12,7 +12,7 @@
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_postcode <- function(spd_data = get_spd_data(BYOC_MODE),
+process_lookup_postcode <- function(spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
                                     simd_path = get_simd_path(),
                                     locality_path = get_locality_path(),
                                     write_to_disk = TRUE) {
