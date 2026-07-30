@@ -1,5 +1,9 @@
 #' Process LTC IT extract
 #'
+#' @description This will process the LTC IT extract,
+#' it will return the final data and (optionally)
+#' write it to disk.
+#'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
@@ -7,7 +11,7 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
-#'
+#' @family process extracts
 process_lookup_ltc <- function(data,
                                year,
                                write_to_disk = TRUE,
@@ -20,7 +24,12 @@ process_lookup_ltc <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Create LTC flags 1/0------------------------------------
 
