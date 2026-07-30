@@ -27,9 +27,9 @@ process_extract_cmh <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
 
-  # If data is available in the FY then run processing.
+  # If no data is available in the FY then return immediately
   if (identical(data, tibble::tibble())) {
     return(data)
   }
@@ -37,23 +37,29 @@ process_extract_cmh <- function(data,
   # Data Cleaning  ---------------------------------------
 
   cmh_clean <- data %>%
-    # create recid, year, SMRType variables
+    # Create recid, year, SMRType variables
     dplyr::mutate(
       recid = "CMH",
       smrtype = add_smrtype(recid = .data$recid),
       year = year
     ) %>%
-    # contact end time
+    # Contact end time
     dplyr::mutate(keytime2 = hms::as.hms(
       .data$keytime1 + lubridate::dminutes(.data$duration)
     )) %>%
-    # record key date 2
+    # Record key date 2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
-    # create blank diag 6
+    # Create blank diag 6
     dplyr::mutate(diag6 = NA)
 
   cmh_processed <- cmh_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "record_keydate1",
@@ -76,10 +82,6 @@ process_extract_cmh <- function(data,
       "diag4",
       "diag5",
       "diag6"
-    ) %>%
-    dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
     )
 
   if (write_to_disk) {

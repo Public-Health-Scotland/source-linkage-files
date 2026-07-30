@@ -14,6 +14,11 @@ read_extract_cmh <- function(
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
+  # Create dates to filter by calendar year
+  # TODO: Check logic and whether this is the correct year column.
+  start_date <- as.Date(paste0(substr(c_year, 1, 4), "-03-31"))
+  end_date <- as.Date(paste0(as.integer(substr(c_year, 1, 4)) + 1, "-04-01"))
+
   # Specify years available for running
   if (!check_year_valid(year, type = "cmh")) {
     return(tibble::tibble())
@@ -25,15 +30,17 @@ read_extract_cmh <- function(
   # Read extract
   extract_cmh <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_cmh_source") # TODO: Check table name.
+    dbplyr::in_schema("sdl", "sdl_cmh_source")
   ) %>%
     # Filter by calendar year
+    # TODO: Check logic and whether this is the correct year column.
     dplyr::filter(
-      .data$financial_year == c_year # TODO: Check year column name.
+      .data$contact_date > start_date,
+      .data$contact_date < end_date
     ) %>%
     # Rename variables
     dplyr::select(
-      chi = "patient_chi",
+      anon_chi = "patient_chi", # TODO: Check we will always get anon_chi
       dob = "patient_dob",
       gender = "gender",
       postcode = "patient_postcode",
@@ -51,9 +58,8 @@ read_extract_cmh <- function(
       diag4 = "other_aim_of_contact_3",
       diag5 = "other_aim_of_contact_4"
     ) %>%
-    # Collect and get anonymous CHI
-    dplyr::collect() %>%
-    slfhelper::get_anon_chi("chi")
+    # Collect
+    dplyr::collect()
 
   log_slf_event(stage = "read", status = "complete", type = "cmh", year = year)
 
