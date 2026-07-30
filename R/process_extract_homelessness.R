@@ -33,9 +33,9 @@ process_extract_homelessness <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
 
-  # If data is available in the FY then run processing.
+  # If no data is available in the FY then return immediately.
   if (identical(data, tibble::tibble())) {
     return(data)
   }
@@ -163,7 +163,7 @@ process_extract_homelessness <- function(data,
     dplyr::rename(hl1_completeness = "pct_complete_all") %>%
     dplyr::mutate(hl1_completeness = round(.data$hl1_completeness, 2))
 
-  final_data <- hl1_data %>%
+  homelessness_processed <- hl1_data %>%
     dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
@@ -190,7 +190,7 @@ process_extract_homelessness <- function(data,
 
   if (write_to_disk) {
     write_file(
-      data = final_data,
+      data = homelessness_processed,
       path = get_source_extract_path(
         year = year,
         type = "homelessness",
@@ -204,5 +204,5 @@ process_extract_homelessness <- function(data,
 
   log_slf_event(stage = "process", status = "complete", type = "homelessness", year = year)
 
-  return(final_data)
+  return(homelessness_processed)
 }
