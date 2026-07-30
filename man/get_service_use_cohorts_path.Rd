@@ -34,6 +34,6 @@ Other file path functions:
 \code{\link[=get_nsu_path]{get_nsu_path()}},
 \code{\link[=get_practice_details_path]{get_practice_details_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
-\code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}
+\code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}}
 }
 \concept{file path functions}

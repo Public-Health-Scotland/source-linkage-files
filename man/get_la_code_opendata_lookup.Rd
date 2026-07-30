@@ -4,7 +4,9 @@
 \alias{get_la_code_opendata_lookup}
 \title{Download the LA code lookup}
 \usage{
-get_la_code_opendata_lookup()
+get_la_code_opendata_lookup(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+)
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with the Local Authority names
