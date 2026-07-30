@@ -130,11 +130,11 @@ get_sg_homelessness_pub_path <- function(...) {
 #'
 #' @export
 get_sg_homelessness_pub_data <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
-  ) {
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-  if(isTRUE(BYOC_MODE)){
+  if (isTRUE(BYOC_MODE)) {
     sg_pub_data <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
@@ -147,7 +147,7 @@ get_sg_homelessness_pub_data <- function(
         .by = c("CAName", "sg_year")
       ) %>%
       dplyr::arrange(CAName, sg_year)
-  }else{
+  } else {
     sg_pub_data <- openxlsx::read.xlsx(
       get_sg_homelessness_pub_path(),
       sheet = "Table 1", # Manual change - check sheet name

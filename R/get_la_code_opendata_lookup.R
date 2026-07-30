@@ -7,12 +7,12 @@
 #' and codes.
 #' @export
 get_la_code_opendata_lookup <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
-  ) {
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  if(isTRUE(BYOC_MODE)){
+  if (isTRUE(BYOC_MODE)) {
     la_code_lookup <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
@@ -28,7 +28,7 @@ get_la_code_opendata_lookup <- function(
         ) %>%
           stringr::str_replace("\\sand\\s", " \\& ")
       )
-  }else{
+  } else {
     res_id <- "967937c4-8d67-4f39-974f-fd58c4acfda5"
     la_code_lookup <- phsopendata::get_resource(
       res_id = res_id,
