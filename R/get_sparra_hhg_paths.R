@@ -39,7 +39,6 @@ get_hhg_path <- function(year, ...) {
 get_hhg_data <- function(year,
                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                          BYOC_MODE) {
-
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   if (isTRUE(BYOC_MODE)) {
