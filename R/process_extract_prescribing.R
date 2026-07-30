@@ -27,11 +27,16 @@ process_extract_prescribing <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning--------------------------------------------
 
-  pis_clean <- data %>%
+  pis_processed <- data %>%
     slfhelper::get_chi() %>%
     # filter for chi NA
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
@@ -57,9 +62,9 @@ process_extract_prescribing <- function(data,
     )
 
   # Issue a warning if rows were removed
-  if (nrow(pis_clean) != nrow(data)) {
+  if (nrow(pis_processed) != nrow(data)) {
     cli::cli_warn(message = c(
-      "{nrow(data) - nrow(pis_clean)} row{?s} were removed from the PIS
+      "{nrow(data) - nrow(pis_processed)} row{?s} were removed from the PIS
     extract because the CHI number was invalid",
       "Check the raw PIS extract."
     ))
@@ -67,7 +72,7 @@ process_extract_prescribing <- function(data,
 
   if (write_to_disk) {
     write_file(
-      data = pis_clean,
+      data = pis_processed,
       path = get_source_extract_path(
         year = year,
         type = "pis",
@@ -81,5 +86,5 @@ process_extract_prescribing <- function(data,
 
   log_slf_event(stage = "process", status = "complete", type = "pis", year = year)
 
-  return(pis_clean)
+  return(pis_processed)
 }
