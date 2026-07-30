@@ -14,6 +14,11 @@ read_extract_district_nursing <- function(
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
+  # Create dates to filter by calendar year
+  # TODO: Check logic and whether this is the correct year column.
+  start_date <- as.Date(paste0(substr(c_year, 1, 4), "-03-31"))
+  end_date <- as.Date(paste0(as.integer(substr(c_year, 1, 4)) + 1, "-04-01"))
+
   # Specify years available for running
   if (!check_year_valid(year, type = "dn")) {
     return(tibble::tibble())
@@ -28,8 +33,10 @@ read_extract_district_nursing <- function(
     dbplyr::in_schema("sdl", "sdl_dn_source")
   ) %>%
     # Filter by calendar year
+    # TODO: Check logic and whether this is the correct year column.
     dplyr::filter(
-      year == c_year # TODO: Data has no year column to filter on. Closest is contact_date
+      .data$contact_date > start_date,
+      .data$contact_date < end_date
     ) %>%
     # Rename variables
     dplyr::select(
