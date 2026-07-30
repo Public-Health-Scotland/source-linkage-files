@@ -39,17 +39,16 @@ get_hhg_path <- function(year, ...) {
 get_hhg_data <- function(year,
                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                          BYOC_MODE) {
-  year <- check_year_format(year, format = "fyyear")
-  c_year <- convert_fyyear_to_year(year)
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   if (isTRUE(BYOC_MODE)) {
     extract_hhg <- dplyr::tbl(
       denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_hhg_source") ### TODO: confirm table name ###
+      dbplyr::in_schema("sdl", "sdl_hhg_source")
     ) %>%
-      dplyr::filter(risk_financial_year == c_year) %>% ### TODO: confirm filter ###
+      dplyr::filter(financial_year == year) %>%
+      dplyr::rename(anon_chi = patient_chi) %>%
       dplyr::collect()
   } else {
     extract_hhg <- read_file(get_hhg_path(year))
