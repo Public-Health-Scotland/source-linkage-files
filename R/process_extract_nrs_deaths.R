@@ -26,7 +26,12 @@ process_extract_nrs_deaths <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately.
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning  ---------------------------------------
 
