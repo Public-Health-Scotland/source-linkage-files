@@ -1,7 +1,7 @@
 #' Process the Nation Records of Scotland (NRS) Deaths extract
 #'
 #' @description This will process the NRS deaths extract, it will return the
-#' final data and write this out.
+#' final data and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
@@ -35,7 +35,7 @@ process_extract_nrs_deaths <- function(data,
 
   # Data Cleaning  ---------------------------------------
 
-  deaths_clean <- data %>%
+  deaths_processed <- data %>%
     dplyr::mutate(
       record_keydate2 = .data$record_keydate1,
       recid = "NRS",
@@ -53,7 +53,7 @@ process_extract_nrs_deaths <- function(data,
 
   if (write_to_disk) {
     write_file(
-      data = deaths_clean,
+      data = deaths_processed,
       path = get_source_extract_path(
         year = year,
         type = "nrs_deaths",
@@ -67,5 +67,5 @@ process_extract_nrs_deaths <- function(data,
 
   log_slf_event(stage = "process", status = "complete", type = "nrs_deaths", year = year)
 
-  return(deaths_clean)
+  return(deaths_processed)
 }
