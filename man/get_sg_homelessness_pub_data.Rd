@@ -5,36 +5,13 @@
 \title{Homelessness Completeness SG publication figures}
 \usage{
 get_sg_homelessness_pub_data(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
-\arguments{
-\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
-}
 \value{
-The path to the Homelessness Completeness SG publication figures
-as an \code{\link[fs:path]{fs::path()}}.
+homelessness completeness data
 }
 \description{
-Get the path to the Excel workbook with Homelessness
-Completeness figures from the SG. These are similar to the figures published
-by the SG but we have to request it specifically as they don't publish
-at financial year or quarterly level, which is needed to properly compare.
+get homelessness completeness SG publication figures
 }
-\seealso{
-\code{\link[=get_file_path]{get_file_path()}} for the generic function.
-
-Other file path functions:
-\code{\link{.byoc_dataset_registry}},
-\code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
-\code{\link[=get_dd_path]{get_dd_path()}},
-\code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
-\code{\link[=get_file_path]{get_file_path()}},
-\code{\link[=get_homelessness_completeness_path]{get_homelessness_completeness_path()}},
-\code{\link[=get_ltcs_path]{get_ltcs_path()}},
-\code{\link[=get_nsu_path]{get_nsu_path()}},
-\code{\link[=get_practice_details_path]{get_practice_details_path()}},
-\code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
-\code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}}
-}
-\concept{file path functions}
