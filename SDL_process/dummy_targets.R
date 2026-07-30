@@ -90,7 +90,8 @@ list(
     la_code_opendata,
     # Function
     get_la_code_opendata_lookup(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
     )
   ),
 
@@ -98,7 +99,8 @@ list(
   tar_target(
     sg_pub_data,
     get_sg_homelessness_pub_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
     )
   ),
 
