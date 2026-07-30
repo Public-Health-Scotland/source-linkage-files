@@ -27,7 +27,12 @@ process_extract_outpatients <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning--------------------------------------------
 
@@ -66,7 +71,13 @@ process_extract_outpatients <- function(data,
     )
 
   outpatients_processed <- outpatients_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "record_keydate1",
@@ -98,10 +109,6 @@ process_extract_outpatients <- function(data,
       "cost_total_net",
       tidyselect::ends_with("_cost"),
       "uri"
-    ) %>%
-    dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
