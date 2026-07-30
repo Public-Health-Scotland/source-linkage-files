@@ -1,7 +1,7 @@
 #' Process the CHI deaths extract
 #'
 #' @description This will process the CHI deaths extract, it will return the
-#' final data and write the data out.
+#' final data and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param write_to_disk (optional) Should the data be written to disk default is
@@ -22,7 +22,7 @@ process_it_chi_deaths <- function(data,
 
   # Data Cleaning  ---------------------------------------
 
-  it_chi_deaths_clean <- data %>%
+  it_chi_deaths_processed <- data %>%
     dplyr::arrange(
       dplyr::desc(.data$death_date_nrs),
       dplyr::desc(.data$death_date_chi)
@@ -44,7 +44,7 @@ process_it_chi_deaths <- function(data,
 
   if (write_to_disk) {
     write_file(
-      data = it_chi_deaths_clean,
+      data = it_chi_deaths_processed,
       path = get_slf_chi_deaths_path(
         BYOC_MODE = BYOC_MODE,
         check_mode = "write"
@@ -56,5 +56,5 @@ process_it_chi_deaths <- function(data,
 
   log_slf_event(stage = "process", status = "complete", type = "it_chi_deaths", year = "all")
 
-  return(it_chi_deaths_clean)
+  return(it_chi_deaths_processed)
 }
