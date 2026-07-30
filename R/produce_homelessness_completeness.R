@@ -96,7 +96,6 @@ produce_homelessness_completeness <- function(
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_sg_homelessness_pub_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)) {
-
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   sg_pub_data <- dplyr::tbl(

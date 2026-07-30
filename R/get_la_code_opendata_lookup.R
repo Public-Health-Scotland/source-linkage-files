@@ -7,7 +7,6 @@
 #' and codes.
 #' @export
 get_la_code_opendata_lookup <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)) {
-
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   la_code_lookup <- dplyr::tbl(
