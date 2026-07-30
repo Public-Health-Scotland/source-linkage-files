@@ -139,9 +139,6 @@ get_nsu_data <- function(year,
                          BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "nsu", year = year)
 
-  year <- check_year_format(year, format = "fyyear")
-  c_year <- convert_fyyear_to_year(year)
-
   # Specify years available for running
   if (!check_year_valid(year, type = "nsu")) {
     return(tibble::tibble())
@@ -151,20 +148,21 @@ get_nsu_data <- function(year,
 
   nsu_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_nsu_source") # TO-DO: come back to fix variable names and selection
+    dbplyr::in_schema("sdl", "sdl_nsu_source")
   ) %>%
-    dplyr::filter(financial_year == c_year) %>%
+    dplyr::filter(financial_year == year) %>%
     dplyr::select(
       year = "financial_year",
       anon_chi = "patient_chi",
-      "recid", # TO-DO: come back to fix variable names and selection
-      "smrtype", # TO-DO: come back to fix variable names and selection
       postcode = "patient_postcode",
       gpprac = "gpprac",
       dob = "patient_dob",
       gender = "patient_sex"
     ) %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::mutate(
+      gender = as.numeric(gender)
+    )
 
   log_slf_event(stage = "read", status = "complete", type = "nsu", year = year)
 
