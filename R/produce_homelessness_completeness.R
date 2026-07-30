@@ -39,34 +39,7 @@ produce_homelessness_completeness <- function(
       .groups = "drop"
     )
 
-  sg_all_assessments_annual <- sg_pub_data # %>%
-  # dplyr::rename_with(~ c(
-  #   "CAName",
-  #   paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2019L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2020L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2021L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2022L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2023L, 4L)),
-  #   paste0(paste0("q", 1L:4L), "_", rep(2024L, 4L))
-  #   ## Manual change - Add new row here when new year is available in publication
-  # )) %>%
-  # tidyr::pivot_longer(
-  #   !"CAName",
-  #   names_to = c("fin_quarter", "fin_year"),
-  #   names_pattern = "q(\\d)_(\\d{4})",
-  #   names_transform = list(
-  #     fin_year = as.integer,
-  #     fin_quarter = as.integer
-  #   ),
-  #   values_to = "sg_all_assessments",
-  #   values_ptypes = list(sg_all_assessments = integer())
-  # ) %>%
-  # dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
-  # dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
-  # dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
+  sg_all_assessments_annual <- sg_pub_data
 
 
   annual_comparison <- dplyr::left_join(
@@ -122,31 +95,24 @@ produce_homelessness_completeness <- function(
 #' @export
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
-get_sg_homelessness_pub_path <- function(...) {
-  path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Homelessness"),
-    file_name = "2025.11.05 - PHS - Total assessment decisions by LA by Qtr.xlsx",
-    ...
-  )
+get_sg_homelessness_pub_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)) {
 
-  last_updated <- lubridate::time_length(
-    lubridate::interval(
-      fs::file_info(path)[["modification_time"]],
-      Sys.Date()
-    ),
-    unit = "years"
-  )
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  if (last_updated > 1L) {
-    cli::cli_warn(c(
-      "!" = "{.file {fs::path_file(path)}} is over a year old.",
-      ">" = "Ask the SG team for an updated version.",
-      "*" = "{.email Sam.Filippi@gov.scot}",
-      "*" = "{.email Sara.White@gov.scot}"
-    ))
-  }
+  sg_pub_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
+  ) %>%
+    dplyr::collect() %>%
+    dplyr::rename("CAName" = "local_authority", "sg_year" = "fin_year") %>%
+    dplyr::mutate(sg_year = convert_year_to_fyyear(sg_year)) %>%
+    dplyr::summarise(
+      sg_all_assessments = sum(sg_all_assessments),
+      .by = c("CAName", "sg_year")
+    ) %>%
+    dplyr::arrange(CAName, sg_year)
 
-  return(path)
+  return(sg_pub_data)
 }
 
 

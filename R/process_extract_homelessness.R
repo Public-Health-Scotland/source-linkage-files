@@ -20,8 +20,8 @@ process_extract_homelessness <- function(
   year,
   write_to_disk = TRUE,
   update = latest_update(),
-  la_code_lookup = get_la_code_opendata_lookup(),
-  sg_pub_data,
+  la_code_lookup = get_la_code_opendata_lookup(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)),
+  sg_pub_data =  get_sg_homelessness_pub_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA

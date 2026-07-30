@@ -27,9 +27,9 @@ read_extract_homelessness <- function(
     dbplyr::in_schema("sdl", "sdl_homelessness_source")
   ) %>%
     dplyr::filter(
-      financial_year_of_assessment <= c_year,
-      is.null(financial_year_of_case_closed) |
-        financial_year_of_case_closed >= c_year
+      assessment_decision_financial_year <= c_year,
+      is.null(case_closed_financial_year) |
+        case_closed_financial_year >= c_year
     ) %>%
     dplyr::select(
       # financial_year_of_assessment,
