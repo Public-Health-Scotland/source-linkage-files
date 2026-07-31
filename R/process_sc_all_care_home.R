@@ -9,6 +9,9 @@
 #' [process_lookup_sc_demographics()].
 #' @param refined_death The processed lookup of deaths from IT produced
 #' with [process_refined_death()].
+#' @param uk_pc_directory UK postcode directory
+#' @param ch_name_lookup_path Care home name lookup
+#' @param spd_path Scottish postcode directory
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
@@ -21,8 +24,11 @@
 #' @export
 process_sc_all_care_home <- function(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
-  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),### TODO - SDL/Denodo name??
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),### TODO - SDL/Denodo name??
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE),### TODO - SDL/Denodo name??
+  ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE), ### TODO - SDL/Denodo name??
+  spd_path = get_spd_data(BYOC_MODE), ### TODO - SDL/DENODO NAME??
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
@@ -67,7 +73,7 @@ process_sc_all_care_home <- function(
     roll = "nearest"
   ]
 
-  uk_pc_directory <- get_uk_postcode_data(BYOC_MODE) %>%
+  uk_pc_directory <- uk_pc_directory %>%
     dplyr::pull()
 
   data <- data %>%
@@ -87,8 +93,8 @@ process_sc_all_care_home <- function(
   # cleaning and matching care home names
   name_postcode_clean <- fill_ch_names(
     ch_data = data,
-    ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE),
-    spd_path = get_spd_data(BYOC_MODE)
+    ch_name_lookup_path = ch_name_lookup_path,
+    spd_path = spd_path
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
