@@ -14,13 +14,13 @@ get_ch_costs_path <- function(BYOC_MODE..., update = NULL) {
   if (isTRUE(BYOC_MODE)) {
     ch_costs_path <- file.path(
       denodo_output_path(),
-      stringr::str_glue("Cost_CH_Lookup.parquet")
+      stringr::str_glue("cost_ch_lookup.parquet")
     )
   } else {
     ch_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),
       file_name = stringr::str_glue(
-        "Cost_CH_Lookup.parquet"
+        "cost_ch_lookup.parquet"
       ),
       ...
     )
