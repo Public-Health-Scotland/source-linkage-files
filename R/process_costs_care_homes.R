@@ -98,34 +98,6 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
       run_date_time = run_date_time
     )
 
-
-  # Join data together  -----------------------------------------------------
-
-  ## TODO - do we still continue with this check?
-
-  # # match files - to make sure costs haven't changed radically
-  # old_costs <- read_file(get_ch_costs_path(update = latest_update())) %>%
-  #   dplyr::rename(
-  #     cost_old = "cost_per_day"
-  #   )
-  #
-  # matched_costs_data <-
-  #   ch_costs_uplifted %>%
-  #   dplyr::arrange(year, nursing_care_provision) %>%
-  #   # match to new costs
-  #   dplyr::full_join(old_costs, by = c("year", "nursing_care_provision")) %>%
-  #   # compute difference
-  #   dplyr::mutate(pct_diff = (cost_per_day - cost_old) / cost_old * 100.0)
-  #
-  # summary(matched_costs_data$pct_diff)
-  #
-  # matched_costs_data %>%
-  #   tidyr::pivot_wider(
-  #     id_cols = "year",
-  #     names_from = "nursing_care_provision",
-  #     values_from = "pct_diff"
-  #   )
-
   # Save .rds file
   ch_costs_uplifted %>%
     write_file(get_ch_costs_path(check_mode = "write", BYOC_MODE),
