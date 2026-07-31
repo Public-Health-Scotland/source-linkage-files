@@ -17,6 +17,8 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
   #   col_select = c("Date", "KeyStatistic", "CA", "Value")
   # ) %>%
 
+  log_slf_event(stage = "process", status = "start", type = "ch_costs", year = "all")
+
   # Disconnect from denodo
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
@@ -104,4 +106,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
       BYOC_MODE,
       group_id = 3206 # hscdiip owner
     )
+
+  log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
+
 }
