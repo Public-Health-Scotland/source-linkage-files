@@ -23,6 +23,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     dbplyr::in_schema("sdl", "sdl_carehomecostopendata_source")
   ) %>%
     janitor::clean_names() %>%
+    dplyr::collect() %>%
     # Dates are at end of the fin year
     # so cost are for the fin year to that date.
     dplyr::mutate(year = createslf::convert_year_to_fyyear((date %/% 10000L) - 1L)) %>%
@@ -36,7 +37,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     ) %>%
     dplyr::select(
       "year",
-      "ca",
+      "council_area_code",
       "funding_source",
       "nursing_care_provision",
       cost_per_week = "value"
@@ -46,7 +47,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
   # Data cleaning ---------------------------------------
   ch_costs_scot <-
     ch_costs_data %>%
-    dplyr::filter(ca == "S92000003") %>%
+    dplyr::filter(council_area_code == "S92000003") %>%
     dplyr::filter(funding_source == "All") %>%
     dplyr::select(year, nursing_care_provision, cost_per_week) %>%
     # cost per day
@@ -66,7 +67,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     dplyr::group_by(nursing_care_provision) %>%
     dplyr::mutate(cost_per_day = dplyr::if_else(
       is.na(cost_per_day),
-      (lag(cost_per_day, order_by = year) + lead(cost_per_day, order_by = year)) / 2,
+      (dplyr::lag(cost_per_day, order_by = year) + dplyr::lead(cost_per_day, order_by = year)) / 2,
       cost_per_day
     )) %>%
     dplyr::ungroup()
@@ -90,7 +91,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
             convert_year_to_fyyear()))
     ) %>%
     dplyr::arrange(year, nursing_care_provision) %>%
-    mutate(
+    dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
     )
