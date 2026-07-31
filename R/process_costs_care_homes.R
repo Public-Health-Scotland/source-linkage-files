@@ -11,7 +11,6 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
                                      BYOC_MODE = FALSE,
                                      run_id = NA,
                                      run_date_time = NA) {
-
   log_slf_event(stage = "process", status = "start", type = "ch_costs", year = "all")
 
   # Disconnect from denodo
@@ -104,5 +103,4 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     )
 
   log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
-
 }
