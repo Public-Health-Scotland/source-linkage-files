@@ -10,7 +10,7 @@
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_ch_costs_path <- function(BYOC_MODE..., update = NULL) {
+get_ch_costs_path <- function(BYOC_MODE, ...) {
   if (isTRUE(BYOC_MODE)) {
     ch_costs_path <- file.path(
       denodo_output_path(),
