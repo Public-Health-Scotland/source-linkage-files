@@ -17,7 +17,7 @@ get_boxi_extract_path <- function(year,
                                     "acute",
                                     "acute_cup",
                                     "cmh",
-                                    "deaths",
+                                    "nrs_deaths",
                                     "dn",
                                     "gp_ooh-c",
                                     "gp_ooh-d",
@@ -43,10 +43,10 @@ get_boxi_extract_path <- function(year,
   }
 
   if (!check_year_valid(year, type)) {
-    return(get_dummy_boxi_extract_path(BYOC_MODE))
+    return(get_dummy_boxi_extract_path())
   }
 
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "ae" ~ "anon-A&E-episode-level-extract",
     "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
@@ -61,7 +61,7 @@ get_boxi_extract_path <- function(year,
     "homelessness" ~ "anon-Homelessness-extract",
     "maternity" ~ "anon-Maternity-episode-level-extract",
     "mh" ~ "anon-Mental-Health-episode-level-extract",
-    "deaths" ~ "anon-NRS-death-registrations-extract",
+    "nrs_deaths" ~ "anon-NRS-death-registrations-extract",
     "outpatients" ~ "anon-Outpatients-episode-level-extract"
   )
 
@@ -89,16 +89,7 @@ get_boxi_extract_path <- function(year,
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
 #' @export
-get_dummy_boxi_extract_path <- function(BYOC_MODE = FALSE) {
-  if (BYOC_MODE) {
-    dummy_path <- "invalid_denodo_extract_path"
-  } else {
-    dummy_path <- get_file_path(
-      directory = get_dev_dir(BYOC_MODE),
-      file_name = ".dummy",
-      create = TRUE
-    )
-  }
-
+get_dummy_boxi_extract_path <- function() {
+  dummy_path <- "dummy_boxi_extract_path"
   return(dummy_path)
 }
