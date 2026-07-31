@@ -8,6 +8,9 @@ process_sc_all_care_home(
   data,
   sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
   refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE),
+  ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE),
+  spd_path = get_spd_data(BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
@@ -22,6 +25,12 @@ process_sc_all_care_home(
 
 \item{refined_death}{The processed lookup of deaths from IT produced
 with \code{\link[=process_refined_death]{process_refined_death()}}.}
+
+\item{uk_pc_directory}{UK postcode directory}
+
+\item{ch_name_lookup_path}{Care home name lookup}
+
+\item{spd_path}{Scottish postcode directory}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
@@ -41,38 +50,38 @@ all Care Home extract, it will return the final data
 and (optionally) write it to disk.
 }
 \seealso{
-Other process extracts:
-\code{\link[=create_homelessness_lookup]{create_homelessness_lookup()}},
-\code{\link[=process_extract_acute]{process_extract_acute()}},
-\code{\link[=process_extract_ae]{process_extract_ae()}},
-\code{\link[=process_extract_alarms_telecare]{process_extract_alarms_telecare()}},
-\code{\link[=process_extract_care_home]{process_extract_care_home()}},
-\code{\link[=process_extract_cmh]{process_extract_cmh()}},
-\code{\link[=process_extract_delayed_discharges]{process_extract_delayed_discharges()}},
-\code{\link[=process_extract_district_nursing]{process_extract_district_nursing()}},
-\code{\link[=process_extract_gp_ooh]{process_extract_gp_ooh()}},
-\code{\link[=process_extract_home_care]{process_extract_home_care()}},
-\code{\link[=process_extract_homelessness]{process_extract_homelessness()}},
-\code{\link[=process_extract_maternity]{process_extract_maternity()}},
-\code{\link[=process_extract_mental_health]{process_extract_mental_health()}},
-\code{\link[=process_extract_nrs_deaths]{process_extract_nrs_deaths()}},
-\code{\link[=process_extract_ooh_consultations]{process_extract_ooh_consultations()}},
-\code{\link[=process_extract_ooh_diagnosis]{process_extract_ooh_diagnosis()}},
-\code{\link[=process_extract_ooh_outcomes]{process_extract_ooh_outcomes()}},
-\code{\link[=process_extract_outpatients]{process_extract_outpatients()}},
-\code{\link[=process_extract_prescribing]{process_extract_prescribing()}},
-\code{\link[=process_extract_sds]{process_extract_sds()}},
-\code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
-\code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
-\code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
-\code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
-\code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},
-\code{\link[=process_refined_death]{process_refined_death()}},
-\code{\link[=process_sc_all_alarms_telecare]{process_sc_all_alarms_telecare()}},
-\code{\link[=process_sc_all_home_care]{process_sc_all_home_care()}},
-\code{\link[=process_sc_all_sds]{process_sc_all_sds()}},
-\code{\link[=read_extract_gp_ooh]{read_extract_gp_ooh()}},
-\code{\link[=read_it_chi_deaths]{read_it_chi_deaths()}},
-\code{\link[=read_lookup_sc_client]{read_lookup_sc_client()}}
+Other process extracts: 
+\code{\link{create_homelessness_lookup}()},
+\code{\link{process_extract_acute}()},
+\code{\link{process_extract_ae}()},
+\code{\link{process_extract_alarms_telecare}()},
+\code{\link{process_extract_care_home}()},
+\code{\link{process_extract_cmh}()},
+\code{\link{process_extract_delayed_discharges}()},
+\code{\link{process_extract_district_nursing}()},
+\code{\link{process_extract_gp_ooh}()},
+\code{\link{process_extract_home_care}()},
+\code{\link{process_extract_homelessness}()},
+\code{\link{process_extract_maternity}()},
+\code{\link{process_extract_mental_health}()},
+\code{\link{process_extract_nrs_deaths}()},
+\code{\link{process_extract_ooh_consultations}()},
+\code{\link{process_extract_ooh_diagnosis}()},
+\code{\link{process_extract_ooh_outcomes}()},
+\code{\link{process_extract_outpatients}()},
+\code{\link{process_extract_prescribing}()},
+\code{\link{process_extract_sds}()},
+\code{\link{process_it_chi_deaths}()},
+\code{\link{process_lookup_gpprac}()},
+\code{\link{process_lookup_postcode}()},
+\code{\link{process_lookup_sc_client}()},
+\code{\link{process_lookup_sc_demographics}()},
+\code{\link{process_refined_death}()},
+\code{\link{process_sc_all_alarms_telecare}()},
+\code{\link{process_sc_all_home_care}()},
+\code{\link{process_sc_all_sds}()},
+\code{\link{read_extract_gp_ooh}()},
+\code{\link{read_it_chi_deaths}()},
+\code{\link{read_lookup_sc_client}()}
 }
 \concept{process extracts}
