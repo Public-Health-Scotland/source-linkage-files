@@ -23,7 +23,7 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
   ## Read costs from the CHC Open data
   ch_costs_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "care_home_costs") # TODO: update SDL table
+    dbplyr::in_schema("sdl", "sdl_carehomecostopendata_source")
   ) %>%
     janitor::clean_names() %>%
     # Dates are at end of the fin year
