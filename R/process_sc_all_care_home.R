@@ -24,9 +24,9 @@
 #' @export
 process_sc_all_care_home <- function(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),### TODO - SDL/Denodo name??
-  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),### TODO - SDL/Denodo name??
-  uk_pc_directory = get_uk_postcode_data(BYOC_MODE),### TODO - SDL/Denodo name??
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)), ### TODO - SDL/Denodo name??
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)), ### TODO - SDL/Denodo name??
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE), ### TODO - SDL/Denodo name??
   ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE), ### TODO - SDL/Denodo name??
   spd_path = get_spd_data(BYOC_MODE), ### TODO - SDL/DENODO NAME??
   BYOC_MODE = FALSE,
