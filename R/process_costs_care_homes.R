@@ -11,11 +11,6 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
                                      BYOC_MODE = FALSE,
                                      run_id = NA,
                                      run_date_time = NA) {
-  ## TODO: Remove old code/check API resource in denodo
-  # ch_costs_data <- phsopendata::get_resource(
-  #   res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
-  #   col_select = c("Date", "KeyStatistic", "CA", "Value")
-  # ) %>%
 
   log_slf_event(stage = "process", status = "start", type = "ch_costs", year = "all")
 
