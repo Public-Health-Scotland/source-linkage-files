@@ -41,18 +41,16 @@ get_hhg_data <- function(year,
                          BYOC_MODE) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  if (isTRUE(BYOC_MODE)) {
-    extract_hhg <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_hhg_source")
-    ) %>%
-      dplyr::filter(financial_year == year) %>%
-      dplyr::rename(anon_chi = patient_chi) %>%
-      dplyr::select("anon_chi", "hhg_score") %>%
-      dplyr::collect()
-  } else {
-    extract_hhg <- read_file(get_hhg_path(year))
-  }
+  # principle: reading all data from denodo
+  extract_hhg <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_hhg_source")
+  ) %>%
+    dplyr::filter(financial_year == year) %>%
+    dplyr::rename(anon_chi = patient_chi) %>%
+    dplyr::select("anon_chi", "hhg_score") %>%
+    dplyr::collect()
+
   return(extract_hhg)
 }
 
