@@ -47,7 +47,7 @@ episode_file <- slfhelper::read_slf_episode(year, col_select = "anon_chi") %>%
   # to the CHILI team.
   slfhelper::get_chi() %>%
   # Remove any duplicate CHIs
-dplyr::distinct()
+  dplyr::distinct()
 
 # Save a parquet file
 episode_file %>%
