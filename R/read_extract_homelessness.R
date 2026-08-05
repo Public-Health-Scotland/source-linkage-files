@@ -29,14 +29,12 @@ read_extract_homelessness <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      .data$financial_year_of_assessment <= c_year,
-      is.null(financial_year_of_case_closed) | # TODO: Check is this should be is.na
-        .data$financial_year_of_case_closed >= c_year
+      .data$assessment_decision_financial_year <= c_year,
+      is.null(.data$case_closed_financial_year) |
+        .data$case_closed_financial_year >= c_year
     ) %>%
     # Rename variables
     dplyr::select(
-      # financial_year_of_assessment,
-      # financial_year_of_case_closed,
       assessment_decision_date = "assessment_decision_date",
       case_closed_date = "case_closed_date",
       sending_local_authority_code_9 = "sending_local_authority_code_9",
