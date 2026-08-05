@@ -16,7 +16,9 @@ produce_homelessness_completeness(
 
 \item{update}{The update to use (default is \code{\link[=latest_update]{latest_update()}}).}
 
-\item{sg_pub_data}{The path to the SG pub figures.}
+\item{sg_pub_data}{SG pub figures.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} as a lookup with \code{year},

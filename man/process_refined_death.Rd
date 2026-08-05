@@ -16,6 +16,12 @@ process_refined_death(
 \item{it_chi_deaths}{it chi death data}
 
 \item{write_to_disk}{write the result to disk or not.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 refined_death The processed lookup of deaths combining NRS and IT_CHI.

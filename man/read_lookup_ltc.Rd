@@ -9,12 +9,9 @@ read_lookup_ltc(
   BYOC_MODE
 )
 }
-\arguments{
-\item{file_path}{Path to the LTC file}
-}
 \value{
 a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-Read LTC IT extract
+This will read the LTC extract and return the data.
 }

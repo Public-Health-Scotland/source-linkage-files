@@ -76,6 +76,7 @@ export(get_sc_hc_episodes_path)
 export(get_sc_sds_episodes_path)
 export(get_service_use_cohorts_path)
 export(get_sg_homelessness_pub_path)
+export(get_sg_pub_data)
 export(get_simd_path)
 export(get_slf_ch_name_lookup_path)
 export(get_slf_chi_deaths_path)
@@ -207,9 +208,13 @@ export(write_console_output)
 export(write_file)
 export(write_temp_data)
 export(years_to_run)
-importFrom(data.table,.N)
-importFrom(data.table,.SD)
+importFrom(data.table,
+  .N,
+  .SD
+)
 importFrom(magrittr,"%>%")
-importFrom(rlang,":=")
-importFrom(rlang,.data)
+importFrom(rlang,
+  ":=",
+  .data
+)
 importFrom(tibble,tibble)
