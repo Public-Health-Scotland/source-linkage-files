@@ -193,6 +193,17 @@ list(
       )
     ),
 
+    # Homelessness lookup-------------------------------------------------------
+    tar_target(
+      # Target name
+      homelessness_lookup,
+      # Function
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
+
     ### Maternity (SMR02) Activity ---------------------------------------------
     # READ - Maternity
     tar_target(
