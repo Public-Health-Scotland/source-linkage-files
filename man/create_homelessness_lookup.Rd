@@ -6,7 +6,8 @@
 \usage{
 create_homelessness_lookup(
   year,
-  homelessness_data = read_file(get_source_extract_path(year, "homelessness"))
+  homelessness_data = read_file(get_source_extract_path(year = year, type =
+    "homelessness", BYOC_MODE = BYOC_MODE))
 )
 }
 \arguments{
