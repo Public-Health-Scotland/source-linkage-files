@@ -211,9 +211,13 @@ export(write_console_output)
 export(write_file)
 export(write_temp_data)
 export(years_to_run)
-importFrom(data.table,.N)
-importFrom(data.table,.SD)
+importFrom(data.table,
+  .N,
+  .SD
+)
 importFrom(magrittr,"%>%")
-importFrom(rlang,":=")
-importFrom(rlang,.data)
+importFrom(rlang,
+  ":=",
+  .data
+)
 importFrom(tibble,tibble)
