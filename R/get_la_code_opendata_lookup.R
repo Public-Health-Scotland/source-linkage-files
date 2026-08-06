@@ -14,7 +14,6 @@ get_la_code_opendata_lookup <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-
   log_slf_event(
     stage = "read",
     status = "start",
