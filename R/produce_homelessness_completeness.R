@@ -39,7 +39,7 @@ produce_homelessness_completeness <- function(
       .groups = "drop"
     )
 
-  sg_all_assessments_annual <- sg_pub_data # %>%
+  # sg_all_assessments_annual <- sg_pub_data %>%
   # dplyr::rename_with(~ c(
   #   "CAName",
   #   paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
@@ -71,7 +71,7 @@ produce_homelessness_completeness <- function(
 
   annual_comparison <- dplyr::left_join(
     application_counts,
-    sg_all_assessments_annual,
+    sg_pub_data,
     by = dplyr::join_by(
       "sending_local_authority_name" == "CAName",
       "year" == "sg_year"
