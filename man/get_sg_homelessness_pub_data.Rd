@@ -9,9 +9,19 @@ get_sg_homelessness_pub_data(
   BYOC_MODE
 )
 }
+\arguments{
+\item{denodo_connect}{Connection to denodo}
+
+\item{BYOC_MODE}{BYOC MODE}
+}
 \value{
-homelessness completeness data
+a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 get homelessness completeness SG publication figures
 }
+\seealso{
+Other lookup files:
+\code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}}
+}
+\concept{lookup files}

@@ -9,8 +9,11 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param update The update to use (default is [latest_update()]).
-#' @param la_code_lookup get local authority using opendata.
-#' @param sg_pub_data The path to the SG pub figures.
+#' @param la_code_lookup local authority data.
+#' @param sg_pub_data SG pub figures.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -38,8 +41,6 @@ process_extract_homelessness <- function(
   if (identical(data, tibble::tibble())) {
     return(data)
   }
-
-  logger::log_info("Process homelessness data")
 
   data <- data %>%
     dplyr::mutate(
@@ -187,14 +188,13 @@ process_extract_homelessness <- function(
       "hl1_completeness"
     )
 
-  logger::log_info("Write processed homelessness data to Denodo intermediate drive")
   if (write_to_disk) {
     write_file(
       final_data,
       get_source_extract_path(
         year = year,
         type = "homelessness",
-        BYOC_MODE,
+        BYOC_MODE = BYOC_MODE,
         check_mode = "write"
       ),
       BYOC_MODE = BYOC_MODE,

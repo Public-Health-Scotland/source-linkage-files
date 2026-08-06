@@ -39,12 +39,9 @@ produce_homelessness_completeness <- function(
       .groups = "drop"
     )
 
-  sg_all_assessments_annual <- sg_pub_data
-
-
   annual_comparison <- dplyr::left_join(
     application_counts,
-    sg_all_assessments_annual,
+    sg_pub_data,
     by = dplyr::join_by(
       "sending_local_authority_name" == "CAName",
       "year" == "sg_year"
@@ -126,21 +123,33 @@ get_sg_homelessness_pub_path <- function(...) {
 #'
 #' @description get homelessness completeness SG publication figures
 #'
-#' @return homelessness completeness data
+#' @param denodo_connect Connection to denodo
+#' @param BYOC_MODE BYOC MODE
 #'
+#' @return a [tibble][tibble::tibble-package].
 #' @export
+#'
+#' @family lookup files
 get_sg_homelessness_pub_data <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  log_slf_event(
+    stage = "read",
+    status = "start",
+    type = "homelessness_completeness",
+    year = "all"
+  )
+
   if (isTRUE(BYOC_MODE)) {
     sg_pub_data <- dplyr::tbl(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
     ) %>%
-      dplyr::collect() %>%
       dplyr::rename("CAName" = "local_authority", "sg_year" = "fin_year") %>%
+      dplyr::collect() %>%
       dplyr::mutate(sg_year = convert_year_to_fyyear(sg_year)) %>%
       dplyr::summarise(
         sg_all_assessments = sum(sg_all_assessments),
@@ -184,6 +193,13 @@ get_sg_homelessness_pub_data <- function(
       dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
   }
 
+  log_slf_event(
+    stage = "read",
+    status = "complete",
+    type = "homelessness_completeness",
+    year = "all"
+  )
+
   return(sg_pub_data)
 }
 
@@ -210,7 +226,7 @@ get_homelessness_completeness_path <- function(
 ) {
   if (BYOC_MODE) {
     completeness_file_path <- fs::path(
-      directory = denodo_output_path(), # todo: waiting to be finalised
+      directory = denodo_output_path(),
       file_name = stringr::str_glue(
         "homelessness_completeness_{year}_{update}.parquet"
       )

@@ -246,7 +246,6 @@ list(
       read_extract_homelessness(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
