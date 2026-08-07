@@ -31,7 +31,7 @@ end_date <- function() {
   # Q2 September = 30092024
   # Q3 December = 31122024
   # Q4 March = 31032025
-  end_date <- lubridate::dmy(30062026)
+  end_date <- lubridate::dmy(30092026)
 
   return(end_date)
 }
@@ -99,17 +99,18 @@ check_year_valid <- function(
     # HHG stops in 2022/23
   } else if (year >= "2324" && all(type %in% "hhg")) {
     return(FALSE)
+  } else if (year >= "2526" &&
+    all(type %in% c())) {
+    return(FALSE)
+  } else if (year >= "2627" &&
+    all(type %in% c("nsu"))) {
     ## CHECK - what is the latest NSU cohort available?
     # NSU is currently available for 2024/25
     ## CHECK - What period does SDS data get submitted?
     ## CHECK - what data do we have available for Social Care and SPARRA?
-  } else if (year >= "2526" &&
-    all(type %in% c("nsu", "sds"))) {
     return(FALSE)
-  } else if (year >= "2627" &&
-    all(type %in% c("sparra", "at", "ch", "hc", "client"))) {
-    return(FALSE)
-  }
+  } else if (year >= "2728" &&
+    all(type %in% c("sparra", "at", "ch", "hc", "sds", "client"))) {}
 
   return(TRUE)
 }
