@@ -23,13 +23,18 @@ process_extract_homelessness <- function(
   year,
   write_to_disk = TRUE,
   update = latest_update(),
-  la_code_lookup = get_la_code_opendata_lookup(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)),
-  sg_pub_data = get_sg_homelessness_pub_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)),
+  la_code_lookup = get_la_code_opendata_lookup(BYOC_MODE = BYOC_MODE),
+  sg_pub_data = get_sg_homelessness_pub_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "homelessness", year = year)
+  log_slf_event(
+    stage = "process",
+    status = "start",
+    type = "homelessness",
+    year = year
+  )
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -202,7 +207,12 @@ process_extract_homelessness <- function(
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "homelessness", year = year)
+  log_slf_event(
+    stage = "process",
+    status = "complete",
+    type = "homelessness",
+    year = year
+  )
 
   return(final_data)
 }
