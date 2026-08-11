@@ -91,7 +91,12 @@ year <- "1920"
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
   year,
-  types = c("demog")
+  types = c(
+    "mh",
+    "nrs_deaths",
+    "combined_deaths",
+    "chi_deaths"
+  )
 )
 # using homelessness for test purpose. When development is complete,
 # we change to "types = "byoc_input_files""
@@ -99,10 +104,17 @@ byoc_output_files <- get_byoc_output_files(
 
 # targets ----
 logger::log_info("Targets started.")
-targets::tar_make(
-  script = "SDL_process/dummy_targets.R",
-  store = store_path,
-  reporter = "timestamp"
+
+tryCatch(
+  log_tar_make(
+    script = "SDL_process/dummy_targets.R",
+    store = store_path,
+    reporter = "verbose"
+  ),
+  error = function(e) {
+    logger::log_error("Targets failed: {conditionMessage(e)}")
+    stop(e)
+  }
 )
 logger::log_info("Targets finished.")
 
