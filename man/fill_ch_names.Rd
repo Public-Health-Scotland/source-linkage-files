@@ -4,7 +4,12 @@
 \alias{fill_ch_names}
 \title{Fix and fill care home name and postcodes}
 \usage{
-fill_ch_names(ch_data)
+fill_ch_names(
+  ch_data,
+  spd_data = get_spd_data(BYOC_MODE),
+  uk_pc_list = get_uk_postcode_data(BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE)
+)
 }
 \arguments{
 \item{ch_data}{partially cleaned up care home data as a
