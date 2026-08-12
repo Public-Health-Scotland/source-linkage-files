@@ -25,7 +25,8 @@ get_sg_pub_data <- function(
   ) %>%
     dplyr::select(
       "CAName" = "local_authority",
-      "sg_year" = "fin_year"
+      "sg_year" = "fin_year",
+      "sg_all_assessments", "sg_all_assessments"
     ) %>%
     # Collect
     dplyr::collect() %>%
@@ -38,5 +39,5 @@ get_sg_pub_data <- function(
 
   log_slf_event(stage = "read", status = "complete", type = "homelessness_completeness", year = "all")
 
-  return(get_sg_pub_data)
+  return(sg_pub_data)
 }
