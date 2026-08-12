@@ -85,11 +85,13 @@ get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
     # Disconnect from Denodo
     on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+    log_slf_event(stage = "read", status = "start", type = "spd", year = "all")
+
     extract_spd <- dplyr::tbl(
       denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_spd_source") ### TODO check SDL name ###
+      dbplyr::in_schema("sdl", "sdl_spd_source")
     ) %>%
-      collect()
+      dplyr::collect()
   } else {
     spd_data <- read_file(get_spd_path()) %>%
       dplyr::select(
@@ -116,6 +118,9 @@ get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
         )
       )
   }
+
+  log_slf_event(stage = "read", status = "complete", type = "spd", year = "all")
+
   return(spd_data)
 }
 
