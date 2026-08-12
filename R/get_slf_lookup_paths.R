@@ -196,7 +196,7 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                         BYOC_MODE) {
-  log_slf_event(stage = "read", status = "start", type = "ch_name_lookup", year = year)
+  log_slf_event(stage = "read", status = "start", type = "ch_name_lookup", year = "all")
 
   # Disconnect from Denodo
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
@@ -205,9 +205,9 @@ get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(B
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source")
   ) %>%
-    collect()
+    dplyr::collect()
 
-  log_slf_event(stage = "read", status = "complete", type = "ch_name_lookup", year = year)
+  log_slf_event(stage = "read", status = "complete", type = "ch_name_lookup", year = "all")
 
   return(ch_name_lookup_data)
 }
