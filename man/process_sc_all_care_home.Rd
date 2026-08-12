@@ -6,11 +6,11 @@
 \usage{
 process_sc_all_care_home(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE)),
-  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE)),
-  uk_pc_directory = get_uk_postcode_data(BYOC_MODE),
-  ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE),
-  spd_path = get_spd_data(BYOC_MODE),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)),
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
@@ -28,9 +28,7 @@ with \code{\link[=process_refined_death]{process_refined_death()}}.}
 
 \item{uk_pc_directory}{UK postcode directory}
 
-\item{ch_name_lookup_path}{Care home name lookup}
-
-\item{spd_path}{Scottish postcode directory}
+\item{ch_name_lookup}{Care home name lookup}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
@@ -40,6 +38,8 @@ with \code{\link[=process_refined_death]{process_refined_death()}}.}
 
 \item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{spd_dataScottish}{postcode directory}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
