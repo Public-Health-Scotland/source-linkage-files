@@ -203,7 +203,7 @@ get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(B
 
   ch_name_lookup_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source") ### TODO check SDL name ###
+    dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source")
   ) %>%
     collect()
 
