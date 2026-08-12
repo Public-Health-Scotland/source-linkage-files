@@ -52,7 +52,7 @@ get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MOD
 
   log_slf_event(stage = "read", status = "complete", type = "uk_postcode", year = "all")
 
-  return(uk_pc_data)
+  return(extract_uk_pc)
 }
 
 
