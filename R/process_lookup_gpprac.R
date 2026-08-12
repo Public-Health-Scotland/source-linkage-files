@@ -13,10 +13,10 @@
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(
-  open_data = get_gpprac_opendata(),
-  gpprac_ref_path = get_gpprac_ref_path(),
-  write_to_disk = TRUE
-) {
+    open_data = get_gpprac_opendata(),
+    gpprac_ref_path = get_gpprac_ref_path(),
+    spd_path = get_spd_path(),
+    write_to_disk = TRUE) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_slf_lookup", year = "all")
 
   gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
@@ -29,14 +29,16 @@ process_lookup_gpprac <- function(
       pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
     )
 
-  spd_file <- get_spd_data(BYOC_MODE) %>%
-    dplyr::select(c(
+  spd_file <- read_file(
+    path = spd_path,
+    col_select = c(
       "pc7",
       "pc8",
       "hb2018",
       "hscp2018",
       "ca2018"
-    ))
+    )
+  )
 
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(
@@ -66,11 +68,11 @@ process_lookup_gpprac <- function(
     ) %>%
     dplyr::mutate(
       lca = convert_ca_to_lca(.data$ca2018),
-      hbpraccode = dplyr::recode_values(
+      hbpraccode = dplyr::case_match(
         .data$gpprac,
         c(99942L, 99957L, 99961L, 99981L, 99999L) ~ "S08200003",
         99995L ~ "S08200001",
-        default = .data$hbpraccode
+        .default = .data$hbpraccode
       )
     )
 
