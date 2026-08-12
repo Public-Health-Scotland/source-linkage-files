@@ -15,7 +15,7 @@ read_sc_all_care_home <- function(denodo_connect = get_denodo_connection(BYOC_MO
 
   ch_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("social_care_2", "carehome_snapshot") # TODO: update SDL table
+    dbplyr::in_schema("sdl", "sdl_sc_carehome_source")
   ) %>%
     dplyr::select(
       "ch_name",
