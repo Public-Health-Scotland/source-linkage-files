@@ -32,7 +32,7 @@ get_hscp_pop_data <- function(
     dplyr::select(
       year = "year",
       hscp2019 = "hscp2019",
-      hscp2019_name = "hscp2019name",
+      hscp2019name = "hscp2019name",
       hscp2018 = "hscp2018",
       hscp2016 = "hscp2016",
       age = "age",
