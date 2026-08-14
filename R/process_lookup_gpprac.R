@@ -3,9 +3,9 @@
 #' @description This will read and process the gpprac lookup, it will return
 #' the final data and also write this out to disk.
 #'
-#' @param gpprac_open_data PHS open dataset link to GP practice details
-#' @param gpprac_ref_path Path to GP Practice reference file
-#' @param spd_path Path to Scottish Postcode Directory.
+#' @param gpprac_opendata PHS open dataset link to GP practice details
+#' @param gpprac_ref_data Path to GP Practice reference file
+#' @param spd_data Path to Scottish Postcode Directory.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -13,20 +13,19 @@
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA,
-  gpprac_ref_file = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
-  gpprac_open_data = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
-  spd_file = get_spd_data(BYOC_MODE = BYOC_MODE)
-) {
+    BYOC_MODE = FALSE,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    run_id = NA,
+    run_date_time = NA,
+    gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
+    gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+    spd_data = get_spd_data(BYOC_MODE = BYOC_MODE)) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_lookup", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
   # Select required variables from the SPD reference file
-  spd_file <- spd_file %>%
+  spd_file <- spd_data %>%
     dplyr::select(
       "pc7",
       "pc8",
@@ -36,8 +35,8 @@ process_lookup_gpprac <- function(
     )
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(
-    gpprac_ref_file,
-    gpprac_open_data,
+    gpprac_ref_data,
+    gpprac_opendata,
     by = "gpprac",
     na_matches = "never",
     relationship = "one-to-one",
@@ -66,7 +65,7 @@ process_lookup_gpprac <- function(
         .data$gpprac,
         c(99942L, 99957L, 99961L, 99981L, 99999L) ~ "S08200003",
         99995L ~ "S08200001",
-        .default = .data$hbpraccode
+        default = .data$hbpraccode
       ),
       run_id = run_id,
       run_date_time = run_date_time

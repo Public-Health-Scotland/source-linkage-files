@@ -4,29 +4,28 @@
 #' @export
 #'
 get_gpprac_opendata <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE,
-  write_to_disk = TRUE
-) {
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE,
+    write_to_disk = TRUE) {
   log_slf_event(stage = "read", status = "start", type = "gpprac_opendata", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  gpprac_data <- dplyr::tbl(
+  gpprac_cluster <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gpprac_cluster_source") # TO-DO: update table name
+    dbplyr::in_schema("sdl", "sdl_gpprac_cluster_source")
   ) %>%
+    dplyr::collect()
+
+  geography_labels <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_geography_labels_source")
+  ) %>%
+    dplyr::collect()
+
+  gpprac_data <- gpprac_cluster %>%
     dplyr::left_join(
-      dplyr::tbl(
-        denodo_connect,
-        dbplyr::in_schema("sdl", "sdl_geography_labels_source") # TO-DO: update table name
-      ) %>%
-        dplyr::select( # TO-DO: confirm variable names
-          hscp,
-          hscpname,
-          hb,
-          hbname
-        ),
+      geography_labels,
       by = c("hb", "hscp")
     ) %>%
     dplyr::select(
@@ -34,10 +33,9 @@ get_gpprac_opendata <- function(
       practice_name = "gp_practice_name",
       "postcode",
       cluster = "gp_cluster",
-      partnership = "hscpname",
-      health_board = "hbname"
+      partnership = "hscp_name",
+      health_board = "hb_name"
     ) %>%
-    dplyr::collect() %>%
     # drop NA cluster rows
     tidyr::drop_na("cluster") %>%
     dplyr::mutate(
@@ -49,11 +47,11 @@ get_gpprac_opendata <- function(
     dplyr::distinct(.data$gpprac, .keep_all = TRUE)
 
   if (write_to_disk) {
-    write_file(gpprac_data, get_practice_details_path(
-      check_mode = "write", BYOC_MODE = BYOC_MODE
-    ),
-    BYOC_MODE = BYOC_MODE,
-    group_id = 3206 # hscdiip owner
+    write_file(
+      gpprac_data,
+      get_practice_details_path(check_mode = "write"),
+      BYOC_MODE = BYOC_MODE,
+      group_id = 3206 # hscdiip owner
     )
   }
 
