@@ -54,11 +54,11 @@ fill_ch_names <- function(ch_data,
   ch_name_lookup <- ch_name_lookup %>%
     # Drop any Care Homes that were closed before 2017/18
     dplyr::select(
-      ch_postcode = "AccomPostCodeNo",
-      ch_name_validated = "ServiceName",
-      ch_date_registered = "DateReg",
-      ch_date_cancelled = "DateCanx",
-      ch_active = tidyselect::contains("ServiceStatusAt")
+      ch_postcode = "accomodation_postcode_number", ## TODO: check typo in final interface??
+      ch_name_validated = "service_name",
+      ch_date_registered = "date_of_registration",
+      ch_date_cancelled = "date_service_cancelled",
+      ch_active = tidyselect::contains("service_status")
     ) %>%
     # some care home cancelled dates incorrectly are "1900-01-01"
     # assume the cancelled dates to be the "current date", or equivalently NA
