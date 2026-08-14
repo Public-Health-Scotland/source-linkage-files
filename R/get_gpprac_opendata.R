@@ -4,9 +4,10 @@
 #' @export
 #'
 get_gpprac_opendata <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE,
-    write_to_disk = TRUE) {
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE,
+  write_to_disk = TRUE
+) {
   log_slf_event(stage = "read", status = "start", type = "gpprac_opendata", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)

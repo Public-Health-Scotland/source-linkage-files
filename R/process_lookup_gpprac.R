@@ -13,13 +13,14 @@
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(
-    BYOC_MODE = FALSE,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    run_id = NA,
-    run_date_time = NA,
-    gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
-    gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
-    spd_data = get_spd_data(BYOC_MODE = BYOC_MODE)) {
+  BYOC_MODE = FALSE,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  run_id = NA,
+  run_date_time = NA,
+  gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
+  gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE)
+) {
   log_slf_event(stage = "process", status = "start", type = "gpprac_lookup", year = "all")
 
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
