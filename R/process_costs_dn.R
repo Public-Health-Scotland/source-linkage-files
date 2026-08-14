@@ -23,7 +23,7 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
                              BYOC_MODE = FALSE,
                              run_id = NA,
                              run_date_time = NA) {
-  log_slf_event(stage = "process", status = "start", type = "dn_cost_lookup", year = year)
+  log_slf_event(stage = "process", status = "start", type = "dn_cost_lookup", year = "all")
 
   # Define latest year
   latest_year <- check_year_format("1920")
@@ -44,39 +44,39 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
   # District Nursing data which is 27% of the population.
   population_lookup <- hscp_population %>%
     # Create year as FY = YYYY from CCYY
-    rename(calendar_year = year) %>%
-    mutate(year = convert_year_to_fyyear(calendar_year)) %>%
-    group_by(year, hscp2019name) %>%
-    summarise(pop = sum(pop)) %>%
-    mutate(total_pop = sum(pop)) %>%
-    ungroup() %>%
+    dplyr::rename(calendar_year = year) %>%
+    dplyr::mutate(year = convert_year_to_fyyear(calendar_year)) %>%
+    dplyr::group_by(year, hscp2019name) %>%
+    dplyr::summarise(pop = sum(pop)) %>%
+    dplyr::mutate(total_pop = sum(pop)) %>%
+    dplyr::ungroup() %>%
     # Add Health Board code
-    mutate(hb2019 = "S08000022") %>%
+    dplyr::mutate(hb2019 = "S08000022") %>%
     # Compute proportion
-    mutate(
+    dplyr::mutate(
       pop_proportion = pop / total_pop,
       pop_pct = pop_proportion * 100.0
     ) %>%
     # Argyll and Bute is the only HSCP in NHS Highland that submits data
-    filter(hscp2019name == "Argyll and Bute")
+    dplyr::filter(hscp2019name == "Argyll and Bute")
 
   # Join population data -------------------------------------------
 
   # Match files
-  matched_data <- full_join(dn_raw_costs_contacts,
+  matched_data <- dplyr::full_join(dn_raw_costs_contacts,
     population_lookup,
     by = c("hb2019", "year")
   ) %>%
     # Recode NA pop_proportion with 1
-    mutate(pop_proportion = replace_na(pop_proportion, 1)) %>%
+    dplyr::mutate(pop_proportion = tidyr::replace_na(pop_proportion, 1)) %>%
     # Total net cost
-    mutate(
+    dplyr::mutate(
       cost_total_net = ((cost * 1000) / (number_of_contacts / pop_proportion))
     ) %>%
     # Sort by HB2019 and year
-    arrange(hb2019, year) %>%
+    dplyr::arrange(hb2019, year) %>%
     # Keep only records with cost
-    filter(!is.na(cost_total_net))
+    dplyr::filter(!is.na(cost_total_net))
 
   # Fix incomplete submissions ------------------------------------------
 
@@ -87,37 +87,38 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
   # Explore the trends
   matched_data <-
     matched_data %>%
-    group_by(board_name) %>%
-    mutate(max_contacts = max(number_of_contacts)) %>%
-    mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
-    ungroup()
+    dplyr::group_by(board_name) %>%
+    dplyr::mutate(max_contacts = max(number_of_contacts)) %>%
+    dplyr::mutate(pct_of_max = number_of_contacts / max_contacts * 100) %>%
+    dplyr::ungroup()
 
   # Deal with costs ------------------------------------------
 
   # Costs with pct_of_max < 75 - uplift
   uplift_data <-
     matched_data %>%
-    mutate(cost_total_net = replace(cost_total_net, pct_of_max < 75, NA)) %>%
-    group_by(board_name)
+    dplyr::mutate(cost_total_net = replace(cost_total_net, pct_of_max < 75, NA)) %>%
+    dplyr::group_by(board_name)
 
   while (anyNA(uplift_data$cost_total_net)) {
     uplift_data <- uplift_data %>%
-      mutate(cost_total_net = if_else(is.na(cost_total_net),
-        lag(cost_total_net) * 1.01,
+      dplyr::mutate(cost_total_net = dplyr::if_else(
+        is.na(cost_total_net),
+        dplyr::lag(cost_total_net) * 1.01,
         cost_total_net
       ))
   }
 
-  uplift_data <- ungroup(uplift_data)
+  uplift_data <- dplyr::ungroup(uplift_data)
 
   # Add in years by copying the most recent year we have
   new_years_data <-
-    bind_rows(
+    dplyr::bind_rows(
       uplift_data,
-      map_df(1:5, ~
+      purrr::map_df(1:5, ~
         uplift_data %>%
-          filter(year == latest_year) %>%
-          mutate(
+          dplyr::filter(year == latest_year) %>%
+          dplyr::mutate(
             cost_total_net = cost_total_net * (1.01)^.x,
             year = convert_year_to_fyyear(as.numeric(convert_fyyear_to_year(year)) + .x)
           ))
@@ -125,18 +126,18 @@ process_costs_dn <- function(dn_raw_costs = get_dn_raw_costs_data(BYOC_MODE = BY
 
   new_years_data <-
     new_years_data %>%
-    rename(
+    dplyr::rename(
       hbtreatcode = "hb2019",
       hbtreatname = "treatment_nhs_board_name"
     ) %>%
-    select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
-    arrange(hbtreatcode, year)
+    dplyr::select(year, hbtreatcode, hbtreatname, cost_total_net) %>%
+    dplyr::arrange(hbtreatcode, year)
 
   # Save outfile ---------------------------------------
 
   outfile <-
     new_years_data %>%
-    select(
+    dplyr::select(
       year,
       hbtreatcode,
       hbtreatname,
