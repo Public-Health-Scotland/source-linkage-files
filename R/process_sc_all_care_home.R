@@ -73,9 +73,6 @@ process_sc_all_care_home <- function(
     roll = "nearest"
   ]
 
-  uk_pc_directory <- uk_pc_directory %>%
-    dplyr::pull()
-
   data <- data %>%
     as.data.frame() %>%
     replace_sc_id_with_latest() %>%
