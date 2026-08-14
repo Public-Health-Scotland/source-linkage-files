@@ -4,9 +4,9 @@
 #'
 #' @export
 read_extract_district_nursing <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "dn", year = year)
 

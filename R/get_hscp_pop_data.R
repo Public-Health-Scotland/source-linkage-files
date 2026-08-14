@@ -10,8 +10,8 @@
 #'
 #' @family lookup files
 get_hscp_pop_data <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "hscp_pop_lookup", year = "all")
 
@@ -47,7 +47,3 @@ get_hscp_pop_data <- function(
 
   return(hscp_pop_data)
 }
-
-
-
-

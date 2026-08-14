@@ -10,8 +10,8 @@
 #'
 #' @family lookup files
 get_dn_contacts_data <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "dn_contact_lookup", year = "all")
 
