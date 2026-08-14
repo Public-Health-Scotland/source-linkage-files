@@ -6,10 +6,14 @@
 \usage{
 process_sc_all_care_home(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
-  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)),
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 )
 }
@@ -22,13 +26,20 @@ process_sc_all_care_home(
 \item{refined_death}{The processed lookup of deaths from IT produced
 with \code{\link[=process_refined_death]{process_refined_death()}}.}
 
-\item{ch_name_lookup_path}{Path to the Care Home name Lookup Excel workbook.}
+\item{uk_pc_directory}{UK postcode directory}
 
-\item{spd_path}{(Optional) Path the Scottish Postcode Directory, default is
-to use \code{\link[=get_spd_path]{get_spd_path()}}.}
+\item{ch_name_lookup}{Care home name lookup}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{Denodo identifier}
+
+\item{run_date_time}{Denodo identifier}
 
 \item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{spd_dataScottish}{postcode directory}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
