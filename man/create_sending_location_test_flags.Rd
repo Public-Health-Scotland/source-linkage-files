@@ -18,12 +18,12 @@ a dataframe with flag (T or F) for each sending location
 Create flags for sending location
 }
 \seealso{
-Other flag functions: 
-\code{\link{create_demog_test_flags}()},
-\code{\link{create_hb_cost_test_flags}()},
-\code{\link{create_hb_test_flags}()},
-\code{\link{create_hscp_test_flags}()},
-\code{\link{create_lca_client_test_flags}()},
-\code{\link{create_lca_test_flags}()}
+Other flag functions:
+\code{\link[=create_demog_test_flags]{create_demog_test_flags()}},
+\code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}},
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}},
+\code{\link[=create_hscp_test_flags]{create_hscp_test_flags()}},
+\code{\link[=create_lca_client_test_flags]{create_lca_client_test_flags()}},
+\code{\link[=create_lca_test_flags]{create_lca_test_flags()}}
 }
 \concept{flag functions}
