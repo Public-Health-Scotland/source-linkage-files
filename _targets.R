@@ -133,10 +133,9 @@ list(
   # Scottish postcode directory------
   tar_target(
     # Target name
-    spd_path,
+    spd_data,
     # Function
-    get_spd_path(),
-    format = "file"
+    get_spd_data(BYOC_MODE = BYOC_MODE)
   ),
   # Update NHS UK postcode directory -----
   tar_target(
@@ -196,7 +195,7 @@ list(
     process_lookup_gpprac(
       open_data = gpprac_opendata,
       gpprac_ref_path = gpprac_ref_path,
-      spd_path = spd_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
@@ -400,7 +399,7 @@ list(
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
       ch_name_lookup_path = slf_ch_name_lookup_path,
-      spd_path = spd_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.5

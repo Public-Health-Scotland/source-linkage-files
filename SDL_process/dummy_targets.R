@@ -178,6 +178,13 @@ list(
   #   )
   # ),
 
+  # Scottish postcode directory------
+  tar_target(
+    # Target name
+    spd_data,
+    # Function
+    get_spd_data(BYOC_MODE = BYOC_MODE)
+  ),
 
   ## Stage 2.2 year specific targets ----
   tar_map(

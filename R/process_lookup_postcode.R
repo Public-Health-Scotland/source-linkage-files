@@ -4,10 +4,14 @@
 #' postcode lookup, it will return the final data
 #' and (optionally) write it to disk.
 #'
+#' @param spd_data Scottish Postcode Directory lookup.
 #' @param simd_data SIMD lookup.
 #' @param locality_data HSCP locality lookup.
-#'
-#' @inheritParams process_lookup_gpprac
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
