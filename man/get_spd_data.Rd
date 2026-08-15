@@ -8,6 +8,11 @@ get_spd_data(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 )
+
+get_spd_data(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{denodo_connect}{Connection to denodo}
@@ -16,13 +21,19 @@ get_spd_data(
 }
 \value{
 An \code{\link[fs:path]{fs::path()}} to the Scottish Postcode Directory
+
+An \code{\link[fs:path]{fs::path()}} to the Scottish Postcode Directory
 }
 \description{
+Return the data to the centrally held Scottish Postcode Directory
+(SPD) file.
+
 Return the data to the centrally held Scottish Postcode Directory
 (SPD) file.
 }
 \seealso{
 Other lookup file paths:
+\code{\link[=get_gpprac_ref_data]{get_gpprac_ref_data()}},
 \code{\link[=get_gpprac_ref_path]{get_gpprac_ref_path()}},
 \code{\link[=get_locality_path]{get_locality_path()}},
 \code{\link[=get_lookups_dir]{get_lookups_dir()}},
