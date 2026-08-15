@@ -140,7 +140,7 @@ add_keep_population_flag <- function(
       )
   }
 
-  log_ep_substage(sub_stage = "Add keep_population flag", status = "complete", year = year)  # TODO: Check usage
+  log_ep_substage(sub_stage = "Add keep_population flag", status = "complete", year = year) # TODO: Check usage
 
   return(individual_file)
 }
