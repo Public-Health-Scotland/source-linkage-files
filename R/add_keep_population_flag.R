@@ -111,7 +111,7 @@ add_keep_population_flag <- function(
       ) %>%
       dplyr::filter(.data$keep_nsu == 1L) %>%
       dplyr::ungroup() %>%
-      dplyr::select(-.data$flag_to_remove)
+      dplyr::select(-"flag_to_remove")
 
     # step 3: match the flag back onto the slf
     individual_file <- individual_file %>%

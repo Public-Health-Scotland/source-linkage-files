@@ -135,7 +135,7 @@ log_slf_event <- function(stage = c("read", "process", "test"),
                           type,
                           year,
                           ...) {
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "acute" ~ "Acute",
     "ae" ~ "A&E",
