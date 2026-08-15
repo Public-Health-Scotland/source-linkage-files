@@ -4,7 +4,7 @@
 \alias{get_slf_gpprac_path}
 \title{SLF GP Lookup File Path}
 \usage{
-get_slf_gpprac_path(update = latest_update(), ...)
+get_slf_gpprac_path(update = latest_update(), BYOC_MODE = FALSE, ...)
 }
 \arguments{
 \item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}

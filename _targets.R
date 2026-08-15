@@ -91,7 +91,10 @@ list(
     # Target name
     gpprac_opendata,
     # Function
-    get_gpprac_opendata()
+    get_gpprac_opendata(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # Local Authority open data------
   tar_target(
@@ -103,9 +106,12 @@ list(
   # GP Practice reference file------
   tar_target(
     # Target name
-    gpprac_ref_path,
+    gpprac_ref_data,
     # Function
-    get_gpprac_ref_path(),
+    get_gpprac_ref_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     format = "file"
   ),
   # Locality data------
@@ -135,7 +141,10 @@ list(
     # Target name
     spd_data,
     # Function
-    get_spd_data(BYOC_MODE = BYOC_MODE)
+    get_spd_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
   ),
   # Update NHS UK postcode directory -----
   tar_target(
@@ -193,10 +202,13 @@ list(
     source_gp_lookup,
     # Function
     process_lookup_gpprac(
-      open_data = gpprac_opendata,
-      gpprac_ref_path = gpprac_ref_path,
+      gpprac_ref_data = gpprac_ref_data,
+      gpprac_opendata = gpprac_opendata,
       spd_data = spd_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),

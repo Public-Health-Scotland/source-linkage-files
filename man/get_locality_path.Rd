@@ -19,6 +19,7 @@ Get the path to the centrally held HSCP Localities file - LOCAL ONLY
 }
 \seealso{
 Other lookup file paths:
+\code{\link[=get_gpprac_ref_data]{get_gpprac_ref_data()}},
 \code{\link[=get_gpprac_ref_path]{get_gpprac_ref_path()}},
 \code{\link[=get_lookups_dir]{get_lookups_dir()}},
 \code{\link[=get_pop_path]{get_pop_path()}},
