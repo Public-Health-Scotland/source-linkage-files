@@ -55,8 +55,7 @@ analyst <- "Jen"
 #   "acute_cup", "gp_ooh_cup", "delayed_discharges", "spd", "simd", "readcode",
 #   "ooh_cost_lookup", "homelessness_completeness", "cmh", "datazone_pop", "dn",
 #   "dn_cost_lookup", "dn_contact_lookup", "hscp_localities", "hscp_pop", "hhg",
-#   "nsu", "la_lookup", "gpprac_ref_file", "ch_costs", "nsu", "la_lookup",
-#   "gpprac_ref_file", "ch_costs", "hc_cost_lookup")
+#   "nsu", "la_lookup", "gpprac_ref_file", "ch_costs","gpprac_ref_file", "hc_cost_lookup")
 
 datasets <- c("ch_costs")
 
