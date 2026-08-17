@@ -15,11 +15,11 @@ process_lookup_postcode(
 )
 }
 \arguments{
-\item{spd_data}{Scottish Postcode Directory lookup.}
+\item{spd_data}{Scottish Postcode Directory data.}
 
-\item{simd_data}{SIMD lookup.}
+\item{simd_data}{SIMD data.}
 
-\item{locality_data}{HSCP locality lookup.}
+\item{locality_data}{HSCP locality data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

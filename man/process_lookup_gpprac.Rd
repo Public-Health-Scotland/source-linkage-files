@@ -17,7 +17,7 @@ process_lookup_gpprac(
 \arguments{
 \item{gpprac_ref_data}{GP Practice reference data.}
 
-\item{gpprac_opendata}{PHS open dataset for GP practice details}
+\item{gpprac_opendata}{PHS open dataset for GP practice details.}
 
 \item{spd_data}{Scottish Postcode Directory data.}
 
@@ -34,8 +34,9 @@ process_lookup_gpprac(
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-This will read and process the gpprac lookup, it will return
-the final data and also write this out to disk.
+This will read and process the
+gpprac lookup, it will return the final data
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts:

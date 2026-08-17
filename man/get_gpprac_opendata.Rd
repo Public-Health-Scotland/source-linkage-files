@@ -6,13 +6,36 @@
 \usage{
 get_gpprac_opendata(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE,
-  write_to_disk = TRUE
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
+}
+\arguments{
+\item{denodo_connect}{Connection to denodo}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 The final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-GP Practice details from PHS open data
+Return the data for GP Practice details.
 }
+\seealso{
+Other lookup files:
+\code{\link[=get_datazone_pop_data]{get_datazone_pop_data()}},
+\code{\link[=get_gpprac_ref_data]{get_gpprac_ref_data()}},
+\code{\link[=get_locality_data]{get_locality_data()}},
+\code{\link[=get_simd_data]{get_simd_data()}},
+\code{\link[=get_spd_data]{get_spd_data()}}
+}
+\concept{lookup files}
