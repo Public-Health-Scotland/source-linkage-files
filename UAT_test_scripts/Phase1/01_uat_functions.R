@@ -270,3 +270,15 @@ get_geography_labels_opendata <- function() {
 
   return(geography_labels)
 }
+
+
+get_ch_costs_open_data <- function() {
+
+  ch_costs_data <- phsopendata::get_resource(
+    res_id = "4ee7dc84-ca65-455c-9e76-b614091f389f",
+    col_select = c("Date", "KeyStatistic", "CA", "Value")
+  )
+
+  return(ch_costs_data)
+
+}
