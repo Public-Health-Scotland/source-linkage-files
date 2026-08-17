@@ -19,6 +19,7 @@
 process_extract_district_nursing <- function(data,
                                              year,
                                              costs = read_file(get_dn_costs_path(BYOC_MODE = BYOC_MODE)),
+                                             # TODO: costs = get_sdl_processed_data(type = "dn_cost_lookup", BYOC_MODE = BYOC_MODE),
                                              write_to_disk = TRUE,
                                              BYOC_MODE = FALSE,
                                              run_id = NA,
@@ -31,7 +32,7 @@ process_extract_district_nursing <- function(data,
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-  # If data is available in the FY then run processing.
+  # If no data is available in the FY then return immediately
   if (identical(data, tibble::tibble())) {
     return(data)
   }
