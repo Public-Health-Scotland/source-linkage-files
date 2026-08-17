@@ -230,3 +230,46 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
     fs::file_chown(path = tests_workbook_path, group_id = 3206)
   }
 }
+
+# Path to the gpprac cluster open data
+get_gpprac_cluster_opendata <- function() {
+
+  gp_cluster_data <- phsopendata::get_dataset(
+    "gp-practice-contact-details-and-list-sizes"
+  ) %>%
+    janitor::clean_names() %>%
+    dplyr::select(
+      practice_code,
+      gp_practice_name,
+      postcode,
+      gp_cluster,
+      hb,
+      hscp
+    )
+
+  return(gp_cluster_data)
+}
+
+# Path to the geography labels open data
+get_geography_labels_opendata <- function() {
+
+  geography_labels <- phsopendata::get_resource(
+    "944765d7-d0d9-46a0-b377-abb3de51d08e",
+    col_select = c(
+      "HSCP",
+      "HSCPName",
+      "HB",
+      "HBName"
+    )
+  ) %>%
+    janitor::clean_names() %>%
+    dplyr::select(
+      hscp,
+      hscp_name,
+      hb,
+      hb_name
+    )
+
+  return(geography_labels)
+}
+
