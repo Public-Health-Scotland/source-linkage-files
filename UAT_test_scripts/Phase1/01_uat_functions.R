@@ -233,7 +233,6 @@ write_uat_tests <- function(uat_data, sheet_name, analyst) {
 
 # Path to the gpprac cluster open data
 get_gpprac_cluster_opendata <- function() {
-
   gp_cluster_data <- phsopendata::get_dataset(
     "gp-practice-contact-details-and-list-sizes"
   ) %>%
@@ -252,7 +251,6 @@ get_gpprac_cluster_opendata <- function() {
 
 # Path to the geography labels open data
 get_geography_labels_opendata <- function() {
-
   geography_labels <- phsopendata::get_resource(
     "944765d7-d0d9-46a0-b377-abb3de51d08e",
     col_select = c(
@@ -272,4 +270,3 @@ get_geography_labels_opendata <- function() {
 
   return(geography_labels)
 }
-
