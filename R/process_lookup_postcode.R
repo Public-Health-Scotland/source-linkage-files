@@ -17,13 +17,13 @@
 #' @export
 #' @family process extracts
 process_lookup_postcode <- function(
-    spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
-    simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
-    locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
-    write_to_disk = TRUE,
-    BYOC_MODE = FALSE,
-    run_id = NA,
-    run_date_time = NA
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 

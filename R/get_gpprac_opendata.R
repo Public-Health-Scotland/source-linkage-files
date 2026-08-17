@@ -45,16 +45,16 @@ get_gpprac_opendata <- function(
       run_id = run_id,
       run_date_time = run_date_time
     )
-    dplyr::select(
-      "run_id",
-      "run_date_time",
-      gpprac = "practice_code",
-      practice_name = "gp_practice_name",
-      postcode = "postcode",
-      cluster = "gp_cluster",
-      partnership = "hscp_name",
-      health_board = "hb_name"
-    ) %>%
+  dplyr::select(
+    "run_id",
+    "run_date_time",
+    gpprac = "practice_code",
+    practice_name = "gp_practice_name",
+    postcode = "postcode",
+    cluster = "gp_cluster",
+    partnership = "hscp_name",
+    health_board = "hb_name"
+  ) %>%
     # drop NA cluster rows
     tidyr::drop_na("cluster") %>%
     dplyr::mutate(

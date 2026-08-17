@@ -24,10 +24,11 @@ get_lookups_dir <- function() {
 #' @family lookup file paths
 get_locality_path <- function(file_name = NULL, ext = "rds") {
   locality_dir <-
-    fs::path(get_lookups_dir(),
-             "Geography",
-             "HSCP Locality"
-            )
+    fs::path(
+      get_lookups_dir(),
+      "Geography",
+      "HSCP Locality"
+    )
 
   locality_path <- get_file_path(
     directory = locality_dir,
@@ -83,9 +84,10 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 #' @family lookup file paths
 get_simd_path <- function(file_name = NULL, ext = "parquet") {
   simd_dir <-
-    fs::path(get_lookups_dir(),
-             "Deprivation"
-            )
+    fs::path(
+      get_lookups_dir(),
+      "Deprivation"
+    )
 
   simd_path <- get_file_path(
     directory = simd_dir,
@@ -155,9 +157,10 @@ get_pop_path <- function(file_name = NULL,
 #' @family lookup file paths
 get_gpprac_ref_path <- function(ext = "csv") {
   gpprac_dir <-
-    fs::path(get_lookups_dir(),
-             "National Reference Files"
-            )
+    fs::path(
+      get_lookups_dir(),
+      "National Reference Files"
+    )
 
   gpprac_path <- get_file_path(
     directory = gpprac_dir,
