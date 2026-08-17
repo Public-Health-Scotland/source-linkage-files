@@ -24,7 +24,10 @@ get_lookups_dir <- function() {
 #' @family lookup file paths
 get_locality_path <- function(file_name = NULL, ext = "rds") {
   locality_dir <-
-    fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
+    fs::path(get_lookups_dir(),
+             "Geography",
+             "HSCP Locality"
+            )
 
   locality_path <- get_file_path(
     directory = locality_dir,
@@ -37,53 +40,14 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 }
 
 
-#' Locality data
-#'
-#' @description Return the data for centrally held HSCP Localities file.
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return a [tibble][tibble::tibble-package].
-#' @export
-#'
-#' @family lookup files
-get_locality_data <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
-) {
-  log_slf_event(stage = "read", status = "start", type = "hscp_locality", year = "all")
-
-  # Denodo disconnect
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # Read data
-  locality_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_hscp_localities_source")
-  ) %>%
-    # Rename variables
-    dplyr::select(
-      locality = "hscp_locality",
-      datazone2011 = "datazone2011",
-    ) %>%
-    # Collect
-    dplyr::collect()
-
-  log_slf_event(stage = "read", status = "complete", type = "hscp_locality", year = "all")
-
-  return(locality_data)
-}
-
-
-#' Scottish Postcode Directory File Path
+#' Scottish Postcode Directory File Path - LOCAL ONLY
 #'
 #' @description Get the path to the centrally held Scottish Postcode Directory
-#' (SPD) file.
+#' (SPD) file - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the Scottish Postcode Directory
+#' @return An [fs::path()] to the local Scottish Postcode Directory file
 #' @export
 #'
 #' @family lookup file paths
@@ -105,108 +69,6 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
   return(spd_path)
 }
 
-#' Scottish Postcode Directory data
-#'
-#' @description Return the data to the centrally held Scottish Postcode Directory
-#' (SPD) file.
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return An [fs::path()] to the Scottish Postcode Directory
-#' @export
-#'
-#' @family lookup file paths
-get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                         BYOC_MODE) {
-  log_slf_event(stage = "read", status = "start", type = "spd", year = "all")
-
-  # Disconnect from Denodo
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  spd_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_spd_source")
-  ) %>%
-    dplyr::select(
-      "pc7",
-      "pc8",
-      "datazone2011",
-      "datazone2022",
-      "hb2019",
-      "hb2018",
-      "hb2014",
-      "hb2006",
-      "hscp2019",
-      "hscp2018",
-      "hscp2016",
-      "ca2019",
-      "ca2018",
-      "ca2011",
-      "hb1995",
-      "ur8_2022",
-      "ur6_2022",
-      "ur3_2022",
-      "ur2_2022"
-    ) %>%
-    dplyr::collect()
-
-  log_slf_event(stage = "read", status = "complete", type = "spd", year = "all")
-
-  return(spd_data)
-}
-
-#' Scottish Postcode Directory data
-#'
-#' @description Return the data to the centrally held Scottish Postcode Directory
-#' (SPD) file.
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return An [fs::path()] to the Scottish Postcode Directory
-#' @export
-#'
-#' @family lookup file paths
-get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                         BYOC_MODE) {
-  log_slf_event(stage = "read", status = "start", type = "spd", year = "all")
-
-  # Disconnect from Denodo
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  spd_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_spd_source")
-  ) %>%
-    dplyr::select(
-      "pc7",
-      "pc8",
-      "datazone2011",
-      "datazone2022",
-      "hb2019",
-      "hb2018",
-      "hb2014",
-      "hb2006",
-      "hscp2019",
-      "hscp2018",
-      "hscp2016",
-      "ca2019",
-      "ca2018",
-      "ca2011",
-      "hb1995",
-      "ur8_2022",
-      "ur6_2022",
-      "ur3_2022",
-      "ur2_2022"
-    ) %>%
-    dplyr::collect()
-
-  log_slf_event(stage = "read", status = "complete", type = "spd", year = "all")
-
-  return(spd_data)
-}
-
 
 #' SIMD File Path - LOCAL ONLY
 #'
@@ -221,7 +83,9 @@ get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
 #' @family lookup file paths
 get_simd_path <- function(file_name = NULL, ext = "parquet") {
   simd_dir <-
-    fs::path(get_lookups_dir(), "Deprivation")
+    fs::path(get_lookups_dir(),
+             "Deprivation"
+            )
 
   simd_path <- get_file_path(
     directory = simd_dir,
@@ -233,53 +97,6 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
   )
 
   return(simd_path)
-}
-
-
-#' SIMD data
-#'
-#' @description Return the data for centrally held Scottish Index of Multiple
-#' Deprivation (SIMD) file.
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return a [tibble][tibble::tibble-package].
-#' @export
-#'
-#' @family lookup files
-get_simd_data <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
-) {
-  log_slf_event(stage = "read", status = "start", type = "simd", year = "all")
-
-  # Denodo disconnect
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # Read data
-  simd_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_simd_source")
-  ) %>%
-    # Rename variables
-    # When a new version of the SIMD is released, the column names within the file will change.
-    dplyr::select(
-      pc7 = "pc7",
-      simd2020v2_rank = "simd2020v2_rank",
-      simd2020v2_sc_decile = "simd2020v2_sc_decile",
-      simd2020v2_sc_quintile = "simd2020v2_sc_quintile",
-      simd2020v2_hb2019_decile = "simd2020v2_hb2019_decile",
-      simd2020v2_hb2019_quintile = "simd2020v2_hb2019_quintile",
-      simd2020v2_hscp2019_decile = "simd2020v2_hscp2019_decile",
-      simd2020v2_hscp2019_quintile = "simd2020v2_hscp2019_quintile"
-    ) %>%
-    # Collect
-    dplyr::collect()
-
-  log_slf_event(stage = "read", status = "complete", type = "simd", year = "all")
-
-  return(simd_data)
 }
 
 
@@ -326,59 +143,21 @@ get_pop_path <- function(file_name = NULL,
 }
 
 
-#' DataZone population data
+#' GP Practice Reference File Path (gpprac) - LOCAL ONLY
 #'
-#' @description Return the data for DataZone population estimates.
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return a [tibble][tibble::tibble-package].
-#' @export
-#'
-#' @family lookup files
-get_datazone_pop_data <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
-) {
-  log_slf_event(stage = "read", status = "start", type = "datazone_pop", year = "all")
-
-  # Denodo disconnect
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # Read data
-  datazone_pop_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_datazone_population_source")
-  ) %>%
-    # Rename variables
-    dplyr::select(
-      year = "year",
-      datazone2011 = "datazone2011",
-      sex = "sex",
-      dplyr::starts_with("age")
-    ) %>%
-    # Collect
-    dplyr::collect()
-
-  log_slf_event(stage = "read", status = "complete", type = "datazone_pop", year = "all")
-
-  return(datazone_pop_data)
-}
-
-
-#' GP Practice Reference File Path (gpprac)
-#'
-#' @description Get the path for the centrally held reference file `gpprac`
+#' @description Get the path for the centrally held reference file `gpprac` - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return  An [fs::path()] to the file
+#' @return  An [fs::path()] to the local GP practice reference file
 #' @export
 #'
 #' @family lookup file paths
 get_gpprac_ref_path <- function(ext = "csv") {
-  gpprac_dir <- fs::path(get_lookups_dir(), "National Reference Files")
+  gpprac_dir <-
+    fs::path(get_lookups_dir(),
+             "National Reference Files"
+            )
 
   gpprac_path <- get_file_path(
     directory = gpprac_dir,
@@ -387,39 +166,4 @@ get_gpprac_ref_path <- function(ext = "csv") {
   )
 
   return(gpprac_path)
-}
-
-#' GP Practice Reference File data
-#'
-#' @description Return the GP Practice Reference File data
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return An [fs::path()] to the file
-#' @export
-#'
-#' @family lookup file paths
-get_gpprac_ref_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                BYOC_MODE) {
-  log_slf_event(stage = "read", status = "start", type = "gpprac_ref_data", year = "all")
-
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  gpprac_ref_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gpprac_lookup_source") # TODO: rename sdl table
-  ) %>%
-    dplyr::select(
-      gpprac = "praccode",
-      pc7 = "postcode"
-    ) %>%
-    dplyr::collect() %>%
-    dplyr::mutate(
-      pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
-    )
-
-  log_slf_event(stage = "read", status = "complete", type = "gpprac_ref_data", year = "all")
-
-  return(gpprac_ref_data)
 }

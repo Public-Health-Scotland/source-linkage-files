@@ -1,12 +1,24 @@
 #' GP Practice details from PHS open data
 #'
+#' @description Return the data for GP Practice details.
+#'
+#' @param denodo_connect Connection to denodo
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #' @return The final data as a [tibble][tibble::tibble-package].
+#'
 #' @export
 #'
+#' @family lookup files
 get_gpprac_opendata <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE,
-  write_to_disk = TRUE
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
   log_slf_event(stage = "read", status = "start", type = "gpprac_opendata", year = "all")
 
@@ -29,10 +41,16 @@ get_gpprac_opendata <- function(
       geography_labels,
       by = c("hb", "hscp")
     ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
     dplyr::select(
+      "run_id",
+      "run_date_time",
       gpprac = "practice_code",
       practice_name = "gp_practice_name",
-      "postcode",
+      postcode = "postcode",
       cluster = "gp_cluster",
       partnership = "hscp_name",
       health_board = "hb_name"
@@ -49,10 +67,13 @@ get_gpprac_opendata <- function(
 
   if (write_to_disk) {
     write_file(
-      gpprac_data,
-      get_practice_details_path(check_mode = "write"),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3206 # hscdiip owner
+      data = gpprac_data,
+      path = get_practice_details_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
