@@ -1,10 +1,11 @@
 #' Process the SLF gpprac lookup
 #'
-#' @description This will read and process the gpprac lookup, it will return
-#' the final data and also write this out to disk.
+#' @description This will read and process the
+#' gpprac lookup, it will return the final data
+#' and (optionally) write it to disk.
 #'
 #' @param gpprac_ref_data GP Practice reference data.
-#' @param gpprac_opendata PHS open dataset for GP practice details
+#' @param gpprac_opendata PHS open dataset for GP practice details.
 #' @param spd_data Scottish Postcode Directory data.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
@@ -27,7 +28,7 @@ process_lookup_gpprac <- function(
   log_slf_event(stage = "process", status = "start", type = "gpprac_lookup", year = "all")
 
   # Select required variables from the SPD reference file
-  spd_file <- spd_data %>%
+  spd <- spd_data %>%
     dplyr::select(
       "pc7",
       "pc8",
@@ -47,13 +48,19 @@ process_lookup_gpprac <- function(
   ) %>%
     # Match on geography info - postcode
     dplyr::left_join(
-      spd_file,
+      spd,
       by = "pc7",
       na_matches = "never",
       relationship = "many-to-one"
     ) %>%
     dplyr::rename(hbpraccode = "hb2018") %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "gpprac",
       "pc7",
       "pc8",
@@ -69,17 +76,20 @@ process_lookup_gpprac <- function(
         c(99942L, 99957L, 99961L, 99981L, 99999L) ~ "S08200003",
         99995L ~ "S08200001",
         default = .data$hbpraccode
-      ),
-      run_id = run_id,
-      run_date_time = run_date_time
+      )
     )
 
-  gpprac_slf_lookup %>%
+  if (write_to_disk) {
     write_file(
-      get_slf_gpprac_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3206 # hscdiip owner
+      data = gpprac_slf_lookup,
+      path = get_slf_gpprac_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
+  }
 
   log_slf_event(stage = "process", status = "complete", type = "gpprac_lookup", year = "all")
 
