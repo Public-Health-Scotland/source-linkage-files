@@ -9,9 +9,7 @@
 #'
 process_costs_home_care <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  lca_data = get_lca_data(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
-  ),
+  lca_data = get_la_code_opendata_lookup(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE), # TODO: this is picked from hl1 branch
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA,
@@ -80,9 +78,9 @@ get_lca_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
 
   dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "lca_opendata") # TODO: update SDL table
+    dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
   ) %>%
-    col_select() <- c("CA", "CAName", "HBName") %>%
+    dplyr::select("CA", "CAName", "HBName") %>%
     dplyr::distinct()
 
   # TODO: remove this when finalise this PR

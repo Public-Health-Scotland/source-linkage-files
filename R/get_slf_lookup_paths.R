@@ -45,13 +45,13 @@ get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MOD
 
     extract_uk_pc <- dplyr::tbl(
       denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_uk_postcode_source") ### TODO check SDL name ###
+      dbplyr::in_schema("sdl", "sdl_uk_postcode_list_source")
     ) %>%
-      collect()
+      dplyr::collect()
   } else {
-    uk_pc_data <- read_file(get_uk_postcode_path())
+    extract_uk_pc <- read_file(get_uk_postcode_path())
   }
-  return(uk_pc_data)
+  return(extract_uk_pc)
 }
 
 

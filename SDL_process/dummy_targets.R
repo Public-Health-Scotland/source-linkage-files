@@ -135,7 +135,7 @@ list(
     # Target name
     spd_data,
     # Function
-    get_spd_data(BYOC_MODE),
+    get_spd_data(BYOC_MODE = BYOC_MODE),
     format = "file"
   ),
 
@@ -143,7 +143,7 @@ list(
   tar_target(
     # Target name
     uk_postcode_data,
-    get_uk_postcode_data(BYOC_MODE)
+    get_uk_postcode_data(BYOC_MODE = BYOC_MODE)
   ),
 
   ### Care home name look up------

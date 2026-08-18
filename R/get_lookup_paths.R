@@ -112,7 +112,7 @@ get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
     ) %>%
     dplyr::collect()
 
-  return(spd_data)
+  return(extract_spd)
 }
 
 
