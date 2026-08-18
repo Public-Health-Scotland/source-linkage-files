@@ -50,28 +50,6 @@ get_slf_gpprac_path <- function(update = latest_update(), ...) {
   )
 }
 
-#' SLF Deaths lookup path
-#'
-#' @description Get the full path to the SLF deaths lookup file
-#'
-#' @inheritParams get_boxi_extract_path
-#' @param ... additional arguments passed to [get_file_path()]
-#'
-#' @return The path to the costs lookup as an [fs::path()]
-#' @export
-#' @family slf lookup file path
-#' @seealso [get_file_path()] for the generic function.
-get_slf_deaths_lookup_path <- function(year, ...) {
-  # Review the naming convention of this path and file
-  slf_deaths_lookup_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Deaths"),
-    file_name = stringr::str_glue("anon-slf_deaths_lookup_{year}.parquet"),
-    ...
-  )
-
-  return(slf_deaths_lookup_path)
-}
-
 #' SLF death dates File Path
 #'
 #' @description Get the full path to the BOXI NRS Deaths lookup file for all financial years
