@@ -157,7 +157,7 @@ add_smrtype <- function(recid,
       recid == "HL1" & main_applicant_flag == "N" ~ "HL1-Other"
     )
   } else if (all(recid == "OoH")) {
-    smrtype <- dplyr::case_match(
+    smrtype <- dplyr::recode_values(
       consultation_type,
       "DISTRICT NURSE" ~ "OOH-DN",
       "DOCTOR ADVICE/NURSE ADVICE" ~ "OOH-Advice",
@@ -167,11 +167,11 @@ add_smrtype <- function(recid,
       "COVID19 ASSESSMENT" ~ "OOH-C19Ass",
       "COVID19 ADVICE" ~ "OOH-C19Adv",
       "COVID19 OTHER" ~ "OOH-C19Oth",
-      .default = "OOH-Other"
+      default = "OOH-Other"
     )
   } else {
     # Recids that can be recoded with no identifier
-    smrtype <- dplyr::case_match(
+    smrtype <- dplyr::recode_values(
       recid,
       "00B" ~ "Outpatient",
       "04B" ~ "Psych-IP",
