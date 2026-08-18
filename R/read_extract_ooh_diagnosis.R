@@ -21,7 +21,7 @@ read_extract_ooh_diagnosis <- function(
       readcode = "Diagnosis Code",
       description = "Diagnosis Description"
     ) %>%
-    tidyr::drop_na(.data$readcode) %>%
+    tidyr::drop_na("readcode") %>%
     dplyr::distinct()
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-d", year = year)
