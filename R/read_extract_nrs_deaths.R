@@ -6,7 +6,7 @@
 read_extract_nrs_deaths <- function(
   year,
   denodo_connect = get_denodo_connect(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "deaths", BYOC_MODE = BYOC_MODE),
+  file_path = get_boxi_extract_path(year, type = "nrs_deaths", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   year <- check_year_format(year, "fyyear")
@@ -15,7 +15,7 @@ read_extract_nrs_deaths <- function(
   log_slf_event(
     stage = "read",
     status = "start",
-    type = "deaths",
+    type = "nrs_deaths",
     year = year
   )
 
@@ -63,7 +63,7 @@ read_extract_nrs_deaths <- function(
   log_slf_event(
     stage = "read",
     status = "complete",
-    type = "deaths",
+    type = "nrs_deaths",
     year = year
   )
 
