@@ -115,7 +115,7 @@ list(
     )
   ),
 
-  # ### NRS BOXI Deaths ----
+  ### NRS BOXI Deaths ----
   # # PROCESS - Refined deaths - combine all NRS death data into a lookup
   # tar_target(
   #   refined_death_data,
@@ -211,7 +211,7 @@ list(
     #   })(year, refined_death_data)
     # )
 
-    # # TESTS - Deaths
+    # TESTS - Deaths
     ### GP Out of Hours (GP OOH) Activity---------------------------------
     # GP Out of Hours ALL
     tar_qs(
@@ -260,7 +260,7 @@ list(
     #   )
     # ),
 
-    # Long-Term Conditions (LTCs) Activity--------------------------------------
+    ### Long-Term Conditions (LTCs) Activity----------------
     # PROCESS - LTCs
     tar_target(
       # Target name
@@ -274,7 +274,7 @@ list(
         run_id = run_id,
         run_date_time = run_date_time
       )
-    )
+    ),
     # # TESTS - LTCs
     # tar_target(
     #   # Target name
@@ -285,7 +285,32 @@ list(
     #     year
     #   )
     # ),
-    # )
+
+    ### Delayed Discharges Activity---------------------
+    # READ - Delayed Discharges
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Delayed Discharges
+    tar_target(
+      # Target name
+      source_dd_extract,
+      # Function
+      process_extract_delayed_discharges(
+        dd_data,
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
   )
 )
 ## End of Targets pipeline ##

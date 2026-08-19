@@ -4,7 +4,14 @@
 \alias{process_extract_delayed_discharges}
 \title{Process the delayed discharges extract}
 \usage{
-process_extract_delayed_discharges(data, year, write_to_disk = TRUE)
+process_extract_delayed_discharges(
+  data,
+  year,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The extract to process}
