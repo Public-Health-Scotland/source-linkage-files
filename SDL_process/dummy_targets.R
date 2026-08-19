@@ -141,6 +141,45 @@ list(
   tar_map(
     list(year = years_to_run),
 
+    # Accident & Emergency (AE2) activity --------------------------------------
+    # READ - A&E
+    tar_target(
+      # Target name
+      ae_data,
+      # Function
+      read_extract_ae(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - A&E CUP
+    tar_target(
+      # Target name
+      ae_cup_file,
+      # Function
+      read_extract_ae_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - A&E
+    tar_target(
+      # Target name
+      source_ae_extract,
+      # Function
+      process_extract_ae(
+        data = ae_data,
+        year = year,
+        ae_cup_file = ae_cup_file,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
     ### Maternity (SMR02) Acitivity----
     # # READ - Maternity
     # tar_target(

@@ -92,6 +92,7 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
+    "ae",
     "dd",
     "ltc",
     "gp_ooh",
@@ -117,9 +118,5 @@ tryCatch(
   }
 )
 logger::log_info("Targets finished.")
-
-# Episode file ----
-
-# Individual file ----
 
 logger::log_info("Run SDL ended.")
