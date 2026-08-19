@@ -59,9 +59,7 @@ tar_option_set(
   garbage_collection = TRUE,
   # format - default is parquet format
   format = "parquet",
-  resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd")
-  ),
+  resources = tar_resources(parquet = tar_resources_parquet(compression = "zstd")),
   # error - if an error occurs, the pipeline will continue
   error = "stop",
   # storage - the worker saves/uploads the value.
@@ -82,140 +80,65 @@ list(
 
   ## Stage 2.1 non-specific targets ----
 
-  ### IT CHI deaths Activity ----
-  # READ - IT CHI deaths
+  ### GP Out of Hours costs------
   tar_target(
     # Target name
-    it_chi_deaths_extract,
-    read_it_chi_deaths(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-  # PROCESS - IT CHI deaths
-  tar_target(
-    # Target name
-    it_chi_deaths_data,
+    gp_ooh_cost_lookup,
     # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   ),
-
-  ### Long-Term Conditions (LTCs) Activity ----
-  # # READ - LTCs
-  # tar_target(
-  #   ltc_data,
-  #   read_lookup_ltc(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-
-  # ### NRS BOXI Deaths ----
-  # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  tar_target(
-    refined_death_data,
-    process_refined_death(
-      it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
-
 
   ## Stage 2.2 year specific targets ----
   tar_map(
     list(year = years_to_run),
 
-    ### Maternity (SMR02) Acitivity----
-    # # READ - Maternity
-    # tar_target(
-    #   # Target name
-    #   maternity_data,
-    #   read_extract_maternity(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # PROCESS - Maternity
-    # tar_target(
-    #   # Target name
-    #   source_maternity_extract,
-    #   # Function
-    #   process_extract_maternity(
-    #     maternity_data,
-    #     year,
-    #     write_to_disk = write_to_disk,
-    #     BYOC_MODE = BYOC_MODE,
-    #     run_id = run_id,
-    #     run_date_time = run_date_time
-    #   )
-    # ),
-
-    ### Mental Health (SMR02) Activity ----
-    # READ - Mental Health
-    tar_target(
-      mental_health_data,
-      read_extract_mental_health(
+    ### GP Out of Hours (GP OOH) Activity---------------------------------
+    # GP Out of Hours ALL
+    tar_qs(
+      # Target name
+      ooh_data,
+      # Function
+      read_extract_gp_ooh(
         year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = NULL
+      )
+    ),
+    # GP Out of Hours CUP
+    tar_target(
+      gp_ooh_cup,
+      read_extract_gp_ooh_cup(
+        year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(
-          year = year,
-          type = "mh",
-          BYOC_MODE = BYOC_MODE
-        ),
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # PROCESS - Mental Health
+    # PROCESS - GP OOH CUP
     tar_target(
       # Target name
-      source_mental_health_extract,
-      process_extract_mental_health(
-        mental_health_data,
+      source_ooh_extract,
+      # Function
+      process_extract_gp_ooh(
         year = year,
+        data_list = ooh_data,
+        gp_ooh_cup = gp_ooh_cup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
       )
-    ),
-
-
-    ### Death Activity ----
-    # PROCESS - Deaths
-    tar_target(
-      # Target name
-      source_nrs_deaths_extract,
-      # use this anonymous function with redundant but necessary refined_death
-      # to make sure reading year-specific NRS deaths extracts after it is produced
-      (\(year, refined_death_data) {
-        arrow::read_parquet(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
-          as.data.frame()
-      })(year, refined_death_data)
     )
-
-    # # TESTS - Deaths
+    # ,
+    # # TESTS - GP OOH
     # tar_target(
     #   # Target name
-    #   tests_source_nrs_deaths_extract,
+    #   tests_source_ooh_extract,
     #   # Function
-    #   process_tests_nrs_deaths(
-    #     source_nrs_deaths_extract,
+    #   process_tests_gp_ooh(
+    #     source_ooh_extract,
     #     year
     #   )
-    # ),
+    # )
   )
 )
-
 ## End of Targets pipeline ##

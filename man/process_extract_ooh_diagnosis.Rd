@@ -4,7 +4,11 @@
 \alias{process_extract_ooh_diagnosis}
 \title{Process the GP OOH Diagnosis extract}
 \usage{
-process_extract_ooh_diagnosis(data, year)
+process_extract_ooh_diagnosis(
+  data,
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+)
 }
 \arguments{
 \item{data}{The extract to process}
