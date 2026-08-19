@@ -115,7 +115,7 @@ list(
     )
   ),
 
-  # ### NRS BOXI Deaths ----
+  ### NRS BOXI Deaths ----
   # # PROCESS - Refined deaths - combine all NRS death data into a lookup
   # tar_target(
   #   refined_death_data,
@@ -211,7 +211,7 @@ list(
     #   })(year, refined_death_data)
     # )
 
-    # # TESTS - Deaths
+    # TESTS - Deaths
     ### GP Out of Hours (GP OOH) Activity---------------------------------
     # GP Out of Hours ALL
     tar_qs(
@@ -260,7 +260,7 @@ list(
     #   )
     # ),
 
-    # Long-Term Conditions (LTCs) Activity--------------------------------------
+    ### Long-Term Conditions (LTCs) Activity----------------
     # PROCESS - LTCs
     tar_target(
       # Target name
@@ -274,7 +274,7 @@ list(
         run_id = run_id,
         run_date_time = run_date_time
       )
-    )
+    ),
     # # TESTS - LTCs
     # tar_target(
     #   # Target name
@@ -286,7 +286,7 @@ list(
     #   )
     # ),
 
-    # Delayed Discharges Activity-----------------------------------------------
+    ### Delayed Discharges Activity---------------------
     # READ - Delayed Discharges
     tar_target(
       # Target name
