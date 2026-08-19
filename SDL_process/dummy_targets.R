@@ -59,9 +59,7 @@ tar_option_set(
   garbage_collection = TRUE,
   # format - default is parquet format
   format = "parquet",
-  resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd")
-  ),
+  resources = tar_resources(parquet = tar_resources_parquet(compression = "zstd")),
   # error - if an error occurs, the pipeline will continue
   error = "stop",
   # storage - the worker saves/uploads the value.
@@ -130,6 +128,14 @@ list(
   #   )
   # ),
 
+
+  ### GP Out of Hours costs------
+  tar_target(
+    # Target name
+    gp_ooh_cost_lookup,
+    # Function
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
+  ),
 
   ## Stage 2.2 year specific targets ----
   tar_map(
@@ -206,12 +212,50 @@ list(
     # )
 
     # # TESTS - Deaths
+    ### GP Out of Hours (GP OOH) Activity---------------------------------
+    # GP Out of Hours ALL
+    tar_qs(
+      # Target name
+      ooh_data,
+      # Function
+      read_extract_gp_ooh(
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = NULL
+      )
+    ),
+    # GP Out of Hours CUP
+    tar_target(
+      gp_ooh_cup,
+      read_extract_gp_ooh_cup(
+        year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - GP OOH CUP
+    tar_target(
+      # Target name
+      source_ooh_extract,
+      # Function
+      process_extract_gp_ooh(
+        year = year,
+        data_list = ooh_data,
+        gp_ooh_cup = gp_ooh_cup,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
+    # ,
+    # # TESTS - GP OOH
     # tar_target(
     #   # Target name
-    #   tests_source_nrs_deaths_extract,
+    #   tests_source_ooh_extract,
     #   # Function
-    #   process_tests_nrs_deaths(
-    #     source_nrs_deaths_extract,
+    #   process_tests_gp_ooh(
+    #     source_ooh_extract,
     #     year
     #   )
     # ),
@@ -241,7 +285,7 @@ list(
     #     year
     #   )
     # ),
+    # )
   )
 )
-
 ## End of Targets pipeline ##
