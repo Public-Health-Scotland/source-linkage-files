@@ -4,28 +4,18 @@
 \alias{read_extract_gp_ooh}
 \title{Read the GP OoH extract}
 \usage{
-read_extract_gp_ooh(
-  year,
-  denodo_connect = NULL,
-  diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE =
-    BYOC_MODE),
-  outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE =
-    BYOC_MODE),
-  consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE =
-    BYOC_MODE),
-  BYOC_MODE
-)
+read_extract_gp_ooh(year, denodo_connect = NULL, BYOC_MODE)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
+
+\item{decodo_connect}{denodo_connection}
 
 \item{diagnosis_path}{Path to diagnosis BOXI extract location.}
 
 \item{outcomes_path}{Path to outcomes BOXI extract location.}
 
 \item{consultations_path}{Path to consultations BOXI extract location.}
-
-\item{decodo_connect}{denodo_connection}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

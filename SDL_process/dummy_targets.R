@@ -92,41 +92,7 @@ list(
   tar_map(
     list(year = years_to_run),
 
-    ### GP Out of Hours (GP OOH) Activity-----------------------------------------
-    # READ - GP Out of Hours diagnoses
-    tar_target(
-      # Target name
-      diagnosis_data_path,
-      get_boxi_extract_path(
-        year = year,
-        type = "gp_ooh-d",
-        BYOC_MODE = BYOC_MODE
-      ),
-      # use format = "rds" NOT format = "file"
-      # format = "file" work only when the file exists.
-      format = "rds"
-    ),
-    # READ - GP Out of Hours outcomes
-    tar_target(
-      # Target name
-      outcomes_data_path,
-      get_boxi_extract_path(
-        year = year,
-        type = "gp_ooh-o",
-        BYOC_MODE = BYOC_MODE
-      ),
-      format = "rds"
-    ),
-    # READ - GP Out of Hours consultations
-    tar_target(
-      consultations_data_path,
-      get_boxi_extract_path(
-        year = year,
-        type = "gp_ooh-c",
-        BYOC_MODE = BYOC_MODE
-      ),
-      format = "rds"
-    ),
+    ### GP Out of Hours (GP OOH) Activity---------------------------------
     # GP Out of Hours ALL
     tar_qs(
       # Target name
@@ -135,10 +101,7 @@ list(
       read_extract_gp_ooh(
         year = year,
         BYOC_MODE = BYOC_MODE,
-        denodo_connect = NULL,
-        diagnosis_path = diagnosis_data_path,
-        outcomes_path = outcomes_data_path,
-        consultations_path = consultations_data_path
+        denodo_connect = NULL
       )
     ),
     # GP Out of Hours CUP

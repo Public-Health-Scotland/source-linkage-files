@@ -19,9 +19,6 @@ read_extract_gp_ooh <- function(
   # So read_extract_ooh_outcomes cannot use that denodo_connect which is disconnected
   # Hence, create denodo_connect in each sub-function.
   denodo_connect = NULL,
-  diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
-  outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
-  consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "gpooh", year = year)
@@ -30,19 +27,16 @@ read_extract_gp_ooh <- function(
     "diagnosis" = read_extract_ooh_diagnosis(
       year = year,
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = diagnosis_path,
       BYOC_MODE = BYOC_MODE
     ),
     "outcomes" = read_extract_ooh_outcomes(
       year = year,
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = outcomes_path,
       BYOC_MODE = BYOC_MODE
     ),
     "consultations" = read_extract_ooh_consultations(
       year = year,
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = consultations_path,
       BYOC_MODE = BYOC_MODE
     )
   )
