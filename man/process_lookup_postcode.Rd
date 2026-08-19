@@ -12,8 +12,6 @@ process_lookup_postcode(
 )
 }
 \arguments{
-\item{spd_data}{Path to Scottish Postcode Directory.}
-
 \item{simd_path}{Path to SIMD lookup.}
 
 \item{locality_path}{Path to locality lookup.}
