@@ -155,7 +155,7 @@ list(
     source_gp_lookup,
     # Function
     process_lookup_gpprac(
-      open_data = gpprac_opendata,
+      gpprac_opendata = gpprac_opendata,
       gpprac_ref_data = gpprac_ref_data,
       spd_data = spd_data,
       write_to_disk = write_to_disk,
