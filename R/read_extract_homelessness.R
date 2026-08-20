@@ -6,7 +6,6 @@
 read_extract_homelessness <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE),
   BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
@@ -15,7 +14,7 @@ read_extract_homelessness <- function(
   c_year <- convert_fyyear_to_year(year)
 
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "homelessness")) {
     return(tibble::tibble())
   }
 
@@ -27,9 +26,9 @@ read_extract_homelessness <- function(
     dbplyr::in_schema("sdl", "sdl_homelessness_source")
   ) %>%
     dplyr::filter(
-      financial_year_of_assessment <= c_year,
-      is.null(financial_year_of_case_closed) |
-        financial_year_of_case_closed >= c_year
+      .data$assessment_decision_financial_year <= c_year,
+      is.null(.data$case_closed_financial_year) |
+        .data$case_closed_financial_year >= c_year
     ) %>%
     dplyr::select(
       # financial_year_of_assessment,

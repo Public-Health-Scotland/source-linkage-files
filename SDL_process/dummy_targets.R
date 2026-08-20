@@ -78,7 +78,29 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1 non-specific targets ----
+  ## Stage 2.1 non year-specific targets ----
+
+  ### Lookup data ---------------
+  #### Local Authority open data -----
+  # used by homelessness
+  tar_target(
+    # Target name
+    la_code_opendata,
+    # Function
+    get_la_code_opendata_lookup(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  #### SG homelessness publication data ----
+  tar_target(
+    sg_pub_data,
+    get_sg_homelessness_pub_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
 
   ### IT CHI deaths Activity ----
   # # READ - IT CHI deaths
@@ -128,7 +150,6 @@ list(
   #   )
   # ),
 
-
   ### GP Out of Hours costs------
   tar_target(
     # Target name
@@ -137,11 +158,11 @@ list(
     process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   ),
 
-  ## Stage 2.2 year specific targets ----
+  ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run),
 
-    # Accident & Emergency (AE2) activity --------------------------------------
+    ### Accident & Emergency (AE2) activity --------------
     # READ - A&E
     tar_target(
       # Target name
@@ -248,10 +269,19 @@ list(
     #     arrow::read_parquet(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
     #       as.data.frame()
     #   })(year, refined_death_data)
-    # )
+    # ),
+    # # TESTS - Deaths
+    # tar_target(
+    #   # Target name
+    #   tests_source_nrs_deaths_extract,
+    #   # Function
+    #   process_tests_nrs_deaths(
+    #     source_nrs_deaths_extract,
+    #     year
+    #   )
+    # ),
 
-    # TESTS - Deaths
-    ### GP Out of Hours (GP OOH) Activity---------------------------------
+    ### GP Out of Hours (GP OOH) Activity--------------
     # GP Out of Hours ALL
     tar_qs(
       # Target name
@@ -287,7 +317,6 @@ list(
         run_date_time = run_date_time
       )
     ),
-    # ,
     # # TESTS - GP OOH
     # tar_target(
     #   # Target name
@@ -324,6 +353,55 @@ list(
     #     year
     #   )
     # ),
+
+    ### Homelessness (HL1) Activity ----
+    # READ - Homelessness
+    tar_target(
+      # Target name
+      homelessness_data,
+      # Function
+      read_extract_homelessness(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Homelessness
+    tar_target(
+      # Target name
+      source_homelessness_extract,
+      # Function
+      process_extract_homelessness(
+        data = homelessness_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        la_code_lookup = la_code_opendata,
+        sg_pub_data = sg_pub_data,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+    # # TESTS - Homelessness
+    # tar_target(
+    #   # Target name
+    #   tests_source_homelessness_extract,
+    #   # Function
+    #   process_tests_homelessness(
+    #     source_homelessness_extract,
+    #     year
+    #   )
+    # ),
+    ### Homelessness lookup------
+    tar_target(
+      # Target name
+      homelessness_lookup,
+      # Function
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
 
     ### Delayed Discharges Activity---------------------
     # READ - Delayed Discharges
