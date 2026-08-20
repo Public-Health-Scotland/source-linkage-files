@@ -30,20 +30,20 @@ Calculate the total length of stay between \code{start_date} and
 If the \code{end_date} is missing then use the dummy discharge date.
 }
 \seealso{
-Other date functions: 
-\code{\link{compute_mid_year_age}()},
-\code{\link{convert_date_to_numeric}()},
-\code{\link{convert_numeric_to_date}()},
-\code{\link{end_fy}()},
-\code{\link{end_fy_quarter}()},
-\code{\link{end_next_fy_quarter}()},
-\code{\link{fy_interval}()},
-\code{\link{is_date_in_fyyear}()},
-\code{\link{last_date_month}()},
-\code{\link{midpoint_fy}()},
-\code{\link{next_fy}()},
-\code{\link{start_fy}()},
-\code{\link{start_fy_quarter}()},
-\code{\link{start_next_fy_quarter}()}
+Other date functions:
+\code{\link[=compute_mid_year_age]{compute_mid_year_age()}},
+\code{\link[=convert_date_to_numeric]{convert_date_to_numeric()}},
+\code{\link[=convert_numeric_to_date]{convert_numeric_to_date()}},
+\code{\link[=end_fy]{end_fy()}},
+\code{\link[=end_fy_quarter]{end_fy_quarter()}},
+\code{\link[=end_next_fy_quarter]{end_next_fy_quarter()}},
+\code{\link[=fy_interval]{fy_interval()}},
+\code{\link[=is_date_in_fyyear]{is_date_in_fyyear()}},
+\code{\link[=last_date_month]{last_date_month()}},
+\code{\link[=midpoint_fy]{midpoint_fy()}},
+\code{\link[=next_fy]{next_fy()}},
+\code{\link[=start_fy]{start_fy()}},
+\code{\link[=start_fy_quarter]{start_fy_quarter()}},
+\code{\link[=start_next_fy_quarter]{start_next_fy_quarter()}}
 }
 \concept{date functions}
