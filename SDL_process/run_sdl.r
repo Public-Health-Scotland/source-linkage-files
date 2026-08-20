@@ -94,6 +94,8 @@ byoc_output_files <- get_byoc_output_files(
   types = c(
     "ae",
     "dd",
+    "homelessness",
+    "homelessness_completeness",
     "ltc",
     "gp_ooh",
     "ooh_cost_lookup"
