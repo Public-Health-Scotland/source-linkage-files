@@ -113,8 +113,4 @@ tryCatch(
 )
 logger::log_info("Targets finished.")
 
-# Episode file ----
-
-# Individual file ----
-
 logger::log_info("Run SDL ended.")
