@@ -427,6 +427,33 @@ list(
         run_id = run_id,
         run_date_time = run_date_time
       )
+    ),
+
+    ### Outpatients (SMR00) Activity ------
+    # READ - Outpatients
+    tar_target(
+      # Target name
+      outpatients_data,
+      # Function
+      read_extract_outpatients(
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      )
+    ),
+    # PROCESS - Outpatients
+    tar_target(
+      # Target name
+      source_outpatients_extract,
+      # Function
+      process_extract_outpatients(
+        data = outpatients_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
     )
   )
 )
