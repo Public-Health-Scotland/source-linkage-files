@@ -50,13 +50,15 @@ analyst <- "Jen"
 # Populate names from this workbook:
 # /conf/sourcedev/Source_Linkage_File_Updates/1_source_data_views/Lookups/uat_names.xlsx
 #
-#   c("acute", "ae", "homelessness", "maternity", "acute", "gp_ooh_consultations",
-#   "gp_ooh_diagnosis", "gp_ooh_outcomes", "mental_health", "nrs_deaths","ae_cup",
-#   "acute_cup", "gp_ooh_cup", "delayed_discharges", "spd", "simd", "readcode",
-#   "ooh_cost_lookup", "homelessness_completeness", "cmh", "datazone_pop", "dn",
-#   "dn_cost_lookup", "dn_contact_lookup", "hscp_localities", "hscp_pop", "hhg",
-#   "nsu", "la_lookup", "gpprac_ref_file", "ch_costs","gpprac_ref_file",
-#   "sc_home_care", "hc_cost_lookup")
+# c("acute", "acute_cup", "ae", "ae_cup", "chi_deaths", "gp_ooh_consultations",
+#   "gp_ooh_diagnosis", "gp_ooh_outcomes", "gp_ooh_cup", "homelessness", "ltcs",
+#   "maternity", "mental_health", "nrs_deaths", "outpatients", "sparra",
+#   "sc_demographics", "sc_client", "sc_alarms_tele", "sc_care_homes",
+#   "sc_home_care", "sc_sds", "ch_name_lookup", "uk_postcode", "delayed_discharges",
+#   "spd", "simd", "ooh_cost_lookup", "homelessness_completeness", "readcode",
+#   "hc_cost_lookup", "cmh", "datazone_pop", "dn", "dn_cost_lookup",
+#   "dn_contact_lookup", "hscp_localities", "hscp_pop", "hhg", "nsu", "la_lookup",
+#   "gpprac_ref_file", "ch_costs", "gpprac_cluster", "geography_labels")
 
 datasets <- c("sc_home_care")
 
