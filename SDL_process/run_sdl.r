@@ -91,7 +91,16 @@ year <- "1920"
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
   year,
-  types = c("outpatients")
+  types = c(
+    "ae",
+    "dd",
+    "homelessness",
+    "homelessness_completeness",
+    "ltc",
+    "gp_ooh",
+    "ooh_cost_lookup",
+    "outpatients"
+  )
 )
 # using homelessness for test purpose. When development is complete,
 # we change to "types = "byoc_input_files""
