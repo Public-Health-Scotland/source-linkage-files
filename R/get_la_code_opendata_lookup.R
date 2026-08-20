@@ -14,7 +14,7 @@ get_la_code_opendata_lookup <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = BYOC_MODE
 ) {
-  log_slf_event(stage = "read", status = "start", type = "la_code", year = "all") # TODO: Check type
+  log_slf_event(stage = "read", status = "start", type = "la_code", year = "all")
 
   # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
@@ -26,8 +26,8 @@ get_la_code_opendata_lookup <- function(
   ) %>%
     # Rename variables
     dplyr::select(
-      CA = "CA",
-      CAName = "CAName"
+      CA = "ca",
+      CAName = "caname"
     ) %>%
     dplyr::distinct() %>%
     # Collect
