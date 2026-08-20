@@ -27,15 +27,15 @@ get_la_code_opendata_lookup <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
   ) %>%
-    dplyr::select("CA", "CAName") %>%
+    dplyr::select("ca", "caname") %>%
     dplyr::distinct() %>%
     dplyr::collect() %>%
     dplyr::mutate(
       sending_local_authority_name = dplyr::recode_values(
-        .data$CAName,
+        .data$caname,
         "City of Edinburgh" ~ "Edinburgh",
         "Na h-Eileanan Siar" ~ "Eilean Siar",
-        default = .data$CAName
+        default = .data$caname
       ) %>%
         stringr::str_replace("\\sand\\s", " \\& ")
     )

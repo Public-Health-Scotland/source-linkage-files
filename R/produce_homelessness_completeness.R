@@ -8,7 +8,6 @@
 #' `pct_complete_all`.
 produce_homelessness_completeness <- function(
   homelessness_data,
-  update,
   sg_pub_data,
   BYOC_MODE
 ) {
@@ -43,7 +42,7 @@ produce_homelessness_completeness <- function(
     application_counts,
     sg_pub_data,
     by = dplyr::join_by(
-      "sending_local_authority_name" == "CAName",
+      "sending_local_authority_name" == "caname",
       "year" == "sg_year"
     )
   ) %>%
@@ -63,16 +62,15 @@ produce_homelessness_completeness <- function(
     return(NULL)
   }
 
-  #   write_file(
-  #     annual_comparison,
-  #     get_homelessness_completeness_path(
-  #       year = year,
-  #       update = update,
-  #       check_mode = "write",
-  #       BYOC_MODE = BYOC_MODE
-  #     ),
-  #     BYOC_MODE = BYOC_MODE
-  # )
+    write_file(
+      annual_comparison,
+      get_homelessness_completeness_path(
+        year = year,
+        check_mode = "write",
+        BYOC_MODE = BYOC_MODE
+      ),
+      BYOC_MODE = BYOC_MODE
+  )
 
   return(annual_comparison)
 }
@@ -148,14 +146,14 @@ get_sg_homelessness_pub_data <- function(
       denodo_connect,
       dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
     ) %>%
-      dplyr::rename("CAName" = "local_authority", "sg_year" = "fin_year") %>%
+      dplyr::rename("caname" = "local_authority", "sg_year" = "fin_year") %>%
       dplyr::collect() %>%
       dplyr::mutate(sg_year = convert_year_to_fyyear(sg_year)) %>%
       dplyr::summarise(
         sg_all_assessments = sum(sg_all_assessments),
-        .by = c("CAName", "sg_year")
+        .by = c("caname", "sg_year")
       ) %>%
-      dplyr::arrange(CAName, sg_year)
+      dplyr::arrange(caname, sg_year)
   } else {
     sg_pub_data <- openxlsx::read.xlsx(
       get_sg_homelessness_pub_path(),
@@ -165,7 +163,7 @@ get_sg_homelessness_pub_data <- function(
       colNames = FALSE
     ) %>%
       dplyr::rename_with(~ c(
-        "CAName",
+        "caname",
         paste0(paste0("q", 1L:4L), "_", rep(2016L, 4L)),
         paste0(paste0("q", 1L:4L), "_", rep(2017L, 4L)),
         paste0(paste0("q", 1L:4L), "_", rep(2018L, 4L)),
@@ -178,7 +176,7 @@ get_sg_homelessness_pub_data <- function(
         ## Manual change - Add new row here when new year is available in publication
       )) %>%
       tidyr::pivot_longer(
-        !"CAName",
+        !"caname",
         names_to = c("fin_quarter", "fin_year"),
         names_pattern = "q(\\d)_(\\d{4})",
         names_transform = list(
@@ -189,7 +187,7 @@ get_sg_homelessness_pub_data <- function(
         values_ptypes = list(sg_all_assessments = integer())
       ) %>%
       dplyr::mutate(sg_year = convert_year_to_fyyear(.data[["fin_year"]])) %>%
-      dplyr::group_by(.data[["CAName"]], .data[["sg_year"]]) %>%
+      dplyr::group_by(.data[["caname"]], .data[["sg_year"]]) %>%
       dplyr::summarise(dplyr::across("sg_all_assessments", sum), .groups = "drop")
   }
 
@@ -210,7 +208,6 @@ get_sg_homelessness_pub_data <- function(
 #' is specific to year and update.
 #'
 #' @param year the financial year of the update.
-#' @param update the update month (defaults to use [latest_update()]).
 #' @param ... additional arguments passed to [get_file_path()].
 #' @param BYOC_MODE check BYOC mode.
 #'
@@ -220,7 +217,6 @@ get_sg_homelessness_pub_data <- function(
 #' @seealso [get_file_path()] for the generic function.
 get_homelessness_completeness_path <- function(
   year,
-  update = latest_update(),
   BYOC_MODE,
   ...
 ) {
@@ -228,14 +224,14 @@ get_homelessness_completeness_path <- function(
     completeness_file_path <- fs::path(
       directory = denodo_output_path(),
       file_name = stringr::str_glue(
-        "homelessness_completeness_{year}_{update}.parquet"
+        "homelessness_completeness-{year}.parquet"
       )
     )
   } else {
     completeness_file_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Homelessness"),
       file_name = stringr::str_glue(
-        "homelessness_completeness_{year}_{update}.parquet"
+        "homelessness_completeness-{year}.parquet"
       ),
       ...
     )
