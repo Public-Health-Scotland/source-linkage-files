@@ -167,7 +167,7 @@ log_slf_event <- function(stage = c("read", "process", "test"),
     "gpprac_ref_data" ~ "GP Practice Reference",
     "spd" ~ "Scottish Postcode Directory",
     "gpprac_lookup" ~ "GP Practice Lookup",
-    "slf_pc_lookup" ~ "Postcode Lookup"
+    "slf_pc_lookup" ~ "Postcode Lookup",
     default = type # use type if file_name not available
   )
 
