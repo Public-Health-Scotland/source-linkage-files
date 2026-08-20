@@ -164,7 +164,9 @@ log_slf_event <- function(stage = c("read", "process", "test"),
     "hscp_locality" ~ "HSCP Localities Lookup",
     "simd" ~ "SIMD Lookup",
     "datazone_pop" ~ "DataZone Population Lookup",
-    .default = type # use type if file_name not available
+    "gpprac_opendata" ~ "GP Practice Open Data Lookup",
+    "gpprac_ref_data" ~ "GP Practice Reference Lookup",
+    default = type # use type if file_name not available
   )
 
   stage <- match.arg(stage)

@@ -21,7 +21,7 @@ get_gpprac_ref_data <- function(
   # Read data
   gpprac_ref_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gpprac_lookup_source") # TODO: rename sdl table
+    dbplyr::in_schema("sdl", "sdl_gpprac_ref_source")
   ) %>%
     # Rename variables
     dplyr::select(
