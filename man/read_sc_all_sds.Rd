@@ -4,10 +4,13 @@
 \alias{read_sc_all_sds}
 \title{Read Social Care SDS data}
 \usage{
-read_sc_all_sds(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"))
+read_sc_all_sds(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
-\item{sc_dvprod_connection}{Connection to the SC platform}
+\item{denodo_connect}{Connection to the BI denodo platform}
 }
 \value{
 an extract of the data as a \link[tibble:tibble-package]{tibble}.
