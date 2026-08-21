@@ -18,8 +18,8 @@
 #' @family process extracts
 process_lookup_sc_client <- function(data,
                                      year,
-                                     sc_demographics = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)) %>%
-                                       dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
+                                     sc_demographics = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+                                     # get_sdl_processed_data(type = "sc_demog_lookup", BYOC_MODE = BYOC_MODE),
                                      write_to_disk = TRUE,
                                      BYOC_MODE = FALSE,
                                      run_id = NA,
@@ -40,7 +40,8 @@ process_lookup_sc_client <- function(data,
   # Match to demographics lookup to get CHI
   sc_client_demographics <- data %>%
     dplyr::right_join(
-      sc_demographics,
+      sc_demographics %>%
+        dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
       by = c("sending_location", "social_care_id")
     ) %>%
     # Need period for the replace sc id with latest function
@@ -56,12 +57,8 @@ process_lookup_sc_client <- function(data,
       dplyr::select(-"latest_sc_id", -"period")
 
   client_clean <- sc_client_demographics %>%
-    dplyr::group_by(
-      .data$sending_location,
-      .data$social_care_id,
-      .data$anon_chi
-    ) %>%
-    # Summarise to take last submission
+    dplyr::group_by(.data$sending_location, .data$social_care_id, .data$anon_chi) %>%
+    # summarise to take last submission
     dplyr::summarise(dplyr::across(
       c(
         "dementia",
@@ -109,10 +106,10 @@ process_lookup_sc_client <- function(data,
           "other_vulnerable_groups",
           "type_of_housing"
         ),
-        tidyr::replace_na, 9L
+        \(x) tidyr::replace_na(x, 9L)
       )
     ) %>%
-    # Factor labels
+    # factor labels
     dplyr::mutate(
       dplyr::across(
         c(
@@ -134,61 +131,33 @@ process_lookup_sc_client <- function(data,
           "autism",
           "other_vulnerable_groups"
         ),
-<<<<<<< HEAD
-        factor,
-        levels = c(0L, 1L, 9L),
-        labels = c("No", "Yes", "Not Known")
-      ),
-      type_of_housing = factor(
-        .data$type_of_housing,
-        levels = 1L:9L,
-        labels = c(
-          "Mainstream", # 1
-          "Supported", # 2
-          "Long Stay Care Home", # 3
-          "Hospital or other medical establishment", # 4
-          "Homeless", # 5
-          "Penal Institutions", # 6
-          "Not Known", # 7
-          "Other", # 8
-          "Not Known" # 9
-=======
-        dplyr::last
-      )) %>%
-      dplyr::ungroup() %>%
-      # Recode NA with 'unknown' values
-      dplyr::mutate(
-        dplyr::across(
-          c(
-            "support_from_unpaid_carer",
-            "social_worker",
-            "meals",
-            "living_alone",
-            "day_care",
-            "dementia",
-            "mental_health_disorders",
-            "learning_disability",
-            "physical_and_sensory_disability",
-            "drugs",
-            "alcohol",
-            "palliative_care",
-            "carer",
-            "elderly_frail",
-            "neurological_condition",
-            "autism",
-            "other_vulnerable_groups",
-            "type_of_housing"
-          ),
-          \(x) tidyr::replace_na(x, 9L)
->>>>>>> origin/development
+        \(x) factor(
+          x,
+          levels = c(0L, 1L, 9L),
+          labels = c("No", "Yes", "Not Known")
         )
+      ),
+      type_of_housing = factor(.data$type_of_housing,
+                               levels = 1L:9L,
+                               labels = c(
+                                 "Mainstream", # 1
+                                 "Supported", # 2
+                                 "Long Stay Care Home", # 3
+                                 "Hospital or other medical establishment", # 4
+                                 "Homeless", # 5
+                                 "Penal Institutions", # 6
+                                 "Not Known", # 7
+                                 "Other", # 8
+                                 "Not Known" # 9
+                               )
       )
     ) %>%
-    # Rename variables
+    # rename variables
     dplyr::rename_with(
       .cols = -c("sending_location", "social_care_id", "anon_chi"),
       .fn = ~ paste0("sc_", .x)
     )
+
 
   sc_client_lookup <- client_clean %>%
     # reorder
@@ -218,83 +187,44 @@ process_lookup_sc_client <- function(data,
     create_person_id() %>%
     select_linking_id()
 
+
   sc_client_lookup <-
-    dplyr::mutate(
-      sc_client_lookup,
-      count_not_known = rowSums(
-        dplyr::select(sc_client_lookup, tidyr::all_of(
-          c(
-<<<<<<< HEAD
-            "sc_living_alone",
-            "sc_support_from_unpaid_carer",
-            "sc_social_worker",
-            "sc_type_of_housing",
-            "sc_meals",
-            "sc_day_care",
-            "sc_dementia",
-            "sc_learning_disability",
-            "sc_mental_health_disorders",
-            "sc_physical_and_sensory_disability",
-            "sc_drugs",
-            "sc_alcohol",
-            "sc_palliative_care",
-            "sc_carer",
-            "sc_elderly_frail",
-            "sc_neurological_condition",
-            "sc_autism",
-            "sc_other_vulnerable_groups"
-=======
-            "living_alone",
-            "support_from_unpaid_carer",
-            "social_worker",
-            "meals",
-            "day_care",
-            "dementia",
-            "mental_health_disorders",
-            "learning_disability",
-            "physical_and_sensory_disability",
-            "drugs",
-            "alcohol",
-            "palliative_care",
-            "carer",
-            "elderly_frail",
-            "neurological_condition",
-            "autism",
-            "other_vulnerable_groups"
-          ),
-          \(x) factor(
-            x,
-            levels = c(0L, 1L, 9L),
-            labels = c("No", "Yes", "Not Known")
-          )
-        ),
-        type_of_housing = factor(.data$type_of_housing,
-          levels = 1L:9L,
-          labels = c(
-            "Mainstream", # 1
-            "Supported", # 2
-            "Long Stay Care Home", # 3
-            "Hospital or other medical establishment", # 4
-            "Homeless", # 5
-            "Penal Institutions", # 6
-            "Not Known", # 7
-            "Other", # 8
-            "Not Known" # 9
->>>>>>> origin/development
-          )
-        )) == "Not Known",
-        na.rm = TRUE
-      )
+    dplyr::mutate(sc_client_lookup,
+                  count_not_known = rowSums(
+                    dplyr::select(sc_client_lookup, tidyr::all_of(
+                      c(
+                        "sc_living_alone",
+                        "sc_support_from_unpaid_carer",
+                        "sc_social_worker",
+                        "sc_type_of_housing",
+                        "sc_meals",
+                        "sc_day_care",
+                        "sc_dementia",
+                        "sc_learning_disability",
+                        "sc_mental_health_disorders",
+                        "sc_physical_and_sensory_disability",
+                        "sc_drugs",
+                        "sc_alcohol",
+                        "sc_palliative_care",
+                        "sc_carer",
+                        "sc_elderly_frail",
+                        "sc_neurological_condition",
+                        "sc_autism",
+                        "sc_other_vulnerable_groups"
+                      )
+                    )) == "Not Known",
+                    na.rm = TRUE
+                  )
     ) %>%
     dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-    dplyr::select(-.data$sending_location, -.data$count_not_known) %>%
+    dplyr::select(-"sending_location", -"count_not_known") %>%
     dplyr::mutate(
       run_id = run_id,
       run_date_time = run_date_time
     )
 
-<<<<<<< HEAD
+
   if (write_to_disk) {
     write_file(
       data = sc_client_lookup,
@@ -306,81 +236,6 @@ process_lookup_sc_client <- function(data,
       group_id = 3206, # hscdiip owner
       BYOC_MODE = BYOC_MODE
     )
-=======
-
-    sc_client_lookup <- client_clean %>%
-      # reorder
-      dplyr::select(
-        "anon_chi",
-        "sending_location",
-        "social_care_id",
-        "sc_living_alone",
-        "sc_support_from_unpaid_carer",
-        "sc_social_worker",
-        "sc_type_of_housing",
-        "sc_meals",
-        "sc_day_care",
-        "sc_dementia",
-        "sc_learning_disability",
-        "sc_mental_health_disorders",
-        "sc_physical_and_sensory_disability",
-        "sc_drugs",
-        "sc_alcohol",
-        "sc_palliative_care",
-        "sc_carer",
-        "sc_elderly_frail",
-        "sc_neurological_condition",
-        "sc_autism",
-        "sc_other_vulnerable_groups"
-      ) %>%
-      create_person_id() %>%
-      select_linking_id()
-
-
-    sc_client_lookup <-
-      dplyr::mutate(sc_client_lookup,
-        count_not_known = rowSums(
-          dplyr::select(sc_client_lookup, tidyr::all_of(
-            c(
-              "sc_living_alone",
-              "sc_support_from_unpaid_carer",
-              "sc_social_worker",
-              "sc_type_of_housing",
-              "sc_meals",
-              "sc_day_care",
-              "sc_dementia",
-              "sc_learning_disability",
-              "sc_mental_health_disorders",
-              "sc_physical_and_sensory_disability",
-              "sc_drugs",
-              "sc_alcohol",
-              "sc_palliative_care",
-              "sc_carer",
-              "sc_elderly_frail",
-              "sc_neurological_condition",
-              "sc_autism",
-              "sc_other_vulnerable_groups"
-            )
-          )) == "Not Known",
-          na.rm = TRUE
-        )
-      ) %>%
-      dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
-      dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-      dplyr::select(-"sending_location", -"count_not_known")
-
-    if (write_to_disk) {
-      write_file(
-        sc_client_lookup,
-        get_sc_client_lookup_path(year, check_mode = "write"),
-        group_id = 3206 # hscdiip owner
-      )
-    }
-
-    log_slf_event(stage = "process", status = "complete", type = "sc_client", year = year)
-
-    return(sc_client_lookup)
->>>>>>> origin/development
   }
 
   log_slf_event(stage = "process", status = "complete", type = "sc_client", year = year)
