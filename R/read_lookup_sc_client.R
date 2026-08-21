@@ -11,10 +11,10 @@
 #' @export
 #' @family process extracts
 read_lookup_sc_client <- function(
-    year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
-  ) {
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "client", year = year)
 
   # Check and convert to calendar year
