@@ -26,8 +26,6 @@ process_extract_homelessness(
 
 \item{la_code_lookup}{local authority data.}
 
-\item{la_code_lookup}{local authority data.}
-
 \item{sg_pub_data}{SG pub figures.}
 
 \item{BYOC_MODE}{BYOC_MODE}

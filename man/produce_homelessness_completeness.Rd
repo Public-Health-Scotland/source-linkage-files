@@ -11,8 +11,6 @@ produce_homelessness_completeness(homelessness_data, sg_pub_data, BYOC_MODE)
 
 \item{sg_pub_data}{SG pub figures.}
 
-\item{sg_pub_data}{SG pub figures.}
-
 \item{BYOC_MODE}{BYOC_MODE}
 }
 \value{

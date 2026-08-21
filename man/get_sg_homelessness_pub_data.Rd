@@ -22,6 +22,7 @@ get homelessness completeness SG publication figures
 }
 \seealso{
 Other lookup files:
-\code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}}
+\code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}},
+\code{\link[=get_sg_pub_data]{get_sg_pub_data()}}
 }
 \concept{lookup files}
