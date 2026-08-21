@@ -92,10 +92,14 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    "mh",
-    "nrs_deaths",
-    "combined_deaths",
-    "chi_deaths"
+    "ae",
+    "dd",
+    "homelessness",
+    "homelessness_completeness",
+    "ltc",
+    "gp_ooh",
+    "ooh_cost_lookup",
+    "outpatients"
   )
 )
 # using homelessness for test purpose. When development is complete,
@@ -117,9 +121,5 @@ tryCatch(
   }
 )
 logger::log_info("Targets finished.")
-
-# Episode file ----
-
-# Individual file ----
 
 logger::log_info("Run SDL ended.")
