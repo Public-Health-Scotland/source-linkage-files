@@ -14,7 +14,7 @@ get_la_code_opendata_lookup <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = BYOC_MODE
 ) {
-  log_slf_event(stage = "read", status = "start", type = "la_code", year = "all")
+  log_slf_event(stage = "read", status = "start", type = "la_lookup", year = "all")
 
   # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
@@ -42,7 +42,7 @@ get_la_code_opendata_lookup <- function(
         stringr::str_replace("\\sand\\s", " \\& ")
     )
 
-  log_slf_event(stage = "read", status = "complete", type = "la_code", year = "all")
+  log_slf_event(stage = "read", status = "complete", type = "la_lookup", year = "all")
 
   return(la_code_lookup)
 }

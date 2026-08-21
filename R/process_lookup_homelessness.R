@@ -15,6 +15,7 @@ create_homelessness_lookup <- function(
   homelessness_data = read_file(
     get_source_extract_path(year = year, type = "homelessness", BYOC_MODE = BYOC_MODE)
   )
+  # TODO: homelessness_data = get_sdl_processed_data(type = "homelessness", year = year, BYOC_MODE = BYOC_MODE)
 ) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
 

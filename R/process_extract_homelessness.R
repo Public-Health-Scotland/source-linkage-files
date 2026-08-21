@@ -20,7 +20,6 @@
 process_extract_homelessness <- function(data,
                                          year,
                                          write_to_disk = TRUE,
-                                         update = latest_update(),
                                          la_code_lookup = get_la_code_opendata_lookup(BYOC_MODE = BYOC_MODE),
                                          sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
                                          BYOC_MODE = FALSE,
@@ -200,12 +199,7 @@ process_extract_homelessness <- function(data,
     )
   }
 
-  log_slf_event(
-    stage = "process",
-    status = "complete",
-    type = "homelessness",
-    year = year
-  )
+  log_slf_event(stage = "process", status = "complete", type = "homelessness", year = year)
 
   return(homelessness_processed)
 }
