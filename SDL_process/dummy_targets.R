@@ -78,7 +78,7 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1 non-specific targets ----
+  ## Stage 2.1 non year-specific targets ----
 
   ## Lookup data ## ------------------------------------------------------------
 
@@ -223,13 +223,28 @@ list(
   #   )
   # ),
 
-  ### Long-Term Conditions (LTCs) Activity ----
-  # # READ - LTCs
+  ### IT CHI deaths Activity ----
+  # # READ - IT CHI deaths
   # tar_target(
-  #   ltc_data,
-  #   read_lookup_ltc(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
   #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
   #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
   #   )
   # ),
 
@@ -246,9 +261,56 @@ list(
   #   )
   # ),
 
-  ## Stage 2.2 year specific targets ----
+  ### GP Out of Hours costs------
+  tar_target(
+    # Target name
+    gp_ooh_cost_lookup,
+    # Function
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
+  ),
+
+  ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run)
+
+    ### Accident & Emergency (AE2) activity --------------
+    # READ - A&E
+    tar_target(
+      # Target name
+      ae_data,
+      # Function
+      read_extract_ae(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - A&E CUP
+    tar_target(
+      # Target name
+      ae_cup_file,
+      # Function
+      read_extract_ae_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - A&E
+    tar_target(
+      # Target name
+      source_ae_extract,
+      # Function
+      process_extract_ae(
+        data = ae_data,
+        year = year,
+        ae_cup_file = ae_cup_file,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
     ### Maternity (SMR02) Acitivity----
     # # READ - Maternity
@@ -321,14 +383,76 @@ list(
     # # TESTS - Deaths
     # tar_target(
     #   # Target name
-    #   tests_source_nrs_deaths_extract,
+    #   tests_source_homelessness_extract,
     #   # Function
-    #   process_tests_nrs_deaths(
-    #     source_nrs_deaths_extract,
+    #   process_tests_homelessness(
+    #     source_homelessness_extract,
     #     year
     #   )
     # ),
+    ### Homelessness lookup------
+    tar_target(
+      # Target name
+      homelessness_lookup,
+      # Function
+      create_homelessness_lookup(
+        year,
+        homelessness_data = source_homelessness_extract
+      )
+    ),
+
+    ### Delayed Discharges Activity---------------------
+    # READ - Delayed Discharges
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Delayed Discharges
+    tar_target(
+      # Target name
+      source_dd_extract,
+      # Function
+      process_extract_delayed_discharges(
+        dd_data,
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### Outpatients (SMR00) Activity ------
+    # READ - Outpatients
+    tar_target(
+      # Target name
+      outpatients_data,
+      # Function
+      read_extract_outpatients(
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      )
+    ),
+    # PROCESS - Outpatients
+    tar_target(
+      # Target name
+      source_outpatients_extract,
+      # Function
+      process_extract_outpatients(
+        data = outpatients_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
   )
 )
-
 ## End of Targets pipeline ##
