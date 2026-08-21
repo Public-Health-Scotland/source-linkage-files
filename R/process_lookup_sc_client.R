@@ -34,7 +34,7 @@ process_lookup_sc_client <- function(data,
 
   # If data is available in the FY then run processing
   if (!check_year_valid(year, "client")) {
-      return(NULL)
+    return(NULL)
   }
 
   # Match to demographics lookup to get CHI
@@ -50,11 +50,12 @@ process_lookup_sc_client <- function(data,
         !(is.na(.data$financial_quarter)),
         paste0(.data$financial_year, "Q", .data$financial_quarter),
         .data$financial_year
-      )) %>%
-      replace_sc_id_with_latest() %>%
-      # remove cases with no data in client
-      dplyr::filter(!(is.na(.data$financial_year))) %>%
-      dplyr::select(-"latest_sc_id", -"period")
+      )
+    ) %>%
+    replace_sc_id_with_latest() %>%
+    # remove cases with no data in client
+    dplyr::filter(!(is.na(.data$financial_year))) %>%
+    dplyr::select(-"latest_sc_id", -"period")
 
   client_clean <- sc_client_demographics %>%
     dplyr::group_by(.data$sending_location, .data$social_care_id, .data$anon_chi) %>%
@@ -138,18 +139,18 @@ process_lookup_sc_client <- function(data,
         )
       ),
       type_of_housing = factor(.data$type_of_housing,
-                               levels = 1L:9L,
-                               labels = c(
-                                 "Mainstream", # 1
-                                 "Supported", # 2
-                                 "Long Stay Care Home", # 3
-                                 "Hospital or other medical establishment", # 4
-                                 "Homeless", # 5
-                                 "Penal Institutions", # 6
-                                 "Not Known", # 7
-                                 "Other", # 8
-                                 "Not Known" # 9
-                               )
+        levels = 1L:9L,
+        labels = c(
+          "Mainstream", # 1
+          "Supported", # 2
+          "Long Stay Care Home", # 3
+          "Hospital or other medical establishment", # 4
+          "Homeless", # 5
+          "Penal Institutions", # 6
+          "Not Known", # 7
+          "Other", # 8
+          "Not Known" # 9
+        )
       )
     ) %>%
     # rename variables
@@ -190,31 +191,31 @@ process_lookup_sc_client <- function(data,
 
   sc_client_lookup <-
     dplyr::mutate(sc_client_lookup,
-                  count_not_known = rowSums(
-                    dplyr::select(sc_client_lookup, tidyr::all_of(
-                      c(
-                        "sc_living_alone",
-                        "sc_support_from_unpaid_carer",
-                        "sc_social_worker",
-                        "sc_type_of_housing",
-                        "sc_meals",
-                        "sc_day_care",
-                        "sc_dementia",
-                        "sc_learning_disability",
-                        "sc_mental_health_disorders",
-                        "sc_physical_and_sensory_disability",
-                        "sc_drugs",
-                        "sc_alcohol",
-                        "sc_palliative_care",
-                        "sc_carer",
-                        "sc_elderly_frail",
-                        "sc_neurological_condition",
-                        "sc_autism",
-                        "sc_other_vulnerable_groups"
-                      )
-                    )) == "Not Known",
-                    na.rm = TRUE
-                  )
+      count_not_known = rowSums(
+        dplyr::select(sc_client_lookup, tidyr::all_of(
+          c(
+            "sc_living_alone",
+            "sc_support_from_unpaid_carer",
+            "sc_social_worker",
+            "sc_type_of_housing",
+            "sc_meals",
+            "sc_day_care",
+            "sc_dementia",
+            "sc_learning_disability",
+            "sc_mental_health_disorders",
+            "sc_physical_and_sensory_disability",
+            "sc_drugs",
+            "sc_alcohol",
+            "sc_palliative_care",
+            "sc_carer",
+            "sc_elderly_frail",
+            "sc_neurological_condition",
+            "sc_autism",
+            "sc_other_vulnerable_groups"
+          )
+        )) == "Not Known",
+        na.rm = TRUE
+      )
     ) %>%
     dplyr::arrange(.data$anon_chi, .data$count_not_known) %>%
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
