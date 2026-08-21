@@ -8,7 +8,6 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#' @param update The update to use (default is [latest_update()]).
 #' @param la_code_lookup local authority data.
 #' @param sg_pub_data SG pub figures.
 #' @param BYOC_MODE BYOC_MODE
@@ -141,7 +140,7 @@ process_extract_homelessness <- function(data,
     ) %>%
     dplyr::left_join(
       la_code_lookup,
-      by = dplyr::join_by("sending_local_authority_code_9" == "CA")
+      by = dplyr::join_by("sending_local_authority_code_9" == "ca")
     ) %>%
     # Filter out duplicates
     fix_west_dun_duplicates() %>%
@@ -149,7 +148,6 @@ process_extract_homelessness <- function(data,
 
   completeness_data <- produce_homelessness_completeness(
     homelessness_data = data,
-    update = update,
     sg_pub_data = sg_pub_data,
     BYOC_MODE = BYOC_MODE
   )
@@ -202,7 +200,12 @@ process_extract_homelessness <- function(data,
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "homelessness", year = year)
+  log_slf_event(
+    stage = "process",
+    status = "complete",
+    type = "homelessness",
+    year = year
+  )
 
   return(homelessness_processed)
 }

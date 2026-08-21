@@ -59,9 +59,7 @@ tar_option_set(
   garbage_collection = TRUE,
   # format - default is parquet format
   format = "parquet",
-  resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd")
-  ),
+  resources = tar_resources(parquet = tar_resources_parquet(compression = "zstd")),
   # error - if an error occurs, the pipeline will continue
   error = "stop",
   # storage - the worker saves/uploads the value.
@@ -118,17 +116,13 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  # PROCESS - IT CHI deaths
+
+  #### SG homelessness publication data ----
   tar_target(
-    # Target name
-    it_chi_deaths_data,
-    # Function
-    process_it_chi_deaths(
-      data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
+    sg_pub_data,
+    get_sg_homelessness_pub_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
     )
   ),
 
@@ -159,6 +153,18 @@ list(
     )
   ),
 
+  ### NRS BOXI Deaths ----
+  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  # tar_target(
+  #   refined_death_data,
+  #   process_refined_death(
+  #     it_chi_deaths = it_chi_deaths_data,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   ## Stage 2.3: year specific targets ----
   tar_map(
@@ -239,11 +245,20 @@ list(
       # Function
       read_extract_mental_health(
         year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = NULL
+      )
+    ),
+    # GP Out of Hours CUP
+    tar_target(
+      gp_ooh_cup,
+      read_extract_gp_ooh_cup(
+        year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # PROCESS - Mental Health
+    # PROCESS - GP OOH CUP
     tar_target(
       # Target name
       source_mental_health_extract,
@@ -251,12 +266,24 @@ list(
       process_extract_mental_health(
         mental_health_data,
         year = year,
+        data_list = ooh_data,
+        gp_ooh_cup = gp_ooh_cup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
       )
     ),
+    # # TESTS - GP OOH
+    # tar_target(
+    #   # Target name
+    #   tests_source_ooh_extract,
+    #   # Function
+    #   process_tests_gp_ooh(
+    #     source_ooh_extract,
+    #     year
+    #   )
+    # ),
 
     ### Death Activity ---------------------------------------------------------
     # PROCESS - Deaths
@@ -273,10 +300,10 @@ list(
     # # TESTS - Deaths
     # tar_target(
     #   # Target name
-    #   tests_source_nrs_deaths_extract,
+    #   tests_source_homelessness_extract,
     #   # Function
-    #   process_tests_nrs_deaths(
-    #     source_nrs_deaths_extract,
+    #   process_tests_homelessness(
+    #     source_homelessness_extract,
     #     year
     #   )
     # ),
@@ -298,5 +325,4 @@ list(
     )
   )
 )
-
 ## End of Targets pipeline ##

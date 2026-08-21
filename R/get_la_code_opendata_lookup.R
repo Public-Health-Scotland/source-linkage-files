@@ -34,10 +34,10 @@ get_la_code_opendata_lookup <- function(
     dplyr::collect() %>%
     dplyr::mutate(
       sending_local_authority_name = dplyr::recode_values(
-        .data$CAName,
+        .data$caname,
         "City of Edinburgh" ~ "Edinburgh",
         "Na h-Eileanan Siar" ~ "Eilean Siar",
-        default = .data$CAName
+        default = .data$caname
       ) %>%
         stringr::str_replace("\\sand\\s", " \\& ")
     )
