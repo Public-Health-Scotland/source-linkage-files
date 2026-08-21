@@ -8,9 +8,8 @@ process_extract_homelessness(
   data,
   year,
   write_to_disk = TRUE,
-  update = latest_update(),
-  la_code_lookup = get_la_code_opendata_lookup(),
-  sg_pub_data,
+  la_code_lookup = get_la_code_opendata_lookup(BYOC_MODE = BYOC_MODE),
+  sg_pub_data = get_sg_homelessness_pub_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA
@@ -24,11 +23,15 @@ process_extract_homelessness(
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
-\item{update}{The update to use (default is \code{\link[=latest_update]{latest_update()}}).}
+\item{la_code_lookup}{local authority data.}
 
-\item{la_code_lookup}{get local authority using opendata.}
+\item{sg_pub_data}{SG pub figures.}
 
-\item{sg_pub_data}{The path to the SG pub figures.}
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -61,6 +64,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

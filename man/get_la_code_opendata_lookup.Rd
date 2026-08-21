@@ -2,15 +2,27 @@
 % Please edit documentation in R/get_la_code_opendata_lookup.R
 \name{get_la_code_opendata_lookup}
 \alias{get_la_code_opendata_lookup}
-\title{Download the LA code lookup}
+\title{LA Code Lookup}
 \usage{
-get_la_code_opendata_lookup()
+get_la_code_opendata_lookup(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
+}
+\arguments{
+\item{denodo_connect}{Connection to denodo}
+
+\item{BYOC_MODE}{BYOC MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with the Local Authority names
 and codes.
 }
 \description{
-Download and process the Local Authority lookup from the Open
-Data platform
+Return the data for Local Authority lookup.
 }
+\seealso{
+Other lookup files:
+\code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}}
+}
+\concept{lookup files}

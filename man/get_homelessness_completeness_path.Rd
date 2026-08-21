@@ -4,17 +4,10 @@
 \alias{get_homelessness_completeness_path}
 \title{Homelessness Completeness lookup path}
 \usage{
-get_homelessness_completeness_path(
-  year,
-  update = latest_update(),
-  BYOC_MODE,
-  ...
-)
+get_homelessness_completeness_path(year, BYOC_MODE, ...)
 }
 \arguments{
 \item{year}{the financial year of the update.}
-
-\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}}).}
 
 \item{BYOC_MODE}{check BYOC mode.}
 
