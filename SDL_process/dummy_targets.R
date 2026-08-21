@@ -117,15 +117,6 @@ list(
     )
   ),
 
-  #### SG homelessness publication data ----
-  tar_target(
-    sg_pub_data,
-    get_sg_homelessness_pub_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-
   ### Long-Term Conditions (LTCs) Activity -------------------------------------
   # READ - LTCs
   tar_target(
@@ -152,19 +143,6 @@ list(
       run_date_time = run_date_time
     )
   ),
-
-  ### NRS BOXI Deaths ----
-  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  # tar_target(
-  #   refined_death_data,
-  #   process_refined_death(
-  #     it_chi_deaths = it_chi_deaths_data,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
 
   ## Stage 2.3: year specific targets ----
   tar_map(
@@ -199,7 +177,7 @@ list(
       )
     ),
 
-    # Homelessness lookup-------------------------------------------------------
+    # Homelessness lookup ------------------------------------------------------
     tar_target(
       # Target name
       homelessness_lookup,
