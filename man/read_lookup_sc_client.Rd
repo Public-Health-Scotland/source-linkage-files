@@ -5,17 +5,14 @@
 \title{Process the social care client lookup}
 \usage{
 read_lookup_sc_client(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+  fyyear,
+  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")
 )
 }
 \arguments{
-\item{year}{The year to process, in the standard format '1718'}
+\item{fyyear}{The year to process, in the standard format '1718'}
 
-\item{denodo_connect}{The connection to the SDL platform.}
-
-\item{BYOC_MODE}{BYOC_MODE}
+\item{sc_dvprod_connection}{The connection to the SC platform.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -48,6 +45,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

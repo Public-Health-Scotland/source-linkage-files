@@ -59,11 +59,9 @@ tar_option_set(
   garbage_collection = TRUE,
   # format - default is parquet format
   format = "parquet",
-  resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd")
-  ),
+  resources = tar_resources(parquet = tar_resources_parquet(compression = "zstd")),
   # error - if an error occurs, the pipeline will continue
-  error = "continue",
+  error = "stop",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
@@ -80,7 +78,54 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1 - non year specific ----
+  ## Stage 2.1 non year-specific targets ----
+
+  ### Lookup data ---------------
+  #### Local Authority open data -----
+  # used by homelessness
+  tar_target(
+    # Target name
+    la_code_opendata,
+    # Function
+    get_la_code_opendata_lookup(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  #### SG homelessness publication data ----
+  tar_target(
+    sg_pub_data,
+    get_sg_homelessness_pub_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  ### IT CHI deaths Activity ----
+  # # READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
   # ### Long-Term Conditions (LTCs) Activity ----
   # # READ - LTCs
@@ -92,7 +137,28 @@ list(
   #   )
   # ),
 
-  ## Stage 2.2 - year specific ----
+  ### NRS BOXI Deaths ----
+  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  # tar_target(
+  #   refined_death_data,
+  #   process_refined_death(
+  #     it_chi_deaths = it_chi_deaths_data,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
+
+  ### GP Out of Hours costs------
+  tar_target(
+    # Target name
+    gp_ooh_cost_lookup,
+    # Function
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
+  ),
+
+  ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run),
 
@@ -122,7 +188,7 @@ list(
     #   )
     # ),
 
-    # ### Maternity (SMR02) Acitivity-----------------------------------------------
+    ### Maternity (SMR02) Acitivity----
     # # READ - Maternity
     # tar_target(
     #   # Target name
@@ -148,8 +214,8 @@ list(
     #     run_date_time = run_date_time
     #   )
     # ),
-    #
-    # ### Mental Health (SMR02) Activity--------------------------------------------
+
+    ### Mental Health (SMR02) Activity ----
     # # READ - Mental Health
     # tar_target(
     #   mental_health_data,
@@ -208,5 +274,4 @@ list(
     )
   )
 )
-
 ## End of Targets pipeline ##

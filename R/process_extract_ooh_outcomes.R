@@ -9,7 +9,10 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_outcomes <- function(data, year) {
+process_extract_ooh_outcomes <- function(
+  data,
+  year
+) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-o", year = year)
 
   # Only run for a single year
@@ -18,14 +21,13 @@ process_extract_ooh_outcomes <- function(data, year) {
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-
   # Outcomes Data ---------------------------------
   ## Data Cleaning
   outcomes_clean <- data %>%
     data.table::as.data.table() %>%
     # Recode outcome
     dplyr::mutate(
-      outcome = dplyr::case_match(
+      outcome = dplyr::recode_values(
         .data$outcome,
         "DEATH" ~ "00",
         "999/AMBULANCE" ~ "01",
@@ -38,7 +40,7 @@ process_extract_ooh_outcomes <- function(data, year) {
         "REFERRED TO SOCIAL SERVICES" ~ "24",
         "OTHER HC REFERRAL/ADVISED TO CONTACT OTHER HCP (NON-EMERGENCY)" ~ "29",
         "OTHER" ~ "99",
-        .default = .data$outcome
+        default = .data$outcome
       )
     ) %>%
     # Sort so we prefer 'lower' outcomes e.g. Death, over things like 'Other'
@@ -48,9 +50,13 @@ process_extract_ooh_outcomes <- function(data, year) {
     dplyr::ungroup() %>%
     # use row order to pivot outcomes
     tidyr::pivot_wider(
-      names_from = .data$outcome_n,
+      names_from = "outcome_n",
       names_prefix = "ooh_outcome",
-      values_from = .data$outcome
+      values_from = "outcome"
+    ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     ) %>%
     dplyr::select(
       "ooh_case_id",

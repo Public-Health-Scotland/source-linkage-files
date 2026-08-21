@@ -5,8 +5,11 @@
 \title{Process the refined death data}
 \usage{
 process_refined_death(
-  it_chi_deaths = read_file(get_slf_chi_deaths_path()),
-  write_to_disk = TRUE
+  it_chi_deaths = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
@@ -48,6 +51,10 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+<<<<<<< HEAD
+=======
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
+>>>>>>> origin/development
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},
