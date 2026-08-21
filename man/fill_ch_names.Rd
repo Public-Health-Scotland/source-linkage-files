@@ -6,9 +6,9 @@
 \usage{
 fill_ch_names(
   ch_data,
-  spd_data = get_spd_data(BYOC_MODE),
-  uk_pc_list = get_uk_postcode_data(BYOC_MODE),
-  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE)
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  uk_pc_list = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{
