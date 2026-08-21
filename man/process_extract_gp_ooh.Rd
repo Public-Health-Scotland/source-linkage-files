@@ -7,8 +7,12 @@
 process_extract_gp_ooh(
   year,
   data_list,
-  gp_ooh_cup_path = get_boxi_extract_path(year, "gp_ooh_cup"),
-  write_to_disk = TRUE
+  gp_ooh_cup = read_extract_gp_ooh_cup(year = year, denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
@@ -16,7 +20,7 @@ process_extract_gp_ooh(
 
 \item{data_list}{A list containing the extracts.}
 
-\item{gp_ooh_cup_path}{path to gp ooh cup data}
+\item{gp_ooh_cup}{gp ooh cup data}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
@@ -52,6 +56,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

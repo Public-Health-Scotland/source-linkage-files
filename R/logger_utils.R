@@ -162,6 +162,8 @@ log_slf_event <- function(stage = c("read", "process", "test"),
     "sds" ~ "Self Directed Support",
     "spd" ~ "Scottish Postcode Directory",
     "pis" ~ "Prescribing",
+    "la_lookup" ~ "LA Code Opendata Lookup",
+    "homelessness_completeness" ~ "Homelessness Completeness",
     default = type # use type if file_name not available
   )
 

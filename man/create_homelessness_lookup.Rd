@@ -6,7 +6,8 @@
 \usage{
 create_homelessness_lookup(
   year,
-  homelessness_data = read_file(get_source_extract_path(year, "homelessness"))
+  homelessness_data = read_file(get_source_extract_path(year, "homelessness", BYOC_MODE =
+    BYOC_MODE))
 )
 }
 \arguments{
@@ -46,6 +47,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},
