@@ -23,6 +23,8 @@ Return the data for HSCP population estimates.
 \seealso{
 Other lookup files:
 \code{\link[=get_dn_contacts_data]{get_dn_contacts_data()}},
-\code{\link[=get_dn_raw_costs_data]{get_dn_raw_costs_data()}}
+\code{\link[=get_dn_raw_costs_data]{get_dn_raw_costs_data()}},
+\code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}},
+\code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}}
 }
 \concept{lookup files}
