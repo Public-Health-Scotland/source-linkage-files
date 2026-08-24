@@ -116,6 +116,19 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
+  # PROCESS - IT CHI deaths
+  tar_target(
+    # Target name
+    it_chi_deaths_data,
+    # Function
+    process_it_chi_deaths(
+      data = it_chi_deaths_extract,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
 
   ### Long-Term Conditions (LTCs) Activity -------------------------------------
   # READ - LTCs
@@ -254,16 +267,6 @@ list(
           as.data.frame()
       })(year, refined_death_data)
     ),
-    # # TESTS - Deaths
-    # tar_target(
-    #   # Target name
-    #   tests_source_homelessness_extract,
-    #   # Function
-    #   process_tests_homelessness(
-    #     source_homelessness_extract,
-    #     year
-    #   )
-    # ),
 
     ### Long-Term Conditions (LTCs) Activity -----------------------------------
     # PROCESS - LTCs
