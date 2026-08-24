@@ -23,7 +23,6 @@ Return the data for Local Authority lookup.
 }
 \seealso{
 Other lookup files:
-\code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}},
 \code{\link[=get_sg_pub_data]{get_sg_pub_data()}}
 }
 \concept{lookup files}

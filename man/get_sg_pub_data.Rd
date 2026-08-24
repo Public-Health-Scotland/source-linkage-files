@@ -22,7 +22,6 @@ Return the data for Homelessness Completeness lookup.
 }
 \seealso{
 Other lookup files:
-\code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}},
-\code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}}
+\code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}}
 }
 \concept{lookup files}
