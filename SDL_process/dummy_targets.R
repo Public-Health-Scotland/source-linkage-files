@@ -223,8 +223,8 @@ list(
       # Function
       read_extract_mental_health(
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = NULL
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # PROCESS - Mental Health
@@ -241,16 +241,6 @@ list(
         run_date_time = run_date_time
       )
     ),
-    # # TESTS - GP OOH
-    # tar_target(
-    #   # Target name
-    #   tests_source_ooh_extract,
-    #   # Function
-    #   process_tests_gp_ooh(
-    #     source_ooh_extract,
-    #     year
-    #   )
-    # ),
 
     ### Death Activity ---------------------------------------------------------
     # PROCESS - Deaths
