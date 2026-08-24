@@ -227,16 +227,7 @@ list(
         denodo_connect = NULL
       )
     ),
-    # GP Out of Hours CUP
-    tar_target(
-      gp_ooh_cup,
-      read_extract_gp_ooh_cup(
-        year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - GP OOH CUP
+    # PROCESS - Mental Health
     tar_target(
       # Target name
       source_mental_health_extract,
@@ -244,8 +235,6 @@ list(
       process_extract_mental_health(
         mental_health_data,
         year = year,
-        data_list = ooh_data,
-        gp_ooh_cup = gp_ooh_cup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
