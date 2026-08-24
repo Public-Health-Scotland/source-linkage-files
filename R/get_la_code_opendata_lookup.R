@@ -26,8 +26,8 @@ get_la_code_opendata_lookup <- function(
   ) %>%
     # Rename variables
     dplyr::select(
-      CA = "ca",
-      CAName = "caname"
+      ca = "ca",
+      caname = "caname"
     ) %>%
     dplyr::distinct() %>%
     # Collect
