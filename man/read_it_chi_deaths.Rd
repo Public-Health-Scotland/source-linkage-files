@@ -9,6 +9,11 @@ read_it_chi_deaths(
   BYOC_MODE
 )
 }
+\arguments{
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
+}
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
