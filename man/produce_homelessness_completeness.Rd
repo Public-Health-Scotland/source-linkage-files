@@ -4,7 +4,11 @@
 \alias{produce_homelessness_completeness}
 \title{Produce the Homelessness Completeness lookup}
 \usage{
-produce_homelessness_completeness(homelessness_data, sg_pub_data, BYOC_MODE)
+produce_homelessness_completeness(
+  homelessness_data,
+  sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{homelessness_data}{The Homelessness data to produce}
