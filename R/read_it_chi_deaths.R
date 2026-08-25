@@ -1,8 +1,8 @@
 #' Read the CHI deaths extract
 #'
 #' @description This will read the CHI deaths extract and return the data.
-#' @param denodo_connect
-#' @param BYOC_MODE
+#' @param denodo_connect Connection to Denodo
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
