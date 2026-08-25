@@ -6,17 +6,23 @@
 #' @param data the SLF
 #' @param slf_pc_lookup The SLF Postcode lookup
 #' @param slf_gpprac_lookup The SLF GP Practice lookup
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return a [tibble][tibble::tibble-package] of the SLF with improved
 #' Postcode and GP Practice details.
 fill_geographies <- function(
   data,
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(
-    get_slf_gpprac_path(),
-    col_select = c("gpprac", "cluster", "hbpraccode")
-  )
+  slf_pc_lookup = read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE)),
+  #  TODO: slf_pc_lookup = get_sdl_processed_data(type = "postcode_lookup", BYOC_MODE = BYOC_MODE),
+  slf_gpprac_lookup = read_file(get_slf_gpprac_path(BYOC_MODE = BYOC_MODE)),
+  # TODO: slf_gpprac_lookup = get_sdl_processed_data(type = "gpprac_lookup", BYOC_MODE = BYOC_MODE)
+  BYOC_MODE
 ) {
+  log_ep_substage(sub_stage = "Fill geographies", status = "start", year = "All years") # TODO: Check usage.
+
+  slf_gpprac_lookup <- slf_gpprac_lookup %>%
+    dplyr::select("gpprac", "cluster", "hbpraccode")
+
   check_variables_exist(data, c(
     "anon_chi",
     "postcode",
@@ -29,17 +35,10 @@ fill_geographies <- function(
   ))
 
   data <- data %>%
-    fill_postcode_geogs(
-      slf_pc_lookup = read_file(get_slf_postcode_path())
-    ) %>%
-    fill_gpprac_geographies(
-      slf_gpprac_lookup = read_file(
-        get_slf_gpprac_path(),
-        col_select = c("gpprac", "cluster", "hbpraccode")
-      )
-    )
+    fill_postcode_geogs(slf_pc_lookup) %>%
+    fill_gpprac_geographies(slf_gpprac_lookup)
 
-  cli::cli_alert_info("Fill geographies function finished at {Sys.time()}")
+  log_ep_substage(sub_stage = "Fill geographies", status = "complete", year = "All years") # TODO: Check usage.
 
   return(data)
 }

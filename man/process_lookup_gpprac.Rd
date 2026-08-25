@@ -5,28 +5,38 @@
 \title{Process the SLF gpprac lookup}
 \usage{
 process_lookup_gpprac(
-  open_data = get_gpprac_opendata(),
-  gpprac_ref_path = get_gpprac_ref_path(),
-  spd_path = get_spd_path(),
-  write_to_disk = TRUE
+  gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
+  gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
-\item{open_data}{PHS open dataset link to GP practice details}
+\item{gpprac_ref_data}{GP Practice reference data.}
 
-\item{gpprac_ref_path}{Path to GP Practice reference file}
+\item{gpprac_opendata}{PHS open dataset for GP practice details.}
 
-\item{spd_path}{Path to Scottish Postcode Directory.}
+\item{spd_data}{Scottish Postcode Directory data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-This will read and process the gpprac lookup, it will return
-the final data and also write this out to disk.
+This will read and process the
+gpprac lookup, it will return the final data
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts:

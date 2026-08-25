@@ -1,50 +1,46 @@
 #' Process the SLF gpprac lookup
 #'
-#' @description This will read and process the gpprac lookup, it will return
-#' the final data and also write this out to disk.
+#' @description This will read and process the
+#' gpprac lookup, it will return the final data
+#' and (optionally) write it to disk.
 #'
-#' @param open_data PHS open dataset link to GP practice details
-#' @param gpprac_ref_path Path to GP Practice reference file
-#' @param spd_path Path to Scottish Postcode Directory.
+#' @param gpprac_ref_data GP Practice reference data.
+#' @param gpprac_opendata PHS open dataset for GP practice details.
+#' @param spd_data Scottish Postcode Directory data.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_lookup_gpprac <- function(
-  open_data = get_gpprac_opendata(),
-  gpprac_ref_path = get_gpprac_ref_path(),
-  spd_path = get_spd_path(),
-  write_to_disk = TRUE
+  gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
+  gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "gpprac_slf_lookup", year = "all")
+  log_slf_event(stage = "process", status = "start", type = "gpprac_lookup", year = "all")
 
-  gpprac_ref_file <- read_file(path = gpprac_ref_path) %>%
+  # Select required variables from the SPD reference file
+  spd <- spd_data %>%
     dplyr::select(
-      "gpprac" = "praccode",
-      "pc7" = "postcode"
-    ) %>%
-    # Ensure all postcodes are strictly pc7 format
-    dplyr::mutate(
-      pc7 = phsmethods::format_postcode(.data$pc7, format = "pc7")
-    )
-
-  spd_file <- read_file(
-    path = spd_path,
-    col_select = c(
       "pc7",
       "pc8",
       "hb2018",
       "hscp2018",
       "ca2018"
     )
-  )
 
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(
-    gpprac_ref_file,
-    open_data,
+    gpprac_ref_data,
+    gpprac_opendata,
     by = "gpprac",
     na_matches = "never",
     relationship = "one-to-one",
@@ -52,13 +48,19 @@ process_lookup_gpprac <- function(
   ) %>%
     # Match on geography info - postcode
     dplyr::left_join(
-      spd_file,
+      spd,
       by = "pc7",
       na_matches = "never",
       relationship = "many-to-one"
     ) %>%
     dplyr::rename(hbpraccode = "hb2018") %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "gpprac",
       "pc7",
       "pc8",
@@ -78,13 +80,18 @@ process_lookup_gpprac <- function(
     )
 
   if (write_to_disk) {
-    gpprac_slf_lookup %>%
-      write_file(get_slf_gpprac_path(check_mode = "write"),
-        group_id = 3206 # hscdiip owner
-      )
+    write_file(
+      data = gpprac_slf_lookup,
+      path = get_slf_gpprac_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "gpprac_slf_lookup", year = "all")
+  log_slf_event(stage = "process", status = "complete", type = "gpprac_lookup", year = "all")
 
   return(gpprac_slf_lookup)
 }

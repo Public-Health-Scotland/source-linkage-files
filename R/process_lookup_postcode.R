@@ -4,23 +4,33 @@
 #' postcode lookup, it will return the final data
 #' and (optionally) write it to disk.
 #'
-#' @param simd_path Path to SIMD lookup.
-#' @param locality_path Path to locality lookup.
-#'
-#' @inheritParams process_lookup_gpprac
+#' @param spd_data Scottish Postcode Directory data.
+#' @param simd_data SIMD data.
+#' @param locality_data HSCP locality data.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_lookup_postcode <- function(spd_path = get_spd_path(),
-                                    simd_path = get_simd_path(),
-                                    locality_path = get_locality_path(),
-                                    write_to_disk = TRUE) {
-  # Read lookup files -------------------------------------------------------
+process_lookup_postcode <- function(
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+) {
   log_slf_event(stage = "process", status = "start", type = "slf_pc_lookup", year = "all")
 
-  # postcode data
-  spd_file <- read_file(spd_path) %>%
+  # Process lookups -------------------------------------------------------
+
+  # Scottish Postcode Directory Lookup
+  spd <- spd_data %>%
     dplyr::select(
       "pc7",
       # tidyselect::matches("datazone\\d{4}$"),
@@ -38,8 +48,8 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
     ) %>%
     dplyr::mutate(lca = convert_ca_to_lca(.data$ca2019))
 
-  # simd data
-  simd_file <- read_file(simd_path) %>%
+  # SIMD Lookup
+  simd <- simd_data %>%
     dplyr::select(
       "pc7",
       tidyselect::matches("simd\\d{4}.?.?_rank"),
@@ -51,27 +61,28 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
       tidyselect::matches("simd\\d{4}.?.?_hscp\\d{4}_quintile")
     )
 
-  # locality
-  locality_file <- read_file(locality_path) %>%
-    dplyr::select(
-      locality = "hscp_locality",
-      tidyselect::matches("datazone\\d{4}$")
-    ) %>%
+  # HSCP Locality Lookup
+  locality <- locality_data %>%
     dplyr::mutate(
       locality = tidyr::replace_na(.data$locality, "No Locality Information")
     )
 
-
   # Join data together  -----------------------------------------------------
-  data <- dplyr::left_join(spd_file, simd_file, by = "pc7") %>%
-    dplyr::rename(postcode = "pc7") %>%
-    dplyr::left_join(locality_file, by = "datazone2011")
 
+  data <- dplyr::left_join(spd, simd, by = "pc7") %>%
+    dplyr::rename(postcode = "pc7") %>%
+    dplyr::left_join(locality, by = "datazone2011")
 
   # Finalise output -----------------------------------------------------
 
   slf_pc_lookup <- data %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "postcode",
       "lca",
       "locality",
@@ -97,9 +108,13 @@ process_lookup_postcode <- function(spd_path = get_spd_path(),
 
   if (write_to_disk) {
     write_file(
-      slf_pc_lookup,
-      get_slf_postcode_path(check_mode = "write"),
-      group_id = 3206 # hscdiip owner
+      data = slf_pc_lookup,
+      path = get_slf_postcode_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
