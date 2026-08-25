@@ -348,15 +348,6 @@ list(
         denodo_connect = NULL
       )
     ),
-    # GP Out of Hours CUP
-    tar_target(
-      gp_ooh_cup,
-      read_extract_gp_ooh_cup(
-        year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
     # PROCESS - District Nursing
     tar_target(
       # Target name
