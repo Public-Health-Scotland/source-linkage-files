@@ -24,7 +24,7 @@ get_sg_pub_data <- function(
     dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
   ) %>%
     dplyr::select(
-      "CAName" = "local_authority",
+      "caname" = "local_authority",
       "sg_year" = "fin_year",
       "sg_all_assessments", "sg_all_assessments"
     ) %>%
@@ -33,9 +33,9 @@ get_sg_pub_data <- function(
     dplyr::mutate(sg_year = convert_year_to_fyyear(sg_year)) %>%
     dplyr::summarise(
       sg_all_assessments = sum(sg_all_assessments),
-      .by = c("CAName", "sg_year")
+      .by = c("caname", "sg_year")
     ) %>%
-    dplyr::arrange(CAName, sg_year)
+    dplyr::arrange(caname, sg_year)
 
   log_slf_event(stage = "read", status = "complete", type = "homelessness_completeness", year = "all")
 

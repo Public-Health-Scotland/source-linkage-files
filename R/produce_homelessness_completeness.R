@@ -8,7 +8,7 @@
 #' `pct_complete_all`.
 produce_homelessness_completeness <- function(
   homelessness_data,
-  sg_pub_data,
+  sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   year <- unique(homelessness_data[["year"]])
