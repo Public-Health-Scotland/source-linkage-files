@@ -345,7 +345,7 @@ list(
       read_extract_district_nursing(
         year = year,
         BYOC_MODE = BYOC_MODE,
-        denodo_connect = NULL
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
       )
     ),
     # PROCESS - District Nursing
