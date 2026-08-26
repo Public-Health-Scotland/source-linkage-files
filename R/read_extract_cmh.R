@@ -5,57 +5,61 @@
 #' @export
 read_extract_cmh <- function(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "cmh")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "cmh", year = year)
 
+  # Check and convert to calendar year
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  # Create dates to filter by calendar year
+  # TODO: Check logic and whether this is the correct year column.
+  start_date <- as.Date(paste0(substr(c_year, 1, 4), "-03-31"))
+  end_date <- as.Date(paste0(as.integer(substr(c_year, 1, 4)) + 1, "-04-01"))
+
   # Specify years available for running
-  if (file_path == get_dummy_boxi_extract_path()) {
+  if (!check_year_valid(year, type = "cmh")) {
     return(tibble::tibble())
   }
 
-  # Read BOXI extract
-  extract_cmh <- read_file(file_path,
-    col_types = readr::cols_only(
-      "anon_chi" = readr::col_character(),
-      "Patient DoB Date [C]" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Gender" = readr::col_double(),
-      "Patient Postcode [C]" = readr::col_character(),
-      "NHS Board of Residence Code 9" = readr::col_character(),
-      "Patient HSCP Code - current" = readr::col_character(),
-      "Practice Code" = readr::col_integer(),
-      "Treatment NHS Board Code 9" = readr::col_character(),
-      "Contact Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Contact Start Time" = readr::col_time(format = "%T"),
-      "Duration of Contact" = readr::col_integer(),
-      "Location of Contact" = readr::col_character(),
-      "Main Aim of Contact" = readr::col_character(),
-      "Other Aim of Contact (1)" = readr::col_character(),
-      "Other Aim of Contact (2)" = readr::col_character(),
-      "Other Aim of Contact (3)" = readr::col_character(),
-      "Other Aim of Contact (4)" = readr::col_character()
-    )
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  # Read extract
+  extract_cmh <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_cmh_source")
   ) %>%
-    # rename
-    dplyr::rename(
-      anon_chi = "anon_chi",
-      dob = "Patient DoB Date [C]",
-      gender = "Gender",
-      postcode = "Patient Postcode [C]",
-      hbrescode = "NHS Board of Residence Code 9",
-      hscp = "Patient HSCP Code - current",
-      gpprac = "Practice Code",
-      hbtreatcode = "Treatment NHS Board Code 9",
-      record_keydate1 = "Contact Date",
-      keytime1 = "Contact Start Time",
-      duration = "Duration of Contact",
-      location = "Location of Contact",
-      diag1 = "Main Aim of Contact",
-      diag2 = "Other Aim of Contact (1)",
-      diag3 = "Other Aim of Contact (2)",
-      diag4 = "Other Aim of Contact (3)",
-      diag5 = "Other Aim of Contact (4)"
-    )
+    # Filter by calendar year
+    # TODO: Check logic and whether this is the correct year column.
+    dplyr::filter(
+      .data$contact_date > start_date,
+      .data$contact_date < end_date
+    ) %>%
+    # Rename variables
+    dplyr::select(
+      anon_chi = "patient_chi", # TODO: Check we will always get anon_chi
+      dob = "patient_dob",
+      gender = "gender",
+      postcode = "patient_postcode",
+      hbrescode = "nhs_board_of_residence_code_9",
+      hscp = "patient_hscp_code_current",
+      gpprac = "practice_code",
+      hbtreatcode = "treatment_nhs_board_code_9",
+      record_keydate1 = "contact_date",
+      keytime1 = "contact_start_time",
+      duration = "duration_of_contact",
+      location = "location_of_contact",
+      diag1 = "main_aim_of_contact",
+      diag2 = "other_aim_of_contact_1",
+      diag3 = "other_aim_of_contact_2",
+      diag4 = "other_aim_of_contact_3",
+      diag5 = "other_aim_of_contact_4"
+    ) %>%
+    # Collect
+    dplyr::collect()
 
   log_slf_event(stage = "read", status = "complete", type = "cmh", year = year)
 

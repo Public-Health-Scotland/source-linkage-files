@@ -4,7 +4,14 @@
 \alias{process_extract_cmh}
 \title{Process the Community Mental Health (CMH) extract}
 \usage{
-process_extract_cmh(data, year, write_to_disk = TRUE)
+process_extract_cmh(
+  data,
+  year,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The extract to process}
@@ -13,6 +20,12 @@ process_extract_cmh(data, year, write_to_disk = TRUE)
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
