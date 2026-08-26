@@ -23,6 +23,38 @@ get_hhg_path <- function(year, ...) {
   return(hhg_file_path)
 }
 
+
+#' HHG Extract File data
+#'
+#' @description Get the path to the HHG extract
+#'
+#' @param year Year of extract
+#' @param denodo_connect connection to denodo
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return The path to the HHG extract as an [fs::path()]
+#' @export
+#' @family extract file paths
+#' @seealso [get_file_path()] for the generic function.
+get_hhg_data <- function(year,
+                         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                         BYOC_MODE) {
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  # principle: reading all data from denodo
+  extract_hhg <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_hhg_source")
+  ) %>%
+    dplyr::filter(financial_year == year) %>%
+    dplyr::rename(anon_chi = patient_chi) %>%
+    dplyr::select("anon_chi", "hhg_score") %>%
+    dplyr::collect()
+
+  return(extract_hhg)
+}
+
+
 #' SPARRA Extract File Path
 #'
 #' @description Get the path to the SPARRA extract
