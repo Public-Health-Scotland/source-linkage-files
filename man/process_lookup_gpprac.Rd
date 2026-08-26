@@ -7,7 +7,6 @@
 process_lookup_gpprac(
   open_data = get_gpprac_opendata(),
   gpprac_ref_path = get_gpprac_ref_path(),
-  spd_path = get_spd_path(),
   write_to_disk = TRUE
 )
 }
@@ -16,10 +15,10 @@ process_lookup_gpprac(
 
 \item{gpprac_ref_path}{Path to GP Practice reference file}
 
-\item{spd_path}{Path to Scottish Postcode Directory.}
-
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{spd_path}{Path to Scottish Postcode Directory.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

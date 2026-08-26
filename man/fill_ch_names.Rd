@@ -6,23 +6,14 @@
 \usage{
 fill_ch_names(
   ch_data,
-  ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-  spd_path = get_spd_path(),
-  uk_pc_path = get_uk_postcode_path()
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  uk_pc_list = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{
 \item{ch_data}{partially cleaned up care home data as a
 \link[tibble:tibble-package]{tibble}}
-
-\item{ch_name_lookup_path}{Path to the 'official' Care Home name Excel
-Workbook, this defaults to \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}}}
-
-\item{spd_path}{Path to the Scottish Postcode Directory (rds) version, this
-defaults to \code{\link[=get_spd_path]{get_spd_path()}}}
-
-\item{uk_pc_path}{Path to the UK postcode list. This is defaults to
-\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}}
 }
 \value{
 the same data with improved accuracy and completeness of the Care

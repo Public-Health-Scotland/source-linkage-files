@@ -4,10 +4,15 @@
 \alias{read_sc_all_care_home}
 \title{Read Social Care - Care Home data}
 \usage{
-read_sc_all_care_home(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"))
+read_sc_all_care_home(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
-\item{sc_dvprod_connection}{Connection to the SC platform}
+\item{denodo_connect}{Connection to denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 an extract of the data as a \link[tibble:tibble-package]{tibble}.
