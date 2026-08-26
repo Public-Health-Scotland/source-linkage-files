@@ -95,14 +95,14 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' Populations File Path for different types
+#' Populations File Path for different types - LOCAL ONLY
 #'
-#' @description Get the path to the populations estimates
+#' @description Get the path to the populations estimates - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #' @param type population type datazone, or hscp, or ca, or hb, or interzone
 #'
-#' @return An [fs::path()] to the populations estimates file
+#' @return An [fs::path()] to the populations estimates local file
 #' @export
 #'
 #' @family lookup file paths

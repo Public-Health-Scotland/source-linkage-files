@@ -6,13 +6,12 @@
 \usage{
 read_extract_district_nursing(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "dn")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
-
-\item{file_path}{BOXI extract location}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.

@@ -9,16 +9,21 @@
 #' @param costs The cost lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_district_nursing <- function(
-  data,
-  year,
-  costs = read_file(get_dn_costs_path()),
-  write_to_disk = TRUE
-) {
+process_extract_district_nursing <- function(data,
+                                             year,
+                                             costs = read_file(get_dn_costs_path(BYOC_MODE = BYOC_MODE)),
+                                             # TODO: costs = get_sdl_processed_data(type = "dn_cost_lookup", BYOC_MODE = BYOC_MODE),
+                                             write_to_disk = TRUE,
+                                             BYOC_MODE = FALSE,
+                                             run_id = NA,
+                                             run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "dn", year = year)
 
   # Only run for a single year
@@ -27,28 +32,28 @@ process_extract_district_nursing <- function(
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-  # If data is available in the FY then run processing.
+  # If no data is available in the FY then return immediately
   if (identical(data, tibble::tibble())) {
     return(data)
   }
 
   # Data Cleaning  ---------------------------------------
+
   dn_clean <- data %>%
-    # change to chi for phsmethods
+    # Change to chi for phsmethods
     slfhelper::get_chi() %>%
-    # filter for valid chi only
+    # Filter for valid chi only
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
-    # change back to anon_chi %>%
+    # Change back to anon_chi %>%
     slfhelper::get_anon_chi() %>%
-    # add variables
+    # Add variables
     dplyr::mutate(
       year = year,
       recid = "DN",
       smrtype = add_smrtype(recid = "DN")
     ) %>%
-    # deal with gpprac
+    # Deal with gpprac
     dplyr::mutate(gpprac = convert_eng_gpprac_to_dummy(.data$gpprac))
-
 
   # Costs  ---------------------------------------
 
@@ -64,11 +69,11 @@ process_extract_district_nursing <- function(
         default = .data$hbtreatcode
       )
     ) %>%
-    # match files with DN Cost Lookup
+    # Match files with DN Cost Lookup
     dplyr::left_join(costs,
       by = c("hbtreatcode", "year")
     ) %>%
-    # costs are rough estimates we round them to the nearest pound
+    # Costs are rough estimates we round them to the nearest pound
     dplyr::mutate(
       cost_total_net = janitor::round_half_up(.data$cost_total_net)
     ) %>%
@@ -137,13 +142,24 @@ process_extract_district_nursing <- function(
         ~ sum(.x)
       )
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   if (write_to_disk) {
-    dn_episodes %>%
-      write_file(get_source_extract_path(year, "dn", check_mode = "write"),
-        group_id = 3356
-      ) # sourcedev owner
+    write_file(
+      data = dn_episodes,
+      path = get_source_extract_path(
+        year = year,
+        type = "dn",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
 
   log_slf_event(stage = "process", status = "complete", type = "dn", year = year)
