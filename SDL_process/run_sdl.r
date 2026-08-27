@@ -100,9 +100,9 @@ byoc_output_files <- get_byoc_output_files(
     "gp_ooh",
     "ooh_cost_lookup",
     "outpatients",
-    "demog", 
-    "costs_hc_lookup", 
-    "hc", 
+    "demog",
+    "costs_hc_lookup",
+    "hc",
     "all_hc"
   )
 )
