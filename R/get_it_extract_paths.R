@@ -86,7 +86,6 @@ get_it_prescribing_path <- function(year, it_reference = NULL, ...) {
     )
   } else {
     it_reference <- check_it_reference(it_reference)
-
     it_pis_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "IT_extracts/anon-chi-IT"),
       file_name = stringr::str_glue(
@@ -94,7 +93,6 @@ get_it_prescribing_path <- function(year, it_reference = NULL, ...) {
       )
     )
   }
-
   return(it_pis_path)
 }
 
