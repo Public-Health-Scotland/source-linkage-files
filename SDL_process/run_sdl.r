@@ -91,7 +91,20 @@ year <- "1920"
 ## Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
   year,
-  types = c("demog", "costs_hc_lookup", "hc", "all_hc")
+  types = c(
+    "ae",
+    "dd",
+    "homelessness",
+    "homelessness_completeness",
+    "ltc",
+    "gp_ooh",
+    "ooh_cost_lookup",
+    "outpatients",
+    "demog", 
+    "costs_hc_lookup", 
+    "hc", 
+    "all_hc"
+  )
 )
 # using homelessness for test purpose. When development is complete,
 # we change to "types = "byoc_input_files""
@@ -112,9 +125,5 @@ tryCatch(
   }
 )
 logger::log_info("Targets finished.")
-
-# Episode file ----
-
-# Individual file ----
 
 logger::log_info("Run SDL ended.")

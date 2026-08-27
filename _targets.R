@@ -257,7 +257,7 @@ list(
     # Target name
     gp_ooh_cost_lookup,
     # Function
-    process_costs_gp_ooh_rmd()
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
@@ -503,12 +503,15 @@ list(
     ),
     # Accident & Emergency (AE2) activity --------------------------------------
     # READ - A&E
-    tar_file_read(
+    tar_target(
       # Target name
       ae_data,
-      get_boxi_extract_path(year, type = "ae"),
       # Function
-      read_extract_ae(year, !!.x)
+      read_extract_ae(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - A&E
     tar_target(
@@ -516,9 +519,13 @@ list(
       source_ae_extract,
       # Function
       process_extract_ae(
-        ae_data,
-        year,
-        write_to_disk = write_to_disk
+        data = ae_data,
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - A&E
@@ -563,7 +570,15 @@ list(
     ),
     # Delayed Discharges Activity-----------------------------------------------
     # READ - Delayed Discharges
-    tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
     # PROCESS - Delayed Discharges
     tar_target(
       # Target name
@@ -572,7 +587,11 @@ list(
       process_extract_delayed_discharges(
         dd_data,
         year,
-        write_to_disk = write_to_disk
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Delayed Discharges
@@ -806,20 +825,20 @@ list(
     tar_target(
       # Target name
       diagnosis_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-d"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # READ - GP Out of Hours outcomes
     tar_target(
       # Target name
       outcomes_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-o"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # READ - GP Out of Hours consultations
     tar_target(
       consultations_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # GP Out of Hours ALL
@@ -828,16 +847,18 @@ list(
       ooh_data,
       # Function
       read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        diagnosis_path = diagnosis_data_path,
+        outcomes_path = outcomes_data_path,
+        consultations_path = consultations_data_path
       )
     ),
     # GP Out of Hours CUP
     tar_target(
       gp_ooh_cup_path,
-      get_boxi_extract_path(year, type = "gp_ooh_cup"),
+      get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # PROCESS - GP OOH CUP
@@ -846,10 +867,14 @@ list(
       source_ooh_extract,
       # Function
       process_extract_gp_ooh(
-        year,
+        year = year,
         ooh_data,
-        gp_ooh_cup_path,
-        write_to_disk = write_to_disk
+        gp_ooh_cup_path = gp_ooh_cup_path,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - GP OOH
@@ -864,12 +889,15 @@ list(
     ),
     # Outpatients (SMR00) Activity----------------------------------------------
     # READ - Outpatients
-    tar_file_read(
+    tar_target(
       # Target name
       outpatients_data,
-      get_boxi_extract_path(year, type = "outpatient"),
       # Function
-      read_extract_outpatients(year, !!.x)
+      read_extract_outpatients(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Outpatients
     tar_target(
@@ -877,9 +905,12 @@ list(
       source_outpatients_extract,
       # Function
       process_extract_outpatients(
-        outpatients_data,
-        year,
-        write_to_disk = write_to_disk
+        data = outpatients_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Outpatients

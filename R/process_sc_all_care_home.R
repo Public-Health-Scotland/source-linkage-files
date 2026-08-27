@@ -9,6 +9,12 @@
 #' [process_lookup_sc_demographics()].
 #' @param refined_death The processed lookup of deaths from IT produced
 #' with [process_refined_death()].
+#' @param uk_pc_directory UK postcode directory
+#' @param ch_name_lookup Care home name lookup
+#' @param spd_dataScottish postcode directory
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id Denodo identifier
+#' @param run_date_time Denodo identifier
 #' @param write_to_disk (Optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #'
@@ -18,8 +24,14 @@
 #' @export
 process_sc_all_care_home <- function(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-  refined_death = read_file(get_combined_slf_deaths_lookup_path()),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)), ### TODO - SDL/Denodo name??
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)), ### TODO - SDL/Denodo name??
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = "all")
@@ -61,9 +73,6 @@ process_sc_all_care_home <- function(
     roll = "nearest"
   ]
 
-  uk_pc_directory <- read_file(get_uk_postcode_path()) %>%
-    dplyr::pull()
-
   data <- data %>%
     as.data.frame() %>%
     replace_sc_id_with_latest() %>%
@@ -81,8 +90,9 @@ process_sc_all_care_home <- function(
   # cleaning and matching care home names
   name_postcode_clean <- fill_ch_names(
     ch_data = data,
-    ch_name_lookup_path = get_slf_ch_name_lookup_data(BYOC_MODE),
-    spd_path = get_spd_data(BYOC_MODE)
+    spd_data = spd_data,
+    uk_pc_list = uk_pc_directory,
+    ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE)
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
@@ -482,11 +492,16 @@ process_sc_all_care_home <- function(
       "sc_latest_submission",
       "linking_id",
       "person_id"
+    ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
     ch_data_final %>%
-      write_file(get_sc_ch_episodes_path(check_mode = "write"),
+      write_file(get_sc_ch_episodes_path(check_mode = "write", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE,
         group_id = 3206 # hscdiip owner
       )
   }

@@ -39,18 +39,19 @@ get_uk_postcode_path <- function(...) {
 #' @family lookup file paths
 get_uk_postcode_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                  BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    # Disconnect from Denodo
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  log_slf_event(stage = "read", status = "start", type = "uk_postcode", year = "all")
 
-    extract_uk_pc <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_uk_postcode_list_source")
-    ) %>%
-      dplyr::collect()
-  } else {
-    extract_uk_pc <- read_file(get_uk_postcode_path())
-  }
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  extract_uk_pc <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_uk_postcode_list_source")
+  ) %>%
+    dplyr::collect()
+
+  log_slf_event(stage = "read", status = "complete", type = "uk_postcode", year = "all")
+
   return(extract_uk_pc)
 }
 
@@ -195,17 +196,18 @@ get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_slf_ch_name_lookup_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                         BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    # Disconnect from Denodo
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  log_slf_event(stage = "read", status = "start", type = "ch_name_lookup", year = "all")
 
-    extract_ch_name_lookup <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source") ### TODO check SDL name ###
-    ) %>%
-      collect()
-  } else {
-    ch_name_lookup_data <- openxlsx::read.xlsx(get_slf_ch_name_lookup_path())
-  }
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  ch_name_lookup_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source")
+  ) %>%
+    dplyr::collect()
+
+  log_slf_event(stage = "read", status = "complete", type = "ch_name_lookup", year = "all")
+
   return(ch_name_lookup_data)
 }

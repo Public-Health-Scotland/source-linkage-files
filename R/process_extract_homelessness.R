@@ -8,9 +8,11 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#' @param update The update to use (default is [latest_update()]).
-#' @param la_code_lookup get local authority using opendata.
-#' @param sg_pub_data The path to the SG pub figures.
+#' @param la_code_lookup local authority data.
+#' @param sg_pub_data SG pub figures.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -19,14 +21,18 @@ process_extract_homelessness <- function(
   data,
   year,
   write_to_disk = TRUE,
-  update = latest_update(),
-  la_code_lookup = get_la_code_opendata_lookup(),
-  sg_pub_data,
+  la_code_lookup = get_la_code_opendata_lookup(BYOC_MODE = BYOC_MODE),
+  sg_pub_data = get_sg_homelessness_pub_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "homelessness", year = year)
+  log_slf_event(
+    stage = "process",
+    status = "start",
+    type = "homelessness",
+    year = year
+  )
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
@@ -38,8 +44,6 @@ process_extract_homelessness <- function(
   if (identical(data, tibble::tibble())) {
     return(data)
   }
-
-  logger::log_info("Process homelessness data")
 
   data <- data %>%
     dplyr::mutate(
@@ -140,7 +144,7 @@ process_extract_homelessness <- function(
     ) %>%
     dplyr::left_join(
       la_code_lookup,
-      by = dplyr::join_by("sending_local_authority_code_9" == "CA")
+      by = dplyr::join_by("sending_local_authority_code_9" == "ca")
     ) %>%
     # Filter out duplicates
     fix_west_dun_duplicates() %>%
@@ -148,7 +152,6 @@ process_extract_homelessness <- function(
 
   completeness_data <- produce_homelessness_completeness(
     homelessness_data = data,
-    update = update,
     sg_pub_data = sg_pub_data,
     BYOC_MODE = BYOC_MODE
   )
@@ -187,14 +190,13 @@ process_extract_homelessness <- function(
       "hl1_completeness"
     )
 
-  logger::log_info("Write processed homelessness data to Denodo intermediate drive")
   if (write_to_disk) {
     write_file(
       final_data,
       get_source_extract_path(
         year = year,
         type = "homelessness",
-        BYOC_MODE,
+        BYOC_MODE = BYOC_MODE,
         check_mode = "write"
       ),
       BYOC_MODE = BYOC_MODE,
@@ -202,7 +204,12 @@ process_extract_homelessness <- function(
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "homelessness", year = year)
+  log_slf_event(
+    stage = "process",
+    status = "complete",
+    type = "homelessness",
+    year = year
+  )
 
   return(final_data)
 }
