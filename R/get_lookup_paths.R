@@ -86,13 +86,13 @@ get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC
     add = TRUE
   )
 
-    log_slf_event(stage = "read", status = "start", type = "spd", year = "all")
+  log_slf_event(stage = "read", status = "start", type = "spd", year = "all")
 
-    extract_spd <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_spd_source")
-    ) %>%
-      dplyr::collect()
+  extract_spd <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_spd_source")
+  ) %>%
+    dplyr::collect()
 
   log_slf_event(stage = "read", status = "complete", type = "spd", year = "all")
 
