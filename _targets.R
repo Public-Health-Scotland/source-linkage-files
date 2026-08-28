@@ -458,19 +458,26 @@ list(
     #---------------------------------------------------------------------------
     # Acute (SMR01) Activity
     # READ - Acute
-    tar_file_read(
-      # Target name
-      acute_data,
-      get_boxi_extract_path(year, type = "acute"),
-      # Function
-      read_extract_acute(year, !!.x)
-    ),
-    # READ - Acute CUP
     tar_target(
       # Target name
-      acute_cup_path,
-      get_boxi_extract_path(year, type = "acute_cup"),
-      format = "file"
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Acute
     tar_target(
@@ -479,9 +486,12 @@ list(
       # Function
       process_extract_acute(
         acute_data,
-        year,
-        acute_cup_path,
-        write_to_disk = write_to_disk
+        acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Acute
