@@ -13,7 +13,11 @@
 #'
 process_sc_all_home_care <- function(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  home_care_costs = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 ) {
   log_slf_event(stage = "process", status = "start", type = "hc", year = "all")
@@ -103,8 +107,6 @@ process_sc_all_home_care <- function(
 
 
   # Home Care Costs ---------------------------------------
-
-  home_care_costs <- read_file(get_hc_costs_path())
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs,
@@ -206,12 +208,16 @@ process_sc_all_home_care <- function(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
     create_person_id() %>%
-    select_linking_id()
+    select_linking_id() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   if (write_to_disk) {
     write_file(
       all_hc_processed,
-      get_sc_hc_episodes_path(check_mode = "write"),
+      get_sc_hc_episodes_path(BYOC_MODE = BYOC_MODE, check_mode = "write"),
       group_id = 3206 # hscdiip owner
     )
   }

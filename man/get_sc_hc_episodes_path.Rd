@@ -4,12 +4,9 @@
 \alias{get_sc_hc_episodes_path}
 \title{Home Care Episodes File Path}
 \usage{
-get_sc_hc_episodes_path(update = latest_update(), ...)
+get_sc_hc_episodes_path(BYOC_MODE = FALSE, ...)
 }
 \arguments{
-\item{update}{The update month to use,
-defaults to \code{\link[=latest_update]{latest_update()}}}
-
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{

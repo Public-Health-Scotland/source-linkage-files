@@ -99,7 +99,11 @@ byoc_output_files <- get_byoc_output_files(
     "ltc",
     "gp_ooh",
     "ooh_cost_lookup",
-    "outpatients"
+    "outpatients",
+    "demog",
+    "costs_hc_lookup",
+    "hc",
+    "all_hc"
   )
 )
 # using homelessness for test purpose. When development is complete,
