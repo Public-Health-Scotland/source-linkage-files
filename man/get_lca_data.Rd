@@ -4,10 +4,16 @@
 \alias{get_lca_data}
 \title{get lca data from Denodo}
 \usage{
-get_lca_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE))
+get_lca_data(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{denodo_connect}{denodo connection}
+}
+\value{
+lca_data with ca, caname, hbname
 }
 \description{
 get lca data from Denodo
