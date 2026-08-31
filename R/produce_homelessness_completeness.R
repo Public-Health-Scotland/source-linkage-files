@@ -140,14 +140,14 @@ get_homelessness_completeness_path <- function(
     completeness_file_path <- fs::path(
       directory = denodo_output_path(),
       file_name = stringr::str_glue(
-        "homelessness_completeness-{year}.parquet"
+        "homelessness_completeness-20{year}.parquet"
       )
     )
   } else {
     completeness_file_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Homelessness"),
       file_name = stringr::str_glue(
-        "homelessness_completeness-{year}.parquet"
+        "homelessness_completeness-20{year}.parquet"
       ),
       ...
     )
