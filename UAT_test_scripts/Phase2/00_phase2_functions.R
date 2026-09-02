@@ -36,8 +36,8 @@ get_slf_current_data_path <- function(year,
                                         "mental_health",
                                         "outpatients",
                                         "pis",
-                                        "sc_sds")) {
-
+                                        "sc_sds"
+                                      )) {
   file_path <- stringr::str_glue("/conf/hscdiip/June26 Update Files/{year}/")
 
   file_name <- dplyr::recode_values(
@@ -68,117 +68,123 @@ get_slf_current_data_path <- function(year,
 }
 
 
-
 ##########################################
 
 ## Main phase 2 function to create output
 
 ##########################################
 
-create_phase2_output <- function(dataset_name, year, slf_current_data, sdl_wip_data){
-
-## Read data from June and SDL ------
-slf_current_cols <- tibble(
-  date = Sys.Date(),
-  dataset_name,
-  year,
-  cols = colnames(slf_current_data),
-  origin_slf_current = "slf_current_data",
-  slf_current_type = sapply(slf_current_data, function(z) class(z)[1]),
-  total_cols_june = ncol(slf_current_data)
-)
-
-sdl_wip_cols <- tibble(
-  date = Sys.Date(),
-  dataset_name,
-  year,
-  cols = colnames(sdl_wip_data),
-  origin_sdl_wip = "sdl_wip_data",
-  sdl_wip_type = sapply(sdl_wip_data, function(z) class(z)[1]),
-  total_cols_sdl = ncol(sdl_wip_data)
-)
-
-
-## Compare outputs -------
-# Do a full join of both dataframes
-compare_output <- full_join(slf_current_cols, sdl_wip_cols, by = c("date", "dataset_name", "year", "cols")) %>%
-  mutate(
-    # How many columns match?
-    cols_match = if_else(origin_slf_current == "slf_current_data" & origin_sdl_wip == "sdl_wip_data", 1, 0),
-    # How many data types match?
-    type_match = if_else(slf_current_type == sdl_wip_type, 1, 0),
-    # How many new expected variables?
-    # e.g. run_id and run_date_time
-    expected_new_var = if_else(cols %in% c("run_id", "run_date_time"), 1, 0)) %>%
-  summarise(matching_cols = sum(cols_match, na.rm = TRUE),
-            matching_datatypes = sum(type_match, na.rm = TRUE),
-            expected_new_vars_in_sdl = sum(expected_new_var, na.rm = TRUE))
-
-# Pivot to long format
-summary_long <- compare_output %>%
-  pivot_longer(
-    everything(),
-    names_to = "measure",
-    values_to = "value"
-  ) %>%
-  mutate(dataset = dataset_name,
-         year = year) %>%
-  select(dataset, year, measure, value)
-
-
-## Prepare June statistics --------
-slf_current_dataset <- slf_current_data %>%
-  dplyr::mutate(n_records = 1L) %>%
-  # Use functions to create HB and partnership flags
-  create_demog_test_flags() %>%
-  # keep variables for comparison
-  dplyr::select("n_records":dplyr::last_col()) %>%
-  # use function to sum new test flags
-  calculate_measures(measure = "sum") %>%
-  # specify dataset name
-  dplyr::mutate(dataset = dataset_name,
-                year = year) %>%
-  relocate(c(dataset, year), .before = measure) %>%
-  rbind(c(dataset = dataset_name, year = year, measure = "total_cols", value = ncol(slf_current_data))) %>%
-  mutate(value = as.numeric(value))
-
-final_slf_current_data <- slf_current_dataset %>%
-  bind_rows(summary_long) %>%
-  rename(slf_current_value = value)
-
-
-## Prepare SDL statistics ------
-sdl_wip_dataset <- sdl_wip_data %>%
-  dplyr::mutate(n_records = 1L) %>%
-  # Use functions to create HB and partnership flags
-  create_demog_test_flags() %>%
-  # keep variables for comparison
-  dplyr::select("n_records":dplyr::last_col()) %>%
-  # use function to sum new test flags
-  calculate_measures(measure = "sum") %>%
-  # specify dataset name
-  dplyr::mutate(dataset = dataset_name,
-                year = year) %>%
-  relocate(c(dataset, year), .before = measure) %>%
-  rbind(c(dataset = dataset_name, year = year, measure = "total_cols", value = ncol(sdl_wip_data))) %>%
-  mutate(value = as.numeric(value))
-
-final_sdl_wip <- sdl_wip_dataset %>%
-  bind_rows(summary_long) %>%
-  rename(sdl_wip_value = value)
-
-
-## Join statistics to create finalised dataframe ------
-join_datasets <- final_slf_current_data %>%
-  left_join(final_sdl_wip, by = c("dataset", "year", "measure")) %>%
-  dplyr::mutate(
-    difference = round(sdl_wip_value - slf_current_value, digits = 2L),
-    pct_change = (difference / slf_current_value),
-    issue = !dplyr::between(.data$pct_change, -0.05, 0.05)
+create_phase2_output <- function(dataset_name, year, slf_current_data, sdl_wip_data) {
+  ## Read data from June and SDL ------
+  slf_current_cols <- tibble(
+    date = Sys.Date(),
+    dataset_name,
+    year,
+    cols = colnames(slf_current_data),
+    origin_slf_current = "slf_current_data",
+    slf_current_type = sapply(slf_current_data, function(z) class(z)[1]),
+    total_cols_june = ncol(slf_current_data)
   )
 
-return(join_datasets)
+  sdl_wip_cols <- tibble(
+    date = Sys.Date(),
+    dataset_name,
+    year,
+    cols = colnames(sdl_wip_data),
+    origin_sdl_wip = "sdl_wip_data",
+    sdl_wip_type = sapply(sdl_wip_data, function(z) class(z)[1]),
+    total_cols_sdl = ncol(sdl_wip_data)
+  )
 
+
+  ## Compare outputs -------
+  # Do a full join of both dataframes
+  compare_output <- full_join(slf_current_cols, sdl_wip_cols, by = c("date", "dataset_name", "year", "cols")) %>%
+    mutate(
+      # How many columns match?
+      cols_match = if_else(origin_slf_current == "slf_current_data" & origin_sdl_wip == "sdl_wip_data", 1, 0),
+      # How many data types match?
+      type_match = if_else(slf_current_type == sdl_wip_type, 1, 0),
+      # How many new expected variables?
+      # e.g. run_id and run_date_time
+      expected_new_var = if_else(cols %in% c("run_id", "run_date_time"), 1, 0)
+    ) %>%
+    summarise(
+      matching_cols = sum(cols_match, na.rm = TRUE),
+      matching_datatypes = sum(type_match, na.rm = TRUE),
+      expected_new_vars_in_sdl = sum(expected_new_var, na.rm = TRUE)
+    )
+
+  # Pivot to long format
+  summary_long <- compare_output %>%
+    pivot_longer(
+      everything(),
+      names_to = "measure",
+      values_to = "value"
+    ) %>%
+    mutate(
+      dataset = dataset_name,
+      year = year
+    ) %>%
+    select(dataset, year, measure, value)
+
+
+  ## Prepare June statistics --------
+  slf_current_dataset <- slf_current_data %>%
+    dplyr::mutate(n_records = 1L) %>%
+    # Use functions to create HB and partnership flags
+    create_demog_test_flags() %>%
+    # keep variables for comparison
+    dplyr::select("n_records":dplyr::last_col()) %>%
+    # use function to sum new test flags
+    calculate_measures(measure = "sum") %>%
+    # specify dataset name
+    dplyr::mutate(
+      dataset = dataset_name,
+      year = year
+    ) %>%
+    relocate(c(dataset, year), .before = measure) %>%
+    rbind(c(dataset = dataset_name, year = year, measure = "total_cols", value = ncol(slf_current_data))) %>%
+    mutate(value = as.numeric(value))
+
+  final_slf_current_data <- slf_current_dataset %>%
+    bind_rows(summary_long) %>%
+    rename(slf_current_value = value)
+
+
+  ## Prepare SDL statistics ------
+  sdl_wip_dataset <- sdl_wip_data %>%
+    dplyr::mutate(n_records = 1L) %>%
+    # Use functions to create HB and partnership flags
+    create_demog_test_flags() %>%
+    # keep variables for comparison
+    dplyr::select("n_records":dplyr::last_col()) %>%
+    # use function to sum new test flags
+    calculate_measures(measure = "sum") %>%
+    # specify dataset name
+    dplyr::mutate(
+      dataset = dataset_name,
+      year = year
+    ) %>%
+    relocate(c(dataset, year), .before = measure) %>%
+    rbind(c(dataset = dataset_name, year = year, measure = "total_cols", value = ncol(sdl_wip_data))) %>%
+    mutate(value = as.numeric(value))
+
+  final_sdl_wip <- sdl_wip_dataset %>%
+    bind_rows(summary_long) %>%
+    rename(sdl_wip_value = value)
+
+
+  ## Join statistics to create finalised dataframe ------
+  join_datasets <- final_slf_current_data %>%
+    left_join(final_sdl_wip, by = c("dataset", "year", "measure")) %>%
+    dplyr::mutate(
+      difference = round(sdl_wip_value - slf_current_value, digits = 2L),
+      pct_change = (difference / slf_current_value),
+      issue = !dplyr::between(.data$pct_change, -0.05, 0.05)
+    )
+
+  return(join_datasets)
 }
 
 
@@ -275,8 +281,8 @@ write_phase2_tests <- function(phase2_uat_data, sheet_name, analyst) {
 
   # Write the data to the workbook on disk
   openxlsx::saveWorkbook(wb,
-                         tests_workbook_path,
-                         overwrite = TRUE
+    tests_workbook_path,
+    overwrite = TRUE
   )
 
   log_info(

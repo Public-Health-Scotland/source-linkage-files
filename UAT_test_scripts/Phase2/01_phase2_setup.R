@@ -35,7 +35,7 @@ sdl_wip_data <- arrow::read_parquet("/conf/sourcedev/Source_Linkage_File_Updates
 #############################
 
 # For latest data in sourcedev use:
-#slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name))
+# slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name))
 
 # Read in June update data
 slf_current_data <- read_file(get_slf_current_data_path(year = year, type = dataset_name))
@@ -67,4 +67,3 @@ dataset_output %>%
   )
 
 # End of Script #
-

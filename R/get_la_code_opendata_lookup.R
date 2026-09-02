@@ -12,17 +12,17 @@ get_la_code_opendata_lookup <- function() {
     res_id = res_id,
     col_select = c("CA", "CAName")
   ) %>%
-     dplyr::distinct()
-  #%>%
-    # dplyr::mutate(
-    #   sending_local_authority_name = dplyr::case_match(
-    #     .data$CAName,
-    #     "City of Edinburgh" ~ "Edinburgh",
-    #     "Na h-Eileanan Siar" ~ "Eilean Siar",
-    #     .default = .data$CAName
-    #   ) %>%
-    #     stringr::str_replace("\\sand\\s", " \\& ")
-    # )
+    dplyr::distinct()
+  # %>%
+  # dplyr::mutate(
+  #   sending_local_authority_name = dplyr::case_match(
+  #     .data$CAName,
+  #     "City of Edinburgh" ~ "Edinburgh",
+  #     "Na h-Eileanan Siar" ~ "Eilean Siar",
+  #     .default = .data$CAName
+  #   ) %>%
+  #     stringr::str_replace("\\sand\\s", " \\& ")
+  # )
 
   return(la_code_lookup)
 }
