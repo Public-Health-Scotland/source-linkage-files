@@ -27,11 +27,11 @@ read_lookup_sc_client <- function(
   # Read extract
   client_fy_extract <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_client_fy_snapshot") # TODO: Check table name
+    dbplyr::in_schema("sdl", "sdl_sc_client_fy_source")
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      .data$financial_year == c_year # TODO: Check year column name
+      .data$financial_year == c_year
     ) %>%
     # Collect
     dplyr::collect()
@@ -39,7 +39,7 @@ read_lookup_sc_client <- function(
   # extract qtr client data
   client_qtr_extract <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_client_qtr_snapshot") # TODO: Check table name
+    dbplyr::in_schema("sdl", "sdl_sc_client_qtr_source")
   ) %>%
     # Filter by calendar year
     dplyr::filter(.data$financial_year == c_year) %>%
