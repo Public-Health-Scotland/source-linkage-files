@@ -148,7 +148,9 @@ process_extract_homelessness <- function(data,
   completeness_data <- produce_homelessness_completeness(
     homelessness_data = data,
     sg_pub_data = sg_pub_data,
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id,
+    run_date_time = run_date_time
   )
 
   hl1_data <- data %>%
