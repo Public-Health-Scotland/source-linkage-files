@@ -11,7 +11,7 @@ rm(list = ls())
 # Initialising ----
 
 ## PHS copy of Fianl Interface Spec ----
-phs_spec_copy_path = file.path(
+phs_spec_copy_path <- file.path(
   "/conf/sourcedev/Source_Linkage_File_Updates/byoc_datatype",
   "PHS_Source Final Interface Specification v0.1.xlsx"
 )
@@ -30,11 +30,10 @@ mapping <- tibble::tribble(
 )
 
 
-
 ## List datasets to check ----
 # listed in run_sdl.r
 
-datasets = c(
+datasets <- c(
   "ae",
   "dd",
   "homelessness",
@@ -52,16 +51,16 @@ red_style <- createStyle(
   fgFill = "#F8696B"
 )
 green_style <- createStyle(
-  bgFill = "#C6EFCE"  # light green
+  bgFill = "#C6EFCE" # light green
 )
 red_light_style <- createStyle(
-  bgFill = "#FFC7CE"  # light red
+  bgFill = "#FFC7CE" # light red
 )
 
-year = "1920"
+year <- "1920"
 
-file_list_byoc = get_byoc_output_files(year = "1920", types = datasets)
-file_list = data.frame(
+file_list_byoc <- get_byoc_output_files(year = "1920", types = datasets)
+file_list <- data.frame(
   dataset_id = names(file_list_byoc),
   file_name = unlist(file_list_byoc),
   row.names = NULL
@@ -81,44 +80,35 @@ dataset_summary <- data.frame(
 
 ## normlise data type ----
 normalise_type <- function(x) {
-
   x <- tolower(trimws(as.character(x)))
 
   case_when(
-
     grepl("hms.*difftime", x) ~ "time",
     grepl("^time", x) ~ "time",
-
     grepl(
       "character|text|string|varchar|varchar2|factor",
       x
     ) ~ "text",
-
     grepl(
       "numeric|number|decimal|double|float",
       x
     ) ~ "numeric",
-
     grepl(
       "integer|int",
       x
     ) ~ "integer",
-
     grepl(
       "date|localdate",
       x
     ) ~ "date",
-
     grepl(
       "datetime|timestamp|posixct|posixt",
       x
     ) ~ "datetime",
-
     grepl(
       "logical|boolean",
       x
     ) ~ "boolean",
-
     TRUE ~ x
   )
 }
@@ -126,10 +116,10 @@ normalise_type <- function(x) {
 
 # Running Loop ----
 for (ii in 1:length(datasets)) {
-  logger::log_info(paste0("start ", ii, ", ",datasets[ii]))
-  file_path = mapping$file_name[ii]
-  dataset_id = mapping$dataset_id[ii]
-  spec_sheetname = mapping$spec_sheetname[ii]
+  logger::log_info(paste0("start ", ii, ", ", datasets[ii]))
+  file_path <- mapping$file_name[ii]
+  dataset_id <- mapping$dataset_id[ii]
+  spec_sheetname <- mapping$spec_sheetname[ii]
 
   # Example dataframe
   df <- createslf::read_file(file_path)
@@ -147,8 +137,9 @@ for (ii in 1:length(datasets)) {
   # Get variable classes
   var_class <- data.frame(
     variable = names(df),
-    class_data = sapply(df, function(x)
-      paste(class(x), collapse = ", ")),
+    class_data = sapply(df, function(x) {
+      paste(class(x), collapse = ", ")
+    }),
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -159,8 +150,10 @@ for (ii in 1:length(datasets)) {
     startRow = 12L
   ) %>%
     select(Column.Name.VDB, Data.Type) %>%
-    rename(variable = 'Column.Name.VDB',
-           class_spec = 'Data.Type')
+    rename(
+      variable = "Column.Name.VDB",
+      class_spec = "Data.Type"
+    )
 
   # Ensure run_id and run_date_time exist
   required_vars <- c(
@@ -174,7 +167,6 @@ for (ii in 1:length(datasets)) {
   )
 
   if (length(missing_vars) > 0) {
-
     var_class <- bind_rows(
       var_class,
       data.frame(
@@ -183,12 +175,10 @@ for (ii in 1:length(datasets)) {
         stringsAsFactors = FALSE
       )
     )
-
   }
 
   combined <- full_join(var_class, spec_class, by = "variable") %>%
     mutate(
-
       class_data_norm = normalise_type(class_data),
       class_spec_norm = normalise_type(class_spec),
 
@@ -201,25 +191,18 @@ for (ii in 1:length(datasets)) {
 
       # Main comparison
       match = case_when(
-
         variable %in% c("run_id", "run_date_time") &
           class_data == "character" ~ "MATCH",
-
         variable %in% c("run_id", "run_date_time") &
           is.na(class_data) ~ "MISSING IN OUTPUT",
-
         variable %in% c("run_id", "run_date_time") ~
           "TYPE MISMATCH",
-
         is.na(class_data) ~
           "MISSING IN OUTPUT",
-
         is.na(class_spec) ~
           "NOT IN SPEC",
-
         class_data_norm == class_spec_norm ~
           "MATCH",
-
         TRUE ~
           "TYPE MISMATCH"
       )
@@ -322,7 +305,7 @@ freezePane(
   firstRow = TRUE
 )
 
-time_stamp = format(Sys.time(), "%Y%m%d_%H%M")
+time_stamp <- format(Sys.time(), "%Y%m%d_%H%M")
 saveWorkbook(
   wb,
   # Change it to whichever folder you like
