@@ -4,7 +4,13 @@
 \alias{produce_homelessness_completeness}
 \title{Produce the Homelessness Completeness lookup}
 \usage{
-produce_homelessness_completeness(homelessness_data, sg_pub_data, BYOC_MODE)
+produce_homelessness_completeness(
+  homelessness_data,
+  sg_pub_data,
+  BYOC_MODE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{homelessness_data}{The Homelessness data to produce}
@@ -12,6 +18,10 @@ produce_homelessness_completeness(homelessness_data, sg_pub_data, BYOC_MODE)
 \item{sg_pub_data}{SG pub figures.}
 
 \item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} as a lookup with \code{year},
