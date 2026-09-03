@@ -60,8 +60,7 @@ analyst <- "Jen"
 #   "dn_contact_lookup", "hscp_localities", "hscp_pop", "hhg", "nsu", "la_lookup",
 #   "gpprac_ref_file", "ch_costs", "gpprac_cluster", "geography_labels")
 
-datasets <- c("sc_home_care")
-
+datasets <- c("sc_client_qtr", "sc_client_fy")
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%

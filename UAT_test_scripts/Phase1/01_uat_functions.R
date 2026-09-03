@@ -280,3 +280,67 @@ get_ch_costs_open_data <- function() {
 
   return(ch_costs_data)
 }
+
+get_sc_client_fy <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")){
+# extract fy client data
+client_fy_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_fy_snapshot")) %>%
+ # dplyr::filter(.data$financial_year == year) %>%
+  dplyr::select(
+    "sending_location",
+    "social_care_id",
+    "financial_year",
+    "financial_quarter",
+    "dementia",
+    "mental_health_problems",
+    "learning_disability",
+    "physical_and_sensory_disability",
+    "drugs",
+    "alcohol",
+    "palliative_care",
+    "carer",
+    "elder_frail",
+    "neurological_condition",
+    "autism",
+    "other_vulnerable_groups",
+    "living_alone",
+    "support_from_unpaid_carer",
+    "social_worker",
+    "type_of_housing",
+    "meals",
+    "day_care"
+  ) %>%
+  dplyr::collect(n = 100)
+
+return(client_fy_extract)
+}
+
+get_sc_client_qtr <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")){
+# extract qtr client data
+client_qtr_extract <- dplyr::tbl(sc_dvprod_connection, dbplyr::in_schema("social_care_2", "client_qtr_snapshot")) %>%
+  #dplyr::filter(.data$financial_year == year) %>%
+  dplyr::select(
+    "sending_location",
+    "social_care_id",
+    "financial_year",
+    "financial_quarter",
+    "dementia",
+    "mental_health_problems",
+    "learning_disability",
+    "physical_and_sensory_disability",
+    "drugs",
+    "alcohol",
+    "palliative_care",
+    "carer",
+    "elder_frail",
+    "neurological_condition",
+    "autism",
+    "other_vulnerable_groups",
+    "living_alone",
+    "support_from_unpaid_carer",
+    "social_worker",
+    "type_of_housing",
+    "meals",
+    "day_care"
+  ) %>%
+  dplyr::collect(n = 100)
+}
