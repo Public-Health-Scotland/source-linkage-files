@@ -155,7 +155,11 @@ list(
     # Target name
     gp_ooh_cost_lookup,
     # Function
-    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
+    process_costs_gp_ooh(
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   ),
 
   ## Stage 2.2 year specific targets ------
