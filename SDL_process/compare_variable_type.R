@@ -20,11 +20,16 @@ phs_spec_copy_path <- file.path(
 mapping <- tibble::tribble(
   ~dataset_id,                  ~spec_sheetname,
   "ae",                         "sdl_ae_processed",
+  "chi_deaths",                 "sdl_chi_deaths_processed ",
+  "combined_deaths",            "sdl_refined_deaths_processed",
   "dd",                         "sdl_delayed_discharge_processed",
+  "gp_ooh",                     "sdl_gp_ooh_processed ",
   "homelessness",               "sdl_homelessness_processed ",
   "homelessness_completeness",  "sdl_homessless_completeness_pro",
   "ltc",                        "sdl_long_term_condition_process",
-  "gp_ooh",                     "sdl_gp_ooh_processed ",
+  "maternity",                  "sdl_maternity_processed ",
+  "mh",              "sdl_mental_health_processed ",
+  "nrs_deaths",                 "sdl_nrs_deaths_processed ",
   "ooh_cost_lookup",            "sdl_gp_ooh_cost_lookup_proces",
   "outpatients",                "sdl_outpatients_processed "
 )
@@ -35,11 +40,16 @@ mapping <- tibble::tribble(
 
 datasets <- c(
   "ae",
+  "chi_deaths",
+  "combined_deaths",
   "dd",
+  "gp_ooh",
   "homelessness",
   "homelessness_completeness",
   "ltc",
-  "gp_ooh",
+  "maternity",
+  "mh",
+  "nrs_deaths",
   "ooh_cost_lookup",
   "outpatients"
 )
@@ -135,11 +145,34 @@ for (ii in 1:length(datasets)) {
   )
 
   # Get variable classes
+  # Get variable classes and maximum text length
   var_class <- data.frame(
     variable = names(df),
-    class_data = sapply(df, function(x) {
-      paste(class(x), collapse = ", ")
-    }),
+
+    class_data = sapply(
+      df,
+      function(x) paste(class(x), collapse = ", ")
+    ),
+
+    max_length = sapply(
+      df,
+      function(x) {
+        if (is.character(x) || is.factor(x)) {
+
+          lengths <- nchar(as.character(x))
+
+          if (all(is.na(lengths))) {
+            NA_integer_
+          } else {
+            max(lengths, na.rm = TRUE)
+          }
+
+        } else {
+          NA_integer_
+        }
+      }
+    ),
+
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -184,9 +217,10 @@ for (ii in 1:length(datasets)) {
 
       # Exact comparison
       match_raw = case_when(
-        is.na(class_data) | is.na(class_spec) ~ NA_character_,
-        class_data == class_spec ~ "TRUE",
-        TRUE ~ "FALSE"
+        is.na(class_data) | is.na(class_spec) ~ NA,
+        tolower(trimws(class_data)) ==
+          tolower(trimws(class_spec)) ~ TRUE,
+        TRUE ~ FALSE
       ),
 
       # Main comparison

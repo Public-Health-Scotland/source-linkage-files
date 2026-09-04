@@ -7,7 +7,9 @@
 produce_homelessness_completeness(
   homelessness_data,
   sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+  BYOC_MODE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
@@ -16,6 +18,10 @@ produce_homelessness_completeness(
 \item{sg_pub_data}{SG pub figures.}
 
 \item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} as a lookup with \code{year},
