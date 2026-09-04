@@ -10,6 +10,7 @@ read_extract_homelessness <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "homelessness", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
@@ -18,21 +19,22 @@ read_extract_homelessness <- function(
     return(tibble::tibble())
   }
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  logger::log_info("Read homelessness data from Denodo")
+  # Read extract
   extract_homelessness <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_homelessness_source")
   ) %>%
+    # Filter by calendar year
     dplyr::filter(
       .data$assessment_decision_financial_year <= c_year,
       is.null(.data$case_closed_financial_year) |
         .data$case_closed_financial_year >= c_year
     ) %>%
+    # Rename variables
     dplyr::select(
-      # financial_year_of_assessment,
-      # financial_year_of_case_closed,
       assessment_decision_date = "assessment_decision_date",
       case_closed_date = "case_closed_date",
       sending_local_authority_code_9 = "sending_local_authority_code_9",
@@ -57,6 +59,7 @@ read_extract_homelessness <- function(
       refused = "refused",
       person_in_receipt_of_universal_credit = "person_in_receipt_of_universal_credit"
     ) %>%
+    # Collect and get anonymous CHI
     dplyr::collect() %>%
     slfhelper::get_anon_chi("chi")
 
