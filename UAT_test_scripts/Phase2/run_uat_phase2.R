@@ -48,18 +48,21 @@ source(here::here("UAT_test_scripts/Phase2/00_phase2_functions.R"))
 #-------------------------------------------------------------------------------
 # Set up environment ---
 
+# For testing the loop below
+ii <- 1
+
 # Test year
 year <- "1920"
 
 # Dataset to test
-datasets <- c("maternity")
+dataset_name <- c("maternity")
 
 # Analyst name for writing to disk
 analyst <- "Jen"
 
 # Read name list for matching each dataset function/sdl name
 name_list <- readxl::read_excel(get_name_list_lookup()) %>%
-  dplyr::filter(dataset_list %in% datasets) %>%
+  dplyr::filter(dataset_list %in% dataset_name) %>%
   dplyr::arrange(dataset_list)
 
 
