@@ -134,8 +134,8 @@ get_sg_homelessness_pub_path <- function(...) {
 #'
 #' @family lookup files
 get_sg_homelessness_pub_data <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
