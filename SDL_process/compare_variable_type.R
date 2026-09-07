@@ -127,14 +127,16 @@ normalise_type <- function(x) {
 # Running Loop ----
 for (ii in 1:length(datasets)) {
   logger::log_info(paste0("start ", ii, ", ", datasets[ii]))
-  file_path <- mapping %>% filter(
-    dataset_id == datasets[ii]
-  ) %>%
+  file_path <- mapping %>%
+    filter(
+      dataset_id == datasets[ii]
+    ) %>%
     pull(file_name)
   dataset_id <- datasets[ii]
-  spec_sheetname <- mapping %>% filter(
-    dataset_id == datasets[ii]
-  ) %>%
+  spec_sheetname <- mapping %>%
+    filter(
+      dataset_id == datasets[ii]
+    ) %>%
     pull(spec_sheetname)
 
   # Example dataframe
