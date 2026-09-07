@@ -6,7 +6,7 @@
 \usage{
 produce_homelessness_completeness(
   homelessness_data,
-  sg_pub_data,
+  sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE,
   run_id = NA,
   run_date_time = NA

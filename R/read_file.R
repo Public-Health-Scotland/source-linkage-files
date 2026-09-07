@@ -23,7 +23,7 @@ read_file <- function(path, col_select = NULL, as_data_frame = TRUE, ...) {
   )
 
   # Return an empty tibble if trying to read the dummy path
-  if (path == get_dummy_boxi_extract_path()) {
+  if (path == get_dummy_path()) {
     return(tibble::tibble())
   }
 
