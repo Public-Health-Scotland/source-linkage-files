@@ -308,6 +308,7 @@ list(
         year = year,
         data_list = ooh_data,
         gp_ooh_cup = gp_ooh_cup,
+        ooh_cost_lookup = gp_ooh_cost_lookup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
