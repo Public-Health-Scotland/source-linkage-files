@@ -25,6 +25,7 @@ Get the full path to the IT PIS extract
 
 Other extract file paths:
 \code{\link[=get_boxi_extract_path]{get_boxi_extract_path()}},
+\code{\link[=get_hhg_data]{get_hhg_data()}},
 \code{\link[=get_hhg_path]{get_hhg_path()}},
 \code{\link[=get_it_deaths_path]{get_it_deaths_path()}},
 \code{\link[=get_it_ltc_path]{get_it_ltc_path()}},
