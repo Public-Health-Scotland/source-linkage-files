@@ -11,7 +11,7 @@
 #' @seealso [get_file_path()] for the generic function.
 get_nsu_path <- function(year, ...) {
   if (!check_year_valid(year, "nsu")) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_path())
   }
 
   nsu_file_path <- get_file_path(
