@@ -232,13 +232,51 @@ list(
     process_costs_ch_rmd(),
     priority = 0.8
   ),
-  # District nursing costs------
+  ### District Nursing Costs ---------------------------------------------------
+  # READ - DN RAW COSTS
+  tar_target(
+    # Target name
+    dn_raw_costs,
+    # Function
+    get_dn_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - DN CONTACTS
+  tar_target(
+    # Target name
+    dn_contacts,
+    # Function
+    get_dn_contacts_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - HSCP POPULATION
+  tar_target(
+    # Target name
+    hscp_population,
+    # Function
+    get_hscp_pop_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - DN COSTS
   tar_target(
     # Target name
     dn_cost_lookup,
     # Function
-    process_costs_dn_rmd(),
-    priority = 0.8
+    process_costs_dn(
+      dn_raw_costs = dn_raw_costs,
+      dn_contacts = dn_contacts,
+      hscp_population = hscp_population,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   ),
   # Home care costs------
   tar_target(
@@ -599,12 +637,16 @@ list(
     ),
     # District Nursing Activity-------------------------------------------------
     # READ - District Nursing
-    tar_file_read(
+    tar_target(
       # Target name
       dn_data,
-      get_boxi_extract_path(year, type = "dn"),
       # Function
-      read_extract_district_nursing(year, !!.x)
+      read_extract_district_nursing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "dn", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - District Nursing
     tar_target(
@@ -613,9 +655,12 @@ list(
       # Function
       process_extract_district_nursing(
         dn_data,
-        year,
+        year = year,
         costs = dn_cost_lookup,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - District Nursing
