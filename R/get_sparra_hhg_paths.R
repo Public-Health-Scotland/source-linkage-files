@@ -11,7 +11,7 @@
 #' @seealso [get_file_path()] for the generic function.
 get_hhg_path <- function(year, ...) {
   if (!check_year_valid(year, "hhg")) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_path())
   }
 
   hhg_file_path <- get_file_path(
@@ -36,7 +36,7 @@ get_hhg_path <- function(year, ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_sparra_path <- function(year, ...) {
   if (!check_year_valid(year, "sparra")) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_path())
   }
 
   sparra_file_path <- get_file_path(

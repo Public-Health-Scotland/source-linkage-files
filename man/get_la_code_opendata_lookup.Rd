@@ -6,7 +6,7 @@
 \usage{
 get_la_code_opendata_lookup(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+  BYOC_MODE = BYOC_MODE
 )
 }
 \arguments{
