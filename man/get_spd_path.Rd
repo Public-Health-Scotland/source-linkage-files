@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_lookup_paths.R
 \name{get_spd_path}
 \alias{get_spd_path}
-\title{Scottish Postcode Directory File Path}
+\title{Scottish Postcode Directory File Path - LOCAL ONLY}
 \usage{
 get_spd_path(file_name = NULL, ext = "parquet")
 }
@@ -12,11 +12,11 @@ get_spd_path(file_name = NULL, ext = "parquet")
 \item{ext}{The extension (type of the file) - optional}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the Scottish Postcode Directory
+An \code{\link[fs:path]{fs::path()}} to the local Scottish Postcode Directory file
 }
 \description{
 Get the path to the centrally held Scottish Postcode Directory
-(SPD) file.
+(SPD) file - LOCAL ONLY
 }
 \seealso{
 Other lookup file paths:
