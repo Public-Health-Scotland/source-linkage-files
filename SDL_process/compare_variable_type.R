@@ -40,18 +40,18 @@ mapping <- tibble::tribble(
 
 datasets <- c(
   "ae",
-  "chi_deaths",
-  "combined_deaths",
+  # "chi_deaths",
+  # "combined_deaths",
   "dd",
   "gp_ooh",
   "homelessness",
   "homelessness_completeness",
-  "ltc",
-  "maternity",
-  "mh",
-  "nrs_deaths",
-  "ooh_cost_lookup",
-  "outpatients"
+  # "ltc",
+  # "maternity",
+  # "mh",
+  # "nrs_deaths",
+  "ooh_cost_lookup"
+  # "outpatients"
 )
 
 wb <- createWorkbook()
@@ -127,9 +127,17 @@ normalise_type <- function(x) {
 # Running Loop ----
 for (ii in 1:length(datasets)) {
   logger::log_info(paste0("start ", ii, ", ", datasets[ii]))
-  file_path <- mapping$file_name[ii]
-  dataset_id <- mapping$dataset_id[ii]
-  spec_sheetname <- mapping$spec_sheetname[ii]
+  file_path <- mapping %>%
+    filter(
+      dataset_id == datasets[ii]
+    ) %>%
+    pull(file_name)
+  dataset_id <- datasets[ii]
+  spec_sheetname <- mapping %>%
+    filter(
+      dataset_id == datasets[ii]
+    ) %>%
+    pull(spec_sheetname)
 
   # Example dataframe
   df <- createslf::read_file(file_path)

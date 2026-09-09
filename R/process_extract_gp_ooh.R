@@ -21,6 +21,7 @@ process_extract_gp_ooh <- function(
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
     BYOC_MODE = BYOC_MODE
   ),
+  ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
@@ -43,7 +44,7 @@ process_extract_gp_ooh <- function(
   # Costs ---------------------------------
 
   # OOH cost lookup
-  ooh_cost_lookup <- read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)) %>%
+  ooh_cost_lookup <- ooh_cost_lookup %>%
     dplyr::rename(
       hbtreatcode = "TreatmentNHSBoardCode"
     )
