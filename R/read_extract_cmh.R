@@ -10,14 +10,8 @@ read_extract_cmh <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "cmh", year = year)
 
-  # Check and convert to calendar year
+  # Check year
   year <- check_year_format(year, format = "fyyear")
-  c_year <- convert_fyyear_to_year(year)
-
-  # Create dates to filter by calendar year
-  # TODO: Check logic and whether this is the correct year column.
-  start_date <- as.Date(paste0(substr(c_year, 1, 4), "-03-31"))
-  end_date <- as.Date(paste0(as.integer(substr(c_year, 1, 4)) + 1, "-04-01"))
 
   # Specify years available for running
   if (!check_year_valid(year, type = "cmh")) {
@@ -32,15 +26,13 @@ read_extract_cmh <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_cmh_source")
   ) %>%
-    # Filter by calendar year
-    # TODO: Check logic and whether this is the correct year column.
+    # Filter by year
     dplyr::filter(
-      .data$contact_date > start_date,
-      .data$contact_date < end_date
+      .data$year == year
     ) %>%
     # Rename variables
     dplyr::select(
-      anon_chi = "patient_chi", # TODO: Check we will always get anon_chi
+      anon_chi = "patient_chi",
       dob = "patient_dob",
       gender = "gender",
       postcode = "patient_postcode",
