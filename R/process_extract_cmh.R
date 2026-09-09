@@ -8,22 +8,28 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#'
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
+
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_extract_cmh <- function(data,
                                 year,
-                                write_to_disk = TRUE) {
+                                write_to_disk = TRUE,
+                                BYOC_MODE = FALSE,
+                                run_id = NA,
+                                run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "cmh", year = year)
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
 
-  # If data is available in the FY then run processing.
+  # If no data is available in the FY then return immediately
   if (identical(data, tibble::tibble())) {
     return(data)
   }
@@ -31,23 +37,29 @@ process_extract_cmh <- function(data,
   # Data Cleaning  ---------------------------------------
 
   cmh_clean <- data %>%
-    # create recid, year, SMRType variables
+    # Create recid, year, SMRType variables
     dplyr::mutate(
       recid = "CMH",
       smrtype = add_smrtype(recid = .data$recid),
       year = year
     ) %>%
-    # contact end time
+    # Contact end time
     dplyr::mutate(keytime2 = hms::as.hms(
       .data$keytime1 + lubridate::dminutes(.data$duration)
     )) %>%
-    # record key date 2
+    # Record key date 2
     dplyr::mutate(record_keydate2 = .data$record_keydate1) %>%
-    # create blank diag 6
+    # Create blank diag 6
     dplyr::mutate(diag6 = NA)
 
   cmh_processed <- cmh_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "record_keydate1",
@@ -74,9 +86,15 @@ process_extract_cmh <- function(data,
 
   if (write_to_disk) {
     write_file(
-      cmh_processed,
-      get_source_extract_path(year, "cmh", check_mode = "write"),
-      group_id = 3356 # sourcedev owner
+      data = cmh_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "cmh",
+        check_mode = "write",
+        BYOC_MODE = BYOC_MODE
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
