@@ -39,7 +39,7 @@ get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
 #' @seealso [get_file_path()] for the generic function.
 get_sc_client_lookup_path <- function(year, update = latest_update(), ...) {
   if (!check_year_valid(year, type = "client")) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_path())
   } else {
     sc_client_lookup_path <- get_file_path(
       directory = fs::path(
