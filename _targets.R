@@ -137,7 +137,7 @@ list(
     # Target name
     uk_pc_list,
     update_uk_postcode_directory(),
-    format = "parquet",
+    format = "rds",
     cue = tar_cue_age(
       name = uk_pc_list,
       age = as.difftime(180, units = "days")
@@ -776,7 +776,8 @@ list(
         diagnosis_data_path,
         outcomes_data_path,
         consultations_data_path
-      )
+      ),
+      format = "rds"
     ),
     # GP Out of Hours CUP
     tar_target(
