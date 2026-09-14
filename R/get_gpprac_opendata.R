@@ -31,13 +31,10 @@ get_gpprac_opendata <- function() {
       # format postcode to strict PC7 format
       postcode = phsmethods::format_postcode(.data$postcode)
     ) %>%
-    dplyr::distinct(.data$gpprac, .keep_all = TRUE)
-
-  write_file(
-    gpprac_data,
-    get_practice_details_path(check_mode = "write"),
-    group_id = 3206
-  ) # hscdiip owner
+    dplyr::distinct(.data$gpprac, .keep_all = TRUE) %>%
+    write_file(get_practice_details_path(check_mode = "write"),
+      group_id = 3206
+    ) # hscdiip owner
 
   return(gpprac_data)
 }
