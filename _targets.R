@@ -48,8 +48,7 @@ tar_option_set(
   # format - default is parquet format
   format = "parquet",
   resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd"),
-    qs = tar_resources_qs(preset = "high")
+    parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
   error = "continue",
@@ -138,7 +137,7 @@ list(
     # Target name
     uk_pc_list,
     update_uk_postcode_directory(),
-    format = "qs",
+    format = "parquet",
     cue = tar_cue_age(
       name = uk_pc_list,
       age = as.difftime(180, units = "days")
@@ -768,7 +767,7 @@ list(
       format = "file"
     ),
     # GP Out of Hours ALL
-    tar_qs(
+    tar_target(
       # Target name
       ooh_data,
       # Function
