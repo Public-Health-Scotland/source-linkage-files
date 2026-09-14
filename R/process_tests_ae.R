@@ -6,7 +6,11 @@
 #' @inherit process_tests_acute
 #'
 #' @export
-process_tests_ae <- function(data, year) {
+process_tests_ae <- function(data,
+                             year,
+                             BYOC_MODE,
+                             run_id = NA,
+                             run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "ae", year = year)
 
   old_data <- get_existing_data_for_tests(data)
@@ -25,6 +29,12 @@ process_tests_ae <- function(data, year) {
       max_min_vars = c("record_keydate1", "record_keydate2", "cost_total_net")
     )
   ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time,
+      dataset_name = "ae",
+      year = year
+    ) %>%
     write_tests_xlsx(sheet_name = "ae2", year, workbook_name = "extract")
 
   log_slf_event(stage = "test", status = "complete", type = "ae", year = year)

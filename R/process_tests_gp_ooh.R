@@ -6,7 +6,11 @@
 #' @inherit process_tests_acute
 #'
 #' @export
-process_tests_gp_ooh <- function(data, year) {
+process_tests_gp_ooh <- function(data,
+                                 year,
+                                 BYOC_MODE,
+                                 run_id = NA,
+                                 run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "gpooh", year = year)
 
   old_data <- get_existing_data_for_tests(data)
@@ -21,6 +25,12 @@ process_tests_gp_ooh <- function(data, year) {
       sum_mean_vars = "cost"
     )
   ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time,
+      dataset_name = "gpooh",
+      year = year
+    ) %>%
     write_tests_xlsx(sheet_name = "gpooh", year, workbook_name = "extract")
 
   log_slf_event(stage = "test", status = "complete", type = "gpooh", year = year)

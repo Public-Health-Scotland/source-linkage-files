@@ -491,7 +491,10 @@ list(
       # Function
       process_tests_acute(
         source_acute_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # Accident & Emergency (AE2) activity --------------------------------------
@@ -528,7 +531,10 @@ list(
       # Function
       process_tests_ae(
         source_ae_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # Community Mental Health (CMH) Activity------------------------------------
@@ -594,7 +600,10 @@ list(
       # Function
       process_tests_delayed_discharges(
         source_dd_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # District Nursing Activity-------------------------------------------------
@@ -877,7 +886,10 @@ list(
       # Function
       process_tests_gp_ooh(
         source_ooh_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # Outpatients (SMR00) Activity----------------------------------------------
