@@ -884,8 +884,7 @@ list(
           year = year
         )
       )
-
     )
   )
 )
-  ## End of Targets pipeline ##
+## End of Targets pipeline ##
