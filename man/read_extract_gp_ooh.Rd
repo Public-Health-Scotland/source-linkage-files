@@ -2,17 +2,14 @@
 % Please edit documentation in R/read_extract_gp_ooh.R
 \name{read_extract_gp_ooh}
 \alias{read_extract_gp_ooh}
-\title{Process the GP OoH extract}
+\title{Read the GP OoH extract}
 \usage{
-read_extract_gp_ooh(
-  year,
-  diagnosis_path = get_boxi_extract_path(year = year, type = "gp_ooh-d"),
-  outcomes_path = get_boxi_extract_path(year = year, type = "gp_ooh-o"),
-  consultations_path = get_boxi_extract_path(year = year, type = "gp_ooh-c")
-)
+read_extract_gp_ooh(year, denodo_connect = NULL, BYOC_MODE)
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
+
+\item{decodo_connect}{denodo_connection}
 
 \item{diagnosis_path}{Path to diagnosis BOXI extract location.}
 
@@ -52,6 +49,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

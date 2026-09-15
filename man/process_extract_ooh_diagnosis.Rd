@@ -4,7 +4,11 @@
 \alias{process_extract_ooh_diagnosis}
 \title{Process the GP OOH Diagnosis extract}
 \usage{
-process_extract_ooh_diagnosis(data, year)
+process_extract_ooh_diagnosis(
+  data,
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+)
 }
 \arguments{
 \item{data}{The extract to process}
@@ -42,6 +46,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

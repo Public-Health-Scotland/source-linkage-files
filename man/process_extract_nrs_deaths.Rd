@@ -18,21 +18,21 @@ process_extract_nrs_deaths(
 
 \item{year}{The year to process, in FY format.}
 
-\item{write_to_disk}{(optional) Should the data be written to disk default is}
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
 \item{run_id}{run_id for BYOC}
 
-\item{run_date_time}{run_date_time for BYOC
-\code{TRUE} i.e. write the data to disk.}
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will process the NRS deaths extract, it will return the
-final data and write this out.
+final data and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts:
@@ -57,6 +57,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

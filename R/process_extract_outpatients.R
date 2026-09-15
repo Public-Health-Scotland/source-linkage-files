@@ -8,18 +8,31 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
+process_extract_outpatients <- function(data,
+                                        year,
+                                        write_to_disk = TRUE,
+                                        BYOC_MODE = FALSE,
+                                        run_id = NA,
+                                        run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "outpatients", year = year)
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning--------------------------------------------
 
@@ -58,7 +71,13 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
     )
 
   outpatients_processed <- outpatients_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "record_keydate1",
@@ -94,9 +113,15 @@ process_extract_outpatients <- function(data, year, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     write_file(
-      outpatients_processed,
-      get_source_extract_path(year, "outpatients", check_mode = "write"),
-      group_id = 3356 # sourcedev owner
+      data = outpatients_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "outpatients",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

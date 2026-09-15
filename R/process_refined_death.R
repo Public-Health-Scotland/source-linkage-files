@@ -8,23 +8,19 @@
 #'
 #' @param it_chi_deaths it chi death data
 #' @param write_to_disk write the result to disk or not.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return refined_death The processed lookup of deaths combining NRS and IT_CHI.
 #' @export
 #' @family process extracts
-process_refined_death <- function(
-  it_chi_deaths = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
-  write_to_disk = TRUE,
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA
-) {
-  log_slf_event(
-    stage = "process",
-    status = "start",
-    type = "refined_death",
-    year = "all"
-  )
+process_refined_death <- function(it_chi_deaths = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
+                                  write_to_disk = TRUE,
+                                  BYOC_MODE = FALSE,
+                                  run_id = NA,
+                                  run_date_time = NA) {
+  log_slf_event(stage = "process", status = "start", type = "refined_death", year = "all")
 
   # TODO: change it to years to run control on Denodo
   years_list <- years_to_run()
@@ -33,7 +29,6 @@ process_refined_death <- function(
     read_extract_nrs_deaths(
       year,
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      get_boxi_extract_path(year, type = "nrs_deaths", BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     ) %>%
       process_extract_nrs_deaths(
@@ -79,19 +74,17 @@ process_refined_death <- function(
 
   if (write_to_disk) {
     write_file(
-      refined_death,
-      get_combined_slf_deaths_lookup_path(create = TRUE, BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3206 # hscdiip owner
+      data = refined_death,
+      path = get_combined_slf_deaths_lookup_path(
+        create = TRUE,
+        BYOC_MODE = BYOC_MODE
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
-  log_slf_event(
-    stage = "process",
-    status = "complete",
-    type = "refined_death",
-    year = "all"
-  )
+  log_slf_event(stage = "process", status = "complete", type = "refined_death", year = "all")
 
   return(refined_death)
 }
