@@ -18,7 +18,7 @@ fill_geographies <- function(
   # TODO: slf_gpprac_lookup = get_sdl_processed_data(type = "gpprac_lookup", BYOC_MODE = BYOC_MODE)
   BYOC_MODE
 ) {
-  log_ep_substage(sub_stage = "Fill geographies", status = "start", year = "All years") # TODO: Check usage.
+  log_ep_substage(sub_stage = "Fill geographies", status = "start", year = "All years")
 
   slf_gpprac_lookup <- slf_gpprac_lookup %>%
     dplyr::select("gpprac", "cluster", "hbpraccode")
@@ -38,7 +38,7 @@ fill_geographies <- function(
     fill_postcode_geogs(slf_pc_lookup) %>%
     fill_gpprac_geographies(slf_gpprac_lookup)
 
-  log_ep_substage(sub_stage = "Fill geographies", status = "complete", year = "All years") # TODO: Check usage.
+  log_ep_substage(sub_stage = "Fill geographies", status = "complete", year = "All years")
 
   return(data)
 }
