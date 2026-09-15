@@ -80,9 +80,9 @@ list(
 
   ## Stage 2.1 non year-specific targets ----
 
-  ## Lookup data ## ------------------------------------------------------------
+  ### Lookup data -------------
 
-  # Locality data --------------------------------------------------------------
+  #### Locality data -------
   tar_target(
     # Target name
     locality_data,
@@ -92,7 +92,7 @@ list(
       BYOC_MODE
     )
   ),
-  # SIMD data ------------------------------------------------------------------
+  #### SIMD data ---------------
   tar_target(
     # Target name
     simd_data,
@@ -102,7 +102,7 @@ list(
       BYOC_MODE
     )
   ),
-  # SPD data  ------------------------------------------------------------------
+  #### SPD data  -------
   tar_target(
     # Target name
     spd_data,
@@ -112,7 +112,7 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  # GP practice open data ------------------------------------------------------
+  #### GP practice open data ---------
   tar_target(
     # Target name
     gpprac_opendata,
@@ -122,7 +122,7 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  # GP Practice reference file -------------------------------------------------
+  #### GP Practice reference file -----
   tar_target(
     # Target name
     gpprac_ref_data,
@@ -132,8 +132,8 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  # Postcode lookup ------------------------------------------------------------
-  # PROCESS - postcode lookup ------
+  #### Postcode lookup ------------
+  # PROCESS - postcode lookup
   tar_target(
     # Target name
     source_pc_lookup,
@@ -148,8 +148,8 @@ list(
       run_date_time = run_date_time
     )
   ),
-  # GP Lookup-----------------------------------------------------------------
-  # PROCESS - GP lookup ------
+  #### GP Lookup-----
+  # PROCESS - GP lookup
   tar_target(
     # Target name
     source_gp_lookup,
@@ -164,7 +164,7 @@ list(
       run_date_time = run_date_time
     ),
   ),
-  # # TESTS - postcode lookup------
+  # # TESTS - postcode lookup
   # tar_target(
   #   # Target name
   #   tests_source_pc_lookup,
@@ -172,81 +172,7 @@ list(
   #   process_tests_lookup_pc(source_pc_lookup)
   # ),
 
-  ### IT CHI deaths Activity ----
-  # # READ - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_extract,
-  #   read_it_chi_deaths(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-  # # PROCESS - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_data,
-  #   # Function
-  #   process_it_chi_deaths(
-  #     data = it_chi_deaths_extract,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
-
-  ### IT CHI deaths Activity ----
-  # # READ - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_extract,
-  #   read_it_chi_deaths(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-  # # PROCESS - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_data,
-  #   # Function
-  #   process_it_chi_deaths(
-  #     data = it_chi_deaths_extract,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
-
-  ### IT CHI deaths Activity ----
-  # # READ - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_extract,
-  #   read_it_chi_deaths(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-  # # PROCESS - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_data,
-  #   # Function
-  #   process_it_chi_deaths(
-  #     data = it_chi_deaths_extract,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
-
-  # Scottish postcode directory------
+  #### Scottish postcode directory------
   tar_target(
     # Target name
     spd_data,
@@ -254,13 +180,15 @@ list(
     get_spd_data(BYOC_MODE = BYOC_MODE),
     format = "file"
   ),
-  # Update NHS UK postcode directory -----
+
+  #### Update NHS UK postcode directory -----
   tar_target(
     # Target name
     uk_postcode_data,
     get_uk_postcode_data(BYOC_MODE = BYOC_MODE)
   ),
-  # Care home name look up------
+
+  #### Care home name look up------
   tar_target(
     slf_ch_name_lookup_data,
     get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
@@ -282,7 +210,7 @@ list(
     )
   ),
 
-  # Social care demographics
+  ### SC - demographics ----
   # READ - SC Demographics
   tar_target(
     # Target name
@@ -322,6 +250,68 @@ list(
     # Function
     process_tests_sc_demographics(sc_demog_lookup)
   ),
+
+  ### SC - Alarms Telecare  ---------------
+  # READ - Alarms Telecare
+  tar_target(
+    # Target name
+    all_at_extract,
+    # Function
+    read_sc_all_alarms_telecare(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(
+      name = all_at_extract,
+      age = as.difftime(28.0, units = "days")
+    )
+  ),
+  # PROCESS - Alarms Telecare
+  tar_target(
+    # Target name
+    all_at,
+    # Function
+    process_sc_all_alarms_telecare(
+      all_at_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    priority = 0.5
+  ),
+  # # TESTS - Alarms Telecare
+  # tar_target(
+  #   # Tests, LOOKUP series
+  #   tests_sc_all_at,
+  #   process_tests_sc_all_at_episodes(all_at)
+  # ),
+
+  ### IT CHI deaths Activity ----
+  # # READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
+
   ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   # tar_target(
@@ -525,7 +515,36 @@ list(
     #     run_id = run_id,
     #     run_date_time = run_date_time
     #   )
-    # )
+    # ),
+
+    ### SC - Alarms Telecare (AT) Activity-----
+    # READ - AT
+    # Target: all_at passed to PROCESS AT
+
+    # PROCESS - AT
+    tar_target(
+      # Target name
+      source_sc_alarms_tele,
+      # Function
+      process_extract_alarms_telecare(
+        data = all_at,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ) #,
+    # # TESTS - AT
+    # tar_target(
+    #   # Target name
+    #   tests_alarms_telecare,
+    #   # Function
+    #   process_tests_alarms_telecare(
+    #     data = source_sc_alarms_tele,
+    #     year = year
+    #   )
+    # ),
   )
 )
 ## End of Targets pipeline ##
