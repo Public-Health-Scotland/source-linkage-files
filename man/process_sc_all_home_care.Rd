@@ -6,7 +6,11 @@
 \usage{
 process_sc_all_home_care(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  home_care_costs = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
   write_to_disk = TRUE
 )
 }
@@ -15,6 +19,12 @@ process_sc_all_home_care(
 
 \item{sc_demog_lookup}{The Social Care Demographics lookup produced by
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{Denodo identifier}
+
+\item{run_date_time}{Denodo identifier}
 
 \item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

@@ -2,6 +2,11 @@
 #'
 #' @param ch_data partially cleaned up care home data as a
 #' [tibble][tibble::tibble-package]
+#' @param ch_name_lookup_path Path to the 'official' Care Home name Excel
+#' Workbook, this defaults to [get_slf_ch_name_lookup_path()]
+#' @param spd_data Path to the Scottish Postcode Directory (parquet) version
+#' @param uk_pc_path Path to the UK postcode list. This is defaults to
+#' [get_uk_postcode_path()]
 #'
 #' @return the same data with improved accuracy and completeness of the Care
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].

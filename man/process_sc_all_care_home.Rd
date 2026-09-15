@@ -40,6 +40,8 @@ with \code{\link[=process_refined_death]{process_refined_death()}}.}
 
 \item{write_to_disk}{(Optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{spd_dataScottish}{postcode directory}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
