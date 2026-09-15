@@ -4,7 +4,10 @@
 \alias{read_sc_all_home_care}
 \title{Read Social Care Home Care data}
 \usage{
-read_sc_all_home_care(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD"))
+read_sc_all_home_care(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE
+)
 }
 \arguments{
 \item{sc_dvprod_connection}{Connection to the SC platform}
