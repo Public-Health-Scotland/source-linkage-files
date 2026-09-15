@@ -10,7 +10,8 @@
 process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                                      BYOC_MODE = FALSE,
                                      run_id = NA,
-                                     run_date_time = NA) {
+                                     run_date_time = NA,
+                                     write_to_disk = TRUE) {
   log_slf_event(stage = "process", status = "start", type = "ch_costs", year = "all")
 
   # Disconnect from denodo
@@ -95,12 +96,14 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
       run_date_time = run_date_time
     )
 
-  # Save .rds file
-  ch_costs_uplifted %>%
-    write_file(get_ch_costs_path(check_mode = "write", BYOC_MODE),
-      BYOC_MODE,
-      group_id = 3206 # hscdiip owner
-    )
+  if (write_to_disk) {
+    # Save .rds file
+    ch_costs_uplifted %>%
+      write_file(get_ch_costs_path(check_mode = "write", BYOC_MODE),
+        BYOC_MODE,
+        group_id = 3206 # hscdiip owner
+      )
+  }
 
   log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
 
