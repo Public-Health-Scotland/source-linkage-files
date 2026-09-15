@@ -16,7 +16,7 @@ add_keep_population_flag <- function(
   locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
-  log_ep_substage(sub_stage = "Add keep_population flag", status = "start", year = year) # TODO: Check usage
+  log_ep_substage(sub_stage = "Add keep_population flag", status = "start", year = year)
 
   calendar_year <- paste0("20", substr(year, 1, 2)) %>%
     as.integer()
@@ -140,7 +140,7 @@ add_keep_population_flag <- function(
       )
   }
 
-  log_ep_substage(sub_stage = "Add keep_population flag", status = "complete", year = year) # TODO: Check usage
+  log_ep_substage(sub_stage = "Add keep_population flag", status = "complete", year = year)
 
   return(individual_file)
 }
