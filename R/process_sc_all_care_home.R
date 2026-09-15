@@ -11,7 +11,7 @@
 #' with [process_refined_death()].
 #' @param uk_pc_directory UK postcode directory
 #' @param ch_name_lookup Care home name lookup
-#' @param spd_dataScottish postcode directory
+#' @param spd_data Scottish postcode directory
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
@@ -24,8 +24,8 @@
 #' @export
 process_sc_all_care_home <- function(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)), ### TODO - SDL/Denodo name??
-  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)), ### TODO - SDL/Denodo name??
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  refined_death = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)),
   uk_pc_directory = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
   ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
   spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),

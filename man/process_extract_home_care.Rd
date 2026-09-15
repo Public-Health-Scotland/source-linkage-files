@@ -12,6 +12,8 @@ the year specific data.}
 
 \item{year}{The year to process, in FY format.}
 
+\item{BYOC_MODE}{BYOC_MODE}
+
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 }

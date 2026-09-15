@@ -71,9 +71,9 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' SIMD File Path - LOCAL ONLY
+#' SIMD File Path
 #'
-#' @description Get the path to the centrally held Scottish Index of Multiple - LOCAL ONLY
+#' @description Get the path to the centrally held Scottish Index of Multiple
 #' Deprivation (SIMD) file.
 #'
 #' @inheritParams get_file_path

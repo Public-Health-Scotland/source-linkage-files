@@ -8,6 +8,8 @@ get_hc_costs_path(..., BYOC_MODE = FALSE)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
