@@ -15,10 +15,10 @@ fill_ch_names(
 \item{ch_data}{partially cleaned up care home data as a
 \link[tibble:tibble-package]{tibble}}
 
+\item{spd_data}{Path to the Scottish Postcode Directory (parquet) version}
+
 \item{ch_name_lookup_path}{Path to the 'official' Care Home name Excel
 Workbook, this defaults to \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}}}
-
-\item{spd_data}{Path to the Scottish Postcode Directory (parquet) version}
 
 \item{uk_pc_path}{Path to the UK postcode list. This is defaults to
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}}

@@ -7,6 +7,8 @@
 get_sc_hc_episodes_path(BYOC_MODE = FALSE, ...)
 }
 \arguments{
+\item{BYOC_MODE}{BYOC_MODE}
+
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{

@@ -4,14 +4,14 @@
 \alias{get_slf_postcode_path}
 \title{SLF Postcode Lookup File Path}
 \usage{
-get_slf_postcode_path(update = latest_update(), BYOC_MODE, ...)
+get_slf_postcode_path(update = latest_update(), ...)
 }
 \arguments{
 \item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{BYOC_MODE}{BYOC_MODE}
-
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The path to the SLF Postcode lookup as an \code{\link[fs:path]{fs::path()}}
