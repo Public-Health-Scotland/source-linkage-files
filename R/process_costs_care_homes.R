@@ -103,4 +103,6 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     )
 
   log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
+
+  return(ch_costs_uplifted)
 }
