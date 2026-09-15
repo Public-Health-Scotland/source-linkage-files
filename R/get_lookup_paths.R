@@ -12,19 +12,23 @@ get_lookups_dir <- function() {
 }
 
 
-#' Locality File Path
+#' Locality File Path - LOCAL ONLY
 #'
-#' @description Get the path to the centrally held HSCP Localities file.
+#' @description Get the path to the centrally held HSCP Localities file - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the Scottish Postcode Directory
+#' @return An [fs::path()] to the local HSCP Localities file
 #' @export
 #'
 #' @family lookup file paths
 get_locality_path <- function(file_name = NULL, ext = "rds") {
   locality_dir <-
-    fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
+    fs::path(
+      get_lookups_dir(),
+      "Geography",
+      "HSCP Locality"
+    )
 
   locality_path <- get_file_path(
     directory = locality_dir,
@@ -37,14 +41,14 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 }
 
 
-#' Scottish Postcode Directory File Path
+#' Scottish Postcode Directory File Path - LOCAL ONLY
 #'
 #' @description Get the path to the centrally held Scottish Postcode Directory
-#' (SPD) file.
+#' (SPD) file - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the Scottish Postcode Directory
+#' @return An [fs::path()] to the local Scottish Postcode Directory file
 #' @export
 #'
 #' @family lookup file paths
@@ -67,78 +71,23 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' Scottish Postcode Directory data
+#' SIMD File Path - LOCAL ONLY
 #'
-#' @description Return the data to the centrally held Scottish Postcode Directory
-#' (SPD) file.
-#'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC MODE
-#'
-#' @return An [fs::path()] to the Scottish Postcode Directory
-#' @export
-#'
-#' @family lookup file paths
-get_spd_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                         BYOC_MODE) {
-  if (isTRUE(BYOC_MODE)) {
-    # Disconnect from Denodo
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-    log_slf_event(stage = "read", status = "start", type = "spd", year = "all")
-
-    extract_spd <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_spd_source")
-    ) %>%
-      dplyr::collect()
-  } else {
-    spd_data <- read_file(get_spd_path()) %>%
-      dplyr::select(
-        c(
-          "pc7",
-          "pc8",
-          "datazone2011",
-          "datazone2022",
-          "hb2019",
-          "hb2018",
-          "hb2014",
-          "hb2006",
-          "hscp2019",
-          "hscp2018",
-          "hscp2016",
-          "ca2019",
-          "ca2018",
-          "ca2011",
-          "hb1995",
-          "ur8_2022",
-          "ur6_2022",
-          "ur3_2022",
-          "ur2_2022"
-        )
-      )
-  }
-
-  log_slf_event(stage = "read", status = "complete", type = "spd", year = "all")
-
-  return(spd_data)
-}
-
-
-#' SIMD File Path
-#'
-#' @description Get the path to the centrally held Scottish Index of Multiple
+#' @description Get the path to the centrally held Scottish Index of Multiple - LOCAL ONLY
 #' Deprivation (SIMD) file.
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the SIMD file
+#' @return An [fs::path()] to the local SIMD file
 #' @export
 #'
 #' @family lookup file paths
 get_simd_path <- function(file_name = NULL, ext = "parquet") {
   simd_dir <-
-    fs::path(get_lookups_dir(), "Deprivation")
+    fs::path(
+      get_lookups_dir(),
+      "Deprivation"
+    )
 
   simd_path <- get_file_path(
     directory = simd_dir,
@@ -153,14 +102,14 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' Populations File Path for different types
+#' Populations File Path for different types - LOCAL ONLY
 #'
-#' @description Get the path to the populations estimates
+#' @description Get the path to the populations estimates - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #' @param type population type datazone, or hscp, or ca, or hb, or interzone
 #'
-#' @return An [fs::path()] to the populations estimates file
+#' @return An [fs::path()] to the local populations estimates file
 #' @export
 #'
 #' @family lookup file paths
@@ -196,18 +145,22 @@ get_pop_path <- function(file_name = NULL,
 }
 
 
-#' GP Practice Reference File Path (gpprac)
+#' GP Practice Reference File Path (gpprac) - LOCAL ONLY
 #'
-#' @description Get the path for the centrally held reference file `gpprac`
+#' @description Get the path for the centrally held reference file `gpprac` - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return  An [fs::path()] to the file
+#' @return  An [fs::path()] to the local GP practice reference file
 #' @export
 #'
 #' @family lookup file paths
 get_gpprac_ref_path <- function(ext = "csv") {
-  gpprac_dir <- fs::path(get_lookups_dir(), "National Reference Files")
+  gpprac_dir <-
+    fs::path(
+      get_lookups_dir(),
+      "National Reference Files"
+    )
 
   gpprac_path <- get_file_path(
     directory = gpprac_dir,

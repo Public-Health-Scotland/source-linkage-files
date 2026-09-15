@@ -12,23 +12,25 @@
 #' @family lookup files
 get_la_code_opendata_lookup <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+  BYOC_MODE = BYOC_MODE
 ) {
-  log_slf_event(
-    stage = "read",
-    status = "start",
-    type = "la_lookup",
-    year = "all"
-  )
+  log_slf_event(stage = "read", status = "start", type = "la_lookup", year = "all")
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+  # Read data
   la_code_lookup <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
   ) %>%
-    dplyr::select("ca", "caname") %>%
+    # Rename variables
+    dplyr::select(
+      ca = "ca",
+      caname = "caname"
+    ) %>%
     dplyr::distinct() %>%
+    # Collect
     dplyr::collect() %>%
     dplyr::mutate(
       sending_local_authority_name = dplyr::recode_values(
@@ -40,12 +42,7 @@ get_la_code_opendata_lookup <- function(
         stringr::str_replace("\\sand\\s", " \\& ")
     )
 
-  log_slf_event(
-    stage = "read",
-    status = "complete",
-    type = "la_lookup",
-    year = "all"
-  )
+  log_slf_event(stage = "read", status = "complete", type = "la_lookup", year = "all")
 
   return(la_code_lookup)
 }

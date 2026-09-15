@@ -8,8 +8,10 @@
 #' `pct_complete_all`.
 produce_homelessness_completeness <- function(
   homelessness_data,
-  sg_pub_data,
-  BYOC_MODE
+  sg_pub_data = get_sg_pub_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE,
+  run_id = NA,
+  run_date_time = NA
 ) {
   year <- unique(homelessness_data[["year"]])
 
@@ -47,7 +49,10 @@ produce_homelessness_completeness <- function(
     )
   ) %>%
     dplyr::mutate(
-      pct_complete_all = .data[["applications_boxi"]] / .data[["sg_all_assessments"]]
+      sg_all_assessments = as.integer(sg_all_assessments),
+      pct_complete_all = .data[["applications_boxi"]] / .data[["sg_all_assessments"]],
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   if (anyNA(annual_comparison[["sg_year"]])) {
@@ -224,14 +229,14 @@ get_homelessness_completeness_path <- function(
     completeness_file_path <- fs::path(
       directory = denodo_output_path(),
       file_name = stringr::str_glue(
-        "homelessness_completeness-{year}.parquet"
+        "homelessness_completeness-20{year}.parquet"
       )
     )
   } else {
     completeness_file_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Homelessness"),
       file_name = stringr::str_glue(
-        "homelessness_completeness-{year}.parquet"
+        "homelessness_completeness-20{year}.parquet"
       ),
       ...
     )
