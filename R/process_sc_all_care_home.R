@@ -11,7 +11,7 @@
 #' with [process_refined_death()].
 #' @param uk_pc_directory UK postcode directory
 #' @param ch_name_lookup Care home name lookup
-#' @param spd_dataScottish postcode directory
+#' @param spd_data Scottish postcode directory
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
