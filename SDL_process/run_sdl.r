@@ -104,6 +104,8 @@ byoc_output_files <- get_byoc_output_files(
     "costs_hc_lookup",
     "hc",
     "all_hc"
+    "postcode_lookup",
+    "gpprac_lookup"
   )
 )
 # using homelessness for test purpose. When development is complete,

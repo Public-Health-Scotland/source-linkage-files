@@ -2,18 +2,25 @@
 #'
 #' @param ch_data partially cleaned up care home data as a
 #' [tibble][tibble::tibble-package]
+#' @param ch_name_lookup_path Path to the 'official' Care Home name Excel
+#' Workbook, this defaults to [get_slf_ch_name_lookup_path()]
+#' @param spd_data Path to the Scottish Postcode Directory (parquet) version
+#' @param uk_pc_path Path to the UK postcode list. This is defaults to
+#' [get_uk_postcode_path()]
 #'
 #' @return the same data with improved accuracy and completeness of the Care
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
 fill_ch_names <- function(ch_data,
+                          ch_name_lookup_path = get_slf_ch_name_lookup_path(),
                           spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
-                          uk_pc_list = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
-                          ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE)) {
+                          uk_pc_path = get_uk_postcode_path()) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
   spd_list <- spd_data %>%
     dplyr::pull(.data$pc7)
+
+  uk_pc_list <- dplyr::pull(read_file(uk_pc_path))
 
   uk_pc_list <- uk_pc_list %>%
     dplyr::pull()

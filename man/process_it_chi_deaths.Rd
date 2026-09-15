@@ -17,13 +17,19 @@ process_it_chi_deaths(
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will process the CHI deaths extract, it will return the
-final data and write the data out.
+final data and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts:
