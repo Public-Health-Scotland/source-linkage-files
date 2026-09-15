@@ -4,7 +4,7 @@
 \alias{join_sparra_hhg}
 \title{Join SPARRA and HHG}
 \usage{
-join_sparra_hhg(data, year)
+join_sparra_hhg(data, year, BYOC_MODE = BYOC_MODE)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
