@@ -88,7 +88,7 @@ list(
     # Function
     get_dn_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
+      BYOC_MODE
     )
   ),
   # READ - DN CONTACTS
@@ -98,7 +98,7 @@ list(
     # Function
     get_dn_contacts_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
+      BYOC_MODE
     )
   ),
   # READ - HSCP POPULATION
@@ -212,9 +212,29 @@ list(
   #   process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   # ),
 
-  ## Stage 2.2 year specific targets ------
-  tar_map(
-    list(year = years_to_run),
+  ### IT CHI deaths Activity ----
+  # # READ - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_extract,
+  #   read_it_chi_deaths(
+  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  #     BYOC_MODE = BYOC_MODE
+  #   )
+  # ),
+  # # PROCESS - IT CHI deaths
+  # tar_target(
+  #   # Target name
+  #   it_chi_deaths_data,
+  #   # Function
+  #   process_it_chi_deaths(
+  #     data = it_chi_deaths_extract,
+  #     write_to_disk = write_to_disk,
+  #     BYOC_MODE = BYOC_MODE,
+  #     run_id = run_id,
+  #     run_date_time = run_date_time
+  #   )
+  # ),
 
     ### Accident & Emergency (AE2) activity --------------
     # # READ - A&E
