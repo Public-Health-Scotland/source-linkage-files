@@ -48,7 +48,8 @@ read_extract_cmh <- function(
       diag2 = "other_aim_of_contact_1",
       diag3 = "other_aim_of_contact_2",
       diag4 = "other_aim_of_contact_3",
-      diag5 = "other_aim_of_contact_4"
+      diag5 = "other_aim_of_contact_4",
+      year = "year"
     ) %>%
     # Collect
     dplyr::collect()

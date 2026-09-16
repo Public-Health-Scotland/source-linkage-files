@@ -40,8 +40,7 @@ process_extract_cmh <- function(data,
     # Create recid, year, SMRType variables
     dplyr::mutate(
       recid = "CMH",
-      smrtype = add_smrtype(recid = .data$recid),
-      year = year
+      smrtype = add_smrtype(recid = .data$recid)
     ) %>%
     # Contact end time
     dplyr::mutate(keytime2 = hms::as.hms(
