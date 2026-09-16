@@ -1,0 +1,95 @@
+#' Process costs - Home Care
+#'
+#' @param denodo_connect connection to denodo
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id Denodo identifier
+#' @param run_date_time Denodo identifier
+#'
+#' @export
+#'
+process_costs_home_care <- function(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  lca_data = get_lca_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA,
+  write_to_disk = TRUE
+) {
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  ## Read costs
+  hc_costs_raw <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_hc_cost_lookup_source")
+  ) %>%
+    dplyr::collect()
+
+  ## add in years by copying the most recent year ##
+  latest_cost_year <- max(hc_costs_raw$year)
+
+  hc_costs <- hc_costs_raw %>%
+    dplyr::left_join(
+      lca_data,
+      by = c("gss_code" = "ca")
+    ) %>%
+    dplyr::select(year,
+      ca_name = caname,
+      health_board = hbname,
+      hourly_cost
+    ) %>%
+    dplyr::mutate(ca_name = factor(ca_name)) %>%
+    dplyr::mutate(year = as.integer(year))
+
+  ## increase by 1% for every year after the latest ##
+  hc_costs_uplifted <-
+    dplyr::bind_rows(
+      hc_costs,
+      purrr::map(
+        1:5,
+        ~
+          hc_costs %>%
+            dplyr::filter(year == latest_cost_year) %>%
+            dplyr::group_by(year, ca_name, health_board) %>%
+            dplyr::summarise(hourly_cost = hourly_cost * (1.01)^.x, .groups = "drop") %>%
+            dplyr::mutate(year = year + .x)
+      )
+    ) %>%
+    dplyr::arrange(year, ca_name)
+
+  ## Outfile  ---------------------------------------
+  outfile <- hc_costs_uplifted %>%
+    dplyr::select(-health_board)
+
+  outfile %>%
+    # Save .rds file
+    write_file(
+      get_hc_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
+      group_id = 3206 # hscdiip owner
+    )
+
+  return(outfile)
+}
+
+
+#' get lca data from Denodo
+#'
+#' @param denodo_connect denodo connection
+#'
+#' @returns lca_data with ca, caname, hbname
+#' @export
+get_lca_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
+  ) %>%
+    dplyr::select("ca", "caname", "hbname") %>%
+    dplyr::distinct() %>%
+    dplyr::collect()
+
+  # TODO: remove this when finalise this PR
+  # phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
+  #                           col_select = c("CA", "CAName", "HBName")) %>%
+  #   dplyr::distinct()
+}
