@@ -18,7 +18,7 @@ get_pop_path(
 \item{type}{population type datazone, or hscp, or ca, or hb, or interzone}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the populations estimates local file
+An \code{\link[fs:path]{fs::path()}} to the local populations estimates file
 }
 \description{
 Get the path to the populations estimates - LOCAL ONLY
