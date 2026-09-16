@@ -49,7 +49,8 @@ read_extract_district_nursing <- function(
       intervention_2 = "other_intervention_category_2",
       duration_contact = "duration_of_contact",
       location_contact = "location_of_contact",
-      `Patient Data Zone 2011 (Contact)` = "patient_data_zone_2011"
+      `Patient Data Zone 2011 (Contact)` = "patient_data_zone_2011",
+      year = "year"
     ) %>%
     # Collect
     dplyr::collect()

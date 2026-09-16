@@ -48,7 +48,6 @@ process_extract_district_nursing <- function(data,
     slfhelper::get_anon_chi() %>%
     # Add variables
     dplyr::mutate(
-      year = year,
       recid = "DN",
       smrtype = add_smrtype(recid = "DN")
     ) %>%
