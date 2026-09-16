@@ -103,14 +103,14 @@ check_year_valid <- function(
     all(type %in% c())) {
     return(FALSE)
   } else if (year >= "2627" &&
-    all(type %in% c("nsu", "sparra", "at", "ch", "hc", "sds", "client"))) {
+    all(type %in% c("nsu", "at", "ch", "hc", "sds", "client"))) {
     ## CHECK - what is the latest NSU cohort available?
     # NSU is currently available for 2024/25
     ## CHECK - What period does SDS data get submitted?
     ## CHECK - what data do we have available for Social Care and SPARRA?
     return(FALSE)
   } else if (year >= "2728" &&
-    all(type %in% c())) {}
+    all(type %in% c("sparra"))) {}
 
   return(TRUE)
 }
