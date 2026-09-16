@@ -279,14 +279,8 @@ list(
 
   ### Social Care, all years -----
 
-  #### Care home name look up------
-  tar_target(
-    slf_ch_name_lookup_data,
-    get_slf_ch_name_lookup_data(BYOC_MODE),
-    format = "file"
-  ),
-
   #### SC - Care Homes ----
+  # READ - Care Homes
   tar_target(
     # Target name
     all_care_home_extract,
@@ -299,6 +293,31 @@ list(
       name = all_care_home_extract,
       age = as.difftime(28.0, units = "days")
     )
+  ),
+  # PROCESS - Care Homes
+  tar_target(
+    # Target name
+    all_care_home,
+    # Function
+    process_sc_all_care_home(
+      all_care_home_extract = all_care_home_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      refined_death = refined_death_data,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      ch_name_lookup_path = slf_ch_name_lookup_path,
+      spd_data = spd_data,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.5
+  ),
+  # TESTS - Care Homes
+  tar_target(
+    # Target name
+    tests_all_care_home,
+    # Function
+    process_tests_sc_all_ch_episodes(all_care_home)
   ),
 
   #### SC - demographics ----
@@ -799,6 +818,37 @@ list(
 
 
       ### Social Care ----
+
+      #### SC - Care Home (CH) Activity -----
+      # READ - CH
+      # Target: all_care_home passed to PROCESS CH
+
+      # PROCESS - CH
+      tar_target(
+        # Target name
+        source_sc_care_home,
+        # Function
+        process_extract_care_home(
+          data = all_care_home,
+          year = year,
+          ch_costs = ch_cost_lookup,
+          BYOC_MODE = BYOC_MODE,
+          run_id = run_id,
+          run_date_time = run_date_time,
+          write_to_disk = write_to_disk
+        )
+      ),
+      # TESTS - CH
+      tar_target(
+        # Target name
+        tests_care_home,
+        # Function
+        process_tests_care_home(
+          data = source_sc_care_home,
+          year = year
+        )
+      ),
+
       #### SC - Home Care (HC) Activity--------
       # READ - HC
       # Target: all_home_care passed to PROCESS HC
