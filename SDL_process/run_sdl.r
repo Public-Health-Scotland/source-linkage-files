@@ -92,6 +92,18 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
+    "ae",
+    "dd",
+    "homelessness",
+    "homelessness_completeness",
+    "ltc",
+    "gp_ooh",
+    "ooh_cost_lookup",
+    "outpatients",
+    "demog",
+    "costs_hc_lookup",
+    "hc",
+    "all_hc"
     "postcode_lookup",
     "gpprac_lookup"
   )
