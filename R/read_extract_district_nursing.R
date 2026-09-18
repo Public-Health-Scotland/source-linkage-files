@@ -28,7 +28,7 @@ read_extract_district_nursing <- function(
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      .data$year == year
+      .data$year == .env$year
     ) %>%
     # Rename variables
     dplyr::select(
