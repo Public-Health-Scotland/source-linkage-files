@@ -103,8 +103,10 @@ byoc_output_files <- get_byoc_output_files(
     # "maternity",
     # "mh",
     # "nrs_deaths",
-    "ooh_cost_lookup"
-    # "outpatients"
+    "ooh_cost_lookup",
+    # "outpatients",
+    "postcode_lookup",
+    "gpprac_lookup"
   )
 )
 # using homelessness for test purpose. When development is complete,
