@@ -28,7 +28,7 @@ read_extract_cmh <- function(
   ) %>%
     # Filter by year
     dplyr::filter(
-      .data$year == year
+      .data$year == .env$year
     ) %>%
     # Rename variables
     dplyr::select(

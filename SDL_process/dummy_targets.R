@@ -187,6 +187,10 @@ list(
   #   )
   # ),
 
+  ## Stage 2.2 year specific targets ------
+  tar_map(
+    list(year = years_to_run),
+
     ### Accident & Emergency (AE2) activity --------------
     # # READ - A&E
     # tar_target(
