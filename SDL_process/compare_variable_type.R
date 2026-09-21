@@ -234,10 +234,8 @@ for (ii in 1:length(datasets)) {
       match = case_when(
         variable %in% c("run_id", "run_date_time") &
           class_data == "character" ~ "MATCH",
-
         variable %in% c("run_date_time") &
           class_data == "date" ~ "MATCH",
-
         variable %in% c("run_id", "run_date_time") &
           is.na(class_data) ~ "MISSING IN OUTPUT",
         variable %in% c("run_id", "run_date_time") ~

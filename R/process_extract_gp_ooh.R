@@ -119,8 +119,10 @@ process_extract_gp_ooh <- function(
     )
 
   ooh_clean <- ooh_clean %>%
-    dplyr::mutate(run_id = .env$run_id,
-                  run_date_time = .env$run_date_time)
+    dplyr::mutate(
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
+    )
 
   ## Save Outfile -------------------------------------
 
