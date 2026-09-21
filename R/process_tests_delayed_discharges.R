@@ -9,7 +9,11 @@
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.
 #'
 #' @export
-process_tests_delayed_discharges <- function(data, year) {
+process_tests_delayed_discharges <- function(data,
+                                             year,
+                                             BYOC_MODE,
+                                             run_id = NA,
+                                             run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "dd", year = year)
 
   old_data <- get_existing_data_for_tests(data)
@@ -20,6 +24,12 @@ process_tests_delayed_discharges <- function(data, year) {
     old_data = produce_source_dd_tests(old_data),
     new_data = produce_source_dd_tests(data)
   ) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time,
+      dataset_name = "dd",
+      year = year
+    ) %>%
     write_tests_xlsx(sheet_name = "dd", year, workbook_name = "extract")
 
   return(comparison)
