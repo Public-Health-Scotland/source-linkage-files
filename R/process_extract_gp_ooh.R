@@ -29,7 +29,7 @@ process_extract_gp_ooh <- function(
 ) {
   log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
 
-  diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year)
+  diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year, BYOC_MODE = BYOC_MODE)
   outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
   consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
 
@@ -119,10 +119,8 @@ process_extract_gp_ooh <- function(
     )
 
   ooh_clean <- ooh_clean %>%
-    dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
+    dplyr::mutate(run_id = .env$run_id,
+                  run_date_time = .env$run_date_time)
 
   ## Save Outfile -------------------------------------
 
