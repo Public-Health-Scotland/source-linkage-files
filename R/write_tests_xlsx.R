@@ -197,7 +197,12 @@ write_tests_xlsx <- function(comparison_data,
                                "extract",
                                "sandpit",
                                "cross_year"
-                             )) {
+                             ),
+                             BYOC_MODE) {
+  if (isTRUE(BYOC_MODE)) {
+    return(comparison_data)
+  }
+
   # Set up the workbook ----
   tests_file_name <- setup_tests_file_name(sheet_name,
     year,
@@ -413,4 +418,70 @@ combine_multi_xlsx <- function(file_list, output_file) {
     }
   }
   openxlsx::saveWorkbook(wb, output_file, overwrite = TRUE)
+}
+
+#' Test results output path
+#'
+#' @param test_type Test results category
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return Path to the test results output
+#' @export
+get_test_results_path <- function(
+  test_type = c("extract", "ep", "ind"),
+  BYOC_MODE
+) {
+  test_type <- match.arg(test_type)
+
+  file_name <- switch(test_type,
+    extract = "sdl_test_results_extract.parquet",
+    ep = "sdl_test_results_ep.parquet",
+    ind = "sdl_test_results_ind.parquet"
+  )
+
+  if (isTRUE(BYOC_MODE)) {
+    test_results_path <- file.path(
+      denodo_output_path(),
+      file_name
+    )
+  } else {
+    test_results_path <- fs::path(
+      get_slf_dir(),
+      "Tests",
+      fy(),
+      qtr(),
+      file_name
+    )
+  }
+
+  return(test_results_path)
+}
+
+#' Stacked test outputs in denodo
+#'
+#' @param test_results Test results data
+#' @param test_type Test type category
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return Test results output
+#' @export
+write_stacked_test_results <- function(
+  test_results,
+  test_type,
+  BYOC_MODE
+) {
+  stacked_results <- dplyr::bind_rows(test_results)
+
+  if (isTRUE(BYOC_MODE)) {
+    write_file(
+      data = stacked_results,
+      path = get_test_results_path(
+        test_type = test_type,
+        BYOC_MODE = BYOC_MODE
+      ),
+      BYOC_MODE = BYOC_MODE
+    )
+  }
+
+  return(stacked_results)
 }
