@@ -199,7 +199,6 @@ write_tests_xlsx <- function(comparison_data,
                                "cross_year"
                              ),
                              BYOC_MODE) {
-
   if (isTRUE(BYOC_MODE)) {
     return(comparison_data)
   }
@@ -429,13 +428,12 @@ combine_multi_xlsx <- function(file_list, output_file) {
 #' @return Path to the test results output
 #' @export
 get_test_results_path <- function(
-    test_type = c("extract", "ep", "ind"),
-    BYOC_MODE
+  test_type = c("extract", "ep", "ind"),
+  BYOC_MODE
 ) {
   test_type <- match.arg(test_type)
 
-  file_name <- switch(
-    test_type,
+  file_name <- switch(test_type,
     extract = "sdl_test_results_extract.parquet",
     ep = "sdl_test_results_ep.parquet",
     ind = "sdl_test_results_ind.parquet"
@@ -468,15 +466,13 @@ get_test_results_path <- function(
 #' @return Test results output
 #' @export
 write_stacked_test_results <- function(
-    test_results,
-    test_type,
-    BYOC_MODE
+  test_results,
+  test_type,
+  BYOC_MODE
 ) {
-
   stacked_results <- dplyr::bind_rows(test_results)
 
   if (isTRUE(BYOC_MODE)) {
-
     write_file(
       data = stacked_results,
       path = get_test_results_path(
@@ -485,7 +481,6 @@ write_stacked_test_results <- function(
       ),
       BYOC_MODE = BYOC_MODE
     )
-
   }
 
   return(stacked_results)
