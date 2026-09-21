@@ -31,7 +31,9 @@ mapping <- tibble::tribble(
   "mh", "sdl_mental_health_processed ",
   "nrs_deaths", "sdl_nrs_deaths_processed ",
   "ooh_cost_lookup", "sdl_gp_ooh_cost_lookup_proces",
-  "outpatients", "sdl_outpatients_processed "
+  "outpatients", "sdl_outpatients_processed ",
+  "postcode_lookup", "sdl_postcode_lookup_processed",
+  "gpprac_lookup", "sdl_gp_practice_lookup_process"
 )
 
 
@@ -40,18 +42,20 @@ mapping <- tibble::tribble(
 
 datasets <- c(
   "ae",
-  # "chi_deaths",
-  # "combined_deaths",
+  "chi_deaths",
+  "combined_deaths",
   "dd",
   "gp_ooh",
   "homelessness",
   "homelessness_completeness",
-  # "ltc",
-  # "maternity",
-  # "mh",
-  # "nrs_deaths",
-  "ooh_cost_lookup"
-  # "outpatients"
+  "ltc",
+  "maternity",
+  "mh",
+  "nrs_deaths",
+  "ooh_cost_lookup",
+  "outpatients",
+  "postcode_lookup",
+  "gpprac_lookup"
 )
 
 wb <- createWorkbook()
@@ -230,6 +234,10 @@ for (ii in 1:length(datasets)) {
       match = case_when(
         variable %in% c("run_id", "run_date_time") &
           class_data == "character" ~ "MATCH",
+
+        variable %in% c("run_date_time") &
+          class_data == "date" ~ "MATCH",
+
         variable %in% c("run_id", "run_date_time") &
           is.na(class_data) ~ "MISSING IN OUTPUT",
         variable %in% c("run_id", "run_date_time") ~
@@ -238,6 +246,11 @@ for (ii in 1:length(datasets)) {
           "MISSING IN OUTPUT",
         is.na(class_spec) ~
           "NOT IN SPEC",
+        # Special handling for keytime variables
+        variable %in% c("keytime1", "keytime2") &
+          class_data_norm == "time" &
+          class_spec_norm %in% c("date", "datetime") ~
+          "MATCH",
         class_data_norm == class_spec_norm ~
           "MATCH",
         TRUE ~
