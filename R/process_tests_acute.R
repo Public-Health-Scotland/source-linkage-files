@@ -12,6 +12,7 @@
 process_tests_acute <- function(data,
                                 year,
                                 BYOC_MODE,
+                                benchmark_run_id = NA,
                                 run_id = NA,
                                 run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "acute", year = year)
@@ -27,12 +28,27 @@ process_tests_acute <- function(data,
     new_data = produce_source_extract_tests(data)
   ) %>%
     dplyr::mutate(
+      benchmark_comparison_type = "episode",
+      benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time,
       dataset_name = "acute",
       year = year
     ) %>%
-    write_tests_xlsx(sheet_name = "01b", year, workbook_name = "extract")
+    dplyr::select(
+      "year",
+      "dataset_name",
+      "measure",
+      "value_old",
+      "value_new",
+      "difference",
+      "pct_change",
+      "issue",
+      "run_id",
+      "run_date_time",
+      "benchmark_comparison_type",
+      "benchmark_run_id"
+    ) %>% write_tests_xlsx(sheet_name = "01b", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
 
   log_slf_event(stage = "test", status = "complete", type = "acute", year = year)
 
