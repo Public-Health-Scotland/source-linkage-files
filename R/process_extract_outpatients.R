@@ -72,8 +72,8 @@ process_extract_outpatients <- function(data,
 
   outpatients_processed <- outpatients_clean %>%
     dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     ) %>%
     dplyr::select(
       "run_id",

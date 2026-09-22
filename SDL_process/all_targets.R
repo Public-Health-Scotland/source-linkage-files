@@ -1,12 +1,8 @@
-# Name of file -  "dummy_targets.R"
+# Name of file -  "all_targets.R"
 #
 # Description:
-#       A small target example to run as test for BYOC.
-#
-#       To run the targets pipeline, please use:
-#       targets::tar_make(script = 'dummy_targets.R',
-#                         store = store_path)
-#
+#       This stores all targets objects for BYOC.
+#       Keep building this on.
 
 
 library(logger)
