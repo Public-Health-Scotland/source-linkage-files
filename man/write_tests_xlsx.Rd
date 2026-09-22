@@ -10,7 +10,7 @@ write_tests_xlsx(
   year = NULL,
   workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit",
     "cross_year"),
-  BYOC_MODE
+  BYOC_MODE = FALSE
 )
 }
 \arguments{

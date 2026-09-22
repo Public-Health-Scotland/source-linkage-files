@@ -8,6 +8,7 @@ process_tests_delayed_discharges(
   data,
   year,
   BYOC_MODE,
+  benchmark_run_id = NA,
   run_id = NA,
   run_date_time = NA
 )

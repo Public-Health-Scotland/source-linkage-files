@@ -2,7 +2,7 @@
 % Please edit documentation in R/write_tests_xlsx.R
 \name{write_stacked_test_results}
 \alias{write_stacked_test_results}
-\title{Stacked test outputs in denodo}
+\title{Stacked extract test outputs in denodo}
 \usage{
 write_stacked_test_results(test_results, test_type, BYOC_MODE)
 }
@@ -17,5 +17,5 @@ write_stacked_test_results(test_results, test_type, BYOC_MODE)
 Test results output
 }
 \description{
-Stacked test outputs in denodo
+Stacked extract test outputs in denodo
 }
