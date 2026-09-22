@@ -110,7 +110,7 @@ check_year_valid <- function(
     ## CHECK - what data do we have available for Social Care and SPARRA?
     return(FALSE)
   } else if (year >= "2728" &&
-    all(type %in% c("sparra"))) {}
+    all(type %in% c("sparra"))) {return(FALSE)}
 
   return(TRUE)
 }
