@@ -16,5 +16,5 @@ the path of the folder where a console output is
 
 ``` r
 console_output_path()
-#> /conf/sourcedev/Source_Linkage_File_Updates/_console_output/2026/Q1/
+#> /conf/sourcedev/Source_Linkage_File_Updates/_console_output/2026/Q2/
 ```
