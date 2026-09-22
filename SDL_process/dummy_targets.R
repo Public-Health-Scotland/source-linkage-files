@@ -549,4 +549,27 @@ list(
     )
   )
 )
+
+# # Bind extract targets in denodo
+# tar_target(
+#   tests_extract_stacked,
+#   write_stacked_test_results(
+#     test_results = list(
+#       tests_source_acute_extract,
+#       tests_source_ae_extract,
+#       tests_source_cmh_extract,
+#       tests_source_dd_extract,
+#       tests_source_dn_extract,
+#       tests_source_homelessness_extract,
+#       tests_source_maternity_extract,
+#       tests_source_mental_health_extract,
+#       tests_source_nrs_deaths_extract,
+#       tests_source_ooh_extract,
+#       tests_source_outpatients_extract
+#     ),
+#     test_type = "extract",
+#     BYOC_MODE = BYOC_MODE
+#   )
+# )
+
 ## End of Targets pipeline ##

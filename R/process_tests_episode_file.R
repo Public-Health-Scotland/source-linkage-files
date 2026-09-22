@@ -6,7 +6,12 @@
 #' @inherit process_tests_acute
 #'
 #' @export
-process_tests_episode_file <- function(data, year) {
+process_tests_episode_file <- function(data,
+                                       year,
+                                       BYOC_MODE,
+                                       benchmark_run_id = NA,
+                                       run_id = NA,
+                                       run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "ep", year = year)
 
   data <- data %>%
@@ -38,12 +43,32 @@ process_tests_episode_file <- function(data, year) {
       dplyr::arrange(.data[["recid"]]),
     produce_episode_file_ltc_tests(data, old_data, year)
   ) %>%
+    dplyr::mutate(
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      year = year
+    ) %>%
+    dplyr::select(
+      "year",
+      "recid",
+      "measure",
+      "value_old",
+      "value_new",
+      "difference",
+      "pct_change",
+      "issue",
+      "run_id",
+      "run_date_time",
+      "benchmark_run_id"
+    ) %>%
     write_tests_xlsx(
       sheet_name = stringr::str_glue({
         "ep_file_{year}"
       }),
       year = year,
-      workbook_name = "ep_file"
+      workbook_name = "ep_file",
+      BYOC_MODE = BYOC_MODE
     )
 
   log_slf_event(stage = "test", status = "complete", type = "ep", year = year)
