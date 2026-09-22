@@ -198,7 +198,7 @@ write_tests_xlsx <- function(comparison_data,
                                "sandpit",
                                "cross_year"
                              ),
-                             BYOC_MODE) {
+                             BYOC_MODE = FALSE) {
   if (isTRUE(BYOC_MODE)) {
     return(comparison_data)
   }
@@ -457,7 +457,7 @@ get_test_results_path <- function(
   return(test_results_path)
 }
 
-#' Stacked test outputs in denodo
+#' Stacked extract test outputs in denodo
 #'
 #' @param test_results Test results data
 #' @param test_type Test type category
@@ -481,6 +481,68 @@ write_stacked_test_results <- function(
       ),
       BYOC_MODE = BYOC_MODE
     )
+  }
+
+  return(stacked_results)
+}
+
+#' Stacked ep file test outputs in denodo
+#'
+#' @param test_results Test results data
+#' @param test_type Test type category
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return Test results output
+#' @export
+write_stacked_episode_test_results <- function(
+    test_results,
+    BYOC_MODE
+) {
+
+  stacked_results <- dplyr::bind_rows(test_results)
+
+  if (isTRUE(BYOC_MODE)) {
+
+    write_file(
+      data = stacked_results,
+      path = get_test_results_path(
+        test_type = "ep",
+        BYOC_MODE = BYOC_MODE
+      ),
+      BYOC_MODE = BYOC_MODE
+    )
+
+  }
+
+  return(stacked_results)
+}
+
+#' Stacked ind file test outputs in denodo
+#'
+#' @param test_results Test results data
+#' @param test_type Test type category
+#' @param BYOC_MODE BYOC MODE
+#'
+#' @return Test results output
+#' @export
+write_stacked_individual_test_results <- function(
+    test_results,
+    BYOC_MODE
+) {
+
+  stacked_results <- dplyr::bind_rows(test_results)
+
+  if (isTRUE(BYOC_MODE)) {
+
+    write_file(
+      data = stacked_results,
+      path = get_test_results_path(
+        test_type = "ind",
+        BYOC_MODE = BYOC_MODE
+      ),
+      BYOC_MODE = BYOC_MODE
+    )
+
   }
 
   return(stacked_results)
