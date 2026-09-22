@@ -7,7 +7,10 @@
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' `TRUE` i.e. write the data to disk
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
@@ -24,7 +27,12 @@ process_extract_mental_health <- function(data,
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately.
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning  ---------------------------------------
 
@@ -82,8 +90,8 @@ process_extract_mental_health <- function(data,
   mh_processed <- mh_clean %>%
     dplyr::arrange(.data$anon_chi, .data$record_keydate1) %>%
     dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     ) %>%
     dplyr::select(
       "run_id",
@@ -133,10 +141,15 @@ process_extract_mental_health <- function(data,
 
   if (write_to_disk) {
     write_file(
-      mh_processed,
-      get_source_extract_path(year, "mh", check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      data = mh_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "mh",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
