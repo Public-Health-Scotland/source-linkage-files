@@ -495,14 +495,12 @@ write_stacked_test_results <- function(
 #' @return Test results output
 #' @export
 write_stacked_episode_test_results <- function(
-    test_results,
-    BYOC_MODE
+  test_results,
+  BYOC_MODE
 ) {
-
   stacked_results <- dplyr::bind_rows(test_results)
 
   if (isTRUE(BYOC_MODE)) {
-
     write_file(
       data = stacked_results,
       path = get_test_results_path(
@@ -511,7 +509,6 @@ write_stacked_episode_test_results <- function(
       ),
       BYOC_MODE = BYOC_MODE
     )
-
   }
 
   return(stacked_results)
@@ -526,14 +523,12 @@ write_stacked_episode_test_results <- function(
 #' @return Test results output
 #' @export
 write_stacked_individual_test_results <- function(
-    test_results,
-    BYOC_MODE
+  test_results,
+  BYOC_MODE
 ) {
-
   stacked_results <- dplyr::bind_rows(test_results)
 
   if (isTRUE(BYOC_MODE)) {
-
     write_file(
       data = stacked_results,
       path = get_test_results_path(
@@ -542,7 +537,6 @@ write_stacked_individual_test_results <- function(
       ),
       BYOC_MODE = BYOC_MODE
     )
-
   }
 
   return(stacked_results)

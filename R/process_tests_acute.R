@@ -48,7 +48,8 @@ process_tests_acute <- function(data,
       "run_date_time",
       "benchmark_comparison_type",
       "benchmark_run_id"
-    ) %>% write_tests_xlsx(sheet_name = "01b", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
+    ) %>%
+    write_tests_xlsx(sheet_name = "01b", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
 
   log_slf_event(stage = "test", status = "complete", type = "acute", year = year)
 

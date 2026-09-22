@@ -109,7 +109,7 @@ console_outputs <- TRUE
 # Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
   year,
-  #types = "byoc_input_files"
+  # types = "byoc_input_files"
   types = c(
     "postcode_lookup",
     "gpprac_lookup"
@@ -142,18 +142,18 @@ if (run_stage == "extract") {
 if (run_stage == "episode") {
   logger::log_info("Episode file processing started.")
 
-  episode_test_results <- purrr::map(years,function(year) {
-      logger::log_info(
-        "Episode file processing started for {year}."
-      )
+  episode_test_results <- purrr::map(years, function(year) {
+    logger::log_info(
+      "Episode file processing started for {year}."
+    )
 
-      if (isFALSE(BYOC_MODE)) {
-        write_console_output(
-          console_outputs = console_outputs,
-          file_type = "episode",
-          year = year
-        )
-      }
+    if (isFALSE(BYOC_MODE)) {
+      write_console_output(
+        console_outputs = console_outputs,
+        file_type = "episode",
+        year = year
+      )
+    }
 
     ## Read processed data and create episode file
     log_ep_message("read_data", year)
@@ -179,25 +179,25 @@ if (run_stage == "episode") {
     log_ep_message("creating", year)
 
     episode_file <- create_episode_file(processed_data_list,
-                        year = year,
-                        write_temp_to_disk = write_temp_to_disk)
+      year = year,
+      write_temp_to_disk = write_temp_to_disk
+    )
 
-      episode_tests <- process_tests_episode_file(
-        data = episode_file,
-        year = year,
-        BYOC_MODE = BYOC_MODE,
-        benchmark_run_id = benchmark_run_id,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
+    episode_tests <- process_tests_episode_file(
+      data = episode_file,
+      year = year,
+      BYOC_MODE = BYOC_MODE,
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
-      logger::log_info(
-        "Episode file processing completed for {year}."
-      )
+    logger::log_info(
+      "Episode file processing completed for {year}."
+    )
 
-      return(episode_tests)
-    }
-  )
+    return(episode_tests)
+  })
 
   episode_tests_stacked <-
     write_stacked_episode_test_results(
@@ -228,7 +228,7 @@ if (run_stage == "individual") {
         )
       }
 
-      episode_file <- arrow::read_parquet(get_slf_episode_path(year = year)) #TO - DO: Will need
+      episode_file <- arrow::read_parquet(get_slf_episode_path(year = year)) # TO - DO: Will need
       # to be edited to change where episode file is read from in denodo.
 
       log_ind_message("creating", year)

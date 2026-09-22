@@ -46,7 +46,8 @@ process_tests_delayed_discharges <- function(data,
       "run_date_time",
       "benchmark_comparison_type",
       "benchmark_run_id"
-    ) %>% write_tests_xlsx(sheet_name = "dd", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
+    ) %>%
+    write_tests_xlsx(sheet_name = "dd", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
 
   return(comparison)
 }

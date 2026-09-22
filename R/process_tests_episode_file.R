@@ -42,13 +42,13 @@ process_tests_episode_file <- function(data,
     ) %>%
       dplyr::arrange(.data[["recid"]]),
     produce_episode_file_ltc_tests(data, old_data, year)
+  ) %>%
+    dplyr::mutate(
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      year = year
     ) %>%
-      dplyr::mutate(
-        benchmark_run_id = benchmark_run_id,
-        run_id = run_id,
-        run_date_time = run_date_time,
-        year = year
-      ) %>%
     dplyr::select(
       "year",
       "recid",

@@ -40,11 +40,13 @@ process_tests_individual_file <- function(data,
   comparison <- produce_test_comparison(
     old_data = produce_individual_file_tests(old_data),
     new_data = produce_individual_file_tests(data)
-  ) %>% dplyr::mutate(
-    benchmark_run_id = benchmark_run_id,
-    run_id = run_id,
-    run_date_time = run_date_time,
-    year = year) %>%
+  ) %>%
+    dplyr::mutate(
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      year = year
+    ) %>%
     dplyr::select(
       "year",
       "measure",

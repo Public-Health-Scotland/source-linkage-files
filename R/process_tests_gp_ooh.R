@@ -47,7 +47,8 @@ process_tests_gp_ooh <- function(data,
       "run_date_time",
       "benchmark_comparison_type",
       "benchmark_run_id"
-    ) %>% write_tests_xlsx(sheet_name = "gpooh", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
+    ) %>%
+    write_tests_xlsx(sheet_name = "gpooh", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
 
   log_slf_event(stage = "test", status = "complete", type = "gpooh", year = year)
 
