@@ -39,7 +39,7 @@ library(glue)
 
 ## Update line 41##
 # The year of new NSU extract
-year <- "2425"
+year <- "2526"
 
 # Update lines 45-46 ##
 # Analysts username and schema to collect the data.
