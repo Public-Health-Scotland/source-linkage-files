@@ -51,7 +51,9 @@ check_year_valid <- function(
   year,
   type = c(
     "acute",
+    "acute_cup",
     "ae",
+    "ae_cup",
     "at",
     "ch",
     "client",

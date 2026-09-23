@@ -78,10 +78,12 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1: Lookups ----
+  ## Stage 2.1 non year-specific targets ----
 
-  ### District Nursing Costs ---------------------------------------------------
-  # READ - DN RAW COSTS
+  ### Cost lookups ----
+
+  #### District nursing costs------
+  ##### READ - DN COSTS -----
   tar_target(
     # Target name
     dn_raw_costs,
@@ -91,6 +93,8 @@ list(
       BYOC_MODE
     )
   ),
+
+  ##### DN contacts -----
   # READ - DN CONTACTS
   tar_target(
     # Target name
@@ -101,6 +105,8 @@ list(
       BYOC_MODE
     )
   ),
+
+  ##### HSCP Population -----
   # READ - HSCP POPULATION
   tar_target(
     # Target name
@@ -111,7 +117,8 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  # PROCESS - DN COSTS
+
+  ##### PROCESS - DN COSTS -----
   tar_target(
     # Target name
     dn_cost_lookup,
@@ -127,233 +134,160 @@ list(
     )
   ),
 
-  ## Stage 2.1 non-specific targets ----
-
   ### IT CHI deaths Activity ----
-  # # READ - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_extract,
-  #   read_it_chi_deaths(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-  # # PROCESS - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_data,
-  #   # Function
-  #   process_it_chi_deaths(
-  #     data = it_chi_deaths_extract,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
+  # READ - IT CHI deaths
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - IT CHI deaths
+  tar_target(
+    # Target name
+    it_chi_deaths_data,
+    # Function
+    process_it_chi_deaths(
+      data = it_chi_deaths_extract,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
+
+  ### NRS BOXI Deaths ----
+  # PROCESS - Refined deaths - combine all NRS death data into a lookup
+  tar_target(
+    refined_death_data,
+    process_refined_death(
+      it_chi_deaths = it_chi_deaths_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
 
   ### Long-Term Conditions (LTCs) Activity ----
-  # # READ - LTCs
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_extract,
-  #   read_it_chi_deaths(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-  # # PROCESS - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_data,
-  #   # Function
-  #   process_it_chi_deaths(
-  #     data = it_chi_deaths_extract,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
-
-  ### NRS BOXI Deaths ----
-  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  # tar_target(
-  #   refined_death_data,
-  #   process_refined_death(
-  #     it_chi_deaths = it_chi_deaths_data,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
-
-  ### NRS BOXI Deaths ----
-  # # PROCESS - Refined deaths - combine all NRS death data into a lookup
-  # tar_target(
-  #   refined_death_data,
-  #   process_refined_death(
-  #     it_chi_deaths = it_chi_deaths_data,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
-
-  ### GP Out of Hours costs------
-  # tar_target(
-  #   # Target name
-  #   gp_ooh_cost_lookup,
-  #   # Function
-  #   process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
-  # ),
-
-  ### IT CHI deaths Activity ----
-  # # READ - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_extract,
-  #   read_it_chi_deaths(
-  #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  #     BYOC_MODE = BYOC_MODE
-  #   )
-  # ),
-  # # PROCESS - IT CHI deaths
-  # tar_target(
-  #   # Target name
-  #   it_chi_deaths_data,
-  #   # Function
-  #   process_it_chi_deaths(
-  #     data = it_chi_deaths_extract,
-  #     write_to_disk = write_to_disk,
-  #     BYOC_MODE = BYOC_MODE,
-  #     run_id = run_id,
-  #     run_date_time = run_date_time
-  #   )
-  # ),
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
 
   ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run),
 
-    ### Accident & Emergency (AE2) activity --------------
-    # # READ - A&E
-    # tar_target(
-    #   # Target name
-    #   ae_data,
-    #   # Function
-    #   read_extract_ae(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # READ - A&E CUP
-    # tar_target(
-    #   # Target name
-    #   ae_cup_file,
-    #   # Function
-    #   read_extract_ae_cup(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # PROCESS - A&E
-    # tar_target(
-    #   # Target name
-    #   source_ae_extract,
-    #   # Function
-    #   process_extract_ae(
-    #     data = ae_data,
-    #     year = year,
-    #     ae_cup_file = ae_cup_file,
-    #     write_to_disk = write_to_disk,
-    #     BYOC_MODE = BYOC_MODE,
-    #     run_id = run_id,
-    #     run_date_time = run_date_time
-    #   )
-    # ),
+    ### Acute (SMR01) Activity ----
+    # READ - Acute
+    tar_target(
+      # Target name
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Acute
+    tar_target(
+      # Target name
+      source_acute_extract,
+      # Function
+      process_extract_acute(
+        data = acute_data,
+        acute_cup_data = acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
     ### Maternity (SMR02) Activity ----
-    # # READ - Maternity
-    # tar_target(
-    #   # Target name
-    #   maternity_data,
-    #   read_extract_maternity(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # PROCESS - Maternity
-    # tar_target(
-    #   # Target name
-    #   source_maternity_extract,
-    #   # Function
-    #   process_extract_maternity(
-    #     maternity_data,
-    #     year,
-    #     write_to_disk = write_to_disk,
-    #     BYOC_MODE = BYOC_MODE,
-    #     run_id = run_id,
-    #     run_date_time = run_date_time
-    #   )
-    # ),
+    # READ - Maternity
+    tar_target(
+      # Target name
+      maternity_data,
+      read_extract_maternity(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Maternity
+    tar_target(
+      # Target name
+      source_maternity_extract,
+      # Function
+      process_extract_maternity(
+        maternity_data,
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
-    ### Mental Health (SMR02) Activity ----
-    # # READ - Mental Health
-    # tar_target(
-    #   mental_health_data,
-    #   read_extract_mental_health(
-    #     year = year,
-    #     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    #     BYOC_MODE = BYOC_MODE
-    #   )
-    # ),
-    # # PROCESS - Mental Health
-    # tar_target(
-    #   # Target name
-    #   source_mental_health_extract,
-    #   process_extract_mental_health(
-    #     mental_health_data,
-    #     year = year,
-    #     write_to_disk = write_to_disk,
-    #     BYOC_MODE = BYOC_MODE,
-    #     run_id = run_id,
-    #     run_date_time = run_date_time
-    #   )
-    # ),
+    ### Mental Health (SMR04) Activity ----
+    # READ - Mental Health
+    tar_target(
+      mental_health_data,
+      read_extract_mental_health(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Mental Health
+    tar_target(
+      # Target name
+      source_mental_health_extract,
+      process_extract_mental_health(
+        mental_health_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
     ### Death Activity ----
-    # # PROCESS - Deaths
-    # tar_target(
-    #   # Target name
-    #   source_nrs_deaths_extract,
-    #   # use this anonymous function with redundant but necessary refined_death
-    #   # to make sure reading year-specific NRS deaths extracts after it is produced
-    #   (\(year, refined_death_data) {
-    #     read_file(get_source_extract_path(year, "deaths", BYOC_MODE = BYOC_MODE)) %>%
-    #       as.data.frame()
-    #   })(year, refined_death_data)
-    # ),
+    # PROCESS - Deaths
+    tar_target(
+      # Target name
+      source_nrs_deaths_extract,
+      # use this anonymous function with redundant but necessary refined_death
+      # to make sure reading year-specific NRS deaths extracts after it is produced
+      (\(year, refined_death_data) {
+        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+          as.data.frame()
+      })(year, refined_death_data)
+    ),
 
-    # # TESTS - Deaths
-    # tar_target(
-    #   # Target name
-    #   tests_source_nrs_deaths_extract,
-    #   # Function
-    #   process_tests_nrs_deaths(
-    #     source_nrs_deaths_extract,
-    #     year
-    #   )
-    # ),
-
-    ### District Nursing Activity ----------------------------------------------
+    ### District Nursing Activity ---------------
     # READ - District Nursing
     tar_target(
       # Target name
@@ -382,5 +316,4 @@ list(
     )
   )
 )
-
 ## End of Targets pipeline ##

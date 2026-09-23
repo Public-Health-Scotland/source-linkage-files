@@ -32,8 +32,8 @@ process_it_chi_deaths <- function(data,
     # the boxi nrs death date is more reliable as this is provided monthly and is validated.
     dplyr::mutate(
       death_date_chi = lubridate::ymd(.data$death_date_chi),
-      run_id = run_id,
-      run_date_time = run_date_time
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     ) %>%
     dplyr::select(
       "run_id",
