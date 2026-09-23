@@ -20,6 +20,7 @@ phs_spec_copy_path <- file.path(
 mapping <- tibble::tribble(
   ~dataset_id, ~spec_sheetname,
   "ae", "sdl_ae_processed",
+  "acute", "sdl_acute_processed ",
   "chi_deaths", "sdl_chi_deaths_processed ",
   "combined_deaths", "sdl_refined_deaths_processed",
   "dd", "sdl_delayed_discharge_processed",
@@ -41,21 +42,22 @@ mapping <- tibble::tribble(
 # listed in run_sdl.r
 
 datasets <- c(
-  "ae",
+  # "ae",
+  "acute",
   "chi_deaths",
   "combined_deaths",
-  "dd",
-  "gp_ooh",
-  "homelessness",
-  "homelessness_completeness",
-  "ltc",
+  # "dd",
+  # "gp_ooh",
+  # "homelessness",
+  # "homelessness_completeness",
+  # "ltc",
   "maternity",
   "mh",
-  "nrs_deaths",
-  "ooh_cost_lookup",
-  "outpatients",
-  "postcode_lookup",
-  "gpprac_lookup"
+  "nrs_deaths" #,
+  # "ooh_cost_lookup",
+  # "outpatients",
+  # "postcode_lookup",
+  # "gpprac_lookup"
 )
 
 wb <- createWorkbook()
