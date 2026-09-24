@@ -97,6 +97,8 @@ byoc_output_files <- get_byoc_output_files(
     "chi_deaths",
     "combined_deaths",
     # "dd",
+    "dn",
+    "dn_cost_lookup",
     # "gp_ooh",
     # "homelessness",
     # "homelessness_completeness",
