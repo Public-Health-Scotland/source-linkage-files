@@ -92,12 +92,13 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    "dn", "dn_cost_lookup"
     # "ae",
     "acute",
     "chi_deaths",
     "combined_deaths",
     # "dd",
+    "dn",
+    "dn_cost_lookup",
     # "gp_ooh",
     # "homelessness",
     # "homelessness_completeness",

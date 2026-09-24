@@ -24,6 +24,8 @@ mapping <- tibble::tribble(
   "chi_deaths", "sdl_chi_deaths_processed ",
   "combined_deaths", "sdl_refined_deaths_processed",
   "dd", "sdl_delayed_discharge_processed",
+  "dn", "sdl_district_nursing_processed ",
+  "dn_cost_lookup", "sdl_dn_cost_lookup_processed",
   "gp_ooh", "sdl_gp_ooh_processed ",
   "homelessness", "sdl_homelessness_processed ",
   "homelessness_completeness", "sdl_homessless_completeness_pro",
@@ -42,6 +44,7 @@ mapping <- tibble::tribble(
 # listed in run_sdl.r
 
 datasets <- c(
+  "dn", "dn_cost_lookup",
   # "ae",
   "acute",
   "chi_deaths",
