@@ -81,6 +81,9 @@ process_extract_cmh <- function(data,
       "diag4",
       "diag5",
       "diag6"
+    ) %>%
+    dplyr::mutate(
+      year = as.character(.data$year)
     )
 
   if (write_to_disk) {

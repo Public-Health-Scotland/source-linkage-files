@@ -77,11 +77,11 @@ years_to_run <- "1920"
 # Stage 2 - Set up targets ----
 list(
   tar_rds(write_to_disk, TRUE),
-  
+
   ## Stage 2.1 non year-specific targets ----
-  
+
   ### Cost lookups ----
-  
+
   #### District nursing costs------
   ##### READ - DN COSTS -----
   tar_target(
@@ -93,7 +93,7 @@ list(
       BYOC_MODE
     )
   ),
-  
+
   ##### DN contacts -----
   # READ - DN CONTACTS
   tar_target(
@@ -105,7 +105,7 @@ list(
       BYOC_MODE
     )
   ),
-  
+
   ##### HSCP Population -----
   # READ - HSCP POPULATION
   tar_target(
@@ -117,7 +117,7 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  
+
   ##### PROCESS - DN COSTS -----
   tar_target(
     # Target name
@@ -133,7 +133,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-  
+
   ### IT CHI deaths Activity ----
   # READ - IT CHI deaths
   tar_target(
@@ -157,7 +157,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-  
+
   ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
@@ -170,21 +170,11 @@ list(
       run_date_time = run_date_time
     )
   ),
-  
-  ### Long-Term Conditions (LTCs) Activity ----
-  # READ - LTCs
-  tar_target(
-    ltc_data,
-    read_lookup_ltc(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-  
+
   ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run),
-    
+
     ### Acute (SMR01) Activity ----
     # READ - Acute
     tar_target(
@@ -223,7 +213,7 @@ list(
         run_date_time = run_date_time
       )
     ),
-    
+
     ### Community Mental Health (CMH) Activity------------------------------------
     # READ - CMH
     tar_target(
@@ -249,8 +239,8 @@ list(
         run_id = run_id,
         run_date_time = run_date_time
       )
-    )
-    
+    ),
+
     ### Maternity (SMR02) Activity ----
     # READ - Maternity
     tar_target(
@@ -276,7 +266,7 @@ list(
         run_date_time = run_date_time
       )
     ),
-    
+
     ### Mental Health (SMR04) Activity ----
     # READ - Mental Health
     tar_target(
@@ -300,7 +290,7 @@ list(
         run_date_time = run_date_time
       )
     ),
-    
+
     ### Death Activity ----
     # PROCESS - Deaths
     tar_target(
@@ -313,7 +303,7 @@ list(
           as.data.frame()
       })(year, refined_death_data)
     ),
-    
+
     ### District Nursing Activity ---------------
     # READ - District Nursing
     tar_target(
