@@ -23,7 +23,10 @@ Return the data for GP Practice Reference.
 \seealso{
 Other lookup files:
 \code{\link[=get_datazone_pop_data]{get_datazone_pop_data()}},
+\code{\link[=get_dn_contacts_data]{get_dn_contacts_data()}},
+\code{\link[=get_dn_raw_costs_data]{get_dn_raw_costs_data()}},
 \code{\link[=get_gpprac_opendata]{get_gpprac_opendata()}},
+\code{\link[=get_hscp_pop_data]{get_hscp_pop_data()}},
 \code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}},
 \code{\link[=get_locality_data]{get_locality_data()}},
 \code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}},

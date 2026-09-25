@@ -20,9 +20,12 @@ phs_spec_copy_path <- file.path(
 mapping <- tibble::tribble(
   ~dataset_id, ~spec_sheetname,
   "ae", "sdl_ae_processed",
+  "acute", "sdl_acute_processed ",
   "chi_deaths", "sdl_chi_deaths_processed ",
   "combined_deaths", "sdl_refined_deaths_processed",
   "dd", "sdl_delayed_discharge_processed",
+  "dn", "sdl_district_nursing_processed ",
+  "dn_cost_lookup", "sdl_dn_cost_lookup_processed",
   "gp_ooh", "sdl_gp_ooh_processed ",
   "homelessness", "sdl_homelessness_processed ",
   "homelessness_completeness", "sdl_homessless_completeness_pro",
@@ -31,7 +34,9 @@ mapping <- tibble::tribble(
   "mh", "sdl_mental_health_processed ",
   "nrs_deaths", "sdl_nrs_deaths_processed ",
   "ooh_cost_lookup", "sdl_gp_ooh_cost_lookup_proces",
-  "outpatients", "sdl_outpatients_processed "
+  "outpatients", "sdl_outpatients_processed ",
+  "postcode_lookup", "sdl_postcode_lookup_processed",
+  "gpprac_lookup", "sdl_gp_practice_lookup_process"
 )
 
 
@@ -39,19 +44,23 @@ mapping <- tibble::tribble(
 # listed in run_sdl.r
 
 datasets <- c(
-  "ae",
+  "dn", "dn_cost_lookup",
+  # "ae",
+  "acute",
   "chi_deaths",
   "combined_deaths",
-  "dd",
-  "gp_ooh",
-  "homelessness",
-  "homelessness_completeness",
-  "ltc",
+  # "dd",
+  # "gp_ooh",
+  # "homelessness",
+  # "homelessness_completeness",
+  # "ltc",
   "maternity",
   "mh",
-  "nrs_deaths",
-  "ooh_cost_lookup",
-  "outpatients"
+  "nrs_deaths" # ,
+  # "ooh_cost_lookup",
+  # "outpatients",
+  # "postcode_lookup",
+  # "gpprac_lookup"
 )
 
 wb <- createWorkbook()
@@ -127,9 +136,17 @@ normalise_type <- function(x) {
 # Running Loop ----
 for (ii in 1:length(datasets)) {
   logger::log_info(paste0("start ", ii, ", ", datasets[ii]))
-  file_path <- mapping$file_name[ii]
-  dataset_id <- mapping$dataset_id[ii]
-  spec_sheetname <- mapping$spec_sheetname[ii]
+  file_path <- mapping %>%
+    filter(
+      dataset_id == datasets[ii]
+    ) %>%
+    pull(file_name)
+  dataset_id <- datasets[ii]
+  spec_sheetname <- mapping %>%
+    filter(
+      dataset_id == datasets[ii]
+    ) %>%
+    pull(spec_sheetname)
 
   # Example dataframe
   df <- createslf::read_file(file_path)
@@ -222,6 +239,8 @@ for (ii in 1:length(datasets)) {
       match = case_when(
         variable %in% c("run_id", "run_date_time") &
           class_data == "character" ~ "MATCH",
+        variable %in% c("run_date_time") &
+          class_data == "date" ~ "MATCH",
         variable %in% c("run_id", "run_date_time") &
           is.na(class_data) ~ "MISSING IN OUTPUT",
         variable %in% c("run_id", "run_date_time") ~
@@ -230,6 +249,11 @@ for (ii in 1:length(datasets)) {
           "MISSING IN OUTPUT",
         is.na(class_spec) ~
           "NOT IN SPEC",
+        # Special handling for keytime variables
+        variable %in% c("keytime1", "keytime2") &
+          class_data_norm == "time" &
+          class_spec_norm %in% c("date", "datetime") ~
+          "MATCH",
         class_data_norm == class_spec_norm ~
           "MATCH",
         TRUE ~

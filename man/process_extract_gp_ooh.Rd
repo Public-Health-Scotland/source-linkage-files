@@ -9,6 +9,7 @@ process_extract_gp_ooh(
   data_list,
   gp_ooh_cup = read_extract_gp_ooh_cup(year = year, denodo_connect =
     get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,

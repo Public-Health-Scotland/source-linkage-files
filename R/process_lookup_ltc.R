@@ -49,8 +49,8 @@ process_lookup_ltc <- function(data,
       .fn = ~ stringr::str_remove(.x, "_date_flag")
     ) %>%
     dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time,
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time,
       year = year
     )
 

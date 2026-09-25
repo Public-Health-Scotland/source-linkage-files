@@ -92,7 +92,25 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    "cmh"
+    # "ae",
+    "acute",
+    "chi_deaths",
+    "cmh",
+    "combined_deaths",
+    # "dd",
+    "dn",
+    "dn_cost_lookup",
+    # "gp_ooh",
+    # "gpprac_lookup"
+    # "homelessness",
+    # "homelessness_completeness",
+    # "ltc",
+    "maternity",
+    "mh",
+    "nrs_deaths" # ,
+    # "ooh_cost_lookup",
+    # "outpatients",
+    # "postcode_lookup"
   )
 )
 # using homelessness for test purpose. When development is complete,
