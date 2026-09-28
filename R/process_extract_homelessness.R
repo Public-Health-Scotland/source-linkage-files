@@ -164,8 +164,8 @@ process_extract_homelessness <- function(data,
 
   homelessness_processed <- hl1_data %>%
     dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     ) %>%
     dplyr::select(
       "run_id",

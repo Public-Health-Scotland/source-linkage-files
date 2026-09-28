@@ -51,8 +51,8 @@ produce_homelessness_completeness <- function(
     dplyr::mutate(
       sg_all_assessments = as.integer(sg_all_assessments),
       pct_complete_all = .data[["applications_boxi"]] / .data[["sg_all_assessments"]],
-      run_id = run_id,
-      run_date_time = run_date_time
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     )
 
   if (anyNA(annual_comparison[["sg_year"]])) {

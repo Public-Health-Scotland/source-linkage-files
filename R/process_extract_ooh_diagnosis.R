@@ -12,7 +12,8 @@
 
 process_extract_ooh_diagnosis <- function(data,
                                           year,
-                                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)) {
+                                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                          BYOC_MODE) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-d", year = year)
 
   # Only run for a single year

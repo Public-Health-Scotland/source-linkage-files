@@ -37,12 +37,7 @@ read_extract_ae_cup <- function(
       cup_marker = "cup_marker",
       cup_pathway = "cup_pathway_name"
     ) %>%
-    dplyr::collect() %>%
-    # TODO: remove after UAT
-    dplyr::mutate(
-      keytime1 = hms::as_hms(paste0(.data$keytime1, ":00")),
-      keytime2 = hms::as_hms(paste0(.data$keytime2, ":00"))
-    )
+    dplyr::collect()
 
   log_slf_event(stage = "read", status = "complete", type = "ae_cup", year = year)
 

@@ -74,10 +74,7 @@ process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MOD
   ooh_cost_lookup <-
     gp_ooh_costs_uplifted %>%
     dplyr::rename(TreatmentNHSBoardCode = "HB2019") %>%
-    dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
+    dplyr::mutate(run_id = .env$run_id, run_date_time = .env$run_date_time)
 
   ooh_cost_lookup %>%
     write_file(
