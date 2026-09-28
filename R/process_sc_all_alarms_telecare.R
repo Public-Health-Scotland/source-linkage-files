@@ -150,7 +150,7 @@ process_sc_all_alarms_telecare <- function(data,
   )]
 
   # Convert back to data.frame if necessary
-  qtr_merge <- as.data.frame(qtr_merge) %>%
+  final_at_data <- as.data.frame(qtr_merge) %>%
     create_person_id() %>%
     select_linking_id() %>%
     dplyr::mutate(
@@ -160,7 +160,7 @@ process_sc_all_alarms_telecare <- function(data,
 
   if (write_to_disk) {
     write_file(
-      qtr_merge,
+      final_at_data,
       get_sc_at_episodes_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
       group_id = 3206, # hscdiip owner
       BYOC_MODE = BYOC_MODE,
@@ -171,5 +171,5 @@ process_sc_all_alarms_telecare <- function(data,
 
   log_slf_event(stage = "process", status = "complete", type = "at", year = "all")
 
-  return(qtr_merge)
+  return(final_at_data)
 }

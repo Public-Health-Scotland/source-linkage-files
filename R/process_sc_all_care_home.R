@@ -92,7 +92,7 @@ process_sc_all_care_home <- function(
     ch_data = data,
     spd_data = spd_data,
     uk_pc_list = uk_pc_directory,
-    ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE)
+    ch_name_lookup = ch_name_lookup
   )
 
   fixed_ch_provider <- name_postcode_clean %>%
