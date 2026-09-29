@@ -95,11 +95,13 @@ byoc_output_files <- get_byoc_output_files(
     # "ae",
     "acute",
     "chi_deaths",
+    "cmh",
     "combined_deaths",
     # "dd",
     "dn",
     "dn_cost_lookup",
     # "gp_ooh",
+    # "gpprac_lookup"
     # "homelessness",
     # "homelessness_completeness",
     # "ltc",
@@ -108,8 +110,7 @@ byoc_output_files <- get_byoc_output_files(
     "nrs_deaths" # ,
     # "ooh_cost_lookup",
     # "outpatients",
-    # "postcode_lookup",
-    # "gpprac_lookup"
+    # "postcode_lookup"
   )
 )
 # using homelessness for test purpose. When development is complete,
