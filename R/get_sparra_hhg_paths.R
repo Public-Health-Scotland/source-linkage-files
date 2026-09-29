@@ -47,7 +47,6 @@ get_hhg_data <- function(year,
     dbplyr::in_schema("sdl", "sdl_hhg_source")
   ) %>%
     dplyr::filter(financial_year == year) %>%
-    dplyr::rename(anon_chi = patient_chi) %>%
     dplyr::select("anon_chi", "hhg_score") %>%
     dplyr::collect()
 
