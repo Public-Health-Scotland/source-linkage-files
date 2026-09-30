@@ -25,11 +25,11 @@ read_extract_prescribing <- function(
   # Read extract
   pis_file <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_prescribing_source") # TODO: Check table name.
+    dbplyr::in_schema("sdl", "sdl_pis_source")
   ) %>%
     # Filter by calendar year
     dplyr::filter(
-      .data$financial_year == c_year # TODO: Check year column name.
+      .data$financial_year == c_year
     ) %>%
     # Rename variables
     dplyr::select(
