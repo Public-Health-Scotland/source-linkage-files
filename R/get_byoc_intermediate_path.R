@@ -37,13 +37,11 @@
   "pis", "anon-prescribing_file_for_source", TRUE,
   "sparra", "anon-sparra", TRUE,
   "service_c", "anon-service_use_cohorts", TRUE,
-
   "sc_at", "anon-alarms-telecare-for-source", TRUE,
   "sc_ch", "anon-care_home_for_source", TRUE,
   "sc_hc", "anon-home_care_for_source", TRUE,
   "sc_sds", "anon-sds-for-source", TRUE,
   "sc_demog_c", "anon-demographic_cohorts", TRUE,
-
   "ep", "source-episode-file", TRUE,
   "ind", "source-individual-file", TRUE,
 

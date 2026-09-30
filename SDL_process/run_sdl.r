@@ -117,12 +117,10 @@ byoc_output_files <- get_byoc_output_files(
     "sc_demog_lookup",
     "ch_cost_lookup",
     "hc_cost_lookup",
-
     "sc_at",
     "sc_ch",
     "sc_hc",
     "sc_sds",
-
     "sc_all_at",
     "sc_all_ch",
     "sc_all_hc",
