@@ -4,7 +4,14 @@
 \alias{process_tests_lookup_pc}
 \title{Process PC (postcode) Lookup tests}
 \usage{
-process_tests_lookup_pc(data, update = previous_update())
+process_tests_lookup_pc(
+  data,
+  update = previous_update(),
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
