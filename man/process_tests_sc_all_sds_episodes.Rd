@@ -4,7 +4,13 @@
 \alias{process_tests_sc_all_sds_episodes}
 \title{Process Social Care SDS all episodes tests}
 \usage{
-process_tests_sc_all_sds_episodes(data)
+process_tests_sc_all_sds_episodes(
+  data,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The processed SDS all episode data produced by

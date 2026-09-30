@@ -6,6 +6,10 @@
 \usage{
 produce_source_sds_tests(
   data,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA,
   max_min_vars = c("record_keydate1", "record_keydate2")
 )
 }

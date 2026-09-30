@@ -4,7 +4,13 @@
 \alias{process_tests_sc_all_ch_episodes}
 \title{Process Social Care, Care Home all episodes tests}
 \usage{
-process_tests_sc_all_ch_episodes(data)
+process_tests_sc_all_ch_episodes(
+  data,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The processed Care Home all episode data produced by
