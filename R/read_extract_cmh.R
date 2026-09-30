@@ -32,7 +32,7 @@ read_extract_cmh <- function(
     ) %>%
     # Rename variables
     dplyr::select(
-      anon_chi = "patient_chi",
+      anon_chi = "anon_chi",
       dob = "patient_dob",
       gender = "gender",
       postcode = "patient_postcode",
