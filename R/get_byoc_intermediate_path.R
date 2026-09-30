@@ -21,15 +21,12 @@
   # Year‑specific datasets -----------------------------------------------------
   "acute", "anon-acute_for_source", TRUE,
   "ae", "anon-a_and_e_for_source", TRUE,
-  "at", "anon-alarms-telecare-for-source", TRUE,
-  "ch", "anon-care_home_for_source", TRUE,
   "cmh", "anon-cmh_for_source", TRUE,
   "client", "anon-sc_client_lookup", TRUE,
   "dd", "anon-delayed_discharge_for_source", TRUE,
   "nrs_deaths", "anon-nrs_deaths_for_source", TRUE,
   "dn", "anon-district_nursing_for_source", TRUE,
   "gp_ooh", "anon-gp_ooh_for_source", TRUE,
-  "hc", "anon-home_care_for_source", TRUE,
   "hhg", "anon-hhg", TRUE,
   "homelessness", "anon-homelessness_for_source", TRUE,
   "homelessness_completeness", "homelessness_completeness", TRUE,
@@ -38,10 +35,15 @@
   "mh", "anon-mental_health_for_source", TRUE,
   "outpatients", "anon-outpatients_for_source", TRUE,
   "pis", "anon-prescribing_file_for_source", TRUE,
-  "sds", "anon-sds-for-source", TRUE,
   "sparra", "anon-sparra", TRUE,
-  "demog_c", "anon-demographic_cohorts", TRUE,
   "service_c", "anon-service_use_cohorts", TRUE,
+
+  "sc_at", "anon-alarms-telecare-for-source", TRUE,
+  "sc_ch", "anon-care_home_for_source", TRUE,
+  "sc_hc", "anon-home_care_for_source", TRUE,
+  "sc_sds", "anon-sds-for-source", TRUE,
+  "sc_demog_c", "anon-demographic_cohorts", TRUE,
+
   "ep", "source-episode-file", TRUE,
   "ind", "source-individual-file", TRUE,
 
