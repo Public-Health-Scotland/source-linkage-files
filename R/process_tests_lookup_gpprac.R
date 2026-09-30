@@ -6,7 +6,12 @@
 #' @inherit process_tests_lookup_pc
 #'
 #' @export
-process_tests_lookup_gpprac <- function(data, update = previous_update(), BYOC_MODE = FALSE) {
+process_tests_lookup_gpprac <- function(data,
+                                        year,
+                                        BYOC_MODE,
+                                        benchmark_run_id = NA,
+                                        run_id = NA,
+                                        run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "gpprac_lookup", year = "all")
 
   comparison <- produce_test_comparison(
@@ -15,7 +20,29 @@ process_tests_lookup_gpprac <- function(data, update = previous_update(), BYOC_M
     ),
     new_data = produce_slf_gpprac_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "source_gpprac_lookup", workbook_name = "lookup")
+    dplyr::mutate(
+      benchmark_comparison_type = "episode",
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      dataset_name = "gpprac_lookup",
+      year = year
+    ) %>%
+    dplyr::select(
+      "year",
+      "dataset_name",
+      "measure",
+      "value_old",
+      "value_new",
+      "difference",
+      "pct_change",
+      "issue",
+      "run_id",
+      "run_date_time",
+      "benchmark_comparison_type",
+      "benchmark_run_id"
+    ) %>%
+    write_tests_xlsx(sheet_name = "gpprac_lookup", year, workbook_name = "lookup", BYOC_MODE = BYOC_MODE)
 
   log_slf_event(stage = "test", status = "complete", type = "gpprac_lookup", year = "all")
 

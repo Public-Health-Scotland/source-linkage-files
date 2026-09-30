@@ -18,7 +18,29 @@ process_tests_sds <- function(data, year) {
       old_data = produce_source_sds_tests(old_data),
       new_data = produce_source_sds_tests(data)
     ) %>%
-      write_tests_xlsx(sheet_name = "sds", year, workbook_name = "extract")
+      dplyr::mutate(
+        benchmark_comparison_type = "episode",
+        benchmark_run_id = benchmark_run_id,
+        run_id = run_id,
+        run_date_time = run_date_time,
+        dataset_name = "sds",
+        year = year
+      ) %>%
+      dplyr::select(
+        "year",
+        "dataset_name",
+        "measure",
+        "value_old",
+        "value_new",
+        "difference",
+        "pct_change",
+        "issue",
+        "run_id",
+        "run_date_time",
+        "benchmark_comparison_type",
+        "benchmark_run_id"
+      ) %>%
+      write_tests_xlsx(sheet_name = "sds", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
 
     log_slf_event(stage = "test", status = "complete", type = "sds", year = year)
 
@@ -40,6 +62,10 @@ process_tests_sds <- function(data, year) {
 #'
 #' @family social care test functions
 produce_source_sds_tests <- function(data,
+                                     BYOC_MODE,
+                                     benchmark_run_id = NA,
+                                     run_id = NA,
+                                     run_date_time = NA,
                                      max_min_vars = c("record_keydate1", "record_keydate2")) {
   # pre-calculate values before applying distinct count which makes NA == 1
   n_missing_chi_total <- sum(is.na(data$anon_chi))
