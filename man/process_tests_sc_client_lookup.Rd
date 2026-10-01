@@ -4,7 +4,15 @@
 \alias{process_tests_sc_client_lookup}
 \title{Social care client lookup tests}
 \usage{
-process_tests_sc_client_lookup(data, year)
+process_tests_sc_client_lookup(
+  data,
+  year,
+  BYOC_MODE,
+  update = previous_update(),
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}

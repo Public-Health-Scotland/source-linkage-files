@@ -6,8 +6,8 @@
 \usage{
 process_tests_lookup_gpprac(
   data,
-  year,
   BYOC_MODE,
+  update = previous_update(),
   benchmark_run_id = NA,
   run_id = NA,
   run_date_time = NA
@@ -15,6 +15,9 @@ process_tests_lookup_gpprac(
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+
+\item{update}{The update to compare the lookup to, defaults to
+\code{\link[=previous_update]{previous_update()}}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.

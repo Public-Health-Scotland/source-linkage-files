@@ -8,6 +8,7 @@ process_tests_ltcs(
   data,
   year,
   BYOC_MODE,
+  update = previous_update(),
   benchmark_run_id = NA,
   run_id = NA,
   run_date_time = NA

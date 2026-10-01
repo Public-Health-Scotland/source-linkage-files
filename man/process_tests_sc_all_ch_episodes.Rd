@@ -7,6 +7,7 @@
 process_tests_sc_all_ch_episodes(
   data,
   BYOC_MODE,
+  update = previous_update(),
   benchmark_run_id = NA,
   run_id = NA,
   run_date_time = NA

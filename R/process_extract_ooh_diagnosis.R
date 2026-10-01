@@ -11,9 +11,9 @@
 #' @family process extracts
 
 process_extract_ooh_diagnosis <- function(
-    data,
-    year,
-    readcode = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
+  data,
+  year,
+  readcode = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
 ) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-d", year = year)
 

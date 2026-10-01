@@ -10,8 +10,8 @@
 #'
 #' @family lookup files
 get_readcode_lookup <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "readcode_lookup", year = "all")
 
@@ -34,5 +34,4 @@ get_readcode_lookup <- function(
   log_slf_event(stage = "read", status = "complete", type = "readcode_lookup", year = "all")
 
   return(readcode_lookup)
-
 }

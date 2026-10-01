@@ -20,7 +20,8 @@ process_extract_acute <- function(data,
                                   acute_cup_data = read_extract_acute_cup(
                                     year = year,
                                     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                    BYOC_MODE = BYOC_MODE),
+                                    BYOC_MODE = BYOC_MODE
+                                  ),
                                   year,
                                   write_to_disk = TRUE,
                                   BYOC_MODE = FALSE,

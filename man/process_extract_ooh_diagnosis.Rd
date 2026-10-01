@@ -7,22 +7,22 @@
 process_extract_ooh_diagnosis(
   data,
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+  readcode = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{
 \item{data}{The extract to process}
 
 \item{year}{The year to process, in FY format.}
+
+\item{readcode}{The Read code lookup}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
-GP OOH Diagnosis extract, it will return the final data
-and (optionally) write it to disk.
+GP OOH Diagnosis extract, it will return the final data.
 }
 \seealso{
 Other process extracts:
