@@ -1,6 +1,6 @@
 #' Process Care Home tests
 #'
-#' @description This script takes the processed Care home extract and produces
+#' @description This script takes the processed Care Home extract and produces
 #' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute

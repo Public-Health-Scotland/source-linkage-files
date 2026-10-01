@@ -1,12 +1,9 @@
-#' Process Social Care SDS all episodes tests
+#' Process SC SDS All Episodes tests
 #'
-#' @param data The processed SDS all episode data produced by
-#' [process_sc_all_sds()].
+#' @description This script takes the processed All SDS file and produces
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
-#' @description This script takes the processed all SDS file and produces
-#' a test comparison with the previous data.
-#'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_lookup_pc
 #'
 #' @export
 process_tests_sc_all_sds_episodes <- function(data,

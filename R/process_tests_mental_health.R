@@ -1,6 +1,6 @@
 #' Process Mental Health tests
 #'
-#' @description This script takes the processed homelessness extract and produces
+#' @description This script takes the processed Mental Health extract and produces
 #' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute

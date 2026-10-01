@@ -1,12 +1,9 @@
-#' Process Social Care Alarms Telecare all episodes tests
+#' Process SC Alarms Telecare All Episodes tests
 #'
-#' @param data The processed Alarms Telecare all episode data produced by
-#' [process_sc_all_alarms_telecare()].
+#' @description This script takes the processed All Alarms Telecare file and produces
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
-#' @description This script takes the processed all Alarms Telecare file and produces
-#' a test comparison with the previous data.
-#'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_lookup_pc
 #'
 #' @export
 process_tests_sc_all_at_episodes <- function(data,

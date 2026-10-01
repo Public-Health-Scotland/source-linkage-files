@@ -1,6 +1,6 @@
-#' Process prescribing tests
+#' Process Prescribing tests
 #'
-#' @description This script takes the processed prescribing extract and produces
+#' @description This script takes the processed Prescribing extract and produces
 #' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute

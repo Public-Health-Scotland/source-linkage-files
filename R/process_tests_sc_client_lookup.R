@@ -1,8 +1,7 @@
-#' Social care client lookup tests
+#' SC Client Lookup tests
 #'
-#' @description This script takes the processed social care client lookup and
-#' produces a test comparison with the previous data. This is written to
-#' disk in the tests workbook.
+#' @description This script takes the processed SC Client Lookup and produces
+#' a test comparison with the previous data.  This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_acute
 #'

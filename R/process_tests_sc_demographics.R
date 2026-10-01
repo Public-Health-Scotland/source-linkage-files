@@ -1,12 +1,9 @@
-#' Process Social Care Demographics tests
+#' Process SC Demographics Lookup tests
 #'
-#' @param data The processed demographic data produced by
-#' [process_lookup_sc_demographics()].
+#' @description This script takes the processed SC Demographics Lookup and produces
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
-#' @description Take the processed demographics extract and produces
-#' a test comparison with the previous data.
-#'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_lookup_pc
 #'
 #' @export
 process_tests_sc_demographics <- function(data,

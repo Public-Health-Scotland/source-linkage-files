@@ -1,6 +1,6 @@
 #' Process GP (gpprac) Lookup tests
 #'
-#' @description This script takes the processed gpprac lookup and produces
+#' @description This script takes the processed GPPrac Lookup and produces
 #' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @inherit process_tests_lookup_pc

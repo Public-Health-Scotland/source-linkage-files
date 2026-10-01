@@ -4,7 +4,7 @@
 #' @param update The update to compare the lookup to, defaults to
 #' [previous_update()].
 #'
-#' @description This script takes the processed acute extract and produces
+#' @description This script takes the processed Postcode Lookup and produces
 #' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
 #' @return a [tibble][tibble::tibble-package] containing a test comparison.

@@ -1,12 +1,9 @@
-#' Process Social Care, Care Home all episodes tests
+#' Process SC Care Home All Episodes tests
 #'
-#' @param data The processed Care Home all episode data produced by
-#' [process_extract_care_home()].
+#' @description This script takes the processed All Care Home file and produces
+#' a test comparison with the previous data. This is written to disk as an xlsx.
 #'
-#' @description This script takes the processed all Care Home file and produces
-#' a test comparison with the previous data.
-#'
-#' @return a [tibble][tibble::tibble-package] containing a test comparison.
+#' @inherit process_tests_lookup_pc
 #'
 #' @export
 process_tests_sc_all_ch_episodes <- function(data,
