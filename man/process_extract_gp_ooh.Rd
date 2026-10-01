@@ -6,7 +6,10 @@
 \usage{
 process_extract_gp_ooh(
   year,
-  data_list,
+  ooh_consultations,
+  ooh_diagnosis,
+  ooh_outcomes,
+  readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE),
   gp_ooh_cup = read_extract_gp_ooh_cup(year = year, denodo_connect =
     get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
   ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
@@ -18,8 +21,6 @@ process_extract_gp_ooh(
 }
 \arguments{
 \item{year}{The year to process, in FY format.}
-
-\item{data_list}{A list containing the extracts.}
 
 \item{gp_ooh_cup}{gp ooh cup data}
 

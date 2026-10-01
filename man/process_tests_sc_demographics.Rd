@@ -4,7 +4,14 @@
 \alias{process_tests_sc_demographics}
 \title{Process Social Care Demographics tests}
 \usage{
-process_tests_sc_demographics(data)
+process_tests_sc_demographics(
+  data,
+  BYOC_MODE,
+  update = previous_update(),
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The processed demographic data produced by
