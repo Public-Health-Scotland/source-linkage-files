@@ -4,7 +4,14 @@
 \alias{process_tests_lookup_pc}
 \title{Process PC (postcode) Lookup tests}
 \usage{
-process_tests_lookup_pc(data, update = previous_update())
+process_tests_lookup_pc(
+  data,
+  BYOC_MODE,
+  update = previous_update(),
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
@@ -16,6 +23,6 @@ process_tests_lookup_pc(data, update = previous_update())
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed acute extract and produces
+This script takes the processed Postcode Lookup and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
 }

@@ -4,7 +4,14 @@
 \alias{process_tests_maternity}
 \title{Process Maternity tests}
 \usage{
-process_tests_maternity(data, year)
+process_tests_maternity(
+  data,
+  year,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
@@ -15,6 +22,6 @@ process_tests_maternity(data, year)
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed homelessness extract and produces
+This script takes the processed Maternity extract and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
 }

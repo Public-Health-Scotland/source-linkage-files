@@ -5,23 +5,33 @@
 #' and (optionally) write it to disk.
 #'
 #' @param year The year to process, in FY format.
-#' @param data_list A list containing the extracts.
+#' @param ooh_consultations
+#' @param ooh_diagnosis
+#' @param ooh_outcomes
+#' @param readcode_lookup
 #' @param gp_ooh_cup gp ooh cup data
+#' @param ooh_cost_lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE
+#' @param run_id
+#' @param run_date_time
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_extract_gp_ooh <- function(
   year,
-  data_list,
+  ooh_consultations,
+  ooh_diagnosis,
+  ooh_outcomes,
+  readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE),
   gp_ooh_cup = read_extract_gp_ooh_cup(
     year = year,
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
     BYOC_MODE = BYOC_MODE
   ),
-  ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
+  ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)), # TODO: Use get_sdl_processed_data
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
@@ -29,9 +39,9 @@ process_extract_gp_ooh <- function(
 ) {
   log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
 
-  diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year, BYOC_MODE = BYOC_MODE)
-  outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
-  consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
+  diagnosis_extract <- process_extract_ooh_diagnosis(ooh_diagnosis, year, readcode = readcode_lookup)
+  outcomes_extract <- process_extract_ooh_outcomes(ooh_outcomes, year)
+  consultations_extract <- process_extract_ooh_consultations(ooh_consultations, year)
 
 
   # Join data ---------------------------------
