@@ -3,16 +3,43 @@
 #' @inherit process_tests_lookup_pc
 #'
 #' @export
-process_tests_it_chi_deaths <- function(data, update = previous_update()) {
+process_tests_it_chi_deaths <- function(data,
+                                        BYOC_MODE,
+                                        update = previous_update(),
+                                        benchmark_run_id = NA,
+                                        run_id = NA,
+                                        run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "it_chi_deaths", year = "all")
 
   comparison <- produce_test_comparison(
     old_data = produce_it_chi_deaths_tests(
-      read_file(get_slf_chi_deaths_path(update = update))
+      read_file(get_slf_chi_deaths_path(update = update)) # TODO: Use get_sdl_processed_data
     ),
     new_data = produce_it_chi_deaths_tests(data)
   ) %>%
-    write_tests_xlsx(sheet_name = "it_chi_deaths", workbook_name = "lookup")
+    dplyr::mutate(
+      benchmark_comparison_type = "episode", # TODO: Is this correct?
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      dataset_name = "it_chi_deaths",
+      year = "all"
+    ) %>%
+    dplyr::select(
+      "year",
+      "dataset_name",
+      "measure",
+      "value_old",
+      "value_new",
+      "difference",
+      "pct_change",
+      "issue",
+      "run_id",
+      "run_date_time",
+      "benchmark_comparison_type",
+      "benchmark_run_id"
+    ) %>%
+    write_tests_xlsx(sheet_name = "it_chi_deaths", year, workbook_name = "lookup", BYOC_MODE = BYOC_MODE)
 
   log_slf_event(stage = "test", status = "complete", type = "it_chi_deaths", year = "all")
 
