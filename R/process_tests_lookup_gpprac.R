@@ -7,8 +7,8 @@
 #'
 #' @export
 process_tests_lookup_gpprac <- function(data,
-                                        year,
                                         BYOC_MODE,
+                                        update = previous_update(),
                                         benchmark_run_id = NA,
                                         run_id = NA,
                                         run_date_time = NA) {
@@ -16,17 +16,17 @@ process_tests_lookup_gpprac <- function(data,
 
   comparison <- produce_test_comparison(
     old_data = produce_slf_gpprac_tests(
-      read_file(get_slf_gpprac_path(update = update, BYOC_MODE = BYOC_MODE))
+      read_file(get_slf_gpprac_path(update = update, BYOC_MODE = BYOC_MODE)) # TODO: Use get_sdl_processed_data
     ),
     new_data = produce_slf_gpprac_tests(data)
   ) %>%
     dplyr::mutate(
-      benchmark_comparison_type = "episode",
+      benchmark_comparison_type = "episode", # TODO: Is this correct?
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time,
       dataset_name = "gpprac_lookup",
-      year = year
+      year = "all"
     ) %>%
     dplyr::select(
       "year",

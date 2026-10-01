@@ -6,7 +6,12 @@
 #' @inherit process_tests_acute
 #'
 #' @export
-process_tests_sds <- function(data, year) {
+process_tests_sds <- function(data,
+                              year,
+                              BYOC_MODE,
+                              benchmark_run_id = NA,
+                              run_id = NA,
+                              run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "sds", year = year)
 
   if (check_year_valid(year, "sds")) {

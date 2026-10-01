@@ -9,12 +9,13 @@
 process_tests_ltcs <- function(data,
                                year,
                                BYOC_MODE,
+                               update = previous_update(),
                                benchmark_run_id = NA,
                                run_id = NA,
                                run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "ltc", year = year)
 
-  old_data <- read_file(get_ltcs_path(year, update = previous_update()))
+  old_data <- read_file(get_ltcs_path(year, update = previous_update())) # TODO: Use get_sdl_processed_data
 
   comparison <- produce_test_comparison(
     old_data = produce_source_ltc_tests(old_data),
@@ -22,7 +23,7 @@ process_tests_ltcs <- function(data,
   ) %>%
     dplyr::mutate(recid = "LTCs") %>%
     dplyr::mutate(
-      benchmark_comparison_type = "episode",
+      benchmark_comparison_type = "episode", # TODO: Is this correct?
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time,

@@ -11,6 +11,7 @@
 #' @export
 process_tests_sc_all_at_episodes <- function(data,
                                              BYOC_MODE,
+                                             update = previous_update(),
                                              benchmark_run_id = NA,
                                              run_id = NA,
                                              run_date_time = NA) {
@@ -18,7 +19,7 @@ process_tests_sc_all_at_episodes <- function(data,
 
   comparison <- produce_test_comparison(
     old_data = produce_sc_all_episodes_tests(
-      read_file(get_sc_at_episodes_path(update = previous_update()))
+      read_file(get_sc_at_episodes_path(update = previous_update())) # TODO: Use get_sdl_processed_data
     ),
     new_data = produce_sc_all_episodes_tests(
       data
@@ -27,12 +28,12 @@ process_tests_sc_all_at_episodes <- function(data,
 
   comparison %>%
     dplyr::mutate(
-      benchmark_comparison_type = "episode",
+      benchmark_comparison_type = "episode", # TODO: Is this correct?
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time,
       dataset_name = "sc_at_ep",
-      year = year
+      year = "all"
     ) %>%
     dplyr::select(
       "year",
