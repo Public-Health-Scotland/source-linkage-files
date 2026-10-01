@@ -175,6 +175,7 @@ log_slf_event <- function(stage = c("read", "process", "test"),
     "slf_pc_lookup" ~ "Postcode Lookup",
     "pis" ~ "Prescribing",
     "la_lookup" ~ "LA Code Opendata Lookup",
+    "readcode_lookup" ~ "Read Code Lookup",
     default = type # use type if file_name not available
   )
 
