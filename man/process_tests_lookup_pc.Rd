@@ -23,6 +23,6 @@ process_tests_lookup_pc(
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed acute extract and produces
+This script takes the processed Postcode Lookup and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
 }

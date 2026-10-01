@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_sc_demographics.R
 \name{process_tests_sc_demographics}
 \alias{process_tests_sc_demographics}
-\title{Process Social Care Demographics tests}
+\title{Process SC Demographics Lookup tests}
 \usage{
 process_tests_sc_demographics(
   data,
@@ -14,13 +14,15 @@ process_tests_sc_demographics(
 )
 }
 \arguments{
-\item{data}{The processed demographic data produced by
-\code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+
+\item{update}{The update to compare the lookup to, defaults to
+\code{\link[=previous_update]{previous_update()}}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-Take the processed demographics extract and produces
-a test comparison with the previous data.
+This script takes the processed SC Demographics Lookup and produces
+a test comparison with the previous data. This is written to disk as an xlsx.
 }

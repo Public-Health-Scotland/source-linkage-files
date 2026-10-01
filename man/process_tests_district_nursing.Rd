@@ -22,7 +22,6 @@ process_tests_district_nursing(
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed district nursing extract and
-produces a test comparison with the previous data. This is written to
-disk as a CSV.
+This script takes the processed District Nursing extract and produces
+a test comparison with the previous data. This is written to disk as an xlsx.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_sc_all_at_episodes.R
 \name{process_tests_sc_all_at_episodes}
 \alias{process_tests_sc_all_at_episodes}
-\title{Process Social Care Alarms Telecare all episodes tests}
+\title{Process SC Alarms Telecare All Episodes tests}
 \usage{
 process_tests_sc_all_at_episodes(
   data,
@@ -14,13 +14,15 @@ process_tests_sc_all_at_episodes(
 )
 }
 \arguments{
-\item{data}{The processed Alarms Telecare all episode data produced by
-\code{\link[=process_sc_all_alarms_telecare]{process_sc_all_alarms_telecare()}}.}
+\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
+
+\item{update}{The update to compare the lookup to, defaults to
+\code{\link[=previous_update]{previous_update()}}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed all Alarms Telecare file and produces
-a test comparison with the previous data.
+This script takes the processed All Alarms Telecare file and produces
+a test comparison with the previous data. This is written to disk as an xlsx.
 }

@@ -22,6 +22,6 @@ process_tests_care_home(
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed Care home extract and produces
+This script takes the processed Care Home extract and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
 }

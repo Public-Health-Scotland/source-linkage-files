@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_tests_prescribing.R
 \name{process_tests_prescribing}
 \alias{process_tests_prescribing}
-\title{Process prescribing tests}
+\title{Process Prescribing tests}
 \usage{
 process_tests_prescribing(
   data,
@@ -22,6 +22,6 @@ process_tests_prescribing(
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed prescribing extract and produces
+This script takes the processed Prescribing extract and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
 }
