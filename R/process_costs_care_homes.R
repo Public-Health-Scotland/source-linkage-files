@@ -1,29 +1,29 @@
 #' Process costs - Care Homes
 #'
-#' @param denodo_connect connection to denodo
+#' @description This will read and process the
+#' Care Home costs look up, it will return the final costs look up
+#' and (optionally) write it to disk.
+#'
+#' @param ch_costs_data Raw care home costs data
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
 #'
+#' @return the final look up as a [tibble][tibble::tibble-package].
 #' @export
-#'
-process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+#' @family process cost look ups
+process_costs_care_homes <- function(ch_costs_data = get_ch_raw_costs_data(BYOC_MODE = BYOC_MODE),
+                                     write_to_disk = TRUE,
                                      BYOC_MODE = FALSE,
                                      run_id = NA,
-                                     run_date_time = NA,
-                                     write_to_disk = TRUE) {
+                                     run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "ch_costs", year = "all")
 
-  # Disconnect from denodo
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+  # Data cleaning ---------------------------------------
 
-  ## Read costs from the CHC Open data
-  ch_costs_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_carehomecostopendata_source")
-  ) %>%
-    janitor::clean_names() %>%
-    dplyr::collect() %>%
+  ch_costs_data <- ch_costs_data %>%
     # Dates are at end of the fin year
     # so cost are for the fin year to that date.
     dplyr::mutate(year = createslf::convert_year_to_fyyear((date %/% 10000L) - 1L)) %>%
@@ -34,17 +34,8 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     )) %>%
     dplyr::mutate(
       nursing_care_provision = as.integer(stringr::str_detect(key_statistic, "Without"))
-    ) %>%
-    dplyr::select(
-      "year",
-      "council_area_code",
-      "funding_source",
-      "nursing_care_provision",
-      cost_per_week = "value"
     )
 
-
-  # Data cleaning ---------------------------------------
   ch_costs_scot <-
     ch_costs_data %>%
     dplyr::filter(council_area_code == "S92000003") %>%
@@ -97,12 +88,15 @@ process_costs_care_homes <- function(denodo_connect = get_denodo_connection(BYOC
     )
 
   if (write_to_disk) {
-    # Save .rds file
-    ch_costs_uplifted %>%
-      write_file(get_ch_costs_path(check_mode = "write", BYOC_MODE),
-        BYOC_MODE,
-        group_id = 3206 # hscdiip owner
-      )
+    write_file(
+      data = ch_costs_uplifted,
+      path = get_ch_costs_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
 
   log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
