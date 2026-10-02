@@ -229,12 +229,22 @@ list(
   ),
 
   ### GP Lookup ----------------------------------------------------------------
-  # GET - GP Practice Open Data
+  # GET - GP Practice Cluster Information
   tar_target(
     # Target name
-    gpprac_opendata,
+    gpprac_cluster,
     # Function
-    get_gpprac_opendata(
+    get_gpprac_cluster(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # GET - GP Practice Geography Labels
+  tar_target(
+    # Target name
+    geography_labels,
+    # Function
+    get_geography_labels(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     )
@@ -247,6 +257,20 @@ list(
     get_gpprac_ref_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - GP Practice Open Data
+  tar_target(
+    # Target name
+    gpprac_opendata,
+    # Function
+    process_gpprac_opendata(
+      gpprac_cluster = gpprac_cluster,
+      geography_labels = geography_labels,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   # PROCESS - GP Lookup
@@ -309,8 +333,6 @@ list(
 
   ### All SC Alarms Telecare ---------------------------------------------------
   # READ - All SC Alarms Telecare
-=======
-
   tar_target(
     # Target name
     all_at_extract,
