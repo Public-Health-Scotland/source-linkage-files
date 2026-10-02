@@ -10,8 +10,8 @@
 #'
 #' @family lookup files
 get_geography_labels <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE = FALSE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE
 ) {
   log_slf_event(stage = "read", status = "start", type = "gpprac_opendata", year = "all")
 
