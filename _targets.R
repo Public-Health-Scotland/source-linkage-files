@@ -262,13 +262,51 @@ list(
       run_date_time = run_date_time
     )
   ),
-  # District nursing costs------
+  ### District Nursing Costs ---------------------------------------------------
+  # READ - DN RAW COSTS
+  tar_target(
+    # Target name
+    dn_raw_costs,
+    # Function
+    get_dn_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - DN CONTACTS
+  tar_target(
+    # Target name
+    dn_contacts,
+    # Function
+    get_dn_contacts_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - HSCP POPULATION
+  tar_target(
+    # Target name
+    hscp_population,
+    # Function
+    get_hscp_pop_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - DN COSTS
   tar_target(
     # Target name
     dn_cost_lookup,
     # Function
-    process_costs_dn_rmd(),
-    priority = 0.8
+    process_costs_dn(
+      dn_raw_costs = dn_raw_costs,
+      dn_contacts = dn_contacts,
+      hscp_population = hscp_population,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   ),
   # Home care costs------
   tar_target(
@@ -500,19 +538,26 @@ list(
     #---------------------------------------------------------------------------
     # Acute (SMR01) Activity
     # READ - Acute
-    tar_file_read(
-      # Target name
-      acute_data,
-      get_boxi_extract_path(year, type = "acute"),
-      # Function
-      read_extract_acute(year, !!.x)
-    ),
-    # READ - Acute CUP
     tar_target(
       # Target name
-      acute_cup_path,
-      get_boxi_extract_path(year, type = "acute_cup"),
-      format = "file"
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Acute
     tar_target(
@@ -521,9 +566,12 @@ list(
       # Function
       process_extract_acute(
         acute_data,
-        year,
-        acute_cup_path,
-        write_to_disk = write_to_disk
+        acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Acute
@@ -575,12 +623,15 @@ list(
     ),
     # Community Mental Health (CMH) Activity------------------------------------
     # READ - CMH
-    tar_file_read(
+    tar_target(
       # Target name
       cmh_data,
-      get_boxi_extract_path(year, type = "cmh"),
       # Function
-      read_extract_cmh(year, !!.x)
+      read_extract_cmh(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - CMH
     tar_target(
@@ -588,9 +639,12 @@ list(
       source_cmh_extract,
       # Function
       process_extract_cmh(
-        cmh_data,
-        year,
-        write_to_disk = write_to_disk
+        data = cmh_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - CMH
@@ -641,12 +695,16 @@ list(
     ),
     # District Nursing Activity-------------------------------------------------
     # READ - District Nursing
-    tar_file_read(
+    tar_target(
       # Target name
       dn_data,
-      get_boxi_extract_path(year, type = "dn"),
       # Function
-      read_extract_district_nursing(year, !!.x)
+      read_extract_district_nursing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "dn", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - District Nursing
     tar_target(
@@ -655,9 +713,12 @@ list(
       # Function
       process_extract_district_nursing(
         dn_data,
-        year,
+        year = year,
         costs = dn_cost_lookup,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - District Nursing

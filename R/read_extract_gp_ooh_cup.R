@@ -36,9 +36,7 @@ read_extract_gp_ooh_cup <- function(
       cup_pathway = "cup_pathway_name"
     ) %>%
     dplyr::collect() %>%
-    dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE) %>%
-    # TODO: remove modifying time format after UAT
-    dplyr::mutate(keytime1 = hms::as_hms(as.difftime(keytime1, format = "%M:%S")))
+    dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE)
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh_cup", year = year)
 

@@ -309,6 +309,8 @@ list(
 
   ### All SC Alarms Telecare ---------------------------------------------------
   # READ - All SC Alarms Telecare
+=======
+
   tar_target(
     # Target name
     all_at_extract,
@@ -512,34 +514,6 @@ list(
         run_id = run_id,
         run_date_time = run_date_time,
         write_to_disk = write_to_disk
-      )
-    ),
-
-    ### SC Client Lookup -------------------------------------------------------
-    # READ - SC Client Lookup
-    tar_target(
-      # Target name
-      sc_client_data,
-      # Function
-      read_lookup_sc_client(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - SC Client Lookup
-    tar_target(
-      # Target name
-      sc_client_lookup,
-      # Function
-      process_lookup_sc_client(
-        data = sc_client_data,
-        year = year,
-        sc_demographics = sc_demog_lookup,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
       )
     ),
 
