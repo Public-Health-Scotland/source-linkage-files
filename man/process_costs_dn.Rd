@@ -38,4 +38,8 @@ This will read and process the
 District Nursing costs look up, it will return the final costs look up
 and (optionally) write it to disk.
 }
+\seealso{
+Other process cost look ups:
+\code{\link[=process_costs_care_homes]{process_costs_care_homes()}}
+}
 \concept{process cost look ups}
