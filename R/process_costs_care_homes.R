@@ -24,8 +24,7 @@ process_costs_care_homes <- function(ch_costs_data = get_ch_raw_costs_data(BYOC_
   # Data cleaning ---------------------------------------
 
   ch_costs_data <- ch_costs_data %>%
-    # Dates are at end of the fin year
-    # so cost are for the fin year to that date.
+    # Dates are at end of the fin year so cost are for the fin year to that date
     dplyr::mutate(year = createslf::convert_year_to_fyyear((date %/% 10000L) - 1L)) %>%
     dplyr::filter(year >= "1617") %>%
     dplyr::mutate(funding_source = stringr::str_extract(
@@ -41,7 +40,7 @@ process_costs_care_homes <- function(ch_costs_data = get_ch_raw_costs_data(BYOC_
     dplyr::filter(council_area_code == "S92000003") %>%
     dplyr::filter(funding_source == "All") %>%
     dplyr::select(year, nursing_care_provision, cost_per_week) %>%
-    # cost per day
+    # Cost per day
     dplyr::mutate(cost_per_day = cost_per_week / 7) %>%
     dplyr::select(-cost_per_week) %>%
     # Compute mean cost for unknown nursing care
@@ -63,10 +62,10 @@ process_costs_care_homes <- function(ch_costs_data = get_ch_raw_costs_data(BYOC_
     )) %>%
     dplyr::ungroup()
 
-  ## add in years by copying the most recent year ##
+  ## Add in years by copying the most recent year ##
   latest_cost_year <- max(ch_costs$year)
 
-  ## increase by 1% for every year after the latest ##
+  ## Increase by 1% for every year after the latest ##
   ch_costs_uplifted <-
     dplyr::bind_rows(
       ch_costs,

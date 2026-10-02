@@ -1,30 +1,31 @@
 #' Process costs - Home Care
 #'
-#' @param denodo_connect connection to denodo
+#' @description This will read and process the
+#' Home Care costs look up, it will return the final costs look up
+#' and (optionally) write it to disk.
+#'
+#' @param hc_costs_raw Raw home care costs data
+#' @param lca_data Local Authority data
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
 #'
+#' @return the final look up as a [tibble][tibble::tibble-package].
 #' @export
-#'
-process_costs_home_care <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  lca_data = get_lca_data(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
-) {
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+#' @family process cost look ups
+process_costs_home_care <- function(hc_costs_raw = get_hc_raw_costs_data(BYOC_MODE = BYOC_MODE),
+                                    lca_data = get_la_code_opendata_lookup(BYOC_MODE = BYOC_MODE),
+                                    write_to_disk = TRUE,
+                                    BYOC_MODE = FALSE,
+                                    run_id = NA,
+                                    run_date_time = NA) {
+  log_slf_event(stage = "process", status = "start", type = "hc_costs", year = "all")
 
-  ## Read costs
-  hc_costs_raw <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_hc_cost_lookup_source")
-  ) %>%
-    dplyr::collect()
+  # Data cleaning ---------------------------------------
 
-  ## add in years by copying the most recent year ##
+  ## Add in years by copying the most recent year ##
   latest_cost_year <- max(hc_costs_raw$year)
 
   hc_costs <- hc_costs_raw %>%
@@ -40,7 +41,7 @@ process_costs_home_care <- function(
     dplyr::mutate(ca_name = factor(ca_name)) %>%
     dplyr::mutate(year = as.integer(year))
 
-  ## increase by 1% for every year after the latest ##
+  ## Increase by 1% for every year after the latest ##
   hc_costs_uplifted <-
     dplyr::bind_rows(
       hc_costs,
@@ -56,40 +57,28 @@ process_costs_home_care <- function(
     ) %>%
     dplyr::arrange(year, ca_name)
 
-  ## Outfile  ---------------------------------------
-  outfile <- hc_costs_uplifted %>%
-    dplyr::select(-health_board)
+  # Outfile ---------------------------------------
 
-  outfile %>%
-    # Save .rds file
-    write_file(
-      get_hc_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
-      group_id = 3206 # hscdiip owner
+  outfile <- hc_costs_uplifted %>%
+    dplyr::select(-health_board) %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
+  if (write_to_disk) {
+    write_file(
+      data = outfile,
+      path = get_hc_costs_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
+    )
+  }
+
+  log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
+
   return(outfile)
-}
-
-
-#' get lca data from Denodo
-#'
-#' @param denodo_connect denodo connection
-#'
-#' @returns lca_data with ca, caname, hbname
-#' @export
-get_lca_data <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
-  ) %>%
-    dplyr::select("ca", "caname", "hbname") %>%
-    dplyr::distinct() %>%
-    dplyr::collect()
-
-  # TODO: remove this when finalise this PR
-  # phsopendata::get_resource("967937c4-8d67-4f39-974f-fd58c4acfda5",
-  #                           col_select = c("CA", "CAName", "HBName")) %>%
-  #   dplyr::distinct()
 }
