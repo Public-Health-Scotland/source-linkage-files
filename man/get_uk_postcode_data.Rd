@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_uk_postcode_data.R
 \name{get_uk_postcode_data}
 \alias{get_uk_postcode_data}
-\title{get uk postcode list file data}
+\title{UK Postcode List data}
 \usage{
 get_uk_postcode_data(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
@@ -10,12 +10,15 @@ get_uk_postcode_data(
 )
 }
 \arguments{
-\item{denodo_connect}{connection to denodo}
+\item{denodo_connect}{Connection to denodo}
 
 \item{BYOC_MODE}{BYOC_MODE}
 }
+\value{
+a \link[tibble:tibble-package]{tibble}.
+}
 \description{
-get uk postcode list file
+Return the data for the UK Postcode List.
 }
 \seealso{
 Other lookup file paths:

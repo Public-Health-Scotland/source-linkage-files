@@ -5,15 +5,18 @@
 \title{Process costs - Care Homes}
 \usage{
 process_costs_care_homes(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  ch_costs_data = get_ch_raw_costs_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
+  run_date_time = NA
 )
 }
 \arguments{
-\item{denodo_connect}{connection to denodo}
+\item{ch_costs_data}{Raw care home costs data}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
@@ -21,6 +24,16 @@ process_costs_care_homes(
 
 \item{run_date_time}{Denodo identifier}
 }
-\description{
-Process costs - Care Homes
+\value{
+the final look up as a \link[tibble:tibble-package]{tibble}.
 }
+\description{
+This will read and process the
+Care Home costs look up, it will return the final costs look up
+and (optionally) write it to disk.
+}
+\seealso{
+Other process cost look ups:
+\code{\link[=process_costs_dn]{process_costs_dn()}}
+}
+\concept{process cost look ups}

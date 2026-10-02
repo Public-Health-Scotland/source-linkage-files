@@ -11,8 +11,8 @@
 #'
 #' @family lookup files
 get_slf_ch_name_lookup_data <- function(
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "ch_name_lookup", year = "all")
 
