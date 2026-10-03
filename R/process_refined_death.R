@@ -75,8 +75,8 @@ process_refined_death <- function(it_chi_deaths = read_file(get_slf_chi_deaths_p
     write_file(
       data = refined_death,
       path = get_combined_slf_deaths_lookup_path(
-        BYOC_MODE = BYOC_MODE
-        create = TRUE,
+        BYOC_MODE = BYOC_MODE,
+        create = TRUE
       ),
       group_id = 3206, # hscdiip owner
       BYOC_MODE = BYOC_MODE
