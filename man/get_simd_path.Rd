@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_lookup_paths.R
 \name{get_simd_path}
 \alias{get_simd_path}
-\title{SIMD File Path - LOCAL ONLY}
+\title{SIMD File Path}
 \usage{
 get_simd_path(file_name = NULL, ext = "parquet")
 }
@@ -15,7 +15,7 @@ get_simd_path(file_name = NULL, ext = "parquet")
 An \code{\link[fs:path]{fs::path()}} to the local SIMD file
 }
 \description{
-Get the path to the centrally held Scottish Index of Multiple - LOCAL ONLY
+Get the path to the centrally held Scottish Index of Multiple
 Deprivation (SIMD) file.
 }
 \seealso{
@@ -25,6 +25,7 @@ Other lookup file paths:
 \code{\link[=get_lookups_dir]{get_lookups_dir()}},
 \code{\link[=get_pop_path]{get_pop_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
+\code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}},
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
 }
 \concept{lookup file paths}

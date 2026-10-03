@@ -138,7 +138,17 @@ process_extract_homelessness <- function(data,
       )
     ) %>%
     dplyr::left_join(
-      la_code_lookup,
+      la_code_lookup %>%
+        dplyr::select(ca, caname) %>%
+        dplyr::mutate(
+          sending_local_authority_name = dplyr::recode_values(
+            .data$caname,
+            "City of Edinburgh" ~ "Edinburgh",
+            "Na h-Eileanan Siar" ~ "Eilean Siar",
+            default = .data$caname
+          ) %>%
+            stringr::str_replace("\\sand\\s", " \\& ")
+        ),
       by = dplyr::join_by("sending_local_authority_code_9" == "ca")
     ) %>%
     # Filter out duplicates

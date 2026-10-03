@@ -103,7 +103,7 @@ list(
     # Function
     get_simd_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE)
   ),
-  #### Scottish postcode directory -------
+  #### SPD data  -------
   tar_target(
     # Target name
     spd_data,
@@ -165,7 +165,7 @@ list(
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
-    )
+    ),
   ),
   # # TESTS - postcode lookup
   # tar_target(
@@ -175,7 +175,28 @@ list(
   #   process_tests_lookup_pc(source_pc_lookup)
   # ),
 
+  #### Scottish postcode directory------
+  tar_target(
+    # Target name
+    spd_data,
+    # Function
+    get_spd_data(BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
+
+  #### Update NHS UK postcode directory -----
+  tar_target(
+    # Target name
+    uk_postcode_data,
+    get_uk_postcode_data(BYOC_MODE = BYOC_MODE)
+  ),
+
   #### Care home name look up------
+  tar_target(
+    slf_ch_name_lookup_data,
+    get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
+    format = "file"
+  ),
 
   #### SG homelessness publication data ----
   tar_target(
@@ -188,6 +209,17 @@ list(
 
   ### Cost lookups ----
   #### Care home costs------
+  tar_target(
+    # Target name
+    ch_cost_lookup,
+    # Function
+    process_costs_care_homes(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
 
   #### District nursing costs------
   ##### READ - DN COSTS -----
@@ -195,10 +227,7 @@ list(
     # Target name
     dn_raw_costs,
     # Function
-    get_dn_raw_costs_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE
-    )
+    get_dn_raw_costs_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE)
   ),
 
   ##### DN contacts -----
@@ -207,10 +236,7 @@ list(
     # Target name
     dn_contacts,
     # Function
-    get_dn_contacts_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE
-    )
+    get_dn_contacts_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE)
   ),
 
   ##### HSCP Population -----
@@ -243,8 +269,27 @@ list(
 
   #### Home care costs------
   # lca data - phsopendata
+  tar_target(
+    # Target name
+    lca_data,
+    # Function
+    get_lca_data(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE))
+  ),
 
   # home care costs lookup
+  tar_target(
+    # Target name
+    hc_cost_lookup,
+    # Function
+    process_costs_home_care(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      lca_data = lca_data,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    priority = 0.8
+  ),
 
   #### GP Out of Hours costs-----
   tar_target(
@@ -258,13 +303,15 @@ list(
     )
   ),
 
-  ### IT CHI deaths Activity ----
+  ### Deaths ----
+  #### IT CHI deaths Activity ----
   # READ - IT CHI deaths
   tar_target(
     # Target name
     it_chi_deaths_extract,
     read_it_chi_deaths(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     )
   ),
@@ -282,7 +329,7 @@ list(
     )
   ),
 
-  ### NRS BOXI Deaths ----
+  #### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
     refined_death_data,
@@ -303,6 +350,185 @@ list(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     )
+  ),
+
+  ### Social Care, all years -----
+
+  #### SC - Care Homes ----
+  # READ - Care Homes
+  tar_target(
+    # Target name
+    all_care_home_extract,
+    # Function
+    read_sc_all_care_home(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(name = all_care_home_extract, age = as.difftime(28.0, units = "days"))
+  ),
+  # PROCESS - Care Homes
+  tar_target(
+    # Target name
+    all_care_home,
+    # Function
+    process_sc_all_care_home(
+      all_care_home_extract = all_care_home_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      refined_death = refined_death_data,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      ch_name_lookup_path = slf_ch_name_lookup_path,
+      spd_data = spd_data,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.5
+  ),
+  # TESTS - Care Homes
+  tar_target(
+    # Target name
+    tests_all_care_home,
+    # Function
+    process_tests_sc_all_ch_episodes(all_care_home)
+  ),
+
+  #### SC - demographics ----
+  # READ - SC Demographics
+  tar_target(
+    # Target name
+    sc_demog_data,
+    # Function
+    read_lookup_sc_demographics(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(name = sc_demog_data, age = as.difftime(28.0, units = "days"))
+  ),
+  # PROCESS - SC Demographics
+  tar_target(
+    # Target name
+    sc_demog_lookup,
+    # Function
+    process_lookup_sc_demographics(
+      sc_demog_data,
+      all_care_home_extract = all_care_home_extract,
+      spd_data = spd_data,
+      uk_postcode_data = uk_postcode_data,
+      ch_name_lookup = slf_ch_name_lookup_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    priority = 0.9
+  ),
+  # TEST - SC Demographics
+  # tar_target(
+  #   # Target name
+  #   tests_sc_demog_lookup,
+  #   # Function
+  #   process_tests_sc_demographics(sc_demog_lookup)
+  # ),
+
+
+  #### SC - Home Care, all year ----
+  # READ - Home Care
+  tar_target(
+    all_home_care_extract,
+    read_sc_all_home_care(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(name = all_home_care_extract, age = as.difftime(28.0, units = "days"))
+  ),
+  # PROCESS - Home Care
+  tar_target(
+    # Target name
+    all_home_care,
+    # Function
+    process_sc_all_home_care(
+      all_home_care_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      home_care_costs = hc_cost_lookup,
+      BYOC_MODE = BYOC_MODE,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.5
+  ),
+  # # TESTS - Home Care
+  # tar_target(
+  #   # Target name
+  #   tests_sc_all_home_care,
+  #   # Function
+  #   process_tests_sc_all_hc_episodes(all_home_care)
+
+  #### SC - Alarms Telecare  ---------------
+  # READ - Alarms Telecare
+  tar_target(
+    # Target name
+    all_at_extract,
+    # Function
+    read_sc_all_alarms_telecare(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(name = all_at_extract, age = as.difftime(28.0, units = "days"))
+  ),
+  # PROCESS - Alarms Telecare
+  tar_target(
+    # Target name
+    all_at,
+    # Function
+    process_sc_all_alarms_telecare(
+      all_at_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    ),
+    priority = 0.5
+  ),
+  # # TESTS - Alarms Telecare
+  # tar_target(
+  #   # Tests, LOOKUP series
+  #   tests_sc_all_at,
+  #   process_tests_sc_all_at_episodes(all_at)
+  # ),
+
+  #### SC - Self-Directed-Support (SDS)-------------
+  # READ - SDS
+  tar_target(
+    # Target name
+    all_sds_extract,
+    # Function
+    read_sc_all_sds(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    cue = tar_cue_age(name = all_sds_extract, age = as.difftime(28.0, units = "days"))
+  ),
+  # PROCESS - SDS
+  tar_target(
+    # Target name
+    all_sds,
+    # Function
+    process_sc_all_sds(
+      all_sds_extract,
+      sc_demog_lookup = sc_demog_lookup,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      write_to_disk = write_to_disk
+    ),
+    priority = 0.5
+  ),
+  # TESTS - SDS
+  tar_target(
+    # Target name
+    tests_sc_all_sds,
+    # Function
+    process_tests_sc_all_sds_episodes(all_sds)
   ),
 
   ## Stage 2.2 year specific targets ------
@@ -387,48 +613,25 @@ list(
       )
     ),
 
-    ### Maternity (SMR02) Activity ----
-    # READ - Maternity
+    ### Community Mental Health (CMH) Activity------------------------------------
+    # READ - CMH
     tar_target(
       # Target name
-      maternity_data,
-      read_extract_maternity(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-    # PROCESS - Maternity
-    tar_target(
-      # Target name
-      source_maternity_extract,
+      cmh_data,
       # Function
-      process_extract_maternity(
-        maternity_data,
-        year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
-
-    ### Mental Health (SMR04) Activity ----
-    # READ - Mental Health
-    tar_target(
-      mental_health_data,
-      read_extract_mental_health(
+      read_extract_cmh(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # PROCESS - Mental Health
+    # PROCESS - CMH
     tar_target(
       # Target name
-      source_mental_health_extract,
-      process_extract_mental_health(
-        mental_health_data,
+      source_cmh_extract,
+      # Function
+      process_extract_cmh(
+        data = cmh_data,
         year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
@@ -459,6 +662,107 @@ list(
     #     year
     #   )
     # ),
+
+    ### Delayed Discharges Activity---------------------
+    # READ - Delayed Discharges
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Delayed Discharges
+    tar_target(
+      # Target name
+      source_dd_extract,
+      # Function
+      process_extract_delayed_discharges(
+        dd_data,
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### District Nursing Activity ---------------
+    # READ - District Nursing
+    tar_target(
+      # Target name
+      dn_data,
+      # Function
+      read_extract_district_nursing(
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      )
+    ),
+    # PROCESS - District Nursing
+    tar_target(
+      # Target name
+      source_dn_extract,
+      # Function
+      process_extract_district_nursing(
+        data = dn_data,
+        year = year,
+        costs = dn_cost_lookup,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### Homelessness (HL1) Activity ----
+    # READ - Homelessness
+    tar_target(
+      # Target name
+      homelessness_data,
+      # Function
+      read_extract_homelessness(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Homelessness
+    tar_target(
+      # Target name
+      source_homelessness_extract,
+      # Function
+      process_extract_homelessness(
+        data = homelessness_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        la_code_lookup = la_code_opendata,
+        sg_pub_data = sg_pub_data,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+    # # TESTS - Homelessness
+    # tar_target(
+    #   # Target name
+    #   tests_source_homelessness_extract,
+    #   # Function
+    #   process_tests_homelessness(
+    #     source_homelessness_extract,
+    #     year
+    #   )
+    # ),
+
+    ### Homelessness lookup------
+    tar_target(
+      # Target name
+      homelessness_lookup,
+      # Function
+      create_homelessness_lookup(year, homelessness_data = source_homelessness_extract)
+    ),
 
     ### GP Out of Hours (GP OOH) Activity--------------
     # GP Out of Hours ALL
@@ -533,72 +837,49 @@ list(
     #   )
     # ),
 
-    ### Homelessness (HL1) Activity ----
-    # READ - Homelessness
+    ### Maternity (SMR02) Activity ----
+    # READ - Maternity
     tar_target(
       # Target name
-      homelessness_data,
-      # Function
-      read_extract_homelessness(
+      maternity_data,
+      read_extract_maternity(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # PROCESS - Homelessness
+    # PROCESS - Maternity
     tar_target(
       # Target name
-      source_homelessness_extract,
+      source_maternity_extract,
       # Function
-      process_extract_homelessness(
-        data = homelessness_data,
-        year = year,
+      process_extract_maternity(
+        maternity_data,
+        year,
         write_to_disk = write_to_disk,
-        la_code_lookup = la_code_opendata,
-        sg_pub_data = sg_pub_data,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
       )
     ),
-    # # TESTS - Homelessness
-    # tar_target(
-    #   # Target name
-    #   tests_source_homelessness_extract,
-    #   # Function
-    #   process_tests_homelessness(
-    #     source_homelessness_extract,
-    #     year
-    #   )
-    # ),
 
-    ### Homelessness lookup------
+    ### Mental Health (SMR04) Activity ----
+    # READ - Mental Health
     tar_target(
-      # Target name
-      homelessness_lookup,
-      # Function
-      create_homelessness_lookup(year, homelessness_data = source_homelessness_extract)
-    ),
-
-    ### Delayed Discharges Activity---------------------
-    # READ - Delayed Discharges
-    tar_target(
-      # Target name
-      dd_data,
-      # Function
-      read_extract_delayed_discharges(
+      mental_health_data,
+      read_extract_mental_health(
+        year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
-    # PROCESS - Delayed Discharges
+    # PROCESS - Mental Health
     tar_target(
       # Target name
-      source_dd_extract,
-      # Function
-      process_extract_delayed_discharges(
-        dd_data,
-        year,
+      source_mental_health_extract,
+      process_extract_mental_health(
+        mental_health_data,
+        year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
@@ -630,34 +911,118 @@ list(
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
-      )
-    ),
+      ),
 
-    ### District Nursing Activity ---------------
-    # READ - District Nursing
-    tar_target(
-      # Target name
-      dn_data,
-      # Function
-      read_extract_district_nursing(
-        year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
-      )
-    ),
-    # PROCESS - District Nursing
-    tar_target(
-      # Target name
-      source_dn_extract,
-      # Function
-      process_extract_district_nursing(
-        data = dn_data,
-        year = year,
-        costs = dn_cost_lookup,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
+      ### Social Care ----
+
+      #### SC - Care Home (CH) Activity -----
+      # READ - CH
+      # Target: all_care_home passed to PROCESS CH
+
+      # PROCESS - CH
+      tar_target(
+        # Target name
+        source_sc_care_home,
+        # Function
+        process_extract_care_home(
+          data = all_care_home,
+          year = year,
+          ch_costs = ch_cost_lookup,
+          BYOC_MODE = BYOC_MODE,
+          run_id = run_id,
+          run_date_time = run_date_time,
+          write_to_disk = write_to_disk
+        )
+      ),
+      # TESTS - CH
+      tar_target(
+        # Target name
+        tests_care_home,
+        # Function
+        process_tests_care_home(data = source_sc_care_home, year = year)
+      ),
+
+      #### SC - Home Care (HC) Activity--------
+      # READ - HC
+      # Target: all_home_care passed to PROCESS HC
+
+      # PROCESS - HC
+      tar_target(
+        # Target name
+        source_sc_home_care,
+        # Function
+        process_extract_home_care(
+          data = all_home_care,
+          year = year,
+          BYOC_MODE = BYOC_MODE,
+          write_to_disk = write_to_disk
+        )
+      ),
+      # # TESTS - HC
+      # tar_target(
+      #   # Target name
+      #   tests_home_care,
+      #   # Function
+      #   process_tests_home_care(
+      #     data = source_sc_home_care,
+      #     year = year
+      #   )
+      # ),
+
+      #### SC - Alarms Telecare (AT) Activity-----
+      # READ - AT
+      # Target: all_at passed to PROCESS AT
+
+      # PROCESS - AT
+      tar_target(
+        # Target name
+        source_sc_alarms_tele,
+        # Function
+        process_extract_alarms_telecare(
+          data = all_at,
+          year = year,
+          write_to_disk = write_to_disk,
+          BYOC_MODE = BYOC_MODE,
+          run_id = run_id,
+          run_date_time = run_date_time
+        )
+      ),
+      # # TESTS - AT
+      # tar_target(
+      #   # Target name
+      #   tests_alarms_telecare,
+      #   # Function
+      #   process_tests_alarms_telecare(
+      #     data = source_sc_alarms_tele,
+      #     year = year
+      #   )
+      # ),
+
+      #### SC - Self-Directed Support (SDS) Activity--------
+      # READ - SDS
+      #
+      # Target: all_sds passed to PROCESS SDS
+      #
+      # PROCESS - SDS
+      tar_target(
+        # Target name
+        source_sc_sds,
+        # Function
+        process_extract_sds(
+          data = all_sds,
+          year = year,
+          BYOC_MODE = BYOC_MODE,
+          run_id = run_id,
+          run_date_time = run_date_time,
+          write_to_disk = write_to_disk
+        )
+      ),
+      # TESTS - SDS
+      tar_target(
+        # Target name
+        tests_sds,
+        # Function
+        process_tests_sds(data = source_sc_sds, year = year)
       )
     )
   )

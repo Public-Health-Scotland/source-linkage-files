@@ -141,6 +141,8 @@ list(
     # Target name
     spd_data,
     # Function
+    get_spd_data(BYOC_MODE),
+    format = "file"
     get_spd_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
@@ -149,18 +151,13 @@ list(
   # Update NHS UK postcode directory -----
   tar_target(
     # Target name
-    uk_pc_list,
-    update_uk_postcode_directory(),
-    format = "qs",
-    cue = tar_cue_age(
-      name = uk_pc_list,
-      age = as.difftime(180, units = "days")
-    )
+    uk_postcode_data,
+    get_uk_postcode_data(BYOC_MODE)
   ),
   # Care home name look up------
   tar_target(
-    slf_ch_name_lookup_path,
-    get_slf_ch_name_lookup_path(),
+    slf_ch_name_lookup_data,
+    get_slf_ch_name_lookup_data(BYOC_MODE),
     format = "file"
   ),
   ## Process Lookups ##-------------------------------------------------------
@@ -170,7 +167,10 @@ list(
     # Target name
     sc_demog_data,
     # Function
-    read_lookup_sc_demographics(),
+    read_lookup_sc_demographics(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = sc_demog_data,
       age = as.difftime(28.0, units = "days")
@@ -183,8 +183,14 @@ list(
     # Function
     process_lookup_sc_demographics(
       sc_demog_data,
-      all_care_home_extract,
-      write_to_disk = write_to_disk
+      all_care_home_extract = all_care_home_extract,
+      spd_data = spd_data,
+      uk_postcode_data = uk_postcode_data,
+      ch_name_lookup = slf_ch_name_lookup_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
@@ -249,8 +255,12 @@ list(
     # Target name
     ch_cost_lookup,
     # Function
-    process_costs_ch_rmd(),
-    priority = 0.8
+    process_costs_care_homes(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   ),
   ### District Nursing Costs ---------------------------------------------------
   # READ - DN RAW COSTS
@@ -433,7 +443,10 @@ list(
     # Target name
     all_care_home_extract,
     # Function
-    read_sc_all_care_home(),
+    read_sc_all_care_home(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = all_care_home_extract,
       age = as.difftime(28.0, units = "days")
@@ -445,9 +458,12 @@ list(
     all_care_home,
     # Function
     process_sc_all_care_home(
-      all_care_home_extract,
+      all_care_home_extract = all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_data = spd_data,
       write_to_disk = write_to_disk
@@ -467,7 +483,10 @@ list(
     # Target name
     all_sds_extract,
     # Function
-    read_sc_all_sds(),
+    read_sc_all_sds(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     cue = tar_cue_age(
       name = all_sds_extract,
       age = as.difftime(28.0, units = "days")
@@ -481,6 +500,9 @@ list(
     process_sc_all_sds(
       all_sds_extract,
       sc_demog_lookup = sc_demog_lookup,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -601,12 +623,15 @@ list(
     ),
     # Community Mental Health (CMH) Activity------------------------------------
     # READ - CMH
-    tar_file_read(
+    tar_target(
       # Target name
       cmh_data,
-      get_boxi_extract_path(year, type = "cmh"),
       # Function
-      read_extract_cmh(year, !!.x)
+      read_extract_cmh(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - CMH
     tar_target(
@@ -614,9 +639,12 @@ list(
       source_cmh_extract,
       # Function
       process_extract_cmh(
-        cmh_data,
-        year,
-        write_to_disk = write_to_disk
+        data = cmh_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - CMH
@@ -1090,6 +1118,9 @@ list(
         data = all_care_home,
         year = year,
         ch_costs = ch_cost_lookup,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time,
         write_to_disk = write_to_disk
       )
     ),
@@ -1142,6 +1173,9 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time,
         write_to_disk = write_to_disk
       )
     ),

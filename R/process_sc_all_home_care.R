@@ -1,27 +1,35 @@
-#' Process the all home care extract
+#' Process the all Home Care extract
 #'
 #' @description This will read and process the
-#' all home care extract, it will return the final data
+#' all Home Care extract, it will return the final data
 #' and (optionally) write it to disk.
 #'
-#' @inheritParams process_sc_all_care_home
+#' @param data The extract to process
+#' @param sc_demog_lookup The Social Care Demographics lookup produced by
+#' [process_lookup_sc_demographics()].
+#' @param home_care_costs Home Care cost lookup
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
-#' @family process extracts
-#'
 #' @export
-#'
-process_sc_all_home_care <- function(
-  data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-  write_to_disk = TRUE
-) {
+#' @family process extracts
+process_sc_all_home_care <- function(data,
+                                     sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)), # TODO: get_sdl_processed_data
+                                     home_care_costs = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)), # TODO: get_sdl_processed_data
+                                     write_to_disk = TRUE,
+                                     BYOC_MODE = FALSE,
+                                     run_id = NA,
+                                     run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "hc", year = "all")
 
   sending_location <- social_care_id <- financial_year <- NULL
 
   data <- data %>%
-    # add per in social_care_id in Renfrewshire
+    # Add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
     dplyr::filter(.data$hc_start_date_after_period_end_date != 1) %>%
     dplyr::mutate(
@@ -45,8 +53,8 @@ process_sc_all_home_care <- function(
 
   data.table::setDT(data)
   data.table::setDT(sc_demog_lookup)
-  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
-  # exact match on first 2 cols; nearest on financial_year
+  # Left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  # Exact match on first 2 cols; nearest on financial_year
   data <- sc_demog_lookup[
     data,
     on = list(sending_location, social_care_id, financial_year),
@@ -61,11 +69,11 @@ process_sc_all_home_care <- function(
   # Data Cleaning ---------------------------------------
 
   home_care_clean <- data %>%
-    # set reablement values == 9 to NA
+    # Set reablement values == 9 to NA
     dplyr::mutate(reablement = dplyr::na_if(.data$reablement, 9L)) %>%
-    # fix NA hc_service
+    # Fix NA hc_service
     dplyr::mutate(hc_service = tidyr::replace_na(.data$hc_service, 0L)) %>%
-    # fill reablement when missing but present in group
+    # Fill reablement when missing but present in group
     dplyr::group_by(
       .data$sending_location,
       .data$social_care_id,
@@ -74,7 +82,6 @@ process_sc_all_home_care <- function(
     tidyr::fill("reablement", .direction = "updown") %>%
     dplyr::mutate(reablement = tidyr::replace_na(.data$reablement, 9L)) %>%
     dplyr::ungroup()
-
 
   # Home Care Hours ---------------------------------------
 
@@ -101,10 +108,7 @@ process_sc_all_home_care <- function(
       )
     )
 
-
   # Home Care Costs ---------------------------------------
-
-  home_care_costs <- read_file(get_hc_costs_path())
 
   matched_costs <- home_care_hours %>%
     dplyr::left_join(home_care_costs,
@@ -153,7 +157,7 @@ process_sc_all_home_care <- function(
     )
 
   merge_data <- pivoted_hours %>%
-    # group the data to be merged
+    # Group the data to be merged
     dplyr::group_by(
       .data$anon_chi,
       .data$sending_location_name,
@@ -181,11 +185,10 @@ process_sc_all_home_care <- function(
     ) %>%
     dplyr::ungroup()
 
-
   # Create Source variables---------------------------------------
 
   all_hc_processed <- merge_data %>%
-    # rename
+    # Rename
     dplyr::rename(
       record_keydate1 = "hc_service_start_date",
       record_keydate2 = "hc_service_end_date",
@@ -201,18 +204,26 @@ process_sc_all_home_care <- function(
         TRUE ~ "HC-Unknown"
       )
     ) %>%
-    # compute lca variable from sending_location
+    # Compute lca variable from sending_location
     dplyr::mutate(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
     create_person_id() %>%
-    select_linking_id()
+    select_linking_id() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   if (write_to_disk) {
     write_file(
-      all_hc_processed,
-      get_sc_hc_episodes_path(check_mode = "write"),
-      group_id = 3206 # hscdiip owner
+      data = all_hc_processed,
+      path = get_sc_hc_episodes_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
