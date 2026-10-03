@@ -17,7 +17,7 @@
 #' @export
 #' @family process extracts
 process_sc_all_alarms_telecare <- function(data,
-                                           sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),  # TODO: get_sdl_processed_data
+                                           sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)), # TODO: get_sdl_processed_data
                                            write_to_disk = TRUE,
                                            BYOC_MODE = FALSE,
                                            run_id = NA,
