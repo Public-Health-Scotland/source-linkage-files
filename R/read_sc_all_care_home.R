@@ -1,22 +1,23 @@
 #' Read Social Care - Care Home data
 #'
-#' @param denodo_connect Connection to denodo
-#' @param BYOC_MODE BYOC_MODE
-#'
-#' @return an extract of the data as a [tibble][tibble::tibble-package].
+#' @inherit read_sc_all_alarms_telecare
 #'
 #' @export
-#'
-read_sc_all_care_home <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
+read_sc_all_care_home <- function(
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "ch", year = "all")
 
-  # Disconnect from Denodo
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+  # Read extract
   ch_data <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_sc_carehome_source")
   ) %>%
+    # Rename variables
     dplyr::select(
       "ch_name",
       "ch_postcode",
@@ -35,13 +36,15 @@ read_sc_all_care_home <- function(denodo_connect = get_denodo_connection(BYOC_MO
       "age"
     ) %>%
     dplyr::distinct() %>%
+    # Collect
     dplyr::collect()
 
   latest_quarter <- ch_data %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%
     dplyr::pull(.data$period) %>%
     utils::head(1)
-  cli::cli_alert_info(stringr::str_glue("Care Home data is available up to {latest_quarter}."))
+
+  logger::log_info(stringr::str_glue("Care Home data is available up to {latest_quarter}."))
 
   ch_data <- ch_data %>%
     # Correct FY 2017 as data collection only started in 2017 Q4

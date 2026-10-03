@@ -2,30 +2,31 @@
 #'
 #' @description This will read and process the
 #' all Alarms Telecare extract, it will return the final data
-#' and (optionally) write it to disk when it is 'TRUE'.
+#' and (optionally) write it to disk.
 #'
-#' @inheritParams process_sc_all_care_home
-#'
+#' @param data The extract to process
+#' @param sc_demog_lookup The Social Care Demographics lookup produced by
+#' [process_lookup_sc_demographics()].
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id run_id for BYOC
 #' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
-#' @family process extracts
-#'
 #' @export
-#'
+#' @family process extracts
 process_sc_all_alarms_telecare <- function(data,
-                                           sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+                                           sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),  # TODO: get_sdl_processed_data
                                            write_to_disk = TRUE,
                                            BYOC_MODE = FALSE,
                                            run_id = NA,
                                            run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "at", year = "all")
 
-  # Data Cleaning-----------------------------------------------------
+  # Data Cleaning -----------------------------------------------------
 
-  # fix "no visible binding for global variable"
+  # Fix "no visible binding for global variable"
   service_end_date <- period_end_date <- service_start_date <- service_type <-
     default <- sending_location <- social_care_id <- pkg_count <-
     record_keydate1 <- smrtype <- period <- record_keydate2 <- anon_chi <-
@@ -33,7 +34,7 @@ process_sc_all_alarms_telecare <- function(data,
     period_start_date <- financial_quarter <- financial_year <-
     extract_date <- consistent_quality <- NULL
 
-  # add per in social_care_id in Renfrewshire
+  # Add per in social_care_id in Renfrewshire
   data <- data %>%
     fix_scid_renfrewshire()
 
@@ -97,15 +98,14 @@ process_sc_all_alarms_telecare <- function(data,
   data[, financial_quarter := NULL]
 
   data.table::setkey(sc_demog_lookup, sending_location, social_care_id, financial_year)
-  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  # Left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
   data <- sc_demog_lookup[
     data,
     on = list(sending_location, social_care_id, financial_year),
-    roll = "nearest" # exact match on first 2 cols; nearest on financial_year
+    roll = "nearest" # Exact match on first 2 cols; nearest on financial_year
   ]
   # To do nearest join is because some sc episode happen in say 2018,
   # but demographics data submitted in the following year, say 2019.
-
 
   # Replace social_care_id with latest if needed (assuming replace_sc_id_with_latest is a custom function)
   data <- data.table::as.data.table(replace_sc_id_with_latest(data))
@@ -160,12 +160,13 @@ process_sc_all_alarms_telecare <- function(data,
 
   if (write_to_disk) {
     write_file(
-      final_at_data,
-      get_sc_at_episodes_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
+      data = final_at_data,
+      path = get_sc_at_episodes_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
       group_id = 3206, # hscdiip owner
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
+      BYOC_MODE = BYOC_MODE
     )
   }
 

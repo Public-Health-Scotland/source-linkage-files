@@ -1,23 +1,23 @@
 #' Read Social Care Home Care data
 #'
-#' @param sc_dvprod_connection Connection to the SC platform
-#'
-#' @return an extract of the data as a [tibble][tibble::tibble-package].
+#' @inherit read_sc_all_alarms_telecare
 #'
 #' @export
-#'
 read_sc_all_home_care <- function(
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE = FALSE
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "hc", year = "all")
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
+  # Read extract
   home_care_data <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_sc_homecare_source")
   ) %>%
+    # Rename variables
     dplyr::select(
       "sending_location",
       "sending_location_name",
@@ -44,22 +44,23 @@ read_sc_all_home_care <- function(
         .data$hc_period_start_date
       )
     ) %>%
-    # fix 2017
+    # Fix 2017
     dplyr::mutate(period = dplyr::if_else(
       .data$period == "2017",
       "2017Q4",
       .data$period
     )) %>%
-    # drop rows start date after end date
+    # Drop rows start date after end date
     dplyr::distinct() %>%
+    # Collect
     dplyr::collect()
 
   latest_quarter <- home_care_data %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%
     dplyr::pull(.data$period) %>%
     utils::head(1)
-  logger::log_info(stringr::str_glue("Home Care data is available up to {latest_quarter}."))
 
+  logger::log_info(stringr::str_glue("Home Care data is available up to {latest_quarter}."))
 
   home_care_data <- home_care_data %>%
     dplyr::mutate(dplyr::across(c(

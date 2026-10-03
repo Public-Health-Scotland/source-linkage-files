@@ -11,28 +11,22 @@
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
-#' @param run_id Denodo identifier
-#' @param run_date_time Denodo identifier
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_care_home <- function(
-  data,
-  year,
-  ch_costs = read_file(get_ch_costs_path(BYOC_MODE)),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
-) {
+process_extract_care_home <- function(data,
+                                      year,
+                                      ch_costs = read_file(get_ch_costs_path(BYOC_MODE)), # TODO: get_sdl_processed_data
+                                      write_to_disk = TRUE,
+                                      BYOC_MODE = FALSE) {
   log_slf_event(stage = "process", status = "start", type = "ch", year = year)
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
 
   # Check that we have data for this year
   if (!check_year_valid(year, "ch")) {
@@ -40,40 +34,41 @@ process_extract_care_home <- function(
     return(tibble::tibble())
   }
 
-  # Selections for financial year------------------------------------
+  # Selections for financial year ------------------------------------
 
   ch_data <- data %>%
-    # select episodes for FY
+    # Select episodes for FY
     dplyr::filter(
       is_date_in_fyyear(year, .data$record_keydate1, .data$record_keydate2)
     ) %>%
-    # remove any episodes where the latest submission was before the current year
-    # this is what stops cases being in future files
+    # Remove any episodes where the latest submission was before the current year
+    # This is what stops cases being in future files
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     )
 
   # Data Cleaning ---------------------------------------
+
   source_ch_clean <- ch_data %>%
-    # create variables
+    # Create variables
     dplyr::mutate(
       year = year,
       recid = "CH",
       smrtype = add_smrtype(recid = "CH")
     ) %>%
-    # compute lca variable from sending_location
+    # Compute lca variable from sending_location
     dplyr::mutate(
       sc_send_lca = convert_sc_sending_location_to_lca(.data$sending_location)
     ) %>%
-    # bed days
+    # Bed days
     create_monthly_beddays(year,
       admission_date = .data$record_keydate1,
       discharge_date = .data$record_keydate2
     ) %>%
-    # year stay
+    # Year stay
     dplyr::mutate(
       yearstay = rowSums(dplyr::pick(dplyr::ends_with("_beddays"))),
-      # total length of stay
+      # Total length of stay
       stay = calculate_stay(year,
         start_date = .data$record_keydate1,
         end_date = .data$record_keydate2,
@@ -85,8 +80,8 @@ process_extract_care_home <- function(
       ch_provider = as.numeric(.data$ch_provider)
     )
 
+  # Costs ---------------------------------------
 
-  # Costs  ---------------------------------------
   matched_costs <- source_ch_clean %>%
     dplyr::left_join(
       ch_costs,
@@ -102,7 +97,7 @@ process_extract_care_home <- function(
         .data$cost_per_day,
         NA_real_
       ),
-      # Create monthly beddays works fine here but this reduces the number
+      # Create monthly bed days works fine here but this reduces the number
       # of calculations and therefore rounding errors.
       dplyr::across(
         .cols = dplyr::ends_with("_beddays"),
@@ -120,6 +115,8 @@ process_extract_care_home <- function(
 
   ch_processed <- monthly_costs %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -140,18 +137,19 @@ process_extract_care_home <- function(
       "cost_total_net",
       dplyr::ends_with("_beddays"),
       dplyr::ends_with("_cost")
-    ) %>%
-    dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
     )
 
   if (write_to_disk) {
     write_file(
-      ch_processed,
-      get_source_extract_path(year, type = "ch", check_mode = "write", BYOC_MODE),
-      BYOC_MODE,
-      group_id = 3356 # sourcedev owner
+      data = ch_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "ch",
+        check_mode = "write",
+        BYOC_MODE = BYOC_MODE
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

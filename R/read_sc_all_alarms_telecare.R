@@ -1,22 +1,26 @@
 #' Read Social Care Alarms Telecare data
 #'
-#' @param sc_dvprod_connection Connection to the BI denodo platform
+#' @param denodo_connect Connection to the BI Denodo platform
+#' @param BYOC_MODE BYOC_MODE
 #'
-#' @return an extract of the data as a [tibble][tibble::tibble-package].
+#' @return An extract of the data as a [tibble][tibble::tibble-package].
 #'
 #' @export
-#'
-read_sc_all_alarms_telecare <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE) {
-  # Read in data---------------------------------------
+read_sc_all_alarms_telecare <- function(
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "at", year = "all")
 
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-  ## read in data - social care 2 demographic
+  # Read extract
   at_full_data <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_sc_alarmtelecare_source")
   ) %>%
+    # Rename variables
     dplyr::select(
       "sending_location",
       "social_care_id",
@@ -29,13 +33,15 @@ read_sc_all_alarms_telecare <- function(denodo_connect = get_denodo_connection(B
       "service_start_date_after_period_end_date"
     ) %>%
     dplyr::distinct() %>%
+    # Collect
     dplyr::collect()
 
   latest_quarter <- at_full_data %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%
     dplyr::pull(.data$period) %>%
     utils::head(1)
-  cli::cli_alert_info(stringr::str_glue("Alarm Telecare data is available up to {latest_quarter}."))
+
+  logger::log_info(stringr::str_glue("Alarm Telecare data is available up to {latest_quarter}."))
 
   at_full_data <- at_full_data %>%
     dplyr::mutate(
@@ -45,7 +51,7 @@ read_sc_all_alarms_telecare <- function(denodo_connect = get_denodo_connection(B
         .data$period_start_date
       )
     ) %>%
-    # fix bad period - 2017 only has Q4
+    # Fix bad period - 2017 only has Q4
     dplyr::mutate(
       period = dplyr::if_else(
         .data$period == "2017",

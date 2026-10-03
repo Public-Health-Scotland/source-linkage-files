@@ -385,12 +385,13 @@ list(
       data = all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
+      uk_pc_directory = uk_postcode_data,
+      ch_name_lookup = slf_ch_name_lookup_data,
+      spd_data = spd_data,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
-      run_date_time = run_date_time,
-      ch_name_lookup_path = slf_ch_name_lookup_path,
-      spd_data = spd_data,
-      write_to_disk = write_to_disk
+      run_date_time = run_date_time
     )
   ),
 
@@ -417,9 +418,9 @@ list(
     process_lookup_sc_demographics(
       data = sc_demog_data,
       all_care_home_extract = all_care_home_extract,
-      spd_data = spd_data,
-      uk_postcode_data = uk_postcode_data,
+      uk_pc_directory = uk_postcode_data,
       ch_name_lookup = slf_ch_name_lookup_data,
+      spd_data = spd_data,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
@@ -451,8 +452,10 @@ list(
       data = all_home_care_extract,
       sc_demog_lookup = sc_demog_lookup,
       home_care_costs = hc_cost_lookup,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
-      write_to_disk = write_to_disk
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
 
@@ -479,10 +482,10 @@ list(
     process_sc_all_sds(
       data = all_sds_extract,
       sc_demog_lookup = sc_demog_lookup,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
-      run_date_time = run_date_time,
-      write_to_disk = write_to_disk
+      run_date_time = run_date_time
     )
   ),
 
@@ -516,9 +519,7 @@ list(
         data = all_at,
         year = year,
         write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
+        BYOC_MODE = BYOC_MODE
       )
     ),
 
@@ -532,10 +533,8 @@ list(
         data = all_care_home,
         year = year,
         ch_costs = ch_cost_lookup,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
       )
     ),
 
@@ -548,8 +547,8 @@ list(
       process_extract_home_care(
         data = all_home_care,
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
       )
     ),
 
@@ -562,10 +561,8 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
       )
     )
   )

@@ -1,28 +1,30 @@
 #' Process the all SDS extract
+#'
 #' @description This will read and process the
 #' all SDS extract, it will return the final data
-#' and (optionally) write it to disk when it is 'TRUE'.
+#' and (optionally) write it to disk.
 #'
-#' @inheritParams process_sc_all_care_home
-#'
+#' @param data The extract to process
+#' @param sc_demog_lookup The Social Care Demographics lookup produced by
+#' [process_lookup_sc_demographics()].
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id run_id for BYOC
 #' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
-#' @family process extracts
-#'
 #' @export
-#'
+#' @family process extracts
 process_sc_all_sds <- function(data,
-                               sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+                               sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)), # TODO: get_sdl_processed_data
                                write_to_disk = TRUE,
                                BYOC_MODE = FALSE,
                                run_id = NA,
                                run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "sds", year = "all")
 
-  # fix "no visible binding for global variable"
+  # Fix "no visible binding for global variable"
   sds_option_4 <- sds_start_date <- sds_period_start_date <- sds_end_date <-
     sds_period_end_date <- received <- sds_option <- sending_location <-
     period <- record_keydate1 <- record_keydate2 <- social_care_id <-
@@ -32,14 +34,14 @@ process_sc_all_sds <- function(data,
 
   # Match on demographics data (chi, gender, dob and postcode)
   data <- data %>%
-    # add per in social_care_id in Renfrewshire
+    # Add per in social_care_id in Renfrewshire
     fix_scid_renfrewshire() %>%
     dplyr::filter(.data$sds_start_date_after_period_end_date != 1) %>%
     add_fy_qtr_from_period()
 
   data.table::setDT(data)
   data.table::setDT(sc_demog_lookup)
-  # left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
+  # Left-join: keep all rows of `data`, bring columns from `sc_demog_lookup`
   data <- sc_demog_lookup[
     data,
     on = list(sending_location, social_care_id, financial_year),
@@ -205,12 +207,13 @@ process_sc_all_sds <- function(data,
 
   if (write_to_disk) {
     write_file(
-      final_data,
-      get_sc_sds_episodes_path(BYOC_MODE = BYOC_MODE, check_mode = "write"),
+      data = final_data,
+      path = get_sc_sds_episodes_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
       group_id = 3206, # hscdiip owner
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
+      BYOC_MODE = BYOC_MODE
     )
   }
 
