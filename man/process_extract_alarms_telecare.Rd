@@ -8,9 +8,7 @@ process_extract_alarms_telecare(
   data,
   year,
   write_to_disk = TRUE,
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA
+  BYOC_MODE = FALSE
 )
 }
 \arguments{
@@ -23,10 +21,6 @@ the year specific data.}
 \code{TRUE} i.e. write the data to disk.}
 
 \item{BYOC_MODE}{BYOC_MODE}
-
-\item{run_id}{run_id for BYOC}
-
-\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -34,7 +28,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 (year specific) Alarms Telecare extract, it will return the final data
-and (optionally) write it to disk when it is 'TRUE'.
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts:

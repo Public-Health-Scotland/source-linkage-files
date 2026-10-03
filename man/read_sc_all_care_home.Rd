@@ -10,12 +10,12 @@ read_sc_all_care_home(
 )
 }
 \arguments{
-\item{denodo_connect}{Connection to denodo}
+\item{denodo_connect}{Connection to the BI Denodo platform}
 
 \item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
-an extract of the data as a \link[tibble:tibble-package]{tibble}.
+An extract of the data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read Social Care - Care Home data

@@ -4,7 +4,7 @@
 \alias{process_extract_home_care}
 \title{Process the (year specific) Home Care extract}
 \usage{
-process_extract_home_care(data, year, BYOC_MODE = FALSE, write_to_disk = TRUE)
+process_extract_home_care(data, year, write_to_disk = TRUE, BYOC_MODE = FALSE)
 }
 \arguments{
 \item{data}{The full processed data which will be selected from to create
@@ -12,10 +12,10 @@ the year specific data.}
 
 \item{year}{The year to process, in FY format.}
 
-\item{BYOC_MODE}{BYOC_MODE}
-
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

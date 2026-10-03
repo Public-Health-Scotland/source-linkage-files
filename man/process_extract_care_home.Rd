@@ -8,10 +8,8 @@ process_extract_care_home(
   data,
   year,
   ch_costs = read_file(get_ch_costs_path(BYOC_MODE)),
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA,
-  write_to_disk = TRUE
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE
 )
 }
 \arguments{
@@ -22,14 +20,10 @@ the year specific data.}
 
 \item{ch_costs}{The Care Home costs lookup}
 
-\item{BYOC_MODE}{BYOC_MODE}
-
-\item{run_id}{Denodo identifier}
-
-\item{run_date_time}{Denodo identifier}
-
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

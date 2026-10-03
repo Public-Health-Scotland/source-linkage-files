@@ -19,7 +19,7 @@ process_sc_all_sds(
 \item{sc_demog_lookup}{The Social Care Demographics lookup produced by
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
-\item{write_to_disk}{(Optional) Should the data be written to disk default is
+\item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
 \item{BYOC_MODE}{BYOC_MODE}
@@ -34,7 +34,7 @@ the final data as a \link[tibble:tibble-package]{tibble}.
 \description{
 This will read and process the
 all SDS extract, it will return the final data
-and (optionally) write it to disk when it is 'TRUE'.
+and (optionally) write it to disk.
 }
 \seealso{
 Other process extracts:

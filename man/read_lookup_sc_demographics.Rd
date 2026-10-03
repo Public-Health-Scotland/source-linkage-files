@@ -10,12 +10,12 @@ read_lookup_sc_demographics(
 )
 }
 \arguments{
-\item{denodo_connect}{Connection to the sc platform}
+\item{denodo_connect}{Connection to the BI Denodo platform}
 
 \item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+An extract of the data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read SC demographics
