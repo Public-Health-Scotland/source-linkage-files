@@ -23,6 +23,13 @@ get_hc_raw_costs_data <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_hc_cost_lookup_source")
   ) %>%
+    # Rename variables
+    dplyr::select(
+      gss_code = "gss_code",
+      local_authority = "local_authority",
+      year = "year",
+      hourly_cost = "hourly_cost"
+    ) %>%
     # Collect
     dplyr::collect()
 

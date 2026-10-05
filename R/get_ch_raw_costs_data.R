@@ -24,12 +24,11 @@ get_ch_raw_costs_data <- function(
     dbplyr::in_schema("sdl", "sdl_carehomecostopendata_source")
   ) %>%
     # Rename variables
-    janitor::clean_names() %>%
     dplyr::select(
       council_area_code = "council_area_code",
       date = "date",
       key_statistic = "key_statistic",
-      value = "value"
+      cost_per_week = "value"
     ) %>%
     # Collect
     dplyr::collect()
