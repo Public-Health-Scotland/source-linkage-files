@@ -23,6 +23,10 @@ get_uk_postcode_data <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_uk_postcode_list_source")
   ) %>%
+    # Rename columns
+    dplyr::select(
+      pcd = "pcd"
+    ) %>%
     # Collect
     dplyr::collect()
 

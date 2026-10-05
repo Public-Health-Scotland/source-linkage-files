@@ -72,7 +72,7 @@ process_lookup_sc_demographics <- function(data,
   valid_spd_postcodes <- spd_data %>%
     dplyr::pull(.data$pc7)
 
-  valid_uk_postcodes <- uk_postcode_data %>%
+  valid_uk_postcodes <- uk_pc_directory %>%
     dplyr::pull()
   # Combine them as some deleted scottish pc are not in the uk pc list
   valid_uk_postcodes <- union(valid_spd_postcodes, valid_uk_postcodes) %>%
