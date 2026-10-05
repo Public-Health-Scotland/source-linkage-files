@@ -10,8 +10,8 @@
 #'
 #' @family lookup files
 get_ch_raw_costs_data <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "ch_costs", year = "all")
 
@@ -26,11 +26,10 @@ get_ch_raw_costs_data <- function(
     # Rename variables
     janitor::clean_names() %>%
     dplyr::select(
-      year = "year",
       council_area_code = "council_area_code",
-      funding_source = "funding_source",
-      nursing_care_provision = "nursing_care_provision",
-      cost_per_week = "value"
+      date = "date",
+      key_statistic = "key_statistic",
+      value = "value"
     ) %>%
     # Collect
     dplyr::collect()
@@ -39,3 +38,4 @@ get_ch_raw_costs_data <- function(
 
   return(raw_ch_costs_data)
 }
+
