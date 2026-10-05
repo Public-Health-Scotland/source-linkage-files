@@ -144,7 +144,7 @@ list(
     # Function
     get_ch_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
+      BYOC_MODE = BYOC_MODE
     ),
   ),
   # PROCESS - Care Home Costs
@@ -169,7 +169,7 @@ list(
     # Function
     get_hc_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
+      BYOC_MODE = BYOC_MODE
     ),
   ),
   # PROCESS - Home Care Costs
