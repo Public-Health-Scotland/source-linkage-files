@@ -186,7 +186,7 @@ list(
     ch_cost_lookup,
     # Function
     process_costs_care_homes(
-      ch_raw_costs = ch_raw_costs,
+      ch_costs_data = ch_raw_costs,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
