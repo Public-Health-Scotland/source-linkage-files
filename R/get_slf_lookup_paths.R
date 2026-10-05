@@ -11,26 +11,20 @@
 #'
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_postcode_path <- function(update = latest_update(), ...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_postcode_lookup_{update}"),
-    ext = "parquet",
-    ...
-  )
-}
-
-#' get uk postcode list file path
-#' @description get uk postcode list file
-#' @param ... additional arguments passed to [get_file_path()]
-#' @family lookup file paths
-get_uk_postcode_path <- function(...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = "uk_postcode_list",
-    ext = "parquet",
-    ...
-  )
+get_slf_postcode_path <- function(update = latest_update(), BYOC_MODE, ...) {
+  if (isTRUE(BYOC_MODE)) {
+    slf_postcode_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = "source_postcode_lookup.parquet"
+    )
+  } else {
+    slf_postcode_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Lookups"),
+      file_name = stringr::str_glue("source_postcode_lookup_{update}.parquet"),
+      ...
+    )
+  }
+  return(slf_postcode_path)
 }
 
 
@@ -47,9 +41,7 @@ get_uk_postcode_path <- function(...) {
 #'
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_gpprac_path <- function(update = latest_update(),
-                                BYOC_MODE,
-                                ...) {
+get_slf_gpprac_path <- function(update = latest_update(), BYOC_MODE, ...) {
   if (isTRUE(BYOC_MODE)) {
     slf_gpprac_path <- file.path(
       directory = denodo_output_path(),
@@ -62,22 +54,37 @@ get_slf_gpprac_path <- function(update = latest_update(),
       ...
     )
   }
-
   return(slf_gpprac_path)
 }
 
 
-#' get uk postcode list file path
-#' @description get uk postcode list file
+#' SLF CHI Deaths File Path
+#'
+#' @description Get the full path to the CHI deaths file
+#'
+#' @param update the update month (defaults to use [latest_update()])
+#' @param BYOC_MODE BYOC_MODE
 #' @param ... additional arguments passed to [get_file_path()]
-#' @family lookup file paths
-get_uk_postcode_path <- function(...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = "uk_postcode_list",
-    ext = "parquet",
-    ...
-  )
+#'
+#' @return The path to the CHI deaths lookup as an [fs::path()]
+#' @export
+#'
+#' @family slf lookup file path
+#' @seealso [get_file_path()] for the generic function.
+get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE = FALSE, ...) {
+  if (BYOC_MODE) {
+    slf_chi_deaths_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = "anon-chi_deaths.parquet"
+    )
+  } else {
+    slf_chi_deaths_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Deaths"),
+      file_name = stringr::str_glue("anon-chi_deaths_{update}.parquet"),
+      ...
+    )
+  }
+  return(slf_chi_deaths_path)
 }
 
 
@@ -89,16 +96,16 @@ get_uk_postcode_path <- function(...) {
 #' This function will return the combined financial years lookup
 #' i.e. all years put together.
 #'
-#' @param ... additional arguments passed to [get_file_path()]
 #' @param update the update month (defaults to use [latest_update()])
-#' @param BYOC_MODE BYOC_MODE, Boolean type
+#' @param BYOC_MODE BYOC_MODE
+#' @param ... additional arguments passed to [get_file_path()]
 #'
+#' @return The path to the combined deaths lookup as an [fs::path()]
 #' @export
+#'
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_combined_slf_deaths_lookup_path <- function(update = latest_update(),
-                                                BYOC_MODE = FALSE,
-                                                ...) {
+get_combined_slf_deaths_lookup_path <- function(update = latest_update(), BYOC_MODE = FALSE, ...) {
   # Note this name is very similar to the existing slf_deaths_lookup_path which returns the path for
   # the refined_death with deceased flag for each financial year.
   # This function will return the combined financial
@@ -115,47 +122,35 @@ get_combined_slf_deaths_lookup_path <- function(update = latest_update(),
       ...
     )
   }
-
   return(combined_slf_deaths_lookup_path)
 }
 
 
-#' SLF CHI Deaths File Path
+#' Get UK postcode list file path
 #'
-#' @description Get the full path to the CHI deaths file
+#' @description Get uk postcode list file
 #'
-#' @param update The update month to use,
-#' defaults to [latest_update()]
 #' @param ... additional arguments passed to [get_file_path()]
 #'
-#' @return The path to the costs lookup as an [fs::path()]
-#' @export
-#' @family slf lookup file path
-#' @seealso [get_file_path()] for the generic function.
-get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE = FALSE, ...) {
-  if (BYOC_MODE) {
-    slf_chi_deaths_path <- file.path(
-      directory = denodo_output_path(),
-      file_name = "anon-chi_deaths.parquet"
-    )
-  } else {
-    slf_chi_deaths_path <- get_file_path(
-      directory = fs::path(get_slf_dir(), "Deaths"),
-      file_name = stringr::str_glue("anon-chi_deaths_{update}.parquet"),
-      ...
-    )
-  }
-
-  return(slf_chi_deaths_path)
+#' @family lookup file paths
+get_uk_postcode_path <- function(...) {
+  get_file_path(
+    directory = fs::path(get_slf_dir(), "Lookups"),
+    file_name = "uk_postcode_list",
+    ext = "parquet",
+    ...
+  )
 }
 
-#' Get the full path to the SLF read code lookup
+
+#' Get the full path to the SLF Read code lookup
 #'
 #' @param update the update month (defaults to use \code{\link{latest_update}})
 #' @param ... additional arguments passed to \code{\link{get_file_path}}
 #'
 #' @return The path to the SLF read code lookup as an \code{\link[fs]{path}}
 #' @export
+#'
 #' @family file path functions
 #' @seealso \code{\link{get_file_path}} for the generic function.
 get_readcode_lookup_path <- function(update = latest_update(), ...) {
@@ -165,6 +160,7 @@ get_readcode_lookup_path <- function(update = latest_update(), ...) {
     ...
   )
 }
+
 
 #' SLF Care Home Lookup File Path
 #'
@@ -176,6 +172,7 @@ get_readcode_lookup_path <- function(update = latest_update(), ...) {
 #'
 #' @return The path to the Care Home lookup as an [fs::path()]
 #' @export
+#'
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
 get_slf_ch_name_lookup_path <- function(update = latest_update(), ...) {
