@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_readcode_lookup_path}
 \alias{get_readcode_lookup_path}
-\title{Get the full path to the SLF read code lookup}
+\title{Get the full path to the SLF Read code lookup}
 \usage{
 get_readcode_lookup_path(update = latest_update(), ...)
 }
@@ -15,7 +15,7 @@ get_readcode_lookup_path(update = latest_update(), ...)
 The path to the SLF read code lookup as an \code{\link[fs]{path}}
 }
 \description{
-Get the full path to the SLF read code lookup
+Get the full path to the SLF Read code lookup
 }
 \seealso{
 \code{\link{get_file_path}} for the generic function.

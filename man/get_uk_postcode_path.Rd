@@ -2,19 +2,15 @@
 % Please edit documentation in R/get_slf_lookup_paths.R
 \name{get_uk_postcode_path}
 \alias{get_uk_postcode_path}
-\title{get uk postcode list file path}
+\title{Get UK postcode list file path}
 \usage{
-get_uk_postcode_path(...)
-
 get_uk_postcode_path(...)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \description{
-get uk postcode list file
-
-get uk postcode list file
+Get uk postcode list file
 }
 \seealso{
 Other lookup file paths:

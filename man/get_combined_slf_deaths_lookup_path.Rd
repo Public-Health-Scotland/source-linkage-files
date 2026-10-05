@@ -13,9 +13,12 @@ get_combined_slf_deaths_lookup_path(
 \arguments{
 \item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
 
-\item{BYOC_MODE}{BYOC_MODE, Boolean type}
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+}
+\value{
+The path to the combined deaths lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full path to the BOXI NRS Deaths lookup file for all financial years
