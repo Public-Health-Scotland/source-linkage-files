@@ -12,12 +12,10 @@
 #' @family Social Care episodes file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_ch_episodes_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     sc_ch_episodes_path <- file.path(
       denodo_output_path(), "anon-all_ch_episodes.parquet"
     )
-
   } else {
     sc_ch_episodes_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_care_home"),
@@ -44,12 +42,10 @@ get_sc_ch_episodes_path <- function(update = latest_update(), BYOC_MODE, ...) {
 #' @family Social Care episodes file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_at_episodes_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     sc_at_episodes_path <- file.path(
       denodo_output_path(), "anon-all_at_episodes.parquet"
     )
-
   } else {
     sc_at_episodes_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_alarms_telecare"),
@@ -76,12 +72,10 @@ get_sc_at_episodes_path <- function(update = latest_update(), BYOC_MODE, ...) {
 #' @family Social Care episodes file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_hc_episodes_path <- function(BYOC_MODE = FALSE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     sc_hc_episodes_path <- file.path(
       denodo_output_path(), "anon-all_hc_episodes.parquet"
     )
-
   } else {
     sc_hc_episodes_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_home_care"),
@@ -108,12 +102,10 @@ get_sc_hc_episodes_path <- function(BYOC_MODE = FALSE, ...) {
 #' @family Social Care episodes file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sc_sds_episodes_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     sc_sds_episodes_path <- file.path(
       denodo_output_path(), "anon-all_sds_episodes.parquet"
     )
-
   } else {
     sc_sds_episodes_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Social_care", "processed_sc_all_sds"),
