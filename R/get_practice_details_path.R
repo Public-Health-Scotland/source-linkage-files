@@ -12,11 +12,13 @@
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_practice_details_path <- function(update = latest_update(), BYOC_MODE, ...) {
+
   if (isTRUE(BYOC_MODE)) {
     practice_details_path <- file.path(
       directory = denodo_output_path(),
       file_name = stringr::str_glue("practice_details_{update}.rds")
     )
+
   } else {
     practice_details_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Lookups"),
