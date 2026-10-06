@@ -2,9 +2,17 @@
 % Please edit documentation in R/process_tests_sc_client_lookup.R
 \name{process_tests_sc_client_lookup}
 \alias{process_tests_sc_client_lookup}
-\title{Social care client lookup tests}
+\title{SC Client Lookup tests}
 \usage{
-process_tests_sc_client_lookup(data, year)
+process_tests_sc_client_lookup(
+  data,
+  year,
+  BYOC_MODE,
+  update = previous_update(),
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
@@ -15,7 +23,6 @@ process_tests_sc_client_lookup(data, year)
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed social care client lookup and
-produces a test comparison with the previous data. This is written to
-disk in the tests workbook.
+This script takes the processed SC Client Lookup and produces
+a test comparison with the previous data.  This is written to disk as an xlsx.
 }

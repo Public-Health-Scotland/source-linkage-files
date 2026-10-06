@@ -4,7 +4,14 @@
 \alias{process_tests_it_chi_deaths}
 \title{Process CHI Deaths tests}
 \usage{
-process_tests_it_chi_deaths(data, update = previous_update())
+process_tests_it_chi_deaths(
+  data,
+  BYOC_MODE,
+  update = previous_update(),
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
@@ -16,6 +23,6 @@ process_tests_it_chi_deaths(data, update = previous_update())
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed acute extract and produces
+This script takes the processed CHI Deaths extract and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
 }

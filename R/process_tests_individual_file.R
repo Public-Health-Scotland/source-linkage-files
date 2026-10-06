@@ -6,7 +6,12 @@
 #' @inherit process_tests_acute
 #'
 #' @export
-process_tests_individual_file <- function(data, year) {
+process_tests_individual_file <- function(data,
+                                          year,
+                                          BYOC_MODE,
+                                          benchmark_run_id = NA,
+                                          run_id = NA,
+                                          run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "ind", year = year)
 
   data <- data %>%
@@ -36,12 +41,31 @@ process_tests_individual_file <- function(data, year) {
     old_data = produce_individual_file_tests(old_data),
     new_data = produce_individual_file_tests(data)
   ) %>%
+    dplyr::mutate(
+      benchmark_run_id = benchmark_run_id,
+      run_id = run_id,
+      run_date_time = run_date_time,
+      year = year
+    ) %>%
+    dplyr::select(
+      "year",
+      "measure",
+      "value_old",
+      "value_new",
+      "difference",
+      "pct_change",
+      "issue",
+      "run_id",
+      "run_date_time",
+      "benchmark_run_id"
+    ) %>%
     write_tests_xlsx(
       sheet_name = stringr::str_glue({
         "indiv_file_{year}"
       }),
       year = year,
-      workbook_name = "indiv_file"
+      workbook_name = "indiv_file",
+      BYOC_MODE = BYOC_MODE
     )
 
   log_slf_event(stage = "test", status = "complete", type = "ind", year = year)
