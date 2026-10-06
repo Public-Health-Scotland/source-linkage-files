@@ -55,10 +55,10 @@ for (t in types) {
     message("Currently processing: ", t, " for fy ", y)
 
     # Get the file path and read the data
-    if(t != "client"){
+    if (t != "client") {
       file_path <- get_source_extract_path(y, type = t)
-    }else{
-      file_path = get_sc_client_lookup_path(y)
+    } else {
+      file_path <- get_sc_client_lookup_path(y)
     }
 
     data <- read_file(file_path)
@@ -94,7 +94,6 @@ summary_rows <- final_table %>%
   group_by(Dataset) %>%
   summarise(
     FY = "Total",
-
     Proportion_of_NA = sum(
       Proportion_of_NA * Number_of_Rows * Number_of_Columns,
       na.rm = TRUE
@@ -102,18 +101,15 @@ summary_rows <- final_table %>%
       Number_of_Rows * Number_of_Columns,
       na.rm = TRUE
     ),
-
     Number_of_Rows = sum(
       Number_of_Rows,
       na.rm = TRUE
     ),
-
     Number_of_Columns = if_else(
       n_distinct(Number_of_Columns) == 1L,
       first(Number_of_Columns),
       NA_integer_
     ),
-
     .groups = "drop"
   ) %>%
   select(
