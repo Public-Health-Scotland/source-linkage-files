@@ -10,14 +10,12 @@ get_ch_costs_path(BYOC_MODE, ...)
 \item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
-
-\item{update}{passed through \code{\link[=latest_update]{latest_update()}}}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full Care Home costs lookup path
+Get the Care Home costs lookup path
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
