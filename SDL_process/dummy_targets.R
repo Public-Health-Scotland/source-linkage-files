@@ -170,7 +170,7 @@ list(
     get_hc_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
-    ),
+    )
   ),
   # PROCESS - Home Care Costs
   tar_target(
@@ -184,7 +184,7 @@ list(
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
-    ),
+    )
   ),
 
   # ============================================================================.
