@@ -559,7 +559,10 @@ list(
       # Function
       process_tests_acute(
         source_acute_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # Accident & Emergency (AE2) activity --------------------------------------
@@ -596,7 +599,10 @@ list(
       # Function
       process_tests_ae(
         source_ae_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # Community Mental Health (CMH) Activity------------------------------------
@@ -662,7 +668,10 @@ list(
       # Function
       process_tests_delayed_discharges(
         source_dd_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # District Nursing Activity-------------------------------------------------
@@ -952,7 +961,10 @@ list(
       # Function
       process_tests_gp_ooh(
         source_ooh_extract,
-        year
+        year,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # Outpatients (SMR00) Activity----------------------------------------------
@@ -1155,6 +1167,28 @@ list(
         year = year
       )
     )
+  )
+)
+
+# Bind extract targets in denodo
+tar_target(
+  tests_extract_stacked,
+  write_stacked_test_results(
+    test_results = list(
+      tests_source_acute_extract,
+      tests_source_ae_extract,
+      tests_source_cmh_extract,
+      tests_source_dd_extract,
+      tests_source_dn_extract,
+      tests_source_homelessness_extract,
+      tests_source_maternity_extract,
+      tests_source_mental_health_extract,
+      tests_source_nrs_deaths_extract,
+      tests_source_ooh_extract,
+      tests_source_outpatients_extract
+    ),
+    test_type = "extract",
+    BYOC_MODE = BYOC_MODE
   )
 )
 
