@@ -84,7 +84,7 @@ process_extract_care_home <- function(data,
 
   matched_costs <- source_ch_clean %>%
     dplyr::left_join(
-      ch_costs,
+      ch_costs %>% dplyr::select(-"run_id", -"run_date_time"),
       by = c("year", "ch_nursing" = "nursing_care_provision")
     )
 

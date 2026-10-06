@@ -111,7 +111,7 @@ process_sc_all_home_care <- function(data,
   # Home Care Costs ---------------------------------------
 
   matched_costs <- home_care_hours %>%
-    dplyr::left_join(home_care_costs,
+    dplyr::left_join(home_care_costs %>% dplyr::select(-"run_id", -"run_date_time"),
       by = c(
         "sending_location_name" = "ca_name",
         "financial_year" = "year"
