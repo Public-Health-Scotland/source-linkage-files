@@ -11,12 +11,10 @@
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_ch_costs_path <- function(BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     ch_costs_path <- file.path(
       denodo_output_path(), "cost_ch_lookup.parquet"
     )
-
   } else {
     ch_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),
@@ -43,12 +41,10 @@ get_ch_costs_path <- function(BYOC_MODE, ...) {
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_dn_costs_path <- function(BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     dn_costs_path <- file.path(
       denodo_output_path(), "cost_dn_lookup.parquet"
     )
-
   } else {
     dn_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),
@@ -75,12 +71,10 @@ get_dn_costs_path <- function(BYOC_MODE, ...) {
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_gp_ooh_costs_path <- function(BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     gp_ooh_costs_path <- file.path(
       denodo_output_path(), "cost_gpooh_lookup.parquet"
     )
-
   } else {
     gp_ooh_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),
@@ -107,12 +101,10 @@ get_gp_ooh_costs_path <- function(BYOC_MODE, ...) {
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
 get_hc_costs_path <- function(..., BYOC_MODE = FALSE) {
-
   if (isTRUE(BYOC_MODE)) {
     hc_costs_path <- file.path(
       denodo_output_path(), "costs_hc_lookup.parquet"
     )
-
   } else {
     hc_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),

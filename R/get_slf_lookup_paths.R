@@ -12,13 +12,11 @@
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
 get_slf_postcode_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     slf_postcode_path <- file.path(
       directory = denodo_output_path(),
       file_name = "source_postcode_lookup.parquet"
     )
-
   } else {
     slf_postcode_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Lookups"),
@@ -45,13 +43,11 @@ get_slf_postcode_path <- function(update = latest_update(), BYOC_MODE, ...) {
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
 get_slf_gpprac_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     slf_gpprac_path <- file.path(
       directory = denodo_output_path(),
       file_name = "source_gpprac_lookup.parquet"
     )
-
   } else {
     slf_gpprac_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Lookups"),
@@ -78,13 +74,11 @@ get_slf_gpprac_path <- function(update = latest_update(), BYOC_MODE, ...) {
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
 get_slf_chi_deaths_path <- function(update = latest_update(), BYOC_MODE, ...) {
-
   if (BYOC_MODE) {
     slf_chi_deaths_path <- file.path(
       directory = denodo_output_path(),
       file_name = "anon-chi_deaths.parquet"
     )
-
   } else {
     slf_chi_deaths_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Deaths"),
