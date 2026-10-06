@@ -23,7 +23,6 @@ get_lookups_dir <- function() {
 #'
 #' @family lookup file paths
 get_locality_path <- function(file_name = NULL, ext = "rds") {
-
   locality_dir <- fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
 
   locality_path <- get_file_path(
@@ -51,7 +50,6 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 #'
 #' @family lookup file paths
 get_spd_path <- function(file_name = NULL, ext = "parquet") {
-
   spd_dir <- fs::path(get_lookups_dir(), "Geography", "Scottish Postcode Directory")
 
   spd_path <- get_file_path(
@@ -79,7 +77,6 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 #'
 #' @family lookup file paths
 get_simd_path <- function(file_name = NULL, ext = "parquet") {
-
   simd_dir <- fs::path(get_lookups_dir(), "Deprivation")
 
   simd_path <- get_file_path(
@@ -108,12 +105,13 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 #' @family lookup file paths
 get_pop_path <- function(file_name = NULL,
                          ext = "rds",
-                         type = c("datazone",
-                                  "hscp",
-                                  "ca",
-                                  "hb",
-                                  "intzone")) {
-
+                         type = c(
+                           "datazone",
+                           "hscp",
+                           "ca",
+                           "hb",
+                           "intzone"
+                         )) {
   pop_dir <- fs::path(get_lookups_dir(), "Populations", "Estimates")
 
   file_name_re <- dplyr::recode_values(
@@ -147,7 +145,6 @@ get_pop_path <- function(file_name = NULL,
 #'
 #' @family lookup file paths
 get_gpprac_ref_path <- function(ext = "csv") {
-
   gpprac_dir <- fs::path(get_lookups_dir(), "National Reference Files")
 
   gpprac_path <- get_file_path(
