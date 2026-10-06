@@ -111,26 +111,49 @@ byoc_output_files <- get_byoc_output_files(
   year,
   # types = "byoc_input_files"
   types = c(
-    # "ae",
-    "acute",
-    "chi_deaths",
-    "combined_deaths",
-    # "dd",
+    "at",
+    "ch",
+    "cmh",
+    "client",
+    "nrs_deaths",
     "dn",
-    "dn_cost_lookup",
-    # "gp_ooh",
-    # "homelessness",
-    # "homelessness_completeness",
-    # "ltc",
+    "hc",
+    "homelessness",
+    "ltc",
     "maternity",
     "mh",
-    "nrs_deaths" # ,
+    "outpatients",
+    "pis",
+    "sds",
+    "demog_c",
+    "service_c",
+    "chi_deaths",
+    "combined_deaths",
+    # TODO: Are these still saved to disk?
+    "sc_all_at",
+    "sc_all_ch",
+    "sc_all_hc",
+    "sc_all_sds",
+    # -----------------------------------
+    "sc_demog_lookup",
+    "ch_cost_lookup",
+    "dn_cost_lookup",
+    "hc_cost_lookup",
+    "ooh_cost_lookup",
+    "postcode_lookup",
+    "gpprac_lookup"
+    # "ae",
+    # "acute",
+    # "dd",
+    # "gp_ooh",
+    # "homelessness_completeness",
     # "ooh_cost_lookup",
-    # "outpatients",
-    # "postcode_lookup",
-    # "gpprac_lookup"
   )
 )
+
+# using homelessness for test purpose. When development is complete,
+# we change to "types = "byoc_input_files""
+# can always use any other type for testing also
 
 # targets ----
 if (run_stage == "extract") {

@@ -1,40 +1,25 @@
 #' Process costs - GP OOH
 #'
-#' @param denodo_connect connection to denodo
+#' @param ooh_raw_costs Raw GP out of hours costs data
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id Denodo identifier
 #' @param run_date_time Denodo identifier
 #'
 #' @export
-process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+process_costs_gp_ooh <- function(ooh_raw_costs = get_gp_ooh_raw_costs_data(BYOC_MODE = BYOC_MODE),
+                                 write_to_disk = TRUE,
                                  BYOC_MODE = FALSE,
                                  run_id = NA,
                                  run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "ooh_cost_lookup", year = "all")
 
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  # Costs data ------------------------------------------------------------
-
-  gp_ooh_data <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_ooh_cost_lookup_source")
-  ) %>%
-    dplyr::select(
-      HB2019 = "hb2019",
-      Board_Name = "board_name",
-      Board_Cypher = "board_cypher",
-      year = "year",
-      Consultations = "consultations",
-      Cost = "cost"
-    ) %>%
-    dplyr::collect()
-
   # Data Cleaning ---------------------------------------------------------
 
   ## data - wide to long ##
   gp_ooh_costs <-
-    gp_ooh_data %>%
+    ooh_raw_costs %>%
     ## create cost per consultation ##
     dplyr::mutate(
       year = as.character(year),
@@ -76,12 +61,17 @@ process_costs_gp_ooh <- function(denodo_connect = get_denodo_connection(BYOC_MOD
     dplyr::rename(TreatmentNHSBoardCode = "HB2019") %>%
     dplyr::mutate(run_id = .env$run_id, run_date_time = .env$run_date_time)
 
-  ooh_cost_lookup %>%
+  if (write_to_disk) {
     write_file(
-      get_gp_ooh_costs_path(check_mode = "write", BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-      group_id = 3206
+      data = ooh_cost_lookup,
+      path = get_gp_ooh_costs_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
+  }
 
   log_slf_event(stage = "process", status = "complete", type = "ooh_cost_lookup", year = "all")
 

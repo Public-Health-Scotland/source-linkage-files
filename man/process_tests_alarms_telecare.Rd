@@ -4,7 +4,14 @@
 \alias{process_tests_alarms_telecare}
 \title{Process Alarms Telecare tests}
 \usage{
-process_tests_alarms_telecare(data, year)
+process_tests_alarms_telecare(
+  data,
+  year,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
@@ -15,7 +22,6 @@ process_tests_alarms_telecare(data, year)
 a \link[tibble:tibble-package]{tibble} containing a test comparison.
 }
 \description{
-This script takes the processed Alarms Telecare extract and
-produces a test comparison with the previous data. This is written to
-disk as a CSV.
+This script takes the processed Alarms Telecare extract and produces
+a test comparison with the previous data. This is written to disk as an xlsx.
 }

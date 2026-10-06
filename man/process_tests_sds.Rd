@@ -4,7 +4,14 @@
 \alias{process_tests_sds}
 \title{Process SDS tests}
 \usage{
-process_tests_sds(data, year)
+process_tests_sds(
+  data,
+  year,
+  BYOC_MODE,
+  benchmark_run_id = NA,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}

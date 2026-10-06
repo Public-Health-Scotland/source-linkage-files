@@ -1,19 +1,20 @@
 #' Process the GP OOH Diagnosis extract
 #'
 #' @description This will read and process the
-#' GP OOH Diagnosis extract, it will return the final data
-#' and (optionally) write it to disk.
+#' GP OOH Diagnosis extract, it will return the final data.
 #'
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
+#' @param readcode The Read code lookup
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
 
-process_extract_ooh_diagnosis <- function(data,
-                                          year,
-                                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-                                          BYOC_MODE) {
+process_extract_ooh_diagnosis <- function(
+  data,
+  year,
+  readcode = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
+) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-d", year = year)
 
   # Only run for a single year
@@ -23,19 +24,6 @@ process_extract_ooh_diagnosis <- function(data,
   year <- check_year_format(year)
 
   # Diagnosis Data ---------------------------------
-
-  # Read code lookup
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  readcode_lookup <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_read_code_lookup_source")
-  ) %>%
-    dplyr::select(
-      readcode = "readcode",
-      description = "description"
-    ) %>%
-    dplyr::collect()
 
   ## Deal with Read Codes
 
