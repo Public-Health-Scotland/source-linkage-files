@@ -77,8 +77,8 @@ process_lookup_postcode <- function(
 
   slf_pc_lookup <- data %>%
     dplyr::mutate(
-      run_id = run_id,
-      run_date_time = run_date_time
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     ) %>%
     dplyr::select(
       "run_id",

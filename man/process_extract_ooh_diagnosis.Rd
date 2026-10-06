@@ -7,7 +7,8 @@
 process_extract_ooh_diagnosis(
   data,
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{

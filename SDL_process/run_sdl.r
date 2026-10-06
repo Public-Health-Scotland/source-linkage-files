@@ -111,8 +111,24 @@ byoc_output_files <- get_byoc_output_files(
   year,
   # types = "byoc_input_files"
   types = c(
-    "postcode_lookup",
-    "gpprac_lookup"
+    # "ae",
+    "acute",
+    "chi_deaths",
+    "combined_deaths",
+    # "dd",
+    "dn",
+    "dn_cost_lookup",
+    # "gp_ooh",
+    # "homelessness",
+    # "homelessness_completeness",
+    # "ltc",
+    "maternity",
+    "mh",
+    "nrs_deaths" # ,
+    # "ooh_cost_lookup",
+    # "outpatients",
+    # "postcode_lookup",
+    # "gpprac_lookup"
   )
 )
 
