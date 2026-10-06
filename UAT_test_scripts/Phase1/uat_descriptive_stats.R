@@ -17,7 +17,25 @@ devtools::load_all()
 
 # 1. Define the lists to loop through
 years <- c("1415", "1516", "1617", "1718", "1819", "1920", "2021", "2122", "2223", "2324", "2425", "2526")
-types <- c("acute", "ae", "at", "ch", "cmh", "dd", "deaths", "dn", "gp_ooh", "hc", "homelessness", "maternity", "mh", "outpatients", "pis", "sds")
+types <- c(
+  "acute",
+  "ae",
+  "at",
+  "ch",
+  "cmh",
+  "dd",
+  "deaths",
+  "dn",
+  "gp_ooh",
+  "hc",
+  "homelessness",
+  "maternity",
+  "mh",
+  "outpatients",
+  "pis",
+  "sds",
+  "client"
+)
 # removed "client" from types as "anon-client_for_source_" is not present in sourcedev.
 
 # 2. Create an empty list to hold the results
@@ -37,7 +55,12 @@ for (t in types) {
     message("Currently processing: ", t, " for fy ", y)
 
     # Get the file path and read the data
-    file_path <- get_source_extract_path(y, type = t)
+    if(t != "client"){
+      file_path <- get_source_extract_path(y, type = t)
+    }else{
+      file_path = get_sc_client_lookup_path(y)
+    }
+
     data <- read_file(file_path)
 
     # Descriptive Statistics Calculations
@@ -64,7 +87,67 @@ for (t in types) {
 # 4. Combine all the small results into one big table
 final_table <- do.call(rbind, results_list)
 
-# 5. Save to Excel
-write.xlsx(final_table, "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx", sheetName = "UAT support")
+# Remove row names created by do.call(rbind, ...)
+rownames(final_table) <- NULL
 
-message("Descriptive statistics complete. File saved to: /conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx")
+summary_rows <- final_table %>%
+  group_by(Dataset) %>%
+  summarise(
+    FY = "Total",
+
+    Proportion_of_NA = sum(
+      Proportion_of_NA * Number_of_Rows * Number_of_Columns,
+      na.rm = TRUE
+    ) / sum(
+      Number_of_Rows * Number_of_Columns,
+      na.rm = TRUE
+    ),
+
+    Number_of_Rows = sum(
+      Number_of_Rows,
+      na.rm = TRUE
+    ),
+
+    Number_of_Columns = if_else(
+      n_distinct(Number_of_Columns) == 1L,
+      first(Number_of_Columns),
+      NA_integer_
+    ),
+
+    .groups = "drop"
+  ) %>%
+  select(
+    Dataset,
+    FY,
+    Number_of_Rows,
+    Number_of_Columns,
+    Proportion_of_NA
+  )
+
+# Add each summary row below its corresponding dataset
+final_table <- final_table %>%
+  mutate(
+    FY = as.character(FY),
+    FY_order = as.integer(FY)
+  ) %>%
+  bind_rows(
+    summary_rows %>%
+      mutate(FY_order = Inf)
+  ) %>%
+  arrange(Dataset, FY_order) %>%
+  select(-FY_order)
+
+# 5. Save to Excel
+write.xlsx(
+  final_table,
+  "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/4_dataset_testing/UAT_support.xlsx",
+  sheetName = "UAT support"
+)
+
+message(
+  paste0(
+    "Descriptive statistics complete. File saved to: ",
+    "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/",
+    "4_dataset_testing/UAT_support.xlsx"
+  )
+)
