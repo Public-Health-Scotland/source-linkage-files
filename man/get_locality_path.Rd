@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_lookup_paths.R
 \name{get_locality_path}
 \alias{get_locality_path}
-\title{Locality File Path - LOCAL ONLY}
+\title{Locality File Path}
 \usage{
 get_locality_path(file_name = NULL, ext = "rds")
 }
@@ -15,7 +15,7 @@ get_locality_path(file_name = NULL, ext = "rds")
 An \code{\link[fs:path]{fs::path()}} to the local HSCP Localities file
 }
 \description{
-Get the path to the centrally held HSCP Localities file - LOCAL ONLY
+Get the path to the centrally held HSCP Localities file
 }
 \seealso{
 Other lookup file paths:
