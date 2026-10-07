@@ -37,7 +37,21 @@ mapping <- tibble::tribble(
   "nrs_deaths", "sdl_nrs_deaths_processed ",
   "ooh_cost_lookup", "sdl_gp_ooh_cost_lookup_proces",
   "outpatients", "sdl_outpatients_processed ",
-  "postcode_lookup", "sdl_postcode_lookup_processed"
+  "postcode_lookup", "sdl_postcode_lookup_processed",
+
+  # Social Care
+  "sc_demog_c", "sdl_demographics_cohort",
+  "sc_demog_lookup", "sdl_demographics_processed ",
+  "ch_cost_lookup", "sdl_ch_cost_lookup_processed",
+  "hc_cost_lookup", "sdl_hc_cost_lookup_processed",
+  "sc_at", "sdl_alarms_telecare_fy_processe",
+  "sc_ch", "sdl_care_homes_fy_processed",
+  "sc_hc", "sdl_home_care_fy_processed",
+  "sc_sds", "sdl_self_directed_support_fy_pr",
+  "sc_all_at", "sdl_alarms_telecare_processed ",
+  "sc_all_ch", "sdl_care_homes_processed ",
+  "sc_all_hc", "sdl_home_care_processed ",
+  "sc_all_sds", "sdl_self_directed_support_proce"
 )
 
 
@@ -46,24 +60,43 @@ mapping <- tibble::tribble(
 
 datasets <- c(
   # "ae",
-  "acute",
-  "chi_deaths",
-  "cmh",
-  "combined_deaths",
+  # "acute",
+  # "cmh",
   # "dd",
-  "dn",
-  "dn_cost_lookup",
+  # "dn",
+  # "dn_cost_lookup",
   # "gp_ooh",
-  # "gpprac_lookup"
   # "homelessness",
   # "homelessness_completeness",
   # "ltc",
-  "maternity",
-  "mh",
-  "nrs_deaths" # ,
+  # "maternity",
+  # "mh",
+  # "nrs_deaths",
   # "ooh_cost_lookup",
   # "outpatients",
-  # "postcode_lookup"
+
+  # Deaths (for Care Home)
+  "nrs_deaths",
+  "chi_deaths",
+
+  # Lookups
+  "combined_deaths",
+  "postcode_lookup",
+  "gpprac_lookup",
+
+  # Social Care
+  # "sc_demog_c",
+  "sc_demog_lookup",
+  "ch_cost_lookup",
+  "hc_cost_lookup",
+  "sc_at",
+  "sc_ch",
+  "sc_hc",
+  "sc_sds",
+  "sc_all_at",
+  "sc_all_ch",
+  "sc_all_hc",
+  "sc_all_sds"
 )
 
 wb <- createWorkbook()
