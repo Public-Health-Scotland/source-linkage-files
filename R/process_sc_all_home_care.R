@@ -183,7 +183,13 @@ process_sc_all_home_care <- function(data,
       # Shouldn't matter as these are all the same
       dplyr::across(c("gender", "dob", "postcode"), dplyr::first)
     ) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      dplyr::across(dplyr::starts_with("hc_cost_"),
+                    ~ as.numeric(as.character(.))),
+      dplyr::across(dplyr::starts_with("hc_hours_"),
+                    ~ as.numeric(as.character(.)))
+    )
 
   # Create Source variables---------------------------------------
 

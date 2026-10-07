@@ -103,13 +103,13 @@ get_gp_ooh_costs_path <- function(BYOC_MODE, ...) {
 get_hc_costs_path <- function(..., BYOC_MODE = FALSE) {
   if (isTRUE(BYOC_MODE)) {
     hc_costs_path <- file.path(
-      denodo_output_path(), "costs_hc_lookup.parquet"
+      denodo_output_path(), "cost_hc_lookup.parquet"
     )
   } else {
     hc_costs_path <- get_file_path(
       directory = fs::path(get_slf_dir(), "Costs"),
       file_name = stringr::str_glue(
-        "costs_hc_lookup.parquet"
+        "cost_hc_lookup.parquet"
       ),
       ...
     )
