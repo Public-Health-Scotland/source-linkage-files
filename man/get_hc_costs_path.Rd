@@ -2,20 +2,20 @@
 % Please edit documentation in R/get_costs_paths.R
 \name{get_hc_costs_path}
 \alias{get_hc_costs_path}
-\title{Full Home Care Costs File Path}
+\title{Home Care Costs File Path}
 \usage{
-get_hc_costs_path(..., update = NULL)
+get_hc_costs_path(..., BYOC_MODE = FALSE)
 }
 \arguments{
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 
-\item{update}{passed through \code{\link[=latest_update]{latest_update()}}}
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full Home Care costs lookup path
+Get the Home Care costs lookup path
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.

@@ -4,16 +4,17 @@
 \alias{get_slf_chi_deaths_path}
 \title{SLF CHI Deaths File Path}
 \usage{
-get_slf_chi_deaths_path(update = latest_update(), BYOC_MODE = FALSE, ...)
+get_slf_chi_deaths_path(update = latest_update(), BYOC_MODE, ...)
 }
 \arguments{
-\item{update}{The update month to use,
-defaults to \code{\link[=latest_update]{latest_update()}}}
+\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
+
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
+The path to the CHI deaths lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the full path to the CHI deaths file
@@ -23,7 +24,6 @@ Get the full path to the CHI deaths file
 
 Other slf lookup file path:
 \code{\link[=get_combined_slf_deaths_lookup_path]{get_combined_slf_deaths_lookup_path()}},
-\code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
 \code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}},
 \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
 }

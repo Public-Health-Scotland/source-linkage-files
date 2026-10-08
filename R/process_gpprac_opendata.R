@@ -1,40 +1,29 @@
-#' GP Practice details from PHS open data
+#' Process the GP Practice Open Data lookup
 #'
-#' @description Return the data for GP Practice details.
+#' @description This will read and process the GP Practice details (Geography
+#' Labels and Cluster Information), it will return the final data
+#' and (optionally) write it to disk.
 #'
-#' @param denodo_connect Connection to denodo
+#' @param gpprac_cluster GP Practice Cluster Information
+#' @param geography_labels GP Practice Geography Labels
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
 #' @param run_id run_id for BYOC
 #' @param run_date_time run_date_time for BYOC
+#'
 #' @return The final data as a [tibble][tibble::tibble-package].
-#'
 #' @export
-#'
 #' @family lookup files
-get_gpprac_opendata <- function(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+process_gpprac_opendata <- function(
+  gpprac_cluster = get_gpprac_cluster(BYOC_MODE = BYOC_MODE),
+  geography_labels = get_geography_labels(BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA
 ) {
-  log_slf_event(stage = "read", status = "start", type = "gpprac_opendata", year = "all")
-
-  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-  gpprac_cluster <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gpprac_cluster_source")
-  ) %>%
-    dplyr::collect()
-
-  geography_labels <- dplyr::tbl(
-    denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_geography_labels_source")
-  ) %>%
-    dplyr::collect()
+  log_slf_event(stage = "process", status = "start", type = "gpprac_opendata", year = "all")
 
   gpprac_data <- gpprac_cluster %>%
     dplyr::left_join(
@@ -55,12 +44,12 @@ get_gpprac_opendata <- function(
       partnership = "hscp_name",
       health_board = "hb_name"
     ) %>%
-    # drop NA cluster rows
+    # Drop NA cluster rows
     tidyr::drop_na("cluster") %>%
     dplyr::mutate(
-      # format practice name text
+      # Format practice name text
       practice_name = stringr::str_to_title(.data$practice_name),
-      # format postcode to strict PC7 format
+      # Format postcode to strict PC7 format
       postcode = phsmethods::format_postcode(.data$postcode)
     ) %>%
     dplyr::distinct(.data$gpprac, .keep_all = TRUE)
@@ -77,7 +66,7 @@ get_gpprac_opendata <- function(
     )
   }
 
-  log_slf_event(stage = "read", status = "complete", type = "gpprac_opendata", year = "all")
+  log_slf_event(stage = "process", status = "complete", type = "gpprac_opendata", year = "all")
 
   return(gpprac_data)
 }

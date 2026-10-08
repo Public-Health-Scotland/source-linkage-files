@@ -11,9 +11,7 @@
 #'
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
-get_practice_details_path <- function(update = latest_update(),
-                                      BYOC_MODE,
-                                      ...) {
+get_practice_details_path <- function(update = latest_update(), BYOC_MODE, ...) {
   if (isTRUE(BYOC_MODE)) {
     practice_details_path <- file.path(
       directory = denodo_output_path(),

@@ -4,23 +4,27 @@
 #' (year specific) Home Care extract, it will return the final data
 #' and (optionally) write it to disk.
 #'
-#' @inheritParams process_extract_care_home
+#' @param data The full processed data which will be selected from to create
+#' the year specific data.
+#' @param year The year to process, in FY format.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_home_care <- function(
-  data,
-  year,
-  write_to_disk = TRUE
-) {
+process_extract_home_care <- function(data,
+                                      year,
+                                      write_to_disk = TRUE,
+                                      BYOC_MODE = FALSE) {
   log_slf_event(stage = "process", status = "start", type = "hc", year = year)
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
 
   # Check that we have data for this year
   if (!check_year_valid(year, "hc")) {
@@ -28,16 +32,16 @@ process_extract_home_care <- function(
     return(tibble::tibble())
   }
 
-  # Selections for financial year------------------------------------
+  # Selections for financial year ------------------------------------
 
   hc_data <- data %>%
-    # select episodes for FY
+    # Select episodes for FY
     dplyr::filter(is_date_in_fyyear(
       year,
       .data[["record_keydate1"]],
       .data[["record_keydate2"]]
     )) %>%
-    # remove any episodes where the latest submission was before the current year
+    # Remove any episodes where the latest submission was before the current year
     dplyr::filter(
       substr(.data$sc_latest_submission, 1L, 4L) >= convert_fyyear_to_year(year)
     ) %>%
@@ -46,35 +50,34 @@ process_extract_home_care <- function(
   # Home Care Hours ---------------------------------------
 
   hc_hours <- hc_data %>%
-    # rename hours variables
+    # Rename hours variables
     dplyr::rename(
       hc_hours_q1 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q1"),
       hc_hours_q2 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q2"),
       hc_hours_q3 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q3"),
       hc_hours_q4 = paste0("hc_hours_", convert_fyyear_to_year(year), "Q4")
     ) %>%
-    # remove hours variables not from current year
+    # Remove hours variables not from current year
     dplyr::select(-(tidyselect::contains("hc_hours_2"))) %>%
-    # create annual hours variable
+    # Create annual hours variable
     dplyr::mutate(hc_hours_annual = rowSums(
       dplyr::pick(tidyselect::contains("hc_hours_q")),
       na.rm = TRUE
     ))
 
-
   # Home Care Costs ---------------------------------------
 
   hc_costs <- hc_hours %>%
-    # rename costs variables
+    # Rename costs variables
     dplyr::rename(
       hc_cost_q1 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q1"),
       hc_cost_q2 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q2"),
       hc_cost_q3 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q3"),
       hc_cost_q4 = paste0("hc_cost_", convert_fyyear_to_year(year), "Q4")
     ) %>%
-    # remove cost variables not from current year
+    # Remove cost variables not from current year
     dplyr::select(-(tidyselect::contains("hc_cost_2"))) %>%
-    # create cost total net
+    # Create cost total net
     dplyr::mutate(
       cost_total_net = rowSums(
         dplyr::pick(tidyselect::contains("hc_cost_q")),
@@ -84,6 +87,8 @@ process_extract_home_care <- function(
 
   hc_processed <- hc_costs %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -106,9 +111,15 @@ process_extract_home_care <- function(
 
   if (write_to_disk) {
     write_file(
-      hc_processed,
-      get_source_extract_path(year, type = "hc", check_mode = "write"),
-      group_id = 3356 # sourcedev owner
+      data = hc_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "hc",
+        check_mode = "write",
+        BYOC_MODE = BYOC_MODE
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
