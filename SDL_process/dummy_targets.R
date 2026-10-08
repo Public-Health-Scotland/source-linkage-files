@@ -145,7 +145,7 @@ list(
     get_ch_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
-    ),
+    )
   ),
   # PROCESS - Care Home Costs
   tar_target(
