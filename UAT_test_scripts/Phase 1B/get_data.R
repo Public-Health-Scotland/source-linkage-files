@@ -5,11 +5,11 @@
 devtools::load_all()
 library(createslf)
 
-################################################################################.
+################################################################################ .
 # Function to show all values for `family` argument in `get_types()`
-################################################################################.
+################################################################################ .
 
-get_families <- function(){
+get_families <- function() {
   family_list <- c(
     "all", # All Extracts (46)
     "boxi", # BOXI Extracts (13)
@@ -23,15 +23,14 @@ get_families <- function(){
   return(family_list)
 }
 
-################################################################################.
+################################################################################ .
 # Function to show the `type` code for each dataset
 # Option to filter for a specific "family" or whether extracts are year specific or file ingests
-################################################################################.
+################################################################################ .
 
 get_types <- function(family = "all", year_specific = NULL, file_ingest = NULL) {
-
   # Check family is valid
-  if (!is.character(family) || length(family) != 1 || !family %in% get_families()){
+  if (!is.character(family) || length(family) != 1 || !family %in% get_families()) {
     message(paste("`family` argument invalid. Use `get_families()`."))
     return(NA_character_)
   }
@@ -49,7 +48,7 @@ get_types <- function(family = "all", year_specific = NULL, file_ingest = NULL) 
   }
 
   # BOXI Extracts (13)
-  boxi_extracts <-c(
+  boxi_extracts <- c(
     "ae", # A&E
     "ae_cup", # A&E CUP
     "acute", # Acute
@@ -154,16 +153,15 @@ get_types <- function(family = "all", year_specific = NULL, file_ingest = NULL) 
   ))
 
   # Get list of types for each family member
-  type_list <- switch(
-      family,
-      "all" = all_extracts,
-      "boxi" = boxi_extracts,
-      "archive" = archived_extracts,
-      "it" = it_extracts,
-      "team" = team_extracts,
-      "lookup" = lookups,
-      "sc" = sc_extracts,
-      "opendata" = open_data_extracts
+  type_list <- switch(family,
+    "all" = all_extracts,
+    "boxi" = boxi_extracts,
+    "archive" = archived_extracts,
+    "it" = it_extracts,
+    "team" = team_extracts,
+    "lookup" = lookups,
+    "sc" = sc_extracts,
+    "opendata" = open_data_extracts
   )
 
   # Filter for year specific extracts
@@ -181,7 +179,7 @@ get_types <- function(family = "all", year_specific = NULL, file_ingest = NULL) 
   }
 
   # Return NA if there are no types in the selection
-  if(length(type_list) == 0){
+  if (length(type_list) == 0) {
     message("No types found.")
     return(NA_character_)
   }
@@ -189,20 +187,19 @@ get_types <- function(family = "all", year_specific = NULL, file_ingest = NULL) 
   return(sort(type_list))
 }
 
-################################################################################.
+################################################################################ .
 # Function to get the local filepath to each dataset as submitted to NSS
-################################################################################.
+################################################################################ .
 
 get_submission_filepath <- function(type) {
-
   # Check type is valid
-  if (!type %in% get_types()){
+  if (!type %in% get_types()) {
     message("`type` not valid. To check valid types use `get_types()`.")
     return(NA_character_)
   }
 
   # Check the type is a file ingest
-  if (type %in% get_types(file_ingest = FALSE)){
+  if (type %in% get_types(file_ingest = FALSE)) {
     message("The type supplied is not a file ingest. To check file ingest types use `get_types(file_ingest = TRUE)`.")
     return(NA_character_)
   }
@@ -242,7 +239,7 @@ get_submission_filepath <- function(type) {
   submission_folder <- paste0("/conf/hscdiip/SDL_submission/", extract_folder, "/")
 
   # Check that the submission folder exists
-  if (!dir.exists(submission_folder)){
+  if (!dir.exists(submission_folder)) {
     message("Submission folder not available.")
     return(NA_character_)
   }
@@ -254,11 +251,11 @@ get_submission_filepath <- function(type) {
   )
 
   # Check that there are files in the submission folder
-  if (length(all_files) == 0){
+  if (length(all_files) == 0) {
     message("No files found in submission folder.")
     return(NA_character_)
 
-  # Get the latest submission
+    # Get the latest submission
   } else {
     # Extract numbers
     nums <- as.numeric(stringr::str_extract(all_files, "\\d+"))
@@ -273,55 +270,54 @@ get_submission_filepath <- function(type) {
   }
 }
 
-################################################################################.
+################################################################################ .
 # Function get test boxi extract path
-################################################################################.
+################################################################################ .
 
-get_test_boxi_data <- function(type, year){
+get_test_boxi_data <- function(type, year) {
   source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp/"
   year <- convert_fyyear_to_year(year)
 
   filename <- dplyr::recode_values(
     type,
-    "ae"            ~ "A&E-episode-level-extract-",
-    "ae_cup"        ~ "A&E-UCD-CUP-extract-",
-    "acute_cup"     ~ "Acute-CUP-extract-",
-    "acute"         ~ "Acute-episode-level-extract-",
-    "gp_ooh-c"      ~ "GP-OoH-consultations-extract-",
-    "gp_ooh_cup"    ~ "GP-OoH-CUP-extract-",
-    "gp_ooh-d"      ~ "GP-OoH-diagnosis-extract-",
-    "gp_ooh-o"      ~ "GP-OoH-outcomes-extract-",
-    "homelessness"  ~ "Homelessness-extract-",
-    "maternity"     ~ "Maternity-episode-level-extract-",
-    "mh"            ~ "Mental-Health-episode-level-extract-",
-    "nrs_deaths"    ~ "NRS-death-registrations-extract-",
-    "outpatients"   ~ "Outpatients-episode-level-extract-",
+    "ae" ~ "A&E-episode-level-extract-",
+    "ae_cup" ~ "A&E-UCD-CUP-extract-",
+    "acute_cup" ~ "Acute-CUP-extract-",
+    "acute" ~ "Acute-episode-level-extract-",
+    "gp_ooh-c" ~ "GP-OoH-consultations-extract-",
+    "gp_ooh_cup" ~ "GP-OoH-CUP-extract-",
+    "gp_ooh-d" ~ "GP-OoH-diagnosis-extract-",
+    "gp_ooh-o" ~ "GP-OoH-outcomes-extract-",
+    "homelessness" ~ "Homelessness-extract-",
+    "maternity" ~ "Maternity-episode-level-extract-",
+    "mh" ~ "Mental-Health-episode-level-extract-",
+    "nrs_deaths" ~ "NRS-death-registrations-extract-",
+    "outpatients" ~ "Outpatients-episode-level-extract-",
     default = NA_character_
   )
   paste0(source_dir, filename, year, ".csv")
 }
 
-################################################################################.
+################################################################################ .
 # Function to get the local filepath to each dataset
 # If sdl_submission is TRUE, returns path to file submitted to NSS
 # NOTE: Social Care extracts return a table name and Open Data returns a res_id
-################################################################################.
+################################################################################ .
 
 get_local_filepath <- function(type, year = "", sdl_submission = FALSE) {
-
   # Check type is valid
-  if (!type %in% get_types()){
+  if (!type %in% get_types()) {
     message("`type` not valid. To check valid types use `get_types()`.")
     return(NA_character_)
   }
 
   # Check year format is correct
   if (!(year == "" ||
-        (is.character(year) &&
-         length(year) == 1 &&
-         grepl("^\\d{4}$", year) &&
-         as.integer(substr(year,3,4)) ==
-         as.integer(substr(year,1,2)) + 1))) {
+    (is.character(year) &&
+      length(year) == 1 &&
+      grepl("^\\d{4}$", year) &&
+      as.integer(substr(year, 3, 4)) ==
+        as.integer(substr(year, 1, 2)) + 1))) {
     message("`year` argument invalid. Must be in the correct format e.g. `1718`.")
     return(NA_character_)
   }
@@ -333,25 +329,25 @@ get_local_filepath <- function(type, year = "", sdl_submission = FALSE) {
   }
 
   # Check if type is year specific and year is not provided
-  if (type %in% get_types(year_specific = TRUE) && year == ""){
+  if (type %in% get_types(year_specific = TRUE) && year == "") {
     message("This is a year specific extract. `year` must be provided.")
     return(NA_character_)
   }
 
   # Check if type is not year specific but year is provided
-  if (type %in% get_types(year_specific = FALSE) && year != ""){
+  if (type %in% get_types(year_specific = FALSE) && year != "") {
     message("This is not a year specific extract. Returning all years.")
   }
 
   # Check if type is not a file ingest but sdl_submission is TRUE
-  if (type %in% get_types(file_ingest = FALSE) && isTRUE(sdl_submission)){
+  if (type %in% get_types(file_ingest = FALSE) && isTRUE(sdl_submission)) {
     message("This is not a file ingest. Returning non-submission file path.")
   }
 
   # Return the submission file path if sdl_submission is TRUE and type is a file ingest (get_submission_filepath returns NA if type is not a file ingest)
-  if (type %in% get_types(file_ingest = TRUE) && isTRUE(sdl_submission)){
+  if (type %in% get_types(file_ingest = TRUE) && isTRUE(sdl_submission)) {
     local_filepath <- get_submission_filepath(type)
-      return(local_filepath)
+    return(local_filepath)
   }
 
   # Return the local file path
@@ -372,13 +368,11 @@ get_local_filepath <- function(type, year = "", sdl_submission = FALSE) {
     "outpatients"
   )) {
     local_filepath <- suppressMessages(get_test_boxi_data(type = type, year = year))
-
   } else {
-    local_filepath <- switch(
-      type,
+    local_filepath <- switch(type,
       # Archived Extracts
-      "cmh" =  suppressMessages(get_boxi_extract_path(type = type, year = year)),
-      "dn" =  suppressMessages(get_boxi_extract_path(type = type, year = year)),
+      "cmh" = suppressMessages(get_boxi_extract_path(type = type, year = year)),
+      "dn" = suppressMessages(get_boxi_extract_path(type = type, year = year)),
       "hhg" = suppressMessages(get_hhg_path(year = year)),
       # IT Extracts
       "chi_deaths" = suppressMessages(get_it_deaths_path()),
@@ -421,38 +415,37 @@ get_local_filepath <- function(type, year = "", sdl_submission = FALSE) {
     )
   }
 
-  if (type %in% get_types("sc")){
+  if (type %in% get_types("sc")) {
     message("This is a Social Care extract. Returning Denodo table name.")
   }
 
-  if (type %in% get_types("opendata")){
+  if (type %in% get_types("opendata")) {
     message("This is a PHS Open Data extract. Returning dataset ID.")
   }
 
   return(local_filepath)
 }
 
-################################################################################.
+################################################################################ .
 # Helper function to detect a file type and read the file
-################################################################################.
+################################################################################ .
 
-auto_file_read <- function(filepath, n_rows = NULL){
-
+auto_file_read <- function(filepath, n_rows = NULL) {
   # Check filepath argument is valid
   if (!is.character(filepath) ||
-      length(filepath) != 1 ||
-      is.na(filepath) ||
-      filepath == "") {
+    length(filepath) != 1 ||
+    is.na(filepath) ||
+    filepath == "") {
     message("`filepath` must be a non-empty character string of length 1.")
     return(NULL)
   }
 
   # Check n_rows argument is valid
   if (!is.null(n_rows) &&
-      (!is.numeric(n_rows) ||
-       length(n_rows) != 1 ||
-       n_rows < 1 ||
-       n_rows %% 1 != 0)) {
+    (!is.numeric(n_rows) ||
+      length(n_rows) != 1 ||
+      n_rows < 1 ||
+      n_rows %% 1 != 0)) {
     message("`n_rows` must be a positive integer or NULL.")
     return(NULL)
   }
@@ -508,26 +501,25 @@ auto_file_read <- function(filepath, n_rows = NULL){
   return(data)
 }
 
-################################################################################.
+################################################################################ .
 # Function to read in data from local file path
 # NOTE: Social Care extracts return data from Denodo (social_care_2) and Open Data returns data from phsopendata
-################################################################################.
+################################################################################ .
 
-get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NULL){
-
+get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NULL) {
   # Check the file path exists
   filepath <- get_local_filepath(type = type, year = year, sdl_submission = sdl_submission)
-  if (is.na(filepath)){
+  if (is.na(filepath)) {
     return(NULL)
   }
 
   # Check n_rows is valid
   if (!(is.null(n_rows) ||
-        (is.numeric(n_rows) &&
-         length(n_rows) == 1 &&
-         !is.na(n_rows) &&
-         n_rows > 0 &&
-         n_rows %% 1 == 0))) {
+    (is.numeric(n_rows) &&
+      length(n_rows) == 1 &&
+      !is.na(n_rows) &&
+      n_rows > 0 &&
+      n_rows %% 1 == 0))) {
     message("`n_rows` must be a positive integer or NULL.")
     return(NULL)
   }
@@ -540,42 +532,45 @@ get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NUL
     if (!is.null(n_rows)) {
       data <- tibble::as_tibble(DBI::dbGetQuery(
         sc_dvprod_connection,
-        glue::glue("SELECT * FROM social_care_2.{filepath} LIMIT {n_rows}")))
-    # All data
+        glue::glue("SELECT * FROM social_care_2.{filepath} LIMIT {n_rows}")
+      ))
+      # All data
     } else {
       data <- tibble::as_tibble(DBI::dbGetQuery(
         sc_dvprod_connection,
-        glue::glue("SELECT * FROM social_care_2.{filepath}")))
+        glue::glue("SELECT * FROM social_care_2.{filepath}")
+      ))
     }
     message(paste0("Data read from: social_care_2, ", filepath))
     DBI::dbDisconnect(sc_dvprod_connection)
 
-  # Open Data
-  } else if (type %in% get_types("opendata")){
+    # Open Data
+  } else if (type %in% get_types("opendata")) {
     # Read data using get_dataset()
-    if (type == "gpprac_cluster"){
+    if (type == "gpprac_cluster") {
       data <- phsopendata::get_dataset(filepath)
-    # Read data using get_resource()
+      # Read data using get_resource()
     } else {
       # Columns to select
-      col_select <- switch(
-        type,
+      col_select <- switch(type,
         "ch_cost" = c("Date", "KeyStatistic", "CA", "Value"),
         "geography_labels" = c("HSCP", "HSCPName", "HB", "HBName"),
         "la_code" = c("CA", "CAName", "HBName"),
-        NULL)
+        NULL
+      )
       # Read data
       data <- phsopendata::get_resource(
         res_id = filepath,
-        col_select = col_select)
+        col_select = col_select
+      )
     }
     if (!is.null(n_rows)) {
       data <- utils::head(data, n_rows)
     }
     message(paste0("Data read from: PHS OpenData (", filepath, ")"))
 
-  # Files
-  } else if (type == "homelessness_completeness" && isFALSE(sdl_submission)){
+    # Files
+  } else if (type == "homelessness_completeness" && isFALSE(sdl_submission)) {
     data <- openxlsx::read.xlsx(
       filepath,
       sheet = "Table 1",
@@ -591,9 +586,9 @@ get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NUL
   return(data)
 }
 
-################################################################################.
+################################################################################ .
 # Function to get preprod connection to denodo (copied from development branch)
-################################################################################.
+################################################################################ .
 
 get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
   if (!BYOC_MODE) {
@@ -681,9 +676,9 @@ get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
   return(db_connection)
 }
 
-################################################################################.
+################################################################################ .
 # Function to set up keyring for denodo (copied from development branch)
-################################################################################.
+################################################################################ .
 
 setup_denodo_keyring <- function(keyring = "denodo_keyring") {
   options(keyring_backend = "file")
@@ -737,12 +732,11 @@ setup_denodo_keyring <- function(keyring = "denodo_keyring") {
   cli::cli_alert_success("Setup Complete! You can now use get_denodo_connection().")
 }
 
-################################################################################.
+################################################################################ .
 # Function to return the table names for each dataset in Denodo
-################################################################################.
+################################################################################ .
 
 get_sdl_raw_names <- function(type) {
-
   # Check type is valid
   if (!is.character(type) || any(!type %in% get_types())) {
     message("`type` not valid. To check valid types use `get_types()`.")
@@ -750,7 +744,6 @@ get_sdl_raw_names <- function(type) {
   }
 
   sdl_names <- c(
-
     # BOXI Extracts (13)
     ae = "sdl_ae2_episode_level_source",
     ae_cup = "sdl_ae_ucd_cup_source",
@@ -816,12 +809,11 @@ get_sdl_raw_names <- function(type) {
   return(unname(sdl_names[type]))
 }
 
-################################################################################.
+################################################################################ .
 # Function to return the year column to filter for year specific datasets in Denodo (UNFINISHED)
-################################################################################.
+################################################################################ .
 
 get_sdl_year_cols <- function(type) {
-
   # Check type is valid
   if (!is.character(type) || any(!type %in% get_types())) {
     message("`type` not valid. To check valid types use `get_types()`.")
@@ -835,7 +827,6 @@ get_sdl_year_cols <- function(type) {
   }
 
   year_cols <- c(
-
     # BOXI Extracts (13)
     ae = "arrival_financial_year",
     ae_cup = "acute_admission_financial_year",
@@ -871,10 +862,10 @@ get_sdl_year_cols <- function(type) {
   return(unname(year_cols[type]))
 }
 
-################################################################################.
+################################################################################ .
 # Function to check available SDL datasets
-################################################################################.
-check_sdl_data <- function(){
+################################################################################ .
+check_sdl_data <- function() {
   # Connect to denodo
   denodo_connect <- get_denodo_connection()
 
@@ -885,80 +876,79 @@ check_sdl_data <- function(){
   DBI::dbDisconnect(denodo_connect)
 
   # Filter the results in R (instead of SQL) to find names starting with 'sdl_' and ending in '_source'
-  my_datasets <- all_views[grepl("^sdl_.*_source$", all_views$name, ignore.case = TRUE),]
+  my_datasets <- all_views[grepl("^sdl_.*_source$", all_views$name, ignore.case = TRUE), ]
 
   # Print available datasets
   message(paste0("The following ", length(my_datasets), " datasets are available:"))
   print(my_datasets)
 
   # Check get_sdl_raw_names() is up to date
-  sdl_raw_names <- get_sdl_raw_names(get_types()) [get_sdl_raw_names(get_types()) != "unavailable"]
+  sdl_raw_names <- get_sdl_raw_names(get_types())[get_sdl_raw_names(get_types()) != "unavailable"]
 
   # Datasets in get_sdl_raw_names() but not in denodo
   error1 <- setdiff(sdl_raw_names, my_datasets)
-  if (length(error1) > 0){
+  if (length(error1) > 0) {
     message("The following datasets are incorrectly named in `get_sdl_raw_names()` or are not yet available:")
     print(error1)
   }
 
   # Datasets in denodo but not in get_sdl_raw_names()
   error2 <- setdiff(my_datasets, sdl_raw_names)
-  if (length(error2) > 0){
+  if (length(error2) > 0) {
     message("The following datasets are available and need to be updated in `get_sdl_raw_names()`:")
     print(error2)
   }
   return(invisible(my_datasets))
 }
 
-################################################################################.
+################################################################################ .
 # Function to read SDL data from denodo
-################################################################################.
+################################################################################ .
 
-get_sdl_data <- function(type, year = "", n_rows = NULL){
-
+get_sdl_data <- function(type, year = "", n_rows = NULL) {
   # Check type is valid
-  if (!type %in% get_types()){
+  if (!type %in% get_types()) {
     message("`type` not valid. To check valid types use `get_types()`.")
     return(NULL)
   }
 
   # Check year format is correct
   if (!(year == "" ||
-        (is.character(year) &&
-         length(year) == 1 &&
-         grepl("^\\d{4}$", year) &&
-         as.integer(substr(year,3,4)) ==
-         as.integer(substr(year,1,2)) + 1))) {
+    (is.character(year) &&
+      length(year) == 1 &&
+      grepl("^\\d{4}$", year) &&
+      as.integer(substr(year, 3, 4)) ==
+        as.integer(substr(year, 1, 2)) + 1))) {
     message("`year` argument invalid. Must be in the correct format e.g. `1718`.")
     return(NULL)
   }
 
   # Check n_rows is valid
   if (!(is.null(n_rows) ||
-        (is.numeric(n_rows) &&
-         length(n_rows) == 1 &&
-         !is.na(n_rows) &&
-         n_rows > 0 &&
-         n_rows %% 1 == 0))) {
+    (is.numeric(n_rows) &&
+      length(n_rows) == 1 &&
+      !is.na(n_rows) &&
+      n_rows > 0 &&
+      n_rows %% 1 == 0))) {
     message("`n_rows` must be a positive integer or NULL.")
     return(NULL)
   }
 
   # Check if type is year specific and year is not provided
-  if (type %in% get_types(year_specific = TRUE) && year == ""){
+  if (type %in% get_types(year_specific = TRUE) && year == "") {
     message("This is a year specific extract. `year` must be provided.")
     return(NULL)
   }
 
   # Check if type is not year specific but year is provided
-  if (type %in% get_types(year_specific = FALSE) && year != ""){
+  if (type %in% get_types(year_specific = FALSE) && year != "") {
     message("This is not a year specific extract. Returning all years.")
   }
 
   # Get table name
   sdl_name <- get_sdl_raw_names(type)
 
-  if (sdl_name == "unavailable"){
+  if (sdl_name == "unavailable") {
     message("Currently waiting for data. Check using `check_sdl_data()` and update `get_sdl_raw_names()` when data is available.")
     return(NULL)
   }
@@ -969,11 +959,13 @@ get_sdl_data <- function(type, year = "", n_rows = NULL){
   if (!is.null(n_rows)) {
     data <- tibble::as_tibble(DBI::dbGetQuery(
       denodo_connect,
-      glue::glue("SELECT * FROM sdl.{sdl_name} LIMIT {n_rows}")))
+      glue::glue("SELECT * FROM sdl.{sdl_name} LIMIT {n_rows}")
+    ))
   } else {
     data <- tibble::as_tibble(DBI::dbGetQuery(
       denodo_connect,
-      glue::glue("SELECT * FROM sdl.{sdl_name}")))
+      glue::glue("SELECT * FROM sdl.{sdl_name}")
+    ))
   }
 
   DBI::dbDisconnect(denodo_connect)
@@ -981,25 +973,24 @@ get_sdl_data <- function(type, year = "", n_rows = NULL){
   return(data)
 }
 
-################################################################################.
+################################################################################ .
 # Function to get data from SDL, local or submission. Enables number of rows to be specified.
-################################################################################.
+################################################################################ .
 
-get_data <- function(type, read_from, year = "", sdl_submission = FALSE, n_rows = NULL){
-
+get_data <- function(type, read_from, year = "", sdl_submission = FALSE, n_rows = NULL) {
   # Check read_from argument is valid
-  if(!read_from %in% c("local", "sdl")){
+  if (!read_from %in% c("local", "sdl")) {
     message("`read_from` argument invalid. Must be `local` or `sdl`.")
     return(NA)
   }
 
   # Read local file
-  if (read_from == "local"){
+  if (read_from == "local") {
     data <- get_local_data(type, year, sdl_submission, n_rows)
   }
 
   # Read SDL table
-  if (read_from == "sdl"){
+  if (read_from == "sdl") {
     data <- get_sdl_data(type, year, n_rows)
   }
 
