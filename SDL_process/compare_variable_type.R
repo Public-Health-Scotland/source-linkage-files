@@ -58,7 +58,7 @@ datasets <- c(
   # "maternity",
   # "mh",
   # "nrs_deaths",
-  "ooh_cost_lookup" #,
+  "ooh_cost_lookup" # ,
   # "outpatients",
   # "postcode_lookup",
   # "gpprac_lookup"

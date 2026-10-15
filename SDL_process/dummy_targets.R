@@ -135,7 +135,6 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
     tar_target(
       ae_cup_file,
       read_extract_ae_cup(
@@ -144,7 +143,6 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
     tar_target(
       source_ae_extract,
       process_extract_ae(
@@ -167,7 +165,6 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
     tar_target(
       source_dd_extract,
       process_extract_delayed_discharges(
@@ -190,7 +187,6 @@ list(
         denodo_connect = NULL
       )
     ),
-
     tar_target(
       gp_ooh_cup,
       read_extract_gp_ooh_cup(
@@ -199,7 +195,6 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
     tar_target(
       source_ooh_extract,
       process_extract_gp_ooh(
@@ -237,7 +232,6 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
     tar_target(
       source_homelessness_extract,
       process_extract_homelessness(
@@ -251,7 +245,6 @@ list(
         run_date_time = run_date_time
       )
     ),
-
     tar_target(
       homelessness_lookup,
       create_homelessness_lookup(
