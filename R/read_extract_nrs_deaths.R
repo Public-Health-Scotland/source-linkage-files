@@ -25,7 +25,7 @@ read_extract_nrs_deaths <- function(
   # Read extract
   extract_nrs_deaths <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_nrs_deaths_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("nrs_deaths"))
   ) %>%
     # Filter by calendar year
     dplyr::filter(
