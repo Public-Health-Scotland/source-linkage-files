@@ -21,35 +21,41 @@ get_ch_costs_path <- function(..., update = NULL) {
   return(ch_costs_path)
 }
 
-#' District Nursing Costs File Path
+#' Processed District Nursing Costs File Path
 #'
-#' @description Get the full District Nursing costs lookup path
+#' @description Get the processed District Nursing costs path
 #'
 #' @inheritParams get_ch_costs_path
 #'
-#' @return The path to the costs lookup as an [fs::path()]
+#' @return The path to the processed costs lookup as an [fs::path()]
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_dn_costs_path <- function(..., update = NULL) {
-  dn_costs_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = stringr::str_glue(
-      "Cost_DN_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.parquet"
-    ),
-    ...
-  )
-
+get_dn_costs_path <- function(BYOC_MODE, ...) {
+  if (isTRUE(BYOC_MODE)) {
+    dn_costs_path <- file.path(
+      denodo_output_path(),
+      stringr::str_glue("cost_dn_lookup.parquet")
+    )
+  } else {
+    dn_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = stringr::str_glue(
+        "Cost_DN_Lookup.parquet"
+      ),
+      ...
+    )
+  }
   return(dn_costs_path)
 }
 
-#' Raw District Nursing Costs File Path
+#' Raw District Nursing Costs File Path - LOCAL ONLY
 #'
-#' @description Get the District Nursing raw costs path
+#' @description Get the raw District Nursing costs path - LOCAL ONLY
 #'
 #' @inheritParams get_ch_costs_path
 #'
-#' @return The path to the costs lookup as an [fs::path()]
+#' @return The path to the local raw costs lookup as an [fs::path()]
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
@@ -63,6 +69,26 @@ get_dn_raw_costs_path <- function(...) {
   return(dn_raw_costs_path)
 }
 
+#' District Nursing Contacts File Path - LOCAL ONLY
+#'
+#' @description Get the District Nursing contacts path - LOCAL ONLY
+#'
+#' @inheritParams get_ch_costs_path
+#'
+#' @return The path to the local contacts lookup as an [fs::path()]
+#' @export
+#' @family costs lookup file paths
+#' @seealso [get_file_path()] for the generic function.
+get_dn_contacts_path <- function(...) {
+  dn_contacts_path <- get_file_path(
+    directory = fs::path(get_slf_dir(), "Costs"),
+    file_name = stringr::str_glue("DN-Contacts-Numbers-for-Costs.csv"),
+    ...
+  )
+
+  return(dn_contacts_path)
+}
+
 #' GP Out of Hours Costs File Path
 #'
 #' @description Get the full GP Out of Hours costs lookup path
@@ -73,14 +99,21 @@ get_dn_raw_costs_path <- function(...) {
 #' @export
 #' @family costs lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_gp_ooh_costs_path <- function(..., update = NULL) {
-  gp_ooh_costs_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Costs"),
-    file_name = stringr::str_glue(
-      "Cost_GPOoH_Lookup{ifelse(is.null(update), '', paste0('_pre-', update))}.parquet"
-    ),
-    ...
-  )
+get_gp_ooh_costs_path <- function(BYOC_MODE, ..., update = NULL) {
+  if (isTRUE(BYOC_MODE)) {
+    gp_ooh_costs_path <- file.path(
+      denodo_output_path(),
+      stringr::str_glue("cost_gpooh_lookup.parquet")
+    )
+  } else {
+    gp_ooh_costs_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Costs"),
+      file_name = stringr::str_glue(
+        "cost_gpooh_lookup.parquet"
+      ),
+      ...
+    )
+  }
 
   return(gp_ooh_costs_path)
 }

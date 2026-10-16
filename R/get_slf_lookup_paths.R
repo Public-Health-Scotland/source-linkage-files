@@ -3,20 +3,66 @@
 #' @description Get the full path to the SLF Postcode lookup
 #'
 #' @param update the update month (defaults to use [latest_update()])
+#' @param BYOC_MODE BYOC_MODE
 #' @param ... additional arguments passed to [get_file_path()]
 #'
 #' @return The path to the SLF Postcode lookup as an [fs::path()]
 #' @export
+#'
 #' @family slf lookup file path
 #' @seealso [get_file_path()] for the generic function.
-get_slf_postcode_path <- function(update = latest_update(), ...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_postcode_lookup_{update}"),
-    ext = "parquet",
-    ...
-  )
+get_slf_postcode_path <- function(update = latest_update(),
+                                  BYOC_MODE,
+                                  ...) {
+  if (isTRUE(BYOC_MODE)) {
+    slf_postcode_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = stringr::str_glue("source_postcode_lookup.parquet")
+    )
+  } else {
+    slf_postcode_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Lookups"),
+      file_name = stringr::str_glue("source_postcode_lookup_{update}.parquet"),
+      ...
+    )
+  }
+
+  return(slf_postcode_path)
 }
+
+
+#' SLF GP Lookup File Path
+#'
+#' @description Get the full path to the SLF GP practice lookup
+#'
+#' @param update the update month (defaults to use [latest_update()])
+#' @param BYOC_MODE BYOC_MODE
+#' @param ... additional arguments passed to [get_file_path()]
+#'
+#' @return The path to the SLF GP practice lookup as an [fs::path()]
+#' @export
+#'
+#' @family slf lookup file path
+#' @seealso [get_file_path()] for the generic function.
+get_slf_gpprac_path <- function(update = latest_update(),
+                                BYOC_MODE,
+                                ...) {
+  if (isTRUE(BYOC_MODE)) {
+    slf_gpprac_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = "source_gpprac_lookup.parquet"
+    )
+  } else {
+    slf_gpprac_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Lookups"),
+      file_name = stringr::str_glue("source_gpprac_lookup_{update}.parquet"),
+      ...
+    )
+  }
+
+  return(slf_gpprac_path)
+}
+
 
 #' get uk postcode list file path
 #' @description get uk postcode list file
@@ -31,24 +77,6 @@ get_uk_postcode_path <- function(...) {
   )
 }
 
-#' SLF GP Lookup File Path
-#'
-#' @description Get the full path to the SLF GP practice lookup
-#'
-#' @param update the update month (defaults to use [latest_update()])
-#' @param ... additional arguments passed to [get_file_path()]
-#'
-#' @return The path to the SLF GP practice lookup as an [fs::path()]
-#' @export
-#' @family slf lookup file path
-#' @seealso [get_file_path()] for the generic function.
-get_slf_gpprac_path <- function(update = latest_update(), ...) {
-  get_file_path(
-    directory = fs::path(get_slf_dir(), "Lookups"),
-    file_name = stringr::str_glue("source_gpprac_lookup_{update}.parquet"),
-    ...
-  )
-}
 
 #' SLF death dates File Path
 #'

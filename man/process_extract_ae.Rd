@@ -4,7 +4,15 @@
 \alias{process_extract_ae}
 \title{Process the A&E extract}
 \usage{
-process_extract_ae(data, year, write_to_disk = TRUE)
+process_extract_ae(
+  data,
+  year,
+  ae_cup_file = read_extract_ae_cup(year = year, BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
+)
 }
 \arguments{
 \item{data}{The extract to process}
@@ -45,6 +53,7 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

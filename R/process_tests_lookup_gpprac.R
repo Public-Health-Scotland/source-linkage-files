@@ -6,12 +6,12 @@
 #' @inherit process_tests_lookup_pc
 #'
 #' @export
-process_tests_lookup_gpprac <- function(data, update = previous_update()) {
+process_tests_lookup_gpprac <- function(data, update = previous_update(), BYOC_MODE = FALSE) {
   log_slf_event(stage = "test", status = "start", type = "gpprac_lookup", year = "all")
 
   comparison <- produce_test_comparison(
     old_data = produce_slf_gpprac_tests(
-      read_file(get_slf_gpprac_path(update = update))
+      read_file(get_slf_gpprac_path(update = update, BYOC_MODE = BYOC_MODE))
     ),
     new_data = produce_slf_gpprac_tests(data)
   ) %>%

@@ -4,10 +4,13 @@
 \alias{read_extract_delayed_discharges}
 \title{Read Delayed Discharges extract}
 \usage{
-read_extract_delayed_discharges(file_path = get_dd_path())
+read_extract_delayed_discharges(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
-\item{file_path}{Path to DD extract}
+\item{denodo_connect}{Connection to denodo database}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
