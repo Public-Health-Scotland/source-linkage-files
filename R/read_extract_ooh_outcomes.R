@@ -5,22 +5,37 @@
 #' @return a [tibble][tibble::tibble-package] with OOH Outcomes extract data
 read_extract_ooh_outcomes <- function(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-o")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh-o", year = year)
 
+  year <- check_year_format(year, format = "fyyear")
+  c_year <- convert_fyyear_to_year(year)
+
+  # Specify years available for running
+  if (!check_year_valid(year, type = "gpooh")) {
+    return(tibble::tibble())
+  }
+
+  # Disconnect from Denodo
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
   ## Load extract file
-  outcomes_extract <- read_file(file_path,
-    # All columns are character type
-    col_types = readr::cols(.default = readr::col_character())
+  outcomes_extract <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_gp_ooh_outcome_source")
   ) %>%
-    # rename variables
-    dplyr::rename(
-      ooh_case_id = "GUID",
-      outcome = "Case Outcome"
+    dplyr::filter(
+      .data$sc_start_financial_year == !!c_year,
+      .data$case_outcome != "",
+      .data$out_of_hours_services_flag == "Y"
     ) %>%
-    # Remove blank outcomes
-    dplyr::filter(.data$outcome != "") %>%
+    dplyr::select(
+      ooh_case_id = "guid",
+      outcome = "case_outcome"
+    ) %>%
+    dplyr::collect() %>%
     dplyr::distinct()
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-o", year = year)

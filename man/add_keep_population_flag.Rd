@@ -4,12 +4,24 @@
 \alias{add_keep_population_flag}
 \title{Add keep_popluation flag}
 \usage{
-add_keep_population_flag(individual_file, year)
+add_keep_population_flag(
+  individual_file,
+  year,
+  pop_estimates = get_datazone_pop_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{individual_file}{individual files under processing}
 
 \item{year}{the year of individual files under processing}
+
+\item{pop_estimates}{Datazone population lookup}
+
+\item{locality_data}{HSCP locality lookup}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 A data frame with keep_population flags

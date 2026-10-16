@@ -4,10 +4,12 @@
 \alias{get_practice_details_path}
 \title{Practice Details File Path}
 \usage{
-get_practice_details_path(update = latest_update(), ...)
+get_practice_details_path(update = latest_update(), BYOC_MODE, ...)
 }
 \arguments{
 \item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
+
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }

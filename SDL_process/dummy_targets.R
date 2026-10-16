@@ -59,9 +59,7 @@ tar_option_set(
   garbage_collection = TRUE,
   # format - default is parquet format
   format = "parquet",
-  resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd")
-  ),
+  resources = tar_resources(parquet = tar_resources_parquet(compression = "zstd")),
   # error - if an error occurs, the pipeline will continue
   error = "stop",
   # storage - the worker saves/uploads the value.
@@ -80,7 +78,61 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1 non-specific targets ----
+  ## Stage 2.1 non year-specific targets ----
+
+  ### Cost lookups ----
+
+  #### District nursing costs------
+  ##### READ - DN COSTS -----
+  tar_target(
+    # Target name
+    dn_raw_costs,
+    # Function
+    get_dn_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE
+    )
+  ),
+
+  ##### DN contacts -----
+  # READ - DN CONTACTS
+  tar_target(
+    # Target name
+    dn_contacts,
+    # Function
+    get_dn_contacts_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE
+    )
+  ),
+
+  ##### HSCP Population -----
+  # READ - HSCP POPULATION
+  tar_target(
+    # Target name
+    hscp_population,
+    # Function
+    get_hscp_pop_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  ##### PROCESS - DN COSTS -----
+  tar_target(
+    # Target name
+    dn_cost_lookup,
+    # Function
+    process_costs_dn(
+      dn_raw_costs = dn_raw_costs,
+      dn_contacts = dn_contacts,
+      hscp_population = hscp_population,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
 
   ### IT CHI deaths Activity ----
   # READ - IT CHI deaths
@@ -89,7 +141,6 @@ list(
     it_chi_deaths_extract,
     read_it_chi_deaths(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      file_path = get_it_deaths_path(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     )
   ),
@@ -107,17 +158,7 @@ list(
     )
   ),
 
-  ### Long-Term Conditions (LTCs) Activity ----
-  # READ - LTCs
-  tar_target(
-    ltc_data,
-    read_lookup_ltc(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-
-  # ### NRS BOXI Deaths ----
+  ### NRS BOXI Deaths ----
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
     refined_death_data,
@@ -130,12 +171,60 @@ list(
     )
   ),
 
+  ### Long-Term Conditions (LTCs) Activity ----
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
 
-  ## Stage 2.2 year specific targets ----
+  ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run),
 
-    ### Maternity (SMR02) Acitivity----
+    ### Acute (SMR01) Activity ----
+    # READ - Acute
+    tar_target(
+      # Target name
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Acute
+    tar_target(
+      # Target name
+      source_acute_extract,
+      # Function
+      process_extract_acute(
+        data = acute_data,
+        acute_cup_data = acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### Maternity (SMR02) Activity ----
     # READ - Maternity
     tar_target(
       # Target name
@@ -143,7 +232,6 @@ list(
       read_extract_maternity(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
         BYOC_MODE = BYOC_MODE
       )
     ),
@@ -162,18 +250,13 @@ list(
       )
     ),
 
-    ### Mental Health (SMR02) Activity ----
+    ### Mental Health (SMR04) Activity ----
     # READ - Mental Health
     tar_target(
       mental_health_data,
       read_extract_mental_health(
         year = year,
         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        file_path = get_boxi_extract_path(
-          year = year,
-          type = "mh",
-          BYOC_MODE = BYOC_MODE
-        ),
         BYOC_MODE = BYOC_MODE
       )
     ),
@@ -191,7 +274,6 @@ list(
       )
     ),
 
-
     ### Death Activity ----
     # PROCESS - Deaths
     tar_target(
@@ -200,22 +282,38 @@ list(
       # use this anonymous function with redundant but necessary refined_death
       # to make sure reading year-specific NRS deaths extracts after it is produced
       (\(year, refined_death_data) {
-        arrow::read_parquet(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
+        createslf::read_file(get_source_extract_path(year, "nrs_deaths", BYOC_MODE = BYOC_MODE)) %>%
           as.data.frame()
       })(year, refined_death_data)
-    )
+    ),
 
-    # # TESTS - Deaths
-    # tar_target(
-    #   # Target name
-    #   tests_source_nrs_deaths_extract,
-    #   # Function
-    #   process_tests_nrs_deaths(
-    #     source_nrs_deaths_extract,
-    #     year
-    #   )
-    # ),
+    ### District Nursing Activity ---------------
+    # READ - District Nursing
+    tar_target(
+      # Target name
+      dn_data,
+      # Function
+      read_extract_district_nursing(
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+      )
+    ),
+    # PROCESS - District Nursing
+    tar_target(
+      # Target name
+      source_dn_extract,
+      # Function
+      process_extract_district_nursing(
+        data = dn_data,
+        year = year,
+        costs = dn_cost_lookup,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    )
   )
 )
-
 ## End of Targets pipeline ##

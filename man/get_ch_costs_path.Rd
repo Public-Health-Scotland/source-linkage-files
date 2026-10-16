@@ -21,6 +21,7 @@ Get the full Care Home costs lookup path
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other costs lookup file paths:
+\code{\link[=get_dn_contacts_path]{get_dn_contacts_path()}},
 \code{\link[=get_dn_costs_path]{get_dn_costs_path()}},
 \code{\link[=get_dn_raw_costs_path]{get_dn_raw_costs_path()}},
 \code{\link[=get_gp_ooh_costs_path]{get_gp_ooh_costs_path()}},
