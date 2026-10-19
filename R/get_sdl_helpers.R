@@ -11,7 +11,6 @@
 #' @export
 #' @family file path functions
 get_sdl_names <- function(dataset, version) {
-
   sdl_names <- tibble::tribble(
     ~type, ~source, ~snapshot, ~processed,
     # Acute
@@ -88,7 +87,7 @@ get_sdl_names <- function(dataset, version) {
     "sparra", "sdl_sparra_source", NA_character_, NA_character_
   )
 
-  result <- sdl_names  %>%
+  result <- sdl_names %>%
     dplyr::filter(type == dataset) %>%
     dplyr::pull(dplyr::all_of(version))
 
