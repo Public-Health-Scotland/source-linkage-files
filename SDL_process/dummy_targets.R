@@ -90,7 +90,6 @@ list(
   # LTC output
   tar_map(
     values = list(year = years_to_run),
-
     tar_target(
       source_ltc_lookup,
       process_lookup_ltc(
