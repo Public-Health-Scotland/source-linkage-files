@@ -76,40 +76,7 @@ years_to_run <- "1920"
 
 # Stage 2 - Set up targets ----
 list(
-  tar_rds(
-    write_to_disk,
-    TRUE
-  ),
-
-  ## Non-year-specific dependencies --------------------------------
-
-  # Homelessness: Local Authority lookup
-  tar_target(
-    la_code_opendata,
-    get_la_code_opendata_lookup(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-
-  # Homelessness: Scottish Government publication data
-  tar_target(
-    sg_pub_data,
-    get_sg_homelessness_pub_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-
-  # GP OOH cost lookup
-  tar_target(
-    gp_ooh_cost_lookup,
-    process_costs_gp_ooh(
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
+  tar_rds(write_to_disk, TRUE),
 
   # LTC source data
   tar_target(
@@ -120,100 +87,9 @@ list(
     )
   ),
 
-  ## Year-specific targets ------------------------------------------
-
+  # LTC output
   tar_map(
     values = list(year = years_to_run),
-
-    ## A&E ----------------------------------------------------------
-
-    tar_target(
-      ae_data,
-      read_extract_ae(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-
-    tar_target(
-      ae_cup_file,
-      read_extract_ae_cup(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-
-    tar_target(
-      source_ae_extract,
-      process_extract_ae(
-        data = ae_data,
-        year = year,
-        ae_cup_file = ae_cup_file,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
-
-    ## Delayed Discharges -------------------------------------------
-
-    tar_target(
-      dd_data,
-      read_extract_delayed_discharges(
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-
-    tar_target(
-      source_dd_extract,
-      process_extract_delayed_discharges(
-        dd_data,
-        year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
-
-    ## GP Out of Hours ----------------------------------------------
-
-    tar_qs(
-      ooh_data,
-      read_extract_gp_ooh(
-        year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = NULL
-      )
-    ),
-
-    tar_target(
-      gp_ooh_cup,
-      read_extract_gp_ooh_cup(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-
-    tar_target(
-      source_ooh_extract,
-      process_extract_gp_ooh(
-        year = year,
-        data_list = ooh_data,
-        gp_ooh_cup = gp_ooh_cup,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
-
-    ## Long-Term Conditions -----------------------------------------
 
     tar_target(
       source_ltc_lookup,
@@ -224,39 +100,6 @@ list(
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
-      )
-    ),
-
-    ## Homelessness -------------------------------------------------
-
-    tar_target(
-      homelessness_data,
-      read_extract_homelessness(
-        year = year,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-        BYOC_MODE = BYOC_MODE
-      )
-    ),
-
-    tar_target(
-      source_homelessness_extract,
-      process_extract_homelessness(
-        data = homelessness_data,
-        year = year,
-        write_to_disk = write_to_disk,
-        la_code_lookup = la_code_opendata,
-        sg_pub_data = sg_pub_data,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
-      )
-    ),
-
-    tar_target(
-      homelessness_lookup,
-      create_homelessness_lookup(
-        year,
-        homelessness_data = source_homelessness_extract
       )
     )
   )

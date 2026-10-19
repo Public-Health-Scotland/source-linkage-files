@@ -44,21 +44,21 @@ mapping <- tibble::tribble(
 # listed in run_sdl.r
 
 datasets <- c(
-  "ae",
+  # "ae",
   # "acute",
   # "chi_deaths",
   # "combined_deaths",
-  "dd",
+  # "dd",
   # "dn",
   # "dn_cost_lookup",
-  "gp_ooh",
-  "homelessness",
-  "homelessness_completeness",
-  "ltc",
+  # "gp_ooh",
+  # "homelessness",
+  # "homelessness_completeness",
+  "ltc"#,
   # "maternity",
   # "mh",
   # "nrs_deaths",
-  "ooh_cost_lookup" #,
+  # "ooh_cost_lookup",
   # "outpatients",
   # "postcode_lookup",
   # "gpprac_lookup"
