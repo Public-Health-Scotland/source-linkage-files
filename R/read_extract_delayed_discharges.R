@@ -16,7 +16,7 @@ read_extract_delayed_discharges <- function(
   # Read Extract
   extract_delayed_discharges <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dd_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "dd", version = "source"))
   ) %>%
     dplyr::select(
       anon_chi = "patient_chi",

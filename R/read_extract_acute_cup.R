@@ -25,7 +25,7 @@ read_extract_acute_cup <- function(
   # Read extract
   extract_acute_cup <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_acute_cup_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "acute_cup", version = version()))
   ) %>%
     # Filter by calendar year
     dplyr::filter(

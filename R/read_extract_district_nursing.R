@@ -24,7 +24,7 @@ read_extract_district_nursing <- function(
   # Read extract
   extract_district_nursing <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "dn", version = "source"))
   ) %>%
     # Filter by calendar year
     dplyr::filter(

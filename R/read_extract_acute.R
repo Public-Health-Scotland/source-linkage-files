@@ -29,7 +29,7 @@ read_extract_acute <- function(
   # Read extract
   extract_acute <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_acute_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "acute", version = version()))
   ) %>%
     # Filter by calendar year
     dplyr::filter(
