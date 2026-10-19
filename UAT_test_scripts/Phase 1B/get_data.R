@@ -258,7 +258,7 @@ get_submission_filepath <- function(type) {
     # Get the latest submission
   } else {
     # Extract numbers
-    nums <-  as.numeric(
+    nums <- as.numeric(
       sapply(stringr::str_extract_all(all_files, "\\d+"), paste0, collapse = "")
     )
 
