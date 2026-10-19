@@ -1,191 +1,111 @@
-#' Get sdl view name for raw data
+#' Get sdl view name for data - either from source, snapshot or processed.
 #'
 #' @description Returns the Denodo SDL table name for the extract
 #' corresponding to a given dataset type.
 #'
-#' @param type Character. Dataset id (e.g. "acute", "ae", etc.)
+#' @param dataset Character. Dataset id (e.g. "acute", "ae", etc.)
+#' @param version Character. Version (e.g. "snapshot", "source", "processed")
 #'
 #' @return Character string of SDL table name
 #'
 #' @export
 #' @family file path functions
-get_sdl_raw_names <- function(type) {
-  sdl_name <- dplyr::recode_values(
-    type,
+get_sdl_names <- function(dataset, version) {
 
-    # acute
-    "acute" ~ "sdl_acute_source",
-    "acute_cup" ~ "sdl_acute_cup_source",
+  sdl_names <- tibble::tribble(
+    ~type, ~source, ~snapshot, ~processed,
+    # Acute
+    "acute", "sdl_acute_source", "sdl_acute_snapshot", NA_character_,
+    "acute_cup", "sdl_acute_cup_source", "sdl_acute_cup_snapshot", NA_character_,
 
-    # ae
-    "ae" ~ "sdl_ae2_episode_level_source",
-    "ae_cup" ~ "sdl_ae_ucd_cup_source",
+    # A&E
+    "ae", "sdl_ae2_episode_level_source", "sdl_ae2_episode_level_snapshot", "sdl_byoc_ae_processed",
+    "ae_cup", "sdl_ae_ucd_cup_source", "sdl_ae_ucd_cup_snapshot", NA_character_,
 
-    # costs
-    "ch_cost" ~ "sdl_carehomecostopendata_source",
-    "dn_cost" ~ "sdl_dn_cost_lookup_source",
-    "hc_cost" ~ "sdl_hc_cost_lookup_source",
-    "ooh_costs" ~ "sdl_ooh_cost_lookup_source",
+    # Costs
+    "ch_cost", "sdl_carehomecostopendata_source", NA_character_, NA_character_,
+    "dn_cost", "sdl_dn_cost_lookup_source", NA_character_, NA_character_,
+    "hc_cost", "sdl_hc_cost_lookup_source", NA_character_, NA_character_,
+    "ooh_costs", "sdl_ooh_cost_lookup_source", NA_character_, NA_character_,
 
-    # cmh
-    "cmh" ~ "sdl_cmh_source",
+    # CMH
+    "cmh", "sdl_cmh_source", NA_character_, NA_character_,
 
-    # deaths
-    "chi_deaths" ~ "sdl_chi_deaths_source",
-    "nrs_deaths" ~ "sdl_nrs_deaths_source",
+    # Deaths
+    "chi_deaths", "sdl_chi_deaths_source", "sdl_chi_deaths_snapshot", NA_character_,
+    "nrs_deaths", "sdl_nrs_deaths_source", "sdl_nrs_deaths_snapshot", NA_character_,
 
-    # delayed discharges
-    "dd" ~ "sdl_dd_source",
+    # Delayed discharges
+    "dd", "sdl_dd_source", NA_character_, "sdl_byoc_dd_processed",
 
-    # district nursing
-    "dn" ~ "sdl_dn_source",
-    "dn_contacts" ~ "sdl_dn_contacts_source",
+    # District nursing
+    "dn", "sdl_dn_source", NA_character_, NA_character_,
+    "dn_contacts", "sdl_dn_contacts_source", NA_character_, NA_character_,
 
-    # gp out of hours
-    "gp_ooh_consultation" ~ "sdl_gp_ooh_consultation_source",
-    "gp_ooh_cup" ~ "sdl_gp_ooh_cup_source",
-    "gp_ooh_diagnosis" ~ "sdl_gp_ooh_diagnosis_source",
-    "gp_ooh_outcome" ~ "sdl_gp_ooh_outcome_source",
+    # GP out of hours
+    "gp_ooh_consultation", "sdl_gp_ooh_consultation_source", "sdl_gp_ooh_consultation_snapshot", NA_character_,
+    "gp_ooh_cup", "sdl_gp_ooh_cup_source", "sdl_gp_ooh_cup_snapshot", NA_character_,
+    "gp_ooh_diagnosis", "sdl_gp_ooh_diagnosis_source", "sdl_gp_ooh_diagnosis_snapshot", NA_character_,
+    "gp_ooh_outcome", "sdl_gp_ooh_outcome_source", "sdl_gp_ooh_outcome_snapshot", NA_character_,
 
-    # lookups
-    "dz_pop" ~ "sdl_datazone_population_source",
-    "readcode" ~ "sdl_read_code_lookup_source",
-    "gpprac" ~ "sdl_gpprac_lookup_source",
-    "hscp_localities" ~ "sdl_hscp_localities_source",
-    "hscp_pop" ~ "sdl_hscp_population_source",
-    "ia_lookup" ~ "sdl_iaopendatalookup_source",
-    "simd" ~ "sdl_simd_source",
-    "spd" ~ "sdl_spd_source",
+    # Lookups
+    "dz_pop", "sdl_datazone_population_source", NA_character_, NA_character_,
+    "readcode", "sdl_read_code_lookup_source", NA_character_, NA_character_,
+    "hscp_localities", "sdl_hscp_localities_source", NA_character_, NA_character_,
+    "hscp_pop", "sdl_hscp_population_source", NA_character_, NA_character_,
+    "simd", "sdl_simd_source", NA_character_, NA_character_,
+    "spd", "sdl_spd_source", NA_character_, NA_character_,
 
-    # homelessness
-    "homelessness" ~ "sdl_homelessness_source",
-    "homelessness_completeness" ~ "sdl_homelessness_completeness_source",
+    # Homelessness
+    "homelessness", "sdl_homelessness_source", "sdl_homelessness_snapshot", "sdl_byoc_homelessness_processed",
+    "homelessness_completeness", "sdl_homelessness_completeness_source", NA_character_, "sdl_byoc_homelessness_completeness_processed",
 
-    # hhg
-    "hhg" ~ "sdl_hhg_source",
+    # HHG
+    "hhg", "sdl_hhg_source", NA_character_, NA_character_,
 
-    # long term conditions - ltc
-    "ltc" ~ "sdl_long_term_condition_source",
+    # Long term conditions
+    "ltc", "sdl_long_term_condition_source", "sdl_long_term_condition_snapshot", "sdl_byoc_ltc_processed",
 
-    # maternity
-    "maternity" ~ "sdl_maternity_episode_source",
+    # Maternity
+    "maternity", "sdl_maternity_episode_source", "sdl_maternity_episode_snapshot", NA_character_,
 
-    # mental health
-    "mh" ~ "sdl_mental_health_episode_source",
+    # Mental health
+    "mh", "sdl_mental_health_episode_source", "sdl_mental_health_episode_snapshot", NA_character_,
 
-    # nsu
-    "nsu" ~ "sdl_nsu_source",
+    # NSU
+    "nsu", "sdl_nsu_source", NA_character_, NA_character_,
 
-    # outpatients
-    "outpatients" ~ "sdl_outpatients_source",
+    # Outpatients
+    "outpatients", "sdl_outpatients_source", NA_character_, "sdl_byoc_outpatients_processed",
 
-    # social care
-    "at" ~ "sdl_sc_alarmtelecare_source",
-    "hc" ~ "sdl_sc_homecare_source",
-    "sc_demog" ~ "sdl_sc_demographic_source",
-    "sds" ~ "sdl_sc_sds_source",
+    # Social care
+    "at", "sdl_sc_alarmtelecare_source", NA_character_, NA_character_,
+    "hc", "sdl_sc_homecare_source", NA_character_, NA_character_,
+    "sc_demog", "sdl_sc_demographic_source", NA_character_, NA_character_,
+    "sds", "sdl_sc_sds_source", NA_character_, NA_character_,
 
-    # sparra
-    "sparra" ~ "sdl_sparra_source"
+    # SPARRA
+    "sparra", "sdl_sparra_source", NA_character_, NA_character_
   )
 
-  if (is.na(sdl_name)) {
-    stop("Unknown dataset type: ", type)
+  result <- sdl_names  %>%
+    dplyr::filter(type == dataset) %>%
+    dplyr::pull(dplyr::all_of(version))
+
+  if (length(result) == 0) {
+    stop("Unknown dataset type: ", dataset)
   }
 
-  return(sdl_name)
-}
-
-#' Get SDL view name for processed datasets
-#'
-#' @param type Character. Dataset id (e.g. "acute", "ae", etc.)
-#'
-#' @return Character string of SDL processed view name
-#'
-#' @export
-#' @family file path functions
-get_sdl_processed_name <- function(type) {
-  sdl_name <- dplyr::recode_values(
-    type,
-
-    # acute
-    "acute" ~ "sdl_acute_processed",
-
-    # ae
-    "ae" ~ "sdl_ae2_processed",
-
-    # costs
-    "ch_cost_lookup" ~ "sdl_ch_cost_lookup_processed",
-    "dn_cost_lookup" ~ "sdl_dn_cost_lookup_processed",
-    "hc_cost_lookup" ~ "sdl_hc_cost_lookup_processed",
-    "ooh_cost_lookup" ~ "sdl_gp_ooh_cost_lookup_processed",
-
-    # deaths
-    "chi_deaths" ~ "sdl_chi_deaths_processed",
-    "nrs_deaths" ~ "sdl_nrs_deaths_processed",
-    "refined_death" ~ "sdl_slf_deaths_lookup_processed",
-
-    # delayed discharge - dd
-    "dd" ~ "sdl_delayed_discharge_processed",
-
-    # district nursing - dn
-    "dn" ~ "sdl_district_nursing_processed",
-
-    # gp ooh
-    "gp_ooh" ~ "sdl_gp_ooh_processed",
-
-    # hhg
-    "hhg" ~ "sdl_hhg_processed",
-
-    # homelessness
-    "homelessness" ~ "sdl_homelessness_processed",
-    "homelessness_completeness" ~ "sdl_homelessness_completeness_processed",
-    "homelessness_lookup" ~ "sdl_homelessness_lookup_processed",
-
-    # long term conditions - ltc
-    "ltc" ~ "sdl_long_term_condition_processed",
-
-    # lookups
-    "care_home_lookup" ~ "sdl_care_home_name_lookup_processed",
-    "gpprac_lookup" ~ "sdl_gp_practice_lookup_processed",
-    "postcode_lookup" ~ "sdl_postcode_lookup_processed",
-
-    # maternity
-    "maternity" ~ "sdl_maternity_processed",
-
-    # mental health - mh
-    "cmh" ~ "sdl_cmh_processed",
-    "mh" ~ "sdl_mental_health_processed",
-
-    # outpatients
-    "outpatients" ~ "sdl_outpatients_processed",
-
-    # prescribing
-    "pis" ~ "sdl_prescribing_processed",
-
-    # social care datasets
-    "at" ~ "sdl_alarms_telecare_processed",
-    "ch" ~ "sdl_care_homes_processed",
-    "client" ~ "sdl_client_information_processed",
-    "hc" ~ "sdl_home_care_processed",
-    "sds" ~ "sdl_self_directed_support_processed",
-    "sc_all_alarms_telecare" ~ "sdl_sc_all_alarms_telecare_processed",
-    "sc_all_care_homes" ~ "sdl_sc_all_care_homes_processed",
-    "sc_all_home_care" ~ "sdl_sc_all_home_care_processed",
-    "sc_all_self_directed_support" ~ "sdl_sc_all_self_directed_support_processed",
-    "sc_demog_lookup" ~ "sdl_demographics_processed",
-
-    # sparra
-    "sparra" ~ "sdl_sparra_processed"
-  )
-
-  if (any(is.na(sdl_name))) {
-    unknown_type <- type[is.na(sdl_name)]
-    stop("Unknown dataset type: ", paste(unknown_type, collapse = ", "))
+  if (is.na(result)) {
+    stop(
+      "Version '", version,
+      "' is not available for dataset '", dataset, "'."
+    )
   }
 
-  return(sdl_name)
+  return(result)
 }
+
 
 #' Get SDL Processed Data
 #'
