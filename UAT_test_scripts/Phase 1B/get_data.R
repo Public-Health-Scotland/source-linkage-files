@@ -223,7 +223,7 @@ get_submission_filepath <- function(type) {
     type == "datazone" ~ "datazone_population",
     type == "dn_contacts" ~ "dn_contacts",
     type == "dn_cost" ~ "dn_cost_lookup",
-    type == "gpprac_ref" ~ "gpprac_lookup",
+    type == "gpprac_ref" ~ "gpprac_ref",
     type == "hc_cost" ~ "hc_cost_lookup",
     type == "homelessness_completeness" ~ "homelessness_completeness",
     type == "hscp" ~ "hscp_population",
@@ -232,7 +232,7 @@ get_submission_filepath <- function(type) {
     type == "readcode" ~ "read_code_lookup",
     type == "simd" ~ "simd",
     type == "spd" ~ "spd",
-    type == "uk_postcode" ~ NA_character_,
+    type == "uk_postcode" ~ "uk_postcode",
 
     # Default
     TRUE ~ NA_character_
@@ -261,7 +261,9 @@ get_submission_filepath <- function(type) {
   # Get the latest submission
   } else {
     # Extract numbers
-    nums <- as.numeric(stringr::str_extract(all_files, "\\d+"))
+    nums <-  as.numeric(
+      sapply(stringr::str_extract_all(all_files, "\\d+"), paste0, collapse = "")
+    )
 
     # Select file with the highest number (most recent)
     filename <- all_files[which.max(nums)]

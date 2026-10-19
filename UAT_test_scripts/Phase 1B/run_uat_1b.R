@@ -21,8 +21,16 @@ sdl_filters <- read.csv(paste0(uat_folder, "lookups/sdl_filters.csv"))
 ################################################################################.
 
 year <- "1920"
-
-for (test_dataset in get_types(c("boxi", "sc"))){
+for (test_dataset in c(get_types("boxi"),
+                       get_types("sc"),
+                       get_types("lookup"),
+                       get_types("opendata"),
+                       "dd",
+                       "nsu",
+                       "hhg")){
   summary_df <- compare_data(test_dataset, year, local_mapping, sdl_mapping, sdl_filters)
   save_as_sheet(summary_df, workbook_file)
 }
+
+# On hold
+# "dn", "cmh", "chi_deaths", "ltc", "pis", "sparra"

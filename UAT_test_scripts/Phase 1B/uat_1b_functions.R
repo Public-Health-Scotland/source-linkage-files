@@ -46,6 +46,7 @@ read_raw_local <- function(test_dataset, year, local_mapping){
   local_data <- get_data(test_dataset, "local", year, sdl_submission = T)
   # Select columns specified in PHS code (raw name)
   local_data <- local_data %>% select(all_of(local_test_map$old_colname))
+  # TODO: May need to rename IT columns with make.names
   # Convert columns to type specified in PHS code
   local_data <- local_data %>% convert_types(local_test_map)
   # Rename columns from raw to SLF
@@ -233,24 +234,23 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
       median_match = equal_or_both_na(median_local, median_sdl),
       sum_match = equal_or_both_na(sum_local, sum_sdl),
       type_match = equal_or_both_na(local_type, sdl_type),
+      change_total_vals = total_vals_sdl - total_vals_local,
       perc_change_total_vals = ifelse(total_vals_sdl == 0 & total_vals_local == 0, 0, round((total_vals_sdl - total_vals_local) / total_vals_local * 100, 2)),
+      change_na = sdl_na_count - local_na_count,
       perc_change_na = ifelse(sdl_na_count == 0 & local_na_count == 0, 0, round((sdl_na_count - local_na_count) / local_na_count * 100, 2)),
+      change_unique_vals = unique_vals_sdl - unique_vals_local,
       perc_change_unique_vals = ifelse(unique_vals_sdl == 0 & unique_vals_local == 0, 0, round((unique_vals_sdl - unique_vals_local) / unique_vals_local * 100, 2)),
       RESULT = if_else(
         rowSums(cbind(in_both, min_match, max_match, mean_match, median_match, sum_match, type_match), na.rm = TRUE) == 7 &
-          rowSums(cbind(perc_change_total_vals, perc_change_na, perc_change_unique_vals, unique_vals_mismatch, unique_vals_with_different_counts), na.rm = TRUE) == 0,
+          rowSums(cbind(change_total_vals, change_na, change_unique_vals, perc_change_total_vals, perc_change_na, perc_change_unique_vals, unique_vals_mismatch, unique_vals_with_different_counts), na.rm = TRUE) == 0,
         "PASS",
         "FAIL"
       ),
       sdl_time = sdl_time,
       local_time = local_time,
       download_time = local_download_time
-    ) # %>%
-  # select(
-  #   in_both, min_match, max_match, mean_match, median_match, sum_match, type_match,
-  #   perc_change_total_vals, perc_change_na, perc_change_unique_vals, unique_vals_mismatch,
-  #   unique_vals_with_different_counts
-  # )
+    ) %>%
+    select(-min_local, -min_sdl, -max_local, -max_sdl, -mean_local, -mean_sdl, -median_local, -median_sdl, -sum_local, -sum_sdl)
 
   return(summary_df)
 }
@@ -338,6 +338,9 @@ save_as_sheet <- function(summary_df, workbook_file){
   highlight_cells("sum_match", summary_df$sum_match != TRUE, mismatch_style)
   highlight_cells("type_match", summary_df$type_match != TRUE, mismatch_style)
 
+  highlight_cells("change_total_vals", summary_df$change_total_vals != 0, mismatch_style)
+  highlight_cells("change_na", summary_df$change_na != 0, mismatch_style)
+  highlight_cells("change_unique_vals", summary_df$change_unique_vals != 0, mismatch_style)
   highlight_cells("perc_change_total_vals", summary_df$perc_change_total_vals != 0, mismatch_style)
   highlight_cells("perc_change_na", summary_df$perc_change_na != 0, mismatch_style)
   highlight_cells("perc_change_unique_vals", summary_df$perc_change_unique_vals != 0, mismatch_style)
