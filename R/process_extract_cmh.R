@@ -86,16 +86,20 @@ process_extract_cmh <- function(data,
     dplyr::mutate(
       year = as.character(.data$year),
       keytime1 = ifelse(
-        is.na(.data$keytime1), NA_character_, as.character(.data$keytime1)),
+        is.na(.data$keytime1), NA_character_, as.character(.data$keytime1)
+      ),
       keytime2 = ifelse(
-        is.na(.data$keytime2), NA_character_, as.character(.data$keytime2))
+        is.na(.data$keytime2), NA_character_, as.character(.data$keytime2)
+      )
     ) %>%
     # Convert 24:00:00 to 23:59:59 for Snowflake
     dplyr::mutate(
       keytime1 = ifelse(
-        .data$keytime1 == "24:00:00", "23:59:59", .data$keytime1),
+        .data$keytime1 == "24:00:00", "23:59:59", .data$keytime1
+      ),
       keytime2 = ifelse(
-        .data$keytime2 == "24:00:00", "23:59:59", .data$keytime2)
+        .data$keytime2 == "24:00:00", "23:59:59", .data$keytime2
+      )
     )
 
   if (write_to_disk) {
