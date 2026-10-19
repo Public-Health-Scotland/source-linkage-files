@@ -1,20 +1,23 @@
-################################################################################.
+################################################################################ .
 # Function to convert column data type
-################################################################################.
+################################################################################ .
 
 convert_types <- function(df, mapping) {
   for (i in seq_len(nrow(mapping))) {
     # Get the column name from the lookup
     column <- mapping$old_colname[i]
     # Skip if the column does not exist
-    if (!column %in% names(df)) {next}
+    if (!column %in% names(df)) {
+      next
+    }
     # Set the target data type
     target_type <- mapping$data_type[i]
     # Skip conversion if no type supplied
-    if (is.na(target_type) || target_type == "") {next}
+    if (is.na(target_type) || target_type == "") {
+      next
+    }
     # Convert data type
-    df[[column]] <- switch(
-      target_type,
+    df[[column]] <- switch(target_type,
       integer = as.integer(df[[column]]),
       double = as.double(df[[column]]),
       character = as.character(df[[column]]),
@@ -28,12 +31,11 @@ convert_types <- function(df, mapping) {
   df
 }
 
-################################################################################.
+################################################################################ .
 # Function to read Local Data
-################################################################################.
+################################################################################ .
 
-read_raw_local <- function(test_dataset, year, local_mapping){
-
+read_raw_local <- function(test_dataset, year, local_mapping) {
   # Column Map
   local_test_map <- local_mapping %>%
     # Filter the local mapping for the dataset required
@@ -66,12 +68,11 @@ read_raw_local <- function(test_dataset, year, local_mapping){
   return(local_data)
 }
 
-################################################################################.
+################################################################################ .
 # Function to read SDL Data
-################################################################################.
+################################################################################ .
 
-read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters){
-
+read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters) {
   # Column Map
   sdl_test_map <- sdl_mapping %>%
     # Filter the local mapping for the dataset required
@@ -91,12 +92,13 @@ read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters){
   sdl_data <- dplyr::tbl(
     denodo_connect,
     # Get data from the test dataset SDL table
-    dbplyr::in_schema("sdl", get_sdl_raw_names(test_dataset))) %>%
+    dbplyr::in_schema("sdl", get_sdl_raw_names(test_dataset))
+  ) %>%
     # Filter data using the filter conditions specified in PHS code
     {
       if (length(filter_conditions) > 0 &&
-          !is.na(filter_conditions) &&
-          nzchar(filter_conditions)) {
+        !is.na(filter_conditions) &&
+        nzchar(filter_conditions)) {
         dplyr::filter(., !!rlang::parse_expr(filter_conditions))
       } else {
         .
@@ -117,12 +119,11 @@ read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters){
   return(sdl_data)
 }
 
-################################################################################.
+################################################################################ .
 # Function to compare local and raw data
-################################################################################.
+################################################################################ .
 
-compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_filters){
-
+compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_filters) {
   # Read local data + note time
   local_data <- read_raw_local(test_dataset, year, local_mapping)
   local_time <- Sys.time() + 3600
@@ -147,8 +148,10 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
 
   # Filter the column name mapping
   colname_mapping <- full_join(local_mapping, sdl_mapping, by = c("type", "new_colname")) %>%
-    select(type, colname = new_colname, sdl_original_colname = old_colname.y, local_original_colname = old_colname.x,
-           final_interface_spec = data_type.y)
+    select(type,
+      colname = new_colname, sdl_original_colname = old_colname.y, local_original_colname = old_colname.x,
+      final_interface_spec = data_type.y
+    )
 
   # Add type
   summary_df <- colname_mapping %>%
@@ -156,14 +159,14 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
 
   # Compare each column in a loop
   details_df <- data.frame()
-  for(column in summary_df$colname){
-
+  for (column in summary_df$colname) {
     # Table comparing counts for each value in the column (local and SDL)
     if ((column %in% colnames(local_data)) && (column %in% colnames(sdl_data))) {
       match_values <- full_join(
         data.frame(table(local_data[[column]], useNA = "ifany")),
         data.frame(table(sdl_data[[column]], useNA = "ifany")),
-        by = "Var1")
+        by = "Var1"
+      )
     } else {
       match_values <- NULL
     }
@@ -178,44 +181,34 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
     details_df <- bind_rows(
       details_df,
       data.frame(
-
         colname = column,
         in_local = ifelse(column %in% colnames(local_data), T, F),
         in_sdl = ifelse(column %in% colnames(sdl_data), T, F),
-
         min_local = ifelse(column %in% colnames(local_data), as.character(min(local_data[[column]], na.rm = TRUE)), NA),
         min_sdl = ifelse(column %in% colnames(sdl_data), as.character(min(sdl_data[[column]], na.rm = TRUE)), NA),
-
         max_local = ifelse(column %in% colnames(local_data), as.character(max(local_data[[column]], na.rm = TRUE)), NA),
         max_sdl = ifelse(column %in% colnames(sdl_data), as.character(max(sdl_data[[column]], na.rm = TRUE)), NA),
-
         median_local = ifelse(column %in% colnames(local_data), as.character(median(local_data[[column]], na.rm = TRUE)), NA),
         median_sdl = ifelse(column %in% colnames(sdl_data), as.character(median(sdl_data[[column]], na.rm = TRUE)), NA),
-
         mean_local = ifelse(column %in% colnames(local_data), mean(as.numeric(local_data[[column]]), na.rm = TRUE), NA),
         mean_sdl = ifelse(column %in% colnames(sdl_data), mean(as.numeric(sdl_data[[column]]), na.rm = TRUE), NA),
-
         sum_local = ifelse(column %in% colnames(local_data), sum(as.numeric(local_data[[column]]), na.rm = TRUE), NA),
         sum_sdl = ifelse(column %in% colnames(sdl_data), sum(as.numeric(sdl_data[[column]]), na.rm = TRUE), NA),
-
         local_type = ifelse(column %in% colnames(local_data), class(local_data[[column]]), NA),
         sdl_type = ifelse(column %in% colnames(sdl_data), class(sdl_data[[column]]), NA),
-
         total_vals_local = ifelse(column %in% colnames(local_data), length(local_data[[column]]), NA),
         total_vals_sdl = ifelse(column %in% colnames(sdl_data), length(sdl_data[[column]]), NA),
-
         local_na_count = ifelse(column %in% colnames(local_data), sum(is.na(local_data[[column]])), NA),
         sdl_na_count = ifelse(column %in% colnames(sdl_data), sum(is.na(sdl_data[[column]])), NA),
-
         unique_vals_local = ifelse(column %in% colnames(local_data), length(unique(local_data[[column]])), NA),
         unique_vals_sdl = ifelse(column %in% colnames(sdl_data), length(unique(sdl_data[[column]])), NA),
         unique_vals_mismatch = ifelse(is.null(match_values), NA, length(setdiff(local_data[[column]], sdl_data[[column]]))),
         unique_vals_with_different_counts = ifelse(is.null(match_values), NA, nrow(match_values %>% filter(Freq.x != Freq.y | is.na(Freq.x) | is.na(Freq.y))))
 
-        #total_count_difference = ifelse(is.null(match_values), NA, sum((match_values %>% filter(Freq.x != Freq.y | is.na(Freq.x) | is.na(Freq.y)) %>% mutate(n = abs(Freq.x - Freq.y)))$n, na.rm = TRUE)),
-        #n_row_mismatch_ordered = ifelse(is.null(match_values), NA, sum(local_data[[column]] != sdl_data[[column]], na.rm = TRUE))
-
-      ))
+        # total_count_difference = ifelse(is.null(match_values), NA, sum((match_values %>% filter(Freq.x != Freq.y | is.na(Freq.x) | is.na(Freq.y)) %>% mutate(n = abs(Freq.x - Freq.y)))$n, na.rm = TRUE)),
+        # n_row_mismatch_ordered = ifelse(is.null(match_values), NA, sum(local_data[[column]] != sdl_data[[column]], na.rm = TRUE))
+      )
+    )
   }
 
   # Helper function to return TRUE if values are the same or both NA
@@ -255,12 +248,11 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
   return(summary_df)
 }
 
-################################################################################.
+################################################################################ .
 # Function to save as excel sheet
-################################################################################.
+################################################################################ .
 
-save_as_sheet <- function(summary_df, workbook_file){
-
+save_as_sheet <- function(summary_df, workbook_file) {
   # If the workbook already exists, load it
   wb <- if (file.exists(workbook_file)) {
     loadWorkbook(workbook_file)
@@ -281,10 +273,12 @@ save_as_sheet <- function(summary_df, workbook_file){
   addWorksheet(
     wb,
     sheetName = sheet_name,
-    tabColour = if (all(summary_df$RESULT == "PASS", na.rm = TRUE))
+    tabColour = if (all(summary_df$RESULT == "PASS", na.rm = TRUE)) {
       "palegreen"
-    else
-      "#FFC7CE")
+    } else {
+      "#FFC7CE"
+    }
+  )
   writeData(wb, sheet_name, summary_df)
 
   # Freeze/anchor the header row
@@ -316,7 +310,7 @@ save_as_sheet <- function(summary_df, workbook_file){
 
   # Helper function to highlight cells
   highlight_cells <- function(column_names, rows, style) {
-    rows <- which(rows) + 1  # +1 because row 1 contains column headings
+    rows <- which(rows) + 1 # +1 because row 1 contains column headings
     if (length(rows) > 0) {
       addStyle(
         wb,
