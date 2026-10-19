@@ -37,6 +37,21 @@ end_date <- function() {
 }
 
 
+#' Version of SDL table
+#'
+#' @return Get the version of the SDL table (e.g. "source", "snapshot" or "processed")
+#' @export
+#'
+version <- function() {
+
+  # Manually update
+  # source, snapshot or processed SDL table
+  version <- "snapshot"
+
+  return(version)
+}
+
+
 #' Check data exists for a year
 #'
 #' @description  Check there is data available for a given year
