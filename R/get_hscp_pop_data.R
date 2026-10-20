@@ -21,7 +21,7 @@ get_hscp_pop_data <- function(
   # Read data
   hscp_pop_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_hscp_population_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "hscp_pop", version = version()))
   ) %>%
     # Select only the HSCPs for NHS Highland & years since 2015
     dplyr::filter(

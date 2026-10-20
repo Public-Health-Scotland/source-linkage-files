@@ -21,7 +21,7 @@ get_sg_pub_data <- function(
   # Read data
   sg_pub_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_homelessness_completeness_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "homelessness_completeness", version = version()))
   ) %>%
     dplyr::select(
       "caname" = "local_authority",

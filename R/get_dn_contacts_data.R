@@ -21,7 +21,7 @@ get_dn_contacts_data <- function(
   # Read data
   dn_contacts_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_contacts_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "dn_contacts", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(
