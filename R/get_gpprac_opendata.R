@@ -26,7 +26,7 @@ get_gpprac_opendata <- function(
 
   gpprac_cluster <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl",  get_sdl_names(dataset = "gp_cluster", version = version()))
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "gp_cluster", version = version()))
   ) %>%
     dplyr::collect()
 
