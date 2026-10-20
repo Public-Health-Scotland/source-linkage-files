@@ -43,7 +43,6 @@ end_date <- function() {
 #' @export
 #'
 version <- function() {
-
   # Manually update
   # source, snapshot or processed SDL table
   version <- "snapshot"
