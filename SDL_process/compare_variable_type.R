@@ -22,11 +22,13 @@ mapping <- tibble::tribble(
   "ae", "sdl_ae_processed",
   "acute", "sdl_acute_processed ",
   "chi_deaths", "sdl_chi_deaths_processed ",
+  "cmh", "sdl_cmh_processed",
   "combined_deaths", "sdl_refined_deaths_processed",
   "dd", "sdl_delayed_discharge_processed",
   "dn", "sdl_district_nursing_processed ",
   "dn_cost_lookup", "sdl_dn_cost_lookup_processed",
   "gp_ooh", "sdl_gp_ooh_processed ",
+  "gpprac_lookup", "sdl_gp_practice_lookup_process",
   "homelessness", "sdl_homelessness_processed ",
   "homelessness_completeness", "sdl_homessless_completeness_pro",
   "ltc", "sdl_long_term_condition_process",
@@ -35,8 +37,7 @@ mapping <- tibble::tribble(
   "nrs_deaths", "sdl_nrs_deaths_processed ",
   "ooh_cost_lookup", "sdl_gp_ooh_cost_lookup_proces",
   "outpatients", "sdl_outpatients_processed ",
-  "postcode_lookup", "sdl_postcode_lookup_processed",
-  "gpprac_lookup", "sdl_gp_practice_lookup_process"
+  "postcode_lookup", "sdl_postcode_lookup_processed"
 )
 
 
@@ -44,13 +45,16 @@ mapping <- tibble::tribble(
 # listed in run_sdl.r
 
 datasets <- c(
-  "dn", "dn_cost_lookup",
   # "ae",
   "acute",
   "chi_deaths",
+  "cmh",
   "combined_deaths",
   # "dd",
+  "dn",
+  "dn_cost_lookup",
   # "gp_ooh",
+  # "gpprac_lookup"
   # "homelessness",
   # "homelessness_completeness",
   # "ltc",
@@ -59,8 +63,7 @@ datasets <- c(
   "nrs_deaths" # ,
   # "ooh_cost_lookup",
   # "outpatients",
-  # "postcode_lookup",
-  # "gpprac_lookup"
+  # "postcode_lookup"
 )
 
 wb <- createWorkbook()
@@ -359,12 +362,14 @@ freezePane(
 )
 
 time_stamp <- format(Sys.time(), "%Y%m%d_%H%M")
-saveWorkbook(
-  wb,
-  # Change it to whichever folder you like
-  file.path(
-    "/conf/sourcedev/Source_Linkage_File_Updates/byoc_datatype",
-    stringr::str_glue("datatype_comparison_{time_stamp}.xlsx")
-  ),
-  overwrite = TRUE
+
+# Change it to whichever folder you like
+output_file <- file.path(
+  "/conf/sourcedev/Source_Linkage_File_Updates/byoc_datatype",
+  stringr::str_glue("datatype_comparison_{time_stamp}.xlsx")
 )
+saveWorkbook(wb, output_file, overwrite = TRUE)
+
+logger::log_success(stringr::str_glue(
+  "The data type comparison is saved in {output_file}."
+))

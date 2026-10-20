@@ -57,7 +57,7 @@ process_refined_death <- function(it_chi_deaths = read_file(get_slf_chi_deaths_p
       .data$death_date_chi,
       .data$record_keydate1
     )) %>%
-    dplyr::select("run_id", "run_date_time", "anon_chi", "death_date") %>%
+    dplyr::select("anon_chi", "death_date") %>%
     # add fy when death happened
     dplyr::mutate(
       death_date = lubridate::as_date(death_date),
@@ -69,8 +69,11 @@ process_refined_death <- function(it_chi_deaths = read_file(get_slf_chi_deaths_p
     dplyr::group_by(.data$anon_chi) %>%
     dplyr::arrange(.data$death_date) %>%
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-    dplyr::ungroup()
-  # run_id and run_date_time should have been added in process_extract_nrs_deaths()
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   if (write_to_disk) {
     write_file(
