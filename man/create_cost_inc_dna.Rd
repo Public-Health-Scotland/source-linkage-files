@@ -16,14 +16,14 @@ The data with cost including dna.
 Create cost total net inc DNA
 }
 \seealso{
-Other episode_file: 
-\code{\link{add_activity_after_death_flag}()},
-\code{\link{add_homelessness_flag}()},
-\code{\link{add_nsu_cohort}()},
-\code{\link{add_ppa_flag}()},
-\code{\link{correct_cij_vars}()},
-\code{\link{create_cohort_lookups}()},
-\code{\link{fill_missing_cij_markers}()},
-\code{\link{link_delayed_discharge_eps}()}
+Other episode_file:
+\code{\link[=add_activity_after_death_flag]{add_activity_after_death_flag()}},
+\code{\link[=add_homelessness_flag]{add_homelessness_flag()}},
+\code{\link[=add_nsu_cohort]{add_nsu_cohort()}},
+\code{\link[=add_ppa_flag]{add_ppa_flag()}},
+\code{\link[=correct_cij_vars]{correct_cij_vars()}},
+\code{\link[=create_cohort_lookups]{create_cohort_lookups()}},
+\code{\link[=fill_missing_cij_markers]{fill_missing_cij_markers()}},
+\code{\link[=link_delayed_discharge_eps]{link_delayed_discharge_eps()}}
 }
 \concept{episode_file}

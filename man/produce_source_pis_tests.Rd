@@ -26,8 +26,8 @@ episode date variables.
 calculate_measures
 
 Other extract test functions
-for creating test flags: 
-\code{\link{produce_source_dd_tests}()}
+for creating test flags:
+\code{\link[=produce_source_dd_tests]{produce_source_dd_tests()}}
 }
 \concept{extract test functions
 for creating test flags}

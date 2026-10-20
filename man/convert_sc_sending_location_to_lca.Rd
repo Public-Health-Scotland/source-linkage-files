@@ -24,9 +24,9 @@ convert_sc_sending_location_to_lca(sending_location)
 \seealso{
 convert_ca_to_lca
 
-Other code functions: 
-\code{\link{convert_ca_to_lca}()},
-\code{\link{convert_hb_to_hbnames}()},
-\code{\link{convert_hscp_to_hscpnames}()}
+Other code functions:
+\code{\link[=convert_ca_to_lca]{convert_ca_to_lca()}},
+\code{\link[=convert_hb_to_hbnames]{convert_hb_to_hbnames()}},
+\code{\link[=convert_hscp_to_hscpnames]{convert_hscp_to_hscpnames()}}
 }
 \concept{code functions}

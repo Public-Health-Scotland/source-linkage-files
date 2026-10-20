@@ -22,8 +22,8 @@ convert_year_to_fyyear(years)
 
 }
 \seealso{
-Other year functions: 
-\code{\link{check_year_format}()},
-\code{\link{convert_fyyear_to_year}()}
+Other year functions:
+\code{\link[=check_year_format]{check_year_format()}},
+\code{\link[=convert_fyyear_to_year]{convert_fyyear_to_year()}}
 }
 \concept{year functions}
