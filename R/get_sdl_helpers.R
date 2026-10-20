@@ -41,6 +41,11 @@ get_sdl_names <- function(dataset, version) {
     "dn", "sdl_dn_source", NA_character_, NA_character_,
     "dn_contacts", "sdl_dn_contacts_source", NA_character_, NA_character_,
 
+    # GP Practice
+    "gp_geo_labels", "sdl_geography_labels_source", NA_character_, NA_character_,
+    "gp_cluster", "sdl_gpprac_cluster_source", NA_character_, NA_character_,
+    "gp_ref", "sdl_gpprac_ref_source", NA_character_, NA_character_,
+
     # GP out of hours
     "gp_ooh_consultation", "sdl_gp_ooh_consultation_source", "sdl_gp_ooh_consultation_snapshot", NA_character_,
     "gp_ooh_cup", "sdl_gp_ooh_cup_source", "sdl_gp_ooh_cup_snapshot", NA_character_,
@@ -48,12 +53,14 @@ get_sdl_names <- function(dataset, version) {
     "gp_ooh_outcome", "sdl_gp_ooh_outcome_source", "sdl_gp_ooh_outcome_snapshot", NA_character_,
 
     # Lookups
+    "la_lookup", "sdl_laopendatalookup_source", NA_character_, NA_character_,
     "dz_pop", "sdl_datazone_population_source", NA_character_, NA_character_,
     "readcode", "sdl_read_code_lookup_source", NA_character_, NA_character_,
     "hscp_localities", "sdl_hscp_localities_source", NA_character_, NA_character_,
     "hscp_pop", "sdl_hscp_population_source", NA_character_, NA_character_,
     "simd", "sdl_simd_source", NA_character_, NA_character_,
     "spd", "sdl_spd_source", NA_character_, NA_character_,
+
 
     # Homelessness
     "homelessness", "sdl_homelessness_source", "sdl_homelessness_snapshot", "sdl_byoc_homelessness_processed",
