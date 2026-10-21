@@ -19,7 +19,7 @@ read_it_chi_deaths <- function(
   # Read extract
   it_chi_deaths <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_chi_deaths_source")
+    dbplyr::in_schema("sdl", get_sdl_raw_names("chi_deaths"))
   ) %>%
     # Rename variables
     dplyr::select(
