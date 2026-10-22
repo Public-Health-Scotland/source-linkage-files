@@ -23,8 +23,10 @@ convert_types <- function(df, mapping) {
       character = as.character(df[[column]]),
       factor = as.factor(df[[column]]),
       date = as.Date(df[[column]], format = "%Y/%m/%d %H:%M:%S"),
+      date2 = as.Date(df[[column]], format = "%Y-%m-%d"),
       datetime = readr::parse_datetime(df[[column]], format = "%Y/%m/%d %H:%M:%S"),
       time = readr::parse_time(df[[column]], format = "%H:%M"),
+      time2 = readr::parse_time(df[[column]], format = "%H:%M:%S"),
       df[[column]]
     )
   }
