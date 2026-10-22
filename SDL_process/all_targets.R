@@ -378,28 +378,15 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-  # PROCESS - GP Practice Open Data
-  tar_target(
-    # Target name
-    gpprac_opendata,
-    # Function
-    process_gpprac_opendata(
-      gpprac_cluster = gpprac_cluster,
-      geography_labels = geography_labels,
-      write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
   # PROCESS - GP Lookup
   tar_target(
     # Target name
     source_gp_lookup,
     # Function
     process_lookup_gpprac(
-      gpprac_opendata = gpprac_opendata,
       gpprac_ref_data = gpprac_ref_data,
+      gpprac_cluster = gpprac_cluster,
+      geography_labels = geography_labels,
       spd_data = spd_data,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
