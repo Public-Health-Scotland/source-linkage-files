@@ -37,7 +37,6 @@ Other lookup files:
 \code{\link[=get_sg_homelessness_pub_data]{get_sg_homelessness_pub_data()}},
 \code{\link[=get_sg_pub_data]{get_sg_pub_data()}},
 \code{\link[=get_slf_ch_name_lookup_data]{get_slf_ch_name_lookup_data()}},
-\code{\link[=get_spd_data]{get_spd_data()}},
-\code{\link[=process_gpprac_opendata]{process_gpprac_opendata()}}
+\code{\link[=get_spd_data]{get_spd_data()}}
 }
 \concept{lookup files}
