@@ -108,28 +108,23 @@ byoc_output_files <- get_byoc_output_files(
     # "ooh_cost_lookup",
     # "outpatients",
 
-    # Deaths (for Care Home)
-    "nrs_deaths",
+    "at",
+    "hc",
+    "ch",
+    "sds",
     "chi_deaths",
-
-    # Lookups
+    "nrs_deaths",
     "combined_deaths",
-    "postcode_lookup",
-    "gpprac_lookup",
-
-    # Social Care
-    "sc_demog_c",
     "sc_demog_lookup",
     "ch_cost_lookup",
     "hc_cost_lookup",
-    "sc_at",
-    "sc_ch",
-    "sc_hc",
-    "sc_sds",
+    "postcode_lookup",
+    "gpprac_lookup",
     "sc_all_at",
     "sc_all_ch",
+    "sc_all_sds",
     "sc_all_hc",
-    "sc_all_sds"
+    "demog_c"
   )
 )
 # using homelessness for test purpose. When development is complete,
