@@ -227,7 +227,8 @@ process_sc_all_home_care <- function(data,
     tidyr::pivot_longer(
       c(dplyr::starts_with("hc_hours"), dplyr::starts_with("hc_cost")),
       names_to = "fy_qtr",
-      values_to = "hc_hours_cost")
+      values_to = "hc_hours_cost"
+    )
 
   if (write_to_disk) {
     write_file(
