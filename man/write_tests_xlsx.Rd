@@ -8,8 +8,7 @@ write_tests_xlsx(
   comparison_data,
   sheet_name,
   year = NULL,
-  workbook_name = c("ep_file", "indiv_file", "lookup", "extract", "sandpit",
-    "cross_year"),
+  workbook_name = c("ep_file", "indiv_file", "lookup", "extract"),
   BYOC_MODE = FALSE
 )
 }
@@ -39,6 +38,7 @@ produce_test_comparison
 Other test functions:
 \code{\link[=format_test_excel]{format_test_excel()}},
 \code{\link[=get_existing_data_for_tests]{get_existing_data_for_tests()}},
+\code{\link[=get_previous_extract]{get_previous_extract()}},
 \code{\link[=produce_test_comparison]{produce_test_comparison()}}
 }
 \concept{test functions}

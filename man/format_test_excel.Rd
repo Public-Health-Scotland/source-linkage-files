@@ -19,6 +19,7 @@ Format structured comparison data
 \seealso{
 Other test functions:
 \code{\link[=get_existing_data_for_tests]{get_existing_data_for_tests()}},
+\code{\link[=get_previous_extract]{get_previous_extract()}},
 \code{\link[=produce_test_comparison]{produce_test_comparison()}},
 \code{\link[=write_tests_xlsx]{write_tests_xlsx()}}
 }

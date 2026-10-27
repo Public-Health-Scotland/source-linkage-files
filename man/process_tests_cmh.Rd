@@ -8,6 +8,7 @@ process_tests_cmh(
   data,
   year,
   BYOC_MODE,
+  benchmark_comparison_type = "episode",
   benchmark_run_id = NA,
   run_id = NA,
   run_date_time = NA

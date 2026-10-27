@@ -4,14 +4,33 @@
 \alias{get_existing_data_for_tests}
 \title{SLF Data for Testing}
 \usage{
-get_existing_data_for_tests(new_data, file_version = "episode")
+get_existing_data_for_tests(
+  new_data,
+  type,
+  year,
+  benchmark_run_id = NA,
+  file_version = "episode",
+  file_location = "denodo",
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE
+)
 }
 \arguments{
 \item{new_data}{a \link[tibble:tibble-package]{tibble} of the
 new data which the SLF data will be compared to.}
 
+\item{type}{Type code}
+
+\item{year}{Financial year}
+
 \item{file_version}{whether to test against the "episode" file (the default)
 or the "individual" file.}
+
+\item{file_location}{denodo or hscdiip}
+
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} from the
@@ -27,6 +46,7 @@ produce_source_extract_tests
 
 Other test functions:
 \code{\link[=format_test_excel]{format_test_excel()}},
+\code{\link[=get_previous_extract]{get_previous_extract()}},
 \code{\link[=produce_test_comparison]{produce_test_comparison()}},
 \code{\link[=write_tests_xlsx]{write_tests_xlsx()}}
 }

@@ -2,9 +2,13 @@
 % Please edit documentation in R/write_tests_xlsx.R
 \name{write_stacked_test_results}
 \alias{write_stacked_test_results}
-\title{Stacked extract test outputs in denodo}
+\title{Stacked test outputs in denodo}
 \usage{
-write_stacked_test_results(test_results, test_type, BYOC_MODE)
+write_stacked_test_results(
+  test_results,
+  test_type = c("extract", "lookup", "ep", "ind"),
+  BYOC_MODE
+)
 }
 \arguments{
 \item{test_results}{Test results data}
@@ -17,5 +21,5 @@ write_stacked_test_results(test_results, test_type, BYOC_MODE)
 Test results output
 }
 \description{
-Stacked extract test outputs in denodo
+Stacked test outputs in denodo
 }
