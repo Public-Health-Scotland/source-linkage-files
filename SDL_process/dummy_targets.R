@@ -8,7 +8,6 @@
 #                         store = store_path)
 #
 
-
 library(logger)
 library(targets) # main package required
 library(tarchetypes) # support for targets
@@ -16,9 +15,12 @@ library(crew) # support for parallel processing
 library(dplyr)
 library(createslf)
 
-# Stage 1 - Setup targets -----------------------------------------
+################################################################################ .
+# Stage 1 - Setup targets ----
+################################################################################ .
 
 ## Set up BYOC_MODE ----
+
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
 BYOC_MODE <- dplyr::case_when(
   BYOC_MODE %in% c("TRUE", "T", "true", "True") ~ TRUE,
@@ -40,6 +42,7 @@ if (isTRUE(BYOC_MODE)) {
 log_threshold(INFO)
 
 ## Set up targets ----
+
 # Set crew controller for parallel processing
 controller <- crew::crew_controller_local(
   name = "my_controller",
@@ -72,6 +75,7 @@ tar_option_set(
   controller = controller
 )
 
+# Define years
 years_to_run <- "1920"
 
 ################################################################################ .
@@ -106,6 +110,19 @@ list(
     la_code_opendata,
     # Function
     get_la_code_opendata_lookup(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  ### Readcode Lookup ----------------------------------------------------------
+  # (GP OOH Diagnosis)
+  # GET - Readcode Lookup
+  tar_target(
+    # Target name
+    readcode_lookup,
+    # Function
+    get_readcode_lookup(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     )
@@ -226,6 +243,31 @@ list(
     )
   ),
 
+  ### GP Out of Hours Costs ----------------------------------------------------
+  # GET - GP Out of Hours Costs
+  tar_target(
+    # Target name
+    gp_ooh_raw_costs,
+    # Function
+    get_gp_ooh_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - GP Out of Hours Costs
+  tar_target(
+    # Target name
+    gp_ooh_cost_lookup,
+    # Function
+    process_costs_gp_ooh(
+      ooh_raw_costs = gp_ooh_raw_costs,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
+  ),
+
   ### Home Care Costs ----------------------------------------------------------
   # GET - Home Care Costs
   tar_target(
@@ -297,10 +339,11 @@ list(
     # Target name
     tests_source_pc_lookup,
     # Function
-    process_tests_lookup_pc(
+    process_tests(
       data = source_pc_lookup,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -348,10 +391,11 @@ list(
     # Target name
     tests_source_gp_lookup,
     # Function
-    process_tests_lookup_gpprac(
+    process_tests(
       data = source_gp_lookup,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -387,10 +431,11 @@ list(
     # Target name
     tests_it_chi_deaths,
     # Function
-    process_tests_it_chi_deaths(
+    process_tests(
       data = it_chi_deaths_data,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -418,6 +463,25 @@ list(
     # Function
     read_lookup_ltc(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+
+  ### Stack Lookup Tests -------------------------------------------------------
+  tar_target(
+    tests_extract_stacked,
+    write_stacked_test_results(
+      test_results = list(
+        tests_source_pc_lookup,
+        tests_source_gp_lookup,
+        tests_it_chi_deaths,
+        tests_sc_all_at,
+        tests_all_care_home,
+        tests_sc_demog_lookup,
+        tests_sc_all_home_care,
+        tests_sc_all_sds
+      ),
+      test_type = "lookup",
       BYOC_MODE = BYOC_MODE
     )
   ),
@@ -460,10 +524,11 @@ list(
     # Target name
     tests_sc_all_at,
     # Function
-    process_tests_sc_all_at_episodes(
+    process_tests(
       data = all_at,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -507,10 +572,11 @@ list(
     # Target name
     tests_all_care_home,
     # Function
-    process_tests_sc_all_ch_episodes(
+    process_tests(
       data = all_care_home,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -554,10 +620,11 @@ list(
     # Target name
     tests_sc_demog_lookup,
     # Function
-    process_tests_sc_demographics(
+    process_tests(
       data = sc_demog_lookup,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -597,10 +664,11 @@ list(
     # Target name
     tests_sc_all_home_care,
     # Function
-    process_tests_sc_all_hc_episodes(
+    process_tests(
       data = all_home_care,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -636,15 +704,16 @@ list(
       write_to_disk = write_to_disk
     )
   ),
-  # TESTS - All SC Self-Directed-Support (SDS)
+  # TEST - All SC Self-Directed-Support (SDS)
   tar_target(
     # Target name
     tests_sc_all_sds,
     # Function
-    process_tests_sc_all_sds_episodes(
+    process_tests(
       data = all_sds,
       BYOC_MODE = BYOC_MODE,
-      update = previous_update(),
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time
@@ -657,6 +726,114 @@ list(
 
   tar_map(
     list(year = years_to_run),
+
+    ### Accident & Emergency (AE2) ---------------------------------------------
+    # READ - Accident & Emergency (AE2)
+    tar_target(
+      # Target name
+      ae_data,
+      # Function
+      read_extract_ae(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Accident & Emergency CUP
+    tar_target(
+      # Target name
+      ae_cup_file,
+      # Function
+      read_extract_ae_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Accident & Emergency (AE2)
+    tar_target(
+      # Target name
+      source_ae_extract,
+      # Function
+      process_extract_ae(
+        data = ae_data,
+        year = year,
+        ae_cup_file = ae_cup_file,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+    # TEST - Accident & Emergency (AE2)
+    tar_target(
+      # Target name
+      tests_source_ae_extract,
+      # Function
+      process_tests(
+        data = source_ae_extract,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
+        benchmark_run_id = benchmark_run_id,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### Acute (SMR01) ----------------------------------------------------------
+    # READ - Acute
+    tar_target(
+      # Target name
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Acute
+    tar_target(
+      # Target name
+      source_acute_extract,
+      # Function
+      process_extract_acute(
+        data = acute_data,
+        acute_cup_data = acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+    # TEST - Acute
+    tar_target(
+      # Target name
+      tests_source_acute_extract,
+      # Function
+      process_tests(
+        data = source_acute_extract,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
+        benchmark_run_id = benchmark_run_id,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
 
     ### Community Mental Health (CMH) ------------------------------------------
     # READ - Community Mental Health (CMH)
@@ -689,10 +866,52 @@ list(
       # Target name
       tests_source_cmh_extract,
       # Function
-      process_tests_cmh(
+      process_tests(
         data = source_cmh_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
+        benchmark_run_id = benchmark_run_id,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### Delayed Discharges  ----------------------------------------------------
+    # READ - Delayed Discharges
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Delayed Discharges
+    tar_target(
+      # Target name
+      source_dd_extract,
+      # Function
+      process_extract_delayed_discharges(
+        data = dd_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+    # TEST - Delayed Discharges
+    tar_target(
+      # Target name
+      tests_source_dd_extract,
+      # Function
+      process_tests(
+        data = source_dd_extract,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -731,10 +950,93 @@ list(
       # Target name
       tests_source_dn_extract,
       # Function
-      process_tests_district_nursing(
+      process_tests(
         data = source_dn_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
+        benchmark_run_id = benchmark_run_id,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### GP Out of Hours (GP OOH) -----------------------------------------------
+    # TODO: Suggest reading and processing OOH extracts separately before joining together
+    # This is more consistent and easier to debug
+    # READ - GP OOH Consultations
+    tar_target(
+      # Target name
+      ooh_consultations_data,
+      # Function
+      read_extract_ooh_consultations(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - GP OOH Diagnosis
+    tar_target(
+      # Target name
+      ooh_diagnosis_data,
+      # Function
+      read_extract_ooh_diagnosis(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - GP OOH Outcomes
+    tar_target(
+      # Target name
+      ooh_outcomes_data,
+      # Function
+      read_extract_ooh_outcomes(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - GP OOH CUP
+    tar_target(
+      # Target name
+      gp_ooh_cup,
+      # Function
+      read_extract_gp_ooh_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - GP Out of Hours
+    tar_target(
+      # Target name
+      source_ooh_extract,
+      # Function
+      process_extract_gp_ooh(
+        year = year,
+        ooh_consultations = ooh_consultations_data,
+        ooh_diagnosis = ooh_diagnosis_data,
+        ooh_outcomes = ooh_outcomes_data,
+        readcode_lookup = readcode_lookup,
+        gp_ooh_cup = gp_ooh_cup,
+        ooh_cost_lookup = gp_ooh_cost_lookup,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+    # TEST - GP Out of Hours
+    tar_target(
+      # Target name
+      tests_source_ooh_extract,
+      # Function
+      process_tests(
+        data = source_ooh_extract,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -774,13 +1076,24 @@ list(
       # Target name
       tests_source_homelessness_extract,
       # Function
-      process_tests_homelessness(
+      process_tests(
         data = source_homelessness_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
+      )
+    ),
+    # PROCESS - Homelessness Lookup
+    tar_target(
+      # Target name
+      homelessness_lookup,
+      # Function
+      create_homelessness_lookup(
+        year = year,
+        homelessness_data = source_homelessness_extract
       )
     ),
 
@@ -804,11 +1117,12 @@ list(
       # Target name
       tests_source_ltc_lookup,
       # Function
-      process_tests_ltcs(
+      process_tests(
         data = source_ltc_lookup,
         year = year,
         BYOC_MODE = BYOC_MODE,
-        update = previous_update(),
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -846,10 +1160,11 @@ list(
       # Target name
       tests_source_maternity_extract,
       # Function
-      process_tests_maternity(
+      process_tests(
         data = source_maternity_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -887,10 +1202,11 @@ list(
       # Target name
       tests_source_mental_health_extract,
       # Function
-      process_tests_mental_health(
+      process_tests(
         data = source_mental_health_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -914,10 +1230,11 @@ list(
       # Target name
       tests_source_nrs_deaths_extract,
       # Function
-      process_tests_nrs_deaths(
+      process_tests(
         data = source_nrs_deaths_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -955,10 +1272,11 @@ list(
       # Target name
       tests_source_outpatients_extract,
       # Function
-      process_tests_outpatients(
+      process_tests(
         data = source_outpatients_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -996,10 +1314,11 @@ list(
       # Target name
       tests_source_prescribing_extract,
       # Function
-      process_tests_prescribing(
+      process_tests(
         data = source_prescribing_extract,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -1026,10 +1345,11 @@ list(
       # Target name
       tests_alarms_telecare,
       # Function
-      process_tests_alarms_telecare(
+      process_tests(
         data = source_sc_alarms_tele,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -1057,10 +1377,11 @@ list(
       # Target name
       tests_care_home,
       # Function
-      process_tests_care_home(
+      process_tests(
         data = source_sc_care_home,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -1099,11 +1420,12 @@ list(
       # Target name
       tests_source_client_lookup,
       # Function
-      process_tests_sc_client_lookup(
+      process_tests(
         data = sc_client_lookup,
         year = year,
         BYOC_MODE = BYOC_MODE,
-        update = previous_update(),
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -1128,10 +1450,11 @@ list(
       # Target name
       tests_home_care,
       # Function
-      process_tests_home_care(
+      process_tests(
         data = source_sc_home_care,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
@@ -1158,38 +1481,46 @@ list(
       # Target name
       tests_sds,
       # Function
-      process_tests_sds(
+      process_tests(
         data = source_sc_sds,
-        year = year,
         BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        benchmark_comparison_type = benchmark_comparison_type,
         benchmark_run_id = benchmark_run_id,
         run_id = run_id,
         run_date_time = run_date_time
+      )
+    ),
+
+    ### Stack Extract Tests ----------------------------------------------------
+    tar_target(
+      tests_extract_stacked,
+      write_stacked_test_results(
+        test_results = list(
+          tests_source_ae_extract,
+          tests_source_acute_extract,
+          tests_source_cmh_extract,
+          tests_source_dd_extract,
+          tests_source_dn_extract,
+          tests_source_ooh_extract,
+          tests_source_homelessness_extract,
+          tests_source_ltc_lookup,
+          tests_source_maternity_extract,
+          tests_source_mental_health_extract,
+          tests_source_nrs_deaths_extract,
+          tests_source_outpatients_extract,
+          tests_source_prescribing_extract,
+          tests_alarms_telecare,
+          tests_care_home,
+          tests_source_client_lookup,
+          tests_home_care,
+          tests_sds
+        ),
+        test_type = "extract",
+        BYOC_MODE = BYOC_MODE
       )
     )
   )
 )
 
-# # Bind extract targets in denodo
-# tar_target(
-#   tests_extract_stacked,
-#   write_stacked_test_results(
-#     test_results = list(
-#       tests_source_acute_extract,
-#       tests_source_ae_extract,
-#       tests_source_cmh_extract,
-#       tests_source_dd_extract,
-#       tests_source_dn_extract,
-#       tests_source_homelessness_extract,
-#       tests_source_maternity_extract,
-#       tests_source_mental_health_extract,
-#       tests_source_nrs_deaths_extract,
-#       tests_source_ooh_extract,
-#       tests_source_outpatients_extract
-#     ),
-#     test_type = "extract",
-#     BYOC_MODE = BYOC_MODE
-#   )
-# )
-
-## End of Targets pipeline ##
+########################### End of Targets Pipeline ############################.
