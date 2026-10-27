@@ -9,30 +9,47 @@
 process_tests_cmh <- function(data,
                               year,
                               BYOC_MODE,
+                              benchmark_comparison_type = "episode",
                               benchmark_run_id = NA,
                               run_id = NA,
                               run_date_time = NA) {
   log_slf_event(stage = "test", status = "start", type = "cmh", year = year)
 
+  type <- "cmh"
+  workbook <- "extract"
+
+  # Deal with years where we have no data
   if (identical(data, tibble::tibble())) {
-    # Deal with years where we have no data
     return(data)
   }
 
-  old_data <- get_existing_data_for_tests(data)
+  # Get previous data to compare to
+  old_data <- get_existing_data_for_tests(
+    new_data = data,
+    type = type,
+    year = year,
+    workbook = workbook,
+    benchmark_run_id = benchmark_run_id,
+    file_version = benchmark_comparison_type,
+    file_location = "denodo",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = BYOC_MODE
+  )
 
+  # Rename HSCP
   data <- rename_hscp(data)
 
+  # Produce comparison
   comparison <- produce_test_comparison(
     old_data = produce_source_cmh_tests(old_data),
     new_data = produce_source_cmh_tests(data)
   ) %>%
     dplyr::mutate(
-      benchmark_comparison_type = "episode",
+      benchmark_comparison_type = benchmark_comparison_type,
       benchmark_run_id = benchmark_run_id,
       run_id = run_id,
       run_date_time = run_date_time,
-      dataset_name = "cmh",
+      dataset_name = type,
       year = year
     ) %>%
     dplyr::select(
@@ -49,7 +66,8 @@ process_tests_cmh <- function(data,
       "benchmark_comparison_type",
       "benchmark_run_id"
     ) %>%
-    write_tests_xlsx(sheet_name = "cmh", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
+    # Write tests
+    write_tests_xlsx(sheet_name = type, year, workbook_name = workbook, BYOC_MODE = BYOC_MODE)
 
   log_slf_event(stage = "test", status = "complete", type = "cmh", year = year)
 
