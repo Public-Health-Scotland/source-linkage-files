@@ -35,6 +35,7 @@ process_extract_home_care <- function(data,
   # Selections for financial year ------------------------------------
 
   hc_data <- data %>%
+    tidyr::pivot_wider(names_from = fy_qtr, values_from = hc_hours_cost) %>%
     # Select episodes for FY
     dplyr::filter(is_date_in_fyyear(
       year,
