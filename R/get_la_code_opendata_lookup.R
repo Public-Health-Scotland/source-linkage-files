@@ -24,19 +24,6 @@ get_la_code_opendata_lookup <- function(
     denodo_connect,
     dbplyr::in_schema("sdl", get_sdl_names(dataset = "la_lookup", version = version()))
   ) %>%
-<<<<<<< HEAD
-    dplyr::distinct()
-  # %>%
-  # dplyr::mutate(
-  #   sending_local_authority_name = dplyr::case_match(
-  #     .data$CAName,
-  #     "City of Edinburgh" ~ "Edinburgh",
-  #     "Na h-Eileanan Siar" ~ "Eilean Siar",
-  #     .default = .data$CAName
-  #   ) %>%
-  #     stringr::str_replace("\\sand\\s", " \\& ")
-  # )
-=======
     # Rename variables
     dplyr::select(
       ca = "ca",
@@ -54,7 +41,6 @@ get_la_code_opendata_lookup <- function(
       ) %>%
         stringr::str_replace("\\sand\\s", " \\& ")
     )
->>>>>>> modify_sdl_helpers
 
   log_slf_event(stage = "read", status = "complete", type = "la_lookup", year = "all")
 

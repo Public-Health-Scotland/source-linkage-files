@@ -63,8 +63,5 @@ Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-<<<<<<< HEAD
-Config/roxygen2/version: 8.1.0
-=======
 Config/roxygen2/version: 8.1.1
->>>>>>> modify_sdl_helpers
+RoxygenNote: 7.3.3
