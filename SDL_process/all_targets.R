@@ -348,6 +348,33 @@ list(
       )
     ),
 
+    ### Community Mental Health (CMH) Activity------------------------------------
+    # READ - CMH
+    tar_target(
+      # Target name
+      cmh_data,
+      # Function
+      read_extract_cmh(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - CMH
+    tar_target(
+      # Target name
+      source_cmh_extract,
+      # Function
+      process_extract_cmh(
+        data = cmh_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
     ### Accident & Emergency (AE2) activity --------------
     # READ - A&E
     tar_target(
