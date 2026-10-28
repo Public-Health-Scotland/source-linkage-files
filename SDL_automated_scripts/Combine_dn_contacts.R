@@ -15,8 +15,6 @@ dn_raw_contacts <- readr::read_csv(
   fs::path(get_slf_dir(), "Costs", "DN-Contacts-Numbers-for-Costs.csv"),
   name_repair = janitor::make_clean_names
 ) %>%
-  # create year variable as fy
-  dplyr::mutate(year = convert_year_to_fyyear(contact_financial_year)) %>%
   # rename TreatmentNHSBoardCode
   dplyr::rename(
     hb2019 = treatment_nhs_board_code_9,
