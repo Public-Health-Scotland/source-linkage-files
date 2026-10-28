@@ -13,9 +13,9 @@ The path to the main SLF dev folder
 File path for the SLF development directory on \code{sourcedev}
 }
 \seealso{
-Other directories: 
-\code{\link{get_lookups_dir}()},
-\code{\link{get_slf_dir}()},
-\code{\link{get_year_dir}()}
+Other directories:
+\code{\link[=get_lookups_dir]{get_lookups_dir()}},
+\code{\link[=get_slf_dir]{get_slf_dir()}},
+\code{\link[=get_year_dir]{get_year_dir()}}
 }
 \concept{directories}

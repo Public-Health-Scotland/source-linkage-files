@@ -18,9 +18,9 @@ from \code{\link[=calculate_measures]{calculate_measures()}}
 Produce the tests for IT CHI deaths
 }
 \seealso{
-Other slf test functions: 
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_homelessness_tests}()},
-\code{\link{produce_slf_postcode_tests}()}
+Other slf test functions:
+\code{\link[=produce_slf_gpprac_tests]{produce_slf_gpprac_tests()}},
+\code{\link[=produce_slf_homelessness_tests]{produce_slf_homelessness_tests()}},
+\code{\link[=produce_slf_postcode_tests]{produce_slf_postcode_tests()}}
 }
 \concept{slf test functions}
