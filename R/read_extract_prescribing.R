@@ -4,6 +4,8 @@
 #'
 #' @export
 read_extract_prescribing <- function(year, file_path = get_it_prescribing_path(year)) {
+  log_slf_event(stage = "read", status = "start", type = "pis", year = year)
+
   pis_file <- read_file(file_path) %>%
     # Rename variables
     dplyr::select(
@@ -19,6 +21,8 @@ read_extract_prescribing <- function(year, file_path = get_it_prescribing_path(y
     dplyr::mutate(
       dob = lubridate::dmy(.data$dob)
     )
+
+  log_slf_event(stage = "read", status = "complete", type = "pis", year = year)
 
   return(pis_file)
 }

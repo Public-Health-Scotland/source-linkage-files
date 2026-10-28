@@ -37,6 +37,20 @@ end_date <- function() {
 }
 
 
+#' Version of SDL table
+#'
+#' @return Get the version of the SDL table (e.g. "source", "snapshot" or "processed")
+#' @export
+#'
+version <- function() {
+  # Manually update
+  # source, snapshot or processed SDL table
+  version <- "source"
+
+  return(version)
+}
+
+
 #' Check data exists for a year
 #'
 #' @description  Check there is data available for a given year
@@ -51,14 +65,16 @@ check_year_valid <- function(
   year,
   type = c(
     "acute",
+    "acute_cup",
     "ae",
+    "ae_cup",
     "at",
     "ch",
     "client",
     "cmh",
     "cost_dna",
     "dd",
-    "deaths",
+    "nrs_deaths",
     "dn",
     "gpooh",
     "hc",
@@ -234,8 +250,8 @@ qtr <- function() {
 #'
 #' @family initialisation
 years_to_run <- function() {
-  fy_start_2digit <- 17
-  fy_end_2digit <- 25
+  fy_start_2digit <- 19
+  fy_end_2digit <- 19
   years_to_run <- paste0(
     fy_start_2digit:fy_end_2digit,
     (fy_start_2digit + 1):(fy_end_2digit + 1)

@@ -4,7 +4,11 @@
 \alias{process_tests_lookup_gpprac}
 \title{Process GP (gpprac) Lookup tests}
 \usage{
-process_tests_lookup_gpprac(data, update = previous_update())
+process_tests_lookup_gpprac(
+  data,
+  update = previous_update(),
+  BYOC_MODE = FALSE
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}

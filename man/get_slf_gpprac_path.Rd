@@ -4,10 +4,12 @@
 \alias{get_slf_gpprac_path}
 \title{SLF GP Lookup File Path}
 \usage{
-get_slf_gpprac_path(update = latest_update(), ...)
+get_slf_gpprac_path(update = latest_update(), BYOC_MODE, ...)
 }
 \arguments{
 \item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}})}
+
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
@@ -24,7 +26,10 @@ Other slf lookup file path:
 \code{\link[=get_combined_slf_deaths_lookup_path]{get_combined_slf_deaths_lookup_path()}},
 \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
 \code{\link[=get_slf_chi_deaths_path]{get_slf_chi_deaths_path()}},
+<<<<<<< HEAD
 \code{\link[=get_slf_deaths_lookup_path]{get_slf_deaths_lookup_path()}},
+=======
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
 }
 \concept{slf lookup file path}

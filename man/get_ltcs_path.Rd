@@ -4,7 +4,7 @@
 \alias{get_ltcs_path}
 \title{Long Term Conditions File Path}
 \usage{
-get_ltcs_path(year, update = latest_update(), ...)
+get_ltcs_path(year, update = latest_update(), BYOC_MODE, ...)
 }
 \arguments{
 \item{year}{financial year e.g. "1920"}
@@ -23,6 +23,11 @@ Get the full path to the LTC Reference File in this quarterly update
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions:
+<<<<<<< HEAD
+=======
+\code{\link{.byoc_dataset_registry}},
+\code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_dd_path]{get_dd_path()}},
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
 \code{\link[=get_file_path]{get_file_path()}},
@@ -30,6 +35,11 @@ Other file path functions:
 \code{\link[=get_nsu_path]{get_nsu_path()}},
 \code{\link[=get_practice_details_path]{get_practice_details_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
+<<<<<<< HEAD
+=======
+\code{\link[=get_sdl_names]{get_sdl_names()}},
+\code{\link[=get_sdl_processed_data]{get_sdl_processed_data()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}
 }

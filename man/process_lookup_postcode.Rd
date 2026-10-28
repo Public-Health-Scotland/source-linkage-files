@@ -5,21 +5,30 @@
 \title{Process the SLF postcode lookup}
 \usage{
 process_lookup_postcode(
-  spd_path = get_spd_path(),
-  simd_path = get_simd_path(),
-  locality_path = get_locality_path(),
-  write_to_disk = TRUE
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  simd_data = get_simd_data(BYOC_MODE = BYOC_MODE),
+  locality_data = get_locality_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
-\item{spd_path}{Path to Scottish Postcode Directory.}
+\item{spd_data}{Scottish Postcode Directory data.}
 
-\item{simd_path}{Path to SIMD lookup.}
+\item{simd_data}{SIMD data.}
 
-\item{locality_path}{Path to locality lookup.}
+\item{locality_data}{HSCP locality data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -53,6 +62,10 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+<<<<<<< HEAD
+=======
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},
 \code{\link[=process_refined_death]{process_refined_death()}},

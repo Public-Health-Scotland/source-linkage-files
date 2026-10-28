@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_sds <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "sds", year = year)
+
   if (check_year_valid(year, "sds")) {
     old_data <- get_existing_data_for_tests(data)
 
@@ -17,6 +19,8 @@ process_tests_sds <- function(data, year) {
       new_data = produce_source_sds_tests(data)
     ) %>%
       write_tests_xlsx(sheet_name = "sds", year, workbook_name = "extract")
+
+    log_slf_event(stage = "test", status = "complete", type = "sds", year = year)
 
     return(comparison)
   } else {
@@ -49,7 +53,7 @@ produce_source_sds_tests <- function(data,
     create_demog_test_flags() %>%
     create_lca_client_test_flags(.data$sc_send_lca) %>%
     # remove variables that won't be summed
-    dplyr::select(.data$unique_anon_chi:.data$West_Lothian_clients) %>%
+    dplyr::select("unique_anon_chi":"West_Lothian_clients") %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum") %>%
     # replace distinct measures with the correct sum of NAs

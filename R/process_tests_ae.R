@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_ae <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "ae", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- apply_cost_uplift(data)
@@ -24,6 +26,8 @@ process_tests_ae <- function(data, year) {
     )
   ) %>%
     write_tests_xlsx(sheet_name = "ae2", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "ae", year = year)
 
   return(comparison)
 }

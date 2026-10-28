@@ -1,7 +1,7 @@
 #' Get BOXI extract
 #'
 #' @description Get the BOXI extract path for a given extract and year,
-#' returns an error message if the extract does not exist
+#' returns an error message if the extract does not exist if local
 #'
 #' @param year Year of extract
 #' @param type Name of BOXI extract
@@ -10,39 +10,37 @@
 #' @export
 #'
 #' @family extract file paths
-get_boxi_extract_path <- function(
-  year,
-  type = c(
-    "ae",
-    "ae_cup",
-    "acute",
-    "acute_cup",
-    "cmh",
-    "deaths",
-    "dn",
-    "gp_ooh-c",
-    "gp_ooh-d",
-    "gp_ooh-o",
-    "gp_ooh_cup",
-    "homelessness",
-    "maternity",
-    "mh",
-    "outpatients"
-  )
-) {
+get_boxi_extract_path <- function(year,
+                                  type = c(
+                                    "ae",
+                                    "ae_cup",
+                                    "acute",
+                                    "acute_cup",
+                                    "cmh",
+                                    "nrs_deaths",
+                                    "dn",
+                                    "gp_ooh-c",
+                                    "gp_ooh-d",
+                                    "gp_ooh-o",
+                                    "gp_ooh_cup",
+                                    "homelessness",
+                                    "maternity",
+                                    "mh",
+                                    "outpatients"
+                                  )) {
   type <- match.arg(type)
 
   if (type %in% c("dn", "cmh")) {
     dir <- fs::path(get_slf_dir(), "Archived_data")
   } else {
-    dir <- get_year_dir(year, extracts_dir = TRUE)
+    dir <- get_year_dir(year, extracts_dir = TRUE, BYOC_MODE = FALSE)
   }
 
   if (!check_year_valid(year, type)) {
-    return(get_dummy_boxi_extract_path())
+    return(get_dummy_path())
   }
 
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "ae" ~ "anon-A&E-episode-level-extract",
     "ae_cup" ~ "anon-A&E-UCD-CUP-extract",
@@ -57,19 +55,13 @@ get_boxi_extract_path <- function(
     "homelessness" ~ "anon-Homelessness-extract",
     "maternity" ~ "anon-Maternity-episode-level-extract",
     "mh" ~ "anon-Mental-Health-episode-level-extract",
-    "deaths" ~ "anon-NRS-death-registrations-extract",
+    "nrs_deaths" ~ "anon-NRS-death-registrations-extract",
     "outpatients" ~ "anon-Outpatients-episode-level-extract"
   )
 
-  boxi_extract_path_csv_gz <- fs::path(
-    dir,
-    stringr::str_glue("{file_name}-20{year}.csv.gz")
-  )
+  boxi_extract_path_csv_gz <- fs::path(dir, stringr::str_glue("{file_name}-20{year}.csv.gz"))
 
-  boxi_extract_path_csv <- fs::path(
-    dir,
-    stringr::str_glue("{file_name}-20{year}.csv")
-  )
+  boxi_extract_path_csv <- fs::path(dir, stringr::str_glue("{file_name}-20{year}.csv"))
 
   # If the csv.gz file doesn't exist look for the unzipped csv.
   if (fs::file_exists(boxi_extract_path_csv_gz)) {
@@ -83,15 +75,12 @@ get_boxi_extract_path <- function(
   return(boxi_extract_path)
 }
 
+
 #' Get a path to a dummy file
 #'
 #' @return an [fs::path()] to a dummy file which can be used with targets.
-get_dummy_boxi_extract_path <- function() {
-  dummy_path <- get_file_path(
-    directory = get_dev_dir(),
-    file_name = ".dummy",
-    create = TRUE
-  )
-
+#' @export
+get_dummy_path <- function() {
+  dummy_path <- "dummy_path"
   return(dummy_path)
 }

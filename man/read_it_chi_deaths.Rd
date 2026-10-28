@@ -4,10 +4,15 @@
 \alias{read_it_chi_deaths}
 \title{Read the CHI deaths extract}
 \usage{
-read_it_chi_deaths(file_path = get_it_deaths_path())
+read_it_chi_deaths(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+)
 }
 \arguments{
-\item{file_path}{Path to CHI Deaths file}
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -39,6 +44,10 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+<<<<<<< HEAD
+=======
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

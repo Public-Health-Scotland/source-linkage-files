@@ -28,12 +28,11 @@ create_episode_file <- function(
     get_slf_gpprac_path(),
     col_select = c("gpprac", "cluster", "hbpraccode")
   ),
-  slf_deaths_lookup = read_file(get_slf_deaths_lookup_path(year)),
   sc_client = read_file(get_sc_client_lookup_path(year)),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE
 ) {
-  cli::cli_alert_info("Create episode file function started at {Sys.time()}")
+  log_ep_substage("Create episode file", "started", year)
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
@@ -168,7 +167,7 @@ create_episode_file <- function(
     ) %>%
     join_deaths_data(
       year,
-      slf_deaths_lookup
+      BYOC_MODE = BYOC_MODE
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
@@ -317,7 +316,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
       group_id = 3356 # sourcedev owner
     )
 
-  cli::cli_alert_info("Store episode file variables function finished at {Sys.time()}")
+  log_ep_substage("Store episode file variables", "finished", year)
 
   return(
     dplyr::select(
@@ -352,7 +351,7 @@ load_ep_file_vars <- function(data, year) {
 
   fs::file_delete(tempfile_path)
 
-  cli::cli_alert_info("Load episode file variable function finished at {Sys.time()}")
+  log_ep_substage("Load episode file variables", "finished", year)
 
   return(full_data)
 }
@@ -409,7 +408,7 @@ fill_missing_cij_markers <- function(data) {
 
   return_data <- dplyr::bind_rows(non_fixable_data, fixed_data)
 
-  cli::cli_alert_info("Fill missing cij markers function finished at {Sys.time()}")
+  log_ep_substage("Fill missing cij markers", "finished", year)
 
   return(return_data)
 }
@@ -436,17 +435,17 @@ correct_cij_vars <- function(data) {
       ),
       cij_pattype_code = dplyr::if_else(
         !is.na(.data$anon_chi) & .data$recid %in% c("01B", "04B", "GLS", "02B"),
-        dplyr::case_match(
+        dplyr::recode_values(
           .data$cij_admtype,
           c("41", "42") ~ 2L,
           c("40", "48", "99") ~ 9L,
           "18" ~ 0L,
-          .default = as.integer(.data$cij_pattype_code)
+          default = as.integer(.data$cij_pattype_code)
         ),
         .data$cij_pattype_code
       ),
       # Recode cij_pattype based on above
-      cij_pattype = dplyr::case_match(
+      cij_pattype = dplyr::recode_values(
         .data$cij_pattype_code,
         0L ~ "Non-Elective",
         1L ~ "Elective",
@@ -455,7 +454,7 @@ correct_cij_vars <- function(data) {
       )
     )
 
-  cli::cli_alert_info("Correct cij variables function finished at {Sys.time()}")
+  log_ep_substage("Correct cij variables", "finished", year)
 
   return(data)
 }
@@ -483,7 +482,7 @@ create_cost_inc_dna <- function(data) {
       )
     )
 
-  cli::cli_alert_info("Create cost inc dna function finished at {Sys.time()}")
+  log_ep_substage("Create cost inc dna", "finished", year)
 
   return(data)
 }
@@ -510,7 +509,7 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
     write_to_disk = TRUE
   )
 
-  cli::cli_alert_info("Create cohort lookups function finished at {Sys.time()}")
+  log_ep_substage("Create cohort lookups", "finished", year)
 
   return(data)
 }
@@ -545,7 +544,7 @@ join_cohort_lookups <- function(
       by = "anon_chi"
     )
 
-  cli::cli_alert_info("Join cohort lookups function finished at {Sys.time()}")
+  log_ep_substage("Join cohort lookups", "finished", year)
 
   return(join_cohort_lookups)
 }
@@ -612,7 +611,9 @@ join_sc_client <- function(data,
       )
   }
 
-  cli::cli_alert_info("Join social care client function finished at {Sys.time()}")
+  log_ep_substage("Join social care client", "finished", year)
+
+  log_ep_substage("Create episode file", "finished", year)
 
   return(data_file)
 }

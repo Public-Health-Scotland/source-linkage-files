@@ -7,17 +7,32 @@
 #' @param data The extract to process
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
-#' `TRUE` i.e. write the data to disk.
+#' `TRUE` i.e. write the data to disk
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
+process_extract_mental_health <- function(data,
+                                          year,
+                                          write_to_disk = TRUE,
+                                          BYOC_MODE = FALSE,
+                                          run_id = NA,
+                                          run_date_time = NA) {
+  log_slf_event(stage = "process", status = "start", type = "mh", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately.
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning  ---------------------------------------
 
@@ -37,7 +52,7 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
         "NA"
       )
     ) %>%
-    dplyr::select(-.data$cij_inpatient) %>%
+    dplyr::select(-"cij_inpatient") %>%
     # cij_admtype recode unknown to 99
     dplyr::mutate(
       cij_admtype = dplyr::if_else(
@@ -48,9 +63,9 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
     ) %>%
     # monthly beddays and costs
     convert_monthly_rows_to_vars(
-      .data$costmonthnum,
-      .data$cost_total_net,
-      .data$yearstay
+      "costmonthnum",
+      "cost_total_net",
+      "yearstay"
     ) %>%
     dplyr::mutate(
       # yearstay
@@ -74,7 +89,13 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
 
   mh_processed <- mh_clean %>%
     dplyr::arrange(.data$anon_chi, .data$record_keydate1) %>%
+    dplyr::mutate(
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "smrtype",
@@ -120,11 +141,19 @@ process_extract_mental_health <- function(data, year, write_to_disk = TRUE) {
 
   if (write_to_disk) {
     write_file(
-      mh_processed,
-      get_source_extract_path(year, "mh", check_mode = "write"),
-      group_id = 3356 # sourcedev owner
+      data = mh_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "mh",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "mh", year = year)
 
   return(mh_processed)
 }

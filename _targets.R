@@ -33,7 +33,7 @@ controller <- crew::crew_controller_local(
   name = "my_controller",
   # Specify 6 workers for parallel processing - works with 8CPU, 128GB posit session
   workers = 6,
-  seconds_idle = 60
+  seconds_idle = 30
 )
 
 # Targets options
@@ -48,15 +48,14 @@ tar_option_set(
   # format - default is parquet format
   format = "parquet",
   resources = tar_resources(
-    parquet = tar_resources_parquet(compression = "zstd"),
-    qs = tar_resources_qs(preset = "high")
+    parquet = tar_resources_parquet(compression = "zstd")
   ),
   # error - if an error occurs, the pipeline will continue
   error = "continue",
   # storage - the worker saves/uploads the value.
   storage = "worker",
   # retrieval - the worker loads the target's dependencies.
-  retrieval = "worker",
+  retrieval = "work",
   # memory - default option: the target stays in memory until the end of the pipeline
   memory = "persistent",
   # controller - A controller or controller group object produced by the crew R package
@@ -92,7 +91,10 @@ list(
     # Target name
     gpprac_opendata,
     # Function
-    get_gpprac_opendata()
+    get_gpprac_opendata(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # Local Authority open data------
   tar_target(
@@ -104,34 +106,45 @@ list(
   # GP Practice reference file------
   tar_target(
     # Target name
-    gpprac_ref_path,
+    gpprac_ref_data,
     # Function
-    get_gpprac_ref_path(),
+    get_gpprac_ref_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
     format = "file"
   ),
-  # Locality path------
+  # Locality data------
   tar_target(
     # Target name
-    locality_path,
+    locality_data,
     # Function
-    get_locality_path(),
-    format = "file"
+    get_locality_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_locality_path(),
+      BYOC_MODE
+    )
   ),
-  # SIMD path------
+  # SIMD data------
   tar_target(
     # Target name
-    simd_path,
+    simd_data,
     # Function
-    get_simd_path(),
-    format = "file"
+    get_simd_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_simd_path(),
+      BYOC_MODE
+    )
   ),
   # Scottish postcode directory------
   tar_target(
     # Target name
-    spd_path,
+    spd_data,
     # Function
-    get_spd_path(),
-    format = "file"
+    get_spd_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
   ),
   # Update NHS UK postcode directory -----
   tar_target(
@@ -189,10 +202,13 @@ list(
     source_gp_lookup,
     # Function
     process_lookup_gpprac(
-      open_data = gpprac_opendata,
-      gpprac_ref_path = gpprac_ref_path,
-      spd_path = spd_path,
-      write_to_disk = write_to_disk
+      gpprac_ref_data = gpprac_ref_data,
+      gpprac_opendata = gpprac_opendata,
+      spd_data = spd_data,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
@@ -210,9 +226,12 @@ list(
     source_pc_lookup,
     # Function
     process_lookup_postcode(
-      spd_path = spd_path,
-      simd_path = simd_path,
-      locality_path = locality_path,
+      spd_data = spd_data,
+      simd_data = simd_data,
+      locality_data = locality_data,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     ),
     priority = 0.9
@@ -233,13 +252,51 @@ list(
     process_costs_ch_rmd(),
     priority = 0.8
   ),
-  # District nursing costs------
+  ### District Nursing Costs ---------------------------------------------------
+  # READ - DN RAW COSTS
+  tar_target(
+    # Target name
+    dn_raw_costs,
+    # Function
+    get_dn_raw_costs_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - DN CONTACTS
+  tar_target(
+    # Target name
+    dn_contacts,
+    # Function
+    get_dn_contacts_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # READ - HSCP POPULATION
+  tar_target(
+    # Target name
+    hscp_population,
+    # Function
+    get_hscp_pop_data(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # PROCESS - DN COSTS
   tar_target(
     # Target name
     dn_cost_lookup,
     # Function
-    process_costs_dn_rmd(),
-    priority = 0.8
+    process_costs_dn(
+      dn_raw_costs = dn_raw_costs,
+      dn_contacts = dn_contacts,
+      hscp_population = hscp_population,
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
   ),
   # Home care costs------
   tar_target(
@@ -254,13 +311,19 @@ list(
     # Target name
     gp_ooh_cost_lookup,
     # Function
-    process_costs_gp_ooh_rmd()
+    process_costs_gp_ooh(BYOC_MODE = BYOC_MODE)
   ),
   # IT deaths-----------------------------------------------------------------
   # READ - IT CHI deaths------
-  tar_file_read(it_chi_deaths_extract,
-    command = get_it_deaths_path(),
-    read = read_it_chi_deaths(!!.x)
+  tar_target(
+    # Target name
+    it_chi_deaths_extract,
+    # Function
+    read_it_chi_deaths(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      file_path = get_it_deaths_path(),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # PROCESS - IT CHI deaths------
   tar_target(
@@ -269,7 +332,10 @@ list(
     # Function
     process_it_chi_deaths(
       data = it_chi_deaths_extract,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     ),
     priority = 0.9
   ),
@@ -280,13 +346,25 @@ list(
     # Function
     process_tests_it_chi_deaths(it_chi_deaths_data)
   ),
+  # Long-Term Conditions (LTCs) Activity--------------------------------------
+  # READ - LTCs
+  tar_target(
+    ltc_data,
+    read_lookup_ltc(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
   # NRS BOXI Deaths------------------------------------------------------------
   # PROCESS - Refined deaths - combine all NRS death data into a lookup
   tar_target(
     refined_death_data,
     process_refined_death(
       it_chi_deaths = it_chi_deaths_data,
-      write_to_disk = write_to_disk
+      write_to_disk = write_to_disk,
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   ### Social Care - 'All' data -----------------------------------------------
@@ -371,7 +449,7 @@ list(
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
       ch_name_lookup_path = slf_ch_name_lookup_path,
-      spd_path = spd_path,
+      spd_data = spd_data,
       write_to_disk = write_to_disk
     ),
     priority = 0.5
@@ -438,19 +516,26 @@ list(
     #---------------------------------------------------------------------------
     # Acute (SMR01) Activity
     # READ - Acute
-    tar_file_read(
-      # Target name
-      acute_data,
-      get_boxi_extract_path(year, type = "acute"),
-      # Function
-      read_extract_acute(year, !!.x)
-    ),
-    # READ - Acute CUP
     tar_target(
       # Target name
-      acute_cup_path,
-      get_boxi_extract_path(year, type = "acute_cup"),
-      format = "file"
+      acute_data,
+      # Function
+      read_extract_acute(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # READ - Acute Cup
+    tar_target(
+      # Target name
+      acute_cup_data,
+      # Function
+      read_extract_acute_cup(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Acute
     tar_target(
@@ -459,9 +544,12 @@ list(
       # Function
       process_extract_acute(
         acute_data,
-        year,
-        acute_cup_path,
-        write_to_disk = write_to_disk
+        acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Acute
@@ -476,12 +564,15 @@ list(
     ),
     # Accident & Emergency (AE2) activity --------------------------------------
     # READ - A&E
-    tar_file_read(
+    tar_target(
       # Target name
       ae_data,
-      get_boxi_extract_path(year, type = "ae"),
       # Function
-      read_extract_ae(year, !!.x)
+      read_extract_ae(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - A&E
     tar_target(
@@ -489,9 +580,13 @@ list(
       source_ae_extract,
       # Function
       process_extract_ae(
-        ae_data,
-        year,
-        write_to_disk = write_to_disk
+        data = ae_data,
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - A&E
@@ -536,7 +631,15 @@ list(
     ),
     # Delayed Discharges Activity-----------------------------------------------
     # READ - Delayed Discharges
-    tar_file_read(dd_data, get_dd_path(), read_extract_delayed_discharges(!!.x)),
+    tar_target(
+      # Target name
+      dd_data,
+      # Function
+      read_extract_delayed_discharges(
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
     # PROCESS - Delayed Discharges
     tar_target(
       # Target name
@@ -545,7 +648,11 @@ list(
       process_extract_delayed_discharges(
         dd_data,
         year,
-        write_to_disk = write_to_disk
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Delayed Discharges
@@ -560,12 +667,16 @@ list(
     ),
     # District Nursing Activity-------------------------------------------------
     # READ - District Nursing
-    tar_file_read(
+    tar_target(
       # Target name
       dn_data,
-      get_boxi_extract_path(year, type = "dn"),
       # Function
-      read_extract_district_nursing(year, !!.x)
+      read_extract_district_nursing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year = year, type = "dn", BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - District Nursing
     tar_target(
@@ -574,9 +685,12 @@ list(
       # Function
       process_extract_district_nursing(
         dn_data,
-        year,
+        year = year,
         costs = dn_cost_lookup,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - District Nursing
@@ -591,12 +705,16 @@ list(
     ),
     # Homelessness (HL1) Activity-----------------------------------------------
     # READ - Homelessness
-    tar_file_read(
+    tar_target(
       # Target name
       homelessness_data,
-      get_boxi_extract_path(year, type = "homelessness"),
       # Function
-      read_extract_homelessness(year, !!.x)
+      read_extract_homelessness(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year, type = "homelessness", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Homelessness
     tar_target(
@@ -607,7 +725,11 @@ list(
         data = homelessness_data,
         year = year,
         write_to_disk = write_to_disk,
-        la_code_lookup = la_code_opendata
+        la_code_lookup = la_code_opendata,
+        # TODO: change sg_pub_data or sg_pub_path here
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Homelessness
@@ -631,8 +753,6 @@ list(
       )
     ),
     # Long-Term Conditions (LTCs) Activity--------------------------------------
-    # READ - LTCs
-    tar_file_read(ltc_data, get_it_ltc_path(), read_lookup_ltc(!!.x)),
     # PROCESS - LTCs
     tar_target(
       # Target name
@@ -641,7 +761,10 @@ list(
       process_lookup_ltc(
         ltc_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - LTCs
@@ -656,12 +779,15 @@ list(
     ),
     # Maternity (SMR02) Acitivity-----------------------------------------------
     # READ - Maternity
-    tar_file_read(
+    tar_target(
       # Target name
       maternity_data,
-      get_boxi_extract_path(year, type = "maternity"),
-      # Function
-      read_extract_maternity(year, !!.x)
+      read_extract_maternity(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(year, type = "maternity", BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Maternity
     tar_target(
@@ -671,7 +797,10 @@ list(
       process_extract_maternity(
         maternity_data,
         year,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Maternity
@@ -686,22 +815,30 @@ list(
     ),
     # Mental Health (SMR02) Activity--------------------------------------------
     # READ - Mental Health
-    tar_file_read(
-      # Target name
+    tar_target(
       mental_health_data,
-      get_boxi_extract_path(year, type = "mh"),
-      # Function
-      read_extract_mental_health(year, !!.x)
+      read_extract_mental_health(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        file_path = get_boxi_extract_path(
+          year = year,
+          type = "mh",
+          BYOC_MODE = BYOC_MODE
+        ),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Mental Health
     tar_target(
       # Target name
       source_mental_health_extract,
-      # Function
       process_extract_mental_health(
         mental_health_data,
-        year,
-        write_to_disk = write_to_disk
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Mental Health
@@ -735,36 +872,41 @@ list(
         year
       )
     ),
-    # Deaths - Year specific SLF lookup-----------------------------------------
-    tar_target(
-      # Target name
-      slf_deaths_lookup,
-      # Function
-      process_slf_deaths_lookup(
-        year = year,
-        refined_death = refined_death_data,
-        write_to_disk = write_to_disk
-      )
-    ),
+
+    # Remove process_slf_deaths_lookup function, and
+    # moved the funtionality to join_deaths_data()
+    # where the slf_deaths_lookup is only used once.
+    # # Deaths - Year specific SLF lookup-----------------------------------------
+    # tar_target(
+    #   # Target name
+    #   slf_deaths_lookup,
+    #   # Function
+    #   process_slf_deaths_lookup(
+    #     year = year,
+    #     refined_death = refined_death_data,
+    #     write_to_disk = write_to_disk
+    #   )
+    # ),
+
     # GP Out of Hours (GP OOH) Activity-----------------------------------------
     # READ - GP Out of Hours diagnoses
     tar_target(
       # Target name
       diagnosis_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-d"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-d", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # READ - GP Out of Hours outcomes
     tar_target(
       # Target name
       outcomes_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-o"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-o", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # READ - GP Out of Hours consultations
     tar_target(
       consultations_data_path,
-      get_boxi_extract_path(year = year, type = "gp_ooh-c"),
+      get_boxi_extract_path(year = year, type = "gp_ooh-c", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # GP Out of Hours ALL
@@ -773,16 +915,18 @@ list(
       ooh_data,
       # Function
       read_extract_gp_ooh(
-        year,
-        diagnosis_data_path,
-        outcomes_data_path,
-        consultations_data_path
+        year = year,
+        BYOC_MODE = BYOC_MODE,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        diagnosis_path = diagnosis_data_path,
+        outcomes_path = outcomes_data_path,
+        consultations_path = consultations_data_path
       )
     ),
     # GP Out of Hours CUP
     tar_target(
       gp_ooh_cup_path,
-      get_boxi_extract_path(year, type = "gp_ooh_cup"),
+      get_boxi_extract_path(year = year, type = "gp_ooh_cup", BYOC_MODE = BYOC_MODE),
       format = "file"
     ),
     # PROCESS - GP OOH CUP
@@ -791,10 +935,14 @@ list(
       source_ooh_extract,
       # Function
       process_extract_gp_ooh(
-        year,
+        year = year,
         ooh_data,
-        gp_ooh_cup_path,
-        write_to_disk = write_to_disk
+        gp_ooh_cup_path = gp_ooh_cup_path,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - GP OOH
@@ -809,12 +957,15 @@ list(
     ),
     # Outpatients (SMR00) Activity----------------------------------------------
     # READ - Outpatients
-    tar_file_read(
+    tar_target(
       # Target name
       outpatients_data,
-      get_boxi_extract_path(year, type = "outpatient"),
       # Function
-      read_extract_outpatients(year, !!.x)
+      read_extract_outpatients(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Outpatients
     tar_target(
@@ -822,9 +973,12 @@ list(
       source_outpatients_extract,
       # Function
       process_extract_outpatients(
-        outpatients_data,
-        year,
-        write_to_disk = write_to_disk
+        data = outpatients_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Outpatients

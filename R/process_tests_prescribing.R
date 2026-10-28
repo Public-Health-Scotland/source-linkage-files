@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_prescribing <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "pis", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- rename_hscp(data)
@@ -16,6 +18,8 @@ process_tests_prescribing <- function(data, year) {
     new_data = produce_source_pis_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "pis", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "pis", year = year)
 
   return(comparison)
 }

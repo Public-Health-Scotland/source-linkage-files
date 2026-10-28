@@ -4,8 +4,7 @@
 #' [tibble][tibble::tibble-package]
 #' @param ch_name_lookup_path Path to the 'official' Care Home name Excel
 #' Workbook, this defaults to [get_slf_ch_name_lookup_path()]
-#' @param spd_path Path to the Scottish Postcode Directory (rds) version, this
-#' defaults to [get_spd_path()]
+#' @param spd_data Path to the Scottish Postcode Directory (parquet) version
 #' @param uk_pc_path Path to the UK postcode list. This is defaults to
 #' [get_uk_postcode_path()]
 #'
@@ -13,15 +12,14 @@
 #' Home names and postcodes, as a [tibble][tibble::tibble-package].
 fill_ch_names <- function(ch_data,
                           ch_name_lookup_path = get_slf_ch_name_lookup_path(),
-                          spd_path = get_spd_path(),
+                          spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
                           uk_pc_path = get_uk_postcode_path()) {
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
 
-  spd_list <- dplyr::pull(
-    read_file(spd_path, col_select = "pc7"),
-    "pc7"
-  )
+  spd_list <- spd_data %>%
+    dplyr::pull(.data$pc7)
+
   uk_pc_list <- dplyr::pull(read_file(uk_pc_path))
 
   ch_data <- ch_data %>%
@@ -84,7 +82,7 @@ fill_ch_names <- function(ch_data,
       ch_name_validated = clean_up_free_text(.data[["ch_name_validated"]]),
       ch_date_registered = lubridate::as_date(.data[["ch_date_registered"]]),
       ch_date_cancelled = lubridate::as_date(.data[["ch_date_cancelled"]]),
-      ch_active = dplyr::case_match(
+      ch_active = dplyr::recode_values(
         .data[["ch_active"]],
         "Active" ~ TRUE,
         c("Cancelled", "Inactive") ~ FALSE
@@ -106,7 +104,7 @@ fill_ch_names <- function(ch_data,
       ch_active = any(.data[["ch_active"]])
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::rename(ch_postcode_lookup = .data[["ch_postcode"]]) %>%
+    dplyr::rename(ch_postcode_lookup = dplyr::all_of("ch_postcode")) %>%
     dplyr::mutate(
       ch_pc_partial = stringr::str_sub(.data[["ch_postcode_lookup"]], 1, -2),
       ch_pc_partial2 = stringr::str_sub(.data[["ch_postcode_lookup"]], 1, -3),

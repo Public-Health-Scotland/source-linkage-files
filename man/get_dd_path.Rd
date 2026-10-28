@@ -25,6 +25,11 @@ Get the Delayed Discharges file path
 get_dd_period
 
 Other file path functions:
+<<<<<<< HEAD
+=======
+\code{\link{.byoc_dataset_registry}},
+\code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
 \code{\link[=get_file_path]{get_file_path()}},
 \code{\link[=get_homelessness_completeness_path]{get_homelessness_completeness_path()}},
@@ -32,6 +37,11 @@ Other file path functions:
 \code{\link[=get_nsu_path]{get_nsu_path()}},
 \code{\link[=get_practice_details_path]{get_practice_details_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
+<<<<<<< HEAD
+=======
+\code{\link[=get_sdl_names]{get_sdl_names()}},
+\code{\link[=get_sdl_processed_data]{get_sdl_processed_data()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}
 }

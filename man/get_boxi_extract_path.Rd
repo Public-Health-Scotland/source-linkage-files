@@ -6,7 +6,7 @@
 \usage{
 get_boxi_extract_path(
   year,
-  type = c("ae", "ae_cup", "acute", "acute_cup", "cmh", "deaths", "dn", "gp_ooh-c",
+  type = c("ae", "ae_cup", "acute", "acute_cup", "cmh", "nrs_deaths", "dn", "gp_ooh-c",
     "gp_ooh-d", "gp_ooh-o", "gp_ooh_cup", "homelessness", "maternity", "mh",
     "outpatients")
 )
@@ -21,7 +21,7 @@ BOXI extracts containing data for each dataset
 }
 \description{
 Get the BOXI extract path for a given extract and year,
-returns an error message if the extract does not exist
+returns an error message if the extract does not exist if local
 }
 \seealso{
 Other extract file paths:

@@ -12,18 +12,22 @@
 #' @family process extracts
 create_homelessness_lookup <- function(
   year,
-  homelessness_data = read_file(get_source_extract_path(year, "homelessness"))
+  homelessness_data = read_file(
+    get_source_extract_path(year = year, type = "homelessness", BYOC_MODE = BYOC_MODE)
+  )
 ) {
+  log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
+
   # Specify years available for running
   if (year <= "1516") {
     return(NULL)
   }
   homelessness_lookup <- homelessness_data %>%
     dplyr::distinct(.data$anon_chi, .data$record_keydate1, .data$record_keydate2) %>%
-    tidyr::drop_na(.data$anon_chi) %>%
+    tidyr::drop_na("anon_chi") %>%
     dplyr::mutate(hl1_in_fy = 1L)
 
-  cli::cli_alert_info("Create homelessness lookup function finished at {Sys.time()}")
+  log_slf_event(stage = "process", status = "complete", type = "homelessness_lookup", year = year)
 
   return(homelessness_lookup)
 }
@@ -43,6 +47,8 @@ create_homelessness_lookup <- function(
 #' @family episode_file
 add_homelessness_flag <- function(data, year,
                                   lookup = create_homelessness_lookup(year)) {
+  log_slf_event(stage = "process", status = "start", type = "homelessness_flag", year = year)
+
   if (!check_year_valid(year, type = "homelessness")) {
     data <- data
     return(data)
@@ -57,7 +63,7 @@ add_homelessness_flag <- function(data, year,
     ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(.data$hl1_in_fy, 0L))
 
-  cli::cli_alert_info("Add homelessness flag function finished at {Sys.time()}")
+  log_slf_event(stage = "process", status = "complete", type = "homelessness_flag", year = year)
 
   return(data)
 }
@@ -74,6 +80,8 @@ add_homelessness_flag <- function(data, year,
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
+  log_slf_event(stage = "process", status = "start", type = "homelessness_date_flags", year = year)
+
   if (!check_year_valid(year, type = "homelessness")) {
     data <- data
     return(data)
@@ -82,8 +90,8 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
   lookup <- lookup %>%
     dplyr::filter(!(is.na(.data$record_keydate2))) %>%
     dplyr::rename(
-      application_date = .data$record_keydate1,
-      end_date = .data$record_keydate2
+      application_date = "record_keydate1",
+      end_date = "record_keydate2"
     ) %>%
     dplyr::mutate(
       six_months_pre_app = .data$application_date - lubridate::days(180),
@@ -93,7 +101,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
 
 
   homeless_flag <- data %>%
-    dplyr::select(.data$anon_chi, .data$record_keydate1, .data$record_keydate2, .data$recid) %>%
+    dplyr::select("anon_chi", "record_keydate1", "record_keydate2", "recid") %>%
     dplyr::filter(.data$recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
     dplyr::distinct() %>%
     dplyr::left_join(
@@ -133,7 +141,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
       )
     )
 
-  cli::cli_alert_info("Add homelessness date flags function finished at {Sys.time()}")
+  log_slf_event(stage = "process", status = "complete", type = "homelessness_date_flags", year = year)
 
   return(data)
 }

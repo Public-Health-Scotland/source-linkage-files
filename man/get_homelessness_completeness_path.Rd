@@ -4,12 +4,12 @@
 \alias{get_homelessness_completeness_path}
 \title{Homelessness Completeness lookup path}
 \usage{
-get_homelessness_completeness_path(year, update = latest_update(), ...)
+get_homelessness_completeness_path(year, BYOC_MODE, ...)
 }
 \arguments{
 \item{year}{the financial year of the update.}
 
-\item{update}{the update month (defaults to use \code{\link[=latest_update]{latest_update()}}).}
+\item{BYOC_MODE}{check BYOC mode.}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}.}
 }
@@ -24,6 +24,11 @@ is specific to year and update.
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions:
+<<<<<<< HEAD
+=======
+\code{\link{.byoc_dataset_registry}},
+\code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_dd_path]{get_dd_path()}},
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
 \code{\link[=get_file_path]{get_file_path()}},
@@ -31,6 +36,11 @@ Other file path functions:
 \code{\link[=get_nsu_path]{get_nsu_path()}},
 \code{\link[=get_practice_details_path]{get_practice_details_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
+<<<<<<< HEAD
+=======
+\code{\link[=get_sdl_names]{get_sdl_names()}},
+\code{\link[=get_sdl_processed_data]{get_sdl_processed_data()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}
 }

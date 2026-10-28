@@ -55,6 +55,10 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+<<<<<<< HEAD
+=======
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
+>>>>>>> modify_sdl_helpers
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},
 \code{\link[=process_refined_death]{process_refined_death()}},

@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_outpatients <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "outpatients", year = year)
+
   old_data <- get_existing_data_for_tests(data)
 
   data <- apply_cost_uplift(data)
@@ -28,6 +30,8 @@ process_tests_outpatients <- function(data, year) {
     )
   ) %>%
     write_tests_xlsx(sheet_name = "00b", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "outpatients", year = year)
 
   return(comparison)
 }

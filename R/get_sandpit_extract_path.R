@@ -21,7 +21,7 @@ get_sandpit_extract_path <- function(type = c(
                                      update = latest_update(), ...) {
   dir <- fs::path(get_slf_dir(), "Social_care", "Sandpit_Extracts")
 
-  file_name <- dplyr::case_match(
+  file_name <- dplyr::recode_values(
     type,
     "at" ~ "anon-sandpit_at_extract",
     "ch" ~ "anon-sandpit_ch_extract",

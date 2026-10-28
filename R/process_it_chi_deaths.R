@@ -1,17 +1,28 @@
 #' Process the CHI deaths extract
 #'
 #' @description This will process the CHI deaths extract, it will return the
-#' final data and write the data out.
+#' final data and (optionally) write it to disk.
 #'
 #' @param data The extract to process
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
-  it_chi_deaths_clean <- data %>%
+process_it_chi_deaths <- function(data,
+                                  write_to_disk = TRUE,
+                                  BYOC_MODE = FALSE,
+                                  run_id = NA,
+                                  run_date_time = NA) {
+  log_slf_event(stage = "process", status = "start", type = "it_chi_deaths", year = "all")
+
+  # Data Cleaning  ---------------------------------------
+
+  it_chi_deaths_processed <- data %>%
     dplyr::arrange(
       dplyr::desc(.data$death_date_nrs),
       dplyr::desc(.data$death_date_chi)
@@ -19,17 +30,31 @@ process_it_chi_deaths <- function(data, write_to_disk = TRUE) {
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
     # remove death_date_nrs as this is the nrs weekly unvalidated data and we should not use this.
     # the boxi nrs death date is more reliable as this is provided monthly and is validated.
-    dplyr::select(.data$anon_chi, .data$death_date_chi) %>%
     dplyr::mutate(
-      death_date_chi = lubridate::ymd(.data$death_date_chi)
+      death_date_chi = lubridate::ymd(.data$death_date_chi),
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
+    ) %>%
+    dplyr::select(
+      "run_id",
+      "run_date_time",
+      "anon_chi",
+      "death_date_chi"
     )
 
   if (write_to_disk) {
-    it_chi_deaths_clean %>%
-      write_file(get_slf_chi_deaths_path(check_mode = "write"),
-        group_id = 3206 # hscdiip owner
-      )
+    write_file(
+      data = it_chi_deaths_processed,
+      path = get_slf_chi_deaths_path(
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
 
-  return(it_chi_deaths_clean)
+  log_slf_event(stage = "process", status = "complete", type = "it_chi_deaths", year = "all")
+
+  return(it_chi_deaths_processed)
 }

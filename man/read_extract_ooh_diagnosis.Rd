@@ -6,13 +6,16 @@
 \usage{
 read_extract_ooh_diagnosis(
   year,
-  file_path = get_boxi_extract_path(year = year, type = "gp_ooh-d")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
 
-\item{file_path}{BOXI extract location}
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with OOH Diagnosis extract data

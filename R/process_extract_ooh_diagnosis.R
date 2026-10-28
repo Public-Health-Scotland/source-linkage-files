@@ -9,22 +9,33 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_diagnosis <- function(data, year) {
+
+process_extract_ooh_diagnosis <- function(data,
+                                          year,
+                                          denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                                          BYOC_MODE) {
+  log_slf_event(stage = "process", status = "start", type = "gp_ooh-d", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
   year <- check_year_format(year)
 
-
   # Diagnosis Data ---------------------------------
 
   # Read code lookup
-  readcode_lookup <- read_file(get_readcode_lookup_path()) %>%
-    dplyr::rename(
-      readcode = "ReadCode",
-      description = "Description"
-    )
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  readcode_lookup <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_read_code_lookup_source")
+  ) %>%
+    dplyr::select(
+      readcode = "readcode",
+      description = "description"
+    ) %>%
+    dplyr::collect()
 
   ## Deal with Read Codes
 
@@ -123,7 +134,6 @@ process_extract_ooh_diagnosis <- function(data, year) {
     )
   }
 
-
   ## Data Cleaning------------------------------------------------------------
 
   diagnosis_clean <- diagnosis_readcodes %>%
@@ -141,8 +151,8 @@ process_extract_ooh_diagnosis <- function(data, year) {
     dplyr::rename(diag = "readcode") %>%
     # restructure data
     tidyr::pivot_wider(
-      names_from = .data$diag_n,
-      values_from = c(.data$diag, .data$description),
+      names_from = "diag_n",
+      values_from = c("diag", "description"),
       names_glue = "{.value}{diag_n}"
     ) %>%
     dplyr::select(
@@ -157,6 +167,8 @@ process_extract_ooh_diagnosis <- function(data, year) {
         "diag6"
       ))
     )
+
+  log_slf_event(stage = "process", status = "complete", type = "gp_ooh-d", year = year)
 
   return(diagnosis_clean)
 }

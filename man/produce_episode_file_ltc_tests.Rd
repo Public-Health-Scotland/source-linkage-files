@@ -29,8 +29,11 @@ with distinct anon_chi.
 Other extract test functions:
 \code{\link[=calculate_measures]{calculate_measures()}},
 \code{\link[=produce_episode_file_tests]{produce_episode_file_tests()}},
+<<<<<<< HEAD
 \code{\link[=produce_non_sc_episode_tests]{produce_non_sc_episode_tests()}},
 \code{\link[=produce_sc_episode_tests]{produce_sc_episode_tests()}},
+=======
+>>>>>>> modify_sdl_helpers
 \code{\link[=produce_source_ch_tests]{produce_source_ch_tests()}},
 \code{\link[=produce_source_cmh_tests]{produce_source_cmh_tests()}},
 \code{\link[=produce_source_dn_tests]{produce_source_dn_tests()}},

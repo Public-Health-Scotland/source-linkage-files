@@ -15,8 +15,13 @@
 process_extract_delayed_discharges <- function(
   data,
   year,
-  write_to_disk = TRUE
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 ) {
+  log_slf_event(stage = "process", status = "start", type = "dd", year = year)
+
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
@@ -46,8 +51,8 @@ process_extract_delayed_discharges <- function(
 
   dd_clean <- data %>%
     dplyr::rename(
-      record_keydate1 = .data[["rdd"]],
-      record_keydate2 = .data[["delay_end_date"]]
+      record_keydate1 = rdd,
+      record_keydate2 = delay_end_date
     ) %>%
     # Use end of the month date for records with no end date
     # (but we think have ended)
@@ -68,11 +73,16 @@ process_extract_delayed_discharges <- function(
     # set up variables
     dplyr::mutate(
       recid = "DD",
-      year = year
+      year = year,
+      run_id = .env$run_id,
+      run_date_time = .env$run_date_time
     ) %>%
     # recode blanks to NA
     dplyr::mutate(
-      dplyr::across(tidyselect::ends_with("_delay_reason"), dplyr::na_if, "")
+      dplyr::across(
+        tidyselect::ends_with("_delay_reason"),
+        \(x) dplyr::na_if(x, "")
+      )
     ) %>%
     # create flags for no_end_date and correct_dates
     dplyr::mutate(
@@ -91,6 +101,8 @@ process_extract_delayed_discharges <- function(
 
   dd_final <- dd_clean %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "anon_chi",
@@ -111,10 +123,18 @@ process_extract_delayed_discharges <- function(
   if (write_to_disk) {
     write_file(
       dd_final,
-      get_source_extract_path(year, "dd", check_mode = "write"),
+      get_source_extract_path(
+        year,
+        "dd",
+        check_mode = "write",
+        BYOC_MODE = BYOC_MODE
+      ),
+      BYOC_MODE = BYOC_MODE,
       group_id = 3356 # sourcedev owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "dd", year = year)
 
   return(dd_final)
 }

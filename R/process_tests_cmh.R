@@ -7,6 +7,8 @@
 #'
 #' @export
 process_tests_cmh <- function(data, year) {
+  log_slf_event(stage = "test", status = "start", type = "cmh", year = year)
+
   if (identical(data, tibble::tibble())) {
     # Deal with years where we have no data
     return(data)
@@ -21,6 +23,8 @@ process_tests_cmh <- function(data, year) {
     new_data = produce_source_cmh_tests(data)
   ) %>%
     write_tests_xlsx(sheet_name = "cmh", year, workbook_name = "extract")
+
+  log_slf_event(stage = "test", status = "complete", type = "cmh", year = year)
 
   return(comparison)
 }

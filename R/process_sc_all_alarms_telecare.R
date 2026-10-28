@@ -16,6 +16,8 @@ process_sc_all_alarms_telecare <- function(
   sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
   write_to_disk = TRUE
 ) {
+  log_slf_event(stage = "process", status = "start", type = "at", year = "all")
+
   # Data Cleaning-----------------------------------------------------
 
   # fix "no visible binding for global variable"
@@ -154,6 +156,8 @@ process_sc_all_alarms_telecare <- function(
       group_id = 3206 # hscdiip owner
     )
   }
+
+  log_slf_event(stage = "process", status = "complete", type = "at", year = "all")
 
   return(qtr_merge)
 }
