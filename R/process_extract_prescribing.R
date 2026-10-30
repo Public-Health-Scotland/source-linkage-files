@@ -8,21 +8,35 @@
 #' @param year The year to process, in FY format.
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
-process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
+process_extract_prescribing <- function(data,
+                                        year,
+                                        write_to_disk = TRUE,
+                                        BYOC_MODE = FALSE,
+                                        run_id = NA,
+                                        run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "pis", year = year)
 
   # Only run for a single year
   stopifnot(length(year) == 1L)
 
   # Check that the supplied year is in the correct format
-  year <- check_year_format(year)
+  year <- check_year_format(year, format = "fyyear")
+
+  # If no data is available in the FY then return immediately
+  if (identical(data, tibble::tibble())) {
+    return(data)
+  }
 
   # Data Cleaning--------------------------------------------
-  pis_clean <- data %>%
+
+  pis_processed <- data %>%
     slfhelper::get_chi() %>%
     # filter for chi NA
     dplyr::filter(phsmethods::chi_check(.data$chi) == "Valid CHI") %>%
@@ -42,27 +56,35 @@ process_extract_prescribing <- function(data, year, write_to_disk = TRUE) {
       record_keydate1 = end_fy(year),
       record_keydate2 = .data$record_keydate1,
       # Add SMR type variable
-      smrtype = add_smrtype(.data$recid)
+      smrtype = add_smrtype(.data$recid),
+      run_id = run_id,
+      run_date_time = run_date_time
     )
 
   # Issue a warning if rows were removed
-  if (nrow(pis_clean) != nrow(data)) {
+  if (nrow(pis_processed) != nrow(data)) {
     cli::cli_warn(message = c(
-      "{nrow(data) - nrow(pis_clean)} row{?s} were removed from the PIS
+      "{nrow(data) - nrow(pis_processed)} row{?s} were removed from the PIS
     extract because the CHI number was invalid",
-      "Check the raw PIS extract: {.path {get_it_prescribing_path(year)}}"
+      "Check the raw PIS extract."
     ))
   }
 
   if (write_to_disk) {
     write_file(
-      pis_clean,
-      get_source_extract_path(year, "pis", check_mode = "write"),
-      group_id = 3356 # sourcedev owner
+      data = pis_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "pis",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 
   log_slf_event(stage = "process", status = "complete", type = "pis", year = year)
 
-  return(pis_clean)
+  return(pis_processed)
 }
