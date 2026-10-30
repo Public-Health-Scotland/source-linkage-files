@@ -13,9 +13,8 @@ process_refined_death(
 )
 }
 \arguments{
-\item{it_chi_deaths}{it chi death data}
-
-\item{write_to_disk}{write the result to disk or not.}
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
@@ -24,13 +23,13 @@ process_refined_death(
 \item{run_date_time}{run_date_time for BYOC}
 }
 \value{
-refined_death The processed lookup of deaths combining NRS and IT_CHI.
+refined_death as a \link[tibble:tibble-package]{tibble}.
+The processed lookup of deaths combining NRS and IT_CHI.
 }
 \description{
-This will process
-year-specific BOXI NRS death file (written to disk), and
-combine them together to get all years NRS file (Not written to disk).
-Then join all NRS deaths with IT CHI death data
+This will process year-specific BOXI NRS death file
+(written to disk), and combine them together to get all years NRS file
+(Not written to disk). Then join all NRS deaths with IT CHI death data
 to get an all-year refined death file (written to disk).
 }
 \seealso{

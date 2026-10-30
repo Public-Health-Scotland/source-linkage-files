@@ -2,34 +2,46 @@
 % Please edit documentation in R/process_lookup_sc_demographics.R
 \name{process_lookup_sc_demographics}
 \alias{process_lookup_sc_demographics}
-\title{Process the social care demographic lookup}
+\title{Process the Social Care Demographics lookup}
 \usage{
 process_lookup_sc_demographics(
   data,
-  all_care_home_extract,
-  spd_path = get_spd_path(),
-  uk_pc_path = get_uk_postcode_path(),
-  write_to_disk = TRUE
+  all_care_home_extract = read_sc_all_care_home(BYOC_MODE = BYOC_MODE),
+  uk_pc_directory = get_uk_postcode_data(BYOC_MODE = BYOC_MODE),
+  ch_name_lookup = get_slf_ch_name_lookup_data(BYOC_MODE = BYOC_MODE),
+  spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
-\item{data}{The extract to process.}
+\item{data}{The extract to process}
 
 \item{all_care_home_extract}{The raw extracts produced by read_sc_all_care_home().}
 
-\item{spd_path}{Path to the Scottish Postcode Directory.}
+\item{uk_pc_directory}{UK postcode directory}
 
-\item{uk_pc_path}{UK Postcode directory}
+\item{ch_name_lookup}{Care home name lookup}
+
+\item{spd_data}{Scottish postcode directory}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
-social care demographic lookup, it will return the final data
+Social Care Demographics lookup, it will return the final data
 and (optionally) write it to disk.
 }
 \seealso{

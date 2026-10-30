@@ -18,7 +18,8 @@
 #' @family process extracts
 process_lookup_gpprac <- function(
   gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
-  gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+  gpprac_cluster = get_gpprac_cluster(BYOC_MODE = BYOC_MODE),
+  geography_labels = get_geography_labels(BYOC_MODE = BYOC_MODE),
   spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
@@ -36,6 +37,30 @@ process_lookup_gpprac <- function(
       "hscp2018",
       "ca2018"
     )
+
+  # Join and process OpenData
+  gpprac_opendata <- gpprac_cluster %>%
+    dplyr::left_join(
+      geography_labels,
+      by = c("hb", "hscp")
+    ) %>%
+    dplyr::select(
+      gpprac = "practice_code",
+      practice_name = "gp_practice_name",
+      postcode = "postcode",
+      cluster = "gp_cluster",
+      partnership = "hscp_name",
+      health_board = "hb_name"
+    ) %>%
+    # Drop NA cluster rows
+    tidyr::drop_na("cluster") %>%
+    dplyr::mutate(
+      # Format practice name text
+      practice_name = stringr::str_to_title(.data$practice_name),
+      # Format postcode to strict PC7 format
+      postcode = phsmethods::format_postcode(.data$postcode)
+    ) %>%
+    dplyr::distinct(.data$gpprac, .keep_all = TRUE)
 
   # Match cluster information onto the practice reference list
   gpprac_slf_lookup <- dplyr::left_join(
