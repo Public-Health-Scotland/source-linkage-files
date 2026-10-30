@@ -75,11 +75,11 @@ years_to_run <- "1920"
 # Stage 2 - Set up targets ----
 list(
   tar_rds(write_to_disk, TRUE),
-
+  
   # ============================================================================.
   ## Stage 2.1 - Look-ups ----
   # ============================================================================.
-
+  
   ### Care Home Name Lookup ----------------------------------------------------
   # (Demographics, Care Home)
   # GET - Care Home Name Lookup
@@ -92,7 +92,7 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-
+  
   ### Local Authority Open Data ------------------------------------------------
   # (Homelessness, Home Care Costs)
   # GET - Local Authority Open Data
@@ -105,7 +105,7 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-
+  
   ### Scottish Postcode Directory ----------------------------------------------
   # (Demographics, Care Home, Postcode Lookup, GP Practice Lookup)
   # GET - Scottish Postcode Directory
@@ -118,7 +118,7 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-
+  
   ### UK Postcode Directory ----------------------------------------------------
   # (Demographics, Care Home)
   # GET - UK Postcode Directory
@@ -131,11 +131,11 @@ list(
       BYOC_MODE = BYOC_MODE
     )
   ),
-
+  
   # ============================================================================.
   ## Stage 2.2 Cost Look-ups ----
   # ============================================================================.
-
+  
   ### Care Home Costs ----------------------------------------------------------
   # GET - Care HomeCosts
   tar_target(
@@ -160,7 +160,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### Home Care Costs ----------------------------------------------------------
   # GET - Home Care Costs
   tar_target(
@@ -186,11 +186,11 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   # ============================================================================.
   ## Stage 2.3 Non Year-Specific Targets ----
   # ============================================================================.
-
+  
   ### Postcode Lookup ----------------------------------------------------------
   # GET - HSCP Locality Data
   tar_target(
@@ -227,7 +227,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### GP Lookup ----------------------------------------------------------------
   # GET - GP Practice Cluster Information
   tar_target(
@@ -275,7 +275,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### IT CHI Deaths ------------------------------------------------------------
   # READ - IT CHI Deaths
   tar_target(
@@ -313,11 +313,11 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   # ============================================================================.
   ## Stage 2.4 - Social Care All Years ----
   # ============================================================================.
-
+  
   ### All SC Alarms Telecare ---------------------------------------------------
   # READ - All SC Alarms Telecare
   tar_target(
@@ -347,7 +347,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### All SC Care Homes --------------------------------------------------------
   # READ - All SC Care Homes
   tar_target(
@@ -381,7 +381,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### All SC Demographics ------------------------------------------------------
   # READ - All SC Demographics
   tar_target(
@@ -414,7 +414,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### All SC Home Care ---------------------------------------------------------
   # READ - All SC Home Care
   tar_target(
@@ -445,7 +445,7 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   ### All SC Self-Directed-Support (SDS) ---------------------------------------
   # READ - All SC Self-Directed-Support (SDS)
   tar_target(
@@ -475,14 +475,14 @@ list(
       run_date_time = run_date_time
     )
   ),
-
+  
   # ============================================================================.
   ## Stage 2.5 - Year Specific Targets ----
   # ============================================================================.
-
+  
   tar_map(
     list(year = years_to_run),
-
+    
     ### NRS Deaths -------------------------------------------------------------
     # PROCESS - NRS Deaths
     tar_target(
@@ -495,7 +495,7 @@ list(
           as.data.frame()
       })(year, refined_death_data)
     ),
-
+    
     ### SC Alarms Telecare -----------------------------------------------------
     # PROCESS - SC Alarms Telecare
     tar_target(
@@ -509,7 +509,7 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
+    
     ### SC Care Home -----------------------------------------------------------
     # PROCESS - SC Care Home
     tar_target(
@@ -524,7 +524,7 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
+    
     ### SC Home Care -----------------------------------------------------------
     # PROCESS - SC Home Care
     tar_target(
@@ -538,7 +538,7 @@ list(
         BYOC_MODE = BYOC_MODE
       )
     ),
-
+    
     ### SC Self-Directed Support (SDS) -----------------------------------------
     # PROCESS - SC Self-Directed Support (SDS)
     tar_target(
@@ -550,33 +550,6 @@ list(
         year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE
-      )
-    ),
-
-    ### Outpatients (SMR00) Activity ------
-    # READ - Outpatients
-    tar_target(
-      # Target name
-      outpatients_data,
-      # Function
-      read_extract_outpatients(
-        year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
-      )
-    ),
-    # PROCESS - Outpatients
-    tar_target(
-      # Target name
-      source_outpatients_extract,
-      # Function
-      process_extract_outpatients(
-        data = outpatients_data,
-        year = year,
-        write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
       )
     )
   )
