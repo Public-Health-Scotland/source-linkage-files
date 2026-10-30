@@ -4,16 +4,17 @@
 \alias{get_sc_hc_episodes_path}
 \title{Home Care Episodes File Path}
 \usage{
-get_sc_hc_episodes_path(update = latest_update(), ...)
+get_sc_hc_episodes_path(BYOC_MODE = FALSE, ...)
 }
 \arguments{
-\item{update}{The update month to use,
-defaults to \code{\link[=latest_update]{latest_update()}}}
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+
+\item{update}{The update month to use, defaults to \code{\link[=latest_update]{latest_update()}}}
 }
 \value{
-The path to the care home episodes file as an \code{\link[fs:path]{fs::path()}}
+The path to the home care episodes file as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the file path for Home Care all episodes file
@@ -21,8 +22,9 @@ Get the file path for Home Care all episodes file
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other social care episodes file paths:
+Other Social Care episodes file paths:
 \code{\link[=get_sc_at_episodes_path]{get_sc_at_episodes_path()}},
-\code{\link[=get_sc_ch_episodes_path]{get_sc_ch_episodes_path()}}
+\code{\link[=get_sc_ch_episodes_path]{get_sc_ch_episodes_path()}},
+\code{\link[=get_sc_sds_episodes_path]{get_sc_sds_episodes_path()}}
 }
-\concept{social care episodes file paths}
+\concept{Social Care episodes file paths}

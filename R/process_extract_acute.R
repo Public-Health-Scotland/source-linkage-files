@@ -5,18 +5,24 @@
 #' and (optionally) write it to disk.
 #'
 #' @param data The extract to process
+#' @param acute_cup_data The acute cup extract
 #' @param year The year to process, in FY format.
-#' @param acute_cup_path path to acute_cup data
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_extract_acute <- function(data,
+                                  acute_cup_data,
                                   year,
-                                  acute_cup_path = get_boxi_extract_path(year, "acute_cup"),
-                                  write_to_disk = TRUE) {
+                                  write_to_disk = TRUE,
+                                  BYOC_MODE = FALSE,
+                                  run_id = NA,
+                                  run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "acute", year = year)
 
   # Only run for a single year
@@ -73,35 +79,9 @@ process_extract_acute <- function(data,
     )) %>%
     dplyr::mutate(
       unique_row_num = dplyr::row_number()
-    )
-
-  acute_cup <- read_file(
-    path = acute_cup_path,
-    col_type = readr::cols(
-      "anon_chi" = readr::col_character(),
-      "Acute Admission Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Acute Discharge Date" = readr::col_date(format = "%Y/%m/%d %T"),
-      "Acute Admission Type Code" = readr::col_character(),
-      "Acute Discharge Type Code" = readr::col_character(),
-      "Case Reference Number [C]" = readr::col_character(),
-      "CUP Marker" = readr::col_integer(),
-      "CUP Pathway Name" = readr::col_character()
-    )
-  ) %>%
-    dplyr::select(
-      anon_chi = "anon_chi",
-      case_reference_number = "Case Reference Number [C]",
-      record_keydate1 = "Acute Admission Date",
-      record_keydate2 = "Acute Discharge Date",
-      tadm = "Acute Admission Type Code",
-      disch = "Acute Discharge Type Code",
-      cup_marker = "CUP Marker",
-      cup_pathway = "CUP Pathway Name"
     ) %>%
-    dplyr::distinct()
-
-  acute_clean <- acute_clean %>%
-    dplyr::left_join(acute_cup,
+    # Join CUP file
+    dplyr::left_join(acute_cup_data,
       by = c(
         "record_keydate1",
         "record_keydate2",
@@ -113,7 +93,13 @@ process_extract_acute <- function(data,
     )
 
   acute_processed <- acute_clean %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    ) %>%
     dplyr::select(
+      "run_id",
+      "run_date_time",
       "year",
       "recid",
       "record_keydate1",
@@ -164,9 +150,15 @@ process_extract_acute <- function(data,
 
   if (write_to_disk) {
     write_file(
-      acute_processed,
-      get_source_extract_path(year, "acute", check_mode = "write"),
-      group_id = 3356 # sourcedev owner
+      data = acute_processed,
+      path = get_source_extract_path(
+        year = year,
+        type = "acute",
+        BYOC_MODE = BYOC_MODE,
+        check_mode = "write"
+      ),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

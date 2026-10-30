@@ -8,7 +8,6 @@
 #                         store = store_path)
 #
 
-
 library(logger)
 library(targets) # main package required
 library(tarchetypes) # support for targets
@@ -29,7 +28,6 @@ BYOC_MODE <- dplyr::case_when(
 run_id <- Sys.getenv("run_id")
 run_date_time <- Sys.getenv("run_date_time")
 denodo_dsn <- Sys.getenv("denodo_dsn")
-
 
 if (isTRUE(BYOC_MODE)) {
   logger::log_info("targets file location on Denodo")
@@ -78,7 +76,9 @@ years_to_run <- "1920"
 list(
   tar_rds(write_to_disk, TRUE),
 
-  ## Stage 2.1 non year-specific targets ----
+  # ============================================================================.
+  ## Stage 2.1 - Look-ups ----
+  # ============================================================================.
 
   ## Stage 2.2 year specific targets ------
   tar_map(
@@ -105,11 +105,10 @@ list(
         data = prescribing_data,
         year = year,
         write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
+        BYOC_MODE = BYOC_MODE
       )
     )
   )
 )
-## End of Targets pipeline ##
+
+########################### End of Targets Pipeline ############################.
