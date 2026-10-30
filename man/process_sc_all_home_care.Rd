@@ -2,12 +2,16 @@
 % Please edit documentation in R/process_sc_all_home_care.R
 \name{process_sc_all_home_care}
 \alias{process_sc_all_home_care}
-\title{Process the all home care extract}
+\title{Process the all Home Care extract}
 \usage{
 process_sc_all_home_care(
   data,
-  sc_demog_lookup = read_file(get_sc_demog_lookup_path()),
-  write_to_disk = TRUE
+  sc_demog_lookup = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
+  home_care_costs = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)),
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE,
+  run_id = NA,
+  run_date_time = NA
 )
 }
 \arguments{
@@ -16,15 +20,23 @@ process_sc_all_home_care(
 \item{sc_demog_lookup}{The Social Care Demographics lookup produced by
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}}.}
 
-\item{write_to_disk}{(Optional) Should the data be written to disk default is
+\item{home_care_costs}{Home Care cost lookup}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id for BYOC}
+
+\item{run_date_time}{run_date_time for BYOC}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 This will read and process the
-all home care extract, it will return the final data
+all Home Care extract, it will return the final data
 and (optionally) write it to disk.
 }
 \seealso{

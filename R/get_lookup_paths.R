@@ -12,9 +12,9 @@ get_lookups_dir <- function() {
 }
 
 
-#' Locality File Path - LOCAL ONLY
+#' Locality File Path
 #'
-#' @description Get the path to the centrally held HSCP Localities file - LOCAL ONLY
+#' @description Get the path to the centrally held HSCP Localities file
 #'
 #' @inheritParams get_file_path
 #'
@@ -23,18 +23,15 @@ get_lookups_dir <- function() {
 #'
 #' @family lookup file paths
 get_locality_path <- function(file_name = NULL, ext = "rds") {
-  locality_dir <-
-    fs::path(
-      get_lookups_dir(),
-      "Geography",
-      "HSCP Locality"
-    )
+  locality_dir <- fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
 
   locality_path <- get_file_path(
     directory = locality_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = stringr::str_glue("HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}")
+    file_name_regexp = stringr::str_glue(
+      "HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}"
+    )
   )
 
   return(locality_path)
@@ -53,27 +50,24 @@ get_locality_path <- function(file_name = NULL, ext = "rds") {
 #'
 #' @family lookup file paths
 get_spd_path <- function(file_name = NULL, ext = "parquet") {
-  spd_dir <-
-    fs::path(
-      get_lookups_dir(),
-      "Geography",
-      "Scottish Postcode Directory"
-    )
+  spd_dir <- fs::path(get_lookups_dir(), "Geography", "Scottish Postcode Directory")
 
   spd_path <- get_file_path(
     directory = spd_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = stringr::str_glue("Scottish_Postcode_Directory_.+?\\.{ext}")
+    file_name_regexp = stringr::str_glue(
+      "Scottish_Postcode_Directory_.+?\\.{ext}"
+    )
   )
 
   return(spd_path)
 }
 
 
-#' SIMD File Path - LOCAL ONLY
+#' SIMD File Path
 #'
-#' @description Get the path to the centrally held Scottish Index of Multiple - LOCAL ONLY
+#' @description Get the path to the centrally held Scottish Index of Multiple
 #' Deprivation (SIMD) file.
 #'
 #' @inheritParams get_file_path
@@ -83,11 +77,7 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 #'
 #' @family lookup file paths
 get_simd_path <- function(file_name = NULL, ext = "parquet") {
-  simd_dir <-
-    fs::path(
-      get_lookups_dir(),
-      "Deprivation"
-    )
+  simd_dir <- fs::path(get_lookups_dir(), "Deprivation")
 
   simd_path <- get_file_path(
     directory = simd_dir,
@@ -102,9 +92,9 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 }
 
 
-#' Populations File Path for different types - LOCAL ONLY
+#' Populations File Path for different types
 #'
-#' @description Get the path to the populations estimates - LOCAL ONLY
+#' @description Get the path to the populations estimates
 #'
 #' @inheritParams get_file_path
 #' @param type population type datazone, or hscp, or ca, or hb, or interzone
@@ -122,8 +112,7 @@ get_pop_path <- function(file_name = NULL,
                            "hb",
                            "intzone"
                          )) {
-  pop_dir <-
-    fs::path(get_lookups_dir(), "Populations", "Estimates")
+  pop_dir <- fs::path(get_lookups_dir(), "Populations", "Estimates")
 
   file_name_re <- dplyr::recode_values(
     type,
@@ -145,9 +134,9 @@ get_pop_path <- function(file_name = NULL,
 }
 
 
-#' GP Practice Reference File Path (gpprac) - LOCAL ONLY
+#' GP Practice Reference File Path (gpprac)
 #'
-#' @description Get the path for the centrally held reference file `gpprac` - LOCAL ONLY
+#' @description Get the path for the centrally held reference file `gpprac`
 #'
 #' @inheritParams get_file_path
 #'
@@ -156,11 +145,7 @@ get_pop_path <- function(file_name = NULL,
 #'
 #' @family lookup file paths
 get_gpprac_ref_path <- function(ext = "csv") {
-  gpprac_dir <-
-    fs::path(
-      get_lookups_dir(),
-      "National Reference Files"
-    )
+  gpprac_dir <- fs::path(get_lookups_dir(), "National Reference Files")
 
   gpprac_path <- get_file_path(
     directory = gpprac_dir,

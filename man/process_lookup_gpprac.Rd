@@ -6,7 +6,8 @@
 \usage{
 process_lookup_gpprac(
   gpprac_ref_data = get_gpprac_ref_data(BYOC_MODE = BYOC_MODE),
-  gpprac_opendata = get_gpprac_opendata(BYOC_MODE = BYOC_MODE),
+  gpprac_cluster = get_gpprac_cluster(BYOC_MODE = BYOC_MODE),
+  geography_labels = get_geography_labels(BYOC_MODE = BYOC_MODE),
   spd_data = get_spd_data(BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   BYOC_MODE = FALSE,
@@ -16,8 +17,6 @@ process_lookup_gpprac(
 }
 \arguments{
 \item{gpprac_ref_data}{GP Practice reference data.}
-
-\item{gpprac_opendata}{PHS open dataset for GP practice details.}
 
 \item{spd_data}{Scottish Postcode Directory data.}
 
@@ -29,6 +28,8 @@ process_lookup_gpprac(
 \item{run_id}{run_id for BYOC}
 
 \item{run_date_time}{run_date_time for BYOC}
+
+\item{gpprac_opendata}{PHS open dataset for GP practice details.}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
