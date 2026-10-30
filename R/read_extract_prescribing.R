@@ -4,15 +4,15 @@
 #'
 #' @export
 read_extract_prescribing <- function(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-  BYOC_MODE
+    year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = "pis", year = year)
 
   # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
-  c_year <- convert_fyyear_to_year(year)
+  c_year <- convert_fyyear_to_year(year) # TODO: Remove?
 
   # Specify years available for running
   if (!check_year_valid(year, type = "pis")) {
@@ -25,11 +25,13 @@ read_extract_prescribing <- function(
   # Read extract
   pis_file <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_pis_source")
+    # TODO: CHANGE TABLE NAME WHEN WE GET SOURCE DATA
+    dbplyr::in_schema("sdl", "sdl_pis_static")
   ) %>%
     # Filter by calendar year
+    # TODO: UNCOMMENT WHEN WE GET SOURCE DATA
     dplyr::filter(
-      .data$financial_year == c_year
+      .data$financial_year == as.integer(year)
     ) %>%
     # Rename variables
     dplyr::select(
@@ -43,10 +45,20 @@ read_extract_prescribing <- function(
     ) %>%
     # Collect and get anonymous CHI
     dplyr::collect() %>%
-    slfhelper::get_anon_chi("chi") %>%
+    # TODO: UNCOMMENT WHEN WE GET SOURCE DATA
+    # slfhelper::get_anon_chi("chi") %>%
+    # TODO: CHECK THIS IS STILL A DATE IN THE SOURCE DATA
     # Data type modification
+    # dplyr::mutate(
+    #   dob = lubridate::as_date(.data$dob)
+    # )
+    # TODO: REMOVE
+    dplyr::rename(anon_chi = chi) %>%
     dplyr::mutate(
-      dob = lubridate::as_date(.data$dob)
+      gender = as.numeric(gender),
+      gpprac = as.numeric(gpprac),
+      no_paid_items = as.numeric(no_paid_items),
+      cost_total_net = as.numeric(cost_total_net)
     )
 
   log_slf_event(stage = "read", status = "complete", type = "pis", year = year)
