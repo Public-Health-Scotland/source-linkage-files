@@ -78,7 +78,8 @@ get_sparra_data <- function(year,
     # Filter on projection variable: `risk_financial_year` e.g.
     # 01-04-2025 relates to financial year 2025/26.
     dplyr::filter(risk_financial_year == c_year) %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    slfhelper::get_anon_chi("patient_chi")
 
   log_slf_event(stage = "read", status = "complete", type = "sparra", year = year)
 
