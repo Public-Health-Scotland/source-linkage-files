@@ -21,16 +21,28 @@ Get the NSU file path for the given year
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions:
+<<<<<<< HEAD
 \code{\link[=get_byoc_intermediate_path]{get_byoc_intermediate_path()}},
+=======
+\code{\link{.byoc_dataset_registry}},
+>>>>>>> development
 \code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
 \code{\link[=get_dd_path]{get_dd_path()}},
 \code{\link[=get_demographic_cohorts_path]{get_demographic_cohorts_path()}},
 \code{\link[=get_file_path]{get_file_path()}},
 \code{\link[=get_homelessness_completeness_path]{get_homelessness_completeness_path()}},
 \code{\link[=get_ltcs_path]{get_ltcs_path()}},
+<<<<<<< HEAD
 \code{\link[=get_practice_details_path]{get_practice_details_path()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}}
+=======
+\code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
+\code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
+\code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}},
+\code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
+\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
+>>>>>>> development
 }
 \concept{file path functions}

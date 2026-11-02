@@ -142,8 +142,8 @@ get_slf_dir <- function() {
 #' @export
 #'
 #' @family directories
-get_dev_dir <- function(BOYC_MODE) {
-  if (!BOYC_MODE) {
+get_dev_dir <- function(BYOC_MODE) {
+  if (!BYOC_MODE) {
     fs::path("/", "conf", "sourcedev", "Source_Linkage_File_Updates")
   } else {
     denodo_output_path()

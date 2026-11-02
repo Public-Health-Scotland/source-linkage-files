@@ -18,7 +18,7 @@ get_pop_path(
 \item{type}{population type datazone, or hscp, or ca, or hb, or interzone}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the populations estimates file
+An \code{\link[fs:path]{fs::path()}} to the local populations estimates file
 }
 \description{
 Get the path to the populations estimates
@@ -30,6 +30,10 @@ Other lookup file paths:
 \code{\link[=get_lookups_dir]{get_lookups_dir()}},
 \code{\link[=get_simd_path]{get_simd_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
+<<<<<<< HEAD
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
+=======
+\code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}}
+>>>>>>> development
 }
 \concept{lookup file paths}

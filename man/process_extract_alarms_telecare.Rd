@@ -4,7 +4,12 @@
 \alias{process_extract_alarms_telecare}
 \title{Process the (year specific) Alarms Telecare extract}
 \usage{
-process_extract_alarms_telecare(data, year, write_to_disk = TRUE)
+process_extract_alarms_telecare(
+  data,
+  year,
+  write_to_disk = TRUE,
+  BYOC_MODE = FALSE
+)
 }
 \arguments{
 \item{data}{The full processed data which will be selected from to create
@@ -14,6 +19,8 @@ the year specific data.}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
@@ -46,6 +53,10 @@ Other process extracts:
 \code{\link[=process_extract_sds]{process_extract_sds()}},
 \code{\link[=process_it_chi_deaths]{process_it_chi_deaths()}},
 \code{\link[=process_lookup_gpprac]{process_lookup_gpprac()}},
+<<<<<<< HEAD
+=======
+\code{\link[=process_lookup_ltc]{process_lookup_ltc()}},
+>>>>>>> development
 \code{\link[=process_lookup_postcode]{process_lookup_postcode()}},
 \code{\link[=process_lookup_sc_client]{process_lookup_sc_client()}},
 \code{\link[=process_lookup_sc_demographics]{process_lookup_sc_demographics()}},

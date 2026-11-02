@@ -1,32 +1,42 @@
 #' Process the refined death data
 #'
-#' @description This will process
-#' year-specific BOXI NRS death file (written to disk), and
-#' combine them together to get all years NRS file (Not written to disk).
-#' Then join all NRS deaths with IT CHI death data
+#' @description This will process year-specific BOXI NRS death file
+#' (written to disk), and combine them together to get all years NRS file
+#' (Not written to disk). Then join all NRS deaths with IT CHI death data
 #' to get an all-year refined death file (written to disk).
 #'
-#' @param it_chi_deaths it chi death data
-#' @param write_to_disk write the result to disk or not.
+#' @param write_to_disk (optional) Should the data be written to disk default is
+#' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id for BYOC
+#' @param run_date_time run_date_time for BYOC
 #'
-#' @return refined_death The processed lookup of deaths combining NRS and IT_CHI.
+#' @return refined_death as a [tibble][tibble::tibble-package].
+#' The processed lookup of deaths combining NRS and IT_CHI.
 #' @export
 #' @family process extracts
-process_refined_death <- function(
-  it_chi_deaths = read_file(get_slf_chi_deaths_path()),
-  write_to_disk = TRUE
-) {
+process_refined_death <- function(it_chi_deaths = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)), # TODO: Replace with get_sdl_processed_data
+                                  write_to_disk = TRUE,
+                                  BYOC_MODE = FALSE,
+                                  run_id = NA,
+                                  run_date_time = NA) {
   log_slf_event(stage = "process", status = "start", type = "refined_death", year = "all")
 
+  # TODO: change it to years to run control on Denodo
   years_list <- years_to_run()
 
   nrs_all_years <- lapply(years_list, (\(year) {
     read_extract_nrs_deaths(
       year,
-      get_boxi_extract_path(year, type = "deaths")
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
     ) %>%
-      process_extract_nrs_deaths(year,
-        write_to_disk = write_to_disk
+      process_extract_nrs_deaths(
+        year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
   })) %>%
     data.table::rbindlist()
@@ -41,7 +51,7 @@ process_refined_death <- function(
   refined_death <- nrs_all_years %>%
     dplyr::arrange(.data$anon_chi, .keep_all = TRUE) %>%
     dplyr::full_join(it_chi_deaths, by = "anon_chi") %>%
-    # use the BOXI NRS death date by default, but if it's missing, use the chi death date.
+    # Use the BOXI NRS death date by default, but if it's missing, use the chi death date.
     dplyr::mutate(death_date = dplyr::if_else(
       is.na(.data$record_keydate1),
       .data$death_date_chi,
@@ -50,21 +60,30 @@ process_refined_death <- function(
     dplyr::select("anon_chi", "death_date") %>%
     # add fy when death happened
     dplyr::mutate(
+      death_date = lubridate::as_date(death_date),
       fy = phsmethods::extract_fin_year(.data$death_date),
       fy = as.character(paste0(substr(fy, 3, 4), substr(fy, 6, 7)))
     ) %>%
-    # no need to keep NA
+    # No need to keep NA
     dplyr::filter(!is.na(.data$anon_chi)) %>%
     dplyr::group_by(.data$anon_chi) %>%
     dplyr::arrange(.data$death_date) %>%
     dplyr::distinct(.data$anon_chi, .keep_all = TRUE) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::mutate(
+      run_id = run_id,
+      run_date_time = run_date_time
+    )
 
   if (write_to_disk) {
     write_file(
-      refined_death,
-      get_combined_slf_deaths_lookup_path(create = TRUE),
-      group_id = 3206 # hscdiip owner
+      data = refined_death,
+      path = get_combined_slf_deaths_lookup_path(
+        BYOC_MODE = BYOC_MODE,
+        create = TRUE
+      ),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

@@ -243,7 +243,7 @@ link_delayed_discharge_eps <- function(
       datediff_start = .data$cij_start_date - .data$record_keydate1_dd
     ) %>%
     dplyr::filter(.data$dd_quality != "-") %>%
-    dplyr::mutate(smrtype = dplyr::case_match(
+    dplyr::mutate(smrtype = dplyr::recode_values(
       as.character(.data$dd_quality),
       c(
         "1",

@@ -7,7 +7,7 @@
 #'
 #' @export
 process_tests_nrs_deaths <- function(data, year) {
-  log_slf_event(stage = "test", status = "start", type = "deaths", year = year)
+  log_slf_event(stage = "test", status = "start", type = "nrs_deaths", year = year)
 
   old_data <- get_existing_data_for_tests(data)
 
@@ -19,7 +19,7 @@ process_tests_nrs_deaths <- function(data, year) {
   ) %>%
     write_tests_xlsx(sheet_name = "nrs", year, workbook_name = "extract")
 
-  log_slf_event(stage = "test", status = "complete", type = "deaths", year = year)
+  log_slf_event(stage = "test", status = "complete", type = "nrs_deaths", year = year)
 
   return(comparison)
 }

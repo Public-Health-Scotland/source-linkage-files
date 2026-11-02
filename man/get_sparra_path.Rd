@@ -26,7 +26,11 @@ Other extract file paths:
 \code{\link[=get_it_deaths_path]{get_it_deaths_path()}},
 \code{\link[=get_it_ltc_path]{get_it_ltc_path()}},
 \code{\link[=get_it_prescribing_path]{get_it_prescribing_path()}},
+<<<<<<< HEAD
 \code{\link[=get_source_extract_path]{get_source_extract_path()}},
 \code{\link[=get_sparra_data]{get_sparra_data()}}
+=======
+\code{\link[=get_source_extract_path]{get_source_extract_path()}}
+>>>>>>> development
 }
 \concept{extract file paths}

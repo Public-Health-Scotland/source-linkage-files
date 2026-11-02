@@ -10,7 +10,7 @@ get_gpprac_ref_path(ext = "csv")
 \item{ext}{The extension (type of the file) - optional}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the file
+An \code{\link[fs:path]{fs::path()}} to the local GP practice reference file
 }
 \description{
 Get the path for the centrally held reference file \code{gpprac}
@@ -22,6 +22,10 @@ Other lookup file paths:
 \code{\link[=get_pop_path]{get_pop_path()}},
 \code{\link[=get_simd_path]{get_simd_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
+<<<<<<< HEAD
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
+=======
+\code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}}
+>>>>>>> development
 }
 \concept{lookup file paths}

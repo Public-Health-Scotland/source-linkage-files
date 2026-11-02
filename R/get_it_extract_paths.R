@@ -56,9 +56,9 @@ get_it_deaths_path <- function(it_reference = NULL, ...) {
       file_name = stringr::str_glue("anon-SCTASK{it_reference}_Deaths.parquet")
     )
   }
-
   return(it_deaths_path)
 }
+
 
 #' IT Prescribing File Path
 #'

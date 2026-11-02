@@ -14,53 +14,51 @@ get_lookups_dir <- function() {
 
 #' Locality File Path
 #'
-#' @description Get the path to the centrally held HSCP Localities file.
+#' @description Get the path to the centrally held HSCP Localities file
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the Scottish Postcode Directory
+#' @return An [fs::path()] to the local HSCP Localities file
 #' @export
 #'
 #' @family lookup file paths
 get_locality_path <- function(file_name = NULL, ext = "rds") {
-  locality_dir <-
-    fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
+  locality_dir <- fs::path(get_lookups_dir(), "Geography", "HSCP Locality")
 
   locality_path <- get_file_path(
     directory = locality_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = stringr::str_glue("HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}")
+    file_name_regexp = stringr::str_glue(
+      "HSCP Localities_DZ11_Lookup_\\d+?\\.{ext}"
+    )
   )
 
   return(locality_path)
 }
 
 
-#' Scottish Postcode Directory File Path
+#' Scottish Postcode Directory File Path - LOCAL ONLY
 #'
 #' @description Get the path to the centrally held Scottish Postcode Directory
-#' (SPD) file.
+#' (SPD) file - LOCAL ONLY
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the Scottish Postcode Directory
+#' @return An [fs::path()] to the local Scottish Postcode Directory file
 #' @export
 #'
 #' @family lookup file paths
 get_spd_path <- function(file_name = NULL, ext = "parquet") {
-  spd_dir <-
-    fs::path(
-      get_lookups_dir(),
-      "Geography",
-      "Scottish Postcode Directory"
-    )
+  spd_dir <- fs::path(get_lookups_dir(), "Geography", "Scottish Postcode Directory")
 
   spd_path <- get_file_path(
     directory = spd_dir,
     file_name = file_name,
     ext = ext,
-    file_name_regexp = stringr::str_glue("Scottish_Postcode_Directory_.+?\\.{ext}")
+    file_name_regexp = stringr::str_glue(
+      "Scottish_Postcode_Directory_.+?\\.{ext}"
+    )
   )
 
   return(spd_path)
@@ -74,13 +72,12 @@ get_spd_path <- function(file_name = NULL, ext = "parquet") {
 #'
 #' @inheritParams get_file_path
 #'
-#' @return An [fs::path()] to the SIMD file
+#' @return An [fs::path()] to the local SIMD file
 #' @export
 #'
 #' @family lookup file paths
 get_simd_path <- function(file_name = NULL, ext = "parquet") {
-  simd_dir <-
-    fs::path(get_lookups_dir(), "Deprivation")
+  simd_dir <- fs::path(get_lookups_dir(), "Deprivation")
 
   simd_path <- get_file_path(
     directory = simd_dir,
@@ -102,7 +99,7 @@ get_simd_path <- function(file_name = NULL, ext = "parquet") {
 #' @inheritParams get_file_path
 #' @param type population type datazone, or hscp, or ca, or hb, or interzone
 #'
-#' @return An [fs::path()] to the populations estimates file
+#' @return An [fs::path()] to the local populations estimates file
 #' @export
 #'
 #' @family lookup file paths
@@ -115,10 +112,9 @@ get_pop_path <- function(file_name = NULL,
                            "hb",
                            "intzone"
                          )) {
-  pop_dir <-
-    fs::path(get_lookups_dir(), "Populations", "Estimates")
+  pop_dir <- fs::path(get_lookups_dir(), "Populations", "Estimates")
 
-  file_name_re <- dplyr::case_match(
+  file_name_re <- dplyr::recode_values(
     type,
     "datazone" ~ stringr::str_glue("DataZone2011_pop_est_2011_\\d+?\\.{ext}"),
     "hscp" ~ stringr::str_glue("HSCP2019_pop_est_1981_\\d+?\\.{ext}"),
@@ -144,7 +140,7 @@ get_pop_path <- function(file_name = NULL,
 #'
 #' @inheritParams get_file_path
 #'
-#' @return  An [fs::path()] to the file
+#' @return  An [fs::path()] to the local GP practice reference file
 #' @export
 #'
 #' @family lookup file paths
