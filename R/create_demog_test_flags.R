@@ -10,16 +10,26 @@
 #' @family flag functions
 create_demog_test_flags <- function(data) {
   anon_chi <- NULL
+  if (!"gender" %in% names(data)) {
+    data$gender <- NA_integer_
+  }
+
+  if (!"dob" %in% names(data)) {
+    data$dob <- NA
+  }
+
+  if (!"postcode" %in% names(data)) {
+    data$postcode <- NA_character_
+  }
+
   data <- data %>%
     dplyr::arrange(.data$anon_chi) %>%
-    # create test flags
     dplyr::mutate(
       unique_anon_chi = dplyr::lag(.data$anon_chi) != .data$anon_chi,
-      # first value of unique_chi is always NA because of lag()
       n_missing_chi = is_missing(.data$anon_chi),
       n_males = .data$gender == 1L,
       n_females = .data$gender == 2L,
-      n_postcode = !is.na(.data$postcode) | !.data$postcode == "",
+      n_postcode = !is.na(.data$postcode) | .data$postcode != "",
       n_missing_postcode = is_missing(.data$postcode),
       missing_dob = is.na(.data$dob)
     )

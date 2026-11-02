@@ -55,7 +55,17 @@ ii <- 1
 year <- "1920"
 
 # Dataset to test
-dataset_name <- c("maternity")
+#"acute", "ae","delayed_discharges", "dn", "gp_ooh_all", "homelessness", "mental_health", "nrs_deaths", "outpatients"
+#"maternity"
+#"combined_deaths"
+#"chi_deaths"
+#"dn_cost_lookup"
+
+#"homelessness_completeness"
+#"ltcs"
+
+
+dataset_name <- c("combined_deaths")
 
 # Analyst name for writing to disk
 analyst <- "Jen"
@@ -71,7 +81,11 @@ name_list <- readxl::read_excel(get_name_list_lookup()) %>%
 for (ii in 1:nrow(name_list)) {
   dataset_name <- name_list$dataset_list[ii]
   year <- year
+  fn_name_processed <- name_list$fn_processed_list[ii]
   sdl_name_processed <- name_list$sdl_processed[ii]
+  year_specific <- name_list$year_specific[ii]
+  type_specific <- name_list$type_specific[ii]
+  type_name <- name_list$type_name[ii]
 
   log_info(
     "UAT run {ii}/{nrow(name_list)} | dataset = {dataset_name}, sdl_name_processed = {sdl_name_processed}"
