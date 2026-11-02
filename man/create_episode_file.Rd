@@ -41,9 +41,7 @@ create_episode_file(
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 
-
-\item{BYOC_MODE}{BYOC mode}
-
+\item{BYOC_MODE}{Whether run in a docker on Denodo}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file
