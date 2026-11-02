@@ -9,7 +9,6 @@ create_episode_file(
   year,
   dd_data = read_file(get_source_extract_path(year, "dd")),
   homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
   ltc_data = read_file(get_ltcs_path(year)),
   slf_pc_lookup = read_file(get_slf_postcode_path()),
   slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
@@ -29,8 +28,6 @@ create_episode_file(
 
 \item{homelessness_lookup}{the lookup file for homelessness}
 
-\item{nsu_cohort}{The NSU data for the year}
-
 \item{ltc_data}{The LTC data for the year}
 
 \item{slf_pc_lookup}{The SLF Postcode lookup}
@@ -44,7 +41,7 @@ create_episode_file(
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 
-\item{BYOC_MODE}{BYOC mode}
+\item{BYOC_MODE}{Whether run in a docker on Denodo}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file

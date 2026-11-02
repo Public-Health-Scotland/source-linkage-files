@@ -2,7 +2,7 @@
 #'
 #' @param data The input data frame
 #' @param year The year being processed
-#' @param nsu_cohort The NSU data for the year
+#' @param BYOC_MODE Whether run in a docker on Denodo
 #'
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
@@ -12,13 +12,15 @@
 add_nsu_cohort <- function(
   data,
   year,
-  nsu_cohort = read_file(get_nsu_path(year))
+  BYOC_MODE
 ) {
   year_param <- year
 
   if (!check_year_valid(year, "nsu")) {
     return(data)
   }
+
+  nsu_cohort <- get_nsu_data(year = year, BYOC_MODE = BYOC_MODE)
 
   # Check that the variables we need are in the data
   check_variables_exist(data,
@@ -120,4 +122,49 @@ add_nsu_cohort <- function(
   cli::cli_alert_info("Add NSU cohort function finished at {Sys.time()}")
 
   return(return_df)
+}
+
+
+#' get nsu data from Denodo
+#'
+#' @param year financial year
+#' @param BYOC_MODE
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+get_nsu_data <- function(year,
+                         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                         BYOC_MODE) {
+  log_slf_event(stage = "read", status = "start", type = "nsu", year = year)
+
+  # Specify years available for running
+  if (!check_year_valid(year, type = "nsu")) {
+    return(tibble::tibble())
+  }
+
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  nsu_data <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_nsu_source")
+  ) %>%
+    dplyr::filter(financial_year == year) %>%
+    dplyr::select(
+      year = "financial_year",
+      anon_chi = "patient_chi",
+      postcode = "patient_postcode",
+      gpprac = "gpprac",
+      dob = "patient_dob",
+      gender = "patient_sex"
+    ) %>%
+    dplyr::collect() %>%
+    dplyr::mutate(
+      gender = as.numeric(gender)
+    )
+
+  log_slf_event(stage = "read", status = "complete", type = "nsu", year = year)
+
+  return(nsu_data)
 }
