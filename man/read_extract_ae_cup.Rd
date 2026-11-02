@@ -12,6 +12,10 @@ read_extract_ae_cup(
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.

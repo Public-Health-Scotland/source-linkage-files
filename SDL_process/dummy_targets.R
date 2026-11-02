@@ -8,7 +8,6 @@
 #                         store = store_path)
 #
 
-
 library(logger)
 library(targets) # main package required
 library(tarchetypes) # support for targets
@@ -29,7 +28,6 @@ BYOC_MODE <- dplyr::case_when(
 run_id <- Sys.getenv("run_id")
 run_date_time <- Sys.getenv("run_date_time")
 denodo_dsn <- Sys.getenv("denodo_dsn")
-
 
 if (isTRUE(BYOC_MODE)) {
   logger::log_info("targets file location on Denodo")
@@ -99,11 +97,10 @@ list(
         year = year,
         sc_demographics = sc_demog_lookup,
         write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
+        BYOC_MODE = BYOC_MODE
       )
     )
   )
 )
-## End of Targets pipeline ##
+
+########################### End of Targets Pipeline ############################.

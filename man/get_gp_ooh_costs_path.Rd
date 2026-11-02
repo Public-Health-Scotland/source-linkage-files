@@ -4,24 +4,25 @@
 \alias{get_gp_ooh_costs_path}
 \title{GP Out of Hours Costs File Path}
 \usage{
-get_gp_ooh_costs_path(BYOC_MODE, ..., update = NULL)
+get_gp_ooh_costs_path(BYOC_MODE, ...)
 }
 \arguments{
-\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
+\item{BYOC_MODE}{BYOC_MODE}
 
-\item{update}{passed through \code{\link[=latest_update]{latest_update()}}}
+\item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
 The path to the costs lookup as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
-Get the full GP Out of Hours costs lookup path
+Get the GP Out of Hours costs lookup path
 }
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other costs lookup file paths:
 \code{\link[=get_ch_costs_path]{get_ch_costs_path()}},
+\code{\link[=get_dn_contacts_path]{get_dn_contacts_path()}},
 \code{\link[=get_dn_costs_path]{get_dn_costs_path()}},
 \code{\link[=get_dn_raw_costs_path]{get_dn_raw_costs_path()}},
 \code{\link[=get_gp_ooh_raw_costs_path]{get_gp_ooh_raw_costs_path()}},

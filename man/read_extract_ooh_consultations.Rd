@@ -12,6 +12,10 @@ read_extract_ooh_consultations(
 }
 \arguments{
 \item{year}{Financial year for the BOXI extract.}
+
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} with OOH Consultations extract data
