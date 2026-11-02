@@ -8,6 +8,7 @@
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE
 #' @param write_temp_to_disk write intermediate data for investigation or debug
+#' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
 #' @inheritParams join_deaths_data
@@ -32,7 +33,7 @@ create_episode_file <- function(
   write_temp_to_disk = FALSE,
   BYOC_MODE
 ) {
-  log_ep_substage("Create episode file", "started", year)
+  log_ep_substage("Create episode file", "started", year) #
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
@@ -160,7 +161,7 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
     create_cohort_lookups(year) %>%
     join_cohort_lookups(year) %>%
-    join_sparra_hhg(year) %>%
+    join_sparra_hhg(year, BYOC_MODE = BYOC_MODE) %>%
     fill_geographies(
       slf_pc_lookup,
       slf_gpprac_lookup

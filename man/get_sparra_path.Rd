@@ -22,10 +22,12 @@ Get the path to the SPARRA extract
 
 Other extract file paths:
 \code{\link[=get_boxi_extract_path]{get_boxi_extract_path()}},
+\code{\link[=get_hhg_data]{get_hhg_data()}},
 \code{\link[=get_hhg_path]{get_hhg_path()}},
 \code{\link[=get_it_deaths_path]{get_it_deaths_path()}},
 \code{\link[=get_it_ltc_path]{get_it_ltc_path()}},
 \code{\link[=get_it_prescribing_path]{get_it_prescribing_path()}},
-\code{\link[=get_source_extract_path]{get_source_extract_path()}}
+\code{\link[=get_source_extract_path]{get_source_extract_path()}},
+\code{\link[=get_sparra_data]{get_sparra_data()}}
 }
 \concept{extract file paths}
