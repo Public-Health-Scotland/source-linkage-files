@@ -32,7 +32,7 @@ create_episode_file <- function(
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE
 ) {
-  log_ep_substage("Create episode file", "started", year)#
+  log_ep_substage("Create episode file", "started", year) #
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
