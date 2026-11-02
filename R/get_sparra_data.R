@@ -34,4 +34,3 @@ get_sparra_data <- function(year,
 
   return(extract_sparra)
 }
-

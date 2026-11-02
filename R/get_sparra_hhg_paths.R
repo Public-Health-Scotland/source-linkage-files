@@ -47,4 +47,3 @@ get_sparra_path <- function(year, ...) {
 
   return(sparra_file_path)
 }
-
