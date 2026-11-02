@@ -79,7 +79,7 @@ process_sc_all_care_home <- function(data,
     # Either case makes sense to use ch_postcode as postcode.
     dplyr::mutate(
       ch_postcode = phsmethods::format_postcode(.data$ch_postcode),
-      postcode = dplyr::if_else(.data$ch_postcode %in% uk_pc_directory, .data$ch_postcode, NA)
+      postcode = dplyr::if_else(.data$ch_postcode %in% uk_pc_directory$pcd, .data$ch_postcode, NA)
     )
 
   # Cleaning and matching care home names
