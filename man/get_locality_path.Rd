@@ -12,10 +12,10 @@ get_locality_path(file_name = NULL, ext = "rds")
 \item{ext}{The extension (type of the file) - optional}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the Scottish Postcode Directory
+An \code{\link[fs:path]{fs::path()}} to the local HSCP Localities file
 }
 \description{
-Get the path to the centrally held HSCP Localities file.
+Get the path to the centrally held HSCP Localities file
 }
 \seealso{
 Other lookup file paths:
@@ -24,6 +24,6 @@ Other lookup file paths:
 \code{\link[=get_pop_path]{get_pop_path()}},
 \code{\link[=get_simd_path]{get_simd_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
-\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
+\code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}}
 }
 \concept{lookup file paths}
