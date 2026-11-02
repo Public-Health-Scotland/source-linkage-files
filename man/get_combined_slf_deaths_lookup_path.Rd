@@ -27,13 +27,7 @@ Get the path to the combined deaths lookup
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other slf lookup file path:
-<<<<<<< HEAD
-\code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
 \code{\link[=get_slf_chi_deaths_path]{get_slf_chi_deaths_path()}},
-\code{\link[=get_slf_deaths_lookup_path]{get_slf_deaths_lookup_path()}},
-=======
-\code{\link[=get_slf_chi_deaths_path]{get_slf_chi_deaths_path()}},
->>>>>>> development
 \code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}},
 \code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
 }

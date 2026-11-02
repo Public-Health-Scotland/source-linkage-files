@@ -16,15 +16,6 @@ The path to the UK postcode list as an \code{\link[fs:path]{fs::path()}}
 Get the local path to the UK postcode list
 }
 \seealso{
-<<<<<<< HEAD
-Other lookup file paths:
-\code{\link[=get_gpprac_ref_path]{get_gpprac_ref_path()}},
-\code{\link[=get_locality_path]{get_locality_path()}},
-\code{\link[=get_lookups_dir]{get_lookups_dir()}},
-\code{\link[=get_pop_path]{get_pop_path()}},
-\code{\link[=get_simd_path]{get_simd_path()}},
-\code{\link[=get_spd_path]{get_spd_path()}}
-=======
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
 Other file path functions:
@@ -40,6 +31,5 @@ Other file path functions:
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}},
 \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}}
->>>>>>> development
 }
 \concept{file path functions}

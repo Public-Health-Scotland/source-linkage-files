@@ -21,14 +21,6 @@ has official Care Home names and addresses provided by the Care Inspectorate.
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-<<<<<<< HEAD
-Other slf lookup file path:
-\code{\link[=get_combined_slf_deaths_lookup_path]{get_combined_slf_deaths_lookup_path()}},
-\code{\link[=get_slf_chi_deaths_path]{get_slf_chi_deaths_path()}},
-\code{\link[=get_slf_deaths_lookup_path]{get_slf_deaths_lookup_path()}},
-\code{\link[=get_slf_gpprac_path]{get_slf_gpprac_path()}},
-\code{\link[=get_slf_postcode_path]{get_slf_postcode_path()}}
-=======
 Other file path functions:
 \code{\link{.byoc_dataset_registry}},
 \code{\link[=get_byoc_output_files]{get_byoc_output_files()}},
@@ -42,6 +34,5 @@ Other file path functions:
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}},
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
->>>>>>> development
 }
 \concept{file path functions}

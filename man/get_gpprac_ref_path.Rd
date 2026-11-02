@@ -22,10 +22,6 @@ Other lookup file paths:
 \code{\link[=get_pop_path]{get_pop_path()}},
 \code{\link[=get_simd_path]{get_simd_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
-<<<<<<< HEAD
-\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
-=======
 \code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}}
->>>>>>> development
 }
 \concept{lookup file paths}
