@@ -67,16 +67,20 @@ get_sparra_data <- function(year,
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
 
+  log_slf_event(stage = "read", status = "start", type = "sparra", year = year)
+
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
-    extract_sparra <- dplyr::tbl(
-      denodo_connect,
-      dbplyr::in_schema("sdl", "sdl_sparra_source")
-    ) %>%
-      # Filter on projection variable: `risk_financial_year` e.g.
-      # 01-04-2025 relates to financial year 2025/26.
-      dplyr::filter(risk_financial_year == c_year) %>%
-      dplyr::collect()
+  extract_sparra <- dplyr::tbl(
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_sparra_source")
+  ) %>%
+    # Filter on projection variable: `risk_financial_year` e.g.
+    # 01-04-2025 relates to financial year 2025/26.
+    dplyr::filter(risk_financial_year == c_year) %>%
+    dplyr::collect()
+
+  log_slf_event(stage = "read", status = "complete", type = "sparra", year = year)
 
   return(extract_sparra)
 }
