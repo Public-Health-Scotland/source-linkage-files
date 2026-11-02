@@ -22,9 +22,9 @@ convert_hscp_to_hscpnames(hscp)
 
 }
 \seealso{
-Other code functions: 
-\code{\link{convert_ca_to_lca}()},
-\code{\link{convert_hb_to_hbnames}()},
-\code{\link{convert_sc_sending_location_to_lca}()}
+Other code functions:
+\code{\link[=convert_ca_to_lca]{convert_ca_to_lca()}},
+\code{\link[=convert_hb_to_hbnames]{convert_hb_to_hbnames()}},
+\code{\link[=convert_sc_sending_location_to_lca]{convert_sc_sending_location_to_lca()}}
 }
 \concept{code functions}

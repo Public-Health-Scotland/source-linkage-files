@@ -17,9 +17,9 @@ format_test_excel(comparison_data, wb, sheet_name_dated)
 Format structured comparison data
 }
 \seealso{
-Other test functions: 
-\code{\link{get_existing_data_for_tests}()},
-\code{\link{produce_test_comparison}()},
-\code{\link{write_tests_xlsx}()}
+Other test functions:
+\code{\link[=get_existing_data_for_tests]{get_existing_data_for_tests()}},
+\code{\link[=produce_test_comparison]{produce_test_comparison()}},
+\code{\link[=write_tests_xlsx]{write_tests_xlsx()}}
 }
 \concept{test functions}

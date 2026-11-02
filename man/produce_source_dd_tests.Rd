@@ -21,8 +21,8 @@ Produce tests for the delayed discharges extract.
 calculate_measures
 
 Other extract test functions
-for creating test flags: 
-\code{\link{produce_source_pis_tests}()}
+for creating test flags:
+\code{\link[=produce_source_pis_tests]{produce_source_pis_tests()}}
 }
 \concept{extract test functions
 for creating test flags}

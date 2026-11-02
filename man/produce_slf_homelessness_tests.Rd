@@ -23,9 +23,9 @@ from \code{\link[=calculate_measures]{calculate_measures()}}
 Produce the tests for the SLF Homelessness Extract
 }
 \seealso{
-Other slf test functions: 
-\code{\link{produce_it_chi_deaths_tests}()},
-\code{\link{produce_slf_gpprac_tests}()},
-\code{\link{produce_slf_postcode_tests}()}
+Other slf test functions:
+\code{\link[=produce_it_chi_deaths_tests]{produce_it_chi_deaths_tests()}},
+\code{\link[=produce_slf_gpprac_tests]{produce_slf_gpprac_tests()}},
+\code{\link[=produce_slf_postcode_tests]{produce_slf_postcode_tests()}}
 }
 \concept{slf test functions}

@@ -13,10 +13,10 @@ The vector of financial years
 Get the vector of years to update slf
 }
 \seealso{
-Other initialisation: 
-\code{\link{get_dd_period}()},
-\code{\link{latest_cost_year}()},
-\code{\link{latest_update}()},
-\code{\link{previous_update}()}
+Other initialisation:
+\code{\link[=get_dd_period]{get_dd_period()}},
+\code{\link[=latest_cost_year]{latest_cost_year()}},
+\code{\link[=latest_update]{latest_update()}},
+\code{\link[=previous_update]{previous_update()}}
 }
 \concept{initialisation}

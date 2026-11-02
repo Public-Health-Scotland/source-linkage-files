@@ -13,12 +13,12 @@ get_uk_postcode_path(...)
 get uk postcode list file
 }
 \seealso{
-Other lookup file paths: 
-\code{\link{get_gpprac_ref_path}()},
-\code{\link{get_locality_path}()},
-\code{\link{get_lookups_dir}()},
-\code{\link{get_pop_path}()},
-\code{\link{get_simd_path}()},
-\code{\link{get_spd_path}()}
+Other lookup file paths:
+\code{\link[=get_gpprac_ref_path]{get_gpprac_ref_path()}},
+\code{\link[=get_locality_path]{get_locality_path()}},
+\code{\link[=get_lookups_dir]{get_lookups_dir()}},
+\code{\link[=get_pop_path]{get_pop_path()}},
+\code{\link[=get_simd_path]{get_simd_path()}},
+\code{\link[=get_spd_path]{get_spd_path()}}
 }
 \concept{lookup file paths}

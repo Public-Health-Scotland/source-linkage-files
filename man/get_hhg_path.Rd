@@ -20,12 +20,12 @@ Get the path to the HHG extract
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other extract file paths: 
-\code{\link{get_boxi_extract_path}()},
-\code{\link{get_it_deaths_path}()},
-\code{\link{get_it_ltc_path}()},
-\code{\link{get_it_prescribing_path}()},
-\code{\link{get_source_extract_path}()},
-\code{\link{get_sparra_path}()}
+Other extract file paths:
+\code{\link[=get_boxi_extract_path]{get_boxi_extract_path()}},
+\code{\link[=get_it_deaths_path]{get_it_deaths_path()}},
+\code{\link[=get_it_ltc_path]{get_it_ltc_path()}},
+\code{\link[=get_it_prescribing_path]{get_it_prescribing_path()}},
+\code{\link[=get_source_extract_path]{get_source_extract_path()}},
+\code{\link[=get_sparra_path]{get_sparra_path()}}
 }
 \concept{extract file paths}

@@ -32,7 +32,7 @@ df_ordered <- order_ep_cols(df)
 
 }
 \seealso{
-Other createslf schema functions: 
-\code{\link{order_ep_cols}()}
+Other createslf schema functions:
+\code{\link[=order_ep_cols]{order_ep_cols()}}
 }
 \concept{createslf schema functions}

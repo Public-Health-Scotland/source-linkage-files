@@ -24,7 +24,7 @@ Get the file path for the Social Care Client lookup file
 \seealso{
 \code{\link[=get_file_path]{get_file_path()}} for the generic function.
 
-Other social care lookup file paths: 
-\code{\link{get_sc_demog_lookup_path}()}
+Other social care lookup file paths:
+\code{\link[=get_sc_demog_lookup_path]{get_sc_demog_lookup_path()}}
 }
 \concept{social care lookup file paths}

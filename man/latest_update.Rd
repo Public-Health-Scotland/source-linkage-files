@@ -13,10 +13,10 @@ Latest update as MMM_YYYY
 Get the date of the latest update, e.g 'Jun_2022'
 }
 \seealso{
-Other initialisation: 
-\code{\link{get_dd_period}()},
-\code{\link{latest_cost_year}()},
-\code{\link{previous_update}()},
-\code{\link{years_to_run}()}
+Other initialisation:
+\code{\link[=get_dd_period]{get_dd_period()}},
+\code{\link[=latest_cost_year]{latest_cost_year()}},
+\code{\link[=previous_update]{previous_update()}},
+\code{\link[=years_to_run]{years_to_run()}}
 }
 \concept{initialisation}
