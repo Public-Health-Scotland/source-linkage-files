@@ -111,6 +111,7 @@ byoc_output_files <- get_byoc_output_files(
     # Year-Specific Social Care
     "at",
     "ch",
+    "client",
     "hc",
     "sds",
     # All-Year Social Care
