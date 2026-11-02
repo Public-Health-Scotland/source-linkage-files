@@ -55,14 +55,14 @@ ii <- 1
 year <- "1920"
 
 # Dataset to test
-#"acute", "ae","delayed_discharges", "dn", "gp_ooh_all", "homelessness", "mental_health", "nrs_deaths", "outpatients"
-#"maternity"
-#"combined_deaths"
-#"chi_deaths"
-#"dn_cost_lookup"
+# "acute", "ae","delayed_discharges", "dn", "gp_ooh_all", "homelessness", "mental_health", "nrs_deaths", "outpatients"
+# "maternity"
+# "combined_deaths"
+# "chi_deaths"
+# "dn_cost_lookup"
 
-#"homelessness_completeness"
-#"ltcs"
+# "homelessness_completeness"
+# "ltcs"
 
 
 dataset_name <- c("combined_deaths")

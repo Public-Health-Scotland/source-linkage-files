@@ -27,7 +27,7 @@ sdl_wip_data <- as_tibble(dbGetQuery(
 ))
 
 # Workaround: Read in data that has been read from SDL cached, processed manually and output saved.
-#sdl_wip_data <- arrow::read_parquet("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/3_dataset_processing/anon-maternity_for_source-201920.parquet")
+# sdl_wip_data <- arrow::read_parquet("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/3_dataset_processing/anon-maternity_for_source-201920.parquet")
 
 
 #############################
@@ -35,22 +35,21 @@ sdl_wip_data <- as_tibble(dbGetQuery(
 #############################
 
 recode_datasets <- function(x) {
-
   dplyr::recode(
     x,
-    "acute"               = "acute",
-    "ae"                  = "ae",
+    "acute" = "acute",
+    "ae" = "ae",
     "delayed_discharges" = "dd",
-    "dn"                  = "dn",
-    "gp_ooh_all"          = "gp_ooh",
-    "homelessness"        = "homelessness",
-    "mental_health"       = "mh",
-    "nrs_deaths"          = "nrs_deaths",
-    "outpatients"         = "outpatients",
-    "maternity"           = "maternity",
-    "combined_deaths"     = "combined_deaths",
-    "chi_deaths"          = "chi_deaths",
-    "dn_cost_lookup"      = "dn_cost_lookup",
+    "dn" = "dn",
+    "gp_ooh_all" = "gp_ooh",
+    "homelessness" = "homelessness",
+    "mental_health" = "mh",
+    "nrs_deaths" = "nrs_deaths",
+    "outpatients" = "outpatients",
+    "maternity" = "maternity",
+    "combined_deaths" = "combined_deaths",
+    "chi_deaths" = "chi_deaths",
+    "dn_cost_lookup" = "dn_cost_lookup",
     .default = x
   )
 }
@@ -58,12 +57,12 @@ recode_datasets <- function(x) {
 dataset_name2 <- recode_datasets(dataset_name)
 
 # For latest data in sourcedev use:
-#slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name2, BYOC_MODE = FALSE))
+# slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name2, BYOC_MODE = FALSE))
 
 # Read boxi data
 if (isTRUE(year_specific) && isFALSE(type_specific)) {
   slf_current_data <- get(fn_name_processed)(year = "1920", BYOC_MODE = FALSE)
-}else{
+} else {
   slf_current_data <- get(fn_name_processed)(BYOC_MODE = FALSE)
 }
 
