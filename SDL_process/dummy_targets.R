@@ -171,16 +171,6 @@ list(
     )
   ),
 
-  ### Long-Term Conditions (LTCs) Activity ----
-  # READ - LTCs
-  tar_target(
-    ltc_data,
-    read_lookup_ltc(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-
   ## Stage 2.2 year specific targets ------
   tar_map(
     list(year = years_to_run),
@@ -216,6 +206,33 @@ list(
       process_extract_acute(
         data = acute_data,
         acute_cup_data = acute_cup_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
+    ### Community Mental Health (CMH) Activity------------------------------------
+    # READ - CMH
+    tar_target(
+      # Target name
+      cmh_data,
+      # Function
+      read_extract_cmh(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - CMH
+    tar_target(
+      # Target name
+      source_cmh_extract,
+      # Function
+      process_extract_cmh(
+        data = cmh_data,
         year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,

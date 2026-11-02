@@ -42,7 +42,7 @@ read_extract_district_nursing <- function(
       gpprac = "practice_code",
       hbpraccode = "practice_nhs_board_code_9",
       hbtreatcode = "treatment_nhs_board_code_9",
-      anon_chi = "patient_chi",
+      anon_chi = "anon_chi",
       record_keydate1 = "contact_date",
       primary_intervention = "primary_intervention_category",
       intervention_1 = "other_intervention_category_1",
