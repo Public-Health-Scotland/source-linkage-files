@@ -22,7 +22,7 @@ get_spd_data <- function(
   # Read data
   spd_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_spd_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "spd", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(
