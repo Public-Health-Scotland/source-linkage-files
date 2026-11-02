@@ -12,7 +12,7 @@ get_simd_path(file_name = NULL, ext = "parquet")
 \item{ext}{The extension (type of the file) - optional}
 }
 \value{
-An \code{\link[fs:path]{fs::path()}} to the SIMD file
+An \code{\link[fs:path]{fs::path()}} to the local SIMD file
 }
 \description{
 Get the path to the centrally held Scottish Index of Multiple
@@ -25,6 +25,6 @@ Other lookup file paths:
 \code{\link[=get_lookups_dir]{get_lookups_dir()}},
 \code{\link[=get_pop_path]{get_pop_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
-\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
+\code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}}
 }
 \concept{lookup file paths}

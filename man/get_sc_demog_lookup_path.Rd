@@ -4,17 +4,17 @@
 \alias{get_sc_demog_lookup_path}
 \title{Social Care Demographic Lookup File Path}
 \usage{
-get_sc_demog_lookup_path(update = latest_update(), ...)
+get_sc_demog_lookup_path(update = latest_update(), BYOC_MODE, ...)
 }
 \arguments{
-\item{update}{The update month to use,
-defaults to \code{\link[=latest_update]{latest_update()}}}
+\item{update}{The update month to use, defaults to \code{\link[=latest_update]{latest_update()}}}
+
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
 \value{
-The path to the social care demographic file
-as an \code{\link[fs:path]{fs::path()}}
+The path to the social care demographic file as an \code{\link[fs:path]{fs::path()}}
 }
 \description{
 Get the file path for the Social Care Demographic lookup file

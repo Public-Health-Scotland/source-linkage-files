@@ -10,11 +10,13 @@ read_lookup_ltc(
 )
 }
 \arguments{
-\item{file_path}{Path to the LTC file}
+\item{denodo_connect}{Connection to Denodo}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}.
 }
 \description{
-Read LTC IT extract
+This will read the LTC extract and return the data.
 }

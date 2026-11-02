@@ -9,7 +9,10 @@
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @family process extracts
-process_extract_ooh_consultations <- function(data, year) {
+process_extract_ooh_consultations <- function(
+  data,
+  year
+) {
   log_slf_event(stage = "process", status = "start", type = "gp_ooh-c", year = year)
 
   # to skip warning no visible binding for global variable when using data.table

@@ -92,10 +92,43 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    "mh",
+    # "ae",
+    # "acute",
+    # "cmh",
+    # "dd",
+    # "dn",
+    # "dn_cost_lookup",
+    # "gp_ooh",
+    # "homelessness",
+    # "homelessness_completeness",
+    # "ltc",
+    # "maternity",
+    # "mh",
+    # "nrs_deaths",
+    # "ooh_cost_lookup",
+    # "outpatients",
+
+    # Year-Specific Social Care
+    "at",
+    "ch",
+    "hc",
+    "sds",
+    # All-Year Social Care
+    "sc_all_at",
+    "sc_all_ch",
+    "sc_all_hc",
+    "sc_all_sds",
+    "sc_demog_lookup",
+    # Deaths (for Care Homes)
+    "chi_deaths",
     "nrs_deaths",
     "combined_deaths",
-    "chi_deaths"
+    # Costs
+    "ch_cost_lookup",
+    "hc_cost_lookup",
+    # Look-ups
+    "postcode_lookup",
+    "gpprac_lookup"
   )
 )
 # using homelessness for test purpose. When development is complete,
@@ -117,9 +150,5 @@ tryCatch(
   }
 )
 logger::log_info("Targets finished.")
-
-# Episode file ----
-
-# Individual file ----
 
 logger::log_info("Run SDL ended.")
