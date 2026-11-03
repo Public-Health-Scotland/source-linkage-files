@@ -4,12 +4,14 @@
 \alias{load_ep_file_vars}
 \title{Load the unneeded episode file variables}
 \usage{
-load_ep_file_vars(data, year)
+load_ep_file_vars(data, year, BYOC_MODE)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{BYOC_MODE}{Whether run in a docker on Denodo}
 }
 \value{
 The full SLF data.
