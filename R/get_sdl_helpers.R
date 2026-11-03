@@ -14,16 +14,16 @@ get_sdl_names <- function(dataset, version) {
   sdl_names <- tibble::tribble(
     ~type, ~source, ~snapshot, ~processed,
     # Acute
-    "acute", "sdl_acute_source", "sdl_acute_snapshot", NA_character_,
+    "acute", "sdl_acute_source", "sdl_acute_snapshot", "sdl_acute_processed",
     "acute_cup", "sdl_acute_cup_source", "sdl_acute_cup_snapshot", NA_character_,
 
     # A&E
-    "ae", "sdl_ae2_episode_level_source", "sdl_ae2_episode_level_snapshot", "sdl_byoc_ae_processed",
+    "ae", "sdl_ae2_episode_level_source", "sdl_ae2_episode_level_snapshot", "sdl_ae_processed",
     "ae_cup", "sdl_ae_ucd_cup_source", "sdl_ae_ucd_cup_snapshot", NA_character_,
 
     # Costs
     "ch_cost", "sdl_carehomecostopendata_source", NA_character_, NA_character_,
-    "dn_cost", "sdl_dn_cost_lookup_source", NA_character_, NA_character_,
+    "dn_cost", "sdl_dn_cost_lookup_source", NA_character_, "sdl_dn_cost_lookup_processed",
     "hc_cost", "sdl_hc_cost_lookup_source", NA_character_, NA_character_,
     "ooh_costs", "sdl_ooh_cost_lookup_source", NA_character_, NA_character_,
 
@@ -31,14 +31,15 @@ get_sdl_names <- function(dataset, version) {
     "cmh", "sdl_cmh_source", NA_character_, NA_character_,
 
     # Deaths
-    "chi_deaths", "sdl_chi_deaths_source", "sdl_chi_deaths_snapshot", NA_character_,
-    "nrs_deaths", "sdl_nrs_deaths_source", "sdl_nrs_deaths_snapshot", NA_character_,
+    "chi_deaths", "sdl_chi_deaths_source", "sdl_chi_deaths_snapshot", "sdl_chi_deaths_processed",
+    "combined_deaths", NA_character_, NA_character_, "sdl_combined_deaths_processed",
+    "nrs_deaths", "sdl_nrs_deaths_source", "sdl_nrs_deaths_snapshot", "sdl_nrs_deaths_processed",
 
     # Delayed discharges
-    "dd", "sdl_dd_source", NA_character_, "sdl_byoc_dd_processed",
+    "dd", "sdl_dd_source", NA_character_, "sdl_dd_processed",
 
     # District nursing
-    "dn", "sdl_dn_source", NA_character_, NA_character_,
+    "dn", "sdl_dn_source", NA_character_, "sdl_dn_processed",
     "dn_contacts", "sdl_dn_contacts_source", NA_character_, NA_character_,
 
     # GP Practice
@@ -51,6 +52,7 @@ get_sdl_names <- function(dataset, version) {
     "gp_ooh_cup", "sdl_gp_ooh_cup_source", "sdl_gp_ooh_cup_snapshot", NA_character_,
     "gp_ooh_diagnosis", "sdl_gp_ooh_diagnosis_source", "sdl_gp_ooh_diagnosis_snapshot", NA_character_,
     "gp_ooh_outcome", "sdl_gp_ooh_outcome_source", "sdl_gp_ooh_outcome_snapshot", NA_character_,
+    "gp_ooh", NA_character_, NA_character_, "sdl_gp_ooh_processed",
 
     # Lookups
     "la_lookup", "sdl_laopendatalookup_source", NA_character_, NA_character_,
@@ -63,26 +65,26 @@ get_sdl_names <- function(dataset, version) {
 
 
     # Homelessness
-    "homelessness", "sdl_homelessness_source", "sdl_homelessness_snapshot", "sdl_byoc_homelessness_processed",
-    "homelessness_completeness", "sdl_homelessness_completeness_source", NA_character_, "sdl_byoc_homelessness_completeness_processed",
+    "homelessness", "sdl_homelessness_source", "sdl_homelessness_snapshot", "sdl_homelessness_processed",
+    "homelessness_completeness", "sdl_homelessness_completeness_source", NA_character_, "sdl_homelessness_completeness_processed",
 
     # HHG
     "hhg", "sdl_hhg_source", NA_character_, NA_character_,
 
     # Long term conditions
-    "ltc", "sdl_long_term_condition_source", "sdl_long_term_condition_snapshot", "sdl_byoc_ltc_processed",
+    "ltc", "sdl_long_term_condition_source", "sdl_long_term_condition_snapshot", "sdl_ltc_processed",
 
     # Maternity
-    "maternity", "sdl_maternity_episode_source", "sdl_maternity_episode_snapshot", NA_character_,
+    "maternity", "sdl_maternity_episode_source", "sdl_maternity_episode_snapshot", "sdl_maternity_processed",
 
     # Mental health
-    "mh", "sdl_mental_health_episode_source", "sdl_mental_health_episode_snapshot", NA_character_,
+    "mh", "sdl_mental_health_episode_source", "sdl_mental_health_episode_snapshot", "sdl_mh_processed",
 
     # NSU
     "nsu", "sdl_nsu_source", NA_character_, NA_character_,
 
     # Outpatients
-    "outpatients", "sdl_outpatients_source", NA_character_, "sdl_byoc_outpatients_processed",
+    "outpatients", "sdl_outpatients_source", NA_character_, "sdl_outpatients_processed",
 
     # Social care
     "at", "sdl_sc_alarmtelecare_source", NA_character_, NA_character_,
