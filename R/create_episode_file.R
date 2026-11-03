@@ -128,7 +128,8 @@ create_episode_file <- function(
         "jan_beddays",
         "feb_beddays",
         "mar_beddays"
-      )
+      ),
+      BYOC_MODE = BYOC_MODE
     ) %>%
     # match on sc client variables
     join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
