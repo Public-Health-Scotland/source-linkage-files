@@ -12,7 +12,7 @@
 add_activity_after_death_flag <- function(
   data,
   year,
-  deaths_data = read_file(get_combined_slf_deaths_lookup_path())
+  deaths_data = get_sdl_processed_data(year, type = "combined_deaths", BYOC_MODE = BYOC_MODE)
 ) {
   # to skip warnings no visible binding for global variable ‘.’
   . <- NULL

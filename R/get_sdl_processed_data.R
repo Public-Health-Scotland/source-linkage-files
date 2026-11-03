@@ -21,6 +21,8 @@ get_sdl_processed_data <- function(
       )
     } else if (type == "sc_client") {
       data <- read_file(get_sc_client_lookup_path(year, BYOC_MODE = BYOC_MODE))
+    } else if (type == "combined_deaths") {
+      data <- read_file(get_combined_slf_deaths_lookup_path(year, BYOC_MODE = BYOC_MODE))
     } else {
       data <- read_file(
         get_source_extract_path(

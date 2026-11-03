@@ -26,6 +26,7 @@ create_episode_file <- function(
   slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", BYOC_MODE = BYOC_MODE),
   slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", BYOC_MODE = BYOC_MODE),
   sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths", BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE,
   BYOC_MODE
@@ -166,11 +167,12 @@ create_episode_file <- function(
     ) %>%
     join_deaths_data(
       year,
+      slf_deaths_lookup = slf_deaths_lookup,
       BYOC_MODE = BYOC_MODE
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
-      deaths_data = read_file(get_combined_slf_deaths_lookup_path())
+      deaths_data = slf_deaths_lookup
     ) %>%
     link_ch_with_adms() %>%
     load_ep_file_vars(year) %>%
