@@ -20,20 +20,17 @@
 create_episode_file <- function(
   processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
+  dd_data = get_sdl_processed_data(year, type = "dd", BYOC_MODE = BYOC_MODE),
   homelessness_lookup = create_homelessness_lookup(year),
-  ltc_data = read_file(get_ltcs_path(year)),
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(
-    get_slf_gpprac_path(),
-    col_select = c("gpprac", "cluster", "hbpraccode")
-  ),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  ltc_data = get_sdl_processed_data(year, type = "ltc", BYOC_MODE = BYOC_MODE),
+  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", BYOC_MODE = BYOC_MODE),
+  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", BYOC_MODE = BYOC_MODE),
+  sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE,
   BYOC_MODE
 ) {
-  log_ep_substage("Create episode file", "started", year) #
+  log_ep_substage("Create episode file", "started", year)
 
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
