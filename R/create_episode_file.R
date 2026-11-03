@@ -290,13 +290,20 @@ create_episode_file <- function(
 #' will be stored.
 #'
 #' @return `data` with only the `vars_to_keep` kept
-store_ep_file_vars <- function(data, year, vars_to_keep) {
-  tempfile_path <- get_file_path(
-    directory = get_year_dir(year),
-    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write",
-    create = TRUE
-  )
+store_ep_file_vars <- function(data, year, vars_to_keep, BYOC_MODE) {
+  if (BYOC_MODE) {
+    tempfile_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
+    )
+  } else {
+    tempfile_path <- get_file_path(
+      directory = get_year_dir(year, BYOC_MODE = BYOC_MODE),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+      check_mode = "write",
+      create = TRUE
+    )
+  }
 
   check_variables_exist(data, vars_to_keep)
 
@@ -330,13 +337,20 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The full SLF data.
-load_ep_file_vars <- function(data, year) {
-  tempfile_path <- get_file_path(
-    directory = get_year_dir(year),
-    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write",
-    create = TRUE
-  )
+load_ep_file_vars <- function(data, year, BYOC_MODE) {
+  if (BYOC_MODE) {
+    tempfile_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
+    )
+  } else {
+    tempfile_path <- get_file_path(
+      directory = get_year_dir(year, BYOC_MODE = BYOC_MODE),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+      check_mode = "write",
+      create = TRUE
+    )
+  }
 
   full_data <- data %>%
     dplyr::left_join(
