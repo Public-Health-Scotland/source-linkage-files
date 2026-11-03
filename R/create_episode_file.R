@@ -280,6 +280,8 @@ create_episode_file <- function(
     ) # sourcedev owner
   }
 
+  log_ep_substage("Create episode file", "finished", year)
+
   return(episode_file)
 }
 
@@ -625,8 +627,6 @@ join_sc_client <- function(data,
   }
 
   log_ep_substage("Join social care client", "finished", year)
-
-  log_ep_substage("Create episode file", "finished", year)
 
   return(data_file)
 }
