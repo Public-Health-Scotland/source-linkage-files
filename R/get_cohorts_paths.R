@@ -11,21 +11,20 @@
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_demographic_cohorts_path <- function(year, BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     demographic_cohorts_path <- file.path(
       denodo_output_path(),
       stringr::str_glue("anon-demographic_cohorts_{year}.parquet")
     )
   } else {
-  demographic_cohorts_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Cohorts"),
-    file_name = stringr::str_glue(
-      "anon-demographic_cohorts_{year}.parquet"
-    ),
-    ...
-  )
-}
+    demographic_cohorts_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Cohorts"),
+      file_name = stringr::str_glue(
+        "anon-demographic_cohorts_{year}.parquet"
+      ),
+      ...
+    )
+  }
 
   return(demographic_cohorts_path)
 }
@@ -42,21 +41,20 @@ get_demographic_cohorts_path <- function(year, BYOC_MODE, ...) {
 #' @family file path functions
 #' @seealso [get_file_path()] for the generic function.
 get_service_use_cohorts_path <- function(year, BYOC_MODE, ...) {
-
   if (isTRUE(BYOC_MODE)) {
     service_use_cohorts_path <- file.path(
       denodo_output_path(),
       stringr::str_glue("anon-service_use_cohorts_{year}.parquet")
     )
   } else {
-  service_use_cohorts_path <- get_file_path(
-    directory = fs::path(get_slf_dir(), "Cohorts"),
-    file_name = stringr::str_glue(
-      "anon-service_use_cohorts_{year}.parquet"
-    ),
-    ...
-  )
-}
+    service_use_cohorts_path <- get_file_path(
+      directory = fs::path(get_slf_dir(), "Cohorts"),
+      file_name = stringr::str_glue(
+        "anon-service_use_cohorts_{year}.parquet"
+      ),
+      ...
+    )
+  }
 
   return(service_use_cohorts_path)
 }
