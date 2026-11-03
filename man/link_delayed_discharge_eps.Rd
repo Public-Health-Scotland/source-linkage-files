@@ -7,7 +7,8 @@
 link_delayed_discharge_eps(
   episode_file,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")) \%>\% slfhelper::get_chi()
+  dd_data = get_sdl_processed_data(year, type = "dd", BYOC_MODE = BYOC_MODE) \%>\%
+    slfhelper::get_chi()
 )
 }
 \arguments{
