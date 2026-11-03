@@ -4,7 +4,7 @@
 \alias{clean_temp_data}
 \title{Clean temp data from disk}
 \usage{
-clean_temp_data(year, file_type = c("ep", "ind"))
+clean_temp_data(year, file_type = c("ep", "ind"), BYOC_MODE)
 }
 \arguments{
 \item{year}{year variable}
