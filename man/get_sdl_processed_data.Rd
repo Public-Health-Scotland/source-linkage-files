@@ -4,12 +4,17 @@
 \alias{get_sdl_processed_data}
 \title{Get SDL Processed Data}
 \usage{
-get_sdl_processed_data(type, year, denodo_connect = NULL, BYOC_MODE)
+get_sdl_processed_data(
+  year,
+  type,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = BYOC_MODE
+)
 }
 \arguments{
-\item{type}{Name of dataset (e.g. "acute").}
-
 \item{year}{Financial year.}
+
+\item{type}{Name of dataset (e.g. "acute").}
 
 \item{denodo_connect}{A Denodo connection object.}
 
