@@ -19,8 +19,6 @@ join_cohort_lookups(
 
 \item{year}{The year to process, in FY format.}
 
-\item{update}{The update to use}
-
 \item{demographic_cohort, service_use_cohort}{The cohort data}
 }
 \value{
