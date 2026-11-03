@@ -573,7 +573,7 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
                            file_type = c("episode", "individual")) {
   if (!check_year_valid(year, type = "client")) {
     data_file <- data
