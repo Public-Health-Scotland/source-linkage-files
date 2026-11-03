@@ -277,9 +277,10 @@ create_episode_file <- function(
     order_ep_cols()
 
   if (write_to_disk) {
-    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"),
-      group_id = 3356
-    ) # sourcedev owner
+    write_file(episode_file, get_slf_episode_path(year, BYOC_MODE, check_mode = "write"),
+      group_id = 3356,# sourcedev owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
 
   log_ep_substage("Create episode file", "finished", year)
