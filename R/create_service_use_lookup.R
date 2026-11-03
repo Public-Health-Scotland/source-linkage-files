@@ -261,7 +261,8 @@ create_service_use_cohorts <- function(
     return_data <- return_data %>%
       dplyr::mutate(
         run_id = .env$run_id,
-        run_date_time = .env$run_date_time)
+        run_date_time = .env$run_date_time
+      )
   }
 
   if (write_to_disk) {

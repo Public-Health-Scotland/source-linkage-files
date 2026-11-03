@@ -15,6 +15,8 @@ create_episode_file(
   slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", BYOC_MODE
     = BYOC_MODE),
   sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths", BYOC_MODE =
+    BYOC_MODE),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE,
   BYOC_MODE
@@ -36,6 +38,8 @@ create_episode_file(
 \item{slf_gpprac_lookup}{The SLF GP Practice lookup}
 
 \item{sc_client}{social care lookup file}
+
+\item{slf_deaths_lookup}{combined deaths lookup}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}

@@ -175,7 +175,8 @@ create_demographic_cohorts <- function(
     demo_lookup <- demo_lookup %>%
       dplyr::mutate(
         run_id = .env$run_id,
-        run_date_time = .env$run_date_time)
+        run_date_time = .env$run_date_time
+      )
   }
 
   # Write to disk
