@@ -25,7 +25,7 @@ read_extract_homelessness <- function(
   # Read extract
   extract_homelessness <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", get_sdl_raw_names("homelessness"))
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "homelessness", version = version()))
   ) %>%
     # Filter by calendar year
     dplyr::filter(

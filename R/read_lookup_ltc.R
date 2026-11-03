@@ -18,7 +18,7 @@ read_lookup_ltc <- function(
   # Read extract
   ltc_file <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", get_sdl_raw_names("ltc"))
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "ltc", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(

@@ -21,7 +21,7 @@ get_datazone_pop_data <- function(
   # Read data
   datazone_pop_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_datazone_population_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "dz_pop", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(

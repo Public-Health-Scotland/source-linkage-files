@@ -22,7 +22,7 @@ get_la_code_opendata_lookup <- function(
   # Read data
   la_code_lookup <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_laopendatalookup_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "la_lookup", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(

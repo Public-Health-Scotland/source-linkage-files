@@ -25,7 +25,7 @@ read_extract_mental_health <- function(
   # Read extract
   extract_mental_health <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", get_sdl_raw_names("mh"))
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "mh", version = version()))
   ) %>%
     # Filter by calendar year
     dplyr::filter(
