@@ -11,16 +11,16 @@ get_sdl_processed_data <- function(
   # Read local files
   if (isFALSE(BYOC_MODE)) {
     if (type == "ltc") {
-      data <- read_file(get_ltcs_path(year))
+      data <- read_file(get_ltcs_path(year, BYOC_MODE = BYOC_MODE))
     } else if (type == "slf_pc_lookup") {
-      data <- read_file(get_slf_postcode_path())
+      data <- read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE))
     } else if (type == "slf_gpprac_lookup") {
       data <- read_file(
-        get_slf_gpprac_path(),
+        get_slf_gpprac_path(BYOC_MODE = BYOC_MODE),
         col_select = c("gpprac", "cluster", "hbpraccode")
       )
     } else if (type == "sc_client") {
-      data <- read_file(get_sc_client_lookup_path(year))
+      data <- read_file(get_sc_client_lookup_path(year, BYOC_MODE = BYOC_MODE))
     } else {
       data <- read_file(
         get_source_extract_path(
