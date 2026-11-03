@@ -509,18 +509,18 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 #' @family episode_file
-create_cohort_lookups <- function(data, year, update = latest_update()) {
+create_cohort_lookups <- function(data, year, BYOC_MODE = BYOC_MODE) {
   create_demographic_cohorts(
     data,
     year,
-    update,
+    BYOC_MODE,
     write_to_disk = TRUE
   )
 
   create_service_use_cohorts(
     data,
     year,
-    update,
+    BYOC_MODE,
     write_to_disk = TRUE
   )
 
