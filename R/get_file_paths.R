@@ -165,7 +165,6 @@ get_dev_dir <- function(BYOC_MODE) {
 #'
 #' @family directories
 get_year_dir <- function(year, extracts_dir = FALSE, BYOC_MODE) {
-
   if (BYOC_MODE) {
     return(get_dev_dir(BYOC_MODE))
   }

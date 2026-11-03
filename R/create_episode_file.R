@@ -278,7 +278,7 @@ create_episode_file <- function(
 
   if (write_to_disk) {
     write_file(episode_file, get_slf_episode_path(year, BYOC_MODE, check_mode = "write"),
-      group_id = 3356,# sourcedev owner
+      group_id = 3356, # sourcedev owner
       BYOC_MODE = BYOC_MODE
     )
   }
