@@ -324,7 +324,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep, BYOC_MODE) {
   ) %>%
     write_file(
       path = tempfile_path,
-      group_id = 3356 # sourcedev owner
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
 
   log_ep_substage("Store episode file variables", "finished", year)
