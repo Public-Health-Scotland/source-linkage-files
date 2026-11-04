@@ -62,8 +62,8 @@ get_sdl_names <- function(dataset, version) {
     "hscp_pop", "sdl_hscp_population_source", NA_character_, NA_character_,
     "simd", "sdl_simd_source", NA_character_, NA_character_,
     "spd", "sdl_spd_source", NA_character_, NA_character_,
-    "slf_pc_lookup", #### TODO ####
-    "slf_gpprac_lookup", #### TODO ####
+    #"slf_pc_lookup", #### TODO ####
+    #"slf_gpprac_lookup", #### TODO ####
 
 
     # Homelessness
@@ -93,7 +93,7 @@ get_sdl_names <- function(dataset, version) {
     "hc", "sdl_sc_homecare_source", NA_character_, NA_character_,
     "sc_demog", "sdl_sc_demographic_source", NA_character_, NA_character_,
     "sds", "sdl_sc_sds_source", NA_character_, NA_character_,
-    "sc_client", ### TODO ###
+    #"sc_client", ### TODO ###
 
     # SPARRA
     "sparra", "sdl_sparra_source", NA_character_, NA_character_
