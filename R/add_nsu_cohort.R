@@ -135,7 +135,7 @@ add_nsu_cohort <- function(
 #'
 #' @examples
 get_nsu_data <- function(year,
-                         denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                         denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), #### TODO change back to BYOC_MODE
                          BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "nsu", year = year)
 
