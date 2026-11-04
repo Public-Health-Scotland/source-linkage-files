@@ -547,13 +547,13 @@ create_cohort_lookups <- function(data, year, BYOC_MODE = BYOC_MODE) {
 join_cohort_lookups <- function(
   data,
   year,
-  update = latest_update(),
+  BYOC_MODE = BYOC_MODE,
   demographic_cohort = read_file(
-    get_demographic_cohorts_path(year, update),
+    get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
     col_select = c("anon_chi", "demographic_cohort")
   ),
   service_use_cohort = read_file(
-    get_service_use_cohorts_path(year, update),
+    get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
     col_select = c("anon_chi", "service_use_cohort")
   )
 ) {
