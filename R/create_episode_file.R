@@ -311,6 +311,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep, BYOC_MODE) {
     )
   }
 
+  log_ep_substage("Store episode file variables", "started", year)
+
   check_variables_exist(data, vars_to_keep)
 
   data <- data %>%
@@ -358,6 +360,8 @@ load_ep_file_vars <- function(data, year, BYOC_MODE) {
       create = TRUE
     )
   }
+
+  log_ep_substage("Load episode file variables", "started", year)
 
   full_data <- data %>%
     dplyr::left_join(
