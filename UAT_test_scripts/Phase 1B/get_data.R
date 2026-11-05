@@ -265,6 +265,14 @@ get_submission_filepath <- function(type) {
     # Select file with the highest number (most recent)
     filename <- all_files[which.max(nums)]
 
+    if(type == "nsu"){
+      filename <- "SDL_NSU_20260617_1.parquet"
+    }
+
+    if(type == "simd"){
+      filename <- "SDL_simd_20260630_1.parquet"
+    }
+
     # Full filepath
     submission_filepath <- paste0(submission_folder, filename)
 
@@ -409,7 +417,7 @@ get_local_filepath <- function(type, year = "", sdl_submission = FALSE) {
       "sds" = "sds_snapshot",
       # Open Data
       "ch_cost" = "4ee7dc84-ca65-455c-9e76-b614091f389f",
-      "gpprac_cluster" = "gp-practice-contact-details-and-list-sizes",
+      "gpprac_cluster" = "ddfcdb81-860a-4851-8925-a094b63e1a00",
       "geography_labels" = "944765d7-d0d9-46a0-b377-abb3de51d08e",
       "la_code" = "967937c4-8d67-4f39-974f-fd58c4acfda5",
       # Default
@@ -461,9 +469,9 @@ auto_file_read <- function(filepath, n_rows = NULL) {
   # .csv / .csv.gz
   if (grepl("\\.csv(\\.gz)?$", filepath, ignore.case = TRUE)) {
     if (is.null(n_rows)) {
-      data <- read.csv(filepath)
+      data <- readr::read_csv(filepath)
     } else {
-      data <- read.csv(filepath, nrows = n_rows)
+      data <- readr::read_csv(filepath, nrows = n_rows)
     }
 
     # .rds / .rds.gz
@@ -548,24 +556,16 @@ get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NUL
 
     # Open Data
   } else if (type %in% get_types("opendata")) {
-    # Read data using get_dataset()
-    if (type == "gpprac_cluster") {
-      data <- phsopendata::get_dataset(filepath)
-      # Read data using get_resource()
-    } else {
-      # Columns to select
-      col_select <- switch(type,
-        "ch_cost" = c("Date", "KeyStatistic", "CA", "Value"),
-        "geography_labels" = c("HSCP", "HSCPName", "HB", "HBName"),
-        "la_code" = c("CA", "CAName", "HBName"),
-        NULL
-      )
-      # Read data
-      data <- phsopendata::get_resource(
-        res_id = filepath,
-        col_select = col_select
-      )
-    }
+    # Columns to select
+    col_select <- switch(type,
+                         "ch_cost" = c("Date", "KeyStatistic", "CA", "Value"),
+                         "geography_labels" = c("HSCP", "HSCPName", "HB", "HBName"),
+                         "la_code" = c("CA", "CAName", "HBName"),
+                         NULL)
+    # Read data
+    data <- phsopendata::get_resource(
+      res_id = filepath,
+      col_select = col_select)
     if (!is.null(n_rows)) {
       data <- utils::head(data, n_rows)
     }

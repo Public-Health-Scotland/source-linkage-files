@@ -7,27 +7,28 @@ convert_types <- function(df, mapping) {
     # Get the column name from the lookup
     column <- mapping$old_colname[i]
     # Skip if the column does not exist
-    if (!column %in% names(df)) {
-      next
-    }
+    if (!column %in% names(df)) {next}
     # Set the target data type
     target_type <- mapping$data_type[i]
     # Skip conversion if no type supplied
-    if (is.na(target_type) || target_type == "") {
-      next
-    }
+    if (is.na(target_type) || target_type == "") {next}
+    x <- df[[column]]
     # Convert data type
-    df[[column]] <- switch(target_type,
-      integer = as.integer(df[[column]]),
-      double = as.double(df[[column]]),
-      character = as.character(df[[column]]),
-      factor = as.factor(df[[column]]),
-      date = as.Date(df[[column]], format = "%Y/%m/%d %H:%M:%S"),
-      date2 = as.Date(df[[column]], format = "%Y-%m-%d"),
-      datetime = readr::parse_datetime(df[[column]], format = "%Y/%m/%d %H:%M:%S"),
-      time = readr::parse_time(df[[column]], format = "%H:%M"),
-      time2 = readr::parse_time(df[[column]], format = "%H:%M:%S"),
-      df[[column]]
+    df[[column]] <- switch(
+      target_type,
+      integer = as.integer(x),
+      double = as.double(x),
+      character = as.character(x),
+      factor = as.factor(x),
+      date = as.Date(x, format = "%Y/%m/%d %H:%M:%S"),
+      date2 = as.Date(x, format = "%Y-%m-%d"),
+      datetime = {if (inherits(x, "POSIXt")) {x} else {
+        readr::parse_datetime(as.character(x), format = "%Y/%m/%d %H:%M:%S")}},
+      time = {if (inherits(x, "difftime")) {hms::as_hms(x)} else {
+        readr::parse_time(as.character(x), format = "%H:%M")}},
+      time2 = {if (inherits(x, "difftime")) {hms::as_hms(x)} else {
+        readr::parse_time(as.character(x), format = "%H:%M:%S")}},
+      x
     )
   }
   df
@@ -41,9 +42,9 @@ read_raw_local <- function(test_dataset, year, local_mapping) {
   # Column Map
   local_test_map <- local_mapping %>%
     # Filter the local mapping for the dataset required
-    filter(type == test_dataset) %>%
+    filter(type == test_dataset) # %>%
     # Replace spaces and special characters with . (R does this to column names automatically)
-    mutate(old_colname = make.names(old_colname))
+    # mutate(old_colname = make.names(old_colname))
 
   # Data
   # Read local data
@@ -57,15 +58,6 @@ read_raw_local <- function(test_dataset, year, local_mapping) {
   colnames(local_data) <- local_test_map$new_colname
   # Convert to tibble
   local_data <- as_tibble(local_data)
-
-  # Pad CHI
-  chi_cols <- c("anon_chi")
-  local_data <- local_data %>% mutate(across(any_of(chi_cols), phsmethods::chi_pad))
-  # Replace empty strings with NA
-  local_data <- local_data %>% mutate(across(where(is.character), ~ na_if(.x, "")))
-  # Pad specified columns e.g. "1" --> "01"
-  pad_cols <- c("lca", "ae_alcohol", "ae_arrivalmode", "ae_attendcat", "ae_bodyloc")
-  local_data <- local_data %>% mutate(across(any_of(pad_cols), ~ str_pad(.x, width = 2, side = "left", pad = "0")))
 
   return(local_data)
 }
@@ -206,9 +198,6 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
         unique_vals_sdl = ifelse(column %in% colnames(sdl_data), length(unique(sdl_data[[column]])), NA),
         unique_vals_mismatch = ifelse(is.null(match_values), NA, length(setdiff(local_data[[column]], sdl_data[[column]]))),
         unique_vals_with_different_counts = ifelse(is.null(match_values), NA, nrow(match_values %>% filter(Freq.x != Freq.y | is.na(Freq.x) | is.na(Freq.y))))
-
-        # total_count_difference = ifelse(is.null(match_values), NA, sum((match_values %>% filter(Freq.x != Freq.y | is.na(Freq.x) | is.na(Freq.y)) %>% mutate(n = abs(Freq.x - Freq.y)))$n, na.rm = TRUE)),
-        # n_row_mismatch_ordered = ifelse(is.null(match_values), NA, sum(local_data[[column]] != sdl_data[[column]], na.rm = TRUE))
       )
     )
   }
