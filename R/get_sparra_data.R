@@ -11,7 +11,7 @@
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_sparra_data <- function(year,
-                            denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                            denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
                             BYOC_MODE) {
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(year)
