@@ -7,27 +7,45 @@ convert_types <- function(df, mapping) {
     # Get the column name from the lookup
     column <- mapping$old_colname[i]
     # Skip if the column does not exist
-    if (!column %in% names(df)) {next}
+    if (!column %in% names(df)) {
+      next
+    }
     # Set the target data type
     target_type <- mapping$data_type[i]
     # Skip conversion if no type supplied
-    if (is.na(target_type) || target_type == "") {next}
+    if (is.na(target_type) || target_type == "") {
+      next
+    }
     x <- df[[column]]
     # Convert data type
-    df[[column]] <- switch(
-      target_type,
+    df[[column]] <- switch(target_type,
       integer = as.integer(x),
       double = as.double(x),
       character = as.character(x),
       factor = as.factor(x),
       date = as.Date(x, format = "%Y/%m/%d %H:%M:%S"),
       date2 = as.Date(x, format = "%Y-%m-%d"),
-      datetime = {if (inherits(x, "POSIXt")) {x} else {
-        readr::parse_datetime(as.character(x), format = "%Y/%m/%d %H:%M:%S")}},
-      time = {if (inherits(x, "difftime")) {hms::as_hms(x)} else {
-        readr::parse_time(as.character(x), format = "%H:%M")}},
-      time2 = {if (inherits(x, "difftime")) {hms::as_hms(x)} else {
-        readr::parse_time(as.character(x), format = "%H:%M:%S")}},
+      datetime = {
+        if (inherits(x, "POSIXt")) {
+          x
+        } else {
+          readr::parse_datetime(as.character(x), format = "%Y/%m/%d %H:%M:%S")
+        }
+      },
+      time = {
+        if (inherits(x, "difftime")) {
+          hms::as_hms(x)
+        } else {
+          readr::parse_time(as.character(x), format = "%H:%M")
+        }
+      },
+      time2 = {
+        if (inherits(x, "difftime")) {
+          hms::as_hms(x)
+        } else {
+          readr::parse_time(as.character(x), format = "%H:%M:%S")
+        }
+      },
       x
     )
   }
@@ -43,8 +61,8 @@ read_raw_local <- function(test_dataset, year, local_mapping) {
   local_test_map <- local_mapping %>%
     # Filter the local mapping for the dataset required
     filter(type == test_dataset) # %>%
-    # Replace spaces and special characters with . (R does this to column names automatically)
-    # mutate(old_colname = make.names(old_colname))
+  # Replace spaces and special characters with . (R does this to column names automatically)
+  # mutate(old_colname = make.names(old_colname))
 
   # Data
   # Read local data

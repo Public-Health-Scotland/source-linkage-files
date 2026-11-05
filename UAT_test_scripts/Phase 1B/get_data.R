@@ -265,11 +265,11 @@ get_submission_filepath <- function(type) {
     # Select file with the highest number (most recent)
     filename <- all_files[which.max(nums)]
 
-    if(type == "nsu"){
+    if (type == "nsu") {
       filename <- "SDL_NSU_20260617_1.parquet"
     }
 
-    if(type == "simd"){
+    if (type == "simd") {
       filename <- "SDL_simd_20260630_1.parquet"
     }
 
@@ -558,14 +558,16 @@ get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NUL
   } else if (type %in% get_types("opendata")) {
     # Columns to select
     col_select <- switch(type,
-                         "ch_cost" = c("Date", "KeyStatistic", "CA", "Value"),
-                         "geography_labels" = c("HSCP", "HSCPName", "HB", "HBName"),
-                         "la_code" = c("CA", "CAName", "HBName"),
-                         NULL)
+      "ch_cost" = c("Date", "KeyStatistic", "CA", "Value"),
+      "geography_labels" = c("HSCP", "HSCPName", "HB", "HBName"),
+      "la_code" = c("CA", "CAName", "HBName"),
+      NULL
+    )
     # Read data
     data <- phsopendata::get_resource(
       res_id = filepath,
-      col_select = col_select)
+      col_select = col_select
+    )
     if (!is.null(n_rows)) {
       data <- utils::head(data, n_rows)
     }
