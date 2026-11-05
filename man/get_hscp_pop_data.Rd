@@ -28,6 +28,7 @@ Other lookup files:
 \code{\link[=get_dn_raw_costs_data]{get_dn_raw_costs_data()}},
 \code{\link[=get_geography_labels]{get_geography_labels()}},
 \code{\link[=get_gpprac_cluster]{get_gpprac_cluster()}},
+\code{\link[=get_gpprac_opendata]{get_gpprac_opendata()}},
 \code{\link[=get_gpprac_ref_data]{get_gpprac_ref_data()}},
 \code{\link[=get_hc_raw_costs_data]{get_hc_raw_costs_data()}},
 \code{\link[=get_la_code_opendata_lookup]{get_la_code_opendata_lookup()}},

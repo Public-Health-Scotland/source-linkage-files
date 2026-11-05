@@ -4,14 +4,14 @@
 \alias{create_cohort_lookups}
 \title{Create the cohort lookups}
 \usage{
-create_cohort_lookups(data, year, update = latest_update())
+create_cohort_lookups(data, year, BYOC_MODE = BYOC_MODE)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
 
-\item{update}{The update to use.}
+\item{BYOC_MODE}{BYOC MODE}
 }
 \value{
 The data unchanged (the cohorts are written to disk)

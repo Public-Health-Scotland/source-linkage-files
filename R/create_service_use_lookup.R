@@ -9,7 +9,7 @@
 create_service_use_cohorts <- function(
   data,
   year,
-  update = latest_update(),
+  BYOC_MODE,
   write_to_disk = TRUE
 ) {
   check_variables_exist(data, variables = c(
@@ -257,10 +257,19 @@ create_service_use_cohorts <- function(
       "ae2_cost"
     )
 
+  if (isTRUE(BYOC_MODE)) {
+    return_data <- return_data %>%
+      dplyr::mutate(
+        run_id = NA, # .env$run_id,
+        run_date_time = NA # .env$run_date_time
+      )
+  }
+
   if (write_to_disk) {
     write_file(return_data,
-      path = get_service_use_cohorts_path(year, update, check_mode = "write"),
-      group_id = 3206 # hscdiip owner
+      path = get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE, check_mode = "write"),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

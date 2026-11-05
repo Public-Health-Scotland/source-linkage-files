@@ -24,7 +24,7 @@ read_extract_ooh_consultations <- function(
   # Read consultations data
   consultations_extract <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gp_ooh_consultation_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "gp_ooh_consultation", version = version()))
   ) %>%
     # Filter to match BOXI extraction
     dplyr::filter(

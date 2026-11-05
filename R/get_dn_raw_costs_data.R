@@ -21,7 +21,7 @@ get_dn_raw_costs_data <- function(
   # Read data
   dn_raw_costs_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_dn_cost_lookup_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "dn_cost", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(
