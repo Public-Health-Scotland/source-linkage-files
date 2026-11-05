@@ -260,8 +260,8 @@ create_service_use_cohorts <- function(
   if (isTRUE(BYOC_MODE)) {
     return_data <- return_data %>%
       dplyr::mutate(
-        run_id = NA, #.env$run_id,
-        run_date_time = NA#.env$run_date_time
+        run_id = NA, # .env$run_id,
+        run_date_time = NA # .env$run_date_time
       )
   }
 

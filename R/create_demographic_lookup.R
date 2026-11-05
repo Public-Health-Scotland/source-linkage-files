@@ -174,8 +174,8 @@ create_demographic_cohorts <- function(
   if (isTRUE(BYOC_MODE)) {
     demo_lookup <- demo_lookup %>%
       dplyr::mutate(
-        run_id = NA, #.env$run_id,
-        run_date_time = NA #.env$run_date_time
+        run_id = NA, # .env$run_id,
+        run_date_time = NA # .env$run_date_time
       )
   }
 
