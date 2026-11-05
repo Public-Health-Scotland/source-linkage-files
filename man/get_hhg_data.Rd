@@ -6,7 +6,7 @@
 \usage{
 get_hhg_data(
   year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
   BYOC_MODE
 )
 }
