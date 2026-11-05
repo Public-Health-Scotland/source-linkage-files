@@ -11,6 +11,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::left_join(
       data,
       get_sparra_data(year, BYOC_MODE = BYOC_MODE) %>%
+        dplyr::select(anon_chi, sparra_risk_score) %>%
         dplyr::rename(sparra_start_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
@@ -24,6 +25,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::left_join(
       data,
       get_sparra_data(next_fy(year), BYOC_MODE = BYOC_MODE) %>%
+        dplyr::select(anon_chi, sparra_risk_score) %>%
         dplyr::rename(sparra_end_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
