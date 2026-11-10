@@ -178,8 +178,6 @@ processed_data_list <- get_processed_data_list()
 log_ep_message("creating", year)
 
 episode_file <- create_episode_file(processed_data_list,
-                                    year = year,
-                                    write_temp_to_disk = write_temp_to_disk
+  year = year,
+  write_temp_to_disk = write_temp_to_disk
 )
-
-
