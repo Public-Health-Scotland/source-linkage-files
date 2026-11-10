@@ -483,6 +483,33 @@ list(
   tar_map(
     list(year = years_to_run),
 
+    # Prescribing (PIS) Activity -----------------------------------------------
+    # READ - Prescribing (PIS)
+    tar_target(
+      # Target name
+      prescribing_data,
+      # Function
+      read_extract_prescribing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - Prescribing
+    tar_target(
+      # Target name
+      source_prescribing_extract,
+      # Function
+      process_extract_prescribing(
+        data = prescribing_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
+      )
+    ),
+
     ### NRS Deaths -------------------------------------------------------------
     # PROCESS - NRS Deaths
     tar_target(
@@ -522,6 +549,34 @@ list(
         ch_costs = ch_cost_lookup,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE
+      )
+    ),
+
+    ### SC Client --------------------------------------------------------------
+    # READ - SC Client
+    tar_target(
+      # Target name
+      sc_client_data,
+      # Function
+      read_lookup_sc_client(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - SC Client
+    tar_target(
+      # Target name
+      sc_client_lookup,
+      # Function
+      process_lookup_sc_client(
+        data = sc_client_data,
+        year = year,
+        sc_demographics = sc_demog_lookup,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
 

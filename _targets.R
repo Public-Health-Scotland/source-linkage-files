@@ -1020,12 +1020,15 @@ list(
     ),
     # Prescribing (PIS) Activity------------------------------------------------
     # READ - Prescribing (PIS)
-    tar_file_read(
+    tar_target(
       # Target name
       prescribing_data,
-      get_it_prescribing_path(year),
       # Function
-      read_extract_prescribing(year, !!.x)
+      read_extract_prescribing(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Prescribing
     tar_target(
@@ -1033,9 +1036,12 @@ list(
       source_prescribing_extract,
       # Function
       process_extract_prescribing(
-        prescribing_data,
-        year,
-        write_to_disk = write_to_disk
+        data = prescribing_data,
+        year = year,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Prescribing
@@ -1056,7 +1062,11 @@ list(
       # Target name
       sc_client_data,
       # Function
-      read_lookup_sc_client(fyyear = year)
+      read_lookup_sc_client(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
     ),
     # PROCESS - Client data
     tar_target(
@@ -1068,7 +1078,10 @@ list(
         year = year,
         sc_demographics = sc_demog_lookup %>%
           dplyr::select(c("sending_location", "social_care_id", "anon_chi", "extract_date", "consistent_quality")),
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE,
+        run_id = run_id,
+        run_date_time = run_date_time
       )
     ),
     # TESTS - Client data
