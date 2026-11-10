@@ -525,6 +525,32 @@ list(
       )
     ),
 
+    ### SC Client --------------------------------------------------------------
+    # READ - SC Client
+    tar_target(
+      # Target name
+      sc_client_data,
+      # Function
+      read_lookup_sc_client(
+        year = year,
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+    # PROCESS - SC Client
+    tar_target(
+      # Target name
+      sc_client_lookup,
+      # Function
+      process_lookup_sc_client(
+        data = sc_client_data,
+        year = year,
+        sc_demographics = sc_demog_lookup,
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
+      )
+    ),
+
     ### SC Home Care -----------------------------------------------------------
     # PROCESS - SC Home Care
     tar_target(
