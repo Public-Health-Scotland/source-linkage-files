@@ -176,7 +176,7 @@ create_episode_file <- function(
       BYOC_MODE = BYOC_MODE
     ) %>%
     # match on sc client variables
-    #join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
+    # join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     # change to chi for phsmethods
     slfhelper::get_chi() %>%
     # Check chi is valid using phsmethods function
