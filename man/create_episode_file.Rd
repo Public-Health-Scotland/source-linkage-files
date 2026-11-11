@@ -14,8 +14,6 @@ create_episode_file(
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE
     = FALSE), BYOC_MODE = BYOC_MODE),
-  sc_client = get_sdl_processed_data(year, type = "sc_client", denodo_connect =
-    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
@@ -42,8 +40,6 @@ create_episode_file(
 
 \item{dd_data}{The processed DD extract}
 
-\item{sc_client}{social care lookup file}
-
 \item{ltc_data}{The LTC data for the year}
 
 \item{slf_pc_lookup}{The SLF Postcode lookup}
@@ -58,6 +54,8 @@ create_episode_file(
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 
 \item{BYOC_MODE}{Whether run in a docker on Denodo}
+
+\item{sc_client}{social care lookup file}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file
