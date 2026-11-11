@@ -133,10 +133,10 @@ get_sdl_names <- function(dataset, version) {
 #' @export
 #' @family file path functions
 get_sdl_processed_data <- function(
-    year,
-    type,
-    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
+  year,
+  type,
+  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+  BYOC_MODE = BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = type, year = year)
 
@@ -187,5 +187,3 @@ get_sdl_processed_data <- function(
 
   return(data)
 }
-
-
