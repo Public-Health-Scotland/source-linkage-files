@@ -37,11 +37,11 @@ create_episode_file <- function(
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
     BYOC_MODE = BYOC_MODE
   ),
-  sc_client = get_sdl_processed_data(year,
-    type = "sc_client",
-    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
-  ),
+  # sc_client = get_sdl_processed_data(year,
+  #   type = "sc_client",
+  #   denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+  #   BYOC_MODE = BYOC_MODE
+  # ),
   ltc_data = get_sdl_processed_data(year,
     type = "ltc",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
@@ -176,7 +176,7 @@ create_episode_file <- function(
       BYOC_MODE = BYOC_MODE
     ) %>%
     # match on sc client variables
-    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
+    #join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     # change to chi for phsmethods
     slfhelper::get_chi() %>%
     # Check chi is valid using phsmethods function
