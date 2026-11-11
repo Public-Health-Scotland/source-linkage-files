@@ -12,7 +12,7 @@
 #' @family process extracts
 create_homelessness_lookup <- function(
   year,
-  homelessness_data = get_sdl_processed_data(year, type = "homelessness", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE)
+  homelessness_data = get_sdl_processed_data(year, type = "homelessness", denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
 ) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
 

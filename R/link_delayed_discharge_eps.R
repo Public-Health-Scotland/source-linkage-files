@@ -3,6 +3,7 @@
 #' @param episode_file The episode file
 #' @param year The year being processed
 #' @param dd_data The processed DD extract
+#' @param denodo_connect Connection to denodo database
 #'
 #' @return A data frame with the delayed discharge cohort added and linked
 #' using the `cij_marker`
@@ -11,7 +12,7 @@
 link_delayed_discharge_eps <- function(
   episode_file,
   year,
-  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE) %>% slfhelper::get_chi()
+  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE) %>% slfhelper::get_chi()
 ) {
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
