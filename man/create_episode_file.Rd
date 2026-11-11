@@ -7,27 +7,27 @@
 create_episode_file(
   processed_data_list,
   year,
-  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect =
-    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   homelessness_lookup = create_homelessness_lookup(year, homelessness_data =
     get_sdl_processed_data(year, type = "homelessness", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE)),
-  ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
+  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
-  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
-    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
-  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
-    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
-  sc_client = get_sdl_processed_data(year, type = "sc_client", denodo_connect =
-    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
-  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
-    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE
     = FALSE), BYOC_MODE = BYOC_MODE),
+  sc_client = get_sdl_processed_data(year, type = "sc_client", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
     FALSE), BYOC_MODE = BYOC_MODE),
   hhg_data = get_hhg_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
     FALSE), BYOC_MODE = BYOC_MODE),
+  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE,
   BYOC_MODE
@@ -38,17 +38,17 @@ create_episode_file(
 
 \item{year}{The year to process, in FY format.}
 
+\item{homelessness_lookup}{the lookup file for homelessness}
+
 \item{dd_data}{The processed DD extract}
 
-\item{homelessness_lookup}{the lookup file for homelessness}
+\item{sc_client}{social care lookup file}
 
 \item{ltc_data}{The LTC data for the year}
 
 \item{slf_pc_lookup}{The SLF Postcode lookup}
 
 \item{slf_gpprac_lookup}{The SLF GP Practice lookup}
-
-\item{sc_client}{social care lookup file}
 
 \item{slf_deaths_lookup}{combined deaths lookup}
 
