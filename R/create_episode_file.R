@@ -22,13 +22,14 @@ create_episode_file <- function(
   processed_data_list,
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
+  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   homelessness_lookup = create_homelessness_lookup(year),
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
   slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
   slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
   sc_client = get_sdl_processed_data(year, type = "sc_client", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
   slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
+  nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE,
   BYOC_MODE
@@ -43,7 +44,7 @@ create_episode_file <- function(
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
     write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
-    add_nsu_cohort(year, denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE) %>%
+    add_nsu_cohort(year, nsu_cohort) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift()
 
