@@ -62,8 +62,8 @@ get_sdl_names <- function(dataset, version) {
     "hscp_pop", "sdl_hscp_population_source", NA_character_, NA_character_,
     "simd", "sdl_simd_source", NA_character_, NA_character_,
     "spd", "sdl_spd_source", NA_character_, NA_character_,
-    "slf_pc_lookup", NA_character_, NA_character_,"sdl_postcode_lookup_processed",
-    "slf_gpprac_lookup", NA_character_, NA_character_,"sdl_gpprac_lookup_processed",
+    "slf_pc_lookup", NA_character_, NA_character_, "sdl_postcode_lookup_processed",
+    "slf_gpprac_lookup", NA_character_, NA_character_, "sdl_gpprac_lookup_processed",
 
 
     # Homelessness
