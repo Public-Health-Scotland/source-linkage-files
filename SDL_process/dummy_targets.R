@@ -242,24 +242,13 @@ list(
   ),
 
   ### GP Out of Hours Costs ----------------------------------------------------
-  # GET - GP Out of Hours Costs
-  tar_target(
-    # Target name
-    gp_ooh_raw_costs,
-    # Function
-    get_gp_ooh_raw_costs_data(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
   # PROCESS - GP Out of Hours Costs
   tar_target(
     # Target name
     gp_ooh_cost_lookup,
     # Function
     process_costs_gp_ooh(
-      ooh_raw_costs = gp_ooh_raw_costs,
-      write_to_disk = write_to_disk,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
