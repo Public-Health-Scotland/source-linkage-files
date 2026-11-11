@@ -4,11 +4,7 @@
 \alias{get_nsu_data}
 \title{get nsu data from Denodo}
 \usage{
-get_nsu_data(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  BYOC_MODE
-)
+get_nsu_data(year, denodo_connect = denodo_connect, BYOC_MODE)
 }
 \arguments{
 \item{year}{financial year}

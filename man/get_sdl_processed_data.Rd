@@ -7,7 +7,7 @@
 get_sdl_processed_data(
   year,
   type,
-  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+  denodo_connect = denodo_connect,
   BYOC_MODE = BYOC_MODE
 )
 }
@@ -37,6 +37,7 @@ Other file path functions:
 \code{\link[=get_homelessness_completeness_path]{get_homelessness_completeness_path()}},
 \code{\link[=get_ltcs_path]{get_ltcs_path()}},
 \code{\link[=get_nsu_path]{get_nsu_path()}},
+\code{\link[=get_processed_data_list]{get_processed_data_list()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
 \code{\link[=get_sdl_names]{get_sdl_names()}},
 \code{\link[=get_service_use_cohorts_path]{get_service_use_cohorts_path()}},

@@ -6,8 +6,8 @@
 \usage{
 create_homelessness_lookup(
   year,
-  homelessness_data = get_sdl_processed_data(year, type = "homelessness", BYOC_MODE =
-    BYOC_MODE)
+  homelessness_data = get_sdl_processed_data(year, type = "homelessness", denodo_connect
+    = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{

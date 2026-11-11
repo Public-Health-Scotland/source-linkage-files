@@ -7,8 +7,8 @@
 add_activity_after_death_flag(
   data,
   year,
-  deaths_data = get_sdl_processed_data(year, type = "combined_deaths", BYOC_MODE =
-    BYOC_MODE)
+  deaths_data = get_sdl_processed_data(year, type = "combined_deaths", denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{
