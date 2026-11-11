@@ -118,13 +118,13 @@ get_sdl_names <- function(dataset, version) {
 }
 
 
-#' Get SDL Processed Data
+#' Get SDL Processed Data for episode file
 #'
 #' @description A switchboard function that retrieves processed datasets. If `BYOC_MODE`
 #' is TRUE, it collects data from Denodo. Otherwise, it sources data locally.
 #'
-#' @param type Name of dataset (e.g. "acute").
 #' @param year Financial year.
+#' @param type Name of dataset (e.g. "acute").
 #' @param denodo_connect A Denodo connection object.
 #' @param BYOC_MODE Logical. TRUE or FALSE.
 #'
@@ -133,78 +133,59 @@ get_sdl_names <- function(dataset, version) {
 #' @export
 #' @family file path functions
 get_sdl_processed_data <- function(
-  type,
-  year,
-  denodo_connect = NULL,
-  BYOC_MODE
+    year,
+    type,
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
 ) {
-  non_year_specific_types <- c(
-    "care_home_lookup",
-    "postcode_lookup",
-    "sc_demog_lookup",
-    "sc_all_alarms_telecare",
-    "sc_all_care_homes",
-    "sc_all_home_care",
-    "sc_all_self_directed_support",
-    "chi_deaths",
-    "nrs_deaths"
-  )
+  log_slf_event(stage = "read", status = "start", type = type, year = year)
 
-  sdl_name <- get_sdl_processed_name(type)
+  year <- check_year_format(year)
 
-  if (isTRUE(BYOC_MODE)) {
-    denodo_connect <- get_denodo_connection(BYOC_MODE = BYOC_MODE)
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-    sdl_tbl <- dplyr::tbl(denodo_connect, dbplyr::in_schema("sdl", sdl_name))
-
-    if (!(type %in% non_year_specific_types)) {
-      sdl_tbl <- sdl_tbl %>%
-        dplyr::filter(as.character(rlang::.data$year) == as.character(year))
+  # Read local files
+  if (isFALSE(BYOC_MODE)) {
+    if (type == "ltc") {
+      data <- read_file(get_ltcs_path(year, BYOC_MODE = BYOC_MODE))
+    } else if (type == "slf_pc_lookup") {
+      data <- read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE))
+    } else if (type == "slf_gpprac_lookup") {
+      data <- read_file(
+        get_slf_gpprac_path(BYOC_MODE = BYOC_MODE),
+        col_select = c("gpprac", "cluster", "hbpraccode")
+      )
+    } else if (type == "sc_client") {
+      data <- read_file(get_sc_client_lookup_path(year, BYOC_MODE = BYOC_MODE))
+    } else if (type == "combined_deaths") {
+      data <- read_file(get_combined_slf_deaths_lookup_path(year, BYOC_MODE = BYOC_MODE))
+    } else {
+      data <- read_file(
+        get_source_extract_path(
+          year,
+          type,
+          BYOC_MODE = BYOC_MODE
+        )
+      )
     }
 
-    return(dplyr::collect(sdl_tbl))
+    # Read processed data from Denodo if BYOC_MODE == TRUE
+  } else {
+    # Disconnect from denodo
+    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+    data <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema(
+        "sdl",
+        get_sdl_names(
+          dataset = type,
+          version = "processed"
+        )
+      )
+    ) %>%
+      dplyr::collect()
   }
 
-  sdl_data <- switch(type,
-    "acute" = read_file(get_source_extract_path("acute", year = year, BYOC_MODE = BYOC_MODE)),
-    "ae" = read_file(get_source_extract_path("ae", year = year, BYOC_MODE = BYOC_MODE)),
-    "at" = read_file(get_source_extract_path("at", year = year, BYOC_MODE = BYOC_MODE)),
-    "ch" = read_file(get_source_extract_path("ch", year = year, BYOC_MODE = BYOC_MODE)),
-    "hc" = read_file(get_source_extract_path("hc", year = year, BYOC_MODE = BYOC_MODE)),
-    "sds" = read_file(get_source_extract_path("sds", year = year, BYOC_MODE = BYOC_MODE)),
-    "client" = read_file(get_source_extract_path("client", year = year, BYOC_MODE = BYOC_MODE)),
-    "cmh" = read_file(get_source_extract_path("cmh", year = year, BYOC_MODE = BYOC_MODE)),
-    "dd" = read_file(get_source_extract_path("dd", year = year, BYOC_MODE = BYOC_MODE)),
-    "dn" = read_file(get_source_extract_path("dn", year = year, BYOC_MODE = BYOC_MODE)),
-    "gp_ooh" = read_file(get_source_extract_path("gp_ooh", year = year, BYOC_MODE = BYOC_MODE)),
-    "homelessness" = read_file(get_source_extract_path("homelessness", year = year, BYOC_MODE = BYOC_MODE)),
-    "maternity" = read_file(get_source_extract_path("maternity", year = year, BYOC_MODE = BYOC_MODE)),
-    "mh" = read_file(get_source_extract_path("mh", year = year, BYOC_MODE = BYOC_MODE)),
-    "outpatients" = read_file(get_source_extract_path("outpatients", year = year, BYOC_MODE = BYOC_MODE)),
-    "pis" = read_file(get_source_extract_path("pis", year = year, BYOC_MODE = BYOC_MODE)),
-    "homelessness_lookup" = create_homelessness_lookup(year = year),
-    "homelessness_completeness" = read_file(get_homelessness_completeness_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "ltc" = read_file(get_ltcs_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "sparra" = read_file(get_sparra_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "chi_deaths" = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
-    "nrs_deaths" = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)),
-    "refined_death" = read_file(get_slf_deaths_lookup_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "hhg" = read_file(get_hhg_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "care_home_lookup" = read_file(get_slf_ch_name_lookup_path(BYOC_MODE = BYOC_MODE)),
-    "postcode_lookup" = read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE)),
-    "gpprac_lookup" = read_file(get_slf_gpprac_path(BYOC_MODE = BYOC_MODE)),
-    "sc_demog_lookup" = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_alarms_telecare" = read_file(get_sc_at_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_care_homes" = read_file(get_sc_ch_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_home_care" = read_file(get_sc_hc_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_self_directed_support" = read_file(get_sc_sds_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "ch_cost_lookup" = read_file(get_ch_costs_path(BYOC_MODE = BYOC_MODE)),
-    "dn_cost_lookup" = read_file(get_dn_costs_path(BYOC_MODE = BYOC_MODE)),
-    "hc_cost_lookup" = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)),
-    "ooh_cost_lookup" = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
-    stop("Unknown dataset type: ", type)
-  )
-
-  return(sdl_data)
+  return(data)
 }
+
+
