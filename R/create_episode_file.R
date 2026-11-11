@@ -179,7 +179,6 @@ create_episode_file <- function(
       deaths_data = slf_deaths_lookup
     ) %>%
     link_ch_with_adms() %>%
-    load_ep_file_vars(year) %>%
     load_ep_file_vars(year, BYOC_MODE = BYOC_MODE) %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%

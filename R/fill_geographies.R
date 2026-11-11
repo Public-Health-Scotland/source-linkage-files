@@ -12,8 +12,8 @@
 #' Postcode and GP Practice details.
 fill_geographies <- function(
   data,
-  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", BYOC_MODE = BYOC_MODE),
-  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", BYOC_MODE = BYOC_MODE),
+  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
+  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 ) {
   log_ep_substage(sub_stage = "Fill geographies", status = "start", year = "All years")
