@@ -143,7 +143,7 @@ get_sdl_names <- function(dataset, version) {
 get_sdl_processed_data <- function(
   year,
   type,
-  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+  denodo_connect = denodo_connect,
   BYOC_MODE = BYOC_MODE
 ) {
   log_slf_event(stage = "read", status = "start", type = type, year = year)

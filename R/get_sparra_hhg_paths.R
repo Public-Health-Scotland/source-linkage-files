@@ -37,7 +37,7 @@ get_hhg_path <- function(year, ...) {
 #' @family extract file paths
 #' @seealso [get_file_path()] for the generic function.
 get_hhg_data <- function(year,
-                         denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+                         denodo_connect = denodo_connect,
                          BYOC_MODE) {
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 

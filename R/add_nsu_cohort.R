@@ -3,6 +3,7 @@
 #' @param data The input data frame
 #' @param year The year being processed
 #' @param BYOC_MODE Whether run in a docker on Denodo
+#' @param denodo_connect connection to the denodo database
 #'
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
@@ -12,6 +13,7 @@
 add_nsu_cohort <- function(
   data,
   year,
+  denodo_connect = denodo_connect,
   BYOC_MODE
 ) {
   year_param <- year
@@ -20,7 +22,7 @@ add_nsu_cohort <- function(
     return(data)
   }
 
-  nsu_cohort <- get_nsu_data(year = year, BYOC_MODE = BYOC_MODE)
+  nsu_cohort <- get_nsu_data(year = year, denodo_connect = denodo_connect, BYOC_MODE = BYOC_MODE)
 
   # Check that the variables we need are in the data
   check_variables_exist(data,
@@ -135,7 +137,7 @@ add_nsu_cohort <- function(
 #'
 #' @examples
 get_nsu_data <- function(year,
-                         denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), #### TODO change back to BYOC_MODE
+                         denodo_connect = denodo_connect,
                          BYOC_MODE) {
   log_slf_event(stage = "read", status = "start", type = "nsu", year = year)
 
