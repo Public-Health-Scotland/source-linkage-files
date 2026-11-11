@@ -4,7 +4,12 @@
 \alias{add_nsu_cohort}
 \title{Add NSU cohort to working file}
 \usage{
-add_nsu_cohort(data, year, BYOC_MODE)
+add_nsu_cohort(
+  data,
+  year,
+  nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE
+    = BYOC_MODE), BYOC_MODE = BYOC_MODE)
+)
 }
 \arguments{
 \item{data}{The input data frame}

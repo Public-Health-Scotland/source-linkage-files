@@ -7,8 +7,8 @@
 join_deaths_data(
   data,
   year,
-  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths", BYOC_MODE =
-    BYOC_MODE),
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE
 )
 }

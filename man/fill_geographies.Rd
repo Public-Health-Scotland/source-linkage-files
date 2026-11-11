@@ -6,10 +6,10 @@
 \usage{
 fill_geographies(
   data,
-  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", BYOC_MODE =
-    BYOC_MODE),
-  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup", BYOC_MODE
-    = BYOC_MODE),
+  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
   BYOC_MODE
 )
 }

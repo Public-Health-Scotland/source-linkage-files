@@ -31,6 +31,7 @@ Other file path functions:
 \code{\link[=get_file_path]{get_file_path()}},
 \code{\link[=get_ltcs_path]{get_ltcs_path()}},
 \code{\link[=get_nsu_path]{get_nsu_path()}},
+\code{\link[=get_processed_data_list]{get_processed_data_list()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
 \code{\link[=get_sdl_names]{get_sdl_names()}},
 \code{\link[=get_sdl_processed_data]{get_sdl_processed_data()}},

@@ -4,11 +4,7 @@
 \alias{get_sparra_data}
 \title{SPARRA Extract File data}
 \usage{
-get_sparra_data(
-  year,
-  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  BYOC_MODE
-)
+get_sparra_data(year, denodo_connect = denodo_connect, BYOC_MODE)
 }
 \arguments{
 \item{year}{Year of extract}
