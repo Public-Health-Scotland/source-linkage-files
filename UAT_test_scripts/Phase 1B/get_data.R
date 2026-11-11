@@ -265,8 +265,8 @@ get_submission_filepath <- function(type) {
     # Select file with the highest number (most recent)
     filename <- all_files[which.max(nums)]
 
-    if (type == "nsu") {
-      filename <- "SDL_NSU_20260617_1.parquet"
+    if(type == "nsu"){
+      filename <- "SDL_nsu_20260630_1.parquet"
     }
 
     if (type == "simd") {
