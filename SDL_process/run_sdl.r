@@ -93,7 +93,6 @@ year <- "1920"
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-
     # BOXI
     "acute",
     "ae",
@@ -141,7 +140,6 @@ byoc_output_files <- get_byoc_output_files(
     "postcode_lookup"
     # "demog_c",
     # "service_c"
-
   )
 )
 
