@@ -88,12 +88,20 @@ get_sdl_names <- function(dataset, version) {
     # Outpatients
     "outpatients", "sdl_outpatients_source", NA_character_, "sdl_outpatients_processed",
 
-    # Social care
-    "at", "sdl_sc_alarmtelecare_source", NA_character_, NA_character_,
-    "hc", "sdl_sc_homecare_source", NA_character_, NA_character_,
+    # Social care - ALL views
     "sc_demog", "sdl_sc_demographic_source", NA_character_, NA_character_,
-    "sds", "sdl_sc_sds_source", NA_character_, NA_character_,
-    # "sc_client", ### TODO ###
+    "sc_client_fy", "sdl_sc_client_fy_source", NA_character_, NA_character_,
+    "sc_client_qtr", "sdl_sc_client_qtr_source", NA_character_, NA_character_,
+    "sc_at_all", "sdl_sc_alarmtelecare_source", NA_character_, "sdl_sc_at_processed",
+    "sc_ch_all", "sdl_sc_carehome_source", NA_character_, "sdl_sc_ch_processed",
+    "sc_hc_all", "sdl_sc_homecare_source", NA_character_, "sdl_sc_at_processed",
+    "sc_sds_all", "sdl_sc_sds_source", NA_character_, "sdl_sc_at_processed",
+
+    # Social care - FY views
+    # "sc_at_fy", NA_character_, NA_character_, "sdl_sc_at_fy_processed",
+    # "sc_ch_fy", NA_character_, NA_character_, "sdl_sc_ch_fy_processed",
+    # "sc_hc_fy", NA_character_, NA_character_, "sdl_sc_hc_fy_processed",
+    # "sc_sds_fy", NA_character_, NA_character_, "sdl_sc_sds_fy_processed",
 
     # SPARRA
     "sparra", "sdl_sparra_source", NA_character_, NA_character_
