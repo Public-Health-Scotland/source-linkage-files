@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_sdl_helpers.R
 \name{get_sdl_processed_data}
 \alias{get_sdl_processed_data}
-\title{Get SDL Processed Data}
+\title{Get SDL Processed Data for episode file}
 \usage{
 get_sdl_processed_data(
   year,
