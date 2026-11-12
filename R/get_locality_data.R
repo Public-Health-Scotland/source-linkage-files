@@ -21,7 +21,7 @@ get_locality_data <- function(
   # Read data
   locality_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_hscp_localities_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "hscp_localities", version = version()))
   ) %>%
     # Rename variables
     dplyr::select(

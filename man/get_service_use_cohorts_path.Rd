@@ -4,12 +4,10 @@
 \alias{get_service_use_cohorts_path}
 \title{Service-use cohorts lookup Path}
 \usage{
-get_service_use_cohorts_path(year, update = latest_update(), ...)
+get_service_use_cohorts_path(year, BYOC_MODE, ...)
 }
 \arguments{
 \item{year}{financial year in '1718' format}
-
-\item{update}{The update to use}
 
 \item{...}{additional arguments passed to \code{\link[=get_file_path]{get_file_path()}}}
 }
@@ -32,7 +30,10 @@ Other file path functions:
 \code{\link[=get_homelessness_completeness_path]{get_homelessness_completeness_path()}},
 \code{\link[=get_ltcs_path]{get_ltcs_path()}},
 \code{\link[=get_nsu_path]{get_nsu_path()}},
+\code{\link[=get_processed_data_list]{get_processed_data_list()}},
 \code{\link[=get_readcode_lookup_path]{get_readcode_lookup_path()}},
+\code{\link[=get_sdl_names]{get_sdl_names()}},
+\code{\link[=get_sdl_processed_data]{get_sdl_processed_data()}},
 \code{\link[=get_sg_homelessness_pub_path]{get_sg_homelessness_pub_path()}},
 \code{\link[=get_slf_ch_name_lookup_path]{get_slf_ch_name_lookup_path()}},
 \code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}

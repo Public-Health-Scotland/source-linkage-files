@@ -25,7 +25,7 @@ read_extract_outpatients <- function(
   # Read extract
   extract_outpatients <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_outpatients_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "outpatients", version = version()))
   ) %>%
     # Filter by calendar year
     dplyr::filter(

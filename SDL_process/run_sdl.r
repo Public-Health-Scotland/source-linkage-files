@@ -88,6 +88,10 @@ if (isFALSE(BYOC_MODE)) {
 # years <- createslf::years_to_run()
 year <- "1920"
 
+## Set up for episode file ----
+write_temp_to_disk <- FALSE
+console_outputs <- TRUE
+
 ## Build BYOC Output File Paths ----
 # When development is complete change to `types = "byoc_input_files"`
 byoc_output_files <- get_byoc_output_files(
@@ -160,3 +164,28 @@ tryCatch(
 logger::log_info("Targets finished.")
 
 logger::log_info("Run SDL ended.")
+
+
+# Episode File processing ----
+
+logger::log_info("Episode file processing started.")
+
+if (isFALSE(BYOC_MODE)) {
+  write_console_output(
+    console_outputs = console_outputs,
+    file_type = "episode",
+    year = year
+  )
+}
+
+## Read processed data and create episode file
+log_ep_message("read_data", year)
+
+processed_data_list <- get_processed_data_list(year = year, type, BYOC_MODE = TRUE)
+
+log_ep_message("creating", year)
+
+episode_file <- create_episode_file(processed_data_list,
+  year = year,
+  write_temp_to_disk = write_temp_to_disk
+)

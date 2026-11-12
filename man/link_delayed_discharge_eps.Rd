@@ -7,7 +7,9 @@
 link_delayed_discharge_eps(
   episode_file,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")) \%>\% slfhelper::get_chi()
+  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE) \%>\%
+    slfhelper::get_chi()
 )
 }
 \arguments{
@@ -16,6 +18,8 @@ link_delayed_discharge_eps(
 \item{year}{The year being processed}
 
 \item{dd_data}{The processed DD extract}
+
+\item{denodo_connect}{Connection to denodo database}
 }
 \value{
 A data frame with the delayed discharge cohort added and linked

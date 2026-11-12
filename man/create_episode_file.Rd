@@ -7,16 +7,28 @@
 create_episode_file(
   processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
-  homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
-  ltc_data = read_file(get_ltcs_path(year)),
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
-    "cluster", "hbpraccode")),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  homelessness_lookup = create_homelessness_lookup(year, homelessness_data =
+    get_sdl_processed_data(year, type = "homelessness", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE)),
+  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE
+    = FALSE), BYOC_MODE = BYOC_MODE),
+  ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
+    FALSE), BYOC_MODE = BYOC_MODE),
+  hhg_data = get_hhg_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
+    FALSE), BYOC_MODE = BYOC_MODE),
+  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
+  write_temp_to_disk = FALSE,
+  BYOC_MODE
 )
 }
 \arguments{
@@ -24,11 +36,9 @@ create_episode_file(
 
 \item{year}{The year to process, in FY format.}
 
-\item{dd_data}{The processed DD extract}
-
 \item{homelessness_lookup}{the lookup file for homelessness}
 
-\item{nsu_cohort}{The NSU data for the year}
+\item{dd_data}{The processed DD extract}
 
 \item{ltc_data}{The LTC data for the year}
 
@@ -36,12 +46,16 @@ create_episode_file(
 
 \item{slf_gpprac_lookup}{The SLF GP Practice lookup}
 
-\item{sc_client}{social care lookup file}
+\item{slf_deaths_lookup}{combined deaths lookup}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
+
+\item{BYOC_MODE}{Whether run in a docker on Denodo}
+
+\item{sc_client}{social care lookup file}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file

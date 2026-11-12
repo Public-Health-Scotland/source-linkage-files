@@ -3,15 +3,17 @@
 #' @param data Episode file data
 #' @param year financial year, e.g. '1920'
 #' @param BYOC_MODE BYOC mode
+#' @param slf_deaths_lookup combined deaths lookup
 #'
 #' @return The data including the deaths lookup matched
 #'         on to the episode file.
 join_deaths_data <- function(
   data,
   year,
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths", denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE
 ) {
-  slf_deaths_lookup <- read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)) %>%
+  slf_deaths_lookup <- slf_deaths_lookup %>%
     # Filter the chi death dates to the FY as the lookup is by FY
     dplyr::filter(fy == year) %>%
     # use the BOXI NRS death date by default, but if it's missing, use the chi death date.

@@ -25,7 +25,7 @@ read_extract_maternity <- function(
   # Read extract
   extract_maternity <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_maternity_episode_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "maternity", version = version()))
   ) %>%
     # Filter by calendar year
     dplyr::filter(

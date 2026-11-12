@@ -11,7 +11,7 @@
 match_on_ltcs <- function(
   data,
   year,
-  ltc_data = read_file(get_ltcs_path(year))
+  ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
 ) {
   # Match on LTC lookup
   matched <- dplyr::left_join(

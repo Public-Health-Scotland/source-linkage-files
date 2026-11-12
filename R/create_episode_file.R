@@ -6,6 +6,7 @@
 #' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE
 #' @param write_temp_to_disk write intermediate data for investigation or debug
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
@@ -19,18 +20,59 @@
 create_episode_file <- function(
   processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
-  homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
-  ltc_data = read_file(get_ltcs_path(year)),
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(
-    get_slf_gpprac_path(),
-    col_select = c("gpprac", "cluster", "hbpraccode")
+  homelessness_lookup = create_homelessness_lookup(year,
+    homelessness_data = get_sdl_processed_data(year,
+      type = "homelessness",
+      denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  dd_data = get_sdl_processed_data(year,
+    type = "dd",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  nsu_cohort = get_nsu_data(
+    year = year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  # sc_client = get_sdl_processed_data(year,
+  #   type = "sc_client",
+  #   denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+  #   BYOC_MODE = BYOC_MODE
+  # ),
+  ltc_data = get_sdl_processed_data(year,
+    type = "ltc",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  sparra_data = get_sparra_data(year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  hhg_data = get_hhg_data(year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  slf_pc_lookup = get_sdl_processed_data(year,
+    type = "slf_pc_lookup",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  slf_gpprac_lookup = get_sdl_processed_data(year,
+    type = "slf_gpprac_lookup",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  slf_deaths_lookup = get_sdl_processed_data(year,
+    type = "combined_deaths",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE
+  write_temp_to_disk = FALSE,
+  BYOC_MODE
 ) {
   log_ep_substage("Create episode file", "started", year)
 
@@ -130,10 +172,11 @@ create_episode_file <- function(
         "jan_beddays",
         "feb_beddays",
         "mar_beddays"
-      )
+      ),
+      BYOC_MODE = BYOC_MODE
     ) %>%
     # match on sc client variables
-    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
+    # join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     # change to chi for phsmethods
     slfhelper::get_chi() %>%
     # Check chi is valid using phsmethods function
@@ -158,23 +201,24 @@ create_episode_file <- function(
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
-    create_cohort_lookups(year) %>%
-    join_cohort_lookups(year) %>%
-    join_sparra_hhg(year) %>%
+    create_cohort_lookups(year, BYOC_MODE) %>%
+    join_cohort_lookups(year, BYOC_MODE) %>%
+    join_sparra_hhg(year, sparra_data, hhg_data, BYOC_MODE = BYOC_MODE) %>%
     fill_geographies(
       slf_pc_lookup,
       slf_gpprac_lookup
     ) %>%
     join_deaths_data(
       year,
+      slf_deaths_lookup = slf_deaths_lookup,
       BYOC_MODE = BYOC_MODE
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
     add_activity_after_death_flag(year,
-      deaths_data = read_file(get_combined_slf_deaths_lookup_path())
+      deaths_data = slf_deaths_lookup
     ) %>%
     link_ch_with_adms() %>%
-    load_ep_file_vars(year) %>%
+    load_ep_file_vars(year, BYOC_MODE = BYOC_MODE) %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%
     write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
@@ -276,10 +320,13 @@ create_episode_file <- function(
     order_ep_cols()
 
   if (write_to_disk) {
-    write_file(episode_file, get_slf_episode_path(year, check_mode = "write"),
-      group_id = 3356
-    ) # sourcedev owner
+    write_file(episode_file, get_slf_episode_path(year, BYOC_MODE, check_mode = "write"),
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
+    )
   }
+
+  log_ep_substage("Create episode file", "finished", year)
 
   return(episode_file)
 }
@@ -292,13 +339,22 @@ create_episode_file <- function(
 #' will be stored.
 #'
 #' @return `data` with only the `vars_to_keep` kept
-store_ep_file_vars <- function(data, year, vars_to_keep) {
-  tempfile_path <- get_file_path(
-    directory = get_year_dir(year),
-    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write",
-    create = TRUE
-  )
+store_ep_file_vars <- function(data, year, vars_to_keep, BYOC_MODE) {
+  if (BYOC_MODE) {
+    tempfile_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
+    )
+  } else {
+    tempfile_path <- get_file_path(
+      directory = get_year_dir(year, BYOC_MODE = BYOC_MODE),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+      check_mode = "write",
+      create = TRUE
+    )
+  }
+
+  log_ep_substage("Store episode file variables", "started", year)
 
   check_variables_exist(data, vars_to_keep)
 
@@ -313,7 +369,8 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
   ) %>%
     write_file(
       path = tempfile_path,
-      group_id = 3356 # sourcedev owner
+      group_id = 3356, # sourcedev owner
+      BYOC_MODE = BYOC_MODE
     )
 
   log_ep_substage("Store episode file variables", "finished", year)
@@ -332,13 +389,22 @@ store_ep_file_vars <- function(data, year, vars_to_keep) {
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The full SLF data.
-load_ep_file_vars <- function(data, year) {
-  tempfile_path <- get_file_path(
-    directory = get_year_dir(year),
-    file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
-    check_mode = "write",
-    create = TRUE
-  )
+load_ep_file_vars <- function(data, year, BYOC_MODE) {
+  if (BYOC_MODE) {
+    tempfile_path <- file.path(
+      directory = denodo_output_path(),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet")
+    )
+  } else {
+    tempfile_path <- get_file_path(
+      directory = get_year_dir(year, BYOC_MODE = BYOC_MODE),
+      file_name = stringr::str_glue("temp_ep_file_variable_store_{year}.parquet"),
+      check_mode = "write",
+      create = TRUE
+    )
+  }
+
+  log_ep_substage("Load episode file variables", "started", year)
 
   full_data <- data %>%
     dplyr::left_join(
@@ -494,18 +560,18 @@ create_cost_inc_dna <- function(data) {
 #'
 #' @return The data unchanged (the cohorts are written to disk)
 #' @family episode_file
-create_cohort_lookups <- function(data, year, update = latest_update()) {
+create_cohort_lookups <- function(data, year, BYOC_MODE = BYOC_MODE) {
   create_demographic_cohorts(
     data,
     year,
-    update,
+    BYOC_MODE,
     write_to_disk = TRUE
   )
 
   create_service_use_cohorts(
     data,
     year,
-    update,
+    BYOC_MODE,
     write_to_disk = TRUE
   )
 
@@ -524,13 +590,13 @@ create_cohort_lookups <- function(data, year, update = latest_update()) {
 join_cohort_lookups <- function(
   data,
   year,
-  update = latest_update(),
+  BYOC_MODE = BYOC_MODE,
   demographic_cohort = read_file(
-    get_demographic_cohorts_path(year, update),
+    get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
     col_select = c("anon_chi", "demographic_cohort")
   ),
   service_use_cohort = read_file(
-    get_service_use_cohorts_path(year, update),
+    get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
     col_select = c("anon_chi", "service_use_cohort")
   )
 ) {
@@ -560,7 +626,7 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = read_file(get_sc_client_lookup_path(year)),
+                           sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
                            file_type = c("episode", "individual")) {
   if (!check_year_valid(year, type = "client")) {
     data_file <- data
@@ -612,8 +678,6 @@ join_sc_client <- function(data,
   }
 
   log_ep_substage("Join social care client", "finished", year)
-
-  log_ep_substage("Create episode file", "finished", year)
 
   return(data_file)
 }

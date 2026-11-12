@@ -9,11 +9,11 @@
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
 write_temp_data <-
-  function(data, year, file_name, write_temp_to_disk) {
+  function(data, year, file_name, write_temp_to_disk, BYOC_MODE) {
     if (write_temp_to_disk) {
       full_file_name <- stringr::str_glue("{file_name}.parquet")
       file_path <- file.path(
-        get_year_dir(year),
+        get_year_dir(year, BYOC_MODE = BYOC_MODE),
         full_file_name
       )
 
@@ -35,10 +35,10 @@ write_temp_data <-
 #'
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
-read_temp_data <- function(year, file_name) {
+read_temp_data <- function(year, file_name, BYOC_MODE) {
   full_file_name <- stringr::str_glue("{file_name}.parquet")
   file_path <- file.path(
-    get_year_dir(year),
+    get_year_dir(year, BYOC_MODE = BYOC_MODE),
     full_file_name
   )
 
@@ -53,9 +53,9 @@ read_temp_data <- function(year, file_name) {
 #'
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
-clean_temp_data <- function(year, file_type = c("ep", "ind")) {
+clean_temp_data <- function(year, file_type = c("ep", "ind"), BYOC_MODE) {
   list.files(
-    path = get_year_dir(year),
+    path = get_year_dir(year, BYOC_MODE = BYOC_MODE),
     pattern = stringr::str_glue("^{file_type}_temp"),
     full.names = TRUE
   ) %>%

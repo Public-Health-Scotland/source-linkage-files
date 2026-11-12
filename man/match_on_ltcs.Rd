@@ -4,7 +4,12 @@
 \alias{match_on_ltcs}
 \title{Match on LTC DoB and dates of LTC incidence}
 \usage{
-match_on_ltcs(data, year, ltc_data = read_file(get_ltcs_path(year)))
+match_on_ltcs(
+  data,
+  year,
+  ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
+)
 }
 \arguments{
 \item{data}{episode files}

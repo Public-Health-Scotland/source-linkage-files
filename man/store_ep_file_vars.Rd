@@ -4,7 +4,7 @@
 \alias{store_ep_file_vars}
 \title{Store the unneeded episode file variables}
 \usage{
-store_ep_file_vars(data, year, vars_to_keep)
+store_ep_file_vars(data, year, vars_to_keep, BYOC_MODE)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
