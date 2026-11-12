@@ -7,7 +7,7 @@
 get_sdl_processed_data(
   year,
   type,
-  denodo_connect = denodo_connect,
+  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
   BYOC_MODE = BYOC_MODE
 )
 }
