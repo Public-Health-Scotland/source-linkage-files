@@ -113,19 +113,6 @@ list(
     )
   ),
 
-  ### Readcode Lookup ----------------------------------------------------------
-  # (GP OOH Diagnosis)
-  # GET - Readcode Lookup
-  tar_target(
-    # Target name
-    readcode_lookup,
-    # Function
-    get_readcode_lookup(
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE
-    )
-  ),
-
   ### Scottish Postcode Directory ----------------------------------------------
   # (Demographics, Care Home, Postcode Lookup, GP Practice Lookup)
   # GET - Scottish Postcode Directory
