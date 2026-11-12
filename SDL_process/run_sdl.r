@@ -173,7 +173,7 @@ if (isFALSE(BYOC_MODE)) {
 ## Read processed data and create episode file
 log_ep_message("read_data", year)
 
-processed_data_list <- get_processed_data_list()
+processed_data_list <- get_processed_data_list(year = year, type, BYOC_MODE = TRUE)
 
 log_ep_message("creating", year)
 
