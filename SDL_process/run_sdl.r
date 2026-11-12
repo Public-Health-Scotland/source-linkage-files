@@ -89,52 +89,59 @@ if (isFALSE(BYOC_MODE)) {
 year <- "1920"
 
 ## Build BYOC Output File Paths ----
+# When development is complete change to `types = "byoc_input_files"`
 byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
-    # "ae",
-    # "acute",
-    # "cmh",
-    # "dd",
-    # "dn",
-    # "dn_cost_lookup",
-    # "gp_ooh",
-    # "homelessness",
-    # "homelessness_completeness",
-    # "ltc",
-    # "maternity",
-    # "mh",
-    # "nrs_deaths",
-    # "ooh_cost_lookup",
-    # "outpatients",
-    "pis",
-    # Year-Specific Social Care
+    # BOXI
+    "acute",
+    "ae",
+    "gp_ooh",
+    "homelessness",
+    "maternity",
+    "mh",
+    "nrs_deaths",
+    "outpatients",
+
+    # Files
+    "cmh",
+    "dd",
+    "dn",
+    # "hhg",
+    # "sparra",
+
+    # Social Care
     "at",
     "ch",
     "client",
     "hc",
     "sds",
-    # All-Year Social Care
     "sc_all_at",
     "sc_all_ch",
     "sc_all_hc",
     "sc_all_sds",
     "sc_demog_lookup",
-    # Deaths (for Care Homes)
+
+    # IT
     "chi_deaths",
-    "nrs_deaths",
-    "combined_deaths",
+    "ltc",
+    "pis",
+
     # Costs
     "ch_cost_lookup",
+    "dn_cost_lookup",
     "hc_cost_lookup",
+    "ooh_cost_lookup",
+
     # Look-ups
-    "postcode_lookup",
-    "gpprac_lookup"
+    "combined_deaths",
+    "gpprac_lookup",
+    "homelessness_completeness",
+    "postcode_lookup"
+    # "demog_c",
+    # "service_c"
   )
 )
-# using homelessness for test purpose. When development is complete,
-# we change to "types = "byoc_input_files""
-# can always use any other type for testing also
 
 # targets ----
 logger::log_info("Targets started.")
