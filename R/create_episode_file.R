@@ -201,8 +201,6 @@ create_episode_file <- function(
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
-    create_cohort_lookups(year) %>%
-    join_cohort_lookups(year) %>%
     create_cohort_lookups(year, BYOC_MODE) %>%
     join_cohort_lookups(year, BYOC_MODE) %>%
     join_sparra_hhg(year, sparra_data, hhg_data, BYOC_MODE = BYOC_MODE) %>%
