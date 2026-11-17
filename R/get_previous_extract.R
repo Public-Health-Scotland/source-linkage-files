@@ -14,12 +14,12 @@
 #' @seealso get_existing_data_for_tests
 #' @export
 get_previous_extract <- function(
-    type,
-    year,
-    benchmark_run_id = NA,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE = FALSE
-){
+  type,
+  year,
+  benchmark_run_id = NA,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = FALSE
+) {
   previous_extract <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", get_sdl_names(type, "processed"))
@@ -29,7 +29,7 @@ get_previous_extract <- function(
       .data$run_id == benchmark_run_id
     )
 
-  if (year != "all"){
+  if (year != "all") {
     # Filter year if not all
     previous_extract <- previous_extract %>%
       dplyr::filter(
@@ -37,7 +37,7 @@ get_previous_extract <- function(
       )
   }
 
-    # Collect
+  # Collect
   previous_extract <- previous_extract %>%
     dplyr::collect()
 

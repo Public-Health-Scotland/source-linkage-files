@@ -16,21 +16,20 @@
 #' @return The requested SLF data as a [tibble][tibble::tibble-package]
 #' @importFrom rlang .data
 read_slf_table <- function(
-    years,
-    file_version = c("episode", "individual"),
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    col_select = NULL,
-    columns = lifecycle::deprecated(),
-    partnerships = NULL,
-    recids = NULL,
-    BYOC_MODE = FALSE
+  years,
+  file_version = c("episode", "individual"),
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  col_select = NULL,
+  columns = lifecycle::deprecated(),
+  partnerships = NULL,
+  recids = NULL,
+  BYOC_MODE = FALSE
 ) {
-
   # Check file_version argument
   file_version <- match.arg(file_version)
 
   # Makes sure recids is NULL if reading individual file
-  if (file_version == "individual" && !is.null(recids)){
+  if (file_version == "individual" && !is.null(recids)) {
     recids <- NULL
     warning("Cannot filter by recid, it is not in the individual file.")
   }
@@ -46,13 +45,13 @@ read_slf_table <- function(
   }
 
   # Check selected columns are in the episode or individual file
-  if (!is.null(col_select)){
-    if (file_version == "episode"){
+  if (!is.null(col_select)) {
+    if (file_version == "episode") {
       col_check <- setdiff(col_select, slfhelper::ep_file_vars)
-    } else if (file_version == "individual"){
+    } else if (file_version == "individual") {
       col_check <- setdiff(col_select, slfhelper::indiv_file_vars)
     }
-    if (length(col_check > 0)){
+    if (length(col_check > 0)) {
       warning(glue::glue(
         "The following columns are not in the {file_version} file: \n- {paste(col_check, collapse = '\n- ')}"
       ))
@@ -60,7 +59,7 @@ read_slf_table <- function(
   }
 
   # Put years into a vector if only a single year is provided as a string
-  if(is.character(years)){
+  if (is.character(years)) {
     years <- c(years)
   }
 
@@ -107,5 +106,5 @@ read_slf_table <- function(
       )
     )
 
-    return(slf_table)
+  return(slf_table)
 }

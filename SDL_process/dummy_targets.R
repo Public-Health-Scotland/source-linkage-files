@@ -1464,7 +1464,6 @@ final_stack_targets <- list(
       tests_all_years_stacked
     )
   ),
-
   tar_target(
     tests_all_written,
     write_stacked_test_results(
