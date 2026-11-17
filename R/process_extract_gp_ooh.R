@@ -5,17 +5,17 @@
 #' and (optionally) write it to disk.
 #'
 #' @param year The year to process, in FY format.
-#' @param ooh_consultations
-#' @param ooh_diagnosis
-#' @param ooh_outcomes
-#' @param readcode_lookup
+#' @param ooh_consultations GP OOH Consultations extract
+#' @param ooh_diagnosis GP OOH Diagnosis extract
+#' @param ooh_outcomes GP OOH Outcomes extract
+#' @param readcode_lookup Readcode Lookup
 #' @param gp_ooh_cup gp ooh cup data
-#' @param ooh_cost_lookup
+#' @param ooh_cost_lookup GP OOH Cost Lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#' @param BYOC_MODE
-#' @param run_id
-#' @param run_date_time
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id
+#' @param run_date_time run_date_time
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export

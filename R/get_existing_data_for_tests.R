@@ -8,7 +8,7 @@
 #' new data which the SLF data will be compared to.
 #' @param type Type code
 #' @param year Financial year
-#' @param benchmark_run_id
+#' @param benchmark_run_id benchmark_run_id
 #' @param file_version whether to test against the "episode" file (the default)
 #' or the "individual" file.
 #' @param file_location denodo or hscdiip
@@ -102,7 +102,7 @@ get_existing_data_for_tests <- function(
         years = year,
         file_version = file_version,
         denodo_connect = denodo_connect,
-        col_select = all_of(variable_names),
+        col_select = dplyr::all_of(variable_names),
         recids = recids,
         BYOC_MODE = BYOC_MODE
       ))
@@ -114,13 +114,13 @@ get_existing_data_for_tests <- function(
         slf_data <- suppressMessages(slfhelper::read_slf_episode(
           year = year,
           recids = recids,
-          col_select = all_of(variable_names)
+          col_select = dplyr::all_of(variable_names)
         ))
         # Individual
       } else {
         slf_data <- suppressMessages(slfhelper::read_slf_individual(
           year = year,
-          col_select = all_of(variable_names)
+          col_select = dplyr::all_of(variable_names)
         ))
       }
     }
@@ -341,7 +341,7 @@ get_existing_data_for_tests <- function(
 #         years = year,
 #         file_version = file_version,
 #         denodo_connect = denodo_connect,
-#         col_select = all_of(variable_names),
+#         col_select = dplyr::all_of(variable_names),
 #         recids = recids,
 #         BYOC_MODE = BYOC_MODE
 #       ))
@@ -353,13 +353,13 @@ get_existing_data_for_tests <- function(
 #         slf_data <- suppressMessages(slfhelper::read_slf_episode(
 #           year = year,
 #           recids = recids,
-#           col_select = all_of(variable_names)
+#           col_select = dplyr::all_of(variable_names)
 #         ))
 #       # Individual
 #       } else {
 #         slf_data <- suppressMessages(slfhelper::read_slf_individual(
 #           year = year,
-#           col_select = all_of(variable_names)
+#           col_select = dplyr::all_of(variable_names)
 #         ))
 #       }
 #     }

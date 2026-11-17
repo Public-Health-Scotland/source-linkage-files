@@ -4,15 +4,15 @@
 #' a test comparison with the previous data. This is returned for stacking in BYOC
 #' mode or written to disk as an xlsx in local mode.
 #'
-#' @param data
-#' @param year
-#' @param BYOC_MODE
-#' @param denodo_connect
-#' @param file_location
-#' @param benchmark_comparison_type
-#' @param benchmark_run_id
-#' @param run_id
-#' @param run_date_time
+#' @param data Data to test
+#' @param year Financial year
+#' @param BYOC_MODE BYOC_MODE
+#' @param denodo_connect Connection to Denodo
+#' @param file_location Location of file - denodo or local
+#' @param benchmark_comparison_type Whether to compare to episode/individual file or previous extract
+#' @param benchmark_run_id benchmark_run_id
+#' @param run_id run_id
+#' @param run_date_time run_date_time
 #'
 #' @export
 process_tests <- function(data,

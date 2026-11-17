@@ -4,7 +4,7 @@
 #'
 #' @param type Type code
 #' @param year Financial year
-#' @param benchmark_run_id
+#' @param benchmark_run_id benchmark_run_id
 #' @param denodo_connect Connection to Denodo
 #' @param BYOC_MODE BYOC_MODE
 #'

@@ -5,7 +5,7 @@
 #' using [format_year()].
 #' @param file_version Version of the file (individual / episode).
 #' @param denodo_connect Connection to Denodo
-#' @param col_select
+#' @param col_select Columns to read in
 #' @param columns `r lifecycle::badge("deprecated")` `columns` is no
 #' longer used, use `col_select` instead.
 #' @param partnerships Optional specify a partnership (hscp2018) or
