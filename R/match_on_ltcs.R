@@ -13,6 +13,11 @@ match_on_ltcs <- function(
   year,
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
 ) {
+  ltc_data <- ltc_data %>%
+    dplyr::group_by(anon_chi) %>%
+    dplyr::filter(dplyr::n() == 1) %>%
+    dplyr::ungroup()
+
   # Match on LTC lookup
   matched <- dplyr::left_join(
     data,
