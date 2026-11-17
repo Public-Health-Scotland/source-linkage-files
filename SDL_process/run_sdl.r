@@ -103,7 +103,7 @@ console_outputs <- TRUE
 
 # Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
-  year,
+  years_to_run,
   types = c(
     # BOXI
     "acute",
