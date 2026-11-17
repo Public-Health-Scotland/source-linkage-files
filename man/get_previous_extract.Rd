@@ -17,6 +17,8 @@ get_previous_extract(
 
 \item{year}{Financial year}
 
+\item{benchmark_run_id}{benchmark_run_id}
+
 \item{denodo_connect}{Connection to Denodo}
 
 \item{BYOC_MODE}{BYOC_MODE}

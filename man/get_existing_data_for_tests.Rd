@@ -23,6 +23,8 @@ new data which the SLF data will be compared to.}
 
 \item{year}{Financial year}
 
+\item{benchmark_run_id}{benchmark_run_id}
+
 \item{file_version}{whether to test against the "episode" file (the default)
 or the "individual" file.}
 

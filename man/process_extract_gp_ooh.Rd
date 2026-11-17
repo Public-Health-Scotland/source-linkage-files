@@ -22,10 +22,26 @@ process_extract_gp_ooh(
 \arguments{
 \item{year}{The year to process, in FY format.}
 
+\item{ooh_consultations}{GP OOH Consultations extract}
+
+\item{ooh_diagnosis}{GP OOH Diagnosis extract}
+
+\item{ooh_outcomes}{GP OOH Outcomes extract}
+
+\item{readcode_lookup}{Readcode Lookup}
+
 \item{gp_ooh_cup}{gp ooh cup data}
+
+\item{ooh_cost_lookup}{GP OOH Cost Lookup}
 
 \item{write_to_disk}{(optional) Should the data be written to disk default is
 \code{TRUE} i.e. write the data to disk.}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{run_id}
+
+\item{run_date_time}{run_date_time}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.
