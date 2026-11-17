@@ -7,9 +7,9 @@ setup_tests_file_name <- function(sheet_name,
                                     "ep_file",
                                     "indiv_file",
                                     "lookup",
-                                    "extract"),
+                                    "extract"
+                                  ),
                                   to_combine = TRUE) {
-
   # Set up the workbook ----
   if (workbook_name == "ep_file") {
     tests_workbook_name <-
@@ -102,7 +102,6 @@ setup_tests_file_name <- function(sheet_name,
 #'
 #' @family test functions
 format_test_excel <- function(comparison_data, wb, sheet_name_dated) {
-
   # Formatting ----
 
   # Get the column numbers
@@ -189,9 +188,9 @@ write_tests_xlsx <- function(comparison_data,
                                "ep_file",
                                "indiv_file",
                                "lookup",
-                               "extract"),
+                               "extract"
+                             ),
                              BYOC_MODE = FALSE) {
-
   if (isTRUE(BYOC_MODE)) {
     return(comparison_data)
   }
@@ -437,7 +436,6 @@ get_test_results_path <- function(
       denodo_output_path(),
       file_name
     )
-
   } else {
     test_results_path <- fs::path(
       get_slf_dir(),
@@ -464,7 +462,6 @@ write_stacked_test_results <- function(
   test_type = c("extract", "lookup", "ep", "ind"),
   BYOC_MODE
 ) {
-
   stacked_results <- dplyr::bind_rows(test_results)
   write_file(
     data = stacked_results,

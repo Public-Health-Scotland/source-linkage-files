@@ -24,11 +24,10 @@ process_tests <- function(data,
                           benchmark_run_id = NA,
                           run_id = NA,
                           run_date_time = NA) {
-
   # 1. Infer type, year and workbook from data ---------------------------------
 
   # Set recid
-  if ("recid" %in% colnames(data)){
+  if ("recid" %in% colnames(data)) {
     recids <- data %>%
       dplyr::pull(.data$recid) %>%
       unique()
@@ -38,21 +37,21 @@ process_tests <- function(data,
 
   # Set type
   demog_cols <- c(
-    "sending_location","anon_chi","social_care_id","financial_year","gender",
-    "dob","postcode","date_of_death","extract_date","consistent_quality","linking_id"
+    "sending_location", "anon_chi", "social_care_id", "financial_year", "gender",
+    "dob", "postcode", "date_of_death", "extract_date", "consistent_quality", "linking_id"
   )
 
   client_cols <- c(
-    "anon_chi","social_care_id","sc_living_alone","sc_support_from_unpaid_carer",
-    "sc_social_worker","sc_type_of_housing","sc_meals","sc_day_care","sc_dementia",
-    "sc_learning_disability","sc_mental_health_disorders","sc_physical_and_sensory_disability",
-    "sc_drugs","sc_alcohol","sc_palliative_care","sc_carer","sc_elderly_frail",
-    "sc_neurological_condition","sc_autism","sc_other_vulnerable_groups","person_id",
+    "anon_chi", "social_care_id", "sc_living_alone", "sc_support_from_unpaid_carer",
+    "sc_social_worker", "sc_type_of_housing", "sc_meals", "sc_day_care", "sc_dementia",
+    "sc_learning_disability", "sc_mental_health_disorders", "sc_physical_and_sensory_disability",
+    "sc_drugs", "sc_alcohol", "sc_palliative_care", "sc_carer", "sc_elderly_frail",
+    "sc_neurological_condition", "sc_autism", "sc_other_vulnerable_groups", "person_id",
     "linking_id"
   )
 
   # Infer type from RECID
-  if (!is.null(recids)){
+  if (!is.null(recids)) {
     type <- dplyr::case_when(
       any(recids %in% c("01B", "GLS")) ~ "acute",
       any(recids == "00B") ~ "outpatients",
@@ -74,11 +73,11 @@ process_tests <- function(data,
       TRUE ~ NA_character_
     )
     # Infer type from columns
-  } else if ("gpprac" %in% colnames(data)){
+  } else if ("gpprac" %in% colnames(data)) {
     type <- "gpprac_lookup"
-  } else if ("postcode" %in% colnames(data)){
+  } else if ("postcode" %in% colnames(data)) {
     type <- "postcode_lookup"
-  } else if ("death_date_chi" %in% colnames(data)){
+  } else if ("death_date_chi" %in% colnames(data)) {
     type <- "chi_deaths"
   } else if (all(unlist(slfhelper::ltc_vars) %in% colnames(data))) {
     type <- "ltc"
@@ -89,12 +88,12 @@ process_tests <- function(data,
   }
 
   # Set year (must be provided for SC Client and LTC but can be overwridden for others)
-  if (!type %in% c("client", "ltc")){
-    if ("year" %in% colnames(data)){
+  if (!type %in% c("client", "ltc")) {
+    if ("year" %in% colnames(data)) {
       year <- data %>%
         dplyr::pull(.data$year) %>%
         unique()
-      if (length(year) > 1){
+      if (length(year) > 1) {
         year <- "all"
       }
     } else {
@@ -103,7 +102,7 @@ process_tests <- function(data,
   }
 
   # Set all-year SC types
-  if (type %in% c("at", "ch", "hc", "sds") && year == "all"){
+  if (type %in% c("at", "ch", "hc", "sds") && year == "all") {
     type <- glue::glue("sc_{type}_all")
   }
 
@@ -115,43 +114,45 @@ process_tests <- function(data,
   log_slf_event(stage = "test", status = "start", type = type, year = year)
 
   # Deal with years where we have no data (archived extracts)
-  if (type %in% c("cmh", "dn")){
+  if (type %in% c("cmh", "dn")) {
     if (identical(data, tibble::tibble())) {
       return(data)
     }
   }
 
   # Year-specific SC extracts
-  if (type %in% c("at", "ch", "client", "hc", "sds")){
+  if (type %in% c("at", "ch", "client", "hc", "sds")) {
     if (check_year_valid(year, type)) {
       return(NULL)
     }
   }
 
   # Cost uplift
-  if (type %in% c("acute", "ae", "maternity", "mh", "outpatients")){
+  if (type %in% c("acute", "ae", "maternity", "mh", "outpatients")) {
     data <- apply_cost_uplift(data)
   }
 
   # Rename HSCP
-  if (type %in% c("acute", "ae", "at", "ch", "cmh", "dd", "dn", "ooh", "hc", "homelessness",
-                  "maternity", "mh", "nrs_deaths", "outpatients", "pis", "sds")){
+  if (type %in% c(
+    "acute", "ae", "at", "ch", "cmh", "dd", "dn", "ooh", "hc", "homelessness",
+    "maternity", "mh", "nrs_deaths", "outpatients", "pis", "sds"
+  )) {
     data <- rename_hscp(data)
   }
 
   # Parameters for produce_source_extract_tests()
   sum_mean_vars <- c("beddays", "cost", "yearstay")
-  max_min_vars <- c("record_keydate1", "record_keydate2","cost_total_net", "yearstay")
+  max_min_vars <- c("record_keydate1", "record_keydate2", "cost_total_net", "yearstay")
   add_hscp_count <- TRUE
   smr00_ep <- FALSE
 
   if (type %in% c("ae", "gp_ooh", "outpatients")) {
     sum_mean_vars <- "cost"
   }
-  if (type %in% c("ae", "outpatients")){
+  if (type %in% c("ae", "outpatients")) {
     max_min_vars <- c("record_keydate1", "record_keydate2", "cost_total_net")
   }
-  if (type == "outpatients"){
+  if (type == "outpatients") {
     add_hscp_count <- FALSE
     smr00_ep <- TRUE
   }
@@ -159,16 +160,17 @@ process_tests <- function(data,
   test_function <- if (type %in% c(
     "acute", "ae", "ooh", "maternity", "mh", "outpatients"
   )) {
-    function(data) produce_source_extract_tests(
-      data,
-      sum_mean_vars,
-      max_min_vars,
-      add_hscp_count,
-      smr00_ep
-    )
+    function(data) {
+      produce_source_extract_tests(
+        data,
+        sum_mean_vars,
+        max_min_vars,
+        add_hscp_count,
+        smr00_ep
+      )
+    }
   } else {
-    switch(
-      type,
+    switch(type,
       "at" = produce_source_at_tests,
       "ch" = produce_source_ch_tests,
       "cmh" = produce_source_cmh_tests,
@@ -239,4 +241,3 @@ process_tests <- function(data,
 
   return(comparison)
 }
-
