@@ -68,7 +68,7 @@ process_tests <- function(data,
       any(recids == "HL1") ~ "homelessness",
       any(recids == "NRS") ~ "nrs_deaths",
       # any(recids == "NSU") ~ "nsu",
-      any(recids == "OoH") ~ "gp_ooh",
+      any(recids == "OoH") ~ "ooh",
       any(recids == "PIS") ~ "pis",
       any(recids == "SDS") ~ "sds",
       TRUE ~ NA_character_
@@ -129,7 +129,7 @@ process_tests <- function(data,
   }
 
   # Cost uplift
-  if (type %in% c("acute", "ae", "maternity", "mh", "outpatients{")){
+  if (type %in% c("acute", "ae", "maternity", "mh", "outpatients")){
     data <- apply_cost_uplift(data)
   }
 
@@ -178,16 +178,16 @@ process_tests <- function(data,
       "homelessness" = produce_slf_homelessness_tests,
       "chi_deaths" = produce_it_chi_deaths_tests,
       "gpprac_lookup" = produce_slf_gpprac_tests,
-      "pc_lookup" = produce_slf_postcode_tests,
+      "postcode_lookup" = produce_slf_postcode_tests,
       "ltc" = produce_source_ltc_tests,
       "nrs_deaths" = produce_source_nrs_tests,
       "pis" = produce_source_pis_tests,
       "sc_at_all" = produce_sc_all_episodes_tests,
-      "ac_ch_all" = produce_sc_all_episodes_tests,
+      "sc_ch_all" = produce_sc_all_episodes_tests,
       "sc_hc_all" = produce_sc_all_episodes_tests,
       "sc_sds_all" = produce_sc_all_episodes_tests,
       "client" = produce_tests_sc_client_lookup,
-      "demog" = produce_sc_demog_lookup_tests,
+      "sc_demog_lookup" = produce_sc_demog_lookup_tests,
       "sds" = produce_source_sds_tests
     )
   }
@@ -202,12 +202,13 @@ process_tests <- function(data,
     file_location = file_location,
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
     BYOC_MODE = BYOC_MODE
-  )
+  ) %>%
+    rename_hscp()
 
   # Produce comparison
   comparison <- produce_test_comparison(
     old_data = test_function(old_data),
-    data = test_function(data)
+    new_data = test_function(data)
   ) %>%
     dplyr::mutate(
       benchmark_comparison_type = benchmark_comparison_type,

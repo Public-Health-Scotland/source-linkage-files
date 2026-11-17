@@ -1,10 +1,15 @@
+################################################################################ .
 # run_sdl.R
+################################################################################ .
 
+################################################################################ .
 # Setup ----
+################################################################################ .
+
 logger::log_info("Run SDL starts.")
 
+## Load required packages ----
 library(createslf)
-
 library(DBI)
 library(arrow)
 library(data.table)
@@ -42,10 +47,8 @@ library(targets)
 library(testthat)
 library(crew)
 
-
 ## Detect BYOC_MODE ----
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
-# Set up logger and system environment variable BYOC_MODE
 if (tolower(BYOC_MODE) %in% c("true", "t")) {
   logger::log_info("Detect run_sdl.r run on Denodo")
   BYOC_MODE <- TRUE
@@ -70,7 +73,6 @@ dplyr::tbl(
   dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
 ) %>%
   dplyr::collect() %>%
-  # Optional: Format the date to look clean first
   dplyr::mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
   purrr::pwalk(function(data_mart, load_str, ...) {
     logger::log_info("{data_mart} loaded at {load_str}")
@@ -80,31 +82,24 @@ if (isFALSE(BYOC_MODE)) {
 }
 
 ## Set up processing stage and years ----
-
-run_stage <- "extract"
-
+run_stage <- Sys.getenv("run_stage")
 if (!run_stage %in% c("extract", "episode", "individual")) {
   cli::cli_abort(
     "RUN_STAGE must be 'extract', 'episode', or 'individual'."
   )
 }
 
-# years <- createslf::years_to_run()
-# For use during development
-years <- "1920"
-
-year <- years[[1L]]
-
-# Set up run_id and run_date_time ----
-# run_id <- Sys.getenv("run_id")
-# run_date_time <- Sys.getenv("run_date_time")
-# benchmark_run_id <- Sys.getenv("benchmark_run_id")
-run_date_time <- script_run_time
-
+years_to_run <- trimws(strsplit(Sys.getenv("years_to_run"), split = ",")[[1]])
+## Set up run_id and run_date_time (for episode/individual file processing) ----
+run_id <- Sys.getenv("run_id")
+run_date_time <- Sys.getenv("run_date_time")
+benchmark_run_id <- Sys.getenv("benchmark_run_id")
 write_temp_to_disk <- FALSE
 console_outputs <- TRUE
 
+################################################################################ .
 ## Extract processing ----
+################################################################################ .
 
 # Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
@@ -160,10 +155,6 @@ byoc_output_files <- get_byoc_output_files(
   )
 )
 
-# using homelessness for test purpose. When development is complete,
-# we change to "types = "byoc_input_files""
-# can always use any other type for testing also
-
 # targets ----
 if (run_stage == "extract") {
   logger::log_info("Targets started.")
@@ -185,7 +176,9 @@ if (run_stage == "extract") {
   logger::log_info("Targets finished.")
 }
 
+################################################################################ .
 # Episode file processing ----
+################################################################################ .
 
 if (run_stage == "episode") {
   logger::log_info("Episode file processing started.")
@@ -256,7 +249,9 @@ if (run_stage == "episode") {
   logger::log_info("Episode file processing finished.")
 }
 
+################################################################################ .
 # Individual file processing ----
+################################################################################ .
 
 if (run_stage == "individual") {
   logger::log_info("Individual file processing started.")

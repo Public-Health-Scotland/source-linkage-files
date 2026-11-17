@@ -99,6 +99,13 @@ read_slf_table <- function(
       dplyr::mutate(age = as.integer(.data$age))
   }
 
+  slf_table <- slf_table %>%
+    dplyr::mutate(
+      dplyr::across(
+        where(~ inherits(.x, "integer64")),
+        as.integer
+      )
+    )
+
     return(slf_table)
 }
-
