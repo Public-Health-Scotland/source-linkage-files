@@ -74,24 +74,24 @@ process_tests <- function(data,
       TRUE ~ NA_character_
     )
     # Infer type from columns
-  } else if ("gpprac" %in% colnames(new_data)){
+  } else if ("gpprac" %in% colnames(data)){
     type <- "gpprac_lookup"
-  } else if ("postcode" %in% colnames(new_data)){
+  } else if ("postcode" %in% colnames(data)){
     type <- "postcode_lookup"
-  } else if ("death_date_chi" %in% colnames(new_data)){
+  } else if ("death_date_chi" %in% colnames(data)){
     type <- "chi_deaths"
-  } else if (all(unlist(slfhelper::ltc_vars) %in% colnames(new_data))) {
+  } else if (all(unlist(slfhelper::ltc_vars) %in% colnames(data))) {
     type <- "ltc"
-  } else if (all(unlist(demog_cols) %in% colnames(new_data))) {
+  } else if (all(unlist(demog_cols) %in% colnames(data))) {
     type <- "sc_demog_lookup"
-  } else if (all(unlist(client_cols) %in% colnames(new_data))) {
+  } else if (all(unlist(client_cols) %in% colnames(data))) {
     type <- "client"
   }
 
   # Set year (must be provided for SC Client and LTC but can be overwridden for others)
   if (!type %in% c("client", "ltc")){
-    if ("year" %in% colnames(new_data)){
-      year <- new_data %>%
+    if ("year" %in% colnames(data)){
+      year <- data %>%
         dplyr::pull(.data$year) %>%
         unique()
       if (length(year) > 1){
@@ -207,7 +207,7 @@ process_tests <- function(data,
   # Produce comparison
   comparison <- produce_test_comparison(
     old_data = test_function(old_data),
-    new_data = test_function(data)
+    data = test_function(data)
   ) %>%
     dplyr::mutate(
       benchmark_comparison_type = benchmark_comparison_type,
@@ -238,3 +238,4 @@ process_tests <- function(data,
 
   return(comparison)
 }
+

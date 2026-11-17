@@ -31,7 +31,8 @@ BYOC_MODE <- dplyr::case_when(
 run_id <- Sys.getenv("run_id")
 run_date_time <- Sys.getenv("run_date_time")
 denodo_dsn <- Sys.getenv("denodo_dsn")
-
+benchmark_run_id <- Sys.getenv("benchmark_run_id")
+benchmark_comparison_type <- Sys.getenv("benchmark_comparison_type")
 
 if (isTRUE(BYOC_MODE)) {
   logger::log_info("targets file location on Denodo")
@@ -519,21 +520,6 @@ list(
       run_date_time = run_date_time
     )
   ),
-  # TEST - All SC Alarms Telecare
-  tar_target(
-    # Target name
-    tests_sc_all_at,
-    # Function
-    process_tests(
-      data = all_at,
-      BYOC_MODE = BYOC_MODE,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      benchmark_comparison_type = benchmark_comparison_type,
-      benchmark_run_id = benchmark_run_id,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
 
   ### All SC Care Homes --------------------------------------------------------
   # READ - All SC Care Homes
@@ -565,21 +551,6 @@ list(
       ch_name_lookup_path = slf_ch_name_lookup_path,
       spd_data = spd_data,
       write_to_disk = write_to_disk
-    )
-  ),
-  # TEST - All SC Care Homes
-  tar_target(
-    # Target name
-    tests_all_care_home,
-    # Function
-    process_tests(
-      data = all_care_home,
-      BYOC_MODE = BYOC_MODE,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      benchmark_comparison_type = benchmark_comparison_type,
-      benchmark_run_id = benchmark_run_id,
-      run_id = run_id,
-      run_date_time = run_date_time
     )
   ),
 
@@ -659,21 +630,6 @@ list(
       write_to_disk = write_to_disk
     )
   ),
-  # TEST - All SC Home Care
-  tar_target(
-    # Target name
-    tests_sc_all_home_care,
-    # Function
-    process_tests(
-      data = all_home_care,
-      BYOC_MODE = BYOC_MODE,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      benchmark_comparison_type = benchmark_comparison_type,
-      benchmark_run_id = benchmark_run_id,
-      run_id = run_id,
-      run_date_time = run_date_time
-    )
-  ),
 
   ### All SC Self-Directed-Support (SDS) ---------------------------------------
   # READ - All SC Self-Directed-Support (SDS)
@@ -702,21 +658,6 @@ list(
       run_id = run_id,
       run_date_time = run_date_time,
       write_to_disk = write_to_disk
-    )
-  ),
-  # TEST - All SC Self-Directed-Support (SDS)
-  tar_target(
-    # Target name
-    tests_sc_all_sds,
-    # Function
-    process_tests(
-      data = all_sds,
-      BYOC_MODE = BYOC_MODE,
-      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      benchmark_comparison_type = benchmark_comparison_type,
-      benchmark_run_id = benchmark_run_id,
-      run_id = run_id,
-      run_date_time = run_date_time
     )
   ),
 

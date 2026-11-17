@@ -109,45 +109,54 @@ console_outputs <- TRUE
 # Build BYOC Output File Paths ----
 byoc_output_files <- get_byoc_output_files(
   year,
-  # types = "byoc_input_files"
   types = c(
-    "at",
-    "ch",
-    "cmh",
-    "client",
-    "nrs_deaths",
-    "dn",
-    "hc",
+    # BOXI
+    "acute",
+    "ae",
+    "gp_ooh",
     "homelessness",
-    "ltc",
     "maternity",
     "mh",
+    "nrs_deaths",
     "outpatients",
-    "pis",
+
+    # Files
+    "cmh",
+    "dd",
+    "dn",
+    # "hhg",
+    # "sparra",
+
+    # Social Care
+    "at",
+    "ch",
+    "client",
+    "hc",
     "sds",
-    "demog_c",
-    "service_c",
-    "chi_deaths",
-    "combined_deaths",
-    # TODO: Are these still saved to disk?
     "sc_all_at",
     "sc_all_ch",
     "sc_all_hc",
     "sc_all_sds",
-    # -----------------------------------
     "sc_demog_lookup",
+
+    # IT
+    "chi_deaths",
+    "ltc",
+    "pis",
+
+    # Costs
     "ch_cost_lookup",
     "dn_cost_lookup",
     "hc_cost_lookup",
     "ooh_cost_lookup",
-    "postcode_lookup",
-    "gpprac_lookup"
-    # "ae",
-    # "acute",
-    # "dd",
-    # "gp_ooh",
-    # "homelessness_completeness",
-    # "ooh_cost_lookup",
+
+    # Look-ups
+    "combined_deaths",
+    "gpprac_lookup",
+    "homelessness_completeness",
+    "postcode_lookup"
+    # "demog_c",
+    # "service_c"
   )
 )
 

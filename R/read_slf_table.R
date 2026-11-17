@@ -60,7 +60,7 @@ read_slf_table <- function(
   }
 
   # Put years into a vector if only a single year is provided as a string
-  if(is.charcter(years)){
+  if(is.character(years)){
     years <- c(years)
   }
 
@@ -101,3 +101,4 @@ read_slf_table <- function(
 
     return(slf_table)
 }
+
