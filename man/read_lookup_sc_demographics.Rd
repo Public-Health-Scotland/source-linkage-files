@@ -5,14 +5,17 @@
 \title{Read SC demographics}
 \usage{
 read_lookup_sc_demographics(
-  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
-\item{sc_dvprod_connection}{Connection to the sc platform}
+\item{denodo_connect}{Connection to the BI Denodo platform}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+An extract of the data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read SC demographics

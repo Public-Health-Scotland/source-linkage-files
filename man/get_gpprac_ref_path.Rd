@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_lookup_paths.R
 \name{get_gpprac_ref_path}
 \alias{get_gpprac_ref_path}
-\title{GP Practice Reference File Path (gpprac) - LOCAL ONLY}
+\title{GP Practice Reference File Path (gpprac)}
 \usage{
 get_gpprac_ref_path(ext = "csv")
 }
@@ -13,7 +13,7 @@ get_gpprac_ref_path(ext = "csv")
 An \code{\link[fs:path]{fs::path()}} to the local GP practice reference file
 }
 \description{
-Get the path for the centrally held reference file \code{gpprac} - LOCAL ONLY
+Get the path for the centrally held reference file \code{gpprac}
 }
 \seealso{
 Other lookup file paths:
@@ -22,6 +22,6 @@ Other lookup file paths:
 \code{\link[=get_pop_path]{get_pop_path()}},
 \code{\link[=get_simd_path]{get_simd_path()}},
 \code{\link[=get_spd_path]{get_spd_path()}},
-\code{\link[=get_uk_postcode_path]{get_uk_postcode_path()}}
+\code{\link[=get_uk_postcode_data]{get_uk_postcode_data()}}
 }
 \concept{lookup file paths}

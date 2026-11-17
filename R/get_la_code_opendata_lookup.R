@@ -27,20 +27,12 @@ get_la_code_opendata_lookup <- function(
     # Rename variables
     dplyr::select(
       ca = "ca",
-      caname = "caname"
+      caname = "caname",
+      hbname = "hbname"
     ) %>%
     dplyr::distinct() %>%
     # Collect
-    dplyr::collect() %>%
-    dplyr::mutate(
-      sending_local_authority_name = dplyr::recode_values(
-        .data$caname,
-        "City of Edinburgh" ~ "Edinburgh",
-        "Na h-Eileanan Siar" ~ "Eilean Siar",
-        default = .data$caname
-      ) %>%
-        stringr::str_replace("\\sand\\s", " \\& ")
-    )
+    dplyr::collect()
 
   log_slf_event(stage = "read", status = "complete", type = "la_lookup", year = "all")
 

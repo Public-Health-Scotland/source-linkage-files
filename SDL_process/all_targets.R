@@ -170,15 +170,15 @@ list(
   # ============================================================================.
 
   ### Care Home Costs ----------------------------------------------------------
-  # GET - Care HomeCosts
+  # GET - Care Home Costs
   tar_target(
     # Target name
     ch_raw_costs,
     # Function
     get_ch_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-    ),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # PROCESS - Care Home Costs
   tar_target(
@@ -186,7 +186,7 @@ list(
     ch_cost_lookup,
     # Function
     process_costs_care_homes(
-      ch_raw_costs = ch_raw_costs,
+      ch_costs_data = ch_raw_costs,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
@@ -274,8 +274,8 @@ list(
     # Function
     get_hc_raw_costs_data(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-      BYOC_MODE = BYOC_MODE,
-    ),
+      BYOC_MODE = BYOC_MODE
+    )
   ),
   # PROCESS - Home Care Costs
   tar_target(
@@ -283,13 +283,13 @@ list(
     hc_cost_lookup,
     # Function
     process_costs_home_care(
-      hc_raw_costs = hc_raw_costs,
+      hc_costs_raw = hc_raw_costs,
       lca_data = la_code_opendata,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
       run_date_time = run_date_time
-    ),
+    )
   ),
 
   # ============================================================================.
@@ -348,12 +348,22 @@ list(
   ),
 
   ### GP Lookup ----------------------------------------------------------------
-  # GET - GP Practice Open Data
+  # GET - GP Practice Cluster Information
   tar_target(
     # Target name
-    gpprac_opendata,
+    gpprac_cluster,
     # Function
-    get_gpprac_opendata(
+    get_gpprac_cluster(
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    )
+  ),
+  # GET - GP Practice Geography Labels
+  tar_target(
+    # Target name
+    geography_labels,
+    # Function
+    get_geography_labels(
       denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
       BYOC_MODE = BYOC_MODE
     )
@@ -374,8 +384,9 @@ list(
     source_gp_lookup,
     # Function
     process_lookup_gpprac(
-      gpprac_opendata = gpprac_opendata,
       gpprac_ref_data = gpprac_ref_data,
+      gpprac_cluster = gpprac_cluster,
+      geography_labels = geography_labels,
       spd_data = spd_data,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
@@ -534,12 +545,13 @@ list(
       data = all_care_home_extract,
       sc_demog_lookup = sc_demog_lookup,
       refined_death = refined_death_data,
+      uk_pc_directory = uk_postcode_data,
+      ch_name_lookup = slf_ch_name_lookup_data,
+      spd_data = spd_data,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
-      run_date_time = run_date_time,
-      ch_name_lookup_path = slf_ch_name_lookup_path,
-      spd_data = spd_data,
-      write_to_disk = write_to_disk
+      run_date_time = run_date_time
     )
   ),
   # TEST - All SC Care Homes
@@ -580,9 +592,9 @@ list(
     process_lookup_sc_demographics(
       data = sc_demog_data,
       all_care_home_extract = all_care_home_extract,
-      spd_data = spd_data,
-      uk_postcode_data = uk_postcode_data,
+      uk_pc_directory = uk_postcode_data,
       ch_name_lookup = slf_ch_name_lookup_data,
+      spd_data = spd_data,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
@@ -628,8 +640,10 @@ list(
       data = all_home_care_extract,
       sc_demog_lookup = sc_demog_lookup,
       home_care_costs = hc_cost_lookup,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
-      write_to_disk = write_to_disk
+      run_id = run_id,
+      run_date_time = run_date_time
     )
   ),
   # TEST - All SC Home Care
@@ -670,10 +684,10 @@ list(
     process_sc_all_sds(
       data = all_sds_extract,
       sc_demog_lookup = sc_demog_lookup,
+      write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
       run_id = run_id,
-      run_date_time = run_date_time,
-      write_to_disk = write_to_disk
+      run_date_time = run_date_time
     )
   ),
   # TESTS - All SC Self-Directed-Support (SDS)
@@ -893,8 +907,8 @@ list(
       # Function
       read_extract_district_nursing(
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # PROCESS - District Nursing
@@ -980,10 +994,10 @@ list(
       source_ooh_extract,
       # Function
       process_extract_gp_ooh(
-        year = year,
         ooh_consultations = ooh_consultations_data,
         ooh_diagnosis = ooh_diagnosis_data,
         ooh_outcomes = ooh_outcomes_data,
+        year = year,
         readcode_lookup = readcode_lookup,
         gp_ooh_cup = gp_ooh_cup,
         ooh_cost_lookup = gp_ooh_cost_lookup,
@@ -1028,9 +1042,9 @@ list(
       process_extract_homelessness(
         data = homelessness_data,
         year = year,
-        write_to_disk = write_to_disk,
         la_code_lookup = la_code_opendata,
         sg_pub_data = sg_pub_data,
+        write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
         run_date_time = run_date_time
@@ -1110,8 +1124,8 @@ list(
       source_maternity_extract,
       # Function
       process_extract_maternity(
-        maternity_data,
-        year,
+        data = maternity_data,
+        year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
         run_id = run_id,
@@ -1151,7 +1165,7 @@ list(
       source_mental_health_extract,
       # Function
       process_extract_mental_health(
-        mental_health_data,
+        data = mental_health_data,
         year = year,
         write_to_disk = write_to_disk,
         BYOC_MODE = BYOC_MODE,
@@ -1209,8 +1223,8 @@ list(
       # Function
       read_extract_outpatients(
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE)
+        denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # PROCESS - Outpatients
@@ -1293,9 +1307,7 @@ list(
         data = all_at,
         year = year,
         write_to_disk = write_to_disk,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # TEST - SC Alarms Telecare
@@ -1323,10 +1335,8 @@ list(
         data = all_care_home,
         year = year,
         ch_costs = ch_cost_lookup,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # TEST - SC Care Home
@@ -1396,8 +1406,8 @@ list(
       process_extract_home_care(
         data = all_home_care,
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # TEST - SC Home Care
@@ -1424,10 +1434,8 @@ list(
       process_extract_sds(
         data = all_sds,
         year = year,
-        BYOC_MODE = BYOC_MODE,
-        run_id = run_id,
-        run_date_time = run_date_time,
-        write_to_disk = write_to_disk
+        write_to_disk = write_to_disk,
+        BYOC_MODE = BYOC_MODE
       )
     ),
     # TEST - SC Self-Directed Support (SDS)

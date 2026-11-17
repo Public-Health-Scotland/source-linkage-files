@@ -5,14 +5,17 @@
 \title{Read Social Care Alarms Telecare data}
 \usage{
 read_sc_all_alarms_telecare(
-  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
-\item{sc_dvprod_connection}{Connection to the SC platform}
+\item{denodo_connect}{Connection to the BI Denodo platform}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
-an extract of the data as a \link[tibble:tibble-package]{tibble}.
+An extract of the data as a \link[tibble:tibble-package]{tibble}.
 }
 \description{
 Read Social Care Alarms Telecare data

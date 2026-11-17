@@ -5,14 +5,17 @@
 \title{Process the social care client lookup}
 \usage{
 read_lookup_sc_client(
-  fyyear,
-  sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")
+  year,
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
 )
 }
 \arguments{
-\item{fyyear}{The year to process, in the standard format '1718'}
+\item{year}{The year to process, in the standard format '1718'}
 
-\item{sc_dvprod_connection}{The connection to the SC platform.}
+\item{denodo_connect}{The connection to the SDL platform.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the final data as a \link[tibble:tibble-package]{tibble}.

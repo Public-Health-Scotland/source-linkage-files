@@ -1,17 +1,23 @@
 #' Read SC demographics
 #'
-#' @param sc_dvprod_connection Connection to the sc platform
+#' @inherit read_sc_all_alarms_telecare
 #'
-#' @return a [tibble][tibble::tibble-package]
 #' @export
-#'
-read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPROD")) {
+read_lookup_sc_demographics <- function(
+  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  BYOC_MODE
+) {
   log_slf_event(stage = "read", status = "start", type = "sc_demog", year = "all")
 
+  # Denodo disconnect
+  on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+
+  # Read extract
   sc_demog <- dplyr::tbl(
-    sc_dvprod_connection,
-    dbplyr::in_schema("social_care_2", "demographic_snapshot")
+    denodo_connect,
+    dbplyr::in_schema("sdl", "sdl_sc_demographic_source")
   ) %>%
+    # Rename variables
     dplyr::select(
       "latest_record_flag",
       "period",
@@ -26,28 +32,18 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
       "chi_gender_code",
       "extract_date"
     ) %>%
+    # Collect
     dplyr::collect()
 
   latest_quarter <- sc_demog %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%
     dplyr::pull(.data$period) %>%
     utils::head(1)
-  cli::cli_alert_info(stringr::str_glue("Demographics data is available up to {latest_quarter}."))
+
+  logger::log_info(stringr::str_glue("Demographics data is available up to {latest_quarter}."))
 
   sc_demog <- sc_demog %>%
-    slfhelper::get_anon_chi(chi_var = "chi_upi")
-
-  if (!fs::file_exists(get_sandpit_extract_path(type = "demographics"))) {
-    sc_demog %>%
-      write_file(get_sandpit_extract_path(type = "demographics"),
-        group_id = 3206 # hscdiip owner
-      )
-
-    sc_demog %>%
-      process_tests_sc_sandpit(type = "demographics")
-  }
-
-  sc_demog <- sc_demog %>%
+    slfhelper::get_anon_chi(chi_var = "chi_upi") %>%
     dplyr::mutate(
       dplyr::across(c(
         "latest_record_flag",
