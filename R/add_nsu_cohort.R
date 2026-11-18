@@ -128,10 +128,9 @@ add_nsu_cohort <- function(
 #' @param year financial year
 #' @param BYOC_MODE
 #'
-#' @returns
+#' @returns nsu
 #' @export
 #'
-#' @examples
 get_nsu_data <- function(year,
                          denodo_connect = denodo_connect,
                          BYOC_MODE) {

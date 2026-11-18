@@ -6,7 +6,7 @@
 #' @param sc_client social care lookup file
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
-#' @param BYOC_MODE
+#' @param BYOC_MODE BYOC_MODE
 #' @param write_temp_to_disk write intermediate data for investigation or debug
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
