@@ -114,8 +114,8 @@ create_phase2_output_detailed <- function(dataset_name, year, slf_current_data, 
       names_expected_in_sdl = if_else((origin_slf_current == "slf_current_data" & origin_sdl_wip == "sdl_wip_data"), "Yes", "No"),
       # Flag mismatching variables
       mismatched_col = if_else((is_current_in_sdl == "No - current cols not in sdl" |
-                                  is_current_in_sdl == "No - sdl view not in current view"),
-                               1L, 0L
+        is_current_in_sdl == "No - sdl view not in current view"),
+      1L, 0L
       ),
       # Check status
       test_status = case_when(
@@ -129,7 +129,6 @@ create_phase2_output_detailed <- function(dataset_name, year, slf_current_data, 
 
   return(compare_output)
 }
-
 
 
 create_phase2_output <- function(dataset_name, year, slf_current_data, sdl_wip_data) {

@@ -65,17 +65,17 @@ year <- "1920"
 # "ltcs"
 
 
-
-
-dataset_name <- c("acute",
-                  "ae",
-                  "district_nursing",
-                  "gp_ooh",
-                  "homelessness",
-                  "maternity",
-                  "mental_health",
-                  "nrs_deaths",
-                  "outpatients")
+dataset_name <- c(
+  "acute",
+  "ae",
+  "district_nursing",
+  "gp_ooh",
+  "homelessness",
+  "maternity",
+  "mental_health",
+  "nrs_deaths",
+  "outpatients"
+)
 
 # Analyst name for writing to disk
 analyst <- "Jen"
