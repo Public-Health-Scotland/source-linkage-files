@@ -74,6 +74,64 @@ get_slf_current_data_path <- function(year,
 
 ##########################################
 
+create_phase2_output_detailed <- function(dataset_name, year, slf_current_data, sdl_wip_data) {
+  ## Read data from June and SDL ------
+  slf_current_cols <- tibble(
+    date = Sys.Date(),
+    dataset_name,
+    year,
+    cols = colnames(slf_current_data),
+    origin_slf_current = "slf_current_data",
+    slf_current_type = sapply(slf_current_data, function(z) class(z)[1]),
+    total_cols_june = ncol(slf_current_data)
+  )
+
+  sdl_wip_cols <- tibble(
+    date = Sys.Date(),
+    dataset_name,
+    year,
+    cols = colnames(sdl_wip_data),
+    origin_sdl_wip = "sdl_wip_data",
+    sdl_wip_type = sapply(sdl_wip_data, function(z) class(z)[1]),
+    total_cols_sdl = ncol(sdl_wip_data)
+  )
+
+
+  ## Compare outputs -------
+  # Do a full join of both dataframes
+  compare_output <- full_join(slf_current_cols, sdl_wip_cols, by = c("date", "dataset_name", "year", "cols")) %>%
+    mutate(
+      # Check - do the data types match?
+      type_match = slf_current_type == sdl_wip_type,
+      # Check - are the current cols present in the sdl view?
+      is_current_in_sdl = case_when(
+        origin_slf_current != origin_sdl_wip ~ "Yes",
+        (origin_slf_current == "slf_current_data" & is.na(origin_sdl_wip)) ~ "No - current cols not in sdl",
+        (is.na(origin_slf_current) & origin_sdl_wip == "sdl_wip_data") ~ "No - sdl view not in current view",
+        TRUE ~ "No"
+      ),
+      # Check if names match boxi/sdl
+      names_expected_in_sdl = if_else((origin_slf_current == "slf_current_data" & origin_sdl_wip == "sdl_wip_data"), "Yes", "No"),
+      # Flag mismatching variables
+      mismatched_col = if_else((is_current_in_sdl == "No - current cols not in sdl" |
+                                  is_current_in_sdl == "No - sdl view not in current view"),
+                               1L, 0L
+      ),
+      # Check status
+      test_status = case_when(
+        (is_current_in_sdl == "No - current cols not in sdl" & is.na(origin_sdl_wip) & origin_slf_current == "slf_current_data") ~ "FAIL: Missing in sdl view",
+        (is_current_in_sdl == "No - sdl view not in current view" & is.na(origin_slf_current) & origin_sdl_wip == "sdl_wip_data") ~ "FAIL: Missing in current view",
+        names_expected_in_sdl == "No" ~ "FAIL: SDL names not as expected",
+        !type_match ~ "FAIL: Data Type does not match",
+        TRUE ~ "PASS"
+      )
+    )
+
+  return(compare_output)
+}
+
+
+
 create_phase2_output <- function(dataset_name, year, slf_current_data, sdl_wip_data) {
   ## Read data from June and SDL ------
   slf_current_cols <- tibble(

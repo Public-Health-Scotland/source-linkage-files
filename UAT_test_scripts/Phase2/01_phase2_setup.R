@@ -60,13 +60,17 @@ dataset_name2 <- recode_datasets(dataset_name)
 # slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name2, BYOC_MODE = FALSE))
 
 # Read boxi data
-if (isTRUE(year_specific) && isFALSE(type_specific)) {
-  slf_current_data <- get(fn_name_processed)(year = "1920", BYOC_MODE = FALSE)
-} else {
-  slf_current_data <- get(fn_name_processed)(BYOC_MODE = FALSE)
-}
+# if (isTRUE(year_specific) && isFALSE(type_specific)) {
+#   slf_current_data <- get(fn_name_processed)(year = "1920", BYOC_MODE = FALSE)
+# } else {
+#   slf_current_data <- get(fn_name_processed)(BYOC_MODE = FALSE)
+# }
+
+slf_current_data <- get(fn_name_processed)(year = "1920", type = dataset_name2, BYOC_MODE = FALSE)
 
 slf_current_data <- read_file(slf_current_data)
+
+#slf_current_data <- read_file('/conf/sourcedev/Source_Linkage_File_Updates/1920/sep26 update/anon-maternity_for_source-201920.parquet')
 
 # } else if (isFALSE(year_specific) && isTRUE(type_specific)) {
 #   boxi_data <- get(fn_name)(type = type_name)
@@ -95,7 +99,7 @@ slf_current_data <- read_file(slf_current_data)
 #############################
 
 # Call main function create_phase2_output
-dataset_output <- create_phase2_output(
+dataset_output <- create_phase2_output_detailed(
   dataset_name = dataset_name,
   year = year,
   slf_current_data = slf_current_data,
