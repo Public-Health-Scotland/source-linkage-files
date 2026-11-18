@@ -11,7 +11,7 @@ create_cohort_lookups(data, year, BYOC_MODE = BYOC_MODE)
 
 \item{year}{The year to process, in FY format.}
 
-\item{BYOC_MODE}{BYOC MODE}
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The data unchanged (the cohorts are written to disk)

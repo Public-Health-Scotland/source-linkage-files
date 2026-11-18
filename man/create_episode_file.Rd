@@ -53,7 +53,7 @@ create_episode_file(
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 
-\item{BYOC_MODE}{Whether run in a docker on Denodo}
+\item{BYOC_MODE}{BYOC_MODE}
 
 \item{sc_client}{social care lookup file}
 }

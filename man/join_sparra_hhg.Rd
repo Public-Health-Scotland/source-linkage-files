@@ -18,6 +18,8 @@ join_sparra_hhg(
 \item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The data including the SPARRA and HHG variables matched

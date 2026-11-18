@@ -11,7 +11,7 @@ load_ep_file_vars(data, year, BYOC_MODE)
 
 \item{year}{The year to process, in FY format.}
 
-\item{BYOC_MODE}{Whether run in a docker on Denodo}
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The full SLF data.

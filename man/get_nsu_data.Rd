@@ -9,6 +9,9 @@ get_nsu_data(year, denodo_connect = denodo_connect, BYOC_MODE)
 \arguments{
 \item{year}{financial year}
 }
+\value{
+nsu
+}
 \description{
 get nsu data from Denodo
 }
