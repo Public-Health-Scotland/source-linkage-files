@@ -60,7 +60,8 @@ read_raw_local <- function(test_dataset, year, local_mapping) {
 
   # Data
   # Read local data
-  local_data <- get_data(test_dataset, "local", year, sdl_submission = T)
+  all_character <- ifelse(test_dataset %in% c(get_types("boxi"), "dn", "cmh", "ltc", "chi_deaths"), T, F)
+  local_data <- get_data(test_dataset, "local", year, sdl_submission = T, all_character = all_character)
   # Column Map
   local_test_map <- local_mapping %>%
     # Filter the local mapping for the dataset required

@@ -6,6 +6,7 @@ library(dplyr)
 library(stringr)
 library(openxlsx)
 library(readr)
+library(readxl)
 
 source("UAT_test_scripts/Phase 1B/get_data.R")
 source("UAT_test_scripts/Phase 1B/uat_1b_functions.R")
@@ -25,13 +26,13 @@ year <- "1920"
 ################################################################################ .
 
 for (test_dataset in c(
-  get_types("boxi")
-  # get_types("sc"),
-  # get_types("lookup"),
-  # get_types("opendata"),
-  # get_types("archive"),
-  # "dd",
-  # "nsu"
+  get_types("boxi"),
+  get_types("sc"),
+  get_types("lookup"),
+  get_types("opendata"),
+  get_types("archive"),
+  "dd",
+  "nsu"
 )) {
   print(test_dataset)
   summary_df <- compare_data(test_dataset, year, local_mapping, sdl_mapping, sdl_filters)
@@ -105,3 +106,76 @@ write.xlsx(
   file = paste0(uat_folder, "outputs/column_comparison_split.xlsx"),
   overwrite = TRUE
 )
+
+################################################################################ .
+# Looking for "NA" and " " ----
+################################################################################ .
+
+df <- data.frame()
+for (test_dataset in c(
+  get_types("boxi"),
+  get_types("sc"),
+  get_types("lookup"),
+  get_types("opendata"),
+  get_types("archive"),
+  "dd",
+  "nsu"
+)) {
+  local_data <- read_raw_local(test_dataset, year, local_mapping)
+  character_na_cols <- names(local_data)[sapply(local_data, function(x) any(as.character(x) == "NA", na.rm = TRUE))]
+  if (length(character_na_cols > 0)) {df <- rbind(df, data.frame(test_dataset, character_na_cols))}
+}
+write.csv(df, paste0(uat_folder, "outputs/na_cols.csv"), row.names = F)
+
+df <- data.frame()
+for (test_dataset in c(
+  get_types("boxi"),
+  get_types("sc"),
+  get_types("lookup"),
+  get_types("opendata"),
+  get_types("archive"),
+  "dd",
+  "nsu"
+)) {
+  local_data <- read_raw_local(test_dataset, year, local_mapping)
+  space_cols <- names(local_data)[sapply(local_data, function(x) any(as.character(x) == " ", na.rm = TRUE))]
+  if (length(space_cols > 0)) {df <- rbind(df, data.frame(test_dataset, space_cols))}
+}
+
+write.csv(df, paste0(uat_folder, "outputs/space_cols.csv"), row.names = F)
+
+df <- data.frame()
+for (test_dataset in c(
+  get_types("boxi"),
+  get_types("sc"),
+  get_types("lookup"),
+  get_types("opendata"),
+  get_types("archive"),
+  "dd",
+  "nsu"
+)) {
+  local_data <- read_raw_local(test_dataset, year, local_mapping)
+  empty_string_cols <- names(local_data)[sapply(local_data, function(x) any(as.character(x) == "", na.rm = TRUE))]
+  if (length(empty_string_cols > 0)) {df <- rbind(df, data.frame(test_dataset, empty_string_cols))}
+}
+
+write.csv(df, paste0(uat_folder, "outputs/empty_string_cols.csv"), row.names = F)
+
+
+df <- data.frame()
+for (test_dataset in c(
+  get_types("boxi"),
+  get_types("sc"),
+  get_types("lookup"),
+  get_types("opendata"),
+  get_types("archive"),
+  "dd",
+  "nsu")) {
+  local_data <- read_raw_local(test_dataset, year, local_mapping)
+  empty_na_cols <- names(local_data)[sapply(local_data, function(x) any(is.na(x)))]
+  if (length(empty_na_cols) > 0) {
+    df <- rbind(df, data.frame(test_dataset = test_dataset,empty_na_cols = empty_na_cols))
+  }
+}
+
+write.csv(df,paste0(uat_folder, "outputs/empty_na_cols.csv"),row.names = FALSE)
