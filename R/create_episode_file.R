@@ -361,6 +361,7 @@ create_episode_file <- function(
 #' @inheritParams create_episode_file
 #' @param vars_to_keep a character vector of the variables to keep, all others
 #' will be stored.
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return `data` with only the `vars_to_keep` kept
 store_ep_file_vars <- function(data, year, vars_to_keep, BYOC_MODE) {
@@ -409,6 +410,7 @@ store_ep_file_vars <- function(data, year, vars_to_keep, BYOC_MODE) {
 
 #' Load the unneeded episode file variables
 #'
+#' @param BYOC_MODE BYOC_MODE
 #' @inheritParams create_episode_file
 #' @inheritParams store_ep_file_vars
 #'
@@ -578,6 +580,7 @@ create_cost_inc_dna <- function(data) {
 }
 
 #' Create the cohort lookups
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @inheritParams store_ep_file_vars
 #' @inheritParams create_demographic_cohorts
@@ -608,7 +611,9 @@ create_cohort_lookups <- function(data, year, BYOC_MODE = BYOC_MODE) {
 #'
 #' @inheritParams store_ep_file_vars
 #' @inheritParams get_demographic_cohorts_path
-#' @param demographic_cohort,service_use_cohort The cohort data
+#' @param demographic_cohort the demographics cohort data
+#' @param service_use_cohort The service use cohort data
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return The data including the Demographic and Service Use lookups.
 join_cohort_lookups <- function(

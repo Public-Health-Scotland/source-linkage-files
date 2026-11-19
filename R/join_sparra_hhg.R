@@ -1,5 +1,9 @@
 #' Join SPARRA and HHG
 #'
+#' @param sparra_data the data for SPARRA from Denodo
+#' @param hhg_data the data for HHG from Denodo
+#' @param BYOC_MODE BYOC_MODE
+#'
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The data including the SPARRA and HHG variables matched

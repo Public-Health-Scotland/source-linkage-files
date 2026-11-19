@@ -2,7 +2,7 @@
 #'
 #' @param data The input data frame
 #' @param year The year being processed
-#' @param BYOC_MODE Whether run in a docker on Denodo
+#' @param nsu_cohort the NSU cohort data
 #'
 #' @return A data frame containing the Non-Service Users as additional rows
 #' @export
@@ -12,7 +12,11 @@
 add_nsu_cohort <- function(
   data,
   year,
-  nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
+  nsu_cohort = get_nsu_data(
+    year = year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = BYOC_MODE
+  )
 ) {
   year_param <- year
 
@@ -126,9 +130,10 @@ add_nsu_cohort <- function(
 #' get nsu data from Denodo
 #'
 #' @param year financial year
-#' @param BYOC_MODE
+#' @param denodo_connect The connection to the Denodo platform
+#' @param BYOC_MODE BYOC_MODE
 #'
-#' @returns nsu
+#' @returns the NSU cohort from the denodo final interface
 #' @export
 #'
 get_nsu_data <- function(year,

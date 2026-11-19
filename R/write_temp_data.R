@@ -5,6 +5,7 @@
 #' @param year year variable
 #' @param file_name The file name to be written
 #' @param write_temp_to_disk Boolean type, write temp data to disk or not
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
@@ -32,6 +33,7 @@ write_temp_data <-
 #' @description Read a temp data to disk for debugging purpose.
 #' @param year year variable
 #' @param file_name The file name to be read
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export
@@ -50,6 +52,7 @@ read_temp_data <- function(year, file_name, BYOC_MODE) {
 #' @description Clean temp data from disk to save storage.
 #' @param year year variable
 #' @param file_type ep or ind files
+#' @param BYOC_MODE BYOC_MODE
 #'
 #' @return the data for next step as a [tibble][tibble::tibble-package].
 #' @export

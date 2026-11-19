@@ -12,7 +12,11 @@
 #' @family process extracts
 create_homelessness_lookup <- function(
   year,
-  homelessness_data = get_sdl_processed_data(year, type = "homelessness", denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
+  homelessness_data = get_sdl_processed_data(year,
+    type = "homelessness",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = BYOC_MODE
+  )
 ) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
 
@@ -43,7 +47,8 @@ create_homelessness_lookup <- function(
 #' @return the final data as a [tibble][tibble::tibble-package]
 #' @export
 #' @family episode_file
-add_homelessness_flag <- function(data, year,
+add_homelessness_flag <- function(data,
+                                  year,
                                   lookup = create_homelessness_lookup(year)) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_flag", year = year)
 
@@ -77,7 +82,9 @@ add_homelessness_flag <- function(data, year,
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
-add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
+add_homelessness_date_flags <- function(data,
+                                        year,
+                                        lookup = create_homelessness_lookup(year)) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_date_flags", year = year)
 
   if (!check_year_valid(year, type = "homelessness")) {
