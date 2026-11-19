@@ -7,9 +7,10 @@
 fill_geographies(
   data,
   slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
-    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE, run_id = run_id),
   slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE,
+    run_id = run_id)
 )
 }
 \arguments{

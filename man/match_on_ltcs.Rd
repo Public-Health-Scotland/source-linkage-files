@@ -8,7 +8,7 @@ match_on_ltcs(
   data,
   year,
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
-    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE)
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE, run_id = run_id)
 )
 }
 \arguments{
