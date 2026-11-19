@@ -7,6 +7,8 @@
 #' @param nsu_cohort the Non-service user cohort
 #' @param sc_client social care lookup file
 #' @param ltc_data the long term condition lookup
+#' @param demographic_cohort the demographic cohort file
+#' @param service_use_cohort the service use cohort file
 #' @param sparra_data the SPARRA dataset
 #' @param hhg_data the HHG dataset
 #' @param slf_pc_lookup the SLF postcode lookup
@@ -58,6 +60,14 @@ create_episode_file <- function(
     type = "ltc",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
     BYOC_MODE = BYOC_MODE
+  ),
+  demographic_cohort = read_file(
+    get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
+    col_select = c("anon_chi", "demographic_cohort")
+  ),
+  service_use_cohort = read_file(
+    get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
+    col_select = c("anon_chi", "service_use_cohort")
   ),
   sparra_data = get_sparra_data(year,
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
