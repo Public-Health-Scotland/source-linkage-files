@@ -6,13 +6,14 @@
 #' @param year Financial year.
 #' @param type Name of dataset (e.g. "acute").
 #' @param denodo_connect A Denodo connection object.
-#' @param BYOC_MODE Logical. TRUE or FALSE.
+#' @param BYOC_MODE Logical. TRUE or FALSE
+#' @param run_id Run_ID from denodo
 #'
 #' @return data
 #'
 #' @export
 #' @family file path functions
-get_processed_data_list <- function(year, type, BYOC_MODE) {
+get_processed_data_list <- function(year, type, BYOC_MODE, run_id = run_id) {
   logger::log_info("Creating processed data list started.")
 
   processed_data_list <- list(
@@ -66,6 +67,14 @@ get_processed_data_list <- function(year, type, BYOC_MODE) {
 
     processed_data_list[[dataset]][[variable]] <-
       as.double(processed_data_list[[dataset]][[variable]])
+  }
+
+  # Standardise run_date_time to character
+  for (dataset in names(processed_data_list)) {
+    if ("run_date_time" %in% names(processed_data_list[[dataset]])) {
+      processed_data_list[[dataset]]$run_date_time <-
+        as.character(processed_data_list[[dataset]]$run_date_time)
+    }
   }
 
   return(processed_data_list)
