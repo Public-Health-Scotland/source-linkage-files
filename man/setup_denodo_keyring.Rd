@@ -24,5 +24,5 @@ NULL (invisibly)
 \description{
 Helper function meant to be used with \code{\link[=get_denodo_connection]{get_denodo_connection()}}.
 It will go through the steps to set up a keyring which can be used to supply
-username and passwords to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}} in a secure and seamless way.
+username and passwords to \code{\link[odbc:dbConnect]{odbc::dbConnect()}} in a secure and seamless way.
 }
