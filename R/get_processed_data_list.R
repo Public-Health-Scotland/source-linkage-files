@@ -25,12 +25,12 @@ get_processed_data_list <- function(year, type, BYOC_MODE) {
     "maternity" = get_sdl_processed_data(year, type = "maternity", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_maternity_processed
     "mental_health" = get_sdl_processed_data(year, type = "mh", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_mh_processed
     "nrs_deaths" = get_sdl_processed_data(year, type = "nrs_deaths", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_nrs_deaths_processed
-    "outpatients" = get_sdl_processed_data(year, type = "outpatients", BYOC_MODE = BYOC_MODE, run_id = run_id) # , # sdl_outpatients_processed
+    "outpatients" = get_sdl_processed_data(year, type = "outpatients", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_outpatients_processed
     # "pis" = get_sdl_processed_data(year, type = "pis", BYOC_MODE = BYOC_MODE, run_id = run_id),
-    # "sc_at" = get_sdl_processed_data(year, type = "at", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_at_processed (ALL)
-    # "sc_ch" = get_sdl_processed_data(year, type = "ch", BYOC_MODE = BYOC_MODE, run_id = run_id),# sdl_sc_ch_processed (ALL)
-    # "sc_hc" = get_sdl_processed_data(year, type = "hc", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_hc_processed (ALL)
-    # "sc_sds" = get_sdl_processed_data(year, type = "sds", BYOC_MODE = BYOC_MODE, run_id = run_id) # sdl_sc_sds_processed (ALL)
+    "sc_at_fy" = get_sdl_processed_data(year, type = "sc_at_fy", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_at_processed (ALL)
+    "sc_ch_fy" = get_sdl_processed_data(year, type = "sc_ch_fy", BYOC_MODE = BYOC_MODE, run_id = run_id),# sdl_sc_ch_processed (ALL)
+    "sc_hc_fy" = get_sdl_processed_data(year, type = "sc_hc_fy", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_hc_processed (ALL)
+    "sc_sds_fy" = get_sdl_processed_data(year, type = "sc_sds_fy", BYOC_MODE = BYOC_MODE, run_id = run_id) # sdl_sc_sds_processed (ALL)
   )
 
   logger::log_info("Creating processed data list finished.")
