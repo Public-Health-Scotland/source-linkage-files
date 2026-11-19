@@ -38,13 +38,15 @@ create_episode_file <- function(
     homelessness_data = get_sdl_processed_data(year,
       type = "homelessness",
       denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-      BYOC_MODE = BYOC_MODE
+      BYOC_MODE = BYOC_MODE,
+      run_id = run_id
     )
   ),
   dd_data = get_sdl_processed_data(year,
     type = "dd",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   ),
   nsu_cohort = get_nsu_data(
     year = year,
@@ -59,15 +61,16 @@ create_episode_file <- function(
   ltc_data = get_sdl_processed_data(year,
     type = "ltc",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   ),
   demographic_cohort = read_file(
     get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("anon_chi", "demographic_cohort")
+    col_select = c("run_id", "anon_chi", "demographic_cohort")
   ),
   service_use_cohort = read_file(
     get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("anon_chi", "service_use_cohort")
+    col_select = c("run_id", "anon_chi", "service_use_cohort")
   ),
   sparra_data = get_sparra_data(year,
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
@@ -80,17 +83,20 @@ create_episode_file <- function(
   slf_pc_lookup = get_sdl_processed_data(year,
     type = "slf_pc_lookup",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   ),
   slf_gpprac_lookup = get_sdl_processed_data(year,
     type = "slf_gpprac_lookup",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   ),
   slf_deaths_lookup = get_sdl_processed_data(year,
     type = "combined_deaths",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   ),
   BYOC_MODE = BYOC_MODE,
   run_id = run_id,
@@ -621,22 +627,24 @@ join_cohort_lookups <- function(
   year,
   demographic_cohort = read_file(
     get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("anon_chi", "demographic_cohort")
+    col_select = c("run_id", "anon_chi", "demographic_cohort")
   ),
   service_use_cohort = read_file(
     get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("anon_chi", "service_use_cohort")
+    col_select = c("run_id", "anon_chi", "service_use_cohort")
   ),
   BYOC_MODE = BYOC_MODE
 ) {
   join_cohort_lookups <- data %>%
     dplyr::left_join(
-      demographic_cohort,
-      by = "anon_chi"
+      demographic_cohort %>%
+        dplyr::filter(run_id == run_id),
+      by = c("anon_chi", "run_id")
     ) %>%
     dplyr::left_join(
-      service_use_cohort,
-      by = "anon_chi"
+      service_use_cohort %>%
+        dplyr::filter(run_id == run_id),
+      by = c("anon_chi", "run_id")
     )
 
   log_ep_substage("Join cohort lookups", "finished", year)

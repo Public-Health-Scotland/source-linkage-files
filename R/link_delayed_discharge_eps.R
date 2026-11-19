@@ -14,7 +14,8 @@ link_delayed_discharge_eps <- function(
   dd_data = get_sdl_processed_data(year,
     type = "dd",
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   ) %>% slfhelper::get_chi()
 ) {
   if (!check_year_valid(year, type = "dd")) {
@@ -62,7 +63,7 @@ link_delayed_discharge_eps <- function(
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
   by_dd <- dplyr::join_by(
-    "anon_chi",
+    c("anon_chi", "run_id"),
     x$record_keydate1 >= y$dummy_cij_start,
     x$dummy_keydate2 <= y$dummy_cij_end
   )

@@ -15,7 +15,8 @@ create_homelessness_lookup <- function(
   homelessness_data = get_sdl_processed_data(year,
     type = "homelessness",
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE = BYOC_MODE
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   )
 ) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
@@ -61,7 +62,7 @@ add_homelessness_flag <- function(data,
     dplyr::left_join(
       lookup %>%
         dplyr::distinct(.data$anon_chi, .data$hl1_in_fy),
-      by = "anon_chi",
+      by = c("anon_chi", "run_id"),
       relationship = "many-to-one"
     ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(.data$hl1_in_fy, 0L))
