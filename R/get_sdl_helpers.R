@@ -194,7 +194,7 @@ get_sdl_processed_data <- function(
       )
     ) %>%
       dplyr::collect() %>%
-      dplyr::filter(run_id == run_id)
+      dplyr::filter(run_id == .env$run_id)
   }
 
   return(data)
