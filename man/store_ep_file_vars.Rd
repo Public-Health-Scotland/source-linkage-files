@@ -13,6 +13,8 @@ store_ep_file_vars(data, year, vars_to_keep, BYOC_MODE)
 
 \item{vars_to_keep}{a character vector of the variables to keep, all others
 will be stored.}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 \code{data} with only the \code{vars_to_keep} kept
