@@ -18,8 +18,6 @@ link_delayed_discharge_eps(
 \item{year}{The year being processed}
 
 \item{dd_data}{The processed DD extract}
-
-\item{denodo_connect}{Connection to denodo database}
 }
 \value{
 A data frame with the delayed discharge cohort added and linked

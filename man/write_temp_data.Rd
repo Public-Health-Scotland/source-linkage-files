@@ -14,6 +14,8 @@ write_temp_data(data, year, file_name, write_temp_to_disk, BYOC_MODE)
 \item{file_name}{The file name to be written}
 
 \item{write_temp_to_disk}{Boolean type, write temp data to disk or not}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the data for next step as a \link[tibble:tibble-package]{tibble}.

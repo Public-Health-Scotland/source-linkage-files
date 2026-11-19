@@ -19,7 +19,9 @@ join_cohort_lookups(
 
 \item{year}{The year to process, in FY format.}
 
-\item{demographic_cohort, service_use_cohort}{The cohort data}
+\item{demographic_cohort}{the demographics cohort data}
+
+\item{service_use_cohort}{The service use cohort data}
 
 \item{BYOC_MODE}{BYOC_MODE}
 }

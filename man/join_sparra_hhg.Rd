@@ -19,6 +19,10 @@ join_sparra_hhg(
 
 \item{year}{The year to process, in FY format.}
 
+\item{sparra_data}{the data for SPARRA from Denodo}
+
+\item{hhg_data}{the data for HHG from Denodo}
+
 \item{BYOC_MODE}{BYOC_MODE}
 }
 \value{

@@ -16,7 +16,7 @@ add_nsu_cohort(
 
 \item{year}{The year being processed}
 
-\item{BYOC_MODE}{Whether run in a docker on Denodo}
+\item{nsu_cohort}{the NSU cohort data}
 }
 \value{
 A data frame containing the Non-Service Users as additional rows
