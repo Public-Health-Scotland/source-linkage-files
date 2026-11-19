@@ -3,11 +3,23 @@
 #' @param processed_data_list containing data from processed extracts.
 #' @param year The year to process, in FY format.
 #' @param homelessness_lookup the lookup file for homelessness
+#' @param dd_data the processed delayed discharges file
+#' @param nsu_cohort the Non-service user cohort
 #' @param sc_client social care lookup file
+#' @param ltc_data the long term condition lookup
+#' @param sparra_data the SPARRA dataset
+#' @param hhg_data the HHG dataset
+#' @param slf_pc_lookup the SLF postcode lookup
+#' @param slf_gpprac_lookup the SLF gpprac lookup
+#' @param slf_deaths_lookup the SLF deaths lookup (ALL)
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
 #' @param BYOC_MODE BYOC_MODE
+#' @param run_id Run ID
+#' @param run_date_time time stamp
+#' @param write_to_disk write the final file to disk
 #' @param write_temp_to_disk write intermediate data for investigation or debug
+#'
 #' @inheritParams add_nsu_cohort
 #' @inheritParams fill_geographies
 #' @inheritParams join_cohort_lookups
@@ -70,9 +82,11 @@ create_episode_file <- function(
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
     BYOC_MODE = BYOC_MODE
   ),
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id,
+  run_date_time = run_date_time,
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE,
-  BYOC_MODE
+  write_temp_to_disk = FALSE
 ) {
   log_ep_substage("Create episode file", "started", year)
 
