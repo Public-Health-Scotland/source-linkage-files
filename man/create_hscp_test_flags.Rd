@@ -18,12 +18,12 @@ a dataframe with flag (TRUE or FALSE) for each HSCP
 Create flags for Health & Social Care Partnerships
 }
 \seealso{
-Other flag functions: 
-\code{\link{create_demog_test_flags}()},
-\code{\link{create_hb_cost_test_flags}()},
-\code{\link{create_hb_test_flags}()},
-\code{\link{create_lca_client_test_flags}()},
-\code{\link{create_lca_test_flags}()},
-\code{\link{create_sending_location_test_flags}()}
+Other flag functions:
+\code{\link[=create_demog_test_flags]{create_demog_test_flags()}},
+\code{\link[=create_hb_cost_test_flags]{create_hb_cost_test_flags()}},
+\code{\link[=create_hb_test_flags]{create_hb_test_flags()}},
+\code{\link[=create_lca_client_test_flags]{create_lca_client_test_flags()}},
+\code{\link[=create_lca_test_flags]{create_lca_test_flags()}},
+\code{\link[=create_sending_location_test_flags]{create_sending_location_test_flags()}}
 }
 \concept{flag functions}

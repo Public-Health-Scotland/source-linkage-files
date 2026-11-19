@@ -26,14 +26,14 @@ Produce a LTCs test counting total number of each LTC flag
 with distinct anon_chi.
 }
 \seealso{
-Other extract test functions: 
-\code{\link{calculate_measures}()},
-\code{\link{produce_episode_file_tests}()},
-\code{\link{produce_source_ch_tests}()},
-\code{\link{produce_source_cmh_tests}()},
-\code{\link{produce_source_dn_tests}()},
-\code{\link{produce_source_extract_tests}()},
-\code{\link{produce_source_hc_tests}()},
-\code{\link{produce_source_nrs_tests}()}
+Other extract test functions:
+\code{\link[=calculate_measures]{calculate_measures()}},
+\code{\link[=produce_episode_file_tests]{produce_episode_file_tests()}},
+\code{\link[=produce_source_ch_tests]{produce_source_ch_tests()}},
+\code{\link[=produce_source_cmh_tests]{produce_source_cmh_tests()}},
+\code{\link[=produce_source_dn_tests]{produce_source_dn_tests()}},
+\code{\link[=produce_source_extract_tests]{produce_source_extract_tests()}},
+\code{\link[=produce_source_hc_tests]{produce_source_hc_tests()}},
+\code{\link[=produce_source_nrs_tests]{produce_source_nrs_tests()}}
 }
 \concept{extract test functions}
