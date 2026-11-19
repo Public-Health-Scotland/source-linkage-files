@@ -53,11 +53,13 @@ create_episode_file <- function(
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
     BYOC_MODE = BYOC_MODE
   ),
-  # sc_client = get_sdl_processed_data(year,
-  #   type = "sc_client",
-  #   denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  #   BYOC_MODE = BYOC_MODE
-  # ),
+  sc_client = get_sdl_processed_data(year,
+    type = "sc_client_processed",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
+  ) %>%
+    dplyr::mutate(year = year),
   ltc_data = get_sdl_processed_data(year,
     type = "ltc",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
@@ -206,7 +208,7 @@ create_episode_file <- function(
       BYOC_MODE = BYOC_MODE
     ) %>%
     # match on sc client variables
-    # join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
+    join_sc_client(year, sc_client = sc_client, file_type = "episode") %>%
     # change to chi for phsmethods
     slfhelper::get_chi() %>%
     # Check chi is valid using phsmethods function
@@ -663,12 +665,19 @@ join_cohort_lookups <- function(
 #' @param file_type episode or individual file
 join_sc_client <- function(data,
                            year,
-                           sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
+                           sc_client = get_sdl_processed_data(year,
+                             type = "sc_client_processed",
+                             BYOC_MODE = BYOC_MODE,
+                             run_id = run_id
+                           ),
                            file_type = c("episode", "individual")) {
   if (!check_year_valid(year, type = "client")) {
     data_file <- data
     return(data_file)
   }
+
+  sc_client <- sc_client %>%
+    dplyr::filter(run_id == run_id)
 
   if (file_type == "episode") {
     # Match on client variables by linking_id
@@ -681,7 +690,7 @@ join_sc_client <- function(data,
     data_file_join <- data_sc %>%
       dplyr::inner_join(
         sc_client,
-        by = "linking_id",
+        by = c("linking_id", "run_id"),
         relationship = "many-to-one",
         suffix = c("", "_sc"),
         # should never have NA in linking_id
@@ -709,7 +718,7 @@ join_sc_client <- function(data,
     data_file <- data %>%
       dplyr::left_join(
         sc_client,
-        by = c("anon_chi"),
+        by = c("anon_chi", "run_id"),
         relationship = "one-to-one"
       )
   }
