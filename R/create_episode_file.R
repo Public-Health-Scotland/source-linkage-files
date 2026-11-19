@@ -103,11 +103,11 @@ create_episode_file <- function(
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
-    write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk) %>%
+    write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
     link_delayed_discharge_eps(year, dd_data) %>%
-    write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk) %>%
+    write_temp_data(year, file_name = "ep_temp1-2", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     add_nsu_cohort(year, nsu_cohort) %>%
     create_cost_inc_dna() %>%
     apply_cost_uplift()
@@ -217,16 +217,16 @@ create_episode_file <- function(
     ) %>%
     # change back to anon_chi
     slfhelper::get_anon_chi() %>%
-    write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk) %>%
+    write_temp_data(year, file_name = "ep_temp2", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     correct_cij_vars() %>%
     fill_missing_cij_markers() %>%
     add_ppa_flag() %>%
-    write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk) %>%
+    write_temp_data(year, file_name = "ep_temp3", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     match_on_ltcs(year, ltc_data) %>%
     correct_demographics(year) %>%
-    write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk) %>%
-    create_cohort_lookups(year, BYOC_MODE) %>%
-    join_cohort_lookups(year, demographic_cohort, service_use_cohort, BYOC_MODE) %>%
+    write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
+    create_cohort_lookups(year, BYOC_MODE = BYOC_MODE) %>%
+    join_cohort_lookups(year, demographic_cohort, service_use_cohort, BYOC_MODE = BYOC_MODE) %>%
     join_sparra_hhg(year, sparra_data, hhg_data, BYOC_MODE = BYOC_MODE) %>%
     fill_geographies(
       slf_pc_lookup,
@@ -237,7 +237,7 @@ create_episode_file <- function(
       slf_deaths_lookup = slf_deaths_lookup,
       BYOC_MODE = BYOC_MODE
     ) %>%
-    write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk) %>%
+    write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     add_activity_after_death_flag(year,
       deaths_data = slf_deaths_lookup
     ) %>%
@@ -245,7 +245,7 @@ create_episode_file <- function(
     load_ep_file_vars(year, BYOC_MODE = BYOC_MODE) %>%
     # temporary fix of extra column `fy`
     dplyr::select(-fy) %>%
-    write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk)
+    write_temp_data(year, file_name = "ep_temp6", write_temp_to_disk, BYOC_MODE = BYOC_MODE)
 
   if (!check_year_valid(year, type = c("ch", "hc", "at", "sds"))) {
     episode_file <- episode_file %>%
