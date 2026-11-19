@@ -4,14 +4,16 @@
 \alias{get_processed_data_list}
 \title{Get SDL Processed Data list for episode file}
 \usage{
-get_processed_data_list(year, type, BYOC_MODE)
+get_processed_data_list(year, type, BYOC_MODE, run_id = run_id)
 }
 \arguments{
 \item{year}{Financial year.}
 
 \item{type}{Name of dataset (e.g. "acute").}
 
-\item{BYOC_MODE}{Logical. TRUE or FALSE.}
+\item{BYOC_MODE}{Logical. TRUE or FALSE}
+
+\item{run_id}{Run_ID from denodo}
 
 \item{denodo_connect}{A Denodo connection object.}
 }
