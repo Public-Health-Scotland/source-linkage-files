@@ -135,6 +135,7 @@ get_sdl_names <- function(dataset, version) {
 #' @param type Name of dataset (e.g. "acute").
 #' @param denodo_connect A Denodo connection object.
 #' @param BYOC_MODE Logical. TRUE or FALSE.
+#' @param run_id run_id from BYOC control sheet
 #'
 #' @return data
 #'
@@ -144,7 +145,8 @@ get_sdl_processed_data <- function(
   year,
   type,
   denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  BYOC_MODE = BYOC_MODE
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id
 ) {
   log_slf_event(stage = "read", status = "start", type = type, year = year)
 
@@ -190,7 +192,8 @@ get_sdl_processed_data <- function(
         )
       )
     ) %>%
-      dplyr::collect()
+      dplyr::collect() %>%
+      dplyr::filter(run_id == run_id)
   }
 
   return(data)
