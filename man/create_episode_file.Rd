@@ -16,6 +16,10 @@ create_episode_file(
     = FALSE), BYOC_MODE = BYOC_MODE),
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  demographic_cohort = read_file(get_demographic_cohorts_path(year, BYOC_MODE =
+    BYOC_MODE), col_select = c("anon_chi", "demographic_cohort")),
+  service_use_cohort = read_file(get_service_use_cohorts_path(year, BYOC_MODE =
+    BYOC_MODE), col_select = c("anon_chi", "service_use_cohort")),
   sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
     FALSE), BYOC_MODE = BYOC_MODE),
   hhg_data = get_hhg_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
@@ -26,9 +30,11 @@ create_episode_file(
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id,
+  run_date_time = run_date_time,
   write_to_disk = TRUE,
-  write_temp_to_disk = FALSE,
-  BYOC_MODE
+  write_temp_to_disk = FALSE
 )
 }
 \arguments{
@@ -38,22 +44,35 @@ create_episode_file(
 
 \item{homelessness_lookup}{the lookup file for homelessness}
 
-\item{dd_data}{The processed DD extract}
+\item{dd_data}{the processed delayed discharges file}
 
-\item{ltc_data}{The LTC data for the year}
+\item{nsu_cohort}{the Non-service user cohort}
 
-\item{slf_pc_lookup}{The SLF Postcode lookup}
+\item{ltc_data}{the long term condition lookup}
 
-\item{slf_gpprac_lookup}{The SLF GP Practice lookup}
+\item{demographic_cohort}{the demographic cohort file}
 
-\item{slf_deaths_lookup}{combined deaths lookup}
+\item{service_use_cohort}{the service use cohort file}
 
-\item{write_to_disk}{(optional) Should the data be written to disk default is
-\code{TRUE} i.e. write the data to disk.}
+\item{sparra_data}{the SPARRA dataset}
 
-\item{write_temp_to_disk}{write intermediate data for investigation or debug}
+\item{hhg_data}{the HHG dataset}
+
+\item{slf_pc_lookup}{the SLF postcode lookup}
+
+\item{slf_gpprac_lookup}{the SLF gpprac lookup}
+
+\item{slf_deaths_lookup}{the SLF deaths lookup (ALL)}
 
 \item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{Run ID}
+
+\item{run_date_time}{time stamp}
+
+\item{write_to_disk}{write the final file to disk}
+
+\item{write_temp_to_disk}{write intermediate data for investigation or debug}
 
 \item{sc_client}{social care lookup file}
 }
