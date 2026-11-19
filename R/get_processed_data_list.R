@@ -29,7 +29,7 @@ get_processed_data_list <- function(year, type, BYOC_MODE, run_id = run_id) {
     "outpatients" = get_sdl_processed_data(year, type = "outpatients", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_outpatients_processed
     # "pis" = get_sdl_processed_data(year, type = "pis", BYOC_MODE = BYOC_MODE, run_id = run_id),
     "sc_at_fy" = get_sdl_processed_data(year, type = "sc_at_fy", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_at_processed (ALL)
-    "sc_ch_fy" = get_sdl_processed_data(year, type = "sc_ch_fy", BYOC_MODE = BYOC_MODE, run_id = run_id),# sdl_sc_ch_processed (ALL)
+    "sc_ch_fy" = get_sdl_processed_data(year, type = "sc_ch_fy", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_ch_processed (ALL)
     "sc_hc_fy" = get_sdl_processed_data(year, type = "sc_hc_fy", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_sc_hc_processed (ALL)
     "sc_sds_fy" = get_sdl_processed_data(year, type = "sc_sds_fy", BYOC_MODE = BYOC_MODE, run_id = run_id) # sdl_sc_sds_processed (ALL)
   )

@@ -7,7 +7,8 @@
 join_sc_client(
   data,
   year,
-  sc_client = get_sdl_processed_data(year, type = "sc_client", BYOC_MODE = BYOC_MODE),
+  sc_client = get_sdl_processed_data(year, type = "sc_client_processed", BYOC_MODE =
+    BYOC_MODE, run_id = run_id),
   file_type = c("episode", "individual")
 )
 }

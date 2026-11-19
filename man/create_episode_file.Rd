@@ -14,6 +14,9 @@ create_episode_file(
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
   nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE
     = FALSE), BYOC_MODE = BYOC_MODE),
+  sc_client = get_sdl_processed_data(year, type = "sc_client_processed", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id)
+    \%>\% dplyr::mutate(year = year),
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
   demographic_cohort = read_file(get_demographic_cohorts_path(year, BYOC_MODE =
@@ -50,6 +53,8 @@ create_episode_file(
 
 \item{nsu_cohort}{the Non-service user cohort}
 
+\item{sc_client}{social care lookup file}
+
 \item{ltc_data}{the long term condition lookup}
 
 \item{demographic_cohort}{the demographic cohort file}
@@ -75,8 +80,6 @@ create_episode_file(
 \item{write_to_disk}{write the final file to disk}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
-
-\item{sc_client}{social care lookup file}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} containing the episode file
