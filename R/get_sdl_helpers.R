@@ -98,10 +98,11 @@ get_sdl_names <- function(dataset, version) {
     "sc_sds_all", "sdl_sc_sds_source", NA_character_, "sdl_sc_at_processed",
 
     # Social care - FY views
-    # "sc_at_fy", NA_character_, NA_character_, "sdl_sc_at_fy_processed",
-    # "sc_ch_fy", NA_character_, NA_character_, "sdl_sc_ch_fy_processed",
-    # "sc_hc_fy", NA_character_, NA_character_, "sdl_sc_hc_fy_processed",
-    # "sc_sds_fy", NA_character_, NA_character_, "sdl_sc_sds_fy_processed",
+    "sc_client_processed", NA_character_, NA_character_, "sdl_client_fy_processed",
+    "sc_at_fy", NA_character_, NA_character_, "sdl_sc_at_fy_processed",
+    "sc_ch_fy", NA_character_, NA_character_, "sdl_sc_ch_fy_processed",
+    "sc_hc_fy", NA_character_, NA_character_, "sdl_sc_hc_fy_processed",
+    "sc_sds_fy", NA_character_, NA_character_, "sdl_sc_sds_fy_processed",
 
     # SPARRA
     "sparra", "sdl_sparra_source", NA_character_, NA_character_
