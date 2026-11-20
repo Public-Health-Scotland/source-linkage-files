@@ -10,7 +10,9 @@
 #' @param demographic_cohort the demographic cohort file
 #' @param service_use_cohort the service use cohort file
 #' @param sparra_data the SPARRA dataset
+#' @param sparra_next_fy_data SPARRA dataset for the next FY
 #' @param hhg_data the HHG dataset
+#' @param hhg_next_fy_data HHG dataset for the next FY
 #' @param slf_pc_lookup the SLF postcode lookup
 #' @param slf_gpprac_lookup the SLF gpprac lookup
 #' @param slf_deaths_lookup the SLF deaths lookup (ALL)
@@ -68,17 +70,27 @@ create_episode_file <- function(
   ),
   demographic_cohort = read_file(
     get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("run_id", "anon_chi", "demographic_cohort")
+    col_select = c("run_id", "year", "anon_chi", "demographic_cohort")
   ),
   service_use_cohort = read_file(
     get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("run_id", "anon_chi", "service_use_cohort")
+    col_select = c("run_id", "year", "anon_chi", "service_use_cohort")
   ),
   sparra_data = get_sparra_data(year,
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
     BYOC_MODE = BYOC_MODE
   ),
+  sparra_next_fy_data = get_sparra_data(
+    year = next_fy(year),
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
   hhg_data = get_hhg_data(year,
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
+    BYOC_MODE = BYOC_MODE
+  ),
+  hhg_next_fy_data = get_hhg_data(
+    year = next_fy(year),
     denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
     BYOC_MODE = BYOC_MODE
   ),
@@ -111,6 +123,12 @@ create_episode_file <- function(
   processed_data_list <- purrr::discard(processed_data_list, ~ is.null(.x) | identical(.x, tibble::tibble()))
 
   episode_file <- dplyr::bind_rows(processed_data_list) %>%
+    dplyr::mutate(
+      dplyr::across(
+        where(~ inherits(.x, "integer64")),
+        as.double
+      )
+    ) %>%
     write_temp_data(year, file_name = "ep_temp1", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     add_homelessness_date_flags(year, lookup = homelessness_lookup) %>%
@@ -236,7 +254,7 @@ create_episode_file <- function(
     write_temp_data(year, file_name = "ep_temp4", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     create_cohort_lookups(year, BYOC_MODE = BYOC_MODE) %>%
     join_cohort_lookups(year, demographic_cohort, service_use_cohort, BYOC_MODE = BYOC_MODE) %>%
-    join_sparra_hhg(year, sparra_data, hhg_data, BYOC_MODE = BYOC_MODE) %>%
+    join_sparra_hhg(year, sparra_data, sparra_next_fy_data, hhg_data, hhg_next_fy_data, BYOC_MODE = BYOC_MODE) %>%
     fill_geographies(
       slf_pc_lookup,
       slf_gpprac_lookup
@@ -640,13 +658,19 @@ join_cohort_lookups <- function(
 ) {
   # Prepare data for matching - filter by runID and Year
   demographic_cohort <- demographic_cohort %>%
-    dplyr::filter(run_id == run_id) %>%
-    dplyr::filter(year == year)
+    dplyr::mutate(run_id = as.double(run_id)) %>%
+    dplyr::filter(
+      run_id == .env$run_id,
+      year == .env$year
+    )
 
   # Prepare data for matching - filter by runID and Year
   service_use_cohort <- service_use_cohort %>%
-    dplyr::filter(run_id == run_id) %>%
-    dplyr::filter(year == year)
+    dplyr::mutate(run_id = as.double(run_id)) %>%
+    dplyr::filter(
+      run_id == .env$run_id,
+      year == .env$year
+    )
 
   # Join the cohort lookups
   join_cohort_lookups <- data %>%

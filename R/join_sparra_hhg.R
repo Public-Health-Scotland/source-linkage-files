@@ -1,7 +1,9 @@
 #' Join SPARRA and HHG
 #'
 #' @param sparra_data the data for SPARRA from Denodo
-#' @param hhg_data the data for HHG from Denodo
+#' @param sparra_next_fy_data SPARRA dataset for the next FY
+#' @param hhg_data the HHG dataset
+#' @param hhg_next_fy_data HHG dataset for the next FY
 #' @param BYOC_MODE BYOC_MODE
 #'
 #' @inheritParams store_ep_file_vars
@@ -14,7 +16,17 @@ join_sparra_hhg <- function(data,
                               denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                               BYOC_MODE = BYOC_MODE
                             ),
+                            sparra_next_fy_data = get_sparra_data(
+                              year = next_fy(year),
+                              denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              BYOC_MODE = BYOC_MODE
+                            ),
                             hhg_data = get_hhg_data(year,
+                              denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              BYOC_MODE = BYOC_MODE
+                            ),
+                            hhg_next_fy_data = get_hhg_data(
+                              year = next_fy(year),
                               denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
                               BYOC_MODE = BYOC_MODE
                             ),
@@ -36,7 +48,7 @@ join_sparra_hhg <- function(data,
   if (check_year_valid(next_fy(year), "sparra")) {
     data <- dplyr::left_join(
       data,
-      get_sparra_data(next_fy(year), denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE) %>%
+      sparra_next_fy_data %>%
         dplyr::select(anon_chi, sparra_risk_score) %>%
         dplyr::rename(sparra_end_fy = "sparra_risk_score"),
       by = c("anon_chi"),
@@ -63,7 +75,7 @@ join_sparra_hhg <- function(data,
   if (check_year_valid(next_fy(year), "hhg")) {
     data <- dplyr::left_join(
       data,
-      get_hhg_data(next_fy(year), denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE) %>%
+      hhg_next_fy_data %>%
         dplyr::rename(hhg_end_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
