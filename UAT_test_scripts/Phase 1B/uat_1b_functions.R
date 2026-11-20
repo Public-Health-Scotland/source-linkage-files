@@ -57,23 +57,25 @@ convert_types <- function(df, mapping) {
 ################################################################################ .
 
 read_raw_local <- function(test_dataset, year, local_mapping) {
-  # Column Map
-  local_test_map <- local_mapping %>%
-    # Filter the local mapping for the dataset required
-    filter(type == test_dataset) # %>%
-  # Replace spaces and special characters with . (R does this to column names automatically)
-  # mutate(old_colname = make.names(old_colname))
 
   # Data
   # Read local data
-  local_data <- get_data(test_dataset, "local", year, sdl_submission = T)
-  # Select columns specified in PHS code (raw name)
-  local_data <- local_data %>% select(all_of(local_test_map$old_colname))
-  # TODO: May need to rename IT columns with make.names
-  # Convert columns to type specified in PHS code
-  local_data <- local_data %>% convert_types(local_test_map)
-  # Rename columns from raw to SLF
-  colnames(local_data) <- local_test_map$new_colname
+  all_character <- ifelse(test_dataset %in% c(get_types("boxi"), "dn", "cmh", "ltc", "chi_deaths"), T, F)
+  local_data <- get_data(test_dataset, "local", year, sdl_submission = T, all_character = all_character)
+  # Column Map
+  local_test_map <- local_mapping %>%
+    # Filter the local mapping for the dataset required
+    filter(type == test_dataset,
+           old_colname %in% names(local_data))
+  # Put mapped columns first, but retain unmapped columns
+  local_data <- local_data %>%
+    select(all_of(local_test_map$old_colname), everything())
+  # Convert mapped columns to required types
+  local_data <- local_data %>%
+    convert_types(local_test_map)
+  # Rename mapped columns from raw to SLF
+  local_data <- local_data %>%
+    rename(!!!setNames(local_test_map$old_colname, local_test_map$new_colname))
   # Convert to tibble
   local_data <- as_tibble(local_data)
 
@@ -87,7 +89,7 @@ read_raw_local <- function(test_dataset, year, local_mapping) {
 read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters) {
   # Column Map
   sdl_test_map <- sdl_mapping %>%
-    # Filter the local mapping for the dataset required
+    # Filter the SDL mapping for the dataset required
     filter(type == test_dataset)
 
   # Filter Conditions (required for selecting a single year)
@@ -109,22 +111,31 @@ read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters) {
     # Filter data using the filter conditions specified in PHS code
     {
       if (length(filter_conditions) > 0 &&
-        !is.na(filter_conditions) &&
-        nzchar(filter_conditions)) {
+          !is.na(filter_conditions) &&
+          nzchar(filter_conditions)) {
         dplyr::filter(., !!rlang::parse_expr(filter_conditions))
       } else {
         .
       }
     } %>%
     # Select columns specified in PHS code (raw name)
-    dplyr::select(all_of(sdl_test_map$old_colname)) %>%
+    dplyr::select(any_of(sdl_test_map$old_colname), everything()) %>%
     # Collect
     dplyr::collect()
 
   # Denodo disconnect
   DBI::dbDisconnect(denodo_connect)
-  # Rename columns from raw to SLF
-  colnames(sdl_data) <- sdl_test_map$new_colname
+
+  # Only include mappings for columns actually present in SDL data
+  sdl_test_map <- sdl_test_map %>%
+    dplyr::filter(old_colname %in% names(sdl_data))
+
+  # Rename mapped columns only; unmapped columns retain their original names
+  sdl_data <- sdl_data %>%
+    dplyr::rename(
+      !!!setNames(sdl_test_map$old_colname, sdl_test_map$new_colname)
+    )
+
   # Convert to tibble
   sdl_data <- as_tibble(sdl_data)
 
@@ -136,14 +147,20 @@ read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters) {
 ################################################################################ .
 
 compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_filters) {
+  local_test_map <- local_mapping %>% filter(type == test_dataset)
+  sdl_test_map <- sdl_mapping %>% filter(type == test_dataset)
+
   # Read local data + note time
   local_data <- read_raw_local(test_dataset, year, local_mapping)
-  local_time <- Sys.time() + 3600
-  local_download_time <- file.info(get_local_filepath(test_dataset, year, sdl_submission = T)) %>% pull(mtime) + 3600
+  local_time <- Sys.time()
+  local_file <- get_local_filepath(type = test_dataset, year = year, sdl_submission = T)
+  local_download_time <- file.info(local_file) %>% pull(mtime)
+  in_local_map <- intersect(colnames(local_data), local_test_map$new_colname)
 
   # Read SDL data + note time
   sdl_data <- read_raw_sdl(test_dataset, year, sdl_mapping, sdl_filters)
-  sdl_time <- Sys.time() + 3600
+  sdl_time <- Sys.time()
+  in_sdl_map <- intersect(colnames(sdl_data), sdl_test_map$new_colname)
 
   # Order rows and columns as similarly as possible
   common_cols <- intersect(colnames(local_data), colnames(sdl_data))
@@ -171,7 +188,7 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
 
   # Compare each column in a loop
   details_df <- data.frame()
-  for (column in summary_df$colname) {
+  for (column in c(common_cols, sdl_specific_cols, local_specific_cols)) {
     # Table comparing counts for each value in the column (local and SDL)
     if ((column %in% colnames(local_data)) && (column %in% colnames(sdl_data))) {
       match_values <- full_join(
@@ -229,6 +246,7 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
   summary_df <- summary_df %>%
     full_join(details_df, by = "colname") %>%
     mutate(
+      type = test_dataset,
       in_both = equal_or_both_na(in_local, in_sdl),
       min_match = equal_or_both_na(min_local, min_sdl),
       max_match = equal_or_both_na(max_local, max_sdl),
@@ -250,9 +268,24 @@ compare_data <- function(test_dataset, year, local_mapping, sdl_mapping, sdl_fil
       ),
       sdl_time = sdl_time,
       local_time = local_time,
-      download_time = local_download_time
+      download_time = local_download_time,
+      local_file = local_file,
+      in_local_mapping = ifelse(colname %in% in_local_map, T, F),
+      in_sdl_mapping = ifelse(colname %in% in_sdl_map, T, F)
     ) %>%
-    select(-min_local, -min_sdl, -max_local, -max_sdl, -mean_local, -mean_sdl, -median_local, -median_sdl, -sum_local, -sum_sdl)
+    select(-min_local, -min_sdl, -max_local, -max_sdl, -mean_local, -mean_sdl, -median_local, -median_sdl, -sum_local, -sum_sdl) %>%
+    mutate(
+      RESULT = case_when(
+        RESULT == "FAIL" & in_local_mapping == F & in_sdl_mapping == F ~ "-",
+        RESULT == "FAIL" & in_sdl == F ~ "FAIL - Not in SDL",
+        RESULT == "FAIL" & in_local == F ~ "FAIL - Not in Local",
+        RESULT == "FAIL" & type_match == F ~ "FAIL - Data Type Mismatch",
+        RESULT == "FAIL" & local_na_count != 0 & sdl_na_count == 0 ~ "FAIL - Incorrect NA Coding",
+        RESULT == "FAIL" & change_total_vals != 0 ~ "FAIL - Row Count Mismatch",
+        RESULT == "FAIL" & (unique_vals_mismatch != 0 | unique_vals_with_different_counts != 0) ~ "FAIL - Data Mismatch",
+        TRUE ~ RESULT
+      ),
+    )
 
   return(summary_df)
 }
@@ -282,10 +315,10 @@ save_as_sheet <- function(summary_df, workbook_file) {
   addWorksheet(
     wb,
     sheetName = sheet_name,
-    tabColour = if (all(summary_df$RESULT == "PASS", na.rm = TRUE)) {
-      "palegreen"
-    } else {
+    tabColour = if (any(grepl("FAIL", summary_df$RESULT), na.rm = TRUE)) {
       "#FFC7CE"
+    } else {
+      "palegreen"
     }
   )
   writeData(wb, sheet_name, summary_df)
@@ -307,6 +340,13 @@ save_as_sheet <- function(summary_df, workbook_file) {
   mismatch_style <- createStyle(
     fgFill = "#FFC7CE",
     fontColour = "firebrick",
+    textDecoration = "bold"
+  )
+
+  # Yellow style for columns missing from mapping
+  mismatch_style_mapping <- createStyle(
+    fgFill = "lightyellow",
+    fontColour = "goldenrod",
     textDecoration = "bold"
   )
 
@@ -350,9 +390,12 @@ save_as_sheet <- function(summary_df, workbook_file) {
   highlight_cells("unique_vals_mismatch", summary_df$unique_vals_mismatch != 0, mismatch_style)
   highlight_cells("unique_vals_with_different_counts", summary_df$unique_vals_with_different_counts != 0, mismatch_style)
 
+  highlight_cells("in_local_mapping", summary_df$in_local_mapping == FALSE, mismatch_style_mapping)
+  highlight_cells("in_sdl_mapping", summary_df$in_sdl_mapping == FALSE, mismatch_style_mapping)
+
   # Highlight result column
-  highlight_cells("RESULT", summary_df$RESULT == "FAIL", mismatch_style)
-  highlight_cells("RESULT", summary_df$RESULT == "PASS", pass_style)
+  highlight_cells("RESULT",  grepl("FAIL", summary_df$RESULT), mismatch_style)
+  highlight_cells("RESULT",  !grepl("FAIL", summary_df$RESULT), pass_style)
 
   # Save
   saveWorkbook(wb, workbook_file, overwrite = TRUE)

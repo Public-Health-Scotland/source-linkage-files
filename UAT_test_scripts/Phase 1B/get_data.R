@@ -4,6 +4,7 @@
 
 devtools::load_all()
 library(createslf)
+options(scipen = 999)
 
 ################################################################################ .
 # Function to show all values for `family` argument in `get_types()`
@@ -265,8 +266,8 @@ get_submission_filepath <- function(type) {
     # Select file with the highest number (most recent)
     filename <- all_files[which.max(nums)]
 
-    if (type == "nsu") {
-      filename <- "SDL_NSU_20260617_1.parquet"
+    if(type == "nsu"){
+      filename <- "SDL_nsu_20260630_1.parquet"
     }
 
     if (type == "simd") {
@@ -285,7 +286,7 @@ get_submission_filepath <- function(type) {
 ################################################################################ .
 
 get_test_boxi_data <- function(type, year) {
-  source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/Extracts Temp/"
+  source_dir <- "/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/1b_source_data_views_detailed/boxi_extracts/"
   year <- convert_fyyear_to_year(year)
 
   filename <- dplyr::recode_values(
@@ -440,7 +441,7 @@ get_local_filepath <- function(type, year = "", sdl_submission = FALSE) {
 # Helper function to detect a file type and read the file
 ################################################################################ .
 
-auto_file_read <- function(filepath, n_rows = NULL) {
+auto_file_read <- function(filepath, n_rows = NULL, all_character = NULL) {
   # Check filepath argument is valid
   if (!is.character(filepath) ||
     length(filepath) != 1 ||
@@ -466,22 +467,41 @@ auto_file_read <- function(filepath, n_rows = NULL) {
     return(NULL)
   }
 
+  # Check all_character argument is valid
+  if (!is.logical(all_character) ||
+      length(all_character) != 1 ||
+      is.na(all_character)) {
+    message("`all_character` must be TRUE or FALSE.")
+    return(NULL)
+  }
+
+  # Check filepath exists
+  if (!file.exists(filepath)) {
+    message("File does not exist.")
+    return(NULL)
+  }
+
   # .csv / .csv.gz
   if (grepl("\\.csv(\\.gz)?$", filepath, ignore.case = TRUE)) {
-    if (is.null(n_rows)) {
-      data <- readr::read_csv(filepath)
+    col_types <- if (all_character) {
+      readr::cols(.default = readr::col_character())
     } else {
-      data <- readr::read_csv(filepath, nrows = n_rows)
+      NULL
+    }
+    if (is.null(n_rows)) {
+      data <- readr::read_csv(filepath, na = c(""), trim_ws = FALSE, col_types = col_types)
+    } else {
+      data <- readr::read_csv(filepath, n_max = n_rows, na = c(""), trim_ws = FALSE, col_types = col_types)
     }
 
-    # .rds / .rds.gz
+  # .rds / .rds.gz
   } else if (grepl("\\.rds(\\.gz)?$", filepath, ignore.case = TRUE)) {
     data <- readr::read_rds(filepath)
     if (!is.null(n_rows)) {
       data <- utils::head(data, n_rows)
     }
 
-    # .parquet
+  # .parquet
   } else if (tolower(tools::file_ext(filepath)) == "parquet") {
     if (is.null(n_rows)) {
       data <- arrow::read_parquet(filepath)
@@ -516,7 +536,7 @@ auto_file_read <- function(filepath, n_rows = NULL) {
 # NOTE: Social Care extracts return data from Denodo (social_care_2) and Open Data returns data from phsopendata
 ################################################################################ .
 
-get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NULL) {
+get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NULL, all_character = NULL) {
   # Check the file path exists
   filepath <- get_local_filepath(type = type, year = year, sdl_submission = sdl_submission)
   if (is.na(filepath)) {
@@ -583,7 +603,7 @@ get_local_data <- function(type, year = "", sdl_submission = FALSE, n_rows = NUL
       colNames = F
     )
   } else {
-    data <- auto_file_read(filepath, n_rows)
+    data <- auto_file_read(filepath, n_rows, all_character)
     message(paste0("Data read from: ", filepath))
   }
 
@@ -981,7 +1001,7 @@ get_sdl_data <- function(type, year = "", n_rows = NULL) {
 # Function to get data from SDL, local or submission. Enables number of rows to be specified.
 ################################################################################ .
 
-get_data <- function(type, read_from, year = "", sdl_submission = FALSE, n_rows = NULL) {
+get_data <- function(type, read_from, year = "", sdl_submission = FALSE, n_rows = NULL, all_character = NULL) {
   # Check read_from argument is valid
   if (!read_from %in% c("local", "sdl")) {
     message("`read_from` argument invalid. Must be `local` or `sdl`.")
@@ -990,7 +1010,7 @@ get_data <- function(type, read_from, year = "", sdl_submission = FALSE, n_rows 
 
   # Read local file
   if (read_from == "local") {
-    data <- get_local_data(type, year, sdl_submission, n_rows)
+    data <- get_local_data(type, year, sdl_submission, n_rows, all_character)
   }
 
   # Read SDL table
