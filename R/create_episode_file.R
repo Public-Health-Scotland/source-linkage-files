@@ -638,7 +638,6 @@ join_cohort_lookups <- function(
   ),
   BYOC_MODE = BYOC_MODE
 ) {
-
   # Prepare data for matching - filter by runID and Year
   demographic_cohort <- demographic_cohort %>%
     dplyr::filter(run_id == run_id) %>%
