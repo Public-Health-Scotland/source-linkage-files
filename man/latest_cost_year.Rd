@@ -18,10 +18,10 @@ Do not change unless specific instructions.
 Changing this means that we need to change cost_uplift().
 }
 \seealso{
-Other initialisation: 
-\code{\link{get_dd_period}()},
-\code{\link{latest_update}()},
-\code{\link{previous_update}()},
-\code{\link{years_to_run}()}
+Other initialisation:
+\code{\link[=get_dd_period]{get_dd_period()}},
+\code{\link[=latest_update]{latest_update()}},
+\code{\link[=previous_update]{previous_update()}},
+\code{\link[=years_to_run]{years_to_run()}}
 }
 \concept{initialisation}
