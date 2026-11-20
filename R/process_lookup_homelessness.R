@@ -26,7 +26,7 @@ create_homelessness_lookup <- function(
     return(NULL)
   }
   homelessness_lookup <- homelessness_data %>%
-    dplyr::distinct(.data$anon_chi, .data$record_keydate1, .data$record_keydate2) %>%
+    dplyr::distinct(.data$run_id, .data$anon_chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na("anon_chi") %>%
     dplyr::mutate(hl1_in_fy = 1L)
 
