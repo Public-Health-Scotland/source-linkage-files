@@ -264,8 +264,6 @@ create_service_use_cohorts <- function(
       "ae2_cost"
     )
 
-  }
-
   if (write_to_disk) {
     write_file(return_data,
       path = get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE, check_mode = "write"),
