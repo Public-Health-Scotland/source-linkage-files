@@ -261,8 +261,7 @@ create_episode_file <- function(
     ) %>%
     join_deaths_data(
       year,
-      slf_deaths_lookup = slf_deaths_lookup,
-      BYOC_MODE = BYOC_MODE
+      slf_deaths_lookup = slf_deaths_lookup
     ) %>%
     write_temp_data(year, file_name = "ep_temp5", write_temp_to_disk, BYOC_MODE = BYOC_MODE) %>%
     add_activity_after_death_flag(year,
@@ -368,6 +367,8 @@ create_episode_file <- function(
   # Ordering the episode file columns. If a new variable is added to the episode file or the
   # variable name changed, then the "order_ep_cols" function should be updated to reflect this.
   episode_file <- episode_file %>%
+    # TEMP CODE - currently no PIS data - declare the variables
+    dplyr::mutate(no_paid_items = NA) %>%
     order_ep_cols()
 
   if (write_to_disk) {
