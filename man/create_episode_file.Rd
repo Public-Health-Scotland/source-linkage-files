@@ -20,13 +20,17 @@ create_episode_file(
   ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
   demographic_cohort = read_file(get_demographic_cohorts_path(year, BYOC_MODE =
-    BYOC_MODE), col_select = c("run_id", "anon_chi", "demographic_cohort")),
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "demographic_cohort")),
   service_use_cohort = read_file(get_service_use_cohorts_path(year, BYOC_MODE =
-    BYOC_MODE), col_select = c("run_id", "anon_chi", "service_use_cohort")),
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "service_use_cohort")),
   sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
     FALSE), BYOC_MODE = BYOC_MODE),
+  sparra_next_fy_data = get_sparra_data(year = next_fy(year), denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   hhg_data = get_hhg_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
     FALSE), BYOC_MODE = BYOC_MODE),
+  hhg_next_fy_data = get_hhg_data(year = next_fy(year), denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
   slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
     get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
   slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
@@ -63,7 +67,11 @@ create_episode_file(
 
 \item{sparra_data}{the SPARRA dataset}
 
+\item{sparra_next_fy_data}{SPARRA dataset for the next FY}
+
 \item{hhg_data}{the HHG dataset}
+
+\item{hhg_next_fy_data}{HHG dataset for the next FY}
 
 \item{slf_pc_lookup}{the SLF postcode lookup}
 
