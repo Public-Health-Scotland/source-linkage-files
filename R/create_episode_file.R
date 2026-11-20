@@ -630,24 +630,34 @@ join_cohort_lookups <- function(
   year,
   demographic_cohort = read_file(
     get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("run_id", "anon_chi", "demographic_cohort")
+    col_select = c("run_id", "year", "anon_chi", "demographic_cohort")
   ),
   service_use_cohort = read_file(
     get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE),
-    col_select = c("run_id", "anon_chi", "service_use_cohort")
+    col_select = c("run_id", "year", "anon_chi", "service_use_cohort")
   ),
   BYOC_MODE = BYOC_MODE
 ) {
+
+  # Prepare data for matching - filter by runID and Year
+  demographic_cohort <- demographic_cohort %>%
+    dplyr::filter(run_id == run_id) %>%
+    dplyr::filter(year == year)
+
+  # Prepare data for matching - filter by runID and Year
+  service_use_cohort <- service_use_cohort %>%
+    dplyr::filter(run_id == run_id) %>%
+    dplyr::filter(year == year)
+
+  # Join the cohort lookups
   join_cohort_lookups <- data %>%
     dplyr::left_join(
-      demographic_cohort %>%
-        dplyr::filter(run_id == run_id),
-      by = c("anon_chi", "run_id")
+      demographic_cohort,
+      by = c("run_id", "year", "anon_chi")
     ) %>%
     dplyr::left_join(
-      service_use_cohort %>%
-        dplyr::filter(run_id == run_id),
-      by = c("anon_chi", "run_id")
+      service_use_cohort,
+      by = c("run_id", "year", "anon_chi")
     )
 
   log_ep_substage("Join cohort lookups", "finished", year)

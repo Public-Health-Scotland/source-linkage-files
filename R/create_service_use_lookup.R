@@ -240,8 +240,15 @@ create_service_use_cohorts <- function(
     ) %>%
     # Add the cohort names
     assign_cohort_names() %>%
+    dplyr::mutate(year = year,
+                  run_id = .env$run_id,
+                  run_date_time = NA # .env$run_date_time
+                  ) %>%
     # Select out the required variables
     dplyr::select(
+      "run_id",
+      "run_date_time",
+      "year",
       "anon_chi",
       "service_use_cohort",
       "psychiatry_cost",
@@ -257,12 +264,6 @@ create_service_use_cohorts <- function(
       "ae2_cost"
     )
 
-  if (isTRUE(BYOC_MODE)) {
-    return_data <- return_data %>%
-      dplyr::mutate(
-        run_id = NA, # .env$run_id,
-        run_date_time = NA # .env$run_date_time
-      )
   }
 
   if (write_to_disk) {

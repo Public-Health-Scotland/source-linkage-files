@@ -168,16 +168,30 @@ create_demographic_cohorts <- function(
       comm_living ~ "Assisted Living in the Community",
       TRUE ~ "Healthy and Low User"
     )) %>%
+    dplyr::mutate(
+      year = year,
+      run_id = .env$run_id,
+      run_date_time = NA, # .env$run_date_time
+    ) %>%
     # Reorder variables
-    dplyr::relocate("demographic_cohort", .after = "anon_chi")
-
-  if (isTRUE(BYOC_MODE)) {
-    demo_lookup <- demo_lookup %>%
-      dplyr::mutate(
-        run_id = NA, # .env$run_id,
-        run_date_time = NA # .env$run_date_time
-      )
-  }
+    dplyr::select(c(
+      "run_id",
+      "run_date_time",
+      "year",
+      "anon_chi",
+      "demographic_cohort",
+      "mh",
+      "frail",
+      "maternity",
+      "high_cc",
+      "medium_cc",
+      "low_cc",
+      "comm_living",
+      "adult_major",
+      "child_major",
+      "end_of_life",
+      "substance"
+    ))
 
   # Write to disk
   if (write_to_disk) {
