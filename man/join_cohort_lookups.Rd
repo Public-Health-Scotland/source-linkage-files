@@ -8,9 +8,9 @@ join_cohort_lookups(
   data,
   year,
   demographic_cohort = read_file(get_demographic_cohorts_path(year, BYOC_MODE =
-    BYOC_MODE), col_select = c("run_id", "anon_chi", "demographic_cohort")),
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "demographic_cohort")),
   service_use_cohort = read_file(get_service_use_cohorts_path(year, BYOC_MODE =
-    BYOC_MODE), col_select = c("run_id", "anon_chi", "service_use_cohort")),
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "service_use_cohort")),
   BYOC_MODE = BYOC_MODE
 )
 }
