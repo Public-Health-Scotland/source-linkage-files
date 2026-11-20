@@ -122,7 +122,7 @@ add_homelessness_date_flags <- function(data,
       (.data$record_keydate1 <= .data$application_date), 1, 0)) %>%
     dplyr::mutate(hl1_during_ep = ifelse((.data$application_date <= .data$record_keydate2) &
       (.data$record_keydate1 <= .data$end_date), 1, 0)) %>%
-    dplyr::group_by(.data$anon_chi, .data$recid, .data$record_keydate1, .data$record_keydate2) %>%
+    dplyr::group_by(.data$run_id, .data$anon_chi, .data$recid, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::summarise(
       hl1_6before_ep = max(.data$hl1_6before_ep),
       hl1_6after_ep = max(.data$hl1_6after_ep),
