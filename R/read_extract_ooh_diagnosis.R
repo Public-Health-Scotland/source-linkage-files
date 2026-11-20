@@ -25,7 +25,7 @@ read_extract_ooh_diagnosis <- function(
   # Load extract file
   diagnosis_extract <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gp_ooh_diagnosis_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "gp_ooh_diagnosis", version = version()))
   ) %>%
     # Filter to match BOXI extraction
     dplyr::filter(

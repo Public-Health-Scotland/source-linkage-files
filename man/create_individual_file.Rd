@@ -9,7 +9,8 @@ create_individual_file(
   year,
   homelessness_lookup = create_homelessness_lookup(year),
   write_to_disk = TRUE,
-  write_temp_to_disk
+  write_temp_to_disk,
+  BYOC_MODE
 )
 }
 \arguments{
@@ -19,10 +20,11 @@ create_individual_file(
 
 \item{homelessness_lookup}{the lookup file for homelessness}
 
-\item{write_to_disk}{(optional) Should the data be written to disk default is
-\code{TRUE} i.e. write the data to disk.}
+\item{write_to_disk}{write the final file to disk}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
+
+\item{BYOC_MODE}{BYOC mode}
 }
 \value{
 The processed individual file

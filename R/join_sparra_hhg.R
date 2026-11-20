@@ -1,14 +1,41 @@
 #' Join SPARRA and HHG
 #'
+#' @param sparra_data the data for SPARRA from Denodo
+#' @param sparra_next_fy_data SPARRA dataset for the next FY
+#' @param hhg_data the HHG dataset
+#' @param hhg_next_fy_data HHG dataset for the next FY
+#' @param BYOC_MODE BYOC_MODE
+#'
 #' @inheritParams store_ep_file_vars
 #'
 #' @return The data including the SPARRA and HHG variables matched
 #' on to the episode file.
-join_sparra_hhg <- function(data, year) {
-  if (check_year_valid(year, "sparra")) {
+join_sparra_hhg <- function(data,
+                            year,
+                            sparra_data = get_sparra_data(year,
+                              denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              BYOC_MODE = BYOC_MODE
+                            ),
+                            sparra_next_fy_data = get_sparra_data(
+                              year = next_fy(year),
+                              denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              BYOC_MODE = BYOC_MODE
+                            ),
+                            hhg_data = get_hhg_data(year,
+                              denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              BYOC_MODE = BYOC_MODE
+                            ),
+                            hhg_next_fy_data = get_hhg_data(
+                              year = next_fy(year),
+                              denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+                              BYOC_MODE = BYOC_MODE
+                            ),
+                            BYOC_MODE = BYOC_MODE) {
+  if (check_year_valid(year, "sparra") && nrow(sparra_data) > 0) {
     data <- dplyr::left_join(
       data,
-      read_file(get_sparra_path(year)) %>%
+      sparra_data %>%
+        dplyr::select(anon_chi, sparra_risk_score) %>%
         dplyr::rename(sparra_start_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
@@ -18,10 +45,11 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, sparra_start_fy = NA_integer_)
   }
 
-  if (check_year_valid(next_fy(year), "sparra")) {
+  if (check_year_valid(next_fy(year), "sparra") && nrow(sparra_data) > 0) {
     data <- dplyr::left_join(
       data,
-      read_file(get_sparra_path(next_fy(year))) %>%
+      sparra_next_fy_data %>%
+        dplyr::select(anon_chi, sparra_risk_score) %>%
         dplyr::rename(sparra_end_fy = "sparra_risk_score"),
       by = c("anon_chi"),
       na_matches = "never",
@@ -31,10 +59,11 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, sparra_end_fy = NA_integer_)
   }
 
-  if (check_year_valid(year, "hhg")) {
+  if (check_year_valid(year, "hhg") && nrow(hhg_data) > 0) {
     data <- dplyr::left_join(
       data,
-      read_file(get_hhg_path(year)) %>%
+      hhg_data %>%
+        dplyr::select(anon_chi, hhg_score) %>%
         dplyr::rename(hhg_start_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
@@ -44,10 +73,11 @@ join_sparra_hhg <- function(data, year) {
     data <- dplyr::mutate(data, hhg_start_fy = NA_integer_)
   }
 
-  if (check_year_valid(next_fy(year), "hhg")) {
+  if (check_year_valid(next_fy(year), "hhg") && nrow(hhg_data) > 0) {
     data <- dplyr::left_join(
       data,
-      read_file(get_hhg_path(next_fy(year))) %>%
+      hhg_next_fy_data %>%
+        dplyr::select(anon_chi, hhg_score) %>%
         dplyr::rename(hhg_end_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",

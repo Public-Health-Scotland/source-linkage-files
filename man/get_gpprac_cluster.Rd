@@ -27,6 +27,7 @@ Other lookup files:
 \code{\link[=get_dn_contacts_data]{get_dn_contacts_data()}},
 \code{\link[=get_dn_raw_costs_data]{get_dn_raw_costs_data()}},
 \code{\link[=get_geography_labels]{get_geography_labels()}},
+\code{\link[=get_gpprac_opendata]{get_gpprac_opendata()}},
 \code{\link[=get_gpprac_ref_data]{get_gpprac_ref_data()}},
 \code{\link[=get_hc_raw_costs_data]{get_hc_raw_costs_data()}},
 \code{\link[=get_hscp_pop_data]{get_hscp_pop_data()}},

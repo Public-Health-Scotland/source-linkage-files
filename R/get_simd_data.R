@@ -22,7 +22,7 @@ get_simd_data <- function(
   # Read data
   simd_data <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_simd_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "simd", version = version()))
   ) %>%
     # Rename variables
     # When a new version of the SIMD is released,

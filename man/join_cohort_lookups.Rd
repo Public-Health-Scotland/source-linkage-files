@@ -7,11 +7,11 @@
 join_cohort_lookups(
   data,
   year,
-  update = latest_update(),
-  demographic_cohort = read_file(get_demographic_cohorts_path(year, update), col_select =
-    c("anon_chi", "demographic_cohort")),
-  service_use_cohort = read_file(get_service_use_cohorts_path(year, update), col_select =
-    c("anon_chi", "service_use_cohort"))
+  demographic_cohort = read_file(get_demographic_cohorts_path(year, BYOC_MODE =
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "demographic_cohort")),
+  service_use_cohort = read_file(get_service_use_cohorts_path(year, BYOC_MODE =
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "service_use_cohort")),
+  BYOC_MODE = BYOC_MODE
 )
 }
 \arguments{
@@ -19,9 +19,11 @@ join_cohort_lookups(
 
 \item{year}{The year to process, in FY format.}
 
-\item{update}{The update to use}
+\item{demographic_cohort}{the demographics cohort data}
 
-\item{demographic_cohort, service_use_cohort}{The cohort data}
+\item{service_use_cohort}{The service use cohort data}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The data including the Demographic and Service Use lookups.

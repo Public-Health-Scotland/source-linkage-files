@@ -2,7 +2,7 @@
 #'
 #' @param data A data frame with the required variables.
 #' @param year The year in standard SLF format.
-#' @param update The update to use.
+#' @param BYOC_MODE BYOC MODE
 #' @param write_to_disk Default `TRUE`, will write the lookup to the
 #' Cohorts folder defined by [get_slf_dir].
 #'
@@ -12,7 +12,7 @@
 create_demographic_cohorts <- function(
   data,
   year,
-  update = latest_update(),
+  BYOC_MODE,
   write_to_disk = TRUE
 ) {
   check_variables_exist(
@@ -168,14 +168,37 @@ create_demographic_cohorts <- function(
       comm_living ~ "Assisted Living in the Community",
       TRUE ~ "Healthy and Low User"
     )) %>%
+    dplyr::mutate(
+      year = year,
+      run_id = .env$run_id,
+      run_date_time = NA, # .env$run_date_time
+    ) %>%
     # Reorder variables
-    dplyr::relocate("demographic_cohort", .after = "anon_chi")
+    dplyr::select(c(
+      "run_id",
+      "run_date_time",
+      "year",
+      "anon_chi",
+      "demographic_cohort",
+      "mh",
+      "frail",
+      "maternity",
+      "high_cc",
+      "medium_cc",
+      "low_cc",
+      "comm_living",
+      "adult_major",
+      "child_major",
+      "end_of_life",
+      "substance"
+    ))
 
   # Write to disk
   if (write_to_disk) {
     write_file(demo_lookup,
-      path = get_demographic_cohorts_path(year, update, check_mode = "write"),
-      group_id = 3206 # hscdiip owner
+      path = get_demographic_cohorts_path(year, BYOC_MODE = BYOC_MODE, check_mode = "write"),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

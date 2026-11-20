@@ -22,7 +22,7 @@ read_extract_ae_cup <- function(
 
   ae_cup_file <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_ae_ucd_cup_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "ae_cup", version = version()))
   ) %>%
     dplyr::filter(
       ed_arrival_financial_year == c_year,

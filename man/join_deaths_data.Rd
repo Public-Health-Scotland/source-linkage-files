@@ -4,14 +4,20 @@
 \alias{join_deaths_data}
 \title{Join Deaths data}
 \usage{
-join_deaths_data(data, year, BYOC_MODE = FALSE)
+join_deaths_data(
+  data,
+  year,
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE,
+    run_id = run_id)
+)
 }
 \arguments{
 \item{data}{Episode file data}
 
 \item{year}{financial year, e.g. '1920'}
 
-\item{BYOC_MODE}{BYOC mode}
+\item{slf_deaths_lookup}{combined deaths lookup}
 }
 \value{
 The data including the deaths lookup matched

@@ -24,7 +24,7 @@ read_extract_ae <- function(
   # Read Extract
   extract_ae <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_ae2_episode_level_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "ae", version = version()))
   ) %>%
     dplyr::filter(
       arrival_financial_year == c_year,
