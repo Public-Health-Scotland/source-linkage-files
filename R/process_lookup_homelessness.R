@@ -107,12 +107,13 @@ add_homelessness_date_flags <- function(data,
 
 
   homeless_flag <- data %>%
-    dplyr::select("anon_chi", "record_keydate1", "record_keydate2", "recid") %>%
+    dplyr::select("anon_chi", "record_keydate1", "record_keydate2", "recid", "run_id") %>%
     dplyr::filter(.data$recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
     dplyr::distinct() %>%
     dplyr::left_join(
       lookup,
-      by = "anon_chi", relationship = "many-to-many"
+      by = c("anon_chi", "run_id"),
+      relationship = "many-to-many"
     ) %>%
     dplyr::filter(.data$hl1_in_fy == 1) %>%
     dplyr::mutate(hl1_6before_ep = ifelse((.data$end_date <= .data$record_keydate2) &
@@ -133,7 +134,7 @@ add_homelessness_date_flags <- function(data,
   data <- data %>%
     dplyr::left_join(
       homeless_flag,
-      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid"),
+      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid", "run_id"),
       relationship = "many-to-one"
     ) %>%
     dplyr::mutate(
