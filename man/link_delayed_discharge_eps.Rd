@@ -9,7 +9,6 @@ link_delayed_discharge_eps(
   year,
   dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect =
     get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE, run_id = run_id)
-    \%>\% slfhelper::get_chi()
 )
 }
 \arguments{
