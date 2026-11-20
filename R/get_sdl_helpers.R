@@ -194,7 +194,13 @@ get_sdl_processed_data <- function(
       )
     ) %>%
       dplyr::collect() %>%
-      dplyr::filter(run_id == .env$run_id)
+      dplyr::filter(run_id == .env$run_id) %>%
+      dplyr::mutate(
+        dplyr::across(
+          where(~ inherits(.x, "integer64")),
+          as.double
+        )
+      )
   }
 
   return(data)
