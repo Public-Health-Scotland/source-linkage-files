@@ -61,7 +61,7 @@ add_homelessness_flag <- function(data,
   data <- data %>%
     dplyr::left_join(
       lookup %>%
-        dplyr::distinct(.data$anon_chi, .data$hl1_in_fy),
+        dplyr::distinct(.data$run_id, .data$anon_chi, .data$hl1_in_fy),
       by = c("anon_chi", "run_id"),
       relationship = "many-to-one"
     ) %>%
