@@ -50,6 +50,11 @@ recode_datasets <- function(x) {
     "combined_deaths" = "combined_deaths",
     "chi_deaths" = "chi_deaths",
     "dn_cost_lookup" = "dn_cost_lookup",
+    "sc_at_fy" = "at",
+    "sc_ch_fy" = "ch",
+    "sc_hc_fy" = "hc",
+    "sc_sds_fy" = "sds",
+    "sc_client_processed" = "sc_client_processed",
     .default = x
   )
 }
@@ -59,37 +64,14 @@ dataset_name2 <- recode_datasets(dataset_name)
 # For latest data in sourcedev use:
 # slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name2, BYOC_MODE = FALSE))
 
-# Read boxi data
-# if (isTRUE(year_specific) && isFALSE(type_specific)) {
-#   slf_current_data <- get(fn_name_processed)(year = "1920", BYOC_MODE = FALSE)
-# } else {
-#   slf_current_data <- get(fn_name_processed)(BYOC_MODE = FALSE)
-# }
-
-slf_current_data <- get(fn_name_processed)(year = "1920", type = dataset_name2, BYOC_MODE = FALSE)
+# Read current data
+if (isTRUE(year_specific) && isTRUE(type_specific)) {
+  slf_current_data <- get(fn_name_processed)(year = "1920", type = dataset_name2, BYOC_MODE = FALSE)
+} else {
+  slf_current_data <- get(fn_name_processed)(year = "1920")
+}
 
 slf_current_data <- read_file(slf_current_data)
-
-#slf_current_data <- read_file('/conf/sourcedev/Source_Linkage_File_Updates/1920/sep26 update/anon-maternity_for_source-201920.parquet')
-
-# } else if (isFALSE(year_specific) && isTRUE(type_specific)) {
-#   boxi_data <- get(fn_name)(type = type_name)
-# } else if (isTRUE(year_specific) && isTRUE(type_specific)) {
-#   boxi_data <- get(fn_name)(year = "1920", type = type_name)
-# } else {
-#   boxi_data <- get(fn_name)()
-# }
-#
-# if (is(boxi_data, "fs_path")) {
-#   ext <- fs::path_ext(boxi_data)
-#
-#   if (ext == "xlsx") {
-#     boxi_data <- readxl::read_excel(boxi_data)
-#   } else {
-#     boxi_data <- read_file(boxi_data) # %>% janitor::clean_names()
-#   }
-# }
-
 
 #-------------------------------------------------------------------------------
 # Output statistics -----

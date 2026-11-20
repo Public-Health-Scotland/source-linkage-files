@@ -37,7 +37,7 @@ get_sc_demog_lookup_path <- function(update = latest_update(), ...) {
 #' @export
 #' @family social care lookup file paths
 #' @seealso [get_file_path()] for the generic function.
-get_sc_client_lookup_path <- function(year, update = latest_update(), ...) {
+get_sc_client_lookup_path <- function(year, update = "Dec_2026", ...) {
   if (!check_year_valid(year, type = "client")) {
     return(get_dummy_path())
   } else {

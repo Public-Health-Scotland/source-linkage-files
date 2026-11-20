@@ -54,28 +54,20 @@ ii <- 1
 # Test year
 year <- "1920"
 
-# Dataset to test
-# "acute", "ae","delayed_discharges", "dn", "gp_ooh_all", "homelessness", "mental_health", "nrs_deaths", "outpatients"
-# "maternity"
+# Processed Dataset to test
+# "acute", "ae", "district_nursing", "gp_ooh", "homelessness",
+# "maternity", "mental_health", "nrs_deaths", "outpatients"
+# "sc_at_fy", "sc_ch_fy", "sc_hc_fy", "sc_sds_fy", "sc_client_processed"
+
+
+# TODO/set up - however these datasets are dropped from the ep file processing
 # "combined_deaths"
 # "chi_deaths"
 # "dn_cost_lookup"
-
 # "homelessness_completeness"
 # "ltcs"
 
-
-
-
-dataset_name <- c("acute",
-                  "ae",
-                  "district_nursing",
-                  "gp_ooh",
-                  "homelessness",
-                  "maternity",
-                  "mental_health",
-                  "nrs_deaths",
-                  "outpatients")
+dataset_name <- c("sc_client_processed")
 
 # Analyst name for writing to disk
 analyst <- "Jen"
