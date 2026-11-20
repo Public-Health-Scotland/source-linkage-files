@@ -297,7 +297,7 @@ link_delayed_discharge_eps <- function(
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
-    dplyr::group_by(.data$run_id,.data$anon_chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$run_id, .data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::mutate(cij_delay = dplyr::if_else(.data$cij_delay == "0",
       FALSE,
