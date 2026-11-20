@@ -63,6 +63,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::left_join(
       data,
       hhg_data %>%
+        dplyr::select(anon_chi, hhg_score) %>%
         dplyr::rename(hhg_start_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
@@ -76,6 +77,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::left_join(
       data,
       hhg_next_fy_data %>%
+        dplyr::select(anon_chi, hhg_score) %>%
         dplyr::rename(hhg_end_fy = "hhg_score"),
       by = c("anon_chi"),
       na_matches = "never",
