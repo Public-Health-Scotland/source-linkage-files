@@ -32,7 +32,7 @@ This is meant to be used with \code{\link[=phs_db_connection]{phs_db_connection(
 interactively i.e. not in targets or in a workbench job.
 
 With the default options it will go through the steps to set up a keyring
-which can be used to supply passwords to \code{\link[odbc:dbConnect-OdbcDriver-method]{odbc::dbConnect()}} (or others) in a
+which can be used to supply passwords to \code{\link[odbc:dbConnect]{odbc::dbConnect()}} (or others) in a
 secure and seamless way.
 \enumerate{
 \item Create an .Renviron file in the project and add a password (for the

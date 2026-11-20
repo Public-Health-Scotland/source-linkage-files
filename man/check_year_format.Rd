@@ -20,8 +20,8 @@ not already.
 Test to check that the year vector is in the correct format
 }
 \seealso{
-Other year functions: 
-\code{\link{convert_fyyear_to_year}()},
-\code{\link{convert_year_to_fyyear}()}
+Other year functions:
+\code{\link[=convert_fyyear_to_year]{convert_fyyear_to_year()}},
+\code{\link[=convert_year_to_fyyear]{convert_year_to_fyyear()}}
 }
 \concept{year functions}
