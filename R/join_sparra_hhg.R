@@ -31,7 +31,7 @@ join_sparra_hhg <- function(data,
                               BYOC_MODE = BYOC_MODE
                             ),
                             BYOC_MODE = BYOC_MODE) {
-  if (check_year_valid(year, "sparra")) {
+  if (check_year_valid(year, "sparra") && nrow(sparra_data) > 0) {
     data <- dplyr::left_join(
       data,
       sparra_data %>%
@@ -45,7 +45,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::mutate(data, sparra_start_fy = NA_integer_)
   }
 
-  if (check_year_valid(next_fy(year), "sparra")) {
+  if (check_year_valid(next_fy(year), "sparra") && nrow(sparra_data) > 0) {
     data <- dplyr::left_join(
       data,
       sparra_next_fy_data %>%
@@ -59,7 +59,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::mutate(data, sparra_end_fy = NA_integer_)
   }
 
-  if (check_year_valid(year, "hhg")) {
+  if (check_year_valid(year, "hhg") && nrow(hhg_data) > 0) {
     data <- dplyr::left_join(
       data,
       hhg_data %>%
@@ -72,7 +72,7 @@ join_sparra_hhg <- function(data,
     data <- dplyr::mutate(data, hhg_start_fy = NA_integer_)
   }
 
-  if (check_year_valid(next_fy(year), "hhg")) {
+  if (check_year_valid(next_fy(year), "hhg") && nrow(hhg_data) > 0) {
     data <- dplyr::left_join(
       data,
       hhg_next_fy_data %>%
