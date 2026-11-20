@@ -142,6 +142,7 @@ create_episode_file <- function(
         "keytime1",
         "keytime2",
         "smrtype",
+        "run_id",
         "anon_chi",
         "person_id",
         "social_care_id",
@@ -677,7 +678,7 @@ join_sc_client <- function(data,
   }
 
   sc_client <- sc_client %>%
-    dplyr::filter(run_id == run_id)
+    dplyr::filter(run_id == .env$run_id)
 
   if (file_type == "episode") {
     # Match on client variables by linking_id
