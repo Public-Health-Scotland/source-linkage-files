@@ -4,7 +4,7 @@
 \alias{get_sc_client_lookup_path}
 \title{Social Care Client Lookup File Path}
 \usage{
-get_sc_client_lookup_path(year, update = latest_update(), ...)
+get_sc_client_lookup_path(year, update = "Dec_2026", ...)
 }
 \arguments{
 \item{year}{Financial year.}
