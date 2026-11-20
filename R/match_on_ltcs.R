@@ -19,6 +19,7 @@ match_on_ltcs <- function(
   )
 ) {
   ltc_data <- ltc_data %>%
+    dplyr::filter(year == .env$year) %>%
     dplyr::group_by(anon_chi) %>%
     dplyr::filter(dplyr::n() == 1) %>%
     dplyr::ungroup()

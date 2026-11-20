@@ -16,7 +16,7 @@ link_delayed_discharge_eps <- function(
     denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
     BYOC_MODE = BYOC_MODE,
     run_id = run_id
-  ) %>% slfhelper::get_chi()
+  )
 ) {
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
@@ -47,6 +47,12 @@ link_delayed_discharge_eps <- function(
     )
 
   ## handling DD ----
+
+  # Convert to CHI and filter on year
+  dd_data <- dd_data %>%
+    slfhelper::get_chi() %>%
+    dplyr::filter(year == .env$year)
+
   # no flag for last reported
   dd_data <- dd_data %>%
     dplyr::mutate(
@@ -297,7 +303,7 @@ link_delayed_discharge_eps <- function(
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
-    dplyr::group_by(.data$run_id,.data$anon_chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$run_id, .data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::mutate(cij_delay = dplyr::if_else(.data$cij_delay == "0",
       FALSE,

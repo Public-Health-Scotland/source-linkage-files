@@ -678,7 +678,7 @@ join_sc_client <- function(data,
   }
 
   sc_client <- sc_client %>%
-    dplyr::filter(run_id == .env$run_id)
+    dplyr::filter(year == .env$year)
 
   if (file_type == "episode") {
     # Match on client variables by linking_id
