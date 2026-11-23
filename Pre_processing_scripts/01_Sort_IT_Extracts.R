@@ -1,5 +1,5 @@
 ################################################################################
-# Name of file -  00_Sort_IT_Extracts.R
+# Name of file -  00_Sort_IT_Extracts.R (part 1)
 #
 # Original Authors - Jennifer Thom, Zihao Li
 # Original Date - July 2024
@@ -168,27 +168,11 @@ cli::cli_alert_info("Converting IT Extracts Starts at {Sys.time()}")
 lapply(csv_files, convert_it_csv_to_parquet)
 
 
-## Stage 5 - Tidy up
+# Stage 5 - TIDY UP
 #-------------------------------------------------------------------------------
-# zip and archive current new parquet files
-new_parquet_list <- list.files(it_extract_anon_path, full.names = TRUE)
-new_parquet_list <- new_parquet_list[grepl(new_task_num, new_parquet_list)]
-
-zip_file_path <- zip::zip(
-  zipfile = file.path(
-    it_extract_path,
-    stringr::str_glue("archive/{new_task_num}_{latest_update()}.zip")
-  ),
-  files = new_parquet_list,
-  compression_level = 9,
-  mode = "cherry-pick"
-)
-
-# delete csv files in this update
-if (file.exists(zip_file_path)) {
-  file.remove(csv_files)
-}
-
+# Run PART 2 of the IT extracts script: 02_Tidy_IT_Extracts.R
+# Only tidy up once happy with the IT extracts as this will remove the version
+# supplied by IT
 #-------------------------------------------------------------------------------
 
 # End of Script #
