@@ -48,9 +48,8 @@ link_delayed_discharge_eps <- function(
 
   ## handling DD ----
 
-  # Convert to CHI and filter on year
+  # Filter on year
   dd_data <- dd_data %>%
-    slfhelper::get_chi() %>%
     dplyr::filter(year == .env$year)
 
   # no flag for last reported

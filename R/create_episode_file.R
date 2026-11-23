@@ -469,7 +469,7 @@ load_ep_file_vars <- function(data, year, BYOC_MODE) {
     ) %>%
     dplyr::select(!"ep_file_row_id")
 
-  fs::file_delete(tempfile_path)
+  #fs::file_delete(tempfile_path)
 
   log_ep_substage("Load episode file variables", "finished", year)
 
