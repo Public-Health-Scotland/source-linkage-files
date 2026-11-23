@@ -16,6 +16,25 @@ process_tests(
   run_date_time = NA
 )
 }
+\arguments{
+\item{data}{Data to test}
+
+\item{year}{Financial year}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{denodo_connect}{Connection to Denodo}
+
+\item{file_location}{Location of file - denodo or local}
+
+\item{benchmark_comparison_type}{Whether to compare to episode/individual file or previous extract}
+
+\item{benchmark_run_id}{benchmark_run_id}
+
+\item{run_id}{run_id}
+
+\item{run_date_time}{run_date_time}
+}
 \description{
 This script takes a processed extract and produces
 a test comparison with the previous data. This is returned for stacking in BYOC

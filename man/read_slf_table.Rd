@@ -20,6 +20,8 @@ read_slf_table(
 
 \item{denodo_connect}{Connection to Denodo}
 
+\item{col_select}{Columns to read in}
+
 \item{columns}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} \code{columns} is no
 longer used, use \code{col_select} instead.}
 
