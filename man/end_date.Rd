@@ -7,8 +7,9 @@
 end_date()
 }
 \value{
-Get the end date of the latest update period
+A \code{Date} containing the end date of the latest reporting period.
 }
 \description{
-End date
+Returns the end date associated with the reporting period specified by the
+\code{reporting_period} environment variable.
 }
