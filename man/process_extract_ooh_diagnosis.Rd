@@ -7,7 +7,7 @@
 process_extract_ooh_diagnosis(
   data,
   year,
-  readcode = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
+  readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE)
 )
 }
 \arguments{
