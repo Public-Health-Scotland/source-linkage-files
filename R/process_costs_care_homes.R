@@ -19,7 +19,7 @@ process_costs_care_homes <- function(ch_costs_data = get_ch_raw_costs_data(BYOC_
                                      BYOC_MODE = FALSE,
                                      run_id = NA,
                                      run_date_time = NA) {
-  log_slf_event(stage = "process", status = "start", type = "ch_costs", year = "all")
+  log_slf_event(stage = "process", status = "start", type = "ch_cost_lookup", year = "all")
 
   # Data cleaning ---------------------------------------
 
@@ -98,7 +98,7 @@ process_costs_care_homes <- function(ch_costs_data = get_ch_raw_costs_data(BYOC_
     )
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "ch_costs", year = "all")
+  log_slf_event(stage = "process", status = "complete", type = "ch_cost_lookup", year = "all")
 
   return(ch_costs_uplifted)
 }

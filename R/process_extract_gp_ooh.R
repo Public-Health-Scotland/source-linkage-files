@@ -37,9 +37,9 @@ process_extract_gp_ooh <- function(
   run_id = NA,
   run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
+  log_slf_event(stage = "process", status = "start", type = "gp_ooh", year = year)
 
-  diagnosis_extract <- process_extract_ooh_diagnosis(ooh_diagnosis, year, readcode = readcode_lookup)
+  diagnosis_extract <- process_extract_ooh_diagnosis(ooh_diagnosis, year, readcode_lookup = readcode_lookup)
   outcomes_extract <- process_extract_ooh_outcomes(ooh_outcomes, year)
   consultations_extract <- process_extract_ooh_consultations(ooh_consultations, year)
 
@@ -177,7 +177,7 @@ process_extract_gp_ooh <- function(
       ) # sourcedev owner
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "gpooh", year = year)
+  log_slf_event(stage = "process", status = "complete", type = "gp_ooh", year = year)
 
   return(final_data)
 }

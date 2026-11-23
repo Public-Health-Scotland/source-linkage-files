@@ -21,7 +21,7 @@ read_extract_gp_ooh <- function(
   denodo_connect = NULL,
   BYOC_MODE
 ) {
-  log_slf_event(stage = "read", status = "start", type = "gpooh", year = year)
+  log_slf_event(stage = "read", status = "start", type = "gp_ooh", year = year)
 
   ooh_extracts <- list(
     "diagnosis" = read_extract_ooh_diagnosis(
@@ -41,7 +41,7 @@ read_extract_gp_ooh <- function(
     )
   )
 
-  log_slf_event(stage = "read", status = "complete", type = "gpooh", year = year)
+  log_slf_event(stage = "read", status = "complete", type = "gp_ooh", year = year)
 
   return(ooh_extracts)
 }

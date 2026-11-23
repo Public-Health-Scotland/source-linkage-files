@@ -279,7 +279,7 @@ non_year_targets <- list(
     hc_cost_lookup,
     # Function
     process_costs_home_care(
-      hc_raw_costs = hc_raw_costs,
+      hc_costs_raw = hc_raw_costs,
       lca_data = la_code_opendata,
       write_to_disk = write_to_disk,
       BYOC_MODE = BYOC_MODE,
@@ -1266,9 +1266,7 @@ year_targets <- tar_map(
       data = all_at,
       year = year,
       write_to_disk = write_to_disk,
-      BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time
+      BYOC_MODE = BYOC_MODE
     )
   ),
   # TEST - SC Alarms Telecare
@@ -1298,8 +1296,6 @@ year_targets <- tar_map(
       year = year,
       ch_costs = ch_cost_lookup,
       BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     )
   ),
@@ -1402,8 +1398,6 @@ year_targets <- tar_map(
       data = all_sds,
       year = year,
       BYOC_MODE = BYOC_MODE,
-      run_id = run_id,
-      run_date_time = run_date_time,
       write_to_disk = write_to_disk
     )
   ),
@@ -1468,7 +1462,7 @@ final_stack_targets <- list(
     tests_all_written,
     write_stacked_test_results(
       test_results = list(tests_all_stacked),
-      test_type = "all",
+      test_type = "extract",
       BYOC_MODE = BYOC_MODE
     )
   )

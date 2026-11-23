@@ -49,6 +49,8 @@ process_tests_delayed_discharges <- function(data,
     ) %>%
     write_tests_xlsx(sheet_name = "dd", year, workbook_name = "extract", BYOC_MODE = BYOC_MODE)
 
+  log_slf_event(stage = "test", status = "complete", type = "dd", year = year)
+
   return(comparison)
 }
 
@@ -76,8 +78,6 @@ produce_source_dd_tests <- function(data) {
     dplyr::select(c("n_delay_episodes":dplyr::last_col())) %>%
     # use function to sum new test flags
     calculate_measures(measure = "sum")
-
-  log_slf_event(stage = "test", status = "complete", type = "dd", year = year)
 
   return(test_flags)
 }

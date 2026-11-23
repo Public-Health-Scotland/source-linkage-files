@@ -12,7 +12,7 @@ process_tests_it_chi_deaths <- function(data,
                                         benchmark_run_id = NA,
                                         run_id = NA,
                                         run_date_time = NA) {
-  log_slf_event(stage = "test", status = "start", type = "it_chi_deaths", year = "all")
+  log_slf_event(stage = "test", status = "start", type = "chi_deaths", year = "all")
 
   comparison <- produce_test_comparison(
     old_data = produce_it_chi_deaths_tests(
@@ -44,7 +44,7 @@ process_tests_it_chi_deaths <- function(data,
     ) %>%
     write_tests_xlsx(sheet_name = "it_chi_deaths", year, workbook_name = "lookup", BYOC_MODE = BYOC_MODE)
 
-  log_slf_event(stage = "test", status = "complete", type = "it_chi_deaths", year = "all")
+  log_slf_event(stage = "test", status = "complete", type = "chi_deaths", year = "all")
 
   return(comparison)
 }

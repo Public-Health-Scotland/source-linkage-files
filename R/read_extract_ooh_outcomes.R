@@ -3,6 +3,7 @@
 #' @inherit read_extract_acute
 #'
 #' @return a [tibble][tibble::tibble-package] with OOH Outcomes extract data
+#' @export
 read_extract_ooh_outcomes <- function(
   year,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),

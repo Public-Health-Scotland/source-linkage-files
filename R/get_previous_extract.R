@@ -27,7 +27,9 @@ get_previous_extract <- function(
     # Filter run_id
     dplyr::filter(
       .data$run_id == benchmark_run_id
-    )
+    ) %>%
+    # Remove run_id and run_date_time columns
+    dplyr::select(-"run_id", -"run_date_time")
 
   if (year != "all") {
     # Filter year if not all

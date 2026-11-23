@@ -67,27 +67,33 @@ process_tests <- function(data,
       any(recids == "HL1") ~ "homelessness",
       any(recids == "NRS") ~ "nrs_deaths",
       # any(recids == "NSU") ~ "nsu",
-      any(recids == "OoH") ~ "ooh",
+      any(recids == "OoH") ~ "gp_ooh",
       any(recids == "PIS") ~ "pis",
       any(recids == "SDS") ~ "sds",
       TRUE ~ NA_character_
     )
     # Infer type from columns
+  } else if (all(unlist(demog_cols) %in% colnames(data))) {
+    type <- "sc_demog_lookup"
+  } else if (all(unlist(client_cols) %in% colnames(data))) {
+    type <- "client"
+  } else if (all(unlist(slfhelper::ltc_vars) %in% colnames(data))) {
+    type <- "ltc"
   } else if ("gpprac" %in% colnames(data)) {
     type <- "gpprac_lookup"
   } else if ("postcode" %in% colnames(data)) {
     type <- "postcode_lookup"
   } else if ("death_date_chi" %in% colnames(data)) {
     type <- "chi_deaths"
-  } else if (all(unlist(slfhelper::ltc_vars) %in% colnames(data))) {
-    type <- "ltc"
-  } else if (all(unlist(demog_cols) %in% colnames(data))) {
-    type <- "sc_demog_lookup"
-  } else if (all(unlist(client_cols) %in% colnames(data))) {
-    type <- "client"
   }
 
-  # Set year (must be provided for SC Client and LTC but can be overwridden for others)
+  if (!exists("type") || length(type) != 1L || is.na(type)) {
+    stop(
+      "Unable to infer dataset type from RECID values or column names."
+    )
+  }
+
+  # Set year (must be provided for SC Client and LTC but can be overridden for others)
   if (!type %in% c("client", "ltc")) {
     if ("year" %in% colnames(data)) {
       year <- data %>%
@@ -101,17 +107,15 @@ process_tests <- function(data,
     }
   }
 
-  # Set all-year SC types
-  if (type %in% c("at", "ch", "hc", "sds") && year == "all") {
-    type <- glue::glue("sc_{type}_all")
-  }
-
   # Set workbook and benchmark_comparison_type
   workbook <- ifelse(year == "all", "lookup", "extract")
 
   # 2. Process test ------------------------------------------------------------
 
   log_slf_event(stage = "test", status = "start", type = type, year = year)
+
+  data <- data %>%
+    dplyr::select(-"run_id", -"run_date_time")
 
   # Deal with years where we have no data (archived extracts)
   if (type %in% c("cmh", "dn")) {
@@ -134,7 +138,7 @@ process_tests <- function(data,
 
   # Rename HSCP
   if (type %in% c(
-    "acute", "ae", "at", "ch", "cmh", "dd", "dn", "ooh", "hc", "homelessness",
+    "acute", "ae", "at", "ch", "cmh", "dd", "dn", "gp_ooh", "hc", "homelessness",
     "maternity", "mh", "nrs_deaths", "outpatients", "pis", "sds"
   )) {
     data <- rename_hscp(data)
@@ -158,7 +162,7 @@ process_tests <- function(data,
   }
 
   test_function <- if (type %in% c(
-    "acute", "ae", "ooh", "maternity", "mh", "outpatients"
+    "acute", "ae", "gp_ooh", "maternity", "mh", "outpatients"
   )) {
     function(data) {
       produce_source_extract_tests(
@@ -184,10 +188,6 @@ process_tests <- function(data,
       "ltc" = produce_source_ltc_tests,
       "nrs_deaths" = produce_source_nrs_tests,
       "pis" = produce_source_pis_tests,
-      "sc_at_all" = produce_sc_all_episodes_tests,
-      "sc_ch_all" = produce_sc_all_episodes_tests,
-      "sc_hc_all" = produce_sc_all_episodes_tests,
-      "sc_sds_all" = produce_sc_all_episodes_tests,
       "client" = produce_tests_sc_client_lookup,
       "sc_demog_lookup" = produce_sc_demog_lookup_tests,
       "sds" = produce_source_sds_tests

@@ -11,6 +11,9 @@
 #' @export
 #' @family file path functions
 get_sdl_names <- function(dataset, version) {
+
+  version <- match.arg(version, c("source", "snapshot", "processed"))
+
   sdl_names <- tibble::tribble(
     ~type, ~source, ~snapshot, ~processed,
     # Acute
@@ -22,13 +25,13 @@ get_sdl_names <- function(dataset, version) {
     "ae_cup", "sdl_ae_ucd_cup_source", "sdl_ae_ucd_cup_snapshot", NA_character_,
 
     # Costs
-    "ch_cost", "sdl_carehomecostopendata_source", NA_character_, NA_character_,
-    "dn_cost", "sdl_dn_cost_lookup_source", NA_character_, "sdl_dn_cost_lookup_processed",
-    "hc_cost", "sdl_hc_cost_lookup_source", NA_character_, NA_character_,
-    "ooh_costs", "sdl_ooh_cost_lookup_source", NA_character_, NA_character_,
+    "ch_cost_lookup", "sdl_carehomecostopendata_source", NA_character_, "sdl_ch_cost_lookup_processed",
+    "dn_cost_lookup", "sdl_dn_cost_lookup_source", NA_character_, "sdl_dn_cost_lookup_processed",
+    "hc_cost_lookup", "sdl_hc_cost_lookup_source", NA_character_, "sdl_hc_cost_lookup_processed",
+    "ooh_cost_lookup", "sdl_ooh_cost_lookup_source", NA_character_, NA_character_,
 
     # CMH
-    "cmh", "sdl_cmh_source", NA_character_, NA_character_,
+    "cmh", "sdl_cmh_source", NA_character_, "sdl_cmh_processed",
 
     # Deaths
     "chi_deaths", "sdl_chi_deaths_source", "sdl_chi_deaths_snapshot", "sdl_chi_deaths_processed",
@@ -40,12 +43,7 @@ get_sdl_names <- function(dataset, version) {
 
     # District nursing
     "dn", "sdl_dn_source", NA_character_, "sdl_dn_processed",
-    "dn_contacts", "sdl_dn_contacts_source", NA_character_, NA_character_,
-
-    # GP Practice
-    "gp_geo_labels", "sdl_geography_labels_source", NA_character_, NA_character_,
-    "gp_cluster", "sdl_gpprac_cluster_source", NA_character_, NA_character_,
-    "gp_ref", "sdl_gpprac_ref_source", NA_character_, NA_character_,
+    "dn_contact_lookup", "sdl_dn_contacts_source", NA_character_, NA_character_,
 
     # GP out of hours
     "gp_ooh_consultation", "sdl_gp_ooh_consultation_source", "sdl_gp_ooh_consultation_snapshot", NA_character_,
@@ -56,13 +54,19 @@ get_sdl_names <- function(dataset, version) {
 
     # Lookups
     "la_lookup", "sdl_laopendatalookup_source", NA_character_, NA_character_,
-    "dz_pop", "sdl_datazone_population_source", NA_character_, NA_character_,
-    "readcode", "sdl_read_code_lookup_source", NA_character_, NA_character_,
-    "hscp_localities", "sdl_hscp_localities_source", NA_character_, NA_character_,
-    "hscp_pop", "sdl_hscp_population_source", NA_character_, NA_character_,
+    "datazone_pop", "sdl_datazone_population_source", NA_character_, NA_character_,
+    "readcode_lookup", "sdl_read_code_lookup_source", NA_character_, NA_character_,
+    "hscp_locality", "sdl_hscp_localities_source", NA_character_, NA_character_,
+    "hscp_pop_lookup", "sdl_hscp_population_source", NA_character_, NA_character_,
     "simd", "sdl_simd_source", NA_character_, NA_character_,
     "spd", "sdl_spd_source", NA_character_, NA_character_,
-
+    "geog_labels", "sdl_geography_labels_source", NA_character_, NA_character_,
+    "gpprac_cluster", "sdl_gpprac_cluster_source", NA_character_, NA_character_,
+    "gpprac_ref_data", "sdl_gpprac_ref_source", NA_character_, NA_character_,
+    "ch_name_lookup", "sdl_ch_name_lookup_source", NA_character_, NA_character_,
+    "uk_postcode", "sdl_uk_postcode_list_source", NA_character_, NA_character_,
+    "gpprac_lookup", NA_character_, NA_character_, "sdl_gpprac_lookup_processed",
+    "postcode_lookup", NA_character_, NA_character_, "sdl_postcode_lookup_processed",
 
     # Homelessness
     "homelessness", "sdl_homelessness_source", "sdl_homelessness_snapshot", "sdl_homelessness_processed",
@@ -86,11 +90,22 @@ get_sdl_names <- function(dataset, version) {
     # Outpatients
     "outpatients", "sdl_outpatients_source", NA_character_, "sdl_outpatients_processed",
 
+    # Prescribing
+    "pis", "sdl_pis_static", NA_character_, "sdl_pis_processed",
+
     # Social care
-    "at", "sdl_sc_alarmtelecare_source", NA_character_, NA_character_,
-    "hc", "sdl_sc_homecare_source", NA_character_, NA_character_,
-    "sc_demog", "sdl_sc_demographic_source", NA_character_, NA_character_,
-    "sds", "sdl_sc_sds_source", NA_character_, NA_character_,
+    "at", "sdl_sc_alarmtelecare_source", NA_character_, "sdl_sc_at_fy_processed",
+    "ch", "sdl_sc_carehome_source", NA_character_, "sdl_sc_ch_fy_processed",
+    "hc", "sdl_sc_homecare_source", NA_character_, "sdl_sc_hc_fy_processed",
+    "sc_demog_lookup", "sdl_sc_demographic_source", NA_character_, "sdl_demographics_processed",
+    "sds", "sdl_sc_sds_source", NA_character_, "sdl_sc_sds_fy_processed",
+    "sc_all_at", NA_character_, NA_character_, "sdl_sc_at_processed",
+    "sc_all_ch", NA_character_, NA_character_, "sdl_sc_ch_processed",
+    "sc_all_hc", NA_character_, NA_character_, "sdl_sc_hc_processed",
+    "sc_all_sds", NA_character_, NA_character_, "sdl_sc_sds_processed",
+    "client_fy", "sdl_sc_client_fy_source", NA_character_, NA_character_,
+    "client_qtr", "sdl_sc_client_qtr_source", NA_character_, NA_character_,
+    "client", NA_character_, NA_character_, "sdl_client_fy_processed",
 
     # SPARRA
     "sparra", "sdl_sparra_source", NA_character_, NA_character_
@@ -112,96 +127,4 @@ get_sdl_names <- function(dataset, version) {
   }
 
   return(result)
-}
-
-
-#' Get SDL Processed Data
-#'
-#' @description A switchboard function that retrieves processed datasets. If `BYOC_MODE`
-#' is TRUE, it collects data from Denodo. Otherwise, it sources data locally.
-#'
-#' @param type Name of dataset (e.g. "acute").
-#' @param year Financial year.
-#' @param denodo_connect A Denodo connection object.
-#' @param BYOC_MODE Logical. TRUE or FALSE.
-#'
-#' @return data
-#'
-#' @export
-#' @family file path functions
-get_sdl_processed_data <- function(
-  type,
-  year,
-  denodo_connect = NULL,
-  BYOC_MODE
-) {
-  non_year_specific_types <- c(
-    "care_home_lookup",
-    "postcode_lookup",
-    "sc_demog_lookup",
-    "sc_all_alarms_telecare",
-    "sc_all_care_homes",
-    "sc_all_home_care",
-    "sc_all_self_directed_support",
-    "chi_deaths",
-    "nrs_deaths"
-  )
-
-  sdl_name <- get_sdl_processed_name(type)
-
-  if (isTRUE(BYOC_MODE)) {
-    denodo_connect <- get_denodo_connection(BYOC_MODE = BYOC_MODE)
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
-
-    sdl_tbl <- dplyr::tbl(denodo_connect, dbplyr::in_schema("sdl", sdl_name))
-
-    if (!(type %in% non_year_specific_types)) {
-      sdl_tbl <- sdl_tbl %>%
-        dplyr::filter(as.character(rlang::.data$year) == as.character(year))
-    }
-
-    return(dplyr::collect(sdl_tbl))
-  }
-
-  sdl_data <- switch(type,
-    "acute" = read_file(get_source_extract_path("acute", year = year, BYOC_MODE = BYOC_MODE)),
-    "ae" = read_file(get_source_extract_path("ae", year = year, BYOC_MODE = BYOC_MODE)),
-    "at" = read_file(get_source_extract_path("at", year = year, BYOC_MODE = BYOC_MODE)),
-    "ch" = read_file(get_source_extract_path("ch", year = year, BYOC_MODE = BYOC_MODE)),
-    "hc" = read_file(get_source_extract_path("hc", year = year, BYOC_MODE = BYOC_MODE)),
-    "sds" = read_file(get_source_extract_path("sds", year = year, BYOC_MODE = BYOC_MODE)),
-    "client" = read_file(get_source_extract_path("client", year = year, BYOC_MODE = BYOC_MODE)),
-    "cmh" = read_file(get_source_extract_path("cmh", year = year, BYOC_MODE = BYOC_MODE)),
-    "dd" = read_file(get_source_extract_path("dd", year = year, BYOC_MODE = BYOC_MODE)),
-    "dn" = read_file(get_source_extract_path("dn", year = year, BYOC_MODE = BYOC_MODE)),
-    "gp_ooh" = read_file(get_source_extract_path("gp_ooh", year = year, BYOC_MODE = BYOC_MODE)),
-    "homelessness" = read_file(get_source_extract_path("homelessness", year = year, BYOC_MODE = BYOC_MODE)),
-    "maternity" = read_file(get_source_extract_path("maternity", year = year, BYOC_MODE = BYOC_MODE)),
-    "mh" = read_file(get_source_extract_path("mh", year = year, BYOC_MODE = BYOC_MODE)),
-    "outpatients" = read_file(get_source_extract_path("outpatients", year = year, BYOC_MODE = BYOC_MODE)),
-    "pis" = read_file(get_source_extract_path("pis", year = year, BYOC_MODE = BYOC_MODE)),
-    "homelessness_lookup" = create_homelessness_lookup(year = year),
-    "homelessness_completeness" = read_file(get_homelessness_completeness_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "ltc" = read_file(get_ltcs_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "sparra" = read_file(get_sparra_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "chi_deaths" = read_file(get_slf_chi_deaths_path(BYOC_MODE = BYOC_MODE)),
-    "nrs_deaths" = read_file(get_combined_slf_deaths_lookup_path(BYOC_MODE = BYOC_MODE)),
-    "refined_death" = read_file(get_slf_deaths_lookup_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "hhg" = read_file(get_hhg_path(year = year, BYOC_MODE = BYOC_MODE)),
-    "care_home_lookup" = read_file(get_slf_ch_name_lookup_path(BYOC_MODE = BYOC_MODE)),
-    "postcode_lookup" = read_file(get_slf_postcode_path(BYOC_MODE = BYOC_MODE)),
-    "gpprac_lookup" = read_file(get_slf_gpprac_path(BYOC_MODE = BYOC_MODE)),
-    "sc_demog_lookup" = read_file(get_sc_demog_lookup_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_alarms_telecare" = read_file(get_sc_at_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_care_homes" = read_file(get_sc_ch_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_home_care" = read_file(get_sc_hc_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "sc_all_self_directed_support" = read_file(get_sc_sds_episodes_path(BYOC_MODE = BYOC_MODE)),
-    "ch_cost_lookup" = read_file(get_ch_costs_path(BYOC_MODE = BYOC_MODE)),
-    "dn_cost_lookup" = read_file(get_dn_costs_path(BYOC_MODE = BYOC_MODE)),
-    "hc_cost_lookup" = read_file(get_hc_costs_path(BYOC_MODE = BYOC_MODE)),
-    "ooh_cost_lookup" = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
-    stop("Unknown dataset type: ", type)
-  )
-
-  return(sdl_data)
 }
