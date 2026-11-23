@@ -58,5 +58,3 @@ zip_file_path <- zip::zip(
 if (file.exists(zip_file_path)) {
   file.remove(csv_files)
 }
-
-
