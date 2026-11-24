@@ -24,7 +24,10 @@ read_lookup_sc_demographics <- function(sc_dvprod_connection = phs_db_connection
       "chi_gender_code",
       "extract_date"
     ) %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::filter(
+      .data$period <= sc_end_qt()
+    )
 
   latest_quarter <- sc_demog %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%

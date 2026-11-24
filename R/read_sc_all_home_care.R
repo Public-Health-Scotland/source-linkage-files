@@ -45,7 +45,10 @@ read_sc_all_home_care <- function(sc_dvprod_connection = phs_db_connection(dsn =
     )) %>%
     # drop rows start date after end date
     dplyr::distinct() %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::filter(
+      .data$period <= sc_end_qt()
+    )
 
   latest_quarter <- home_care_data %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%

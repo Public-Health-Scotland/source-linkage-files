@@ -29,7 +29,10 @@ read_sc_all_care_home <- function(sc_dvprod_connection = phs_db_connection(dsn =
       "age"
     ) %>%
     dplyr::distinct() %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::filter(
+      .data$period <= sc_end_qt()
+    )
 
   latest_quarter <- ch_data %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%

@@ -26,7 +26,10 @@ read_lookup_sc_client <- function(fyyear,
     dplyr::collect()
 
   # Bind client FY and QTR extracts together
-  client_extract <- rbind(client_fy_extract, client_qtr_extract)
+  client_extract <- rbind(client_fy_extract, client_qtr_extract) %>%
+    dplyr::filter(
+      .data$period <= sc_end_qt()
+    )
 
   client_data <- client_extract %>%
     dplyr::select(

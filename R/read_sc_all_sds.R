@@ -26,7 +26,10 @@ read_sc_all_sds <- function(sc_dvprod_connection = phs_db_connection(dsn = "DVPR
       "sds_start_date_after_period_end_date" # get removed
     ) %>%
     dplyr::distinct() %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::filter(
+      .data$period <= sc_end_qt()
+    )
 
   latest_quarter <- sds_full_data %>%
     dplyr::arrange(dplyr::desc(.data$period)) %>%

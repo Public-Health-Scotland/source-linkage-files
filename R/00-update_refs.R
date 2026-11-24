@@ -37,6 +37,17 @@ end_date <- function() {
 }
 
 
+#' Social Care End Quarter
+#'
+#' @return Get the last validated quarter for Social Care Extracts
+#' @export
+#'
+sc_end_qt <- function() {
+  sc_end_qt <- "2026Q1"
+  return(sc_end_qt)
+}
+
+
 #' Check data exists for a year
 #'
 #' @description  Check there is data available for a given year
@@ -103,14 +114,14 @@ check_year_valid <- function(
     all(type %in% c())) {
     return(FALSE)
   } else if (year >= "2627" &&
-    all(type %in% c("nsu", "at", "ch", "hc", "sds", "client"))) {
+    all(type %in% c("nsu", "sds"))) {
     ## CHECK - what is the latest NSU cohort available?
     # NSU is currently available for 2024/25
     ## CHECK - What period does SDS data get submitted?
     ## CHECK - what data do we have available for Social Care and SPARRA?
     return(FALSE)
   } else if (year >= "2728" &&
-    all(type %in% c("sparra"))) {
+    all(type %in% c("sparra", "at", "ch", "hc", "client"))) {
     return(FALSE)
   }
 
