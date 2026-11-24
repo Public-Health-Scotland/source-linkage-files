@@ -94,50 +94,50 @@ byoc_output_files <- get_byoc_output_files(
   year,
   types = c(
     # BOXI
-    "acute",
-    "ae",
-    "gp_ooh",
-    "homelessness",
-    "maternity",
-    "mh",
-    "nrs_deaths",
-    "outpatients",
+    # "acute",
+    # "ae",
+    # "gp_ooh",
+    # "homelessness",
+    # "maternity",
+    # "mh",
+    # "nrs_deaths",
+    # "outpatients",
 
     # Files
-    "cmh",
-    "dd",
-    "dn",
+    # "cmh",
+    # "dd",
+    # "dn",
     # "hhg",
     # "sparra",
 
     # Social Care
-    "at",
-    "ch",
+    # "at",
+    # "ch",
     "client",
-    "hc",
-    "sds",
-    "sc_all_at",
-    "sc_all_ch",
-    "sc_all_hc",
-    "sc_all_sds",
-    "sc_demog_lookup",
+    # "hc",
+    # "sds",
+    # "sc_all_at",
+    # "sc_all_ch",
+    # "sc_all_hc",
+    # "sc_all_sds",
+    # "sc_demog_lookup",
 
     # IT
-    "chi_deaths",
-    "ltc",
-    "pis",
+    # "chi_deaths",
+    # "ltc",
+    # "pis",
 
     # Costs
-    "ch_cost_lookup",
-    "dn_cost_lookup",
-    "hc_cost_lookup",
-    "ooh_cost_lookup",
+    # "ch_cost_lookup",
+    # "dn_cost_lookup",
+    # "hc_cost_lookup",
+    # "ooh_cost_lookup",
 
     # Look-ups
-    "combined_deaths",
-    "gpprac_lookup",
-    "homelessness_completeness",
-    "postcode_lookup"
+    # "combined_deaths",
+    # "gpprac_lookup",
+    # "homelessness_completeness",
+    # "postcode_lookup"
     # "demog_c",
     # "service_c"
   )

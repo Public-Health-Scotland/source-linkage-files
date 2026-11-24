@@ -42,7 +42,9 @@ read_lookup_sc_client <- function(
     dbplyr::in_schema("sdl", "sdl_sc_client_qtr_source")
   ) %>%
     # Filter by calendar year
-    dplyr::filter(.data$financial_year == c_year) %>%
+    dplyr::filter(
+      .data$financial_year == c_year
+    ) %>%
     # Collect
     dplyr::collect()
 
