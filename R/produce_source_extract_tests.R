@@ -34,7 +34,6 @@ produce_source_extract_tests <- function(data,
                                          ),
                                          add_hscp_count = TRUE,
                                          smr00_ep = FALSE) {
-
   if (smr00_ep & "cost_total_net_inc_dnas" %in% names(data)) {
     data <- data %>%
       dplyr::select(-"cost_total_net") %>%
