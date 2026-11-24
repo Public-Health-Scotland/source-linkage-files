@@ -113,14 +113,14 @@ byoc_output_files <- get_byoc_output_files(
     # Social Care
     # "at",
     # "ch",
-    "client"
+    "client",
     # "hc",
     # "sds",
     # "sc_all_at",
     # "sc_all_ch",
     # "sc_all_hc",
     # "sc_all_sds",
-    # "sc_demog_lookup",
+    "sc_demog_lookup"
 
     # IT
     # "chi_deaths",
