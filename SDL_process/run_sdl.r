@@ -67,25 +67,29 @@ if (isFALSE(BYOC_MODE)) {
 # Data Control Sheet
 data_control_sheet <- dplyr::tbl(
   denodo_connect,
-  dbplyr::in_schema("sdl", "sdl_byoc_data_control_sheet")) %>%
+  dbplyr::in_schema("sdl", "sdl_byoc_data_control_sheet")
+) %>%
   dplyr::collect()
 
 # Snapshot Control Sheet
 snapshot_control_sheet <- dplyr::tbl(
   denodo_connect,
-  dbplyr::in_schema("sdl", "sdl_byoc_snapshot_control_sheet")) %>%
+  dbplyr::in_schema("sdl", "sdl_byoc_snapshot_control_sheet")
+) %>%
   dplyr::collect()
 
 # Test Control Sheet
 test_control_sheet <- dplyr::tbl(
   denodo_connect,
-  dbplyr::in_schema("sdl", "sdl_byoc_test_control_sheet")) %>%
+  dbplyr::in_schema("sdl", "sdl_byoc_test_control_sheet")
+) %>%
   dplyr::collect()
 
 # Linkage Control Sheet
 linkage_control_sheet <- dplyr::tbl(
   denodo_connect,
-  dbplyr::in_schema("sdl", "sdl_byoc_linkage_control_sheet")) %>%
+  dbplyr::in_schema("sdl", "sdl_byoc_linkage_control_sheet")
+) %>%
   dplyr::collect()
 
 if (isFALSE(BYOC_MODE)) {
@@ -118,7 +122,7 @@ fys <- snapshot_control_sheet %>%
   unique()
 
 # If NA, snapshot includes all years (2014/15 to current)
-if(length(fys) == 0){
+if (length(fys) == 0) {
   end_year <- as.integer(
     stringr::str_sub(
       phsmethods::extract_fin_year(end_date()),
@@ -139,7 +143,8 @@ benchmark_comparison_type <- test_control_sheet$test_type
 Sys.setenv(
   fys = paste(fys, collapse = ","),
   benchmark_run_id = benchmark_run_id,
-  benchmark_comparison_type = benchmark_comparison_type)
+  benchmark_comparison_type = benchmark_comparison_type
+)
 
 ## Include reporting of last run date of ACADME ----
 if (isFALSE(BYOC_MODE)) {

@@ -17,8 +17,6 @@
 ################################################################################
 
 
-
-
 #' Check data exists for a year
 #'
 #' @description  Check there is data available for a given year
@@ -111,7 +109,6 @@ check_year_valid <- function(
 #' @return A `Date` containing the end date of the latest reporting period.
 #' @export
 end_date <- function() {
-
   reporting_period <- Sys.getenv("reporting_period")
 
   if (!nzchar(reporting_period)) {
@@ -262,7 +259,6 @@ qtr <- function() {
 #'
 #' @family initialisation
 years_to_run <- function() {
-
   years_to_run <- Sys.getenv("fys") %>%
     strsplit(",") %>%
     unlist()
