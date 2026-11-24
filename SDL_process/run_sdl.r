@@ -181,3 +181,8 @@ episode_file <- create_episode_file(processed_data_list,
   year = year,
   write_temp_to_disk = write_temp_to_disk
 )
+
+logger::log_info(
+  "Episode file processing completed for {year}."
+)
+
