@@ -31,7 +31,9 @@ get_dn_contacts_data <- function(
       number_of_contacts = "number_of_contacts"
     ) %>%
     # Collect
-    dplyr::collect()
+    dplyr::collect() %>%
+    # Convert "NA" to NA
+    mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
   log_slf_event(stage = "read", status = "complete", type = "dn_contact_lookup", year = "all")
 

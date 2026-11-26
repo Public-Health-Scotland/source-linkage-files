@@ -25,7 +25,9 @@ get_slf_ch_name_lookup_data <- function(
     dbplyr::in_schema("sdl", "sdl_ch_name_lookup_source")
   ) %>%
     # Collect
-    dplyr::collect()
+    dplyr::collect() %>%
+    # Convert "NA" to NA
+    mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
   log_slf_event(stage = "read", status = "complete", type = "ch_name_lookup", year = "all")
 

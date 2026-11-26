@@ -52,7 +52,9 @@ read_extract_cmh <- function(
       year = "year"
     ) %>%
     # Collect
-    dplyr::collect()
+    dplyr::collect() %>%
+    # Convert "NA" to NA
+    mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
   log_slf_event(stage = "read", status = "complete", type = "cmh", year = year)
 

@@ -34,6 +34,8 @@ read_extract_delayed_discharges <- function(
       monthflag = "month_flag"
     ) %>%
     dplyr::collect() %>%
+    # Convert "NA" to NA
+    mutate(across(where(is.character), ~ na_if(.x, "NA"))) %>%
     dplyr::mutate(
       monthflag = lubridate::my(.data[["monthflag"]]),
       delay_end_reason = as.integer(.data[["delay_end_reason"]])

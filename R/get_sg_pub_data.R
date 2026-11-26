@@ -30,6 +30,8 @@ get_sg_pub_data <- function(
     ) %>%
     # Collect
     dplyr::collect() %>%
+    # Convert "NA" to NA
+    mutate(across(where(is.character), ~ na_if(.x, "NA"))) %>%
     dplyr::mutate(sg_year = convert_year_to_fyyear(sg_year)) %>%
     dplyr::summarise(
       sg_all_assessments = sum(sg_all_assessments),

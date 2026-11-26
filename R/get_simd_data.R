@@ -38,7 +38,9 @@ get_simd_data <- function(
       simd2020v2_hscp2019_quintile = "simd2020v2_hscp2019_quintile"
     ) %>%
     # Collect
-    dplyr::collect()
+    dplyr::collect() %>%
+    # Convert "NA" to NA
+    mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
   log_slf_event(stage = "read", status = "complete", type = "simd", year = "all")
 
