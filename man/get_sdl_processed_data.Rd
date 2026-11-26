@@ -7,9 +7,9 @@
 get_sdl_processed_data(
   year,
   type,
-  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  BYOC_MODE = BYOC_MODE,
-  run_id = run_id
+  BYOC_MODE,
+  run_id = NULL,
+  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE)
 )
 }
 \arguments{
@@ -17,11 +17,11 @@ get_sdl_processed_data(
 
 \item{type}{Name of dataset (e.g. "acute").}
 
-\item{denodo_connect}{A Denodo connection object.}
-
 \item{BYOC_MODE}{Logical. TRUE or FALSE.}
 
 \item{run_id}{run_id from BYOC control sheet}
+
+\item{denodo_connect}{A Denodo connection object.}
 }
 \value{
 data
