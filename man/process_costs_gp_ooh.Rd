@@ -5,14 +5,18 @@
 \title{Process costs - GP OOH}
 \usage{
 process_costs_gp_ooh(
-  denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+  ooh_raw_costs = get_gp_ooh_raw_costs_data(BYOC_MODE = BYOC_MODE),
+  write_to_disk = TRUE,
   BYOC_MODE = FALSE,
   run_id = NA,
   run_date_time = NA
 )
 }
 \arguments{
-\item{denodo_connect}{connection to denodo}
+\item{ooh_raw_costs}{Raw GP out of hours costs data}
+
+\item{write_to_disk}{(optional) Should the data be written to disk default is
+\code{TRUE} i.e. write the data to disk.}
 
 \item{BYOC_MODE}{BYOC_MODE}
 
