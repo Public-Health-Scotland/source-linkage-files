@@ -185,4 +185,3 @@ episode_file <- create_episode_file(processed_data_list,
 logger::log_info(
   "Episode file processing completed for {year}."
 )
-
