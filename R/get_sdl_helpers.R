@@ -153,6 +153,15 @@ get_sdl_processed_data <- function(
 
   year <- check_year_format(year)
 
+  if (type == "pis") {
+    data <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", "sdl_pis_static")
+    ) %>%
+      dplyr::collect()
+  }
+
+
   if (isFALSE(BYOC_MODE)) {
     if (type == "ltc") {
       data <- read_file(get_ltcs_path(year, BYOC_MODE = BYOC_MODE))
