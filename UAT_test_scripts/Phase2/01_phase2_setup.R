@@ -65,7 +65,7 @@ dataset_name2 <- recode_datasets(dataset_name)
 # slf_current_data <- read_file(get_source_extract_path(year = year, type = dataset_name2, BYOC_MODE = FALSE))
 
 # Read current data
-if (isTRUE(year_specific) && isTRUE(type_specific)) {
+if (isTRUE(year_specific)) {
   slf_current_data <- get(fn_name_processed)(year = "1920", type = dataset_name2, BYOC_MODE = FALSE)
 } else {
   slf_current_data <- get(fn_name_processed)(year = "1920")

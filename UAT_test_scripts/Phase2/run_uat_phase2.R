@@ -36,6 +36,7 @@ library(logger)
 denodo_connect <- suppressWarnings(
   dbConnect(odbc(),
     dsn = "DVPREPROD", # or DVPROD
+    bigint = "integer",
     uid = .rs.askForPassword("Username:"),
     pwd = .rs.askForPassword("Enter your test environment password")
   )
@@ -67,7 +68,9 @@ year <- "1920"
 # "homelessness_completeness"
 # "ltcs"
 
-dataset_name <- c("sc_client_processed")
+dataset_name <- c("acute", "ae", "district_nursing", "gp_ooh", "homelessness",
+                  "maternity", "mental_health", "nrs_deaths", "outpatients",
+                  "sc_at_fy", "sc_ch_fy", "sc_hc_fy", "sc_sds_fy", "sc_client_processed")
 
 # Analyst name for writing to disk
 analyst <- "Jen"
