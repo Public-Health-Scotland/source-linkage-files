@@ -19,7 +19,7 @@ get_processed_data_list <- function(year, type, BYOC_MODE, run_id) {
   processed_data_list <- list(
     "acute" = get_sdl_processed_data(year, type = "acute", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_acute_processed
     "ae" = get_sdl_processed_data(year, type = "ae", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_ae_processed
-    "cmh" = get_sdl_processed_data(year, type = "cmh", BYOC_MODE = BYOC_MODE, run_id = run_id), #sdl_cmh_processed
+    "cmh" = get_sdl_processed_data(year, type = "cmh", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_cmh_processed
     "district_nursing" = get_sdl_processed_data(year, type = "dn", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_dn_processed
     "gp_ooh" = get_sdl_processed_data(year, type = "gp_ooh", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_gp_ooh_processed
     "homelessness" = get_sdl_processed_data(year, type = "homelessness", BYOC_MODE = BYOC_MODE, run_id = run_id), # sdl_homelessness_processed
