@@ -57,7 +57,6 @@ convert_types <- function(df, mapping) {
 ################################################################################ .
 
 read_raw_local <- function(test_dataset, year, local_mapping) {
-
   # Data
   # Read local data
   all_character <- ifelse(test_dataset %in% c(get_types("boxi"), "dn", "cmh", "ltc", "chi_deaths"), T, F)
@@ -65,8 +64,10 @@ read_raw_local <- function(test_dataset, year, local_mapping) {
   # Column Map
   local_test_map <- local_mapping %>%
     # Filter the local mapping for the dataset required
-    filter(type == test_dataset,
-           old_colname %in% names(local_data))
+    filter(
+      type == test_dataset,
+      old_colname %in% names(local_data)
+    )
   # Put mapped columns first, but retain unmapped columns
   local_data <- local_data %>%
     select(all_of(local_test_map$old_colname), everything())
@@ -111,8 +112,8 @@ read_raw_sdl <- function(test_dataset, year, sdl_mapping, sdl_filters) {
     # Filter data using the filter conditions specified in PHS code
     {
       if (length(filter_conditions) > 0 &&
-          !is.na(filter_conditions) &&
-          nzchar(filter_conditions)) {
+        !is.na(filter_conditions) &&
+        nzchar(filter_conditions)) {
         dplyr::filter(., !!rlang::parse_expr(filter_conditions))
       } else {
         .
@@ -394,8 +395,8 @@ save_as_sheet <- function(summary_df, workbook_file) {
   highlight_cells("in_sdl_mapping", summary_df$in_sdl_mapping == FALSE, mismatch_style_mapping)
 
   # Highlight result column
-  highlight_cells("RESULT",  grepl("FAIL", summary_df$RESULT), mismatch_style)
-  highlight_cells("RESULT",  !grepl("FAIL", summary_df$RESULT), pass_style)
+  highlight_cells("RESULT", grepl("FAIL", summary_df$RESULT), mismatch_style)
+  highlight_cells("RESULT", !grepl("FAIL", summary_df$RESULT), pass_style)
 
   # Save
   saveWorkbook(wb, workbook_file, overwrite = TRUE)

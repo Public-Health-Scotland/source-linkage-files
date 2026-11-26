@@ -55,19 +55,19 @@ all_data <- excel_sheets(file) %>%
   lapply(\(sheet) read_excel(file, sheet = sheet)) %>%
   bind_rows()
 
-local_only<-all_data %>%
+local_only <- all_data %>%
   filter(in_sdl == FALSE, grepl("FAIL", RESULT)) %>%
   select(type, colname, local_original_colname)
 
-sdl_only<-all_data %>%
-  filter(in_local == FALSE, grepl("FAIL",RESULT)) %>%
+sdl_only <- all_data %>%
+  filter(in_local == FALSE, grepl("FAIL", RESULT)) %>%
   select(type, colname, sdl_original_colname)
 
-type_mismatch<-all_data %>%
+type_mismatch <- all_data %>%
   filter(type_match == FALSE, grepl("FAIL", RESULT)) %>%
   select(type, colname, sdl_original_colname, local_original_colname, sdl_type, local_type)
 
-row_mismatch<-all_data %>%
+row_mismatch <- all_data %>%
   filter(change_total_vals != 0, grepl("FAIL", RESULT)) %>%
   select(type, total_vals_local, total_vals_sdl, change_total_vals, perc_change_total_vals) %>%
   distinct()
@@ -77,14 +77,15 @@ na_mismatch <- all_data %>%
   select(type, colname, sdl_original_colname, local_original_colname, local_na_count, sdl_na_count) %>%
   distinct()
 
-data_mismatch<-all_data %>%
+data_mismatch <- all_data %>%
   filter(
     grepl("FAIL", RESULT),
     in_both == TRUE,
     type_match == TRUE,
     change_total_vals == 0,
     sdl_na_count != 0 | local_na_count == 0,
-    (unique_vals_mismatch != 0 | unique_vals_with_different_counts != 0)) %>%
+    (unique_vals_mismatch != 0 | unique_vals_with_different_counts != 0)
+  ) %>%
   select(
     type, colname, sdl_original_colname, local_original_colname,
     local_na_count, sdl_na_count, change_na, perc_change_na, unique_vals_local,
@@ -123,7 +124,9 @@ for (test_dataset in c(
 )) {
   local_data <- read_raw_local(test_dataset, year, local_mapping)
   character_na_cols <- names(local_data)[sapply(local_data, function(x) any(as.character(x) == "NA", na.rm = TRUE))]
-  if (length(character_na_cols > 0)) {df <- rbind(df, data.frame(test_dataset, character_na_cols))}
+  if (length(character_na_cols > 0)) {
+    df <- rbind(df, data.frame(test_dataset, character_na_cols))
+  }
 }
 write.csv(df, paste0(uat_folder, "outputs/na_cols.csv"), row.names = F)
 
@@ -139,7 +142,9 @@ for (test_dataset in c(
 )) {
   local_data <- read_raw_local(test_dataset, year, local_mapping)
   space_cols <- names(local_data)[sapply(local_data, function(x) any(as.character(x) == " ", na.rm = TRUE))]
-  if (length(space_cols > 0)) {df <- rbind(df, data.frame(test_dataset, space_cols))}
+  if (length(space_cols > 0)) {
+    df <- rbind(df, data.frame(test_dataset, space_cols))
+  }
 }
 
 write.csv(df, paste0(uat_folder, "outputs/space_cols.csv"), row.names = F)
@@ -156,7 +161,9 @@ for (test_dataset in c(
 )) {
   local_data <- read_raw_local(test_dataset, year, local_mapping)
   empty_string_cols <- names(local_data)[sapply(local_data, function(x) any(as.character(x) == "", na.rm = TRUE))]
-  if (length(empty_string_cols > 0)) {df <- rbind(df, data.frame(test_dataset, empty_string_cols))}
+  if (length(empty_string_cols > 0)) {
+    df <- rbind(df, data.frame(test_dataset, empty_string_cols))
+  }
 }
 
 write.csv(df, paste0(uat_folder, "outputs/empty_string_cols.csv"), row.names = F)
@@ -170,12 +177,13 @@ for (test_dataset in c(
   get_types("opendata"),
   get_types("archive"),
   "dd",
-  "nsu")) {
+  "nsu"
+)) {
   local_data <- read_raw_local(test_dataset, year, local_mapping)
   empty_na_cols <- names(local_data)[sapply(local_data, function(x) any(is.na(x)))]
   if (length(empty_na_cols) > 0) {
-    df <- rbind(df, data.frame(test_dataset = test_dataset,empty_na_cols = empty_na_cols))
+    df <- rbind(df, data.frame(test_dataset = test_dataset, empty_na_cols = empty_na_cols))
   }
 }
 
-write.csv(df,paste0(uat_folder, "outputs/empty_na_cols.csv"),row.names = FALSE)
+write.csv(df, paste0(uat_folder, "outputs/empty_na_cols.csv"), row.names = FALSE)

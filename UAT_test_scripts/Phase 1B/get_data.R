@@ -266,7 +266,7 @@ get_submission_filepath <- function(type) {
     # Select file with the highest number (most recent)
     filename <- all_files[which.max(nums)]
 
-    if(type == "nsu"){
+    if (type == "nsu") {
       filename <- "SDL_nsu_20260630_1.parquet"
     }
 
@@ -469,8 +469,8 @@ auto_file_read <- function(filepath, n_rows = NULL, all_character = NULL) {
 
   # Check all_character argument is valid
   if (!is.logical(all_character) ||
-      length(all_character) != 1 ||
-      is.na(all_character)) {
+    length(all_character) != 1 ||
+    is.na(all_character)) {
     message("`all_character` must be TRUE or FALSE.")
     return(NULL)
   }
@@ -494,14 +494,14 @@ auto_file_read <- function(filepath, n_rows = NULL, all_character = NULL) {
       data <- readr::read_csv(filepath, n_max = n_rows, na = c(""), trim_ws = FALSE, col_types = col_types)
     }
 
-  # .rds / .rds.gz
+    # .rds / .rds.gz
   } else if (grepl("\\.rds(\\.gz)?$", filepath, ignore.case = TRUE)) {
     data <- readr::read_rds(filepath)
     if (!is.null(n_rows)) {
       data <- utils::head(data, n_rows)
     }
 
-  # .parquet
+    # .parquet
   } else if (tolower(tools::file_ext(filepath)) == "parquet") {
     if (is.null(n_rows)) {
       data <- arrow::read_parquet(filepath)
