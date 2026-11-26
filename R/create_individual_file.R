@@ -5,6 +5,7 @@
 #' @param episode_file Tibble containing episodic data.
 #' @param homelessness_lookup the lookup file for homelessness
 #' @param write_temp_to_disk write intermediate data for investigation or debug
+#' @param BYOC_MODE BYOC mode
 #' @inheritParams create_episode_file
 #'
 #' @return The processed individual file
@@ -15,7 +16,8 @@ create_individual_file <- function(
   year,
   homelessness_lookup = create_homelessness_lookup(year),
   write_to_disk = TRUE,
-  write_temp_to_disk
+  write_temp_to_disk,
+  BYOC_MODE
 ) {
   log_ind_substage("Create individual file", "started", year)
 
@@ -89,7 +91,7 @@ create_individual_file <- function(
     add_homelessness_flag(year, lookup = homelessness_lookup) %>%
     match_on_ltcs(year) %>%
     join_deaths_data(year) %>%
-    join_sparra_hhg(year) %>%
+    join_sparra_hhg(year, BYOC_MODE = BYOC_MODE) %>%
     write_temp_data(year, file_name = "indiv_temp4", write_temp_to_disk) %>%
     join_slf_lookup_vars() %>%
     dplyr::mutate(year = year) %>%

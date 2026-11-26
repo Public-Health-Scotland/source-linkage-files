@@ -4,19 +4,14 @@
 \alias{create_service_use_cohorts}
 \title{Create the Service Use Cohort lookup}
 \usage{
-create_service_use_cohorts(
-  data,
-  year,
-  update = latest_update(),
-  write_to_disk = TRUE
-)
+create_service_use_cohorts(data, year, BYOC_MODE, write_to_disk = TRUE)
 }
 \arguments{
 \item{data}{A data frame with the required variables.}
 
 \item{year}{The year in standard SLF format.}
 
-\item{update}{The update to use.}
+\item{BYOC_MODE}{BYOC MODE}
 
 \item{write_to_disk}{Default \code{TRUE}, will write the lookup to the
 Cohorts folder defined by \link{get_slf_dir}.}

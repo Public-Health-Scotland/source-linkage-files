@@ -4,12 +4,14 @@
 \alias{read_temp_data}
 \title{Read a temp data from disk for debugging purpose}
 \usage{
-read_temp_data(year, file_name)
+read_temp_data(year, file_name, BYOC_MODE)
 }
 \arguments{
 \item{year}{year variable}
 
 \item{file_name}{The file name to be read}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the data for next step as a \link[tibble:tibble-package]{tibble}.

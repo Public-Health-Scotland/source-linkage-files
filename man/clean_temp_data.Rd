@@ -4,12 +4,14 @@
 \alias{clean_temp_data}
 \title{Clean temp data from disk}
 \usage{
-clean_temp_data(year, file_type = c("ep", "ind"))
+clean_temp_data(year, file_type = c("ep", "ind"), BYOC_MODE)
 }
 \arguments{
 \item{year}{year variable}
 
 \item{file_type}{ep or ind files}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 the data for next step as a \link[tibble:tibble-package]{tibble}.

@@ -4,12 +4,34 @@
 \alias{join_sparra_hhg}
 \title{Join SPARRA and HHG}
 \usage{
-join_sparra_hhg(data, year)
+join_sparra_hhg(
+  data,
+  year,
+  sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
+    BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  sparra_next_fy_data = get_sparra_data(year = next_fy(year), denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  hhg_data = get_hhg_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
+    BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  hhg_next_fy_data = get_hhg_data(year = next_fy(year), denodo_connect =
+    get_denodo_connection(BYOC_MODE = BYOC_MODE), BYOC_MODE = BYOC_MODE),
+  BYOC_MODE = BYOC_MODE
+)
 }
 \arguments{
 \item{data}{The in-progress episode file data.}
 
 \item{year}{The year to process, in FY format.}
+
+\item{sparra_data}{the data for SPARRA from Denodo}
+
+\item{sparra_next_fy_data}{SPARRA dataset for the next FY}
+
+\item{hhg_data}{the HHG dataset}
+
+\item{hhg_next_fy_data}{HHG dataset for the next FY}
+
+\item{BYOC_MODE}{BYOC_MODE}
 }
 \value{
 The data including the SPARRA and HHG variables matched

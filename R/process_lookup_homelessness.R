@@ -12,8 +12,11 @@
 #' @family process extracts
 create_homelessness_lookup <- function(
   year,
-  homelessness_data = read_file(
-    get_source_extract_path(year = year, type = "homelessness", BYOC_MODE = BYOC_MODE)
+  homelessness_data = get_sdl_processed_data(year,
+    type = "homelessness",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
   )
 ) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_lookup", year = year)
@@ -23,7 +26,8 @@ create_homelessness_lookup <- function(
     return(NULL)
   }
   homelessness_lookup <- homelessness_data %>%
-    dplyr::distinct(.data$anon_chi, .data$record_keydate1, .data$record_keydate2) %>%
+    dplyr::filter(year == .env$year) %>%
+    dplyr::distinct(.data$run_id, .data$anon_chi, .data$record_keydate1, .data$record_keydate2) %>%
     tidyr::drop_na("anon_chi") %>%
     dplyr::mutate(hl1_in_fy = 1L)
 
@@ -45,7 +49,8 @@ create_homelessness_lookup <- function(
 #' @return the final data as a [tibble][tibble::tibble-package]
 #' @export
 #' @family episode_file
-add_homelessness_flag <- function(data, year,
+add_homelessness_flag <- function(data,
+                                  year,
                                   lookup = create_homelessness_lookup(year)) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_flag", year = year)
 
@@ -57,8 +62,8 @@ add_homelessness_flag <- function(data, year,
   data <- data %>%
     dplyr::left_join(
       lookup %>%
-        dplyr::distinct(.data$anon_chi, .data$hl1_in_fy),
-      by = "anon_chi",
+        dplyr::distinct(.data$run_id, .data$anon_chi, .data$hl1_in_fy),
+      by = c("anon_chi", "run_id"),
       relationship = "many-to-one"
     ) %>%
     dplyr::mutate(hl1_in_fy = tidyr::replace_na(.data$hl1_in_fy, 0L))
@@ -79,7 +84,9 @@ add_homelessness_flag <- function(data, year,
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
-add_homelessness_date_flags <- function(data, year, lookup = create_homelessness_lookup(year)) {
+add_homelessness_date_flags <- function(data,
+                                        year,
+                                        lookup = create_homelessness_lookup(year)) {
   log_slf_event(stage = "process", status = "start", type = "homelessness_date_flags", year = year)
 
   if (!check_year_valid(year, type = "homelessness")) {
@@ -97,16 +104,17 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
       six_months_pre_app = .data$application_date - lubridate::days(180),
       six_months_post_app = .data$end_date + lubridate::days(180)
     ) %>%
-    dplyr::distinct(.data$anon_chi, .data$hl1_in_fy, .data$six_months_pre_app, .data$six_months_post_app, .data$application_date, .data$end_date)
+    dplyr::distinct(.data$run_id, .data$anon_chi, .data$hl1_in_fy, .data$six_months_pre_app, .data$six_months_post_app, .data$application_date, .data$end_date)
 
 
   homeless_flag <- data %>%
-    dplyr::select("anon_chi", "record_keydate1", "record_keydate2", "recid") %>%
+    dplyr::select("anon_chi", "record_keydate1", "record_keydate2", "recid", "run_id") %>%
     dplyr::filter(.data$recid %in% c("00B", "01B", "GLS", "DD", "02B", "04B", "AE2", "OoH", "DN", "CMH", "NRS")) %>%
     dplyr::distinct() %>%
     dplyr::left_join(
       lookup,
-      by = "anon_chi", relationship = "many-to-many"
+      by = c("anon_chi", "run_id"),
+      relationship = "many-to-many"
     ) %>%
     dplyr::filter(.data$hl1_in_fy == 1) %>%
     dplyr::mutate(hl1_6before_ep = ifelse((.data$end_date <= .data$record_keydate2) &
@@ -115,7 +123,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
       (.data$record_keydate1 <= .data$application_date), 1, 0)) %>%
     dplyr::mutate(hl1_during_ep = ifelse((.data$application_date <= .data$record_keydate2) &
       (.data$record_keydate1 <= .data$end_date), 1, 0)) %>%
-    dplyr::group_by(.data$anon_chi, .data$recid, .data$record_keydate1, .data$record_keydate2) %>%
+    dplyr::group_by(.data$run_id, .data$anon_chi, .data$recid, .data$record_keydate1, .data$record_keydate2) %>%
     dplyr::summarise(
       hl1_6before_ep = max(.data$hl1_6before_ep),
       hl1_6after_ep = max(.data$hl1_6after_ep),
@@ -127,7 +135,7 @@ add_homelessness_date_flags <- function(data, year, lookup = create_homelessness
   data <- data %>%
     dplyr::left_join(
       homeless_flag,
-      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid"),
+      by = c("anon_chi", "record_keydate1", "record_keydate2", "recid", "run_id"),
       relationship = "many-to-one"
     ) %>%
     dplyr::mutate(

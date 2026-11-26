@@ -9,7 +9,7 @@
 create_service_use_cohorts <- function(
   data,
   year,
-  update = latest_update(),
+  BYOC_MODE,
   write_to_disk = TRUE
 ) {
   check_variables_exist(data, variables = c(
@@ -240,8 +240,16 @@ create_service_use_cohorts <- function(
     ) %>%
     # Add the cohort names
     assign_cohort_names() %>%
+    dplyr::mutate(
+      year = year,
+      run_id = .env$run_id,
+      run_date_time = NA # .env$run_date_time
+    ) %>%
     # Select out the required variables
     dplyr::select(
+      "run_id",
+      "run_date_time",
+      "year",
       "anon_chi",
       "service_use_cohort",
       "psychiatry_cost",
@@ -259,8 +267,9 @@ create_service_use_cohorts <- function(
 
   if (write_to_disk) {
     write_file(return_data,
-      path = get_service_use_cohorts_path(year, update, check_mode = "write"),
-      group_id = 3206 # hscdiip owner
+      path = get_service_use_cohorts_path(year, BYOC_MODE = BYOC_MODE, check_mode = "write"),
+      group_id = 3206, # hscdiip owner
+      BYOC_MODE = BYOC_MODE
     )
   }
 

@@ -7,14 +7,41 @@
 create_episode_file(
   processed_data_list,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")),
-  homelessness_lookup = create_homelessness_lookup(year),
-  nsu_cohort = read_file(get_nsu_path(year)),
-  ltc_data = read_file(get_ltcs_path(year)),
-  slf_pc_lookup = read_file(get_slf_postcode_path()),
-  slf_gpprac_lookup = read_file(get_slf_gpprac_path(), col_select = c("gpprac",
-    "cluster", "hbpraccode")),
-  sc_client = read_file(get_sc_client_lookup_path(year)),
+  homelessness_lookup = create_homelessness_lookup(year, homelessness_data =
+    get_sdl_processed_data(year, type = "homelessness", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id)),
+  dd_data = get_sdl_processed_data(year, type = "dd", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
+  nsu_cohort = get_nsu_data(year = year, denodo_connect = get_denodo_connection(BYOC_MODE
+    = FALSE), BYOC_MODE = BYOC_MODE),
+  sc_client = get_sdl_processed_data(year, type = "sc_client_processed", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id)
+    \%>\% dplyr::mutate(year = year),
+  ltc_data = get_sdl_processed_data(year, type = "ltc", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
+  demographic_cohort = read_file(get_demographic_cohorts_path(year, BYOC_MODE =
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "demographic_cohort")),
+  service_use_cohort = read_file(get_service_use_cohorts_path(year, BYOC_MODE =
+    BYOC_MODE), col_select = c("run_id", "year", "anon_chi", "service_use_cohort")),
+  sparra_data = get_sparra_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
+    FALSE), BYOC_MODE = BYOC_MODE),
+  sparra_next_fy_data = get_sparra_data(year = next_fy(year), denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  hhg_data = get_hhg_data(year, denodo_connect = get_denodo_connection(BYOC_MODE =
+    FALSE), BYOC_MODE = BYOC_MODE),
+  hhg_next_fy_data = get_hhg_data(year = next_fy(year), denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE),
+  slf_pc_lookup = get_sdl_processed_data(year, type = "slf_pc_lookup", denodo_connect =
+    get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE, run_id = run_id),
+  slf_gpprac_lookup = get_sdl_processed_data(year, type = "slf_gpprac_lookup",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE,
+    run_id = run_id),
+  slf_deaths_lookup = get_sdl_processed_data(year, type = "combined_deaths",
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE), BYOC_MODE = BYOC_MODE,
+    run_id = run_id),
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id,
+  run_date_time = run_date_time,
   write_to_disk = TRUE,
   write_temp_to_disk = FALSE
 )
@@ -24,22 +51,41 @@ create_episode_file(
 
 \item{year}{The year to process, in FY format.}
 
-\item{dd_data}{The processed DD extract}
-
 \item{homelessness_lookup}{the lookup file for homelessness}
 
-\item{nsu_cohort}{The NSU data for the year}
+\item{dd_data}{the processed delayed discharges file}
 
-\item{ltc_data}{The LTC data for the year}
-
-\item{slf_pc_lookup}{The SLF Postcode lookup}
-
-\item{slf_gpprac_lookup}{The SLF GP Practice lookup}
+\item{nsu_cohort}{the Non-service user cohort}
 
 \item{sc_client}{social care lookup file}
 
-\item{write_to_disk}{(optional) Should the data be written to disk default is
-\code{TRUE} i.e. write the data to disk.}
+\item{ltc_data}{the long term condition lookup}
+
+\item{demographic_cohort}{the demographic cohort file}
+
+\item{service_use_cohort}{the service use cohort file}
+
+\item{sparra_data}{the SPARRA dataset}
+
+\item{sparra_next_fy_data}{SPARRA dataset for the next FY}
+
+\item{hhg_data}{the HHG dataset}
+
+\item{hhg_next_fy_data}{HHG dataset for the next FY}
+
+\item{slf_pc_lookup}{the SLF postcode lookup}
+
+\item{slf_gpprac_lookup}{the SLF gpprac lookup}
+
+\item{slf_deaths_lookup}{the SLF deaths lookup (ALL)}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{run_id}{Run ID}
+
+\item{run_date_time}{time stamp}
+
+\item{write_to_disk}{write the final file to disk}
 
 \item{write_temp_to_disk}{write intermediate data for investigation or debug}
 }

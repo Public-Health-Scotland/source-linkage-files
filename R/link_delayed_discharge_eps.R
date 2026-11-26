@@ -11,7 +11,12 @@
 link_delayed_discharge_eps <- function(
   episode_file,
   year,
-  dd_data = read_file(get_source_extract_path(year, "dd")) %>% slfhelper::get_chi()
+  dd_data = get_sdl_processed_data(year,
+    type = "dd",
+    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+    BYOC_MODE = BYOC_MODE,
+    run_id = run_id
+  )
 ) {
   if (!check_year_valid(year, type = "dd")) {
     episode_file <- episode_file
@@ -42,6 +47,11 @@ link_delayed_discharge_eps <- function(
     )
 
   ## handling DD ----
+
+  # Filter on year
+  dd_data <- dd_data %>%
+    dplyr::filter(year == .env$year)
+
   # no flag for last reported
   dd_data <- dd_data %>%
     dplyr::mutate(
@@ -58,7 +68,8 @@ link_delayed_discharge_eps <- function(
   # fix the issue "no visible binding for global variable x, y"
   x <- y <- NULL
   by_dd <- dplyr::join_by(
-    "anon_chi",
+    anon_chi,
+    run_id,
     x$record_keydate1 >= y$dummy_cij_start,
     x$dummy_keydate2 <= y$dummy_cij_end
   )
@@ -79,6 +90,7 @@ link_delayed_discharge_eps <- function(
     ) %>%
     # remove duplicate rows, but still got some duplicate mismatches
     dplyr::distinct(
+      .data$run_id,
       .data$anon_chi,
       .data$cij_start_date,
       .data$cij_end_date,
@@ -268,6 +280,7 @@ link_delayed_discharge_eps <- function(
     # remove duplicated rows when many to many inner join
     # keep the records that closest to the cij record
     dplyr::arrange(
+      .data$run_id,
       .data$anon_chi,
       .data$original_admission_date,
       .data$record_keydate1_dd,
@@ -289,7 +302,7 @@ link_delayed_discharge_eps <- function(
       .data$smrtype == "DD-CIJ",
       NA
     )) %>%
-    dplyr::group_by(.data$anon_chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$run_id, .data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(cij_delay = max(.data$has_delay)) %>%
     dplyr::mutate(cij_delay = dplyr::if_else(.data$cij_delay == "0",
       FALSE,
@@ -362,7 +375,7 @@ link_delayed_discharge_eps <- function(
         )
     ) %>%
     # populate cij_delay dd details back to ep
-    dplyr::group_by(.data$anon_chi, .data$cij_marker) %>%
+    dplyr::group_by(.data$run_id, .data$anon_chi, .data$cij_marker) %>%
     dplyr::mutate(
       has_dd = any(.data$recid == "DD"),
       delay_dd = any(.data$cij_delay)

@@ -24,7 +24,7 @@ read_extract_ooh_outcomes <- function(
   ## Load extract file
   outcomes_extract <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gp_ooh_outcome_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "gp_ooh_outcome", version = version()))
   ) %>%
     dplyr::filter(
       .data$sc_start_financial_year == !!c_year,

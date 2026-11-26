@@ -25,7 +25,7 @@ read_extract_gp_ooh_cup <- function(
 
   gp_ooh_cup <- dplyr::tbl(
     denodo_connect,
-    dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_source")
+    dbplyr::in_schema("sdl", get_sdl_names(dataset = "gp_ooh_cup", version = version()))
   ) %>%
     dplyr::filter(gp_ooh_sc_start_financial_year == c_year) %>%
     dplyr::select(
