@@ -222,7 +222,8 @@ process_lookup_sc_client <- function(data,
     dplyr::select(-"sending_location", -"count_not_known") %>%
     dplyr::mutate(
       run_id = run_id,
-      run_date_time = run_date_time
+      run_date_time = run_date_time,
+      year = year
     )
 
 
