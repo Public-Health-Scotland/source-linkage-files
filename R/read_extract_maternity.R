@@ -86,8 +86,11 @@ read_extract_maternity <- function(
       uri = "maternity_unique_record_identifier",
       yearstay = "occupied_bed_days"
     ) %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "maternity", year = year)

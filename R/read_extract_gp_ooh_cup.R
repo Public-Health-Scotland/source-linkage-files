@@ -10,6 +10,7 @@ read_extract_gp_ooh_cup <- function(
 ) {
   log_slf_event(stage = "read", status = "start", type = "gp_ooh_cup", year = year)
 
+  # Check and convert to calendar year
   year <- check_year_format(year, format = "fyyear")
   c_year <- convert_fyyear_to_year(check_year_format(year))
 
@@ -18,16 +19,21 @@ read_extract_gp_ooh_cup <- function(
     return(tibble::tibble())
   }
 
-  # Disconnect from Denodo
+  # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE),
     add = TRUE
   )
 
+  # Read Extract
   gp_ooh_cup <- dplyr::tbl(
     denodo_connect,
     dbplyr::in_schema("sdl", "sdl_gp_ooh_cup_source")
   ) %>%
-    dplyr::filter(gp_ooh_sc_start_financial_year == c_year) %>%
+    # Filter by calendar year
+    dplyr::filter(
+      gp_ooh_sc_start_financial_year == c_year
+    ) %>%
+    # Rename variables
     dplyr::select(
       record_keydate1 = "gp_ooh_consultation_start_date",
       keytime1 = "gp_ooh_consultation_start_time",
@@ -35,8 +41,17 @@ read_extract_gp_ooh_cup <- function(
       cup_marker = "cup_marker",
       cup_pathway = "cup_pathway_name"
     ) %>%
+    # Collect
     dplyr::collect() %>%
-    dplyr::distinct(record_keydate1, keytime1, ooh_case_id, .keep_all = TRUE)
+    # Convert " " to NA
+    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Drop duplicates
+    dplyr::distinct(
+      record_keydate1,
+      keytime1,
+      ooh_case_id,
+      .keep_all = TRUE
+    )
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh_cup", year = year)
 

@@ -59,8 +59,11 @@ read_extract_nrs_deaths <- function(
       uri = "unique_record_identifier",
       gpprac = "gp_practice_code"
     ) %>%
-    # Collect and get anonymous CHI
+    # Collect
     dplyr::collect() %>%
+    # Convert " " to NA
+    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 
   log_slf_event(stage = "read", status = "complete", type = "nrs_deaths", year = year)
