@@ -30,6 +30,7 @@ get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
     db_connection <- odbc::dbConnect(
       odbc::odbc(),
       dsn = dsn,
+      bigint = "integer",
       uid = cloud_user,
       pwd = cloud_pass
     )
@@ -89,6 +90,7 @@ get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
   db_connection <- odbc::dbConnect(
     odbc::odbc(),
     dsn = dsn,
+    bigint = "integer",
     uid = username,
     pwd = db_pwd
   )
