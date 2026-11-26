@@ -143,17 +143,16 @@ get_sdl_names <- function(dataset, version) {
 #' @export
 #' @family file path functions
 get_sdl_processed_data <- function(
-  year,
-  type,
-  denodo_connect = get_denodo_connection(BYOC_MODE = FALSE),
-  BYOC_MODE = BYOC_MODE,
-  run_id = run_id
+    year,
+    type,
+    BYOC_MODE,
+    run_id = NULL,
+    denodo_connect = get_denodo_connection(BYOC_MODE = FALSE)
 ) {
   log_slf_event(stage = "read", status = "start", type = type, year = year)
 
   year <- check_year_format(year)
 
-  # Read local files
   if (isFALSE(BYOC_MODE)) {
     if (type == "ltc") {
       data <- read_file(get_ltcs_path(year, BYOC_MODE = BYOC_MODE))
@@ -165,9 +164,16 @@ get_sdl_processed_data <- function(
         col_select = c("gpprac", "cluster", "hbpraccode")
       )
     } else if (type == "sc_client") {
-      data <- read_file(get_sc_client_lookup_path(year, BYOC_MODE = BYOC_MODE))
+      data <- read_file(
+        get_sc_client_lookup_path(year, BYOC_MODE = BYOC_MODE)
+      )
     } else if (type == "combined_deaths") {
-      data <- read_file(get_combined_slf_deaths_lookup_path(year, BYOC_MODE = BYOC_MODE))
+      data <- read_file(
+        get_combined_slf_deaths_lookup_path(
+          year,
+          BYOC_MODE = BYOC_MODE
+        )
+      )
     } else {
       data <- read_file(
         get_source_extract_path(
@@ -177,11 +183,15 @@ get_sdl_processed_data <- function(
         )
       )
     }
-
-    # Read processed data from Denodo if BYOC_MODE == TRUE
   } else {
-    # Disconnect from denodo
-    on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
+    if (is.null(run_id)) {
+      rlang::abort("`run_id` must be supplied when `BYOC_MODE = TRUE`.")
+    }
+
+    on.exit(
+      try(DBI::dbDisconnect(denodo_connect), silent = TRUE),
+      add = TRUE
+    )
 
     data <- dplyr::tbl(
       denodo_connect,
@@ -194,7 +204,7 @@ get_sdl_processed_data <- function(
       )
     ) %>%
       dplyr::collect() %>%
-      dplyr::filter(run_id == .env$run_id) %>%
+      dplyr::filter(.data$run_id == .env$run_id) %>%
       dplyr::mutate(
         dplyr::across(
           where(~ inherits(.x, "integer64")),
