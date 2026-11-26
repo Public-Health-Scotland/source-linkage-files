@@ -5,33 +5,43 @@
 #' and (optionally) write it to disk.
 #'
 #' @param year The year to process, in FY format.
-#' @param data_list A list containing the extracts.
+#' @param ooh_consultations GP OOH Consultations extract
+#' @param ooh_diagnosis GP OOH Diagnosis extract
+#' @param ooh_outcomes GP OOH Outcomes extract
+#' @param readcode_lookup Readcode Lookup
 #' @param gp_ooh_cup gp ooh cup data
+#' @param ooh_cost_lookup GP OOH Cost Lookup
 #' @param write_to_disk (optional) Should the data be written to disk default is
 #' `TRUE` i.e. write the data to disk.
+#' @param BYOC_MODE BYOC_MODE
+#' @param run_id run_id
+#' @param run_date_time run_date_time
 #'
 #' @return the final data as a [tibble][tibble::tibble-package].
 #' @export
 #' @family process extracts
 process_extract_gp_ooh <- function(
-  year,
-  data_list,
-  gp_ooh_cup = read_extract_gp_ooh_cup(
-    year = year,
-    denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
-    BYOC_MODE = BYOC_MODE
-  ),
-  ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)),
-  write_to_disk = TRUE,
-  BYOC_MODE = FALSE,
-  run_id = NA,
-  run_date_time = NA
+    year,
+    ooh_consultations,
+    ooh_diagnosis,
+    ooh_outcomes,
+    readcode_lookup = get_readcode_lookup(BYOC_MODE = BYOC_MODE),
+    gp_ooh_cup = read_extract_gp_ooh_cup(
+      year = year,
+      denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
+      BYOC_MODE = BYOC_MODE
+    ),
+    ooh_cost_lookup = read_file(get_gp_ooh_costs_path(BYOC_MODE = BYOC_MODE)), # TODO: Use get_sdl_processed_data
+    write_to_disk = TRUE,
+    BYOC_MODE = FALSE,
+    run_id = NA,
+    run_date_time = NA
 ) {
-  log_slf_event(stage = "process", status = "start", type = "gpooh", year = year)
+  log_slf_event(stage = "process", status = "start", type = "gp_ooh", year = year)
 
-  diagnosis_extract <- process_extract_ooh_diagnosis(data_list[["diagnosis"]], year, BYOC_MODE = BYOC_MODE)
-  outcomes_extract <- process_extract_ooh_outcomes(data_list[["outcomes"]], year)
-  consultations_extract <- process_extract_ooh_consultations(data_list[["consultations"]], year)
+  diagnosis_extract <- process_extract_ooh_diagnosis(ooh_diagnosis, year, readcode_lookup = readcode_lookup)
+  outcomes_extract <- process_extract_ooh_outcomes(ooh_outcomes, year)
+  consultations_extract <- process_extract_ooh_consultations(ooh_consultations, year)
 
 
   # Join data ---------------------------------
@@ -111,11 +121,11 @@ process_extract_gp_ooh <- function(
   ## Link CUP Marker -----
   ooh_clean <- ooh_clean %>%
     dplyr::left_join(gp_ooh_cup,
-      by = dplyr::join_by(
-        "ooh_case_id",
-        "record_keydate1",
-        "keytime1"
-      )
+                     by = dplyr::join_by(
+                       "ooh_case_id",
+                       "record_keydate1",
+                       "keytime1"
+                     )
     )
 
   ooh_clean <- ooh_clean %>%
@@ -167,7 +177,7 @@ process_extract_gp_ooh <- function(
       ) # sourcedev owner
   }
 
-  log_slf_event(stage = "process", status = "complete", type = "gpooh", year = year)
+  log_slf_event(stage = "process", status = "complete", type = "gp_ooh", year = year)
 
   return(final_data)
 }
