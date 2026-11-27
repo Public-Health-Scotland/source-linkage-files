@@ -54,12 +54,12 @@ if (tolower(BYOC_MODE) %in% c("true", "t")) {
   BYOC_MODE <- FALSE
 }
 
-## Set up targets store path ----
-store_path <- dplyr::if_else(
-  BYOC_MODE,
-  "/sdl_byoc/_targets",
-  "/conf/sourcedev/Source_Linkage_File_Updates/_targets"
-)
+# ## Set up targets store path ----
+# store_path <- dplyr::if_else(
+#   BYOC_MODE,
+#   "/sdl_byoc/_targets",
+#   "/conf/sourcedev/Source_Linkage_File_Updates/_targets"
+# )
 
 ## Set up run_id and run_date_time ----
 # run_id <- Sys.getenv("run_id")
@@ -90,72 +90,72 @@ year <- "1920"
 
 ## Set up for episode file ----
 write_temp_to_disk <- FALSE
-console_outputs <- TRUE
+console_outputs <- FALSE
 
-## Build BYOC Output File Paths ----
-byoc_output_files <- get_byoc_output_files(
-  year,
-  types = c(
-    # "ae",
-    # "acute",
-    # "cmh",
-    # "dd",
-    # "dn",
-    # "dn_cost_lookup",
-    # "gp_ooh",
-    # "homelessness",
-    # "homelessness_completeness",
-    # "ltc",
-    # "maternity",
-    # "mh",
-    # "nrs_deaths",
-    # "ooh_cost_lookup",
-    # "outpatients",
-
-    # Year-Specific Social Care
-    "at",
-    "ch",
-    "hc",
-    "sds",
-    # All-Year Social Care
-    "sc_all_at",
-    "sc_all_ch",
-    "sc_all_hc",
-    "sc_all_sds",
-    "sc_demog_lookup",
-    # Deaths (for Care Homes)
-    "chi_deaths",
-    "nrs_deaths",
-    "combined_deaths",
-    # Costs
-    "ch_cost_lookup",
-    "hc_cost_lookup",
-    # Look-ups
-    "postcode_lookup",
-    "gpprac_lookup"
-  )
-)
-# using homelessness for test purpose. When development is complete,
-# we change to "types = "byoc_input_files""
-# can always use any other type for testing also
-
-# targets ----
-logger::log_info("Targets started.")
-
-tryCatch(
-  log_tar_make(
-    script = "SDL_process/dummy_targets.R",
-    store = store_path,
-    reporter = "verbose"
-  ),
-  error = function(e) {
-    logger::log_error("Targets failed: {conditionMessage(e)}")
-    stop(e)
-  }
-)
-logger::log_info("Targets finished.")
-
-logger::log_info("Run SDL ended.")
+# ## Build BYOC Output File Paths ----
+# byoc_output_files <- get_byoc_output_files(
+#   year,
+#   types = c(
+#     # "ae",
+#     # "acute",
+#     # "cmh",
+#     # "dd",
+#     # "dn",
+#     # "dn_cost_lookup",
+#     # "gp_ooh",
+#     # "homelessness",
+#     # "homelessness_completeness",
+#     # "ltc",
+#     # "maternity",
+#     # "mh",
+#     # "nrs_deaths",
+#     # "ooh_cost_lookup",
+#     # "outpatients",
+#
+#     # Year-Specific Social Care
+#     "at",
+#     "ch",
+#     "hc",
+#     "sds",
+#     # All-Year Social Care
+#     "sc_all_at",
+#     "sc_all_ch",
+#     "sc_all_hc",
+#     "sc_all_sds",
+#     "sc_demog_lookup",
+#     # Deaths (for Care Homes)
+#     "chi_deaths",
+#     "nrs_deaths",
+#     "combined_deaths",
+#     # Costs
+#     "ch_cost_lookup",
+#     "hc_cost_lookup",
+#     # Look-ups
+#     "postcode_lookup",
+#     "gpprac_lookup"
+#   )
+# )
+# # using homelessness for test purpose. When development is complete,
+# # we change to "types = "byoc_input_files""
+# # can always use any other type for testing also
+#
+# # targets ----
+# logger::log_info("Targets started.")
+#
+# tryCatch(
+#   log_tar_make(
+#     script = "SDL_process/dummy_targets.R",
+#     store = store_path,
+#     reporter = "verbose"
+#   ),
+#   error = function(e) {
+#     logger::log_error("Targets failed: {conditionMessage(e)}")
+#     stop(e)
+#   }
+# )
+# logger::log_info("Targets finished.")
+#
+# logger::log_info("Run SDL ended.")
 
 
 # Episode File processing ----
@@ -179,6 +179,9 @@ log_ep_message("creating", year)
 
 episode_file <- create_episode_file(processed_data_list,
   year = year,
+  BYOC_MODE = BYOC_MODE,
+  run_id = run_id,
+  run_date_time = run_date_time,
   write_temp_to_disk = write_temp_to_disk
 )
 
