@@ -124,7 +124,7 @@ process_tests <- function(data,
   }
 
   # TODO: Remove second condition when ep and indiv files have a run_id
-  if (file_location == "hscdiip" | benchmark_comparison_type %in% c("episode", "individual")){
+  if (file_location == "hscdiip" | benchmark_comparison_type %in% c("episode", "individual")) {
     benchmark_run_id <- NA
   }
 
