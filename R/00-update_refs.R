@@ -49,29 +49,30 @@ end_date <- function() {
 #'
 #' @return A logical TRUE/FALSE
 check_year_valid <- function(year,
-                             type = c("acute",
-                                      "ae",
-                                      "at",
-                                      "ch",
-                                      "client",
-                                      "cmh",
-                                      "cost_dna",
-                                      "dd",
-                                      "deaths",
-                                      "dn",
-                                      "gpooh",
-                                      "hc",
-                                      "homelessness",
-                                      "hhg",
-                                      "maternity",
-                                      "mh",
-                                      "nsu",
-                                      "outpatients",
-                                      "pis",
-                                      "sds",
-                                      "sparra"),
+                             type = c(
+                               "acute",
+                               "ae",
+                               "at",
+                               "ch",
+                               "client",
+                               "cmh",
+                               "cost_dna",
+                               "dd",
+                               "deaths",
+                               "dn",
+                               "gpooh",
+                               "hc",
+                               "homelessness",
+                               "hhg",
+                               "maternity",
+                               "mh",
+                               "nsu",
+                               "outpatients",
+                               "pis",
+                               "sds",
+                               "sparra"
+                             ),
                              denodo_connect = get_denodo_connection(BYOC_MODE = FALSE)) {
-
   # Denodo disconnect
   on.exit(try(DBI::dbDisconnect(denodo_connect), silent = TRUE), add = TRUE)
 
@@ -83,7 +84,7 @@ check_year_valid <- function(year,
   #   dplyr::collect()
 
   # TEMP - read in csv file as not everything is updated in the denodo table
-  availability_table <- readr::read_csv('/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/3_dataset_processing/dataset_availability.csv')
+  availability_table <- readr::read_csv("/conf/sourcedev/Source_Linkage_File_Updates/uat_testing/3_dataset_processing/dataset_availability.csv")
 
   # Convert financial year, e.g. "1920" -> 2019
   year_start <- convert_fyyear_to_year(year)
