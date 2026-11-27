@@ -181,6 +181,7 @@ format_test_excel <- function(comparison_data, wb, sheet_name_dated) {
 #'
 #' @family test functions
 #' @seealso produce_test_comparison
+#' @export
 write_tests_xlsx <- function(comparison_data,
                              sheet_name,
                              year = NULL,
@@ -419,14 +420,13 @@ combine_multi_xlsx <- function(file_list, output_file) {
 #' @return Path to the test results output
 #' @export
 get_test_results_path <- function(
-  test_type = c("extract", "lookup", "ep", "ind"),
+  test_type = c("extract", "ep", "ind"),
   BYOC_MODE
 ) {
   test_type <- match.arg(test_type)
 
   file_name <- switch(test_type,
     extract = "sdl_test_results_extract.parquet",
-    lookup = "sdl_test_results_lookup.parquet",
     ep = "sdl_test_results_ep.parquet",
     ind = "sdl_test_results_ind.parquet"
   )
@@ -459,7 +459,7 @@ get_test_results_path <- function(
 #' @export
 write_stacked_test_results <- function(
   test_results,
-  test_type = c("extract", "lookup", "ep", "ind"),
+  test_type = c("extract", "ep", "ind"),
   BYOC_MODE
 ) {
   stacked_results <- dplyr::bind_rows(test_results)
@@ -473,4 +473,95 @@ write_stacked_test_results <- function(
   )
 
   return(stacked_results)
+}
+
+
+#' Format Stacked Tests
+#'
+#' @description Write stacked test output as an xlsx workbook using write_tests_xlsx.
+#'
+#' @param test_type Extract, episode or individual.
+#' @param test_location Denodo or hscdiip.
+#' @param denodo_connect Connection to Denodo.
+#' @param run_id Identifier for the tests if using Denodo.
+#'
+#' @family test functions
+#' @seealso write_tests_xlsx
+#' @export
+format_stacked_tests <- function(
+    test_type = c("extract", "ep", "ind"),
+    test_location = c("denodo", "hscdiip"),
+    denodo_connect = get_denodo_connection(),
+    run_id = NA
+){
+
+  # Check arguments
+  test_type <- match.arg(test_type)
+  test_location <- match.arg(test_location)
+
+  # Get tests from Denodo
+  if (test_location == "denodo") {
+    table_name <- switch(
+      test_type,
+      extract = "sdl_test_results_extract",
+      ep = "sdl_test_results_ep",
+      ind = "sdl_test_results_ind"
+    )
+
+    test_results <- dplyr::tbl(
+      denodo_connect,
+      dbplyr::in_schema("sdl", table_name)
+    ) %>%
+      dplyr::filter(
+        .data$run_id == .env$run_id
+      ) %>%
+      dplyr::collect()
+
+    # Get tests from hscdiip
+  } else {
+    file_name <- switch(
+      test_type,
+      extract = "sdl_test_results_extract.parquet",
+      ep = "sdl_test_results_ep.parquet",
+      ind = "sdl_test_results_ind.parquet"
+    )
+
+    test_results_path <- fs::path(
+      get_slf_dir(),
+      "Tests",
+      fy(),
+      qtr(),
+      file_name
+    )
+
+    test_results <- read_file(test_results_path)
+  }
+
+  # Use stacked test output to create excel formatted outputs
+  test_ids <- test_results %>%
+    dplyr::distinct(year, dataset_name)
+
+  for (i in 1:nrow(test_ids)){
+
+    dataset <- test_ids$dataset_name[i]
+    yr <- test_ids$year[i]
+
+    if (yr == "all"){
+      workbook <- "lookup"
+      write_yr <- NULL
+    } else {
+      workbook <- "extract"
+      write_yr <- yr
+    }
+
+    test_results %>%
+      dplyr::filter(
+        .data$year == yr,
+        .data$dataset_name == dataset
+      ) %>%
+      createslf::write_tests_xlsx(dataset, write_yr, workbook)
+  }
+
+  createslf::combine_tests()
+
 }

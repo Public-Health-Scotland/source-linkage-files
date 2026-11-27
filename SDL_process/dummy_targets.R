@@ -608,6 +608,8 @@ non_year_targets <- list(
       data = all_home_care_extract,
       sc_demog_lookup = sc_demog_lookup,
       home_care_costs = hc_cost_lookup,
+      run_id = run_id,
+      run_date_time = run_date_time,
       BYOC_MODE = BYOC_MODE,
       write_to_disk = write_to_disk
     )
