@@ -12,6 +12,7 @@ read_slf_table(
   columns = lifecycle::deprecated(),
   partnerships = NULL,
   recids = NULL,
+  run_id = NA,
   BYOC_MODE = FALSE
 )
 }

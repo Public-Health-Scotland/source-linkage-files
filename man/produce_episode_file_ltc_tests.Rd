@@ -11,11 +11,7 @@ produce_episode_file_ltc_tests(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
-
 \item{old_data}{old episode file data}
-
-\item{year}{the financial year of the extract in the format '1718'.}
 }
 \value{
 a dataframe with a count of total numbers of
