@@ -7,7 +7,7 @@
 get_previous_extract(
   type,
   year,
-  benchmark_run_id = NA,
+  run_id = NA,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE
 )
@@ -17,11 +17,11 @@ get_previous_extract(
 
 \item{year}{Financial year}
 
-\item{benchmark_run_id}{benchmark_run_id}
-
 \item{denodo_connect}{Connection to Denodo}
 
 \item{BYOC_MODE}{BYOC_MODE}
+
+\item{benchmark_run_id}{benchmark_run_id}
 }
 \value{
 a \link[tibble:tibble-package]{tibble} the previous extract from Denodo.

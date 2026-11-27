@@ -13,14 +13,6 @@ process_tests_individual_file(
   run_date_time = NA
 )
 }
-\arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} of the processed data extract.}
-
-\item{year}{the financial year of the extract in the format '1718'.}
-}
-\value{
-a \link[tibble:tibble-package]{tibble} containing a test comparison.
-}
 \description{
 Takes the processed individual file and produces
 a test comparison with the previous data. This is written to disk as an xlsx.
