@@ -11,7 +11,6 @@
 #' @export
 #' @family file path functions
 get_sdl_names <- function(dataset, version) {
-
   version <- match.arg(version, c("source", "snapshot", "processed"))
 
   sdl_names <- tibble::tribble(
