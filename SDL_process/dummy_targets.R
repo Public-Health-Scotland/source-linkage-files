@@ -1,15 +1,15 @@
 ################################################################################ .
-# Name of file -  "all_targets.R"
+# Name of file -  "dummy_targets.R"
 #
 # Description:
 #       This stores all targets objects for BYOC.
 #       Keep building this on.
 ################################################################################ .
 
-library(logger)
-library(targets) # main package required
-library(tarchetypes) # support for targets
-library(crew) # support for parallel processing
+library(logger) # Log errors/info
+library(targets) # Main package required
+library(tarchetypes) # Support for targets
+library(crew) # Support for parallel processing
 library(dplyr)
 library(createslf)
 
@@ -17,29 +17,34 @@ library(createslf)
 # Stage 1 - Setup targets ----
 ################################################################################ .
 
-## Set up BYOC_MODE ----
-
+## Detect BYOC_MODE ----
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
-BYOC_MODE <- dplyr::case_when(
-  BYOC_MODE %in% c("TRUE", "T", "true", "True") ~ TRUE,
-  BYOC_MODE %in% c("FALSE", "F", "false", "False") ~ FALSE,
-  TRUE ~ NA
-)
-
-run_id <- Sys.getenv("run_id")
-run_date_time <- Sys.getenv("run_date_time")
-denodo_dsn <- Sys.getenv("denodo_dsn")
-
-
-if (isTRUE(BYOC_MODE)) {
+if (tolower(BYOC_MODE) %in% c("true", "t")) {
   logger::log_info("targets file location on Denodo")
+  BYOC_MODE <- TRUE
 } else {
   logger::log_info("targets file location is local")
+  BYOC_MODE <- FALSE
 }
 
-log_threshold(INFO)
+## Detect run_id and run_date_time ----
+if (isTRUE(BYOC_MODE)) {
+  run_id <- Sys.getenv("run_id")
+  run_date_time <- Sys.getenv("run_date_time")
+} else {
+  run_id <- 0
+  run_date_time <- format(Sys.time())
+}
+
+benchmark_run_id <- Sys.getenv("benchmark_run_id")
+benchmark_comparison_type <- Sys.getenv("benchmark_comparison_type")
+
+# Define years
+years_to_run <- createslf::years_to_run()
 
 ## Set up targets ----
+
+log_threshold(INFO)
 
 # Set crew controller for parallel processing
 controller <- crew::crew_controller_local(
@@ -72,9 +77,6 @@ tar_option_set(
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
-
-# Define years
-years_to_run <- "1920"
 
 ################################################################################ .
 # Stage 2 - Run Targets ----

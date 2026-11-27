@@ -10,31 +10,11 @@
 # Description - Use this script to update references needed for the SLF update.
 #
 # Manual changes needed to the following Essential Functions:
-#       # End_date
 #       # Check_year_valid
 #       # Delayed_discharges_period
 #       # Latest_update
 #
 ################################################################################
-
-## MANUALLY UPDATE ##-----------------------------------------------------------
-
-#' End date
-#'
-#' @return Get the end date of the latest update period
-#' @export
-#'
-end_date <- function() {
-  ## MANUALLY UPDATE ##
-  # Specify update by indicating end of quarter date
-  # Q1 June = 30062024
-  # Q2 September = 30092024
-  # Q3 December = 31122024
-  # Q4 March = 31032025
-  end_date <- lubridate::dmy(31122025)
-
-  return(end_date)
-}
 
 
 #' Check data exists for a year
@@ -119,6 +99,49 @@ check_year_valid <- function(
 #-------------------------------------------------------------------------------
 
 ## AUTOMATED REFS - please check to ensure these are used correctly ##
+
+#' End date
+#'
+#' @description
+#' Returns the end date associated with the reporting period specified by the
+#' `reporting_period` environment variable.
+#'
+#' @return A `Date` containing the end date of the latest reporting period.
+#' @export
+end_date <- function() {
+  reporting_period <- Sys.getenv("reporting_period")
+
+  if (!nzchar(reporting_period)) {
+    stop("Environment variable `reporting_period` is not set.")
+  }
+
+  reporting_period_month <- stringr::str_extract(
+    reporting_period,
+    "[A-Za-z]+"
+  )
+
+  reporting_period_year <- stringr::str_extract(
+    reporting_period,
+    "\\d+"
+  )
+
+  reporting_period_end <- dplyr::case_when(
+    reporting_period_month == "Jun" ~ paste0("30-06-", reporting_period_year),
+    reporting_period_month == "Sep" ~ paste0("30-09-", reporting_period_year),
+    reporting_period_month == "Dec" ~ paste0("31-12-", reporting_period_year),
+    reporting_period_month == "Mar" ~ paste0("31-03-", reporting_period_year),
+    TRUE ~ NA_character_
+  )
+
+  if (is.na(reporting_period_end)) {
+    stop(
+      "`reporting_period` must contain one of Mar, Jun, Sep or Dec. ",
+      "Received: ", reporting_period
+    )
+  }
+
+  lubridate::dmy(reporting_period_end)
+}
 
 #' Delayed Discharge period
 #'
@@ -236,11 +259,9 @@ qtr <- function() {
 #'
 #' @family initialisation
 years_to_run <- function() {
-  fy_start_2digit <- 19
-  fy_end_2digit <- 19
-  years_to_run <- paste0(
-    fy_start_2digit:fy_end_2digit,
-    (fy_start_2digit + 1):(fy_end_2digit + 1)
-  )
+  years_to_run <- Sys.getenv("fys") %>%
+    strsplit(",") %>%
+    unlist()
+
   return(years_to_run)
 }
