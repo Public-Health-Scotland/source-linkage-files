@@ -43,7 +43,7 @@ read_extract_ooh_diagnosis <- function(
     # Collect
     dplyr::collect() %>%
     # Convert " " to NA
-    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
     tidyr::drop_na(readcode)
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-d", year = year)

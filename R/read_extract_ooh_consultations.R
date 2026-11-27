@@ -57,7 +57,7 @@ read_extract_ooh_consultations <- function(
     # Collect
     dplyr::collect() %>%
     # Convert " " to NA
-    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
     # Get anonymous CHI
     slfhelper::get_anon_chi("chi")
 

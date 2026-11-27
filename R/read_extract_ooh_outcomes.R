@@ -41,7 +41,7 @@ read_extract_ooh_outcomes <- function(
     # Collect
     dplyr::collect() %>%
     # Convert " " to NA
-    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
     dplyr::distinct()
 
   log_slf_event(stage = "read", status = "complete", type = "gp_ooh-o", year = year)

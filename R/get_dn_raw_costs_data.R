@@ -34,7 +34,7 @@ get_dn_raw_costs_data <- function(
     # Collect
     dplyr::collect() %>%
     # Convert "NA" to NA
-    mutate(across(where(is.character), ~ na_if(.x, "NA"))) %>%
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, "NA"))) %>%
     # Data type modification
     dplyr::mutate(
       year = check_year_format(.data$year)

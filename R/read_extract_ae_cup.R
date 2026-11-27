@@ -45,7 +45,7 @@ read_extract_ae_cup <- function(
     # Collect
     dplyr::collect() %>%
     # Convert " " to NA
-    mutate(across(where(is.character), ~ na_if(.x, " ")))
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " ")))
 
   log_slf_event(stage = "read", status = "complete", type = "ae_cup", year = year)
 

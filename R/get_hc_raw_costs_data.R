@@ -33,7 +33,7 @@ get_hc_raw_costs_data <- function(
     # Collect
     dplyr::collect() %>%
     # Convert "NA" to NA
-    mutate(across(where(is.character), ~ na_if(.x, "NA")))
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, "NA")))
 
   log_slf_event(stage = "read", status = "complete", type = "hc_costs", year = "all")
 

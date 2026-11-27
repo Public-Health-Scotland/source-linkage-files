@@ -44,7 +44,7 @@ read_extract_gp_ooh_cup <- function(
     # Collect
     dplyr::collect() %>%
     # Convert " " to NA
-    mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
+    dplyr::mutate(across(where(is.character), ~ na_if(.x, " "))) %>%
     # Drop duplicates
     dplyr::distinct(
       record_keydate1,
