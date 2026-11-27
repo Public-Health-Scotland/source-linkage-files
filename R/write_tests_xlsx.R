@@ -489,20 +489,18 @@ write_stacked_test_results <- function(
 #' @seealso write_tests_xlsx
 #' @export
 format_stacked_tests <- function(
-    test_type = c("extract", "ep", "ind"),
-    test_location = c("denodo", "hscdiip"),
-    denodo_connect = get_denodo_connection(),
-    run_id = NA
-){
-
+  test_type = c("extract", "ep", "ind"),
+  test_location = c("denodo", "hscdiip"),
+  denodo_connect = get_denodo_connection(),
+  run_id = NA
+) {
   # Check arguments
   test_type <- match.arg(test_type)
   test_location <- match.arg(test_location)
 
   # Get tests from Denodo
   if (test_location == "denodo") {
-    table_name <- switch(
-      test_type,
+    table_name <- switch(test_type,
       extract = "sdl_test_results_extract",
       ep = "sdl_test_results_ep",
       ind = "sdl_test_results_ind"
@@ -519,8 +517,7 @@ format_stacked_tests <- function(
 
     # Get tests from hscdiip
   } else {
-    file_name <- switch(
-      test_type,
+    file_name <- switch(test_type,
       extract = "sdl_test_results_extract.parquet",
       ep = "sdl_test_results_ep.parquet",
       ind = "sdl_test_results_ind.parquet"
@@ -541,12 +538,11 @@ format_stacked_tests <- function(
   test_ids <- test_results %>%
     dplyr::distinct(year, dataset_name)
 
-  for (i in 1:nrow(test_ids)){
-
+  for (i in 1:nrow(test_ids)) {
     dataset <- test_ids$dataset_name[i]
     yr <- test_ids$year[i]
 
-    if (yr == "all"){
+    if (yr == "all") {
       workbook <- "lookup"
       write_yr <- NULL
     } else {
@@ -563,5 +559,4 @@ format_stacked_tests <- function(
   }
 
   createslf::combine_tests()
-
 }
