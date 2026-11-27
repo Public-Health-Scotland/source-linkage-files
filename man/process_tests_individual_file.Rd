@@ -13,6 +13,19 @@ process_tests_individual_file(
   run_date_time = NA
 )
 }
+\arguments{
+\item{data}{Data to test}
+
+\item{year}{Financial year}
+
+\item{BYOC_MODE}{BYOC_MODE}
+
+\item{benchmark_run_id}{benchmark_run_id}
+
+\item{run_id}{run_id}
+
+\item{run_date_time}{run_date_time}
+}
 \description{
 Takes the processed individual file and produces
 a test comparison with the previous data. This is written to disk as an xlsx.

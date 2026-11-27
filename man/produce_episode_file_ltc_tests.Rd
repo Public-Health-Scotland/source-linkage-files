@@ -11,7 +11,11 @@ produce_episode_file_ltc_tests(
 )
 }
 \arguments{
+\item{data}{Data to test}
+
 \item{old_data}{old episode file data}
+
+\item{year}{Financial year}
 }
 \value{
 a dataframe with a count of total numbers of
