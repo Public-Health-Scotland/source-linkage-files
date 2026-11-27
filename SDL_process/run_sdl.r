@@ -1,15 +1,10 @@
-################################################################################ .
 # run_sdl.R
-################################################################################ .
 
-################################################################################ .
 # Setup ----
-################################################################################ .
-
 logger::log_info("Run SDL starts.")
 
-## Load required packages ----
 library(createslf)
+
 library(DBI)
 library(arrow)
 library(data.table)
@@ -49,6 +44,7 @@ library(crew)
 
 ## Detect BYOC_MODE ----
 BYOC_MODE <- Sys.getenv("BYOC_MODE")
+# Set up logger and system environment variable BYOC_MODE
 if (tolower(BYOC_MODE) %in% c("true", "t")) {
   logger::log_info("Detect run_sdl.r run on Denodo")
   BYOC_MODE <- TRUE
@@ -73,6 +69,7 @@ dplyr::tbl(
   dbplyr::in_schema("sdl", "sdl_byoc_acadme_load_detail")
 ) %>%
   dplyr::collect() %>%
+  # Optional: Format the date to look clean first
   dplyr::mutate(load_str = format(load_date, "%Y-%m-%d %H:%M:%S")) %>%
   purrr::pwalk(function(data_mart, load_str, ...) {
     logger::log_info("{data_mart} loaded at {load_str}")
@@ -82,26 +79,32 @@ if (isFALSE(BYOC_MODE)) {
 }
 
 ## Set up processing stage and years ----
-run_stage <- Sys.getenv("run_stage")
+
+run_stage <- "extract"
+
 if (!run_stage %in% c("extract", "episode", "individual")) {
   cli::cli_abort(
     "RUN_STAGE must be 'extract', 'episode', or 'individual'."
   )
 }
 
-years_to_run <- trimws(strsplit(Sys.getenv("years_to_run"), split = ",")[[1]])
-## Set up run_id and run_date_time (for episode/individual file processing) ----
-run_id <- Sys.getenv("run_id")
-run_date_time <- Sys.getenv("run_date_time")
-benchmark_run_id <- Sys.getenv("benchmark_run_id")
+# years_to_run <- createslf::years_to_run()
+# For use during development
+years_to_run <- "1920"
+
+# Set up run_id and run_date_time ----
+# run_id <- Sys.getenv("run_id")
+# run_date_time <- Sys.getenv("run_date_time")
+# benchmark_run_id <- Sys.getenv("benchmark_run_id")
+run_date_time <- script_run_time
+
 write_temp_to_disk <- FALSE
 console_outputs <- TRUE
 
-################################################################################ .
 ## Extract processing ----
-################################################################################ .
 
-# Build BYOC Output File Paths ----
+## Build BYOC Output File Paths ----
+# When development is complete change to `types = "byoc_input_files"`
 byoc_output_files <- get_byoc_output_files(
   years_to_run,
   types = c(
@@ -176,14 +179,12 @@ if (run_stage == "extract") {
   logger::log_info("Targets finished.")
 }
 
-################################################################################ .
 # Episode file processing ----
-################################################################################ .
 
 if (run_stage == "episode") {
   logger::log_info("Episode file processing started.")
 
-  episode_test_results <- purrr::map(years, function(year) {
+  episode_test_results <- purrr::map(years_to_run, function(year) {
     logger::log_info(
       "Episode file processing started for {year}."
     )
@@ -220,8 +221,8 @@ if (run_stage == "episode") {
     log_ep_message("creating", year)
 
     episode_file <- create_episode_file(processed_data_list,
-      year = year,
-      write_temp_to_disk = write_temp_to_disk
+                                        year = year,
+                                        write_temp_to_disk = write_temp_to_disk
     )
 
     episode_tests <- process_tests_episode_file(
@@ -249,15 +250,13 @@ if (run_stage == "episode") {
   logger::log_info("Episode file processing finished.")
 }
 
-################################################################################ .
 # Individual file processing ----
-################################################################################ .
 
 if (run_stage == "individual") {
   logger::log_info("Individual file processing started.")
 
   individual_test_results <- purrr::map(
-    years,
+    years_to_run,
     function(year) {
       logger::log_info(
         "Individual file processing started for {year}."

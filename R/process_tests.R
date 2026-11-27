@@ -107,8 +107,26 @@ process_tests <- function(data,
     }
   }
 
-  # Set workbook and benchmark_comparison_type
+  # Set workbook
   workbook <- ifelse(year == "all", "lookup", "extract")
+
+  # Override benchmark_comparison_type for specific cases
+  # Look-ups cannot pull from episode/individual file
+  # These extracts did not previously use get_existing_data_for_tests()
+  # (client, demog, chi_deaths, ltc, pc_lookup, gpprac_lookup)
+  if (year == "all" | type %in% c("client", "ltc")) {
+    benchmark_comparison_type <- "extract"
+  }
+
+  # Year-specific previous extracts not stored in hscdiip
+  if (file_location == "hscdiip" && year != "all" && !type %in% c("client", "ltc")) {
+    benchmark_comparison_type <- "episode"
+  }
+
+  # TODO: Remove second condition when ep and indiv files have a run_id
+  if (file_location == "hscdiip" | benchmark_comparison_type %in% c("episode", "individual")){
+    benchmark_run_id <- NA
+  }
 
   # 2. Process test ------------------------------------------------------------
 

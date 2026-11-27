@@ -3,10 +3,8 @@
 #
 # Description:
 #       A small target example to run as test for BYOC.
-#
 #       To run the targets pipeline, please use:
-#       targets::tar_make(script = 'dummy_targets.R',
-#                         store = store_path)
+#       targets::tar_make(script = 'dummy_targets.R', store = store_path)
 ################################################################################ .
 
 library(logger) # Info/error messages
@@ -20,25 +18,26 @@ library(createslf)
 # Stage 1 - Setup targets ----
 ################################################################################ .
 
-## Detect BYOC_MODE ----
-
-BYOC_MODE <- Sys.getenv("BYOC_MODE")
-if (tolower(BYOC_MODE) %in% c("true", "t")) {
-  logger::log_info("targets file location on Denodo")
-  BYOC_MODE <- TRUE
-} else {
-  logger::log_info("targets file location is local")
-  BYOC_MODE <- FALSE
-}
-
-## Detect environment variables ----
+## Get environment variables ----
 
 run_id <- Sys.getenv("run_id")
 run_date_time <- Sys.getenv("run_date_time")
 denodo_dsn <- Sys.getenv("denodo_dsn")
-benchmark_run_id <- Sys.getenv("benchmark_run_id")
-benchmark_comparison_type <- Sys.getenv("benchmark_comparison_type")
-years_to_run <- trimws(strsplit(Sys.getenv("years_to_run"), split = ",")[[1]])
+BYOC_MODE <- Sys.getenv("BYOC_MODE")
+
+## Set up BYOC_MODE ----
+
+BYOC_MODE <- dplyr::case_when(
+  BYOC_MODE %in% c("TRUE", "T", "true", "True") ~ TRUE,
+  BYOC_MODE %in% c("FALSE", "F", "false", "False") ~ FALSE,
+  TRUE ~ NA
+)
+
+if (isTRUE(BYOC_MODE)) {
+  logger::log_info("targets file location on Denodo")
+} else {
+  logger::log_info("targets file location is local")
+}
 
 ## Set up targets ----
 
@@ -75,6 +74,11 @@ tar_option_set(
   # controller - A controller or controller group object produced by the crew R package
   controller = controller
 )
+
+# Define years and test type
+years_to_run <- "1920"
+benchmark_run_id <- 2
+benchmark_comparison_type <- "extract"
 
 ################################################################################ .
 # Stage 2 - Run Targets ----

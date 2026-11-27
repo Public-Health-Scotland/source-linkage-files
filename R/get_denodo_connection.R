@@ -31,7 +31,8 @@ get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
       odbc::odbc(),
       dsn = dsn,
       uid = cloud_user,
-      pwd = cloud_pass
+      pwd = cloud_pass,
+      bigint = "integer"
     )
 
     cli::cli_alert_success("Connected to Denodo in BYOC_MODE")
@@ -90,7 +91,8 @@ get_denodo_connection <- function(username = NULL, BYOC_MODE = FALSE) {
     odbc::odbc(),
     dsn = dsn,
     uid = username,
-    pwd = db_pwd
+    pwd = db_pwd,
+    bigint = "integer"
   )
 
   # Re-lock the keyring vault for security

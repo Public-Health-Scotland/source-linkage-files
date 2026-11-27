@@ -23,6 +23,7 @@ read_slf_table <- function(
   columns = lifecycle::deprecated(),
   partnerships = NULL,
   recids = NULL,
+  run_id = NA,
   BYOC_MODE = FALSE
 ) {
   # Check file_version argument
@@ -70,6 +71,12 @@ read_slf_table <- function(
   ) %>%
     dplyr::filter(.data$year %in% years)
 
+  # Filter by run_id
+  if (!is.null(run_id)) {
+    slf_table <- slf_table %>%
+      dplyr::filter(.data$run_id == .env$run_id)
+  }
+
   # Filter by partnerships
   if (!is.null(partnerships)) {
     slf_table <- slf_table %>%
@@ -97,14 +104,6 @@ read_slf_table <- function(
     slf_table <- slf_table %>%
       dplyr::mutate(age = as.integer(.data$age))
   }
-
-  slf_table <- slf_table %>%
-    dplyr::mutate(
-      dplyr::across(
-        where(~ inherits(.x, "integer64")),
-        as.integer
-      )
-    )
 
   return(slf_table)
 }

@@ -16,7 +16,7 @@
 get_previous_extract <- function(
   type,
   year,
-  benchmark_run_id = NA,
+  run_id = NA,
   denodo_connect = get_denodo_connection(BYOC_MODE = BYOC_MODE),
   BYOC_MODE = FALSE
 ) {
@@ -26,7 +26,7 @@ get_previous_extract <- function(
   ) %>%
     # Filter run_id
     dplyr::filter(
-      .data$run_id == benchmark_run_id
+      .data$run_id == .env$run_id
     ) %>%
     # Remove run_id and run_date_time columns
     dplyr::select(-"run_id", -"run_date_time")
